@@ -23,6 +23,7 @@
     "noImplicitAny": false,
     "strictNullChecks": false,
     "noFallthroughCasesInSwitch": true,
+    "declaration": true,
   },
   "exclude": [
     "node_modules",
