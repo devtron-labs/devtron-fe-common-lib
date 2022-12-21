@@ -183,6 +183,8 @@ function fetchInTime(
         fetchAPI(url, type, data, options?.signal || signal, options?.preventAutoLogout || false, isMultipartRequest),
         timeoutPromise,
     ]).catch((err) => {
+        console.log(url, err, err instanceof ServerErrors)
+        //throw err
         if (err instanceof ServerErrors) {
             throw err
         } else {

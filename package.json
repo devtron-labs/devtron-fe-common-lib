@@ -1,41 +1,41 @@
 {
-  "name": "@devtron-labs/devtron-fe-common-lib",
-  "version": "0.0.6-beta-8",
-  "description": "Supporting common component library",
-  "main": "dist/index.js",
-  "scripts": {
-    "test": "exit 0",
-    "build-lib": "rollup -c --bundleConfigAsCjs",
-    "build-watch": "rollup -c --bundleConfigAsCjs -w"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/devtron-labs/devtron-fe-common-lib.git"
-  },
-  "author": "Devtron",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/devtron-labs/devtron-fe-common-lib/issues"
-  },
-  "homepage": "https://github.com/devtron-labs/devtron-fe-common-lib#readme",
-  "devDependencies": {
-    "@rollup/plugin-babel": "^6.0.3",
-    "@rollup/plugin-node-resolve": "^15.0.1",
-    "@rollup/plugin-terser": "^0.2.0",
-    "@types/react": "17.0.39",
-    "@types/react-dom": "17.0.13",
-    "rollup": "^3.7.3",
-    "rollup-plugin-delete": "^2.0.0",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-typescript2": "^0.34.1",
-    "typescript": "^4.9.4"
-  },
-  "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
-  "dependencies": {
-    "sass": "^1.56.2"
-  }
+    "name": "@devtron-labs/devtron-fe-common-lib",
+    "version": "0.0.6-beta-8",
+    "description": "Supporting common component library",
+    "main": "dist/index.js",
+    "scripts": {
+        "test": "exit 0",
+        "build-lib": "rollup -c --bundleConfigAsCjs",
+        "build-watch": "rollup -c --bundleConfigAsCjs -w"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/devtron-labs/devtron-fe-common-lib.git"
+    },
+    "author": "Devtron",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/devtron-labs/devtron-fe-common-lib/issues"
+    },
+    "homepage": "https://github.com/devtron-labs/devtron-fe-common-lib#readme",
+    "devDependencies": {
+        "@rollup/plugin-babel": "^6.0.3",
+        "@rollup/plugin-node-resolve": "^15.0.1",
+        "@rollup/plugin-terser": "^0.2.0",
+        "@types/react": "17.0.39",
+        "@types/react-dom": "17.0.13",
+        "rollup": "^3.7.3",
+        "rollup-plugin-delete": "^2.0.0",
+        "rollup-plugin-peer-deps-external": "^2.2.4",
+        "rollup-plugin-postcss": "^4.0.2",
+        "rollup-plugin-typescript2": "^0.34.1",
+        "typescript": "^4.9.4"
+    },
+    "peerDependencies": {
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
+    },
+    "dependencies": {
+        "sass": "^1.56.2"
+    }
 }
