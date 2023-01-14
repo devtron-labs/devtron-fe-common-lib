@@ -15,7 +15,7 @@ interface drawerInterface {
     onEscape?: (e?: any) => void
 }
 
-const Drawer: React.FC<drawerInterface> = ({
+export const Drawer = ({
     children,
     position,
     height,
@@ -24,7 +24,7 @@ const Drawer: React.FC<drawerInterface> = ({
     maxWidth,
     parentClassName,
     onEscape,
-}) => {
+}: drawerInterface) => {
     const drawerRef = useRef(null)
     useEffect(() => {
         setTimeout(() => drawerRef.current?.classList?.add('show'), 1)
@@ -47,5 +47,3 @@ const Drawer: React.FC<drawerInterface> = ({
         </VisibleModal>
     )
 }
-
-export default Drawer

@@ -1,4 +1,4 @@
-import React from 'react';
+/// <reference types="react" />
 import './Drawer.scss';
 interface drawerInterface {
     position: 'left' | 'right' | 'bottom' | 'top';
@@ -12,5 +12,5 @@ interface drawerInterface {
     parentClassName?: string;
     onEscape?: (e?: any) => void;
 }
-declare const Drawer: React.FC<drawerInterface>;
-export default Drawer;
+export declare const Drawer: ({ children, position, height, width, minWidth, maxWidth, parentClassName, onEscape, }: drawerInterface) => JSX.Element;
+export {};

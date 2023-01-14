@@ -29,3 +29,11 @@ export function showError(serverError, showToastOnUnknownError = true, hideAcces
       }
   }
 }
+
+interface ConditionalWrapper<T> {
+  condition: boolean
+  wrap: (children: T) => T
+  children: T
+}
+export const ConditionalWrap: React.FC<ConditionalWrapper<any>> = ({ condition, wrap, children }) =>
+  condition ? wrap(children) : <>{children}</>

@@ -13,3 +13,5 @@ export * from './Modals/Modal';
 export * from './Modals/OpaqueModal';
 export * from './Modals/VisibleModal';
 export * from './Modals/VisibleModal2';
+export { BreadCrumb, useBreadcrumb } from './BreadCrumb/BreadCrumb';
+export { default as BreadcrumbStore } from './BreadCrumb/BreadcrumbStore';
