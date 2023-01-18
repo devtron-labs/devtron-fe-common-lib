@@ -147,6 +147,12 @@ var ServerErrors = /** @class */ (function (_super) {
     return ServerErrors;
 }(Error));
 
+var TippyTheme;
+(function (TippyTheme) {
+    TippyTheme["black"] = "black";
+    TippyTheme["white"] = "white";
+})(TippyTheme || (TippyTheme = {}));
+
 var responseMessages = {
     100: 'Continue',
     101: 'Switching Protocols',
@@ -3967,7 +3973,7 @@ var SvgIcClose = function SvgIcClose(props) {
     fillRule: "evenodd"
   })));
 };
-var closeIcon = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%20%20%20%20%3Cdefs%3E%20%20%20%20%20%20%20%20%3Cpath%20id%3D%22a%22%20class%3D%22stroke-color%22%20d%3D%22M18.295%205.705a.997.997%200%200%200-1.41%200L12%2010.59%207.115%205.705a.997.997%200%201%200-1.41%201.41L10.59%2012l-4.885%204.885a.997.997%200%201%200%201.41%201.41L12%2013.41l4.885%204.885a.997.997%200%200%200%201.41-1.41L13.41%2012l4.885-4.885a.997.997%200%200%200%200-1.41z%22%2F%3E%20%20%20%20%3C%2Fdefs%3E%20%20%20%20%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22%22%2F%3E%20%20%20%20%20%20%20%20%3Cuse%20fill%3D%22%23999%22%20xlink%3Ahref%3D%22%23a%22%2F%3E%20%20%20%20%3C%2Fg%3E%3C%2Fsvg%3E";
+var close = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%20%20%20%20%3Cdefs%3E%20%20%20%20%20%20%20%20%3Cpath%20id%3D%22a%22%20class%3D%22stroke-color%22%20d%3D%22M18.295%205.705a.997.997%200%200%200-1.41%200L12%2010.59%207.115%205.705a.997.997%200%201%200-1.41%201.41L10.59%2012l-4.885%204.885a.997.997%200%201%200%201.41%201.41L12%2013.41l4.885%204.885a.997.997%200%200%200%201.41-1.41L13.41%2012l4.885-4.885a.997.997%200%200%200%200-1.41z%22%2F%3E%20%20%20%20%3C%2Fdefs%3E%20%20%20%20%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22%22%2F%3E%20%20%20%20%20%20%20%20%3Cuse%20fill%3D%22%23999%22%20xlink%3Ahref%3D%22%23a%22%2F%3E%20%20%20%20%3C%2Fg%3E%3C%2Fsvg%3E";
 
 var OpaqueModal = /** @class */ (function (_super) {
     __extends(OpaqueModal, _super);
@@ -3988,7 +3994,7 @@ var OpaqueModal = /** @class */ (function (_super) {
     };
     OpaqueModal.prototype.render = function () {
         var _a = __assign({}, this.props), _b = _a.className, className = _b === void 0 ? "" : _b, _c = _a.onHide, onHide = _c === void 0 ? null : _c;
-        return ReactDOM.createPortal(jsxs("div", __assign({ className: "full-screen-modal__body-container ".concat(className) }, { children: [this.props.children, typeof onHide === 'function' && jsx("div", __assign({ className: "close-btn icon-dim-24", onClick: function (e) { return onHide(false); } }, { children: jsx("img", { className: "close-img", src: closeIcon, alt: "close" }) }))] })), document.getElementById('full-screen-modal'));
+        return ReactDOM.createPortal(jsxs("div", __assign({ className: "full-screen-modal__body-container ".concat(className) }, { children: [this.props.children, typeof onHide === 'function' && jsx("div", __assign({ className: "close-btn icon-dim-24", onClick: function (e) { return onHide(false); } }, { children: jsx("img", { className: "close-img", src: close, alt: "close" }) }))] })), document.getElementById('full-screen-modal'));
     };
     return OpaqueModal;
 }(React__default.Component));
@@ -4232,13 +4238,13 @@ function Button(_a) {
     var _h = usePopupContext(), handleOpen = _h.handleOpen, popupPosition = _h.popupPosition; _h.buttonRef; var initialiseButtonWidth = _h.initialiseButtonWidth;
     return jsx("button", __assign({ ref: initialiseButtonWidth, type: "button", tabIndex: tabIndex, disabled: disabled, className: "".concat(rootClassName, " ").concat(popupPosition ? 'focused' : '', "  ").concat(isKebab ? 'popup-button-kebab' : "popup-button"), onMouseEnter: onHover ? (disabled ? null : handleOpen) : function () { }, onClick: disabled ? null : handleOpen }, { children: children }));
 }
-function Body(_a) {
+function Body$1(_a) {
     var _b = _a.children, children = _b === void 0 ? null : _b, _c = _a.rootClassName, rootClassName = _c === void 0 ? "" : _c, _d = _a.style, style = _d === void 0 ? {} : _d, _e = _a.autoWidth, autoWidth = _e === void 0 ? false : _e;
     var _f = usePopupContext(), handleClose = _f.handleClose, popupPosition = _f.popupPosition, opacity = _f.opacity, callbackRef = _f.callbackRef, buttonWidth = _f.buttonWidth;
     return popupPosition ? jsx(Modal, __assign({ callbackRef: callbackRef, onClick: handleClose, rootClassName: "".concat(rootClassName, " popup-body ").concat(!children ? 'popup-body--empty' : '', " ").concat(Object.keys(popupPosition).join(" ")), style: __assign(__assign(__assign(__assign({}, popupPosition), style), (autoWidth ? { width: buttonWidth.current } : {})), { opacity: opacity }) }, { children: children })) : null;
 }
 PopupMenu.Button = Button;
-PopupMenu.Body = Body;
+PopupMenu.Body = Body$1;
 
 var top = 'top';
 var bottom = 'bottom';
@@ -8247,11 +8253,6 @@ var Tippy = index;
 var css_248z = ".tippy-box[data-animation=shift-toward-subtle][data-state=hidden]{opacity:0}.tippy-box[data-animation=shift-toward-subtle][data-state=hidden][data-placement^=top][data-state=hidden]{transform:translateY(-5px)}.tippy-box[data-animation=shift-toward-subtle][data-state=hidden][data-placement^=bottom][data-state=hidden]{transform:translateY(5px)}.tippy-box[data-animation=shift-toward-subtle][data-state=hidden][data-placement^=left][data-state=hidden]{transform:translateX(-5px)}.tippy-box[data-animation=shift-toward-subtle][data-state=hidden][data-placement^=right][data-state=hidden]{transform:translateX(5px)}";
 styleInject(css_248z);
 
-var TippyTheme;
-(function (TippyTheme) {
-    TippyTheme["black"] = "black";
-    TippyTheme["white"] = "white";
-})(TippyTheme || (TippyTheme = {}));
 // This component will handle some of the new tippy designs and interactions
 // So this can be updated to support further for new features or interactions
 function TippyCustomized(props) {
@@ -8527,4 +8528,91 @@ var TagLabelSelect = function (_a) {
     return (jsxs("div", { children: [jsxs("div", __assign({ className: "flexbox dc__content-space mb-8" }, { children: [jsx("span", { children: "Tags" }), jsx(PropagateTagInfo, {})] })), jsxs("div", { children: [jsxs("div", __assign({ className: "dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor", onClick: addNewTag }, { children: [jsx(SvgIcAdd, { className: "icon-dim-20 fcb-5" }), " Add tag"] })), jsx("div", __assign({ className: "mb-8" }, { children: labelTags === null || labelTags === void 0 ? void 0 : labelTags.map(function (tagData, index) { return (jsx(TagDetails, { index: index, tagData: tagData, setTagData: setTagData, removeTag: removeTag }, "tag-".concat(index))); }) }))] })] }));
 };
 
-export { BreadCrumb, Store as BreadcrumbStore, ConditionalWrap, DetailsProgressing, Drawer, ErrorScreenManager, ErrorScreenNotAuthorized, Host, Modal, OpaqueModal, PATTERNS, PopupMenu, Progressing, RadioGroup, RadioGroupItem, RequestTimeout, ServerError, ServerErrors, TagLabelSelect, TippyTheme, ToastBody, ToastBody3, ToastBodyWithButton, VisibleModal, VisibleModal2, get, post, put, showError, toastAccessDenied, trash, useBreadcrumb };
+function ConfirmationDialog(_a) {
+    var _b = _a.className, className = _b === void 0 ? '' : _b, children = _a.children;
+    return (jsx(VisibleModal2, __assign({ className: "confirmation-dialog" }, { children: jsx("div", __assign({ className: "confirmation-dialog__body ".concat(className) }, { children: children })) })));
+}
+function Icon(_a) {
+    var src = _a.src, _b = _a.className, className = _b === void 0 ? '' : _b;
+    return jsx("img", { src: src, className: "confirmation-dialog__icon ".concat(className), alt: "" });
+}
+function Body(_a) {
+    var title = _a.title, _b = _a.subtitle, subtitle = _b === void 0 ? null : _b, _c = _a.children, children = _c === void 0 ? null : _c;
+    return (jsxs("div", __assign({ className: "flex left column " }, { children: [jsx("h3", __assign({ className: "confirmation-dialog__title lh-1-25 dc__break-word w-100" }, { children: title })), subtitle && jsx("div", __assign({ className: "confirmation-dialog__subtitle" }, { children: subtitle })), children] })));
+}
+function ButtonGroup(_a) {
+    var children = _a.children;
+    return jsx("div", __assign({ className: "flex right confirmation-dialog__button-group" }, { children: children }));
+}
+ConfirmationDialog.Icon = Icon;
+ConfirmationDialog.Body = Body;
+ConfirmationDialog.ButtonGroup = ButtonGroup;
+
+var warn = "data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%3F%3E%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2248%22%20height%3D%2248%22%20viewBox%3D%220%200%2048%2048%22%3E%20%20%20%20%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M0%200h48v48H0z%22%2F%3E%20%20%20%20%20%20%20%20%3Cg%20fill%3D%22%23FFEBEB%22%20stroke%3D%22%23F33E3E%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%3E%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M7%2024h24v17a4%204%200%200%201-4%204H11a4%204%200%200%201-4-4V24z%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20stroke-linecap%3D%22round%22%20d%3D%22M19%2029.5v10M24%2029.5v10M14%2029.5v10%22%2F%3E%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%20%20%20%20%3Cpath%20stroke%3D%22%23F33E3E%22%20stroke-dasharray%3D%2217%2C3%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%20d%3D%22M42%2010a3%203%200%200%201%200%206H31M38%2023a3%203%200%200%200-3-3h-8%22%2F%3E%20%20%20%20%20%20%20%20%3Cg%20stroke%3D%22%23F33E3E%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%20transform%3D%22rotate%28-10%2036.29%20-8.86%29%22%3E%20%20%20%20%20%20%20%20%20%20%20%20%3Crect%20width%3D%2230%22%20height%3D%225%22%20y%3D%226%22%20fill%3D%22%23FFEBEB%22%20rx%3D%221%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M11%200h8a2%202%200%200%201%202%202v4H9V2a2%202%200%200%201%202-2z%22%2F%3E%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%3C%2Fg%3E%3C%2Fsvg%3E";
+
+var DeleteDialog = function (props) {
+    return jsxs(ConfirmationDialog, __assign({ className: "confirmation-dialog__body--w-400" }, { children: [jsx(ConfirmationDialog.Icon, { src: warn }), jsx(ConfirmationDialog.Body, __assign({ title: props.title }, { children: jsxs("div", __assign({ className: "fs-13 cn-7 lh-1-54 w-100" }, { children: [props.description ? props.description : null, props.children] })) })), jsx(ConfirmationDialog.ButtonGroup, { children: jsxs("div", __assign({ className: "flex right" }, { children: [jsx("button", __assign({ type: "button", className: "cta cancel cta-cd-delete-modal ml-16", onClick: props.closeDelete, disabled: props.apiCallInProgress }, { children: "Cancel" })), jsx("button", __assign({ type: "button", className: "cta delete cta-cd-delete-modal ml-16", onClick: function () { return props.delete(); }, disabled: props.apiCallInProgress }, { children: props.apiCallInProgress ? jsx(Progressing, {}) : "".concat(props.deletePrefix || '', "Delete").concat(props.deletePostfix || '') }))] })) })] }));
+};
+function DeleteDialogDescription(props) {
+    return jsx(Fragment, { children: props.children });
+}
+DeleteDialog.Description = DeleteDialogDescription;
+
+//TODO: may not need context
+var DialogFormContext = createContext({ title: '', isLoading: false, close: function (event) { }, onSave: function (event) { } });
+var DialogForm = /** @class */ (function (_super) {
+    __extends(DialogForm, _super);
+    function DialogForm(props) {
+        var _this = _super.call(this, props) || this;
+        _this.escFunction = _this.escFunction.bind(_this);
+        return _this;
+    }
+    DialogForm.prototype.componentDidMount = function () {
+        document.addEventListener('keydown', this.escFunction);
+    };
+    DialogForm.prototype.componentWillUnmount = function () {
+        document.removeEventListener('keydown', this.escFunction);
+    };
+    DialogForm.prototype.escFunction = function (event) {
+        if (event.keyCode === 27 && this.props.closeOnESC) {
+            this.props.close(event);
+        }
+    };
+    DialogForm.prototype.render = function () {
+        var _this = this;
+        return (jsx(DialogFormContext.Provider, __assign({ value: {
+                title: this.props.title,
+                isLoading: this.props.isLoading,
+                close: this.props.close,
+                onSave: this.props.onSave,
+            } }, { children: jsx(VisibleModal, __assign({ className: "" }, { children: jsxs("div", __assign({ className: "modal__body ".concat(this.props.className || '') }, { children: [jsxs("div", __assign({ className: "modal__header ".concat(this.props.headerClassName || '') }, { children: [jsx("h1", __assign({ className: "modal__title" }, { children: this.props.title })), jsxs("button", __assign({ type: "button", className: "dc__transparent", onClick: this.props.close }, { children: [' ', jsx("img", { src: close, alt: "close" })] }))] })), jsx(DialogFormContext.Consumer, { children: function (context) {
+                                return (jsx("form", __assign({ noValidate: true, onSubmit: function (e) {
+                                        e.preventDefault();
+                                        if (!context.isLoading) {
+                                            context.onSave(e);
+                                        }
+                                    } }, { children: _this.props.children })));
+                            } })] })) })) })));
+    };
+    return DialogForm;
+}(Component));
+var DialogFormSubmit = /** @class */ (function (_super) {
+    __extends(DialogFormSubmit, _super);
+    function DialogFormSubmit() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DialogFormSubmit.prototype.render = function () {
+        var _this = this;
+        return (jsx(DialogFormContext.Consumer, { children: function (context) {
+                return (jsx("button", __assign({ type: "submit", className: "cta dc__align-right", tabIndex: _this.props.tabIndex }, { children: context.isLoading ? jsx(Progressing, {}) : _this.props.children })));
+            } }));
+    };
+    return DialogFormSubmit;
+}(Component));
+
+function ForceDeleteDialog(_a) {
+    var onClickDelete = _a.onClickDelete, closeDeleteModal = _a.closeDeleteModal, forceDeleteDialogTitle = _a.forceDeleteDialogTitle, forceDeleteDialogMessage = _a.forceDeleteDialogMessage;
+    return (jsx("div", { children: jsx(DeleteDialog, __assign({ title: forceDeleteDialogTitle, delete: onClickDelete, closeDelete: closeDeleteModal, deletePrefix: "Force " }, { children: jsxs(DeleteDialog.Description, { children: [jsxs("p", __assign({ className: "mt-12 mb-12 p-8 dc__break-word dc__window-bg" }, { children: ["Error: ", forceDeleteDialogMessage] })), jsx("p", { children: "Do you want to force delete?" })] }) })) }));
+}
+
+export { BreadCrumb, Store as BreadcrumbStore, ConditionalWrap, ConfirmationDialog, DeleteDialog, DetailsProgressing, DialogForm, DialogFormSubmit, Drawer, ErrorScreenManager, ErrorScreenNotAuthorized, ForceDeleteDialog, Host, Modal, OpaqueModal, PATTERNS, PopupMenu, Progressing, RadioGroup, RadioGroupItem, RequestTimeout, ServerError, ServerErrors, TagLabelSelect, TippyCustomized, TippyTheme, ToastBody, ToastBody3, ToastBodyWithButton, VisibleModal, VisibleModal2, get, post, put, showError, toastAccessDenied, trash, useBreadcrumb };

@@ -1,6 +1,6 @@
 import React, { Component, createContext } from 'react';
 import { VisibleModal } from '../Modals/VisibleModal';
-import close from '../../../Assets/Icons/ic-close.svg';
+import close from '../../Assets/Icon/ic-close.svg';
 import { Progressing } from '../Progressing'
 //TODO: may not need context
 const DialogFormContext = createContext({ title: '', isLoading: false, close: (event) => {}, onSave: (event) => {} });

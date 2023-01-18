@@ -1,7 +1,8 @@
 import React from 'react'
 import { ReactComponent as InjectTag } from '../../Assets/Icon/inject-tag.svg'
 import { ReactComponent as Help } from '../../Assets/Icon/ic-help-outline.svg'
-import TippyCustomized, { TippyTheme } from '../TippyCustomized'
+import { TippyCustomized } from '../TippyCustomized'
+import { TippyTheme } from '../Types'
 
 export default function PropagateTagInfo() {
     const additionalInfo = () => {

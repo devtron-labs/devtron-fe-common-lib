@@ -1,5 +1,5 @@
 import React from 'react';
-import warn from '../../../Assets/Img/warning-medium.svg';
+import warn from '../../Assets/Img/warning-medium.svg';
 import { Progressing } from '../Progressing'
 import ConfirmationDialog from './ConfirmationDialog';
 import { DeleteDialogProps } from './Types';

@@ -1,13 +1,9 @@
-import React, { ReactNode, useEffect, useRef } from 'react'
+import React, { ReactNode, useRef } from 'react'
 import Tippy from '@tippyjs/react'
 import { Placement } from 'tippy.js'
 import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-close.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
-
-export enum TippyTheme {
-    black = 'black',
-    white = 'white',
-}
+import { TippyTheme } from './Types'
 
 interface TippyCustomizedProps {
     theme: TippyTheme
@@ -38,7 +34,7 @@ interface TippyCustomizedProps {
 
 // This component will handle some of the new tippy designs and interactions
 // So this can be updated to support further for new features or interactions
-export default function TippyCustomized(props: TippyCustomizedProps) {
+export function TippyCustomized(props: TippyCustomizedProps) {
     const tippyRef = useRef(null)
     const isWhiteTheme = props.theme === TippyTheme.white
 

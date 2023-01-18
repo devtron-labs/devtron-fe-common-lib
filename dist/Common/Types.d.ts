@@ -21,3 +21,7 @@ export interface OptionType {
     label: string;
     value: string;
 }
+export declare enum TippyTheme {
+    black = "black",
+    white = "white"
+}

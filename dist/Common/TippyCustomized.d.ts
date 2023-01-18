@@ -1,10 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Placement } from 'tippy.js';
 import 'tippy.js/animations/shift-toward-subtle.css';
-export declare enum TippyTheme {
-    black = "black",
-    white = "white"
-}
+import { TippyTheme } from './Types';
 interface TippyCustomizedProps {
     theme: TippyTheme;
     visible?: boolean;
@@ -31,5 +28,5 @@ interface TippyCustomizedProps {
     documentationLinkText?: string;
     children: React.ReactElement<any>;
 }
-export default function TippyCustomized(props: TippyCustomizedProps): JSX.Element;
+export declare function TippyCustomized(props: TippyCustomizedProps): JSX.Element;
 export {};
