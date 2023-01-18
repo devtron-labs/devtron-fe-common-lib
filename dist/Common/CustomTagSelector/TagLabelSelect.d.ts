@@ -1,5 +1,6 @@
 /// <reference types="react" />
-export default function TagLabelSelect({ labelTags, setLabelTags }: {
-    labelTags: any;
-    setLabelTags: any;
-}): JSX.Element;
+import { TagType } from '../Types';
+export declare const TagLabelSelect: ({ labelTags, setLabelTags, }: {
+    labelTags: TagType[];
+    setLabelTags: (tagList: TagType[]) => void;
+}) => JSX.Element;

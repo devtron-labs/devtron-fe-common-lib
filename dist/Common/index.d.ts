@@ -16,6 +16,6 @@ export * from './Modals/VisibleModal2';
 export { BreadCrumb, useBreadcrumb } from './BreadCrumb/BreadCrumb';
 export { default as BreadcrumbStore } from './BreadCrumb/BreadcrumbStore';
 export * from './RadioGroup';
-export * from './PopupMenu';
+export { default as PopupMenu } from './PopupMenu';
 export * from './TippyCustomized';
 export * from './CustomTagSelector';

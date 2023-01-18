@@ -1,9 +1,9 @@
 /// <reference types="react" />
-declare function ConfirmationDialog({ className, children }: {
+export declare function ConfirmationDialog({ className, children }: {
     className?: string;
     children: any;
 }): JSX.Element;
-declare namespace ConfirmationDialog {
+export declare namespace ConfirmationDialog {
     var Icon: ({ src, className }: {
         src: any;
         className?: string;
@@ -17,4 +17,3 @@ declare namespace ConfirmationDialog {
         children: any;
     }) => JSX.Element;
 }
-export default ConfirmationDialog;

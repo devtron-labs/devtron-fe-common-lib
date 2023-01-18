@@ -2,8 +2,15 @@ import React from 'react'
 import PropagateTagInfo from './PropagateTagInfo'
 import { ReactComponent as Add } from '../../Assets/Icon/ic-add.svg'
 import TagDetails from './TagDetails'
+import { TagType } from '../Types'
 
-export default function TagLabelSelect({ labelTags, setLabelTags }) {
+export const TagLabelSelect = ({
+    labelTags,
+    setLabelTags,
+}: {
+    labelTags: TagType[]
+    setLabelTags: (tagList: TagType[]) => void
+}) => {
     const setTagData = (index, tagValue): void => {
         const _tags = [...labelTags]
         _tags[index] = tagValue

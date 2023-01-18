@@ -1,4 +1,4 @@
-export * from './ConfirmationDialog'
+export { default as ConfirmationDialog } from './ConfirmationDialog'
 export * from './DeleteDialog'
 export * from './DialogForm'
-export * from './ForceDeleteDialog'
+export { default as ForceDeleteDialog } from './ForceDeleteDialog'

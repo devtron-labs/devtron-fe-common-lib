@@ -5,7 +5,7 @@ import postcss from 'rollup-plugin-postcss'
 import { babel } from '@rollup/plugin-babel'
 import del from 'rollup-plugin-delete'
 import pkg from './package.json'
-import svgr from '@svgr/rollup';
+import svgr from '@svgr/rollup'
 import url from '@rollup/plugin-url'
 
 export default {
@@ -23,7 +23,7 @@ export default {
         }),
         del({ targets: ['dist/*'] }),
         url(),
-        svgr()
+        svgr(),
     ],
     external: Object.keys(pkg.peerDependencies || {}),
 }
