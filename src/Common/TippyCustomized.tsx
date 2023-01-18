@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useRef } from 'react'
 import Tippy from '@tippyjs/react'
 import { Placement } from 'tippy.js'
-import { ReactComponent as CloseIcon } from '../../assets/icons/ic-cross.svg'
+import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-close.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
 
 export enum TippyTheme {
