@@ -2,7 +2,7 @@ import React from 'react'
 import { ReactComponent as DeleteCross } from '../../Assets/Icon/ic-close.svg'
 import { ReactComponent as InjectTag } from '../../Assets/Icon/inject-tag.svg'
 import { TagType } from '../Types'
-import TagLabelValueSelector from './TagLabelValueSelector'
+import { TagLabelValueSelector } from './TagLabelValueSelector'
 
 export default function TagDetails({
     index,

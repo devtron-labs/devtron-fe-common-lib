@@ -5,7 +5,7 @@ import { ValidationRules } from './ValidationRules'
 import { ReactComponent as ErrorCross } from '../../Assets/Icon/ic-close.svg'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-outlined.svg'
 
-export default function TagLabelValueSelector({
+export const TagLabelValueSelector = ({
     selectedTagIndex,
     tagData,
     setTagData,
@@ -19,7 +19,7 @@ export default function TagLabelValueSelector({
     tagOptions?: OptionType[]
     isRequired?: boolean
     type?: string
-}) {
+}) => {
     const [selectedValue, setSelectedValue] = useState<string>('')
     const [isPopupOpen, togglePopup] = useState<boolean>(false)
 
