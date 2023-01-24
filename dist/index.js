@@ -8429,13 +8429,12 @@ var TagLabelValueSelector = function (_a) {
     var _c = __read(useState(false), 2), isPopupOpen = _c[0], togglePopup = _c[1];
     var validationRules = new ValidationRules();
     useEffect(function () {
-        var _tagData = __assign({}, tagData);
-        setSelectedValue(_tagData[type]);
+        setSelectedValue((tagData === null || tagData === void 0 ? void 0 : tagData[type]) || '');
     }, [selectedTagIndex, tagData, type]);
     var handleOnBlur = function (e) {
         if (!e.relatedTarget ||
             !e.relatedTarget.classList.value ||
-            e.relatedTarget.classList.value.indexOf("tag-".concat(selectedTagIndex, "-class")) === -1) {
+            !e.relatedTarget.classList.value.includes("tag-".concat(selectedTagIndex, "-class"))) {
             var _tagData = __assign({}, tagData);
             _tagData[type] = selectedValue;
             if (type === 'key') {
@@ -8443,15 +8442,13 @@ var TagLabelValueSelector = function (_a) {
                     ? !validationRules.propagateTagKey(selectedValue).isValid
                     : _tagData.value !== '';
             }
+            else if (selectedValue) {
+                _tagData.isInvalidValue = !validationRules.propagateTagValue(selectedValue).isValid;
+                _tagData.isInvalidKey = !_tagData.key || _tagData.isInvalidKey;
+            }
             else {
-                if (selectedValue) {
-                    _tagData.isInvalidValue = !validationRules.propagateTagValue(selectedValue).isValid;
-                    _tagData.isInvalidKey = !_tagData.key || _tagData.isInvalidKey;
-                }
-                else {
-                    _tagData.isInvalidValue = false;
-                    _tagData.isInvalidKey = !_tagData.key ? false : _tagData.isInvalidKey;
-                }
+                _tagData.isInvalidValue = false;
+                _tagData.isInvalidKey = !_tagData.key ? false : _tagData.isInvalidKey;
             }
             setTagData(selectedTagIndex, _tagData);
         }
@@ -8466,13 +8463,11 @@ var TagLabelValueSelector = function (_a) {
     };
     var renderValidationsSuggestions = function () {
         var field = { isValid: true, messages: [] };
-        if (type === 'value') {
-            if (isRequired || selectedValue) {
-                field = validationRules.propagateTagValue(selectedValue);
-            }
-        }
-        else {
+        if (type === 'key') {
             field = validationRules.propagateTagKey(selectedValue);
+        }
+        else if (isRequired || selectedValue) {
+            field = validationRules.propagateTagValue(selectedValue);
         }
         if (!field.isValid) {
             return (jsxs("div", __assign({ className: "p-4" }, { children: [field.messages.map(function (error) { return (jsxs("div", __assign({ className: "flexbox p-4" }, { children: [jsx("span", { children: jsx(SvgIcClose, { className: "icon-dim-14 scr-5 mt-3 mr-4" }) }), jsx("span", { children: error })] }), error)); }), type === 'key' && (jsxs("div", __assign({ className: "flexbox p-4" }, { children: [jsx("span", { children: jsx(SvgIcInfoOutlined, { className: "icon-dim-14 mt-3 mr-4" }) }), jsx("span", __assign({ className: "dc__italic-font-style" }, { children: "Key format: prefix/name or name" }))] })))] })));

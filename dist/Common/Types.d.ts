@@ -25,3 +25,21 @@ export declare enum TippyTheme {
     black = "black",
     white = "white"
 }
+export interface TagLabelSelectType {
+    labelTags: TagType[];
+    setLabelTags: (tagList: TagType[]) => void;
+}
+export interface TagDetailType {
+    index: number;
+    tagData: TagType;
+    setTagData: (index: number, tagData: TagType) => void;
+    removeTag: (index: number) => void;
+}
+export interface TagLabelValueSelectorType {
+    selectedTagIndex: number;
+    tagData: TagType;
+    setTagData: (index: number, tagData: TagType) => void;
+    tagOptions?: OptionType[];
+    isRequired?: boolean;
+    type?: string;
+}
