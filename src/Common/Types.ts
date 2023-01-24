@@ -1,3 +1,5 @@
+import { TagLabelSelect } from './CustomTagSelector'
+
 export interface ResponseType {
     code: number
     status: string
@@ -12,20 +14,41 @@ export interface APIOptions {
 }
 
 export interface TagType {
-  key:string
-  value?: string
-  description?: string
-  propagate: boolean
-  isInvalidKey?: boolean
-  isInvalidValue?: boolean
+    key: string
+    value?: string
+    description?: string
+    propagate: boolean
+    isInvalidKey?: boolean
+    isInvalidValue?: boolean
 }
 
 export interface OptionType {
-    label: string;
-    value: string;
+    label: string
+    value: string
 }
 
 export enum TippyTheme {
     black = 'black',
     white = 'white',
+}
+
+export interface TagLabelSelectType {
+    labelTags: TagType[]
+    setLabelTags: (tagList: TagType[]) => void
+}
+
+export interface TagDetailType {
+    index: number
+    tagData: TagType
+    setTagData: (index: number, tagData: TagType) => void
+    removeTag: (index: number) => void
+}
+
+export interface TagLabelValueSelectorType {
+  selectedTagIndex: number
+  tagData: TagType
+  setTagData: (index: number, tagData: TagType) => void
+  tagOptions?: OptionType[]
+  isRequired?: boolean
+  type?: string
 }

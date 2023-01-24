@@ -5,11 +5,11 @@ const validateTagValue = (value: string): string[] => {
     if (value.length > 63) {
         errorList.push('Can be max 63 characters')
     }
-    let firstLastAlphanumeric = PATTERNS.START_END_ALPHANUMERIC.test(value)
+    const firstLastAlphanumeric = PATTERNS.START_END_ALPHANUMERIC.test(value)
     if (!firstLastAlphanumeric) {
         errorList.push('Must start and end with an alphanumeric character')
     }
-    let validValue = PATTERNS.ALPHANUMERIC_WITH_SPECIAL_CHAR.test(value)
+    const validValue = PATTERNS.ALPHANUMERIC_WITH_SPECIAL_CHAR.test(value)
     if (!validValue) {
         errorList.push('Can only contain alphanumeric chars and (-), (_), (.)')
     }
@@ -32,7 +32,7 @@ export class ValidationRules {
                 if (prefix.length > 253) {
                     errorList.push('Prefix: Can be max 253 characters')
                 }
-                let validPrefix = PATTERNS.KUBERNETES_KEY_PREFIX.test(prefix)
+                const validPrefix = PATTERNS.KUBERNETES_KEY_PREFIX.test(prefix)
                 if (!validPrefix) {
                     errorList.push('Prefix: Must be a DNS subdomain (a series of DNS labels separated by dots (.)')
                 }
