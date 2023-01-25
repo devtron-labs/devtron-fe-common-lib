@@ -51,4 +51,5 @@ export interface TagLabelValueSelectorType {
   tagOptions?: OptionType[]
   isRequired?: boolean
   type?: string
+  placeholder?: string
 }
