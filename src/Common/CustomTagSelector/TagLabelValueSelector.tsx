@@ -59,7 +59,7 @@ export const TagLabelValueSelector = ({
     const renderValidationsSuggestions = (): JSX.Element => {
         let field = { isValid: true, messages: [] }
         if (type === 'key') {
-            if (selectedValue || tagData.value) {
+            if (selectedValue || tagData.value || tagData.description) {
                 field = validationRules.propagateTagKey(selectedValue)
             }
         } else if (isRequired || selectedValue) {
@@ -71,7 +71,7 @@ export const TagLabelValueSelector = ({
                     {field.messages.map((error) => (
                         <div key={error} className="flexbox p-4">
                             <span>
-                                <ErrorCross className="icon-dim-14 scr-5 mt-3 mr-4" />
+                                <ErrorCross className="fcr-5 mr-4" />
                             </span>
                             <span>{error}</span>
                         </div>
@@ -79,7 +79,7 @@ export const TagLabelValueSelector = ({
                     {type === 'key' && (
                         <div className="flexbox p-4">
                             <span>
-                                <Info className="icon-dim-14 mt-3 mr-4" />
+                                <Info className="mr-4" />
                             </span>
                             <span className="dc__italic-font-style">Key format: prefix/name or name</span>
                         </div>
@@ -113,7 +113,7 @@ export const TagLabelValueSelector = ({
     return (
         <PopupMenu onToggleCallback={(isOpen) => togglePopup(isOpen)} autoClose>
             <PopupMenu.Button
-                rootClassName={`${
+                rootClassName={`h-32 ${
                     type === 'key'
                         ? `dc__no-right-radius`
                         : `dc__no-border-radius dc__no-right-border dc__no-left-border`

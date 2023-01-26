@@ -18,6 +18,7 @@ export interface TagType {
     value?: string
     description?: string
     propagate: boolean
+    mandatoryProjectIdsCsv?: string[]
     isInvalidKey?: boolean
     isInvalidValue?: boolean
 }

@@ -14,6 +14,7 @@ export interface TagType {
     value?: string;
     description?: string;
     propagate: boolean;
+    mandatoryProjectIdsCsv?: string[];
     isInvalidKey?: boolean;
     isInvalidValue?: boolean;
 }
@@ -42,4 +43,5 @@ export interface TagLabelValueSelectorType {
     tagOptions?: OptionType[];
     isRequired?: boolean;
     type?: string;
+    placeholder?: string;
 }

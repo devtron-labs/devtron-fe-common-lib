@@ -9,7 +9,7 @@ var Host = process.env.REACT_APP_ORCHESTRATOR_ROOT;
 var PATTERNS = {
     KUBERNETES_KEY_PREFIX: /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/,
     KUBERNETES_KEY_NAME: /^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$/,
-    START_END_ALPHANUMERIC: /^([A-Za-z0-9]).*[A-Za-z0-9]$|^[A-Za-z0-9]{1}$/,
+    START_END_ALPHANUMERIC: /^([Az09].*[A-Za-z0-9])$|[A-Za-z0-9]$/,
     ALPHANUMERIC_WITH_SPECIAL_CHAR: /^[A-Za-z0-9._-]+$/, // allow alphanumeric,(.) ,(-),(_)
 };
 
@@ -8332,7 +8332,7 @@ function PropagateTagInfo() {
     var additionalInfo = function () {
         return (jsx("div", __assign({ className: "p-12 fs-13" }, { children: "Use these tags to filter/identify resources via CLI or in other Kubernetes tools." })));
     };
-    return (jsxs("div", __assign({ className: "flexbox" }, { children: [jsx(SvgInjectTag, { className: "icon-dim-16 mt-2 mr-4" }), jsx("span", { children: "Propagate tags" }), jsx(TippyCustomized, __assign({ theme: TippyTheme.white, className: "w-300", placement: "top", Icon: SvgInjectTag, heading: 'Propagate tags to K8s resources', infoText: "Add a tag and click on the \u2B21 icon to propagate tags as labels to Kubernetes resources.", additionalContent: additionalInfo(), showCloseButton: true, trigger: "click", interactive: true, documentationLink: '', documentationLinkText: 'View Documentation' }, { children: jsx(SvgIcHelpOutline, { className: "icon-dim-16 mt-2 ml-4 cursor" }) }))] })));
+    return (jsx(TippyCustomized, __assign({ theme: TippyTheme.white, className: "w-300", placement: "top", Icon: SvgInjectTag, heading: 'Propagate tags to K8s resources', infoText: "Add a tag and click on the \u2B21 icon to propagate tags as labels to Kubernetes resources.", additionalContent: additionalInfo(), showCloseButton: true, trigger: "click", interactive: true, documentationLink: '', documentationLinkText: 'View Documentation' }, { children: jsxs("div", __assign({ className: "flexbox" }, { children: [jsx(SvgInjectTag, { className: "icon-dim-16 mt-2 mr-4" }), jsx("span", { children: "Propagate tags" }), jsx(SvgIcHelpOutline, { className: "icon-dim-16 mt-2 ml-4 cursor" })] })) })));
 }
 
 var _path$1;
@@ -8424,7 +8424,7 @@ var SvgIcInfoOutlined = function SvgIcInfoOutlined(props) {
 };
 
 var TagLabelValueSelector = function (_a) {
-    var selectedTagIndex = _a.selectedTagIndex, tagData = _a.tagData, setTagData = _a.setTagData, tagOptions = _a.tagOptions, isRequired = _a.isRequired, type = _a.type;
+    var selectedTagIndex = _a.selectedTagIndex, tagData = _a.tagData, setTagData = _a.setTagData, tagOptions = _a.tagOptions, isRequired = _a.isRequired, type = _a.type, placeholder = _a.placeholder;
     var _b = __read(useState(''), 2), selectedValue = _b[0], setSelectedValue = _b[1];
     var _c = __read(useState(false), 2), isPopupOpen = _c[0], togglePopup = _c[1];
     var validationRules = new ValidationRules();
@@ -8464,13 +8464,15 @@ var TagLabelValueSelector = function (_a) {
     var renderValidationsSuggestions = function () {
         var field = { isValid: true, messages: [] };
         if (type === 'key') {
-            field = validationRules.propagateTagKey(selectedValue);
+            if (selectedValue || tagData.value || tagData.description) {
+                field = validationRules.propagateTagKey(selectedValue);
+            }
         }
         else if (isRequired || selectedValue) {
             field = validationRules.propagateTagValue(selectedValue);
         }
         if (!field.isValid) {
-            return (jsxs("div", __assign({ className: "p-4" }, { children: [field.messages.map(function (error) { return (jsxs("div", __assign({ className: "flexbox p-4" }, { children: [jsx("span", { children: jsx(SvgIcClose, { className: "icon-dim-14 scr-5 mt-3 mr-4" }) }), jsx("span", { children: error })] }), error)); }), type === 'key' && (jsxs("div", __assign({ className: "flexbox p-4" }, { children: [jsx("span", { children: jsx(SvgIcInfoOutlined, { className: "icon-dim-14 mt-3 mr-4" }) }), jsx("span", __assign({ className: "dc__italic-font-style" }, { children: "Key format: prefix/name or name" }))] })))] })));
+            return (jsxs("div", __assign({ className: "p-4" }, { children: [field.messages.map(function (error) { return (jsxs("div", __assign({ className: "flexbox p-4" }, { children: [jsx("span", { children: jsx(SvgIcClose, { className: "fcr-5 mr-4" }) }), jsx("span", { children: error })] }), error)); }), type === 'key' && (jsxs("div", __assign({ className: "flexbox p-4" }, { children: [jsx("span", { children: jsx(SvgIcInfoOutlined, { className: "mr-4" }) }), jsx("span", __assign({ className: "dc__italic-font-style" }, { children: "Key format: prefix/name or name" }))] })))] })));
         }
         return null;
     };
@@ -8485,9 +8487,9 @@ var TagLabelValueSelector = function (_a) {
         }
         return renderValidationsSuggestions();
     };
-    return (jsxs(PopupMenu, __assign({ onToggleCallback: function (isOpen) { return togglePopup(isOpen); }, autoClose: true }, { children: [jsx(PopupMenu.Button, __assign({ rootClassName: "".concat(type === 'key'
+    return (jsxs(PopupMenu, __assign({ onToggleCallback: function (isOpen) { return togglePopup(isOpen); }, autoClose: true }, { children: [jsx(PopupMenu.Button, __assign({ rootClassName: "h-32 ".concat(type === 'key'
                     ? "dc__no-right-radius"
-                    : "dc__no-border-radius dc__no-right-border dc__no-left-border", " ").concat(tagData[type === 'key' ? 'isInvalidKey' : 'isInvalidValue'] ? 'er-5 bw-1' : '') }, { children: jsx("input", { type: "text", className: "form__input pt-4-imp pb-4-imp dc__no-border", value: selectedValue, onChange: handleInputChange, onBlur: handleOnBlur }) })), jsx(PopupMenu.Body, __assign({ rootClassName: "tag-".concat(selectedTagIndex, "-class"), autoWidth: true }, { children: isPopupOpen && renderSuggestions() }))] })));
+                    : "dc__no-border-radius dc__no-right-border dc__no-left-border", " ").concat(tagData[type === 'key' ? 'isInvalidKey' : 'isInvalidValue'] ? 'er-5 bw-1' : '') }, { children: jsx("input", { type: "text", className: "form__input pt-4-imp pb-4-imp dc__no-border", value: selectedValue, onChange: handleInputChange, onBlur: handleOnBlur, placeholder: placeholder }) })), jsx(PopupMenu.Body, __assign({ rootClassName: "tag-".concat(selectedTagIndex, "-class"), autoWidth: true }, { children: isPopupOpen && renderSuggestions() }))] })));
 };
 
 function TagDetails(_a) {
@@ -8500,7 +8502,7 @@ function TagDetails(_a) {
         _tagData.propagate = !_tagData.propagate;
         setTagData(index, _tagData);
     };
-    return (jsxs("div", __assign({ className: "flexbox mb-8" }, { children: [jsx("div", __assign({ className: "dc__border pl-4 pr-4 br-4 mr-8 pointer ".concat(tagData.propagate ? 'bcn-7' : ''), onClick: propagateTagToResource }, { children: jsx(SvgInjectTag, { className: "icon-dim-20 mt-4 ".concat(tagData.propagate ? 'scn-0' : '') }) })), jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, type: "key" }), jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, type: "value" }), jsx("div", __assign({ className: "dc__border pl-4 pr-4 dc__right-radius-4 pointer", onClick: deleteTag }, { children: jsx(SvgIcClose, { className: "icon-dim-20 mt-4" }) }))] })));
+    return (jsxs("div", __assign({ className: "flexbox mb-8" }, { children: [jsx("div", __assign({ className: "dc__border pl-4 pr-4 br-4 mr-8 pointer ".concat(tagData.propagate ? 'bcn-7' : ''), onClick: propagateTagToResource }, { children: jsx(SvgInjectTag, { className: "icon-dim-20 mt-4 ".concat(tagData.propagate ? 'scn-0' : '') }) })), jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, type: "key", placeholder: "Enter key" }), jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, type: "value", placeholder: "Enter value" }), jsx("div", __assign({ className: "dc__border pl-4 pr-4 dc__right-radius-4 pointer", onClick: deleteTag }, { children: jsx(SvgIcClose, { className: "icon-dim-20 mt-4" }) }))] })));
 }
 
 var TagLabelSelect = function (_a) {
