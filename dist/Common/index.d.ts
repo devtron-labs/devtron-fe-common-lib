@@ -20,3 +20,5 @@ export { default as PopupMenu } from './PopupMenu';
 export * from './TippyCustomized';
 export * from './CustomTagSelector';
 export * from './Dialogs';
+export * from './MultiSelectCustomization';
+export * from './InfoColorBar/InfoColourbar';
