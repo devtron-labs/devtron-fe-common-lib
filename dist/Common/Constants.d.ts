@@ -6,3 +6,6 @@ export declare const PATTERNS: {
     START_END_ALPHANUMERIC: RegExp;
     ALPHANUMERIC_WITH_SPECIAL_CHAR: RegExp;
 };
+export declare const ROUTES: {
+    PROJECT_LIST_MIN: string;
+};

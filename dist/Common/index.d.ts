@@ -21,4 +21,5 @@ export * from './TippyCustomized';
 export * from './CustomTagSelector';
 export * from './Dialogs';
 export * from './MultiSelectCustomization';
-export * from './InfoColorBar/InfoColourbar';
+export { default as InfoColourBar } from './InfoColorBar/InfoColourbar';
+export * from './Common.service';

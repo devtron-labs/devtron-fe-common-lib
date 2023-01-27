@@ -54,3 +54,13 @@ export interface TagLabelValueSelectorType {
   type?: string
   placeholder?: string
 }
+
+export interface TeamList extends ResponseType {
+  result: Teams[];
+}
+
+export interface Teams {
+  id: number;
+  name: string;
+  active: boolean;
+}

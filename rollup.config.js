@@ -25,7 +25,7 @@ export default {
         }),
         del({ targets: ['dist/*'] }),
         url(),
-        svgr(),
+        svgr({ icon: true }),
     ],
     external: Object.keys(pkg.peerDependencies || {}),
 }

@@ -71,7 +71,7 @@ export const TagLabelValueSelector = ({
                     {field.messages.map((error) => (
                         <div key={error} className="flexbox p-4">
                             <span>
-                                <ErrorCross className="fcr-5 mr-4" />
+                                <ErrorCross className="icon-dim-16 fcr-5 mt-3 mr-4" />
                             </span>
                             <span>{error}</span>
                         </div>
@@ -79,7 +79,7 @@ export const TagLabelValueSelector = ({
                     {type === 'key' && (
                         <div className="flexbox p-4">
                             <span>
-                                <Info className="mr-4" />
+                                <Info className="icon-dim-16 mt-3 mr-4" />
                             </span>
                             <span className="dc__italic-font-style">Key format: prefix/name or name</span>
                         </div>

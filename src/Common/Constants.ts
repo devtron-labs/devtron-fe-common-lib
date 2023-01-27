@@ -7,3 +7,7 @@ export const PATTERNS = {
   START_END_ALPHANUMERIC: /^([Az09].*[A-Za-z0-9])$|[A-Za-z0-9]$/,
   ALPHANUMERIC_WITH_SPECIAL_CHAR: /^[A-Za-z0-9._-]+$/, // allow alphanumeric,(.) ,(-),(_)
 }
+
+export const ROUTES = {
+  PROJECT_LIST_MIN: 'team/autocomplete',
+}

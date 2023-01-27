@@ -6,4 +6,5 @@ interface ConditionalWrapper<T> {
     children: T;
 }
 export declare const ConditionalWrap: React.FC<ConditionalWrapper<any>>;
+export declare function sortCallback(key: string, a: any, b: any, isCaseSensitive?: boolean): 1 | -1 | 0;
 export {};

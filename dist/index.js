@@ -32,6 +32,9 @@ var PATTERNS = {
     START_END_ALPHANUMERIC: /^([Az09].*[A-Za-z0-9])$|[A-Za-z0-9]$/,
     ALPHANUMERIC_WITH_SPECIAL_CHAR: /^[A-Za-z0-9._-]+$/, // allow alphanumeric,(.) ,(-),(_)
 };
+var ROUTES = {
+    PROJECT_LIST_MIN: 'team/autocomplete',
+};
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -438,7 +441,9 @@ function _extends$a() { _extends$a = Object.assign ? Object.assign.bind() : func
 var SvgIcProgressing = function SvgIcProgressing(props) {
   return /*#__PURE__*/React__namespace.createElement("svg", _extends$a({
     xmlns: "http://www.w3.org/2000/svg",
-    viewBox: "0 0 24 24"
+    viewBox: "0 0 24 24",
+    width: "1em",
+    height: "1em"
   }, props), _g$2 || (_g$2 = /*#__PURE__*/React__namespace.createElement("g", {
     fill: "none"
   }, /*#__PURE__*/React__namespace.createElement("animateTransform", {
@@ -3870,6 +3875,21 @@ var ConditionalWrap = function (_a) {
     var condition = _a.condition, wrap = _a.wrap, children = _a.children;
     return condition ? wrap(children) : jsxRuntime.jsx(jsxRuntime.Fragment, { children: children });
 };
+function sortCallback(key, a, b, isCaseSensitive) {
+    var x = a[key];
+    var y = b[key];
+    if (isCaseSensitive) {
+        x = x.toLowerCase();
+        y = y.toLowerCase();
+    }
+    if (x < y) {
+        return -1;
+    }
+    if (x > y) {
+        return 1;
+    }
+    return 0;
+}
 
 function Progressing(_a) {
     var pageLoader = _a.pageLoader, size = _a.size, theme = _a.theme, styles = _a.styles;
@@ -3993,8 +4013,9 @@ var SvgIcClose = function SvgIcClose(props) {
   return /*#__PURE__*/React__namespace.createElement("svg", _extends$8({
     xmlns: "http://www.w3.org/2000/svg",
     xmlnsXlink: "http://www.w3.org/1999/xlink",
-    width: 24,
-    height: 24
+    width: "1em",
+    height: "1em",
+    viewBox: "0 0 24 24"
   }, props), _defs || (_defs = /*#__PURE__*/React__namespace.createElement("defs", null, /*#__PURE__*/React__namespace.createElement("path", {
     id: "ic-close_svg__a",
     className: "ic-close_svg__stroke-color",
@@ -8323,8 +8344,9 @@ var _path$4, _circle, _path2;
 function _extends$7() { _extends$7 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$7.apply(this, arguments); }
 var SvgInjectTag = function SvgInjectTag(props) {
   return /*#__PURE__*/React__namespace.createElement("svg", _extends$7({
-    width: 20,
-    height: 20,
+    width: "1em",
+    height: "1em",
+    viewBox: "0 0 20 20",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
   }, props), _path$4 || (_path$4 = /*#__PURE__*/React__namespace.createElement("path", {
@@ -8352,7 +8374,9 @@ function _extends$6() { _extends$6 = Object.assign ? Object.assign.bind() : func
 var SvgIcHelpOutline = function SvgIcHelpOutline(props) {
   return /*#__PURE__*/React__namespace.createElement("svg", _extends$6({
     xmlns: "http://www.w3.org/2000/svg",
-    viewBox: "0 0 17 16"
+    viewBox: "0 0 17 16",
+    width: "1em",
+    height: "1em"
   }, props), _path$3 || (_path$3 = /*#__PURE__*/React__namespace.createElement("path", {
     fill: "#767D84",
     fillRule: "evenodd",
@@ -8372,8 +8396,9 @@ function _extends$5() { _extends$5 = Object.assign ? Object.assign.bind() : func
 var SvgIcAdd = function SvgIcAdd(props) {
   return /*#__PURE__*/React__namespace.createElement("svg", _extends$5({
     xmlns: "http://www.w3.org/2000/svg",
-    width: 24,
-    height: 24
+    width: "1em",
+    height: "1em",
+    viewBox: "0 0 24 24"
   }, props), _path$2 || (_path$2 = /*#__PURE__*/React__namespace.createElement("path", {
     className: "ic-add_svg__fill-color",
     fill: "#999",
@@ -8446,8 +8471,9 @@ function _extends$4() { _extends$4 = Object.assign ? Object.assign.bind() : func
 var SvgIcInfoOutlined = function SvgIcInfoOutlined(props) {
   return /*#__PURE__*/React__namespace.createElement("svg", _extends$4({
     xmlns: "http://www.w3.org/2000/svg",
-    width: 20,
-    height: 20
+    width: "1em",
+    height: "1em",
+    viewBox: "0 0 20 20"
   }, props), _path$1 || (_path$1 = /*#__PURE__*/React__namespace.createElement("path", {
     d: "M10 1.667c4.6 0 8.333 3.733 8.333 8.333S14.6 18.333 10 18.333 1.667 14.6 1.667 10 5.4 1.667 10 1.667zm0 1.666A6.67 6.67 0 0 0 3.333 10 6.67 6.67 0 0 0 10 16.667 6.67 6.67 0 0 0 16.667 10 6.67 6.67 0 0 0 10 3.333zm0 5.834c.46 0 .833.373.833.833v3.333a.834.834 0 1 1-1.666 0V10c0-.46.373-.833.833-.833zm0-3.334A.833.833 0 1 1 10 7.5a.833.833 0 0 1 0-1.667z",
     fill: "#06C",
@@ -8504,7 +8530,7 @@ var TagLabelValueSelector = function (_a) {
             field = validationRules.propagateTagValue(selectedValue);
         }
         if (!field.isValid) {
-            return (jsxRuntime.jsxs("div", __assign({ className: "p-4" }, { children: [field.messages.map(function (error) { return (jsxRuntime.jsxs("div", __assign({ className: "flexbox p-4" }, { children: [jsxRuntime.jsx("span", { children: jsxRuntime.jsx(SvgIcClose, { className: "fcr-5 mr-4" }) }), jsxRuntime.jsx("span", { children: error })] }), error)); }), type === 'key' && (jsxRuntime.jsxs("div", __assign({ className: "flexbox p-4" }, { children: [jsxRuntime.jsx("span", { children: jsxRuntime.jsx(SvgIcInfoOutlined, { className: "mr-4" }) }), jsxRuntime.jsx("span", __assign({ className: "dc__italic-font-style" }, { children: "Key format: prefix/name or name" }))] })))] })));
+            return (jsxRuntime.jsxs("div", __assign({ className: "p-4" }, { children: [field.messages.map(function (error) { return (jsxRuntime.jsxs("div", __assign({ className: "flexbox p-4" }, { children: [jsxRuntime.jsx("span", { children: jsxRuntime.jsx(SvgIcClose, { className: "icon-dim-16 fcr-5 mt-3 mr-4" }) }), jsxRuntime.jsx("span", { children: error })] }), error)); }), type === 'key' && (jsxRuntime.jsxs("div", __assign({ className: "flexbox p-4" }, { children: [jsxRuntime.jsx("span", { children: jsxRuntime.jsx(SvgIcInfoOutlined, { className: "icon-dim-16 mt-3 mr-4" }) }), jsxRuntime.jsx("span", __assign({ className: "dc__italic-font-style" }, { children: "Key format: prefix/name or name" }))] })))] })));
         }
         return null;
     };
@@ -16023,8 +16049,8 @@ var SvgIcAppstatusCancelled = function SvgIcAppstatusCancelled(props) {
   return /*#__PURE__*/React__namespace.createElement("svg", _extends$2({
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 28 28",
-    width: 24,
-    height: 24
+    width: "1em",
+    height: "1em"
   }, props), _g$1 || (_g$1 = /*#__PURE__*/React__namespace.createElement("g", {
     fill: "none",
     fillRule: "evenodd",
@@ -16046,8 +16072,9 @@ function _extends$1() { _extends$1 = Object.assign ? Object.assign.bind() : func
 var SvgIcCheck = function SvgIcCheck(props) {
   return /*#__PURE__*/React__namespace.createElement("svg", _extends$1({
     xmlns: "http://www.w3.org/2000/svg",
-    width: 24,
-    height: 24
+    width: "1em",
+    height: "1em",
+    viewBox: "0 0 24 24"
   }, props), _path || (_path = /*#__PURE__*/React__namespace.createElement("path", {
     stroke: "#06C",
     strokeLinecap: "round",
@@ -16064,8 +16091,9 @@ function _extends() { _extends = Object.assign ? Object.assign.bind() : function
 var SvgIcErrorMedium = function SvgIcErrorMedium(props) {
   return /*#__PURE__*/React__namespace.createElement("svg", _extends({
     xmlns: "http://www.w3.org/2000/svg",
-    width: 20,
-    height: 21
+    width: "1em",
+    height: "1em",
+    viewBox: "0 0 20 21"
   }, props), _g || (_g = /*#__PURE__*/React__namespace.createElement("g", {
     fill: "none",
     fillRule: "evenodd"
@@ -16129,6 +16157,42 @@ var CustomSelect = function (props) {
 var css_248z = ".info-bar-container .info_text .success {\n  background-color: var(--G100);\n}\n.info-bar-container .warn {\n  background: var(--Y100);\n  border: solid var(--Y200);\n}\n.info-bar-container .warn .warning-icon path:nth-child(2) {\n  fill: var(--Y700);\n}\n.info-bar-container .info_bar {\n  background-color: var(--B100);\n  border: 1px solid var(--B200);\n}\n.info-bar-container .error_bar {\n  background-color: var(--R100);\n  border: 1px solid var(--R200);\n}\n.info-bar-container .question-bar {\n  background-color: var(--V100);\n  border: 1px solid var(--V200);\n}";
 styleInject(css_248z);
 
+function InfoColourBar(_a) {
+    var message = _a.message, classname = _a.classname, Icon = _a.Icon, iconClass = _a.iconClass, iconSize = _a.iconSize, renderActionButton = _a.renderActionButton, linkText = _a.linkText, redirectLink = _a.redirectLink, linkOnClick = _a.linkOnClick, linkClass = _a.linkClass, internalLink = _a.internalLink, styles = _a.styles;
+    var renderLink = function () {
+        if (!linkText) {
+            return null;
+        }
+        else if (redirectLink) {
+            if (internalLink) {
+                return (jsxRuntime.jsx(reactRouterDom.Link, __assign({ to: redirectLink, onClick: linkOnClick, className: "cursor dc__link dc__underline-onhover mr-5" }, { children: linkText })));
+            }
+            return (jsxRuntime.jsx("a", __assign({ href: redirectLink, target: "_blank", onClick: linkOnClick, className: "cursor dc__link dc__underline-onhover mr-5" }, { children: linkText })));
+        }
+        return (linkOnClick && (jsxRuntime.jsx("div", __assign({ onClick: linkOnClick, className: "cursor dc__link dc__underline-onhover" }, { children: linkText }))));
+    };
+    return (jsxRuntime.jsx("div", __assign({ className: "info-bar-container" }, { children: jsxRuntime.jsxs("div", __assign({ className: "".concat(classname, " info_text flex dc__content-space pt-8 pb-8 pl-16 pr-16 br-4 top fs-13 fw-4"), style: styles }, { children: [jsxRuntime.jsxs("div", __assign({ className: "flex top ".concat(typeof renderActionButton === 'function' ? 'mr-5' : '') }, { children: [jsxRuntime.jsx("div", __assign({ className: "icon-dim-".concat(iconSize !== null && iconSize !== void 0 ? iconSize : '20', " mr-10") }, { children: jsxRuntime.jsx(Icon, { className: "icon-dim-".concat(iconSize !== null && iconSize !== void 0 ? iconSize : '20', " ").concat(iconClass || '', " mr-8") }) })), jsxRuntime.jsxs("div", __assign({ className: "info-bar-message-wrapper ".concat(linkClass || '') }, { children: [jsxRuntime.jsx("span", __assign({ className: linkText && redirectLink ? 'mr-5' : '' }, { children: message })), renderLink()] }))] })), typeof renderActionButton === 'function' && renderActionButton()] })) })));
+}
+
+var getTeamListMin = function () {
+    // ignore active field
+    var URL = "".concat(ROUTES.PROJECT_LIST_MIN);
+    return get(URL).then(function (response) {
+        var list = [];
+        if (response && response.result && Array.isArray(response.result)) {
+            list = response.result;
+        }
+        list = list.sort(function (a, b) {
+            return sortCallback('name', a, b);
+        });
+        return {
+            code: response.code,
+            status: response.status,
+            result: list,
+        };
+    });
+};
+
 exports.BreadCrumb = BreadCrumb;
 exports.BreadcrumbStore = Store;
 exports.ClearIndicator = ClearIndicator;
@@ -16144,6 +16208,7 @@ exports.ErrorScreenManager = ErrorScreenManager;
 exports.ErrorScreenNotAuthorized = ErrorScreenNotAuthorized;
 exports.ForceDeleteDialog = ForceDeleteDialog;
 exports.Host = Host;
+exports.InfoColourBar = InfoColourBar;
 exports.Modal = Modal;
 exports.MultiValueChipContainer = MultiValueChipContainer;
 exports.MultiValueContainer = MultiValueContainer;
@@ -16153,6 +16218,7 @@ exports.Option = Option;
 exports.PATTERNS = PATTERNS;
 exports.PopupMenu = PopupMenu;
 exports.Progressing = Progressing;
+exports.ROUTES = ROUTES;
 exports.RadioGroup = RadioGroup;
 exports.RadioGroupItem = RadioGroupItem;
 exports.RequestTimeout = RequestTimeout;
@@ -16168,10 +16234,12 @@ exports.ToastBodyWithButton = ToastBodyWithButton;
 exports.VisibleModal = VisibleModal;
 exports.VisibleModal2 = VisibleModal2;
 exports.get = get;
+exports.getTeamListMin = getTeamListMin;
 exports.multiSelectStyles = multiSelectStyles;
 exports.post = post;
 exports.put = put;
 exports.showError = showError;
+exports.sortCallback = sortCallback;
 exports.toastAccessDenied = toastAccessDenied;
 exports.trash = trash;
 exports.useBreadcrumb = useBreadcrumb;
