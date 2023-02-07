@@ -7,4 +7,6 @@ interface ConditionalWrapper<T> {
 }
 export declare const ConditionalWrap: React.FC<ConditionalWrapper<any>>;
 export declare function sortCallback(key: string, a: any, b: any, isCaseSensitive?: boolean): 1 | -1 | 0;
+export declare const stopPropagation: (event: any) => void;
+export declare function useThrottledEffect(callback: any, delay: any, deps?: any[]): void;
 export {};

@@ -3,8 +3,9 @@ import PropagateTagInfo from './PropagateTagInfo'
 import { ReactComponent as Add } from '../../Assets/Icon/ic-add.svg'
 import TagDetails from './TagDetails'
 import { TagLabelSelectType } from '../Types'
+import { DEFAULT_TAG_DATA } from '../Constants'
 
-export const TagLabelSelect = ({ labelTags, setLabelTags }: TagLabelSelectType) => {
+export const TagLabelSelect = ({ isCreateApp, labelTags, setLabelTags, tabIndex = 0 }: TagLabelSelectType) => {
     const setTagData = (index, tagValue): void => {
         const _tags = [...labelTags]
         _tags[index] = tagValue
@@ -13,7 +14,7 @@ export const TagLabelSelect = ({ labelTags, setLabelTags }: TagLabelSelectType) 
 
     const addNewTag = (): void => {
         const _tags = [...labelTags]
-        _tags.splice(0, 0, { key: '', value: '', propagate: false, isInvalidKey: false, isInvalidValue: false })
+        _tags.splice(0, 0, DEFAULT_TAG_DATA)
         setLabelTags(_tags)
     }
 
@@ -27,7 +28,7 @@ export const TagLabelSelect = ({ labelTags, setLabelTags }: TagLabelSelectType) 
         <div>
             <div className="flexbox dc__content-space mb-8">
                 <span>Tags</span>
-                <PropagateTagInfo />
+                <PropagateTagInfo isCreateApp={isCreateApp} />
             </div>
             <div>
                 <div className="dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor" onClick={addNewTag}>
@@ -41,6 +42,7 @@ export const TagLabelSelect = ({ labelTags, setLabelTags }: TagLabelSelectType) 
                             tagData={tagData}
                             setTagData={setTagData}
                             removeTag={removeTag}
+                            tabIndex={tabIndex + (index + 2)}
                         />
                     ))}
                 </div>

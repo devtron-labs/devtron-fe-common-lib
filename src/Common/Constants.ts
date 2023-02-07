@@ -1,6 +1,12 @@
 export const RequestTimeout = 60000
 export const Host = process.env.REACT_APP_ORCHESTRATOR_ROOT
 
+export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
+export const DOCUMENTATION = {
+    APP_TAGS: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/usage/applications/create-application#tags`,
+    APP_OVERVIEW_TAGS: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/usage/applications/overview#manage-tags`,
+}
+
 export const PATTERNS = {
   KUBERNETES_KEY_PREFIX: /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/,
   KUBERNETES_KEY_NAME: /^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$/,
@@ -11,3 +17,10 @@ export const PATTERNS = {
 export const ROUTES = {
   PROJECT_LIST_MIN: 'team/autocomplete',
 }
+
+export enum KEY_VALUE {
+  KEY= 'key',
+  VALUE= 'value'
+}
+
+export const DEFAULT_TAG_DATA = { key: '', value: '', propagate: false, isInvalidKey: false, isInvalidValue: false }

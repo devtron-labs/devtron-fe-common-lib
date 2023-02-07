@@ -26,6 +26,11 @@ var React__namespace = /*#__PURE__*/_interopNamespaceDefault(React);
 
 var RequestTimeout = 60000;
 var Host = process.env.REACT_APP_ORCHESTRATOR_ROOT;
+var DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai';
+var DOCUMENTATION = {
+    APP_TAGS: "".concat(DOCUMENTATION_HOME_PAGE, "/v/v0.6/usage/applications/create-application#tags"),
+    APP_OVERVIEW_TAGS: "".concat(DOCUMENTATION_HOME_PAGE, "/v/v0.6/usage/applications/overview#manage-tags"),
+};
 var PATTERNS = {
     KUBERNETES_KEY_PREFIX: /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/,
     KUBERNETES_KEY_NAME: /^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$/,
@@ -35,6 +40,12 @@ var PATTERNS = {
 var ROUTES = {
     PROJECT_LIST_MIN: 'team/autocomplete',
 };
+exports.KEY_VALUE = void 0;
+(function (KEY_VALUE) {
+    KEY_VALUE["KEY"] = "key";
+    KEY_VALUE["VALUE"] = "value";
+})(exports.KEY_VALUE || (exports.KEY_VALUE = {}));
+var DEFAULT_TAG_DATA = { key: '', value: '', propagate: false, isInvalidKey: false, isInvalidValue: false };
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -437,9 +448,9 @@ var css_248z$3 = ".empty-state {\n  height: 100%;\n}\n.empty-state img {\n  heig
 styleInject(css_248z$3);
 
 var _g$2;
-function _extends$a() { _extends$a = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$a.apply(this, arguments); }
+function _extends$b() { _extends$b = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$b.apply(this, arguments); }
 var SvgIcProgressing = function SvgIcProgressing(props) {
-  return /*#__PURE__*/React__namespace.createElement("svg", _extends$a({
+  return /*#__PURE__*/React__namespace.createElement("svg", _extends$b({
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 24 24",
     width: "1em",
@@ -491,8 +502,8 @@ EmptyState.Loading = Loading;
 
 function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e))for(t=0;t<e.length;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f);else for(t in e)e[t]&&(n&&(n+=" "),n+=t);return n}function clsx(){for(var e,t,f=0,n="";f<arguments.length;)(e=arguments[f++])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}
 
-function _extends$9() {
-  _extends$9 = Object.assign || function (target) {
+function _extends$a() {
+  _extends$a = Object.assign || function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
 
@@ -506,7 +517,7 @@ function _extends$9() {
     return target;
   };
 
-  return _extends$9.apply(this, arguments);
+  return _extends$a.apply(this, arguments);
 }
 
 function _objectWithoutPropertiesLoose$2(source, excluded) {
@@ -1232,7 +1243,7 @@ function ProgressBar(_ref) {
       isIn = _ref.isIn,
       theme = _ref.theme;
 
-  var style = _extends$9({}, userStyle, {
+  var style = _extends$a({}, userStyle, {
     animationDuration: delay + "ms",
     animationPlayState: isRunning ? 'running' : 'paused',
     opacity: hide ? 0 : 1
@@ -1509,9 +1520,9 @@ var ToastContainer = function ToastContainer(props) {
     ,
     id: containerId
   }, getToastToRender(function (position, toastList) {
-    var containerStyle = !toastList.length ? _extends$9({}, style, {
+    var containerStyle = !toastList.length ? _extends$a({}, style, {
       pointerEvents: 'none'
-    }) : _extends$9({}, style);
+    }) : _extends$a({}, style);
     return React.createElement("div", {
       className: getClassName(position),
       style: containerStyle,
@@ -1618,7 +1629,7 @@ function dispatchToast(content, options) {
 
 
 function mergeOptions(type, options) {
-  return _extends$9({}, options, {
+  return _extends$a({}, options, {
     type: options && options.type || type,
     toastId: getToastId(options)
   });
@@ -1635,7 +1646,7 @@ function toast(content, options) {
 }
 
 toast.loading = function (content, options) {
-  return dispatchToast(content, mergeOptions(TYPE.DEFAULT, _extends$9({
+  return dispatchToast(content, mergeOptions(TYPE.DEFAULT, _extends$a({
     isLoading: true,
     autoClose: false,
     closeOnClick: false,
@@ -1651,7 +1662,7 @@ function handlePromise(promise, _ref2, options) {
   var id;
 
   if (pending) {
-    id = isStr(pending) ? toast.loading(pending, options) : toast.loading(pending.render, _extends$9({}, options, pending));
+    id = isStr(pending) ? toast.loading(pending, options) : toast.loading(pending.render, _extends$a({}, options, pending));
   }
 
   var resetParams = {
@@ -1670,7 +1681,7 @@ function handlePromise(promise, _ref2, options) {
       return;
     }
 
-    var baseParams = _extends$9({
+    var baseParams = _extends$a({
       type: type
     }, resetParams, options, {
       data: result
@@ -1681,10 +1692,10 @@ function handlePromise(promise, _ref2, options) {
     } : input; // if the id is set we know that it's an update
 
     if (id) {
-      toast.update(id, _extends$9({}, baseParams, params));
+      toast.update(id, _extends$a({}, baseParams, params));
     } else {
       // using toast.promise without loading
-      toast(params.render, _extends$9({}, baseParams, params));
+      toast(params.render, _extends$a({}, baseParams, params));
     }
 
     return result;
@@ -1708,7 +1719,7 @@ toast.warning = /*#__PURE__*/createToastByType(TYPE.WARNING);
 toast.warn = toast.warning;
 
 toast.dark = function (content, options) {
-  return dispatchToast(content, mergeOptions(TYPE.DEFAULT, _extends$9({
+  return dispatchToast(content, mergeOptions(TYPE.DEFAULT, _extends$a({
     theme: 'dark'
   }, options)));
 };
@@ -1765,7 +1776,7 @@ toast.update = function (toastId, options) {
       var oldOptions = toast.props,
           oldContent = toast.content;
 
-      var nextOptions = _extends$9({}, oldOptions, options, {
+      var nextOptions = _extends$a({}, oldOptions, options, {
         toastId: options.toastId || toastId,
         updateId: generateToastId()
       });
@@ -1924,7 +1935,7 @@ var ErrorScreenManager = /** @class */ (function (_super) {
             case 401:
                 return 'Unauthorized';
             case 403:
-                return jsxRuntime.jsx(ErrorScreenNotAuthorized, { subtitle: this.props.subtitle });
+                return (jsxRuntime.jsx(ErrorScreenNotAuthorized, { subtitle: this.props.subtitle, subtitleClass: this.props.subtitleClass }));
             case 404:
                 return 'Not Found';
             case 500:
@@ -1949,9 +1960,9 @@ var ErrorScreenNotAuthorized = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ErrorScreenNotAuthorized.prototype.render = function () {
-        return (jsxRuntime.jsxs(EmptyState, { children: [jsxRuntime.jsx(EmptyState.Image, { children: jsxRuntime.jsx("img", { src: notAuthorized, alt: "Not Authorized" }) }), jsxRuntime.jsx(EmptyState.Title, { children: jsxRuntime.jsx("h3", __assign({ className: "title" }, { children: "Not authorized" })) }), jsxRuntime.jsx(EmptyState.Subtitle, { children: this.props.subtitle
+        return (jsxRuntime.jsxs(EmptyState, { children: [jsxRuntime.jsx(EmptyState.Image, { children: jsxRuntime.jsx("img", { src: notAuthorized, alt: "Not Authorized" }) }), jsxRuntime.jsx(EmptyState.Title, { children: jsxRuntime.jsx("h3", __assign({ className: "title" }, { children: "Not authorized" })) }), jsxRuntime.jsx(EmptyState.Subtitle, __assign({ className: this.props.subtitleClass }, { children: this.props.subtitle
                         ? this.props.subtitle
-                        : "Looks like you don't have access to information on this page. Please contact your manager to request access." })] }));
+                        : "Looks like you don't have access to information on this page. Please contact your manager to request access." }))] }));
     };
     return ErrorScreenNotAuthorized;
 }(React.Component));
@@ -3890,6 +3901,25 @@ function sortCallback(key, a, b, isCaseSensitive) {
     }
     return 0;
 }
+var stopPropagation = function (event) {
+    event.stopPropagation();
+};
+function useThrottledEffect(callback, delay, deps) {
+    if (deps === void 0) { deps = []; }
+    //function will be executed only once in a given time interval.
+    var lastRan = React.useRef(Date.now());
+    React.useEffect(function () {
+        var handler = setTimeout(function () {
+            if (Date.now() - lastRan.current >= delay) {
+                callback();
+                lastRan.current = Date.now();
+            }
+        }, delay - (Date.now() - lastRan.current));
+        return function () {
+            clearTimeout(handler);
+        };
+    }, __spreadArray([delay], __read(deps), false));
+}
 
 function Progressing(_a) {
     var pageLoader = _a.pageLoader, size = _a.size, theme = _a.theme, styles = _a.styles;
@@ -3964,12 +3994,13 @@ var Drawer = function (_a) {
 };
 
 var Modal = function (_a) {
-    var _b = _a.style, style = _b === void 0 ? {} : _b, children = _a.children, _c = _a.modal, modal = _c === void 0 ? false : _c, _d = _a.rootClassName, rootClassName = _d === void 0 ? "" : _d, _e = _a.onClick, onClick = _e === void 0 ? null : _e, _f = _a.callbackRef, callbackRef = _f === void 0 ? null : _f;
+    var _b = _a.style, style = _b === void 0 ? {} : _b, children = _a.children, _c = _a.modal, modal = _c === void 0 ? false : _c, _d = _a.rootClassName, rootClassName = _d === void 0 ? '' : _d, _e = _a.onClick, onClick = _e === void 0 ? null : _e, _f = _a.callbackRef, callbackRef = _f === void 0 ? null : _f, _g = _a.preventWheelDisable, preventWheelDisable = _g === void 0 ? false : _g;
     var innerRef = React.useRef(null);
     function handleClick(e) {
+        var _a;
         if (typeof onClick !== 'function')
             return;
-        if (innerRef && innerRef.current.contains(e.target)) {
+        if (innerRef && ((_a = innerRef.current) === null || _a === void 0 ? void 0 : _a.contains(e.target))) {
             onClick(e, 'in');
         }
         else {
@@ -3977,26 +4008,30 @@ var Modal = function (_a) {
         }
     }
     function disableWheel(e) {
-        if (innerRef && innerRef.current.contains(e.target)) {
-            if (innerRef.current.clientHeight === innerRef.current.scrollHeight) {
+        if (!preventWheelDisable) {
+            if (innerRef === null || innerRef === void 0 ? void 0 : innerRef.current.contains(e.target)) {
+                if (innerRef.current.clientHeight === innerRef.current.scrollHeight) {
+                    e.preventDefault();
+                }
+            }
+            else {
                 e.preventDefault();
             }
-        }
-        else {
-            e.preventDefault();
         }
     }
     React.useEffect(function () {
         document.addEventListener('click', handleClick);
-        var modal = document.getElementById("visible-modal");
+        var modal = document.getElementById('visible-modal');
         if (modal)
-            modal.classList.add("show");
-        document.body.addEventListener('wheel', disableWheel, { passive: false });
+            modal.classList.add('show');
+        if (!preventWheelDisable)
+            document.body.addEventListener('wheel', disableWheel, { passive: false });
         return function () {
-            document.body.removeEventListener('wheel', disableWheel);
+            if (!preventWheelDisable)
+                document.body.removeEventListener('wheel', disableWheel);
             document.removeEventListener('click', handleClick);
             if (modal)
-                modal.classList.remove("show");
+                modal.classList.remove('show');
         };
     }, []);
     return ReactDOM.createPortal(jsxRuntime.jsx("div", __assign({ tabIndex: 0, onClick: onClick, ref: function (el) {
@@ -4008,9 +4043,9 @@ var Modal = function (_a) {
 };
 
 var _defs, _use;
-function _extends$8() { _extends$8 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$8.apply(this, arguments); }
+function _extends$9() { _extends$9 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$9.apply(this, arguments); }
 var SvgIcClose = function SvgIcClose(props) {
-  return /*#__PURE__*/React__namespace.createElement("svg", _extends$8({
+  return /*#__PURE__*/React__namespace.createElement("svg", _extends$9({
     xmlns: "http://www.w3.org/2000/svg",
     xmlnsXlink: "http://www.w3.org/1999/xlink",
     width: "1em",
@@ -4201,9 +4236,10 @@ function usePopupContext() {
     return context;
 }
 function PopupMenu(_a) {
-    var _b = _a.children, children = _b === void 0 ? null : _b, _c = _a.onToggleCallback, onToggleCallback = _c === void 0 ? null : _c, _d = _a.autoClose, autoClose = _d === void 0 ? false : _d;
-    var _e = __read(React.useState(null), 2), popupPosition = _e[0], setPopupPosition = _e[1];
-    var _f = __read(React.useState(0), 2), opacity = _f[0], setOpacity = _f[1];
+    var _b;
+    var _c = _a.children, children = _c === void 0 ? null : _c, _d = _a.onToggleCallback, onToggleCallback = _d === void 0 ? null : _d, _e = _a.autoClose, autoClose = _e === void 0 ? false : _e, _f = _a.autoPosition, autoPosition = _f === void 0 ? false : _f;
+    var _g = __read(React.useState(null), 2), popupPosition = _g[0], setPopupPosition = _g[1];
+    var _h = __read(React.useState(0), 2), opacity = _h[0], setOpacity = _h[1];
     var observer = React.useRef(null);
     var buttonRef = React.useRef(null);
     var buttonWidth = React.useRef(null);
@@ -4224,10 +4260,16 @@ function PopupMenu(_a) {
             }
         }
     }, [popupPosition]);
+    React.useEffect(function () {
+        if ((buttonRef === null || buttonRef === void 0 ? void 0 : buttonRef.current) && autoPosition && popupPosition) {
+            var _a = buttonRef.current.getBoundingClientRect(), height = _a.height, x = _a.x, y = _a.y;
+            setPopupPosition({ left: x, top: y + height });
+        }
+    }, [(_b = buttonRef === null || buttonRef === void 0 ? void 0 : buttonRef.current) === null || _b === void 0 ? void 0 : _b.clientHeight]);
     var options = {
         root: null,
         rootMargin: '0px',
-        threshold: 1.0
+        threshold: 1.0,
     };
     if (!children)
         return children;
@@ -4255,7 +4297,7 @@ function PopupMenu(_a) {
     var handleOpen = function (e) {
         e.stopPropagation();
         setOpacity(0);
-        var _a = e.currentTarget.getBoundingClientRect(); _a.bottom; var height = _a.height; _a.left; _a.right; _a.top; _a.width; var x = _a.x, y = _a.y;
+        var _a = e.currentTarget.getBoundingClientRect(), height = _a.height, x = _a.x, y = _a.y;
         setPopupPosition({ left: x, top: y + height });
     };
     var handleClose = function (e, inOrOut) {
@@ -4284,17 +4326,27 @@ function PopupMenu(_a) {
         var _a = buttonEl.getBoundingClientRect(); _a.bottom; _a.height; _a.left; _a.right; _a.top; var width = _a.width; _a.x; _a.y;
         buttonWidth.current = width;
     }
-    return jsxRuntime.jsx(PopupContext.Provider, __assign({ value: { handleOpen: handleOpen, popupPosition: popupPosition, handleClose: handleClose, opacity: opacity, setPopupPosition: setPopupPosition, callbackRef: callbackRef, buttonRef: buttonRef, initialiseButtonWidth: initialiseButtonWidth, buttonWidth: buttonWidth } }, { children: children }));
+    return (jsxRuntime.jsx(PopupContext.Provider, __assign({ value: {
+            handleOpen: handleOpen,
+            popupPosition: popupPosition,
+            handleClose: handleClose,
+            opacity: opacity,
+            setPopupPosition: setPopupPosition,
+            callbackRef: callbackRef,
+            buttonRef: buttonRef,
+            initialiseButtonWidth: initialiseButtonWidth,
+            buttonWidth: buttonWidth,
+        } }, { children: children })));
 }
 function Button(_a) {
-    var _b = _a.children, children = _b === void 0 ? null : _b, _c = _a.disabled, disabled = _c === void 0 ? false : _c, _d = _a.rootClassName, rootClassName = _d === void 0 ? "" : _d, _e = _a.tabIndex, tabIndex = _e === void 0 ? 0 : _e, _f = _a.onHover, onHover = _f === void 0 ? false : _f, _g = _a.isKebab, isKebab = _g === void 0 ? false : _g;
+    var _b = _a.children, children = _b === void 0 ? null : _b, _c = _a.disabled, disabled = _c === void 0 ? false : _c, _d = _a.rootClassName, rootClassName = _d === void 0 ? '' : _d, _e = _a.tabIndex, tabIndex = _e === void 0 ? 0 : _e, _f = _a.onHover, onHover = _f === void 0 ? false : _f, _g = _a.isKebab, isKebab = _g === void 0 ? false : _g;
     var _h = usePopupContext(), handleOpen = _h.handleOpen, popupPosition = _h.popupPosition; _h.buttonRef; var initialiseButtonWidth = _h.initialiseButtonWidth;
-    return jsxRuntime.jsx("button", __assign({ ref: initialiseButtonWidth, type: "button", tabIndex: tabIndex, disabled: disabled, className: "".concat(rootClassName, " ").concat(popupPosition ? 'focused' : '', "  ").concat(isKebab ? 'popup-button-kebab' : "popup-button"), onMouseEnter: onHover ? (disabled ? null : handleOpen) : function () { }, onClick: disabled ? null : handleOpen }, { children: children }));
+    return (jsxRuntime.jsx("button", __assign({ ref: initialiseButtonWidth, type: "button", tabIndex: tabIndex, disabled: disabled, className: "".concat(rootClassName, " ").concat(popupPosition ? 'focused' : '', "  ").concat(isKebab ? 'popup-button-kebab' : 'popup-button'), onMouseEnter: onHover ? (disabled ? null : handleOpen) : function () { }, onClick: disabled ? null : handleOpen }, { children: children })));
 }
 function Body$1(_a) {
-    var _b = _a.children, children = _b === void 0 ? null : _b, _c = _a.rootClassName, rootClassName = _c === void 0 ? "" : _c, _d = _a.style, style = _d === void 0 ? {} : _d, _e = _a.autoWidth, autoWidth = _e === void 0 ? false : _e;
-    var _f = usePopupContext(), handleClose = _f.handleClose, popupPosition = _f.popupPosition, opacity = _f.opacity, callbackRef = _f.callbackRef, buttonWidth = _f.buttonWidth;
-    return popupPosition ? jsxRuntime.jsx(Modal, __assign({ callbackRef: callbackRef, onClick: handleClose, rootClassName: "".concat(rootClassName, " popup-body ").concat(!children ? 'popup-body--empty' : '', " ").concat(Object.keys(popupPosition).join(" ")), style: __assign(__assign(__assign(__assign({}, popupPosition), style), (autoWidth ? { width: buttonWidth.current } : {})), { opacity: opacity }) }, { children: children })) : null;
+    var _b = _a.children, children = _b === void 0 ? null : _b, _c = _a.rootClassName, rootClassName = _c === void 0 ? '' : _c, _d = _a.style, style = _d === void 0 ? {} : _d, _e = _a.autoWidth, autoWidth = _e === void 0 ? false : _e, _f = _a.preventWheelDisable, preventWheelDisable = _f === void 0 ? false : _f;
+    var _g = usePopupContext(), handleClose = _g.handleClose, popupPosition = _g.popupPosition, opacity = _g.opacity, callbackRef = _g.callbackRef, buttonWidth = _g.buttonWidth;
+    return popupPosition ? (jsxRuntime.jsx(Modal, __assign({ callbackRef: callbackRef, onClick: handleClose, rootClassName: "".concat(rootClassName, " popup-body ").concat(!children ? 'popup-body--empty' : '', " ").concat(Object.keys(popupPosition).join(' ')), style: __assign(__assign(__assign(__assign({}, popupPosition), style), (autoWidth ? { width: buttonWidth.current } : {})), { opacity: opacity }), preventWheelDisable: preventWheelDisable }, { children: children }))) : null;
 }
 PopupMenu.Button = Button;
 PopupMenu.Body = Body$1;
@@ -8303,6 +8355,21 @@ var index$1 = /*#__PURE__*/forwardRef( /*#__PURE__*/TippyGenerator(tippy));
 
 var Tippy = index$1;
 
+var _path$5;
+function _extends$8() { _extends$8 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$8.apply(this, arguments); }
+var SvgIcCross = function SvgIcCross(props) {
+  return /*#__PURE__*/React__namespace.createElement("svg", _extends$8({
+    width: "1em",
+    height: "1em",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, props), _path$5 || (_path$5 = /*#__PURE__*/React__namespace.createElement("path", {
+    d: "M19.28 5.78a.75.75 0 0 0-1.06-1.06l1.06 1.06ZM4.72 18.22a.75.75 0 1 0 1.06 1.06l-1.06-1.06Zm13.5 1.06a.75.75 0 1 0 1.06-1.06l-1.06 1.06ZM5.78 4.72a.75.75 0 0 0-1.06 1.06l1.06-1.06Zm12.44 0-6.75 6.75 1.06 1.06 6.75-6.75-1.06-1.06Zm-6.75 6.75-6.75 6.75 1.06 1.06 6.75-6.75-1.06-1.06Zm7.81 6.75-6.75-6.75-1.06 1.06 6.75 6.75 1.06-1.06Zm-6.75-6.75L5.78 4.72 4.72 5.78l6.75 6.75 1.06-1.06Z",
+    fill: "#596168"
+  })));
+};
+
 var css_248z$1 = ".tippy-box[data-animation=shift-toward-subtle][data-state=hidden]{opacity:0}.tippy-box[data-animation=shift-toward-subtle][data-state=hidden][data-placement^=top][data-state=hidden]{transform:translateY(-5px)}.tippy-box[data-animation=shift-toward-subtle][data-state=hidden][data-placement^=bottom][data-state=hidden]{transform:translateY(5px)}.tippy-box[data-animation=shift-toward-subtle][data-state=hidden][data-placement^=left][data-state=hidden]{transform:translateX(-5px)}.tippy-box[data-animation=shift-toward-subtle][data-state=hidden][data-placement^=right][data-state=hidden]{transform:translateX(5px)}";
 styleInject(css_248z$1);
 
@@ -8332,9 +8399,9 @@ function TippyCustomized(props) {
     };
     var getTippyContent = function () {
         var Icon = props.Icon, iconPath = props.iconPath, iconClass = props.iconClass, iconSize = props.iconSize, onImageLoadError = props.onImageLoadError, heading = props.heading, infoTextHeading = props.infoTextHeading, infoText = props.infoText, showCloseButton = props.showCloseButton, additionalContent = props.additionalContent, documentationLink = props.documentationLink, documentationLinkText = props.documentationLinkText;
-        return (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs("div", __assign({ className: "dc__word-break dc__hyphens-auto flex left ".concat(isWhiteTheme ? 'p-12 dc__border-bottom-n1 cn-9' : 'pt-20 pb-12 pr-20 pl-20 cn-0') }, { children: [iconPath ? (jsxRuntime.jsx("img", { className: "icon-dim-".concat(iconSize || 20, " mr-6 ").concat(iconClass || ''), src: iconPath, alt: heading, onError: onImageLoadError })) : (Icon && (jsxRuntime.jsx("div", __assign({ className: "icon-dim-".concat(iconSize || 20, " mr-6") }, { children: jsxRuntime.jsx(Icon, { className: "icon-dim-".concat(iconSize || 20, " ").concat(iconClass || '') }) })))), heading && jsxRuntime.jsx("span", __assign({ className: "fs-14 fw-6 lh-20 ".concat(showCloseButton ? 'mr-6' : '') }, { children: heading })), showCloseButton && (jsxRuntime.jsx("div", __assign({ className: "icon-dim-16 ml-auto" }, { children: jsxRuntime.jsx(SvgIcClose, { className: "icon-dim-16 cursor ".concat(isWhiteTheme ? 'fcn-9' : 'fcn-0'), onClick: closeTippy }) })))] })), infoTextHeading && (jsxRuntime.jsx("div", __assign({ className: "dc__word-break dc__hyphens-auto fs-14 fw-6 lh-20 ".concat(isWhiteTheme ? 'pl-12 pr-12' : 'pl-20 pr-20') }, { children: infoTextHeading }))), infoText && (jsxRuntime.jsx("div", __assign({ className: "dc__word-break dc__hyphens-auto fs-13 fw-4 lh-20 ".concat(isWhiteTheme
+        return (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs("div", __assign({ className: "dc__word-break dc__hyphens-auto flex left ".concat(isWhiteTheme ? 'p-12 dc__border-bottom-n1 cn-9' : 'pt-20 pb-12 pr-20 pl-20 cn-0') }, { children: [iconPath ? (jsxRuntime.jsx("img", { className: "icon-dim-".concat(iconSize || 20, " mr-6 ").concat(iconClass || ''), src: iconPath, alt: heading, onError: onImageLoadError })) : (Icon && (jsxRuntime.jsx("div", __assign({ className: "icon-dim-".concat(iconSize || 20, " mr-6") }, { children: jsxRuntime.jsx(Icon, { className: "icon-dim-".concat(iconSize || 20, " ").concat(iconClass || '') }) })))), heading && jsxRuntime.jsx("span", __assign({ className: "fs-14 fw-6 lh-20 ".concat(showCloseButton ? 'mr-6' : '') }, { children: heading })), showCloseButton && (jsxRuntime.jsx("div", __assign({ className: "icon-dim-16 ml-auto" }, { children: jsxRuntime.jsx(SvgIcCross, { className: "icon-dim-16 cursor ".concat(isWhiteTheme ? 'fcn-9' : 'fcn-0'), onClick: closeTippy }) })))] })), infoTextHeading && (jsxRuntime.jsx("div", __assign({ className: "dc__word-break dc__hyphens-auto fs-14 fw-6 lh-20 ".concat(isWhiteTheme ? 'pl-12 pr-12' : 'pl-20 pr-20') }, { children: infoTextHeading }))), infoText && (jsxRuntime.jsx("div", __assign({ className: "dc__word-break dc__hyphens-auto fs-13 fw-4 lh-20 ".concat(isWhiteTheme
                         ? 'p-12'
-                        : "pl-20 pr-20 pt-4 ".concat(additionalContent && documentationLink ? 'pb-12' : 'pb-20')) }, { children: infoText }))), additionalContent, documentationLink && (jsxRuntime.jsx("div", __assign({ className: "pl-12 pb-12" }, { children: jsxRuntime.jsx("a", __assign({ href: documentationLink, target: "_blank", rel: "noreferrer noopener", className: "cb-5", onClick: closeTippy }, { children: documentationLinkText || 'Learn more' })) })))] }));
+                        : "pl-20 pr-20 pt-4 ".concat(additionalContent && documentationLink ? 'pb-12' : 'pb-20')) }, { children: infoText }))), additionalContent, documentationLink && (jsxRuntime.jsx("div", __assign({ className: "pl-12 pb-12" }, { children: jsxRuntime.jsx("a", __assign({ href: documentationLink, target: "_blank", rel: "noreferrer noopener", className: "fs-13 cb-5", onClick: closeTippy }, { children: documentationLinkText || 'Learn more' })) })))] }));
     };
     var className = props.className, placement = props.placement, arrow = props.arrow, interactive = props.interactive, showOnCreate = props.showOnCreate, trigger = props.trigger, animation = props.animation, duration = props.duration, children = props.children;
     return (jsxRuntime.jsx(Tippy, __assign({ className: "".concat(isWhiteTheme ? 'tippy-white-container default-white' : 'tippy-black-container default-black', " no-content-padding tippy-shadow ").concat(className), arrow: arrow || false, interactive: interactive || false, placement: placement || 'top', content: getTippyContent(), trigger: trigger || 'mouseenter', onMount: onTippyMount, onClickOutside: closeTippy, showOnCreate: showOnCreate || false, animation: animation || 'fade', duration: duration || 300, visible: props.visible }, { children: children })));
@@ -8384,11 +8451,12 @@ var SvgIcHelpOutline = function SvgIcHelpOutline(props) {
   })));
 };
 
-function PropagateTagInfo() {
+function PropagateTagInfo(_a) {
+    var isCreateApp = _a.isCreateApp;
     var additionalInfo = function () {
-        return (jsxRuntime.jsx("div", __assign({ className: "p-12 fs-13" }, { children: "Use these tags to filter/identify resources via CLI or in other Kubernetes tools." })));
+        return (jsxRuntime.jsxs("div", __assign({ className: "p-12 fs-13" }, { children: [jsxRuntime.jsxs("div", __assign({ className: "mb-20" }, { children: [jsxRuntime.jsxs("span", __assign({ className: "flex left" }, { children: ["Add a tag and click on the", jsxRuntime.jsx(SvgInjectTag, { className: "icon-dim-16 ml-4 mr-4" }), "icon to"] })), "propagate tags as labels to Kubernetes resources"] })), jsxRuntime.jsx("div", { children: "Use these tags to filter/identify resources via CLI or in other Kubernetes tools." })] })));
     };
-    return (jsxRuntime.jsx(TippyCustomized, __assign({ theme: exports.TippyTheme.white, className: "w-300", placement: "top", Icon: SvgInjectTag, heading: 'Propagate tags to K8s resources', infoText: "Add a tag and click on the \u2B21 icon to propagate tags as labels to Kubernetes resources.", additionalContent: additionalInfo(), showCloseButton: true, trigger: "click", interactive: true, documentationLink: '', documentationLinkText: 'View Documentation' }, { children: jsxRuntime.jsxs("div", __assign({ className: "flexbox" }, { children: [jsxRuntime.jsx(SvgInjectTag, { className: "icon-dim-16 mt-2 mr-4" }), jsxRuntime.jsx("span", { children: "Propagate tags" }), jsxRuntime.jsx(SvgIcHelpOutline, { className: "icon-dim-16 mt-2 ml-4 cursor" })] })) })));
+    return (jsxRuntime.jsx(TippyCustomized, __assign({ theme: exports.TippyTheme.white, className: "w-300", placement: "top", Icon: SvgInjectTag, heading: 'Propagate tags to K8s resources', infoText: "", additionalContent: additionalInfo(), showCloseButton: true, trigger: "click", interactive: true, documentationLink: isCreateApp ? DOCUMENTATION.APP_TAGS : DOCUMENTATION.APP_OVERVIEW_TAGS, documentationLinkText: "View Documentation" }, { children: jsxRuntime.jsxs("div", __assign({ className: "flexbox cursor" }, { children: [jsxRuntime.jsx(SvgInjectTag, { className: "icon-dim-16 mt-2 mr-4" }), jsxRuntime.jsx("span", { children: "Propagate tags" }), jsxRuntime.jsx(SvgIcHelpOutline, { className: "icon-dim-16 mt-2 ml-4" })] })) })));
 }
 
 var _path$2;
@@ -8481,21 +8549,68 @@ var SvgIcInfoOutlined = function SvgIcInfoOutlined(props) {
   })));
 };
 
+function ResizableTagTextArea(_a) {
+    var className = _a.className, minHeight = _a.minHeight, maxHeight = _a.maxHeight, value = _a.value, onChange = _a.onChange, onBlur = _a.onBlur, onFocus = _a.onFocus, placeholder = _a.placeholder, tabIndex = _a.tabIndex, refVar = _a.refVar, dependentRef = _a.dependentRef;
+    var _b = __read(React.useState(''), 2), text = _b[0], setText = _b[1];
+    React.useEffect(function () {
+        setText(value);
+    }, [value]);
+    var handleChange = function (event) {
+        setText(event.target.value);
+        onChange(event);
+    };
+    var reInitHeight = function () {
+        if (document.activeElement !== refVar.current)
+            return;
+        refVar.current.style.height = 'auto';
+        dependentRef.current.style.height = 'auto';
+        var nextHeight = refVar.current.scrollHeight;
+        if (nextHeight < dependentRef.current.scrollHeight) {
+            nextHeight = dependentRef.current.scrollHeight;
+        }
+        if (minHeight && nextHeight < minHeight) {
+            nextHeight = minHeight;
+        }
+        if (maxHeight && nextHeight > maxHeight) {
+            nextHeight = maxHeight;
+        }
+        refVar.current.style.height = nextHeight + 'px';
+        dependentRef.current.style.height = nextHeight + 'px';
+    };
+    useThrottledEffect(reInitHeight, 500, [text]);
+    var handleOnBlur = function (event) {
+        refVar.current.style.height = 'auto';
+        dependentRef.current.style.height = 'auto';
+        onBlur(event);
+    };
+    var handleOnFocus = function (event) {
+        reInitHeight();
+        onFocus(event);
+    };
+    return (jsxRuntime.jsx("textarea", { rows: 1, ref: refVar, value: text, placeholder: placeholder, className: "".concat(className || '', " lh-20"), style: { resize: 'none' }, onChange: handleChange, onBlur: handleOnBlur, onFocus: handleOnFocus, tabIndex: tabIndex }));
+}
+
 var TagLabelValueSelector = function (_a) {
-    var selectedTagIndex = _a.selectedTagIndex, tagData = _a.tagData, setTagData = _a.setTagData, tagOptions = _a.tagOptions, isRequired = _a.isRequired, type = _a.type, placeholder = _a.placeholder;
-    var _b = __read(React.useState(''), 2), selectedValue = _b[0], setSelectedValue = _b[1];
-    var _c = __read(React.useState(false), 2), isPopupOpen = _c[0], togglePopup = _c[1];
+    var selectedTagIndex = _a.selectedTagIndex, tagData = _a.tagData, setTagData = _a.setTagData, tagOptions = _a.tagOptions, isRequired = _a.isRequired, tagInputType = _a.tagInputType, placeholder = _a.placeholder, _b = _a.tabIndex, tabIndex = _b === void 0 ? null : _b, refVar = _a.refVar, dependentRef = _a.dependentRef;
+    var _c = __read(React.useState(''), 2), selectedValue = _c[0], setSelectedValue = _c[1];
+    var _d = __read(React.useState(''), 2), activeElement = _d[0], setActiveElement = _d[1];
     var validationRules = new ValidationRules();
     React.useEffect(function () {
-        setSelectedValue((tagData === null || tagData === void 0 ? void 0 : tagData[type]) || '');
-    }, [selectedTagIndex, tagData, type]);
+        setSelectedValue((tagData === null || tagData === void 0 ? void 0 : tagData[tagInputType]) || '');
+    }, [selectedTagIndex, tagData, tagInputType]);
+    var handleOnFocus = function (e) {
+        setTimeout(function () {
+            setActiveElement("tag-".concat(tagInputType, "-").concat(selectedTagIndex));
+        }, 300);
+    };
     var handleOnBlur = function (e) {
+        setActiveElement('');
         if (!e.relatedTarget ||
             !e.relatedTarget.classList.value ||
             !e.relatedTarget.classList.value.includes("tag-".concat(selectedTagIndex, "-class"))) {
             var _tagData = __assign({}, tagData);
-            _tagData[type] = selectedValue;
-            if (type === 'key') {
+            _tagData[tagInputType] = selectedValue;
+            if (tagInputType === exports.KEY_VALUE.KEY) {
                 _tagData.isInvalidKey = selectedValue
                     ? !validationRules.propagateTagKey(selectedValue).isValid
                     : _tagData.value !== '';
@@ -8515,14 +8630,15 @@ var TagLabelValueSelector = function (_a) {
         setSelectedValue(e.target.value);
     };
     var onSelectValue = function (e) {
+        stopPropagation(e);
         var _tagData = __assign({}, tagData);
-        _tagData[type] = e.currentTarget.dataset.key;
+        _tagData[tagInputType] = e.currentTarget.dataset.key;
         setTagData(selectedTagIndex, _tagData);
     };
     var renderValidationsSuggestions = function () {
         var field = { isValid: true, messages: [] };
-        if (type === 'key') {
-            if (selectedValue || tagData.value || tagData.description) {
+        if (tagInputType === exports.KEY_VALUE.KEY) {
+            if (selectedValue || tagData.value) {
                 field = validationRules.propagateTagKey(selectedValue);
             }
         }
@@ -8530,7 +8646,7 @@ var TagLabelValueSelector = function (_a) {
             field = validationRules.propagateTagValue(selectedValue);
         }
         if (!field.isValid) {
-            return (jsxRuntime.jsxs("div", __assign({ className: "p-4" }, { children: [field.messages.map(function (error) { return (jsxRuntime.jsxs("div", __assign({ className: "flexbox p-4" }, { children: [jsxRuntime.jsx("span", { children: jsxRuntime.jsx(SvgIcClose, { className: "icon-dim-16 fcr-5 mt-3 mr-4" }) }), jsxRuntime.jsx("span", { children: error })] }), error)); }), type === 'key' && (jsxRuntime.jsxs("div", __assign({ className: "flexbox p-4" }, { children: [jsxRuntime.jsx("span", { children: jsxRuntime.jsx(SvgIcInfoOutlined, { className: "icon-dim-16 mt-3 mr-4" }) }), jsxRuntime.jsx("span", __assign({ className: "dc__italic-font-style" }, { children: "Key format: prefix/name or name" }))] })))] })));
+            return (jsxRuntime.jsxs("div", __assign({ className: "p-4", onClick: stopPropagation }, { children: [field.messages.map(function (error) { return (jsxRuntime.jsxs("div", __assign({ className: "flexbox pr-4 pl-4" }, { children: [jsxRuntime.jsx("span", { children: jsxRuntime.jsx(SvgIcCross, { className: "icon-dim-14 scr-5 mt-3 mr-4" }) }), jsxRuntime.jsx("span", { children: error })] }), error)); }), tagInputType === exports.KEY_VALUE.KEY && (jsxRuntime.jsxs("div", __assign({ className: "flexbox pr-4 pl-4" }, { children: [jsxRuntime.jsx("span", { children: jsxRuntime.jsx(SvgIcInfoOutlined, { className: "icon-dim-14 mt-3 mr-4" }) }), jsxRuntime.jsx("span", __assign({ className: "dc__italic-font-style" }, { children: "Key format: prefix/name or name" }))] })))] })));
         }
         return null;
     };
@@ -8545,14 +8661,19 @@ var TagLabelValueSelector = function (_a) {
         }
         return renderValidationsSuggestions();
     };
-    return (jsxRuntime.jsxs(PopupMenu, __assign({ onToggleCallback: function (isOpen) { return togglePopup(isOpen); }, autoClose: true }, { children: [jsxRuntime.jsx(PopupMenu.Button, __assign({ rootClassName: "h-32 ".concat(type === 'key'
-                    ? "dc__no-right-radius"
-                    : "dc__no-border-radius dc__no-right-border dc__no-left-border", " ").concat(tagData[type === 'key' ? 'isInvalidKey' : 'isInvalidValue'] ? 'er-5 bw-1' : '') }, { children: jsxRuntime.jsx("input", { type: "text", className: "form__input pt-4-imp pb-4-imp dc__no-border", value: selectedValue, onChange: handleInputChange, onBlur: handleOnBlur, placeholder: placeholder }) })), jsxRuntime.jsx(PopupMenu.Body, __assign({ rootClassName: "tag-".concat(selectedTagIndex, "-class"), autoWidth: true }, { children: isPopupOpen && renderSuggestions() }))] })));
+    return (jsxRuntime.jsxs(PopupMenu, __assign({ autoClose: true, autoPosition: true }, { children: [jsxRuntime.jsx(PopupMenu.Button, __assign({ rootClassName: "dc__bg-n50 flex top dc__no-border" }, { children: jsxRuntime.jsx(ResizableTagTextArea, { minHeight: 30, maxHeight: 80, className: "form__input pt-4-imp pb-4-imp fs-13 ".concat(tagInputType === exports.KEY_VALUE.KEY
+                        ? "dc__no-right-radius"
+                        : "dc__no-border-radius dc__no-right-border dc__no-left-border", " ").concat(tagData[tagInputType === exports.KEY_VALUE.KEY ? 'isInvalidKey' : 'isInvalidValue']
+                        ? 'form__input--error'
+                        : ''), value: selectedValue, onChange: handleInputChange, onBlur: handleOnBlur, onFocus: handleOnFocus, placeholder: placeholder, tabIndex: tabIndex, refVar: refVar, dependentRef: dependentRef }) })), jsxRuntime.jsx(PopupMenu.Body, __assign({ rootClassName: "tag-".concat(selectedTagIndex, "-class"), autoWidth: true, preventWheelDisable: true }, { children: activeElement === "tag-".concat(tagInputType, "-").concat(selectedTagIndex) && renderSuggestions() }))] })));
 };
 
 function TagDetails(_a) {
-    var index = _a.index, tagData = _a.tagData, setTagData = _a.setTagData, removeTag = _a.removeTag;
-    var deleteTag = function () {
+    var index = _a.index, tagData = _a.tagData, setTagData = _a.setTagData, removeTag = _a.removeTag, _b = _a.tabIndex, tabIndex = _b === void 0 ? 1 : _b;
+    var keyRef = React.useRef(null);
+    var valueRef = React.useRef(null);
+    var deleteTag = function (e) {
+        stopPropagation(e);
         removeTag(index);
     };
     var propagateTagToResource = function () {
@@ -8560,11 +8681,11 @@ function TagDetails(_a) {
         _tagData.propagate = !_tagData.propagate;
         setTagData(index, _tagData);
     };
-    return (jsxRuntime.jsxs("div", __assign({ className: "flexbox mb-8" }, { children: [jsxRuntime.jsx("div", __assign({ className: "dc__border pl-4 pr-4 br-4 mr-8 pointer ".concat(tagData.propagate ? 'bcn-7' : ''), onClick: propagateTagToResource }, { children: jsxRuntime.jsx(SvgInjectTag, { className: "icon-dim-20 mt-4 ".concat(tagData.propagate ? 'scn-0' : '') }) })), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, type: "key", placeholder: "Enter key" }), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, type: "value", placeholder: "Enter value" }), jsxRuntime.jsx("div", __assign({ className: "dc__border pl-4 pr-4 dc__right-radius-4 pointer", onClick: deleteTag }, { children: jsxRuntime.jsx(SvgIcClose, { className: "icon-dim-20 mt-4" }) }))] })));
+    return (jsxRuntime.jsxs("div", __assign({ className: "flexbox mb-8" }, { children: [jsxRuntime.jsx("div", __assign({ className: "dc__border h-30 pl-4 pr-4 br-4 mr-8 pointer ".concat(tagData.propagate ? 'bcn-7' : ''), onClick: propagateTagToResource }, { children: jsxRuntime.jsx(SvgInjectTag, { className: "icon-dim-20 mt-4 ".concat(tagData.propagate ? 'scn-0' : '') }) })), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, tagInputType: exports.KEY_VALUE.KEY, placeholder: "Enter key", tabIndex: tabIndex - 1, refVar: keyRef, dependentRef: valueRef }), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, tagInputType: exports.KEY_VALUE.VALUE, placeholder: "Enter value", tabIndex: tabIndex, refVar: valueRef, dependentRef: keyRef }), jsxRuntime.jsx("div", __assign({ className: "dc__border pl-4 pr-4 dc__right-radius-4 pointer flex top", onClick: deleteTag }, { children: jsxRuntime.jsx(SvgIcClose, { className: "icon-dim-20 mt-4" }) }))] })));
 }
 
 var TagLabelSelect = function (_a) {
-    var labelTags = _a.labelTags, setLabelTags = _a.setLabelTags;
+    var isCreateApp = _a.isCreateApp, labelTags = _a.labelTags, setLabelTags = _a.setLabelTags, _b = _a.tabIndex, tabIndex = _b === void 0 ? 0 : _b;
     var setTagData = function (index, tagValue) {
         var _tags = __spreadArray([], __read(labelTags), false);
         _tags[index] = tagValue;
@@ -8572,7 +8693,7 @@ var TagLabelSelect = function (_a) {
     };
     var addNewTag = function () {
         var _tags = __spreadArray([], __read(labelTags), false);
-        _tags.splice(0, 0, { key: '', value: '', propagate: false, isInvalidKey: false, isInvalidValue: false });
+        _tags.splice(0, 0, DEFAULT_TAG_DATA);
         setLabelTags(_tags);
     };
     var removeTag = function (index) {
@@ -8580,7 +8701,7 @@ var TagLabelSelect = function (_a) {
         _tags.splice(index, 1);
         setLabelTags(_tags);
     };
-    return (jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs("div", __assign({ className: "flexbox dc__content-space mb-8" }, { children: [jsxRuntime.jsx("span", { children: "Tags" }), jsxRuntime.jsx(PropagateTagInfo, {})] })), jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs("div", __assign({ className: "dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor", onClick: addNewTag }, { children: [jsxRuntime.jsx(SvgIcAdd, { className: "icon-dim-20 fcb-5" }), " Add tag"] })), jsxRuntime.jsx("div", __assign({ className: "mb-8" }, { children: labelTags === null || labelTags === void 0 ? void 0 : labelTags.map(function (tagData, index) { return (jsxRuntime.jsx(TagDetails, { index: index, tagData: tagData, setTagData: setTagData, removeTag: removeTag }, "tag-".concat(index))); }) }))] })] }));
+    return (jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs("div", __assign({ className: "flexbox dc__content-space mb-8" }, { children: [jsxRuntime.jsx("span", { children: "Tags" }), jsxRuntime.jsx(PropagateTagInfo, { isCreateApp: isCreateApp })] })), jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs("div", __assign({ className: "dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor", onClick: addNewTag }, { children: [jsxRuntime.jsx(SvgIcAdd, { className: "icon-dim-20 fcb-5" }), " Add tag"] })), jsxRuntime.jsx("div", __assign({ className: "mb-8" }, { children: labelTags === null || labelTags === void 0 ? void 0 : labelTags.map(function (tagData, index) { return (jsxRuntime.jsx(TagDetails, { index: index, tagData: tagData, setTagData: setTagData, removeTag: removeTag, tabIndex: tabIndex + (index + 2) }, "tag-".concat(index))); }) }))] })] }));
 };
 
 function ConfirmationDialog(_a) {
@@ -16199,6 +16320,9 @@ exports.ClearIndicator = ClearIndicator;
 exports.ConditionalWrap = ConditionalWrap;
 exports.ConfirmationDialog = ConfirmationDialog;
 exports.CustomSelect = CustomSelect;
+exports.DEFAULT_TAG_DATA = DEFAULT_TAG_DATA;
+exports.DOCUMENTATION = DOCUMENTATION;
+exports.DOCUMENTATION_HOME_PAGE = DOCUMENTATION_HOME_PAGE;
 exports.DeleteDialog = DeleteDialog;
 exports.DetailsProgressing = DetailsProgressing;
 exports.DialogForm = DialogForm;
@@ -16240,6 +16364,8 @@ exports.post = post;
 exports.put = put;
 exports.showError = showError;
 exports.sortCallback = sortCallback;
+exports.stopPropagation = stopPropagation;
 exports.toastAccessDenied = toastAccessDenied;
 exports.trash = trash;
 exports.useBreadcrumb = useBreadcrumb;
+exports.useThrottledEffect = useThrottledEffect;

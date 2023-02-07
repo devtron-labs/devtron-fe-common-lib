@@ -2,6 +2,7 @@ import { ServerErrors } from './ServerError'
 import { toast } from 'react-toastify'
 import * as Sentry from '@sentry/browser'
 import { toastAccessDenied } from './ToastBody'
+import { useEffect, useRef } from 'react'
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
@@ -51,4 +52,26 @@ export function sortCallback(key: string, a: any, b: any, isCaseSensitive?: bool
         return 1
     }
     return 0
+}
+
+export const stopPropagation = (event): void => {
+    event.stopPropagation()
+}
+
+export function useThrottledEffect(callback, delay, deps = []) {
+    //function will be executed only once in a given time interval.
+    const lastRan = useRef(Date.now())
+
+    useEffect(() => {
+        const handler = setTimeout(function () {
+            if (Date.now() - lastRan.current >= delay) {
+                callback()
+                lastRan.current = Date.now()
+            }
+        }, delay - (Date.now() - lastRan.current))
+
+        return () => {
+            clearTimeout(handler)
+        }
+    }, [delay, ...deps])
 }

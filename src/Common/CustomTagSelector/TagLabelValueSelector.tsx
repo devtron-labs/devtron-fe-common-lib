@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { TagLabelValueSelectorType } from '../Types'
 import PopupMenu from '../PopupMenu'
 import { ValidationRules } from './ValidationRules'
-import { ReactComponent as ErrorCross } from '../../Assets/Icon/ic-close.svg'
+import { ReactComponent as ErrorCross } from '../../Assets/Icon/ic-cross.svg'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-outlined.svg'
+import { KEY_VALUE } from '../Constants'
+import { stopPropagation } from '../Helper'
+import { ResizableTagTextArea } from './ResizableTagTextArea'
 
 export const TagLabelValueSelector = ({
     selectedTagIndex,
@@ -11,27 +14,35 @@ export const TagLabelValueSelector = ({
     setTagData,
     tagOptions,
     isRequired,
-    type,
+    tagInputType,
     placeholder,
+    tabIndex = null,
+    refVar,
+    dependentRef,
 }: TagLabelValueSelectorType) => {
     const [selectedValue, setSelectedValue] = useState<string>('')
-    const [isPopupOpen, togglePopup] = useState<boolean>(false)
-
+    const [activeElement, setActiveElement] = useState<string>('')
     const validationRules = new ValidationRules()
 
     useEffect(() => {
-        setSelectedValue(tagData?.[type] || '')
-    }, [selectedTagIndex, tagData, type])
+        setSelectedValue(tagData?.[tagInputType] || '')
+    }, [selectedTagIndex, tagData, tagInputType])
 
+    const handleOnFocus = (e) => {
+        setTimeout(() => {
+            setActiveElement(`tag-${tagInputType}-${selectedTagIndex}`)
+        }, 300)
+    }
     const handleOnBlur = (e) => {
+        setActiveElement('')
         if (
             !e.relatedTarget ||
             !e.relatedTarget.classList.value ||
             !e.relatedTarget.classList.value.includes(`tag-${selectedTagIndex}-class`)
         ) {
             const _tagData = { ...tagData }
-            _tagData[type] = selectedValue
-            if (type === 'key') {
+            _tagData[tagInputType] = selectedValue
+            if (tagInputType === KEY_VALUE.KEY) {
                 _tagData.isInvalidKey = selectedValue
                     ? !validationRules.propagateTagKey(selectedValue).isValid
                     : _tagData.value !== ''
@@ -51,15 +62,16 @@ export const TagLabelValueSelector = ({
     }
 
     const onSelectValue = (e): void => {
+        stopPropagation(e)
         const _tagData = { ...tagData }
-        _tagData[type] = e.currentTarget.dataset.key
+        _tagData[tagInputType] = e.currentTarget.dataset.key
         setTagData(selectedTagIndex, _tagData)
     }
 
     const renderValidationsSuggestions = (): JSX.Element => {
         let field = { isValid: true, messages: [] }
-        if (type === 'key') {
-            if (selectedValue || tagData.value || tagData.description) {
+        if (tagInputType === KEY_VALUE.KEY) {
+            if (selectedValue || tagData.value) {
                 field = validationRules.propagateTagKey(selectedValue)
             }
         } else if (isRequired || selectedValue) {
@@ -67,19 +79,19 @@ export const TagLabelValueSelector = ({
         }
         if (!field.isValid) {
             return (
-                <div className="p-4">
+                <div className="p-4" onClick={stopPropagation}>
                     {field.messages.map((error) => (
-                        <div key={error} className="flexbox p-4">
+                        <div key={error} className="flexbox pr-4 pl-4">
                             <span>
-                                <ErrorCross className="icon-dim-16 fcr-5 mt-3 mr-4" />
+                                <ErrorCross className="icon-dim-14 scr-5 mt-3 mr-4" />
                             </span>
                             <span>{error}</span>
                         </div>
                     ))}
-                    {type === 'key' && (
-                        <div className="flexbox p-4">
+                    {tagInputType === KEY_VALUE.KEY && (
+                        <div className="flexbox pr-4 pl-4">
                             <span>
-                                <Info className="icon-dim-16 mt-3 mr-4" />
+                                <Info className="icon-dim-14 mt-3 mr-4" />
                             </span>
                             <span className="dc__italic-font-style">Key format: prefix/name or name</span>
                         </div>
@@ -111,25 +123,32 @@ export const TagLabelValueSelector = ({
     }
 
     return (
-        <PopupMenu onToggleCallback={(isOpen) => togglePopup(isOpen)} autoClose>
-            <PopupMenu.Button
-                rootClassName={`h-32 ${
-                    type === 'key'
-                        ? `dc__no-right-radius`
-                        : `dc__no-border-radius dc__no-right-border dc__no-left-border`
-                } ${tagData[type === 'key' ? 'isInvalidKey' : 'isInvalidValue'] ? 'er-5 bw-1' : ''}`}
-            >
-                <input
-                    type="text"
-                    className="form__input pt-4-imp pb-4-imp dc__no-border"
+        <PopupMenu autoClose autoPosition>
+            <PopupMenu.Button rootClassName="dc__bg-n50 flex top dc__no-border">
+                <ResizableTagTextArea
+                    minHeight={30}
+                    maxHeight={80}
+                    className={`form__input pt-4-imp pb-4-imp fs-13 ${
+                        tagInputType === KEY_VALUE.KEY
+                            ? `dc__no-right-radius`
+                            : `dc__no-border-radius dc__no-right-border dc__no-left-border`
+                    } ${
+                        tagData[tagInputType === KEY_VALUE.KEY ? 'isInvalidKey' : 'isInvalidValue']
+                            ? 'form__input--error'
+                            : ''
+                    }`}
                     value={selectedValue}
                     onChange={handleInputChange}
                     onBlur={handleOnBlur}
+                    onFocus={handleOnFocus}
                     placeholder={placeholder}
+                    tabIndex={tabIndex}
+                    refVar={refVar}
+                    dependentRef={dependentRef}
                 />
             </PopupMenu.Button>
-            <PopupMenu.Body rootClassName={`tag-${selectedTagIndex}-class`} autoWidth={true}>
-                {isPopupOpen && renderSuggestions()}
+            <PopupMenu.Body rootClassName={`tag-${selectedTagIndex}-class`} autoWidth={true} preventWheelDisable={true}>
+                {activeElement === `tag-${tagInputType}-${selectedTagIndex}` && renderSuggestions()}
             </PopupMenu.Body>
         </PopupMenu>
     )

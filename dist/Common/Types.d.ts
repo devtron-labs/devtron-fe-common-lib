@@ -1,3 +1,5 @@
+/// <reference types="react" />
+import { KEY_VALUE } from './Constants';
 export interface ResponseType {
     code: number;
     status: string;
@@ -9,6 +11,14 @@ export interface APIOptions {
     signal?: AbortSignal;
     preventAutoLogout?: boolean;
 }
+export interface OptionType {
+    label: string;
+    value: string;
+}
+export declare enum TippyTheme {
+    black = "black",
+    white = "white"
+}
 export interface TagType {
     key: string;
     value?: string;
@@ -18,23 +28,22 @@ export interface TagType {
     isInvalidKey?: boolean;
     isInvalidValue?: boolean;
 }
-export interface OptionType {
-    label: string;
-    value: string;
-}
-export declare enum TippyTheme {
-    black = "black",
-    white = "white"
+export interface TagErrorType {
+    isValid: boolean;
+    messages: string[];
 }
 export interface TagLabelSelectType {
+    isCreateApp?: boolean;
     labelTags: TagType[];
     setLabelTags: (tagList: TagType[]) => void;
+    tabIndex?: number;
 }
 export interface TagDetailType {
     index: number;
     tagData: TagType;
     setTagData: (index: number, tagData: TagType) => void;
     removeTag: (index: number) => void;
+    tabIndex?: number;
 }
 export interface TagLabelValueSelectorType {
     selectedTagIndex: number;
@@ -42,8 +51,24 @@ export interface TagLabelValueSelectorType {
     setTagData: (index: number, tagData: TagType) => void;
     tagOptions?: OptionType[];
     isRequired?: boolean;
-    type?: string;
+    tagInputType?: KEY_VALUE;
     placeholder?: string;
+    tabIndex?: number;
+    refVar?: React.MutableRefObject<HTMLTextAreaElement>;
+    dependentRef?: React.MutableRefObject<HTMLTextAreaElement>;
+}
+export interface ResizableTagTextAreaProps {
+    className?: string;
+    minHeight?: number;
+    maxHeight?: number;
+    value?: string;
+    onChange?: (e: any) => void;
+    onBlur?: (e: any) => void;
+    onFocus?: (e: any) => void;
+    placeholder?: string;
+    tabIndex?: number;
+    refVar?: React.MutableRefObject<HTMLTextAreaElement>;
+    dependentRef?: React.MutableRefObject<HTMLTextAreaElement>;
 }
 export interface TeamList extends ResponseType {
     result: Teams[];

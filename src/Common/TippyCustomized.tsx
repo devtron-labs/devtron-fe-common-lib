@@ -1,7 +1,7 @@
 import React, { ReactNode, useRef } from 'react'
 import Tippy from '@tippyjs/react'
 import { Placement } from 'tippy.js'
-import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-close.svg'
+import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-cross.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
 import { TippyTheme } from './Types'
 
@@ -133,7 +133,7 @@ export function TippyCustomized(props: TippyCustomizedProps) {
                             href={documentationLink}
                             target="_blank"
                             rel="noreferrer noopener"
-                            className="cb-5"
+                            className="fs-13 cb-5"
                             onClick={closeTippy}
                         >
                             {documentationLinkText || 'Learn more'}
