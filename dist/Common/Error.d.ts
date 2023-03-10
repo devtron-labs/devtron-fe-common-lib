@@ -6,7 +6,7 @@ export declare class ErrorScreenManager extends Component<{
     subtitleClass?: string;
     reloadClass?: string;
 }> {
-    getMessage(): JSX.Element | "Bad Request" | "Unauthorized" | "Not Found" | "Internal Server Error" | "Bad Gateway" | "Service Temporarily Unavailable";
+    getMessage(): JSX.Element | "Bad Request" | "Unauthorized" | "Internal Server Error" | "Bad Gateway" | "Service Temporarily Unavailable";
     render(): JSX.Element;
 }
 export declare class ErrorScreenNotAuthorized extends Component<{

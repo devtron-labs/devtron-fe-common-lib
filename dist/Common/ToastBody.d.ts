@@ -20,4 +20,4 @@ export declare class ToastBodyWithButton extends React.Component<{
 }> {
     render(): JSX.Element;
 }
-export declare const toastAccessDenied: (subtitle?: string) => React.ReactText;
+export declare const toastAccessDenied: (title?: string, subtitle?: string) => React.ReactText;

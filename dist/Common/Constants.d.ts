@@ -25,3 +25,12 @@ export declare const DEFAULT_TAG_DATA: {
     isInvalidKey: boolean;
     isInvalidValue: boolean;
 };
+export declare const TOAST_ACCESS_DENIED: {
+    TITLE: string;
+    SUBTITLE: string;
+};
+export declare const ERROR_EMPTY_SCREEN: {
+    PAGE_NOT_FOUND: string;
+    PAGE_NOT_EXIST: string;
+    TAKE_BACK_HOME: string;
+};

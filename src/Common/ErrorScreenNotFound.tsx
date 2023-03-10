@@ -1,5 +1,5 @@
 import React from 'react'
-import notFound from '../../../Assets/Img/ic-empty-error@2x.png'
+import notFound from '../Assets/Img/ic-empty-error@2x.png'
 import { useHistory } from 'react-router'
 import EmptyState from './EmptyState/EmptyState'
 import { ERROR_EMPTY_SCREEN } from './Constants'

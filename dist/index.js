@@ -3,6 +3,7 @@
 var jsxRuntime = require('react/jsx-runtime');
 var React = require('react');
 var ReactDOM = require('react-dom');
+var reactRouter = require('react-router');
 var reactRouterDom = require('react-router-dom');
 
 function _interopNamespaceDefault(e) {
@@ -46,6 +47,16 @@ exports.KEY_VALUE = void 0;
     KEY_VALUE["VALUE"] = "value";
 })(exports.KEY_VALUE || (exports.KEY_VALUE = {}));
 var DEFAULT_TAG_DATA = { key: '', value: '', propagate: false, isInvalidKey: false, isInvalidValue: false };
+var TOAST_ACCESS_DENIED = {
+    TITLE: 'Access denied',
+    SUBTITLE: 'You do not have required access to perform this action',
+};
+// Empty state messgaes
+var ERROR_EMPTY_SCREEN = {
+    PAGE_NOT_FOUND: 'We could not find this page',
+    PAGE_NOT_EXIST: 'This page doesn’t exist or was removed. We suggest you go back to home',
+    TAKE_BACK_HOME: 'Take me home',
+};
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -1905,8 +1916,8 @@ var ToastBodyWithButton = /** @class */ (function (_super) {
     };
     return ToastBodyWithButton;
 }(React.Component));
-var toastAccessDenied = function (subtitle) {
-    return toast.info(jsxRuntime.jsx(ToastBody, { title: "Access denied", subtitle: subtitle || "You do not have required access to perform this action" }), {
+var toastAccessDenied = function (title, subtitle) {
+    return toast.info(jsxRuntime.jsx(ToastBody, { title: title || TOAST_ACCESS_DENIED.TITLE, subtitle: subtitle || TOAST_ACCESS_DENIED.SUBTITLE }), {
         className: 'devtron-toast unauthorized',
     });
 };
@@ -1923,6 +1934,16 @@ function Reload(_a) {
 
 var notAuthorized = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20width%3D%22250%22%20height%3D%22200%22%20viewBox%3D%220%200%20250%20200%22%3E%20%20%20%20%3Cdefs%3E%20%20%20%20%20%20%20%20%3ClinearGradient%20id%3D%22ho9etwod5c%22%20x1%3D%2255.01%25%22%20x2%3D%2240.976%25%22%20y1%3D%220%25%22%20y2%3D%22100%25%22%3E%20%20%20%20%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%232A318C%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231D225F%22%2F%3E%20%20%20%20%20%20%20%20%3C%2FlinearGradient%3E%20%20%20%20%20%20%20%20%3ClinearGradient%20id%3D%22mdhg2gjypd%22%20x1%3D%2250%25%22%20x2%3D%2250%25%22%20y1%3D%220%25%22%20y2%3D%22100%25%22%3E%20%20%20%20%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23EEE%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23D6D7D8%22%2F%3E%20%20%20%20%20%20%20%20%3C%2FlinearGradient%3E%20%20%20%20%20%20%20%20%3ClinearGradient%20id%3D%22xe2mx0bk0e%22%20x1%3D%220%25%22%20x2%3D%22100%25%22%20y1%3D%2218%25%22%20y2%3D%2282%25%22%3E%20%20%20%20%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23E8B73F%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23CF9F36%22%2F%3E%20%20%20%20%20%20%20%20%3C%2FlinearGradient%3E%20%20%20%20%20%20%20%20%3Cpath%20id%3D%2288gkjk6cca%22%20d%3D%22M0%200H250V200H0z%22%2F%3E%20%20%20%20%3C%2Fdefs%3E%20%20%20%20%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%20%20%20%20%20%20%20%20%3Cg%3E%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20transform%3D%22translate%28-590%20-308%29%20translate%28590%20308%29%22%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cmask%20id%3D%22pitr2853ub%22%20fill%3D%22%23fff%22%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cuse%20xlink%3Ahref%3D%22%2388gkjk6cca%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fmask%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20mask%3D%22url%28%23pitr2853ub%29%22%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%23FFF%22%20fill-rule%3D%22nonzero%22%20d%3D%22M47.646%200c2.598%200%205.717%201.017%207.994%202.74%202.276%201.722%203.845%203.02%204.55%205.097.465%201.372.252%203.282-.641%205.728l.008-.072c-.013.145-.039.269-.071.387.574-1.048%201.638-1.624%202.576-1.283%201.07.39%201.5%201.803%201.013%203.14-.487%201.337-1.723%202.144-2.794%201.754-.536-.195-.91-.646-1.09-1.216.023.975.09%202.117.203%203.427l-2.317.161c-2.223%202.412-4.574%203.48-7.055%203.207-.6-.067-1.158-.18-1.675-.339-.588%201.007-1.177%202.688-1.766%205.043l-.064.031.005-.043c-.585%205.627-1.014%2011.07-1.287%2016.327l.001-.108c-.013.958-.003%201.853.028%202.684l.109-1.533c2.141%201.735%204.344%202.776%206.608%203.123%202.263.348%205.76-.128%2010.49-1.426%202.808-.962%205.555-2.299%208.243-4.011H63.94l16.84-20.83h2.756c0-1.439%201.165-2.604%202.604-2.604%201.378%200%202.506%201.07%202.597%202.425l.006.178h1.736c0-1.438%201.166-2.603%202.604-2.603%201.378%200%202.506%201.07%202.598%202.425l.006.178h5.284L89.832%2035.292c.097-.07.17-.106.212-.106.692%200%20.692%205.306-.057%207.152-.289.865-4.73%205.71-9.864%2010.844-2.78%202.78-6.605%206.366-11.477%2010.759l2.511%2011.858c-.568%201.157-2.01%201.928-4.324%202.314-5.208.579-10.415-1.736-16.78-1.736-1.852%200-3.142.343-4.269.744.841%208.545%202.264%2016.398%204.269%2023.558-1.157%201.157-1.946%201.682-2.808%202.052-1.015.394-2.305.789-3.009.86.776%202.429%201.318%204.584%201.627%206.464.38%202.322%202.518%2022.156%206.411%2059.5h-.044l2.037%201.697c2.308%201.962%2012.796%207.547%2014.132%208.307.891.506%202.067%201.794%203.526%203.864-16.575-.025-27.78-.05-33.613-.075l.053.075C12.788%20183.385%200%20183.346%200%20183.308c0-.116%201.154-3.288%202.538-7.095l2.44-6.658H1.761c-.4-1.385-.792-3.254-1.175-5.606-.75-4.788-.18-7.96%203.05-14.536%203.23-6.518%204.866-10.072%204.866-13.764.058-5.768%201.222-11.316%204.28-17.315%202.364-4.73%203.495-5.086%203.725-7.97l.367-5.421c-2.382-.231-5.928-.988-8.045-1.693l-4.21-1.385-.116-4.326C4.214%2085.6%205.08%2076.89%207.79%2065.757%2011.482%2050.47%2022.096%2034.84%2034.959%2025.668c3.055-2.203%204.272-3.049%205.093-2.807.79-.548%201.483-1.096%202.077-1.645-1.685-.52-3.275-1.222-4.77-2.105-2.311-1.366-4.444-3.194-6.398-5.483.397-.834.904-1.524%201.522-2.07.671-.592%201.935-1.108%203.169-1.822l-.065.021-1.204.401c-1.26.424-1.956.713-2.396%201.032-.829.601-1.259%201.275-1.312%202.032l-.005.191-.579.007c-.012-1.039.516-1.943%201.557-2.699.427-.31%201.013-.573%201.983-.916l1.755-.59.612-.213c.593-.213%201.063-.401%201.438-.584%201.296-1.399%202.17-3.971%204.089-5.678C43.642.855%2045.048%200%2047.646%200zM27.999%20144.476l-.189.512c-2.603%207.055-5.679%2015.219-9.228%2024.493l2.126%201.771c2.307%201.962%2012.795%207.547%2014.132%208.307l.035.021c.364-1.006.782-2.154%201.223-3.367l2.44-6.658h-4.242c-1.444-2.617-2.166-4.456-2.166-5.517%200-1.59.913-3.77.913-6.068%200-1.393-1.68-5.89-5.044-13.494zM78.827%2042.819l-1.242-.001c-2.375%202.17-3.972%203.706-4.791%204.61-.72.793-2.112%202.23-4.176%204.309%203.033-1.194%205.06-2.078%206.083-2.65%201.5-.865%202.077-1.673%203.807-5.307.082-.163.192-.506.319-.961zm7.313-22.857c-1.119%200-2.026.907-2.026%202.025h4.05c0-1.118-.906-2.025-2.024-2.025zm6.943%200c-1.119%200-2.025.907-2.025%202.025h4.05c0-1.118-.907-2.025-2.025-2.025zm-33.27-5.413c-.388%201.066-.065%202.132.666%202.398.73.266%201.664-.343%202.052-1.408.388-1.065.064-2.132-.667-2.398-.73-.266-1.664.343-2.052%201.408z%22%20transform%3D%22translate%2829%208%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%2380AEF2%22%20fill-rule%3D%22nonzero%22%20d%3D%22M36.56%20183.308c0-.116%201.153-3.288%202.538-7.095l2.538-6.922%206.46-.173%206.403-.173%202.768%202.307c2.308%201.962%2012.796%207.547%2014.132%208.307.891.506%202.067%201.794%203.526%203.864-25.577-.038-38.365-.077-38.365-.115z%22%20transform%3D%22translate%2829%208%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%2394BBF8%22%20fill-rule%3D%22nonzero%22%20d%3D%22M3%20183.308c0-.116%201.154-3.288%202.538-7.095l2.538-6.922%206.46-.173%206.403-.173%202.769%202.307c2.307%201.962%2012.795%207.547%2014.132%208.307.89.506%202.066%201.794%203.525%203.864C15.788%20183.385%203%20183.346%203%20183.308z%22%20transform%3D%22translate%2829%208%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%231D225F%22%20fill-rule%3D%22nonzero%22%20d%3D%22M46.655%20101.836c1.09%203.158%201.826%205.898%202.208%208.22.38%202.321%202.518%2022.155%206.411%2059.5H37.296c-1.444-2.618-2.166-4.457-2.166-5.518%200-1.59.913-3.77.913-6.068%200-1.532-2.034-6.823-6.104-15.871l3.931-39.349%2012.785-.914z%22%20transform%3D%22translate%2829%208%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22url%28%23ho9etwod5c%29%22%20d%3D%22M21.554%20169.555H4.76c-.4-1.385-.792-3.254-1.175-5.606-.75-4.788-.18-7.96%203.05-14.536%203.23-6.518%204.866-10.072%204.866-13.764.058-5.768%201.222-11.316%204.28-17.315%202.364-4.73%203.495-5.086%203.725-7.97l.42-6.202h21.078c.512%201.433.696%204.075.55%207.925-.145%203.85-6.812%2023.006-20.001%2057.468z%22%20transform%3D%22translate%2829%208%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20fill-rule%3D%22nonzero%22%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%2398BDF9%22%20d%3D%22M0%2024.302L16.84%203.472%2037.031%203.472%2019.592%2024.302z%22%20transform%3D%22translate%2829%208%29%20translate%2866.94%2018.516%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%232174DB%22%20d%3D%22M22.2.868c1.378%200%202.506%201.07%202.597%202.425l.006.179h-.578c0-1.119-.907-2.025-2.025-2.025-1.119%200-2.025.906-2.025%202.025%200%201.062.818%201.934%201.859%202.018l.166.007v.578c-1.438%200-2.604-1.165-2.604-2.603%200-1.438%201.166-2.604%202.604-2.604zM29.143.868c1.378%200%202.506%201.07%202.598%202.425l.006.179h-.579c0-1.119-.906-2.025-2.025-2.025-1.118%200-2.025.906-2.025%202.025%200%201.062.818%201.934%201.859%202.018l.166.007v.578c-1.438%200-2.604-1.165-2.604-2.603%200-1.438%201.166-2.604%202.604-2.604z%22%20transform%3D%22translate%2829%208%29%20translate%2866.94%2018.516%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%23F3A29D%22%20fill-rule%3D%22nonzero%22%20d%3D%22M65.472%2046.829c2.807-.962%205.554-2.299%208.242-4.011h6.871c-2.375%202.17-3.972%203.706-4.791%204.61-.82.903-2.509%202.638-5.068%205.205-1.091%205.781-2.254%208.21-3.487%207.285-1.85-1.386-7.939-10.897-1.767-13.09z%22%20transform%3D%22translate%2829%208%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%23FAB6AF%22%20fill-rule%3D%22nonzero%22%20d%3D%22M69.254%2052.654c4.363-1.668%207.179-2.857%208.447-3.567%201.5-.865%202.077-1.673%203.807-5.307.23-.461.692-2.365%201.096-4.153.923-4.557%202.423-4.326%202.538.346.058%201.27.346%202.423.692%202.538.288.116%201.961-1.5%203.634-3.576%201.673-2.077%203.288-3.75%203.576-3.75.692%200%20.692%205.307-.057%207.153-.289.865-4.73%205.71-9.864%2010.844-3.422%203.423-8.431%208.068-15.026%2013.937l1.157-14.465z%22%20transform%3D%22translate%2829%208%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%23F3A29D%22%20fill-rule%3D%22nonzero%22%20d%3D%22M49.581%2027.774c.772-3.086%201.543-5.015%202.315-5.787-1.157-1.157-2.315-2.314-4.63-3.471-.77%201.543-2.314%203.086-4.628%204.629%200%202.314.771%203.857%202.314%204.629%201.543.771%203.086.771%204.63%200z%22%20transform%3D%22translate%2829%208%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22url%28%23mdhg2gjypd%29%22%20fill-rule%3D%22nonzero%22%20d%3D%22M12.858%2082.16c-2.365-.174-6.23-.981-8.48-1.731l-4.21-1.385-.115-4.326c-.289-11.94.577-20.65%203.288-31.782C7.032%2027.65%2017.646%2012.019%2030.509%202.847c4.96-3.576%205.076-3.576%206.518-1.153.634%201.153%201.96%202.307%202.884%202.653l2.161.594c-3.046%2029.324-1.87%2053.63%203.531%2072.917-1.157%201.158-1.946%201.682-2.808%202.052-1.039.403-2.365.807-3.057.865-.693.058-3%20.519-5.25%201.038-4.21.923-13.382%201.096-21.63.346z%22%20transform%3D%22translate%2829%208%29%20translate%287.45%2022.82%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%23D6D7D8%22%20d%3D%22M58.022%2024.008l1.767%2011.311-19.972%202.645%201.106-15.653c2.141%201.735%204.344%202.776%206.608%203.123%202.263.348%205.76-.128%2010.49-1.426z%22%20transform%3D%22translate%2829%208%29%20translate%287.45%2022.82%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%23E9E9E9%22%20fill-rule%3D%22nonzero%22%20d%3D%22M61.804%2029.833l4.903%2023.145c-.568%201.157-2.01%201.929-4.324%202.314-5.208.579-10.415-1.736-16.78-1.736-6.365%200-6.09%204.05-15.348.58-6.172-2.315-8.68-12.73-7.523-31.246l18.054-1.73c-.078%205.782.655%209.252%202.198%2010.409%201.512%201.134%207.569.601%2018.17-1.6l.65-.136z%22%20transform%3D%22translate%2829%208%29%20translate%287.45%2022.82%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%23FAB6AF%22%20fill-rule%3D%22nonzero%22%20d%3D%22M29.082%207.444c1.07%201.52%201.488%203.536%201.253%206.049-.062.656-.376.883-.376%202.052%200%201.12.07%202.506.212%204.157l-2.317.161c-2.222%202.412-4.574%203.48-7.055%203.207-2.48-.275-4.251-1.343-5.31-3.207-2.18-4.023-1.621-7.444%201.675-10.262%203.296-2.818%207.269-3.537%2011.918-2.157z%22%20transform%3D%22translate%2829%208%29%20translate%2832.223%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%23E94A47%22%20d%3D%22M18.423%200c2.598%200%205.717%201.017%207.994%202.74%202.277%201.722%203.845%203.02%204.55%205.097.47%201.384.248%203.314-.664%205.791.13-2.345-.048-3.647-.533-3.906-.67%201.653-1.595%201.987-2.703%202.787-.62.448-2.791.518-4.917.897-2.628%201.722-4.303%203.33-4.867%204.86-.448%201.218-.402%202.608.148%204.177l.126.339-.54.21c-.714-1.833-.81-3.478-.277-4.925.522-1.417%201.85-2.838%203.894-4.321-1.09.307-2.051.754-2.634%201.449-1.279%201.526-2.028%203.765-2.246%206.716-2.766-.5-5.305-1.433-7.617-2.8-2.312-1.366-4.445-3.194-6.398-5.483.396-.834.904-1.524%201.521-2.07.671-.592%201.935-1.108%203.169-1.822l-.065.021-1.204.401c-1.26.424-1.956.713-2.395%201.032-.83.601-1.26%201.275-1.313%202.032l-.005.191-.579.007c-.012-1.039.516-1.943%201.557-2.699.427-.31%201.013-.573%201.983-.916l1.756-.59.61-.213c.594-.213%201.064-.401%201.439-.584%201.296-1.399%202.17-3.971%204.09-5.678C14.418.855%2015.825%200%2018.422%200z%22%20transform%3D%22translate%2829%208%29%20translate%2832.223%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20fill%3D%22%23222768%22%20fill-rule%3D%22nonzero%22%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M1.025%203.16C1.622%201.52%203.194.563%204.56%201.06c1.061.386%201.653%201.524%201.586%202.781.36-.092.688-.137.988-.137l.208.008c.254.02.466.056.636.114.511-1.271%201.708-2.023%202.749-1.644%201.07.39%201.5%201.802%201.013%203.14-.487%201.337-1.723%202.143-2.794%201.754-.953-.347-1.397-1.504-1.14-2.697-.103-.038-.274-.072-.508-.09-.334-.025-.737.029-1.209.165l-.03.01c-.036.159-.083.318-.14.477-.597%201.64-2.17%202.597-3.536%202.1C1.017%206.543.428%204.8%201.025%203.16zm9.504-.434c-.73-.266-1.664.343-2.052%201.408-.388%201.065-.064%202.132.667%202.398.73.266%201.664-.343%202.052-1.408.387-1.066.064-2.132-.667-2.398zM4.362%201.604c-1.036-.378-2.297.39-2.793%201.754-.496%201.363-.024%202.762%201.012%203.14%201.036.376%202.298-.392%202.794-1.755s.023-2.762-1.013-3.14z%22%20transform%3D%22translate%2829%208%29%20translate%2832.223%29%20translate%2822.112%2010.415%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20mask%3D%22url%28%23pitr2853ub%29%22%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%23FFF%22%20d%3D%22M30%200c12.15%200%2022%209.85%2022%2022v11h8v48H0V33h8V22C8%209.973%2017.654.198%2029.637.004zm0%207.934c-7.755%200-14.067%206.309-14.067%2014.067V33h28.133V22c0-7.652-6.14-13.896-13.752-14.063z%22%20transform%3D%22translate%28134%2061%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%23D6D7D8%22%20d%3D%22M55%2034.3V22C55%209.85%2045.15%200%2033%200S11%209.85%2011%2022v12.3m7.933%200V22c0-7.757%206.312-14.066%2014.068-14.066%207.756%200%2014.065%206.31%2014.065%2014.067v12.298%22%20transform%3D%22translate%28134%2061%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22url%28%23xe2mx0bk0e%29%22%20d%3D%22M3%2033H63V81H3z%22%20transform%3D%22translate%28134%2061%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%22%233E3D4C%22%20fill-rule%3D%22nonzero%22%20d%3D%22M39%2056c0-3.314-2.686-6-6-6s-6%202.686-6%206c0%202.282%201.275%204.267%203.15%205.281l-.965%207.386h7.63l-.965-7.386C37.726%2060.267%2039%2058.282%2039%2056z%22%20transform%3D%22translate%28134%2061%29%22%2F%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%20%20%20%20%3C%2Fg%3E%20%20%20%20%3C%2Fg%3E%3C%2Fsvg%3E";
 
+var notFound = "27bfa7a87d0b7039.png";
+
+function ErrorScreenNotFound() {
+    var history = reactRouter.useHistory();
+    var redirectToHome = function () {
+        history.push('/app/list');
+    };
+    return (jsxRuntime.jsx("div", { children: jsxRuntime.jsxs(EmptyState, { children: [jsxRuntime.jsx(EmptyState.Image, { children: jsxRuntime.jsx("img", { src: notFound, alt: "Not Found" }) }), jsxRuntime.jsx(EmptyState.Title, { children: jsxRuntime.jsx("h3", __assign({ className: "title" }, { children: ERROR_EMPTY_SCREEN.PAGE_NOT_FOUND })) }), jsxRuntime.jsx(EmptyState.Subtitle, { children: jsxRuntime.jsx("p", { children: ERROR_EMPTY_SCREEN.PAGE_NOT_EXIST }) }), jsxRuntime.jsx(EmptyState.Button, { children: jsxRuntime.jsx("button", __assign({ className: "flex cta h-32", onClick: redirectToHome }, { children: ERROR_EMPTY_SCREEN.TAKE_BACK_HOME })) })] }) }));
+}
+
 var ErrorScreenManager = /** @class */ (function (_super) {
     __extends(ErrorScreenManager, _super);
     function ErrorScreenManager() {
@@ -1937,7 +1958,7 @@ var ErrorScreenManager = /** @class */ (function (_super) {
             case 403:
                 return (jsxRuntime.jsx(ErrorScreenNotAuthorized, { subtitle: this.props.subtitle, subtitleClass: this.props.subtitleClass }));
             case 404:
-                return 'Not Found';
+                return jsxRuntime.jsx(ErrorScreenNotFound, {});
             case 500:
                 return 'Internal Server Error';
             case 502:
@@ -16263,12 +16284,12 @@ var MultiValueChipContainer = function (_a) {
     return (jsxRuntime.jsxs(components.MultiValueContainer, __assign({}, { data: data, innerProps: innerProps, selectProps: selectProps }, { children: [jsxRuntime.jsxs("div", __assign({ className: "flex fs-12 pl-4 pr-4" }, { children: [!isValidEmail && jsxRuntime.jsx(SvgIcErrorMedium, { className: "mr-4 icon-dim-16" }), jsxRuntime.jsx("div", __assign({ className: "".concat(isValidEmail ? 'cn-9' : 'cr-5') }, { children: label }))] })), children[1]] })));
 };
 var multiSelectStyles = {
-    control: function (base, state) { return (__assign(__assign({}, base), { cursor: state.isDisabled ? 'not-allowed' : 'normal', border: state.isFocused ? '1px solid #06c' : '1px solid #d6dbdf', boxShadow: 'none', minheight: '24px !important' })); },
-    menu: function (base, state) { return (__assign(__assign({}, base), { top: "40px" })); },
+    control: function (base, state) { return (__assign(__assign({}, base), { cursor: state.isDisabled ? 'not-allowed' : 'normal', border: state.isFocused ? '1px solid #06c' : '1px solid #d6dbdf', boxShadow: 'none' })); },
+    menu: function (base, state) { return (__assign({}, base)); },
     option: function (base, state) {
-        return (__assign(__assign({}, base), { backgroundColor: state.isFocused ? 'var(--N100)' : 'white', color: 'var(--N900)', padding: '8px 12px' }));
+        return __assign(__assign({}, base), { backgroundColor: state.isFocused ? 'var(--N100)' : 'white', color: 'var(--N900)', padding: '8px 12px' });
     },
-    container: function (base, state) { return (__assign(__assign({}, base), { cursor: state.isDisabled ? 'not-allowed' : 'normal' })); },
+    container: function (base, state) { return (__assign(__assign({}, base), { cursor: state.isDisabled ? 'not-allowed' : 'pointer' })); },
     valueContainer: function (base, state) { return (__assign(__assign({}, base), { color: state.selectProps.menuIsOpen ? 'var(--N500)' : base.color })); },
 };
 var CustomSelect = function (props) {
@@ -16314,8 +16335,36 @@ var getTeamListMin = function () {
     });
 };
 
+exports.CHECKBOX_VALUE = void 0;
+(function (CHECKBOX_VALUE) {
+    CHECKBOX_VALUE["CHECKED"] = "CHECKED";
+    CHECKBOX_VALUE["INTERMEDIATE"] = "INTERMEDIATE";
+})(exports.CHECKBOX_VALUE || (exports.CHECKBOX_VALUE = {}));
+/*
+Valid States of Checkbox:
+1. disabled: true, checked: false, value: XXX
+2. disabled: true, checked: true, value: INTERMIDIATE
+3. disabled: true, checked: true, value: CHECKED
+4. disabled: true, checked: false, value: XXX
+5. disabled: false, checked: true,  value: INTERMIDIATE
+6. disabled: false, checked: true,  value: CHECKED
+*/
+var Checkbox = /** @class */ (function (_super) {
+    __extends(Checkbox, _super);
+    function Checkbox() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Checkbox.prototype.render = function () {
+        var _a;
+        var rootClassName = "".concat(this.props.rootClassName ? this.props.rootClassName : '');
+        return (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsxs("label", __assign({ className: "dc__position-rel flex left cursor ".concat(rootClassName), onClick: (_a = this.props) === null || _a === void 0 ? void 0 : _a.onClick }, { children: [jsxRuntime.jsx("input", { type: "checkbox", className: 'form__checkbox', disabled: this.props.disabled, value: this.props.value, onChange: this.props.onChange, tabIndex: this.props.tabIndex, checked: this.props.isChecked, id: this.props.id }), jsxRuntime.jsx("span", { className: "form__checkbox-container" }), jsxRuntime.jsx("span", __assign({ className: "form__checkbox-label" }, { children: this.props.children }))] })) }));
+    };
+    return Checkbox;
+}(React.Component));
+
 exports.BreadCrumb = BreadCrumb;
 exports.BreadcrumbStore = Store;
+exports.Checkbox = Checkbox;
 exports.ClearIndicator = ClearIndicator;
 exports.ConditionalWrap = ConditionalWrap;
 exports.ConfirmationDialog = ConfirmationDialog;
@@ -16328,6 +16377,7 @@ exports.DetailsProgressing = DetailsProgressing;
 exports.DialogForm = DialogForm;
 exports.DialogFormSubmit = DialogFormSubmit;
 exports.Drawer = Drawer;
+exports.ERROR_EMPTY_SCREEN = ERROR_EMPTY_SCREEN;
 exports.ErrorScreenManager = ErrorScreenManager;
 exports.ErrorScreenNotAuthorized = ErrorScreenNotAuthorized;
 exports.ForceDeleteDialog = ForceDeleteDialog;
@@ -16349,6 +16399,7 @@ exports.RequestTimeout = RequestTimeout;
 exports.ServerError = ServerError;
 exports.ServerErrors = ServerErrors;
 exports.SingleSelectOption = SingleSelectOption;
+exports.TOAST_ACCESS_DENIED = TOAST_ACCESS_DENIED;
 exports.TagLabelSelect = TagLabelSelect;
 exports.TagLabelValueSelector = TagLabelValueSelector;
 exports.TippyCustomized = TippyCustomized;
