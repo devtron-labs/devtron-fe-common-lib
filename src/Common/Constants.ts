@@ -24,3 +24,15 @@ export enum KEY_VALUE {
 }
 
 export const DEFAULT_TAG_DATA = { key: '', value: '', propagate: false, isInvalidKey: false, isInvalidValue: false }
+
+export const TOAST_ACCESS_DENIED = {
+  TITLE: 'Access denied',
+  SUBTITLE: 'You do not have required access to perform this action',
+}
+
+// Empty state messgaes
+export const ERROR_EMPTY_SCREEN = {
+  PAGE_NOT_FOUND: 'We could not find this page',
+  PAGE_NOT_EXIST: 'This page doesn’t exist or was removed. We suggest you go back to home',
+  TAKE_BACK_HOME: 'Take me home',
+}

@@ -78,12 +78,12 @@ export const MultiValueRemove = (props) => {
     )
 }
 
-export const MultiValueChipContainer = ({ validator,  isAllSelected = false, ...props }) => {
+export const MultiValueChipContainer = ({ validator, isAllSelected = false, ...props }) => {
     const { children, data, innerProps, selectProps } = props
     const { label, value } = data
     const isValidEmail = validator ? validator(value) : true
 
-    if(isAllSelected && value !== '*') return null
+    if (isAllSelected && value !== '*') return null
 
     return (
         <components.MultiValueContainer {...{ data, innerProps, selectProps }}>
@@ -97,33 +97,31 @@ export const MultiValueChipContainer = ({ validator,  isAllSelected = false, ...
 }
 
 export const multiSelectStyles = {
-  control: (base, state) => ({
-      ...base,
-      cursor: state.isDisabled ? 'not-allowed' : 'normal',
-      border: state.isFocused ? '1px solid #06c' : '1px solid #d6dbdf',
-      boxShadow: 'none',
-      minheight: '24px !important'
-  }),
-  menu: (base, state) => ({
-      ...base,
-      top: `40px`,
-  }),
-  option: (base, state) => {
-      return ({
-          ...base,
-          backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
-          color: 'var(--N900)',
-          padding: '8px 12px',
-      })
-  },
-  container: (base, state) => ({
-      ...base,
-      cursor: state.isDisabled ? 'not-allowed' : 'normal'
-  }),
-  valueContainer: (base, state) => ({
-      ...base,
-      color: state.selectProps.menuIsOpen ? 'var(--N500)' : base.color,
-  }),
+    control: (base, state) => ({
+        ...base,
+        cursor: state.isDisabled ? 'not-allowed' : 'normal',
+        border: state.isFocused ? '1px solid #06c' : '1px solid #d6dbdf',
+        boxShadow: 'none',
+    }),
+    menu: (base, state) => ({
+        ...base,
+    }),
+    option: (base, state) => {
+        return {
+            ...base,
+            backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
+            color: 'var(--N900)',
+            padding: '8px 12px',
+        }
+    },
+    container: (base, state) => ({
+        ...base,
+        cursor: state.isDisabled ? 'not-allowed' : 'pointer',
+    }),
+    valueContainer: (base, state) => ({
+        ...base,
+        color: state.selectProps.menuIsOpen ? 'var(--N500)' : base.color,
+    }),
 }
 
 interface CustomSelect {
