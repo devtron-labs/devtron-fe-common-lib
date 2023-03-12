@@ -8420,7 +8420,7 @@ function TippyCustomized(props) {
     };
     var getTippyContent = function () {
         var Icon = props.Icon, iconPath = props.iconPath, iconClass = props.iconClass, iconSize = props.iconSize, onImageLoadError = props.onImageLoadError, heading = props.heading, infoTextHeading = props.infoTextHeading, infoText = props.infoText, showCloseButton = props.showCloseButton, additionalContent = props.additionalContent, documentationLink = props.documentationLink, documentationLinkText = props.documentationLinkText;
-        return (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs("div", __assign({ className: "dc__word-break dc__hyphens-auto flex left ".concat(isWhiteTheme ? 'p-12 dc__border-bottom-n1 cn-9' : 'pt-20 pb-12 pr-20 pl-20 cn-0') }, { children: [iconPath ? (jsxRuntime.jsx("img", { className: "icon-dim-".concat(iconSize || 20, " mr-6 ").concat(iconClass || ''), src: iconPath, alt: heading, onError: onImageLoadError })) : (Icon && (jsxRuntime.jsx("div", __assign({ className: "icon-dim-".concat(iconSize || 20, " mr-6") }, { children: jsxRuntime.jsx(Icon, { className: "icon-dim-".concat(iconSize || 20, " ").concat(iconClass || '') }) })))), heading && jsxRuntime.jsx("span", __assign({ className: "fs-14 fw-6 lh-20 ".concat(showCloseButton ? 'mr-6' : '') }, { children: heading })), showCloseButton && (jsxRuntime.jsx("div", __assign({ className: "icon-dim-16 ml-auto" }, { children: jsxRuntime.jsx(SvgIcCross, { className: "icon-dim-16 cursor ".concat(isWhiteTheme ? 'fcn-9' : 'fcn-0'), onClick: closeTippy }) })))] })), infoTextHeading && (jsxRuntime.jsx("div", __assign({ className: "dc__word-break dc__hyphens-auto fs-14 fw-6 lh-20 ".concat(isWhiteTheme ? 'pl-12 pr-12' : 'pl-20 pr-20') }, { children: infoTextHeading }))), infoText && (jsxRuntime.jsx("div", __assign({ className: "dc__word-break dc__hyphens-auto fs-13 fw-4 lh-20 ".concat(isWhiteTheme
+        return (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs("div", __assign({ className: "dc__word-break dc__hyphens-auto flex left ".concat(isWhiteTheme ? 'p-12 dc__border-bottom-n1 cn-9' : 'pt-20 pb-12 pr-20 pl-20 cn-0 top') }, { children: [iconPath ? (jsxRuntime.jsx("img", { className: "icon-dim-".concat(iconSize || 20, " mr-6 ").concat(iconClass || ''), src: iconPath, alt: heading, onError: onImageLoadError })) : (Icon && (jsxRuntime.jsx("div", __assign({ className: "icon-dim-".concat(iconSize || 20, " mr-6") }, { children: jsxRuntime.jsx(Icon, { className: "icon-dim-".concat(iconSize || 20, " ").concat(iconClass || '') }) })))), heading && jsxRuntime.jsx("span", __assign({ className: "fs-14 fw-6 lh-20 ".concat(showCloseButton ? 'mr-6' : '') }, { children: heading })), showCloseButton && (jsxRuntime.jsx("div", __assign({ className: "icon-dim-16 ml-auto" }, { children: jsxRuntime.jsx(SvgIcCross, { className: "icon-dim-16 cursor ".concat(isWhiteTheme ? 'fcn-9' : 'fcn-0'), onClick: closeTippy }) })))] })), infoTextHeading && (jsxRuntime.jsx("div", __assign({ className: "dc__word-break dc__hyphens-auto fs-14 fw-6 lh-20 ".concat(isWhiteTheme ? 'pl-12 pr-12' : 'pl-20 pr-20') }, { children: infoTextHeading }))), infoText && (jsxRuntime.jsx("div", __assign({ className: "dc__word-break dc__hyphens-auto fs-13 fw-4 lh-20 ".concat(isWhiteTheme
                         ? 'p-12'
                         : "pl-20 pr-20 pt-4 ".concat(additionalContent && documentationLink ? 'pb-12' : 'pb-20')) }, { children: infoText }))), additionalContent, documentationLink && (jsxRuntime.jsx("div", __assign({ className: "pl-12 pb-12" }, { children: jsxRuntime.jsx("a", __assign({ href: documentationLink, target: "_blank", rel: "noreferrer noopener", className: "fs-13 cb-5", onClick: closeTippy }, { children: documentationLinkText || 'Learn more' })) })))] }));
     };
@@ -8602,11 +8602,11 @@ function ResizableTagTextArea(_a) {
     var handleOnBlur = function (event) {
         refVar.current.style.height = 'auto';
         dependentRef.current.style.height = 'auto';
-        onBlur(event);
+        onBlur && onBlur(event);
     };
     var handleOnFocus = function (event) {
         reInitHeight();
-        onFocus(event);
+        onFocus && onFocus(event);
     };
     return (jsxRuntime.jsx("textarea", { rows: 1, ref: refVar, value: text, placeholder: placeholder, className: "".concat(className || '', " lh-20"), style: { resize: 'none' }, onChange: handleChange, onBlur: handleOnBlur, onFocus: handleOnFocus, tabIndex: tabIndex }));
 }
@@ -16396,6 +16396,7 @@ exports.ROUTES = ROUTES;
 exports.RadioGroup = RadioGroup;
 exports.RadioGroupItem = RadioGroupItem;
 exports.RequestTimeout = RequestTimeout;
+exports.ResizableTagTextArea = ResizableTagTextArea;
 exports.ServerError = ServerError;
 exports.ServerErrors = ServerErrors;
 exports.SingleSelectOption = SingleSelectOption;

@@ -20,6 +20,7 @@ export declare enum TippyTheme {
     white = "white"
 }
 export interface TagType {
+    id?: number;
     key: string;
     value?: string;
     description?: string;

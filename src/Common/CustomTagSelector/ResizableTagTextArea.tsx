@@ -49,12 +49,12 @@ export function ResizableTagTextArea({
     const handleOnBlur = (event) => {
         refVar.current.style.height = 'auto'
         dependentRef.current.style.height = 'auto'
-        onBlur(event)
+        onBlur && onBlur(event)
     }
 
     const handleOnFocus = (event) => {
         reInitHeight()
-        onFocus(event)
+        onFocus && onFocus(event)
     }
 
     return (

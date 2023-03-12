@@ -24,67 +24,68 @@ export enum TippyTheme {
 }
 
 export interface TagType {
-  key: string
-  value?: string
-  description?: string
-  propagate: boolean
-  mandatoryProjectIdsCsv?: string[]
-  isInvalidKey?: boolean
-  isInvalidValue?: boolean
+    id?: number
+    key: string
+    value?: string
+    description?: string
+    propagate: boolean
+    mandatoryProjectIdsCsv?: string[]
+    isInvalidKey?: boolean
+    isInvalidValue?: boolean
 }
 
 export interface TagErrorType {
-  isValid: boolean
-  messages: string[]
+    isValid: boolean
+    messages: string[]
 }
 export interface TagLabelSelectType {
-  isCreateApp?: boolean
-  labelTags: TagType[]
-  setLabelTags: (tagList: TagType[]) => void
-  tabIndex?: number
+    isCreateApp?: boolean
+    labelTags: TagType[]
+    setLabelTags: (tagList: TagType[]) => void
+    tabIndex?: number
 }
 
 export interface TagDetailType {
-  index: number
-  tagData: TagType
-  setTagData: (index: number, tagData: TagType) => void
-  removeTag: (index: number) => void
-  tabIndex?: number
+    index: number
+    tagData: TagType
+    setTagData: (index: number, tagData: TagType) => void
+    removeTag: (index: number) => void
+    tabIndex?: number
 }
 
 export interface TagLabelValueSelectorType {
-  selectedTagIndex: number
-  tagData: TagType
-  setTagData: (index: number, tagData: TagType) => void
-  tagOptions?: OptionType[]
-  isRequired?: boolean
-  tagInputType?: KEY_VALUE
-  placeholder?: string
-  tabIndex?: number
-  refVar?: React.MutableRefObject<HTMLTextAreaElement>
-  dependentRef?: React.MutableRefObject<HTMLTextAreaElement>
+    selectedTagIndex: number
+    tagData: TagType
+    setTagData: (index: number, tagData: TagType) => void
+    tagOptions?: OptionType[]
+    isRequired?: boolean
+    tagInputType?: KEY_VALUE
+    placeholder?: string
+    tabIndex?: number
+    refVar?: React.MutableRefObject<HTMLTextAreaElement>
+    dependentRef?: React.MutableRefObject<HTMLTextAreaElement>
 }
 
 export interface ResizableTagTextAreaProps {
-  className?: string
-  minHeight?: number
-  maxHeight?: number
-  value?: string
-  onChange?: (e) => void
-  onBlur?: (e) => void
-  onFocus?: (e) => void
-  placeholder?: string
-  tabIndex?: number
-  refVar?: React.MutableRefObject<HTMLTextAreaElement>
-  dependentRef?: React.MutableRefObject<HTMLTextAreaElement>
+    className?: string
+    minHeight?: number
+    maxHeight?: number
+    value?: string
+    onChange?: (e) => void
+    onBlur?: (e) => void
+    onFocus?: (e) => void
+    placeholder?: string
+    tabIndex?: number
+    refVar?: React.MutableRefObject<HTMLTextAreaElement>
+    dependentRef?: React.MutableRefObject<HTMLTextAreaElement>
 }
 
 export interface TeamList extends ResponseType {
-  result: Teams[];
+    result: Teams[]
 }
 
 export interface Teams {
-  id: number;
-  name: string;
-  active: boolean;
+    id: number
+    name: string
+    active: boolean
 }
