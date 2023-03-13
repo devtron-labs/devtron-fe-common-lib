@@ -38,13 +38,16 @@ export interface TagLabelSelectType {
     labelTags: TagType[];
     setLabelTags: (tagList: TagType[]) => void;
     tabIndex?: number;
+    selectedProjectId?: number;
+    suggestedTagsOptions?: OptionType[];
 }
 export interface TagDetailType {
     index: number;
     tagData: TagType;
     setTagData: (index: number, tagData: TagType) => void;
-    removeTag: (index: number) => void;
+    removeTag?: (index: number) => void;
     tabIndex?: number;
+    suggestedTagsOptions?: OptionType[];
 }
 export interface TagLabelValueSelectorType {
     selectedTagIndex: number;

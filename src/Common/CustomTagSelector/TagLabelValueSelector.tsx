@@ -34,12 +34,12 @@ export const TagLabelValueSelector = ({
         }, 300)
     }
     const handleOnBlur = (e) => {
-        setActiveElement('')
         if (
             !e.relatedTarget ||
             !e.relatedTarget.classList.value ||
             !e.relatedTarget.classList.value.includes(`tag-${selectedTagIndex}-class`)
         ) {
+            setActiveElement('')
             const _tagData = { ...tagData }
             _tagData[tagInputType] = selectedValue
             if (tagInputType === KEY_VALUE.KEY) {
@@ -108,13 +108,16 @@ export const TagLabelValueSelector = ({
             if (filteredTags.length) {
                 return (
                     <div className="p-8">
-                        {tagOptions
-                            .filter((tag) => tag.value.indexOf(selectedValue) >= 0)
-                            .map((tag, index) => (
-                                <div data-key={`${tag.value}-${index}`} className="cursor" onClick={onSelectValue}>
-                                    {tag.label}
-                                </div>
-                            ))}
+                        {filteredTags.map((tag, index) => (
+                            <div
+                                key={`${tag.value}-${index}`}
+                                data-key={tag.label}
+                                className="cursor"
+                                onClick={onSelectValue}
+                            >
+                                {tag.label}
+                            </div>
+                        ))}
                     </div>
                 )
             }

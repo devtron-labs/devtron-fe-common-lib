@@ -8625,10 +8625,10 @@ var TagLabelValueSelector = function (_a) {
         }, 300);
     };
     var handleOnBlur = function (e) {
-        setActiveElement('');
         if (!e.relatedTarget ||
             !e.relatedTarget.classList.value ||
             !e.relatedTarget.classList.value.includes("tag-".concat(selectedTagIndex, "-class"))) {
+            setActiveElement('');
             var _tagData = __assign({}, tagData);
             _tagData[tagInputType] = selectedValue;
             if (tagInputType === exports.KEY_VALUE.KEY) {
@@ -8675,9 +8675,7 @@ var TagLabelValueSelector = function (_a) {
         if (tagOptions === null || tagOptions === void 0 ? void 0 : tagOptions.length) {
             var filteredTags = tagOptions.filter(function (tag) { return tag.value.indexOf(selectedValue) >= 0; });
             if (filteredTags.length) {
-                return (jsxRuntime.jsx("div", __assign({ className: "p-8" }, { children: tagOptions
-                        .filter(function (tag) { return tag.value.indexOf(selectedValue) >= 0; })
-                        .map(function (tag, index) { return (jsxRuntime.jsx("div", __assign({ "data-key": "".concat(tag.value, "-").concat(index), className: "cursor", onClick: onSelectValue }, { children: tag.label }))); }) })));
+                return (jsxRuntime.jsx("div", __assign({ className: "p-8" }, { children: filteredTags.map(function (tag, index) { return (jsxRuntime.jsxs("div", __assign({ "data-key": tag.label, className: "cursor", onClick: onSelectValue }, { children: [tag.label, "hahahahah"] }), "".concat(tag.value, "-").concat(index))); }) })));
             }
         }
         return renderValidationsSuggestions();
@@ -8690,7 +8688,7 @@ var TagLabelValueSelector = function (_a) {
 };
 
 function TagDetails(_a) {
-    var index = _a.index, tagData = _a.tagData, setTagData = _a.setTagData, removeTag = _a.removeTag, _b = _a.tabIndex, tabIndex = _b === void 0 ? 1 : _b;
+    var index = _a.index, tagData = _a.tagData, setTagData = _a.setTagData, removeTag = _a.removeTag, _b = _a.tabIndex, tabIndex = _b === void 0 ? 1 : _b, suggestedTagsOptions = _a.suggestedTagsOptions;
     var keyRef = React.useRef(null);
     var valueRef = React.useRef(null);
     var deleteTag = function (e) {
@@ -8702,11 +8700,11 @@ function TagDetails(_a) {
         _tagData.propagate = !_tagData.propagate;
         setTagData(index, _tagData);
     };
-    return (jsxRuntime.jsxs("div", __assign({ className: "flexbox mb-8" }, { children: [jsxRuntime.jsx("div", __assign({ className: "dc__border h-30 pl-4 pr-4 br-4 mr-8 pointer ".concat(tagData.propagate ? 'bcn-7' : ''), onClick: propagateTagToResource }, { children: jsxRuntime.jsx(SvgInjectTag, { className: "icon-dim-20 mt-4 ".concat(tagData.propagate ? 'scn-0' : '') }) })), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, tagInputType: exports.KEY_VALUE.KEY, placeholder: "Enter key", tabIndex: tabIndex - 1, refVar: keyRef, dependentRef: valueRef }), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, tagInputType: exports.KEY_VALUE.VALUE, placeholder: "Enter value", tabIndex: tabIndex, refVar: valueRef, dependentRef: keyRef }), jsxRuntime.jsx("div", __assign({ className: "dc__border pl-4 pr-4 dc__right-radius-4 pointer flex top", onClick: deleteTag }, { children: jsxRuntime.jsx(SvgIcClose, { className: "icon-dim-20 mt-4" }) }))] })));
+    return (jsxRuntime.jsxs("div", __assign({ className: "flexbox mb-8" }, { children: [jsxRuntime.jsx("div", __assign({ className: "dc__border h-30 pl-4 pr-4 br-4 mr-8 pointer ".concat(tagData.propagate ? 'bcn-7' : ''), onClick: propagateTagToResource }, { children: jsxRuntime.jsx(SvgInjectTag, { className: "icon-dim-20 mt-4 ".concat(tagData.propagate ? 'scn-0' : '') }) })), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, tagInputType: exports.KEY_VALUE.KEY, placeholder: "Enter key", tabIndex: tabIndex - 1, refVar: keyRef, dependentRef: valueRef, tagOptions: suggestedTagsOptions }), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, tagInputType: exports.KEY_VALUE.VALUE, placeholder: "Enter value", tabIndex: tabIndex, refVar: valueRef, dependentRef: keyRef }), jsxRuntime.jsx("div", __assign({ className: "dc__border pl-4 pr-4 dc__right-radius-4 pointer flex top", onClick: deleteTag }, { children: jsxRuntime.jsx(SvgIcClose, { className: "icon-dim-20 mt-4" }) }))] })));
 }
 
 var TagLabelSelect = function (_a) {
-    var isCreateApp = _a.isCreateApp, labelTags = _a.labelTags, setLabelTags = _a.setLabelTags, _b = _a.tabIndex, tabIndex = _b === void 0 ? 0 : _b;
+    var isCreateApp = _a.isCreateApp, labelTags = _a.labelTags, setLabelTags = _a.setLabelTags, _b = _a.tabIndex, tabIndex = _b === void 0 ? 0 : _b, suggestedTagsOptions = _a.suggestedTagsOptions;
     var setTagData = function (index, tagValue) {
         var _tags = __spreadArray([], __read(labelTags), false);
         _tags[index] = tagValue;
@@ -8722,7 +8720,7 @@ var TagLabelSelect = function (_a) {
         _tags.splice(index, 1);
         setLabelTags(_tags);
     };
-    return (jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs("div", __assign({ className: "flexbox dc__content-space mb-8" }, { children: [jsxRuntime.jsx("span", { children: "Tags" }), jsxRuntime.jsx(PropagateTagInfo, { isCreateApp: isCreateApp })] })), jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs("div", __assign({ className: "dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor", onClick: addNewTag }, { children: [jsxRuntime.jsx(SvgIcAdd, { className: "icon-dim-20 fcb-5" }), " Add tag"] })), jsxRuntime.jsx("div", __assign({ className: "mb-8" }, { children: labelTags === null || labelTags === void 0 ? void 0 : labelTags.map(function (tagData, index) { return (jsxRuntime.jsx(TagDetails, { index: index, tagData: tagData, setTagData: setTagData, removeTag: removeTag, tabIndex: tabIndex + (index + 2) }, "tag-".concat(index))); }) }))] })] }));
+    return (jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs("div", __assign({ className: "flexbox dc__content-space mb-8" }, { children: [jsxRuntime.jsx("span", { children: "Tags" }), jsxRuntime.jsx(PropagateTagInfo, { isCreateApp: isCreateApp })] })), jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs("div", __assign({ className: "dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor", onClick: addNewTag }, { children: [jsxRuntime.jsx(SvgIcAdd, { className: "icon-dim-20 fcb-5" }), " Add tag"] })), jsxRuntime.jsx("div", __assign({ className: "mb-8" }, { children: labelTags === null || labelTags === void 0 ? void 0 : labelTags.map(function (tagData, index) { return (jsxRuntime.jsx(TagDetails, { index: index, tagData: tagData, setTagData: setTagData, removeTag: removeTag, tabIndex: tabIndex + (index + 2), suggestedTagsOptions: suggestedTagsOptions }, "tag-".concat(index))); }) }))] })] }));
 };
 
 function ConfirmationDialog(_a) {

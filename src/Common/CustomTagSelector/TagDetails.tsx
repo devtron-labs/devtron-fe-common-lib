@@ -6,7 +6,14 @@ import { TagLabelValueSelector } from './TagLabelValueSelector'
 import { KEY_VALUE } from '../Constants'
 import { stopPropagation } from '../Helper'
 
-export default function TagDetails({ index, tagData, setTagData, removeTag, tabIndex = 1 }: TagDetailType) {
+export default function TagDetails({
+    index,
+    tagData,
+    setTagData,
+    removeTag,
+    tabIndex = 1,
+    suggestedTagsOptions,
+}: TagDetailType) {
     const keyRef = useRef(null)
     const valueRef = useRef(null)
 
@@ -36,6 +43,7 @@ export default function TagDetails({ index, tagData, setTagData, removeTag, tabI
                 tabIndex={tabIndex - 1}
                 refVar={keyRef}
                 dependentRef={valueRef}
+                tagOptions={suggestedTagsOptions}
             />
             <TagLabelValueSelector
                 selectedTagIndex={index}

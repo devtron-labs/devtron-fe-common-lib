@@ -5,7 +5,13 @@ import TagDetails from './TagDetails'
 import { TagLabelSelectType } from '../Types'
 import { DEFAULT_TAG_DATA } from '../Constants'
 
-export const TagLabelSelect = ({ isCreateApp, labelTags, setLabelTags, tabIndex = 0 }: TagLabelSelectType) => {
+export const TagLabelSelect = ({
+    isCreateApp,
+    labelTags,
+    setLabelTags,
+    tabIndex = 0,
+    suggestedTagsOptions,
+}: TagLabelSelectType) => {
     const setTagData = (index, tagValue): void => {
         const _tags = [...labelTags]
         _tags[index] = tagValue
@@ -43,6 +49,7 @@ export const TagLabelSelect = ({ isCreateApp, labelTags, setLabelTags, tabIndex 
                             setTagData={setTagData}
                             removeTag={removeTag}
                             tabIndex={tabIndex + (index + 2)}
+                            suggestedTagsOptions={suggestedTagsOptions}
                         />
                     ))}
                 </div>
