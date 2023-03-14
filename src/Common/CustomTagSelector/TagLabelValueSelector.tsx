@@ -46,7 +46,7 @@ export const TagLabelValueSelector = ({
                 _tagData.isInvalidKey = selectedValue
                     ? !validationRules.propagateTagKey(selectedValue).isValid
                     : _tagData.value !== ''
-            } else if (selectedValue) {
+            } else if (selectedValue || isRequired) {
                 _tagData.isInvalidValue = !validationRules.propagateTagValue(selectedValue).isValid
                 _tagData.isInvalidKey = !_tagData.key || _tagData.isInvalidKey
             } else {
@@ -112,7 +112,7 @@ export const TagLabelValueSelector = ({
                             <div
                                 key={`${tag.value}-${index}`}
                                 data-key={tag.label}
-                                className="dc__hover-n50 lh-20 fs-13 fw-6 pt-6 pr-8 pb-6 pl-8 cursor"
+                                className="dc__hover-n50 lh-20 fs-13 fw-4 pt-6 pr-8 pb-6 pl-8 cursor"
                                 onClick={onSelectValue}
                             >
                                 {tag.label}

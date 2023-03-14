@@ -7,20 +7,20 @@ var reactRouter = require('react-router');
 var reactRouterDom = require('react-router-dom');
 
 function _interopNamespaceDefault(e) {
-  var n = Object.create(null);
-  if (e) {
-    Object.keys(e).forEach(function (k) {
-      if (k !== 'default') {
-        var d = Object.getOwnPropertyDescriptor(e, k);
-        Object.defineProperty(n, k, d.get ? d : {
-          enumerable: true,
-          get: function () { return e[k]; }
+    var n = Object.create(null);
+    if (e) {
+        Object.keys(e).forEach(function (k) {
+            if (k !== 'default') {
+                var d = Object.getOwnPropertyDescriptor(e, k);
+                Object.defineProperty(n, k, d.get ? d : {
+                    enumerable: true,
+                    get: function () { return e[k]; }
+                });
+            }
         });
-      }
-    });
-  }
-  n.default = e;
-  return Object.freeze(n);
+    }
+    n.default = e;
+    return Object.freeze(n);
 }
 
 var React__namespace = /*#__PURE__*/_interopNamespaceDefault(React);
@@ -46,7 +46,14 @@ exports.KEY_VALUE = void 0;
     KEY_VALUE["KEY"] = "key";
     KEY_VALUE["VALUE"] = "value";
 })(exports.KEY_VALUE || (exports.KEY_VALUE = {}));
-var DEFAULT_TAG_DATA = { key: '', value: '', propagate: false, isInvalidKey: false, isInvalidValue: false };
+var DEFAULT_TAG_DATA = {
+    key: '',
+    value: '',
+    propagate: false,
+    isInvalidKey: false,
+    isInvalidValue: false,
+    isSuggested: true,
+};
 var TOAST_ACCESS_DENIED = {
     TITLE: 'Access denied',
     SUBTITLE: 'You do not have required access to perform this action',
@@ -459,9 +466,9 @@ var css_248z$3 = ".empty-state {\n  height: 100%;\n}\n.empty-state img {\n  heig
 styleInject(css_248z$3);
 
 var _g$2;
-function _extends$b() { _extends$b = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$b.apply(this, arguments); }
+function _extends$a() { _extends$a = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$a.apply(this, arguments); }
 var SvgIcProgressing = function SvgIcProgressing(props) {
-  return /*#__PURE__*/React__namespace.createElement("svg", _extends$b({
+  return /*#__PURE__*/React__namespace.createElement("svg", _extends$a({
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 24 24",
     width: "1em",
@@ -513,8 +520,8 @@ EmptyState.Loading = Loading;
 
 function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e))for(t=0;t<e.length;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f);else for(t in e)e[t]&&(n&&(n+=" "),n+=t);return n}function clsx(){for(var e,t,f=0,n="";f<arguments.length;)(e=arguments[f++])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}
 
-function _extends$a() {
-  _extends$a = Object.assign || function (target) {
+function _extends$9() {
+  _extends$9 = Object.assign || function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
 
@@ -528,7 +535,7 @@ function _extends$a() {
     return target;
   };
 
-  return _extends$a.apply(this, arguments);
+  return _extends$9.apply(this, arguments);
 }
 
 function _objectWithoutPropertiesLoose$2(source, excluded) {
@@ -1254,7 +1261,7 @@ function ProgressBar(_ref) {
       isIn = _ref.isIn,
       theme = _ref.theme;
 
-  var style = _extends$a({}, userStyle, {
+  var style = _extends$9({}, userStyle, {
     animationDuration: delay + "ms",
     animationPlayState: isRunning ? 'running' : 'paused',
     opacity: hide ? 0 : 1
@@ -1531,9 +1538,9 @@ var ToastContainer = function ToastContainer(props) {
     ,
     id: containerId
   }, getToastToRender(function (position, toastList) {
-    var containerStyle = !toastList.length ? _extends$a({}, style, {
+    var containerStyle = !toastList.length ? _extends$9({}, style, {
       pointerEvents: 'none'
-    }) : _extends$a({}, style);
+    }) : _extends$9({}, style);
     return React.createElement("div", {
       className: getClassName(position),
       style: containerStyle,
@@ -1640,7 +1647,7 @@ function dispatchToast(content, options) {
 
 
 function mergeOptions(type, options) {
-  return _extends$a({}, options, {
+  return _extends$9({}, options, {
     type: options && options.type || type,
     toastId: getToastId(options)
   });
@@ -1657,7 +1664,7 @@ function toast(content, options) {
 }
 
 toast.loading = function (content, options) {
-  return dispatchToast(content, mergeOptions(TYPE.DEFAULT, _extends$a({
+  return dispatchToast(content, mergeOptions(TYPE.DEFAULT, _extends$9({
     isLoading: true,
     autoClose: false,
     closeOnClick: false,
@@ -1673,7 +1680,7 @@ function handlePromise(promise, _ref2, options) {
   var id;
 
   if (pending) {
-    id = isStr(pending) ? toast.loading(pending, options) : toast.loading(pending.render, _extends$a({}, options, pending));
+    id = isStr(pending) ? toast.loading(pending, options) : toast.loading(pending.render, _extends$9({}, options, pending));
   }
 
   var resetParams = {
@@ -1692,7 +1699,7 @@ function handlePromise(promise, _ref2, options) {
       return;
     }
 
-    var baseParams = _extends$a({
+    var baseParams = _extends$9({
       type: type
     }, resetParams, options, {
       data: result
@@ -1703,10 +1710,10 @@ function handlePromise(promise, _ref2, options) {
     } : input; // if the id is set we know that it's an update
 
     if (id) {
-      toast.update(id, _extends$a({}, baseParams, params));
+      toast.update(id, _extends$9({}, baseParams, params));
     } else {
       // using toast.promise without loading
-      toast(params.render, _extends$a({}, baseParams, params));
+      toast(params.render, _extends$9({}, baseParams, params));
     }
 
     return result;
@@ -1730,7 +1737,7 @@ toast.warning = /*#__PURE__*/createToastByType(TYPE.WARNING);
 toast.warn = toast.warning;
 
 toast.dark = function (content, options) {
-  return dispatchToast(content, mergeOptions(TYPE.DEFAULT, _extends$a({
+  return dispatchToast(content, mergeOptions(TYPE.DEFAULT, _extends$9({
     theme: 'dark'
   }, options)));
 };
@@ -1787,7 +1794,7 @@ toast.update = function (toastId, options) {
       var oldOptions = toast.props,
           oldContent = toast.content;
 
-      var nextOptions = _extends$a({}, oldOptions, options, {
+      var nextOptions = _extends$9({}, oldOptions, options, {
         toastId: options.toastId || toastId,
         updateId: generateToastId()
       });
@@ -4063,25 +4070,6 @@ var Modal = function (_a) {
         }, id: "popup", className: "".concat(rootClassName, " popup ").concat(modal ? 'modal' : ''), style: __assign({}, style) }, { children: children })), document.getElementById('visible-modal'));
 };
 
-var _defs, _use;
-function _extends$9() { _extends$9 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$9.apply(this, arguments); }
-var SvgIcClose = function SvgIcClose(props) {
-  return /*#__PURE__*/React__namespace.createElement("svg", _extends$9({
-    xmlns: "http://www.w3.org/2000/svg",
-    xmlnsXlink: "http://www.w3.org/1999/xlink",
-    width: "1em",
-    height: "1em",
-    viewBox: "0 0 24 24"
-  }, props), _defs || (_defs = /*#__PURE__*/React__namespace.createElement("defs", null, /*#__PURE__*/React__namespace.createElement("path", {
-    id: "ic-close_svg__a",
-    className: "ic-close_svg__stroke-color",
-    d: "M18.295 5.705a.997.997 0 0 0-1.41 0L12 10.59 7.115 5.705a.997.997 0 1 0-1.41 1.41L10.59 12l-4.885 4.885a.997.997 0 1 0 1.41 1.41L12 13.41l4.885 4.885a.997.997 0 0 0 1.41-1.41L13.41 12l4.885-4.885a.997.997 0 0 0 0-1.41z"
-  }))), _use || (_use = /*#__PURE__*/React__namespace.createElement("use", {
-    fill: "#999",
-    xlinkHref: "#ic-close_svg__a",
-    fillRule: "evenodd"
-  })));
-};
 var close = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%20%20%20%20%3Cdefs%3E%20%20%20%20%20%20%20%20%3Cpath%20id%3D%22a%22%20class%3D%22stroke-color%22%20d%3D%22M18.295%205.705a.997.997%200%200%200-1.41%200L12%2010.59%207.115%205.705a.997.997%200%201%200-1.41%201.41L10.59%2012l-4.885%204.885a.997.997%200%201%200%201.41%201.41L12%2013.41l4.885%204.885a.997.997%200%200%200%201.41-1.41L13.41%2012l4.885-4.885a.997.997%200%200%200%200-1.41z%22%2F%3E%20%20%20%20%3C%2Fdefs%3E%20%20%20%20%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22%22%2F%3E%20%20%20%20%20%20%20%20%3Cuse%20fill%3D%22%23999%22%20xlink%3Ahref%3D%22%23a%22%2F%3E%20%20%20%20%3C%2Fg%3E%3C%2Fsvg%3E";
 
 var OpaqueModal = /** @class */ (function (_super) {
@@ -8621,7 +8609,7 @@ var TagLabelValueSelector = function (_a) {
                     ? !validationRules.propagateTagKey(selectedValue).isValid
                     : _tagData.value !== '';
             }
-            else if (selectedValue) {
+            else if (selectedValue || isRequired) {
                 _tagData.isInvalidValue = !validationRules.propagateTagValue(selectedValue).isValid;
                 _tagData.isInvalidKey = !_tagData.key || _tagData.isInvalidKey;
             }
@@ -8660,7 +8648,7 @@ var TagLabelValueSelector = function (_a) {
         if (tagOptions === null || tagOptions === void 0 ? void 0 : tagOptions.length) {
             var filteredTags = tagOptions.filter(function (tag) { return tag.value.indexOf(selectedValue) >= 0; });
             if (filteredTags.length) {
-                return (jsxRuntime.jsx("div", { children: filteredTags.map(function (tag, index) { return (jsxRuntime.jsx("div", __assign({ "data-key": tag.label, className: "dc__hover-n50 lh-20 fs-13 fw-6 pt-6 pr-8 pb-6 pl-8 cursor", onClick: onSelectValue }, { children: tag.label }), "".concat(tag.value, "-").concat(index))); }) }));
+                return (jsxRuntime.jsx("div", { children: filteredTags.map(function (tag, index) { return (jsxRuntime.jsx("div", __assign({ "data-key": tag.label, className: "dc__hover-n50 lh-20 fs-13 fw-4 pt-6 pr-8 pb-6 pl-8 cursor", onClick: onSelectValue }, { children: tag.label }), "".concat(tag.value, "-").concat(index))); }) }));
             }
         }
         return renderValidationsSuggestions();
@@ -8685,7 +8673,7 @@ var TagDetails = function (_a) {
         _tagData.propagate = !_tagData.propagate;
         setTagData(index, _tagData);
     };
-    return (jsxRuntime.jsxs("div", __assign({ className: "flexbox mb-8" }, { children: [jsxRuntime.jsx("div", __assign({ className: "dc__border h-30 pl-4 pr-4 br-4 mr-8 pointer ".concat(tagData.propagate ? 'bcn-7' : ''), onClick: propagateTagToResource }, { children: jsxRuntime.jsx(SvgInjectTag, { className: "icon-dim-20 mt-4 ".concat(tagData.propagate ? 'scn-0' : '') }) })), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, tagInputType: exports.KEY_VALUE.KEY, placeholder: "Enter key", tabIndex: tabIndex - 1, refVar: keyRef, dependentRef: valueRef, tagOptions: suggestedTagsOptions }), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, tagInputType: exports.KEY_VALUE.VALUE, placeholder: "Enter value", tabIndex: tabIndex, refVar: valueRef, dependentRef: keyRef }), jsxRuntime.jsx("div", __assign({ className: "dc__border pl-4 pr-4 dc__right-radius-4 pointer flex top", onClick: deleteTag }, { children: jsxRuntime.jsx(SvgIcClose, { className: "icon-dim-20 mt-4" }) }))] })));
+    return (jsxRuntime.jsxs("div", __assign({ className: "flexbox mb-8" }, { children: [jsxRuntime.jsx("div", __assign({ className: "dc__border h-30 pl-4 pr-4 br-4 mr-8 pointer ".concat(tagData.propagate ? 'bcn-7' : ''), onClick: propagateTagToResource }, { children: jsxRuntime.jsx(SvgInjectTag, { className: "icon-dim-20 mt-4 ".concat(tagData.propagate ? 'scn-0' : '') }) })), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, tagInputType: exports.KEY_VALUE.KEY, placeholder: "Enter key", tabIndex: tabIndex - 1, refVar: keyRef, dependentRef: valueRef, tagOptions: suggestedTagsOptions }), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, tagInputType: exports.KEY_VALUE.VALUE, placeholder: "Enter value", tabIndex: tabIndex, refVar: valueRef, dependentRef: keyRef }), jsxRuntime.jsx("div", __assign({ className: "dc__border pl-4 pr-4 dc__right-radius-4 pointer flex top", onClick: deleteTag }, { children: jsxRuntime.jsx(SvgIcCross, { className: "icon-dim-20 mt-4" }) }))] })));
 };
 
 var _path$1;

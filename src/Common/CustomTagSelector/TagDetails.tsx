@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { ReactComponent as DeleteCross } from '../../Assets/Icon/ic-close.svg'
+import { ReactComponent as DeleteCross } from '../../Assets/Icon/ic-cross.svg'
 import { ReactComponent as InjectTag } from '../../Assets/Icon/inject-tag.svg'
 import { TagLabelValueSelector } from './TagLabelValueSelector'
 import { KEY_VALUE } from '../Constants'

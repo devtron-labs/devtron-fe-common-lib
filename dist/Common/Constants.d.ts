@@ -24,6 +24,7 @@ export declare const DEFAULT_TAG_DATA: {
     propagate: boolean;
     isInvalidKey: boolean;
     isInvalidValue: boolean;
+    isSuggested: boolean;
 };
 export declare const TOAST_ACCESS_DENIED: {
     TITLE: string;
