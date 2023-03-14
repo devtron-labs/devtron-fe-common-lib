@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { TagLabelValueSelectorType } from '../Types'
 import PopupMenu from '../PopupMenu'
 import { ValidationRules } from './ValidationRules'
 import { ReactComponent as ErrorCross } from '../../Assets/Icon/ic-cross.svg'
@@ -7,6 +6,7 @@ import { ReactComponent as Info } from '../../Assets/Icon/ic-info-outlined.svg'
 import { KEY_VALUE } from '../Constants'
 import { stopPropagation } from '../Helper'
 import { ResizableTagTextArea } from './ResizableTagTextArea'
+import { TagLabelValueSelectorType } from './Types'
 
 export const TagLabelValueSelector = ({
     selectedTagIndex,
@@ -107,12 +107,12 @@ export const TagLabelValueSelector = ({
             const filteredTags = tagOptions.filter((tag) => tag.value.indexOf(selectedValue) >= 0)
             if (filteredTags.length) {
                 return (
-                    <div className="p-8">
+                    <div>
                         {filteredTags.map((tag, index) => (
                             <div
                                 key={`${tag.value}-${index}`}
                                 data-key={tag.label}
-                                className="cursor"
+                                className="dc__hover-n50 lh-20 fs-13 fw-6 pt-6 pr-8 pb-6 pl-8 cursor"
                                 onClick={onSelectValue}
                             >
                                 {tag.label}

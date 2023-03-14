@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useThrottledEffect } from '../Helper'
-import { ResizableTagTextAreaProps } from '../Types'
+import { ResizableTagTextAreaProps } from './Types'
 
 export function ResizableTagTextArea({
     className,

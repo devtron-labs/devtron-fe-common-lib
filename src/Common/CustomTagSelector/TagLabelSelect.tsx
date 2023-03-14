@@ -1,16 +1,15 @@
 import React from 'react'
 import PropagateTagInfo from './PropagateTagInfo'
 import { ReactComponent as Add } from '../../Assets/Icon/ic-add.svg'
-import TagDetails from './TagDetails'
-import { TagLabelSelectType } from '../Types'
 import { DEFAULT_TAG_DATA } from '../Constants'
+import { TagLabelSelectType } from './Types'
+import { TagDetails } from './TagDetails'
 
 export const TagLabelSelect = ({
     isCreateApp,
     labelTags,
     setLabelTags,
-    tabIndex = 0,
-    suggestedTagsOptions,
+    tabIndex = 0
 }: TagLabelSelectType) => {
     const setTagData = (index, tagValue): void => {
         const _tags = [...labelTags]
@@ -49,7 +48,6 @@ export const TagLabelSelect = ({
                             setTagData={setTagData}
                             removeTag={removeTag}
                             tabIndex={tabIndex + (index + 2)}
-                            suggestedTagsOptions={suggestedTagsOptions}
                         />
                     ))}
                 </div>

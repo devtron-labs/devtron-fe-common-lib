@@ -8480,21 +8480,6 @@ function PropagateTagInfo(_a) {
     return (jsxRuntime.jsx(TippyCustomized, __assign({ theme: exports.TippyTheme.white, className: "w-300", placement: "top", Icon: SvgInjectTag, heading: 'Propagate tags to K8s resources', infoText: "", additionalContent: additionalInfo(), showCloseButton: true, trigger: "click", interactive: true, documentationLink: isCreateApp ? DOCUMENTATION.APP_TAGS : DOCUMENTATION.APP_OVERVIEW_TAGS, documentationLinkText: "View Documentation" }, { children: jsxRuntime.jsxs("div", __assign({ className: "flexbox cursor" }, { children: [jsxRuntime.jsx(SvgInjectTag, { className: "icon-dim-16 mt-2 mr-4" }), jsxRuntime.jsx("span", { children: "Propagate tags" }), jsxRuntime.jsx(SvgIcHelpOutline, { className: "icon-dim-16 mt-2 ml-4" })] })) })));
 }
 
-var _path$2;
-function _extends$5() { _extends$5 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$5.apply(this, arguments); }
-var SvgIcAdd = function SvgIcAdd(props) {
-  return /*#__PURE__*/React__namespace.createElement("svg", _extends$5({
-    xmlns: "http://www.w3.org/2000/svg",
-    width: "1em",
-    height: "1em",
-    viewBox: "0 0 24 24"
-  }, props), _path$2 || (_path$2 = /*#__PURE__*/React__namespace.createElement("path", {
-    className: "ic-add_svg__fill-color",
-    fill: "#999",
-    d: "M18 13h-5v5a1 1 0 0 1-2 0v-5H6a1 1 0 0 1 0-2h5V6a1 1 0 0 1 2 0v5h5a1 1 0 0 1 0 2z"
-  })));
-};
-
 var validateTagValue = function (value) {
     var errorList = [];
     if (value.length > 63) {
@@ -8555,15 +8540,15 @@ var ValidationRules = /** @class */ (function () {
     return ValidationRules;
 }());
 
-var _path$1;
-function _extends$4() { _extends$4 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$4.apply(this, arguments); }
+var _path$2;
+function _extends$5() { _extends$5 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$5.apply(this, arguments); }
 var SvgIcInfoOutlined = function SvgIcInfoOutlined(props) {
-  return /*#__PURE__*/React__namespace.createElement("svg", _extends$4({
+  return /*#__PURE__*/React__namespace.createElement("svg", _extends$5({
     xmlns: "http://www.w3.org/2000/svg",
     width: "1em",
     height: "1em",
     viewBox: "0 0 20 20"
-  }, props), _path$1 || (_path$1 = /*#__PURE__*/React__namespace.createElement("path", {
+  }, props), _path$2 || (_path$2 = /*#__PURE__*/React__namespace.createElement("path", {
     d: "M10 1.667c4.6 0 8.333 3.733 8.333 8.333S14.6 18.333 10 18.333 1.667 14.6 1.667 10 5.4 1.667 10 1.667zm0 1.666A6.67 6.67 0 0 0 3.333 10 6.67 6.67 0 0 0 10 16.667 6.67 6.67 0 0 0 16.667 10 6.67 6.67 0 0 0 10 3.333zm0 5.834c.46 0 .833.373.833.833v3.333a.834.834 0 1 1-1.666 0V10c0-.46.373-.833.833-.833zm0-3.334A.833.833 0 1 1 10 7.5a.833.833 0 0 1 0-1.667z",
     fill: "#06C",
     fillRule: "evenodd"
@@ -8675,7 +8660,7 @@ var TagLabelValueSelector = function (_a) {
         if (tagOptions === null || tagOptions === void 0 ? void 0 : tagOptions.length) {
             var filteredTags = tagOptions.filter(function (tag) { return tag.value.indexOf(selectedValue) >= 0; });
             if (filteredTags.length) {
-                return (jsxRuntime.jsx("div", __assign({ className: "p-8" }, { children: filteredTags.map(function (tag, index) { return (jsxRuntime.jsxs("div", __assign({ "data-key": tag.label, className: "cursor", onClick: onSelectValue }, { children: [tag.label, "hahahahah"] }), "".concat(tag.value, "-").concat(index))); }) })));
+                return (jsxRuntime.jsx("div", { children: filteredTags.map(function (tag, index) { return (jsxRuntime.jsx("div", __assign({ "data-key": tag.label, className: "dc__hover-n50 lh-20 fs-13 fw-6 pt-6 pr-8 pb-6 pl-8 cursor", onClick: onSelectValue }, { children: tag.label }), "".concat(tag.value, "-").concat(index))); }) }));
             }
         }
         return renderValidationsSuggestions();
@@ -8687,7 +8672,7 @@ var TagLabelValueSelector = function (_a) {
                         : ''), value: selectedValue, onChange: handleInputChange, onBlur: handleOnBlur, onFocus: handleOnFocus, placeholder: placeholder, tabIndex: tabIndex, refVar: refVar, dependentRef: dependentRef }) })), jsxRuntime.jsx(PopupMenu.Body, __assign({ rootClassName: "tag-".concat(selectedTagIndex, "-class"), autoWidth: true, preventWheelDisable: true }, { children: activeElement === "tag-".concat(tagInputType, "-").concat(selectedTagIndex) && renderSuggestions() }))] })));
 };
 
-function TagDetails(_a) {
+var TagDetails = function (_a) {
     var index = _a.index, tagData = _a.tagData, setTagData = _a.setTagData, removeTag = _a.removeTag, _b = _a.tabIndex, tabIndex = _b === void 0 ? 1 : _b, suggestedTagsOptions = _a.suggestedTagsOptions;
     var keyRef = React.useRef(null);
     var valueRef = React.useRef(null);
@@ -8701,10 +8686,25 @@ function TagDetails(_a) {
         setTagData(index, _tagData);
     };
     return (jsxRuntime.jsxs("div", __assign({ className: "flexbox mb-8" }, { children: [jsxRuntime.jsx("div", __assign({ className: "dc__border h-30 pl-4 pr-4 br-4 mr-8 pointer ".concat(tagData.propagate ? 'bcn-7' : ''), onClick: propagateTagToResource }, { children: jsxRuntime.jsx(SvgInjectTag, { className: "icon-dim-20 mt-4 ".concat(tagData.propagate ? 'scn-0' : '') }) })), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, tagInputType: exports.KEY_VALUE.KEY, placeholder: "Enter key", tabIndex: tabIndex - 1, refVar: keyRef, dependentRef: valueRef, tagOptions: suggestedTagsOptions }), jsxRuntime.jsx(TagLabelValueSelector, { selectedTagIndex: index, tagData: tagData, setTagData: setTagData, tagInputType: exports.KEY_VALUE.VALUE, placeholder: "Enter value", tabIndex: tabIndex, refVar: valueRef, dependentRef: keyRef }), jsxRuntime.jsx("div", __assign({ className: "dc__border pl-4 pr-4 dc__right-radius-4 pointer flex top", onClick: deleteTag }, { children: jsxRuntime.jsx(SvgIcClose, { className: "icon-dim-20 mt-4" }) }))] })));
-}
+};
+
+var _path$1;
+function _extends$4() { _extends$4 = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$4.apply(this, arguments); }
+var SvgIcAdd = function SvgIcAdd(props) {
+  return /*#__PURE__*/React__namespace.createElement("svg", _extends$4({
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "1em",
+    height: "1em",
+    viewBox: "0 0 24 24"
+  }, props), _path$1 || (_path$1 = /*#__PURE__*/React__namespace.createElement("path", {
+    className: "ic-add_svg__fill-color",
+    fill: "#999",
+    d: "M18 13h-5v5a1 1 0 0 1-2 0v-5H6a1 1 0 0 1 0-2h5V6a1 1 0 0 1 2 0v5h5a1 1 0 0 1 0 2z"
+  })));
+};
 
 var TagLabelSelect = function (_a) {
-    var isCreateApp = _a.isCreateApp, labelTags = _a.labelTags, setLabelTags = _a.setLabelTags, _b = _a.tabIndex, tabIndex = _b === void 0 ? 0 : _b, suggestedTagsOptions = _a.suggestedTagsOptions;
+    var isCreateApp = _a.isCreateApp, labelTags = _a.labelTags, setLabelTags = _a.setLabelTags, _b = _a.tabIndex, tabIndex = _b === void 0 ? 0 : _b;
     var setTagData = function (index, tagValue) {
         var _tags = __spreadArray([], __read(labelTags), false);
         _tags[index] = tagValue;
@@ -8720,7 +8720,7 @@ var TagLabelSelect = function (_a) {
         _tags.splice(index, 1);
         setLabelTags(_tags);
     };
-    return (jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs("div", __assign({ className: "flexbox dc__content-space mb-8" }, { children: [jsxRuntime.jsx("span", { children: "Tags" }), jsxRuntime.jsx(PropagateTagInfo, { isCreateApp: isCreateApp })] })), jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs("div", __assign({ className: "dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor", onClick: addNewTag }, { children: [jsxRuntime.jsx(SvgIcAdd, { className: "icon-dim-20 fcb-5" }), " Add tag"] })), jsxRuntime.jsx("div", __assign({ className: "mb-8" }, { children: labelTags === null || labelTags === void 0 ? void 0 : labelTags.map(function (tagData, index) { return (jsxRuntime.jsx(TagDetails, { index: index, tagData: tagData, setTagData: setTagData, removeTag: removeTag, tabIndex: tabIndex + (index + 2), suggestedTagsOptions: suggestedTagsOptions }, "tag-".concat(index))); }) }))] })] }));
+    return (jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs("div", __assign({ className: "flexbox dc__content-space mb-8" }, { children: [jsxRuntime.jsx("span", { children: "Tags" }), jsxRuntime.jsx(PropagateTagInfo, { isCreateApp: isCreateApp })] })), jsxRuntime.jsxs("div", { children: [jsxRuntime.jsxs("div", __assign({ className: "dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor", onClick: addNewTag }, { children: [jsxRuntime.jsx(SvgIcAdd, { className: "icon-dim-20 fcb-5" }), " Add tag"] })), jsxRuntime.jsx("div", __assign({ className: "mb-8" }, { children: labelTags === null || labelTags === void 0 ? void 0 : labelTags.map(function (tagData, index) { return (jsxRuntime.jsx(TagDetails, { index: index, tagData: tagData, setTagData: setTagData, removeTag: removeTag, tabIndex: tabIndex + (index + 2) }, "tag-".concat(index))); }) }))] })] }));
 };
 
 function ConfirmationDialog(_a) {
@@ -16391,6 +16391,7 @@ exports.Option = Option;
 exports.PATTERNS = PATTERNS;
 exports.PopupMenu = PopupMenu;
 exports.Progressing = Progressing;
+exports.PropagateTagInfo = PropagateTagInfo;
 exports.ROUTES = ROUTES;
 exports.RadioGroup = RadioGroup;
 exports.RadioGroupItem = RadioGroupItem;
@@ -16400,6 +16401,7 @@ exports.ServerError = ServerError;
 exports.ServerErrors = ServerErrors;
 exports.SingleSelectOption = SingleSelectOption;
 exports.TOAST_ACCESS_DENIED = TOAST_ACCESS_DENIED;
+exports.TagDetails = TagDetails;
 exports.TagLabelSelect = TagLabelSelect;
 exports.TagLabelValueSelector = TagLabelValueSelector;
 exports.TippyCustomized = TippyCustomized;

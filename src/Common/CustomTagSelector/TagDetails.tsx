@@ -1,19 +1,19 @@
 import React, { useRef } from 'react'
 import { ReactComponent as DeleteCross } from '../../Assets/Icon/ic-close.svg'
 import { ReactComponent as InjectTag } from '../../Assets/Icon/inject-tag.svg'
-import { TagDetailType } from '../Types'
 import { TagLabelValueSelector } from './TagLabelValueSelector'
 import { KEY_VALUE } from '../Constants'
 import { stopPropagation } from '../Helper'
+import { TagDetailType } from './Types'
 
-export default function TagDetails({
+export const TagDetails = ({
     index,
     tagData,
     setTagData,
     removeTag,
     tabIndex = 1,
     suggestedTagsOptions,
-}: TagDetailType) {
+}: TagDetailType) => {
     const keyRef = useRef(null)
     const valueRef = useRef(null)
 

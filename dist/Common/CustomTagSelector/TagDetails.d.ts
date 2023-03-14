@@ -1,3 +1,3 @@
 /// <reference types="react" />
-import { TagDetailType } from '../Types';
-export default function TagDetails({ index, tagData, setTagData, removeTag, tabIndex, suggestedTagsOptions }: TagDetailType): JSX.Element;
+import { TagDetailType } from './Types';
+export declare const TagDetails: ({ index, tagData, setTagData, removeTag, tabIndex, suggestedTagsOptions, }: TagDetailType) => JSX.Element;
