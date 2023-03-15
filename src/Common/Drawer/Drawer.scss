@@ -1,39 +1,40 @@
-.drawer{
+.drawer {
     position: absolute;
     overflow: hidden;
-    &.left, &.right{
+    &.left,
+    &.right {
         top: 0;
         bottom: 0;
         width: 0;
         transition: width 200ms;
-        &.show{
+        &.show {
             min-width: var(--minWidth);
             width: var(--width);
             max-width: var(--maxWidth);
         }
     }
 
-    &.top, &.bottom{
+    &.top,
+    &.bottom {
         left: 0;
         right: 0;
         height: 0;
         transition: height 200ms;
-        &.show{
+        &.show {
             height: var(--height);
         }
     }
-    &.right{
+    &.right {
         right: 0;
     }
-    &.left{
+    &.left {
         left: 0;
-
     }
-    &.top{
+    &.top {
         top: 0;
     }
 
-    &.bottom{
+    &.bottom {
         bottom: 0;
     }
 }

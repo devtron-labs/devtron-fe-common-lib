@@ -4,7 +4,7 @@ export * from './Types';
 export * from './Api';
 export * from './EmptyState/EmptyState';
 export * from './ToastBody';
-export * from './Reload';
+export { default as Reload } from './Reload';
 export * from './Error';
 export * from './Helper';
 export * from './Progressing';

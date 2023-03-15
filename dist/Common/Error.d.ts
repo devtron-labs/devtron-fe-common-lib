@@ -10,7 +10,8 @@ export declare class ErrorScreenManager extends Component<{
     render(): JSX.Element;
 }
 export declare class ErrorScreenNotAuthorized extends Component<{
-    subtitle: React.ReactChild;
+    subtitle?: React.ReactChild;
+    title?: string;
     subtitleClass?: string;
 }> {
     render(): JSX.Element;

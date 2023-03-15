@@ -63,6 +63,11 @@ var ERROR_EMPTY_SCREEN = {
     PAGE_NOT_FOUND: 'We could not find this page',
     PAGE_NOT_EXIST: 'This page doesn’t exist or was removed. We suggest you go back to home',
     TAKE_BACK_HOME: 'Take me home',
+    ONLY_FOR_SUPERADMIN: 'Information on this page is available only to superadmin users.',
+    NOT_AUTHORIZED: 'Not authorized',
+    UNAUTHORIZED: 'unauthorized',
+    FORBIDDEN: 'forbidden',
+    REQUIRED_MANAGER_ACCESS: 'Looks like you don’t have access to information on this page. Please contact your manager to request access.',
 };
 
 /******************************************************************************
@@ -490,8 +495,8 @@ var SvgIcProgressing = function SvgIcProgressing(props) {
 };
 
 function EmptyState(_a) {
-    var children = _a.children;
-    return (jsxRuntime.jsx("div", __assign({ className: "flex column empty-state", style: { width: '100%', height: '100%' } }, { children: children })));
+    var children = _a.children, _b = _a.className, className = _b === void 0 ? '' : _b;
+    return (jsxRuntime.jsx("div", __assign({ className: "flex column empty-state ".concat(className), "w-100": true, "h-100": true }, { children: children })));
 }
 function Image(_a) {
     var children = _a.children;
@@ -503,7 +508,7 @@ function Title(_a) {
 }
 function Subtitle(_a) {
     var children = _a.children, className = _a.className;
-    return jsxRuntime.jsx("p", __assign({ className: "subtitle ".concat(className) }, { children: children }));
+    return jsxRuntime.jsx("p", __assign({ className: "subtitle ".concat(className || '') }, { children: children }));
 }
 function Button$1(_a) {
     var children = _a.children;
@@ -1963,7 +1968,7 @@ var ErrorScreenManager = /** @class */ (function (_super) {
             case 401:
                 return 'Unauthorized';
             case 403:
-                return (jsxRuntime.jsx(ErrorScreenNotAuthorized, { subtitle: this.props.subtitle, subtitleClass: this.props.subtitleClass }));
+                return jsxRuntime.jsx(ErrorScreenNotAuthorized, { subtitle: this.props.subtitle, subtitleClass: this.props.subtitleClass });
             case 404:
                 return jsxRuntime.jsx(ErrorScreenNotFound, {});
             case 500:
@@ -1988,9 +1993,8 @@ var ErrorScreenNotAuthorized = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ErrorScreenNotAuthorized.prototype.render = function () {
-        return (jsxRuntime.jsxs(EmptyState, { children: [jsxRuntime.jsx(EmptyState.Image, { children: jsxRuntime.jsx("img", { src: notAuthorized, alt: "Not Authorized" }) }), jsxRuntime.jsx(EmptyState.Title, { children: jsxRuntime.jsx("h3", __assign({ className: "title" }, { children: "Not authorized" })) }), jsxRuntime.jsx(EmptyState.Subtitle, __assign({ className: this.props.subtitleClass }, { children: this.props.subtitle
-                        ? this.props.subtitle
-                        : "Looks like you don't have access to information on this page. Please contact your manager to request access." }))] }));
+        var _a, _b;
+        return (jsxRuntime.jsxs(EmptyState, __assign({ className: "dc__align-reload-center" }, { children: [jsxRuntime.jsx(EmptyState.Image, { children: jsxRuntime.jsx("img", { src: notAuthorized, alt: "Not Authorized" }) }), jsxRuntime.jsx(EmptyState.Title, { children: jsxRuntime.jsx("h3", __assign({ className: "title" }, { children: (_a = this.props.title) !== null && _a !== void 0 ? _a : ERROR_EMPTY_SCREEN.NOT_AUTHORIZED })) }), jsxRuntime.jsx(EmptyState.Subtitle, __assign({ className: this.props.subtitleClass }, { children: (_b = this.props.subtitle) !== null && _b !== void 0 ? _b : ERROR_EMPTY_SCREEN.ONLY_FOR_SUPERADMIN }))] })));
     };
     return ErrorScreenNotAuthorized;
 }(React.Component));
@@ -3886,7 +3890,8 @@ function showError(serverError, showToastOnUnknownError, hideAccessError) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
         serverError.errors.map(function (_a) {
             var userMessage = _a.userMessage, internalMessage = _a.internalMessage;
-            if (serverError.code === 403 && userMessage === 'unauthorized') {
+            if (serverError.code === 403 &&
+                (userMessage === ERROR_EMPTY_SCREEN.UNAUTHORIZED || userMessage === ERROR_EMPTY_SCREEN.FORBIDDEN)) {
                 if (!hideAccessError) {
                     toastAccessDenied();
                 }
@@ -16383,6 +16388,7 @@ exports.PropagateTagInfo = PropagateTagInfo;
 exports.ROUTES = ROUTES;
 exports.RadioGroup = RadioGroup;
 exports.RadioGroupItem = RadioGroupItem;
+exports.Reload = Reload;
 exports.RequestTimeout = RequestTimeout;
 exports.ResizableTagTextArea = ResizableTagTextArea;
 exports.ServerError = ServerError;

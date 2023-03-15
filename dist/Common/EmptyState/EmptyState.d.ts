@@ -1,7 +1,8 @@
 import React from 'react';
 import './emptyState.scss';
-declare function EmptyState({ children }: {
+declare function EmptyState({ children, className }: {
     children: any;
+    className?: string;
 }): JSX.Element;
 declare namespace EmptyState {
     var Image: ({ children }: {

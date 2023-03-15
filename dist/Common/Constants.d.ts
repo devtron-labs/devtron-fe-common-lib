@@ -34,4 +34,9 @@ export declare const ERROR_EMPTY_SCREEN: {
     PAGE_NOT_FOUND: string;
     PAGE_NOT_EXIST: string;
     TAKE_BACK_HOME: string;
+    ONLY_FOR_SUPERADMIN: string;
+    NOT_AUTHORIZED: string;
+    UNAUTHORIZED: string;
+    FORBIDDEN: string;
+    REQUIRED_MANAGER_ACCESS: string;
 };
