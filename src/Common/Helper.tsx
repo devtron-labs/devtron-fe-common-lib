@@ -3,31 +3,35 @@ import { toast } from 'react-toastify'
 import * as Sentry from '@sentry/browser'
 import { toastAccessDenied } from './ToastBody'
 import { useEffect, useRef } from 'react'
+import { ERROR_EMPTY_SCREEN } from './Constants'
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
-    if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
-        serverError.errors.map(({ userMessage, internalMessage }) => {
-            if (serverError.code === 403 && userMessage === 'unauthorized') {
-                if (!hideAccessError) {
-                    toastAccessDenied()
-                }
-            } else {
-                toast.error(userMessage || internalMessage)
-            }
-        })
-    } else {
-        if (serverError.code !== 403 && serverError.code !== 408) {
-            Sentry.captureException(serverError)
-        }
+  if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
+      serverError.errors.map(({ userMessage, internalMessage }) => {
+          if (
+              serverError.code === 403 &&
+              (userMessage === ERROR_EMPTY_SCREEN.UNAUTHORIZED || userMessage === ERROR_EMPTY_SCREEN.FORBIDDEN)
+          ) {
+              if (!hideAccessError) {
+                  toastAccessDenied()
+              }
+          } else {
+              toast.error(userMessage || internalMessage)
+          }
+      })
+  } else {
+      if (serverError.code !== 403 && serverError.code !== 408) {
+          Sentry.captureException(serverError)
+      }
 
-        if (showToastOnUnknownError) {
-            if (serverError.message) {
-                toast.error(serverError.message)
-            } else {
-                toast.error('Some Error Occurred')
-            }
-        }
-    }
+      if (showToastOnUnknownError) {
+          if (serverError.message) {
+              toast.error(serverError.message)
+          } else {
+              toast.error('Some Error Occurred')
+          }
+      }
+  }
 }
 
 interface ConditionalWrapper<T> {

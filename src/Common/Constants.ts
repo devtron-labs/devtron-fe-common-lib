@@ -42,4 +42,10 @@ export const ERROR_EMPTY_SCREEN = {
     PAGE_NOT_FOUND: 'We could not find this page',
     PAGE_NOT_EXIST: 'This page doesn’t exist or was removed. We suggest you go back to home',
     TAKE_BACK_HOME: 'Take me home',
+    ONLY_FOR_SUPERADMIN: 'Information on this page is available only to superadmin users.',
+    NOT_AUTHORIZED: 'Not authorized',
+    UNAUTHORIZED:'unauthorized',
+    FORBIDDEN:'forbidden',
+    REQUIRED_MANAGER_ACCESS:
+        'Looks like you don’t have access to information on this page. Please contact your manager to request access.',
 }
