@@ -2,18 +2,9 @@ import React, { Component, createContext } from 'react';
 import { VisibleModal } from '../Modals/VisibleModal';
 import close from '../../Assets/Icon/ic-cross.svg';
 import { Progressing } from '../Progressing'
+import { DialogFormProps } from './Types';
 //TODO: may not need context
 const DialogFormContext = createContext({ title: '', isLoading: false, close: (event) => {}, onSave: (event) => {} });
-
-export interface DialogFormProps {
-    className: string;
-    title: string;
-    isLoading: boolean;
-    closeOnESC?: boolean;
-    close: (event) => void;
-    onSave: (event) => void;
-    headerClassName?: string;
-}
 
 export class DialogForm extends Component<DialogFormProps> {
     constructor(props) {

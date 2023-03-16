@@ -32,3 +32,12 @@ export interface ConfirmationDialogBodyType {
 export interface ConfirmationDialogButtonGroupType {
     children: any
 }
+export interface DialogFormProps {
+    className: string;
+    title: string;
+    isLoading: boolean;
+    closeOnESC?: boolean;
+    close: (event) => void;
+    onSave: (event) => void;
+    headerClassName?: string;
+}
