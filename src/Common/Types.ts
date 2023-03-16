@@ -1,3 +1,5 @@
+import { ReactNode, CSSProperties } from 'react'
+import { Placement } from 'tippy.js'
 export interface ResponseType {
     code: number
     status: string
@@ -28,4 +30,141 @@ export interface Teams {
     id: number
     name: string
     active: boolean
+}
+
+export enum CHECKBOX_VALUE {
+    CHECKED = 'CHECKED',
+    INTERMEDIATE = 'INTERMEDIATE',
+}
+export interface CheckboxProps {
+    onChange: (event) => void
+    isChecked: boolean
+    value: 'CHECKED' | 'INTERMEDIATE'
+    disabled?: boolean
+    tabIndex?: number
+    rootClassName?: string
+    onClick?: (event) => void
+    id?: string
+}
+
+export interface TippyCustomizedProps {
+    theme: TippyTheme
+    visible?: boolean
+    heading?: string
+    infoTextHeading?: string
+    placement: Placement
+    className?: string
+    Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+    iconPath?: string
+    iconClass?: string
+    iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
+    onImageLoadError?: (e) => void
+    onClose?: () => void
+    infoText?: string
+    showCloseButton?: boolean
+    arrow?: boolean
+    interactive?: boolean
+    showOnCreate?: boolean
+    trigger?: string
+    animation?: string
+    duration?: number
+    additionalContent?: ReactNode
+    documentationLink?: string
+    documentationLinkText?: string
+    children: React.ReactElement<any>
+}
+export interface GenericEmptyStateType {
+    title: ReactNode
+    image?
+    classname?: string
+    subTitle?: ReactNode
+    isButtonAvailable?: boolean
+    styles?: CSSProperties
+    heightToDeduct?: number
+    imageType?: string
+    renderButton?: () => JSX.Element
+    imageClassName?: string
+    children?: ReactNode
+    noImage?: boolean
+}
+
+export enum ImageType {
+    Large = 'large',
+    Medium = 'medium',
+}
+
+export interface InfoColourBarType {
+    message: React.ReactNode
+    classname: string
+    Icon
+    iconClass?: string
+    iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
+    renderActionButton?: () => JSX.Element
+    linkText?: React.ReactNode
+    redirectLink?: string
+    linkOnClick?: () => void
+    linkClass?: string
+    internalLink?: boolean
+    styles?: CSSProperties
+}
+
+export interface ReloadType {
+    reload?: () => void
+    className?: string
+}
+
+export interface RadioGroupItemProps {
+    value: string
+}
+
+export interface RadioGroupProps {
+    value: string
+    name: string
+    disabled?: boolean
+    onChange: (event) => void
+    className?: string
+}
+
+export interface ProgressingProps {
+    pageLoader?: boolean
+    loadingText?: string
+    size?: number
+    fullHeight?: boolean
+    theme?: 'white' | 'default'
+    styles?: React.CSSProperties
+    children?: React.ReactNode
+}
+
+export interface PopupMenuType {
+    children?: any
+    onToggleCallback?: (isOpen: boolean) => void
+    autoClose?: boolean
+    autoPosition?: boolean
+}
+
+export interface PopupMenuButtonType {
+    children?: React.ReactElement<any>
+    disabled?: boolean
+    rootClassName?: string
+    tabIndex?: number
+    onHover?: boolean
+    isKebab?: boolean
+}
+
+export interface PopupMenuBodyType {
+    children?: React.ReactElement<any>
+    rootClassName?: string
+    style?: React.CSSProperties
+    autoWidth?: boolean
+    preventWheelDisable?: boolean
+}
+
+export interface ModalType {
+    style: React.CSSProperties
+    children?: React.ReactElement<any>
+    modal?: boolean
+    rootClassName?: string
+    onClick?: any
+    callbackRef?: (element?: any) => any
+    preventWheelDisable?: boolean
 }

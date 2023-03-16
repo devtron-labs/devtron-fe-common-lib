@@ -1,36 +1,8 @@
-import React, { ReactNode, useRef } from 'react'
+import React, { useRef } from 'react'
 import Tippy from '@tippyjs/react'
-import { Placement } from 'tippy.js'
 import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-cross.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
-import { TippyTheme } from './Types'
-
-interface TippyCustomizedProps {
-    theme: TippyTheme
-    visible?: boolean
-    heading?: string
-    infoTextHeading?: string
-    placement: Placement
-    className?: string
-    Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
-    iconPath?: string
-    iconClass?: string
-    iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
-    onImageLoadError?: (e) => void
-    onClose?: () => void
-    infoText?: string
-    showCloseButton?: boolean
-    arrow?: boolean
-    interactive?: boolean
-    showOnCreate?: boolean
-    trigger?: string
-    animation?: string
-    duration?: number
-    additionalContent?: ReactNode
-    documentationLink?: string
-    documentationLinkText?: string
-    children: React.ReactElement<any>
-}
+import { TippyCustomizedProps, TippyTheme } from './Types'
 
 // This component will handle some of the new tippy designs and interactions
 // So this can be updated to support further for new features or interactions

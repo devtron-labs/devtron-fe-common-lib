@@ -1,26 +1,7 @@
-import React, { CSSProperties, ReactNode } from 'react'
-import './emptyState.scss'
+import React from 'react'
 import AppNotDeployed from '../../Assets/Img/app-not-deployed.png'
-
-interface GenericEmptyStateType {
-    title: ReactNode
-    image?
-    classname?: string
-    subTitle?: ReactNode
-    isButtonAvailable?: boolean
-    styles?: CSSProperties
-    heightToDeduct?: number
-    imageType?: string
-    renderButton?: () => JSX.Element
-    imageClassName?: string
-    children?: ReactNode
-    noImage?: boolean
-}
-
-enum ImageType {
-    Large = 'large',
-    Medium = 'medium',
-}
+import { GenericEmptyStateType, ImageType } from '../Types'
+import './emptyState.scss'
 
 function GenericEmptyState({
     title,

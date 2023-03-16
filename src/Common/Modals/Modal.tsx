@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
+import { ModalType } from '../Types'
+
 export const Modal = ({
     style = {},
     children,
@@ -8,7 +10,7 @@ export const Modal = ({
     onClick = null,
     callbackRef = null,
     preventWheelDisable = false,
-}) => {
+}: ModalType) => {
     const innerRef = React.useRef(null)
     function handleClick(e) {
         if (typeof onClick !== 'function') return

@@ -2,31 +2,8 @@ import React, { useMemo, useEffect } from 'react'
 import { Link, useRouteMatch, useParams } from 'react-router-dom'
 import { useBreadcrumbContext } from './BreadcrumbStore'
 import { ConditionalWrap } from '../Helper'
+import { Breadcrumb, Breadcrumbs, UseBreadcrumbOptionalProps, UseBreadcrumbState } from './Types'
 export const BreadcrumbContext = React.createContext(null)
-
-interface Breadcrumb {
-    to: string
-    name: string
-    className?: string
-}
-
-interface UseBreadcrumbState {
-    breadcrumbs: Breadcrumb[]
-    setCrumb: (props: { [key: string]: any }) => void
-    resetCrumb: (props: string[]) => void
-}
-
-interface AdvancedAlias {
-    component: any
-    linked: boolean
-}
-
-interface UseBreadcrumbProps {
-    sep?: string
-    alias?: { [key: string]: AdvancedAlias | any }
-}
-
-type UseBreadcrumbOptionalProps = UseBreadcrumbProps | null
 
 export function useBreadcrumb(props?: UseBreadcrumbOptionalProps, deps?: any[]): UseBreadcrumbState {
     let sep = props?.sep || '/'
@@ -89,12 +66,6 @@ export function useBreadcrumb(props?: UseBreadcrumbOptionalProps, deps?: any[]):
     }, [levels, state])
 
     return { breadcrumbs, setCrumb, resetCrumb }
-}
-
-interface Breadcrumbs {
-    breadcrumbs: Breadcrumb[]
-    sep?: string
-    className?: string
 }
 
 export const BreadCrumb: React.FC<Breadcrumbs> = ({

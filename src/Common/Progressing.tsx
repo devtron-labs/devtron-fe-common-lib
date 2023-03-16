@@ -1,14 +1,5 @@
 import React from 'react'
-
-interface ProgressingProps {
-    pageLoader?: boolean
-    loadingText?: string
-    size?: number
-    fullHeight?: boolean
-    theme?: 'white' | 'default'
-    styles?: React.CSSProperties
-    children?: React.ReactNode
-}
+import { ProgressingProps } from './Types'
 
 export function Progressing({ pageLoader, size, theme, styles }: ProgressingProps): JSX.Element {
     const loaderSize = size ? `${size}px` : pageLoader ? '48px' : '20px'

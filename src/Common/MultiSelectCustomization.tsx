@@ -124,7 +124,7 @@ export const multiSelectStyles = {
     }),
 }
 
-interface CustomSelect {
+export interface CustomSelect {
     sortSelected?: boolean
     options: any[]
     onChange: (...args) => void

@@ -1,21 +1,7 @@
-import React, { CSSProperties } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
+import { InfoColourBarType } from '../Types'
 import './infoColourBar.scss'
-
-interface InfoColourBarType {
-    message: React.ReactNode
-    classname: string
-    Icon
-    iconClass?: string
-    iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
-    renderActionButton?: () => JSX.Element
-    linkText?: React.ReactNode
-    redirectLink?: string
-    linkOnClick?: () => void
-    linkClass?: string
-    internalLink?: boolean
-    styles?: CSSProperties
-}
 
 function InfoColourBar({
     message,

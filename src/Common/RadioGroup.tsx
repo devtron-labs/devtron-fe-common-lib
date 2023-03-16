@@ -1,9 +1,6 @@
 import React, { Component, createContext } from 'react'
+import { RadioGroupItemProps, RadioGroupProps } from './Types'
 const RadioGroupContext = createContext({ name: '', value: '', disabled: false, onChange: (event) => {} })
-
-export interface RadioGroupItemProps {
-    value: string
-}
 
 export class RadioGroupItem extends Component<RadioGroupItemProps> {
     render() {
@@ -33,14 +30,6 @@ export class RadioGroupItem extends Component<RadioGroupItemProps> {
             </RadioGroupContext.Consumer>
         )
     }
-}
-
-export interface RadioGroupProps {
-    value: string
-    name: string
-    disabled?: boolean
-    onChange: (event) => void
-    className?: string
 }
 
 export class RadioGroup extends Component<RadioGroupProps> {

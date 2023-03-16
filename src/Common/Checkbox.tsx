@@ -1,19 +1,5 @@
 import React, { Component } from 'react'
-
-export enum CHECKBOX_VALUE {
-    CHECKED = 'CHECKED',
-    INTERMEDIATE = 'INTERMEDIATE',
-}
-export interface CheckboxProps {
-    onChange: (event) => void
-    isChecked: boolean
-    value: 'CHECKED' | 'INTERMEDIATE'
-    disabled?: boolean
-    tabIndex?: number
-    rootClassName?: string
-    onClick?: (event) => void
-    id?: string
-}
+import { CheckboxProps } from './Types'
 
 /*
 Valid States of Checkbox:
