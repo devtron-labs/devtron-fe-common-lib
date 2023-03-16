@@ -467,7 +467,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z$3 = ".empty-state {\n  height: 100%;\n}\n.empty-state img {\n  height: 40%;\n  max-height: 200px;\n  width: auto;\n  max-width: 250px;\n}\n.empty-state svg {\n  height: 40%;\n  max-height: 200px;\n  width: auto;\n}\n.empty-state h1,\n.empty-state h2,\n.empty-state h3,\n.empty-state h4,\n.empty-state h5,\n.empty-state h6 {\n  color: var(--N900);\n}\n.empty-state .title {\n  font-weight: 600;\n}\n.empty-state .subtitle {\n  font-size: 13px;\n  width: 250px;\n  font-weight: 400;\n  text-align: center;\n  line-height: 1.5;\n  margin-bottom: 20px;\n}\n.empty-state .cta {\n  height: 36px;\n}\n.empty-state p {\n  width: 250px;\n  text-align: center;\n  font-size: 13px;\n  color: var(--N700);\n}\n.empty-state strong {\n  font-size: 16px;\n  margin-bottom: 4px;\n  color: var(--N900);\n  font-weight: normal;\n}\n.empty-state .select-popup {\n  height: min-content;\n  max-height: 250px;\n  overflow: auto;\n  padding: 8px 0;\n}\n.empty-state .empty-state__loader {\n  width: 34px;\n  height: 34px;\n  margin-bottom: 16px;\n}\n.empty-state .empty-state__loading-text {\n  font-size: 12px;\n  width: 200px;\n  font-weight: normal;\n  font-stretch: normal;\n  font-style: normal;\n  line-height: 1.5;\n  letter-spacing: normal;\n  text-align: center;\n  color: var(--N900);\n}\n.empty-state .button__icon {\n  width: 16px;\n  height: 16px;\n  margin-left: 8px;\n}";
+var css_248z$3 = ".empty-state {\n  height: 100%;\n}\n.empty-state img {\n  height: 40%;\n  max-height: 200px;\n  width: auto;\n  max-width: 250px;\n}\n.empty-state svg {\n  height: 40%;\n  max-height: 200px;\n  width: auto;\n}\n.empty-state h1,\n.empty-state h2,\n.empty-state h3,\n.empty-state h4,\n.empty-state h5,\n.empty-state h6 {\n  color: var(--N900);\n}\n.empty-state .subtitle {\n  font-size: 13px;\n  width: 250px;\n  font-weight: 400;\n  text-align: center;\n  line-height: 1.5;\n  margin-bottom: 20px;\n}\n.empty-state .cta {\n  height: 36px;\n}\n.empty-state p {\n  width: 250px;\n  text-align: center;\n  font-size: 13px;\n  color: var(--N700);\n}\n.empty-state strong {\n  font-size: 16px;\n  margin-bottom: 4px;\n  color: var(--N900);\n  font-weight: normal;\n}\n.empty-state .select-popup {\n  height: min-content;\n  max-height: 250px;\n  overflow: auto;\n  padding: 8px 0;\n}\n.empty-state .empty-state__loader {\n  width: 34px;\n  height: 34px;\n  margin-bottom: 16px;\n}\n.empty-state .empty-state__loading-text {\n  font-size: 12px;\n  width: 200px;\n  font-weight: normal;\n  font-stretch: normal;\n  font-style: normal;\n  line-height: 1.5;\n  letter-spacing: normal;\n  text-align: center;\n  color: var(--N900);\n}\n.empty-state .button__icon {\n  width: 16px;\n  height: 16px;\n  margin-left: 8px;\n}";
 styleInject(css_248z$3);
 
 var _g$2;
@@ -16353,6 +16353,18 @@ var Checkbox = /** @class */ (function (_super) {
     return Checkbox;
 }(React.Component));
 
+var AppNotDeployed = "64232fbb58cec80f.png";
+
+var ImageType;
+(function (ImageType) {
+    ImageType["Large"] = "large";
+    ImageType["Medium"] = "medium";
+})(ImageType || (ImageType = {}));
+function GenericEmptyState(_a) {
+    var title = _a.title, image = _a.image, subTitle = _a.subTitle, isButtonAvailable = _a.isButtonAvailable, classname = _a.classname, styles = _a.styles, heightToDeduct = _a.heightToDeduct, imageType = _a.imageType, renderButton = _a.renderButton, imageClassName = _a.imageClassName, children = _a.children, noImage = _a.noImage;
+    return (jsxRuntime.jsxs("div", __assign({ className: "flex column empty-state ".concat(classname ? classname : ''), style: styles }, (heightToDeduct >= 0 && { style: __assign(__assign({}, styles), { height: "calc(100vh - ".concat(heightToDeduct, "px)") }) }), { children: [!noImage && jsxRuntime.jsx("img", { className: imageClassName ? imageClassName : '', src: image || AppNotDeployed, width: imageType === ImageType.Medium ? '200' : '250', height: imageType === ImageType.Medium ? '160' : '200', alt: "empty-state" }), jsxRuntime.jsx("h4", __assign({ className: "title fw-6 cn-9 mb-8" }, { children: title })), subTitle && jsxRuntime.jsx("p", __assign({ className: "subtitle" }, { children: subTitle })), isButtonAvailable && renderButton(), children] })));
+}
+
 exports.BreadCrumb = BreadCrumb;
 exports.BreadcrumbStore = Store;
 exports.Checkbox = Checkbox;
@@ -16373,6 +16385,7 @@ exports.EmptyState = EmptyState;
 exports.ErrorScreenManager = ErrorScreenManager;
 exports.ErrorScreenNotAuthorized = ErrorScreenNotAuthorized;
 exports.ForceDeleteDialog = ForceDeleteDialog;
+exports.GenericEmptyState = GenericEmptyState;
 exports.Host = Host;
 exports.InfoColourBar = InfoColourBar;
 exports.Modal = Modal;

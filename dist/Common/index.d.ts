@@ -25,3 +25,4 @@ export { default as InfoColourBar } from './InfoColorBar/InfoColourbar';
 export * from './Common.service';
 export * from './Checkbox';
 export { default as EmptyState } from './EmptyState/EmptyState';
+export { default as GenericEmptyState } from './EmptyState/GenericEmptyState';
