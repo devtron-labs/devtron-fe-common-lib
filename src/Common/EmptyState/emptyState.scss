@@ -19,9 +19,6 @@
     h6 {
         color: var(--N900);
     }
-    .title {
-        font-weight: 600;
-    }
     .subtitle {
         font-size: 13px;
         width: 250px;
@@ -68,16 +65,8 @@
         color: var(--N900);
     }
     .button__icon {
-        width:16px;
-        height:16px;
+        width: 16px;
+        height: 16px;
         margin-left: 8px;
     }
-    //TODO: use name
-    // .subtitle a {
-    //     color: inherit;
-    // }
-    // .subtitle a:focus,
-    // .subtitle a:hover {
-    //     color: inherit;
-    // }
 }
