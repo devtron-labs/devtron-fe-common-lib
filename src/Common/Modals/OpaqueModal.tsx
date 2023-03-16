@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
-import closeIcon from '../../Assets/Icon/ic-close.svg'
+import closeIcon from '../../Assets/Icon/ic-cross.svg'
 
 export interface OpaqueModalProps {
     className?: string;

@@ -4,6 +4,7 @@ import notAuthorized from '../Assets/Img/ic-not-authorized.svg'
 import Reload from './Reload'
 import ErrorScreenNotFound from './ErrorScreenNotFound'
 import { ERROR_EMPTY_SCREEN } from './Constants'
+import GenericEmptyState from './EmptyState/GenericEmptyState'
 
 export class ErrorScreenManager extends Component<{
     code?: number
@@ -19,7 +20,9 @@ export class ErrorScreenManager extends Component<{
             case 401:
                 return 'Unauthorized'
             case 403:
-                return <ErrorScreenNotAuthorized subtitle={this.props.subtitle} subtitleClass={this.props.subtitleClass}/>
+                return (
+                    <ErrorScreenNotAuthorized subtitle={this.props.subtitle} />
+                )
             case 404:
                 return <ErrorScreenNotFound />
             case 500:
@@ -45,21 +48,14 @@ export class ErrorScreenManager extends Component<{
 export class ErrorScreenNotAuthorized extends Component<{
     subtitle?: React.ReactChild
     title?: string
-    subtitleClass?: string
 }> {
     render() {
         return (
-            <EmptyState className="dc__align-reload-center">
-                <EmptyState.Image>
-                    <img src={notAuthorized} alt="Not Authorized" />
-                </EmptyState.Image>
-                <EmptyState.Title>
-                    <h3 className="title">{this.props.title ?? ERROR_EMPTY_SCREEN.NOT_AUTHORIZED}</h3>
-                </EmptyState.Title>
-                <EmptyState.Subtitle className={this.props.subtitleClass}>
-                    {this.props.subtitle ?? ERROR_EMPTY_SCREEN.ONLY_FOR_SUPERADMIN}
-                </EmptyState.Subtitle>
-            </EmptyState>
+            <GenericEmptyState
+                image={notAuthorized}
+                title={this.props.title ?? ERROR_EMPTY_SCREEN.NOT_AUTHORIZED}
+                subTitle={this.props.subtitle ?? ERROR_EMPTY_SCREEN.ONLY_FOR_SUPERADMIN}
+            />
         )
     }
 }
