@@ -109,7 +109,7 @@ export interface InfoColourBarType {
 }
 
 export interface ReloadType {
-    reload?: () => void
+    reload?: (event?: any) => void
     className?: string
 }
 
@@ -143,7 +143,7 @@ export interface PopupMenuType {
 }
 
 export interface PopupMenuButtonType {
-    children?: React.ReactElement<any>
+    children?: ReactNode
     disabled?: boolean
     rootClassName?: string
     tabIndex?: number
@@ -152,7 +152,7 @@ export interface PopupMenuButtonType {
 }
 
 export interface PopupMenuBodyType {
-    children?: React.ReactElement<any>
+    children?: ReactNode
     rootClassName?: string
     style?: React.CSSProperties
     autoWidth?: boolean
@@ -160,8 +160,8 @@ export interface PopupMenuBodyType {
 }
 
 export interface ModalType {
-    style: React.CSSProperties
-    children?: React.ReactElement<any>
+    style?: React.CSSProperties
+    children?: ReactNode
     modal?: boolean
     rootClassName?: string
     onClick?: any

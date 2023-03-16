@@ -1,3 +1,5 @@
+import { ReactNode } from "react"
+
 export interface DeleteDialogProps {
     title: string
     description?: string
@@ -24,7 +26,7 @@ export interface ConfirmationDialogIconType {
 }
 export interface ConfirmationDialogBodyType {
     title: string
-    subtitle?: string
+    subtitle?: ReactNode
     children?: any
 }
 export interface ConfirmationDialogButtonGroupType {
