@@ -1,6 +1,6 @@
 import React, { CSSProperties, ReactNode } from 'react'
 import './emptyState.scss'
-import AppNotDeployed from '../../assets/img/app-not-deployed.png'
+import AppNotDeployed from '../../Assets/Img/app-not-deployed.png'
 
 interface GenericEmptyStateType {
     title: ReactNode
