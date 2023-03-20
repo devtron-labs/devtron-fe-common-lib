@@ -11,6 +11,7 @@ export interface TagType {
     isInvalidKey?: boolean
     isInvalidValue?: boolean
     isSuggested?: boolean
+    isPropagateDisabled?: boolean
 }
 
 export interface TagErrorType {
