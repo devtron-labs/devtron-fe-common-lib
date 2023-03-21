@@ -7,7 +7,7 @@ import GenericEmptyState from './EmptyState/GenericEmptyState'
 function ErrorScreenNotFound() {
     const history = useHistory()
     const redirectToHome = () => {
-        history.push('/app/list')
+        history.push('app/list')
     }
     const renderGenerateButton = () => {
         return (
