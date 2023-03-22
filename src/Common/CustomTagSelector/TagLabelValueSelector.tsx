@@ -104,7 +104,7 @@ export const TagLabelValueSelector = ({
 
     const renderSuggestions = (): JSX.Element => {
         if (tagOptions?.length) {
-            const filteredTags = tagOptions.filter((tag) => tag.value.indexOf(selectedValue) >= 0)
+            const filteredTags = tagOptions.filter((tag) => tag.label.indexOf(selectedValue) >= 0)
             if (filteredTags.length) {
                 return (
                     <div>
@@ -150,7 +150,11 @@ export const TagLabelValueSelector = ({
                     dependentRef={dependentRef}
                 />
             </PopupMenu.Button>
-            <PopupMenu.Body rootClassName={`tag-${selectedTagIndex}-class`} autoWidth={true} preventWheelDisable={true}>
+            <PopupMenu.Body
+                rootClassName={`mxh-210 dc__overflow-auto tag-${selectedTagIndex}-class`}
+                autoWidth={true}
+                preventWheelDisable={true}
+            >
                 {activeElement === `tag-${tagInputType}-${selectedTagIndex}` && renderSuggestions()}
             </PopupMenu.Body>
         </PopupMenu>
