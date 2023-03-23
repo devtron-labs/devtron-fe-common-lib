@@ -6,7 +6,8 @@ import { ReactComponent as Info } from '../../Assets/Icon/ic-info-outlined.svg'
 import { KEY_VALUE } from '../Constants'
 import { stopPropagation } from '../Helper'
 import { ResizableTagTextArea } from './ResizableTagTextArea'
-import { TagLabelValueSelectorType } from './Types'
+import { SuggestedTagOptionType, TagLabelValueSelectorType } from './Types'
+import Tippy from '@tippyjs/react'
 
 export const TagLabelValueSelector = ({
     selectedTagIndex,
@@ -65,7 +66,9 @@ export const TagLabelValueSelector = ({
         stopPropagation(e)
         const _tagData = { ...tagData }
         _tagData[tagInputType] = e.currentTarget.dataset.key
+        _tagData.propagate = e.currentTarget.dataset.propagate === 'true'
         setTagData(selectedTagIndex, _tagData)
+        setActiveElement('')
     }
 
     const renderValidationsSuggestions = (): JSX.Element => {
@@ -102,22 +105,51 @@ export const TagLabelValueSelector = ({
         return null
     }
 
+    const option = (tag: SuggestedTagOptionType, index: number): JSX.Element => {
+        return (
+            <div
+                key={`${tag.value}-${index}`}
+                data-key={tag.label}
+                data-propagate={tag.propagate}
+                className="dc__hover-n50 lh-20 fs-13 fw-4 pt-6 pr-8 pb-6 pl-8 cursor"
+                onClick={onSelectValue}
+            >
+                {tag.label}
+            </div>
+        )
+    }
+
+    const optionWithTippy = (tag: SuggestedTagOptionType, index: number): JSX.Element => {
+        return (
+            <Tippy
+                className="default-tt"
+                arrow={false}
+                placement="bottom"
+                content={
+                    <div className="pt-6 pr-10 pb-6 pl-10">
+                        <div className="mb-10 fs-12 fw-6 cn-0">
+                            {tag.label}
+                        </div>
+                        <div className="fs-12 fw-4 cn-0">
+                            {tag.description}
+                        </div>
+                    </div>
+                }
+            >
+                {option(tag, index)}
+            </Tippy>
+        )
+    }
+
     const renderSuggestions = (): JSX.Element => {
         if (tagOptions?.length) {
             const filteredTags = tagOptions.filter((tag) => tag.label.indexOf(selectedValue) >= 0)
             if (filteredTags.length) {
                 return (
                     <div>
-                        {filteredTags.map((tag, index) => (
-                            <div
-                                key={`${tag.value}-${index}`}
-                                data-key={tag.label}
-                                className="dc__hover-n50 lh-20 fs-13 fw-4 pt-6 pr-8 pb-6 pl-8 cursor"
-                                onClick={onSelectValue}
-                            >
-                                {tag.label}
-                            </div>
-                        ))}
+                        {filteredTags.map((tag, index) =>
+                            tag.description ? optionWithTippy(tag, index) : option(tag, index),
+                        )}
                     </div>
                 )
             }

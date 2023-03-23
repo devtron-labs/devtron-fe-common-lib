@@ -1,6 +1,10 @@
 import { KEY_VALUE } from '../Constants'
 import { OptionType } from '../Types'
 
+export interface SuggestedTagOptionType extends OptionType {
+    description: string
+    propagate: boolean
+}
 export interface TagType {
     id?: number
     key: string
@@ -24,7 +28,7 @@ export interface TagLabelSelectType {
     setLabelTags: (tagList: TagType[]) => void
     tabIndex?: number
     selectedProjectId?: number
-    suggestedTagsOptions?: OptionType[]
+    suggestedTagsOptions?: SuggestedTagOptionType[]
 }
 
 export interface TagDetailType {
@@ -33,14 +37,14 @@ export interface TagDetailType {
     setTagData: (index: number, tagData: TagType) => void
     removeTag?: (index: number) => void
     tabIndex?: number
-    suggestedTagsOptions?: OptionType[]
+    suggestedTagsOptions?: SuggestedTagOptionType[]
 }
 
 export interface TagLabelValueSelectorType {
     selectedTagIndex: number
     tagData: TagType
     setTagData: (index: number, tagData: TagType) => void
-    tagOptions?: OptionType[]
+    tagOptions?: SuggestedTagOptionType[]
     isRequired?: boolean
     tagInputType?: KEY_VALUE
     placeholder?: string

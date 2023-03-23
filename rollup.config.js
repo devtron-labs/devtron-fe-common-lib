@@ -7,7 +7,7 @@ import del from 'rollup-plugin-delete'
 import pkg from './package.json'
 import svgr from '@svgr/rollup'
 import url from '@rollup/plugin-url'
-import commonjs from '@rollup/plugin-commonjs';
+import commonjs from '@rollup/plugin-commonjs'
 
 export default {
     input: './src/index.ts',
@@ -24,8 +24,23 @@ export default {
             exclude: 'node_modules/**',
         }),
         del({ targets: ['dist/*'] }),
-        url(),
-        svgr({ icon: true }),
+        url({
+          // Where to put files
+          destDir: 'dist/assets/',
+          // Path to put infront of files (in code)
+          publicPath: '/',
+          // File name once copied
+          fileName: '[name][extname]',
+          // Kinds of files to process
+          include: [
+                  '**/*.svg',
+                  '**/*.png',
+                  '**/*.gif',
+                  '**/*.jpg',
+                  '**/*.jpeg',
+          ]
+        }),
+        svgr({ icon: true })
     ],
     external: Object.keys(pkg.peerDependencies || {}),
 }
