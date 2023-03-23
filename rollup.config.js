@@ -24,22 +24,7 @@ export default {
             exclude: 'node_modules/**',
         }),
         del({ targets: ['dist/*'] }),
-        url({
-          // Where to put files
-          destDir: 'dist/assets/',
-          // Path to put infront of files (in code)
-          publicPath: '/',
-          // File name once copied
-          fileName: '[name][extname]',
-          // Kinds of files to process
-          include: [
-                  '**/*.svg',
-                  '**/*.png',
-                  '**/*.gif',
-                  '**/*.jpg',
-                  '**/*.jpeg',
-          ]
-        }),
+        url({limit: '100000'}),
         svgr({ icon: true })
     ],
     external: Object.keys(pkg.peerDependencies || {}),
