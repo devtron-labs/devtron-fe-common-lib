@@ -125,6 +125,7 @@ export const TagLabelValueSelector = ({
         return renderValidationsSuggestions()
     }
 
+    const popupMenuBody = activeElement === `tag-${tagInputType}-${selectedTagIndex}` ? renderSuggestions() : null
     return (
         <PopupMenu autoClose autoPosition>
             <PopupMenu.Button rootClassName="dc__bg-n50 flex top dc__no-border-imp">
@@ -150,13 +151,15 @@ export const TagLabelValueSelector = ({
                     dependentRef={dependentRef}
                 />
             </PopupMenu.Button>
-            <PopupMenu.Body
-                rootClassName={`mxh-210 dc__overflow-auto tag-${selectedTagIndex}-class`}
-                autoWidth={true}
-                preventWheelDisable={true}
-            >
-                {activeElement === `tag-${tagInputType}-${selectedTagIndex}` && renderSuggestions()}
-            </PopupMenu.Body>
+            {popupMenuBody && (
+                <PopupMenu.Body
+                    rootClassName={`mxh-210 dc__overflow-auto tag-${selectedTagIndex}-class`}
+                    autoWidth={true}
+                    preventWheelDisable={true}
+                >
+                    {popupMenuBody}
+                </PopupMenu.Body>
+            )}
         </PopupMenu>
     )
 }
