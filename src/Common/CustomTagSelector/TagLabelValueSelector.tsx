@@ -124,7 +124,7 @@ export const TagLabelValueSelector = ({
             <Tippy
                 className="default-tt"
                 arrow={false}
-                placement="bottom"
+                placement="right"
                 content={
                     <div className="pt-6 pr-10 pb-6 pl-10">
                         <div className="mb-10 fs-12 fw-6 cn-0">
