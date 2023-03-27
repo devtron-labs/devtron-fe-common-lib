@@ -27,12 +27,14 @@ export const TagDetails = ({
         const _tagData = { ...tagData }
         _tagData.propagate = !_tagData.propagate
         if (_tagData.propagate) {
-            _tagData.isInvalidKey = !_tagData.key || _tagData.isInvalidValue
-            _tagData.isInvalidValue = !_tagData.value || _tagData.isInvalidValue
+            _tagData.isInvalidKey = _tagData.isInvalidKey || !_tagData.key
+            _tagData.isInvalidValue = _tagData.isInvalidValue || !_tagData.value
         } else {
             _tagData.isInvalidKey =
-                _tagData.key || _tagData.value ? validationRules.propagateTagKey(_tagData.key).isValid : false
-            _tagData.isInvalidValue = _tagData.value ? validationRules.propagateTagValue(_tagData.value).isValid : false
+                _tagData.key || _tagData.value ? !validationRules.propagateTagKey(_tagData.key).isValid : false
+            _tagData.isInvalidValue = _tagData.value
+                ? !validationRules.propagateTagValue(_tagData.value).isValid
+                : false
         }
         setTagData(index, _tagData)
     }

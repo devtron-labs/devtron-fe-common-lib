@@ -162,7 +162,7 @@ export const TagLabelValueSelector = ({
                 <ResizableTagTextArea
                     minHeight={30}
                     maxHeight={80}
-                    className={`form__input pt-4-imp pb-4-imp fs-13 ${
+                    className={`form__input tag-input pt-4-imp pb-4-imp fs-13 ${
                         tagInputType === KEY_VALUE.KEY
                             ? `dc__no-right-radius`
                             : `dc__no-border-radius dc__no-right-border dc__no-left-border`
