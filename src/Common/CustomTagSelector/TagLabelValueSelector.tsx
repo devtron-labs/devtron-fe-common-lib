@@ -48,7 +48,7 @@ export const TagLabelValueSelector = ({
                 _tagData.isInvalidKey = selectedValue
                     ? !validationRules.propagateTagKey(selectedValue).isValid
                     : _tagData.value !== ''
-            } else if (selectedValue || isRequired) {
+            } else if (selectedValue || isRequired || _tagData.propagate) {
                 _tagData.isInvalidValue = !validationRules.propagateTagValue(selectedValue).isValid
                 _tagData.isInvalidKey = !_tagData.key || _tagData.isInvalidKey
             } else {
