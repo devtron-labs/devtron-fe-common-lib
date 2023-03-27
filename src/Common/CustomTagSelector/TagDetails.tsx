@@ -5,7 +5,7 @@ import { TagLabelValueSelector } from './TagLabelValueSelector'
 import { KEY_VALUE } from '../Constants'
 import { stopPropagation } from '../Helper'
 import { TagDetailType } from './Types'
-import { propagateTagValueValidator } from './ValidationRules'
+import { ValidationRules } from './ValidationRules'
 
 export const TagDetails = ({
     index,
@@ -17,6 +17,7 @@ export const TagDetails = ({
 }: TagDetailType) => {
     const keyRef = useRef(null)
     const valueRef = useRef(null)
+    const validationRules = new ValidationRules()
 
     const deleteTag = (e): void => {
         stopPropagation(e)
@@ -25,12 +26,13 @@ export const TagDetails = ({
     const propagateTagToResource = (): void => {
         const _tagData = { ...tagData }
         _tagData.propagate = !_tagData.propagate
-        console.log(_tagData.propagate, _tagData.value)
         if (_tagData.propagate) {
-            _tagData.isInvalidValue = _tagData.key && (!_tagData.value || _tagData.isInvalidValue)
+            _tagData.isInvalidKey = !_tagData.key || _tagData.isInvalidValue
+            _tagData.isInvalidValue = !_tagData.value || _tagData.isInvalidValue
         } else {
-            _tagData.isInvalidValue =
-                _tagData.key && _tagData.value ? propagateTagValueValidator(_tagData.value).isValid : false
+            _tagData.isInvalidKey =
+                _tagData.key || _tagData.value ? validationRules.propagateTagKey(_tagData.key).isValid : false
+            _tagData.isInvalidValue = _tagData.value ? validationRules.propagateTagValue(_tagData.value).isValid : false
         }
         setTagData(index, _tagData)
     }

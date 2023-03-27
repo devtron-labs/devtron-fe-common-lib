@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import PopupMenu from '../PopupMenu'
-import { propagateTagKeyValidator, propagateTagValueValidator } from './ValidationRules'
 import { ReactComponent as ErrorCross } from '../../Assets/Icon/ic-cross.svg'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-outlined.svg'
 import { KEY_VALUE } from '../Constants'
@@ -8,6 +7,7 @@ import { stopPropagation } from '../Helper'
 import { ResizableTagTextArea } from './ResizableTagTextArea'
 import { SuggestedTagOptionType, TagLabelValueSelectorType } from './Types'
 import Tippy from '@tippyjs/react'
+import { ValidationRules } from './ValidationRules'
 
 export const TagLabelValueSelector = ({
     selectedTagIndex,
@@ -24,6 +24,7 @@ export const TagLabelValueSelector = ({
 }: TagLabelValueSelectorType) => {
     const [selectedValue, setSelectedValue] = useState<string>('')
     const [activeElement, setActiveElement] = useState<string>('')
+    const validationRules = new ValidationRules()
 
     useEffect(() => {
         setSelectedValue(tagData?.[tagInputType] || '')
@@ -44,11 +45,12 @@ export const TagLabelValueSelector = ({
             const _tagData = { ...tagData }
             _tagData[tagInputType] = selectedValue
             if (tagInputType === KEY_VALUE.KEY) {
-                _tagData.isInvalidKey = selectedValue
-                    ? !propagateTagKeyValidator(selectedValue).isValid
-                    : _tagData.value !== ''
+                _tagData.isInvalidKey =
+                    selectedValue || _tagData.propagate
+                        ? !validationRules.propagateTagKey(selectedValue).isValid
+                        : _tagData.value !== ''
             } else if (selectedValue || isRequired || _tagData.propagate) {
-                _tagData.isInvalidValue = !propagateTagValueValidator(selectedValue).isValid
+                _tagData.isInvalidValue = !validationRules.propagateTagValue(selectedValue).isValid
                 _tagData.isInvalidKey = !_tagData.key || _tagData.isInvalidKey
             } else {
                 _tagData.isInvalidValue = false
@@ -75,10 +77,10 @@ export const TagLabelValueSelector = ({
         let field = { isValid: true, messages: [] }
         if (tagInputType === KEY_VALUE.KEY) {
             if (selectedValue || tagData.value) {
-                field = propagateTagKeyValidator(selectedValue)
+                field = validationRules.propagateTagKey(selectedValue)
             }
         } else if (isRequired || selectedValue || tagData.propagate) {
-            field = propagateTagValueValidator(selectedValue)
+            field = validationRules.propagateTagValue(selectedValue)
         }
         if (!field.isValid) {
             return (
