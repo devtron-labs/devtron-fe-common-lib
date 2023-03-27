@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PopupMenu from '../PopupMenu'
-import { ValidationRules } from './ValidationRules'
+import { propagateTagKeyValidator, propagateTagValueValidator } from './ValidationRules'
 import { ReactComponent as ErrorCross } from '../../Assets/Icon/ic-cross.svg'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-outlined.svg'
 import { KEY_VALUE } from '../Constants'
@@ -20,11 +20,10 @@ export const TagLabelValueSelector = ({
     tabIndex = null,
     refVar,
     dependentRef,
-    noBackDrop
+    noBackDrop,
 }: TagLabelValueSelectorType) => {
     const [selectedValue, setSelectedValue] = useState<string>('')
     const [activeElement, setActiveElement] = useState<string>('')
-    const validationRules = new ValidationRules()
 
     useEffect(() => {
         setSelectedValue(tagData?.[tagInputType] || '')
@@ -46,10 +45,10 @@ export const TagLabelValueSelector = ({
             _tagData[tagInputType] = selectedValue
             if (tagInputType === KEY_VALUE.KEY) {
                 _tagData.isInvalidKey = selectedValue
-                    ? !validationRules.propagateTagKey(selectedValue).isValid
+                    ? !propagateTagKeyValidator(selectedValue).isValid
                     : _tagData.value !== ''
             } else if (selectedValue || isRequired || _tagData.propagate) {
-                _tagData.isInvalidValue = !validationRules.propagateTagValue(selectedValue).isValid
+                _tagData.isInvalidValue = !propagateTagValueValidator(selectedValue).isValid
                 _tagData.isInvalidKey = !_tagData.key || _tagData.isInvalidKey
             } else {
                 _tagData.isInvalidValue = false
@@ -76,10 +75,10 @@ export const TagLabelValueSelector = ({
         let field = { isValid: true, messages: [] }
         if (tagInputType === KEY_VALUE.KEY) {
             if (selectedValue || tagData.value) {
-                field = validationRules.propagateTagKey(selectedValue)
+                field = propagateTagKeyValidator(selectedValue)
             }
-        } else if (isRequired || selectedValue) {
-            field = validationRules.propagateTagValue(selectedValue)
+        } else if (isRequired || selectedValue || tagData.propagate) {
+            field = propagateTagValueValidator(selectedValue)
         }
         if (!field.isValid) {
             return (
@@ -128,12 +127,8 @@ export const TagLabelValueSelector = ({
                 placement="right"
                 content={
                     <div>
-                        <div className="mb-10 fs-12 fw-6 cn-0 dc__break-word">
-                            {tag.label}
-                        </div>
-                        <div className="fs-12 fw-4 cn-0 dc__break-word">
-                            {tag.description}
-                        </div>
+                        <div className="mb-10 fs-12 fw-6 cn-0 dc__break-word">{tag.label}</div>
+                        <div className="fs-12 fw-4 cn-0 dc__break-word">{tag.description}</div>
                     </div>
                 }
             >

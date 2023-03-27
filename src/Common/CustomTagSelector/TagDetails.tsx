@@ -5,6 +5,7 @@ import { TagLabelValueSelector } from './TagLabelValueSelector'
 import { KEY_VALUE } from '../Constants'
 import { stopPropagation } from '../Helper'
 import { TagDetailType } from './Types'
+import { propagateTagValueValidator } from './ValidationRules'
 
 export const TagDetails = ({
     index,
@@ -24,6 +25,11 @@ export const TagDetails = ({
     const propagateTagToResource = (): void => {
         const _tagData = { ...tagData }
         _tagData.propagate = !_tagData.propagate
+        if (_tagData.propagate) {
+            _tagData.isInvalidValue = !_tagData.value || _tagData.isInvalidValue
+        } else {
+            _tagData.isInvalidValue = _tagData.value ? propagateTagValueValidator(_tagData.value).isValid : false
+        }
         setTagData(index, _tagData)
     }
     return (
