@@ -25,10 +25,12 @@ export const TagDetails = ({
     const propagateTagToResource = (): void => {
         const _tagData = { ...tagData }
         _tagData.propagate = !_tagData.propagate
+        console.log(_tagData.propagate, _tagData.value)
         if (_tagData.propagate) {
-            _tagData.isInvalidValue = !_tagData.value || _tagData.isInvalidValue
+            _tagData.isInvalidValue = _tagData.key && (!_tagData.value || _tagData.isInvalidValue)
         } else {
-            _tagData.isInvalidValue = _tagData.value ? propagateTagValueValidator(_tagData.value).isValid : false
+            _tagData.isInvalidValue =
+                _tagData.key && _tagData.value ? propagateTagValueValidator(_tagData.value).isValid : false
         }
         setTagData(index, _tagData)
     }
