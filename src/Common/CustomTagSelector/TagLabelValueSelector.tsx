@@ -127,10 +127,10 @@ export const TagLabelValueSelector = ({
                 placement="right"
                 content={
                     <div className="pt-6 pr-10 pb-6 pl-10">
-                        <div className="mb-10 fs-12 fw-6 cn-0">
+                        <div className="mb-10 fs-12 fw-6 cn-0 dc__break-word">
                             {tag.label}
                         </div>
-                        <div className="fs-12 fw-4 cn-0">
+                        <div className="fs-12 fw-4 cn-0 dc__break-word">
                             {tag.description}
                         </div>
                     </div>

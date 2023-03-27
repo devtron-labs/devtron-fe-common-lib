@@ -87,9 +87,9 @@ export const MultiValueChipContainer = ({ validator, isAllSelected = false, ...p
 
     return (
         <components.MultiValueContainer {...{ data, innerProps, selectProps }}>
-            <div className={`flex fs-12 pl-4 pr-4`}>
+            <div className="flex left fs-12 pl-4 pr-4 dc__ellipsis-right">
                 {!isValidEmail && <RedWarning className="mr-4 icon-dim-16" />}
-                <div className={`${isValidEmail ? 'cn-9' : 'cr-5'}`}>{label}</div>
+                <div className={`dc__ellipsis-right ${isValidEmail ? 'cn-9' : 'cr-5'}`}>{label}</div>
             </div>
             {children[1]}
         </components.MultiValueContainer>

@@ -29,6 +29,7 @@ export interface TagLabelSelectType {
     tabIndex?: number
     selectedProjectId?: number
     suggestedTagsOptions?: SuggestedTagOptionType[]
+    reloadProjectTags?: boolean
 }
 
 export interface TagDetailType {
