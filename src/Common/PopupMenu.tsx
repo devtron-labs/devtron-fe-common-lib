@@ -167,6 +167,7 @@ function Body({
     style = {},
     autoWidth = false,
     preventWheelDisable = false,
+    noBackDrop
 }: PopupMenuBodyType) {
     const { handleClose, popupPosition, opacity, callbackRef, buttonWidth } = usePopupContext()
     return popupPosition ? (
@@ -183,6 +184,7 @@ function Body({
                 opacity: opacity,
             }}
             preventWheelDisable={preventWheelDisable}
+            noBackDrop={noBackDrop}
         >
             {children}
         </Modal>

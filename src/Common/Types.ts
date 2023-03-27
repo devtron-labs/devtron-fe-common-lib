@@ -157,6 +157,7 @@ export interface PopupMenuBodyType {
     style?: React.CSSProperties
     autoWidth?: boolean
     preventWheelDisable?: boolean
+    noBackDrop?: boolean
 }
 
 export interface ModalType {
@@ -167,4 +168,5 @@ export interface ModalType {
     onClick?: any
     callbackRef?: (element?: any) => any
     preventWheelDisable?: boolean
+    noBackDrop?: boolean
 }

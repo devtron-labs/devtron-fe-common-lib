@@ -20,6 +20,7 @@ export const TagLabelValueSelector = ({
     tabIndex = null,
     refVar,
     dependentRef,
+    noBackDrop
 }: TagLabelValueSelectorType) => {
     const [selectedValue, setSelectedValue] = useState<string>('')
     const [activeElement, setActiveElement] = useState<string>('')
@@ -111,7 +112,7 @@ export const TagLabelValueSelector = ({
                 key={`${tag.value}-${index}`}
                 data-key={tag.label}
                 data-propagate={tag.propagate}
-                className="dc__hover-n50 lh-20 fs-13 fw-4 pt-6 pr-8 pb-6 pl-8 cursor"
+                className="dc__hover-n50 dc__ellipsis-right lh-20 fs-13 fw-4 pt-6 pr-8 pb-6 pl-8 cursor"
                 onClick={onSelectValue}
             >
                 {tag.label}
@@ -126,7 +127,7 @@ export const TagLabelValueSelector = ({
                 arrow={false}
                 placement="right"
                 content={
-                    <div className="pt-6 pr-10 pb-6 pl-10">
+                    <div>
                         <div className="mb-10 fs-12 fw-6 cn-0 dc__break-word">
                             {tag.label}
                         </div>
@@ -188,6 +189,7 @@ export const TagLabelValueSelector = ({
                     rootClassName={`mxh-210 dc__overflow-auto tag-${selectedTagIndex}-class`}
                     autoWidth={true}
                     preventWheelDisable={true}
+                    noBackDrop={noBackDrop}
                 >
                     {popupMenuBody}
                 </PopupMenu.Body>

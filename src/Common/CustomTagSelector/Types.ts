@@ -52,6 +52,7 @@ export interface TagLabelValueSelectorType {
     tabIndex?: number
     refVar?: React.MutableRefObject<HTMLTextAreaElement>
     dependentRef?: React.MutableRefObject<HTMLTextAreaElement>
+    noBackDrop?: boolean
 }
 
 export interface ResizableTagTextAreaProps {
