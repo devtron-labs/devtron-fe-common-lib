@@ -10,6 +10,7 @@ export const Modal = ({
     onClick = null,
     callbackRef = null,
     preventWheelDisable = false,
+    noBackDrop
 }: ModalType) => {
     const innerRef = React.useRef(null)
     function handleClick(e) {
@@ -36,11 +37,13 @@ export const Modal = ({
         document.addEventListener('click', handleClick)
         let modal = document.getElementById('visible-modal')
         if (modal) modal.classList.add('show')
+        if (noBackDrop) modal.classList.add('no-back-drop')
         if (!preventWheelDisable) document.body.addEventListener('wheel', disableWheel, { passive: false })
         return () => {
             if (!preventWheelDisable) document.body.removeEventListener('wheel', disableWheel)
             document.removeEventListener('click', handleClick)
             if (modal) modal.classList.remove('show')
+            if (noBackDrop) modal.classList.remove('no-back-drop')
         }
     }, [])
     return ReactDOM.createPortal(

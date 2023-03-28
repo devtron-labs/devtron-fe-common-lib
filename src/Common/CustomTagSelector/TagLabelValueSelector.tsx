@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import PopupMenu from '../PopupMenu'
-import { ValidationRules } from './ValidationRules'
 import { ReactComponent as ErrorCross } from '../../Assets/Icon/ic-cross.svg'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-outlined.svg'
 import { KEY_VALUE } from '../Constants'
 import { stopPropagation } from '../Helper'
 import { ResizableTagTextArea } from './ResizableTagTextArea'
-import { TagLabelValueSelectorType } from './Types'
+import { SuggestedTagOptionType, TagLabelValueSelectorType } from './Types'
+import Tippy from '@tippyjs/react'
+import { ValidationRules } from './ValidationRules'
 
 export const TagLabelValueSelector = ({
     selectedTagIndex,
@@ -19,6 +20,7 @@ export const TagLabelValueSelector = ({
     tabIndex = null,
     refVar,
     dependentRef,
+    noBackDrop,
 }: TagLabelValueSelectorType) => {
     const [selectedValue, setSelectedValue] = useState<string>('')
     const [activeElement, setActiveElement] = useState<string>('')
@@ -43,10 +45,11 @@ export const TagLabelValueSelector = ({
             const _tagData = { ...tagData }
             _tagData[tagInputType] = selectedValue
             if (tagInputType === KEY_VALUE.KEY) {
-                _tagData.isInvalidKey = selectedValue
-                    ? !validationRules.propagateTagKey(selectedValue).isValid
-                    : _tagData.value !== ''
-            } else if (selectedValue || isRequired) {
+                _tagData.isInvalidKey =
+                    selectedValue || _tagData.propagate
+                        ? !validationRules.propagateTagKey(selectedValue).isValid
+                        : _tagData.value !== ''
+            } else if (selectedValue || isRequired || _tagData.propagate) {
                 _tagData.isInvalidValue = !validationRules.propagateTagValue(selectedValue).isValid
                 _tagData.isInvalidKey = !_tagData.key || _tagData.isInvalidKey
             } else {
@@ -65,7 +68,9 @@ export const TagLabelValueSelector = ({
         stopPropagation(e)
         const _tagData = { ...tagData }
         _tagData[tagInputType] = e.currentTarget.dataset.key
+        _tagData.propagate = e.currentTarget.dataset.propagate === 'true'
         setTagData(selectedTagIndex, _tagData)
+        setActiveElement('')
     }
 
     const renderValidationsSuggestions = (): JSX.Element => {
@@ -74,7 +79,7 @@ export const TagLabelValueSelector = ({
             if (selectedValue || tagData.value) {
                 field = validationRules.propagateTagKey(selectedValue)
             }
-        } else if (isRequired || selectedValue) {
+        } else if (isRequired || selectedValue || tagData.propagate) {
             field = validationRules.propagateTagValue(selectedValue)
         }
         if (!field.isValid) {
@@ -102,22 +107,47 @@ export const TagLabelValueSelector = ({
         return null
     }
 
+    const option = (tag: SuggestedTagOptionType, index: number): JSX.Element => {
+        return (
+            <div
+                key={`${tag.value}-${index}`}
+                data-key={tag.label}
+                data-propagate={tag.propagate}
+                className="dc__hover-n50 dc__ellipsis-right lh-20 fs-13 fw-4 pt-6 pr-8 pb-6 pl-8 cursor"
+                onClick={onSelectValue}
+            >
+                {tag.label}
+            </div>
+        )
+    }
+
+    const optionWithTippy = (tag: SuggestedTagOptionType, index: number): JSX.Element => {
+        return (
+            <Tippy
+                className="default-tt"
+                arrow={false}
+                placement="right"
+                content={
+                    <div>
+                        <div className="mb-10 fs-12 fw-6 cn-0 dc__break-word">{tag.label}</div>
+                        <div className="fs-12 fw-4 cn-0 dc__break-word">{tag.description}</div>
+                    </div>
+                }
+            >
+                {option(tag, index)}
+            </Tippy>
+        )
+    }
+
     const renderSuggestions = (): JSX.Element => {
         if (tagOptions?.length) {
-            const filteredTags = tagOptions.filter((tag) => tag.value.indexOf(selectedValue) >= 0)
+            const filteredTags = tagOptions.filter((tag) => tag.label.indexOf(selectedValue) >= 0)
             if (filteredTags.length) {
                 return (
                     <div>
-                        {filteredTags.map((tag, index) => (
-                            <div
-                                key={`${tag.value}-${index}`}
-                                data-key={tag.label}
-                                className="dc__hover-n50 lh-20 fs-13 fw-4 pt-6 pr-8 pb-6 pl-8 cursor"
-                                onClick={onSelectValue}
-                            >
-                                {tag.label}
-                            </div>
-                        ))}
+                        {filteredTags.map((tag, index) =>
+                            tag.description ? optionWithTippy(tag, index) : option(tag, index),
+                        )}
                     </div>
                 )
             }
@@ -125,13 +155,14 @@ export const TagLabelValueSelector = ({
         return renderValidationsSuggestions()
     }
 
+    const popupMenuBody = activeElement === `tag-${tagInputType}-${selectedTagIndex}` ? renderSuggestions() : null
     return (
         <PopupMenu autoClose autoPosition>
-            <PopupMenu.Button rootClassName="dc__bg-n50 flex top dc__no-border">
+            <PopupMenu.Button rootClassName="dc__bg-n50 flex top dc__no-border-imp">
                 <ResizableTagTextArea
                     minHeight={30}
                     maxHeight={80}
-                    className={`form__input pt-4-imp pb-4-imp fs-13 ${
+                    className={`form__input tag-input pt-4-imp pb-4-imp fs-13 ${
                         tagInputType === KEY_VALUE.KEY
                             ? `dc__no-right-radius`
                             : `dc__no-border-radius dc__no-right-border dc__no-left-border`
@@ -150,9 +181,16 @@ export const TagLabelValueSelector = ({
                     dependentRef={dependentRef}
                 />
             </PopupMenu.Button>
-            <PopupMenu.Body rootClassName={`tag-${selectedTagIndex}-class`} autoWidth={true} preventWheelDisable={true}>
-                {activeElement === `tag-${tagInputType}-${selectedTagIndex}` && renderSuggestions()}
-            </PopupMenu.Body>
+            {popupMenuBody && (
+                <PopupMenu.Body
+                    rootClassName={`mxh-210 dc__overflow-auto tag-${selectedTagIndex}-class`}
+                    autoWidth={true}
+                    preventWheelDisable={true}
+                    noBackDrop={noBackDrop}
+                >
+                    {popupMenuBody}
+                </PopupMenu.Body>
+            )}
         </PopupMenu>
     )
 }

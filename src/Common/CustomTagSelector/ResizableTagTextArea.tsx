@@ -28,8 +28,8 @@ export function ResizableTagTextArea({
 
     const reInitHeight = () => {
         if (document.activeElement !== refVar.current) return
-        refVar.current.style.height = 'auto'
-        dependentRef.current.style.height = 'auto'
+        refVar.current.style.height = minHeight+ 'px'
+        dependentRef.current.style.height = minHeight+ 'px'
         let nextHeight = refVar.current.scrollHeight
         if (nextHeight < dependentRef.current.scrollHeight) {
             nextHeight = dependentRef.current.scrollHeight
@@ -47,8 +47,8 @@ export function ResizableTagTextArea({
     useThrottledEffect(reInitHeight, 500, [text])
 
     const handleOnBlur = (event) => {
-        refVar.current.style.height = 'auto'
-        dependentRef.current.style.height = 'auto'
+        refVar.current.style.height = minHeight+ 'px'
+        dependentRef.current.style.height = minHeight+ 'px'
         onBlur && onBlur(event)
     }
 

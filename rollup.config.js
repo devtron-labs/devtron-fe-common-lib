@@ -7,7 +7,7 @@ import del from 'rollup-plugin-delete'
 import pkg from './package.json'
 import svgr from '@svgr/rollup'
 import url from '@rollup/plugin-url'
-import commonjs from '@rollup/plugin-commonjs';
+import commonjs from '@rollup/plugin-commonjs'
 
 export default {
     input: './src/index.ts',
@@ -24,8 +24,8 @@ export default {
             exclude: 'node_modules/**',
         }),
         del({ targets: ['dist/*'] }),
-        url(),
-        svgr({ icon: true }),
+        url({limit: '100000'}),
+        svgr({ icon: true })
     ],
     external: Object.keys(pkg.peerDependencies || {}),
 }

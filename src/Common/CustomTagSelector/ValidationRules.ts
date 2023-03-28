@@ -16,7 +16,6 @@ const validateTagValue = (value: string): string[] => {
     return errorList
 }
 export class ValidationRules {
-
     propagateTagKey = (key: string): { isValid: boolean; messages: string[] } => {
         const errorList = []
         if (!key) {

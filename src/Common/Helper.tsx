@@ -5,6 +5,17 @@ import { toastAccessDenied } from './ToastBody'
 import { useEffect, useRef } from 'react'
 import { ERROR_EMPTY_SCREEN } from './Constants'
 
+toast.configure({
+  autoClose: 3000,
+  hideProgressBar: true,
+  pauseOnHover: true,
+  pauseOnFocusLoss: true,
+  closeOnClick: false,
+  newestOnTop: true,
+  toastClassName: 'devtron-toast',
+  bodyClassName: 'devtron-toast__body',
+})
+
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
   if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
       serverError.errors.map(({ userMessage, internalMessage }) => {
