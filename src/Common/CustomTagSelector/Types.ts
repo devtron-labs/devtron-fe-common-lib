@@ -67,4 +67,5 @@ export interface ResizableTagTextAreaProps {
     tabIndex?: number
     refVar?: React.MutableRefObject<HTMLTextAreaElement>
     dependentRef?: React.MutableRefObject<HTMLTextAreaElement>
+    dataTestId?: string
 }

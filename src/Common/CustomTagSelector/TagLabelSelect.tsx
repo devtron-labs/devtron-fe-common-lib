@@ -36,10 +36,10 @@ export const TagLabelSelect = ({
                 <PropagateTagInfo isCreateApp={isCreateApp} />
             </div>
             <div>
-                <div className="dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor" onClick={addNewTag}>
+                <div className="dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor" onClick={addNewTag} data-testid="add-tag-button">
                     <Add className="icon-dim-20 fcb-5" /> Add tag
                 </div>
-                <div className="mb-8">
+                <div className="mb-8" data-testid="tag-rows-container">
                     {labelTags?.map((tagData, index) => (
                         <TagDetails
                             key={`tag-${index}`}

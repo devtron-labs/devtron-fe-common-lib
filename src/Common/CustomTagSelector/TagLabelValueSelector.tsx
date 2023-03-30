@@ -179,6 +179,7 @@ export const TagLabelValueSelector = ({
                     tabIndex={tabIndex}
                     refVar={refVar}
                     dependentRef={dependentRef}
+                    dataTestId={`tag-${tagInputType === KEY_VALUE.KEY ? 'key' : 'value'}-${selectedTagIndex}`}
                 />
             </PopupMenu.Button>
             {popupMenuBody && (
