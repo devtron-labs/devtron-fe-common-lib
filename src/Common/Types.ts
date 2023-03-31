@@ -116,7 +116,7 @@ export interface ReloadType {
 
 export interface RadioGroupItemProps {
     value: string
-    dataTestId: string
+    dataTestId?: string
 }
 
 export interface RadioGroupProps {
