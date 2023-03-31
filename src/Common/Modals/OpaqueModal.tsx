@@ -28,7 +28,7 @@ export class OpaqueModal extends React.Component<OpaqueModalProps> {
         return ReactDOM.createPortal(
             <div className={`full-screen-modal__body-container ${className}`}>
                 {this.props.children}
-                {typeof onHide === 'function' && <div className="close-btn icon-dim-24" onClick={e => onHide(false)}>
+                {typeof onHide === 'function' && <div className="close-btn icon-dim-24" onClick={e => onHide(false)} data-testid="opaque-modal-close">
                     <img className="close-img" src={closeIcon} alt="close" />
                 </div>}
             </div>, document.getElementById('full-screen-modal'))

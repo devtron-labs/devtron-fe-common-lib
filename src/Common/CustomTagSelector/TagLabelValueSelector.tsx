@@ -84,7 +84,7 @@ export const TagLabelValueSelector = ({
         }
         if (!field.isValid) {
             return (
-                <div className="p-4" onClick={stopPropagation}>
+                <div className="p-4" onClick={stopPropagation} data-testid="tag-label-cross-stop-propagation">
                     {field.messages.map((error) => (
                         <div key={error} className="flexbox pr-4 pl-4">
                             <span>
@@ -115,6 +115,7 @@ export const TagLabelValueSelector = ({
                 data-propagate={tag.propagate}
                 className="dc__hover-n50 dc__ellipsis-right lh-20 fs-13 fw-4 pt-6 pr-8 pb-6 pl-8 cursor"
                 onClick={onSelectValue}
+                data-testid={`tag-label-value-${index}`}
             >
                 {tag.label}
             </div>

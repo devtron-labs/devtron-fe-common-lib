@@ -45,6 +45,7 @@ export interface CheckboxProps {
     rootClassName?: string
     onClick?: (event) => void
     id?: string
+    dataTestId?: string
 }
 
 export interface TippyCustomizedProps {
@@ -115,6 +116,7 @@ export interface ReloadType {
 
 export interface RadioGroupItemProps {
     value: string
+    dataTestId: string
 }
 
 export interface RadioGroupProps {
@@ -149,6 +151,7 @@ export interface PopupMenuButtonType {
     tabIndex?: number
     onHover?: boolean
     isKebab?: boolean
+    dataTestId?: string;
 }
 
 export interface PopupMenuBodyType {
@@ -158,6 +161,7 @@ export interface PopupMenuBodyType {
     autoWidth?: boolean
     preventWheelDisable?: boolean
     noBackDrop?: boolean
+    dataTestId?: string
 }
 
 export interface ModalType {
