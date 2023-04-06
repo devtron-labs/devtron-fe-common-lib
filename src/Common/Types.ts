@@ -135,6 +135,7 @@ export interface ProgressingProps {
     theme?: 'white' | 'default'
     styles?: React.CSSProperties
     children?: React.ReactNode
+    fillColor?: string
 }
 
 export interface PopupMenuType {
