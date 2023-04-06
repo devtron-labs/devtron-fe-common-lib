@@ -26,7 +26,7 @@ function InfoColourBar({
                     <Link
                         to={redirectLink}
                         onClick={linkOnClick}
-                        data-testId="info-bar-internal-link"
+                        data-testid="info-bar-internal-link"
                         className="cursor dc__link dc__underline-onhover mr-5"
                     >
                         {linkText}
