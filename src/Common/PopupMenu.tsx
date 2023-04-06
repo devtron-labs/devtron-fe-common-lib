@@ -170,14 +170,12 @@ function Body({
     autoWidth = false,
     preventWheelDisable = false,
     noBackDrop,
-    dataTestId= ""
 }: PopupMenuBodyType) {
     const { handleClose, popupPosition, opacity, callbackRef, buttonWidth } = usePopupContext()
     return popupPosition ? (
         <Modal
             callbackRef={callbackRef}
             onClick={handleClose}
-            data-testid={dataTestId}
             rootClassName={`${rootClassName} popup-body ${!children ? 'popup-body--empty' : ''} ${Object.keys(
                 popupPosition,
             ).join(' ')}`}

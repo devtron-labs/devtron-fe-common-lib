@@ -10,7 +10,7 @@ export const Modal = ({
     onClick = null,
     callbackRef = null,
     preventWheelDisable = false,
-    noBackDrop
+    noBackDrop,
 }: ModalType) => {
     const innerRef = React.useRef(null)
     function handleClick(e) {
@@ -50,7 +50,7 @@ export const Modal = ({
         <div
             tabIndex={0}
             onClick={onClick}
-            data-testid= "modal"
+            data-testid= "common-modal"
             ref={(el) => {
                 if (typeof callbackRef === 'function') {
                     callbackRef(el)

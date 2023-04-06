@@ -151,7 +151,7 @@ export interface PopupMenuButtonType {
     tabIndex?: number
     onHover?: boolean
     isKebab?: boolean
-    dataTestId?: string;
+    dataTestId?: string
 }
 
 export interface PopupMenuBodyType {
@@ -161,7 +161,6 @@ export interface PopupMenuBodyType {
     autoWidth?: boolean
     preventWheelDisable?: boolean
     noBackDrop?: boolean
-    dataTestId?: string
 }
 
 export interface ModalType {
