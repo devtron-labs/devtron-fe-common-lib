@@ -33,16 +33,18 @@ export function DetailsProgressing({
     loadingText,
     size = 24,
     fullHeight = false,
-    children,
     styles,
+    fillColor,
+    children,
 }: ProgressingProps): JSX.Element {
     return (
         <div
             className={`details-loader bcn-0 flex column fs-14 fw-6 ${fullHeight ? 'h-100' : 'details-loader-height'}`}
             style={styles}
+            data-testid="details-progressing"
         >
             <span style={{ width: `${size}px`, height: `${size}px` }}>
-                <Progressing size={size} />
+                <Progressing size={size} fillColor={fillColor} />
             </span>
             {loadingText && <span className="mt-10">{loadingText}</span>}
             {children}

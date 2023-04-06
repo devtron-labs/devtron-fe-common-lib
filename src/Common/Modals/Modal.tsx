@@ -50,7 +50,7 @@ export const Modal = ({
         <div
             tabIndex={0}
             onClick={onClick}
-            data-testid= "common-modal"
+            data-testid="common-modal"
             ref={(el) => {
                 if (typeof callbackRef === 'function') {
                     callbackRef(el)

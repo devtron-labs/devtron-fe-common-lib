@@ -26,7 +26,7 @@ function InfoColourBar({
                     <Link
                         to={redirectLink}
                         onClick={linkOnClick}
-                        data-testId= "info-bar-internal-link"
+                        data-testId="info-bar-internal-link"
                         className="cursor dc__link dc__underline-onhover mr-5"
                     >
                         {linkText}
@@ -39,7 +39,7 @@ function InfoColourBar({
                     href={redirectLink}
                     target="_blank"
                     onClick={linkOnClick}
-                    data-testid= "info-bar-redirectLink"
+                    data-testid="info-bar-redirectLink"
                     className="cursor dc__link dc__underline-onhover mr-5"
                 >
                     {linkText}
@@ -49,7 +49,7 @@ function InfoColourBar({
 
         return (
             linkOnClick && (
-                <div onClick={linkOnClick} className="cursor dc__link dc__underline-onhover" data-testid= "info-bar-linkText">
+                <div onClick={linkOnClick} className="cursor dc__link dc__underline-onhover" data-testid="info-bar-linkText">
                     {linkText}
                 </div>
             )

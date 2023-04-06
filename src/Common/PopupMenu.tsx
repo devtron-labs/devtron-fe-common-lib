@@ -142,7 +142,7 @@ function Button({
     tabIndex = 0,
     onHover = false,
     isKebab = false,
-    dataTestId= ""
+    dataTestId = "",
 }: PopupMenuButtonType) {
     const { handleOpen, popupPosition, buttonRef, initialiseButtonWidth } = usePopupContext()
     return (
