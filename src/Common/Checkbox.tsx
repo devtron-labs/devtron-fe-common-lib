@@ -25,8 +25,9 @@ export class Checkbox extends Component<CheckboxProps> {
                         tabIndex={this.props.tabIndex}
                         checked={this.props.isChecked}
                         id={this.props.id}
+                        data-testid={this.props.dataTestId}
                     />
-                    <span className="form__checkbox-container"></span>
+                    <span className="form__checkbox-container" data-testid={`${this.props.dataTestId}-chk-span`}></span>
                     <span className={`form__checkbox-label`}>{this.props.children}</span>
                 </label>
             </>

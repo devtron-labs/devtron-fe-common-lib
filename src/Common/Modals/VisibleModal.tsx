@@ -46,7 +46,7 @@ export class VisibleModal extends React.Component<{
 
     render() {
         return ReactDOM.createPortal(
-            <div className={`visible-modal__body ${this.props.className}`} onClick={this.props?.close}>
+            <div className={`visible-modal__body ${this.props.className}`} onClick={this.props?.close} data-testid="visible-modal-close">
                 {this.props.children}
             </div>,
             document.getElementById('visible-modal'),

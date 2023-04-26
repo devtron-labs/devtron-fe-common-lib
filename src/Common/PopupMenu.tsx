@@ -142,6 +142,7 @@ function Button({
     tabIndex = 0,
     onHover = false,
     isKebab = false,
+    dataTestId = "",
 }: PopupMenuButtonType) {
     const { handleOpen, popupPosition, buttonRef, initialiseButtonWidth } = usePopupContext()
     return (
@@ -155,6 +156,7 @@ function Button({
             }`}
             onMouseEnter={onHover ? (disabled ? null : handleOpen) : () => {}}
             onClick={disabled ? null : handleOpen}
+            data-testid={dataTestId}
         >
             {children}
         </button>
@@ -167,7 +169,7 @@ function Body({
     style = {},
     autoWidth = false,
     preventWheelDisable = false,
-    noBackDrop
+    noBackDrop,
 }: PopupMenuBodyType) {
     const { handleClose, popupPosition, opacity, callbackRef, buttonWidth } = usePopupContext()
     return popupPosition ? (

@@ -45,6 +45,7 @@ export interface CheckboxProps {
     rootClassName?: string
     onClick?: (event) => void
     id?: string
+    dataTestId?: string
 }
 
 export interface TippyCustomizedProps {
@@ -115,6 +116,7 @@ export interface ReloadType {
 
 export interface RadioGroupItemProps {
     value: string
+    dataTestId?: string
 }
 
 export interface RadioGroupProps {
@@ -133,6 +135,7 @@ export interface ProgressingProps {
     theme?: 'white' | 'default'
     styles?: React.CSSProperties
     children?: React.ReactNode
+    fillColor?: string
 }
 
 export interface PopupMenuType {
@@ -149,6 +152,7 @@ export interface PopupMenuButtonType {
     tabIndex?: number
     onHover?: boolean
     isKebab?: boolean
+    dataTestId?: string
 }
 
 export interface PopupMenuBodyType {

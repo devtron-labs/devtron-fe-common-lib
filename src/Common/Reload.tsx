@@ -8,7 +8,7 @@ export default function Reload({ reload, className = '' }: ReloadType) {
     }
     return (
         <article className={`flex w-100 h-100 ${className}`}>
-            <div className="flex column w-250 dc__align-center">
+            <div className="flex column w-250 dc__align-center" data-testid="reload">
                 <img src={loadingFailure} style={{ height: 'auto' }} className="w-100 mb-12" alt="load-error" />
                 <h3 className="title dc__bold">Failed to load</h3>
                 <div className="dc__empty__subtitle mb-20">

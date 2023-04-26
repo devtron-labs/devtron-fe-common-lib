@@ -21,6 +21,7 @@ function GenericEmptyState({
         <div
             className={`flex column empty-state dc__align-reload-center ${classname ? classname : ''}`}
             style={styles}
+            data-testid="generic-empty-state"
             {...(heightToDeduct >= 0 && { style: { ...styles, height: `calc(100vh - ${heightToDeduct}px)` } })}
         >
             {!noImage && <img className={imageClassName ? imageClassName : ''}

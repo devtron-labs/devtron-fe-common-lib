@@ -11,7 +11,7 @@ function ErrorScreenNotFound() {
     }
     const renderGenerateButton = () => {
         return (
-            <button className="flex cta h-32" onClick={redirectToHome}>
+            <button className="flex cta h-32" onClick={redirectToHome} data-testid="empty-screen-take-me-home">
                 {ERROR_EMPTY_SCREEN.TAKE_BACK_HOME}
             </button>
         )

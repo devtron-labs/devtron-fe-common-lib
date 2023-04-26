@@ -43,6 +43,7 @@ export const TagDetails = ({
             <div
                 className={`dc__border h-30 pl-4 pr-4 br-4 mr-8 pointer ${tagData.propagate ? 'bcn-7' : ''}`}
                 onClick={propagateTagToResource}
+                data-testid={`propagate-tag-${index}`}
             >
                 <InjectTag className={`icon-dim-20 mt-4 ${tagData.propagate ? 'scn-0' : ''}`} />
             </div>
@@ -67,7 +68,7 @@ export const TagDetails = ({
                 refVar={valueRef}
                 dependentRef={keyRef}
             />
-            <div className="dc__border pl-4 pr-4 dc__right-radius-4 pointer flex top" onClick={deleteTag}>
+            <div className="dc__border pl-4 pr-4 dc__right-radius-4 pointer flex top" onClick={deleteTag} data-testid={`delete-tag-${index}`}>
                 <DeleteCross className="icon-dim-20 mt-4" />
             </div>
         </div>
