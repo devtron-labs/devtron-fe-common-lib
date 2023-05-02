@@ -1,5 +1,5 @@
 import { ServerErrors } from './ServerError'
-import { RequestTimeout, Host } from './Constants'
+import { RequestTimeout, Host, URLS } from './Constants'
 import { ResponseType, APIOptions } from './Types'
 
 const responseMessages = {
@@ -73,6 +73,12 @@ const responseMessages = {
     599: 'Network connect timeout error',
 }
 
+function handleLogout() {
+    let cont = `${window.location.pathname.replace(process.env.PUBLIC_URL, '')}${window.location.search}`
+    const loginUrl = URLS.LOGIN_SSO
+    window.location.href = `${window.location.origin}${process.env.PUBLIC_URL}${loginUrl}?continue=${cont}`
+}
+
 async function handleServerError(contentType, response) {
     //Test for HTTP Status Code
     let code: number = response.status
@@ -126,6 +132,7 @@ async function fetchAPI(
                         ],
                     })
                 } else {
+                    handleLogout()
                     return { code: 401, status: 'Unauthorized', result: [] }
                 }
             } else if (response.status >= 300 && response.status <= 599) {
