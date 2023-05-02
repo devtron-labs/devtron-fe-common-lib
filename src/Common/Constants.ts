@@ -14,6 +14,10 @@ export const PATTERNS = {
     ALPHANUMERIC_WITH_SPECIAL_CHAR: /^[A-Za-z0-9._-]+$/, // allow alphanumeric,(.) ,(-),(_)
 }
 
+export const URLS = {
+    LOGIN_SSO: '/login/sso',
+}
+
 export const ROUTES = {
     PROJECT_LIST_MIN: 'team/autocomplete',
 }
@@ -44,8 +48,8 @@ export const ERROR_EMPTY_SCREEN = {
     TAKE_BACK_HOME: 'Take me home',
     ONLY_FOR_SUPERADMIN: 'Information on this page is available only to superadmin users.',
     NOT_AUTHORIZED: 'Not authorized',
-    UNAUTHORIZED:'unauthorized',
-    FORBIDDEN:'forbidden',
+    UNAUTHORIZED: 'unauthorized',
+    FORBIDDEN: 'forbidden',
     REQUIRED_MANAGER_ACCESS:
         'Looks like you don’t have access to information on this page. Please contact your manager to request access.',
 }
