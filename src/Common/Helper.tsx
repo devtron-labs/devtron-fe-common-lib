@@ -1,9 +1,9 @@
+import React, { useEffect, useRef } from 'react'
 import { ServerErrors } from './ServerError'
 import { toast } from 'react-toastify'
 import * as Sentry from '@sentry/browser'
 import { toastAccessDenied } from './ToastBody'
-import { useEffect, useRef } from 'react'
-import { ERROR_EMPTY_SCREEN } from './Constants'
+import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 
 toast.configure({
   autoClose: 3000,
@@ -89,4 +89,82 @@ export function useThrottledEffect(callback, delay, deps = []) {
             clearTimeout(handler)
         }
     }, [delay, ...deps])
+}
+
+const colors = [
+    '#FFB900',
+    '#D83B01',
+    '#B50E0E',
+    '#E81123',
+    '#B4009E',
+    '#5C2D91',
+    '#0078D7',
+    '#00B4FF',
+    '#008272',
+    '#107C10',
+]
+
+export function getRandomColor(email: string): string {
+    let sum = 0
+    for (let i = 0; i < email.length; i++) {
+        sum += email.charCodeAt(i)
+    }
+    return colors[sum % colors.length]
+}
+
+export const getAlphabetIcon = (str: string) => {
+    if (!str) return null
+    return (
+        <span
+            className="alphabet-icon__initial fs-13 icon-dim-20 flex cn-0 mr-8"
+            style={{ backgroundColor: getRandomColor(str) }}
+        >
+            {str[0]}
+        </span>
+    )
+}
+
+export const getEmptyArrayOfLength = (length: number) => {
+    return Array.from({ length })
+}
+
+export function noop(...args): any {}
+
+export function not(e) {
+    return !e
+}
+
+export function useEffectAfterMount(cb, dependencies) {
+    const justMounted = React.useRef(true)
+    React.useEffect(() => {
+        if (!justMounted.current) {
+            return cb()
+        }
+        justMounted.current = false
+    }, dependencies)
+}
+
+export function getCookie(sKey) {
+    if (!sKey) {
+        return null
+    }
+    return (
+        document.cookie.replace(
+            new RegExp('(?:(?:^|.*;)\\s*' + sKey.replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'),
+            '$1',
+        ) || null
+    )
+}
+
+export function getLoginInfo() {
+    const argocdToken = getCookie(TOKEN_COOKIE_NAME)
+    if (argocdToken) {
+        const jwts = argocdToken.split('.')
+        try {
+            return JSON.parse(atob(jwts[1]))
+        } catch (err) {
+            console.error('error in setting user ', err)
+            return null
+        }
+    }
 }
