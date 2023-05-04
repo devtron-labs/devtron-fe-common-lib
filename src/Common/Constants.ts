@@ -53,3 +53,8 @@ export const ERROR_EMPTY_SCREEN = {
     REQUIRED_MANAGER_ACCESS:
         'Looks like you don’t have access to information on this page. Please contact your manager to request access.',
 }
+export const TOKEN_COOKIE_NAME = 'argocd.token'
+export const TriggerTypeMap = {
+    automatic: 'Auto',
+    manual: 'Manual',
+}

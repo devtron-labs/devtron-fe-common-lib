@@ -174,3 +174,146 @@ export interface ModalType {
     preventWheelDisable?: boolean
     noBackDrop?: boolean
 }
+
+export type CDModalTabType = 'SECURITY' | 'CHANGES'
+
+export const CDModalTab = {
+    Security: <CDModalTabType>'SECURITY',
+    Changes: <CDModalTabType>'CHANGES',
+}
+
+export enum DeploymentNodeType {
+    PRECD = 'PRECD',
+    CD = 'CD',
+    POSTCD = 'POSTCD',
+    APPROVAL = 'APPROVAL'
+}
+
+export interface UserApprovalConfigType {
+    requiredCount: number
+}
+
+interface ApprovalUserDataType {
+    dataId: number
+    userActionTime: string
+    userComment: string
+    userEmail: string
+    userId: number
+    userResponse: number
+}
+
+export interface UserApprovalMetadataType {
+    approvalRequestId: number
+    approvalRuntimeState: number
+    approvedUsersData: ApprovalUserDataType[]
+    requestedUserData: ApprovalUserDataType
+}
+
+export interface CommonNodeAttr {
+    connectingCiPipelineId?: number
+    parents: string | number[] | string[]
+    x: number
+    y: number
+    title: string
+    description?: string
+    triggerType?: string
+    id: string
+    icon?: string
+    status?: string
+    isSource: boolean
+    isGitSource: boolean
+    isRoot: boolean
+    downstreams: string[]
+    type: 'CI' | 'GIT' | 'PRECD' | 'CD' | 'POSTCD' | 'WEBHOOK'
+    parentCiPipeline?: number
+    parentAppId?: number
+    url?: string
+    branch?: string
+    sourceType?: string
+    colorCode?: string
+    isExternalCI?: boolean
+    isLinkedCI?: boolean
+    environmentName?: string //used for CDs
+    environmentId?: number
+    inputMaterialList?: any[]
+    rollbackMaterialList?: any[] //used for CDs
+    linkedCount?: number //used for CI
+    deploymentStrategy?: string
+    height: number
+    width: number
+    preNode?: CommonNodeAttr //used for CDs
+    postNode?: CommonNodeAttr //used for CDs
+    stageIndex?: number //used for CDs
+    sourceNodes?: Array<CommonNodeAttr> //used for CI
+    downstreamNodes?: Array<CommonNodeAttr>
+    parentPipelineId?: string
+    parentPipelineType?: string
+    parentEnvironmentName?: string
+    isRegex?: boolean
+    regex?: string
+    primaryBranchAfterRegex?: string
+    storageConfigured?: boolean
+    deploymentAppDeleteRequest?: boolean
+    approvalUsers?: string[]
+    userApprovalConfig?: UserApprovalConfigType
+    requestedUserId?: number
+}
+
+
+export interface VulnerabilityType {
+    name: string;
+    severity: "CRITICAL" | "MODERATE" | "LOW";
+    package: string;
+    version: string;
+    fixedVersion: string;
+    policy: string;
+    url?: string;
+}
+
+export interface ScanVulnerabilitiesTableProps {
+    vulnerabilities: VulnerabilityType[];
+}
+
+export interface MaterialInfo {
+    revision: string
+    modifiedTime: string | Date
+    author: string
+    message: string
+    commitLink: string
+    tag: string
+    webhookData: string
+    branch: string
+    url?: string
+    type?: string
+}
+
+export interface CDMaterialType {
+    index: number
+    id: string
+    materialInfo: MaterialInfo[]
+    tab: CDModalTabType
+    scanEnabled: boolean
+    scanned: boolean
+    vulnerabilitiesLoading: boolean
+    lastExecution: string //timestamp
+    vulnerabilities: VulnerabilityType[]
+    vulnerable: boolean
+    deployedTime: string
+    deployedBy?: string
+    wfrId?: number
+    buildTime: string
+    image: string
+    isSelected: boolean
+    showSourceInfo: boolean
+    latest: boolean
+    runningOnParentCd?: boolean
+    userApprovalMetadata?: UserApprovalMetadataType
+    triggeredBy?: number
+}
+
+export interface CDMaterialResponseType {
+    approvalUsers: string[]
+    materials: any[]
+    userApprovalConfig: UserApprovalConfigType
+    requestedUserId: number
+}
