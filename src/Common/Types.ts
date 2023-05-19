@@ -52,6 +52,7 @@ export interface TippyCustomizedProps {
     theme: TippyTheme
     visible?: boolean
     heading?: string
+    headingInfo?: string
     infoTextHeading?: string
     placement: Placement
     className?: string
@@ -316,4 +317,14 @@ export interface CDMaterialResponseType {
     materials: any[]
     userApprovalConfig: UserApprovalConfigType
     requestedUserId: number
+}
+export interface MandatoryPluginDetailType {
+  id: number
+  name: string
+  invalidPost: boolean
+}
+export interface MandatoryPluginDataType {
+    pluginData: MandatoryPluginDetailType[]
+    isValidPre: boolean
+    isValidPost: boolean
 }
