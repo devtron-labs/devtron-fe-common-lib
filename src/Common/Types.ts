@@ -318,10 +318,22 @@ export interface CDMaterialResponseType {
     userApprovalConfig: UserApprovalConfigType
     requestedUserId: number
 }
+
+export enum PluginRequiredStageKeys {
+  PRE = 'PRE',
+  POST = 'POST',
+  ANY = 'ANY'
+}
+
+export enum PluginRequiredStage {
+  PRE = 'preBuildStage',
+  POST = 'postBuildStage',
+  ANY = 'ANY'
+}
 export interface MandatoryPluginDetailType {
   id: number
   name: string
-  invalidPost: boolean
+  requiredIn: PluginRequiredStage
 }
 export interface MandatoryPluginDataType {
     pluginData: MandatoryPluginDetailType[]
