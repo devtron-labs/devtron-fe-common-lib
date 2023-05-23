@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { toast } from 'react-toastify'
 import { useHistory } from 'react-router'
-import info from '../assets/icons/ic-info-filled.svg'
-import ConfirmationDialog from '../Dialogs/ConfirmationDialog'
-import { DeleteDialog } from '../Dialogs'
+import { toast } from 'react-toastify'
+import info from '../../Assets/Icon/ic-info-filled.svg'
+import { ConfirmationDialog, DeleteDialog } from '../Dialogs'
 import { ServerErrors } from '../ServerError'
 import { DeleteComponentProps } from './types'
+
 
 function DeleteComponent({
     setDeleting,
