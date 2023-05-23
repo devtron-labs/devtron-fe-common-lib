@@ -50,7 +50,7 @@ export const TagLabelValueSelector = ({
                         ? !validationRules.propagateTagKey(selectedValue).isValid
                         : _tagData.value !== ''
             } else if (selectedValue || isRequired || _tagData.propagate) {
-                _tagData.isInvalidValue = !validationRules.propagateTagValue(selectedValue).isValid
+                _tagData.isInvalidValue = !validationRules.propagateTagValue(selectedValue, _tagData.key).isValid
                 _tagData.isInvalidKey = !_tagData.key || _tagData.isInvalidKey
             } else {
                 _tagData.isInvalidValue = false
@@ -80,7 +80,7 @@ export const TagLabelValueSelector = ({
                 field = validationRules.propagateTagKey(selectedValue)
             }
         } else if (isRequired || selectedValue || tagData.propagate) {
-            field = validationRules.propagateTagValue(selectedValue)
+            field = validationRules.propagateTagValue(selectedValue, tagData.key)
         }
         if (!field.isValid) {
             return (

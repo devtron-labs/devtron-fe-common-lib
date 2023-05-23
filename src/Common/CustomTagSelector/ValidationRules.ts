@@ -21,33 +21,37 @@ export class ValidationRules {
         if (!key) {
             errorList.push('Key is required')
         } else {
-            const re = new RegExp('/', 'g')
-            const noOfSlashInKey = key.match(re)?.length
-            if (noOfSlashInKey > 1) {
-                errorList.push('Key: Max 1 ( / ) allowed')
-            } else if (noOfSlashInKey === 1) {
-                const [prefix, name] = key.split('/')
-                errorList.push(...validateTagValue(name).map((error) => `Name: ${error}`))
-                if (prefix.length > 253) {
-                    errorList.push('Prefix: Can be max 253 characters')
+            if(!key.startsWith("devtron.ai/")){
+                const re = new RegExp('/', 'g')
+                const noOfSlashInKey = key.match(re)?.length
+                if (noOfSlashInKey > 1) {
+                    errorList.push('Key: Max 1 ( / ) allowed')
+                } else if (noOfSlashInKey === 1) {
+                    const [prefix, name] = key.split('/')
+                    errorList.push(...validateTagValue(name).map((error) => `Name: ${error}`))
+                    if (prefix.length > 253) {
+                        errorList.push('Prefix: Can be max 253 characters')
+                    }
+                    const validPrefix = PATTERNS.KUBERNETES_KEY_PREFIX.test(prefix)
+                    if (!validPrefix) {
+                        errorList.push('Prefix: Must be a DNS subdomain (a series of DNS labels separated by dots (.)')
+                    }
+                } else {
+                    errorList.push(...validateTagValue(key).map((error) => `Name: ${error}`))
                 }
-                const validPrefix = PATTERNS.KUBERNETES_KEY_PREFIX.test(prefix)
-                if (!validPrefix) {
-                    errorList.push('Prefix: Must be a DNS subdomain (a series of DNS labels separated by dots (.)')
-                }
-            } else {
-                errorList.push(...validateTagValue(key).map((error) => `Name: ${error}`))
             }
         }
         return { isValid: errorList.length === 0, messages: errorList }
     }
 
-    propagateTagValue = (value: string): { isValid: boolean; messages: string[] } => {
+    propagateTagValue = (value: string, key: string): { isValid: boolean; messages: string[] } => {
         const errorList = []
         if (!value) {
             errorList.push('Value is required')
         } else {
-            errorList.push(...validateTagValue(value))
+            if(!key.startsWith("devtron.ai/")){
+                errorList.push(...validateTagValue(value))
+            }
         }
         return { isValid: errorList.length === 0, messages: errorList }
     }
