@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import info from '../../Assets/Icon/ic-info-filled.svg'
 import { ConfirmationDialog, DeleteDialog } from '../Dialogs'
