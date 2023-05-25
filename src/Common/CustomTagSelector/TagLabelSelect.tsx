@@ -13,7 +13,11 @@ export const TagLabelSelect = ({
 }: TagLabelSelectType) => {
     const setTagData = (index, tagValue): void => {
         const _tags = [...labelTags]
-        _tags[index] = tagValue
+        const _tagValue = tagValue
+        if(_tagValue.key.startsWith("devtron.ai/")){
+            _tagValue.propagate = false
+        }
+        _tags[index] = _tagValue
         setLabelTags(_tags)
     }
 
