@@ -151,6 +151,7 @@ export interface StepType {
     inlineStepDetail?: InlineStepDetailType
     pluginRefStepDetail?: PluginRefStepDetailType
     triggerIfParentStageFail: boolean
+    isMandatory?: boolean
 }
 
 export interface BuildStageType {

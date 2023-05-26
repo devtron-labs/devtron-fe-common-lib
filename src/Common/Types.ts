@@ -258,6 +258,7 @@ export interface CommonNodeAttr {
     approvalUsers?: string[]
     userApprovalConfig?: UserApprovalConfigType
     requestedUserId?: number
+    showPluginWarning?: boolean
 }
 
 
@@ -320,20 +321,21 @@ export interface CDMaterialResponseType {
 }
 
 export enum PluginRequiredStageKeys {
-  PRE = 'PRE',
-  POST = 'POST',
-  ANY = 'ANY'
+  PRE_CI = 'PRE_CI',
+  POST_CI = 'POST_CI',
+  PRE_OR_POST_CI = 'PRE_OR_POST_CI'
 }
 
 export enum PluginRequiredStage {
-  PRE = 'preBuildStage',
-  POST = 'postBuildStage',
-  ANY = 'ANY'
+  PRE_CI = 'preBuildStage',
+  POST_CI = 'postBuildStage',
+  PRE_OR_POST_CI = 'PRE_OR_POST_CI'
 }
 export interface MandatoryPluginDetailType {
   id: number
   name: string
   requiredIn: PluginRequiredStage
+  applied?: boolean
 }
 export interface MandatoryPluginDataType {
     pluginData: MandatoryPluginDetailType[]
