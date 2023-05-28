@@ -270,4 +270,6 @@ export interface PluginDetailType {
   description: string
   icon: string
   tags: string[]
+  inputVariables?: VariableType[]
+  outputVariables?: VariableType[]
 }

@@ -1,5 +1,6 @@
 import { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
+import { VariableType } from './CIPipeline.Types'
 export interface ResponseType {
     code: number
     status: string
@@ -334,8 +335,11 @@ export enum PluginRequiredStage {
 export interface MandatoryPluginDetailType {
   id: number
   name: string
+  description?: string;
   requiredIn: PluginRequiredStage
   applied?: boolean
+  inputVariables?: VariableType[]
+  outputVariables?: VariableType[]
 }
 export interface MandatoryPluginDataType {
     pluginData: MandatoryPluginDetailType[]
