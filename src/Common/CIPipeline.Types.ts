@@ -262,3 +262,12 @@ export interface FormErrorObjectType {
         steps: TaskErrorObj[]
     }
 }
+
+export interface PluginDetailType {
+  id: number
+  name: string
+  type: string
+  description: string
+  icon: string
+  tags: string[]
+}
