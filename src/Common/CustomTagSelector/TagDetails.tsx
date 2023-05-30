@@ -33,7 +33,7 @@ export const TagDetails = ({
             _tagData.isInvalidKey =
                 _tagData.key || _tagData.value ? !validationRules.propagateTagKey(_tagData.key).isValid : false
             _tagData.isInvalidValue = _tagData.value
-                ? !validationRules.propagateTagValue(_tagData.value).isValid
+                ? !validationRules.propagateTagValue(_tagData.value, _tagData.key).isValid
                 : false
         }
         setTagData(index, _tagData)
@@ -41,7 +41,7 @@ export const TagDetails = ({
     return (
         <div className="flexbox mb-8">
             <div
-                className={`dc__border h-30 pl-4 pr-4 br-4 mr-8 pointer ${tagData.propagate ? 'bcn-7' : ''}`}
+                className={`dc__border h-30 pl-4 pr-4 br-4 mr-8 pointer ${tagData.propagate ? 'bcn-7' : ''} ${tagData.key.startsWith("devtron.ai/") ? 'cursor-not-allowed bcn-1' : ''}`}
                 onClick={propagateTagToResource}
                 data-testid={`propagate-tag-${index}`}
             >
