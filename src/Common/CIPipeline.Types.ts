@@ -152,7 +152,6 @@ export interface StepType {
     pluginRefStepDetail?: PluginRefStepDetailType
     triggerIfParentStageFail: boolean
     isMandatory?: boolean
-    canBeMoved?: boolean
 }
 
 export interface BuildStageType {
