@@ -30,7 +30,7 @@ function GenericEmptyState({
                 height={imageType === ImageType.Medium ? '160' : '200'}
                 alt="empty-state"
             />}
-            <h4 className="title fw-6 cn-9 mb-8">{title}</h4>
+            <h4 className="title fw-6 cn-9 mb-8 mt-20">{title}</h4>
             {subTitle && <p className="subtitle">{subTitle}</p>}
             {isButtonAvailable && renderButton()}
               {children}
