@@ -257,6 +257,7 @@ export interface CommonNodeAttr {
     approvalUsers?: string[]
     userApprovalConfig?: UserApprovalConfigType
     requestedUserId?: number
+    helmPackageName?: string
     isVirtualEnvironment?: boolean
 }
 
