@@ -1,48 +1,49 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { ServerErrors } from './ServerError'
 import { toast } from 'react-toastify'
 import * as Sentry from '@sentry/browser'
 import { toastAccessDenied } from './ToastBody'
 import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
+import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
 
 toast.configure({
-  autoClose: 3000,
-  hideProgressBar: true,
-  pauseOnHover: true,
-  pauseOnFocusLoss: true,
-  closeOnClick: false,
-  newestOnTop: true,
-  toastClassName: 'devtron-toast',
-  bodyClassName: 'devtron-toast__body',
+    autoClose: 3000,
+    hideProgressBar: true,
+    pauseOnHover: true,
+    pauseOnFocusLoss: true,
+    closeOnClick: false,
+    newestOnTop: true,
+    toastClassName: 'devtron-toast',
+    bodyClassName: 'devtron-toast__body',
 })
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
-  if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
-      serverError.errors.map(({ userMessage, internalMessage }) => {
-          if (
-              serverError.code === 403 &&
-              (userMessage === ERROR_EMPTY_SCREEN.UNAUTHORIZED || userMessage === ERROR_EMPTY_SCREEN.FORBIDDEN)
-          ) {
-              if (!hideAccessError) {
-                  toastAccessDenied()
-              }
-          } else {
-              toast.error(userMessage || internalMessage)
-          }
-      })
-  } else {
-      if (serverError.code !== 403 && serverError.code !== 408) {
-          Sentry.captureException(serverError)
-      }
+    if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
+        serverError.errors.map(({ userMessage, internalMessage }) => {
+            if (
+                serverError.code === 403 &&
+                (userMessage === ERROR_EMPTY_SCREEN.UNAUTHORIZED || userMessage === ERROR_EMPTY_SCREEN.FORBIDDEN)
+            ) {
+                if (!hideAccessError) {
+                    toastAccessDenied()
+                }
+            } else {
+                toast.error(userMessage || internalMessage)
+            }
+        })
+    } else {
+        if (serverError.code !== 403 && serverError.code !== 408) {
+            Sentry.captureException(serverError)
+        }
 
-      if (showToastOnUnknownError) {
-          if (serverError.message) {
-              toast.error(serverError.message)
-          } else {
-              toast.error('Some Error Occurred')
-          }
-      }
-  }
+        if (showToastOnUnknownError) {
+            if (serverError.message) {
+                toast.error(serverError.message)
+            } else {
+                toast.error('Some Error Occurred')
+            }
+        }
+    }
 }
 
 interface ConditionalWrapper<T> {
@@ -167,4 +168,166 @@ export function getLoginInfo() {
             return null
         }
     }
+}
+
+export function useForm(stateSchema, validationSchema = {}, callback) {
+    const [state, setState] = useState(stateSchema)
+    const [disable, setDisable] = useState(true)
+    const [isDirty, setIsDirty] = useState(false)
+
+    // Disable button in initial render.
+    useEffect(() => {
+        setDisable(true)
+    }, [])
+
+    // For every changed in our state this will be fired
+    // To be able to disable the button
+    useEffect(() => {
+        if (isDirty) {
+            setDisable(validateState(state))
+        }
+    }, [state, isDirty])
+
+    // Used to disable submit button if there's an error in state
+    // or the required field in state has no value.
+    // Wrapped in useCallback to cached the function to avoid intensive memory leaked
+    // in every re-render in component
+    const validateState = useCallback(
+        (state) => {
+            //check errors in all fields
+            const hasErrorInState = Object.keys(validationSchema).some((key) => {
+                const isInputFieldRequired = validationSchema[key].required
+                const stateValue = state[key].value // state value
+                const stateError = state[key].error // state error
+                return (isInputFieldRequired && !stateValue) || stateError
+            })
+            return hasErrorInState
+        },
+        [state, validationSchema],
+    )
+
+    function validateField(name, value): string | string[] {
+        if (validationSchema[name].required) {
+            if (!value) {
+                return 'This is a required field.'
+            }
+        }
+
+        function _validateSingleValidator(validator, value) {
+            if (value && !validator.regex.test(value)) {
+                return false
+            }
+            return true
+        }
+
+        // single validator
+        let _validator = validationSchema[name].validator
+        if (_validator && typeof _validator === 'object') {
+            if (!_validateSingleValidator(_validator, value)) {
+                return _validator.error
+            }
+        }
+
+        // multiple validators
+        let _validators = validationSchema[name].validators
+        if (_validators && typeof _validators === 'object' && Array.isArray(_validators)) {
+            let errors = []
+            _validators.forEach((_validator) => {
+                if (!_validateSingleValidator(_validator, value)) {
+                    errors.push(_validator.error)
+                }
+            })
+            if (errors.length > 0) {
+                return errors
+            }
+        }
+
+        return ''
+    }
+
+    const handleOnChange = useCallback(
+        (event) => {
+            setIsDirty(true)
+
+            const { name, value } = event.target
+            let error = validateField(name, value)
+            setState((prevState) => ({
+                ...prevState,
+                [name]: { value, error },
+            }))
+        },
+        [validationSchema],
+    )
+
+    const handleOnSubmit = (event) => {
+        event.preventDefault()
+        const newState = Object.keys(validationSchema).reduce((agg, curr) => {
+            agg[curr] = { ...state[curr], error: validateField(curr, state[curr].value) }
+            return agg
+        }, state)
+        if (!validateState(newState)) {
+            callback(state)
+        } else {
+            setState({ ...newState })
+        }
+    }
+    return { state, disable, handleOnChange, handleOnSubmit }
+}
+
+function handleError(error: any): any[] {
+    if (!error) {
+        return []
+    }
+
+    if (!Array.isArray(error)) {
+        return [error]
+    }
+
+    return error
+}
+
+export function CustomInput({
+    name,
+    value,
+    error,
+    onChange,
+    onBlur = (e) => {},
+    onFocus = (e) => {},
+    label,
+    type = 'text',
+    disabled = false,
+    autoComplete = 'off',
+    labelClassName = '',
+    placeholder = '',
+    tabIndex = 1,
+    dataTestid = '',
+}) {
+    return (
+        <div className="flex column left top">
+            <label className={`form__label ${labelClassName}`}>{label}</label>
+            <input
+                data-testid={dataTestid}
+                type={type}
+                name={name}
+                autoComplete="off"
+                className="form__input"
+                onChange={(e) => {
+                    e.persist()
+                    onChange(e)
+                }}
+                onBlur={onBlur}
+                onFocus={onFocus}
+                placeholder={placeholder}
+                value={value}
+                disabled={disabled}
+                tabIndex={tabIndex}
+            />
+            {handleError(error).map((err) => (
+                <div className="form__error">
+                    <FormError className="form__icon form__icon--error" />
+                    {err}
+                </div>
+            ))}
+        </div>
+    )
 }

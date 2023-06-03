@@ -58,7 +58,7 @@ export function TippyCustomized(props: TippyCustomizedProps) {
                         <img
                             className={`icon-dim-${iconSize || 20} mr-6 ${iconClass || ''}`}
                             src={iconPath}
-                            alt={heading}
+                            alt="Heading"
                             onError={onImageLoadError}
                         />
                     ) : (

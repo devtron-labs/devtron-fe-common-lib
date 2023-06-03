@@ -51,7 +51,7 @@ export interface CheckboxProps {
 export interface TippyCustomizedProps {
     theme: TippyTheme
     visible?: boolean
-    heading?: string
+    heading?: ReactNode | string
     infoTextHeading?: string
     placement: Placement
     className?: string
@@ -257,6 +257,8 @@ export interface CommonNodeAttr {
     approvalUsers?: string[]
     userApprovalConfig?: UserApprovalConfigType
     requestedUserId?: number
+    helmPackageName?: string
+    isVirtualEnvironment?: boolean
 }
 
 
