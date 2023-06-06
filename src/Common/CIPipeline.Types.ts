@@ -195,6 +195,7 @@ export interface CIBuildConfigType {
     gitMaterialId: number
     buildContextGitMaterialId: number
     id?: number
+    useRootBuildContext: boolean
 }
 
 export interface DockerConfigOverrideType {
