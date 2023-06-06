@@ -323,10 +323,10 @@ export interface CDMaterialResponseType {
     requestedUserId: number
 }
 
-export enum PluginRequiredStageKeys {
+export enum ApplyPolicyToStage {
   PRE_CI = 'PRE_CI',
   POST_CI = 'POST_CI',
-  PRE_OR_POST_CI = 'PRE_OR_POST_CI'
+  PRE_OR_POST_CI = 'PRE_OR_POST_CI',
 }
 
 export enum PluginRequiredStage {
