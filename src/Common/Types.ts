@@ -339,9 +339,11 @@ interface DefinitionSourceType {
     isDueToProductionEnvironment: boolean
     isDueToLinkedPipeline: boolean
     policyName: string
-    appName: string
-    clusterName: string
-    environmentName: string
+    appName?: string
+    clusterName?: string
+    environmentName?: string
+    branchName?: string
+    ciPipelineName?: string
 }
 export interface MandatoryPluginDetailType {
     id: number
