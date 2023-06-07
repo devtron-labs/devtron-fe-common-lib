@@ -335,7 +335,7 @@ export enum PluginRequiredStage {
     PRE_OR_POST_CI = 'PRE_OR_POST_CI',
 }
 
-interface DefinitionSourceType {
+export interface DefinitionSourceType {
     projectName: string
     isDueToProductionEnvironment: boolean
     isDueToLinkedPipeline: boolean
