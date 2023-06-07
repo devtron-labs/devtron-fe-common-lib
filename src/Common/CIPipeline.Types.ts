@@ -235,6 +235,7 @@ export interface FormType {
     postBuildStage?: BuildStageType
     isDockerConfigOverridden?: boolean
     dockerConfigOverride?: DockerConfigOverrideType
+    isOffendingMandatoryPlugin?: boolean
 }
 
 export interface ErrorObj {
@@ -265,12 +266,12 @@ export interface FormErrorObjectType {
 }
 
 export interface PluginDetailType {
-  id: number
-  name: string
-  type: string
-  description: string
-  icon: string
-  tags: string[]
-  inputVariables?: VariableType[]
-  outputVariables?: VariableType[]
+    id: number
+    name: string
+    type: string
+    description: string
+    icon: string
+    tags: string[]
+    inputVariables?: VariableType[]
+    outputVariables?: VariableType[]
 }

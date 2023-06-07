@@ -96,7 +96,7 @@ export function TippyCustomized(props: TippyCustomizedProps) {
                 </div>
                 {showHeadingInfo && (
                     <div
-                        className={`flex left bcv-1 fs-13 fw-4 lh-20 pt-8 pb-8 ${
+                        className={`flex left top bcv-1 fs-13 fw-4 lh-20 pt-8 pb-8 ${
                             isWhiteTheme ? 'pl-12 pr-12' : 'pl-20 pr-20'
                         }`}
                     >
