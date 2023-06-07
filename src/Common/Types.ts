@@ -54,6 +54,7 @@ export interface TippyCustomizedProps {
     visible?: boolean
     heading?: ReactNode | string
     headingInfo?: string
+    noHeadingBorder?: boolean
     infoTextHeading?: string
     placement: Placement
     className?: string
