@@ -348,7 +348,7 @@ export interface DefinitionSourceType {
     appName?: string
     clusterName?: string
     environmentName?: string
-    branchName?: string
+    branchNames?: string[]
     ciPipelineName?: string
 }
 export interface MandatoryPluginDetailType {
