@@ -5,6 +5,7 @@ import * as Sentry from '@sentry/browser'
 import { toastAccessDenied } from './ToastBody'
 import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
+import moment from 'moment';
 
 toast.configure({
     autoClose: 3000,
@@ -330,4 +331,18 @@ export function CustomInput({
             ))}
         </div>
     )
+}
+
+export function handleUTCTime(ts: string, isRelativeTime = false) {
+  let timestamp = "";
+  try {
+      if (ts && ts.length) {
+          let date = moment(ts);
+          if (isRelativeTime) timestamp = date.fromNow();
+          else timestamp = date.format("ddd DD MMM YYYY HH:mm:ss");
+      }
+  } catch (error) {
+      console.error("Error Parsing Date:", ts);
+  }
+  return timestamp;
 }

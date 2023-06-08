@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "0.0.9-beta-7",
+    "version": "0.0.9-beta-8",
     "description": "Supporting common component library",
     "main": "dist/index.js",
     "scripts": {
@@ -33,6 +33,7 @@
         "@svgr/rollup": "6.5.1",
         "@rollup/plugin-url": "8.0.1",
         "@rollup/plugin-commonjs": "24.0.1",
+        "moment": "^2.29.4",
         "typescript": "^4.9.4",
         "react-toastify": "^8.2.0",
         "@tippyjs/react": "^4.2.0",
