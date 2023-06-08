@@ -263,6 +263,11 @@ export interface CommonNodeAttr {
     showPluginWarning?: boolean
     helmPackageName?: string
     isVirtualEnvironment?: boolean
+    isCITriggerBlocked?: boolean
+    ciBlockState?: {
+        action: any,
+        metadataField: string
+    }
 }
 
 export interface VulnerabilityType {
