@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-cross.svg'
 import { ReactComponent as QuestionFilled } from '../Assets/Icon/ic-help.svg'
+import { ReactComponent as Question } from '../Assets/Icon/ic-help-outline.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
 import { not } from './Helper'
@@ -82,7 +83,7 @@ export function TippyCustomized(props: TippyCustomizedProps) {
                     {heading && <span className={`fs-14 fw-6 lh-20 ${showCloseButton ? 'mr-6' : ''}`}>{heading}</span>}
                     {headingInfo && (
                         <div className="icon-dim-20 cursor" onClick={toggleHeadingInfo}>
-                            <QuestionFilled className="icon-dim-20" />
+                            <Question className="icon-dim-20" />
                         </div>
                     )}
                     {showCloseButton && (
