@@ -318,4 +318,6 @@ export interface CDMaterialResponseType {
     materials: any[]
     userApprovalConfig: UserApprovalConfigType
     requestedUserId: number
+    tagsEditable: boolean
+    appReleaseTagNames: string[]
 }
