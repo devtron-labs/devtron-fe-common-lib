@@ -311,6 +311,8 @@ export interface CDMaterialType {
     runningOnParentCd?: boolean
     userApprovalMetadata?: UserApprovalMetadataType
     triggeredBy?: number
+    imageComment?: ImageComment
+    imageReleaseTags?: ReleaseTag[]
 }
 
 export interface CDMaterialResponseType {
@@ -321,3 +323,20 @@ export interface CDMaterialResponseType {
     tagsEditable: boolean
     appReleaseTagNames: string[]
 }
+
+export interface ReleaseTag {
+    id: number
+    tagName: string
+    appId: number
+    deleted: boolean
+    artifactId: number
+}
+
+export interface ImageComment {
+    id: number
+    comment: string
+    artifactId: number
+}
+
+
+
