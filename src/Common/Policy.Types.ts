@@ -1,4 +1,5 @@
 import { VariableType } from "./CIPipeline.Types"
+import { ResponseType } from "./Types"
 
 export enum ApplyPolicyToStage {
   PRE_CI = 'PRE_CI',
@@ -48,4 +49,14 @@ export enum ConsequenceAction {
 export interface ConsequenceType {
   action: ConsequenceAction
   metadataField: string
+}
+
+export interface BlockedStateData {
+  isOffendingMandatoryPlugin: boolean
+  isCITriggerBlocked: boolean
+  ciBlockState: ConsequenceType
+}
+
+export interface GetBlockedStateResponse extends ResponseType {
+    result?: BlockedStateData
 }
