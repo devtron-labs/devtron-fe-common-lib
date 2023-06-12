@@ -209,6 +209,33 @@ export interface UserApprovalMetadataType {
     requestedUserData: ApprovalUserDataType
 }
 
+
+export interface CDMaterialType {
+    index: number
+    id: string
+    materialInfo: MaterialInfo[]
+    tab: CDModalTabType
+    scanEnabled: boolean
+    scanned: boolean
+    vulnerabilitiesLoading: boolean
+    lastExecution: string //timestamp
+    vulnerabilities: VulnerabilityType[]
+    vulnerable: boolean
+    deployedTime: string
+    deployedBy?: string
+    wfrId?: number
+    buildTime: string
+    image: string
+    isSelected: boolean
+    showSourceInfo: boolean
+    latest: boolean
+    runningOnParentCd?: boolean
+    userApprovalMetadata?: UserApprovalMetadataType
+    triggeredBy?: number
+    imageComment?: ImageComment
+    imageReleaseTags?: ReleaseTag[]
+}
+
 export interface CommonNodeAttr {
     connectingCiPipelineId?: number
     parents: string | number[] | string[]
@@ -259,6 +286,8 @@ export interface CommonNodeAttr {
     requestedUserId?: number
     helmPackageName?: string
     isVirtualEnvironment?: boolean
+    appReleaseTagNames?: string[]
+    tagsEditable?: boolean
 }
 
 
@@ -287,32 +316,6 @@ export interface MaterialInfo {
     branch: string
     url?: string
     type?: string
-}
-
-export interface CDMaterialType {
-    index: number
-    id: string
-    materialInfo: MaterialInfo[]
-    tab: CDModalTabType
-    scanEnabled: boolean
-    scanned: boolean
-    vulnerabilitiesLoading: boolean
-    lastExecution: string //timestamp
-    vulnerabilities: VulnerabilityType[]
-    vulnerable: boolean
-    deployedTime: string
-    deployedBy?: string
-    wfrId?: number
-    buildTime: string
-    image: string
-    isSelected: boolean
-    showSourceInfo: boolean
-    latest: boolean
-    runningOnParentCd?: boolean
-    userApprovalMetadata?: UserApprovalMetadataType
-    triggeredBy?: number
-    imageComment?: ImageComment
-    imageReleaseTags?: ReleaseTag[]
 }
 
 export interface CDMaterialResponseType {
