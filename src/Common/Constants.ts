@@ -58,3 +58,9 @@ export const TriggerTypeMap = {
     automatic: 'Auto',
     manual: 'Manual',
 }
+
+export const BuildStageVariable = {
+  PreBuild: 'preBuildStage',
+  Build: 'buildStage',
+  PostBuild: 'postBuildStage',
+}

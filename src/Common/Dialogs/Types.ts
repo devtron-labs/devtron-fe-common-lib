@@ -9,6 +9,7 @@ export interface DeleteDialogProps {
     deletePostfix?: string
     apiCallInProgress?: boolean
     dataTestId?: string
+    buttonPrimaryText?: string
 }
 
 export interface ForceDeleteDialogType {

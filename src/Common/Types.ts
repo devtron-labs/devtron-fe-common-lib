@@ -52,6 +52,8 @@ export interface TippyCustomizedProps {
     theme: TippyTheme
     visible?: boolean
     heading?: ReactNode | string
+    headingInfo?: ReactNode | string
+    noHeadingBorder?: boolean
     infoTextHeading?: string
     placement: Placement
     className?: string
@@ -186,7 +188,7 @@ export enum DeploymentNodeType {
     PRECD = 'PRECD',
     CD = 'CD',
     POSTCD = 'POSTCD',
-    APPROVAL = 'APPROVAL'
+    APPROVAL = 'APPROVAL',
 }
 
 export interface UserApprovalConfigType {
@@ -257,23 +259,28 @@ export interface CommonNodeAttr {
     approvalUsers?: string[]
     userApprovalConfig?: UserApprovalConfigType
     requestedUserId?: number
+    showPluginWarning?: boolean
     helmPackageName?: string
     isVirtualEnvironment?: boolean
+    isCITriggerBlocked?: boolean
+    ciBlockState?: {
+        action: any,
+        metadataField: string
+    }
 }
 
-
 export interface VulnerabilityType {
-    name: string;
-    severity: "CRITICAL" | "MODERATE" | "LOW";
-    package: string;
-    version: string;
-    fixedVersion: string;
-    policy: string;
-    url?: string;
+    name: string
+    severity: 'CRITICAL' | 'MODERATE' | 'LOW'
+    package: string
+    version: string
+    fixedVersion: string
+    policy: string
+    url?: string
 }
 
 export interface ScanVulnerabilitiesTableProps {
-    vulnerabilities: VulnerabilityType[];
+    vulnerabilities: VulnerabilityType[]
 }
 
 export interface MaterialInfo {
