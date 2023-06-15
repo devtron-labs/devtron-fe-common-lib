@@ -236,6 +236,7 @@ export interface CDMaterialType {
     triggeredBy?: number
     imageComment?: ImageComment
     imageReleaseTags?: ReleaseTag[]
+    artifactStatus?: string
 }
 
 export interface CommonNodeAttr {
