@@ -22,7 +22,9 @@ export const ImageTagsContainer = ({
     imageComment,
     imageReleaseTags,
     appReleaseTagNames,
+    setAppReleaseTagNames,
     tagsEditable,
+    setTagsEditable,
     toggleCardMode,
 }: ImageTaggingContainerType) => {
     const [initialTags, setInitialTags] = useState<ReleaseTag[]>(imageReleaseTags ? imageReleaseTags : [])
@@ -37,6 +39,7 @@ export const ImageTagsContainer = ({
     const [softDeleteTags, setSoftDeleteTags] = useState<ReleaseTag[]>([])
     const [hardDeleteTags, setHardDeleteTags] = useState<ReleaseTag[]>([])
     const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false)
+    const [descriptionValidationMessage, setDescriptionValidationMessage] = useState<string>('')
 
     useEffect(() => {
         initialise()
@@ -44,7 +47,11 @@ export const ImageTagsContainer = ({
 
     useEffect(() => {
         reInitState()
-    }, [imageReleaseTags, imageComment, appReleaseTagNames, tagsEditable])
+    }, [imageReleaseTags,imageComment,tagsEditable])
+
+    useEffect(() => {
+        setExistingTags(appReleaseTagNames ? appReleaseTagNames : [])
+    },[appReleaseTagNames])
 
     async function initialise() {
         try {
@@ -58,11 +65,12 @@ export const ImageTagsContainer = ({
     }
 
     const reInitState = () => {
-        setInitialTags(imageReleaseTags ? imageReleaseTags : [])
-        setInitialDescription(imageComment ? imageComment.comment : '')
-        setExistingTags(appReleaseTagNames ? appReleaseTagNames : [])
-        setNewDescription(imageComment ? imageComment.comment : '')
-        setDisplayedTags(imageReleaseTags ? imageReleaseTags : [])
+        if (isEditing === false) {
+            setInitialTags(imageReleaseTags ? imageReleaseTags : [])
+            setInitialDescription(imageComment ? imageComment.comment : '')
+            setNewDescription(imageComment ? imageComment.comment : '')
+            setDisplayedTags(imageReleaseTags ? imageReleaseTags : [])
+        }
     }
 
     const CreatableComponents = useMemo(
@@ -82,7 +90,9 @@ export const ImageTagsContainer = ({
     }
 
     const handleDescriptionChange = (e) => {
-        setNewDescription(e.target.value)
+        const description = e.target.value
+        description?.length > 500 ? setDescriptionValidationMessage('comment length cannot exceed 500 characters') : setDescriptionValidationMessage('')
+        setNewDescription(description)
     }
 
     const handleCancel = () => {
@@ -97,15 +107,19 @@ export const ImageTagsContainer = ({
     }
 
     const handleTagCreate = (newValue) => {
-        const lowercaseValue = newValue.toLowerCase()
+        const lowercaseValue = newValue.toLowerCase().trim()
+        if(lowercaseValue.length == 0 || lowercaseValue.length >= 128 || lowercaseValue[0] == '.' || lowercaseValue[0] == '-') {
+            setTagErrorMessage("tag name cannot be empty or exceed 128 characters or cannot start with . or -")
+            return
+        }
         setTagErrorMessage('')
         const isTagExistsInExistingTags = existingTags.includes(lowercaseValue)
         let isTagExistsInDisplayedTags = false
         for (let i = 0; i < displayedTags?.length; i++) {
             if (displayedTags[i].tagName.toLowerCase() === lowercaseValue) isTagExistsInDisplayedTags = true
         }
-        if (isTagExistsInExistingTags || isTagExistsInDisplayedTags) {
-            setTagErrorMessage('This tag is already applied on another image in this application')
+        if (isTagExistsInExistingTags || isTagExistsInDisplayedTags || lowercaseValue === 'latest') {
+            setTagErrorMessage(`This tag ${lowercaseValue} is already applied on same/another image in this application`)
             return
         }
         const newTag: ReleaseTag = {
@@ -167,30 +181,38 @@ export const ImageTagsContainer = ({
             hardDeleteTags: hardDeleteTags,
         }
 
-        try {
-            // set loading state true
-            let response = await setImageTags(payload, ciPipelineId, artifactId)
-            const tags = response.result?.imageReleaseTags?.map((tag) => ({
-                id: tag.id,
-                tagName: tag.tagName,
-                deleted: tag.deleted,
-                appId: 0,
-                artifactId: 0,
-            }))
-            setInitialTags(tags)
-            setInitialDescription(response.result?.imageComment?.comment)
-            setDisplayedTags(tags)
-            setNewDescription(response.result?.imageComment?.comment)
-            setCreateTags([])
-            setSoftDeleteTags([])
-            setHardDeleteTags([])
-            handleEditClick()
-            setShowTagsWarning(false)
-            setTagErrorMessage('')
-        } catch (err) {
-            showError(err)
-        }
+        // set loading state true
+        setImageTags(payload, ciPipelineId, artifactId)
+            .then((res) => {
+                const tags = res.result?.imageReleaseTags?.map((tag) => ({
+                    id: tag.id,
+                    tagName: tag.tagName,
+                    deleted: tag.deleted,
+                    appId: 0,
+                    artifactId: 0,
+                }))
+                if (setAppReleaseTagNames) {
+                    setAppReleaseTagNames(res.result?.appReleaseTags)
+                }
+                if (setTagsEditable) {
+                    setTagsEditable(res.result?.tagsEditable)
+                }
+                setInitialTags(tags)
+                setInitialDescription(res.result?.imageComment?.comment)
+                setDisplayedTags(tags)
+                setNewDescription(res.result?.imageComment?.comment)
+                setCreateTags([])
+                setSoftDeleteTags([])
+                setHardDeleteTags([])
+                handleEditClick()
+                setShowTagsWarning(false)
+                setTagErrorMessage('')
+            })
+            .catch((err) => {
+                showError(err)
+            })
     }
+
 
     const renderInfoCard = (): JSX.Element => {
         return (
@@ -297,7 +319,7 @@ export const ImageTagsContainer = ({
                     )}
                     <div className="cn-7 mt-12">Comment</div>
                     <div
-                        className="flex left flex-wrap dc__gap-8 w-100 mt-6 mb-12"
+                        className="flex left flex-wrap dc__gap-8 w-100 mt-6"
                         data-testid="add-image-comment-text-area"
                     >
                         <textarea
@@ -307,7 +329,12 @@ export const ImageTagsContainer = ({
                             style={{ height: '90px !important' }}
                         />
                     </div>
-                    <div className="w-100 flex right">
+                    { (descriptionValidationMessage !== '') && (<div className="flex left">
+                            <Error className="form__icon form__icon--error" />
+                            <div className="form__error">{descriptionValidationMessage}</div>
+                        </div>
+                    )}
+                    <div className="w-100 flex right mt-12">
                         <button
                             className="cta flex cancel h-32 lh-32-imp"
                             type="button"
@@ -437,7 +464,8 @@ export const ImageTagButton = ({
 }
 
 const AddImageButton = ({ handleEditClick }) => {
-    const handleClick = () => {
+    const handleClick = (e) => {
+        stopPropagation(e)
         handleEditClick()
     }
 
