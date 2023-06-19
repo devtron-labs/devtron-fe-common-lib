@@ -357,6 +357,8 @@ export interface ImageTaggingContainerType {
     imageReleaseTags?: ReleaseTag[]
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
+    setAppReleaseTagNames?: (appReleaseTags: string[]) => void
+    setTagsEditable?: (tagsEditable: boolean) => void
     toggleCardMode?: (id: number) => void
 }
 
