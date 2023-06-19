@@ -1,7 +1,7 @@
-import { get } from './Api';
+import {get, post} from './Api';
 import { ROUTES } from './Constants'
 import { sortCallback } from './Helper';
-import { TeamList } from './Types';
+import { TeamList ,ResponseType } from './Types';
 
 export const getTeamListMin = (): Promise<TeamList> => {
   // ignore active field
@@ -21,3 +21,18 @@ export const getTeamListMin = (): Promise<TeamList> => {
       };
   });
 };
+
+interface UserRole extends ResponseType {
+    result?: {
+        roles: string[]
+        superAdmin: boolean
+    }
+}
+
+export function getUserRole(appName?: string): Promise<UserRole> {
+    return get(`${ROUTES.USER_CHECK_ROLE}${appName ? `?appName=${appName}` : ''}`)
+}
+
+export function setImageTags(request, pipelineId: number, artifactId: number){
+    return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`,request )
+}

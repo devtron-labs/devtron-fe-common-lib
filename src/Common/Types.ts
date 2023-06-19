@@ -350,4 +350,25 @@ export interface ImageComment {
 }
 
 
+export interface ImageTaggingContainerType {
+    ciPipelineId?: number
+    artifactId?: number
+    imageComment?: ImageComment
+    imageReleaseTags?: ReleaseTag[]
+    appReleaseTagNames?: string[]
+    tagsEditable?: boolean
+    toggleCardMode?: (id: number) => void
+}
+
+export interface ImageButtonType {
+    text: string
+    isSoftDeleted: boolean
+    isEditing: boolean
+    onSoftDeleteClick?: any
+    onHardDeleteClick?: any
+    tagId: number
+    softDeleteTags: any
+    isSuperAdmin: any
+}
+
 
