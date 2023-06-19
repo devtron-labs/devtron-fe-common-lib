@@ -5,7 +5,7 @@ import { ReactComponent as Close } from '../Assets/Icon/ic-cross.svg'
 import { ReactComponent as QuestionFilled } from '../Assets/Icon/ic-help.svg'
 import { ReactComponent as Question } from '../Assets/Icon/ic-help-outline.svg'
 
-import { ReactComponent as EditIcon } from '../Assets/icon/ic-pencil.svg'
+import { ReactComponent as EditIcon } from '../Assets/Icon/ic-pencil.svg'
 import { ReactComponent as Redo } from '../Assets/Icon/ic-arrow-counter-clockwise.svg'
 import { ReactComponent as Minus } from '../Assets/Icon/ic-minus.svg'
 
