@@ -15,6 +15,7 @@ import { ImageButtonType, ImageTaggingContainerType, ReleaseTag, TippyTheme } fr
 import { showError, stopPropagation } from './Helper'
 import { TippyCustomized } from './TippyCustomized'
 import { setImageTags, getUserRole } from './Common.service'
+import Tippy from '@tippyjs/react'
 
 export const ImageTagsContainer = ({
     ciPipelineId,
@@ -47,11 +48,11 @@ export const ImageTagsContainer = ({
 
     useEffect(() => {
         reInitState()
-    }, [imageReleaseTags,imageComment,tagsEditable])
+    }, [imageReleaseTags, imageComment, tagsEditable])
 
     useEffect(() => {
         setExistingTags(appReleaseTagNames ? appReleaseTagNames : [])
-    },[appReleaseTagNames])
+    }, [appReleaseTagNames])
 
     async function initialise() {
         try {
@@ -91,7 +92,9 @@ export const ImageTagsContainer = ({
 
     const handleDescriptionChange = (e) => {
         const description = e.target.value
-        description?.length > 500 ? setDescriptionValidationMessage('comment length cannot exceed 500 characters') : setDescriptionValidationMessage('')
+        description?.length > 500
+            ? setDescriptionValidationMessage('comment length cannot exceed 500 characters')
+            : setDescriptionValidationMessage('')
         setNewDescription(description)
     }
 
@@ -108,8 +111,13 @@ export const ImageTagsContainer = ({
 
     const handleTagCreate = (newValue) => {
         const lowercaseValue = newValue.toLowerCase().trim()
-        if(lowercaseValue.length == 0 || lowercaseValue.length >= 128 || lowercaseValue[0] == '.' || lowercaseValue[0] == '-') {
-            setTagErrorMessage("tag name cannot be empty or exceed 128 characters or cannot start with . or -")
+        if (
+            lowercaseValue.length == 0 ||
+            lowercaseValue.length >= 128 ||
+            lowercaseValue[0] == '.' ||
+            lowercaseValue[0] == '-'
+        ) {
+            setTagErrorMessage('tag name cannot be empty or exceed 128 characters or cannot start with . or -')
             return
         }
         setTagErrorMessage('')
@@ -119,7 +127,9 @@ export const ImageTagsContainer = ({
             if (displayedTags[i].tagName.toLowerCase() === lowercaseValue) isTagExistsInDisplayedTags = true
         }
         if (isTagExistsInExistingTags || isTagExistsInDisplayedTags || lowercaseValue === 'latest') {
-            setTagErrorMessage(`This tag ${lowercaseValue} is already applied on same/another image in this application`)
+            setTagErrorMessage(
+                'This tag is already being used in this application',
+            )
             return
         }
         const newTag: ReleaseTag = {
@@ -213,16 +223,14 @@ export const ImageTagsContainer = ({
             })
     }
 
-
     const renderInfoCard = (): JSX.Element => {
         return (
             <TippyCustomized
                 theme={TippyTheme.white}
-                className="w-300 h-250 fcv-5 dc__overflow-scroll"
+                className="w-300 fcv-5"
                 placement="right"
                 Icon={QuestionFilled}
                 heading="Release tags"
-                infoText="Release tags allow you to tag container images with readable and relatable tags eg. v1.0."
                 showCloseButton={true}
                 trigger="click"
                 interactive={true}
@@ -238,8 +246,9 @@ export const ImageTagsContainer = ({
 
     const getBuildContextAdditionalContent = () => {
         return (
-            <div className="p-12 fs-13">
-                <ul>
+            <div className="h-250 fs-13 dc__overflow-scroll p-12">
+                <div>Release tags allow you to tag container images with readable and relatable tags eg. v1.0.</div>
+                <ul className='pl-20 mt-8'>
                     <li>
                         A release tag can only be added if a workflow has CD pipelines deploying to Production
                         environments.
@@ -318,10 +327,7 @@ export const ImageTagsContainer = ({
                         </div>
                     )}
                     <div className="cn-7 mt-12">Comment</div>
-                    <div
-                        className="flex left flex-wrap dc__gap-8 w-100 mt-6"
-                        data-testid="add-image-comment-text-area"
-                    >
+                    <div  className="flex left flex-wrap dc__gap-8 w-100 mt-6 mb-12" data-testid="add-image-comment-text-area">
                         <textarea
                             value={newDescription}
                             onChange={handleDescriptionChange}
@@ -329,7 +335,8 @@ export const ImageTagsContainer = ({
                             style={{ height: '90px !important' }}
                         />
                     </div>
-                    { (descriptionValidationMessage !== '') && (<div className="flex left">
+                    {descriptionValidationMessage !== '' && (
+                        <div className="flex left">
                             <Error className="form__icon form__icon--error" />
                             <div className="form__error">{descriptionValidationMessage}</div>
                         </div>
@@ -444,19 +451,28 @@ export const ImageTagButton = ({
         >
             <div className="flex pt-2 pl-8 pr-8 pb-2">
                 {isHovered && isEditing && (isInSoftDeleteTags || (tagId !== 0 && !isSoftDeleted)) && (
-                    <IconComponent
-                        className={`icon-dim-12 mr-4 cursor ${isSoftDeleted ? 'scn-6' : 'fcn-6'}`}
-                        data-testid={`${text}-tag-soft-delete`}
-                        onClick={onSoftDeleteClick}
-                    />
+                    <Tippy
+                        className="default-tt"
+                        arrow={true}
+                        placement="top"
+                        content={isInSoftDeleteTags ? 'Restore tag' : 'Soft delete tag'}
+                    >
+                        <IconComponent
+                            className={`icon-dim-12 mr-4 cursor ${isSoftDeleted ? 'scn-6' : 'fcn-6'}`}
+                            data-testid={`${text}-tag-soft-delete`}
+                            onClick={onSoftDeleteClick}
+                        />
+                    </Tippy>
                 )}
                 {text}
                 {isHovered && isEditing && canTagBeHardDelete && (
-                    <Close
-                        className="icon-dim-12 ml-4 fcn-6 cn-5 cursor"
-                        data-testid={`${text}-tag-hard-delete`}
-                        onClick={onHardDeleteClick}
-                    />
+                    <Tippy className="default-tt" arrow={true} placement="top" content="Remove tag">
+                        <Close
+                            className="icon-dim-12 ml-4 fcn-6 cn-5 cursor"
+                            data-testid={`${text}-tag-hard-delete`}
+                            onClick={onHardDeleteClick}
+                        />
+                    </Tippy>
                 )}
             </div>
         </div>
