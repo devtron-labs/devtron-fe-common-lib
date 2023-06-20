@@ -500,7 +500,7 @@ export const ImageTagButton = ({
 
     return (
         <div
-            className={`br-4 en-2 bw-1 dc__w-fit-content dc__word-wrap-anywhere mr-8 bcn-0 flex h-24 ${tabColor}`}
+            className={`br-4 en-2 bw-1 dc__w-fit-content dc__word-wrap-anywhere mr-8 bcn-0 flex mb-4 ${tabColor}`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
