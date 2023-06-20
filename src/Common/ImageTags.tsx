@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { ReactComponent as Add } from '../Assets/Icon/ic-add.svg'
-import Creatable from 'react-select/creatable'
 import { ReactComponent as Close } from '../Assets/Icon/ic-cross.svg'
 import { ReactComponent as QuestionFilled } from '../Assets/Icon/ic-help.svg'
 import { ReactComponent as Question } from '../Assets/Icon/ic-help-outline.svg'
