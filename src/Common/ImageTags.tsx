@@ -11,11 +11,13 @@ import { ReactComponent as Minus } from '../Assets/Icon/ic-minus.svg'
 
 import { ReactComponent as Info } from '../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as Error } from '../Assets/Icon/ic-warning.svg'
+import { ReactComponent as Warning } from '../Assets/icons/ic-error-exclamation.svg'
 import { ImageButtonType, ImageTaggingContainerType, ReleaseTag, TippyTheme } from './Types'
 import { showError, stopPropagation } from './Helper'
 import { TippyCustomized } from './TippyCustomized'
 import { setImageTags, getUserRole } from './Common.service'
 import Tippy from '@tippyjs/react'
+import { ServerErrors } from './ServerError'
 
 export const ImageTagsContainer = ({
     ciPipelineId,
@@ -127,9 +129,7 @@ export const ImageTagsContainer = ({
             if (displayedTags[i].tagName.toLowerCase() === lowercaseValue) isTagExistsInDisplayedTags = true
         }
         if (isTagExistsInExistingTags || isTagExistsInDisplayedTags || lowercaseValue === 'latest') {
-            setTagErrorMessage(
-                'This tag is already being used in this application',
-            )
+            setTagErrorMessage('This tag is already being used in this application')
             return
         }
         const newTag: ReleaseTag = {
@@ -138,6 +138,7 @@ export const ImageTagsContainer = ({
             appId: 0,
             deleted: false,
             artifactId: 0,
+            duplicateTag: false,
         }
         setCreateTags([...createTags, newTag])
         setDisplayedTags([...displayedTags, newTag])
@@ -177,6 +178,31 @@ export const ImageTagsContainer = ({
             const updatedHardDeleteTags = [...hardDeleteTags, deletedTag]
             setHardDeleteTags(updatedHardDeleteTags)
         }
+    }
+
+    const errorStateHandling = (err) => {
+        err.forEach(({ userMessage }) => {
+            const tagList = createTags.map((tags) => {
+                if (userMessage?.appReleaseTags?.includes(tags.tagName)) {
+                    return {
+                        ...tags,
+                        duplicateTag: true,
+                    }
+                }
+                return tags
+            })
+            setCreateTags(tagList)
+
+            const displayList = displayedTags.map((obj) => {
+                const matchingTag = tagList.find((tag) => tag.tagName === obj.tagName)
+                if (matchingTag) {
+                    return { ...obj, duplicateTag: matchingTag.duplicateTag }
+                }
+                return obj
+            })
+
+            setDisplayedTags(displayList)
+        })
     }
 
     const handleSave = async () => {
@@ -219,7 +245,22 @@ export const ImageTagsContainer = ({
                 setTagErrorMessage('')
             })
             .catch((err) => {
-                showError(err)
+                // Fix toast message
+                if (err.errors?.[0]?.userMessage?.appReleaseTags?.length) {
+                    const customError: ServerErrors = {
+                        ...err,
+                        errors: [
+                            {
+                                ...err.errors?.[0],
+                                userMessage: err.errors?.[0]?.internalMessage,
+                            },
+                        ],
+                    }
+                    showError(customError)
+                    errorStateHandling(err.errors)
+                } else {
+                    showError(err)
+                }
             })
     }
 
@@ -248,7 +289,7 @@ export const ImageTagsContainer = ({
         return (
             <div className="h-250 fs-13 dc__overflow-scroll p-12">
                 <div>Release tags allow you to tag container images with readable and relatable tags eg. v1.0.</div>
-                <ul className='pl-20 mt-8'>
+                <ul className="pl-20 mt-8">
                     <li>
                         A release tag can only be added if a workflow has CD pipelines deploying to Production
                         environments.
@@ -317,6 +358,7 @@ export const ImageTagsContainer = ({
                                 tagId={tag.id}
                                 softDeleteTags={softDeleteTags}
                                 isSuperAdmin={isSuperAdmin}
+                                dulplicateTag={tag?.duplicateTag}
                             />
                         ))}
                     </div>
@@ -327,7 +369,10 @@ export const ImageTagsContainer = ({
                         </div>
                     )}
                     <div className="cn-7 mt-12">Comment</div>
-                    <div  className="flex left flex-wrap dc__gap-8 w-100 mt-6 mb-12" data-testid="add-image-comment-text-area">
+                    <div
+                        className="flex left flex-wrap dc__gap-8 w-100 mt-6 mb-12"
+                        data-testid="add-image-comment-text-area"
+                    >
                         <textarea
                             value={newDescription}
                             onChange={handleDescriptionChange}
@@ -391,6 +436,7 @@ export const ImageTagsContainer = ({
                                         tagId={tag.id}
                                         softDeleteTags={softDeleteTags}
                                         isSuperAdmin={isSuperAdmin}
+                                        dulplicateTag={tag?.deleted}
                                     />
                                 ))}
                             </div>
@@ -423,6 +469,7 @@ export const ImageTagButton = ({
     tagId,
     softDeleteTags,
     isSuperAdmin,
+    dulplicateTag,
 }: ImageButtonType) => {
     const IconComponent = isSoftDeleted ? Redo : Minus
 
@@ -441,28 +488,42 @@ export const ImageTagButton = ({
     const isInSoftDeleteTags = isSoftDeleted && softDeleteTags.some((tag) => tag.tagName === text)
     const canTagBeHardDelete = tagId === 0 || isSuperAdmin
 
+    const tabColor = () => {
+        if (dulplicateTag) {
+            return 'cr-5 bcr-1 er-2'
+        } else if (isSoftDeleted) {
+            return 'cy-7 bcy-1 dc__strike-through ey-2'
+        } else {
+            return 'cn-9'
+        }
+    }
+
     return (
         <div
-            className={`br-4 en-2 bw-1 dc__w-fit-content dc__word-wrap-anywhere mr-8 bcn-0 flex h-24 ${
-                isSoftDeleted ? 'cy-7 bcy-1 dc__strike-through ey-2' : ''
-            }`}
+            className={`br-4 en-2 bw-1 dc__w-fit-content dc__word-wrap-anywhere mr-8 bcn-0 flex h-24 ${tabColor}`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
             <div className="flex pt-2 pl-8 pr-8 pb-2">
-                {isHovered && isEditing && (isInSoftDeleteTags || (tagId !== 0 && !isSoftDeleted)) && (
-                    <Tippy
-                        className="default-tt"
-                        arrow={true}
-                        placement="top"
-                        content={isInSoftDeleteTags ? 'Restore tag' : 'Soft delete tag'}
-                    >
-                        <IconComponent
-                            className={`icon-dim-12 mr-4 cursor ${isSoftDeleted ? 'scn-6' : 'fcn-6'}`}
-                            data-testid={`${text}-tag-soft-delete`}
-                            onClick={onSoftDeleteClick}
-                        />
-                    </Tippy>
+                {dulplicateTag ? (
+                    <Warning className="icon-dim-12 mr-4" />
+                ) : (
+                    isHovered &&
+                    isEditing &&
+                    (isInSoftDeleteTags || (tagId !== 0 && !isSoftDeleted)) && (
+                        <Tippy
+                            className="default-tt"
+                            arrow={true}
+                            placement="top"
+                            content={isInSoftDeleteTags ? 'Restore tag' : 'Soft delete tag'}
+                        >
+                            <IconComponent
+                                className={`icon-dim-12 mr-4 cursor ${isSoftDeleted ? 'scn-6' : 'fcn-6'}`}
+                                data-testid={`${text}-tag-soft-delete`}
+                                onClick={onSoftDeleteClick}
+                            />
+                        </Tippy>
+                    )
                 )}
                 {text}
                 {isHovered && isEditing && canTagBeHardDelete && (

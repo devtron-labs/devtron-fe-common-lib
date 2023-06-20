@@ -341,6 +341,7 @@ export interface ReleaseTag {
     appId: number
     deleted: boolean
     artifactId: number
+    duplicateTag: boolean
 }
 
 export interface ImageComment {
@@ -371,6 +372,7 @@ export interface ImageButtonType {
     tagId: number
     softDeleteTags: any
     isSuperAdmin: any
+    dulplicateTag?: boolean
 }
 
 
