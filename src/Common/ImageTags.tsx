@@ -344,7 +344,7 @@ export const ImageTagsContainer = ({
                         <span>Release tags (eg. v1.0)</span>
                         <div className="flex row ml-0">{renderInfoCard()}</div>
                     </div>
-                    <div className="mt-6" data-testid="add-tag-text-area">
+                    <div className="mt-6 dc__position-rel-imp" data-testid="add-tag-text-area">
                         <input
                             className="form__input"
                             value={textInput}
@@ -356,7 +356,7 @@ export const ImageTagsContainer = ({
                         {textInput.length > 0 && (
                             <div
                                 onClick={enterTagCreate}
-                                className="dc__position-abs flex cursor pt-2 pb-2 pr-4 pl-4 br-2 cn-7 dc__border dc__border-bottom-2"
+                                className="dc__position-abs bcn-0 flex cursor pt-2 pb-2 pr-4 pl-4 br-2 cn-7 dc__border dc__border-bottom-2"
                                 style={{
                                     top: '50%',
                                     fontFamily: 'monospace',
@@ -394,7 +394,7 @@ export const ImageTagsContainer = ({
                                 tagId={tag.id}
                                 softDeleteTags={softDeleteTags}
                                 isSuperAdmin={isSuperAdmin}
-                                dulplicateTag={tag?.duplicateTag}
+                                duplicateTag={tag?.duplicateTag}
                             />
                         ))}
                     </div>
@@ -472,7 +472,7 @@ export const ImageTagsContainer = ({
                                         tagId={tag.id}
                                         softDeleteTags={softDeleteTags}
                                         isSuperAdmin={isSuperAdmin}
-                                        dulplicateTag={tag?.deleted}
+                                        duplicateTag={tag?.duplicateTag}
                                     />
                                 ))}
                             </div>
@@ -505,7 +505,7 @@ export const ImageTagButton = ({
     tagId,
     softDeleteTags,
     isSuperAdmin,
-    dulplicateTag,
+    duplicateTag,
 }: ImageButtonType) => {
     const IconComponent = isSoftDeleted ? Redo : Minus
 
@@ -525,7 +525,7 @@ export const ImageTagButton = ({
     const canTagBeHardDelete = tagId === 0 || isSuperAdmin
 
     const tabColor = () => {
-        if (dulplicateTag) {
+        if (duplicateTag) {
             return 'cr-5 bcr-1 er-2'
         } else if (isSoftDeleted) {
             return 'cy-7 bcy-1 dc__strike-through ey-2'
@@ -536,12 +536,12 @@ export const ImageTagButton = ({
 
     return (
         <div
-            className={`br-4 en-2 bw-1 dc__w-fit-content dc__word-wrap-anywhere mr-8 bcn-0 flex mb-4 ${tabColor}`}
+            className={`br-4 en-2 bw-1 dc__w-fit-content dc__word-wrap-anywhere mr-8 bcn-0 flex mb-4 ${tabColor()}`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
             <div className="flex pt-2 pl-8 pr-8 pb-2">
-                {dulplicateTag ? (
+                {duplicateTag ? (
                     <Warning className="icon-dim-12 mr-4" />
                 ) : (
                     isHovered &&

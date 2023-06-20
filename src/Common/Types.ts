@@ -372,7 +372,7 @@ export interface ImageButtonType {
     tagId: number
     softDeleteTags: any
     isSuperAdmin: any
-    dulplicateTag?: boolean
+    duplicateTag?: boolean
 }
 
 
