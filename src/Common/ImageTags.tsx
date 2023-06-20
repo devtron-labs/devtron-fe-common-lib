@@ -12,6 +12,7 @@ import { ReactComponent as Minus } from '../Assets/Icon/ic-minus.svg'
 import { ReactComponent as Info } from '../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as Error } from '../Assets/Icon/ic-warning.svg'
 import { ReactComponent as Warning } from '../Assets/icons/ic-error-exclamation.svg'
+import { ReactComponent as Enter } from '../Assets/icons/ic-enter.svg'
 import { ImageButtonType, ImageTaggingContainerType, ReleaseTag, TippyTheme } from './Types'
 import { showError, stopPropagation } from './Helper'
 import { TippyCustomized } from './TippyCustomized'
@@ -43,6 +44,7 @@ export const ImageTagsContainer = ({
     const [hardDeleteTags, setHardDeleteTags] = useState<ReleaseTag[]>([])
     const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false)
     const [descriptionValidationMessage, setDescriptionValidationMessage] = useState<string>('')
+    const [textInput, setTextInput] = useState<string>('')
 
     useEffect(() => {
         initialise()
@@ -143,6 +145,7 @@ export const ImageTagsContainer = ({
         setCreateTags([...createTags, newTag])
         setDisplayedTags([...displayedTags, newTag])
         setShowTagsWarning(true)
+        setTextInput('')
     }
 
     const handleTagSoftDelete = (index) => {
@@ -317,6 +320,22 @@ export const ImageTagsContainer = ({
         )
     }
 
+    const handleKeydown = (event) => {
+        if (event.key === 'Enter' && event.target.value.trim()) {
+            handleTagCreate(event.target.value.trim())
+        }
+    }
+
+    const setInputValue = (e) => {
+        setTextInput(e.target.value)
+    }
+
+    const enterTagCreate = () => {
+        if (textInput.trim()) {
+            handleTagCreate(textInput.trim())
+        }
+    }
+
     return (
         <div className="mt-8">
             {isEditing && tagsEditable ? (
@@ -326,12 +345,29 @@ export const ImageTagsContainer = ({
                         <div className="flex row ml-0">{renderInfoCard()}</div>
                     </div>
                     <div className="mt-6" data-testid="add-tag-text-area">
-                        <Creatable
+                        <input
+                            className="form__input"
+                            value={textInput}
+                            onChange={setInputValue}
                             placeholder="Type a tag and press enter"
-                            onCreateOption={handleTagCreate}
+                            onKeyDown={handleKeydown}
                             ref={creatableRef}
-                            components={CreatableComponents}
                         />
+                        {textInput.length > 0 && (
+                            <div
+                                onClick={enterTagCreate}
+                                className="dc__position-abs flex cursor pt-2 pb-2 pr-4 pl-4 br-2 cn-7 dc__border dc__border-bottom-2"
+                                style={{
+                                    top: '50%',
+                                    fontFamily: 'monospace',
+                                    right: '8px',
+                                    transform: 'translateY(-50%)',
+                                }}
+                            >
+                                <Enter className="icon-dim-16 mr-4" />
+                                Enter
+                            </div>
+                        )}
                     </div>
 
                     {tagErrorMessage && (
