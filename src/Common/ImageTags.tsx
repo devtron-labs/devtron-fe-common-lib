@@ -59,11 +59,11 @@ export const ImageTagsContainer = ({
     }, [appReleaseTagNames])
 
     useEffect(() => {
-        if(saveData){
+        if (saveData) {
             handleSave()
             setSaveData(false)
         }
-    },[saveData])
+    }, [saveData])
 
     async function initialise() {
         try {
@@ -207,8 +207,8 @@ export const ImageTagsContainer = ({
     }
 
     const handleSave = async () => {
-        if(tagErrorMessage) return
-        
+        if (tagErrorMessage) return
+
         const payload = {
             createTags: createTags,
             softDeleteTags: softDeleteTags,
@@ -337,7 +337,7 @@ export const ImageTagsContainer = ({
     }
 
     const onClickSave = () => {
-        if(textInput.trim()){
+        if (textInput.trim()) {
             handleTagCreate(textInput)
         }
         setSaveData(true)
@@ -515,19 +515,6 @@ export const ImageTagButton = ({
     duplicateTag,
 }: ImageButtonType) => {
     const IconComponent = isSoftDeleted ? Redo : Minus
-
-    const [isHovered, setIsHovered] = useState(false)
-    const handleMouseEnter = () => {
-        if (isEditing) {
-            setIsHovered(true)
-        }
-    }
-    const handleMouseLeave = () => {
-        if (isEditing) {
-            setIsHovered(false)
-        }
-    }
-
     const isInSoftDeleteTags = isSoftDeleted && softDeleteTags.some((tag) => tag.tagName === text)
     const canTagBeHardDelete = tagId === 0 || isSuperAdmin
 
@@ -543,42 +530,42 @@ export const ImageTagButton = ({
 
     return (
         <div
-            className={`br-4 en-2 bw-1 dc__w-fit-content dc__word-wrap-anywhere mr-8 bcn-0 flex mb-4 ${tabColor()}`}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            className={`br-4 en-2 bw-1 mr-8 bcn-0 mb-4 pt-2 pr-8 pb-2 pl-8 tag-class flex ${
+                isEditing ? 'icon-hover' : ''
+            } ${tabColor()}`}
         >
-            <div className="flex pt-2 pl-8 pr-8 pb-2">
-                {duplicateTag ? (
-                    <Warning className="icon-dim-12 mr-4" />
-                ) : (
-                    isHovered &&
-                    isEditing &&
-                    (isInSoftDeleteTags || (tagId !== 0 && !isSoftDeleted)) && (
-                        <Tippy
-                            className="default-tt"
-                            arrow={true}
-                            placement="top"
-                            content={isInSoftDeleteTags ? 'Restore tag' : 'Soft delete tag'}
-                        >
-                            <IconComponent
-                                className={`icon-dim-12 mr-4 cursor ${isSoftDeleted ? 'scn-6' : 'fcn-6'}`}
-                                data-testid={`${text}-tag-soft-delete`}
-                                onClick={onSoftDeleteClick}
-                            />
-                        </Tippy>
-                    )
-                )}
-                {text}
-                {isHovered && isEditing && canTagBeHardDelete && (
-                    <Tippy className="default-tt" arrow={true} placement="top" content="Remove tag">
-                        <Close
-                            className="icon-dim-12 ml-4 fcn-6 cn-5 cursor"
-                            data-testid={`${text}-tag-hard-delete`}
-                            onClick={onHardDeleteClick}
+            {duplicateTag ? (
+                <Warning className="icon-dim-12 mr-4" />
+            ) : (
+                <Tippy
+                    className="default-tt"
+                    arrow={true}
+                    placement="top"
+                    content={isInSoftDeleteTags ? 'Restore tag' : 'Soft delete tag'}
+                >
+                    <div
+                        className={`action-icon mr-4 lh-16 pt-3 ${
+                            isInSoftDeleteTags || (tagId !== 0 && !isSoftDeleted) ? 'show-icon' : ''
+                        }`}
+                    >
+                        <IconComponent
+                            className={`icon-dim-12 cursor${isSoftDeleted ? 'scn-6' : 'fcn-6'} `}
+                            data-testid={`${text}-tag-soft-delete`}
+                            onClick={onSoftDeleteClick}
                         />
-                    </Tippy>
-                )}
-            </div>
+                    </div>
+                </Tippy>
+            )}
+            {text}
+            <Tippy className="default-tt" arrow={true} placement="top" content="Remove tag">
+                <div className={`action-icon ml-4 lh-16 pt-3 ${canTagBeHardDelete ? 'show-icon' : ''}`}>
+                    <Close
+                        className="icon-dim-12 fcn-6 cursor"
+                        data-testid={`${text}-tag-hard-delete`}
+                        onClick={onHardDeleteClick}
+                    />
+                </div>
+            </Tippy>
         </div>
     )
 }
