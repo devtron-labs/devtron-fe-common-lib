@@ -29,6 +29,7 @@ export const ImageTagsContainer = ({
     tagsEditable,
     setTagsEditable,
     toggleCardMode,
+    hideHardDelete,
 }: ImageTaggingContainerType) => {
     const [initialTags, setInitialTags] = useState<ReleaseTag[]>(imageReleaseTags ? imageReleaseTags : [])
     const [initialDescription, setInitialDescription] = useState(imageComment ? imageComment.comment : '')
@@ -330,7 +331,8 @@ export const ImageTagsContainer = ({
         setTextInput(e.target.value)
     }
 
-    const enterTagCreate = () => {
+    const enterTagCreate = (e) => {
+        stopPropagation(e)
         if (textInput.trim()) {
             handleTagCreate(textInput.trim())
         }
