@@ -30,6 +30,7 @@ export const ImageTagsContainer = ({
     setTagsEditable,
     toggleCardMode,
     hideHardDelete,
+    forceReInit
 }: ImageTaggingContainerType) => {
     const [initialTags, setInitialTags] = useState<ReleaseTag[]>(imageReleaseTags ? imageReleaseTags : [])
     const [initialDescription, setInitialDescription] = useState(imageComment ? imageComment.comment : '')
@@ -78,11 +79,12 @@ export const ImageTagsContainer = ({
     }
 
     const reInitState = () => {
-        if (isEditing === false) {
+        if (forceReInit || !isEditing) {
             setInitialTags(imageReleaseTags ? imageReleaseTags : [])
             setInitialDescription(imageComment ? imageComment.comment : '')
             setNewDescription(imageComment ? imageComment.comment : '')
             setDisplayedTags(imageReleaseTags ? imageReleaseTags : [])
+            setIsEditing(false)
         }
     }
 
