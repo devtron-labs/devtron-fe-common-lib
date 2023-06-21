@@ -44,6 +44,7 @@ export const ImageTagsContainer = ({
     const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false)
     const [descriptionValidationMessage, setDescriptionValidationMessage] = useState<string>('')
     const [textInput, setTextInput] = useState<string>('')
+    const [saveData, setSaveData] = useState<boolean>(false)
 
     useEffect(() => {
         initialise()
@@ -56,6 +57,13 @@ export const ImageTagsContainer = ({
     useEffect(() => {
         setExistingTags(appReleaseTagNames ? appReleaseTagNames : [])
     }, [appReleaseTagNames])
+
+    useEffect(() => {
+        if(saveData){
+            handleSave()
+            setSaveData(false)
+        }
+    },[saveData])
 
     async function initialise() {
         try {
@@ -76,15 +84,6 @@ export const ImageTagsContainer = ({
             setDisplayedTags(imageReleaseTags ? imageReleaseTags : [])
         }
     }
-
-    const CreatableComponents = useMemo(
-        () => ({
-            DropdownIndicator: () => null,
-            IndicatorSeparator: () => null,
-            Menu: () => null,
-        }),
-        [],
-    )
 
     const handleEditClick = () => {
         setIsEditing(!isEditing)
@@ -208,6 +207,8 @@ export const ImageTagsContainer = ({
     }
 
     const handleSave = async () => {
+        if(tagErrorMessage) return
+        
         const payload = {
             createTags: createTags,
             softDeleteTags: softDeleteTags,
@@ -335,6 +336,13 @@ export const ImageTagsContainer = ({
         }
     }
 
+    const onClickSave = () => {
+        if(textInput.trim()){
+            handleTagCreate(textInput)
+        }
+        setSaveData(true)
+    }
+
     return (
         <div className="mt-8">
             {isEditing && tagsEditable ? (
@@ -438,7 +446,7 @@ export const ImageTagsContainer = ({
                             type="button"
                             onClick={(e) => {
                                 stopPropagation(e)
-                                handleSave()
+                                onClickSave()
                             }}
                         >
                             Save
