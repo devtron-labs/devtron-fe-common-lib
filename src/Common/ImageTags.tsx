@@ -312,7 +312,7 @@ export const ImageTagsContainer = ({
 
     if (newDescription === '' && displayedTags.length === 0 && !isEditing) {
         return tagsEditable ? (
-            <div className="bcn-0 mt-8">
+            <div className="bcn-0 mt-8 add-image-button">
                 <AddImageButton handleEditClick={handleEditClick} />
             </div>
         ) : (
