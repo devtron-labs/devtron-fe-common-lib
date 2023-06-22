@@ -7,7 +7,7 @@ import { ReactComponent as Question } from '../Assets/Icon/ic-help-outline.svg'
 import { ReactComponent as EditIcon } from '../Assets/Icon/ic-pencil.svg'
 import { ReactComponent as Redo } from '../Assets/Icon/ic-arrow-counter-clockwise.svg'
 import { ReactComponent as Minus } from '../Assets/Icon/ic-minus.svg'
-
+import { toast } from 'react-toastify'
 import { ReactComponent as Info } from '../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as Error } from '../Assets/Icon/ic-warning.svg'
 import { ReactComponent as Warning } from '../Assets/Icon/ic-error-exclamation.svg'
@@ -268,7 +268,7 @@ export const ImageTagsContainer = ({
                             },
                         ],
                     }
-                    showError(customError)
+                    toast.error(customError)
                     errorStateHandling(err.errors)
                 } else {
                     showError(err)
