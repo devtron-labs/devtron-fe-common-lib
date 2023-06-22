@@ -24,13 +24,15 @@ export const ImageTagsContainer = ({
     artifactId,
     imageComment,
     imageReleaseTags,
+    matId,
+    updateCurrentAppMaterial,
     appReleaseTagNames,
     setAppReleaseTagNames,
     tagsEditable,
     setTagsEditable,
     toggleCardMode,
     hideHardDelete,
-    forceReInit
+    forceReInit,
 }: ImageTaggingContainerType) => {
     const [initialTags, setInitialTags] = useState<ReleaseTag[]>(imageReleaseTags ? imageReleaseTags : [])
     const [initialDescription, setInitialDescription] = useState(imageComment ? imageComment.comment : '')
@@ -249,6 +251,7 @@ export const ImageTagsContainer = ({
                 handleEditClick()
                 setShowTagsWarning(false)
                 setTagErrorMessage('')
+                if(updateCurrentAppMaterial)updateCurrentAppMaterial(matId,tags,res.result?.imageComment)
             })
             .catch((err) => {
                 // Fix toast message
@@ -330,6 +333,7 @@ export const ImageTagsContainer = ({
     }
 
     const setInputValue = (e) => {
+
         setTextInput(e.target.value)
     }
 
@@ -406,6 +410,7 @@ export const ImageTagsContainer = ({
                                 softDeleteTags={softDeleteTags}
                                 isSuperAdmin={isSuperAdmin}
                                 duplicateTag={tag?.duplicateTag}
+                                hideHardDelete={hideHardDelete}
                             />
                         ))}
                     </div>
@@ -484,6 +489,7 @@ export const ImageTagsContainer = ({
                                         softDeleteTags={softDeleteTags}
                                         isSuperAdmin={isSuperAdmin}
                                         duplicateTag={tag?.duplicateTag}
+                                        hideHardDelete={hideHardDelete}
                                     />
                                 ))}
                             </div>
@@ -517,10 +523,11 @@ export const ImageTagButton = ({
     softDeleteTags,
     isSuperAdmin,
     duplicateTag,
+    hideHardDelete,
 }: ImageButtonType) => {
     const IconComponent = isSoftDeleted ? Redo : Minus
     const isInSoftDeleteTags = isSoftDeleted && softDeleteTags.some((tag) => tag.tagName === text)
-    const canTagBeHardDelete = tagId === 0 || isSuperAdmin
+    const canTagBeHardDelete = tagId === 0 || (isSuperAdmin && !hideHardDelete)
 
     const tabColor = () => {
         if (duplicateTag) {

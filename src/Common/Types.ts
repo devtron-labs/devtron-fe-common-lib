@@ -1,4 +1,4 @@
-import { ReactNode, CSSProperties } from 'react'
+import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 export interface ResponseType {
     code: number
@@ -356,6 +356,8 @@ export interface ImageTaggingContainerType {
     artifactId?: number
     imageComment?: ImageComment
     imageReleaseTags?: ReleaseTag[]
+    matId?: number
+    updateCurrentAppMaterial? : (matId:number, releaseTags?:ReleaseTag[], imageComment?:ImageComment) => void
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
     forceReInit?: boolean
@@ -375,6 +377,7 @@ export interface ImageButtonType {
     softDeleteTags: any
     isSuperAdmin: any
     duplicateTag?: boolean
+    hideHardDelete?: boolean
 }
 
 
