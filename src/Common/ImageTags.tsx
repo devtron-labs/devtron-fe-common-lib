@@ -115,7 +115,7 @@ export const ImageTagsContainer = ({
         setTagErrorMessage('')
     }
 
-    const validateTag = (lowercaseValue) => {
+    const validateTag = (lowercaseValue) : boolean => {
         if (
             lowercaseValue.length == 0 ||
             lowercaseValue.length >= 128 ||
@@ -123,7 +123,7 @@ export const ImageTagsContainer = ({
             lowercaseValue[0] == '-'
         ) {
             setTagErrorMessage('tag name cannot be empty or exceed 128 characters or cannot start with . or -')
-            return
+            return false
         }
         setTagErrorMessage('')
         const isTagExistsInExistingTags = existingTags.includes(lowercaseValue)
@@ -133,25 +133,27 @@ export const ImageTagsContainer = ({
         }
         if (isTagExistsInExistingTags || isTagExistsInDisplayedTags || lowercaseValue === 'latest') {
             setTagErrorMessage('This tag is already being used in this application')
-            return
+            return false
         }
+        return true
     }
 
     const handleTagCreate = (newValue) => {
         const lowercaseValue = newValue.toLowerCase().trim()
-        validateTag(lowercaseValue)
-        const newTag: ReleaseTag = {
-            id: 0,
-            tagName: lowercaseValue,
-            appId: 0,
-            deleted: false,
-            artifactId: 0,
-            duplicateTag: false,
+        if(validateTag(lowercaseValue)) {
+            const newTag: ReleaseTag = {
+                id: 0,
+                tagName: lowercaseValue,
+                appId: 0,
+                deleted: false,
+                artifactId: 0,
+                duplicateTag: false,
+            }
+            setCreateTags([...createTags, newTag])
+            setDisplayedTags([...displayedTags, newTag])
+            setShowTagsWarning(true)
+            setTextInput('')
         }
-        setCreateTags([...createTags, newTag])
-        setDisplayedTags([...displayedTags, newTag])
-        setShowTagsWarning(true)
-        setTextInput('')
     }
 
     const handleTagSoftDelete = (index) => {
@@ -259,16 +261,7 @@ export const ImageTagsContainer = ({
             .catch((err) => {
                 // Fix toast message
                 if (err.errors?.[0]?.userMessage?.appReleaseTags?.length) {
-                    const customError: ServerErrors = {
-                        ...err,
-                        errors: [
-                            {
-                                ...err.errors?.[0],
-                                userMessage: err.errors?.[0]?.internalMessage,
-                            },
-                        ],
-                    }
-                    toast.error(customError)
+                    toast.error(err.errors?.[0]?.internalMessage)
                     errorStateHandling(err.errors)
                 } else {
                     showError(err)
