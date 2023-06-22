@@ -24,7 +24,6 @@ export const ImageTagsContainer = ({
     artifactId,
     imageComment,
     imageReleaseTags,
-    matId,
     updateCurrentAppMaterial,
     appReleaseTagNames,
     setAppReleaseTagNames,
@@ -116,8 +115,7 @@ export const ImageTagsContainer = ({
         setTagErrorMessage('')
     }
 
-    const handleTagCreate = (newValue) => {
-        const lowercaseValue = newValue.toLowerCase().trim()
+    const validateTag = (lowercaseValue) => {
         if (
             lowercaseValue.length == 0 ||
             lowercaseValue.length >= 128 ||
@@ -137,6 +135,11 @@ export const ImageTagsContainer = ({
             setTagErrorMessage('This tag is already being used in this application')
             return
         }
+    }
+
+    const handleTagCreate = (newValue) => {
+        const lowercaseValue = newValue.toLowerCase().trim()
+        validateTag(lowercaseValue)
         const newTag: ReleaseTag = {
             id: 0,
             tagName: lowercaseValue,
@@ -251,7 +254,7 @@ export const ImageTagsContainer = ({
                 handleEditClick()
                 setShowTagsWarning(false)
                 setTagErrorMessage('')
-                if(updateCurrentAppMaterial)updateCurrentAppMaterial(matId,tags,res.result?.imageComment)
+                if(updateCurrentAppMaterial)updateCurrentAppMaterial(artifactId,tags,res.result?.imageComment)
             })
             .catch((err) => {
                 // Fix toast message
@@ -333,7 +336,7 @@ export const ImageTagsContainer = ({
     }
 
     const setInputValue = (e) => {
-
+        e.target.value && validateTag(e.target.value)
         setTextInput(e.target.value)
     }
 

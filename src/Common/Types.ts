@@ -356,7 +356,6 @@ export interface ImageTaggingContainerType {
     artifactId?: number
     imageComment?: ImageComment
     imageReleaseTags?: ReleaseTag[]
-    matId?: number
     updateCurrentAppMaterial? : (matId:number, releaseTags?:ReleaseTag[], imageComment?:ImageComment) => void
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
