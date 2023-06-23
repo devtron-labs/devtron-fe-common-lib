@@ -14,7 +14,7 @@ export class RadioGroupItem extends Component<RadioGroupItemProps> {
                                     type="radio"
                                     className="form__checkbox"
                                     name={context.name}
-                                    disabled={context.disabled ?? this.props.disabled}
+                                    disabled={context.disabled || this.props.disabled}
                                     onChange={context.onChange}
                                     value={this.props.value}
                                     checked={context.value === this.props.value}
