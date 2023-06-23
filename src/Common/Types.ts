@@ -119,6 +119,7 @@ export interface ReloadType {
 export interface RadioGroupItemProps {
     value: string
     dataTestId?: string
+    disabled?: boolean
 }
 
 export interface RadioGroupProps {
