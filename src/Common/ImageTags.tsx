@@ -464,8 +464,8 @@ export const ImageTagsContainer = ({
                         className="flex left image-tag-left-border w-100 mt-8 mb-8 pr-10 pl-10"
                         data-testid="image-tags-container-hover"
                     >
-                        <div>
-                            {initialDescription && <div className="mb-6 fs-13">{initialDescription}</div>}
+                        <div className='w-100'>
+                            {initialDescription && <div className="mb-6 fs-13 dc__word-break-all">{initialDescription}</div>}
                             <div className="flex-wrap flex left">
                                 {initialTags?.map((tag, index) => (
                                     <ImageTagButton
@@ -537,7 +537,7 @@ export const ImageTagButton = ({
 
     return (
         <div
-            className={`br-4 en-2 bw-1 mr-8 bcn-0 mb-4 pt-2 pr-8 pb-2 pl-8 tag-class flex ${
+            className={`br-4 en-2 bw-1 mr-8 bcn-0 mb-4 pt-2 pr-8 pb-2 pl-8 tag-class dc__word-break-all flex ${
                 isEditing ? 'icon-hover' : ''
             } ${tabColor()}`}
         >
