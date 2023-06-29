@@ -17,7 +17,6 @@ import { showError, stopPropagation } from './Helper'
 import { TippyCustomized } from './TippyCustomized'
 import { setImageTags, getUserRole } from './Common.service'
 import Tippy from '@tippyjs/react'
-import { ServerErrors } from './ServerError'
 
 export const ImageTagsContainer = ({
     ciPipelineId,
@@ -60,13 +59,6 @@ export const ImageTagsContainer = ({
     useEffect(() => {
         setExistingTags(appReleaseTagNames ? appReleaseTagNames : [])
     }, [appReleaseTagNames])
-
-    useEffect(() => {
-        if (saveData) {
-            handleSave()
-            setSaveData(false)
-        }
-    }, [saveData])
 
     async function initialise() {
         try {
@@ -344,7 +336,7 @@ export const ImageTagsContainer = ({
         if (textInput.trim()) {
             handleTagCreate(textInput)
         }
-        setSaveData(true)
+        handleSave()
     }
 
     return (
