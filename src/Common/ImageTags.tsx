@@ -46,7 +46,6 @@ export const ImageTagsContainer = ({
     const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false)
     const [descriptionValidationMessage, setDescriptionValidationMessage] = useState<string>('')
     const [textInput, setTextInput] = useState<string>('')
-    const [saveData, setSaveData] = useState<boolean>(false)
 
     useEffect(() => {
         initialise()
