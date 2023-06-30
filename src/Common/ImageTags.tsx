@@ -12,7 +12,8 @@ import { ReactComponent as Info } from '../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as Error } from '../Assets/Icon/ic-warning.svg'
 import { ReactComponent as Warning } from '../Assets/Icon/ic-error-exclamation.svg'
 import { ReactComponent as Enter } from '../Assets/Icon/ic-enter.svg'
-import { ImageButtonType, ImageTaggingContainerType, ReleaseTag, TippyTheme } from './Types'
+import { TippyTheme } from './Types'
+import { ImageButtonType, ImageTaggingContainerType, ReleaseTag } from './ImageTags.Types'
 import { showError, stopPropagation } from './Helper'
 import { TippyCustomized } from './TippyCustomized'
 import { setImageTags, getUserRole } from './Common.service'
@@ -271,7 +272,6 @@ export const ImageTagsContainer = ({
                 showCloseButton={true}
                 trigger="click"
                 interactive={true}
-                documentationLinkText="View Documentation"
                 additionalContent={getBuildContextAdditionalContent()}
             >
                 <div className="icon-dim-16 fcn-5 ml-8 cursor">
