@@ -353,6 +353,7 @@ export const ImageTagsContainer = ({
                             onChange={setInputValue}
                             placeholder="Type a tag and press enter"
                             onKeyDown={handleKeydown}
+                            onBlur={setInputValue}
                             ref={creatableRef}
                         />
                         {textInput.length > 0 && (
