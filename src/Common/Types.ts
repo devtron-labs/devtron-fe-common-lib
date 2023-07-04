@@ -1,5 +1,6 @@
-import { ReactNode, CSSProperties } from 'react'
+import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
+import { ImageComment, ReleaseTag } from "./ImageTags.Types";
 export interface ResponseType {
     code: number
     status: string
@@ -212,6 +213,34 @@ export interface UserApprovalMetadataType {
     requestedUserData: ApprovalUserDataType
 }
 
+
+export interface CDMaterialType {
+    index: number
+    id: string
+    materialInfo: MaterialInfo[]
+    tab: CDModalTabType
+    scanEnabled: boolean
+    scanned: boolean
+    vulnerabilitiesLoading: boolean
+    lastExecution: string //timestamp
+    vulnerabilities: VulnerabilityType[]
+    vulnerable: boolean
+    deployedTime: string
+    deployedBy?: string
+    wfrId?: number
+    buildTime: string
+    image: string
+    isSelected: boolean
+    showSourceInfo: boolean
+    latest: boolean
+    runningOnParentCd?: boolean
+    userApprovalMetadata?: UserApprovalMetadataType
+    triggeredBy?: number
+    imageComment?: ImageComment
+    imageReleaseTags?: ReleaseTag[]
+    artifactStatus?: string
+}
+
 export interface CommonNodeAttr {
     connectingCiPipelineId?: number
     parents: string | number[] | string[]
@@ -268,6 +297,8 @@ export interface CommonNodeAttr {
         action: any,
         metadataField: string
     }
+    appReleaseTagNames?: string[]
+    tagsEditable?: boolean
 }
 
 export interface VulnerabilityType {
@@ -297,33 +328,15 @@ export interface MaterialInfo {
     type?: string
 }
 
-export interface CDMaterialType {
-    index: number
-    id: string
-    materialInfo: MaterialInfo[]
-    tab: CDModalTabType
-    scanEnabled: boolean
-    scanned: boolean
-    vulnerabilitiesLoading: boolean
-    lastExecution: string //timestamp
-    vulnerabilities: VulnerabilityType[]
-    vulnerable: boolean
-    deployedTime: string
-    deployedBy?: string
-    wfrId?: number
-    buildTime: string
-    image: string
-    isSelected: boolean
-    showSourceInfo: boolean
-    latest: boolean
-    runningOnParentCd?: boolean
-    userApprovalMetadata?: UserApprovalMetadataType
-    triggeredBy?: number
-}
-
 export interface CDMaterialResponseType {
     approvalUsers: string[]
     materials: any[]
     userApprovalConfig: UserApprovalConfigType
     requestedUserId: number
+    tagsEditable: boolean
+    appReleaseTagNames: string[]
+    hideImageTaggingHardDelete: boolean
 }
+
+
+

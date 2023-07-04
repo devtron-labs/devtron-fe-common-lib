@@ -20,6 +20,8 @@ export const URLS = {
 
 export const ROUTES = {
     PROJECT_LIST_MIN: 'team/autocomplete',
+    USER_CHECK_ROLE: 'user/check/roles',
+    IMAGE_TAGGING:'app/image-tagging',
 }
 
 export enum KEY_VALUE {
