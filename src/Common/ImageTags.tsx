@@ -132,7 +132,9 @@ export const ImageTagsContainer = ({
 
     const handleTagCreate = (newValue) => {
         const lowercaseValue = newValue.toLowerCase().trim()
+        console.log("handleTagCreate,outside validation : ")
         if(validateTag(lowercaseValue)) {
+            console.log("handleTagCreate,inside validation : ")
             const newTag: ReleaseTag = {
                 id: 0,
                 tagName: lowercaseValue,
@@ -320,6 +322,8 @@ export const ImageTagsContainer = ({
     }
 
     const setInputValue = (e) => {
+        console.log("setInputValue: ")
+        console.log(e.target.value)
         e.target.value && validateTag(e.target.value)
         setTextInput(e.target.value)
     }
@@ -332,6 +336,8 @@ export const ImageTagsContainer = ({
     }
 
     const onClickSave = () => {
+        console.log("onClickSave: ")
+        console.log(textInput)
         if (textInput.trim()) {
             handleTagCreate(textInput)
         }

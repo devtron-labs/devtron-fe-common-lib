@@ -335,6 +335,7 @@ export interface CDMaterialResponseType {
     requestedUserId: number
     tagsEditable: boolean
     appReleaseTagNames: string[]
+    hideImageTaggingHardDelete: boolean
 }
 
 
