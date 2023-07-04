@@ -130,11 +130,9 @@ export const ImageTagsContainer = ({
         return true
     }
 
-    const handleTagCreate = (newValue) => {
+    const handleTagCreate = (newValue) : ReleaseTag[] => {
         const lowercaseValue = newValue.toLowerCase().trim()
-        console.log("handleTagCreate,outside validation : ")
         if(validateTag(lowercaseValue)) {
-            console.log("handleTagCreate,inside validation : ")
             const newTag: ReleaseTag = {
                 id: 0,
                 tagName: lowercaseValue,
@@ -143,11 +141,14 @@ export const ImageTagsContainer = ({
                 artifactId: 0,
                 duplicateTag: false,
             }
-            setCreateTags([...createTags, newTag])
+            const newCreateTags = [...createTags, newTag]
+            setCreateTags(newCreateTags)
             setDisplayedTags([...displayedTags, newTag])
             setShowTagsWarning(true)
             setTextInput('')
+            return newCreateTags
         }
+        return createTags
     }
 
     const handleTagSoftDelete = (index) => {
@@ -210,11 +211,11 @@ export const ImageTagsContainer = ({
         })
     }
 
-    const handleSave = async () => {
+    const handleSave = async (tagsToBeCreated: ReleaseTag[]) => {
         if (tagErrorMessage) return
 
         const payload = {
-            createTags: createTags,
+            createTags: tagsToBeCreated,
             softDeleteTags: softDeleteTags,
             imageComment: {
                 id: 0,
@@ -322,8 +323,6 @@ export const ImageTagsContainer = ({
     }
 
     const setInputValue = (e) => {
-        console.log("setInputValue: ")
-        console.log(e.target.value)
         e.target.value && validateTag(e.target.value)
         setTextInput(e.target.value)
     }
@@ -336,12 +335,11 @@ export const ImageTagsContainer = ({
     }
 
     const onClickSave = () => {
-        console.log("onClickSave: ")
-        console.log(textInput)
+        let tagsToBeCreated = createTags
         if (textInput.trim()) {
-            handleTagCreate(textInput)
+            tagsToBeCreated = handleTagCreate(textInput)
         }
-        handleSave()
+        handleSave(tagsToBeCreated)
     }
 
     return (
