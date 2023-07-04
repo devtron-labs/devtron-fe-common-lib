@@ -114,7 +114,7 @@ export const ImageTagsContainer = ({
             lowercaseValue[0] == '.' ||
             lowercaseValue[0] == '-'
         ) {
-            setTagErrorMessage('tag name cannot be empty or exceed 128 characters or cannot start with . or -')
+            setTagErrorMessage('Tag name cannot be empty or exceed 128 characters or cannot start with . or -')
             return false
         }
         setTagErrorMessage('')
@@ -277,8 +277,8 @@ export const ImageTagsContainer = ({
                 interactive={true}
                 additionalContent={getBuildContextAdditionalContent()}
             >
-                <div className="icon-dim-16 fcn-5 ml-8 cursor">
-                    <Question />
+                <div className="flex">
+                    <Question  className="fcn-5 ml-8 cursor icon-dim-16"/>
                 </div>
             </TippyCustomized>
         )
@@ -347,8 +347,8 @@ export const ImageTagsContainer = ({
             {isEditing && tagsEditable ? (
                 <div className="bcn-0 dc__border-top-n1 ">
                     <div className="cn-7 mt-12 flex left">
-                        <span>Release tags (eg. v1.0)</span>
-                        <div className="flex row ml-0">{renderInfoCard()}</div>
+                        <div>Release tags (eg. v1.0)</div>
+                        {renderInfoCard()}
                     </div>
                     <div className="mt-6 dc__position-rel-imp" data-testid="add-tag-text-area">
                         <input
@@ -461,7 +461,7 @@ export const ImageTagsContainer = ({
                         data-testid="image-tags-container-hover"
                     >
                         <div className='w-100'>
-                            {initialDescription && <div className="mb-6 fs-13 dc__word-break-all">{initialDescription}</div>}
+                            {initialDescription && <div className="mb-6 fs-13 lh-20 dc__word-break-all">{initialDescription}</div>}
                             <div className="flex-wrap flex left">
                                 {initialTags?.map((tag, index) => (
                                     <ImageTagButton
@@ -487,7 +487,7 @@ export const ImageTagsContainer = ({
                             </div>
                         </div>
                     </div>
-                    <div className="mt-8 mr-6 icon-dim-16">
+                    <div className="mt-8 mr-10 icon-dim-16">
                         {tagsEditable && (
                             <EditIcon
                                 className="icon-dim-16 image-tags-container-edit__icon cursor"
@@ -552,7 +552,7 @@ export const ImageTagButton = ({
                         }`}
                     >
                         <IconComponent
-                            className={`icon-dim-12 cursor${isSoftDeleted ? 'scn-6' : 'fcn-6'} `}
+                            className={`icon-dim-12 cursor ${isSoftDeleted ? 'scn-6' : 'fcn-6'} `}
                             data-testid={`${text}-tag-soft-delete`}
                             onClick={onSoftDeleteClick}
                         />
