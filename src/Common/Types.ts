@@ -347,4 +347,20 @@ export interface CDMaterialResponseType {
 }
 
 
+export interface InputDetailType {
+    label: string
+    defaultValue: string
+    placeholder: string
+}
 
+export interface RegistryTypeDetailType {
+    value: string
+    label: string
+    desiredFormat: string
+    placeholderText: string
+    gettingStartedLink: string
+    defaultRegistryURL: string
+    registryURL: InputDetailType
+    id: InputDetailType
+    password: InputDetailType
+}
