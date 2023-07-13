@@ -292,6 +292,7 @@ export interface CommonNodeAttr {
     showPluginWarning?: boolean
     helmPackageName?: string
     isVirtualEnvironment?: boolean
+    deploymentAppType?: DeploymentAppTypes
     isCITriggerBlocked?: boolean
     ciBlockState?: {
         action: any,
@@ -299,6 +300,13 @@ export interface CommonNodeAttr {
     }
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
+}
+
+export enum DeploymentAppTypes {
+    HELM = 'helm',
+    GITOPS = 'argo_cd',
+    MANIFEST_DOWNLOAD = 'manifest_download',
+    MANIFEST_PUSH='manifest_push'
 }
 
 export interface VulnerabilityType {
@@ -339,4 +347,20 @@ export interface CDMaterialResponseType {
 }
 
 
+export interface InputDetailType {
+    label: string
+    defaultValue: string
+    placeholder: string
+}
 
+export interface RegistryTypeDetailType {
+    value: string
+    label: string
+    desiredFormat: string
+    placeholderText: string
+    gettingStartedLink: string
+    defaultRegistryURL: string
+    registryURL: InputDetailType
+    id: InputDetailType
+    password: InputDetailType
+}
