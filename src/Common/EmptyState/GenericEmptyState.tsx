@@ -1,7 +1,6 @@
 import React from 'react'
 import AppNotDeployed from '../../Assets/Img/app-not-deployed.png'
 import { GenericEmptyStateType, ImageType } from '../Types'
-import { ReactComponent as MechanicalOperation } from '../../Assets/Img/ic-operation-mechanical.svg'
 
 import './emptyState.scss'
 
