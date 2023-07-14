@@ -86,6 +86,7 @@ export interface GenericEmptyStateType {
     styles?: CSSProperties
     heightToDeduct?: number
     imageType?: string
+    SvgImage?
     renderButton?: () => JSX.Element
     imageClassName?: string
     children?: ReactNode
