@@ -6,9 +6,8 @@ import { toastAccessDenied } from './ToastBody'
 import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
 import moment from 'moment';
-import { DeploymentNodeType, UseSearchString } from './Types'
+import { UseSearchString } from './Types'
 import { useLocation } from 'react-router-dom'
-import { get } from './Api'
 
 toast.configure({
     autoClose: 3000,
@@ -369,74 +368,4 @@ export function useSearchString(): UseSearchString {
     return { queryParams, searchParams }
 }
 
-export const getCDMaterials = (
-    cdMaterialId,
-    stageType: DeploymentNodeType,
-    abortSignal: AbortSignal,
-    isApprovalNode?: boolean,
-    imageTag?: string): Promise<any> => {
-    const URL = (!imageTag) ? `app/cd-pipeline/${cdMaterialId}/material?stage=APPROVAL` : `app/cd-pipeline/${cdMaterialId}/material?stage=APPROVAL&search=${imageTag}`
 
-    return get(URL, {
-        signal: abortSignal,
-    }).then((response) => {
-        let artifacts = response.result.ci_artifacts ?? []
-        if (!response.result) {
-            return {
-                materials: [],
-            }
-        }
-        else {
-            const materials = artifacts.map((material, index) => {
-                let artifactStatusValue = ''
-                return {
-                    index,
-                    id: material.id,
-                    deployedTime: material.deployed_time
-                        ? moment(material.deployed_time).format('ddd, DD MMM YYYY, hh:mm A')
-                        : 'Not Deployed',
-                    deployedBy: material.deployedBy,
-                    wfrId: material.wfrId,
-                    image: extractImage(material.image),
-                    showChanges: false,
-                    vulnerabilities: [],
-                    buildTime: material.build_time || '',
-                    showSourceInfo: false,
-                    deployed: material.deployed || false,
-                    latest: material.latest || false,
-                    vulnerabilitiesLoading: true,
-                    scanned: material.scanned,
-                    scanEnabled: material.scanEnabled,
-                    vulnerable: material.vulnerable,
-                    runningOnParentCd: material.runningOnParentCd,
-                    artifactStatus: artifactStatusValue,
-                    userApprovalMetadata: material.userApprovalMetadata,
-                    triggeredBy: material.triggeredBy,
-                    isVirtualEnvironment: material.isVirtualEnvironment,
-                    imageComment: material.imageComment,
-                    imageReleaseTags: material.imageReleaseTags,
-                    materialInfo: material.material_info
-                        ? material.material_info.map((mat) => {
-                            return {
-                                author: mat.author || '',
-                                message: mat.message || '',
-                                revision: mat.revision || '',
-                                tag: mat.tag || '',
-                                webhookData: mat.webhookData || '',
-                                url: mat.url || '',
-                                type: material.ciConfigureSourceType || '',
-                            }
-                        })
-                        : [],
-                }
-            })
-            return {
-                materials: materials
-            }
-        }
-    })
-}
-
-export function extractImage(image: string): string {
-    return image ? image.split(':').pop() : ''
-}
