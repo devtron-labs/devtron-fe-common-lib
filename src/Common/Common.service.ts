@@ -44,7 +44,7 @@ export const getCDMaterials = (
     abortSignal: AbortSignal,
     isApprovalNode?: boolean,
     imageTag?: string): Promise<any> => {
-    const URL = (!imageTag) ? `app/cd-pipeline/${cdMaterialId}/material?stage=${stageType}` : `app/cd-pipeline/${cdMaterialId}/material?stage=APPROVAL&search=${imageTag}`
+    const URL = (!imageTag) ? `app/cd-pipeline/${cdMaterialId}/material?stage=${stageType}` : `app/cd-pipeline/${cdMaterialId}/material?stage=${stageType}&search=${imageTag}`
 
     return get(URL, {
         signal: abortSignal,
