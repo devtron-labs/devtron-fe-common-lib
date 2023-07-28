@@ -30,6 +30,13 @@ interface UserRole extends ResponseType {
     }
 }
 
+let stageMap = {
+    PRECD: 'PRE',
+    CD: 'DEPLOY',
+    POSTCD: 'POST',
+    APPROVAL: 'APPROVAL',
+}
+
 export function getUserRole(appName?: string): Promise<UserRole> {
     return get(`${ROUTES.USER_CHECK_ROLE}${appName ? `?appName=${appName}` : ''}`)
 }
@@ -44,7 +51,7 @@ export const getCDMaterials = (
     abortSignal: AbortSignal,
     isApprovalNode?: boolean,
     imageTag?: string): Promise<any> => {
-    const URL = (!imageTag) ? `app/cd-pipeline/${cdMaterialId}/material?stage=${stageType}` : `app/cd-pipeline/${cdMaterialId}/material?stage=${stageType}&search=${imageTag}`
+    const URL = (!imageTag) ? `app/cd-pipeline/${cdMaterialId}/material?stage=${stageMap[stageType]}` : `app/cd-pipeline/${cdMaterialId}/material?stage=${stageMap[stageType]}&search=${imageTag}`
 
     return get(URL, {
         signal: abortSignal,
