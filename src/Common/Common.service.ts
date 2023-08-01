@@ -43,6 +43,12 @@ export const SourceTypeMap = {
     BranchRegex: 'SOURCE_TYPE_BRANCH_REGEX',
 }
 
+export type CDModalTabType = 'SECURITY' | 'CHANGES';
+export declare const CDModalTab: {
+    Security: CDModalTabType;
+    Changes: CDModalTabType;
+};
+
 export function getUserRole(appName?: string): Promise<UserRole> {
     return get(`${ROUTES.USER_CHECK_ROLE}${appName ? `?appName=${appName}` : ''}`)
 }
@@ -83,6 +89,7 @@ export const getCDMaterials = (
                     showChanges: false,
                     vulnerabilities: [],
                     buildTime: material.build_time || '',
+                    tab: CDModalTab.Changes,
                     showSourceInfo: false,
                     deployed: material.deployed || false,
                     latest: material.latest || false,
