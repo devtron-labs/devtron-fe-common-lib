@@ -37,6 +37,12 @@ let stageMap = {
     APPROVAL: 'APPROVAL',
 }
 
+export const SourceTypeMap = {
+    BranchFixed: 'SOURCE_TYPE_BRANCH_FIXED',
+    WEBHOOK: 'WEBHOOK',
+    BranchRegex: 'SOURCE_TYPE_BRANCH_REGEX',
+}
+
 export function getUserRole(appName?: string): Promise<UserRole> {
     return get(`${ROUTES.USER_CHECK_ROLE}${appName ? `?appName=${appName}` : ''}`)
 }
@@ -95,12 +101,18 @@ export const getCDMaterials = (
                     materialInfo: material.material_info
                         ? material.material_info.map((mat) => {
                             return {
+                                modifiedTime: mat.modifiedTime ? moment(mat.modifiedTime).format("ddd, DD MMM YYYY, hh:mm A") : '',
+                                commitLink: createGitCommitUrl(mat.url, mat.revision),
                                 author: mat.author || '',
                                 message: mat.message || '',
                                 revision: mat.revision || '',
                                 tag: mat.tag || '',
                                 webhookData: mat.webhookData || '',
                                 url: mat.url || '',
+                                branch:
+                                    (material.ciConfigureSourceType === SourceTypeMap.WEBHOOK
+                                        ? material.ciConfigureSourceValue
+                                        : mat.branch) || '',
                                 type: material.ciConfigureSourceType || '',
                             }
                         })
@@ -116,4 +128,29 @@ export const getCDMaterials = (
 
 export function extractImage(image: string): string {
     return image ? image.split(':').pop() : ''
+}
+
+export function createGitCommitUrl(url: string, revision: string): string {
+    if (!url || !revision) {
+        return "NA"
+    }
+    if (url.indexOf("gitlab") > 0 || url.indexOf("github") > 0 || url.indexOf("azure") > 0) {
+        let urlpart = url.split("@")
+        if (urlpart.length > 1) {
+            return "https://" + urlpart[1].split(".git")[0] + "/commit/" + revision
+        }
+        if (urlpart.length == 1) {
+            return urlpart[0].split(".git")[0] + "/commit/" + revision
+        }
+    }
+    if (url.indexOf("bitbucket") > 0) {
+        let urlpart = url.split("@")
+        if (urlpart.length > 1) {
+            return "https://" + urlpart[1].split(".git")[0] + "/commits/" + revision
+        }
+        if (urlpart.length == 1) {
+            return urlpart[0].split(".git")[0] + "/commits/" + revision
+        }
+    }
+    return "NA"
 }
