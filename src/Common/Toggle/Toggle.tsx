@@ -40,7 +40,7 @@ const Toggle = ({
         >
             <input type="checkbox" checked={!!active} onChange={handleClick} className="toggle__input" />
             <span className={`toggle__slider ${Icon ? 'with-icon br-4 dc__border' : 'round'}`} data-testid={dataTestId}>
-                {Icon && <Icon className="icon-dim-20 br-4" />}
+                {Icon && <Icon className="icon-dim-20 br-4 p-2" />}
             </span>
         </label>
     )
