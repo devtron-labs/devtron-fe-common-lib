@@ -83,6 +83,7 @@ export const getCDMaterials = (
                     vulnerabilitiesLoading: true,
                     scanned: material.scanned,
                     scanEnabled: material.scanEnabled,
+                    isSelected: !material.vulnerable && index === 0,
                     vulnerable: material.vulnerable,
                     runningOnParentCd: material.runningOnParentCd,
                     artifactStatus: artifactStatusValue,
