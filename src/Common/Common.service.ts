@@ -2,7 +2,7 @@ import moment from 'moment';
 import {get, post} from './Api';
 import { ROUTES } from './Constants'
 import { sortCallback } from './Helper';
-import { TeamList ,ResponseType, DeploymentNodeType } from './Types';
+import { TeamList ,ResponseType, DeploymentNodeType, CDModalTab } from './Types';
 
 export const getTeamListMin = (): Promise<TeamList> => {
   // ignore active field
@@ -42,12 +42,6 @@ export const SourceTypeMap = {
     WEBHOOK: 'WEBHOOK',
     BranchRegex: 'SOURCE_TYPE_BRANCH_REGEX',
 }
-
-export type CDModalTabType = 'SECURITY' | 'CHANGES';
-export declare const CDModalTab: {
-    Security: CDModalTabType;
-    Changes: CDModalTabType;
-};
 
 export function getUserRole(appName?: string): Promise<UserRole> {
     return get(`${ROUTES.USER_CHECK_ROLE}${appName ? `?appName=${appName}` : ''}`)
