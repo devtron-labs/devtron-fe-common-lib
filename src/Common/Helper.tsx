@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ServerErrors } from './ServerError'
 import { toast } from 'react-toastify'
 import * as Sentry from '@sentry/browser'
@@ -6,6 +6,8 @@ import { toastAccessDenied } from './ToastBody'
 import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
 import moment from 'moment';
+import { UseSearchString } from './Types'
+import { useLocation } from 'react-router-dom'
 
 toast.configure({
     autoClose: 3000,
@@ -346,3 +348,24 @@ export function handleUTCTime(ts: string, isRelativeTime = false) {
   }
   return timestamp;
 }
+
+export function useSearchString(): UseSearchString {
+    const location = useLocation()
+    const queryParams: URLSearchParams = useMemo(() => {
+        const queryParams = new URLSearchParams(location.search)
+        return queryParams
+    }, [location])
+
+    // const searchParams={}
+    // for (let [key, value] of queryParams.entries()){
+    //     searchParams[key]=value
+    // }
+    const searchParams = Array.from(queryParams.entries()).reduce((agg, curr, idx) => {
+        agg[curr[0]] = curr[1]
+        return agg
+    }, {})
+
+    return { queryParams, searchParams }
+}
+
+

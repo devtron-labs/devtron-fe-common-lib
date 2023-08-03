@@ -365,3 +365,10 @@ export interface RegistryTypeDetailType {
     id: InputDetailType
     password: InputDetailType
 }
+
+export interface UseSearchString {
+    queryParams: URLSearchParams
+    searchParams: {
+        [key: string]: string
+    }
+}
