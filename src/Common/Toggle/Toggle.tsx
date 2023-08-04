@@ -10,6 +10,7 @@ const Toggle = ({
     disabled = false,
     dataTestId = 'handle-toggle-button',
     Icon = null,
+    iconClass= '',
     ...props
 }) => {
     const [active, setActive] = React.useState(selected)
@@ -40,7 +41,7 @@ const Toggle = ({
         >
             <input type="checkbox" checked={!!active} onChange={handleClick} className="toggle__input" />
             <span className={`toggle__slider ${Icon ? 'with-icon br-4 dc__border' : 'round'}`} data-testid={dataTestId}>
-                {Icon && <Icon className="icon-dim-20 br-4 p-2" />}
+                {Icon && <Icon className={`icon-dim-20 br-4 p-2 ${iconClass}`} />}
             </span>
         </label>
     )
