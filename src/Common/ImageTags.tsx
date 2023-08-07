@@ -352,7 +352,7 @@ export const ImageTagsContainer = ({
                     </div>
                     <div className="mt-6 dc__position-rel-imp" data-testid="add-tag-text-area">
                         <input
-                            className="form__input"
+                            className="form__input fs-13"
                             value={textInput}
                             onChange={setInputValue}
                             placeholder="Type a tag and press enter"
@@ -420,7 +420,7 @@ export const ImageTagsContainer = ({
                         <textarea
                             value={newDescription}
                             onChange={handleDescriptionChange}
-                            className="flex left flex-wrap dc__gap-8 dc__description-textarea"
+                            className="flex left flex-wrap dc__gap-8 dc__description-textarea fs-13"
                             style={{ height: '90px !important' }}
                         />
                     </div>

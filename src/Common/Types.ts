@@ -366,6 +366,13 @@ export interface RegistryTypeDetailType {
     password: InputDetailType
 }
 
+export interface UseSearchString {
+    queryParams: URLSearchParams
+    searchParams: {
+        [key: string]: string
+    }
+}
+
 export interface ResizableTextareaProps {
     minHeight?: number
     maxHeight?: number

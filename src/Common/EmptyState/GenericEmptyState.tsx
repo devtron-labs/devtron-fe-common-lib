@@ -19,7 +19,6 @@ function GenericEmptyState({
     SvgImage,
     noImage
 }: GenericEmptyStateType): JSX.Element {
-    console.log(image);
     
     return (
         <div
