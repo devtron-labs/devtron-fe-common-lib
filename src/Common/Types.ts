@@ -372,3 +372,19 @@ export interface UseSearchString {
         [key: string]: string
     }
 }
+
+export interface ResizableTextareaProps {
+    minHeight?: number
+    maxHeight?: number
+    value?: string
+    onChange?: (e) => void
+    onBlur?: (e) => void
+    onFocus?: (e) => void
+    className?: string
+    placeholder?: string
+    lineHeight?: number
+    padding?: number
+    disabled?: boolean
+    name?: string
+    dataTestId?: string
+}
