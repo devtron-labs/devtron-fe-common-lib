@@ -102,7 +102,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
         defaultRegistryURL: 'docker.io',
         registryURL: {
             label: 'Registry URL',
-            defaultValue: 'docker.io',
+            defaultValue: '',
             placeholder: '',
         },
         id: {
@@ -195,7 +195,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
         defaultRegistryURL: 'quay.io',
         registryURL: {
             label: 'Registry URL',
-            defaultValue: 'quay.io',
+            defaultValue: '',
             placeholder: '',
         },
         id: {
@@ -232,4 +232,10 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             placeholder: '',
         },
     },
+}
+
+export const RepositoryAction = {
+    CONTAINER: "CONTAINER",
+    CHART_PULL: "CHART_PULL",
+    CHART_PUSH: "CHART_PUSH"
 }
