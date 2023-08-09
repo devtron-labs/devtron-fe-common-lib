@@ -1,25 +1,35 @@
-import React from 'react';
-import { useEffectAfterMount } from '../Helper';
+import React from 'react'
+import { useEffectAfterMount } from '../Helper'
 import './Toggle.scss'
 
-const Toggle = ({selected=false, onSelect=null, color="#36b37e", rootClassName="", disabled=false, dataTestId="handle-toggle-button", ...props})=>{
-    const [active, setActive] = React.useState(selected);
+const Toggle = ({
+    selected = false,
+    onSelect = null,
+    color = '#36b37e',
+    rootClassName = '',
+    disabled = false,
+    dataTestId = 'handle-toggle-button',
+    Icon = null,
+    iconClass= '',
+    ...props
+}) => {
+    const [active, setActive] = React.useState(selected)
 
-    useEffectAfterMount(()=>{
-        if(typeof onSelect === 'function'){
-            if(active !== selected){
+    useEffectAfterMount(() => {
+        if (typeof onSelect === 'function') {
+            if (active !== selected) {
                 onSelect(active)
             }
         }
-    },[active])
+    }, [active])
 
     useEffectAfterMount(() => {
         setActive(selected)
     }, [selected])
 
-    function handleClick(e){
-        if(!disabled){
-            setActive(active=>!active)
+    function handleClick(e) {
+        if (!disabled) {
+            setActive((active) => !active)
         }
     }
 
@@ -30,7 +40,9 @@ const Toggle = ({selected=false, onSelect=null, color="#36b37e", rootClassName="
             style={{ ['--color' as any]: color }}
         >
             <input type="checkbox" checked={!!active} onChange={handleClick} className="toggle__input" />
-            <span className="toggle__slider round" data-testid={dataTestId}></span>
+            <span className={`toggle__slider ${Icon ? 'with-icon br-4 dc__border' : 'round'}`} data-testid={dataTestId}>
+                {Icon && <Icon className={`icon-dim-20 br-4 p-2 ${iconClass}`} />}
+            </span>
         </label>
     )
 }
