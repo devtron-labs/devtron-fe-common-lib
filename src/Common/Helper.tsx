@@ -369,8 +369,8 @@ export function useSearchString(): UseSearchString {
 }
 
 
-export const closeOnKeyPressed = (e: any, actionClose: () => void, keyCode: number, key: string) => {
-    if (e.keyCode === keyCode || e.key === key) {
+export const closeOnEscKeyPressed = (e: any, actionClose: () => void) => {
+    if (e.keyCode === 27 || e.key === 'Escape')  {
         actionClose()
     }
 }
