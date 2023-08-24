@@ -51,6 +51,7 @@ export function TippyCustomized(props: TippyCustomizedProps) {
             heading,
             headingInfo,
             infoTextHeading,
+            isHeadingVisible,
             infoText,
             showCloseButton,
             additionalContent,
@@ -59,9 +60,10 @@ export function TippyCustomized(props: TippyCustomizedProps) {
         } = props
         return (
             <>
+                {!isHeadingVisible && 
                 <div
                     className={`dc__word-break dc__hyphens-auto flex left ${
-                        isWhiteTheme
+                        isWhiteTheme 
                             ? `p-12 cn-9 ${props.noHeadingBorder ? '' : 'dc__border-bottom-n1'}`
                             : 'pt-20 pb-12 pr-20 pl-20 cn-0 top'
                     }`}
@@ -94,7 +96,7 @@ export function TippyCustomized(props: TippyCustomizedProps) {
                             />
                         </div>
                     )}
-                </div>
+                </div>}
                 {showHeadingInfo && (
                     <div
                         className={`flex left top bcv-1 fs-13 fw-4 lh-20 pt-8 pb-8 ${
