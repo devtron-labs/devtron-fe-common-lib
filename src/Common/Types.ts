@@ -56,7 +56,7 @@ export interface TippyCustomizedProps {
     headingInfo?: ReactNode | string
     noHeadingBorder?: boolean
     infoTextHeading?: string
-    showHeading?: boolean
+    hideHeading?: boolean
     placement: Placement
     className?: string
     Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>

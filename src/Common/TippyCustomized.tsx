@@ -51,7 +51,7 @@ export function TippyCustomized(props: TippyCustomizedProps) {
             heading,
             headingInfo,
             infoTextHeading,
-            showHeading,
+            hideHeading,
             infoText,
             showCloseButton,
             additionalContent,
@@ -60,7 +60,7 @@ export function TippyCustomized(props: TippyCustomizedProps) {
         } = props
         return (
             <>
-                {!showHeading && 
+                {!hideHeading && 
                 <div
                     className={`dc__word-break dc__hyphens-auto flex left ${
                         isWhiteTheme 
