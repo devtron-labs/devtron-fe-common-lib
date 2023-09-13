@@ -28,7 +28,7 @@ export function ResizableTagTextArea({
     }
 
     const reInitHeight = () => {
-        if (document.activeElement !== refVar.current) return
+        if (!dependentRef || document.activeElement !== refVar.current) return
         refVar.current.style.height = minHeight+ 'px'
         dependentRef.current.style.height = minHeight+ 'px'
         let nextHeight = refVar.current.scrollHeight
@@ -49,6 +49,7 @@ export function ResizableTagTextArea({
 
     const handleOnBlur = (event) => {
         refVar.current.style.height = minHeight+ 'px'
+        if(!dependentRef) return
         dependentRef.current.style.height = minHeight+ 'px'
         onBlur && onBlur(event)
     }
