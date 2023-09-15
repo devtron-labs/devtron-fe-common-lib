@@ -59,20 +59,18 @@ export function ResizableTagTextArea({
     }
 
     return (
-        <>
-            <textarea
-                rows={1}
-                ref={refVar}
-                value={text}
-                placeholder={placeholder}
-                className={`${className || ''} lh-20`}
-                style={{ resize: 'none' }}
-                onChange={handleChange}
-                onBlur={handleOnBlur}
-                onFocus={handleOnFocus}
-                tabIndex={tabIndex}
-                data-testid={dataTestId}
-            />
-        </>
+        <textarea
+            rows={1}
+            ref={refVar}
+            value={text}
+            placeholder={placeholder}
+            className={`${className || ''} lh-20`}
+            style={{ resize: 'none' }}
+            onChange={handleChange}
+            onBlur={handleOnBlur}
+            onFocus={handleOnFocus}
+            tabIndex={tabIndex}
+            data-testid={dataTestId}
+        />
     )
 }
