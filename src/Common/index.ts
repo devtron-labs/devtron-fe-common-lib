@@ -35,3 +35,4 @@ export { default as DeleteComponent } from './DeleteComponentModal/DeleteCompone
 export * from './ImageTags'
 export * from './ImageTags.Types'
 export * from './ResizableTextarea'
+export { default as DebouncedSearch } from './DebouncedSearch/DebouncedSearch'
