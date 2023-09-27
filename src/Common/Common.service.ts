@@ -51,6 +51,7 @@ export function setImageTags(request, pipelineId: number, artifactId: number){
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`,request )
 }
 
+// TODO: Add enum for filterState as well
 export const getCDMaterials = (
     cdMaterialId,
     stageType: DeploymentNodeType,
@@ -71,6 +72,8 @@ export const getCDMaterials = (
         else {
             const materials = artifacts.map((material, index) => {
                 let artifactStatusValue = ''
+                const filterState = material.filterState ?? 1
+
                 return {
                     index,
                     id: material.id,
@@ -90,7 +93,7 @@ export const getCDMaterials = (
                     vulnerabilitiesLoading: true,
                     scanned: material.scanned,
                     scanEnabled: material.scanEnabled,
-                    isSelected: !material.vulnerable && index === 0,
+                    isSelected: !material.vulnerable && filterState === 1 && index === 0,
                     vulnerable: material.vulnerable,
                     runningOnParentCd: material.runningOnParentCd,
                     artifactStatus: artifactStatusValue,
@@ -118,6 +121,7 @@ export const getCDMaterials = (
                             }
                         })
                         : [],
+                    filterState,
                 }
             })
             return {
