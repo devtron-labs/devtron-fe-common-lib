@@ -2,7 +2,7 @@ import moment from 'moment';
 import {get, post} from './Api';
 import { ROUTES } from './Constants'
 import { sortCallback } from './Helper';
-import { TeamList ,ResponseType, DeploymentNodeType, CDModalTab } from './Types';
+import { TeamList ,ResponseType, DeploymentNodeType, CDModalTab, FilterStates } from './Types';
 
 export const getTeamListMin = (): Promise<TeamList> => {
   // ignore active field
@@ -72,7 +72,7 @@ export const getCDMaterials = (
         else {
             const materials = artifacts.map((material, index) => {
                 let artifactStatusValue = ''
-                const filterState = material.filterState ?? 1
+                const filterState = material.filterState ?? FilterStates.ALLOWED
 
                 return {
                     index,
@@ -93,7 +93,7 @@ export const getCDMaterials = (
                     vulnerabilitiesLoading: true,
                     scanned: material.scanned,
                     scanEnabled: material.scanEnabled,
-                    isSelected: !material.vulnerable && filterState === 1 && index === 0,
+                    isSelected: !material.vulnerable && filterState === FilterStates.ALLOWED && index === 0,
                     vulnerable: material.vulnerable,
                     runningOnParentCd: material.runningOnParentCd,
                     artifactStatus: artifactStatusValue,
