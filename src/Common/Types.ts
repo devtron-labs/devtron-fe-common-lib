@@ -215,6 +215,11 @@ export interface UserApprovalMetadataType {
     requestedUserData: ApprovalUserDataType
 }
 
+export enum FilterStates {
+    BLOCKED = 0,
+    ALLOWED = 1,
+    ERROR = 2
+}
 
 export interface CDMaterialType {
     index: number
@@ -241,6 +246,7 @@ export interface CDMaterialType {
     imageComment?: ImageComment
     imageReleaseTags?: ReleaseTag[]
     artifactStatus?: string
+    filterState: FilterStates;
 }
 
 export interface CommonNodeAttr {
