@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import Tippy from '@tippyjs/react'
 import { copyToClipboard } from './utils'
 import ClipboardProps from './types'
-import { ReactComponent as ICCopy } from '../../../assets/icons/ic-copy.svg'
+import { ReactComponent as ICCopy } from '../../Assets/Icon/ic-copy.svg'
 
 /**
  * @param content - Content to be copied
