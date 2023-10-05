@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ServerErrors } from './ServerError'
+import { useLocation } from 'react-router-dom'
+import moment from 'moment'
 import { toast } from 'react-toastify'
 import * as Sentry from '@sentry/browser'
+import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
-import moment from 'moment';
-import { UseSearchString } from './Types'
-import { useLocation } from 'react-router-dom'
 import YAML from 'yaml'
+import { AsyncOptions, AsyncState, UseSearchString } from './Types'
 
 toast.configure({
     autoClose: 3000,
@@ -337,17 +337,17 @@ export function CustomInput({
 }
 
 export function handleUTCTime(ts: string, isRelativeTime = false) {
-  let timestamp = "";
-  try {
-      if (ts && ts.length) {
-          let date = moment(ts);
-          if (isRelativeTime) timestamp = date.fromNow();
-          else timestamp = date.format("ddd DD MMM YYYY HH:mm:ss");
-      }
-  } catch (error) {
-      console.error("Error Parsing Date:", ts);
-  }
-  return timestamp;
+    let timestamp = ''
+    try {
+        if (ts && ts.length) {
+            let date = moment(ts)
+            if (isRelativeTime) timestamp = date.fromNow()
+            else timestamp = date.format('ddd DD MMM YYYY HH:mm:ss')
+        }
+    } catch (error) {
+        console.error('Error Parsing Date:', ts)
+    }
+    return timestamp
 }
 
 export function useSearchString(): UseSearchString {
@@ -369,9 +369,8 @@ export function useSearchString(): UseSearchString {
     return { queryParams, searchParams }
 }
 
-
 export const closeOnEscKeyPressed = (e: any, actionClose: () => void) => {
-    if (e.keyCode === 27 || e.key === 'Escape')  {
+    if (e.keyCode === 27 || e.key === 'Escape') {
         actionClose()
     }
 }
@@ -448,42 +447,6 @@ export function useJsonYaml(value, tabSize = 4, language = 'json', shouldRun = f
   return [nativeObject, json, yaml, error]
 }
 
-const unsecureCopyToClipboard = (str, callback = noop) => {
-  const listener = function (ev) {
-      ev.preventDefault()
-      ev.clipboardData.setData('text/plain', str)
-  }
-  document.addEventListener('copy', listener)
-  document.execCommand('copy')
-  document.removeEventListener('copy', listener)
-  callback()
-}
-
-/**
-* It will copy the passed content to clipboard and invoke the callback function, in case of error it will show the toast message.
-* On HTTP system clipboard is not supported, so it will use the unsecureCopyToClipboard function
-* @param str
-* @param callback
-*/
-export function copyToClipboard(str, callback = noop) {
-  if (!str) {
-      return
-  }
-
-  if (window.isSecureContext && navigator.clipboard) {
-      navigator.clipboard
-          .writeText(str)
-          .then(() => {
-              callback()
-          })
-          .catch(() => {
-              toast.error('Failed to copy to clipboard')
-          })
-  } else {
-      unsecureCopyToClipboard(str, callback)
-  }
-}
-
 const MANIFEST_METADATA_REQUIRED_FIELDS: string[] = ['name', 'namespace', 'labels', 'annotations']
 
 // Remove Auto-generated fields from kubernetes manifest
@@ -514,4 +477,117 @@ export function cleanKubeManifest(manifestJsonString: string): string {
     } catch (e) {
         return manifestJsonString
     }
+}
+const unsecureCopyToClipboard = (str, callback = noop) => {
+    const listener = function (ev) {
+        ev.preventDefault()
+        ev.clipboardData.setData('text/plain', str)
+    }
+    document.addEventListener('copy', listener)
+    document.execCommand('copy')
+    document.removeEventListener('copy', listener)
+    callback()
+}
+
+/**
+ * It will copy the passed content to clipboard and invoke the callback function, in case of error it will show the toast message.
+ * On HTTP system clipboard is not supported, so it will use the unsecureCopyToClipboard function
+ * @param str
+ * @param callback
+ */
+export function copyToClipboard(str, callback = noop) {
+    if (!str) {
+        return
+    }
+
+    if (window.isSecureContext && navigator.clipboard) {
+        navigator.clipboard
+            .writeText(str)
+            .then(() => {
+                callback()
+            })
+            .catch(() => {
+                toast.error('Failed to copy to clipboard')
+            })
+    } else {
+        unsecureCopyToClipboard(str, callback)
+    }
+}
+
+export function useAsync<T>(
+    func: (...rest) => Promise<T>,
+    dependencyArray: any[] = [],
+    shouldRun = true,
+    options: AsyncOptions = { resetOnChange: true },
+): [boolean, T, any | null, () => void, React.Dispatch<any>, any[]] {
+    const [state, setState] = useState<AsyncState<T>>({
+        loading: true,
+        result: null,
+        error: null,
+        dependencies: dependencyArray,
+    })
+    const mounted = useRef(true)
+    const dependencies: any[] = useMemo(() => {
+        return [...dependencyArray, shouldRun]
+    }, [...dependencyArray, shouldRun])
+
+    const reload = () => {
+        async function call() {
+            try {
+                setState((state) => ({
+                    ...state,
+                    loading: true,
+                }))
+                const result = await func()
+                if (mounted.current)
+                    setState((state) => ({
+                        ...state,
+                        result,
+                        error: null,
+                        loading: false,
+                    }))
+            } catch (error: any) {
+                if (mounted.current)
+                    setState((state) => ({
+                        ...state,
+                        error,
+                        loading: false,
+                    }))
+            }
+        }
+        call()
+    }
+
+    useEffect(() => {
+        if (!shouldRun) {
+            setState((state) => ({ ...state, loading: false }))
+            return
+        }
+        setState((state) => ({ ...state, dependencies: dependencyArray }))
+        reload()
+        return () =>
+            setState((state) => ({
+                ...state,
+                loading: false,
+                error: null,
+                ...(options.resetOnChange ? { result: null } : {}),
+            }))
+    }, dependencies)
+
+    useEffect(() => {
+        mounted.current = true
+        return () => {
+            mounted.current = false
+        }
+    }, [])
+
+    const setResult = (param) => {
+        if (typeof param === 'function') {
+            setState((state) => ({ ...state, result: param(state.result) }))
+        } else {
+            setState((state) => ({ ...state, result: param }))
+        }
+    }
+
+    return [state.loading, state.result, state.error, reload, setResult, state.dependencies]
 }
