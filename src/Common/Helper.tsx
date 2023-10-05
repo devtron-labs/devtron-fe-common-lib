@@ -8,6 +8,7 @@ import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
 import moment from 'moment';
 import { UseSearchString } from './Types'
 import { useLocation } from 'react-router-dom'
+import YAML from 'yaml'
 
 toast.configure({
     autoClose: 3000,
@@ -372,5 +373,145 @@ export function useSearchString(): UseSearchString {
 export const closeOnEscKeyPressed = (e: any, actionClose: () => void) => {
     if (e.keyCode === 27 || e.key === 'Escape')  {
         actionClose()
+    }
+}
+
+
+
+
+
+
+
+export function useJsonYaml(value, tabSize = 4, language = 'json', shouldRun = false) {
+  const [json, setJson] = useState('')
+  const [yaml, setYaml] = useState('')
+  const [nativeObject, setNativeObject] = useState(null)
+  const [error, setError] = useState('')
+  const yamlParseConfig = {
+      prettyErrors: true,
+  }
+
+  useEffect(() => {
+      if (!shouldRun) return
+      let obj
+      let jsonError = null
+      let yamlError = null
+      if (language === 'json') {
+          try {
+              obj = JSON.parse(value)
+              jsonError = null
+              yamlError = null
+          } catch (err) {
+              jsonError = err
+              try {
+                  obj = YAML.parse(value, yamlParseConfig)
+                  jsonError = null
+                  yamlError = null
+              } catch (err2) {
+                  yamlError = err2
+              }
+          }
+      } else {
+          try {
+              obj = YAML.parse(value, yamlParseConfig)
+              jsonError = null
+              yamlError = null
+          } catch (err) {
+              yamlError = err
+              try {
+                  obj = JSON.parse(value)
+                  jsonError = null
+                  yamlError = null
+              } catch (err2) {
+                  jsonError = err2
+              }
+          }
+      }
+      if (jsonError || yamlError) {
+          setError(language === 'json' ? jsonError.message : yamlError.message)
+      }
+      if (obj && typeof obj === 'object') {
+          setJson(JSON.stringify(obj, null, tabSize))
+          setYaml(YAML.stringify(obj, { indent: 2 }))
+          setNativeObject(obj)
+          setError('')
+      } else {
+          setNativeObject(null)
+          if (jsonError || yamlError) {
+              setError(language === 'json' ? jsonError.message : yamlError.message)
+          } else {
+              setError('cannot parse to valid object')
+          }
+      }
+  }, [value, tabSize, language, shouldRun])
+
+  return [nativeObject, json, yaml, error]
+}
+
+const unsecureCopyToClipboard = (str, callback = noop) => {
+  const listener = function (ev) {
+      ev.preventDefault()
+      ev.clipboardData.setData('text/plain', str)
+  }
+  document.addEventListener('copy', listener)
+  document.execCommand('copy')
+  document.removeEventListener('copy', listener)
+  callback()
+}
+
+/**
+* It will copy the passed content to clipboard and invoke the callback function, in case of error it will show the toast message.
+* On HTTP system clipboard is not supported, so it will use the unsecureCopyToClipboard function
+* @param str
+* @param callback
+*/
+export function copyToClipboard(str, callback = noop) {
+  if (!str) {
+      return
+  }
+
+  if (window.isSecureContext && navigator.clipboard) {
+      navigator.clipboard
+          .writeText(str)
+          .then(() => {
+              callback()
+          })
+          .catch(() => {
+              toast.error('Failed to copy to clipboard')
+          })
+  } else {
+      unsecureCopyToClipboard(str, callback)
+  }
+}
+
+const MANIFEST_METADATA_REQUIRED_FIELDS: string[] = ['name', 'namespace', 'labels', 'annotations']
+
+// Remove Auto-generated fields from kubernetes manifest
+// input - jsonString
+// output - jsonString
+export function cleanKubeManifest(manifestJsonString: string): string {
+    if (!manifestJsonString) {
+        return manifestJsonString
+    }
+
+    try {
+        const obj = JSON.parse(manifestJsonString)
+
+        // 1 - delete status
+        delete obj['status']
+
+        // 2 - delete all fields from metadata except some predefined
+        let metadata = obj['metadata']
+        if (metadata) {
+            for (let key in metadata) {
+                if (!MANIFEST_METADATA_REQUIRED_FIELDS.includes(key)) {
+                    delete metadata[key]
+                }
+            }
+        }
+
+        return JSON.stringify(obj)
+    } catch (e) {
+        return manifestJsonString
     }
 }

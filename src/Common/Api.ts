@@ -74,8 +74,8 @@ const responseMessages = {
 }
 
 function handleLogout() {
-    const continueParam = `${window.location.pathname.replace(process.env.PUBLIC_URL, '')}${window.location.search}`
-    window.location.href = `${window.location.origin}${process.env.PUBLIC_URL}${URLS.LOGIN_SSO}?continue=${continueParam}`
+    const continueParam = `${window.location.pathname.replace(import.meta['env'].PUBLIC_URL, '')}${window.location.search}`
+    window.location.href = `${window.location.origin}${import.meta['env'].PUBLIC_URL}${URLS.LOGIN_SSO}?continue=${continueParam}`
 }
 
 async function handleServerError(contentType, response) {

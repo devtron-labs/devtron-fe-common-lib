@@ -11,7 +11,8 @@ import commonjs from '@rollup/plugin-commonjs'
 
 export default {
     input: './src/index.ts',
-    output: [{ file: pkg.main, format: 'cjs' }],
+    //output: [{ file: pkg.main, format: 'cjs' }],
+    output: { dir: 'dist', format: 'cjs' },
     plugins: [
         peerDepsExternal(),
         resolve(),
