@@ -1,7 +1,7 @@
 import { RegistryTypeDetailType } from "./Types"
 
 export const RequestTimeout = 60000
-export const Host = import.meta['env'].REACT_APP_ORCHESTRATOR_ROOT
+export const Host = import.meta['env'].REACT_APP_ORCHESTRATOR_ROOT ?? "/orchestrator"
 
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
 export const DOCUMENTATION = {
