@@ -396,3 +396,15 @@ export interface ResizableTextareaProps {
     name?: string
     dataTestId?: string
 }
+
+export interface AsyncState<T> {
+    loading: boolean
+    result: T
+    error: null
+    dependencies: any[]
+}
+
+
+export interface AsyncOptions {
+    resetOnChange: boolean
+}

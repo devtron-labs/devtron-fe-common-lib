@@ -15,6 +15,7 @@ export function ResizableTagTextArea({
     refVar,
     dependentRef,
     dataTestId,
+    handleKeyDown,
 }: ResizableTagTextAreaProps) {
     const [text, setText] = useState('')
 
@@ -29,10 +30,12 @@ export function ResizableTagTextArea({
 
     const reInitHeight = () => {
         if (document.activeElement !== refVar.current) return
-        refVar.current.style.height = minHeight+ 'px'
-        dependentRef.current.style.height = minHeight+ 'px'
+        refVar.current.style.height = minHeight + 'px'
+        if (dependentRef) {
+            dependentRef.current.style.height = minHeight + 'px'
+        }
         let nextHeight = refVar.current.scrollHeight
-        if (nextHeight < dependentRef.current.scrollHeight) {
+        if (dependentRef && nextHeight < dependentRef.current.scrollHeight) {
             nextHeight = dependentRef.current.scrollHeight
         }
         if (minHeight && nextHeight < minHeight) {
@@ -42,14 +45,18 @@ export function ResizableTagTextArea({
             nextHeight = maxHeight
         }
         refVar.current.style.height = nextHeight + 'px'
-        dependentRef.current.style.height = nextHeight + 'px'
+        if (dependentRef) {
+            dependentRef.current.style.height = nextHeight + 'px'
+        }
     }
 
     useThrottledEffect(reInitHeight, 500, [text])
 
     const handleOnBlur = (event) => {
-        refVar.current.style.height = minHeight+ 'px'
-        dependentRef.current.style.height = minHeight+ 'px'
+        refVar.current.style.height = minHeight + 'px'
+        if (dependentRef) {
+            dependentRef.current.style.height = minHeight + 'px'
+        }
         onBlur && onBlur(event)
     }
 
@@ -71,6 +78,7 @@ export function ResizableTagTextArea({
             onFocus={handleOnFocus}
             tabIndex={tabIndex}
             data-testid={dataTestId}
+            onKeyDown={handleKeyDown}
         />
     )
 }
