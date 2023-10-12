@@ -216,8 +216,8 @@ export interface UserApprovalMetadataType {
 }
 
 export enum FilterStates {
-    BLOCKED = 0,
-    ALLOWED = 1,
+    ALLOWED = 0,
+    BLOCKED = 1,
     ERROR = 2
 }
 
