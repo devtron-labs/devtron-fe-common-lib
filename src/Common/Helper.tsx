@@ -326,7 +326,7 @@ export function CustomInput({
                 tabIndex={tabIndex}
             />
             {handleError(error).map((err) => (
-                <div className="form__error">
+                <div className="form__error" key={err}>
                     <FormError className="form__icon form__icon--error" />
                     {err}
                 </div>
