@@ -18,7 +18,7 @@ export default defineConfig({
     svgr({
         svgrOptions: {},
     }),
-    dts({ include: ['lib'], copyDtsFiles: true }),
+    dts(),
     NodeGlobalsPolyfillPlugin({
       process: true,
   })
