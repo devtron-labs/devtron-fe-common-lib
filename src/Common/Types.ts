@@ -249,6 +249,17 @@ export interface CDMaterialType {
     filterState: FilterStates
 }
 
+export enum CDMaterialServiceEnum {
+    ROLLBACK = 'rollback',
+    CD_MATERIALS = 'cd-materials',
+}
+
+export interface CDMaterialServiceQueryParams {
+    search?: string
+    offset?: number
+    size?: number
+}
+
 export interface CommonNodeAttr {
     connectingCiPipelineId?: number
     parents: string | number[] | string[]
@@ -362,15 +373,21 @@ export interface FilterConditionsListType {
     conditions: FilterConditionsInfo[]
 }
 
-export interface CDMaterialResponseType {
+export interface CDMaterialsApprovalInfo {
     approvalUsers: string[]
-    materials: any[]
     userApprovalConfig: UserApprovalConfigType
     requestedUserId: number
+}
+
+export interface CDMaterialsMetaInfo {
     tagsEditable: boolean
     appReleaseTagNames: string[]
     hideImageTaggingHardDelete: boolean
     resourceFilters?: FilterConditionsListType[]
+}
+
+export interface CDMaterialResponseType extends CDMaterialsMetaInfo, CDMaterialsApprovalInfo {
+    materials: any[]
 }
 
 export interface InputDetailType {

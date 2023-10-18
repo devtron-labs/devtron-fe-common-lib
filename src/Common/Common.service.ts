@@ -2,7 +2,18 @@ import moment from 'moment';
 import {get, post} from './Api';
 import { ROUTES } from './Constants'
 import { sortCallback } from './Helper';
-import { TeamList ,ResponseType, DeploymentNodeType, CDModalTab, FilterStates } from './Types';
+import {
+    TeamList,
+    ResponseType,
+    DeploymentNodeType,
+    CDModalTab,
+    FilterStates,
+    CDMaterialServiceEnum,
+    CDMaterialServiceQueryParams,
+    CDMaterialResponseType,
+    CDMaterialsMetaInfo,
+    CDMaterialsApprovalInfo,
+} from './Types'
 
 export const getTeamListMin = (): Promise<TeamList> => {
   // ignore active field
@@ -51,83 +62,191 @@ export function setImageTags(request, pipelineId: number, artifactId: number){
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`,request )
 }
 
-// FIXME: This is only returning materials to cater the case of search in approval but it should be a common function service coming from dashboard.
-export const getCDMaterials = (
-    cdMaterialId,
-    stageType: DeploymentNodeType,
-    abortSignal: AbortSignal,
-    isApprovalNode?: boolean,
-    imageTag?: string): Promise<any> => {
-    const URL = (!imageTag) ? `app/cd-pipeline/${cdMaterialId}/material?stage=${stageMap[stageType]}` : `app/cd-pipeline/${cdMaterialId}/material?stage=${stageMap[stageType]}&search=${imageTag}`
+const processURL = (url: string, params: object) => {
+    const validParams = Object.keys(params).filter((key) => {
+        return params[key] != null
+    })
 
-    return get(URL, {
-        signal: abortSignal,
-    }).then((response) => {
-        let artifacts = response.result.ci_artifacts ?? []
-        if (!response.result) {
-            return {
-                materials: [],
-            }
-        }
-        else {
-            const materials = artifacts.map((material, index) => {
-                let artifactStatusValue = ''
-                const filterState = material.filterState ?? FilterStates.ALLOWED
+    if (!validParams.length) {
+        return url
+    }
 
-                return {
-                    index,
-                    id: material.id,
-                    deployedTime: material.deployed_time
-                        ? moment(material.deployed_time).format('ddd, DD MMM YYYY, hh:mm A')
-                        : 'Not Deployed',
-                    deployedBy: material.deployedBy,
-                    wfrId: material.wfrId,
-                    image: extractImage(material.image),
-                    showChanges: false,
-                    vulnerabilities: [],
-                    buildTime: material.build_time || '',
-                    tab: CDModalTab.Changes,
-                    showSourceInfo: false,
-                    deployed: material.deployed || false,
-                    latest: material.latest || false,
-                    vulnerabilitiesLoading: true,
-                    scanned: material.scanned,
-                    scanEnabled: material.scanEnabled,
-                    isSelected: !material.vulnerable && filterState === FilterStates.ALLOWED && index === 0,
-                    vulnerable: material.vulnerable,
-                    runningOnParentCd: material.runningOnParentCd,
-                    artifactStatus: artifactStatusValue,
-                    userApprovalMetadata: material.userApprovalMetadata,
-                    triggeredBy: material.triggeredBy,
-                    isVirtualEnvironment: material.isVirtualEnvironment,
-                    imageComment: material.imageComment,
-                    imageReleaseTags: material.imageReleaseTags,
-                    materialInfo: material.material_info
-                        ? material.material_info.map((mat) => {
-                            return {
-                                modifiedTime: mat.modifiedTime ? moment(mat.modifiedTime).format("ddd, DD MMM YYYY, hh:mm A") : '',
-                                commitLink: createGitCommitUrl(mat.url, mat.revision),
-                                author: mat.author || '',
-                                message: mat.message || '',
-                                revision: mat.revision || '',
-                                tag: mat.tag || '',
-                                webhookData: mat.webhookData || '',
-                                url: mat.url || '',
-                                branch:
-                                    (material.ciConfigureSourceType === SourceTypeMap.WEBHOOK
-                                        ? material.ciConfigureSourceValue
-                                        : mat.branch) || '',
-                                type: material.ciConfigureSourceType || '',
-                            }
-                        })
-                        : [],
-                    filterState,
-                }
-            })
-            return {
-                materials: materials
-            }
+    const queryString = validParams
+        .map((key) => {
+            return `${key}=${params[key]}`
+        })
+        .join('&')
+
+    return `${url}?${queryString}`
+}
+
+const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: number, artifactStatus?: string) => {
+    if (!artifacts || !artifacts.length) return []
+
+    const markFirstSelected = offset === 1
+    const startIndex = offset - 1
+    let isImageMarked = false
+
+    const materials = artifacts.map((material, index) => {
+        let artifactStatusValue = ''
+        const filterState = material.filterState ?? FilterStates.ALLOWED
+
+        if (artifactId && artifactStatus && material.id === artifactId) {
+            artifactStatusValue = artifactStatus
         }
+
+        const selectImage =
+            !isImageMarked && markFirstSelected && filterState === FilterStates.ALLOWED ? !material.vulnerable : false
+        if (selectImage) {
+            isImageMarked = true
+        }
+
+        return {
+            index: startIndex + index,
+            id: material.id,
+            deployedTime: material.deployed_time
+                ? moment(material.deployed_time).format('ddd, DD MMM YYYY, hh:mm A')
+                : 'Not Deployed',
+            deployedBy: material.deployedBy,
+            wfrId: material.wfrId,
+            tab: CDModalTab.Changes,
+            image: extractImage(material.image),
+            showChanges: false,
+            vulnerabilities: [],
+            buildTime: material.build_time || '',
+            isSelected: selectImage,
+            showSourceInfo: false,
+            deployed: material.deployed || false,
+            latest: material.latest || false,
+            vulnerabilitiesLoading: true,
+            scanned: material.scanned,
+            scanEnabled: material.scanEnabled,
+            vulnerable: material.vulnerable,
+            runningOnParentCd: material.runningOnParentCd,
+            artifactStatus: artifactStatusValue,
+            userApprovalMetadata: material.userApprovalMetadata,
+            triggeredBy: material.triggeredBy,
+            isVirtualEnvironment: material.isVirtualEnvironment,
+            imageComment: material.imageComment,
+            imageReleaseTags: material.imageReleaseTags,
+            materialInfo: material.material_info
+                ? material.material_info.map((mat) => {
+                      return {
+                          modifiedTime: mat.modifiedTime
+                              ? moment(mat.modifiedTime).format('ddd, DD MMM YYYY, hh:mm A')
+                              : '',
+                          commitLink: createGitCommitUrl(mat.url, mat.revision),
+                          author: mat.author || '',
+                          message: mat.message || '',
+                          revision: mat.revision || '',
+                          tag: mat.tag || '',
+                          webhookData: mat.webhookData || '',
+                          url: mat.url || '',
+                          branch:
+                              (material.ciConfigureSourceType === SourceTypeMap.WEBHOOK
+                                  ? material.ciConfigureSourceValue
+                                  : mat.branch) || '',
+                          type: material.ciConfigureSourceType || '',
+                      }
+                  })
+                : [],
+            filterState,
+        }
+    })
+    return materials
+}
+
+const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResult): CDMaterialsApprovalInfo => {
+    if (!enableApproval) {
+        return {
+            approvalUsers: [],
+            userApprovalConfig: null,
+            requestedUserId: 0,
+        }
+    }
+
+    return {
+        approvalUsers: cdMaterialsResult.approvalUsers,
+        userApprovalConfig: cdMaterialsResult.userApprovalConfig,
+        requestedUserId: cdMaterialsResult.requestedUserId,
+    }
+}
+
+const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
+    if (!cdMaterialsResult) {
+        return {
+            tagsEditable: false,
+            appReleaseTagNames: [],
+            hideImageTaggingHardDelete: false,
+            resourceFilters: [],
+        }
+    }
+
+    return {
+        appReleaseTagNames: cdMaterialsResult.appReleaseTagNames,
+        tagsEditable: cdMaterialsResult.tagsEditable,
+        hideImageTaggingHardDelete: cdMaterialsResult.hideImageTaggingHardDelete,
+        resourceFilters: cdMaterialsResult.resourceFilters ?? [],
+    }
+}
+
+const processCDMaterialServiceResponse = (
+    cdMaterialsResult,
+    stage: DeploymentNodeType,
+    offset: number,
+): CDMaterialResponseType => {
+    if (!cdMaterialsResult) {
+        return {
+            materials: [],
+            ...processCDMaterialsMetaInfo(cdMaterialsResult),
+            ...processCDMaterialsApprovalInfo(false, cdMaterialsResult),
+        }
+    }
+
+    const materials = cdMaterialListModal(
+        cdMaterialsResult.ci_artifacts,
+        offset ?? 1,
+        cdMaterialsResult.latest_wf_artifact_id,
+        cdMaterialsResult.latest_wf_artifact_status,
+    )
+    const approvalInfo = processCDMaterialsApprovalInfo(
+        stage === DeploymentNodeType.CD || stage === DeploymentNodeType.APPROVAL,
+        cdMaterialsResult,
+    )
+    const metaInfo = processCDMaterialsMetaInfo(cdMaterialsResult)
+
+    return {
+        materials,
+        ...approvalInfo,
+        ...metaInfo,
+    }
+}
+
+export const genericCDMaterialsService = (
+    serviceType: CDMaterialServiceEnum,
+    cdMaterialID: number,
+    stage: DeploymentNodeType,
+    signal: AbortSignal,
+    queryParams: CDMaterialServiceQueryParams = {},
+): Promise<CDMaterialResponseType> => {
+    let URL
+    switch (serviceType) {
+        case CDMaterialServiceEnum.ROLLBACK:
+            if (!queryParams.offset || !queryParams.size) {
+                throw new Error('Dev Error: Provide both offset and size for rollback')
+            }
+
+            URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material/rollback`, queryParams)
+            break
+
+        // Meant for handling getCDMaterialList
+        default:
+            URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material`, { ...queryParams, stage })
+            break
+    }
+
+    return get(URL, { signal }).then((response) => {
+        return processCDMaterialServiceResponse(response.result, stage, queryParams.offset)
     })
 }
 
