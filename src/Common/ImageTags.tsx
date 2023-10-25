@@ -18,6 +18,7 @@ import { showError, stopPropagation } from './Helper'
 import { TippyCustomized } from './TippyCustomized'
 import { setImageTags, getUserRole } from './Common.service'
 import Tippy from '@tippyjs/react'
+import { Progressing } from './Progressing'
 
 export const ImageTagsContainer = ({
     ciPipelineId,
@@ -47,6 +48,7 @@ export const ImageTagsContainer = ({
     const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false)
     const [descriptionValidationMessage, setDescriptionValidationMessage] = useState<string>('')
     const [textInput, setTextInput] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
         initialise()
@@ -226,6 +228,7 @@ export const ImageTagsContainer = ({
         }
 
         // set loading state true
+        setLoading(true)
         setImageTags(payload, ciPipelineId, artifactId)
             .then((res) => {
                 const tags = res.result?.imageReleaseTags?.map((tag) => ({
@@ -261,6 +264,9 @@ export const ImageTagsContainer = ({
                 } else {
                     showError(err)
                 }
+            })
+            .finally(()=>{
+                setLoading(false)
             })
     }
 
@@ -438,6 +444,7 @@ export const ImageTagsContainer = ({
                                 stopPropagation(e)
                                 handleCancel()
                             }}
+                            disabled={loading}
                         >
                             Cancel
                         </button>
@@ -449,8 +456,9 @@ export const ImageTagsContainer = ({
                                 stopPropagation(e)
                                 onClickSave()
                             }}
+                            disabled={loading}
                         >
-                            Save
+                            {loading ? <Progressing /> : 'Save'}
                         </button>
                     </div>
                 </div>

@@ -13,6 +13,8 @@ import {
     CDMaterialResponseType,
     CDMaterialsMetaInfo,
     CDMaterialsApprovalInfo,
+    CDMaterialFilterQuery,
+    CDMaterialType,
 } from './Types'
 
 export const getTeamListMin = (): Promise<TeamList> => {
@@ -73,9 +75,12 @@ const processURL = (url: string, params: object) => {
 
     const queryString = validParams
         .map((key) => {
+            if (Array.isArray(params[key])) {
+                return `${key}=${params[key].join(',')}`  
+            }
             return `${key}=${params[key]}`
         })
-        .join('&')
+        .join('&')    
 
     return `${url}?${queryString}`
 }
@@ -87,7 +92,7 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
     const startIndex = offset - 1
     let isImageMarked = false
 
-    const materials = artifacts.map((material, index) => {
+    const materials: CDMaterialType[] = artifacts.map((material, index) => {
         let artifactStatusValue = ''
         const filterState = material.filterState ?? FilterStates.ALLOWED
 
@@ -129,6 +134,8 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
             isVirtualEnvironment: material.isVirtualEnvironment,
             imageComment: material.imageComment,
             imageReleaseTags: material.imageReleaseTags,
+            // It is going to be null but required in type so can't remove
+            lastExecution: material.lastExecution,
             materialInfo: material.material_info
                 ? material.material_info.map((mat) => {
                       return {
@@ -194,6 +201,7 @@ const processCDMaterialServiceResponse = (
     cdMaterialsResult,
     stage: DeploymentNodeType,
     offset: number,
+    filter: CDMaterialFilterQuery,
 ): CDMaterialResponseType => {
     if (!cdMaterialsResult) {
         return {
@@ -215,11 +223,24 @@ const processCDMaterialServiceResponse = (
     )
     const metaInfo = processCDMaterialsMetaInfo(cdMaterialsResult)
 
+    // TODO: On update of service would remove from here
+    const filteredMaterials =
+        filter && filter === CDMaterialFilterQuery.RESOURCE
+            ? materials.filter((material) => {
+                  return material.filterState === FilterStates.ALLOWED
+              })
+            : materials
+
     return {
-        materials,
+        materials: filteredMaterials,
         ...approvalInfo,
         ...metaInfo,
     }
+}
+
+const getSanitizedQueryParams = (queryParams: CDMaterialServiceQueryParams): CDMaterialServiceQueryParams => {
+    const { filter, ...rest } = queryParams
+    return rest
 }
 
 export const genericCDMaterialsService = (
@@ -229,24 +250,23 @@ export const genericCDMaterialsService = (
     signal: AbortSignal,
     queryParams: CDMaterialServiceQueryParams = {},
 ): Promise<CDMaterialResponseType> => {
+    // TODO: On update of service would remove from here
+    const manipulatedParams = getSanitizedQueryParams(queryParams)
+    
     let URL
     switch (serviceType) {
         case CDMaterialServiceEnum.ROLLBACK:
-            if (!queryParams.offset || !queryParams.size) {
-                throw new Error('Dev Error: Provide both offset and size for rollback')
-            }
-
-            URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material/rollback`, queryParams)
+            URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material/rollback`, manipulatedParams)
             break
 
         // Meant for handling getCDMaterialList
         default:
-            URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material`, { ...queryParams, stage })
+            URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material`, { ...manipulatedParams, stage })
             break
     }
 
     return get(URL, { signal }).then((response) => {
-        return processCDMaterialServiceResponse(response.result, stage, queryParams.offset)
+        return processCDMaterialServiceResponse(response.result, stage, manipulatedParams.offset, manipulatedParams.filter)
     })
 }
 

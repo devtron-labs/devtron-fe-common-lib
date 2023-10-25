@@ -247,6 +247,8 @@ export interface CDMaterialType {
     imageReleaseTags?: ReleaseTag[]
     artifactStatus?: string
     filterState: FilterStates
+    // Not even coming from API but required in CDMaterials for Security which makes its own api call but stores data in CDMaterials
+    scanToolId?: number
 }
 
 export enum CDMaterialServiceEnum {
@@ -254,10 +256,21 @@ export enum CDMaterialServiceEnum {
     CD_MATERIALS = 'cd-materials',
 }
 
+export enum CDMaterialResourceQuery {
+    PENDING_APPROVAL = 'PENDING_APPROVAL'
+}
+
+export enum CDMaterialFilterQuery {
+    RESOURCE = 'ELIGIBLE_RESOURCES',
+    ALL = 'ALL_RESOURCES'
+}
+
 export interface CDMaterialServiceQueryParams {
     search?: string
     offset?: number
     size?: number
+    resource?: CDMaterialResourceQuery
+    filter?: CDMaterialFilterQuery
 }
 
 export interface CommonNodeAttr {
@@ -387,7 +400,7 @@ export interface CDMaterialsMetaInfo {
 }
 
 export interface CDMaterialResponseType extends CDMaterialsMetaInfo, CDMaterialsApprovalInfo {
-    materials: any[]
+    materials: CDMaterialType[]
 }
 
 export interface InputDetailType {
