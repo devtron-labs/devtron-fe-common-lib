@@ -43,7 +43,7 @@ interface UserRole extends ResponseType {
     }
 }
 
-let stageMap = {
+const stageMap = {
     PRECD: 'PRE',
     CD: 'DEPLOY',
     POSTCD: 'POST',
@@ -261,7 +261,7 @@ export const genericCDMaterialsService = (
 
         // Meant for handling getCDMaterialList
         default:
-            URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material`, { ...manipulatedParams, stage })
+            URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material`, { ...manipulatedParams, stage: stageMap[stage] })
             break
     }
 
