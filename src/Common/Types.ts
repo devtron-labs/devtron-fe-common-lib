@@ -249,6 +249,8 @@ export interface CDMaterialType {
     filterState: FilterStates
     // Not even coming from API but required in CDMaterials for Security which makes its own api call but stores data in CDMaterials
     scanToolId?: number
+    appliedFiltersTimestamp?: string
+    appliedFilters?: FilterConditionsListType[]
 }
 
 export enum CDMaterialServiceEnum {
@@ -397,6 +399,7 @@ export interface CDMaterialsMetaInfo {
     appReleaseTagNames: string[]
     hideImageTaggingHardDelete: boolean
     resourceFilters?: FilterConditionsListType[]
+    totalCount: number
 }
 
 export interface CDMaterialResponseType extends CDMaterialsMetaInfo, CDMaterialsApprovalInfo {

@@ -88,11 +88,11 @@ const processURL = (url: string, params: object) => {
 const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: number, artifactStatus?: string) => {
     if (!artifacts || !artifacts.length) return []
 
-    const markFirstSelected = offset === 1
-    const startIndex = offset - 1
+    const markFirstSelected = offset === 0
+    const startIndex = offset
     let isImageMarked = false
 
-    const materials: CDMaterialType[] = artifacts.map((material, index) => {
+    const materials = artifacts.map((material, index) => {
         let artifactStatusValue = ''
         const filterState = material.filterState ?? FilterStates.ALLOWED
 
@@ -158,6 +158,8 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
                   })
                 : [],
             filterState,
+            appliedFiltersTimestamp: material.appliedFiltersTimestamp ?? '',
+            appliedFilters: material.appliedFilters ?? []
         }
     })
     return materials
@@ -186,6 +188,7 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
             appReleaseTagNames: [],
             hideImageTaggingHardDelete: false,
             resourceFilters: [],
+            totalCount: 0,
         }
     }
 
@@ -194,6 +197,7 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
         tagsEditable: cdMaterialsResult.tagsEditable,
         hideImageTaggingHardDelete: cdMaterialsResult.hideImageTaggingHardDelete,
         resourceFilters: cdMaterialsResult.resourceFilters ?? [],
+        totalCount: cdMaterialsResult.totalCount ?? 0,
     }
 }
 
@@ -213,7 +217,7 @@ const processCDMaterialServiceResponse = (
 
     const materials = cdMaterialListModal(
         cdMaterialsResult.ci_artifacts,
-        offset ?? 1,
+        offset ?? 0,
         cdMaterialsResult.latest_wf_artifact_id,
         cdMaterialsResult.latest_wf_artifact_status,
     )
@@ -266,7 +270,7 @@ export const genericCDMaterialsService = (
     }
 
     return get(URL, { signal }).then((response) => {
-        return processCDMaterialServiceResponse(response.result, stage, manipulatedParams.offset, manipulatedParams.filter)
+        return processCDMaterialServiceResponse(response.result, stage, queryParams.offset, queryParams.filter)
     })
 }
 
