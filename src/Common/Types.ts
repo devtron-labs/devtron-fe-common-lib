@@ -251,7 +251,7 @@ export interface CDMaterialType {
     scanToolId?: number
     appliedFiltersTimestamp?: string
     appliedFilters?: FilterConditionsListType[]
-    appliedFilterState?: FilterStates
+    appliedFiltersState?: FilterStates
     createdTime?: string
 }
 
