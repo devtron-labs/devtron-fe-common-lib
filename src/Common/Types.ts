@@ -253,6 +253,7 @@ export interface CDMaterialType {
     appliedFilters?: FilterConditionsListType[]
     appliedFiltersState?: FilterStates
     createdTime?: string
+    deployed?: boolean
 }
 
 export enum CDMaterialServiceEnum {
