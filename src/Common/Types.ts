@@ -251,6 +251,8 @@ export interface CDMaterialType {
     scanToolId?: number
     appliedFiltersTimestamp?: string
     appliedFilters?: FilterConditionsListType[]
+    appliedFilterState?: FilterStates
+    createdTime?: string
 }
 
 export enum CDMaterialServiceEnum {

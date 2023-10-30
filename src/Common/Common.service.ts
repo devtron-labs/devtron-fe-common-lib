@@ -159,7 +159,9 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
                 : [],
             filterState,
             appliedFiltersTimestamp: material.appliedFiltersTimestamp ?? '',
-            appliedFilters: material.appliedFilters ?? []
+            appliedFilters: material.appliedFilters ?? [],
+            appliedFilterState: material.appliedFilterState ?? FilterStates.ALLOWED,
+            createdTime: material.createdTime ?? '',
         }
     })
     return materials
