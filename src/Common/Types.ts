@@ -254,6 +254,7 @@ export interface CDMaterialType {
     appliedFiltersState?: FilterStates
     createdTime?: string
     deployed?: boolean
+    externalCiPipelineId?: number
 }
 
 export enum CDMaterialServiceEnum {
