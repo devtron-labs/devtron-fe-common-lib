@@ -221,6 +221,10 @@ export enum FilterStates {
     ERROR = 2,
 }
 
+export enum MaterialDataSource {
+    EXTERNAL = "ext"
+}
+
 export interface CDMaterialType {
     index: number
     id: string
@@ -254,7 +258,7 @@ export interface CDMaterialType {
     appliedFiltersState?: FilterStates
     createdTime?: string
     deployed?: boolean
-    externalCiPipelineId?: number
+    dataSource?: MaterialDataSource
 }
 
 export enum CDMaterialServiceEnum {

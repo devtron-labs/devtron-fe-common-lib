@@ -161,7 +161,7 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
             appliedFilters: material.appliedFilters ?? [],
             appliedFiltersState: material.appliedFiltersState ?? FilterStates.ALLOWED,
             createdTime: material.createdTime ?? '',
-            externalCiPipelineId: material.externalCiPipelineId ?? 0,
+            dataSource: material.data_source ?? '',
         }
     })
     return materials
