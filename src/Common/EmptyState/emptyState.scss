@@ -21,17 +21,19 @@
     }
     .subtitle {
         font-size: 13px;
-        width: 300px;
         font-weight: 400;
         text-align: center;
         line-height: 1.5;
-        margin-bottom: 20px;
+        margin-bottom: 6px;
+
+        &--text-start {
+            text-align: start;
+        }
     }
     .cta {
         height: 36px;
     }
     p {
-        width: 300px;
         text-align: center;
         font-size: 13px;
         color: var(--N700);
