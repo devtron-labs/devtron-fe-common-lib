@@ -247,6 +247,8 @@ export interface CDMaterialType {
     imageReleaseTags?: ReleaseTag[]
     artifactStatus?: string
     filterState: FilterStates
+    registryType?: string;
+    imagePath?: string
 }
 
 export interface CommonNodeAttr {
