@@ -21,6 +21,7 @@ import Tippy from '@tippyjs/react'
 import { Progressing } from './Progressing'
 
 export const ImageTagsContainer = ({
+    // Setting it to zero in case of external pipeline
     ciPipelineId,
     artifactId,
     imageComment,
@@ -229,7 +230,7 @@ export const ImageTagsContainer = ({
 
         // set loading state true
         setLoading(true)
-        setImageTags(payload, ciPipelineId, artifactId)
+        setImageTags(payload, ciPipelineId ?? 0, artifactId)
             .then((res) => {
                 const tags = res.result?.imageReleaseTags?.map((tag) => ({
                     id: tag.id,
