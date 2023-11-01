@@ -92,6 +92,11 @@ export interface GenericEmptyStateType {
     imageClassName?: string
     children?: ReactNode
     noImage?: boolean
+    /**
+     * @default 'column'
+     */
+    layout?: 'row' | 'column'
+    contentClassName?: string
 }
 
 export enum ImageType {
