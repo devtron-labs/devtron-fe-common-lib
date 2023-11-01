@@ -249,6 +249,7 @@ export interface CDMaterialType {
     filterState: FilterStates
     registryType?: string;
     imagePath?: string
+    registryName?: string
 }
 
 export interface CommonNodeAttr {
