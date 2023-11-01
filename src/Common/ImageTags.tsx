@@ -32,6 +32,7 @@ export const ImageTagsContainer = ({
     toggleCardMode,
     hideHardDelete,
     forceReInit,
+    isSuperAdmin
 }: ImageTaggingContainerType) => {
     const [initialTags, setInitialTags] = useState<ReleaseTag[]>(imageReleaseTags ? imageReleaseTags : [])
     const [initialDescription, setInitialDescription] = useState(imageComment ? imageComment.comment : '')
@@ -44,13 +45,9 @@ export const ImageTagsContainer = ({
     const [createTags, setCreateTags] = useState<ReleaseTag[]>([])
     const [softDeleteTags, setSoftDeleteTags] = useState<ReleaseTag[]>([])
     const [hardDeleteTags, setHardDeleteTags] = useState<ReleaseTag[]>([])
-    const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false)
     const [descriptionValidationMessage, setDescriptionValidationMessage] = useState<string>('')
     const [textInput, setTextInput] = useState<string>('')
 
-    useEffect(() => {
-        initialise()
-    }, [])
 
     useEffect(() => {
         reInitState()
@@ -60,16 +57,6 @@ export const ImageTagsContainer = ({
         setExistingTags(appReleaseTagNames ? appReleaseTagNames : [])
     }, [appReleaseTagNames])
 
-    async function initialise() {
-        try {
-            const userRole = await getUserRole()
-
-            const superAdmin = userRole?.result?.roles?.includes('role:super-admin___')
-            setSuperAdmin(superAdmin)
-        } catch (err) {
-            showError(err)
-        }
-    }
 
     const reInitState = () => {
         if (forceReInit || !isEditing) {
