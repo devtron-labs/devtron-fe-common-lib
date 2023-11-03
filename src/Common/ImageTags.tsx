@@ -16,7 +16,7 @@ import { TippyTheme } from './Types'
 import { ImageButtonType, ImageTaggingContainerType, ReleaseTag } from './ImageTags.Types'
 import { showError, stopPropagation } from './Helper'
 import { TippyCustomized } from './TippyCustomized'
-import { setImageTags, getUserRole } from './Common.service'
+import { setImageTags } from './Common.service'
 import Tippy from '@tippyjs/react'
 import { Progressing } from './Progressing'
 
