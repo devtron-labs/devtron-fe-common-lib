@@ -191,6 +191,7 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
             hideImageTaggingHardDelete: false,
             resourceFilters: [],
             totalCount: 0,
+            canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
         }
     }
 
@@ -200,6 +201,7 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
         hideImageTaggingHardDelete: cdMaterialsResult.hideImageTaggingHardDelete,
         resourceFilters: cdMaterialsResult.resourceFilters ?? [],
         totalCount: cdMaterialsResult.totalCount ?? 0,
+        canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
     }
 }
 

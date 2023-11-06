@@ -413,6 +413,7 @@ export interface CDMaterialsMetaInfo {
     hideImageTaggingHardDelete: boolean
     resourceFilters?: FilterConditionsListType[]
     totalCount: number
+    canApproverDeploy: boolean
 }
 
 export interface CDMaterialResponseType extends CDMaterialsMetaInfo, CDMaterialsApprovalInfo {
