@@ -20,6 +20,7 @@ export default function AppStatus({
     const iconClass = isNotDeployed ? StatusConstants.NOT_DEPLOYED.lowerCase : appStatusLowerCase
     const statusMessage = status || (isVirtualEnv ? StatusConstants.NOT_AVILABLE.normalCase : '-')
     const notDeployed = isJobView ? YET_TO_RUN : StatusConstants.NOT_DEPLOYED.normalCase
+    const textContent = isNotDeployed ? notDeployed : statusMessage
 
     const renderIcon = () => {
         if (iconClass) {
@@ -45,12 +46,18 @@ export default function AppStatus({
     }
 
     return hideStatusMessage ? (
-        renderIcon()
+        iconClass || isVirtualEnv ? (
+            <Tippy className="default-tt" arrow={false} placement="top" content={textContent}>
+                <div className="flex">{renderIcon()}</div>
+            </Tippy>
+        ) : (
+            renderIcon()
+        )
     ) : (
         <div className="flex left">
             <div className="flex mr-6">{renderIcon()}</div>
             <p data-testid={`${status}-app-status`} className="dc__truncate-text dc__first-letter-capitalize cn-6 m-0">
-                {isNotDeployed ? notDeployed : statusMessage}
+                {textContent}
             </p>
         </div>
     )

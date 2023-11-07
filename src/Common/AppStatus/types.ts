@@ -4,7 +4,7 @@ export interface AppStatusType {
     isJobView?: boolean
     isVirtualEnv?: boolean
     /**
-     * Hide the status message if true
+     * Hide the status message if true and show status message in tooltip
      *
      * @default false
      */
