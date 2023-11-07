@@ -39,6 +39,9 @@
 .security-tab__cell-fixed-ver,
 .security-tab__cell-policy {
     padding: 10px;
+    text-overflow: ellipsis;
+    max-width: 120px;
+    overflow: hidden;
 }
 
 .security-tab__cell-cve {
