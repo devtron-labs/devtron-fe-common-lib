@@ -1,6 +1,6 @@
 import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
-import { ImageComment, ReleaseTag } from "./ImageTags.Types";
+import { ImageComment, ReleaseTag } from './ImageTags.Types'
 export interface ResponseType {
     code: number
     status: string
@@ -92,6 +92,11 @@ export interface GenericEmptyStateType {
     imageClassName?: string
     children?: ReactNode
     noImage?: boolean
+    /**
+     * @default 'column'
+     */
+    layout?: 'row' | 'column'
+    contentClassName?: string
 }
 
 export enum ImageType {
@@ -218,7 +223,7 @@ export interface UserApprovalMetadataType {
 export enum FilterStates {
     ALLOWED = 0,
     BLOCKED = 1,
-    ERROR = 2
+    ERROR = 2,
 }
 
 export interface CDMaterialType {
@@ -246,7 +251,7 @@ export interface CDMaterialType {
     imageComment?: ImageComment
     imageReleaseTags?: ReleaseTag[]
     artifactStatus?: string
-    filterState: FilterStates;
+    filterState: FilterStates
 }
 
 export interface CommonNodeAttr {
@@ -304,7 +309,7 @@ export interface CommonNodeAttr {
     deploymentAppType?: DeploymentAppTypes
     isCITriggerBlocked?: boolean
     ciBlockState?: {
-        action: any,
+        action: any
         metadataField: string
     }
     appReleaseTagNames?: string[]
@@ -315,7 +320,7 @@ export enum DeploymentAppTypes {
     HELM = 'helm',
     GITOPS = 'argo_cd',
     MANIFEST_DOWNLOAD = 'manifest_download',
-    MANIFEST_PUSH='manifest_push'
+    MANIFEST_PUSH = 'manifest_push',
 }
 
 export interface VulnerabilityType {
@@ -345,6 +350,23 @@ export interface MaterialInfo {
     type?: string
 }
 
+export enum FilterConditionType {
+    PASS = 1,
+    FAIL = 0,
+}
+
+export interface FilterConditionsInfo {
+    conditionType: FilterConditionType
+    expression: string
+}
+
+export interface FilterConditionsListType {
+    id: number
+    name: string
+    description: string
+    conditions: FilterConditionsInfo[]
+}
+
 export interface CDMaterialResponseType {
     approvalUsers: string[]
     materials: any[]
@@ -353,8 +375,8 @@ export interface CDMaterialResponseType {
     tagsEditable: boolean
     appReleaseTagNames: string[]
     hideImageTaggingHardDelete: boolean
+    resourceFilters?: FilterConditionsListType[]
 }
-
 
 export interface InputDetailType {
     label: string
@@ -403,7 +425,6 @@ export interface AsyncState<T> {
     error: null
     dependencies: any[]
 }
-
 
 export interface AsyncOptions {
     resetOnChange: boolean

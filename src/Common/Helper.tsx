@@ -327,7 +327,7 @@ export function CustomInput({
                 tabIndex={tabIndex}
             />
             {handleError(error).map((err) => (
-                <div className="form__error">
+                <div className="form__error" key={err}>
                     <FormError className="form__icon form__icon--error" />
                     {err}
                 </div>
@@ -590,4 +590,12 @@ export function useAsync<T>(
     }
 
     return [state.loading, state.result, state.error, reload, setResult, state.dependencies]
+}
+
+export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
+    if (lastDeployed) {
+        return handleUTCTime(lastDeployed, true)
+    } else {
+        return isArgoInstalled ? '' : 'Not deployed'
+    }
 }

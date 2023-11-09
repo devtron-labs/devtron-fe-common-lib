@@ -51,7 +51,7 @@ export function setImageTags(request, pipelineId: number, artifactId: number){
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`,request )
 }
 
-// TODO: Add enum for filterState as well
+// FIXME: This is only returning materials to cater the case of search in approval but it should be a common function service coming from dashboard.
 export const getCDMaterials = (
     cdMaterialId,
     stageType: DeploymentNodeType,

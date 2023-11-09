@@ -27,6 +27,7 @@ export interface ImageTaggingContainerType {
     setTagsEditable?: (tagsEditable: boolean) => void
     toggleCardMode?: (id: number) => void
     hideHardDelete?: boolean
+    isSuperAdmin?: boolean
 }
 
 export interface ImageButtonType {
