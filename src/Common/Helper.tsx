@@ -495,3 +495,20 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
         return isArgoInstalled ? '' : 'Not deployed'
     }
 }
+
+/**
+ * Appends search parameters to the url as a query string
+ *
+ * @param url URL to which the search params needs to be added
+ * @param params Object for the search parameters
+ */
+export const getUrlWithSearchParams = (url: string, params: Record<string | number, any>) => {
+    const searchParams = new URLSearchParams()
+    Object.keys(params).forEach((key) => {
+        if (params[key]) {
+            searchParams.append(key, params[key])
+        }
+    })
+    const queryString = searchParams.toString()
+    return url + (queryString ? `?${queryString}` : '')
+}
