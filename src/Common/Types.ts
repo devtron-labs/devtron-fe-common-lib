@@ -303,7 +303,7 @@ export interface CommonNodeAttr {
     isGitSource: boolean
     isRoot: boolean
     downstreams: string[]
-    type: 'CI' | 'GIT' | 'PRECD' | 'CD' | 'POSTCD' | 'WEBHOOK'
+    type: 'CI' | 'GIT' | 'PRECD' | 'CD' | 'POSTCD' | 'WEBHOOK' | 'LINKED_CD'
     parentCiPipeline?: number
     parentAppId?: number
     url?: string
@@ -313,7 +313,6 @@ export interface CommonNodeAttr {
     isExternalCI?: boolean
     isLinkedCI?: boolean
     isJobCI?: boolean // used for Job type CI in Devtron Apps
-    isLinkedCD?: boolean
     environmentName?: string //used for CDs
     environmentId?: number
     inputMaterialList?: any[]
