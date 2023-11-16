@@ -1,12 +1,16 @@
 import React from 'react'
 import { WidgetProps } from '@rjsf/utils'
-import ReactSelect, { components } from 'react-select'
+import ReactSelect, { MenuListProps, components } from 'react-select'
 import { PLACEHOLDERS } from '../constants'
 import { getCommonSelectStyle } from '../utils'
 
 import { ReactComponent as ArrowDown } from '../../../Assets/Icon/ic-chevron-down.svg'
 
 const commonStyles = getCommonSelectStyle()
+
+const MenuList = ({ children, ...props }: MenuListProps) => (
+    <components.MenuList {...props}>{Array.isArray(children) ? children.slice(0, 20) : children}</components.MenuList>
+)
 
 const DropdownIndicator = (props) => (
     <components.DropdownIndicator {...props}>
@@ -64,9 +68,9 @@ export const Select = (props: WidgetProps) => {
             components={{
                 IndicatorSeparator: null,
                 DropdownIndicator,
+                MenuList,
             }}
             menuPlacement="auto"
-            menuPortalTarget={document.body}
         />
     )
 }
