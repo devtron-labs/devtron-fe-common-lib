@@ -18,8 +18,10 @@ import { showError, stopPropagation } from './Helper'
 import { TippyCustomized } from './TippyCustomized'
 import { setImageTags } from './Common.service'
 import Tippy from '@tippyjs/react'
+import { Progressing } from './Progressing'
 
 export const ImageTagsContainer = ({
+    // Setting it to zero in case of external pipeline
     ciPipelineId,
     artifactId,
     imageComment,
@@ -47,6 +49,7 @@ export const ImageTagsContainer = ({
     const [hardDeleteTags, setHardDeleteTags] = useState<ReleaseTag[]>([])
     const [descriptionValidationMessage, setDescriptionValidationMessage] = useState<string>('')
     const [textInput, setTextInput] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(false)
 
 
     useEffect(() => {
@@ -213,7 +216,8 @@ export const ImageTagsContainer = ({
         }
 
         // set loading state true
-        setImageTags(payload, ciPipelineId, artifactId)
+        setLoading(true)
+        setImageTags(payload, ciPipelineId ?? 0, artifactId)
             .then((res) => {
                 const tags = res.result?.imageReleaseTags?.map((tag) => ({
                     id: tag.id,
@@ -248,6 +252,9 @@ export const ImageTagsContainer = ({
                 } else {
                     showError(err)
                 }
+            })
+            .finally(()=>{
+                setLoading(false)
             })
     }
 
@@ -425,6 +432,7 @@ export const ImageTagsContainer = ({
                                 stopPropagation(e)
                                 handleCancel()
                             }}
+                            disabled={loading}
                         >
                             Cancel
                         </button>
@@ -436,8 +444,9 @@ export const ImageTagsContainer = ({
                                 stopPropagation(e)
                                 onClickSave()
                             }}
+                            disabled={loading}
                         >
-                            Save
+                            {loading ? <Progressing /> : 'Save'}
                         </button>
                     </div>
                 </div>
