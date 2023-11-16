@@ -313,6 +313,7 @@ export interface CommonNodeAttr {
     isExternalCI?: boolean
     isLinkedCI?: boolean
     isJobCI?: boolean // used for Job type CI in Devtron Apps
+    isLinkedCD?: boolean
     environmentName?: string //used for CDs
     environmentId?: number
     inputMaterialList?: any[]

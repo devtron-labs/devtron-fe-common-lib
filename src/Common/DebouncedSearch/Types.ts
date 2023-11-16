@@ -9,4 +9,5 @@ export interface DebouncedSearchProps {
     debounceTimeout?: number
     clearSearch?: boolean
     showClearIcon?: boolean
+    autoFocus?: boolean
 }
