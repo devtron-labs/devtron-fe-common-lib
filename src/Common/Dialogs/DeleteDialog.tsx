@@ -5,16 +5,6 @@ import ConfirmationDialog from './ConfirmationDialog'
 import { DeleteDialogProps } from './Types'
 
 export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.FC<any> } = function (props) {
-    const handleDelete = (e: React.MouseEvent) => {
-        e.stopPropagation()
-        props.delete()
-    }
-
-    const handleModalClose = (e: React.MouseEvent) => {
-        e.stopPropagation()
-        props.closeDelete()
-    }
-
     return (
         <ConfirmationDialog className="confirmation-dialog__body--w-400">
             <ConfirmationDialog.Icon src={warn} />
@@ -29,7 +19,7 @@ export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.F
                     <button
                         type="button"
                         className="cta cancel cta-cd-delete-modal ml-16"
-                        onClick={handleModalClose}
+                        onClick={props.closeDelete}
                         disabled={props.apiCallInProgress}
                         data-testid="dialog-cancel"
                     >
@@ -38,7 +28,7 @@ export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.F
                     <button
                         type="button"
                         className="cta delete cta-cd-delete-modal ml-16"
-                        onClick={handleDelete}
+                        onClick={props.delete}
                         disabled={props.apiCallInProgress}
                         data-testid="dialog-delete"
                     >
