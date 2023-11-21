@@ -6,12 +6,18 @@ import { DeleteDialogProps } from './Types'
 
 export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.FC<any> } = function (props) {
     const handleDelete = (e: React.MouseEvent) => {
-        e.stopPropagation()
+        if (props.shouldStopPropagation) {
+            e.stopPropagation()
+        }
+
         props.delete()
     }
 
     const handleModalClose = (e: React.MouseEvent) => {
-        e.stopPropagation()
+        if (props.shouldStopPropagation) {
+            e.stopPropagation()
+        }
+
         props.closeDelete()
     }
 

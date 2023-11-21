@@ -10,6 +10,7 @@ export interface DeleteDialogProps {
     apiCallInProgress?: boolean
     dataTestId?: string
     buttonPrimaryText?: string
+    shouldStopPropagation?: boolean
 }
 
 export interface ForceDeleteDialogType {
