@@ -3,8 +3,8 @@ import { ReactNode } from "react"
 export interface DeleteDialogProps {
     title: string
     description?: string
-    closeDelete: (e?: React.MouseEvent) => void
-    delete: (e?: React.MouseEvent) => any
+    closeDelete: () => void
+    delete: () => any
     deletePrefix?: string
     deletePostfix?: string
     apiCallInProgress?: boolean
