@@ -90,7 +90,10 @@ export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps) => {
                     registry={registry}
                 />
             )}
-            <Field {...props} />
+            {/* Not adding the border and padding for non-objects and root schema */}
+            <div className={schema.properties && idSchema.$id !== 'root' ? 'dc__border-left pl-5' : ''}>
+                <Field {...props} />
+            </div>
         </fieldset>
     )
 }
