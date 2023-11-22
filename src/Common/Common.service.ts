@@ -162,6 +162,9 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
             appliedFiltersState: material.appliedFiltersState ?? FilterStates.ALLOWED,
             createdTime: material.createdTime ?? '',
             dataSource: material.data_source ?? '',
+            registryType: material.registryType ?? '',
+            imagePath: material.image ?? '',
+            registryName: material.registryName ?? '',
         }
     })
     return materials
