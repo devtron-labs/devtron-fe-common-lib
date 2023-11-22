@@ -57,3 +57,53 @@ export const getCommonSelectStyle = (styleOverrides = {}) => {
         ...styleOverrides,
     }
 }
+
+/**
+ * Returns the redirection props for a url
+ */
+export const getRedirectionProps = (
+    url: string,
+): React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+    url: string
+} => {
+    try {
+        const isInternalUrl = new URL(url).origin === window.location.origin
+        const redirectionUrl = url.startsWith('http://') || url.startsWith('https://') ? url : `https://${url}`
+        return {
+            href: redirectionUrl,
+            target: isInternalUrl ? '_self' : '_blank',
+            rel: isInternalUrl ? undefined : 'external noreferrer',
+            url,
+        }
+    } catch (err) {
+        return {
+            href: '',
+            url: `${url} (Invalid URL)`,
+        }
+    }
+}
+
+/**
+ * Infers the type for json schema from value type
+ */
+export const getInferredTypeFromValueType = (value) => {
+    const valueType = typeof value
+
+    switch (valueType) {
+        case 'boolean':
+        case 'string':
+        case 'number':
+            return valueType
+        case 'object':
+            if (Array.isArray(value)) {
+                return 'array'
+            }
+            if (value === null) {
+                return 'null'
+            }
+            return valueType
+        default:
+            // Unsupported or undefined types
+            return 'null'
+    }
+}
