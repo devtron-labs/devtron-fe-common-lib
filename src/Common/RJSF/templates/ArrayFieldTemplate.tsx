@@ -1,6 +1,7 @@
 import React from 'react'
 import { getTemplate, getUiOptions, ArrayFieldTemplateProps, ArrayFieldTemplateItemType } from '@rjsf/utils'
 import { FieldRowWithLabel } from '../common/FieldRow'
+import { DO_NOT_SHOW_LABEL } from '../constants'
 
 const ActionButton = ({ canAdd, onAddClick, disabled, readonly, uiSchema, registry }) => {
     const {
@@ -42,7 +43,7 @@ export const ArrayFieldTemplate = ({
                             ...itemProps.children,
                             props: {
                                 ...itemProps.children.props,
-                                name: index === 0 ? label : '',
+                                name: index === 0 ? label : DO_NOT_SHOW_LABEL,
                             },
                         }
                         return (
