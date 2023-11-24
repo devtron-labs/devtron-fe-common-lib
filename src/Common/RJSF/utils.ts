@@ -67,17 +67,18 @@ export const getRedirectionProps = (
     url: string
 } => {
     try {
+        // The URL is validated when added using the form
         const isInternalUrl = new URL(url).origin === window.location.origin
-        const redirectionUrl = url.startsWith('http://') || url.startsWith('https://') ? url : `https://${url}`
         return {
-            href: redirectionUrl,
+            href: url,
             target: isInternalUrl ? '_self' : '_blank',
             rel: isInternalUrl ? undefined : 'external noreferrer',
             url,
         }
     } catch (err) {
         return {
-            href: '',
+            href: url,
+            target: '_blank',
             url: `${url} (Invalid URL)`,
         }
     }
