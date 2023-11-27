@@ -317,6 +317,7 @@ export interface CommonNodeAttr {
     colorCode?: string
     isExternalCI?: boolean
     isLinkedCI?: boolean
+    isLinkedCD?: boolean
     isJobCI?: boolean // used for Job type CI in Devtron Apps
     environmentName?: string //used for CDs
     environmentId?: number
