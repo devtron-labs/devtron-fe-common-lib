@@ -1,6 +1,8 @@
 import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
+import { DockerConfigOverrideType, TaskErrorObj } from '.'
+
 export interface ResponseType {
     code: number
     status: string
@@ -226,6 +228,10 @@ export enum FilterStates {
     ERROR = 2,
 }
 
+export enum MaterialDataSource {
+    EXTERNAL = "ext"
+}
+
 export interface CDMaterialType {
     index: number
     id: string
@@ -252,6 +258,39 @@ export interface CDMaterialType {
     imageReleaseTags?: ReleaseTag[]
     artifactStatus?: string
     filterState: FilterStates
+    registryType?: string;
+    imagePath?: string
+    registryName?: string
+    // Not even coming from API but required in CDMaterials for Security which makes its own api call but stores data in CDMaterials
+    scanToolId?: number
+    appliedFiltersTimestamp?: string
+    appliedFilters?: FilterConditionsListType[]
+    appliedFiltersState?: FilterStates
+    createdTime?: string
+    deployed?: boolean
+    dataSource?: MaterialDataSource
+}
+
+export enum CDMaterialServiceEnum {
+    ROLLBACK = 'rollback',
+    CD_MATERIALS = 'cd-materials',
+}
+
+export enum CDMaterialResourceQuery {
+    PENDING_APPROVAL = 'PENDING_APPROVAL'
+}
+
+export enum CDMaterialFilterQuery {
+    RESOURCE = 'ELIGIBLE_RESOURCES',
+    ALL = 'ALL_RESOURCES'
+}
+
+export interface CDMaterialServiceQueryParams {
+    search?: string
+    offset?: number
+    size?: number
+    resource?: CDMaterialResourceQuery
+    filter?: CDMaterialFilterQuery
 }
 
 export interface CommonNodeAttr {
@@ -278,6 +317,7 @@ export interface CommonNodeAttr {
     colorCode?: string
     isExternalCI?: boolean
     isLinkedCI?: boolean
+    isLinkedCD?: boolean
     isJobCI?: boolean // used for Job type CI in Devtron Apps
     environmentName?: string //used for CDs
     environmentId?: number
@@ -367,15 +407,23 @@ export interface FilterConditionsListType {
     conditions: FilterConditionsInfo[]
 }
 
-export interface CDMaterialResponseType {
+export interface CDMaterialsApprovalInfo {
     approvalUsers: string[]
-    materials: any[]
     userApprovalConfig: UserApprovalConfigType
     requestedUserId: number
+}
+
+export interface CDMaterialsMetaInfo {
     tagsEditable: boolean
     appReleaseTagNames: string[]
     hideImageTaggingHardDelete: boolean
     resourceFilters?: FilterConditionsListType[]
+    totalCount: number
+    canApproverDeploy: boolean
+}
+
+export interface CDMaterialResponseType extends CDMaterialsMetaInfo, CDMaterialsApprovalInfo {
+    materials: CDMaterialType[]
 }
 
 export interface InputDetailType {
@@ -428,4 +476,150 @@ export interface AsyncState<T> {
 
 export interface AsyncOptions {
     resetOnChange: boolean
+}
+
+export interface AppEnvironment {
+    environmentId: number
+    environmentName: string
+    appMetrics: boolean
+    infraMetrics: boolean
+    prod: boolean
+    chartRefId?: number
+    lastDeployed?: string
+    lastDeployedBy?: string
+    lastDeployedImage?: string
+    appStatus?: string
+    deploymentAppDeleteRequest?: boolean
+    isVirtualEnvironment?: boolean
+    isProtected?: boolean
+    pipelineId?: number
+    latestCdWorkflowRunnerId?: number
+}
+
+export interface Strategy {
+    deploymentTemplate: string
+    config: any
+    default?: boolean
+}
+
+export interface CDStage {
+    status: string
+    name: string
+    triggerType: 'AUTOMATIC' | 'MANUAL'
+    config: string
+}
+
+export interface CDStageConfigMapSecretNames {
+    configMaps: any[]
+    secrets: any[]
+}
+
+export interface PrePostDeployStageType {
+    isValid: boolean
+    steps: TaskErrorObj[]
+    triggerType: string
+    name: string
+    status: string
+}
+
+export interface CdPipeline {
+    id: number
+    environmentId: number
+    environmentName?: string
+    description?: string
+    ciPipelineId: number
+    triggerType: 'AUTOMATIC' | 'MANUAL'
+    name: string
+    strategies?: Strategy[]
+    namespace?: string
+    appWorkflowId?: number
+    deploymentTemplate?: string
+    preStage?: CDStage
+    postStage?: CDStage
+    preStageConfigMapSecretNames?: CDStageConfigMapSecretNames
+    postStageConfigMapSecretNames?: CDStageConfigMapSecretNames
+    runPreStageInEnv?: boolean
+    runPostStageInEnv?: boolean
+    isClusterCdActive?: boolean
+    parentPipelineId?: number
+    parentPipelineType?: string
+    deploymentAppDeleteRequest?: boolean
+    deploymentAppCreated?: boolean
+    userApprovalConfig?: UserApprovalConfigType
+    isVirtualEnvironment?: boolean
+    deploymentAppType: DeploymentAppTypes
+    helmPackageName?: string
+    preDeployStage?: PrePostDeployStageType
+    postDeployStage?: PrePostDeployStageType
+    isProdEnv?: boolean
+}
+
+export interface ExternalCiConfig {
+    id: number
+    webhookUrl: string
+    payload: string
+    accessKey: string
+}
+
+export interface Source {
+    type: string
+    value?: string
+    regex?: string
+}
+
+export interface CiMaterial {
+    source: Source
+    gitMaterialId: number
+    id: number
+    gitMaterialName: string
+    isRegex?: boolean
+}
+
+export interface Task {
+    name?: string
+    type?: string
+    cmd?: string
+    args?: Array<string>
+}
+
+export interface CiScript {
+    id: number
+    index: number
+    name: string
+    script: string
+    outputLocation?: string
+}
+
+export interface CiPipeline {
+    isManual: boolean
+    dockerArgs?: Map<string, string>
+    isExternal: boolean
+    parentCiPipeline: number
+    parentAppId: number
+    externalCiConfig: ExternalCiConfig
+    ciMaterial?: CiMaterial[]
+    name?: string
+    id?: number
+    active?: boolean
+    linkedCount: number
+    scanEnabled: boolean
+    deleted?: boolean
+    version?: string
+    beforeDockerBuild?: Array<Task>
+    afterDockerBuild?: Array<Task>
+    appWorkflowId?: number
+    beforeDockerBuildScripts?: Array<CiScript>
+    afterDockerBuildScripts?: Array<CiScript>
+    isDockerConfigOverridden?: boolean
+    dockerConfigOverride?: DockerConfigOverrideType
+    appName?: string
+    appId?: string
+    componentId?: number
+    isCITriggerBlocked?: boolean
+    ciBlockState?: {
+        action: any
+        metadataField: string
+    }
+    isOffendingMandatoryPlugin?: boolean
+    pipelineType?: string
 }
