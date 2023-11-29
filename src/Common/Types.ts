@@ -354,6 +354,7 @@ export interface CommonNodeAttr {
     }
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
+    isGitRequired?: boolean;
 }
 
 export enum DeploymentAppTypes {
