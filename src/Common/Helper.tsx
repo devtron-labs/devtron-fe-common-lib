@@ -116,11 +116,11 @@ export function getRandomColor(email: string): string {
     return colors[sum % colors.length]
 }
 
-export const getAlphabetIcon = (str: string) => {
+export const getAlphabetIcon = (str: string, intialAlphabetClassName?: string) => {
     if (!str) return null
     return (
         <span
-            className="alphabet-icon__initial fs-13 icon-dim-20 flex cn-0 mr-8"
+            className={`alphabet-icon__initial fs-13 icon-dim-20 flex cn-0 mr-8 ${intialAlphabetClassName}`}
             style={{ backgroundColor: getRandomColor(str) }}
         >
             {str[0]}
