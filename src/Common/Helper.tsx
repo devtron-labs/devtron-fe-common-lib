@@ -1,12 +1,12 @@
+import * as Sentry from '@sentry/browser'
+import moment from 'moment'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import moment from 'moment'
 import { toast } from 'react-toastify'
-import * as Sentry from '@sentry/browser'
+import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
+import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
-import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
-import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
 
 toast.configure({
@@ -512,3 +512,8 @@ export const getUrlWithSearchParams = (url: string, params: Record<string | numb
     const queryString = searchParams.toString()
     return url + (queryString ? `?${queryString}` : '')
 }
+
+/**
+ * Custom exception logger function for logging errors to sentry
+ */
+export const logExceptionToSentry = Sentry.captureException.bind(window)
