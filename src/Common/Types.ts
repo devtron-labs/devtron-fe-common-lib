@@ -79,6 +79,7 @@ export interface TippyCustomizedProps {
     documentationLink?: string
     documentationLinkText?: string
     children: React.ReactElement<any>
+    followCursor?: boolean
 }
 export interface GenericEmptyStateType {
     title: ReactNode
