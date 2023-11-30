@@ -26,6 +26,7 @@ export default function DebouncedSearch({
     debounceTimeout = 500,
     clearSearch,
     showClearIcon = true,
+    autoFocus = true,
 }: DebouncedSearchProps) {
     const [searchText, setSearchText] = useState<string>('')
 
@@ -41,7 +42,7 @@ export default function DebouncedSearch({
         setSearchText('')
     }
 
-    useDebouncedEffect(() => onSearch(searchText), debounceTimeout, [searchText, onSearch])
+    useDebouncedEffect(() => onSearch(searchText), debounceTimeout, [searchText])
 
     return (
         <div className={containerClass}>
@@ -53,7 +54,7 @@ export default function DebouncedSearch({
                 placeholder={placeholder ?? 'Search'}
                 value={searchText}
                 onChange={handleSearchTextChange}
-                autoFocus
+                autoFocus={autoFocus}
                 data-testid="debounced-search"
             />
 
