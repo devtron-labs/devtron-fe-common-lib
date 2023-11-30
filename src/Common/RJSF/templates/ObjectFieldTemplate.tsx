@@ -94,7 +94,7 @@ export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps) => {
             <div
                 className={
                     schema.properties && !hasAdditionalProperties && idSchema.$id !== 'root'
-                        ? 'dc__border-left pl-5'
+                        ? 'dc__border-left pl-12'
                         : ''
                 }
             >
