@@ -41,10 +41,11 @@ export const getCommonSelectStyle = (styleOverrides = {}) => {
             transition: 'all .2s ease',
             transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
         }),
-        valueContainer: (base) => ({
+        valueContainer: (base, state) => ({
             ...base,
             padding: '0 8px',
             fontWeight: '400',
+            color: state.selectProps.menuIsOpen ? 'var(--N500)' : base.color,
         }),
         loadingMessage: (base) => ({
             ...base,
@@ -54,6 +55,18 @@ export const getCommonSelectStyle = (styleOverrides = {}) => {
             ...base,
             color: 'var(--N600)',
         }),
+        multiValue: (base, state) => {
+            return {
+                ...base,
+                border: `1px solid var(--N200)`,
+                borderRadius: `4px`,
+                background: 'white',
+                height: '28px',
+                marginRight: '8px',
+                padding: '2px',
+                fontSize: '12px',
+            }
+        },
         ...styleOverrides,
     }
 }
