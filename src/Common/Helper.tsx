@@ -1,12 +1,12 @@
+import * as Sentry from '@sentry/browser'
+import moment from 'moment'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import moment from 'moment'
 import { toast } from 'react-toastify'
-import * as Sentry from '@sentry/browser'
+import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
+import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
-import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
-import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
 
 toast.configure({
@@ -495,3 +495,25 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
         return isArgoInstalled ? '' : 'Not deployed'
     }
 }
+
+/**
+ * Appends search parameters to the url as a query string
+ *
+ * @param url URL to which the search params needs to be added
+ * @param params Object for the search parameters
+ */
+export const getUrlWithSearchParams = (url: string, params: Record<string | number, any>) => {
+    const searchParams = new URLSearchParams()
+    Object.keys(params).forEach((key) => {
+        if (params[key]) {
+            searchParams.append(key, params[key])
+        }
+    })
+    const queryString = searchParams.toString()
+    return url + (queryString ? `?${queryString}` : '')
+}
+
+/**
+ * Custom exception logger function for logging errors to sentry
+ */
+export const logExceptionToSentry = Sentry.captureException.bind(window)
