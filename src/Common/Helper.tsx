@@ -120,7 +120,7 @@ export const getAlphabetIcon = (str: string, intialAlphabetClassName?: string) =
     if (!str) return null
     return (
         <span
-            className={`${intialAlphabetClassName} alphabet-icon__initial fs-13 icon-dim-20 flex cn-0 mr-8`}
+            className={`${intialAlphabetClassName ? intialAlphabetClassName : ""} alphabet-icon__initial fs-13 icon-dim-20 flex cn-0 mr-8`}
             style={{ backgroundColor: getRandomColor(str) }}
         >
             {str[0]}
