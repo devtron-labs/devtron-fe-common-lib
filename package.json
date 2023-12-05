@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "0.0.43-beta-1",
+    "version": "0.0.45",
     "description": "Supporting common component library",
     "main": "dist/index.js",
     "scripts": {
@@ -41,6 +41,9 @@
         "@sentry/browser": "^7.31.1"
     },
     "peerDependencies": {
+        "@rjsf/core": "^5.13.3",
+        "@rjsf/utils": "^5.13.3",
+        "@rjsf/validator-ajv8": "^5.13.3",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-router": "^5.3.0",
