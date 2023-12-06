@@ -354,6 +354,7 @@ export interface CommonNodeAttr {
     }
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
+    isGitOpsRepoNotConfigured?: boolean
 }
 
 export enum DeploymentAppTypes {
