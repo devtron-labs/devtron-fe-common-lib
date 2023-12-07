@@ -1,10 +1,10 @@
 export interface CustomInputProps {
     name: string
     value: string | number
-    autoComplete: string
     onChange: (e: any) => void
     onBlur?: (e: any) => void
     onFocus?: (e: any) => void
+    autoComplete?: string
     label?: React.ReactNode
     labelClassName?: string
     type?: 'text' | 'number'

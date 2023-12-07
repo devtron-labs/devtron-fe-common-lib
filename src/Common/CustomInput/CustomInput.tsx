@@ -1,5 +1,5 @@
 import { CustomInputProps } from "./Types"
-import { ReactComponent as Info } from '../Assets/Icon/ic-info.svg'
+import { ReactComponent as Info } from '../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
 
 export function CustomInput({
@@ -36,14 +36,6 @@ export function CustomInput({
         )
     }
 
-    onBlur = (e) => {
-       onBlur && onBlur(e)
-    }
-
-    onFocus = (e) => {
-        onFocus && onFocus(e)
-    }
-
     function handleError(error: any): any[] {
         if (!error) {
             return []
@@ -58,12 +50,10 @@ export function CustomInput({
 
     return (
         <div className="flex column left top">
-            {label ? (
+            {label && (
                 <label className={`form__label ${labelClassName} ${isRequiredField ? 'dc__required-field' : ''}`}  data-testid={`label-${dataTestid}`}>
                     {label} {showLink && renderLabelHelperText()}
                 </label>
-            ) : (
-                ''
             )}
             <input
                 data-testid={dataTestid}
