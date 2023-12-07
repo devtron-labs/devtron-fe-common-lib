@@ -7,7 +7,7 @@ import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
 import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
-import { AsyncOptions, AsyncState, UseSearchString } from './Types'
+import { AsyncOptions, AsyncState, CustomInputProps, UseSearchString } from './Types'
 
 toast.configure({
     autoClose: 3000,
@@ -299,21 +299,29 @@ export function CustomInput({
     label,
     type = 'text',
     disabled = false,
-    autoComplete = 'off',
     labelClassName = '',
     placeholder = '',
     tabIndex = 1,
     dataTestid = '',
-}) {
+    isRequiredField = false,
+    autoFocus = true,
+    rootClassName = '',
+}: CustomInputProps) {
     return (
         <div className="flex column left top">
-            <label className={`form__label ${labelClassName}`}>{label}</label>
+            {label ? (
+                <label className={`form__label ${labelClassName} ${isRequiredField ? 'dc__required-field' : ''}`}>
+                    {label}
+                </label>
+            ) : (
+                ''
+            )}
             <input
                 data-testid={dataTestid}
                 type={type}
                 name={name}
                 autoComplete="off"
-                className="form__input"
+                className={`form__input ${rootClassName}`}
                 onChange={(e) => {
                     e.persist()
                     onChange(e)
@@ -324,6 +332,7 @@ export function CustomInput({
                 value={value}
                 disabled={disabled}
                 tabIndex={tabIndex}
+                autoFocus={autoFocus}
             />
             {handleError(error).map((err) => (
                 <div className="form__error" key={err}>
