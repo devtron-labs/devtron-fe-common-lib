@@ -1,6 +1,6 @@
 import { CustomInputProps } from "./Types"
-import { ReactComponent as Info } from '../Assets/Icon/ic-info-filled.svg'
-import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
+import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
+import { ReactComponent as FormError } from '../../Assets/Icon/ic-warning.svg'
 
 export function CustomInput({
     name,
