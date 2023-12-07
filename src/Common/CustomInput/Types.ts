@@ -18,6 +18,6 @@ export interface CustomInputProps {
     showLink?: boolean
     link?: string
     linkText?: string
-    error?: React.ReactNode
+    error?: string[] | string
     helperText?: string;
 }

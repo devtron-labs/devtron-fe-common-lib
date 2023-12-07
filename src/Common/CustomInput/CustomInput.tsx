@@ -1,4 +1,4 @@
-import { CustomInputProps } from "./Types"
+import { CustomInputProps } from './Types'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as FormError } from '../../Assets/Icon/ic-warning.svg'
 
@@ -20,12 +20,11 @@ export function CustomInput({
     autoFocus = true,
     rootClassName = '',
     autoComplete = 'off',
-    showLink= false,
-    linkText= '',
-    link= '',
-    helperText= '',
+    showLink = false,
+    linkText = '',
+    link = '',
+    helperText = '',
 }: CustomInputProps) {
-
     const renderLabelHelperText = () => {
         return (
             <span>
@@ -40,18 +39,40 @@ export function CustomInput({
         if (!error) {
             return []
         }
-    
+
         if (!Array.isArray(error)) {
             return [error]
         }
-    
+
         return error
+    }
+
+    const renderFormError = () => {
+        if (error?.length > 0) {
+            if (typeof error === 'object') {
+                return handleError(error).map((err: string) => (
+                    <div className="form__error" key={err}>
+                        <FormError className="form__icon form__icon--error" />
+                        {err}
+                    </div>
+                ))
+            }
+            return (
+                <div className="form__error">
+                    <FormError className="form__icon form__icon--error" />
+                    {error}
+                </div>
+            )
+        }
     }
 
     return (
         <div className="flex column left top">
             {label && (
-                <label className={`form__label ${labelClassName} ${isRequiredField ? 'dc__required-field' : ''}`}  data-testid={`label-${dataTestid}`}>
+                <label
+                    className={`form__label ${labelClassName} ${isRequiredField ? 'dc__required-field' : ''}`}
+                    data-testid={`label-${dataTestid}`}
+                >
                     {label} {showLink && renderLabelHelperText()}
                 </label>
             )}
@@ -73,20 +94,16 @@ export function CustomInput({
                 tabIndex={tabIndex}
                 autoFocus={autoFocus}
             />
-            {handleError(error).map((err) => (
-                <div className="form__error" key={err}>
-                    <FormError className="form__icon form__icon--error" />
-                    {err}
-                </div>
-            ))}
-             {helperText ? (
-                    <>
-                        <div className="form__text-field-info">
-                            <Info className="form__icon form__icon--info" />
-                            <p className="sentence-case">{helperText}</p>
-                        </div>
-                    </>
-                ) : null}
+
+            {renderFormError()}
+            {helperText ? (
+                <>
+                    <div className="form__text-field-info">
+                        <Info className="form__icon form__icon--info" />
+                        <p className="sentence-case">{helperText}</p>
+                    </div>
+                </>
+            ) : null}
         </div>
     )
 }
