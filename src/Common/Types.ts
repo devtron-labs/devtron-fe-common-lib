@@ -623,22 +623,3 @@ export interface CiPipeline {
     isOffendingMandatoryPlugin?: boolean
     pipelineType?: string
 }
-
-export interface CustomInputProps {
-    name: string
-    value: string
-    error?: React.ReactNode
-    onChange: (e: any) => void
-    onBlur?: (e: any) => void
-    onFocus?: (e: any) => void
-    label?: React.ReactNode
-    type?: string
-    disabled?: boolean
-    labelClassName?: string
-    placeholder?: string
-    tabIndex?: number
-    dataTestid?: string
-    isRequiredField?: boolean
-    autoFocus?: boolean
-    rootClassName?: string
-}

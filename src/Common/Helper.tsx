@@ -3,11 +3,10 @@ import moment from 'moment'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
 import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
-import { AsyncOptions, AsyncState, CustomInputProps, UseSearchString } from './Types'
+import { AsyncOptions, AsyncState, UseSearchString } from './Types'
 
 toast.configure({
     autoClose: 3000,
@@ -275,73 +274,6 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
         }
     }
     return { state, disable, handleOnChange, handleOnSubmit }
-}
-
-function handleError(error: any): any[] {
-    if (!error) {
-        return []
-    }
-
-    if (!Array.isArray(error)) {
-        return [error]
-    }
-
-    return error
-}
-
-export function CustomInput({
-    name,
-    value,
-    error,
-    onChange,
-    onBlur = (e) => {},
-    onFocus = (e) => {},
-    label,
-    type = 'text',
-    disabled = false,
-    labelClassName = '',
-    placeholder = '',
-    tabIndex = 1,
-    dataTestid = '',
-    isRequiredField = false,
-    autoFocus = true,
-    rootClassName = '',
-}: CustomInputProps) {
-    return (
-        <div className="flex column left top">
-            {label ? (
-                <label className={`form__label ${labelClassName} ${isRequiredField ? 'dc__required-field' : ''}`}>
-                    {label}
-                </label>
-            ) : (
-                ''
-            )}
-            <input
-                data-testid={dataTestid}
-                type={type}
-                name={name}
-                autoComplete="off"
-                className={`form__input ${rootClassName}`}
-                onChange={(e) => {
-                    e.persist()
-                    onChange(e)
-                }}
-                onBlur={onBlur}
-                onFocus={onFocus}
-                placeholder={placeholder}
-                value={value}
-                disabled={disabled}
-                tabIndex={tabIndex}
-                autoFocus={autoFocus}
-            />
-            {handleError(error).map((err) => (
-                <div className="form__error" key={err}>
-                    <FormError className="form__icon form__icon--error" />
-                    {err}
-                </div>
-            ))}
-        </div>
-    )
 }
 
 export function handleUTCTime(ts: string, isRelativeTime = false) {
