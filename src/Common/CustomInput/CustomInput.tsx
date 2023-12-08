@@ -97,12 +97,10 @@ export function CustomInput({
 
             {renderFormError()}
             {helperText && (
-                <>
-                    <div className="form__text-field-info">
-                        <Info className="form__icon form__icon--info" />
-                        <p className="sentence-case">{helperText}</p>
-                    </div>
-                </>
+                <div className="form__text-field-info">
+                    <Info className="form__icon form__icon--info" />
+                    <p className="sentence-case">{helperText}</p>
+                </div>
             )}
         </div>
     )
