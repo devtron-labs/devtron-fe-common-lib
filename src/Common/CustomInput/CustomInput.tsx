@@ -96,14 +96,14 @@ export function CustomInput({
             />
 
             {renderFormError()}
-            {helperText ? (
+            {helperText && (
                 <>
                     <div className="form__text-field-info">
                         <Info className="form__icon form__icon--info" />
                         <p className="sentence-case">{helperText}</p>
                     </div>
                 </>
-            ) : null}
+            )}
         </div>
     )
 }
