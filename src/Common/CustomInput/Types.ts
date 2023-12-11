@@ -22,5 +22,5 @@ export interface CustomInputProps {
     helperText?: string;
     state?;
     setState?;
-    handleBlurChange?: () => void
+    handleBlurChange?: (e) => void
 }

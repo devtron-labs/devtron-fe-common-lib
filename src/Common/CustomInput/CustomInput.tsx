@@ -1,6 +1,7 @@
 import { CustomInputProps } from './Types'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as FormError } from '../../Assets/Icon/ic-warning.svg'
+import { useState } from 'react'
 
 export function CustomInput({
     name,
@@ -25,9 +26,10 @@ export function CustomInput({
     link = '',
     helperText = '',
     state,
-    setState,
     handleBlurChange
 }: CustomInputProps) {
+    const [stateForm, setStateForm] = useState(state)
+
     const renderLabelHelperText = () => {
         return (
             <span>
@@ -52,16 +54,15 @@ export function CustomInput({
 
     const handleOnBlur = (event) => {
        if(typeof handleBlurChange === 'function') {
-              handleBlurChange()
+              handleBlurChange(event)
        }
+       console.log('event', event)
 
-       if (state) {
-           setState((prevState) => ({
+       if (stateForm) {
+        console.log('stateForm', stateForm)
+        setStateForm((prevState) => ({
                ...prevState,
-               [event.target.name]: {
-                ...prevState[event.target.name],
-                value: event.target.value.trim(),
-            },
+               [event.target.name]: event.target.value.trim(),
            }))
        }
       
