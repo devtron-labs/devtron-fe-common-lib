@@ -24,6 +24,9 @@ export function CustomInput({
     linkText = '',
     link = '',
     helperText = '',
+    state,
+    setState,
+    handleBlurChange
 }: CustomInputProps) {
     const renderLabelHelperText = () => {
         return (
@@ -45,6 +48,23 @@ export function CustomInput({
         }
 
         return error
+    }
+
+    const handleOnBlur = (event) => {
+       if(typeof handleBlurChange === 'function') {
+              handleBlurChange()
+       }
+
+       if (state) {
+           setState((prevState) => ({
+               ...prevState,
+               [event.target.name]: {
+                ...prevState[event.target.name],
+                value: event.target.value.trim(),
+            },
+           }))
+       }
+      
     }
 
     const renderFormError = () => {
@@ -84,7 +104,7 @@ export function CustomInput({
                     e.persist()
                     onChange(e)
                 }}
-                onBlur={onBlur}
+                onBlur={handleOnBlur}
                 onFocus={onFocus}
                 placeholder={placeholder}
                 value={value}

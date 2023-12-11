@@ -20,4 +20,7 @@ export interface CustomInputProps {
     linkText?: string
     error?: string[] | string
     helperText?: string;
+    state?;
+    setState?;
+    handleBlurChange?: () => void
 }
