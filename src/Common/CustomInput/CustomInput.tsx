@@ -9,7 +9,7 @@ export function CustomInput({
     onChange,
     onBlur = (e) => {},
     onFocus = (e) => {},
-    label,
+    label = '',
     type = 'text',
     disabled = false,
     labelClassName = '',
@@ -28,7 +28,7 @@ export function CustomInput({
     const renderLabelHelperText = () => {
         return (
             <span>
-                <a target="_blank" href={link} className="cursor fs-13 onlink">
+                <a target="_blank" href={link} className="cursor fs-13 onlink ml-4">
                     {linkText}
                 </a>
             </span>
@@ -69,11 +69,9 @@ export function CustomInput({
     return (
         <div className="flex column left top">
             {label && (
-                <label
-                    className={`form__label ${labelClassName} ${isRequiredField ? 'dc__required-field' : ''}`}
-                    data-testid={`label-${dataTestid}`}
-                >
-                    {label} {showLink && renderLabelHelperText()}
+                <label className={`form__label ${labelClassName}`} data-testid={`label-${dataTestid}`}>
+                    <span className={`${isRequiredField ? 'dc__required-field' : ''}`}>{label}</span>
+                    {showLink && renderLabelHelperText()}
                 </label>
             )}
             <input
