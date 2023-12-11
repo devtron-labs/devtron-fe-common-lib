@@ -28,7 +28,6 @@ export function CustomInput({
     state,
     handleBlurChange
 }: CustomInputProps) {
-    const [stateForm, setStateForm] = useState(state)
 
     const renderLabelHelperText = () => {
         return (
@@ -53,17 +52,22 @@ export function CustomInput({
     }
 
     const handleOnBlur = (event) => {
-       if(typeof handleBlurChange === 'function') {
-              handleBlurChange(event)
-       }
-       console.log('event', event)
-
-       if (stateForm) {
-        console.log('stateForm', stateForm)
-        setStateForm((prevState) => ({
-               ...prevState,
-               [event.target.name]: event.target.value.trim(),
-           }))
+      
+       onChange({
+           ...event,
+           target: {
+               ...event.target,
+               value: event.target.value.trim(),
+           },
+       })
+       if (typeof handleBlurChange === 'function') {
+           handleBlurChange({
+               ...event,
+               target: {
+                   ...event.target,
+                   value: event.target.value.trim(),
+               },
+           })
        }
       
     }
