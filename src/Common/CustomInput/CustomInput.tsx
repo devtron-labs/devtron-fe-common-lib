@@ -1,7 +1,7 @@
 import { CustomInputProps } from './Types'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as FormError } from '../../Assets/Icon/ic-warning.svg'
-import { useState } from 'react'
+import { useCallback } from 'react'
 
 export function CustomInput({
     name,
@@ -51,8 +51,7 @@ export function CustomInput({
         return error
     }
 
-    const handleOnBlur = (event) => {
-      
+    const handleOnBlur = useCallback((event) => {  
        onChange({
            ...event,
            target: {
@@ -61,16 +60,10 @@ export function CustomInput({
            },
        })
        if (typeof handleBlurChange === 'function') {
-           handleBlurChange({
-               ...event,
-               target: {
-                   ...event.target,
-                   value: event.target.value.trim(),
-               },
-           })
+           handleBlurChange(event)
        }
       
-    }
+    },[])
 
     const renderFormError = () => {
         if (error?.length > 0) {
