@@ -52,13 +52,14 @@ export function CustomInput({
     }
 
     const handleOnBlur = useCallback((event) => {  
-       onChange({
-           ...event,
-           target: {
-               ...event.target,
-               value: event.target.value.trim(),
-           },
-       })
+    //    onChange({
+    //        ...event,
+    //        target: {
+    //            ...event.target,
+    //            value: event.target.value.trim(),
+    //        },
+    //    })
+       event.target.value = event.target.value.trim()
        if (typeof handleBlurChange === 'function') {
            handleBlurChange(event)
        }
