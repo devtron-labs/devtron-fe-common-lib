@@ -8,7 +8,6 @@ export function CustomInput({
     value,
     error,
     onChange,
-    onBlur = (e) => {},
     onFocus = (e) => {},
     label = '',
     type = 'text',
@@ -25,10 +24,8 @@ export function CustomInput({
     linkText = '',
     link = '',
     helperText = '',
-    state,
-    handleBlurChange
+    handleBlurChange,
 }: CustomInputProps) {
-
     const renderLabelHelperText = () => {
         return (
             <span>
@@ -51,20 +48,14 @@ export function CustomInput({
         return error
     }
 
-    const handleOnBlur = useCallback((event) => {  
-    //    onChange({
-    //        ...event,
-    //        target: {
-    //            ...event.target,
-    //            value: event.target.value.trim(),
-    //        },
-    //    })
-       event.target.value = event.target.value.trim()
-       if (typeof handleBlurChange === 'function') {
-           handleBlurChange(event)
-       }
-      
-    },[])
+    const handleOnBlur = (event) => {
+        event.stopPropagation()
+        event.target.value = event.target.value?.trim()
+        onChange(event)
+        if (typeof handleBlurChange === 'function') {
+            handleBlurChange(event)
+        }
+    }
 
     const renderFormError = () => {
         if (error?.length > 0) {

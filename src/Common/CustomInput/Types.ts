@@ -2,7 +2,6 @@ export interface CustomInputProps {
     name: string
     value: string | number
     onChange: (e: any) => void
-    onBlur?: (e: any) => void
     onFocus?: (e: any) => void
     autoComplete?: string
     label?: React.ReactNode
@@ -20,7 +19,5 @@ export interface CustomInputProps {
     linkText?: string
     error?: string[] | string
     helperText?: string;
-    state?;
-    setState?;
     handleBlurChange?: (e) => void
 }
