@@ -20,4 +20,6 @@ export interface CustomInputProps {
     error?: string[] | string
     helperText?: string;
     handleBlurChange?: (e) => void
+    readOnly?: boolean
+    noTrim?: boolean
 }

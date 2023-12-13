@@ -25,6 +25,8 @@ export function CustomInput({
     link = '',
     helperText = '',
     handleBlurChange,
+    readOnly = false,
+    noTrim = false,
 }: CustomInputProps) {
     const renderLabelHelperText = () => {
         return (
@@ -50,7 +52,13 @@ export function CustomInput({
 
     const handleOnBlur = (event) => {
         event.stopPropagation()
-        event.target.value = event.target.value?.trim()
+
+        //NOTE: This is to prevent the input from being trimmed when the user do not want to trim the input
+        if(noTrim){
+            event.target.value = event.target.value
+        } else{
+            event.target.value = event.target.value?.trim()
+        }
         onChange(event)
         if (typeof handleBlurChange === 'function') {
             handleBlurChange(event)
@@ -101,6 +109,7 @@ export function CustomInput({
                 disabled={disabled}
                 tabIndex={tabIndex}
                 autoFocus={autoFocus}
+                readOnly={readOnly}
             />
 
             {renderFormError()}
