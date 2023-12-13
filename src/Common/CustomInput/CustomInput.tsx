@@ -52,9 +52,7 @@ export function CustomInput({
 
     const onBlur = (event) => {
         //NOTE: This is to prevent the input from being trimmed when the user do not want to trim the input
-        if (noTrim) {
-            event.target.value = event.target.value
-        } else {
+        if (!noTrim) {
             event.stopPropagation()
             event.target.value = event.target.value?.trim()
             onChange(event)
