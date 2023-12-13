@@ -623,3 +623,14 @@ export interface CiPipeline {
     isOffendingMandatoryPlugin?: boolean
     pipelineType?: string
 }
+
+export interface DeploymentChartVersionType {
+    chartRefId: number 
+    chartVersion: string
+    chartType: string
+    type: number
+}
+
+export interface ChartVersionAndTypeSelectorProps {
+    setSelectedChartRefId: React.Dispatch<React.SetStateAction<number>>
+}
