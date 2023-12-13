@@ -17,7 +17,7 @@ export function CustomInput({
     tabIndex = 1,
     dataTestid = '',
     isRequiredField = false,
-    autoFocus = true,
+    autoFocus = false,
     rootClassName = '',
     autoComplete = 'off',
     showLink = false,
