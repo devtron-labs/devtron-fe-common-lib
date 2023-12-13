@@ -19,7 +19,7 @@ export interface CustomInputProps {
     linkText?: string
     error?: string[] | string
     helperText?: string;
-    handleBlurChange?: (e) => void
+    handleOnBlur?: (e) => void
     readOnly?: boolean
     noTrim?: boolean
 }

@@ -24,7 +24,7 @@ export function CustomInput({
     linkText = '',
     link = '',
     helperText = '',
-    handleBlurChange,
+    handleOnBlur,
     readOnly = false,
     noTrim = false,
 }: CustomInputProps) {
@@ -50,18 +50,17 @@ export function CustomInput({
         return error
     }
 
-    const handleOnBlur = (event) => {
-        event.stopPropagation()
-
+    const onBlur = (event) => {
         //NOTE: This is to prevent the input from being trimmed when the user do not want to trim the input
-        if(noTrim){
+        if (noTrim) {
             event.target.value = event.target.value
-        } else{
+        } else {
+            event.stopPropagation()
             event.target.value = event.target.value?.trim()
+            onChange(event)
         }
-        onChange(event)
-        if (typeof handleBlurChange === 'function') {
-            handleBlurChange(event)
+        if (typeof handleOnBlur === 'function') {
+            handleOnBlur(event)
         }
     }
 
@@ -102,7 +101,7 @@ export function CustomInput({
                     e.persist()
                     onChange(e)
                 }}
-                onBlur={handleOnBlur}
+                onBlur={onBlur}
                 onFocus={onFocus}
                 placeholder={placeholder}
                 value={value}
