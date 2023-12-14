@@ -355,6 +355,7 @@ export interface CommonNodeAttr {
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
     deploymentAppCreated?: boolean
+    isLast?: boolean
 }
 
 export enum DeploymentAppTypes {
@@ -654,4 +655,21 @@ export interface SelectedNode {
 export enum AddPipelineType {
     SEQUENTIAL = 'SEQUENTIAL',
     PARALLEL = 'PARALLEL',
+}
+
+export interface Point {
+    x: number
+    y: number
+}
+
+export interface EdgeNodeType {
+    height: number
+    width: number
+    userApprovalConfig?: UserApprovalConfigType
+    type?: any
+    id?: number | string
+}
+
+export interface EdgeEndNodeType extends EdgeNodeType {
+    userApprovalConfig?: UserApprovalConfigType
 }
