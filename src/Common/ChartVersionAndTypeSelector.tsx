@@ -16,7 +16,7 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
     useEffect(() => {
         fetchChartTemplateVersions()
             .then((res) => {
-                const charts = res?.result
+                const charts = res?.result || []
                 setCharts(charts)
                 // Extract unique chart types from the data
                 const chartTypeOptions = [...new Set(charts.map((item) => item.chartType))].map((type) => ({
@@ -48,7 +48,7 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
     // Function to handle the change of the selected chart version
     const handleChartVersionChange = (selectedOption) => {
         setSelectedChartVersion(selectedOption)
-        setSelectedChartRefId(selectedOption?.chartRefId)
+        setSelectedChartRefId(selectedOption.chartRefId)
     }
 
     return (
