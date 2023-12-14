@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { fetchSelectedChartTemplate } from './Common.service'
+import { fetchChartTemplateVersions } from './Common.service'
 import { ChartVersionAndTypeSelectorProps, DeploymentChartVersionType } from './Types'
 import ReactSelect from 'react-select'
 import { customStyles, getFilteredChartVersions, showError } from './Helper'
 
+// @TODO: Generalize this component to be used in CodeEditor as Chart selector toolbar
+// when the Code Editor is moved to the fe-common-lib
 const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndTypeSelectorProps) => {
     const [charts, setCharts] = useState<DeploymentChartVersionType[]>([])
     const [selectedChartType, setSelectedChartType] = useState(null)
@@ -12,16 +14,17 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
     const [selectedChartVersion, setSelectedChartVersion] = useState(null)
 
     useEffect(() => {
-        fetchSelectedChartTemplate()
+        fetchChartTemplateVersions()
             .then((res) => {
-                setCharts(res?.result)
+                const charts = res?.result
+                setCharts(charts)
                 // Extract unique chart types from the data
-                const chartTypeOptions = [...new Set(res?.result.map((item) => item.chartType))].map((type) => ({
+                const chartTypeOptions = [...new Set(charts.map((item) => item.chartType))].map((type) => ({
                     value: type,
                     label: type,
                 }))
                 setChartTypeOptions(chartTypeOptions)
-                const filteredVersions = getFilteredChartVersions(res?.result, chartTypeOptions[0])
+                const filteredVersions = getFilteredChartVersions(charts, chartTypeOptions[0])
                 selectFirstChartVersion(filteredVersions)
             })
             .catch((err) => {
@@ -62,7 +65,7 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
             <div className="chart-version-options flex" data-testid="chart-version-options">
                 <span className="chart-version-options-label mr-4">Chart Version</span>
                 <ReactSelect
-                    value={selectedChartVersion ?? chartTypeOptions[0]}
+                    value={selectedChartVersion ?? chartVersionOptions[0]}
                     options={chartVersionOptions}
                     onChange={handleChartVersionChange}
                     styles={customStyles}

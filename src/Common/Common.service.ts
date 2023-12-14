@@ -310,6 +310,6 @@ export function createGitCommitUrl(url: string, revision: string): string {
     return "NA"
 }
 
-export function fetchSelectedChartTemplate() {
-    return get(`app/template/list?appId=-1&envId=-1`)
+export function fetchChartTemplateVersions() {
+    return get(`${ROUTES.DEPLOYMENT_TEMPLATE_LIST}?appId=-1&envId=-1`)
 }
