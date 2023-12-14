@@ -623,3 +623,34 @@ export interface CiPipeline {
     isOffendingMandatoryPlugin?: boolean
     pipelineType?: string
 }
+
+export enum PipelineType {
+    CI_PIPELINE = 'CI_PIPELINE',
+    CD_PIPELINE = 'CD_PIPELINE',
+    WEBHOOK = 'WEBHOOK',
+    LINKED_CD = 'LINKED_CD',
+}
+
+export enum WorkflowNodeType {
+    GIT = 'GIT',
+    CI = 'CI',
+    WEBHOOK = 'WEBHOOK',
+    PRE_CD = 'PRECD',
+    CD = 'CD',
+    POST_CD = 'POSTCD',
+}
+
+export enum AddCDPositions {
+    LEFT = 'left',
+    RIGHT = 'right',
+}
+
+export interface SelectedNode {
+    nodeType: WorkflowNodeType
+    id: string
+}
+
+export enum AddPipelineType {
+    SEQUENTIAL = 'SEQUENTIAL',
+    PARALLEL = 'PARALLEL',
+}
