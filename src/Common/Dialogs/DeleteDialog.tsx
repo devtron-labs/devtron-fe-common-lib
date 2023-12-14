@@ -45,7 +45,7 @@ export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.F
                         type="button"
                         className="cta delete cta-cd-delete-modal ml-16"
                         onClick={handleDelete}
-                        disabled={props.apiCallInProgress}
+                        disabled={props.apiCallInProgress || props.disabled}
                         data-testid="dialog-delete"
                     >
                         {props.apiCallInProgress ? (
