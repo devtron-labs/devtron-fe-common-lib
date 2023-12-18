@@ -29,7 +29,9 @@ export function CustomInput({
     ref,
     onKeyPress,
     defaultValue,
-    onKeyDown
+    onKeyDown,
+    required,
+    additionalErrorInfo
 }: CustomInputProps) {
     const renderLabelHelperText = () => {
         return (
@@ -71,7 +73,7 @@ export function CustomInput({
                 return handleError(error).map((err: string) => (
                     <div className="form__error" key={err}>
                         <FormError className="form__icon form__icon--error" />
-                        {err}
+                        {err}{typeof additionalErrorInfo === "function" && additionalErrorInfo() }
                     </div>
                 ))
             }
@@ -114,6 +116,7 @@ export function CustomInput({
                 onKeyPress={onKeyPress}
                 defaultValue={defaultValue}
                 onKeyDown={onKeyDown}
+                required={required}
             />
 
             {renderFormError()}
