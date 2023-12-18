@@ -1,4 +1,4 @@
-import { LegacyRef } from "react"
+import { HTMLInputTypeAttribute, LegacyRef } from "react"
 
 export interface CustomInputProps {
     name: string
@@ -8,7 +8,7 @@ export interface CustomInputProps {
     autoComplete?: string
     label?: React.ReactNode
     labelClassName?: string
-    type?: 'text' | 'number'
+    type?: HTMLInputTypeAttribute
     disabled?: boolean
     placeholder?: string
     tabIndex?: number
@@ -27,4 +27,5 @@ export interface CustomInputProps {
     ref?: LegacyRef<HTMLInputElement>
     onKeyPress?: (e) => void
     defaultValue?: string | number | ReadonlyArray<string> | undefined;
+    onKeyDown?: (e) => void
 }
