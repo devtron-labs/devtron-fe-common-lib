@@ -6,6 +6,7 @@ export interface AddCDButtonProps {
     endNode: Point & EdgeEndNodeType
     startNode: Point & EdgeNodeType
     handleAddCD: (position: AddCDPositions) => void
+    tooltipContent?: string
 }
 
 export interface HandleAddCD {
@@ -30,4 +31,8 @@ export interface HandleAddCD {
 export interface GetPipelineType {
     isWebhookCD: boolean
     startNode: EdgeNodeType
+}
+
+export interface TooltipContentProps {
+    tooltipContent?: string
 }
