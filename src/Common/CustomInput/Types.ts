@@ -25,4 +25,5 @@ export interface CustomInputProps {
     readOnly?: boolean
     noTrim?: boolean
     ref?: LegacyRef<HTMLInputElement>
+    onKeyPress?: (e) => void
 }

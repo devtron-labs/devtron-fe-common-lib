@@ -26,7 +26,8 @@ export function CustomInput({
     handleOnBlur,
     readOnly = false,
     noTrim = false,
-    ref
+    ref,
+    onKeyPress
 }: CustomInputProps) {
     const renderLabelHelperText = () => {
         return (
@@ -108,6 +109,7 @@ export function CustomInput({
                 autoFocus={autoFocus}
                 readOnly={readOnly}
                 ref={ref}
+                onKeyPress={onKeyPress}
             />
 
             {renderFormError()}
