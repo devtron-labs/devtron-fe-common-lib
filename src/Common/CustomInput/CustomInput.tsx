@@ -1,7 +1,6 @@
 import { CustomInputProps } from './Types'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as FormError } from '../../Assets/Icon/ic-warning.svg'
-import { useCallback } from 'react'
 
 export function CustomInput({
     name,
@@ -27,6 +26,7 @@ export function CustomInput({
     handleOnBlur,
     readOnly = false,
     noTrim = false,
+    ref
 }: CustomInputProps) {
     const renderLabelHelperText = () => {
         return (
@@ -107,6 +107,7 @@ export function CustomInput({
                 tabIndex={tabIndex}
                 autoFocus={autoFocus}
                 readOnly={readOnly}
+                ref={ref}
             />
 
             {renderFormError()}

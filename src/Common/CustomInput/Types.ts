@@ -1,3 +1,5 @@
+import { LegacyRef } from "react"
+
 export interface CustomInputProps {
     name: string
     value: string | number
@@ -22,4 +24,5 @@ export interface CustomInputProps {
     handleOnBlur?: (e) => void
     readOnly?: boolean
     noTrim?: boolean
+    ref?: LegacyRef<HTMLInputElement>
 }
