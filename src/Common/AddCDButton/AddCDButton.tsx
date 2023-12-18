@@ -49,6 +49,7 @@ export default function AddCDButton({
                     xmlns="http://www.w3.org/2000/svg"
                     data-testid={`add-cd-to-${position}`}
                     onClick={handleAddCDClick}
+                    className="dc__outline-none-imp"
                 >
                     <rect width="20" height="20" rx="10" fill="#664BEE" className="add-cd-edge-btn" />
                     <path
