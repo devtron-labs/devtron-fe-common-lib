@@ -27,7 +27,8 @@ export function CustomInput({
     readOnly = false,
     noTrim = false,
     ref,
-    onKeyPress
+    onKeyPress,
+    defaultValue,
 }: CustomInputProps) {
     const renderLabelHelperText = () => {
         return (
@@ -110,6 +111,7 @@ export function CustomInput({
                 readOnly={readOnly}
                 ref={ref}
                 onKeyPress={onKeyPress}
+                defaultValue={defaultValue}
             />
 
             {renderFormError()}

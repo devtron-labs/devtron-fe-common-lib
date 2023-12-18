@@ -26,4 +26,5 @@ export interface CustomInputProps {
     noTrim?: boolean
     ref?: LegacyRef<HTMLInputElement>
     onKeyPress?: (e) => void
+    defaultValue?: string | number | ReadonlyArray<string> | undefined;
 }
