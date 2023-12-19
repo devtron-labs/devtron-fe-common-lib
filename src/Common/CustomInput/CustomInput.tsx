@@ -67,33 +67,41 @@ export function CustomInput({
         }
     }
 
-    const renderFormError = () => {
+    const renderInputErrorMessage = (error: string) => {
+        return (
+            <div className="form__error" key={error}>
+                <FormError className="form__icon form__icon--error" />
+                {error}
+                {typeof additionalErrorInfo === 'function' && additionalErrorInfo()}
+            </div>
+        )
+    }
+
+    const getInputError = () => {
         if (error?.length > 0) {
             if (typeof error === 'object') {
-                return handleError(error).map((err: string) => (
-                    <div className="form__error" key={err}>
-                        <FormError className="form__icon form__icon--error" />
-                        {err}{typeof additionalErrorInfo === "function" && additionalErrorInfo() }
-                    </div>
-                ))
+                return handleError(error).map((err: string) => renderInputErrorMessage(err))
             }
-            return (
-                <div className="form__error">
-                    <FormError className="form__icon form__icon--error" />
-                    {error}
-                </div>
-            )
+            return renderInputErrorMessage(error)
+        }
+    }
+
+    const renderInputLabel = () => {
+        if(label){
+            if(typeof label === "string"){
+                return  <label className={`form__label ${labelClassName}`} data-testid={`label-${dataTestid}`}>
+                  <span className={`${isRequiredField ? 'dc__required-field' : ''}`}>{label}</span>
+                  {showLink && renderLabelHelperText()}
+              </label>
+              } else if(typeof label === "function"){
+                  return label()
+              }
         }
     }
 
     return (
         <div className="flex column left top">
-            {label && (
-                <label className={`form__label ${labelClassName}`} data-testid={`label-${dataTestid}`}>
-                    <span className={`${isRequiredField ? 'dc__required-field' : ''}`}>{label}</span>
-                    {showLink && renderLabelHelperText()}
-                </label>
-            )}
+           {renderInputLabel()}
             <input
                 data-testid={dataTestid}
                 type={type}
@@ -119,7 +127,7 @@ export function CustomInput({
                 required={required}
             />
 
-            {renderFormError()}
+            {getInputError()}
             {helperText && (
                 <div className="form__text-field-info">
                     <Info className="form__icon form__icon--info" />
