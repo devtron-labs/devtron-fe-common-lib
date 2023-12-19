@@ -293,6 +293,11 @@ export interface CDMaterialServiceQueryParams {
     filter?: CDMaterialFilterQuery
 }
 
+export interface DownstreamNodesEnvironmentsType {
+    environmentId: number
+    environmentName: string
+}
+
 export interface CommonNodeAttr {
     connectingCiPipelineId?: number
     parents: string | number[] | string[]
@@ -356,6 +361,7 @@ export interface CommonNodeAttr {
     tagsEditable?: boolean
     deploymentAppCreated?: boolean
     isLast?: boolean
+    downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
 }
 
 export enum DeploymentAppTypes {
