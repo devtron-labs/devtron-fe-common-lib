@@ -520,13 +520,18 @@ export const getUrlWithSearchParams = (url: string, params: Record<string | numb
  */
 export const logExceptionToSentry = Sentry.captureException.bind(window)
 
-export function removeEmptyValues(obj) {
+function removeEmptyObjectKeysAndNullValues(obj) {
+    //it recursively removes empty object keys and array values that are null
     for (let key in obj) {
-        if (obj[key] && typeof obj[key] === 'object') {
-            if (removeEmptyValues(obj[key])) {
+        if (Array.isArray(obj[key])) obj[key] = obj[key].filter((item) => item !== null)
+        if (obj[key].length === 0) {
+            // Check if the array is empty
+            delete obj[key] // Delete the key if the array is empty
+        } else if (obj[key] && typeof obj[key] === 'object') {
+            if (removeEmptyObjectKeysAndNullValues(obj[key])) {
                 delete obj[key]
             }
-        } else if (obj[key] === '' || obj[key] === null || obj[key] === undefined) {
+        } else if (obj[key] === null || obj[key] === undefined) {
             delete obj[key]
         }
     }
@@ -534,31 +539,38 @@ export function removeEmptyValues(obj) {
 }
 
 export function getUnlockedJSON(json, jsonPathArray) {
-    const patches = jsonPathArray.flatMap((jsonPath) => {
+    let patches = jsonPathArray.flatMap((jsonPath) => {
         const pathsToRemove = JSONPath({ path: jsonPath, json: json, resultType: 'all' })
-        return pathsToRemove.map((result) => ({ op: 'remove', path: result.pointer }))
+        return pathsToRemove.map((result) =>
+            Array.isArray(result.parent)
+                ? { op: 'replace', path: result.pointer, value: null }
+                : { op: 'remove', path: result.pointer },
+        )
     })
-    const newDocument = jsonpatch.applyPatch(json, patches).newDocument
-    removeEmptyValues(newDocument)
+    let newDocument = jsonpatch.applyPatch(json, patches).newDocument
+
+    removeEmptyObjectKeysAndNullValues(newDocument)
     return newDocument
 }
 
 export function getLockedJSON(json, jsonPathArray: string[]) {
+    const jsonCopy=JSON.parse(JSON.stringify(json))
     let resultJson = {}
     jsonPathArray.forEach((jsonPath) => {
-        const elements = JSONPath({ path: jsonPath, json: json, resultType: 'all' })
+        const elements = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
         elements.forEach((element) => {
             const pathArray: string[] = JSONPath.toPathArray(element.path)
             const lastPath = pathArray.pop()
+            let current = resultJson
             for (let i = 0; i < pathArray.length; i++) {
                 let key = isNaN(Number(pathArray[i])) ? pathArray[i] : parseInt(pathArray[i])
-                if (!resultJson[key]) {
-                    resultJson[key] = isNaN(Number(pathArray[i + 1])) ? {} : []
+                if (!current[key]) {
+                    current[key] = isNaN(Number(pathArray[i + 1])) ? {} : []
                 }
-                resultJson = resultJson[key]
+                current = current[key]
             }
             let key = isNaN(Number(lastPath)) ? lastPath : parseInt(lastPath)
-            resultJson[key] = element.value
+            current[key] = element.value
         })
     })
     return resultJson
