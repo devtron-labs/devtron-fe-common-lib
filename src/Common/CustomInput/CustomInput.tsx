@@ -19,9 +19,6 @@ export function CustomInput({
     autoFocus = false,
     rootClassName = '',
     autoComplete = 'off',
-    showLink = false,
-    linkText = '',
-    link = '',
     helperText = '',
     handleOnBlur,
     readOnly = false,
@@ -33,14 +30,6 @@ export function CustomInput({
     required,
     additionalErrorInfo
 }: CustomInputProps) {
-
-    const renderLabelHelperText = () => {
-        return (
-            <a target="_blank" href={link} className="cursor fs-13 onlink ml-4">
-                {linkText}
-            </a>
-        )
-    }
 
     function handleError(error: any): any[] {
         if (!Array.isArray(error)) {
@@ -82,21 +71,26 @@ export function CustomInput({
         }
     }
 
+    const renderInputLabelConditionally = () => {
+        if (typeof label === 'string') {
+            return <span className={`${isRequiredField ? 'dc__required-field' : ''}`}>{label}</span>
+        } else if (typeof label === 'function') {
+            return label()
+        } else {
+            return label
+        }
+    }
+
     const renderInputLabel = () => {
         if (!label) {
             return null
         } else {
-            if (typeof label === 'string') {
-                return (
-                    <label className={`form__label ${labelClassName}`} data-testid={`label-${dataTestid}`}>
-                        <span className={`${isRequiredField ? 'dc__required-field' : ''}`}>{label}</span>
-                        {showLink && renderLabelHelperText()}
-                    </label>
-                )
-            } else if (typeof label === 'function') {
-                return label()
-            }
-        } 
+            return (
+                <label className={`form__label ${labelClassName}`} data-testid={`label-${dataTestid}`}>
+                    {renderInputLabelConditionally()}
+                </label>
+            )
+        }
     }
 
     return (

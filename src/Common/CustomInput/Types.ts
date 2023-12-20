@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute } from "react"
+import { HTMLInputTypeAttribute } from 'react'
 
 export interface CustomInputProps {
     name: string
@@ -16,17 +16,14 @@ export interface CustomInputProps {
     isRequiredField?: boolean
     autoFocus?: boolean
     rootClassName?: string
-    showLink?: boolean
-    link?: string
-    linkText?: string
     error?: string[] | string
-    helperText?: string;
+    helperText?: string
     handleOnBlur?: (e) => void
     readOnly?: boolean
     noTrim?: boolean
     ref?: React.LegacyRef<HTMLInputElement>
     onKeyPress?: (e) => void
-    defaultValue?: string | number | ReadonlyArray<string> | undefined;
+    defaultValue?: string | number | ReadonlyArray<string> | undefined
     onKeyDown?: (e) => void
     required?: boolean
     additionalErrorInfo?: React.ReactNode
