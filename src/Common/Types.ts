@@ -669,3 +669,15 @@ export interface CodeEditorComposition {
     ErrorBar?: React.FC<InformationBarProps>
     Information?: React.FC<InformationBarProps>
 }
+
+export interface CodeEditorHeaderComposition {
+    LanguageChanger?: React.FC<any>;
+    ThemeChanger?: React.FC<any>;
+    ValidationError?: React.FC<any>;
+    Clipboard?: React.FC<any>;
+}
+export interface CodeEditorHeaderInterface {
+    children?: any;
+    className?: string
+    hideDefaultSplitHeader?: boolean;
+}
