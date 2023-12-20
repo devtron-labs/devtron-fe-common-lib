@@ -75,7 +75,7 @@ export function CustomInput({
         if (typeof label === 'string') {
             return <span className={`${isRequiredField ? 'dc__required-field' : ''}`}>{label}</span>
         } else {
-            return label()
+            return label
         }
     }
 
