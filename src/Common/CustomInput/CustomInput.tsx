@@ -33,25 +33,19 @@ export function CustomInput({
     required,
     additionalErrorInfo
 }: CustomInputProps) {
+
     const renderLabelHelperText = () => {
         return (
-            <span>
-                <a target="_blank" href={link} className="cursor fs-13 onlink ml-4">
-                    {linkText}
-                </a>
-            </span>
+            <a target="_blank" href={link} className="cursor fs-13 onlink ml-4">
+                {linkText}
+            </a>
         )
     }
 
     function handleError(error: any): any[] {
-        if (!error) {
-            return []
-        }
-
         if (!Array.isArray(error)) {
             return [error]
         }
-
         return error
     }
 
@@ -78,7 +72,9 @@ export function CustomInput({
     }
 
     const getInputError = () => {
-        if (error?.length > 0) {
+        if (error.length === 0) {
+            return null
+        } else {
             if (typeof error === 'object') {
                 return handleError(error).map((err: string) => renderInputErrorMessage(err))
             }
@@ -96,6 +92,8 @@ export function CustomInput({
               } else if(typeof label === "function"){
                   return label()
               }
+        } else {
+            return null
         }
     }
 
