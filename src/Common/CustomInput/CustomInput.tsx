@@ -8,7 +8,7 @@ export function CustomInput({
     error,
     onChange,
     onFocus = (e) => {},
-    label = '',
+    label,
     type = 'text',
     disabled = false,
     labelClassName = '',
@@ -61,7 +61,7 @@ export function CustomInput({
         }
     }
 
-    const renderInputErrorMessage = (error: string) => {
+    const renderFormErrorWithIcon = (error: string) => {
         return (
             <div className="form__error" key={error}>
                 <FormError className="form__icon form__icon--error" />
@@ -72,29 +72,31 @@ export function CustomInput({
     }
 
     const getInputError = () => {
-        if (error.length === 0) {
+        if (!error?.length) {
             return null
         } else {
             if (typeof error === 'object') {
-                return handleError(error).map((err: string) => renderInputErrorMessage(err))
+                return handleError(error).map((err: string) => renderFormErrorWithIcon(err))
             }
-            return renderInputErrorMessage(error)
+            return renderFormErrorWithIcon(error)
         }
     }
 
     const renderInputLabel = () => {
-        if(label){
-            if(typeof label === "string"){
-                return  <label className={`form__label ${labelClassName}`} data-testid={`label-${dataTestid}`}>
-                  <span className={`${isRequiredField ? 'dc__required-field' : ''}`}>{label}</span>
-                  {showLink && renderLabelHelperText()}
-              </label>
-              } else if(typeof label === "function"){
-                  return label()
-              }
-        } else {
+        if (!label) {
             return null
-        }
+        } else {
+            if (typeof label === 'string') {
+                return (
+                    <label className={`form__label ${labelClassName}`} data-testid={`label-${dataTestid}`}>
+                        <span className={`${isRequiredField ? 'dc__required-field' : ''}`}>{label}</span>
+                        {showLink && renderLabelHelperText()}
+                    </label>
+                )
+            } else if (typeof label === 'function') {
+                return label()
+            }
+        } 
     }
 
     return (
