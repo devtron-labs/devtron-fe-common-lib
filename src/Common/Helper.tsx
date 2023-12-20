@@ -539,22 +539,23 @@ function removeEmptyObjectKeysAndNullValues(obj) {
 }
 
 export function getUnlockedJSON(json, jsonPathArray) {
+    const jsonCopy = JSON.parse(JSON.stringify(json))
     let patches = jsonPathArray.flatMap((jsonPath) => {
-        const pathsToRemove = JSONPath({ path: jsonPath, json: json, resultType: 'all' })
+        const pathsToRemove = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
         return pathsToRemove.map((result) =>
             Array.isArray(result.parent)
                 ? { op: 'replace', path: result.pointer, value: null }
                 : { op: 'remove', path: result.pointer },
         )
     })
-    let newDocument = jsonpatch.applyPatch(json, patches).newDocument
+    let newDocument = jsonpatch.applyPatch(jsonCopy, patches).newDocument
 
     removeEmptyObjectKeysAndNullValues(newDocument)
     return newDocument
 }
 
 export function getLockedJSON(json, jsonPathArray: string[]) {
-    const jsonCopy=JSON.parse(JSON.stringify(json))
+    const jsonCopy = JSON.parse(JSON.stringify(json))
     let resultJson = {}
     jsonPathArray.forEach((jsonPath) => {
         const elements = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
@@ -573,6 +574,6 @@ export function getLockedJSON(json, jsonPathArray: string[]) {
             current[key] = element.value
         })
     })
-    return resultJson
+    return resultJson['$']
 }
 
