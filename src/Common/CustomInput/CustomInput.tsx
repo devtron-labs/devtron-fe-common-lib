@@ -1,6 +1,6 @@
 import { CustomInputProps } from './Types'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
-import { ReactComponent as FormError } from '../../Assets/Icon/ic-warning.svg'
+import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-warning.svg'
 
 export function CustomInput({
     name,
@@ -64,7 +64,7 @@ export function CustomInput({
     const renderFormErrorWithIcon = (error: string) => {
         return (
             <div className="form__error" key={error}>
-                <FormError className="form__icon form__icon--error" />
+                <ErrorIcon className="form__icon form__icon--error" />
                 {error}
                 {typeof additionalErrorInfo === 'function' && additionalErrorInfo()}
             </div>
