@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute } from 'react'
+import React, { HTMLInputTypeAttribute } from 'react'
 
 export interface CustomInputProps {
     name: string
@@ -6,7 +6,7 @@ export interface CustomInputProps {
     onChange: (e: any) => void
     onFocus?: (e: any) => void
     autoComplete?: string
-    label?: React.ReactNode
+    label?: string | (() => React.ReactNode)
     labelClassName?: string
     type?: HTMLInputTypeAttribute
     disabled?: boolean

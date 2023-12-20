@@ -74,10 +74,8 @@ export function CustomInput({
     const renderInputLabelConditionally = () => {
         if (typeof label === 'string') {
             return <span className={`${isRequiredField ? 'dc__required-field' : ''}`}>{label}</span>
-        } else if (typeof label === 'function') {
-            return label()
         } else {
-            return label
+            return label()
         }
     }
 
