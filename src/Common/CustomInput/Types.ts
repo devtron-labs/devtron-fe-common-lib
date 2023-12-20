@@ -6,7 +6,7 @@ export interface CustomInputProps {
     onChange: (e: any) => void
     onFocus?: (e: any) => void
     autoComplete?: string
-    label?: string | (() => React.ReactNode)
+    label?: string |  React.ReactNode
     labelClassName?: string
     type?: HTMLInputTypeAttribute
     disabled?: boolean
