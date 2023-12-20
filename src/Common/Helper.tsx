@@ -8,6 +8,8 @@ import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
+import { JSONPath } from 'jsonpath-plus'
+import * as jsonpatch from 'fast-json-patch'
 
 toast.configure({
     autoClose: 3000,
@@ -517,3 +519,48 @@ export const getUrlWithSearchParams = (url: string, params: Record<string | numb
  * Custom exception logger function for logging errors to sentry
  */
 export const logExceptionToSentry = Sentry.captureException.bind(window)
+
+export function removeEmptyValues(obj) {
+    for (let key in obj) {
+        if (obj[key] && typeof obj[key] === 'object') {
+            if (removeEmptyValues(obj[key])) {
+                delete obj[key]
+            }
+        } else if (obj[key] === '' || obj[key] === null || obj[key] === undefined) {
+            delete obj[key]
+        }
+    }
+    return Object.keys(obj).length === 0
+}
+
+export function getUnlockedJSON(json, jsonPathArray) {
+    const patches = jsonPathArray.flatMap((jsonPath) => {
+        const pathsToRemove = JSONPath({ path: jsonPath, json: json, resultType: 'all' })
+        return pathsToRemove.map((result) => ({ op: 'remove', path: result.pointer }))
+    })
+    const newDocument = jsonpatch.applyPatch(json, patches).newDocument
+    removeEmptyValues(newDocument)
+    return newDocument
+}
+
+export function getLockedJSON(json, jsonPathArray: string[]) {
+    let resultJson = {}
+    jsonPathArray.forEach((jsonPath) => {
+        const elements = JSONPath({ path: jsonPath, json: json, resultType: 'all' })
+        elements.forEach((element) => {
+            const pathArray: string[] = JSONPath.toPathArray(element.path)
+            const lastPath = pathArray.pop()
+            for (let i = 0; i < pathArray.length; i++) {
+                let key = isNaN(Number(pathArray[i])) ? pathArray[i] : parseInt(pathArray[i])
+                if (!resultJson[key]) {
+                    resultJson[key] = isNaN(Number(pathArray[i + 1])) ? {} : []
+                }
+                resultJson = resultJson[key]
+            }
+            let key = isNaN(Number(lastPath)) ? lastPath : parseInt(lastPath)
+            resultJson[key] = element.value
+        })
+    })
+    return resultJson
+}
+
