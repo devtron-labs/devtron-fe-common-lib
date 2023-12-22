@@ -462,12 +462,14 @@ export const getUrlWithSearchParams = (url: string, params: Record<string | numb
 export const logExceptionToSentry = Sentry.captureException.bind(window)
 
 function removeEmptyObjectKeysAndNullValues(obj) {
-    //it recursively removes empty object keys and array values that are null
+    // It recursively removes empty object keys and array values that are null
     for (let key in obj) {
-        if (Array.isArray(obj[key])) obj[key] = obj[key].filter((item) => item !== null)
-        if (obj[key].length === 0) {
+        if (Array.isArray(obj[key])) {
+            obj[key] = obj[key].filter((item) => item !== null)
             // Check if the array is empty
-            delete obj[key] // Delete the key if the array is empty
+            if (obj[key].length === 0) {
+                delete obj[key] // Delete the key if the array is empty
+            }
         } else if (obj[key] && typeof obj[key] === 'object') {
             if (removeEmptyObjectKeysAndNullValues(obj[key])) {
                 delete obj[key]
