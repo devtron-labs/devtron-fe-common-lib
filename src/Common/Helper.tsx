@@ -503,6 +503,7 @@ function removeEmptyObjectKeysAndNullValues(obj) {
     // It recursively removes empty object keys and array values that are null
     for (let key in obj) {
         if (Array.isArray(obj[key])) {
+            if (obj[key].length === 0) continue
             obj[key] = obj[key].filter((item) => item !== null)
             // Check if the array is empty
             if (obj[key].length === 0) {
@@ -512,7 +513,7 @@ function removeEmptyObjectKeysAndNullValues(obj) {
             if (removeEmptyObjectKeysAndNullValues(obj[key])) {
                 delete obj[key]
             }
-        } else if (obj[key] === null || obj[key] === undefined) {
+        } else if (obj[key] === undefined) {
             delete obj[key]
         }
     }
