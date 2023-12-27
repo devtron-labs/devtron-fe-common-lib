@@ -28,7 +28,8 @@ export function CustomInput({
     defaultValue,
     onKeyDown,
     required,
-    additionalErrorInfo
+    additionalErrorInfo,
+    inputWrapClassname = '',
 }: CustomInputProps) {
 
     function handleError(error: any): any[] {
@@ -92,7 +93,7 @@ export function CustomInput({
     }
 
     return (
-        <div className="flex column left top">
+        <div className={`flex column left top ${inputWrapClassname}`}>
            {renderInputLabel()}
             <input
                 data-testid={dataTestid}
