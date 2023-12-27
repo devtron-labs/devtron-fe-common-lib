@@ -293,6 +293,11 @@ export interface CDMaterialServiceQueryParams {
     filter?: CDMaterialFilterQuery
 }
 
+export interface DownstreamNodesEnvironmentsType {
+    environmentId: number
+    environmentName: string
+}
+
 export interface CommonNodeAttr {
     connectingCiPipelineId?: number
     parents: string | number[] | string[]
@@ -354,6 +359,9 @@ export interface CommonNodeAttr {
     }
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
+    deploymentAppCreated?: boolean
+    isLast?: boolean
+    downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
 }
 
 export enum DeploymentAppTypes {
@@ -680,4 +688,52 @@ export interface CodeEditorHeaderInterface {
     children?: any;
     className?: string
     hideDefaultSplitHeader?: boolean;
+}
+
+export enum PipelineType {
+    CI_PIPELINE = 'CI_PIPELINE',
+    CD_PIPELINE = 'CD_PIPELINE',
+    WEBHOOK = 'WEBHOOK',
+    LINKED_CD = 'LINKED_CD',
+}
+
+export enum WorkflowNodeType {
+    GIT = 'GIT',
+    CI = 'CI',
+    WEBHOOK = 'WEBHOOK',
+    PRE_CD = 'PRECD',
+    CD = 'CD',
+    POST_CD = 'POSTCD',
+}
+
+export enum AddCDPositions {
+    LEFT = 'left',
+    RIGHT = 'right',
+}
+
+export interface SelectedNode {
+    nodeType: WorkflowNodeType
+    id: string
+}
+
+export enum AddPipelineType {
+    SEQUENTIAL = 'SEQUENTIAL',
+    PARALLEL = 'PARALLEL',
+}
+
+export interface Point {
+    x: number
+    y: number
+}
+
+export interface EdgeNodeType {
+    height: number
+    width: number
+    userApprovalConfig?: UserApprovalConfigType
+    type?: any
+    id?: number | string
+}
+
+export interface EdgeEndNodeType extends EdgeNodeType {
+    userApprovalConfig?: UserApprovalConfigType
 }
