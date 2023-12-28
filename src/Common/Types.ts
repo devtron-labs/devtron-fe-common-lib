@@ -646,7 +646,7 @@ export interface CodeEditorInterface {
     onFocus?: () => void
     children?: any
     defaultValue?: string
-    mode?: 'json' | 'yaml' | 'shell' | 'dockerfile'
+    mode?: 'json' | 'yaml' | 'shell' | 'dockerfile' | 'plaintext'
     tabSize?: number
     readOnly?: boolean
     noParsing?: boolean
