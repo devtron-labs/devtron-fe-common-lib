@@ -240,3 +240,8 @@ export const RepositoryAction = {
     CHART_PULL: "CHART_PULL",
     CHART_PUSH: "CHART_PUSH"
 }
+
+export enum APPROVAL_MODAL_TYPE {
+    CONFIG = 'CONFIG',
+    IMAGE = 'IMAGE',
+}
