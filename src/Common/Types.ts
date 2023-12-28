@@ -690,6 +690,17 @@ export interface CodeEditorHeaderInterface {
     hideDefaultSplitHeader?: boolean;
 }
 
+export interface DeploymentChartVersionType {
+    chartRefId: number 
+    chartVersion: string
+    chartType: string
+    type: number
+}
+
+export interface ChartVersionAndTypeSelectorProps {
+    setSelectedChartRefId: React.Dispatch<React.SetStateAction<number>>
+}
+
 export enum PipelineType {
     CI_PIPELINE = 'CI_PIPELINE',
     CD_PIPELINE = 'CD_PIPELINE',

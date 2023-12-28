@@ -461,6 +461,44 @@ export const getUrlWithSearchParams = (url: string, params: Record<string | numb
  */
 export const logExceptionToSentry = Sentry.captureException.bind(window)
 
+export const customStyles = {
+    control: (base, state) => ({
+        ...base,
+        minHeight: '32px',
+        boxShadow: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        background: 'transparent',
+    }),
+    indicatorSeparator: (base, state) => ({
+        ...base,
+        width: 0,
+    }),
+    valueContainer: (base, state) => ({
+        ...base,
+        padding: '0',
+        fontSize: '13px',
+        fontWeight: '600',
+    }),
+    dropdownIndicator: (base, state) => ({
+        ...base,
+        color: 'var(--N400)',
+        padding: '0 8px',
+        transition: 'all .2s ease',
+        transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+    }),
+}
+
+export const getFilteredChartVersions = (charts, selectedChartType) => {
+    // Filter chart versions based on selected chart type
+    return charts
+        .filter((item) => item?.chartType === selectedChartType.value)
+        .map((item) => ({
+            value: item?.chartVersion,
+            label: item?.chartVersion,
+            chartRefId: item.chartRefId,
+        }))
+}
 function removeEmptyObjectKeysAndNullValues(obj) {
     // It recursively removes empty object keys and array values that are null
     for (let key in obj) {
