@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { ReactNode } from 'react'
 
 export interface DeleteDialogProps {
     title: string
@@ -15,10 +15,10 @@ export interface DeleteDialogProps {
 }
 
 export interface ForceDeleteDialogType {
-  onClickDelete: () => void
-  closeDeleteModal: () => void
-  forceDeleteDialogTitle: string
-  forceDeleteDialogMessage: string
+    onClickDelete: () => void
+    closeDeleteModal: () => void
+    forceDeleteDialogTitle: string
+    forceDeleteDialogMessage: string
 }
 export interface ConfirmationDialogType {
     className?: string
@@ -37,11 +37,11 @@ export interface ConfirmationDialogButtonGroupType {
     children: any
 }
 export interface DialogFormProps {
-    className: string;
-    title: string;
-    isLoading: boolean;
-    closeOnESC?: boolean;
-    close: (event) => void;
-    onSave: (event) => void;
-    headerClassName?: string;
+    className: string
+    title: string
+    isLoading: boolean
+    closeOnESC?: boolean
+    close: (event) => void
+    onSave: (event) => void
+    headerClassName?: string
 }

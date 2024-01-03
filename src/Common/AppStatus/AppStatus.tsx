@@ -25,24 +25,24 @@ export default function AppStatus({
     const renderIcon = () => {
         if (iconClass) {
             return <span className={`dc__app-summary__icon icon-dim-16 ${iconClass} ${iconClass}--node`} />
-        } else if (isVirtualEnv) {
+        }
+        if (isVirtualEnv) {
             return (
                 <span
                     className={`dc__app-summary__icon icon-dim-16 ${StatusConstants.NOT_DEPLOYED.lowerCase} ${StatusConstants.NOT_DEPLOYED.lowerCase}--node`}
                 />
             )
-        } else {
-            return (
-                <Tippy
-                    className="default-tt w-200"
-                    arrow={false}
-                    placement="top"
-                    content="To fetch app status for GitOps based deployments open the app detail page"
-                >
-                    <InfoIcon className="icon-dim-16 fcn-6" />
-                </Tippy>
-            )
         }
+        return (
+            <Tippy
+                className="default-tt w-200"
+                arrow={false}
+                placement="top"
+                content="To fetch app status for GitOps based deployments open the app detail page"
+            >
+                <InfoIcon className="icon-dim-16 fcn-6" />
+            </Tippy>
+        )
     }
 
     return hideStatusMessage ? (

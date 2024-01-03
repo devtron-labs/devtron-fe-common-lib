@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { toast } from 'react-toastify'
+import Tippy from '@tippyjs/react'
 import { ReactComponent as Add } from '../Assets/Icon/ic-add.svg'
 import { ReactComponent as Close } from '../Assets/Icon/ic-cross.svg'
 import { ReactComponent as QuestionFilled } from '../Assets/Icon/ic-help.svg'
@@ -7,7 +9,6 @@ import { ReactComponent as Question } from '../Assets/Icon/ic-help-outline.svg'
 import { ReactComponent as EditIcon } from '../Assets/Icon/ic-pencil.svg'
 import { ReactComponent as Redo } from '../Assets/Icon/ic-arrow-counter-clockwise.svg'
 import { ReactComponent as Minus } from '../Assets/Icon/ic-minus.svg'
-import { toast } from 'react-toastify'
 import { ReactComponent as Info } from '../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as Error } from '../Assets/Icon/ic-warning.svg'
 import { ReactComponent as Warning } from '../Assets/Icon/ic-error-exclamation.svg'
@@ -17,7 +18,6 @@ import { ImageButtonType, ImageTaggingContainerType, ReleaseTag } from './ImageT
 import { showError, stopPropagation } from './Helper'
 import { TippyCustomized } from './TippyCustomized'
 import { setImageTags } from './Common.service'
-import Tippy from '@tippyjs/react'
 import { Progressing } from './Progressing'
 
 export const ImageTagsContainer = ({
@@ -34,15 +34,15 @@ export const ImageTagsContainer = ({
     toggleCardMode,
     hideHardDelete,
     forceReInit,
-    isSuperAdmin
+    isSuperAdmin,
 }: ImageTaggingContainerType) => {
-    const [initialTags, setInitialTags] = useState<ReleaseTag[]>(imageReleaseTags ? imageReleaseTags : [])
+    const [initialTags, setInitialTags] = useState<ReleaseTag[]>(imageReleaseTags || [])
     const [initialDescription, setInitialDescription] = useState(imageComment ? imageComment.comment : '')
-    const [existingTags, setExistingTags] = useState(appReleaseTagNames ? appReleaseTagNames : [])
+    const [existingTags, setExistingTags] = useState(appReleaseTagNames || [])
     const [newDescription, setNewDescription] = useState(imageComment ? imageComment.comment : '')
     const [isEditing, setIsEditing] = useState(false)
     const [showTagsWarning, setShowTagsWarning] = useState(false)
-    const [displayedTags, setDisplayedTags] = useState<ReleaseTag[]>(imageReleaseTags ? imageReleaseTags : [])
+    const [displayedTags, setDisplayedTags] = useState<ReleaseTag[]>(imageReleaseTags || [])
     const [tagErrorMessage, setTagErrorMessage] = useState('')
     const [createTags, setCreateTags] = useState<ReleaseTag[]>([])
     const [softDeleteTags, setSoftDeleteTags] = useState<ReleaseTag[]>([])
@@ -51,22 +51,20 @@ export const ImageTagsContainer = ({
     const [textInput, setTextInput] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
 
-
     useEffect(() => {
         reInitState()
     }, [imageReleaseTags, imageComment, tagsEditable])
 
     useEffect(() => {
-        setExistingTags(appReleaseTagNames ? appReleaseTagNames : [])
+        setExistingTags(appReleaseTagNames || [])
     }, [appReleaseTagNames])
-
 
     const reInitState = () => {
         if (forceReInit || !isEditing) {
-            setInitialTags(imageReleaseTags ? imageReleaseTags : [])
+            setInitialTags(imageReleaseTags || [])
             setInitialDescription(imageComment ? imageComment.comment : '')
             setNewDescription(imageComment ? imageComment.comment : '')
-            setDisplayedTags(imageReleaseTags ? imageReleaseTags : [])
+            setDisplayedTags(imageReleaseTags || [])
             setIsEditing(false)
         }
     }
@@ -97,7 +95,7 @@ export const ImageTagsContainer = ({
         setTagErrorMessage('')
     }
 
-    const validateTag = (lowercaseValue) : boolean => {
+    const validateTag = (lowercaseValue): boolean => {
         if (
             lowercaseValue.length == 0 ||
             lowercaseValue.length >= 128 ||
@@ -120,9 +118,9 @@ export const ImageTagsContainer = ({
         return true
     }
 
-    const handleTagCreate = (newValue) : ReleaseTag[] => {
+    const handleTagCreate = (newValue): ReleaseTag[] => {
         const lowercaseValue = newValue.toLowerCase().trim()
-        if(validateTag(lowercaseValue)) {
+        if (validateTag(lowercaseValue)) {
             const newTag: ReleaseTag = {
                 id: 0,
                 tagName: lowercaseValue,
@@ -148,7 +146,7 @@ export const ImageTagsContainer = ({
             deleted: !updatedTags[index].deleted,
         }
         const updatedTag = updatedTags[index]
-        let updatedSoftDeleteTags = [...softDeleteTags]
+        const updatedSoftDeleteTags = [...softDeleteTags]
         const tagIndex = updatedSoftDeleteTags.findIndex((tag) => tag.tagName === updatedTag.tagName)
         if (tagIndex !== -1) {
             // Tag already exists in softDeleteTags array, remove it
@@ -206,13 +204,13 @@ export const ImageTagsContainer = ({
 
         const payload = {
             createTags: tagsToBeCreated,
-            softDeleteTags: softDeleteTags,
+            softDeleteTags,
             imageComment: {
                 id: 0,
                 comment: newDescription.trim(),
                 artifactId: 0,
             },
-            hardDeleteTags: hardDeleteTags,
+            hardDeleteTags,
         }
 
         // set loading state true
@@ -242,7 +240,7 @@ export const ImageTagsContainer = ({
                 handleEditClick()
                 setShowTagsWarning(false)
                 setTagErrorMessage('')
-                if(updateCurrentAppMaterial)updateCurrentAppMaterial(artifactId,tags,res.result?.imageComment)
+                if (updateCurrentAppMaterial) updateCurrentAppMaterial(artifactId, tags, res.result?.imageComment)
             })
             .catch((err) => {
                 // Fix toast message
@@ -253,50 +251,45 @@ export const ImageTagsContainer = ({
                     showError(err)
                 }
             })
-            .finally(()=>{
+            .finally(() => {
                 setLoading(false)
             })
     }
 
-    const renderInfoCard = (): JSX.Element => {
-        return (
-            <TippyCustomized
-                theme={TippyTheme.white}
-                className="w-300 fcv-5"
-                placement="right"
-                Icon={QuestionFilled}
-                heading="Release tags"
-                showCloseButton={true}
-                trigger="click"
-                interactive={true}
-                additionalContent={getBuildContextAdditionalContent()}
-            >
-                <div className="flex">
-                    <Question  className="fcn-5 ml-8 cursor icon-dim-16"/>
-                </div>
-            </TippyCustomized>
-        )
-    }
-
-    const getBuildContextAdditionalContent = () => {
-        return (
-            <div className="h-250 fs-13 dc__overflow-scroll p-12">
-                <div>Release tags allow you to tag container images with readable and relatable tags eg. v1.0.</div>
-                <ul className="pl-20 mt-8">
-                    <li>
-                        A release tag can only be added if a workflow has CD pipelines deploying to Production
-                        environments.
-                    </li>
-                    <li>Multiple tags can be added to an image.</li>
-                    <li>Multiple images in an application cannot have the same tag.</li>
-                    <li>
-                        Tags cannot be deleted once saved. Although, you can soft delete a tag if an unwanted tag has
-                        been added.
-                    </li>
-                </ul>
+    const renderInfoCard = (): JSX.Element => (
+        <TippyCustomized
+            theme={TippyTheme.white}
+            className="w-300 fcv-5"
+            placement="right"
+            Icon={QuestionFilled}
+            heading="Release tags"
+            showCloseButton
+            trigger="click"
+            interactive
+            additionalContent={getBuildContextAdditionalContent()}
+        >
+            <div className="flex">
+                <Question className="fcn-5 ml-8 cursor icon-dim-16" />
             </div>
-        )
-    }
+        </TippyCustomized>
+    )
+
+    const getBuildContextAdditionalContent = () => (
+        <div className="h-250 fs-13 dc__overflow-scroll p-12">
+            <div>Release tags allow you to tag container images with readable and relatable tags eg. v1.0.</div>
+            <ul className="pl-20 mt-8">
+                <li>
+                    A release tag can only be added if a workflow has CD pipelines deploying to Production environments.
+                </li>
+                <li>Multiple tags can be added to an image.</li>
+                <li>Multiple images in an application cannot have the same tag.</li>
+                <li>
+                    Tags cannot be deleted once saved. Although, you can soft delete a tag if an unwanted tag has been
+                    added.
+                </li>
+            </ul>
+        </div>
+    )
 
     const creatableRef = useRef(null)
 
@@ -306,7 +299,7 @@ export const ImageTagsContainer = ({
                 <AddImageButton handleEditClick={handleEditClick} />
             </div>
         ) : (
-            <div></div>
+            <div />
         )
     }
 
@@ -456,8 +449,10 @@ export const ImageTagsContainer = ({
                         className="flex left image-tag-left-border w-100 mt-8 mb-8 pr-10 pl-10"
                         data-testid="image-tags-container-hover"
                     >
-                        <div className='w-100'>
-                            {initialDescription && <div className="mb-6 fs-13 lh-20 dc__word-break-all">{initialDescription}</div>}
+                        <div className="w-100">
+                            {initialDescription && (
+                                <div className="mb-6 fs-13 lh-20 dc__word-break-all">{initialDescription}</div>
+                            )}
                             <div className="flex-wrap flex left">
                                 {initialTags?.map((tag, index) => (
                                     <ImageTagButton
@@ -520,11 +515,11 @@ export const ImageTagButton = ({
     const tabColor = () => {
         if (duplicateTag) {
             return 'cr-5 bcr-1 er-2'
-        } else if (isSoftDeleted) {
-            return 'cy-7 bcy-1 dc__strike-through ey-2'
-        } else {
-            return 'cn-9'
         }
+        if (isSoftDeleted) {
+            return 'cy-7 bcy-1 dc__strike-through ey-2'
+        }
+        return 'cn-9'
     }
 
     return (
@@ -538,7 +533,7 @@ export const ImageTagButton = ({
             ) : (
                 <Tippy
                     className="default-tt"
-                    arrow={true}
+                    arrow
                     placement="top"
                     content={isInSoftDeleteTags ? 'Restore tag' : 'Soft delete tag'}
                 >
@@ -556,7 +551,7 @@ export const ImageTagButton = ({
                 </Tippy>
             )}
             {text}
-            <Tippy className="default-tt" arrow={true} placement="top" content="Remove tag">
+            <Tippy className="default-tt" arrow placement="top" content="Remove tag">
                 <div className={`action-icon ml-4 lh-16 pt-3 ${canTagBeHardDelete ? 'show-icon' : ''}`}>
                     <Close
                         className="icon-dim-12 fcn-6 cursor"

@@ -68,5 +68,5 @@ export interface ResizableTagTextAreaProps {
     refVar?: React.MutableRefObject<HTMLTextAreaElement>
     dependentRef?: React.MutableRefObject<HTMLTextAreaElement>
     dataTestId?: string
-    handleKeyDown?: any   
+    handleKeyDown?: any
 }

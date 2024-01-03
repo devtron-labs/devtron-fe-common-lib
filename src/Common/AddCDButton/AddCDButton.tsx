@@ -3,7 +3,7 @@ import Tippy from '@tippyjs/react'
 import { AddCDButtonProps, TooltipContentProps } from './types'
 import { AddCDPositions } from '../Types'
 
-function TooltipContent({ tooltipContent }: TooltipContentProps) {
+const TooltipContent = ({ tooltipContent }: TooltipContentProps) => {
     if (tooltipContent) {
         return (
             <div className="dc__white-space-pre-wrap">

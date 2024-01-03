@@ -1,1 +1,1 @@
-export * from "./Common"
+export * from './Common'

@@ -1,4 +1,4 @@
-import { RegistryTypeDetailType } from "./Types"
+import { RegistryTypeDetailType } from './Types'
 
 export const RequestTimeout = 60000
 export const Host = process.env.REACT_APP_ORCHESTRATOR_ROOT
@@ -23,8 +23,8 @@ export const URLS = {
 export const ROUTES = {
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
-    IMAGE_TAGGING:'app/image-tagging',
-    CD_MATERIAL_GET: 'app/cd-pipeline'
+    IMAGE_TAGGING: 'app/image-tagging',
+    CD_MATERIAL_GET: 'app/cd-pipeline',
 }
 
 export enum KEY_VALUE {
@@ -65,9 +65,9 @@ export const TriggerTypeMap = {
 }
 
 export const BuildStageVariable = {
-  PreBuild: 'preBuildStage',
-  Build: 'buildStage',
-  PostBuild: 'postBuildStage',
+    PreBuild: 'preBuildStage',
+    Build: 'buildStage',
+    PostBuild: 'postBuildStage',
 }
 
 export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
@@ -236,7 +236,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
 }
 
 export const RepositoryAction = {
-    CONTAINER: "CONTAINER",
-    CHART_PULL: "CHART_PULL",
-    CHART_PUSH: "CHART_PUSH"
+    CONTAINER: 'CONTAINER',
+    CHART_PULL: 'CHART_PULL',
+    CHART_PUSH: 'CHART_PUSH',
 }

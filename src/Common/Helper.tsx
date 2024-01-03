@@ -77,16 +77,19 @@ export const stopPropagation = (event): void => {
 }
 
 export function useThrottledEffect(callback, delay, deps = []) {
-    //function will be executed only once in a given time interval.
+    // function will be executed only once in a given time interval.
     const lastRan = useRef(Date.now())
 
     useEffect(() => {
-        const handler = setTimeout(function () {
-            if (Date.now() - lastRan.current >= delay) {
-                callback()
-                lastRan.current = Date.now()
-            }
-        }, delay - (Date.now() - lastRan.current))
+        const handler = setTimeout(
+            () => {
+                if (Date.now() - lastRan.current >= delay) {
+                    callback()
+                    lastRan.current = Date.now()
+                }
+            },
+            delay - (Date.now() - lastRan.current),
+        )
 
         return () => {
             clearTimeout(handler)
@@ -115,7 +118,7 @@ export function getRandomColor(email: string): string {
     return colors[sum % colors.length]
 }
 
-export const getAlphabetIcon = (str: string, rootClassName: string = "") => {
+export const getAlphabetIcon = (str: string, rootClassName: string = '') => {
     if (!str) return null
     return (
         <span
@@ -127,9 +130,7 @@ export const getAlphabetIcon = (str: string, rootClassName: string = "") => {
     )
 }
 
-export const getEmptyArrayOfLength = (length: number) => {
-    return Array.from({ length })
-}
+export const getEmptyArrayOfLength = (length: number) => Array.from({ length })
 
 export function noop(...args): any {}
 
@@ -153,7 +154,7 @@ export function getCookie(sKey) {
     }
     return (
         document.cookie.replace(
-            new RegExp('(?:(?:^|.*;)\\s*' + sKey.replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'),
+            new RegExp(`(?:(?:^|.*;)\\s*${sKey.replace(/[\-\.\+\*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
             '$1',
         ) || null
     )
@@ -196,7 +197,7 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
     // in every re-render in component
     const validateState = useCallback(
         (state) => {
-            //check errors in all fields
+            // check errors in all fields
             const hasErrorInState = Object.keys(validationSchema).some((key) => {
                 const isInputFieldRequired = validationSchema[key].required
                 const stateValue = state[key].value // state value
@@ -223,7 +224,7 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
         }
 
         // single validator
-        let _validator = validationSchema[name].validator
+        const _validator = validationSchema[name].validator
         if (_validator && typeof _validator === 'object') {
             if (!_validateSingleValidator(_validator, value)) {
                 return _validator.error
@@ -231,9 +232,9 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
         }
 
         // multiple validators
-        let _validators = validationSchema[name].validators
+        const _validators = validationSchema[name].validators
         if (_validators && typeof _validators === 'object' && Array.isArray(_validators)) {
-            let errors = []
+            const errors = []
             _validators.forEach((_validator) => {
                 if (!_validateSingleValidator(_validator, value)) {
                     errors.push(_validator.error)
@@ -252,7 +253,7 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
             setIsDirty(true)
 
             const { name, value } = event.target
-            let error = validateField(name, value)
+            const error = validateField(name, value)
             setState((prevState) => ({
                 ...prevState,
                 [name]: { value, error },
@@ -280,7 +281,7 @@ export function handleUTCTime(ts: string, isRelativeTime = false) {
     let timestamp = ''
     try {
         if (ts && ts.length) {
-            let date = moment(ts)
+            const date = moment(ts)
             if (isRelativeTime) timestamp = date.fromNow()
             else timestamp = date.format('ddd DD MMM YYYY HH:mm:ss')
         }
@@ -364,9 +365,7 @@ export function useAsync<T>(
         dependencies: dependencyArray,
     })
     const mounted = useRef(true)
-    const dependencies: any[] = useMemo(() => {
-        return [...dependencyArray, shouldRun]
-    }, [...dependencyArray, shouldRun])
+    const dependencies: any[] = useMemo(() => [...dependencyArray, shouldRun], [...dependencyArray, shouldRun])
 
     const reload = () => {
         async function call() {
@@ -432,9 +431,8 @@ export function useAsync<T>(
 export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
     if (lastDeployed) {
         return handleUTCTime(lastDeployed, true)
-    } else {
-        return isArgoInstalled ? '' : 'Not deployed'
     }
+    return isArgoInstalled ? '' : 'Not deployed'
 }
 
 /**

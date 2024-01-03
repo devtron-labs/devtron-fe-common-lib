@@ -11,7 +11,7 @@ export default function Grid({
     itemClass = '',
     children,
 }: GridProps) {
-    const containerStyles = container ? { gap: spacing + 'px' } : {}
+    const containerStyles = container ? { gap: `${spacing}px` } : {}
 
     if (item) {
         const getColumnWidth = () => {
