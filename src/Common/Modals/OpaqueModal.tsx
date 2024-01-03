@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 import ReactDOM from 'react-dom'
 import closeIcon from '../../Assets/Icon/ic-cross.svg'
 
@@ -8,7 +8,7 @@ export interface OpaqueModalProps {
     noBackground?: boolean
 }
 
-export class OpaqueModal extends React.Component<OpaqueModalProps> {
+export class OpaqueModal extends Component<OpaqueModalProps> {
     modalRef = document.getElementById('full-screen-modal')
 
     componentDidMount() {

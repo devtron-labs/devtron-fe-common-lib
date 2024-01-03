@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import { useContext, createContext, useState } from 'react'
 
 const initialState = {
     alias: {},
@@ -15,7 +15,7 @@ export const BreadcrumbContext = createContext({
 })
 
 export function useBreadcrumbContext() {
-    const context = React.useContext(BreadcrumbContext)
+    const context = useContext(BreadcrumbContext)
     if (!context) {
         throw new Error(`breadcrumb components cannot be used outside Breadcrumb context`)
     }

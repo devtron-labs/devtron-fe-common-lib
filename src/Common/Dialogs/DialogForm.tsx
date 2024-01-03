@@ -1,4 +1,4 @@
-import React, { Component, createContext } from 'react'
+import { Component, createContext } from 'react'
 import { VisibleModal } from '../Modals/VisibleModal'
 import close from '../../Assets/Icon/ic-cross.svg'
 import { Progressing } from '../Progressing'

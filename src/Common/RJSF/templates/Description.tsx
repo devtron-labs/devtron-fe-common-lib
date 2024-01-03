@@ -1,4 +1,3 @@
-import React from 'react'
 import { DescriptionFieldProps } from '@rjsf/utils'
 
 import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'

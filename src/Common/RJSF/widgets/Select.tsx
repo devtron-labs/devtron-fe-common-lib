@@ -1,4 +1,3 @@
-import React from 'react'
 import isEqual from 'lodash/isEqual'
 import { WidgetProps } from '@rjsf/utils'
 import ReactSelect, { MenuListProps, components } from 'react-select'

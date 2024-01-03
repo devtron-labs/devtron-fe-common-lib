@@ -1,4 +1,3 @@
-import React from 'react'
 import { IconButtonProps } from '@rjsf/utils'
 
 import { ReactComponent as CrossIcon } from '../../../../Assets/Icon/ic-cross.svg'

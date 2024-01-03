@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
+import * as React from 'react'
 import { Modal } from './Modals/Modal'
 import { PopupMenuBodyType, PopupMenuButtonType, PopupMenuType } from './Types'
 

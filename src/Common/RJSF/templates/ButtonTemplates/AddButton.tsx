@@ -1,4 +1,3 @@
-import React from 'react'
 import { IconButtonProps } from '@rjsf/utils'
 
 import { ReactComponent as PlusIcon } from '../../../../Assets/Icon/ic-add.svg'

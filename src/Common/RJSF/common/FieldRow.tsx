@@ -1,4 +1,3 @@
-import React from 'react'
 import { FieldRowProps } from './types'
 import { DEFAULT_FIELD_TITLE, DO_NOT_SHOW_LABEL } from '../constants'
 

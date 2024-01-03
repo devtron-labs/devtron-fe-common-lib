@@ -1,4 +1,3 @@
-import React from 'react'
 import { ScanVulnerabilitiesTableProps, VulnerabilityType } from '../Types'
 import './scanVulnerabilities.css'
 

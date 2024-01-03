@@ -1,4 +1,3 @@
-import React from 'react'
 import { ForceDeleteDialogType } from './Types'
 import { DeleteDialog } from './DeleteDialog'
 

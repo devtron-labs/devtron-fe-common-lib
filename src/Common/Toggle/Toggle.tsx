@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { useEffectAfterMount } from '../Helper'
 import './Toggle.scss'
 
@@ -13,7 +13,7 @@ const Toggle = ({
     iconClass = '',
     ...props
 }) => {
-    const [active, setActive] = React.useState(selected)
+    const [active, setActive] = useState(selected)
 
     useEffectAfterMount(() => {
         if (typeof onSelect === 'function') {

@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
+import * as React from 'react'
 import EmptyState from './EmptyState/EmptyState'
 import notAuthorized from '../Assets/Img/ic-not-authorized.svg'
 import ErrorScreenNotFound from './ErrorScreenNotFound'

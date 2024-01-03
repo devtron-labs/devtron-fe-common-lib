@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react'
 import { WidgetProps } from '@rjsf/utils'
 import Toggle from '../../Toggle/Toggle'
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as Add } from '../Assets/Icon/ic-add.svg'

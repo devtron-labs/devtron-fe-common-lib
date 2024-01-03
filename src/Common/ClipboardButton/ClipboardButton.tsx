@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Tippy from '@tippyjs/react'
 import { copyToClipboard } from '../Helper'
 import ClipboardProps from './types'

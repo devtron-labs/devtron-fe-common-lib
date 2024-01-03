@@ -1,4 +1,5 @@
-import React, { HTMLInputTypeAttribute } from 'react'
+import { HTMLInputTypeAttribute } from 'react'
+import * as React from 'react'
 
 export interface CustomInputProps {
     name: string

@@ -1,4 +1,3 @@
-import React from 'react'
 import { getSubmitButtonOptions, SubmitButtonProps } from '@rjsf/utils'
 
 export const SubmitButton = ({ uiSchema }: SubmitButtonProps) => {

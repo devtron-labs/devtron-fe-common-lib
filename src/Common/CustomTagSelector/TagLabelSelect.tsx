@@ -1,4 +1,3 @@
-import React from 'react'
 import PropagateTagInfo from './PropagateTagInfo'
 import { ReactComponent as Add } from '../../Assets/Icon/ic-add.svg'
 import { DEFAULT_TAG_DATA } from '../Constants'

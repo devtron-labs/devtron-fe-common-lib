@@ -1,7 +1,7 @@
-import React from 'react'
+import { Component } from 'react'
 import ReactDOM from 'react-dom'
 
-export class VisibleModal extends React.Component<{
+export class VisibleModal extends Component<{
     className: string
     parentClassName?: string
     noBackground?: boolean

@@ -1,4 +1,3 @@
-import React from 'react'
 import { FieldTemplateProps, getUiOptions, getTemplate, ADDITIONAL_PROPERTY_FLAG } from '@rjsf/utils'
 import { FieldRowWithLabel } from '../common/FieldRow'
 

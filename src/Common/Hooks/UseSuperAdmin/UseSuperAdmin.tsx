@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getUserRole } from '../../Common.service'
 import { useSuperAdminType } from './types'
 import { showError } from '../../Helper'

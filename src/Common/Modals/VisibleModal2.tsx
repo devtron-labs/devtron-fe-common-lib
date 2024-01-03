@@ -1,7 +1,7 @@
-import React from 'react'
+import { Component } from 'react'
 import ReactDOM from 'react-dom'
 
-export class VisibleModal2 extends React.Component<{ className: string; close?: (e) => void }> {
+export class VisibleModal2 extends Component<{ className: string; close?: (e) => void }> {
     modalRef = document.getElementById('visible-modal-2')
 
     constructor(props) {

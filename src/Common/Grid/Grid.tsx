@@ -1,4 +1,3 @@
-import React from 'react'
 import { GridProps } from './types'
 
 // This is meant to be a reusable component that will provide a grid like dynamic layout where xs is the number of columns out of 12 that the item will take up

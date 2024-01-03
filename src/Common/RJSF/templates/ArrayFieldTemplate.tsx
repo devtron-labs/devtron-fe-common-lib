@@ -1,4 +1,3 @@
-import React from 'react'
 import { getTemplate, getUiOptions, ArrayFieldTemplateProps, ArrayFieldTemplateItemType } from '@rjsf/utils'
 import { FieldRowWithLabel } from '../common/FieldRow'
 import { DO_NOT_SHOW_LABEL } from '../constants'

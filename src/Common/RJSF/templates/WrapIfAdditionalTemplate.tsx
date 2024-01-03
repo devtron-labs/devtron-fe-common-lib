@@ -1,4 +1,3 @@
-import React from 'react'
 import { ADDITIONAL_PROPERTY_FLAG, WrapIfAdditionalTemplateProps } from '@rjsf/utils'
 
 import { PLACEHOLDERS } from '../constants'

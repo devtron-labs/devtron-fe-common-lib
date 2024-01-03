@@ -1,4 +1,3 @@
-import React from 'react'
 import { useHistory } from 'react-router-dom'
 import notFound from '../Assets/Img/ic-empty-error@2x.png'
 import { ERROR_EMPTY_SCREEN } from './Constants'

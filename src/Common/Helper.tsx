@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/browser'
 import moment from 'moment'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import * as React from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'

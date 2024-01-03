@@ -1,4 +1,3 @@
-import React from 'react'
 import { TitleFieldProps } from '@rjsf/utils'
 
 export const TitleField = ({ id, title, required }: TitleFieldProps) => (

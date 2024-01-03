@@ -1,4 +1,3 @@
-import React from 'react'
 import { ReactComponent as InjectTag } from '../../Assets/Icon/inject-tag.svg'
 import { ReactComponent as Help } from '../../Assets/Icon/ic-help-outline.svg'
 import { TippyCustomized } from '../TippyCustomized'

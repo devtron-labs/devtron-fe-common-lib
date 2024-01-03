@@ -1,4 +1,3 @@
-import React from 'react'
 import loadingFailure from '../Assets/Img/ic-loading-failure.png'
 import { ReloadType } from './Types'
 

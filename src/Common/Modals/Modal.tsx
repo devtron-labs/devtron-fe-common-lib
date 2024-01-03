@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { ModalType } from '../Types'
 
@@ -12,7 +12,7 @@ export const Modal = ({
     preventWheelDisable = false,
     noBackDrop,
 }: ModalType) => {
-    const innerRef = React.useRef(null)
+    const innerRef = useRef(null)
     function handleClick(e) {
         if (typeof onClick !== 'function') return
         if (innerRef && innerRef.current?.contains(e.target)) {

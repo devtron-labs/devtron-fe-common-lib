@@ -1,4 +1,3 @@
-import React from 'react'
 import { ReactComponent as ICRotateDevtron } from '../../Assets/Icon/ic-rotate-devtron.svg'
 import { DevtronProgressingProps } from './types'
 

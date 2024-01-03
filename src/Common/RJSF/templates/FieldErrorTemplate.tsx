@@ -1,4 +1,3 @@
-import React from 'react'
 import { errorId, FieldErrorProps } from '@rjsf/utils'
 
 import { ReactComponent as Error } from '../../../Assets/Icon/ic-warning.svg'

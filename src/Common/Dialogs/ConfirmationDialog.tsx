@@ -1,4 +1,3 @@
-import React from 'react'
 import { VisibleModal2 } from '../Modals/VisibleModal2'
 import {
     ConfirmationDialogBodyType,

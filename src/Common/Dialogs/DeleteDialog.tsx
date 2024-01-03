@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import warn from '../../Assets/Img/delete-medium.svg'
 import { Progressing } from '../Progressing'
 import ConfirmationDialog from './ConfirmationDialog'

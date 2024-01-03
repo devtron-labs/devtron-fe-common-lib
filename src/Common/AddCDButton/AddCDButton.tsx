@@ -1,4 +1,3 @@
-import React from 'react'
 import Tippy from '@tippyjs/react'
 import { AddCDButtonProps, TooltipContentProps } from './types'
 import { AddCDPositions } from '../Types'

@@ -1,4 +1,5 @@
-import React, { useMemo, useEffect } from 'react'
+import { useMemo, useEffect } from 'react'
+import * as React from 'react'
 import { Link, useRouteMatch, useParams } from 'react-router-dom'
 import { useBreadcrumbContext } from './BreadcrumbStore'
 import { ConditionalWrap } from '../Helper'

@@ -1,4 +1,4 @@
-import React, { Component, createContext } from 'react'
+import { Component, createContext } from 'react'
 import { RadioGroupItemProps, RadioGroupProps } from './Types'
 
 const RadioGroupContext = createContext({ name: '', value: '', disabled: false, onChange: (event) => {} })

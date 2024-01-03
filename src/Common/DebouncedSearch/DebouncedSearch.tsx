@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import * as React from 'react'
 import { useDebouncedEffect } from './Utils'
 import { ReactComponent as ICClear } from '../../Assets/Icon/ic-error-cross.svg'
 import { DebouncedSearchProps } from './Types'

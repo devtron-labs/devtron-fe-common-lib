@@ -1,8 +1,8 @@
-import React from 'react'
+import { Component } from 'react'
 import { toast } from 'react-toastify'
 import { TOAST_ACCESS_DENIED } from './Constants'
 
-export class ToastBody extends React.Component<{
+export class ToastBody extends Component<{
     title: string
     subtitle?: string
 }> {
@@ -16,7 +16,7 @@ export class ToastBody extends React.Component<{
     }
 }
 
-export class ToastBody3 extends React.Component<{
+export class ToastBody3 extends Component<{
     text: string
     onClick: (...args) => void
     buttonText: string
@@ -33,7 +33,7 @@ export class ToastBody3 extends React.Component<{
     }
 }
 
-export class ToastBodyWithButton extends React.Component<{
+export class ToastBodyWithButton extends Component<{
     title: string
     subtitle?: string
     onClick: (...args) => void
