@@ -1,6 +1,6 @@
 import { RegistryTypeDetailType } from "./Types"
 
-export const RequestTimeout = 60000
+export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = process.env.REACT_APP_ORCHESTRATOR_ROOT
 
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
