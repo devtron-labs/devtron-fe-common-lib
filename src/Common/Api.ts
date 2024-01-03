@@ -109,8 +109,8 @@ async function fetchAPI(
         method: type,
         signal,
         body: data ? JSON.stringify(data) : undefined,
+        credentials: 'include' as RequestCredentials,
     }
-    options.credentials = 'include' as RequestCredentials
     return fetch(
         `${Host}/${url}`,
         !isMultipartRequest
