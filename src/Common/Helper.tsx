@@ -548,7 +548,7 @@ export function getLockedJSON(json, jsonPathArray: string[]) {
             for (let i = 0; i < pathArray.length; i++) {
                 let key = isNaN(Number(pathArray[i])) ? pathArray[i] : parseInt(pathArray[i])
                 if (!current[key]) {
-                    current[key] = isNaN(Number(pathArray[i + 1])) ? {} : []
+                    current[key] = isNaN(Number(pathArray[i + 1]??lastPath)) ? {} : []
                 }
                 current = current[key]
             }
