@@ -176,7 +176,7 @@ function fetchInTime(
     const controller = new AbortController()
     const { signal } = controller
     const timeoutPromise: Promise<ResponseType> = new Promise((resolve, reject) => {
-        const requestTimeout = (window as any)?._env_?.GLOBAL_API_TIMEOUT ?? FALLBACK_REQUEST_TIMEOUT
+        const requestTimeout = (window as any)?._env_?.GLOBAL_API_TIMEOUT || FALLBACK_REQUEST_TIMEOUT
         const timeout = options?.timeout ? options.timeout : requestTimeout
 
         setTimeout(() => {
