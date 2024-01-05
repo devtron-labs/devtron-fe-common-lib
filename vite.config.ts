@@ -24,6 +24,7 @@ export default defineConfig({
   })
   ],
   build: {
+    target: "ES2021",
     copyPublicDir: false,
     lib: {
       entry: resolve(__dirname, 'lib/main.ts'),

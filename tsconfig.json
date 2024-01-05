@@ -14,6 +14,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "declaration": true,
+    "declarationDir": "dist/types/",
+    // "typeRoots": [
+    //   "node_modules/@six006",
+    //   "node_modules/@types"
+    // ],
 
     /* Linting */
     "strict": false,
