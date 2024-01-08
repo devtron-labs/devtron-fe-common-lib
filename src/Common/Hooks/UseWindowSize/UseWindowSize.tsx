@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 
-function getSize() {
+const getSize = () => {
     return {
         width: window.innerWidth,
         height: window.innerHeight,
     }
 }
 
-export function useWindowSize() {
+export const useWindowSize = () => {
     let timeout
     const [windowSize, setWindowSize] = useState(getSize)
 
