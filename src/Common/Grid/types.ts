@@ -1,4 +1,6 @@
-export interface GridProps {
+import { HTMLAttributes } from "react"
+
+export interface GridProps extends HTMLAttributes<HTMLDivElement> {
     container?: boolean
     spacing?: number
     item?: boolean
