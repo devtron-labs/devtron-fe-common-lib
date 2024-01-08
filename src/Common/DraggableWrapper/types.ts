@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react'
+import { HTMLAttributes, ReactNode, RefObject } from 'react'
 
 export enum DraggablePositionVariant {
     PARENT_BOTTOM_CENTER = 'PARENT_BOTTOM_CENTER',
@@ -7,11 +7,11 @@ export enum DraggablePositionVariant {
 }
 
 export interface DraggableWrapperProps {
-    children: React.ReactNode
+    children: ReactNode
     zIndex?: number
     positionVariant?: DraggablePositionVariant
     dragSelector: string
-    parentRef?: React.RefObject<HTMLDivElement>
+    parentRef?: RefObject<HTMLDivElement>
     boundaryGap?: number
     childDivProps?: HTMLAttributes<HTMLDivElement>
 }
