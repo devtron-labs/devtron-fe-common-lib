@@ -10,6 +10,9 @@ export interface DraggableWrapperProps {
     children: ReactNode
     zIndex?: number
     positionVariant?: DraggablePositionVariant
+    /**
+     * dragSelector (class - (append with .), id, etc) will be used to identify the grabbable button that will grab the div to drag
+     */
     dragSelector: string
     parentRef?: RefObject<HTMLDivElement>
     boundaryGap?: number

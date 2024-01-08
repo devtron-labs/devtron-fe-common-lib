@@ -28,7 +28,7 @@ export default function DraggableWrapper({
     })
 
     const getDefaultPosition = (positionVariant: DraggablePositionVariant): ControlPosition => {
-        // if i return x: 0, y: 0 then it will be top left corner of parentDiv
+        // if this return x: 0, y: 0 then it will be top left corner of parentDiv
         const parentRect =
             parentRef?.current?.getBoundingClientRect() ??
             ({
