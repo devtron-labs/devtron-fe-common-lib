@@ -2,13 +2,12 @@
     "name": "@devtron-labs/devtron-fe-common-lib",
     "version": "0.0.50-beta-2",
     "description": "Supporting common component library",
-
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/devtron-labs/devtron-fe-common-lib.git"
@@ -20,48 +19,47 @@
     },
     "homepage": "https://github.com/devtron-labs/devtron-fe-common-lib#readme",
     "sideEffects": [
-      "**/*.css"
+        "**/*.css"
     ],
     "scripts": {
-      "test": "exit 0",
-      "dev": "vite",
-      "build-lib": "tsc --p ./tsconfig-build.json && vite build",
-      "preview": "vite preview"
+        "test": "exit 0",
+        "dev": "vite",
+        "build-lib": "tsc --p ./tsconfig-build.json && vite build",
+        "preview": "vite preview"
     },
     "devDependencies": {
+        "@esbuild-plugins/node-globals-polyfill": "0.2.3",
         "@rollup/plugin-babel": "^6.0.3",
-        "@rollup/plugin-node-resolve": "^15.0.1",
         "@rollup/plugin-image": "3.0.1",
-        "rollup-plugin-peer-deps-external": "^2.2.4",
-        "rollup-plugin-postcss": "^4.0.2",
-        "rollup-plugin-typescript2": "^0.34.1",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-url": "8.0.1",
+        "@sentry/browser": "^7.31.1",
+        "@svgr/rollup": "6.5.1",
+        "@testing-library/jest-dom": "^5.16.2",
+        "@testing-library/react": "^12.1.4",
+        "@tippyjs/react": "^4.2.0",
         "@types/react": "17.0.39",
         "@types/react-dom": "17.0.13",
         "@types/react-router-dom": "^5.3.3",
-        "rollup": "^3.10.0",
-        "rollup-plugin-delete": "^2.0.0",
-        "@svgr/rollup": "6.5.1",
-        "@rollup/plugin-url": "8.0.1",
-        "@rollup/plugin-commonjs": "24.0.1",
+        "@vitejs/plugin-react": "^4.0.3",
+        "eslint": "^8.45.0",
+        "glob": "^10.3.3",
         "moment": "^2.29.4",
-        "typescript": "^4.9.4",
-        "react-toastify": "^8.2.0",
-        "@tippyjs/react": "^4.2.0",
-        "react-select": "5.2.2",
-        "@sentry/browser": "^7.31.1",
         "monaco-editor": "0.39.0",
         "monaco-yaml": "4.0.4",
+        "react-select": "5.2.2",
+        "react-toastify": "^8.2.0",
+        "rollup": "^3.10.0",
+        "rollup-plugin-delete": "^2.0.0",
+        "rollup-plugin-peer-deps-external": "^2.2.4",
+        "rollup-plugin-postcss": "^4.0.2",
+        "rollup-plugin-typescript2": "^0.34.1",
+        "typescript": "^4.9.4",
         "vite": "^4.4.5",
         "vite-plugin-dts": "^3.5.1",
         "vite-plugin-lib-inject-css": "^1.2.0",
-        "@vitejs/plugin-react": "^4.0.3",
         "vite-plugin-svgr": "^2.4.0",
-        "vite-tsconfig-paths": "^4.2.0",
-        "eslint": "^8.45.0",
-        "glob": "^10.3.3",
-        "@testing-library/jest-dom": "^5.16.2",
-        "@testing-library/react": "^12.1.4",
-        "@esbuild-plugins/node-globals-polyfill": "0.2.3"
+        "vite-tsconfig-paths": "^4.2.0"
     },
     "peerDependencies": {
         "react": "^17.0.2",
@@ -70,8 +68,8 @@
         "react-router-dom": "^5.3.0"
     },
     "dependencies": {
+        "react-monaco-editor": "^0.54.0",
         "sass": "^1.56.2",
-        "tslib": "^2.4.1",
-        "react-monaco-editor": "^0.54.0"
+        "tslib": "^2.4.1"
     }
 }

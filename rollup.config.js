@@ -7,7 +7,6 @@ import del from 'rollup-plugin-delete'
 import pkg from './package.json'
 import svgr from '@svgr/rollup'
 import url from '@rollup/plugin-url'
-import commonjs from '@rollup/plugin-commonjs'
 
 export default {
     input: './src/index.ts',
@@ -16,7 +15,6 @@ export default {
     plugins: [
         peerDepsExternal(),
         resolve(),
-        commonjs(),
         typescript(),
         postcss({
             extensions: ['.css'],
