@@ -22,19 +22,26 @@ export default function DraggableWrapper({
     const windowSize = useWindowSize()
     const nodeRef = useRef<HTMLDivElement>(null)
 
+    const [position, setPosition] = useState<ControlPosition>({
+        x: 0,
+        y: 0,
+    })
+
     const getDefaultPosition = (positionVariant: DraggablePositionVariant): ControlPosition => {
         // if i return x: 0, y: 0 then it will be top left corner of parentDiv
-        const parentRect = parentRef?.current?.getBoundingClientRect() ?? {
-            width: 0,
-            height: 0,
-            top: 0,
-            left: 0,
-            bottom: 0,
-        }
+        const parentRect =
+            parentRef?.current?.getBoundingClientRect() ??
+            ({
+                width: 0,
+                height: 0,
+                top: 0,
+                left: 0,
+                bottom: 0,
+            } as DOMRect)
 
         switch (positionVariant) {
             case DraggablePositionVariant.PARENT_BOTTOM_CENTER: {
-                const x = parentRect.width / 2 - nodeRef.current?.getBoundingClientRect().width / 2
+                const x = (parentRect.width - nodeRef.current?.getBoundingClientRect().width) / 2
                 const y =
                     Math.min(parentRect.height, windowSize.height) -
                     parentRect.top -
@@ -55,17 +62,13 @@ export default function DraggableWrapper({
         }
     }
 
-    const [position, setPosition] = useState<ControlPosition>({
-        x: 0,
-        y: 0,
-    })
-
     // On change of windowSize we will reset the position to default
     useEffect(() => {
         const defaultPosition = getDefaultPosition(positionVariant)
         setPosition(defaultPosition)
     }, [nodeRef, positionVariant, windowSize])
 
+    // Would be called on drag and will not update the state if the new position is out of window screen
     function handlePositionChange(e, data: DraggableData) {
         const offsetX = parentRef?.current?.getBoundingClientRect().left ?? 0
         const offsetY = parentRef?.current?.getBoundingClientRect().top ?? 0
@@ -86,7 +89,6 @@ export default function DraggableWrapper({
     }
 
     return (
-        // Check there might be a case if we need it to be absolute?
         <div
             className="dc__position-fixed"
             style={{
