@@ -41,16 +41,19 @@ export default function DraggableWrapper({
 
         switch (positionVariant) {
             case DraggablePositionVariant.PARENT_BOTTOM_CENTER: {
+                // currently at parentRect.x and need to start to the center of its width and half of node should lie on left of center and other half on right
                 const x = (parentRect.width - nodeRef.current?.getBoundingClientRect().width) / 2
-                const y =
-                    Math.min(parentRect.height, windowSize.height) -
-                    parentRect.top -
-                    nodeRef.current?.getBoundingClientRect().height -
-                    boundaryGap
+                // currently at parentRect.y now parent height can be greater than windowSize.height so taking min
+                // subtracting parentRect.top since window height already contains that
+                const baseY =
+                    parentRect.height > windowSize.height ? windowSize.height - parentRect.top : parentRect.height
+                const y = baseY - nodeRef.current?.getBoundingClientRect().height - boundaryGap
                 return { x, y }
             }
             case DraggablePositionVariant.SCREEN_BOTTOM_CENTER: {
+                // Since need node to be in center of screen so subtracting width/2 by left of parentRect it will start the node from center but want node's midpoint at center so subtracting node's width from it.
                 const x = windowSize.width / 2 - parentRect.left - nodeRef.current?.getBoundingClientRect().width / 2
+                // subtracting top since windowSize already contains that
                 const y =
                     windowSize.height - parentRect.top - nodeRef.current?.getBoundingClientRect().height - boundaryGap
 
