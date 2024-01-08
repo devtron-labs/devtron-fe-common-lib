@@ -7,14 +7,14 @@ import { MAX_Z_INDEX } from '../Constants'
 /**
  * TODO: import it as lazy, after it is supported in common
  * 1. If using react select please use menuPlacement='auto'
- * 2. dragClassName will be used to identify the grabbable button that will grab the div to drag
+ * 2. dragSelector will be used to identify the grabbable button that will grab the div to drag
  * 3. parentRef is the reference point from which we will derive the base top:0 ,left: 0 position
  */
 export default function DraggableWrapper({
     children,
     zIndex = MAX_Z_INDEX,
     positionVariant,
-    dragClassName,
+    dragSelector,
     parentRef,
     boundaryGap = 16,
     childDivProps = {},
@@ -93,7 +93,7 @@ export default function DraggableWrapper({
                 zIndex,
             }}
         >
-            <Draggable handle={`.${dragClassName}`} nodeRef={nodeRef} position={position} onDrag={handlePositionChange}>
+            <Draggable handle={dragSelector} nodeRef={nodeRef} position={position} onDrag={handlePositionChange}>
                 <div
                     ref={nodeRef}
                     {...childDivProps}

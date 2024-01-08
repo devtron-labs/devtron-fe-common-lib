@@ -10,7 +10,7 @@ export interface DraggableWrapperProps {
     children: React.ReactNode
     zIndex?: number
     positionVariant?: DraggablePositionVariant
-    dragClassName: string
+    dragSelector: string
     parentRef?: React.RefObject<HTMLDivElement>
     boundaryGap?: number
     childDivProps?: HTMLAttributes<HTMLDivElement>
@@ -19,4 +19,6 @@ export interface DraggableWrapperProps {
 /**
  * dragClassName is the class that we feed to Draggable to identify dragging buttons
  */
-export interface DraggableButtonProps extends Pick<DraggableWrapperProps, 'dragClassName'> {}
+export interface DraggableButtonProps {
+    dragClassName: string
+}
