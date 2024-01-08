@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "0.0.50",
+    "version": "0.0.51",
     "description": "Supporting common component library",
     "main": "dist/index.js",
     "scripts": {
@@ -51,6 +51,8 @@
         "react-draggable": "^4.4.5"
     },
     "dependencies": {
+        "fast-json-patch": "^3.1.1",
+        "jsonpath-plus": "^7.2.0",
         "sass": "^1.56.2",
         "tslib": "^2.4.1"
     }

@@ -7,6 +7,8 @@ import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
+import { JSONPath } from 'jsonpath-plus'
+import * as jsonpatch from 'fast-json-patch'
 
 toast.configure({
     autoClose: 3000,
@@ -458,3 +460,102 @@ export const getUrlWithSearchParams = (url: string, params: Record<string | numb
  * Custom exception logger function for logging errors to sentry
  */
 export const logExceptionToSentry = Sentry.captureException.bind(window)
+
+export const customStyles = {
+    control: (base, state) => ({
+        ...base,
+        minHeight: '32px',
+        boxShadow: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        background: 'transparent',
+    }),
+    indicatorSeparator: (base, state) => ({
+        ...base,
+        width: 0,
+    }),
+    valueContainer: (base, state) => ({
+        ...base,
+        padding: '0',
+        fontSize: '13px',
+        fontWeight: '600',
+    }),
+    dropdownIndicator: (base, state) => ({
+        ...base,
+        color: 'var(--N400)',
+        padding: '0 8px',
+        transition: 'all .2s ease',
+        transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+    }),
+}
+
+export const getFilteredChartVersions = (charts, selectedChartType) => {
+    // Filter chart versions based on selected chart type
+    return charts
+        .filter((item) => item?.chartType === selectedChartType.value)
+        .map((item) => ({
+            value: item?.chartVersion,
+            label: item?.chartVersion,
+            chartRefId: item.chartRefId,
+        }))
+}
+function removeEmptyObjectKeysAndNullValues(obj) {
+    // It recursively removes empty object keys and array values that are null
+    for (let key in obj) {
+        if (Array.isArray(obj[key])) {
+            if (obj[key].length === 0) continue
+            obj[key] = obj[key].filter((item) => item !== null)
+            // Check if the array is empty
+            if (obj[key].length === 0) {
+                delete obj[key] // Delete the key if the array is empty
+            }
+        } else if (obj[key] && typeof obj[key] === 'object') {
+            if (removeEmptyObjectKeysAndNullValues(obj[key])) {
+                delete obj[key]
+            }
+        } else if (obj[key] === undefined) {
+            delete obj[key]
+        }
+    }
+    return Object.keys(obj).length === 0
+}
+
+export function getUnlockedJSON(json, jsonPathArray) {
+    const jsonCopy = JSON.parse(JSON.stringify(json))
+    let patches = jsonPathArray.flatMap((jsonPath) => {
+        const pathsToRemove = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
+        return pathsToRemove.map((result) =>
+            Array.isArray(result.parent)
+                ? { op: 'replace', path: result.pointer, value: null }
+                : { op: 'remove', path: result.pointer },
+        )
+    })
+    let newDocument = jsonpatch.applyPatch(jsonCopy, patches).newDocument
+
+    removeEmptyObjectKeysAndNullValues(newDocument)
+    return newDocument
+}
+
+export function getLockedJSON(json, jsonPathArray: string[]) {
+    const jsonCopy = JSON.parse(JSON.stringify(json))
+    let resultJson = {}
+    jsonPathArray.forEach((jsonPath) => {
+        const elements = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
+        elements.forEach((element) => {
+            const pathArray: string[] = JSONPath.toPathArray(element.path)
+            const lastPath = pathArray.pop()
+            let current = resultJson
+            for (let i = 0; i < pathArray.length; i++) {
+                let key = isNaN(Number(pathArray[i])) ? pathArray[i] : parseInt(pathArray[i])
+                if (!current[key]) {
+                    current[key] = isNaN(Number(pathArray[i + 1]??lastPath)) ? {} : []
+                }
+                current = current[key]
+            }
+            let key = isNaN(Number(lastPath)) ? lastPath : parseInt(lastPath)
+            current[key] = element.value
+        })
+    })
+    return resultJson['$']
+}
+
