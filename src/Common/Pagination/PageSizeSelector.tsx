@@ -40,6 +40,10 @@ const PageSizeSelector = ({ pageSizeOptions, pageSize, changePageSize }: PageSiz
         setIsDropdownOpen(false)
     }
 
+    const handleDropdownToggle = () => {
+        setIsDropdownOpen(!isDropdownOpen)
+    }
+
     const dropdownRef = useRef<HTMLDivElement>(null)
     useClickOutside(dropdownRef, handleCloseDropdown)
 
@@ -61,7 +65,7 @@ const PageSizeSelector = ({ pageSizeOptions, pageSize, changePageSize }: PageSiz
                 </div>
             )}
 
-            <button type="button" className="select__button" onClick={handleCloseDropdown}>
+            <button type="button" className="select__button" onClick={handleDropdownToggle}>
                 <span>{selectedOption ? selectedOption.value : ''}</span>
                 <span className="select__icon">
                     <i className={font} />
