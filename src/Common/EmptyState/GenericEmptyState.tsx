@@ -20,17 +20,16 @@ function GenericEmptyState({
     noImage,
     layout = 'column',
     contentClassName = '',
+    imageStyles = {},
 }: GenericEmptyStateType): JSX.Element {
     const isRowLayout = layout === 'row'
 
     const getImageSize = () => {
         switch (imageType) {
-            case ImageType.Medium:
-                return { width: '200', height: '160' }
             case ImageType.Large:
-                return { width: '250', height: '200' }
+                return { width: '250px', height: '200px' }
             default:
-                return { width: '200', height: '160' }
+                return { width: '200px', height: '160px' }
         }
     }
 
@@ -48,13 +47,22 @@ function GenericEmptyState({
                     <img
                         className={imageClassName ? imageClassName : ''}
                         src={image || AppNotDeployed}
-                        width={getImageSize().width}
-                        height={getImageSize().height}
+                        style={{
+                            ...imageStyles,
+                            width: `${getImageSize().width}`,
+                            height: `${getImageSize().height}`,
+                        }}
                         alt="empty-state"
                     />
                 )
             ) : (
-                <SvgImage style={{ width: `${getImageSize().width}px`, height: `${getImageSize().height}px` }} />
+                <SvgImage
+                    style={{
+                        ...imageStyles,
+                        width: `${getImageSize().width}`,
+                        height: `${getImageSize().height}`,
+                    }}
+                />
             )}
             <div
                 className={`flex column dc__gap-10 dc__mxw-300 ${

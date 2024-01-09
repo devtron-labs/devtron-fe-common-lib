@@ -94,6 +94,7 @@ export interface GenericEmptyStateType {
     imageClassName?: string
     children?: ReactNode
     noImage?: boolean
+    imageStyles?: CSSProperties
     /**
      * @default 'column'
      */
