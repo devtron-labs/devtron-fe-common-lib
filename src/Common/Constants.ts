@@ -243,5 +243,5 @@ export const RepositoryAction = {
 
 export enum APPROVAL_MODAL_TYPE {
     CONFIG = 'CONFIG',
-    IMAGE = 'IMAGE',
+    DEPLOYMENT = 'DEPLOYMENT',
 }
