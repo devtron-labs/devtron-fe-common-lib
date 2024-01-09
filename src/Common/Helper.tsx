@@ -6,7 +6,6 @@ import { toast } from 'react-toastify'
 import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
-import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import YAML from 'yaml'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
 
