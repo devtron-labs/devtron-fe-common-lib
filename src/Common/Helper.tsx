@@ -1,12 +1,12 @@
+import * as Sentry from '@sentry/browser'
+import moment from 'moment'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import moment from 'moment'
 import { toast } from 'react-toastify'
-import * as Sentry from '@sentry/browser'
+import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
-import { ReactComponent as FormError } from '../Assets/Icon/ic-warning.svg'
 import YAML from 'yaml'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
 
@@ -117,11 +117,11 @@ export function getRandomColor(email: string): string {
     return colors[sum % colors.length]
 }
 
-export const getAlphabetIcon = (str: string) => {
+export const getAlphabetIcon = (str: string, rootClassName: string = "") => {
     if (!str) return null
     return (
         <span
-            className="alphabet-icon__initial fs-13 icon-dim-20 flex cn-0 mr-8"
+            className={`${rootClassName} alphabet-icon__initial fs-13 icon-dim-20 flex cn-0 mr-8`}
             style={{ backgroundColor: getRandomColor(str) }}
         >
             {str[0]}
@@ -276,64 +276,6 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
         }
     }
     return { state, disable, handleOnChange, handleOnSubmit }
-}
-
-function handleError(error: any): any[] {
-    if (!error) {
-        return []
-    }
-
-    if (!Array.isArray(error)) {
-        return [error]
-    }
-
-    return error
-}
-
-export function CustomInput({
-    name,
-    value,
-    error,
-    onChange,
-    onBlur = (e) => {},
-    onFocus = (e) => {},
-    label,
-    type = 'text',
-    disabled = false,
-    autoComplete = 'off',
-    labelClassName = '',
-    placeholder = '',
-    tabIndex = 1,
-    dataTestid = '',
-}) {
-    return (
-        <div className="flex column left top">
-            <label className={`form__label ${labelClassName}`}>{label}</label>
-            <input
-                data-testid={dataTestid}
-                type={type}
-                name={name}
-                autoComplete="off"
-                className="form__input"
-                onChange={(e) => {
-                    e.persist()
-                    onChange(e)
-                }}
-                onBlur={onBlur}
-                onFocus={onFocus}
-                placeholder={placeholder}
-                value={value}
-                disabled={disabled}
-                tabIndex={tabIndex}
-            />
-            {handleError(error).map((err) => (
-                <div className="form__error" key={err}>
-                    <FormError className="form__icon form__icon--error" />
-                    {err}
-                </div>
-            ))}
-        </div>
-    )
 }
 
 export function handleUTCTime(ts: string, isRelativeTime = false) {
@@ -599,3 +541,25 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
         return isArgoInstalled ? '' : 'Not deployed'
     }
 }
+
+/**
+ * Appends search parameters to the url as a query string
+ *
+ * @param url URL to which the search params needs to be added
+ * @param params Object for the search parameters
+ */
+export const getUrlWithSearchParams = (url: string, params: Record<string | number, any>) => {
+    const searchParams = new URLSearchParams()
+    Object.keys(params).forEach((key) => {
+        if (params[key]) {
+            searchParams.append(key, params[key])
+        }
+    })
+    const queryString = searchParams.toString()
+    return url + (queryString ? `?${queryString}` : '')
+}
+
+/**
+ * Custom exception logger function for logging errors to sentry
+ */
+export const logExceptionToSentry = Sentry.captureException.bind(window)

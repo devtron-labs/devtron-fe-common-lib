@@ -11,6 +11,7 @@ export interface DeleteDialogProps {
     dataTestId?: string
     buttonPrimaryText?: string
     shouldStopPropagation?: boolean
+    disabled?: boolean
 }
 
 export interface ForceDeleteDialogType {
