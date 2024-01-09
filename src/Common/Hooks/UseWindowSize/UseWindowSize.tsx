@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+let timeout
+
 const getSize = () => {
     return {
         width: window.innerWidth,
@@ -8,7 +10,6 @@ const getSize = () => {
 }
 
 export const useWindowSize = () => {
-    let timeout
     const [windowSize, setWindowSize] = useState(getSize)
 
     function handleResize(e) {
