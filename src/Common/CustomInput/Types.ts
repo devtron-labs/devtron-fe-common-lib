@@ -27,5 +27,5 @@ export interface CustomInputProps {
     onKeyDown?: (e) => void
     required?: boolean
     additionalErrorInfo?: React.ReactNode
-    inputWrapClassname?: string
+    inputWrapClassName?: string
 }
