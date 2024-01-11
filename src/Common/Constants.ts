@@ -24,7 +24,8 @@ export const ROUTES = {
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING:'app/image-tagging',
-    CD_MATERIAL_GET: 'app/cd-pipeline'
+    CD_MATERIAL_GET: 'app/cd-pipeline',
+    DEPLOYMENT_TEMPLATE_LIST: 'app/template/list'
 }
 
 export enum KEY_VALUE {
@@ -247,3 +248,5 @@ export enum MODES {
   SHELL = 'shell',
   DOCKERFILE = 'dockerfile',
 }
+
+export const MAX_Z_INDEX = 2147483647
