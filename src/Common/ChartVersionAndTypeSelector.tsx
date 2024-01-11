@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import ReactSelect from 'react-select'
 import { fetchChartTemplateVersions } from './Common.service'
 import { ChartVersionAndTypeSelectorProps, DeploymentChartVersionType } from './Types'
-import ReactSelect from 'react-select'
 import { customStyles, getFilteredChartVersions, showError } from './Helper'
 
 // @TODO: Generalize this component to be used in CodeEditor as Chart selector toolbar

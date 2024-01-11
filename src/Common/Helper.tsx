@@ -4,12 +4,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as React from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { JSONPath } from 'jsonpath-plus'
+import * as jsonpatch from 'fast-json-patch'
 import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
-import { JSONPath } from 'jsonpath-plus'
-import * as jsonpatch from 'fast-json-patch'
 
 toast.configure({
     autoClose: 3000,
@@ -488,19 +488,19 @@ export const customStyles = {
     }),
 }
 
-export const getFilteredChartVersions = (charts, selectedChartType) => {
+export const getFilteredChartVersions = (charts, selectedChartType) =>
     // Filter chart versions based on selected chart type
-    return charts
+    charts
         .filter((item) => item?.chartType === selectedChartType.value)
         .map((item) => ({
             value: item?.chartVersion,
             label: item?.chartVersion,
             chartRefId: item.chartRefId,
         }))
-}
+
 function removeEmptyObjectKeysAndNullValues(obj) {
     // It recursively removes empty object keys and array values that are null
-    for (let key in obj) {
+    for (const key in obj) {
         if (Array.isArray(obj[key])) {
             if (obj[key].length === 0) continue
             obj[key] = obj[key].filter((item) => item !== null)
@@ -521,7 +521,7 @@ function removeEmptyObjectKeysAndNullValues(obj) {
 
 export function getUnlockedJSON(json, jsonPathArray) {
     const jsonCopy = JSON.parse(JSON.stringify(json))
-    let patches = jsonPathArray.flatMap((jsonPath) => {
+    const patches = jsonPathArray.flatMap((jsonPath) => {
         const pathsToRemove = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
         return pathsToRemove.map((result) =>
             Array.isArray(result.parent)
@@ -529,7 +529,7 @@ export function getUnlockedJSON(json, jsonPathArray) {
                 : { op: 'remove', path: result.pointer },
         )
     })
-    let newDocument = jsonpatch.applyPatch(jsonCopy, patches).newDocument
+    const { newDocument } = jsonpatch.applyPatch(jsonCopy, patches)
 
     removeEmptyObjectKeysAndNullValues(newDocument)
     return newDocument
@@ -537,7 +537,7 @@ export function getUnlockedJSON(json, jsonPathArray) {
 
 export function getLockedJSON(json, jsonPathArray: string[]) {
     const jsonCopy = JSON.parse(JSON.stringify(json))
-    let resultJson = {}
+    const resultJson = {}
     jsonPathArray.forEach((jsonPath) => {
         const elements = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
         elements.forEach((element) => {
@@ -545,16 +545,16 @@ export function getLockedJSON(json, jsonPathArray: string[]) {
             const lastPath = pathArray.pop()
             let current = resultJson
             for (let i = 0; i < pathArray.length; i++) {
-                let key = isNaN(Number(pathArray[i])) ? pathArray[i] : parseInt(pathArray[i])
+                const key = isNaN(Number(pathArray[i])) ? pathArray[i] : parseInt(pathArray[i])
                 if (!current[key]) {
-                    current[key] = isNaN(Number(pathArray[i + 1]??lastPath)) ? {} : []
+                    current[key] = isNaN(Number(pathArray[i + 1] ?? lastPath)) ? {} : []
                 }
                 current = current[key]
             }
-            let key = isNaN(Number(lastPath)) ? lastPath : parseInt(lastPath)
+            const key = isNaN(Number(lastPath)) ? lastPath : parseInt(lastPath)
             current[key] = element.value
         })
     })
+    // eslint-disable-next-line dot-notation
     return resultJson['$']
 }
-

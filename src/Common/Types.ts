@@ -679,19 +679,19 @@ export interface CodeEditorComposition {
 }
 
 export interface CodeEditorHeaderComposition {
-    LanguageChanger?: React.FC<any>;
-    ThemeChanger?: React.FC<any>;
-    ValidationError?: React.FC<any>;
-    Clipboard?: React.FC<any>;
+    LanguageChanger?: React.FC<any>
+    ThemeChanger?: React.FC<any>
+    ValidationError?: React.FC<any>
+    Clipboard?: React.FC<any>
 }
 export interface CodeEditorHeaderInterface {
-    children?: any;
+    children?: any
     className?: string
-    hideDefaultSplitHeader?: boolean;
+    hideDefaultSplitHeader?: boolean
 }
 
 export interface DeploymentChartVersionType {
-    chartRefId: number 
+    chartRefId: number
     chartVersion: string
     chartType: string
     type: number

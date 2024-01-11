@@ -10,6 +10,7 @@ src/Common/AppStatus/utils.ts
 src/Common/BreadCrumb/BreadCrumb.tsx
 src/Common/BreadCrumb/BreadcrumbStore.tsx
 src/Common/CIPipeline.Types.ts
+src/Common/ChartVersionAndTypeSelector.tsx
 src/Common/Checkbox.tsx
 src/Common/ClipboardButton/ClipboardButton.tsx
 src/Common/ClipboardButton/__tests__/ClipboardButton.test.tsx
@@ -30,6 +31,8 @@ src/Common/DevtronProgressing/DevtronProgressing.tsx
 src/Common/Dialogs/DeleteDialog.tsx
 src/Common/Dialogs/DialogForm.tsx
 src/Common/Dialogs/ForceDeleteDialog.tsx
+src/Common/DraggableWrapper/DraggableButton.tsx
+src/Common/DraggableWrapper/DraggableWrapper.tsx
 src/Common/Drawer/Drawer.tsx
 src/Common/EmptyState/EmptyState.tsx
 src/Common/Error.tsx
@@ -38,6 +41,7 @@ src/Common/Grid/Grid.tsx
 src/Common/Helper.tsx
 src/Common/Hooks/UseClickOutside/UseClickOutside.tsx
 src/Common/Hooks/UseSuperAdmin/UseSuperAdmin.tsx
+src/Common/Hooks/UseWindowSize/UseWindowSize.tsx
 src/Common/ImageTags.tsx
 src/Common/Modals/Modal.tsx
 src/Common/Modals/OpaqueModal.tsx
