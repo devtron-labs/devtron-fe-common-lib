@@ -246,3 +246,4 @@ export enum APPROVAL_MODAL_TYPE {
     CONFIG = 'CONFIG',
     DEPLOYMENT = 'DEPLOYMENT',
 }
+export const MAX_Z_INDEX = 2147483647
