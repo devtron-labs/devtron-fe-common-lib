@@ -9,6 +9,7 @@ export default function Grid({
     containerClass = '',
     itemClass = '',
     children,
+    ...containerDivProps
 }: GridProps) {
     const containerStyles = container ? { gap: `${spacing}px` } : {}
 
@@ -24,14 +25,18 @@ export default function Grid({
         }
 
         return (
-            <div className={`p-0 ${itemClass}`} style={itemStyles}>
+            <div className={`p-0 ${itemClass}`} style={itemStyles} {...containerDivProps}>
                 {children}
             </div>
         )
     }
 
     return (
-        <div className={`flex-wrap flexbox ${container ? containerClass : ''}`} style={containerStyles}>
+        <div
+            className={`flex-wrap flexbox ${container ? containerClass : ''}`}
+            style={containerStyles}
+            {...containerDivProps}
+        >
             {children}
         </div>
     )
