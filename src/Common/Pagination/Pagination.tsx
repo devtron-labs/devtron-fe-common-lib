@@ -65,7 +65,7 @@ const Pagination = ({
     const pageNoIndex = pages.findIndex((page) => page.selected)
     const visiblePages = pages.filter((page) => page.isVisible)
     return (
-        <div className={`pagination-wrapper ${rootClassName || ''}`}>
+        <div className={rootClassName || ''}>
             <div className="page-number">
                 {offset + 1} - {lastPageNo} of {size}
             </div>
