@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import PageSizeSelector from './PageSizeSelector'
 import { Page, PageValueItemProps, PaginationProps } from './types'
 import { createPageArr } from './utils'
 import './pagination.scss'
-import PageSizeSelector from './PageSizeSelector'
 
 const PageValueItem = ({ value, isSelected, selectPage }: PageValueItemProps) => {
     const classes = isSelected ? 'page__button page__button--selected' : 'page__button'
@@ -65,6 +65,7 @@ const Pagination = ({
     const pageNoIndex = pages.findIndex((page) => page.selected)
     const visiblePages = pages.filter((page) => page.isVisible)
     return (
+        // TODO: Remove pagination-wrapper from dashboard
         <div className={rootClassName || ''}>
             <div className="page-number">
                 {offset + 1} - {lastPageNo} of {size}
@@ -77,6 +78,7 @@ const Pagination = ({
                         disabled={!pageNoIndex}
                         onClick={selectPreviousPage}
                         type="button"
+                        aria-label="Previous page"
                     >
                         <span className="left-icon">
                             <i className="fa fa-chevron-left" />
@@ -99,6 +101,7 @@ const Pagination = ({
                         disabled={pageNoIndex === pages.length - 1}
                         onClick={selectNextPage}
                         type="button"
+                        aria-label="Next page"
                     >
                         <span className="left-icon">
                             <i className="fa fa-chevron-right" />

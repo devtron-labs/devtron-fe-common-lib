@@ -3,13 +3,28 @@ export interface PageSizeOption {
     selected: boolean
 }
 export interface PaginationProps {
+    /**
+     * number of items
+     */
     size: number
+    /**
+     * pageSize
+     */
     pageSize: number
     offset: number
     changePage: (pageNo: number) => void
     changePageSize?: (pageSize: number) => void
+    /**
+     * If true will not show page size selector
+     */
     isPageSizeFix?: boolean
+    /**
+     * If given would show these options in page size selector else [20,40,50] with 20 as selected
+     */
     pageSizeOptions?: PageSizeOption[]
+    /**
+     * class for wrapper
+     */
     rootClassName?: string
 }
 
