@@ -1,4 +1,4 @@
-import { ChangeEvent, FunctionComponent, useCallback, useState } from 'react'
+import { ChangeEvent, FunctionComponent, useCallback, useRef, useState, KeyboardEvent } from 'react'
 import { ReactComponent as Search } from '../../Assets/Icon/ic-search.svg'
 import { ReactComponent as Clear } from '../../Assets/Icon/ic-error-cross.svg'
 import { SearchBarProps } from './types'
@@ -17,7 +17,8 @@ const SearchBar: FunctionComponent<SearchBarProps> = ({
     shouldDebounce = false,
     debounceTimeout = 300,
 }) => {
-    const [isSearchApplied, setIsSearchApplied] = useState(!!initialSearchText)
+    const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
+    const inputRef = useRef<HTMLInputElement>()
     const debouncedSearchChange = useCallback(debounce(handleSearchChange, debounceTimeout), [
         handleSearchChange,
         debounceTimeout,
@@ -25,7 +26,7 @@ const SearchBar: FunctionComponent<SearchBarProps> = ({
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target
-        setIsSearchApplied(!!value)
+        setShowClearButton(!!value)
         if (shouldDebounce) {
             debouncedSearchChange(value)
         } else {
@@ -33,37 +34,42 @@ const SearchBar: FunctionComponent<SearchBarProps> = ({
         }
     }
 
-    const handleKeyDown = (e) => {
-        const keyCode = e.key
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        const { key } = e
 
-        if (keyCode === 'Enter') {
-            const event = { ...e, target: { ...e.target, value: e.target.value?.trim() } }
+        if (key === 'Enter') {
+            const inputTarget = e.target as HTMLInputElement
+            const event = { ...e, target: { ...inputTarget, value: inputTarget.value.trim() } }
             handleSearchChange(event.target.value)
             handleEnter(event)
         }
     }
 
     const clearSearch = () => {
+        inputRef.current.value = ''
         handleSearchChange('')
     }
 
     return (
         <div className={containerClassName}>
-            <div className="search-bar dc__position-rel en-2 bw-1 br-4 h-32">
-                <Search className="search-bar__icon icon-dim-18" />
+            <div className="search-bar bcn-0 dc__block w-100 min-w-200 dc__position-rel en-2 bw-1 br-4 h-32">
+                <Search className="search-bar__icon dc__position-abs icon-color-n6 icon-dim-18" />
                 <input
                     placeholder="Search"
-                    {...inputProps}
-                    type="text"
                     data-testid="search-bar"
+                    type="text"
+                    {...inputProps}
                     defaultValue={initialSearchText}
-                    className={`search-bar__input bcn-0 ${isSearchApplied ? 'search-bar__input--applied' : ''}`}
+                    className={`search-bar__input bcn-0 dc__position-abs w-100 h-100 br-4 dc__no-border pt-6 pr-10 pb-6 pl-30 fs-13 lh-20 fw-4 cn-9 placeholder-cn5 ${
+                        showClearButton ? 'pr-30' : 'pr-10'
+                    }`}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
+                    ref={inputRef}
                 />
-                {isSearchApplied && (
+                {showClearButton && (
                     <button
-                        className="flex search-bar__clear-button"
+                        className="flex search-bar__clear-button dc__position-abs dc__transparent mt-0 mb-0 mr-5 ml-5"
                         type="button"
                         onClick={clearSearch}
                         aria-label="Clear search"
