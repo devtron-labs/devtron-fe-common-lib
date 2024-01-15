@@ -559,3 +559,18 @@ export function getLockedJSON(json, jsonPathArray: string[]) {
     return resultJson['$']
 }
 
+/**
+ * Returns a debounced variant of the function
+ */
+export const debounce = (func, timeout = 500) => {
+    let timer
+
+    return function (this, ...args) {
+        const context = this
+        if (timer) clearTimeout(timer)
+        timer = setTimeout(() => {
+            timer = null
+            func.apply(context, args)
+        }, timeout)
+    }
+}
