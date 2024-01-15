@@ -1,4 +1,3 @@
-
 export interface Breadcrumb {
   to: string
   name: string

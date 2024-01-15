@@ -1,5 +1,5 @@
-import { ReactNode } from "react"
-import { Breadcrumb } from "../../Common/BreadCrumb/Types"
+import { ReactNode } from 'react'
+import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
 
 export interface DescriptorProps {
     /**
@@ -7,8 +7,12 @@ export interface DescriptorProps {
      */
     additionalContainerClasses?: string
     breadCrumbs: Breadcrumb[]
-    /***
+    /**
      * Would stick at right of div
      */
     children?: ReactNode
+}
+
+export interface FooterProps {
+    disabled?: boolean
 }

@@ -1,2 +1,2 @@
 export * from './Common'
-export * from './GlobalConfigurations'
+export * from './pages/GlobalConfigurations'
