@@ -1,22 +1,22 @@
-import { ChangeEvent, FunctionComponent, useCallback, useRef, useState, KeyboardEvent } from 'react'
+import { ChangeEvent, useCallback, useRef, useState, KeyboardEvent } from 'react'
 import { ReactComponent as Search } from '../../Assets/Icon/ic-search.svg'
 import { ReactComponent as Clear } from '../../Assets/Icon/ic-error-cross.svg'
 import { SearchBarProps } from './types'
 import './searchBar.scss'
-import { debounce, noop } from '../Helper'
+import { debounce } from '../Helper'
 
 /**
  * Generic search input component with support for enter based and debounced search
  */
-const SearchBar: FunctionComponent<SearchBarProps> = ({
+const SearchBar = ({
     initialSearchText = '',
-    handleSearchChange = noop,
-    handleEnter = noop,
+    handleSearchChange = () => {},
+    handleEnter = () => {},
     inputProps = {},
     containerClassName,
     shouldDebounce = false,
     debounceTimeout = 300,
-}) => {
+}: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
     const inputRef = useRef<HTMLInputElement>()
     const debouncedSearchChange = useCallback(debounce(handleSearchChange, debounceTimeout), [
@@ -34,20 +34,24 @@ const SearchBar: FunctionComponent<SearchBarProps> = ({
         }
     }
 
+    const _applySearch = (value: string) => {
+        handleSearchChange(value)
+        handleEnter(value)
+    }
+
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         const { key } = e
 
         if (key === 'Enter') {
             const inputTarget = e.target as HTMLInputElement
-            const event = { ...e, target: { ...inputTarget, value: inputTarget.value.trim() } }
-            handleSearchChange(event.target.value)
-            handleEnter(event)
+            const value = inputTarget.value.trim()
+            _applySearch(value)
         }
     }
 
     const clearSearch = () => {
         inputRef.current.value = ''
-        handleSearchChange('')
+        _applySearch('')
     }
 
     return (

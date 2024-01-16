@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, SyntheticEvent } from 'react'
+import { InputHTMLAttributes } from 'react'
 
 export interface SearchBarProps {
     /**
@@ -14,7 +14,7 @@ export interface SearchBarProps {
     /**
      * Enter event handler for the search input
      */
-    handleEnter?: (event: SyntheticEvent) => void
+    handleEnter?: (searchText: string) => void
     /**
      * Input props for the search input
      */
