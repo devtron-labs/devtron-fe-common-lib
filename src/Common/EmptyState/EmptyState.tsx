@@ -1,5 +1,4 @@
 import React from 'react'
-import './emptyState.scss';
 import { ReactComponent as Progressing } from '../../Assets/Icon/ic-progressing.svg';
 
 function EmptyState({ children, className = '' }) {
