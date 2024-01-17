@@ -2,7 +2,6 @@ import React from 'react';
 import AppNotDeployed from '../../Assets/Img/app-not-deployed.png'
 import { GenericEmptyStateType, ImageType } from '../Types'
 
-import './emptyState.scss'
 
 function GenericEmptyState({
     title,
@@ -22,14 +21,14 @@ function GenericEmptyState({
     contentClassName = ''
 }: GenericEmptyStateType): JSX.Element {
     const isRowLayout = layout === 'row';
-    
+
     return (
         <div
             className={`flex ${isRowLayout ? 'dc__gap-32' : 'column dc__gap-20'} empty-state ${classname ? classname : ''}`}
             style={styles}
             data-testid="generic-empty-state"
             {...(heightToDeduct >= 0 && { style: { ...styles, height: `calc(100vh - ${heightToDeduct}px)` } })}
-        >   
+        >
             {!SvgImage ? !noImage && <img className={imageClassName ? imageClassName : ''}
                 src={image || AppNotDeployed}
                 width={imageType === ImageType.Medium ? '200' : '250'}
