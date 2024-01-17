@@ -133,6 +133,8 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
             isVirtualEnvironment: material.isVirtualEnvironment,
             imageComment: material.imageComment,
             imageReleaseTags: material.imageReleaseTags,
+            hasDuplicateImages: material.hasDuplicateImages,
+            isSuperseded: material.isSuperseded,
             // It is going to be null but required in type so can't remove
             lastExecution: material.lastExecution,
             materialInfo: material.material_info
