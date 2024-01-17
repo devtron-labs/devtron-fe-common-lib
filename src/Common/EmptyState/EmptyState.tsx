@@ -1,6 +1,10 @@
 import React from 'react'
 import { ReactComponent as Progressing } from '../../Assets/Icon/ic-progressing.svg';
 
+/**
+ * @deprecated
+ * @description Trying to deprecate this component instead, use GenericEmptyState
+ */
 function EmptyState({ children, className = '' }) {
     return (
         <div className={`flex column empty-state w-100 h-100 ${className}`}>

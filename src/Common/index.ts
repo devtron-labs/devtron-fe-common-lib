@@ -1,4 +1,3 @@
-import './EmptyState/emptyState.scss'
 export * from './Constants'
 export * from './ServerError'
 export * from './Types'

@@ -2,6 +2,7 @@ import React from 'react';
 import AppNotDeployed from '../../Assets/Img/app-not-deployed.png'
 import { GenericEmptyStateType, ImageType } from '../Types'
 
+import './emptyState.scss'
 
 function GenericEmptyState({
     title,
