@@ -261,6 +261,8 @@ export interface CDMaterialType {
     registryType?: string;
     imagePath?: string
     registryName?: string
+    hasDuplicateImages?: boolean
+    isSuperseded?: boolean
     // Not even coming from API but required in CDMaterials for Security which makes its own api call but stores data in CDMaterials
     scanToolId?: number
     appliedFiltersTimestamp?: string
