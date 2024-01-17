@@ -4,6 +4,8 @@ import { ReactComponent as ICClear } from '../../Assets/Icon/ic-error-cross.svg'
 import { DebouncedSearchProps } from './Types'
 
 /**
+ * @deprecated Use `SearchBar` component instead.
+ *
  * @param onSearch - Callback function to be called on search
  * @param Icon - (Optional) Icon to be shown before the input
  * @param iconClass - (Optional) Class for the icon
