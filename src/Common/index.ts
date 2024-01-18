@@ -48,3 +48,4 @@ export { default as ChartVersionAndTypeSelector } from './ChartVersionAndTypeSel
 export * from './AddCDButton'
 export * from './CustomInput'
 export * from './DraggableWrapper'
+export * from './Pagination'
