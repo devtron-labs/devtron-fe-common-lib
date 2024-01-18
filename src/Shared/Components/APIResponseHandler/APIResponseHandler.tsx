@@ -21,11 +21,10 @@ const APIResponseHandler = ({
 
     if (error) {
         if (error?.code === 404) {
-            // TODO: sync with product team to get the correct text
             return (
                 <GenericEmptyState
-                    title={notFoundText?.title ?? 'Page not found'}
-                    subTitle={notFoundText?.subTitle ?? 'The page you are looking for does not exist'}
+                    title={notFoundText?.title ?? 'Data not found'}
+                    subTitle={notFoundText?.subTitle ?? 'The data you are looking for does not exist'}
                 />
             )
         }
