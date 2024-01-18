@@ -1,3 +1,6 @@
 export { default as BuildInfraDescriptor } from './Descriptor'
 export { default as BuildInfraFooter } from './Footer'
+export { default as BuildInfraConfigForm } from './BuildInfraConfigForm'
+export * from './utils'
+export * from './types'
 export * from './constants'

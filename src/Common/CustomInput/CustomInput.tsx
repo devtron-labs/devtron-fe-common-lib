@@ -2,6 +2,7 @@ import { CustomInputProps } from './Types'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-warning.svg'
 
+// TODO: label association with input
 export function CustomInput({
     name,
     value,
@@ -13,7 +14,7 @@ export function CustomInput({
     disabled = false,
     labelClassName = '',
     placeholder = '',
-    tabIndex = 1,
+    tabIndex = 0,
     dataTestid = '',
     isRequiredField = false,
     autoFocus = false,

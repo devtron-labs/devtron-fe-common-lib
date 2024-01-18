@@ -13,12 +13,14 @@ export const translateString = (stringToTranslate: TranslatableString, params?: 
     }
 }
 
+// NOTE: If you are changing this please make sure BuildInfra selects are also working fine
 export const getCommonSelectStyle = (styleOverrides = {}) => {
     return {
         menuList: (base) => ({
             ...base,
             paddingTop: 0,
             paddingBottom: 0,
+            cursor: 'pointer',
         }),
         control: (base, state) => ({
             ...base,
@@ -33,6 +35,7 @@ export const getCommonSelectStyle = (styleOverrides = {}) => {
             color: 'var(--N900)',
             backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
             padding: '10px 12px',
+            cursor: 'pointer',
         }),
         dropdownIndicator: (base, state) => ({
             ...base,

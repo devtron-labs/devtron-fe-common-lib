@@ -25,7 +25,8 @@ export const ROUTES = {
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING:'app/image-tagging',
     CD_MATERIAL_GET: 'app/cd-pipeline',
-    DEPLOYMENT_TEMPLATE_LIST: 'app/template/list'
+    DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
+    INFRA_CONFIG_PROFILE: 'infra-config/profile',
 }
 
 export enum KEY_VALUE {
