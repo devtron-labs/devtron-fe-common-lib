@@ -1,0 +1,31 @@
+.search-bar {
+
+    &:focus,
+    &:focus-within {
+        outline: none;
+        border: solid 1px var(--B500);
+    }
+
+    &__input {
+
+        &:focus,
+        &:focus-visible {
+            border: none;
+            outline: none;
+        }
+    }
+
+    &__icon {
+        z-index: 1;
+        top: 50%;
+        left: 8px;
+        transform: translateY(-50%);
+    }
+
+    &__clear-button {
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1;
+    }
+}
