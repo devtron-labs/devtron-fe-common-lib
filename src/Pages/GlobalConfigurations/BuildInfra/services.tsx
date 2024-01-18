@@ -6,6 +6,7 @@ import {
     BuildInfraConfigTypes,
     BuildInfraConfigurationMapType,
     BuildInfraConfigurationType,
+    BuildInfraProfileAPIResponseType,
     BuildInfraProfileResponseType,
     BuildInfraProfileVariants,
     BuildInfraUnitsMapType,
@@ -329,6 +330,67 @@ const getSampleResponse2 = (name: string) => ({
     },
 })
 
+// Would recieve a single profile and return transformed response
+export const getTransformedBuildInfraProfileResponse = ({
+    configurationUnits,
+    defaultConfigurations,
+    profile,
+}: BuildInfraProfileAPIResponseType): BuildInfraProfileResponseType => {
+    const configurationUnitsMap = configurationUnits?.reduce((acc, profileUnitList) => {
+        acc[profileUnitList.name] = profileUnitList.units.reduce((accumulator, units) => {
+            accumulator[units.name] = units
+            return accumulator
+        }, {} as ConfigurationUnitMapType)
+        return acc
+    }, {} as BuildInfraUnitsMapType)
+
+    // Assuming would contain all the keys
+    const defaultConfigurationsMap =
+        defaultConfigurations?.reduce((acc, configuration) => {
+            acc[configuration.key] = configuration
+            return acc
+        }, {}) ?? {}
+
+    const profileConfigurations =
+        profile?.configurations?.reduce((acc, configuration) => {
+            acc[configuration.key] = configuration
+            return acc
+        }, {}) ?? {}
+
+    // traversing defaultConfigurationsMap and if key is present in profileConfigurations then use that else use defaultConfigurationsMap
+    const configurations = Object.keys(defaultConfigurationsMap).reduce((acc, key) => {
+        const defaultConfiguration: BuildInfraConfigurationType = defaultConfigurationsMap[key]
+        const profileConfiguration = profileConfigurations[key]
+        // TODO: Would remove profileName from it since it can change and won't send profileName to api
+        if (profileConfiguration) {
+            acc[key] = profileConfiguration
+        } else {
+            // Removing id from it since we do not have a configuration
+            // While generating payload, we will check on the basis of id and active flag.
+            acc[key] = {
+                key,
+                value: defaultConfiguration.value,
+                // saving profile name as undefined and this would be a check, if we are deriving from default or not
+                unit: defaultConfiguration.unit,
+                active: false,
+            }
+        }
+        acc[key].defaultValue = {
+            value: defaultConfiguration.value,
+            unit: defaultConfiguration.unit,
+        }
+        return acc
+    }, {} as BuildInfraConfigurationMapType)
+
+    return {
+        configurationUnits: configurationUnitsMap,
+        profile: {
+            ...(profile && profile),
+            configurations,
+        },
+    }
+}
+
 export const getBuildInfraProfileByName = async (name: string): Promise<BuildInfraProfileResponseType> => {
     // Adding a timeout to show the loader
     // eslint-disable-next-line no-promise-executor-return
@@ -339,60 +401,8 @@ export const getBuildInfraProfileByName = async (name: string): Promise<BuildInf
     const { code, result } = response
 
     if (code === 200 && result) {
-        const { configurationUnits, defaultConfigurations } = result
-        const configurationUnitsMap = configurationUnits?.reduce((acc, profileUnitList) => {
-            acc[profileUnitList.name] = profileUnitList.units.reduce((accumulator, units) => {
-                accumulator[units.name] = units
-                return accumulator
-            }, {} as ConfigurationUnitMapType)
-            return acc
-        }, {} as BuildInfraUnitsMapType)
-
-        // Assuming would contain all the keys
-        const defaultConfigurationsMap =
-            defaultConfigurations?.reduce((acc, configuration) => {
-                acc[configuration.key] = configuration
-                return acc
-            }, {}) ?? {}
-
-        const profileConfigurations =
-            result.profile?.configurations?.reduce((acc, configuration) => {
-                acc[configuration.key] = configuration
-                return acc
-            }, {}) ?? {}
-
-        // traversing defaultConfigurationsMap and if key is present in profileConfigurations then use that else use defaultConfigurationsMap
-        const configurations = Object.keys(defaultConfigurationsMap).reduce((acc, key) => {
-            const defaultConfiguration: BuildInfraConfigurationType = defaultConfigurationsMap[key]
-            const profileConfiguration = profileConfigurations[key]
-            // TODO: Would remove profileName from it since it can change and won't send profileName to api
-            if (profileConfiguration) {
-                acc[key] = profileConfiguration
-            } else {
-                // Removing id from it since we do not have a configuration
-                // While generating payload, we will check on the basis of id and active flag.
-                acc[key] = {
-                    key,
-                    value: defaultConfiguration.value,
-                    // saving profile name as undefined and this would be a check, if we are deriving from default or not
-                    unit: defaultConfiguration.unit,
-                    active: false,
-                }
-            }
-            acc[key].defaultValue = {
-                value: defaultConfiguration.value,
-                unit: defaultConfiguration.unit,
-            }
-            return acc
-        }, {} as BuildInfraConfigurationMapType)
-
-        return {
-            configurationUnits: configurationUnitsMap,
-            profile: {
-                ...result.profile,
-                configurations,
-            },
-        }
+        const { configurationUnits, defaultConfigurations, profile } = result as BuildInfraProfileAPIResponseType
+        return getTransformedBuildInfraProfileResponse({ configurationUnits, defaultConfigurations, profile })
     }
 
     return {

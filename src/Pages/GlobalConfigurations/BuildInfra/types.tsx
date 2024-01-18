@@ -119,11 +119,18 @@ export interface BuildInfraConfigValuesType {
     unit?: ConfigurationUnitType['name']
 }
 
-export interface BuildInfraConfigurationType extends BuildInfraConfigValuesType {
+interface BuildInfraProfileConfigBase {
+    id?: number
     key: BuildInfraConfigTypes
     profileName: string
     active: boolean
-    id?: number
+}
+
+export interface BuildInfraProfileConfigResponseDataType
+    extends BuildInfraConfigValuesType,
+        BuildInfraProfileConfigBase {}
+
+export interface BuildInfraConfigurationType extends BuildInfraConfigValuesType, BuildInfraProfileConfigBase {
     defaultValue: BuildInfraConfigValuesType
 }
 
@@ -131,11 +138,19 @@ export type BuildInfraConfigurationMapType = {
     [key in BuildInfraConfigTypes]: BuildInfraConfigurationType
 }
 
-export interface BuildInfraProfileData {
+interface BuildInfraProfileBase {
+    id?: number
     name: string
     description: string
     type: BuildInfraProfileVariants
     appCount: number
+}
+
+export interface BuildInfraProfileResponseDataType extends BuildInfraProfileBase {
+    configurations: BuildInfraProfileConfigResponseDataType[]
+}
+
+export interface BuildInfraProfileData extends BuildInfraProfileBase {
     configurations: BuildInfraConfigurationMapType
 }
 
@@ -279,4 +294,22 @@ export interface BuildInfraInputFieldComponentProps {
 export interface InheritingHeaderProps {
     defaultHeading: BuildInfraFormFieldType['heading']
     inhertingData: BuildInfraConfigValuesType[]
+}
+
+export interface BuildInfraConfigResponseDataType {
+    name: BuildInfraConfigTypes
+    units: ConfigurationUnitType[]
+}
+
+interface BaseBuildInfraProfileResponseType {
+    defaultConfigurations: BuildInfraProfileConfigResponseDataType[]
+    configurationUnits: BuildInfraConfigResponseDataType[]
+}
+
+export interface BuildInfraListResponseType extends BaseBuildInfraProfileResponseType {
+    profiles: BuildInfraProfileConfigResponseDataType[]
+}
+
+export interface BuildInfraProfileAPIResponseType extends BaseBuildInfraProfileResponseType {
+    profile: BuildInfraProfileResponseDataType
 }
