@@ -32,6 +32,14 @@ export enum BuildInfraLocators {
     BUILD_TIMEOUT = 'build_timeout',
 }
 
+export const BuildInfraLocatorsActionMap = {
+    [BuildInfraConfigTypes.BUILD_TIMEOUT]: BuildInfraLocators.BUILD_TIMEOUT,
+    [BuildInfraConfigTypes.CPU_LIMIT]: BuildInfraLocators.CPU,
+    [BuildInfraConfigTypes.CPU_REQUEST]: BuildInfraLocators.CPU,
+    [BuildInfraConfigTypes.MEMORY_LIMIT]: BuildInfraLocators.MEMORY,
+    [BuildInfraConfigTypes.MEMORY_REQUEST]: BuildInfraLocators.MEMORY,
+}
+
 // FIXME: Derive this from BuildInfraLocators
 // Appending the locators from above
 export enum BuildInfraInheritActions {
@@ -307,7 +315,7 @@ interface BaseBuildInfraProfileResponseType {
 }
 
 export interface BuildInfraListResponseType extends BaseBuildInfraProfileResponseType {
-    profiles: BuildInfraProfileConfigResponseDataType[]
+    profiles: BuildInfraProfileResponseDataType[]
 }
 
 export interface BuildInfraProfileAPIResponseType extends BaseBuildInfraProfileResponseType {
