@@ -523,6 +523,8 @@ function removeEmptyObjectKeysAndNullValues(obj, originaljsonCopy) {
 }
 
 export function getUnlockedJSON(json, jsonPathArray, removeParentKeysAndEmptyArrays = false) {
+    if (!jsonPathArray.length) return { newDocument: json, removedPatches: [] }
+    
     const jsonCopy = JSON.parse(JSON.stringify(json))
     const originaljsonCopy = JSON.parse(JSON.stringify(json))
     let removedPatches = []
