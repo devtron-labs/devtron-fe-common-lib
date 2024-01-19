@@ -20,7 +20,7 @@ import 'monaco-editor'
 // eslint-disable-next-line import/no-webpack-loader-syntax
 // import YamlWorker from 'web-worker:monaco-yaml/lib/esm/yaml.worker';
 import { Progressing } from '../Progressing'
-import { useWindowSize } from '../UseWindowSize'
+import { useWindowSize } from '../Hooks/UseWindowSize/UseWindowSize'
 import { cleanKubeManifest, copyToClipboard, useJsonYaml } from '../Helper'
 import Select from '../Select/Select'
 import RadioGroup from '../RadioGroup/RadioGroup'
