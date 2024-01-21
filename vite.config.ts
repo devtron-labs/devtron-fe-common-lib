@@ -8,6 +8,7 @@ import { libInjectCss } from 'vite-plugin-lib-inject-css'
 import svgr from 'vite-plugin-svgr'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import * as packageJson from './package.json'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,7 +17,7 @@ export default defineConfig({
     libInjectCss(),
     viteTsconfigPaths(),
     svgr({
-        svgrOptions: {},
+      svgrOptions: {}
     }),
     dts(),
     NodeGlobalsPolyfillPlugin({
@@ -31,7 +32,7 @@ export default defineConfig({
       formats: ['es']
     },
     rollupOptions: {
-      external: ['react', 'react/jsx-runtime', 'react-router', 'react-router-dom'],
+      external: [...Object.keys(packageJson.peerDependencies)],
       input: Object.fromEntries(
         // https://rollupjs.org/configuration-options/#input
         glob.sync('src/**/!(*.d).{ts,tsx}').map(file => [
