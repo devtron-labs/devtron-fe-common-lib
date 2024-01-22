@@ -3,10 +3,23 @@ import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { DockerConfigOverrideType, TaskErrorObj } from '.'
 
-export interface ResponseType {
+/**
+ * Generic response type object with support for overriding the result type
+ *
+ * @example Default usage:
+ * ```ts
+ * interface UserResponse extends ResponseType {}
+ * ```
+ *
+ * @example Override the response type:
+ * ```ts
+ * interface UserResponse extends ResponseType<Record<string, string>> {}
+ * ```
+ */
+export interface ResponseType<T = any> {
     code: number
     status: string
-    result?: any
+    result?: T
     errors?: any
 }
 
@@ -293,6 +306,11 @@ export interface CDMaterialServiceQueryParams {
     filter?: CDMaterialFilterQuery
 }
 
+export interface DownstreamNodesEnvironmentsType {
+    environmentId: number
+    environmentName: string
+}
+
 export interface CommonNodeAttr {
     connectingCiPipelineId?: number
     parents: string | number[] | string[]
@@ -355,6 +373,9 @@ export interface CommonNodeAttr {
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
     isGitOpsRepoNotConfigured?: boolean
+    deploymentAppCreated?: boolean
+    isLast?: boolean
+    downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
 }
 
 export enum DeploymentAppTypes {
@@ -623,4 +644,121 @@ export interface CiPipeline {
     }
     isOffendingMandatoryPlugin?: boolean
     pipelineType?: string
+}
+export interface InformationBarProps {
+    text: string
+    className?: string
+    children?: React.ReactNode
+}
+
+export interface CodeEditorInterface {
+    value?: string
+    lineDecorationsWidth?: number
+    responseType?: string
+    onChange?: (string) => void
+    onBlur?: () => void
+    onFocus?: () => void
+    children?: any
+    defaultValue?: string
+    mode?: 'json' | 'yaml' | 'shell' | 'dockerfile' | 'plaintext'
+    tabSize?: number
+    readOnly?: boolean
+    noParsing?: boolean
+    minHeight?: number
+    maxHeight?: number
+    inline?: boolean
+    height?: number | string
+    shebang?: string | JSX.Element
+    diffView?: boolean
+    loading?: boolean
+    customLoader?: JSX.Element
+    theme?: string
+    original?: string
+    focus?: boolean
+    validatorSchema?: any
+    isKubernetes?: boolean
+    cleanData?: boolean
+    chartVersion?: any
+}
+
+export interface CodeEditorComposition {
+    Header?: React.FC<any>
+    LanguageChanger?: React.FC<any>
+    ThemeChanger?: React.FC<any>
+    ValidationError?: React.FC<any>
+    Clipboard?: React.FC<any>
+    Warning?: React.FC<InformationBarProps>
+    ErrorBar?: React.FC<InformationBarProps>
+    Information?: React.FC<InformationBarProps>
+}
+
+export interface CodeEditorHeaderComposition {
+    LanguageChanger?: React.FC<any>;
+    ThemeChanger?: React.FC<any>;
+    ValidationError?: React.FC<any>;
+    Clipboard?: React.FC<any>;
+}
+export interface CodeEditorHeaderInterface {
+    children?: any;
+    className?: string
+    hideDefaultSplitHeader?: boolean;
+}
+
+export interface DeploymentChartVersionType {
+    chartRefId: number 
+    chartVersion: string
+    chartType: string
+    type: number
+}
+
+export interface ChartVersionAndTypeSelectorProps {
+    setSelectedChartRefId: React.Dispatch<React.SetStateAction<number>>
+}
+
+export enum PipelineType {
+    CI_PIPELINE = 'CI_PIPELINE',
+    CD_PIPELINE = 'CD_PIPELINE',
+    WEBHOOK = 'WEBHOOK',
+    LINKED_CD = 'LINKED_CD',
+}
+
+export enum WorkflowNodeType {
+    GIT = 'GIT',
+    CI = 'CI',
+    WEBHOOK = 'WEBHOOK',
+    PRE_CD = 'PRECD',
+    CD = 'CD',
+    POST_CD = 'POSTCD',
+}
+
+export enum AddCDPositions {
+    LEFT = 'left',
+    RIGHT = 'right',
+}
+
+export interface SelectedNode {
+    nodeType: WorkflowNodeType
+    id: string
+}
+
+export enum AddPipelineType {
+    SEQUENTIAL = 'SEQUENTIAL',
+    PARALLEL = 'PARALLEL',
+}
+
+export interface Point {
+    x: number
+    y: number
+}
+
+export interface EdgeNodeType {
+    height: number
+    width: number
+    userApprovalConfig?: UserApprovalConfigType
+    type?: any
+    id?: number | string
+}
+
+export interface EdgeEndNodeType extends EdgeNodeType {
+    userApprovalConfig?: UserApprovalConfigType
 }

@@ -1,6 +1,6 @@
 import { RegistryTypeDetailType } from "./Types"
 
-export const RequestTimeout = 60000
+export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = process.env.REACT_APP_ORCHESTRATOR_ROOT
 
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
@@ -24,7 +24,8 @@ export const ROUTES = {
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING:'app/image-tagging',
-    CD_MATERIAL_GET: 'app/cd-pipeline'
+    CD_MATERIAL_GET: 'app/cd-pipeline',
+    DEPLOYMENT_TEMPLATE_LIST: 'app/template/list'
 }
 
 export enum KEY_VALUE {
@@ -240,3 +241,5 @@ export const RepositoryAction = {
     CHART_PULL: "CHART_PULL",
     CHART_PUSH: "CHART_PUSH"
 }
+
+export const MAX_Z_INDEX = 2147483647
