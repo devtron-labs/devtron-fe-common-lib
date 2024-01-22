@@ -3,10 +3,23 @@ import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { DockerConfigOverrideType, TaskErrorObj } from '.'
 
-export interface ResponseType {
+/**
+ * Generic response type object with support for overriding the result type
+ *
+ * @example Default usage:
+ * ```ts
+ * interface UserResponse extends ResponseType {}
+ * ```
+ *
+ * @example Override the response type:
+ * ```ts
+ * interface UserResponse extends ResponseType<Record<string, string>> {}
+ * ```
+ */
+export interface ResponseType<T = any> {
     code: number
     status: string
-    result?: any
+    result?: T
     errors?: any
 }
 
