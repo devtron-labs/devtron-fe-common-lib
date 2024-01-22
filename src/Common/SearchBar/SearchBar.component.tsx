@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useRef, useState, KeyboardEvent } from 'react'
+import { ChangeEvent, useCallback, useRef, useState, KeyboardEvent, useEffect } from 'react'
 import { ReactComponent as Search } from '../../Assets/Icon/ic-search.svg'
 import { ReactComponent as Clear } from '../../Assets/Icon/ic-error-cross.svg'
 import { SearchBarProps } from './types'
@@ -55,19 +55,36 @@ const SearchBar = ({
         debounceTimeout,
     ])
 
+    // In most case would reset the state by doing history.push('/')
+    useEffect(() => {
+        inputRef.current.value = initialSearchText
+    }, [initialSearchText])
+
+    const _applySearch = (value: string) => {
+        handleSearchChange(value)
+        handleEnter(value)
+    }
+
+    const clearSearch = () => {
+        inputRef.current.value = ''
+        _applySearch('')
+        setShowClearButton(false)
+    }
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target
         setShowClearButton(!!value)
+
+        if (!value) {
+            clearSearch()
+            return
+        }
+
         if (shouldDebounce) {
             debouncedSearchChange(value)
         } else {
             handleSearchChange(value)
         }
-    }
-
-    const _applySearch = (value: string) => {
-        handleSearchChange(value)
-        handleEnter(value)
     }
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -78,12 +95,6 @@ const SearchBar = ({
             const value = inputTarget.value.trim()
             _applySearch(value)
         }
-    }
-
-    const clearSearch = () => {
-        inputRef.current.value = ''
-        _applySearch('')
-        setShowClearButton(false)
     }
 
     return (
@@ -103,6 +114,7 @@ const SearchBar = ({
                     onKeyDown={handleKeyDown}
                     ref={inputRef}
                 />
+                {/* TODO: Sync with product since it should have ic-enter in case of not applied */}
                 {showClearButton && (
                     <button
                         className="flex search-bar__clear-button dc__position-abs dc__transparent mt-0 mb-0 mr-5 ml-5"
