@@ -241,3 +241,5 @@ export const RepositoryAction = {
     CHART_PULL: "CHART_PULL",
     CHART_PUSH: "CHART_PUSH"
 }
+
+export const MAX_Z_INDEX = 2147483647
