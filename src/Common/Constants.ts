@@ -249,4 +249,13 @@ export enum MODES {
   DOCKERFILE = 'dockerfile',
 }
 
+export enum APPROVAL_MODAL_TYPE {
+    CONFIG = 'CONFIG',
+    DEPLOYMENT = 'DEPLOYMENT',
+}
 export const MAX_Z_INDEX = 2147483647
+
+export const SELECTED_APPROVAL_TAB_STATE = {
+    APPROVAL: 'approval',
+    PENDING: 'pending',
+}
