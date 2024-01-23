@@ -505,8 +505,15 @@ function removeEmptyObjectKeysAndNullValues(obj, originaljsonCopy) {
     for (let key in obj) {
         if (Array.isArray(obj[key])) {
             // Check if the array is empty
+            if (obj[key].length !== 0) {
+                obj[key].forEach((element, index) => {
+                    if (element === null || (typeof element === 'object' && Object.keys(element).length === 0))
+                        obj[key].splice(index, 1)
+                    else removeEmptyObjectKeysAndNullValues(element, originaljsonCopy[key][index])
+                })
+            }
             if (obj[key].length === 0 && originaljsonCopy[key].length !== 0) {
-                delete obj[key] 
+                delete obj[key]
             }
         } else if (obj[key] && typeof obj[key] === 'object') {
             if (
