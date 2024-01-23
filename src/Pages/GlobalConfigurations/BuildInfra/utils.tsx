@@ -8,7 +8,6 @@ import {
     BuildInfraInheritActions,
     BuildInfraMetaConfigTypes,
     BuildInfraProfileData,
-    BuildInfraProfileVariants,
     HandleProfileInputChangeType,
     ProfileInputErrorType,
     UseBuildInfraFormProps,
@@ -81,7 +80,11 @@ export const useBuildInfraForm = ({
     handleSuccessRedirection,
 }: UseBuildInfraFormProps): UseBuildInfraFormResponseType => {
     const [isLoading, profileResponse, responseError, reloadRequest] = useAsync(
-        () => getBuildInfraProfileByName(name ?? DEFAULT_PROFILE_NAME),
+        () =>
+            getBuildInfraProfileByName({
+                name: name ?? DEFAULT_PROFILE_NAME,
+                fromCreateView: !name,
+            }),
         [name],
         isSuperAdmin,
     )
@@ -92,12 +95,9 @@ export const useBuildInfraForm = ({
 
     useEffect(() => {
         if (!isLoading && profileResponse?.configurationUnits && profileResponse?.profile) {
-            // In case we are coming from create profile, we need to set the type to normal
-            const profile = {
+            setProfileInput({
                 ...profileResponse.profile,
-                type: name ? profileResponse.profile.type : BuildInfraProfileVariants.NORMAL,
-            }
-            setProfileInput(profile)
+            })
             setProfileInputErrors(PROFILE_INPUT_ERROR_FIELDS)
         }
     }, [profileResponse, isLoading])

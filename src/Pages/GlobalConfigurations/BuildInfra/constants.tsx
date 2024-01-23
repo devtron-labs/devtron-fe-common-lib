@@ -8,6 +8,8 @@ import {
     BuildInfraLocators,
     BuildInfraMetaConfigTypes,
     ProfileInputErrorType,
+    BuildInfraProfileBase,
+    BuildInfraProfileVariants,
 } from './types'
 
 export const BUILD_INFRA_TEXT = {
@@ -18,9 +20,9 @@ export const BUILD_INFRA_TEXT = {
     EDIT_DEFAULT_TOOLTIP:
         'Efficiently control infrastructure settings such as CPU, Memory, and Build timeout for your build pipelines. Streamline resource management to optimise build time and cost effortlessly.',
     DESCRIPTION_LABEL: 'Description',
-    DESCRIPTION_PLACEHOLDER: 'Type description',
+    DESCRIPTION_PLACEHOLDER: 'Enter a description here',
     PROFILE_LABEL: 'Profile name',
-    PROFILE_PLACEHOLDER: 'Type profile name',
+    PROFILE_PLACEHOLDER: 'Eg. Java or Node',
     INHERITING_HEADING_DESCRIPTION: 'Inheriting from default',
 }
 
@@ -91,3 +93,15 @@ export const PROFILE_INPUT_ERROR_FIELDS = {
 } as ProfileInputErrorType
 
 export const DEFAULT_PROFILE_NAME = 'default'
+
+export const CREATE_PROFILE_BASE_VALUE: BuildInfraProfileBase = {
+    name: '',
+    description: '',
+    type: BuildInfraProfileVariants.NORMAL,
+    appCount: 0,
+}
+
+export const CREATE_VIEW_CHECKED_CONFIGS = {
+    [BuildInfraConfigTypes.CPU_REQUEST]: true,
+    [BuildInfraConfigTypes.CPU_LIMIT]: true,
+}

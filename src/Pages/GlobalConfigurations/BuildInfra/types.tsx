@@ -146,7 +146,7 @@ export type BuildInfraConfigurationMapType = {
     [key in BuildInfraConfigTypes]: BuildInfraConfigurationType
 }
 
-interface BuildInfraProfileBase {
+export interface BuildInfraProfileBase {
     id?: number
     name: string
     description: string
@@ -162,6 +162,11 @@ export interface BuildInfraProfileData extends BuildInfraProfileBase {
     configurations: BuildInfraConfigurationMapType
 }
 
+export interface GetBuildInfraProfileType {
+    name: string
+    fromCreateView?: boolean
+}
+
 export interface BuildInfraProfileResponseType {
     configurationUnits: BuildInfraUnitsMapType | null
     profile: BuildInfraProfileData | null
@@ -169,7 +174,7 @@ export interface BuildInfraProfileResponseType {
 
 export interface UseBuildInfraFormProps {
     /**
-     * Name of the profile
+     * Name of the profile, if not provided assumption would be for create view
      */
     name?: string
     /**
@@ -228,6 +233,7 @@ export interface BuildInfraFormItemProps extends Pick<BuildInfraFormFieldType, '
      */
     handleProfileInputChange: UseBuildInfraFormResponseType['handleProfileInputChange']
     locator: BuildInfraFormFieldType['locator']
+    isDefaultProfile: boolean
 }
 
 export interface ValidateRequestLimitType {
@@ -245,6 +251,7 @@ export interface BuildInfraConfigFormProps
     extends Pick<UseBuildInfraFormResponseType, 'profileInput' | 'profileInputErrors' | 'handleProfileInputChange'> {
     isDefaultProfile?: boolean
     unitsMap?: BuildInfraProfileResponseType['configurationUnits']
+    confugrationContainerLabel?: ReactNode
 }
 
 export interface BuildInfraFormActionProps extends BuildInfraActionType {
@@ -302,6 +309,8 @@ export interface BuildInfraInputFieldComponentProps {
 export interface InheritingHeaderProps {
     defaultHeading: BuildInfraFormFieldType['heading']
     inhertingData: BuildInfraConfigValuesType[]
+    isInheriting: boolean
+    isDefaultProfile: boolean
 }
 
 export interface BuildInfraConfigResponseDataType {
@@ -321,3 +330,7 @@ export interface BuildInfraListResponseType extends BaseBuildInfraProfileRespons
 export interface BuildInfraProfileAPIResponseType extends BaseBuildInfraProfileResponseType {
     profile: BuildInfraProfileResponseDataType
 }
+
+export interface BuildInfraProfileTransformerType
+    extends BuildInfraProfileAPIResponseType,
+        Pick<GetBuildInfraProfileType, 'fromCreateView'> {}

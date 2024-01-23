@@ -2,18 +2,23 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // import { get, post, put, trash } from '../../../Common'
+import { CREATE_PROFILE_BASE_VALUE, CREATE_VIEW_CHECKED_CONFIGS } from './constants'
 import {
     BuildInfraConfigTypes,
     BuildInfraConfigurationMapType,
     BuildInfraConfigurationType,
     BuildInfraProfileAPIResponseType,
+    BuildInfraProfileBase,
+    BuildInfraProfileResponseDataType,
     BuildInfraProfileResponseType,
+    BuildInfraProfileTransformerType,
     BuildInfraProfileVariants,
     BuildInfraUnitsMapType,
     ConfigurationUnitMapType,
     CreateBuildInfraProfileType,
     CreateBuildInfraSerivcePayloadType,
     CreateBuildInfraServiceConfigurationType,
+    GetBuildInfraProfileType,
     UpdateBuildInfraProfileType,
 } from './types'
 
@@ -278,7 +283,7 @@ const getSampleResponse2 = (name: string) => ({
             id: 1,
             name: `${name}`,
             description: 'all java apps should have this infra profile',
-            type: BuildInfraProfileVariants.NORMAL,
+            type: BuildInfraProfileVariants.DEFAULT,
             configurations: [
                 {
                     id: 1,
@@ -330,12 +335,30 @@ const getSampleResponse2 = (name: string) => ({
     },
 })
 
+const getBaseProfileObject = (
+    fromCreateView: boolean,
+    profile: BuildInfraProfileResponseDataType,
+): BuildInfraProfileBase => {
+    if (fromCreateView) {
+        return CREATE_PROFILE_BASE_VALUE
+    }
+
+    return {
+        id: profile.id,
+        name: profile.name,
+        description: profile.description,
+        type: profile.type,
+        appCount: profile.appCount,
+    }
+}
+
 // Would recieve a single profile and return transformed response
 export const getTransformedBuildInfraProfileResponse = ({
     configurationUnits,
     defaultConfigurations,
     profile,
-}: BuildInfraProfileAPIResponseType): BuildInfraProfileResponseType => {
+    fromCreateView,
+}: BuildInfraProfileTransformerType): BuildInfraProfileResponseType => {
     const configurationUnitsMap = configurationUnits?.reduce((acc, profileUnitList) => {
         acc[profileUnitList.name] = profileUnitList.units.reduce((accumulator, units) => {
             accumulator[units.name] = units
@@ -361,8 +384,14 @@ export const getTransformedBuildInfraProfileResponse = ({
     const configurations = Object.keys(defaultConfigurationsMap).reduce((acc, key) => {
         const defaultConfiguration: BuildInfraConfigurationType = defaultConfigurationsMap[key]
         const profileConfiguration = profileConfigurations[key]
-        // TODO: Would remove profileName from it since it can change and won't send profileName to api
-        if (profileConfiguration) {
+        if (fromCreateView) {
+            acc[key] = {
+                key,
+                value: defaultConfiguration.value,
+                unit: defaultConfiguration.unit,
+                active: CREATE_VIEW_CHECKED_CONFIGS[key] ?? false,
+            }
+        } else if (profileConfiguration) {
             acc[key] = profileConfiguration
         } else {
             // Removing id from it since we do not have a configuration
@@ -385,24 +414,32 @@ export const getTransformedBuildInfraProfileResponse = ({
     return {
         configurationUnits: configurationUnitsMap,
         profile: {
-            ...(profile && profile),
+            ...(profile && getBaseProfileObject(fromCreateView, profile)),
             configurations,
         },
     }
 }
 
-export const getBuildInfraProfileByName = async (name: string): Promise<BuildInfraProfileResponseType> => {
+export const getBuildInfraProfileByName = async ({
+    name,
+    fromCreateView,
+}: GetBuildInfraProfileType): Promise<BuildInfraProfileResponseType> => {
     // Adding a timeout to show the loader
     // eslint-disable-next-line no-promise-executor-return
     await new Promise((resolve) => setTimeout(resolve, 1000))
     // TODO: Capture error for toast
 
-    const response = await Promise.resolve(getSampleResponse1(name))
+    const response = await Promise.resolve(getSampleResponse2(name))
     const { code, result } = response
 
     if (code === 200 && result) {
         const { configurationUnits, defaultConfigurations, profile } = result as BuildInfraProfileAPIResponseType
-        return getTransformedBuildInfraProfileResponse({ configurationUnits, defaultConfigurations, profile })
+        return getTransformedBuildInfraProfileResponse({
+            configurationUnits,
+            defaultConfigurations,
+            profile,
+            fromCreateView,
+        })
     }
 
     return {

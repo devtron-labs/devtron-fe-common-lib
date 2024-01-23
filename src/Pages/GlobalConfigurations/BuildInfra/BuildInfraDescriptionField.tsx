@@ -16,15 +16,15 @@ const BuildInfraProfileDescriptionField: FunctionComponent<BuildInfraInputFieldC
     }
 
     return (
-        <div className="flexbox-col dc__gap-4 dc__mxw-420 w-100 dc__align-start">
-            <label htmlFor="build-infra-profile-description" className="m-0 fs-13 fw-4 lh-20 cn-7 mxh-140">
+        <div className="flexbox-col dc__gap-4 w-100 dc__align-start">
+            <label htmlFor="build-infra-profile-description" className="m-0 fs-13 fw-4 lh-20 cn-7">
                 {BUILD_INFRA_TEXT.DESCRIPTION_LABEL}
             </label>
 
             <textarea
-                data-testid="build-infra-profdescription"
+                data-testid="build-infra-profile-description"
                 name="profile-description"
-                className="form__text-area"
+                className="form__textarea mxh-140 dc__hover-border-n300"
                 id="build-infra-profile-description"
                 placeholder={BUILD_INFRA_TEXT.DESCRIPTION_PLACEHOLDER}
                 value={currentValue}
