@@ -133,7 +133,7 @@ const getBuildInfraProfilePayload = (
             acc.push({
                 id: configuration.id,
                 key,
-                value: configuration.value,
+                value: Number(configuration.value),
                 unit: configuration.unit,
                 active: configuration.active,
             })

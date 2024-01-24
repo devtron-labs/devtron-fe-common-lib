@@ -282,7 +282,7 @@ export interface CreateBuildInfraProfileType extends Pick<UseBuildInfraFormRespo
 
 export interface CreateBuildInfraServiceConfigurationType {
     key: BuildInfraConfigTypes
-    value: string
+    value: string | number
     active: boolean
     unit?: string
     /**

@@ -172,6 +172,7 @@ export const useBuildInfraForm = ({
         }
     }, [profileResponse, isLoading])
 
+    // NOTE: Currently sending and receiving values as string, but will parse it to number for payload
     const handleProfileInputChange = ({ action, data }: HandleProfileInputChangeType) => {
         const currentInput = { ...profileInput }
         const currentInputErrors = { ...profileInputErrors }
