@@ -15,9 +15,13 @@ import {
     ValidateRequestLimitResponseType,
     ValidateRequestLimitType,
 } from './types'
-import { DEFAULT_PROFILE_NAME, PROFILE_INPUT_ERROR_FIELDS } from './constants'
-import { validateDescription, validateName, validateRequiredPositiveNumber } from '../../../Shared'
-import { getCommonSelectStyle } from '../../../Common/RJSF/utils'
+import { BUILD_INFRA_TEXT, DEFAULT_PROFILE_NAME, PROFILE_INPUT_ERROR_FIELDS } from './constants'
+import {
+    validateDescription,
+    validateName,
+    validateRequiredPositiveNumber,
+    getCommonSelectStyle,
+} from '../../../Shared'
 
 export const validateRequestLimit = ({
     request,
@@ -47,14 +51,14 @@ export const validateRequestLimit = ({
 
     if (!isRequestValidNumber) {
         requestLimitValidationResponse.request = {
-            message: 'Request should be a positive number',
+            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.NEGATIVE_REQUEST,
             isValid: false,
         }
     }
 
     if (!isLimitValidNumber) {
         requestLimitValidationResponse.limit = {
-            message: 'Limit should be a positive number',
+            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.NEGATIVE_LIMIT,
             isValid: false,
         }
     }
@@ -65,7 +69,7 @@ export const validateRequestLimit = ({
 
     if (requestNumber * requestUnit > limitNumber * limitUnit) {
         requestLimitValidationResponse.request = {
-            message: 'Request should be less than or equal to limit',
+            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.REQUEST_LESS_THAN_LIMIT,
             isValid: false,
         }
     }
@@ -75,7 +79,6 @@ export const validateRequestLimit = ({
 
 export const useBuildInfraForm = ({
     name,
-    isSuperAdmin,
     editProfile,
     handleSuccessRedirection,
 }: UseBuildInfraFormProps): UseBuildInfraFormResponseType => {
@@ -86,7 +89,6 @@ export const useBuildInfraForm = ({
                 fromCreateView: !name,
             }),
         [name],
-        isSuperAdmin,
     )
     // If configuration is existing and is active then use it else use default from profileResponse
     const [profileInput, setProfileInput] = useState<BuildInfraProfileData>(null)
@@ -314,7 +316,7 @@ export const useBuildInfraForm = ({
                 break
 
             default:
-                throw new Error(`Invalid action type: ${action}`)
+                throw new Error(BUILD_INFRA_TEXT.getInvalidActionMessage(action))
         }
 
         setProfileInput(currentInput)
@@ -325,14 +327,13 @@ export const useBuildInfraForm = ({
         e.preventDefault()
         setLoadingActionRequest(true)
         try {
-            // TODO: Add check for status code as well
             if (editProfile) {
                 await updateBuildInfraProfile({ name, profileInput })
             } else {
                 await createBuildInfraProfile({ profileInput })
             }
             setLoadingActionRequest(false)
-            toast.success(`${profileInput.name} is ${editProfile ? 'updated' : 'created'}`)
+            toast.success(BUILD_INFRA_TEXT.getSubmitSuccessMessage(profileInput.name, editProfile))
 
             if (handleSuccessRedirection) {
                 handleSuccessRedirection()

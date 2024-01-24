@@ -7,8 +7,13 @@ import BuildInfraProfileNameField from './BuildInfraProfileNameField'
 import { BUILD_INFRA_FORM_FIELDS, BUILD_INFRA_TEXT } from './constants'
 import { BuildInfraActionType, BuildInfraConfigFormProps, InheritingHeaderProps } from './types'
 
-const InheritingHeader = ({ defaultHeading, inhertingData, isInheriting, isDefaultProfile }: InheritingHeaderProps) => {
-    const inheritingDataString = inhertingData.map((data) => `${data.value} ${data.unit ?? ''}`).join(' - ')
+const InheritingHeader = ({
+    defaultHeading,
+    inheritingData,
+    isInheriting,
+    isDefaultProfile,
+}: InheritingHeaderProps) => {
+    const inheritingDataString = inheritingData.map((data) => `${data.value} ${data.unit ?? ''}`).join(' - ')
 
     if (isDefaultProfile || !isInheriting) {
         // For typing issues
@@ -33,7 +38,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
     handleProfileInputChange,
     isDefaultProfile,
     unitsMap,
-    confugrationContainerLabel: ConfigurationContainerLabel,
+    configurationContainerLabel,
 }) => {
     const currentConfigurations = profileInput?.configurations
 
@@ -65,7 +70,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
             )}
 
             <div className="flexbox-col dc__gap-12">
-                {ConfigurationContainerLabel}
+                {configurationContainerLabel}
 
                 <div className="w-100 flexbox-col dc__gap-16 br-4 dc__border-n1 p-16">
                     {BUILD_INFRA_FORM_FIELDS.map((field, index) => (
@@ -75,7 +80,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
                             heading={
                                 <InheritingHeader
                                     defaultHeading={field.heading}
-                                    inhertingData={field.actions.map(
+                                    inheritingData={field.actions.map(
                                         (action) => currentConfigurations[action.actionType],
                                     )}
                                     isInheriting={isInheritingProfileValues(field.actions)}
@@ -83,7 +88,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
                                 />
                             }
                             showDivider={index !== BUILD_INFRA_FORM_FIELDS.length - 1}
-                            isInherting={isInheritingProfileValues(field.actions)}
+                            isInheriting={isInheritingProfileValues(field.actions)}
                             handleProfileInputChange={handleProfileInputChange}
                             locator={field.locator}
                             isDefaultProfile={isDefaultProfile}

@@ -1,7 +1,7 @@
 // TODO: Remove these comment on API integration
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// import { get, post, put, trash } from '../../../Common'
+import { ROUTES, ResponseType, get, showError } from '../../../Common'
 import { CREATE_PROFILE_BASE_VALUE, CREATE_VIEW_CHECKED_CONFIGS } from './constants'
 import {
     BuildInfraConfigTypes,
@@ -16,7 +16,7 @@ import {
     BuildInfraUnitsMapType,
     ConfigurationUnitMapType,
     CreateBuildInfraProfileType,
-    CreateBuildInfraSerivcePayloadType,
+    CreateBuildInfraServicePayloadType,
     CreateBuildInfraServiceConfigurationType,
     GetBuildInfraProfileType,
     UpdateBuildInfraProfileType,
@@ -424,34 +424,27 @@ export const getBuildInfraProfileByName = async ({
     name,
     fromCreateView,
 }: GetBuildInfraProfileType): Promise<BuildInfraProfileResponseType> => {
-    // Adding a timeout to show the loader
-    // eslint-disable-next-line no-promise-executor-return
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    // TODO: Capture error for toast
+    try {
+        const response = await get(`${ROUTES.INFRA_CONFIG_PROFILE}/${name}`)
+        const {
+            result: { configurationUnits, defaultConfigurations, profile },
+        } = response as ResponseType<BuildInfraProfileAPIResponseType>
 
-    const response = await Promise.resolve(getSampleResponse2(name))
-    const { code, result } = response
-
-    if (code === 200 && result) {
-        const { configurationUnits, defaultConfigurations, profile } = result as BuildInfraProfileAPIResponseType
         return getTransformedBuildInfraProfileResponse({
             configurationUnits,
             defaultConfigurations,
             profile,
             fromCreateView,
         })
+    } catch (error) {
+        showError(error)
+        throw error
     }
-
-    return {
-        configurationUnits: null,
-        profile: null,
-    }
-    // return get(`${ROUTES}/${name}`)
 }
 
 const getBuildInfraProfilePayload = (
     profileInput: CreateBuildInfraProfileType['profileInput'],
-): CreateBuildInfraSerivcePayloadType => {
+): CreateBuildInfraServicePayloadType => {
     const currentConfigurations = profileInput.configurations
     const configurationKeys = Object.keys(currentConfigurations) as BuildInfraConfigTypes[]
     // would only keep the configurations with id or active flag as true
@@ -469,7 +462,7 @@ const getBuildInfraProfilePayload = (
         return acc
     }, [] as CreateBuildInfraServiceConfigurationType[])
 
-    const payload: CreateBuildInfraSerivcePayloadType = {
+    const payload: CreateBuildInfraServicePayloadType = {
         name: profileInput.name,
         description: profileInput.description,
         type: profileInput.type,

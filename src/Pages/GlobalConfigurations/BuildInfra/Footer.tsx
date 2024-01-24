@@ -5,14 +5,18 @@ import { FooterProps } from './types'
 import { ConditionalWrap, Progressing } from '../../../Common'
 
 const Footer: FunctionComponent<FooterProps> = ({ disabled, hideCancelButton, editProfile, loading }) => {
-    const disableMessage = disabled ? 'Valid input is required for all mandatory fields.' : 'Request in progress.'
+    const disableMessage = disabled
+        ? BUILD_INFRA_TEXT.SUBMIT_BUTTON_TIPPY.INVALID_INPUT
+        : BUILD_INFRA_TEXT.SUBMIT_BUTTON_TIPPY.REQUEST_IN_PROGRESS
 
     const getButtonText = () => {
         if (editProfile) {
             return BUILD_INFRA_TEXT.EDIT_SUBMIT
         }
+
         return BUILD_INFRA_TEXT.SAVE_SUBMIT
     }
+
     const renderTippy = (children: ReactElement) => (
         <Tippy content={disableMessage} placement="top" className="default-tt" arrow={false}>
             {children}

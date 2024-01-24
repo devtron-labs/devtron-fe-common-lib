@@ -22,7 +22,7 @@ const Descriptor = ({ additionalContainerClasses, breadCrumbs, children }: Descr
                 interactive
             >
                 <button
-                    className="p-0 h-20 dc__no-background dc__no-border dc__outline-none-imp"
+                    className="p-0 h-20 dc__no-background dc__no-border dc__tab-focus"
                     type="button"
                     aria-label="build-infra-info"
                 >

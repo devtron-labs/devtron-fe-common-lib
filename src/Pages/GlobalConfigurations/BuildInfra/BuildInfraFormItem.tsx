@@ -6,7 +6,7 @@ const BuildInfraFormItem: FunctionComponent<BuildInfraFormItemProps> = ({
     heading,
     marker: Marker,
     children,
-    isInherting,
+    isInheriting,
     showDivider,
     handleProfileInputChange,
     locator,
@@ -26,7 +26,7 @@ const BuildInfraFormItem: FunctionComponent<BuildInfraFormItemProps> = ({
         return (
             <Checkbox
                 onChange={handleActivationChange}
-                isChecked={!isInherting}
+                isChecked={!isInheriting}
                 value={CHECKBOX_VALUE.CHECKED}
                 dataTestId={`${locator}_marker`}
             />
@@ -42,7 +42,7 @@ const BuildInfraFormItem: FunctionComponent<BuildInfraFormItemProps> = ({
 
                     <div className="flexbox-col dc__gap-8 w-100">
                         {heading}
-                        {!isInherting && children}
+                        {!isInheriting && children}
                     </div>
                 </div>
             </div>

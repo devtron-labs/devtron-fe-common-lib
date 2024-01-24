@@ -178,15 +178,11 @@ export interface UseBuildInfraFormProps {
      */
     name?: string
     /**
-     * If false, wont make any call
-     */
-    isSuperAdmin?: boolean
-    /**
      * If true, would send put request else would create profile via post
      */
     editProfile?: boolean
     /**
-     * If true, call this on form submition success
+     * If true, call this on form submission success
      */
     handleSuccessRedirection?: () => void
 }
@@ -222,7 +218,7 @@ export interface BuildInfraFormItemProps extends Pick<BuildInfraFormFieldType, '
     /**
      * If true, means profile is inheriting values from other profile (e.g, default)
      */
-    isInherting?: boolean
+    isInheriting?: boolean
     /**
      * Would be false for last item
      */
@@ -251,7 +247,7 @@ export interface BuildInfraConfigFormProps
     extends Pick<UseBuildInfraFormResponseType, 'profileInput' | 'profileInputErrors' | 'handleProfileInputChange'> {
     isDefaultProfile?: boolean
     unitsMap?: BuildInfraProfileResponseType['configurationUnits']
-    confugrationContainerLabel?: ReactNode
+    configurationContainerLabel?: ReactNode
 }
 
 export interface BuildInfraFormActionProps extends BuildInfraActionType {
@@ -293,7 +289,7 @@ export interface CreateBuildInfraServiceConfigurationType {
     id?: number
 }
 
-export interface CreateBuildInfraSerivcePayloadType {
+export interface CreateBuildInfraServicePayloadType {
     name: string
     description: string
     type: BuildInfraProfileVariants
@@ -308,7 +304,7 @@ export interface BuildInfraInputFieldComponentProps {
 
 export interface InheritingHeaderProps {
     defaultHeading: BuildInfraFormFieldType['heading']
-    inhertingData: BuildInfraConfigValuesType[]
+    inheritingData: BuildInfraConfigValuesType[]
     isInheriting: boolean
     isDefaultProfile: boolean
 }

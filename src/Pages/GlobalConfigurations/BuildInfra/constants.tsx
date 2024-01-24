@@ -10,6 +10,7 @@ import {
     ProfileInputErrorType,
     BuildInfraProfileBase,
     BuildInfraProfileVariants,
+    HandleProfileInputChangeType,
 } from './types'
 
 export const BUILD_INFRA_TEXT = {
@@ -24,6 +25,22 @@ export const BUILD_INFRA_TEXT = {
     PROFILE_LABEL: 'Profile name',
     PROFILE_PLACEHOLDER: 'Eg. Java or Node',
     INHERITING_HEADING_DESCRIPTION: 'Inheriting from default',
+    SUBMIT_BUTTON_TIPPY: {
+        INVALID_INPUT: 'Valid input is required for all mandatory fields.',
+        REQUEST_IN_PROGRESS: 'Request in progress.',
+    },
+    VALIDATE_REQUEST_LIMIT: {
+        NEGATIVE_REQUEST: 'Request should be a positive number.',
+        NEGATIVE_LIMIT: 'Limit should be a positive number.',
+        REQUEST_LESS_THAN_LIMIT: 'Request should be less than or equal to limit.',
+    },
+    getInvalidActionMessage: (action: HandleProfileInputChangeType['action']) => `Invalid action type: ${action}`,
+    getSubmitSuccessMessage: (profileName: string, isEdited: boolean) =>
+        `${profileName} is ${isEdited ? 'updated' : 'created'}`,
+    PROFILE_NOT_FOUND: {
+        title: 'Profile not found',
+        subTitle: 'The profile you are looking for does not exist.',
+    },
 }
 
 export const BUILD_INFRA_BREADCRUMB: UseBreadcrumbProps = {
