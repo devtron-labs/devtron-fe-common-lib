@@ -10,9 +10,9 @@ import { ServerErrors } from '../../../Common'
 export enum BuildInfraConfigTypes {
     CPU_LIMIT = 'cpu_limit',
     CPU_REQUEST = 'cpu_request',
-    MEMORY_LIMIT = 'mem_limit',
-    MEMORY_REQUEST = 'mem_request',
-    BUILD_TIMEOUT = 'build_timeout',
+    MEMORY_LIMIT = 'memory_limit',
+    MEMORY_REQUEST = 'memory_request',
+    BUILD_TIMEOUT = 'timeout',
 }
 
 /**
@@ -29,15 +29,8 @@ export enum BuildInfraMetaConfigTypes {
 export enum BuildInfraLocators {
     CPU = 'cpu',
     MEMORY = 'memory',
-    BUILD_TIMEOUT = 'build_timeout',
-}
-
-export const BuildInfraLocatorsActionMap = {
-    [BuildInfraConfigTypes.BUILD_TIMEOUT]: BuildInfraLocators.BUILD_TIMEOUT,
-    [BuildInfraConfigTypes.CPU_LIMIT]: BuildInfraLocators.CPU,
-    [BuildInfraConfigTypes.CPU_REQUEST]: BuildInfraLocators.CPU,
-    [BuildInfraConfigTypes.MEMORY_LIMIT]: BuildInfraLocators.MEMORY,
-    [BuildInfraConfigTypes.MEMORY_REQUEST]: BuildInfraLocators.MEMORY,
+    // This name can be also different from BuildInfraConfigTypes[BUILD_TIMEOUT] in case we want to show different label
+    BUILD_TIMEOUT = 'timeout',
 }
 
 // FIXME: Derive this from BuildInfraLocators
@@ -49,6 +42,15 @@ export enum BuildInfraInheritActions {
     DE_ACTIVATE_MEMORY = `de_activate_memory`,
     ACTIVATE_BUILD_TIMEOUT = `activate_build_timeout`,
     DE_ACTIVATE_BUILD_TIMEOUT = `de_activate_build_timeout`,
+}
+
+// TODO: Better name would be BuildInfraConfigActionMap
+export const BuildInfraLocatorsActionMap = {
+    [BuildInfraConfigTypes.BUILD_TIMEOUT]: BuildInfraLocators.BUILD_TIMEOUT,
+    [BuildInfraConfigTypes.CPU_LIMIT]: BuildInfraLocators.CPU,
+    [BuildInfraConfigTypes.CPU_REQUEST]: BuildInfraLocators.CPU,
+    [BuildInfraConfigTypes.MEMORY_LIMIT]: BuildInfraLocators.MEMORY,
+    [BuildInfraConfigTypes.MEMORY_REQUEST]: BuildInfraLocators.MEMORY,
 }
 
 export enum BuildInfraProfileVariants {
@@ -316,7 +318,7 @@ export interface BuildInfraConfigResponseDataType {
 
 interface BaseBuildInfraProfileResponseType {
     defaultConfigurations: BuildInfraProfileConfigResponseDataType[]
-    configurationUnits: BuildInfraConfigResponseDataType[]
+    configurationUnits: BuildInfraUnitsMapType
 }
 
 export interface BuildInfraListResponseType extends BaseBuildInfraProfileResponseType {

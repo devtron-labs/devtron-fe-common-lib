@@ -33,6 +33,8 @@ export const BUILD_INFRA_TEXT = {
         NEGATIVE_REQUEST: 'Request should be a positive number.',
         NEGATIVE_LIMIT: 'Limit should be a positive number.',
         REQUEST_LESS_THAN_LIMIT: 'Request should be less than or equal to limit.',
+        REQUEST_TOO_BIG: 'Request is too big to compute.',
+        LIMIT_TOO_BIG: 'Limit is too big to compute.',
     },
     getInvalidActionMessage: (action: HandleProfileInputChangeType['action']) => `Invalid action type: ${action}`,
     getSubmitSuccessMessage: (profileName: string, isEdited: boolean) =>
@@ -108,6 +110,9 @@ export const PROFILE_INPUT_ERROR_FIELDS = {
         Object.keys({ ...BuildInfraConfigTypes, ...BuildInfraMetaConfigTypes }).map((key) => [key, null]),
     ),
 } as ProfileInputErrorType
+
+// All fields in BuildInfraConfigTypes are required and name in BuildInfraMetaConfigTypes is required
+export const REQUIRED_INPUT_FIELDS = [...Object.keys(BuildInfraConfigTypes), BuildInfraMetaConfigTypes.NAME]
 
 export const DEFAULT_PROFILE_NAME = 'default'
 

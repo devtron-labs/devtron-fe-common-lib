@@ -15,7 +15,7 @@ import {
     ValidateRequestLimitResponseType,
     ValidateRequestLimitType,
 } from './types'
-import { BUILD_INFRA_TEXT, DEFAULT_PROFILE_NAME, PROFILE_INPUT_ERROR_FIELDS } from './constants'
+import { BUILD_INFRA_TEXT, DEFAULT_PROFILE_NAME, PROFILE_INPUT_ERROR_FIELDS, REQUIRED_INPUT_FIELDS } from './constants'
 import {
     validateDescription,
     validateName,
@@ -67,6 +67,24 @@ export const validateRequestLimit = ({
         return requestLimitValidationResponse
     }
 
+    // TODO: Validation for big numbers
+    const isSafeRequestNumber = requestNumber * requestUnit < Number.MAX_SAFE_INTEGER
+    const isSafeLimitNumber = limitNumber * limitUnit < Number.MAX_SAFE_INTEGER
+
+    if (!isSafeRequestNumber) {
+        requestLimitValidationResponse.request = {
+            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.REQUEST_TOO_BIG,
+            isValid: false,
+        }
+    }
+
+    if (!isSafeLimitNumber) {
+        requestLimitValidationResponse.limit = {
+            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.LIMIT_TOO_BIG,
+            isValid: false,
+        }
+    }
+
     if (requestNumber * requestUnit > limitNumber * limitUnit) {
         requestLimitValidationResponse.request = {
             message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.REQUEST_LESS_THAN_LIMIT,
@@ -77,22 +95,40 @@ export const validateRequestLimit = ({
     return requestLimitValidationResponse
 }
 
+const getInitialProfileInputErrors = (fromCreateView: boolean): ProfileInputErrorType => {
+    if (fromCreateView) {
+        const initialProfileInputErrors = { ...PROFILE_INPUT_ERROR_FIELDS }
+        REQUIRED_INPUT_FIELDS.forEach((field) => {
+            initialProfileInputErrors[field] = ''
+        })
+        return initialProfileInputErrors
+    }
+
+    return {
+        ...PROFILE_INPUT_ERROR_FIELDS,
+    }
+}
+
 export const useBuildInfraForm = ({
     name,
     editProfile,
     handleSuccessRedirection,
 }: UseBuildInfraFormProps): UseBuildInfraFormResponseType => {
+    const fromCreateView = !name
+
     const [isLoading, profileResponse, responseError, reloadRequest] = useAsync(
         () =>
             getBuildInfraProfileByName({
                 name: name ?? DEFAULT_PROFILE_NAME,
-                fromCreateView: !name,
+                fromCreateView,
             }),
         [name],
     )
     // If configuration is existing and is active then use it else use default from profileResponse
     const [profileInput, setProfileInput] = useState<BuildInfraProfileData>(null)
-    const [profileInputErrors, setProfileInputErrors] = useState<ProfileInputErrorType>(PROFILE_INPUT_ERROR_FIELDS)
+    const [profileInputErrors, setProfileInputErrors] = useState<ProfileInputErrorType>({
+        ...PROFILE_INPUT_ERROR_FIELDS,
+    })
     const [loadingActionRequest, setLoadingActionRequest] = useState<boolean>(false)
 
     useEffect(() => {
@@ -100,7 +136,8 @@ export const useBuildInfraForm = ({
             setProfileInput({
                 ...profileResponse.profile,
             })
-            setProfileInputErrors(PROFILE_INPUT_ERROR_FIELDS)
+
+            setProfileInputErrors(getInitialProfileInputErrors(fromCreateView))
         }
     }, [profileResponse, isLoading])
 
@@ -127,7 +164,6 @@ export const useBuildInfraForm = ({
                     ...currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT],
                     value,
                     unit,
-                    active: true,
                 }
                 const { request, limit } = validateRequestLimit({
                     request: {
@@ -149,7 +185,6 @@ export const useBuildInfraForm = ({
                     ...currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST],
                     value,
                     unit,
-                    active: true,
                 }
                 const { request, limit } = validateRequestLimit({
                     request: {
@@ -172,7 +207,6 @@ export const useBuildInfraForm = ({
                     ...currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT],
                     value,
                     unit,
-                    active: true,
                 }
                 const { request, limit } = validateRequestLimit({
                     request: {
@@ -195,7 +229,6 @@ export const useBuildInfraForm = ({
                     ...currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST],
                     value,
                     unit,
-                    active: true,
                 }
                 const { request, limit } = validateRequestLimit({
                     request: {
@@ -214,14 +247,13 @@ export const useBuildInfraForm = ({
             }
 
             case BuildInfraConfigTypes.BUILD_TIMEOUT: {
-                currentConfiguration.build_timeout = {
-                    ...currentConfiguration.build_timeout,
+                currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT] = {
+                    ...currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT],
                     value,
                     unit,
-                    active: true,
                 }
 
-                currentInputErrors.build_timeout = validateRequiredPositiveNumber(value).message
+                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = validateRequiredPositiveNumber(value).message
                 break
             }
 
@@ -261,24 +293,24 @@ export const useBuildInfraForm = ({
                 break
 
             case BuildInfraInheritActions.ACTIVATE_BUILD_TIMEOUT:
-                currentConfiguration.build_timeout = {
-                    ...lastSavedConfiguration.build_timeout,
-                    value: lastSavedConfiguration.build_timeout.value,
-                    unit: lastSavedConfiguration.build_timeout.unit,
+                currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT] = {
+                    ...lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT],
+                    value: lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].value,
+                    unit: lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].unit,
                     active: true,
                 }
-                currentInputErrors.build_timeout = null
+                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = null
                 break
 
             case BuildInfraInheritActions.DE_ACTIVATE_BUILD_TIMEOUT:
                 // Reverting the value and unit to defaultValues
-                currentConfiguration.build_timeout = {
-                    ...currentConfiguration.build_timeout,
-                    value: lastSavedConfiguration.build_timeout.defaultValue.value,
-                    unit: lastSavedConfiguration.build_timeout.defaultValue.unit,
+                currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT] = {
+                    ...currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT],
+                    value: lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].defaultValue.value,
+                    unit: lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].defaultValue.unit,
                     active: false,
                 }
-                currentInputErrors.build_timeout = null
+                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = null
                 break
 
             case BuildInfraInheritActions.DE_ACTIVATE_CPU:

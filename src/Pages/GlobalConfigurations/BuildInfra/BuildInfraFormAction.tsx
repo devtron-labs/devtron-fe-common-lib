@@ -55,9 +55,8 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                     <input
                         data-testid={actionType}
                         name={actionType}
-                        // TODO: Ask whether to use number or text, BTW have handled the validation for string as well
                         type="number"
-                        step="any"
+                        step={2}
                         min={0}
                         className="form__input dc__no-right-border dc__no-right-radius"
                         placeholder={placeholder}
