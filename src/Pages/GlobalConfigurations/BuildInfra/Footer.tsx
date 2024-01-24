@@ -27,7 +27,7 @@ const Footer: FunctionComponent<FooterProps> = ({ disabled, hideCancelButton, ed
         <div className="flex pl pr pb pt h-64 dc__gap-12 dc__border-top dc__content-start">
             <ConditionalWrap condition={disabled || loading} wrap={renderTippy}>
                 <div className="flexbox dc__align-items-center">
-                    <button type="submit" className="cta submit h-32 flex" disabled={disabled}>
+                    <button type="submit" className="cta submit h-32 flex" disabled={disabled || loading}>
                         {loading ? <Progressing size={16} /> : getButtonText()}
                     </button>
                 </div>

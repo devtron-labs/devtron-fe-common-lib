@@ -1,7 +1,7 @@
 // TODO: Remove these comment on API integration
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ROUTES, ResponseType, get, showError } from '../../../Common'
+import { ROUTES, ResponseType, get, put, showError } from '../../../Common'
 import { CREATE_PROFILE_BASE_VALUE, CREATE_VIEW_CHECKED_CONFIGS } from './constants'
 import {
     BuildInfraConfigTypes,
@@ -150,18 +150,11 @@ const getBuildInfraProfilePayload = (
     return payload
 }
 
-export const updateBuildInfraProfile = async ({ name, profileInput }: UpdateBuildInfraProfileType) => {
-    // Adding a timeout to show the loader
-    // eslint-disable-next-line no-promise-executor-return
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+export const updateBuildInfraProfile = ({ name, profileInput }: UpdateBuildInfraProfileType) => {
     const payload = getBuildInfraProfilePayload(profileInput)
     // TODO: Would remove this
     console.log(payload, 'edit payload')
-    return Promise.resolve({
-        code: 200,
-        result: profileInput,
-    })
-    // return put(`${ROUTES}/${name}`, payload)
+    return put(`${ROUTES.INFRA_CONFIG_PROFILE}/${name}`, payload)
 }
 
 export const createBuildInfraProfile = async ({ profileInput }: CreateBuildInfraProfileType) => {

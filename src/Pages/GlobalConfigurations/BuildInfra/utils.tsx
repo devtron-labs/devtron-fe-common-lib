@@ -1,5 +1,4 @@
-import { FormEvent, cloneElement, useEffect, useState } from 'react'
-import { components } from 'react-select'
+import { FormEvent, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { showError, useAsync } from '../../../Common'
 import { getBuildInfraProfileByName, createBuildInfraProfile, updateBuildInfraProfile } from './services'
@@ -15,7 +14,13 @@ import {
     ValidateRequestLimitResponseType,
     ValidateRequestLimitType,
 } from './types'
-import { BUILD_INFRA_TEXT, DEFAULT_PROFILE_NAME, PROFILE_INPUT_ERROR_FIELDS, REQUIRED_INPUT_FIELDS } from './constants'
+import {
+    BUILD_INFRA_INPUT_CONSTRAINTS,
+    BUILD_INFRA_TEXT,
+    DEFAULT_PROFILE_NAME,
+    PROFILE_INPUT_ERROR_FIELDS,
+    REQUIRED_INPUT_FIELDS,
+} from './constants'
 import {
     validateDescription,
     validateName,
@@ -31,6 +36,8 @@ export const validateRequestLimit = ({
     // Request <= Limit
     // Request and Limit should be numbers can be decimals
     // Request and Limit should be positive numbers
+    // Request and Limit should be less than Number.MAX_SAFE_INTEGER
+    // Request and Limit should can have at most BUILD_INFRA_INPUT_CONSTRAINTS.DECIMAL_PLACES
     // Both request and limit should be there
     const requestNumber = Number(request.value)
     const limitNumber = Number(limit.value)
@@ -67,7 +74,6 @@ export const validateRequestLimit = ({
         return requestLimitValidationResponse
     }
 
-    // TODO: Validation for big numbers
     const isSafeRequestNumber = requestNumber * requestUnit < Number.MAX_SAFE_INTEGER
     const isSafeLimitNumber = limitNumber * limitUnit < Number.MAX_SAFE_INTEGER
 
@@ -76,6 +82,8 @@ export const validateRequestLimit = ({
             message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.REQUEST_TOO_BIG,
             isValid: false,
         }
+
+        return requestLimitValidationResponse
     }
 
     if (!isSafeLimitNumber) {
@@ -83,6 +91,29 @@ export const validateRequestLimit = ({
             message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.LIMIT_TOO_BIG,
             isValid: false,
         }
+
+        return requestLimitValidationResponse
+    }
+
+    // only two decimal places are allowed
+    const requestDecimalPlaces = String(request.value).split('.')[1]?.length ?? 0
+    const limitDecimalPlaces = String(limit.value).split('.')[1]?.length ?? 0
+
+    if (requestDecimalPlaces > BUILD_INFRA_INPUT_CONSTRAINTS.DECIMAL_PLACES) {
+        requestLimitValidationResponse.request = {
+            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.REQUEST_DECIMAL_PLACES,
+            isValid: false,
+        }
+
+        return requestLimitValidationResponse
+    }
+    if (limitDecimalPlaces > BUILD_INFRA_INPUT_CONSTRAINTS.DECIMAL_PLACES) {
+        requestLimitValidationResponse.limit = {
+            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.LIMIT_DECIMAL_PLACES,
+            isValid: false,
+        }
+
+        return requestLimitValidationResponse
     }
 
     if (requestNumber * requestUnit > limitNumber * limitUnit) {
@@ -404,26 +435,23 @@ const getOptionBackgroundColor = (isFocused: boolean, isSelected: boolean): stri
 
 export const unitSelectorStyles = () =>
     getCommonSelectStyle({
-        menuList: (base) => ({
-            ...base,
-            position: 'relative',
-            paddingTop: 0,
-            paddingBottom: '4px',
-            width: '124px',
-            maxHeight: '250px',
-            cursor: 'pointer',
-        }),
-        control: (base) => ({
+        control: (base, state) => ({
             ...base,
             borderRadius: 0,
             backgroundColor: 'var(--N0)',
-            borderLeft: '1px solid var(--N200)',
-            gap: '8px',
-            padding: '0 8px',
+            border: state.isFocused ? '1px solid var(--B500)' : '1px solid var(--N200)',
             alignItems: 'center',
             cursor: 'pointer',
             borderTopRightRadius: '4px',
             borderBottomRightRadius: '4px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            outline: 'none',
+            boxShadow: 'none',
+            '&:hover': {
+                border: '1px solid var(--N400)',
+            },
         }),
         indicatorContainer: (base) => ({
             ...base,
@@ -448,28 +476,14 @@ export const unitSelectorStyles = () =>
         }),
         valueContainer: (base) => ({
             ...base,
-            padding: '2px 0px 2px 8px',
-            display: 'flex',
-            height: '36px',
+            color: 'var(--N900)',
+            fontSize: '13px',
+            fontWeight: '400',
+            lineHeight: '20px',
+        }),
+        menuList: (base) => ({
+            ...base,
+            maxHeight: '164px',
+            height: '100%',
         }),
     })
-
-// Export options with Tippy
-
-// TODO: ADD Tippy
-export const UnitSelectorValueContainer = ({ selectProps, children, ...restProps }: any) => {
-    const valueContainerProps = {
-        selectProps,
-        children,
-        ...restProps,
-    }
-
-    return (
-        <components.ValueContainer {...valueContainerProps}>
-            <span className="cn-9 fs-13 dc__ellipsis-right m-0 flex dc__align-items-center">
-                {selectProps?.value?.label}
-            </span>
-            {cloneElement(children[1])}
-        </components.ValueContainer>
-    )
-}

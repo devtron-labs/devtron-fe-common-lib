@@ -2,7 +2,8 @@ import { FormEvent, FunctionComponent } from 'react'
 import ReactSelect from 'react-select'
 import { BuildInfraFormActionProps } from './types'
 import { OptionType } from '../../../Common'
-import { UnitSelectorValueContainer, unitSelectorStyles } from './utils'
+import { unitSelectorStyles } from './utils'
+import { BUILD_INFRA_INPUT_CONSTRAINTS } from './constants'
 import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
 
 /**
@@ -56,8 +57,8 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         data-testid={actionType}
                         name={actionType}
                         type="number"
-                        step={2}
-                        min={0}
+                        step={BUILD_INFRA_INPUT_CONSTRAINTS.STEP}
+                        min={BUILD_INFRA_INPUT_CONSTRAINTS.MIN}
                         className="form__input dc__no-right-border dc__no-right-radius"
                         placeholder={placeholder}
                         value={currentValue}
@@ -71,7 +72,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                 {profileUnitsMap && (
                     <ReactSelect
                         name={`${actionType}-unit`}
-                        className="bcn-0 dc__mxw-90"
+                        className="bcn-0 dc__mxw-120"
                         options={unitOptions}
                         value={currentUnit}
                         onChange={handleUnitChange}
@@ -79,7 +80,6 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         components={{
                             IndicatorSeparator: null,
                             ClearIndicator: null,
-                            ValueContainer: UnitSelectorValueContainer,
                         }}
                         styles={unitSelectorStyles()}
                     />

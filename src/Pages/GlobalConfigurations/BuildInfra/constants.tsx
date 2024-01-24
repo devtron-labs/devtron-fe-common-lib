@@ -35,6 +35,8 @@ export const BUILD_INFRA_TEXT = {
         REQUEST_LESS_THAN_LIMIT: 'Request should be less than or equal to limit.',
         REQUEST_TOO_BIG: 'Request is too big to compute.',
         LIMIT_TOO_BIG: 'Limit is too big to compute.',
+        REQUEST_DECIMAL_PLACES: 'Request should be upto 2 decimal places.',
+        LIMIT_DECIMAL_PLACES: 'Limit should be upto 2 decimal places.',
     },
     getInvalidActionMessage: (action: HandleProfileInputChangeType['action']) => `Invalid action type: ${action}`,
     getSubmitSuccessMessage: (profileName: string, isEdited: boolean) =>
@@ -126,4 +128,10 @@ export const CREATE_PROFILE_BASE_VALUE: BuildInfraProfileBase = {
 export const CREATE_VIEW_CHECKED_CONFIGS = {
     [BuildInfraConfigTypes.CPU_REQUEST]: true,
     [BuildInfraConfigTypes.CPU_LIMIT]: true,
+}
+
+export const BUILD_INFRA_INPUT_CONSTRAINTS = {
+    STEP: 0.01,
+    MIN: 0,
+    DECIMAL_PLACES: 2,
 }
