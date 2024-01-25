@@ -143,7 +143,6 @@ const getBuildInfraProfilePayload = (
 
     const payload: CreateBuildInfraServicePayloadType = {
         name: profileInput.name,
-        id: profileInput.id,
         description: profileInput.description,
         type: profileInput.type,
         configurations,

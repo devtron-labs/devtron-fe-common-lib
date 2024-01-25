@@ -36,17 +36,19 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
         handleProfileInputChange({ action: actionType, data })
     }
 
-    // would also sort the units in order of conversionFactor
-    const { unitOptions, currentUnit } = useMemo(() => {
+    const unitOptions = useMemo(() => {
         const units =
             Object.values(profileUnitsMap)?.map((unit) => ({
                 label: unit.name,
                 value: String(unit.conversionFactor),
             })) ?? []
-
-        const _currentUnit = units.find((unit) => unit.label === currentUnitName)
-        return { unitOptions: units.sort((a, b) => Number(a.value) - Number(b.value)), currentUnit: _currentUnit }
+        return units.sort((a, b) => Number(a.value) - Number(b.value))
     }, [profileUnitsMap])
+
+    const currentUnit = useMemo(
+        () => unitOptions.find((unit) => unit.label === currentUnitName),
+        [unitOptions, currentUnitName],
+    )
 
     return (
         <div className="flexbox-col dc__gap-4 dc__mxw-420 w-100 dc__align-start">
@@ -59,7 +61,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
             <div className="w-100 flexbox dc__align-items-center">
                 <div className="flex-grow-1">
                     <input
-                        data-testid={actionType}
+                        data-testid={`${actionType}-input-field`}
                         name={actionType}
                         type="number"
                         step={BUILD_INFRA_INPUT_CONSTRAINTS.STEP}
