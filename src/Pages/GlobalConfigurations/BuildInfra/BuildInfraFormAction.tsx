@@ -1,4 +1,4 @@
-import { FormEvent, FunctionComponent } from 'react'
+import { FormEvent, FunctionComponent, useMemo } from 'react'
 import ReactSelect from 'react-select'
 import { BuildInfraFormActionProps } from './types'
 import { OptionType } from '../../../Common'
@@ -36,12 +36,17 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
         handleProfileInputChange({ action: actionType, data })
     }
 
-    const unitOptions: OptionType[] =
-        Object.values(profileUnitsMap)?.map((unit) => ({
-            label: unit.name,
-            value: unit.name,
-        })) ?? []
-    const currentUnit = unitOptions.find((unit) => unit.value === currentUnitName)
+    // would also sort the units in order of conversionFactor
+    const { unitOptions, currentUnit } = useMemo(() => {
+        const units =
+            Object.values(profileUnitsMap)?.map((unit) => ({
+                label: unit.name,
+                value: String(unit.conversionFactor),
+            })) ?? []
+
+        const _currentUnit = units.find((unit) => unit.label === currentUnitName)
+        return { unitOptions: units.sort((a, b) => Number(a.value) - Number(b.value)), currentUnit: _currentUnit }
+    }, [profileUnitsMap])
 
     return (
         <div className="flexbox-col dc__gap-4 dc__mxw-420 w-100 dc__align-start">

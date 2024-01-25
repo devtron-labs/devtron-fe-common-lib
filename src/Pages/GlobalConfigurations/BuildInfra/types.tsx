@@ -292,6 +292,7 @@ export interface CreateBuildInfraServiceConfigurationType {
 }
 
 export interface CreateBuildInfraServicePayloadType {
+    id: number
     name: string
     description: string
     type: BuildInfraProfileVariants

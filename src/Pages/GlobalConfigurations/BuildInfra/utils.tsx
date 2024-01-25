@@ -74,27 +74,6 @@ export const validateRequestLimit = ({
         return requestLimitValidationResponse
     }
 
-    const isSafeRequestNumber = requestNumber * requestUnit < Number.MAX_SAFE_INTEGER
-    const isSafeLimitNumber = limitNumber * limitUnit < Number.MAX_SAFE_INTEGER
-
-    if (!isSafeRequestNumber) {
-        requestLimitValidationResponse.request = {
-            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.REQUEST_TOO_BIG,
-            isValid: false,
-        }
-
-        return requestLimitValidationResponse
-    }
-
-    if (!isSafeLimitNumber) {
-        requestLimitValidationResponse.limit = {
-            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.LIMIT_TOO_BIG,
-            isValid: false,
-        }
-
-        return requestLimitValidationResponse
-    }
-
     // only two decimal places are allowed
     const requestDecimalPlaces = String(request.value).split('.')[1]?.length ?? 0
     const limitDecimalPlaces = String(limit.value).split('.')[1]?.length ?? 0
@@ -116,11 +95,27 @@ export const validateRequestLimit = ({
         return requestLimitValidationResponse
     }
 
-    if (requestNumber * requestUnit > limitNumber * limitUnit) {
+    const limitRequestUnitFactor = limitUnit / requestUnit
+    const limitRequestFactor = limitNumber / requestNumber
+
+    const isProductSafe = limitRequestUnitFactor * limitRequestFactor <= Number.MAX_SAFE_INTEGER
+
+    if (!isProductSafe) {
+        requestLimitValidationResponse.request = {
+            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.CAN_NOT_COMPUTE,
+            isValid: false,
+        }
+
+        return requestLimitValidationResponse
+    }
+
+    if (limitRequestUnitFactor * limitRequestFactor < 1) {
         requestLimitValidationResponse.request = {
             message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.REQUEST_LESS_THAN_LIMIT,
             isValid: false,
         }
+
+        return requestLimitValidationResponse
     }
 
     return requestLimitValidationResponse
@@ -208,6 +203,7 @@ export const useBuildInfraForm = ({
                     },
                     unitsMap: profileResponse.configurationUnits[BuildInfraConfigTypes.CPU_LIMIT],
                 })
+
                 currentInputErrors[BuildInfraConfigTypes.CPU_LIMIT] = limit.message
                 currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = request.message
                 break
@@ -229,6 +225,7 @@ export const useBuildInfraForm = ({
                     },
                     unitsMap: profileResponse.configurationUnits[BuildInfraConfigTypes.CPU_LIMIT],
                 })
+
                 currentInputErrors[BuildInfraConfigTypes.CPU_LIMIT] = limit.message
                 currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = request.message
                 break
@@ -251,6 +248,7 @@ export const useBuildInfraForm = ({
                     },
                     unitsMap: profileResponse.configurationUnits[BuildInfraConfigTypes.MEMORY_LIMIT],
                 })
+
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = limit.message
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = request.message
                 break
@@ -273,6 +271,7 @@ export const useBuildInfraForm = ({
                     },
                     unitsMap: profileResponse.configurationUnits[BuildInfraConfigTypes.MEMORY_LIMIT],
                 })
+
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = limit.message
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = request.message
                 break
@@ -320,6 +319,7 @@ export const useBuildInfraForm = ({
                     unit: lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST].unit,
                     active: true,
                 }
+
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = null
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = null
                 break
@@ -331,6 +331,7 @@ export const useBuildInfraForm = ({
                     unit: lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].unit,
                     active: true,
                 }
+
                 currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = null
                 break
 
@@ -342,6 +343,7 @@ export const useBuildInfraForm = ({
                     unit: lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].defaultValue.unit,
                     active: false,
                 }
+
                 currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = null
                 break
 
@@ -358,6 +360,7 @@ export const useBuildInfraForm = ({
                     unit: lastSavedConfiguration[BuildInfraConfigTypes.CPU_REQUEST].defaultValue.unit,
                     active: false,
                 }
+
                 currentInputErrors[BuildInfraConfigTypes.CPU_LIMIT] = null
                 currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = null
                 break
@@ -375,6 +378,7 @@ export const useBuildInfraForm = ({
                     unit: lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST].defaultValue.unit,
                     active: false,
                 }
+
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = null
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = null
                 break
@@ -440,7 +444,7 @@ export const unitSelectorStyles = () =>
             ...base,
             borderRadius: 0,
             backgroundColor: 'var(--N0)',
-            border: state.isFocused ? '1px solid var(--B500)' : '1px solid var(--N200)',
+            border: state.isFocused ? '1px solid var(--B500) !important' : '1px solid var(--N200)',
             alignItems: 'center',
             cursor: 'pointer',
             borderTopRightRadius: '4px',

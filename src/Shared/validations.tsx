@@ -59,7 +59,7 @@ export const validateRequiredPositiveNumber = (value: string | Number): Validati
         }
     }
 
-    if (Number(value) < 0) {
+    if (Number(value) <= 0) {
         return {
             isValid: false,
             message: 'Only positive numbers are allowed',
