@@ -13,7 +13,6 @@ export const translateString = (stringToTranslate: TranslatableString, params?: 
     }
 }
 
-// NOTE: If you are changing this please make sure BuildInfra selects are also working fine
 export const getCommonSelectStyle = (styleOverrides = {}) => {
     return {
         menuList: (base) => ({

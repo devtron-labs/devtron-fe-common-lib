@@ -20,6 +20,7 @@ const APIResponseHandler = ({
     }
 
     if (error) {
+        // TODO: Can extend ErrorScreenNotFound
         if (error?.code === 404) {
             return (
                 <GenericEmptyState

@@ -1,9 +1,9 @@
 import { ReactNode } from 'react'
-import { ProgressingProps, ReloadType, ServerErrors } from '../../../Common'
+import { GenericEmptyStateType, ProgressingProps, ReloadType, ServerErrors } from '../../../Common'
 
 export interface EmptyPageTextType {
-    title?: string
-    subTitle?: string
+    title?: GenericEmptyStateType['title']
+    subTitle?: GenericEmptyStateType['subTitle']
 }
 
 export interface APIResponseHandlerProps {
