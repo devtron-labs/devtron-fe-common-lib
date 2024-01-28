@@ -1,7 +1,4 @@
-// TODO: Remove these comment on API integration
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { ROUTES, ResponseType, get, put, showError } from '../../../Common'
+import { ROUTES, ResponseType, get, post, put, showError } from '../../../Common'
 import { CREATE_PROFILE_BASE_VALUE, CREATE_VIEW_CHECKED_CONFIGS } from './constants'
 import {
     BuildInfraConfigTypes,
@@ -12,9 +9,6 @@ import {
     BuildInfraProfileResponseDataType,
     BuildInfraProfileResponseType,
     BuildInfraProfileTransformerType,
-    BuildInfraProfileVariants,
-    BuildInfraUnitsMapType,
-    ConfigurationUnitMapType,
     CreateBuildInfraProfileType,
     CreateBuildInfraServicePayloadType,
     CreateBuildInfraServiceConfigurationType,
@@ -59,10 +53,15 @@ export const getTransformedBuildInfraProfileResponse = ({
             return acc
         }, {}) ?? {}
 
-    // traversing defaultConfigurationsMap and if key is present in profileConfigurations then use that else use defaultConfigurationsMap
     const configurations = Object.keys(defaultConfigurationsMap).reduce((acc, key) => {
         const defaultConfiguration: BuildInfraConfigurationType = defaultConfigurationsMap[key]
         const profileConfiguration = profileConfigurations[key]
+        // Pushing default value in configurations in case we de-activate the configuration
+        acc[key].defaultValue = {
+            value: defaultConfiguration.value,
+            unit: defaultConfiguration.unit,
+        }
+
         if (fromCreateView) {
             acc[key] = {
                 key,
@@ -70,22 +69,22 @@ export const getTransformedBuildInfraProfileResponse = ({
                 unit: defaultConfiguration.unit,
                 active: CREATE_VIEW_CHECKED_CONFIGS[key] ?? false,
             }
-        } else if (profileConfiguration) {
-            acc[key] = profileConfiguration
-        } else {
-            // Removing id from it since we do not have a configuration
-            // While generating payload, we will check on the basis of id and active flag.
-            acc[key] = {
-                key,
-                value: defaultConfiguration.value,
-                // saving profile name as undefined and this would be a check, if we are deriving from default or not
-                unit: defaultConfiguration.unit,
-                active: false,
-            }
+            return acc
         }
-        acc[key].defaultValue = {
+
+        if (profileConfiguration) {
+            acc[key] = profileConfiguration
+            return acc
+        }
+
+        // Removing id from it since we do not have a configuration
+        // While generating payload, we will check on the basis of id and active flag.
+        acc[key] = {
+            key,
             value: defaultConfiguration.value,
+            // saving profile name as undefined and this would be a check, if we are deriving from default or not
             unit: defaultConfiguration.unit,
+            active: false,
         }
         return acc
     }, {} as BuildInfraConfigurationMapType)
@@ -131,6 +130,7 @@ const getBuildInfraProfilePayload = (
         const configuration = currentConfigurations[key]
         if (configuration.id || configuration.active) {
             acc.push({
+                // TODO: Ask maybe can send 0 instead of null
                 id: configuration.id,
                 key,
                 value: Number(configuration.value),
@@ -152,32 +152,10 @@ const getBuildInfraProfilePayload = (
 
 export const updateBuildInfraProfile = ({ name, profileInput }: UpdateBuildInfraProfileType) => {
     const payload = getBuildInfraProfilePayload(profileInput)
-    // TODO: Would remove this
-    console.log(payload, 'edit payload')
     return put(`${ROUTES.INFRA_CONFIG_PROFILE}/${name}`, payload)
 }
 
 export const createBuildInfraProfile = async ({ profileInput }: CreateBuildInfraProfileType) => {
-    // Adding a timeout to show the loader
-    // eslint-disable-next-line no-promise-executor-return
-    await new Promise((resolve) => setTimeout(resolve, 1000))
     const payload = getBuildInfraProfilePayload(profileInput)
-    // TODO: Remove this
-    console.log(payload, 'create payload')
-    return Promise.resolve({
-        code: 200,
-        result: profileInput,
-    })
-    // return post(`${ROUTES}/${name}`, payload)
-}
-
-export const deleteBuildInfraProfileByName = async (name: string) => {
-    // Adding a timeout to show the loader
-    // eslint-disable-next-line no-promise-executor-return
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    return Promise.resolve({
-        code: 200,
-        result: null,
-    })
-    // return trash(`${ROUTES}/${name}`)
+    return post(ROUTES.INFRA_CONFIG_PROFILE, payload)
 }

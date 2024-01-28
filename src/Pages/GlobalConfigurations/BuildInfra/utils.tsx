@@ -41,8 +41,8 @@ export const validateRequestLimit = ({
     // Both request and limit should be there
     const requestNumber = Number(request.value)
     const limitNumber = Number(limit.value)
-    const requestUnit = Number(unitsMap[request.unit].conversionFactor)
-    const limitUnit = Number(unitsMap[limit.unit].conversionFactor)
+    const requestUnit = Number(unitsMap[request.unit]?.conversionFactor)
+    const limitUnit = Number(unitsMap[limit.unit]?.conversionFactor)
 
     const requestLimitValidationResponse: ValidateRequestLimitResponseType = {
         request: {
@@ -95,12 +95,14 @@ export const validateRequestLimit = ({
         return requestLimitValidationResponse
     }
 
+    // Assuming requestUnit and requestNumber are not 0
+    // TODO: Communicate this assumption to the backend
     const limitRequestUnitFactor = limitUnit / requestUnit
     const limitRequestFactor = limitNumber / requestNumber
 
-    const isProductSafe = limitRequestUnitFactor * limitRequestFactor <= Number.MAX_SAFE_INTEGER
+    const isDifferenceBigNumber = limitRequestUnitFactor * limitRequestFactor <= Number.MAX_SAFE_INTEGER
 
-    if (!isProductSafe) {
+    if (!isDifferenceBigNumber) {
         requestLimitValidationResponse.request = {
             message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.CAN_NOT_COMPUTE,
             isValid: false,
@@ -393,6 +395,17 @@ export const useBuildInfraForm = ({
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        // Since considering '' as a valid error message
+        const hasErrors =
+            Object.keys(profileInputErrors).filter(
+                (item) => profileInputErrors[item] !== null && profileInputErrors[item] !== undefined,
+            ).length > 0
+
+        if (hasErrors) {
+            toast.error(BUILD_INFRA_TEXT.INVALID_FORM_MESSAGE)
+            return
+        }
+
         setLoadingActionRequest(true)
         try {
             if (editProfile) {

@@ -1,4 +1,5 @@
 import { ErrorScreenNotAuthorized, GenericEmptyState, Progressing, Reload } from '../../../Common'
+import { NOT_FOUND_DEFAULT_TEXT } from './constants'
 import { APIResponseHandlerProps } from './types'
 
 const APIResponseHandler = ({
@@ -24,8 +25,8 @@ const APIResponseHandler = ({
         if (error?.code === 404) {
             return (
                 <GenericEmptyState
-                    title={notFoundText?.title ?? 'Data not found'}
-                    subTitle={notFoundText?.subTitle ?? 'The data you are looking for does not exist'}
+                    title={notFoundText?.title ?? NOT_FOUND_DEFAULT_TEXT.title}
+                    subTitle={notFoundText?.subTitle ?? NOT_FOUND_DEFAULT_TEXT.subTitle}
                 />
             )
         }

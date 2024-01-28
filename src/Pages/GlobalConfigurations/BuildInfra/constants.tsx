@@ -13,6 +13,12 @@ import {
     HandleProfileInputChangeType,
 } from './types'
 
+export const BUILD_INFRA_INPUT_CONSTRAINTS = {
+    STEP: 0.01,
+    MIN: 0,
+    DECIMAL_PLACES: 2,
+} as const
+
 export const BUILD_INFRA_TEXT = {
     HEADING: 'Build Infra Configuration',
     EDIT_SUBMIT: 'Save changes',
@@ -30,21 +36,23 @@ export const BUILD_INFRA_TEXT = {
         REQUEST_IN_PROGRESS: 'Request in progress.',
     },
     VALIDATE_REQUEST_LIMIT: {
+        // Might use the constants from BUILD_INFRA_INPUT_CONSTRAINTS even for NEGATIVE_REQUEST and NEGATIVE_LIMIT
         NEGATIVE_REQUEST: 'Request should be a positive number.',
         NEGATIVE_LIMIT: 'Limit should be a positive number.',
         REQUEST_LESS_THAN_LIMIT: 'Request should be less than or equal to limit.',
         CAN_NOT_COMPUTE: 'Request and limit value diff are too high to validate.',
-        REQUEST_DECIMAL_PLACES: 'Request should be upto 2 decimal places.',
-        LIMIT_DECIMAL_PLACES: 'Limit should be upto 2 decimal places.',
+        REQUEST_DECIMAL_PLACES: `Request should be upto ${BUILD_INFRA_INPUT_CONSTRAINTS.DECIMAL_PLACES} decimal places.`,
+        LIMIT_DECIMAL_PLACES: `Limit should be upto ${BUILD_INFRA_INPUT_CONSTRAINTS.DECIMAL_PLACES} decimal places.`,
     },
     getInvalidActionMessage: (action: HandleProfileInputChangeType['action']) => `Invalid action type: ${action}`,
     getSubmitSuccessMessage: (profileName: string, isEdited: boolean) =>
-        `${profileName} is ${isEdited ? 'updated' : 'created'}`,
+        `${profileName} profile is ${isEdited ? 'updated' : 'created'}`,
     PROFILE_NOT_FOUND: {
         title: 'Profile not found',
         subTitle: 'The profile you are looking for does not exist.',
     },
-}
+    INVALID_FORM_MESSAGE: 'Valid input is required for all mandatory fields.',
+} as const
 
 export const BUILD_INFRA_BREADCRUMB: UseBreadcrumbProps = {
     alias: {
@@ -105,17 +113,14 @@ export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
     },
 ]
 
-// TODO: Handle the case of create profile to disable save button initially and enable it when all the fields are filled
-export const PROFILE_INPUT_ERROR_FIELDS = {
-    ...Object.fromEntries(
-        Object.keys({ ...BuildInfraConfigTypes, ...BuildInfraMetaConfigTypes }).map((key) => [key, null]),
-    ),
-} as ProfileInputErrorType
+export const PROFILE_INPUT_ERROR_FIELDS = Object.fromEntries(
+    Object.keys({ ...BuildInfraConfigTypes, ...BuildInfraMetaConfigTypes }).map((key) => [key, null]),
+) as ProfileInputErrorType
 
 // All fields in BuildInfraConfigTypes are required and name in BuildInfraMetaConfigTypes is required
 export const REQUIRED_INPUT_FIELDS = [...Object.keys(BuildInfraConfigTypes), BuildInfraMetaConfigTypes.NAME]
 
-export const DEFAULT_PROFILE_NAME = 'default'
+export const DEFAULT_PROFILE_NAME = 'default' as const
 
 export const CREATE_PROFILE_BASE_VALUE: BuildInfraProfileBase = {
     name: '',
@@ -127,10 +132,9 @@ export const CREATE_PROFILE_BASE_VALUE: BuildInfraProfileBase = {
 export const CREATE_VIEW_CHECKED_CONFIGS = {
     [BuildInfraConfigTypes.CPU_REQUEST]: true,
     [BuildInfraConfigTypes.CPU_LIMIT]: true,
-}
+} as const
 
-export const BUILD_INFRA_INPUT_CONSTRAINTS = {
-    STEP: 0.01,
-    MIN: 0,
-    DECIMAL_PLACES: 2,
-}
+export const BUILD_INFRA_TEST_IDS = {
+    SUBMIT_BUTTON: 'build-infra-submit-button',
+    CANCEL_BUTTON: 'build-infra-cancel-button',
+} as const

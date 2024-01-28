@@ -41,11 +41,10 @@ export enum BuildInfraInheritActions {
     ACTIVATE_MEMORY = `activate_memory`,
     DE_ACTIVATE_MEMORY = `de_activate_memory`,
     ACTIVATE_BUILD_TIMEOUT = `activate_build_timeout`,
-    DE_ACTIVATE_BUILD_TIMEOUT = `de_activate_build_timeout`,
+    DE_ACTIVATE_BUILD_TIMEOUT = `de_activate_timeout`,
 }
 
-// TODO: Better name would be BuildInfraConfigActionMap
-export const BuildInfraLocatorsActionMap = {
+export const BuildInfraConfigActionMap = {
     [BuildInfraConfigTypes.BUILD_TIMEOUT]: BuildInfraLocators.BUILD_TIMEOUT,
     [BuildInfraConfigTypes.CPU_LIMIT]: BuildInfraLocators.CPU,
     [BuildInfraConfigTypes.CPU_REQUEST]: BuildInfraLocators.CPU,
@@ -266,7 +265,7 @@ export interface FooterProps {
      * If true, means form contains errors
      */
     disabled?: boolean
-    hideCancelButton?: boolean
+    handleCancel?: () => void
     /**
      * If true would show save changes else would show save for submit button
      */
