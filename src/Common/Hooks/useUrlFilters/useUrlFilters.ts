@@ -79,6 +79,7 @@ const useUrlFilters = <T = string>({ initialSortKey }: UseUrlFiltersProps<T> = {
 
     const handleSearch = (searchTerm: string) => {
         _updateSearchParam(SEARCH_KEY, searchTerm)
+        _resetPageNumber()
     }
 
     const handleSorting = (_sortBy: T) => {
