@@ -14,6 +14,7 @@ import {
     CreateBuildInfraServiceConfigurationType,
     GetBuildInfraProfileType,
     UpdateBuildInfraProfileType,
+    BuildInfraConfigurationMapWithoutDefaultType,
 } from './types'
 
 const getBaseProfileObject = (
@@ -45,13 +46,13 @@ export const getTransformedBuildInfraProfileResponse = ({
         defaultConfigurations?.reduce((acc, configuration) => {
             acc[configuration.key] = configuration
             return acc
-        }, {}) ?? {}
+        }, {} as BuildInfraConfigurationMapWithoutDefaultType) ?? ({} as BuildInfraConfigurationMapWithoutDefaultType)
 
     const profileConfigurations =
         profile?.configurations?.reduce((acc, configuration) => {
             acc[configuration.key] = configuration
             return acc
-        }, {}) ?? {}
+        }, {} as BuildInfraConfigurationMapWithoutDefaultType) ?? ({} as BuildInfraConfigurationMapWithoutDefaultType)
 
     const configurations = Object.keys(defaultConfigurationsMap).reduce((acc, key) => {
         const defaultConfiguration: BuildInfraConfigurationType = defaultConfigurationsMap[key]

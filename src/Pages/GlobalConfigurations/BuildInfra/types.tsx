@@ -145,6 +145,10 @@ export interface BuildInfraConfigurationType extends BuildInfraConfigValuesType,
     defaultValue: BuildInfraConfigValuesType
 }
 
+export type BuildInfraConfigurationMapWithoutDefaultType = {
+    [key in BuildInfraConfigTypes]: BuildInfraConfigValuesType & BuildInfraProfileConfigBase
+}
+
 export type BuildInfraConfigurationMapType = {
     [key in BuildInfraConfigTypes]: BuildInfraConfigurationType
 }

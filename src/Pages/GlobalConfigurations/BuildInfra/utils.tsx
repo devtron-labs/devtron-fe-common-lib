@@ -210,6 +210,7 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = request.message
                 break
             }
+
             case BuildInfraConfigTypes.CPU_REQUEST: {
                 currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST] = {
                     ...currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST],
