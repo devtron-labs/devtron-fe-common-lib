@@ -56,7 +56,8 @@ export const getTransformedBuildInfraProfileResponse = ({
 
     const configurations = Object.keys(defaultConfigurationsMap).reduce((acc, key) => {
         const defaultConfiguration: BuildInfraConfigurationType = defaultConfigurationsMap[key]
-        const profileConfiguration = profileConfigurations[key]
+        const profileConfiguration =
+            profileConfigurations[key]?.profileName === profile?.name ? profileConfigurations[key] : null
         // Pushing default value in configurations in case we de-activate the configuration
         const defaultValue = {
             value: defaultConfiguration.value,
