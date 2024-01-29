@@ -137,7 +137,6 @@ const getBuildInfraProfilePayload = (
         const configuration = currentConfigurations[key]
         if (configuration.id || configuration.active) {
             acc.push({
-                // TODO: Ask maybe can send 0 instead of null
                 id: configuration.id,
                 key,
                 value: Number(configuration.value),
