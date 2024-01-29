@@ -64,9 +64,10 @@ export const BUILD_INFRA_BREADCRUMB: UseBreadcrumbProps = {
     },
 }
 
+// TODO: move heading to component itself
 export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
     {
-        heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">CPU (Request - Limit)</h3>,
+        heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20 w-240 dc__no-shrink">CPU (Request - Limit)</h3>,
         marker: ICCpu,
         actions: [
             {
@@ -83,7 +84,7 @@ export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
         locator: BuildInfraLocators.CPU,
     },
     {
-        heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Memory (Request - Limit)</h3>,
+        heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20 w-240 dc__no-shrink">Memory (Request - Limit)</h3>,
         marker: ICMemory,
         actions: [
             {
@@ -100,7 +101,7 @@ export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
         locator: BuildInfraLocators.MEMORY,
     },
     {
-        heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Build timeout</h3>,
+        heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20 w-240 dc__no-shrink">Build timeout</h3>,
         marker: ICTimer,
         actions: [
             {
@@ -114,11 +115,11 @@ export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
 ]
 
 export const PROFILE_INPUT_ERROR_FIELDS = Object.fromEntries(
-    Object.keys({ ...BuildInfraConfigTypes, ...BuildInfraMetaConfigTypes }).map((key) => [key, null]),
+    Object.values({ ...BuildInfraConfigTypes, ...BuildInfraMetaConfigTypes }).map((value) => [value, null]),
 ) as ProfileInputErrorType
 
-// All fields in BuildInfraConfigTypes are required and name in BuildInfraMetaConfigTypes is required
-export const REQUIRED_INPUT_FIELDS = [...Object.keys(BuildInfraConfigTypes), BuildInfraMetaConfigTypes.NAME]
+// fields required to be filled before submitting the form in create view, since we pre-populate the form with default values so no need in configs
+export const CREATE_MODE_REQUIRED_INPUT_FIELDS = [BuildInfraMetaConfigTypes.NAME]
 
 export const DEFAULT_PROFILE_NAME = 'default' as const
 

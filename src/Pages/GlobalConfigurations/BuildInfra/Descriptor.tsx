@@ -4,7 +4,13 @@ import { ReactComponent as QuestionFilled } from '../../../Assets/Icon/ic-help.s
 import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
 import { BUILD_INFRA_TEXT } from './constants'
 
-const Descriptor = ({ additionalContainerClasses, breadCrumbs, children }: DescriptorProps) => (
+const Descriptor = ({
+    additionalContainerClasses,
+    breadCrumbs,
+    children,
+    tippyInfoText,
+    tippyAdditionalContent,
+}: DescriptorProps) => (
     <div className={`flexbox dc__content-space dc__align-items-center w-100 ${additionalContainerClasses ?? ''}`}>
         <div className="flexbox dc__align-items-center dc__gap-4">
             <BreadCrumb breadcrumbs={breadCrumbs} />
@@ -15,7 +21,8 @@ const Descriptor = ({ additionalContainerClasses, breadCrumbs, children }: Descr
                 placement="right"
                 Icon={QuestionFilled}
                 iconClass="fcv-5"
-                infoText={BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
+                infoText={tippyInfoText ?? BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
+                additionalContent={tippyAdditionalContent}
                 heading={BUILD_INFRA_TEXT.HEADING}
                 showCloseButton
                 trigger="click"

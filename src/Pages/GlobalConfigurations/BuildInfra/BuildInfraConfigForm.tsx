@@ -25,9 +25,16 @@ const InheritingHeader = ({
         <div className="flexbox dc__align-items-center dc__content-space w-100">
             {defaultHeading}
 
-            <p className="m-0 flexbox pt-0 pb-0 pl-4 pr-4 fs-13 lh-20 fw-4 cn-9">{inheritingDataString}</p>
+            <div className="flexbox dc__content-space w-100">
+                <span className="m-0 pt-0 pb-0 pl-4 pr-4 fs-13 lh-20 fw-4 cn-9 dc__ellipsis-right dc__word-break-all flex-grow-1">
+                    {inheritingDataString}
+                </span>
 
-            <p className="m-0 cn-7 fs-13 fw-4 lh-20">{BUILD_INFRA_TEXT.INHERITING_HEADING_DESCRIPTION}</p>
+                {/* TODO: Add ellipsis */}
+                <p className="m-0 cn-7 fs-13 fw-4 lh-20 dc__no-shrink">
+                    {BUILD_INFRA_TEXT.INHERITING_HEADING_DESCRIPTION}
+                </p>
+            </div>
         </div>
     )
 }
@@ -102,7 +109,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
                                         placeholder={action.placeholder}
                                         error={profileInputErrors[action.actionType]}
                                         // Assumption is for default profiles all input fields are required
-                                        isRequired={isDefaultProfile}
+                                        isRequired
                                         profileUnitsMap={unitsMap[action.actionType]}
                                         handleProfileInputChange={handleProfileInputChange}
                                         currentUnitName={currentConfigurations[action.actionType].unit}

@@ -38,7 +38,7 @@ const Footer: FunctionComponent<FooterProps> = ({ disabled, handleCancel, editPr
                 </div>
             </ConditionalWrap>
 
-            {!handleCancel && (
+            {handleCancel && (
                 <button
                     type="button"
                     className="cta cancel h-32 flex"

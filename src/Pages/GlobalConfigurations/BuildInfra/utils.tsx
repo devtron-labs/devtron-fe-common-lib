@@ -19,7 +19,7 @@ import {
     BUILD_INFRA_TEXT,
     DEFAULT_PROFILE_NAME,
     PROFILE_INPUT_ERROR_FIELDS,
-    REQUIRED_INPUT_FIELDS,
+    CREATE_MODE_REQUIRED_INPUT_FIELDS,
 } from './constants'
 import {
     validateDescription,
@@ -126,7 +126,7 @@ export const validateRequestLimit = ({
 const getInitialProfileInputErrors = (fromCreateView: boolean): ProfileInputErrorType => {
     if (fromCreateView) {
         const initialProfileInputErrors = { ...PROFILE_INPUT_ERROR_FIELDS }
-        REQUIRED_INPUT_FIELDS.forEach((field) => {
+        CREATE_MODE_REQUIRED_INPUT_FIELDS.forEach((field) => {
             initialProfileInputErrors[field] = ''
         })
         return initialProfileInputErrors

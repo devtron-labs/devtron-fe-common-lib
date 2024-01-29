@@ -36,12 +36,12 @@ export enum BuildInfraLocators {
 // FIXME: Derive this from BuildInfraLocators
 // Appending the locators from above
 export enum BuildInfraInheritActions {
-    ACTIVATE_CPU = `activate_cpu`,
-    DE_ACTIVATE_CPU = `de_activate_cpu`,
-    ACTIVATE_MEMORY = `activate_memory`,
-    DE_ACTIVATE_MEMORY = `de_activate_memory`,
-    ACTIVATE_BUILD_TIMEOUT = `activate_build_timeout`,
-    DE_ACTIVATE_BUILD_TIMEOUT = `de_activate_timeout`,
+    ACTIVATE_CPU = 'activate_cpu',
+    DE_ACTIVATE_CPU = 'de_activate_cpu',
+    ACTIVATE_MEMORY = 'activate_memory',
+    DE_ACTIVATE_MEMORY = 'de_activate_memory',
+    ACTIVATE_BUILD_TIMEOUT = 'activate_timeout',
+    DE_ACTIVATE_BUILD_TIMEOUT = 'de_activate_timeout',
 }
 
 export const BuildInfraConfigActionMap = {
@@ -68,6 +68,8 @@ export interface DescriptorProps {
      * Would stick at right of div
      */
     children?: ReactNode
+    tippyInfoText?: string
+    tippyAdditionalContent?: ReactNode
 }
 
 export interface BuildInfraActionType {

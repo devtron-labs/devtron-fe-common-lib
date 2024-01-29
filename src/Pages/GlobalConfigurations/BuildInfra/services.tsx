@@ -57,7 +57,7 @@ export const getTransformedBuildInfraProfileResponse = ({
         const defaultConfiguration: BuildInfraConfigurationType = defaultConfigurationsMap[key]
         const profileConfiguration = profileConfigurations[key]
         // Pushing default value in configurations in case we de-activate the configuration
-        acc[key].defaultValue = {
+        const defaultValue = {
             value: defaultConfiguration.value,
             unit: defaultConfiguration.unit,
         }
@@ -68,12 +68,16 @@ export const getTransformedBuildInfraProfileResponse = ({
                 value: defaultConfiguration.value,
                 unit: defaultConfiguration.unit,
                 active: CREATE_VIEW_CHECKED_CONFIGS[key] ?? false,
+                defaultValue,
             }
             return acc
         }
 
         if (profileConfiguration) {
-            acc[key] = profileConfiguration
+            acc[key] = {
+                ...profileConfiguration,
+                defaultValue,
+            }
             return acc
         }
 
@@ -85,6 +89,7 @@ export const getTransformedBuildInfraProfileResponse = ({
             // saving profile name as undefined and this would be a check, if we are deriving from default or not
             unit: defaultConfiguration.unit,
             active: false,
+            defaultValue,
         }
         return acc
     }, {} as BuildInfraConfigurationMapType)
