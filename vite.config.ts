@@ -6,7 +6,6 @@ import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
 import { libInjectCss } from 'vite-plugin-lib-inject-css'
 import svgr from 'vite-plugin-svgr'
-import viteTsconfigPaths from 'vite-tsconfig-paths'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import * as packageJson from './package.json'
 
@@ -15,7 +14,6 @@ export default defineConfig({
   plugins: [
     react(),
     libInjectCss(),
-    viteTsconfigPaths(),
     svgr({
       svgrOptions: {}
     }),
