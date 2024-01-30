@@ -30,6 +30,7 @@ export function CustomInput({
     required,
     additionalErrorInfo,
     inputWrapClassName = '',
+    dataIndex= ''
 }: CustomInputProps) {
     function handleError(error: any): any[] {
         if (!Array.isArray(error)) {
@@ -96,6 +97,7 @@ export function CustomInput({
            {renderInputLabel()}
             <input
                 data-testid={dataTestid}
+                data-index={dataIndex}
                 type={type}
                 name={name}
                 autoComplete={autoComplete}

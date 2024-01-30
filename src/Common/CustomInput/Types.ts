@@ -28,4 +28,5 @@ export interface CustomInputProps {
     required?: boolean
     additionalErrorInfo?: React.ReactNode
     inputWrapClassName?: string
+    dataIndex?: string
 }
