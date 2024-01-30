@@ -5,16 +5,11 @@ import { DEFAULT_TAG_DATA } from '../Constants'
 import { TagLabelSelectType } from './Types'
 import { TagDetails } from './TagDetails'
 
-export const TagLabelSelect = ({
-    isCreateApp,
-    labelTags,
-    setLabelTags,
-    tabIndex = 0
-}: TagLabelSelectType) => {
+export const TagLabelSelect = ({ isCreateApp, labelTags, setLabelTags, tabIndex = 0 }: TagLabelSelectType) => {
     const setTagData = (index, tagValue): void => {
         const _tags = [...labelTags]
         const _tagValue = tagValue
-        if(_tagValue.key.startsWith("devtron.ai/")){
+        if (_tagValue.key.startsWith('devtron.ai/')) {
             _tagValue.propagate = false
         }
         _tags[index] = _tagValue
@@ -40,7 +35,11 @@ export const TagLabelSelect = ({
                 <PropagateTagInfo isCreateApp={isCreateApp} />
             </div>
             <div>
-                <div className="dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor" onClick={addNewTag} data-testid="add-tag-button">
+                <div
+                    className="dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor"
+                    onClick={addNewTag}
+                    data-testid="add-tag-button"
+                >
                     <Add className="icon-dim-20 fcb-5" /> Add tag
                 </div>
                 <div className="mb-8" data-testid="tag-rows-container">

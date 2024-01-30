@@ -27,8 +27,8 @@
         "lint-fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
         "test": "exit 0",
         "dev": "vite",
-        "build-watch": "tsc --p ./tsconfig-build.json && vite build --watch",
-        "build-lib": "tsc --p ./tsconfig-build.json && vite build",
+        "build-watch": "tsc && vite build --watch",
+        "build-lib": "tsc && vite build",
         "preview": "vite preview",
         "lint-staged": "lint-staged"
     },

@@ -1,17 +1,13 @@
 import React from 'react'
-import { ReactComponent as Progressing } from '../../Assets/Icon/ic-progressing.svg';
+import { ReactComponent as Progressing } from '../../Assets/Icon/ic-progressing.svg'
 
 /**
  * @deprecated
  * @description Trying to deprecate this component instead, use GenericEmptyState
  */
-function EmptyState({ children, className = '' }) {
-    return (
-        <div className={`flex column empty-state w-100 h-100 ${className}`}>
-            {children}
-        </div>
-    )
-}
+const EmptyState = ({ children, className = '' }) => (
+    <div className={`flex column empty-state w-100 h-100 ${className}`}>{children}</div>
+)
 
 function Image({ children }) {
     return children
@@ -21,20 +17,20 @@ function Title({ children }) {
     return children
 }
 
-function Subtitle({ children, className }: { children: any; className?: string }) {
-    return <p className={`subtitle ${className || ''}`}>{children}</p>
-}
+const Subtitle = ({ children, className }: { children: any; className?: string }) => (
+    <p className={`subtitle ${className || ''}`}>{children}</p>
+)
 
 function Button({ children }) {
     return children
 }
 
-const Loading: React.FC<{ text: string }> = function (props) {
-    return <>
+const Loading: React.FC<{ text: string }> = (props) => (
+    <>
         <Progressing className="dc__block empty-state__loader" />
         <p className="empty-state__loading-text">{props.text}</p>
     </>
-}
+)
 
 EmptyState.Image = Image
 EmptyState.Title = Title
