@@ -29,7 +29,7 @@ export const BUILD_INFRA_TEXT = {
     DESCRIPTION_LABEL: 'Description',
     DESCRIPTION_PLACEHOLDER: 'Enter a description here',
     PROFILE_LABEL: 'Profile name',
-    PROFILE_PLACEHOLDER: 'Eg. Java or Node',
+    PROFILE_PLACEHOLDER: 'Eg. java or node',
     INHERITING_HEADING_DESCRIPTION: 'Inheriting from default',
     SUBMIT_BUTTON_TIPPY: {
         INVALID_INPUT: 'Valid input is required for all mandatory fields.',
