@@ -30,7 +30,7 @@ export function CustomInput({
     required,
     additionalErrorInfo,
     inputWrapClassName = '',
-    dataIndex = '',
+    inputProps = {},
 }: CustomInputProps) {
     function handleError(error: any): any[] {
         if (!Array.isArray(error)) {
@@ -97,7 +97,6 @@ export function CustomInput({
             {renderInputLabel()}
             <input
                 data-testid={dataTestid}
-                data-index={dataIndex}
                 type={type}
                 name={name}
                 autoComplete={autoComplete}
@@ -119,6 +118,7 @@ export function CustomInput({
                 defaultValue={defaultValue}
                 onKeyDown={onKeyDown}
                 required={required}
+                {...inputProps}
             />
 
             {getInputError()}
