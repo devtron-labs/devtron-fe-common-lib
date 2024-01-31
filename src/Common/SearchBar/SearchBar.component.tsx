@@ -55,9 +55,11 @@ const SearchBar = ({
         debounceTimeout,
     ])
 
-    // In most case would reset the state by doing history.push('/')
+    // assuming initialSearchText will change if we are changing history otherwise will be constant and will not change
+    // since on changing history we expect to make api call using useAsync so not applying handleEnter
     useEffect(() => {
         inputRef.current.value = initialSearchText
+        setShowClearButton(!!initialSearchText)
     }, [initialSearchText])
 
     const _applySearch = (value: string) => {
@@ -75,11 +77,6 @@ const SearchBar = ({
         const { value } = e.target
         setShowClearButton(!!value)
 
-        if (!value) {
-            clearSearch()
-            return
-        }
-
         if (shouldDebounce) {
             debouncedSearchChange(value)
         } else {
@@ -91,6 +88,7 @@ const SearchBar = ({
         const { key } = e
 
         if (key === 'Enter') {
+            e.preventDefault()
             const inputTarget = e.target as HTMLInputElement
             const value = inputTarget.value.trim()
             _applySearch(value)
