@@ -98,7 +98,7 @@ const SearchBar = ({
     return (
         <div className={containerClassName}>
             <div className="search-bar bc-n50 focus-within-border-b5 dc__hover-border-n300 dc__block w-100 min-w-200 dc__position-rel en-2 bw-1 br-4 h-32">
-                <Search className="search-bar__icon dc__position-abs icon-color-n6 icon-dim-18" />
+                <Search className="search-bar__icon dc__position-abs icon-color-n6 icon-dim-16" />
                 <input
                     placeholder="Search"
                     data-testid="search-bar"
@@ -120,7 +120,7 @@ const SearchBar = ({
                         onClick={clearSearch}
                         aria-label="Clear search"
                     >
-                        <Clear className="icon-dim-18 icon-n4 dc__vertical-align-middle" />
+                        <Clear className="icon-dim-16 icon-n4 dc__vertical-align-middle" />
                     </button>
                 )}
             </div>
