@@ -89,7 +89,7 @@ const SearchBar = ({
             <div className="search-bar bc-n50 focus-within-border-b5 dc__hover-border-n300 dc__block w-100 min-w-200 dc__position-rel en-2 bw-1 br-4 h-32">
                 <Search className="search-bar__icon dc__position-abs icon-color-n6 icon-dim-16" />
                 <input
-                    placeholder={inputProps.placeholder || 'Search'}
+                    placeholder="Search"
                     data-testid="search-bar"
                     type="text"
                     {...inputProps}
