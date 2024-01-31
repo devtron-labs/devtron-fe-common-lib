@@ -51,11 +51,12 @@ export interface Teams {
 export enum CHECKBOX_VALUE {
     CHECKED = 'CHECKED',
     INTERMEDIATE = 'INTERMEDIATE',
+    BULK_CHECKED = 'BULK_CHECKED',
 }
 export interface CheckboxProps {
     onChange: (event) => void
     isChecked: boolean
-    value: 'CHECKED' | 'INTERMEDIATE'
+    value: 'CHECKED' | 'INTERMEDIATE' | 'BULK_CHECKED'
     disabled?: boolean
     tabIndex?: number
     rootClassName?: string
