@@ -30,6 +30,7 @@ export const CustomInput = ({
     required,
     additionalErrorInfo,
     inputWrapClassName = '',
+    inputProps = {},
 }: CustomInputProps) => {
     function handleError(error: any): any[] {
         if (!Array.isArray(error)) {
@@ -112,6 +113,8 @@ export const CustomInput = ({
                 defaultValue={defaultValue}
                 onKeyDown={onKeyDown}
                 required={required}
+                // Will be passing other props like other data attributes etc from inputProps
+                {...inputProps}
             />
 
             {getInputError()}

@@ -74,8 +74,8 @@ const responseMessages = {
 }
 
 function handleLogout() {
-    const continueParam = `${window.location.pathname.replace(import.meta.env.PUBLIC_URL, '')}${window.location.search}`
-    window.location.href = `${window.location.origin}${import.meta.env.PUBLIC_URL}${
+    const continueParam = `${window.location.pathname.replace(window.__BASE_URL__, '')}${window.location.search}`
+    window.location.href = `${window.location.origin}${window.__BASE_URL__}${
         URLS.LOGIN_SSO
     }?continue=${continueParam}`
 }

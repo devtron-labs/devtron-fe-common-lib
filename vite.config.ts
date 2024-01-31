@@ -9,31 +9,31 @@ import * as packageJson from './package.json'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    libInjectCss(),
-    svgr({
-      svgrOptions: {}
-    }),
-    dts(),
-    NodeGlobalsPolyfillPlugin({
-      process: true,
-  })
-  ],
-  build: {
-    target: "ES2021",
-    copyPublicDir: false,
-    lib: {
-      entry: resolve(__dirname, 'lib/main.ts'),
-      formats: ['es']
+    plugins: [
+        react(),
+        libInjectCss(),
+        svgr({
+            svgrOptions: {},
+        }),
+        dts(),
+        NodeGlobalsPolyfillPlugin({
+            process: true,
+        }),
+    ],
+    build: {
+        target: 'ES2021',
+        copyPublicDir: false,
+        lib: {
+            entry: resolve(__dirname, 'lib/main.ts'),
+            formats: ['es'],
+        },
+        rollupOptions: {
+            external: [...Object.keys(packageJson.peerDependencies)],
+            input: './src/index.ts',
+            output: {
+                assetFileNames: 'assets/[name][extname]',
+                entryFileNames: '[name].js',
+            },
+        },
     },
-    rollupOptions: {
-      external: [...Object.keys(packageJson.peerDependencies)],
-      input: './src/index.ts',
-      output: {
-        assetFileNames: 'assets/[name][extname]',
-        entryFileNames: '[name].js',
-      }
-    }
-  }
 })

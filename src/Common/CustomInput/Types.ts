@@ -1,4 +1,4 @@
-import React, { HTMLInputTypeAttribute } from 'react'
+import React, { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 
 export interface CustomInputProps {
     name: string
@@ -28,4 +28,5 @@ export interface CustomInputProps {
     required?: boolean
     additionalErrorInfo?: React.ReactNode
     inputWrapClassName?: string
+    inputProps?: InputHTMLAttributes<HTMLInputElement>
 }
