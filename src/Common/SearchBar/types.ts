@@ -33,4 +33,13 @@ export interface SearchBarProps {
      * Timeout for the debounce handler to be triggered
      */
     debounceTimeout?: number
+    /**
+     * Placeholder for the search input
+     * @default 'Search'
+     */
+    placeholder?: string
+    /**
+     * Class name for the input; can be used for handling input css
+     */
+    inputClassName?: string
 }
