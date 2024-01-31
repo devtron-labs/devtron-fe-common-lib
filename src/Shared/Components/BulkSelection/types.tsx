@@ -45,6 +45,9 @@ export enum SelectAllDialogStatus {
     CLOSED = 'CLOSED',
 }
 
+// This type is intended to be used with UseBulkSelectionProps, e.g, UseBulkSelectionProps<BulkSelectionIdentifiersType<boolean>>
+export type BulkSelectionIdentifiersType<T> = Record<string | number, T>
+
 export interface UseBulkSelectionProps<T> {
     /**
      * Response from API, assuming structure to be array of objects with key and values
