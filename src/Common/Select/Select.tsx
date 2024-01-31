@@ -5,7 +5,7 @@ import { SelectComposition, SelectProps, OptionGroupProps, SelectAsync } from '.
 
 import arrowTriangle from '../../Assets/Icon/ic-chevron-down.svg' // '../../../assets/icons/ic-chevron-down.svg'
 
-import './select.css'
+import './select.scss'
 import PopupMenu from '../PopupMenu'
 import { showError } from '../Helper'
 

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import EmptyState from './EmptyState/EmptyState'
 import notAuthorized from '../Assets/Img/ic-not-authorized.svg'
 import ErrorScreenNotFound from './ErrorScreenNotFound'
 import { ERROR_EMPTY_SCREEN } from './Constants'
