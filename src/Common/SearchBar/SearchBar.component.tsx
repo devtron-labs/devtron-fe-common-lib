@@ -47,8 +47,6 @@ const SearchBar = ({
     containerClassName,
     shouldDebounce = false,
     debounceTimeout = 300,
-    placeholder = 'Search',
-    inputClassName = '',
     searchIconClassName = '',
 }: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
@@ -89,19 +87,19 @@ const SearchBar = ({
     }
     return (
         <div className={containerClassName}>
-            <div className="search-bar bcn-0 dc__block w-100 min-w-200 dc__position-rel en-2 bw-1 br-4 h-32">
+            <div className="search-bar bc-n50 focus-within-border-b5 dc__hover-border-n300 dc__block w-100 min-w-200 dc__position-rel en-2 bw-1 br-4 h-32">
                 <Search
                     className={`search-bar__icon dc__position-abs icon-color-n6 icon-dim-18 ${searchIconClassName}`}
                 />
                 <input
-                    placeholder={placeholder}
+                    placeholder={inputProps.placeholder || 'Search'}
                     data-testid="search-bar"
                     type="text"
                     {...inputProps}
                     defaultValue={initialSearchText}
                     className={`search-bar__input bcn-0 dc__position-abs w-100 h-100 br-4 dc__no-border pt-6 pr-10 pb-6 pl-30 fs-13 lh-20 fw-4 cn-9 placeholder-cn5 ${
                         showClearButton ? 'pr-30' : 'pr-10'
-                    } ${inputClassName}`}
+                    }`}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     ref={inputRef}
