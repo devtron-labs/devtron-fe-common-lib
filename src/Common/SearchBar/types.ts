@@ -42,4 +42,8 @@ export interface SearchBarProps {
      * Class name for the input; can be used for handling input css
      */
     inputClassName?: string
+    /**
+     * Icon for the search input
+     */
+    searchIconClassName?: string
 }
