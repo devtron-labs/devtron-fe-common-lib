@@ -14,6 +14,7 @@ import {
 } from './types'
 
 export const BUILD_INFRA_INPUT_CONSTRAINTS = {
+    // Will not enforce any decimal specification on input field
     STEP: 'any',
     MIN: 0,
     DECIMAL_PLACES: 2,
