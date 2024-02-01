@@ -81,7 +81,7 @@ export const validateRequiredPositiveNumber = (value: string | number): Validati
         }
     }
 
-    if (Number(value) <= 0) {
+    if (numericValue <= 0) {
         return {
             isValid: false,
             message: MESSAGES.VALID_POSITIVE_NUMBER,
@@ -117,7 +117,7 @@ export const validatePositiveInteger = (value: string | number): ValidationRespo
         }
     }
 
-    if (Number(value) <= 0) {
+    if (numericValue <= 0) {
         return {
             isValid: false,
             message: MESSAGES.VALID_POSITIVE_INTEGER,
