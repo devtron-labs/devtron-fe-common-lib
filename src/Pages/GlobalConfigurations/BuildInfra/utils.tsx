@@ -26,6 +26,7 @@ import {
     validateName,
     validateRequiredPositiveNumber,
     getCommonSelectStyle,
+    validatePositiveInteger,
 } from '../../../Shared'
 
 export const validateRequestLimit = ({
@@ -53,24 +54,24 @@ export const validateRequestLimit = ({
         },
     }
 
-    const isRequestValidNumber = validateRequiredPositiveNumber(request.value).isValid
-    const isLimitValidNumber = validateRequiredPositiveNumber(limit.value).isValid
+    const requestValidationMessage = validateRequiredPositiveNumber(request.value).message
+    const limitValidationMessage = validateRequiredPositiveNumber(limit.value).message
 
-    if (!isRequestValidNumber) {
+    if (requestValidationMessage) {
         requestLimitValidationResponse.request = {
-            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.NEGATIVE_REQUEST,
+            message: requestValidationMessage,
             isValid: false,
         }
     }
 
-    if (!isLimitValidNumber) {
+    if (limitValidationMessage) {
         requestLimitValidationResponse.limit = {
-            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.NEGATIVE_LIMIT,
+            message: limitValidationMessage,
             isValid: false,
         }
     }
 
-    if (!isRequestValidNumber || !isLimitValidNumber) {
+    if (limitValidationMessage || requestValidationMessage) {
         return requestLimitValidationResponse
     }
 
@@ -287,7 +288,7 @@ export const useBuildInfraForm = ({
                     unit,
                 }
 
-                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = validateRequiredPositiveNumber(value).message
+                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = validatePositiveInteger(value).message
                 break
             }
 

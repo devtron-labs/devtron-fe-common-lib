@@ -14,7 +14,7 @@ import {
 } from './types'
 
 export const BUILD_INFRA_INPUT_CONSTRAINTS = {
-    STEP: 0.01,
+    STEP: 'any',
     MIN: 0,
     DECIMAL_PLACES: 2,
 } as const
@@ -36,9 +36,6 @@ export const BUILD_INFRA_TEXT = {
         REQUEST_IN_PROGRESS: 'Request in progress.',
     },
     VALIDATE_REQUEST_LIMIT: {
-        // Might use the constants from BUILD_INFRA_INPUT_CONSTRAINTS even for NEGATIVE_REQUEST and NEGATIVE_LIMIT
-        NEGATIVE_REQUEST: 'Request should be a positive number.',
-        NEGATIVE_LIMIT: 'Limit should be a positive number.',
         REQUEST_LESS_THAN_LIMIT: 'Request should be less than or equal to limit.',
         CAN_NOT_COMPUTE: 'Request and limit value diff are too high to validate.',
         REQUEST_DECIMAL_PLACES: `Request should be upto ${BUILD_INFRA_INPUT_CONSTRAINTS.DECIMAL_PLACES} decimal places.`,
