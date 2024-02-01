@@ -5,7 +5,7 @@ import { BULK_DROPDOWN_TEST_ID, BulkSelectionOptionsLabels } from './constants'
 import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { ReactComponent as ICCheckSquare } from '../../../Assets/Icon/ic-check-square.svg'
 import { ReactComponent as ICCheckAll } from '../../../Assets/Icon/ic-check-all.svg'
-import { ReactComponent as ICCross } from '../../../Assets/Icon/ic-cross.svg'
+import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 
 const BulkSelection = <T,>({
     checkboxValue,
@@ -38,7 +38,7 @@ const BulkSelection = <T,>({
                       locator: BulkSelectionEvents.CLEAR_ALL_SELECTIONS,
                       label: BulkSelectionOptionsLabels[BulkSelectionEvents.CLEAR_ALL_SELECTIONS],
                       isSelected: false,
-                      icon: ICCross,
+                      icon: ICClose,
                   },
               ]
             : []),
