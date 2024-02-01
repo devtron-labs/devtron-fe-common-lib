@@ -26,7 +26,7 @@ import {
     validateName,
     validateRequiredPositiveNumber,
     getCommonSelectStyle,
-    validatePositiveInteger,
+    validateRequiredPositiveInteger,
 } from '../../../Shared'
 
 export const validateRequestLimit = ({
@@ -288,7 +288,7 @@ export const useBuildInfraForm = ({
                     unit,
                 }
 
-                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = validatePositiveInteger(value).message
+                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = validateRequiredPositiveInteger(value).message
                 break
             }
 

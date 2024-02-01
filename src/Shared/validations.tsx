@@ -93,7 +93,7 @@ export const validateRequiredPositiveNumber = (value: string | number): Validati
     }
 }
 
-export const validatePositiveInteger = (value: string | number): ValidationResponseType => {
+export const validateRequiredPositiveInteger = (value: string | number): ValidationResponseType => {
     if (!value) {
         return {
             isValid: false,
