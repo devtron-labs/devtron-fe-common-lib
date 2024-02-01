@@ -56,6 +56,7 @@ export enum CHECKBOX_VALUE {
 export interface CheckboxProps {
     onChange: (event) => void
     isChecked: boolean
+    // FIXME: Need to replace this CHECKBOX_VALUE enum, and replace string instances in dashboard
     value: 'CHECKED' | 'INTERMEDIATE' | 'BULK_CHECKED'
     disabled?: boolean
     tabIndex?: number
