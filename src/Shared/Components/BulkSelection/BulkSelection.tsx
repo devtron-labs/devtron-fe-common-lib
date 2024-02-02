@@ -1,5 +1,6 @@
 import BulkSelectionDropdownItems from './BulkSelectionDropdownItems'
 import { CHECKBOX_VALUE, Checkbox, PopupMenu, noop } from '../../../Common'
+import { useBulkSelection } from './BulkSelectionProvider'
 import { BulkSelectionDropdownItemsType, BulkSelectionEvents, BulkSelectionProps } from './types'
 import { BULK_DROPDOWN_TEST_ID, BulkSelectionOptionsLabels } from './constants'
 import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
@@ -7,13 +8,8 @@ import { ReactComponent as ICCheckSquare } from '../../../Assets/Icon/ic-check-s
 import { ReactComponent as ICCheckAll } from '../../../Assets/Icon/ic-check-all.svg'
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 
-const BulkSelection = <T,>({
-    checkboxValue,
-    isChecked,
-    selectedIdentifiers,
-    handleBulkSelection,
-    showPagination,
-}: BulkSelectionProps<T>) => {
+const BulkSelection = <T,>({ showPagination }: BulkSelectionProps) => {
+    const { handleBulkSelection, selectedIdentifiers, isChecked, checkboxValue } = useBulkSelection<T>()
     const areOptionsSelected = Object.keys(selectedIdentifiers).length > 0
     const BulkSelectionItems: BulkSelectionDropdownItemsType[] = [
         {
