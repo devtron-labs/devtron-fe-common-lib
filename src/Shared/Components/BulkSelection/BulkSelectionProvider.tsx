@@ -1,17 +1,36 @@
-import { useState } from 'react'
-import { SELECT_ALL_ACROSS_PAGES_LOCATOR, getInvalidActionMessage } from './constants'
+import { createContext, useContext, useMemo, useState } from 'react'
+import { BULK_SELECTION_CONTEXT_ERROR, SELECT_ALL_ACROSS_PAGES_LOCATOR, getInvalidActionMessage } from './constants'
 import {
     BulkSelectionEvents,
+    GetBulkSelectionCheckboxValuesType,
     HandleBulkSelectionType,
     SelectAllDialogStatus,
     UseBulkSelectionProps,
     UseBulkSelectionReturnType,
 } from './types'
+import { CHECKBOX_VALUE, noop } from '../../../Common'
 
-const useBulkSelection = <T,>({
+// giving type any here since not exporting this context, rather using it through useBulkSelection hook which is typed
+const BulkSelectionContext = createContext<UseBulkSelectionReturnType<any>>({
+    selectedIdentifiers: {},
+    handleBulkSelection: noop,
+    isChecked: false,
+    checkboxValue: CHECKBOX_VALUE.CHECKED,
+})
+
+export const useBulkSelection = <T,>() => {
+    const context = useContext<UseBulkSelectionReturnType<T>>(BulkSelectionContext)
+    if (!context) {
+        throw new Error(BULK_SELECTION_CONTEXT_ERROR)
+    }
+    return context
+}
+
+export const BulkSelectionProvider = <T,>({
+    children,
     identifiers,
     getSelectAllDialogStatus,
-}: UseBulkSelectionProps<T>): UseBulkSelectionReturnType<T> => {
+}: UseBulkSelectionProps<T>) => {
     const [selectedIdentifiers, setSelectedIdentifiers] = useState<T>({} as T)
 
     const setIdentifiersAfterClear = (newIdentifiers: T, selectedIds: (number | string)[]) => {
@@ -90,10 +109,52 @@ const useBulkSelection = <T,>({
         }
     }
 
-    return {
-        handleBulkSelection,
-        selectedIdentifiers,
-    }
-}
+    const getBulkSelectionCheckboxValues = (): GetBulkSelectionCheckboxValuesType => {
+        const selectedIdentifiersArray = Object.keys(selectedIdentifiers)
+        if (selectedIdentifiersArray.length === 0) {
+            return {
+                isChecked: false,
+                checkboxValue: CHECKBOX_VALUE.CHECKED,
+            }
+        }
 
-export default useBulkSelection
+        // if selectedIdentifiers contains select all across pages locator then it means all are selected
+        if (selectedIdentifiers[SELECT_ALL_ACROSS_PAGES_LOCATOR]) {
+            return {
+                isChecked: true,
+                checkboxValue: CHECKBOX_VALUE.BULK_CHECKED,
+            }
+        }
+
+        // if all the identifiers are selected then CHECKED else intermediate
+        const areAllPresentIdentifiersSelected = selectedIdentifiersArray.every(
+            (identifierId) => identifiers[identifierId],
+        )
+
+        if (areAllPresentIdentifiersSelected) {
+            return {
+                isChecked: true,
+                checkboxValue: CHECKBOX_VALUE.CHECKED,
+            }
+        }
+
+        return {
+            isChecked: true,
+            checkboxValue: CHECKBOX_VALUE.INTERMEDIATE,
+        }
+    }
+
+    const { isChecked, checkboxValue } = getBulkSelectionCheckboxValues()
+
+    const value = useMemo(
+        () => ({
+            selectedIdentifiers,
+            handleBulkSelection,
+            isChecked,
+            checkboxValue,
+        }),
+        [selectedIdentifiers, handleBulkSelection, isChecked, checkboxValue],
+    )
+
+    return <BulkSelectionContext.Provider value={value}>{children}</BulkSelectionContext.Provider>
+}
