@@ -42,6 +42,7 @@ const Footer: FunctionComponent<FooterProps> = ({ disabled, handleCancel, editPr
                 <button
                     type="button"
                     className="cta cancel h-32 flex"
+                    disabled={loading}
                     data-testid={BUILD_INFRA_TEST_IDS.CANCEL_BUTTON}
                     onClick={handleCancel}
                 >
