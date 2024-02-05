@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '../../Constants'
 import { DEFAULT_PAGE_NUMBER, URL_FILTER_KEYS } from './constants'
-import { UseUrlFiltersProps } from './types'
+import { UseUrlFiltersProps, UseUrlFiltersReturnType } from './types'
 
 const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_KEYS
 
@@ -23,7 +23,7 @@ const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_K
  * ```
  *
  */
-const useUrlFilters = <T = string>({ initialSortKey }: UseUrlFiltersProps<T> = {}) => {
+const useUrlFilters = <T = string>({ initialSortKey }: UseUrlFiltersProps<T> = {}): UseUrlFiltersReturnType<T> => {
     const location = useLocation()
     const history = useHistory()
     const searchParams = new URLSearchParams(location.search)
