@@ -18,14 +18,17 @@ export interface HandleBulkSelectionType<T> {
     }
 }
 
-export interface UseBulkSelectionReturnType<T> {
+export interface GetBulkSelectionCheckboxValuesType {
+    isChecked: boolean
+    checkboxValue: CHECKBOX_VALUE
+}
+
+export interface UseBulkSelectionReturnType<T> extends GetBulkSelectionCheckboxValuesType {
     selectedIdentifiers: T
     handleBulkSelection: ({ action, data }: HandleBulkSelectionType<T>) => void
 }
 
-export interface BulkSelectionProps<T> extends UseBulkSelectionReturnType<T> {
-    checkboxValue: CHECKBOX_VALUE
-    isChecked: boolean
+export interface BulkSelectionProps {
     showPagination: boolean
 }
 
@@ -38,7 +41,7 @@ export interface BulkSelectionDropdownItemsType {
 
 export interface BulkSelectionDropdownItemsProps<T>
     extends BulkSelectionDropdownItemsType,
-        Pick<BulkSelectionProps<T>, 'handleBulkSelection'> {}
+        Pick<UseBulkSelectionReturnType<T>, 'handleBulkSelection'> {}
 
 export enum SelectAllDialogStatus {
     OPEN = 'OPEN',
@@ -58,4 +61,5 @@ export interface UseBulkSelectionProps<T> {
      * Act as buffer between select all across pages and select all on page state
      */
     getSelectAllDialogStatus: () => SelectAllDialogStatus
+    children?: React.ReactNode
 }
