@@ -50,7 +50,7 @@ const BulkSelection = <T,>({ showPagination }: BulkSelectionProps) => {
                 <Checkbox
                     isChecked={isChecked}
                     onChange={noop}
-                    rootClassName="icon-dim-20"
+                    rootClassName="icon-dim-20 m-0"
                     value={checkboxValue}
                     // Ideally should be disabled but was giving issue with cursor
                 />
