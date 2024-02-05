@@ -126,9 +126,8 @@ export const BulkSelectionProvider = <T,>({
             }
         }
 
-        // if all the identifiers are selected then CHECKED else intermediate
-        const areAllPresentIdentifiersSelected = selectedIdentifiersArray.every(
-            (identifierId) => identifiers[identifierId],
+        const areAllPresentIdentifiersSelected = Object.keys(identifiers).every(
+            (identifierId) => selectedIdentifiers[identifierId],
         )
 
         if (areAllPresentIdentifiersSelected) {

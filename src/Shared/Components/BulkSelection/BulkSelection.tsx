@@ -55,7 +55,7 @@ const BulkSelection = <T,>({ showPagination }: BulkSelectionProps) => {
                     // Ideally should be disabled but was giving issue with cursor
                 />
 
-                <ICChevronDown className="icon-dim-20 icon-n6" />
+                <ICChevronDown className="icon-dim-20 fcn-6 dc__no-shrink" />
             </PopupMenu.Button>
 
             <PopupMenu.Body rootClassName="dc__top-22 w-150 dc__right-0 pt-4 pb-4 pl-0 pr-0 bcn-0 flex column dc__content-start dc__align-start dc__position-abs bcn-0 dc__border dc__border-radius-4-imp">
