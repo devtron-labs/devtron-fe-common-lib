@@ -1,5 +1,3 @@
-import { InputHTMLAttributes } from 'react'
-
 export interface SearchBarProps {
     /**
      * Initial search text
@@ -18,7 +16,7 @@ export interface SearchBarProps {
     /**
      * Input props for the search input
      */
-    inputProps?: InputHTMLAttributes<HTMLInputElement>
+    inputProps?: React.InputHTMLAttributes<HTMLInputElement>
     /**
      * Class name for the container; can be used for handling width
      */

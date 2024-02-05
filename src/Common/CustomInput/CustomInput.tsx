@@ -28,9 +28,10 @@ export function CustomInput({
     defaultValue,
     onKeyDown,
     required,
-    additionalErrorInfo
+    additionalErrorInfo,
+    inputWrapClassName = '',
+    inputProps = {},
 }: CustomInputProps) {
-
     function handleError(error: any): any[] {
         if (!Array.isArray(error)) {
             return [error]
@@ -55,7 +56,7 @@ export function CustomInput({
             <div className="form__error" key={error}>
                 <ErrorIcon className="form__icon form__icon--error" />
                 {error}
-                {typeof additionalErrorInfo === 'function' && additionalErrorInfo()}
+                {error && typeof additionalErrorInfo === 'function' && additionalErrorInfo()}
             </div>
         )
     }
@@ -92,8 +93,8 @@ export function CustomInput({
     }
 
     return (
-        <div className="flex column left top">
-           {renderInputLabel()}
+        <div className={`flex column left top ${inputWrapClassName}`}>
+            {renderInputLabel()}
             <input
                 data-testid={dataTestid}
                 type={type}
@@ -117,6 +118,8 @@ export function CustomInput({
                 defaultValue={defaultValue}
                 onKeyDown={onKeyDown}
                 required={required}
+                // Will be passing other props like other data attributes etc from inputProps
+                {...inputProps}
             />
 
             {getInputError()}

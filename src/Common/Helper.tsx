@@ -499,18 +499,27 @@ export const getFilteredChartVersions = (charts, selectedChartType) => {
             chartRefId: item.chartRefId,
         }))
 }
-function removeEmptyObjectKeysAndNullValues(obj) {
-    // It recursively removes empty object keys and array values that are null
+
+function removeEmptyObjectKeysAndNullValues(obj, originaljsonCopy) {
+    // It recursively removes empty object keys and empty array keys
     for (let key in obj) {
         if (Array.isArray(obj[key])) {
-            if (obj[key].length === 0) continue
-            obj[key] = obj[key].filter((item) => item !== null)
             // Check if the array is empty
-            if (obj[key].length === 0) {
-                delete obj[key] // Delete the key if the array is empty
+            if (obj[key].length !== 0) {
+                obj[key].forEach((element, index) => {
+                    if (element === null || (typeof element === 'object' && Object.keys(element).length === 0))
+                        obj[key].splice(index, 1)
+                    else removeEmptyObjectKeysAndNullValues(element, originaljsonCopy[key][index])
+                })
+            }
+            if (obj[key].length === 0 && originaljsonCopy[key].length !== 0) {
+                delete obj[key]
             }
         } else if (obj[key] && typeof obj[key] === 'object') {
-            if (removeEmptyObjectKeysAndNullValues(obj[key])) {
+            if (
+                removeEmptyObjectKeysAndNullValues(obj[key], originaljsonCopy[key]) &&
+                Object.keys(originaljsonCopy[key]).length !== 0
+            ) {
                 delete obj[key]
             }
         } else if (obj[key] === undefined) {
@@ -520,20 +529,25 @@ function removeEmptyObjectKeysAndNullValues(obj) {
     return Object.keys(obj).length === 0
 }
 
-export function getUnlockedJSON(json, jsonPathArray) {
+export function getUnlockedJSON(json, jsonPathArray, removeParentKeysAndEmptyArrays = false) {
+    if (!jsonPathArray.length) return { newDocument: json, removedPatches: [] }
+    
     const jsonCopy = JSON.parse(JSON.stringify(json))
+    const originaljsonCopy = JSON.parse(JSON.stringify(json))
+    let removedPatches = []
     let patches = jsonPathArray.flatMap((jsonPath) => {
         const pathsToRemove = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
-        return pathsToRemove.map((result) =>
-            Array.isArray(result.parent)
-                ? { op: 'replace', path: result.pointer, value: null }
-                : { op: 'remove', path: result.pointer },
-        )
+        //reversing patches to handle correct array index deletion
+        pathsToRemove.reverse()
+        return pathsToRemove.map((result) => {
+            //storing removed patches to have functionality of undo
+            removedPatches.push({ op: 'add', path: result.pointer, value: result.value })
+            return { op: 'remove', path: result.pointer }
+        })
     })
     let newDocument = jsonpatch.applyPatch(jsonCopy, patches).newDocument
-
-    removeEmptyObjectKeysAndNullValues(newDocument)
-    return newDocument
+    if (removeParentKeysAndEmptyArrays) removeEmptyObjectKeysAndNullValues(newDocument, originaljsonCopy)
+    return { newDocument, removedPatches: removedPatches.reverse() }
 }
 
 export function getLockedJSON(json, jsonPathArray: string[]) {
