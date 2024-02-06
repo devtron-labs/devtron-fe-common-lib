@@ -31,4 +31,8 @@ export interface SearchBarProps {
      * Timeout for the debounce handler to be triggered
      */
     debounceTimeout?: number
+    /**
+     * handleOnBlur for the search input
+     */
+    handleOnBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
 }
