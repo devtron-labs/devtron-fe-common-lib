@@ -47,7 +47,6 @@ const SearchBar = ({
     containerClassName,
     shouldDebounce = false,
     debounceTimeout = 300,
-    handleOnBlur,
 }: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
     const inputRef = useRef<HTMLInputElement>()
@@ -112,7 +111,6 @@ const SearchBar = ({
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     ref={inputRef}
-                    onBlur={handleOnBlur}
                 />
                 {/* TODO: Sync with product since it should have ic-enter in case of not applied */}
                 {showClearButton && (
