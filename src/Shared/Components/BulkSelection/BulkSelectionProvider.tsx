@@ -78,6 +78,9 @@ export const BulkSelectionProvider = <T,>({
                     return
                 }
                 const selectedIdentifiersLength = Object.keys(selectedIdentifiers).length
+                // This is for showing a modal dialog if applicable to confirm if bulk selection is to be applied
+                // Do note that the 'getSelectAllDialogStatus' should be called after the length check explicitly
+                // otherwise the modal will open each time
                 if (selectedIdentifiersLength > 0 && getSelectAllDialogStatus() === SelectAllDialogStatus.OPEN) {
                     return
                 }
