@@ -1,5 +1,6 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import Tippy from '@tippyjs/react'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactNode, useMemo } from 'react'
 import { ConditionalWrap } from '../Helper'
 import './radioGroup.scss'
 
@@ -19,8 +20,19 @@ interface RadioGroupInterface {
     className?: string
     initialTab: string
     disabled: boolean
+    children: ReactNode
+}
+
+interface RadioInterface {
+    children: ReactNode
+    value: string
+    className?: string
     showTippy?: boolean
     tippyContent?: any
+    tippyPlacement?: string
+    canSelect?: boolean
+    isDisabled?: boolean
+    tippyClass?: string
     dataTestId?: string
 }
 
@@ -28,30 +40,33 @@ interface RadioGroupComposition {
     Radio?: React.FC<any>
 }
 
-const RadioGroup: React.FC<RadioGroupInterface> & RadioGroupComposition = React.memo(function RadioGroup({
-    name,
-    onChange,
-    children,
-    className = '',
-    initialTab,
-    disabled = false,
-    dataTestId,
-}) {
-    const [selected, select] = useState(null)
+const RadioGroup: React.FC<RadioGroupInterface> & RadioGroupComposition = React.memo(
+    ({ name, onChange, children, className = '', initialTab, disabled = false }: RadioGroupInterface) => {
+        const [selected, select] = useState(null)
 
-    useEffect(() => {
-        if (initialTab === selected) return
-        select(initialTab)
-    }, [initialTab])
+        useEffect(() => {
+            if (initialTab === selected) return
+            select(initialTab)
+        }, [initialTab])
+        const contextValue = useMemo(
+            () => ({ name, selected, select, disabled, onChange }),
+            [name, selected, select, disabled, onChange],
+        )
+        return (
+            <RadioContext.Provider value={contextValue}>
+                <div className={`${className} radio-group`}>{children}</div>
+            </RadioContext.Provider>
+        )
+    },
+)
 
-    return (
-        <RadioContext.Provider value={{ name, selected, select, disabled, onChange }}>
-            <div className={`${className} radio-group`}>{children}</div>
-        </RadioContext.Provider>
-    )
-})
+const TippyComponent = (children, tippyContent, tippyPlacement, tippyClass) => (
+    <Tippy className={`default-tt w-250 ${tippyClass}`} arrow={false} placement={tippyPlacement} content={tippyContent}>
+        {children}
+    </Tippy>
+)
 
-function Radio({
+const Radio = ({
     value,
     children,
     className = '',
@@ -62,21 +77,13 @@ function Radio({
     isDisabled = false,
     tippyClass = '',
     dataTestId,
-}) {
+}: RadioInterface) => {
     const { name, selected, select, disabled, onChange } = useRadioContext()
+
     return (
         <ConditionalWrap
             condition={showTippy}
-            wrap={(children) => (
-                <Tippy
-                    className={`default-tt w-250 ${tippyClass}`}
-                    arrow={false}
-                    placement={tippyPlacement as any}
-                    content={tippyContent}
-                >
-                    {children}
-                </Tippy>
-            )}
+            wrap={(child) => TippyComponent(child, tippyContent, tippyPlacement, tippyClass)}
         >
             <label className={`${className} radio ${isDisabled || disabled ? 'disabled' : ''}`}>
                 <input

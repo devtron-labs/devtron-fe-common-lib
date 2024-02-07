@@ -144,9 +144,11 @@ export interface RadioGroupItemProps {
     value: string
     dataTestId?: string
     disabled?: boolean
+    children: ReactNode
 }
 
 export interface RadioGroupProps {
+    children: ReactNode
     value: string
     name: string
     disabled?: boolean

@@ -82,8 +82,6 @@ src/Common/RJSF/templates/WrapIfAdditionalTemplate.tsx
 src/Common/RJSF/utils.ts
 src/Common/RJSF/widgets/Checkbox.tsx
 src/Common/RJSF/widgets/Select.tsx
-src/Common/RadioGroup.tsx
-src/Common/RadioGroup/RadioGroup.tsx
 src/Common/Reload.tsx
 src/Common/ResizableTextarea.tsx
 src/Common/Security/ScanVulnerabilitiesTable.tsx
