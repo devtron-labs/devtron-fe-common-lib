@@ -442,17 +442,6 @@ export const useBuildInfraForm = ({
     }
 }
 
-const getOptionBackgroundColor = (isFocused: boolean, isSelected: boolean): string => {
-    if (isSelected) {
-        return 'var(--B100)'
-    }
-
-    if (isFocused) {
-        return 'var(--N50)'
-    }
-    return 'var(--white)'
-}
-
 export const unitSelectorStyles = () =>
     getCommonSelectStyle({
         control: (base, state) => ({
@@ -485,14 +474,23 @@ export const unitSelectorStyles = () =>
         }),
         option: (base, state) => ({
             ...base,
-            padding: '4px 12px',
-            backgroundColor: getOptionBackgroundColor(state.isFocused, state.isSelected),
-            color: 'var(--N900)',
-            cursor: 'pointer',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
-            height: '36px',
+            cursor: 'pointer',
+            ...(state.isFocused
+                ? {
+                      backgroundColor: 'var(--N50)',
+                  }
+                : {}),
+            ...(state.isSelected && {
+                backgroundColor: 'var(--B100)',
+                fontWeight: 600,
+                color: 'var(--B500)',
+            }),
+            '&:active': {
+                backgroundColor: 'var(--N50)',
+            },
         }),
         valueContainer: (base) => ({
             ...base,
