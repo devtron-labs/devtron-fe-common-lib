@@ -1,7 +1,7 @@
 import { RadioGroupItemProps } from './Types'
 import { RadioGroupContext } from './RadioGroup'
 
-export const RadioGroupItem = (props: RadioGroupItemProps) => {
+const RadioGroupItem = (props: RadioGroupItemProps) => {
     const { value, disabled, children, dataTestId } = props
     return (
         <RadioGroupContext.Consumer>
