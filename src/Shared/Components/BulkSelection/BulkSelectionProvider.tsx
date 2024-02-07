@@ -16,6 +16,8 @@ const BulkSelectionContext = createContext<UseBulkSelectionReturnType<any>>({
     handleBulkSelection: noop,
     isChecked: false,
     checkboxValue: CHECKBOX_VALUE.CHECKED,
+    isBulkSelectionApplied: false,
+    getSelectedIdentifiersCount: noop,
 })
 
 export const useBulkSelection = <T,>() => {

@@ -9,8 +9,8 @@ import { ReactComponent as ICCheckAll } from '../../../Assets/Icon/ic-check-all.
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 
 const BulkSelection = <T,>({ showPagination }: BulkSelectionProps) => {
-    const { handleBulkSelection, selectedIdentifiers, isChecked, checkboxValue } = useBulkSelection<T>()
-    const areOptionsSelected = Object.keys(selectedIdentifiers).length > 0
+    const { handleBulkSelection, isChecked, checkboxValue, getSelectedIdentifiersCount } = useBulkSelection<T>()
+    const areOptionsSelected = getSelectedIdentifiersCount() > 0
     const BulkSelectionItems: BulkSelectionDropdownItemsType[] = [
         {
             locator: BulkSelectionEvents.SELECT_ALL_ON_PAGE,

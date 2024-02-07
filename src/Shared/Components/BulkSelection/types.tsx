@@ -26,6 +26,8 @@ export interface GetBulkSelectionCheckboxValuesType {
 export interface UseBulkSelectionReturnType<T> extends GetBulkSelectionCheckboxValuesType {
     selectedIdentifiers: T
     handleBulkSelection: ({ action, data }: HandleBulkSelectionType<T>) => void
+    isBulkSelectionApplied: boolean
+    getSelectedIdentifiersCount: () => number
 }
 
 export interface BulkSelectionProps {
