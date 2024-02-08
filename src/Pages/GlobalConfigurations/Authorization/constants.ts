@@ -12,5 +12,5 @@ export enum UserStatusDto {
 export enum UserStatus {
     active = 'active',
     inactive = 'inactive',
-    temporary = 'temporary',
+    temporary = 'temporaryAccess',
 }
