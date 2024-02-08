@@ -76,6 +76,7 @@ const SearchBar = ({
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target
         setShowClearButton(!!value)
+
         if (shouldDebounce) {
             debouncedSearchChange(value)
         } else {
