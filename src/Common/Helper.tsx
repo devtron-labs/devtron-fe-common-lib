@@ -447,9 +447,16 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
  */
 export const getUrlWithSearchParams = (url: string, params: Record<string | number, any>) => {
     const searchParams = new URLSearchParams()
+    // TODO: Common out
     Object.keys(params).forEach((key) => {
         if (params[key]) {
-            searchParams.append(key, params[key])
+            if (Array.isArray(params[key])) {
+                params[key].forEach((val) => {
+                    searchParams.append(key, val)
+                })
+            } else {
+                searchParams.set(key, params[key])
+            }
         }
     })
     const queryString = searchParams.toString()
