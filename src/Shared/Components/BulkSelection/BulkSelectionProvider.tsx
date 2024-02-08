@@ -1,5 +1,11 @@
 import { createContext, useContext, useMemo, useState } from 'react'
-import { BULK_SELECTION_CONTEXT_ERROR, SELECT_ALL_ACROSS_PAGES_LOCATOR, getInvalidActionMessage } from './constants'
+import { toast } from 'react-toastify'
+import {
+    BULK_SELECTION_CONTEXT_ERROR,
+    CLEAR_SELECTIONS_WARNING,
+    SELECT_ALL_ACROSS_PAGES_LOCATOR,
+    getInvalidActionMessage,
+} from './constants'
 import {
     BulkSelectionEvents,
     GetBulkSelectionCheckboxValuesType,
@@ -64,6 +70,7 @@ export const BulkSelectionProvider = <T,>({
                 break
 
             case BulkSelectionEvents.CLEAR_IDENTIFIERS_AFTER_ACROSS_SELECTION: {
+                toast.info(CLEAR_SELECTIONS_WARNING)
                 setIdentifiersAfterClear(identifiers, selectedIds)
                 break
             }
@@ -95,6 +102,10 @@ export const BulkSelectionProvider = <T,>({
                 break
 
             case BulkSelectionEvents.SELECT_ALL_ON_PAGE: {
+                if (selectedIdentifiers[SELECT_ALL_ACROSS_PAGES_LOCATOR]) {
+                    toast.info(CLEAR_SELECTIONS_WARNING)
+                }
+
                 setIdentifiersAfterPageSelection(identifiers)
                 break
             }
