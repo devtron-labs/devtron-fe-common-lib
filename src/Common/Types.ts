@@ -1,7 +1,7 @@
 import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
-import { DockerConfigOverrideType, TaskErrorObj } from '.'
+import { DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -763,3 +763,15 @@ export interface EdgeNodeType {
 export interface EdgeEndNodeType extends EdgeNodeType {
     userApprovalConfig?: UserApprovalConfigType
 }
+
+/**
+ * Search params for sorting configuration
+ * 
+ * Note: Either both sortOrder and sortBy are required or none
+ */
+export type SortingParams<T = string> =
+    | {
+          sortOrder: SortingOrder
+          sortBy: T
+      }
+    | { sortOrder?: never; sortBy?: never }
