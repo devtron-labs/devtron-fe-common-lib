@@ -33,9 +33,7 @@ export interface FilterChipsProps extends Pick<FilterChipProps, 'getFormattedLab
      */
     clearFilters: () => void
     /**
-     *
-     * @param filterConfig
-     * @returns
+     * Handler for removing a applied filter
      */
     onRemoveFilter: (filterConfig: Record<string, unknown>) => void
 }
