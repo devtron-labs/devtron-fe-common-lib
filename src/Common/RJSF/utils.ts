@@ -19,6 +19,7 @@ export const getCommonSelectStyle = (styleOverrides = {}) => {
             ...base,
             paddingTop: 0,
             paddingBottom: 0,
+            cursor: 'pointer',
         }),
         control: (base, state) => ({
             ...base,
@@ -33,6 +34,7 @@ export const getCommonSelectStyle = (styleOverrides = {}) => {
             color: 'var(--N900)',
             backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
             padding: '10px 12px',
+            cursor: 'pointer',
         }),
         dropdownIndicator: (base, state) => ({
             ...base,

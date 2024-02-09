@@ -94,8 +94,9 @@ export default function DraggableWrapper({
     }
 
     return (
+        // Since we are using position fixed so we need to disable click on the div so that it does not interfere with the click of other elements
         <div
-            className="dc__position-fixed"
+            className="dc__position-fixed dc__disable-click"
             style={{
                 zIndex,
             }}
@@ -106,6 +107,7 @@ export default function DraggableWrapper({
                     {...childDivProps}
                     style={{
                         zIndex,
+                        pointerEvents: 'auto',
                     }}
                 >
                     {children}
