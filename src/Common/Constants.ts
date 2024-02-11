@@ -259,3 +259,19 @@ export const SELECTED_APPROVAL_TAB_STATE = {
     APPROVAL: 'approval',
     PENDING: 'pending',
 }
+
+export enum SortingOrder {
+    /**
+     * Ascending order
+     */
+    ASC = 'ASC',
+    /**
+     * Descending order
+     */
+    DESC = 'DESC',
+}
+
+/**
+ * Base page size for pagination
+ */
+export const DEFAULT_BASE_PAGE_SIZE = 20

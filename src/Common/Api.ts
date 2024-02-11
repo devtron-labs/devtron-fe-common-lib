@@ -1,6 +1,7 @@
 import { ServerErrors } from './ServerError'
 import { FALLBACK_REQUEST_TIMEOUT, Host, URLS } from './Constants'
 import { ResponseType, APIOptions } from './Types'
+import { MutableRefObject } from 'react'
 
 const responseMessages = {
     100: 'Continue',
@@ -224,5 +225,26 @@ export const put = (url: string, data: object, options?: APIOptions): Promise<Re
 
 export const get = (url: string, options?: APIOptions): Promise<ResponseType> => fetchInTime(url, 'GET', null, options)
 
-export const trash = (url: string, data?: object, options?: APIOptions): Promise<ResponseType> =>
-    fetchInTime(url, 'DELETE', data, options)
+export const trash = (url: string, data?: object, options?: APIOptions): Promise<ResponseType> => {
+    return fetchInTime(url, 'DELETE', data, options)
+}
+
+/**
+ * Aborts the previous request before triggering next request
+ */
+export const abortPreviousRequests = <T,>(
+    callback: () => Promise<T>,
+    abortControllerRef: MutableRefObject<AbortController>,
+): Promise<T> => {
+    abortControllerRef.current.abort()
+    // eslint-disable-next-line no-param-reassign
+    abortControllerRef.current = new AbortController()
+    return callback()
+}
+
+/**
+ * Returns true if the error is due to a aborted request
+ */
+export const getIsRequestAborted = (error) =>
+    // The 0 code is common for aborted and blocked requests
+    error && error.code === 0 && error.message === 'The user aborted a request.'

@@ -5,3 +5,4 @@ declare global {
     }
 }
 export * from './Common'
+export * from './Pages'
