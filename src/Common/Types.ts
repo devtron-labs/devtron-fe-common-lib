@@ -147,6 +147,32 @@ export interface RadioGroupItemProps {
     children: ReactNode
 }
 
+export interface RadioGroupInterface {
+    name: string
+    onChange: any
+    className?: string
+    initialTab: string
+    disabled: boolean
+    children: ReactNode
+}
+
+export interface RadioInterface {
+    children: ReactNode
+    value: string
+    className?: string
+    showTippy?: boolean
+    tippyContent?: any
+    tippyPlacement?: string
+    canSelect?: boolean
+    isDisabled?: boolean
+    tippyClass?: string
+    dataTestId?: string
+}
+export interface RadioGroupComposition {
+    Radio?: React.FC<any>
+}
+
+
 export interface RadioGroupProps {
     children: ReactNode
     value: string

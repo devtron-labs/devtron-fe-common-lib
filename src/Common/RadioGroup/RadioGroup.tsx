@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import Tippy from '@tippyjs/react'
-import React, { useState, useEffect, ReactNode, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { ConditionalWrap } from '../Helper'
 import './radioGroup.scss'
+import { RadioGroupComposition, RadioGroupInterface, RadioInterface } from '..'
 
 const RadioContext = React.createContext(null)
 
@@ -12,32 +13,6 @@ function useRadioContext() {
         throw new Error(`Radio compound components cannot be rendered outside the Toggle component`)
     }
     return context
-}
-
-interface RadioGroupInterface {
-    name: string
-    onChange: any
-    className?: string
-    initialTab: string
-    disabled: boolean
-    children: ReactNode
-}
-
-interface RadioInterface {
-    children: ReactNode
-    value: string
-    className?: string
-    showTippy?: boolean
-    tippyContent?: any
-    tippyPlacement?: string
-    canSelect?: boolean
-    isDisabled?: boolean
-    tippyClass?: string
-    dataTestId?: string
-}
-
-interface RadioGroupComposition {
-    Radio?: React.FC<any>
 }
 
 const RadioGroup: React.FC<RadioGroupInterface> & RadioGroupComposition = React.memo(
