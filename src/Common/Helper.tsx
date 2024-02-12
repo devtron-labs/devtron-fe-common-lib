@@ -585,19 +585,19 @@ export const customStyles = {
     }),
 }
 
-export const getFilteredChartVersions = (charts, selectedChartType) => {
-  // Filter chart versions based on selected chart type
-  return charts
-      .filter((item) => item?.chartType === selectedChartType.value)
-      .map((item) => ({
-          value: item?.chartVersion,
-          label: item?.chartVersion,
-          chartRefId: item.chartRefId,
-      }))
-}
+export const getFilteredChartVersions = (charts, selectedChartType) =>
+    // Filter chart versions based on selected chart type
+    charts
+        .filter((item) => item?.chartType === selectedChartType.value)
+        .map((item) => ({
+            value: item?.chartVersion,
+            label: item?.chartVersion,
+            chartRefId: item.chartRefId,
+        }))
+
 function removeEmptyObjectKeysAndNullValues(obj, originaljsonCopy) {
     // It recursively removes empty object keys and empty array keys
-    for (let key in obj) {
+    for (const key in obj) {
         if (Array.isArray(obj[key])) {
             // Check if the array is empty
             if (obj[key].length !== 0) {
@@ -629,18 +629,18 @@ export function getUnlockedJSON(json, jsonPathArray, removeParentKeysAndEmptyArr
 
     const jsonCopy = JSON.parse(JSON.stringify(json))
     const originaljsonCopy = JSON.parse(JSON.stringify(json))
-    let removedPatches = []
-    let patches = jsonPathArray.flatMap((jsonPath) => {
+    const removedPatches = []
+    const patches = jsonPathArray.flatMap((jsonPath) => {
         const pathsToRemove = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
-        //reversing patches to handle correct array index deletion
+        // reversing patches to handle correct array index deletion
         pathsToRemove.reverse()
         return pathsToRemove.map((result) => {
-            //storing removed patches to have functionality of undo
+            // storing removed patches to have functionality of undo
             removedPatches.push({ op: 'add', path: result.pointer, value: result.value })
             return { op: 'remove', path: result.pointer }
         })
     })
-    let newDocument = jsonpatch.applyPatch(jsonCopy, patches).newDocument
+    const { newDocument } = jsonpatch.applyPatch(jsonCopy, patches)
     if (removeParentKeysAndEmptyArrays) removeEmptyObjectKeysAndNullValues(newDocument, originaljsonCopy)
     return { newDocument, removedPatches: removedPatches.reverse() }
 }

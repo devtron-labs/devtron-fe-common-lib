@@ -36,7 +36,6 @@ src/Common/Dialogs/ForceDeleteDialog.tsx
 src/Common/DraggableWrapper/DraggableButton.tsx
 src/Common/DraggableWrapper/DraggableWrapper.tsx
 src/Common/Drawer/Drawer.tsx
-src/Common/EmptyState/EmptyState.tsx
 src/Common/EmptyState/GenericEmptyState.tsx
 src/Common/Error.tsx
 src/Common/ErrorScreenNotFound.tsx
