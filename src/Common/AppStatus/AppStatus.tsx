@@ -40,7 +40,9 @@ export default function AppStatus({
                 placement="top"
                 content="To fetch app status for GitOps based deployments open the app detail page"
             >
-                <InfoIcon className="icon-dim-16 fcn-6" />
+                <div className="flex">
+                    <InfoIcon className="icon-dim-16 fcn-6" />
+                </div>
             </Tippy>
         )
     }
