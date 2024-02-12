@@ -3,7 +3,7 @@
     &:focus,
     &:focus-within {
         outline: none;
-        border: solid 1px var(--B500);
+        border: solid 1px var(--B500) !important;
     }
 
     &__input {
