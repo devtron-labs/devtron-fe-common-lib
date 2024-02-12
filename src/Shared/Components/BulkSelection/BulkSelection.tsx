@@ -35,6 +35,7 @@ const BulkSelection = <T,>({ showPagination }: BulkSelectionProps) => {
                       label: BulkSelectionOptionsLabels[BulkSelectionEvents.CLEAR_ALL_SELECTIONS],
                       isSelected: false,
                       icon: ICClose,
+                      iconClass: 'icon-use-fill-n6',
                   },
               ]
             : []),
@@ -67,6 +68,7 @@ const BulkSelection = <T,>({ showPagination }: BulkSelectionProps) => {
                         isSelected={item.isSelected}
                         icon={item.icon}
                         handleBulkSelection={handleBulkSelection}
+                        iconClass={item.iconClass}
                     />
                 ))}
             </PopupMenu.Body>

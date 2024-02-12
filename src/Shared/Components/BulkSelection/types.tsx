@@ -39,6 +39,7 @@ export interface BulkSelectionDropdownItemsType {
     label: string
     isSelected: boolean
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+    iconClass?: string
 }
 
 export interface BulkSelectionDropdownItemsProps<T>
