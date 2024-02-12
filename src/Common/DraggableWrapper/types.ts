@@ -20,6 +20,10 @@ export interface DraggableWrapperProps {
     parentRef?: RefObject<HTMLDivElement>
     boundaryGap?: number
     childDivProps?: HTMLAttributes<HTMLDivElement>
+    /**
+     * Delta for fixing the scrollable layout positioning
+     */
+    layoutFixDelta?: number
 }
 
 /**

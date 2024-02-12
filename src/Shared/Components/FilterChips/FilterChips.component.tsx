@@ -18,7 +18,7 @@ const FilterChip = ({
     const valueToDisplay = getFormattedValue(label, value) ?? value
 
     return (
-        <div className="flexbox flex-align-center br-4 dc__border dc__bg-n50 pl-6 pr-6 pt-2 pb-2 dc__user-select-none h-24 dc__gap-6 fs-12 lh-20 cn-9 fw-4">
+        <div className="flexbox flex-align-center br-4 dc__border dc__bg-n50 pl-6 pr-6 pt-2 pb-2 dc__user-select-none h-24 dc__gap-6 fs-12 lh-20 cn-9 fw-4 dc__ellipsis-right">
             <span className="fw-6 dc__capitalize">{labelToDisplay}</span>
             <span className="dc__divider h-24" />
             <span className="dc__ellipsis-right">{valueToDisplay}</span>
@@ -88,7 +88,7 @@ const FilterChips = ({
                     ),
                 )}
                 <div className="flex">
-                    <button type="button" className="cta text fs-13 lh-20-imp h-20 p-0-imp" onClick={clearFilters}>
+                    <button type="button" className="cta text fs-13-imp lh-20-imp h-20 p-0-imp" onClick={clearFilters}>
                         Clear All Filters
                     </button>
                 </div>
