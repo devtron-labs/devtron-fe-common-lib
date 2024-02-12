@@ -767,7 +767,7 @@ export interface EdgeEndNodeType extends EdgeNodeType {
 
 /**
  * Search params for sorting configuration
- * 
+ *
  * Note: Either both sortOrder and sortBy are required or none
  */
 export type SortingParams<T = string> =

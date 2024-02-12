@@ -1,7 +1,7 @@
+import { MutableRefObject } from 'react'
 import { ServerErrors } from './ServerError'
 import { FALLBACK_REQUEST_TIMEOUT, Host, URLS } from './Constants'
 import { ResponseType, APIOptions } from './Types'
-import { MutableRefObject } from 'react'
 
 const responseMessages = {
     100: 'Continue',
@@ -76,9 +76,7 @@ const responseMessages = {
 
 function handleLogout() {
     const continueParam = `${window.location.pathname.replace(window.__BASE_URL__, '')}${window.location.search}`
-    window.location.href = `${window.location.origin}${window.__BASE_URL__}${
-        URLS.LOGIN_SSO
-    }?continue=${continueParam}`
+    window.location.href = `${window.location.origin}${window.__BASE_URL__}${URLS.LOGIN_SSO}?continue=${continueParam}`
 }
 
 async function handleServerError(contentType, response) {
@@ -225,14 +223,13 @@ export const put = (url: string, data: object, options?: APIOptions): Promise<Re
 
 export const get = (url: string, options?: APIOptions): Promise<ResponseType> => fetchInTime(url, 'GET', null, options)
 
-export const trash = (url: string, data?: object, options?: APIOptions): Promise<ResponseType> => {
-    return fetchInTime(url, 'DELETE', data, options)
-}
+export const trash = (url: string, data?: object, options?: APIOptions): Promise<ResponseType> =>
+    fetchInTime(url, 'DELETE', data, options)
 
 /**
  * Aborts the previous request before triggering next request
  */
-export const abortPreviousRequests = <T,>(
+export const abortPreviousRequests = <T>(
     callback: () => Promise<T>,
     abortControllerRef: MutableRefObject<AbortController>,
 ): Promise<T> => {
