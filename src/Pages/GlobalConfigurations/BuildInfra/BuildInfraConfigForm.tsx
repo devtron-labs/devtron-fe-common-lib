@@ -30,7 +30,6 @@ const InheritingHeader = ({
                     {inheritingDataString}
                 </span>
 
-                {/* TODO: Add ellipsis */}
                 <p className="m-0 cn-7 fs-13 fw-4 lh-20 dc__no-shrink">
                     {BUILD_INFRA_TEXT.INHERITING_HEADING_DESCRIPTION}
                 </p>

@@ -97,7 +97,6 @@ export const validateRequestLimit = ({
     }
 
     // Assuming requestUnit and requestNumber are not 0
-    // TODO: Communicate this assumption to the backend
     const limitRequestUnitFactor = limitUnit / requestUnit
     const limitRequestFactor = limitNumber / requestNumber
 
