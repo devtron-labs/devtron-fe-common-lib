@@ -13,59 +13,65 @@ export const translateString = (stringToTranslate: TranslatableString, params?: 
     }
 }
 
-export const getCommonSelectStyle = (styleOverrides = {}) => ({
-    menuList: (base) => ({
-        ...base,
-        paddingTop: 0,
-        paddingBottom: 0,
-    }),
-    control: (base, state) => ({
-        ...base,
-        minHeight: '32px',
-        boxShadow: 'none',
-        backgroundColor: 'var(--N50)',
-        border: state.isFocused ? '1px solid var(--B500)' : '1px solid var(--N200)',
-        cursor: 'pointer',
-    }),
-    option: (base, state) => ({
-        ...base,
-        color: 'var(--N900)',
-        backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
-        padding: '10px 12px',
-    }),
-    dropdownIndicator: (base, state) => ({
-        ...base,
-        color: 'var(--N400)',
-        padding: '0 8px',
-        transition: 'all .2s ease',
-        transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-    }),
-    valueContainer: (base, state) => ({
-        ...base,
-        padding: '0 8px',
-        fontWeight: '400',
-        color: state.selectProps.menuIsOpen ? 'var(--N500)' : base.color,
-    }),
-    loadingMessage: (base) => ({
-        ...base,
-        color: 'var(--N600)',
-    }),
-    noOptionsMessage: (base) => ({
-        ...base,
-        color: 'var(--N600)',
-    }),
-    multiValue: (base, state) => ({
-        ...base,
-        border: `1px solid var(--N200)`,
-        borderRadius: `4px`,
-        background: 'white',
-        height: '28px',
-        marginRight: '8px',
-        padding: '2px',
-        fontSize: '12px',
-    }),
-    ...styleOverrides,
-})
+export const getCommonSelectStyle = (styleOverrides = {}) => {
+    return {
+        menuList: (base) => ({
+            ...base,
+            paddingTop: 0,
+            paddingBottom: 0,
+            cursor: 'pointer',
+        }),
+        control: (base, state) => ({
+            ...base,
+            minHeight: '32px',
+            boxShadow: 'none',
+            backgroundColor: 'var(--N50)',
+            border: state.isFocused ? '1px solid var(--B500)' : '1px solid var(--N200)',
+            cursor: 'pointer',
+        }),
+        option: (base, state) => ({
+            ...base,
+            color: 'var(--N900)',
+            backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
+            padding: '10px 12px',
+            cursor: 'pointer',
+        }),
+        dropdownIndicator: (base, state) => ({
+            ...base,
+            color: 'var(--N400)',
+            padding: '0 8px',
+            transition: 'all .2s ease',
+            transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+        }),
+        valueContainer: (base, state) => ({
+            ...base,
+            padding: '0 8px',
+            fontWeight: '400',
+            color: state.selectProps.menuIsOpen ? 'var(--N500)' : base.color,
+        }),
+        loadingMessage: (base) => ({
+            ...base,
+            color: 'var(--N600)',
+        }),
+        noOptionsMessage: (base) => ({
+            ...base,
+            color: 'var(--N600)',
+        }),
+        multiValue: (base, state) => {
+            return {
+                ...base,
+                border: `1px solid var(--N200)`,
+                borderRadius: `4px`,
+                background: 'white',
+                height: '28px',
+                marginRight: '8px',
+                padding: '2px',
+                fontSize: '12px',
+            }
+        },
+        ...styleOverrides,
+    }
+}
 
 /**
  * Returns the redirection props for a url

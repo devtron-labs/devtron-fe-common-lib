@@ -10,6 +10,7 @@ Valid States of Checkbox:
 5. disabled: false, checked: true,  value: INTERMIDIATE
 6. disabled: false, checked: true,  value: CHECKED
 */
+// TODO: Associate label with input element
 export class Checkbox extends Component<CheckboxProps> {
     render() {
         const rootClassName = `${this.props.rootClassName ? this.props.rootClassName : ''}`
