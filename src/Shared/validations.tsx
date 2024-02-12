@@ -64,7 +64,7 @@ export const validateRequiredPositiveNumber = (value: string | number): Validati
         }
     }
 
-    // TODO: Look if regex is available for this, since 0002 is not a valid number
+    // 0002 is a valid number
     if (!/^\d+(\.\d+)?$/.test(value.toString())) {
         return {
             isValid: false,

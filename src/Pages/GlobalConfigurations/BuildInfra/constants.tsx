@@ -62,7 +62,6 @@ export const BUILD_INFRA_BREADCRUMB: UseBreadcrumbProps = {
     },
 }
 
-// TODO: move heading to component itself
 export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
     {
         heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20 w-240 dc__no-shrink">CPU (Request - Limit)</h3>,
