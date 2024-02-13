@@ -12,12 +12,12 @@ function usePopupContext() {
     return context
 }
 
-function PopupMenu({
+const PopupMenu = ({
     children = null,
     onToggleCallback = null,
     autoClose = false,
     autoPosition = false,
-}: PopupMenuType) {
+}: PopupMenuType) => {
     const [popupPosition, setPopupPosition] = React.useState(null)
     const [opacity, setOpacity] = React.useState(0)
     const observer = React.useRef<IntersectionObserver | null>(null)
@@ -135,15 +135,15 @@ function PopupMenu({
     )
 }
 
-function Button({
+const Button = ({
     children = null,
     disabled = false,
     rootClassName = '',
     tabIndex = 0,
     onHover = false,
     isKebab = false,
-    dataTestId = "",
-}: PopupMenuButtonType) {
+    dataTestId = '',
+}: PopupMenuButtonType) => {
     const { handleOpen, popupPosition, buttonRef, initialiseButtonWidth } = usePopupContext()
     return (
         <button
@@ -163,14 +163,14 @@ function Button({
     )
 }
 
-function Body({
+const Body = ({
     children = null,
     rootClassName = '',
     style = {},
     autoWidth = false,
     preventWheelDisable = false,
     noBackDrop,
-}: PopupMenuBodyType) {
+}: PopupMenuBodyType) => {
     const { handleClose, popupPosition, opacity, callbackRef, buttonWidth } = usePopupContext()
     return popupPosition ? (
         <Modal
@@ -183,7 +183,7 @@ function Body({
                 ...popupPosition,
                 ...style,
                 ...(autoWidth ? { width: buttonWidth.current } : {}),
-                opacity: opacity,
+                opacity,
             }}
             preventWheelDisable={preventWheelDisable}
             noBackDrop={noBackDrop}

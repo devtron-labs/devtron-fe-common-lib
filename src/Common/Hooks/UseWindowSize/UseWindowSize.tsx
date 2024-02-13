@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react'
 
 let timeout
 
-const getSize = () => {
-    return {
-        width: window.innerWidth,
-        height: window.innerHeight,
-    }
-}
+const getSize = () => ({
+    width: window.innerWidth,
+    height: window.innerHeight,
+})
 
 export const useWindowSize = () => {
     const [windowSize, setWindowSize] = useState(getSize)
@@ -17,7 +15,7 @@ export const useWindowSize = () => {
             window.cancelAnimationFrame(timeout)
         }
 
-        timeout = window.requestAnimationFrame(function () {
+        timeout = window.requestAnimationFrame(() => {
             setWindowSize(getSize())
         })
     }

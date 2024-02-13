@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { ReactComponent as ICClear } from '../../../../assets/icons/ic-error.svg'
+import { ReactComponent as ICClear } from '../../../Assets/Icon/ic-error-cross.svg'
 import DebouncedSearch from '../DebouncedSearch'
 
 jest.mock('../../helpers/Helpers', () => ({

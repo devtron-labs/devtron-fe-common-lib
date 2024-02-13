@@ -13,13 +13,12 @@ export interface ImageComment {
     artifactId: number
 }
 
-
 export interface ImageTaggingContainerType {
     ciPipelineId?: number
     artifactId?: number
     imageComment?: ImageComment
     imageReleaseTags?: ReleaseTag[]
-    updateCurrentAppMaterial? : (matId:number, releaseTags?:ReleaseTag[], imageComment?:ImageComment) => void
+    updateCurrentAppMaterial?: (matId: number, releaseTags?: ReleaseTag[], imageComment?: ImageComment) => void
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
     forceReInit?: boolean

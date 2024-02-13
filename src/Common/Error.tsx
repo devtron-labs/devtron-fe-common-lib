@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import EmptyState from './EmptyState/EmptyState'
 import notAuthorized from '../Assets/Img/ic-not-authorized.svg'
 import ErrorScreenNotFound from './ErrorScreenNotFound'
 import { ERROR_EMPTY_SCREEN } from './Constants'
@@ -20,9 +19,7 @@ export class ErrorScreenManager extends Component<{
             case 401:
                 return 'Unauthorized'
             case 403:
-                return (
-                    <ErrorScreenNotAuthorized subtitle={this.props.subtitle} />
-                )
+                return <ErrorScreenNotAuthorized subtitle={this.props.subtitle} />
             case 404:
                 return <ErrorScreenNotFound />
             case 500:
@@ -35,8 +32,9 @@ export class ErrorScreenManager extends Component<{
                 return <Reload className={this.props.reloadClass} />
         }
     }
+
     render() {
-        let msg = this.getMessage()
+        const msg = this.getMessage()
         return (
             <div>
                 <h1>{msg}</h1>

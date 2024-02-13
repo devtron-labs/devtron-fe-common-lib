@@ -28,30 +28,24 @@ interface RadioGroupComposition {
     Radio?: React.FC<any>
 }
 
-const RadioGroup: React.FC<RadioGroupInterface> & RadioGroupComposition = React.memo(function RadioGroup({
-    name,
-    onChange,
-    children,
-    className = '',
-    initialTab,
-    disabled = false,
-    dataTestId,
-}) {
-    const [selected, select] = useState(null)
+const RadioGroup: React.FC<RadioGroupInterface> & RadioGroupComposition = React.memo(
+    ({ name, onChange, children, className = '', initialTab, disabled = false, dataTestId }) => {
+        const [selected, select] = useState(null)
 
-    useEffect(() => {
-        if (initialTab === selected) return
-        select(initialTab)
-    }, [initialTab])
+        useEffect(() => {
+            if (initialTab === selected) return
+            select(initialTab)
+        }, [initialTab])
 
-    return (
-        <RadioContext.Provider value={{ name, selected, select, disabled, onChange }}>
-            <div className={`${className} radio-group`}>{children}</div>
-        </RadioContext.Provider>
-    )
-})
+        return (
+            <RadioContext.Provider value={{ name, selected, select, disabled, onChange }}>
+                <div className={`${className} radio-group`}>{children}</div>
+            </RadioContext.Provider>
+        )
+    },
+)
 
-function Radio({
+const Radio = ({
     value,
     children,
     className = '',
@@ -62,7 +56,7 @@ function Radio({
     isDisabled = false,
     tippyClass = '',
     dataTestId,
-}) {
+}) => {
     const { name, selected, select, disabled, onChange } = useRadioContext()
     return (
         <ConditionalWrap

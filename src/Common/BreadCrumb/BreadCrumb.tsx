@@ -3,10 +3,11 @@ import { Link, useRouteMatch, useParams } from 'react-router-dom'
 import { useBreadcrumbContext } from './BreadcrumbStore'
 import { ConditionalWrap } from '../Helper'
 import { Breadcrumb, Breadcrumbs, UseBreadcrumbOptionalProps, UseBreadcrumbState } from './Types'
+
 export const BreadcrumbContext = React.createContext(null)
 
 export function useBreadcrumb(props?: UseBreadcrumbOptionalProps, deps?: any[]): UseBreadcrumbState {
-    let sep = props?.sep || '/'
+    const sep = props?.sep || '/'
     deps = deps || []
     const { url, path } = useRouteMatch()
     const params = useParams()
@@ -30,7 +31,7 @@ export function useBreadcrumb(props?: UseBreadcrumbOptionalProps, deps?: any[]):
         setState((state) => ({ ...state, alias: tempAlias }))
     }
 
-    let levels: Breadcrumb[] = useMemo(() => {
+    const levels: Breadcrumb[] = useMemo(() => {
         const paths = path.split('/').filter(Boolean)
         const urls = url.split('/').filter(Boolean)
         return paths.map((path, idx) => {
@@ -41,29 +42,31 @@ export function useBreadcrumb(props?: UseBreadcrumbOptionalProps, deps?: any[]):
             return crumb
         })
     }, [path, url])
-    const { res: breadcrumbs } = useMemo(() => {
-        return levels.reduce(
-            (agg, curr, idx) => {
-                const { res, prefix } = agg
-                const { to, name } = curr
-                res.push({
-                    to:
-                        !state.alias[name]?.component || (state.alias[name]?.component && state.alias[name]?.linked)
-                            ? `${prefix}${to}`
-                            : null,
-                    name:
-                        typeof state.alias[name] === 'object'
-                            ? !!state.alias[name]?.component
-                                ? state.alias[name].component
-                                : null
-                            : state.alias[name] || name,
-                    className: curr.className || '',
-                })
-                return { res, prefix: `${prefix}${curr.to}${sep}` }
-            },
-            { res: [], prefix: '/' },
-        )
-    }, [levels, state])
+    const { res: breadcrumbs } = useMemo(
+        () =>
+            levels.reduce(
+                (agg, curr, idx) => {
+                    const { res, prefix } = agg
+                    const { to, name } = curr
+                    res.push({
+                        to:
+                            !state.alias[name]?.component || (state.alias[name]?.component && state.alias[name]?.linked)
+                                ? `${prefix}${to}`
+                                : null,
+                        name:
+                            typeof state.alias[name] === 'object'
+                                ? state.alias[name]?.component
+                                    ? state.alias[name].component
+                                    : null
+                                : state.alias[name] || name,
+                        className: curr.className || '',
+                    })
+                    return { res, prefix: `${prefix}${curr.to}${sep}` }
+                },
+                { res: [], prefix: '/' },
+            ),
+        [levels, state],
+    )
 
     return { breadcrumbs, setCrumb, resetCrumb }
 }
@@ -76,7 +79,7 @@ export const BreadCrumb: React.FC<Breadcrumbs> = ({
     const { url } = useRouteMatch()
     const filteredCrumbs = breadcrumbs.filter((crumb) => !!crumb.name)
     return (
-        <React.Fragment>
+        <>
             {filteredCrumbs.map((breadcrumb, idx) => (
                 <React.Fragment key={idx}>
                     <ConditionalWrap
@@ -100,6 +103,6 @@ export const BreadCrumb: React.FC<Breadcrumbs> = ({
                     )}
                 </React.Fragment>
             ))}
-        </React.Fragment>
+        </>
     )
 }

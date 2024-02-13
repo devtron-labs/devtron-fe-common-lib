@@ -1,7 +1,7 @@
-import moment from 'moment';
-import {get, post} from './Api';
+import moment from 'moment'
+import { get, post } from './Api'
 import { ROUTES } from './Constants'
-import { sortCallback } from './Helper';
+import { sortCallback } from './Helper'
 import {
     TeamList,
     ResponseType,
@@ -17,23 +17,21 @@ import {
 } from './Types'
 
 export const getTeamListMin = (): Promise<TeamList> => {
-  // ignore active field
-  const URL = `${ROUTES.PROJECT_LIST_MIN}`;
-  return get(URL).then(response => {
-      let list = [];
-      if (response && response.result && Array.isArray(response.result)) {
-          list = response.result;
-      }
-      list = list.sort((a, b) => {
-          return sortCallback('name', a, b);
-      });
-      return {
-          code: response.code,
-          status: response.status,
-          result: list,
-      };
-  });
-};
+    // ignore active field
+    const URL = `${ROUTES.PROJECT_LIST_MIN}`
+    return get(URL).then((response) => {
+        let list = []
+        if (response && response.result && Array.isArray(response.result)) {
+            list = response.result
+        }
+        list = list.sort((a, b) => sortCallback('name', a, b))
+        return {
+            code: response.code,
+            status: response.status,
+            result: list,
+        }
+    })
+}
 
 interface UserRole extends ResponseType {
     result?: {
@@ -59,14 +57,12 @@ export function getUserRole(appName?: string): Promise<UserRole> {
     return get(`${ROUTES.USER_CHECK_ROLE}${appName ? `?appName=${appName}` : ''}`)
 }
 
-export function setImageTags(request, pipelineId: number, artifactId: number){
-    return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`,request )
+export function setImageTags(request, pipelineId: number, artifactId: number) {
+    return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
 }
 
 const processURL = (url: string, params: object) => {
-    const validParams = Object.keys(params).filter((key) => {
-        return params[key] != null
-    })
+    const validParams = Object.keys(params).filter((key) => params[key] != null)
 
     if (!validParams.length) {
         return url
@@ -75,11 +71,11 @@ const processURL = (url: string, params: object) => {
     const queryString = validParams
         .map((key) => {
             if (Array.isArray(params[key])) {
-                return `${key}=${params[key].join(',')}`  
+                return `${key}=${params[key].join(',')}`
             }
             return `${key}=${params[key]}`
         })
-        .join('&')    
+        .join('&')
 
     return `${url}?${queryString}`
 }
@@ -136,25 +132,23 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
             // It is going to be null but required in type so can't remove
             lastExecution: material.lastExecution,
             materialInfo: material.material_info
-                ? material.material_info.map((mat) => {
-                      return {
-                          modifiedTime: mat.modifiedTime
-                              ? moment(mat.modifiedTime).format('ddd, DD MMM YYYY, hh:mm A')
-                              : '',
-                          commitLink: createGitCommitUrl(mat.url, mat.revision),
-                          author: mat.author || '',
-                          message: mat.message || '',
-                          revision: mat.revision || '',
-                          tag: mat.tag || '',
-                          webhookData: mat.webhookData || '',
-                          url: mat.url || '',
-                          branch:
-                              (material.ciConfigureSourceType === SourceTypeMap.WEBHOOK
-                                  ? material.ciConfigureSourceValue
-                                  : mat.branch) || '',
-                          type: material.ciConfigureSourceType || '',
-                      }
-                  })
+                ? material.material_info.map((mat) => ({
+                      modifiedTime: mat.modifiedTime
+                          ? moment(mat.modifiedTime).format('ddd, DD MMM YYYY, hh:mm A')
+                          : '',
+                      commitLink: createGitCommitUrl(mat.url, mat.revision),
+                      author: mat.author || '',
+                      message: mat.message || '',
+                      revision: mat.revision || '',
+                      tag: mat.tag || '',
+                      webhookData: mat.webhookData || '',
+                      url: mat.url || '',
+                      branch:
+                          (material.ciConfigureSourceType === SourceTypeMap.WEBHOOK
+                              ? material.ciConfigureSourceValue
+                              : mat.branch) || '',
+                      type: material.ciConfigureSourceType || '',
+                  }))
                 : [],
             filterState,
             appliedFiltersTimestamp: material.appliedFiltersTimestamp ?? '',
@@ -237,9 +231,7 @@ const processCDMaterialServiceResponse = (
     // TODO: On update of service would remove from here
     const filteredMaterials =
         filter && filter === CDMaterialFilterQuery.RESOURCE
-            ? materials.filter((material) => {
-                  return material.filterState === FilterStates.ALLOWED
-              })
+            ? materials.filter((material) => material.filterState === FilterStates.ALLOWED)
             : materials
 
     return {
@@ -263,7 +255,7 @@ export const genericCDMaterialsService = (
 ): Promise<CDMaterialResponseType> => {
     // TODO: On update of service would remove from here
     const manipulatedParams = getSanitizedQueryParams(queryParams)
-    
+
     let URL
     switch (serviceType) {
         case CDMaterialServiceEnum.ROLLBACK:
@@ -272,13 +264,16 @@ export const genericCDMaterialsService = (
 
         // Meant for handling getCDMaterialList
         default:
-            URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material`, { ...manipulatedParams, stage: stageMap[stage] })
+            URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material`, {
+                ...manipulatedParams,
+                stage: stageMap[stage],
+            })
             break
     }
 
-    return get(URL, { signal }).then((response) => {
-        return processCDMaterialServiceResponse(response.result, stage, queryParams.offset, queryParams.filter)
-    })
+    return get(URL, { signal }).then((response) =>
+        processCDMaterialServiceResponse(response.result, stage, queryParams.offset, queryParams.filter),
+    )
 }
 
 export function extractImage(image: string): string {
@@ -287,27 +282,27 @@ export function extractImage(image: string): string {
 
 export function createGitCommitUrl(url: string, revision: string): string {
     if (!url || !revision) {
-        return "NA"
+        return 'NA'
     }
-    if (url.indexOf("gitlab") > 0 || url.indexOf("github") > 0 || url.indexOf("azure") > 0) {
-        let urlpart = url.split("@")
+    if (url.indexOf('gitlab') > 0 || url.indexOf('github') > 0 || url.indexOf('azure') > 0) {
+        const urlpart = url.split('@')
         if (urlpart.length > 1) {
-            return "https://" + urlpart[1].split(".git")[0] + "/commit/" + revision
+            return `https://${urlpart[1].split('.git')[0]}/commit/${revision}`
         }
         if (urlpart.length == 1) {
-            return urlpart[0].split(".git")[0] + "/commit/" + revision
+            return `${urlpart[0].split('.git')[0]}/commit/${revision}`
         }
     }
-    if (url.indexOf("bitbucket") > 0) {
-        let urlpart = url.split("@")
+    if (url.indexOf('bitbucket') > 0) {
+        const urlpart = url.split('@')
         if (urlpart.length > 1) {
-            return "https://" + urlpart[1].split(".git")[0] + "/commits/" + revision
+            return `https://${urlpart[1].split('.git')[0]}/commits/${revision}`
         }
         if (urlpart.length == 1) {
-            return urlpart[0].split(".git")[0] + "/commits/" + revision
+            return `${urlpart[0].split('.git')[0]}/commits/${revision}`
         }
     }
-    return "NA"
+    return 'NA'
 }
 
 export function fetchChartTemplateVersions() {

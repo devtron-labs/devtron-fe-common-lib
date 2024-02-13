@@ -3,20 +3,20 @@ import { useThrottledEffect } from './Helper'
 import { ResizableTextareaProps } from './Types'
 
 export const ResizableTextarea: React.FC<ResizableTextareaProps> = ({
-                                                                        minHeight,
-                                                                        maxHeight,
-                                                                        value,
-                                                                        onChange = null,
-                                                                        onBlur = null,
-                                                                        onFocus = null,
-                                                                        className = '',
-                                                                        placeholder = 'Enter your text here..',
-                                                                        lineHeight = 14,
-                                                                        padding = 12,
-                                                                        disabled = false,
-                                                                        dataTestId,
-                                                                        ...props
-                                                                    }) => {
+    minHeight,
+    maxHeight,
+    value,
+    onChange = null,
+    onBlur = null,
+    onFocus = null,
+    className = '',
+    placeholder = 'Enter your text here..',
+    lineHeight = 14,
+    padding = 12,
+    disabled = false,
+    dataTestId,
+    ...props
+}) => {
     const [text, setText] = useState('')
     const _textRef = useRef(null)
 
@@ -48,7 +48,7 @@ export const ResizableTextarea: React.FC<ResizableTextareaProps> = ({
             if (maxHeight && nextHeight > maxHeight) {
                 nextHeight = maxHeight
             }
-            _textRef.current.style.height = nextHeight + 2 + 'px'
+            _textRef.current.style.height = `${nextHeight + 2}px`
         },
         500,
         [text],
