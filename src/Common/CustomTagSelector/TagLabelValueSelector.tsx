@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Tippy from '@tippyjs/react'
 import PopupMenu from '../PopupMenu'
 import { ReactComponent as ErrorCross } from '../../Assets/Icon/ic-cross.svg'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-outlined.svg'
@@ -6,7 +7,6 @@ import { KEY_VALUE } from '../Constants'
 import { stopPropagation } from '../Helper'
 import { ResizableTagTextArea } from './ResizableTagTextArea'
 import { SuggestedTagOptionType, TagLabelValueSelectorType } from './Types'
-import Tippy from '@tippyjs/react'
 import { ValidationRules } from './ValidationRules'
 
 export const TagLabelValueSelector = ({
@@ -107,38 +107,34 @@ export const TagLabelValueSelector = ({
         return null
     }
 
-    const option = (tag: SuggestedTagOptionType, index: number): JSX.Element => {
-        return (
-            <div
-                key={`${tag.value}-${index}`}
-                data-key={tag.label}
-                data-propagate={tag.propagate}
-                className="dc__hover-n50 dc__ellipsis-right lh-20 fs-13 fw-4 pt-6 pr-8 pb-6 pl-8 cursor"
-                onClick={onSelectValue}
-                data-testid={`tag-label-value-${index}`}
-            >
-                {tag.label}
-            </div>
-        )
-    }
+    const option = (tag: SuggestedTagOptionType, index: number): JSX.Element => (
+        <div
+            key={`${tag.value}-${index}`}
+            data-key={tag.label}
+            data-propagate={tag.propagate}
+            className="dc__hover-n50 dc__ellipsis-right lh-20 fs-13 fw-4 pt-6 pr-8 pb-6 pl-8 cursor"
+            onClick={onSelectValue}
+            data-testid={`tag-label-value-${index}`}
+        >
+            {tag.label}
+        </div>
+    )
 
-    const optionWithTippy = (tag: SuggestedTagOptionType, index: number): JSX.Element => {
-        return (
-            <Tippy
-                className="default-tt"
-                arrow={false}
-                placement="right"
-                content={
-                    <div>
-                        <div className="mb-10 fs-12 fw-6 cn-0 dc__break-word">{tag.label}</div>
-                        <div className="fs-12 fw-4 cn-0 dc__break-word">{tag.description}</div>
-                    </div>
-                }
-            >
-                {option(tag, index)}
-            </Tippy>
-        )
-    }
+    const optionWithTippy = (tag: SuggestedTagOptionType, index: number): JSX.Element => (
+        <Tippy
+            className="default-tt"
+            arrow={false}
+            placement="right"
+            content={
+                <div>
+                    <div className="mb-10 fs-12 fw-6 cn-0 dc__break-word">{tag.label}</div>
+                    <div className="fs-12 fw-4 cn-0 dc__break-word">{tag.description}</div>
+                </div>
+            }
+        >
+            {option(tag, index)}
+        </Tippy>
+    )
 
     const renderSuggestions = (): JSX.Element => {
         if (tagOptions?.length) {
@@ -186,8 +182,8 @@ export const TagLabelValueSelector = ({
             {popupMenuBody && (
                 <PopupMenu.Body
                     rootClassName={`mxh-210 dc__overflow-auto tag-${selectedTagIndex}-class`}
-                    autoWidth={true}
-                    preventWheelDisable={true}
+                    autoWidth
+                    preventWheelDisable
                     noBackDrop={noBackDrop}
                 >
                     {popupMenuBody}

@@ -9,8 +9,8 @@ import './rjsfForm.scss'
 
 // Need to use this way because the default import was not working as expected
 // The default import resolves to an object intead of a function
-const Form = (RJSF as any).default as typeof RJSF
-const validator = (RJSFValidator as any).default as typeof RJSFValidator
+const Form = RJSF
+const validator = RJSFValidator
 
 export const RJSFForm = (props: FormProps) => (
     <Form

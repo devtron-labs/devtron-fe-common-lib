@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { InfoColourBarType } from '../Types'
 import './infoColourBar.scss'
 
-function InfoColourBar({
+const InfoColourBar = ({
     message,
     classname,
     Icon,
@@ -16,11 +16,12 @@ function InfoColourBar({
     linkClass,
     internalLink,
     styles,
-}: InfoColourBarType) {
+}: InfoColourBarType) => {
     const renderLink = () => {
         if (!linkText) {
             return null
-        } else if (redirectLink) {
+        }
+        if (redirectLink) {
             if (internalLink) {
                 return (
                     <Link
@@ -41,6 +42,7 @@ function InfoColourBar({
                     onClick={linkOnClick}
                     data-testid="info-bar-redirectLink"
                     className="cursor dc__link dc__underline-onhover mr-5"
+                    rel="noreferrer"
                 >
                     {linkText}
                 </a>
@@ -49,7 +51,11 @@ function InfoColourBar({
 
         return (
             linkOnClick && (
-                <div onClick={linkOnClick} className="cursor dc__link dc__underline-onhover" data-testid="info-bar-linkText">
+                <div
+                    onClick={linkOnClick}
+                    className="cursor dc__link dc__underline-onhover"
+                    data-testid="info-bar-linkText"
+                >
                     {linkText}
                 </div>
             )

@@ -59,10 +59,9 @@ export const validateKubernetesKey = (key: string) => {
         if (noOfSlashInKey > 1) {
             invalidMessageList.push('Key: Max 1 ( / ) allowed')
         } else {
-          let name = key
+            const name = key
             if (noOfSlashInKey === 1) {
-              const [prefix, name]=key.split('/')
-
+                const [prefix, name] = key.split('/')
             }
         }
     }

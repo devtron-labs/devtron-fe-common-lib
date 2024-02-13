@@ -1,28 +1,28 @@
-import React, { Component, createContext } from 'react';
-import { VisibleModal } from '../Modals/VisibleModal';
-import close from '../../Assets/Icon/ic-cross.svg';
+import React, { Component, createContext } from 'react'
+import { VisibleModal } from '../Modals/VisibleModal'
+import close from '../../Assets/Icon/ic-cross.svg'
 import { Progressing } from '../Progressing'
-import { DialogFormProps } from './Types';
-//TODO: may not need context
-const DialogFormContext = createContext({ title: '', isLoading: false, close: (event) => {}, onSave: (event) => {} });
+import { DialogFormProps } from './Types'
+// TODO: may not need context
+const DialogFormContext = createContext({ title: '', isLoading: false, close: (event) => {}, onSave: (event) => {} })
 
 export class DialogForm extends Component<DialogFormProps> {
     constructor(props) {
-        super(props);
-        this.escFunction = this.escFunction.bind(this);
+        super(props)
+        this.escFunction = this.escFunction.bind(this)
     }
 
     componentDidMount() {
-        document.addEventListener('keydown', this.escFunction);
+        document.addEventListener('keydown', this.escFunction)
     }
 
     componentWillUnmount() {
-        document.removeEventListener('keydown', this.escFunction);
+        document.removeEventListener('keydown', this.escFunction)
     }
 
     escFunction(event) {
         if (event.keyCode === 27 && this.props.closeOnESC) {
-            this.props.close(event);
+            this.props.close(event)
         }
     }
 
@@ -46,26 +46,24 @@ export class DialogForm extends Component<DialogFormProps> {
                             </button>
                         </div>
                         <DialogFormContext.Consumer>
-                            {(context) => {
-                                return (
-                                    <form
-                                        noValidate
-                                        onSubmit={(e) => {
-                                            e.preventDefault();
-                                            if (!context.isLoading) {
-                                                context.onSave(e);
-                                            }
-                                        }}
-                                    >
-                                        {this.props.children}
-                                    </form>
-                                );
-                            }}
+                            {(context) => (
+                                <form
+                                    noValidate
+                                    onSubmit={(e) => {
+                                        e.preventDefault()
+                                        if (!context.isLoading) {
+                                            context.onSave(e)
+                                        }
+                                    }}
+                                >
+                                    {this.props.children}
+                                </form>
+                            )}
                         </DialogFormContext.Consumer>
                     </div>
                 </VisibleModal>
             </DialogFormContext.Provider>
-        );
+        )
     }
 }
 
@@ -73,14 +71,12 @@ export class DialogFormSubmit extends Component<{ tabIndex: number }> {
     render() {
         return (
             <DialogFormContext.Consumer>
-                {(context) => {
-                    return (
-                        <button type="submit" className="cta dc__align-right" tabIndex={this.props.tabIndex}>
-                            {context.isLoading ? <Progressing /> : this.props.children}
-                        </button>
-                    );
-                }}
+                {(context) => (
+                    <button type="submit" className="cta dc__align-right" tabIndex={this.props.tabIndex}>
+                        {context.isLoading ? <Progressing /> : this.props.children}
+                    </button>
+                )}
             </DialogFormContext.Consumer>
-        );
+        )
     }
 }

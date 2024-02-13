@@ -3,8 +3,20 @@ import { FieldTemplateProps, getUiOptions, getTemplate, ADDITIONAL_PROPERTY_FLAG
 import { FieldRowWithLabel } from '../common/FieldRow'
 
 export const Field = (props: FieldTemplateProps) => {
-    const { id, label, children, errors, hidden, required, displayLabel, registry, uiSchema, classNames, schema, description } =
-        props
+    const {
+        id,
+        label,
+        children,
+        errors,
+        hidden,
+        required,
+        displayLabel,
+        registry,
+        uiSchema,
+        classNames,
+        schema,
+        description,
+    } = props
     const uiOptions = getUiOptions(uiSchema)
     const WrapIfAdditionalTemplate = getTemplate<'WrapIfAdditionalTemplate'>(
         'WrapIfAdditionalTemplate',
