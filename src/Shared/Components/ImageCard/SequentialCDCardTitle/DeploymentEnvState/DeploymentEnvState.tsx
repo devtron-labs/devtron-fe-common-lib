@@ -1,8 +1,8 @@
 import { DeploymentEnvStateProps } from './types'
-import { getDeploymentEnvIcon } from './utils'
+import { getDeploymentEnvConfig } from './utils'
 
 const DeploymentEnvState = ({ envStateText, envName }: DeploymentEnvStateProps) => {
-    const { Icon, stateClassName } = getDeploymentEnvIcon(envStateText)
+    const { Icon, stateClassName } = getDeploymentEnvConfig(envStateText)
 
     return (
         <div className={`${stateClassName} br-4 cn-9 pt-3 pb-3 pl-6 pr-6 bw-1 mr-6`}>

@@ -4,7 +4,7 @@ import { ReactComponent as ICWorld } from '../../../../../Assets/Icon/ic-world.s
 import { ReactComponent as ICRocketFail } from '../../../../../Assets/Icon/ic-rocket-fail.svg'
 
 // eslint-disable-next-line import/prefer-default-export
-export const getDeploymentEnvIcon = (envStateText: string): GetDeploymentEnvConfigType => {
+export const getDeploymentEnvConfig = (envStateText: string): GetDeploymentEnvConfigType => {
     switch (envStateText) {
         case DEPLOYMENT_ENV_TEXT.ACTIVE:
             return { Icon: <ICWorld className="icon-dim-16 mr-4 scg-5" />, stateClassName: 'bcg-1 eg-2' }
