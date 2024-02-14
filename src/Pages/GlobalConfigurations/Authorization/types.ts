@@ -23,3 +23,21 @@ export type BaseFilterQueryParams<T> = {
 export type UserListFilterParams = BaseFilterQueryParams<UserListSortableKeys> & {
     status: UserStatus[]
 }
+
+// TODO (v3): Common out in dashboard and FE Lib
+export interface UserRoleGroup {
+    /**
+     * Id of the permission group
+     */
+    id: number
+    /**
+     * Name of the permission group
+     */
+    name: string
+    /**
+     * Associated description for the group
+     *
+     * @default '-'
+     */
+    description?: string
+}

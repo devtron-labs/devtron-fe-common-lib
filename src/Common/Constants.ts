@@ -18,6 +18,7 @@ export const PATTERNS = {
 
 export const URLS = {
     LOGIN_SSO: '/login/sso',
+    PERMISSION_GROUPS: '/global-config/auth/groups',
 }
 
 export const ROUTES = {

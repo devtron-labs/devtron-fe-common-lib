@@ -1,0 +1,10 @@
+.user-permission {
+    &__table-header, &__table-row {
+        grid-template-columns: 20px 200px minmax(300px, 1fr) 20px;
+        column-gap: 16px;
+
+        &--with-status {
+            grid-template-columns: 20px 200px minmax(300px, 1fr) 180px 20px;
+        }
+    }
+}
