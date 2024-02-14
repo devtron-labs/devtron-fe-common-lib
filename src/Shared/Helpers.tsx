@@ -14,7 +14,6 @@ interface HighlightSearchTextProps {
 }
 
 // Disabling default export since this is a helper function and we would have to export a lot of functions in future.
-// eslint-disable-next-line import/prefer-default-export
 export const highlightSearchText = ({ searchText, text, highlightClasses }: HighlightSearchTextProps): string => {
     if (!searchText) {
         return text

@@ -3,7 +3,6 @@ import { GetDeploymentEnvConfigType } from './types'
 import { ReactComponent as ICWorld } from '../../../../../Assets/Icon/ic-world.svg'
 import { ReactComponent as ICRocketFail } from '../../../../../Assets/Icon/ic-rocket-fail.svg'
 
-// eslint-disable-next-line import/prefer-default-export
 export const getDeploymentEnvConfig = (envStateText: string): GetDeploymentEnvConfigType => {
     switch (envStateText) {
         case DEPLOYMENT_ENV_TEXT.ACTIVE:
