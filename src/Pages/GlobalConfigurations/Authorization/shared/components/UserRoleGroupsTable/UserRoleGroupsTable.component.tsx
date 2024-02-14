@@ -37,7 +37,7 @@ const UserRoleGroupsTable = ({ roleGroups, showStatus, handleDelete }: UserRoleG
                         {name}
                     </Link>
                     <div className="dc__ellipsis-right">{description || '-'}</div>
-                    {/* TODO (v3): Add status */}
+                    {/* TODO (v3): Add status and tippy (preferably common out) */}
                     {showStatus && <div>Status</div>}
                     {/* TODO (v3): Make this configurable for AD and abstract the handleDelete function */}
                     <button
