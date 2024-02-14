@@ -4,7 +4,7 @@ import { Progressing } from '../Progressing'
 import ConfirmationDialog from './ConfirmationDialog'
 import { DeleteDialogProps } from './Types'
 
-export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.FC<any> } = function (props) {
+export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.FC<any> } = (props) => {
     const handleDelete = (e: React.MouseEvent) => {
         if (props.shouldStopPropagation) {
             e.stopPropagation()
@@ -62,8 +62,6 @@ export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.F
     )
 }
 
-function DeleteDialogDescription(props) {
-    return <>{props.children}</>
-}
+const DeleteDialogDescription = (props) => <>{props.children}</>
 
 DeleteDialog.Description = DeleteDialogDescription

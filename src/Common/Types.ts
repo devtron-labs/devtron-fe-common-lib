@@ -51,11 +51,13 @@ export interface Teams {
 export enum CHECKBOX_VALUE {
     CHECKED = 'CHECKED',
     INTERMEDIATE = 'INTERMEDIATE',
+    BULK_CHECKED = 'BULK_CHECKED',
 }
 export interface CheckboxProps {
     onChange: (event) => void
     isChecked: boolean
-    value: 'CHECKED' | 'INTERMEDIATE'
+    // FIXME: Need to replace this CHECKBOX_VALUE enum, and replace string instances in dashboard
+    value: 'CHECKED' | 'INTERMEDIATE' | 'BULK_CHECKED'
     disabled?: boolean
     tabIndex?: number
     rootClassName?: string
@@ -243,7 +245,7 @@ export enum FilterStates {
 }
 
 export enum MaterialDataSource {
-    EXTERNAL = "ext"
+    EXTERNAL = 'ext',
 }
 
 export interface CDMaterialType {
@@ -254,7 +256,7 @@ export interface CDMaterialType {
     scanEnabled: boolean
     scanned: boolean
     vulnerabilitiesLoading: boolean
-    lastExecution: string //timestamp
+    lastExecution: string // timestamp
     vulnerabilities: VulnerabilityType[]
     vulnerable: boolean
     deployedTime: string
@@ -272,7 +274,7 @@ export interface CDMaterialType {
     imageReleaseTags?: ReleaseTag[]
     artifactStatus?: string
     filterState: FilterStates
-    registryType?: string;
+    registryType?: string
     imagePath?: string
     registryName?: string
     // Not even coming from API but required in CDMaterials for Security which makes its own api call but stores data in CDMaterials
@@ -291,12 +293,12 @@ export enum CDMaterialServiceEnum {
 }
 
 export enum CDMaterialResourceQuery {
-    PENDING_APPROVAL = 'PENDING_APPROVAL'
+    PENDING_APPROVAL = 'PENDING_APPROVAL',
 }
 
 export enum CDMaterialFilterQuery {
     RESOURCE = 'ELIGIBLE_RESOURCES',
-    ALL = 'ALL_RESOURCES'
+    ALL = 'ALL_RESOURCES',
 }
 
 export interface CDMaterialServiceQueryParams {
@@ -338,18 +340,18 @@ export interface CommonNodeAttr {
     isLinkedCI?: boolean
     isLinkedCD?: boolean
     isJobCI?: boolean // used for Job type CI in Devtron Apps
-    environmentName?: string //used for CDs
+    environmentName?: string // used for CDs
     environmentId?: number
     inputMaterialList?: any[]
-    rollbackMaterialList?: any[] //used for CDs
-    linkedCount?: number //used for CI
+    rollbackMaterialList?: any[] // used for CDs
+    linkedCount?: number // used for CI
     deploymentStrategy?: string
     height: number
     width: number
-    preNode?: CommonNodeAttr //used for CDs
-    postNode?: CommonNodeAttr //used for CDs
-    stageIndex?: number //used for CDs
-    sourceNodes?: Array<CommonNodeAttr> //used for CI
+    preNode?: CommonNodeAttr // used for CDs
+    postNode?: CommonNodeAttr // used for CDs
+    stageIndex?: number // used for CDs
+    sourceNodes?: Array<CommonNodeAttr> // used for CI
     downstreamNodes?: Array<CommonNodeAttr>
     parentPipelineId?: string
     parentPipelineType?: string
@@ -694,19 +696,19 @@ export interface CodeEditorComposition {
 }
 
 export interface CodeEditorHeaderComposition {
-    LanguageChanger?: React.FC<any>;
-    ThemeChanger?: React.FC<any>;
-    ValidationError?: React.FC<any>;
-    Clipboard?: React.FC<any>;
+    LanguageChanger?: React.FC<any>
+    ThemeChanger?: React.FC<any>
+    ValidationError?: React.FC<any>
+    Clipboard?: React.FC<any>
 }
 export interface CodeEditorHeaderInterface {
-    children?: any;
+    children?: any
     className?: string
-    hideDefaultSplitHeader?: boolean;
+    hideDefaultSplitHeader?: boolean
 }
 
 export interface DeploymentChartVersionType {
-    chartRefId: number 
+    chartRefId: number
     chartVersion: string
     chartType: string
     type: number
@@ -766,7 +768,7 @@ export interface EdgeEndNodeType extends EdgeNodeType {
 
 /**
  * Search params for sorting configuration
- * 
+ *
  * Note: Either both sortOrder and sortBy are required or none
  */
 export type SortingParams<T = string> =

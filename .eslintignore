@@ -1,4 +1,4 @@
-.eslintrc.js
+.eslintrc.cjs
 
 # Files with ESLint errors/warnings
 src/Common/AddCDButton/AddCDButton.tsx
@@ -9,42 +9,33 @@ src/Common/AppStatus/index.ts
 src/Common/AppStatus/utils.ts
 src/Common/BreadCrumb/BreadCrumb.tsx
 src/Common/BreadCrumb/BreadcrumbStore.tsx
-src/Common/BreadCrumb/Types.ts
 src/Common/CIPipeline.Types.ts
 src/Common/ChartVersionAndTypeSelector.tsx
 src/Common/Checkbox.tsx
 src/Common/ClipboardButton/ClipboardButton.tsx
 src/Common/ClipboardButton/__tests__/ClipboardButton.test.tsx
+src/Common/CodeEditor/CodeEditor.tsx
 src/Common/Common.service.ts
-src/Common/Constants.ts
 src/Common/CustomInput/CustomInput.tsx
-src/Common/CustomInput/Types.ts
-src/Common/CustomInput/index.ts
 src/Common/CustomTagSelector/PropagateTagInfo.tsx
 src/Common/CustomTagSelector/ResizableTagTextArea.tsx
 src/Common/CustomTagSelector/TagDetails.tsx
 src/Common/CustomTagSelector/TagLabelSelect.tsx
 src/Common/CustomTagSelector/TagLabelValueSelector.tsx
 src/Common/CustomTagSelector/TagSelector.utils.ts
-src/Common/CustomTagSelector/Types.ts
 src/Common/CustomTagSelector/ValidationRules.ts
-src/Common/CustomTagSelector/index.ts
 src/Common/DebouncedSearch/DebouncedSearch.tsx
 src/Common/DebouncedSearch/Utils.ts
 src/Common/DebouncedSearch/__tests__/DebouncedSearch.test.tsx
 src/Common/DeleteComponentModal/DeleteComponent.tsx
-src/Common/DeleteComponentModal/types.ts
 src/Common/DevtronProgressing/DevtronProgressing.tsx
 src/Common/Dialogs/ConfirmationDialog.tsx
 src/Common/Dialogs/DeleteDialog.tsx
 src/Common/Dialogs/DialogForm.tsx
 src/Common/Dialogs/ForceDeleteDialog.tsx
-src/Common/Dialogs/Types.ts
-src/Common/Dialogs/index.ts
 src/Common/DraggableWrapper/DraggableButton.tsx
 src/Common/DraggableWrapper/DraggableWrapper.tsx
 src/Common/Drawer/Drawer.tsx
-src/Common/EmptyState/EmptyState.tsx
 src/Common/EmptyState/GenericEmptyState.tsx
 src/Common/Error.tsx
 src/Common/ErrorScreenNotFound.tsx
@@ -53,7 +44,6 @@ src/Common/Helper.tsx
 src/Common/Hooks/UseClickOutside/UseClickOutside.tsx
 src/Common/Hooks/UseSuperAdmin/UseSuperAdmin.tsx
 src/Common/Hooks/UseWindowSize/UseWindowSize.tsx
-src/Common/ImageTags.Types.ts
 src/Common/ImageTags.tsx
 src/Common/InfoColorBar/InfoColourbar.tsx
 src/Common/Modals/Modal.tsx
@@ -61,7 +51,6 @@ src/Common/Modals/OpaqueModal.tsx
 src/Common/Modals/VisibleModal.tsx
 src/Common/Modals/VisibleModal2.tsx
 src/Common/MultiSelectCustomization.tsx
-src/Common/Policy.Types.ts
 src/Common/PopupMenu.tsx
 src/Common/Progressing.tsx
 src/Common/RJSF/Form.tsx
@@ -87,10 +76,9 @@ src/Common/RadioGroup/RadioGroup.tsx
 src/Common/Reload.tsx
 src/Common/ResizableTextarea.tsx
 src/Common/Security/ScanVulnerabilitiesTable.tsx
+src/Common/Select/Select.tsx
 src/Common/ServerError.ts
 src/Common/TippyCustomized.tsx
 src/Common/ToastBody.tsx
 src/Common/Toggle/Toggle.tsx
 src/Common/Types.ts
-src/custom.d.ts
-src/index.ts

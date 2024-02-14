@@ -6,11 +6,7 @@ export const SubmitButton = ({ uiSchema }: SubmitButtonProps) => {
 
     return norender ? null : (
         <div className="flexbox flex-justify-end">
-            <button
-                type="submit"
-                {...submitButtonProps}
-                className={`cta ${submitButtonProps.className || ''}`}
-            >
+            <button type="submit" {...submitButtonProps} className={`cta ${submitButtonProps.className || ''}`}>
                 {submitText}
             </button>
         </div>

@@ -9,7 +9,7 @@ import { not } from './Helper'
 
 // This component will handle some of the new tippy designs and interactions
 // So this can be updated to support further for new features or interactions
-export function TippyCustomized(props: TippyCustomizedProps) {
+export const TippyCustomized = (props: TippyCustomizedProps) => {
     const tippyRef = useRef(null)
     const [showHeadingInfo, setShowHeadingInfo] = useState(false)
     const isWhiteTheme = props.theme === TippyTheme.white
@@ -60,43 +60,46 @@ export function TippyCustomized(props: TippyCustomizedProps) {
         } = props
         return (
             <>
-                {!hideHeading && 
-                <div
-                    className={`dc__word-break dc__hyphens-auto flex left ${
-                        isWhiteTheme 
-                            ? `p-12 cn-9 ${props.noHeadingBorder ? '' : 'dc__border-bottom-n1'}`
-                            : 'pt-20 pb-12 pr-20 pl-20 cn-0 top'
-                    }`}
-                >
-                    {iconPath ? (
-                        <img
-                            className={`icon-dim-${iconSize || 20} mr-6 ${iconClass || ''}`}
-                            src={iconPath}
-                            alt="Heading"
-                            onError={onImageLoadError}
-                        />
-                    ) : (
-                        Icon && (
-                            <div className={`icon-dim-${iconSize || 20} mr-6`}>
-                                <Icon className={`icon-dim-${iconSize || 20} ${iconClass || ''}`} />
-                            </div>
-                        )
-                    )}
-                    {heading && <span className={`fs-14 fw-6 lh-20 ${showCloseButton ? 'mr-6' : ''}`}>{heading}</span>}
-                    {headingInfo && (
-                        <div className="icon-dim-20 cursor" onClick={toggleHeadingInfo}>
-                            <Question className="icon-dim-20" />
-                        </div>
-                    )}
-                    {showCloseButton && (
-                        <div className="icon-dim-16 ml-auto">
-                            <CloseIcon
-                                className={`icon-dim-16 cursor ${isWhiteTheme ? 'fcn-9' : 'fcn-0'}`}
-                                onClick={closeTippy}
+                {!hideHeading && (
+                    <div
+                        className={`dc__word-break dc__hyphens-auto flex left ${
+                            isWhiteTheme
+                                ? `p-12 cn-9 ${props.noHeadingBorder ? '' : 'dc__border-bottom-n1'}`
+                                : 'pt-20 pb-12 pr-20 pl-20 cn-0 top'
+                        }`}
+                    >
+                        {iconPath ? (
+                            <img
+                                className={`icon-dim-${iconSize || 20} mr-6 ${iconClass || ''}`}
+                                src={iconPath}
+                                alt="Heading"
+                                onError={onImageLoadError}
                             />
-                        </div>
-                    )}
-                </div>}
+                        ) : (
+                            Icon && (
+                                <div className={`icon-dim-${iconSize || 20} mr-6`}>
+                                    <Icon className={`icon-dim-${iconSize || 20} ${iconClass || ''}`} />
+                                </div>
+                            )
+                        )}
+                        {heading && (
+                            <span className={`fs-14 fw-6 lh-20 ${showCloseButton ? 'mr-6' : ''}`}>{heading}</span>
+                        )}
+                        {headingInfo && (
+                            <div className="icon-dim-20 cursor" onClick={toggleHeadingInfo}>
+                                <Question className="icon-dim-20" />
+                            </div>
+                        )}
+                        {showCloseButton && (
+                            <div className="icon-dim-16 ml-auto">
+                                <CloseIcon
+                                    className={`icon-dim-16 cursor ${isWhiteTheme ? 'fcn-9' : 'fcn-0'}`}
+                                    onClick={closeTippy}
+                                />
+                            </div>
+                        )}
+                    </div>
+                )}
                 {showHeadingInfo && (
                     <div
                         className={`flex left top bcv-1 fs-13 fw-4 lh-20 pt-8 pb-8 ${

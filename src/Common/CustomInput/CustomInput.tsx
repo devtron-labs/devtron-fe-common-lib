@@ -2,7 +2,7 @@ import { CustomInputProps } from './Types'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-warning.svg'
 
-export function CustomInput({
+export const CustomInput = ({
     name,
     value,
     error,
@@ -13,7 +13,7 @@ export function CustomInput({
     disabled = false,
     labelClassName = '',
     placeholder = '',
-    tabIndex = 1,
+    tabIndex = 0,
     dataTestid = '',
     isRequiredField = false,
     autoFocus = false,
@@ -31,7 +31,7 @@ export function CustomInput({
     additionalErrorInfo,
     inputWrapClassName = '',
     inputProps = {},
-}: CustomInputProps) {
+}: CustomInputProps) => {
     function handleError(error: any): any[] {
         if (!Array.isArray(error)) {
             return [error]
@@ -40,7 +40,7 @@ export function CustomInput({
     }
 
     const onBlur = (event) => {
-        //NOTE: This is to prevent the input from being trimmed when the user do not want to trim the input
+        // NOTE: This is to prevent the input from being trimmed when the user do not want to trim the input
         if (!noTrim) {
             event.stopPropagation()
             event.target.value = event.target.value?.trim()
@@ -51,45 +51,40 @@ export function CustomInput({
         }
     }
 
-    const renderFormErrorWithIcon = (error: string) => {
-        return (
-            <div className="form__error" key={error}>
-                <ErrorIcon className="form__icon form__icon--error" />
-                {error}
-                {error && typeof additionalErrorInfo === 'function' && additionalErrorInfo()}
-            </div>
-        )
-    }
+    const renderFormErrorWithIcon = (error: string) => (
+        <div className="form__error" key={error}>
+            <ErrorIcon className="form__icon form__icon--error" />
+            {error}
+            {error && typeof additionalErrorInfo === 'function' && additionalErrorInfo()}
+        </div>
+    )
 
     const getInputError = () => {
         if (!error?.length) {
             return null
-        } else {
-            if (typeof error === 'object') {
-                return handleError(error).map((err: string) => renderFormErrorWithIcon(err))
-            }
-            return renderFormErrorWithIcon(error)
         }
+        if (typeof error === 'object') {
+            return handleError(error).map((err: string) => renderFormErrorWithIcon(err))
+        }
+        return renderFormErrorWithIcon(error)
     }
 
     const renderInputLabelConditionally = () => {
         if (typeof label === 'string') {
             return <span className={`${isRequiredField ? 'dc__required-field' : ''}`}>{label}</span>
-        } else {
-            return label
         }
+        return label
     }
 
     const renderInputLabel = () => {
         if (!label) {
             return null
-        } else {
-            return (
-                <label className={`form__label ${labelClassName}`} data-testid={`label-${dataTestid}`}>
-                    {renderInputLabelConditionally()}
-                </label>
-            )
         }
+        return (
+            <label className={`form__label ${labelClassName}`} data-testid={`label-${dataTestid}`}>
+                {renderInputLabelConditionally()}
+            </label>
+        )
     }
 
     return (

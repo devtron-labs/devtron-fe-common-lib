@@ -6,8 +6,7 @@ import { ConfirmationDialog, DeleteDialog } from '../Dialogs'
 import { ServerErrors } from '../ServerError'
 import { DeleteComponentProps } from './types'
 
-
-function DeleteComponent({
+const DeleteComponent = ({
     setDeleting,
     toggleConfirmation,
     deleteComponent,
@@ -20,7 +19,7 @@ function DeleteComponent({
     reload,
     configuration = '',
     closeCustomComponent,
-}: DeleteComponentProps) {
+}: DeleteComponentProps) => {
     const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(false)
     const { push } = useHistory()
 
@@ -55,35 +54,31 @@ function DeleteComponent({
         }
     }
 
-    const renderCannotDeleteDialogModal = () => {
-        return (
-            <ConfirmationDialog className="confirmation-dialog__body--w-360">
-                <ConfirmationDialog.Icon src={info} />
-                <ConfirmationDialog.Body title={`Cannot delete ${component} '${title}'`} />
-                <p className="fs-13 cn-7 ">{confirmationDialogDescription}</p>
-                <ConfirmationDialog.ButtonGroup>
-                    <button type="button" className="cta" onClick={handleConfirmation}>
-                        Okay
-                    </button>
-                </ConfirmationDialog.ButtonGroup>
-            </ConfirmationDialog>
-        )
-    }
+    const renderCannotDeleteDialogModal = () => (
+        <ConfirmationDialog className="confirmation-dialog__body--w-360">
+            <ConfirmationDialog.Icon src={info} />
+            <ConfirmationDialog.Body title={`Cannot delete ${component} '${title}'`} />
+            <p className="fs-13 cn-7 ">{confirmationDialogDescription}</p>
+            <ConfirmationDialog.ButtonGroup>
+                <button type="button" className="cta" onClick={handleConfirmation}>
+                    Okay
+                </button>
+            </ConfirmationDialog.ButtonGroup>
+        </ConfirmationDialog>
+    )
 
-    const renderDeleteDialog = () => {
-        return (
-            <DeleteDialog
-                title={`Delete ${component} '${title}'`}
-                delete={handleDelete}
-                closeDelete={() => toggleConfirmation(false)}
-                dataTestId="delete-dialog"
-            >
-                <DeleteDialog.Description>
-                    <p>Are you sure you want to delete this {configuration ? configuration : component}? </p>
-                </DeleteDialog.Description>
-            </DeleteDialog>
-        )
-    }
+    const renderDeleteDialog = () => (
+        <DeleteDialog
+            title={`Delete ${component} '${title}'`}
+            delete={handleDelete}
+            closeDelete={() => toggleConfirmation(false)}
+            dataTestId="delete-dialog"
+        >
+            <DeleteDialog.Description>
+                <p>Are you sure you want to delete this {configuration || component}? </p>
+            </DeleteDialog.Description>
+        </DeleteDialog>
+    )
     return (
         <div>
             {!showCannotDeleteDialogModal && renderDeleteDialog()}

@@ -10,7 +10,7 @@ const Toggle = ({
     disabled = false,
     dataTestId = 'handle-toggle-button',
     Icon = null,
-    iconClass= '',
+    iconClass = '',
     ...props
 }) => {
     const [active, setActive] = React.useState(selected)
