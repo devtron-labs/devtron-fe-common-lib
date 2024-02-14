@@ -1,7 +1,7 @@
 import { ARTIFACT_STATUS } from '../../../constants'
 import { DeploymentEnvState } from './DeploymentEnvState'
 import { DEPLOYMENT_ENV_TEXT } from './DeploymentEnvState/constants'
-import { SequentialCDCardTitleProps } from './types'
+import { SequentialCDCardTitleProps } from '../types'
 
 const SequentialCDCardTitle = ({
     isLatest,

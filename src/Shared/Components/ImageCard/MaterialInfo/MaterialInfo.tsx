@@ -1,6 +1,7 @@
 import Tippy from '@tippyjs/react'
 import { ConditionalWrap } from '../../../../Common'
-import { ImagePathTippyContentProps, MaterialInfoProps } from './types'
+import { ImagePathTippyContentProps } from './types'
+import { MaterialInfoProps } from '../types'
 import { ReactComponent as DeployIcon } from '../../../../Assets/Icon/ic-nav-rocket.svg'
 
 const ImagePathTippyContent = ({ imagePath, registryName }: ImagePathTippyContentProps) => (
