@@ -1,7 +1,8 @@
-import { ARTIFACT_STATUS } from '../../../constants'
+import { ARTIFACT_STATUS, STAGE_TYPE } from '../../../constants'
 import { DeploymentEnvState } from './DeploymentEnvState'
 import { DEPLOYMENT_ENV_TEXT } from './DeploymentEnvState/constants'
 import { SequentialCDCardTitleProps } from '../types'
+import { ImageTagButton } from '../../../../Common'
 
 const SequentialCDCardTitle = ({
     isLatest,
@@ -9,8 +10,21 @@ const SequentialCDCardTitle = ({
     artifactStatus,
     environmentName,
     parentEnvironmentName,
+    stageType,
+    showLatestTag,
 }: SequentialCDCardTitleProps) => {
-    if (isLatest || isRunningOnParentCD || Object.values(ARTIFACT_STATUS).includes(artifactStatus)) {
+    if (stageType !== STAGE_TYPE.CD) {
+        if (isLatest) {
+            return (
+                <div className="bcn-0 pb-8 br-4 flex left">
+                    <span className="last-deployed-status">Last Run</span>
+                </div>
+            )
+        }
+        return null
+    }
+
+    if (isLatest || isRunningOnParentCD || Object.values(ARTIFACT_STATUS).includes(artifactStatus) || showLatestTag) {
         return (
             <div className="bcn-0 pb-8 br-4 flex left">
                 {isLatest && <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.ACTIVE} envName={environmentName} />}
@@ -22,6 +36,17 @@ const SequentialCDCardTitle = ({
                 )}
                 {(artifactStatus === ARTIFACT_STATUS.DEGRADED || artifactStatus === ARTIFACT_STATUS.FAILED) && (
                     <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.FAILED} envName={environmentName} />
+                )}
+                {showLatestTag && (
+                    // TODO: Remove hard coded text
+                    <ImageTagButton
+                        text="Latest"
+                        isSoftDeleted={false}
+                        isEditing={false}
+                        tagId={0}
+                        softDeleteTags={[]}
+                        isSuperAdmin={[]}
+                    />
                 )}
             </div>
         )

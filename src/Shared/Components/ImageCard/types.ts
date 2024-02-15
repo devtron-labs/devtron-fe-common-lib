@@ -17,6 +17,8 @@ export interface SequentialCDCardTitleProps {
     artifactStatus: string
     environmentName: string
     parentEnvironmentName: string
+    stageType: string
+    showLatestTag: boolean
 }
 
 export interface ImageCardProps {
