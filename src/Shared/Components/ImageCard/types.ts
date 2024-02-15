@@ -7,8 +7,8 @@ export interface MaterialInfoProps {
     registryType: string
     image: string
     deployedTime: string
-    excludedImagePath?: ReactNode
-    approvalChecks?: ReactNode
+    excludedImagePathNode: ReactNode
+    approvalChecksNode?: ReactNode
 }
 
 export interface SequentialCDCardTitleProps {
