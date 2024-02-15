@@ -18,3 +18,10 @@ export const MATERIAL_TYPE = {
     INPUT_MATERIAL_LIST: 'inputMaterialList',
     NONE: 'none',
 }
+
+export const SCAN_TOOL_ID_TRIVY = 3
+
+export const IMAGE_SCAN_TOOL = {
+    Clair: 'Clair',
+    Trivy: 'Trivy',
+}
