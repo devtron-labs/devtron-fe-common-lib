@@ -25,4 +25,6 @@ export interface ImageCardProps {
     cta: ReactNode
     materialInfoProps: MaterialInfoProps
     imageTagContainerProps: ImageTaggingContainerType
+    rootClassName?: string
+    materialInfoRootClassName?: string
 }
