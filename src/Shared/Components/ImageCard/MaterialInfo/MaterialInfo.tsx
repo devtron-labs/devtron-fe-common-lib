@@ -17,8 +17,8 @@ const MaterialInfo = ({
     registryType,
     image,
     deployedTime,
-    excludedImagePath,
-    approvalChecks,
+    excludedImagePathNode,
+    approvalChecksNode,
 }: MaterialInfoProps) => {
     const renderImagePathTippy = (children) => {
         const content = <ImagePathTippyContent imagePath={imagePath} registryName={registryName} />
@@ -44,7 +44,7 @@ const MaterialInfo = ({
     return (
         <>
             <div className="flex left column">
-                {excludedImagePath ?? (
+                {excludedImagePathNode ?? (
                     <ConditionalWrap condition={!!imagePath} wrap={renderImagePathTippy}>
                         <div className="commit-hash commit-hash--docker">
                             <div className={`dc__registry-icon ${registryType} mr-8`} />
@@ -54,7 +54,7 @@ const MaterialInfo = ({
                 )}
             </div>
 
-            {approvalChecks ?? renderDeployedTime()}
+            {approvalChecksNode ?? renderDeployedTime()}
         </>
     )
 }
