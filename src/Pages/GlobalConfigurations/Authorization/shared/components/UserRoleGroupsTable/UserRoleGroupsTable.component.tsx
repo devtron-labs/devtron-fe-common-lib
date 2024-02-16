@@ -16,7 +16,8 @@ const UserRoleGroupsTable = ({ roleGroups, showStatus, handleDelete }: UserRoleG
             <span />
             <span>Group Name</span>
             <span>Description</span>
-            {showStatus && <span>Status</span>}
+            {/* TODO (v3): Add status and tippy (preferably common out) */}
+            {showStatus && <span className="pl-22">Status</span>}
             <span />
         </div>
         <div className="fs-13 fw-4 lh-20 cn-9">
@@ -37,18 +38,19 @@ const UserRoleGroupsTable = ({ roleGroups, showStatus, handleDelete }: UserRoleG
                         {name}
                     </Link>
                     <div className="dc__ellipsis-right">{description || '-'}</div>
-                    {/* TODO (v3): Add status and tippy (preferably common out) */}
-                    {showStatus && <div className="pl-22">Status</div>}
+                    {showStatus && <div>Status</div>}
                     {/* TODO (v3): Make this configurable for AD and abstract the handleDelete function */}
-                    <button
-                        type="button"
-                        className="dc__transparent"
-                        data-testid="user-permission__delete-button"
-                        onClick={() => handleDelete(id)}
-                        aria-label="Delete user"
-                    >
-                        <TrashIcon className="scn-6 icon-dim-16 icon-delete" />
-                    </button>
+                    {!!handleDelete && (
+                        <button
+                            type="button"
+                            className="dc__transparent"
+                            data-testid="user-permission__delete-button"
+                            onClick={() => handleDelete(id)}
+                            aria-label="Delete user"
+                        >
+                            <TrashIcon className="scn-6 icon-dim-16 icon-delete" />
+                        </button>
+                    )}
                 </div>
             ))}
         </div>

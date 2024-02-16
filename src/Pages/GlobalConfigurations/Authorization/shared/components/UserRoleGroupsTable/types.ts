@@ -3,5 +3,5 @@ import { UserRoleGroup } from '../../../types'
 export interface UserRoleGroupsTableProps {
     roleGroups: UserRoleGroup[]
     showStatus?: boolean
-    handleDelete: (id: number) => void
+    handleDelete?: (id: number) => void
 }
