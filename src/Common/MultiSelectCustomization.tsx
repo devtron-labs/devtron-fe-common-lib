@@ -6,15 +6,19 @@ import { ReactComponent as RedWarning } from '../Assets/Icon/ic-error-medium.svg
 
 export const Option = (props) => {
     const { selectOption, data } = props
+
     return (
-        <div className="flex left pl-12" style={{ background: props.isFocused ? 'var(--N100)' : 'transparent' }}>
+        <div
+            className="flex left pl-12 cursor"
+            style={{ background: props.isFocused ? 'var(--N100)' : 'transparent' }}
+        >
             <input
                 checked={props.isSelected}
                 disabled={props.isDisabled}
                 onChange={(e) => selectOption(data)}
                 type="checkbox"
                 style={{ height: '16px', width: '16px', flex: '0 0 16px' }}
-                className="mr-8"
+                className="mr-8 cursor"
             />
             <components.Option {...props} />
         </div>
