@@ -2,8 +2,28 @@ import { useState } from 'react'
 import { CDModalTab, CDModalTabType, useAsync } from '../../../Common'
 import { Vulnerabilities } from '../Vulnerabilities'
 import { getLastExecutionByArtifactAppEnv } from './service'
-import { ImageCardAccordionProps } from './types'
+import { AccordionItemProps, ImageCardAccordionProps } from './types'
 import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
+
+const AccordionItem = ({ currentTab, activeTab, setActiveTab, buttonText }: AccordionItemProps) => {
+    const handleTabSwitch = () => {
+        setActiveTab(currentTab)
+    }
+
+    return (
+        <li className="tab-list__tab">
+            <button
+                type="button"
+                onClick={handleTabSwitch}
+                className={`dc__transparent tab-list__tab-link tab-list__tab-link--vulnerability ${
+                    currentTab === activeTab ? 'active' : ''
+                }`}
+            >
+                {buttonText}
+            </button>
+        </li>
+    )
+}
 
 const ImageCardAccordion = ({
     isSecurityModuleInstalled,
@@ -16,18 +36,10 @@ const ImageCardAccordion = ({
     isScanEnabled,
 }: ImageCardAccordionProps) => {
     const [isOpened, setIsOpened] = useState<boolean>(false)
-    const [currentTab, setCurrentTab] = useState<CDModalTabType>(CDModalTab.Changes)
+    const [activeTab, setActiveTab] = useState<CDModalTabType>(CDModalTab.Changes)
     const [areVulnerabilitiesLoading, vulnerabilitiesResponse, vulnerabilitiesError, reloadVulnerabilities] = useAsync(
         () => getLastExecutionByArtifactAppEnv(artifactId, applicationId, environmentId),
     )
-
-    const handleSwitchToSecurity = () => {
-        setCurrentTab(CDModalTab.Security)
-    }
-
-    const handleSwitchToChanges = () => {
-        setCurrentTab(CDModalTab.Changes)
-    }
 
     const handleAccordionToggle = () => {
         setIsOpened(!isOpened)
@@ -38,7 +50,7 @@ const ImageCardAccordion = ({
             return null
         }
 
-        if (currentTab === CDModalTab.Changes) {
+        if (activeTab === CDModalTab.Changes) {
             return changesCard
         }
 
@@ -62,31 +74,23 @@ const ImageCardAccordion = ({
                 {isOpened &&
                     (isSecurityModuleInstalled ? (
                         <>
-                            <li className="tab-list__tab">
-                                <button
-                                    type="button"
-                                    onClick={handleSwitchToChanges}
-                                    className={`dc__transparent tab-list__tab-link tab-list__tab-link--vulnerability ${
-                                        currentTab === CDModalTab.Changes ? 'active' : ''
-                                    }`}
-                                >
-                                    Changes
-                                </button>
-                            </li>
-                            <li className="tab-list__tab">
-                                <button
-                                    type="button"
-                                    onClick={handleSwitchToSecurity}
-                                    className={`dc__transparent tab-list__tab-link tab-list__tab-link--vulnerability ${
-                                        currentTab === CDModalTab.Security ? 'active' : ''
-                                    }`}
-                                >
-                                    Security
-                                    {areVulnerabilitiesLoading && !vulnerabilitiesError
+                            <AccordionItem
+                                currentTab={CDModalTab.Changes}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                                buttonText="Changes"
+                            />
+
+                            <AccordionItem
+                                currentTab={CDModalTab.Security}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                                buttonText={`Security (${
+                                    areVulnerabilitiesLoading && !vulnerabilitiesError
                                         ? ''
-                                        : ` (${vulnerabilitiesResponse.result.vulnerabilities.length})`}
-                                </button>
-                            </li>
+                                        : vulnerabilitiesResponse.result.vulnerabilities.length
+                                })`}
+                            />
                         </>
                     ) : (
                         <div className="fs-13 fw-6 flex">Changes</div>
