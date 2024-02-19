@@ -17,3 +17,9 @@ export enum DefaultUserKey {
     system = 'system',
     admin = 'admin',
 }
+
+export enum Severity {
+    CRITICAL = 'critical',
+    MODERATE = 'moderate',
+    LOW = 'low',
+}
