@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import Tippy from '@tippyjs/react'
 import { getRandomColor, URLS } from '../../../../../../Common'
 import { UserRoleGroupsTableProps } from './types'
 
@@ -41,15 +42,17 @@ const UserRoleGroupsTable = ({ roleGroups, showStatus, handleDelete }: UserRoleG
                     {showStatus && <div>Status</div>}
                     {/* TODO (v3): Make this configurable for AD and abstract the handleDelete function */}
                     {!!handleDelete && (
-                        <button
-                            type="button"
-                            className="dc__transparent"
-                            data-testid="user-permission__delete-button"
-                            onClick={() => handleDelete(id)}
-                            aria-label="Delete user"
-                        >
-                            <TrashIcon className="scn-6 icon-dim-16 icon-delete" />
-                        </button>
+                        <Tippy className="default-tt" arrow={false} placement="top" content="Delete">
+                            <button
+                                type="button"
+                                className="dc__transparent flex"
+                                data-testid="user-permission__delete-button"
+                                onClick={() => handleDelete(id)}
+                                aria-label="Delete user"
+                            >
+                                <TrashIcon className="scn-6 icon-dim-16 icon-delete" />
+                            </button>
+                        </Tippy>
                     )}
                 </div>
             ))}
