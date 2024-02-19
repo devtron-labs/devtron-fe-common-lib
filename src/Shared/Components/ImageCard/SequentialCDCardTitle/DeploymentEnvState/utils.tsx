@@ -5,6 +5,7 @@ import { ReactComponent as ICRocketFail } from '../../../../../Assets/Icon/ic-ro
 
 export const getDeploymentEnvConfig = (envStateText: string): GetDeploymentEnvConfigType => {
     switch (envStateText) {
+        case DEPLOYMENT_ENV_TEXT.VIRTUAL_ENV:
         case DEPLOYMENT_ENV_TEXT.ACTIVE:
             return { Icon: <ICWorld className="icon-dim-16 mr-4 scg-5" />, stateClassName: 'bcg-1 eg-2' }
 

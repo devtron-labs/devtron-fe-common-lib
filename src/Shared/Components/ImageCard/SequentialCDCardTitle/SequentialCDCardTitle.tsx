@@ -12,7 +12,15 @@ const SequentialCDCardTitle = ({
     parentEnvironmentName,
     stageType,
     showLatestTag,
+    isVirtualEnvironment,
 }: SequentialCDCardTitleProps) => {
+    const getDeployedStateText = () => {
+        if (isVirtualEnvironment) {
+            return DEPLOYMENT_ENV_TEXT.VIRTUAL_ENV
+        }
+        return DEPLOYMENT_ENV_TEXT.ACTIVE
+    }
+
     if (stageType !== STAGE_TYPE.CD) {
         if (isLatest) {
             return (
@@ -27,9 +35,9 @@ const SequentialCDCardTitle = ({
     if (isLatest || isRunningOnParentCD || Object.values(ARTIFACT_STATUS).includes(artifactStatus) || showLatestTag) {
         return (
             <div className="bcn-0 pb-8 br-4 flex left">
-                {isLatest && <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.ACTIVE} envName={environmentName} />}
+                {isLatest && <DeploymentEnvState envStateText={getDeployedStateText()} envName={environmentName} />}
                 {isRunningOnParentCD && (
-                    <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.ACTIVE} envName={parentEnvironmentName} />
+                    <DeploymentEnvState envStateText={getDeployedStateText()} envName={parentEnvironmentName} />
                 )}
                 {artifactStatus === ARTIFACT_STATUS.PROGRESSING && (
                     <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.DEPLOYING} envName={environmentName} />

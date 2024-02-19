@@ -23,6 +23,7 @@ export interface SequentialCDCardTitleProps {
     parentEnvironmentName: string
     stageType: string
     showLatestTag: boolean
+    isVirtualEnvironment: boolean
 }
 
 export interface ImageCardProps {
