@@ -1,8 +1,8 @@
 import Tippy from '@tippyjs/react'
 import { DefaultUserKey } from '../../../types'
-import { ConditionalWrap, getRandomColor } from '../../../../Common/Helper'
 import { ImagePathTippyContentProps } from './types'
 import { ArtifactInfoProps } from '../types'
+import { ConditionalWrap, getRandomColor } from '../../../../Common/Helper'
 import { ReactComponent as DeployIcon } from '../../../../Assets/Icon/ic-nav-rocket.svg'
 import { ReactComponent as ICBot } from '../../../../Assets/Icon/ic-bot.svg'
 
@@ -36,7 +36,9 @@ const ArtifactInfo = ({
     }
 
     const renderDeployedTime = () => {
-        if (!deployedTime) return null
+        if (!deployedTime) {
+            return null
+        }
 
         return (
             <div className="material-history__info flex left fs-13">
