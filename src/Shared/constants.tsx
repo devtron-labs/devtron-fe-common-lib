@@ -25,3 +25,6 @@ export const IMAGE_SCAN_TOOL = {
     Clair: 'Clair',
     Trivy: 'Trivy',
 }
+
+export const EXCLUDED_IMAGE_TOOLTIP =
+    'This image is excluded for new deployment as it does not match the filter conditions configured for this environment.'
