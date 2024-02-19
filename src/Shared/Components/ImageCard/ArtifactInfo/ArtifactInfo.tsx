@@ -1,8 +1,10 @@
 import Tippy from '@tippyjs/react'
-import { ConditionalWrap } from '../../../../Common'
+import { DefaultUserKey } from '../../../types'
+import { ConditionalWrap, getRandomColor } from '../../../../Common/Helper'
 import { ImagePathTippyContentProps } from './types'
-import { MaterialInfoProps } from '../types'
+import { ArtifactInfoProps } from '../types'
 import { ReactComponent as DeployIcon } from '../../../../Assets/Icon/ic-nav-rocket.svg'
+import { ReactComponent as ICBot } from '../../../../Assets/Icon/ic-bot.svg'
 
 const ImagePathTippyContent = ({ imagePath, registryName }: ImagePathTippyContentProps) => (
     <div>
@@ -11,15 +13,18 @@ const ImagePathTippyContent = ({ imagePath, registryName }: ImagePathTippyConten
     </div>
 )
 
-const MaterialInfo = ({
+const ArtifactInfo = ({
     imagePath,
     registryName,
     registryType,
     image,
     deployedTime,
+    deployedBy,
+    isRollbackTrigger,
     excludedImagePathNode,
     approvalChecksNode,
-}: MaterialInfoProps) => {
+    approvalInfoTippy,
+}: ArtifactInfoProps) => {
     const renderImagePathTippy = (children) => {
         const content = <ImagePathTippyContent imagePath={imagePath} registryName={registryName} />
 
@@ -34,9 +39,38 @@ const MaterialInfo = ({
         if (!deployedTime) return null
 
         return (
-            <div className="material-history__info flex left">
+            <div className="material-history__info flex left fs-13">
                 <DeployIcon className="icon-dim-16 scn-6 mr-8" />
                 <span className="fs-13 fw-4">{deployedTime}</span>
+            </div>
+        )
+    }
+
+    const renderDeployedBy = () => {
+        if (!deployedBy || !isRollbackTrigger) {
+            return null
+        }
+
+        if (deployedBy === DefaultUserKey.system) {
+            return (
+                <div className="material-history__deployed-by flex left">
+                    <ICBot className="icon-dim-16 mr-6" />
+                    <span className="fs-13 fw-4">Auto triggered</span>
+                </div>
+            )
+        }
+
+        return (
+            <div className="material-history__deployed-by flex left">
+                <span
+                    className="flex fs-13 fw-6 lh-18 icon-dim-20 mr-6 cn-0 m-auto dc__border-transparent dc__uppercase dc__border-radius-50-per"
+                    style={{
+                        backgroundColor: getRandomColor(deployedBy),
+                    }}
+                >
+                    {deployedBy[0]}
+                </span>
+                <span className="fs-13 fw-4">{deployedBy}</span>
             </div>
         )
     }
@@ -46,7 +80,7 @@ const MaterialInfo = ({
             <div className="flex left column">
                 {excludedImagePathNode ?? (
                     <ConditionalWrap condition={!!imagePath} wrap={renderImagePathTippy}>
-                        <div className="commit-hash commit-hash--docker">
+                        <div className="commit-hash commit-hash--docker" data-testid="cd-trigger-modal-image-value">
                             <div className={`dc__registry-icon ${registryType} mr-8`} />
                             {image}
                         </div>
@@ -54,9 +88,13 @@ const MaterialInfo = ({
                 )}
             </div>
 
+            {approvalInfoTippy}
+
+            {renderDeployedBy()}
+
             {approvalChecksNode ?? renderDeployedTime()}
         </>
     )
 }
 
-export default MaterialInfo
+export default ArtifactInfo

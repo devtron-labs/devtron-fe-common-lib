@@ -1,5 +1,5 @@
 import { ImageTagsContainer } from '../../../Common'
-import { MaterialInfo } from './MaterialInfo'
+import { ArtifactInfo } from './ArtifactInfo'
 import { SequentialCDCardTitle } from './SequentialCDCardTitle'
 import { ImageCardProps } from './types'
 
@@ -7,8 +7,9 @@ const ImageCard = ({
     testIdLocator,
     cta,
     sequentialCDCardTitleProps,
-    materialInfoProps,
+    artifactInfoProps,
     imageTagContainerProps,
+    children,
     rootClassName = '',
     materialInfoRootClassName = '',
 }: ImageCardProps) => (
@@ -22,7 +23,7 @@ const ImageCard = ({
                         data-testid={`cd-material-history-image-${testIdLocator}`}
                         className={`material-history__top cursor-default ${materialInfoRootClassName || ''}`}
                     >
-                        <MaterialInfo {...materialInfoProps} />
+                        <ArtifactInfo {...artifactInfoProps} />
                     </div>
                 </div>
 
@@ -34,6 +35,8 @@ const ImageCard = ({
             <div data-testid={`image-tags-container-${testIdLocator}`}>
                 <ImageTagsContainer {...imageTagContainerProps} />
             </div>
+
+            {children}
         </div>
     </div>
 )
