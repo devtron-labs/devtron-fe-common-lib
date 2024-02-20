@@ -10,8 +10,8 @@ import './userRoleGroupsTable.scss'
 const UserRoleGroupsTable = ({ roleGroups, showStatus, handleDelete }: UserRoleGroupsTableProps) => (
     <div>
         <div
-            className={`user-permission__table-header ${
-                showStatus ? 'user-permission__table-header--with-status' : ''
+            className={`user-groups__table-header ${
+                showStatus ? 'user-groups__table-header--with-status' : ''
             } display-grid dc__align-items-center dc__uppercase fs-12 fw-6 cn-7 lh-20 pt-6 pb-6`}
         >
             <span />
@@ -24,9 +24,9 @@ const UserRoleGroupsTable = ({ roleGroups, showStatus, handleDelete }: UserRoleG
         <div className="fs-13 fw-4 lh-20 cn-9">
             {roleGroups.map(({ id, name, description }) => (
                 <div
-                    key={`user-permission-group-${id}`}
-                    className={`user-permission__table-row ${
-                        showStatus ? 'user-permission__table-row--with-status' : ''
+                    key={`user-groups-group-${id}`}
+                    className={`user-groups__table-row ${
+                        showStatus ? 'user-groups__table-row--with-status' : ''
                     } display-grid dc__align-items-center pt-8 pb-8`}
                 >
                     <div
@@ -46,7 +46,7 @@ const UserRoleGroupsTable = ({ roleGroups, showStatus, handleDelete }: UserRoleG
                             <button
                                 type="button"
                                 className="dc__transparent flex"
-                                data-testid="user-permission__delete-button"
+                                data-testid="user-groups__delete-button"
                                 onClick={() => handleDelete(id)}
                                 aria-label="Delete user"
                             >
