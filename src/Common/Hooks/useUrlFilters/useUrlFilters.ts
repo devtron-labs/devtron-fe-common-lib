@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '../../Constants'
 import { DEFAULT_PAGE_NUMBER, URL_FILTER_KEYS } from './constants'
-import { UseUrlFiltersProps } from './types'
+import { UseUrlFiltersProps, UseUrlFiltersReturnType } from './types'
 
 const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_KEYS
 
@@ -23,12 +23,15 @@ const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_K
  * ```
  *
  */
-const useUrlFilters = <T = string>({ initialSortKey }: UseUrlFiltersProps<T> = {}) => {
+const useUrlFilters = <T = string, K = unknown>({
+    initialSortKey,
+    parseSearchParams,
+}: UseUrlFiltersProps<T, K> = {}): UseUrlFiltersReturnType<T, K> => {
     const location = useLocation()
     const history = useHistory()
     const searchParams = new URLSearchParams(location.search)
 
-    const { pageSize, pageNumber, searchKey, sortBy, sortOrder } = useMemo(() => {
+    const { pageSize, pageNumber, searchKey, sortBy, sortOrder, parsedParams } = useMemo(() => {
         const _pageSize = searchParams.get(PAGE_SIZE)
         const _pageNumber = searchParams.get(PAGE_NUMBER)
         const _searchKey = searchParams.get(SEARCH_KEY)
@@ -39,6 +42,8 @@ const useUrlFilters = <T = string>({ initialSortKey }: UseUrlFiltersProps<T> = {
         // Fallback to ascending order
         const sortByOrder = Object.values(SortingOrder).includes(_sortOrder) ? _sortOrder : SortingOrder.ASC
 
+        const _parsedParams = parseSearchParams ? parseSearchParams(searchParams) : ({} as K)
+
         return {
             pageSize: Number(_pageSize) || DEFAULT_BASE_PAGE_SIZE,
             pageNumber: Number(_pageNumber) || DEFAULT_PAGE_NUMBER,
@@ -46,6 +51,7 @@ const useUrlFilters = <T = string>({ initialSortKey }: UseUrlFiltersProps<T> = {
             sortBy: sortByKey,
             // sort order should only be applied if the key is available
             sortOrder: (sortByKey ? sortByOrder : '') as SortingOrder,
+            parsedParams: _parsedParams,
         }
     }, [searchParams])
 
@@ -98,10 +104,24 @@ const useUrlFilters = <T = string>({ initialSortKey }: UseUrlFiltersProps<T> = {
     }
 
     const clearFilters = () => {
-        Object.values(URL_FILTER_KEYS).forEach((key) => {
-            searchParams.delete(key)
+        history.replace({ search: '' })
+    }
+
+    const updateSearchParams = (paramsToSerialize: K) => {
+        Object.keys(paramsToSerialize).forEach((key) => {
+            if (paramsToSerialize[key]) {
+                if (Array.isArray(paramsToSerialize[key])) {
+                    searchParams.delete(key)
+                    paramsToSerialize[key].forEach((val) => {
+                        searchParams.append(key, val)
+                    })
+                } else {
+                    searchParams.set(key, paramsToSerialize[key])
+                }
+            }
         })
-        history.replace({ search: searchParams.toString() })
+        // Not replacing the params as it is being done by _resetPageNumber
+        _resetPageNumber()
     }
 
     return {
@@ -115,6 +135,8 @@ const useUrlFilters = <T = string>({ initialSortKey }: UseUrlFiltersProps<T> = {
         sortOrder,
         handleSorting,
         clearFilters,
+        ...parsedParams,
+        updateSearchParams,
     }
 }
 
