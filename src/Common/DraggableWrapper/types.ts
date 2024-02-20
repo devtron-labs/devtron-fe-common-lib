@@ -8,7 +8,10 @@ export enum DraggablePositionVariant {
 
 export interface DraggableWrapperProps {
     children: ReactNode
-    zIndex?: number
+    /**
+     * Support for passing the direct value or calc functions as well
+     */
+    zIndex?: number | string
     positionVariant?: DraggablePositionVariant
     /**
      * dragSelector (class - (append with .), id, etc) will be used to identify the grabbable button that will grab the div to drag
@@ -17,6 +20,10 @@ export interface DraggableWrapperProps {
     parentRef?: RefObject<HTMLDivElement>
     boundaryGap?: number
     childDivProps?: HTMLAttributes<HTMLDivElement>
+    /**
+     * Delta for fixing the scrollable layout positioning
+     */
+    layoutFixDelta?: number
 }
 
 /**

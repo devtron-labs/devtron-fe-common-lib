@@ -22,6 +22,8 @@ const BulkSelectionContext = createContext<UseBulkSelectionReturnType<any>>({
     handleBulkSelection: noop,
     isChecked: false,
     checkboxValue: CHECKBOX_VALUE.CHECKED,
+    isBulkSelectionApplied: false,
+    getSelectedIdentifiersCount: noop,
 })
 
 export const useBulkSelection = <T,>() => {
@@ -39,6 +41,10 @@ export const BulkSelectionProvider = <T,>({
 }: UseBulkSelectionProps<T>) => {
     const [selectedIdentifiers, setSelectedIdentifiers] = useState<T>({} as T)
 
+    const isBulkSelectionApplied = selectedIdentifiers[SELECT_ALL_ACROSS_PAGES_LOCATOR]
+
+    const getSelectedIdentifiersCount = () => Object.keys(selectedIdentifiers).length
+
     const setIdentifiersAfterClear = (newIdentifiers: T, selectedIds: (number | string)[]) => {
         const _newIdentifiers = JSON.parse(JSON.stringify(newIdentifiers))
         selectedIds.forEach((id) => {
@@ -50,7 +56,7 @@ export const BulkSelectionProvider = <T,>({
     const setIdentifiersAfterPageSelection = (baseObject: T) => {
         const _selectedIdentifiers = JSON.parse(JSON.stringify(selectedIdentifiers))
         // removing bulk selection across pages if present
-        if (_selectedIdentifiers[SELECT_ALL_ACROSS_PAGES_LOCATOR]) {
+        if (isBulkSelectionApplied) {
             delete _selectedIdentifiers[SELECT_ALL_ACROSS_PAGES_LOCATOR]
         }
 
@@ -81,10 +87,13 @@ export const BulkSelectionProvider = <T,>({
             }
 
             case BulkSelectionEvents.SELECT_ALL_ACROSS_PAGES: {
-                if (selectedIdentifiers[SELECT_ALL_ACROSS_PAGES_LOCATOR]) {
+                if (isBulkSelectionApplied) {
                     return
                 }
-                const selectedIdentifiersLength = Object.keys(selectedIdentifiers).length
+                const selectedIdentifiersLength = getSelectedIdentifiersCount()
+                // This is for showing a modal dialog if applicable to confirm if bulk selection is to be applied
+                // Do note that the 'getSelectAllDialogStatus' should be called after the length check explicitly
+                // otherwise the modal will open each time
                 if (selectedIdentifiersLength > 0 && getSelectAllDialogStatus() === SelectAllDialogStatus.OPEN) {
                     return
                 }
@@ -130,7 +139,7 @@ export const BulkSelectionProvider = <T,>({
         }
 
         // if selectedIdentifiers contains select all across pages locator then it means all are selected
-        if (selectedIdentifiers[SELECT_ALL_ACROSS_PAGES_LOCATOR]) {
+        if (isBulkSelectionApplied) {
             return {
                 isChecked: true,
                 checkboxValue: CHECKBOX_VALUE.BULK_CHECKED,
@@ -163,8 +172,10 @@ export const BulkSelectionProvider = <T,>({
             handleBulkSelection,
             isChecked,
             checkboxValue,
+            isBulkSelectionApplied,
+            getSelectedIdentifiersCount,
         }),
-        [selectedIdentifiers, handleBulkSelection, isChecked, checkboxValue],
+        [selectedIdentifiers, handleBulkSelection, isChecked, checkboxValue, getSelectedIdentifiersCount],
     )
 
     return <BulkSelectionContext.Provider value={value}>{children}</BulkSelectionContext.Provider>

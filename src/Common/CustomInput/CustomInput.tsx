@@ -95,7 +95,7 @@ export const CustomInput = ({
                 type={type}
                 name={name}
                 autoComplete={autoComplete}
-                className={`form__input ${rootClassName}`}
+                className={`form__input fs-13 lh-20 fw-4 ${rootClassName}`}
                 onChange={(e) => {
                     e.persist()
                     onChange(e)
