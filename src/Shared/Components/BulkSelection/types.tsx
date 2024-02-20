@@ -26,6 +26,8 @@ export interface GetBulkSelectionCheckboxValuesType {
 export interface UseBulkSelectionReturnType<T> extends GetBulkSelectionCheckboxValuesType {
     selectedIdentifiers: T
     handleBulkSelection: ({ action, data }: HandleBulkSelectionType<T>) => void
+    isBulkSelectionApplied: boolean
+    getSelectedIdentifiersCount: () => number
 }
 
 export interface BulkSelectionProps {
@@ -37,6 +39,7 @@ export interface BulkSelectionDropdownItemsType {
     label: string
     isSelected: boolean
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+    iconClass?: string
 }
 
 export interface BulkSelectionDropdownItemsProps<T>

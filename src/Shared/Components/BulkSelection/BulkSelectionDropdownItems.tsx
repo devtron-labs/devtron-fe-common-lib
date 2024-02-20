@@ -6,6 +6,7 @@ const BulkSelectionDropdownItems = <T,>({
     isSelected,
     handleBulkSelection,
     icon: Icon,
+    iconClass,
 }: BulkSelectionDropdownItemsProps<T>) => {
     const handleSelect = () => {
         handleBulkSelection({
@@ -24,7 +25,7 @@ const BulkSelectionDropdownItems = <T,>({
             }`}
             type="button"
         >
-            <Icon className="icon-dim-16" />
+            <Icon className={`icon-dim-16 ${iconClass || ''}`} />
             {label}
         </button>
     )

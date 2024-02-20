@@ -1,3 +1,8 @@
+export enum UserListSortableKeys {
+    email = 'email_id',
+    lastLogin = 'last_login',
+}
+
 /**
  * User Status received from the API
  */
@@ -12,5 +17,5 @@ export enum UserStatusDto {
 export enum UserStatus {
     active = 'active',
     inactive = 'inactive',
-    temporary = 'temporary',
+    temporary = 'temporaryAccess',
 }
