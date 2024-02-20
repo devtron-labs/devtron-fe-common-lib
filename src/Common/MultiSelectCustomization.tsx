@@ -42,7 +42,7 @@ export const MultiValueContainer = (props) => {
     const { label, value } = data
     return (
         <components.MultiValueContainer {...{ data, innerProps, selectProps }}>
-            <div className={`flex fs-12 ml-4 cn-9`}>{label}</div>
+            <div className="flex fs-12 ml-4 cn-9">{label}</div>
             {children[1]}
         </components.MultiValueContainer>
     )
@@ -106,14 +106,12 @@ export const multiSelectStyles = {
     menu: (base, state) => ({
         ...base,
     }),
-    option: (base, state) => {
-        return {
-            ...base,
-            backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
-            color: 'var(--N900)',
-            padding: '8px 12px',
-        }
-    },
+    option: (base, state) => ({
+        ...base,
+        backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
+        color: 'var(--N900)',
+        padding: '8px 12px',
+    }),
     container: (base, state) => ({
         ...base,
         cursor: state.isDisabled ? 'not-allowed' : 'pointer',
@@ -143,6 +141,4 @@ export interface CustomSelect {
     formatOptionLabel?: (...args) => any
 }
 
-export const CustomSelect: React.FC<CustomSelect> = (props) => {
-    return <Select {...props} />
-}
+export const CustomSelect: React.FC<CustomSelect> = (props) => <Select {...props} />

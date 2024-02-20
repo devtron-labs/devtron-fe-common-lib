@@ -1,7 +1,7 @@
-import { RegistryTypeDetailType } from "./Types"
+import { RegistryTypeDetailType } from './Types'
 
 export const FALLBACK_REQUEST_TIMEOUT = 60000
-export const Host = process.env.REACT_APP_ORCHESTRATOR_ROOT
+export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
 export const DOCUMENTATION = {
@@ -23,9 +23,10 @@ export const URLS = {
 export const ROUTES = {
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
-    IMAGE_TAGGING:'app/image-tagging',
+    IMAGE_TAGGING: 'app/image-tagging',
     CD_MATERIAL_GET: 'app/cd-pipeline',
-    DEPLOYMENT_TEMPLATE_LIST: 'app/template/list'
+    DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
+    INFRA_CONFIG_PROFILE: 'infra-config/profile',
 }
 
 export enum KEY_VALUE {
@@ -66,9 +67,9 @@ export const TriggerTypeMap = {
 }
 
 export const BuildStageVariable = {
-  PreBuild: 'preBuildStage',
-  Build: 'buildStage',
-  PostBuild: 'postBuildStage',
+    PreBuild: 'preBuildStage',
+    Build: 'buildStage',
+    PostBuild: 'postBuildStage',
 }
 
 export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
@@ -237,9 +238,16 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
 }
 
 export const RepositoryAction = {
-    CONTAINER: "CONTAINER",
-    CHART_PULL: "CHART_PULL",
-    CHART_PUSH: "CHART_PUSH"
+    CONTAINER: 'CONTAINER',
+    CHART_PULL: 'CHART_PULL',
+    CHART_PUSH: 'CHART_PUSH',
+}
+
+export enum MODES {
+    YAML = 'yaml',
+    JSON = 'json',
+    SHELL = 'shell',
+    DOCKERFILE = 'dockerfile',
 }
 
 export enum APPROVAL_MODAL_TYPE {

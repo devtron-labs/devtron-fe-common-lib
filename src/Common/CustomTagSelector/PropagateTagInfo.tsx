@@ -6,33 +6,31 @@ import { TippyTheme } from '../Types'
 import { DOCUMENTATION } from '../Constants'
 
 export default function PropagateTagInfo({ isCreateApp }: { isCreateApp: boolean }) {
-    const additionalInfo = () => {
-        return (
-            <div className="p-12 fs-13">
-                <div className="mb-20">
-                    <span className="flex left">
-                        Add a tag and click on the
-                        <InjectTag className="icon-dim-16 ml-4 mr-4" />
-                        icon to
-                    </span>
-                    propagate tags as labels to Kubernetes resources
-                </div>
-                <div>Use these tags to filter/identify resources via CLI or in other Kubernetes tools.</div>
+    const additionalInfo = () => (
+        <div className="p-12 fs-13">
+            <div className="mb-20">
+                <span className="flex left">
+                    Add a tag and click on the
+                    <InjectTag className="icon-dim-16 ml-4 mr-4" />
+                    icon to
+                </span>
+                propagate tags as labels to Kubernetes resources
             </div>
-        )
-    }
+            <div>Use these tags to filter/identify resources via CLI or in other Kubernetes tools.</div>
+        </div>
+    )
     return (
         <TippyCustomized
             theme={TippyTheme.white}
             className="w-300"
             placement="top"
             Icon={InjectTag}
-            heading={'Propagate tags to K8s resources'}
+            heading="Propagate tags to K8s resources"
             infoText=""
             additionalContent={additionalInfo()}
-            showCloseButton={true}
+            showCloseButton
             trigger="click"
-            interactive={true}
+            interactive
             documentationLink={isCreateApp ? DOCUMENTATION.APP_TAGS : DOCUMENTATION.APP_OVERVIEW_TAGS}
             documentationLinkText="View Documentation"
         >

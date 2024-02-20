@@ -35,7 +35,7 @@ export const Modal = ({
     }
     useEffect(() => {
         document.addEventListener('click', handleClick)
-        let modal = document.getElementById('visible-modal')
+        const modal = document.getElementById('visible-modal')
         if (modal) modal.classList.add('show')
         if (noBackDrop) modal.classList.add('no-back-drop')
         if (!preventWheelDisable) document.body.addEventListener('wheel', disableWheel, { passive: false })

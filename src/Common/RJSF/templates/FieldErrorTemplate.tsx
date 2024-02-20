@@ -11,14 +11,12 @@ export const FieldErrorTemplate = ({ errors = [], idSchema }: FieldErrorProps) =
             <span id={id}>
                 {errors
                     .filter((elem) => !!elem)
-                    .map((error, index: number) => {
-                        return (
-                            <span className="form__error" key={index}>
-                                <Error className="form__icon form__icon--error" />
-                                {error}
-                            </span>
-                        )
-                    })}
+                    .map((error, index: number) => (
+                        <span className="form__error" key={index}>
+                            <Error className="form__icon form__icon--error" />
+                            {error}
+                        </span>
+                    ))}
             </span>
         )
     )

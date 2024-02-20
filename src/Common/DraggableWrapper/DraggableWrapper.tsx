@@ -18,6 +18,7 @@ export default function DraggableWrapper({
     parentRef,
     boundaryGap = 16,
     childDivProps = {},
+    layoutFixDelta = 0
 }: DraggableWrapperProps) {
     const windowSize = useWindowSize()
     const nodeRef = useRef<HTMLDivElement>(null)
@@ -45,10 +46,12 @@ export default function DraggableWrapper({
             case DraggablePositionVariant.PARENT_BOTTOM_CENTER: {
                 // currently at parentRect.x and need to start to the center of its width and half of node should lie on left of center and other half on right
                 const x = (parentRect.width - nodeRefWidth) / 2
+                // TODO (v3): Temp fix. Revisit
+                const parentRectTop = parentRect.top > 0 ? parentRect.top : layoutFixDelta
                 // currently at parentRect.y now parent height can be greater than windowSize.height so taking min
                 // subtracting parentRect.top since window height already contains that
                 const baseY =
-                    parentRect.height > windowSize.height ? windowSize.height - parentRect.top : parentRect.height
+                    parentRect.height > windowSize.height ? windowSize.height - parentRectTop : parentRect.height
                 const y = baseY - nodeRefHeight - boundaryGap
                 return { x, y }
             }
@@ -94,8 +97,9 @@ export default function DraggableWrapper({
     }
 
     return (
+        // Since we are using position fixed so we need to disable click on the div so that it does not interfere with the click of other elements
         <div
-            className="dc__position-fixed"
+            className="dc__position-fixed dc__disable-click"
             style={{
                 zIndex,
             }}
@@ -106,6 +110,7 @@ export default function DraggableWrapper({
                     {...childDivProps}
                     style={{
                         zIndex,
+                        pointerEvents: 'auto',
                     }}
                 >
                     {children}

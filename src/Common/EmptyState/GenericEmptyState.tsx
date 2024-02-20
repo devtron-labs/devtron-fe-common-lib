@@ -4,7 +4,7 @@ import { GenericEmptyStateType, ImageType } from '../Types'
 
 import './emptyState.scss'
 
-function GenericEmptyState({
+const GenericEmptyState = ({
     title,
     image,
     subTitle,
@@ -21,7 +21,7 @@ function GenericEmptyState({
     layout = 'column',
     contentClassName = '',
     imageStyles = {},
-}: GenericEmptyStateType): JSX.Element {
+}: GenericEmptyStateType): JSX.Element => {
     const isRowLayout = layout === 'row'
 
     const getImageSize = () => {
@@ -35,9 +35,7 @@ function GenericEmptyState({
 
     return (
         <div
-            className={`flex ${isRowLayout ? 'dc__gap-32' : 'column dc__gap-20'} empty-state ${
-                classname ? classname : ''
-            }`}
+            className={`flex ${isRowLayout ? 'dc__gap-32' : 'column dc__gap-20'} empty-state ${classname || ''}`}
             style={styles}
             data-testid="generic-empty-state"
             {...(heightToDeduct >= 0 && { style: { ...styles, height: `calc(100vh - ${heightToDeduct}px)` } })}
@@ -45,7 +43,7 @@ function GenericEmptyState({
             {!SvgImage ? (
                 !noImage && (
                     <img
-                        className={imageClassName ? imageClassName : ''}
+                        className={imageClassName || ''}
                         src={image || AppNotDeployed}
                         style={{
                             ...imageStyles,

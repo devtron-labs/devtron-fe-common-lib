@@ -1,7 +1,7 @@
 import React from 'react'
 import { ProgressingProps } from './Types'
 
-export function Progressing({ pageLoader, size, theme, styles, fillColor }: ProgressingProps): JSX.Element {
+export const Progressing = ({ pageLoader, size, theme, styles, fillColor }: ProgressingProps): JSX.Element => {
     const loaderSize = size ? `${size}px` : pageLoader ? '48px' : '20px'
     return (
         <div className={`loader ${theme || 'default'}-background`} style={styles} data-testid="progressing">
@@ -29,25 +29,23 @@ export function Progressing({ pageLoader, size, theme, styles, fillColor }: Prog
     )
 }
 
-export function DetailsProgressing({
+export const DetailsProgressing = ({
     loadingText,
     size = 24,
     fullHeight = false,
     styles,
     fillColor,
     children,
-}: ProgressingProps): JSX.Element {
-    return (
-        <div
-            className={`details-loader bcn-0 flex column fs-14 fw-6 ${fullHeight ? 'h-100' : 'details-loader-height'}`}
-            style={styles}
-            data-testid="details-progressing"
-        >
-            <span style={{ width: `${size}px`, height: `${size}px` }}>
-                <Progressing size={size} fillColor={fillColor} />
-            </span>
-            {loadingText && <span className="mt-10">{loadingText}</span>}
-            {children}
-        </div>
-    )
-}
+}: ProgressingProps): JSX.Element => (
+    <div
+        className={`details-loader bcn-0 flex column fs-14 fw-6 ${fullHeight ? 'h-100' : 'details-loader-height'}`}
+        style={styles}
+        data-testid="details-progressing"
+    >
+        <span style={{ width: `${size}px`, height: `${size}px` }}>
+            <Progressing size={size} fillColor={fillColor} />
+        </span>
+        {loadingText && <span className="mt-10">{loadingText}</span>}
+        {children}
+    </div>
+)

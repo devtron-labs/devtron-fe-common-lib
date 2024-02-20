@@ -1,7 +1,10 @@
 export class ServerError {
     code: number
+
     internalMessage: string | null
+
     userMessage: string | null
+
     moreInfo?: string | null
 
     constructor(error) {
@@ -14,12 +17,13 @@ export class ServerError {
 
 export class ServerErrors extends Error {
     code: number
+
     errors: ServerError[]
 
     constructor(obj: { code: number; errors: ServerError[] }) {
         super()
         this.code = obj.code
-        let message = obj.errors.reduce((str: string, err: ServerError) => {
+        const message = obj.errors.reduce((str: string, err: ServerError) => {
             str += `${err.internalMessage || err.userMessage}`
             return str
         }, '')

@@ -3,12 +3,13 @@ import moment from 'moment'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import YAML from 'yaml'
+import { JSONPath } from 'jsonpath-plus'
+import * as jsonpatch from 'fast-json-patch'
 import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
-import { JSONPath } from 'jsonpath-plus'
-import * as jsonpatch from 'fast-json-patch'
 
 toast.configure({
     autoClose: 3000,
@@ -79,16 +80,19 @@ export const stopPropagation = (event): void => {
 }
 
 export function useThrottledEffect(callback, delay, deps = []) {
-    //function will be executed only once in a given time interval.
+    // function will be executed only once in a given time interval.
     const lastRan = useRef(Date.now())
 
     useEffect(() => {
-        const handler = setTimeout(function () {
-            if (Date.now() - lastRan.current >= delay) {
-                callback()
-                lastRan.current = Date.now()
-            }
-        }, delay - (Date.now() - lastRan.current))
+        const handler = setTimeout(
+            () => {
+                if (Date.now() - lastRan.current >= delay) {
+                    callback()
+                    lastRan.current = Date.now()
+                }
+            },
+            delay - (Date.now() - lastRan.current),
+        )
 
         return () => {
             clearTimeout(handler)
@@ -117,7 +121,7 @@ export function getRandomColor(email: string): string {
     return colors[sum % colors.length]
 }
 
-export const getAlphabetIcon = (str: string, rootClassName: string = "") => {
+export const getAlphabetIcon = (str: string, rootClassName: string = '') => {
     if (!str) return null
     return (
         <span
@@ -129,9 +133,7 @@ export const getAlphabetIcon = (str: string, rootClassName: string = "") => {
     )
 }
 
-export const getEmptyArrayOfLength = (length: number) => {
-    return Array.from({ length })
-}
+export const getEmptyArrayOfLength = (length: number) => Array.from({ length })
 
 export function noop(...args): any {}
 
@@ -155,7 +157,7 @@ export function getCookie(sKey) {
     }
     return (
         document.cookie.replace(
-            new RegExp('(?:(?:^|.*;)\\s*' + sKey.replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'),
+            new RegExp(`(?:(?:^|.*;)\\s*${sKey.replace(/[\-\.\+\*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
             '$1',
         ) || null
     )
@@ -198,7 +200,7 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
     // in every re-render in component
     const validateState = useCallback(
         (state) => {
-            //check errors in all fields
+            // check errors in all fields
             const hasErrorInState = Object.keys(validationSchema).some((key) => {
                 const isInputFieldRequired = validationSchema[key].required
                 const stateValue = state[key].value // state value
@@ -225,7 +227,7 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
         }
 
         // single validator
-        let _validator = validationSchema[name].validator
+        const _validator = validationSchema[name].validator
         if (_validator && typeof _validator === 'object') {
             if (!_validateSingleValidator(_validator, value)) {
                 return _validator.error
@@ -233,9 +235,9 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
         }
 
         // multiple validators
-        let _validators = validationSchema[name].validators
+        const _validators = validationSchema[name].validators
         if (_validators && typeof _validators === 'object' && Array.isArray(_validators)) {
-            let errors = []
+            const errors = []
             _validators.forEach((_validator) => {
                 if (!_validateSingleValidator(_validator, value)) {
                     errors.push(_validator.error)
@@ -254,7 +256,7 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
             setIsDirty(true)
 
             const { name, value } = event.target
-            let error = validateField(name, value)
+            const error = validateField(name, value)
             setState((prevState) => ({
                 ...prevState,
                 [name]: { value, error },
@@ -282,7 +284,7 @@ export function handleUTCTime(ts: string, isRelativeTime = false) {
     let timestamp = ''
     try {
         if (ts && ts.length) {
-            let date = moment(ts)
+            const date = moment(ts)
             if (isRelativeTime) timestamp = date.fromNow()
             else timestamp = date.format('ddd DD MMM YYYY HH:mm:ss')
         }
@@ -317,6 +319,103 @@ export const closeOnEscKeyPressed = (e: any, actionClose: () => void) => {
     }
 }
 
+export function useJsonYaml(value, tabSize = 4, language = 'json', shouldRun = false) {
+    const [json, setJson] = useState('')
+    const [yaml, setYaml] = useState('')
+    const [nativeObject, setNativeObject] = useState(null)
+    const [error, setError] = useState('')
+    const yamlParseConfig = {
+        prettyErrors: true,
+    }
+
+    useEffect(() => {
+        if (!shouldRun) return
+        let obj
+        let jsonError = null
+        let yamlError = null
+        if (language === 'json') {
+            try {
+                obj = JSON.parse(value)
+                jsonError = null
+                yamlError = null
+            } catch (err) {
+                jsonError = err
+                try {
+                    obj = YAML.parse(value, yamlParseConfig)
+                    jsonError = null
+                    yamlError = null
+                } catch (err2) {
+                    yamlError = err2
+                }
+            }
+        } else {
+            try {
+                obj = YAML.parse(value, yamlParseConfig)
+                jsonError = null
+                yamlError = null
+            } catch (err) {
+                yamlError = err
+                try {
+                    obj = JSON.parse(value)
+                    jsonError = null
+                    yamlError = null
+                } catch (err2) {
+                    jsonError = err2
+                }
+            }
+        }
+        if (jsonError || yamlError) {
+            setError(language === 'json' ? jsonError.message : yamlError.message)
+        }
+        if (obj && typeof obj === 'object') {
+            setJson(JSON.stringify(obj, null, tabSize))
+            setYaml(YAML.stringify(obj, { indent: 2 }))
+            setNativeObject(obj)
+            setError('')
+        } else {
+            setNativeObject(null)
+            if (jsonError || yamlError) {
+                setError(language === 'json' ? jsonError.message : yamlError.message)
+            } else {
+                setError('cannot parse to valid object')
+            }
+        }
+    }, [value, tabSize, language, shouldRun])
+
+    return [nativeObject, json, yaml, error]
+}
+
+const MANIFEST_METADATA_REQUIRED_FIELDS: string[] = ['name', 'namespace', 'labels', 'annotations']
+
+// Remove Auto-generated fields from kubernetes manifest
+// input - jsonString
+// output - jsonString
+export function cleanKubeManifest(manifestJsonString: string): string {
+    if (!manifestJsonString) {
+        return manifestJsonString
+    }
+
+    try {
+        const obj = JSON.parse(manifestJsonString)
+
+        // 1 - delete status
+        delete obj.status
+
+        // 2 - delete all fields from metadata except some predefined
+        const { metadata } = obj
+        if (metadata) {
+            for (const key in metadata) {
+                if (!MANIFEST_METADATA_REQUIRED_FIELDS.includes(key)) {
+                    delete metadata[key]
+                }
+            }
+        }
+
+        return JSON.stringify(obj)
+    } catch (e) {
+        return manifestJsonString
+    }
+}
 const unsecureCopyToClipboard = (str, callback = noop) => {
     const listener = function (ev) {
         ev.preventDefault()
@@ -366,9 +465,7 @@ export function useAsync<T>(
         dependencies: dependencyArray,
     })
     const mounted = useRef(true)
-    const dependencies: any[] = useMemo(() => {
-        return [...dependencyArray, shouldRun]
-    }, [...dependencyArray, shouldRun])
+    const dependencies: any[] = useMemo(() => [...dependencyArray, shouldRun], [...dependencyArray, shouldRun])
 
     const reload = () => {
         async function call() {
@@ -434,9 +531,8 @@ export function useAsync<T>(
 export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
     if (lastDeployed) {
         return handleUTCTime(lastDeployed, true)
-    } else {
-        return isArgoInstalled ? '' : 'Not deployed'
     }
+    return isArgoInstalled ? '' : 'Not deployed'
 }
 
 /**
@@ -449,7 +545,13 @@ export const getUrlWithSearchParams = (url: string, params: Record<string | numb
     const searchParams = new URLSearchParams()
     Object.keys(params).forEach((key) => {
         if (params[key]) {
-            searchParams.append(key, params[key])
+            if (Array.isArray(params[key])) {
+                params[key].forEach((val) => {
+                    searchParams.append(key, val)
+                })
+            } else {
+                searchParams.set(key, params[key])
+            }
         }
     })
     const queryString = searchParams.toString()
@@ -489,20 +591,19 @@ export const customStyles = {
     }),
 }
 
-export const getFilteredChartVersions = (charts, selectedChartType) => {
+export const getFilteredChartVersions = (charts, selectedChartType) =>
     // Filter chart versions based on selected chart type
-    return charts
+    charts
         .filter((item) => item?.chartType === selectedChartType.value)
         .map((item) => ({
             value: item?.chartVersion,
             label: item?.chartVersion,
             chartRefId: item.chartRefId,
         }))
-}
 
 function removeEmptyObjectKeysAndNullValues(obj, originaljsonCopy) {
     // It recursively removes empty object keys and empty array keys
-    for (let key in obj) {
+    for (const key in obj) {
         if (Array.isArray(obj[key])) {
             // Check if the array is empty
             if (obj[key].length !== 0) {
@@ -531,28 +632,28 @@ function removeEmptyObjectKeysAndNullValues(obj, originaljsonCopy) {
 
 export function getUnlockedJSON(json, jsonPathArray, removeParentKeysAndEmptyArrays = false) {
     if (!jsonPathArray.length) return { newDocument: json, removedPatches: [] }
-    
+
     const jsonCopy = JSON.parse(JSON.stringify(json))
     const originaljsonCopy = JSON.parse(JSON.stringify(json))
-    let removedPatches = []
-    let patches = jsonPathArray.flatMap((jsonPath) => {
+    const removedPatches = []
+    const patches = jsonPathArray.flatMap((jsonPath) => {
         const pathsToRemove = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
-        //reversing patches to handle correct array index deletion
+        // reversing patches to handle correct array index deletion
         pathsToRemove.reverse()
         return pathsToRemove.map((result) => {
-            //storing removed patches to have functionality of undo
+            // storing removed patches to have functionality of undo
             removedPatches.push({ op: 'add', path: result.pointer, value: result.value })
             return { op: 'remove', path: result.pointer }
         })
     })
-    let newDocument = jsonpatch.applyPatch(jsonCopy, patches).newDocument
+    const { newDocument } = jsonpatch.applyPatch(jsonCopy, patches)
     if (removeParentKeysAndEmptyArrays) removeEmptyObjectKeysAndNullValues(newDocument, originaljsonCopy)
     return { newDocument, removedPatches: removedPatches.reverse() }
 }
 
 export function getLockedJSON(json, jsonPathArray: string[]) {
     const jsonCopy = JSON.parse(JSON.stringify(json))
-    let resultJson = {}
+    const resultJson = {}
     jsonPathArray.forEach((jsonPath) => {
         const elements = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
         elements.forEach((element) => {
@@ -560,16 +661,17 @@ export function getLockedJSON(json, jsonPathArray: string[]) {
             const lastPath = pathArray.pop()
             let current = resultJson
             for (let i = 0; i < pathArray.length; i++) {
-                let key = isNaN(Number(pathArray[i])) ? pathArray[i] : parseInt(pathArray[i])
+                const key = isNaN(Number(pathArray[i])) ? pathArray[i] : parseInt(pathArray[i])
                 if (!current[key]) {
-                    current[key] = isNaN(Number(pathArray[i + 1]??lastPath)) ? {} : []
+                    current[key] = isNaN(Number(pathArray[i + 1] ?? lastPath)) ? {} : []
                 }
                 current = current[key]
             }
-            let key = isNaN(Number(lastPath)) ? lastPath : parseInt(lastPath)
+            const key = isNaN(Number(lastPath)) ? lastPath : parseInt(lastPath)
             current[key] = element.value
         })
     })
+    // eslint-disable-next-line dot-notation
     return resultJson['$']
 }
 

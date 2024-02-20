@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useThrottledEffect } from '../Helper'
 import { ResizableTagTextAreaProps } from './Types'
 
-export function ResizableTagTextArea({
+export const ResizableTagTextArea = ({
     className,
     minHeight,
     maxHeight,
@@ -16,7 +16,7 @@ export function ResizableTagTextArea({
     dependentRef,
     dataTestId,
     handleKeyDown,
-}: ResizableTagTextAreaProps) {
+}: ResizableTagTextAreaProps) => {
     const [text, setText] = useState('')
 
     useEffect(() => {
@@ -30,9 +30,9 @@ export function ResizableTagTextArea({
 
     const reInitHeight = () => {
         if (document.activeElement !== refVar.current) return
-        refVar.current.style.height = minHeight + 'px'
+        refVar.current.style.height = `${minHeight}px`
         if (dependentRef) {
-            dependentRef.current.style.height = minHeight + 'px'
+            dependentRef.current.style.height = `${minHeight}px`
         }
         let nextHeight = refVar.current.scrollHeight
         if (dependentRef && nextHeight < dependentRef.current.scrollHeight) {
@@ -44,18 +44,18 @@ export function ResizableTagTextArea({
         if (maxHeight && nextHeight > maxHeight) {
             nextHeight = maxHeight
         }
-        refVar.current.style.height = nextHeight + 'px'
+        refVar.current.style.height = `${nextHeight}px`
         if (dependentRef) {
-            dependentRef.current.style.height = nextHeight + 'px'
+            dependentRef.current.style.height = `${nextHeight}px`
         }
     }
 
     useThrottledEffect(reInitHeight, 500, [text])
 
     const handleOnBlur = (event) => {
-        refVar.current.style.height = minHeight + 'px'
+        refVar.current.style.height = `${minHeight}px`
         if (dependentRef) {
-            dependentRef.current.style.height = minHeight + 'px'
+            dependentRef.current.style.height = `${minHeight}px`
         }
         onBlur && onBlur(event)
     }

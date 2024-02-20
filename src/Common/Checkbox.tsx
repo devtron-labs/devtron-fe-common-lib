@@ -10,27 +10,26 @@ Valid States of Checkbox:
 5. disabled: false, checked: true,  value: INTERMIDIATE
 6. disabled: false, checked: true,  value: CHECKED
 */
+// TODO: Associate label with input element
 export class Checkbox extends Component<CheckboxProps> {
     render() {
-        let rootClassName = `${this.props.rootClassName ? this.props.rootClassName : ''}`
+        const rootClassName = `${this.props.rootClassName ? this.props.rootClassName : ''}`
         return (
-            <>
-                <label className={`dc__position-rel flex left cursor ${rootClassName}`} onClick={this.props?.onClick}>
-                    <input
-                        type="checkbox"
-                        className={'form__checkbox'}
-                        disabled={this.props.disabled}
-                        value={this.props.value}
-                        onChange={this.props.onChange}
-                        tabIndex={this.props.tabIndex}
-                        checked={this.props.isChecked}
-                        id={this.props.id}
-                        data-testid={this.props.dataTestId}
-                    />
-                    <span className="form__checkbox-container" data-testid={`${this.props.dataTestId}-chk-span`}></span>
-                    <span className={`form__checkbox-label`}>{this.props.children}</span>
-                </label>
-            </>
+            <label className={`dc__position-rel flex left cursor ${rootClassName}`} onClick={this.props?.onClick}>
+                <input
+                    type="checkbox"
+                    className="form__checkbox"
+                    disabled={this.props.disabled}
+                    value={this.props.value}
+                    onChange={this.props.onChange}
+                    tabIndex={this.props.tabIndex}
+                    checked={this.props.isChecked}
+                    id={this.props.id}
+                    data-testid={this.props.dataTestId}
+                />
+                <span className="form__checkbox-container" data-testid={`${this.props.dataTestId}-chk-span`} />
+                <span className="form__checkbox-label">{this.props.children}</span>
+            </label>
         )
     }
 }

@@ -1,7 +1,7 @@
+import { MutableRefObject } from 'react'
 import { ServerErrors } from './ServerError'
 import { FALLBACK_REQUEST_TIMEOUT, Host, URLS } from './Constants'
 import { ResponseType, APIOptions } from './Types'
-import { MutableRefObject } from 'react'
 
 const responseMessages = {
     100: 'Continue',
@@ -75,17 +75,17 @@ const responseMessages = {
 }
 
 function handleLogout() {
-    const continueParam = `${window.location.pathname.replace(process.env.PUBLIC_URL, '')}${window.location.search}`
-    window.location.href = `${window.location.origin}${process.env.PUBLIC_URL}${URLS.LOGIN_SSO}?continue=${continueParam}`
+    const continueParam = `${window.location.pathname.replace(window.__BASE_URL__, '')}${window.location.search}`
+    window.location.href = `${window.location.origin}${window.__BASE_URL__}${URLS.LOGIN_SSO}?continue=${continueParam}`
 }
 
 async function handleServerError(contentType, response) {
-    //Test for HTTP Status Code
-    let code: number = response.status
+    // Test for HTTP Status Code
+    const code: number = response.status
     let status: string = response.statusText || responseMessages[code]
-    let serverError = new ServerErrors({ code, errors: [] })
+    const serverError = new ServerErrors({ code, errors: [] })
     if (contentType !== 'application/json') {
-        //used for better debugging,
+        // used for better debugging,
         status = `${responseMessages[code]}. Please try again.`
     } else {
         const responseBody = await response.json()
@@ -106,11 +106,12 @@ async function fetchAPI(
     preventAutoLogout = false,
     isMultipartRequest?: boolean,
 ): Promise<ResponseType> {
-    let options = {
+    const options = {
         method: type,
         signal,
         body: data ? JSON.stringify(data) : undefined,
     }
+    // eslint-disable-next-line dot-notation
     options['credentials'] = 'include' as RequestCredentials
     return fetch(
         `${Host}/${url}`,
@@ -122,7 +123,7 @@ async function fetchAPI(
               } as RequestInit),
     ).then(
         async (response) => {
-            let contentType = response.headers.get('Content-Type')
+            const contentType = response.headers.get('Content-Type')
             if (response.status === 401) {
                 if (preventAutoLogout) {
                     throw new ServerErrors({
@@ -141,22 +142,23 @@ async function fetchAPI(
                 if (contentType === 'application/json') {
                     return response.json().then((responseBody) => {
                         if (responseBody.code >= 300 && responseBody.code <= 599) {
-                            //Test Code in Response Body, despite successful HTTP Response Code
+                            // Test Code in Response Body, despite successful HTTP Response Code
                             throw new ServerErrors({ code: responseBody.code, errors: responseBody.errors })
                         } else {
-                            //Successfull Response. Expected Response Type {code, result, status}
+                            // Successfull Response. Expected Response Type {code, result, status}
                             return responseBody
                         }
                     })
-                } else if (contentType === 'octet-stream' || contentType === 'application/octet-stream') {
-                    //used in getArtifact() API only
+                }
+                if (contentType === 'octet-stream' || contentType === 'application/octet-stream') {
+                    // used in getArtifact() API only
                     return response
                 }
             }
         },
         (error) => {
-            //Network call fails. Handle Failed to Fetch
-            let err = {
+            // Network call fails. Handle Failed to Fetch
+            const err = {
                 code: 0,
                 userMessage: error.message,
                 internalMessage: error.message,
@@ -214,26 +216,20 @@ export const post = (
     data: object,
     options?: APIOptions,
     isMultipartRequest?: boolean,
-): Promise<ResponseType> => {
-    return fetchInTime(url, 'POST', data, options, isMultipartRequest)
-}
+): Promise<ResponseType> => fetchInTime(url, 'POST', data, options, isMultipartRequest)
 
-export const put = (url: string, data: object, options?: APIOptions): Promise<ResponseType> => {
-    return fetchInTime(url, 'PUT', data, options)
-}
+export const put = (url: string, data: object, options?: APIOptions): Promise<ResponseType> =>
+    fetchInTime(url, 'PUT', data, options)
 
-export const get = (url: string, options?: APIOptions): Promise<ResponseType> => {
-    return fetchInTime(url, 'GET', null, options)
-}
+export const get = (url: string, options?: APIOptions): Promise<ResponseType> => fetchInTime(url, 'GET', null, options)
 
-export const trash = (url: string, data?: object, options?: APIOptions): Promise<ResponseType> => {
-    return fetchInTime(url, 'DELETE', data, options)
-}
+export const trash = (url: string, data?: object, options?: APIOptions): Promise<ResponseType> =>
+    fetchInTime(url, 'DELETE', data, options)
 
 /**
  * Aborts the previous request before triggering next request
  */
-export const abortPreviousRequests = <T,>(
+export const abortPreviousRequests = <T>(
     callback: () => Promise<T>,
     abortControllerRef: MutableRefObject<AbortController>,
 ): Promise<T> => {

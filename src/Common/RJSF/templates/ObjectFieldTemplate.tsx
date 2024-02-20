@@ -55,13 +55,12 @@ const Field = ({
                     {ActionButton}
                 </>
             )
-        } else {
-            return (
-                <FieldRowWithLabel label={title} required={required} showLabel id={idSchema.$id}>
-                    {ActionButton}
-                </FieldRowWithLabel>
-            )
         }
+        return (
+            <FieldRowWithLabel label={title} required={required} showLabel id={idSchema.$id}>
+                {ActionButton}
+            </FieldRowWithLabel>
+        )
     }
     return (
         <>

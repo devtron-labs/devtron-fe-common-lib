@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react'
-import Toggle from '../../Toggle/Toggle'
 import { WidgetProps } from '@rjsf/utils'
+import Toggle from '../../Toggle/Toggle'
 
 export const Checkbox = ({
     id,
