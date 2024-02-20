@@ -23,3 +23,8 @@ export enum Severity {
     MODERATE = 'moderate',
     LOW = 'low',
 }
+
+export enum ImagePromotionTabs {
+    REQUEST = 'request',
+    PENDING = 'pending',
+}
