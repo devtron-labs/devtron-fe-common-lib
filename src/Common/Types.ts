@@ -379,6 +379,7 @@ export interface CommonNodeAttr {
     deploymentAppCreated?: boolean
     isLast?: boolean
     downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
+    cipipelineId?: number
 }
 
 export enum DeploymentAppTypes {
