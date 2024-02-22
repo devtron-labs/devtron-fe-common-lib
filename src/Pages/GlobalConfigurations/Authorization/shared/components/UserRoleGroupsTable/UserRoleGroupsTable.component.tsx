@@ -44,7 +44,7 @@ const UserRoleGroupsTable = ({
                 {roleGroups.map(({ id, name, description, status, timeToLive }) => (
                     <div
                         key={`user-groups-group-${id}`}
-                        className={`user-role-groups__table-row ${modifierClassName} display-grid dc__align-items-center pt-8 pb-8`}
+                        className={`user-role-groups__table-row ${modifierClassName} display-grid dc__align-items-center`}
                     >
                         <div
                             className="icon-dim-20 mw-20 flexbox flex-justify-center flex-align-center dc__border-radius-50-per dc__uppercase cn-0"
@@ -66,6 +66,7 @@ const UserRoleGroupsTable = ({
                                 }
                                 disabled={disableStatusComponent}
                                 showDropdownBorder={false}
+                                breakLinesForTemporaryAccess
                             />
                         )}
                         {showDelete && (
