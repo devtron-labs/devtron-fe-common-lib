@@ -3,6 +3,7 @@ import { UserRoleGroup } from '../../../types'
 
 export type UserRoleGroupsTableProps = {
     roleGroups: UserRoleGroup[]
+    showStatus?: boolean
     /**
      * Delete button is shown only if handleDelete is passed
      */
@@ -25,7 +26,7 @@ export type UserRoleGroupsTableProps = {
            * Component for rendering the status header
            */
           statusHeaderComponent: FC
-          handleStatusUpdate?: (
+          handleStatusUpdate: (
               id: UserRoleGroup['id'],
               updatedStatus: UserRoleGroup['status'],
               updatedTimeToLive: UserRoleGroup['timeToLive'],
