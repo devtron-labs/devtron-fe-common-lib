@@ -17,7 +17,6 @@ export type UserRoleGroupsTableProps = {
           disableStatusComponent?: never
       }
     | {
-          showStatus: true
           /**
            * Component for rendering the status
            */
