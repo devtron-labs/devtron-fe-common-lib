@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { CDModalTab, CDModalTabType, useAsync } from '../../../Common'
+import { CDModalTab, CDModalTabType } from '../../../Common'
 import { Vulnerabilities } from '../Vulnerabilities'
-import { getLastExecutionByArtifactAppEnv } from './service'
 import { AccordionItemProps, ImageCardAccordionProps } from './types'
 import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
 
@@ -30,16 +29,13 @@ const ImageCardAccordion = ({
     artifactId,
     applicationId,
     environmentId,
-    // TODO: Might remove it
     changesCard,
     isScanned,
     isScanEnabled,
 }: ImageCardAccordionProps) => {
     const [isOpened, setIsOpened] = useState<boolean>(false)
     const [activeTab, setActiveTab] = useState<CDModalTabType>(CDModalTab.Changes)
-    const [areVulnerabilitiesLoading, vulnerabilitiesResponse, vulnerabilitiesError, reloadVulnerabilities] = useAsync(
-        () => getLastExecutionByArtifactAppEnv(artifactId, applicationId, environmentId),
-    )
+    const [vulnerabilityCount, setVulnerabilityCount] = useState<number>(null)
 
     const handleAccordionToggle = () => {
         setIsOpened(!isOpened)
@@ -58,12 +54,10 @@ const ImageCardAccordion = ({
             <Vulnerabilities
                 isScanned={isScanned}
                 isScanEnabled={isScanEnabled}
-                areVulnerabilitiesLoading={areVulnerabilitiesLoading}
-                vulnerabilities={vulnerabilitiesResponse.result.vulnerabilities}
-                lastExecution={vulnerabilitiesResponse.result.lastExecution}
-                scanToolId={vulnerabilitiesResponse.result.scanToolId}
-                hasError={!!vulnerabilitiesError}
-                reloadVulnerabilities={reloadVulnerabilities}
+                artifactId={artifactId}
+                applicationId={applicationId}
+                environmentId={environmentId}
+                setVulnerabilityCount={setVulnerabilityCount}
             />
         )
     }
@@ -85,11 +79,7 @@ const ImageCardAccordion = ({
                                 currentTab={CDModalTab.Security}
                                 activeTab={activeTab}
                                 setActiveTab={setActiveTab}
-                                buttonText={`Security (${
-                                    areVulnerabilitiesLoading && !vulnerabilitiesError
-                                        ? ''
-                                        : vulnerabilitiesResponse.result.vulnerabilities.length
-                                })`}
+                                buttonText={`Security ${vulnerabilityCount ? `(${vulnerabilityCount})` : ''}`}
                             />
                         </>
                     ) : (

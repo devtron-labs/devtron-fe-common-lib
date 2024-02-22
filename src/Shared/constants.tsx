@@ -13,15 +13,12 @@ export const STAGE_TYPE = {
     ROLLBACK: 'ROLLBACK',
 }
 
-export const MATERIAL_TYPE = {
-    ROLLBACK_MATERIAL_LIST: 'rollbackMaterialList',
-    INPUT_MATERIAL_LIST: 'inputMaterialList',
-    NONE: 'none',
-}
-
 export const SCAN_TOOL_ID_TRIVY = 3
 
 export const IMAGE_SCAN_TOOL = {
     Clair: 'Clair',
     Trivy: 'Trivy',
 }
+
+export const EXCLUDED_IMAGE_TOOLTIP =
+    'This image is excluded for new deployment as it does not match the filter conditions configured for this environment.'

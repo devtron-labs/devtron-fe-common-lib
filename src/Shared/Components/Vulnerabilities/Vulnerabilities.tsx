@@ -1,19 +1,35 @@
-import { Progressing, ScanVulnerabilitiesTable } from '../../../Common'
+import { useEffect } from 'react'
+import { Progressing, ScanVulnerabilitiesTable, useAsync } from '../../../Common'
 import { ScannedByToolModal } from '../ScannedByToolModal'
 import { NO_VULNERABILITY_TEXT } from './constants'
+import { getLastExecutionByArtifactAppEnv } from './service'
 import { VulnerabilitiesProps } from './types'
 
 const Vulnerabilities = ({
     isScanned,
     isScanEnabled,
-    areVulnerabilitiesLoading,
-    vulnerabilities,
-    lastExecution,
-    scanToolId,
-    hasError,
-    reloadVulnerabilities,
+    artifactId,
+    applicationId,
+    environmentId,
+    setVulnerabilityCount,
 }: VulnerabilitiesProps) => {
-    if (hasError) {
+    const [areVulnerabilitiesLoading, vulnerabilitiesResponse, vulnerabilitiesError, reloadVulnerabilities] = useAsync(
+        () => getLastExecutionByArtifactAppEnv(artifactId, applicationId, environmentId),
+        [],
+        // TODO: Ask whether should add this optimization?
+        isScanned && isScanEnabled,
+        {
+            resetOnChange: false,
+        },
+    )
+
+    useEffect(() => {
+        if (vulnerabilitiesResponse) {
+            setVulnerabilityCount(vulnerabilitiesResponse.result.vulnerabilities?.length)
+        }
+    }, [vulnerabilitiesResponse])
+
+    if (vulnerabilitiesError) {
         return (
             <div className="security-tab-empty">
                 <p className="security-tab-empty__title">Failed to fetch vulnerabilities</p>
@@ -48,14 +64,14 @@ const Vulnerabilities = ({
         )
     }
 
-    if (!areVulnerabilitiesLoading && vulnerabilities.length === 0) {
+    if (!areVulnerabilitiesLoading && vulnerabilitiesResponse.result.vulnerabilities.length === 0) {
         return (
             <div className="security-tab-empty">
                 <p className="security-tab-empty__title">{NO_VULNERABILITY_TEXT.Secured}</p>
                 <p>{NO_VULNERABILITY_TEXT.NoVulnerabilityFound}</p>
-                <p className="security-tab-empty__subtitle">{lastExecution}</p>
+                <p className="security-tab-empty__subtitle">{vulnerabilitiesResponse.result.lastExecution}</p>
                 <p className="pt-8 pb-8 pl-16 pr-16 flexbox dc__align-items-center">
-                    <ScannedByToolModal scanToolId={scanToolId} />
+                    <ScannedByToolModal scanToolId={vulnerabilitiesResponse.result.scanToolId} />
                 </p>
             </div>
         )
@@ -64,13 +80,15 @@ const Vulnerabilities = ({
     return (
         <div className="security-tab">
             <div className="flexbox dc__content-space">
-                <span className="flex left security-tab__last-scanned ">Scanned on {lastExecution} </span>
+                <span className="flex left security-tab__last-scanned ">
+                    Scanned on {vulnerabilitiesResponse.result.lastExecution}&nbsp;
+                </span>
                 <span className="flex right">
-                    <ScannedByToolModal scanToolId={scanToolId} />
+                    <ScannedByToolModal scanToolId={vulnerabilitiesResponse.result.scanToolId} />
                 </span>
             </div>
 
-            <ScanVulnerabilitiesTable vulnerabilities={vulnerabilities} />
+            <ScanVulnerabilitiesTable vulnerabilities={vulnerabilitiesResponse.result.vulnerabilities} />
         </div>
     )
 }

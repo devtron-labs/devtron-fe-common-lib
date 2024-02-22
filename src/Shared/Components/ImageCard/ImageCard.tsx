@@ -16,7 +16,7 @@ const ImageCard = ({
     <div className={`material-history material-history--cd image-tag-parent-card ${rootClassName || ''}`}>
         <div className="p-12 bcn-0 br-4">
             <div className="dc__content-space flexbox dc__align-start">
-                <div className="flexbox dc__align-start">
+                <div className="flexbox-col dc__content-start dc__align-start">
                     <SequentialCDCardTitle {...sequentialCDCardTitleProps} />
 
                     <div
@@ -35,9 +35,9 @@ const ImageCard = ({
             <div data-testid={`image-tags-container-${testIdLocator}`}>
                 <ImageTagsContainer {...imageTagContainerProps} />
             </div>
-
-            {children}
         </div>
+
+        {children}
     </div>
 )
 
