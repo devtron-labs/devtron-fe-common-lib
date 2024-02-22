@@ -16,7 +16,6 @@ const Vulnerabilities = ({
     const [areVulnerabilitiesLoading, vulnerabilitiesResponse, vulnerabilitiesError, reloadVulnerabilities] = useAsync(
         () => getLastExecutionByArtifactAppEnv(artifactId, applicationId, environmentId),
         [],
-        // TODO: Ask whether should add this optimization?
         isScanned && isScanEnabled,
         {
             resetOnChange: false,
@@ -64,7 +63,7 @@ const Vulnerabilities = ({
         )
     }
 
-    if (!areVulnerabilitiesLoading && vulnerabilitiesResponse.result.vulnerabilities.length === 0) {
+    if (vulnerabilitiesResponse.result.vulnerabilities.length === 0) {
         return (
             <div className="security-tab-empty">
                 <p className="security-tab-empty__title">{NO_VULNERABILITY_TEXT.Secured}</p>
