@@ -2,6 +2,7 @@ import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
+import { RegistryType } from '../Shared'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -274,7 +275,7 @@ export interface CDMaterialType {
     imageReleaseTags?: ReleaseTag[]
     artifactStatus?: string
     filterState: FilterStates
-    registryType?: string
+    registryType?: RegistryType
     imagePath?: string
     registryName?: string
     // Not even coming from API but required in CDMaterials for Security which makes its own api call but stores data in CDMaterials

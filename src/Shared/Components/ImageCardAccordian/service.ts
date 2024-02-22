@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { ROUTES, VulnerabilityType, get, sortCallback } from '../../../Common'
+import { Severity } from '../../types'
 
 interface LastExecutionResponseType {
     code: number
@@ -30,12 +31,12 @@ interface LastExecutionResponseType {
 function parseLastExecutionResponse(response): LastExecutionResponseType {
     const vulnerabilities = response.result.vulnerabilities || []
     const critical = vulnerabilities
-        .filter((v) => v.severity === 'critical')
+        .filter((v) => v.severity === Severity.CRITICAL)
         .sort((a, b) => sortCallback('cveName', a, b))
     const moderate = vulnerabilities
-        .filter((v) => v.severity === 'moderate')
+        .filter((v) => v.severity === Severity.MODERATE)
         .sort((a, b) => sortCallback('cveName', a, b))
-    const low = vulnerabilities.filter((v) => v.severity === 'low').sort((a, b) => sortCallback('cveName', a, b))
+    const low = vulnerabilities.filter((v) => v.severity === Severity.LOW).sort((a, b) => sortCallback('cveName', a, b))
     const groupedVulnerabilities = critical.concat(moderate, low)
     return {
         ...response,
