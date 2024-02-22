@@ -24,7 +24,6 @@ export type UserListFilterParams = BaseFilterQueryParams<UserListSortableKeys> &
     status: UserStatus[]
 }
 
-// TODO (v3): Common out in dashboard and FE Lib
 export interface UserRoleGroup {
     /**
      * Id of the permission group
@@ -40,4 +39,6 @@ export interface UserRoleGroup {
      * @default '-'
      */
     description?: string
+    status: UserStatus
+    timeToLive: string
 }
