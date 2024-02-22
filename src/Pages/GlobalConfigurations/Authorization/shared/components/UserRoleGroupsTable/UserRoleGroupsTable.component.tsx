@@ -24,6 +24,7 @@ const UserRoleGroupsTable = ({
     statusComponent: StatusComponent,
     statusHeaderComponent: StatusHeaderComponent,
     handleStatusUpdate,
+    disableStatusComponent = false,
 }: UserRoleGroupsTableProps) => {
     const showDelete = !!handleDelete
     const modifierClassName = getModifierClassName(showStatus, showDelete)
@@ -63,7 +64,7 @@ const UserRoleGroupsTable = ({
                                 handleChange={(updatedStatus, updatedTimeToLive) =>
                                     handleStatusUpdate?.(id, updatedStatus, updatedTimeToLive)
                                 }
-                                // disabled
+                                disabled={disableStatusComponent}
                                 showDropdownBorder={false}
                             />
                         )}

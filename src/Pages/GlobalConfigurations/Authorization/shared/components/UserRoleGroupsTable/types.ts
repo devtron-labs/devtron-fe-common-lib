@@ -7,16 +7,13 @@ export type UserRoleGroupsTableProps = {
      * Delete button is shown only if handleDelete is passed
      */
     handleDelete?: (id: number) => void
-    handleStatusUpdate?: (
-        id: UserRoleGroup['id'],
-        updatedStatus: UserRoleGroup['status'],
-        updatedTimeToLive: UserRoleGroup['timeToLive'],
-    ) => void
 } & (
     | {
           showStatus?: false
           statusComponent?: never
           statusHeaderComponent?: never
+          handleStatusUpdate?: never
+          disableStatusComponent?: never
       }
     | {
           showStatus: true
@@ -28,5 +25,11 @@ export type UserRoleGroupsTableProps = {
            * Component for rendering the status header
            */
           statusHeaderComponent: FC
+          handleStatusUpdate?: (
+              id: UserRoleGroup['id'],
+              updatedStatus: UserRoleGroup['status'],
+              updatedTimeToLive: UserRoleGroup['timeToLive'],
+          ) => void
+          disableStatusComponent?: boolean
       }
 )
