@@ -73,8 +73,8 @@ const UserRoleGroupsTable = ({
                             <Tippy className="default-tt" arrow={false} placement="top" content="Delete">
                                 <button
                                     type="button"
-                                    className="dc__transparent flex"
-                                    data-testid="user-role-groups__delete-button"
+                                    className="dc__transparent flex p-4"
+                                    data-testid="user-role-groups__delete-button icon-delete"
                                     onClick={() => handleDelete(id)}
                                     aria-label="Delete user"
                                 >

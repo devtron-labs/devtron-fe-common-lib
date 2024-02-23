@@ -13,11 +13,11 @@
         }
 
         &--with-delete {
-            grid-template-columns: 20px 200px minmax(300px, 1fr) 20px;
+            grid-template-columns: 20px 200px minmax(300px, 1fr) 24px;
         }
 
         &--with-status-and-delete {
-            grid-template-columns: 20px 200px minmax(300px, 1fr) 185px 20px;
+            grid-template-columns: 20px 200px minmax(300px, 1fr) 185px 24px;
         }
     }
 }
