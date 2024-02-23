@@ -70,6 +70,9 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
         lineHeight: '20px',
         fontWeight: 400,
         margin: 0,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
     }),
     ...styleOverrides,
 })
