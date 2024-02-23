@@ -284,3 +284,5 @@ export enum ReactSelectInputAction {
     deselectOption = 'deselect-option',
     removeValue = 'remove-value',
 }
+
+export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
