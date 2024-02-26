@@ -21,6 +21,7 @@ export const URLS = {
 }
 
 export const ROUTES = {
+    APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promote/material',
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',
@@ -28,6 +29,7 @@ export const ROUTES = {
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
     SECURITY_SCAN_EXECUTION_DETAILS: 'security/scan/executionDetail',
+    NOTIFIER: 'notification',
 }
 
 export enum KEY_VALUE {
@@ -277,3 +279,14 @@ export enum SortingOrder {
  * Base page size for pagination
  */
 export const DEFAULT_BASE_PAGE_SIZE = 20
+
+export const ModuleNameMap = {
+    ARGO_CD: 'argo-cd',
+    CICD: 'cicd',
+    SECURITY: 'security',
+    BLOB_STORAGE: 'blob-storage',
+    GRAFANA: 'monitoring.grafana',
+    NOTIFICATION: 'notifier',
+    SECURITY_TRIVY: 'security.trivy',
+    SECURITY_CLAIR: 'security.clair',
+}

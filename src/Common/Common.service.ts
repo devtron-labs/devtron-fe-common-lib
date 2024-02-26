@@ -14,6 +14,7 @@ import {
     CDMaterialsMetaInfo,
     CDMaterialsApprovalInfo,
     CDMaterialFilterQuery,
+    ImagePromotionMaterialInfo,
 } from './Types'
 
 export const getTeamListMin = (): Promise<TeamList> => {
@@ -159,24 +160,28 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
             registryType: material.registryType ?? '',
             imagePath: material.image ?? '',
             registryName: material.registryName ?? '',
+            promotionApprovalMetaData: material.promotionApprovalMetaData,
+            deployedOnEnvironments: material.deployedOnEnvironments ?? [],
+            promotedFrom: material.promotedFrom ?? '',
+            promoteFromType: material.promoteFromType ?? '',
         }
     })
     return materials
 }
 
 const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResult): CDMaterialsApprovalInfo => {
-    if (!enableApproval) {
+    if (!enableApproval || !cdMaterialsResult) {
         return {
             approvalUsers: [],
             userApprovalConfig: null,
-            requestedUserId: 0,
+            canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
         }
     }
 
     return {
         approvalUsers: cdMaterialsResult.approvalUsers,
         userApprovalConfig: cdMaterialsResult.userApprovalConfig,
-        requestedUserId: cdMaterialsResult.requestedUserId,
+        canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
     }
 }
 
@@ -188,7 +193,7 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
             hideImageTaggingHardDelete: false,
             resourceFilters: [],
             totalCount: 0,
-            canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
+            requestedUserId: 0,
         }
     }
 
@@ -198,7 +203,21 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
         hideImageTaggingHardDelete: cdMaterialsResult.hideImageTaggingHardDelete,
         resourceFilters: cdMaterialsResult.resourceFilters ?? [],
         totalCount: cdMaterialsResult.totalCount ?? 0,
-        canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
+        requestedUserId: cdMaterialsResult.requestedUserId,
+    }
+}
+
+const processImagePromotionInfo = (cdMaterialsResult): ImagePromotionMaterialInfo => {
+    if (!cdMaterialsResult) {
+        return {
+            isApprovalPendingForPromotion: false,
+            imagePromotionApproverEmails: [],
+        }
+    }
+
+    return {
+        isApprovalPendingForPromotion: cdMaterialsResult.isApprovalPendingForPromotion,
+        imagePromotionApproverEmails: cdMaterialsResult.imagePromotionApproverEmails ?? [],
     }
 }
 
@@ -213,6 +232,7 @@ const processCDMaterialServiceResponse = (
             materials: [],
             ...processCDMaterialsMetaInfo(cdMaterialsResult),
             ...processCDMaterialsApprovalInfo(false, cdMaterialsResult),
+            ...processImagePromotionInfo(cdMaterialsResult),
         }
     }
 
@@ -227,6 +247,7 @@ const processCDMaterialServiceResponse = (
         cdMaterialsResult,
     )
     const metaInfo = processCDMaterialsMetaInfo(cdMaterialsResult)
+    const imagePromotionInfo = processImagePromotionInfo(cdMaterialsResult)
 
     // TODO: On update of service would remove from here
     const filteredMaterials =
@@ -238,6 +259,7 @@ const processCDMaterialServiceResponse = (
         materials: filteredMaterials,
         ...approvalInfo,
         ...metaInfo,
+        ...imagePromotionInfo,
     }
 }
 
@@ -248,7 +270,13 @@ const getSanitizedQueryParams = (queryParams: CDMaterialServiceQueryParams): CDM
 
 export const genericCDMaterialsService = (
     serviceType: CDMaterialServiceEnum,
+    /**
+     * In case of hotfix would be sending it as null
+     */
     cdMaterialID: number,
+    /**
+     * Would be sending null in case we don't have stage like for case of promotion.
+     */
     stage: DeploymentNodeType,
     signal: AbortSignal,
     queryParams: CDMaterialServiceQueryParams = {},
@@ -260,6 +288,11 @@ export const genericCDMaterialsService = (
     switch (serviceType) {
         case CDMaterialServiceEnum.ROLLBACK:
             URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material/rollback`, manipulatedParams)
+            break
+
+        case CDMaterialServiceEnum.IMAGE_PROMOTION:
+            // Directly sending queryParams since do not need to get queryParams sanitized in case of image promotion
+            URL = processURL(`${ROUTES.APP_ARTIFACT_PROMOTE_MATERIAL}`, queryParams)
             break
 
         // Meant for handling getCDMaterialList
@@ -307,4 +340,9 @@ export function createGitCommitUrl(url: string, revision: string): string {
 
 export function fetchChartTemplateVersions() {
     return get(`${ROUTES.DEPLOYMENT_TEMPLATE_LIST}?appId=-1&envId=-1`)
+}
+
+export function getDefaultConfig(): Promise<ResponseType> {
+    const URL = `${ROUTES.NOTIFIER}/channel/config`
+    return get(URL)
 }
