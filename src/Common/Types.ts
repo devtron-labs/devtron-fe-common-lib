@@ -403,6 +403,7 @@ export interface CommonNodeAttr {
     }
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
+    isGitOpsRepoNotConfigured?: boolean
     deploymentAppCreated?: boolean
     isLast?: boolean
     downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
