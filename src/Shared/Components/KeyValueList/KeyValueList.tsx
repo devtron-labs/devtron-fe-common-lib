@@ -96,18 +96,16 @@ const KeyValueList = ({
 
     return (
         <>
-            {!isDisabled && (
-                <ConditionalWrap condition={isDisabled} wrap={renderDisabledInfoTippy}>
-                    <button
-                        className="p-0 cb-5 fw-6 fs-13 flex content-fit lh-32 dc__no-background dc__no-border dc__outline-none-imp dc__tab-focus"
-                        onClick={handleAddParameter}
-                        type="button"
-                    >
-                        <span className="fa fa-plus mr-8" />
-                        {addButtonText}
-                    </button>
-                </ConditionalWrap>
-            )}
+            <ConditionalWrap condition={isDisabled} wrap={renderDisabledInfoTippy}>
+                <button
+                    className="p-0 cb-5 fw-6 fs-13 flex content-fit lh-32 dc__no-background dc__no-border dc__outline-none-imp dc__tab-focus"
+                    onClick={handleAddParameter}
+                    type="button"
+                >
+                    <span className="fa fa-plus mr-8" />
+                    {addButtonText}
+                </button>
+            </ConditionalWrap>
 
             {keyValueList.length > 0 &&
                 keyValueList.map((keyValueGroup, index) => (
