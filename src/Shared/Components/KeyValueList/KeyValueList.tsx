@@ -13,6 +13,7 @@ const KeyValueItem = ({
     keyPlaceholder,
     valuePlaceholder,
     index,
+    itemClassName,
 }: KeyValueItemProps) => {
     const handleKeyUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
         const data = {
@@ -40,7 +41,7 @@ const KeyValueItem = ({
     }
 
     return (
-        <div className="flexbox justify-space">
+        <div className={`flexbox justify-space ${itemClassName || ''}`}>
             <div className="pt-8 w-100">
                 <CustomInput
                     name="item-key"
@@ -84,6 +85,7 @@ const KeyValueList = ({
     handleKeyValueChange,
     isDisabled,
     disabledInfo,
+    itemClassName,
     addButtonText = TEXT_MESSAGES.ADD_BUTTON_TEXT,
     keyPlaceholder = TEXT_MESSAGES.DEFAULT_KEY_PLACEHOLDER,
     valuePlaceholder = TEXT_MESSAGES.DEFAULT_VALUE_PLACEHOLDER,
@@ -119,6 +121,7 @@ const KeyValueList = ({
                         keyPlaceholder={keyPlaceholder}
                         valuePlaceholder={valuePlaceholder}
                         index={index}
+                        itemClassName={itemClassName}
                     />
                 ))}
         </>
