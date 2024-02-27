@@ -1,8 +1,8 @@
 import React from 'react'
 import Tippy from '@tippyjs/react'
+import { ConditionalWrap, CustomInput } from '../../../Common'
 import { TEXT_MESSAGES } from './constants'
 import { KeyValueItemProps, KeyValueListActionType, KeyValueListProps } from './types'
-import { ConditionalWrap, CustomInput } from '../../../Common'
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 
 const KeyValueItem = ({
