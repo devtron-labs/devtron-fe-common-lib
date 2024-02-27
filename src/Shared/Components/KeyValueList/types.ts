@@ -44,6 +44,10 @@ export interface KeyValueListProps {
      * @default - Enter Value
      */
     valuePlaceholder?: string
+    /**
+     * to be applied on each item
+     */
+    itemClassName?: string
 }
 
 export interface KeyValueItemProps extends Omit<KeyValueListProps, 'addButtonText' | 'keyValueList' | 'disabledInfo'> {
