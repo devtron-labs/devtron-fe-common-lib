@@ -21,6 +21,9 @@ export type BaseFilterQueryParams<T> = {
 } & SortingParams<T>
 
 export type UserListFilterParams = BaseFilterQueryParams<UserListSortableKeys> & {
+    /**
+     * Selected statuses (if any)
+     */
     status: UserStatus[]
 }
 
@@ -39,6 +42,12 @@ export interface UserRoleGroup {
      * @default '-'
      */
     description?: string
+    /**
+     * Status of the role group
+     */
     status: UserStatus
+    /**
+     * Timeout for the role group
+     */
     timeToLive: string
 }
