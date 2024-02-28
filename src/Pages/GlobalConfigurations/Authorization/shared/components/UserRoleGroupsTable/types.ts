@@ -33,3 +33,12 @@ export type UserRoleGroupsTableProps = {
           disableStatusComponent?: boolean
       }
 )
+
+export type UserRoleGroupTableRow = UserRoleGroup &
+    Pick<
+        UserRoleGroupsTableProps,
+        'disableStatusComponent' | 'handleStatusUpdate' | 'handleDelete' | 'statusComponent' | 'showStatus'
+    > & {
+        modifierClassName: string
+        showDelete: boolean
+    }
