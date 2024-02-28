@@ -9,7 +9,7 @@ export const Option = (props) => {
 
     return (
         <div
-            className="flex left pl-12 cursor"
+            className="flex left pl-12 cursor dc__gap-8"
             style={{ background: props.isFocused ? 'var(--N100)' : 'transparent' }}
         >
             <input
@@ -18,7 +18,7 @@ export const Option = (props) => {
                 onChange={(e) => selectOption(data)}
                 type="checkbox"
                 style={{ height: '16px', width: '16px', flex: '0 0 16px' }}
-                className="mr-8 cursor"
+                className="m-0-imp cursor"
             />
             <components.Option {...props} />
         </div>
