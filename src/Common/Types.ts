@@ -59,6 +59,7 @@ export interface CheckboxProps {
     isChecked: boolean
     // FIXME: Need to replace this CHECKBOX_VALUE enum, and replace string instances in dashboard
     value: 'CHECKED' | 'INTERMEDIATE' | 'BULK_CHECKED'
+    name?: string
     disabled?: boolean
     tabIndex?: number
     rootClassName?: string
@@ -487,7 +488,10 @@ export interface ImagePromotionMaterialInfo {
     imagePromotionApproverEmails: string[]
 }
 
-export interface CDMaterialResponseType extends CDMaterialsMetaInfo, CDMaterialsApprovalInfo, ImagePromotionMaterialInfo {
+export interface CDMaterialResponseType
+    extends CDMaterialsMetaInfo,
+        CDMaterialsApprovalInfo,
+        ImagePromotionMaterialInfo {
     materials: CDMaterialType[]
 }
 
