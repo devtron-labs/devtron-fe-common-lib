@@ -19,11 +19,14 @@ export interface SequentialCDCardTitleProps {
     isLatest: boolean
     isRunningOnParentCD: boolean
     artifactStatus: string
-    environmentName: string
-    parentEnvironmentName: string
     stageType: string
     showLatestTag: boolean
     isVirtualEnvironment: boolean
+    // Have to verify if coming in deployment modal then would remove envName and parentEnvName
+    deployedOn?: string[]
+    environmentName?: string
+    parentEnvironmentName?: string
+    additionalInfo?: ReactNode
 }
 
 export interface ImageCardProps {

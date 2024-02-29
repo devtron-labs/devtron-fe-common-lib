@@ -13,12 +13,35 @@ const SequentialCDCardTitle = ({
     stageType,
     showLatestTag,
     isVirtualEnvironment,
+    deployedOn,
+    additionalInfo,
 }: SequentialCDCardTitleProps) => {
     const getDeployedStateText = () => {
         if (isVirtualEnvironment) {
             return DEPLOYMENT_ENV_TEXT.VIRTUAL_ENV
         }
         return DEPLOYMENT_ENV_TEXT.ACTIVE
+    }
+
+    const renderDeployedEnvironmentName = () => {
+        if (deployedOn?.length) {
+            return (
+                <DeploymentEnvState
+                    envStateText={getDeployedStateText()}
+                    title={`${deployedOn.length} environments`}
+                    tooltipContent={deployedOn.join(',')}
+                />
+            )
+        }
+
+        return (
+            <>
+                {isLatest && <DeploymentEnvState envStateText={getDeployedStateText()} title={environmentName} />}
+                {isRunningOnParentCD && (
+                    <DeploymentEnvState envStateText={getDeployedStateText()} title={parentEnvironmentName} />
+                )}
+            </>
+        )
     }
 
     if (stageType !== STAGE_TYPE.CD) {
@@ -35,15 +58,12 @@ const SequentialCDCardTitle = ({
     if (isLatest || isRunningOnParentCD || Object.values(ARTIFACT_STATUS).includes(artifactStatus) || showLatestTag) {
         return (
             <div className="bcn-0 pb-8 br-4 flex left">
-                {isLatest && <DeploymentEnvState envStateText={getDeployedStateText()} envName={environmentName} />}
-                {isRunningOnParentCD && (
-                    <DeploymentEnvState envStateText={getDeployedStateText()} envName={parentEnvironmentName} />
-                )}
+                {renderDeployedEnvironmentName()}
                 {artifactStatus === ARTIFACT_STATUS.PROGRESSING && (
-                    <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.DEPLOYING} envName={environmentName} />
+                    <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.DEPLOYING} title={environmentName} />
                 )}
                 {(artifactStatus === ARTIFACT_STATUS.DEGRADED || artifactStatus === ARTIFACT_STATUS.FAILED) && (
-                    <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.FAILED} envName={environmentName} />
+                    <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.FAILED} title={environmentName} />
                 )}
                 {showLatestTag && (
                     // TODO: Remove hard coded text
@@ -56,6 +76,7 @@ const SequentialCDCardTitle = ({
                         isSuperAdmin={[]}
                     />
                 )}
+                {additionalInfo}
             </div>
         )
     }
