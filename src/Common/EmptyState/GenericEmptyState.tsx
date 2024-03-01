@@ -67,7 +67,7 @@ const GenericEmptyState = ({
                     isRowLayout ? 'dc__align-start' : ''
                 } ${contentClassName}`}
             >
-                <h4 className="title fw-6 cn-9 mt-0 mb-0">{title}</h4>
+                <h4 className="title fw-6 cn-9 mt-0 mb-0 lh-1-5">{title}</h4>
                 {subTitle && <p className={`subtitle ${isRowLayout ? 'subtitle--text-start' : ''}`}>{subTitle}</p>}
                 {isButtonAvailable && renderButton()}
                 {children}
