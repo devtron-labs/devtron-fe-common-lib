@@ -276,3 +276,14 @@ export enum SortingOrder {
  * Base page size for pagination
  */
 export const DEFAULT_BASE_PAGE_SIZE = 20
+
+export enum MODAL_TYPE {
+    HIBERNATE = 'HIBERNATE',
+    RESTORE = 'RESTORE',
+    DEPLOY = 'DEPLOY',
+    RESOURCE = 'RESOURCE',
+    RESTART = 'RESTART',
+    PIPELINE = 'PIPELINE',
+    OVERVIEW = 'OVERVIEW',
+    APP_DETAILS_STATUS = 'APP_DETAILS_STATUS',
+}
