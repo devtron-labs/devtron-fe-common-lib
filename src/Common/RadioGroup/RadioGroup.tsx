@@ -3,7 +3,7 @@ import Tippy from '@tippyjs/react'
 import React, { useState, useEffect, useMemo } from 'react'
 import { ConditionalWrap } from '../Helper'
 import './radioGroup.scss'
-import { RadioGroupComposition, RadioGroupInterface, RadioInterface } from '..'
+import { RadioGroupComposition, RadioGroupInterface, RadioInterface } from '../Types'
 
 const RadioContext = React.createContext(null)
 
