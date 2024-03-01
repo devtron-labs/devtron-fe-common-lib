@@ -696,15 +696,3 @@ export const debounce = (func, timeout = 500) => {
  */
 
 export const capitalizeFirstLetter = (text: string) => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
-
-/**
- * Returns first letter of the string encircle with random colour
- */
-export const getEmailInitials = (email: string) => (
-    <div
-        className="icon-dim-20 mw-20 flexbox flex-justify-center flex-align-center dc__border-radius-50-per dc__uppercase cn-0"
-        style={{ backgroundColor: getRandomColor(email) }}
-    >
-        {email[0]}
-    </div>
-)
