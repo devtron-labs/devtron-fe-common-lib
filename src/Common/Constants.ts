@@ -18,6 +18,7 @@ export const PATTERNS = {
 
 export const URLS = {
     LOGIN_SSO: '/login/sso',
+    PERMISSION_GROUPS: '/global-config/auth/groups',
 }
 
 export const ROUTES = {
@@ -290,3 +291,12 @@ export const ModuleNameMap = {
     SECURITY_TRIVY: 'security.trivy',
     SECURITY_CLAIR: 'security.clair',
 }
+
+export enum ReactSelectInputAction {
+    inputChange = 'input-change',
+    selectOption = 'select-option',
+    deselectOption = 'deselect-option',
+    removeValue = 'remove-value',
+}
+
+export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
