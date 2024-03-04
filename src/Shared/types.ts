@@ -31,7 +31,7 @@ export enum ImagePromotionTabs {
     PENDING = 'pending',
 }
 
-export interface ArtifactPromotionMetaData {
+export interface ArtifactPromotionMetadata {
     isConfigured: boolean
     isApprovalPendingForPromotion: boolean
 }
@@ -60,7 +60,7 @@ export interface WorkflowType {
     appReleaseTags?: string[]
     tagsEditable?: boolean
     hideImageTaggingHardDelete?: boolean
-    artifactPromotionMetaData?: ArtifactPromotionMetaData
+    artifactPromotionMetadata?: ArtifactPromotionMetadata
 }
 
 export enum ModuleStatus {

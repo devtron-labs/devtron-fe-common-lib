@@ -22,7 +22,7 @@ export const URLS = {
 }
 
 export const ROUTES = {
-    APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promote/material',
+    APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',
