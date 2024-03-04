@@ -17,6 +17,7 @@ export class Checkbox extends Component<CheckboxProps> {
         return (
             <label className={`dc__position-rel flex left cursor ${rootClassName}`} onClick={this.props?.onClick}>
                 <input
+                    {...(this.props.name ? { name: this.props.name } : {})}
                     type="checkbox"
                     className="form__checkbox"
                     disabled={this.props.disabled}

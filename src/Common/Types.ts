@@ -59,6 +59,7 @@ export interface CheckboxProps {
     isChecked: boolean
     // FIXME: Need to replace this CHECKBOX_VALUE enum, and replace string instances in dashboard
     value: 'CHECKED' | 'INTERMEDIATE' | 'BULK_CHECKED'
+    name?: string
     disabled?: boolean
     tabIndex?: number
     rootClassName?: string
@@ -249,6 +250,20 @@ export enum MaterialDataSource {
     EXTERNAL = 'ext',
 }
 
+export enum ImagePromotionRuntimeState {
+    AWAITING = 'AWAITING',
+    PROMOTED = 'PROMOTED',
+    CANCELLED = 'CANCELLED',
+    STALE = 'STALE',
+}
+
+export interface PromotionApprovalMetaDataType {
+    approvalRequestId: number
+    approvalRuntimeState: ImagePromotionRuntimeState
+    approvedUsersData: ApprovalUserDataType[]
+    requestedUserData: ApprovalUserDataType
+}
+
 export interface CDMaterialType {
     index: number
     id: string
@@ -286,15 +301,28 @@ export interface CDMaterialType {
     createdTime?: string
     deployed?: boolean
     dataSource?: MaterialDataSource
+    /**
+     * The below four keys: `promotionApprovalMetaData`, `deployedOnEnvironments`, `promotedFrom`, `promoteFromType` are used in image promotion
+     * and may not be available to cater other use-cases.
+     */
+    promotionApprovalMetaData?: PromotionApprovalMetaDataType
+    deployedOnEnvironments?: string[]
+    promotedFrom?: string
+    promoteFromType?: string
 }
 
 export enum CDMaterialServiceEnum {
     ROLLBACK = 'rollback',
     CD_MATERIALS = 'cd-materials',
+    IMAGE_PROMOTION = 'image-promotion',
 }
 
 export enum CDMaterialResourceQuery {
     PENDING_APPROVAL = 'PENDING_APPROVAL',
+    PROMOTION_APPROVAL_PENDING_NODE = 'PROMOTION_APPROVAL_PENDING_NODE',
+    CI = 'CI',
+    CD = 'CD',
+    WEBHOOK = 'WEBHOOK',
 }
 
 export enum CDMaterialFilterQuery {
@@ -307,6 +335,10 @@ export interface CDMaterialServiceQueryParams {
     offset?: number
     size?: number
     resource?: CDMaterialResourceQuery
+    resourceName?: string
+    workflowId?: number
+    appId?: number
+    pendingForCurrentUser?: boolean
     filter?: CDMaterialFilterQuery
 }
 
@@ -376,6 +408,7 @@ export interface CommonNodeAttr {
     }
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
+    isGitOpsRepoNotConfigured?: boolean
     deploymentAppCreated?: boolean
     isLast?: boolean
     downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
@@ -436,7 +469,7 @@ export interface FilterConditionsListType {
 export interface CDMaterialsApprovalInfo {
     approvalUsers: string[]
     userApprovalConfig: UserApprovalConfigType
-    requestedUserId: number
+    canApproverDeploy: boolean
 }
 
 export interface CDMaterialsMetaInfo {
@@ -445,10 +478,21 @@ export interface CDMaterialsMetaInfo {
     hideImageTaggingHardDelete: boolean
     resourceFilters?: FilterConditionsListType[]
     totalCount: number
-    canApproverDeploy: boolean
+    /**
+     * This is the ID of user that has request the material
+     */
+    requestedUserId: number
 }
 
-export interface CDMaterialResponseType extends CDMaterialsMetaInfo, CDMaterialsApprovalInfo {
+export interface ImagePromotionMaterialInfo {
+    isApprovalPendingForPromotion: boolean
+    imagePromotionApproverEmails: string[]
+}
+
+export interface CDMaterialResponseType
+    extends CDMaterialsMetaInfo,
+        CDMaterialsApprovalInfo,
+        ImagePromotionMaterialInfo {
     materials: CDMaterialType[]
 }
 
@@ -486,8 +530,6 @@ export interface ResizableTextareaProps {
     onFocus?: (e) => void
     className?: string
     placeholder?: string
-    lineHeight?: number
-    padding?: number
     disabled?: boolean
     name?: string
     dataTestId?: string

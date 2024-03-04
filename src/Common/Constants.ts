@@ -18,9 +18,11 @@ export const PATTERNS = {
 
 export const URLS = {
     LOGIN_SSO: '/login/sso',
+    PERMISSION_GROUPS: '/global-config/auth/groups',
 }
 
 export const ROUTES = {
+    APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promote/material',
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',
@@ -28,6 +30,7 @@ export const ROUTES = {
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
     SECURITY_SCAN_EXECUTION_DETAILS: 'security/scan/executionDetail',
+    NOTIFIER: 'notification',
 }
 
 export enum KEY_VALUE {
@@ -277,3 +280,23 @@ export enum SortingOrder {
  * Base page size for pagination
  */
 export const DEFAULT_BASE_PAGE_SIZE = 20
+
+export const ModuleNameMap = {
+    ARGO_CD: 'argo-cd',
+    CICD: 'cicd',
+    SECURITY: 'security',
+    BLOB_STORAGE: 'blob-storage',
+    GRAFANA: 'monitoring.grafana',
+    NOTIFICATION: 'notifier',
+    SECURITY_TRIVY: 'security.trivy',
+    SECURITY_CLAIR: 'security.clair',
+}
+
+export enum ReactSelectInputAction {
+    inputChange = 'input-change',
+    selectOption = 'select-option',
+    deselectOption = 'deselect-option',
+    removeValue = 'remove-value',
+}
+
+export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'

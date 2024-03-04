@@ -33,7 +33,7 @@ export enum ImagePromotionTabs {
 
 export interface ArtifactPromotionMetaData {
     isConfigured: boolean
-    pendingApprovalCount: number
+    isApprovalPendingForPromotion: boolean
 }
 
 export interface Material {
@@ -61,4 +61,50 @@ export interface WorkflowType {
     tagsEditable?: boolean
     hideImageTaggingHardDelete?: boolean
     artifactPromotionMetaData?: ArtifactPromotionMetaData
+}
+
+export enum ModuleStatus {
+    HEALTHY = 'healthy',
+    NONE = 'none',
+    UNKNOWN = 'unknown',
+    UPGRADING = 'upgrading',
+    UPGRADE_FAILED = 'upgradeFailed',
+    // Module Status
+    INSTALLED = 'installed',
+    INSTALLING = 'installing',
+    INSTALL_FAILED = 'installFailed',
+    NOT_INSTALLED = 'notInstalled',
+    TIMEOUT = 'timeout',
+}
+
+export interface WebHookData {
+    Id: number
+    EventActionType: string
+    Data: any
+}
+
+export interface GitTriggers {
+    Commit: string
+    Author: string
+    Date: Date | string
+    Message: string
+    Changes: string[]
+    WebhookData: WebHookData
+    GitRepoUrl: string
+    GitRepoName: string
+    CiConfigureSourceType: string
+    CiConfigureSourceValue: string
+}
+
+export interface RuntimeParamsAPIResponseType {
+    envVariables: Record<string, string>
+}
+
+export interface RuntimeParamsTriggerPayloadType {
+    runtimeParams: RuntimeParamsAPIResponseType
+}
+
+export enum CIMaterialSidebarType {
+    CODE_SOURCE = 'Code Source',
+    PARAMETERS = 'Parameters',
 }

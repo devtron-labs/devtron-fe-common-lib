@@ -2,7 +2,8 @@ import { ReactNode } from 'react'
 
 export interface DeploymentEnvStateProps {
     envStateText: string
-    envName: string
+    title: string
+    tooltipContent?: string
 }
 
 export interface GetDeploymentEnvConfigType {
