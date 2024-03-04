@@ -59,6 +59,7 @@ const UserRoleGroupTableRow = ({
                     disabled={disableStatusComponent}
                     showDropdownBorder={false}
                     breakLinesForTemporaryAccess
+                    showTooltipWhenDisabled
                 />
             )}
             {showDelete && (

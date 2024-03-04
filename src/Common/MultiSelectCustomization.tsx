@@ -3,22 +3,26 @@ import Select, { components } from 'react-select'
 import { ReactComponent as ClearIcon } from '../Assets/Icon/ic-appstatus-cancelled.svg'
 import { ReactComponent as Check } from '../Assets/Icon/ic-check.svg'
 import { ReactComponent as RedWarning } from '../Assets/Icon/ic-error-medium.svg'
+import { Checkbox } from './Checkbox'
+import { CHECKBOX_VALUE } from './Types'
 
 export const Option = (props) => {
     const { selectOption, data } = props
+
+    const handleChange = (e) => {
+        selectOption(data)
+    }
 
     return (
         <div
             className="flex left pl-12 cursor dc__gap-8"
             style={{ background: props.isFocused ? 'var(--N100)' : 'transparent' }}
         >
-            <input
-                checked={props.isSelected}
-                disabled={props.isDisabled}
-                onChange={(e) => selectOption(data)}
-                type="checkbox"
-                style={{ height: '16px', width: '16px', flex: '0 0 16px' }}
-                className="m-0-imp cursor"
+            <Checkbox
+                isChecked={props.isSelected || false}
+                onChange={handleChange}
+                value={CHECKBOX_VALUE.CHECKED}
+                rootClassName="mb-0 w-20"
             />
             <components.Option {...props} />
         </div>
