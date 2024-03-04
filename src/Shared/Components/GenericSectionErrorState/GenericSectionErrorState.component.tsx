@@ -7,7 +7,7 @@ const GenericSectionErrorState = ({ reload, withBorder = false }: GenericSection
         <div className="flex column dc__gap-4">
             <h3 className="fs-13 lh-20 fw-6 cn-9 m-0">Failed to load</h3>
             <div className="flex column fs-13 lh-20 fw-4 cn-7">
-                <p className="m-0">We could load the information on this page.</p>
+                <p className="m-0">We could not load the information on this page.</p>
                 <p className="m-0">Please reload or try again later</p>
             </div>
         </div>
