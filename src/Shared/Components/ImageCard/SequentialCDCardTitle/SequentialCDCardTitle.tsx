@@ -36,8 +36,10 @@ const SequentialCDCardTitle = ({
 
         return (
             <>
-                {isLatest && <DeploymentEnvState envStateText={getDeployedStateText()} title={environmentName} />}
-                {isRunningOnParentCD && (
+                {isLatest && environmentName && (
+                    <DeploymentEnvState envStateText={getDeployedStateText()} title={environmentName} />
+                )}
+                {isRunningOnParentCD && parentEnvironmentName && (
                     <DeploymentEnvState envStateText={getDeployedStateText()} title={parentEnvironmentName} />
                 )}
             </>
