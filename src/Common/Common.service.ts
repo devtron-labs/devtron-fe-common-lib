@@ -172,7 +172,7 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
         return {
             approvalUsers: [],
             userApprovalConfig: null,
-            canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
+            canApproverDeploy: cdMaterialsResult?.canApproverDeploy ?? false,
         }
     }
 
