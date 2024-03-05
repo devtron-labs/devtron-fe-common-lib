@@ -22,3 +22,16 @@ export const IMAGE_SCAN_TOOL = {
 
 export const EXCLUDED_IMAGE_TOOLTIP =
     'This image is excluded for new deployment as it does not match the filter conditions configured for this environment.'
+
+export const ModuleNameMap = {
+    ARGO_CD: 'argo-cd',
+    CICD: 'cicd',
+    SECURITY: 'security',
+    BLOB_STORAGE: 'blob-storage',
+    GRAFANA: 'monitoring.grafana',
+    NOTIFICATION: 'notifier',
+    SECURITY_TRIVY: 'security.trivy',
+    SECURITY_CLAIR: 'security.clair',
+}
+
+export const DATE_TIME_FORMAT_STRING = 'ddd DD MMM YYYY HH:mm:ss'

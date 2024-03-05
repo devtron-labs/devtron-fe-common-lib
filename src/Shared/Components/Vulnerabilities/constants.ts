@@ -1,4 +1,4 @@
 export const NO_VULNERABILITY_TEXT = {
-    Secured: 'You’re secure!',
-    NoVulnerabilityFound: 'No security vulnerability found for this image.',
+    SECURED: 'You’re secure!',
+    NO_VULNERABILITY_FOUND: 'No security vulnerability found for this image.',
 }

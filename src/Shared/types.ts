@@ -1,4 +1,4 @@
-import { CommonNodeAttr, UserApprovalConfigType } from '../Common'
+import { CommonNodeAttr, ResponseType, UserApprovalConfigType, VulnerabilityType } from '../Common'
 
 export enum RegistryType {
     GIT = 'git',
@@ -107,4 +107,33 @@ export interface RuntimeParamsTriggerPayloadType {
 export enum CIMaterialSidebarType {
     CODE_SOURCE = 'Code Source',
     PARAMETERS = 'Parameters',
+}
+
+interface LastExecutionResultType {
+    scanExecutionId: number
+    lastExecution: string
+    appId?: number
+    appName?: string
+    envId?: number
+    envName?: string
+    pod?: string
+    replicaSet?: string
+    image?: string
+    objectType: 'app' | 'chart'
+    scanned: boolean
+    scanEnabled: boolean
+    severityCount: {
+        critical: number
+        moderate: number
+        low: number
+    }
+    vulnerabilities: VulnerabilityType[]
+    scanToolId?: number
+}
+
+export interface LastExecutionResponseType extends ResponseType<LastExecutionResultType> {}
+
+export interface MaterialSecurityInfoType {
+    isScanned: boolean
+    isScanEnabled: boolean
 }

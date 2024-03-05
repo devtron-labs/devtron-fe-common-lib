@@ -28,17 +28,6 @@ const Vulnerabilities = ({
         }
     }, [vulnerabilitiesResponse])
 
-    if (vulnerabilitiesError) {
-        return (
-            <div className="security-tab-empty">
-                <p className="security-tab-empty__title">Failed to fetch vulnerabilities</p>
-                <button className="cta secondary" type="button" onClick={reloadVulnerabilities}>
-                    Reload
-                </button>
-            </div>
-        )
-    }
-
     if (!isScanned) {
         return (
             <div className="security-tab-empty">
@@ -63,11 +52,22 @@ const Vulnerabilities = ({
         )
     }
 
+    if (vulnerabilitiesError) {
+        return (
+            <div className="security-tab-empty">
+                <p className="security-tab-empty__title">Failed to fetch vulnerabilities</p>
+                <button className="cta secondary" type="button" onClick={reloadVulnerabilities}>
+                    Reload
+                </button>
+            </div>
+        )
+    }
+
     if (vulnerabilitiesResponse.result.vulnerabilities.length === 0) {
         return (
             <div className="security-tab-empty">
-                <p className="security-tab-empty__title">{NO_VULNERABILITY_TEXT.Secured}</p>
-                <p>{NO_VULNERABILITY_TEXT.NoVulnerabilityFound}</p>
+                <p className="security-tab-empty__title">{NO_VULNERABILITY_TEXT.SECURED}</p>
+                <p>{NO_VULNERABILITY_TEXT.NO_VULNERABILITY_FOUND}</p>
                 <p className="security-tab-empty__subtitle">{vulnerabilitiesResponse.result.lastExecution}</p>
                 <p className="pt-8 pb-8 pl-16 pr-16 flexbox dc__align-items-center">
                     <ScannedByToolModal scanToolId={vulnerabilitiesResponse.result.scanToolId} />

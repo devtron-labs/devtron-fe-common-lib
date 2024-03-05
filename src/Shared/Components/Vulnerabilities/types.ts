@@ -1,6 +1,6 @@
-export interface VulnerabilitiesProps {
-    isScanned: boolean
-    isScanEnabled: boolean
+import { MaterialSecurityInfoType } from '../../types'
+
+export interface VulnerabilitiesProps extends MaterialSecurityInfoType {
     artifactId: number
     applicationId: number
     environmentId: number

@@ -68,14 +68,13 @@ const SequentialCDCardTitle = ({
                     <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.FAILED} title={environmentName} />
                 )}
                 {showLatestTag && (
-                    // TODO: Remove hard coded text
                     <ImageTagButton
                         text="Latest"
                         isSoftDeleted={false}
                         isEditing={false}
                         tagId={0}
                         softDeleteTags={[]}
-                        isSuperAdmin={[]}
+                        isSuperAdmin
                     />
                 )}
                 {additionalInfo}

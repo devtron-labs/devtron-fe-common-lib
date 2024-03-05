@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react'
 import { CDModalTabType, VulnerabilityType } from '../../../Common'
+import { MaterialSecurityInfoType } from '../../types'
 
-export interface ImageCardAccordionProps {
+export interface ImageCardAccordionProps extends MaterialSecurityInfoType {
     isSecurityModuleInstalled: boolean
     artifactId: number
     applicationId: number

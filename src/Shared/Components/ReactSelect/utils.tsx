@@ -129,3 +129,18 @@ export const SelectOption = (props: any) => {
 }
 
 export const LoadingIndicator = () => <Progressing />
+
+export const GroupHeading = (props: any) => {
+    const { data } = props
+    if (!data.label) {
+        return null
+    }
+
+    return (
+        <components.GroupHeading {...props}>
+            <div className="flex dc__no-text-transform flex-justify dc__truncate-text h-100">
+                <span className="dc__truncate-text">{data.label}</span>
+            </div>
+        </components.GroupHeading>
+    )
+}

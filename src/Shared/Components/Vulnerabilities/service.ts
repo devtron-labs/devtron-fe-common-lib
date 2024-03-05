@@ -1,32 +1,7 @@
 import moment from 'moment'
-import { ROUTES, VulnerabilityType, get, sortCallback } from '../../../Common'
-import { Severity } from '../../types'
-
-interface LastExecutionResponseType {
-    code: number
-    status: string
-    result: {
-        scanExecutionId: number
-        lastExecution: string
-        appId?: number
-        appName?: string
-        envId?: number
-        envName?: string
-        pod?: string
-        replicaSet?: string
-        image?: string
-        objectType: 'app' | 'chart'
-        scanned: boolean
-        scanEnabled: boolean
-        severityCount: {
-            critical: number
-            moderate: number
-            low: number
-        }
-        vulnerabilities: VulnerabilityType[]
-        scanToolId?: number
-    }
-}
+import { ROUTES, get, getUrlWithSearchParams, sortCallback } from '../../../Common'
+import { LastExecutionResponseType, Severity } from '../../types'
+import { DATE_TIME_FORMAT_STRING } from '../../constants'
 
 function parseLastExecutionResponse(response): LastExecutionResponseType {
     const vulnerabilities = response.result.vulnerabilities || []
@@ -37,20 +12,18 @@ function parseLastExecutionResponse(response): LastExecutionResponseType {
         .filter((v) => v.severity === Severity.MODERATE)
         .sort((a, b) => sortCallback('cveName', a, b))
     const low = vulnerabilities.filter((v) => v.severity === Severity.LOW).sort((a, b) => sortCallback('cveName', a, b))
-    const groupedVulnerabilities = critical.concat(moderate, low)
+    const moderateAndLowVulnerabilities = critical.concat(moderate, low)
     return {
         ...response,
         result: {
             ...response.result,
-            scanExecutionId: response.result.ScanExecutionId,
-            lastExecution: moment(response.result.executionTime).utc(false).format('ddd DD MMM YYYY HH:mm:ss'),
-            objectType: response.result.objectType,
+            lastExecution: moment(response.result.executionTime).utc(false).format(DATE_TIME_FORMAT_STRING),
             severityCount: {
                 critical: response.result?.severityCount?.high,
                 moderate: response.result?.severityCount?.moderate,
                 low: response.result?.severityCount?.low,
             },
-            vulnerabilities: groupedVulnerabilities.map((cve) => ({
+            vulnerabilities: moderateAndLowVulnerabilities.map((cve) => ({
                 name: cve.cveName,
                 severity: cve.severity,
                 package: cve.package,
@@ -58,20 +31,20 @@ function parseLastExecutionResponse(response): LastExecutionResponseType {
                 fixedVersion: cve.fixedVersion,
                 policy: cve.permission,
             })),
-            scanToolId: response.result.scanToolId,
         },
     }
 }
 
-function getLastExecution(queryString: number | string) {
-    return get(`${ROUTES.SECURITY_SCAN_EXECUTION_DETAILS}?${queryString}`)
-}
-
 export function getLastExecutionByArtifactAppEnv(
-    artifact: string | number,
+    artifactId: string | number,
     appId: number | string,
     envId: number | string,
 ): Promise<LastExecutionResponseType> {
-    const queryString = `artifactId=${artifact}&appId=${appId}&envId=${envId}`
-    return getLastExecution(queryString).then((response) => parseLastExecutionResponse(response))
+    return get(
+        getUrlWithSearchParams(ROUTES.SECURITY_SCAN_EXECUTION_DETAILS, {
+            artifactId,
+            appId,
+            envId,
+        }),
+    ).then((response) => parseLastExecutionResponse(response))
 }

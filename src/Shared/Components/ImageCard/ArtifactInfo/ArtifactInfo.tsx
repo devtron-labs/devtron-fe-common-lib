@@ -8,8 +8,8 @@ import { ReactComponent as ICBot } from '../../../../Assets/Icon/ic-bot.svg'
 
 const ImagePathTippyContent = ({ imagePath, registryName }: ImagePathTippyContentProps) => (
     <div>
-        <div className="fw-6 m-0">{registryName}</div>
-        <div className="m-0">{imagePath}</div>
+        <div className="fw-6">{registryName}</div>
+        <div>{imagePath}</div>
     </div>
 )
 

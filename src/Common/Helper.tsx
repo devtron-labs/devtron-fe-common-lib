@@ -10,6 +10,7 @@ import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
+import { DATE_TIME_FORMAT_STRING } from '../Shared'
 
 toast.configure({
     autoClose: 3000,
@@ -286,7 +287,7 @@ export function handleUTCTime(ts: string, isRelativeTime = false) {
         if (ts && ts.length) {
             const date = moment(ts)
             if (isRelativeTime) timestamp = date.fromNow()
-            else timestamp = date.format('ddd DD MMM YYYY HH:mm:ss')
+            else timestamp = date.format(DATE_TIME_FORMAT_STRING)
         }
     } catch (error) {
         console.error('Error Parsing Date:', ts)

@@ -52,7 +52,7 @@ const getIsMaterialInfoValid = (materialInfo: MaterialInfo): boolean =>
     )
 
 export const getIsMaterialInfoAvailable = (materialInfo: MaterialInfo[]) =>
-    !!materialInfo?.every((material) => getIsMaterialInfoValid(material))
+    !!materialInfo?.every(getIsMaterialInfoValid)
 
 export const getGitCommitInfo = (materialInfo: MaterialInfo): GitTriggers => ({
     Commit: materialInfo.revision,

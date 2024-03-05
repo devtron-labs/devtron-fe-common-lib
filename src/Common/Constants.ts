@@ -281,17 +281,6 @@ export enum SortingOrder {
  */
 export const DEFAULT_BASE_PAGE_SIZE = 20
 
-export const ModuleNameMap = {
-    ARGO_CD: 'argo-cd',
-    CICD: 'cicd',
-    SECURITY: 'security',
-    BLOB_STORAGE: 'blob-storage',
-    GRAFANA: 'monitoring.grafana',
-    NOTIFICATION: 'notifier',
-    SECURITY_TRIVY: 'security.trivy',
-    SECURITY_CLAIR: 'security.clair',
-}
-
 export enum ReactSelectInputAction {
     inputChange = 'input-change',
     selectOption = 'select-option',

@@ -95,8 +95,8 @@ const ImageCardAccordion = ({
                         {isOpened ? 'Hide info' : 'Show more info'}
 
                         <ICChevronDown
-                            className="icon-dim-24"
-                            style={{ transform: `${isOpened ? 'rotate(-180deg)' : ''}` }}
+                            className="icon-dim-24 rotate"
+                            style={{ ['--rotateBy' as any]: isOpened ? '-180deg' : '0deg' }}
                         />
                     </button>
                 </li>
