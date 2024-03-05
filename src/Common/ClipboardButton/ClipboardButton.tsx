@@ -1,17 +1,25 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import Tippy from '@tippyjs/react'
-import { copyToClipboard } from '../Helper'
+import { copyToClipboard, noop } from '../Helper'
 import ClipboardProps from './types'
 import { ReactComponent as ICCopy } from '../../Assets/Icon/ic-copy.svg'
+import { ReactComponent as Check } from '../../Assets/Icon/ic-check.svg'
 
 /**
  * @param content - Content to be copied
  * @param copiedTippyText - Text to be shown in the tippy when the content is copied
  * @param duration - Duration for which the tippy should be shown
- * @param trigger - To trigger the copy action, if set to true the content will be copied, use case being triggering the copy action from outside the component
- * @param setTrigger - Callback function to set the trigger
+ * @param trigger - To trigger the copy action outside the button, if set to true the content will be copied, use case being triggering the copy action from outside the component
+ * @param setTrigger - Callback function to set the trigger outside the button
+ * @param iconSize - size of svg icon to show according to icon-dim class
  */
-export default function ClipboardButton({ content, copiedTippyText, duration, trigger, setTrigger }: ClipboardProps) {
+export default function ClipboardButton({
+    content,
+    copiedTippyText,
+    duration,
+    trigger = false,
+    setTrigger = noop,
+}: ClipboardProps) {
     const [copied, setCopied] = useState<boolean>(false)
     const [enableTippy, setEnableTippy] = useState<boolean>(false)
 
@@ -39,21 +47,25 @@ export default function ClipboardButton({ content, copiedTippyText, duration, tr
     }, [trigger, handleCopyContent])
 
     return (
-        <div className="icon-dim-16 flex center">
+        <div className={`icon-dim-16 flex center`}>
             <Tippy
                 className="default-tt"
                 content={copied ? copiedTippyText : 'Copy'}
-                placement="right"
+                placement="bottom"
                 visible={copied || enableTippy}
             >
                 <button
                     type="button"
-                    className="dc__hover-n100 dc__outline-none-imp p-0 flex bcn-0 dc__no-border"
+                    className="dc__outline-none-imp p-0 flex bcn-0 dc__no-border"
                     onMouseEnter={handleEnableTippy}
                     onMouseLeave={handleDisableTippy}
                     onClick={handleCopyContent}
                 >
-                    <ICCopy className="icon-dim-16" />
+                    {copied ? (
+                        <Check className={`icon-dim-16 scg-5`} />
+                    ) : (
+                        <ICCopy className={`resource-action-tabs__clipboard icon-dim-16 pointer`} />
+                    )}
                 </button>
             </Tippy>
         </div>
