@@ -34,4 +34,5 @@ export const ModuleNameMap = {
     SECURITY_CLAIR: 'security.clair',
 }
 
+// TODO: Convert to object later if more formats arise
 export const DATE_TIME_FORMAT_STRING = 'ddd DD MMM YYYY HH:mm:ss'
