@@ -162,8 +162,6 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
             registryName: material.registryName ?? '',
             promotionApprovalMetaData: material.promotionApprovalMetaData,
             deployedOnEnvironments: material.deployedOnEnvironments ?? [],
-            promotedFrom: material.promotedFrom ?? '',
-            promoteFromType: material.promoteFromType ?? '',
         }
     })
     return materials

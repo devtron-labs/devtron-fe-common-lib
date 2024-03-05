@@ -285,11 +285,29 @@ export enum ImagePromotionRuntimeState {
     STALE = 'STALE',
 }
 
+export interface ImagePromotionPolicyApprovalMetadata {
+    approverCount: number
+    allowRequesterFromApprove: boolean
+    allowImageBuilderFromApprove: boolean
+    allowApproverFromDeploy: boolean
+}
+
+export interface ImagePromotionPolicyInfoType {
+    name: string
+    id: number
+    description: string
+    conditions: FilterConditionsInfo[]
+    approvalMetadata: ImagePromotionPolicyApprovalMetadata
+}
+
 export interface PromotionApprovalMetaDataType {
     approvalRequestId: number
     approvalRuntimeState: ImagePromotionRuntimeState
     approvedUsersData: ApprovalUserDataType[]
     requestedUserData: ApprovalUserDataType
+    policy: ImagePromotionPolicyInfoType
+    promotedFrom?: string
+    promoteFromType?: string
 }
 
 export interface CDMaterialType {
@@ -330,13 +348,11 @@ export interface CDMaterialType {
     deployed?: boolean
     dataSource?: MaterialDataSource
     /**
-     * The below four keys: `promotionApprovalMetaData`, `deployedOnEnvironments`, `promotedFrom`, `promoteFromType` are used in image promotion
+     * The below two keys: `promotionApprovalMetaData`, `deployedOnEnvironments` are used in image promotion
      * and may not be available to cater other use-cases.
      */
     promotionApprovalMetaData?: PromotionApprovalMetaDataType
     deployedOnEnvironments?: string[]
-    promotedFrom?: string
-    promoteFromType?: string
 }
 
 export enum CDMaterialServiceEnum {
