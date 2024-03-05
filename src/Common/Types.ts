@@ -379,6 +379,7 @@ export interface CommonNodeAttr {
     deploymentAppCreated?: boolean
     isLast?: boolean
     downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
+    isDeploymentBlocked?: boolean
 }
 
 export enum DeploymentAppTypes {
