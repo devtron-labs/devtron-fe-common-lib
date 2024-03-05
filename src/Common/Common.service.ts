@@ -160,7 +160,7 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
             registryType: material.registryType ?? '',
             imagePath: material.image ?? '',
             registryName: material.registryName ?? '',
-            promotionApprovalMetaData: material.promotionApprovalMetaData,
+            promotionApprovalMetadata: material.promotionApprovalMetadata,
             deployedOnEnvironments: material.deployedOnEnvironments ?? [],
         }
     })

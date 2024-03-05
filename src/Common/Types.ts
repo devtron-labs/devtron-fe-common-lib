@@ -300,7 +300,7 @@ export interface ImagePromotionPolicyInfoType {
     approvalMetadata: ImagePromotionPolicyApprovalMetadata
 }
 
-export interface PromotionApprovalMetaDataType {
+export interface PromotionApprovalMetadataType {
     approvalRequestId: number
     approvalRuntimeState: ImagePromotionRuntimeState
     approvedUsersData: ApprovalUserDataType[]
@@ -351,7 +351,7 @@ export interface CDMaterialType {
      * The below two keys: `promotionApprovalMetaData`, `deployedOnEnvironments` are used in image promotion
      * and may not be available to cater other use-cases.
      */
-    promotionApprovalMetaData?: PromotionApprovalMetaDataType
+    promotionApprovalMetadata?: PromotionApprovalMetadataType
     deployedOnEnvironments?: string[]
 }
 
