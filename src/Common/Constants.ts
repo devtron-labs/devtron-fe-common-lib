@@ -254,9 +254,11 @@ export enum MODES {
     DOCKERFILE = 'dockerfile',
 }
 
+// The values are going to be part of route that's why they may contain -
 export enum APPROVAL_MODAL_TYPE {
     CONFIG = 'CONFIG',
     DEPLOYMENT = 'DEPLOYMENT',
+    IMAGE_PROMOTION = 'IMAGE-PROMOTION',
 }
 export const MAX_Z_INDEX = 2147483647
 
