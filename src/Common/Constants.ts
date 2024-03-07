@@ -296,3 +296,14 @@ export enum ACTION_STATE {
     PARTIAL = 'PARTIAL',
     BLOCKED = 'BLOCKED',
 }
+
+export enum DEPLOYMENT_WINDOW_TYPE {
+    MAINTENANCE = 'MAINTENANCE',
+    BLACKOUT = 'BLACKOUT',
+}
+export interface DeploymentWindowProfileMetaData {
+    userActionState: ACTION_STATE
+    type: string | DEPLOYMENT_WINDOW_TYPE
+    calculatedTimestamp: string
+    isActive: boolean
+}
