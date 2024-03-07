@@ -277,6 +277,9 @@ export enum SortingOrder {
  */
 export const DEFAULT_BASE_PAGE_SIZE = 20
 
+/**
+ * Deployment Window
+ */
 export enum MODAL_TYPE {
     HIBERNATE = 'HIBERNATE',
     RESTORE = 'RESTORE',
@@ -286,4 +289,10 @@ export enum MODAL_TYPE {
     PIPELINE = 'PIPELINE',
     OVERVIEW = 'OVERVIEW',
     APP_DETAILS_STATUS = 'APP_DETAILS_STATUS',
+}
+
+export enum ACTION_STATE {
+    ALLOWED = 'ALLOWED',
+    PARTIAL = 'PARTIAL',
+    BLOCKED = 'BLOCKED',
 }
