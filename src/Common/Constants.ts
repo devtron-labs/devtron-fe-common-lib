@@ -302,11 +302,11 @@ export enum DEPLOYMENT_WINDOW_TYPE {
     BLACKOUT = 'BLACKOUT',
 }
 export interface DeploymentWindowProfileMetaData {
-    name: string;
-    userActionState: ACTION_STATE;
-    type: string | DEPLOYMENT_WINDOW_TYPE;
-    calculatedTimestamp: string;
-    isActive: boolean;
+    name: string
+    userActionState: ACTION_STATE
+    type: string | DEPLOYMENT_WINDOW_TYPE
+    calculatedTimestamp: string
+    isActive: boolean
     excludedUserEmails: string[]
     warningMessage: string
 }
