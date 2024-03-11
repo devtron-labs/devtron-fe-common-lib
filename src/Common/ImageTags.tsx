@@ -524,7 +524,7 @@ export const ImageTagButton = ({
 
     return (
         <div
-            className={`br-4 en-2 bw-1 mr-8 bcn-0 mb-4 pt-2 pr-8 pb-2 pl-8 tag-class dc__word-break-all flex ${
+            className={`br-4 en-2 bw-1 mr-8 bcn-0 pt-2 pr-8 pb-2 pl-8 tag-class dc__word-break-all flex ${
                 isEditing ? 'icon-hover' : ''
             } ${tabColor()}`}
         >

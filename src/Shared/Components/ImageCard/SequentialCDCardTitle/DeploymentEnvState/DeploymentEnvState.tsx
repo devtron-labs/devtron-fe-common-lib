@@ -6,7 +6,7 @@ import { getDeploymentEnvConfig } from './utils'
 const DeploymentEnvState = ({ envStateText, title, tooltipContent }: DeploymentEnvStateProps) => {
     const { Icon, stateClassName } = getDeploymentEnvConfig(envStateText)
     const renderTooltip = (children) => (
-        <Tippy content={tooltipContent} placement="top" arrow={false} interactive>
+        <Tippy content={tooltipContent} className="default-tt" placement="top" arrow={false} interactive>
             {children}
         </Tippy>
     )
