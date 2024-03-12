@@ -4,4 +4,6 @@ export default interface ClipboardProps {
     duration?: number
     trigger?: boolean
     setTrigger?: React.Dispatch<React.SetStateAction<boolean>>
+    rootClassName?: string
+    iconSize?: number
 }
