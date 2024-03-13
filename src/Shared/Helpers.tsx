@@ -66,3 +66,6 @@ export const getGitCommitInfo = (materialInfo: MaterialInfo): GitTriggers => ({
     CiConfigureSourceType: '',
     CiConfigureSourceValue: '',
 })
+
+export const caseInsensitiveStringComparator = (a: string, b: string): number =>
+    a.toLowerCase().localeCompare(b.toLowerCase())

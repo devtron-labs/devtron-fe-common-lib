@@ -102,7 +102,7 @@ export const ImageTagsContainer = ({
             lowercaseValue[0] == '.' ||
             lowercaseValue[0] == '-'
         ) {
-            setTagErrorMessage('Tag name cannot be empty or exceed 128 characters or cannot start with . or -')
+            setTagErrorMessage('Label name cannot be empty or exceed 128 characters or cannot start with . or -')
             return false
         }
         setTagErrorMessage('')
@@ -112,7 +112,7 @@ export const ImageTagsContainer = ({
             if (displayedTags[i].tagName.toLowerCase() === lowercaseValue) isTagExistsInDisplayedTags = true
         }
         if (isTagExistsInExistingTags || isTagExistsInDisplayedTags || lowercaseValue === 'latest') {
-            setTagErrorMessage('This tag is already being used in this application')
+            setTagErrorMessage('This label is already being used in this application')
             return false
         }
         return true
@@ -262,7 +262,7 @@ export const ImageTagsContainer = ({
             className="w-300 fcv-5"
             placement="right"
             Icon={QuestionFilled}
-            heading="Release tags"
+            heading="Image labels"
             showCloseButton
             trigger="click"
             interactive
@@ -276,15 +276,15 @@ export const ImageTagsContainer = ({
 
     const getBuildContextAdditionalContent = () => (
         <div className="h-250 fs-13 dc__overflow-scroll p-12">
-            <div>Release tags allow you to tag container images with readable and relatable tags eg. v1.0.</div>
+            <div>Image labels allow you to tag container images with readable and relatable labels eg. v1.0.</div>
             <ul className="pl-20 mt-8">
                 <li>
-                    A release tag can only be added if a workflow has CD pipelines deploying to Production environments.
+                    A label can only be added if a workflow has CD pipelines deploying to Production environments.
                 </li>
-                <li>Multiple tags can be added to an image.</li>
-                <li>Multiple images in an application cannot have the same tag.</li>
+                <li>Multiple labels can be added to an image.</li>
+                <li>Multiple images in an application cannot have the same label.</li>
                 <li>
-                    Tags cannot be deleted once saved. Although, you can soft delete a tag if an unwanted tag has been
+                    Labels cannot be deleted once saved. Although, you can soft delete a label if an unwanted label has been
                     added.
                 </li>
             </ul>
@@ -334,7 +334,7 @@ export const ImageTagsContainer = ({
             {isEditing && tagsEditable ? (
                 <div className="bcn-0 dc__border-top-n1 ">
                     <div className="cn-7 mt-12 flex left">
-                        <div>Release tags (eg. v1.0)</div>
+                        <div>Image labels (eg. v1.0)</div>
                         {renderInfoCard()}
                     </div>
                     <div className="mt-6 dc__position-rel-imp" data-testid="add-tag-text-area">
@@ -574,7 +574,7 @@ const AddImageButton = ({ handleEditClick }) => {
         <div className="add-tag-button flex pt-12 pr-12" data-testid="add-tags-button" onClick={handleClick}>
             <div className="lh-16 flex">
                 <Add className="icon-dim-16 cn-6" />
-                <span className="cn-7">Add tags/comment</span>
+                <span className="cn-7">Add labels/comment</span>
             </div>
         </div>
     )
