@@ -25,10 +25,12 @@ const SequentialCDCardTitle = ({
 
     const renderDeployedEnvironmentName = () => {
         if (deployedOn?.length) {
+            const deployedOnTitle = deployedOn.length === 1 ? deployedOn[0] : `${deployedOn.length} environments`
+
             return (
                 <DeploymentEnvState
                     envStateText={getDeployedStateText()}
-                    title={`${deployedOn.length} environments`}
+                    title={deployedOnTitle}
                     tooltipContent={deployedOn.join(',')}
                 />
             )
