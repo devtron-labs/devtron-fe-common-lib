@@ -301,12 +301,3 @@ export enum DEPLOYMENT_WINDOW_TYPE {
     MAINTENANCE = 'MAINTENANCE',
     BLACKOUT = 'BLACKOUT',
 }
-export interface DeploymentWindowProfileMetaData {
-    name: string
-    userActionState: ACTION_STATE
-    type: string | DEPLOYMENT_WINDOW_TYPE
-    calculatedTimestamp: string
-    isActive: boolean
-    excludedUserEmails: string[]
-    warningMessage: string
-}

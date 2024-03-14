@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "0.0.68-beta-8",
+    "version": "0.0.68-beta-10",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -27,6 +27,7 @@
         "lint-fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
         "test": "exit 0",
         "dev": "vite",
+        "build": "vite build --sourcemap true",
         "build-watch": "vite build --watch",
         "build-lib": "vite build",
         "preview": "vite preview",
