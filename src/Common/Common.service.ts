@@ -340,7 +340,6 @@ export function fetchChartTemplateVersions() {
     return get(`${ROUTES.DEPLOYMENT_TEMPLATE_LIST}?appId=-1&envId=-1`)
 }
 
-export function getDefaultConfig(): Promise<ResponseType> {
-    const URL = `${ROUTES.NOTIFIER}/channel/config`
-    return get(URL)
+export const getDefaultConfig = (): Promise<ResponseType> => {
+    return get(`${ROUTES.NOTIFIER}/channel/config`)
 }
