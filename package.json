@@ -27,7 +27,8 @@
         "lint-fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
         "test": "exit 0",
         "dev": "vite",
-        "build-watch": "vite build --watch",
+        "build": "vite build --sourcemap",
+        "build-watch": "vite build --sourcemap --watch",
         "build-lib": "vite build",
         "preview": "vite preview",
         "lint-staged": "lint-staged"
