@@ -380,6 +380,7 @@ export interface CDMaterialServiceQueryParams {
     size?: number
     resource?: CDMaterialResourceQuery
     resourceName?: string
+    resourceId?: number
     workflowId?: number
     appId?: number
     pendingForCurrentUser?: boolean
