@@ -307,7 +307,7 @@ export interface PromotionApprovalMetadataType {
     requestedUserData: ApprovalUserDataType
     policy: ImagePromotionPolicyInfoType
     promotedFrom?: string
-    promoteFromType?: string
+    promotedFromType?: CDMaterialResourceQuery
 }
 
 export interface CDMaterialType {
@@ -367,6 +367,9 @@ export enum CDMaterialResourceQuery {
     CI = 'CI',
     ENVIRONMENT = 'ENVIRONMENT',
     WEBHOOK = 'WEBHOOK',
+    LINKED_CI = 'LINKED_CI',
+    CI_JOB = 'CI_JOB',
+    LINKED_CD = 'LINKED_CD',
 }
 
 export enum CDMaterialFilterQuery {
