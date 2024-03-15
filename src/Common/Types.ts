@@ -367,9 +367,9 @@ export enum CDMaterialResourceQuery {
     CI = 'CI',
     ENVIRONMENT = 'ENVIRONMENT',
     WEBHOOK = 'WEBHOOK',
-    LINKED_CI = 'LINKED_CI',
-    CI_JOB = 'CI_JOB',
-    LINKED_CD = 'LINKED_CD',
+    LINKED_CI = 'LINKED-CI',
+    CI_JOB = 'CI-JOB',
+    LINKED_CD = 'LINKED-CD',
 }
 
 export enum CDMaterialFilterQuery {
