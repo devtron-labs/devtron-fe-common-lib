@@ -64,7 +64,8 @@ const SequentialCDCardTitle = ({
         isRunningOnParentCD ||
         Object.values(ARTIFACT_STATUS).includes(artifactStatus) ||
         showLatestTag ||
-        deployedOn?.length
+        deployedOn?.length ||
+        additionalInfo
     ) {
         return (
             <div className="bcn-0 pb-8 br-4 flex left">
