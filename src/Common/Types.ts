@@ -513,8 +513,6 @@ export interface ResizableTextareaProps {
     onFocus?: (e) => void
     className?: string
     placeholder?: string
-    lineHeight?: number
-    padding?: number
     disabled?: boolean
     name?: string
     dataTestId?: string

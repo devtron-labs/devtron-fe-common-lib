@@ -1,0 +1,23 @@
+.user-role-groups {
+    &__table-row {
+        grid-template-rows: 36px;
+    }
+
+    &__table-header,
+    &__table-row {
+        grid-template-columns: 20px 200px minmax(300px, 1fr);
+        column-gap: 16px;
+
+        &--with-status {
+            grid-template-columns: 20px 200px minmax(300px, 1fr) 185px;
+        }
+
+        &--with-delete {
+            grid-template-columns: 20px 200px minmax(300px, 1fr) 24px;
+        }
+
+        &--with-status-and-delete {
+            grid-template-columns: 20px 200px minmax(300px, 1fr) 185px 24px;
+        }
+    }
+}
