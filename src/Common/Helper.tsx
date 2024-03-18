@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import YAML from 'yaml'
 import { JSONPath } from 'jsonpath-plus'
 import * as jsonpatch from 'fast-json-patch'
-import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
+import { ERROR_EMPTY_SCREEN, EXCLUDED_FALSY_VALUES, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
@@ -545,7 +545,7 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
 export const getUrlWithSearchParams = (url: string, params: Record<string | number, any>) => {
     const searchParams = new URLSearchParams()
     Object.keys(params).forEach((key) => {
-        if (params[key]) {
+        if (!EXCLUDED_FALSY_VALUES.includes(params[key])) {
             if (Array.isArray(params[key])) {
                 params[key].forEach((val) => {
                     searchParams.append(key, val)
