@@ -53,6 +53,8 @@ const SequentialCDCardTitle = ({
             return (
                 <div className="bcn-0 pb-8 br-4 flex left">
                     <span className="last-deployed-status">Last Run</span>
+
+                    {additionalInfo}
                 </div>
             )
         }
