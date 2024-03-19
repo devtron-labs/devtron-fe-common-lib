@@ -49,15 +49,16 @@ const SequentialCDCardTitle = ({
     }
 
     if (stageType !== STAGE_TYPE.CD) {
-        if (isLatest) {
+        if (isLatest || additionalInfo) {
             return (
-                <div className="bcn-0 pb-8 br-4 flex left">
-                    <span className="last-deployed-status">Last Run</span>
+                <div className="bcn-0 pb-8 br-4 flex left dc__gap-8">
+                    {isLatest && <span className="last-deployed-status">Last Run</span>}
 
                     {additionalInfo}
                 </div>
             )
         }
+
         return null
     }
 
