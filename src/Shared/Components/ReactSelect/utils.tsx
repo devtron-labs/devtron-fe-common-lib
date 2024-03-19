@@ -1,26 +1,47 @@
 import Tippy from '@tippyjs/react'
 import { components } from 'react-select'
-import { stopPropagation } from '../../../Common'
+import { Progressing, stopPropagation } from '../../../Common'
 
 export const getCommonSelectStyle = (styleOverrides = {}) => ({
+    container: (base, state) => ({
+        ...base,
+        ...(state.isDisabled && {
+            cursor: 'not-allowed',
+            pointerEvents: 'auto',
+        }),
+    }),
     menuList: (base) => ({
         ...base,
         paddingTop: 0,
         paddingBottom: 0,
+        cursor: 'pointer',
     }),
     control: (base, state) => ({
         ...base,
         minHeight: '32px',
         boxShadow: 'none',
-        backgroundColor: 'var(--N50)',
-        border: state.isFocused ? '1px solid var(--B500)' : '1px solid var(--N200)',
-        cursor: 'pointer',
+        backgroundColor: state.isDisabled ? 'var(--N100)' : 'var(--N50)',
+        border: '1px solid var(--N200)',
+        cursor: state.isDisabled ? 'not-allowed' : 'pointer',
+
+        '&:hover': {
+            borderColor: 'var(--N300)',
+        },
+        '&:focus, &:focus-within': {
+            borderColor: 'var(--B500)',
+            outline: 'none',
+        },
     }),
     option: (base, state) => ({
         ...base,
         color: 'var(--N900)',
         backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
         padding: '10px 12px',
+        cursor: 'pointer',
+
+        ':active': {
+            backgroundColor: 'var(--N100)',
+        },
     }),
     dropdownIndicator: (base, state) => ({
         ...base,
@@ -41,6 +62,17 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
     noOptionsMessage: (base) => ({
         ...base,
         color: 'var(--N600)',
+    }),
+    placeholder: (base) => ({
+        ...base,
+        color: 'var(--N500)',
+        fontSize: '13px',
+        lineHeight: '20px',
+        fontWeight: 400,
+        margin: 0,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
     }),
     ...styleOverrides,
 })
@@ -95,3 +127,5 @@ export const SelectOption = (props: any) => {
         getOption()
     )
 }
+
+export const LoadingIndicator = () => <Progressing />
