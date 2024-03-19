@@ -1,8 +1,8 @@
 import { AddCDPositions, AddPipelineType, PipelineType, WorkflowNodeType } from '../Types'
 import { HandleAddCD, GetPipelineType } from './types'
 
-const getPipelineType = ({ isWebhookCD, startNode }: GetPipelineType) => {
-    if (isWebhookCD) {
+const getPipelineType = ({ startNode }: GetPipelineType) => {
+    if (startNode.type === WorkflowNodeType.WEBHOOK) {
         return PipelineType.WEBHOOK
     }
 
@@ -26,7 +26,7 @@ export const handleAddCD = ({
     if (!handleCDSelect) {
         return
     }
-    const pipelineType = getPipelineType({ isWebhookCD, startNode })
+    const pipelineType = getPipelineType({ startNode })
     const addPipelineType =
         isParallelEdge && position === AddCDPositions.RIGHT ? AddPipelineType.PARALLEL : AddPipelineType.SEQUENTIAL
     const endNodeId = !isParallelEdge && position === AddCDPositions.RIGHT ? endNode.id : null
