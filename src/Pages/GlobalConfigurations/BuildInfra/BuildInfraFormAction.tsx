@@ -78,6 +78,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
 
                 {profileUnitsMap && (
                     <ReactSelect
+                        classNamePrefix="unit-dropdown"
                         name={`${actionType}-unit`}
                         className="bcn-0 dc__mxw-120"
                         options={unitOptions}
