@@ -1,12 +1,12 @@
 import * as Sentry from '@sentry/browser'
+import * as jsonpatch from 'fast-json-patch'
+import { JSONPath } from 'jsonpath-plus'
 import moment from 'moment'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import YAML from 'yaml'
-import { JSONPath } from 'jsonpath-plus'
-import * as jsonpatch from 'fast-json-patch'
-import { ERROR_EMPTY_SCREEN, TOKEN_COOKIE_NAME } from './Constants'
+import { ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
@@ -688,5 +688,26 @@ export const debounce = (func, timeout = 500) => {
             timer = null
             func.apply(context, args)
         }, timeout)
+    }
+}
+
+/**
+ * Sorts the relative dates based on the sorting direction
+ */
+export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) => {
+    // For date, we show relative date hence the logic for sorting is reversed here
+    const dateA = new Date(dateStringA).getTime()
+    const dateB = new Date(dateStringB).getTime()
+
+    if (isNaN(dateA) && isNaN(dateB)) {
+        return 0 // Both dates are invalid, consider them equal
+    } else if (isNaN(dateA)) {
+        // dateA is invalid, move it to the end if sorting ASC, otherwise to the beginning
+        return sortOrder === SortingOrder.ASC ? -1 : 1
+    } else if (isNaN(dateB)) {
+        // dateB is invalid, move it to the end if sorting ASC, otherwise to the beginning
+        return sortOrder === SortingOrder.ASC ? 1 : -1
+    } else {
+        return sortOrder === SortingOrder.ASC ? dateB - dateA : dateA - dateB
     }
 }
