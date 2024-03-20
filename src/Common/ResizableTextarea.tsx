@@ -11,10 +11,9 @@ export const ResizableTextarea: React.FC<ResizableTextareaProps> = ({
     onFocus = null,
     className = '',
     placeholder = 'Enter your text here..',
-    lineHeight = 14,
-    padding = 12,
     disabled = false,
     dataTestId,
+    name,
     ...props
 }) => {
     const [text, setText] = useState('')
@@ -60,13 +59,14 @@ export const ResizableTextarea: React.FC<ResizableTextareaProps> = ({
             ref={(el) => (_textRef.current = el)}
             value={text}
             placeholder={placeholder}
-            className={`dc__resizable-textarea ${className}`}
+            className={`dc__resizable-textarea pt-8 pb-8 pl-10 pb-10 lh-20 fs-13 fw-4 ${className}`}
             onChange={handleChange}
             onBlur={handleBlur}
             onFocus={handleFocus}
-            style={{ lineHeight: `${lineHeight}px`, padding: `${padding}px` }}
             spellCheck={false}
             disabled={disabled}
+            name={name}
+            id={name}
             {...props}
         />
     )
