@@ -22,12 +22,15 @@ export const URLS = {
 }
 
 export const ROUTES = {
+    APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',
     CD_MATERIAL_GET: 'app/cd-pipeline',
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
+    SECURITY_SCAN_EXECUTION_DETAILS: 'security/scan/executionDetail',
+    NOTIFIER: 'notification',
 }
 
 export enum KEY_VALUE {
@@ -251,9 +254,11 @@ export enum MODES {
     DOCKERFILE = 'dockerfile',
 }
 
+// The values are going to be part of route that's why they may contain -
 export enum APPROVAL_MODAL_TYPE {
     CONFIG = 'CONFIG',
     DEPLOYMENT = 'DEPLOYMENT',
+    IMAGE_PROMOTION = 'IMAGE-PROMOTION',
 }
 export const MAX_Z_INDEX = 2147483647
 
