@@ -1,14 +1,17 @@
 import { ErrorScreenNotAuthorized, GenericEmptyState, Progressing, Reload } from '../../../Common'
+import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import { NOT_FOUND_DEFAULT_TEXT } from './constants'
 import { APIResponseHandlerProps } from './types'
 
 const APIResponseHandler = ({
     isLoading,
     progressingProps,
+    customLoader,
     error,
     notAuthorized,
     notFoundText,
     reloadProps,
+    genericSectionErrorProps,
     children,
 }: APIResponseHandlerProps) => {
     // keeping it above loading since, not expected to send a call if not authorized
@@ -17,7 +20,8 @@ const APIResponseHandler = ({
     }
 
     if (isLoading) {
-        return <Progressing {...progressingProps} />
+        // eslint-disable-next-line react/jsx-no-useless-fragment
+        return customLoader ? <>{customLoader}</> : <Progressing {...progressingProps} />
     }
 
     if (error) {
@@ -30,6 +34,11 @@ const APIResponseHandler = ({
                 />
             )
         }
+
+        if (genericSectionErrorProps) {
+            return <GenericSectionErrorState {...genericSectionErrorProps} />
+        }
+
         return <Reload {...reloadProps} />
     }
 
