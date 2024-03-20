@@ -29,7 +29,6 @@ export interface HandleAddCD {
 }
 
 export interface GetPipelineType {
-    isWebhookCD: boolean
     startNode: EdgeNodeType
 }
 
