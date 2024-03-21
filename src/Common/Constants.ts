@@ -283,6 +283,7 @@ export const DEFAULT_BASE_PAGE_SIZE = 20
  */
 export enum MODAL_TYPE {
     HIBERNATE = 'HIBERNATE',
+    UNHIBERNATE = 'UNHIBERNATE',
     RESTORE = 'RESTORE',
     DEPLOY = 'DEPLOY',
     RESOURCE = 'RESOURCE',
@@ -302,6 +303,31 @@ export enum DEPLOYMENT_WINDOW_TYPE {
     MAINTENANCE = 'MAINTENANCE',
     BLACKOUT = 'BLACKOUT',
 }
+export const arrowUnicode = '\u279d'
+
+export enum WEEK_DAYS_ENUM {
+    SUNDAY = 'SUNDAY',
+    MONDAY = 'MONDAY',
+    TUESDAY = 'TUESDAY',
+    WEDNESDAY = 'WEDNESDAY',
+    THURSDAY = 'THURSDAY',
+    FRIDAY = 'FRIDAY',
+    SATURDAY = 'SATURDAY',
+}
+
+export enum FREQUENCY_ENUM {
+    FIXED = 'FIXED',
+    DAILY = 'DAILY',
+    WEEKLY = 'WEEKLY',
+    MONTHLY = 'MONTHLY',
+    YEARLY = 'YEARLY',
+    WEEKLY_RANGE = 'WEEKLY_RANGE',
+}
+
+export const TIME_FORMAT = {
+    DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
+}
+
 export enum ReactSelectInputAction {
     inputChange = 'input-change',
     selectOption = 'select-option',
