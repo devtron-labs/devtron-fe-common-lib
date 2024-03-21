@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-cross.svg'
-import { ReactComponent as QuestionFilled } from '../Assets/Icon/ic-help.svg'
-import { ReactComponent as Question } from '../Assets/Icon/ic-help-outline.svg'
+import { ReactComponent as Help } from '../Assets/Icon/ic-help.svg'
+import { ReactComponent as ICHelpOutline } from '../Assets/Icon/ic-help-outline.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
 import { not } from './Helper'
@@ -87,7 +87,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                         )}
                         {headingInfo && (
                             <div className="icon-dim-20 cursor" onClick={toggleHeadingInfo}>
-                                <Question className="icon-dim-20" />
+                                <ICHelpOutline className="icon-dim-20" />
                             </div>
                         )}
                         {showCloseButton && (
@@ -107,7 +107,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                         }`}
                     >
                         <div className="icon-dim-20 mr-8">
-                            <QuestionFilled className="icon-dim-20 fcv-5" />
+                            <Help className="icon-dim-20 fcv-5" />
                         </div>
                         <div className="dc__word-break dc__hyphens-auto">{headingInfo}</div>
                     </div>

@@ -276,3 +276,9 @@ export enum SortingOrder {
  * Base page size for pagination
  */
 export const DEFAULT_BASE_PAGE_SIZE = 20
+
+export enum TIPPY_ICON_DIM{
+    SMALL = 'icon-dim-12',
+    MEDIUM = 'icon-dim-16',
+    LARGE = 'icon-dim-20',
+}
