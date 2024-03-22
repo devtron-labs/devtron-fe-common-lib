@@ -1,6 +1,6 @@
 import Tippy from '@tippyjs/react'
 import { components } from 'react-select'
-import { stopPropagation } from '../../../Common'
+import { Progressing, stopPropagation } from '../../../Common'
 
 export const getCommonSelectStyle = (styleOverrides = {}) => ({
     menuList: (base) => ({
@@ -95,3 +95,5 @@ export const SelectOption = (props: any) => {
         getOption()
     )
 }
+
+export const LoadingIndicator = () => <Progressing />
