@@ -1,6 +1,6 @@
 import { DescriptorProps } from './types'
 import { BreadCrumb, TippyCustomized, TippyTheme } from '../../../Common'
-import { ReactComponent as QuestionFilled } from '../../../Assets/Icon/ic-help.svg'
+import { ReactComponent as Help } from '../../../Assets/Icon/ic-help.svg'
 import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
 import { BUILD_INFRA_TEXT } from './constants'
 
@@ -19,7 +19,7 @@ const Descriptor = ({
                 theme={TippyTheme.white}
                 className="w-300 h-100 dc__align-left"
                 placement="right"
-                Icon={QuestionFilled}
+                Icon={Help}
                 iconClass="fcv-5"
                 infoText={tippyInfoText ?? BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
                 additionalContent={tippyAdditionalContent}

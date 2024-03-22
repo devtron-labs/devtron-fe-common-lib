@@ -3,8 +3,8 @@ import { toast } from 'react-toastify'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as Add } from '../Assets/Icon/ic-add.svg'
 import { ReactComponent as Close } from '../Assets/Icon/ic-cross.svg'
-import { ReactComponent as QuestionFilled } from '../Assets/Icon/ic-help.svg'
-import { ReactComponent as Question } from '../Assets/Icon/ic-help-outline.svg'
+import { ReactComponent as Help } from '../Assets/Icon/ic-help.svg'
+import { ReactComponent as ICHelpOutline } from '../Assets/Icon/ic-help-outline.svg'
 
 import { ReactComponent as EditIcon } from '../Assets/Icon/ic-pencil.svg'
 import { ReactComponent as Redo } from '../Assets/Icon/ic-arrow-counter-clockwise.svg'
@@ -261,7 +261,7 @@ export const ImageTagsContainer = ({
             theme={TippyTheme.white}
             className="w-300 fcv-5"
             placement="right"
-            Icon={QuestionFilled}
+            Icon={Help}
             heading="Release tags"
             showCloseButton
             trigger="click"
@@ -269,7 +269,7 @@ export const ImageTagsContainer = ({
             additionalContent={getBuildContextAdditionalContent()}
         >
             <div className="flex">
-                <Question className="fcn-5 ml-8 cursor icon-dim-16" />
+                <ICHelpOutline className="fcn-5 ml-8 cursor icon-dim-16" />
             </div>
         </TippyCustomized>
     )
