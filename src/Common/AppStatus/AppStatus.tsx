@@ -1,4 +1,3 @@
-import React from 'react'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as InfoIcon } from '../../Assets/Icon/ic-info-outlined.svg'
 import { StatusConstants, YET_TO_RUN } from './constants'

@@ -4,37 +4,26 @@ import { InfoIconTippyType } from '../../types'
 import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 import { TIPPY_ICON_DIM } from '../../../Common/Constants'
+import { getInfoIconTippyClass } from '../../../Common/AppStatus/utils'
 
-export const InfoIconWithTippy = ({
-    titleText,
+const InfoIconTippy = ({
+    heading,
     infoText,
+    iconClass,
     documentationLink,
     additionalContent,
     variant = TIPPY_ICON_DIM.LARGE,
 }: InfoIconTippyType) => {
-    let className: string
-    switch (variant) {
-        case 'SMALL':
-            className = TIPPY_ICON_DIM.SMALL
-            break
-        case 'MEDIUM':
-            className = TIPPY_ICON_DIM.MEDIUM
-            break
-        case 'LARGE':
-            className = TIPPY_ICON_DIM.LARGE
-            break
-        default:
-            className = TIPPY_ICON_DIM.MEDIUM
-    }
-    className += ' fcn-9 ml-8 cursor'
+    const className: string = getInfoIconTippyClass(variant)
     return (
         <TippyCustomized
             theme={TippyTheme.white}
-            className="w-300 h-100 fcv-5"
+            className="w-300 h-100"
             placement="right"
             Icon={HelpIcon}
-            heading={titleText}
+            heading={heading}
             infoText={infoText}
+            iconClass={iconClass}
             showCloseButton
             trigger="click"
             interactive
@@ -42,11 +31,15 @@ export const InfoIconWithTippy = ({
             documentationLinkText="View Documentation"
             additionalContent={additionalContent}
         >
-            <button type="button" className={className} aria-label="TippyIcon">
-                <ICHelpOutline />
+            <button
+                type="button"
+                className={` p-0 h-20 dc__no-background dc__no-border dc__outline-none-imp flex`}
+                aria-label="Info Icon"
+            >
+                <ICHelpOutline className={`${className} mx-16 fcn-6`} />
             </button>
         </TippyCustomized>
     )
 }
 
-export default InfoIconWithTippy
+export default InfoIconTippy

@@ -14,8 +14,9 @@ export enum CIMaterialSidebarType {
 }
 
 export interface InfoIconTippyType {
-    titleText: string
+    heading: string
     infoText: string
+    iconClass?: string
     documentationLink?: string
     additionalContent?: ReactNode
     variant?: string

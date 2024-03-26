@@ -1,4 +1,3 @@
-import React from 'react'
 import { CustomInputProps } from './Types'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-warning.svg'
