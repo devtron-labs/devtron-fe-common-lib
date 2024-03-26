@@ -19,7 +19,8 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
         document.addEventListener('keydown', closeOnEsc)
     }
 
-    const closeTippy = () => {
+    const closeTippy = (e) => {
+        e.stopPropagation()
         if (tippyRef.current?.hide) {
             tippyRef.current.hide()
             tippyRef.current = null
@@ -33,7 +34,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
 
     const closeOnEsc = (e) => {
         if (e.keyCode === 27) {
-            closeTippy()
+            closeTippy(e)
         }
     }
 
