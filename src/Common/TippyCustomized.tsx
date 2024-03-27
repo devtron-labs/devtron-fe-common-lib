@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-cross.svg'
 import { ReactComponent as Help } from '../Assets/Icon/ic-help.svg'
@@ -62,7 +62,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
             <>
                 {!hideHeading && (
                     <div
-                        className={`dc__word-break dc__hyphens-auto flex left ${
+                        className={`dc__word-break dc__hyphens-auto flex dc__align-start left ${
                             isWhiteTheme
                                 ? `p-12 cn-9 ${props.noHeadingBorder ? '' : 'dc__border-bottom-n1'}`
                                 : 'pt-20 pb-12 pr-20 pl-20 cn-0 top'
@@ -83,7 +83,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                             )
                         )}
                         {heading && (
-                            <span className={`fs-14 fw-6 lh-20 ${showCloseButton ? 'mr-6' : ''}`}>{heading}</span>
+                            <span className={`fs-14 fw-6 lh-20 ${showCloseButton ? 'mr-12' : ''}`}>{heading}</span>
                         )}
                         {headingInfo && (
                             <div className="icon-dim-20 cursor" onClick={toggleHeadingInfo}>

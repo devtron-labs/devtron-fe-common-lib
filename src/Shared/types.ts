@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import { Placement } from 'tippy.js'
 
 export interface RuntimeParamsAPIResponseType {
     envVariables: Record<string, string>
@@ -18,6 +19,8 @@ export interface InfoIconTippyType {
     infoText: string
     iconClass?: string
     documentationLink?: string
+    documentationLinkText?: string
     additionalContent?: ReactNode
-    variant?: string
+    placement?: Placement
+    className?: string
 }

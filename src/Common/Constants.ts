@@ -286,8 +286,3 @@ export enum ReactSelectInputAction {
 }
 
 export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
-export enum TIPPY_ICON_DIM {
-    SMALL = 'icon-dim-12',
-    MEDIUM = 'icon-dim-16',
-    LARGE = 'icon-dim-20',
-}
