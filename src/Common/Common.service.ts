@@ -159,6 +159,7 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
             registryType: material.registryType ?? '',
             imagePath: material.image ?? '',
             registryName: material.registryName ?? '',
+            deploymentWindowArtifactMetadata: material.deploymentWindowArtifactMetadata ?? null,
         }
     })
     return materials

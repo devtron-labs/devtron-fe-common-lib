@@ -690,3 +690,9 @@ export const debounce = (func, timeout = 500) => {
         }, timeout)
     }
 }
+
+/**
+ * Returns a capitalized string with first letter in uppercase and rest in lowercase
+ */
+
+export const capitalizeFirstLetter = (text: string) => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
