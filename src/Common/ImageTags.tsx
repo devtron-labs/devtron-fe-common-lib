@@ -3,9 +3,6 @@ import { toast } from 'react-toastify'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as Add } from '../Assets/Icon/ic-add.svg'
 import { ReactComponent as Close } from '../Assets/Icon/ic-cross.svg'
-import { ReactComponent as Help } from '../Assets/Icon/ic-help.svg'
-import { ReactComponent as ICHelpOutline } from '../Assets/Icon/ic-help-outline.svg'
-
 import { ReactComponent as EditIcon } from '../Assets/Icon/ic-pencil.svg'
 import { ReactComponent as Redo } from '../Assets/Icon/ic-arrow-counter-clockwise.svg'
 import { ReactComponent as Minus } from '../Assets/Icon/ic-minus.svg'
@@ -13,13 +10,11 @@ import { ReactComponent as Info } from '../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as Error } from '../Assets/Icon/ic-warning.svg'
 import { ReactComponent as Warning } from '../Assets/Icon/ic-error-exclamation.svg'
 import { ReactComponent as Enter } from '../Assets/Icon/ic-enter.svg'
-import { TippyTheme } from './Types'
 import { ImageButtonType, ImageTaggingContainerType, ReleaseTag } from './ImageTags.Types'
 import { showError, stopPropagation } from './Helper'
-import { TippyCustomized } from './TippyCustomized'
 import { setImageTags } from './Common.service'
 import { Progressing } from './Progressing'
-
+import { InfoIconTippy } from '../Shared'
 export const ImageTagsContainer = ({
     // Setting it to zero in case of external pipeline
     ciPipelineId,
@@ -257,21 +252,13 @@ export const ImageTagsContainer = ({
     }
 
     const renderInfoCard = (): JSX.Element => (
-        <TippyCustomized
-            theme={TippyTheme.white}
-            className="w-300 fcv-5"
-            placement="right"
-            Icon={Help}
+        <InfoIconTippy
+            iconClass="fcv-5"
             heading="Release tags"
-            showCloseButton
-            trigger="click"
-            interactive
+            infoText=""
             additionalContent={getBuildContextAdditionalContent()}
-        >
-            <div className="flex">
-                <ICHelpOutline className="fcn-5 ml-8 cursor icon-dim-16" />
-            </div>
-        </TippyCustomized>
+            className="fcn-5 ml-4 icon-dim-16"
+        />
     )
 
     const getBuildContextAdditionalContent = () => (

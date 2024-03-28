@@ -13,10 +13,11 @@ const InfoIconTippy = ({
     additionalContent,
     className = 'icon-dim-16',
     placement = 'bottom',
+    dataTestid,
 }: InfoIconTippyType) => (
     <TippyCustomized
         theme={TippyTheme.white}
-        className="w-300 h-100"
+        className="w-300 h-100 dc__no-text-transform"
         placement={placement}
         Icon={HelpIcon}
         heading={heading}
@@ -31,8 +32,9 @@ const InfoIconTippy = ({
     >
         <button
             type="button"
-            className="p-0 dc__no-background dc__no-border dc__outline-none-imp flex ml-4"
+            className="p-0 dc__no-background dc__no-border dc__outline-none-imp flex ml-4 dc__tab-focus"
             aria-label="Info Icon"
+            data-testid={dataTestid}
         >
             <ICHelpOutline className={className} />
         </button>

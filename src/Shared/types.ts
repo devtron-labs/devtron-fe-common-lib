@@ -23,4 +23,5 @@ export interface InfoIconTippyType {
     additionalContent?: ReactNode
     placement?: Placement
     className?: string
+    dataTestid?: string
 }
