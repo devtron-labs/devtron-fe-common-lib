@@ -1,6 +1,6 @@
 import React from 'react'
 import { ReactComponent as InjectTag } from '../../Assets/Icon/inject-tag.svg'
-import { ReactComponent as Help } from '../../Assets/Icon/ic-help-outline.svg'
+import { ReactComponent as ICHelpOutline } from '../../Assets/Icon/ic-help-outline.svg'
 import { TippyCustomized } from '../TippyCustomized'
 import { TippyTheme } from '../Types'
 import { DOCUMENTATION } from '../Constants'
@@ -37,7 +37,7 @@ export default function PropagateTagInfo({ isCreateApp }: { isCreateApp: boolean
             <div className="flexbox cursor">
                 <InjectTag className="icon-dim-16 mt-2 mr-4" />
                 <span>Propagate tags</span>
-                <Help className="icon-dim-16 mt-2 ml-4" />
+                <ICHelpOutline className="icon-dim-16 mt-2 ml-4" />
             </div>
         </TippyCustomized>
     )
