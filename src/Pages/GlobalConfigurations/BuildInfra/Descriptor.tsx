@@ -15,7 +15,6 @@ const Descriptor = ({
             <BreadCrumb breadcrumbs={breadCrumbs} />
 
             <InfoIconTippy
-                iconClass="fcv-5"
                 infoText={tippyInfoText ?? BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
                 additionalContent={tippyAdditionalContent}
                 heading={BUILD_INFRA_TEXT.HEADING}

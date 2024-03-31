@@ -7,7 +7,7 @@ import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 const InfoIconTippy = ({
     heading,
     infoText,
-    iconClass,
+    iconClass = 'fcv-5',
     documentationLink,
     documentationLinkText,
     additionalContent,

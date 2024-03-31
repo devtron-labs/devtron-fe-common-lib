@@ -16,7 +16,7 @@ export enum CIMaterialSidebarType {
 
 export interface InfoIconTippyType {
     heading: string
-    infoText: string
+    infoText?: string
     iconClass?: string
     documentationLink?: string
     documentationLinkText?: string
