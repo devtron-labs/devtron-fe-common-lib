@@ -20,16 +20,24 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
     }
 
     const closeTippy = (e) => {
-        e.stopPropagation()
-        if (tippyRef.current?.hide) {
-            tippyRef.current.hide()
-            tippyRef.current = null
+        // Check if the event target matches the expected trigger
+        const isTriggerElement = e.target === tippyRef.current
+        // If the event is from the trigger element, hide the tippy
+        // Otherwise, stop propagation
+        if (isTriggerElement) {
+            e.stopPropagation()
+            if (tippyRef.current?.hide) {
+                tippyRef.current.hide()
+                tippyRef.current = null
 
-            if (props.onClose) {
-                props.onClose()
+                if (props.onClose) {
+                    props.onClose()
+                }
             }
+            setShowHeadingInfo(false)
+        } else {
+            e.stopPropagation() // Stop propagation for the second prop
         }
-        setShowHeadingInfo(false)
     }
 
     const closeOnEsc = (e) => {
