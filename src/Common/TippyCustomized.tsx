@@ -5,7 +5,7 @@ import { ReactComponent as QuestionFilled } from '../Assets/Icon/ic-help.svg'
 import { ReactComponent as Question } from '../Assets/Icon/ic-help-outline.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
-import { not } from './Helper'
+import { not, stopPropagation } from './Helper'
 
 // This component will handle some of the new tippy designs and interactions
 // So this can be updated to support further for new features or interactions
@@ -20,12 +20,8 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
     }
 
     const closeTippy = (e) => {
-        // Check if the event target matches the expected trigger
-        const isTriggerElement = e.target === tippyRef.current
         // If the event is from the trigger element, hide the tippy
-        // Otherwise, stop propagation
-        if (isTriggerElement) {
-            e.stopPropagation()
+            stopPropagation(e)
             if (tippyRef.current?.hide) {
                 tippyRef.current.hide()
                 tippyRef.current = null
@@ -35,9 +31,6 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                 }
             }
             setShowHeadingInfo(false)
-        } else {
-            e.stopPropagation() // Stop propagation for the second prop
-        }
     }
 
     const closeOnEsc = (e) => {
@@ -164,7 +157,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
     return (
         <Tippy
             className={`${
-                isWhiteTheme ? 'tippy-white-container default-white' : 'tippy-black-container default-black'
+                isWhiteTheme ? 'tippy-white-c   ontainer default-white' : 'tippy-black-container default-black'
             } no-content-padding tippy-shadow ${className}`}
             arrow={arrow || false}
             interactive={interactive || false}
@@ -172,7 +165,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
             content={getTippyContent()}
             trigger={trigger || 'mouseenter'}
             onMount={onTippyMount}
-            onClickOutside={closeTippy}
+            onClickOutside={(tippyInstance,e)=>closeTippy(e)}
             showOnCreate={showOnCreate || false}
             animation={animation || 'fade'}
             duration={duration || 300}
