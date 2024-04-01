@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { get, post } from './Api'
 import { ROUTES } from './Constants'
-import { sortCallback } from './Helper'
+import { getUrlWithSearchParams, sortCallback } from './Helper'
 import {
     TeamList,
     ResponseType,
@@ -60,25 +60,6 @@ export function getUserRole(appName?: string): Promise<UserRole> {
 
 export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
-}
-
-const processURL = (url: string, params: object) => {
-    const validParams = Object.keys(params).filter((key) => params[key] != null)
-
-    if (!validParams.length) {
-        return url
-    }
-
-    const queryString = validParams
-        .map((key) => {
-            if (Array.isArray(params[key])) {
-                return `${key}=${params[key].join(',')}`
-            }
-            return `${key}=${params[key]}`
-        })
-        .join('&')
-
-    return `${url}?${queryString}`
 }
 
 const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: number, artifactStatus?: string) => {
@@ -285,17 +266,17 @@ export const genericCDMaterialsService = (
     let URL
     switch (serviceType) {
         case CDMaterialServiceEnum.ROLLBACK:
-            URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material/rollback`, manipulatedParams)
+            URL = getUrlWithSearchParams(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material/rollback`, manipulatedParams)
             break
 
         case CDMaterialServiceEnum.IMAGE_PROMOTION:
             // Directly sending queryParams since do not need to get queryParams sanitized in case of image promotion
-            URL = processURL(`${ROUTES.APP_ARTIFACT_PROMOTE_MATERIAL}`, queryParams)
+            URL = getUrlWithSearchParams(ROUTES.APP_ARTIFACT_PROMOTE_MATERIAL, queryParams)
             break
 
         // Meant for handling getCDMaterialList
         default:
-            URL = processURL(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material`, {
+            URL = getUrlWithSearchParams(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material`, {
                 ...manipulatedParams,
                 stage: stageMap[stage],
             })
@@ -340,7 +321,6 @@ export function fetchChartTemplateVersions() {
     return get(`${ROUTES.DEPLOYMENT_TEMPLATE_LIST}?appId=-1&envId=-1`)
 }
 
-export function getDefaultConfig(): Promise<ResponseType> {
-    const URL = `${ROUTES.NOTIFIER}/channel/config`
-    return get(URL)
+export const getDefaultConfig = (): Promise<ResponseType> => {
+    return get(`${ROUTES.NOTIFIER}/channel/config`)
 }
