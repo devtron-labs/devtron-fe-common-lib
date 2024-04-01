@@ -157,7 +157,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
     return (
         <Tippy
             className={`${
-                isWhiteTheme ? 'tippy-white-c   ontainer default-white' : 'tippy-black-container default-black'
+                isWhiteTheme ? 'tippy-white-container default-white' : 'tippy-black-container default-black'
             } no-content-padding tippy-shadow ${className}`}
             arrow={arrow || false}
             interactive={interactive || false}
