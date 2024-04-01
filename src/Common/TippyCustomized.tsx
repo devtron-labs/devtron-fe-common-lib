@@ -20,7 +20,6 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
     }
 
     const closeTippy = (e) => {
-        // If the event is from the trigger element, hide the tippy
         stopPropagation(e)
         if (tippyRef.current?.hide) {
             tippyRef.current.hide()
