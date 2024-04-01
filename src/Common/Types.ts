@@ -74,7 +74,7 @@ export interface TippyCustomizedProps {
     noHeadingBorder?: boolean
     infoTextHeading?: string
     hideHeading?: boolean
-    placement: Placement
+    placement?: Placement
     className?: string
     Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     iconPath?: string
@@ -173,7 +173,6 @@ export interface RadioInterface {
 export interface RadioGroupComposition {
     Radio?: React.FC<any>
 }
-
 
 export interface RadioGroupProps {
     children: ReactNode

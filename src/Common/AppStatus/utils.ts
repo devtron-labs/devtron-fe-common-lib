@@ -12,4 +12,3 @@ export const triggerStatus = (triggerDetailStatus: string): string => {
     }
     return triggerDetailStatus
 }
-
