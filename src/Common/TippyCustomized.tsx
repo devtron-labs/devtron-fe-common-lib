@@ -21,16 +21,16 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
 
     const closeTippy = (e) => {
         // If the event is from the trigger element, hide the tippy
-            stopPropagation(e)
-            if (tippyRef.current?.hide) {
-                tippyRef.current.hide()
-                tippyRef.current = null
+        stopPropagation(e)
+        if (tippyRef.current?.hide) {
+            tippyRef.current.hide()
+            tippyRef.current = null
 
-                if (props.onClose) {
-                    props.onClose()
-                }
+            if (props.onClose) {
+                props.onClose()
             }
-            setShowHeadingInfo(false)
+        }
+        setShowHeadingInfo(false)
     }
 
     const closeOnEsc = (e) => {
@@ -165,7 +165,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
             content={getTippyContent()}
             trigger={trigger || 'mouseenter'}
             onMount={onTippyMount}
-            onClickOutside={(tippyInstance,e)=>closeTippy(e)}
+            onClickOutside={(tippyInstance, e) => closeTippy(e)}
             showOnCreate={showOnCreate || false}
             animation={animation || 'fade'}
             duration={duration || 300}
