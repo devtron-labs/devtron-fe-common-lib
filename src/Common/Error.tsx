@@ -27,8 +27,7 @@ export class ErrorScreenManager extends Component<{
             case 403:
                 return <ErrorForbidden />
             case 404:
-                return <ErrorBadRequest />
-            // return <ErrorScreenNotFound />
+                return <ErrorScreenNotFound />
             case 500:
                 return <ErrorInternalServer />
             case 502:

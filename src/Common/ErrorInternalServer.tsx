@@ -1,18 +1,18 @@
-import { useHistory } from 'react-router-dom'
-import unauthorized from '../Assets/Img/ic-unauthorized.png'
+import unauthorized from '../Assets/Img/ic-bad-request.png'
 import { ERROR_EMPTY_SCREEN } from './Constants'
 import GenericEmptyState from './EmptyState/GenericEmptyState'
+import { ImageType } from './Types'
 
 const ErrorInternalServer = () => {
-    const { push } = useHistory()
-    const redirectToHome = () => {
-        push('/app/list')
+    const ReportIssue = () => {
+        window.open('https://discord.devtron.ai/')
     }
     const renderGenerateButton = () => (
         <button
             type="button"
             className="flex cta h-32"
-            onClick={redirectToHome}
+            onClick={ReportIssue}
+            formTarget="_blank"
             data-testid="empty-screen-take-me-home"
         >
             {ERROR_EMPTY_SCREEN.REPORT_ISSUE}
@@ -26,6 +26,7 @@ const ErrorInternalServer = () => {
             subTitle={ERROR_EMPTY_SCREEN.INTERNAL_SERVER_ERROR_MESSAGE}
             isButtonAvailable
             renderButton={renderGenerateButton}
+            imageType={ImageType.Large}
         />
     )
 }
