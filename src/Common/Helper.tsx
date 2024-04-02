@@ -711,3 +711,11 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
         return sortOrder === SortingOrder.ASC ? dateB - dateA : dateA - dateB
     }
 }
+
+/**
+ * Returns a stringified YAML with default indentation & line width
+ */
+
+export const YAMLStringify = (obj: string, option?: object) => (
+    YAML.stringify(obj, { indent: 2, lineWidth: 0, ...option  })
+)
