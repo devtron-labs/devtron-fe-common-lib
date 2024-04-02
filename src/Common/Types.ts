@@ -95,6 +95,22 @@ export interface TippyCustomizedProps {
     documentationLinkText?: string
     children: React.ReactElement<any>
 }
+
+export interface InfoIconTippyProps
+    extends Pick<
+        TippyCustomizedProps,
+        | 'heading'
+        | 'infoText'
+        | 'iconClass'
+        | 'documentationLink'
+        | 'documentationLinkText'
+        | 'additionalContent'
+        | 'className'
+        | 'placement'
+    > {
+    dataTestid?: string
+}
+
 export interface GenericEmptyStateType {
     title: ReactNode
     image?

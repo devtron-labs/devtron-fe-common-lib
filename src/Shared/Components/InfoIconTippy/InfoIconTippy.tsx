@@ -1,5 +1,5 @@
 import { TippyCustomized } from '../../../Common/TippyCustomized'
-import { TippyTheme, TippyCustomizedProps } from '../../../Common/Types'
+import { TippyTheme, InfoIconTippyProps } from '../../../Common/Types'
 import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 
@@ -12,18 +12,8 @@ const InfoIconTippy = ({
     additionalContent,
     className = 'icon-dim-16',
     placement = 'bottom',
-    dataTestid,
-}: Pick<
-    TippyCustomizedProps,
-    | 'heading'
-    | 'infoText'
-    | 'iconClass'
-    | 'documentationLink'
-    | 'documentationLinkText'
-    | 'additionalContent'
-    | 'className'
-    | 'placement'
-> & { dataTestid?: string }) => (
+    dataTestid = 'info-tippy-button',
+}: InfoIconTippyProps) => (
     <TippyCustomized
         theme={TippyTheme.white}
         className="w-300 h-100 dc__no-text-transform"

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as Add } from '../Assets/Icon/ic-add.svg'
@@ -15,6 +15,7 @@ import { showError, stopPropagation } from './Helper'
 import { setImageTags } from './Common.service'
 import { Progressing } from './Progressing'
 import { InfoIconTippy } from '../Shared'
+
 export const ImageTagsContainer = ({
     // Setting it to zero in case of external pipeline
     ciPipelineId,
