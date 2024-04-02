@@ -1,9 +1,15 @@
 import React, { Component } from 'react'
 import notAuthorized from '../Assets/Img/ic-not-authorized.svg'
 import ErrorScreenNotFound from './ErrorScreenNotFound'
+import ErrorBadRequest from './ErrorBadRequest'
 import { ERROR_EMPTY_SCREEN } from './Constants'
 import GenericEmptyState from './EmptyState/GenericEmptyState'
 import Reload from './Reload'
+import ErrorUnauthorized from './ErrorUnauthorized'
+import ErrorForbidden from './ErrorForbidden'
+import ErrorInternalServer from './ErrorInternalServer'
+import ErrorBadGateway from './ErrorBadGateway'
+import ErrorServiceTemporaryUnavailable from './ErrorServiceTemporaryUnavailable'
 
 export class ErrorScreenManager extends Component<{
     code?: number
@@ -15,19 +21,20 @@ export class ErrorScreenManager extends Component<{
     getMessage() {
         switch (this.props.code) {
             case 400:
-                return 'Bad Request'
+                return <ErrorBadRequest />
             case 401:
-                return 'Unauthorized'
+                return <ErrorUnauthorized />
             case 403:
-                return <ErrorScreenNotAuthorized subtitle={this.props.subtitle} />
+                return <ErrorForbidden />
             case 404:
-                return <ErrorScreenNotFound />
+                return <ErrorBadRequest />
+            // return <ErrorScreenNotFound />
             case 500:
-                return 'Internal Server Error'
+                return <ErrorInternalServer />
             case 502:
-                return 'Bad Gateway'
+                return <ErrorBadGateway />
             case 503:
-                return 'Service Temporarily Unavailable'
+                return <ErrorServiceTemporaryUnavailable />
             default:
                 return <Reload className={this.props.reloadClass} />
         }

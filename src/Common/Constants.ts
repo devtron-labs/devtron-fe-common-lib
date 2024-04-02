@@ -51,15 +51,33 @@ export const TOAST_ACCESS_DENIED = {
 
 // Empty state messgaes
 export const ERROR_EMPTY_SCREEN = {
-    PAGE_NOT_FOUND: 'We could not find this page',
-    PAGE_NOT_EXIST: 'This page doesn’t exist or was removed. We suggest you go back to home',
-    TAKE_BACK_HOME: 'Take me home',
+    PAGE_NOT_FOUND: 'Not found',
+    PAGE_NOT_EXIST: 'Error 404: The requested resource could not be found. Please check the URL and try again.',
+    TAKE_BACK_HOME: 'Go back home',
+    REPORT_ISSUE: 'Report issue',
     ONLY_FOR_SUPERADMIN: 'Information on this page is available only to superadmin users.',
     NOT_AUTHORIZED: 'Not authorized',
-    UNAUTHORIZED: 'unauthorized',
-    FORBIDDEN: 'forbidden',
     REQUIRED_MANAGER_ACCESS:
         'Looks like you don’t have access to information on this page. Please contact your manager to request access.',
+    BAD_REQUEST: 'Bad request',
+    BAD_REQUEST_MESSAGE:
+        'Error 400: The request could not be understood by the server due to malformed syntax. Please check your request and try again.',
+    TRY_AGAIN: 'Try again',
+    UNAUTHORIZED: 'Unauthorized',
+    UNAUTHORIZED_MESSAGE:
+        'Error 401: You are not authorized to access this resource. Please contact your administrator for assistance.',
+    FORBIDDEN: 'Forbidden',
+    FORBIDDEN_MESSAGE:
+        'Error 403: You are not authorized to access this resource. Please contact your administrator for assistance.',
+    INTERNAL_SERVER_ERROR: 'Internal server error',
+    INTERNAL_SERVER_ERROR_MESSAGE:
+        'Error 500: The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later.',
+    BAD_GATEWAY: 'Bad gateway',
+    BAD_GATEWAY_MESSAGE:
+        'Error 500: The server received an invalid response from an upstream server. Please try again later.',
+    SERVICE_TEMPORARY_UNAVAILABLE: 'Service temporary unavailable',
+    SERVICE_TEMPORARY_UNAVAILABLE_MESSAGE:
+        'Error 503: The server is currently unable to handle the request due to a temporary overload or maintenance. Please try again later.',
 }
 export const TOKEN_COOKIE_NAME = 'argocd.token'
 export const TriggerTypeMap = {
