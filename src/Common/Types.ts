@@ -1,4 +1,4 @@
-import React, { ReactNode, CSSProperties, Children } from 'react'
+import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
