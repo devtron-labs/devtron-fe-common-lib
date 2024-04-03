@@ -1,4 +1,4 @@
-import React, { ReactNode, CSSProperties } from 'react'
+import React, { ReactNode, CSSProperties, Children } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
@@ -107,8 +107,11 @@ export interface InfoIconTippyProps
         | 'additionalContent'
         | 'className'
         | 'placement'
+        | 'Icon'
+        | 'headingInfo'
     > {
     dataTestid?: string
+    children?: TippyCustomizedProps['children']
 }
 
 export interface GenericEmptyStateType {
