@@ -1,0 +1,34 @@
+.scanned-object__bar {
+    height: 8px;
+    width: 100%;
+    display: flex;
+    background-color: #e7635d;
+}
+
+.scanned-object__critical-count {
+    background-color: #e7635d;
+}
+
+.scanned-object__moderate-count {
+    background-color: #f0aa65;
+}
+
+.scanned-object__low-count {
+    background-color: var(--Y500);
+}
+
+.scanned-object__counts {
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 1.54;
+    letter-spacing: normal;
+    color: var(--N900);
+}
+
+.scanned-object__icon {
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-right: 5px;
+}
