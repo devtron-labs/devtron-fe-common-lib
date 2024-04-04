@@ -1,20 +1,15 @@
 import { useHistory } from 'react-router'
-import { API_STATUS_CODES, DISCORD_LINK, ERROR_EMPTY_SCREEN, ROUTES } from './Constants'
+import { API_STATUS_CODES, ERROR_EMPTY_SCREEN, ROUTES } from './Constants'
 import GenericEmptyState from './EmptyState/GenericEmptyState'
 import { ErrorPageType } from './Types'
-import { noop } from './Helper'
+import { noop, refresh, reportIssue } from './Helper'
 
 const ErrorPage = ({ code, image, title, subTitle, imageType }: ErrorPageType) => {
     const { push } = useHistory()
     const redirectToHome = () => {
         push(`/${ROUTES.APP_LIST}`)
     }
-    const refresh = () => {
-        window.location.reload()
-    }
-    const reportIssue = () => {
-        window.open(DISCORD_LINK)
-    }
+
     const getErrorPageProps = (
         statusCode: API_STATUS_CODES,
     ): { onClick: () => void; renderButtonText: string; isButtonAvailable: boolean } => {
@@ -45,6 +40,7 @@ const ErrorPage = ({ code, image, title, subTitle, imageType }: ErrorPageType) =
                 return { onClick: noop, renderButtonText: '', isButtonAvailable: false }
         }
     }
+
     const {
         onClick,
         renderButtonText,
