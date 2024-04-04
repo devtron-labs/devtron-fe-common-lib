@@ -1,4 +1,4 @@
-interface customEnv {
+export interface customEnv {
     SENTRY_ENV?: string
     SENTRY_ERROR_ENABLED?: boolean
     SENTRY_PERFORMANCE_ENABLED?: boolean
@@ -48,6 +48,7 @@ interface customEnv {
     SIDEBAR_DT_LOGO?: string
     ENABLE_EXTERNAL_ARGO_CD: boolean
     API_BATCH_SIZE: number
+    SERVICE_WORKER_TIMEOUT?: string
 }
 declare global {
     interface Window {
@@ -56,6 +57,7 @@ declare global {
         _env_: customEnv
     }
 }
+
 export * from './Common'
 export * from './Pages'
 export * from './Shared'

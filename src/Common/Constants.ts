@@ -299,6 +299,13 @@ export enum ReactSelectInputAction {
 
 export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
 
+export const API_STATUS_CODES = {
+    UNAUTHORIZED: 401,
+    PERMISSION_DENIED: 403,
+    NOT_FOUND: 404,
+    EXPECTATION_FAILED: 417,
+}
+
 export enum SERVER_MODE {
     EA_ONLY = 'EA_ONLY',
     FULL = 'FULL',
