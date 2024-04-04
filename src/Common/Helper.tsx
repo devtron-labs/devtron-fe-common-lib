@@ -716,6 +716,6 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
  * Returns a stringified YAML with default indentation & line width
  */
 
-export const YAMLStringify = (obj: object | string, option?: object) => (
+export const YAMLStringify = (obj: object | unknown, option?: object) => (
     YAMLStringify(obj, { indent: 2, lineWidth: 0, ...option  })
 )
