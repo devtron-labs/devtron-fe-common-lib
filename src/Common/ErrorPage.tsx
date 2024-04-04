@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router'
-import { ERROR_EMPTY_SCREEN } from './Constants'
+import { DISCORD_LINK, ERROR_EMPTY_SCREEN } from './Constants'
 import GenericEmptyState from './EmptyState/GenericEmptyState'
 import { ErrorPageType } from './Types'
 import { noop } from './Helper'
@@ -13,7 +13,7 @@ const ErrorPage = ({ code, image, title, subTitle, imageType }: ErrorPageType) =
         window.location.reload()
     }
     const reportIssue = () => {
-        window.open('https://discord.devtron.ai/')
+        window.open(DISCORD_LINK)
     }
     const getErrorPageProps = (statusCode: number): [() => void, string, boolean] => {
         switch (statusCode) {
