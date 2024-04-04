@@ -1,5 +1,5 @@
 import { MutableRefObject, ReactNode } from 'react'
-import { ServerInfo } from '../Components/header/types'
+import { ServerInfo } from '../Components/Header/types'
 import { SERVER_MODE } from '../../Common'
 
 export interface MainContext {

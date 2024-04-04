@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { InfoColourBar } from '../../Common'
-import { ReactComponent as MegaphoneIcon } from '../../Assets/Icon/ic-megaphone.svg'
-import { ReactComponent as Close } from '../../Assets/Icon/ic-close.svg'
-import { setActionWithExpiry, getDateInMilliseconds } from './header/utils'
+import { InfoColourBar } from '../../../Common'
+import { ReactComponent as MegaphoneIcon } from '../../../Assets/Icon/ic-megaphone.svg'
+import { ReactComponent as Close } from '../../../Assets/Icon/ic-close.svg'
+import { setActionWithExpiry, getDateInMilliseconds } from '../Header/utils'
 
 interface AnnouncementBannerType {
     parentClassName?: string

@@ -1,7 +1,7 @@
 import GettingToast from '../../../Assets/Img/lifebuoy.png'
 import updateLoginCount from './service'
 import { LOGIN_COUNT, MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING } from '../../../Common'
-import { handlePostHogEventUpdate, setActionWithExpiry } from '../header/utils'
+import { handlePostHogEventUpdate, setActionWithExpiry } from '../Header/utils'
 import { GettingStartedType } from './types'
 import './gettingStarted.scss'
 

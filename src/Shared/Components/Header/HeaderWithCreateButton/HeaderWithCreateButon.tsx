@@ -10,7 +10,7 @@ import AppListConstants from './constants'
 import './HeaderWithCreateButton.scss'
 import { useMainContext } from '../../../Providers'
 
-interface HeaderWithCreateButtonProps {
+export interface HeaderWithCreateButtonProps {
     headerName: string
 }
 

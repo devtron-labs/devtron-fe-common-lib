@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
 import { ReactComponent as EditIcon } from '../../../Assets/Icon/ic-pencil.svg'
-import { ButtonWithLoader } from '../ButtonWIthLoader/ButtonWithLoader'
+import { ButtonWithLoader } from '../ButtonWithLoader/ButtonWithLoader'
 import type { EditableTextAreaProps, Error } from './types'
 
 const TextArea = (
