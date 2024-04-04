@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router'
-import { DISCORD_LINK, ERROR_EMPTY_SCREEN } from './Constants'
+import { API_STATUS_CODES, DISCORD_LINK, ERROR_EMPTY_SCREEN, ROUTES } from './Constants'
 import GenericEmptyState from './EmptyState/GenericEmptyState'
 import { ErrorPageType } from './Types'
 import { noop } from './Helper'
@@ -7,7 +7,7 @@ import { noop } from './Helper'
 const ErrorPage = ({ code, image, title, subTitle, imageType }: ErrorPageType) => {
     const { push } = useHistory()
     const redirectToHome = () => {
-        push('/app/list')
+        push(`/${ROUTES.APP_LIST}`)
     }
     const refresh = () => {
         window.location.reload()
@@ -15,30 +15,44 @@ const ErrorPage = ({ code, image, title, subTitle, imageType }: ErrorPageType) =
     const reportIssue = () => {
         window.open(DISCORD_LINK)
     }
-    const getErrorPageProps = (statusCode: number): [() => void, string, boolean] => {
+    const getErrorPageProps = (
+        statusCode: API_STATUS_CODES,
+    ): { onClick: () => void; renderButtonText: string; isButtonAvailable: boolean } => {
         switch (statusCode) {
-            case 400:
-                return [refresh, ERROR_EMPTY_SCREEN.TRY_AGAIN, true]
-            case 401:
-                return [noop, '', false]
-            case 403:
-                return [noop, '', false]
-            case 404:
-                return [redirectToHome, ERROR_EMPTY_SCREEN.TAKE_BACK_HOME, true]
-            case 500:
-                return [reportIssue, ERROR_EMPTY_SCREEN.REPORT_ISSUE, true]
-            case 502:
-                return [refresh, ERROR_EMPTY_SCREEN.TRY_AGAIN, true]
-            case 503:
-                return [refresh, ERROR_EMPTY_SCREEN.TRY_AGAIN, true]
+            case API_STATUS_CODES.BAD_REQUEST:
+                return { onClick: refresh, renderButtonText: ERROR_EMPTY_SCREEN.TRY_AGAIN, isButtonAvailable: true }
+            case API_STATUS_CODES.UNAUTHORIZED:
+                return { onClick: noop, renderButtonText: '', isButtonAvailable: false }
+            case API_STATUS_CODES.PERMISSION_DENIED:
+                return { onClick: noop, renderButtonText: '', isButtonAvailable: false }
+            case API_STATUS_CODES.NOT_FOUND:
+                return {
+                    onClick: redirectToHome,
+                    renderButtonText: ERROR_EMPTY_SCREEN.TAKE_BACK_HOME,
+                    isButtonAvailable: true,
+                }
+            case API_STATUS_CODES.INTERNAL_SERVER_ERROR:
+                return {
+                    onClick: reportIssue,
+                    renderButtonText: ERROR_EMPTY_SCREEN.REPORT_ISSUE,
+                    isButtonAvailable: true,
+                }
+            case API_STATUS_CODES.BAD_GATEWAY:
+                return { onClick: refresh, renderButtonText: ERROR_EMPTY_SCREEN.TRY_AGAIN, isButtonAvailable: true }
+            case API_STATUS_CODES.SERVICE_TEMPORARY_UNAVAILABLE:
+                return { onClick: refresh, renderButtonText: ERROR_EMPTY_SCREEN.TRY_AGAIN, isButtonAvailable: true }
             default:
-                return [noop, '', false]
+                return { onClick: noop, renderButtonText: '', isButtonAvailable: false }
         }
     }
-    const [onClick, renderButtonText, isButtonAvailable]: [() => void, string, boolean] = getErrorPageProps(code)
+    const {
+        onClick,
+        renderButtonText,
+        isButtonAvailable,
+    }: { onClick: () => void; renderButtonText: string; isButtonAvailable: boolean } = getErrorPageProps(code)
 
     const renderGenerateButton = () => (
-        <button type="button" className="flex cta h-32" onClick={onClick} data-testid="empty-screen-take-me-home">
+        <button type="button" className="flex cta h-36" onClick={onClick} data-testid="empty-screen-take-me-home">
             {renderButtonText}
         </button>
     )
@@ -51,6 +65,7 @@ const ErrorPage = ({ code, image, title, subTitle, imageType }: ErrorPageType) =
             isButtonAvailable={isButtonAvailable}
             renderButton={renderGenerateButton}
             imageType={imageType}
+            subtitleClassName="mb-0-imp"
         />
     )
 }

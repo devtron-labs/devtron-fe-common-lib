@@ -116,6 +116,7 @@ export interface GenericEmptyStateType {
      */
     layout?: 'row' | 'column'
     contentClassName?: string
+    subtitleClassName?: string
 }
 
 export interface ErrorPageType

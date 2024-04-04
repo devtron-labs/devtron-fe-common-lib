@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import notAuthorized from '../Assets/Img/ic-not-authorized.svg'
 import notFound from '../Assets/Img/ic-not-found.png'
 import badRequest from '../Assets/Img/ic-bad-request.png'
 import unauthorized from '../Assets/Img/ic-unauthorized.png'
@@ -110,7 +109,7 @@ export class ErrorScreenNotAuthorized extends Component<{
     render() {
         return (
             <GenericEmptyState
-                image={notAuthorized}
+                image={unauthorized}
                 title={this.props.title ?? ERROR_EMPTY_SCREEN.NOT_AUTHORIZED}
                 subTitle={this.props.subtitle ?? ERROR_EMPTY_SCREEN.ONLY_FOR_SUPERADMIN}
             />

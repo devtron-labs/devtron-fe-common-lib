@@ -29,6 +29,7 @@ export const ROUTES = {
     CD_MATERIAL_GET: 'app/cd-pipeline',
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
+    APP_LIST: 'app/list',
 }
 
 export enum KEY_VALUE {
@@ -43,6 +44,17 @@ export const DEFAULT_TAG_DATA = {
     isInvalidKey: false,
     isInvalidValue: false,
     isSuggested: true,
+}
+
+export enum API_STATUS_CODES {
+    BAD_REQUEST = 400,
+    UNAUTHORIZED = 401,
+    PERMISSION_DENIED = 403,
+    NOT_FOUND = 404,
+    EXPECTATION_FAILED = 417,
+    INTERNAL_SERVER_ERROR = 500,
+    BAD_GATEWAY = 502,
+    SERVICE_TEMPORARY_UNAVAILABLE = 503,
 }
 
 export const TOAST_ACCESS_DENIED = {
