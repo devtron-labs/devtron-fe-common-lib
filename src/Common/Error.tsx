@@ -1,15 +1,13 @@
 import React, { Component } from 'react'
 import notAuthorized from '../Assets/Img/ic-not-authorized.svg'
-import ErrorScreenNotFound from './ErrorScreenNotFound'
-import ErrorBadRequest from './ErrorBadRequest'
+import notFound from '../Assets/Img/ic-not-found.png'
+import badRequest from '../Assets/Img/ic-bad-request.png'
+import unauthorized from '../Assets/Img/ic-unauthorized.png'
 import { ERROR_EMPTY_SCREEN } from './Constants'
 import GenericEmptyState from './EmptyState/GenericEmptyState'
 import Reload from './Reload'
-import ErrorUnauthorized from './ErrorUnauthorized'
-import ErrorForbidden from './ErrorForbidden'
-import ErrorInternalServer from './ErrorInternalServer'
-import ErrorBadGateway from './ErrorBadGateway'
-import ErrorServiceTemporaryUnavailable from './ErrorServiceTemporaryUnavailable'
+import ErrorPage from './ErrorPage'
+import { ImageType } from './Types'
 
 export class ErrorScreenManager extends Component<{
     code?: number
@@ -21,19 +19,75 @@ export class ErrorScreenManager extends Component<{
     getMessage() {
         switch (this.props.code) {
             case 400:
-                return <ErrorBadRequest />
+                return (
+                    <ErrorPage
+                        code={400}
+                        title={ERROR_EMPTY_SCREEN.BAD_REQUEST}
+                        subTitle={ERROR_EMPTY_SCREEN.BAD_REQUEST_MESSAGE}
+                        image={badRequest}
+                        imageType={ImageType.Large}
+                    />
+                )
             case 401:
-                return <ErrorUnauthorized />
+                return (
+                    <ErrorPage
+                        code={401}
+                        title={ERROR_EMPTY_SCREEN.UNAUTHORIZED}
+                        subTitle={ERROR_EMPTY_SCREEN.UNAUTHORIZED_MESSAGE}
+                        image={unauthorized}
+                        imageType={ImageType.Large}
+                    />
+                )
             case 403:
-                return <ErrorForbidden />
+                return (
+                    <ErrorPage
+                        code={403}
+                        title={ERROR_EMPTY_SCREEN.FORBIDDEN}
+                        subTitle={ERROR_EMPTY_SCREEN.FORBIDDEN_MESSAGE}
+                        image={unauthorized}
+                        imageType={ImageType.Large}
+                    />
+                )
             case 404:
-                return <ErrorScreenNotFound />
+                return (
+                    <ErrorPage
+                        code={404}
+                        title={ERROR_EMPTY_SCREEN.PAGE_NOT_FOUND}
+                        subTitle={ERROR_EMPTY_SCREEN.PAGE_NOT_EXIST}
+                        image={notFound}
+                        imageType={ImageType.Large}
+                    />
+                )
             case 500:
-                return <ErrorInternalServer />
+                return (
+                    <ErrorPage
+                        code={500}
+                        title={ERROR_EMPTY_SCREEN.INTERNAL_SERVER_ERROR}
+                        subTitle={ERROR_EMPTY_SCREEN.INTERNAL_SERVER_ERROR_MESSAGE}
+                        image={badRequest}
+                        imageType={ImageType.Large}
+                    />
+                )
             case 502:
-                return <ErrorBadGateway />
+                return (
+                    <ErrorPage
+                        code={502}
+                        title={ERROR_EMPTY_SCREEN.BAD_GATEWAY}
+                        subTitle={ERROR_EMPTY_SCREEN.BAD_GATEWAY_MESSAGE}
+                        image={badRequest}
+                        imageType={ImageType.Large}
+                    />
+                )
             case 503:
-                return <ErrorServiceTemporaryUnavailable />
+                return (
+                    <ErrorPage
+                        code={503}
+                        title={ERROR_EMPTY_SCREEN.SERVICE_TEMPORARY_UNAVAILABLE}
+                        subTitle={ERROR_EMPTY_SCREEN.SERVICE_TEMPORARY_UNAVAILABLE_MESSAGE}
+                        image={badRequest}
+                        imageType={ImageType.Large}
+                    />
+                )
             default:
                 return <Reload className={this.props.reloadClass} />
         }
