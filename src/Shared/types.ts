@@ -109,7 +109,7 @@ export enum CIMaterialSidebarType {
     PARAMETERS = 'Parameters',
 }
 
-interface LastExecutionResultType {
+export interface LastExecutionResultType {
     lastExecution: string
     severityCount: {
         critical: number

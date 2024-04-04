@@ -2,7 +2,7 @@ import React from 'react'
 import { ScanVulnerabilitiesTableProps, VulnerabilityType } from '../Types'
 import './scanVulnerabilities.css'
 
-export default function ScanVulnerabilitiesTable({ vulnerabilities }: ScanVulnerabilitiesTableProps) {
+export default function ScanVulnerabilitiesTable({ vulnerabilities, hidePolicy }: ScanVulnerabilitiesTableProps) {
     const renderRow = (vulnerability: VulnerabilityType) => (
         <tr
             className="dc__security-tab__table-row cursor"
@@ -25,11 +25,13 @@ export default function ScanVulnerabilitiesTable({ vulnerabilities }: ScanVulner
             <td className="security-tab__cell-package">{vulnerability.package}</td>
             <td className="security-tab__cell-current-ver">{vulnerability.version}</td>
             <td className="security-tab__cell-fixed-ver">{vulnerability.fixedVersion}</td>
-            <td
-                className={`security-tab__cell-policy security-tab__cell-policy--${vulnerability.policy?.toLowerCase()}`}
-            >
-                {vulnerability.policy?.toLowerCase()}
-            </td>
+            {!hidePolicy && (
+                <td
+                    className={`security-tab__cell-policy security-tab__cell-policy--${vulnerability.policy?.toLowerCase()}`}
+                >
+                    {vulnerability.policy?.toLowerCase()}
+                </td>
+            )}
         </tr>
     )
 
@@ -42,7 +44,9 @@ export default function ScanVulnerabilitiesTable({ vulnerabilities }: ScanVulner
                     <th className="security-cell-header security-tab__cell-package">Package</th>
                     <th className="security-cell-header security-tab__cell-current-ver">Current Version</th>
                     <th className="security-cell-header security-tab__cell-fixed-ver">Fixed In Version</th>
-                    <th className="security-cell-header security-tab__cell-policy">Policy</th>
+                    {!hidePolicy && (
+                        <th className="security-cell-header security-tab__cell-policy">Policy</th>
+                    )}
                 </tr>
                 {vulnerabilities.map((vulnerability) => renderRow(vulnerability))}
             </tbody>
