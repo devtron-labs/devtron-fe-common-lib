@@ -133,6 +133,11 @@ export interface GenericEmptyStateType {
     contentClassName?: string
 }
 
+export interface ErrorPageType
+    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'> {
+    code: number
+}
+
 export enum ImageType {
     Large = 'large',
     Medium = 'medium',
