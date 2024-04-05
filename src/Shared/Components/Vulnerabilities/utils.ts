@@ -4,7 +4,7 @@ import { sortCallback } from '../../../Common'
 import { LastExecutionResponseType, LastExecutionResultType, Severity } from '../../types'
 
 export const getParsedScanResult = (scanResult): LastExecutionResultType => {
-    const vulnerabilities = scanResult.vulnerabilities || []
+    const vulnerabilities = scanResult?.vulnerabilities || []
     const critical = vulnerabilities
         .filter((v) => v.severity === Severity.CRITICAL)
         .sort((a, b) => sortCallback('cveName', a, b))
@@ -15,8 +15,10 @@ export const getParsedScanResult = (scanResult): LastExecutionResultType => {
     const sortedVulnerabilities = critical.concat(moderate, low)
 
     return {
-        ...scanResult,
-        lastExecution: moment(scanResult.executionTime).utc(false).format(DATE_TIME_FORMAT_STRING),
+        ...(scanResult || {}),
+        lastExecution: scanResult?.executionTime
+            ? moment(scanResult.executionTime).utc(false).format(DATE_TIME_FORMAT_STRING)
+            : '',
         severityCount: {
             critical: scanResult?.severityCount?.high,
             moderate: scanResult?.severityCount?.moderate,
