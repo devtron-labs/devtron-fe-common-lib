@@ -1,28 +1,34 @@
 import React, { Component } from 'react'
-import notFound from '../Assets/Img/ic-not-found.png'
-import badRequest from '../Assets/Img/ic-bad-request.png'
-import unauthorized from '../Assets/Img/ic-unauthorized.png'
+import notFound from '../Assets/Img/ic-not-found.svg'
+import badRequest from '../Assets/Img/ic-page-not-found.svg'
+import unauthorized from '../Assets/Img/ic-not-authorized.svg'
 import { API_STATUS_CODES, ERROR_EMPTY_SCREEN } from './Constants'
 import GenericEmptyState from './EmptyState/GenericEmptyState'
 import Reload from './Reload'
 import ErrorPage from './ErrorPage'
 import { ImageType } from './Types'
 
-export class ErrorScreenManager extends Component<{
+export const ErrorScreenManager = ({
+    code,
+    reload,
+    subtitle,
+    subtitleClass,
+    reloadClass,
+}: {
     code?: number
     reload?: (...args) => any
     subtitle?: React.ReactChild
     subtitleClass?: string
     reloadClass?: string
-}> {
-    getMessage() {
-        switch (this.props.code) {
+}) => {
+    const getMessage = () => {
+        switch (code) {
             case API_STATUS_CODES.BAD_REQUEST:
                 return (
                     <ErrorPage
                         code={API_STATUS_CODES.BAD_REQUEST}
                         title={ERROR_EMPTY_SCREEN.BAD_REQUEST}
-                        subTitle={ERROR_EMPTY_SCREEN.BAD_REQUEST_MESSAGE}
+                        subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.BAD_REQUEST_MESSAGE}
                         image={badRequest}
                         imageType={ImageType.Large}
                     />
@@ -32,7 +38,7 @@ export class ErrorScreenManager extends Component<{
                     <ErrorPage
                         code={API_STATUS_CODES.UNAUTHORIZED}
                         title={ERROR_EMPTY_SCREEN.UNAUTHORIZED}
-                        subTitle={ERROR_EMPTY_SCREEN.UNAUTHORIZED_MESSAGE}
+                        subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.UNAUTHORIZED_MESSAGE}
                         image={unauthorized}
                         imageType={ImageType.Large}
                     />
@@ -42,7 +48,7 @@ export class ErrorScreenManager extends Component<{
                     <ErrorPage
                         code={API_STATUS_CODES.PERMISSION_DENIED}
                         title={ERROR_EMPTY_SCREEN.FORBIDDEN}
-                        subTitle={ERROR_EMPTY_SCREEN.FORBIDDEN_MESSAGE}
+                        subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.FORBIDDEN_MESSAGE}
                         image={unauthorized}
                         imageType={ImageType.Large}
                     />
@@ -52,7 +58,7 @@ export class ErrorScreenManager extends Component<{
                     <ErrorPage
                         code={API_STATUS_CODES.NOT_FOUND}
                         title={ERROR_EMPTY_SCREEN.PAGE_NOT_FOUND}
-                        subTitle={ERROR_EMPTY_SCREEN.PAGE_NOT_EXIST}
+                        subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.PAGE_NOT_EXIST}
                         image={notFound}
                         imageType={ImageType.Large}
                     />
@@ -62,7 +68,7 @@ export class ErrorScreenManager extends Component<{
                     <ErrorPage
                         code={API_STATUS_CODES.INTERNAL_SERVER_ERROR}
                         title={ERROR_EMPTY_SCREEN.INTERNAL_SERVER_ERROR}
-                        subTitle={ERROR_EMPTY_SCREEN.INTERNAL_SERVER_ERROR_MESSAGE}
+                        subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.INTERNAL_SERVER_ERROR_MESSAGE}
                         image={badRequest}
                         imageType={ImageType.Large}
                     />
@@ -72,7 +78,7 @@ export class ErrorScreenManager extends Component<{
                     <ErrorPage
                         code={API_STATUS_CODES.BAD_GATEWAY}
                         title={ERROR_EMPTY_SCREEN.BAD_GATEWAY}
-                        subTitle={ERROR_EMPTY_SCREEN.BAD_GATEWAY_MESSAGE}
+                        subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.BAD_GATEWAY_MESSAGE}
                         image={badRequest}
                         imageType={ImageType.Large}
                     />
@@ -82,24 +88,16 @@ export class ErrorScreenManager extends Component<{
                     <ErrorPage
                         code={API_STATUS_CODES.SERVICE_TEMPORARY_UNAVAILABLE}
                         title={ERROR_EMPTY_SCREEN.SERVICE_TEMPORARY_UNAVAILABLE}
-                        subTitle={ERROR_EMPTY_SCREEN.SERVICE_TEMPORARY_UNAVAILABLE_MESSAGE}
+                        subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.SERVICE_TEMPORARY_UNAVAILABLE_MESSAGE}
                         image={badRequest}
                         imageType={ImageType.Large}
                     />
                 )
             default:
-                return <Reload className={this.props.reloadClass} />
+                return <Reload className={reloadClass} />
         }
     }
-
-    render() {
-        const msg = this.getMessage()
-        return (
-            <div>
-                <h1>{msg}</h1>
-            </div>
-        )
-    }
+    return getMessage()
 }
 
 export class ErrorScreenNotAuthorized extends Component<{
