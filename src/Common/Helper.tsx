@@ -370,7 +370,7 @@ export function useJsonYaml(value, tabSize = 4, language = 'json', shouldRun = f
         }
         if (obj && typeof obj === 'object') {
             setJson(JSON.stringify(obj, null, tabSize))
-            setYaml(YAML.stringify(obj, { indent: 2 }))
+            setYaml(YAML.stringify(obj, { indent: 2, lineWidth: 0 }))
             setNativeObject(obj)
             setError('')
         } else {
@@ -712,3 +712,11 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
         return sortOrder === SortingOrder.ASC ? dateB - dateA : dateA - dateB
     }
 }
+
+/**
+ * Returns a stringified YAML with default indentation & line width
+ */
+
+export const YAMLStringify = (obj: object | unknown, option?: object) => (
+    YAML.stringify(obj, { indent: 2, lineWidth: 0, ...option  })
+)
