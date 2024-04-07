@@ -69,3 +69,5 @@ export const getGitCommitInfo = (materialInfo: MaterialInfo): GitTriggers => ({
 
 export const caseInsensitiveStringComparator = (a: string, b: string): number =>
     a.toLowerCase().localeCompare(b.toLowerCase())
+
+export const isNullOrUndefined = (value: unknown): boolean => value === null || value === undefined

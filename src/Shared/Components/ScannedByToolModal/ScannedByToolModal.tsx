@@ -14,7 +14,11 @@ const ScannedByToolModal = ({ scanToolId }: ScannedByToolModalProps) => {
                     {isTrivy ? IMAGE_SCAN_TOOL.Trivy : IMAGE_SCAN_TOOL.Clair}
                 </span>
             </span>
-            {isTrivy ? <ICTrivy className="h-20 w-20 ml-6" /> : <ICClair className="h-20 w-20 ml-6" />}
+            {isTrivy ? (
+                <ICTrivy className="h-20 w-20 ml-6 dc__no-shrink" />
+            ) : (
+                <ICClair className="h-20 w-20 ml-6 dc__no-shrink" />
+            )}
         </>
     )
 }

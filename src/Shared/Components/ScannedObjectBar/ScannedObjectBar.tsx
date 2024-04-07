@@ -5,6 +5,8 @@ const ScannedObjectBar = ({
     criticalVulnerabilitiesCount,
     moderateVulnerabilitiesCount,
     lowVulnerabilitiesCount,
+    objectBarClassName,
+    removeObjectCountMargin,
 }: ScannedObjectBarProps) => {
     const totalVulnerabilitiesCount =
         criticalVulnerabilitiesCount + moderateVulnerabilitiesCount + lowVulnerabilitiesCount
@@ -14,7 +16,7 @@ const ScannedObjectBar = ({
     )
 
     const renderObjectCount = (count: number, title: string, objectIconClass: string) => (
-        <p className="scanned-object__counts">
+        <p className={`scanned-object__counts ${removeObjectCountMargin ? 'm-0' : ''}`}>
             <span className={`scanned-object__icon ${objectIconClass}`} />
             {title}
             <span className="fw-6 ml-5 mr-20">{count}</span>
@@ -23,7 +25,7 @@ const ScannedObjectBar = ({
 
     return (
         <>
-            <div className="scanned-object__bar mb-16">
+            <div className={`scanned-object__bar ${objectBarClassName || ''}`}>
                 {renderScannedObject('scanned-object__critical-count', criticalVulnerabilitiesCount)}
                 {renderScannedObject('scanned-object__moderate-count', moderateVulnerabilitiesCount)}
                 {renderScannedObject('scanned-object__low-count', lowVulnerabilitiesCount)}
