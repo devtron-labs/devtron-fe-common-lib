@@ -1,4 +1,5 @@
 import React from 'react'
+import DOMPurify from 'dompurify'
 import { ScanVulnerabilitiesTableProps, VulnerabilityType } from '../Types'
 import './scanVulnerabilities.css'
 
@@ -23,7 +24,12 @@ export default function ScanVulnerabilitiesTable({ vulnerabilities, hidePolicy }
                 <span className={`fill-${vulnerability.severity?.toLowerCase()}`}>{vulnerability.severity}</span>
             </td>
             <td className="security-tab__cell-package">{vulnerability.package}</td>
-            <td className="security-tab__cell-current-ver">{vulnerability.version}</td>
+            {/* QUERY: Do we need to add DOMPurify at any other key for this table as well? */}
+            <td className="security-tab__cell-current-ver">
+                <p className="m-0 cn-9 fs-13 fw-4" dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(vulnerability.version)
+                }} />
+            </td>
             <td className="security-tab__cell-fixed-ver">{vulnerability.fixedVersion}</td>
             {!hidePolicy && (
                 <td
