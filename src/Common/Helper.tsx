@@ -370,7 +370,7 @@ export function useJsonYaml(value, tabSize = 4, language = 'json', shouldRun = f
         }
         if (obj && typeof obj === 'object') {
             setJson(JSON.stringify(obj, null, tabSize))
-            setYaml(YAML.stringify(obj, { indent: 2 }))
+            setYaml(YAML.stringify(obj, { indent: 2, lineWidth: 0 }))
             setNativeObject(obj)
             setError('')
         } else {
@@ -693,8 +693,13 @@ export const debounce = (func, timeout = 500) => {
 }
 
 /**
- * Sorts the relative dates based on the sorting direction
+ * Returns a capitalized string with first letter in uppercase and rest in lowercase
  */
+
+export const capitalizeFirstLetter = (text: string) => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
+
+//  * Sorts the relative dates based on the sorting direction
+//  */
 export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) => {
     // For date, we show relative date hence the logic for sorting is reversed here
     const dateA = new Date(dateStringA).getTime()
@@ -712,3 +717,11 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
         return sortOrder === SortingOrder.ASC ? dateB - dateA : dateA - dateB
     }
 }
+
+/**
+ * Returns a stringified YAML with default indentation & line width
+ */
+
+export const YAMLStringify = (obj: object | unknown, option?: object) => (
+    YAML.stringify(obj, { indent: 2, lineWidth: 0, ...option  })
+)

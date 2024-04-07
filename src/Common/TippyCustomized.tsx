@@ -5,7 +5,7 @@ import { ReactComponent as QuestionFilled } from '../Assets/Icon/ic-help.svg'
 import { ReactComponent as Question } from '../Assets/Icon/ic-help-outline.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
-import { not } from './Helper'
+import { not, stopPropagation } from './Helper'
 
 // This component will handle some of the new tippy designs and interactions
 // So this can be updated to support further for new features or interactions
@@ -19,7 +19,8 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
         document.addEventListener('keydown', closeOnEsc)
     }
 
-    const closeTippy = () => {
+    const closeTippy = (e) => {
+        stopPropagation(e)
         if (tippyRef.current?.hide) {
             tippyRef.current.hide()
             tippyRef.current = null
@@ -33,7 +34,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
 
     const closeOnEsc = (e) => {
         if (e.keyCode === 27) {
-            closeTippy()
+            closeTippy(e)
         }
     }
 
@@ -163,7 +164,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
             content={getTippyContent()}
             trigger={trigger || 'mouseenter'}
             onMount={onTippyMount}
-            onClickOutside={closeTippy}
+            onClickOutside={(tippyInstance, e) => closeTippy(e)}
             showOnCreate={showOnCreate || false}
             animation={animation || 'fade'}
             duration={duration || 300}

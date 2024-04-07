@@ -1,7 +1,7 @@
 import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
-import { DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
+import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
 import { RegistryType } from '../Shared'
 
 /**
@@ -176,7 +176,6 @@ export interface RadioGroupComposition {
     Radio?: React.FC<any>
 }
 
-
 export interface RadioGroupProps {
     children: ReactNode
     value: string
@@ -310,6 +309,12 @@ export interface PromotionApprovalMetadataType {
     promotedFromType?: CDMaterialResourceQuery
 }
 
+export interface DeploymentWindowArtifactMetadata {
+    id: number
+    name: string
+    type: DEPLOYMENT_WINDOW_TYPE
+}
+
 export interface CDMaterialType {
     index: number
     id: string
@@ -353,6 +358,7 @@ export interface CDMaterialType {
      */
     promotionApprovalMetadata?: PromotionApprovalMetadataType
     deployedOnEnvironments?: string[]
+    deploymentWindowArtifactMetadata?: DeploymentWindowArtifactMetadata
 }
 
 export enum CDMaterialServiceEnum {
@@ -461,6 +467,7 @@ export interface CommonNodeAttr {
     isLast?: boolean
     downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
     cipipelineId?: number
+    isDeploymentBlocked?: boolean
 }
 
 export enum DeploymentAppTypes {
@@ -868,3 +875,13 @@ export type SortingParams<T = string> =
           sortBy: T
       }
     | { sortOrder?: never; sortBy?: never }
+
+export interface DeploymentWindowProfileMetaData {
+    name: string
+    userActionState: ACTION_STATE
+    type: string | DEPLOYMENT_WINDOW_TYPE
+    calculatedTimestamp: string
+    isActive: boolean
+    excludedUserEmails: string[]
+    warningMessage: string
+}
