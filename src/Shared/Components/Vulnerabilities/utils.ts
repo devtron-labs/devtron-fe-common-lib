@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { DATE_TIME_FORMAT_STRING } from '../../constants'
-import { sortCallback } from '../../../Common'
+import { ZERO_TIME_STRING, sortCallback } from '../../../Common'
 import { LastExecutionResponseType, LastExecutionResultType, Severity } from '../../types'
 
 export const getParsedScanResult = (scanResult): LastExecutionResultType => {
@@ -16,9 +16,10 @@ export const getParsedScanResult = (scanResult): LastExecutionResultType => {
 
     return {
         ...(scanResult || {}),
-        lastExecution: scanResult?.executionTime
-            ? moment(scanResult.executionTime).utc(false).format(DATE_TIME_FORMAT_STRING)
-            : '',
+        lastExecution:
+            scanResult?.executionTime && scanResult.executionTime !== ZERO_TIME_STRING
+                ? moment(scanResult.executionTime).utc(false).format(DATE_TIME_FORMAT_STRING)
+                : '',
         severityCount: {
             critical: scanResult?.severityCount?.high,
             moderate: scanResult?.severityCount?.moderate,
