@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router'
-import { API_STATUS_CODES, ERROR_EMPTY_SCREEN, ROUTES } from './Constants'
+import { ERROR_STATUS_CODE, ERROR_EMPTY_SCREEN, ROUTES } from './Constants'
 import GenericEmptyState from './EmptyState/GenericEmptyState'
 import { ErrorPageType } from './Types'
 import { noop, refresh, reportIssue } from './Helper'
@@ -11,30 +11,30 @@ const ErrorPage = ({ code, image, title, subTitle, imageType }: ErrorPageType) =
     }
 
     const getErrorPageProps = (
-        statusCode: API_STATUS_CODES,
+        statusCode: ERROR_STATUS_CODE,
     ): { onClick: () => void; renderButtonText: string; isButtonAvailable: boolean } => {
         switch (statusCode) {
-            case API_STATUS_CODES.BAD_REQUEST:
+            case ERROR_STATUS_CODE.BAD_REQUEST:
                 return { onClick: refresh, renderButtonText: ERROR_EMPTY_SCREEN.TRY_AGAIN, isButtonAvailable: true }
-            case API_STATUS_CODES.UNAUTHORIZED:
+            case ERROR_STATUS_CODE.UNAUTHORIZED:
                 return { onClick: noop, renderButtonText: '', isButtonAvailable: false }
-            case API_STATUS_CODES.PERMISSION_DENIED:
+            case ERROR_STATUS_CODE.PERMISSION_DENIED:
                 return { onClick: noop, renderButtonText: '', isButtonAvailable: false }
-            case API_STATUS_CODES.NOT_FOUND:
+            case ERROR_STATUS_CODE.NOT_FOUND:
                 return {
                     onClick: redirectToHome,
                     renderButtonText: ERROR_EMPTY_SCREEN.TAKE_BACK_HOME,
                     isButtonAvailable: true,
                 }
-            case API_STATUS_CODES.INTERNAL_SERVER_ERROR:
+            case ERROR_STATUS_CODE.INTERNAL_SERVER_ERROR:
                 return {
                     onClick: reportIssue,
                     renderButtonText: ERROR_EMPTY_SCREEN.REPORT_ISSUE,
                     isButtonAvailable: true,
                 }
-            case API_STATUS_CODES.BAD_GATEWAY:
+            case ERROR_STATUS_CODE.BAD_GATEWAY:
                 return { onClick: refresh, renderButtonText: ERROR_EMPTY_SCREEN.TRY_AGAIN, isButtonAvailable: true }
-            case API_STATUS_CODES.SERVICE_TEMPORARY_UNAVAILABLE:
+            case ERROR_STATUS_CODE.SERVICE_TEMPORARY_UNAVAILABLE:
                 return { onClick: refresh, renderButtonText: ERROR_EMPTY_SCREEN.TRY_AGAIN, isButtonAvailable: true }
             default:
                 return { onClick: noop, renderButtonText: '', isButtonAvailable: false }

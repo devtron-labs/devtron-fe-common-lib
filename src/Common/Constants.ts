@@ -46,7 +46,7 @@ export const DEFAULT_TAG_DATA = {
     isSuggested: true,
 }
 
-export enum API_STATUS_CODES {
+export enum ERROR_STATUS_CODE {
     BAD_REQUEST = 400,
     UNAUTHORIZED = 401,
     PERMISSION_DENIED = 403,

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import notFound from '../Assets/Img/ic-not-found.svg'
 import badRequest from '../Assets/Img/ic-page-not-found.svg'
 import unauthorized from '../Assets/Img/ic-not-authorized.svg'
-import { API_STATUS_CODES, ERROR_EMPTY_SCREEN } from './Constants'
+import { ERROR_STATUS_CODE, ERROR_EMPTY_SCREEN } from './Constants'
 import GenericEmptyState from './EmptyState/GenericEmptyState'
 import Reload from './Reload'
 import ErrorPage from './ErrorPage'
@@ -23,70 +23,70 @@ export const ErrorScreenManager = ({
 }) => {
     const getMessage = () => {
         switch (code) {
-            case API_STATUS_CODES.BAD_REQUEST:
+            case ERROR_STATUS_CODE.BAD_REQUEST:
                 return (
                     <ErrorPage
-                        code={API_STATUS_CODES.BAD_REQUEST}
+                        code={ERROR_STATUS_CODE.BAD_REQUEST}
                         title={ERROR_EMPTY_SCREEN.BAD_REQUEST}
                         subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.BAD_REQUEST_MESSAGE}
                         image={badRequest}
                         imageType={ImageType.Large}
                     />
                 )
-            case API_STATUS_CODES.UNAUTHORIZED:
+            case ERROR_STATUS_CODE.UNAUTHORIZED:
                 return (
                     <ErrorPage
-                        code={API_STATUS_CODES.UNAUTHORIZED}
+                        code={ERROR_STATUS_CODE.UNAUTHORIZED}
                         title={ERROR_EMPTY_SCREEN.UNAUTHORIZED}
                         subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.UNAUTHORIZED_MESSAGE}
                         image={unauthorized}
                         imageType={ImageType.Large}
                     />
                 )
-            case API_STATUS_CODES.PERMISSION_DENIED:
+            case ERROR_STATUS_CODE.PERMISSION_DENIED:
                 return (
                     <ErrorPage
-                        code={API_STATUS_CODES.PERMISSION_DENIED}
+                        code={ERROR_STATUS_CODE.PERMISSION_DENIED}
                         title={ERROR_EMPTY_SCREEN.FORBIDDEN}
                         subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.FORBIDDEN_MESSAGE}
                         image={unauthorized}
                         imageType={ImageType.Large}
                     />
                 )
-            case API_STATUS_CODES.NOT_FOUND:
+            case ERROR_STATUS_CODE.NOT_FOUND:
                 return (
                     <ErrorPage
-                        code={API_STATUS_CODES.NOT_FOUND}
+                        code={ERROR_STATUS_CODE.NOT_FOUND}
                         title={ERROR_EMPTY_SCREEN.PAGE_NOT_FOUND}
                         subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.PAGE_NOT_EXIST}
                         image={notFound}
                         imageType={ImageType.Large}
                     />
                 )
-            case API_STATUS_CODES.INTERNAL_SERVER_ERROR:
+            case ERROR_STATUS_CODE.INTERNAL_SERVER_ERROR:
                 return (
                     <ErrorPage
-                        code={API_STATUS_CODES.INTERNAL_SERVER_ERROR}
+                        code={ERROR_STATUS_CODE.INTERNAL_SERVER_ERROR}
                         title={ERROR_EMPTY_SCREEN.INTERNAL_SERVER_ERROR}
                         subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.INTERNAL_SERVER_ERROR_MESSAGE}
                         image={badRequest}
                         imageType={ImageType.Large}
                     />
                 )
-            case API_STATUS_CODES.BAD_GATEWAY:
+            case ERROR_STATUS_CODE.BAD_GATEWAY:
                 return (
                     <ErrorPage
-                        code={API_STATUS_CODES.BAD_GATEWAY}
+                        code={ERROR_STATUS_CODE.BAD_GATEWAY}
                         title={ERROR_EMPTY_SCREEN.BAD_GATEWAY}
                         subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.BAD_GATEWAY_MESSAGE}
                         image={badRequest}
                         imageType={ImageType.Large}
                     />
                 )
-            case API_STATUS_CODES.SERVICE_TEMPORARY_UNAVAILABLE:
+            case ERROR_STATUS_CODE.SERVICE_TEMPORARY_UNAVAILABLE:
                 return (
                     <ErrorPage
-                        code={API_STATUS_CODES.SERVICE_TEMPORARY_UNAVAILABLE}
+                        code={ERROR_STATUS_CODE.SERVICE_TEMPORARY_UNAVAILABLE}
                         title={ERROR_EMPTY_SCREEN.SERVICE_TEMPORARY_UNAVAILABLE}
                         subTitle={subtitle ? subtitle : ERROR_EMPTY_SCREEN.SERVICE_TEMPORARY_UNAVAILABLE_MESSAGE}
                         image={badRequest}
