@@ -21,7 +21,7 @@ export default function ScanVulnerabilitiesTable({ vulnerabilities, hidePolicy }
                 </a>
             </td>
             <td className="security-tab__cell-severity">
-                <span className={`fill-${vulnerability.severity?.toLowerCase()}`}>{vulnerability.severity}</span>
+                <span className={`dc__fill-${vulnerability.severity?.toLowerCase()}`}>{vulnerability.severity}</span>
             </td>
             <td className="security-tab__cell-package">{vulnerability.package}</td>
             {/* QUERY: Do we need to add DOMPurify at any other key for this table as well? */}
