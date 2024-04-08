@@ -1,7 +1,7 @@
 import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
-import { DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
+import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -282,6 +282,12 @@ export enum MaterialDataSource {
     EXTERNAL = 'ext',
 }
 
+export interface DeploymentWindowArtifactMetadata {
+    id: number
+    name: string
+    type: DEPLOYMENT_WINDOW_TYPE
+}
+
 export interface CDMaterialType {
     index: number
     id: string
@@ -319,6 +325,7 @@ export interface CDMaterialType {
     createdTime?: string
     deployed?: boolean
     dataSource?: MaterialDataSource
+    deploymentWindowArtifactMetadata?: DeploymentWindowArtifactMetadata
 }
 
 export enum CDMaterialServiceEnum {
@@ -413,6 +420,7 @@ export interface CommonNodeAttr {
     deploymentAppCreated?: boolean
     isLast?: boolean
     downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
+    isDeploymentBlocked?: boolean
 }
 
 export enum DeploymentAppTypes {
@@ -809,3 +817,13 @@ export type SortingParams<T = string> =
           sortBy: T
       }
     | { sortOrder?: never; sortBy?: never }
+
+export interface DeploymentWindowProfileMetaData {
+    name: string
+    userActionState: ACTION_STATE
+    type: string | DEPLOYMENT_WINDOW_TYPE
+    calculatedTimestamp: string
+    isActive: boolean
+    excludedUserEmails: string[]
+    warningMessage: string
+}
