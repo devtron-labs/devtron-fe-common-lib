@@ -37,4 +37,3 @@ export const ModuleNameMap = {
 // TODO: Convert to object later if more formats arise
 export const DATE_TIME_FORMAT_STRING = 'ddd DD MMM YYYY HH:mm:ss'
 export const API_TOKEN_PREFIX = 'API-TOKEN:'
-export const STRINGIFIED_TRUE = 'true'
