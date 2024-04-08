@@ -1,18 +1,13 @@
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import { useEffect, useRef } from 'react'
+import { MarkDownProps } from './Types'
 
-const MarkDown = (
-    setExpandableIcon: (arg0: boolean) => void,
-    markdown = '',
-    className = '',
-    breaks = false,
-    disableEscapedText = false,
-    ...props: any[]
-) => {
-    const uncheckedCheckboxInputElement = `<input checked="" disabled="" type="checkbox">`
-    const checkedCheckboxInputElement = `<input disabled="" type="checkbox">`
-    const renderer = new marked.Renderer()
+const uncheckedCheckboxInputElement = `<input checked="" disabled="" type="checkbox">`
+const checkedCheckboxInputElement = `<input disabled="" type="checkbox">`
+const renderer = new marked.Renderer()
+
+const MarkDown = ({ setExpandableIcon, markdown, className, breaks, disableEscapedText, ...props }: MarkDownProps) => {
     const mdeRef = useRef(null)
 
     const getHeight = () => {
@@ -27,7 +22,7 @@ const MarkDown = (
         getHeight()
     }, [markdown])
 
-    function isReadmeInputCheckbox(text: string) {
+    const isReadmeInputCheckbox = (text: string) => {
         if (text.includes(uncheckedCheckboxInputElement) || text.includes(checkedCheckboxInputElement)) {
             return true
         }
@@ -82,9 +77,8 @@ const MarkDown = (
         ...(breaks && { breaks: true }),
     })
 
-    function createMarkup() {
-        return { __html: DOMPurify.sanitize(marked(markdown), { USE_PROFILES: { html: true } }) }
-    }
+    const createMarkup = () => ({ __html: DOMPurify.sanitize(marked(markdown), { USE_PROFILES: { html: true } }) })
+
     return (
         <article
             {...props}
