@@ -149,7 +149,7 @@ const PageHeader = ({
                 showTabs ? 'dc__page-header-tabs__height' : 'dc__page-header__height flex'
             }`}
         >
-            <h1 className="dc__page-header__title dc__content-space  flex fs-16 fw-6 lh-20">
+            <h1 className="dc__page-header__title dc__content-space  flex fs-16 fw-6 lh-20 h-48">
                 <div className="flex left">
                     {showCloseButton && (
                         <button
