@@ -20,7 +20,6 @@ const GenericEmptyState = ({
     layout = 'column',
     contentClassName = '',
     imageStyles = {},
-    subtitleClassName,
 }: GenericEmptyStateType): JSX.Element => {
     const isRowLayout = layout === 'row'
 
@@ -70,7 +69,7 @@ const GenericEmptyState = ({
                 <div className="flex column dc__gap-8">
                     <h4 className="title fw-6 cn-9 mt-0 mb-0 lh-24">{title}</h4>
                     {subTitle && (
-                        <p className={`subtitle ${isRowLayout ? 'subtitle--text-start' : ''} ${subtitleClassName}`}>
+                        <p className={`subtitle ${isRowLayout ? 'subtitle--text-start' : ''}`}>
                             {subTitle}
                         </p>
                     )}

@@ -61,7 +61,6 @@ const ErrorPage = ({ code, image, title, subTitle, imageType }: ErrorPageType) =
             isButtonAvailable={isButtonAvailable}
             renderButton={renderGenerateButton}
             imageType={imageType}
-            subtitleClassName="mb-0-imp"
         />
     )
 }
