@@ -3,7 +3,7 @@ import DOMPurify from 'dompurify'
 import { ScanVulnerabilitiesTableProps, VulnerabilityType } from '../Types'
 import './scanVulnerabilities.css'
 
-export default function ScanVulnerabilitiesTable({ vulnerabilities, hidePolicy }: ScanVulnerabilitiesTableProps) {
+export default function ScanVulnerabilitiesTable({ vulnerabilities, hidePolicy, shouldStick }: ScanVulnerabilitiesTableProps) {
     const renderRow = (vulnerability: VulnerabilityType) => (
         <tr
             className="dc__security-tab__table-row cursor"
@@ -44,7 +44,7 @@ export default function ScanVulnerabilitiesTable({ vulnerabilities, hidePolicy }
     return (
         <table className="security-tab__table">
             <tbody>
-                <tr className="security-tab__table-header">
+                <tr className={`security-tab__table-header ${shouldStick ? 'dc__position-sticky bcn-0 dc__zi-4 dc__top-0' : ''}`}>
                     <th className="security-cell-header security-tab__cell-cve">CVE</th>
                     <th className="security-cell-header security-tab__cell-severity">Severity</th>
                     <th className="security-cell-header security-tab__cell-package">Package</th>

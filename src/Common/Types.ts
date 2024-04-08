@@ -490,6 +490,7 @@ export interface VulnerabilityType {
 export interface ScanVulnerabilitiesTableProps {
     vulnerabilities: VulnerabilityType[]
     hidePolicy?: boolean
+    shouldStick?: boolean
 }
 
 export interface MaterialInfo {
