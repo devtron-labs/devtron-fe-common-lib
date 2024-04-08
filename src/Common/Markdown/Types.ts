@@ -1,7 +1,7 @@
 export interface MarkDownProps {
-    setExpandableIcon: (showExpandedIcon: boolean) => void
+    setExpandableIcon?: (showExpandedIcon: boolean) => void
     markdown: string
     className: string
     breaks: boolean
-    disableEscapedText: boolean
+    disableEscapedText?: boolean
 }
