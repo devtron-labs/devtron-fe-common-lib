@@ -21,7 +21,7 @@ import 'monaco-editor'
 // import YamlWorker from 'web-worker:monaco-yaml/lib/esm/yaml.worker';
 import { Progressing } from '../Progressing'
 import { useWindowSize } from '../Hooks/UseWindowSize/UseWindowSize'
-import { cleanKubeManifest, copyToClipboard, useJsonYaml } from '../Helper'
+import { YAMLStringify, cleanKubeManifest, copyToClipboard, useJsonYaml } from '../Helper'
 import Select from '../Select/Select'
 import RadioGroup from '../RadioGroup/RadioGroup'
 
@@ -300,7 +300,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             }
             let final = value
             if (obj) {
-                final = state.mode === 'json' ? JSON.stringify(obj, null, tabSize) : YAML.stringify(obj, { indent: 2 })
+                final = state.mode === 'json' ? JSON.stringify(obj, null, tabSize) : YAMLStringify(obj, { indent: 2 })
             }
             dispatch({ type: 'setCode', value: final })
         }, [value, noParsing])
