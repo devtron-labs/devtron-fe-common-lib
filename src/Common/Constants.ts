@@ -19,6 +19,14 @@ export const PATTERNS = {
 export const URLS = {
     LOGIN_SSO: '/login/sso',
     PERMISSION_GROUPS: '/global-config/auth/groups',
+    APP: '/app',
+    APP_LIST: 'list',
+    CHARTS_DISCOVER: '/chart-store/discover',
+    JOB: '/job',
+    CREATE_JOB: 'create-job',
+    GETTING_STARTED: 'getting-started',
+    STACK_MANAGER_ABOUT: '/stack-manager/about',
+    APP_LIST_HELM: 'h',
 }
 
 export const ROUTES = {
@@ -28,6 +36,10 @@ export const ROUTES = {
     CD_MATERIAL_GET: 'app/cd-pipeline',
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
+    TELEMETRY_EVENT: 'telemetry/event',
+    SERVER_INFO_API: 'server',
+    ATTRIBUTES_USER: 'attributes/user',
+    UPDATE: 'update',
 }
 
 export enum KEY_VALUE {
@@ -377,3 +389,34 @@ export enum ReactSelectInputAction {
 }
 
 export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
+
+export const API_STATUS_CODES = {
+    UNAUTHORIZED: 401,
+    PERMISSION_DENIED: 403,
+    NOT_FOUND: 404,
+    EXPECTATION_FAILED: 417,
+}
+
+export enum SERVER_MODE {
+    EA_ONLY = 'EA_ONLY',
+    FULL = 'FULL',
+}
+
+export const DISCORD_LINK = 'https://discord.devtron.ai/'
+
+export const POSTHOG_EVENT_ONBOARDING = {
+    PREVIEW: 'Preview',
+    DEPLOY_CUSTOM_APP_CI_CD: 'Deploy custom app using CI/CD pipelines',
+    INSTALL_CUSTOM_CI_CD: 'Install CI/CD',
+    VIEW_APPLICATION: 'View helm application',
+    BROWSE_HELM_CHART: 'Browse helm chart',
+    CONNECT_CLUSTER: 'Connect cluster',
+    CONNECT_CHART_REPOSITORY: 'Connect chart repository',
+    TOOLTIP_OKAY: 'Tooltip okay',
+    TOOLTIP_DONT_SHOW_AGAIN: 'Tooltip Dont show again',
+    HELP: 'Clicked Help',
+    SKIP_AND_EXPLORE_DEVTRON: 'SkippedOnboarding',
+}
+export const MAX_LOGIN_COUNT = 5
+export const BULK_EDIT_HEADER = 'Bulk Edit'
+export const LOGIN_COUNT = 'login-count'
