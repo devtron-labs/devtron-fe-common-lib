@@ -124,6 +124,13 @@ export interface ErrorPageType
     code: number
 }
 
+export interface ErrorScreenManagerType {
+    code?: number
+    reload?: (...args) => any
+    subtitle?: React.ReactChild
+    reloadClass?: string
+}
+
 export enum ImageType {
     Large = 'large',
     Medium = 'medium',

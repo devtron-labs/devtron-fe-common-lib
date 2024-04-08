@@ -6,21 +6,9 @@ import { ERROR_STATUS_CODE, ERROR_EMPTY_SCREEN } from './Constants'
 import GenericEmptyState from './EmptyState/GenericEmptyState'
 import Reload from './Reload'
 import ErrorPage from './ErrorPage'
-import { ImageType } from './Types'
+import { ErrorScreenManagerType, ImageType } from './Types'
 
-export const ErrorScreenManager = ({
-    code,
-    reload,
-    subtitle,
-    subtitleClass,
-    reloadClass,
-}: {
-    code?: number
-    reload?: (...args) => any
-    subtitle?: React.ReactChild
-    subtitleClass?: string
-    reloadClass?: string
-}) => {
+export const ErrorScreenManager = ({ code, reload, subtitle, reloadClass }: ErrorScreenManagerType) => {
     const getMessage = () => {
         switch (code) {
             case ERROR_STATUS_CODE.BAD_REQUEST:
