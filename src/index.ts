@@ -49,6 +49,7 @@ export interface customEnv {
     ENABLE_EXTERNAL_ARGO_CD: boolean
     API_BATCH_SIZE: number
     SERVICE_WORKER_TIMEOUT?: string
+    HIDE_RELEASES?: boolean
 }
 declare global {
     interface Window {
