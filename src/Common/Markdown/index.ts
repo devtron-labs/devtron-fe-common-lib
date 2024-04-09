@@ -1,2 +1,2 @@
 // eslint-disable-next-line import/prefer-default-export
-export { default as Markdown } from './MarkDown'
+export { default as MarkDown } from './MarkDown'
