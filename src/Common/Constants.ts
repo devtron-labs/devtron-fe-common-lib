@@ -394,6 +394,7 @@ export enum ReactSelectInputAction {
 }
 
 export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
+
 // Excluding 0 from this list as 0 is a valid value
 export const EXCLUDED_FALSY_VALUES = [undefined, null, '', NaN] as const
 
