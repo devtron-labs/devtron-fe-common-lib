@@ -182,4 +182,5 @@ export enum Nodes {
     Overview = 'Overview',
 }
 
+// FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
 export type NodeType = keyof typeof Nodes
