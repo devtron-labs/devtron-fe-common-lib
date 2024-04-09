@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "0.0.70",
+    "version": "0.0.70-patch-1",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -76,7 +76,9 @@
         "react-dom": "^17.0.2",
         "react-router": "^5.3.0",
         "react-router-dom": "^5.3.0",
-        "react-draggable": "^4.4.5"
+        "react-draggable": "^4.4.5",
+        "marked": "4.3.0",
+        "dompurify": "^3.0.2"
     },
     "dependencies": {
         "react-monaco-editor": "^0.54.0",
