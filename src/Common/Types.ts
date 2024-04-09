@@ -123,13 +123,17 @@ export interface ErrorPageType
     code: number
 }
 
-export interface ErrorScreenManagerType {
+export interface ErrorScreenManagerProps {
     code?: number
     reload?: (...args) => any
     subtitle?: React.ReactChild
     reloadClass?: string
 }
 
+export interface ErrorScreenNotAuthorizedProps {
+    subtitle?: React.ReactChild
+    title?: string
+}
 export enum ImageType {
     Large = 'large',
     Medium = 'medium',

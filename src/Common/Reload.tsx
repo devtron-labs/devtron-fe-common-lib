@@ -1,10 +1,9 @@
 import loadingFailure from '../Assets/Img/ic-loading-failure.png'
 import { ReloadType } from './Types'
+import { refresh } from './Helper'
 
 export default function Reload({ reload, className = '' }: ReloadType) {
-    function refresh(e) {
-        window.location.reload()
-    }
+
     return (
         <article className={`flex w-100 h-100 ${className}`}>
             <div className="flex column w-250 dc__align-center" data-testid="reload">
