@@ -83,10 +83,10 @@ const MarkDown = ({ setExpandableIcon, markdown, className, breaks, disableEscap
         <article
             {...props}
             ref={mdeRef}
-            className={`deploy-chart__readme-markdown  ${className}`}
+            className={`markdown ${className}`}
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={createMarkup()}
-            data-testid="article-for-bulk-edit"
+            data-testid="markdown-rendered-content"
         />
     )
 }
