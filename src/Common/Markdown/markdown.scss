@@ -1,3 +1,50 @@
 .markdown {
     padding: 0 20px 20px 20px;
+
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        border-spacing: 0;
+        border-collapse: collapse;
+
+        tbody {
+            td,
+            th {
+                padding: 6px 13px;
+                border: 1px solid #dfe2e5;
+            }
+
+            tr {
+                height: 37px;
+            }
+
+            tr:nth-child(2n + 3) {
+                background: #f6f8fa;
+            }
+
+            tr:first-child {
+                th {
+                    text-align: center;
+                }
+            }
+        }
+
+        code {
+            background-color: rgba(27, 31, 35, 0.05);
+        }
+    }
+
+    pre {
+        padding: 16px;
+        background-color: #f6f8fa;
+        border-radius: 4px;
+        border: unset;
+    }
+
+    a.anchor {
+        color: var(--N900);
+    }
 }
