@@ -89,6 +89,7 @@ const GenericDescription = ({
         if (isAuthorized()) {
             let isConfirmed: boolean = true
             if (isDescriptionModified) {
+                // eslint-disable-next-line no-alert
                 isConfirmed = window.confirm(CLUSTER_DESCRIPTION_UNSAVED_CHANGES_MSG)
             }
             if (isConfirmed) {
