@@ -2,6 +2,7 @@ import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import { useEffect, useRef } from 'react'
 import { MarkDownProps } from './Types'
+import './markdown.scss'
 
 const uncheckedCheckboxInputElement = `<input checked="" disabled="" type="checkbox">`
 const checkedCheckboxInputElement = `<input disabled="" type="checkbox">`
