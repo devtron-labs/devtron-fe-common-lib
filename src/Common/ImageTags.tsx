@@ -256,7 +256,7 @@ export const ImageTagsContainer = ({
         <InfoIconTippy
             heading="Release tags"
             additionalContent={getBuildContextAdditionalContent()}
-            className="fcn-5 ml-4 icon-dim-16"
+            iconClassName="fcn-5 ml-4 icon-dim-16"
         />
     )
 

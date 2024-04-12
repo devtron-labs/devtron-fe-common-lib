@@ -105,13 +105,13 @@ export interface InfoIconTippyProps
         | 'documentationLink'
         | 'documentationLinkText'
         | 'additionalContent'
-        | 'className'
         | 'placement'
         | 'Icon'
         | 'headingInfo'
     > {
     dataTestid?: string
     children?: TippyCustomizedProps['children']
+    iconClassName?: string
 }
 
 export interface GenericEmptyStateType {

@@ -18,7 +18,7 @@ const Descriptor = ({
                 infoText={tippyInfoText ?? BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
                 additionalContent={tippyAdditionalContent}
                 heading={BUILD_INFRA_TEXT.HEADING}
-                className="icon-dim-20"
+                iconClassName="icon-dim-20"
             />
         </div>
 

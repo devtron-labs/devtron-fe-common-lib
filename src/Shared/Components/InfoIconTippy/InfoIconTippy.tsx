@@ -10,7 +10,7 @@ const InfoIconTippy = ({
     documentationLink,
     documentationLinkText,
     additionalContent,
-    className = 'icon-dim-16',
+    iconClassName = 'icon-dim-16',
     placement = 'bottom',
     dataTestid = 'info-tippy-button',
     children,
@@ -37,7 +37,7 @@ const InfoIconTippy = ({
                 aria-label="Info Icon"
                 data-testid={dataTestid}
             >
-                <ICHelpOutline className={className} />
+                <ICHelpOutline className={iconClassName} />
             </button>
         )}
     </TippyCustomized>
