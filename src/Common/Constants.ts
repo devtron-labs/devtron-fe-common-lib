@@ -40,7 +40,6 @@ export const ROUTES = {
     SERVER_INFO_API: 'server',
     ATTRIBUTES_USER: 'attributes/user',
     UPDATE: 'update',
-    // TODO : Remove from dashboard and export from here
     CLUSTER_NOTE: 'cluster/note',
     APPLICATION_NOTE: 'app/note',
 }
@@ -424,10 +423,6 @@ export const MAX_LOGIN_COUNT = 5
 export const BULK_EDIT_HEADER = 'Bulk Edit'
 export const LOGIN_COUNT = 'login-count'
 
-// TODO: delete from fe-lib and use from here
-
-//---------------------------------------------------
-
 export const DATE_TIME_FORMATS = {
     TWELVE_HOURS_FORMAT: 'ddd, DD MMM YYYY, hh:mm A',
     TWELVE_HOURS_FORMAT_WITHOUT_WEEKDAY: 'DD MMM YYYY, hh:mm A',
@@ -442,5 +437,3 @@ export const defaultClusterNote = `## Describe this cluster
 Describe your Kubernetes cluster in a few words. This will help others understand the purpose and configuration of your cluster. For example, you might mention the number of worker nodes, the types of applications running on the cluster, or any relevant security considerations. Keep it concise and informative!
 `
 export const defaultClusterShortDescription = 'Write a short description for this cluster'
-
-//--------------------------------------------------

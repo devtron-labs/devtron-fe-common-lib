@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import Tippy from '@tippyjs/react'
 import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import { toast } from 'react-toastify'
@@ -16,22 +17,26 @@ import {
 import './genericDescription.scss'
 import { ReactComponent as Edit } from '../../Assets/Icon/ic-pencil.svg'
 import { GenericDescriptionProps } from './types'
-import { DEFAULT_MARKDOWN_EDITOR_PREVIEW_MESSAGE, MARKDOWN_EDITOR_COMMANDS } from '../Markdown/constant'
+import {
+    DEFAULT_MARKDOWN_EDITOR_PREVIEW_MESSAGE,
+    MARKDOWN_EDITOR_COMMANDS,
+    MARKDOWN_EDITOR_COMMAND_TITLE,
+    MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT,
+} from '../Markdown/constant'
 import { MDEditorSelectedTabType, MD_EDITOR_TAB } from './constant'
 import { patchApplicationNote, patchClusterNote } from './service'
 
-// Import images from dashboard
-// import { ReactComponent as HeaderIcon } from '../../../assets/icons/mdeditor/ic-header.svg'
-// import { ReactComponent as BoldIcon } from '../../../assets/icons/mdeditor/ic-bold.svg'
-// import { ReactComponent as ItalicIcon } from '../../../assets/icons/mdeditor/ic-italic.svg'
-// import { ReactComponent as LinkIcon } from '../../../assets/icons/mdeditor/ic-link.svg'
-// import { ReactComponent as StrikethroughIcon } from '../../../assets/icons/mdeditor/ic-strikethrough.svg'
-// import { ReactComponent as CodeIcon } from '../../../assets/icons/mdeditor/ic-code.svg'
-// import { ReactComponent as QuoteIcon } from '../../../assets/icons/mdeditor/ic-quote.svg'
-// import { ReactComponent as ImageIcon } from '../../../assets/icons/mdeditor/ic-image.svg'
-// import { ReactComponent as OrderedListIcon } from '../../../assets/icons/mdeditor/ic-ordered-list.svg'
-// import { ReactComponent as UnorderedListIcon } from '../../../assets/icons/mdeditor/ic-unordered-list.svg'
-// import { ReactComponent as CheckedListIcon } from '../../../assets/icons/mdeditor/ic-checked-list.svg'
+import { ReactComponent as HeaderIcon } from '../../Assets/Icon/ic-header.svg'
+import { ReactComponent as BoldIcon } from '../../Assets/Icon/ic-bold.svg'
+import { ReactComponent as ItalicIcon } from '../../Assets/Icon/ic-italic.svg'
+import { ReactComponent as LinkIcon } from '../../Assets/Icon/ic-link.svg'
+import { ReactComponent as StrikethroughIcon } from '../../Assets/Icon/ic-strikethrough.svg'
+import { ReactComponent as CodeIcon } from '../../Assets/Icon/ic-code.svg'
+import { ReactComponent as QuoteIcon } from '../../Assets/Icon/ic-quote.svg'
+import { ReactComponent as ImageIcon } from '../../Assets/Icon/ic-image.svg'
+import { ReactComponent as OrderedListIcon } from '../../Assets/Icon/ic-ordered-list.svg'
+import { ReactComponent as UnorderedListIcon } from '../../Assets/Icon/ic-unordered-list.svg'
+import { ReactComponent as CheckedListIcon } from '../../Assets/Icon/ic-checked-list.svg'
 
 const GenericDescription = ({
     isClusterTerminal,
@@ -171,156 +176,155 @@ const GenericDescription = ({
     }
 
     // TODO: add commandName
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const editorCustomIcon = (commandName: string): JSX.Element => (
-        // switch (commandName) {
-        //     case MARKDOWN_EDITOR_COMMAND_TITLE.HEADER:
-        //         return (
-        //             <Tippy
-        //                 className="default-tt"
-        //                 arrow={false}
-        //                 placement="bottom"
-        //                 content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
-        //             >
-        //                 <div className="flex">
-        //                     <HeaderIcon className="icon-dim-16 flex" />
-        //                 </div>
-        //             </Tippy>
-        //         )
-        //     case MARKDOWN_EDITOR_COMMAND_TITLE.BOLD:
-        //         return (
-        //             <Tippy
-        //                 className="default-tt"
-        //                 arrow={false}
-        //                 placement="bottom"
-        //                 content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
-        //             >
-        //                 <div className="flex">
-        //                     <BoldIcon className="icon-dim-16 flex" />
-        //                 </div>
-        //             </Tippy>
-        //         )
-        //     case MARKDOWN_EDITOR_COMMAND_TITLE.ITALIC:
-        //         return (
-        //             <Tippy
-        //                 className="default-tt"
-        //                 arrow={false}
-        //                 placement="bottom"
-        //                 content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
-        //             >
-        //                 <div className="flex">
-        //                     <ItalicIcon className="icon-dim-16 flex" />
-        //                 </div>
-        //             </Tippy>
-        //         )
-        //     case MARKDOWN_EDITOR_COMMAND_TITLE.STRIKETHROUGH:
-        //         return (
-        //             <Tippy
-        //                 className="default-tt"
-        //                 arrow={false}
-        //                 placement="bottom"
-        //                 content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
-        //             >
-        //                 <div className="flex">
-        //                     <StrikethroughIcon className="icon-dim-16 flex" />
-        //                 </div>
-        //             </Tippy>
-        //         )
-        //     case MARKDOWN_EDITOR_COMMAND_TITLE.LINK:
-        //         return (
-        //             <Tippy
-        //                 className="default-tt"
-        //                 arrow={false}
-        //                 placement="bottom"
-        //                 content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
-        //             >
-        //                 <div className="flex">
-        //                     <LinkIcon className="icon-dim-16 flex" />
-        //                 </div>
-        //             </Tippy>
-        //         )
-        //     case MARKDOWN_EDITOR_COMMAND_TITLE.QUOTE:
-        //         return (
-        //             <Tippy
-        //                 className="default-tt"
-        //                 arrow={false}
-        //                 placement="bottom"
-        //                 content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
-        //             >
-        //                 <div className="flex">
-        //                     <QuoteIcon className="icon-dim-16 flex" />
-        //                 </div>
-        //             </Tippy>
-        //         )
-        //     case MARKDOWN_EDITOR_COMMAND_TITLE.CODE:
-        //         return (
-        //             <Tippy
-        //                 className="default-tt"
-        //                 arrow={false}
-        //                 placement="bottom"
-        //                 content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
-        //             >
-        //                 <div className="flex">
-        //                     <CodeIcon className="icon-dim-16 flex" />
-        //                 </div>
-        //             </Tippy>
-        //         )
-        //     case MARKDOWN_EDITOR_COMMAND_TITLE.IMAGE:
-        //         return (
-        //             <Tippy
-        //                 className="default-tt"
-        //                 arrow={false}
-        //                 placement="bottom"
-        //                 content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
-        //             >
-        //                 <div className="flex">
-        //                     <ImageIcon className="icon-dim-16 flex" />
-        //                 </div>
-        //             </Tippy>
-        //         )
-        //     case MARKDOWN_EDITOR_COMMAND_TITLE.UNORDERED_LIST:
-        //         return (
-        //             <Tippy
-        //                 className="default-tt"
-        //                 arrow={false}
-        //                 placement="bottom"
-        //                 content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
-        //             >
-        //                 <div className="flex">
-        //                     <UnorderedListIcon className="icon-dim-16 flex" />
-        //                 </div>
-        //             </Tippy>
-        //         )
-        //     case MARKDOWN_EDITOR_COMMAND_TITLE.ORDERED_LIST:
-        //         return (
-        //             <Tippy
-        //                 className="default-tt"
-        //                 arrow={false}
-        //                 placement="bottom"
-        //                 content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
-        //             >
-        //                 <div className="flex">
-        //                     <OrderedListIcon className="icon-dim-16 flex" />
-        //                 </div>
-        //             </Tippy>
-        //         )
-        //     case MARKDOWN_EDITOR_COMMAND_TITLE.CHECKED_LIST:
-        //         return (
-        //             <Tippy
-        //                 className="default-tt"
-        //                 arrow={false}
-        //                 placement="bottom"
-        //                 content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
-        //             >
-        //                 <div className="flex">
-        //                     <CheckedListIcon className="icon-dim-16 flex" />
-        //                 </div>
-        //             </Tippy>
-        //         )
-        // }
-        // TODO : Return the above switch case and remove the below code after importing all the icons from dashboard
-        <Edit className="icon-dim-16 flex" />
-    )
+    // eslint-disable-next-line consistent-return
+    const editorCustomIcon = (commandName: string): JSX.Element => {
+        // eslint-disable-next-line default-case
+        switch (commandName) {
+            case MARKDOWN_EDITOR_COMMAND_TITLE.HEADER:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <HeaderIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.BOLD:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <BoldIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.ITALIC:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <ItalicIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.STRIKETHROUGH:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <StrikethroughIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.LINK:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <LinkIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.QUOTE:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <QuoteIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.CODE:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <CodeIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.IMAGE:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <ImageIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.UNORDERED_LIST:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <UnorderedListIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.ORDERED_LIST:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <OrderedListIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.CHECKED_LIST:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <CheckedListIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+        }
+    }
 
     return (
         <div className={`cluster__body-details ${initialEditDescriptionView ? 'pb-16 dc__overflow-scroll' : ''}`}>

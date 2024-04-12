@@ -1,7 +1,5 @@
 import { ResponseType } from '..'
 
-// TODO: remove interface from dashboard
-
 export interface GenericDescriptionProps {
     isClusterTerminal: boolean
     clusterId?: string
