@@ -19,6 +19,14 @@ export const PATTERNS = {
 export const URLS = {
     LOGIN_SSO: '/login/sso',
     PERMISSION_GROUPS: '/global-config/auth/groups',
+    APP: '/app',
+    APP_LIST: 'list',
+    CHARTS_DISCOVER: '/chart-store/discover',
+    JOB: '/job',
+    CREATE_JOB: 'create-job',
+    GETTING_STARTED: 'getting-started',
+    STACK_MANAGER_ABOUT: '/stack-manager/about',
+    APP_LIST_HELM: 'h',
 }
 
 export const ROUTES = {
@@ -28,6 +36,10 @@ export const ROUTES = {
     CD_MATERIAL_GET: 'app/cd-pipeline',
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
+    TELEMETRY_EVENT: 'telemetry/event',
+    SERVER_INFO_API: 'server',
+    ATTRIBUTES_USER: 'attributes/user',
+    UPDATE: 'update',
 }
 
 export enum KEY_VALUE {
@@ -278,6 +290,97 @@ export enum SortingOrder {
  */
 export const DEFAULT_BASE_PAGE_SIZE = 20
 
+/**
+ * Deployment Window
+ */
+export enum MODAL_TYPE {
+    HIBERNATE = 'HIBERNATE',
+    UNHIBERNATE = 'UNHIBERNATE',
+    RESTORE = 'RESTORE',
+    DEPLOY = 'DEPLOY',
+    RESOURCE = 'RESOURCE',
+    RESTART = 'RESTART',
+    PIPELINE = 'PIPELINE',
+    OVERVIEW = 'OVERVIEW',
+    APP_DETAILS_STATUS = 'APP_DETAILS_STATUS',
+}
+
+export enum ACTION_STATE {
+    ALLOWED = 'ALLOWED',
+    PARTIAL = 'PARTIAL',
+    BLOCKED = 'BLOCKED',
+}
+
+export enum DEPLOYMENT_WINDOW_TYPE {
+    MAINTENANCE = 'MAINTENANCE',
+    BLACKOUT = 'BLACKOUT',
+}
+export const arrowUnicode = '\u279d'
+
+export enum WEEK_DAYS_ENUM {
+    SUNDAY = 'SUNDAY',
+    MONDAY = 'MONDAY',
+    TUESDAY = 'TUESDAY',
+    WEDNESDAY = 'WEDNESDAY',
+    THURSDAY = 'THURSDAY',
+    FRIDAY = 'FRIDAY',
+    SATURDAY = 'SATURDAY',
+}
+
+export enum FREQUENCY_ENUM {
+    FIXED = 'FIXED',
+    DAILY = 'DAILY',
+    WEEKLY = 'WEEKLY',
+    MONTHLY = 'MONTHLY',
+    YEARLY = 'YEARLY',
+    WEEKLY_RANGE = 'WEEKLY_RANGE',
+}
+
+export const TIME_FORMAT = {
+    DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
+}
+
+export function getOrdinal(number) {
+    if (number % 100 >= 11 && number % 100 <= 13) {
+        return `${number}th`
+    }
+    switch (number % 10) {
+        case 1:
+            return `${number}st`
+        case 2:
+            return `${number}nd`
+        case 3:
+            return `${number}rd`
+        default:
+            return `${number}th`
+    }
+}
+
+export const TIME_HOUR_SUFFIX_FOR_12_HOUR_FORMAT = {
+    AM: 'AM',
+    PM: 'PM',
+    MIDNIGHT: 'midnight',
+    NOON: 'noon',
+}
+
+export const getTimeStampAMPMSuffix = (time: string): string => {
+    // time is in format HH:mm 24hr format
+    const [hoursStr, minutesStr] = time.split(':')
+    const hours = parseInt(hoursStr, 10)
+    const minutes = parseInt(minutesStr, 10)
+
+    if (hours === 12 && minutes === 0) {
+        return TIME_HOUR_SUFFIX_FOR_12_HOUR_FORMAT.NOON
+    }
+    if (hours === 0 && minutes === 0) {
+        return TIME_HOUR_SUFFIX_FOR_12_HOUR_FORMAT.MIDNIGHT
+    }
+    if (hours >= 12) {
+        return TIME_HOUR_SUFFIX_FOR_12_HOUR_FORMAT.PM
+    }
+    return TIME_HOUR_SUFFIX_FOR_12_HOUR_FORMAT.AM
+}
+
 export enum ReactSelectInputAction {
     inputChange = 'input-change',
     selectOption = 'select-option',
@@ -286,3 +389,34 @@ export enum ReactSelectInputAction {
 }
 
 export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
+
+export const API_STATUS_CODES = {
+    UNAUTHORIZED: 401,
+    PERMISSION_DENIED: 403,
+    NOT_FOUND: 404,
+    EXPECTATION_FAILED: 417,
+}
+
+export enum SERVER_MODE {
+    EA_ONLY = 'EA_ONLY',
+    FULL = 'FULL',
+}
+
+export const DISCORD_LINK = 'https://discord.devtron.ai/'
+
+export const POSTHOG_EVENT_ONBOARDING = {
+    PREVIEW: 'Preview',
+    DEPLOY_CUSTOM_APP_CI_CD: 'Deploy custom app using CI/CD pipelines',
+    INSTALL_CUSTOM_CI_CD: 'Install CI/CD',
+    VIEW_APPLICATION: 'View helm application',
+    BROWSE_HELM_CHART: 'Browse helm chart',
+    CONNECT_CLUSTER: 'Connect cluster',
+    CONNECT_CHART_REPOSITORY: 'Connect chart repository',
+    TOOLTIP_OKAY: 'Tooltip okay',
+    TOOLTIP_DONT_SHOW_AGAIN: 'Tooltip Dont show again',
+    HELP: 'Clicked Help',
+    SKIP_AND_EXPLORE_DEVTRON: 'SkippedOnboarding',
+}
+export const MAX_LOGIN_COUNT = 5
+export const BULK_EDIT_HEADER = 'Bulk Edit'
+export const LOGIN_COUNT = 'login-count'
