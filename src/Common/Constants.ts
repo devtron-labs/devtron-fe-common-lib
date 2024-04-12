@@ -433,7 +433,3 @@ export const CLUSTER_DESCRIPTION_UPDATE_MSG = 'Saved changes'
 export const CLUSTER_DESCRIPTION_EMPTY_ERROR_MSG =
     'Readme cannot be empty. Please add some information or cancel the changes.'
 export const CLUSTER_DESCRIPTION_UNSAVED_CHANGES_MSG = 'Are you sure you want to discard your changes?'
-export const defaultClusterNote = `## Describe this cluster
-Describe your Kubernetes cluster in a few words. This will help others understand the purpose and configuration of your cluster. For example, you might mention the number of worker nodes, the types of applications running on the cluster, or any relevant security considerations. Keep it concise and informative!
-`
-export const defaultClusterShortDescription = 'Write a short description for this cluster'
