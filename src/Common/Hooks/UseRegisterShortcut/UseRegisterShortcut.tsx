@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { context } from './UseRegisterShortcutContext'
 
-const useRegisterShorcut = () => useContext(context)
+const useRegisterShortcut = () => useContext(context)
 
-export default useRegisterShorcut
+export default useRegisterShortcut

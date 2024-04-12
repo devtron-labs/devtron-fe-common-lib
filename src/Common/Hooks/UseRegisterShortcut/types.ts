@@ -1,6 +1,6 @@
 export interface UseRegisterShortcutContextType {
     registerShortcut: boolean
-    setRegisterShortcut: (allowShorcut: boolean) => void
+    setRegisterShortcut: (allowShortcut: boolean) => void
 }
 
 export interface UseRegisterShortcutProviderType {

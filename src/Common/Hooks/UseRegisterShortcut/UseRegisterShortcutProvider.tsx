@@ -8,7 +8,7 @@ const UseRegisterShortcutProvider = ({ children }: UseRegisterShortcutProviderTy
     const providerValue = useMemo(
         () => ({
             registerShortcut,
-            setRegisterShortcut: (allowShorcut: boolean) => setRegisterShortcut(allowShorcut),
+            setRegisterShortcut: (allowShortcut: boolean) => setRegisterShortcut(allowShortcut),
         }),
         [registerShortcut],
     )
