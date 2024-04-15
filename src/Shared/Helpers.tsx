@@ -1,3 +1,6 @@
+import moment from 'moment'
+import { ZERO_TIME_STRING } from '../Common'
+
 interface HighlightSearchTextProps {
     /**
      * The text to be highlighted
@@ -26,4 +29,25 @@ export const highlightSearchText = ({ searchText, text, highlightClasses }: High
     } catch (error) {
         return text
     }
+}
+
+export function ISTTimeModal(ts: string, isRelativeTime = false) {
+    let timestamp = ''
+    try {
+        if (ts && ts.length) {
+            const date = moment(ts)
+            if (isRelativeTime) {
+                // check for minimum date (zero date) (Invoking an empty time.Time struct literal will return Go's zero date)
+                if (ts !== ZERO_TIME_STRING) {
+                    timestamp = date.fromNow()
+                }
+            } else {
+                timestamp = date.format('ddd DD MMM YYYY HH:mm:ss')
+            }
+        }
+    } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error Parsing Date:', ts)
+    }
+    return timestamp
 }
