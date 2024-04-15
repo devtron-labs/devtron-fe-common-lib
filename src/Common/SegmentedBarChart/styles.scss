@@ -1,0 +1,13 @@
+.rounded-ends {
+    &:first-child {
+        border-radius: 100% 0 0 100%;
+    }
+
+    &:last-child {
+        border-radius: 0 100% 100% 0;
+    }
+}
+
+.dot {
+    border-radius: 100%;
+}
