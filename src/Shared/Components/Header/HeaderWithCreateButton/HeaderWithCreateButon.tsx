@@ -14,6 +14,7 @@ interface HeaderWithCreateButtonProps {
     headerName: string
     buttonContent: string
     buttonType: string
+    hideRelease: boolean
 }
 
 export enum PageHeaderButtonType {
@@ -22,7 +23,12 @@ export enum PageHeaderButtonType {
     RELEASE = 'release',
 }
 
-export const HeaderWithCreateButton = ({ headerName, buttonContent, buttonType }: HeaderWithCreateButtonProps) => {
+export const HeaderWithCreateButton = ({
+    headerName,
+    buttonContent,
+    buttonType,
+    hideRelease,
+}: HeaderWithCreateButtonProps) => {
     const params = useParams<{ appType: string }>()
     const history = useHistory()
     const location = useLocation()
@@ -50,14 +56,14 @@ export const HeaderWithCreateButton = ({ headerName, buttonContent, buttonType }
     }
 
     const dropdownOptions = (
-        <div className="flexbox-col w-296 pt-4 pb-4 bcn-0 br-4">
+        <div className="flexbox-col w-296 pt-4 pb-4 bcn-0 br-4 create-modal-wrapper">
             <button
                 type="button"
                 className="flexbox pl-10 pr-10 pt-8 pb-8 dc__transparent dc__gap-12"
                 onClick={openCreateDevtronAppModel}
             >
                 <div className="flexbox-col justify-start">
-                    <AddIcon className="icon-dim-20" />
+                    <AddIcon className="icon-dim-20 fcn-9" />
                 </div>
                 <div className="flexbox-col">
                     <span className="flexbox lh-20 cn-9 fs-13 fw-6">Custom Application</span>
@@ -72,7 +78,7 @@ export const HeaderWithCreateButton = ({ headerName, buttonContent, buttonType }
                 onClick={redirectToHelmAppDiscover}
             >
                 <div className="flexbox-col justify-start">
-                    <ChartIcon className="icon-dim-20" />
+                    <ChartIcon className="icon-dim-20 fcn-9" />
                 </div>
                 <div className="flexbox-col">
                     <span className="flexbox lh-20 cn-9 fs-13 fw-6">App from chart store</span>
@@ -87,7 +93,7 @@ export const HeaderWithCreateButton = ({ headerName, buttonContent, buttonType }
                 onClick={openCreateJobModel}
             >
                 <div className="flexbox-col justify-start">
-                    <JobIcon className="icon-dim-20 icon-fill-n6" />
+                    <JobIcon className="icon-dim-20 scn-9" />
                 </div>
                 <div className="flexbox-col">
                     <span className="flexbox lh-20 cn-9 fs-13 fw-6">Job</span>
@@ -96,21 +102,23 @@ export const HeaderWithCreateButton = ({ headerName, buttonContent, buttonType }
                     </span>
                 </div>
             </button>
-            <button
-                type="button"
-                className="flexbox pl-10 pr-10 pt-8 pb-8 dc__transparent dc__gap-12"
-                onClick={openCreateReleaseModal}
-            >
-                <div className="flexbox-col justify-start">
-                    <ReleasesIcon className="icon-dim-20" />
-                </div>
-                <div className="flexbox-col">
-                    <span className="flexbox lh-20 cn-9 fs-13 fw-6">Release</span>
-                    <span className="flexbox lh-18 cn-7 fs-12 fw-4 text-left">
-                        Create release package for bulk deployments
-                    </span>
-                </div>
-            </button>
+            {!hideRelease && (
+                <button
+                    type="button"
+                    className="flexbox pl-10 pr-10 pt-8 pb-8 dc__transparent dc__gap-12"
+                    onClick={openCreateReleaseModal}
+                >
+                    <div className="flexbox-col justify-start">
+                        <ReleasesIcon className="icon-dim-20" />
+                    </div>
+                    <div className="flexbox-col">
+                        <span className="flexbox lh-20 cn-9 fs-13 fw-6">Release</span>
+                        <span className="flexbox lh-18 cn-7 fs-12 fw-4 text-left">
+                            Create release package for bulk deployments
+                        </span>
+                    </div>
+                </button>
+            )}
         </div>
     )
 
