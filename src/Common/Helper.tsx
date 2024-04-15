@@ -541,10 +541,11 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
  * @param url URL to which the search params needs to be added
  * @param params Object for the search parameters
  */
-export const getUrlWithSearchParams = (url: string, params: Record<string | number, any>) => {
+export const getUrlWithSearchParams = (url: string, params: Record<string | number, any> = {}) => {
     const searchParams = new URLSearchParams()
     Object.keys(params).forEach((key) => {
-        if (params[key]) {
+        // TODO: Resolve conflict with image promotion
+        if (![null, NaN, undefined].includes(params[key])) {
             if (Array.isArray(params[key])) {
                 params[key].forEach((val) => {
                     searchParams.append(key, val)
