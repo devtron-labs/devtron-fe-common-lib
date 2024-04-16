@@ -12,8 +12,8 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
     }),
     menuList: (base) => ({
         ...base,
-        paddingTop: 0,
-        paddingBottom: 0,
+        padding: 0,
+        paddingBlock: '4px',
         cursor: 'pointer',
     }),
     control: (base, state) => ({
