@@ -544,7 +544,7 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
 export const getUrlWithSearchParams = (url: string, params: Record<string | number, any> = {}) => {
     const searchParams = new URLSearchParams()
     Object.keys(params).forEach((key) => {
-        // TODO: Resolve conflict with image promotion
+        // TODO (Abhishek): Resolve conflict with image promotion
         if (![null, NaN, undefined].includes(params[key])) {
             if (Array.isArray(params[key])) {
                 params[key].forEach((val) => {
