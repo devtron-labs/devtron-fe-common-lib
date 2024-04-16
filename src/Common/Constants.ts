@@ -429,7 +429,6 @@ export const DATE_TIME_FORMATS = {
     TWELVE_HOURS_EXPORT_FORMAT: 'DD-MMM-YYYY hh.mm A',
 }
 
-export const CLUSTER_DESCRIPTION_UPDATE_MSG = 'Saved changes'
-export const CLUSTER_DESCRIPTION_EMPTY_ERROR_MSG =
-    'Readme cannot be empty. Please add some information or cancel the changes.'
-export const CLUSTER_DESCRIPTION_UNSAVED_CHANGES_MSG = 'Are you sure you want to discard your changes?'
+export const DESCRIPTION_UPDATE_MSG = 'Saved changes'
+export const DESCRIPTION_EMPTY_ERROR_MSG = 'Readme cannot be empty. Please add some information or cancel the changes.'
+export const DESCRIPTION_UNSAVED_CHANGES_MSG = 'Are you sure you want to discard your changes?'

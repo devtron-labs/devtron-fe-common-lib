@@ -1,15 +1,13 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import Tippy from '@tippyjs/react'
 import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import { toast } from 'react-toastify'
-import moment from 'moment'
 import Markdown from '../Markdown/MarkDown'
 import {
-    CLUSTER_DESCRIPTION_EMPTY_ERROR_MSG,
-    CLUSTER_DESCRIPTION_UNSAVED_CHANGES_MSG,
-    CLUSTER_DESCRIPTION_UPDATE_MSG,
-    DATE_TIME_FORMATS,
+    DESCRIPTION_EMPTY_ERROR_MSG,
+    DESCRIPTION_UNSAVED_CHANGES_MSG,
+    DESCRIPTION_UPDATE_MSG,
     deepEqual,
     showError,
     toastAccessDenied,
@@ -24,8 +22,6 @@ import {
     MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT,
 } from '../Markdown/constant'
 import { MDEditorSelectedTabType, MD_EDITOR_TAB } from './constant'
-import { patchApplicationNote, patchClusterNote } from './service'
-
 import { ReactComponent as HeaderIcon } from '../../Assets/Icon/ic-header.svg'
 import { ReactComponent as BoldIcon } from '../../Assets/Icon/ic-bold.svg'
 import { ReactComponent as ItalicIcon } from '../../Assets/Icon/ic-italic.svg'
@@ -39,51 +35,32 @@ import { ReactComponent as UnorderedListIcon } from '../../Assets/Icon/ic-unorde
 import { ReactComponent as CheckedListIcon } from '../../Assets/Icon/ic-checked-list.svg'
 
 const GenericDescription = ({
-    isClusterTerminal,
-    clusterId,
     isSuperAdmin,
-    appId,
-    descriptionId,
-    initialDescriptionText,
-    initialDescriptionUpdatedBy,
-    initialDescriptionUpdatedOn,
+    descriptionText,
+    descriptionUpdatedBy,
+    descriptionUpdatedOn,
     initialEditDescriptionView,
-    updateCreateAppFormDescription,
-    appMetaInfo,
     tabIndex,
+    updateDescription,
+    releaseId,
 }: GenericDescriptionProps) => {
     const [isEditDescriptionView, setEditDescriptionView] = useState<boolean>(initialEditDescriptionView)
-    const [descriptionText, setDescriptionText] = useState<string>(initialDescriptionText)
-    const [descriptionUpdatedBy, setDescriptionUpdatedBy] = useState<string>(initialDescriptionUpdatedBy)
-    const [descriptionUpdatedOn, setDescriptionUpdatedOn] = useState<string>(initialDescriptionUpdatedOn)
-    const [modifiedDescriptionText, setModifiedDescriptionText] = useState<string>(initialDescriptionText)
+    const [modifiedDescriptionText, setModifiedDescriptionText] = useState<string>(descriptionText)
     const [selectedTab, setSelectedTab] = useState<MDEditorSelectedTabType>(MD_EDITOR_TAB.WRITE)
     const isDescriptionModified: boolean = !deepEqual(descriptionText, modifiedDescriptionText)
     const mdeRef = useRef(null)
 
-    useEffect(() => {
-        if (typeof updateCreateAppFormDescription === 'function') {
-            updateCreateAppFormDescription(modifiedDescriptionText)
-        }
-    }, [modifiedDescriptionText])
-
-    useEffect(() => {
-        if (!isClusterTerminal && appId === 0) {
-            mdeRef.current?.finalRefs?.textarea?.current?.focus()
-        }
-    }, [isEditDescriptionView])
-
     const validateDescriptionText = (): boolean => {
         let isValid = true
         if (modifiedDescriptionText.length === 0) {
-            toast.error(CLUSTER_DESCRIPTION_EMPTY_ERROR_MSG)
+            toast.error(DESCRIPTION_EMPTY_ERROR_MSG)
             isValid = false
         }
         return isValid
     }
 
     const isAuthorized = (): boolean => {
-        if (!isSuperAdmin && isClusterTerminal) {
+        if (!isSuperAdmin) {
             toastAccessDenied()
             return false
         }
@@ -95,7 +72,7 @@ const GenericDescription = ({
             let isConfirmed: boolean = true
             if (isDescriptionModified) {
                 // eslint-disable-next-line no-alert
-                isConfirmed = window.confirm(CLUSTER_DESCRIPTION_UNSAVED_CHANGES_MSG)
+                isConfirmed = window.confirm(DESCRIPTION_UNSAVED_CHANGES_MSG)
             }
             if (isConfirmed) {
                 setModifiedDescriptionText(descriptionText)
@@ -105,73 +82,21 @@ const GenericDescription = ({
         }
     }
 
-    const updateApplicationAbout = (): void => {
+    const handleSave = (): void => {
         const isValidate = validateDescriptionText()
         if (!isValidate) {
             return
         }
-        const requestPayload = {
-            id: descriptionId,
-            identifier: Number(appId),
-            description: modifiedDescriptionText,
-        }
-        patchApplicationNote(requestPayload)
-            .then((response) => {
-                if (response.result) {
-                    setDescriptionText(response.result.description)
-                    setDescriptionUpdatedBy(response.result.updatedBy)
-                    const _moment = moment(response.result.updatedOn, 'YYYY-MM-DDTHH:mm:ssZ')
-                    const _date = _moment.isValid()
-                        ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)
-                        : response.result.updatedOn
-                    setDescriptionUpdatedOn(_date)
-                    setModifiedDescriptionText(response.result.description)
-                    // eslint-disable-next-line no-param-reassign
-                    appMetaInfo.note = response.result
-                    toast.success(CLUSTER_DESCRIPTION_UPDATE_MSG)
-                    setEditDescriptionView(true)
-                }
-            })
-            .catch((error) => {
-                showError(error)
-            })
-    }
-
-    const updateClusterAbout = (): void => {
-        const isValidate = validateDescriptionText()
-        if (!isValidate) {
-            return
-        }
-        const requestPayload = {
-            id: descriptionId,
-            identifier: Number(clusterId),
-            description: modifiedDescriptionText,
-        }
-        patchClusterNote(requestPayload)
-            .then((response) => {
-                if (response.result) {
-                    setDescriptionText(response.result.description)
-                    setDescriptionUpdatedBy(response.result.updatedBy)
-                    const _moment = moment(response.result.updatedOn, 'YYYY-MM-DDTHH:mm:ssZ')
-                    const _date = _moment.isValid()
-                        ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)
-                        : response.result.updatedOn
-                    setDescriptionUpdatedOn(_date)
-                    setModifiedDescriptionText(response.result.description)
-                    toast.success(CLUSTER_DESCRIPTION_UPDATE_MSG)
-                    setEditDescriptionView(true)
-                }
-            })
-            .catch((error) => {
-                showError(error)
-            })
-    }
-
-    const handleSave = () => {
-        if (isClusterTerminal) {
-            updateClusterAbout()
-        } else {
-            updateApplicationAbout()
+        try {
+            const payload = {
+                id: releaseId,
+                releaseNote: modifiedDescriptionText,
+            }
+            updateDescription(payload)
+            toast.success(DESCRIPTION_UPDATE_MSG)
+            setEditDescriptionView(true)
+        } catch (error) {
+            showError(error)
         }
     }
 

@@ -1,17 +1,13 @@
 import { ResponseType } from '..'
 
 export interface GenericDescriptionProps {
-    isClusterTerminal: boolean
-    clusterId?: string
     isSuperAdmin: boolean
-    appId?: number
-    descriptionId?: number
-    initialDescriptionText?: string
-    initialDescriptionUpdatedBy?: string
-    initialDescriptionUpdatedOn?: string
+    descriptionText?: string
+    descriptionUpdatedBy?: string
+    descriptionUpdatedOn?: string
     initialEditDescriptionView: boolean
-    updateCreateAppFormDescription?: (string) => void
-    appMetaInfo? // AppMetaInfo
+    updateDescription: (string) => void
+    releaseId: number
     tabIndex?: number
 }
 
