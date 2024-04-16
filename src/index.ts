@@ -50,6 +50,7 @@ export interface customEnv {
     API_BATCH_SIZE: number
     SERVICE_WORKER_TIMEOUT?: string
     ENABLE_RESOURCE_SCAN?: boolean
+    ENABLE_RESOURCE_SCAN_V2?: boolean
 }
 declare global {
     interface Window {
