@@ -7,4 +7,6 @@ export type Entity = {
 export interface SegmentedBarChartProps {
     entities: NonNullable<Entity[]>
     rootClassName?: string
+    countClassName?: string
+    labelClassName?: string
 }

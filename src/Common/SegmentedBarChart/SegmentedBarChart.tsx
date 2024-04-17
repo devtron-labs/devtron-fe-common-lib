@@ -3,7 +3,12 @@ import { SegmentedBarChartProps, Entity } from './types'
 import { FALLBACK_ENTITY } from './constants'
 import './styles.scss'
 
-const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({ entities = [FALLBACK_ENTITY], rootClassName }) => {
+const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
+    entities = [FALLBACK_ENTITY],
+    rootClassName,
+    countClassName,
+    labelClassName,
+}) => {
     const total = entities.reduce((sum, entity) => entity.value + sum, 0)
 
     const calcSegmentWidth = (entity: Entity) => {
@@ -19,8 +24,8 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({ entities = [FALLB
                 {entities?.map((entity) => (
                     <div className="flexbox dc__gap-4 dc__align-items-center">
                         <div className="dot" style={{ backgroundColor: entity.color, width: '10px', height: '10px' }} />
-                        <span>{entity.value}</span>
-                        <span>{entity.label}</span>
+                        <span className={countClassName}>{entity.value}</span>
+                        <span className={labelClassName}>{entity.label}</span>
                     </div>
                 ))}
             </div>
