@@ -51,6 +51,7 @@ export interface customEnv {
     SERVICE_WORKER_TIMEOUT?: string
     ENABLE_RESOURCE_SCAN?: boolean
     FEATURE_USER_DEFINED_GITOPS_REPO_ENABLE: boolean
+    ENABLE_RESOURCE_SCAN_V2?: boolean
 }
 declare global {
     interface Window {
