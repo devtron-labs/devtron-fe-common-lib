@@ -722,6 +722,56 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
  * Returns a stringified YAML with default indentation & line width
  */
 
-export const YAMLStringify = (obj: object | unknown, option?: object) => (
-    YAML.stringify(obj, { indent: 2, lineWidth: 0, ...option  })
-)
+export const YAMLStringify = (obj: object | unknown, option?: object) =>
+    YAML.stringify(obj, { indent: 2, lineWidth: 0, ...option })
+
+/**
+ * compare Object Length of the object
+ */
+// TODO - deprecate this function from dashboard
+export const compareObjectLength = (objA: any, objB: any): boolean => {
+    if (objA === objB) {
+        return true
+    }
+
+    const isArrayA = Array.isArray(objA)
+    const isArrayB = Array.isArray(objB)
+
+    if ((isArrayA && !isArrayB) || (!isArrayA && isArrayB)) {
+        return false
+    }
+    if (!isArrayA && !isArrayB) {
+        return Object.keys(objA).length === Object.keys(objB).length
+    }
+
+    return objA.length === objB.length
+}
+
+/**
+ * Return deep copy of the object
+ */
+// TODO - deprecate this function from dashboard
+export function deepEqual(configA: any, configB: any): boolean {
+    try {
+        if (configA === configB) {
+            return true
+        }
+        if ((configA && !configB) || (!configA && configB) || !compareObjectLength(configA, configB)) {
+            return false
+        }
+        let isEqual = true
+        for (const idx in configA) {
+            if (!isEqual) {
+                break
+            } else if (typeof configA[idx] === 'object' && typeof configB[idx] === 'object') {
+                isEqual = deepEqual(configA[idx], configB[idx])
+            } else if (configA[idx] !== configB[idx]) {
+                isEqual = false
+            }
+        }
+        return isEqual
+    } catch (err) {
+        showError(err)
+        return true
+    }
+}
