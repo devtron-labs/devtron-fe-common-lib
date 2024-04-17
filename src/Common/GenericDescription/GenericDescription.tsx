@@ -26,8 +26,7 @@ import { ReactComponent as ImageIcon } from '../../Assets/Icon/ic-image.svg'
 import { ReactComponent as OrderedListIcon } from '../../Assets/Icon/ic-ordered-list.svg'
 import { ReactComponent as UnorderedListIcon } from '../../Assets/Icon/ic-unordered-list.svg'
 import { ReactComponent as CheckedListIcon } from '../../Assets/Icon/ic-checked-list.svg'
-
-import Moment12HourFormat from './constant'
+import { Moment12HourFormat, README } from './constant'
 
 const GenericDescription = ({
     descriptionText,
@@ -244,7 +243,7 @@ const GenericDescription = ({
                         <div className="pt-8 pb-8 pl-16 pr-16 dc__top-radius-4 flex bc-n50 dc__border-bottom h-36">
                             <div className="flexbox dc__gap-6 dc__align-items-center">
                                 <UnorderedListIcon className="icon-dim-16" />
-                                <div className="fw-6 lh-20 cn-9 fs-13">{title ?? `Readme`}</div>
+                                <div className="fw-6 lh-20 cn-9 fs-13">{title ?? README}</div>
                             </div>
                             {descriptionUpdatedBy && descriptionUpdatedOn && (
                                 <div className="flex left fw-4 cn-7 ml-8 fs-12 h-20">
