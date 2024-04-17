@@ -1,6 +1,3 @@
-export enum MD_EDITOR_TAB {
-    WRITE = 'write',
-    PREVIEW = 'preview',
-}
+const Moment12HourFormat = 'ddd, DD MMM YYYY, hh:mm A'
 
-export type MDEditorSelectedTabType = 'write' | 'preview'
+export default Moment12HourFormat

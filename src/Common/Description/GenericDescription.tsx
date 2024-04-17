@@ -3,25 +3,24 @@ import Tippy from '@tippyjs/react'
 import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import { toast } from 'react-toastify'
+import moment from 'moment'
 import Markdown from '../Markdown/MarkDown'
 import {
     DESCRIPTION_EMPTY_ERROR_MSG,
     DESCRIPTION_UNSAVED_CHANGES_MSG,
-    DESCRIPTION_UPDATE_MSG,
     deepEqual,
     showError,
     toastAccessDenied,
 } from '..'
 import './genericDescription.scss'
 import { ReactComponent as Edit } from '../../Assets/Icon/ic-pencil.svg'
-import { GenericDescriptionProps } from './types'
+import { GenericDescriptionProps, MDEditorSelectedTabType, MD_EDITOR_TAB } from './types'
 import {
     DEFAULT_MARKDOWN_EDITOR_PREVIEW_MESSAGE,
     MARKDOWN_EDITOR_COMMANDS,
     MARKDOWN_EDITOR_COMMAND_TITLE,
     MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT,
 } from '../Markdown/constant'
-import { MDEditorSelectedTabType, MD_EDITOR_TAB } from './constant'
 import { ReactComponent as HeaderIcon } from '../../Assets/Icon/ic-header.svg'
 import { ReactComponent as BoldIcon } from '../../Assets/Icon/ic-bold.svg'
 import { ReactComponent as ItalicIcon } from '../../Assets/Icon/ic-italic.svg'
@@ -34,6 +33,8 @@ import { ReactComponent as OrderedListIcon } from '../../Assets/Icon/ic-ordered-
 import { ReactComponent as UnorderedListIcon } from '../../Assets/Icon/ic-unordered-list.svg'
 import { ReactComponent as CheckedListIcon } from '../../Assets/Icon/ic-checked-list.svg'
 
+import Moment12HourFormat from './constant'
+
 const GenericDescription = ({
     isSuperAdmin,
     descriptionText,
@@ -42,13 +43,16 @@ const GenericDescription = ({
     initialEditDescriptionView,
     tabIndex,
     updateDescription,
-    releaseId,
+    title,
 }: GenericDescriptionProps) => {
     const [isEditDescriptionView, setEditDescriptionView] = useState<boolean>(initialEditDescriptionView)
     const [modifiedDescriptionText, setModifiedDescriptionText] = useState<string>(descriptionText)
     const [selectedTab, setSelectedTab] = useState<MDEditorSelectedTabType>(MD_EDITOR_TAB.WRITE)
     const isDescriptionModified: boolean = !deepEqual(descriptionText, modifiedDescriptionText)
     const mdeRef = useRef(null)
+
+    const _moment = moment(descriptionUpdatedOn, 'YYYY-MM-DDTHH:mm:ssZ')
+    const _date = _moment.isValid() ? _moment.format(Moment12HourFormat) : descriptionUpdatedOn
 
     const validateDescriptionText = (): boolean => {
         let isValid = true
@@ -88,12 +92,7 @@ const GenericDescription = ({
             return
         }
         try {
-            const payload = {
-                id: releaseId,
-                releaseNote: modifiedDescriptionText,
-            }
-            updateDescription(payload)
-            toast.success(DESCRIPTION_UPDATE_MSG)
+            updateDescription(modifiedDescriptionText)
             setEditDescriptionView(true)
         } catch (error) {
             showError(error)
@@ -259,11 +258,14 @@ const GenericDescription = ({
             >
                 {isEditDescriptionView ? (
                     <div className="min-w-500 bcn-0 br-4 dc__border-top dc__border-left dc__border-right w-100 dc__border-bottom">
-                        <div className="pt-8 pb-8 pl-16 pr-16 dc__top-radius-4 flex bc-n50 dc__border-bottom h-36 fs-13">
-                            <div className="fw-6 lh-20 cn-9">Readme</div>
+                        <div className="pt-8 pb-8 pl-16 pr-16 dc__top-radius-4 flex bc-n50 dc__border-bottom h-36">
+                            <div className="flexbox dc__gap-6 dc__align-items-center">
+                                <UnorderedListIcon className="icon-dim-16" />
+                                <div className="fw-6 lh-20 cn-9 fs-13">{title ?? `Readme`}</div>
+                            </div>
                             {descriptionUpdatedBy && descriptionUpdatedOn && (
-                                <div className="flex left fw-4 cn-7 ml-8">
-                                    Last updated by {descriptionUpdatedBy} on {descriptionUpdatedOn}
+                                <div className="flex left fw-4 cn-7 ml-8 fs-12 h-20">
+                                    Last updated by {descriptionUpdatedBy} on {_date}
                                 </div>
                             )}
                             <div

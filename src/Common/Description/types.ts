@@ -7,7 +7,7 @@ export interface GenericDescriptionProps {
     descriptionUpdatedOn?: string
     initialEditDescriptionView: boolean
     updateDescription: (string) => void
-    releaseId: number
+    title?: string
     tabIndex?: number
 }
 
@@ -26,3 +26,10 @@ export interface ClusterNoteType {
 export interface ClusterNoteResponse extends ResponseType {
     result?: ClusterNoteType
 }
+
+export enum MD_EDITOR_TAB {
+    WRITE = 'write',
+    PREVIEW = 'preview',
+}
+
+export type MDEditorSelectedTabType = 'write' | 'preview'

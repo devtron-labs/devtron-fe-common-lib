@@ -98,6 +98,10 @@
         .mde-preview {
             .mde-preview-content {
                 padding: 0px !important;
+
+                a.anchor {
+                    color: var(--N900);
+                }
             }
         }
 
