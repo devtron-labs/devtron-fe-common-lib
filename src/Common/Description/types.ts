@@ -1,7 +1,6 @@
 import { ResponseType } from '..'
 
 export interface GenericDescriptionProps {
-    isSuperAdmin: boolean
     descriptionText?: string
     descriptionUpdatedBy?: string
     descriptionUpdatedOn?: string

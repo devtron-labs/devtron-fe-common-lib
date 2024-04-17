@@ -5,13 +5,7 @@ import 'react-mde/lib/styles/css/react-mde-all.css'
 import { toast } from 'react-toastify'
 import moment from 'moment'
 import Markdown from '../Markdown/MarkDown'
-import {
-    DESCRIPTION_EMPTY_ERROR_MSG,
-    DESCRIPTION_UNSAVED_CHANGES_MSG,
-    deepEqual,
-    showError,
-    toastAccessDenied,
-} from '..'
+import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG, deepEqual, showError } from '..'
 import './genericDescription.scss'
 import { ReactComponent as Edit } from '../../Assets/Icon/ic-pencil.svg'
 import { GenericDescriptionProps, MDEditorSelectedTabType, MD_EDITOR_TAB } from './types'
@@ -36,7 +30,6 @@ import { ReactComponent as CheckedListIcon } from '../../Assets/Icon/ic-checked-
 import Moment12HourFormat from './constant'
 
 const GenericDescription = ({
-    isSuperAdmin,
     descriptionText,
     descriptionUpdatedBy,
     descriptionUpdatedOn,
@@ -63,26 +56,16 @@ const GenericDescription = ({
         return isValid
     }
 
-    const isAuthorized = (): boolean => {
-        if (!isSuperAdmin) {
-            toastAccessDenied()
-            return false
-        }
-        return true
-    }
-
     const toggleDescriptionView = () => {
-        if (isAuthorized()) {
-            let isConfirmed: boolean = true
-            if (isDescriptionModified) {
-                // eslint-disable-next-line no-alert
-                isConfirmed = window.confirm(DESCRIPTION_UNSAVED_CHANGES_MSG)
-            }
-            if (isConfirmed) {
-                setModifiedDescriptionText(descriptionText)
-                setEditDescriptionView(!isEditDescriptionView)
-                setSelectedTab(MD_EDITOR_TAB.WRITE)
-            }
+        let isConfirmed: boolean = true
+        if (isDescriptionModified) {
+            // eslint-disable-next-line no-alert
+            isConfirmed = window.confirm(DESCRIPTION_UNSAVED_CHANGES_MSG)
+        }
+        if (isConfirmed) {
+            setModifiedDescriptionText(descriptionText)
+            setEditDescriptionView(!isEditDescriptionView)
+            setSelectedTab(MD_EDITOR_TAB.WRITE)
         }
     }
 
