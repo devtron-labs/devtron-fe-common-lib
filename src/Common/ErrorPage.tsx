@@ -4,7 +4,7 @@ import GenericEmptyState from './EmptyState/GenericEmptyState'
 import { ErrorPageType } from './Types'
 import { noop, refresh, reportIssue } from './Helper'
 
-const ErrorPage = ({ code, image, title, subTitle, imageType }: ErrorPageType) => {
+const ErrorPage = ({ code, image, title, subTitle, imageType, heightToDeduct }: ErrorPageType) => {
     const { push } = useHistory()
     const redirectToHome = () => {
         push(`/${ROUTES.APP_LIST}`)
@@ -61,6 +61,7 @@ const ErrorPage = ({ code, image, title, subTitle, imageType }: ErrorPageType) =
             isButtonAvailable={isButtonAvailable}
             renderButton={renderGenerateButton}
             imageType={imageType}
+            heightToDeduct={heightToDeduct}
         />
     )
 }
