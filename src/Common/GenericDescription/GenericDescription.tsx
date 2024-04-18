@@ -5,10 +5,10 @@ import 'react-mde/lib/styles/css/react-mde-all.css'
 import { toast } from 'react-toastify'
 import moment from 'moment'
 import Markdown from '../Markdown/MarkDown'
-import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG, deepEqual, showError } from '..'
+import { DATE_TIME_FORMATS, deepEqual, showError } from '..'
 import './genericDescription.scss'
 import { ReactComponent as Edit } from '../../Assets/Icon/ic-pencil.svg'
-import { GenericDescriptionProps, MDEditorSelectedTabType, MD_EDITOR_TAB } from './types'
+import { GenericDescriptionProps, MDEditorSelectedTabType } from './types'
 import {
     DEFAULT_MARKDOWN_EDITOR_PREVIEW_MESSAGE,
     MARKDOWN_EDITOR_COMMANDS,
@@ -26,25 +26,25 @@ import { ReactComponent as ImageIcon } from '../../Assets/Icon/ic-image.svg'
 import { ReactComponent as OrderedListIcon } from '../../Assets/Icon/ic-ordered-list.svg'
 import { ReactComponent as UnorderedListIcon } from '../../Assets/Icon/ic-unordered-list.svg'
 import { ReactComponent as CheckedListIcon } from '../../Assets/Icon/ic-checked-list.svg'
-import { Moment12HourFormat, README } from './constant'
+import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG } from './constant'
 
 const GenericDescription = ({
-    descriptionText,
-    descriptionUpdatedBy,
-    descriptionUpdatedOn,
-    initialEditDescriptionView,
+    text,
+    updatedBy,
+    updatedOn,
+    isDescriptionPreview,
     tabIndex,
     updateDescription,
     title,
 }: GenericDescriptionProps) => {
-    const [isEditDescriptionView, setEditDescriptionView] = useState<boolean>(initialEditDescriptionView)
-    const [modifiedDescriptionText, setModifiedDescriptionText] = useState<string>(descriptionText)
-    const [selectedTab, setSelectedTab] = useState<MDEditorSelectedTabType>(MD_EDITOR_TAB.WRITE)
-    const isDescriptionModified: boolean = !deepEqual(descriptionText, modifiedDescriptionText)
+    const [isEditDescriptionView, setEditDescriptionView] = useState<boolean>(isDescriptionPreview)
+    const [modifiedDescriptionText, setModifiedDescriptionText] = useState<string>(text)
+    const [selectedTab, setSelectedTab] = useState<'write' | 'preview'>(MDEditorSelectedTabType.WRITE)
+    const isDescriptionModified = !deepEqual(text, modifiedDescriptionText)
     const mdeRef = useRef(null)
 
-    const _moment = moment(descriptionUpdatedOn, 'YYYY-MM-DDTHH:mm:ssZ')
-    const _date = _moment.isValid() ? _moment.format(Moment12HourFormat) : descriptionUpdatedOn
+    const _moment = moment(updatedOn)
+    const _date = _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : updatedOn
 
     const validateDescriptionText = (): boolean => {
         let isValid = true
@@ -62,9 +62,9 @@ const GenericDescription = ({
             isConfirmed = window.confirm(DESCRIPTION_UNSAVED_CHANGES_MSG)
         }
         if (isConfirmed) {
-            setModifiedDescriptionText(descriptionText)
+            setModifiedDescriptionText(text)
             setEditDescriptionView(!isEditDescriptionView)
-            setSelectedTab(MD_EDITOR_TAB.WRITE)
+            setSelectedTab(MDEditorSelectedTabType.WRITE)
         }
     }
 
@@ -233,9 +233,9 @@ const GenericDescription = ({
     }
 
     return (
-        <div className={`cluster__body-details ${initialEditDescriptionView ? 'pb-16 dc__overflow-scroll' : ''}`}>
+        <div className={`cluster__body-details ${isDescriptionPreview ? 'pb-16 dc__overflow-scroll' : ''}`}>
             <div
-                data-testid="cluster-note-wrapper"
+                data-testid="generic-description-wrapper"
                 className={!isEditDescriptionView ? 'dc__overflow-auto' : 'dc__overflow-hidden'}
             >
                 {isEditDescriptionView ? (
@@ -243,11 +243,11 @@ const GenericDescription = ({
                         <div className="pt-8 pb-8 pl-16 pr-16 dc__top-radius-4 flex bc-n50 dc__border-bottom h-36">
                             <div className="flexbox dc__gap-6 dc__align-items-center">
                                 <UnorderedListIcon className="icon-dim-16" />
-                                <div className="fw-6 lh-20 cn-9 fs-13">{title ?? README}</div>
+                                <div className="fw-6 lh-20 cn-9 fs-13">{title}</div>
                             </div>
-                            {descriptionUpdatedBy && descriptionUpdatedOn && (
+                            {updatedBy && _date && (
                                 <div className="flex left fw-4 cn-7 ml-8 fs-12 h-20">
-                                    Last updated by {descriptionUpdatedBy} on {_date}
+                                    Last updated by {updatedBy} on {_date}
                                 </div>
                             )}
                             <div
@@ -266,7 +266,7 @@ const GenericDescription = ({
                                 preview: 'mark-down-editor-preview dc__bottom-radius-4',
                                 textArea: 'mark-down-editor__hidden',
                             }}
-                            value={descriptionText}
+                            value={text}
                             selectedTab="preview"
                             minPreviewHeight={150}
                             generateMarkdownPreview={(markdown) =>
@@ -280,12 +280,12 @@ const GenericDescription = ({
                             ref={mdeRef}
                             classes={{
                                 reactMde: `mark-down-editor-container dc__word-break ${
-                                    initialEditDescriptionView ? '' : 'create-app-description'
+                                    isDescriptionPreview ? '' : 'create-app-description'
                                 }`,
                                 toolbar: 'mark-down-editor-toolbar tab-description',
                                 preview: 'mark-down-editor-preview pt-8',
                                 textArea: `mark-down-editor-textarea-wrapper ${
-                                    initialEditDescriptionView ? '' : 'h-200-imp'
+                                    isDescriptionPreview ? '' : 'h-200-imp'
                                 }`,
                             }}
                             getIcon={(commandName: string) => editorCustomIcon(commandName)}
@@ -304,12 +304,12 @@ const GenericDescription = ({
                             childProps={{
                                 writeButton: {
                                     className: `tab-list__tab pointer fs-13 ${
-                                        selectedTab === MD_EDITOR_TAB.WRITE && 'cb-5 fw-6 active active-tab'
+                                        selectedTab === MDEditorSelectedTabType.WRITE && 'cb-5 fw-6 active active-tab'
                                     }`,
                                 },
                                 previewButton: {
                                     className: `tab-list__tab pointer fs-13 ${
-                                        selectedTab === MD_EDITOR_TAB.PREVIEW && 'cb-5 fw-6 active active-tab'
+                                        selectedTab === MDEditorSelectedTabType.PREVIEW && 'cb-5 fw-6 active active-tab'
                                     }`,
                                 },
                                 textArea: {
@@ -317,7 +317,7 @@ const GenericDescription = ({
                                 },
                             }}
                         />
-                        {initialEditDescriptionView && (
+                        {isDescriptionPreview && (
                             <div className="form cluster__description-footer pt-12 pb-12">
                                 <div className="form__buttons pl-16 pr-16">
                                     <button
