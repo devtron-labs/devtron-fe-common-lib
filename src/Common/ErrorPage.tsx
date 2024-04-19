@@ -14,12 +14,6 @@ const ErrorPage = ({ code, image, title, subTitle, imageType, heightToDeduct }: 
         statusCode: ERROR_STATUS_CODE,
     ): { onClick: () => void; renderButtonText: string; isButtonAvailable: boolean } => {
         switch (statusCode) {
-            case ERROR_STATUS_CODE.BAD_REQUEST:
-                return { onClick: refresh, renderButtonText: ERROR_EMPTY_SCREEN.TRY_AGAIN, isButtonAvailable: true }
-            case ERROR_STATUS_CODE.UNAUTHORIZED:
-                return { onClick: noop, renderButtonText: '', isButtonAvailable: false }
-            case ERROR_STATUS_CODE.PERMISSION_DENIED:
-                return { onClick: noop, renderButtonText: '', isButtonAvailable: false }
             case ERROR_STATUS_CODE.NOT_FOUND:
                 return {
                     onClick: redirectToHome,
@@ -32,8 +26,8 @@ const ErrorPage = ({ code, image, title, subTitle, imageType, heightToDeduct }: 
                     renderButtonText: ERROR_EMPTY_SCREEN.REPORT_ISSUE,
                     isButtonAvailable: true,
                 }
+            case ERROR_STATUS_CODE.BAD_REQUEST:
             case ERROR_STATUS_CODE.BAD_GATEWAY:
-                return { onClick: refresh, renderButtonText: ERROR_EMPTY_SCREEN.TRY_AGAIN, isButtonAvailable: true }
             case ERROR_STATUS_CODE.SERVICE_TEMPORARY_UNAVAILABLE:
                 return { onClick: refresh, renderButtonText: ERROR_EMPTY_SCREEN.TRY_AGAIN, isButtonAvailable: true }
             default:
