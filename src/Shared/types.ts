@@ -43,7 +43,7 @@ export enum CIMaterialSidebarType {
  * ```
  *
  * @example Usage with `PatchOperationType.remove`
- * Note: We cannot add value to remove operation
+ * Note: Value is not allowed for remove operation
  *
  * ```ts
  * const query: PatchQueryType<string> = {
@@ -76,3 +76,22 @@ export type PatchQueryType<T extends string, K = unknown> = {
           value?: never
       }
 )
+
+/**
+ * Enum for devtron resources
+ */
+export enum ResourceKindType {
+    devtronApplication = 'application/devtron-application',
+    helmChart = 'application/helm-application',
+    job = 'job',
+    cluster = 'cluster',
+    release = 'release',
+    releaseTrack = 'release-track',
+}
+
+/**
+ * Versions support for the resources on BE
+ */
+export enum ResourceVersionType {
+    v1 = 'v1',
+}
