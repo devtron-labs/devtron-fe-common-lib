@@ -43,7 +43,7 @@ export enum CIMaterialSidebarType {
  * ```
  *
  * @example Usage with `PatchOperationType.remove`
- * Note: Value is optional for remove operation
+ * Note: Value is not allowed for remove operation
  *
  * ```ts
  * const query: PatchQueryType<string> = {
@@ -73,6 +73,6 @@ export type PatchQueryType<T extends string, K = unknown> = {
            * Operation type for patch
            */
           op: PatchOperationType.remove
-          value?: K
+          value?: never
       }
 )
