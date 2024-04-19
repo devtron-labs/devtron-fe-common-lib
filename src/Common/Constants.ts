@@ -40,6 +40,8 @@ export const ROUTES = {
     SERVER_INFO_API: 'server',
     ATTRIBUTES_USER: 'attributes/user',
     UPDATE: 'update',
+    CLUSTER_NOTE: 'cluster/note',
+    APPLICATION_NOTE: 'app/note',
 }
 
 export enum KEY_VALUE {
@@ -420,3 +422,9 @@ export const POSTHOG_EVENT_ONBOARDING = {
 export const MAX_LOGIN_COUNT = 5
 export const BULK_EDIT_HEADER = 'Bulk Edit'
 export const LOGIN_COUNT = 'login-count'
+
+export const DATE_TIME_FORMATS = {
+    TWELVE_HOURS_FORMAT: 'ddd, DD MMM YYYY, hh:mm A',
+    TWELVE_HOURS_FORMAT_WITHOUT_WEEKDAY: 'DD MMM YYYY, hh:mm A',
+    TWELVE_HOURS_EXPORT_FORMAT: 'DD-MMM-YYYY hh.mm A',
+}
