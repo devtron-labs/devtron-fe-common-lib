@@ -136,6 +136,24 @@ export interface GenericEmptyStateType {
     contentClassName?: string
 }
 
+export interface ErrorPageType
+    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'> {
+    code: number
+    heightToDeduct?: number
+}
+
+export interface ErrorScreenManagerProps {
+    code?: number
+    reload?: (...args) => any
+    subtitle?: React.ReactChild
+    reloadClass?: string
+    heightToDeduct?: number
+}
+
+export interface ErrorScreenNotAuthorizedProps {
+    subtitle?: React.ReactChild
+    title?: string
+}
 export enum ImageType {
     Large = 'large',
     Medium = 'medium',
@@ -159,6 +177,7 @@ export interface InfoColourBarType {
 export interface ReloadType {
     reload?: (event?: any) => void
     className?: string
+    heightToDeduct?: number
 }
 
 export interface RadioGroupItemProps {

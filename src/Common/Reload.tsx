@@ -1,13 +1,13 @@
-import React from 'react'
 import loadingFailure from '../Assets/Img/ic-loading-failure.png'
 import { ReloadType } from './Types'
+import { refresh } from './Helper'
 
-export default function Reload({ reload, className = '' }: ReloadType) {
-    function refresh(e) {
-        window.location.reload()
-    }
+export default function Reload({ reload, className = '', heightToDeduct = 0 }: ReloadType) {
     return (
-        <article className={`flex w-100 h-100 ${className}`}>
+        <article
+            className={`flex w-100 h-100 ${className}`}
+            {...(heightToDeduct > 0 && { style: { height: `calc(100vh - ${heightToDeduct}px)` } })}
+        >
             <div className="flex column w-250 dc__align-center" data-testid="reload">
                 <img src={loadingFailure} style={{ height: 'auto' }} className="w-100 mb-12" alt="load-error" />
                 <h3 className="title dc__bold">Failed to load</h3>
