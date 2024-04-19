@@ -68,7 +68,9 @@
         "vite": "^4.4.5",
         "vite-plugin-dts": "^3.5.1",
         "vite-plugin-lib-inject-css": "^1.2.0",
-        "vite-plugin-svgr": "^2.4.0"
+        "vite-plugin-svgr": "^2.4.0",
+        "react-mde": "^11.5.0"
+
     },
     "peerDependencies": {
         "@rjsf/core": "^5.13.3",
@@ -79,9 +81,13 @@
         "react-router": "^5.3.0",
         "react-router-dom": "^5.3.0",
         "react-draggable": "^4.4.5",
+        "marked": "4.3.0",
+        "dompurify": "^3.0.2",
         "react-ga4": "^1.4.1",
         "@typeform/embed-react": "2.20.0",
-        "yaml": "^2.4.1"
+        "yaml": "^2.4.1",
+        "react-mde": "^11.5.0"
+
     },
     "dependencies": {
         "react-monaco-editor": "^0.54.0",
