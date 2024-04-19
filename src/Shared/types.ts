@@ -76,3 +76,15 @@ export type PatchQueryType<T extends string, K = unknown> = {
           value?: never
       }
 )
+
+/**
+ * Enum for devtron resources
+ */
+export enum ResourceType {
+    devtronApplication = 'application/devtron-application',
+    helmChart = 'application/helm-application',
+    job = 'job',
+    cluster = 'cluster',
+    release = 'release',
+    releaseTrack = 'release-track',
+}
