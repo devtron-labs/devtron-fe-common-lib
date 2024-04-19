@@ -728,7 +728,6 @@ export const YAMLStringify = (obj: object | unknown, option?: object) =>
 /**
  * compare Object Length of the object
  */
-// TODO - deprecate this function from dashboard
 export const compareObjectLength = (objA: any, objB: any): boolean => {
     if (objA === objB) {
         return true
@@ -750,7 +749,6 @@ export const compareObjectLength = (objA: any, objB: any): boolean => {
 /**
  * Return deep copy of the object
  */
-// TODO - deprecate this function from dashboard
 export function deepEqual(configA: any, configB: any): boolean {
     try {
         if (configA === configB) {
