@@ -43,6 +43,7 @@ const GenericDescription = ({
     const isDescriptionModified = !deepEqual(text, modifiedDescriptionText)
     const mdeRef = useRef(null)
 
+    // TODO (Arun): Replace with dayjs
     const _moment = moment(updatedOn)
     const _date = _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : updatedOn
 
