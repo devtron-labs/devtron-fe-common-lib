@@ -74,7 +74,7 @@ export interface TippyCustomizedProps {
     noHeadingBorder?: boolean
     infoTextHeading?: string
     hideHeading?: boolean
-    placement: Placement
+    placement?: Placement
     className?: string
     Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     iconPath?: string
@@ -95,6 +95,25 @@ export interface TippyCustomizedProps {
     documentationLinkText?: string
     children: React.ReactElement<any>
 }
+
+export interface InfoIconTippyProps
+    extends Pick<
+        TippyCustomizedProps,
+        | 'heading'
+        | 'infoText'
+        | 'iconClass'
+        | 'documentationLink'
+        | 'documentationLinkText'
+        | 'additionalContent'
+        | 'placement'
+        | 'Icon'
+        | 'headingInfo'
+    > {
+    dataTestid?: string
+    children?: TippyCustomizedProps['children']
+    iconClassName?: string
+}
+
 export interface GenericEmptyStateType {
     title: ReactNode
     image?

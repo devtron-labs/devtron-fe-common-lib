@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-cross.svg'
-import { ReactComponent as QuestionFilled } from '../Assets/Icon/ic-help.svg'
-import { ReactComponent as Question } from '../Assets/Icon/ic-help-outline.svg'
+import { ReactComponent as Help } from '../Assets/Icon/ic-help.svg'
+import { ReactComponent as ICHelpOutline } from '../Assets/Icon/ic-help-outline.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
 import { not, stopPropagation } from './Helper'
@@ -63,7 +63,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
             <>
                 {!hideHeading && (
                     <div
-                        className={`dc__word-break dc__hyphens-auto flex left ${
+                        className={`dc__word-break dc__hyphens-auto flex dc__align-start left ${
                             isWhiteTheme
                                 ? `p-12 cn-9 ${props.noHeadingBorder ? '' : 'dc__border-bottom-n1'}`
                                 : 'pt-20 pb-12 pr-20 pl-20 cn-0 top'
@@ -84,11 +84,11 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                             )
                         )}
                         {heading && (
-                            <span className={`fs-14 fw-6 lh-20 ${showCloseButton ? 'mr-6' : ''}`}>{heading}</span>
+                            <span className={`fs-14 fw-6 lh-20 ${showCloseButton ? 'mr-12' : ''}`}>{heading}</span>
                         )}
                         {headingInfo && (
                             <div className="icon-dim-20 cursor" onClick={toggleHeadingInfo}>
-                                <Question className="icon-dim-20" />
+                                <ICHelpOutline className="icon-dim-20" />
                             </div>
                         )}
                         {showCloseButton && (
@@ -108,7 +108,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                         }`}
                     >
                         <div className="icon-dim-20 mr-8">
-                            <QuestionFilled className="icon-dim-20 fcv-5" />
+                            <Help className="icon-dim-20 fcv-5" />
                         </div>
                         <div className="dc__word-break dc__hyphens-auto">{headingInfo}</div>
                     </div>
