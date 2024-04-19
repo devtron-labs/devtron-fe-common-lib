@@ -88,3 +88,10 @@ export enum ResourceType {
     release = 'release',
     releaseTrack = 'release-track',
 }
+
+/**
+ * Versions support for the resources on BE
+ */
+export enum ResourceVersionType {
+    v1 = 'v1',
+}
