@@ -79,6 +79,10 @@ export const stopPropagation = (event): void => {
     event.stopPropagation()
 }
 
+export const preventDefault = (event): void => {
+    event.preventDefault()
+}
+
 export function useThrottledEffect(callback, delay, deps = []) {
     // function will be executed only once in a given time interval.
     const lastRan = useRef(Date.now())

@@ -1,3 +1,4 @@
+import { OptionType } from '../Common'
 import { PatchOperationType } from './constants'
 
 export interface RuntimeParamsAPIResponseType {
@@ -76,3 +77,8 @@ export type PatchQueryType<T extends string, K = unknown> = {
           value?: never
       }
 )
+
+export interface GroupedOptionsType {
+    label: string
+    options: OptionType[]
+}
