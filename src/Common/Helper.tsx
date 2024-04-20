@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import YAML from 'yaml'
-import { ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME, EXCLUDED_FALSY_VALUES } from './Constants'
+import { DISCORD_LINK, ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME, EXCLUDED_FALSY_VALUES } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
@@ -140,6 +140,13 @@ export function noop(...args): any {}
 
 export function not(e) {
     return !e
+}
+
+export const refresh = () => {
+    window.location.reload()
+}
+export const reportIssue = () => {
+    window.open(DISCORD_LINK)
 }
 
 export function useEffectAfterMount(cb, dependencies) {

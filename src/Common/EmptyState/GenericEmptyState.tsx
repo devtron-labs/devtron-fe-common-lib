@@ -1,4 +1,3 @@
-import React from 'react'
 import AppNotDeployed from '../../Assets/Img/app-not-deployed.png'
 import { GenericEmptyStateType, ImageType } from '../Types'
 
@@ -63,12 +62,18 @@ const GenericEmptyState = ({
                 />
             )}
             <div
-                className={`flex column dc__gap-10 dc__mxw-300 ${
+                className={`flex column dc__gap-20 dc__mxw-300 ${
                     isRowLayout ? 'dc__align-start' : ''
                 } ${contentClassName}`}
             >
-                <h4 className="title fw-6 cn-9 mt-0 mb-0 lh-1-5">{title}</h4>
-                {subTitle && <p className={`subtitle ${isRowLayout ? 'subtitle--text-start' : ''}`}>{subTitle}</p>}
+                <div className="flex column dc__gap-8">
+                    <h4 className="title fw-6 cn-9 mt-0 mb-0 lh-24">{title}</h4>
+                    {subTitle && (
+                        <p className={`subtitle ${isRowLayout ? 'subtitle--text-start' : ''}`}>
+                            {subTitle}
+                        </p>
+                    )}
+                </div>
                 {isButtonAvailable && renderButton()}
                 {children}
             </div>
