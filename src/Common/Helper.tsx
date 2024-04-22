@@ -79,7 +79,7 @@ export const stopPropagation = (event): void => {
     event.stopPropagation()
 }
 
-export const preventDefault = (event): void => {
+export const preventDefault = (event: React.SyntheticEvent): void => {
     event.preventDefault()
 }
 
