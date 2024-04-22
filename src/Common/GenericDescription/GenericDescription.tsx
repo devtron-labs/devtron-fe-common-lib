@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Tippy from '@tippyjs/react'
 import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
@@ -45,13 +45,17 @@ const GenericDescription = ({
     const isDescriptionModified = !deepEqual(text, modifiedDescriptionText)
     const mdeRef = useRef(null)
 
+    useEffect(() => {
+        setModifiedDescriptionText(text)
+    }, [text])
+
     // TODO (Arun): Replace with dayjs
     const _moment = moment(updatedOn)
     const _date = _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : updatedOn
 
-    const validateDescriptionText = (): boolean => {
+    const validateDescriptionText = (description: string): boolean => {
         let isValid = true
-        if (modifiedDescriptionText.length === 0) {
+        if (description.length === 0) {
             toast.error(DESCRIPTION_EMPTY_ERROR_MSG)
             isValid = false
         }
@@ -72,14 +76,17 @@ const GenericDescription = ({
     }
 
     const handleSave = async () => {
-        const isValidate = validateDescriptionText()
+        const trimmedDescription = modifiedDescriptionText.trim()
+        const isValidate = validateDescriptionText(trimmedDescription)
         if (!isValidate) {
             return
         }
         try {
             setIsLoading(true)
-            await updateDescription(modifiedDescriptionText)
+            await updateDescription(trimmedDescription)
             setIsEditDescriptionView(true)
+            // Explicitly updating the state, since the modified state gets corrupted
+            setModifiedDescriptionText(trimmedDescription)
         } catch (error) {
             showError(error)
         } finally {
@@ -323,7 +330,7 @@ const GenericDescription = ({
                                 },
                             }}
                         />
-                        {isDescriptionPreview && (
+                        {selectedTab === MDEditorSelectedTabType.WRITE && (
                             <div className="form cluster__description-footer pt-12 pb-12">
                                 <div className="form__buttons pl-16 pr-16">
                                     <button
