@@ -3,7 +3,7 @@ export interface GenericDescriptionProps {
     updatedBy?: string
     updatedOn?: string
     isDescriptionPreview: boolean
-    updateDescription: (string) => void
+    updateDescription: (string) => Promise<void>
     title: string
     tabIndex?: number
 }

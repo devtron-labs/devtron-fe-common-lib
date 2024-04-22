@@ -15,6 +15,7 @@ import {
     MARKDOWN_EDITOR_COMMAND_TITLE,
     MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT,
 } from '../Markdown/constant'
+import { ButtonWithLoader } from '../../Shared'
 import { ReactComponent as HeaderIcon } from '../../Assets/Icon/ic-header.svg'
 import { ReactComponent as BoldIcon } from '../../Assets/Icon/ic-bold.svg'
 import { ReactComponent as ItalicIcon } from '../../Assets/Icon/ic-italic.svg'
@@ -37,7 +38,8 @@ const GenericDescription = ({
     updateDescription,
     title,
 }: GenericDescriptionProps) => {
-    const [isEditDescriptionView, setEditDescriptionView] = useState<boolean>(isDescriptionPreview)
+    const [isLoading, setIsLoading] = useState(false)
+    const [isEditDescriptionView, setIsEditDescriptionView] = useState<boolean>(isDescriptionPreview)
     const [modifiedDescriptionText, setModifiedDescriptionText] = useState<string>(text)
     const [selectedTab, setSelectedTab] = useState<'write' | 'preview'>(MDEditorSelectedTabType.WRITE)
     const isDescriptionModified = !deepEqual(text, modifiedDescriptionText)
@@ -64,21 +66,24 @@ const GenericDescription = ({
         }
         if (isConfirmed) {
             setModifiedDescriptionText(text)
-            setEditDescriptionView(!isEditDescriptionView)
+            setIsEditDescriptionView(!isEditDescriptionView)
             setSelectedTab(MDEditorSelectedTabType.WRITE)
         }
     }
 
-    const handleSave = (): void => {
+    const handleSave = async () => {
         const isValidate = validateDescriptionText()
         if (!isValidate) {
             return
         }
         try {
-            updateDescription(modifiedDescriptionText)
-            setEditDescriptionView(true)
+            setIsLoading(true)
+            await updateDescription(modifiedDescriptionText)
+            setIsEditDescriptionView(true)
         } catch (error) {
             showError(error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -326,17 +331,20 @@ const GenericDescription = ({
                                         className="cta cancel flex h-36 mr-12"
                                         type="button"
                                         onClick={toggleDescriptionView}
+                                        disabled={isLoading}
                                     >
                                         Cancel
                                     </button>
-                                    <button
+                                    <ButtonWithLoader
+                                        isLoading={isLoading}
+                                        disabled={isLoading}
                                         data-testid="description-edit-save-button"
-                                        className="cta flex h-36"
+                                        rootClassName="cta flex h-36"
                                         type="submit"
                                         onClick={handleSave}
                                     >
                                         Save
-                                    </button>
+                                    </ButtonWithLoader>
                                 </div>
                             </div>
                         )}
