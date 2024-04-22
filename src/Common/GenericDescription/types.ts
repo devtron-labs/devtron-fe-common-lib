@@ -6,6 +6,7 @@ export interface GenericDescriptionProps {
     updateDescription: (string) => Promise<void>
     title: string
     tabIndex?: number
+    minEditorHeight?: number
 }
 
 export enum MDEditorSelectedTabType {

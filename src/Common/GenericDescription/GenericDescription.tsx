@@ -37,6 +37,7 @@ const GenericDescription = ({
     tabIndex,
     updateDescription,
     title,
+    minEditorHeight = 300,
 }: GenericDescriptionProps) => {
     const [isLoading, setIsLoading] = useState(false)
     const [isEditDescriptionView, setIsEditDescriptionView] = useState<boolean>(isDescriptionPreview)
@@ -293,6 +294,7 @@ const GenericDescription = ({
                             ref={mdeRef}
                             classes={{
                                 reactMde: `mark-down-editor-container dc__word-break ${
+                                    // TODO (Eshank): The checks are broken here & the height as well
                                     isDescriptionPreview ? '' : 'create-app-description'
                                 }`,
                                 toolbar: 'mark-down-editor-toolbar tab-description',
@@ -305,7 +307,7 @@ const GenericDescription = ({
                             toolbarCommands={MARKDOWN_EDITOR_COMMANDS}
                             value={modifiedDescriptionText}
                             onChange={setModifiedDescriptionText}
-                            minEditorHeight={window.innerHeight - 165}
+                            minEditorHeight={minEditorHeight}
                             minPreviewHeight={150}
                             selectedTab={selectedTab}
                             onTabChange={setSelectedTab}
