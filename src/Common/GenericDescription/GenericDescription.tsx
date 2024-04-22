@@ -65,7 +65,7 @@ const GenericDescription = ({
 
     const toggleDescriptionView = () => {
         let isConfirmed: boolean = true
-        if (isDescriptionModified) {
+        if (isDescriptionModified && !isEditDescriptionView) {
             // eslint-disable-next-line no-alert
             isConfirmed = window.confirm(DESCRIPTION_UNSAVED_CHANGES_MSG)
         }
