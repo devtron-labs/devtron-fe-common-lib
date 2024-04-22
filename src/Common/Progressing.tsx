@@ -1,4 +1,3 @@
-import React from 'react'
 import { ProgressingProps } from './Types'
 
 export const Progressing = ({ pageLoader, size, theme, styles, fillColor }: ProgressingProps): JSX.Element => {
