@@ -1,8 +1,8 @@
+import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as Sentry from '@sentry/browser'
 import * as jsonpatch from 'fast-json-patch'
 import { JSONPath } from 'jsonpath-plus'
 import moment from 'moment'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import YAML from 'yaml'
@@ -77,6 +77,10 @@ export function sortCallback(key: string, a: any, b: any, isCaseSensitive?: bool
 
 export const stopPropagation = (event): void => {
     event.stopPropagation()
+}
+
+export const preventDefault = (event: SyntheticEvent): void => {
+    event.preventDefault()
 }
 
 export function useThrottledEffect(callback, delay, deps = []) {
