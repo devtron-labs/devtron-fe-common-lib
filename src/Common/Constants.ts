@@ -31,12 +31,15 @@ export const URLS = {
 }
 
 export const ROUTES = {
+    APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',
     CD_MATERIAL_GET: 'app/cd-pipeline',
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
+    SECURITY_SCAN_EXECUTION_DETAILS: 'security/scan/executionDetail',
+    NOTIFIER: 'notification',
     APP_LIST: 'app/list',
     TELEMETRY_EVENT: 'telemetry/event',
     SERVER_INFO_API: 'server',
@@ -294,9 +297,11 @@ export enum MODES {
     DOCKERFILE = 'dockerfile',
 }
 
+// The values are going to be part of route that's why they may contain -
 export enum APPROVAL_MODAL_TYPE {
     CONFIG = 'CONFIG',
     DEPLOYMENT = 'DEPLOYMENT',
+    IMAGE_PROMOTION = 'IMAGE-PROMOTION',
 }
 export const MAX_Z_INDEX = 2147483647
 
@@ -420,6 +425,9 @@ export enum ReactSelectInputAction {
 }
 
 export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
+
+// Excluding 0 from this list as 0 is a valid value
+export const EXCLUDED_FALSY_VALUES = [undefined, null, '', NaN] as const
 
 export const API_STATUS_CODES = {
     UNAUTHORIZED: 401,

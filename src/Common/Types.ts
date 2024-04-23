@@ -2,6 +2,7 @@ import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
+import { RegistryType } from '../Shared'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -58,6 +59,7 @@ export interface CheckboxProps {
     isChecked: boolean
     // FIXME: Need to replace this CHECKBOX_VALUE enum, and replace string instances in dashboard
     value: 'CHECKED' | 'INTERMEDIATE' | 'BULK_CHECKED'
+    name?: string
     disabled?: boolean
     tabIndex?: number
     rootClassName?: string
@@ -313,6 +315,38 @@ export enum MaterialDataSource {
     EXTERNAL = 'ext',
 }
 
+export enum ImagePromotionRuntimeState {
+    AWAITING = 'AWAITING',
+    PROMOTED = 'PROMOTED',
+    CANCELLED = 'CANCELLED',
+    STALE = 'STALE',
+}
+
+export interface ImagePromotionPolicyApprovalMetadata {
+    approverCount: number
+    allowRequesterFromApprove: boolean
+    allowImageBuilderFromApprove: boolean
+    allowApproverFromDeploy: boolean
+}
+
+export interface ImagePromotionPolicyInfoType {
+    name: string
+    id: number
+    description: string
+    conditions: FilterConditionsInfo[]
+    approvalMetadata: ImagePromotionPolicyApprovalMetadata
+}
+
+export interface PromotionApprovalMetadataType {
+    approvalRequestId: number
+    approvalRuntimeState: ImagePromotionRuntimeState
+    approvedUsersData: ApprovalUserDataType[]
+    requestedUserData: ApprovalUserDataType
+    policy: ImagePromotionPolicyInfoType
+    promotedFrom?: string
+    promotedFromType?: CDMaterialResourceQuery
+}
+
 export interface DeploymentWindowArtifactMetadata {
     id: number
     name: string
@@ -345,7 +379,7 @@ export interface CDMaterialType {
     imageReleaseTags?: ReleaseTag[]
     artifactStatus?: string
     filterState: FilterStates
-    registryType?: string
+    registryType?: RegistryType
     imagePath?: string
     registryName?: string
     // Not even coming from API but required in CDMaterials for Security which makes its own api call but stores data in CDMaterials
@@ -356,16 +390,30 @@ export interface CDMaterialType {
     createdTime?: string
     deployed?: boolean
     dataSource?: MaterialDataSource
+    /**
+     * The below two keys: `promotionApprovalMetaData`, `deployedOnEnvironments` are used in image promotion
+     * and may not be available to cater other use-cases.
+     */
+    promotionApprovalMetadata?: PromotionApprovalMetadataType
+    deployedOnEnvironments?: string[]
     deploymentWindowArtifactMetadata?: DeploymentWindowArtifactMetadata
 }
 
 export enum CDMaterialServiceEnum {
     ROLLBACK = 'rollback',
     CD_MATERIALS = 'cd-materials',
+    IMAGE_PROMOTION = 'image-promotion',
 }
 
 export enum CDMaterialResourceQuery {
     PENDING_APPROVAL = 'PENDING_APPROVAL',
+    PROMOTION_APPROVAL_PENDING_NODE = 'PROMOTION_APPROVAL_PENDING_NODE',
+    CI = 'CI',
+    ENVIRONMENT = 'ENVIRONMENT',
+    WEBHOOK = 'WEBHOOK',
+    LINKED_CI = 'LINKED-CI',
+    CI_JOB = 'CI-JOB',
+    LINKED_CD = 'LINKED-CD',
 }
 
 export enum CDMaterialFilterQuery {
@@ -378,6 +426,11 @@ export interface CDMaterialServiceQueryParams {
     offset?: number
     size?: number
     resource?: CDMaterialResourceQuery
+    resourceName?: string
+    resourceId?: number
+    workflowId?: number
+    appId?: number
+    pendingForCurrentUser?: boolean
     filter?: CDMaterialFilterQuery
 }
 
@@ -451,6 +504,7 @@ export interface CommonNodeAttr {
     deploymentAppCreated?: boolean
     isLast?: boolean
     downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
+    cipipelineId?: number
     isDeploymentBlocked?: boolean
 }
 
@@ -508,7 +562,7 @@ export interface FilterConditionsListType {
 export interface CDMaterialsApprovalInfo {
     approvalUsers: string[]
     userApprovalConfig: UserApprovalConfigType
-    requestedUserId: number
+    canApproverDeploy: boolean
 }
 
 export interface CDMaterialsMetaInfo {
@@ -517,10 +571,21 @@ export interface CDMaterialsMetaInfo {
     hideImageTaggingHardDelete: boolean
     resourceFilters?: FilterConditionsListType[]
     totalCount: number
-    canApproverDeploy: boolean
+    /**
+     * This is the ID of user that has request the material
+     */
+    requestedUserId: number
 }
 
-export interface CDMaterialResponseType extends CDMaterialsMetaInfo, CDMaterialsApprovalInfo {
+export interface ImagePromotionMaterialInfo {
+    isApprovalPendingForPromotion: boolean
+    imagePromotionApproverEmails: string[]
+}
+
+export interface CDMaterialResponseType
+    extends CDMaterialsMetaInfo,
+        CDMaterialsApprovalInfo,
+        ImagePromotionMaterialInfo {
     materials: CDMaterialType[]
 }
 
