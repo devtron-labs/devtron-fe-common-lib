@@ -4,6 +4,7 @@ export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
+export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DOCUMENTATION = {
     APP_TAGS: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/usage/applications/create-application#tags`,
     APP_OVERVIEW_TAGS: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/usage/applications/overview#manage-tags`,
@@ -30,12 +31,16 @@ export const URLS = {
 }
 
 export const ROUTES = {
+    APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',
     CD_MATERIAL_GET: 'app/cd-pipeline',
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
+    SECURITY_SCAN_EXECUTION_DETAILS: 'security/scan/executionDetail',
+    NOTIFIER: 'notification',
+    APP_LIST: 'app/list',
     TELEMETRY_EVENT: 'telemetry/event',
     SERVER_INFO_API: 'server',
     ATTRIBUTES_USER: 'attributes/user',
@@ -58,6 +63,17 @@ export const DEFAULT_TAG_DATA = {
     isSuggested: true,
 }
 
+export enum ERROR_STATUS_CODE {
+    BAD_REQUEST = 400,
+    UNAUTHORIZED = 401,
+    PERMISSION_DENIED = 403,
+    NOT_FOUND = 404,
+    EXPECTATION_FAILED = 417,
+    INTERNAL_SERVER_ERROR = 500,
+    BAD_GATEWAY = 502,
+    SERVICE_TEMPORARY_UNAVAILABLE = 503,
+}
+
 export const TOAST_ACCESS_DENIED = {
     TITLE: 'Access denied',
     SUBTITLE: 'You do not have required access to perform this action',
@@ -65,15 +81,33 @@ export const TOAST_ACCESS_DENIED = {
 
 // Empty state messgaes
 export const ERROR_EMPTY_SCREEN = {
-    PAGE_NOT_FOUND: 'We could not find this page',
-    PAGE_NOT_EXIST: 'This page doesn’t exist or was removed. We suggest you go back to home',
-    TAKE_BACK_HOME: 'Take me home',
+    PAGE_NOT_FOUND: 'Not found',
+    PAGE_NOT_EXIST: 'Error 404: The requested resource could not be found. Please check the URL and try again.',
+    TAKE_BACK_HOME: 'Go back home',
+    REPORT_ISSUE: 'Report issue',
     ONLY_FOR_SUPERADMIN: 'Information on this page is available only to superadmin users.',
     NOT_AUTHORIZED: 'Not authorized',
-    UNAUTHORIZED: 'unauthorized',
-    FORBIDDEN: 'forbidden',
     REQUIRED_MANAGER_ACCESS:
         'Looks like you don’t have access to information on this page. Please contact your manager to request access.',
+    BAD_REQUEST: 'Bad request',
+    BAD_REQUEST_MESSAGE:
+        'Error 400: The request could not be understood by the server due to malformed syntax. Please check your request and try again.',
+    TRY_AGAIN: 'Try again',
+    UNAUTHORIZED: 'Unauthorized',
+    UNAUTHORIZED_MESSAGE:
+        'Error 401: You are not authorized to access this resource. Please contact your administrator for assistance.',
+    FORBIDDEN: 'Forbidden',
+    FORBIDDEN_MESSAGE:
+        'Error 403: You are not authorized to access this resource. Please contact your administrator for assistance.',
+    INTERNAL_SERVER_ERROR: 'Internal server error',
+    INTERNAL_SERVER_ERROR_MESSAGE:
+        'Error 500: The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later.',
+    BAD_GATEWAY: 'Bad gateway',
+    BAD_GATEWAY_MESSAGE:
+        'Error 500: The server received an invalid response from an upstream server. Please try again later.',
+    SERVICE_TEMPORARY_UNAVAILABLE: 'Service temporary unavailable',
+    SERVICE_TEMPORARY_UNAVAILABLE_MESSAGE:
+        'Error 503: The server is currently unable to handle the request due to a temporary overload or maintenance. Please try again later.',
 }
 export const TOKEN_COOKIE_NAME = 'argocd.token'
 export const TriggerTypeMap = {
@@ -265,9 +299,11 @@ export enum MODES {
     DOCKERFILE = 'dockerfile',
 }
 
+// The values are going to be part of route that's why they may contain -
 export enum APPROVAL_MODAL_TYPE {
     CONFIG = 'CONFIG',
     DEPLOYMENT = 'DEPLOYMENT',
+    IMAGE_PROMOTION = 'IMAGE-PROMOTION',
 }
 export const MAX_Z_INDEX = 2147483647
 
@@ -392,6 +428,9 @@ export enum ReactSelectInputAction {
 
 export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
 
+// Excluding 0 from this list as 0 is a valid value
+export const EXCLUDED_FALSY_VALUES = [undefined, null, '', NaN] as const
+
 export const API_STATUS_CODES = {
     UNAUTHORIZED: 401,
     PERMISSION_DENIED: 403,
@@ -403,8 +442,6 @@ export enum SERVER_MODE {
     EA_ONLY = 'EA_ONLY',
     FULL = 'FULL',
 }
-
-export const DISCORD_LINK = 'https://discord.devtron.ai/'
 
 export const POSTHOG_EVENT_ONBOARDING = {
     PREVIEW: 'Preview',

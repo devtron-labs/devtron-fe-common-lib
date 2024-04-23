@@ -37,7 +37,7 @@ export interface ImageButtonType {
     onHardDeleteClick?: any
     tagId: number
     softDeleteTags: any
-    isSuperAdmin: any
+    isSuperAdmin: boolean
     duplicateTag?: boolean
     hideHardDelete?: boolean
 }

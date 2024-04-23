@@ -6,10 +6,11 @@ import moment from 'moment'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import YAML from 'yaml'
-import { ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME } from './Constants'
+import { ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME, EXCLUDED_FALSY_VALUES, DISCORD_LINK } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
+import { DATE_TIME_FORMAT_STRING } from '../Shared'
 
 toast.configure({
     autoClose: 3000,
@@ -143,6 +144,13 @@ export function noop(...args): any {}
 
 export function not(e) {
     return !e
+}
+
+export const refresh = () => {
+    window.location.reload()
+}
+export const reportIssue = () => {
+    window.open(DISCORD_LINK)
 }
 
 export function useEffectAfterMount(cb, dependencies) {
@@ -290,7 +298,7 @@ export function handleUTCTime(ts: string, isRelativeTime = false) {
         if (ts && ts.length) {
             const date = moment(ts)
             if (isRelativeTime) timestamp = date.fromNow()
-            else timestamp = date.format('ddd DD MMM YYYY HH:mm:ss')
+            else timestamp = date.format(DATE_TIME_FORMAT_STRING)
         }
     } catch (error) {
         console.error('Error Parsing Date:', ts)
@@ -548,8 +556,7 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
 export const getUrlWithSearchParams = (url: string, params: Record<string | number, any> = {}) => {
     const searchParams = new URLSearchParams()
     Object.keys(params).forEach((key) => {
-        // TODO (Abhishek): Resolve conflict with image promotion
-        if (![null, NaN, undefined].includes(params[key])) {
+        if (!EXCLUDED_FALSY_VALUES.includes(params[key])) {
             if (Array.isArray(params[key])) {
                 params[key].forEach((val) => {
                     searchParams.append(key, val)
