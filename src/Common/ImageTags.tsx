@@ -254,7 +254,7 @@ export const ImageTagsContainer = ({
 
     const renderInfoCard = (): JSX.Element => (
         <InfoIconTippy
-            heading="Release tags"
+            heading="Image labels"
             additionalContent={getBuildContextAdditionalContent()}
             iconClassName="fcn-5 ml-4 icon-dim-16"
         />
