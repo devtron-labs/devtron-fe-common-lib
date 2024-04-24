@@ -67,7 +67,7 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
 
     const markFirstSelected = offset === 0
     const startIndex = offset
-    let isImageMarked = false
+    let isImageMarked = false //TODO: isImageMarked is dead code, Need to fix this
 
     const materials = artifacts.map((material, index) => {
         let artifactStatusValue = ''
