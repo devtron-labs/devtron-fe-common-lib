@@ -469,7 +469,7 @@ export function useAsync<T>(
     dependencyArray: any[] = [],
     shouldRun = true,
     options: AsyncOptions = { resetOnChange: true },
-): [boolean, T, any | null, () => Promise<void>, React.Dispatch<any>, any[]] {
+): [boolean, T, any | null, () => void, React.Dispatch<any>, any[]] {
     const [state, setState] = useState<AsyncState<T>>({
         loading: true,
         result: null,
