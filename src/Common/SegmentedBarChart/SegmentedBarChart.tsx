@@ -21,11 +21,15 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     return (
         <div className={`flexbox-col w-100 dc__gap-12 ${rootClassName}`}>
             <div className="flexbox dc__gap-16">
-                {entities?.map((entity) => (
+                {entities?.map((entity, index) => (
                     <div className="flexbox dc__gap-4 dc__align-items-center">
                         <div className="dot" style={{ backgroundColor: entity.color, width: '10px', height: '10px' }} />
-                        <span className={countClassName}>{entity.value}</span>
-                        <span className={labelClassName}>{entity.label}</span>
+                        <span className={countClassName} data-testid={`segmented-bar-chart-value-${index}`}>
+                            {entity.value}
+                        </span>
+                        <span className={labelClassName} data-testid={`segmented-bar-chart-label-${index}`}>
+                            {entity.label}
+                        </span>
                     </div>
                 ))}
             </div>
