@@ -22,21 +22,23 @@ export enum ModuleStatus {
 
 export interface PageHeaderType {
     headerName?: string
-    additionalHeaderInfo?: () => JSX.Element
-    isTippyShown?: boolean
-    tippyRedirectLink?: string
     showTabs?: boolean
+    additionalHeaderInfo?: () => JSX.Element
     renderHeaderTabs?: () => JSX.Element
     isBreadcrumbs?: boolean
     breadCrumbs?: () => JSX.Element
-    TippyIcon?: React.FunctionComponent<any>
-    tippyMessage?: string
-    onClickTippybutton?: () => void
     renderActionButtons?: () => JSX.Element
     showCloseButton?: boolean
     onClose?: () => void
     markAsBeta?: boolean
     showAnnouncementHeader?: boolean
+    tippyProps?: {
+        isTippyCustomized?: boolean
+        tippyRedirectLink?: string
+        TippyIcon?: React.FunctionComponent<any>
+        tippyMessage?: string
+        onClickTippyButton?: () => void
+    }
 }
 
 export interface ServerInfo {

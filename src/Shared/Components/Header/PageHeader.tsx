@@ -2,41 +2,38 @@ import { useEffect, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import './pageHeader.css'
 import ReactGA from 'react-ga4'
-import { getLoginInfo, getRandomColor, TippyCustomized, TippyTheme } from '../../../Common'
+import { getLoginInfo, getRandomColor } from '../../../Common'
 import LogoutCard from '../LogoutCard'
 import { setActionWithExpiry, handlePostHogEventUpdate } from './utils'
 import { InstallationType, ServerInfo, PageHeaderType } from './types'
 import { getServerInfo } from './service'
 import GettingStartedCard from '../GettingStartedCard/GettingStarted'
-import { POSTHOG_EVENT_ONBOARDING, MAX_LOGIN_COUNT, BULK_EDIT_HEADER } from '../../../Common/Constants'
+import { POSTHOG_EVENT_ONBOARDING, MAX_LOGIN_COUNT } from '../../../Common/Constants'
 import HelpNav from './HelpNav'
 import { ReactComponent as Question } from '../../../Assets/Icon/ic-help-outline.svg'
-import { ReactComponent as QuestionFilled } from '../../../Assets/Icon/ic-help.svg'
 import { ReactComponent as Close } from '../../../Assets/Icon/ic-close.svg'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import AnnouncementBanner from '../AnnouncementBanner/AnnouncementBanner'
 import { useMainContext } from '../../Providers'
+import { InfoIconTippy } from '../InfoIconTippy'
 
 const PageHeader = ({
     headerName,
     additionalHeaderInfo,
-    isTippyShown = false,
-    tippyRedirectLink,
     showTabs = false,
     renderHeaderTabs,
     isBreadcrumbs = false,
     breadCrumbs,
-    TippyIcon,
-    tippyMessage,
-    onClickTippybutton,
     renderActionButtons,
     showCloseButton = false,
     onClose,
     markAsBeta,
     showAnnouncementHeader,
+    tippyProps,
 }: PageHeaderType) => {
     const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard, setGettingStartedClicked } =
         useMainContext()
+    const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton } = tippyProps
     const [showHelpCard, setShowHelpCard] = useState(false)
     const [showLogOutCard, setShowLogOutCard] = useState(false)
     const loginInfo = getLoginInfo()
@@ -166,47 +163,43 @@ const PageHeader = ({
                     </span>
                     {additionalHeaderInfo && additionalHeaderInfo()}
                     {isBreadcrumbs && breadCrumbs()}
-                    {isTippyShown && headerName !== BULK_EDIT_HEADER && (
-                        <a
-                            data-testid="learn-more-symbol"
-                            className="dc__link flex"
-                            target="_blank"
-                            href={tippyRedirectLink}
-                            onClick={onClickTippybutton}
-                            rel="noreferrer"
-                            aria-label="tippy-icon"
-                        >
-                            <Tippy
-                                className="default-tt "
-                                arrow={false}
-                                placement="top"
-                                content={<span style={{ display: 'block', width: '66px' }}> {tippyMessage} </span>}
+                    {tippyProps &&
+                        (isTippyCustomized ? (
+                            <InfoIconTippy
+                                infoText={tippyMessage}
+                                heading={headerName}
+                                iconClassName="icon-dim-20"
+                                documentationLink={tippyRedirectLink}
+                                documentationLinkText="Learn More"
                             >
-                                <div className="flex">
-                                    <TippyIcon className="icon-dim-20 ml-16 cursor fcn-5" />
-                                </div>
-                            </Tippy>
-                        </a>
-                    )}
-                    {isTippyShown && headerName === BULK_EDIT_HEADER && (
-                        <TippyCustomized
-                            theme={TippyTheme.white}
-                            className="w-300 h-100 fcv-5"
-                            placement="bottom"
-                            Icon={QuestionFilled}
-                            heading={headerName}
-                            infoText={tippyMessage}
-                            showCloseButton
-                            trigger="click"
-                            interactive
-                            documentationLink={tippyRedirectLink}
-                            documentationLinkText="Learn More"
-                        >
-                            <div className="flex">
-                                <TippyIcon className="icon-dim-20 ml-16 cursor fcn-5" />
-                            </div>
-                        </TippyCustomized>
-                    )}
+                                {TippyIcon && (
+                                    <div className="flex">
+                                        <TippyIcon className="icon-dim-20 ml-16 cursor fcn-5" />
+                                    </div>
+                                )}
+                            </InfoIconTippy>
+                        ) : (
+                            <a
+                                data-testid="learn-more-symbol"
+                                className="dc__link flex"
+                                target="_blank"
+                                href={tippyRedirectLink}
+                                onClick={onClickTippyButton}
+                                rel="noreferrer"
+                                aria-label="tippy-icon"
+                            >
+                                <Tippy
+                                    className="default-tt "
+                                    arrow={false}
+                                    placement="top"
+                                    content={<span style={{ display: 'block', width: '66px' }}> {tippyMessage} </span>}
+                                >
+                                    <div className="flex">
+                                        <TippyIcon className="icon-dim-20 ml-8 cursor fcn-5" />
+                                    </div>
+                                </Tippy>
+                            </a>
+                        ))}
                     {markAsBeta && renderBetaTag()}
                 </div>
                 {showTabs && (

@@ -455,5 +455,4 @@ export const POSTHOG_EVENT_ONBOARDING = {
     SKIP_AND_EXPLORE_DEVTRON: 'SkippedOnboarding',
 }
 export const MAX_LOGIN_COUNT = 5
-export const BULK_EDIT_HEADER = 'Bulk Edit'
 export const LOGIN_COUNT = 'login-count'
