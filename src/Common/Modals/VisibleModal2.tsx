@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { preventBodyScroll } from '../../Shared';
+import { preventBodyScroll } from '../../Shared'
 
 export class VisibleModal2 extends React.Component<{ className: string; close?: (e) => void }> {
     modalRef = document.getElementById('visible-modal-2')
