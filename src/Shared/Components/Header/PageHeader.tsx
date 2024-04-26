@@ -33,7 +33,8 @@ const PageHeader = ({
 }: PageHeaderType) => {
     const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard, setGettingStartedClicked } =
         useMainContext()
-    const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton } = tippyProps
+    const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
+        tippyProps || {}
     const [showHelpCard, setShowHelpCard] = useState(false)
     const [showLogOutCard, setShowLogOutCard] = useState(false)
     const loginInfo = getLoginInfo()
@@ -168,13 +169,14 @@ const PageHeader = ({
                             <InfoIconTippy
                                 infoText={tippyMessage}
                                 heading={headerName}
-                                iconClassName="icon-dim-20"
+                                iconClassName="icon-dim-20 ml-8 fcn-5"
                                 documentationLink={tippyRedirectLink}
                                 documentationLinkText="Learn More"
+                                additionalContent={additionalContent}
                             >
                                 {TippyIcon && (
                                     <div className="flex">
-                                        <TippyIcon className="icon-dim-20 ml-16 cursor fcn-5" />
+                                        <TippyIcon className="icon-dim-20 ml- cursor fcn-5" />
                                     </div>
                                 )}
                             </InfoIconTippy>

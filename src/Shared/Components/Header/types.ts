@@ -1,4 +1,4 @@
-import { ResponseType } from '../../../Common'
+import { ResponseType, TippyCustomizedProps } from '../../../Common'
 
 export enum InstallationType {
     OSS_KUBECTL = 'oss_kubectl',
@@ -32,7 +32,7 @@ export interface PageHeaderType {
     onClose?: () => void
     markAsBeta?: boolean
     showAnnouncementHeader?: boolean
-    tippyProps?: {
+    tippyProps?: Pick<TippyCustomizedProps, 'additionalContent'> & {
         isTippyCustomized?: boolean
         tippyRedirectLink?: string
         TippyIcon?: React.FunctionComponent<any>
