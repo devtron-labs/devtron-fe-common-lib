@@ -503,7 +503,7 @@ export function useAsync<T>(
                     }))
             }
         }
-        call()
+        return call()
     }
 
     useEffect(() => {

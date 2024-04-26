@@ -32,6 +32,7 @@ export interface UseBulkSelectionReturnType<T> extends GetBulkSelectionCheckboxV
 
 export interface BulkSelectionProps {
     showPagination: boolean
+    disabled?: boolean
 }
 
 export interface BulkSelectionDropdownItemsType {

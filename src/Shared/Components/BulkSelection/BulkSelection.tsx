@@ -8,7 +8,7 @@ import { ReactComponent as ICCheckSquare } from '../../../Assets/Icon/ic-check-s
 import { ReactComponent as ICCheckAll } from '../../../Assets/Icon/ic-check-all.svg'
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 
-const BulkSelection = <T,>({ showPagination }: BulkSelectionProps) => {
+const BulkSelection = <T,>({ showPagination, disabled = false }: BulkSelectionProps) => {
     const { handleBulkSelection, isChecked, checkboxValue, getSelectedIdentifiersCount } = useBulkSelection<T>()
     const areOptionsSelected = getSelectedIdentifiersCount() > 0
     const BulkSelectionItems: BulkSelectionDropdownItemsType[] = [
@@ -47,12 +47,14 @@ const BulkSelection = <T,>({ showPagination }: BulkSelectionProps) => {
                 isKebab
                 rootClassName="h-20 flexbox p-0 dc__no-background dc__no-border dc__outline-none-imp"
                 dataTestId={BULK_DROPDOWN_TEST_ID}
+                disabled={disabled}
             >
                 <Checkbox
                     isChecked={isChecked}
                     onChange={noop}
                     rootClassName="icon-dim-20 m-0"
                     value={checkboxValue}
+                    disabled={disabled}
                     // Ideally should be disabled but was giving issue with cursor
                 />
 
