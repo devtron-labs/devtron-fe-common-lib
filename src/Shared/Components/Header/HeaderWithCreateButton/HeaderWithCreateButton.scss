@@ -1,10 +1,6 @@
 .create-modal-wrapper {
-    position: fixed;
     right: 24px;
     top: 50px;
-    overflow: hidden;
-    border-radius: 4px;
-    border: 1px solid var(--N200, #D0D4D9);
     background: var(--Neutral-N0, #FFF);
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.20);
 }

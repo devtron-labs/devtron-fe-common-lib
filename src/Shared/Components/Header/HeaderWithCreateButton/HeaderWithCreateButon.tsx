@@ -52,11 +52,11 @@ export const HeaderWithCreateButton = ({
     }
 
     const openCreateReleaseModal = () => {
-        history.push(`releases/create`)
+        history.push(`${URLS.RELEASES}${URLS.CREATE}`)
     }
 
     const dropdownOptions = (
-        <div className="flexbox-col w-296 pt-4 pb-4 bcn-0 br-4 create-modal-wrapper">
+        <div className="flexbox-col w-296 pt-4 pb-4 bcn-0 br-4 create-modal-wrapper dc__overflow-hidden dc__border dc__position-fixed">
             <button
                 type="button"
                 className="flexbox pl-10 pr-10 pt-8 pb-8 dc__transparent dc__gap-12"
@@ -122,7 +122,7 @@ export const HeaderWithCreateButton = ({
         </div>
     )
 
-    const buttonClickHandlerFunc = (btnType: string) => {
+    const getButtonClickHandlerFunc = (btnType: string) => {
         switch (btnType) {
             case PageHeaderButtonType.APP:
                 return openCreateDevtronAppModel
@@ -139,7 +139,7 @@ export const HeaderWithCreateButton = ({
         serverMode === SERVER_MODE.FULL ? (
             <ButtonWithSelector
                 buttonContent={buttonContent}
-                buttonClickHandler={buttonClickHandlerFunc(buttonType)}
+                buttonClickHandler={getButtonClickHandlerFunc(buttonType)}
                 menuItems={dropdownOptions}
             />
         ) : (
