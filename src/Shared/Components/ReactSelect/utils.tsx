@@ -12,8 +12,8 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
     }),
     menuList: (base) => ({
         ...base,
-        paddingTop: 0,
-        paddingBottom: 0,
+        padding: 0,
+        paddingBlock: '4px',
         cursor: 'pointer',
     }),
     control: (base, state) => ({
@@ -35,9 +35,13 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
     option: (base, state) => ({
         ...base,
         color: 'var(--N900)',
-        backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
+        // eslint-disable-next-line no-nested-ternary
+        backgroundColor: state.isSelected ? 'var(--B100)' : state.isFocused ? 'var(--N100)' : 'white',
         padding: '10px 12px',
         cursor: 'pointer',
+        fontSize: '13px',
+        lineHeight: '20px',
+        fontWeight: 400,
 
         ':active': {
             backgroundColor: 'var(--N100)',
@@ -45,7 +49,7 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
     }),
     dropdownIndicator: (base, state) => ({
         ...base,
-        color: 'var(--N400)',
+        color: 'var(--N600)',
         padding: '0 8px',
         transition: 'all .2s ease',
         transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
@@ -129,3 +133,18 @@ export const SelectOption = (props: any) => {
 }
 
 export const LoadingIndicator = () => <Progressing />
+
+export const GroupHeading = (props: any) => {
+    const { data } = props
+    if (!data.label) {
+        return null
+    }
+
+    return (
+        <components.GroupHeading {...props}>
+            <div className="flex dc__no-text-transform flex-justify dc__truncate-text h-100">
+                <span className="dc__truncate-text">{data.label}</span>
+            </div>
+        </components.GroupHeading>
+    )
+}

@@ -50,6 +50,7 @@ export interface customEnv {
     API_BATCH_SIZE: number
     SERVICE_WORKER_TIMEOUT?: string
     HIDE_RELEASES?: boolean
+    FEATURE_USER_DEFINED_GITOPS_REPO_ENABLE: boolean
 }
 declare global {
     interface Window {

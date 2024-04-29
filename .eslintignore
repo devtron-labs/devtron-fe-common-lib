@@ -38,7 +38,6 @@ src/Common/DraggableWrapper/DraggableWrapper.tsx
 src/Common/Drawer/Drawer.tsx
 src/Common/EmptyState/GenericEmptyState.tsx
 src/Common/Error.tsx
-src/Common/ErrorScreenNotFound.tsx
 src/Common/Grid/Grid.tsx
 src/Common/Helper.tsx
 src/Common/Hooks/UseClickOutside/UseClickOutside.tsx

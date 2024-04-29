@@ -221,6 +221,9 @@ export const post = (
 export const put = (url: string, data: object, options?: APIOptions): Promise<ResponseType> =>
     fetchInTime(url, 'PUT', data, options)
 
+export const patch = (url: string, data: object, options?: APIOptions): Promise<ResponseType> =>
+    fetchInTime(url, 'PATCH', data, options)
+
 export const get = (url: string, options?: APIOptions): Promise<ResponseType> => fetchInTime(url, 'GET', null, options)
 
 export const trash = (url: string, data?: object, options?: APIOptions): Promise<ResponseType> =>

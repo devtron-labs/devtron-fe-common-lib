@@ -1,15 +1,16 @@
+import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as Sentry from '@sentry/browser'
 import * as jsonpatch from 'fast-json-patch'
 import { JSONPath } from 'jsonpath-plus'
 import moment from 'moment'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import YAML from 'yaml'
-import { ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME } from './Constants'
+import { ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME, EXCLUDED_FALSY_VALUES, DISCORD_LINK } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
+import { DATE_TIME_FORMAT_STRING } from '../Shared'
 
 toast.configure({
     autoClose: 3000,
@@ -79,6 +80,10 @@ export const stopPropagation = (event): void => {
     event.stopPropagation()
 }
 
+export const preventDefault = (event: SyntheticEvent): void => {
+    event.preventDefault()
+}
+
 export function useThrottledEffect(callback, delay, deps = []) {
     // function will be executed only once in a given time interval.
     const lastRan = useRef(Date.now())
@@ -139,6 +144,13 @@ export function noop(...args): any {}
 
 export function not(e) {
     return !e
+}
+
+export const refresh = () => {
+    window.location.reload()
+}
+export const reportIssue = () => {
+    window.open(DISCORD_LINK)
 }
 
 export function useEffectAfterMount(cb, dependencies) {
@@ -286,7 +298,7 @@ export function handleUTCTime(ts: string, isRelativeTime = false) {
         if (ts && ts.length) {
             const date = moment(ts)
             if (isRelativeTime) timestamp = date.fromNow()
-            else timestamp = date.format('ddd DD MMM YYYY HH:mm:ss')
+            else timestamp = date.format(DATE_TIME_FORMAT_STRING)
         }
     } catch (error) {
         console.error('Error Parsing Date:', ts)
@@ -491,7 +503,7 @@ export function useAsync<T>(
                     }))
             }
         }
-        call()
+        return call()
     }
 
     useEffect(() => {
@@ -541,10 +553,10 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
  * @param url URL to which the search params needs to be added
  * @param params Object for the search parameters
  */
-export const getUrlWithSearchParams = (url: string, params: Record<string | number, any>) => {
+export const getUrlWithSearchParams = (url: string, params: Record<string | number, any> = {}) => {
     const searchParams = new URLSearchParams()
     Object.keys(params).forEach((key) => {
-        if (params[key]) {
+        if (!EXCLUDED_FALSY_VALUES.includes(params[key])) {
             if (Array.isArray(params[key])) {
                 params[key].forEach((val) => {
                     searchParams.append(key, val)
@@ -721,6 +733,54 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
  * Returns a stringified YAML with default indentation & line width
  */
 
-export const YAMLStringify = (obj: object | unknown, option?: object) => (
-    YAML.stringify(obj, { indent: 2, lineWidth: 0, ...option  })
-)
+export const YAMLStringify = (obj: object | unknown, option?: object) =>
+    YAML.stringify(obj, { indent: 2, lineWidth: 0, ...option })
+
+/**
+ * compare Object Length of the object
+ */
+export const compareObjectLength = (objA: any, objB: any): boolean => {
+    if (objA === objB) {
+        return true
+    }
+
+    const isArrayA = Array.isArray(objA)
+    const isArrayB = Array.isArray(objB)
+
+    if ((isArrayA && !isArrayB) || (!isArrayA && isArrayB)) {
+        return false
+    }
+    if (!isArrayA && !isArrayB) {
+        return Object.keys(objA).length === Object.keys(objB).length
+    }
+
+    return objA.length === objB.length
+}
+
+/**
+ * Return deep copy of the object
+ */
+export function deepEqual(configA: any, configB: any): boolean {
+    try {
+        if (configA === configB) {
+            return true
+        }
+        if ((configA && !configB) || (!configA && configB) || !compareObjectLength(configA, configB)) {
+            return false
+        }
+        let isEqual = true
+        for (const idx in configA) {
+            if (!isEqual) {
+                break
+            } else if (typeof configA[idx] === 'object' && typeof configB[idx] === 'object') {
+                isEqual = deepEqual(configA[idx], configB[idx])
+            } else if (configA[idx] !== configB[idx]) {
+                isEqual = false
+            }
+        }
+        return isEqual
+    } catch (err) {
+        showError(err)
+        return true
+    }
+}
