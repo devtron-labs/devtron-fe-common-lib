@@ -326,3 +326,8 @@ export function fetchChartTemplateVersions() {
 export const getDefaultConfig = (): Promise<ResponseType> => {
     return get(`${ROUTES.NOTIFIER}/channel/config`)
 }
+
+export function getWebhookEventsForEventId(eventId: string | number) {
+    const URL = `${ROUTES.GIT_HOST_EVENT}/${eventId}`
+    return get(URL)
+}
