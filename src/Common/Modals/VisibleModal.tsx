@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { preventBodyScroll } from '../../Shared'
 
 export class VisibleModal extends React.Component<{
     className: string
@@ -28,6 +29,7 @@ export class VisibleModal extends React.Component<{
     componentDidMount() {
         document.addEventListener('keydown', this.escFunction)
         this.modalRef.classList.add(this.props.noBackground ? 'show' : 'show-with-bg')
+        preventBodyScroll(true)
 
         if (this.props.parentClassName) {
             this.modalRef.classList.add(this.props.parentClassName)
@@ -38,6 +40,7 @@ export class VisibleModal extends React.Component<{
         document.removeEventListener('keydown', this.escFunction)
         this.modalRef.classList.remove('show')
         this.modalRef.classList.remove('show-with-bg')
+        preventBodyScroll(false)
 
         if (this.props.parentClassName) {
             this.modalRef.classList.remove(this.props.parentClassName)

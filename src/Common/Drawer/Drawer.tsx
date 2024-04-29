@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react'
+import { preventBodyScroll } from '../../Shared'
 import { VisibleModal } from '../Modals/VisibleModal'
 import './Drawer.scss'
 
@@ -28,7 +29,11 @@ export const Drawer = ({
     const drawerRef = useRef(null)
     useEffect(() => {
         setTimeout(() => drawerRef.current?.classList?.add('show'), 1)
-        return () => drawerRef.current?.classList?.remove('show')
+        preventBodyScroll(true)
+        return () => {
+            drawerRef.current?.classList?.remove('show')
+            preventBodyScroll(false)
+        }
     }, [])
     const style = {}
     if (position === 'left' || position === 'right') {
