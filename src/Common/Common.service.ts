@@ -62,12 +62,12 @@ export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
 }
 
-const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: number, artifactStatus?: string) => {
+const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: number, artifactStatus?: string, disableDefaultSelection?: boolean) => {
     if (!artifacts || !artifacts.length) return []
 
     const markFirstSelected = offset === 0
     const startIndex = offset
-    let isImageMarked = false
+    let isImageMarked = disableDefaultSelection
 
     const materials = artifacts.map((material, index) => {
         let artifactStatusValue = ''
@@ -178,8 +178,8 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
     }
 
     return {
-        appReleaseTagNames: cdMaterialsResult.appReleaseTagNames,
-        tagsEditable: cdMaterialsResult.tagsEditable,
+        appReleaseTagNames: cdMaterialsResult.appReleaseTagNames ?? [],
+        tagsEditable: cdMaterialsResult.tagsEditable ?? false,
         hideImageTaggingHardDelete: cdMaterialsResult.hideImageTaggingHardDelete,
         resourceFilters: cdMaterialsResult.resourceFilters ?? [],
         totalCount: cdMaterialsResult.totalCount ?? 0,
@@ -201,11 +201,12 @@ const processImagePromotionInfo = (cdMaterialsResult): ImagePromotionMaterialInf
     }
 }
 
-const processCDMaterialServiceResponse = (
+export const processCDMaterialServiceResponse = (
     cdMaterialsResult,
     stage: DeploymentNodeType,
     offset: number,
     filter: CDMaterialFilterQuery,
+    disableDefaultSelection?: boolean,
 ): CDMaterialResponseType => {
     if (!cdMaterialsResult) {
         return {
@@ -221,6 +222,7 @@ const processCDMaterialServiceResponse = (
         offset ?? 0,
         cdMaterialsResult.latest_wf_artifact_id,
         cdMaterialsResult.latest_wf_artifact_status,
+        disableDefaultSelection,
     )
     const approvalInfo = processCDMaterialsApprovalInfo(
         stage === DeploymentNodeType.CD || stage === DeploymentNodeType.APPROVAL,
@@ -251,7 +253,7 @@ const getSanitizedQueryParams = (queryParams: CDMaterialServiceQueryParams): CDM
 export const genericCDMaterialsService = (
     serviceType: CDMaterialServiceEnum,
     /**
-     * In case of hotfix would be sending it as null
+     * In case of multiple candidates are there like promotion, would be sending it as null
      */
     cdMaterialID: number,
     /**
@@ -274,7 +276,6 @@ export const genericCDMaterialsService = (
             // Directly sending queryParams since do not need to get queryParams sanitized in case of image promotion
             URL = getUrlWithSearchParams(ROUTES.APP_ARTIFACT_PROMOTE_MATERIAL, queryParams)
             break
-
         // Meant for handling getCDMaterialList
         default:
             URL = getUrlWithSearchParams(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material`, {
