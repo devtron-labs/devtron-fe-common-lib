@@ -45,6 +45,7 @@ export const ROUTES = {
     SERVER_INFO_API: 'server',
     ATTRIBUTES_USER: 'attributes/user',
     UPDATE: 'update',
+    ENVIRONMENT_LIST_MIN: 'env/autocomplete',
 }
 
 export enum KEY_VALUE {
@@ -456,3 +457,4 @@ export const POSTHOG_EVENT_ONBOARDING = {
 }
 export const MAX_LOGIN_COUNT = 5
 export const LOGIN_COUNT = 'login-count'
+export const DEFAULT_ENV = 'devtron-ci'

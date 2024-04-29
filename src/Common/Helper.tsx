@@ -732,3 +732,37 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
 export const YAMLStringify = (obj: object | unknown, option?: object) => (
     YAML.stringify(obj, { indent: 2, lineWidth: 0, ...option  })
 )
+
+export function createClusterEnvGroup<T>(
+  list: T[],
+  propKey: string,
+  optionLabel?: string,
+  optionValue?: string,
+): { label: string; options: T[]; isVirtualEnvironment?: boolean }[] {
+  const objList: Record<string, T[]> = list.reduce((acc, obj) => {
+      const key = obj[propKey]
+      if (!acc[key]) {
+          acc[key] = []
+      }
+      acc[key].push(
+          optionLabel
+              ? {
+                    label: obj[optionLabel],
+                    value: obj[optionValue || optionLabel],
+                    description: obj['description'],
+                    isVirtualEnvironment: obj['isVirtualEnvironment'],
+                    isClusterCdActive: obj['isClusterCdActive'],
+                }
+              : obj,
+      )
+      return acc
+  }, {})
+
+  return Object.entries(objList)
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([key, value]) => ({
+          label: key,
+          options: value,
+          isVirtualEnvironment: value[0]['isVirtualEnvironment'], // All the values will be having similar isVirtualEnvironment
+      }))
+}

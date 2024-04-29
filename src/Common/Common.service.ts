@@ -267,7 +267,10 @@ export const genericCDMaterialsService = (
     let URL
     switch (serviceType) {
         case CDMaterialServiceEnum.ROLLBACK:
-            URL = getUrlWithSearchParams(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material/rollback`, manipulatedParams)
+            URL = getUrlWithSearchParams(
+                `${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material/rollback`,
+                manipulatedParams,
+            )
             break
 
         case CDMaterialServiceEnum.IMAGE_PROMOTION:
@@ -324,4 +327,10 @@ export function fetchChartTemplateVersions() {
 
 export const getDefaultConfig = (): Promise<ResponseType> => {
     return get(`${ROUTES.NOTIFIER}/channel/config`)
+}
+
+export function getEnvironmentListMinPublic(includeAllowedDeploymentTypes?: boolean) {
+    return get(
+        `${ROUTES.ENVIRONMENT_LIST_MIN}?auth=false${includeAllowedDeploymentTypes ? '&showDeploymentOptions=true' : ''}`,
+    )
 }
