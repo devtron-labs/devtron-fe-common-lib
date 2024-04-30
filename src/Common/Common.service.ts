@@ -16,7 +16,7 @@ import {
     CDMaterialFilterQuery,
     ImagePromotionMaterialInfo,
 } from './Types'
-import { ApiResourceType } from './ResourceBrowser/ResourceBrowser.Types'
+import { ApiResourceType } from '../Pages'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
