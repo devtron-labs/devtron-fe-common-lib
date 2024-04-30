@@ -334,3 +334,13 @@ export function getEnvironmentListMinPublic(includeAllowedDeploymentTypes?: bool
         `${ROUTES.ENVIRONMENT_LIST_MIN}?auth=false${includeAllowedDeploymentTypes ? '&showDeploymentOptions=true' : ''}`,
     )
 }
+
+export function getClusterListMin() {
+    const URL = `${ROUTES.CLUSTER}/autocomplete`
+    return get(URL)
+}
+
+//Add the typings
+export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType> => {
+    return get(`${ROUTES.API_RESOURCE}/${ROUTES.GVK}/${clusterId}`)
+}

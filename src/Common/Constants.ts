@@ -46,6 +46,9 @@ export const ROUTES = {
     ATTRIBUTES_USER: 'attributes/user',
     UPDATE: 'update',
     ENVIRONMENT_LIST_MIN: 'env/autocomplete',
+    CLUSTER: 'cluster',
+    API_RESOURCE: 'k8s/api-resources',
+    GVK: 'gvk',
 }
 
 export enum KEY_VALUE {
