@@ -42,3 +42,9 @@ export enum PatchOperationType {
     replace = 'replace',
     remove = 'remove',
 }
+
+export enum DeploymentStageType {
+    PRE = 'PRE',
+    DEPLOY = 'DEPLOY',
+    POST = 'POST',
+}
