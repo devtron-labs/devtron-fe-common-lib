@@ -21,7 +21,3 @@ export interface K8SObjectBaseType {
     name: string
     isExpanded: boolean
 }
-
-export interface K8SObjectType extends K8SObjectBaseType {
-    child: ApiResourceGroupType[]
-}

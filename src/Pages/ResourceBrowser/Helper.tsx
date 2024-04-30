@@ -1,6 +1,4 @@
 import { AggregationKeys, NodeType, Nodes } from '../../Shared'
-import { SIDEBAR_KEYS } from './Constants'
-import { ApiResourceGroupType, K8SObjectType } from './ResourceBrowser.Types'
 
 export function getAggregator(nodeType: NodeType, defaultAsOtherResources?: boolean): AggregationKeys {
     switch (nodeType) {
@@ -50,53 +48,4 @@ export function getAggregator(nodeType: NodeType, defaultAsOtherResources?: bool
         default:
             return defaultAsOtherResources ? AggregationKeys['Other Resources'] : AggregationKeys['Custom Resource']
     }
-}
-
-export const processK8SObjects = (
-    k8sObjects: ApiResourceGroupType[],
-    selectedResourceKind?: string,
-    disableGroupFilter?: boolean,
-): { k8SObjectMap: Map<string, K8SObjectType>; selectedResource: ApiResourceGroupType } => {
-    const _k8SObjectMap = new Map<string, K8SObjectType>()
-    let _selectedResource: ApiResourceGroupType
-    for (let index = 0; index < k8sObjects.length; index++) {
-        const element = k8sObjects[index]
-        const groupParent = disableGroupFilter
-            ? element.gvk.Group
-            : getAggregator(element.gvk.Kind, element.gvk.Group.endsWith('.k8s.io'))
-
-        if (element.gvk.Kind.toLowerCase() === selectedResourceKind) {
-            _selectedResource = { namespaced: element.namespaced, gvk: element.gvk }
-        }
-        const currentData = _k8SObjectMap.get(groupParent)
-        if (!currentData) {
-            _k8SObjectMap.set(groupParent, {
-                name: groupParent,
-                isExpanded:
-                    element.gvk.Kind !== SIDEBAR_KEYS.namespaceGVK.Kind &&
-                    element.gvk.Kind !== SIDEBAR_KEYS.eventGVK.Kind &&
-                    element.gvk.Kind.toLowerCase() === selectedResourceKind,
-                child: [{ namespaced: element.namespaced, gvk: element.gvk }],
-            })
-        } else {
-            currentData.child = [...currentData.child, { namespaced: element.namespaced, gvk: element.gvk }]
-            if (element.gvk.Kind.toLowerCase() === selectedResourceKind) {
-                currentData.isExpanded =
-                    element.gvk.Kind !== SIDEBAR_KEYS.namespaceGVK.Kind &&
-                    element.gvk.Kind !== SIDEBAR_KEYS.eventGVK.Kind &&
-                    element.gvk.Kind.toLowerCase() === selectedResourceKind
-            }
-        }
-        if (element.gvk.Kind === SIDEBAR_KEYS.eventGVK.Kind) {
-            SIDEBAR_KEYS.eventGVK = { ...element.gvk }
-        }
-        if (element.gvk.Kind === SIDEBAR_KEYS.namespaceGVK.Kind) {
-            SIDEBAR_KEYS.namespaceGVK = { ...element.gvk }
-        }
-    }
-    // eslint-disable-next-line no-restricted-syntax
-    for (const [, _k8sObject] of _k8SObjectMap.entries()) {
-        _k8sObject.child.sort((a, b) => a.gvk.Kind.localeCompare(b.gvk.Kind))
-    }
-    return { k8SObjectMap: _k8SObjectMap, selectedResource: _selectedResource }
 }
