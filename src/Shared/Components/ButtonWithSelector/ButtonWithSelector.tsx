@@ -4,6 +4,13 @@ import { PopupMenu } from '../../../Common'
 import { ButtonWithSelectorProps } from './types'
 import './buttonWithSelector.scss'
 
+/**
+ * Button WIth Selector
+ * @param buttonContent Content to show in button
+ * @param buttonClickHandler Handler Function for button click
+ * @param menuItems Dropdown Content
+ */
+
 const ButtonWithSelector = ({ buttonContent, buttonClickHandler, menuItems }: ButtonWithSelectorProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
 
