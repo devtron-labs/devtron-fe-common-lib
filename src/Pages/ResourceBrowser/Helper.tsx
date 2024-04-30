@@ -2,40 +2,6 @@ import { AggregationKeys, NodeType, Nodes } from '../../Shared'
 import { SIDEBAR_KEYS } from './Constants'
 import { ApiResourceGroupType, K8SObjectType } from './ResourceBrowser.Types'
 
-export function createClusterEnvGroup<T extends Record<string, string>>(
-    list: T[],
-    propKey: string,
-    optionLabel?: string,
-    optionValue?: string,
-): { label: string; options: T[]; isVirtualEnvironment?: boolean }[] {
-    const objList: Record<string, T[]> = list.reduce((acc, obj) => {
-        const key = obj[propKey]
-        if (!acc[key]) {
-            acc[key] = []
-        }
-        acc[key].push(
-            optionLabel
-                ? {
-                      label: obj[optionLabel],
-                      value: obj[optionValue || optionLabel],
-                      description: obj.description,
-                      isVirtualEnvironment: obj.isVirtualEnvironment,
-                      isClusterCdActive: obj.isClusterCdActive,
-                  }
-                : obj,
-        )
-        return acc
-    }, {})
-
-    return Object.entries(objList)
-        .sort((a, b) => a[0].localeCompare(b[0]))
-        .map(([key, value]) => ({
-            label: key,
-            options: value,
-            isVirtualEnvironment: !!value[0].isVirtualEnvironment, // All the values will be having similar isVirtualEnvironment
-        }))
-}
-
 export function getAggregator(nodeType: NodeType, defaultAsOtherResources?: boolean): AggregationKeys {
     switch (nodeType) {
         case Nodes.DaemonSet:
