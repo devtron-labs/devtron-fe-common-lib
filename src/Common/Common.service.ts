@@ -16,6 +16,7 @@ import {
     CDMaterialFilterQuery,
     ImagePromotionMaterialInfo,
 } from './Types'
+import { ApiResourceType } from './ResourceBrowser/ResourceBrowser.Types'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -340,7 +341,6 @@ export function getClusterListMin() {
     return get(URL)
 }
 
-//Add the typings
-export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType> => {
+export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType<ApiResourceType>> => {
     return get(`${ROUTES.API_RESOURCE}/${ROUTES.GVK}/${clusterId}`)
 }
