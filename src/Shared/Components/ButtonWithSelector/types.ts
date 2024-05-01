@@ -5,4 +5,5 @@ export interface ButtonWithSelectorProps {
     onClick: () => void
     children: ReactNode
     className?: string
+    popUpBodyClassName?: string
 }

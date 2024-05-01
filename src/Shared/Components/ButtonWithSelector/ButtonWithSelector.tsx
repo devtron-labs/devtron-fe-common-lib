@@ -13,18 +13,24 @@ import './buttonWithSelector.scss'
  *
  * @example
  * ```tsx
- * <ButtonWithSelector buttonContent='Create Job' buttonClickHandler={() => {} className=''}>
+ * <ButtonWithSelector content='Create Job' onClick={() => {}} className=''>
  *  {dropdownOptions}
  * </ButtonWithSelector>
  * ```
  */
-const ButtonWithSelector = ({ content, onClick, children, className = '' }: ButtonWithSelectorProps) => {
+const ButtonWithSelector = ({
+    content,
+    onClick,
+    children,
+    className = '',
+    popUpBodyClassName = '',
+}: ButtonWithSelectorProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
 
     return (
-        <>
+        <div className="flexbox">
             <button
-                className={`cta flex h-28 dc__no-right-radius dc__no-border-imp fs-12 fw-6 lh-18 ${className}`}
+                className={`cta flex h-28 dc__no-right-radius dc__no-border-imp fs-12 fw-6 lh-20-imp ${className}`}
                 type="button"
                 onClick={onClick}
             >
@@ -37,9 +43,11 @@ const ButtonWithSelector = ({ content, onClick, children, className = '' }: Butt
                         style={{ ['--rotateBy' as any]: isMenuOpen ? '180deg' : '0deg' }}
                     />
                 </PopupMenu.Button>
-                <PopupMenu.Body>{children}</PopupMenu.Body>
+                <PopupMenu.Body rootClassName={`pt-4 pb-4 dc__border dc__overflow-hidden ${popUpBodyClassName}`}>
+                    {children}
+                </PopupMenu.Body>
             </PopupMenu>
-        </>
+        </div>
     )
 }
 
