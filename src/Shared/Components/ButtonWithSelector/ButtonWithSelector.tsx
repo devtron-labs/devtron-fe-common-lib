@@ -9,21 +9,22 @@ import './buttonWithSelector.scss'
  * @param content Content to show in button
  * @param onClick Handler Function for button click
  * @param children Dropdown Content
+ * @param className Other Classes to be applied
  *
  * @example
  * ```tsx
- * <ButtonWithSelector buttonContent='Create Job' buttonClickHandler={() => {}}>
+ * <ButtonWithSelector buttonContent='Create Job' buttonClickHandler={() => {} className=''}>
  *  {dropdownOptions}
  * </ButtonWithSelector>
  * ```
  */
-const ButtonWithSelector = ({ content, onClick, children }: ButtonWithSelectorProps) => {
+const ButtonWithSelector = ({ content, onClick, children, className = '' }: ButtonWithSelectorProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
 
     return (
         <>
             <button
-                className="cta flex h-28 dc__no-right-radius dc__no-border-imp fs-12 fw-6 lh-18"
+                className={`cta flex h-28 dc__no-right-radius dc__no-border-imp fs-12 fw-6 lh-18 ${className}`}
                 type="button"
                 onClick={onClick}
             >

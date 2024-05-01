@@ -4,4 +4,5 @@ export interface ButtonWithSelectorProps {
     content: ReactNode
     onClick: () => void
     children: ReactNode
+    className?: string
 }
