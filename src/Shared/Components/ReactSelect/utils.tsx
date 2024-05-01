@@ -148,3 +148,5 @@ export const GroupHeading = (props: any) => {
         </components.GroupHeading>
     )
 }
+
+export const commonSelectStyles = getCommonSelectStyle()
