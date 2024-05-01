@@ -1,5 +1,8 @@
 import { MaterialInfo } from '../Common'
-import { GitTriggers } from './types'
+import { GitTriggers, WebhookEventNameType } from './types'
+import { ReactComponent as ICPullRequest } from '../Assets/Icon/ic-pull-request.svg'
+import { ReactComponent as ICTag } from '../Assets/Icon/ic-tag.svg'
+import { ReactComponent as ICWebhook } from '../Assets/Icon/ic-webhook.svg'
 
 interface HighlightSearchTextProps {
     /**
@@ -69,3 +72,14 @@ export const getGitCommitInfo = (materialInfo: MaterialInfo): GitTriggers => ({
 
 export const caseInsensitiveStringComparator = (a: string, b: string): number =>
     a.toLowerCase().localeCompare(b.toLowerCase())
+
+export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
+    switch (eventName) {
+        case WebhookEventNameType.PULL_REQUEST:
+            return <ICPullRequest className="icon-dim-12" />
+        case WebhookEventNameType.TAG_CREATION:
+            return <ICTag className="icon-dim-12" />
+        default:
+            return <ICWebhook className="icon-dim-12" />
+    }
+}

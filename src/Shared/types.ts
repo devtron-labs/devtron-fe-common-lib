@@ -227,3 +227,8 @@ export interface MaterialSecurityInfoType {
     isScanned: boolean
     isScanEnabled: boolean
 }
+
+export enum WebhookEventNameType {
+    PULL_REQUEST = 'Pull Request',
+    TAG_CREATION = 'Tag Creation',
+}

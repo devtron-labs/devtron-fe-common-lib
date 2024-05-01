@@ -49,6 +49,7 @@ export const ROUTES = {
     UPDATE: 'update',
     CLUSTER_NOTE: 'cluster/note',
     APPLICATION_NOTE: 'app/note',
+    GIT_HOST_EVENT: 'git/host/event',
 }
 
 export enum KEY_VALUE {

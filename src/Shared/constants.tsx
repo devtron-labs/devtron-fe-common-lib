@@ -42,3 +42,15 @@ export enum PatchOperationType {
     replace = 'replace',
     remove = 'remove',
 }
+
+export enum DeploymentStageType {
+    PRE = 'PRE',
+    DEPLOY = 'DEPLOY',
+    POST = 'POST',
+}
+
+export enum DeploymentWithConfigType {
+    LAST_SAVED_CONFIG = 'LAST_SAVED_CONFIG',
+    LATEST_TRIGGER_CONFIG = 'LATEST_TRIGGER_CONFIG',
+    SPECIFIC_TRIGGER_CONFIG = 'SPECIFIC_TRIGGER_CONFIG',
+}
