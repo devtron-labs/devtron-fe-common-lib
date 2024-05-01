@@ -12,7 +12,9 @@ import './buttonWithSelector.scss'
  *
  * @example
  * ```tsx
- * <ButtonWithSelector buttonContent='Create Job' buttonClickHandler={() => {}} children={<>dropdownOptions</>} />
+ * <ButtonWithSelector buttonContent='Create Job' buttonClickHandler={() => {}}>
+ *  {dropdownOptions}
+ * </ButtonWithSelector>
  * ```
  */
 const ButtonWithSelector = ({ content, onClick, children }: ButtonWithSelectorProps) => {
