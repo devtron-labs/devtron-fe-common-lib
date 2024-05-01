@@ -5,13 +5,17 @@ import { ButtonWithSelectorProps } from './types'
 import './buttonWithSelector.scss'
 
 /**
- * Button WIth Selector
+ * Button With Selector
  * @param buttonContent Content to show in button
  * @param buttonClickHandler Handler Function for button click
- * @param menuItems Dropdown Content
+ * @param children Dropdown Content
+ *
+ * @example
+ * ```tsx
+ * <ButtonWithSelector buttonContent='Create Job' buttonClickHandler={() => {}} children={<>dropdownOptions</>} />
+ * ```
  */
-
-const ButtonWithSelector = ({ buttonContent, buttonClickHandler, menuItems }: ButtonWithSelectorProps) => {
+const ButtonWithSelector = ({ buttonContent, buttonClickHandler, children }: ButtonWithSelectorProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
 
     return (
@@ -30,7 +34,7 @@ const ButtonWithSelector = ({ buttonContent, buttonClickHandler, menuItems }: Bu
                         style={{ ['--rotateBy' as any]: isMenuOpen ? '180deg' : '0deg' }}
                     />
                 </PopupMenu.Button>
-                <PopupMenu.Body>{menuItems}</PopupMenu.Body>
+                <PopupMenu.Body>{children}</PopupMenu.Body>
             </PopupMenu>
         </>
     )
