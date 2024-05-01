@@ -6,4 +6,5 @@ export interface ButtonWithSelectorProps {
     children: ReactNode
     className?: string
     popUpBodyClassName?: string
+    showPopUp?: boolean
 }
