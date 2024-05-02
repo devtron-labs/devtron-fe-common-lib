@@ -1,7 +1,11 @@
 import { ActivityIndicatorProps } from './types'
 
-const ActivityIndicator = ({ rootClassName = '' }: ActivityIndicatorProps) => (
-    <div className={`dc__border-radius-50-per bcr-5 icon-dim-6 ${rootClassName}`} />
+const ActivityIndicator = ({
+    rootClassName = '',
+    backgroundColorClass = 'bcr-5',
+    iconSizeClass = 'icon-dim-6',
+}: ActivityIndicatorProps) => (
+    <div className={`dc__border-radius-50-per ${backgroundColorClass} ${iconSizeClass} ${rootClassName}`} />
 )
 
 export default ActivityIndicator
