@@ -28,6 +28,8 @@ export const URLS = {
     GETTING_STARTED: 'getting-started',
     STACK_MANAGER_ABOUT: '/stack-manager/about',
     APP_LIST_HELM: 'h',
+    CREATE: '/create',
+    RELEASES: '/releases',
 }
 
 export const ROUTES = {
@@ -433,6 +435,7 @@ export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
 export const EXCLUDED_FALSY_VALUES = [undefined, null, '', NaN] as const
 
 export const API_STATUS_CODES = {
+    BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
     PERMISSION_DENIED: 403,
     NOT_FOUND: 404,
