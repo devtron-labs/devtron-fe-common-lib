@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { stopPropagation } from '../Helper';
 
 export class VisibleModal2 extends React.Component<{ className: string; close?: (e) => void }> {
     modalRef = document.getElementById('visible-modal-2')
@@ -10,6 +11,7 @@ export class VisibleModal2 extends React.Component<{ className: string; close?: 
     }
 
     escFunction(event) {
+        stopPropagation(event)
         if (event.keyCode === 27 && this.props.close) {
             this.props.close(event)
         }

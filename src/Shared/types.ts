@@ -109,9 +109,15 @@ export enum CIMaterialSidebarType {
     PARAMETERS = 'Parameters',
 }
 
-interface LastExecutionResultType {
-    scanExecutionId: number
+export interface LastExecutionResultType {
     lastExecution: string
+    severityCount: {
+        critical: number
+        moderate: number
+        low: number
+    }
+    vulnerabilities: VulnerabilityType[]
+    scanExecutionId?: number
     appId?: number
     appName?: string
     envId?: number
@@ -119,15 +125,9 @@ interface LastExecutionResultType {
     pod?: string
     replicaSet?: string
     image?: string
-    objectType: 'app' | 'chart'
-    scanned: boolean
-    scanEnabled: boolean
-    severityCount: {
-        critical: number
-        moderate: number
-        low: number
-    }
-    vulnerabilities: VulnerabilityType[]
+    objectType?: 'app' | 'chart'
+    scanned?: boolean
+    scanEnabled?: boolean
     scanToolId?: number
 }
 
@@ -137,3 +137,50 @@ export interface MaterialSecurityInfoType {
     isScanned: boolean
     isScanEnabled: boolean
 }
+
+export enum Nodes {
+    Service = 'Service',
+    Alertmanager = 'Alertmanager',
+    PodSecurity = 'PodSecurityPolicy',
+    ConfigMap = 'ConfigMap',
+    ServiceAccount = 'ServiceAccount',
+    ClusterRoleBinding = 'ClusterRoleBinding',
+    RoleBinding = 'RoleBinding',
+    ClusterRole = 'ClusterRole',
+    Role = 'Role',
+    Prometheus = 'Prometheus',
+    ServiceMonitor = 'ServiceMonitor',
+    Deployment = 'Deployment',
+    MutatingWebhookConfiguration = 'MutatingWebhookConfiguration',
+    DaemonSet = 'DaemonSet',
+    Secret = 'Secret',
+    ValidatingWebhookConfiguration = 'ValidatingWebhookConfiguration',
+    Pod = 'Pod',
+    Ingress = 'Ingress',
+    ReplicaSet = 'ReplicaSet',
+    Endpoints = 'Endpoints',
+    Cluster = 'ClusterRoleBinding',
+    PodSecurityPolicy = 'PodSecurityPolicy',
+    CronJob = 'CronJob',
+    Job = 'Job',
+    ReplicationController = 'ReplicationController',
+    StatefulSet = 'StatefulSet',
+    Rollout = 'Rollout',
+    PersistentVolumeClaim = 'PersistentVolumeClaim',
+    PersistentVolume = 'PersistentVolume',
+    Containers = 'Containers', // containers are being treated same way as nodes for nested table generation
+    InitContainers = 'InitContainers',
+    EndpointSlice = 'EndpointSlice',
+    NetworkPolicy = 'NetworkPolicy',
+    StorageClass = 'StorageClass',
+    VolumeSnapshot = 'VolumeSnapshot',
+    VolumeSnapshotContent = 'VolumeSnapshotContent',
+    VolumeSnapshotClass = 'VolumeSnapshotClass',
+    PodDisruptionBudget = 'PodDisruptionBudget',
+    Event = 'Event',
+    Namespace = 'Namespace',
+    Overview = 'Overview',
+}
+
+// FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
+export type NodeType = keyof typeof Nodes
