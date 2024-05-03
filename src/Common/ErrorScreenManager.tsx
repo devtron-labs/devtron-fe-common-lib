@@ -18,6 +18,7 @@ const ErrorScreenManager = ({ code, reload, subtitle, reloadClass, heightToDeduc
                         image={badRequest}
                         imageType={ImageType.Large}
                         heightToDeduct={heightToDeduct}
+                        reload={reload}
                     />
                 )
             case ERROR_STATUS_CODE.UNAUTHORIZED:
