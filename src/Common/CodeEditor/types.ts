@@ -15,7 +15,7 @@ export interface CodeEditorInterface {
     onFocus?: () => void
     children?: any
     defaultValue?: string
-    mode?: MODES
+    mode?: MODES | string
     tabSize?: number
     readOnly?: boolean
     noParsing?: boolean

@@ -301,6 +301,7 @@ export enum MODES {
     JSON = 'json',
     SHELL = 'shell',
     DOCKERFILE = 'dockerfile',
+    PLAINTEXT = 'plaintext',
 }
 
 // The values are going to be part of route that's why they may contain -
