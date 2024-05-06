@@ -1,4 +1,5 @@
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import * as jsonpatch from 'fast-json-patch'
 import { JSONPath } from 'jsonpath-plus'
@@ -11,6 +12,7 @@ import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
 import { DATE_TIME_FORMAT_STRING } from '../Shared'
+import { ReactComponent as ArrowDown } from '../Assets/Icon/ic-chevron-down.svg'
 
 toast.configure({
     autoClose: 3000,
@@ -783,4 +785,39 @@ export function deepEqual(configA: any, configB: any): boolean {
         showError(err)
         return true
     }
+}
+
+export function shallowEqual(objA, objB) {
+    if (objA === objB) {
+        return true
+    }
+
+    if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+        return false
+    }
+
+    const keysA = Object.keys(objA)
+    const keysB = Object.keys(objB)
+
+    if (keysA.length !== keysB.length) {
+        return false
+    }
+
+    // Test for A's keys different from B.
+    const bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB)
+    for (let i = 0; i < keysA.length; i++) {
+        if (!bHasOwnProperty(keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
+            return false
+        }
+    }
+
+    return true
+}
+
+export const DropdownIndicator = (props) => {
+    return (
+        <components.DropdownIndicator {...props}>
+            <ArrowDown className="icon-dim-20 icon-n5" />
+        </components.DropdownIndicator>
+    )
 }

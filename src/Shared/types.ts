@@ -232,3 +232,13 @@ export enum WebhookEventNameType {
     PULL_REQUEST = 'Pull Request',
     TAG_CREATION = 'Tag Creation',
 }
+
+export type IntersectionOptions = {
+    root?: React.RefObject<Element>
+    rootMargin?: string
+    threshold?: number | number[]
+    once?: boolean
+    defaultIntersecting?: boolean
+}
+
+export type IntersectionChangeHandler = (entry: IntersectionObserverEntry) => void
