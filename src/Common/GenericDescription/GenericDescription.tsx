@@ -259,7 +259,7 @@ const GenericDescription = ({
                             {updatedBy && _date && (
                                 <div className="flex left fw-4 cn-7 ml-8 fs-12 h-20">
                                     Last updated by &nbsp;
-                                    <span className=" dc__ellipsis-right dc__mxw-200">{updatedBy}</span>&nbsp;on {_date}
+                                    <span className="dc__ellipsis-right dc__mxw-200">{updatedBy}</span>&nbsp;on {_date}
                                 </div>
                             )}
                             <div
