@@ -83,3 +83,5 @@ export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
             return <ICWebhook className="icon-dim-12" />
     }
 }
+
+export const isNullOrUndefined = (value: unknown): boolean => value === null || value === undefined

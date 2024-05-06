@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { preventBodyScroll } from '../../Shared'
+import { stopPropagation } from '../Helper'
 
 export class VisibleModal extends React.Component<{
     className: string
@@ -17,6 +18,7 @@ export class VisibleModal extends React.Component<{
     }
 
     escFunction(event) {
+        stopPropagation(event)
         if (event.keyCode === 27 || event.key === 'Escape') {
             if (this.props.onEscape) {
                 this.props.onEscape(event)
