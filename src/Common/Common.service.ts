@@ -15,6 +15,7 @@ import {
     CDMaterialsApprovalInfo,
     CDMaterialFilterQuery,
     ImagePromotionMaterialInfo,
+    EnvironmentListHelmResponse,
 } from './Types'
 import { ApiResourceType } from '../Pages'
 
@@ -343,4 +344,9 @@ export function getClusterListMin() {
 
 export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType<ApiResourceType>> => {
     return get(`${ROUTES.API_RESOURCE}/${ROUTES.GVK}/${clusterId}`)
+}
+
+export function getNamespaceListMin(clusterIdsCsv: string): Promise<EnvironmentListHelmResponse> {
+  const URL = `${ROUTES.NAMESPACE}/autocomplete?ids=${clusterIdsCsv}`
+  return get(URL)
 }

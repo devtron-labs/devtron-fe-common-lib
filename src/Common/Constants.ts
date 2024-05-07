@@ -51,6 +51,7 @@ export const ROUTES = {
     CLUSTER: 'cluster',
     API_RESOURCE: 'k8s/api-resources',
     GVK: 'gvk',
+    NAMESPACE: 'env/namespace',
 }
 
 export enum KEY_VALUE {

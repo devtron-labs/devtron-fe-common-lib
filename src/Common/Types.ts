@@ -867,3 +867,20 @@ export interface DeploymentWindowProfileMetaData {
     excludedUserEmails: string[]
     warningMessage: string
 }
+
+export interface EnvironmentListHelmResult {
+  clusterId: number
+  clusterName: string
+  environments: EnvironmentHelmResult[]
+}
+
+export interface EnvironmentHelmResult {
+  environmentId: number
+  environmentName: string
+  namespace: string
+  environmentIdentifier: string
+  isVirtualEnvironment?: boolean // Need to confirm for not full mode
+  allowedDeploymentTypes?: DeploymentAppTypes[]
+}
+
+export type EnvironmentListHelmResponse = ResponseType<EnvironmentListHelmResult[]>
