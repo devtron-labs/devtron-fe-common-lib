@@ -49,245 +49,247 @@ function useCodeEditorContext() {
     return context
 }
 
-const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(function Editor({
-    value,
-    mode = MODES.JSON,
-    noParsing = false,
-    defaultValue = '',
-    children,
-    tabSize = 2,
-    lineDecorationsWidth = 0,
-    height = 450,
-    inline = false,
-    shebang = '',
-    minHeight,
-    maxHeight,
-    onChange,
-    readOnly,
-    diffView,
-    theme = '',
-    loading,
-    customLoader,
-    focus,
-    validatorSchema,
-    chartVersion,
-    isKubernetes = true,
-    cleanData = false,
-    onBlur,
-    onFocus,
-}) {
-    if (cleanData) {
-        value = cleanKubeManifest(value)
-        defaultValue = cleanKubeManifest(defaultValue)
-    }
-
-    const editorRef = useRef(null)
-    const monacoRef = useRef(null)
-    const { width, height: windowHeight } = useWindowSize()
-    const memoisedReducer = React.useCallback(CodeEditorReducer, [])
-    const [state, dispatch] = useReducer(memoisedReducer, initialState(mode, theme, value, diffView, noParsing))
-    const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
-    const [, originalJson, originlaYaml] = useJsonYaml(defaultValue, tabSize, state.mode, !state.noParsing)
-    monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
-        base: 'vs-dark',
-        inherit: true,
-        rules: [
-            // @ts-ignore
-            { background: '#0B0F22' },
-        ],
-        colors: {
-            'editor.background': '#0B0F22',
-        },
-    })
-
-    monaco.editor.defineTheme(CodeEditorThemesKeys.deleteDraft, {
-        base: 'vs',
-        inherit: true,
-        rules: [],
-        colors: {
-            'diffEditor.insertedTextBackground': '#ffd4d1',
-            'diffEditor.removedTextBackground': '#ffffff33',
-        },
-    })
-
-    monaco.editor.defineTheme(CodeEditorThemesKeys.unpublished, {
-        base: 'vs',
-        inherit: true,
-        rules: [],
-        colors: {
-            'diffEditor.insertedTextBackground': '#eaf1dd',
-            'diffEditor.removedTextBackground': '#ffffff33',
-        },
-    })
-
-    function editorDidMount(editor, monaco) {
-        if (
-            mode === MODES.YAML &&
-            editor &&
-            typeof editor.getModel === 'function' &&
-            typeof editor.getModel().updateOptions === 'function'
-        ) {
-            editor.getModel().updateOptions({ tabSize: 2 })
-        }
-
-        if (editor) {
-            if (typeof editor.onDidFocusEditorWidget === 'function' && typeof onFocus === 'function') {
-                editor.onDidFocusEditorWidget(onFocus)
-            }
-
-            if (typeof editor.onDidBlurEditorWidget === 'function' && typeof onBlur === 'function') {
-                editor.onDidBlurEditorWidget(onBlur)
-            }
-        }
-
-        editorRef.current = editor
-        monacoRef.current = monaco
-    }
-
-    useEffect(() => {
-        if (!validatorSchema) {
-            return
-        }
-        const config = configureMonacoYaml(monaco, {
-            enableSchemaRequest: true,
-            isKubernetes,
-            schemas: [
-                {
-                    uri: `https://github.com/devtron-labs/devtron/tree/main/scripts/devtron-reference-helm-charts/reference-chart_${chartVersion}/schema.json`, // id of the first schema
-                    fileMatch: ['*'], // associate with our model
-                    schema: validatorSchema,
-                },
-            ],
-        })
-        return () => {
-            config.dispose()
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [validatorSchema, chartVersion])
-    useEffect(() => {
-        if (!editorRef.current) {
-            return
-        }
-        editorRef.current.updateOptions({ readOnly })
-    }, [readOnly])
-
-    useEffect(() => {
-        if (!editorRef.current) {
-            return
-        }
-        editorRef.current.layout()
-    }, [width, windowHeight])
-
-    useEffect(() => {
-        if (onChange) {
-            onChange(state.code)
-        }
-    }, [state.code])
-
-    useEffect(() => {
-        if (noParsing) {
-            dispatch({ type: 'setCode', value })
-
-            return
-        }
-        let obj
-        if (value === state.code) {
-            return
-        }
-        try {
-            obj = JSON.parse(value)
-        } catch (err) {
-            try {
-                obj = YAML.parse(value)
-            } catch (err) {}
-        }
-        let final = value
-        if (obj) {
-            final = state.mode === 'json' ? JSON.stringify(obj, null, tabSize) : YAMLStringify(obj)
-        }
-        dispatch({ type: 'setCode', value: final })
-    }, [value, noParsing])
-
-    useEffect(() => {
-        dispatch({ type: 'setDiff', value: diffView })
-    }, [diffView])
-
-    useEffect(() => {
-        if (focus) {
-            editorRef.current.focus()
-        }
-    }, [focus])
-
-    function handleOnChange(newValue, e) {
-        dispatch({ type: 'setCode', value: newValue })
-    }
-
-    function handleLanguageChange(mode: 'json' | 'yaml') {
-        dispatch({ type: 'changeLanguage', value: mode })
-        dispatch({ type: 'setCode', value: mode === 'json' ? json : yamlCode })
-    }
-
-    const options: monaco.editor.IEditorConstructionOptions = {
-        selectOnLineNumbers: true,
-        roundedSelection: false,
+const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(
+    ({
+        value,
+        mode = MODES.JSON,
+        noParsing = false,
+        defaultValue = '',
+        children,
+        tabSize = 2,
+        lineDecorationsWidth = 0,
+        height = 450,
+        inline = false,
+        shebang = '',
+        onChange,
         readOnly,
-        lineDecorationsWidth,
-        automaticLayout: true,
-        scrollBeyondLastLine: false,
-        minimap: {
-            enabled: false,
-        },
-        scrollbar: {
-            alwaysConsumeMouseWheel: false,
-            vertical: inline ? 'hidden' : 'auto',
-        },
-        lineNumbers(lineNumber) {
-            return `<span style="padding-right:6px">${lineNumber}</span>`
-        },
-    }
+        diffView,
+        theme = '',
+        loading,
+        customLoader,
+        focus,
+        validatorSchema,
+        chartVersion,
+        isKubernetes = true,
+        cleanData = false,
+        onBlur,
+        onFocus,
+    }) => {
+        if (cleanData) {
+            value = cleanKubeManifest(value)
+            defaultValue = cleanKubeManifest(defaultValue)
+        }
 
-    const diffViewOptions: monaco.editor.IDiffEditorConstructionOptions = {
-        ...options,
-        useInlineViewWhenSpaceIsLimited: false,
-    }
+        const editorRef = useRef(null)
+        const monacoRef = useRef(null)
+        const { width, height: windowHeight } = useWindowSize()
+        const memoisedReducer = React.useCallback(CodeEditorReducer, [])
+        const [state, dispatch] = useReducer(memoisedReducer, initialState({mode, theme, value, diffView, noParsing}))
+        const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
+        const [, originalJson, originlaYaml] = useJsonYaml(defaultValue, tabSize, state.mode, !state.noParsing)
+        monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
+            base: 'vs-dark',
+            inherit: true,
+            rules: [
+                // @ts-ignore
+                { background: '#0B0F22' },
+            ],
+            colors: {
+                'editor.background': '#0B0F22',
+            },
+        })
 
-    return (
-        <CodeEditorContext.Provider value={{ dispatch, state, handleLanguageChange, error, defaultValue, height }}>
-            {children}
-            {loading ? (
-                <CodeEditorPlaceholder customLoader={customLoader} />
-            ) : (
-                <>
-                    {shebang && <div className="shebang">{shebang}</div>}
-                    {state.diffMode ? (
-                        <MonacoDiffEditor
-                            original={noParsing ? defaultValue : state.mode === 'json' ? originalJson : originlaYaml}
-                            value={state.code}
-                            language={state.mode}
-                            onChange={handleOnChange}
-                            options={diffViewOptions}
-                            theme={state.theme.toLowerCase().split(' ').join('-')}
-                            editorDidMount={editorDidMount}
-                            height={height}
-                            width="100%"
-                        />
-                    ) : (
-                        <MonacoEditor
-                            language={state.mode}
-                            value={state.code}
-                            theme={state.theme.toLowerCase().split(' ').join('-')}
-                            options={options}
-                            onChange={handleOnChange}
-                            editorDidMount={editorDidMount}
-                            height={height}
-                            width="100%"
-                        />
-                    )}
-                </>
-            )}
-        </CodeEditorContext.Provider>
-    )
-})
+        monaco.editor.defineTheme(CodeEditorThemesKeys.deleteDraft, {
+            base: 'vs',
+            inherit: true,
+            rules: [],
+            colors: {
+                'diffEditor.insertedTextBackground': '#ffd4d1',
+                'diffEditor.removedTextBackground': '#ffffff33',
+            },
+        })
+
+        monaco.editor.defineTheme(CodeEditorThemesKeys.unpublished, {
+            base: 'vs',
+            inherit: true,
+            rules: [],
+            colors: {
+                'diffEditor.insertedTextBackground': '#eaf1dd',
+                'diffEditor.removedTextBackground': '#ffffff33',
+            },
+        })
+
+        function editorDidMount(editor, monaco) {
+            if (
+                mode === MODES.YAML &&
+                editor &&
+                typeof editor.getModel === 'function' &&
+                typeof editor.getModel().updateOptions === 'function'
+            ) {
+                editor.getModel().updateOptions({ tabSize: 2 })
+            }
+
+            if (editor) {
+                if (typeof editor.onDidFocusEditorWidget === 'function' && typeof onFocus === 'function') {
+                    editor.onDidFocusEditorWidget(onFocus)
+                }
+
+                if (typeof editor.onDidBlurEditorWidget === 'function' && typeof onBlur === 'function') {
+                    editor.onDidBlurEditorWidget(onBlur)
+                }
+            }
+
+            editorRef.current = editor
+            monacoRef.current = monaco
+        }
+
+        useEffect(() => {
+            if (!validatorSchema) {
+                return
+            }
+            const config = configureMonacoYaml(monaco, {
+                enableSchemaRequest: true,
+                isKubernetes,
+                schemas: [
+                    {
+                        uri: `https://github.com/devtron-labs/devtron/tree/main/scripts/devtron-reference-helm-charts/reference-chart_${chartVersion}/schema.json`, // id of the first schema
+                        fileMatch: ['*'], // associate with our model
+                        schema: validatorSchema,
+                    },
+                ],
+            })
+            return () => {
+                config.dispose()
+            }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [validatorSchema, chartVersion])
+        useEffect(() => {
+            if (!editorRef.current) {
+                return
+            }
+            editorRef.current.updateOptions({ readOnly })
+        }, [readOnly])
+
+        useEffect(() => {
+            if (!editorRef.current) {
+                return
+            }
+            editorRef.current.layout()
+        }, [width, windowHeight])
+
+        useEffect(() => {
+            if (onChange) {
+                onChange(state.code)
+            }
+        }, [state.code])
+
+        useEffect(() => {
+            if (noParsing) {
+                dispatch({ type: 'setCode', value })
+
+                return
+            }
+            let obj
+            if (value === state.code) {
+                return
+            }
+            try {
+                obj = JSON.parse(value)
+            } catch (err) {
+                try {
+                    obj = YAML.parse(value)
+                } catch (err) {}
+            }
+            let final = value
+            if (obj) {
+                final = state.mode === 'json' ? JSON.stringify(obj, null, tabSize) : YAMLStringify(obj)
+            }
+            dispatch({ type: 'setCode', value: final })
+        }, [value, noParsing])
+
+        useEffect(() => {
+            dispatch({ type: 'setDiff', value: diffView })
+        }, [diffView])
+
+        useEffect(() => {
+            if (focus) {
+                editorRef.current.focus()
+            }
+        }, [focus])
+
+        function handleOnChange(newValue, e) {
+            dispatch({ type: 'setCode', value: newValue })
+        }
+
+        function handleLanguageChange(mode: 'json' | 'yaml') {
+            dispatch({ type: 'changeLanguage', value: mode })
+            dispatch({ type: 'setCode', value: mode === 'json' ? json : yamlCode })
+        }
+
+        const options: monaco.editor.IEditorConstructionOptions = {
+            selectOnLineNumbers: true,
+            roundedSelection: false,
+            readOnly,
+            lineDecorationsWidth,
+            automaticLayout: true,
+            scrollBeyondLastLine: false,
+            minimap: {
+                enabled: false,
+            },
+            scrollbar: {
+                alwaysConsumeMouseWheel: false,
+                vertical: inline ? 'hidden' : 'auto',
+            },
+            lineNumbers(lineNumber) {
+                return `<span style="padding-right:6px">${lineNumber}</span>`
+            },
+        }
+
+        const diffViewOptions: monaco.editor.IDiffEditorConstructionOptions = {
+            ...options,
+            useInlineViewWhenSpaceIsLimited: false,
+        }
+
+        return (
+            <CodeEditorContext.Provider value={{ dispatch, state, handleLanguageChange, error, defaultValue, height }}>
+                {children}
+                {loading ? (
+                    <CodeEditorPlaceholder customLoader={customLoader} />
+                ) : (
+                    <>
+                        {shebang && <div className="shebang">{shebang}</div>}
+                        {state.diffMode ? (
+                            <MonacoDiffEditor
+                                original={
+                                    noParsing ? defaultValue : state.mode === 'json' ? originalJson : originlaYaml
+                                }
+                                value={state.code}
+                                language={state.mode}
+                                onChange={handleOnChange}
+                                options={diffViewOptions}
+                                theme={state.theme.toLowerCase().split(' ').join('-')}
+                                editorDidMount={editorDidMount}
+                                height={height}
+                                width="100%"
+                            />
+                        ) : (
+                            <MonacoEditor
+                                language={state.mode}
+                                value={state.code}
+                                theme={state.theme.toLowerCase().split(' ').join('-')}
+                                options={options}
+                                onChange={handleOnChange}
+                                editorDidMount={editorDidMount}
+                                height={height}
+                                width="100%"
+                            />
+                        )}
+                    </>
+                )}
+            </CodeEditorContext.Provider>
+        )
+    },
+)
 
 const Header: React.FC<CodeEditorHeaderInterface> & CodeEditorHeaderComposition = ({
     children,
@@ -357,35 +359,29 @@ const ValidationError = () => {
     return error ? <div className="form__error">{error}</div> : null
 }
 
-const Warning: React.FC<InformationBarProps> = (props) => {
-    return (
-        <div className={`code-editor__warning ${props.className || ''}`}>
-            <WarningIcon className="code-editor__information-info-icon" />
-            {props.text}
-            {props.children}
-        </div>
-    )
-}
+const Warning: React.FC<InformationBarProps> = (props) => (
+    <div className={`code-editor__warning ${props.className || ''}`}>
+        <WarningIcon className="code-editor__information-info-icon" />
+        {props.text}
+        {props.children}
+    </div>
+)
 
-const ErrorBar: React.FC<InformationBarProps> = (props) => {
-    return (
-        <div className={`code-editor__error ${props.className || ''}`}>
-            <ErrorIcon className="code-editor__information-info-icon" />
-            {props.text}
-            {props.children}
-        </div>
-    )
-}
+const ErrorBar: React.FC<InformationBarProps> = (props) => (
+    <div className={`code-editor__error ${props.className || ''}`}>
+        <ErrorIcon className="code-editor__information-info-icon" />
+        {props.text}
+        {props.children}
+    </div>
+)
 
-const Information: React.FC<InformationBarProps> = (props) => {
-    return (
-        <div className={`code-editor__information ${props.className || ''}`}>
-            <Info className="code-editor__information-info-icon" />
-            {props.text}
-            {props.children}
-        </div>
-    )
-}
+const Information: React.FC<InformationBarProps> = (props) => (
+    <div className={`code-editor__information ${props.className || ''}`}>
+        <Info className="code-editor__information-info-icon" />
+        {props.text}
+        {props.children}
+    </div>
+)
 
 const Clipboard = () => {
     const { state } = useCodeEditorContext()

@@ -1,5 +1,5 @@
 import { MODES } from '../Constants'
-import { Action, CodeEditorState, CodeEditorThemesKeys } from './types'
+import { Action, CodeEditorInitialValueType, CodeEditorState, CodeEditorThemesKeys } from './types'
 
 export const CodeEditorReducer = (state: CodeEditorState, action: Action) => {
     switch (action.type) {
@@ -18,10 +18,16 @@ export const CodeEditorReducer = (state: CodeEditorState, action: Action) => {
     }
 }
 
-export const initialState = (mode, theme, value, diffView, noParsing): CodeEditorState => ({
+export const initialState = ({
     mode,
-    theme: theme || CodeEditorThemesKeys.vs,
+    theme,
+    value,
+    diffView,
+    noParsing,
+}: CodeEditorInitialValueType): CodeEditorState => ({
+    mode: mode as MODES,
+    theme: (theme || CodeEditorThemesKeys.vs) as CodeEditorThemesKeys,
     code: value,
     diffMode: diffView,
-    noParsing: [MODES.JSON, MODES.YAML].includes(mode) ? noParsing : true,
+    noParsing: [MODES.JSON, MODES.YAML].includes(mode as MODES) ? noParsing : true,
 })

@@ -19,8 +19,6 @@ export interface CodeEditorInterface {
     tabSize?: number
     readOnly?: boolean
     noParsing?: boolean
-    minHeight?: number
-    maxHeight?: number
     inline?: boolean
     height?: number | string
     shebang?: string | JSX.Element
@@ -70,6 +68,14 @@ export enum CodeEditorThemesKeys {
     deleteDraft = 'delete-draft',
     unpublished = 'unpublished',
     vs = 'vs',
+}
+
+export interface CodeEditorInitialValueType {
+    mode: string
+    diffView: boolean
+    theme?: string
+    value: string
+    noParsing?: boolean
 }
 
 export interface CodeEditorState {
