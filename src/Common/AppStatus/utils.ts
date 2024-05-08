@@ -1,4 +1,4 @@
-import { TIMELINE_STATUS } from './constants'
+import { TIMELINE_STATUS } from "../Constants"
 
 export const triggerStatus = (triggerDetailStatus: string): string => {
     const triggerStatus = triggerDetailStatus?.toUpperCase()

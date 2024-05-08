@@ -23,7 +23,7 @@ import {
     createGitCommitUrl,
     DropdownIndicator,
 } from '../../../Common'
-import { ReactComponent as ICArrowBackward } from '../../../Assets/Icon/ic-sort-arrow-down.svg'
+import { ReactComponent as ICArrowBackward } from '../../../Assets/Icon/ic-arrow-backward.svg'
 import { ReactComponent as ICDocker } from '../../../Assets/Icon/ic-docker.svg'
 import { GitTriggers } from '../../types'
 import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
@@ -104,7 +104,7 @@ const ViewAllCardsTile = React.memo(
                 className="p-0 dc__no-background dc__no-border h-16"
                 onClick={handleViewAllHistory}
             >
-                <ICArrowBackward width={16} height={16} style={{ transform: 'rotate(90deg)' }} />
+                <ICArrowBackward width={16} height={16} />
             </button>
 
             <div style={{ flex: '1 0 0' }}>

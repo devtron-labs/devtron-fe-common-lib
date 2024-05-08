@@ -8,6 +8,7 @@ export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DOCUMENTATION = {
     APP_TAGS: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/usage/applications/create-application#tags`,
     APP_OVERVIEW_TAGS: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/usage/applications/overview#manage-tags`,
+    BLOB_STORAGE: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/getting-started/install/installation-configuration#configuration-of-blob-storage`,
 }
 
 export const PATTERNS = {
@@ -30,13 +31,24 @@ export const URLS = {
     APP_LIST_HELM: 'h',
     CREATE: '/create',
     RELEASES: '/releases',
+    DEVTRON_CHARTS: 'dc',
+    APP_DEPLOYMNENT_HISTORY: 'deployments',
+    APP_DETAILS: 'details',
+    APP_DETAILS_K8: 'k8s-resources', // for V2
+    DETAILS: '/details',
+    CD_DETAILS: 'cd-details',
+    APP_TRIGGER: 'trigger',
+    GLOBAL_CONFIG_DOCKER: '/global-config/docker',
+    DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
 }
 
 export const ROUTES = {
+    APP: 'app',
     APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',
+    CI_CONFIG_GET: 'app/ci-pipeline',
     CD_MATERIAL_GET: 'app/cd-pipeline',
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
@@ -50,6 +62,9 @@ export const ROUTES = {
     CLUSTER_NOTE: 'cluster/note',
     APPLICATION_NOTE: 'app/note',
     GIT_HOST_EVENT: 'git/host/event',
+    HELM_DEPLOYMENT_STATUS_TIMELINE_INSTALLED_APP: 'app-store/deployment-status/timeline',
+    DEPLOYMENT_STATUS: 'app/deployment-status/timeline',
+    MANUAL_SYNC: 'app/deployment-status/manual-sync',
 }
 
 export enum KEY_VALUE {
@@ -469,3 +484,66 @@ export const DATE_TIME_FORMATS = {
     TWELVE_HOURS_FORMAT_WITHOUT_WEEKDAY: 'DD MMM YYYY, hh:mm A',
     TWELVE_HOURS_EXPORT_FORMAT: 'DD-MMM-YYYY hh.mm A',
 }
+
+export enum TIMELINE_STATUS {
+    DEPLOYMENT_INITIATED = 'DEPLOYMENT_INITIATED',
+    GIT_COMMIT = 'GIT_COMMIT',
+    GIT_COMMIT_FAILED = 'GIT_COMMIT_FAILED',
+    ARGOCD_SYNC = 'ARGOCD_SYNC',
+    ARGOCD_SYNC_FAILED = 'ARGOCD_SYNC_FAILED',
+    KUBECTL_APPLY = 'KUBECTL_APPLY',
+    KUBECTL_APPLY_STARTED = 'KUBECTL_APPLY_STARTED',
+    KUBECTL_APPLY_SYNCED = 'KUBECTL_APPLY_SYNCED',
+    HEALTHY = 'HEALTHY',
+    APP_HEALTH = 'APP_HEALTH',
+    DEPLOYMENT_FAILED = 'FAILED',
+    FETCH_TIMED_OUT = 'TIMED_OUT',
+    UNABLE_TO_FETCH_STATUS = 'UNABLE_TO_FETCH_STATUS',
+    DEGRADED = 'DEGRADED',
+    DEPLOYMENT_SUPERSEDED = 'DEPLOYMENT_SUPERSEDED',
+    ABORTED = 'ABORTED',
+    INPROGRESS = 'INPROGRESS',
+    HELM_PACKAGE_GENERATED = 'HELM_PACKAGE_GENERATED',
+    HELM_MANIFEST_PUSHED_TO_HELM_REPO = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO',
+    HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED',
+}
+
+export const DEPLOYMENT_STATUS = {
+    SUCCEEDED: 'succeeded',
+    HEALTHY: 'healthy',
+    FAILED: 'failed',
+    TIMED_OUT: 'timed_out',
+    UNABLE_TO_FETCH: 'unable_to_fetch',
+    INPROGRESS: 'inprogress',
+    PROGRESSING: 'progressing',
+    STARTING: 'starting',
+    INITIATING: 'initiating',
+    SUPERSEDED: 'superseded',
+    QUEUED: 'queued',
+    UNKNOWN: 'unknown',
+    CHECKING: 'checking',
+} as const
+
+export const statusIcon = {
+    failed: 'failed',
+    queued: 'queued',
+    suspended: 'suspended',
+    starting: 'progressing',
+    initiating: 'progressing',
+    unknown: 'unknown',
+    degraded: 'degraded',
+    healthy: 'healthy',
+    notdeployed: 'not-deployed',
+    missing: 'missing',
+    progressing: 'progressing',
+    deploymentinitiated: 'progressing',
+    hibernating: 'hibernating',
+    succeeded: 'healthy',
+    timedout: 'timed-out',
+    unabletofetch: 'failed',
+}
+
+export const APP_STATUS_HEADERS = ['KIND', 'NAME', 'STATUS', 'MESSAGE']
+
+export const MATERIAL_EXCLUDE_TIPPY_TEXT =
+    'Not available for build as this commit contains changes in excluded files or folders'

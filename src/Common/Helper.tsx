@@ -10,7 +10,7 @@ import YAML from 'yaml'
 import { ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME, EXCLUDED_FALSY_VALUES, DISCORD_LINK } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
-import { AsyncOptions, AsyncState, UseSearchString } from './Types'
+import { AsyncOptions, AsyncState, UseSearchString, scrollableInterface } from './Types'
 import { DATE_TIME_FORMAT_STRING } from '../Shared'
 import { ReactComponent as ArrowDown } from '../Assets/Icon/ic-chevron-down.svg'
 
@@ -814,10 +814,139 @@ export function shallowEqual(objA, objB) {
     return true
 }
 
+export function useInterval(callback, delay) {
+    const savedCallback = useRef(null)
+    // Remember the latest callback.
+    useEffect(() => {
+        savedCallback.current = callback
+    }, [callback])
+
+    // Set up the interval.
+    useEffect(() => {
+        function tick() {
+            savedCallback.current()
+        }
+        if (delay !== null) {
+            const id = setInterval(tick, delay)
+            return () => clearInterval(id)
+        }
+    }, [delay])
+}
+
+export function useScrollable(options: scrollableInterface) {
+    const targetRef = useRef(null)
+    const raf_id = useRef(0)
+    const wheelListener = useRef(null)
+    const [scrollHeight, setScrollHeight] = useState(0)
+    const [scrollTop, setScrollTop] = useState(0)
+    const [autoBottom, toggleAutoBottom] = useState(false)
+
+    const target = useCallback((node) => {
+        if (node === null) {
+            return
+        }
+        targetRef.current = node
+        wheelListener.current = node.addEventListener('wheel', handleWheel)
+        raf_id.current = requestAnimationFrame(rAFCallback)
+        return () => {
+            node.removeEventListener('wheel', handleWheel)
+            cancelAnimationFrame(raf_id.current)
+        }
+    }, [])
+
+    function handleWheel(e) {
+        if (e.deltaY < 0) {
+            toggleAutoBottom(false)
+        }
+    }
+
+    const [topScrollable, bottomScrollable] = useMemo(() => {
+        if (!targetRef.current) {
+            return [false, false]
+        }
+
+        let topScrollable = true
+        const bottomScrollable = !(
+            targetRef.current.scrollHeight - targetRef.current.scrollTop ===
+            targetRef.current.clientHeight
+        )
+        if (scrollTop === 0) {
+            topScrollable = false
+        }
+
+        if (!bottomScrollable && options.autoBottomScroll) {
+            toggleAutoBottom(true)
+        }
+        return [topScrollable, bottomScrollable]
+    }, [scrollHeight, scrollTop])
+
+    useEffect(() => {
+        if (options.autoBottomScroll) {
+            toggleAutoBottom(true)
+        } else {
+            toggleAutoBottom(false)
+        }
+    }, [options.autoBottomScroll])
+
+    useThrottledEffect(
+        () => {
+            if (!autoBottom || !targetRef.current) {
+                return
+            }
+            targetRef.current.scrollBy({
+                top: scrollHeight,
+                left: 0,
+            })
+        },
+        500,
+        [scrollHeight, autoBottom],
+    )
+
+    function scrollToTop(e) {
+        targetRef.current.scrollBy({
+            top: -1 * scrollTop,
+            left: 0,
+            behavior: 'smooth',
+        })
+        if (options.autoBottomScroll) {
+            toggleAutoBottom(false)
+        }
+    }
+
+    function scrollToBottom(e) {
+        toggleAutoBottom(true)
+        targetRef.current.scrollBy({
+            top: scrollHeight,
+            left: 0,
+            behavior: 'smooth',
+        })
+    }
+
+    function rAFCallback() {
+        if (!targetRef.current) {
+            return
+        }
+
+        setScrollHeight(targetRef.current.scrollHeight)
+        setScrollTop(targetRef.current.scrollTop)
+        raf_id.current = requestAnimationFrame(rAFCallback)
+    }
+
+    return [target, topScrollable ? scrollToTop : null, bottomScrollable ? scrollToBottom : null]
+}
+
 export const DropdownIndicator = (props) => {
     return (
         <components.DropdownIndicator {...props}>
             <ArrowDown className="icon-dim-20 icon-n5" />
         </components.DropdownIndicator>
     )
+}
+
+export function mapByKey<T = Map<any, any>>(arr: any[], id: string): T {
+    if (!Array.isArray(arr)) {
+        console.error(arr, 'is not array')
+        return new Map() as T
+    }
+    return arr.reduce((agg, curr) => agg.set(curr[id], curr), new Map())
 }

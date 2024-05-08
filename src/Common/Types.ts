@@ -923,3 +923,7 @@ export interface DeploymentWindowProfileMetaData {
     excludedUserEmails: string[]
     warningMessage: string
 }
+
+export interface scrollableInterface {
+    autoBottomScroll: boolean
+}
