@@ -25,7 +25,28 @@ export interface PodMetaData {
     uid: string
 }
 
-export enum NodeType {
+export interface Info {
+    value: string
+    name: string
+}
+
+export interface Health {
+    status: string
+    message?: string
+}
+
+export interface TargetLabel {
+    'app.kubernetes.io/instance': string
+    'app.kubernetes.io/name': string
+}
+export interface TargetLabels {
+    targetLabel: TargetLabel
+}
+export interface NetworkingInfo {
+    targetLabels: TargetLabels
+}
+
+export enum Nodes {
     Service = 'Service',
     Alertmanager = 'Alertmanager',
     PodSecurity = 'PodSecurityPolicy',
@@ -65,28 +86,12 @@ export enum NodeType {
     VolumeSnapshotClass = 'VolumeSnapshotClass',
     PodDisruptionBudget = 'PodDisruptionBudget',
     Event = 'Event',
+    Namespace = 'Namespace',
+    Overview = 'Overview',
 }
 
-export interface Info {
-    value: string
-    name: string
-}
-
-export interface Health {
-    status: string
-    message?: string
-}
-
-export interface TargetLabel {
-    'app.kubernetes.io/instance': string
-    'app.kubernetes.io/name': string
-}
-export interface TargetLabels {
-    targetLabel: TargetLabel
-}
-export interface NetworkingInfo {
-    targetLabels: TargetLabels
-}
+// FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
+export type NodeType = keyof typeof Nodes
 
 export interface Node {
     createdAt: Date
@@ -378,9 +383,15 @@ export enum ResourceVersionType {
     alpha1 = 'alpha1',
 }
 
-interface LastExecutionResultType {
-    scanExecutionId: number
+export interface LastExecutionResultType {
     lastExecution: string
+    severityCount: {
+        critical: number
+        moderate: number
+        low: number
+    }
+    vulnerabilities: VulnerabilityType[]
+    scanExecutionId?: number
     appId?: number
     appName?: string
     envId?: number
@@ -388,15 +399,9 @@ interface LastExecutionResultType {
     pod?: string
     replicaSet?: string
     image?: string
-    objectType: 'app' | 'chart'
-    scanned: boolean
-    scanEnabled: boolean
-    severityCount: {
-        critical: number
-        moderate: number
-        low: number
-    }
-    vulnerabilities: VulnerabilityType[]
+    objectType?: 'app' | 'chart'
+    scanned?: boolean
+    scanEnabled?: boolean
     scanToolId?: number
 }
 

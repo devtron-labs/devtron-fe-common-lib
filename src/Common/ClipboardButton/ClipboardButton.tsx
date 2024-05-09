@@ -55,6 +55,7 @@ export default function ClipboardButton({
                 content={copied ? copiedTippyText : 'Copy'}
                 placement="bottom"
                 visible={copied || enableTippy}
+                arrow={false}
             >
                 <button
                     type="button"
