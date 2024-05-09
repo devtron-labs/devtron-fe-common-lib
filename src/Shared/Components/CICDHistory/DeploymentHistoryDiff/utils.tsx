@@ -1,7 +1,7 @@
 import { components } from 'react-select'
 import { multiSelectStyles } from '../../../../Common'
 
-export const styles = {
+export const dropdownStyles = {
     ...multiSelectStyles,
     menu: (base) => ({ ...base, zIndex: 9999, textAlign: 'left', width: '150%' }),
     control: (base) => ({

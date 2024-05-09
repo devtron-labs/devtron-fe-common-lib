@@ -48,7 +48,7 @@ const renderConfigurationError = (isBlobStorageConfigured: boolean): JSX.Element
 )
 
 function useCIEventSource(url: string, maxLength?: number) {
-    const [data, setData] = useState([])
+    const [dataVal, setDataVal] = useState([])
     let retryCount = LOGS_RETRY_COUNT
     const [logsNotAvailableError, setLogsNotAvailableError] = useState<boolean>(false)
     const [interval, setInterval] = useState(1000)
@@ -56,7 +56,7 @@ function useCIEventSource(url: string, maxLength?: number) {
     const eventSourceRef = useRef(null)
 
     function populateData() {
-        setData((data) => [...data, ...buffer.current])
+        setDataVal((data) => [...data, ...buffer.current])
         buffer.current = []
     }
 
@@ -78,12 +78,12 @@ function useCIEventSource(url: string, maxLength?: number) {
     function handleStreamStart() {
         retryCount = LOGS_RETRY_COUNT
         buffer.current = []
-        setData([])
+        setDataVal([])
     }
 
     function handleStreamEnd() {
         retryCount = LOGS_RETRY_COUNT
-        setData((data) => [...data, ...buffer.current])
+        setDataVal((data) => [...data, ...buffer.current])
         buffer.current = []
         eventSourceRef.current.close()
         setInterval(null)
@@ -120,7 +120,7 @@ function useCIEventSource(url: string, maxLength?: number) {
         return closeEventSource
     }, [url, maxLength])
 
-    return [data, eventSourceRef.current, logsNotAvailableError]
+    return [dataVal, eventSourceRef.current, logsNotAvailableError]
 }
 
 const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType }: LogsRendererType): JSX.Element => {
@@ -155,6 +155,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType }: L
                 // eslint-disable-next-line react/no-array-index-key
                 <div className="flex top left mb-10 lh-24" key={`logs-${index}`}>
                     <span className="cn-4 col-2 pr-10">{index + 1}</span>
+                    {/* eslint-disable-next-line react/no-danger */}
                     <p className="mono fs-14 mb-0-imp" dangerouslySetInnerHTML={createMarkup(log)} />
                 </div>
             ))}

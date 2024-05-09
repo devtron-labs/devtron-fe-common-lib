@@ -9,7 +9,7 @@ import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../constants'
 import { ReactComponent as LeftIcon } from '../../../../Assets/Icon/ic-arrow-backward.svg'
 import { DeploymentTemplateOptions, DeploymentHistoryParamsType, CompareWithBaseConfiguration } from './types'
 import { getDeploymentDiffSelector } from '../service'
-import { styles, Option } from './utils'
+import { dropdownStyles, Option } from './utils'
 
 const DeploymentHistoryHeader = ({
     selectedDeploymentTemplate,
@@ -41,14 +41,14 @@ const DeploymentHistoryHeader = ({
                     baseConfigurationId,
                     historyComponentName,
                 ).then((response) => {
-                    const deploymentTemplateOption = []
+                    const deploymentTemplateOpt = []
                     if (response.result) {
                         const resultLen = response.result.length
                         for (let i = 0; i < resultLen; i++) {
                             if (response.result[i].id.toString() === baseConfigurationId) {
                                 setBaseTemplateTimeStamp(response.result[i].deployedOn)
                             } else {
-                                deploymentTemplateOption.push({
+                                deploymentTemplateOpt.push({
                                     value: String(response.result[i].id),
                                     label: moment(response.result[i].deployedOn).format(
                                         DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
@@ -59,10 +59,10 @@ const DeploymentHistoryHeader = ({
                             }
                         }
                     }
-                    setPreviousConfigAvailable(deploymentTemplateOption.length > 0)
-                    setDeploymentTemplateOption(deploymentTemplateOption)
+                    setPreviousConfigAvailable(deploymentTemplateOpt.length > 0)
+                    setDeploymentTemplateOption(deploymentTemplateOpt)
                     setSelectedDeploymentTemplate(
-                        deploymentTemplateOption[0] || { label: 'NA', value: 'NA', author: 'NA', status: 'NA' },
+                        deploymentTemplateOpt[0] || { label: 'NA', value: 'NA', author: 'NA', status: 'NA' },
                     )
                 })
             } catch (err) {
@@ -100,7 +100,7 @@ const DeploymentHistoryHeader = ({
                         placeholder="Select Timestamp"
                         classNamePrefix="configuration-compare-with-dropdown"
                         isSearchable={false}
-                        styles={styles}
+                        styles={dropdownStyles}
                         onChange={onClickTimeStampSelector}
                         options={deploymentTemplateOption}
                         components={{
