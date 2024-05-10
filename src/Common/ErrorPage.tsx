@@ -4,10 +4,18 @@ import GenericEmptyState from './EmptyState/GenericEmptyState'
 import { ErrorPageType } from './Types'
 import { noop, refresh, reportIssue } from './Helper'
 
-const ErrorPage = ({ code, image, title, subTitle, imageType, heightToDeduct }: ErrorPageType) => {
+const ErrorPage = ({ code, image, title, subTitle, imageType, heightToDeduct, redirectURL, reload }: ErrorPageType) => {
     const { push } = useHistory()
     const redirectToHome = () => {
-        push(`/${ROUTES.APP_LIST}`)
+        push(redirectURL || `/${ROUTES.APP_LIST}`)
+    }
+
+    const handleRefresh = () => {
+        if (reload) {
+            reload()
+        } else {
+            refresh()
+        }
     }
 
     const getErrorPageProps = (
@@ -29,7 +37,11 @@ const ErrorPage = ({ code, image, title, subTitle, imageType, heightToDeduct }: 
             case ERROR_STATUS_CODE.BAD_REQUEST:
             case ERROR_STATUS_CODE.BAD_GATEWAY:
             case ERROR_STATUS_CODE.SERVICE_TEMPORARY_UNAVAILABLE:
-                return { onClick: refresh, renderButtonText: ERROR_EMPTY_SCREEN.TRY_AGAIN, isButtonAvailable: true }
+                return {
+                    onClick: handleRefresh,
+                    renderButtonText: ERROR_EMPTY_SCREEN.TRY_AGAIN,
+                    isButtonAvailable: true,
+                }
             default:
                 return { onClick: noop, renderButtonText: '', isButtonAvailable: false }
         }

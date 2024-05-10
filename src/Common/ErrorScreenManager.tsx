@@ -6,7 +6,14 @@ import Reload from './Reload'
 import ErrorPage from './ErrorPage'
 import { ErrorScreenManagerProps, ImageType } from './Types'
 
-const ErrorScreenManager = ({ code, reload, subtitle, reloadClass, heightToDeduct }: ErrorScreenManagerProps) => {
+const ErrorScreenManager = ({
+    code,
+    reload,
+    subtitle,
+    reloadClass,
+    heightToDeduct,
+    redirectURL,
+}: ErrorScreenManagerProps) => {
     const getMessage = () => {
         switch (code) {
             case ERROR_STATUS_CODE.BAD_REQUEST:
@@ -18,6 +25,7 @@ const ErrorScreenManager = ({ code, reload, subtitle, reloadClass, heightToDeduc
                         image={badRequest}
                         imageType={ImageType.Large}
                         heightToDeduct={heightToDeduct}
+                        reload={reload}
                     />
                 )
             case ERROR_STATUS_CODE.UNAUTHORIZED:
@@ -51,6 +59,7 @@ const ErrorScreenManager = ({ code, reload, subtitle, reloadClass, heightToDeduc
                         image={notFound}
                         imageType={ImageType.Large}
                         heightToDeduct={heightToDeduct}
+                        redirectURL={redirectURL}
                     />
                 )
             case ERROR_STATUS_CODE.INTERNAL_SERVER_ERROR:
@@ -73,6 +82,7 @@ const ErrorScreenManager = ({ code, reload, subtitle, reloadClass, heightToDeduc
                         image={badRequest}
                         imageType={ImageType.Large}
                         heightToDeduct={heightToDeduct}
+                        reload={reload}
                     />
                 )
             case ERROR_STATUS_CODE.SERVICE_TEMPORARY_UNAVAILABLE:
@@ -84,6 +94,7 @@ const ErrorScreenManager = ({ code, reload, subtitle, reloadClass, heightToDeduc
                         image={badRequest}
                         imageType={ImageType.Large}
                         heightToDeduct={heightToDeduct}
+                        reload={reload}
                     />
                 )
             default:

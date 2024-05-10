@@ -142,6 +142,8 @@ export interface ErrorPageType
     extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'> {
     code: number
     heightToDeduct?: number
+    redirectURL?: string
+    reload?: () => void
 }
 
 export interface ErrorScreenManagerProps {
@@ -150,6 +152,7 @@ export interface ErrorScreenManagerProps {
     subtitle?: React.ReactChild
     reloadClass?: string
     heightToDeduct?: number
+    redirectURL?: string
 }
 
 export interface ErrorScreenNotAuthorizedProps {
@@ -869,18 +872,18 @@ export interface DeploymentWindowProfileMetaData {
 }
 
 export interface EnvironmentListHelmResult {
-  clusterId: number
-  clusterName: string
-  environments: EnvironmentHelmResult[]
+    clusterId: number
+    clusterName: string
+    environments: EnvironmentHelmResult[]
 }
 
 export interface EnvironmentHelmResult {
-  environmentId: number
-  environmentName: string
-  namespace: string
-  environmentIdentifier: string
-  isVirtualEnvironment?: boolean // Need to confirm for not full mode
-  allowedDeploymentTypes?: DeploymentAppTypes[]
+    environmentId: number
+    environmentName: string
+    namespace: string
+    environmentIdentifier: string
+    isVirtualEnvironment?: boolean // Need to confirm for not full mode
+    allowedDeploymentTypes?: DeploymentAppTypes[]
 }
 
 export type EnvironmentListHelmResponse = ResponseType<EnvironmentListHelmResult[]>
