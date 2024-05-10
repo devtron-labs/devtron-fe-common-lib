@@ -1,2 +1,5 @@
-export { default as DeplomentHistorySidebar } from './Sidebar'
+export { default as Sidebar } from './Sidebar'
 export { default as Artifacts } from './Artifacts'
+export { default as TriggerOutput } from './TriggerOutput'
+export * from './types'
+export * from './service'

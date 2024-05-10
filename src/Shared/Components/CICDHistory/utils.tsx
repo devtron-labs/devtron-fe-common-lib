@@ -6,11 +6,9 @@ import {
     DeploymentStatusDetailsBreakdownDataType,
     AggregatedNodes,
     PodMetadatum,
-    Nodes,
     AggregationKeys,
-    NodeType,
 } from './types'
-import { AppDetails, Node } from '../../types'
+import { AppDetails, Node, Nodes, NodeType } from '../../types'
 
 const _appDetailsSubject: BehaviorSubject<AppDetails> = new BehaviorSubject({} as AppDetails)
 const _nodesSubject: BehaviorSubject<Array<Node>> = new BehaviorSubject([] as Node[])

@@ -10,31 +10,8 @@ import {
     ResponseType,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
-import { GitTriggers, Node } from '../../types'
+import { GitTriggers, Node, NodeType } from '../../types'
 import { TERMINAL_STATUS_MAP } from './constants'
-
-export interface PodMetaData {
-    containers: Array<string>
-    initContainers: any
-    ephemeralContainers: any
-    isNew: boolean
-    name: string
-    uid: string
-}
-export interface ResourceTree {
-    conditions: any
-    newGenerationReplicaSet: string
-    nodes: Array<Node>
-    podMetadata: Array<PodMetaData>
-    status: string
-    resourcesSyncResult?: Record<string, string>
-}
-
-export interface HelmReleaseStatus {
-    status: string
-    message: string
-    description: string
-}
 
 export enum HistoryComponentType {
     CI = 'CI',
@@ -49,7 +26,7 @@ export enum FetchIdDataStatus {
     SUSPEND = 'SUSPEND',
 }
 
-export interface CiMaterial {
+interface CiMaterial {
     id: number
     gitMaterialId: number
     gitMaterialUrl: string
@@ -421,51 +398,6 @@ export enum NodeStatus {
     Suspended = 'suspended',
     Unknown = 'unknown',
 }
-
-export enum Nodes {
-    Service = 'Service',
-    Alertmanager = 'Alertmanager',
-    PodSecurity = 'PodSecurityPolicy',
-    ConfigMap = 'ConfigMap',
-    ServiceAccount = 'ServiceAccount',
-    ClusterRoleBinding = 'ClusterRoleBinding',
-    RoleBinding = 'RoleBinding',
-    ClusterRole = 'ClusterRole',
-    Role = 'Role',
-    Prometheus = 'Prometheus',
-    ServiceMonitor = 'ServiceMonitor',
-    Deployment = 'Deployment',
-    MutatingWebhookConfiguration = 'MutatingWebhookConfiguration',
-    DaemonSet = 'DaemonSet',
-    Secret = 'Secret',
-    ValidatingWebhookConfiguration = 'ValidatingWebhookConfiguration',
-    Pod = 'Pod',
-    Ingress = 'Ingress',
-    ReplicaSet = 'ReplicaSet',
-    Endpoints = 'Endpoints',
-    Cluster = 'ClusterRoleBinding',
-    PodSecurityPolicy = 'PodSecurityPolicy',
-    CronJob = 'CronJob',
-    Job = 'Job',
-    ReplicationController = 'ReplicationController',
-    StatefulSet = 'StatefulSet',
-    Rollout = 'Rollout',
-    PersistentVolumeClaim = 'PersistentVolumeClaim',
-    PersistentVolume = 'PersistentVolume',
-    Containers = 'Containers', // containers are being treated same way as nodes for nested table generation
-    InitContainers = 'InitContainers',
-    EndpointSlice = 'EndpointSlice',
-    NetworkPolicy = 'NetworkPolicy',
-    StorageClass = 'StorageClass',
-    VolumeSnapshot = 'VolumeSnapshot',
-    VolumeSnapshotContent = 'VolumeSnapshotContent',
-    VolumeSnapshotClass = 'VolumeSnapshotClass',
-    PodDisruptionBudget = 'PodDisruptionBudget',
-    Event = 'Event',
-    Namespace = 'Namespace',
-    Overview = 'Overview',
-}
-export type NodeType = keyof typeof Nodes
 
 export enum AggregationKeys {
     Workloads = 'Workloads',
