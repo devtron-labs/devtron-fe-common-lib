@@ -353,6 +353,16 @@ export interface DeploymentWindowArtifactMetadata {
     type: DEPLOYMENT_WINDOW_TYPE
 }
 
+export interface ArtifactReleaseMappingType {
+    id : number, 
+    identifier: string,
+    // TODO: Ask BE to rename this to `releaseVersion`
+    releaseVersion: string,
+    name: string
+    kind: string
+    version: string
+}
+
 export interface CDMaterialType {
     index: number
     id: string
@@ -397,6 +407,10 @@ export interface CDMaterialType {
     promotionApprovalMetadata?: PromotionApprovalMetadataType
     deployedOnEnvironments?: string[]
     deploymentWindowArtifactMetadata?: DeploymentWindowArtifactMetadata
+    /**
+     * Will only be present in case of release
+     */
+    configuredInReleases: ArtifactReleaseMappingType[]
 }
 
 export enum CDMaterialServiceEnum {
@@ -577,6 +591,10 @@ export interface CDMaterialsMetaInfo {
      * This is the ID of user that has request the material
      */
     requestedUserId: number
+    /**
+     * Would currently only be received in case of release, otherwise it would be 0
+     */
+    appWorkflowId: number
 }
 
 export interface ImagePromotionMaterialInfo {
