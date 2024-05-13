@@ -1,5 +1,11 @@
 import { ReactNode } from 'react'
-import { GenericEmptyStateType, ProgressingProps, ReloadType, ServerErrors } from '../../../Common'
+import {
+    ErrorScreenManagerProps,
+    GenericEmptyStateType,
+    ProgressingProps,
+    ReloadType,
+    ServerErrors,
+} from '../../../Common'
 import { GenericSectionErrorStateProps } from '../GenericSectionErrorState/types'
 
 export interface EmptyPageTextType {
@@ -38,9 +44,14 @@ export interface APIResponseHandlerProps {
      */
     reloadProps?: ReloadType
     /**
-     * If given, would show this component instead of default Error component
+     * If given, would show GenericSectionErrorState instead of default Reload component
      */
     genericSectionErrorProps?: GenericSectionErrorStateProps
+    /**
+     * If given, would show ErrorScreenManager component instead of Reload component
+     * Priority of error states are: genericSectionErrorProps > errorScreenManagerProps > Reload component
+     */
+    errorScreenManagerProps?: ErrorScreenManagerProps
     /**
      * If no Error and no Loading, would load this component
      */
