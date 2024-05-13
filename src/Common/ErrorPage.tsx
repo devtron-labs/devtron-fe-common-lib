@@ -10,14 +10,6 @@ const ErrorPage = ({ code, image, title, subTitle, imageType, heightToDeduct, re
         push(redirectURL || `/${ROUTES.APP_LIST}`)
     }
 
-    const handleRefresh = () => {
-        if (reload) {
-            reload()
-        } else {
-            refresh()
-        }
-    }
-
     const getErrorPageProps = (
         statusCode: ERROR_STATUS_CODE,
     ): { onClick: () => void; renderButtonText: string; isButtonAvailable: boolean } => {
@@ -38,7 +30,7 @@ const ErrorPage = ({ code, image, title, subTitle, imageType, heightToDeduct, re
             case ERROR_STATUS_CODE.BAD_GATEWAY:
             case ERROR_STATUS_CODE.SERVICE_TEMPORARY_UNAVAILABLE:
                 return {
-                    onClick: handleRefresh,
+                    onClick: reload ?? refresh,
                     renderButtonText: ERROR_EMPTY_SCREEN.TRY_AGAIN,
                     isButtonAvailable: true,
                 }

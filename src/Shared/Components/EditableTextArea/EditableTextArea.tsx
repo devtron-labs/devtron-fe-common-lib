@@ -21,7 +21,7 @@ const TextArea = (
 
     const handleSaveContent = () => {
         setIsLoading(true)
-        updateContent(text)
+        updateContent(text.trim())
             .then(() => {
                 setIsEditable(false)
                 setIsLoading(false)

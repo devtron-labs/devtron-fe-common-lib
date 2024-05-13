@@ -30,6 +30,8 @@ export const URLS = {
     APP_LIST_HELM: 'h',
     APP_CI_DETAILS: 'ci-details',
     LOGS: 'Logs',
+    CREATE: '/create',
+    RELEASES: '/releases',
 }
 
 export const ROUTES = {
@@ -52,6 +54,9 @@ export const ROUTES = {
     API_RESOURCE: 'k8s/api-resources',
     GVK: 'gvk',
     NAMESPACE: 'env/namespace',
+    CLUSTER_NOTE: 'cluster/note',
+    APPLICATION_NOTE: 'app/note',
+    GIT_HOST_EVENT: 'git/host/event',
 }
 
 export enum KEY_VALUE {
@@ -438,6 +443,7 @@ export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
 export const EXCLUDED_FALSY_VALUES = [undefined, null, '', NaN] as const
 
 export const API_STATUS_CODES = {
+    BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
     PERMISSION_DENIED: 403,
     NOT_FOUND: 404,
@@ -465,3 +471,9 @@ export const POSTHOG_EVENT_ONBOARDING = {
 export const MAX_LOGIN_COUNT = 5
 export const LOGIN_COUNT = 'login-count'
 export const DEFAULT_ENV = 'devtron-ci'
+
+export const DATE_TIME_FORMATS = {
+    TWELVE_HOURS_FORMAT: 'ddd, DD MMM YYYY, hh:mm A',
+    TWELVE_HOURS_FORMAT_WITHOUT_WEEKDAY: 'DD MMM YYYY, hh:mm A',
+    TWELVE_HOURS_EXPORT_FORMAT: 'DD-MMM-YYYY hh.mm A',
+}

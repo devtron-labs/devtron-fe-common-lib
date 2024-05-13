@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { preventBodyScroll } from '../../Shared'
 import { stopPropagation } from '../Helper';
 
 export class VisibleModal2 extends React.Component<{ className: string; close?: (e) => void }> {
@@ -20,11 +21,13 @@ export class VisibleModal2 extends React.Component<{ className: string; close?: 
     componentDidMount() {
         document.addEventListener('keydown', this.escFunction)
         this.modalRef.classList.add('show-with-bg')
+        preventBodyScroll(true)
     }
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this.escFunction)
         this.modalRef.classList.remove('show-with-bg')
+        preventBodyScroll(false)
     }
 
     render() {

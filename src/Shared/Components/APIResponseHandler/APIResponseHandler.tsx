@@ -25,6 +25,11 @@ const APIResponseHandler = ({
     }
 
     if (error) {
+        // This will be used for handling error screen for small screen size
+        if (genericSectionErrorProps) {
+            return <GenericSectionErrorState {...genericSectionErrorProps} />
+        }
+
         // TODO: Can extend ErrorScreenNotFound
         if (error?.code === 404) {
             return (
@@ -33,10 +38,6 @@ const APIResponseHandler = ({
                     subTitle={notFoundText?.subTitle ?? NOT_FOUND_DEFAULT_TEXT.subTitle}
                 />
             )
-        }
-
-        if (genericSectionErrorProps) {
-            return <GenericSectionErrorState {...genericSectionErrorProps} />
         }
 
         return <Reload {...reloadProps} />

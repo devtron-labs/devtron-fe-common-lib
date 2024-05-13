@@ -1,4 +1,5 @@
-import { CommonNodeAttr, ResponseType, UserApprovalConfigType, VulnerabilityType } from '../Common'
+import { OptionType, CommonNodeAttr, ResponseType, UserApprovalConfigType, VulnerabilityType } from '../Common'
+import { PatchOperationType } from './constants'
 
 export enum RegistryType {
     GIT = 'git',
@@ -109,6 +110,95 @@ export enum CIMaterialSidebarType {
     PARAMETERS = 'Parameters',
 }
 
+/**
+ * @example Usage with specific enum for path & `unknown` type for value
+ * ```ts
+ * enum PatchKeys {
+ *  name = 'name',
+ *  description = 'description',
+ * }
+ *
+ * const query: PatchQueryType<PatchKeys> = {
+ *  op: PatchOperationType.replace,
+ *  path: PatchKeys.name,
+ *  value: '1'
+ * }
+ * ```
+ *
+ * @example Usage with specific enum for path & custom type for value
+ * ```ts
+ * enum PatchKeys {
+ *  name = 'name',
+ *  description = 'description',
+ * }
+ *
+ * const query: PatchQueryType<PatchKeys, number> = {
+ *  op: PatchOperationType.replace,
+ *  path: PatchKeys.name,
+ *  value: 1
+ * }
+ * ```
+ *
+ * @example Usage with `PatchOperationType.remove`
+ * Note: Value is not allowed for remove operation
+ *
+ * ```ts
+ * const query: PatchQueryType<string> = {
+ *  op: PatchOperationType.remove,
+ *  path: 'name'
+ * }
+ * ```
+ */
+export type PatchQueryType<T extends string, K = unknown> = {
+    /**
+     * The path of the json to be patched
+     */
+    path: T
+} & (
+    | {
+          /**
+           * Operation type for patch
+           */
+          op: PatchOperationType.replace
+          /**
+           * Corresponding value for the operation
+           */
+          value: K
+      }
+    | {
+          /**
+           * Operation type for patch
+           */
+          op: PatchOperationType.remove
+          value?: never
+      }
+)
+
+export interface GroupedOptionsType {
+    label: string
+    options: OptionType[]
+}
+
+/**
+ * Enum for devtron resources
+ */
+export enum ResourceKindType {
+    devtronApplication = 'application/devtron-application',
+    helmChart = 'application/helm-application',
+    job = 'job',
+    cluster = 'cluster',
+    release = 'release',
+    releaseTrack = 'release-track',
+}
+
+/**
+ * Versions support for the resources on BE
+ */
+export enum ResourceVersionType {
+    v1 = 'v1',
+    alpha1 = 'alpha1',
+}
+
 export interface LastExecutionResultType {
     lastExecution: string
     severityCount: {
@@ -136,6 +226,11 @@ export interface LastExecutionResponseType extends ResponseType<LastExecutionRes
 export interface MaterialSecurityInfoType {
     isScanned: boolean
     isScanEnabled: boolean
+}
+
+export enum WebhookEventNameType {
+    PULL_REQUEST = 'Pull Request',
+    TAG_CREATION = 'Tag Creation',
 }
 
 export enum Nodes {

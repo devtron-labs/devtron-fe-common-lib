@@ -3,7 +3,7 @@ export interface ValidationResponseType {
     message?: string
 }
 
-const MESSAGES = {
+export const MESSAGES = {
     PROVIDE_A_NUMBER: 'Please provide a number',
     LOWERCASE_ALPHANUMERIC: 'Only lowercase alphanumeric characters, -, _ or . allowed',
     CAN_NOT_START_END_WITH_SEPARATORS: 'Cannot start/end with -, _ or .',
@@ -14,7 +14,7 @@ const MESSAGES = {
     MAX_SAFE_INTEGER: `Maximum allowed value is ${Number.MAX_SAFE_INTEGER}`,
 }
 
-const MAX_DESCRIPTION_LENGTH = 300
+const MAX_DESCRIPTION_LENGTH = 350
 
 export const requiredField = (value: string): ValidationResponseType => {
     if (!value) {
