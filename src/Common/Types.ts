@@ -361,7 +361,6 @@ export interface DeploymentWindowArtifactMetadata {
 export interface ArtifactReleaseMappingType {
     id : number, 
     identifier: string,
-    // TODO: Ask BE to rename this to `releaseVersion`
     releaseVersion: string,
     name: string
     kind: string
@@ -597,7 +596,7 @@ export interface CDMaterialsMetaInfo {
      */
     requestedUserId: number
     /**
-     * Would currently only be received in case of release, otherwise it would be 0
+     * Would currently only be received in case of release
      */
     appWorkflowId: number
 }
