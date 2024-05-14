@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import './pageHeader.css'
 import ReactGA from 'react-ga4'
-import { getLoginInfo, getRandomColor, TippyCustomized, TippyTheme } from '../../../Common'
+import { getRandomColor, TippyCustomized, TippyTheme } from '../../../Common'
 import LogoutCard from '../LogoutCard'
 import { setActionWithExpiry, handlePostHogEventUpdate } from './utils'
 import { InstallationType, ServerInfo, PageHeaderType } from './types'
@@ -15,7 +15,7 @@ import { ReactComponent as QuestionFilled } from '../../../Assets/Icon/ic-help.s
 import { ReactComponent as Close } from '../../../Assets/Icon/ic-close.svg'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import AnnouncementBanner from '../AnnouncementBanner/AnnouncementBanner'
-import { useMainContext } from '../../Providers'
+import { useMainContext, useUserEmail } from '../../Providers'
 
 const PageHeader = ({
     headerName,
@@ -39,8 +39,7 @@ const PageHeader = ({
         useMainContext()
     const [showHelpCard, setShowHelpCard] = useState(false)
     const [showLogOutCard, setShowLogOutCard] = useState(false)
-    const loginInfo = getLoginInfo()
-    const email: string = loginInfo ? loginInfo.email || loginInfo.sub : ''
+    const { email } = useUserEmail()
     const [currentServerInfo, setCurrentServerInfo] = useState<{ serverInfo: ServerInfo; fetchingServerInfo: boolean }>(
         {
             serverInfo: undefined,
