@@ -247,4 +247,4 @@ export const abortPreviousRequests = <T>(
  */
 export const getIsRequestAborted = (error) =>
     // The 0 code is common for aborted and blocked requests
-    error && error.code === 0 && error.message === 'The user aborted a request.'
+    error && error.code === 0 && (error.message === 'The user aborted a request.' || error.message === 'signal is aborted without reason')
