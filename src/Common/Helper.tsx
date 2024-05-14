@@ -171,19 +171,6 @@ export function getCookie(sKey) {
     )
 }
 
-export function getLoginInfo() {
-    const argocdToken = getCookie(TOKEN_COOKIE_NAME)
-    if (argocdToken) {
-        const jwts = argocdToken.split('.')
-        try {
-            return JSON.parse(atob(jwts[1]))
-        } catch (err) {
-            console.error('error in setting user ', err)
-            return null
-        }
-    }
-}
-
 export function useForm(stateSchema, validationSchema = {}, callback) {
     const [state, setState] = useState(stateSchema)
     const [disable, setDisable] = useState(true)
