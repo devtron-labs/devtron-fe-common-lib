@@ -144,6 +144,7 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
             promotionApprovalMetadata: material.promotionApprovalMetadata,
             deployedOnEnvironments: material.deployedOnEnvironments ?? [],
             deploymentWindowArtifactMetadata: material.deploymentWindowArtifactMetadata ?? null,
+            configuredInReleases: material.configuredInReleases ?? [],
         }
     })
     return materials
@@ -174,6 +175,7 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
             resourceFilters: [],
             totalCount: 0,
             requestedUserId: 0,
+            appWorkflowId: 0,
         }
     }
 
@@ -184,6 +186,7 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
         resourceFilters: cdMaterialsResult.resourceFilters ?? [],
         totalCount: cdMaterialsResult.totalCount ?? 0,
         requestedUserId: cdMaterialsResult.requestedUserId,
+        appWorkflowId: cdMaterialsResult.appWorkflowId,
     }
 }
 
