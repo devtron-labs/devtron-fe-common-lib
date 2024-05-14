@@ -26,7 +26,6 @@ const ErrorScreenManager = ({
                         imageType={ImageType.Large}
                         heightToDeduct={heightToDeduct}
                         reload={reload}
-                        redirectURL={redirectURL}
                     />
                 )
             case ERROR_STATUS_CODE.UNAUTHORIZED:
@@ -60,6 +59,7 @@ const ErrorScreenManager = ({
                         image={notFound}
                         imageType={ImageType.Large}
                         heightToDeduct={heightToDeduct}
+                        redirectURL={redirectURL}
                     />
                 )
             case ERROR_STATUS_CODE.INTERNAL_SERVER_ERROR:
@@ -71,6 +71,7 @@ const ErrorScreenManager = ({
                         image={badRequest}
                         imageType={ImageType.Large}
                         heightToDeduct={heightToDeduct}
+                        reload={reload}
                     />
                 )
             case ERROR_STATUS_CODE.BAD_GATEWAY:
