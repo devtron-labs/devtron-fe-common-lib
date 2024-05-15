@@ -139,7 +139,7 @@ export interface GenericEmptyStateType {
 }
 
 export interface ErrorPageType
-    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>, Pick<ErrorScreenManagerProps, 'reload'> {
+    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>, Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
     code: number
     heightToDeduct?: number
 }
@@ -150,6 +150,11 @@ export interface ErrorScreenManagerProps {
     subtitle?: React.ReactChild
     reloadClass?: string
     heightToDeduct?: number
+    /**
+     * Would be used to redirect URL in case of 404
+     * @default - APP_LIST
+     */
+    redirectURL?: string
 }
 
 export interface ErrorScreenNotAuthorizedProps {
@@ -356,7 +361,6 @@ export interface DeploymentWindowArtifactMetadata {
 export interface ArtifactReleaseMappingType {
     id : number, 
     identifier: string,
-    // TODO: Ask BE to rename this to `releaseVersion`
     releaseVersion: string,
     name: string
     kind: string
@@ -592,7 +596,7 @@ export interface CDMaterialsMetaInfo {
      */
     requestedUserId: number
     /**
-     * Would currently only be received in case of release, otherwise it would be 0
+     * Would currently only be received in case of release
      */
     appWorkflowId: number
 }
