@@ -103,3 +103,7 @@ export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
 }
 
 export const isNullOrUndefined = (value: unknown): boolean => value === null || value === undefined
+
+export const filterUniqueItemsInArrayByKey = <T extends unknown>(arr: T[], key: string | number): T[] => [
+    ...new Map<typeof key, T>(arr.map((item) => [item[key], item])).values(),
+]
