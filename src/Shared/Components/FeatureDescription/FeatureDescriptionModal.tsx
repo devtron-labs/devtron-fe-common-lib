@@ -16,7 +16,7 @@ export const FeatureDescriptionModal = ({
     const renderDescriptionBody = () => (
         <div className="pl-20 pr-20 pt-16 pb-16 dc__gap-16">
             <div className="flex left w-100 fs-16 fw-6">{title}</div>
-            <div className={`${imageVariant === IMAGE_VARIANT.SMALL ? 'mxh-350' : 'mxh-450'}`}>
+            <div className={`${imageVariant === IMAGE_VARIANT.SMALL ? 'mxh-350' : 'mxh-450'} dc__overflow-auto`}>
                 <img
                     src={image}
                     className={`${imageVariant === IMAGE_VARIANT.SMALL ? 'small' : 'large'}  mt-16 mb-12`}
@@ -33,13 +33,13 @@ export const FeatureDescriptionModal = ({
         >
             {docLink.length > 0 && (
                 <a
-                    className="flex dc__link en-2 bw-1 pl-8 pr-8 dc__gap-6 br-4 fw-6 lh-20"
+                    className="flex dc__link en-2 bw-1 pl-8 pr-8 dc__gap-6 br-4 fw-6 lh-20 pt-6 pb-6 h-32"
                     href={docLink}
                     target="_blank"
                     rel="noreferrer"
                 >
                     {BUTTON_TEXT.VIEW_DOCUMENTATION}
-                    <ArrowOutSquare className="icon-dim-16 ml-8 scb-5" />
+                    <ArrowOutSquare className="icon-dim-16 scb-5" />
                 </a>
             )}
             <button className="cta flex small" type="submit" onClick={closeModal}>
