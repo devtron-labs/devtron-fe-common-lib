@@ -415,6 +415,10 @@ export interface CDMaterialType {
      * Will only be present in case of release
      */
     configuredInReleases: ArtifactReleaseMappingType[]
+    /**
+     * Would currently only be received in case of release
+     */
+    appWorkflowId: number
 }
 
 export enum CDMaterialServiceEnum {
@@ -595,10 +599,6 @@ export interface CDMaterialsMetaInfo {
      * This is the ID of user that has request the material
      */
     requestedUserId: number
-    /**
-     * Would currently only be received in case of release
-     */
-    appWorkflowId: number
 }
 
 export interface ImagePromotionMaterialInfo {
