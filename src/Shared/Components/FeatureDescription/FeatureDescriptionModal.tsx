@@ -14,14 +14,16 @@ export const FeatureDescriptionModal = ({
     imageVariant,
 }: FeatureDescriptionModalProps) => {
     const renderDescriptionBody = () => (
-        <div className="pl-20 pr-20 pt-16">
+        <div className="pl-20 pr-20 pt-16 pb-16 dc__gap-16">
             <div className="flex left w-100 fs-16 fw-6">{title}</div>
-            <img
-                src={image}
-                className={`${imageVariant === IMAGE_VARIANT.SMALL ? 'small' : 'large'} mt-16 mb-12`}
-                alt="feature-description"
-            />
-            {typeof renderDescriptionContent === 'function' && renderDescriptionContent()}
+            <div className={`${imageVariant === IMAGE_VARIANT.SMALL ? 'mxh-350' : 'mxh-450'}`}>
+                <img
+                    src={image}
+                    className={`${imageVariant === IMAGE_VARIANT.SMALL ? 'small' : 'large'}  mt-16 mb-12`}
+                    alt="feature-description"
+                />
+                {typeof renderDescriptionContent === 'function' && renderDescriptionContent()}
+            </div>
         </div>
     )
 
@@ -48,7 +50,7 @@ export const FeatureDescriptionModal = ({
 
     return (
         <VisibleModal className="">
-            <div className="feature-description modal__body w-600 mt-40 flex column dc__gap-16 p-0 fs-13">
+            <div className="feature-description modal__body w-600 mt-40 flex column p-0 fs-13 dc__overflow-hidden">
                 {renderDescriptionBody()}
                 {renderFooter()}
             </div>
