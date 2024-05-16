@@ -10,7 +10,7 @@ const GenericSectionErrorState = ({
     buttonText = 'Reload',
     rootClassName,
 }: GenericSectionErrorStateProps) => (
-    <div className={`flex column dc__gap-8 p-16 ${withBorder ? 'dc__border' : ''} ${rootClassName || ''}`}>
+    <div className={`flex column dc__gap-8 p-16 ${withBorder ? 'dc__border br-4' : ''} ${rootClassName || ''}`}>
         <ErrorIcon className="icon-dim-24 alert-icon-r5-imp" />
         <div className="flex column dc__gap-4 dc__align-center">
             <h3 className="fs-13 lh-20 fw-6 cn-9 m-0">{title}</h3>
