@@ -7,7 +7,7 @@ export interface FeatureDescriptionModalProps {
     renderDescriptionContent?: () => JSX.Element
     closeModalText?: string
     docLink?: string
-    closeModal: () => void
+    closeModal?: () => void
     imageVariant?: IMAGE_VARIANT
 }
 

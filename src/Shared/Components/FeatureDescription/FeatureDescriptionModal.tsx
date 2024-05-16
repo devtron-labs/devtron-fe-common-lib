@@ -1,7 +1,8 @@
-import { VisibleModal, noop } from '../../../Common'
+import { VisibleModal } from '../../../Common'
 import { BUTTON_TEXT, IMAGE_VARIANT } from './constant'
 import { FeatureDescriptionModalProps } from './types'
 import './featureDescription.scss'
+import { ReactComponent as ArrowOutSquare } from '../../../Assets/Icon/ic-arrow-square-out.svg'
 
 export const FeatureDescriptionModal = ({
     image,
@@ -13,7 +14,7 @@ export const FeatureDescriptionModal = ({
     imageVariant,
 }: FeatureDescriptionModalProps) => {
     const renderDescriptionBody = () => (
-        <div className="pl-20 pr-20 pt-16 pb-16">
+        <div className="pl-20 pr-20 pt-16">
             <div className="flex left w-100 fs-16 fw-6">{title}</div>
             <img
                 src={image}
@@ -26,16 +27,20 @@ export const FeatureDescriptionModal = ({
 
     const renderFooter = () => (
         <div
-            className={`flex right w-100 dc__align-right pt-16 dc__border-top-n1 pb-16 pl-20 pr-20 ${docLink ? 'dc__content-space' : 'right'}`}
+            className={`flex right w-100 dc__align-right pt-16 dc__border-top-n1 pb-16 pl-20 pr-20 pt-6 pb-6 ${docLink ? 'dc__content-space' : 'right'}`}
         >
-            {docLink && (
-                <button className="cta flex h-36" type="submit" onClick={noop}>
-                    <a className="" href={docLink} target="_blank" rel="noreferrer">
-                        {BUTTON_TEXT.VIEW_DOCUMENTATION}
-                    </a>
-                </button>
+            {docLink.length > 0 && (
+                <a
+                    className="flex dc__link en-2 bw-1 pl-8 pr-8 dc__gap-6 br-4 fw-6 lh-20"
+                    href={docLink}
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    {BUTTON_TEXT.VIEW_DOCUMENTATION}
+                    <ArrowOutSquare className="icon-dim-16 ml-8 scb-5" />
+                </a>
             )}
-            <button className="cta flex h-36" type="submit" onClick={closeModal}>
+            <button className="cta flex small" type="submit" onClick={closeModal}>
                 {closeModalText}
             </button>
         </div>
