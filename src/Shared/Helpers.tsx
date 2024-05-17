@@ -103,3 +103,12 @@ export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
 }
 
 export const isNullOrUndefined = (value: unknown): boolean => value === null || value === undefined
+
+export const getKeyToBooleanMapFromArray = <T extends string | number>(arr: T[] = []) =>
+    arr.reduce<Record<T, boolean>>(
+        (acc, key) => {
+            acc[key] = true
+            return acc
+        },
+        {} as Record<T, boolean>,
+    )
