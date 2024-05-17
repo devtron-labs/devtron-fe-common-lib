@@ -18,19 +18,22 @@ const FilterChip = ({
     const valueToDisplay = getFormattedValue(label, value) ?? value
 
     return (
-        <div className="flexbox flex-align-center br-4 dc__border dc__bg-n50 pl-6 pr-6 pt-2 pb-2 dc__user-select-none h-24 dc__gap-6 fs-12 lh-20 cn-9 fw-4 dc__ellipsis-right">
-            <span className="fw-6 dc__capitalize">{labelToDisplay}</span>
-            <span className="dc__divider h-24" />
-            <span className="dc__ellipsis-right">{valueToDisplay}</span>
-            <button
-                type="button"
-                className="flex p-0 dc__transparent"
-                onClick={removeFilter}
-                aria-label="Remove filter"
-            >
-                <CloseIcon className="icon-dim-12 icon-use-fill-n6" />
-            </button>
-        </div>
+        labelToDisplay &&
+        valueToDisplay && (
+            <div className="flexbox flex-align-center br-4 dc__border dc__bg-n50 pl-6 pr-6 pt-2 pb-2 dc__user-select-none h-24 dc__gap-6 fs-12 lh-20 cn-9 fw-4 dc__ellipsis-right">
+                <span className="fw-6 dc__capitalize">{labelToDisplay}</span>
+                <span className="dc__divider h-24" />
+                <span className="dc__ellipsis-right">{valueToDisplay}</span>
+                <button
+                    type="button"
+                    className="flex p-0 dc__transparent"
+                    onClick={removeFilter}
+                    aria-label="Remove filter"
+                >
+                    <CloseIcon className="icon-dim-12 icon-use-fill-n6" />
+                </button>
+            </div>
+        )
     )
 }
 
