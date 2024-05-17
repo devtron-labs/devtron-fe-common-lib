@@ -65,6 +65,8 @@ export const ROUTES = {
     HELM_DEPLOYMENT_STATUS_TIMELINE_INSTALLED_APP: 'app-store/deployment-status/timeline',
     DEPLOYMENT_STATUS: 'app/deployment-status/timeline',
     MANUAL_SYNC: 'app/deployment-status/manual-sync',
+    CD_CONFIG: 'app/cd-pipeline',
+    MODULE_CONFIGURED: 'module/config',
 }
 
 export enum KEY_VALUE {

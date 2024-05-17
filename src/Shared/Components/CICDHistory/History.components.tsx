@@ -1,11 +1,58 @@
 import Tippy from '@tippyjs/react'
 import { useEffect, useState } from 'react'
-import { ClipboardButton, GenericEmptyState, extractImage, getUserRole, showError } from '../../../Common'
+import { useLocation } from 'react-router'
+import { ClipboardButton, GenericEmptyState, extractImage, getUserRole, showError, useKeyDown } from '../../../Common'
 import { EMPTY_STATE_STATUS } from './constants'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
-import { GitChangesType, ScrollerType } from './types'
+import { GitChangesType, LogResizeButtonType, ScrollerType } from './types'
 import GitCommitInfoGeneric from './GitCommitInfoGeneric'
 import { CIListItem } from './Artifacts'
+import { ReactComponent as ZoomIn } from '../../../Assets/Icon/ic-fullscreen.svg'
+import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscreen.svg'
+
+export const LogResizeButton = ({ fullScreenView, setFullScreenView }: LogResizeButtonType): JSX.Element => {
+    const { pathname } = useLocation()
+
+    const keys = useKeyDown()
+
+    const toggleFullScreen = (): void => {
+        setFullScreenView(!fullScreenView)
+    }
+
+    useEffect(() => {
+        if (!pathname.includes('/logs')) {
+            return
+        }
+        // eslint-disable-next-line default-case
+        switch (keys.join('')) {
+            case 'f':
+                toggleFullScreen()
+                break
+            case 'Escape':
+                setFullScreenView(false)
+                break
+        }
+    }, [keys])
+
+    return (
+        pathname.includes('/logs') && (
+            <Tippy
+                placement="top"
+                arrow={false}
+                className="default-tt"
+                content={fullScreenView ? 'Exit fullscreen (f)' : 'Enter fullscreen (f)'}
+            >
+                <div>
+                    {fullScreenView ? (
+                        <ZoomOut className="zoom zoom--out pointer" onClick={toggleFullScreen} />
+                    ) : (
+                        <ZoomIn className="zoom zoom--in pointer" onClick={toggleFullScreen} />
+                    )}
+                </div>
+            </Tippy>
+        )
+    )
+}
 
 export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): JSX.Element => (
     <div style={style} className="dc__element-scroller flex column top">

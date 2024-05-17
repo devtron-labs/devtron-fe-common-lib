@@ -1,3 +1,5 @@
+// import { multiSelectStyles } from '../../../Common'
+
 export const HISTORY_LABEL = {
     APPLICATION: 'Application',
     ENVIRONMENT: 'Environment',
@@ -5,6 +7,7 @@ export const HISTORY_LABEL = {
 }
 
 export const FILTER_STYLE = {
+    // TODO : Use MultiSelectStyles here
     // ...multiSelectStyles,
     control: (base) => ({
         ...base,

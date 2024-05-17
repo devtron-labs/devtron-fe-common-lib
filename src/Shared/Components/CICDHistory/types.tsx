@@ -26,6 +26,11 @@ export enum FetchIdDataStatus {
     SUSPEND = 'SUSPEND',
 }
 
+export interface LogResizeButtonType {
+    fullScreenView: boolean
+    setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
+}
+
 interface CiMaterial {
     id: number
     gitMaterialId: number
@@ -82,6 +87,18 @@ export interface History {
     promotionApprovalMetadata?: PromotionApprovalMetadataType
     triggerMetadata?: string
 }
+
+export interface DeploymentHistoryResultObject {
+    cdWorkflows: History[]
+    appReleaseTagNames: string[]
+    tagsEditable: boolean
+    hideImageTaggingHardDelete: boolean
+}
+
+export interface DeploymentHistoryResult extends ResponseType {
+    result?: DeploymentHistoryResultObject
+}
+
 export interface SidebarType {
     type: HistoryComponentType
     filterOptions: CICDSidebarFilterOptionType[]
@@ -90,6 +107,7 @@ export interface SidebarType {
     setPagination: React.Dispatch<React.SetStateAction<{ offset: number; size: number }>>
     fetchIdData?: FetchIdDataStatus
     handleViewAllHistory?: () => void
+    children?: React.ReactNode
 }
 
 export interface HistorySummaryCardType {
@@ -144,7 +162,7 @@ export interface StartDetailsType {
     environmentName?: string
     isJobView?: boolean
     triggerMetadata?: string
-    renderDeploymentHistoryTriggerMetaText: () => JSX.Element
+    renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string) => JSX.Element
 }
 
 export interface TriggerDetailsType {
@@ -164,7 +182,7 @@ export interface TriggerDetailsType {
     isJobView?: boolean
     workerPodName?: string
     triggerMetadata?: string
-    renderDeploymentHistoryTriggerMetaText: () => JSX.Element
+    renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string) => JSX.Element
 }
 
 export interface ProgressingStatusType {
@@ -289,9 +307,28 @@ export interface DeploymentDetailStepsType {
     processVirtualEnvironmentDeploymentData: (
         data?: DeploymentStatusDetailsType,
     ) => DeploymentStatusDetailsBreakdownDataType
-    renderDeploymentApprovalInfo: () => JSX.Element
+    renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
 }
 
+export interface RenderCIListHeaderProps {
+    userApprovalMetadata: UserApprovalMetadataType
+    triggeredBy: string
+    appliedFilters: FilterConditionsListType[]
+    appliedFiltersTimestamp: string
+    promotionApprovalMetadata: PromotionApprovalMetadataType
+    selectedEnvironmentName: string
+}
+
+export interface VirtualHistoryArtifactProps {
+    status: string
+    title: string
+    params: {
+        appId: number
+        envId: number
+        appName: string
+        workflowId: number
+    }
+}
 export interface TriggerOutputProps {
     fullScreenView: boolean
     syncState: (triggerId: number, triggerDetails: History, triggerDetailsError: any) => void
@@ -307,13 +344,13 @@ export interface TriggerOutputProps {
     hideImageTaggingHardDelete: boolean
     fetchIdData: FetchIdDataStatus
     selectedEnvironmentName?: string
-    renderCIListHeader: () => JSX.Element
-    renderDeploymentApprovalInfo: () => JSX.Element
+    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+    renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
     processVirtualEnvironmentDeploymentData: (
         data?: DeploymentStatusDetailsType,
     ) => DeploymentStatusDetailsBreakdownDataType
-    renderVirtualHistoryArtifacts: () => JSX.Element
-    renderDeploymentHistoryTriggerMetaText: () => JSX.Element
+    renderVirtualHistoryArtifacts: (virtualHistoryArtifactProps: VirtualHistoryArtifactProps) => JSX.Element
+    renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string) => JSX.Element
 }
 
 export interface DeploymentStatusDetailBreakdownType {
@@ -477,7 +514,7 @@ export interface GitChangesType extends Pick<History, 'promotionApprovalMetadata
     appliedFilters?: FilterConditionsListType[]
     appliedFiltersTimestamp?: string
     selectedEnvironmentName?: string
-    renderCIListHeader: () => JSX.Element
+    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
 }
 
 export interface ArtifactType {
@@ -497,7 +534,7 @@ export interface ArtifactType {
     tagsEditable?: boolean
     hideImageTaggingHardDelete?: boolean
     jobCIClass?: string
-    renderCIListHeader: () => JSX.Element
+    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
 }
 
 export interface CIListItemType extends Pick<GitChangesType, 'promotionApprovalMetadata' | 'selectedEnvironmentName'> {
@@ -515,7 +552,73 @@ export interface CIListItemType extends Pick<GitChangesType, 'promotionApprovalM
     appliedFilters?: FilterConditionsListType[]
     appliedFiltersTimestamp?: string
     isSuperAdmin?: boolean
-    renderCIListHeader: () => JSX.Element
+    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+}
+
+export interface DeploymentHistory {
+    id: number
+    cd_workflow_id: number
+    name: string
+    status: string
+    pod_status: string
+    message: string
+    started_on: string
+    finished_on: string
+    pipeline_id: number
+    namespace: string
+    log_file_path: string
+    triggered_by: number
+    email_id?: string
+    image: string
+    workflow_type?: string
+    imageComment?: ImageComment
+    imageReleaseTags?: ReleaseTag[]
+    ci_artifact_id?: number
+}
+
+type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE_GREEN'
+
+interface DeploymentStrategy {
+    deploymentTemplate: DeploymentStrategyType
+    config: any
+    default: boolean
+}
+
+interface PrePostStage {
+    triggerType: 'AUTOMATIC' | 'MANUAL'
+    name: string
+    config: string
+}
+
+interface CDPipeline {
+    id: number
+    environmentId: number
+    environmentName: string
+    description: string
+    ciPipelineId: number
+    triggerType: string
+    name: string
+    strategies: DeploymentStrategy[]
+    deploymentTemplate: string
+    preStage: PrePostStage
+    postStage: PrePostStage
+    preStageConfigMapSecretNames: { configMaps: string[]; secrets: string[] }
+    postStageConfigMapSecretNames: { configMaps: string[]; secrets: string[] }
+    runPreStageInEnv: boolean
+    runPostStageInEnv: boolean
+    isClusterCdActive: boolean
+    deploymentAppType?: DeploymentAppTypes
+    isDeploymentBlocked?: boolean
+}
+
+export interface CDPipelines {
+    pipelines: CDPipeline[]
+}
+
+export interface ModuleConfigResponse extends ResponseType {
+    result?: {
+        enabled: boolean
+    }
 }
 
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])

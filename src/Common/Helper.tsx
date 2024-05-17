@@ -935,6 +935,44 @@ export function useScrollable(options: scrollableInterface) {
     return [target, topScrollable ? scrollToTop : null, bottomScrollable ? scrollToBottom : null]
 }
 
+function useDelayedEffect(callback, delay, deps = []) {
+    const timeoutRef = useRef(null)
+    useEffect(() => {
+        timeoutRef.current = setTimeout(callback, delay)
+        return () => clearTimeout(timeoutRef.current)
+    }, deps)
+}
+
+export function useKeyDown() {
+    const [keys, setKeys] = useState([])
+    useEffect(() => {
+        document.addEventListener('keydown', onKeyDown)
+        document.addEventListener('keyup', onKeyUp)
+        return () => {
+            document.removeEventListener('keydown', onKeyDown)
+            document.removeEventListener('keyup', onKeyUp)
+        }
+    }, [keys])
+
+    // another hook just to reset the key becayse Meta key on mac ignores all other keyUps while MetaKey is pressed.
+    useDelayedEffect(clearKeys, 500, [keys.join('+')])
+
+    function clearKeys() {
+        if (keys.length) {
+            setKeys([])
+        }
+    }
+
+    const onKeyDown = ({ key }) => {
+        setKeys((k) => Array.from(new Set(k).add(key)))
+    }
+    const onKeyUp = ({ key }) => {
+        setKeys((ks) => ks.filter((k) => k !== key))
+    }
+
+    return keys
+}
+
 export const DropdownIndicator = (props) => {
     return (
         <components.DropdownIndicator {...props}>
@@ -949,4 +987,8 @@ export function mapByKey<T = Map<any, any>>(arr: any[], id: string): T {
         return new Map() as T
     }
     return arr.reduce((agg, curr) => agg.set(curr[id], curr), new Map())
+}
+
+export function asyncWrap(promise): any[] {
+    return promise.then((result) => [null, result]).catch((err) => [err])
 }

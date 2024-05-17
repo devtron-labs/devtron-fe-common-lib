@@ -41,6 +41,8 @@ import {
     History,
     DeploymentStatusDetailsType,
     DeploymentStatusDetailsBreakdownDataType,
+    RenderCIListHeaderProps,
+    VirtualHistoryArtifactProps,
 } from './types'
 import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger, getCDBuildReport } from './service'
 import {
@@ -59,6 +61,7 @@ import DeploymentHistoryDetailedView from './DeploymentHistoryDiff/DeploymentHis
 import DeploymentHistoryConfigList from './DeploymentHistoryDiff/DeploymentHistoryConfigList.component'
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
+import './cicdHistory.scss'
 
 const Finished = React.memo(
     ({ status, finishedOn, artifact, type }: FinishedType): JSX.Element => (
@@ -385,7 +388,7 @@ const StartDetails = ({
                 )}
             </div>
 
-            {triggerMetadata && renderDeploymentHistoryTriggerMetaText()}
+            {triggerMetadata && renderDeploymentHistoryTriggerMetaText(triggerMetadata)}
             {isJobView && (
                 <div className="pt-4 pb-4 pr-0 pl-0">
                     <span className="fw-6 fs-14">Env</span>
@@ -500,9 +503,9 @@ const HistoryLogs: React.FC<{
     processVirtualEnvironmentDeploymentData: (
         data?: DeploymentStatusDetailsType,
     ) => DeploymentStatusDetailsBreakdownDataType
-    renderDeploymentApprovalInfo: () => JSX.Element
-    renderCIListHeader: () => JSX.Element
-    renderVirtualHistoryArtifacts: () => JSX.Element
+    renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
+    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+    renderVirtualHistoryArtifacts: (virtualHistoryArtifactProps: VirtualHistoryArtifactProps) => JSX.Element
 }> = ({
     triggerDetails,
     loading,
@@ -531,6 +534,13 @@ const HistoryLogs: React.FC<{
         triggerId: string
         envId: string
     }>()
+
+    const paramsData = {
+        appId,
+        envId,
+        appName: `${triggerDetails.helmPackageName}.tgz`,
+        workflowId: triggerDetails.id,
+    }
 
     const [ref, scrollToTop, scrollToBottom] = useScrollable({
         autoBottomScroll: triggerDetails.status.toLowerCase() !== 'succeeded',
@@ -617,7 +627,11 @@ const HistoryLogs: React.FC<{
                         {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
                             <Route path={`${path}/artifacts`}>
                                 {triggerDetails.IsVirtualEnvironment ? (
-                                    renderVirtualHistoryArtifacts()
+                                    renderVirtualHistoryArtifacts({
+                                        status: triggerDetails.status,
+                                        title: triggerDetails.helmPackageName,
+                                        params: { ...paramsData, appId: Number(appId), envId: Number(envId) },
+                                    })
                                 ) : (
                                     <Artifacts
                                         status={triggerDetails.status}
@@ -809,7 +823,7 @@ const TriggerOutput = ({
                                 <li className="tab-list__tab" data-testid="deployment-history-steps-link">
                                     <NavLink
                                         replace
-                                        className="tab-list__tab-link"
+                                        className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
                                         activeClassName="active"
                                         to="deployment-steps"
                                     >
@@ -819,7 +833,12 @@ const TriggerOutput = ({
                             )}
                             {!(triggerDetails.stage === 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
                                 <li className="tab-list__tab" data-testid="deployment-history-logs-link">
-                                    <NavLink replace className="tab-list__tab-link" activeClassName="active" to="logs">
+                                    <NavLink
+                                        replace
+                                        className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
+                                        activeClassName="active"
+                                        to="logs"
+                                    >
                                         Logs
                                     </NavLink>
                                 </li>
@@ -827,7 +846,7 @@ const TriggerOutput = ({
                             <li className="tab-list__tab" data-testid="deployment-history-source-code-link">
                                 <NavLink
                                     replace
-                                    className="tab-list__tab-link"
+                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
                                     activeClassName="active"
                                     to="source-code"
                                 >
@@ -838,7 +857,7 @@ const TriggerOutput = ({
                                 <li className="tab-list__tab" data-testid="deployment-history-configuration-link">
                                     <NavLink
                                         replace
-                                        className="tab-list__tab-link"
+                                        className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
                                         activeClassName="active"
                                         to="configuration"
                                     >
@@ -850,7 +869,7 @@ const TriggerOutput = ({
                                 <li className="tab-list__tab" data-testid="deployment-history-artifacts-link">
                                     <NavLink
                                         replace
-                                        className="tab-list__tab-link"
+                                        className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
                                         activeClassName="active"
                                         to="artifacts"
                                     >

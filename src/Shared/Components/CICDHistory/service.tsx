@@ -2,13 +2,17 @@
 import { ROUTES, ResponseType, get, trash } from '../../../Common'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from './constants'
 import {
+    CDPipelines,
     DeploymentConfigurationsRes,
+    DeploymentHistory,
     DeploymentHistoryDetail,
     DeploymentHistoryDetailRes,
+    DeploymentHistoryResult,
     DeploymentHistorySingleValue,
     DeploymentStatusDetailsResponse,
     FetchIdDataStatus,
     HistoryDiffSelectorRes,
+    ModuleConfigResponse,
     TriggerDetails,
 } from './types'
 import { decode } from './utils'
@@ -239,3 +243,47 @@ export const getDeploymentDiffSelector = (
 export function getCDBuildReport(appId, envId, pipelineId, workflowId) {
     return get(`app/cd-pipeline/workflow/download/${appId}/${envId}/${pipelineId}/${workflowId}`)
 }
+
+export async function getTriggerHistory(
+    appId: number | string,
+    envId: number | string,
+    pipelineId: number | string,
+    pagination,
+): Promise<DeploymentHistoryResult> {
+    return get(
+        `app/cd-pipeline/workflow/history/${appId}/${envId}/${pipelineId}?offset=${pagination.offset}&size=${pagination.size}`,
+    ).then(({ result, code, status }) => ({
+        result: {
+            cdWorkflows: (result.cdWorkflows || []).map((deploymentHistory: DeploymentHistory) => ({
+                ...deploymentHistory,
+                triggerId: deploymentHistory?.cd_workflow_id,
+                podStatus: deploymentHistory?.pod_status,
+                startedOn: deploymentHistory?.started_on,
+                finishedOn: deploymentHistory?.finished_on,
+                pipelineId: deploymentHistory?.pipeline_id,
+                logLocation: deploymentHistory?.log_file_path,
+                triggeredBy: deploymentHistory?.triggered_by,
+                artifact: deploymentHistory?.image,
+                triggeredByEmail: deploymentHistory?.email_id,
+                stage: deploymentHistory?.workflow_type,
+                image: deploymentHistory?.image,
+                imageComment: deploymentHistory?.imageComment,
+                imageReleaseTags: deploymentHistory?.imageReleaseTags,
+                artifactId: deploymentHistory?.ci_artifact_id,
+            })),
+            appReleaseTagNames: result.appReleaseTagNames,
+            tagsEditable: result.tagsEditable,
+            hideImageTaggingHardDelete: result.hideImageTaggingHardDelete,
+        },
+        code,
+        status,
+    }))
+}
+
+export const getCDPipelines = (appId: number | string): Promise<CDPipelines> => {
+    const URL = `${ROUTES.CD_CONFIG}/${appId}`
+    return get(URL).then((response) => response.result)
+}
+
+export const getModuleConfigured = (moduleName: string): Promise<ModuleConfigResponse> =>
+    get(`${ROUTES.MODULE_CONFIGURED}?name=${moduleName}`)

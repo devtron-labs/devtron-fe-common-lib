@@ -241,6 +241,7 @@ const Sidebar = React.memo(
         setPagination,
         fetchIdData,
         handleViewAllHistory,
+        children,
     }: SidebarType) => {
         const { pipelineId, appId, envId } = useParams<{ appId: string; envId: string; pipelineId: string }>()
         const { push } = useHistory()
@@ -316,33 +317,35 @@ const Sidebar = React.memo(
 
         return (
             <>
-                <div
-                    className="select-pipeline-wrapper w-100 pl-16 pr-16 dc__overflow-hidden"
-                    style={{
-                        borderBottom: '1px solid var(--n-100, #EDF1F5)',
-                    }}
-                >
-                    <label htmlFor="text" className="form__label" data-testid="select-history-heading">
-                        Select {selectLabel()}
-                    </label>
-                    <ReactSelect
-                        classNamePrefix="history-pipeline-dropdown"
-                        value={selectedFilter}
-                        options={
-                            type === HistoryComponentType.CI || type === HistoryComponentType.GROUP_CI
-                                ? filterOptions
-                                : _filterOptions
-                        }
-                        onChange={handleFilterChange}
-                        components={{
-                            IndicatorSeparator: null,
-                            Option: ciPipelineBuildTypeOption,
-                            DropdownIndicator,
+                {children || (
+                    <div
+                        className="select-pipeline-wrapper w-100 pl-16 pr-16 dc__overflow-hidden"
+                        style={{
+                            borderBottom: '1px solid var(--n-100, #EDF1F5)',
                         }}
-                        styles={FILTER_STYLE}
-                        menuPosition="fixed"
-                    />
-                </div>
+                    >
+                        <label htmlFor="text" className="form__label" data-testid="select-history-heading">
+                            Select {selectLabel()}
+                        </label>
+                        <ReactSelect
+                            classNamePrefix="history-pipeline-dropdown"
+                            value={selectedFilter}
+                            options={
+                                type === HistoryComponentType.CI || type === HistoryComponentType.GROUP_CI
+                                    ? filterOptions
+                                    : _filterOptions
+                            }
+                            onChange={handleFilterChange}
+                            components={{
+                                IndicatorSeparator: null,
+                                Option: ciPipelineBuildTypeOption,
+                                DropdownIndicator,
+                            }}
+                            styles={FILTER_STYLE}
+                            menuPosition="fixed"
+                        />
+                    </div>
+                )}
 
                 <div className="flex column top left" style={{ overflowY: 'auto' }}>
                     {fetchIdData === FetchIdDataStatus.SUCCESS && (

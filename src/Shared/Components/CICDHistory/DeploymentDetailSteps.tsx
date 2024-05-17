@@ -137,7 +137,7 @@ const DeploymentDetailSteps = ({
             </div>
         ) : (
             <div className="dc__mxw-1000 min-w-800">
-                {userApprovalMetadata && renderDeploymentApprovalInfo()}
+                {userApprovalMetadata && renderDeploymentApprovalInfo(userApprovalMetadata)}
                 <DeploymentStatusDetailBreakdown
                     deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}
                     isVirtualEnvironment={isVirtualEnv.current}

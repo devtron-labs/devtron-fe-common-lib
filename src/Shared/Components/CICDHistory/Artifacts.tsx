@@ -31,6 +31,7 @@ const CIProgressView = (): JSX.Element => (
 export const CIListItem = ({
     type,
     userApprovalMetadata,
+    triggeredBy,
     children,
     ciPipelineId,
     artifactId,
@@ -42,6 +43,8 @@ export const CIListItem = ({
     appliedFilters,
     isSuperAdmin,
     promotionApprovalMetadata,
+    appliedFiltersTimestamp,
+    selectedEnvironmentName,
     renderCIListHeader,
 }: CIListItemType) => {
     const headerMetaDataPresent =
@@ -57,7 +60,15 @@ export const CIListItem = ({
                 </div>
             )}
 
-            {headerMetaDataPresent && renderCIListHeader()}
+            {headerMetaDataPresent &&
+                renderCIListHeader({
+                    userApprovalMetadata,
+                    triggeredBy,
+                    appliedFilters,
+                    appliedFiltersTimestamp,
+                    promotionApprovalMetadata,
+                    selectedEnvironmentName,
+                })}
 
             <div
                 className={`dc__h-fit-content ci-artifact ci-artifact--${type} image-tag-parent-card bcn-0 br-4 dc__border p-12 w-100 dc__mxw-800 ${
