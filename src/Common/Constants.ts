@@ -28,6 +28,8 @@ export const URLS = {
     GETTING_STARTED: 'getting-started',
     STACK_MANAGER_ABOUT: '/stack-manager/about',
     APP_LIST_HELM: 'h',
+    APP_CI_DETAILS: 'ci-details',
+    LOGS: 'Logs',
     CREATE: '/create',
     RELEASES: '/releases',
 }
@@ -47,6 +49,11 @@ export const ROUTES = {
     SERVER_INFO_API: 'server',
     ATTRIBUTES_USER: 'attributes/user',
     UPDATE: 'update',
+    ENVIRONMENT_LIST_MIN: 'env/autocomplete',
+    CLUSTER: 'cluster',
+    API_RESOURCE: 'k8s/api-resources',
+    GVK: 'gvk',
+    NAMESPACE: 'env/namespace',
     CLUSTER_NOTE: 'cluster/note',
     APPLICATION_NOTE: 'app/note',
     GIT_HOST_EVENT: 'git/host/event',
@@ -300,6 +307,7 @@ export enum MODES {
     JSON = 'json',
     SHELL = 'shell',
     DOCKERFILE = 'dockerfile',
+    PLAINTEXT = 'plaintext',
 }
 
 // The values are going to be part of route that's why they may contain -
@@ -461,8 +469,8 @@ export const POSTHOG_EVENT_ONBOARDING = {
     SKIP_AND_EXPLORE_DEVTRON: 'SkippedOnboarding',
 }
 export const MAX_LOGIN_COUNT = 5
-export const BULK_EDIT_HEADER = 'Bulk Edit'
 export const LOGIN_COUNT = 'login-count'
+export const DEFAULT_ENV = 'devtron-ci'
 
 export const DATE_TIME_FORMATS = {
     TWELVE_HOURS_FORMAT: 'ddd, DD MMM YYYY, hh:mm A',
