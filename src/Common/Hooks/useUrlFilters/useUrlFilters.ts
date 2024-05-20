@@ -107,7 +107,7 @@ const useUrlFilters = <T = string, K = unknown>({
         history.replace({ search: '' })
     }
 
-    const updateSearchParams = (paramsToSerialize: K) => {
+    const updateSearchParams = (paramsToSerialize: Partial<K>) => {
         Object.keys(paramsToSerialize).forEach((key) => {
             if (paramsToSerialize[key]) {
                 if (Array.isArray(paramsToSerialize[key])) {

@@ -992,3 +992,5 @@ export function mapByKey<T = Map<any, any>>(arr: any[], id: string): T {
 export function asyncWrap(promise): any[] {
     return promise.then((result) => [null, result]).catch((err) => [err])
 }
+
+export const prefixZeroIfSingleDigit = (value: number = 0) => (value > 0 && value < 10 ? `0${value}` : value)
