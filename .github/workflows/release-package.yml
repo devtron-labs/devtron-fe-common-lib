@@ -5,44 +5,32 @@ on:
     types: [created]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-      - run: npm ci
-      - run: npm test
+  build-and-publish:
+    name: Build and Publish to NPM Registry
 
-  publish-gpr:
-    needs: build
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          registry-url: https://npm.pkg.github.com/
-      - run: npm ci
-      - run: npm run build-lib
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  publish-npm:
-    name: Publish to NPM Registry
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 16
+          cache: 'npm'
           registry-url: 'https://registry.npmjs.org/'
-      - run: npm ci
-      - run: npm run build-lib
-      - run: npm publish --access public
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Execute test cases
+        run: npm test
+
+      - name: Build Lib
+        run: npm run build-lib
+
+      - name: Publish to NPM Registry
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
