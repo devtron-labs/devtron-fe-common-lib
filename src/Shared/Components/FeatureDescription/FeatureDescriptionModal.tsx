@@ -1,4 +1,4 @@
-import { VisibleModal } from '../../../Common'
+import { VisibleModal, stopPropagation } from '../../../Common'
 import { BUTTON_TEXT } from './constant'
 import { FeatureDescriptionModalProps } from './types'
 import './featureDescription.scss'
@@ -80,7 +80,10 @@ export const FeatureDescriptionModal = ({
 
     return (
         <VisibleModal className="" close={closeModal}>
-            <div className="feature-description modal__body w-600 mt-40 flex column p-0 fs-13 dc__overflow-hidden">
+            <div
+                className="feature-description modal__body w-600 mt-40 flex column p-0 fs-13 dc__overflow-hidden"
+                onClick={stopPropagation}
+            >
                 {renderDescriptionBody()}
                 {renderFooter()}
             </div>
