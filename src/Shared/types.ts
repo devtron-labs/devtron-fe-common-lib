@@ -426,3 +426,12 @@ export type IntersectionOptions = {
 }
 
 export type IntersectionChangeHandler = (entry: IntersectionObserverEntry) => void
+
+export interface scrollableInterface {
+    autoBottomScroll: boolean
+}
+
+export enum PromiseAllStatusType {
+    FULFILLED = 'fulfilled',
+    REJECTED = 'rejected',
+}

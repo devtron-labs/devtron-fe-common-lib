@@ -2,7 +2,8 @@
 import { useEffect, useState } from 'react'
 import moment from 'moment'
 import { useParams } from 'react-router-dom'
-import { DATE_TIME_FORMATS, DEPLOYMENT_STATUS, showError, statusIcon, TIMELINE_STATUS } from '../../../Common'
+import { DATE_TIME_FORMATS, showError } from '../../../Common'
+import { DEPLOYMENT_STATUS, statusIcon, TIMELINE_STATUS } from '../../constants'
 import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
 import { DeploymentStatusDetailRowType } from './types'
 import { getManualSync } from './service'
@@ -15,7 +16,7 @@ import { ReactComponent as Timer } from '../../../Assets/Icon/ic-timer.svg'
 import { ReactComponent as Disconnect } from '../../../Assets/Icon/ic-disconnected.svg'
 import { ReactComponent as TimeOut } from '../../../Assets/Icon/ic-timeout-red.svg'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
-import { ShowMoreText } from '../../../Common/ShowMoreText'
+import { ShowMoreText } from '../ShowMoreText/ShowMoreText'
 import AppStatusDetailsChart from './AppStatusDetailsChart'
 
 export const DeploymentStatusDetailRow = ({

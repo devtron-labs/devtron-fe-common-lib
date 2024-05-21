@@ -338,7 +338,6 @@ export interface TriggerOutputProps {
     setDeploymentHistoryList: React.Dispatch<React.SetStateAction<DeploymentTemplateList[]>>
     deploymentAppType: DeploymentAppTypes
     isBlobStorageConfigured: boolean
-    deploymentHistoryResult: History[]
     appReleaseTags: string[]
     tagsEditable: boolean
     hideImageTaggingHardDelete: boolean

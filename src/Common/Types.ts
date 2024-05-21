@@ -926,6 +926,3 @@ export interface DeploymentWindowProfileMetaData {
     warningMessage: string
 }
 
-export interface scrollableInterface {
-    autoBottomScroll: boolean
-}

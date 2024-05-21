@@ -4,8 +4,8 @@ import { getAppDetails, aggregateNodes } from './utils'
 import { ReactComponent as InfoIcon } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as Chat } from '../../../Assets/Icon/ic-chat-circle-dots.svg'
 import { AppStatusDetailsChartType, AggregatedNodes, STATUS_SORTING_ORDER } from './types'
-import { DEPLOYMENT_STATUS, APP_STATUS_HEADERS } from '../../../Common'
 import { StatusFilterButtonComponent } from './StatusFilterButtonComponent'
+import { DEPLOYMENT_STATUS, APP_STATUS_HEADERS } from '../../constants'
 
 const AppStatusDetailsChart = ({ filterRemoveHealth = false, showFooter }: AppStatusDetailsChartType) => {
     const _appDetails = getAppDetails()

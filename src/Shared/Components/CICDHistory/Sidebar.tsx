@@ -28,6 +28,7 @@ import { ReactComponent as ICDocker } from '../../../Assets/Icon/ic-docker.svg'
 import { GitTriggers } from '../../types'
 import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
 import { triggerStatus } from '../../../Common/AppStatus/utils'
+import { ReactComponent as ICRelease } from '../../../Assets/Icon/ic-release.svg'
 
 const SummaryTooltipCard = React.memo(
     ({
@@ -199,30 +200,45 @@ const HistorySummaryCard = React.memo(
                                 ?.toLocaleLowerCase()
                                 .replace(/\s+/g, '')}`}
                         />
-                        <div className="flex column left dc__ellipsis-right">
-                            <div className="cn-9 fs-14">
-                                {moment(startedOn).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
-                            </div>
-                            <div className="flex left cn-7 fs-12">
-                                {isCDType && (
-                                    <>
-                                        <div className="dc__capitalize">
-                                            {['pre', 'post'].includes(stage?.toLowerCase()) ? `${stage}-deploy` : stage}
-                                        </div>
-                                        <span className="dc__bullet dc__bullet--d2 ml-4 mr-4" />
-
-                                        {artifact && (
-                                            <div className="dc__app-commit__hash dc__app-commit__hash--no-bg">
-                                                <ICDocker className="commit-hash__icon grayscale" />
-                                                {artifact.split(':')[1].slice(-12)}
-                                            </div>
-                                        )}
-                                        <span className="dc__bullet dc__bullet--d2 ml-4 mr-4" />
-                                    </>
-                                )}
-                                <div className="cn-7 fs-12">
-                                    {triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}
+                        <div className="flexbox-col dc__gap-8">
+                            <div className="flex column left dc__ellipsis-right">
+                                <div className="cn-9 fs-14">
+                                    {moment(startedOn).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
                                 </div>
+                                <div className="flex left cn-7 fs-12">
+                                    {isCDType && (
+                                        <>
+                                            <div className="dc__capitalize">
+                                                {['pre', 'post'].includes(stage?.toLowerCase())
+                                                    ? `${stage}-deploy`
+                                                    : stage}
+                                            </div>
+                                            <span className="dc__bullet dc__bullet--d2 ml-4 mr-4" />
+
+                                            {artifact && (
+                                                <div className="dc__app-commit__hash dc__app-commit__hash--no-bg">
+                                                    <ICDocker className="commit-hash__icon grayscale" />
+                                                    {artifact.split(':')[1].slice(-12)}
+                                                </div>
+                                            )}
+                                            <span className="dc__bullet dc__bullet--d2 ml-4 mr-4" />
+                                        </>
+                                    )}
+                                    <div className="cn-7 fs-12">
+                                        {triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flexbox dc__align-item-center dc__gap-4 pl-6 pr-6">
+                                <ICRelease />
+                                <span>
+                                    <span className="cn-9 fs-12 fw-4 lh-20 dc__ellipsis-right max-w-100">
+                                        ReleaseTrack1111
+                                    </span>
+                                    <span className="cn-9 fs-12 fw-4 lh-20">/</span>
+                                    <span className="cn-9 fs-12 fw-5 lh-20">0.3.0</span>
+                                </span>
+                                {/* <span>This Release</span> */}
                             </div>
                         </div>
                     </div>

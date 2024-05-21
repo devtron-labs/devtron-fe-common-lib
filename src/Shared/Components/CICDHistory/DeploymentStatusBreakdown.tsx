@@ -1,5 +1,6 @@
 import { useRouteMatch } from 'react-router'
-import { TIMELINE_STATUS, URLS } from '../../../Common'
+import { URLS } from '../../../Common'
+import { TIMELINE_STATUS } from '../../constants'
 import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
 import { DeploymentStatusDetailRow } from './DeploymentStatusDetailRow'
 import { DeploymentStatusDetailBreakdownType } from './types'

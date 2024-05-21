@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { BehaviorSubject } from 'rxjs'
-import { DEPLOYMENT_STATUS, TIMELINE_STATUS, handleUTCTime, mapByKey } from '../../../Common'
+import { handleUTCTime, mapByKey } from '../../../Common'
 import {
     DeploymentStatusDetailsType,
     DeploymentStatusDetailsBreakdownDataType,
@@ -9,10 +9,11 @@ import {
     AggregationKeys,
 } from './types'
 import { AppDetails, Node, Nodes, NodeType } from '../../types'
+import { DEPLOYMENT_STATUS, TIMELINE_STATUS } from '../../constants'
 
-const _appDetailsSubject: BehaviorSubject<AppDetails> = new BehaviorSubject({} as AppDetails)
-const _nodesSubject: BehaviorSubject<Array<Node>> = new BehaviorSubject([] as Node[])
-const _nodesFilteredSubject: BehaviorSubject<Array<Node>> = new BehaviorSubject([] as Node[])
+export const _appDetailsSubject: BehaviorSubject<AppDetails> = new BehaviorSubject({} as AppDetails)
+export const _nodesSubject: BehaviorSubject<Array<Node>> = new BehaviorSubject([] as Node[])
+export const _nodesFilteredSubject: BehaviorSubject<Array<Node>> = new BehaviorSubject([] as Node[])
 
 export function getAggregator(nodeType: NodeType, defaultAsOtherResources?: boolean): AggregationKeys {
     switch (nodeType) {

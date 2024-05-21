@@ -14,7 +14,8 @@ import { ReactComponent as Check } from '../../../Assets/Icon/ic-check-circle.sv
 import { ReactComponent as Abort } from '../../../Assets/Icon/ic-abort.svg'
 import { SourceTypeMap, createGitCommitUrl } from '../../../Common/Common.service'
 import GitMaterialInfoHeader from './GitMaterialInfoHeader'
-import { DATE_TIME_FORMATS, MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../../Common/Constants'
+import { DATE_TIME_FORMATS } from '../../../Common/Constants'
+import { MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../constants'
 
 const GitCommitInfoGeneric = ({
     materialSourceType,
