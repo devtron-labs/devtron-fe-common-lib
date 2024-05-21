@@ -1,8 +1,9 @@
 import { VisibleModal } from '../../../Common'
-import { BUTTON_TEXT, IMAGE_VARIANT } from './constant'
+import { BUTTON_TEXT } from './constant'
 import { FeatureDescriptionModalProps } from './types'
 import './featureDescription.scss'
 import { ReactComponent as ArrowOutSquare } from '../../../Assets/Icon/ic-arrow-square-out.svg'
+import { getImageSize } from './utils'
 
 export const FeatureDescriptionModal = ({
     image,
@@ -12,18 +13,47 @@ export const FeatureDescriptionModal = ({
     docLink = '',
     closeModal,
     imageVariant,
+    SVGImage,
+    imageStyles = {},
 }: FeatureDescriptionModalProps) => {
+    const renderImage = () => {
+        if (!image && !SVGImage) {
+            return null
+        }
+        if (image) {
+            return (
+                <div className="} dc__overflow-auto">
+                    <img
+                        src={image}
+                        style={{
+                            ...imageStyles,
+                            width: `${getImageSize(imageVariant).width}`,
+                            height: `${getImageSize(imageVariant).height}`,
+                        }}
+                        className="image-class-name mt-16 mb-12"
+                        alt="feature-description"
+                    />
+                    image
+                </div>
+            )
+        }
+        return (
+            <div className="flexbox dc__align-center dc__justify-center mt-16 mb-12">
+                <SVGImage
+                    style={{
+                        ...imageStyles,
+                        width: `${getImageSize(imageVariant).width}`,
+                        height: `${getImageSize(imageVariant).height}`,
+                    }}
+                />
+            </div>
+        )
+    }
     const renderDescriptionBody = () => (
         <div className="pl-20 pr-20 pt-16 pb-16 dc__gap-16">
             <div className="flex left w-100 fs-16 fw-6">{title}</div>
-            <div className={`${imageVariant === IMAGE_VARIANT.SMALL ? 'mxh-350' : 'mxh-450'} dc__overflow-auto`}>
-                <img
-                    src={image}
-                    className={`${imageVariant === IMAGE_VARIANT.SMALL ? 'small' : 'large'}  mt-16 mb-12`}
-                    alt="feature-description"
-                />
-                {typeof renderDescriptionContent === 'function' && renderDescriptionContent()}
-            </div>
+            {renderImage()}
+            {typeof renderDescriptionContent === 'function' && renderDescriptionContent()}
         </div>
     )
 
@@ -49,7 +79,7 @@ export const FeatureDescriptionModal = ({
     )
 
     return (
-        <VisibleModal className="">
+        <VisibleModal className="" close={closeModal}>
             <div className="feature-description modal__body w-600 mt-40 flex column p-0 fs-13 dc__overflow-hidden">
                 {renderDescriptionBody()}
                 {renderFooter()}

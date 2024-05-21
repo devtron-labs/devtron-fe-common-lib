@@ -14,6 +14,7 @@ const FeatureTitleWithInfo = ({
     renderDescriptionContent,
     closeModalText,
     docLink,
+    SVGImage,
 }: DescriptorProps) => {
     const [showFeatureDescriptionModal, setShowFeatureDescriptionModal] = useState(false)
     const onClickInfoIcon = () => {
@@ -43,6 +44,7 @@ const FeatureTitleWithInfo = ({
                     closeModalText={closeModalText}
                     docLink={docLink}
                     closeModal={closeModal}
+                    SVGImage={SVGImage}
                 />
             )}
         </>

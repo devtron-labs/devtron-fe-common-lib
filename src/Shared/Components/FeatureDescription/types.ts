@@ -1,14 +1,16 @@
+import { ImageType } from '../../../Common'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
-import { IMAGE_VARIANT } from './constant'
 
 export interface FeatureDescriptionModalProps {
-    image
+    image?
     title: string
     renderDescriptionContent?: () => JSX.Element
     closeModalText?: string
     docLink?: string
     closeModal?: () => void
-    imageVariant?: IMAGE_VARIANT
+    imageVariant?: ImageType
+    SVGImage?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+    imageStyles?: React.CSSProperties
 }
 
 export interface DescriptorProps extends FeatureDescriptionModalProps {
