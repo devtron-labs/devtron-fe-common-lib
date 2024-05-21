@@ -18,32 +18,37 @@ const FilterChip = ({
     const valueToDisplay = getFormattedValue(label, value) ?? value
 
     return (
-        <div className="flexbox flex-align-center br-4 dc__border dc__bg-n50 pl-6 pr-6 pt-2 pb-2 dc__user-select-none h-24 dc__gap-6 fs-12 lh-20 cn-9 fw-4 dc__ellipsis-right">
-            <span className="fw-6 dc__capitalize">{labelToDisplay}</span>
-            <span className="dc__divider h-24" />
-            <span className="dc__ellipsis-right">{valueToDisplay}</span>
-            <button
-                type="button"
-                className="flex p-0 dc__transparent"
-                onClick={removeFilter}
-                aria-label="Remove filter"
-            >
-                <CloseIcon className="icon-dim-12 icon-use-fill-n6" />
-            </button>
-        </div>
+        labelToDisplay &&
+        valueToDisplay && (
+            <div className="flexbox flex-align-center br-4 dc__border dc__bg-n50 pl-6 pr-6 pt-2 pb-2 dc__user-select-none h-24 dc__gap-6 fs-12 lh-20 cn-9 fw-4 dc__ellipsis-right">
+                <span className="fw-6 dc__capitalize">{labelToDisplay}</span>
+                <span className="dc__divider h-24" />
+                <span className="dc__ellipsis-right">{valueToDisplay}</span>
+                <button
+                    type="button"
+                    className="flex p-0 dc__transparent"
+                    onClick={removeFilter}
+                    aria-label="Remove filter"
+                >
+                    <CloseIcon className="icon-dim-12 icon-use-fill-n6" />
+                </button>
+            </div>
+        )
     )
 }
 
 /**
  * Component for rendering the applied filter chips
  */
-const FilterChips = ({
+const FilterChips = <T,>({
     filterConfig,
     clearFilters,
     onRemoveFilter,
     getFormattedLabel,
     getFormattedValue,
-}: FilterChipsProps) => {
+    className = '',
+    clearButtonClassName = '',
+}: FilterChipsProps<T>) => {
     const handleRemoveFilter = (filterKey, valueToRemove) => {
         const updatedFilterConfig = JSON.parse(JSON.stringify(filterConfig))
         if (Array.isArray(filterConfig[filterKey])) {
@@ -63,7 +68,7 @@ const FilterChips = ({
 
     return (
         chips.length > 0 && (
-            <div className="flexbox pt-6 pb-6 flex-wrap dc__gap-8">
+            <div className={`flexbox pt-6 pb-6 flex-wrap dc__gap-8 ${className}`}>
                 {chips.map(([filterKey, filterValue]) =>
                     Array.isArray(filterValue) ? (
                         filterValue.map((filter) => (
@@ -88,7 +93,11 @@ const FilterChips = ({
                     ),
                 )}
                 <div className="flex">
-                    <button type="button" className="cta text fs-13-imp lh-20-imp h-20 p-0-imp" onClick={clearFilters}>
+                    <button
+                        type="button"
+                        className={`cta text fs-13-imp lh-20-imp h-20 p-0-imp ${clearButtonClassName}`}
+                        onClick={clearFilters}
+                    >
                         Clear All Filters
                     </button>
                 </div>

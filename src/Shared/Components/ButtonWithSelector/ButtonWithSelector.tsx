@@ -25,6 +25,7 @@ const ButtonWithSelector = ({
     className = '',
     popUpBodyClassName = '',
     showPopUp = true,
+    disabled = false,
 }: ButtonWithSelectorProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
 
@@ -34,12 +35,16 @@ const ButtonWithSelector = ({
                 className={`cta flex h-28 ${showPopUp ? 'dc__no-right-radius' : ''} dc__no-border-imp fs-12 fw-6 lh-20-imp ${className}`}
                 type="button"
                 onClick={onClick}
+                disabled={disabled}
             >
                 {content}
             </button>
             {showPopUp && (
                 <PopupMenu autoClose autoPosition onToggleCallback={setIsMenuOpen}>
-                    <PopupMenu.Button rootClassName="flex dc__transparent p-0 w-28 bcb-5 dc__right-radius-4 dc__no-left-radius dc__no-top-border dc__no-bottom-border dc__no-right-border button-with-selector">
+                    <PopupMenu.Button
+                        disabled={disabled}
+                        rootClassName="flex dc__transparent p-0 w-28 bcb-5 dc__right-radius-4 dc__no-left-radius dc__no-top-border dc__no-bottom-border dc__no-right-border button-with-selector"
+                    >
                         <ICDropdown
                             className="icon-dim-16 fcn-0 dc__no-shrink rotate"
                             style={{ ['--rotateBy' as any]: isMenuOpen ? '180deg' : '0deg' }}
