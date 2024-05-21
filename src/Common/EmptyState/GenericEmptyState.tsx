@@ -67,7 +67,7 @@ const GenericEmptyState = ({
                 } ${contentClassName}`}
             >
                 <div className="flex column dc__gap-8">
-                    <h4 className="title fw-6 cn-9 mt-0 mb-0 lh-24">{title}</h4>
+                    <h4 className="title fw-6 cn-9 mt-0 mb-0 lh-24 dc__align-center">{title}</h4>
                     {subTitle && (
                         <p className={`subtitle ${isRowLayout ? 'subtitle--text-start' : ''}`}>
                             {subTitle}
