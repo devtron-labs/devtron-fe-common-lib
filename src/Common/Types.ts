@@ -142,6 +142,8 @@ export interface ErrorPageType
     extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>, Pick<ErrorScreenManagerProps, 'reload'> {
     code: number
     heightToDeduct?: number
+    redirectURL?: string
+    reload?: () => void
 }
 
 export interface ErrorScreenManagerProps {
@@ -150,6 +152,7 @@ export interface ErrorScreenManagerProps {
     subtitle?: React.ReactChild
     reloadClass?: string
     heightToDeduct?: number
+    redirectURL?: string
 }
 
 export interface ErrorScreenNotAuthorizedProps {
@@ -786,64 +789,6 @@ export interface CiPipeline {
     isOffendingMandatoryPlugin?: boolean
     pipelineType?: string
 }
-export interface InformationBarProps {
-    text: string
-    className?: string
-    children?: React.ReactNode
-}
-
-export interface CodeEditorInterface {
-    value?: string
-    lineDecorationsWidth?: number
-    responseType?: string
-    onChange?: (string) => void
-    onBlur?: () => void
-    onFocus?: () => void
-    children?: any
-    defaultValue?: string
-    mode?: 'json' | 'yaml' | 'shell' | 'dockerfile' | 'plaintext'
-    tabSize?: number
-    readOnly?: boolean
-    noParsing?: boolean
-    minHeight?: number
-    maxHeight?: number
-    inline?: boolean
-    height?: number | string
-    shebang?: string | JSX.Element
-    diffView?: boolean
-    loading?: boolean
-    customLoader?: JSX.Element
-    theme?: string
-    original?: string
-    focus?: boolean
-    validatorSchema?: any
-    isKubernetes?: boolean
-    cleanData?: boolean
-    chartVersion?: any
-}
-
-export interface CodeEditorComposition {
-    Header?: React.FC<any>
-    LanguageChanger?: React.FC<any>
-    ThemeChanger?: React.FC<any>
-    ValidationError?: React.FC<any>
-    Clipboard?: React.FC<any>
-    Warning?: React.FC<InformationBarProps>
-    ErrorBar?: React.FC<InformationBarProps>
-    Information?: React.FC<InformationBarProps>
-}
-
-export interface CodeEditorHeaderComposition {
-    LanguageChanger?: React.FC<any>
-    ThemeChanger?: React.FC<any>
-    ValidationError?: React.FC<any>
-    Clipboard?: React.FC<any>
-}
-export interface CodeEditorHeaderInterface {
-    children?: any
-    className?: string
-    hideDefaultSplitHeader?: boolean
-}
 
 export interface DeploymentChartVersionType {
     chartRefId: number
@@ -925,3 +870,20 @@ export interface DeploymentWindowProfileMetaData {
     excludedUserEmails: string[]
     warningMessage: string
 }
+
+export interface EnvironmentListHelmResult {
+    clusterId: number
+    clusterName: string
+    environments: EnvironmentHelmResult[]
+}
+
+export interface EnvironmentHelmResult {
+    environmentId: number
+    environmentName: string
+    namespace: string
+    environmentIdentifier: string
+    isVirtualEnvironment?: boolean // Need to confirm for not full mode
+    allowedDeploymentTypes?: DeploymentAppTypes[]
+}
+
+export type EnvironmentListHelmResponse = ResponseType<EnvironmentListHelmResult[]>
