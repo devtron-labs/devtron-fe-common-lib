@@ -31,4 +31,8 @@ export interface SearchBarProps {
      * Timeout for the debounce handler to be triggered
      */
     debounceTimeout?: number
+    /**
+     * Data test id for the search input
+     */
+    dataTestId?: string
 }
