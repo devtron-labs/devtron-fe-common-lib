@@ -1,4 +1,4 @@
-export interface AddEditEnvironmentModalProps {
+export interface AddEditEnvironmentFormProps {
     environmentName: string
     namespace: string
     id: number

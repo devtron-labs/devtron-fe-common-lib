@@ -5,9 +5,9 @@ import { ReactComponent as Close } from '../../../Assets/Icon/ic-close.svg'
 import { ReactComponent as DeleteEnvironment } from '../../../Assets/Icon/ic-delete-interactive.svg'
 import { ButtonWithLoader } from '../ButtonWithLoader'
 import { CustomInput, DeleteDialog, Progressing, showError, stopPropagation, useForm } from '../../../Common'
-import { AddEditEnvironmentModalProps } from './types'
+import { AddEditEnvironmentFormProps } from './types'
 
-const AddEditEnvironmentModal = ({
+const AddEditEnvironmentForm = ({
     environmentName,
     namespace,
     id,
@@ -19,7 +19,7 @@ const AddEditEnvironmentModal = ({
     hideClusterDrawer,
     isVirtual,
     virtualClusterSaveUpdateApi,
-}: AddEditEnvironmentModalProps) => {
+}: AddEditEnvironmentFormProps) => {
     const isNamespaceMandatory = !isVirtual
 
     const [loading, setLoading] = useState(false)
@@ -259,4 +259,4 @@ const AddEditEnvironmentModal = ({
     )
 }
 
-export default AddEditEnvironmentModal
+export default AddEditEnvironmentForm

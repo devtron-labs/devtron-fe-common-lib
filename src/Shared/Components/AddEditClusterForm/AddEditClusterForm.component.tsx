@@ -115,7 +115,7 @@ const NoMatchingResults = (): JSX.Element => (
     <GenericEmptyState image={NoResults} title="No matching results" subTitle="We couldn't find any matching cluster" />
 )
 
-const AddEditClusterModal = ({
+const AddEditClusterForm = ({
     id,
     cluster_name: clusterName,
     server_url: serverUrl,
@@ -1522,4 +1522,4 @@ const AddEditClusterModal = ({
     )
 }
 
-export default AddEditClusterModal
+export default AddEditClusterForm
