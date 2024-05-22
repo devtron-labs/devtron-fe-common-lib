@@ -23,6 +23,57 @@ const AddEditEnvironmentModal = ({
     const isNamespaceMandatory = !isVirtual
 
     const [loading, setLoading] = useState(false)
+
+    const getEnvironmentPayload = (stateForPayload) => ({
+        id,
+        environment_name: stateForPayload.environment_name.value,
+        cluster_id: clusterId,
+        prometheus_endpoint: prometheusEndpoint,
+        namespace: stateForPayload.namespace.value || '',
+        active: true,
+        default: stateForPayload.isProduction.value === 'true',
+        description: stateForPayload.description.value || '',
+    })
+
+    const renderVirtualClusterSaveUpdate = (idToUpdate) => {
+        if (virtualClusterSaveUpdateApi) {
+            return virtualClusterSaveUpdateApi(idToUpdate)
+        }
+
+        return null
+    }
+
+    const onValidation = async (stateToValidate) => {
+        let payload
+        let api
+        if (isVirtual) {
+            payload = {
+                id,
+                environment_name: stateToValidate.environment_name.value,
+                namespace: stateToValidate.namespace.value || '',
+                IsVirtualEnvironment: true,
+                cluster_id: clusterId,
+                description: stateToValidate.description.value || '',
+            }
+            api = renderVirtualClusterSaveUpdate(id)
+        } else {
+            payload = getEnvironmentPayload(stateToValidate)
+            api = id ? updateEnvironment : saveEnvironment
+        }
+
+        try {
+            setLoading(true)
+            await api(payload, id)
+            toast.success(`Successfully ${id ? 'updated' : 'saved'}`)
+            reload()
+            hideClusterDrawer()
+        } catch (err) {
+            showError(err)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const { state, handleOnChange, handleOnSubmit } = useForm(
         {
             environment_name: { value: environmentName, error: '' },
@@ -64,57 +115,6 @@ const AddEditEnvironmentModal = ({
     const [deleting, setDeleting] = useState(false)
     const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false)
 
-    const getEnvironmentPayload = () => ({
-        id,
-        environment_name: state.environment_name.value,
-        cluster_id: clusterId,
-        prometheus_endpoint: prometheusEndpoint,
-        namespace: state.namespace.value || '',
-        active: true,
-        default: state.isProduction.value === 'true',
-        description: state.description.value || '',
-    })
-
-    const renderVirtualClusterSaveUpdate = (idToUpdate) => {
-        if (virtualClusterSaveUpdateApi) {
-            return virtualClusterSaveUpdateApi(idToUpdate)
-        }
-
-        return null
-    }
-
-    // eslint-disable-next-line no-var
-    var onValidation = async () => {
-        let payload
-        let api
-        if (isVirtual) {
-            payload = {
-                id,
-                environment_name: state.environment_name.value,
-                namespace: state.namespace.value || '',
-                IsVirtualEnvironment: true,
-                cluster_id: clusterId,
-                description: state.description.value || '',
-            }
-            api = renderVirtualClusterSaveUpdate(id)
-        } else {
-            payload = getEnvironmentPayload()
-            api = id ? updateEnvironment : saveEnvironment
-        }
-
-        try {
-            setLoading(true)
-            await api(payload, id)
-            toast.success(`Successfully ${id ? 'updated' : 'saved'}`)
-            reload()
-            hideClusterDrawer()
-        } catch (err) {
-            showError(err)
-        } finally {
-            setLoading(false)
-        }
-    }
-
     const closeConfirmationModal = () => {
         setShowConfirmationModal(false)
     }
@@ -122,7 +122,7 @@ const AddEditEnvironmentModal = ({
     const handleDeleteEnvironment = async () => {
         setDeleting(true)
         try {
-            await deleteEnvironment(getEnvironmentPayload())
+            await deleteEnvironment(getEnvironmentPayload(state))
             toast.success('Successfully deleted')
             closeConfirmationModal()
             hideClusterDrawer()
@@ -217,7 +217,7 @@ const AddEditEnvironmentModal = ({
                     </div>
                 </div>
                 <div className="w-100 dc__border-top flex right pb-8 pt-8 dc__position-fixed dc__position-abs dc__bottom-0 bcn-0">
-                    {id && (
+                    {!!id && (
                         <button
                             className="cta flex override-button delete scr-5 h-36 ml-20 cluster-delete-icon"
                             type="button"
