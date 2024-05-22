@@ -786,7 +786,3 @@ export function deepEqual(configA: any, configB: any): boolean {
 }
 
 export const prefixZeroIfSingleDigit = (value: number = 0) => (value > 0 && value < 10 ? `0${value}` : value)
-
-// TODO Eshank: Remove this function once the rollout status is implemented
-export const caseInsensitiveStringComparator = (a: string, b: string): number =>
-    a.toLowerCase().localeCompare(b.toLowerCase())

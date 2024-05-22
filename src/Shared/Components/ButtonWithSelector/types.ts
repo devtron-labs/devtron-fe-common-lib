@@ -7,4 +7,5 @@ export interface ButtonWithSelectorProps {
     className?: string
     popUpBodyClassName?: string
     showPopUp?: boolean
+    disabled?: boolean
 }

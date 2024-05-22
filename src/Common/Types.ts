@@ -30,9 +30,9 @@ export interface APIOptions {
     preventAutoLogout?: boolean
 }
 
-export interface OptionType {
-    label: string
-    value: string
+export interface OptionType<T = string, K = string> {
+    value: T
+    label: K
 }
 
 export enum TippyTheme {

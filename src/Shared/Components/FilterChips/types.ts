@@ -23,11 +23,12 @@ export interface FilterChipProps {
     getFormattedValue?: (filterKey: string, filterValue: unknown) => ReactNode
 }
 
-export interface FilterChipsProps extends Pick<FilterChipProps, 'getFormattedLabel' | 'getFormattedValue'> {
+export interface FilterChipsProps<T = Record<string, unknown>>
+    extends Pick<FilterChipProps, 'getFormattedLabel' | 'getFormattedValue'> {
     /**
      * Current filter configuration
      */
-    filterConfig: Record<string, unknown>
+    filterConfig: T
     /**
      * Callback handler for removing the filters
      */
@@ -35,5 +36,13 @@ export interface FilterChipsProps extends Pick<FilterChipProps, 'getFormattedLab
     /**
      * Handler for removing a applied filter
      */
-    onRemoveFilter: (filterConfig: Record<string, unknown>) => void
+    onRemoveFilter: (filterConfig: T) => void
+    /**
+     * Class name for the container
+     */
+    className?: string
+    /**
+     * Class name for the clear filter button
+     */
+    clearButtonClassName?: string
 }
