@@ -16,8 +16,12 @@ import {
     CDMaterialFilterQuery,
     ImagePromotionMaterialInfo,
     EnvironmentListHelmResponse,
+    ModuleInfo,
+    ModuleInfoResponse,
 } from './Types'
 import { ApiResourceType } from '../Pages'
+import { ModuleNameMap, ModuleStatus, reloadToastBody } from '../Shared'
+import { toast } from 'react-toastify'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -356,4 +360,72 @@ export function getNamespaceListMin(clusterIdsCsv: string): Promise<EnvironmentL
 export function getWebhookEventsForEventId(eventId: string | number) {
     const URL = `${ROUTES.GIT_HOST_EVENT}/${eventId}`
     return get(URL)
+}
+
+let moduleStatusMap: Record<string, ModuleInfo> = {}
+let isReloadToastShown = false
+
+const getSavedModuleStatus = (): Record<string, ModuleInfo> => {
+    let _moduleStatusMaps = moduleStatusMap
+    if (!Object.keys(_moduleStatusMaps).length) {
+        if (typeof Storage !== 'undefined' && localStorage.moduleStatusMap) {
+            _moduleStatusMaps = JSON.parse(localStorage.moduleStatusMap)
+        }
+    }
+    return _moduleStatusMaps
+}
+
+export const getSecurityModulesInfoInstalledStatus = async (): Promise<ModuleInfoResponse> => {
+    // getting Security Module Installation status
+    const res: ModuleInfo = {
+        id: null,
+        name: null,
+        status: null,
+    }
+    let installedResponseFlag = false
+    try {
+        const { result: trivyResponse } = await get(`${ROUTES.MODULE_INFO_API}?name=${ModuleNameMap.SECURITY_TRIVY}`)
+        const isTrivyInstalled = trivyResponse && trivyResponse.status === ModuleStatus.INSTALLED
+        if (!isTrivyInstalled) {
+            const { result: clairResponse } = await get(
+                `${ROUTES.MODULE_INFO_API}?name=${ModuleNameMap.SECURITY_CLAIR}`,
+            )
+            if (clairResponse && clairResponse?.status === ModuleStatus.INSTALLED) {
+                installedResponseFlag = true
+            }
+        } else {
+            installedResponseFlag = true
+        }
+    } catch {
+        installedResponseFlag = false
+    } finally {
+        if (installedResponseFlag) {
+            return Promise.resolve({ status: '', code: 200, result: { ...res, status: ModuleStatus.INSTALLED } })
+        }
+        return Promise.resolve({ status: '', code: 200, result: { ...res, status: ModuleStatus.NOT_INSTALLED } })
+    }
+}
+
+export const getModuleInfo = async (moduleName: string, forceReload?: boolean): Promise<ModuleInfoResponse> => {
+    const _savedModuleStatusMap = getSavedModuleStatus()
+    if (!forceReload && _savedModuleStatusMap && _savedModuleStatusMap[moduleName]) {
+        return Promise.resolve({ status: '', code: 200, result: _savedModuleStatusMap[moduleName] })
+    }
+    if (moduleName === ModuleNameMap.SECURITY) {
+        return getSecurityModulesInfoInstalledStatus()
+    }
+    const { result } = await get(`${ROUTES.MODULE_INFO_API}?name=${moduleName}`)
+    if (result && result.status === ModuleStatus.INSTALLED) {
+        if (moduleName === ModuleNameMap.CICD && !isReloadToastShown) {
+            // To show a reload tost if CICD installation complete
+            toast.info(reloadToastBody(), { autoClose: false, closeButton: false })
+            isReloadToastShown = true
+        }
+        _savedModuleStatusMap[moduleName] = { ...result, moduleResourcesStatus: null }
+        if (typeof Storage !== 'undefined') {
+            localStorage.moduleStatusMap = JSON.stringify(_savedModuleStatusMap)
+        }
+        moduleStatusMap = _savedModuleStatusMap
+    }
+    return Promise.resolve({ status: '', code: 200, result })
 }

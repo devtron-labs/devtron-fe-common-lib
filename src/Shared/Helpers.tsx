@@ -1,4 +1,4 @@
-import { MaterialInfo, SortingOrder } from '../Common'
+import { MaterialInfo, SortingOrder, ToastBody3 } from '../Common'
 import { GitTriggers, WebhookEventNameType } from './types'
 import { ReactComponent as ICPullRequest } from '../Assets/Icon/ic-pull-request.svg'
 import { ReactComponent as ICTag } from '../Assets/Icon/ic-tag.svg'
@@ -112,3 +112,15 @@ export const getKeyToBooleanMapFromArray = <T extends string | number>(arr: T[] 
         },
         {} as Record<T, boolean>,
     )
+
+export const reloadLocation = () => {
+    window.location.reload()
+}
+
+export const reloadToastBody = () => (
+    <ToastBody3
+        onClick={reloadLocation}
+        text="You are viewing an outdated version of Devtron UI."
+        buttonText="Reload"
+    />
+)

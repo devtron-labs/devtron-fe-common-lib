@@ -51,6 +51,8 @@ export const ROUTES = {
     UPDATE: 'update',
     ENVIRONMENT_LIST_MIN: 'env/autocomplete',
     CLUSTER: 'cluster',
+    VALIDATE: 'cluster/validate',
+    SAVE_CLUSTER: 'cluster/saveClusters',
     API_RESOURCE: 'k8s/api-resources',
     GVK: 'gvk',
     NAMESPACE: 'env/namespace',
@@ -58,6 +60,7 @@ export const ROUTES = {
     APPLICATION_NOTE: 'app/note',
     GIT_HOST_EVENT: 'git/host/event',
     ENVIRONMENT: 'env',
+    MODULE_INFO_API: 'module',
 }
 
 export enum KEY_VALUE {
@@ -477,4 +480,26 @@ export const DATE_TIME_FORMATS = {
     TWELVE_HOURS_FORMAT: 'ddd, DD MMM YYYY, hh:mm A',
     TWELVE_HOURS_FORMAT_WITHOUT_WEEKDAY: 'DD MMM YYYY, hh:mm A',
     TWELVE_HOURS_EXPORT_FORMAT: 'DD-MMM-YYYY hh.mm A',
+}
+
+export const DEFAULT_CLUSTER_ID = 1
+
+export const DEFAULT_SECRET_PLACEHOLDER = '••••••••'
+
+export const AppCreationType = {
+    Blank: 'BLANK',
+    Existing: 'EXISTING',
+}
+
+export enum RemoteConnectionType {
+    Direct = 'DIRECT',
+    Proxy = 'PROXY',
+    SSHTunnel = 'SSH',
+}
+
+export const UPLOAD_STATE = {
+    UPLOAD: 'Upload',
+    UPLOADING: 'Uploading',
+    ERROR: 'Error',
+    SUCCESS: 'Success',
 }
