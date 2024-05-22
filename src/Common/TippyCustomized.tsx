@@ -3,6 +3,7 @@ import Tippy from '@tippyjs/react'
 import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-cross.svg'
 import { ReactComponent as Help } from '../Assets/Icon/ic-help.svg'
 import { ReactComponent as ICHelpOutline } from '../Assets/Icon/ic-help-outline.svg'
+import { ReactComponent as ICOpenInNew } from '../Assets/Icon/ic-open-in-new.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
 import { not, stopPropagation } from './Helper'
@@ -140,10 +141,11 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                             href={documentationLink}
                             target="_blank"
                             rel="noreferrer noopener"
-                            className="fs-13 cb-5"
+                            className="fs-13 cb-5 flex left"
                             onClick={closeTippy}
                         >
                             {documentationLinkText || 'Learn more'}
+                            <ICOpenInNew className="icon-dim-14 ml-4" />
                         </a>
                     </div>
                 )}
