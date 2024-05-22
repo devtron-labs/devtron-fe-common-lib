@@ -83,6 +83,7 @@ const ErrorScreenManager = ({
                         image={badRequest}
                         imageType={ImageType.Large}
                         heightToDeduct={heightToDeduct}
+                        reload={reload}
                     />
                 )
             case ERROR_STATUS_CODE.SERVICE_TEMPORARY_UNAVAILABLE:
@@ -94,6 +95,7 @@ const ErrorScreenManager = ({
                         image={badRequest}
                         imageType={ImageType.Large}
                         heightToDeduct={heightToDeduct}
+                        reload={reload}
                     />
                 )
             default:
