@@ -13,7 +13,7 @@ const MenuList = ({ children, ...props }: MenuListProps) => (
     <components.MenuList {...props}>{Array.isArray(children) ? children.slice(0, 20) : children}</components.MenuList>
 )
 
-const DropdownIndicator = (props) => (
+export const DropdownIndicator = (props) => (
     <components.DropdownIndicator {...props}>
         <ArrowDown className="icon-dim-20 icon-n5" data-testid="overview-project-edit-dropdown" />
     </components.DropdownIndicator>

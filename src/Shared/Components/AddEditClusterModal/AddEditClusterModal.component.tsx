@@ -47,11 +47,8 @@ import {
 import { ModuleNameMap } from '../../constants'
 import { ModuleStatus } from '../../types'
 import { CustomPassword } from '../CustomPassword'
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ClusterInfoStepsModal = (props: any) => <div>ClusterInfoStepsModal</div>
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const UserNameDropDownList = (props: any) => <div>UserNameDropDownList</div>
+import ClusterInfoStepsModal from './ClusterInfoStepsModal'
+import UserNameDropDownList from './UseNameListDropdown'
 
 const PrometheusWarningInfo = () => (
     <div className="pt-10 pb-10 pl-16 pr-16 bcy-1 br-4 bw-1 dc__cluster-error mb-40">

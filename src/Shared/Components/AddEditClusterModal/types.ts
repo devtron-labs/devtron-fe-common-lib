@@ -45,3 +45,9 @@ export interface SaveClusterPayloadType {
     server_url: string
     remoteConnectionConfig: RemoteConnectionConfig
 }
+
+export interface ClusterStepModalProps {
+    subTitle: string
+    command: string
+    clusterName: string
+}
