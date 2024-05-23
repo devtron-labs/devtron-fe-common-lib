@@ -10,7 +10,6 @@ const FeatureTitleWithInfo = ({
     children,
     iconClassName,
     title,
-    image,
     renderDescriptionContent,
     closeModalText,
     docLink,
@@ -38,7 +37,6 @@ const FeatureTitleWithInfo = ({
             </div>
             {showFeatureDescriptionModal && (
                 <FeatureDescriptionModal
-                    image={image}
                     title={title}
                     renderDescriptionContent={renderDescriptionContent}
                     closeModalText={closeModalText}

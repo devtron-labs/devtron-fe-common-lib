@@ -6,7 +6,6 @@ import { ReactComponent as ArrowOutSquare } from '../../../Assets/Icon/ic-arrow-
 import { getImageSize } from './utils'
 
 export const FeatureDescriptionModal = ({
-    image,
     title,
     renderDescriptionContent,
     closeModalText = BUTTON_TEXT.GOT_IT,
@@ -17,25 +16,8 @@ export const FeatureDescriptionModal = ({
     imageStyles = {},
 }: FeatureDescriptionModalProps) => {
     const renderImage = () => {
-        if (!image && !SVGImage) {
+        if (!SVGImage) {
             return null
-        }
-        if (image) {
-            return (
-                <div className="} dc__overflow-auto">
-                    <img
-                        src={image}
-                        style={{
-                            ...imageStyles,
-                            width: `${getImageSize(imageVariant).width}`,
-                            height: `${getImageSize(imageVariant).height}`,
-                        }}
-                        className="image-class-name mt-16 mb-12"
-                        alt="feature-description"
-                    />
-                    image
-                </div>
-            )
         }
         return (
             <div className="flexbox dc__align-center dc__justify-center mt-16 mb-12">

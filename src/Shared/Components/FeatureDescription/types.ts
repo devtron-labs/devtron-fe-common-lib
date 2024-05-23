@@ -2,7 +2,6 @@ import { ImageType } from '../../../Common'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
 
 export interface FeatureDescriptionModalProps {
-    image?
     title: string
     renderDescriptionContent?: () => JSX.Element
     closeModalText?: string
