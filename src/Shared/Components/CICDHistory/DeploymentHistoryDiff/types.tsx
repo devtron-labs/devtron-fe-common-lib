@@ -1,5 +1,5 @@
 import { OptionType } from '../../../../Common'
-import { DeploymentTemplateList, RunSource } from '../types'
+import { DeploymentTemplateList, RunSource, renderRunSourceType } from '../types'
 
 export interface DeploymentHistoryParamsType {
     appId: string
@@ -11,35 +11,24 @@ export interface DeploymentHistoryParamsType {
     triggerId?: string
 }
 
-export interface CompareViewDeploymentType {
+export interface CompareViewDeploymentType extends renderRunSourceType {
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
     deploymentHistoryList: DeploymentTemplateList[]
     setDeploymentHistoryList: React.Dispatch<React.SetStateAction<DeploymentTemplateList[]>>
-    renderRunSource?: (runSource: RunSource) => JSX.Element
 }
 
 export interface DeploymentTemplateOptions extends OptionType {
     author: string
     status: string
-    runSource?: {
-        id: number
-        identifier: string
-        kind: string
-        name: string
-        releaseTrackName: string
-        releaseVersion: string
-        version: string
-    }
-    releaseId?: number
+    runSource?: RunSource
 }
 
-export interface CompareWithBaseConfiguration {
+export interface CompareWithBaseConfiguration extends renderRunSourceType {
     selectedDeploymentTemplate: DeploymentTemplateOptions
     setSelectedDeploymentTemplate: (selected) => void
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
     setPreviousConfigAvailable: React.Dispatch<React.SetStateAction<boolean>>
-    renderRunSource: (runSource: RunSource) => JSX.Element
 }
 
 export interface TemplateConfiguration {
