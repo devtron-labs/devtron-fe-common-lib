@@ -15,9 +15,6 @@ export const CommonGroupedDropdownStyles = {
         backgroundColor: 'var(--N50)',
         cursor: state.isDisabled ? 'not-allowed' : 'pointer',
         opacity: state.isDisabled ? 0.5 : 1,
-        maxHeight: '200px',
-        overflow: 'scroll',
-        alignItems: 'flex-start',
     }),
     singleValue: (base) => ({
         ...base,
