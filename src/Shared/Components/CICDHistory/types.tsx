@@ -661,5 +661,11 @@ export interface ModuleConfigResponse extends ResponseType {
     }
 }
 
+export interface DeploymentHistoryBaseParamsType {
+    appId: string
+    envId: string
+    pipelineId: string
+}
+
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])
 export const statusSet = new Set(['starting', 'running', 'pending'])

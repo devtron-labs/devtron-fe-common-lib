@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-import { BehaviorSubject } from 'rxjs'
 import { handleUTCTime, mapByKey } from '../../../Common'
 import {
     DeploymentStatusDetailsType,
@@ -8,12 +7,8 @@ import {
     PodMetadatum,
     AggregationKeys,
 } from './types'
-import { AppDetails, Node, Nodes, NodeType } from '../../types'
+import { Nodes, NodeType } from '../../types'
 import { DEPLOYMENT_STATUS, TIMELINE_STATUS } from '../../constants'
-
-export const _appDetailsSubject: BehaviorSubject<AppDetails> = new BehaviorSubject({} as AppDetails)
-export const _nodesSubject: BehaviorSubject<Array<Node>> = new BehaviorSubject([] as Node[])
-export const _nodesFilteredSubject: BehaviorSubject<Array<Node>> = new BehaviorSubject([] as Node[])
 
 export function getAggregator(nodeType: NodeType, defaultAsOtherResources?: boolean): AggregationKeys {
     switch (nodeType) {
@@ -129,38 +124,7 @@ export function aggregateNodes(nodes: any[], podMetadata: PodMetadatum[]): Aggre
     )
 }
 
-let _nodeFilter = {
-    filterType: '',
-    searchString: '',
-}
-
-const publishFilteredNodes = () => {
-    const filteredNodes = _nodesSubject.getValue().filter((_node: Node) => {
-        if (!_nodeFilter.filterType && !_nodeFilter.searchString) {
-            return true
-        }
-
-        if (_nodeFilter.filterType === 'ALL') {
-            return true
-        }
-
-        if (_nodeFilter.filterType.toLowerCase() === _node.health?.status?.toLowerCase()) {
-            return true
-        }
-
-        return false
-    })
-
-    _nodesFilteredSubject.next([...filteredNodes])
-}
-
-export const getAppDetails = (): AppDetails => _appDetailsSubject.getValue()
-
-export const updateFilterType = (filterType: string) => {
-    _nodeFilter = { ..._nodeFilter, filterType }
-    publishFilteredNodes()
-}
-
+// NOTE: Need to improve logic since in some cases the unknown status would leak to previous entites, can do that by not setting deploymentStatus as Failed by ourselves and let backend be source of truth of that
 export const processDeploymentStatusDetailsData = (
     data?: DeploymentStatusDetailsType,
 ): DeploymentStatusDetailsBreakdownDataType => {

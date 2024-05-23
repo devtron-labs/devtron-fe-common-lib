@@ -16,6 +16,7 @@ import { SourceTypeMap, createGitCommitUrl } from '../../../Common/Common.servic
 import GitMaterialInfoHeader from './GitMaterialInfoHeader'
 import { DATE_TIME_FORMATS } from '../../../Common/Constants'
 import { MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../constants'
+import { GitCommitInfoGenericProps } from './types'
 
 const GitCommitInfoGeneric = ({
     materialSourceType,
@@ -27,7 +28,7 @@ const GitCommitInfoGeneric = ({
     canTriggerBuild = false,
     index,
     isExcluded = false,
-}) => {
+}: GitCommitInfoGenericProps) => {
     const [showSeeMore, setShowSeeMore] = useState(true)
 
     function _lowerCaseObject(input): any {

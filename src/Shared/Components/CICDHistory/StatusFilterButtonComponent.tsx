@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { StyledRadioGroup as RadioGroup } from '../../../Common'
 import { NodeStatus, StatusFilterButtonType } from './types'
-import { updateFilterType } from './utils'
+import { IndexStore } from '../../Store'
 
 interface TabState {
     status: string
@@ -57,7 +57,7 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
         } else if (handleFilterClick) {
             handleFilterClick(selectedTab)
         } else {
-            updateFilterType(selectedTab.toUpperCase())
+            IndexStore.updateFilterType(selectedTab.toUpperCase())
         }
     }, [nodes, selectedTab])
 

@@ -41,3 +41,9 @@ export interface CompareWithBaseConfiguration {
     setPreviousConfigAvailable: React.Dispatch<React.SetStateAction<boolean>>
     renderRunSource: (runSource: RunSource) => JSX.Element
 }
+
+export interface TemplateConfiguration {
+    setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
+    deploymentHistoryList: DeploymentTemplateList[]
+    setDeploymentHistoryList: React.Dispatch<React.SetStateAction<DeploymentTemplateList[]>>
+}
