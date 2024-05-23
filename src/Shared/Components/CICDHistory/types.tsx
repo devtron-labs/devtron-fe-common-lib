@@ -10,7 +10,7 @@ import {
     ResponseType,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
-import { GitTriggers, Node, NodeType } from '../../types'
+import { GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
 import { TERMINAL_STATUS_MAP } from './constants'
 
 export enum HistoryComponentType {
@@ -29,6 +29,16 @@ export enum FetchIdDataStatus {
 export interface LogResizeButtonType {
     fullScreenView: boolean
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export interface RunSource {
+    id: number
+    identifier: string
+    kind: ResourceKindType
+    name: string
+    releaseTrackName: string
+    releaseVersion: string
+    version: ResourceVersionType
 }
 
 interface CiMaterial {
@@ -86,15 +96,7 @@ export interface History {
     appliedFiltersTimestamp?: string
     promotionApprovalMetadata?: PromotionApprovalMetadataType
     triggerMetadata?: string
-    runSource?: {
-        id: number
-        identifier: string
-        kind: string
-        name: string
-        releaseTrackName: string
-        releaseVersion: string
-        version: string
-    }
+    runSource?: RunSource
 }
 
 export interface DeploymentHistoryResultObject {
@@ -108,17 +110,11 @@ export interface DeploymentHistoryResult extends ResponseType {
     result?: DeploymentHistoryResultObject
 }
 
-export interface RunSource {
-    id: number
-    identifier: string
-    kind: string
-    name: string
-    releaseTrackName: string
-    releaseVersion: string
-    version: string
+export interface renderRunSourceType {
+    renderRunSource?: (runSource: RunSource) => JSX.Element
 }
 
-export interface SidebarType {
+export interface SidebarType extends renderRunSourceType {
     type: HistoryComponentType
     filterOptions: CICDSidebarFilterOptionType[]
     triggerHistory: Map<number, History>
@@ -127,10 +123,9 @@ export interface SidebarType {
     fetchIdData?: FetchIdDataStatus
     handleViewAllHistory?: () => void
     children?: React.ReactNode
-    renderRunSource?: (runSource: RunSource) => JSX.Element
 }
 
-export interface HistorySummaryCardType {
+export interface HistorySummaryCardType extends renderRunSourceType {
     id: number
     status: string
     startedOn: string
@@ -143,7 +138,6 @@ export interface HistorySummaryCardType {
     stage: DeploymentStageType
     dataTestId?: string
     runSource?: RunSource
-    renderRunSource?: (runSource: RunSource) => JSX.Element
 }
 
 export interface SummaryTooltipCardType {
@@ -428,15 +422,7 @@ export interface HistoryDiffSelectorList {
     deployedBy: string
     deploymentStatus: string
     wfrId?: number
-    runSource?: {
-        id: number
-        identifier: string
-        kind: string
-        name: string
-        releaseTrackName: string
-        releaseVersion: string
-        version: string
-    }
+    runSource?: RunSource
 }
 
 export interface HistoryDiffSelectorRes {
@@ -605,15 +591,7 @@ export interface DeploymentHistory {
     imageComment?: ImageComment
     imageReleaseTags?: ReleaseTag[]
     ci_artifact_id?: number
-    runSource?: {
-        id: number
-        identifier: string
-        kind: string
-        name: string
-        releaseTrackName: string
-        releaseVersion: string
-        version: string
-    }
+    runSource?: RunSource
 }
 
 type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE_GREEN'

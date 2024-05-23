@@ -198,7 +198,7 @@ export const getPodsForRootNodeName = (_rootNode: string, _treeNodes: Array<Node
     return pods
 }
 
-const IndexStore = {
+export const IndexStore = {
     setEnvDetails: (envType: string, appId: number, envId: number) => {
         const _envDetails = {} as EnvDetails
 
@@ -373,5 +373,3 @@ const IndexStore = {
         publishFilteredNodes()
     },
 }
-
-export default IndexStore

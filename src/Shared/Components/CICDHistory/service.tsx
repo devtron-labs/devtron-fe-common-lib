@@ -1,5 +1,6 @@
 /* eslint-disable dot-notation */
-import { ROUTES, ResponseType, get, trash } from '../../../Common'
+import { ROUTES, ResponseType, get, getUrlWithSearchParams, trash } from '../../../Common'
+import { ResourceVersionType } from '../../types'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from './constants'
 import {
     CDPipelines,
@@ -232,15 +233,24 @@ export const getDeploymentDiffSelector = (
     historyComponent,
     baseConfigurationId,
     historyComponentName,
-): Promise<HistoryDiffSelectorRes> =>
-    get(
-        `resource/history/deployment/config/cd-pipeline/v1?baseConfigurationId=${baseConfigurationId}&historyComponent=${historyComponent.replace('-', '_').toUpperCase()}${historyComponentName ? `&historyComponentName=${historyComponentName}` : ''}&filterCriteria=cd-pipeline|id|${pipelineId}`,
+): Promise<HistoryDiffSelectorRes> => {
+    const url = getUrlWithSearchParams(
+        `${ROUTES.RESOURCE_HISTORY_DEPLOYMENT}/${ROUTES.CONFIG_CD_PIPELINE}/${ResourceVersionType.v1}`,
+        {
+            baseConfigurationId,
+            historyComponent: historyComponent.replace('-', '_').toUpperCase(),
+            filterCriteria: `cd-pipeline|id|${pipelineId}`,
+            historyComponentName,
+        },
     )
+    return get(url)
+}
 
 export function getCDBuildReport(appId, envId, pipelineId, workflowId) {
     return get(`app/cd-pipeline/workflow/download/${appId}/${envId}/${pipelineId}/${workflowId}`)
 }
 
+// TODO - Replace with new API in release history
 export async function getTriggerHistory(
     appId: number | string,
     envId: number | string,
@@ -248,7 +258,7 @@ export async function getTriggerHistory(
     pagination,
 ): Promise<DeploymentHistoryResult> {
     return get(
-        `app/cd-pipeline/workflow/history/${appId}/${envId}/${pipelineId}?offset=${pagination.offset}&size=${pagination.size}`,
+        `${ROUTES.CD_CONFIG}/workflow/history/${appId}/${envId}/${pipelineId}?offset=${pagination.offset}&size=${pagination.size}`,
     ).then(({ result, code, status }) => ({
         result: {
             cdWorkflows: (result.cdWorkflows || []).map((deploymentHistory: DeploymentHistory) => ({

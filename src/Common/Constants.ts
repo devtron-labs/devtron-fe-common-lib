@@ -66,6 +66,7 @@ export const ROUTES = {
     DEPLOYMENT_STATUS: 'app/deployment-status/timeline',
     MANUAL_SYNC: 'app/deployment-status/manual-sync',
     CD_CONFIG: 'app/cd-pipeline',
+    CONFIG_CD_PIPELINE: 'config/cd-pipeline',
     MODULE_CONFIGURED: 'module/config',
     RESOURCE_HISTORY_DEPLOYMENT: 'resource/history/deployment',
 }
