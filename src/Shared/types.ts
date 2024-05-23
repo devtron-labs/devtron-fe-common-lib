@@ -284,3 +284,17 @@ export interface InputFieldState<T = string> {
     value: T
     error: string
 }
+
+export enum AggregationKeys {
+    Workloads = 'Workloads',
+    Networking = 'Networking',
+    'Config & Storage' = 'Config & Storage',
+    RBAC = 'RBAC',
+    Administration = 'Administration',
+    'Custom Resource' = 'Custom Resource',
+    'Other Resources' = 'Other Resources',
+    Events = 'Events',
+    Namespaces = 'Namespaces',
+}
+
+export type AggregationKeysType = keyof typeof AggregationKeys
