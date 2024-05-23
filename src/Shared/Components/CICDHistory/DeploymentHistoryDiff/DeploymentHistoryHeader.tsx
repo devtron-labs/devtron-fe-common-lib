@@ -17,10 +17,11 @@ const DeploymentHistoryHeader = ({
     setFullScreenView,
     setLoader,
     setPreviousConfigAvailable,
+    renderRunSource,
 }: CompareWithBaseConfiguration) => {
     const { url } = useRouteMatch()
     const history = useHistory()
-    const { appId, pipelineId, historyComponent, baseConfigurationId, historyComponentName } =
+    const { pipelineId, historyComponent, baseConfigurationId, historyComponentName } =
         useParams<DeploymentHistoryParamsType>()
     const [baseTemplateTimeStamp, setBaseTemplateTimeStamp] = useState<string>('')
     const [deploymentTemplateOption, setDeploymentTemplateOption] = useState<DeploymentTemplateOptions[]>([])
@@ -34,37 +35,41 @@ const DeploymentHistoryHeader = ({
             try {
                 setLoader(true)
                 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                getDeploymentDiffSelector(
-                    appId,
-                    pipelineId,
-                    historyComponent,
-                    baseConfigurationId,
-                    historyComponentName,
-                ).then((response) => {
-                    const deploymentTemplateOpt = []
-                    if (response.result) {
-                        const resultLen = response.result.length
-                        for (let i = 0; i < resultLen; i++) {
-                            if (response.result[i].id.toString() === baseConfigurationId) {
-                                setBaseTemplateTimeStamp(response.result[i].deployedOn)
-                            } else {
-                                deploymentTemplateOpt.push({
-                                    value: String(response.result[i].id),
-                                    label: moment(response.result[i].deployedOn).format(
-                                        DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
-                                    ),
-                                    author: response.result[i].deployedBy,
-                                    status: response.result[i].deploymentStatus,
-                                })
+                getDeploymentDiffSelector(pipelineId, historyComponent, baseConfigurationId, historyComponentName).then(
+                    (response) => {
+                        const deploymentTemplateOpt = []
+                        if (response.result) {
+                            const resultLen = response.result.length
+                            for (let i = 0; i < resultLen; i++) {
+                                if (response.result[i].id.toString() === baseConfigurationId) {
+                                    setBaseTemplateTimeStamp(response.result[i].deployedOn)
+                                } else {
+                                    deploymentTemplateOpt.push({
+                                        value: String(response.result[i].id),
+                                        label: moment(response.result[i].deployedOn).format(
+                                            DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
+                                        ),
+                                        author: response.result[i].deployedBy,
+                                        status: response.result[i].deploymentStatus,
+                                        runSource: response.result[i].runSource,
+                                        renderRunSource,
+                                    })
+                                }
                             }
                         }
-                    }
-                    setPreviousConfigAvailable(deploymentTemplateOpt.length > 0)
-                    setDeploymentTemplateOption(deploymentTemplateOpt)
-                    setSelectedDeploymentTemplate(
-                        deploymentTemplateOpt[0] || { label: 'NA', value: 'NA', author: 'NA', status: 'NA' },
-                    )
-                })
+                        setPreviousConfigAvailable(deploymentTemplateOpt.length > 0)
+                        setDeploymentTemplateOption(deploymentTemplateOpt)
+                        setSelectedDeploymentTemplate(
+                            deploymentTemplateOpt[0] || {
+                                label: 'NA',
+                                value: 'NA',
+                                author: 'NA',
+                                status: 'NA',
+                                runSource: null,
+                            },
+                        )
+                    },
+                )
             } catch (err) {
                 showError(err)
                 setLoader(false)

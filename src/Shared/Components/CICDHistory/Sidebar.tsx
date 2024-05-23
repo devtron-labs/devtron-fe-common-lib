@@ -13,7 +13,6 @@ import {
     SummaryTooltipCardType,
     FetchIdDataStatus,
 } from './types'
-import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
 import { getCustomOptionSelectionStyle } from '../ReactSelect'
 import DetectBottom from './DetectBottom'
 import {
@@ -28,7 +27,7 @@ import { ReactComponent as ICDocker } from '../../../Assets/Icon/ic-docker.svg'
 import { GitTriggers } from '../../types'
 import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
 import { triggerStatus } from '../../../Common/AppStatus/utils'
-import { ReactComponent as ICRelease } from '../../../Assets/Icon/ic-release.svg'
+import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
 
 const SummaryTooltipCard = React.memo(
     ({
@@ -128,6 +127,8 @@ const HistorySummaryCard = React.memo(
         type,
         stage,
         dataTestId,
+        renderRunSource,
+        runSource,
     }: HistorySummaryCardType): JSX.Element => {
         const { path, params } = useRouteMatch()
         const { pathname } = useLocation()
@@ -164,6 +165,7 @@ const HistorySummaryCard = React.memo(
                 targetCardRef.current = el
             }
         }
+
         return (
             <ConditionalWrap
                 condition={Array.isArray(ciMaterials)}
@@ -189,12 +191,12 @@ const HistorySummaryCard = React.memo(
             >
                 <NavLink
                     to={getPath}
-                    className="w-100 ci-details__build-card-container"
+                    className="w-100 deployment-history-card-container"
                     data-testid={dataTestId}
                     activeClassName="active"
                     ref={assignTargetCardRef}
                 >
-                    <div className="w-100 ci-details__build-card">
+                    <div className="w-100 deployment-history-card">
                         <div
                             className={`dc__app-summary__icon icon-dim-20 ${triggerStatus(status)
                                 ?.toLocaleLowerCase()
@@ -229,17 +231,7 @@ const HistorySummaryCard = React.memo(
                                     </div>
                                 </div>
                             </div>
-                            <div className="flexbox dc__align-item-center dc__gap-4 pl-6 pr-6">
-                                <ICRelease />
-                                <span>
-                                    <span className="cn-9 fs-12 fw-4 lh-20 dc__ellipsis-right max-w-100">
-                                        ReleaseTrack1111
-                                    </span>
-                                    <span className="cn-9 fs-12 fw-4 lh-20">/</span>
-                                    <span className="cn-9 fs-12 fw-5 lh-20">0.3.0</span>
-                                </span>
-                                {/* <span>This Release</span> */}
-                            </div>
+                            {runSource && renderRunSource(runSource)}
                         </div>
                     </div>
                 </NavLink>
@@ -258,6 +250,7 @@ const Sidebar = React.memo(
         fetchIdData,
         handleViewAllHistory,
         children,
+        renderRunSource,
     }: SidebarType) => {
         const { pipelineId, appId, envId } = useParams<{ appId: string; envId: string; pipelineId: string }>()
         const { push } = useHistory()
@@ -340,7 +333,11 @@ const Sidebar = React.memo(
                             borderBottom: '1px solid var(--n-100, #EDF1F5)',
                         }}
                     >
-                        <label htmlFor="text" className="form__label" data-testid="select-history-heading">
+                        <label
+                            htmlFor="history-pipeline-selector"
+                            className="form__label"
+                            data-testid="select-history-heading"
+                        >
                             Select {selectLabel()}
                         </label>
                         <ReactSelect
@@ -359,6 +356,7 @@ const Sidebar = React.memo(
                             }}
                             styles={FILTER_STYLE}
                             menuPosition="fixed"
+                            inputId="history-pipeline-selector"
                         />
                     </div>
                 )}
@@ -384,6 +382,8 @@ const Sidebar = React.memo(
                                 artifact={triggerDetails.artifact}
                                 stage={triggerDetails.stage}
                                 type={type}
+                                runSource={triggerDetails.runSource}
+                                renderRunSource={renderRunSource}
                             />
                         ))}
                     {hasMore && (fetchIdData === FetchIdDataStatus.SUSPEND || !fetchIdData) && (

@@ -86,6 +86,15 @@ export interface History {
     appliedFiltersTimestamp?: string
     promotionApprovalMetadata?: PromotionApprovalMetadataType
     triggerMetadata?: string
+    runSource?: {
+        id: number
+        identifier: string
+        kind: string
+        name: string
+        releaseTrackName: string
+        releaseVersion: string
+        version: string
+    }
 }
 
 export interface DeploymentHistoryResultObject {
@@ -99,6 +108,16 @@ export interface DeploymentHistoryResult extends ResponseType {
     result?: DeploymentHistoryResultObject
 }
 
+export interface RunSource {
+    id: number
+    identifier: string
+    kind: string
+    name: string
+    releaseTrackName: string
+    releaseVersion: string
+    version: string
+}
+
 export interface SidebarType {
     type: HistoryComponentType
     filterOptions: CICDSidebarFilterOptionType[]
@@ -108,6 +127,7 @@ export interface SidebarType {
     fetchIdData?: FetchIdDataStatus
     handleViewAllHistory?: () => void
     children?: React.ReactNode
+    renderRunSource?: (runSource: RunSource) => JSX.Element
 }
 
 export interface HistorySummaryCardType {
@@ -122,6 +142,8 @@ export interface HistorySummaryCardType {
     type: HistoryComponentType
     stage: DeploymentStageType
     dataTestId?: string
+    runSource?: RunSource
+    renderRunSource?: (runSource: RunSource) => JSX.Element
 }
 
 export interface SummaryTooltipCardType {
@@ -343,6 +365,7 @@ export interface TriggerOutputProps {
     hideImageTaggingHardDelete: boolean
     fetchIdData: FetchIdDataStatus
     selectedEnvironmentName?: string
+    renderRunSource?: (runSource: RunSource) => JSX.Element
     renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
     renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
     processVirtualEnvironmentDeploymentData: (
@@ -405,6 +428,15 @@ export interface HistoryDiffSelectorList {
     deployedBy: string
     deploymentStatus: string
     wfrId?: number
+    runSource?: {
+        id: number
+        identifier: string
+        kind: string
+        name: string
+        releaseTrackName: string
+        releaseVersion: string
+        version: string
+    }
 }
 
 export interface HistoryDiffSelectorRes {
@@ -573,6 +605,15 @@ export interface DeploymentHistory {
     imageComment?: ImageComment
     imageReleaseTags?: ReleaseTag[]
     ci_artifact_id?: number
+    runSource?: {
+        id: number
+        identifier: string
+        kind: string
+        name: string
+        releaseTrackName: string
+        releaseVersion: string
+        version: string
+    }
 }
 
 type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE_GREEN'

@@ -34,9 +34,10 @@ const DeploymentDetailSteps = ({
         deploymentStatus?.toUpperCase() !== TIMELINE_STATUS.ABORTED,
     )
     const isVirtualEnv = useRef(isVirtualEnvironment)
-    const processedData = isVirtualEnv.current
-        ? processVirtualEnvironmentDeploymentData()
-        : processDeploymentStatusDetailsData()
+    const processedData =
+        isVirtualEnv.current && processVirtualEnvironmentDeploymentData
+            ? processVirtualEnvironmentDeploymentData()
+            : processDeploymentStatusDetailsData()
     const [deploymentStatusDetailsBreakdownData, setDeploymentStatusDetailsBreakdownData] =
         useState<DeploymentStatusDetailsBreakdownDataType>(processedData)
 
@@ -105,12 +106,10 @@ const DeploymentDetailSteps = ({
                 pathname: `${URLS.APP}/${URLS.DEVTRON_CHARTS}/${URLS.APP_DEPLOYMNENT_HISTORY}/${appId}/env/${envId}/${URLS.DETAILS}/${URLS.APP_DETAILS_K8}`,
                 search: DEPLOYMENT_STATUS_QUERY_PARAM,
             })
-        else {
-            history.push({
-                pathname: `${URLS.APP}/${appId}/${URLS.APP_DETAILS}/${envId}/${URLS.APP_DETAILS_K8}`,
-                search: DEPLOYMENT_STATUS_QUERY_PARAM,
-            })
-        }
+        history.push({
+            pathname: `${URLS.APP}/${appId}/${URLS.APP_DETAILS}/${envId}/${URLS.APP_DETAILS_K8}`,
+            search: DEPLOYMENT_STATUS_QUERY_PARAM,
+        })
     }
 
     const getDeploymentStatusDetails = () =>
@@ -131,7 +130,9 @@ const DeploymentDetailSteps = ({
             </div>
         ) : (
             <div className="dc__mxw-1000 min-w-800">
-                {userApprovalMetadata && renderDeploymentApprovalInfo(userApprovalMetadata)}
+                {renderDeploymentApprovalInfo &&
+                    userApprovalMetadata &&
+                    renderDeploymentApprovalInfo(userApprovalMetadata)}
                 <DeploymentStatusDetailBreakdown
                     deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}
                     isVirtualEnvironment={isVirtualEnv.current}

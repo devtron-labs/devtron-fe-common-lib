@@ -43,6 +43,7 @@ import {
     DeploymentStatusDetailsBreakdownDataType,
     RenderCIListHeaderProps,
     VirtualHistoryArtifactProps,
+    RunSource,
 } from './types'
 import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger, getCDBuildReport } from './service'
 import {
@@ -500,6 +501,7 @@ const HistoryLogs: React.FC<{
     tagsEditable: boolean
     hideImageTaggingHardDelete: boolean
     selectedEnvironmentName?: string
+    renderRunSource: (runSource: RunSource) => JSX.Element
     processVirtualEnvironmentDeploymentData: (
         data?: DeploymentStatusDetailsType,
     ) => DeploymentStatusDetailsBreakdownDataType
@@ -522,6 +524,7 @@ const HistoryLogs: React.FC<{
     tagsEditable,
     hideImageTaggingHardDelete,
     selectedEnvironmentName,
+    renderRunSource,
     processVirtualEnvironmentDeploymentData,
     renderDeploymentApprovalInfo,
     renderCIListHeader,
@@ -621,6 +624,7 @@ const HistoryLogs: React.FC<{
                                     setDeploymentHistoryList={setDeploymentHistoryList}
                                     deploymentHistoryList={deploymentHistoryList}
                                     setFullScreenView={setFullScreenView}
+                                    renderRunSource={renderRunSource}
                                 />
                             </Route>
                         )}
@@ -689,6 +693,7 @@ const TriggerOutput = ({
     hideImageTaggingHardDelete,
     fetchIdData,
     selectedEnvironmentName,
+    renderRunSource,
     renderCIListHeader,
     renderDeploymentApprovalInfo,
     processVirtualEnvironmentDeploymentData,
@@ -902,6 +907,7 @@ const TriggerOutput = ({
                 tagsEditable={tagsEditable}
                 hideImageTaggingHardDelete={hideImageTaggingHardDelete}
                 selectedEnvironmentName={selectedEnvironmentName}
+                renderRunSource={renderRunSource}
                 processVirtualEnvironmentDeploymentData={processVirtualEnvironmentDeploymentData}
                 renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}
                 renderCIListHeader={renderCIListHeader}

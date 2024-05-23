@@ -206,3 +206,87 @@
         stroke: #fff;
     }
 }
+
+.deployment-history-card-container {
+    text-decoration: unset;
+    padding: 0 16px;
+
+    &:hover {
+        text-decoration: unset;
+        background: var(--N100);
+    }
+
+    &.active {
+        background: var(--B100);
+    }
+
+    .deployment-history-card {
+        display: grid;
+        grid-template-columns: 20px 1fr;
+        padding: 12px 0;
+        column-gap: 12px;
+    }
+
+    .app-status__icon {
+        position: unset;
+    }
+}
+
+.deployment-status-breakdown-container,
+.deployment-approval-container {
+    .vertical-connector {
+        border-left: 1px solid var(--N300);
+        height: 15px;
+        position: relative;
+        left: 18px;
+        width: 5px;
+    }
+    .deployment-status-breakdown-row {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+
+        &.border-collapse {
+            border-radius: 4px 4px 0 0;
+        }
+    }
+
+    .pulse-highlight {
+        width: 12px;
+        height: 12px;
+        border: solid 4px rgba(255, 126, 91, 0.4);
+        background-color: #ff7e5b;
+        position: relative;
+        top: 5px;
+        right: -5px;
+        border-radius: 50%;
+        animation-name: pulse;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+    .green-tick {
+        path {
+            stroke: var(--G500);
+        }
+    }
+
+    .app-status-row {
+        display: grid;
+        grid-template-columns: 150px 200px 150px auto;
+        grid-column-gap: 16px;
+    }
+    .resource-list {
+        .app-status-row {
+            &:hover {
+                background-color: var(--N50);
+            }
+        }
+    }
+
+    .detail-tab_border {
+        border-radius: 0 0 4px 4px;
+        border-top: 0;
+    }
+}

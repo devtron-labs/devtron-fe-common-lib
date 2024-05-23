@@ -62,7 +62,7 @@ export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): 
                 disabled={!scrollToTop}
                 type="button"
                 onClick={scrollToTop}
-                aria-label="dropdown-button"
+                aria-label="scroll-to-top"
             >
                 <DropDownIcon className="rotate" style={{ ['--rotateBy' as any]: '180deg' }} />
             </button>
@@ -73,7 +73,7 @@ export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): 
                 disabled={!scrollToBottom}
                 type="button"
                 onClick={scrollToBottom}
-                aria-label="dropdown-button"
+                aria-label="scroll-to-button"
             >
                 <DropDownIcon className="rotate" />
             </button>

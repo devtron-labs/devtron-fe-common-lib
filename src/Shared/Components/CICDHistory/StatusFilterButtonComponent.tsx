@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import { useEffect, useState } from 'react'
 import { StyledRadioGroup as RadioGroup } from '../../../Common'
 import { NodeStatus, StatusFilterButtonType } from './types'
@@ -34,15 +35,15 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
     })
 
     const filters = [
-        { status: 'all', count: allNodeCount, isSelected: selectedTab === 'all' },
-        { status: NodeStatus.Missing, count: missingNodeCount, isSelected: NodeStatus.Missing === selectedTab },
-        { status: NodeStatus.Degraded, count: failedNodeCount, isSelected: NodeStatus.Degraded === selectedTab },
+        { status: 'all', count: allNodeCount, isSelected: selectedTab == 'all' },
+        { status: NodeStatus.Missing, count: missingNodeCount, isSelected: NodeStatus.Missing == selectedTab },
+        { status: NodeStatus.Degraded, count: failedNodeCount, isSelected: NodeStatus.Degraded == selectedTab },
         {
             status: NodeStatus.Progressing,
             count: progressingNodeCount,
-            isSelected: NodeStatus.Progressing === selectedTab,
+            isSelected: NodeStatus.Progressing == selectedTab,
         },
-        { status: NodeStatus.Healthy, count: healthyNodeCount, isSelected: NodeStatus.Healthy === selectedTab },
+        { status: NodeStatus.Healthy, count: healthyNodeCount, isSelected: NodeStatus.Healthy == selectedTab },
     ]
 
     useEffect(() => {

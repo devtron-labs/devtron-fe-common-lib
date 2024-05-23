@@ -235,7 +235,8 @@ const GitCommitInfoGeneric = ({
                     ) : null}
                     {_lowerCaseCommitInfo.date ? (
                         <div className="material-history__text flex left">
-                            <CalendarIcon className="icon-dim-16 mr-8" /> {_lowerCaseCommitInfo.date}
+                            <CalendarIcon className="icon-dim-16 mr-8" />
+                            {moment(_lowerCaseCommitInfo.date).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
                         </div>
                     ) : null}
                     {_lowerCaseCommitInfo.message ? (

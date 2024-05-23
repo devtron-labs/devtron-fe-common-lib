@@ -67,6 +67,7 @@ export const ROUTES = {
     MANUAL_SYNC: 'app/deployment-status/manual-sync',
     CD_CONFIG: 'app/cd-pipeline',
     MODULE_CONFIGURED: 'module/config',
+    RESOURCE_HISTORY_DEPLOYMENT: 'resource/history/deployment',
 }
 
 export enum KEY_VALUE {

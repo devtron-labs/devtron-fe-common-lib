@@ -228,16 +228,13 @@ export const prepareHistoryData = (
 }
 
 export const getDeploymentDiffSelector = (
-    appId: string,
     pipelineId: string,
     historyComponent,
     baseConfigurationId,
     historyComponentName,
 ): Promise<HistoryDiffSelectorRes> =>
     get(
-        `app/history/deployed-component/list/${appId}/${pipelineId}?baseConfigurationId=${baseConfigurationId}&historyComponent=${historyComponent
-            .replace('-', '_')
-            .toUpperCase()}${historyComponentName ? `&historyComponentName=${historyComponentName}` : ''}`,
+        `resource/history/deployment/config/cd-pipeline/v1?baseConfigurationId=${baseConfigurationId}&historyComponent=${historyComponent.replace('-', '_').toUpperCase()}${historyComponentName ? `&historyComponentName=${historyComponentName}` : ''}&filterCriteria=cd-pipeline|id|${pipelineId}`,
     )
 
 export function getCDBuildReport(appId, envId, pipelineId, workflowId) {
