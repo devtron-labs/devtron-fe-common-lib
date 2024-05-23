@@ -71,7 +71,9 @@ const useUrlFilters = <T = string, K = unknown>({
     }
 
     const _resetPageNumber = () => {
-        _updateSearchParam(PAGE_NUMBER, DEFAULT_PAGE_NUMBER)
+        if (pageNumber !== DEFAULT_PAGE_NUMBER) {
+            _updateSearchParam(PAGE_NUMBER, DEFAULT_PAGE_NUMBER)
+        }
     }
 
     const changePage = (page: number) => {
