@@ -10,7 +10,7 @@ import {
     ResponseType,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
-import { GitTriggers, Node, NodeType } from '../../types'
+import { AggregationKeys, GitTriggers, Node, NodeType } from '../../types'
 import { TERMINAL_STATUS_MAP } from './constants'
 
 export enum HistoryComponentType {
@@ -434,18 +434,6 @@ export enum NodeStatus {
     Missing = 'missing',
     Suspended = 'suspended',
     Unknown = 'unknown',
-}
-
-export enum AggregationKeys {
-    Workloads = 'Workloads',
-    Networking = 'Networking',
-    'Config & Storage' = 'Config & Storage',
-    RBAC = 'RBAC',
-    Administration = 'Administration',
-    'Custom Resource' = 'Custom Resource',
-    'Other Resources' = 'Other Resources',
-    Events = 'Events',
-    Namespaces = 'Namespaces',
 }
 
 type NodesMap = {

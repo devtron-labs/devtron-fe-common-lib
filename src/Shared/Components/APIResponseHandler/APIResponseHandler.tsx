@@ -1,4 +1,4 @@
-import { ErrorScreenNotAuthorized, GenericEmptyState, Progressing, Reload } from '../../../Common'
+import { ErrorScreenManager, ErrorScreenNotAuthorized, GenericEmptyState, Progressing, Reload } from '../../../Common'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import { NOT_FOUND_DEFAULT_TEXT } from './constants'
 import { APIResponseHandlerProps } from './types'
@@ -12,6 +12,7 @@ const APIResponseHandler = ({
     notFoundText,
     reloadProps,
     genericSectionErrorProps,
+    errorScreenManagerProps,
     children,
 }: APIResponseHandlerProps) => {
     // keeping it above loading since, not expected to send a call if not authorized
@@ -30,7 +31,10 @@ const APIResponseHandler = ({
             return <GenericSectionErrorState {...genericSectionErrorProps} />
         }
 
-        // TODO: Can extend ErrorScreenNotFound
+        if (errorScreenManagerProps) {
+            return <ErrorScreenManager {...errorScreenManagerProps} />
+        }
+
         if (error?.code === 404) {
             return (
                 <GenericEmptyState

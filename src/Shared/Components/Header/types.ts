@@ -1,4 +1,4 @@
-import { ResponseType } from '../../../Common'
+import { ResponseType, TippyCustomizedProps } from '../../../Common'
 
 export enum InstallationType {
     OSS_KUBECTL = 'oss_kubectl',
@@ -22,21 +22,23 @@ export enum ModuleStatus {
 
 export interface PageHeaderType {
     headerName?: string
-    additionalHeaderInfo?: () => JSX.Element
-    isTippyShown?: boolean
-    tippyRedirectLink?: string
     showTabs?: boolean
+    additionalHeaderInfo?: () => JSX.Element
     renderHeaderTabs?: () => JSX.Element
     isBreadcrumbs?: boolean
     breadCrumbs?: () => JSX.Element
-    TippyIcon?: React.FunctionComponent<any>
-    tippyMessage?: string
-    onClickTippybutton?: () => void
     renderActionButtons?: () => JSX.Element
     showCloseButton?: boolean
     onClose?: () => void
     markAsBeta?: boolean
     showAnnouncementHeader?: boolean
+    tippyProps?: Pick<TippyCustomizedProps, 'additionalContent'> & {
+        isTippyCustomized?: boolean
+        tippyRedirectLink?: string
+        TippyIcon?: React.FunctionComponent<any>
+        tippyMessage?: string
+        onClickTippyButton?: () => void
+    }
 }
 
 export interface ServerInfo {

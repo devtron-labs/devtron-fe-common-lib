@@ -15,7 +15,9 @@ import {
     CDMaterialsApprovalInfo,
     CDMaterialFilterQuery,
     ImagePromotionMaterialInfo,
+    EnvironmentListHelmResponse,
 } from './Types'
+import { ApiResourceType } from '../Pages'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -144,6 +146,8 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
             promotionApprovalMetadata: material.promotionApprovalMetadata,
             deployedOnEnvironments: material.deployedOnEnvironments ?? [],
             deploymentWindowArtifactMetadata: material.deploymentWindowArtifactMetadata ?? null,
+            configuredInReleases: material.configuredInReleases ?? [],
+            appWorkflowId: material.appWorkflowId ?? null,
         }
     })
     return materials
@@ -269,7 +273,10 @@ export const genericCDMaterialsService = (
     let URL
     switch (serviceType) {
         case CDMaterialServiceEnum.ROLLBACK:
-            URL = getUrlWithSearchParams(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material/rollback`, manipulatedParams)
+            URL = getUrlWithSearchParams(
+                `${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material/rollback`,
+                manipulatedParams,
+            )
             break
 
         case CDMaterialServiceEnum.IMAGE_PROMOTION:
@@ -327,6 +334,25 @@ export const getDefaultConfig = (): Promise<ResponseType> => {
     return get(`${ROUTES.NOTIFIER}/channel/config`)
 }
 
+export function getEnvironmentListMinPublic(includeAllowedDeploymentTypes?: boolean) {
+    return get(
+        `${ROUTES.ENVIRONMENT_LIST_MIN}?auth=false${includeAllowedDeploymentTypes ? '&showDeploymentOptions=true' : ''}`,
+    )
+}
+
+export function getClusterListMin() {
+    const URL = `${ROUTES.CLUSTER}/autocomplete`
+    return get(URL)
+}
+
+export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType<ApiResourceType>> => {
+    return get(`${ROUTES.API_RESOURCE}/${ROUTES.GVK}/${clusterId}`)
+}
+
+export function getNamespaceListMin(clusterIdsCsv: string): Promise<EnvironmentListHelmResponse> {
+  const URL = `${ROUTES.NAMESPACE}/autocomplete?ids=${clusterIdsCsv}`
+  return get(URL)
+}
 export function getWebhookEventsForEventId(eventId: string | number) {
     const URL = `${ROUTES.GIT_HOST_EVENT}/${eventId}`
     return get(URL)

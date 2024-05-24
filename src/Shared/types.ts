@@ -426,3 +426,17 @@ export type IntersectionOptions = {
 }
 
 export type IntersectionChangeHandler = (entry: IntersectionObserverEntry) => void
+// FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
+
+export enum AggregationKeys {
+    Workloads = 'Workloads',
+    Networking = 'Networking',
+    'Config & Storage' = 'Config & Storage',
+    RBAC = 'RBAC',
+    Administration = 'Administration',
+    'Custom Resource' = 'Custom Resource',
+    'Other Resources' = 'Other Resources',
+    Events = 'Events',
+    Namespaces = 'Namespaces',
+}
+export type AggregationKeysType = keyof typeof AggregationKeys

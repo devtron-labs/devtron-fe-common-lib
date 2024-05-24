@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { MaterialInfo, shallowEqual } from '../Common'
+import { MaterialInfo, shallowEqual, SortingOrder } from '../Common'
 import { GitTriggers, IntersectionChangeHandler, IntersectionOptions, WebhookEventNameType } from './types'
 import { ReactComponent as ICPullRequest } from '../Assets/Icon/ic-pull-request.svg'
 import { ReactComponent as ICTag } from '../Assets/Icon/ic-tag.svg'
@@ -71,8 +71,26 @@ export const getGitCommitInfo = (materialInfo: MaterialInfo): GitTriggers => ({
     CiConfigureSourceValue: '',
 })
 
-export const caseInsensitiveStringComparator = (a: string, b: string): number =>
-    a.toLowerCase().localeCompare(b.toLowerCase())
+export const stringComparatorBySortOrder = (
+    a: string,
+    b: string,
+    sortOrder: SortingOrder = SortingOrder.ASC,
+    isCaseSensitive: boolean = true,
+): number => {
+    if (isCaseSensitive) {
+        return sortOrder === SortingOrder.ASC ? a.localeCompare(b) : b.localeCompare(a)
+    }
+
+    return sortOrder === SortingOrder.ASC
+        ? a.toLowerCase().localeCompare(b.toLowerCase())
+        : b.toLowerCase().localeCompare(a.toLowerCase())
+}
+
+export const numberComparatorBySortOrder = (
+    a: number,
+    b: number,
+    sortOrder: SortingOrder = SortingOrder.ASC,
+): number => (sortOrder === SortingOrder.ASC ? a - b : b - a)
 
 export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
     switch (eventName) {
@@ -155,3 +173,12 @@ export const useIntersection = (
     return intersecting
 }
 export const isNullOrUndefined = (value: unknown): boolean => value === null || value === undefined
+
+export const getKeyToBooleanMapFromArray = <T extends string | number>(arr: T[] = []) =>
+    arr.reduce<Record<T, boolean>>(
+        (acc, key) => {
+            acc[key] = true
+            return acc
+        },
+        {} as Record<T, boolean>,
+    )
