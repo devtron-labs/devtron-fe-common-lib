@@ -1,6 +1,22 @@
 import { ReactNode } from 'react'
 
-export interface DeleteDialogProps {
+type WithOrWithoutDeleteConfirmationType =
+    | {
+          showDeleteConfirmation: true
+          /**
+           * If added, confirmation input is shown
+           */
+          deleteConfirmationText: string
+      }
+    | {
+          showDeleteConfirmation?: never
+          /**
+           * If added, confirmation input is shown
+           */
+          deleteConfirmationText?: never
+      }
+
+export type DeleteDialogProps = {
     title: string
     description?: string
     closeDelete: () => void
@@ -12,7 +28,8 @@ export interface DeleteDialogProps {
     buttonPrimaryText?: string
     shouldStopPropagation?: boolean
     disabled?: boolean
-}
+    children?: ReactNode
+} & WithOrWithoutDeleteConfirmationType
 
 export interface ForceDeleteDialogType {
     onClickDelete: () => void
