@@ -123,7 +123,11 @@ function useCIEventSource(url: string, maxLength?: number) {
     return [dataVal, eventSourceRef.current, logsNotAvailableError]
 }
 
-const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType }: LogsRendererType): JSX.Element => {
+export const LogsRenderer = ({
+    triggerDetails,
+    isBlobStorageConfigured,
+    parentType,
+}: LogsRendererType): JSX.Element => {
     const { pipelineId, envId, appId } = useParams<DeploymentHistoryBaseParamsType>()
     const logsURL =
         parentType === HistoryComponentType.CI

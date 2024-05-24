@@ -231,7 +231,7 @@ const HistorySummaryCard = React.memo(
                                     </div>
                                 </div>
                             </div>
-                            {runSource && renderRunSource(runSource)}
+                            {runSource && renderRunSource && renderRunSource(runSource)}
                         </div>
                     </div>
                 </NavLink>

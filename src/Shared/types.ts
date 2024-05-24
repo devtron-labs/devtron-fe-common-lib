@@ -393,6 +393,7 @@ export enum ResourceKindType {
     cluster = 'cluster',
     release = 'release',
     releaseTrack = 'release-track',
+    cdPipeline = 'cd-pipeline',
 }
 
 /**

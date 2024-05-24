@@ -6,8 +6,11 @@ import {
     AggregatedNodes,
     PodMetadatum,
     AggregationKeys,
+    TriggerHistoryFilterCriteriaProps,
+    DeploymentHistoryResultObject,
+    DeploymentHistory,
 } from './types'
-import { Nodes, NodeType } from '../../types'
+import { Nodes, NodeType, ResourceKindType } from '../../types'
 import { DEPLOYMENT_STATUS, TIMELINE_STATUS } from '../../constants'
 
 export function getAggregator(nodeType: NodeType, defaultAsOtherResources?: boolean): AggregationKeys {
@@ -531,3 +534,44 @@ export const decode = (data, isEncoded: boolean = false) =>
             agg[curr.key] = curr.value
             return agg
         }, {})
+
+export const getTriggerHistoryFilterCriteria = ({
+    appId,
+    envId,
+    releaseId,
+    showCurrentReleaseDeployments,
+}: TriggerHistoryFilterCriteriaProps): string[] => {
+    const filterCriteria = [`${ResourceKindType.devtronApplication}|id|${appId}`, `environment|id|${envId}`]
+    if (showCurrentReleaseDeployments) {
+        filterCriteria.push(`${ResourceKindType.release}|id|${releaseId}`)
+    }
+
+    return filterCriteria
+}
+
+export const getParsedTriggerHistory = (result): DeploymentHistoryResultObject => {
+    const parsedResult = {
+        cdWorkflows: (result.cdWorkflows || []).map((deploymentHistory: DeploymentHistory) => ({
+            ...deploymentHistory,
+            triggerId: deploymentHistory?.cd_workflow_id,
+            podStatus: deploymentHistory?.pod_status,
+            startedOn: deploymentHistory?.started_on,
+            finishedOn: deploymentHistory?.finished_on,
+            pipelineId: deploymentHistory?.pipeline_id,
+            logLocation: deploymentHistory?.log_file_path,
+            triggeredBy: deploymentHistory?.triggered_by,
+            artifact: deploymentHistory?.image,
+            triggeredByEmail: deploymentHistory?.email_id,
+            stage: deploymentHistory?.workflow_type,
+            image: deploymentHistory?.image,
+            imageComment: deploymentHistory?.imageComment,
+            imageReleaseTags: deploymentHistory?.imageReleaseTags,
+            artifactId: deploymentHistory?.ci_artifact_id,
+            runSource: deploymentHistory?.runSource,
+        })),
+        appReleaseTagNames: result.appReleaseTagNames,
+        tagsEditable: result.tagsEditable,
+        hideImageTaggingHardDelete: result.hideImageTaggingHardDelete,
+    }
+    return parsedResult
+}

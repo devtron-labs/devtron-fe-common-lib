@@ -1,11 +1,10 @@
 /* eslint-disable dot-notation */
-import { ROUTES, ResponseType, get, getUrlWithSearchParams, trash } from '../../../Common'
-import { ResourceVersionType } from '../../types'
+import { ROUTES, ResponseType, get, getUrlWithSearchParams, showError, trash } from '../../../Common'
+import { ResourceKindType, ResourceVersionType } from '../../types'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from './constants'
 import {
     CDPipelines,
     DeploymentConfigurationsRes,
-    DeploymentHistory,
     DeploymentHistoryDetail,
     DeploymentHistoryDetailRes,
     DeploymentHistoryResult,
@@ -14,9 +13,10 @@ import {
     FetchIdDataStatus,
     HistoryDiffSelectorRes,
     ModuleConfigResponse,
-    TriggerDetails,
+    TriggerDetailsResponseType,
+    TriggerHistoryProps,
 } from './types'
-import { decode } from './utils'
+import { decode, getParsedTriggerHistory, getTriggerHistoryFilterCriteria } from './utils'
 
 const getTriggerDetailsQuery = (fetchIdData) => {
     if (fetchIdData && fetchIdData === FetchIdDataStatus.FETCHING) {
@@ -26,7 +26,13 @@ const getTriggerDetailsQuery = (fetchIdData) => {
     return ''
 }
 
-export function getTriggerDetails({ appId, envId, pipelineId, triggerId, fetchIdData }): Promise<TriggerDetails> {
+export function getTriggerDetails({
+    appId,
+    envId,
+    pipelineId,
+    triggerId,
+    fetchIdData,
+}): Promise<TriggerDetailsResponseType> {
     if (triggerId) {
         return get(
             `${ROUTES.APP}/cd-pipeline/workflow/trigger-info/${appId}/${envId}/${pipelineId}/${triggerId}${getTriggerDetailsQuery(fetchIdData)}`,
@@ -250,41 +256,30 @@ export function getCDBuildReport(appId, envId, pipelineId, workflowId) {
     return get(`app/cd-pipeline/workflow/download/${appId}/${envId}/${pipelineId}/${workflowId}`)
 }
 
-// TODO - Replace with new API in release history
-export async function getTriggerHistory(
-    appId: number | string,
-    envId: number | string,
-    pipelineId: number | string,
+export const getTriggerHistory = async ({
+    appId,
+    envId,
     pagination,
-): Promise<DeploymentHistoryResult> {
-    return get(
-        `${ROUTES.CD_CONFIG}/workflow/history/${appId}/${envId}/${pipelineId}?offset=${pagination.offset}&size=${pagination.size}`,
-    ).then(({ result, code, status }) => ({
-        result: {
-            cdWorkflows: (result.cdWorkflows || []).map((deploymentHistory: DeploymentHistory) => ({
-                ...deploymentHistory,
-                triggerId: deploymentHistory?.cd_workflow_id,
-                podStatus: deploymentHistory?.pod_status,
-                startedOn: deploymentHistory?.started_on,
-                finishedOn: deploymentHistory?.finished_on,
-                pipelineId: deploymentHistory?.pipeline_id,
-                logLocation: deploymentHistory?.log_file_path,
-                triggeredBy: deploymentHistory?.triggered_by,
-                artifact: deploymentHistory?.image,
-                triggeredByEmail: deploymentHistory?.email_id,
-                stage: deploymentHistory?.workflow_type,
-                image: deploymentHistory?.image,
-                imageComment: deploymentHistory?.imageComment,
-                imageReleaseTags: deploymentHistory?.imageReleaseTags,
-                artifactId: deploymentHistory?.ci_artifact_id,
-            })),
-            appReleaseTagNames: result.appReleaseTagNames,
-            tagsEditable: result.tagsEditable,
-            hideImageTaggingHardDelete: result.hideImageTaggingHardDelete,
+    releaseId,
+    showCurrentReleaseDeployments = false,
+}: TriggerHistoryProps): Promise<Pick<DeploymentHistoryResult, 'result'>> => {
+    const url = getUrlWithSearchParams(
+        `${ROUTES.RESOURCE_HISTORY_DEPLOYMENT}/${ResourceKindType.cdPipeline}/${-ResourceVersionType.v1}`,
+        {
+            filterCriteria: getTriggerHistoryFilterCriteria({ appId, envId, releaseId, showCurrentReleaseDeployments }),
+            offset: pagination.offset,
+            limit: pagination.size,
         },
-        code,
-        status,
-    }))
+    )
+
+    try {
+        const { result } = await get(url)
+        const parsedResult = getParsedTriggerHistory(result)
+        return { result: parsedResult }
+    } catch (error) {
+        showError(error)
+        throw error
+    }
 }
 
 export const getCDPipelines = (appId: number | string): Promise<CDPipelines> => {

@@ -8,6 +8,7 @@ import {
     FilterConditionsListType,
     DeploymentAppTypes,
     ResponseType,
+    PaginationProps,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
 import { GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
@@ -345,7 +346,7 @@ export interface VirtualHistoryArtifactProps {
         workflowId: number
     }
 }
-export interface TriggerOutputProps {
+export interface TriggerOutputProps extends renderRunSourceType {
     fullScreenView: boolean
     syncState: (triggerId: number, triggerDetails: History, triggerDetailsError: any) => void
     triggerHistory: Map<number, History>
@@ -359,14 +360,13 @@ export interface TriggerOutputProps {
     hideImageTaggingHardDelete: boolean
     fetchIdData: FetchIdDataStatus
     selectedEnvironmentName?: string
-    renderRunSource?: (runSource: RunSource) => JSX.Element
-    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
-    renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
-    processVirtualEnvironmentDeploymentData: (
+    renderCIListHeader?: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+    renderDeploymentApprovalInfo?: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
+    processVirtualEnvironmentDeploymentData?: (
         data?: DeploymentStatusDetailsType,
     ) => DeploymentStatusDetailsBreakdownDataType
-    renderVirtualHistoryArtifacts: (virtualHistoryArtifactProps: VirtualHistoryArtifactProps) => JSX.Element
-    renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string) => JSX.Element
+    renderVirtualHistoryArtifacts?: (virtualHistoryArtifactProps: VirtualHistoryArtifactProps) => JSX.Element
+    renderDeploymentHistoryTriggerMetaText?: (triggerMetaData: string) => JSX.Element
 }
 
 export interface DeploymentStatusDetailBreakdownType {
@@ -505,7 +505,7 @@ export const STATUS_SORTING_ORDER = {
     [NodeStatus.Healthy]: 4,
 }
 
-export interface TriggerDetails extends ResponseType {
+export interface TriggerDetailsResponseType extends ResponseType {
     result?: History
 }
 
@@ -643,6 +643,21 @@ export interface DeploymentHistoryBaseParamsType {
     appId: string
     envId: string
     pipelineId: string
+}
+
+export interface TriggerHistoryProps {
+    appId: number
+    envId: number
+    pagination: Pick<PaginationProps, 'offset' | 'size'>
+    releaseId?: number
+    showCurrentReleaseDeployments?: boolean
+}
+
+export interface TriggerHistoryFilterCriteriaProps {
+    appId: number
+    envId: number
+    releaseId: number
+    showCurrentReleaseDeployments: boolean
 }
 
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])
