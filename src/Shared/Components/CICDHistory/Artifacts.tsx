@@ -61,6 +61,7 @@ export const CIListItem = ({
             )}
 
             {headerMetaDataPresent &&
+                renderCIListHeader &&
                 renderCIListHeader({
                     userApprovalMetadata,
                     triggeredBy,

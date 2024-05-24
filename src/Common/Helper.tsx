@@ -10,7 +10,8 @@ import YAML from 'yaml'
 import { ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME, EXCLUDED_FALSY_VALUES, DISCORD_LINK } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
-import { AsyncOptions, AsyncState, UseSearchString, scrollableInterface } from './Types'
+import { AsyncOptions, AsyncState, UseSearchString } from './Types'
+import { scrollableInterface } from '../Shared'
 import { DATE_TIME_FORMAT_STRING } from '../Shared'
 import { ReactComponent as ArrowDown } from '../Assets/Icon/ic-chevron-down.svg'
 
@@ -992,4 +993,5 @@ export function mapByKey<T = Map<any, any>>(arr: any[], id: string): T {
 export function asyncWrap(promise): any[] {
     return promise.then((result) => [null, result]).catch((err) => [err])
 }
+
 export const prefixZeroIfSingleDigit = (value: number = 0) => (value > 0 && value < 10 ? `0${value}` : value)

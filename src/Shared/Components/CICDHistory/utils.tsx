@@ -1,67 +1,17 @@
 /* eslint-disable no-param-reassign */
-import { BehaviorSubject } from 'rxjs'
-import { DEPLOYMENT_STATUS, TIMELINE_STATUS, handleUTCTime, mapByKey } from '../../../Common'
+import { handleUTCTime, mapByKey } from '../../../Common'
 import {
     DeploymentStatusDetailsType,
     DeploymentStatusDetailsBreakdownDataType,
     AggregatedNodes,
     PodMetadatum,
+    TriggerHistoryFilterCriteriaProps,
+    DeploymentHistoryResultObject,
+    DeploymentHistory,
 } from './types'
-import { AppDetails, Node, Nodes, NodeType, AggregationKeys } from '../../types'
-
-const _appDetailsSubject: BehaviorSubject<AppDetails> = new BehaviorSubject({} as AppDetails)
-const _nodesSubject: BehaviorSubject<Array<Node>> = new BehaviorSubject([] as Node[])
-const _nodesFilteredSubject: BehaviorSubject<Array<Node>> = new BehaviorSubject([] as Node[])
-
-export function getAggregator(nodeType: NodeType, defaultAsOtherResources?: boolean): AggregationKeys {
-    switch (nodeType) {
-        case Nodes.DaemonSet:
-        case Nodes.Deployment:
-        case Nodes.Pod:
-        case Nodes.ReplicaSet:
-        case Nodes.Job:
-        case Nodes.CronJob:
-        case Nodes.ReplicationController:
-        case Nodes.StatefulSet:
-            return AggregationKeys.Workloads
-        case Nodes.Ingress:
-        case Nodes.Service:
-        case Nodes.Endpoints:
-        case Nodes.EndpointSlice:
-        case Nodes.NetworkPolicy:
-            return AggregationKeys.Networking
-        case Nodes.ConfigMap:
-        case Nodes.Secret:
-        case Nodes.PersistentVolume:
-        case Nodes.PersistentVolumeClaim:
-        case Nodes.StorageClass:
-        case Nodes.VolumeSnapshot:
-        case Nodes.VolumeSnapshotContent:
-        case Nodes.VolumeSnapshotClass:
-        case Nodes.PodDisruptionBudget:
-            return AggregationKeys['Config & Storage']
-        case Nodes.ServiceAccount:
-        case Nodes.ClusterRoleBinding:
-        case Nodes.RoleBinding:
-        case Nodes.ClusterRole:
-        case Nodes.Role:
-        case Nodes.PodSecurityPolicy:
-            return AggregationKeys.RBAC
-        case Nodes.MutatingWebhookConfiguration:
-        case Nodes.ValidatingWebhookConfiguration:
-            return AggregationKeys.Administration
-        case Nodes.Alertmanager:
-        case Nodes.Prometheus:
-        case Nodes.ServiceMonitor:
-            return AggregationKeys['Custom Resource']
-        case Nodes.Event:
-            return AggregationKeys.Events
-        case Nodes.Namespace:
-            return AggregationKeys.Namespaces
-        default:
-            return defaultAsOtherResources ? AggregationKeys['Other Resources'] : AggregationKeys['Custom Resource']
-    }
-}
+import { Nodes, ResourceKindType, AggregationKeys } from '../../types'
+import { DEPLOYMENT_STATUS, TIMELINE_STATUS } from '../../constants'
+import { getAggregator } from '../../../Pages'
 
 export function aggregateNodes(nodes: any[], podMetadata: PodMetadatum[]): AggregatedNodes {
     const podMetadataMap = mapByKey(podMetadata, 'name')
@@ -127,38 +77,7 @@ export function aggregateNodes(nodes: any[], podMetadata: PodMetadatum[]): Aggre
     )
 }
 
-let _nodeFilter = {
-    filterType: '',
-    searchString: '',
-}
-
-const publishFilteredNodes = () => {
-    const filteredNodes = _nodesSubject.getValue().filter((_node: Node) => {
-        if (!_nodeFilter.filterType && !_nodeFilter.searchString) {
-            return true
-        }
-
-        if (_nodeFilter.filterType === 'ALL') {
-            return true
-        }
-
-        if (_nodeFilter.filterType.toLowerCase() === _node.health?.status?.toLowerCase()) {
-            return true
-        }
-
-        return false
-    })
-
-    _nodesFilteredSubject.next([...filteredNodes])
-}
-
-export const getAppDetails = (): AppDetails => _appDetailsSubject.getValue()
-
-export const updateFilterType = (filterType: string) => {
-    _nodeFilter = { ..._nodeFilter, filterType }
-    publishFilteredNodes()
-}
-
+// NOTE: Need to improve logic since in some cases the unknown status would leak to previous entites, can do that by not setting deploymentStatus as Failed by ourselves and let backend be source of truth of that
 export const processDeploymentStatusDetailsData = (
     data?: DeploymentStatusDetailsType,
 ): DeploymentStatusDetailsBreakdownDataType => {
@@ -565,3 +484,44 @@ export const decode = (data, isEncoded: boolean = false) =>
             agg[curr.key] = curr.value
             return agg
         }, {})
+
+export const getTriggerHistoryFilterCriteria = ({
+    appId,
+    envId,
+    releaseId,
+    showCurrentReleaseDeployments,
+}: TriggerHistoryFilterCriteriaProps): string[] => {
+    const filterCriteria = [`${ResourceKindType.devtronApplication}|id|${appId}`, `environment|id|${envId}`]
+    if (showCurrentReleaseDeployments) {
+        filterCriteria.push(`${ResourceKindType.release}|id|${releaseId}`)
+    }
+
+    return filterCriteria
+}
+
+export const getParsedTriggerHistory = (result): DeploymentHistoryResultObject => {
+    const parsedResult = {
+        cdWorkflows: (result.cdWorkflows || []).map((deploymentHistory: DeploymentHistory) => ({
+            ...deploymentHistory,
+            triggerId: deploymentHistory?.cd_workflow_id,
+            podStatus: deploymentHistory?.pod_status,
+            startedOn: deploymentHistory?.started_on,
+            finishedOn: deploymentHistory?.finished_on,
+            pipelineId: deploymentHistory?.pipeline_id,
+            logLocation: deploymentHistory?.log_file_path,
+            triggeredBy: deploymentHistory?.triggered_by,
+            artifact: deploymentHistory?.image,
+            triggeredByEmail: deploymentHistory?.email_id,
+            stage: deploymentHistory?.workflow_type,
+            image: deploymentHistory?.image,
+            imageComment: deploymentHistory?.imageComment,
+            imageReleaseTags: deploymentHistory?.imageReleaseTags,
+            artifactId: deploymentHistory?.ci_artifact_id,
+            runSource: deploymentHistory?.runSource,
+        })),
+        appReleaseTagNames: result.appReleaseTagNames,
+        tagsEditable: result.tagsEditable,
+        hideImageTaggingHardDelete: result.hideImageTaggingHardDelete,
+    }
+    return parsedResult
+}

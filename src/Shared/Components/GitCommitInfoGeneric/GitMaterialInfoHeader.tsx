@@ -1,4 +1,4 @@
-import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
+import { CiPipelineSourceConfig } from '../CICDHistory/CiPipelineSourceConfig'
 
 /* eslint-disable react/prop-types */
 function getGitIcon(repoUrl) {

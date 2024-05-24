@@ -892,9 +892,6 @@ export interface DeploymentWindowProfileMetaData {
     warningMessage: string
 }
 
-export interface scrollableInterface {
-    autoBottomScroll: boolean
-}
 export interface EnvironmentListHelmResult {
     clusterId: number
     clusterName: string

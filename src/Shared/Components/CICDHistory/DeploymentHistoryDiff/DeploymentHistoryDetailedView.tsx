@@ -12,6 +12,7 @@ const DeploymentHistoryDetailedView = ({
     setFullScreenView,
     deploymentHistoryList,
     setDeploymentHistoryList,
+    renderRunSource,
 }: CompareViewDeploymentType) => {
     const { appId, pipelineId, historyComponent, baseConfigurationId, historyComponentName } =
         useParams<DeploymentHistoryParamsType>()
@@ -86,6 +87,7 @@ const DeploymentHistoryDetailedView = ({
                 setFullScreenView={setFullScreenView}
                 setLoader={setLoader}
                 setPreviousConfigAvailable={setPreviousConfigAvailable}
+                renderRunSource={renderRunSource}
             />
 
             <div className="historical-diff__container bcn-1">

@@ -1,13 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams, useRouteMatch } from 'react-router'
-import {
-    DEPLOYMENT_STATUS,
-    DeploymentAppTypes,
-    GenericEmptyState,
-    Progressing,
-    TIMELINE_STATUS,
-    URLS,
-} from '../../../Common'
+import { DeploymentAppTypes, GenericEmptyState, Progressing, URLS } from '../../../Common'
+import { DEPLOYMENT_STATUS, TIMELINE_STATUS } from '../../constants'
 import { getDeploymentStatusDetail } from './service'
 import {
     DeploymentDetailStepsType,
@@ -40,9 +34,10 @@ const DeploymentDetailSteps = ({
         deploymentStatus?.toUpperCase() !== TIMELINE_STATUS.ABORTED,
     )
     const isVirtualEnv = useRef(isVirtualEnvironment)
-    const processedData = isVirtualEnv.current
-        ? processVirtualEnvironmentDeploymentData()
-        : processDeploymentStatusDetailsData()
+    const processedData =
+        isVirtualEnv.current && processVirtualEnvironmentDeploymentData
+            ? processVirtualEnvironmentDeploymentData()
+            : processDeploymentStatusDetailsData()
     const [deploymentStatusDetailsBreakdownData, setDeploymentStatusDetailsBreakdownData] =
         useState<DeploymentStatusDetailsBreakdownDataType>(processedData)
 
@@ -111,17 +106,15 @@ const DeploymentDetailSteps = ({
                 pathname: `${URLS.APP}/${URLS.DEVTRON_CHARTS}/${URLS.APP_DEPLOYMNENT_HISTORY}/${appId}/env/${envId}/${URLS.DETAILS}/${URLS.APP_DETAILS_K8}`,
                 search: DEPLOYMENT_STATUS_QUERY_PARAM,
             })
-        else {
-            history.push({
-                pathname: `${URLS.APP}/${appId}/${URLS.APP_DETAILS}/${envId}/${URLS.APP_DETAILS_K8}`,
-                search: DEPLOYMENT_STATUS_QUERY_PARAM,
-            })
-        }
+        history.push({
+            pathname: `${URLS.APP}/${appId}/${URLS.APP_DETAILS}/${envId}/${URLS.APP_DETAILS_K8}`,
+            search: DEPLOYMENT_STATUS_QUERY_PARAM,
+        })
     }
 
     const getDeploymentStatusDetails = () =>
         !isVirtualEnv.current &&
-        !deploymentStatusDetailsBreakdownData.deploymentStatusBreakdown.APP_HEALTH.isCollapsed ? (
+        !deploymentStatusDetailsBreakdownData?.deploymentStatusBreakdown?.APP_HEALTH?.isCollapsed ? (
             <div className="h-100 flex">
                 <CDEmptyState
                     title={EMPTY_STATE_STATUS.DEPLOYMENT_DETAILS_SETPS_PROGRESSING.TITLE}
@@ -137,7 +130,9 @@ const DeploymentDetailSteps = ({
             </div>
         ) : (
             <div className="dc__mxw-1000 min-w-800">
-                {userApprovalMetadata && renderDeploymentApprovalInfo(userApprovalMetadata)}
+                {renderDeploymentApprovalInfo &&
+                    userApprovalMetadata &&
+                    renderDeploymentApprovalInfo(userApprovalMetadata)}
                 <DeploymentStatusDetailBreakdown
                     deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}
                     isVirtualEnvironment={isVirtualEnv.current}

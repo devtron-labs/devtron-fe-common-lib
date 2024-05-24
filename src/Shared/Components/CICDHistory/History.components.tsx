@@ -5,7 +5,7 @@ import { ClipboardButton, GenericEmptyState, extractImage, getUserRole, showErro
 import { EMPTY_STATE_STATUS } from './constants'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { GitChangesType, LogResizeButtonType, ScrollerType } from './types'
-import GitCommitInfoGeneric from './GitCommitInfoGeneric'
+import GitCommitInfoGeneric from '../GitCommitInfoGeneric/GitCommitInfoGeneric'
 import { CIListItem } from './Artifacts'
 import { ReactComponent as ZoomIn } from '../../../Assets/Icon/ic-fullscreen.svg'
 import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscreen.svg'
@@ -62,7 +62,7 @@ export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): 
                 disabled={!scrollToTop}
                 type="button"
                 onClick={scrollToTop}
-                aria-label="dropdown-button"
+                aria-label="scroll-to-top"
             >
                 <DropDownIcon className="rotate" style={{ ['--rotateBy' as any]: '180deg' }} />
             </button>
@@ -73,7 +73,7 @@ export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): 
                 disabled={!scrollToBottom}
                 type="button"
                 onClick={scrollToBottom}
-                aria-label="dropdown-button"
+                aria-label="scroll-to-button"
             >
                 <DropDownIcon className="rotate" />
             </button>

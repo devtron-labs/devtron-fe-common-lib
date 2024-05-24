@@ -1,7 +1,8 @@
+/* eslint-disable eqeqeq */
 import { useEffect, useState } from 'react'
 import { StyledRadioGroup as RadioGroup } from '../../../Common'
 import { NodeStatus, StatusFilterButtonType } from './types'
-import { updateFilterType } from './utils'
+import { IndexStore } from '../../Store'
 
 interface TabState {
     status: string
@@ -34,15 +35,15 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
     })
 
     const filters = [
-        { status: 'all', count: allNodeCount, isSelected: selectedTab === 'all' },
-        { status: NodeStatus.Missing, count: missingNodeCount, isSelected: NodeStatus.Missing === selectedTab },
-        { status: NodeStatus.Degraded, count: failedNodeCount, isSelected: NodeStatus.Degraded === selectedTab },
+        { status: 'all', count: allNodeCount, isSelected: selectedTab == 'all' },
+        { status: NodeStatus.Missing, count: missingNodeCount, isSelected: NodeStatus.Missing == selectedTab },
+        { status: NodeStatus.Degraded, count: failedNodeCount, isSelected: NodeStatus.Degraded == selectedTab },
         {
             status: NodeStatus.Progressing,
             count: progressingNodeCount,
-            isSelected: NodeStatus.Progressing === selectedTab,
+            isSelected: NodeStatus.Progressing == selectedTab,
         },
-        { status: NodeStatus.Healthy, count: healthyNodeCount, isSelected: NodeStatus.Healthy === selectedTab },
+        { status: NodeStatus.Healthy, count: healthyNodeCount, isSelected: NodeStatus.Healthy == selectedTab },
     ]
 
     useEffect(() => {
@@ -56,7 +57,7 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
         } else if (handleFilterClick) {
             handleFilterClick(selectedTab)
         } else {
-            updateFilterType(selectedTab.toUpperCase())
+            IndexStore.updateFilterType(selectedTab.toUpperCase())
         }
     }, [nodes, selectedTab])
 

@@ -14,7 +14,9 @@ import { ReactComponent as Check } from '../../../Assets/Icon/ic-check-circle.sv
 import { ReactComponent as Abort } from '../../../Assets/Icon/ic-abort.svg'
 import { SourceTypeMap, createGitCommitUrl } from '../../../Common/Common.service'
 import GitMaterialInfoHeader from './GitMaterialInfoHeader'
-import { DATE_TIME_FORMATS, MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../../Common/Constants'
+import { DATE_TIME_FORMATS } from '../../../Common/Constants'
+import { MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../constants'
+import { GitCommitInfoGenericProps } from './types'
 
 const GitCommitInfoGeneric = ({
     materialSourceType,
@@ -26,7 +28,7 @@ const GitCommitInfoGeneric = ({
     canTriggerBuild = false,
     index,
     isExcluded = false,
-}) => {
+}: GitCommitInfoGenericProps) => {
     const [showSeeMore, setShowSeeMore] = useState(true)
 
     function _lowerCaseObject(input): any {
@@ -234,7 +236,8 @@ const GitCommitInfoGeneric = ({
                     ) : null}
                     {_lowerCaseCommitInfo.date ? (
                         <div className="material-history__text flex left">
-                            <CalendarIcon className="icon-dim-16 mr-8" /> {_lowerCaseCommitInfo.date}
+                            <CalendarIcon className="icon-dim-16 mr-8" />
+                            {moment(_lowerCaseCommitInfo.date).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
                         </div>
                     ) : null}
                     {_lowerCaseCommitInfo.message ? (
