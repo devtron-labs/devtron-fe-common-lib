@@ -73,6 +73,8 @@ const useUrlFilters = <T = string, K = unknown>({
     const _resetPageNumber = () => {
         if (pageNumber !== DEFAULT_PAGE_NUMBER) {
             _updateSearchParam(PAGE_NUMBER, DEFAULT_PAGE_NUMBER)
+        } else {
+            history.replace({ search: searchParams.toString() })
         }
     }
 
