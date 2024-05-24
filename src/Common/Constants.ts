@@ -66,7 +66,9 @@ export const ROUTES = {
     DEPLOYMENT_STATUS: 'app/deployment-status/timeline',
     MANUAL_SYNC: 'app/deployment-status/manual-sync',
     CD_CONFIG: 'app/cd-pipeline',
+    CONFIG_CD_PIPELINE: 'config/cd-pipeline',
     MODULE_CONFIGURED: 'module/config',
+    RESOURCE_HISTORY_DEPLOYMENT: 'resource/history/deployment',
 }
 
 export enum KEY_VALUE {
@@ -486,66 +488,3 @@ export const DATE_TIME_FORMATS = {
     TWELVE_HOURS_FORMAT_WITHOUT_WEEKDAY: 'DD MMM YYYY, hh:mm A',
     TWELVE_HOURS_EXPORT_FORMAT: 'DD-MMM-YYYY hh.mm A',
 }
-
-export enum TIMELINE_STATUS {
-    DEPLOYMENT_INITIATED = 'DEPLOYMENT_INITIATED',
-    GIT_COMMIT = 'GIT_COMMIT',
-    GIT_COMMIT_FAILED = 'GIT_COMMIT_FAILED',
-    ARGOCD_SYNC = 'ARGOCD_SYNC',
-    ARGOCD_SYNC_FAILED = 'ARGOCD_SYNC_FAILED',
-    KUBECTL_APPLY = 'KUBECTL_APPLY',
-    KUBECTL_APPLY_STARTED = 'KUBECTL_APPLY_STARTED',
-    KUBECTL_APPLY_SYNCED = 'KUBECTL_APPLY_SYNCED',
-    HEALTHY = 'HEALTHY',
-    APP_HEALTH = 'APP_HEALTH',
-    DEPLOYMENT_FAILED = 'FAILED',
-    FETCH_TIMED_OUT = 'TIMED_OUT',
-    UNABLE_TO_FETCH_STATUS = 'UNABLE_TO_FETCH_STATUS',
-    DEGRADED = 'DEGRADED',
-    DEPLOYMENT_SUPERSEDED = 'DEPLOYMENT_SUPERSEDED',
-    ABORTED = 'ABORTED',
-    INPROGRESS = 'INPROGRESS',
-    HELM_PACKAGE_GENERATED = 'HELM_PACKAGE_GENERATED',
-    HELM_MANIFEST_PUSHED_TO_HELM_REPO = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO',
-    HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED',
-}
-
-export const DEPLOYMENT_STATUS = {
-    SUCCEEDED: 'succeeded',
-    HEALTHY: 'healthy',
-    FAILED: 'failed',
-    TIMED_OUT: 'timed_out',
-    UNABLE_TO_FETCH: 'unable_to_fetch',
-    INPROGRESS: 'inprogress',
-    PROGRESSING: 'progressing',
-    STARTING: 'starting',
-    INITIATING: 'initiating',
-    SUPERSEDED: 'superseded',
-    QUEUED: 'queued',
-    UNKNOWN: 'unknown',
-    CHECKING: 'checking',
-} as const
-
-export const statusIcon = {
-    failed: 'failed',
-    queued: 'queued',
-    suspended: 'suspended',
-    starting: 'progressing',
-    initiating: 'progressing',
-    unknown: 'unknown',
-    degraded: 'degraded',
-    healthy: 'healthy',
-    notdeployed: 'not-deployed',
-    missing: 'missing',
-    progressing: 'progressing',
-    deploymentinitiated: 'progressing',
-    hibernating: 'hibernating',
-    succeeded: 'healthy',
-    timedout: 'timed-out',
-    unabletofetch: 'failed',
-}
-
-export const APP_STATUS_HEADERS = ['KIND', 'NAME', 'STATUS', 'MESSAGE']
-
-export const MATERIAL_EXCLUDE_TIPPY_TEXT =
-    'Not available for build as this commit contains changes in excluded files or folders'

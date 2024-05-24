@@ -1,19 +1,12 @@
 /* eslint-disable no-nested-ternary */
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useRouteMatch, useParams } from 'react-router'
 import { GenericEmptyState, Progressing } from '../../../../Common'
 import { ReactComponent as RightArrow } from '../../../../Assets/Icon/ic-arrow-forward.svg'
-import { DeploymentTemplateList } from '../types'
-import { DeploymentHistoryParamsType } from './types'
+import { DeploymentHistoryParamsType, TemplateConfiguration } from './types'
 import { getDeploymentHistoryList } from '../service'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EMPTY_STATE_STATUS } from '../constants'
-
-interface TemplateConfiguration {
-    setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
-    deploymentHistoryList: DeploymentTemplateList[]
-    setDeploymentHistoryList: React.Dispatch<React.SetStateAction<DeploymentTemplateList[]>>
-}
 
 const DeploymentHistoryConfigList = ({
     setFullScreenView,

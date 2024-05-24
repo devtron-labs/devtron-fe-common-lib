@@ -8,6 +8,17 @@ import {
 } from '../Common'
 import { PatchOperationType } from './constants'
 
+export enum EnvType {
+    CHART = 'helm_charts',
+    APPLICATION = 'apps',
+}
+
+export interface EnvDetails {
+    envType: EnvType
+    envId: number
+    appId: number
+}
+
 interface OtherEnvironment {
     environmentId: number
     environmentName: string
@@ -110,6 +121,15 @@ export interface Node {
     port: number
     canBeHibernated: boolean
     isHibernated: boolean
+}
+
+// eslint-disable-next-line no-use-before-define
+export interface iNodes extends Array<iNode> {}
+
+export interface iNode extends Node {
+    childNodes: iNodes
+    type: NodeType
+    status: string
 }
 export interface ResourceTree {
     conditions: any
@@ -373,6 +393,7 @@ export enum ResourceKindType {
     cluster = 'cluster',
     release = 'release',
     releaseTrack = 'release-track',
+    cdPipeline = 'cd-pipeline',
 }
 
 /**
@@ -426,3 +447,12 @@ export type IntersectionOptions = {
 }
 
 export type IntersectionChangeHandler = (entry: IntersectionObserverEntry) => void
+
+export interface scrollableInterface {
+    autoBottomScroll: boolean
+}
+
+export enum PromiseAllStatusType {
+    FULFILLED = 'fulfilled',
+    REJECTED = 'rejected',
+}

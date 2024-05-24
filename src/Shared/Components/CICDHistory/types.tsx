@@ -8,9 +8,10 @@ import {
     FilterConditionsListType,
     DeploymentAppTypes,
     ResponseType,
+    PaginationProps,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
-import { GitTriggers, Node, NodeType } from '../../types'
+import { GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
 import { TERMINAL_STATUS_MAP } from './constants'
 
 export enum HistoryComponentType {
@@ -29,6 +30,16 @@ export enum FetchIdDataStatus {
 export interface LogResizeButtonType {
     fullScreenView: boolean
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export interface RunSource {
+    id: number
+    identifier: string
+    kind: ResourceKindType
+    name: string
+    releaseTrackName: string
+    releaseVersion: string
+    version: ResourceVersionType
 }
 
 interface CiMaterial {
@@ -86,6 +97,7 @@ export interface History {
     appliedFiltersTimestamp?: string
     promotionApprovalMetadata?: PromotionApprovalMetadataType
     triggerMetadata?: string
+    runSource?: RunSource
 }
 
 export interface DeploymentHistoryResultObject {
@@ -99,7 +111,11 @@ export interface DeploymentHistoryResult extends ResponseType {
     result?: DeploymentHistoryResultObject
 }
 
-export interface SidebarType {
+export interface renderRunSourceType {
+    renderRunSource?: (runSource: RunSource) => JSX.Element
+}
+
+export interface SidebarType extends renderRunSourceType {
     type: HistoryComponentType
     filterOptions: CICDSidebarFilterOptionType[]
     triggerHistory: Map<number, History>
@@ -110,7 +126,7 @@ export interface SidebarType {
     children?: React.ReactNode
 }
 
-export interface HistorySummaryCardType {
+export interface HistorySummaryCardType extends renderRunSourceType {
     id: number
     status: string
     startedOn: string
@@ -122,6 +138,7 @@ export interface HistorySummaryCardType {
     type: HistoryComponentType
     stage: DeploymentStageType
     dataTestId?: string
+    runSource?: RunSource
 }
 
 export interface SummaryTooltipCardType {
@@ -329,7 +346,7 @@ export interface VirtualHistoryArtifactProps {
         workflowId: number
     }
 }
-export interface TriggerOutputProps {
+export interface TriggerOutputProps extends renderRunSourceType {
     fullScreenView: boolean
     syncState: (triggerId: number, triggerDetails: History, triggerDetailsError: any) => void
     triggerHistory: Map<number, History>
@@ -338,19 +355,18 @@ export interface TriggerOutputProps {
     setDeploymentHistoryList: React.Dispatch<React.SetStateAction<DeploymentTemplateList[]>>
     deploymentAppType: DeploymentAppTypes
     isBlobStorageConfigured: boolean
-    deploymentHistoryResult: History[]
     appReleaseTags: string[]
     tagsEditable: boolean
     hideImageTaggingHardDelete: boolean
     fetchIdData: FetchIdDataStatus
     selectedEnvironmentName?: string
-    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
-    renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
-    processVirtualEnvironmentDeploymentData: (
+    renderCIListHeader?: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+    renderDeploymentApprovalInfo?: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
+    processVirtualEnvironmentDeploymentData?: (
         data?: DeploymentStatusDetailsType,
     ) => DeploymentStatusDetailsBreakdownDataType
-    renderVirtualHistoryArtifacts: (virtualHistoryArtifactProps: VirtualHistoryArtifactProps) => JSX.Element
-    renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string) => JSX.Element
+    renderVirtualHistoryArtifacts?: (virtualHistoryArtifactProps: VirtualHistoryArtifactProps) => JSX.Element
+    renderDeploymentHistoryTriggerMetaText?: (triggerMetaData: string) => JSX.Element
 }
 
 export interface DeploymentStatusDetailBreakdownType {
@@ -406,6 +422,7 @@ export interface HistoryDiffSelectorList {
     deployedBy: string
     deploymentStatus: string
     wfrId?: number
+    runSource?: RunSource
 }
 
 export interface HistoryDiffSelectorRes {
@@ -488,7 +505,7 @@ export const STATUS_SORTING_ORDER = {
     [NodeStatus.Healthy]: 4,
 }
 
-export interface TriggerDetails extends ResponseType {
+export interface TriggerDetailsResponseType extends ResponseType {
     result?: History
 }
 
@@ -574,6 +591,7 @@ export interface DeploymentHistory {
     imageComment?: ImageComment
     imageReleaseTags?: ReleaseTag[]
     ci_artifact_id?: number
+    runSource?: RunSource
 }
 
 type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE_GREEN'
@@ -619,6 +637,27 @@ export interface ModuleConfigResponse extends ResponseType {
     result?: {
         enabled: boolean
     }
+}
+
+export interface DeploymentHistoryBaseParamsType {
+    appId: string
+    envId: string
+    pipelineId: string
+}
+
+export interface TriggerHistoryProps {
+    appId: number
+    envId: number
+    pagination: Pick<PaginationProps, 'offset' | 'size'>
+    releaseId?: number
+    showCurrentReleaseDeployments?: boolean
+}
+
+export interface TriggerHistoryFilterCriteriaProps {
+    appId: number
+    envId: number
+    releaseId: number
+    showCurrentReleaseDeployments: boolean
 }
 
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])

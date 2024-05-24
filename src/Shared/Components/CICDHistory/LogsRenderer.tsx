@@ -2,7 +2,7 @@ import { useParams } from 'react-router'
 import { useEffect, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
 import { Progressing, Host, useInterval, DOCUMENTATION, ROUTES } from '../../../Common'
-import { HistoryComponentType, LogsRendererType } from './types'
+import { DeploymentHistoryBaseParamsType, HistoryComponentType, LogsRendererType } from './types'
 import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
@@ -123,8 +123,12 @@ function useCIEventSource(url: string, maxLength?: number) {
     return [dataVal, eventSourceRef.current, logsNotAvailableError]
 }
 
-const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType }: LogsRendererType): JSX.Element => {
-    const { pipelineId, envId, appId } = useParams<{ pipelineId: string; envId: string; appId: string }>()
+export const LogsRenderer = ({
+    triggerDetails,
+    isBlobStorageConfigured,
+    parentType,
+}: LogsRendererType): JSX.Element => {
+    const { pipelineId, envId, appId } = useParams<DeploymentHistoryBaseParamsType>()
     const logsURL =
         parentType === HistoryComponentType.CI
             ? `${Host}/${ROUTES.CI_CONFIG_GET}/${pipelineId}/workflow/${triggerDetails.id}/logs`

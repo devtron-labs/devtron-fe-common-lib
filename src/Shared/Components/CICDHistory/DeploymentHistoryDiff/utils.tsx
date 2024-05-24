@@ -1,9 +1,8 @@
 import { components } from 'react-select'
-// import { multiSelectStyles } from '../../../../Common'
+import { multiSelectStyles } from '../../../../Common/MultiSelectCustomization'
 
 export const dropdownStyles = {
-    // TODO : Use MultiSelectStyles here
-    // ...multiSelectStyles,
+    ...multiSelectStyles,
     menu: (base) => ({ ...base, zIndex: 9999, textAlign: 'left', width: '150%' }),
     control: (base) => ({
         ...base,
@@ -46,24 +45,28 @@ export const dropdownStyles = {
 export const Option = (props: any) => {
     const {
         isSelected,
-        data: { status, author },
+        data: { status, author, runSource, renderRunSource },
         label,
     } = props
     return (
         <components.Option {...props}>
             <div className={`flex left pt-8 pb-8 pl-8 pr-8 ${isSelected ? 'bcb-1' : ''}`}>
                 <div
-                    className={`dc__app-summary__icon icon-dim-22 ${status
+                    className={`flexbox dc__align-items-start dc__app-summary__icon icon-dim-22 ${status
                         .toLocaleLowerCase()
                         .replace(/\s+/g, '')} mr-8`}
                 />
-                <div>
-                    <div className="cn-9 fs-13"> {label}</div>
-                    <div className="cn-7 flex left">
-                        <span className="dc__capitalize">Deploy</span>{' '}
-                        <div className="dc__bullet ml-4 dc__bullet--d2 mr-4" />{' '}
-                        {author === 'system' ? 'auto-triggered' : author}
+                <div className="flexbox-col dc__gap-8">
+                    <div>
+                        <div className="cn-9 fs-13"> {label}</div>
+                        <div className="cn-7 flex left">
+                            <span className="dc__capitalize">Deploy</span>&nbsp;
+                            <div className="dc__bullet ml-4 dc__bullet--d2 mr-4" />
+                            &nbsp;
+                            {author === 'system' ? 'auto-triggered' : author}
+                        </div>
                     </div>
+                    {runSource && renderRunSource(runSource)}
                 </div>
             </div>
         </components.Option>

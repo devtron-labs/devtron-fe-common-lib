@@ -38,7 +38,8 @@ export const CiPipelineSourceConfig = ({
     function _buildHoverHtmlForWebhook(eventName, condition, selectors) {
         const _conditions = []
         Object.keys(condition).forEach((_selectorId) => {
-            const _selector = selectors.find((i) => i.id === _selectorId)
+            // eslint-disable-next-line eqeqeq
+            const _selector = selectors.find((i) => i.id == _selectorId)
             _conditions.push({ name: _selector ? _selector.name : '', value: condition[_selectorId] })
         })
 
@@ -81,7 +82,7 @@ export const CiPipelineSourceConfig = ({
     }, [sourceValue])
 
     // tippy content for regex type
-    const rendeRegexSourceVal = (): JSX.Element => (
+    const renderRegexSourceVal = (): JSX.Element => (
         <>
             <>
                 <div className="fw-6">Regex</div>
@@ -97,7 +98,7 @@ export const CiPipelineSourceConfig = ({
         </>
     )
     // for non webhook case, data is already set in use state initialisation
-    function _init() {
+    async function _init() {
         if (!_isWebhook) {
             return
         }
@@ -106,7 +107,7 @@ export const CiPipelineSourceConfig = ({
         const _condition = _sourceValueObj.condition
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        getWebhookEventsForEventId(_eventId).then((_res) => {
+        await getWebhookEventsForEventId(_eventId).then((_res) => {
             const _webhookEvent = _res.result
             setSourceValueBase(_webhookEvent.name)
             setSourceValueAdv(_buildHoverHtmlForWebhook(_webhookEvent.name, _condition, _webhookEvent.selectors))
@@ -118,15 +119,16 @@ export const CiPipelineSourceConfig = ({
         if (!_isRegex) {
             return
         }
-        setSourceValueAdv(rendeRegexSourceVal())
+        setSourceValueAdv(renderRegexSourceVal())
     }
 
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         _init()
         regexTippyContent()
     }, [])
 
-    const getRegexorBranchIcon = () => (_isRegex ? regexIcon : branchIcon)
+    const getRegexOrBranchIcon = () => (_isRegex ? regexIcon : branchIcon)
 
     return (
         <div className={`flex left ${showTooltip ? 'branch-name' : ''}`}>
@@ -135,7 +137,7 @@ export const CiPipelineSourceConfig = ({
                 <>
                     {showIcons && (
                         <img
-                            src={_isWebhook ? webhookIcon : getRegexorBranchIcon()}
+                            src={_isWebhook ? webhookIcon : getRegexOrBranchIcon()}
                             alt="branch"
                             className="icon-dim-12 mr-5"
                         />

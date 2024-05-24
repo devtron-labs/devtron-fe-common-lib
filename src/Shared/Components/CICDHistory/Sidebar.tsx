@@ -13,7 +13,6 @@ import {
     SummaryTooltipCardType,
     FetchIdDataStatus,
 } from './types'
-import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
 import { getCustomOptionSelectionStyle } from '../ReactSelect'
 import DetectBottom from './DetectBottom'
 import {
@@ -28,6 +27,7 @@ import { ReactComponent as ICDocker } from '../../../Assets/Icon/ic-docker.svg'
 import { GitTriggers } from '../../types'
 import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
 import { triggerStatus } from '../../../Common/AppStatus/utils'
+import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
 
 const SummaryTooltipCard = React.memo(
     ({
@@ -127,6 +127,8 @@ const HistorySummaryCard = React.memo(
         type,
         stage,
         dataTestId,
+        renderRunSource,
+        runSource,
     }: HistorySummaryCardType): JSX.Element => {
         const { path, params } = useRouteMatch()
         const { pathname } = useLocation()
@@ -163,6 +165,7 @@ const HistorySummaryCard = React.memo(
                 targetCardRef.current = el
             }
         }
+
         return (
             <ConditionalWrap
                 condition={Array.isArray(ciMaterials)}
@@ -188,42 +191,47 @@ const HistorySummaryCard = React.memo(
             >
                 <NavLink
                     to={getPath}
-                    className="w-100 ci-details__build-card-container"
+                    className="w-100 deployment-history-card-container"
                     data-testid={dataTestId}
                     activeClassName="active"
                     ref={assignTargetCardRef}
                 >
-                    <div className="w-100 ci-details__build-card">
+                    <div className="w-100 deployment-history-card">
                         <div
                             className={`dc__app-summary__icon icon-dim-20 ${triggerStatus(status)
                                 ?.toLocaleLowerCase()
                                 .replace(/\s+/g, '')}`}
                         />
-                        <div className="flex column left dc__ellipsis-right">
-                            <div className="cn-9 fs-14">
-                                {moment(startedOn).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
-                            </div>
-                            <div className="flex left cn-7 fs-12">
-                                {isCDType && (
-                                    <>
-                                        <div className="dc__capitalize">
-                                            {['pre', 'post'].includes(stage?.toLowerCase()) ? `${stage}-deploy` : stage}
-                                        </div>
-                                        <span className="dc__bullet dc__bullet--d2 ml-4 mr-4" />
-
-                                        {artifact && (
-                                            <div className="dc__app-commit__hash dc__app-commit__hash--no-bg">
-                                                <ICDocker className="commit-hash__icon grayscale" />
-                                                {artifact.split(':')[1].slice(-12)}
+                        <div className="flexbox-col dc__gap-8">
+                            <div className="flex column left dc__ellipsis-right">
+                                <div className="cn-9 fs-14">
+                                    {moment(startedOn).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
+                                </div>
+                                <div className="flex left cn-7 fs-12">
+                                    {isCDType && (
+                                        <>
+                                            <div className="dc__capitalize">
+                                                {['pre', 'post'].includes(stage?.toLowerCase())
+                                                    ? `${stage}-deploy`
+                                                    : stage}
                                             </div>
-                                        )}
-                                        <span className="dc__bullet dc__bullet--d2 ml-4 mr-4" />
-                                    </>
-                                )}
-                                <div className="cn-7 fs-12">
-                                    {triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}
+                                            <span className="dc__bullet dc__bullet--d2 ml-4 mr-4" />
+
+                                            {artifact && (
+                                                <div className="dc__app-commit__hash dc__app-commit__hash--no-bg">
+                                                    <ICDocker className="commit-hash__icon grayscale" />
+                                                    {artifact.split(':')[1].slice(-12)}
+                                                </div>
+                                            )}
+                                            <span className="dc__bullet dc__bullet--d2 ml-4 mr-4" />
+                                        </>
+                                    )}
+                                    <div className="cn-7 fs-12">
+                                        {triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}
+                                    </div>
                                 </div>
                             </div>
+                            {runSource && renderRunSource && renderRunSource(runSource)}
                         </div>
                     </div>
                 </NavLink>
@@ -242,6 +250,7 @@ const Sidebar = React.memo(
         fetchIdData,
         handleViewAllHistory,
         children,
+        renderRunSource,
     }: SidebarType) => {
         const { pipelineId, appId, envId } = useParams<{ appId: string; envId: string; pipelineId: string }>()
         const { push } = useHistory()
@@ -324,7 +333,11 @@ const Sidebar = React.memo(
                             borderBottom: '1px solid var(--n-100, #EDF1F5)',
                         }}
                     >
-                        <label htmlFor="text" className="form__label" data-testid="select-history-heading">
+                        <label
+                            htmlFor="history-pipeline-selector"
+                            className="form__label"
+                            data-testid="select-history-heading"
+                        >
                             Select {selectLabel()}
                         </label>
                         <ReactSelect
@@ -343,6 +356,7 @@ const Sidebar = React.memo(
                             }}
                             styles={FILTER_STYLE}
                             menuPosition="fixed"
+                            inputId="history-pipeline-selector"
                         />
                     </div>
                 )}
@@ -368,6 +382,8 @@ const Sidebar = React.memo(
                                 artifact={triggerDetails.artifact}
                                 stage={triggerDetails.stage}
                                 type={type}
+                                runSource={triggerDetails.runSource}
+                                renderRunSource={renderRunSource}
                             />
                         ))}
                     {hasMore && (fetchIdData === FetchIdDataStatus.SUSPEND || !fetchIdData) && (
