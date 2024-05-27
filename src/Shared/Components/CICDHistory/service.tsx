@@ -1,5 +1,5 @@
 /* eslint-disable dot-notation */
-import { ROUTES, ResponseType, get, getUrlWithSearchParams, showError, trash } from '../../../Common'
+import { ROUTES, ResponseType, get, getUrlWithSearchParams, trash } from '../../../Common'
 import { ResourceKindType, ResourceVersionType } from '../../types'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from './constants'
 import {
@@ -14,7 +14,7 @@ import {
     HistoryDiffSelectorRes,
     ModuleConfigResponse,
     TriggerDetailsResponseType,
-    TriggerHistoryProps,
+    TriggerHistoryParamsType,
 } from './types'
 import { decode, getParsedTriggerHistory, getTriggerHistoryFilterCriteria } from './utils'
 
@@ -262,24 +262,18 @@ export const getTriggerHistory = async ({
     pagination,
     releaseId,
     showCurrentReleaseDeployments = false,
-}: TriggerHistoryProps): Promise<Pick<DeploymentHistoryResult, 'result'>> => {
+}: TriggerHistoryParamsType): Promise<Pick<DeploymentHistoryResult, 'result'>> => {
     const url = getUrlWithSearchParams(
-        `${ROUTES.RESOURCE_HISTORY_DEPLOYMENT}/${ResourceKindType.cdPipeline}/${-ResourceVersionType.v1}`,
+        `${ROUTES.RESOURCE_HISTORY_DEPLOYMENT}/${ResourceKindType.cdPipeline}/${ResourceVersionType.v1}`,
         {
             filterCriteria: getTriggerHistoryFilterCriteria({ appId, envId, releaseId, showCurrentReleaseDeployments }),
             offset: pagination.offset,
             limit: pagination.size,
         },
     )
-
-    try {
-        const { result } = await get(url)
-        const parsedResult = getParsedTriggerHistory(result)
-        return { result: parsedResult }
-    } catch (error) {
-        showError(error)
-        throw error
-    }
+    const { result } = await get(url)
+    const parsedResult = getParsedTriggerHistory(result)
+    return { result: parsedResult }
 }
 
 export const getCDPipelines = (appId: number | string): Promise<CDPipelines> => {

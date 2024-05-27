@@ -8,6 +8,7 @@ import {
     TriggerHistoryFilterCriteriaProps,
     DeploymentHistoryResultObject,
     DeploymentHistory,
+    TriggerHistoryFilterCriteriaType,
 } from './types'
 import { Nodes, ResourceKindType, AggregationKeys } from '../../types'
 import { DEPLOYMENT_STATUS, TIMELINE_STATUS } from '../../constants'
@@ -490,8 +491,11 @@ export const getTriggerHistoryFilterCriteria = ({
     envId,
     releaseId,
     showCurrentReleaseDeployments,
-}: TriggerHistoryFilterCriteriaProps): string[] => {
-    const filterCriteria = [`${ResourceKindType.devtronApplication}|id|${appId}`, `environment|id|${envId}`]
+}: TriggerHistoryFilterCriteriaProps): TriggerHistoryFilterCriteriaType => {
+    const filterCriteria: TriggerHistoryFilterCriteriaType = [
+        `${ResourceKindType.devtronApplication}|id|${appId}`,
+        `environment|id|${envId}`,
+    ]
     if (showCurrentReleaseDeployments) {
         filterCriteria.push(`${ResourceKindType.release}|id|${releaseId}`)
     }

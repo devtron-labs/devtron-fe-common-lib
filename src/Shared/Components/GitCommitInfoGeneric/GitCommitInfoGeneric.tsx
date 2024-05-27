@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable eqeqeq */
 import { useState } from 'react'
 import moment from 'moment'
 import Tippy from '@tippyjs/react'
@@ -95,7 +95,7 @@ const GitCommitInfoGeneric = ({
                 <div className="material-history__body mt-4">
                     {Object.keys(_moreData).map((_key, idx) => {
                         let classes
-                        if (idx % 2 === 0) {
+                        if (idx % 2 == 0) {
                             classes = 'bcn-1'
                         }
                         return (
@@ -131,22 +131,22 @@ const GitCommitInfoGeneric = ({
 
     function handleMoreDataForWebhook() {
         const _moreData = {}
-        if (_webhookData.eventactiontype === 'merged') {
+        if (_webhookData.eventactiontype == 'merged') {
             Object.keys(_webhookData.data).forEach((_key) => {
                 if (
-                    _key !== 'author' &&
-                    _key !== 'date' &&
-                    _key !== 'git url' &&
-                    _key !== 'source branch name' &&
-                    _key !== 'source checkout' &&
-                    _key !== 'target branch name' &&
-                    _key !== 'target checkout' &&
-                    _key !== 'title'
+                    _key != 'author' &&
+                    _key != 'date' &&
+                    _key != 'git url' &&
+                    _key != 'source branch name' &&
+                    _key != 'source checkout' &&
+                    _key != 'target branch name' &&
+                    _key != 'target checkout' &&
+                    _key != 'title'
                 ) {
                     _moreData[_key] = _webhookData.data[_key]
                 }
             })
-        } else if (_webhookData.eventactiontype === 'non-merged') {
+        } else if (_webhookData.eventactiontype == 'non-merged') {
             Object.keys(_webhookData.data).forEach((_key) => {
                 if (_key !== 'author' && _key !== 'date' && _key !== 'target checkout') {
                     _moreData[_key] = _webhookData.data[_key]
@@ -252,7 +252,7 @@ const GitCommitInfoGeneric = ({
                 </>
             )}
 
-            {_isWebhook && _webhookData.eventactiontype === 'merged' && (
+            {_isWebhook && _webhookData.eventactiontype == 'merged' && (
                 <>
                     <div className="flex dc__content-space pr-16 ">
                         <div className="ml-16 ">
@@ -346,7 +346,7 @@ const GitCommitInfoGeneric = ({
                     {handleMoreDataForWebhook()}
                 </>
             )}
-            {_isWebhook && _webhookData.eventactiontype === 'non-merged' && (
+            {_isWebhook && _webhookData.eventactiontype == 'non-merged' && (
                 <>
                     <div className="flex left pr-16 pb-8" style={{ justifyContent: 'space-between' }}>
                         <div className="flex left cn-9 fs-13 ml-16"> {_webhookData.data['target checkout']}</div>

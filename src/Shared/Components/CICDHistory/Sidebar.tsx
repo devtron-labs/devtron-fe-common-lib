@@ -129,6 +129,7 @@ const HistorySummaryCard = React.memo(
         dataTestId,
         renderRunSource,
         runSource,
+        releaseId,
     }: HistorySummaryCardType): JSX.Element => {
         const { path, params } = useRouteMatch()
         const { pathname } = useLocation()
@@ -231,7 +232,7 @@ const HistorySummaryCard = React.memo(
                                     </div>
                                 </div>
                             </div>
-                            {runSource && renderRunSource && renderRunSource(runSource)}
+                            {runSource && renderRunSource && renderRunSource(runSource, releaseId)}
                         </div>
                     </div>
                 </NavLink>
@@ -251,6 +252,7 @@ const Sidebar = React.memo(
         handleViewAllHistory,
         children,
         renderRunSource,
+        releaseId,
     }: SidebarType) => {
         const { pipelineId, appId, envId } = useParams<{ appId: string; envId: string; pipelineId: string }>()
         const { push } = useHistory()
@@ -271,7 +273,7 @@ const Sidebar = React.memo(
                 push(generatePath(path, { appId, envId: selectedFilter.value, pipelineId: selectedFilter.pipelineId }))
             }
         }
-        function reloadNextAfterBottom() {
+        const reloadNextAfterBottom = () => {
             ReactGA.event({
                 category: 'pagination',
                 action: 'scroll',
@@ -384,10 +386,10 @@ const Sidebar = React.memo(
                                 type={type}
                                 runSource={triggerDetails.runSource}
                                 renderRunSource={renderRunSource}
+                                releaseId={releaseId}
                             />
                         ))}
                     {hasMore && (fetchIdData === FetchIdDataStatus.SUSPEND || !fetchIdData) && (
-                        // eslint-disable-next-line react/jsx-no-bind
                         <DetectBottom callback={reloadNextAfterBottom} />
                     )}
                 </div>

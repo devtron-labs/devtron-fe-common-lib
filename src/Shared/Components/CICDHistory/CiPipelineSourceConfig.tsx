@@ -59,17 +59,25 @@ export const CiPipelineSourceConfig = ({
         )
     }
 
-    const updateSourceValue = async () => {
+    const updateSourceValue = () => {
         if (_isWebhook) {
             const _sourceValueObj = JSON.parse(sourceValue)
-            await getWebhookEventsForEventId(_sourceValueObj.eventId).then((_res) => {
-                const _webhookEvent = _res.result
-                setSourceValueBase(_webhookEvent.name)
-                setSourceValueAdv(
-                    _buildHoverHtmlForWebhook(_webhookEvent.name, _sourceValueObj.condition, _webhookEvent.selectors),
-                )
-                setLoading(false)
-            })
+            getWebhookEventsForEventId(_sourceValueObj.eventId)
+                .then((_res) => {
+                    const _webhookEvent = _res.result
+                    setSourceValueBase(_webhookEvent.name)
+                    setSourceValueAdv(
+                        _buildHoverHtmlForWebhook(
+                            _webhookEvent.name,
+                            _sourceValueObj.condition,
+                            _webhookEvent.selectors,
+                        ),
+                    )
+                    setLoading(false)
+                })
+                .catch((error) => {
+                    throw error
+                })
         } else {
             setSourceValueBase(sourceValue)
             setSourceValueAdv(sourceValue)
@@ -77,7 +85,6 @@ export const CiPipelineSourceConfig = ({
     }
 
     useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         updateSourceValue()
     }, [sourceValue])
 
@@ -98,7 +105,7 @@ export const CiPipelineSourceConfig = ({
         </>
     )
     // for non webhook case, data is already set in use state initialisation
-    async function _init() {
+    function _init() {
         if (!_isWebhook) {
             return
         }
@@ -106,13 +113,16 @@ export const CiPipelineSourceConfig = ({
         const _eventId = _sourceValueObj.eventId
         const _condition = _sourceValueObj.condition
 
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        await getWebhookEventsForEventId(_eventId).then((_res) => {
-            const _webhookEvent = _res.result
-            setSourceValueBase(_webhookEvent.name)
-            setSourceValueAdv(_buildHoverHtmlForWebhook(_webhookEvent.name, _condition, _webhookEvent.selectors))
-            setLoading(false)
-        })
+        getWebhookEventsForEventId(_eventId)
+            .then((_res) => {
+                const _webhookEvent = _res.result
+                setSourceValueBase(_webhookEvent.name)
+                setSourceValueAdv(_buildHoverHtmlForWebhook(_webhookEvent.name, _condition, _webhookEvent.selectors))
+                setLoading(false)
+            })
+            .catch((error) => {
+                throw error
+            })
     }
 
     function regexTippyContent() {
@@ -123,7 +133,6 @@ export const CiPipelineSourceConfig = ({
     }
 
     useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         _init()
         regexTippyContent()
     }, [])

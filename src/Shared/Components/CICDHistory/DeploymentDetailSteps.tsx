@@ -81,9 +81,10 @@ const DeploymentDetailSteps = ({
     }, [isVirtualEnvironment])
 
     const processDeploymentStatusData = (deploymentStatusDetailRes: DeploymentStatusDetailsType): void => {
-        const processedDeploymentStatusDetailsData = isVirtualEnv.current
-            ? processVirtualEnvironmentDeploymentData(deploymentStatusDetailRes)
-            : processDeploymentStatusDetailsData(deploymentStatusDetailRes)
+        const processedDeploymentStatusDetailsData =
+            isVirtualEnv.current && processVirtualEnvironmentDeploymentData
+                ? processVirtualEnvironmentDeploymentData(deploymentStatusDetailRes)
+                : processDeploymentStatusDetailsData(deploymentStatusDetailRes)
         clearDeploymentStatusTimer()
         // If deployment status is in progress then fetch data in every 10 seconds
 
@@ -101,11 +102,13 @@ const DeploymentDetailSteps = ({
     }
 
     const redirectToDeploymentStatus = () => {
-        if (isHelmApps)
+        if (isHelmApps) {
             history.push({
                 pathname: `${URLS.APP}/${URLS.DEVTRON_CHARTS}/${URLS.APP_DEPLOYMNENT_HISTORY}/${appId}/env/${envId}/${URLS.DETAILS}/${URLS.APP_DETAILS_K8}`,
                 search: DEPLOYMENT_STATUS_QUERY_PARAM,
             })
+            return
+        }
         history.push({
             pathname: `${URLS.APP}/${appId}/${URLS.APP_DETAILS}/${envId}/${URLS.APP_DETAILS_K8}`,
             search: DEPLOYMENT_STATUS_QUERY_PARAM,

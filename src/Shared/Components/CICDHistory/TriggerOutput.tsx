@@ -43,7 +43,7 @@ import {
     DeploymentStatusDetailsBreakdownDataType,
     RenderCIListHeaderProps,
     VirtualHistoryArtifactProps,
-    RunSource,
+    RunSourceType,
 } from './types'
 import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger, getCDBuildReport } from './service'
 import {
@@ -388,7 +388,9 @@ const StartDetails = ({
                 )}
             </div>
 
-            {triggerMetadata && renderDeploymentHistoryTriggerMetaText(triggerMetadata)}
+            {triggerMetadata &&
+                renderDeploymentHistoryTriggerMetaText &&
+                renderDeploymentHistoryTriggerMetaText(triggerMetadata)}
             {isJobView && (
                 <div className="pt-4 pb-4 pr-0 pl-0">
                     <span className="fw-6 fs-14">Env</span>
@@ -500,7 +502,8 @@ const HistoryLogs: React.FC<{
     tagsEditable: boolean
     hideImageTaggingHardDelete: boolean
     selectedEnvironmentName?: string
-    renderRunSource: (runSource: RunSource) => JSX.Element
+    releaseId?: number
+    renderRunSource: (runSource: RunSourceType, releaseId: number) => JSX.Element
     processVirtualEnvironmentDeploymentData: (
         data?: DeploymentStatusDetailsType,
     ) => DeploymentStatusDetailsBreakdownDataType
@@ -523,6 +526,7 @@ const HistoryLogs: React.FC<{
     tagsEditable,
     hideImageTaggingHardDelete,
     selectedEnvironmentName,
+    releaseId,
     renderRunSource,
     processVirtualEnvironmentDeploymentData,
     renderDeploymentApprovalInfo,
@@ -624,12 +628,13 @@ const HistoryLogs: React.FC<{
                                     deploymentHistoryList={deploymentHistoryList}
                                     setFullScreenView={setFullScreenView}
                                     renderRunSource={renderRunSource}
+                                    releaseId={releaseId}
                                 />
                             </Route>
                         )}
                         {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
                             <Route path={`${path}/artifacts`}>
-                                {triggerDetails.IsVirtualEnvironment ? (
+                                {triggerDetails.IsVirtualEnvironment && renderVirtualHistoryArtifacts ? (
                                     renderVirtualHistoryArtifacts({
                                         status: triggerDetails.status,
                                         title: triggerDetails.helmPackageName,
@@ -698,6 +703,7 @@ const TriggerOutput = ({
     processVirtualEnvironmentDeploymentData,
     renderVirtualHistoryArtifacts,
     renderDeploymentHistoryTriggerMetaText,
+    releaseId,
 }: TriggerOutputProps) => {
     const { appId, triggerId, envId, pipelineId } = useParams<{
         appId: string
@@ -906,6 +912,7 @@ const TriggerOutput = ({
                 tagsEditable={tagsEditable}
                 hideImageTaggingHardDelete={hideImageTaggingHardDelete}
                 selectedEnvironmentName={selectedEnvironmentName}
+                releaseId={releaseId}
                 renderRunSource={renderRunSource}
                 processVirtualEnvironmentDeploymentData={processVirtualEnvironmentDeploymentData}
                 renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}

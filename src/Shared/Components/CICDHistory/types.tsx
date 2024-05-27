@@ -32,7 +32,7 @@ export interface LogResizeButtonType {
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export interface RunSource {
+export interface RunSourceType {
     id: number
     identifier: string
     kind: ResourceKindType
@@ -97,7 +97,7 @@ export interface History {
     appliedFiltersTimestamp?: string
     promotionApprovalMetadata?: PromotionApprovalMetadataType
     triggerMetadata?: string
-    runSource?: RunSource
+    runSource?: RunSourceType
 }
 
 export interface DeploymentHistoryResultObject {
@@ -111,11 +111,11 @@ export interface DeploymentHistoryResult extends ResponseType {
     result?: DeploymentHistoryResultObject
 }
 
-export interface renderRunSourceType {
-    renderRunSource?: (runSource: RunSource) => JSX.Element
+export interface RenderRunSourceType {
+    renderRunSource?: (runSource: RunSourceType, releaseId: number) => JSX.Element
 }
 
-export interface SidebarType extends renderRunSourceType {
+export interface SidebarType extends RenderRunSourceType {
     type: HistoryComponentType
     filterOptions: CICDSidebarFilterOptionType[]
     triggerHistory: Map<number, History>
@@ -124,9 +124,10 @@ export interface SidebarType extends renderRunSourceType {
     fetchIdData?: FetchIdDataStatus
     handleViewAllHistory?: () => void
     children?: React.ReactNode
+    releaseId?: number
 }
 
-export interface HistorySummaryCardType extends renderRunSourceType {
+export interface HistorySummaryCardType extends RenderRunSourceType {
     id: number
     status: string
     startedOn: string
@@ -138,7 +139,8 @@ export interface HistorySummaryCardType extends renderRunSourceType {
     type: HistoryComponentType
     stage: DeploymentStageType
     dataTestId?: string
-    runSource?: RunSource
+    runSource?: RunSourceType
+    releaseId?: number
 }
 
 export interface SummaryTooltipCardType {
@@ -346,7 +348,7 @@ export interface VirtualHistoryArtifactProps {
         workflowId: number
     }
 }
-export interface TriggerOutputProps extends renderRunSourceType {
+export interface TriggerOutputProps extends RenderRunSourceType {
     fullScreenView: boolean
     syncState: (triggerId: number, triggerDetails: History, triggerDetailsError: any) => void
     triggerHistory: Map<number, History>
@@ -367,6 +369,7 @@ export interface TriggerOutputProps extends renderRunSourceType {
     ) => DeploymentStatusDetailsBreakdownDataType
     renderVirtualHistoryArtifacts?: (virtualHistoryArtifactProps: VirtualHistoryArtifactProps) => JSX.Element
     renderDeploymentHistoryTriggerMetaText?: (triggerMetaData: string) => JSX.Element
+    releaseId?: number
 }
 
 export interface DeploymentStatusDetailBreakdownType {
@@ -422,7 +425,7 @@ export interface HistoryDiffSelectorList {
     deployedBy: string
     deploymentStatus: string
     wfrId?: number
-    runSource?: RunSource
+    runSource?: RunSourceType
 }
 
 export interface HistoryDiffSelectorRes {
@@ -579,7 +582,7 @@ export interface DeploymentHistory {
     imageComment?: ImageComment
     imageReleaseTags?: ReleaseTag[]
     ci_artifact_id?: number
-    runSource?: RunSource
+    runSource?: RunSourceType
 }
 
 type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE_GREEN'
@@ -633,7 +636,7 @@ export interface DeploymentHistoryBaseParamsType {
     pipelineId: string
 }
 
-export interface TriggerHistoryProps {
+export interface TriggerHistoryParamsType {
     appId: number
     envId: number
     pagination: Pick<PaginationProps, 'offset' | 'size'>
@@ -648,5 +651,6 @@ export interface TriggerHistoryFilterCriteriaProps {
     showCurrentReleaseDeployments: boolean
 }
 
+export type TriggerHistoryFilterCriteriaType = `${string}|${string}|${string}`[]
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])
 export const statusSet = new Set(['starting', 'running', 'pending'])
