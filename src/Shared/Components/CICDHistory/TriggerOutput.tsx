@@ -502,8 +502,8 @@ const HistoryLogs: React.FC<{
     tagsEditable: boolean
     hideImageTaggingHardDelete: boolean
     selectedEnvironmentName?: string
-    releaseId?: number
-    renderRunSource: (runSource: RunSourceType, releaseId: number) => JSX.Element
+    resourceId?: number
+    renderRunSource: (runSource: RunSourceType, isDeployedInThisResource: boolean) => JSX.Element
     processVirtualEnvironmentDeploymentData: (
         data?: DeploymentStatusDetailsType,
     ) => DeploymentStatusDetailsBreakdownDataType
@@ -526,7 +526,7 @@ const HistoryLogs: React.FC<{
     tagsEditable,
     hideImageTaggingHardDelete,
     selectedEnvironmentName,
-    releaseId,
+    resourceId,
     renderRunSource,
     processVirtualEnvironmentDeploymentData,
     renderDeploymentApprovalInfo,
@@ -628,7 +628,7 @@ const HistoryLogs: React.FC<{
                                     deploymentHistoryList={deploymentHistoryList}
                                     setFullScreenView={setFullScreenView}
                                     renderRunSource={renderRunSource}
-                                    releaseId={releaseId}
+                                    resourceId={resourceId}
                                 />
                             </Route>
                         )}
@@ -703,7 +703,7 @@ const TriggerOutput = ({
     processVirtualEnvironmentDeploymentData,
     renderVirtualHistoryArtifacts,
     renderDeploymentHistoryTriggerMetaText,
-    releaseId,
+    resourceId,
 }: TriggerOutputProps) => {
     const { appId, triggerId, envId, pipelineId } = useParams<{
         appId: string
@@ -912,7 +912,7 @@ const TriggerOutput = ({
                 tagsEditable={tagsEditable}
                 hideImageTaggingHardDelete={hideImageTaggingHardDelete}
                 selectedEnvironmentName={selectedEnvironmentName}
-                releaseId={releaseId}
+                resourceId={resourceId}
                 renderRunSource={renderRunSource}
                 processVirtualEnvironmentDeploymentData={processVirtualEnvironmentDeploymentData}
                 renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}

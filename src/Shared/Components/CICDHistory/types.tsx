@@ -112,7 +112,7 @@ export interface DeploymentHistoryResult extends ResponseType {
 }
 
 export interface RenderRunSourceType {
-    renderRunSource?: (runSource: RunSourceType, releaseId: number) => JSX.Element
+    renderRunSource?: (runSource: RunSourceType, isDeployedInThisResource: boolean) => JSX.Element
 }
 
 export interface SidebarType extends RenderRunSourceType {
@@ -124,7 +124,7 @@ export interface SidebarType extends RenderRunSourceType {
     fetchIdData?: FetchIdDataStatus
     handleViewAllHistory?: () => void
     children?: React.ReactNode
-    releaseId?: number
+    resourceId?: number
 }
 
 export interface HistorySummaryCardType extends RenderRunSourceType {
@@ -140,7 +140,7 @@ export interface HistorySummaryCardType extends RenderRunSourceType {
     stage: DeploymentStageType
     dataTestId?: string
     runSource?: RunSourceType
-    releaseId?: number
+    resourceId?: number
 }
 
 export interface SummaryTooltipCardType {
@@ -369,7 +369,7 @@ export interface TriggerOutputProps extends RenderRunSourceType {
     ) => DeploymentStatusDetailsBreakdownDataType
     renderVirtualHistoryArtifacts?: (virtualHistoryArtifactProps: VirtualHistoryArtifactProps) => JSX.Element
     renderDeploymentHistoryTriggerMetaText?: (triggerMetaData: string) => JSX.Element
-    releaseId?: number
+    resourceId?: number
 }
 
 export interface DeploymentStatusDetailBreakdownType {

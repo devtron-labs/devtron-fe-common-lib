@@ -45,7 +45,7 @@ export const dropdownStyles = {
 export const Option = (props: any) => {
     const {
         isSelected,
-        data: { status, author, runSource, renderRunSource, releaseId },
+        data: { status, author, runSource, renderRunSource, resourceId },
         label,
     } = props
     return (
@@ -66,7 +66,7 @@ export const Option = (props: any) => {
                             {author === 'system' ? 'auto-triggered' : author}
                         </div>
                     </div>
-                    {runSource && renderRunSource && renderRunSource(runSource, releaseId)}
+                    {runSource && renderRunSource && renderRunSource(runSource, resourceId === runSource.id)}
                 </div>
             </div>
         </components.Option>

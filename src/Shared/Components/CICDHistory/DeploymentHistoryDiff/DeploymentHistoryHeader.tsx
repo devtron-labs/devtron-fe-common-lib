@@ -18,7 +18,7 @@ const DeploymentHistoryHeader = ({
     setLoader,
     setPreviousConfigAvailable,
     renderRunSource,
-    releaseId,
+    resourceId,
 }: CompareWithBaseConfiguration) => {
     const { url } = useRouteMatch()
     const history = useHistory()
@@ -54,7 +54,7 @@ const DeploymentHistoryHeader = ({
                                         status: response.result[i].deploymentStatus,
                                         runSource: response.result[i].runSource,
                                         renderRunSource,
-                                        releaseId,
+                                        resourceId,
                                     })
                                 }
                             }

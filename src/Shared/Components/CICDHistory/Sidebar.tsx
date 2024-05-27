@@ -129,7 +129,7 @@ const HistorySummaryCard = React.memo(
         dataTestId,
         renderRunSource,
         runSource,
-        releaseId,
+        resourceId,
     }: HistorySummaryCardType): JSX.Element => {
         const { path, params } = useRouteMatch()
         const { pathname } = useLocation()
@@ -137,6 +137,8 @@ const HistorySummaryCard = React.memo(
         const { envId, ...rest } = useParams<{ triggerId: string; envId: string }>()
         const isCDType: boolean = type === HistoryComponentType.CD || type === HistoryComponentType.GROUP_CD
         const idName = isCDType ? 'triggerId' : 'buildId'
+
+        const isDeployedInThisResource = resourceId === runSource?.id
 
         const targetCardRef = useRef(null)
 
@@ -232,7 +234,7 @@ const HistorySummaryCard = React.memo(
                                     </div>
                                 </div>
                             </div>
-                            {runSource && renderRunSource && renderRunSource(runSource, releaseId)}
+                            {runSource && renderRunSource && renderRunSource(runSource, isDeployedInThisResource)}
                         </div>
                     </div>
                 </NavLink>
@@ -252,7 +254,7 @@ const Sidebar = React.memo(
         handleViewAllHistory,
         children,
         renderRunSource,
-        releaseId,
+        resourceId,
     }: SidebarType) => {
         const { pipelineId, appId, envId } = useParams<{ appId: string; envId: string; pipelineId: string }>()
         const { push } = useHistory()
@@ -386,7 +388,7 @@ const Sidebar = React.memo(
                                 type={type}
                                 runSource={triggerDetails.runSource}
                                 renderRunSource={renderRunSource}
-                                releaseId={releaseId}
+                                resourceId={resourceId}
                             />
                         ))}
                     {hasMore && (fetchIdData === FetchIdDataStatus.SUSPEND || !fetchIdData) && (

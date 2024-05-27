@@ -13,7 +13,7 @@ const DeploymentHistoryDetailedView = ({
     deploymentHistoryList,
     setDeploymentHistoryList,
     renderRunSource,
-    releaseId,
+    resourceId,
 }: CompareViewDeploymentType) => {
     const { appId, pipelineId, historyComponent, baseConfigurationId, historyComponentName } =
         useParams<DeploymentHistoryParamsType>()
@@ -89,7 +89,7 @@ const DeploymentHistoryDetailedView = ({
                 setLoader={setLoader}
                 setPreviousConfigAvailable={setPreviousConfigAvailable}
                 renderRunSource={renderRunSource}
-                releaseId={releaseId}
+                resourceId={resourceId}
             />
 
             <div className="historical-diff__container bcn-1">

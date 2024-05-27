@@ -15,7 +15,7 @@ export interface CompareViewDeploymentType extends RenderRunSourceType {
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
     deploymentHistoryList: DeploymentTemplateList[]
     setDeploymentHistoryList: React.Dispatch<React.SetStateAction<DeploymentTemplateList[]>>
-    releaseId?: number
+    resourceId?: number
 }
 
 export interface DeploymentTemplateOptions extends OptionType {
@@ -30,7 +30,7 @@ export interface CompareWithBaseConfiguration extends RenderRunSourceType {
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
     setLoader: React.Dispatch<React.SetStateAction<boolean>>
     setPreviousConfigAvailable: React.Dispatch<React.SetStateAction<boolean>>
-    releaseId?: number
+    resourceId?: number
 }
 
 export interface TemplateConfiguration {
