@@ -54,3 +54,8 @@ export enum DeploymentWithConfigType {
     LATEST_TRIGGER_CONFIG = 'LATEST_TRIGGER_CONFIG',
     SPECIFIC_TRIGGER_CONFIG = 'SPECIFIC_TRIGGER_CONFIG',
 }
+
+export enum EnvironmentTypeEnum {
+    production = 'Production',
+    nonProduction = 'Non-Production',
+}
