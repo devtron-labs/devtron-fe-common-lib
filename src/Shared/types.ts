@@ -299,3 +299,14 @@ export enum AggregationKeys {
 }
 
 export type AggregationKeysType = keyof typeof AggregationKeys
+
+export interface EnvironmentType {
+    /**
+     * Unique identifier for the environment
+     */
+    id: number
+    /**
+     * Name of the environment
+     */
+    name: string
+}
