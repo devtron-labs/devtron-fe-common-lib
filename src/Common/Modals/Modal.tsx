@@ -17,7 +17,9 @@ export const Modal = ({
 }: ModalType) => {
     const innerRef = React.useRef(null)
     function handleClick(e) {
+        // Adding both to ensure that nested click as well as href work as expected
         e.stopPropagation()
+        e.preventDefault()
         if (typeof onClick !== 'function') return
         if (innerRef && innerRef.current?.contains(e.target)) {
             onClick(e, 'in')

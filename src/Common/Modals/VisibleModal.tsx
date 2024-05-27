@@ -51,7 +51,9 @@ export class VisibleModal extends React.Component<{
 
     render() {
         const handleBodyClick = (e: SyntheticEvent) => {
+            // Adding both to ensure that nested click as well as href work as expected
             e.stopPropagation()
+            e.preventDefault()
 
             this.props?.close?.(e)
         }

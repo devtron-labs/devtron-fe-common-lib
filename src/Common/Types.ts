@@ -246,6 +246,7 @@ export interface PopupMenuType {
     onToggleCallback?: (isOpen: boolean) => void
     autoClose?: boolean
     autoPosition?: boolean
+    shouldPreventDefault?: boolean
 }
 
 export interface PopupMenuButtonType {
