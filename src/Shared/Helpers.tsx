@@ -1,3 +1,5 @@
+import { ReactElement } from 'react'
+import Tippy from '@tippyjs/react'
 import { MaterialInfo, SortingOrder } from '../Common'
 import { GitTriggers, WebhookEventNameType } from './types'
 import { ReactComponent as ICPullRequest } from '../Assets/Icon/ic-pull-request.svg'
@@ -112,3 +114,14 @@ export const getKeyToBooleanMapFromArray = <T extends string | number>(arr: T[] 
         },
         {} as Record<T, boolean>,
     )
+
+export const renderValidInputButtonTippy = (children: ReactElement) => (
+    <Tippy
+        content="Valid input is required for all mandatory fields."
+        placement="top"
+        className="default-tt"
+        arrow={false}
+    >
+        {children}
+    </Tippy>
+)
