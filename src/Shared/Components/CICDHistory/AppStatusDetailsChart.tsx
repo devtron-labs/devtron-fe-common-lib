@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react'
-import { aggregateNodes } from './utils'
 import { ReactComponent as InfoIcon } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as Chat } from '../../../Assets/Icon/ic-chat-circle-dots.svg'
 import { AppStatusDetailsChartType, AggregatedNodes, STATUS_SORTING_ORDER } from './types'
 import { StatusFilterButtonComponent } from './StatusFilterButtonComponent'
 import { DEPLOYMENT_STATUS, APP_STATUS_HEADERS } from '../../constants'
 import { IndexStore } from '../../Store'
+import { aggregateNodes } from '../../Helpers'
 
 const AppStatusDetailsChart = ({ filterRemoveHealth = false, showFooter }: AppStatusDetailsChartType) => {
     const _appDetails = IndexStore.getAppDetails()
