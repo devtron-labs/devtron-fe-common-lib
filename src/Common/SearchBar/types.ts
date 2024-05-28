@@ -31,4 +31,8 @@ export interface SearchBarProps {
      * Timeout for the debounce handler to be triggered
      */
     debounceTimeout?: number
+    /**
+     * Hide the background and border of the search
+     */
+    noBackgroundAndBorder?: boolean
 }

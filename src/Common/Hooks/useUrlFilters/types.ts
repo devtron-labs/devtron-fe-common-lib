@@ -57,5 +57,5 @@ export type UseUrlFiltersReturnType<T, K = unknown> = K & {
     /**
      * Update the search params with the passed object
      */
-    updateSearchParams: (paramsToSerialize: K) => void
+    updateSearchParams: (paramsToSerialize: Partial<K>) => void
 }

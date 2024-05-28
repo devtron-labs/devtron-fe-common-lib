@@ -146,6 +146,8 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
             promotionApprovalMetadata: material.promotionApprovalMetadata,
             deployedOnEnvironments: material.deployedOnEnvironments ?? [],
             deploymentWindowArtifactMetadata: material.deploymentWindowArtifactMetadata ?? null,
+            configuredInReleases: material.configuredInReleases ?? [],
+            appWorkflowId: material.appWorkflowId ?? null,
         }
     })
     return materials

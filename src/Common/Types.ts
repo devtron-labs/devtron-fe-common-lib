@@ -30,9 +30,9 @@ export interface APIOptions {
     preventAutoLogout?: boolean
 }
 
-export interface OptionType {
-    label: string
-    value: string
+export interface OptionType<T = string, K = string> {
+    value: T
+    label: K
 }
 
 export enum TippyTheme {
@@ -139,7 +139,7 @@ export interface GenericEmptyStateType {
 }
 
 export interface ErrorPageType
-    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>, Pick<ErrorScreenManagerProps, 'reload'> {
+    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>, Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
     code: number
     heightToDeduct?: number
     redirectURL?: string
@@ -152,6 +152,10 @@ export interface ErrorScreenManagerProps {
     subtitle?: React.ReactChild
     reloadClass?: string
     heightToDeduct?: number
+    /**
+     * Would be used to redirect URL in case of 404
+     * @default - APP_LIST
+     */
     redirectURL?: string
 }
 
@@ -356,6 +360,15 @@ export interface DeploymentWindowArtifactMetadata {
     type: DEPLOYMENT_WINDOW_TYPE
 }
 
+export interface ArtifactReleaseMappingType {
+    id : number, 
+    identifier: string,
+    releaseVersion: string,
+    name: string
+    kind: string
+    version: string
+}
+
 export interface CDMaterialType {
     index: number
     id: string
@@ -400,6 +413,14 @@ export interface CDMaterialType {
     promotionApprovalMetadata?: PromotionApprovalMetadataType
     deployedOnEnvironments?: string[]
     deploymentWindowArtifactMetadata?: DeploymentWindowArtifactMetadata
+    /**
+     * Will only be present in case of release
+     */
+    configuredInReleases: ArtifactReleaseMappingType[]
+    /**
+     * Would currently only be received in case of release
+     */
+    appWorkflowId: number
 }
 
 export enum CDMaterialServiceEnum {

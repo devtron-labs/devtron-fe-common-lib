@@ -1,7 +1,7 @@
 import notFound from '../Assets/Img/ic-not-found.svg'
 import badRequest from '../Assets/Img/ic-page-not-found.svg'
 import unauthorized from '../Assets/Img/ic-not-authorized.svg'
-import { ERROR_STATUS_CODE, ERROR_EMPTY_SCREEN } from './Constants'
+import { ERROR_STATUS_CODE, ERROR_EMPTY_SCREEN, ROUTES } from './Constants'
 import Reload from './Reload'
 import ErrorPage from './ErrorPage'
 import { ErrorScreenManagerProps, ImageType } from './Types'
@@ -12,7 +12,7 @@ const ErrorScreenManager = ({
     subtitle,
     reloadClass,
     heightToDeduct,
-    redirectURL,
+    redirectURL = ROUTES.APP_LIST,
 }: ErrorScreenManagerProps) => {
     const getMessage = () => {
         switch (code) {
@@ -71,6 +71,7 @@ const ErrorScreenManager = ({
                         image={badRequest}
                         imageType={ImageType.Large}
                         heightToDeduct={heightToDeduct}
+                        reload={reload}
                     />
                 )
             case ERROR_STATUS_CODE.BAD_GATEWAY:

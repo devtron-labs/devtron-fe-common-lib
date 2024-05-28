@@ -784,3 +784,5 @@ export function deepEqual(configA: any, configB: any): boolean {
         return true
     }
 }
+
+export const prefixZeroIfSingleDigit = (value: number = 0) => (value > 0 && value < 10 ? `0${value}` : value)

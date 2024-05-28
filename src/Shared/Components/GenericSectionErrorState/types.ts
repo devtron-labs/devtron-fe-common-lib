@@ -29,4 +29,10 @@ export interface GenericSectionErrorStateProps {
      * to be applied on parent div
      */
     rootClassName?: string
+    /**
+     * If true, info icon would be used instead of error
+     *
+     * @default false
+     */
+    useInfoIcon?: boolean
 }
