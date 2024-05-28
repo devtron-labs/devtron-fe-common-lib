@@ -6,7 +6,7 @@ import { GenericEmptyState, Progressing } from '../../../../Common'
 import { ReactComponent as RightArrow } from '../../../../Assets/Icon/ic-arrow-forward.svg'
 import { DeploymentHistoryParamsType, TemplateConfiguration } from './types'
 import { getDeploymentHistoryList } from '../service'
-import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EMPTY_STATE_STATUS } from '../constants'
+import { EMPTY_STATE_STATUS, DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
 
 const DeploymentHistoryConfigList = ({
     setFullScreenView,

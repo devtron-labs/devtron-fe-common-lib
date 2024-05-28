@@ -50,7 +50,7 @@ export const Option = (props: any) => {
     } = props
     return (
         <components.Option {...props}>
-            <div className={`flex left pt-8 pb-8 pl-8 pr-8 ${isSelected ? 'bcb-1' : ''}`}>
+            <div className={`flex dc__align-start left pt-8 pb-8 pl-8 pr-8 ${isSelected ? 'bcb-1' : ''}`}>
                 <div
                     className={`flexbox dc__align-items-start dc__app-summary__icon icon-dim-22 ${status
                         .toLocaleLowerCase()

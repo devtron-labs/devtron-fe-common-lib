@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { NavLink, useRouteMatch, useParams } from 'react-router-dom'
-import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../constants'
+import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
 import { DeploymentHistoryParamsType } from './types'
 import { getDeploymentHistoryList } from '../service'
 import { DeploymentHistorySidebarType } from '../types'

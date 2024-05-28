@@ -46,13 +46,7 @@ import {
     RunSourceType,
 } from './types'
 import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger, getCDBuildReport } from './service'
-import {
-    DEFAULT_ENV,
-    EMPTY_STATE_STATUS,
-    TIMEOUT_VALUE,
-    WORKER_POD_BASE_URL,
-    statusColor as colorMap,
-} from './constants'
+import { DEFAULT_ENV, TIMEOUT_VALUE, WORKER_POD_BASE_URL } from './constants'
 import { GitTriggers } from '../../types'
 import warn from '../../../Assets/Icon/ic-warning.svg'
 import docker from '../../../Assets/Icon/ic-docker.svg'
@@ -62,6 +56,7 @@ import { DeploymentHistoryDetailedView, DeploymentHistoryConfigList } from './De
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
 import './cicdHistory.scss'
+import { statusColor as colorMap, EMPTY_STATE_STATUS } from '../../constants'
 
 const Finished = React.memo(
     ({ status, finishedOn, artifact, type }: FinishedType): JSX.Element => (

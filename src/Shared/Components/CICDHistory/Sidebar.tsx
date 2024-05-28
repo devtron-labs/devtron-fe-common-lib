@@ -27,7 +27,8 @@ import { ReactComponent as ICDocker } from '../../../Assets/Icon/ic-docker.svg'
 import { GitTriggers } from '../../types'
 import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
 import { triggerStatus } from '../../../Common/AppStatus/utils'
-import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
+import { HISTORY_LABEL, FILTER_STYLE } from './constants'
+import { statusColor as colorMap } from '../../constants'
 
 const SummaryTooltipCard = React.memo(
     ({

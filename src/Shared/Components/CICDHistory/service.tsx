@@ -1,9 +1,8 @@
 /* eslint-disable dot-notation */
 import { ROUTES, ResponseType, get, getUrlWithSearchParams, trash } from '../../../Common'
 import { ResourceKindType, ResourceVersionType } from '../../types'
-import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from './constants'
+import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from '../../constants'
 import {
-    CDPipelines,
     DeploymentConfigurationsRes,
     DeploymentHistoryDetail,
     DeploymentHistoryDetailRes,
@@ -16,7 +15,8 @@ import {
     TriggerDetailsResponseType,
     TriggerHistoryParamsType,
 } from './types'
-import { decode, getParsedTriggerHistory, getTriggerHistoryFilterCriteria } from './utils'
+import { getParsedTriggerHistory, getTriggerHistoryFilterCriteria } from './utils'
+import { decode } from '../../Helpers'
 
 const getTriggerDetailsQuery = (fetchIdData) => {
     if (fetchIdData && fetchIdData === FetchIdDataStatus.FETCHING) {
@@ -274,11 +274,6 @@ export const getTriggerHistory = async ({
     const { result } = await get(url)
     const parsedResult = getParsedTriggerHistory(result)
     return { result: parsedResult }
-}
-
-export const getCDPipelines = (appId: number | string): Promise<CDPipelines> => {
-    const URL = `${ROUTES.CD_CONFIG}/${appId}`
-    return get(URL).then((response) => response.result)
 }
 
 export const getModuleConfigured = (moduleName: string): Promise<ModuleConfigResponse> =>

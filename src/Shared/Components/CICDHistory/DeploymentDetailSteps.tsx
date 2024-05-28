@@ -1,19 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams, useRouteMatch } from 'react-router'
 import { DeploymentAppTypes, GenericEmptyState, Progressing, URLS } from '../../../Common'
-import { DEPLOYMENT_STATUS, TIMELINE_STATUS } from '../../constants'
+import { DEPLOYMENT_STATUS, TIMELINE_STATUS, EMPTY_STATE_STATUS } from '../../constants'
 import { getDeploymentStatusDetail } from './service'
 import {
     DeploymentDetailStepsType,
     DeploymentStatusDetailsBreakdownDataType,
     DeploymentStatusDetailsType,
 } from './types'
-import { processDeploymentStatusDetailsData } from './utils'
-import { DEPLOYMENT_STATUS_QUERY_PARAM, EMPTY_STATE_STATUS } from './constants'
+import { DEPLOYMENT_STATUS_QUERY_PARAM } from './constants'
 import { ReactComponent as Arrow } from '../../../Assets/Icon/ic-arrow-forward.svg'
 import mechanicalOperation from '../../../Assets/Icon/ic-mechanical-operation.svg'
 import CDEmptyState from './CDEmptyState'
 import DeploymentStatusDetailBreakdown from './DeploymentStatusBreakdown'
+import { processDeploymentStatusDetailsData } from '../../Helpers'
 
 let deploymentStatusTimer = null
 const DeploymentDetailSteps = ({
