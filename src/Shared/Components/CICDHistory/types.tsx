@@ -140,6 +140,9 @@ export interface HistorySummaryCardType extends RenderRunSourceType {
     stage: DeploymentStageType
     dataTestId?: string
     runSource?: RunSourceType
+    /**
+     * resourceId is optional as of now since resource is not shown at all places, in future should be mandatory if we show run source at all places
+     */
     resourceId?: number
 }
 
