@@ -18,7 +18,8 @@ import docker from '../../../Assets/Icon/ic-docker.svg'
 import folder from '../../../Assets/Icon/ic-folder.svg'
 import noartifact from '../../../Assets/Img/no-artifact@2x.png'
 import { ArtifactType, CIListItemType, HistoryComponentType } from './types'
-import { EMPTY_STATE_STATUS, TERMINAL_STATUS_MAP } from './constants'
+import { TERMINAL_STATUS_MAP } from './constants'
+import { EMPTY_STATE_STATUS } from '../../constants'
 
 const CIProgressView = (): JSX.Element => (
     <GenericEmptyState

@@ -1,7 +1,7 @@
 import React from 'react'
 import { GenericEmptyState } from '../../../Common'
 import AppNotDeployed from '../../../Assets/Img/app-not-deployed.png'
-import { EMPTY_STATE_STATUS } from './constants'
+import { EMPTY_STATE_STATUS } from '../../constants'
 
 const CDEmptyState = ({
     imgSource,
