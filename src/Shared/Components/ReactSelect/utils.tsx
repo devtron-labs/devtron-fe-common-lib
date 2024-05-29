@@ -78,6 +78,24 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
     }),
+    group: (base) => ({
+        ...base,
+        paddingTop: '4px',
+        paddingBottom: 0,
+    }),
+    groupHeading: (base) => ({
+        ...base,
+        fontWeight: 600,
+        fontSize: '12px',
+        color: 'var(--N900)',
+        backgroundColor: 'var(--N100)',
+        marginBottom: 0,
+        padding: '4px 8px',
+        textTransform: 'none',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    }),
     ...styleOverrides,
 })
 

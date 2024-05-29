@@ -1,4 +1,11 @@
-import { OptionType, CommonNodeAttr, ResponseType, UserApprovalConfigType, VulnerabilityType } from '../Common'
+import {
+    OptionType,
+    CommonNodeAttr,
+    ResponseType,
+    UserApprovalConfigType,
+    VulnerabilityType,
+    DeploymentAppTypes,
+} from '../Common'
 import { PatchOperationType } from './constants'
 
 export enum RegistryType {
@@ -291,4 +298,36 @@ export enum AggregationKeys {
     Events = 'Events',
     Namespaces = 'Namespaces',
 }
+
 export type AggregationKeysType = keyof typeof AggregationKeys
+
+export interface AppInfoListType {
+    application: string
+    appStatus: string
+    deploymentStatus: string
+    lastDeployed: string
+    lastDeployedImage?: string
+    lastDeployedBy?: string
+    appId: number
+    envId: number
+    pipelineId?: number
+    commits?: string[]
+    ciArtifactId?: number
+}
+
+export interface EnvListMinDTO {
+    id: number
+    active: boolean
+    allowedDeploymentTypes: DeploymentAppTypes[] | null
+    appCount: number
+    cluster_id: number
+    cluster_name: string
+    default: boolean
+    description: string
+    environmentIdentifier: string
+    environment_name: string
+    isClusterCdActive: boolean
+    isDigestEnforcedForEnv: boolean
+    isVirtualEnvironment: boolean
+    namespace: string
+}
