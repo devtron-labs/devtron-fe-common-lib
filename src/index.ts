@@ -54,6 +54,7 @@ export interface customEnv {
     FEATURE_USER_DEFINED_GITOPS_REPO_ENABLE: boolean
     ENABLE_RESOURCE_SCAN_V2?: boolean
     ENABLE_GITOPS_BITBUCKET_SOURCE: boolean
+    HIDE_RESOURCE_WATCHER?: boolean
 }
 declare global {
     interface Window {
