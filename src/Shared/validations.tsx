@@ -9,6 +9,7 @@ export const MESSAGES = {
     CAN_NOT_START_END_WITH_SEPARATORS: 'Cannot start/end with -, _ or .',
     getMinMaxCharMessage: (min: number, max: number) => `Minimum ${min} and maximum ${max} characters allowed`,
     getMaxCharMessage: (max: number) => `Maximum ${max} characters are allowed`,
+    getMinCharMessage: (min: number) => `Minimum ${min} characters are required`,
     VALID_POSITIVE_NUMBER: 'This field should be a valid positive number',
     VALID_POSITIVE_INTEGER: 'This field should be a valid positive integer',
     MAX_SAFE_INTEGER: `Maximum allowed value is ${Number.MAX_SAFE_INTEGER}`,
@@ -55,6 +56,26 @@ export const validateDescription = (description: string): ValidationResponseType
         return {
             isValid: false,
             message: MESSAGES.getMaxCharMessage(MAX_DESCRIPTION_LENGTH),
+        }
+    }
+
+    return {
+        isValid: true,
+    }
+}
+
+export const validateStringLength = (value: string, maxLimit: number, minLimit: number): ValidationResponseType => {
+    if (value?.length < minLimit) {
+        return {
+            isValid: false,
+            message: MESSAGES.getMinCharMessage(minLimit),
+        }
+    }
+
+    if (value?.length > maxLimit) {
+        return {
+            isValid: false,
+            message: MESSAGES.getMaxCharMessage(maxLimit),
         }
     }
 
@@ -128,6 +149,22 @@ export const validateRequiredPositiveInteger = (value: string | number): Validat
         return {
             isValid: false,
             message: MESSAGES.VALID_POSITIVE_INTEGER,
+        }
+    }
+
+    return {
+        isValid: true,
+    }
+}
+
+export const validateURL = (url: string): ValidationResponseType => {
+    try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const urlObject = new URL(url)
+    } catch (e) {
+        return {
+            isValid: false,
+            message: 'Invalid URL',
         }
     }
 

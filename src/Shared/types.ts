@@ -280,6 +280,11 @@ export enum Nodes {
 // FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
 export type NodeType = keyof typeof Nodes
 
+export interface InputFieldState<T = string> {
+    value: T
+    error: string
+}
+
 export enum AggregationKeys {
     Workloads = 'Workloads',
     Networking = 'Networking',
@@ -291,4 +296,5 @@ export enum AggregationKeys {
     Events = 'Events',
     Namespaces = 'Namespaces',
 }
+
 export type AggregationKeysType = keyof typeof AggregationKeys
