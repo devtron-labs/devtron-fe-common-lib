@@ -23,4 +23,9 @@ export interface SortableTableHeaderCellProps {
      * If true, the cell is disabled
      */
     disabled: boolean
+    /**
+     * If false, the cell acts like normal table header cell
+     * @default true
+     */
+    isSortable?: boolean
 }

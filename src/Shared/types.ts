@@ -5,6 +5,7 @@ import {
     UserApprovalConfigType,
     VulnerabilityType,
     DeploymentAppTypes,
+    ServerErrors,
 } from '../Common'
 import { PatchOperationType } from './constants'
 
@@ -330,4 +331,26 @@ export interface EnvListMinDTO {
     isDigestEnforcedForEnv: boolean
     isVirtualEnvironment: boolean
     namespace: string
+}
+
+export enum ApiQueuingBatchStatusType {
+    FULFILLED = 'fulfilled',
+    REJECTED = 'rejected',
+}
+
+export type ApiQueuingWithBatchResponseItem<T> =
+    | {
+          status: ApiQueuingBatchStatusType.FULFILLED
+          value: T
+      }
+    | {
+          status: ApiQueuingBatchStatusType.REJECTED
+          reason: ServerErrors
+      }
+
+export interface BatchConfigType {
+    lastIndex: number
+    results: any[]
+    concurrentCount: number
+    completedCalls: number
 }
