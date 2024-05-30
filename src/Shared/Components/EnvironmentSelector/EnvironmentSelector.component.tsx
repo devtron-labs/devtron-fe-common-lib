@@ -15,11 +15,11 @@
  *   limitations under the License.
  */
 
-import ReactSelect from 'react-select'
 import { useMemo } from 'react'
-import { ClearIndicator, useAsync } from '../../../Common'
+import ReactSelect from 'react-select'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import { commonSelectStyles, GroupHeading, LoadingIndicator } from '../ReactSelect'
+import { ClearIndicator, useAsync } from '../../../Common'
 import { ENVIRONMENT_SELECTOR_TEXT } from './constants'
 import { getEnvironmentsGroupedByCluster } from './service'
 import { EnvironmentSelectorProps } from './types'

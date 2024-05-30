@@ -23,10 +23,14 @@ import { SelectedEnvironmentsMapType } from './types'
 
 export const parseEnvironmentClusterListToOptions = (environmentClusterList: EnvListMinDTO[]): GroupedOptionsType[] => {
     const clusterEnvironmentMap: Record<string, EnvListMinDTO[]> = environmentClusterList.reduce(
-        (acc, env) => ({
-            ...acc,
-            [env.cluster_name]: [...(acc[env.cluster_name] || []), env],
-        }),
+        (acc, env) => {
+            if (!acc[env.cluster_name]) {
+                acc[env.cluster_name] = []
+            }
+
+            acc[env.cluster_name].push(env)
+            return acc
+        },
         {} as Record<string, EnvListMinDTO[]>,
     )
 

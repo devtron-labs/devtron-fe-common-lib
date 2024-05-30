@@ -32,7 +32,9 @@ export type BaseSelectorType =
       }
 
 export type EnvironmentSelectorProps<T> = BaseSelectorType & {
-    // Would expect selected option to be like {[selectedOption1.label] = <any value we want to store>, ...}
+    /**
+     * Would expect selected option to be like {[selectedOption1.label] = <any value we want to store>, ...}
+     */
     selectedEnvironmentsMap?: SelectedEnvironmentsMapType<T>
     placeholder?: string
     /**
