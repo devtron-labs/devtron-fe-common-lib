@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
@@ -30,9 +46,9 @@ export interface APIOptions {
     preventAutoLogout?: boolean
 }
 
-export interface OptionType {
-    label: string
-    value: string
+export interface OptionType<T = string, K = string> {
+    value: T
+    label: K
 }
 
 export enum TippyTheme {
@@ -139,7 +155,7 @@ export interface GenericEmptyStateType {
 }
 
 export interface ErrorPageType
-    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>, Pick<ErrorScreenManagerProps, 'reload'> {
+    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>, Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
     code: number
     heightToDeduct?: number
     redirectURL?: string
@@ -152,6 +168,10 @@ export interface ErrorScreenManagerProps {
     subtitle?: React.ReactChild
     reloadClass?: string
     heightToDeduct?: number
+    /**
+     * Would be used to redirect URL in case of 404
+     * @default - APP_LIST
+     */
     redirectURL?: string
 }
 
@@ -357,6 +377,15 @@ export interface DeploymentWindowArtifactMetadata {
     type: DEPLOYMENT_WINDOW_TYPE
 }
 
+export interface ArtifactReleaseMappingType {
+    id : number, 
+    identifier: string,
+    releaseVersion: string,
+    name: string
+    kind: string
+    version: string
+}
+
 export interface CDMaterialType {
     index: number
     id: string
@@ -401,6 +430,14 @@ export interface CDMaterialType {
     promotionApprovalMetadata?: PromotionApprovalMetadataType
     deployedOnEnvironments?: string[]
     deploymentWindowArtifactMetadata?: DeploymentWindowArtifactMetadata
+    /**
+     * Will only be present in case of release
+     */
+    configuredInReleases: ArtifactReleaseMappingType[]
+    /**
+     * Would currently only be received in case of release
+     */
+    appWorkflowId: number
 }
 
 export enum CDMaterialServiceEnum {
