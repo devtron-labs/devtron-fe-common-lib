@@ -1,15 +1,9 @@
-import { ResponseType } from '../../Common'
 import { clusterListData } from './mock'
 import { ClusterType } from './types'
 
-export const getClusterList = async (): Promise<ResponseType<ClusterType[]>> =>
+export const getClusterList = async (): Promise<ClusterType[]> =>
     new Promise((resolve) => {
         setTimeout(() => {
-            resolve({
-                code: 200,
-                result: clusterListData,
-                status: '',
-                errors: [],
-            })
+            resolve(clusterListData)
         }, 1000)
     })
