@@ -190,6 +190,7 @@ export enum ResourceKindType {
     release = 'release',
     releaseTrack = 'release-track',
     tenant = 'tenant',
+    installation = 'installation',
 }
 
 /**
@@ -321,4 +322,10 @@ export interface EnvironmentType {
      * Associated cluster for the environment
      */
     cluster: string
+}
+
+export interface CreatedByDTO {
+    icon: boolean
+    id: number
+    name: string
 }
