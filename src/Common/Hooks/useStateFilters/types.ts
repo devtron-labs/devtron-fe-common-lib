@@ -19,4 +19,18 @@ import { UseUrlFiltersProps, UseUrlFiltersReturnType } from '../useUrlFilters'
 export interface UseStateFiltersProps<T> extends Pick<UseUrlFiltersProps<T, never>, 'initialSortKey'> {}
 
 export interface UseStateFiltersReturnType<T>
-    extends Pick<UseUrlFiltersReturnType<T>, 'sortBy' | 'sortOrder' | 'handleSorting' | 'clearFilters'> {}
+    extends Pick<
+        UseUrlFiltersReturnType<T>,
+        'sortBy' | 'sortOrder' | 'handleSorting' | 'clearFilters' | 'changePage' | 'changePageSize'
+    > {
+    /*
+     *  Handler for resetting the pagination to the initial state
+     */
+    resetPagination: () => void
+}
+
+export interface PaginationType {
+    pageSize: number
+    offset: number
+    size: number
+}
