@@ -21,7 +21,14 @@ export interface UseStateFiltersProps<T> extends Pick<UseUrlFiltersProps<T, neve
 export interface UseStateFiltersReturnType<T>
     extends Pick<
         UseUrlFiltersReturnType<T>,
-        'sortBy' | 'sortOrder' | 'handleSorting' | 'clearFilters' | 'changePage' | 'changePageSize'
+        | 'sortBy'
+        | 'sortOrder'
+        | 'handleSorting'
+        | 'clearFilters'
+        | 'changePage'
+        | 'changePageSize'
+        | 'offset'
+        | 'pageSize'
     > {
     /*
      *  Handler for resetting the pagination to the initial state
@@ -32,5 +39,4 @@ export interface UseStateFiltersReturnType<T>
 export interface PaginationType {
     pageSize: number
     offset: number
-    size: number
 }

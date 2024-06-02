@@ -43,7 +43,6 @@ const useStateFilters = <T = string,>({
     const [pagination, setPagination] = useState<PaginationType>({
         pageSize: DEFAULT_BASE_PAGE_SIZE,
         offset: 0,
-        size: 0,
     })
 
     const changePage = (pageNo: number): void => {
@@ -89,7 +88,6 @@ const useStateFilters = <T = string,>({
         setPagination({
             pageSize: DEFAULT_BASE_PAGE_SIZE,
             offset: 0,
-            size: 0,
         })
     }
 
