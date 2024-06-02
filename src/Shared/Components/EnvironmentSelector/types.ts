@@ -38,6 +38,7 @@ export type EnvironmentSelectorProps<T> = BaseSelectorType & {
     selectedEnvironmentsMap?: SelectedEnvironmentsMapType<T>
     placeholder?: string
     /**
+     * This is a HEAVY operation, so make sure to wrap it in useCallback
      * In case we want to process (filter, rename label, etc) the options before displaying them
      */
     processOptions?: (options: GroupedOptionsType[]) => GroupedOptionsType[]
