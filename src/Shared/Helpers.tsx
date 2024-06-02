@@ -1,4 +1,20 @@
-import { MaterialInfo } from '../Common'
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { MaterialInfo, SortingOrder } from '../Common'
 import { GitTriggers, WebhookEventNameType } from './types'
 import { ReactComponent as ICPullRequest } from '../Assets/Icon/ic-pull-request.svg'
 import { ReactComponent as ICTag } from '../Assets/Icon/ic-tag.svg'
@@ -70,8 +86,26 @@ export const getGitCommitInfo = (materialInfo: MaterialInfo): GitTriggers => ({
     CiConfigureSourceValue: '',
 })
 
-export const caseInsensitiveStringComparator = (a: string, b: string): number =>
-    a.toLowerCase().localeCompare(b.toLowerCase())
+export const stringComparatorBySortOrder = (
+    a: string,
+    b: string,
+    sortOrder: SortingOrder = SortingOrder.ASC,
+    isCaseSensitive: boolean = true,
+): number => {
+    if (isCaseSensitive) {
+        return sortOrder === SortingOrder.ASC ? a.localeCompare(b) : b.localeCompare(a)
+    }
+
+    return sortOrder === SortingOrder.ASC
+        ? a.toLowerCase().localeCompare(b.toLowerCase())
+        : b.toLowerCase().localeCompare(a.toLowerCase())
+}
+
+export const numberComparatorBySortOrder = (
+    a: number,
+    b: number,
+    sortOrder: SortingOrder = SortingOrder.ASC,
+): number => (sortOrder === SortingOrder.ASC ? a - b : b - a)
 
 export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
     switch (eventName) {
@@ -85,3 +119,12 @@ export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
 }
 
 export const isNullOrUndefined = (value: unknown): boolean => value === null || value === undefined
+
+export const getKeyToBooleanMapFromArray = <T extends string | number>(arr: T[] = []) =>
+    arr.reduce<Record<T, boolean>>(
+        (acc, key) => {
+            acc[key] = true
+            return acc
+        },
+        {} as Record<T, boolean>,
+    )

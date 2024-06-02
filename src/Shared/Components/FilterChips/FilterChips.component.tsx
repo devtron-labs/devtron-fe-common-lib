@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { ReactComponent as CloseIcon } from '../../../Assets/Icon/ic-close.svg'
 import { noop } from '../../../Common'
 import { FilterChipProps, FilterChipsProps } from './types'
@@ -18,32 +34,37 @@ const FilterChip = ({
     const valueToDisplay = getFormattedValue(label, value) ?? value
 
     return (
-        <div className="flexbox flex-align-center br-4 dc__border dc__bg-n50 pl-6 pr-6 pt-2 pb-2 dc__user-select-none h-24 dc__gap-6 fs-12 lh-20 cn-9 fw-4 dc__ellipsis-right">
-            <span className="fw-6 dc__capitalize">{labelToDisplay}</span>
-            <span className="dc__divider h-24" />
-            <span className="dc__ellipsis-right">{valueToDisplay}</span>
-            <button
-                type="button"
-                className="flex p-0 dc__transparent"
-                onClick={removeFilter}
-                aria-label="Remove filter"
-            >
-                <CloseIcon className="icon-dim-12 icon-use-fill-n6" />
-            </button>
-        </div>
+        labelToDisplay &&
+        valueToDisplay && (
+            <div className="flexbox flex-align-center br-4 dc__border dc__bg-n50 pl-6 pr-6 pt-2 pb-2 dc__user-select-none h-24 dc__gap-6 fs-12 lh-20 cn-9 fw-4 dc__ellipsis-right">
+                <span className="fw-6 dc__capitalize">{labelToDisplay}</span>
+                <span className="dc__divider h-24" />
+                <span className="dc__ellipsis-right">{valueToDisplay}</span>
+                <button
+                    type="button"
+                    className="flex p-0 dc__transparent"
+                    onClick={removeFilter}
+                    aria-label="Remove filter"
+                >
+                    <CloseIcon className="icon-dim-12 icon-use-fill-n6" />
+                </button>
+            </div>
+        )
     )
 }
 
 /**
  * Component for rendering the applied filter chips
  */
-const FilterChips = ({
+const FilterChips = <T = Record<string, unknown>,>({
     filterConfig,
     clearFilters,
     onRemoveFilter,
     getFormattedLabel,
     getFormattedValue,
-}: FilterChipsProps) => {
+    className = '',
+    clearButtonClassName = '',
+}: FilterChipsProps<T>) => {
     const handleRemoveFilter = (filterKey, valueToRemove) => {
         const updatedFilterConfig = JSON.parse(JSON.stringify(filterConfig))
         if (Array.isArray(filterConfig[filterKey])) {
@@ -63,7 +84,7 @@ const FilterChips = ({
 
     return (
         chips.length > 0 && (
-            <div className="flexbox pt-6 pb-6 flex-wrap dc__gap-8">
+            <div className={`flexbox pt-6 pb-6 flex-wrap dc__gap-8 ${className}`}>
                 {chips.map(([filterKey, filterValue]) =>
                     Array.isArray(filterValue) ? (
                         filterValue.map((filter) => (
@@ -88,7 +109,11 @@ const FilterChips = ({
                     ),
                 )}
                 <div className="flex">
-                    <button type="button" className="cta text fs-13-imp lh-20-imp h-20 p-0-imp" onClick={clearFilters}>
+                    <button
+                        type="button"
+                        className={`cta text fs-13-imp lh-20-imp h-20 p-0-imp ${clearButtonClassName}`}
+                        onClick={clearFilters}
+                    >
                         Clear All Filters
                     </button>
                 </div>
