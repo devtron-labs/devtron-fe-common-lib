@@ -17,6 +17,7 @@
 import { useState } from 'react'
 import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '../../Constants'
 import { PaginationType, UseStateFiltersProps, UseStateFiltersReturnType } from './types'
+import { DEFAULT_PAGE_NUMBER } from '../useUrlFilters/constants'
 
 /**
  * Generic hook for implementing state based pagination, search, sorting.
@@ -40,16 +41,16 @@ const useStateFilters = <T = string,>({
     })
     const { sortBy, sortOrder } = sortingConfig
 
-    const [pagination, setPagination] = useState<PaginationType>({
+    const [pagination, setPagination] = useState<PaginationType<T>>({
         pageSize: DEFAULT_BASE_PAGE_SIZE,
-        offset: 0,
+        pageNumber: DEFAULT_PAGE_NUMBER,
     })
+    const offset = pagination.pageSize * (pagination.pageNumber - 1)
 
     const changePage = (pageNo: number): void => {
-        const offset = pagination.pageSize * (pageNo - 1)
         setPagination({
             ...pagination,
-            offset,
+            pageNumber: pageNo,
         })
     }
 
@@ -57,7 +58,6 @@ const useStateFilters = <T = string,>({
         setPagination({
             ...pagination,
             pageSize: _pageSize,
-            offset: 0,
         })
     }
 
@@ -75,19 +75,16 @@ const useStateFilters = <T = string,>({
             sortBy: _sortBy,
             sortOrder: order,
         }))
+        setPagination({
+            ...pagination,
+            pageNumber: DEFAULT_PAGE_NUMBER,
+        })
     }
 
     const clearFilters = () => {
         setSortingConfig({
             sortOrder: SortingOrder.ASC,
             sortBy: initialSortKey,
-        })
-    }
-
-    const resetPagination = () => {
-        setPagination({
-            pageSize: DEFAULT_BASE_PAGE_SIZE,
-            offset: 0,
         })
     }
 
@@ -98,7 +95,7 @@ const useStateFilters = <T = string,>({
         ...pagination,
         changePage,
         changePageSize,
-        resetPagination,
+        offset,
     }
 }
 

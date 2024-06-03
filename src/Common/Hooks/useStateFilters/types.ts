@@ -29,14 +29,6 @@ export interface UseStateFiltersReturnType<T>
         | 'changePageSize'
         | 'offset'
         | 'pageSize'
-    > {
-    /*
-     *  Handler for resetting the pagination to the initial state
-     */
-    resetPagination: () => void
-}
+    > {}
 
-export interface PaginationType {
-    pageSize: number
-    offset: number
-}
+export interface PaginationType<T> extends Pick<UseUrlFiltersReturnType<T>, 'pageSize' | 'pageNumber'> {}
