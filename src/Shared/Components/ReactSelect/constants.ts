@@ -51,7 +51,7 @@ export const CommonGroupedDropdownStyles = {
     }),
     valueContainer: (base) => ({
         ...base,
-        padding: '4px 0px 4px 8px',
+        padding: '8px 0px 8px 8px',
         display: 'flex',
         minHeight: '36px',
         gap: '6px',

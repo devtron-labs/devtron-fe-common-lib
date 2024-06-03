@@ -168,7 +168,7 @@ export const GroupHeading = (props: any) => {
 
 export const DropdownIndicator = (props) => (
     <components.DropdownIndicator {...props}>
-        <ICCaretDown className="icon-dim-20 icon-n5" data-testId />
+        <ICCaretDown className="icon-dim-20 icon-n6" data-testId />
     </components.DropdownIndicator>
 )
 
