@@ -53,7 +53,7 @@ export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.F
     const getLabel = () => (
         <span>
             Type
-            <span className="fw-6">&nbsp;&apos;{deleteConfirmationText}&apos;&nbsp;</span>
+            <span className="fw-6 dc__word-break">&nbsp;&apos;{deleteConfirmationText}&apos;&nbsp;</span>
             to confirm
         </span>
     )
