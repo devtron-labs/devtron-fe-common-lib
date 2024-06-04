@@ -30,17 +30,17 @@ export class VisibleModal2 extends React.Component<{ className: string; close?: 
         preventBodyScroll(false)
     }
 
+    handleBodyClick = (e: SyntheticEvent) => {
+        e.stopPropagation()
+
+        this.props.close?.(e)
+    }
+
     render() {
-        const handleBodyClick = (e: SyntheticEvent) => {
-            e.stopPropagation()
-
-            this.props?.close?.(e)
-        }
-
         return ReactDOM.createPortal(
             <div
                 className={`visible-modal__body ${this.props.className}`}
-                onClick={handleBodyClick}
+                onClick={this.handleBodyClick}
                 data-testid="visible-modal2-close"
             >
                 {this.props.children}
