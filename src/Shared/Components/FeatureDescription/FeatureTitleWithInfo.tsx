@@ -46,7 +46,7 @@ const FeatureTitleWithInfo = ({
             >
                 <div className="flexbox dc__align-items-center dc__gap-4">
                     <BreadCrumb breadcrumbs={breadCrumbs} />
-                    <ICHelpOutline className={`${iconClassName} icon-dim-20 cursor`} onClick={onClickInfoIcon} />
+                    <ICHelpOutline className={`${iconClassName} icon-dim-20 cursor fcn-6`} onClick={onClickInfoIcon} />
                 </div>
 
                 {children}
