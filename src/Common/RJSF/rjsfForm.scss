@@ -14,5 +14,11 @@
             // This is added as the array field itself has a margin bottom
             margin: 0;
         }
+
+        &:has(> .remove-btn-container:hover) {
+            outline: 1px solid var(--N200);
+            outline-offset: 6px;
+            border-radius: 4px;
+        }
     }
 }
