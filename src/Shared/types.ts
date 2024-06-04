@@ -191,6 +191,7 @@ export enum ResourceKindType {
     releaseTrack = 'release-track',
     tenant = 'tenant',
     installation = 'installation',
+    environment = 'environment',
 }
 
 /**
@@ -328,4 +329,10 @@ export interface CreatedByDTO {
     icon: boolean
     id: number
     name: string
+}
+
+export enum DependencyType {
+    UPSTREAM = 'upstream',
+    DOWNSTREAM = 'downstream',
+    LEVEL = 'level',
 }
