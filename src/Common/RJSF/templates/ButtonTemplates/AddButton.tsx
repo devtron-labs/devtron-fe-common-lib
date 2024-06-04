@@ -16,6 +16,7 @@
 
 import React from 'react'
 import { IconButtonProps } from '@rjsf/utils'
+import Tippy from '@tippyjs/react'
 
 import { ReactComponent as PlusIcon } from '../../../../Assets/Icon/ic-add.svg'
 
@@ -26,16 +27,27 @@ export const AddButton = ({
     registry,
     uiSchema,
     ...props
-}: IconButtonProps & Partial<Record<'label', string>>) => (
-    <div className="flexbox flex-justify-start">
-        <button
-            {...props}
-            type="button"
-            className="dc__outline br-4 pl-8 pr-8 pt-2 pb-2 dc__transparent flex dc__gap-4 cursor dc__mxw-250"
-            title="Add"
-        >
-            <PlusIcon className="icon-dim-16 fcb-5" />
-            <span className="cb-5 fs-13 lh-20 dc__truncate">Add {label}</span>
-        </button>
-    </div>
-)
+}: IconButtonProps & Partial<Record<'label', string>>) => {
+    const content = `Add ${label}`
+
+    return (
+        <div className="flexbox flex-justify-start">
+            <Tippy
+                className="default-tt"
+                arrow={false}
+                placement="right"
+                content={content}
+            >
+                <button
+                    {...props}
+                    type="button"
+                    className="dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor dc__mxw-250"
+                    title="Add"
+                >
+                    <PlusIcon className="icon-dim-16 fcb-5" />
+                    <span className="cb-5 fs-13 lh-20 dc__truncate">{content}</span>
+                </button>
+            </Tippy>
+        </div>
+    )
+} 
