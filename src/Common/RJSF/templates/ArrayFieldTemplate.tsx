@@ -19,14 +19,20 @@ import { getTemplate, getUiOptions, ArrayFieldTemplateProps, ArrayFieldTemplateI
 import { FieldRowWithLabel } from '../common/FieldRow'
 import { DO_NOT_SHOW_LABEL } from '../constants'
 
-const ActionButton = ({ canAdd, onAddClick, disabled, readonly, uiSchema, registry }) => {
+const ActionButton = ({ label, canAdd, onAddClick, disabled, readonly, uiSchema, registry }) => {
     const {
         ButtonTemplates: { AddButton },
     } = registry.templates
 
     return (
         canAdd && (
-            <AddButton onClick={onAddClick} disabled={disabled || readonly} uiSchema={uiSchema} registry={registry} />
+            <AddButton
+                label={label}
+                onClick={onAddClick}
+                disabled={disabled || readonly}
+                uiSchema={uiSchema}
+                registry={registry}
+            />
         )
     )
 }
@@ -69,6 +75,7 @@ export const ArrayFieldTemplate = ({
                         )
                     })}
                     <ActionButton
+                        label={label}
                         canAdd={canAdd}
                         onAddClick={onAddClick}
                         disabled={disabled}
@@ -80,6 +87,7 @@ export const ArrayFieldTemplate = ({
             ) : (
                 <FieldRowWithLabel label={label} required={required} showLabel id={idSchema.$id}>
                     <ActionButton
+                        label={label}
                         canAdd={canAdd}
                         onAddClick={onAddClick}
                         disabled={disabled}

@@ -19,16 +19,23 @@ import { IconButtonProps } from '@rjsf/utils'
 
 import { ReactComponent as PlusIcon } from '../../../../Assets/Icon/ic-add.svg'
 
-export const AddButton = ({ icon, iconType, registry, uiSchema, ...props }: IconButtonProps) => (
+export const AddButton = ({
+    label,
+    icon,
+    iconType,
+    registry,
+    uiSchema,
+    ...props
+}: IconButtonProps & Partial<Record<'label', string>>) => (
     <div className="flexbox flex-justify-start">
         <button
             {...props}
             type="button"
-            className="dc__outline br-4 pl-8 pr-8 pt-2 pb-2 dc__transparent flex dc__gap-4 cursor"
+            className="dc__outline br-4 pl-8 pr-8 pt-2 pb-2 dc__transparent flex dc__gap-4 cursor dc__mxw-250"
             title="Add"
         >
             <PlusIcon className="icon-dim-16 fcb-5" />
-            <span className="cb-5 fs-13 lh-20">Add</span>
+            <span className="cb-5 fs-13 lh-20 dc__truncate">Add {label}</span>
         </button>
     </div>
 )
