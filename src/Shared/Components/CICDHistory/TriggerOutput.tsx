@@ -21,6 +21,8 @@ import {
     UserApprovalMetadataType,
     useScrollable,
     URLS,
+    ServerError,
+    mapByKey,
 } from '../../../Common'
 import {
     CurrentStatusType,
@@ -680,8 +682,8 @@ const HistoryLogs: React.FC<{
 
 const TriggerOutput = ({
     fullScreenView,
-    syncState,
     triggerHistory,
+    setTriggerHistory,
     setFullScreenView,
     setDeploymentHistoryList,
     deploymentHistoryList,
@@ -691,7 +693,9 @@ const TriggerOutput = ({
     tagsEditable,
     hideImageTaggingHardDelete,
     fetchIdData,
+    setFetchTriggerIdData,
     selectedEnvironmentName,
+    deploymentHistoryResult,
     renderRunSource,
     renderCIListHeader,
     renderDeploymentApprovalInfo,
@@ -713,6 +717,37 @@ const TriggerOutput = ({
         [triggerId, appId, envId],
         !!triggerId && !!pipelineId,
     )
+
+    // Function to sync the trigger details as trigger details is also fetched with another api
+    const syncState = (syncTriggerId: number, triggerDetail: History, triggerDetailsError: ServerError) => {
+        if (triggerDetailsError) {
+            if (deploymentHistoryResult?.result?.cdWorkflows?.length) {
+                setTriggerHistory(mapByKey(deploymentHistoryResult.result.cdWorkflows, 'id'))
+            }
+            setFetchTriggerIdData(FetchIdDataStatus.SUSPEND)
+            return
+        }
+        if (syncTriggerId === triggerDetail?.id) {
+            const appliedFilters = triggerHistory.get(syncTriggerId)?.appliedFilters ?? []
+            const appliedFiltersTimestamp = triggerHistory.get(syncTriggerId)?.appliedFiltersTimestamp
+            const promotionApprovalMetadata = triggerHistory.get(syncTriggerId)?.promotionApprovalMetadata
+            const runSource = triggerHistory.get(syncTriggerId)?.runSource
+            // These changes are not subject to change after refresh, add data which will not change
+            const additionalDataObject = {
+                ...(appliedFilters.length ? { appliedFilters } : {}),
+                ...(appliedFiltersTimestamp ? { appliedFiltersTimestamp } : {}),
+                ...(promotionApprovalMetadata ? { promotionApprovalMetadata } : {}),
+                ...(runSource ? { runSource } : {}),
+            }
+            setTriggerHistory((newTriggerHistory) => {
+                newTriggerHistory.set(syncTriggerId, { ...triggerDetail, ...additionalDataObject })
+                return new Map(newTriggerHistory)
+            })
+            if (fetchIdData === FetchIdDataStatus.FETCHING) {
+                setFetchTriggerIdData(FetchIdDataStatus.SUCCESS)
+            }
+        }
+    }
 
     let areTagDetailsRequired = !!fetchIdData && fetchIdData !== FetchIdDataStatus.SUSPEND
     if (triggerDetailsResult?.result?.artifactId === 0 || triggerDetails?.artifactId === 0) {

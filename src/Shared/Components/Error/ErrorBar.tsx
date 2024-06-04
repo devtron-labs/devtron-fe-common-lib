@@ -15,7 +15,7 @@ const ErrorBar = ({ appDetails }: ErrorBarType) => {
                 const node = appDetails.resourceTree.nodes[index]
                 let _isImagePullBackOff = false
                 if (node.info?.length) {
-                    for (let idx = 0; index < node.info.length; idx++) {
+                    for (let idx = 0; idx < node.info.length; idx++) {
                         const info = node.info[idx]
                         if (
                             info.value &&

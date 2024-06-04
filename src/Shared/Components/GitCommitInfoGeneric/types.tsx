@@ -1,11 +1,11 @@
 export interface GitCommitInfoGenericProps {
     materialSourceType: any
-    materialSourceValue: any
+    materialSourceValue: string
     commitInfo: any
     selectedCommitInfo: any
-    materialUrl: any
-    showMaterialInfoHeader: any
-    canTriggerBuild?: any
-    index: any
-    isExcluded?: any
+    materialUrl: string
+    showMaterialInfoHeader: boolean
+    canTriggerBuild?: boolean
+    index: number
+    isExcluded?: boolean
 }

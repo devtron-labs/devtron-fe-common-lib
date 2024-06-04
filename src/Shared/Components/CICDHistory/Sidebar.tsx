@@ -366,7 +366,7 @@ const Sidebar = React.memo(
                     </div>
                 )}
 
-                <div className="flex column top left flex-grow-1" style={{ overflowY: 'auto' }}>
+                <div className="flex column top left flex-grow-1 dc__hide-hscroll" style={{ overflowY: 'auto' }}>
                     {fetchIdData === FetchIdDataStatus.SUCCESS && (
                         <ViewAllCardsTile handleViewAllHistory={handleViewAllHistory} />
                     )}

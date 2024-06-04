@@ -353,7 +353,6 @@ export interface VirtualHistoryArtifactProps {
 }
 export interface TriggerOutputProps extends RenderRunSourceType {
     fullScreenView: boolean
-    syncState: (triggerId: number, triggerDetails: History, triggerDetailsError: any) => void
     triggerHistory: Map<number, History>
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
     deploymentHistoryList: DeploymentTemplateList[]
@@ -373,6 +372,9 @@ export interface TriggerOutputProps extends RenderRunSourceType {
     renderVirtualHistoryArtifacts?: (virtualHistoryArtifactProps: VirtualHistoryArtifactProps) => JSX.Element
     renderDeploymentHistoryTriggerMetaText?: (triggerMetaData: string) => JSX.Element
     resourceId?: number
+    deploymentHistoryResult: Pick<DeploymentHistoryResult, 'result'>
+    setFetchTriggerIdData: React.Dispatch<React.SetStateAction<FetchIdDataStatus>>
+    setTriggerHistory: React.Dispatch<React.SetStateAction<Map<Number, History>>>
 }
 
 export interface DeploymentStatusDetailBreakdownType {
