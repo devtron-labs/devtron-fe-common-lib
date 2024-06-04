@@ -90,7 +90,7 @@ export const CommonGroupedDropdownStyles = {
         border: `1px solid var(--N200)`,
         borderRadius: `4px`,
         background: 'white',
-        height: '28px',
+        height: '24px',
         margin: '0px',
         padding: '2px',
         fontSize: '13px',

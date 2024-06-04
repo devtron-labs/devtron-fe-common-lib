@@ -33,10 +33,6 @@ export type UseUrlFiltersReturnType<T, K = unknown> = K & {
      */
     pageSize: number
     /**
-     * PageNumber for the current page
-     */
-    pageNumber?: number
-    /**
      * Handler for updating the current page
      */
     changePage: (pageNumber: number) => void

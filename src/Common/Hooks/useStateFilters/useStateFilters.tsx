@@ -58,6 +58,7 @@ const useStateFilters = <T = string,>({
         setPagination({
             ...pagination,
             pageSize: _pageSize,
+            pageNumber: DEFAULT_PAGE_NUMBER,
         })
     }
 

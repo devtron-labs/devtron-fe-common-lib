@@ -31,4 +31,6 @@ export interface UseStateFiltersReturnType<T>
         | 'pageSize'
     > {}
 
-export interface PaginationType<T> extends Pick<UseUrlFiltersReturnType<T>, 'pageSize' | 'pageNumber'> {}
+export interface PaginationType<T> extends Pick<UseUrlFiltersReturnType<T>, 'pageSize'> {
+    pageNumber: number
+}
