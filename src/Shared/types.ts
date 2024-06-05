@@ -312,6 +312,7 @@ export type AggregationKeysType = keyof typeof AggregationKeys
 export enum GitOpsAuthModeType {
     SSH = 'SSH',
     PASSWORD = 'PASSWORD',
+    SSH_AND_PASSWORD = 'PAT_AND_SSH',
 }
 
 export interface BaseGitOpsType {
@@ -319,6 +320,7 @@ export interface BaseGitOpsType {
     sshKey: string
     sshHost: string
     username: string
+    token: string
 }
 
 export type GitOpsFieldKeyType =
