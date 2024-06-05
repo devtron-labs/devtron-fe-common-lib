@@ -15,6 +15,7 @@
  */
 
 import { TranslatableString, englishStringTranslator } from '@rjsf/utils'
+import Tippy from '@tippyjs/react'
 
 /**
  * Override for the TranslatableString from RJSF
@@ -72,7 +73,7 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
         ...base,
         color: 'var(--N600)',
     }),
-    multiValue: (base, state) => ({
+    multiValue: (base) => ({
         ...base,
         border: `1px solid var(--N200)`,
         borderRadius: `4px`,
@@ -135,3 +136,9 @@ export const getInferredTypeFromValueType = (value) => {
             return 'null'
     }
 }
+
+export const getTippyWrapperWithContent = (content) => (children) => (
+    <Tippy className="default-tt" arrow={false} placement="right" content={content}>
+        {children}
+    </Tippy>
+)
