@@ -1,4 +1,3 @@
-import { TIMELINE_STATUS } from "../../Shared/constants"
 /*
  * Copyright (c) 2024. Devtron Inc.
  *
@@ -14,6 +13,8 @@ import { TIMELINE_STATUS } from "../../Shared/constants"
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { TIMELINE_STATUS } from "../../Shared/constants"
 
 export const triggerStatus = (triggerDetailStatus: string): string => {
     const triggerStatus = triggerDetailStatus?.toUpperCase()
