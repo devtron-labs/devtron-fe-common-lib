@@ -719,8 +719,8 @@ const TriggerOutput = ({
     )
 
     // Function to sync the trigger details as trigger details is also fetched with another api
-    const syncState = (syncTriggerId: number, syncTriggerDetail: History, triggerDetailsError: ServerError) => {
-        if (triggerDetailsError) {
+    const syncState = (syncTriggerId: number, syncTriggerDetail: History, syncTriggerDetailsError: ServerError) => {
+        if (syncTriggerDetailsError) {
             if (deploymentHistoryResult?.result?.cdWorkflows?.length) {
                 setTriggerHistory(mapByKey(deploymentHistoryResult.result.cdWorkflows, 'id'))
             }
