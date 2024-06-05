@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { Redirect, Route, Switch, useLocation, useParams, useRouteMatch } from 'react-router'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
@@ -21,6 +37,8 @@ import {
     UserApprovalMetadataType,
     useScrollable,
     URLS,
+    ServerError,
+    mapByKey,
 } from '../../../Common'
 import {
     CurrentStatusType,
@@ -680,8 +698,8 @@ const HistoryLogs: React.FC<{
 
 const TriggerOutput = ({
     fullScreenView,
-    syncState,
     triggerHistory,
+    setTriggerHistory,
     setFullScreenView,
     setDeploymentHistoryList,
     deploymentHistoryList,
@@ -691,7 +709,9 @@ const TriggerOutput = ({
     tagsEditable,
     hideImageTaggingHardDelete,
     fetchIdData,
+    setFetchTriggerIdData,
     selectedEnvironmentName,
+    deploymentHistoryResult,
     renderRunSource,
     renderCIListHeader,
     renderDeploymentApprovalInfo,
@@ -713,6 +733,37 @@ const TriggerOutput = ({
         [triggerId, appId, envId],
         !!triggerId && !!pipelineId,
     )
+
+    // Function to sync the trigger details as trigger details is also fetched with another api
+    const syncState = (syncTriggerId: number, syncTriggerDetail: History, syncTriggerDetailsError: ServerError) => {
+        if (syncTriggerDetailsError) {
+            if (deploymentHistoryResult?.result?.cdWorkflows?.length) {
+                setTriggerHistory(mapByKey(deploymentHistoryResult.result.cdWorkflows, 'id'))
+            }
+            setFetchTriggerIdData(FetchIdDataStatus.SUSPEND)
+            return
+        }
+        if (syncTriggerId === syncTriggerDetail?.id) {
+            const appliedFilters = triggerHistory.get(syncTriggerId)?.appliedFilters ?? []
+            const appliedFiltersTimestamp = triggerHistory.get(syncTriggerId)?.appliedFiltersTimestamp
+            const promotionApprovalMetadata = triggerHistory.get(syncTriggerId)?.promotionApprovalMetadata
+            const runSource = triggerHistory.get(syncTriggerId)?.runSource
+            // These changes are not subject to change after refresh, add data which will not change
+            const additionalDataObject = {
+                ...(appliedFilters.length ? { appliedFilters } : {}),
+                ...(appliedFiltersTimestamp ? { appliedFiltersTimestamp } : {}),
+                ...(promotionApprovalMetadata ? { promotionApprovalMetadata } : {}),
+                ...(runSource ? { runSource } : {}),
+            }
+            setTriggerHistory((newTriggerHistory) => {
+                newTriggerHistory.set(syncTriggerId, { ...syncTriggerDetail, ...additionalDataObject })
+                return new Map(newTriggerHistory)
+            })
+            if (fetchIdData === FetchIdDataStatus.FETCHING) {
+                setFetchTriggerIdData(FetchIdDataStatus.SUCCESS)
+            }
+        }
+    }
 
     let areTagDetailsRequired = !!fetchIdData && fetchIdData !== FetchIdDataStatus.SUSPEND
     if (triggerDetailsResult?.result?.artifactId === 0 || triggerDetails?.artifactId === 0) {

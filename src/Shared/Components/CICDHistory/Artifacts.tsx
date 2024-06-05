@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import {
@@ -6,7 +22,6 @@ import {
     ImageTagsContainer,
     ClipboardButton,
     extractImage,
-    getUserRole,
     DOCUMENTATION,
 } from '../../../Common'
 import { ReactComponent as Download } from '../../../Assets/Icon/ic-download.svg'
@@ -20,6 +35,7 @@ import noartifact from '../../../Assets/Img/no-artifact@2x.png'
 import { ArtifactType, CIListItemType, HistoryComponentType } from './types'
 import { TERMINAL_STATUS_MAP } from './constants'
 import { EMPTY_STATE_STATUS } from '../../constants'
+import { useMainContext } from '../../Providers'
 
 const CIProgressView = (): JSX.Element => (
     <GenericEmptyState
@@ -120,23 +136,7 @@ const Artifacts = ({
     jobCIClass,
     renderCIListHeader,
 }: ArtifactType) => {
-    const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false)
-
-    async function initialise() {
-        try {
-            const userRole = await getUserRole()
-
-            const superAdmin = userRole?.result?.roles?.includes('role:super-admin___')
-            setSuperAdmin(superAdmin)
-        } catch (err) {
-            showError(err)
-        }
-    }
-
-    useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        initialise()
-    }, [])
+    const { isSuperAdmin } = useMainContext()
 
     const { triggerId, buildId } = useParams<{
         triggerId: string
