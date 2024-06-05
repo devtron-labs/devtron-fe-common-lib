@@ -9,16 +9,25 @@
 
     &__array-field-item {
         grid-template-columns: 1fr auto;
+        z-index: 1;
+        background: transparent;
 
         & > :first-child {
             // This is added as the array field itself has a margin bottom
             margin: 0;
         }
 
-        &:has(> .remove-btn-container:hover) {
-            outline: 1px solid var(--N200);
-            outline-offset: 6px;
+        &:has(> .remove-btn-container:hover)::after {
             border-radius: 4px;
+            transform: translate(-50%, -50%);
+            top: 50%; 
+            left: 50%; 
+            background: var(--N50);
+            z-index: -1;
+            position: absolute;
+            height: calc(100% + 12px);
+            width: calc(100% + 12px);
+            content: '';
         }
     }
 }
