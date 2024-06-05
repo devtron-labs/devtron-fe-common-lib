@@ -719,7 +719,7 @@ const TriggerOutput = ({
     )
 
     // Function to sync the trigger details as trigger details is also fetched with another api
-    const syncState = (syncTriggerId: number, triggerDetail: History, triggerDetailsError: ServerError) => {
+    const syncState = (syncTriggerId: number, syncTriggerDetail: History, triggerDetailsError: ServerError) => {
         if (triggerDetailsError) {
             if (deploymentHistoryResult?.result?.cdWorkflows?.length) {
                 setTriggerHistory(mapByKey(deploymentHistoryResult.result.cdWorkflows, 'id'))
@@ -727,7 +727,7 @@ const TriggerOutput = ({
             setFetchTriggerIdData(FetchIdDataStatus.SUSPEND)
             return
         }
-        if (syncTriggerId === triggerDetail?.id) {
+        if (syncTriggerId === syncTriggerDetail?.id) {
             const appliedFilters = triggerHistory.get(syncTriggerId)?.appliedFilters ?? []
             const appliedFiltersTimestamp = triggerHistory.get(syncTriggerId)?.appliedFiltersTimestamp
             const promotionApprovalMetadata = triggerHistory.get(syncTriggerId)?.promotionApprovalMetadata
@@ -740,7 +740,7 @@ const TriggerOutput = ({
                 ...(runSource ? { runSource } : {}),
             }
             setTriggerHistory((newTriggerHistory) => {
-                newTriggerHistory.set(syncTriggerId, { ...triggerDetail, ...additionalDataObject })
+                newTriggerHistory.set(syncTriggerId, { ...syncTriggerDetail, ...additionalDataObject })
                 return new Map(newTriggerHistory)
             })
             if (fetchIdData === FetchIdDataStatus.FETCHING) {
