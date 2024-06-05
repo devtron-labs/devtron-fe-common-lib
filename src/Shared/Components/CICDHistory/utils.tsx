@@ -73,7 +73,7 @@ export const getParsedTriggerHistory = (result): DeploymentHistoryResultObject =
     return parsedResult
 }
 
-export const _buildHoverHtmlForWebhook = (eventName, condition, selectors) => {
+export const buildHoverHtmlForWebhook = (eventName, condition, selectors) => {
     const _conditions = []
     Object.keys(condition).forEach((_selectorId) => {
         // eslint-disable-next-line eqeqeq

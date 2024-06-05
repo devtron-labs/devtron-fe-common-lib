@@ -22,7 +22,7 @@ import webhookIcon from '../../../Assets/Icon/ic-webhook.svg'
 import branchIcon from '../../../Assets/Icon/ic-branch.svg'
 import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-outlined.svg'
 import regexIcon from '../../../Assets/Icon/ic-regex.svg'
-import { _buildHoverHtmlForWebhook } from './utils'
+import { buildHoverHtmlForWebhook } from './utils'
 
 export interface CIPipelineSourceConfigInterface {
     sourceType
@@ -60,7 +60,7 @@ export const CiPipelineSourceConfig = ({
                     const _webhookEvent = _res.result
                     setSourceValueBase(_webhookEvent.name)
                     setSourceValueAdv(
-                        _buildHoverHtmlForWebhook(
+                        buildHoverHtmlForWebhook(
                             _webhookEvent.name,
                             _sourceValueObj.condition,
                             _webhookEvent.selectors,
@@ -110,7 +110,7 @@ export const CiPipelineSourceConfig = ({
             .then((_res) => {
                 const _webhookEvent = _res.result
                 setSourceValueBase(_webhookEvent.name)
-                setSourceValueAdv(_buildHoverHtmlForWebhook(_webhookEvent.name, _condition, _webhookEvent.selectors))
+                setSourceValueAdv(buildHoverHtmlForWebhook(_webhookEvent.name, _condition, _webhookEvent.selectors))
                 setLoading(false)
             })
             .catch((error) => {

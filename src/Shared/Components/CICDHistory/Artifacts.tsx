@@ -23,6 +23,7 @@ import {
     ClipboardButton,
     extractImage,
     DOCUMENTATION,
+    useSuperAdmin,
 } from '../../../Common'
 import { ReactComponent as Download } from '../../../Assets/Icon/ic-download.svg'
 import { ReactComponent as MechanicalOperation } from '../../../Assets/Icon/ic-mechanical-operation.svg'
@@ -35,7 +36,6 @@ import noartifact from '../../../Assets/Img/no-artifact@2x.png'
 import { ArtifactType, CIListItemType, HistoryComponentType } from './types'
 import { TERMINAL_STATUS_MAP } from './constants'
 import { EMPTY_STATE_STATUS } from '../../constants'
-import { useMainContext } from '../../Providers'
 
 const CIProgressView = (): JSX.Element => (
     <GenericEmptyState
@@ -136,7 +136,7 @@ const Artifacts = ({
     jobCIClass,
     renderCIListHeader,
 }: ArtifactType) => {
-    const { isSuperAdmin } = useMainContext()
+    const { isSuperAdmin } = useSuperAdmin()
 
     const { triggerId, buildId } = useParams<{
         triggerId: string

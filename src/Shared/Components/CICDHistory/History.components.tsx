@@ -17,7 +17,7 @@
 import Tippy from '@tippyjs/react'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router'
-import { ClipboardButton, GenericEmptyState, extractImage, useKeyDown } from '../../../Common'
+import { ClipboardButton, GenericEmptyState, extractImage, useKeyDown, useSuperAdmin } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { GitChangesType, LogResizeButtonType, ScrollerType } from './types'
@@ -25,7 +25,6 @@ import GitCommitInfoGeneric from '../GitCommitInfoGeneric/GitCommitInfoGeneric'
 import { CIListItem } from './Artifacts'
 import { ReactComponent as ZoomIn } from '../../../Assets/Icon/ic-fullscreen.svg'
 import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscreen.svg'
-import { useMainContext } from '../../Providers'
 
 export const LogResizeButton = ({ fullScreenView, setFullScreenView }: LogResizeButtonType): JSX.Element => {
     const { pathname } = useLocation()
@@ -117,7 +116,7 @@ export const GitChanges = ({
     selectedEnvironmentName,
     renderCIListHeader,
 }: GitChangesType) => {
-    const { isSuperAdmin } = useMainContext()
+    const { isSuperAdmin } = useSuperAdmin()
 
     if (!ciMaterials?.length || !Object.keys(gitTriggers ?? {}).length) {
         return (
