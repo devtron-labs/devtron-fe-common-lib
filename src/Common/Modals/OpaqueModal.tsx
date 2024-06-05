@@ -8,6 +8,9 @@ export interface OpaqueModalProps {
     noBackground?: boolean
 }
 
+/**
+ * @deprecated Use VisibleModal instead
+ */
 export class OpaqueModal extends React.Component<OpaqueModalProps> {
     modalRef = document.getElementById('full-screen-modal')
 
