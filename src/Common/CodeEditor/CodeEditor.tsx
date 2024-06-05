@@ -1,106 +1,58 @@
-import React, { useEffect, useCallback, useReducer, useRef } from 'react'
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import React, { useEffect, useReducer, useRef } from 'react'
 import MonacoEditor, { MonacoDiffEditor } from 'react-monaco-editor'
-// import { useJsonYaml, Select, RadioGroup, useWindowSize, copyToClipboard } from '../common'
-// import { Progressing } from '@devtron-labs/devtron-fe-common-lib'
 import YAML from 'yaml'
+import ReactGA from 'react-ga4'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import { ReactComponent as ClipboardIcon } from '../../Assets/Icon/ic-copy.svg'
+import { configureMonacoYaml } from 'monaco-yaml'
+
+import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-error-exclamation.svg'
 import { ReactComponent as WarningIcon } from '../../Assets/Icon/ic-warning.svg'
 import './codeEditor.scss'
-// import ReactGA from 'react-ga4';
 import 'monaco-editor'
-// @ts-ignore
-// import 'monaco-yaml/lib/esm/monaco.contribution';
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-// import EditorWorker from 'web-worker:monaco-editor/esm/vs/editor/editor.worker';
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-// import YamlWorker from 'web-worker:monaco-yaml/lib/esm/yaml.worker';
-import { Progressing } from '../Progressing'
-import { useWindowSize } from '../Hooks/UseWindowSize/UseWindowSize'
-import { YAMLStringify, cleanKubeManifest, copyToClipboard, useJsonYaml } from '../Helper'
+
+import YamlWorker from '../../yaml.worker.js?worker'
+import { YAMLStringify, cleanKubeManifest, useJsonYaml } from '../Helper'
+import { useWindowSize } from '../Hooks'
 import Select from '../Select/Select'
 import RadioGroup from '../RadioGroup/RadioGroup'
+import ClipboardButton from '../ClipboardButton/ClipboardButton'
+import { Progressing } from '../Progressing'
+import {
+    CodeEditorComposition,
+    CodeEditorHeaderComposition,
+    CodeEditorHeaderInterface,
+    CodeEditorInterface,
+    CodeEditorThemesKeys,
+    InformationBarProps,
+} from './types'
+import { CodeEditorReducer, initialState } from './CodeEditor.reducer'
+import { MODES } from '../Constants'
 
-// @ts-ignore
-window.MonacoEnvironment = {
-    // @ts-ignore
-    getWorker(workerId, label: string) {
-        switch (label) {
-            case 'editorWorkerService':
-                return new Worker(new URL('monaco-editor/esm/vs/editor/editor.worker.js', import.meta.url))
-            case 'json':
-                return new Worker(new URL('monaco-editor/esm/vs/language/json/json.worker.js', import.meta.url))
-            case 'yaml':
-                return new Worker(new URL('monaco-yaml/yaml.worker.js', import.meta.url))
-            default:
-                throw new Error(`Unknown label ${label}`)
+self.MonacoEnvironment = {
+    getWorker(_, label) {
+        if (label === MODES.YAML) {
+            return new YamlWorker()
         }
+        return new editorWorker()
     },
-}
-
-// @ts-ignore
-const { yaml } = monaco.languages || {}
-
-interface InformationBarProps {
-    text: string
-    className?: string
-    children?: React.ReactNode
-}
-
-interface CodeEditorInterface {
-    value?: string
-    lineDecorationsWidth?: number
-    responseType?: string
-    onChange?: (string) => void
-    onBlur?: () => void
-    onFocus?: () => void
-    children?: any
-    defaultValue?: string
-    mode?: 'json' | 'yaml' | 'shell' | 'dockerfile'
-    tabSize?: number
-    readOnly?: boolean
-    noParsing?: boolean
-    minHeight?: number
-    maxHeight?: number
-    inline?: boolean
-    height?: number | string
-    shebang?: string | JSX.Element
-    diffView?: boolean
-    loading?: boolean
-    customLoader?: JSX.Element
-    theme?: string
-    original?: string
-    focus?: boolean
-    validatorSchema?: any
-    isKubernetes?: boolean
-    cleanData?: boolean
-    chartVersion?: any
-}
-
-interface CodeEditorHeaderInterface {
-    children?: any
-    className?: string
-    hideDefaultSplitHeader?: boolean
-}
-interface CodeEditorComposition {
-    Header?: React.FC<any>
-    LanguageChanger?: React.FC<any>
-    ThemeChanger?: React.FC<any>
-    ValidationError?: React.FC<any>
-    Clipboard?: React.FC<any>
-    Warning?: React.FC<InformationBarProps>
-    ErrorBar?: React.FC<InformationBarProps>
-    Information?: React.FC<InformationBarProps>
-}
-interface CodeEditorHeaderComposition {
-    LanguageChanger?: React.FC<any>
-    ThemeChanger?: React.FC<any>
-    ValidationError?: React.FC<any>
-    Clipboard?: React.FC<any>
 }
 
 const CodeEditorContext = React.createContext(null)
@@ -113,23 +65,10 @@ function useCodeEditorContext() {
     return context
 }
 
-type ActionTypes = 'changeLanguage' | 'setDiff' | 'setTheme' | 'setCode' | 'setHeight'
-interface Action {
-    type: ActionTypes
-    value: any
-}
-
-interface CodeEditorState {
-    mode: 'json' | 'yaml' | 'shell' | 'dockerfile'
-    diffMode: boolean
-    theme: 'vs' | 'vs-dark'
-    code: string
-    noParsing: boolean
-}
 const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(
     ({
         value,
-        mode = 'json',
+        mode = MODES.JSON,
         noParsing = false,
         defaultValue = '',
         children,
@@ -138,8 +77,6 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         height = 450,
         inline = false,
         shebang = '',
-        minHeight,
-        maxHeight,
         onChange,
         readOnly,
         diffView,
@@ -162,38 +99,11 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         const editorRef = useRef(null)
         const monacoRef = useRef(null)
         const { width, height: windowHeight } = useWindowSize()
-        const memoisedReducer = useCallback((state: CodeEditorState, action: Action) => {
-            switch (action.type) {
-                case 'changeLanguage':
-                    return { ...state, mode: action.value }
-                case 'setDiff':
-                    return { ...state, diffMode: action.value }
-                case 'setTheme':
-                    return { ...state, theme: action.value }
-                case 'setCode':
-                    return { ...state, code: action.value }
-                case 'setHeight':
-                    return { ...state, height: action.value.toString() }
-                default:
-                    return state
-            }
-        }, [])
-        const initialState = {
-            mode,
-            theme: theme || 'vs',
-            code: value,
-            diffMode: diffView,
-            noParsing: ['json', 'yaml'].includes(mode) ? noParsing : true,
-        }
-        const [state, dispatch] = useReducer(memoisedReducer, initialState)
-        const [nativeObject, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
-        const [, originalJson, originlaYaml, originalError] = useJsonYaml(
-            defaultValue,
-            tabSize,
-            state.mode,
-            !state.noParsing,
-        )
-        monaco.editor.defineTheme('vs-dark--dt', {
+        const memoisedReducer = React.useCallback(CodeEditorReducer, [])
+        const [state, dispatch] = useReducer(memoisedReducer, initialState({mode, theme, value, diffView, noParsing}))
+        const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
+        const [, originalJson, originlaYaml] = useJsonYaml(defaultValue, tabSize, state.mode, !state.noParsing)
+        monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
             base: 'vs-dark',
             inherit: true,
             rules: [
@@ -205,7 +115,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             },
         })
 
-        monaco.editor.defineTheme('delete-draft', {
+        monaco.editor.defineTheme(CodeEditorThemesKeys.deleteDraft, {
             base: 'vs',
             inherit: true,
             rules: [],
@@ -215,7 +125,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             },
         })
 
-        monaco.editor.defineTheme('unpublished', {
+        monaco.editor.defineTheme(CodeEditorThemesKeys.unpublished, {
             base: 'vs',
             inherit: true,
             rules: [],
@@ -227,7 +137,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
 
         function editorDidMount(editor, monaco) {
             if (
-                mode === 'yaml' &&
+                mode === MODES.YAML &&
                 editor &&
                 typeof editor.getModel === 'function' &&
                 typeof editor.getModel().updateOptions === 'function'
@@ -250,37 +160,43 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         }
 
         useEffect(() => {
-            if (!validatorSchema) return
-            yaml &&
-                yaml.yamlDefaults.setDiagnosticsOptions({
-                    validate: true,
-                    enableSchemaRequest: true,
-                    hover: true,
-                    completion: true,
-                    isKubernetes,
-                    format: true,
-                    schemas: [
-                        {
-                            uri: `https://github.com/devtron-labs/devtron/tree/main/scripts/devtron-reference-helm-charts/reference-chart_${chartVersion}/schema.json`, // id of the first schema
-                            fileMatch: ['*'], // associate with our model
-                            schema: validatorSchema,
-                        },
-                    ],
-                })
+            if (!validatorSchema) {
+                return
+            }
+            const config = configureMonacoYaml(monaco, {
+                enableSchemaRequest: true,
+                isKubernetes,
+                schemas: [
+                    {
+                        uri: `https://github.com/devtron-labs/devtron/tree/main/scripts/devtron-reference-helm-charts/reference-chart_${chartVersion}/schema.json`, // id of the first schema
+                        fileMatch: ['*'], // associate with our model
+                        schema: validatorSchema,
+                    },
+                ],
+            })
+            return () => {
+                config.dispose()
+            }
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [validatorSchema, chartVersion])
         useEffect(() => {
-            if (!editorRef.current) return
+            if (!editorRef.current) {
+                return
+            }
             editorRef.current.updateOptions({ readOnly })
         }, [readOnly])
 
         useEffect(() => {
-            if (!editorRef.current) return
+            if (!editorRef.current) {
+                return
+            }
             editorRef.current.layout()
         }, [width, windowHeight])
 
         useEffect(() => {
-            if (onChange) onChange(state.code)
+            if (onChange) {
+                onChange(state.code)
+            }
         }, [state.code])
 
         useEffect(() => {
@@ -290,7 +206,9 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 return
             }
             let obj
-            if (value === state.code) return
+            if (value === state.code) {
+                return
+            }
             try {
                 obj = JSON.parse(value)
             } catch (err) {
@@ -300,7 +218,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             }
             let final = value
             if (obj) {
-                final = state.mode === 'json' ? JSON.stringify(obj, null, tabSize) : YAMLStringify(obj, { indent: 2 })
+                final = state.mode === 'json' ? JSON.stringify(obj, null, tabSize) : YAMLStringify(obj)
             }
             dispatch({ type: 'setCode', value: final })
         }, [value, noParsing])
@@ -342,6 +260,12 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 return `<span style="padding-right:6px">${lineNumber}</span>`
             },
         }
+
+        const diffViewOptions: monaco.editor.IDiffEditorConstructionOptions = {
+            ...options,
+            useInlineViewWhenSpaceIsLimited: false,
+        }
+
         return (
             <CodeEditorContext.Provider value={{ dispatch, state, handleLanguageChange, error, defaultValue, height }}>
                 {children}
@@ -358,7 +282,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                                 value={state.code}
                                 language={state.mode}
                                 onChange={handleOnChange}
-                                options={options}
+                                options={diffViewOptions}
                                 theme={state.theme.toLowerCase().split(' ').join('-')}
                                 editorDidMount={editorDidMount}
                                 height={height}
@@ -390,7 +314,7 @@ const Header: React.FC<CodeEditorHeaderInterface> & CodeEditorHeaderComposition 
 }) => {
     const { defaultValue } = useCodeEditorContext()
     return (
-        <div className={className || 'code-editor__header flex left'}>
+        <div className={className || 'code-editor__header flex right'}>
             {children}
             {!hideDefaultSplitHeader && defaultValue && <SplitPane />}
         </div>
@@ -421,7 +345,9 @@ const ThemeChanger = ({}) => {
 
 const LanguageChanger = ({}) => {
     const { readOnly, handleLanguageChange, state } = useCodeEditorContext()
-    if (state.noParsing) return null
+    if (state.noParsing) {
+        return null
+    }
     return (
         <div className="code-editor__toggle flex left">
             <RadioGroup
@@ -430,10 +356,10 @@ const LanguageChanger = ({}) => {
                 initialTab={state.mode}
                 className="flex left"
                 onChange={(event) => {
-                    // ReactGA.event({
-                    //     'category': 'JSON-YAML Switch',
-                    //     'action': `${event.target.value} view`,
-                    // })
+                    ReactGA.event({
+                        category: 'JSON-YAML Switch',
+                        action: `${event.target.value} view`,
+                    })
                     handleLanguageChange(event.target.value)
                 }}
             >
@@ -475,17 +401,15 @@ const Information: React.FC<InformationBarProps> = (props) => (
 
 const Clipboard = () => {
     const { state } = useCodeEditorContext()
-    return (
-        <button type="button" className="clipboard" onClick={(e) => copyToClipboard(state.code)}>
-            <ClipboardIcon />
-        </button>
-    )
+    return <ClipboardButton content={state.code} rootClassName="bcn-1" iconSize={20} />
 }
 
 const SplitPane = ({}) => {
     const { state, dispatch, readOnly } = useCodeEditorContext()
     function handleToggle(e) {
-        if (readOnly) return
+        if (readOnly) {
+            return
+        }
         dispatch({ type: 'setDiff', value: !state.diffMode })
     }
     return (

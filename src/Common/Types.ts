@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
@@ -30,9 +46,9 @@ export interface APIOptions {
     preventAutoLogout?: boolean
 }
 
-export interface OptionType {
-    label: string
-    value: string
+export interface OptionType<T = string, K = string> {
+    value: T
+    label: K
 }
 
 export enum TippyTheme {
@@ -139,9 +155,11 @@ export interface GenericEmptyStateType {
 }
 
 export interface ErrorPageType
-    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>, Pick<ErrorScreenManagerProps, 'reload'> {
+    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>, Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
     code: number
     heightToDeduct?: number
+    redirectURL?: string
+    reload?: () => void
 }
 
 export interface ErrorScreenManagerProps {
@@ -150,6 +168,11 @@ export interface ErrorScreenManagerProps {
     subtitle?: React.ReactChild
     reloadClass?: string
     heightToDeduct?: number
+    /**
+     * Would be used to redirect URL in case of 404
+     * @default - APP_LIST
+     */
+    redirectURL?: string
 }
 
 export interface ErrorScreenNotAuthorizedProps {
@@ -353,6 +376,15 @@ export interface DeploymentWindowArtifactMetadata {
     type: DEPLOYMENT_WINDOW_TYPE
 }
 
+export interface ArtifactReleaseMappingType {
+    id : number, 
+    identifier: string,
+    releaseVersion: string,
+    name: string
+    kind: string
+    version: string
+}
+
 export interface CDMaterialType {
     index: number
     id: string
@@ -397,6 +429,14 @@ export interface CDMaterialType {
     promotionApprovalMetadata?: PromotionApprovalMetadataType
     deployedOnEnvironments?: string[]
     deploymentWindowArtifactMetadata?: DeploymentWindowArtifactMetadata
+    /**
+     * Will only be present in case of release
+     */
+    configuredInReleases: ArtifactReleaseMappingType[]
+    /**
+     * Would currently only be received in case of release
+     */
+    appWorkflowId: number
 }
 
 export enum CDMaterialServiceEnum {
@@ -786,64 +826,6 @@ export interface CiPipeline {
     isOffendingMandatoryPlugin?: boolean
     pipelineType?: string
 }
-export interface InformationBarProps {
-    text: string
-    className?: string
-    children?: React.ReactNode
-}
-
-export interface CodeEditorInterface {
-    value?: string
-    lineDecorationsWidth?: number
-    responseType?: string
-    onChange?: (string) => void
-    onBlur?: () => void
-    onFocus?: () => void
-    children?: any
-    defaultValue?: string
-    mode?: 'json' | 'yaml' | 'shell' | 'dockerfile' | 'plaintext'
-    tabSize?: number
-    readOnly?: boolean
-    noParsing?: boolean
-    minHeight?: number
-    maxHeight?: number
-    inline?: boolean
-    height?: number | string
-    shebang?: string | JSX.Element
-    diffView?: boolean
-    loading?: boolean
-    customLoader?: JSX.Element
-    theme?: string
-    original?: string
-    focus?: boolean
-    validatorSchema?: any
-    isKubernetes?: boolean
-    cleanData?: boolean
-    chartVersion?: any
-}
-
-export interface CodeEditorComposition {
-    Header?: React.FC<any>
-    LanguageChanger?: React.FC<any>
-    ThemeChanger?: React.FC<any>
-    ValidationError?: React.FC<any>
-    Clipboard?: React.FC<any>
-    Warning?: React.FC<InformationBarProps>
-    ErrorBar?: React.FC<InformationBarProps>
-    Information?: React.FC<InformationBarProps>
-}
-
-export interface CodeEditorHeaderComposition {
-    LanguageChanger?: React.FC<any>
-    ThemeChanger?: React.FC<any>
-    ValidationError?: React.FC<any>
-    Clipboard?: React.FC<any>
-}
-export interface CodeEditorHeaderInterface {
-    children?: any
-    className?: string
-    hideDefaultSplitHeader?: boolean
-}
 
 export interface DeploymentChartVersionType {
     chartRefId: number
@@ -925,3 +907,20 @@ export interface DeploymentWindowProfileMetaData {
     excludedUserEmails: string[]
     warningMessage: string
 }
+
+export interface EnvironmentListHelmResult {
+    clusterId: number
+    clusterName: string
+    environments: EnvironmentHelmResult[]
+}
+
+export interface EnvironmentHelmResult {
+    environmentId: number
+    environmentName: string
+    namespace: string
+    environmentIdentifier: string
+    isVirtualEnvironment?: boolean // Need to confirm for not full mode
+    allowedDeploymentTypes?: DeploymentAppTypes[]
+}
+
+export type EnvironmentListHelmResponse = ResponseType<EnvironmentListHelmResult[]>
