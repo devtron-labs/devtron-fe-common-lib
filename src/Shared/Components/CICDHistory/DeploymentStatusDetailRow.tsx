@@ -24,16 +24,10 @@ import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
 import { DeploymentStatusDetailRowType } from './types'
 import { getManualSync } from './service'
 import { MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
-import { ReactComponent as Close } from '../../../Assets/Icon/ic-close.svg'
-import { ReactComponent as Check } from '../../../Assets/Icon/ic-check-grey.svg'
-import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
-import { ReactComponent as Error } from '../../../Assets/Icon/ic-error-exclamation.svg'
-import { ReactComponent as Timer } from '../../../Assets/Icon/ic-timer.svg'
-import { ReactComponent as Disconnect } from '../../../Assets/Icon/ic-disconnected.svg'
-import { ReactComponent as TimeOut } from '../../../Assets/Icon/ic-timeout-red.svg'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { ShowMoreText } from '../ShowMoreText/ShowMoreText'
 import AppStatusDetailsChart from './AppStatusDetailsChart'
+import { renderIcon } from './utils'
 
 export const DeploymentStatusDetailRow = ({
     type,
@@ -62,33 +56,6 @@ export const DeploymentStatusDetailRow = ({
     }
     const toggleDropdown = () => {
         toggleCollapsed(!collapsed)
-    }
-
-    const renderIcon = (iconState: string): JSX.Element => {
-        switch (iconState) {
-            case 'success':
-                return <Check className="icon-dim-20 green-tick" data-testid="success-green-tick" />
-            case 'failed':
-                return <Error className="icon-dim-20" />
-            case 'unknown':
-                return <ICHelpOutline className="icon-dim-20" />
-            case 'inprogress':
-                return (
-                    <div className="icon-dim-20">
-                        <div className="pulse-highlight" />
-                    </div>
-                )
-            case 'unreachable':
-                return <Close className="icon-dim-20" />
-            case 'loading':
-                return <div className="dc__app-summary__icon icon-dim-20 mr-6 progressing progressing--node" />
-            case 'disconnect':
-                return <Disconnect className="icon-dim-20" />
-            case 'time_out':
-                return <TimeOut className="icon-dim-20" />
-            default:
-                return <Timer className="icon-dim-20 timer-icon" />
-        }
     }
 
     const renderDetailedData = () =>

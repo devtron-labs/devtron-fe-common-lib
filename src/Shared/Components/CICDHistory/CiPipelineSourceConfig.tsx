@@ -22,6 +22,7 @@ import webhookIcon from '../../../Assets/Icon/ic-webhook.svg'
 import branchIcon from '../../../Assets/Icon/ic-branch.svg'
 import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-outlined.svg'
 import regexIcon from '../../../Assets/Icon/ic-regex.svg'
+import { _buildHoverHtmlForWebhook } from './utils'
 
 export interface CIPipelineSourceConfigInterface {
     sourceType
@@ -50,30 +51,6 @@ export const CiPipelineSourceConfig = ({
     const [sourceValueBase, setSourceValueBase] = useState<ReactNode>('')
     const [sourceValueAdv, setSourceValueAdv] = useState<ReactNode>('')
     const [loading, setLoading] = useState(!!_isWebhook)
-
-    function _buildHoverHtmlForWebhook(eventName, condition, selectors) {
-        const _conditions = []
-        Object.keys(condition).forEach((_selectorId) => {
-            // eslint-disable-next-line eqeqeq
-            const _selector = selectors.find((i) => i.id == _selectorId)
-            _conditions.push({ name: _selector ? _selector.name : '', value: condition[_selectorId] })
-        })
-
-        return (
-            <>
-                <span> {eventName} Filters </span>
-                <br />
-                <ul className="m-0">
-                    {_conditions.map((_condition, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <li key={index}>
-                            {_condition.name} : {_condition.value}
-                        </li>
-                    ))}
-                </ul>
-            </>
-        )
-    }
 
     const updateSourceValue = () => {
         if (_isWebhook) {
@@ -153,7 +130,7 @@ export const CiPipelineSourceConfig = ({
         regexTippyContent()
     }, [])
 
-    const getRegexOrBranchIcon = () => (_isRegex ? regexIcon : branchIcon)
+    const isRegexOrBranchIcon = _isRegex ? regexIcon : branchIcon
 
     return (
         <div className={`flex left ${showTooltip ? 'branch-name' : ''}`}>
@@ -162,7 +139,7 @@ export const CiPipelineSourceConfig = ({
                 <>
                     {showIcons && (
                         <img
-                            src={_isWebhook ? webhookIcon : getRegexOrBranchIcon()}
+                            src={_isWebhook ? webhookIcon : isRegexOrBranchIcon}
                             alt="branch"
                             className="icon-dim-12 mr-5"
                         />

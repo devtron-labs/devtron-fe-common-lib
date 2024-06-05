@@ -21,6 +21,13 @@ import {
     TriggerHistoryFilterCriteriaType,
 } from './types'
 import { ResourceKindType } from '../../types'
+import { ReactComponent as Close } from '../../../Assets/Icon/ic-close.svg'
+import { ReactComponent as Check } from '../../../Assets/Icon/ic-check-grey.svg'
+import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
+import { ReactComponent as Error } from '../../../Assets/Icon/ic-error-exclamation.svg'
+import { ReactComponent as Timer } from '../../../Assets/Icon/ic-timer.svg'
+import { ReactComponent as Disconnect } from '../../../Assets/Icon/ic-disconnected.svg'
+import { ReactComponent as TimeOut } from '../../../Assets/Icon/ic-timeout-red.svg'
 
 export const getTriggerHistoryFilterCriteria = ({
     appId,
@@ -64,4 +71,55 @@ export const getParsedTriggerHistory = (result): DeploymentHistoryResultObject =
         hideImageTaggingHardDelete: result.hideImageTaggingHardDelete,
     }
     return parsedResult
+}
+
+export const _buildHoverHtmlForWebhook = (eventName, condition, selectors) => {
+    const _conditions = []
+    Object.keys(condition).forEach((_selectorId) => {
+        // eslint-disable-next-line eqeqeq
+        const _selector = selectors.find((i) => i.id == _selectorId)
+        _conditions.push({ name: _selector ? _selector.name : '', value: condition[_selectorId] })
+    })
+
+    return (
+        <>
+            <span> {eventName} Filters </span>
+            <br />
+            <ul className="m-0">
+                {_conditions.map((_condition, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <li key={index}>
+                        {_condition.name} : {_condition.value}
+                    </li>
+                ))}
+            </ul>
+        </>
+    )
+}
+
+export const renderIcon = (iconState: string): JSX.Element => {
+    switch (iconState) {
+        case 'success':
+            return <Check className="icon-dim-20 green-tick" data-testid="success-green-tick" />
+        case 'failed':
+            return <Error className="icon-dim-20" />
+        case 'unknown':
+            return <ICHelpOutline className="icon-dim-20" />
+        case 'inprogress':
+            return (
+                <div className="icon-dim-20">
+                    <div className="pulse-highlight" />
+                </div>
+            )
+        case 'unreachable':
+            return <Close className="icon-dim-20" />
+        case 'loading':
+            return <div className="dc__app-summary__icon icon-dim-20 mr-6 progressing progressing--node" />
+        case 'disconnect':
+            return <Disconnect className="icon-dim-20" />
+        case 'time_out':
+            return <TimeOut className="icon-dim-20" />
+        default:
+            return <Timer className="icon-dim-20 timer-icon" />
+    }
 }
