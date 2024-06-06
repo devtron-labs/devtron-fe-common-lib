@@ -1,5 +1,225 @@
-import { OptionType, CommonNodeAttr, ResponseType, UserApprovalConfigType, VulnerabilityType } from '../Common'
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import {
+    OptionType,
+    CommonNodeAttr,
+    ResponseType,
+    UserApprovalConfigType,
+    VulnerabilityType,
+    DeploymentAppTypes,
+} from '../Common'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
+
+export enum EnvType {
+    CHART = 'helm_charts',
+    APPLICATION = 'apps',
+}
+
+export interface EnvDetails {
+    envType: EnvType
+    envId: number
+    appId: number
+}
+
+interface OtherEnvironment {
+    environmentId: number
+    environmentName: string
+    appMetrics: boolean
+    infraMetrics: boolean
+    prod: boolean
+}
+
+export interface PodMetaData {
+    containers: Array<string>
+    initContainers: any
+    ephemeralContainers: any
+    isNew: boolean
+    name: string
+    uid: string
+}
+
+export interface Info {
+    value: string
+    name: string
+}
+
+export interface Health {
+    status: string
+    message?: string
+}
+
+export interface TargetLabel {
+    'app.kubernetes.io/instance': string
+    'app.kubernetes.io/name': string
+}
+export interface TargetLabels {
+    targetLabel: TargetLabel
+}
+export interface NetworkingInfo {
+    targetLabels: TargetLabels
+}
+
+export enum Nodes {
+    Service = 'Service',
+    Alertmanager = 'Alertmanager',
+    PodSecurity = 'PodSecurityPolicy',
+    ConfigMap = 'ConfigMap',
+    ServiceAccount = 'ServiceAccount',
+    ClusterRoleBinding = 'ClusterRoleBinding',
+    RoleBinding = 'RoleBinding',
+    ClusterRole = 'ClusterRole',
+    Role = 'Role',
+    Prometheus = 'Prometheus',
+    ServiceMonitor = 'ServiceMonitor',
+    Deployment = 'Deployment',
+    MutatingWebhookConfiguration = 'MutatingWebhookConfiguration',
+    DaemonSet = 'DaemonSet',
+    Secret = 'Secret',
+    ValidatingWebhookConfiguration = 'ValidatingWebhookConfiguration',
+    Pod = 'Pod',
+    Ingress = 'Ingress',
+    ReplicaSet = 'ReplicaSet',
+    Endpoints = 'Endpoints',
+    Cluster = 'ClusterRoleBinding',
+    PodSecurityPolicy = 'PodSecurityPolicy',
+    CronJob = 'CronJob',
+    Job = 'Job',
+    ReplicationController = 'ReplicationController',
+    StatefulSet = 'StatefulSet',
+    Rollout = 'Rollout',
+    PersistentVolumeClaim = 'PersistentVolumeClaim',
+    PersistentVolume = 'PersistentVolume',
+    Containers = 'Containers', // containers are being treated same way as nodes for nested table generation
+    InitContainers = 'InitContainers',
+    EndpointSlice = 'EndpointSlice',
+    NetworkPolicy = 'NetworkPolicy',
+    StorageClass = 'StorageClass',
+    VolumeSnapshot = 'VolumeSnapshot',
+    VolumeSnapshotContent = 'VolumeSnapshotContent',
+    VolumeSnapshotClass = 'VolumeSnapshotClass',
+    PodDisruptionBudget = 'PodDisruptionBudget',
+    Event = 'Event',
+    Namespace = 'Namespace',
+    Overview = 'Overview',
+}
+
+// FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
+export type NodeType = keyof typeof Nodes
+
+export interface Node {
+    createdAt: Date
+    health: Health
+    kind: NodeType
+    name: string
+    namespace: string
+    networkingInfo: NetworkingInfo
+    resourceVersion: string
+    uid: string
+    version: string
+    parentRefs: Array<Node>
+    group: string
+    isSelected: boolean
+    info: Info[]
+    port: number
+    canBeHibernated: boolean
+    isHibernated: boolean
+}
+
+// eslint-disable-next-line no-use-before-define
+export interface iNodes extends Array<iNode> {}
+
+export interface iNode extends Node {
+    childNodes: iNodes
+    type: NodeType
+    status: string
+}
+export interface ResourceTree {
+    conditions: any
+    newGenerationReplicaSet: string
+    nodes: Array<Node>
+    podMetadata: Array<PodMetaData>
+    status: string
+    resourcesSyncResult?: Record<string, string>
+}
+
+export enum AppType {
+    DEVTRON_APP = 'devtron_app',
+    DEVTRON_HELM_CHART = 'devtron_helm_chart',
+    EXTERNAL_HELM_CHART = 'external_helm_chart',
+    EXTERNAL_ARGO_APP = 'external_argo_app',
+}
+
+export interface HelmReleaseStatus {
+    status: string
+    message: string
+    description: string
+}
+
+interface MaterialInfo {
+    author: string
+    branch: string
+    message: string
+    modifiedTime: string
+    revision: string
+    url: string
+    webhookData: string
+}
+export interface AppDetails {
+    appId?: number
+    appName: string
+    appStoreAppName?: string
+    appStoreAppVersion?: string
+    appStoreChartId?: number
+    appStoreChartName?: string
+    appStoreInstalledAppVersionId?: number
+    ciArtifactId?: number
+    deprecated?: false
+    environmentId?: number
+    environmentName: string
+    installedAppId?: number
+    instanceDetail?: null
+    k8sVersion?: string
+    lastDeployedBy?: string
+    lastDeployedTime: string
+    namespace: string
+    resourceTree: ResourceTree
+    materialInfo?: MaterialInfo[]
+    releaseVersion?: string
+    dataSource?: string
+    lastDeployedPipeline?: string
+    otherEnvironment?: OtherEnvironment[]
+    projectName?: string
+    appType?: AppType
+    helmReleaseStatus?: HelmReleaseStatus
+    clusterId?: number
+    notes?: string
+    deploymentAppType?: DeploymentAppTypes
+    ipsAccessProvided?: boolean
+    externalCi?: boolean
+    clusterName?: string
+    dockerRegistryId?: string
+    deploymentAppDeleteRequest?: boolean
+    userApprovalConfig?: string
+    isVirtualEnvironment?: boolean
+    imageTag?: string
+    helmPackageName?: string
+    appStatus?: string
+    chartAvatar?: string
+}
 
 export enum RegistryType {
     GIT = 'git',
@@ -192,6 +412,7 @@ export enum ResourceKindType {
     tenant = 'tenant',
     installation = 'installation',
     environment = 'environment',
+    cdPipeline = 'cd-pipeline',
 }
 
 /**
@@ -236,52 +457,16 @@ export enum WebhookEventNameType {
     TAG_CREATION = 'Tag Creation',
 }
 
-export enum Nodes {
-    Service = 'Service',
-    Alertmanager = 'Alertmanager',
-    PodSecurity = 'PodSecurityPolicy',
-    ConfigMap = 'ConfigMap',
-    ServiceAccount = 'ServiceAccount',
-    ClusterRoleBinding = 'ClusterRoleBinding',
-    RoleBinding = 'RoleBinding',
-    ClusterRole = 'ClusterRole',
-    Role = 'Role',
-    Prometheus = 'Prometheus',
-    ServiceMonitor = 'ServiceMonitor',
-    Deployment = 'Deployment',
-    MutatingWebhookConfiguration = 'MutatingWebhookConfiguration',
-    DaemonSet = 'DaemonSet',
-    Secret = 'Secret',
-    ValidatingWebhookConfiguration = 'ValidatingWebhookConfiguration',
-    Pod = 'Pod',
-    Ingress = 'Ingress',
-    ReplicaSet = 'ReplicaSet',
-    Endpoints = 'Endpoints',
-    Cluster = 'ClusterRoleBinding',
-    PodSecurityPolicy = 'PodSecurityPolicy',
-    CronJob = 'CronJob',
-    Job = 'Job',
-    ReplicationController = 'ReplicationController',
-    StatefulSet = 'StatefulSet',
-    Rollout = 'Rollout',
-    PersistentVolumeClaim = 'PersistentVolumeClaim',
-    PersistentVolume = 'PersistentVolume',
-    Containers = 'Containers', // containers are being treated same way as nodes for nested table generation
-    InitContainers = 'InitContainers',
-    EndpointSlice = 'EndpointSlice',
-    NetworkPolicy = 'NetworkPolicy',
-    StorageClass = 'StorageClass',
-    VolumeSnapshot = 'VolumeSnapshot',
-    VolumeSnapshotContent = 'VolumeSnapshotContent',
-    VolumeSnapshotClass = 'VolumeSnapshotClass',
-    PodDisruptionBudget = 'PodDisruptionBudget',
-    Event = 'Event',
-    Namespace = 'Namespace',
-    Overview = 'Overview',
+export type IntersectionOptions = {
+    root?: React.RefObject<Element>
+    rootMargin?: string
+    threshold?: number | number[]
+    once?: boolean
+    defaultIntersecting?: boolean
 }
 
+export type IntersectionChangeHandler = (entry: IntersectionObserverEntry) => void
 // FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
-export type NodeType = keyof typeof Nodes
 
 export interface InputFieldState<T = string> {
     value: T
@@ -335,4 +520,13 @@ export enum DependencyType {
     UPSTREAM = 'upstream',
     DOWNSTREAM = 'downstream',
     LEVEL = 'level',
+}
+
+export interface scrollableInterface {
+    autoBottomScroll: boolean
+}
+
+export enum PromiseAllStatusType {
+    FULFILLED = 'fulfilled',
+    REJECTED = 'rejected',
 }
