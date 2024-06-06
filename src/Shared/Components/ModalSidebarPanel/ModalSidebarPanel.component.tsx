@@ -8,7 +8,7 @@ const ModalSidebarPanel = ({
     children,
     documentationLink,
 }: ModalSidebarPanelProps) => (
-    <div className={`flexbox-col w-250 dc__gap-24 ${rootClassName}`}>
+    <div className={`flexbox-col w-250 dc__gap-24 dc__modal-gradient ${rootClassName}`}>
         <div className="flexbox-col dc__gap-12">
             <div className="flexbox-col dc__gap-4">
                 {icon && icon}
