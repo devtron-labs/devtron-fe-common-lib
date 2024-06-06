@@ -1,3 +1,12 @@
+.rjsf-root-css #root {
+    margin-right: 28px;
+    padding: 20px;
+
+    input.form__input {
+        padding: 6px 8px;
+    }
+}
+
 .rjsf-form-template {
     &__field {
         grid-template-columns: 250px 1fr;
@@ -9,7 +18,7 @@
 
     &__array-field-item {
         grid-template-columns: 1fr auto;
-        z-index: 1;
+        z-index: 0;
         background: transparent;
 
         & > :first-child {
@@ -18,16 +27,36 @@
         }
 
         &:has(> .remove-btn-container:hover)::after {
+            background: var(--R50);
+        }
+
+        &:has(> .remove-btn-container)::after {
             border-radius: 4px;
             transform: translate(-50%, -50%);
             top: 50%; 
             left: 50%; 
-            background: var(--N50);
+            background: transparent;
             z-index: -1;
             position: absolute;
             height: calc(100% + 12px);
             width: calc(100% + 12px);
             content: '';
+            transition: all 100ms ease-out;
+        }
+
+        & > .remove-btn-container:hover {
+            stroke: var(--R500);
+            path {
+                stroke: var(--R500);
+            }
+        }
+
+        & > .remove-btn-container {
+            stroke: var(--R500);
+            path {
+                stroke: var(--R500);
+            }
+            transition: all 100ms ease-out;
         }
     }
 }

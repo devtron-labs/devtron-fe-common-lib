@@ -34,7 +34,7 @@ export const ArrayFieldItemTemplate = ({
     return (
         <div className="dc__position-rel display-grid rjsf-form-template__array-field-item flex-align-center mb-12">
             {children}
-            <div className="dc__position-abs remove-btn-container" style={{ right: "-24px", top: "11px" }}>
+            <div className="dc__position-abs remove-btn-container" style={{ right: "-28px", top: "9px" }}>
                 {hasToolbar && hasRemove && (
                     <RemoveButton
                         disabled={disabled || readonly}

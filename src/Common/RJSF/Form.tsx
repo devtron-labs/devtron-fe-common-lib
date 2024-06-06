@@ -33,6 +33,7 @@ export const RJSFForm = (props: FormProps) => (
         noHtml5Validate
         showErrorList={false}
         autoComplete="off"
+        className={`rjsf-root-css ${props.className}`}
         {...props}
         validator={validator}
         templates={{
