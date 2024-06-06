@@ -22,6 +22,7 @@ const useStateFilters = <T = string,>({
         sortOrder: SortingOrder.ASC,
         sortBy: initialSortKey,
     })
+    const [searchKey, setSearchKey] = useState('')
 
     const { sortBy, sortOrder } = sortingConfig
 
@@ -41,7 +42,12 @@ const useStateFilters = <T = string,>({
         }))
     }
 
+    const handleSearch = (searchTerm: string) => {
+        setSearchKey(searchTerm?.trim() ?? '')
+    }
+
     const clearFilters = () => {
+        setSearchKey('')
         setSortingConfig({
             sortOrder: SortingOrder.ASC,
             sortBy: initialSortKey,
@@ -51,6 +57,8 @@ const useStateFilters = <T = string,>({
     return {
         ...sortingConfig,
         handleSorting,
+        searchKey,
+        handleSearch,
         clearFilters,
     }
 }

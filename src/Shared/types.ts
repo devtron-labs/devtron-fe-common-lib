@@ -1,5 +1,5 @@
 import { OptionType, CommonNodeAttr, ResponseType, UserApprovalConfigType, VulnerabilityType } from '../Common'
-import { PatchOperationType } from './constants'
+import { EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum RegistryType {
     GIT = 'git',
@@ -299,3 +299,26 @@ export enum AggregationKeys {
 }
 
 export type AggregationKeysType = keyof typeof AggregationKeys
+
+export interface EnvironmentType {
+    /**
+     * Unique identifier for the environment
+     */
+    id: number
+    /**
+     * Name of the environment
+     */
+    name: string
+    /**
+     * Associated namespace for the environment
+     */
+    namespace: string
+    /**
+     * Type of the environment
+     */
+    environmentType: EnvironmentTypeEnum
+    /**
+     * Associated cluster for the environment
+     */
+    cluster: string
+}
