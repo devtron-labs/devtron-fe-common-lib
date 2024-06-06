@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { MutableRefObject } from 'react'
 import { ServerErrors } from './ServerError'
 import { FALLBACK_REQUEST_TIMEOUT, Host, URLS } from './Constants'
@@ -247,4 +263,4 @@ export const abortPreviousRequests = <T>(
  */
 export const getIsRequestAborted = (error) =>
     // The 0 code is common for aborted and blocked requests
-    error && error.code === 0 && (error.message === 'The user aborted a request.' || error.message === 'signal is aborted without reason')
+    error && error.code === 0 && error.message.search('abort\|aborted')

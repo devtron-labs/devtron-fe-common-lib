@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { RegistryTypeDetailType } from './Types'
 
 export const FALLBACK_REQUEST_TIMEOUT = 60000
@@ -8,6 +24,7 @@ export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DOCUMENTATION = {
     APP_TAGS: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/usage/applications/create-application#tags`,
     APP_OVERVIEW_TAGS: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/usage/applications/overview#manage-tags`,
+    BLOB_STORAGE: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/getting-started/install/installation-configuration#configuration-of-blob-storage`,
 }
 
 export const PATTERNS = {
@@ -32,13 +49,24 @@ export const URLS = {
     LOGS: 'Logs',
     CREATE: '/create',
     RELEASES: '/releases',
+    DEVTRON_CHARTS: 'dc',
+    APP_DEPLOYMNENT_HISTORY: 'deployments',
+    APP_DETAILS: 'details',
+    APP_DETAILS_K8: 'k8s-resources', // for V2
+    DETAILS: '/details',
+    CD_DETAILS: 'cd-details',
+    APP_TRIGGER: 'trigger',
+    GLOBAL_CONFIG_DOCKER: '/global-config/docker',
+    DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
 }
 
 export const ROUTES = {
+    APP: 'app',
     APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',
+    CI_CONFIG_GET: 'app/ci-pipeline',
     CD_MATERIAL_GET: 'app/cd-pipeline',
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
@@ -57,6 +85,13 @@ export const ROUTES = {
     CLUSTER_NOTE: 'cluster/note',
     APPLICATION_NOTE: 'app/note',
     GIT_HOST_EVENT: 'git/host/event',
+    HELM_DEPLOYMENT_STATUS_TIMELINE_INSTALLED_APP: 'app-store/deployment-status/timeline',
+    DEPLOYMENT_STATUS: 'app/deployment-status/timeline',
+    MANUAL_SYNC: 'app/deployment-status/manual-sync',
+    CD_CONFIG: 'app/cd-pipeline',
+    CONFIG_CD_PIPELINE: 'config/cd-pipeline',
+    MODULE_CONFIGURED: 'module/config',
+    RESOURCE_HISTORY_DEPLOYMENT: 'resource/history/deployment',
 }
 
 export enum KEY_VALUE {

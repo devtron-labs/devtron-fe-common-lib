@@ -1,4 +1,21 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import * as jsonpatch from 'fast-json-patch'
 import { JSONPath } from 'jsonpath-plus'
@@ -10,7 +27,9 @@ import { ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME, EXCLUDED_FALSY_VAL
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
+import { scrollableInterface } from '../Shared'
 import { DATE_TIME_FORMAT_STRING } from '../Shared'
+import { ReactComponent as ArrowDown } from '../Assets/Icon/ic-chevron-down.svg'
 
 toast.configure({
     autoClose: 3000,
@@ -783,6 +802,212 @@ export function deepEqual(configA: any, configB: any): boolean {
         showError(err)
         return true
     }
+}
+
+export function shallowEqual(objA, objB) {
+    if (objA === objB) {
+        return true
+    }
+
+    if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+        return false
+    }
+
+    const keysA = Object.keys(objA)
+    const keysB = Object.keys(objB)
+
+    if (keysA.length !== keysB.length) {
+        return false
+    }
+
+    // Test for A's keys different from B.
+    const bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB)
+    for (let i = 0; i < keysA.length; i++) {
+        if (!bHasOwnProperty(keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
+            return false
+        }
+    }
+
+    return true
+}
+
+export function useInterval(callback, delay) {
+    const savedCallback = useRef(null)
+    // Remember the latest callback.
+    useEffect(() => {
+        savedCallback.current = callback
+    }, [callback])
+
+    // Set up the interval.
+    useEffect(() => {
+        function tick() {
+            savedCallback.current()
+        }
+        if (delay !== null) {
+            const id = setInterval(tick, delay)
+            return () => clearInterval(id)
+        }
+    }, [delay])
+}
+
+export function useScrollable(options: scrollableInterface) {
+    const targetRef = useRef(null)
+    const raf_id = useRef(0)
+    const wheelListener = useRef(null)
+    const [scrollHeight, setScrollHeight] = useState(0)
+    const [scrollTop, setScrollTop] = useState(0)
+    const [autoBottom, toggleAutoBottom] = useState(false)
+
+    const target = useCallback((node) => {
+        if (node === null) {
+            return
+        }
+        targetRef.current = node
+        wheelListener.current = node.addEventListener('wheel', handleWheel)
+        raf_id.current = requestAnimationFrame(rAFCallback)
+        return () => {
+            node.removeEventListener('wheel', handleWheel)
+            cancelAnimationFrame(raf_id.current)
+        }
+    }, [])
+
+    function handleWheel(e) {
+        if (e.deltaY < 0) {
+            toggleAutoBottom(false)
+        }
+    }
+
+    const [topScrollable, bottomScrollable] = useMemo(() => {
+        if (!targetRef.current) {
+            return [false, false]
+        }
+
+        let topScrollable = true
+        const bottomScrollable = !(
+            targetRef.current.scrollHeight - targetRef.current.scrollTop ===
+            targetRef.current.clientHeight
+        )
+        if (scrollTop === 0) {
+            topScrollable = false
+        }
+
+        if (!bottomScrollable && options.autoBottomScroll) {
+            toggleAutoBottom(true)
+        }
+        return [topScrollable, bottomScrollable]
+    }, [scrollHeight, scrollTop])
+
+    useEffect(() => {
+        if (options.autoBottomScroll) {
+            toggleAutoBottom(true)
+        } else {
+            toggleAutoBottom(false)
+        }
+    }, [options.autoBottomScroll])
+
+    useThrottledEffect(
+        () => {
+            if (!autoBottom || !targetRef.current) {
+                return
+            }
+            targetRef.current.scrollBy({
+                top: scrollHeight,
+                left: 0,
+            })
+        },
+        500,
+        [scrollHeight, autoBottom],
+    )
+
+    function scrollToTop(e) {
+        targetRef.current.scrollBy({
+            top: -1 * scrollTop,
+            left: 0,
+            behavior: 'smooth',
+        })
+        if (options.autoBottomScroll) {
+            toggleAutoBottom(false)
+        }
+    }
+
+    function scrollToBottom(e) {
+        toggleAutoBottom(true)
+        targetRef.current.scrollBy({
+            top: scrollHeight,
+            left: 0,
+            behavior: 'smooth',
+        })
+    }
+
+    function rAFCallback() {
+        if (!targetRef.current) {
+            return
+        }
+
+        setScrollHeight(targetRef.current.scrollHeight)
+        setScrollTop(targetRef.current.scrollTop)
+        raf_id.current = requestAnimationFrame(rAFCallback)
+    }
+
+    return [target, topScrollable ? scrollToTop : null, bottomScrollable ? scrollToBottom : null]
+}
+
+function useDelayedEffect(callback, delay, deps = []) {
+    const timeoutRef = useRef(null)
+    useEffect(() => {
+        timeoutRef.current = setTimeout(callback, delay)
+        return () => clearTimeout(timeoutRef.current)
+    }, deps)
+}
+
+export function useKeyDown() {
+    const [keys, setKeys] = useState([])
+    useEffect(() => {
+        document.addEventListener('keydown', onKeyDown)
+        document.addEventListener('keyup', onKeyUp)
+        return () => {
+            document.removeEventListener('keydown', onKeyDown)
+            document.removeEventListener('keyup', onKeyUp)
+        }
+    }, [keys])
+
+    // another hook just to reset the key becayse Meta key on mac ignores all other keyUps while MetaKey is pressed.
+    useDelayedEffect(clearKeys, 500, [keys.join('+')])
+
+    function clearKeys() {
+        if (keys.length) {
+            setKeys([])
+        }
+    }
+
+    const onKeyDown = ({ key }) => {
+        setKeys((k) => Array.from(new Set(k).add(key)))
+    }
+    const onKeyUp = ({ key }) => {
+        setKeys((ks) => ks.filter((k) => k !== key))
+    }
+
+    return keys
+}
+
+export const DropdownIndicator = (props) => {
+    return (
+        <components.DropdownIndicator {...props}>
+            <ArrowDown className="icon-dim-20 icon-n5" />
+        </components.DropdownIndicator>
+    )
+}
+
+export function mapByKey<T = Map<any, any>>(arr: any[], id: string): T {
+    if (!Array.isArray(arr)) {
+        console.error(arr, 'is not array')
+        return new Map() as T
+    }
+    return arr.reduce((agg, curr) => agg.set(curr[id], curr), new Map())
+}
+
+export function asyncWrap(promise): any[] {
+    return promise.then((result) => [null, result]).catch((err) => [err])
 }
 
 export const prefixZeroIfSingleDigit = (value: number = 0) => (value > 0 && value < 10 ? `0${value}` : value)
