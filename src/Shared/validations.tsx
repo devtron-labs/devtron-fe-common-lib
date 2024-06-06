@@ -157,14 +157,22 @@ export const validateRequiredPositiveInteger = (value: string | number): Validat
     }
 }
 
-export const validateURL = (url: string): ValidationResponseType => {
+/**
+ * Check if the URL starts with the base64 URL prefix
+ */
+const isBase64Url = (url: string): boolean => /^data:.*;base64,/.test(url)
+
+export const validateURL = (url: string, allowBase64Url: boolean = true): ValidationResponseType => {
     try {
+        if (!allowBase64Url && isBase64Url(url)) {
+            throw new Error('Base64 URLs are not allowed')
+        }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const urlObject = new URL(url)
-    } catch (e) {
+    } catch (err) {
         return {
             isValid: false,
-            message: 'Invalid URL',
+            message: err.message || 'Invalid URL',
         }
     }
 
@@ -172,3 +180,28 @@ export const validateURL = (url: string): ValidationResponseType => {
         isValid: true,
     }
 }
+
+export const validateIfImageExist = (url: string): Promise<ValidationResponseType> =>
+    new Promise<ValidationResponseType>((resolve) => {
+        const img = new Image()
+
+        img.src = url
+        img.onload = () => {
+            img.onload = null
+            img.onerror = null
+
+            return resolve({
+                isValid: true,
+            })
+        }
+        img.onerror = () => {
+            img.src = ''
+            img.onload = null
+            img.onerror = null
+
+            return resolve({
+                isValid: false,
+                message: 'Invalid URL',
+            })
+        }
+    })
