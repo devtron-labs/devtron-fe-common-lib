@@ -166,6 +166,7 @@ export interface ErrorScreenNotAuthorizedProps {
 export enum ImageType {
     Large = 'large',
     Medium = 'medium',
+    SMALL = 'small',
 }
 
 export interface InfoColourBarType {

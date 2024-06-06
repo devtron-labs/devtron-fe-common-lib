@@ -30,7 +30,7 @@ export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.F
         props.delete()
     }
 
-    const handleKeyDown = async (event: KeyboardEvent) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'Enter' && !isDeleteDisabled) {
             event.preventDefault()
 
