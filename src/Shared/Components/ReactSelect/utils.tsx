@@ -18,6 +18,7 @@ import Tippy from '@tippyjs/react'
 import { components } from 'react-select'
 import { Progressing, stopPropagation } from '../../../Common'
 import { ReactComponent as ICCaretDown } from '../../../Assets/Icon/ic-chevron-down.svg'
+import { ReactComponent as ClockIcon } from '../../../Assets/Icon/ic-clock.svg'
 
 export const getCommonSelectStyle = (styleOverrides = {}) => ({
     container: (base, state) => ({
@@ -173,3 +174,12 @@ export const DropdownIndicator = (props) => (
 )
 
 export const commonSelectStyles = getCommonSelectStyle()
+
+/**
+ * Clock icon for the time picker
+ */
+export const DropdownIndicatorTimePicker = (props) => (
+    <components.DropdownIndicator {...props}>
+        <ClockIcon className="icon-dim-20 fcn-6" />
+    </components.DropdownIndicator>
+)
