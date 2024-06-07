@@ -19,6 +19,7 @@ import { IconButtonProps } from '@rjsf/utils'
 
 import { ConditionalWrap } from '../../../Helper'
 import { getTippyWrapperWithContent } from '../../utils'
+import { ADD_BUTTON_WIDTH } from '../../constants'
 import { ReactComponent as PlusIcon } from '../../../../Assets/Icon/ic-add.svg'
 
 export const AddButton = ({
@@ -33,7 +34,7 @@ export const AddButton = ({
     const buttonRef = useRef<HTMLButtonElement>(null)
     const content = `Add ${label}`
 
-    useEffect(() => setShowTippy(buttonRef.current?.offsetWidth >= 250), [buttonRef.current])
+    useEffect(() => setShowTippy(buttonRef.current?.offsetWidth >= ADD_BUTTON_WIDTH.MAX_WIDTH_VALUE), [buttonRef.current])
 
     return (
         <div className="flexbox flex-justify-start">
@@ -42,7 +43,7 @@ export const AddButton = ({
                     ref={buttonRef}
                     {...props}
                     type="button"
-                    className="dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor dc__mxw-250"
+                    className={`dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor ${ADD_BUTTON_WIDTH.MAX_WIDTH_CLASSNAME}`}
                     title="Add"
                 >
                     <PlusIcon className="icon-dim-16 fcb-5" />

@@ -28,13 +28,13 @@ export const FieldErrorTemplate = ({ errors = [], idSchema }: FieldErrorProps) =
                 {errors
                     .filter((elem) => !!elem)
                     .map((error, index: number) => (
-                        <>
+                        <React.Fragment key={index}>
                             <span />
-                            <span className="form__error" key={index}>
+                            <span className="form__error">
                                 <Error className="form__icon form__icon--error" />
                                 {error}
                             </span>
-                        </>
+                        </React.Fragment>
                     ))}
             </span>
         )

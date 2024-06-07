@@ -24,3 +24,8 @@ export const DEFAULT_FIELD_TITLE = 'Key not available'
 
 // Using symbol to ensure uniqueness across the fields
 export const DO_NOT_SHOW_LABEL = Symbol('Do not show label')
+
+export const ADD_BUTTON_WIDTH = {
+    MAX_WIDTH_VALUE: 250,
+    MAX_WIDTH_CLASSNAME: 'dc__mxw-250',
+}

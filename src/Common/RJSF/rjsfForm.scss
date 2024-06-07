@@ -1,13 +1,13 @@
-.rjsf-root-css #root {
-    margin-right: 28px;
-    padding: 20px;
-
-    input.form__input {
-        padding: 6px 8px;
-    }
-}
-
 .rjsf-form-template {
+    &__container {
+        margin-right: 28px;
+        padding: 20px;
+
+        input.form__input {
+            padding: 6px 8px;
+        }
+    }
+
     &__field {
         grid-template-columns: 250px 1fr;
     }
@@ -26,11 +26,11 @@
             margin: 0;
         }
 
-        &:has(> .remove-btn-container:hover)::after {
+        &:has(> .remove-btn__container:hover)::after {
             background: var(--R50);
         }
 
-        &:has(> .remove-btn-container)::after {
+        &:has(> .remove-btn__container)::after {
             border-radius: 4px;
             transform: translate(-50%, -50%);
             top: 50%; 
@@ -44,18 +44,14 @@
             transition: all 100ms ease-out;
         }
 
-        & > .remove-btn-container:hover {
+        & > .remove-btn__container:hover {
             stroke: var(--R500);
             path {
                 stroke: var(--R500);
             }
         }
 
-        & > .remove-btn-container {
-            stroke: var(--R500);
-            path {
-                stroke: var(--R500);
-            }
+        & > .remove-btn__container {
             transition: all 100ms ease-out;
         }
     }
