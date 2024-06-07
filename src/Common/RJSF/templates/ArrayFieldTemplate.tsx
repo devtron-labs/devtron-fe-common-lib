@@ -65,7 +65,6 @@ export const ArrayFieldTemplate = ({
                             ...itemProps.children,
                             props: {
                                 ...itemProps.children.props,
-                                name: index === 0 ? label : DO_NOT_SHOW_LABEL,
                             },
                         }
                         return (
