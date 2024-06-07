@@ -138,7 +138,7 @@ export const getInferredTypeFromValueType = (value) => {
 }
 
 export const getTippyWrapperWithContent = (content) => (children) => (
-    <Tippy className="default-tt" arrow={false} placement="right" content={content}>
+    <Tippy className="default-tt dc__word-break" arrow={false} placement="right" content={content}>
         {children}
     </Tippy>
 )
