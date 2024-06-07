@@ -21,6 +21,6 @@ import { ReactComponent as CrossIcon } from '../../../../Assets/Icon/ic-cross.sv
 
 export const RemoveButton = ({ icon, iconType, registry, uiSchema, ...props }: IconButtonProps) => (
     <button {...props} type="button" className="dc__outline-none-imp p-0 dc__transparent flex cursor" title="Remove">
-        <CrossIcon className="icon-dim-16 scn-6" />
+        <CrossIcon className="icon-dim-16 fcn-6" />
     </button>
 )

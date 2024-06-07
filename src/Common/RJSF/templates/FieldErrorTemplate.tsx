@@ -24,7 +24,7 @@ export const FieldErrorTemplate = ({ errors = [], idSchema }: FieldErrorProps) =
 
     return (
         errors.length > 0 && (
-            <span className="display-grid rjsf-form-template__field dc__gap-12" id={id}>
+            <span className="display-grid rjsf-form-template__field--error dc__gap-12" id={id}>
                 {errors
                     .filter((elem) => !!elem)
                     .map((error, index: number) => (

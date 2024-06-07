@@ -1,7 +1,11 @@
 .rjsf-form-template {
-    &__container {
-        margin-right: 28px;
+    &__container > div:first-child {
         padding: 20px;
+        margin-right: 28px;
+    }
+
+    &__field, &__field--error {
+        grid-template-columns: 250px 1fr;
 
         input.form__input {
             padding: 6px 8px;
@@ -38,6 +42,8 @@
             background: transparent;
             z-index: -1;
             position: absolute;
+            /* NOTE: this overlay is exactly 6px wider & taller on all sides
+             * therefore the 12px (6 + 6) on height & width */
             height: calc(100% + 12px);
             width: calc(100% + 12px);
             content: '';
@@ -45,9 +51,9 @@
         }
 
         & > .remove-btn__container:hover {
-            stroke: var(--R500);
+            fill: var(--R500);
             path {
-                stroke: var(--R500);
+                fill: var(--R500);
             }
         }
 
