@@ -99,7 +99,10 @@
         "sass": "^1.69.7",
         "tslib": "^2.4.1",
         "dayjs": "^1.11.8"
-
-
+    },
+    "overrides": {
+    "react-dates": {
+      "react": "^18.0.0"
     }
+  }
 }
