@@ -17,7 +17,6 @@
 import Tippy from '@tippyjs/react'
 import { components } from 'react-select'
 import { Progressing, stopPropagation } from '../../../Common'
-import { ReactComponent as ICCaretDown } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { ReactComponent as ClockIcon } from '../../../Assets/Icon/ic-clock.svg'
 
 export const getCommonSelectStyle = (styleOverrides = {}) => ({
@@ -166,12 +165,6 @@ export const GroupHeading = (props: any) => {
         </components.GroupHeading>
     )
 }
-
-export const DropdownIndicator = (props) => (
-    <components.DropdownIndicator {...props}>
-        <ICCaretDown className="icon-dim-20 icon-n6" data-testId />
-    </components.DropdownIndicator>
-)
 
 export const commonSelectStyles = getCommonSelectStyle()
 
