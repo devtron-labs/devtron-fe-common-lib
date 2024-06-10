@@ -71,6 +71,7 @@ export interface customEnv {
     ENABLE_RESOURCE_SCAN_V2?: boolean
     ENABLE_GITOPS_BITBUCKET_SOURCE: boolean
     HIDE_RESOURCE_WATCHER?: boolean
+    ORGANIZATION_NAME: string
 }
 declare global {
     interface Window {
