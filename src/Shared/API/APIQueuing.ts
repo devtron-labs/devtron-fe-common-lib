@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import { ApiQueuingBatchStatusType, ApiQueuingWithBatchResponseItem, BatchConfigType } from '../types'
+import { PromiseAllStatusType, ApiQueuingWithBatchResponseItem, BatchConfigType } from '../types'
 
 const eachCall = (batchConfig, functionCalls, resolve, reject, shouldRejectOnError) => {
     const callIndex = batchConfig.lastIndex
     Promise.resolve(functionCalls[callIndex]())
         .then((result) => {
             // eslint-disable-next-line no-param-reassign
-            batchConfig.results[callIndex] = { status: ApiQueuingBatchStatusType.FULFILLED, value: result }
+            batchConfig.results[callIndex] = { status: PromiseAllStatusType.FULFILLED, value: result }
         })
         .catch((error) => {
             // eslint-disable-next-line no-param-reassign
-            batchConfig.results[callIndex] = { status: ApiQueuingBatchStatusType.REJECTED, reason: error }
+            batchConfig.results[callIndex] = { status: PromiseAllStatusType.REJECTED, reason: error }
         })
         .finally(() => {
-            if (shouldRejectOnError && batchConfig.results[callIndex].status === ApiQueuingBatchStatusType.REJECTED) {
+            if (shouldRejectOnError && batchConfig.results[callIndex].status === PromiseAllStatusType.REJECTED) {
                 reject(batchConfig.results[callIndex].reason)
                 return
             }
