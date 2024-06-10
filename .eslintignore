@@ -46,7 +46,6 @@ src/Common/Hooks/UseWindowSize/UseWindowSize.tsx
 src/Common/ImageTags.tsx
 src/Common/InfoColorBar/InfoColourbar.tsx
 src/Common/Modals/Modal.tsx
-src/Common/Modals/OpaqueModal.tsx
 src/Common/Modals/VisibleModal.tsx
 src/Common/Modals/VisibleModal2.tsx
 src/Common/MultiSelectCustomization.tsx
