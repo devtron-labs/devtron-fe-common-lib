@@ -121,7 +121,9 @@ export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
 export const isNullOrUndefined = (value: unknown): boolean => value === null || value === undefined
 
 export const handleDisableSubmitOnEnter = (event: React.KeyboardEvent<HTMLFormElement>) => {
-    if (event.key === 'Enter') {
+    const isTextArea = event.target instanceof HTMLTextAreaElement
+
+    if (event.key === 'Enter' && !isTextArea) {
         event.preventDefault()
     }
 }
