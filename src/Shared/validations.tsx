@@ -183,8 +183,8 @@ export const validateURL = (url: string, allowBase64Url: boolean = true): Valida
         if (!allowBase64Url && isBase64Url(url)) {
             throw new Error('Base64 URLs are not allowed')
         }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const urlObject = new URL(url)
+        // eslint-disable-next-line no-new
+        new URL(url)
     } catch (err) {
         return {
             isValid: false,
