@@ -16,7 +16,7 @@
 
 import React from 'react'
 import { FieldRowProps } from './types'
-import { DEFAULT_FIELD_TITLE, DO_NOT_SHOW_LABEL } from '../constants'
+import { DEFAULT_FIELD_TITLE } from '../constants'
 
 export const FieldRowWithLabel = ({
     showLabel,
@@ -25,9 +25,7 @@ export const FieldRowWithLabel = ({
     children,
     id,
     shouldAlignCenter = true,
-}: Omit<FieldRowProps, 'label'> & {
-    label: FieldRowProps['label'] | typeof DO_NOT_SHOW_LABEL
-}) => (
+}: FieldRowProps) => (
     <div
         className={
             showLabel
