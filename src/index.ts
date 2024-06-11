@@ -70,6 +70,7 @@ export interface customEnv {
     FEATURE_USER_DEFINED_GITOPS_REPO_ENABLE: boolean
     ENABLE_RESOURCE_SCAN_V2?: boolean
     HIDE_RESOURCE_WATCHER?: boolean
+    ORGANIZATION_NAME: string
 }
 declare global {
     interface Window {
