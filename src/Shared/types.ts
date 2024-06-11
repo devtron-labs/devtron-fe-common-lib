@@ -508,6 +508,10 @@ export interface EnvironmentType {
      * Associated cluster for the environment
      */
     cluster: string
+    /**
+     * If true, denotes virtual environment
+     */
+    isVirtual: boolean
 }
 
 export interface CreatedByDTO {

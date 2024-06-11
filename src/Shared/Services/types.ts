@@ -4,6 +4,10 @@ import { ResourceKindType, ResourceVersionType } from '../types'
 export interface ClusterType {
     id: number
     name: string
+    /**
+     * If true, denotes virtual cluster
+     */
+    isVirtual: boolean
 }
 
 export interface GetResourceApiUrlProps<T> {
