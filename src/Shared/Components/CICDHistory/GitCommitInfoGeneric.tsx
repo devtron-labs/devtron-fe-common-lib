@@ -91,9 +91,9 @@ const GitCommitInfoGeneric = ({
         return !showSeeMore ? (
             <div className="material-history__all-changes">
                 <div className="material-history__body mt-4">
-                    {Object.keys(_moreData).map((_key, index) => {
+                    {Object.keys(_moreData).map((_key, idx) => {
                         let classes
-                        if (index % 2 === 0) {
+                        if (idx % 2 === 0) {
                             classes = 'bcn-1'
                         }
                         return (
