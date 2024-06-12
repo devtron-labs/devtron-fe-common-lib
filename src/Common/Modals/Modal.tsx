@@ -18,6 +18,9 @@ import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { ModalType } from '../Types'
 
+/**
+ * @deprecated Use VisibleModal instead
+ */
 export const Modal = ({
     style = {},
     children,
@@ -30,6 +33,7 @@ export const Modal = ({
 }: ModalType) => {
     const innerRef = React.useRef(null)
     function handleClick(e) {
+        e.stopPropagation()
         if (typeof onClick !== 'function') return
         if (innerRef && innerRef.current?.contains(e.target)) {
             onClick(e, 'in')
@@ -65,7 +69,7 @@ export const Modal = ({
     return ReactDOM.createPortal(
         <div
             tabIndex={0}
-            onClick={onClick}
+            onClick={handleClick}
             data-testid="common-modal"
             ref={(el) => {
                 if (typeof callbackRef === 'function') {
