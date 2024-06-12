@@ -24,6 +24,7 @@ import {
     titleId,
 } from '@rjsf/utils'
 import { FieldRowWithLabel } from '../common/FieldRow'
+import { TitleField } from './TitleField'
 
 const Field = ({
     disabled,
@@ -87,22 +88,22 @@ const Field = ({
 }
 
 export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps) => {
-    const { idSchema, registry, required, schema, title, uiSchema } = props
+    const { idSchema, registry, required, schema, title, uiSchema, description } = props
     const options = getUiOptions(uiSchema)
-    const TitleFieldTemplate = getTemplate('TitleFieldTemplate', registry, options)
     const hasAdditionalProperties = !!schema.additionalProperties
     const showTitle = title && !hasAdditionalProperties
 
     return (
         <fieldset id={idSchema.$id}>
             {showTitle && (
-                <TitleFieldTemplate
+                <TitleField
                     id={titleId(idSchema)}
                     title={title}
                     required={required}
                     schema={schema}
                     uiSchema={uiSchema}
                     registry={registry}
+                    description={description}
                 />
             )}
             {/* Not adding the border and padding for non-objects and root schema */}

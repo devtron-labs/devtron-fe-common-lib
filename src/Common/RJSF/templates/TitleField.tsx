@@ -15,11 +15,15 @@
  */
 
 import React from 'react'
+import { ConditionalWrap } from '../../Helper'
 import { TitleFieldProps } from '@rjsf/utils'
+import { getTippyWrapperWithContent } from '../utils'
 
-export const TitleField = ({ id, title, required }: TitleFieldProps) => (
+export const TitleField = ({ id, title, required, description }: TitleFieldProps & Record<'description', string>) => (
     <legend className="fs-13 fw-6 cn-9 lh-20 dc__no-border py-9 mb-0" id={id}>
-        <span>{title}</span>
+        <ConditionalWrap condition={!!description} wrap={getTippyWrapperWithContent(description, 'top')}>
+            <span className={`${description ? 'text-underline-dashed-300' : ''}`}>{title}</span>
+        </ConditionalWrap>
         {required && <span className="cr-5">&nbsp;*</span>}
     </legend>
 )

@@ -137,8 +137,9 @@ export const getInferredTypeFromValueType = (value) => {
     }
 }
 
-export const getTippyWrapperWithContent = (content) => (children) => (
-    <Tippy className="default-tt dc__word-break" arrow={false} placement="right" content={content}>
-        {children}
-    </Tippy>
-)
+export const getTippyWrapperWithContent =
+    (content, placement?: React.ComponentProps<typeof Tippy>['placement']) => (children) => (
+        <Tippy className="default-tt dc__word-break" arrow={false} placement={placement || 'right'} content={content}>
+            {children}
+        </Tippy>
+    )
