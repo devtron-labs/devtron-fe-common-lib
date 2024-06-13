@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "0.0.91-beta-1",
+    "version": "0.0.91-beta-2",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -23,12 +23,12 @@
     ],
     "scripts": {
         "prepare": "node -e \"try { require('husky').install() } catch (e) {}\"",
-        "lint": "tsc --noEmit && eslint 'src/**/*.{js,jsx,ts,tsx}' --max-warnings 0",
+        "lint": "tsc --noEmit && NODE_OPTIONS=--max_old_space_size=8192 eslint 'src/**/*.{js,jsx,ts,tsx}' --max-warnings 0",
         "lint-fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
         "test": "exit 0",
-        "dev": "vite",
-        "build": "vite build --sourcemap",
-        "build-watch": "vite build --sourcemap --watch",
+        "dev": "NODE_OPTIONS=--max_old_space_size=8192 vite",
+        "build": "NODE_OPTIONS=--max_old_space_size=8192 vite build --sourcemap",
+        "build-watch": "NODE_OPTIONS=--max_old_space_size=8192 vite build --sourcemap --watch",
         "build-lib": "vite build",
         "preview": "vite preview",
         "lint-staged": "lint-staged"

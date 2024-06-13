@@ -15,7 +15,8 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, ReactElement } from 'react'
+import Tippy from '@tippyjs/react'
 import { handleUTCTime, mapByKey, MaterialInfo, shallowEqual, SortingOrder } from '../Common'
 import {
     AggregationKeys,
@@ -214,6 +215,17 @@ export const getKeyToBooleanMapFromArray = <T extends string | number>(arr: T[] 
         },
         {} as Record<T, boolean>,
     )
+
+export const renderValidInputButtonTippy = (children: ReactElement) => (
+    <Tippy
+        content="Valid input is required for all mandatory fields."
+        placement="top"
+        className="default-tt"
+        arrow={false}
+    >
+        {children}
+    </Tippy>
+)
 
 // NOTE: Need to improve logic since in some cases the unknown status would leak to previous entites, can do that by not setting deploymentStatus as Failed by ourselves and let backend be source of truth of that
 export const processDeploymentStatusDetailsData = (

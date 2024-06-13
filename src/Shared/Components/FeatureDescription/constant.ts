@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { UseUrlFiltersProps, UseUrlFiltersReturnType } from '../useUrlFilters'
+export enum BUTTON_TEXT {
+    GOT_IT = 'Got it',
+    VIEW_DOCUMENTATION = 'View Documentation',
+}
 
-export interface UseStateFiltersProps<T> extends Pick<UseUrlFiltersProps<T, never>, 'initialSortKey'> {}
-
-export interface UseStateFiltersReturnType<T>
-    extends Pick<
-        UseUrlFiltersReturnType<T>,
-        'sortBy' | 'sortOrder' | 'handleSorting' | 'clearFilters' | 'searchKey' | 'handleSearch'
-    > {}
+export enum IMAGE_VARIANT {
+    SMALL = 'small',
+    LARGE = 'large',
+}
