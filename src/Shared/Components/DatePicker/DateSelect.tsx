@@ -1,7 +1,7 @@
 import ReactSelect from 'react-select'
 import { DateSelectProps } from './types'
 import { MONTHLY_DATE_OPTIONS, getTimePickerStyles } from './utils'
-import { DropdownIndicator } from '../ReactSelect/utils'
+import { DropdownIndicator } from '../../../Common/Helper'
 
 export const DateSelect = ({ selectedDate, handleOnChange }: DateSelectProps) => (
     <div className="dc__no-shrink">
