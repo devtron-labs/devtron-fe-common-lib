@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-export * from './Components'
-export * from './validations'
-export * from './Helpers'
-export * from './types'
-export * from './Providers'
-export * from './constants'
-export * from './Services'
-export * from './Store'
-export * from './Hooks'
-export * from './API'
+import { ImageType } from '../../../Common'
+
+export const getImageSize = (imageType: ImageType) => {
+    switch (imageType) {
+        case ImageType.SMALL:
+            return { width: '100%', height: '200px' }
+        default:
+            return { width: '100%', height: '250px' }
+    }
+}

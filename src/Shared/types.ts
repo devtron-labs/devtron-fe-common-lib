@@ -23,7 +23,7 @@ import {
     DeploymentAppTypes,
     ServerErrors,
 } from '../Common'
-import { PatchOperationType } from './constants'
+import { EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
     CHART = 'helm_charts',
@@ -410,6 +410,9 @@ export enum ResourceKindType {
     cluster = 'cluster',
     release = 'release',
     releaseTrack = 'release-track',
+    tenant = 'tenant',
+    installation = 'installation',
+    environment = 'environment',
     cdPipeline = 'cd-pipeline',
 }
 
@@ -466,6 +469,11 @@ export type IntersectionOptions = {
 export type IntersectionChangeHandler = (entry: IntersectionObserverEntry) => void
 // FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
 
+export interface InputFieldState<T = string> {
+    value: T
+    error: string
+}
+
 export enum AggregationKeys {
     Workloads = 'Workloads',
     Networking = 'Networking',
@@ -509,6 +517,45 @@ export interface EnvListMinDTO {
     isDigestEnforcedForEnv: boolean
     isVirtualEnvironment: boolean
     namespace: string
+}
+
+export interface EnvironmentType {
+    /**
+     * Unique identifier for the environment
+     */
+    id: number
+    /**
+     * Name of the environment
+     */
+    name: string
+    /**
+     * Associated namespace for the environment
+     */
+    namespace: string
+    /**
+     * Type of the environment
+     */
+    environmentType: EnvironmentTypeEnum
+    /**
+     * Associated cluster for the environment
+     */
+    cluster: string
+    /**
+     * If true, denotes virtual environment
+     */
+    isVirtual: boolean
+}
+
+export interface CreatedByDTO {
+    icon: boolean
+    id: number
+    name: string
+}
+
+export enum DependencyType {
+    UPSTREAM = 'upstream',
+    DOWNSTREAM = 'downstream',
+    LEVEL = 'level',
 }
 
 export enum PromiseAllStatusType {

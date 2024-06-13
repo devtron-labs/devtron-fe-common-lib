@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-export * from './Components'
-export * from './validations'
-export * from './Helpers'
-export * from './types'
-export * from './Providers'
-export * from './constants'
-export * from './Services'
-export * from './Store'
-export * from './Hooks'
-export * from './API'
+export enum BUTTON_TEXT {
+    GOT_IT = 'Got it',
+    VIEW_DOCUMENTATION = 'View Documentation',
+}
+
+export enum IMAGE_VARIANT {
+    SMALL = 'small',
+    LARGE = 'large',
+}

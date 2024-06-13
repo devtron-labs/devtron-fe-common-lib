@@ -182,6 +182,7 @@ export interface ErrorScreenNotAuthorizedProps {
 export enum ImageType {
     Large = 'large',
     Medium = 'medium',
+    SMALL = 'small',
 }
 
 export interface InfoColourBarType {
@@ -262,6 +263,7 @@ export interface PopupMenuType {
     onToggleCallback?: (isOpen: boolean) => void
     autoClose?: boolean
     autoPosition?: boolean
+    shouldPreventDefault?: boolean
 }
 
 export interface PopupMenuButtonType {

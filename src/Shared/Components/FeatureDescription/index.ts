@@ -14,13 +14,5 @@
  * limitations under the License.
  */
 
-export * from './Components'
-export * from './validations'
-export * from './Helpers'
-export * from './types'
-export * from './Providers'
-export * from './constants'
-export * from './Services'
-export * from './Store'
-export * from './Hooks'
-export * from './API'
+export * from './FeatureDescriptionModal'
+export { default as FeatureTitleWithInfo } from './FeatureTitleWithInfo'
