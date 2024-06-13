@@ -14,19 +14,48 @@
  * limitations under the License.
  */
 
-import React from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import warn from '../../Assets/Img/delete-medium.svg'
 import { Progressing } from '../Progressing'
 import ConfirmationDialog from './ConfirmationDialog'
 import { DeleteDialogProps } from './Types'
+import { CustomInput } from '../CustomInput'
 
-export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.FC<any> } = (props) => {
+export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.FC<any> } = ({
+    showDeleteConfirmation: _showDeleteConfirmation,
+    deleteConfirmationText = null,
+    ...props
+}: DeleteDialogProps) => {
+    const [confirmationText, setConfirmationText] = useState('')
+
+    const showDeleteConfirmation = _showDeleteConfirmation && !!deleteConfirmationText
+    const isDeleteDisabled =
+        props.apiCallInProgress ||
+        props.disabled ||
+        (showDeleteConfirmation && deleteConfirmationText !== confirmationText)
+
+    const handleConfirmationTextChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setConfirmationText(e.target.value)
+    }
+
     const handleDelete = (e: React.MouseEvent) => {
         if (props.shouldStopPropagation) {
             e.stopPropagation()
         }
 
         props.delete()
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Enter' && !isDeleteDisabled) {
+            event.preventDefault()
+
+            if (props.shouldStopPropagation) {
+                event.stopPropagation()
+            }
+
+            props.delete()
+        }
     }
 
     const handleModalClose = (e: React.MouseEvent) => {
@@ -37,6 +66,14 @@ export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.F
         props.closeDelete()
     }
 
+    const getLabel = () => (
+        <span>
+            Type
+            <span className="fw-6 dc__word-break">&nbsp;&apos;{deleteConfirmationText}&apos;&nbsp;</span>
+            to confirm
+        </span>
+    )
+
     return (
         <ConfirmationDialog className="confirmation-dialog__body--w-400">
             <ConfirmationDialog.Icon src={warn} />
@@ -44,6 +81,19 @@ export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.F
                 <div className="fs-13 cn-7 lh-1-54 w-100">
                     {props.description ? props.description : null}
                     {props.children}
+                    {showDeleteConfirmation && (
+                        <CustomInput
+                            name="delete-confirmation"
+                            value={confirmationText}
+                            onChange={handleConfirmationTextChange}
+                            label={getLabel()}
+                            inputWrapClassName="mt-12 w-100"
+                            placeholder={`Type ${deleteConfirmationText} to confirm`}
+                            isRequiredField
+                            onKeyDown={handleKeyDown}
+                            autoFocus
+                        />
+                    )}
                 </div>
             </ConfirmationDialog.Body>
             <ConfirmationDialog.ButtonGroup>
@@ -61,7 +111,7 @@ export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.F
                         type="button"
                         className="cta delete cta-cd-delete-modal ml-16"
                         onClick={handleDelete}
-                        disabled={props.apiCallInProgress || props.disabled}
+                        disabled={isDeleteDisabled}
                         data-testid="dialog-delete"
                     >
                         {props.apiCallInProgress ? (
@@ -78,6 +128,7 @@ export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.F
     )
 }
 
-const DeleteDialogDescription = (props) => <>{props.children}</>
+// eslint-disable-next-line react/jsx-no-useless-fragment
+const DeleteDialogDescription = ({ children }: Pick<DeleteDialogProps, 'children'>) => <>{children}</>
 
 DeleteDialog.Description = DeleteDialogDescription
