@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useRouteMatch, useParams } from 'react-router'
 import { GenericEmptyState, Progressing } from '../../../../Common'
-import { ReactComponent as RightArrow } from '../../../../Assets/Icon/ic-arrow-forward.svg'
+import { ReactComponent as ICChevron } from '../../../../Assets/Icon/ic-chevron-down.svg'
 import { DeploymentHistoryParamsType, TemplateConfiguration } from './types'
 import { getDeploymentHistoryList } from '../service'
 import { EMPTY_STATE_STATUS, DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
@@ -65,7 +65,7 @@ const DeploymentHistoryConfigList = ({
                 className="bcb-1 dc__no-decor bcn-0 cn-9 pl-16 pr-16 pt-12 pb-12 br-4 en-2 bw-1 mb-12 flex dc__content-space cursor lh-20"
             >
                 {childComponentName || currentComponent.DISPLAY_NAME}
-                <RightArrow className="rotate icon-dim-20" style={{ ['--rotateBy' as any]: '180deg' }} />
+                <ICChevron className="icon-dim-20 fcn-6 dc__flip-270" />
             </NavLink>
         )
     }

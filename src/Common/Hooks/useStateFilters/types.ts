@@ -29,6 +29,8 @@ export interface UseStateFiltersReturnType<T>
         | 'changePageSize'
         | 'offset'
         | 'pageSize'
+        | 'searchKey'
+        | 'handleSearch'
     > {}
 
 export interface PaginationType<T> extends Pick<UseUrlFiltersReturnType<T>, 'pageSize'> {

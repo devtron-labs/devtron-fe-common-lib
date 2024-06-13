@@ -57,11 +57,11 @@ export const FeatureDescriptionModal = ({
 
     const renderFooter = () => (
         <div
-            className={`flex right w-100 dc__align-right pt-16 dc__border-top-n1 pb-16 pl-20 pr-20 pt-6 pb-6 ${docLink ? 'dc__content-space' : 'right'}`}
+            className={`flex right w-100 dc__align-right dc__border-top-n1 px-20 py-16 ${docLink ? 'dc__content-space' : 'right'}`}
         >
             {docLink.length > 0 && (
                 <a
-                    className="flex dc__link en-2 bw-1 pl-8 pr-8 dc__gap-6 br-4 fw-6 lh-20 pt-6 pb-6 h-32"
+                    className="flex dc__link en-2 bw-1 dc__gap-6 br-4 fw-6 lh-20 px-8 py-6 h-32"
                     href={docLink}
                     target="_blank"
                     rel="noreferrer"

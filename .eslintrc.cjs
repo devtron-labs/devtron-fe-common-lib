@@ -92,7 +92,7 @@ module.exports = {
       'react/react-in-jsx-scope': 'off',
       // additional rules:
       '@typescript-eslint/no-floating-promises': 'error',
-      "import/prefer-default-export": "off",
+      'import/prefer-default-export': 'off',
       'import/extensions': [
           'warn',
           'ignorePackages',
@@ -103,6 +103,7 @@ module.exports = {
               tsx: 'never',
           },
       ],
+      'no-restricted-exports': 'off',
   },
   overrides: [
       {

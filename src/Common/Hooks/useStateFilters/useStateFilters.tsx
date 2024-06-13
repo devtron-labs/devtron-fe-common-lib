@@ -39,6 +39,8 @@ const useStateFilters = <T = string,>({
         sortOrder: SortingOrder.ASC,
         sortBy: initialSortKey,
     })
+    const [searchKey, setSearchKey] = useState('')
+
     const { sortBy, sortOrder } = sortingConfig
 
     const [pagination, setPagination] = useState<PaginationType<T>>({
@@ -46,6 +48,13 @@ const useStateFilters = <T = string,>({
         pageNumber: DEFAULT_PAGE_NUMBER,
     })
     const offset = pagination.pageSize * (pagination.pageNumber - 1)
+
+    const resetPageNumberToDefault = () => {
+        setPagination((prevPagination) => ({
+            ...prevPagination,
+            pageNumber: DEFAULT_PAGE_NUMBER,
+        }))
+    }
 
     const changePage = (pageNo: number): void => {
         setPagination({
@@ -58,8 +67,8 @@ const useStateFilters = <T = string,>({
         setPagination({
             ...pagination,
             pageSize: _pageSize,
-            pageNumber: DEFAULT_PAGE_NUMBER,
         })
+        resetPageNumberToDefault()
     }
 
     const handleSorting = (_sortBy: T) => {
@@ -76,22 +85,32 @@ const useStateFilters = <T = string,>({
             sortBy: _sortBy,
             sortOrder: order,
         }))
-        setPagination({
-            ...pagination,
-            pageNumber: DEFAULT_PAGE_NUMBER,
-        })
+        resetPageNumberToDefault()
+    }
+
+    const handleSearch = (searchTerm: string) => {
+        setSearchKey(searchTerm?.trim() ?? '')
+
+        resetPageNumberToDefault()
     }
 
     const clearFilters = () => {
+        setSearchKey('')
         setSortingConfig({
             sortOrder: SortingOrder.ASC,
             sortBy: initialSortKey,
+        })
+        setPagination({
+            pageSize: DEFAULT_BASE_PAGE_SIZE,
+            pageNumber: DEFAULT_PAGE_NUMBER,
         })
     }
 
     return {
         ...sortingConfig,
         handleSorting,
+        searchKey,
+        handleSearch,
         clearFilters,
         ...pagination,
         changePage,
