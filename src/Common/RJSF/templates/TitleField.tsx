@@ -19,7 +19,7 @@ import { ConditionalWrap } from '../../Helper'
 import { TitleFieldProps } from '@rjsf/utils'
 import { getTippyWrapperWithContent } from '../utils'
 
-export const TitleField = ({ id, title, required, description }: TitleFieldProps & Record<'description', string>) => (
+export const TitleField = ({ id, title, required, description }: TitleFieldProps & Partial<Record<'description', string>>) => (
     <legend className="fs-13 fw-6 cn-9 lh-20 dc__no-border py-9 mb-0" id={id}>
         <ConditionalWrap condition={!!description} wrap={getTippyWrapperWithContent(description, 'top')}>
             <span className={`${description ? 'text-underline-dashed-300' : ''}`}>{title}</span>

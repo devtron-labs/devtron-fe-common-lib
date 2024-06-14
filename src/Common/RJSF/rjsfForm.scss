@@ -17,18 +17,22 @@
     }
 
     &__additional-fields {
-        grid-template-columns: 1fr 1fr minmax(20px, auto);
+        grid-template-columns: 1fr 1fr;
     }
 
     &__array-field-item {
         grid-template-columns: 1fr auto;
-        z-index: 0;
-        background: transparent;
 
         & > :first-child {
             // This is added as the array field itself has a margin bottom
             margin: 0;
         }
+    }
+
+    &__additional-fields,
+    &__array-field-items {
+        z-index: 0;
+        background: transparent;
 
         &:has(> .remove-btn__container:hover)::after {
             background: var(--R50);

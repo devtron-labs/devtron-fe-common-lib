@@ -19,12 +19,12 @@ import {
     ObjectFieldTemplatePropertyType,
     ObjectFieldTemplateProps,
     canExpand,
-    getTemplate,
     getUiOptions,
     titleId,
 } from '@rjsf/utils'
 import { FieldRowWithLabel } from '../common/FieldRow'
 import { TitleField } from './TitleField'
+import { AddButton } from './ButtonTemplates'
 
 const Field = ({
     disabled,
@@ -39,13 +39,11 @@ const Field = ({
     title,
     uiSchema,
 }: ObjectFieldTemplateProps) => {
-    const {
-        ButtonTemplates: { AddButton },
-    } = registry.templates
     const hasAdditionalProperties = !!schema.additionalProperties
 
     const ActionButton = canExpand(schema, uiSchema, formData) && (
         <AddButton
+            label={title}
             className="object-property-expand"
             onClick={onAddClick(schema)}
             disabled={disabled || readonly}
