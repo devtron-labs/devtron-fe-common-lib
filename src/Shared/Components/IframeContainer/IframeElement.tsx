@@ -52,6 +52,8 @@ const IframeElement = ({ URL, width, height, title, maxHeight, maxWidth }: Ifram
                     height={Math.min(maxHeight, height)}
                     className="dc__no-border"
                     onError={handleError}
+                    sandbox="allow-same-origin allow-scripts"
+                    referrerPolicy="no-referrer"
                 />
             </div>
 
@@ -74,7 +76,14 @@ const IframeElement = ({ URL, width, height, title, maxHeight, maxWidth }: Ifram
                         </div>
                         <div className="flex px-16 py-8 h-100">
                             {/* eslint-disable-next-line jsx-a11y/iframe-has-title */}
-                            <iframe src={URL} width="100%" height="100%" className="dc__no-border" />
+                            <iframe
+                                src={URL}
+                                width="100%"
+                                height="100%"
+                                className="dc__no-border"
+                                sandbox="allow-same-origin allow-scripts"
+                                referrerPolicy="no-referrer"
+                            />
                         </div>
                     </div>
                 </VisibleModal>
