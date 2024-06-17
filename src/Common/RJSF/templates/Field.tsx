@@ -17,6 +17,7 @@
 import React from 'react'
 import { FieldTemplateProps, getUiOptions, getTemplate, ADDITIONAL_PROPERTY_FLAG } from '@rjsf/utils'
 import { FieldRowWithLabel } from '../common/FieldRow'
+import { TitleField } from './TitleField'
 
 export const Field = (props: FieldTemplateProps) => {
     const {
@@ -31,7 +32,7 @@ export const Field = (props: FieldTemplateProps) => {
         uiSchema,
         classNames,
         schema,
-        description,
+        rawDescription,
     } = props
     const uiOptions = getUiOptions(uiSchema)
     const WrapIfAdditionalTemplate = getTemplate<'WrapIfAdditionalTemplate'>(
@@ -43,15 +44,32 @@ export const Field = (props: FieldTemplateProps) => {
     const hasAdditionalProperties = ADDITIONAL_PROPERTY_FLAG in schema
     // Label is not displayed for boolean fields by default and hide for object type fields
     const showLabel = (displayLabel || schema.type === 'boolean') && !hasAdditionalProperties
+    const showTitle = schema.type === 'array'
 
     return hidden ? (
         <div className="hidden">{children}</div>
     ) : (
         <div className={`${classNames} mb-12`}>
-            <FieldRowWithLabel label={label} showLabel={showLabel} id={id} required={required}>
+            {showTitle && (
+                <TitleField
+                    id={id}
+                    title={label}
+                    required={required}
+                    registry={registry}
+                    uiSchema={uiSchema}
+                    schema={schema}
+                    description={rawDescription}
+                />
+            )}
+            <FieldRowWithLabel
+                label={label}
+                showLabel={showLabel}
+                id={id}
+                required={required}
+                rawDescription={rawDescription}
+            >
                 <WrapIfAdditionalTemplate {...props}>{children}</WrapIfAdditionalTemplate>
             </FieldRowWithLabel>
-            {description}
             {errors}
         </div>
     )
