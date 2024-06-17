@@ -35,7 +35,13 @@ const blockToday = (day: Moment): boolean => day.isSame(moment(), 'day')
  * @returns
  */
 
-const SingleDatePickerComponent = ({ date, handleDatesChange, readOnly, isTodayBlocked }: SingleDatePickerProps) => {
+const SingleDatePickerComponent = ({
+    date,
+    handleDatesChange,
+    readOnly,
+    isTodayBlocked,
+    displayFormat,
+}: SingleDatePickerProps) => {
     const [focused, setFocused] = useState(false)
 
     const handleFocusChange = (props) => {
@@ -62,6 +68,7 @@ const SingleDatePickerComponent = ({ date, handleDatesChange, readOnly, isTodayB
             isDayBlocked={isTodayBlocked ? blockToday : undefined}
             customInputIcon={<CalenderIcon />}
             inputIconPosition="after"
+            displayFormat={displayFormat}
         />
     )
 }

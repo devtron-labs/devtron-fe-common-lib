@@ -422,6 +422,7 @@ export enum FREQUENCY_ENUM {
 
 export const TIME_FORMAT = {
     DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
+    DD_MMM_YYYY: 'DD MMM YYYY',
 }
 
 export function getOrdinal(number) {

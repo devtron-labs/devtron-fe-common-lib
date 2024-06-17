@@ -1,6 +1,8 @@
 import dayjs from 'dayjs'
+import { components } from 'react-select'
 import { OptionType } from '../../../Common'
 import { MONTHLY_DATES_CONFIG, TIME_OPTIONS_CONFIG } from './constants'
+import { ReactComponent as ClockIcon } from '../../../Assets/Icon/ic-clock.svg'
 
 export const getTimePickerStyles = () => ({
     container: (base) => ({
@@ -134,7 +136,7 @@ export const updateDate = (currentDateObj: Date, newDate: Date) => {
  * @returns
  */
 
-export const getDefaultDateFromTimeToLive = (timeToLive: string) => {
+export const getDefaultDateFromTimeToLive = (timeToLive: string, isTomorrow?: boolean) => {
     const date = timeToLive ? new Date(timeToLive) : new Date()
 
     let hours = date.getHours()
@@ -150,8 +152,23 @@ export const getDefaultDateFromTimeToLive = (timeToLive: string) => {
     }
 
     // Handle date change
+    if (isTomorrow) {
+        // Get tomorrow's date
+        const tomorrowDate = new Date(date)
+        tomorrowDate.setHours(hours, minutes, 0)
+        tomorrowDate.setDate(date.getDate() + 1)
+        return tomorrowDate
+    }
     const nextDate = new Date(date)
     nextDate.setHours(hours, minutes, 0)
-
     return nextDate
 }
+
+/**
+ * Clock icon for the time picker
+ */
+export const DropdownIndicatorTimePicker = (props) => (
+    <components.DropdownIndicator {...props}>
+        <ClockIcon className="icon-dim-20 fcn-6" />
+    </components.DropdownIndicator>
+)

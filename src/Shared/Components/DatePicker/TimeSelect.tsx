@@ -1,8 +1,8 @@
 import ReactSelect from 'react-select'
-import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
+import { useState } from 'react'
+import { DEFAULT_TIME_OPTIONS, DropdownIndicatorTimePicker, getTimePickerStyles, updateTime } from './utils'
 import { TimeSelectProps } from './types'
-import { DEFAULT_TIME_OPTIONS, getTimePickerStyles, getTimeValue, updateTime } from './utils'
-import { DropdownIndicatorTimePicker } from '../ReactSelect/utils'
+import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
 
 export const TimePickerSelect = ({
     disabled = false,
@@ -10,12 +10,13 @@ export const TimePickerSelect = ({
     onChange,
     timePickerProps,
     error,
+    default12HourTime,
 }: TimeSelectProps) => {
-    const time = getTimeValue(dateObject)
-    const selectedTimeOption = DEFAULT_TIME_OPTIONS.find((option) => option.value === time) ?? DEFAULT_TIME_OPTIONS[0]
+    const [selectedTimeOption, setSelectedTimeOption] = useState(default12HourTime)
 
     const handleTimeChange = (option) => {
         onChange(updateTime(dateObject, option.value))
+        setSelectedTimeOption(option)
     }
     return (
         <>
