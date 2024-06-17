@@ -726,10 +726,10 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
         return 0 // Both dates are invalid, consider them equal
     } else if (isNaN(dateA)) {
         // dateA is invalid, move it to the end if sorting ASC, otherwise to the beginning
-        return sortOrder === SortingOrder.ASC ? -1 : 1
+        return sortOrder === SortingOrder.ASC ? 1 : -1
     } else if (isNaN(dateB)) {
         // dateB is invalid, move it to the end if sorting ASC, otherwise to the beginning
-        return sortOrder === SortingOrder.ASC ? 1 : -1
+        return sortOrder === SortingOrder.ASC ? -1 : 1
     } else {
         return sortOrder === SortingOrder.ASC ? dateB - dateA : dateA - dateB
     }
