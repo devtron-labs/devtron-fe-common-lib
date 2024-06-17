@@ -15,8 +15,10 @@
  */
 
 import React from 'react'
+import { ConditionalWrap } from '../../Helper'
 import { FieldRowProps } from './types'
-import { DEFAULT_FIELD_TITLE, DO_NOT_SHOW_LABEL } from '../constants'
+import { DEFAULT_FIELD_TITLE } from '../constants'
+import { getTippyWrapperWithContent } from '../utils'
 
 export const FieldRowWithLabel = ({
     showLabel,
@@ -24,10 +26,9 @@ export const FieldRowWithLabel = ({
     required,
     children,
     id,
+    rawDescription,
     shouldAlignCenter = true,
-}: Omit<FieldRowProps, 'label'> & {
-    label: FieldRowProps['label'] | typeof DO_NOT_SHOW_LABEL
-}) => (
+}: FieldRowProps) => (
     <div
         className={
             showLabel
@@ -36,14 +37,13 @@ export const FieldRowWithLabel = ({
         }
     >
         {showLabel && (
-            <label className="cn-7 fs-13 lh-32 fw-4 flexbox mb-0" htmlFor={id}>
-                {/* The check is added here intentionally for proper layout for array type field */}
-                {label !== DO_NOT_SHOW_LABEL && (
-                    <>
-                        <span className="dc__ellipsis-right">{label || DEFAULT_FIELD_TITLE}</span>
-                        {required && <span className="cr-5">&nbsp;*</span>}
-                    </>
-                )}
+            <label className="cn-7 fs-13 lh-20 fw-4 flexbox mb-0" htmlFor={id}>
+                <ConditionalWrap condition={!!rawDescription} wrap={getTippyWrapperWithContent(rawDescription, 'top')}>
+                    <span className={`dc__ellipsis-right ${rawDescription ? 'text-underline-dashed-300' : ''}`}>
+                        {label || DEFAULT_FIELD_TITLE}
+                    </span>
+                </ConditionalWrap>
+                {required && <span className="cr-5">&nbsp;*</span>}
             </label>
         )}
         {children}
