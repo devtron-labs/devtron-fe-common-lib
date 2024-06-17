@@ -38,7 +38,7 @@ export const WrapIfAdditionalTemplate = ({
     return (
         <>
             {additional ? (
-                <div className="rjsf-form-template__additional-fields display-grid dc__gap-8 flex-align-center">
+                <div className="dc__position-rel rjsf-form-template__additional-fields display-grid dc__gap-8 flex-align-center">
                     <div>
                         <input
                             type="text"
@@ -50,7 +50,7 @@ export const WrapIfAdditionalTemplate = ({
                         />
                     </div>
                     <div>{children}</div>
-                    <div>
+                    <div className="dc__position-abs remove-btn__container" style={{ right: "-28px", top: "9px" }}>
                         <RemoveButton
                             disabled={disabled || readonly}
                             onClick={onDropPropertyClick(label)}

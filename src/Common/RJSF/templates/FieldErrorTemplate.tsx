@@ -24,14 +24,17 @@ export const FieldErrorTemplate = ({ errors = [], idSchema }: FieldErrorProps) =
 
     return (
         errors.length > 0 && (
-            <span id={id}>
+            <span className="display-grid rjsf-form-template__field--error dc__gap-12" id={id}>
                 {errors
                     .filter((elem) => !!elem)
                     .map((error, index: number) => (
-                        <span className="form__error" key={index}>
-                            <Error className="form__icon form__icon--error" />
-                            {error}
-                        </span>
+                        <React.Fragment key={index}>
+                            <span />
+                            <span className="form__error">
+                                <Error className="form__icon form__icon--error" />
+                                {error}
+                            </span>
+                        </React.Fragment>
                     ))}
             </span>
         )
