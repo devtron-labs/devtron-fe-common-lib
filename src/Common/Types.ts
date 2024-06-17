@@ -198,6 +198,12 @@ export interface InfoColourBarType {
     linkClass?: string
     internalLink?: boolean
     styles?: CSSProperties
+    /**
+     * If true, the icon is not shown
+     *
+     * @default false
+     */
+    hideIcon?: boolean
 }
 
 export interface ReloadType {
