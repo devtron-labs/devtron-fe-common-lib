@@ -2,7 +2,7 @@ import { createGitCommitUrl, handleUTCTime } from '../../Common'
 import { CIMaterialInfoDTO, CIMaterialInfoType } from './app.types'
 
 export const getParsedCIMaterialInfo = (ciMaterialData: CIMaterialInfoDTO): CIMaterialInfoType => {
-    const materials = (ciMaterialData?.ciMaterials ?? []).map((mat) => ({
+    const materials = (ciMaterialData?.ciMaterials ?? []).map((mat, materialIndex) => ({
         id: mat.id,
         gitMaterialName: mat.gitMaterialName || '',
         gitMaterialId: mat.gitMaterialId || 0,
@@ -22,6 +22,7 @@ export const getParsedCIMaterialInfo = (ciMaterialData: CIMaterialInfoDTO): CIMa
             isSelected: false,
         })),
         lastFetchTime: mat.lastFetchTime || '',
+        isSelected: materialIndex === 0,
     }))
 
     return {
