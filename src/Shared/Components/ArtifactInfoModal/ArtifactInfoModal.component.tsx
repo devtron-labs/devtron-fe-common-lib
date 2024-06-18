@@ -128,7 +128,7 @@ const ArtifactInfoModal = ({
                             <GenericEmptyState
                                 title="Data not available"
                                 subTitle="The data you are looking for is not available"
-                                classname="h-100 bcn-0"
+                                classname="h-100 bcn-0 flex-grow-1"
                             />
                         )}
                     </APIResponseHandler>
