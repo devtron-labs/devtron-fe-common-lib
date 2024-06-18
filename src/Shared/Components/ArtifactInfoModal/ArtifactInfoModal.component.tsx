@@ -1,5 +1,5 @@
 import { Drawer, GenericEmptyState, useAsync } from '../../../Common'
-import { getCITriggerInfo } from '../../Services/app.service'
+import { getArtifactInfo, getCITriggerInfo } from '../../Services/app.service'
 import { APIResponseHandler } from '../APIResponseHandler'
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 import { ReactComponent as ICArrowDown } from '../../../Assets/Icon/ic-arrow-down.svg'
@@ -7,15 +7,28 @@ import { Artifacts, HistoryComponentType } from '../CICDHistory'
 import MaterialHistory from '../MaterialHistory/MaterialHistory.component'
 import { ArtifactInfoModalProps } from './types'
 
-const ArtifactInfoModal = ({ envId, ciArtifactId, handleClose, renderCIListHeader }: ArtifactInfoModalProps) => {
-    const [isInfoLoading, artifactInfo, infoError, refetchArtifactInfo] = useAsync(() =>
-        getCITriggerInfo({
-            ciArtifactId,
-            envId,
-        }),
+const ArtifactInfoModal = ({
+    envId,
+    ciArtifactId,
+    handleClose,
+    renderCIListHeader,
+    fetchOnlyArtifactInfo = false,
+}: ArtifactInfoModalProps) => {
+    const [isInfoLoading, artifactInfo, infoError, refetchArtifactInfo] = useAsync(
+        () =>
+            fetchOnlyArtifactInfo
+                ? getArtifactInfo({
+                      ciArtifactId,
+                  })
+                : getCITriggerInfo({
+                      ciArtifactId,
+                      envId,
+                  }),
+        [ciArtifactId, envId, fetchOnlyArtifactInfo],
     )
 
     const isArtifactInfoAvailable = !!artifactInfo?.materials?.length
+    const showDescription = isArtifactInfoAvailable && !fetchOnlyArtifactInfo
 
     return (
         <Drawer position="right" width="800px" onEscape={handleClose}>
@@ -30,7 +43,7 @@ const ArtifactInfoModal = ({ envId, ciArtifactId, handleClose, renderCIListHeade
                         ) : (
                             <>
                                 <h1 className="fs-16 fw-6 lh-24 m-0 dc__truncate">{artifactInfo?.appName}</h1>
-                                {isArtifactInfoAvailable && (
+                                {showDescription && (
                                     <p className="fs-13 cn-7 lh-1-5 m-0 dc__truncate">
                                         Deployed on {artifactInfo.environmentName} at {artifactInfo.lastDeployedTime}
                                         &nbsp;by {artifactInfo.triggeredByEmail}
@@ -42,7 +55,7 @@ const ArtifactInfoModal = ({ envId, ciArtifactId, handleClose, renderCIListHeade
                     <button
                         data-testid="visible-modal-close"
                         type="button"
-                        className="dc__transparent"
+                        className="dc__transparent flex"
                         onClick={handleClose}
                         aria-label="Close modal"
                     >
