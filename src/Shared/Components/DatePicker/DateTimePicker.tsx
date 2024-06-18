@@ -1,5 +1,17 @@
 /*
  * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 import { SingleDatePicker } from 'react-dates'
@@ -38,6 +50,8 @@ const DateTimePicker = ({
     const selectedTimeOption = DEFAULT_TIME_OPTIONS.find((option) => option.value === time) ?? DEFAULT_TIME_OPTIONS[0]
     const [focused, setFocused] = useState(false)
 
+    console.log('dateObject', dateObject)
+
     const handleFocusChange = ({ focused }) => {
         setFocused(focused)
     }
@@ -69,7 +83,9 @@ const DateTimePicker = ({
                     withFullScreenPortal={false}
                     orientation="horizontal"
                     readOnly={readOnly || false}
-                    customInputIcon={<CalendarIcon className="icon-dim-16" />}
+                    customInputIcon={<CalendarIcon className="icon-dim-20" />}
+                    inputIconPosition="after"
+                    displayFormat="DD MMM YYYY"
                 />
                 {!hideTimeSelect && (
                     <div className="dc__no-shrink">
