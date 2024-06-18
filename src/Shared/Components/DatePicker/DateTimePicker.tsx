@@ -50,8 +50,6 @@ const DateTimePicker = ({
     const selectedTimeOption = DEFAULT_TIME_OPTIONS.find((option) => option.value === time) ?? DEFAULT_TIME_OPTIONS[0]
     const [focused, setFocused] = useState(false)
 
-    console.log('dateObject', dateObject)
-
     const handleFocusChange = ({ focused }) => {
         setFocused(focused)
     }
