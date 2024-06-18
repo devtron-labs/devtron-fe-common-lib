@@ -70,7 +70,7 @@ export const SourceTypeMap = {
     BranchFixed: 'SOURCE_TYPE_BRANCH_FIXED',
     WEBHOOK: 'WEBHOOK',
     BranchRegex: 'SOURCE_TYPE_BRANCH_REGEX',
-}
+} as const
 
 export function getUserRole(appName?: string): Promise<UserRole> {
     return get(`${ROUTES.USER_CHECK_ROLE}${appName ? `?appName=${appName}` : ''}`)
