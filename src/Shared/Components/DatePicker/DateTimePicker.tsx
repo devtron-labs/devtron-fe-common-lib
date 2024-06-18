@@ -45,7 +45,6 @@ const DateTimePicker = ({
     hideTimeSelect = false,
     readOnly = false,
 }: DateTimePickerProps) => {
-    // const value = dayjs(dateObject)
     const time = getTimeValue(dateObject)
     const selectedTimeOption = DEFAULT_TIME_OPTIONS.find((option) => option.value === time) ?? DEFAULT_TIME_OPTIONS[0]
     const [focused, setFocused] = useState(false)
