@@ -42,7 +42,11 @@ const ArtifactInfoModal = ({
                             </>
                         ) : (
                             <>
-                                <h1 className="fs-16 fw-6 lh-24 m-0 dc__truncate">{artifactInfo?.appName}</h1>
+                                <h1 className="fs-16 fw-6 lh-24 m-0 dc__truncate">
+                                    {showDescription
+                                        ? artifactInfo?.appName
+                                        : `Source & image details of ${artifactInfo?.appName}`}
+                                </h1>
                                 {showDescription && (
                                     <p className="fs-13 cn-7 lh-1-5 m-0 dc__truncate">
                                         Deployed on {artifactInfo.environmentName} at {artifactInfo.lastDeployedTime}
