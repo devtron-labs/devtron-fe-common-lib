@@ -31,17 +31,16 @@ const MaterialHistory = ({ material, pipelineName, ciPipelineId, selectCommit }:
         // eslint-disable-next-line react/jsx-no-useless-fragment
         <>
             {material?.history?.map((history, index) => {
-                const classes = `material-history w-auto mt-12 ${history.isSelected ? 'material-history-selected' : ''}`
-
                 const _commitId =
                     material.type === SourceTypeMap.WEBHOOK && history.webhookData
                         ? history.webhookData.id.toString()
                         : history.commit
+
                 return (
                     <div
                         data-testid={`material-history-${index}`}
                         key={_commitId}
-                        className={`${classes} `}
+                        className={`material-history w-auto mt-12 ${history.isSelected ? 'material-history-selected' : ''}`}
                         onClick={(e) => onClickMaterialHistory(e, _commitId, history.excluded)}
                     >
                         <GitCommitInfoGeneric

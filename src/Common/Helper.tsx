@@ -304,9 +304,10 @@ export function handleUTCTime(ts: string, isRelativeTime = false) {
         if (ts && ts.length) {
             const date = moment(ts)
             if (isRelativeTime) {
-                timestamp = ts === ZERO_TIME_STRING ? '' : date.fromNow()
-            }
-            else {
+                if (ts !== ZERO_TIME_STRING) {
+                    timestamp = date.fromNow()
+                }
+            } else {
                 timestamp = date.format(DATE_TIME_FORMAT_STRING)
             }
         }
