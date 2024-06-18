@@ -425,5 +425,6 @@ export const AppListConstants = {
         NAMESPACE: 'namespace',
         ENVIRONMENT: 'environment',
         APP_STATUS: 'appStatus',
+        DEPLOYMENT_TYPE: 'deploymentType',
     },
 }

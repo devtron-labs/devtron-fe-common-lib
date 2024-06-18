@@ -161,6 +161,7 @@ export enum AppType {
     DEVTRON_HELM_CHART = 'devtron_helm_chart',
     EXTERNAL_HELM_CHART = 'external_helm_chart',
     EXTERNAL_ARGO_APP = 'external_argo_app',
+    EXTERNAL_FLUX_APP = 'external_flux_app',
 }
 
 export interface HelmReleaseStatus {
