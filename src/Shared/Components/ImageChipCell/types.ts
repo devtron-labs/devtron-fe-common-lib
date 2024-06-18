@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
+import { SyntheticEvent } from 'react'
 import { RegistryType } from '../../types'
 
 export interface ImageChipCellProps {
-    handleClick: () => void
+    handleClick: (e: SyntheticEvent) => void
     imagePath: string
     isExpanded: boolean
     registryType: RegistryType
