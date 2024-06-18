@@ -1,0 +1,25 @@
+.logs-renderer {
+    &__search-bar {
+        .search-bar {
+            background: transparent;
+            border-radius: 0px;
+            border: none !important;
+
+            input {
+                color: var(--N0);
+
+                &::placeholder {
+                    color: var(--N500);
+                }
+            }
+        }
+
+        .search-bar:focus-within {
+            border: none !important;
+        }
+    }
+
+    &__filters-border-bottom {
+        border-bottom: 1px solid #2C3354;
+    }
+}
