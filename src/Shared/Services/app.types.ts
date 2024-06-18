@@ -1,4 +1,4 @@
-import { ReleaseTag, SourceTypeMap } from '../../Common'
+import { ReleaseTag } from '../../Common'
 
 interface WebhookDataType {
     id: number
@@ -32,7 +32,7 @@ interface CIMaterialDTO {
     id: number
     gitMaterialId: number
     gitMaterialName: string
-    type: (typeof SourceTypeMap)[keyof typeof SourceTypeMap]
+    type: string
     value: string
     active: boolean
     history: MaterialHistoryDTO[]
@@ -40,11 +40,31 @@ interface CIMaterialDTO {
     url: string
 }
 
+// FIXME: These are meta types not received from API. Added this for backward compatibility
+interface CIMaterialMetaType {
+    isRepoError?: boolean
+    repoErrorMsg?: string
+    isBranchError?: boolean
+    branchErrorMsg?: string
+    isMaterialLoading?: boolean
+    regex?: string
+    searchText?: string
+    noSearchResultsMsg?: string
+    noSearchResult?: boolean
+    isRegex?: boolean
+    isDockerFileError?: boolean
+    dockerFileErrorMsg?: string
+    showAllCommits?: boolean
+    isMaterialSelectionError?: boolean
+    materialSelectionErrorMsg?: string
+}
+
 export interface CIMaterialType
     extends Pick<
-        CIMaterialDTO,
-        'id' | 'gitMaterialId' | 'gitMaterialName' | 'type' | 'value' | 'active' | 'lastFetchTime'
-    > {
+            CIMaterialDTO,
+            'id' | 'gitMaterialId' | 'gitMaterialName' | 'type' | 'value' | 'active' | 'lastFetchTime'
+        >,
+        CIMaterialMetaType {
     gitURL: CIMaterialDTO['url']
     history: MaterialHistoryType[]
 }

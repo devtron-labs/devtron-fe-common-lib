@@ -1,5 +1,5 @@
 import { createGitCommitUrl, handleUTCTime } from '../../Common'
-import { CIMaterialInfoDTO, CIMaterialInfoType, CIMaterialType } from './app.types'
+import { CIMaterialInfoDTO, CIMaterialInfoType } from './app.types'
 
 export const getParsedCIMaterialInfo = (ciMaterialData: CIMaterialInfoDTO): CIMaterialInfoType => {
     const materials = (ciMaterialData?.ciMaterials ?? []).map((mat) => ({
@@ -7,7 +7,7 @@ export const getParsedCIMaterialInfo = (ciMaterialData: CIMaterialInfoDTO): CIMa
         gitMaterialName: mat.gitMaterialName || '',
         gitMaterialId: mat.gitMaterialId || 0,
         gitURL: mat.url || '',
-        type: mat.type || ('' as CIMaterialType['type']),
+        type: mat.type || '',
         value: mat.value || '',
         active: mat.active || false,
         history: mat.history.map((hist, index) => ({

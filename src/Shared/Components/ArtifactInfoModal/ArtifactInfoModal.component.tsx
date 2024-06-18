@@ -20,15 +20,18 @@ const ArtifactInfoModal = ({ envId, ciArtifactId, handleClose, renderCIListHeade
     return (
         <Drawer position="right" width="800px" onEscape={handleClose}>
             <div data-testid="visible-modal-commit-info" className="h-100vh">
-                <div className="trigger-modal__header bcn-0">
-                    <div>
+                <div className="flex dc__content-space py-10 px-20 cn-9 bcn-0 dc__border-bottom">
+                    <div className="flexbox-col dc__content-center">
                         {isInfoLoading ? (
-                            <div />
+                            <>
+                                <div className="shimmer h-24 mb-2 w-200" />
+                                <div className="shimmer h-18 w-250" />
+                            </>
                         ) : (
                             <>
-                                <h1 className="modal__title">{artifactInfo?.appName}</h1>
+                                <h1 className="fs-16 fw-6 lh-24 m-0 dc__truncate">{artifactInfo?.appName}</h1>
                                 {isArtifactInfoAvailable && (
-                                    <p className="fs-13 cn-7 lh-1-54 m-0">
+                                    <p className="fs-13 cn-7 lh-1-5 m-0 dc__truncate">
                                         Deployed on {artifactInfo.environmentName} at {artifactInfo.lastDeployedTime}
                                         &nbsp;by {artifactInfo.triggeredByEmail}
                                     </p>
@@ -46,16 +49,19 @@ const ArtifactInfoModal = ({ envId, ciArtifactId, handleClose, renderCIListHeade
                         <ICClose className="icon-dim-24 icon-use-fill-n6" />
                     </button>
                 </div>
-                <APIResponseHandler
-                    isLoading={isInfoLoading}
-                    error={infoError}
-                    errorScreenManagerProps={{
-                        code: infoError?.code,
-                        reload: refetchArtifactInfo,
-                    }}
-                >
-                    {isArtifactInfoAvailable ? (
-                        <div className="m-lr-0 flexbox trigger-modal-body-height dc__overflow-scroll pb-12">
+                <div className="m-lr-0 flexbox trigger-modal-body-height dc__overflow-scroll pb-12 dc__window-bg">
+                    <APIResponseHandler
+                        isLoading={isInfoLoading}
+                        progressingProps={{
+                            pageLoader: true,
+                        }}
+                        error={infoError}
+                        errorScreenManagerProps={{
+                            code: infoError?.code,
+                            reload: refetchArtifactInfo,
+                        }}
+                    >
+                        {isArtifactInfoAvailable ? (
                             <div className="select-material">
                                 {artifactInfo.materials.map((material) => (
                                     <MaterialHistory material={material} pipelineName="" key={material.id} />
@@ -85,15 +91,15 @@ const ArtifactInfoModal = ({ envId, ciArtifactId, handleClose, renderCIListHeade
                                     renderCIListHeader={renderCIListHeader}
                                 />
                             </div>
-                        </div>
-                    ) : (
-                        <GenericEmptyState
-                            title="Data not available"
-                            subTitle="The data you are looking for is not available"
-                            classname="h-100 bcn-0"
-                        />
-                    )}
-                </APIResponseHandler>
+                        ) : (
+                            <GenericEmptyState
+                                title="Data not available"
+                                subTitle="The data you are looking for is not available"
+                                classname="h-100 bcn-0"
+                            />
+                        )}
+                    </APIResponseHandler>
+                </div>
             </div>
         </Drawer>
     )

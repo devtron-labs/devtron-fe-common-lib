@@ -15,4 +15,5 @@
  */
 
 export * from './types'
+export * from './app.types'
 export * from './common.service'
