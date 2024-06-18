@@ -19,7 +19,7 @@ import { DateSelectProps } from './types'
 import { MONTHLY_DATE_OPTIONS, getTimePickerStyles } from './utils'
 import { DropdownIndicator } from '../../../Common'
 
-export const DateSelect = ({ selectedDate, handleOnChange }: DateSelectProps) => (
+export const MonthlySelect = ({ selectedDate, handleOnChange }: DateSelectProps) => (
     <div className="dc__no-shrink">
         <ReactSelect
             placeholder="12:00 AM"

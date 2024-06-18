@@ -16,7 +16,7 @@
 
 export { default as SingleDatePickerComponent } from './SingleDatePickerComponent'
 export * from './types'
-export * from './DateSelect'
+export * from './MonthlySelect'
 export * from './TimeSelect'
 export * from './utils'
 export * from './constants'
