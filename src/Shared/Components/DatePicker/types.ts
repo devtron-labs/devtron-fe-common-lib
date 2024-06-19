@@ -134,4 +134,16 @@ export interface DateTimePickerProps {
      * To make the field read only
      */
     readOnly?: boolean
+    /**
+     * To block today's date
+     */
+    isTodayBlocked?: boolean
+    /**
+     * To enable outside range
+     */
+    isOutsideRangeEnabled?: boolean
+    /**
+     * Start date for the date picker
+     */
+    startDate?: Date
 }

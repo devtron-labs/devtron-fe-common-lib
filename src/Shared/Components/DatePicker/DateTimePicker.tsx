@@ -44,6 +44,8 @@ const DateTimePicker = ({
     required,
     hideTimeSelect = false,
     readOnly = false,
+    isOutsideRangeEnabled = false,
+    startDate,
 }: DateTimePickerProps) => {
     const time = getTimeValue(dateObject)
     const selectedTimeOption = DEFAULT_TIME_OPTIONS.find((option) => option.value === time) ?? DEFAULT_TIME_OPTIONS[0]
@@ -60,6 +62,7 @@ const DateTimePicker = ({
         onChange(updateTime(dateObject, option.value))
     }
 
+    const isOutsideRange = (day) => moment(startDate).diff(day, 'days') >= 0
     return (
         <div>
             <label className={`form__label ${required ? 'dc__required-field' : ''}`} htmlFor={id}>
@@ -83,6 +86,7 @@ const DateTimePicker = ({
                     customInputIcon={<CalendarIcon className="icon-dim-20" />}
                     inputIconPosition="after"
                     displayFormat="DD MMM YYYY"
+                    isOutsideRange={isOutsideRangeEnabled ? isOutsideRange : undefined}
                 />
                 {!hideTimeSelect && (
                     <div className="dc__no-shrink">
