@@ -72,7 +72,7 @@ export interface customEnv {
     ENABLE_GITOPS_BITBUCKET_SOURCE: boolean
     HIDE_RESOURCE_WATCHER?: boolean
     ORGANIZATION_NAME: string
-    ENABLE_EXTERNAL_FLUX_CD: boolean
+    FEATURE_EXTERNAL_FLUX_CD_ENABLE: boolean
 }
 declare global {
     interface Window {
