@@ -25,6 +25,7 @@ export const MESSAGES = {
     CAN_NOT_START_END_WITH_SEPARATORS: 'Cannot start/end with -, _ or .',
     getMinMaxCharMessage: (min: number, max: number) => `Minimum ${min} and maximum ${max} characters allowed`,
     getMaxCharMessage: (max: number) => `Maximum ${max} characters are allowed`,
+    getMinCharMessage: (min: number) => `Minimum ${min} characters are required`,
     VALID_POSITIVE_NUMBER: 'This field should be a valid positive number',
     VALID_POSITIVE_INTEGER: 'This field should be a valid positive integer',
     MAX_SAFE_INTEGER: `Maximum allowed value is ${Number.MAX_SAFE_INTEGER}`,
@@ -71,6 +72,26 @@ export const validateDescription = (description: string): ValidationResponseType
         return {
             isValid: false,
             message: MESSAGES.getMaxCharMessage(MAX_DESCRIPTION_LENGTH),
+        }
+    }
+
+    return {
+        isValid: true,
+    }
+}
+
+export const validateStringLength = (value: string, maxLimit: number, minLimit: number): ValidationResponseType => {
+    if (value?.length < minLimit) {
+        return {
+            isValid: false,
+            message: MESSAGES.getMinCharMessage(minLimit),
+        }
+    }
+
+    if (value?.length > maxLimit) {
+        return {
+            isValid: false,
+            message: MESSAGES.getMaxCharMessage(maxLimit),
         }
     }
 
@@ -151,3 +172,52 @@ export const validateRequiredPositiveInteger = (value: string | number): Validat
         isValid: true,
     }
 }
+
+/**
+ * Check if the URL starts with the base64 URL prefix
+ */
+const isBase64Url = (url: string): boolean => /^data:.*;base64,/.test(url)
+
+export const validateURL = (url: string, allowBase64Url: boolean = true): ValidationResponseType => {
+    try {
+        if (!allowBase64Url && isBase64Url(url)) {
+            throw new Error('Base64 URLs are not allowed')
+        }
+        // eslint-disable-next-line no-new
+        new URL(url)
+    } catch (err) {
+        return {
+            isValid: false,
+            message: err.message || 'Invalid URL',
+        }
+    }
+
+    return {
+        isValid: true,
+    }
+}
+
+export const validateIfImageExist = (url: string): Promise<ValidationResponseType> =>
+    new Promise<ValidationResponseType>((resolve) => {
+        const img = new Image()
+
+        img.src = url
+        img.onload = () => {
+            img.onload = null
+            img.onerror = null
+
+            return resolve({
+                isValid: true,
+            })
+        }
+        img.onerror = () => {
+            img.src = ''
+            img.onload = null
+            img.onerror = null
+
+            return resolve({
+                isValid: false,
+                message: 'Invalid URL',
+            })
+        }
+    })

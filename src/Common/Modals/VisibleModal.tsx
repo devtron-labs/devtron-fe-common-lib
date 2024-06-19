@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react'
+import React, { SyntheticEvent } from 'react'
 import ReactDOM from 'react-dom'
 import { preventBodyScroll } from '../../Shared'
 import { stopPropagation } from '../Helper'
@@ -65,11 +65,17 @@ export class VisibleModal extends React.Component<{
         }
     }
 
+    handleBodyClick = (e: SyntheticEvent) => {
+        e.stopPropagation()
+
+        this.props.close?.(e)
+    }
+
     render() {
         return ReactDOM.createPortal(
             <div
                 className={`visible-modal__body ${this.props.className}`}
-                onClick={this.props?.close}
+                onClick={this.handleBodyClick}
                 data-testid="visible-modal-close"
             >
                 {this.props.children}

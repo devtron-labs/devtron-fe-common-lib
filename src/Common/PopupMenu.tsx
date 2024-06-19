@@ -33,6 +33,7 @@ const PopupMenu = ({
     onToggleCallback = null,
     autoClose = false,
     autoPosition = false,
+    shouldPreventDefault = false
 }: PopupMenuType) => {
     const [popupPosition, setPopupPosition] = React.useState(null)
     const [opacity, setOpacity] = React.useState(0)
@@ -104,6 +105,9 @@ const PopupMenu = ({
 
     const handleOpen = (e) => {
         e.stopPropagation()
+        if (shouldPreventDefault) {
+            e.preventDefault()
+        }
         setOpacity(0)
         const { height, x, y } = e.currentTarget.getBoundingClientRect()
         setPopupPosition({ left: x, top: y + height })

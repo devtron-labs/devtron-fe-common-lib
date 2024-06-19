@@ -72,6 +72,11 @@ export enum DeploymentWithConfigType {
     SPECIFIC_TRIGGER_CONFIG = 'SPECIFIC_TRIGGER_CONFIG',
 }
 
+export enum EnvironmentTypeEnum {
+    production = 'Production',
+    nonProduction = 'Non-Production',
+}
+
 export enum TIMELINE_STATUS {
     DEPLOYMENT_INITIATED = 'DEPLOYMENT_INITIATED',
     GIT_COMMIT = 'GIT_COMMIT',

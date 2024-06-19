@@ -34,6 +34,7 @@ export const RJSFForm = (props: FormProps) => (
         showErrorList={false}
         autoComplete="off"
         {...props}
+        className={`rjsf-form-template__container ${props.className || ''}`}
         validator={validator}
         templates={{
             ...templates,

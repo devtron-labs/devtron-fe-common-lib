@@ -32,16 +32,18 @@ export const ArrayFieldItemTemplate = ({
     const { RemoveButton } = registry.templates.ButtonTemplates
 
     return (
-        <div className="display-grid rjsf-form-template__array-field-item flex-align-center dc__gap-8 mb-12">
+        <div className="dc__position-rel display-grid rjsf-form-template__array-field-item flex-align-center mb-12">
             {children}
-            {hasToolbar && hasRemove && (
-                <RemoveButton
-                    disabled={disabled || readonly}
-                    onClick={onDropIndexClick(index)}
-                    uiSchema={uiSchema}
-                    registry={registry}
-                />
-            )}
+            <div className="dc__position-abs remove-btn__container" style={{ right: "-28px", top: "9px" }}>
+                {hasToolbar && hasRemove && (
+                    <RemoveButton
+                        disabled={disabled || readonly}
+                        onClick={onDropIndexClick(index)}
+                        uiSchema={uiSchema}
+                        registry={registry}
+                    />
+                )}
+            </div>
         </div>
     )
 }

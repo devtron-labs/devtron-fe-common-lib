@@ -182,6 +182,7 @@ export interface ErrorScreenNotAuthorizedProps {
 export enum ImageType {
     Large = 'large',
     Medium = 'medium',
+    SMALL = 'small',
 }
 
 export interface InfoColourBarType {
@@ -197,6 +198,12 @@ export interface InfoColourBarType {
     linkClass?: string
     internalLink?: boolean
     styles?: CSSProperties
+    /**
+     * If true, the icon is not shown
+     *
+     * @default false
+     */
+    hideIcon?: boolean
 }
 
 export interface ReloadType {
@@ -262,6 +269,7 @@ export interface PopupMenuType {
     onToggleCallback?: (isOpen: boolean) => void
     autoClose?: boolean
     autoPosition?: boolean
+    shouldPreventDefault?: boolean
 }
 
 export interface PopupMenuButtonType {
