@@ -30,7 +30,7 @@ export const getParsedCIMaterialInfo = (ciMaterialData: CIMaterialInfoDTO): CIMa
             commitURL: mat.url ? createGitCommitUrl(mat.url, hist.Commit) : '',
             commit: hist.Commit || '',
             author: hist.Author || '',
-            date: hist.Date ? handleUTCTime(hist.Date, false) : '',
+            date: handleUTCTime(hist.Date, false),
             message: hist.Message || '',
             changes: hist.Changes || [],
             showChanges: index === 0,
@@ -44,7 +44,7 @@ export const getParsedCIMaterialInfo = (ciMaterialData: CIMaterialInfoDTO): CIMa
     return {
         materials,
         triggeredByEmail: ciMaterialData?.triggeredByEmail || '',
-        lastDeployedTime: ciMaterialData?.lastDeployedTime ? handleUTCTime(ciMaterialData.lastDeployedTime, false) : '',
+        lastDeployedTime: handleUTCTime(ciMaterialData.lastDeployedTime, false),
         environmentName: ciMaterialData?.environmentName || '',
         environmentId: ciMaterialData?.environmentId || 0,
         appId: ciMaterialData?.appId,

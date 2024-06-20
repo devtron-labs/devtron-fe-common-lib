@@ -23,7 +23,7 @@ import moment from 'moment'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import YAML from 'yaml'
-import { ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME, EXCLUDED_FALSY_VALUES, DISCORD_LINK, ZERO_TIME_STRING } from './Constants'
+import { ERROR_EMPTY_SCREEN, SortingOrder, EXCLUDED_FALSY_VALUES, DISCORD_LINK, ZERO_TIME_STRING } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
@@ -301,12 +301,10 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
 export function handleUTCTime(ts: string, isRelativeTime = false) {
     let timestamp = ''
     try {
-        if (ts && ts.length) {
+        if (ts && ts.length && ts !== ZERO_TIME_STRING) {
             const date = moment(ts)
             if (isRelativeTime) {
-                if (ts !== ZERO_TIME_STRING) {
-                    timestamp = date.fromNow()
-                }
+                timestamp = date.fromNow()
             } else {
                 timestamp = date.format(DATE_TIME_FORMAT_STRING)
             }
