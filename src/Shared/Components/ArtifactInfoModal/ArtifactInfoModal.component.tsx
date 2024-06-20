@@ -48,7 +48,7 @@ const ArtifactInfoModal = ({
 
     return (
         <Drawer position="right" width="800px" onEscape={handleClose}>
-            <div data-testid="visible-modal-commit-info" className="h-100vh">
+            <div data-testid="visible-modal-commit-info" className="flexbox-col h-100">
                 <div className="flex dc__content-space py-10 px-20 cn-9 bcn-0 dc__border-bottom">
                     <div className="flexbox-col dc__content-center">
                         {isInfoLoading ? (
