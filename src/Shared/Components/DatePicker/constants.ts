@@ -131,3 +131,76 @@ export const TIME_OPTIONS_CONFIG = {
     '11:00 PM': '23:00:00',
     '11:30 PM': '23:30:00',
 }
+
+export const DATE_PICKER_PLACEHOLDER = {
+    DATE: 'Select date',
+    TIME: 'Select time',
+    MONTH: 'Select month',
+    DEFAULT_TIME: '12:00 AM',
+    DEFAULT_MONTHLY_DATE: 'Day 1',
+}
+
+export const DATE_PICKER_IDS = {
+    DATE: 'date_picker',
+    MONTH: 'month_picker',
+    TIME: 'time_picker',
+}
+
+export const reactSelectStyles = {
+    container: (base) => ({
+        ...base,
+        height: '36px',
+    }),
+    control: (base, state) => ({
+        ...base,
+        boxShadow: 'none',
+        minHeight: '36px',
+        cursor: 'pointer',
+        borderColor: 'var(--N200)',
+        backgroundColor: 'var(--N50)',
+
+        ...(state.isDisabled
+            ? {
+                  borderColor: 'var(--N200)',
+                  backgroundColor: 'var(--N100)',
+                  cursor: 'not-allowed',
+              }
+            : {}),
+
+        '&:hover': {
+            borderColor: 'var(--N400)',
+        },
+        '&:focus, &:focus-within': {
+            borderColor: 'var(--B500)',
+            outline: 'none',
+        },
+    }),
+    valueContainer: (base) => ({
+        ...base,
+        padding: 0,
+        width: '180px',
+    }),
+    input: (base) => ({
+        ...base,
+        padding: 0,
+        margin: 0,
+    }),
+    dropdownIndicator: (base, state) => ({
+        ...base,
+        transition: 'all .2s ease',
+        transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+        padding: 0,
+    }),
+    option: (base) => ({
+        ...base,
+        fontSize: '13px',
+        cursor: 'pointer',
+    }),
+    menuList: (base) => ({
+        ...base,
+        position: 'relative',
+        paddingBottom: '0px',
+        maxHeight: '250px',
+        width: '200px',
+    }),
+}

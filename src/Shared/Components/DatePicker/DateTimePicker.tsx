@@ -28,7 +28,7 @@ import {
     updateTime,
 } from './utils'
 import { DateTimePickerProps } from './types'
-import { customDayStyles } from './constants'
+import { DATE_PICKER_IDS, DATE_PICKER_PLACEHOLDER, customDayStyles } from './constants'
 import './datePicker.scss'
 import { ReactComponent as CalendarIcon } from '../../../Assets/Icon/ic-calendar.svg'
 import { DATE_TIME_FORMATS } from '../../../Common'
@@ -47,6 +47,8 @@ const DateTimePicker = ({
     readOnly = false,
     isOutsideRangeEnabled = false,
     startDate,
+    dataTestIdForTime = DATE_PICKER_IDS.TIME,
+    dataTestidForDate = DATE_PICKER_IDS.DATE,
 }: DateTimePickerProps) => {
     const time = getTimeValue(dateObject)
     const selectedTimeOption = DEFAULT_TIME_OPTIONS.find((option) => option.value === time) ?? DEFAULT_TIME_OPTIONS[0]
@@ -88,13 +90,15 @@ const DateTimePicker = ({
                     inputIconPosition="after"
                     displayFormat={DATE_TIME_FORMATS.DD_MMM_YYYY}
                     isOutsideRange={isOutsideRangeEnabled ? isOutsideRange : undefined}
+                    data-testid={dataTestidForDate}
                 />
                 {!hideTimeSelect && (
                     <div className="dc__no-shrink">
                         <ReactSelect
-                            placeholder="12:00 AM"
+                            placeholder={DATE_PICKER_PLACEHOLDER.DEFAULT_TIME}
                             options={DEFAULT_TIME_OPTIONS}
                             menuPlacement="auto"
+                            menuPosition="fixed"
                             components={{
                                 IndicatorSeparator: null,
                                 ClearIndicator: null,
@@ -106,6 +110,7 @@ const DateTimePicker = ({
                             {...timePickerProps}
                             value={selectedTimeOption}
                             onChange={handleTimeChange}
+                            data-testid={dataTestIdForTime}
                         />
                     </div>
                 )}

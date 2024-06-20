@@ -41,6 +41,7 @@ const SingleDatePickerComponent = ({
     readOnly,
     isTodayBlocked,
     displayFormat,
+    dataTestId,
 }: SingleDatePickerProps) => {
     const [focused, setFocused] = useState(false)
 
@@ -69,6 +70,7 @@ const SingleDatePickerComponent = ({
             customInputIcon={<CalenderIcon />}
             inputIconPosition="after"
             displayFormat={displayFormat}
+            data-testid={dataTestId}
         />
     )
 }

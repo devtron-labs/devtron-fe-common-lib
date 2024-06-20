@@ -16,9 +16,10 @@
 
 import ReactSelect from 'react-select'
 import { useState } from 'react'
-import { DEFAULT_TIME_OPTIONS, DropdownIndicatorTimePicker, getTimePickerStyles, updateTime } from './utils'
+import { DEFAULT_TIME_OPTIONS, DropdownIndicatorTimePicker, updateTime } from './utils'
 import { TimeSelectProps } from './types'
 import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
+import { DATE_PICKER_IDS, reactSelectStyles } from './constants'
 
 export const TimePickerSelect = ({
     disabled = false,
@@ -27,6 +28,7 @@ export const TimePickerSelect = ({
     timePickerProps,
     error,
     default12HourTime,
+    dataTestIdForTime = DATE_PICKER_IDS.TIME,
 }: TimeSelectProps) => {
     const [selectedTimeOption, setSelectedTimeOption] = useState(default12HourTime)
 
@@ -41,17 +43,19 @@ export const TimePickerSelect = ({
                     placeholder="12:00 AM"
                     options={DEFAULT_TIME_OPTIONS}
                     menuPlacement="auto"
+                    menuPosition="fixed"
                     components={{
                         IndicatorSeparator: null,
                         ClearIndicator: null,
                         DropdownIndicator: DropdownIndicatorTimePicker,
                     }}
                     isSearchable={false}
-                    styles={getTimePickerStyles()}
+                    styles={reactSelectStyles}
                     isDisabled={disabled}
                     {...timePickerProps}
                     value={selectedTimeOption}
                     onChange={handleTimeChange}
+                    data-testid={dataTestIdForTime}
                 />
             </div>
             {error && (

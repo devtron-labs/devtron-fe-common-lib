@@ -43,19 +43,23 @@ export interface SingleDatePickerProps {
      * Display format for the date
      */
     displayFormat?: string
+    /**
+     * Data test id for date picker
+     */
+    dataTestId?: string
 }
 
-export interface DateSelectProps {
+export interface MonthlySelectProps extends Pick<SingleDatePickerProps, 'dataTestId'> {
     /**
      * Current selected date object
      *
      * @default 'new Date()'
      */
-    selectedDate: OptionType
+    selectedMonthlyDate: OptionType
     /**
-     * Handler for updating the date from the parent component
+     * Onchange handle picker type
      */
-    handleOnChange: (date: OptionType) => void
+    onChange?: (event) => void
 }
 
 export interface TimeSelectProps {
@@ -85,35 +89,21 @@ export interface TimeSelectProps {
      * Id for the component
      */
     default12HourTime: OptionType
+    /**
+     * Data test id for time picker
+     */
+    dataTestIdForTime?: string
 }
 
-export interface DateTimePickerProps {
-    /**
-     * Current selected date object
-     *
-     * @default 'new Date()'
-     */
-    date?: Date
-    /**
-     * Handler for updating the date from the parent component
-     */
-    onChange: (date: Date) => void
+export interface DateTimePickerProps
+    extends Pick<
+        TimeSelectProps,
+        'date' | 'onChange' | 'timePickerProps' | 'error' | 'disabled' | 'dataTestIdForTime'
+    > {
     /**
      * Props for the date picker
      */
     datePickerProps?: any
-    /**
-     * Props for the time picker
-     */
-    timePickerProps?: SelectInstance
-    /**
-     * Error message for the DateTime picker component
-     */
-    error?: string
-    /**
-     * If true, both the date and time picker are disabled
-     */
-    disabled?: boolean
     /**
      * Id for the component
      */
@@ -146,4 +136,9 @@ export interface DateTimePickerProps {
      * Start date for the date picker
      */
     startDate?: Date
+
+    /**
+     * Data test id for date picker
+     */
+    dataTestidForDate?: string
 }

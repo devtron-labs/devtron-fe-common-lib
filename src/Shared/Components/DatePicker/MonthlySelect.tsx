@@ -15,14 +15,22 @@
  */
 
 import ReactSelect from 'react-select'
-import { DateSelectProps } from './types'
 import { MONTHLY_DATE_OPTIONS, getTimePickerStyles } from './utils'
 import { DropdownIndicator } from '../../../Common'
+import { MonthlySelectProps } from './types'
+import { DATE_PICKER_IDS } from './constants'
 
-export const MonthlySelect = ({ selectedDate, handleOnChange }: DateSelectProps) => (
+const timePickerStyles = getTimePickerStyles()
+
+export const MonthlySelect = ({
+    selectedMonthlyDate,
+    onChange,
+    dataTestId = DATE_PICKER_IDS.MONTH,
+}: MonthlySelectProps) => (
     <div className="dc__no-shrink">
+        {console.log('MonthlySelect.tsx')}
         <ReactSelect
-            placeholder="12:00 AM"
+            placeholder="Day 1"
             options={MONTHLY_DATE_OPTIONS}
             menuPlacement="auto"
             components={{
@@ -31,9 +39,11 @@ export const MonthlySelect = ({ selectedDate, handleOnChange }: DateSelectProps)
                 DropdownIndicator,
             }}
             isSearchable={false}
-            styles={getTimePickerStyles()}
-            value={selectedDate}
-            onChange={handleOnChange}
+            styles={timePickerStyles}
+            value={selectedMonthlyDate}
+            onChange={onChange}
+            data-testid={dataTestId}
+            menuPosition="fixed"
         />
     </div>
 )
