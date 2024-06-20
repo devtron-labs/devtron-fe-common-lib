@@ -93,6 +93,10 @@ export interface TimeSelectProps {
      * Data test id for time picker
      */
     dataTestIdForTime?: string
+    /**
+     * To hide time selector
+     */
+    selectedTimeOption: OptionType
 }
 
 export interface DateTimePickerProps

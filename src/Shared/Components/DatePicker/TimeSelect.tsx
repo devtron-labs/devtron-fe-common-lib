@@ -15,27 +15,20 @@
  */
 
 import ReactSelect from 'react-select'
-import { useState } from 'react'
-import { DEFAULT_TIME_OPTIONS, DropdownIndicatorTimePicker, updateTime } from './utils'
+import { DEFAULT_TIME_OPTIONS, DropdownIndicatorTimePicker, getTimePickerStyles } from './utils'
 import { TimeSelectProps } from './types'
 import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
-import { DATE_PICKER_IDS, reactSelectStyles } from './constants'
+import { DATE_PICKER_IDS } from './constants'
 
 export const TimePickerSelect = ({
     disabled = false,
-    date: dateObject = new Date(),
     onChange,
     timePickerProps,
     error,
-    default12HourTime,
-    dataTestIdForTime = DATE_PICKER_IDS.TIME,
+    selectedTimeOption,
 }: TimeSelectProps) => {
-    const [selectedTimeOption, setSelectedTimeOption] = useState(default12HourTime)
+    const timeSelectStyles = getTimePickerStyles()
 
-    const handleTimeChange = (option) => {
-        onChange(updateTime(dateObject, option.value))
-        setSelectedTimeOption(option)
-    }
     return (
         <>
             <div className="dc__no-shrink">
@@ -50,12 +43,12 @@ export const TimePickerSelect = ({
                         DropdownIndicator: DropdownIndicatorTimePicker,
                     }}
                     isSearchable={false}
-                    styles={reactSelectStyles}
+                    styles={timeSelectStyles}
                     isDisabled={disabled}
                     {...timePickerProps}
                     value={selectedTimeOption}
-                    onChange={handleTimeChange}
-                    data-testid={dataTestIdForTime}
+                    onChange={onChange}
+                    data-testid={DATE_PICKER_IDS.TIME}
                 />
             </div>
             {error && (
