@@ -420,11 +420,6 @@ export enum FREQUENCY_ENUM {
     WEEKLY_RANGE = 'WEEKLY_RANGE',
 }
 
-export const TIME_FORMAT = {
-    DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
-    DD_MMM_YYYY: 'DD MMM YYYY',
-}
-
 export function getOrdinal(number) {
     if (number % 100 >= 11 && number % 100 <= 13) {
         return `${number}th`
@@ -512,4 +507,6 @@ export const DATE_TIME_FORMATS = {
     TWELVE_HOURS_FORMAT: 'ddd, DD MMM YYYY, hh:mm A',
     TWELVE_HOURS_FORMAT_WITHOUT_WEEKDAY: 'DD MMM YYYY, hh:mm A',
     TWELVE_HOURS_EXPORT_FORMAT: 'DD-MMM-YYYY hh.mm A',
+    DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
+    DD_MMM_YYYY: 'DD MMM YYYY',
 }

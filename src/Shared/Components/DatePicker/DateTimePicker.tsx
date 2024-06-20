@@ -31,6 +31,7 @@ import { DateTimePickerProps } from './types'
 import { customDayStyles } from './constants'
 import './datePicker.scss'
 import { ReactComponent as CalendarIcon } from '../../../Assets/Icon/ic-calendar.svg'
+import { DATE_TIME_FORMATS } from '../../../Common'
 
 const timePickerStyles = getTimePickerStyles()
 
@@ -85,7 +86,7 @@ const DateTimePicker = ({
                     readOnly={readOnly || false}
                     customInputIcon={<CalendarIcon className="icon-dim-20" />}
                     inputIconPosition="after"
-                    displayFormat="DD MMM YYYY"
+                    displayFormat={DATE_TIME_FORMATS.DD_MMM_YYYY}
                     isOutsideRange={isOutsideRangeEnabled ? isOutsideRange : undefined}
                 />
                 {!hideTimeSelect && (
