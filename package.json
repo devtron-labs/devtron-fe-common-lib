@@ -96,7 +96,6 @@
         "@types/react-dates": "^21.8.6",
         "react-dates": "^21.8.0",
         "sass": "^1.69.7",
-        "tslib": "^2.4.1",
-        "dayjs": "^1.11.8"
+        "tslib": "^2.4.1"
     }
 }

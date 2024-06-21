@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import dayjs from 'dayjs'
 import { components } from 'react-select'
 import { OptionType } from '../../../Common'
 import { MONTHLY_DATES_CONFIG, TIME_OPTIONS_CONFIG } from './constants'
@@ -101,11 +100,6 @@ export const DEFAULT_TIME_OPTIONS: OptionType[] = Object.entries(TIME_OPTIONS_CO
     label,
     value,
 }))
-
-/**
- * @returns True if the date is before today's date
- */
-export const disablePreviousDates = (current: dayjs.Dayjs) => current?.isBefore(dayjs(), 'date')
 
 const formatTimePart = (value: number) => (value < 10 ? `0${value}` : value)
 /**
