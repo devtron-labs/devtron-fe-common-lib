@@ -28,7 +28,6 @@ export const MonthlySelect = ({
     dataTestId = DATE_PICKER_IDS.MONTH,
 }: MonthlySelectProps) => (
     <div className="dc__no-shrink">
-        {console.log('MonthlySelect.tsx')}
         <ReactSelect
             placeholder="Day 1"
             options={MONTHLY_DATE_OPTIONS}
