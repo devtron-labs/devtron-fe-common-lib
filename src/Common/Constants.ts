@@ -92,6 +92,7 @@ export const ROUTES = {
     CONFIG_CD_PIPELINE: 'config/cd-pipeline',
     MODULE_CONFIGURED: 'module/config',
     RESOURCE_HISTORY_DEPLOYMENT: 'resource/history/deployment',
+    PLUGIN_GLOBAL_DETAIL: 'plugin/global/detail',
 }
 
 export enum KEY_VALUE {

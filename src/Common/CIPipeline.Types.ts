@@ -281,6 +281,9 @@ export interface FormErrorObjectType {
     }
 }
 
+/**
+ * @deprecated
+ */
 export interface PluginDetailType {
     id: number
     name: string
