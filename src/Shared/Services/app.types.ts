@@ -107,6 +107,7 @@ interface ImageTaggingDataType
 }
 
 export interface CIMaterialInfoDTO {
+    ciPipelineId: number
     ciMaterials: CIMaterialDTO[]
     triggeredByEmail: string
     lastDeployedTime: string
@@ -128,6 +129,7 @@ export interface CIMaterialInfoType
             | 'environmentId'
             | 'environmentName'
             | 'image'
+            | 'ciPipelineId'
         >,
         ImageTaggingDataType {
     materials: CIMaterialType[]
