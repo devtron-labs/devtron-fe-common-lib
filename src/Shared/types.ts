@@ -21,6 +21,7 @@ import {
     UserApprovalConfigType,
     VulnerabilityType,
     DeploymentAppTypes,
+    ServerErrors,
 } from '../Common'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
 
@@ -513,6 +514,37 @@ export type GitOpsFieldKeyType =
     | 'sshHost'
     | 'sshKey'
 
+export interface AppInfoListType {
+    application: string
+    appStatus: string
+    deploymentStatus: string
+    lastDeployed: string
+    lastDeployedImage?: string
+    lastDeployedBy?: string
+    appId: number
+    envId: number
+    pipelineId?: number
+    commits?: string[]
+    ciArtifactId?: number
+}
+
+export interface EnvListMinDTO {
+    id: number
+    active: boolean
+    allowedDeploymentTypes: DeploymentAppTypes[] | null
+    appCount: number
+    cluster_id: number
+    cluster_name: string
+    default: boolean
+    description: string
+    environmentIdentifier: string
+    environment_name: string
+    isClusterCdActive: boolean
+    isDigestEnforcedForEnv: boolean
+    isVirtualEnvironment: boolean
+    namespace: string
+}
+
 export interface EnvironmentType {
     /**
      * Unique identifier for the environment
@@ -552,11 +584,27 @@ export enum DependencyType {
     LEVEL = 'level',
 }
 
-export interface scrollableInterface {
-    autoBottomScroll: boolean
-}
-
 export enum PromiseAllStatusType {
     FULFILLED = 'fulfilled',
     REJECTED = 'rejected',
+}
+
+export type ApiQueuingWithBatchResponseItem<T> =
+    | {
+          status: PromiseAllStatusType.FULFILLED
+          value: T
+      }
+    | {
+          status: PromiseAllStatusType.REJECTED
+          reason: ServerErrors
+      }
+
+export interface BatchConfigType {
+    lastIndex: number
+    results: any[]
+    concurrentCount: number
+    completedCalls: number
+}
+export interface scrollableInterface {
+    autoBottomScroll: boolean
 }
