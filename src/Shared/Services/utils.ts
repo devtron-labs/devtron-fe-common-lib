@@ -42,6 +42,7 @@ export const getParsedCIMaterialInfo = (ciMaterialData: CIMaterialInfoDTO): CIMa
     }))
 
     return {
+        ciPipelineId: ciMaterialData?.ciPipelineId,
         materials,
         triggeredByEmail: ciMaterialData?.triggeredByEmail || '',
         lastDeployedTime: handleUTCTime(ciMaterialData.lastDeployedTime, false),

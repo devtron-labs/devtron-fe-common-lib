@@ -115,8 +115,7 @@ const ArtifactInfoModal = ({
                                     type={HistoryComponentType.CI}
                                     imageReleaseTags={artifactInfo.imageReleaseTags}
                                     imageComment={artifactInfo.imageComment}
-                                    // FIXME: This is a existing issue, we should be sending the pipeline id instead of the artifact id
-                                    ciPipelineId={artifactInfo.materials[0].id}
+                                    ciPipelineId={artifactInfo.ciPipelineId}
                                     artifactId={ciArtifactId}
                                     appReleaseTagNames={artifactInfo.appReleaseTags}
                                     tagsEditable={artifactInfo.tagsEditable}
