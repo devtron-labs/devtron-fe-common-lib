@@ -48,7 +48,7 @@ export interface PluginDetailPayloadType {
     appId: number
     fetchLatestVersionDetails: boolean
     pluginId?: number[]
-    parentPluginId?: number
+    parentPluginId?: number[]
 }
 
 export interface PluginListFiltersType extends Pick<BaseFilterQueryParams<unknown>, 'searchKey' | 'offset'> {
