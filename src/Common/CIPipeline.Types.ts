@@ -280,17 +280,3 @@ export interface FormErrorObjectType {
         steps: TaskErrorObj[]
     }
 }
-
-/**
- * @deprecated
- */
-export interface PluginDetailType {
-    id: number
-    name: string
-    type: string
-    description: string
-    icon: string
-    tags: string[]
-    inputVariables?: VariableType[]
-    outputVariables?: VariableType[]
-}

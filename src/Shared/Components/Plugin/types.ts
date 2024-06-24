@@ -26,8 +26,8 @@ interface DetailedPluginVersionDTO extends MinimalPluginVersionDataDTO {
 }
 
 interface PluginVersionsDTO {
-    detailedPluginVersionData: DetailedPluginVersionDTO
-    minimalPluginVersionData: MinimalPluginVersionDataDTO
+    detailedPluginVersionData: DetailedPluginVersionDTO[]
+    minimalPluginVersionData: MinimalPluginVersionDataDTO[]
 }
 
 export interface ParentPluginDTO {
@@ -40,7 +40,7 @@ export interface ParentPluginDTO {
 }
 
 export interface PluginDetailDTO {
-    parentPlugins: ParentPluginDTO
+    parentPlugins: ParentPluginDTO[]
     totalCount: number
 }
 
@@ -70,6 +70,9 @@ interface DetailedPluginVersionType
         > {}
 
 export interface PluginDataStoreType {
-    parentPluginStore: Record<string, ParentPluginType>
-    pluginVersionStore: Record<string, DetailedPluginVersionType>
+    parentPluginStore: Record<number, ParentPluginType>
+    pluginVersionStore: Record<number, DetailedPluginVersionType>
 }
+
+// TODO: Deprecate this type
+export interface PluginDetailType extends DetailedPluginVersionType {}
