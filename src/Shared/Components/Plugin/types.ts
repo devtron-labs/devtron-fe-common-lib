@@ -11,6 +11,7 @@ interface MinimalPluginVersionDataDTO {
     name: string
     description: string
     pluginVersion: string
+    isLatest: boolean
 }
 
 interface DetailedPluginVersionDTO extends MinimalPluginVersionDataDTO {
@@ -55,19 +56,20 @@ export interface PluginListFiltersType extends Pick<BaseFilterQueryParams<unknow
     selectedTags: string[]
 }
 
-interface ParentPluginType extends Pick<ParentPluginDTO, 'id' | 'name' | 'description' | 'type' | 'icon'> {}
-
-interface BasePluginVersionType
-    extends Pick<MinimalPluginVersionDataDTO, 'id' | 'description' | 'name' | 'pluginVersion'> {
-    parentPluginId: ParentPluginType['id']
+interface ParentPluginType extends Pick<ParentPluginDTO, 'id' | 'name' | 'description' | 'type' | 'icon'> {
+    latestVersionId: MinimalPluginVersionDataDTO['id']
+    pluginVersions: MinimalPluginVersionDataDTO[]
 }
 
 interface DetailedPluginVersionType
-    extends BasePluginVersionType,
+    extends Pick<MinimalPluginVersionDataDTO, 'id' | 'description' | 'name' | 'pluginVersion'>,
         Pick<
             DetailedPluginVersionDTO,
             'tags' | 'isLatest' | 'inputVariables' | 'outputVariables' | 'updatedBy' | 'docLink'
-        > {}
+        >,
+        Pick<ParentPluginType, 'icon' | 'type'> {
+    parentPluginId: ParentPluginType['id']
+}
 
 export interface PluginDataStoreType {
     parentPluginStore: Record<number, ParentPluginType>
