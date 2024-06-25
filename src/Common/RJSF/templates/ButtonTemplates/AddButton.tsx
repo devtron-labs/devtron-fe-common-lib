@@ -14,21 +14,42 @@
  * limitations under the License.
  */
 
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { IconButtonProps } from '@rjsf/utils'
 
+import { ConditionalWrap } from '../../../Helper'
+import { getTippyWrapperWithContent } from '../../utils'
+import { ADD_BUTTON_WIDTH } from '../../constants'
 import { ReactComponent as PlusIcon } from '../../../../Assets/Icon/ic-add.svg'
 
-export const AddButton = ({ icon, iconType, registry, uiSchema, ...props }: IconButtonProps) => (
-    <div className="flexbox flex-justify-end">
-        <button
-            {...props}
-            type="button"
-            className="dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor"
-            title="Add"
-        >
-            <PlusIcon className="icon-dim-16 fcb-5" />
-            <span className="cb-5 fs-13 lh-20">Add</span>
-        </button>
-    </div>
-)
+export const AddButton = ({
+    label,
+    icon,
+    iconType,
+    registry,
+    uiSchema,
+    ...props
+}: IconButtonProps & Partial<Record<'label', string>>) => {
+    const [showTippy, setShowTippy] = useState(false)
+    const buttonRef = useRef<HTMLButtonElement>(null)
+    const content = `Add ${label}`
+
+    useEffect(() => setShowTippy(buttonRef.current?.offsetWidth >= ADD_BUTTON_WIDTH.MAX_WIDTH_VALUE), [buttonRef.current])
+
+    return (
+        <div className="flexbox flex-justify-start">
+            <ConditionalWrap condition={showTippy} wrap={getTippyWrapperWithContent(content)}>
+                <button
+                    ref={buttonRef}
+                    {...props}
+                    type="button"
+                    className={`dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor ${ADD_BUTTON_WIDTH.MAX_WIDTH_CLASSNAME}`}
+                    title="Add"
+                >
+                    <PlusIcon className="icon-dim-16 fcb-5" />
+                    <span className="cb-5 fs-13 lh-20 dc__truncate">{content}</span>
+                </button>
+            </ConditionalWrap>
+        </div>
+    )
+}
