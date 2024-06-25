@@ -130,6 +130,10 @@ export const updateTime = (currentDateObj: Date, timeString: string) => {
  * Updates the date in the given date object and returns the updated object
  */
 export const updateDate = (currentDateObj: Date, newDate: Date) => {
+    // In case of null date, it will return the same date
+    if (!newDate) {
+        return currentDateObj
+    }
     const day = newDate.getDate()
     const month = newDate.getMonth()
     const fullYear = newDate.getFullYear()

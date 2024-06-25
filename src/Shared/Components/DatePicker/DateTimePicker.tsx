@@ -32,6 +32,8 @@ import { DATE_PICKER_IDS, DATE_PICKER_PLACEHOLDER, customDayStyles } from './con
 import './datePicker.scss'
 import { ReactComponent as CalendarIcon } from '../../../Assets/Icon/ic-calendar.svg'
 import { DATE_TIME_FORMATS } from '../../../Common'
+import 'react-dates/initialize'
+import 'react-dates/lib/css/_datepicker.css'
 
 const timePickerStyles = getTimePickerStyles()
 
@@ -58,14 +60,16 @@ const DateTimePicker = ({
         setFocused(focused)
     }
     const handleDateChange = (event) => {
-        onChange(updateDate(dateObject, event.toDate()))
+        onChange(updateDate(dateObject, event?.toDate()))
     }
 
     const handleTimeChange = (option) => {
         onChange(updateTime(dateObject, option.value))
     }
 
-    const isOutsideRange = (day) => moment(startDate).diff(day, 'days') >= 0
+    // To disable dates before the end date
+    const isOutsideRange = (day) => moment(startDate).diff(day, 'days') >= 1
+
     return (
         <div>
             <label className={`form__label ${required ? 'dc__required-field' : ''}`} htmlFor={id}>
