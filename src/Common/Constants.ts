@@ -20,11 +20,12 @@ export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
+export const DOCUMENTATION_VERSION = '/v/v0.7'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DOCUMENTATION = {
-    APP_TAGS: `${DOCUMENTATION_HOME_PAGE}/v/v0.7/usage/applications/create-application#tags`,
-    APP_OVERVIEW_TAGS: `${DOCUMENTATION_HOME_PAGE}/v/v0.7/usage/applications/overview#manage-tags`,
-    BLOB_STORAGE: `${DOCUMENTATION_HOME_PAGE}/v/v0.7/getting-started/install/installation-configuration#configuration-of-blob-storage`,
+    APP_TAGS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/create-application#tags`,
+    APP_OVERVIEW_TAGS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/overview#manage-tags`,
+    BLOB_STORAGE: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/getting-started/install/installation-configuration#configuration-of-blob-storage`,
 }
 
 export const PATTERNS = {
