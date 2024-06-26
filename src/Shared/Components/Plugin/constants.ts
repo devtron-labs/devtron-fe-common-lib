@@ -8,6 +8,5 @@ export const DEFAULT_PLUGIN_DATA_STORE: PluginDataStoreType = {
 export const DEFAULT_PLUGIN_LIST_FILTERS: PluginListFiltersType = {
     searchKey: '',
     selectedTags: [],
-    offset: 0,
     showSelectedPlugins: false,
 }

@@ -37,7 +37,8 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
             description: plugin.description || '',
             type: plugin.type,
             icon: plugin.icon || '',
-            latestVersionId: latestPluginVersionId !== -1 ? pluginVersions[latestPluginVersionId].id : null,
+            // Assuming latest version is always present
+            latestVersionId: pluginVersions[latestPluginVersionId].id,
             pluginVersions,
         }
 
