@@ -618,27 +618,25 @@ export const getFilteredChartVersions = (charts, selectedChartType) =>
         }))
 
 /**
- * This function takes a list of strings and checks if the strings
- * have prefix matches in the list of prefixes
- * @param strings check if a @string has a prefix match in @prefixes
- * @param prefixes list of prefixes
- * @returns array of booleans corresponding to each string in @strings
+ * Removes nulls from the arrays in the provided object
+ * @param {object} object from which we need to delete nulls in its arrays
+ * @returns object after removing (in-place) the null items in arrays
  */
-export const getPrefixMatches = (strings: string[], prefixes: string[]) => {
-    // NOTE: a trie could have been used but it would have been memory inefficient
-    const set = new Set(prefixes)
-    return strings.map((string) => {
-        for (let index = 0; index <= string.length; index++) {
-            // NOTE: slice in v8 is O(1) https://mrale.ph/blog/2016/11/23/making-less-dart-faster.html
-            // due to using SlicedString construct that only keeps pointer to original string
-            // alternative tries would be tree structure (hard to cache)
-            const slice = string.slice(0, index)
-            if (set.has(slice)) {
-                return true
-            }
-        }
-        return false
+export const recursivelyRemoveNullsFromArraysInObject = (object: object) => {
+    // NOTE: typeof null === 'object'
+    if (typeof object !== 'object' || !object) {
+        return object
+    }
+    if (Array.isArray(object)) {
+        return object.filter((item) => {
+            recursivelyRemoveNullsFromArraysInObject(item)
+            return !!item
+        })
+    }
+    Object.keys(object).forEach((key) => {
+        object[key] = recursivelyRemoveNullsFromArraysInObject(object[key])
     })
+    return object
 }
 
 const _joinObjects = (A: object, B: object) => {
@@ -655,8 +653,8 @@ const _joinObjects = (A: object, B: object) => {
 }
 
 /**
- * Merges @objects into one
- * @param objects list of js objects
+ * Merges the objects into one object
+ * @param {object[]} objects list of js objects
  * @returns object after the merge
  */
 export const joinObjects = (objects: object[]) => {
@@ -679,11 +677,10 @@ const buildObjectFromPathTokens = (index: number, tokens: string[], value: any) 
         : { [key]: buildObjectFromPathTokens(index + 1, tokens, value) }
 }
 
-// TODO: learn how to write js doc comments
 /**
- * Builds an object from the provided @path
- * @param path JSON pointer path of the form /path/to/1/...
- * @param value property value
+ * Builds an object from the provided path
+ * @param {string} path JSON pointer path of the form /path/to/1/...
+ * @param {any} value property value
  * @returns final object formed from the path
  */
 export const buildObjectFromPath = (path: string, value: any) => {
@@ -707,21 +704,6 @@ export const getRegexMatchPositions = (string: string, regex: RegExp): number[] 
     const nextToken = string.slice(pos + 1)
     return [pos, ...getRegexMatchPositions(nextToken, regex).map((n) => n + pos + 1)]
 }
-
-// TODO: write js doc comment
-export const powerSetOfSubstringsFromStart = (strings: string[]) =>
-    strings.flatMap((key) => {
-        const _keys = [key]
-        const positions = getRegexMatchPositions(key, /\.|\[|\]/g)
-        positions.forEach((position) => {
-            const ch = key.charAt(position)
-            if (ch === ']') {
-                return
-            }
-            _keys.push(key.slice(0, position))
-        })
-        return _keys
-    })
 
 /**
  * Returns a debounced variant of the function
