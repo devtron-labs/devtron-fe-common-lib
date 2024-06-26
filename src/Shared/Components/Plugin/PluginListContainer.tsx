@@ -1,32 +1,64 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router'
 import { APIResponseHandler } from '../APIResponseHandler'
 import PluginTagSelect from './PluginTagSelect'
+import PluginList from './PluginList'
+import { FilterChips } from '../FilterChips'
 import { SearchBar, useAsync } from '../../../Common'
 import { getAvailablePluginTags, getPluginStoreData } from './service'
-import { PluginListParamsType, PluginListContainerProps, PluginListProps } from './types'
+import {
+    PluginListParamsType,
+    PluginListContainerProps,
+    PluginListProps,
+    PluginListFiltersType,
+    PluginListItemType,
+} from './types'
 import { ReactComponent as ICCross } from '../../../Assets/Icon/ic-cross.svg'
 import { ReactComponent as ICVisibility } from '../../../Assets/Icon/ic-visibility-on.svg'
-import PluginList from './PluginList'
+import { DEFAULT_PLUGIN_LIST_FILTERS } from './constants'
 
 const PluginListContainer = ({
-    pluginList,
-    handlePluginListUpdate,
-    filters,
-    handleUpdateFilters,
-    isSelectable,
     availableTags,
     handleUpdateAvailableTags,
     pluginDataStore,
     handlePluginDataStoreUpdate,
-    totalCount,
-    handleUpdateTotalCount,
-    persistFilters,
-    selectedPluginsMap,
     handlePluginSelection,
+    // Selected plugins Section
+    isSelectable,
+    selectedPluginsMap,
+    // Plugin list Section
+    persistFilters,
+    parentPluginList,
+    handleParentPluginListUpdate,
+    parentTotalCount,
+    handleParentTotalCount,
+    parentFilters,
+    handleUpdateParentFilters,
 }: Readonly<PluginListContainerProps>) => {
-    const { searchKey, selectedTags, showSelectedPlugins } = filters
     const { appId } = useParams<PluginListParamsType>()
+
+    const [pluginList, setPluginList] = useState<PluginListItemType[]>(parentPluginList || [])
+    const [totalCount, setTotalCount] = useState<number>(parentTotalCount || 0)
+    const [filters, setFilters] = useState<PluginListFiltersType>(
+        parentFilters || structuredClone(DEFAULT_PLUGIN_LIST_FILTERS),
+    )
+
+    const handlePluginListUpdate = (updatedPluginList: PluginListItemType[]) => {
+        setPluginList(updatedPluginList)
+        handleParentPluginListUpdate?.(updatedPluginList)
+    }
+
+    const handleUpdateTotalCount = (updatedTotalCount: number) => {
+        setTotalCount(updatedTotalCount)
+        handleParentTotalCount?.(updatedTotalCount)
+    }
+
+    const handleUpdateFilters = (updatedFilters: PluginListFiltersType) => {
+        setFilters(updatedFilters)
+        handleUpdateParentFilters?.(updatedFilters)
+    }
+
+    const { searchKey, selectedTags, showSelectedPlugins } = filters || {}
 
     const pluginDataDependency = persistFilters ? [pluginList] : [searchKey, appId, selectedTags]
     // TODO: Add abortController as well
@@ -36,7 +68,7 @@ const PluginListContainer = ({
                 searchKey,
                 selectedTags,
                 offset: 0,
-                appId: appId ? +appId : undefined,
+                appId: appId ? +appId : null,
             }),
         pluginDataDependency,
         persistFilters ? !pluginList.length : true,
@@ -99,16 +131,6 @@ const PluginListContainer = ({
         })
     }
 
-    useEffect(
-        // TODO: Test this persistFilters value on unmount
-        () => () => {
-            if (!persistFilters) {
-                handleClearFilters()
-            }
-        },
-        [],
-    )
-
     const handleSearch = (searchText: string) => {
         handleUpdateFilters({
             ...filters,
@@ -142,6 +164,13 @@ const PluginListContainer = ({
         handleUpdateFilters({
             ...filters,
             showSelectedPlugins: false,
+        })
+    }
+
+    const handleRemoveSelectedTag = (filterConfig: Pick<PluginListFiltersType, 'selectedTags'>) => {
+        handleUpdateFilters({
+            ...filters,
+            selectedTags: filterConfig.selectedTags,
         })
     }
 
@@ -190,6 +219,18 @@ const PluginListContainer = ({
                     </button>
                 )}
             </div>
+
+            {!!selectedTags.length && (
+                <FilterChips<Pick<PluginListFiltersType, 'selectedTags'>>
+                    filterConfig={{
+                        selectedTags,
+                    }}
+                    onRemoveFilter={handleRemoveSelectedTag}
+                    clearFilters={handleClearFilters}
+                    className="p-0 w-100 pt-4"
+                    clearButtonClassName="dc__no-background-imp dc__no-border-imp dc__tab-focus"
+                />
+            )}
 
             <APIResponseHandler
                 isLoading={isLoadingPluginData}

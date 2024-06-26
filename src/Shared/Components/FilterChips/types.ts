@@ -20,7 +20,7 @@ export interface FilterChipProps {
     /**
      * Filter label
      */
-    label: string
+    label?: string
     /**
      * Corresponding value of the filter
      */

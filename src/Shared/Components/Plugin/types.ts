@@ -84,23 +84,38 @@ export interface PluginDataStoreType {
 
 // TODO: Deprecate this type
 export interface PluginDetailType extends DetailedPluginVersionType {}
+export type PluginListItemType = Pick<PluginDetailType, 'parentPluginId'>
 
 interface BasePluginListContainerProps {
-    filters: PluginListFiltersType
-    handleUpdateFilters: (filters: PluginListFiltersType) => void
     availableTags: string[]
     handleUpdateAvailableTags: (tags: string[]) => void
     handlePluginSelection: (parentPluginId: PluginDetailType['parentPluginId']) => void
     pluginDataStore: PluginDataStoreType
     handlePluginDataStoreUpdate: (pluginStore: PluginDataStoreType) => void
-    totalCount: number
-    handleUpdateTotalCount: (totalCount: number) => void
-    persistFilters?: boolean
-    pluginList: Pick<PluginDetailType, 'parentPluginId'>[]
-    handlePluginListUpdate: (pluginList: Pick<PluginDetailType, 'parentPluginId'>[]) => void
 }
 
+type PluginListType =
+    | {
+          persistFilters: true
+          parentPluginList: PluginListItemType[]
+          handleParentPluginListUpdate: (pluginList: PluginListItemType[]) => void
+          parentTotalCount: number
+          handleParentTotalCount: (totalCount: number) => void
+          parentFilters: PluginListFiltersType
+          handleUpdateParentFilters: (filters: PluginListFiltersType) => void
+      }
+    | {
+          persistFilters: false
+          parentPluginList?: never
+          handleParentPluginListUpdate?: never
+          parentTotalCount?: never
+          handleParentTotalCount?: never
+          parentFilters?: never
+          handleUpdateParentFilters?: never
+      }
+
 export type PluginListContainerProps = BasePluginListContainerProps &
+    PluginListType &
     (
         | {
               /**
@@ -140,7 +155,7 @@ export interface PluginListParamsType {
 }
 
 export interface PluginTagSelectProps extends Pick<BasePluginListContainerProps, 'availableTags'> {
-    selectedTags: BasePluginListContainerProps['filters']['selectedTags']
+    selectedTags: PluginListContainerProps['parentFilters']['selectedTags']
     isLoading: boolean
     hasError: boolean
     reloadTags: () => void
@@ -150,16 +165,13 @@ export interface PluginTagSelectProps extends Pick<BasePluginListContainerProps,
 export interface PluginListProps
     extends Pick<
         PluginListContainerProps,
-        | 'pluginDataStore'
-        | 'pluginList'
-        | 'totalCount'
-        | 'filters'
-        | 'handlePluginSelection'
-        | 'selectedPluginsMap'
-        | 'isSelectable'
+        'pluginDataStore' | 'handlePluginSelection' | 'selectedPluginsMap' | 'isSelectable'
     > {
     handleDataUpdateForPluginResponse: (pluginResponse: Awaited<ReturnType<typeof getPluginStoreData>>) => void
     handleClearFilters: () => void
+    pluginList: PluginListContainerProps['parentPluginList']
+    totalCount: PluginListContainerProps['parentTotalCount']
+    filters: PluginListContainerProps['parentFilters']
 }
 
 export interface PluginCardProps
