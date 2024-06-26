@@ -706,6 +706,23 @@ export const getRegexMatchPositions = (string: string, regex: RegExp): number[] 
 }
 
 /**
+ * Returns all the substrings from 0th index to progressively next regex match position
+ * Eg. Suppose a string is /path/to/folder then it will return [/path, /path/to, /path/to/folder]
+ * @param strings list of strings
+ * @param regex that matches the separators for the substrings
+ * @returns set of substrings
+ */
+export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) =>
+    strings.flatMap((key) => {
+        const _keys = [key]
+        const positions = getRegexMatchPositions(key, regex)
+        positions.forEach((position) => {
+            _keys.push(key.slice(0, position))
+        })
+        return _keys
+    })
+
+/**
  * Returns a debounced variant of the function
  */
 export const debounce = (func, timeout = 500) => {
