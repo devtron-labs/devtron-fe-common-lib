@@ -51,26 +51,28 @@ const ArtifactInfoModal = ({
             <div data-testid="visible-modal-commit-info" className="flexbox-col h-100">
                 <div className="flex dc__content-space py-10 px-20 cn-9 bcn-0 dc__border-bottom">
                     <div className="flexbox-col dc__content-center">
-                        {isInfoLoading ? (
-                            <>
-                                <div className="shimmer h-24 mb-2 w-200" />
-                                <div className="shimmer h-18 w-250" />
-                            </>
-                        ) : (
-                            <>
-                                <h1 className="fs-16 fw-6 lh-24 m-0 dc__truncate">
-                                    {showDescription
-                                        ? artifactInfo?.appName
-                                        : `Source & image details of ${artifactInfo?.appName}`}
-                                </h1>
-                                {showDescription && (
-                                    <p className="fs-13 cn-7 lh-1-5 m-0 dc__truncate">
-                                        Deployed on {artifactInfo.environmentName} at {artifactInfo.lastDeployedTime}
-                                        &nbsp;by {artifactInfo.triggeredByEmail}
-                                    </p>
-                                )}
-                            </>
-                        )}
+                        {!infoError &&
+                            (isInfoLoading ? (
+                                <>
+                                    <div className="shimmer h-24 mb-2 w-200" />
+                                    <div className="shimmer h-18 w-250" />
+                                </>
+                            ) : (
+                                <>
+                                    <h1 className="fs-16 fw-6 lh-24 m-0 dc__truncate">
+                                        {showDescription
+                                            ? artifactInfo?.appName
+                                            : `Source & image details of ${artifactInfo?.appName}`}
+                                    </h1>
+                                    {showDescription && (
+                                        <p className="fs-13 cn-7 lh-1-5 m-0 dc__truncate">
+                                            Deployed on {artifactInfo.environmentName} at{' '}
+                                            {artifactInfo.lastDeployedTime}
+                                            &nbsp;by {artifactInfo.triggeredByEmail}
+                                        </p>
+                                    )}
+                                </>
+                            ))}
                     </div>
                     <button
                         data-testid="visible-modal-close"
