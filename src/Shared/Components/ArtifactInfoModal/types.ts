@@ -14,7 +14,21 @@
  * limitations under the License.
  */
 
-export * from './types'
-export * from './app.types'
-export * from './app.service'
-export * from './common.service'
+import { ArtifactType } from '../CICDHistory'
+
+export type ArtifactInfoModalProps = Pick<ArtifactType, 'renderCIListHeader'> & {
+    ciArtifactId: number
+    handleClose: () => void
+} & (
+        | {
+              envId: number | string
+              fetchOnlyArtifactInfo?: false
+          }
+        | {
+              envId?: never
+              /**
+               * If true, the env and trigger meta data is not fetched
+               */
+              fetchOnlyArtifactInfo: true
+          }
+    )
