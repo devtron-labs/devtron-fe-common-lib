@@ -15,7 +15,7 @@
  */
 
 import { CustomInputProps } from './Types'
-import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
+import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled-override.svg'
 import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-warning.svg'
 
 export const CustomInput = ({
@@ -135,9 +135,9 @@ export const CustomInput = ({
 
             {getInputError()}
             {helperText && (
-                <div className="form__text-field-info">
-                    <Info className="form__icon form__icon--info" />
-                    <p className="sentence-case">{helperText}</p>
+                 <div className="flex left top dc__gap-4 fs-11 lh-16 cn-7">
+                 <Info className="icon-dim-16" />
+                 <div>{helperText}</div>
                 </div>
             )}
         </div>
