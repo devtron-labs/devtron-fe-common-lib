@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-export * from './types'
-export * from './app.types'
-export * from './app.service'
-export * from './common.service'
+.image-chip-cell {
+    &__container {
+        grid-template-columns: 18px 10px 1fr;
+
+        &--expanded {
+            grid-template-columns: 18px 1fr;
+        }
+    }
+}
