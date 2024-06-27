@@ -21,7 +21,7 @@ import moment from 'moment'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import YAML from 'yaml'
-import { ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME, EXCLUDED_FALSY_VALUES, DISCORD_LINK } from './Constants'
+import { ERROR_EMPTY_SCREEN, SortingOrder, EXCLUDED_FALSY_VALUES, DISCORD_LINK, ZERO_TIME_STRING } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
@@ -299,10 +299,13 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
 export function handleUTCTime(ts: string, isRelativeTime = false) {
     let timestamp = ''
     try {
-        if (ts && ts.length) {
+        if (ts && ts.length && ts !== ZERO_TIME_STRING) {
             const date = moment(ts)
-            if (isRelativeTime) timestamp = date.fromNow()
-            else timestamp = date.format(DATE_TIME_FORMAT_STRING)
+            if (isRelativeTime) {
+                timestamp = date.fromNow()
+            } else {
+                timestamp = date.format(DATE_TIME_FORMAT_STRING)
+            }
         }
     } catch (error) {
         console.error('Error Parsing Date:', ts)
@@ -755,10 +758,10 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
         return 0 // Both dates are invalid, consider them equal
     } else if (isNaN(dateA)) {
         // dateA is invalid, move it to the end if sorting ASC, otherwise to the beginning
-        return sortOrder === SortingOrder.ASC ? -1 : 1
+        return sortOrder === SortingOrder.ASC ? 1 : -1
     } else if (isNaN(dateB)) {
         // dateB is invalid, move it to the end if sorting ASC, otherwise to the beginning
-        return sortOrder === SortingOrder.ASC ? 1 : -1
+        return sortOrder === SortingOrder.ASC ? -1 : 1
     } else {
         return sortOrder === SortingOrder.ASC ? dateB - dateA : dateA - dateB
     }

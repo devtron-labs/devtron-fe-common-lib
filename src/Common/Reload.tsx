@@ -18,6 +18,9 @@ import loadingFailure from '../Assets/Img/ic-loading-failure.png'
 import { ReloadType } from './Types'
 import { refresh } from './Helper'
 
+/**
+ * @deprecated Use APIResponseHandler (Preferred) or error screen manager instead
+ */
 export default function Reload({ reload, className = '', heightToDeduct = 0 }: ReloadType) {
     return (
         <article
