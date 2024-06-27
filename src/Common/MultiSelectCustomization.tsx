@@ -15,15 +15,15 @@
  */
 
 import React from 'react'
-import Select, { components } from 'react-select'
+import Select, { OptionProps, components } from 'react-select'
 import { ReactComponent as ClearIcon } from '../Assets/Icon/ic-appstatus-cancelled.svg'
 import { ReactComponent as Check } from '../Assets/Icon/ic-check.svg'
 import { ReactComponent as RedWarning } from '../Assets/Icon/ic-error-medium.svg'
 import { Checkbox } from './Checkbox'
 import { CHECKBOX_VALUE } from './Types'
 
-export const Option = (props) => {
-    const { selectOption, data } = props
+export const Option = (props: OptionProps) => {
+    const { selectOption, data, isDisabled } = props
 
     const handleChange = (e) => {
         selectOption(data)
@@ -31,7 +31,7 @@ export const Option = (props) => {
 
     return (
         <div
-            className="flex left pl-12 cursor dc__gap-8"
+            className={`flex left pl-12 cursor dc__gap-8 ${isDisabled ? 'dc__disabled' : ''}`}
             style={{ background: props.isFocused ? 'var(--N100)' : 'transparent' }}
         >
             <Checkbox
@@ -39,6 +39,7 @@ export const Option = (props) => {
                 onChange={handleChange}
                 value={CHECKBOX_VALUE.CHECKED}
                 rootClassName="mb-0 w-20"
+                disabled={isDisabled || false}
             />
             <components.Option {...props} />
         </div>
