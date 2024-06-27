@@ -129,7 +129,7 @@ export type PluginListContainerProps = BasePluginListContainerProps &
               /**
                * Map of parentId to boolean
                */
-              selectedPluginsMap: Record<number, boolean>
+              selectedPluginsMap: Record<number, true>
           }
     )
 

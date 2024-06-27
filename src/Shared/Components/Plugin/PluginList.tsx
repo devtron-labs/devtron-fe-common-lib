@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { PluginListProps } from './types'
-import { DetectBottom } from '../DetectBottom'
-import { GenericEmptyState, GenericFilterEmptyState, showError } from '../../../Common'
-import { getPluginStoreData } from './service'
+import { useParams } from 'react-router'
 import PluginCard from './PluginCard'
+import { DetectBottom } from '../DetectBottom'
+import { PluginListParamsType, PluginListProps } from './types'
+import { GenericEmptyState, GenericFilterEmptyState, Progressing, showError } from '../../../Common'
+import { getPluginStoreData } from './service'
 
 const PluginList = ({
     pluginDataStore,
@@ -16,6 +17,8 @@ const PluginList = ({
     isSelectable,
     handleClearFilters,
 }: PluginListProps) => {
+    const { appId } = useParams<PluginListParamsType>()
+
     const [isLoadingMorePlugins, setIsLoadingMorePlugins] = useState<boolean>(false)
     const handleLoadMore = async () => {
         setIsLoadingMorePlugins(true)
@@ -24,7 +27,7 @@ const PluginList = ({
                 searchKey,
                 offset: pluginList.length,
                 selectedTags,
-                appId: undefined,
+                appId: appId ? +appId : null,
             })
 
             handleDataUpdateForPluginResponse(pluginDataResponse)
@@ -36,7 +39,7 @@ const PluginList = ({
     }
 
     if (!pluginList.length) {
-        if (!!searchKey || !selectedTags.length) {
+        if (!!searchKey || !!selectedTags.length) {
             return <GenericFilterEmptyState handleClearFilters={handleClearFilters} />
         }
 
@@ -76,6 +79,8 @@ const PluginList = ({
                     isSelected={!!selectedPluginsMap[plugin.parentPluginId]}
                 />
             ))}
+
+            {isLoadingMorePlugins && <Progressing />}
 
             {totalCount > pluginList.length && !isLoadingMorePlugins && <DetectBottom callback={handleLoadMore} />}
         </>

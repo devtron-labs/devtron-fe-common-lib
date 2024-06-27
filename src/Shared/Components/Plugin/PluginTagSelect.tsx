@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import ReactSelect, { MenuListProps } from 'react-select'
-import { OptionType } from '../../../Common'
+import { Option, OptionType } from '../../../Common'
 import { commonSelectStyles, LoadingIndicator, MenuListWithApplyButton } from '../ReactSelect'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import { PluginTagSelectProps } from './types'
@@ -45,6 +45,7 @@ const PluginTagSelect = ({
         <MenuListWithApplyButton {...props} handleApplyFilter={handleApplyFilters} />
     )
 
+    // TODO: Look if should close menu on apply
     return (
         <ReactSelect
             styles={commonSelectStyles}
@@ -57,6 +58,7 @@ const PluginTagSelect = ({
                 LoadingIndicator,
                 NoOptionsMessage: renderNoOptionsMessage,
                 MenuList: renderMenuList,
+                Option,
             }}
             isLoading={isLoading}
             onChange={handleLocalSelection}
@@ -67,6 +69,7 @@ const PluginTagSelect = ({
             maxMenuHeight={300}
             onMenuClose={handleMenuClose}
             inputId="plugin-tag-select"
+            className="w-200"
         />
     )
 }

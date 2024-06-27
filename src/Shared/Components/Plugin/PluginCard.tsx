@@ -46,13 +46,12 @@ const PluginCard = ({
             <div className="flexbox-col dc__gap-12">
                 <div className="flexbox-col dc__gap-8">
                     <div className="flexbox-col dc__gap-4">
-                        <h4 className="m-0 dc__truncate--clamp-3 cn-9 fs-13 fw-6 lh-20">
-                            {name}
-
+                        <div className="flexbox dc__gap-4">
+                            <h4 className="m-0 dc__truncate--clamp-3 cn-9 fs-13 fw-6 lh-20">{name}</h4>
                             {!isSelectable && (
                                 <span className="dc__truncate--clamp-3 cn-7 fs-12 fw-4 lh-20">({pluginVersion})</span>
                             )}
-                        </h4>
+                        </div>
 
                         <span className="dc__truncate cn-7 fs-12 fw-4 lh-16">By {updatedBy || 'Devtron'}</span>
                     </div>
@@ -62,6 +61,7 @@ const PluginCard = ({
                 </div>
 
                 {/* Tag container */}
+                {/* TODO: Make component since re-usable */}
                 <div className="flexbox dc__gap-6 flex-wrap">
                     {tags.map((tag) => (
                         <div className="flexbox px-6 br-4 bcn-1 dc__align-items-center dc__mxw-160" key={tag}>

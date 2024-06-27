@@ -12,7 +12,7 @@ const parseMinimalPluginVersionsDTO = (
         description: pluginVersion.description || '',
         name: pluginVersion.name || '',
         pluginVersion: pluginVersion.pluginVersion || '',
-        isLatest: false,
+        isLatest: pluginVersion.isLatest || false,
     }))
 }
 

@@ -25,7 +25,7 @@ const PluginListContainer = ({
     handlePluginSelection,
     // Selected plugins Section
     isSelectable,
-    selectedPluginsMap,
+    selectedPluginsMap = {},
     // Plugin list Section
     persistFilters,
     parentPluginList,
@@ -60,7 +60,6 @@ const PluginListContainer = ({
 
     const { searchKey, selectedTags, showSelectedPlugins } = filters || {}
 
-    const pluginDataDependency = persistFilters ? [pluginList] : [searchKey, appId, selectedTags]
     // TODO: Add abortController as well
     const [isLoadingPluginData, pluginData, pluginDataError, reloadPluginData] = useAsync(
         () =>
@@ -70,14 +69,19 @@ const PluginListContainer = ({
                 offset: 0,
                 appId: appId ? +appId : null,
             }),
-        pluginDataDependency,
+        // TODO: Test if this is correct since new reference is created every time
+        persistFilters ? [pluginList] : [searchKey, appId, selectedTags],
         persistFilters ? !pluginList.length : true,
     )
 
-    const [areTagsLoading, tags, tagsError, reloadTags] = useAsync(getAvailablePluginTags, [], !availableTags?.length)
+    const [areTagsLoading, tags, tagsError, reloadTags] = useAsync(
+        () => getAvailablePluginTags(appId ? +appId : null),
+        [],
+        !availableTags?.length,
+    )
 
     useEffect(() => {
-        if (!isLoadingPluginData && !tagsError && pluginData) {
+        if (!areTagsLoading && !tagsError && tags) {
             handleUpdateAvailableTags(tags)
         }
     }, [areTagsLoading, tags, tagsError])
@@ -105,7 +109,9 @@ const PluginListContainer = ({
         handleUpdateTotalCount(responseTotalCount)
 
         const newPluginList: typeof pluginList = structuredClone(pluginList)
+
         Object.keys(parentPluginStore).forEach((key) => {
+            // TODO: Can convert to map
             if (!newPluginList.find((plugin) => plugin.parentPluginId === +key)) {
                 newPluginList.push({
                     parentPluginId: +key,
@@ -229,6 +235,7 @@ const PluginListContainer = ({
                     clearFilters={handleClearFilters}
                     className="p-0 w-100 pt-4"
                     clearButtonClassName="dc__no-background-imp dc__no-border-imp dc__tab-focus"
+                    shouldHideLabel
                 />
             )}
 
