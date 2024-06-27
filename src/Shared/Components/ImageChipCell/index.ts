@@ -14,7 +14,5 @@
  * limitations under the License.
  */
 
-export * from './types'
-export * from './app.types'
-export * from './app.service'
-export * from './common.service'
+export { default as ImageChipCell } from './ImageChipCell.component'
+export type { ImageChipCellProps } from './types'
