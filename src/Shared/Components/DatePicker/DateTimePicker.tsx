@@ -68,7 +68,7 @@ const DateTimePicker = ({
 
     const today = moment()
     // Function to disable dates including today and all past dates
-    const isDayBlocked = (day) => !day.isAfter(today)
+    const isDayBlocked = (day) => isTodayBlocked && !day.isAfter(today)
 
     return (
         <div>
@@ -94,7 +94,7 @@ const DateTimePicker = ({
                     inputIconPosition="after"
                     displayFormat={DATE_TIME_FORMATS.DD_MMM_YYYY}
                     data-testid={dataTestidForDate}
-                    isDayBlocked={isTodayBlocked ? isDayBlocked : undefined}
+                    isDayBlocked={isDayBlocked}
                 />
                 {!hideTimeSelect && (
                     <div className="dc__no-shrink">
