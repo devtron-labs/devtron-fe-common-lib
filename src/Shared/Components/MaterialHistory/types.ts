@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-export * from './types'
-export * from './app.types'
-export * from './app.service'
-export * from './common.service'
+import { CIMaterialType } from '../../Services/app.types'
+
+export interface MaterialHistoryProps {
+    material: CIMaterialType
+    pipelineName: string
+    ciPipelineId?: string
+    selectCommit?: (materialId: string, commit: string, ciPipelineId?: string) => void
+}
