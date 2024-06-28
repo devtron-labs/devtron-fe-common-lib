@@ -133,15 +133,6 @@ export interface DateTimePickerProps
      */
     isTodayBlocked?: boolean
     /**
-     * To enable outside range
-     */
-    isOutsideRangeEnabled?: boolean
-    /**
-     * Start date for the date picker
-     */
-    startDate?: Date
-
-    /**
      * Data test id for date picker
      */
     dataTestidForDate?: string

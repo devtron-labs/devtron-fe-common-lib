@@ -47,8 +47,7 @@ const DateTimePicker = ({
     required,
     hideTimeSelect = false,
     readOnly = false,
-    isOutsideRangeEnabled = false,
-    startDate,
+    isTodayBlocked = false,
     dataTestIdForTime = DATE_PICKER_IDS.TIME,
     dataTestidForDate = DATE_PICKER_IDS.DATE,
 }: DateTimePickerProps) => {
@@ -67,8 +66,9 @@ const DateTimePicker = ({
         onChange(updateTime(dateObject, option.value))
     }
 
-    // To disable dates before the end date
-    const isOutsideRange = (day) => moment(startDate).diff(day, 'days') >= 1
+    const today = moment()
+    // Function to disable dates including today and all past dates
+    const isDayBlocked = (day) => isTodayBlocked && !day.isAfter(today)
 
     return (
         <div>
@@ -93,8 +93,8 @@ const DateTimePicker = ({
                     customInputIcon={<CalendarIcon className="icon-dim-20" />}
                     inputIconPosition="after"
                     displayFormat={DATE_TIME_FORMATS.DD_MMM_YYYY}
-                    isOutsideRange={isOutsideRangeEnabled ? isOutsideRange : undefined}
                     data-testid={dataTestidForDate}
+                    isDayBlocked={isDayBlocked}
                 />
                 {!hideTimeSelect && (
                     <div className="dc__no-shrink">
