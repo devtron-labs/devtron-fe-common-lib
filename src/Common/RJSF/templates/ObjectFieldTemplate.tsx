@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-import React from 'react'
-import {
-    ObjectFieldTemplatePropertyType,
-    ObjectFieldTemplateProps,
-    canExpand,
-    getUiOptions,
-    titleId,
-} from '@rjsf/utils'
+import { ObjectFieldTemplateProps, canExpand, titleId } from '@rjsf/utils'
 import { FieldRowWithLabel } from '../common/FieldRow'
 import { TitleField } from './TitleField'
 import { AddButton } from './ButtonTemplates'
+import { JSONPath } from 'jsonpath-plus'
+import { RJSFFormSchema } from '../types'
 
 const Field = ({
     disabled,
@@ -38,7 +33,7 @@ const Field = ({
     schema,
     title,
     uiSchema,
-}: ObjectFieldTemplateProps) => {
+}: ObjectFieldTemplateProps<any, RJSFFormSchema, any>) => {
     const hasAdditionalProperties = !!schema.additionalProperties
 
     const ActionButton = canExpand(schema, uiSchema, formData) && (
@@ -52,7 +47,19 @@ const Field = ({
         />
     )
 
-    const Properties = properties.map((prop: ObjectFieldTemplatePropertyType) => prop.content)
+    const Properties = properties
+        .filter((prop) => {
+            const hiddenSchemaProp = schema.properties?.[prop.name]?.hidden
+            if (!hiddenSchemaProp) {
+                return true
+            }
+            const isHidden =
+                hiddenSchemaProp.condition === JSONPath({ path: hiddenSchemaProp.match, json: formData })[0]
+            // NOTE: if should be hidden then filter it out i.e return false
+            return !isHidden
+        })
+        .sort((prop) => (schema.properties?.[prop.name]?.type === 'boolean' ? -1 : 1))
+        .map((prop) => prop.content)
 
     if (hasAdditionalProperties) {
         if (properties.length) {
@@ -85,9 +92,8 @@ const Field = ({
     )
 }
 
-export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps) => {
+export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps<any, RJSFFormSchema, any>) => {
     const { idSchema, registry, required, schema, title, uiSchema, description } = props
-    const options = getUiOptions(uiSchema)
     const hasAdditionalProperties = !!schema.additionalProperties
     const showTitle = title && !hasAdditionalProperties
 
@@ -106,11 +112,11 @@ export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps) => {
             )}
             {/* Not adding the border and padding for non-objects and root schema */}
             <div
-                className={
+                className={`${
                     schema.properties && !hasAdditionalProperties && idSchema.$id !== 'root'
                         ? 'dc__border-left pl-12'
                         : ''
-                }
+                } flexbox-col dc__gap-8`}
             >
                 <Field {...props} />
             </div>
