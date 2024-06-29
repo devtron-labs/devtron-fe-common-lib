@@ -16,6 +16,7 @@ const PluginList = ({
     selectedPluginsMap,
     isSelectable,
     handleClearFilters,
+    showCardBorder,
 }: PluginListProps) => {
     const { appId } = useParams<PluginListParamsType>()
 
@@ -49,17 +50,20 @@ const PluginList = ({
         )
     }
 
-    // selectedPluginsMap should always be present if s
+    // selectedPluginsMap should always be present if isSelectable is true
     if (showSelectedPlugins) {
+        // TODO: Ask with product, filters and search can cause conflicting state
+
         return (
             <>
-                {Object.keys(selectedPluginsMap).map((pluginId) => (
+                {Object.keys(selectedPluginsMap).map((parentPluginId) => (
                     <PluginCard
-                        key={pluginId}
-                        parentPluginId={+pluginId}
+                        key={parentPluginId}
+                        parentPluginId={+parentPluginId}
                         isSelectable={isSelectable}
                         pluginDataStore={pluginDataStore}
                         handlePluginSelection={handlePluginSelection}
+                        showCardBorder={showCardBorder}
                         isSelected
                     />
                 ))}
@@ -77,6 +81,7 @@ const PluginList = ({
                     pluginDataStore={pluginDataStore}
                     handlePluginSelection={handlePluginSelection}
                     isSelected={!!selectedPluginsMap[plugin.parentPluginId]}
+                    showCardBorder={showCardBorder}
                 />
             ))}
 

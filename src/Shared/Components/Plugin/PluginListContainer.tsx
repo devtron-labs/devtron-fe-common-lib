@@ -13,9 +13,9 @@ import {
     PluginListFiltersType,
     PluginListItemType,
 } from './types'
+import { DEFAULT_PLUGIN_LIST_FILTERS } from './constants'
 import { ReactComponent as ICCross } from '../../../Assets/Icon/ic-cross.svg'
 import { ReactComponent as ICVisibility } from '../../../Assets/Icon/ic-visibility-on.svg'
-import { DEFAULT_PLUGIN_LIST_FILTERS } from './constants'
 
 const PluginListContainer = ({
     availableTags,
@@ -34,14 +34,19 @@ const PluginListContainer = ({
     handleParentTotalCount,
     parentFilters,
     handleUpdateParentFilters,
+    rootClassName,
+    showCardBorder,
 }: Readonly<PluginListContainerProps>) => {
     const { appId } = useParams<PluginListParamsType>()
 
     const [pluginList, setPluginList] = useState<PluginListItemType[]>(parentPluginList || [])
     const [totalCount, setTotalCount] = useState<number>(parentTotalCount || 0)
+    // TODO: Maybe structuredClone is not required
     const [filters, setFilters] = useState<PluginListFiltersType>(
         parentFilters || structuredClone(DEFAULT_PLUGIN_LIST_FILTERS),
     )
+    // Have to make a state to trigger clear filters, since filters are not on URL
+    const [clearFiltersTrigger, setClearFiltersTrigger] = useState<boolean>(false)
 
     const handlePluginListUpdate = (updatedPluginList: PluginListItemType[]) => {
         setPluginList(updatedPluginList)
@@ -129,12 +134,22 @@ const PluginListContainer = ({
         }
     }, [isLoadingPluginData, pluginData, pluginDataError])
 
+    const handlePersistFiltersChange = () => {
+        // Doing this since in case of persistence of filter we have should run as plugin length
+        if (persistFilters) {
+            handlePluginListUpdate([])
+        }
+    }
+
     const handleClearFilters = () => {
         handleUpdateFilters({
             searchKey: '',
             selectedTags: [],
             showSelectedPlugins: false,
         })
+
+        setClearFiltersTrigger((prev) => !prev)
+        handlePersistFiltersChange()
     }
 
     const handleSearch = (searchText: string) => {
@@ -143,9 +158,7 @@ const PluginListContainer = ({
             searchKey: searchText,
         })
 
-        if (persistFilters) {
-            handlePluginListUpdate([])
-        }
+        handlePersistFiltersChange()
     }
 
     const handleUpdateSelectedTags = (updatedTags: string[]) => {
@@ -154,9 +167,16 @@ const PluginListContainer = ({
             selectedTags: updatedTags,
         })
 
-        if (persistFilters) {
-            handlePluginListUpdate([])
-        }
+        handlePersistFiltersChange()
+    }
+
+    const handleRemoveSelectedTag = (filterConfig: Pick<PluginListFiltersType, 'selectedTags'>) => {
+        handleUpdateFilters({
+            ...filters,
+            selectedTags: filterConfig.selectedTags,
+        })
+
+        handlePersistFiltersChange()
     }
 
     const handleShowSelectedPlugins = () => {
@@ -173,24 +193,26 @@ const PluginListContainer = ({
         })
     }
 
-    const handleRemoveSelectedTag = (filterConfig: Pick<PluginListFiltersType, 'selectedTags'>) => {
-        handleUpdateFilters({
-            ...filters,
-            selectedTags: filterConfig.selectedTags,
-        })
+    const handlePluginSelectionWrapper: PluginListProps['handlePluginSelection'] = (parentPluginId) => {
+        const isCurrentPluginSelected = isSelectable && selectedPluginsMap[parentPluginId]
+        if (isCurrentPluginSelected && Object.keys(selectedPluginsMap).length === 1) {
+            handleHideSelectedPlugins()
+        }
+
+        handlePluginSelection(parentPluginId)
     }
 
-    // TODO: Be remember to turn showSelectedPluginFilter as false if count becomes 0
     const showSelectedPluginFilter = useMemo(
         () => isSelectable && selectedPluginsMap && Object.keys(selectedPluginsMap).length > 0,
         [selectedPluginsMap, isSelectable],
     )
 
     return (
-        <div className="flexbox-col dc__overflow-scroll w-100 h-100">
+        <div className={`flexbox-col w-100 ${rootClassName}`}>
             {/* Filters section */}
-            <div className="w-100 flexbox dc__gap-12 py-12">
+            <div className="w-100 flexbox dc__gap-12 py-12 dc__position-sticky dc__top-0 bcn-0 dc__zi-1">
                 <SearchBar
+                    key={`search-bar-key-${Number(clearFiltersTrigger)}`}
                     containerClassName="flex-grow-1"
                     handleEnter={handleSearch}
                     inputProps={{
@@ -199,6 +221,7 @@ const PluginListContainer = ({
                 />
 
                 <PluginTagSelect
+                    key={`plugin-tag-select-key-${Number(clearFiltersTrigger)}`}
                     availableTags={availableTags}
                     handleUpdateSelectedTags={handleUpdateSelectedTags}
                     selectedTags={selectedTags}
@@ -209,8 +232,8 @@ const PluginListContainer = ({
 
                 {showSelectedPluginFilter && (
                     <button
-                        className={`py-6 px-8 dc__gap-12 flex dc__no-border dc__no-background dc__outline-none-imp dc__tab-focus dc__tab-focus ${
-                            showSelectedPlugins ? 'bc-n50 dc__border-n1' : ''
+                        className={`py-6 px-8 dc__gap-12 flex dc__outline-none-imp dc__tab-focus dc__tab-focus ${
+                            showSelectedPlugins ? 'bc-n50 dc__border-n1' : 'dc__no-border dc__no-background'
                         }`}
                         data-testid="view-only-selected"
                         type="button"
@@ -253,10 +276,11 @@ const PluginListContainer = ({
                     totalCount={totalCount}
                     handleDataUpdateForPluginResponse={handleDataUpdateForPluginResponse}
                     filters={filters}
-                    handlePluginSelection={handlePluginSelection}
+                    handlePluginSelection={handlePluginSelectionWrapper}
                     selectedPluginsMap={selectedPluginsMap}
                     isSelectable={isSelectable}
                     handleClearFilters={handleClearFilters}
+                    showCardBorder={showCardBorder}
                 />
             </APIResponseHandler>
         </div>

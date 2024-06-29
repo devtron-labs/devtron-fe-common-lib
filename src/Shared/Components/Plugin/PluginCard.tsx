@@ -1,4 +1,4 @@
-import { Checkbox, CHECKBOX_VALUE, noop } from '../../../Common'
+import { Checkbox, CHECKBOX_VALUE } from '../../../Common'
 import { ImageWithFallback } from '../ImageWithFallback'
 import { PluginCardProps } from './types'
 import { ReactComponent as ICLegoBlock } from '../../../Assets/Icon/ic-lego-block.svg'
@@ -9,6 +9,7 @@ const PluginCard = ({
     handlePluginSelection,
     parentPluginId,
     isSelected,
+    showCardBorder,
 }: PluginCardProps) => {
     const latestPluginId = pluginDataStore.parentPluginStore[parentPluginId].latestVersionId
     const { icon, name, description, tags, pluginVersion, updatedBy } =
@@ -19,26 +20,33 @@ const PluginCard = ({
     }
 
     return (
-        <div className="p-12 flexbox dc__gap-16 dc__tab-focus" role="button" tabIndex={0} onClick={handleSelection}>
-            {isSelectable ? (
-                <div className="dc__no-shrink icon-dim-40 p-8">
+        <div
+            className={`p-12 flexbox dc__gap-16 dc__tab-focus dc__visible-hover dc__visible-hover--parent ${showCardBorder ? 'dc__border br-4 dc__hover-n50' : ''}`}
+            role="button"
+            tabIndex={0}
+            onClick={handleSelection}
+        >
+            {isSelectable && (
+                <div className={`dc__no-shrink icon-dim-40 p-8 ${!isSelected ? 'dc__visible-hover--child' : ''}`}>
                     <Checkbox
                         isChecked={isSelected}
-                        onChange={noop}
+                        onChange={handleSelection}
                         rootClassName="icon-dim-40 p-8 w-100 mb-0 dc__no-shrink"
                         value={CHECKBOX_VALUE.CHECKED}
                     />
                 </div>
-            ) : (
-                // TODO: Test multiple cards with fallback since has if in LegoBlock
+            )}
+
+            {/* TODO: Test multiple cards with fallback since has if in LegoBlock */}
+            {!isSelected && (
                 <ImageWithFallback
-                    fallbackImage={<ICLegoBlock className="dc__no-shrink icon-dim-40" />}
+                    fallbackImage={<ICLegoBlock className="dc__no-shrink dc__visible-hover--hide-child icon-dim-40" />}
                     imageProps={{
                         src: icon,
                         alt: `${name} logo`,
                         width: 40,
                         height: 40,
-                        className: 'p-4 dc__no-shrink',
+                        className: 'p-4 dc__no-shrink dc__visible-hover--hide-child',
                     }}
                 />
             )}
@@ -47,9 +55,9 @@ const PluginCard = ({
                 <div className="flexbox-col dc__gap-8">
                     <div className="flexbox-col dc__gap-4">
                         <div className="flexbox dc__gap-4">
-                            <h4 className="m-0 dc__truncate--clamp-3 cn-9 fs-13 fw-6 lh-20">{name}</h4>
+                            <h4 className="m-0 dc__truncate cn-9 fs-13 fw-6 lh-20">{name}</h4>
                             {!isSelectable && (
-                                <span className="dc__truncate--clamp-3 cn-7 fs-12 fw-4 lh-20">({pluginVersion})</span>
+                                <span className="dc__truncate cn-7 fs-12 fw-4 lh-20">({pluginVersion})</span>
                             )}
                         </div>
 

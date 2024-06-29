@@ -1,4 +1,5 @@
 import { get, getUrlWithSearchParams, ResponseType, ROUTES, showError } from '../../../Common'
+import { stringComparatorBySortOrder } from '../../Helpers'
 import {
     GetPluginListPayloadType,
     GetPluginStoreDataReturnType,
@@ -13,16 +14,15 @@ export const getPluginsDetail = async ({
     appId,
     parentPluginId,
     pluginId,
-    // TODO: Can make it true by default
-    fetchLatestVersionDetails,
 }: PluginDetailPayloadType): Promise<PluginDetailDTO> => {
     try {
+        // TODO: Add type for payload as well and return parsed data itself
+        // Can parse the response here itself
         const { result } = (await get(
-            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_DETAIL, {
+            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_DETAIL_V2, {
                 appId,
                 parentPluginId,
                 pluginId,
-                fetchLatestVersionDetails,
             }),
         )) as ResponseType<PluginDetailDTO>
         return result
@@ -34,9 +34,9 @@ export const getPluginsDetail = async ({
 
 export const getPluginStoreData = async ({
     searchKey,
-    offset = 0,
     selectedTags,
     appId,
+    offset = 0,
 }: GetPluginStoreDataServiceParamsType): Promise<GetPluginStoreDataReturnType> => {
     try {
         const payload: GetPluginListPayloadType = {
@@ -44,7 +44,6 @@ export const getPluginStoreData = async ({
             offset,
             appId,
             size: 20,
-            fetchLatestVersionDetails: true,
             tag: selectedTags,
         }
         const { result } = (await get(
@@ -62,13 +61,15 @@ export const getPluginStoreData = async ({
     }
 }
 
-export const getAvailablePluginTags = async (): Promise<string[]> => {
+export const getAvailablePluginTags = async (appId: number): Promise<string[]> => {
     try {
-        const { result } = (await get(ROUTES.PLUGIN_GLOBAL_LIST_TAGS)) as ResponseType<PluginTagNamesDTO>
+        const { result } = (await get(
+            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_TAGS, { appId }),
+        )) as ResponseType<PluginTagNamesDTO>
         if (!result?.tagNames) {
             return []
         }
-        return result.tagNames
+        return result.tagNames.sort(stringComparatorBySortOrder)
     } catch (error) {
         showError(error)
         throw error

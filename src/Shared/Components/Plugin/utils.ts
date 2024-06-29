@@ -1,4 +1,4 @@
-import { ParentPluginDTO, PluginDataStoreType } from './types'
+import { ParentPluginDTO, PluginCreationType, PluginDataStoreType } from './types'
 
 const parseMinimalPluginVersionsDTO = (
     pluginVersionData: ParentPluginDTO['pluginVersions']['minimalPluginVersionData'],
@@ -29,7 +29,7 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
 
     pluginData.forEach((plugin) => {
         const pluginVersions = parseMinimalPluginVersionsDTO(plugin.pluginVersions.minimalPluginVersionData)
-        const latestPluginVersionId = pluginVersions.findIndex((pluginVersion) => pluginVersion.isLatest)
+        const latestPluginVersionIndex = pluginVersions.findIndex((pluginVersion) => pluginVersion.isLatest)
 
         parentPluginStore[plugin.id] = {
             id: plugin.id,
@@ -38,7 +38,7 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
             type: plugin.type,
             icon: plugin.icon || '',
             // Assuming latest version is always present
-            latestVersionId: pluginVersions[latestPluginVersionId].id,
+            latestVersionId: pluginVersions[latestPluginVersionIndex].id,
             pluginVersions,
         }
 
@@ -49,10 +49,11 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
                 description: pluginVersionData.description || '',
                 pluginVersion: pluginVersionData.pluginVersion || '',
                 docLink: pluginVersionData.docLink || '',
-                updatedBy: pluginVersionData.updatedBy,
+                updatedBy: plugin.type === PluginCreationType.SHARED ? pluginVersionData.updatedBy : 'Devtron',
                 outputVariables: pluginVersionData.outputVariables || [],
                 inputVariables: pluginVersionData.inputVariables || [],
                 isLatest: pluginVersionData.isLatest || false,
+                // TODO: can add unique check and sort them alphabetically
                 tags: pluginVersionData.tags || [],
                 parentPluginId: plugin.id,
                 icon: plugin.icon || '',

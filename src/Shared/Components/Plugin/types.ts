@@ -52,7 +52,6 @@ export interface PluginDetailDTO {
 
 export interface PluginDetailPayloadType {
     appId: number
-    fetchLatestVersionDetails: boolean
     pluginId?: number[]
     parentPluginId?: number[]
 }
@@ -92,6 +91,8 @@ interface BasePluginListContainerProps {
     handlePluginSelection: (parentPluginId: PluginDetailType['parentPluginId']) => void
     pluginDataStore: PluginDataStoreType
     handlePluginDataStoreUpdate: (pluginStore: PluginDataStoreType) => void
+    rootClassName?: string
+    showCardBorder?: boolean
 }
 
 type PluginListType =
@@ -134,15 +135,14 @@ export type PluginListContainerProps = BasePluginListContainerProps &
     )
 
 export interface GetPluginStoreDataServiceParamsType extends Pick<PluginListFiltersType, 'searchKey' | 'selectedTags'> {
-    offset: number
     appId: number
+    offset?: number
 }
 
 export interface GetPluginListPayloadType
     extends Pick<GetPluginStoreDataServiceParamsType, 'searchKey' | 'offset' | 'appId'> {
     tag: PluginListFiltersType['selectedTags']
     size: number
-    fetchLatestVersionDetails: boolean
 }
 
 export interface GetPluginStoreDataReturnType {
@@ -165,7 +165,7 @@ export interface PluginTagSelectProps extends Pick<BasePluginListContainerProps,
 export interface PluginListProps
     extends Pick<
         PluginListContainerProps,
-        'pluginDataStore' | 'handlePluginSelection' | 'selectedPluginsMap' | 'isSelectable'
+        'pluginDataStore' | 'handlePluginSelection' | 'selectedPluginsMap' | 'isSelectable' | 'showCardBorder'
     > {
     handleDataUpdateForPluginResponse: (pluginResponse: Awaited<ReturnType<typeof getPluginStoreData>>) => void
     handleClearFilters: () => void
@@ -175,7 +175,7 @@ export interface PluginListProps
 }
 
 export interface PluginCardProps
-    extends Pick<PluginListProps, 'isSelectable' | 'pluginDataStore' | 'handlePluginSelection'> {
+    extends Pick<PluginListProps, 'isSelectable' | 'pluginDataStore' | 'handlePluginSelection' | 'showCardBorder'> {
     parentPluginId: PluginDetailType['parentPluginId']
     isSelected: boolean
 }

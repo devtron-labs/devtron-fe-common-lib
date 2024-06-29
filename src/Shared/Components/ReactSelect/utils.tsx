@@ -185,22 +185,21 @@ export const GroupHeading = (props: any) => {
 
 export const commonSelectStyles = getCommonSelectStyle()
 
-export const MenuListWithApplyButton = (props: MenuListProps & { handleApplyFilter: () => void }) => {
-    const { children, handleApplyFilter } = props
-
-    return (
-        <components.MenuList {...props}>
-            {children}
-            <div className="p-8 dc__position-sticky dc__bottom-0 dc__border-top-n1 bcn-0">
-                <button
-                    type="button"
-                    className="dc__unset-button-styles w-100 br-4 h-28 flex bcb-5 cn-0 fw-6 lh-28 fs-12 h-28 br-4 pt-5 pr-12 pb-5 pl-12"
-                    onClick={handleApplyFilter}
-                    aria-label="Apply filters"
-                >
-                    Apply
-                </button>
-            </div>
-        </components.MenuList>
-    )
-}
+export const MenuListWithApplyButton = ({
+    handleApplyFilter,
+    ...props
+}: MenuListProps & { handleApplyFilter: () => void }) => (
+    <>
+        <components.MenuList {...props} />
+        <div className="p-8 dc__position-sticky dc__bottom-0 dc__border-top-n1 bcn-0">
+            <button
+                type="button"
+                className="dc__unset-button-styles w-100 br-4 h-28 flex bcb-5 cn-0 fw-6 lh-28 fs-12 h-28 br-4 pt-5 pr-12 pb-5 pl-12"
+                onClick={handleApplyFilter}
+                aria-label="Apply filters"
+            >
+                Apply
+            </button>
+        </div>
+    </>
+)
