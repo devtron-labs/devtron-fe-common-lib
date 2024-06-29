@@ -17,7 +17,7 @@
 import { SingleDatePicker } from 'react-dates'
 import ReactSelect, { SelectInstance } from 'react-select'
 import moment from 'moment'
-import CustomizableCalendarDay from 'react-dates/esm/components/CustomizableCalendarDay.js'
+import CustomizableCalendarDay from 'react-dates/esm/components/CustomizableCalendarDay'
 import { useState } from 'react'
 import {
     DEFAULT_TIME_OPTIONS,
