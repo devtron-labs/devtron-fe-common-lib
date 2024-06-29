@@ -53,7 +53,7 @@ const DateTimePicker = ({
 }: DateTimePickerProps) => {
     const time = getTimeValue(dateObject)
     const selectedTimeOption = DEFAULT_TIME_OPTIONS.find((option) => option.value === time) ?? DEFAULT_TIME_OPTIONS[0]
-    const [focused, setFocused] = useState(false)
+    const [isFocused, setFocused] = useState(false)
 
     const handleFocusChange = ({ focused }) => {
         setFocused(focused)
@@ -81,7 +81,7 @@ const DateTimePicker = ({
                     placeholder="Select date"
                     date={moment(dateObject)}
                     onDateChange={handleDateChange}
-                    focused={focused}
+                    focused={isFocused}
                     onFocusChange={handleFocusChange}
                     numberOfMonths={1}
                     openDirection="down"
