@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from 'react'
 import ReactSelect, { MenuListProps } from 'react-select'
 import { Option, OptionType } from '../../../Common'
-import { commonSelectStyles, LoadingIndicator, MenuListWithApplyButton } from '../ReactSelect'
+import { LoadingIndicator, MenuListWithApplyButton } from '../ReactSelect'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import { PluginTagSelectProps } from './types'
-import { PluginTagSelectValueContainer } from './utils'
+import { PluginTagSelectValueContainer, pluginTagSelectStyles } from './utils'
 
 const PluginTagSelect = ({
     availableTags,
@@ -50,10 +50,9 @@ const PluginTagSelect = ({
         return <MenuListWithApplyButton {...props} handleApplyFilter={handleApplyFilters} />
     }, [])
 
-    // TODO: Look if should close menu on apply
     return (
         <ReactSelect
-            styles={commonSelectStyles}
+            styles={pluginTagSelectStyles}
             options={tagOptions}
             isMulti
             value={localSelectedOptions}

@@ -5,6 +5,7 @@ import { ReactComponent as ICSearch } from '../../../Assets/Icon/ic-search.svg'
 import { ReactComponent as ICFilter } from '../../../Assets/Icon/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '../../../Assets/Icon/ic-filter-applied.svg'
 import { OptionType } from '../../../Common'
+import { commonSelectStyles } from '../ReactSelect'
 
 const parseMinimalPluginVersionsDTO = (
     pluginVersionData: ParentPluginDTO['pluginVersions']['minimalPluginVersionData'],
@@ -116,4 +117,24 @@ export const PluginTagSelectValueContainer = (props: ValueContainerProps<OptionT
             </div>
         </components.ValueContainer>
     )
+}
+
+// TODO: Should it be in constants?
+export const pluginTagSelectStyles = {
+    ...commonSelectStyles,
+    option: (base, state) => ({
+        ...base,
+        height: '36px',
+        padding: '8px 12px',
+        backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
+        color: 'var(--N900)',
+        cursor: 'pointer',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+
+        ':active': {
+            backgroundColor: 'var(--N100)',
+        },
+    }),
 }
