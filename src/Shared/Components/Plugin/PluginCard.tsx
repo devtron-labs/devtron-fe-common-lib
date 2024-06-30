@@ -1,7 +1,9 @@
 import { Checkbox, CHECKBOX_VALUE } from '../../../Common'
 import { ImageWithFallback } from '../ImageWithFallback'
+import PluginTagsContainer from './PluginTagsContainer'
 import { PluginCardProps } from './types'
 import { ReactComponent as ICLegoBlock } from '../../../Assets/Icon/ic-lego-block.svg'
+import { ReactComponent as ICBookOpen } from '../../../Assets/Icon/ic-book-open.svg'
 
 const PluginCard = ({
     isSelectable,
@@ -12,7 +14,7 @@ const PluginCard = ({
     showCardBorder,
 }: PluginCardProps) => {
     const latestPluginId = pluginDataStore.parentPluginStore[parentPluginId].latestVersionId
-    const { icon, name, description, tags, pluginVersion, updatedBy } =
+    const { icon, name, description, tags, pluginVersion, updatedBy, docLink } =
         pluginDataStore.pluginVersionStore[latestPluginId]
 
     const handleSelection = () => {
@@ -40,18 +42,22 @@ const PluginCard = ({
             {/* TODO: Test multiple cards with fallback since has if in LegoBlock */}
             {!isSelected && (
                 <ImageWithFallback
-                    fallbackImage={<ICLegoBlock className="dc__no-shrink dc__visible-hover--hide-child icon-dim-40" />}
+                    fallbackImage={
+                        <ICLegoBlock
+                            className={`dc__no-shrink icon-dim-40 ${isSelectable ? 'dc__visible-hover--hide-child' : ''}`}
+                        />
+                    }
                     imageProps={{
                         src: icon,
                         alt: `${name} logo`,
                         width: 40,
                         height: 40,
-                        className: 'p-4 dc__no-shrink dc__visible-hover--hide-child',
+                        className: `p-4 dc__no-shrink ${isSelectable ? 'dc__visible-hover--hide-child' : ''}`,
                     }}
                 />
             )}
 
-            <div className="flexbox-col dc__gap-12">
+            <div className="flexbox-col dc__gap-12 w-100">
                 <div className="flexbox-col dc__gap-8">
                     <div className="flexbox-col dc__gap-4">
                         <div className="flexbox dc__gap-4">
@@ -69,13 +75,21 @@ const PluginCard = ({
                 </div>
 
                 {/* Tag container */}
-                {/* TODO: Make component since re-usable */}
-                <div className="flexbox dc__gap-6 flex-wrap">
-                    {tags.map((tag) => (
-                        <div className="flexbox px-6 br-4 bcn-1 dc__align-items-center dc__mxw-160" key={tag}>
-                            <span className="dc__mxw-160 dc__truncate cn-8 fs-11 fw-4 lh-20">{tag}</span>
-                        </div>
-                    ))}
+                <div className="flexbox dc__gap-6 w-100 dc__align-start">
+                    <PluginTagsContainer tags={tags} />
+
+                    {/* Adding a div with min width so that tags won't have layout shift on hover and will give flex-grow as 1 with flex end so that it sticks to end even if tags don't exist */}
+                    <div className="mw-84 flexbox dc__content-end flex-grow-1">
+                        {docLink && (
+                            <div className="flexbox dc__gap-4 dc__visible-hover--child dc__align-items-center">
+                                <a href={docLink} className="anchor" target="_blank" rel="noopener noreferrer">
+                                    Learn more
+                                </a>
+
+                                <ICBookOpen className="icon-dim-12 dc__no-shrink" />
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

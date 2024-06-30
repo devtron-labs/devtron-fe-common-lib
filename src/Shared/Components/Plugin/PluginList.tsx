@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { useParams } from 'react-router'
 import PluginCard from './PluginCard'
 import { DetectBottom } from '../DetectBottom'
+import PluginCardSkeletonList from './PluginCardSkeletonList'
 import { PluginListParamsType, PluginListProps } from './types'
-import { GenericEmptyState, GenericFilterEmptyState, Progressing, showError } from '../../../Common'
+import { GenericEmptyState, GenericFilterEmptyState, showError } from '../../../Common'
 import { getPluginStoreData } from './service'
 
 const PluginList = ({
@@ -85,8 +86,9 @@ const PluginList = ({
                 />
             ))}
 
-            {isLoadingMorePlugins && <Progressing />}
+            {isLoadingMorePlugins && <PluginCardSkeletonList />}
 
+            {/* TODO: Handle on error */}
             {totalCount > pluginList.length && !isLoadingMorePlugins && <DetectBottom callback={handleLoadMore} />}
         </>
     )

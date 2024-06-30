@@ -179,3 +179,12 @@ export interface PluginCardProps
     parentPluginId: PluginDetailType['parentPluginId']
     isSelected: boolean
 }
+
+export interface PluginCardSkeletonListProps {
+    // Default value is 3
+    count?: number
+}
+
+export interface PluginTagsContainerProps {
+    tags: string[]
+}

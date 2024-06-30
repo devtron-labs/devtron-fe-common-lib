@@ -16,6 +16,7 @@ import {
 import { DEFAULT_PLUGIN_LIST_FILTERS } from './constants'
 import { ReactComponent as ICCross } from '../../../Assets/Icon/ic-cross.svg'
 import { ReactComponent as ICVisibility } from '../../../Assets/Icon/ic-visibility-on.svg'
+import PluginCardSkeletonList from './PluginCardSkeletonList'
 
 const PluginListContainer = ({
     availableTags,
@@ -237,7 +238,7 @@ const PluginListContainer = ({
                 {showSelectedPluginFilter && (
                     <button
                         className={`py-6 px-8 dc__gap-12 flex dc__outline-none-imp dc__tab-focus dc__tab-focus dc__no-shrink ${
-                            showSelectedPlugins ? 'bc-n50 dc__border-n1' : 'dc__no-border dc__no-background'
+                            showSelectedPlugins ? 'bc-n50 dc__border-n1' : 'en-0 bw-1 dc__no-background'
                         }`}
                         data-testid="view-only-selected"
                         type="button"
@@ -268,6 +269,7 @@ const PluginListContainer = ({
 
             <APIResponseHandler
                 isLoading={isLoadingPluginData}
+                customLoader={<PluginCardSkeletonList count={5} />}
                 error={pluginDataError}
                 errorScreenManagerProps={{
                     code: pluginDataError?.code,
