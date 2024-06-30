@@ -167,7 +167,15 @@ export interface PluginListProps
         PluginListContainerProps,
         'pluginDataStore' | 'handlePluginSelection' | 'selectedPluginsMap' | 'isSelectable' | 'showCardBorder'
     > {
-    handleDataUpdateForPluginResponse: (pluginResponse: Awaited<ReturnType<typeof getPluginStoreData>>) => void
+    handleDataUpdateForPluginResponse: (
+        pluginResponse: Awaited<ReturnType<typeof getPluginStoreData>>,
+        /**
+         * If true, the response would be appended to the existing data
+         * if false, the existing data would be replaced with the new data
+         * default value is false
+         */
+        appendResponse?: boolean,
+    ) => void
     handleClearFilters: () => void
     pluginList: PluginListContainerProps['parentPluginList']
     totalCount: PluginListContainerProps['parentTotalCount']

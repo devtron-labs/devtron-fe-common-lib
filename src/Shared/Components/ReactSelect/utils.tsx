@@ -191,6 +191,7 @@ export const MenuListWithApplyButton = ({
 }: MenuListProps & { handleApplyFilter: () => void }) => (
     <>
         <components.MenuList {...props} />
+        {/* TODO: Check not working look into this */}
         {props.selectProps.options.length > 0 && (
             <div className="p-8 dc__position-sticky dc__bottom-0 dc__border-top-n1 bcn-0 dc__bottom-radius-4">
                 <button

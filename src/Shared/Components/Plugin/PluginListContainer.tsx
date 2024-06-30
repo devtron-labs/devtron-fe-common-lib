@@ -97,10 +97,13 @@ const PluginListContainer = ({
 
     const handleDataUpdateForPluginResponse: PluginListProps['handleDataUpdateForPluginResponse'] = (
         pluginResponse,
+        appendResponse = false,
     ) => {
         const clonedPluginDataStore = structuredClone(pluginDataStore)
-        const { pluginStore: newPluginStore, totalCount: responseTotalCount } = pluginResponse
-        const { parentPluginStore, pluginVersionStore } = newPluginStore
+        const {
+            pluginStore: { parentPluginStore, pluginVersionStore },
+            totalCount: responseTotalCount,
+        } = pluginResponse
 
         Object.keys(parentPluginStore).forEach((key) => {
             if (!clonedPluginDataStore.parentPluginStore[key]) {
@@ -117,14 +120,21 @@ const PluginListContainer = ({
         handlePluginDataStoreUpdate(clonedPluginDataStore)
         handleUpdateTotalCount(responseTotalCount)
 
-        const newPluginList: typeof pluginList = structuredClone(pluginList)
+        const newPluginList: typeof pluginList = appendResponse ? structuredClone(pluginList) : []
+        const newPluginListMap = newPluginList.reduce(
+            (acc, plugin) => {
+                acc[plugin.parentPluginId] = true
+                return acc
+            },
+            {} as Record<number, true>,
+        )
 
         Object.keys(parentPluginStore).forEach((key) => {
-            // TODO: Can convert to map
-            if (!newPluginList.find((plugin) => plugin.parentPluginId === +key)) {
+            if (!newPluginListMap[key]) {
                 newPluginList.push({
                     parentPluginId: +key,
                 })
+                newPluginListMap[key] = true
             }
         })
 

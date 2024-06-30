@@ -32,7 +32,7 @@ const PluginList = ({
                 appId: appId ? +appId : null,
             })
 
-            handleDataUpdateForPluginResponse(pluginDataResponse)
+            handleDataUpdateForPluginResponse(pluginDataResponse, true)
         } catch (error) {
             showError(error)
         } finally {
