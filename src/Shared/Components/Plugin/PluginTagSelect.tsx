@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import ReactSelect, { MenuListProps } from 'react-select'
 import { Option, OptionType } from '../../../Common'
 import { commonSelectStyles, LoadingIndicator, MenuListWithApplyButton } from '../ReactSelect'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import { PluginTagSelectProps } from './types'
+import { PluginTagSelectValueContainer } from './utils'
 
 const PluginTagSelect = ({
     availableTags,
@@ -26,24 +27,28 @@ const PluginTagSelect = ({
         setLocalSelectedOptions(selectedOptions)
     }
 
-    const handleApplyFilters = () => {
-        handleUpdateSelectedTags(localSelectedOptions.map((option) => option.label))
-    }
-
     const handleMenuClose = () => {
         setLocalSelectedOptions(selectedTags?.map((tag) => ({ label: tag, value: tag })) ?? [])
     }
 
     const renderNoOptionsMessage = () => {
         if (hasError) {
-            return <GenericSectionErrorState withBorder reload={reloadTags} />
+            return <GenericSectionErrorState reload={reloadTags} />
         }
         return <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8">No tags found</p>
     }
 
-    const renderMenuList = (props: MenuListProps) => (
-        <MenuListWithApplyButton {...props} handleApplyFilter={handleApplyFilters} />
-    )
+    // TODO: Should i add handleUpdateSelectedTags as dependency?
+    const renderMenuList = useCallback((props: MenuListProps) => {
+        const selectedOptions: any = props.selectProps.value
+
+        //  TODO: Should we create function here or inside MenuListWithApplyButton?
+        const handleApplyFilters = () => {
+            handleUpdateSelectedTags(selectedOptions.map((option) => option.value))
+        }
+
+        return <MenuListWithApplyButton {...props} handleApplyFilter={handleApplyFilters} />
+    }, [])
 
     // TODO: Look if should close menu on apply
     return (
@@ -59,18 +64,20 @@ const PluginTagSelect = ({
                 NoOptionsMessage: renderNoOptionsMessage,
                 MenuList: renderMenuList,
                 Option,
+                ValueContainer: PluginTagSelectValueContainer,
             }}
             isLoading={isLoading}
             onChange={handleLocalSelection}
-            escapeClearsValue={false}
+            backspaceRemovesValue={false}
             closeMenuOnSelect={false}
             controlShouldRenderValue={false}
             hideSelectedOptions={false}
             blurInputOnSelect={false}
             maxMenuHeight={250}
             onMenuClose={handleMenuClose}
+            placeholder="Select tags"
             inputId="plugin-tag-select"
-            className="w-200"
+            className="w-150"
         />
     )
 }

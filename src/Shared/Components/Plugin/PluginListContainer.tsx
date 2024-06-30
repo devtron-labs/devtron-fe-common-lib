@@ -46,7 +46,9 @@ const PluginListContainer = ({
         parentFilters || structuredClone(DEFAULT_PLUGIN_LIST_FILTERS),
     )
     // Have to make a state to trigger clear filters, since filters are not on URL
-    const [clearFiltersTrigger, setClearFiltersTrigger] = useState<boolean>(false)
+    // TODO: Ask should it be number since in case of large state it can be a problem
+    const [clearSearchTrigger, setClearSearchTrigger] = useState<boolean>(false)
+    const [clearTagFilterTrigger, setClearTagFiltersTrigger] = useState<boolean>(false)
 
     const handlePluginListUpdate = (updatedPluginList: PluginListItemType[]) => {
         setPluginList(updatedPluginList)
@@ -148,7 +150,8 @@ const PluginListContainer = ({
             showSelectedPlugins: false,
         })
 
-        setClearFiltersTrigger((prev) => !prev)
+        setClearSearchTrigger((prev) => !prev)
+        setClearTagFiltersTrigger((prev) => !prev)
         handlePersistFiltersChange()
     }
 
@@ -176,6 +179,7 @@ const PluginListContainer = ({
             selectedTags: filterConfig.selectedTags,
         })
 
+        setClearTagFiltersTrigger((prev) => !prev)
         handlePersistFiltersChange()
     }
 
@@ -212,7 +216,7 @@ const PluginListContainer = ({
             {/* Filters section */}
             <div className="w-100 flexbox dc__gap-12 py-12 dc__position-sticky dc__top-0 bcn-0 dc__zi-1">
                 <SearchBar
-                    key={`search-bar-key-${Number(clearFiltersTrigger)}`}
+                    key={`search-bar-key-${Number(clearSearchTrigger)}`}
                     containerClassName="flex-grow-1"
                     handleEnter={handleSearch}
                     inputProps={{
@@ -221,7 +225,7 @@ const PluginListContainer = ({
                 />
 
                 <PluginTagSelect
-                    key={`plugin-tag-select-key-${Number(clearFiltersTrigger)}`}
+                    key={`plugin-tag-select-key-${Number(clearTagFilterTrigger)}`}
                     availableTags={availableTags}
                     handleUpdateSelectedTags={handleUpdateSelectedTags}
                     selectedTags={selectedTags}
@@ -232,7 +236,7 @@ const PluginListContainer = ({
 
                 {showSelectedPluginFilter && (
                     <button
-                        className={`py-6 px-8 dc__gap-12 flex dc__outline-none-imp dc__tab-focus dc__tab-focus ${
+                        className={`py-6 px-8 dc__gap-12 flex dc__outline-none-imp dc__tab-focus dc__tab-focus dc__no-shrink ${
                             showSelectedPlugins ? 'bc-n50 dc__border-n1' : 'dc__no-border dc__no-background'
                         }`}
                         data-testid="view-only-selected"

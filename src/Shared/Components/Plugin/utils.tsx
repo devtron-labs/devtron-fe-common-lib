@@ -1,4 +1,10 @@
+import { cloneElement } from 'react'
+import { components, ValueContainerProps } from 'react-select'
 import { ParentPluginDTO, PluginCreationType, PluginDataStoreType } from './types'
+import { ReactComponent as ICSearch } from '../../../Assets/Icon/ic-search.svg'
+import { ReactComponent as ICFilter } from '../../../Assets/Icon/ic-filter.svg'
+import { ReactComponent as ICFilterApplied } from '../../../Assets/Icon/ic-filter-applied.svg'
+import { OptionType } from '../../../Common'
 
 const parseMinimalPluginVersionsDTO = (
     pluginVersionData: ParentPluginDTO['pluginVersions']['minimalPluginVersionData'],
@@ -66,4 +72,48 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
         parentPluginStore,
         pluginVersionStore,
     }
+}
+
+export const PluginTagSelectValueContainer = (props: ValueContainerProps<OptionType[]>) => {
+    const { children, selectProps } = props
+
+    const renderContainer = () => {
+        if (selectProps.menuIsOpen) {
+            if (!selectProps.inputValue) {
+                return (
+                    <>
+                        <ICSearch className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
+                        <span className="dc__position-abs dc__left-35 cn-5 ml-2">{selectProps.placeholder}</span>
+                    </>
+                )
+            }
+
+            return <ICSearch className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
+        }
+
+        if (selectProps.value.length) {
+            return (
+                <>
+                    <ICFilterApplied className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
+                    <span className="dc__position-abs dc__left-35 cn-9 fs-13 fw-4 lh-20">Category</span>
+                </>
+            )
+        }
+
+        return (
+            <>
+                <ICFilter className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
+                <span className="dc__position-abs dc__left-35 cn-5 fs-13 fw-4 lh-20">Category</span>
+            </>
+        )
+    }
+
+    return (
+        <components.ValueContainer {...props}>
+            <div className="flexbox dc__align-items-center">
+                {renderContainer()}
+                {cloneElement(children[1])}
+            </div>
+        </components.ValueContainer>
+    )
 }
