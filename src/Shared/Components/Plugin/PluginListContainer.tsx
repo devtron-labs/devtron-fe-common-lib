@@ -4,6 +4,7 @@ import { APIResponseHandler } from '../APIResponseHandler'
 import PluginTagSelect from './PluginTagSelect'
 import PluginList from './PluginList'
 import { FilterChips } from '../FilterChips'
+import PluginCardSkeletonList from './PluginCardSkeletonList'
 import { SearchBar, useAsync } from '../../../Common'
 import { getAvailablePluginTags, getPluginStoreData } from './service'
 import {
@@ -16,7 +17,7 @@ import {
 import { DEFAULT_PLUGIN_LIST_FILTERS } from './constants'
 import { ReactComponent as ICCross } from '../../../Assets/Icon/ic-cross.svg'
 import { ReactComponent as ICVisibility } from '../../../Assets/Icon/ic-visibility-on.svg'
-import PluginCardSkeletonList from './PluginCardSkeletonList'
+import './pluginListContainer.scss'
 
 const PluginListContainer = ({
     availableTags,
@@ -35,8 +36,8 @@ const PluginListContainer = ({
     handleParentTotalCount,
     parentFilters,
     handleUpdateParentFilters,
-    rootClassName,
-    showCardBorder,
+    rootClassName = '',
+    showCardBorder = false,
 }: Readonly<PluginListContainerProps>) => {
     const { appId } = useParams<PluginListParamsType>()
 

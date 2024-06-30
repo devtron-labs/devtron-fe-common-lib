@@ -23,7 +23,7 @@ const PluginCard = ({
 
     return (
         <div
-            className={`p-12 flexbox dc__gap-16 dc__tab-focus dc__visible-hover dc__visible-hover--parent ${showCardBorder ? 'dc__border br-4 dc__hover-n50' : ''}`}
+            className={`p-12 flexbox dc__gap-16 dc__tab-focus plugin-card dc__visible-hover dc__visible-hover--parent ${showCardBorder ? 'dc__border br-4 dc__hover-n50' : ''}`}
             role="button"
             tabIndex={0}
             onClick={handleSelection}
@@ -61,7 +61,7 @@ const PluginCard = ({
                 <div className="flexbox-col dc__gap-8">
                     <div className="flexbox-col dc__gap-4">
                         <div className="flexbox dc__gap-4">
-                            <h4 className="m-0 dc__truncate cn-9 fs-13 fw-6 lh-20">{name}</h4>
+                            <h4 className="m-0 dc__truncate cn-9 fs-13 fw-6 lh-20 plugin-card__title">{name}</h4>
                             {!isSelectable && (
                                 <span className="dc__truncate cn-7 fs-12 fw-4 lh-20">({pluginVersion})</span>
                             )}
