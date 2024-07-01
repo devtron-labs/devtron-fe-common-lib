@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-import React, { CSSProperties } from 'react'
 import { ArrayFieldTemplateItemType } from '@rjsf/utils'
 
 export const ArrayFieldItemTemplate = ({
     children,
-    className,
     disabled,
     hasToolbar,
     hasRemove,
@@ -32,7 +30,7 @@ export const ArrayFieldItemTemplate = ({
     const { RemoveButton } = registry.templates.ButtonTemplates
 
     return (
-        <div className="dc__position-rel display-grid rjsf-form-template__array-field-item flex-align-center mb-12">
+        <div className="dc__position-rel display-grid rjsf-form-template__array-field-item flex-align-center">
             {children}
             <div className="dc__position-abs remove-btn__container" style={{ right: "-28px", top: "9px" }}>
                 {hasToolbar && hasRemove && (

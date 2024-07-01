@@ -49,7 +49,8 @@ export const Field = (props: FieldTemplateProps) => {
     return hidden ? (
         <div className="hidden">{children}</div>
     ) : (
-        <div className={`${classNames} mb-12`}>
+        // NOTE: need to override the margins of default rjsf css
+        <div className={`${classNames} mb-0`}>
             {showTitle && (
                 <TitleField
                     id={id}

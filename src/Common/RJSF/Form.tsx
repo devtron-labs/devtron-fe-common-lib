@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import RJSF from '@rjsf/core'
 import RJSFValidator from '@rjsf/validator-ajv8'
 
