@@ -195,4 +195,5 @@ export interface PluginCardSkeletonListProps {
 
 export interface PluginTagsContainerProps {
     tags: string[]
+    rootClassName?: string
 }

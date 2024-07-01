@@ -60,10 +60,22 @@ const PluginCard = ({
             <div className="flexbox-col dc__gap-12 w-100">
                 <div className="flexbox-col dc__gap-8">
                     <div className="flexbox-col dc__gap-4">
-                        <div className="flexbox dc__gap-4">
-                            <h4 className="m-0 dc__truncate cn-9 fs-13 fw-6 lh-20 plugin-card__title">{name}</h4>
-                            {!isSelectable && (
-                                <span className="dc__truncate cn-7 fs-12 fw-4 lh-20">({pluginVersion})</span>
+                        <div className="flexbox dc__gap-6 w-100 dc__align-start dc__content-space">
+                            <div className="flexbox dc__gap-4">
+                                <h4 className="m-0 dc__truncate cn-9 fs-13 fw-6 lh-20 plugin-card__title">{name}</h4>
+                                {!isSelectable && (
+                                    <span className="dc__truncate cn-7 fs-12 fw-4 lh-20">({pluginVersion})</span>
+                                )}
+                            </div>
+
+                            {docLink && (
+                                <div className="flexbox dc__gap-4 dc__visible-hover--child dc__align-items-center">
+                                    <a href={docLink} className="anchor" target="_blank" rel="noopener noreferrer">
+                                        Learn more
+                                    </a>
+
+                                    <ICBookOpen className="icon-dim-12 dc__no-shrink" />
+                                </div>
                             )}
                         </div>
 
@@ -75,22 +87,7 @@ const PluginCard = ({
                 </div>
 
                 {/* Tag container */}
-                <div className="flexbox dc__gap-6 w-100 dc__align-start">
-                    <PluginTagsContainer tags={tags} />
-
-                    {/* Adding a div with min width so that tags won't have layout shift on hover and will give flex-grow as 1 with flex end so that it sticks to end even if tags don't exist */}
-                    <div className="mw-84 flexbox dc__content-end flex-grow-1">
-                        {docLink && (
-                            <div className="flexbox dc__gap-4 dc__visible-hover--child dc__align-items-center">
-                                <a href={docLink} className="anchor" target="_blank" rel="noopener noreferrer">
-                                    Learn more
-                                </a>
-
-                                <ICBookOpen className="icon-dim-12 dc__no-shrink" />
-                            </div>
-                        )}
-                    </div>
-                </div>
+                <PluginTagsContainer tags={tags} />
             </div>
         </div>
     )
