@@ -1018,7 +1018,7 @@ export function useKeyDown() {
 export const DropdownIndicator = (props) => {
     return (
         <components.DropdownIndicator {...props}>
-            <ArrowDown className="icon-dim-20 icon-n5" />
+            <ArrowDown className="icon-dim-20 icon-n6" />
         </components.DropdownIndicator>
     )
 }

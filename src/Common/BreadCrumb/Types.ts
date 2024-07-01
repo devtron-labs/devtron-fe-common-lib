@@ -43,3 +43,8 @@ export interface Breadcrumbs {
 }
 
 export type UseBreadcrumbOptionalProps = UseBreadcrumbProps | null
+
+export interface BreadcrumbTextProps {
+    heading: string
+    isActive?: boolean
+}
