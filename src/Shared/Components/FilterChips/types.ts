@@ -20,7 +20,7 @@ export interface FilterChipProps {
     /**
      * Filter label
      */
-    label: string
+    label?: string
     /**
      * Corresponding value of the filter
      */
@@ -37,10 +37,15 @@ export interface FilterChipProps {
      * If passed, the label will be formatted accordingly
      */
     getFormattedValue?: (filterKey: string, filterValue: unknown) => ReactNode
+    /**
+     * If true, would hide the label
+     * @default false
+     */
+    shouldHideLabel?: boolean
 }
 
 export interface FilterChipsProps<T = Record<string, unknown>>
-    extends Pick<FilterChipProps, 'getFormattedLabel' | 'getFormattedValue'> {
+    extends Pick<FilterChipProps, 'getFormattedLabel' | 'getFormattedValue' | 'shouldHideLabel'> {
     /**
      * Current filter configuration
      */

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { PluginDataStoreType } from '../Shared'
 import { VariableType } from './CIPipeline.Types'
 import { ResponseType } from './Types'
 
@@ -42,6 +43,7 @@ export interface DefinitionSourceType {
 }
 export interface MandatoryPluginDetailType {
     id: number
+    parentPluginId: number
     icon: string
     name: string
     description?: string
@@ -55,6 +57,11 @@ export interface MandatoryPluginDataType {
     pluginData: MandatoryPluginDetailType[]
     isValidPre: boolean
     isValidPost: boolean
+}
+
+export interface ProcessPluginDataReturnType {
+    mandatoryPluginData: MandatoryPluginDataType
+    pluginDataStore: PluginDataStoreType
 }
 
 export enum ConsequenceAction {

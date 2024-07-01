@@ -24,6 +24,7 @@ const FilterChip = ({
     handleRemoveFilter,
     getFormattedLabel = noop,
     getFormattedValue = noop,
+    shouldHideLabel = false,
 }: FilterChipProps) => {
     const removeFilter = () => {
         handleRemoveFilter(label, value)
@@ -34,11 +35,15 @@ const FilterChip = ({
     const valueToDisplay = getFormattedValue(label, value) ?? value
 
     return (
-        labelToDisplay &&
+        (labelToDisplay || shouldHideLabel) &&
         valueToDisplay && (
             <div className="flexbox flex-align-center br-4 dc__border dc__bg-n50 pl-6 pr-6 pt-2 pb-2 dc__user-select-none h-24 dc__gap-6 fs-12 lh-20 cn-9 fw-4 dc__ellipsis-right">
-                <span className="fw-6 dc__capitalize">{labelToDisplay}</span>
-                <span className="dc__divider h-24" />
+                {!shouldHideLabel && (
+                    <>
+                        <span className="fw-6 dc__capitalize">{labelToDisplay}</span>
+                        <span className="dc__divider h-24" />
+                    </>
+                )}
                 <span className="dc__ellipsis-right">{valueToDisplay}</span>
                 <button
                     type="button"
@@ -64,6 +69,7 @@ const FilterChips = <T = Record<string, unknown>,>({
     getFormattedValue,
     className = '',
     clearButtonClassName = '',
+    shouldHideLabel,
 }: FilterChipsProps<T>) => {
     const handleRemoveFilter = (filterKey, valueToRemove) => {
         const updatedFilterConfig = JSON.parse(JSON.stringify(filterConfig))
@@ -95,6 +101,7 @@ const FilterChips = <T = Record<string, unknown>,>({
                                 handleRemoveFilter={handleRemoveFilter}
                                 getFormattedLabel={getFormattedLabel}
                                 getFormattedValue={getFormattedValue}
+                                shouldHideLabel={shouldHideLabel}
                             />
                         ))
                     ) : (
@@ -105,6 +112,7 @@ const FilterChips = <T = Record<string, unknown>,>({
                             handleRemoveFilter={handleRemoveFilter}
                             getFormattedLabel={getFormattedLabel}
                             getFormattedValue={getFormattedValue}
+                            shouldHideLabel={shouldHideLabel}
                         />
                     ),
                 )}

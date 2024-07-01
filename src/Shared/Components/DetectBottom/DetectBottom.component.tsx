@@ -17,7 +17,11 @@
 import { useEffect, useRef } from 'react'
 import { useIntersection } from '../../Helpers'
 
-const DetectBottom = ({ callback }: { callback: () => void }) => {
+interface DetectBottomProps {
+    callback: () => void
+}
+
+const DetectBottom = ({ callback }: DetectBottomProps) => {
     const target = useRef<HTMLSpanElement>(null)
     const intersected = useIntersection(target, {
         rootMargin: '0px',

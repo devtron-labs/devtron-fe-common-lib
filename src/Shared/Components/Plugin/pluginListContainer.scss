@@ -1,0 +1,11 @@
+.pre-build-plugin-list-container {
+    .plugin-card {
+        &:hover {
+            box-shadow: 0 0 4px 1px var(--N200);
+
+            .plugin-card__title {
+                color: var(--B500);
+            }
+        }
+    }
+}
