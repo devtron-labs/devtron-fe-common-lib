@@ -15,6 +15,7 @@
  */
 
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
 import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import moment from 'moment'
@@ -724,6 +725,12 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
         })
         return _keys
     })
+
+export const flatMapOfJSONPaths = (
+    paths: string[],
+    json: object,
+    resultType: JSONPathOptions['resultType'] = 'path',
+): string[] => paths.flatMap((path) => JSONPath({ path, json, resultType }))
 
 /**
  * Returns a debounced variant of the function

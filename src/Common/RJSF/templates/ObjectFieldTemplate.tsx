@@ -54,10 +54,12 @@ const Field = ({
                 return true
             }
             const isHidden =
-                hiddenSchemaProp.condition === JSONPath({ path: hiddenSchemaProp.match, json: formData })[0]
+                // NOTE: if json is null, then JSONPath will return undefined; hence the ?
+                hiddenSchemaProp.condition === JSONPath({ path: hiddenSchemaProp.match, json: formData })?.[0]
             // NOTE: if should be hidden then filter it out i.e return false
             return !isHidden
         })
+        // NOTE: we probably should use uiSchema instead?
         .sort((prop) => (schema.properties?.[prop.name]?.type === 'boolean' ? -1 : 1))
         .map((prop) => prop.content)
 

@@ -46,7 +46,7 @@ export const AddButton = ({
                     title="Add"
                 >
                     <PlusIcon className="icon-dim-16 fcb-5" />
-                    <span className="cb-5 fs-13 lh-24 dc__truncate">{content}</span>
+                    <span className="cb-5 fs-13 lh-34 dc__truncate">{content}</span>
                 </button>
             </Tippy>
         </div>
