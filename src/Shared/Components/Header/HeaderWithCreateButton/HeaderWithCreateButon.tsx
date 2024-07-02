@@ -22,7 +22,7 @@ import { ReactComponent as DropDown } from '../../../../Assets/Icon/ic-dropdown-
 import { ReactComponent as ChartIcon } from '../../../../Assets/Icon/ic-charts.svg'
 import { ReactComponent as AddIcon } from '../../../../Assets/Icon/ic-add.svg'
 import { ReactComponent as JobIcon } from '../../../../Assets/Icon/ic-k8s-job.svg'
-import AppListConstants from './constants'
+import { AppListConstants } from '../../../constants'
 import './HeaderWithCreateButton.scss'
 import { useMainContext } from '../../../Providers'
 

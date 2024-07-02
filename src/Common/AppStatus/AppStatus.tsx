@@ -33,10 +33,22 @@ export default function AppStatus({
     }
     const appStatusLowerCase = status?.toLowerCase()
     const isNotDeployed = appStatusLowerCase === StatusConstants.NOT_DEPLOYED.noSpaceLower
-    const iconClass = isNotDeployed ? StatusConstants.NOT_DEPLOYED.lowerCase : appStatusLowerCase
+    const isNotReady = appStatus === StatusConstants.NOT_READY.normalCase
     const statusMessage = status || (isVirtualEnv ? StatusConstants.NOT_AVILABLE.normalCase : '-')
     const notDeployed = isJobView ? YET_TO_RUN : StatusConstants.NOT_DEPLOYED.normalCase
     const textContent = isNotDeployed ? notDeployed : statusMessage
+
+    const getIconClass = () => {
+        if (isNotDeployed) {
+            return StatusConstants.NOT_DEPLOYED.lowerCase
+        }
+        if (isNotReady) {
+            return StatusConstants.NOT_READY.lowerCase
+        }
+        return appStatusLowerCase
+    }
+
+    const iconClass = getIconClass()
 
     const renderIcon = () => {
         if (iconClass) {

@@ -71,6 +71,7 @@ export interface customEnv {
     ENABLE_RESOURCE_SCAN_V2?: boolean
     HIDE_RESOURCE_WATCHER?: boolean
     ORGANIZATION_NAME: string
+    FEATURE_EXTERNAL_FLUX_CD_ENABLE: boolean
 }
 declare global {
     interface Window {

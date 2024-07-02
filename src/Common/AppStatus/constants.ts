@@ -20,6 +20,11 @@ export const StatusConstants = {
         normalCase: 'Not deployed',
         lowerCase: 'not-deployed',
     },
+    NOT_READY: {
+        noSpaceLower: 'notready',
+        normalCase: 'Not Ready',
+        lowerCase: 'not-ready',
+    },
     APP_STATUS: {
         noSpaceLower: 'appStatus',
         normalText: 'App status',
