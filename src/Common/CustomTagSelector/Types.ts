@@ -85,4 +85,5 @@ export interface ResizableTagTextAreaProps {
     dependentRef?: React.MutableRefObject<HTMLTextAreaElement>
     dataTestId?: string
     handleKeyDown?: any
+    disableOnBlurResizeToMinHeight?: boolean
 }
