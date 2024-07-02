@@ -62,12 +62,38 @@ export const SingleSelectOption = (props) => {
     )
 }
 
+/**
+ *  Multi value container 
+*/
+
 export const MultiValueContainer = (props) => {
     const { children, data, innerProps, selectProps } = props
     const { label, value } = data
     return (
         <components.MultiValueContainer {...{ data, innerProps, selectProps }}>
             <div className="flex fs-12 ml-4 cn-9">{label}</div>
+            {children[1]}
+        </components.MultiValueContainer>
+    )
+}
+/**
+ * 
+ * Multi value container with count
+ */
+export const MultiValueContainerWithCount = (props: any) => {
+    const { children, data, innerProps, selectProps } = props
+    const selectedLen = selectProps.value?.length ?? 0
+
+    return (
+        <components.MultiValueContainer {...{ data, innerProps, selectProps }}>
+            {(!selectProps.menuIsOpen || !selectProps.inputValue) && (
+                <span className="cn-9 fs-13 lh-20">
+                    {selectProps.placeholder}
+                    {selectedLen > 0 && (
+                        <span className="bcb-5 cn-0 fw-6 fs-12 br-8 ml-4 pr-8 pl-8">{selectedLen}</span>
+                    )}
+                </span>
+            )}
             {children[1]}
         </components.MultiValueContainer>
     )

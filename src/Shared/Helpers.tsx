@@ -207,6 +207,14 @@ export const useIntersection = (
 }
 export const isNullOrUndefined = (value: unknown): boolean => value === null || value === undefined
 
+export const handleDisableSubmitOnEnter = (event: React.KeyboardEvent<HTMLFormElement>) => {
+    const isTextArea = event.target instanceof HTMLTextAreaElement
+
+    if (event.key === 'Enter' && !isTextArea) {
+        event.preventDefault()
+    }
+}
+
 export const getKeyToBooleanMapFromArray = <T extends string | number>(arr: T[] = []) =>
     arr.reduce<Record<T, boolean>>(
         (acc, key) => {

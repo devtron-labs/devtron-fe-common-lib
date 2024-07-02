@@ -488,6 +488,32 @@ export enum AggregationKeys {
 
 export type AggregationKeysType = keyof typeof AggregationKeys
 
+export enum GitOpsAuthModeType {
+    SSH = 'SSH',
+    PASSWORD = 'PASSWORD',
+    SSH_AND_PASSWORD = 'PAT_AND_SSH',
+}
+
+export interface BaseGitOpsType {
+    authMode: GitOpsAuthModeType
+    sshKey: string
+    sshHost: string
+    username: string
+    token: string
+}
+
+export type GitOpsFieldKeyType =
+    | 'host'
+    | 'username'
+    | 'token'
+    | 'gitHubOrgId'
+    | 'azureProjectName'
+    | 'gitLabGroupId'
+    | 'bitBucketWorkspaceId'
+    | 'bitBucketProjectKey'
+    | 'sshHost'
+    | 'sshKey'
+
 export interface AppInfoListType {
     application: string
     appStatus: string

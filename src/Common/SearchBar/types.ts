@@ -48,6 +48,10 @@ export interface SearchBarProps {
      */
     debounceTimeout?: number
     /**
+     * Data test id for the search input
+     */
+    dataTestId?: string
+    /**
      * Hide the background and border of the search
      */
     noBackgroundAndBorder?: boolean
