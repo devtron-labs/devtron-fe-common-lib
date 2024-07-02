@@ -22,7 +22,7 @@ import { ReactComponent as RedWarning } from '../Assets/Icon/ic-error-medium.svg
 import { Checkbox } from './Checkbox'
 import { CHECKBOX_VALUE } from './Types'
 
-export const Option = (props: OptionProps) => {
+export const Option = (props) => {
     const { selectOption, data, isDisabled } = props
 
     const handleChange = (e) => {
