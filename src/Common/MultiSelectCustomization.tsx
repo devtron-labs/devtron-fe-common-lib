@@ -15,7 +15,7 @@
  */
 
 import React from 'react'
-import Select, { OptionProps, components } from 'react-select'
+import Select, { components } from 'react-select'
 import { ReactComponent as ClearIcon } from '../Assets/Icon/ic-appstatus-cancelled.svg'
 import { ReactComponent as Check } from '../Assets/Icon/ic-check.svg'
 import { ReactComponent as RedWarning } from '../Assets/Icon/ic-error-medium.svg'
