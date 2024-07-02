@@ -36,10 +36,13 @@ export interface KeyValueHeader<K extends string> {
  * @template K - A string representing the key type.
  */
 export type KeyValueRow<K extends string> = {
-    [key in K]: ResizableTagTextAreaProps & {
-        /** An optional boolean indicating if an asterisk should be shown. */
-        showAsterisk?: boolean
+    data: {
+        [key in K]: ResizableTagTextAreaProps & {
+            /** An optional boolean indicating if an asterisk should be shown. */
+            showAsterisk?: boolean
+        }
     }
+    id: string | number
 }
 
 /**
@@ -74,12 +77,15 @@ export interface KeyValueTableProps<K extends string> {
     isSortable?: boolean
     /** An optional React node for a custom header component. */
     headerComponent?: ReactNode
+    /** When true, data addition field will not be shown */
+    isAdditionNotAllowed?: boolean
     /**
      * An optional function to handle changes in the table rows.
      * @param rowIndex - The index of the row that changed.
      * @param headerKey - The key of the header that changed.
+     * @param value - The value of the cell.
      */
-    onChange?: (rowIndex: number, headerKey: K) => void
+    onChange?: (rowIndex: number, headerKey: K, value: string) => void
     /**
      * An optional function to handle row deletions.
      * @param e - The event triggered by the delete action.

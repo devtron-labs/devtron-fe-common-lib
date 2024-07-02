@@ -32,6 +32,7 @@ export const ResizableTagTextArea = ({
     dependentRef,
     dataTestId,
     handleKeyDown,
+    disabled,
     disableOnBlurResizeToMinHeight,
 }: ResizableTagTextAreaProps) => {
     const [text, setText] = useState('')
@@ -98,6 +99,7 @@ export const ResizableTagTextArea = ({
             tabIndex={tabIndex}
             data-testid={dataTestId}
             onKeyDown={handleKeyDown}
+            disabled={disabled}
         />
     )
 }
