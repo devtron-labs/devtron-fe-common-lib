@@ -32,6 +32,8 @@ export const ResizableTagTextArea = ({
     dependentRef,
     dataTestId,
     handleKeyDown,
+    disabled,
+    disableOnBlurResizeToMinHeight,
 }: ResizableTagTextAreaProps) => {
     const [text, setText] = useState('')
 
@@ -41,7 +43,7 @@ export const ResizableTagTextArea = ({
 
     const handleChange = (event) => {
         setText(event.target.value)
-        onChange(event)
+        onChange?.(event)
     }
 
     const reInitHeight = () => {
@@ -69,9 +71,11 @@ export const ResizableTagTextArea = ({
     useThrottledEffect(reInitHeight, 500, [text])
 
     const handleOnBlur = (event) => {
-        refVar.current.style.height = `${minHeight}px`
-        if (dependentRef) {
-            dependentRef.current.style.height = `${minHeight}px`
+        if (!disableOnBlurResizeToMinHeight) {
+            refVar.current.style.height = `${minHeight}px`
+            if (dependentRef) {
+                dependentRef.current.style.height = `${minHeight}px`
+            }
         }
         onBlur && onBlur(event)
     }
@@ -95,6 +99,7 @@ export const ResizableTagTextArea = ({
             tabIndex={tabIndex}
             data-testid={dataTestId}
             onKeyDown={handleKeyDown}
+            disabled={disabled}
         />
     )
 }
