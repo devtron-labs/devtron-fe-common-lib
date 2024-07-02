@@ -726,6 +726,9 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
         return _keys
     })
 
+export const convertJSONPointerToJSONPath = (pointer: string) =>
+    pointer.replace(/\//g, '.').replace(/\./, '$.')
+
 export const flatMapOfJSONPaths = (
     paths: string[],
     json: object,
