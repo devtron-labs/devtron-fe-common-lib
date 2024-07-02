@@ -48,6 +48,7 @@ export const KeyValueTable = <K extends string>({
     headerComponent,
     onChange,
     onDelete,
+    isAdditionNotAllowed,
 }: KeyValueTableProps<K>) => {
     // CONSTANTS
     const { headers, rows } = config
@@ -82,13 +83,10 @@ export const KeyValueTable = <K extends string>({
 
     useEffect(() => {
         const sortFn = (a: KeyValueRow<K>, b: KeyValueRow<K>) => {
-            if (!a[sortBy].value && !b[sortBy].value) {
-                return 0
-            }
             if (sortOrder === SortingOrder.ASC) {
-                return a[sortBy].value < b[sortBy].value ? 1 : -1
+                return b.data[sortBy].value.localeCompare(a.data[sortBy].value)
             }
-            return a[sortBy].value > b[sortBy].value ? 1 : -1
+            return a.data[sortBy].value.localeCompare(b.data[sortBy].value)
         }
 
         const sortedRows = [..._rows]
@@ -102,14 +100,14 @@ export const KeyValueTable = <K extends string>({
             setNewRowAdded(false)
 
             if (
-                !firstRow[secondHeaderKey].value &&
+                !firstRow.data[secondHeaderKey].value &&
                 keyTextAreaRef.current[0].current &&
                 valueTextAreaRef.current[0].current
             ) {
                 keyTextAreaRef.current[0].current.focus()
             }
             if (
-                !firstRow[firstHeaderKey].value &&
+                !firstRow.data[firstHeaderKey].value &&
                 valueTextAreaRef.current[0].current &&
                 valueTextAreaRef.current[0].current
             ) {
@@ -125,14 +123,17 @@ export const KeyValueTable = <K extends string>({
         const { value } = e.target
 
         const data = {
-            [firstHeaderKey]: {
-                value: key === firstHeaderKey ? value : '',
-                placeholder: 'Enter Key',
+            data: {
+                [firstHeaderKey]: {
+                    value: key === firstHeaderKey ? value : '',
+                    placeholder: 'Enter Key',
+                },
+                [secondHeaderKey]: {
+                    value: key === secondHeaderKey ? value : '',
+                    placeholder: 'Enter Value',
+                },
             },
-            [secondHeaderKey]: {
-                value: key === secondHeaderKey ? value : '',
-                placeholder: 'Enter Value',
-            },
+            id: Date.now() * Math.random(),
         } as KeyValueRow<K>
 
         setNewRowAdded(true)
@@ -146,7 +147,7 @@ export const KeyValueTable = <K extends string>({
             const { value } = e.target
 
             let newRows = []
-            if (!value && !row[key === firstHeaderKey ? secondHeaderKey : firstHeaderKey].value) {
+            if (!value && !row.data[key === firstHeaderKey ? secondHeaderKey : firstHeaderKey].value) {
                 newRows = _rows.filter((_, idx) => idx !== rowIndex)
 
                 keyTextAreaRef.current = keyTextAreaRef.current.filter((_, idx) => idx !== rowIndex)
@@ -159,16 +160,19 @@ export const KeyValueTable = <K extends string>({
                     ..._rows.slice(0, rowIndex),
                     {
                         ...row,
-                        [key]: {
-                            ...row[key],
-                            value,
+                        data: {
+                            ...row.data,
+                            [key]: {
+                                ...row.data[key],
+                                value,
+                            },
                         },
                     },
                     ..._rows.slice(rowIndex + 1),
                 ]
             }
             setRows(newRows)
-            onChange?.(rowIndex, key)
+            onChange?.(rowIndex, key, value)
         }
 
     return (
@@ -205,26 +209,28 @@ export const KeyValueTable = <K extends string>({
                     )}
                     {!!headerComponent && <div className="px-12">{headerComponent}</div>}
                 </div>
-                <div
-                    className="table-row flexbox dc__align-items-center dc__border-bottom"
-                    style={{ borderColor: 'var(--N100)' }}
-                >
-                    {headers.map(({ key }) => (
-                        <div
-                            key={key}
-                            className={`cn-9 fs-13 lh-20 py-8 px-12 flex dc__overflow-auto ${key === firstHeaderKey ? 'head__key' : 'flex-grow-1'}`}
-                        >
-                            <textarea
-                                ref={key === firstHeaderKey ? inputRowRef : undefined}
-                                className="table-input table-input__text-area pt-8 pb-8 pl-10 pb-10 lh-20 fs-13 fw-4"
-                                value=""
-                                rows={1}
-                                placeholder={key === firstHeaderKey ? 'Enter Key' : 'Enter Value'}
-                                onChange={onNewRowEdit(key)}
-                            />
-                        </div>
-                    ))}
-                </div>
+                {!isAdditionNotAllowed && (
+                    <div
+                        className="table-row flexbox dc__align-items-center dc__border-bottom"
+                        style={{ borderColor: 'var(--N100)' }}
+                    >
+                        {headers.map(({ key }) => (
+                            <div
+                                key={key}
+                                className={`cn-9 fs-13 lh-20 py-8 px-12 flex dc__overflow-auto ${key === firstHeaderKey ? 'head__key' : 'flex-grow-1'}`}
+                            >
+                                <textarea
+                                    ref={key === firstHeaderKey ? inputRowRef : undefined}
+                                    className="table-input table-input__text-area pt-8 pb-8 pl-10 pb-10 lh-20 fs-13 fw-4"
+                                    value=""
+                                    rows={1}
+                                    placeholder={key === firstHeaderKey ? 'Enter Key' : 'Enter Value'}
+                                    onChange={onNewRowEdit(key)}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                )}
                 {_rows?.map((row, index) => (
                     <div
                         key={`${index.toString()}`}
@@ -236,16 +242,16 @@ export const KeyValueTable = <K extends string>({
                                 key={`${index.toString()}-${i.toString()}`}
                                 className={`cn-9 fs-13 lh-20 py-8 px-12 dc__overflow-auto flexbox dc__align-items-center dc__gap-4 ${key === firstHeaderKey ? 'head__key' : 'flex-grow-1'}`}
                             >
-                                {maskValue?.[key] && row[key].value ? (
+                                {maskValue?.[key] && row.data[key].value ? (
                                     '*****'
                                 ) : (
                                     <>
                                         <ResizableTagTextArea
-                                            {...row[key]}
+                                            {...row.data[key]}
                                             className="table-input"
                                             minHeight={20}
                                             maxHeight={144}
-                                            value={row[key].value}
+                                            value={row.data[key].value}
                                             onChange={onRowDataEdit(row, key, index)}
                                             refVar={
                                                 key === firstHeaderKey
@@ -259,7 +265,7 @@ export const KeyValueTable = <K extends string>({
                                             }
                                             disableOnBlurResizeToMinHeight
                                         />
-                                        {row[key].showAsterisk && (
+                                        {row.data[key].showAsterisk && (
                                             <span className="cr-5 fs-16 dc__align-self-start px-6">*</span>
                                         )}
                                     </>
