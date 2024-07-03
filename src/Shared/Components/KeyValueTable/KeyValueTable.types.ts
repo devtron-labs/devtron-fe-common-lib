@@ -39,7 +39,7 @@ export type KeyValueRow<K extends string> = {
     data: {
         [key in K]: Pick<ResizableTagTextAreaProps, 'value' | 'dataTestId' | 'disabled' | 'tabIndex'> & {
             /** An optional boolean indicating if an asterisk should be shown. */
-            showAsterisk?: boolean
+            required?: boolean
         }
     }
     id: string | number
@@ -65,7 +65,7 @@ export type KeyValueMask<K extends string> = {
 }
 
 export type KeyValuePlaceholder<K extends string> = {
-    [key in K]: string
+    [key in K]?: string
 }
 
 /**

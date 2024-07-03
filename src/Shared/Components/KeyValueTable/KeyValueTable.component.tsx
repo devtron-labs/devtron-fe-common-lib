@@ -87,7 +87,7 @@ export const KeyValueTable = <K extends string>({
                 valueTextAreaRef.current[firstRow.id].current.focus()
             }
         }
-    }, [updatedRows, newRowAdded])
+    }, [newRowAdded])
 
     // METHODS
     const onSortBtnClick = () => handleSorting(sortBy)
@@ -122,15 +122,21 @@ export const KeyValueTable = <K extends string>({
         }
     }
 
+    const onRowDelete = (row: KeyValueRow<K>) => () => {
+        const remainingRows = updatedRows.filter(({ id }) => id !== row.id)
+        setUpdatedRows(remainingRows)
+
+        delete keyTextAreaRef.current[row.id]
+        delete valueTextAreaRef.current[row.id]
+
+        onDelete?.(row.id)
+    }
+
     const onRowDataEdit = (row: KeyValueRow<K>, key: K) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target
 
-        let editedRows = []
         if (!value && !row.data[key === firstHeaderKey ? secondHeaderKey : firstHeaderKey].value) {
-            editedRows = updatedRows.filter(({ id }) => id !== row.id)
-
-            delete keyTextAreaRef.current[row.id]
-            delete valueTextAreaRef.current[row.id]
+            onRowDelete(row)()
 
             if (inputRowRef.current) {
                 inputRowRef.current.focus()
@@ -146,21 +152,17 @@ export const KeyValueTable = <K extends string>({
                     },
                 },
             }
-            editedRows = updatedRows.map((_row) => (_row.id === row.id ? rowData : _row))
+            const editedRows = updatedRows.map((_row) => (_row.id === row.id ? rowData : _row))
+            setUpdatedRows(editedRows)
         }
-
-        setUpdatedRows(editedRows)
-        onChange?.(row.id, key, value)
     }
 
-    const onRowDelete = (row: KeyValueRow<K>) => () => {
-        const remainingRows = updatedRows.filter(({ id }) => id !== row.id)
-        setUpdatedRows(remainingRows)
+    const onRowDataBlur = (row: KeyValueRow<K>, key: K) => (e: React.FocusEvent<HTMLTextAreaElement>) => {
+        const { value } = e.target
 
-        delete keyTextAreaRef.current[row.id]
-        delete valueTextAreaRef.current[row.id]
-
-        onDelete?.(row.id)
+        if (value || row.data[key === firstHeaderKey ? secondHeaderKey : firstHeaderKey].value) {
+            onChange?.(row.id, key, value)
+        }
     }
 
     return (
@@ -238,6 +240,7 @@ export const KeyValueTable = <K extends string>({
                                         value={row.data[key].value}
                                         placeholder={placeholder[key]}
                                         onChange={onRowDataEdit(row, key)}
+                                        onBlur={onRowDataBlur(row, key)}
                                         refVar={
                                             key === firstHeaderKey
                                                 ? keyTextAreaRef.current?.[row.id]
@@ -250,7 +253,7 @@ export const KeyValueTable = <K extends string>({
                                         }
                                         disableOnBlurResizeToMinHeight
                                     />
-                                    {row.data[key].showAsterisk && (
+                                    {row.data[key].required && (
                                         <span className="cr-5 fs-16 dc__align-self-start px-6">*</span>
                                     )}
                                 </>
