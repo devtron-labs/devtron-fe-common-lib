@@ -15,7 +15,7 @@
  *   limitations under the License.
  */
 
-import { ReactNode, SyntheticEvent } from 'react'
+import { ReactNode } from 'react'
 import { ResizableTagTextAreaProps } from '../../../Common'
 
 /**
@@ -86,15 +86,14 @@ export interface KeyValueTableProps<K extends string> {
     isAdditionNotAllowed?: boolean
     /**
      * An optional function to handle changes in the table rows.
-     * @param rowIndex - The index of the row that changed.
+     * @param rowId - The id of the row that changed.
      * @param headerKey - The key of the header that changed.
      * @param value - The value of the cell.
      */
-    onChange?: (rowIndex: number, headerKey: K, value: string) => void
+    onChange?: (rowId: string | number, headerKey: K, value: string) => void
     /**
      * An optional function to handle row deletions.
-     * @param e - The event triggered by the delete action.
      * @param deletedRowIndex - The index of the row that was deleted.
      */
-    onDelete?: (e: SyntheticEvent<HTMLButtonElement, MouseEvent>, deletedRowIndex: number) => void
+    onDelete?: (deletedRowId: string | number) => void
 }
