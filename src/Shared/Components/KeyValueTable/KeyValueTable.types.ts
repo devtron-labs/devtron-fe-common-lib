@@ -37,7 +37,7 @@ export interface KeyValueHeader<K extends string> {
  */
 export type KeyValueRow<K extends string> = {
     data: {
-        [key in K]: ResizableTagTextAreaProps & {
+        [key in K]: Pick<ResizableTagTextAreaProps, 'value' | 'dataTestId' | 'disabled' | 'tabIndex'> & {
             /** An optional boolean indicating if an asterisk should be shown. */
             showAsterisk?: boolean
         }
@@ -64,6 +64,10 @@ export type KeyValueMask<K extends string> = {
     [key in K]?: boolean
 }
 
+export type KeyValuePlaceholder<K extends string> = {
+    [key in K]: string
+}
+
 /**
  * Interface representing the properties for a key-value table component.
  * @template K - A string representing the key type.
@@ -73,6 +77,7 @@ export interface KeyValueTableProps<K extends string> {
     config: KeyValueConfig<K>
     /** An optional mask for the key-value pairs. */
     maskValue?: KeyValueMask<K>
+    placeholder?: KeyValuePlaceholder<K>
     /** An optional boolean indicating if the table is sortable. */
     isSortable?: boolean
     /** An optional React node for a custom header component. */
@@ -91,5 +96,5 @@ export interface KeyValueTableProps<K extends string> {
      * @param e - The event triggered by the delete action.
      * @param deletedRowIndex - The index of the row that was deleted.
      */
-    onDelete?: (e: SyntheticEvent<SVGSVGElement, MouseEvent>, deletedRowIndex: number) => void
+    onDelete?: (e: SyntheticEvent<HTMLButtonElement, MouseEvent>, deletedRowIndex: number) => void
 }
