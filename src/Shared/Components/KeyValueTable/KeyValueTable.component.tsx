@@ -17,7 +17,7 @@
 
 import React, { createRef, useEffect, useRef, useState } from 'react'
 
-import { ReactComponent as ICArrowDown } from '../../../Assets/Icon/ic-arrow-down.svg'
+import { ReactComponent as ICArrowDown } from '../../../Assets/Icon/ic-sort-arrow-down.svg'
 import { ReactComponent as ICCross } from '../../../Assets/Icon/ic-cross.svg'
 import { ResizableTagTextArea, SortingOrder, useStateFilters } from '../../../Common'
 import { DEFAULT_SECRET_PLACEHOLDER } from '../../constants'
@@ -166,7 +166,7 @@ export const KeyValueTable = <K extends string>({
     }
 
     return (
-        <div className="dc__border br-4 w-100 bcn-0">
+        <div className="dc__border br-4 w-100 bcn-0 key-value">
             <div
                 className={`key-value__row flexbox dc__align-items-center bcn-50 ${!isAdditionNotAllowed || updatedRows.length ? 'dc__border-bottom-n1' : ''}`}
             >
@@ -208,7 +208,7 @@ export const KeyValueTable = <K extends string>({
                         >
                             <textarea
                                 ref={key === firstHeaderKey ? inputRowRef : undefined}
-                                className="key-value__row-input key-value__row-input--add placeholder-cn5 p-0 lh-20 fs-13 fw-4"
+                                className="key-value__row-input key-value__row-input--add placeholder-cn5 p-0 lh-20 fs-13 fw-4 dc__no-border-imp dc__no-border-radius"
                                 value=""
                                 rows={1}
                                 placeholder={placeholder[key]}
@@ -234,7 +234,7 @@ export const KeyValueTable = <K extends string>({
                                 <>
                                     <ResizableTagTextArea
                                         {...row.data[key]}
-                                        className="key-value__row-input placeholder-cn5 py-8 px-0"
+                                        className="key-value__row-input placeholder-cn5 py-8 px-0 dc__no-border-imp dc__no-border-radius"
                                         minHeight={20}
                                         maxHeight={160}
                                         value={row.data[key].value}
@@ -254,7 +254,7 @@ export const KeyValueTable = <K extends string>({
                                         disableOnBlurResizeToMinHeight
                                     />
                                     {row.data[key].required && (
-                                        <span className="cr-5 fs-16 dc__align-self-start px-6">*</span>
+                                        <span className="cr-5 fs-16 dc__align-self-start px-6 py-8">*</span>
                                     )}
                                 </>
                             )}
@@ -262,7 +262,7 @@ export const KeyValueTable = <K extends string>({
                     ))}
                     <button
                         type="button"
-                        className="dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 dc__border-left-n1--important"
+                        className="dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 dc__border-left-n1--important dc__hover-n50"
                         onClick={onRowDelete(row)}
                     >
                         <ICCross aria-label="delete-row" className="icon-dim-16 fcn-4 dc__align-self-start cursor" />

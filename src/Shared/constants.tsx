@@ -403,3 +403,5 @@ export const APP_STATUS_HEADERS = ['KIND', 'NAME', 'STATUS', 'MESSAGE']
 
 export const MATERIAL_EXCLUDE_TIPPY_TEXT =
     'Not available for build as this commit contains changes in excluded files or folders'
+
+export const DEFAULT_SECRET_PLACEHOLDER = '••••••••'
