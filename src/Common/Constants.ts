@@ -58,6 +58,7 @@ export const URLS = {
     APP_TRIGGER: 'trigger',
     GLOBAL_CONFIG_DOCKER: '/global-config/docker',
     DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
+    GLOBAL_CONFIG_SCOPED_VARIABLES: '/global-config/scoped-variables',
 }
 
 export const ROUTES = {
