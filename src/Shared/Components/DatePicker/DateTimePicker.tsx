@@ -50,6 +50,7 @@ const DateTimePicker = ({
     isTodayBlocked = false,
     dataTestIdForTime = DATE_PICKER_IDS.TIME,
     dataTestidForDate = DATE_PICKER_IDS.DATE,
+    openDirection = 'down',
 }: DateTimePickerProps) => {
     const time = getTimeValue(dateObject)
     const selectedTimeOption = DEFAULT_TIME_OPTIONS.find((option) => option.value === time) ?? DEFAULT_TIME_OPTIONS[0]
@@ -84,7 +85,7 @@ const DateTimePicker = ({
                     focused={isFocused}
                     onFocusChange={handleFocusChange}
                     numberOfMonths={1}
-                    openDirection="down"
+                    openDirection={openDirection}
                     renderCalendarDay={(props) => <CustomizableCalendarDay {...props} {...customDayStyles} />}
                     hideKeyboardShortcutsPanel
                     withFullScreenPortal={false}
@@ -96,6 +97,7 @@ const DateTimePicker = ({
                     data-testid={dataTestidForDate}
                     isDayBlocked={isDayBlocked}
                     disabled={disabled}
+                    appendToBody
                 />
                 {!hideTimeSelect && (
                     <div className="dc__no-shrink">

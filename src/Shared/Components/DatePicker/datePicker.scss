@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-.date-time-picker {
-    .DayPicker__horizontal {
-        position: fixed !important;
-    }
+.SingleDatePicker_picker {
+    z-index: calc(var(--modal-index) + 1) !important;
+}
 
+.date-time-picker {
     .SingleDatePicker {
         width: 100%;
     }
