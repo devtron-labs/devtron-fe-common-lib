@@ -31,6 +31,7 @@ import { DateTimePickerProps } from './types'
 import { DATE_PICKER_IDS, DATE_PICKER_PLACEHOLDER, customDayStyles } from './constants'
 import './datePicker.scss'
 import { ReactComponent as CalendarIcon } from '../../../Assets/Icon/ic-calendar.svg'
+import { ReactComponent as ICWarning } from '../../../Assets/Icon/ic-warning.svg'
 import { DATE_TIME_FORMATS } from '../../../Common'
 import 'react-dates/initialize'
 import 'react-dates/lib/css/_datepicker.css'
@@ -51,6 +52,7 @@ const DateTimePicker = ({
     dataTestIdForTime = DATE_PICKER_IDS.TIME,
     dataTestidForDate = DATE_PICKER_IDS.DATE,
     openDirection = 'down',
+    error = '',
 }: DateTimePickerProps) => {
     const time = getTimeValue(dateObject)
     const selectedTimeOption = DEFAULT_TIME_OPTIONS.find((option) => option.value === time) ?? DEFAULT_TIME_OPTIONS[0]
@@ -122,6 +124,12 @@ const DateTimePicker = ({
                     </div>
                 )}
             </div>
+            {error && (
+                <div className="form__error">
+                    <ICWarning className="form__icon form__icon--error" />
+                    {error}
+                </div>
+            )}
         </div>
     )
 }
