@@ -14,33 +14,82 @@
  * limitations under the License.
  */
 
- .window-configuration {
+.date-time-picker {
     .DayPicker__horizontal {
         position: fixed !important;
     }
-    
+
     .SingleDatePickerInput {
         display: flex !important;
-        width: 200px;
+        width: 100%;
         background-color: var(--N50);
         margin-right: 0 !important;
         padding: 0 !important;
         height: 36px !important;
+        overflow: hidden;
+        border: 1px solid var(--N200);
+        border-radius: 4px;
+
+        &:hover {
+            border: 1px solid var(--N400);
+        }
+
+        &:focus,
+        &:focus-visible,
+        &:focus-within {
+            border: 1px solid var(--B500);
+        }
+
+        &__disabled {
+            background-color: var(--N100);
+            border-color: var(--N200);
+        }
     }
-    
+
     .SingleDatePickerInput_calendarIcon {
         padding: 0 !important;
         margin: 0 !important;
         padding-right: 8px !important;
-        background-color: var(--N50) !important;
-        height: 36px !important;
+        background-color: transparent !important;
+        height: 34px !important;
+        display: flex;
+        align-items: center;
+
+        &:focus-visible {
+            outline: none;
+        }
     }
-    
-    .SingleDatePickerInput__withBorder .DateInput {
-        line-height: 20px !important;
+
+    .SingleDatePickerInput__withBorder {
+        .DateInput {
+            line-height: 20px !important;
+            height: 34px;
+            background-color: transparent;
+            width: 100%;
+        }
+
+        .DateInput_input {
+            font-size: 13px;
+            border-bottom: none;
+            cursor: pointer;
+            background-color: transparent;
+            color: var(--N900);
+
+            &__focused+.DateInput_fang {
+                display: none;
+            }
+
+            &__disabled {
+                cursor: not-allowed;
+            }
+        }
     }
-    
+
     .DateInput_input {
-        padding: 6px 8px !important
+        padding: 6px 8px !important;
+
+        &__disabled {
+            font-style: normal;
+        }
     }
 }

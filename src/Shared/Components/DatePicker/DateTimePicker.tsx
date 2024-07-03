@@ -71,13 +71,13 @@ const DateTimePicker = ({
     const isDayBlocked = (day) => isTodayBlocked && !day.isAfter(today)
 
     return (
-        <div>
+        <div className="date-time-picker">
             <label className={`form__label ${required ? 'dc__required-field' : ''}`} htmlFor={id}>
                 {label}
             </label>
-            <div className="dc__grid-row-one-half dc__gap-8">
+            <div className="flex left dc__gap-8">
                 <SingleDatePicker
-                    id="single_date_picker"
+                    id={id}
                     placeholder="Select date"
                     date={moment(dateObject)}
                     onDateChange={handleDateChange}
@@ -95,6 +95,7 @@ const DateTimePicker = ({
                     displayFormat={DATE_TIME_FORMATS.DD_MMM_YYYY}
                     data-testid={dataTestidForDate}
                     isDayBlocked={isDayBlocked}
+                    disabled={disabled}
                 />
                 {!hideTimeSelect && (
                     <div className="dc__no-shrink">
