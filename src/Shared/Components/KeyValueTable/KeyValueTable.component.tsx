@@ -37,6 +37,7 @@ import React, { createRef, useEffect, useRef, useState } from 'react'
 import { ReactComponent as ICArrowDown } from '../../../Assets/Icon/ic-arrow-down.svg'
 import { ReactComponent as ICCross } from '../../../Assets/Icon/ic-cross.svg'
 import { ResizableTagTextArea, SortingOrder, useStateFilters } from '../../../Common'
+import { stringComparatorBySortOrder } from '../../Helpers'
 import { KeyValueRow, KeyValueTableProps } from './KeyValueTable.types'
 
 import './KeyValueTable.scss'
@@ -48,6 +49,7 @@ export const KeyValueTable = <K extends string>({
     headerComponent,
     onChange,
     onDelete,
+    placeholder,
     isAdditionNotAllowed,
 }: KeyValueTableProps<K>) => {
     // CONSTANTS
@@ -64,33 +66,20 @@ export const KeyValueTable = <K extends string>({
         initialSortKey: firstHeaderKey,
     })
     const inputRowRef = useRef<HTMLTextAreaElement>()
-    const keyTextAreaRef = useRef<React.RefObject<HTMLTextAreaElement>[]>([])
-    const valueTextAreaRef = useRef<React.RefObject<HTMLTextAreaElement>[]>([])
+    const keyTextAreaRef = useRef<Record<string, React.RefObject<HTMLTextAreaElement>>>()
+    const valueTextAreaRef = useRef<Record<string, React.RefObject<HTMLTextAreaElement>>>()
+
+    if (!keyTextAreaRef.current) {
+        keyTextAreaRef.current = _rows.reduce((acc, curr) => ({ ...acc, [curr.id]: createRef() }), {})
+    }
+
+    if (!valueTextAreaRef.current) {
+        valueTextAreaRef.current = _rows.reduce((acc, curr) => ({ ...acc, [curr.id]: createRef() }), {})
+    }
 
     useEffect(() => {
-        if (keyTextAreaRef.current.length !== _rows.length) {
-            keyTextAreaRef.current = new Array(_rows.length)
-                .fill(0)
-                .map((_, i) => keyTextAreaRef.current[i] || createRef<HTMLTextAreaElement>())
-        }
-
-        if (valueTextAreaRef.current.length !== _rows.length) {
-            valueTextAreaRef.current = new Array(_rows.length)
-                .fill(0)
-                .map((_, i) => valueTextAreaRef.current[i] || createRef<HTMLTextAreaElement>())
-        }
-    }, [])
-
-    useEffect(() => {
-        const sortFn = (a: KeyValueRow<K>, b: KeyValueRow<K>) => {
-            if (sortOrder === SortingOrder.ASC) {
-                return b.data[sortBy].value.localeCompare(a.data[sortBy].value)
-            }
-            return a.data[sortBy].value.localeCompare(b.data[sortBy].value)
-        }
-
         const sortedRows = [..._rows]
-        sortedRows.sort(sortFn)
+        sortedRows.sort((a, b) => stringComparatorBySortOrder(a.data[sortBy].value, b.data[sortBy].value, sortOrder))
         setRows(sortedRows)
     }, [sortOrder])
 
@@ -101,17 +90,17 @@ export const KeyValueTable = <K extends string>({
 
             if (
                 !firstRow.data[secondHeaderKey].value &&
-                keyTextAreaRef.current[0].current &&
-                valueTextAreaRef.current[0].current
+                keyTextAreaRef.current[firstRow.id].current &&
+                valueTextAreaRef.current[firstRow.id].current
             ) {
-                keyTextAreaRef.current[0].current.focus()
+                keyTextAreaRef.current[firstRow.id].current.focus()
             }
             if (
                 !firstRow.data[firstHeaderKey].value &&
-                valueTextAreaRef.current[0].current &&
-                valueTextAreaRef.current[0].current
+                keyTextAreaRef.current[firstRow.id].current &&
+                valueTextAreaRef.current[firstRow.id].current
             ) {
-                valueTextAreaRef.current[0].current.focus()
+                valueTextAreaRef.current[firstRow.id].current.focus()
             }
         }
     }, [_rows, newRowAdded])
@@ -119,27 +108,33 @@ export const KeyValueTable = <K extends string>({
     // METHODS
     const onSortBtnClick = () => handleSorting(sortBy)
 
-    const onNewRowEdit = (key: K) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const onNewRowAdd = (key: K) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target
 
+        const id = Date.now().toString(16)
         const data = {
             data: {
                 [firstHeaderKey]: {
                     value: key === firstHeaderKey ? value : '',
-                    placeholder: 'Enter Key',
                 },
                 [secondHeaderKey]: {
                     value: key === secondHeaderKey ? value : '',
-                    placeholder: 'Enter Value',
                 },
             },
-            id: Date.now() * Math.random(),
+            id,
         } as KeyValueRow<K>
 
         setNewRowAdded(true)
         setRows([data, ..._rows])
-        keyTextAreaRef.current = [createRef(), ...keyTextAreaRef.current]
-        valueTextAreaRef.current = [createRef(), ...valueTextAreaRef.current]
+
+        keyTextAreaRef.current = {
+            ...keyTextAreaRef.current,
+            [id]: createRef(),
+        }
+        valueTextAreaRef.current = {
+            ...valueTextAreaRef.current,
+            [id]: createRef(),
+        }
     }
 
     const onRowDataEdit =
@@ -150,8 +145,9 @@ export const KeyValueTable = <K extends string>({
             if (!value && !row.data[key === firstHeaderKey ? secondHeaderKey : firstHeaderKey].value) {
                 newRows = _rows.filter((_, idx) => idx !== rowIndex)
 
-                keyTextAreaRef.current = keyTextAreaRef.current.filter((_, idx) => idx !== rowIndex)
-                valueTextAreaRef.current = valueTextAreaRef.current.filter((_, idx) => idx !== rowIndex)
+                delete keyTextAreaRef.current[row.id]
+                delete valueTextAreaRef.current[row.id]
+
                 if (inputRowRef.current) {
                     inputRowRef.current.focus()
                 }
@@ -171,15 +167,26 @@ export const KeyValueTable = <K extends string>({
                     ..._rows.slice(rowIndex + 1),
                 ]
             }
+
             setRows(newRows)
             onChange?.(rowIndex, key, value)
         }
+
+    const onRowDelete = (rowIndex: number, row: KeyValueRow<K>) => (e: React.MouseEvent<HTMLButtonElement>) => {
+        const newRows = _rows.filter((_, idx) => idx !== rowIndex)
+        setRows(newRows)
+
+        delete keyTextAreaRef.current[row.id]
+        delete valueTextAreaRef.current[row.id]
+
+        onDelete?.(e, rowIndex)
+    }
 
     return (
         <div style={{ minHeight: '500px', background: 'white', padding: '2px' }}>
             <div className="dc__border br-4 w-100 table-container">
                 <div
-                    className="table-row flexbox dc__align-items-center bcn-50 dc__border-bottom"
+                    className={`table-row flexbox dc__align-items-center bcn-50 ${!isAdditionNotAllowed || _rows.length ? 'dc__border-bottom' : ''}`}
                     style={{ borderColor: 'var(--N100)' }}
                 >
                     {headers.map(({ key, label, className }) =>
@@ -211,7 +218,7 @@ export const KeyValueTable = <K extends string>({
                 </div>
                 {!isAdditionNotAllowed && (
                     <div
-                        className="table-row flexbox dc__align-items-center dc__border-bottom"
+                        className={`table-row flexbox dc__align-items-center ${_rows.length ? 'dc__border-bottom' : ''}`}
                         style={{ borderColor: 'var(--N100)' }}
                     >
                         {headers.map(({ key }) => (
@@ -224,22 +231,22 @@ export const KeyValueTable = <K extends string>({
                                     className="table-input table-input__text-area pt-8 pb-8 pl-10 pb-10 lh-20 fs-13 fw-4"
                                     value=""
                                     rows={1}
-                                    placeholder={key === firstHeaderKey ? 'Enter Key' : 'Enter Value'}
-                                    onChange={onNewRowEdit(key)}
+                                    placeholder={placeholder[key]}
+                                    onChange={onNewRowAdd(key)}
                                 />
                             </div>
                         ))}
                     </div>
                 )}
-                {_rows?.map((row, index) => (
+                {_rows.map((row, index) => (
                     <div
-                        key={`${index.toString()}`}
+                        key={row.id}
                         className={`table-row flexbox dc__align-items-center ${index !== _rows.length - 1 ? 'dc__border-bottom' : ''}`}
                         style={{ borderColor: 'var(--N100)' }}
                     >
-                        {headers.map(({ key }, i) => (
+                        {headers.map(({ key }) => (
                             <div
-                                key={`${index.toString()}-${i.toString()}`}
+                                key={key}
                                 className={`cn-9 fs-13 lh-20 py-8 px-12 dc__overflow-auto flexbox dc__align-items-center dc__gap-4 ${key === firstHeaderKey ? 'head__key' : 'flex-grow-1'}`}
                             >
                                 {maskValue?.[key] && row.data[key].value ? (
@@ -252,16 +259,17 @@ export const KeyValueTable = <K extends string>({
                                             minHeight={20}
                                             maxHeight={144}
                                             value={row.data[key].value}
+                                            placeholder={placeholder[key]}
                                             onChange={onRowDataEdit(row, key, index)}
                                             refVar={
                                                 key === firstHeaderKey
-                                                    ? keyTextAreaRef.current[index]
-                                                    : valueTextAreaRef.current[index]
+                                                    ? keyTextAreaRef.current?.[row.id]
+                                                    : valueTextAreaRef.current?.[row.id]
                                             }
                                             dependentRef={
                                                 key === firstHeaderKey
-                                                    ? valueTextAreaRef.current[index]
-                                                    : keyTextAreaRef.current[index]
+                                                    ? valueTextAreaRef.current?.[row.id]
+                                                    : keyTextAreaRef.current?.[row.id]
                                             }
                                             disableOnBlurResizeToMinHeight
                                         />
@@ -272,12 +280,16 @@ export const KeyValueTable = <K extends string>({
                                 )}
                             </div>
                         ))}
-                        <div className="icon flex dc__no-shrink py-10 px-8">
+                        <button
+                            type="button"
+                            className=" dc__unset-button-styles icon flex dc__no-shrink py-10 px-8"
+                            onClick={onRowDelete(index, row)}
+                        >
                             <ICCross
-                                onClick={(e) => onDelete?.(e, index)}
-                                className="icon-dim-16 fcn-4 dc__align-self-start"
+                                aria-label="delete-data"
+                                className="icon-dim-16 fcn-4 dc__align-self-start cursor"
                             />
-                        </div>
+                        </button>
                     </div>
                 ))}
             </div>
