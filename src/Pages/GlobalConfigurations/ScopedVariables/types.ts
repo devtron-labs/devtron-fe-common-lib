@@ -6,7 +6,7 @@ export enum ScopedVariablesFileViewType {
     /**
      * Shows the variable list view
      */
-    SAVED = 'variable-list',
+    SAVED = 'variables',
     /**
      * Shows the variables in environment list view
      */
