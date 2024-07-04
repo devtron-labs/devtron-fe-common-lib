@@ -180,6 +180,11 @@ interface MaterialInfo {
     url: string
     webhookData: string
 }
+export interface FluxAppStatusDetail {
+    status: string
+    message: string
+    reason: string
+}
 export interface AppDetails {
     appId?: number
     appName: string
@@ -221,6 +226,7 @@ export interface AppDetails {
     helmPackageName?: string
     appStatus?: string
     chartAvatar?: string
+    FluxAppStatusDetail?: FluxAppStatusDetail
 }
 
 export enum RegistryType {
