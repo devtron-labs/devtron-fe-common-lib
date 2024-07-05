@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export * from './utils'
-export * from './constants'
+export { default as ArtifactInfoModal } from './ArtifactInfoModal.component'
+export type { ArtifactInfoModalProps } from './types'

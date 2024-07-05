@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export * from './utils'
-export * from './constants'
+export { default as MaterialHistory } from './MaterialHistory.component'
+export type { MaterialHistoryProps } from './types'

@@ -14,5 +14,12 @@
  * limitations under the License.
  */
 
-export * from './utils'
-export * from './constants'
+import { SyntheticEvent } from 'react'
+import { RegistryType } from '../../types'
+
+export interface ImageChipCellProps {
+    handleClick: (e: SyntheticEvent) => void
+    imagePath: string
+    isExpanded: boolean
+    registryType: RegistryType
+}

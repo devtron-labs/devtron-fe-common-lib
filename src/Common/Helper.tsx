@@ -17,13 +17,11 @@
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
-import * as jsonpatch from 'fast-json-patch'
-import { JSONPath } from 'jsonpath-plus'
 import moment from 'moment'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import YAML from 'yaml'
-import { ERROR_EMPTY_SCREEN, SortingOrder, TOKEN_COOKIE_NAME, EXCLUDED_FALSY_VALUES, DISCORD_LINK } from './Constants'
+import { ERROR_EMPTY_SCREEN, SortingOrder, EXCLUDED_FALSY_VALUES, DISCORD_LINK, ZERO_TIME_STRING } from './Constants'
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
@@ -301,10 +299,13 @@ export function useForm(stateSchema, validationSchema = {}, callback) {
 export function handleUTCTime(ts: string, isRelativeTime = false) {
     let timestamp = ''
     try {
-        if (ts && ts.length) {
+        if (ts && ts.length && ts !== ZERO_TIME_STRING) {
             const date = moment(ts)
-            if (isRelativeTime) timestamp = date.fromNow()
-            else timestamp = date.format(DATE_TIME_FORMAT_STRING)
+            if (isRelativeTime) {
+                timestamp = date.fromNow()
+            } else {
+                timestamp = date.format(DATE_TIME_FORMAT_STRING)
+            }
         }
     } catch (error) {
         console.error('Error Parsing Date:', ts)
@@ -619,79 +620,110 @@ export const getFilteredChartVersions = (charts, selectedChartType) =>
             chartRefId: item.chartRefId,
         }))
 
-function removeEmptyObjectKeysAndNullValues(obj, originaljsonCopy) {
-    // It recursively removes empty object keys and empty array keys
-    for (const key in obj) {
-        if (Array.isArray(obj[key])) {
-            // Check if the array is empty
-            if (obj[key].length !== 0) {
-                obj[key].forEach((element, index) => {
-                    if (element === null || (typeof element === 'object' && Object.keys(element).length === 0))
-                        obj[key].splice(index, 1)
-                    else removeEmptyObjectKeysAndNullValues(element, originaljsonCopy[key][index])
-                })
-            }
-            if (obj[key].length === 0 && originaljsonCopy[key].length !== 0) {
-                delete obj[key]
-            }
-        } else if (obj[key] && typeof obj[key] === 'object') {
-            if (
-                removeEmptyObjectKeysAndNullValues(obj[key], originaljsonCopy[key]) &&
-                Object.keys(originaljsonCopy[key]).length !== 0
-            ) {
-                delete obj[key]
-            }
-        } else if (obj[key] === undefined) {
-            delete obj[key]
-        }
+/**
+ * Removes nulls from the arrays in the provided object
+ * @param {object} object from which we need to delete nulls in its arrays
+ * @returns object after removing (in-place) the null items in arrays
+ */
+export const recursivelyRemoveNullsFromArraysInObject = (object: object) => {
+    // NOTE: typeof null === 'object'
+    if (typeof object !== 'object' || !object) {
+        return object
     }
-    return Object.keys(obj).length === 0
-}
-
-export function getUnlockedJSON(json, jsonPathArray, removeParentKeysAndEmptyArrays = false) {
-    if (!jsonPathArray.length) return { newDocument: json, removedPatches: [] }
-
-    const jsonCopy = JSON.parse(JSON.stringify(json))
-    const originaljsonCopy = JSON.parse(JSON.stringify(json))
-    const removedPatches = []
-    const patches = jsonPathArray.flatMap((jsonPath) => {
-        const pathsToRemove = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
-        // reversing patches to handle correct array index deletion
-        pathsToRemove.reverse()
-        return pathsToRemove.map((result) => {
-            // storing removed patches to have functionality of undo
-            removedPatches.push({ op: 'add', path: result.pointer, value: result.value })
-            return { op: 'remove', path: result.pointer }
+    if (Array.isArray(object)) {
+        return object.filter((item) => {
+            recursivelyRemoveNullsFromArraysInObject(item)
+            return !!item
         })
+    }
+    Object.keys(object).forEach((key) => {
+        object[key] = recursivelyRemoveNullsFromArraysInObject(object[key])
     })
-    const { newDocument } = jsonpatch.applyPatch(jsonCopy, patches)
-    if (removeParentKeysAndEmptyArrays) removeEmptyObjectKeysAndNullValues(newDocument, originaljsonCopy)
-    return { newDocument, removedPatches: removedPatches.reverse() }
+    return object
 }
 
-export function getLockedJSON(json, jsonPathArray: string[]) {
-    const jsonCopy = JSON.parse(JSON.stringify(json))
-    const resultJson = {}
-    jsonPathArray.forEach((jsonPath) => {
-        const elements = JSONPath({ path: jsonPath, json: jsonCopy, resultType: 'all' })
-        elements.forEach((element) => {
-            const pathArray: string[] = JSONPath.toPathArray(element.path)
-            const lastPath = pathArray.pop()
-            let current = resultJson
-            for (let i = 0; i < pathArray.length; i++) {
-                const key = isNaN(Number(pathArray[i])) ? pathArray[i] : parseInt(pathArray[i])
-                if (!current[key]) {
-                    current[key] = isNaN(Number(pathArray[i + 1] ?? lastPath)) ? {} : []
-                }
-                current = current[key]
-            }
-            const key = isNaN(Number(lastPath)) ? lastPath : parseInt(lastPath)
-            current[key] = element.value
-        })
+const _joinObjects = (A: object, B: object) => {
+    if (typeof A !== 'object' || typeof B !== 'object' || !B) {
+        return
+    }
+    Object.keys(B).forEach((key) => {
+        if (!A[key]) {
+            A[key] = structuredClone(B[key])
+            return
+        }
+        _joinObjects(A[key], B[key])
     })
-    // eslint-disable-next-line dot-notation
-    return resultJson['$']
 }
+
+/**
+ * Merges the objects into one object
+ * @param {object[]} objects list of js objects
+ * @returns object after the merge
+ */
+export const joinObjects = (objects: object[]) => {
+    const join = {}
+    objects.forEach((object) => {
+        _joinObjects(join, object)
+    })
+    return join
+}
+
+const buildObjectFromPathTokens = (index: number, tokens: string[], value: any) => {
+    if (index === tokens.length) {
+        return value
+    }
+    const key = tokens[index]
+    const numberKey = Number(key)
+    const isKeyNumber = !Number.isNaN(numberKey)
+    return isKeyNumber
+        ? [...Array(numberKey).fill(null), buildObjectFromPathTokens(index + 1, tokens, value)]
+        : { [key]: buildObjectFromPathTokens(index + 1, tokens, value) }
+}
+
+/**
+ * Builds an object from the provided path
+ * @param {string} path JSON pointer path of the form /path/to/1/...
+ * @param {any} value property value
+ * @returns final object formed from the path
+ */
+export const buildObjectFromPath = (path: string, value: any) => {
+    const parts = path.split('/')
+    // NOTE: since the path has a leading / we need to delete the first element
+    parts.splice(0, 1)
+    return buildObjectFromPathTokens(0, parts, value)
+}
+
+/**
+ * Returns the list of indices at which the regex matched
+ * @param string the string to process
+ * @param regex @RegExp
+ * @returns array of indices where the @regex matched in @string
+ */
+export const getRegexMatchPositions = (string: string, regex: RegExp): number[] => {
+    const pos = string.search(regex)
+    if (pos < 0) {
+        return []
+    }
+    const nextToken = string.slice(pos + 1)
+    return [pos, ...getRegexMatchPositions(nextToken, regex).map((n) => n + pos + 1)]
+}
+
+/**
+ * Returns all the substrings from 0th index to progressively next regex match position
+ * Eg. Suppose a string is /path/to/folder then it will return [/path, /path/to, /path/to/folder]
+ * @param strings list of strings
+ * @param regex that matches the separators for the substrings
+ * @returns set of substrings
+ */
+export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) =>
+    strings.flatMap((key) => {
+        const _keys = [key]
+        const positions = getRegexMatchPositions(key, regex)
+        positions.forEach((position) => {
+            _keys.push(key.slice(0, position))
+        })
+        return _keys
+    })
 
 /**
  * Returns a debounced variant of the function
@@ -726,10 +758,10 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
         return 0 // Both dates are invalid, consider them equal
     } else if (isNaN(dateA)) {
         // dateA is invalid, move it to the end if sorting ASC, otherwise to the beginning
-        return sortOrder === SortingOrder.ASC ? -1 : 1
+        return sortOrder === SortingOrder.ASC ? 1 : -1
     } else if (isNaN(dateB)) {
         // dateB is invalid, move it to the end if sorting ASC, otherwise to the beginning
-        return sortOrder === SortingOrder.ASC ? 1 : -1
+        return sortOrder === SortingOrder.ASC ? -1 : 1
     } else {
         return sortOrder === SortingOrder.ASC ? dateB - dateA : dateA - dateB
     }
@@ -979,7 +1011,7 @@ export function useKeyDown() {
 export const DropdownIndicator = (props) => {
     return (
         <components.DropdownIndicator {...props}>
-            <ArrowDown className="icon-dim-20 icon-n5" />
+            <ArrowDown className="icon-dim-20 icon-n6" />
         </components.DropdownIndicator>
     )
 }

@@ -14,5 +14,12 @@
  * limitations under the License.
  */
 
-export * from './utils'
-export * from './constants'
+.image-chip-cell {
+    &__container {
+        grid-template-columns: 18px 10px 1fr;
+
+        &--expanded {
+            grid-template-columns: 18px 1fr;
+        }
+    }
+}

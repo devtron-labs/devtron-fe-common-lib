@@ -14,5 +14,9 @@
  * limitations under the License.
  */
 
-export * from './utils'
-export * from './constants'
+import { SyntheticEvent } from 'react'
+
+export interface CommitChipCellProps {
+    handleClick: (e: SyntheticEvent) => void
+    commits?: string[]
+}

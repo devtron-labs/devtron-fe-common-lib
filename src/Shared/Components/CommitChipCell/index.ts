@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export * from './utils'
-export * from './constants'
+export { default as CommitChipCell } from './CommitChipCell'
+export type { CommitChipCellProps } from './types'
