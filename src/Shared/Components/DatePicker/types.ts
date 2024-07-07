@@ -16,6 +16,7 @@
 
 import { Moment } from 'moment'
 import { SelectInstance } from 'react-select'
+import { SingleDatePickerShape } from 'react-dates'
 import { OptionType } from '../../../Common'
 
 export interface SingleDatePickerProps {
@@ -100,10 +101,8 @@ export interface TimeSelectProps {
 }
 
 export interface DateTimePickerProps
-    extends Pick<
-        TimeSelectProps,
-        'date' | 'onChange' | 'timePickerProps' | 'error' | 'disabled' | 'dataTestIdForTime'
-    > {
+    extends Pick<TimeSelectProps, 'date' | 'onChange' | 'timePickerProps' | 'error' | 'disabled' | 'dataTestIdForTime'>,
+        Pick<SingleDatePickerShape, 'openDirection'> {
     /**
      * Props for the date picker
      */
