@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { APIResponseHandler } from '../APIResponseHandler'
 import PluginTagSelect from './PluginTagSelect'
@@ -15,8 +15,6 @@ import {
     PluginListItemType,
 } from './types'
 import { DEFAULT_PLUGIN_LIST_FILTERS } from './constants'
-import { ReactComponent as ICCross } from '../../../Assets/Icon/ic-cross.svg'
-import { ReactComponent as ICVisibility } from '../../../Assets/Icon/ic-visibility-on.svg'
 import './pluginListContainer.scss'
 
 const PluginListContainer = ({
@@ -67,7 +65,7 @@ const PluginListContainer = ({
         handleUpdateParentFilters?.(updatedFilters)
     }
 
-    const { searchKey, selectedTags, showSelectedPlugins } = filters || {}
+    const { searchKey, selectedTags } = filters || {}
 
     // TODO: Add abortController as well
     const [isLoadingPluginData, pluginData, pluginDataError, reloadPluginData] = useAsync(
@@ -159,7 +157,6 @@ const PluginListContainer = ({
         handleUpdateFilters({
             searchKey: '',
             selectedTags: [],
-            showSelectedPlugins: false,
         })
 
         setClearSearchTrigger((prev) => !prev)
@@ -195,33 +192,9 @@ const PluginListContainer = ({
         handlePersistFiltersChange()
     }
 
-    const handleShowSelectedPlugins = () => {
-        handleUpdateFilters({
-            ...filters,
-            showSelectedPlugins: true,
-        })
-    }
-
-    const handleHideSelectedPlugins = () => {
-        handleUpdateFilters({
-            ...filters,
-            showSelectedPlugins: false,
-        })
-    }
-
     const handlePluginSelectionWrapper: PluginListProps['handlePluginSelection'] = (parentPluginId) => {
-        const isCurrentPluginSelected = isSelectable && selectedPluginsMap[parentPluginId]
-        if (isCurrentPluginSelected && Object.keys(selectedPluginsMap).length === 1) {
-            handleHideSelectedPlugins()
-        }
-
         handlePluginSelection(parentPluginId)
     }
-
-    const showSelectedPluginFilter = useMemo(
-        () => isSelectable && selectedPluginsMap && Object.keys(selectedPluginsMap).length > 0,
-        [selectedPluginsMap, isSelectable],
-    )
 
     return (
         <div className={`flexbox-col w-100 ${rootClassName}`}>
@@ -245,24 +218,6 @@ const PluginListContainer = ({
                     hasError={!!tagsError}
                     reloadTags={reloadTags}
                 />
-
-                {showSelectedPluginFilter && (
-                    <button
-                        className={`py-6 px-8 dc__gap-12 flex dc__outline-none-imp dc__tab-focus dc__tab-focus dc__no-shrink ${
-                            showSelectedPlugins ? 'bc-n50 dc__border-n1' : 'en-0 bw-1 dc__no-background'
-                        }`}
-                        data-testid="view-only-selected"
-                        type="button"
-                        onClick={showSelectedPlugins ? handleHideSelectedPlugins : handleShowSelectedPlugins}
-                    >
-                        {showSelectedPlugins ? (
-                            <ICCross className="icon-dim-16 dc__no-shrink" />
-                        ) : (
-                            <ICVisibility className="icon-dim-16 dc__no-shrink" />
-                        )}
-                        View only selected
-                    </button>
-                )}
             </div>
 
             {!!selectedTags.length && (

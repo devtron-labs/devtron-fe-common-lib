@@ -12,7 +12,7 @@ const PluginList = ({
     pluginList,
     totalCount,
     handleDataUpdateForPluginResponse,
-    filters: { selectedTags, searchKey, showSelectedPlugins },
+    filters: { selectedTags, searchKey },
     handlePluginSelection,
     selectedPluginsMap,
     isSelectable,
@@ -48,27 +48,6 @@ const PluginList = ({
         // Not going to happen but still handling in case of any issue that might arise
         return (
             <GenericEmptyState title="No plugins found" subTitle="We are unable to locate any plugin in our system" />
-        )
-    }
-
-    // selectedPluginsMap should always be present if isSelectable is true
-    if (showSelectedPlugins) {
-        // TODO: Ask with product, filters and search can cause conflicting state
-
-        return (
-            <>
-                {Object.keys(selectedPluginsMap).map((parentPluginId) => (
-                    <PluginCard
-                        key={parentPluginId}
-                        parentPluginId={+parentPluginId}
-                        isSelectable={isSelectable}
-                        pluginDataStore={pluginDataStore}
-                        handlePluginSelection={handlePluginSelection}
-                        showCardBorder={showCardBorder}
-                        isSelected
-                    />
-                ))}
-            </>
         )
     }
 

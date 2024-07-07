@@ -58,7 +58,6 @@ export interface PluginDetailPayloadType {
 
 export interface PluginListFiltersType extends Pick<BaseFilterQueryParams<unknown>, 'searchKey'> {
     selectedTags: string[]
-    showSelectedPlugins: boolean
 }
 
 interface ParentPluginType extends Pick<ParentPluginDTO, 'id' | 'name' | 'description' | 'type' | 'icon'> {
