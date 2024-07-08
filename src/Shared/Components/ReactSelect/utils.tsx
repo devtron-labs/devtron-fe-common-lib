@@ -15,7 +15,7 @@
  */
 
 import Tippy from '@tippyjs/react'
-import { components } from 'react-select'
+import { components, MenuListProps } from 'react-select'
 import { Progressing, stopPropagation } from '../../../Common'
 
 export const getCommonSelectStyle = (styleOverrides = {}) => ({
@@ -184,3 +184,24 @@ export const GroupHeading = (props: any) => {
 }
 
 export const commonSelectStyles = getCommonSelectStyle()
+
+export const MenuListWithApplyButton = ({
+    handleApplyFilter,
+    ...props
+}: MenuListProps & { handleApplyFilter: () => void }) => (
+    <>
+        <components.MenuList {...props} />
+        {props.selectProps.options.length > 0 && (
+            <div className="p-8 dc__position-sticky dc__bottom-0 dc__border-top-n1 bcn-0 dc__bottom-radius-4">
+                <button
+                    type="button"
+                    className="dc__unset-button-styles w-100 br-4 h-28 flex bcb-5 cn-0 fw-6 lh-28 fs-12 h-28 br-4 pt-5 pr-12 pb-5 pl-12"
+                    onClick={handleApplyFilter}
+                    aria-label="Apply filters"
+                >
+                    Apply
+                </button>
+            </div>
+        )}
+    </>
+)
