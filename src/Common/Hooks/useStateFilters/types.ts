@@ -21,5 +21,18 @@ export interface UseStateFiltersProps<T> extends Pick<UseUrlFiltersProps<T, neve
 export interface UseStateFiltersReturnType<T>
     extends Pick<
         UseUrlFiltersReturnType<T>,
-        'sortBy' | 'sortOrder' | 'handleSorting' | 'clearFilters' | 'searchKey' | 'handleSearch'
+        | 'sortBy'
+        | 'sortOrder'
+        | 'handleSorting'
+        | 'clearFilters'
+        | 'changePage'
+        | 'changePageSize'
+        | 'offset'
+        | 'pageSize'
+        | 'searchKey'
+        | 'handleSearch'
     > {}
+
+export interface PaginationType<T> extends Pick<UseUrlFiltersReturnType<T>, 'pageSize'> {
+    pageNumber: number
+}
