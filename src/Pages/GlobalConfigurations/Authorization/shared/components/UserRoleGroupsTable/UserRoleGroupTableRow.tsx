@@ -17,7 +17,8 @@
 import { Link } from 'react-router-dom'
 import Tippy from '@tippyjs/react'
 
-import { getRandomColor, URLS } from '../../../../../../Common'
+import { URLS } from '@Common/Constants'
+import { getRandomColor } from '@Common/Helper'
 import { UserRoleGroupsTableProps } from './types'
 import { ReactComponent as TrashIcon } from '../../../../../../Assets/Icon/ic-delete-interactive.svg'
 import { UserRoleGroup } from '../../../types'

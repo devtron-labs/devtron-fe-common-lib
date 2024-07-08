@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -49,6 +49,7 @@
         "eslint": "^8.56.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-prettier": "^9.1.0",
+        "eslint-import-resolver-typescript": "^3.6.1",
         "eslint-plugin-import": "^2.29.1",
         "eslint-plugin-jsx-a11y": "^6.8.0",
         "eslint-plugin-prettier": "^5.1.2",
@@ -69,7 +70,8 @@
         "vite": "^4.5.3",
         "vite-plugin-dts": "^3.5.1",
         "vite-plugin-lib-inject-css": "^1.2.0",
-        "vite-plugin-svgr": "^2.4.0"
+        "vite-plugin-svgr": "^2.4.0",
+        "vite-tsconfig-paths": "^4.3.2"
     },
     "peerDependencies": {
         "@rjsf/core": "^5.13.3",
@@ -89,11 +91,11 @@
         "yaml": "^2.4.1"
     },
     "dependencies": {
+        "@types/react-dates": "^21.8.6",
         "ansi_up": "^5.2.1",
         "fast-json-patch": "^3.1.1",
-        "react-monaco-editor": "^0.54.0",
-        "@types/react-dates": "^21.8.6",
         "react-dates": "^21.8.0",
+        "react-monaco-editor": "^0.54.0",
         "sass": "^1.69.7",
         "tslib": "^2.4.1"
     },
