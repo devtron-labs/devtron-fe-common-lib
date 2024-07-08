@@ -17,7 +17,7 @@ const PluginCard = ({
         pluginDataStore.pluginVersionStore[latestPluginId]
 
     const handleSelection = (e: React.MouseEvent | React.KeyboardEvent) => {
-        if ('key' in e && e.key !== 'Enter') {
+        if ('key' in e && e.key !== 'Enter' && e.key !== ' ') {
             return
         }
 
@@ -78,7 +78,7 @@ const PluginCard = ({
                             )}
                         </div>
 
-                        <span className="dc__truncate cn-7 fs-12 fw-4 lh-16">By {updatedBy || 'Devtron'}</span>
+                        <span className="dc__truncate cn-7 fs-12 fw-4 lh-16">By {updatedBy}</span>
                     </div>
 
                     {/* Plugin description */}
