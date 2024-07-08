@@ -48,7 +48,6 @@ const PluginListContainer = ({
     // Have to make a state to trigger clear filters, since filters are not on URL
     // TODO: Ask should it be number since in case of large state it can be a problem
     const [clearSearchTrigger, setClearSearchTrigger] = useState<boolean>(false)
-    const [clearTagFilterTrigger, setClearTagFiltersTrigger] = useState<boolean>(false)
 
     const handlePluginListUpdate = (updatedPluginList: PluginListItemType[]) => {
         setPluginList(updatedPluginList)
@@ -160,7 +159,6 @@ const PluginListContainer = ({
         })
 
         setClearSearchTrigger((prev) => !prev)
-        setClearTagFiltersTrigger((prev) => !prev)
         handlePersistFiltersChange()
     }
 
@@ -188,7 +186,6 @@ const PluginListContainer = ({
             selectedTags: filterConfig.selectedTags,
         })
 
-        setClearTagFiltersTrigger((prev) => !prev)
         handlePersistFiltersChange()
     }
 
@@ -210,7 +207,6 @@ const PluginListContainer = ({
                 />
 
                 <PluginTagSelect
-                    key={`plugin-tag-select-key-${Number(clearTagFilterTrigger)}`}
                     availableTags={availableTags}
                     handleUpdateSelectedTags={handleUpdateSelectedTags}
                     selectedTags={selectedTags}

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactSelect, { MenuListProps, ValueContainerProps } from 'react-select'
 import { Option, OptionType } from '../../../Common'
 import { LoadingIndicator, MenuListWithApplyButton, MultiSelectValueContainer } from '../ReactSelect'
@@ -14,10 +14,13 @@ const PluginTagSelect = ({
     hasError,
     reloadTags,
 }: PluginTagSelectProps) => {
+    const getInitialSelectedOptions = () => selectedTags?.map((tag) => ({ label: tag, value: tag })) ?? []
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
-    const [localSelectedOptions, setLocalSelectedOptions] = useState<OptionType[]>(
-        selectedTags?.map((tag) => ({ label: tag, value: tag })) ?? [],
-    )
+    const [localSelectedOptions, setLocalSelectedOptions] = useState<OptionType[]>(getInitialSelectedOptions())
+
+    useEffect(() => {
+        setLocalSelectedOptions(getInitialSelectedOptions())
+    }, [selectedTags])
 
     const tagOptions: OptionType[] = useMemo(
         () => availableTags?.map((tag) => ({ label: tag, value: tag })) || [],
@@ -34,7 +37,7 @@ const PluginTagSelect = ({
 
     const handleMenuClose = () => {
         setIsMenuOpen(false)
-        setLocalSelectedOptions(selectedTags?.map((tag) => ({ label: tag, value: tag })) ?? [])
+        setLocalSelectedOptions(getInitialSelectedOptions())
     }
 
     const renderNoOptionsMessage = () => {
@@ -44,16 +47,19 @@ const PluginTagSelect = ({
         return <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8">No tags found</p>
     }
 
-    const renderMenuList = useCallback((props: MenuListProps<OptionType, true>) => {
-        const selectedOptions = props.getValue() || []
+    const renderMenuList = useCallback(
+        (props: MenuListProps<OptionType, true>) => {
+            const selectedOptions = props.getValue() || []
 
-        const handleApplyFilters = () => {
-            handleMenuClose()
-            handleUpdateSelectedTags(selectedOptions.map((option) => option.value))
-        }
+            const handleApplyFilters = () => {
+                handleMenuClose()
+                handleUpdateSelectedTags(selectedOptions.map((option) => option.value))
+            }
 
-        return <MenuListWithApplyButton {...props} handleApplyFilter={handleApplyFilters} />
-    }, [])
+            return <MenuListWithApplyButton {...props} handleApplyFilter={handleApplyFilters} />
+        },
+        [handleUpdateSelectedTags],
+    )
 
     const renderValueContainer = useCallback(
         (props: ValueContainerProps<OptionType, true>) => <MultiSelectValueContainer {...props} title="Category" />,
