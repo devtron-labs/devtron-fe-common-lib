@@ -41,13 +41,9 @@ const PluginListContainer = ({
 
     const [pluginList, setPluginList] = useState<PluginListItemType[]>(parentPluginList || [])
     const [totalCount, setTotalCount] = useState<number>(parentTotalCount || 0)
-    // TODO: Maybe structuredClone is not required
     const [filters, setFilters] = useState<PluginListFiltersType>(
         parentFilters || structuredClone(DEFAULT_PLUGIN_LIST_FILTERS),
     )
-    // Have to make a state to trigger clear filters, since filters are not on URL
-    // TODO: Ask should it be number since in case of large state it can be a problem
-    const [clearSearchTrigger, setClearSearchTrigger] = useState<boolean>(false)
 
     const handlePluginListUpdate = (updatedPluginList: PluginListItemType[]) => {
         setPluginList(updatedPluginList)
@@ -158,7 +154,6 @@ const PluginListContainer = ({
             selectedTags: [],
         })
 
-        setClearSearchTrigger((prev) => !prev)
         handlePersistFiltersChange()
     }
 
@@ -198,7 +193,7 @@ const PluginListContainer = ({
             {/* Filters section */}
             <div className="w-100 flexbox dc__gap-12 py-12 dc__position-sticky dc__top-0 bcn-0 dc__zi-1 flex-wrap">
                 <SearchBar
-                    key={`search-bar-key-${Number(clearSearchTrigger)}`}
+                    initialSearchText={searchKey}
                     containerClassName="flex-grow-1"
                     handleEnter={handleSearch}
                     inputProps={{
