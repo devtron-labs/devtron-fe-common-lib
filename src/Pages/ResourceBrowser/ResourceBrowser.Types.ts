@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { NodeType, Nodes } from '../../Shared'
+import { NodeType, Nodes } from '@Shared/types'
 
 export interface GVKType {
     Group: string
