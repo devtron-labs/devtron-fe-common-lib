@@ -1,5 +1,6 @@
 import { VariableType } from '../../../Common'
 import { BaseFilterQueryParams } from '../../types'
+import { ImageWithFallbackProps } from '../ImageWithFallback'
 import { getPluginStoreData } from './service'
 
 export enum PluginCreationType {
@@ -195,4 +196,8 @@ export interface PluginCardSkeletonListProps {
 export interface PluginTagsContainerProps {
     tags: string[]
     rootClassName?: string
+}
+
+export interface PluginImageContainerProps extends Pick<ImageWithFallbackProps, 'imageProps'> {
+    fallbackImageClassName?: string
 }

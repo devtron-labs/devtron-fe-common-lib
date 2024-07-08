@@ -227,7 +227,7 @@ const PluginListContainer = ({
                     }}
                     onRemoveFilter={handleRemoveSelectedTag}
                     clearFilters={handleClearFilters}
-                    className="p-0 w-100 pt-4"
+                    className="w-100 pt-0-imp"
                     clearButtonClassName="dc__no-background-imp dc__no-border-imp dc__tab-focus"
                     shouldHideLabel
                 />

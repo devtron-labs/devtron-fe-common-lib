@@ -1,8 +1,7 @@
 import { Checkbox, CHECKBOX_VALUE } from '../../../Common'
-import { ImageWithFallback } from '../ImageWithFallback'
+import PluginImageContainer from './PluginImageContainer'
 import PluginTagsContainer from './PluginTagsContainer'
 import { PluginCardProps } from './types'
-import { ReactComponent as ICLegoBlock } from '../../../Assets/Icon/ic-lego-block.svg'
 import { ReactComponent as ICBookOpen } from '../../../Assets/Icon/ic-book-open.svg'
 
 const PluginCard = ({
@@ -39,14 +38,9 @@ const PluginCard = ({
                 </div>
             )}
 
-            {/* TODO: Test multiple cards with fallback since has if in LegoBlock */}
             {!isSelected && (
-                <ImageWithFallback
-                    fallbackImage={
-                        <ICLegoBlock
-                            className={`dc__no-shrink icon-dim-40 ${isSelectable ? 'dc__visible-hover--hide-child' : ''}`}
-                        />
-                    }
+                <PluginImageContainer
+                    fallbackImageClassName={`icon-dim-40 ${isSelectable ? 'dc__visible-hover--hide-child' : ''}`}
                     imageProps={{
                         src: icon,
                         alt: `${name} logo`,
