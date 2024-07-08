@@ -16,7 +16,11 @@ const PluginCard = ({
     const { icon, name, description, tags, pluginVersion, updatedBy, docLink } =
         pluginDataStore.pluginVersionStore[latestPluginId]
 
-    const handleSelection = () => {
+    const handleSelection = (e: React.MouseEvent | React.KeyboardEvent) => {
+        if ('key' in e && e.key !== 'Enter') {
+            return
+        }
+
         handlePluginSelection(parentPluginId)
     }
 
@@ -26,6 +30,7 @@ const PluginCard = ({
             role="button"
             tabIndex={0}
             onClick={handleSelection}
+            onKeyDown={handleSelection}
         >
             {isSelectable && (
                 <div className={`dc__no-shrink icon-dim-40 p-8 ${!isSelected ? 'dc__visible-hover--child' : ''}`}>
