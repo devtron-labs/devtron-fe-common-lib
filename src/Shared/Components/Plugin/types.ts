@@ -1,3 +1,4 @@
+import { MutableRefObject } from 'react'
 import { VariableType } from '../../../Common'
 import { BaseFilterQueryParams } from '../../types'
 import { ImageWithFallbackProps } from '../ImageWithFallback'
@@ -143,6 +144,7 @@ export type PluginListContainerProps = BasePluginListContainerProps &
     )
 
 export interface GetPluginStoreDataServiceParamsType extends Pick<PluginListFiltersType, 'searchKey' | 'selectedTags'> {
+    signal: AbortSignal
     appId: number
     offset?: number
 }
@@ -188,6 +190,7 @@ export interface PluginListProps
     pluginList: PluginListContainerProps['parentPluginList']
     totalCount: PluginListContainerProps['parentTotalCount']
     filters: PluginListContainerProps['parentFilters']
+    getPluginStoreRef: MutableRefObject<AbortController>
 }
 
 export interface PluginCardProps

@@ -1,4 +1,4 @@
-import { get, getUrlWithSearchParams, ResponseType, ROUTES, showError } from '../../../Common'
+import { get, getIsRequestAborted, getUrlWithSearchParams, ResponseType, ROUTES, showError } from '../../../Common'
 import { stringComparatorBySortOrder } from '../../Helpers'
 import {
     GetPluginListPayloadType,
@@ -44,6 +44,7 @@ export const getPluginStoreData = async ({
     selectedTags,
     appId,
     offset = 0,
+    signal,
 }: GetPluginStoreDataServiceParamsType): Promise<GetPluginStoreDataReturnType> => {
     try {
         const payload: GetPluginListPayloadType = {
@@ -53,9 +54,9 @@ export const getPluginStoreData = async ({
             size: 20,
             tag: selectedTags,
         }
-        const { result } = (await get(
-            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_V2, payload),
-        )) as ResponseType<PluginDetailDTO>
+        const { result } = (await get(getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_V2, payload), {
+            signal,
+        })) as ResponseType<PluginDetailDTO>
 
         const pluginStore = parsePluginDetailsDTOIntoPluginStore(result?.parentPlugins)
         return {
@@ -63,7 +64,9 @@ export const getPluginStoreData = async ({
             pluginStore,
         }
     } catch (error) {
-        showError(error)
+        if (!getIsRequestAborted(error)) {
+            showError(error)
+        }
         throw error
     }
 }

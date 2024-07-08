@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 import { APIResponseHandler } from '../APIResponseHandler'
 import PluginTagSelect from './PluginTagSelect'
 import PluginList from './PluginList'
 import { FilterChips } from '../FilterChips'
 import PluginCardSkeletonList from './PluginCardSkeletonList'
-import { SearchBar, useAsync } from '../../../Common'
+import { abortPreviousRequests, getIsRequestAborted, SearchBar, useAsync } from '../../../Common'
 import { getAvailablePluginTags, getPluginStoreData } from './service'
 import {
     PluginListParamsType,
@@ -44,6 +44,7 @@ const PluginListContainer = ({
     const [filters, setFilters] = useState<PluginListFiltersType>(
         parentFilters || structuredClone(DEFAULT_PLUGIN_LIST_FILTERS),
     )
+    const abortControllerRef: PluginListProps['getPluginStoreRef'] = useRef(new AbortController())
 
     const handlePluginListUpdate = (updatedPluginList: PluginListItemType[]) => {
         setPluginList(updatedPluginList)
@@ -62,16 +63,21 @@ const PluginListContainer = ({
 
     const { searchKey, selectedTags } = filters || {}
 
-    // TODO: Add abortController as well
+    const getPluginStoreDataWrapper = () =>
+        abortPreviousRequests(
+            () =>
+                getPluginStoreData({
+                    searchKey,
+                    selectedTags,
+                    offset: 0,
+                    appId: appId ? +appId : null,
+                    signal: abortControllerRef.current.signal,
+                }),
+            abortControllerRef,
+        )
+
     const [isLoadingPluginData, pluginData, pluginDataError, reloadPluginData] = useAsync(
-        () =>
-            getPluginStoreData({
-                searchKey,
-                selectedTags,
-                offset: 0,
-                appId: appId ? +appId : null,
-            }),
-        // TODO: Test if this is correct since new reference is created every time
+        getPluginStoreDataWrapper,
         persistFilters ? [pluginList] : [searchKey, appId, selectedTags],
         persistFilters ? !pluginList.length : true,
     )
@@ -135,8 +141,9 @@ const PluginListContainer = ({
     }
 
     useEffect(() => {
+        const isLoading = isLoadingPluginData || getIsRequestAborted(pluginDataError)
         // This will be reusable for load more so convert it to a function
-        if (!isLoadingPluginData && !pluginDataError && pluginData) {
+        if (!isLoading && !pluginDataError && pluginData) {
             handleDataUpdateForPluginResponse(pluginData)
         }
     }, [isLoadingPluginData, pluginData, pluginDataError])
@@ -225,7 +232,7 @@ const PluginListContainer = ({
             )}
 
             <APIResponseHandler
-                isLoading={isLoadingPluginData}
+                isLoading={isLoadingPluginData || getIsRequestAborted(pluginDataError)}
                 customLoader={<PluginCardSkeletonList count={5} />}
                 error={pluginDataError}
                 errorScreenManagerProps={{
@@ -244,6 +251,7 @@ const PluginListContainer = ({
                     isSelectable={isSelectable}
                     handleClearFilters={handleClearFilters}
                     showCardBorder={showCardBorder}
+                    getPluginStoreRef={abortControllerRef}
                 />
             </APIResponseHandler>
         </div>

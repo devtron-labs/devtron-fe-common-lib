@@ -4,7 +4,13 @@ import PluginCard from './PluginCard'
 import { DetectBottom } from '../DetectBottom'
 import PluginCardSkeletonList from './PluginCardSkeletonList'
 import { PluginListParamsType, PluginListProps } from './types'
-import { GenericEmptyState, GenericFilterEmptyState, showError } from '../../../Common'
+import {
+    abortPreviousRequests,
+    GenericEmptyState,
+    GenericFilterEmptyState,
+    getIsRequestAborted,
+    showError,
+} from '../../../Common'
 import { getPluginStoreData } from './service'
 
 const PluginList = ({
@@ -18,6 +24,7 @@ const PluginList = ({
     isSelectable,
     handleClearFilters,
     showCardBorder,
+    getPluginStoreRef,
 }: PluginListProps) => {
     const { appId } = useParams<PluginListParamsType>()
 
@@ -25,16 +32,23 @@ const PluginList = ({
     const handleLoadMore = async () => {
         setIsLoadingMorePlugins(true)
         try {
-            const pluginDataResponse = await getPluginStoreData({
-                searchKey,
-                offset: pluginList.length,
-                selectedTags,
-                appId: appId ? +appId : null,
-            })
+            const pluginDataResponse = await abortPreviousRequests(
+                () =>
+                    getPluginStoreData({
+                        searchKey,
+                        offset: pluginList.length,
+                        selectedTags,
+                        appId: appId ? +appId : null,
+                        signal: getPluginStoreRef.current.signal,
+                    }),
+                getPluginStoreRef,
+            )
 
             handleDataUpdateForPluginResponse(pluginDataResponse, true)
         } catch (error) {
-            showError(error)
+            if (!getIsRequestAborted(error)) {
+                showError(error)
+            }
         } finally {
             setIsLoadingMorePlugins(false)
         }
