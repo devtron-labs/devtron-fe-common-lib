@@ -15,8 +15,8 @@
  */
 
 import { ChangeEvent, useCallback, useRef, useState, KeyboardEvent, useEffect } from 'react'
-import { ReactComponent as Search } from '../../Assets/Icon/ic-search.svg'
-import { ReactComponent as Clear } from '../../Assets/Icon/ic-error-cross.svg'
+import { ReactComponent as Search } from '@Icons/ic-search.svg'
+import { ReactComponent as Clear } from '@Icons/ic-error-cross.svg'
 import { SearchBarProps } from './types'
 import './searchBar.scss'
 import { debounce } from '../Helper'
@@ -63,6 +63,7 @@ const SearchBar = ({
     containerClassName,
     shouldDebounce = false,
     debounceTimeout = 300,
+    dataTestId = 'search-bar',
     noBackgroundAndBorder = false,
 }: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
@@ -120,7 +121,7 @@ const SearchBar = ({
                 <Search className="search-bar__icon dc__position-abs icon-color-n6 icon-dim-16" />
                 <input
                     placeholder="Search"
-                    data-testid="search-bar"
+                    data-testid={dataTestId}
                     type="text"
                     {...inputProps}
                     defaultValue={initialSearchText}

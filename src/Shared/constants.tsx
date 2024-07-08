@@ -53,6 +53,7 @@ export const ModuleNameMap = {
 // TODO: Convert to object later if more formats arise
 export const DATE_TIME_FORMAT_STRING = 'ddd DD MMM YYYY HH:mm:ss'
 export const API_TOKEN_PREFIX = 'API-TOKEN:'
+export const DEFAULT_SECRET_PLACEHOLDER = '••••••••'
 
 export enum PatchOperationType {
     replace = 'replace',
@@ -404,4 +405,8 @@ export const APP_STATUS_HEADERS = ['KIND', 'NAME', 'STATUS', 'MESSAGE']
 export const MATERIAL_EXCLUDE_TIPPY_TEXT =
     'Not available for build as this commit contains changes in excluded files or folders'
 
-export const DEFAULT_SECRET_PLACEHOLDER = '••••••••'
+export enum K8sResourcePayloadAppType {
+    DEVTRON_APP = 0,
+    HELM_APP = 1,
+    EXTERNAL_ARGO_APP = 2,
+}
