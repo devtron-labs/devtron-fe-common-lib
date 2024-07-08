@@ -34,6 +34,11 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
         const pluginVersions = parseMinimalPluginVersionsDTO(plugin.pluginVersions.minimalPluginVersionData)
         const latestPluginVersionIndex = pluginVersions.findIndex((pluginVersion) => pluginVersion.isLatest)
 
+        // Adding this check to ensure better debugging in case backend panics
+        if (latestPluginVersionIndex === -1) {
+            throw new Error('Latest plugin version not found')
+        }
+
         parentPluginStore[plugin.id] = {
             id: plugin.id,
             name: plugin.name || '',

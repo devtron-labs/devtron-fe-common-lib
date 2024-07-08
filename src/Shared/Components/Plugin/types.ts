@@ -16,6 +16,9 @@ export interface PluginTagNamesDTO {
     tagNames: string[]
 }
 
+/**
+ * Minimal data of child plugins
+ */
 interface MinimalPluginVersionDataDTO {
     id: number
     name: string
@@ -26,7 +29,6 @@ interface MinimalPluginVersionDataDTO {
 
 interface DetailedPluginVersionDTO extends MinimalPluginVersionDataDTO {
     tags: string[]
-    isLatest: boolean
     inputVariables: VariableType[]
     outputVariables: VariableType[]
     /**
@@ -87,7 +89,7 @@ export interface PluginDataStoreType {
     pluginVersionStore: Record<number, DetailedPluginVersionType>
 }
 
-// TODO: Deprecate this type
+// TODO: Check if can deprecate this if have time
 export interface PluginDetailType extends DetailedPluginVersionType {}
 export type PluginListItemType = Pick<PluginDetailType, 'parentPluginId'>
 
@@ -178,7 +180,7 @@ export interface PluginListProps
         /**
          * If true, the response would be appended to the existing data
          * if false, the existing data would be replaced with the new data
-         * default value is false
+         * @default false
          */
         appendResponse?: boolean,
     ) => void
@@ -195,7 +197,9 @@ export interface PluginCardProps
 }
 
 export interface PluginCardSkeletonListProps {
-    // Default value is 3
+    /**
+     * @default 3
+     */
     count?: number
 }
 
