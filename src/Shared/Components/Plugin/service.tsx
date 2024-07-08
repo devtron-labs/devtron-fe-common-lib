@@ -4,8 +4,10 @@ import {
     GetPluginListPayloadType,
     GetPluginStoreDataReturnType,
     GetPluginStoreDataServiceParamsType,
+    GetPluginTagsPayloadType,
     PluginDetailDTO,
     PluginDetailPayloadType,
+    PluginDetailServiceParamsType,
     PluginTagNamesDTO,
 } from './types'
 import { parsePluginDetailsDTOIntoPluginStore } from './utils'
@@ -14,18 +16,23 @@ export const getPluginsDetail = async ({
     appId,
     parentPluginId,
     pluginId,
-}: PluginDetailPayloadType): Promise<PluginDetailDTO> => {
+}: PluginDetailServiceParamsType): Promise<Pick<GetPluginStoreDataReturnType, 'pluginStore'>> => {
     try {
-        // TODO: Add type for payload as well and return parsed data itself
-        // Can parse the response here itself
+        const payload: PluginDetailPayloadType = {
+            appId,
+            parentPluginId,
+            pluginId,
+        }
+
         const { result } = (await get(
-            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_DETAIL_V2, {
-                appId,
-                parentPluginId,
-                pluginId,
-            }),
+            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_DETAIL_V2, payload),
         )) as ResponseType<PluginDetailDTO>
-        return result
+
+        const pluginStore = parsePluginDetailsDTOIntoPluginStore(result?.parentPlugins)
+
+        return {
+            pluginStore,
+        }
     } catch (error) {
         showError(error)
         throw error
@@ -50,7 +57,7 @@ export const getPluginStoreData = async ({
             getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_V2, payload),
         )) as ResponseType<PluginDetailDTO>
 
-        const pluginStore = parsePluginDetailsDTOIntoPluginStore(result.parentPlugins)
+        const pluginStore = parsePluginDetailsDTOIntoPluginStore(result?.parentPlugins)
         return {
             totalCount: result.totalCount,
             pluginStore,
@@ -63,13 +70,20 @@ export const getPluginStoreData = async ({
 
 export const getAvailablePluginTags = async (appId: number): Promise<string[]> => {
     try {
+        const payload: GetPluginTagsPayloadType = {
+            appId,
+        }
+
         const { result } = (await get(
-            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_TAGS, { appId }),
+            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_TAGS, payload),
         )) as ResponseType<PluginTagNamesDTO>
+
         if (!result?.tagNames) {
             return []
         }
-        return result.tagNames.sort(stringComparatorBySortOrder)
+
+        const uniqueTags = new Set(result.tagNames)
+        return Array.from(uniqueTags).sort(stringComparatorBySortOrder)
     } catch (error) {
         showError(error)
         throw error

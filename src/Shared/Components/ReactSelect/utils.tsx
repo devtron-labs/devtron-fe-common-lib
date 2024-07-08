@@ -15,8 +15,12 @@
  */
 
 import Tippy from '@tippyjs/react'
-import { components, MenuListProps } from 'react-select'
-import { Progressing, stopPropagation } from '../../../Common'
+import { components, MenuListProps, ValueContainerProps } from 'react-select'
+import { cloneElement } from 'react'
+import { OptionType, Progressing, stopPropagation } from '../../../Common'
+import { ReactComponent as ICSearch } from '../../../Assets/Icon/ic-search.svg'
+import { ReactComponent as ICFilter } from '../../../Assets/Icon/ic-filter.svg'
+import { ReactComponent as ICFilterApplied } from '../../../Assets/Icon/ic-filter-applied.svg'
 
 export const getCommonSelectStyle = (styleOverrides = {}) => ({
     container: (base, state) => ({
@@ -205,3 +209,51 @@ export const MenuListWithApplyButton = ({
         )}
     </>
 )
+
+export const MultiSelectValueContainer = ({
+    title,
+    ...props
+}: ValueContainerProps<OptionType, true> & { title: string }) => {
+    const { children, selectProps, getValue } = props
+    const value = getValue() || []
+
+    const renderContainer = () => {
+        if (selectProps.menuIsOpen) {
+            if (!selectProps.inputValue) {
+                return (
+                    <>
+                        <ICSearch className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
+                        <span className="dc__position-abs dc__left-35 cn-5 ml-2">{selectProps.placeholder}</span>
+                    </>
+                )
+            }
+
+            return <ICSearch className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
+        }
+
+        if (value.length) {
+            return (
+                <>
+                    <ICFilterApplied className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
+                    <span className="dc__position-abs dc__left-35 cn-9 fs-13 fw-4 lh-20">{title}</span>
+                </>
+            )
+        }
+
+        return (
+            <>
+                <ICFilter className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
+                <span className="dc__position-abs dc__left-35 cn-5 fs-13 fw-4 lh-20">{title}</span>
+            </>
+        )
+    }
+
+    return (
+        <components.ValueContainer {...props}>
+            <div className="flexbox dc__align-items-center">
+                {renderContainer()}
+                {cloneElement(children[1])}
+            </div>
+        </components.ValueContainer>
+    )
+}

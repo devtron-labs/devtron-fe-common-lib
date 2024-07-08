@@ -8,6 +8,10 @@ export enum PluginCreationType {
     PRESET = 'PRESET',
 }
 
+export interface GetPluginTagsPayloadType {
+    appId: number
+}
+
 export interface PluginTagNamesDTO {
     tagNames: string[]
 }
@@ -51,11 +55,13 @@ export interface PluginDetailDTO {
     totalCount: number
 }
 
-export interface PluginDetailPayloadType {
+export interface PluginDetailServiceParamsType {
     appId: number
     pluginId?: number[]
     parentPluginId?: number[]
 }
+
+export interface PluginDetailPayloadType extends PluginDetailServiceParamsType {}
 
 export interface PluginListFiltersType extends Pick<BaseFilterQueryParams<unknown>, 'searchKey'> {
     selectedTags: string[]

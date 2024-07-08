@@ -1,11 +1,7 @@
-import { cloneElement } from 'react'
-import { components, ValueContainerProps } from 'react-select'
 import { ParentPluginDTO, PluginCreationType, PluginDataStoreType } from './types'
-import { ReactComponent as ICSearch } from '../../../Assets/Icon/ic-search.svg'
-import { ReactComponent as ICFilter } from '../../../Assets/Icon/ic-filter.svg'
-import { ReactComponent as ICFilterApplied } from '../../../Assets/Icon/ic-filter-applied.svg'
-import { OptionType } from '../../../Common'
 import { commonSelectStyles } from '../ReactSelect'
+import { stringComparatorBySortOrder } from '../../Helpers'
+import { DEFAULT_PLUGIN_CREATED_BY } from './constants'
 
 const parseMinimalPluginVersionsDTO = (
     pluginVersionData: ParentPluginDTO['pluginVersions']['minimalPluginVersionData'],
@@ -14,12 +10,12 @@ const parseMinimalPluginVersionsDTO = (
         return []
     }
 
-    return pluginVersionData.map((pluginVersion) => ({
-        id: pluginVersion.id,
-        description: pluginVersion.description || '',
-        name: pluginVersion.name || '',
-        pluginVersion: pluginVersion.pluginVersion || '',
-        isLatest: pluginVersion.isLatest || false,
+    return pluginVersionData.map(({ id, description, name, pluginVersion, isLatest }) => ({
+        id,
+        description: description || '',
+        name: name || '',
+        pluginVersion: pluginVersion || '',
+        isLatest: isLatest || false,
     }))
 }
 
@@ -50,18 +46,21 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
         }
 
         plugin.pluginVersions.detailedPluginVersionData.forEach((pluginVersionData) => {
+            const targetTags = pluginVersionData.tags || []
+            const sortedUniqueTags = Array.from(new Set(targetTags)).sort(stringComparatorBySortOrder)
+
             pluginVersionStore[pluginVersionData.id] = {
                 id: pluginVersionData.id,
                 name: pluginVersionData.name || '',
                 description: pluginVersionData.description || '',
                 pluginVersion: pluginVersionData.pluginVersion || '',
                 docLink: pluginVersionData.docLink || '',
-                updatedBy: plugin.type === PluginCreationType.SHARED ? pluginVersionData.updatedBy : 'Devtron',
+                updatedBy:
+                    plugin.type === PluginCreationType.SHARED ? pluginVersionData.updatedBy : DEFAULT_PLUGIN_CREATED_BY,
                 outputVariables: pluginVersionData.outputVariables || [],
                 inputVariables: pluginVersionData.inputVariables || [],
                 isLatest: pluginVersionData.isLatest || false,
-                // TODO: can add unique check and sort them alphabetically
-                tags: pluginVersionData.tags || [],
+                tags: sortedUniqueTags,
                 parentPluginId: plugin.id,
                 icon: plugin.icon || '',
                 type: plugin.type,
@@ -75,51 +74,6 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
     }
 }
 
-export const PluginTagSelectValueContainer = (props: ValueContainerProps<OptionType[]>) => {
-    const { children, selectProps } = props
-
-    const renderContainer = () => {
-        if (selectProps.menuIsOpen) {
-            if (!selectProps.inputValue) {
-                return (
-                    <>
-                        <ICSearch className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
-                        <span className="dc__position-abs dc__left-35 cn-5 ml-2">{selectProps.placeholder}</span>
-                    </>
-                )
-            }
-
-            return <ICSearch className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
-        }
-
-        if (selectProps.value.length) {
-            return (
-                <>
-                    <ICFilterApplied className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
-                    <span className="dc__position-abs dc__left-35 cn-9 fs-13 fw-4 lh-20">Category</span>
-                </>
-            )
-        }
-
-        return (
-            <>
-                <ICFilter className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
-                <span className="dc__position-abs dc__left-35 cn-5 fs-13 fw-4 lh-20">Category</span>
-            </>
-        )
-    }
-
-    return (
-        <components.ValueContainer {...props}>
-            <div className="flexbox dc__align-items-center">
-                {renderContainer()}
-                {cloneElement(children[1])}
-            </div>
-        </components.ValueContainer>
-    )
-}
-
-// TODO: Should it be in constants?
 export const pluginTagSelectStyles = {
     ...commonSelectStyles,
     option: (base, state) => ({

@@ -9,3 +9,5 @@ export const DEFAULT_PLUGIN_LIST_FILTERS: PluginListFiltersType = {
     searchKey: '',
     selectedTags: [],
 }
+
+export const DEFAULT_PLUGIN_CREATED_BY = 'Devtron'

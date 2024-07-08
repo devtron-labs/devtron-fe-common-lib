@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from 'react'
-import ReactSelect, { MenuListProps } from 'react-select'
+import ReactSelect, { MenuListProps, ValueContainerProps } from 'react-select'
 import { Option, OptionType } from '../../../Common'
-import { LoadingIndicator, MenuListWithApplyButton } from '../ReactSelect'
+import { LoadingIndicator, MenuListWithApplyButton, MultiSelectValueContainer } from '../ReactSelect'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import { PluginTagSelectProps } from './types'
-import { PluginTagSelectValueContainer, pluginTagSelectStyles } from './utils'
+import { pluginTagSelectStyles } from './utils'
 
 const PluginTagSelect = ({
     availableTags,
@@ -14,6 +14,7 @@ const PluginTagSelect = ({
     hasError,
     reloadTags,
 }: PluginTagSelectProps) => {
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
     const [localSelectedOptions, setLocalSelectedOptions] = useState<OptionType[]>(
         selectedTags?.map((tag) => ({ label: tag, value: tag })) ?? [],
     )
@@ -27,7 +28,12 @@ const PluginTagSelect = ({
         setLocalSelectedOptions(selectedOptions)
     }
 
+    const handleMenuOpen = () => {
+        setIsMenuOpen(true)
+    }
+
     const handleMenuClose = () => {
+        setIsMenuOpen(false)
         setLocalSelectedOptions(selectedTags?.map((tag) => ({ label: tag, value: tag })) ?? [])
     }
 
@@ -38,20 +44,24 @@ const PluginTagSelect = ({
         return <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8">No tags found</p>
     }
 
-    // TODO: Should i add handleUpdateSelectedTags as dependency?
-    const renderMenuList = useCallback((props: MenuListProps) => {
-        const selectedOptions: any = props.selectProps.value
+    const renderMenuList = useCallback((props: MenuListProps<OptionType, true>) => {
+        const selectedOptions = props.getValue() || []
 
-        //  TODO: Should we create function here or inside MenuListWithApplyButton?
         const handleApplyFilters = () => {
+            handleMenuClose()
             handleUpdateSelectedTags(selectedOptions.map((option) => option.value))
         }
 
         return <MenuListWithApplyButton {...props} handleApplyFilter={handleApplyFilters} />
     }, [])
 
+    const renderValueContainer = useCallback(
+        (props: ValueContainerProps<OptionType, true>) => <MultiSelectValueContainer {...props} title="Category" />,
+        [],
+    )
+
     return (
-        <ReactSelect
+        <ReactSelect<OptionType, true>
             styles={pluginTagSelectStyles}
             options={tagOptions}
             isMulti
@@ -63,8 +73,11 @@ const PluginTagSelect = ({
                 NoOptionsMessage: renderNoOptionsMessage,
                 MenuList: renderMenuList,
                 Option,
-                ValueContainer: PluginTagSelectValueContainer,
+                ValueContainer: renderValueContainer,
             }}
+            menuIsOpen={isMenuOpen}
+            onMenuOpen={handleMenuOpen}
+            onMenuClose={handleMenuClose}
             isLoading={isLoading}
             onChange={handleLocalSelection}
             backspaceRemovesValue={false}
@@ -73,7 +86,6 @@ const PluginTagSelect = ({
             hideSelectedOptions={false}
             blurInputOnSelect={false}
             maxMenuHeight={250}
-            onMenuClose={handleMenuClose}
             placeholder="Select tags"
             inputId="plugin-tag-select"
             className="w-150"
