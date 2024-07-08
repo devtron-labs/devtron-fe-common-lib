@@ -69,11 +69,16 @@ const PluginCard = ({
 
                             {docLink && (
                                 <div className="flexbox dc__gap-4 dc__visible-hover--child dc__align-items-center">
-                                    <a href={docLink} className="anchor" target="_blank" rel="noopener noreferrer">
+                                    <a
+                                        href={docLink}
+                                        className="anchor fs-12 fw-6 lh-20"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
                                         Learn more
                                     </a>
 
-                                    <ICBookOpen className="icon-dim-12 dc__no-shrink" />
+                                    <ICBookOpen className="icon-dim-12 dc__no-shrink scb-5" />
                                 </div>
                             )}
                         </div>
