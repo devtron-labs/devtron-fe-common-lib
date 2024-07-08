@@ -15,8 +15,8 @@
  */
 
 import { ChangeEvent, useCallback, useRef, useState, KeyboardEvent, useEffect } from 'react'
-import { ReactComponent as Search } from '../../Assets/Icon/ic-search.svg'
-import { ReactComponent as Clear } from '../../Assets/Icon/ic-error-cross.svg'
+import { ReactComponent as Search } from '@Icons/ic-search.svg'
+import { ReactComponent as Clear } from '@Icons/ic-error-cross.svg'
 import { SearchBarProps } from './types'
 import './searchBar.scss'
 import { debounce } from '../Helper'

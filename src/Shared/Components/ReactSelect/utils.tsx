@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import { cloneElement } from 'react'
 import Tippy from '@tippyjs/react'
 import { components, MenuListProps, ValueContainerProps } from 'react-select'
-import { cloneElement } from 'react'
 import { OptionType, Progressing, stopPropagation } from '../../../Common'
 import { ReactComponent as ICSearch } from '../../../Assets/Icon/ic-search.svg'
 import { ReactComponent as ICFilter } from '../../../Assets/Icon/ic-filter.svg'
