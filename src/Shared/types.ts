@@ -393,6 +393,13 @@ export type PatchQueryType<T extends string, K = unknown> = {
           op: PatchOperationType.remove
           value?: never
       }
+    | {
+          /**
+           * Operation type for add
+           */
+          op: PatchOperationType.add
+          value?: K
+      }
 )
 
 export interface GroupedOptionsType {
