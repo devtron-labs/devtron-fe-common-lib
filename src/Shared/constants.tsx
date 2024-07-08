@@ -404,3 +404,9 @@ export const APP_STATUS_HEADERS = ['KIND', 'NAME', 'STATUS', 'MESSAGE']
 
 export const MATERIAL_EXCLUDE_TIPPY_TEXT =
     'Not available for build as this commit contains changes in excluded files or folders'
+
+export enum K8sResourcePayloadAppType {
+    DEVTRON_APP = 0,
+    HELM_APP = 1,
+    EXTERNAL_ARGO_APP = 2,
+}
