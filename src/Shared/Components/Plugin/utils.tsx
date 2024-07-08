@@ -97,3 +97,28 @@ export const pluginTagSelectStyles = {
         },
     }),
 }
+
+/**
+ * @description This method takes the initial plugin data store and updates only keys that are not present in the initial store with the values from the target store.
+ */
+export const getUpdatedPluginStore = (
+    initialPluginDataStore: PluginDataStoreType,
+    targetParentPluginStore: PluginDataStoreType['parentPluginStore'],
+    targetPluginVersionStore: PluginDataStoreType['pluginVersionStore'],
+): PluginDataStoreType => {
+    const clonedPluginDataStore = structuredClone(initialPluginDataStore)
+
+    Object.keys(targetParentPluginStore).forEach((key) => {
+        if (!clonedPluginDataStore.parentPluginStore[key]) {
+            clonedPluginDataStore.parentPluginStore[key] = targetParentPluginStore[key]
+        }
+    })
+
+    Object.keys(targetPluginVersionStore).forEach((key) => {
+        if (!clonedPluginDataStore.pluginVersionStore[key]) {
+            clonedPluginDataStore.pluginVersionStore[key] = targetPluginVersionStore[key]
+        }
+    })
+
+    return clonedPluginDataStore
+}

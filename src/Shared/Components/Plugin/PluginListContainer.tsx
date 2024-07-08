@@ -16,6 +16,7 @@ import {
 } from './types'
 import { DEFAULT_PLUGIN_LIST_FILTERS } from './constants'
 import './pluginListContainer.scss'
+import { getUpdatedPluginStore } from './utils'
 
 const PluginListContainer = ({
     availableTags,
@@ -98,25 +99,12 @@ const PluginListContainer = ({
         pluginResponse,
         appendResponse = false,
     ) => {
-        const clonedPluginDataStore = structuredClone(pluginDataStore)
         const {
             pluginStore: { parentPluginStore, pluginVersionStore },
             totalCount: responseTotalCount,
         } = pluginResponse
 
-        Object.keys(parentPluginStore).forEach((key) => {
-            if (!clonedPluginDataStore.parentPluginStore[key]) {
-                clonedPluginDataStore.parentPluginStore[key] = parentPluginStore[key]
-            }
-        })
-
-        Object.keys(pluginVersionStore).forEach((key) => {
-            if (!clonedPluginDataStore.pluginVersionStore[key]) {
-                clonedPluginDataStore.pluginVersionStore[key] = pluginVersionStore[key]
-            }
-        })
-
-        handlePluginDataStoreUpdate(clonedPluginDataStore)
+        handlePluginDataStoreUpdate(getUpdatedPluginStore(pluginDataStore, parentPluginStore, pluginVersionStore))
         handleUpdateTotalCount(responseTotalCount)
 
         const newPluginList: typeof pluginList = appendResponse ? structuredClone(pluginList) : []
@@ -142,7 +130,6 @@ const PluginListContainer = ({
 
     useEffect(() => {
         const isLoading = isLoadingPluginData || getIsRequestAborted(pluginDataError)
-        // This will be reusable for load more so convert it to a function
         if (!isLoading && !pluginDataError && pluginData) {
             handleDataUpdateForPluginResponse(pluginData)
         }
