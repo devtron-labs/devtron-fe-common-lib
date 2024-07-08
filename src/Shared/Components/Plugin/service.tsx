@@ -14,14 +14,14 @@ import { parsePluginDetailsDTOIntoPluginStore } from './utils'
 
 export const getPluginsDetail = async ({
     appId,
-    parentPluginId,
-    pluginId,
+    parentPluginIds,
+    pluginIds,
 }: PluginDetailServiceParamsType): Promise<Pick<GetPluginStoreDataReturnType, 'pluginStore'>> => {
     try {
         const payload: PluginDetailPayloadType = {
             appId,
-            parentPluginId,
-            pluginId,
+            parentPluginId: parentPluginIds,
+            pluginId: pluginIds,
         }
 
         const { result } = (await get(
@@ -60,7 +60,7 @@ export const getPluginStoreData = async ({
 
         const pluginStore = parsePluginDetailsDTOIntoPluginStore(result?.parentPlugins)
         return {
-            totalCount: result.totalCount,
+            totalCount: result?.totalCount || 0,
             pluginStore,
         }
     } catch (error) {

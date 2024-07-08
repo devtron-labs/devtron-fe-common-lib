@@ -60,11 +60,14 @@ export interface PluginDetailDTO {
 
 export interface PluginDetailServiceParamsType {
     appId: number
-    pluginId?: number[]
-    parentPluginId?: number[]
+    pluginIds?: number[]
+    parentPluginIds?: number[]
 }
 
-export interface PluginDetailPayloadType extends PluginDetailServiceParamsType {}
+export interface PluginDetailPayloadType extends Pick<PluginDetailServiceParamsType, 'appId'> {
+    pluginId?: PluginDetailServiceParamsType['pluginIds']
+    parentPluginId?: PluginDetailServiceParamsType['parentPluginIds']
+}
 
 export interface PluginListFiltersType extends Pick<BaseFilterQueryParams<unknown>, 'searchKey'> {
     selectedTags: string[]

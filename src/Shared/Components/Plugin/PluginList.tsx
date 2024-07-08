@@ -4,13 +4,7 @@ import PluginCard from './PluginCard'
 import { DetectBottom } from '../DetectBottom'
 import PluginCardSkeletonList from './PluginCardSkeletonList'
 import { PluginListParamsType, PluginListProps } from './types'
-import {
-    abortPreviousRequests,
-    GenericEmptyState,
-    GenericFilterEmptyState,
-    getIsRequestAborted,
-    showError,
-} from '../../../Common'
+import { abortPreviousRequests, GenericEmptyState, GenericFilterEmptyState, ImageType } from '../../../Common'
 import { getPluginStoreData } from './service'
 
 const PluginList = ({
@@ -46,9 +40,7 @@ const PluginList = ({
 
             handleDataUpdateForPluginResponse(pluginDataResponse, true)
         } catch (error) {
-            if (!getIsRequestAborted(error)) {
-                showError(error)
-            }
+            // Do nothing
         } finally {
             setIsLoadingMorePlugins(false)
         }
@@ -56,7 +48,7 @@ const PluginList = ({
 
     if (!pluginList.length) {
         if (!!searchKey || !!selectedTags.length) {
-            return <GenericFilterEmptyState handleClearFilters={handleClearFilters} />
+            return <GenericFilterEmptyState handleClearFilters={handleClearFilters} imageType={ImageType.Large} />
         }
 
         // Not going to happen but still handling in case of any issue that might arise
