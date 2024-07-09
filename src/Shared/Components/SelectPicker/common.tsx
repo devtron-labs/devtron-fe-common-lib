@@ -32,7 +32,7 @@ export const SelectPickerControl = ({ icon, ...props }: ControlProps & Pick<Sele
 
     return (
         <components.Control {...props}>
-            {icon && <div className="p-2 dc__no-shrink flex left">{icon}</div>}
+            {icon && <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{icon}</div>}
             {children}
         </components.Control>
     )
