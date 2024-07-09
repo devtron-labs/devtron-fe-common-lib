@@ -61,6 +61,10 @@ export const getCommonSelectStyle = ({ hasError }: { hasError: boolean }) => ({
         transition: 'all .2s ease',
         transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
     }),
+    clearIndicator: (base) => ({
+        ...base,
+        padding: 0,
+    }),
     valueContainer: (base) => ({
         ...base,
         padding: '0',
@@ -111,5 +115,10 @@ export const getCommonSelectStyle = ({ hasError }: { hasError: boolean }) => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
+    }),
+    indicatorsContainer: (base) => ({
+        ...base,
+        gap: '4px',
+        flexShrink: 0,
     }),
 })

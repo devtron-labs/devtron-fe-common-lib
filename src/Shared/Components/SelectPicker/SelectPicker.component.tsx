@@ -1,9 +1,10 @@
 import ReactSelect, { ControlProps, MenuProps, Props as ReactSelectProps } from 'react-select'
 import { ReactElement, ReactNode, useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
-import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
+import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled.svg'
 import { getCommonSelectStyle } from './utils'
 import {
+    SelectPickerClearIndicator,
     SelectPickerControl,
     SelectPickerDropdownIndicator,
     SelectPickerLoadingIndicator,
@@ -99,6 +100,7 @@ const SelectPicker = ({
                         Control: renderControl,
                         Option: SelectPickerOption,
                         Menu: renderMenu,
+                        ClearIndicator: SelectPickerClearIndicator,
                         // TODO Eshank: need to export variants of ValueContainer: Icon, No Icon etc
                     }}
                     styles={selectStyles}

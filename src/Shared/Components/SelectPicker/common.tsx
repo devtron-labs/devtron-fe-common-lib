@@ -1,6 +1,14 @@
-import { components, DropdownIndicatorProps, ControlProps, OptionProps, MenuProps } from 'react-select'
-import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
+import {
+    components,
+    DropdownIndicatorProps,
+    ControlProps,
+    OptionProps,
+    MenuProps,
+    ClearIndicatorProps,
+} from 'react-select'
 import { Progressing } from '@Common/Progressing'
+import { ReactComponent as ICChevronDown } from '@Icons/ic-chevron-down.svg'
+import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { SelectPickerProps } from './SelectPicker.component'
 import { SelectPickerOptionType } from './type'
 
@@ -9,10 +17,16 @@ export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps) => 
 
     return (
         <components.DropdownIndicator {...props}>
-            <ICCaretDown className={`icon-dim-16 ${isDisabled ? 'fcn-3' : 'fcn-6'} dc__no-shrink`} />
+            <ICChevronDown className={`icon-dim-16 ${isDisabled ? 'fcn-3' : 'fcn-6'} dc__no-shrink`} />
         </components.DropdownIndicator>
     )
 }
+
+export const SelectPickerClearIndicator = (props: ClearIndicatorProps) => (
+    <components.ClearIndicator {...props}>
+        <ICClose className="icon-dim-16 fcn-6 dc__no-shrink" />
+    </components.ClearIndicator>
+)
 
 export const SelectPickerControl = ({ icon, ...props }: ControlProps & Pick<SelectPickerProps, 'icon'>) => {
     const { children } = props
