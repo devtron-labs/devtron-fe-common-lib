@@ -9,8 +9,7 @@ import {
 import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICChevronDown } from '@Icons/ic-chevron-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { SelectPickerProps } from './SelectPicker.component'
-import { SelectPickerOptionType } from './type'
+import { SelectPickerOptionType, SelectPickerProps } from './type'
 
 export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps) => {
     const { isDisabled } = props

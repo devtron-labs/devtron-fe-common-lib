@@ -1,5 +1,5 @@
-import ReactSelect, { ControlProps, MenuProps, Props as ReactSelectProps } from 'react-select'
-import { ReactElement, ReactNode, useCallback, useMemo } from 'react'
+import ReactSelect, { ControlProps, MenuProps } from 'react-select'
+import { useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled.svg'
 import { getCommonSelectStyle } from './utils'
@@ -11,36 +11,7 @@ import {
     SelectPickerMenu,
     SelectPickerOption,
 } from './common'
-import { SelectPickerOptionType } from './type'
-
-type SelectProps = ReactSelectProps<SelectPickerOptionType>
-
-export interface SelectPickerProps
-    extends Pick<
-            SelectProps,
-            | 'options'
-            | 'value'
-            | 'isMulti'
-            | 'onChange'
-            | 'isSearchable'
-            | 'isClearable'
-            | 'isLoading'
-            | 'placeholder'
-            | 'hideSelectedOptions'
-            | 'controlShouldRenderValue'
-            | 'backspaceRemovesValue'
-            | 'closeMenuOnSelect'
-            | 'isDisabled'
-            | 'isLoading'
-            | 'required'
-        >,
-        Required<Pick<SelectProps, 'classNamePrefix' | 'inputId'>> {
-    icon?: ReactElement
-    error?: ReactNode
-    renderMenuListFooter?: () => ReactNode
-    helperText?: ReactNode
-    label?: ReactNode
-}
+import { SelectPickerOptionType, SelectPickerProps } from './type'
 
 const SelectPicker = ({
     error,
