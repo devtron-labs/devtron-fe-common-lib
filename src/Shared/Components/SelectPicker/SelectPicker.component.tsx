@@ -13,7 +13,9 @@ import { SelectPickerOptionType } from './type'
 
 export interface SelectPickerProps
     extends Pick<
-        ReactSelectProps,
+        ReactSelectProps<SelectPickerOptionType>,
+        | 'options'
+        | 'value'
         | 'isMulti'
         | 'onChange'
         | 'isSearchable'
@@ -30,8 +32,6 @@ export interface SelectPickerProps
     > {
     icon?: ReactElement
     error?: ReactNode
-    options: SelectPickerOptionType[]
-    value?: SelectPickerOptionType
     renderMenuListFooter?: () => ReactNode
 }
 
