@@ -16,6 +16,7 @@ export const getPluginsDetail = async ({
     appId,
     parentPluginIds,
     pluginIds,
+    shouldShowError = true,
 }: PluginDetailServiceParamsType): Promise<Pick<GetPluginStoreDataReturnType, 'pluginStore'>> => {
     try {
         const payload: PluginDetailPayloadType = {
@@ -34,7 +35,9 @@ export const getPluginsDetail = async ({
             pluginStore,
         }
     } catch (error) {
-        showError(error)
+        if (shouldShowError) {
+            showError(error)
+        }
         throw error
     }
 }

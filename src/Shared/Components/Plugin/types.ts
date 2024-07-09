@@ -62,6 +62,10 @@ export interface PluginDetailServiceParamsType {
     appId: number
     pluginIds?: number[]
     parentPluginIds?: number[]
+    /**
+     * @default true
+     */
+    shouldShowError?: boolean
 }
 
 export interface PluginDetailPayloadType extends Pick<PluginDetailServiceParamsType, 'appId'> {

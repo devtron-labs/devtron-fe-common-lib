@@ -16,6 +16,7 @@
 
 import { PluginDataStoreType } from '../Shared'
 import { VariableType } from './CIPipeline.Types'
+import { ServerErrors } from './ServerError'
 import { ResponseType } from './Types'
 
 export enum ApplyPolicyToStage {
@@ -62,6 +63,7 @@ export interface MandatoryPluginDataType {
 export interface ProcessPluginDataReturnType {
     mandatoryPluginData: MandatoryPluginDataType
     pluginDataStore: PluginDataStoreType
+    mandatoryPluginsError?: ServerErrors
 }
 
 export enum ConsequenceAction {
