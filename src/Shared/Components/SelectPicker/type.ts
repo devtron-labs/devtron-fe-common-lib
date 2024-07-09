@@ -16,7 +16,6 @@ export interface SelectPickerProps
             SelectProps,
             | 'options'
             | 'value'
-            | 'isMulti'
             | 'onChange'
             | 'isSearchable'
             | 'isClearable'
@@ -24,7 +23,6 @@ export interface SelectPickerProps
             | 'placeholder'
             | 'hideSelectedOptions'
             | 'controlShouldRenderValue'
-            | 'backspaceRemovesValue'
             | 'closeMenuOnSelect'
             | 'isDisabled'
             | 'isLoading'
@@ -36,4 +34,5 @@ export interface SelectPickerProps
     renderMenuListFooter?: () => ReactNode
     helperText?: ReactNode
     label?: ReactNode
+    // TODO Eshank: Add support for border less
 }

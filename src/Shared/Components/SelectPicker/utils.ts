@@ -11,6 +11,7 @@ export const getCommonSelectStyle = ({ hasError }: { hasError: boolean }) => ({
         overflow: 'hidden',
         marginBlock: '4px',
         backgroundColor: 'var(--N0)',
+        border: '1px solid var(--N200)',
         boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.20)',
     }),
     menuList: (base) => ({

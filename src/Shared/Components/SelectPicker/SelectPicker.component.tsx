@@ -55,6 +55,7 @@ const SelectPicker = ({
                         {typeof label === 'string' ? (
                             <span className={`flex left ${required ? 'dc__required-field' : ''}`}>
                                 <span className="dc__truncate">{label}</span>
+                                {required && <span>&nbsp;</span>}
                             </span>
                         ) : (
                             label
@@ -76,6 +77,10 @@ const SelectPicker = ({
                     }}
                     styles={selectStyles}
                     className="w-100"
+                    menuPlacement="auto"
+                    menuPosition="fixed"
+                    menuShouldScrollIntoView
+                    backspaceRemovesValue={false}
                 />
             </div>
             {error && (
