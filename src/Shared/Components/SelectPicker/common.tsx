@@ -58,7 +58,7 @@ export const SelectPickerMenu = ({
     return (
         <components.Menu {...props}>
             {children}
-            {renderMenuListFooter()}
+            {renderMenuListFooter?.()}
         </components.Menu>
     )
 }

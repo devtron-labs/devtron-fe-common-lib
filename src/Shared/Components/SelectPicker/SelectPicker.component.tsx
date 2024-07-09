@@ -32,7 +32,7 @@ export interface SelectPickerProps
     error?: ReactNode
     options: SelectPickerOptionType[]
     value?: SelectPickerOptionType
-    renderMenuListFooter: () => ReactNode
+    renderMenuListFooter?: () => ReactNode
 }
 
 const SelectPicker = ({
@@ -74,7 +74,6 @@ const SelectPicker = ({
                     Menu: renderMenu,
                 }}
                 styles={selectStyles}
-                menuIsOpen
             />
             {error && (
                 <div className="flex left dc__gap-4 cr-5 fs-11 lh-16 fw-4">
