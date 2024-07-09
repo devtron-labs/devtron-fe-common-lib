@@ -1,7 +1,7 @@
 import ReactSelect, { ControlProps, MenuProps } from 'react-select'
 import { useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
-import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled.svg'
+import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
 import { getCommonSelectStyle } from './utils'
 import {
     SelectPickerClearIndicator,
@@ -80,7 +80,7 @@ const SelectPicker = ({
             </div>
             {error && (
                 <div className="flex left dc__gap-4 cr-5 fs-11 lh-16 fw-4">
-                    <ErrorIcon className="icon-dim-16 p-2 form__icon--error dc__no-shrink dc__align-self-start" />
+                    <ErrorIcon className="icon-dim-16 p-1 form__icon--error dc__no-shrink dc__align-self-start" />
                     <span className="dc__ellipsis-right__2nd-line">{error}</span>
                 </div>
             )}

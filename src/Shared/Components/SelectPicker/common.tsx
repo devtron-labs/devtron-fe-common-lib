@@ -7,7 +7,7 @@ import {
     ClearIndicatorProps,
 } from 'react-select'
 import { Progressing } from '@Common/Progressing'
-import { ReactComponent as ICChevronDown } from '@Icons/ic-chevron-down.svg'
+import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { SelectPickerOptionType, SelectPickerProps } from './type'
 
@@ -16,7 +16,7 @@ export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps) => 
 
     return (
         <components.DropdownIndicator {...props}>
-            <ICChevronDown className={`icon-dim-16 ${isDisabled ? 'fcn-3' : 'fcn-6'} dc__no-shrink`} />
+            <ICCaretDown className={`icon-dim-16 ${isDisabled ? 'scn-3' : 'scn-6'} dc__no-shrink`} />
         </components.DropdownIndicator>
     )
 }
