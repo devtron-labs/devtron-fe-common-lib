@@ -108,6 +108,7 @@ module.exports = {
         'import/no-cycle': 'off',
         'import/prefer-default-export': 'off',
         'no-restricted-exports': 'off',
+        'import/named': 'off'
     },
     overrides: [
         {
