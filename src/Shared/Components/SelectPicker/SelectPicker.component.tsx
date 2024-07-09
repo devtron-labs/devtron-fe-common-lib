@@ -80,9 +80,7 @@ const SelectPicker = ({
             </div>
             {error && (
                 <div className="flex left dc__gap-4 cr-5 fs-11 lh-16 fw-4">
-                    <div className="dc__no-shrink dc__align-self-start p-2">
-                        <ErrorIcon className="icon-dim-12 form__icon--error" />
-                    </div>
+                    <ErrorIcon className="icon-dim-16 p-2 form__icon--error dc__no-shrink dc__align-self-start" />
                     <span className="dc__ellipsis-right__2nd-line">{error}</span>
                 </div>
             )}
