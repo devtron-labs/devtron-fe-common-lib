@@ -24,11 +24,12 @@ export const getCommonSelectStyle = ({ hasError }: { hasError: boolean }) => ({
         // Add support for configurable: 36px, 28px
         minHeight: 'auto',
         boxShadow: 'none',
-        backgroundColor: state.isDisabled ? 'var(--N100)' : 'var(--N50)',
+        backgroundColor: 'var(--N50)',
         border: `1px solid ${hasError ? 'var(--R500)' : 'var(--N200)'}`,
         cursor: state.isDisabled ? 'not-allowed' : 'pointer',
         padding: '5px 8px',
         gap: '8px',
+        opacity: state.isDisabled ? 0.5 : 1,
 
         '&:hover': {
             borderColor: state.isDisabled ? 'var(--N200)' : 'var(--N300)',
@@ -100,9 +101,9 @@ export const getCommonSelectStyle = ({ hasError }: { hasError: boolean }) => ({
         fontWeight: 400,
         lineHeight: '20px',
     }),
-    placeholder: (base, state) => ({
+    placeholder: (base) => ({
         ...base,
-        color: state.isDisabled ? 'var(--N600)' : 'var(--N500)',
+        color: 'var(--N500)',
         fontSize: '13px',
         lineHeight: '20px',
         fontWeight: 400,
