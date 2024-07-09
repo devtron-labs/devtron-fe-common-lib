@@ -1,8 +1,14 @@
-import ReactSelect, { ControlProps, Props as ReactSelectProps } from 'react-select'
-import { ReactNode, useCallback, useMemo } from 'react'
+import ReactSelect, { ControlProps, MenuProps, Props as ReactSelectProps } from 'react-select'
+import { ReactElement, ReactNode, useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { getCommonSelectStyle } from './utils'
-import { ControlWithIcon, DropdownIndicator, SingleSelectOption, LoadingIndicator } from './common'
+import {
+    SelectPickerControl,
+    SelectPickerDropdownIndicator,
+    SelectPickerMenu,
+    SelectPickerOption,
+    SelectPickerLoadingIndicator,
+} from './common'
 import { SelectPickerOptionType } from './type'
 
 export interface SelectPickerProps
@@ -22,13 +28,20 @@ export interface SelectPickerProps
         | 'isLoading'
         | 'inputId'
     > {
-    icon?: ReactNode
+    icon?: ReactElement
     error?: ReactNode
     options: SelectPickerOptionType[]
     value?: SelectPickerOptionType
+    renderMenuListFooter: () => ReactNode
 }
 
-const SelectPicker = ({ error, icon, placeholder = 'Select a option', ...props }: SelectPickerProps) => {
+const SelectPicker = ({
+    error,
+    icon,
+    renderMenuListFooter,
+    placeholder = 'Select a option',
+    ...props
+}: SelectPickerProps) => {
     const selectStyles = useMemo(
         () =>
             getCommonSelectStyle({
@@ -38,8 +51,13 @@ const SelectPicker = ({ error, icon, placeholder = 'Select a option', ...props }
     )
 
     const renderControl = useCallback(
-        (controlProps: ControlProps) => <ControlWithIcon {...controlProps} icon={icon} />,
+        (controlProps: ControlProps) => <SelectPickerControl {...controlProps} icon={icon} />,
         [icon],
+    )
+
+    const renderMenu = useCallback(
+        (menuProps: MenuProps) => <SelectPickerMenu {...menuProps} renderMenuListFooter={renderMenuListFooter} />,
+        [],
     )
 
     return (
@@ -49,13 +67,14 @@ const SelectPicker = ({ error, icon, placeholder = 'Select a option', ...props }
                 placeholder={placeholder}
                 components={{
                     IndicatorSeparator: null,
-                    LoadingIndicator,
-                    DropdownIndicator,
+                    LoadingIndicator: SelectPickerLoadingIndicator,
+                    DropdownIndicator: SelectPickerDropdownIndicator,
                     Control: renderControl,
-                    Option: SingleSelectOption,
-                    // ValueContainer,
+                    Option: SelectPickerOption,
+                    Menu: renderMenu,
                 }}
                 styles={selectStyles}
+                menuIsOpen
             />
             {error && (
                 <div className="flex left dc__gap-4 cr-5 fs-11 lh-16 fw-4">

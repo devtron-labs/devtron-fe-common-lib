@@ -1,10 +1,10 @@
-import { components, DropdownIndicatorProps, ControlProps, OptionProps } from 'react-select'
+import { components, DropdownIndicatorProps, ControlProps, OptionProps, MenuProps } from 'react-select'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { Progressing } from '@Common/Progressing'
 import { SelectPickerProps } from './SelectPicker.component'
 import { SelectPickerOptionType } from './type'
 
-export const DropdownIndicator = (props: DropdownIndicatorProps) => {
+export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps) => {
     const { isDisabled } = props
 
     return (
@@ -14,7 +14,7 @@ export const DropdownIndicator = (props: DropdownIndicatorProps) => {
     )
 }
 
-export const ControlWithIcon = ({ icon, ...props }: ControlProps & Pick<SelectPickerProps, 'icon'>) => {
+export const SelectPickerControl = ({ icon, ...props }: ControlProps & Pick<SelectPickerProps, 'icon'>) => {
     const { children } = props
 
     return (
@@ -25,9 +25,9 @@ export const ControlWithIcon = ({ icon, ...props }: ControlProps & Pick<SelectPi
     )
 }
 
-export const LoadingIndicator = () => <Progressing />
+export const SelectPickerLoadingIndicator = () => <Progressing />
 
-export const SingleSelectOption = (props: OptionProps<SelectPickerOptionType>) => {
+export const SelectPickerOption = (props: OptionProps<SelectPickerOptionType>) => {
     const { label, data } = props
     const { description, startIcon, endIcon } = data ?? {}
     const showDescription = !!description
@@ -46,5 +46,19 @@ export const SingleSelectOption = (props: OptionProps<SelectPickerOptionType>) =
                 {endIcon && <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{endIcon}</div>}
             </div>
         </components.Option>
+    )
+}
+
+export const SelectPickerMenu = ({
+    renderMenuListFooter,
+    ...props
+}: MenuProps & Pick<SelectPickerProps, 'renderMenuListFooter'>) => {
+    const { children } = props
+
+    return (
+        <components.Menu {...props}>
+            {children}
+            {renderMenuListFooter()}
+        </components.Menu>
     )
 }
