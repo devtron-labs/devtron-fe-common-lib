@@ -2,14 +2,13 @@ import ReactSelect, { ControlProps, Props as ReactSelectProps } from 'react-sele
 import { ReactNode, useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { getCommonSelectStyle } from './utils'
-import { ControlWithIcon, DropdownIndicator, LoadingIndicator } from './common'
+import { ControlWithIcon, DropdownIndicator, SingleSelectOption, LoadingIndicator } from './common'
+import { SelectPickerOptionType } from './type'
 
 export interface SelectPickerProps
     extends Pick<
         ReactSelectProps,
         | 'isMulti'
-        | 'options'
-        | 'value'
         | 'onChange'
         | 'isSearchable'
         | 'isClearable'
@@ -25,6 +24,8 @@ export interface SelectPickerProps
     > {
     icon?: ReactNode
     error?: ReactNode
+    options: SelectPickerOptionType[]
+    value?: SelectPickerOptionType
 }
 
 const SelectPicker = ({ error, icon, placeholder = 'Select a option', ...props }: SelectPickerProps) => {
@@ -43,7 +44,7 @@ const SelectPicker = ({ error, icon, placeholder = 'Select a option', ...props }
 
     return (
         <div>
-            <ReactSelect
+            <ReactSelect<SelectPickerOptionType, boolean>
                 {...props}
                 placeholder={placeholder}
                 components={{
@@ -51,7 +52,7 @@ const SelectPicker = ({ error, icon, placeholder = 'Select a option', ...props }
                     LoadingIndicator,
                     DropdownIndicator,
                     Control: renderControl,
-                    // Option,
+                    Option: SingleSelectOption,
                     // ValueContainer,
                 }}
                 styles={selectStyles}

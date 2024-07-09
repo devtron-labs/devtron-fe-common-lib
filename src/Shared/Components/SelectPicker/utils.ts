@@ -6,6 +6,13 @@ export const getCommonSelectStyle = ({ hasError }: { hasError: boolean }) => ({
             pointerEvents: 'auto',
         }),
     }),
+    menu: (base) => ({
+        ...base,
+        overflow: 'hidden',
+        marginBlock: '4px',
+        backgroundColor: 'var(--N0)',
+        boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.20)',
+    }),
     menuList: (base) => ({
         ...base,
         padding: 0,
@@ -35,8 +42,8 @@ export const getCommonSelectStyle = ({ hasError }: { hasError: boolean }) => ({
         ...base,
         color: 'var(--N900)',
         // eslint-disable-next-line no-nested-ternary
-        backgroundColor: state.isSelected ? 'var(--B100)' : state.isFocused ? 'var(--N100)' : 'white',
-        padding: '10px 12px',
+        backgroundColor: state.isSelected ? 'var(--B100)' : state.isFocused ? 'var(--N50)' : 'var(--N0)',
+        padding: '6px 8px',
         cursor: 'pointer',
         fontSize: '13px',
         lineHeight: '20px',

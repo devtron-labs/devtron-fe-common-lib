@@ -1,7 +1,8 @@
-import { components, DropdownIndicatorProps, ControlProps } from 'react-select'
+import { components, DropdownIndicatorProps, ControlProps, OptionProps } from 'react-select'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { Progressing } from '@Common/Progressing'
 import { SelectPickerProps } from './SelectPicker.component'
+import { SelectPickerOptionType } from './type'
 
 export const DropdownIndicator = (props: DropdownIndicatorProps) => {
     const { isDisabled } = props
@@ -25,3 +26,25 @@ export const ControlWithIcon = ({ icon, ...props }: ControlProps & Pick<SelectPi
 }
 
 export const LoadingIndicator = () => <Progressing />
+
+export const SingleSelectOption = (props: OptionProps<SelectPickerOptionType>) => {
+    const { label, data } = props
+    const { description, startIcon, endIcon } = data ?? {}
+    const showDescription = !!description
+
+    return (
+        <components.Option {...props}>
+            <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
+                {startIcon && (
+                    <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{startIcon}</div>
+                )}
+                <div className="flex-grow-1">
+                    <h4 className="m-0 cn-9 fs-13 fw-4 lh-20 dc__truncate">{label}</h4>
+                    {/* TODO Eshank: Add support for custom ellipsis */}
+                    {showDescription && <p className="m-0 fs-12 fw-4 lh-18 cn-7 dc__truncate">{description}</p>}
+                </div>
+                {endIcon && <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{endIcon}</div>}
+            </div>
+        </components.Option>
+    )
+}
