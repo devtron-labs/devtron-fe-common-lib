@@ -84,14 +84,14 @@ export const SelectPickerOption = (props: OptionProps<SelectPickerOptionType>) =
         <components.Option {...props}>
             <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
                 {startIcon && (
-                    <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{startIcon}</div>
+                    <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
                 )}
                 <div className="flex-grow-1">
                     <h4 className="m-0 cn-9 fs-13 fw-4 lh-20 dc__truncate">{label}</h4>
                     {/* Add support for custom ellipsis if required */}
                     {showDescription && <p className="m-0 fs-12 fw-4 lh-18 cn-7 dc__truncate">{description}</p>}
                 </div>
-                {endIcon && <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{endIcon}</div>}
+                {endIcon && <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>}
             </div>
         </components.Option>
     )
