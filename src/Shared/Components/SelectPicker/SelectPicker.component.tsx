@@ -2,6 +2,7 @@ import ReactSelect, { ControlProps, MenuProps } from 'react-select'
 import { useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
+import { ComponentSizeType } from '@Shared/constants'
 import { getCommonSelectStyle } from './utils'
 import {
     SelectPickerClearIndicator,
@@ -22,6 +23,7 @@ const SelectPicker = ({
     placeholder = 'Select a option',
     label,
     showSelectedOptionIcon = true,
+    size = ComponentSizeType.medium,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required } = props
@@ -29,9 +31,10 @@ const SelectPicker = ({
     const selectStyles = useMemo(
         () =>
             getCommonSelectStyle({
-                hasError: !!error,
+                error,
+                size,
             }),
-        [error],
+        [error, size],
     )
 
     const renderControl = useCallback(

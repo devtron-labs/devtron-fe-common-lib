@@ -1,4 +1,7 @@
-export const getCommonSelectStyle = ({ hasError }: { hasError: boolean }) => ({
+import { ComponentSizeType } from '@Shared/constants'
+import { SelectPickerProps } from './type'
+
+export const getCommonSelectStyle = ({ error, size }: Pick<SelectPickerProps, 'error' | 'size'>) => ({
     container: (base, state) => ({
         ...base,
         ...(state.isDisabled && {
@@ -22,11 +25,10 @@ export const getCommonSelectStyle = ({ hasError }: { hasError: boolean }) => ({
     }),
     control: (base, state) => ({
         ...base,
-        // Add support for configurable: 36px, 28px
-        minHeight: 'auto',
+        minHeight: size === ComponentSizeType.medium ? 'auto' : '36px',
         boxShadow: 'none',
         backgroundColor: 'var(--N50)',
-        border: `1px solid ${hasError ? 'var(--R500)' : 'var(--N200)'}`,
+        border: `1px solid ${error ? 'var(--R500)' : 'var(--N200)'}`,
         cursor: state.isDisabled ? 'not-allowed' : 'pointer',
         padding: '5px 8px',
         gap: '8px',

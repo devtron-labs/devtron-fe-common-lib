@@ -1,4 +1,5 @@
 import { OptionType } from '@Common/Types'
+import { ComponentSizeType } from '@Shared/constants'
 import { ReactElement, ReactNode } from 'react'
 import { Props as ReactSelectProps } from 'react-select'
 
@@ -41,4 +42,10 @@ export interface SelectPickerProps
      * @default 'true'
      */
     showSelectedOptionIcon?: boolean
+    /**
+     * Height of the dropdown
+     *
+     * @default 'ComponentSizeType.medium'
+     */
+    size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large>
 }
