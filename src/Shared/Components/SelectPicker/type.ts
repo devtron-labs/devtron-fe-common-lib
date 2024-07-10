@@ -21,19 +21,34 @@ export interface SelectPickerProps
             | 'isSearchable'
             | 'isClearable'
             | 'isLoading'
-            | 'placeholder'
             | 'hideSelectedOptions'
             | 'controlShouldRenderValue'
             | 'closeMenuOnSelect'
             | 'isDisabled'
             | 'isLoading'
             | 'required'
+            | 'isOptionDisabled'
         >,
-        Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> {
+        Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name' | 'placeholder'>> {
+    /**
+     * Icon to be rendered in the control
+     */
     icon?: ReactElement
+    /**
+     * Error message for the select
+     */
     error?: ReactNode
+    /**
+     * Render function for the footer at the bottom of menu list. It is sticky by default
+     */
     renderMenuListFooter?: () => ReactNode
+    /**
+     * Info text for the select, if any
+     */
     helperText?: ReactNode
+    /**
+     * Label for the select. if required is added, the corresponding * is also added
+     */
     label?: ReactNode
     /**
      * If true, the selected option icon is shown in the container.
