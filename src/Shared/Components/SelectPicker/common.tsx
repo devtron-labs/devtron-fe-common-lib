@@ -5,13 +5,14 @@ import {
     OptionProps,
     MenuProps,
     ClearIndicatorProps,
+    ValueContainerProps,
 } from 'react-select'
 import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { SelectPickerOptionType, SelectPickerProps } from './type'
 
-export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps) => {
+export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps<SelectPickerOptionType>) => {
     const { isDisabled } = props
 
     return (
@@ -21,20 +22,49 @@ export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps) => 
     )
 }
 
-export const SelectPickerClearIndicator = (props: ClearIndicatorProps) => (
+export const SelectPickerClearIndicator = (props: ClearIndicatorProps<SelectPickerOptionType>) => (
     <components.ClearIndicator {...props}>
         <ICClose className="icon-dim-16 fcn-6 dc__no-shrink" />
     </components.ClearIndicator>
 )
 
-export const SelectPickerControl = ({ icon, ...props }: ControlProps & Pick<SelectPickerProps, 'icon'>) => {
-    const { children } = props
+export const SelectPickerControl = ({
+    icon,
+    showSelectedOptionIcon,
+    ...props
+}: ControlProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'icon' | 'showSelectedOptionIcon'>) => {
+    const { children, getValue } = props
+    const { startIcon, endIcon } = getValue()?.[0] ?? {}
+    // Show the display icon if either the selected option icon is not to be shown or not available
+    const showDisplayIcon = !!(icon && (!showSelectedOptionIcon || !(startIcon || endIcon)))
 
     return (
         <components.Control {...props}>
-            {icon && <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{icon}</div>}
+            {showDisplayIcon && <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{icon}</div>}
             {children}
         </components.Control>
+    )
+}
+
+export const SelectPickerValueContainer = ({
+    showSelectedOptionIcon,
+    ...props
+}: ValueContainerProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'showSelectedOptionIcon'>) => {
+    const { children, getValue, hasValue } = props
+    const { startIcon, endIcon } = getValue()?.[0] ?? {}
+    const showIcon = !!(showSelectedOptionIcon && hasValue && (startIcon || endIcon))
+
+    return (
+        <components.ValueContainer {...props}>
+            <div className="flex left dc__gap-8">
+                {showIcon && (
+                    <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">
+                        {startIcon || endIcon}
+                    </div>
+                )}
+                {children}
+            </div>
+        </components.ValueContainer>
     )
 }
 
@@ -65,7 +95,7 @@ export const SelectPickerOption = (props: OptionProps<SelectPickerOptionType>) =
 export const SelectPickerMenu = ({
     renderMenuListFooter,
     ...props
-}: MenuProps & Pick<SelectPickerProps, 'renderMenuListFooter'>) => {
+}: MenuProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'renderMenuListFooter'>) => {
     const { children } = props
 
     return (

@@ -10,6 +10,7 @@ import {
     SelectPickerLoadingIndicator,
     SelectPickerMenu,
     SelectPickerOption,
+    SelectPickerValueContainer,
 } from './common'
 import { SelectPickerOptionType, SelectPickerProps } from './type'
 
@@ -20,6 +21,7 @@ const SelectPicker = ({
     helperText,
     placeholder = 'Select a option',
     label,
+    showSelectedOptionIcon = true,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required } = props
@@ -33,13 +35,24 @@ const SelectPicker = ({
     )
 
     const renderControl = useCallback(
-        (controlProps: ControlProps) => <SelectPickerControl {...controlProps} icon={icon} />,
-        [icon],
+        (controlProps: ControlProps<SelectPickerOptionType>) => (
+            <SelectPickerControl {...controlProps} icon={icon} showSelectedOptionIcon={showSelectedOptionIcon} />
+        ),
+        [icon, showSelectedOptionIcon],
     )
 
     const renderMenu = useCallback(
-        (menuProps: MenuProps) => <SelectPickerMenu {...menuProps} renderMenuListFooter={renderMenuListFooter} />,
+        (menuProps: MenuProps<SelectPickerOptionType>) => (
+            <SelectPickerMenu {...menuProps} renderMenuListFooter={renderMenuListFooter} />
+        ),
         [],
+    )
+
+    const renderValueContainer = useCallback(
+        (valueContainerProps) => (
+            <SelectPickerValueContainer {...valueContainerProps} showSelectedOptionIcon={showSelectedOptionIcon} />
+        ),
+        [showSelectedOptionIcon],
     )
 
     return (
@@ -73,7 +86,7 @@ const SelectPicker = ({
                         Option: SelectPickerOption,
                         Menu: renderMenu,
                         ClearIndicator: SelectPickerClearIndicator,
-                        // TODO Eshank: need to export variants of ValueContainer: Icon, No Icon etc
+                        ValueContainer: renderValueContainer,
                     }}
                     styles={selectStyles}
                     className="w-100"

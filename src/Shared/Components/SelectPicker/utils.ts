@@ -122,4 +122,12 @@ export const getCommonSelectStyle = ({ hasError }: { hasError: boolean }) => ({
         gap: '4px',
         flexShrink: 0,
     }),
+    singleValue: (base) => ({
+        ...base,
+        margin: 0,
+        color: 'var(--N900)',
+        fontSize: '13px',
+        fontWeight: 400,
+        lineHeight: '20px',
+    }),
 })
