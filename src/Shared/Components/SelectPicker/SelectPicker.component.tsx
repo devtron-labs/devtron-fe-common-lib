@@ -11,7 +11,6 @@ import {
     SelectPickerLoadingIndicator,
     SelectPickerMenu,
     SelectPickerOption,
-    SelectPickerValueContainer,
 } from './common'
 import { SelectPickerOptionType, SelectPickerProps } from './type'
 
@@ -51,13 +50,6 @@ const SelectPicker = ({
         [],
     )
 
-    const renderValueContainer = useCallback(
-        (valueContainerProps) => (
-            <SelectPickerValueContainer {...valueContainerProps} showSelectedOptionIcon={showSelectedOptionIcon} />
-        ),
-        [showSelectedOptionIcon],
-    )
-
     return (
         <div className="flex column left top dc__gap-4">
             {/* TODO Eshank: Common out for fields */}
@@ -89,7 +81,6 @@ const SelectPicker = ({
                         Option: SelectPickerOption,
                         Menu: renderMenu,
                         ClearIndicator: SelectPickerClearIndicator,
-                        ValueContainer: renderValueContainer,
                     }}
                     styles={selectStyles}
                     className="w-100"

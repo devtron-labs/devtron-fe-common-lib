@@ -3,9 +3,8 @@ import {
     DropdownIndicatorProps,
     ControlProps,
     OptionProps,
-    MenuProps,
     ClearIndicatorProps,
-    ValueContainerProps,
+    MenuProps,
 } from 'react-select'
 import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
@@ -35,36 +34,20 @@ export const SelectPickerControl = ({
 }: ControlProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'icon' | 'showSelectedOptionIcon'>) => {
     const { children, getValue } = props
     const { startIcon, endIcon } = getValue()?.[0] ?? {}
-    // Show the display icon if either the selected option icon is not to be shown or not available
-    const showDisplayIcon = !!(icon && (!showSelectedOptionIcon || !(startIcon || endIcon)))
+
+    let iconToDisplay = icon
+
+    if (showSelectedOptionIcon && (startIcon || endIcon)) {
+        iconToDisplay = startIcon || endIcon
+    }
 
     return (
         <components.Control {...props}>
-            {showDisplayIcon && <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{icon}</div>}
+            {iconToDisplay && (
+                <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{iconToDisplay}</div>
+            )}
             {children}
         </components.Control>
-    )
-}
-
-export const SelectPickerValueContainer = ({
-    showSelectedOptionIcon,
-    ...props
-}: ValueContainerProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'showSelectedOptionIcon'>) => {
-    const { children, getValue, hasValue } = props
-    const { startIcon, endIcon } = getValue()?.[0] ?? {}
-    const showIcon = !!(showSelectedOptionIcon && hasValue && (startIcon || endIcon))
-
-    return (
-        <components.ValueContainer {...props}>
-            <div className="flex left dc__gap-8">
-                {showIcon && (
-                    <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">
-                        {startIcon || endIcon}
-                    </div>
-                )}
-                {children}
-            </div>
-        </components.ValueContainer>
     )
 }
 
