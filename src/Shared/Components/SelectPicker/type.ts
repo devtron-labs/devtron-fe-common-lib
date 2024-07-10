@@ -4,8 +4,17 @@ import { ReactElement, ReactNode } from 'react'
 import { Props as ReactSelectProps } from 'react-select'
 
 export interface SelectPickerOptionType extends OptionType<number | string, ReactNode> {
+    /**
+     * Description to be displayed for the option
+     */
     description?: string
+    /**
+     * Icon at the start of the option
+     */
     startIcon?: ReactElement
+    /**
+     * Icon at the end of the option
+     */
     endIcon?: ReactElement
 }
 
@@ -28,8 +37,9 @@ export interface SelectPickerProps
             | 'isLoading'
             | 'required'
             | 'isOptionDisabled'
+            | 'placeholder'
         >,
-        Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name' | 'placeholder'>> {
+        Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> {
     /**
      * Icon to be rendered in the control
      */
