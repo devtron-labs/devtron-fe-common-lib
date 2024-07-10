@@ -434,4 +434,5 @@ export enum K8sResourcePayloadAppType {
     DEVTRON_APP = 0,
     HELM_APP = 1,
     EXTERNAL_ARGO_APP = 2,
+    EXTERNAL_FLUX_APP = 3,
 }

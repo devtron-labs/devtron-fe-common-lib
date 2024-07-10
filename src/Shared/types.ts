@@ -226,6 +226,7 @@ export interface AppDetails {
     helmPackageName?: string
     appStatus?: string
     chartAvatar?: string
+    fluxTemplateType?: string
     FluxAppStatusDetail?: FluxAppStatusDetail
 }
 
