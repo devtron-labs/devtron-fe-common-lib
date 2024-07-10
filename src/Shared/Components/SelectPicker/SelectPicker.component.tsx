@@ -50,11 +50,6 @@ import { SelectPickerOptionType, SelectPickerProps } from './type'
  * <SelectPicker ... error="Something went wrong" />
  * ```
  *
- * @example Custom label
- * ```tsx
- * <SelectPicker ... label={<div>Label</div>} />
- * ```
- *
  * @example Helper text
  * ```tsx
  * <SelectPicker ... helperText="Help information" />
