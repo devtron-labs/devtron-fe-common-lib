@@ -1,4 +1,4 @@
-import { Checkbox, CHECKBOX_VALUE } from '../../../Common'
+import { Checkbox, CHECKBOX_VALUE, stopPropagation } from '../../../Common'
 import PluginImageContainer from './PluginImageContainer'
 import PluginTagsContainer from './PluginTagsContainer'
 import { PluginCardProps } from './types'
@@ -74,6 +74,7 @@ const PluginCard = ({
                                         className="anchor fs-12 fw-6 lh-20"
                                         target="_blank"
                                         rel="noopener noreferrer"
+                                        onClick={stopPropagation}
                                     >
                                         Learn more
                                     </a>
