@@ -5,6 +5,7 @@ import {
     OptionProps,
     ClearIndicatorProps,
     MenuProps,
+    ValueContainerProps,
 } from 'react-select'
 import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
@@ -48,6 +49,27 @@ export const SelectPickerControl = ({
             )}
             {children}
         </components.Control>
+    )
+}
+
+export const SelectPickerValueContainer = ({
+    showSelectedOptionsCount,
+    ...props
+}: ValueContainerProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'showSelectedOptionsCount'>) => {
+    const { getValue } = props
+    const selectedOptionsLength = (getValue() ?? []).length
+
+    return (
+        <div className="flex left dc__gap-8 flex-grow-1">
+            <div className="flex left">
+                <components.ValueContainer {...props} />
+            </div>
+            {showSelectedOptionsCount && selectedOptionsLength > 0 && (
+                <div className="bcb-5 dc__border-radius-4-imp pl-5 pr-5 cn-0 fs-12 fw-6 lh-18 dc__truncate dc__no-shrink">
+                    {selectedOptionsLength}
+                </div>
+            )}
+        </div>
     )
 }
 

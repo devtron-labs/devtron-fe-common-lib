@@ -1,4 +1,4 @@
-import ReactSelect, { ControlProps, MenuProps } from 'react-select'
+import ReactSelect, { ControlProps, MenuProps, ValueContainerProps } from 'react-select'
 import { ReactElement, useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
@@ -13,6 +13,7 @@ import {
     SelectPickerLoadingIndicator,
     SelectPickerMenu,
     SelectPickerOption,
+    SelectPickerValueContainer,
 } from './common'
 import { SelectPickerOptionType, SelectPickerProps } from './type'
 
@@ -26,6 +27,7 @@ const SelectPicker = ({
     showSelectedOptionIcon = true,
     size = ComponentSizeType.medium,
     disabledTippyContent,
+    showSelectedOptionsCount = false,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
@@ -51,6 +53,13 @@ const SelectPicker = ({
             <SelectPickerMenu {...menuProps} renderMenuListFooter={renderMenuListFooter} />
         ),
         [],
+    )
+
+    const renderValueContainer = useCallback(
+        (valueContainerProps: ValueContainerProps<SelectPickerOptionType>) => (
+            <SelectPickerValueContainer {...valueContainerProps} showSelectedOptionsCount={showSelectedOptionsCount} />
+        ),
+        [showSelectedOptionsCount],
     )
 
     const renderDisabledTippy = (children: ReactElement) => (
@@ -92,6 +101,7 @@ const SelectPicker = ({
                                 Option: SelectPickerOption,
                                 Menu: renderMenu,
                                 ClearIndicator: SelectPickerClearIndicator,
+                                ValueContainer: renderValueContainer,
                             }}
                             styles={selectStyles}
                             menuPlacement="auto"

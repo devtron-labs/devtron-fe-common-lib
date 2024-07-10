@@ -52,4 +52,10 @@ export interface SelectPickerProps
      * Content to be shown in a tippy when disabled
      */
     disabledTippyContent?: ReactNode
+    /**
+     * If true, the selected options count is shown in a chip inside ValueContainer
+     *
+     * @default 'false'
+     */
+    showSelectedOptionsCount?: boolean
 }

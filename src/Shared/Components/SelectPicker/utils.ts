@@ -33,6 +33,7 @@ export const getCommonSelectStyle = ({ error, size }: Pick<SelectPickerProps, 'e
         padding: '5px 8px',
         gap: '8px',
         opacity: state.isDisabled ? 0.5 : 1,
+        flexWrap: 'nowrap',
 
         '&:hover': {
             borderColor: state.isDisabled ? 'var(--N200)' : 'var(--N300)',
@@ -107,6 +108,7 @@ export const getCommonSelectStyle = ({ error, size }: Pick<SelectPickerProps, 'e
         size: '13px',
         fontWeight: 400,
         lineHeight: '20px',
+        overflow: 'hidden',
     }),
     placeholder: (base) => ({
         ...base,
