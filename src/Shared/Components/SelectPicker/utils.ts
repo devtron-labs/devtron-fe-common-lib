@@ -1,7 +1,8 @@
 import { ComponentSizeType } from '@Shared/constants'
-import { SelectPickerProps } from './type'
+import { StylesConfig } from 'react-select'
+import { SelectPickerOptionType, SelectPickerProps } from './type'
 
-const getMenuWidthFromSize = (menuSize: SelectPickerProps['menuSize']) => {
+const getMenuWidthFromSize = (menuSize: SelectPickerProps['menuSize']): string => {
     switch (menuSize) {
         case ComponentSizeType.medium:
             return '125%'
@@ -17,7 +18,7 @@ export const getCommonSelectStyle = ({
     error,
     size,
     menuSize,
-}: Pick<SelectPickerProps, 'error' | 'size' | 'menuSize'>) => ({
+}: Pick<SelectPickerProps, 'error' | 'size' | 'menuSize'>): StylesConfig<SelectPickerOptionType> => ({
     container: (base, state) => ({
         ...base,
         ...(state.isDisabled && {
