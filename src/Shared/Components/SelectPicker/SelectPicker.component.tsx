@@ -1,8 +1,10 @@
 import ReactSelect, { ControlProps, MenuProps } from 'react-select'
-import { useCallback, useMemo } from 'react'
+import { ReactElement, useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
 import { ComponentSizeType } from '@Shared/constants'
+import { ConditionalWrap } from '@Common/Helper'
+import Tippy from '@tippyjs/react'
 import { getCommonSelectStyle } from './utils'
 import {
     SelectPickerClearIndicator,
@@ -23,9 +25,10 @@ const SelectPicker = ({
     label,
     showSelectedOptionIcon = true,
     size = ComponentSizeType.medium,
+    disabledTippyContent,
     ...props
 }: SelectPickerProps) => {
-    const { inputId, required } = props
+    const { inputId, required, isDisabled } = props
 
     const selectStyles = useMemo(
         () =>
@@ -50,6 +53,12 @@ const SelectPicker = ({
         [],
     )
 
+    const renderDisabledTippy = (children: ReactElement) => (
+        <Tippy content={disabledTippyContent} placement="top" className="default-tt" arrow={false}>
+            {children}
+        </Tippy>
+    )
+
     return (
         <div className="flex column left top dc__gap-4">
             {/* TODO Eshank: Common out for fields */}
@@ -70,25 +79,28 @@ const SelectPicker = ({
                         )}
                     </label>
                 )}
-                <ReactSelect<SelectPickerOptionType, boolean>
-                    {...props}
-                    placeholder={placeholder}
-                    components={{
-                        IndicatorSeparator: null,
-                        LoadingIndicator: SelectPickerLoadingIndicator,
-                        DropdownIndicator: SelectPickerDropdownIndicator,
-                        Control: renderControl,
-                        Option: SelectPickerOption,
-                        Menu: renderMenu,
-                        ClearIndicator: SelectPickerClearIndicator,
-                    }}
-                    styles={selectStyles}
-                    className="w-100"
-                    menuPlacement="auto"
-                    menuPosition="fixed"
-                    menuShouldScrollIntoView
-                    backspaceRemovesValue={false}
-                />
+                <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
+                    <div className="w-100">
+                        <ReactSelect<SelectPickerOptionType, boolean>
+                            {...props}
+                            placeholder={placeholder}
+                            components={{
+                                IndicatorSeparator: null,
+                                LoadingIndicator: SelectPickerLoadingIndicator,
+                                DropdownIndicator: SelectPickerDropdownIndicator,
+                                Control: renderControl,
+                                Option: SelectPickerOption,
+                                Menu: renderMenu,
+                                ClearIndicator: SelectPickerClearIndicator,
+                            }}
+                            styles={selectStyles}
+                            menuPlacement="auto"
+                            menuPosition="fixed"
+                            menuShouldScrollIntoView
+                            backspaceRemovesValue={false}
+                        />
+                    </div>
+                </ConditionalWrap>
             </div>
             {error && (
                 <div className="flex left dc__gap-4 cr-5 fs-11 lh-16 fw-4">

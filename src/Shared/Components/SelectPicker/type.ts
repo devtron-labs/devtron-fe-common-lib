@@ -48,4 +48,8 @@ export interface SelectPickerProps
      * @default 'ComponentSizeType.medium'
      */
     size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large>
+    /**
+     * Content to be shown in a tippy when disabled
+     */
+    disabledTippyContent?: ReactNode
 }
