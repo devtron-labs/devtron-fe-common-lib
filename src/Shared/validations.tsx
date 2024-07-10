@@ -221,3 +221,30 @@ export const validateIfImageExist = (url: string): Promise<ValidationResponseTyp
             })
         }
     })
+
+export const validateUniqueKeys = (keys: string[]) => {
+    const keysMap: Record<string, number> = keys.reduce(
+        (acc, key) => {
+            if (acc[key]) {
+                acc[key] += 1
+                return acc
+            }
+
+            acc[key] = 1
+            return acc
+        },
+        {} as Record<string, number>,
+    )
+
+    const duplicateKeys = Object.keys(keysMap).filter((key) => keysMap[key] > 1)
+    if (!duplicateKeys.length) {
+        return {
+            isValid: true,
+        }
+    }
+
+    return {
+        isValid: false,
+        message: `Duplicate variable name: ${duplicateKeys.join(', ')}`,
+    }
+}
