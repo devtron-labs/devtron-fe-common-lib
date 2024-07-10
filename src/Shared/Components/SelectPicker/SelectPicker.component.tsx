@@ -1,4 +1,4 @@
-import ReactSelect, { ControlProps, MenuProps, ValueContainerProps } from 'react-select'
+import ReactSelect, { ControlProps, MenuListProps, ValueContainerProps } from 'react-select'
 import { ReactElement, useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
@@ -11,7 +11,7 @@ import {
     SelectPickerControl,
     SelectPickerDropdownIndicator,
     SelectPickerLoadingIndicator,
-    SelectPickerMenu,
+    SelectPickerMenuList,
     SelectPickerOption,
     SelectPickerValueContainer,
 } from './common'
@@ -50,9 +50,9 @@ const SelectPicker = ({
         [icon, showSelectedOptionIcon],
     )
 
-    const renderMenu = useCallback(
-        (menuProps: MenuProps<SelectPickerOptionType>) => (
-            <SelectPickerMenu {...menuProps} renderMenuListFooter={renderMenuListFooter} />
+    const renderMenuList = useCallback(
+        (menuProps: MenuListProps<SelectPickerOptionType>) => (
+            <SelectPickerMenuList {...menuProps} renderMenuListFooter={renderMenuListFooter} />
         ),
         [],
     )
@@ -72,7 +72,7 @@ const SelectPicker = ({
 
     return (
         <div className="flex column left top dc__gap-4">
-            {/* TODO Eshank: Common out for fields */}
+            {/* Note: Common out for fields */}
             <div className="flex column left top dc__gap-6 w-100">
                 {label && (
                     <label
@@ -101,7 +101,7 @@ const SelectPicker = ({
                                 DropdownIndicator: SelectPickerDropdownIndicator,
                                 Control: renderControl,
                                 Option: SelectPickerOption,
-                                Menu: renderMenu,
+                                MenuList: renderMenuList,
                                 ClearIndicator: SelectPickerClearIndicator,
                                 ValueContainer: renderValueContainer,
                             }}
@@ -120,7 +120,7 @@ const SelectPicker = ({
                     <span className="dc__ellipsis-right__2nd-line">{error}</span>
                 </div>
             )}
-            {/* TODO Eshank: Common out for input fields */}
+            {/* Note: Common out for input fields */}
             {helperText && (
                 <div className="flex left dc__gap-4 fs-11 lh-16 cn-7">
                     <ICInfoFilledOverride className="icon-dim-16 dc__no-shrink dc__align-self-start" />

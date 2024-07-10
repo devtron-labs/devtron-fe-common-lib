@@ -37,8 +37,6 @@ export const getCommonSelectStyle = ({
     menuList: (base) => ({
         ...base,
         padding: 0,
-        paddingBlock: '4px',
-        cursor: 'pointer',
     }),
     control: (base, state) => ({
         ...base,

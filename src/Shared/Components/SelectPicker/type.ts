@@ -11,7 +11,7 @@ export interface SelectPickerOptionType extends OptionType<number | string, Reac
 
 type SelectProps = ReactSelectProps<SelectPickerOptionType>
 
-// TODO Eshank: Add support for border less
+// TODO: Add support for border less
 export interface SelectPickerProps
     extends Pick<
             SelectProps,
@@ -28,7 +28,6 @@ export interface SelectPickerProps
             | 'isDisabled'
             | 'isLoading'
             | 'required'
-            | 'menuIsOpen'
         >,
         Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> {
     icon?: ReactElement
