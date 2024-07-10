@@ -28,6 +28,7 @@ export interface SelectPickerProps
             | 'isDisabled'
             | 'isLoading'
             | 'required'
+            | 'menuIsOpen'
         >,
         Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> {
     icon?: ReactElement
@@ -58,4 +59,12 @@ export interface SelectPickerProps
      * @default 'false'
      */
     showSelectedOptionsCount?: boolean
+    /**
+     * Width of the menu list
+     *
+     * Note: the overflow needs to be handled explicitly for non-small variants
+     *
+     * @default 'ComponentSizeType.small'
+     */
+    menuSize?: ComponentSizeType
 }

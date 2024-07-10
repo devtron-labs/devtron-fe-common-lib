@@ -28,6 +28,7 @@ const SelectPicker = ({
     size = ComponentSizeType.medium,
     disabledTippyContent,
     showSelectedOptionsCount = false,
+    menuSize,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
@@ -37,8 +38,9 @@ const SelectPicker = ({
             getCommonSelectStyle({
                 error,
                 size,
+                menuSize,
             }),
-        [error, size],
+        [error, size, menuSize],
     )
 
     const renderControl = useCallback(

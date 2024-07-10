@@ -1,7 +1,23 @@
 import { ComponentSizeType } from '@Shared/constants'
 import { SelectPickerProps } from './type'
 
-export const getCommonSelectStyle = ({ error, size }: Pick<SelectPickerProps, 'error' | 'size'>) => ({
+const getMenuWidthFromSize = (menuSize: SelectPickerProps['menuSize']) => {
+    switch (menuSize) {
+        case ComponentSizeType.medium:
+            return '125%'
+        case ComponentSizeType.large:
+            return '150%'
+        case ComponentSizeType.small:
+        default:
+            return '100%'
+    }
+}
+
+export const getCommonSelectStyle = ({
+    error,
+    size,
+    menuSize,
+}: Pick<SelectPickerProps, 'error' | 'size' | 'menuSize'>) => ({
     container: (base, state) => ({
         ...base,
         ...(state.isDisabled && {
@@ -16,6 +32,7 @@ export const getCommonSelectStyle = ({ error, size }: Pick<SelectPickerProps, 'e
         backgroundColor: 'var(--N0)',
         border: '1px solid var(--N200)',
         boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.20)',
+        width: getMenuWidthFromSize(menuSize),
     }),
     menuList: (base) => ({
         ...base,

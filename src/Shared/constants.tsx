@@ -411,6 +411,9 @@ export enum K8sResourcePayloadAppType {
     EXTERNAL_ARGO_APP = 2,
 }
 
+/**
+ * Size variants for components
+ */
 export enum ComponentSizeType {
     small = 'small',
     medium = 'medium',
