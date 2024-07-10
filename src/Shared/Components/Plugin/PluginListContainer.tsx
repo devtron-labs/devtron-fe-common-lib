@@ -79,7 +79,8 @@ const PluginListContainer = ({
 
     const [isLoadingPluginData, pluginData, pluginDataError, reloadPluginData] = useAsync(
         getPluginStoreDataWrapper,
-        persistFilters ? [pluginList] : [searchKey, appId, selectedTags],
+        // In case of persistFilters with change of searchKey or selectedTags we anyways clear the pluginList so no need to add dependency
+        [searchKey, appId, selectedTags],
         persistFilters ? !pluginList.length : true,
     )
 
