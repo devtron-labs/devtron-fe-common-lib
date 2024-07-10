@@ -2,23 +2,23 @@ import { showError } from '@Common/Helper'
 import { ToastBody } from '@Common/ToastBody'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+import { API_STATUS_CODES } from '@Common/Constants'
 import { getDownloadResponse } from './service'
-
-export interface HandleDownloadProps {
-    downloadUrl: string
-    showFilePreparingToast?: boolean
-    fileName?: string
-}
+import { HandleDownloadProps } from './types'
 
 const useDownload = () => {
     const [isDownloading, setIsDownloading] = useState<boolean>(false)
 
-    /*
-    downloadUrl: API url for downloading file
-    showFilePreparingToast: Show toast 'Preparing file for download'
-    fileName: fileName of the downloaded file
-    */
-    const handleDownload = async ({ downloadUrl, showFilePreparingToast = false, fileName = 'file.tgz' }) => {
+    /**
+     * @param downloadUrl - API url for downloading file
+     * @param filterType - Show toast 'Preparing file for download'
+     * @param query - fileName of the downloaded file
+     */
+    const handleDownload = async ({
+        downloadUrl,
+        showFilePreparingToast = false,
+        fileName = 'file.tgz',
+    }: HandleDownloadProps) => {
         setIsDownloading(true)
         if (showFilePreparingToast) {
             toast.info(
@@ -30,7 +30,7 @@ const useDownload = () => {
         }
         try {
             const response = await getDownloadResponse(downloadUrl)
-            if (response.status === 200) {
+            if (response.status === API_STATUS_CODES.OK) {
                 const data = await (response as any).blob()
 
                 // Create a new URL object
@@ -55,11 +55,12 @@ const useDownload = () => {
 
                 toast.success('Downloaded Successfully')
             } else {
-                const error = (await response.json()).errors[0].userMessage
-                showError(error)
+                const jsonResponse = await response?.json()
+                const error = jsonResponse.errors[0].userMessage || jsonResponse.errors[0].internalMessage
+                showError(new Error(error))
             }
         } catch (error) {
-            toast.error(error)
+            showError(error)
         } finally {
             setIsDownloading(false)
         }
