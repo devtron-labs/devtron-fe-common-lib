@@ -65,6 +65,7 @@ export const getPluginStoreData = async ({
         return {
             totalCount: result?.totalCount || 0,
             pluginStore,
+            parentPluginIdList: result?.parentPlugins?.map((parentPluginDetails) => parentPluginDetails.id) || [],
         }
     } catch (error) {
         if (!getIsRequestAborted(error)) {

@@ -103,6 +103,7 @@ const PluginListContainer = ({
         const {
             pluginStore: { parentPluginStore, pluginVersionStore },
             totalCount: responseTotalCount,
+            parentPluginIdList,
         } = pluginResponse
 
         handlePluginDataStoreUpdate(getUpdatedPluginStore(pluginDataStore, parentPluginStore, pluginVersionStore))
@@ -117,10 +118,10 @@ const PluginListContainer = ({
             {} as Record<number, true>,
         )
 
-        Object.keys(parentPluginStore).forEach((key) => {
+        parentPluginIdList.forEach((key) => {
             if (!newPluginListMap[key]) {
                 newPluginList.push({
-                    parentPluginId: +key,
+                    parentPluginId: key,
                 })
                 newPluginListMap[key] = true
             }
