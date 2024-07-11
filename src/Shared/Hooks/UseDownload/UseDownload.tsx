@@ -56,8 +56,8 @@ const useDownload = () => {
 
                 toast.success('Downloaded Successfully')
             } else {
-                const jsonResponseError = await response?.json()
-                showError(new ServerErrors(jsonResponseError))
+                const jsonResponseError: ServerErrors = await response?.json()
+                throw new ServerErrors(jsonResponseError)
             }
         } catch (error) {
             showError(error)
