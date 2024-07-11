@@ -3,6 +3,7 @@ import { ToastBody } from '@Common/ToastBody'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { API_STATUS_CODES } from '@Common/Constants'
+import { ServerErrors } from '@Common/ServerError'
 import { getDownloadResponse } from './service'
 import { HandleDownloadProps } from './types'
 
@@ -55,9 +56,8 @@ const useDownload = () => {
 
                 toast.success('Downloaded Successfully')
             } else {
-                const jsonResponse = await response?.json()
-                const error = jsonResponse.errors[0].userMessage || jsonResponse.errors[0].internalMessage
-                showError(new Error(error))
+                const jsonResponseError = await response?.json()
+                showError(new ServerErrors(jsonResponseError))
             }
         } catch (error) {
             showError(error)
