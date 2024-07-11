@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import noResult from '../../Assets/Img/empty-noresult@2x.png'
+import noResult from '@Images/empty-noresult@2x.png'
 import GenericEmptyState from './GenericEmptyState'
 import { GenericFilterEmptyStateProps } from './types'
 

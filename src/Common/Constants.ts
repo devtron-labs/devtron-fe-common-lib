@@ -20,11 +20,12 @@ export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
+export const DOCUMENTATION_VERSION = '/v/v0.7'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DOCUMENTATION = {
-    APP_TAGS: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/usage/applications/create-application#tags`,
-    APP_OVERVIEW_TAGS: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/usage/applications/overview#manage-tags`,
-    BLOB_STORAGE: `${DOCUMENTATION_HOME_PAGE}/v/v0.6/getting-started/install/installation-configuration#configuration-of-blob-storage`,
+    APP_TAGS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/create-application#tags`,
+    APP_OVERVIEW_TAGS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/overview#manage-tags`,
+    BLOB_STORAGE: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/getting-started/install/installation-configuration#configuration-of-blob-storage`,
 }
 
 export const PATTERNS = {
@@ -58,6 +59,7 @@ export const URLS = {
     APP_TRIGGER: 'trigger',
     GLOBAL_CONFIG_DOCKER: '/global-config/docker',
     DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
+    GLOBAL_CONFIG_SCOPED_VARIABLES: '/global-config/scoped-variables',
 }
 
 export const ROUTES = {
@@ -420,10 +422,6 @@ export enum FREQUENCY_ENUM {
     WEEKLY_RANGE = 'WEEKLY_RANGE',
 }
 
-export const TIME_FORMAT = {
-    DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
-}
-
 export function getOrdinal(number) {
     if (number % 100 >= 11 && number % 100 <= 13) {
         return `${number}th`
@@ -511,4 +509,6 @@ export const DATE_TIME_FORMATS = {
     TWELVE_HOURS_FORMAT: 'ddd, DD MMM YYYY, hh:mm A',
     TWELVE_HOURS_FORMAT_WITHOUT_WEEKDAY: 'DD MMM YYYY, hh:mm A',
     TWELVE_HOURS_EXPORT_FORMAT: 'DD-MMM-YYYY hh.mm A',
+    DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
+    DD_MMM_YYYY: 'DD MMM YYYY',
 }
