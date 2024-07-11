@@ -165,6 +165,10 @@ export interface GetPluginListPayloadType
 export interface GetPluginStoreDataReturnType {
     totalCount: number
     pluginStore: PluginDataStoreType
+    /**
+     * Sorted on the basis of name of latest version of parent plugin
+     */
+    parentPluginIdList: number[]
 }
 
 export interface PluginListParamsType {
