@@ -672,6 +672,23 @@ export interface TriggerHistoryFilterCriteriaProps {
     showCurrentReleaseDeployments: boolean
 }
 
+export enum StageStatusType {
+    SUCCESS = 'Success',
+    FAILURE = 'Failure',
+}
+
+export interface StageInfoDTO {
+    stage: string
+    startTime: string
+    endTime?: string
+    status: StageStatusType
+}
+
+export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime' | 'endTime' | 'status'> {
+    logs: string[]
+    isOpen: boolean
+}
+
 export type TriggerHistoryFilterCriteriaType = `${string}|${string}|${string}`[]
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])
 export const statusSet = new Set(['starting', 'running', 'pending'])

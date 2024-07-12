@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { useHistory, useParams } from 'react-router'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import moment from 'moment'
+import { useParams } from 'react-router'
+import { useEffect, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
+import { getTimeDifference } from '@Shared/Helpers'
 import {
     Progressing,
     Host,
@@ -26,19 +26,24 @@ import {
     ROUTES,
     showError,
     SearchBar,
-    useSearchString,
-    UseSearchString,
+    ZERO_TIME_STRING,
+    useUrlFilters,
+    stopPropagation,
 } from '../../../Common'
-import { EVENT_STREAM_EVENTS_MAP, LOGS_RETRY_COUNT, POD_STATUS } from './constants'
-import { DeploymentHistoryBaseParamsType, HistoryComponentType, LogsRendererType } from './types'
-import { DEPLOYMENT_STATUS } from '../../constants'
+import { EVENT_STREAM_EVENTS_MAP, LOGS_RETRY_COUNT, LOGS_STAGE_IDENTIFIER, POD_STATUS } from './constants'
+import {
+    DeploymentHistoryBaseParamsType,
+    HistoryComponentType,
+    LogsRendererType,
+    StageDetailType,
+    StageInfoDTO,
+    StageStatusType,
+} from './types'
+import { getStageStatusIcon } from './utils'
 import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
 import { ReactComponent as ICCaretDown } from '../../../Assets/Icon/ic-caret-down.svg'
-import { ReactComponent as ICCheck } from '../../../Assets/Icon/ic-check.svg'
-import { ReactComponent as ICInProgress } from '../../../Assets/Icon/ic-in-progress.svg'
-import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 import './LogsRenderer.scss'
 
 const renderLogsNotAvailable = (subtitle?: string): JSX.Element => (
@@ -80,13 +85,13 @@ const renderConfigurationError = (isBlobStorageConfigured: boolean): JSX.Element
     </div>
 )
 
-function useCIEventSource(url: string, maxLength?: number) {
+const useCIEventSource = (url: string, maxLength?: number): [string[], EventSource, boolean] => {
     const [dataVal, setDataVal] = useState([])
     let retryCount = LOGS_RETRY_COUNT
     const [logsNotAvailableError, setLogsNotAvailableError] = useState<boolean>(false)
     const [interval, setInterval] = useState(1000)
     const buffer = useRef([])
-    const eventSourceRef = useRef(null)
+    const eventSourceRef = useRef<EventSource>(null)
 
     function populateData() {
         setDataVal((data) => [...data, ...buffer.current])
@@ -166,108 +171,121 @@ export const LogsRenderer = ({
         parentType === HistoryComponentType.CI
             ? `${Host}/${ROUTES.CI_CONFIG_GET}/${pipelineId}/workflow/${triggerDetails.id}/logs`
             : `${Host}/${ROUTES.CD_MATERIAL_GET}/workflow/logs/${appId}/${envId}/${pipelineId}/${triggerDetails.id}`
-    const [logs, eventSource, logsNotAvailable] = useCIEventSource(
+    const [streamDataList, eventSource, logsNotAvailable] = useCIEventSource(
         triggerDetails.podStatus && triggerDetails.podStatus !== POD_STATUS.PENDING && logsURL,
     )
-    // TODO: Add type
-    const [parsedLogs, setParsedLogs] = useState([])
+    const [stageList, setStageList] = useState<StageDetailType[]>([])
+    const { searchKey, handleSearch } = useUrlFilters()
 
-    const history = useHistory()
-    const { searchParams } = useSearchString()
-    const { logsQuery } = searchParams
-
-    // Would open all the stages containing logsQuery and close all other stages iff logsQuery is present
-    // Have not mindfully changed index since need the same index to be used for setting parsedLogs
-    const manipulatedParsedLogs = useMemo(() => {
-        if (!logsQuery) {
-            return parsedLogs
+    // TODO: Look into code duplication
+    // TODO: Handle backward compatibility
+    useEffect(() => {
+        if (!streamDataList?.length) {
+            return
         }
 
-        return parsedLogs.map((stage) => {
-            if (stage.logs.some((log) => log.includes(logsQuery))) {
-                return {
-                    ...stage,
-                    isOpen: true,
-                }
-            }
-
-            return {
-                ...stage,
-                isOpen: false,
-            }
-        })
-    }, [JSON.stringify(parsedLogs), logsQuery])
-
-    useEffect(() => {
         // If initially parsedLogs are empty, and initialStatus is Success then would set opened as false on each
-        // If initialStatus is not success and parsedLogs are empty then would set opened as false on each except the last
-        if (parsedLogs.length === 0) {
-            const newLogs = logs.reduce((acc, log: string, index) => {
-                if (log.startsWith('STAGE_INFO')) {
+        // If initialStatus is not success and initial parsedLogs are empty then would set opened as false on each except the last
+        if (stageList.length === 0) {
+            const newStageList: StageDetailType[] = streamDataList.reduce((acc, streamItem: string, index) => {
+                if (streamItem.startsWith(LOGS_STAGE_IDENTIFIER)) {
                     try {
-                        const stageInfo = JSON.parse(log.split('|')[1])
-                        acc.push({
-                            stage: stageInfo.stage,
-                            startTime: stageInfo.startTime,
-                            endTime: stageInfo.endTime,
-                            isOpen: triggerDetails.status === 'Success' ? false : acc.length === logs.length - 1,
-                            logs: [],
-                        })
+                        const { stage, startTime, endTime, status }: StageInfoDTO = JSON.parse(streamItem.split('|')[1])
+                        const existingStage = acc.find((item) => item.stage === stage && item.startTime === startTime)
+                        if (existingStage) {
+                            // Would update the existing stage with new endTime
+                            existingStage.endTime = endTime
+                            existingStage.status = status
+                        } else {
+                            acc.push({
+                                stage: stage || `Untitled stage ${index + 1}`,
+                                startTime: startTime || ZERO_TIME_STRING,
+                                endTime: endTime || ZERO_TIME_STRING,
+                                isOpen:
+                                    status === StageStatusType.SUCCESS
+                                        ? false
+                                        : acc.length === streamDataList.length - 1,
+                                logs: [],
+                                status,
+                            })
+                        }
                         return acc
                     } catch (e) {
                         showError('Error while parsing logs stage')
                         acc.push({
-                            stage: `'Error ${index}'`,
-                            startTime: '',
-                            endTime: '',
+                            stage: `Error ${index}`,
+                            startTime: ZERO_TIME_STRING,
+                            endTime: ZERO_TIME_STRING,
                             isOpen: false,
                             logs: [],
+                            status: StageStatusType.FAILURE,
                         })
                         return acc
                     }
                 }
 
+                // Ideally in case of parallel build should receive stage name with logs
+                // NOTE: For now would always append log to last stage, can show a loader on stage tiles till processed
                 if (acc.length > 0) {
-                    acc[acc.length - 1].logs.push(log)
+                    acc[acc.length - 1].logs.push(streamItem)
                 }
 
                 return acc
-            }, [])
+            }, [] as StageDetailType[])
 
-            setParsedLogs(newLogs)
+            setStageList(newStageList)
             return
         }
 
-        // First would get the total length of logs including stage heading then would start injecting logs from above logic
-        const totalLength = logs.reduce((acc, logsStage) => acc + logsStage.logs.length + 1, 0)
-        const newLogs = structuredClone(parsedLogs)
-        for (let i = totalLength; i < logs.length; i++) {
-            if (logs[i].startsWith('STAGE_INFO')) {
+        const newStageList = streamDataList.reduce((acc, streamItem: string, index) => {
+            if (streamItem.startsWith(LOGS_STAGE_IDENTIFIER)) {
                 try {
-                    const stageInfo = JSON.parse(logs[i].split('|')[1])
-                    newLogs.push({
-                        stage: stageInfo.stage,
-                        startTime: stageInfo.startTime,
-                        endTime: stageInfo.endTime,
-                        isOpen: true,
-                        logs: [],
-                    })
+                    const { stage, startTime, endTime, status }: StageInfoDTO = JSON.parse(streamItem.split('|')[1])
+                    const existingStage = acc.find((item) => item.stage === stage && item.startTime === startTime)
+                    const previousExistingStage = stageList.find(
+                        (item) => item.stage === stage && item.startTime === startTime,
+                    )
+
+                    if (existingStage) {
+                        // Would update the existing stage with new endTime
+                        existingStage.endTime = endTime
+                        existingStage.status = status
+                    } else {
+                        acc.push({
+                            stage: stage || `Untitled stage ${index + 1}`,
+                            startTime: startTime || ZERO_TIME_STRING,
+                            endTime: endTime || ZERO_TIME_STRING,
+                            isOpen: previousExistingStage ? previousExistingStage.isOpen : true,
+                            logs: [],
+                            status,
+                        })
+                    }
+                    return acc
                 } catch (e) {
                     showError('Error while parsing logs stage')
-                    newLogs.push({
-                        stage: 'Error',
-                        startTime: '',
-                        endTime: '',
+                    acc.push({
+                        stage: `Error ${index}`,
+                        startTime: ZERO_TIME_STRING,
+                        endTime: ZERO_TIME_STRING,
                         isOpen: false,
                         logs: [],
+                        status: StageStatusType.FAILURE,
                     })
+                    return acc
                 }
-            } else {
-                newLogs[newLogs.length - 1].logs.push(logs[i])
             }
-        }
-        setParsedLogs(newLogs)
-    }, [JSON.stringify(logs)])
+
+            // Ideally in case of parallel build should receive stage name with logs
+            // NOTE: For now would always append log to last stage, can show a loader on stage tiles till processed
+            if (acc.length > 0) {
+                acc[acc.length - 1].logs.push(streamItem)
+            }
+
+            return acc
+        }, [] as StageDetailType[])
+
+        setStageList(newStageList)
+    }, [JSON.stringify(streamDataList)])
 
     function createMarkup(log: string): {
         __html: string
@@ -283,60 +301,19 @@ export const LogsRenderer = ({
     }
 
     const handleSearchChange = (searchText: string) => {
-        const newParams: UseSearchString['searchParams'] = {
-            ...searchParams,
-            logsQuery: searchText,
-        }
-
-        if (!searchText) {
-            delete newParams.logsQuery
-        }
-
-        history.replace({
-            search: new URLSearchParams(newParams).toString(),
-        })
-    }
-
-    const renderStageStatusIcon = (isLastIndex: boolean, endTime: string) => {
-        const lowerCaseStatus = triggerDetails.status.toLowerCase()
-        const isDeploymentSuccessful =
-            lowerCaseStatus === DEPLOYMENT_STATUS.SUCCEEDED || lowerCaseStatus === DEPLOYMENT_STATUS.HEALTHY
-
-        if (!isLastIndex || isDeploymentSuccessful) {
-            return <ICCheck className="dc__no-shrink icon-dim-16 scg-5" />
-        }
-
-        if (!endTime) {
-            return <ICInProgress className="dc__no-shrink icon-dim-16 ic-in-progress-orange" />
-        }
-
-        return <ICClose className="dc__no-shrink icon-dim-16 fcr-5" />
+        handleSearch(searchText)
     }
 
     const closeLogsStage = (index: number) => {
-        const newLogs = structuredClone(parsedLogs)
+        const newLogs = structuredClone(stageList)
         newLogs[index].isOpen = false
-        setParsedLogs(newLogs)
+        setStageList(newLogs)
     }
 
     const openLogsStage = (index: number) => {
-        const newLogs = structuredClone(parsedLogs)
+        const newLogs = structuredClone(stageList)
         newLogs[index].isOpen = true
-        setParsedLogs(newLogs)
-    }
-
-    // TODO: Re-look
-    const renderTimeDiff = (endTime: string, startTime: string) => {
-        const seconds = moment(endTime).diff(moment(startTime), 'seconds')
-        const minutes = moment(endTime).diff(moment(startTime), 'minutes') % 60
-        const hours = moment(endTime).diff(moment(startTime), 'hours', true).toFixed(2)
-        if (seconds < 60) {
-            return `${seconds} s`
-        }
-        if (minutes < 60) {
-            return `${minutes} m ${seconds % 60} s`
-        }
-        return `${hours} h ${minutes % 60} m ${seconds % 60} s`
+        setStageList(newLogs)
     }
 
     return triggerDetails.podStatus !== POD_STATUS.PENDING &&
@@ -351,7 +328,10 @@ export const LogsRenderer = ({
                 backgroundColor: '#0C1021',
             }}
         >
-            <div className="flexbox logs-renderer__search-bar logs-renderer__filters-border-bottom">
+            <div
+                className="flexbox logs-renderer__search-bar logs-renderer__filters-border-bottom"
+                onKeyDown={stopPropagation}
+            >
                 <SearchBar
                     noBackgroundAndBorder
                     containerClassName="w-100"
@@ -359,54 +339,41 @@ export const LogsRenderer = ({
                         placeholder: 'Search logs',
                     }}
                     handleSearchChange={handleSearchChange}
-                    initialSearchText={logsQuery || ''}
+                    initialSearchText={searchKey}
                 />
             </div>
 
             <div className="flexbox-col px-12 dc__gap-8">
-                {manipulatedParsedLogs.map(({ stage, isOpen, logs: stageLogs, endTime, startTime }, index) => (
+                {stageList.map(({ stage, isOpen, logs: stageLogs, endTime, startTime, status }, index) => (
                     <div key={stage} className="flexbox-col dc__gap-8">
-                        <div
-                            className="flexbox dc__content-space py-6 px-8 br-4"
+                        <button
+                            className="flexbox dc__transparent dc__content-space py-6 px-8 br-4 dc__align-items-center"
                             style={{
                                 backgroundColor: isOpen ? '#2C3354' : '#0C1021',
                             }}
+                            type="button"
+                            role="tab"
+                            // TODO: Make a component
+                            onClick={isOpen ? () => closeLogsStage(index) : () => openLogsStage(index)}
                         >
-                            <div className="flexbox dc__gap-8">
-                                {/* TODO: Make whole row clickable */}
+                            <div className="flexbox dc__gap-8 dc__transparent dc__align-items-center">
                                 {isOpen ? (
-                                    <button
-                                        type="button"
-                                        aria-label={`Close ${stage}`}
-                                        data-testid={`close-logs-stage-${index}`}
-                                        className="p-0 flex dc__no-border dc__no-background dc__outline-none-imp dc__tab-focus icon-dim-16 dc__tab-focus"
-                                        onClick={() => closeLogsStage(index)}
-                                    >
-                                        <ICCaretDown className="icon-dim-16 dc__no-shrink" />
-                                    </button>
+                                    <ICCaretDown className="icon-dim-16 dc__no-shrink" />
                                 ) : (
-                                    <button
-                                        type="button"
-                                        aria-label={`Open ${stage}`}
-                                        data-testid={`open-logs-stage-${index}`}
-                                        className="p-0 flex dc__no-border dc__no-background dc__outline-none-imp dc__tab-focus icon-dim-16 dc__tab-focus"
-                                        onClick={() => openLogsStage(index)}
-                                    >
-                                        <ICCaretDown className="icon-dim-16 dc__no-shrink dc__flip-270 dc__opacity-0_5" />
-                                    </button>
+                                    <ICCaretDown className="icon-dim-16 dc__no-shrink dc__flip-270 dc__opacity-0_5" />
                                 )}
 
-                                <div className="flexbox dc__gap-12">
-                                    {renderStageStatusIcon(index === parsedLogs.length - 1, endTime)}
+                                <div className="flexbox dc__gap-12 dc__align-items-center">
+                                    {getStageStatusIcon(status)}
 
                                     <h3 className="m-0 cn-0 fs-13 fw-6 lh-20 dc__truncate">{stage}</h3>
                                 </div>
                             </div>
 
-                            {endTime && (
-                                <span className="cn-0 fs-13 fw-4 lh-20">{renderTimeDiff(endTime, startTime)}</span>
+                            {endTime !== ZERO_TIME_STRING && (
+                                <span className="cn-0 fs-13 fw-4 lh-20">{getTimeDifference(startTime, endTime)}</span>
                             )}
-                        </div>
+                        </button>
 
                         {isOpen &&
                             stageLogs.map((log: string, logsIndex: number) => (

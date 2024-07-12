@@ -17,6 +17,7 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
+import moment from 'moment'
 import { handleUTCTime, mapByKey, MaterialInfo, shallowEqual, SortingOrder } from '../Common'
 import {
     AggregationKeys,
@@ -707,3 +708,16 @@ export const decode = (data, isEncoded: boolean = false) =>
             agg[curr.key] = curr.value
             return agg
         }, {})
+
+export const getTimeDifference = (startTime: string, endTime: string): string => {
+    const seconds = moment(endTime).diff(moment(startTime), 'seconds')
+    const minutes = moment(endTime).diff(moment(startTime), 'minutes') % 60
+    const hours = moment(endTime).diff(moment(startTime), 'hours', true).toFixed(2)
+    if (seconds < 60) {
+        return `${seconds}s`
+    }
+    if (minutes < 60) {
+        return `${minutes}m ${seconds % 60}s`
+    }
+    return `${hours}h ${minutes % 60}m ${seconds % 60}s`
+}
