@@ -13,12 +13,16 @@ const useDownload = () => {
     /**
      * @param downloadUrl - API url for downloading file
      * @param filterType - Show toast 'Preparing file for download'
-     * @param query - fileName of the downloaded file
+     * @param fileName - fileName of the downloaded file
+     * @param showSuccessfulToast - show toast on successful download
+     * @param downloadSuccessToastContent - Content to show in toast on successful download
      */
     const handleDownload = async ({
         downloadUrl,
         showFilePreparingToast = false,
-        fileName = 'file.tgz',
+        fileName,
+        showSuccessfulToast = true,
+        downloadSuccessToastContent = 'Downloaded Successfully',
     }: HandleDownloadProps) => {
         setIsDownloading(true)
         if (showFilePreparingToast) {
@@ -40,7 +44,15 @@ const useDownload = () => {
                 // Create a link element
                 const a = document.createElement('a')
                 a.href = blobUrl
-                a.download = fileName
+
+                // Get filename from response headers
+                const defaultFileName = response.headers
+                    .get('content-disposition')
+                    .split(';')
+                    .find((n) => n.includes('filename='))
+                    .replace('filename=', '')
+                    .trim()
+                a.download = fileName || defaultFileName || 'file.tgz'
 
                 // Append the link element to the DOM
                 document.body.appendChild(a)
@@ -54,7 +66,9 @@ const useDownload = () => {
                     document.body.removeChild(a)
                 }, 0)
 
-                toast.success('Downloaded Successfully')
+                if (showSuccessfulToast) {
+                    toast.success(downloadSuccessToastContent)
+                }
             } else {
                 const jsonResponseError: ServerErrors = await response?.json()
                 throw new ServerErrors(jsonResponseError)
