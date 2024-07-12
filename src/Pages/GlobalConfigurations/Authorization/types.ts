@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { SortingParams } from '../../../Common'
+import { SortingParams } from '@Common/Types'
 import { UserListSortableKeys, UserStatus } from './constants'
 
 export type BaseFilterQueryParams<T> = {

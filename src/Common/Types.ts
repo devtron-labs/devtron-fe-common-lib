@@ -235,6 +235,9 @@ export interface RadioInterface {
     showTippy?: boolean
     tippyContent?: any
     tippyPlacement?: string
+    /**
+     * If false would make radio group controlled
+     */
     canSelect?: boolean
     isDisabled?: boolean
     tippyClass?: string
