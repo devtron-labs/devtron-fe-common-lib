@@ -12,10 +12,22 @@
                     color: var(--N500);
                 }
             }
+
+            &:hover {
+                border: none !important;
+                background: transparent;
+            }
         }
 
         .search-bar:focus-within {
             border: none !important;
+        }
+    }
+
+    // TODO: Sync with product to replace this placeholder
+    &__stage-accordion-hover {
+        &:hover {
+            background-color: #2C3354 !important;
         }
     }
 

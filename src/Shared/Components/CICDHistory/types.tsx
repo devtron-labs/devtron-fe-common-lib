@@ -689,6 +689,12 @@ export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime
     isOpen: boolean
 }
 
+export interface LogStageAccordionProps extends StageDetailType {
+    handleStageClose: (index: number) => void
+    handleStageOpen: (index: number) => void
+    accordionIndex: number
+}
+
 export type TriggerHistoryFilterCriteriaType = `${string}|${string}|${string}`[]
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])
 export const statusSet = new Set(['starting', 'running', 'pending'])

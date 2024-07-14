@@ -17,7 +17,6 @@
 import { useParams } from 'react-router'
 import { useEffect, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
-import { getTimeDifference } from '@Shared/Helpers'
 import {
     Progressing,
     Host,
@@ -30,6 +29,7 @@ import {
     useUrlFilters,
     stopPropagation,
 } from '../../../Common'
+import LogStageAccordion from './LogStageAccordion'
 import { EVENT_STREAM_EVENTS_MAP, LOGS_RETRY_COUNT, LOGS_STAGE_IDENTIFIER, POD_STATUS } from './constants'
 import {
     DeploymentHistoryBaseParamsType,
@@ -39,11 +39,9 @@ import {
     StageInfoDTO,
     StageStatusType,
 } from './types'
-import { getStageStatusIcon } from './utils'
 import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
-import { ReactComponent as ICCaretDown } from '../../../Assets/Icon/ic-caret-down.svg'
 import './LogsRenderer.scss'
 
 const renderLogsNotAvailable = (subtitle?: string): JSX.Element => (
@@ -175,12 +173,67 @@ export const LogsRenderer = ({
         triggerDetails.podStatus && triggerDetails.podStatus !== POD_STATUS.PENDING && logsURL,
     )
     const [stageList, setStageList] = useState<StageDetailType[]>([])
+    // State for logs list in case no stages are available
+    const [logsList, setLogsList] = useState<string[]>([])
     const { searchKey, handleSearch } = useUrlFilters()
 
-    // TODO: Look into code duplication
-    // TODO: Handle backward compatibility
+    const areStagesAvailable = streamDataList?.[0]?.startsWith(LOGS_STAGE_IDENTIFIER)
+
+    function createMarkup(log: string): {
+        __html: string
+        isSearchKeyPresent: boolean
+    } {
+        let isSearchKeyPresent = false
+        try {
+            // eslint-disable-next-line no-param-reassign
+            log = log.replace(/\[[.]*m/, (m) => `\x1B[${m}m`)
+
+            if (searchKey && areStagesAvailable) {
+                // Disallowing this rule since ansi specifically works with escape characters
+                // eslint-disable-next-line no-control-regex
+                const ansiRegex = /\x1B\[.*?m/g
+
+                const logParts = log.split(ansiRegex)
+                const availableEscapeCodes = log.match(ansiRegex)
+                const parts = logParts.reduce((acc, part, index) => {
+                    try {
+                        acc.push(
+                            part.replace(
+                                new RegExp(searchKey, 'g'),
+                                `\x1B[48;2;197;141;54m${searchKey}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
+                            ),
+                        )
+                        if (part.includes(searchKey)) {
+                            isSearchKeyPresent = true
+                        }
+                    } catch (searchRegexError) {
+                        acc.push(part)
+                    }
+
+                    if (index < logParts.length - 1) {
+                        acc.push(availableEscapeCodes[index])
+                    }
+                    return acc
+                }, [])
+                // eslint-disable-next-line no-param-reassign
+                log = parts.join('')
+            }
+            const ansiUp = new AnsiUp()
+            return { __html: ansiUp.ansi_to_html(log), isSearchKeyPresent }
+        } catch (err) {
+            return { __html: log, isSearchKeyPresent }
+        }
+    }
+
+    // TODO: Look into code duplication later
     useEffect(() => {
         if (!streamDataList?.length) {
+            return
+        }
+
+        if (!areStagesAvailable) {
+            const newLogs = streamDataList.map((logItem) => createMarkup(logItem).__html)
+            setLogsList(newLogs)
             return
         }
 
@@ -227,7 +280,12 @@ export const LogsRenderer = ({
                 // Ideally in case of parallel build should receive stage name with logs
                 // NOTE: For now would always append log to last stage, can show a loader on stage tiles till processed
                 if (acc.length > 0) {
-                    acc[acc.length - 1].logs.push(streamItem)
+                    const { __html, isSearchKeyPresent } = createMarkup(streamItem)
+
+                    acc[acc.length - 1].logs.push(__html)
+                    if (isSearchKeyPresent) {
+                        acc[acc.length - 1].isOpen = true
+                    }
                 }
 
                 return acc
@@ -278,126 +336,124 @@ export const LogsRenderer = ({
             // Ideally in case of parallel build should receive stage name with logs
             // NOTE: For now would always append log to last stage, can show a loader on stage tiles till processed
             if (acc.length > 0) {
-                acc[acc.length - 1].logs.push(streamItem)
+                const { __html, isSearchKeyPresent } = createMarkup(streamItem)
+                acc[acc.length - 1].logs.push(__html)
+                if (isSearchKeyPresent) {
+                    acc[acc.length - 1].isOpen = true
+                }
             }
 
             return acc
         }, [] as StageDetailType[])
 
         setStageList(newStageList)
-    }, [JSON.stringify(streamDataList)])
+    }, [JSON.stringify(streamDataList), searchKey])
 
-    function createMarkup(log: string): {
-        __html: string
-    } {
-        try {
-            // eslint-disable-next-line no-param-reassign
-            log = log.replace(/\[[.]*m/, (m) => `\x1B[${m}m`)
-            const ansiUp = new AnsiUp()
-            return { __html: ansiUp.ansi_to_html(log) }
-        } catch (err) {
-            return { __html: log }
-        }
-    }
-
-    const handleSearchChange = (searchText: string) => {
+    const handleSearchEnter = (searchText: string) => {
         handleSearch(searchText)
     }
 
-    const closeLogsStage = (index: number) => {
+    const handleStageClose = (index: number) => {
         const newLogs = structuredClone(stageList)
         newLogs[index].isOpen = false
         setStageList(newLogs)
     }
 
-    const openLogsStage = (index: number) => {
+    const handleStageOpen = (index: number) => {
         const newLogs = structuredClone(stageList)
         newLogs[index].isOpen = true
         setStageList(newLogs)
     }
 
-    return triggerDetails.podStatus !== POD_STATUS.PENDING &&
-        logsNotAvailable &&
-        (!isBlobStorageConfigured || !triggerDetails.blobStorageEnabled) ? (
-        renderConfigurationError(isBlobStorageConfigured)
-    ) : (
-        <div
-            className="flexbox-col dc__gap-8"
-            data-testid="check-logs-detail"
-            style={{
-                backgroundColor: '#0C1021',
-            }}
-        >
-            <div
-                className="flexbox logs-renderer__search-bar logs-renderer__filters-border-bottom"
-                onKeyDown={stopPropagation}
-            >
-                <SearchBar
-                    noBackgroundAndBorder
-                    containerClassName="w-100"
-                    inputProps={{
-                        placeholder: 'Search logs',
+    const areEventsProgressing =
+        triggerDetails.podStatus === POD_STATUS.PENDING || (eventSource && eventSource.readyState <= 1)
+
+    const renderLogs = () => {
+        if (areStagesAvailable) {
+            return (
+                <div
+                    className="flexbox-col dc__gap-8"
+                    data-testid="check-logs-detail"
+                    style={{
+                        backgroundColor: '#0C1021',
                     }}
-                    handleSearchChange={handleSearchChange}
-                    initialSearchText={searchKey}
-                />
-            </div>
-
-            <div className="flexbox-col px-12 dc__gap-8">
-                {stageList.map(({ stage, isOpen, logs: stageLogs, endTime, startTime, status }, index) => (
-                    <div key={stage} className="flexbox-col dc__gap-8">
-                        <button
-                            className="flexbox dc__transparent dc__content-space py-6 px-8 br-4 dc__align-items-center"
-                            style={{
-                                backgroundColor: isOpen ? '#2C3354' : '#0C1021',
+                >
+                    <div
+                        className="flexbox pl-12 logs-renderer__search-bar logs-renderer__filters-border-bottom dc__position-sticky dc__top-0 dc__zi-1"
+                        onKeyDown={stopPropagation}
+                        style={{
+                            backgroundColor: '#0C1021',
+                        }}
+                    >
+                        <SearchBar
+                            noBackgroundAndBorder
+                            containerClassName="w-100"
+                            inputProps={{
+                                placeholder: 'Search logs',
                             }}
-                            type="button"
-                            role="tab"
-                            // TODO: Make a component
-                            onClick={isOpen ? () => closeLogsStage(index) : () => openLogsStage(index)}
-                        >
-                            <div className="flexbox dc__gap-8 dc__transparent dc__align-items-center">
-                                {isOpen ? (
-                                    <ICCaretDown className="icon-dim-16 dc__no-shrink" />
-                                ) : (
-                                    <ICCaretDown className="icon-dim-16 dc__no-shrink dc__flip-270 dc__opacity-0_5" />
-                                )}
+                            handleEnter={handleSearchEnter}
+                            initialSearchText={searchKey}
+                        />
+                    </div>
 
-                                <div className="flexbox dc__gap-12 dc__align-items-center">
-                                    {getStageStatusIcon(status)}
+                    <div className="flexbox-col px-12 dc__gap-8">
+                        {stageList.map(({ stage, isOpen, logs, endTime, startTime, status }, index) => (
+                            <LogStageAccordion
+                                key={`${stage}-${startTime}-log-stage-accordion`}
+                                stage={stage}
+                                isOpen={isOpen}
+                                logs={logs}
+                                endTime={endTime}
+                                startTime={startTime}
+                                status={status}
+                                handleStageClose={handleStageClose}
+                                handleStageOpen={handleStageOpen}
+                                accordionIndex={index}
+                            />
+                        ))}
+                    </div>
 
-                                    <h3 className="m-0 cn-0 fs-13 fw-6 lh-20 dc__truncate">{stage}</h3>
-                                </div>
-                            </div>
+                    {areEventsProgressing && (
+                        <div className="flex left event-source-status pl-24">
+                            <Progressing />
+                        </div>
+                    )}
+                </div>
+            )
+        }
 
-                            {endTime !== ZERO_TIME_STRING && (
-                                <span className="cn-0 fs-13 fw-4 lh-20">{getTimeDifference(startTime, endTime)}</span>
-                            )}
-                        </button>
-
-                        {isOpen &&
-                            stageLogs.map((log: string, logsIndex: number) => (
-                                // eslint-disable-next-line react/no-array-index-key
-                                <div className="flex top left pl-24 dc__gap-10 lh-24" key={`logs-${logsIndex}`}>
-                                    <span className="cn-4 col-2">{logsIndex + 1}</span>
-                                    <p
-                                        className="mono fs-14 mb-0-imp cn-0"
-                                        // eslint-disable-next-line react/no-danger
-                                        dangerouslySetInnerHTML={createMarkup(log)}
-                                    />
-                                </div>
-                            ))}
+        // Having a fallback for logs that already stored in blob storage
+        return (
+            <div className="logs__body" data-testid="check-logs-detail">
+                {logsList.map((log: string, index: number) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div className="flex top left mb-10 lh-24" key={`logs-${index}`}>
+                        <span className="cn-4 col-2 pr-10">{index + 1}</span>
+                        {/* eslint-disable-next-line react/no-danger */}
+                        <p
+                            className="mono fs-14 mb-0-imp"
+                            // eslint-disable-next-line react/no-danger
+                            dangerouslySetInnerHTML={{
+                                __html: log,
+                            }}
+                        />
                     </div>
                 ))}
-            </div>
 
-            {(triggerDetails.podStatus === POD_STATUS.PENDING || (eventSource && eventSource.readyState <= 1)) && (
-                <div className="flex left event-source-status">
-                    <Progressing />
-                </div>
-            )}
-        </div>
-    )
+                {areEventsProgressing && (
+                    <div className="flex left event-source-status">
+                        <Progressing />
+                    </div>
+                )}
+            </div>
+        )
+    }
+
+    return triggerDetails.podStatus !== POD_STATUS.PENDING &&
+        logsNotAvailable &&
+        (!isBlobStorageConfigured || !triggerDetails.blobStorageEnabled)
+        ? renderConfigurationError(isBlobStorageConfigured)
+        : renderLogs()
 }
 
 export default LogsRenderer
