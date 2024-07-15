@@ -396,7 +396,7 @@ export const LogsRenderer = ({
                     }}
                 >
                     <div
-                        className="flexbox pl-12 logs-renderer__search-bar logs-renderer__filters-border-bottom dc__position-sticky dc__top-0 dc__zi-1"
+                        className="flexbox pl-12 logs-renderer__search-bar logs-renderer__filters-border-bottom dc__position-sticky dc__top-0 dc__zi-2"
                         // Doing this since we have binded 'f' with full screen and SearchVar has not exposed event on search, so on pressing f it goes to full screen
                         onKeyDown={stopPropagation}
                         style={{

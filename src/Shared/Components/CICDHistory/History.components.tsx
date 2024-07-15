@@ -60,9 +60,9 @@ export const LogResizeButton = ({ fullScreenView, setFullScreenView }: LogResize
             >
                 <div>
                     {fullScreenView ? (
-                        <ZoomOut className="zoom zoom--out pointer" onClick={toggleFullScreen} />
+                        <ZoomOut className="zoom zoom--out pointer dc__zi-4" onClick={toggleFullScreen} />
                     ) : (
-                        <ZoomIn className="zoom zoom--in pointer" onClick={toggleFullScreen} />
+                        <ZoomIn className="zoom zoom--in pointer dc__zi-4" onClick={toggleFullScreen} />
                     )}
                 </div>
             </Tippy>
@@ -71,7 +71,7 @@ export const LogResizeButton = ({ fullScreenView, setFullScreenView }: LogResize
 }
 
 export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): JSX.Element => (
-    <div style={style} className="dc__element-scroller flex column top">
+    <div style={style} className="dc__element-scroller flex column top br-4">
         <Tippy className="default-tt" arrow={false} content="Scroll to Top">
             <button
                 className="flex"

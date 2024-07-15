@@ -26,7 +26,7 @@ const LogStageAccordion = ({
     return (
         <div className="flexbox-col dc__gap-8">
             <button
-                className="flexbox dc__transparent dc__content-space py-6 px-8 br-4 dc__align-items-center dc__select-text logs-renderer__stage-accordion-hover"
+                className="flexbox dc__transparent dc__content-space py-6 px-8 br-4 dc__align-items-center dc__select-text logs-renderer__stage-accordion-hover dc__position-sticky dc__zi-1 dc__top-40"
                 style={{
                     backgroundColor: isOpen ? '#2C3354' : '#0C1021',
                 }}
@@ -49,23 +49,26 @@ const LogStageAccordion = ({
                 {!!endTime && <span className="cn-0 fs-13 fw-4 lh-20">{getTimeDifference(startTime, endTime)}</span>}
             </button>
 
-            {isOpen &&
-                logs.map((log: string, logsIndex: number) => (
-                    <div
-                        className="flex top left pl-24 dc__gap-10 lh-24 pb-10"
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={`logs-${stage}-${startTime}-${logsIndex}`}
-                    >
-                        <span className="cn-4 col-2">{logsIndex + 1}</span>
-                        <p
-                            className="mono fs-14 mb-0-imp cn-0 dc__word-break"
-                            // eslint-disable-next-line react/no-danger
-                            dangerouslySetInnerHTML={{
-                                __html: DOMPurify.sanitize(log),
-                            }}
-                        />
-                    </div>
-                ))}
+            {isOpen && (
+                <div className="flexbox-col dc__gap-4">
+                    {logs.map((log: string, logsIndex: number) => (
+                        <div
+                            className="flex top left pl-24 dc__gap-10 lh-20"
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={`logs-${stage}-${startTime}-${logsIndex}`}
+                        >
+                            <span className="cn-4 col-2">{logsIndex + 1}</span>
+                            <p
+                                className="mono fs-14 mb-0-imp cn-0 dc__word-break"
+                                // eslint-disable-next-line react/no-danger
+                                dangerouslySetInnerHTML={{
+                                    __html: DOMPurify.sanitize(log),
+                                }}
+                            />
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
