@@ -304,6 +304,7 @@ export const LogsRenderer = ({
                             isOpen: getIsStageOpen(
                                 StageStatusType.PROGRESSING,
                                 previousExistingStage.isOpen,
+                                // Wont be present in case of start stage since no logs are present yet
                                 !!searchKeyStatusMap[stage]?.[startTime],
                                 !!targetSearchKey,
                             ),
@@ -327,6 +328,13 @@ export const LogsRenderer = ({
                 const lastStage = acc[acc.length - 1]
                 lastStage.logs.push(__html)
                 if (isSearchKeyPresent) {
+                    lastStage.isOpen = getIsStageOpen(
+                        lastStage.status,
+                        previousStageMap[lastStage.stage]?.[lastStage.startTime]?.isOpen,
+                        true,
+                        !!targetSearchKey,
+                    )
+
                     if (!searchKeyStatusMap[lastStage.stage]) {
                         searchKeyStatusMap[lastStage.stage] = {}
                     }
