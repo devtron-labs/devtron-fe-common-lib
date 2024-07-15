@@ -36,7 +36,7 @@ const LogStageAccordion = ({
             >
                 <div className="flexbox dc__gap-8 dc__transparent dc__align-items-center">
                     <ICCaretDown
-                        className={`icon-dim-16 dc__no-shrink dc__transition--transform ${!isOpen ? 'dc__flip-n90 dc__opacity-0_5' : ''}`}
+                        className={`icon-dim-16 dc__no-shrink dc__transition--transform scn-6 ${!isOpen ? 'dc__flip-n90 dc__opacity-0_5' : ''}`}
                     />
 
                     <div className="flexbox dc__gap-12 dc__align-items-center">

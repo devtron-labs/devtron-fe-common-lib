@@ -414,3 +414,11 @@ export enum K8sResourcePayloadAppType {
 // Disallowing this rule since ansi specifically works with escape characters
 // eslint-disable-next-line no-control-regex
 export const ANSI_UP_REGEX = /\x1B\[.*?m/g
+/**
+ * Size variants for components
+ */
+export enum ComponentSizeType {
+    small = 'small',
+    medium = 'medium',
+    large = 'large',
+}
