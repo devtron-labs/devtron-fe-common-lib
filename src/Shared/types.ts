@@ -419,10 +419,16 @@ export enum ResourceKindType {
 
 /**
  * Versions support for the resources on BE
+ *
+ * TODO: Rename to ApiVersionType
  */
 export enum ResourceVersionType {
     v1 = 'v1',
     alpha1 = 'alpha1',
+}
+
+export enum PolicySubKindType {
+    lockConfiguration = 'config-protection',
 }
 
 export interface LastExecutionResultType {
