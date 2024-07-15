@@ -235,21 +235,24 @@ export const LogsRenderer = ({
      */
     const getIsStageOpen = (
         status: StageStatusType,
-        lastUserActionState: boolean,
+        lastUserActionState: boolean | undefined,
         isSearchKeyPresent: boolean,
         isFromSearchAction: boolean,
     ): boolean => {
         const isInitialState = stageList.length === 0
+        const lastActionState = lastUserActionState ?? true
 
+        // In case of search action, would open the stage if search key is present
+        // If search key is not present would return the last action state, if no action taken would return true(that is stage is new or being loaded)
         if (isFromSearchAction) {
-            return isSearchKeyPresent || lastUserActionState
+            return isSearchKeyPresent || lastActionState
         }
 
         if (isInitialState) {
             return status !== StageStatusType.SUCCESS || isSearchKeyPresent
         }
 
-        return lastUserActionState ?? true
+        return lastActionState
     }
 
     /**
@@ -298,7 +301,12 @@ export const LogsRenderer = ({
                             startTime: startTime || '',
                             endTime: endTime || '',
                             // Would be defining the state when we receive the end status, otherwise it is loading and would be open
-                            isOpen: true,
+                            isOpen: getIsStageOpen(
+                                StageStatusType.PROGRESSING,
+                                previousExistingStage.isOpen,
+                                !!searchKeyStatusMap[stage]?.[startTime],
+                                !!targetSearchKey,
+                            ),
                             status: StageStatusType.PROGRESSING,
                             logs: [],
                         })
