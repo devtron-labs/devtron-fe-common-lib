@@ -17,6 +17,7 @@
 import { useParams } from 'react-router'
 import { useEffect, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
+import DOMPurify from 'dompurify'
 import { ANSI_UP_REGEX } from '@Shared/constants'
 import {
     Progressing,
@@ -436,7 +437,7 @@ export const LogsRenderer = ({
                             className="mono fs-14 mb-0-imp"
                             // eslint-disable-next-line react/no-danger
                             dangerouslySetInnerHTML={{
-                                __html: log,
+                                __html: DOMPurify.sanitize(log),
                             }}
                         />
                     </div>

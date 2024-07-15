@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify'
 import { ZERO_TIME_STRING } from '@Common/Constants'
 import { getTimeDifference } from '@Shared/Helpers'
 import { LogStageAccordionProps } from './types'
@@ -63,7 +64,7 @@ const LogStageAccordion = ({
                             className="mono fs-14 mb-0-imp cn-0 dc__word-break"
                             // eslint-disable-next-line react/no-danger
                             dangerouslySetInnerHTML={{
-                                __html: log,
+                                __html: DOMPurify.sanitize(log),
                             }}
                         />
                     </div>
