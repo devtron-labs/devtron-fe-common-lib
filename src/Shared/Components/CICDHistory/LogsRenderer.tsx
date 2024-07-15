@@ -288,8 +288,8 @@ export const LogsRenderer = ({
                         existingStage.status = status
                         existingStage.isOpen = getIsStageOpen(
                             status,
-                            previousExistingStage?.isOpen,
-                            !!searchKeyStatusMap[stage][startTime],
+                            previousExistingStage.isOpen,
+                            !!searchKeyStatusMap[stage]?.[startTime],
                             !!targetSearchKey,
                         )
                     } else {
