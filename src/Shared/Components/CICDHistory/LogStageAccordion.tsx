@@ -1,5 +1,4 @@
 import DOMPurify from 'dompurify'
-import { ZERO_TIME_STRING } from '@Common/Constants'
 import { getTimeDifference } from '@Shared/Helpers'
 import { LogStageAccordionProps } from './types'
 import { getStageStatusIcon } from './utils'
@@ -47,9 +46,7 @@ const LogStageAccordion = ({
                     </div>
                 </div>
 
-                {endTime !== ZERO_TIME_STRING && (
-                    <span className="cn-0 fs-13 fw-4 lh-20">{getTimeDifference(startTime, endTime)}</span>
-                )}
+                {!!endTime && <span className="cn-0 fs-13 fw-4 lh-20">{getTimeDifference(startTime, endTime)}</span>}
             </button>
 
             {isOpen &&

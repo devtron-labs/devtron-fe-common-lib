@@ -26,12 +26,17 @@ import {
     DOCUMENTATION,
     ROUTES,
     SearchBar,
-    ZERO_TIME_STRING,
     useUrlFilters,
     stopPropagation,
 } from '../../../Common'
 import LogStageAccordion from './LogStageAccordion'
-import { EVENT_STREAM_EVENTS_MAP, LOGS_RETRY_COUNT, LOGS_STAGE_IDENTIFIER, POD_STATUS } from './constants'
+import {
+    EVENT_STREAM_EVENTS_MAP,
+    LOGS_RETRY_COUNT,
+    LOGS_STAGE_IDENTIFIER,
+    LOGS_STAGE_STREAM_SEPARATOR,
+    POD_STATUS,
+} from './constants'
 import {
     CreateMarkupReturnType,
     DeploymentHistoryBaseParamsType,
@@ -271,9 +276,11 @@ export const LogsRenderer = ({
         return streamDataList.reduce((acc, streamItem: string, index) => {
             if (streamItem.startsWith(LOGS_STAGE_IDENTIFIER)) {
                 try {
-                    const { stage, startTime, endTime, status }: StageInfoDTO = JSON.parse(streamItem.split('|')[1])
+                    const { stage, startTime, endTime, status }: StageInfoDTO = JSON.parse(
+                        streamItem.split(LOGS_STAGE_STREAM_SEPARATOR)[1],
+                    )
                     const existingStage = acc.find((item) => item.stage === stage && item.startTime === startTime)
-                    const previousExistingStage = previousStageMap[stage]?.[startTime]
+                    const previousExistingStage = previousStageMap[stage]?.[startTime] ?? ({} as StageDetailType)
 
                     if (existingStage) {
                         // Would update the existing stage with new endTime
@@ -282,14 +289,14 @@ export const LogsRenderer = ({
                         existingStage.isOpen = getIsStageOpen(
                             status,
                             previousExistingStage?.isOpen,
-                            !!searchKeyStatusMap[stage]?.[startTime],
+                            !!searchKeyStatusMap[stage][startTime],
                             !!targetSearchKey,
                         )
                     } else {
                         acc.push({
                             stage: stage || `Untitled stage ${index + 1}`,
-                            startTime: startTime || ZERO_TIME_STRING,
-                            endTime: endTime || ZERO_TIME_STRING,
+                            startTime: startTime || '',
+                            endTime: endTime || '',
                             // Would be defining the state when we receive the end status, otherwise it is loading and would be open
                             isOpen: true,
                             status: StageStatusType.PROGRESSING,
@@ -298,15 +305,7 @@ export const LogsRenderer = ({
                     }
                     return acc
                 } catch (e) {
-                    acc.push({
-                        stage: `Untitled stage ${index + 1}`,
-                        startTime: ZERO_TIME_STRING,
-                        endTime: ZERO_TIME_STRING,
-                        isOpen: false,
-                        logs: [],
-                        // Can not set status as FAILURE, as we will append latest logs to last stage
-                        status: StageStatusType.PROGRESSING,
-                    })
+                    // In case of error would not create
                     return acc
                 }
             }
@@ -347,8 +346,7 @@ export const LogsRenderer = ({
         setStageList(newStageList)
         // NOTE: Not adding searchKey as dependency since on mount we would already have searchKey
         // And for other cases we would use handleSearchEnter
-        // TODO: Check if stringifying the streamDataList is required
-    }, [JSON.stringify(streamDataList)])
+    }, [streamDataList])
 
     const handleSearchEnter = (searchText: string) => {
         handleSearch(searchText)
@@ -383,6 +381,7 @@ export const LogsRenderer = ({
                 >
                     <div
                         className="flexbox pl-12 logs-renderer__search-bar logs-renderer__filters-border-bottom dc__position-sticky dc__top-0 dc__zi-1"
+                        // Doing this since we have binded 'f' with full screen and SearchVar has not exposed event on search, so on pressing f it goes to full screen
                         onKeyDown={stopPropagation}
                         style={{
                             backgroundColor: '#0C1021',

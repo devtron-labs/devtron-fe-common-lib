@@ -18,7 +18,7 @@
 import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
 import moment from 'moment'
-import { handleUTCTime, mapByKey, MaterialInfo, shallowEqual, SortingOrder } from '../Common'
+import { handleUTCTime, mapByKey, MaterialInfo, shallowEqual, SortingOrder, ZERO_TIME_STRING } from '../Common'
 import {
     AggregationKeys,
     GitTriggers,
@@ -709,7 +709,13 @@ export const decode = (data, isEncoded: boolean = false) =>
             return agg
         }, {})
 
+export const isTimeStringAvailable = (time: string): boolean => !!time && time !== ZERO_TIME_STRING
+
 export const getTimeDifference = (startTime: string, endTime: string): string => {
+    if (!isTimeStringAvailable(startTime) || !isTimeStringAvailable(endTime)) {
+        return '-'
+    }
+
     const seconds = moment(endTime).diff(moment(startTime), 'seconds')
     const minutes = moment(endTime).diff(moment(startTime), 'minutes') % 60
     const hours = moment(endTime).diff(moment(startTime), 'hours', true).toFixed(2)
