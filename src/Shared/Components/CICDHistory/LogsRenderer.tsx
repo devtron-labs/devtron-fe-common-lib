@@ -17,13 +17,13 @@
 import { useParams } from 'react-router'
 import { useEffect, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
+import { ANSI_UP_REGEX } from '@Shared/constants'
 import {
     Progressing,
     Host,
     useInterval,
     DOCUMENTATION,
     ROUTES,
-    showError,
     SearchBar,
     ZERO_TIME_STRING,
     useUrlFilters,
@@ -32,6 +32,7 @@ import {
 import LogStageAccordion from './LogStageAccordion'
 import { EVENT_STREAM_EVENTS_MAP, LOGS_RETRY_COUNT, LOGS_STAGE_IDENTIFIER, POD_STATUS } from './constants'
 import {
+    CreateMarkupReturnType,
     DeploymentHistoryBaseParamsType,
     HistoryComponentType,
     LogsRendererType,
@@ -177,33 +178,26 @@ export const LogsRenderer = ({
     const [logsList, setLogsList] = useState<string[]>([])
     const { searchKey, handleSearch } = useUrlFilters()
 
-    const areStagesAvailable = streamDataList?.[0]?.startsWith(LOGS_STAGE_IDENTIFIER)
+    const areStagesAvailable = streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER) || false
 
-    function createMarkup(log: string): {
-        __html: string
-        isSearchKeyPresent: boolean
-    } {
+    function createMarkup(log: string, targetSearchKey: string = searchKey): CreateMarkupReturnType {
         let isSearchKeyPresent = false
         try {
             // eslint-disable-next-line no-param-reassign
             log = log.replace(/\[[.]*m/, (m) => `\x1B[${m}m`)
 
-            if (searchKey && areStagesAvailable) {
-                // Disallowing this rule since ansi specifically works with escape characters
-                // eslint-disable-next-line no-control-regex
-                const ansiRegex = /\x1B\[.*?m/g
-
-                const logParts = log.split(ansiRegex)
-                const availableEscapeCodes = log.match(ansiRegex)
+            if (targetSearchKey && areStagesAvailable) {
+                const logParts = log.split(ANSI_UP_REGEX)
+                const availableEscapeCodes = log.match(ANSI_UP_REGEX)
                 const parts = logParts.reduce((acc, part, index) => {
                     try {
                         acc.push(
                             part.replace(
-                                new RegExp(searchKey, 'g'),
-                                `\x1B[48;2;197;141;54m${searchKey}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
+                                new RegExp(targetSearchKey, 'g'),
+                                `\x1B[48;2;197;141;54m${targetSearchKey}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
                             ),
                         )
-                        if (part.includes(searchKey)) {
+                        if (part.includes(targetSearchKey)) {
                             isSearchKeyPresent = true
                         }
                     } catch (searchRegexError) {
@@ -225,7 +219,118 @@ export const LogsRenderer = ({
         }
     }
 
-    // TODO: Look into code duplication later
+    /**
+     *
+     * @param status - status of the stage
+     * @param lastUserActionState - If true, user had opened the stage else closed the stage
+     * @param isSearchKeyPresent - If search key is present in the logs of that stage
+     * @param isFromSearchAction - If the action is from search action
+     * @returns
+     */
+    const getIsStageOpen = (
+        status: StageStatusType,
+        lastUserActionState: boolean,
+        isSearchKeyPresent: boolean,
+        isFromSearchAction: boolean,
+    ): boolean => {
+        const isInitialState = stageList.length === 0
+
+        if (isFromSearchAction) {
+            return isSearchKeyPresent || lastUserActionState
+        }
+
+        if (isInitialState) {
+            return status !== StageStatusType.SUCCESS || isSearchKeyPresent
+        }
+
+        return lastUserActionState ?? true
+    }
+
+    /**
+     * If initially parsedLogs are empty, and initialStatus is Success then would set opened as false on each
+     * If initialStatus is not success and initial parsedLogs are empty then would set opened as false on each except the last
+     * In case data is already present we will just find user's last action else would open the stage
+     */
+    const getStageListFromStreamData = (targetSearchKey?: string): StageDetailType[] => {
+        // Would be using this to get last user action on stage
+        const previousStageMap: Readonly<Record<string, Readonly<Record<string, StageDetailType>>>> = stageList.reduce(
+            (acc, stageDetails) => {
+                if (!acc[stageDetails.stage]) {
+                    acc[stageDetails.stage] = {}
+                }
+                acc[stageDetails.stage][stageDetails.startTime] = stageDetails
+                return acc
+            },
+            {} as Record<string, Record<string, StageDetailType>>,
+        )
+
+        // Map of stage as key and value as object with key as start time and value as boolean depicting if search key is present or not
+        const searchKeyStatusMap: Record<string, Record<string, boolean>> = {}
+
+        return streamDataList.reduce((acc, streamItem: string, index) => {
+            if (streamItem.startsWith(LOGS_STAGE_IDENTIFIER)) {
+                try {
+                    const { stage, startTime, endTime, status }: StageInfoDTO = JSON.parse(streamItem.split('|')[1])
+                    const existingStage = acc.find((item) => item.stage === stage && item.startTime === startTime)
+                    const previousExistingStage = previousStageMap[stage]?.[startTime]
+
+                    if (existingStage) {
+                        // Would update the existing stage with new endTime
+                        existingStage.endTime = endTime
+                        existingStage.status = status
+                        existingStage.isOpen = getIsStageOpen(
+                            status,
+                            previousExistingStage?.isOpen,
+                            !!searchKeyStatusMap[stage]?.[startTime],
+                            !!targetSearchKey,
+                        )
+                    } else {
+                        acc.push({
+                            stage: stage || `Untitled stage ${index + 1}`,
+                            startTime: startTime || ZERO_TIME_STRING,
+                            endTime: endTime || ZERO_TIME_STRING,
+                            // Would be defining the state when we receive the end status, otherwise it is loading and would be open
+                            isOpen: true,
+                            status: StageStatusType.PROGRESSING,
+                            logs: [],
+                        })
+                    }
+                    return acc
+                } catch (e) {
+                    acc.push({
+                        stage: `Untitled stage ${index + 1}`,
+                        startTime: ZERO_TIME_STRING,
+                        endTime: ZERO_TIME_STRING,
+                        isOpen: false,
+                        logs: [],
+                        // Can not set status as FAILURE, as we will append latest logs to last stage
+                        status: StageStatusType.PROGRESSING,
+                    })
+                    return acc
+                }
+            }
+
+            // Ideally in case of parallel build should receive stage name with logs
+            // NOTE: For now would always append log to last stage, can show a loader on stage tiles till processed
+            if (acc.length > 0) {
+                // In case targetSearchKey is not present createMarkup will internally fallback to searchKey
+                const { __html, isSearchKeyPresent } = createMarkup(streamItem, targetSearchKey)
+
+                const lastStage = acc[acc.length - 1]
+                lastStage.logs.push(__html)
+                if (isSearchKeyPresent) {
+                    if (!searchKeyStatusMap[lastStage.stage]) {
+                        searchKeyStatusMap[lastStage.stage] = {}
+                    }
+
+                    searchKeyStatusMap[lastStage.stage][lastStage.startTime] = true
+                }
+            }
+
+            return acc
+        }, [] as StageDetailType[])
+    }
+
     useEffect(() => {
         if (!streamDataList?.length) {
             return
@@ -237,120 +342,17 @@ export const LogsRenderer = ({
             return
         }
 
-        // If initially parsedLogs are empty, and initialStatus is Success then would set opened as false on each
-        // If initialStatus is not success and initial parsedLogs are empty then would set opened as false on each except the last
-        if (stageList.length === 0) {
-            const newStageList: StageDetailType[] = streamDataList.reduce((acc, streamItem: string, index) => {
-                if (streamItem.startsWith(LOGS_STAGE_IDENTIFIER)) {
-                    try {
-                        const { stage, startTime, endTime, status }: StageInfoDTO = JSON.parse(streamItem.split('|')[1])
-                        const existingStage = acc.find((item) => item.stage === stage && item.startTime === startTime)
-                        if (existingStage) {
-                            // Would update the existing stage with new endTime
-                            existingStage.endTime = endTime
-                            existingStage.status = status
-                        } else {
-                            acc.push({
-                                stage: stage || `Untitled stage ${index + 1}`,
-                                startTime: startTime || ZERO_TIME_STRING,
-                                endTime: endTime || ZERO_TIME_STRING,
-                                isOpen:
-                                    status === StageStatusType.SUCCESS
-                                        ? false
-                                        : acc.length === streamDataList.length - 1,
-                                logs: [],
-                                status,
-                            })
-                        }
-                        return acc
-                    } catch (e) {
-                        showError('Error while parsing logs stage')
-                        acc.push({
-                            stage: `Error ${index}`,
-                            startTime: ZERO_TIME_STRING,
-                            endTime: ZERO_TIME_STRING,
-                            isOpen: false,
-                            logs: [],
-                            status: StageStatusType.FAILURE,
-                        })
-                        return acc
-                    }
-                }
-
-                // Ideally in case of parallel build should receive stage name with logs
-                // NOTE: For now would always append log to last stage, can show a loader on stage tiles till processed
-                if (acc.length > 0) {
-                    const { __html, isSearchKeyPresent } = createMarkup(streamItem)
-
-                    acc[acc.length - 1].logs.push(__html)
-                    if (isSearchKeyPresent) {
-                        acc[acc.length - 1].isOpen = true
-                    }
-                }
-
-                return acc
-            }, [] as StageDetailType[])
-
-            setStageList(newStageList)
-            return
-        }
-
-        const newStageList = streamDataList.reduce((acc, streamItem: string, index) => {
-            if (streamItem.startsWith(LOGS_STAGE_IDENTIFIER)) {
-                try {
-                    const { stage, startTime, endTime, status }: StageInfoDTO = JSON.parse(streamItem.split('|')[1])
-                    const existingStage = acc.find((item) => item.stage === stage && item.startTime === startTime)
-                    const previousExistingStage = stageList.find(
-                        (item) => item.stage === stage && item.startTime === startTime,
-                    )
-
-                    if (existingStage) {
-                        // Would update the existing stage with new endTime
-                        existingStage.endTime = endTime
-                        existingStage.status = status
-                    } else {
-                        acc.push({
-                            stage: stage || `Untitled stage ${index + 1}`,
-                            startTime: startTime || ZERO_TIME_STRING,
-                            endTime: endTime || ZERO_TIME_STRING,
-                            isOpen: previousExistingStage ? previousExistingStage.isOpen : true,
-                            logs: [],
-                            status,
-                        })
-                    }
-                    return acc
-                } catch (e) {
-                    showError('Error while parsing logs stage')
-                    acc.push({
-                        stage: `Error ${index}`,
-                        startTime: ZERO_TIME_STRING,
-                        endTime: ZERO_TIME_STRING,
-                        isOpen: false,
-                        logs: [],
-                        status: StageStatusType.FAILURE,
-                    })
-                    return acc
-                }
-            }
-
-            // Ideally in case of parallel build should receive stage name with logs
-            // NOTE: For now would always append log to last stage, can show a loader on stage tiles till processed
-            if (acc.length > 0) {
-                const { __html, isSearchKeyPresent } = createMarkup(streamItem)
-                acc[acc.length - 1].logs.push(__html)
-                if (isSearchKeyPresent) {
-                    acc[acc.length - 1].isOpen = true
-                }
-            }
-
-            return acc
-        }, [] as StageDetailType[])
-
+        const newStageList = getStageListFromStreamData()
         setStageList(newStageList)
-    }, [JSON.stringify(streamDataList), searchKey])
+        // NOTE: Not adding searchKey as dependency since on mount we would already have searchKey
+        // And for other cases we would use handleSearchEnter
+        // TODO: Check if stringifying the streamDataList is required
+    }, [JSON.stringify(streamDataList)])
 
     const handleSearchEnter = (searchText: string) => {
         handleSearch(searchText)
+        const newStageList = getStageListFromStreamData(searchText)
+        setStageList(newStageList)
     }
 
     const handleStageClose = (index: number) => {

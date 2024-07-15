@@ -675,13 +675,17 @@ export interface TriggerHistoryFilterCriteriaProps {
 export enum StageStatusType {
     SUCCESS = 'Success',
     FAILURE = 'Failure',
+    /**
+     * Not given in API response
+     */
+    PROGRESSING = 'Progressing',
 }
 
 export interface StageInfoDTO {
     stage: string
     startTime: string
     endTime?: string
-    status: StageStatusType
+    status?: StageStatusType
 }
 
 export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime' | 'endTime' | 'status'> {
@@ -693,6 +697,11 @@ export interface LogStageAccordionProps extends StageDetailType {
     handleStageClose: (index: number) => void
     handleStageOpen: (index: number) => void
     accordionIndex: number
+}
+
+export interface CreateMarkupReturnType {
+    __html: string
+    isSearchKeyPresent: boolean
 }
 
 export type TriggerHistoryFilterCriteriaType = `${string}|${string}|${string}`[]
