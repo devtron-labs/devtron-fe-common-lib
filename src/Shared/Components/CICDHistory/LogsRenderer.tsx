@@ -389,32 +389,36 @@ export const LogsRenderer = ({
         if (areStagesAvailable) {
             return (
                 <div
-                    className="flexbox-col dc__gap-8"
+                    className="flexbox-col pb-20"
                     data-testid="check-logs-detail"
                     style={{
                         backgroundColor: '#0C1021',
                     }}
                 >
                     <div
-                        className="flexbox pl-12 logs-renderer__search-bar logs-renderer__filters-border-bottom dc__position-sticky dc__top-0 dc__zi-2"
-                        // Doing this since we have binded 'f' with full screen and SearchVar has not exposed event on search, so on pressing f it goes to full screen
-                        onKeyDown={stopPropagation}
+                        className="flexbox-col pb-7 dc__position-sticky dc__top-0 dc__zi-2"
                         style={{
                             backgroundColor: '#0C1021',
                         }}
                     >
-                        <SearchBar
-                            noBackgroundAndBorder
-                            containerClassName="w-100"
-                            inputProps={{
-                                placeholder: 'Search logs',
-                            }}
-                            handleEnter={handleSearchEnter}
-                            initialSearchText={searchKey}
-                        />
+                        <div
+                            className="flexbox logs-renderer__search-bar logs-renderer__filters-border-bottom pl-12"
+                            // Doing this since we have binded 'f' with full screen and SearchVar has not exposed event on search, so on pressing f it goes to full screen
+                            onKeyDown={stopPropagation}
+                        >
+                            <SearchBar
+                                noBackgroundAndBorder
+                                containerClassName="w-100"
+                                inputProps={{
+                                    placeholder: 'Search logs',
+                                }}
+                                handleEnter={handleSearchEnter}
+                                initialSearchText={searchKey}
+                            />
+                        </div>
                     </div>
 
-                    <div className="flexbox-col px-12 dc__gap-8">
+                    <div className="flexbox-col px-12 dc__gap-4">
                         {stageList.map(({ stage, isOpen, logs, endTime, startTime, status }, index) => (
                             <LogStageAccordion
                                 key={`${stage}-${startTime}-log-stage-accordion`}
@@ -427,15 +431,10 @@ export const LogsRenderer = ({
                                 handleStageClose={handleStageClose}
                                 handleStageOpen={handleStageOpen}
                                 accordionIndex={index}
+                                areEventsProgressing={areEventsProgressing}
                             />
                         ))}
                     </div>
-
-                    {areEventsProgressing && (
-                        <div className="flex left event-source-status pl-24">
-                            <Progressing />
-                        </div>
-                    )}
                 </div>
             )
         }

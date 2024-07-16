@@ -697,6 +697,7 @@ export interface LogStageAccordionProps extends StageDetailType {
     handleStageClose: (index: number) => void
     handleStageOpen: (index: number) => void
     accordionIndex: number
+    areEventsProgressing: boolean
 }
 
 export interface CreateMarkupReturnType {
