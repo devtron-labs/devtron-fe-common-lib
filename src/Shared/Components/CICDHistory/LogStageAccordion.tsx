@@ -17,14 +17,14 @@ const LogStageAccordion = ({
     status,
     handleStageClose,
     handleStageOpen,
-    accordionIndex,
-    areEventsProgressing,
+    stageIndex,
+    isLoading,
 }: LogStageAccordionProps) => {
     const handleAccordionToggle = () => {
         if (isOpen) {
-            handleStageClose(accordionIndex)
+            handleStageClose(stageIndex)
         } else {
-            handleStageOpen(accordionIndex)
+            handleStageOpen(stageIndex)
         }
     }
 
@@ -73,7 +73,7 @@ const LogStageAccordion = ({
                         </LogsItemContainer>
                     ))}
 
-                    {areEventsProgressing && (
+                    {isLoading && (
                         <LogsItemContainer>
                             <span />
                             <div className="dc__loading-dots cn-0" />

@@ -184,7 +184,8 @@ export const LogsRenderer = ({
     const [logsList, setLogsList] = useState<string[]>([])
     const { searchKey, handleSearch } = useUrlFilters()
 
-    const areStagesAvailable = streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER) || false
+    const areStagesAvailable =
+        (window._env_.FEATURE_STEP_WISE_LOGS_ENABLE && streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER)) || false
 
     function createMarkup(log: string, targetSearchKey: string = searchKey): CreateMarkupReturnType {
         let isSearchKeyPresent = false
@@ -431,8 +432,8 @@ export const LogsRenderer = ({
                                 status={status}
                                 handleStageClose={handleStageClose}
                                 handleStageOpen={handleStageOpen}
-                                accordionIndex={index}
-                                areEventsProgressing={areEventsProgressing}
+                                stageIndex={index}
+                                isLoading={index === stageList.length - 1 && areEventsProgressing}
                             />
                         ))}
                     </div>
