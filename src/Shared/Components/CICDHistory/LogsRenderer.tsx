@@ -18,7 +18,7 @@ import { useParams } from 'react-router'
 import { useEffect, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
 import DOMPurify from 'dompurify'
-import { ANSI_UP_REGEX } from '@Shared/constants'
+import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
 import {
     Progressing,
     Host,
@@ -200,7 +200,7 @@ export const LogsRenderer = ({
                         acc.push(
                             part.replace(
                                 new RegExp(targetSearchKey, 'g'),
-                                `\x1B[48;2;197;141;54m${targetSearchKey}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
+                                `\x1B[0m\x1B[48;2;197;141;54m${targetSearchKey}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
                             ),
                         )
                         if (part.includes(targetSearchKey)) {
@@ -414,6 +414,7 @@ export const LogsRenderer = ({
                                 }}
                                 handleEnter={handleSearchEnter}
                                 initialSearchText={searchKey}
+                                size={ComponentSizeType.large}
                             />
                         </div>
                     </div>
