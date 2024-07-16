@@ -389,7 +389,7 @@ export const LogsRenderer = ({
         if (areStagesAvailable) {
             return (
                 <div
-                    className="flexbox-col pb-20"
+                    className="flexbox-col pb-20 logs-renderer-container"
                     data-testid="check-logs-detail"
                     style={{
                         backgroundColor: '#0C1021',
