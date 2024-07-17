@@ -32,6 +32,8 @@ const FeatureTitleWithInfo = ({
     docLink,
     SVGImage,
     showInfoIconTippy,
+    docLinkText = 'View Documentation',
+    dataTestId = 'feature-title-with-info',
 }: DescriptorProps) => {
     const [showFeatureDescriptionModal, setShowFeatureDescriptionModal] = useState(false)
     const onClickInfoIcon = () => {
@@ -43,26 +45,30 @@ const FeatureTitleWithInfo = ({
     }
 
     const renderTitle = () => {
-        if (breadCrumbs)
-            <div className="flexbox dc__align-items-center dc__gap-4">
-                <BreadCrumb breadcrumbs={breadCrumbs} />
-                <ICHelpOutline className={`${iconClassName} icon-dim-20 cursor fcn-6`} onClick={onClickInfoIcon} />
-            </div>
-        else if (showInfoIconTippy) {
+        if (showInfoIconTippy) {
             return (
-                <div>
+                <div className="flex left fs-16 cn-9 fw-6 mb-20 dc__gap-4" data-testid={dataTestId}>
                     {title}
                     <InfoIconTippy
                         heading={title}
                         infoText={renderDescriptionContent()}
                         iconClassName={iconClassName}
                         documentationLink={docLink}
-                        documentationLinkText={docLink}
+                        documentationLinkText={docLinkText}
                         dataTestid="info-tippy-button"
                     />
                 </div>
             )
         }
+        if (breadCrumbs) {
+            return (
+                <div className="flexbox dc__align-items-center dc__gap-4">
+                    <BreadCrumb breadcrumbs={breadCrumbs} />
+                    <ICHelpOutline className={`${iconClassName} icon-dim-20 cursor fcn-6`} onClick={onClickInfoIcon} />
+                </div>
+            )
+        }
+
         return title
     }
 

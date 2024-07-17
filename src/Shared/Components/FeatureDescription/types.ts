@@ -35,4 +35,6 @@ export interface DescriptorProps extends FeatureDescriptionModalProps {
     iconClassName?: string
     children?: React.ReactNode
     showInfoIconTippy?: boolean
+    docLinkText?: string
+    dataTestId?: string
 }
