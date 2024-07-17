@@ -152,6 +152,7 @@ const Artifacts = ({
     }, [copied])
 
     async function handleArtifact() {
+        // TODO: Use useDownload() Hook instead to download file/folder
         try {
             const response = await getArtifactPromise()
             const b = await (response as any).blob()

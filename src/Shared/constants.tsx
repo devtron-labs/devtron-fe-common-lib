@@ -436,3 +436,12 @@ export enum K8sResourcePayloadAppType {
     EXTERNAL_ARGO_APP = 2,
     EXTERNAL_FLUX_APP = 3,
 }
+
+/**
+ * Size variants for components
+ */
+export enum ComponentSizeType {
+    small = 'small',
+    medium = 'medium',
+    large = 'large',
+}

@@ -476,6 +476,7 @@ export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
 export const EXCLUDED_FALSY_VALUES = [undefined, null, '', NaN] as const
 
 export const API_STATUS_CODES = {
+    OK: 200,
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
     PERMISSION_DENIED: 403,
