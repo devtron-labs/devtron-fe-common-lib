@@ -19,10 +19,11 @@ import { DescriptorProps } from './types'
 import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
 import { BreadCrumb } from '../../../Common'
 import { FeatureDescriptionModal } from './FeatureDescriptionModal'
+import { InfoIconTippy } from '../InfoIconTippy'
 
 const FeatureTitleWithInfo = ({
     additionalContainerClasses,
-    breadCrumbs,
+    breadCrumbs = [],
     children,
     iconClassName,
     title,
@@ -30,6 +31,7 @@ const FeatureTitleWithInfo = ({
     closeModalText,
     docLink,
     SVGImage,
+    showInfoIconTippy,
 }: DescriptorProps) => {
     const [showFeatureDescriptionModal, setShowFeatureDescriptionModal] = useState(false)
     const onClickInfoIcon = () => {
@@ -39,15 +41,37 @@ const FeatureTitleWithInfo = ({
     const closeModal = () => {
         setShowFeatureDescriptionModal(false)
     }
+
+    const renderTitle = () => {
+        if (breadCrumbs)
+            <div className="flexbox dc__align-items-center dc__gap-4">
+                <BreadCrumb breadcrumbs={breadCrumbs} />
+                <ICHelpOutline className={`${iconClassName} icon-dim-20 cursor fcn-6`} onClick={onClickInfoIcon} />
+            </div>
+        else if (showInfoIconTippy) {
+            return (
+                <div>
+                    {title}
+                    <InfoIconTippy
+                        heading={title}
+                        infoText={renderDescriptionContent()}
+                        iconClassName={iconClassName}
+                        documentationLink={docLink}
+                        documentationLinkText={docLink}
+                        dataTestid="info-tippy-button"
+                    />
+                </div>
+            )
+        }
+        return title
+    }
+
     return (
         <>
             <div
                 className={`feature-description flexbox dc__content-space dc__align-items-center w-100 ${additionalContainerClasses ?? ''}`}
             >
-                <div className="flexbox dc__align-items-center dc__gap-4">
-                    <BreadCrumb breadcrumbs={breadCrumbs} />
-                    <ICHelpOutline className={`${iconClassName} icon-dim-20 cursor fcn-6`} onClick={onClickInfoIcon} />
-                </div>
+                {renderTitle()}
 
                 {children}
             </div>
