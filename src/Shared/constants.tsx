@@ -410,3 +410,12 @@ export enum K8sResourcePayloadAppType {
     HELM_APP = 1,
     EXTERNAL_ARGO_APP = 2,
 }
+
+/**
+ * Size variants for components
+ */
+export enum ComponentSizeType {
+    small = 'small',
+    medium = 'medium',
+    large = 'large',
+}
