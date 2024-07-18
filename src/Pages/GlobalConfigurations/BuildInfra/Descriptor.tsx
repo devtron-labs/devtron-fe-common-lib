@@ -35,6 +35,8 @@ const Descriptor = ({
                 additionalContent={tippyAdditionalContent}
                 heading={BUILD_INFRA_TEXT.HEADING}
                 documentationLink={DOCUMENTATION.GLOBAL_CONFIG_BUILD_INFRA}
+                documentationLinkText="View Documentation"
+                iconClassName="icon-dim-20 fcn-6"
             />
         </div>
 
