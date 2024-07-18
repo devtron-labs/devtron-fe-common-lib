@@ -24,6 +24,7 @@ const FilterChip = ({
     handleRemoveFilter,
     getFormattedLabel = noop,
     getFormattedValue = noop,
+    showRemoveIcon,
 }: FilterChipProps) => {
     const removeFilter = () => {
         handleRemoveFilter(label, value)
@@ -40,14 +41,16 @@ const FilterChip = ({
                 <span className="fw-6 dc__capitalize">{labelToDisplay}</span>
                 <span className="dc__divider h-24" />
                 <span className="dc__ellipsis-right">{valueToDisplay}</span>
-                <button
-                    type="button"
-                    className="flex p-0 dc__transparent"
-                    onClick={removeFilter}
-                    aria-label="Remove filter"
-                >
-                    <CloseIcon className="icon-dim-12 icon-use-fill-n6" />
-                </button>
+                {showRemoveIcon && (
+                    <button
+                        type="button"
+                        className="flex p-0 dc__transparent dc__hover-n50 br-4"
+                        onClick={removeFilter}
+                        aria-label="Remove filter"
+                    >
+                        <CloseIcon className="icon-dim-12 icon-use-fill-n6" />
+                    </button>
+                )}
             </div>
         )
     )
@@ -64,6 +67,7 @@ const FilterChips = <T = Record<string, unknown>,>({
     getFormattedValue,
     className = '',
     clearButtonClassName = '',
+    showClearAndRemove = true,
 }: FilterChipsProps<T>) => {
     const handleRemoveFilter = (filterKey, valueToRemove) => {
         const updatedFilterConfig = JSON.parse(JSON.stringify(filterConfig))
@@ -95,6 +99,7 @@ const FilterChips = <T = Record<string, unknown>,>({
                                 handleRemoveFilter={handleRemoveFilter}
                                 getFormattedLabel={getFormattedLabel}
                                 getFormattedValue={getFormattedValue}
+                                showRemoveIcon={showClearAndRemove}
                             />
                         ))
                     ) : (
@@ -105,18 +110,21 @@ const FilterChips = <T = Record<string, unknown>,>({
                             handleRemoveFilter={handleRemoveFilter}
                             getFormattedLabel={getFormattedLabel}
                             getFormattedValue={getFormattedValue}
+                            showRemoveIcon={showClearAndRemove}
                         />
                     ),
                 )}
-                <div className="flex">
-                    <button
-                        type="button"
-                        className={`cta text fs-13-imp lh-20-imp h-20 p-0-imp ${clearButtonClassName}`}
-                        onClick={clearFilters}
-                    >
-                        Clear All Filters
-                    </button>
-                </div>
+                {showClearAndRemove && (
+                    <div className="flex">
+                        <button
+                            type="button"
+                            className={`cta text fs-13-imp lh-20-imp h-20 p-0-imp ${clearButtonClassName}`}
+                            onClick={clearFilters}
+                        >
+                            Clear All Filters
+                        </button>
+                    </div>
+                )}
             </div>
         )
     )
