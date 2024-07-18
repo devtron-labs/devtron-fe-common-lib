@@ -25,7 +25,7 @@ const FeatureTitleWithInfo = ({
     additionalContainerClasses,
     breadCrumbs = [],
     children,
-    iconClassName = 'icon-dim-20',
+    iconClassName = 'icon-dim-20 fcn-6',
     title,
     renderDescriptionContent,
     closeModalText,
