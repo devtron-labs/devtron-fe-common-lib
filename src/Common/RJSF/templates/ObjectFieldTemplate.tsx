@@ -53,9 +53,8 @@ const Field = ({
             if (!hiddenSchemaProp) {
                 return true
             }
-            const isHidden =
-                // NOTE: if json is null, then JSONPath will return undefined; hence the ?
-                hiddenSchemaProp.condition === JSONPath({ path: hiddenSchemaProp.match, json: formData })?.[0]
+            const value = JSONPath({ path: hiddenSchemaProp.match, json: formData })?.[0]
+            const isHidden = value === undefined || hiddenSchemaProp.condition === value
             // NOTE: if should be hidden then filter it out i.e return false
             return !isHidden
         })
