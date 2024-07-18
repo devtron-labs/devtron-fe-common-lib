@@ -155,7 +155,6 @@ const Artifacts = ({
     async function handleArtifact() {
         await handleDownload({
             downloadUrl: downloadArtifactUrl,
-            showFilePreparingToast: true,
             fileName: `${buildId || triggerId}.zip`,
         })
     }

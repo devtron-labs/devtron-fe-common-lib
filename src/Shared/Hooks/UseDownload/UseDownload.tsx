@@ -45,14 +45,15 @@ const useDownload = () => {
                 const a = document.createElement('a')
                 a.href = blobUrl
 
-                // Get filename from response headers
-                const defaultFileName = response.headers
-                    .get('content-disposition')
-                    .split(';')
-                    .find((n) => n.includes('filename='))
-                    .replace('filename=', '')
-                    .trim()
-                a.download = fileName || defaultFileName || 'file.tgz'
+                a.download =
+                    fileName ||
+                    response.headers // File name from response headers
+                        ?.get('content-disposition')
+                        ?.split(';')
+                        ?.find((n) => n.includes('filename='))
+                        ?.replace('filename=', '')
+                        .trim() ||
+                    'file.tgz'
 
                 // Append the link element to the DOM
                 document.body.appendChild(a)
@@ -69,6 +70,8 @@ const useDownload = () => {
                 if (showSuccessfulToast) {
                     toast.success(downloadSuccessToastContent)
                 }
+            } else if (response.status === API_STATUS_CODES.NO_CONTENT) {
+                throw new Error('No content to download')
             } else {
                 const jsonResponseError: ServerErrors = await response?.json()
                 throw new ServerErrors(jsonResponseError)
