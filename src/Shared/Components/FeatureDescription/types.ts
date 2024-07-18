@@ -37,4 +37,5 @@ export interface DescriptorProps extends FeatureDescriptionModalProps {
     showInfoIconTippy?: boolean
     docLinkText?: string
     dataTestId?: string
+    additionalContent?: ReactNode
 }

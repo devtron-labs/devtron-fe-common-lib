@@ -34,6 +34,7 @@ const FeatureTitleWithInfo = ({
     showInfoIconTippy,
     docLinkText = 'View Documentation',
     dataTestId = 'feature-title-with-info',
+    additionalContent,
 }: DescriptorProps) => {
     const [showFeatureDescriptionModal, setShowFeatureDescriptionModal] = useState(false)
     const onClickInfoIcon = () => {
@@ -47,11 +48,14 @@ const FeatureTitleWithInfo = ({
     const renderTitle = () => {
         if (showInfoIconTippy) {
             return (
-                <div className="flex left fs-16 cn-9 fw-6 mb-20 dc__gap-4" data-testid={dataTestId}>
-                    {title}
+                <div className="flex left fs-16 cn-9 fw-6 dc__gap-4">
+                    <span data-testid={dataTestId} className="lh-32">
+                        {title}
+                    </span>
                     <InfoIconTippy
                         heading={title}
                         infoText={renderDescriptionContent()}
+                        additionalContent={additionalContent}
                         iconClassName={iconClassName}
                         documentationLink={docLink}
                         documentationLinkText={docLinkText}
@@ -60,7 +64,7 @@ const FeatureTitleWithInfo = ({
                 </div>
             )
         }
-        if (breadCrumbs) {
+        if (breadCrumbs?.length > 0) {
             return (
                 <div className="flexbox dc__align-items-center dc__gap-4">
                     <BreadCrumb breadcrumbs={breadCrumbs} />
@@ -69,16 +73,15 @@ const FeatureTitleWithInfo = ({
             )
         }
 
-        return title
+        return <span className="fs-16 fw-6 cn-9 lh-32">{title}</span>
     }
 
     return (
         <>
             <div
-                className={`feature-description flexbox dc__content-space dc__align-items-center w-100 ${additionalContainerClasses ?? ''}`}
+                className={`feature-description flexbox dc__content-space dc__align-items-center ${additionalContainerClasses ?? ''}`}
             >
                 {renderTitle()}
-
                 {children}
             </div>
             {showFeatureDescriptionModal && (
