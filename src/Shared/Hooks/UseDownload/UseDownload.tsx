@@ -6,6 +6,7 @@ import { API_STATUS_CODES } from '@Common/Constants'
 import { ServerErrors } from '@Common/ServerError'
 import { getDownloadResponse } from './service'
 import { HandleDownloadProps } from './types'
+import { getDefaultFileName } from './utils'
 
 const useDownload = () => {
     const [isDownloading, setIsDownloading] = useState<boolean>(false)
@@ -46,15 +47,7 @@ const useDownload = () => {
                 const a = document.createElement('a')
                 a.href = blobUrl
 
-                a.download =
-                    fileName ||
-                    response.headers // File name from response headers
-                        ?.get('content-disposition')
-                        ?.split(';')
-                        ?.find((n) => n.includes('filename='))
-                        ?.replace('filename=', '')
-                        .trim() ||
-                    'file.tgz'
+                a.download = fileName || getDefaultFileName(response.headers) || 'file.tgz'
 
                 // Append the link element to the DOM
                 document.body.appendChild(a)
