@@ -24,7 +24,7 @@ const useDownload = () => {
         fileName,
         showSuccessfulToast = true,
         downloadSuccessToastContent = 'Downloaded Successfully',
-    }: HandleDownloadProps) => {
+    }: HandleDownloadProps): Promise<Error | ServerErrors> => {
         setIsDownloading(true)
         if (showFilePreparingToast) {
             toast.info(
@@ -70,10 +70,11 @@ const useDownload = () => {
                 throw new ServerErrors(jsonResponseError)
             }
         } catch (error) {
-            showError(error)
             setIsDownloading(false)
+            showError(error)
             return error
         }
+        setIsDownloading(false)
         return null
     }
 
