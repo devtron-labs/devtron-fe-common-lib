@@ -4,13 +4,13 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { API_STATUS_CODES } from '@Common/Constants'
 import { ServerErrors } from '@Common/ServerError'
+import { getFileNameFromHeaders } from '@Shared/Helpers'
 import { getDownloadResponse } from './service'
 import { HandleDownloadProps } from './types'
-import { getDefaultFileName } from './utils'
 
 const useDownload = () => {
     const [isDownloading, setIsDownloading] = useState<boolean>(false)
-    const [downloadError, setDownloadError] = useState(null)
+    const [downloadError, setDownloadError] = useState<Error | ServerErrors>(null)
 
     /**
      * @param downloadUrl - API url for downloading file
@@ -47,7 +47,7 @@ const useDownload = () => {
                 const a = document.createElement('a')
                 a.href = blobUrl
 
-                a.download = fileName || getDefaultFileName(response.headers) || 'file.tgz'
+                a.download = fileName || getFileNameFromHeaders(response.headers) || 'file.tgz'
 
                 // Append the link element to the DOM
                 document.body.appendChild(a)
