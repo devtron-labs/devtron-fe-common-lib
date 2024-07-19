@@ -10,7 +10,6 @@ import { HandleDownloadProps } from './types'
 
 const useDownload = () => {
     const [isDownloading, setIsDownloading] = useState<boolean>(false)
-    const [downloadError, setDownloadError] = useState<Error | ServerErrors>(null)
 
     /**
      * @param downloadUrl - API url for downloading file
@@ -71,14 +70,14 @@ const useDownload = () => {
                 throw new ServerErrors(jsonResponseError)
             }
         } catch (error) {
-            setDownloadError(error)
             showError(error)
-        } finally {
             setIsDownloading(false)
+            return error
         }
+        return null
     }
 
-    return { handleDownload, isDownloading, downloadError }
+    return { handleDownload, isDownloading }
 }
 
 export default useDownload
