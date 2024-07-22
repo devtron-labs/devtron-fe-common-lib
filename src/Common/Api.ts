@@ -240,7 +240,7 @@ export const put = (url: string, data: object, options?: APIOptions): Promise<Re
 export const patch = (url: string, data: object, options?: APIOptions): Promise<ResponseType> =>
     fetchInTime(url, 'PATCH', data, options)
 
-export const get = (url: string, options?: APIOptions): Promise<ResponseType> => fetchInTime(url, 'GET', null, options)
+export const get = <T = any>(url: string, options?: APIOptions): Promise<ResponseType<T>> => fetchInTime(url, 'GET', null, options)
 
 export const trash = (url: string, data?: object, options?: APIOptions): Promise<ResponseType> =>
     fetchInTime(url, 'DELETE', data, options)
