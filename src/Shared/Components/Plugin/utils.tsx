@@ -10,12 +10,13 @@ const parseMinimalPluginVersionsDTO = (
         return []
     }
 
-    return pluginVersionData.map(({ id, description, name, pluginVersion, isLatest }) => ({
+    return pluginVersionData.map(({ id, description, name, pluginVersion, isLatest, identifier }) => ({
         id,
         description: description || '',
         name: name || '',
         pluginVersion: pluginVersion || '',
         isLatest: isLatest || false,
+        identifier: identifier || '',
     }))
 }
 
@@ -56,6 +57,7 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
 
             pluginVersionStore[pluginVersionData.id] = {
                 id: pluginVersionData.id,
+                identifier: pluginVersionData.identifier || '',
                 name: pluginVersionData.name || '',
                 description: pluginVersionData.description || '',
                 pluginVersion: pluginVersionData.pluginVersion || '',

@@ -31,6 +31,7 @@ interface MinimalPluginVersionDataDTO {
     name: string
     description: string
     pluginVersion: string
+    identifier: string
     isLatest: boolean
 }
 
@@ -89,7 +90,7 @@ interface ParentPluginType extends Pick<ParentPluginDTO, 'id' | 'name' | 'descri
 }
 
 interface DetailedPluginVersionType
-    extends Pick<MinimalPluginVersionDataDTO, 'id' | 'description' | 'name' | 'pluginVersion'>,
+    extends Pick<MinimalPluginVersionDataDTO, 'id' | 'description' | 'name' | 'pluginVersion' | 'identifier'>,
         Pick<
             DetailedPluginVersionDTO,
             'tags' | 'isLatest' | 'inputVariables' | 'outputVariables' | 'updatedBy' | 'docLink'
