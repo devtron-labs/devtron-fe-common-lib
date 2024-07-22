@@ -193,16 +193,15 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             editorRef.current.layout()
         }, [width, windowHeight])
 
-        const setCode = (value: string) => {
-            dispatch({ type: 'setCode', value })
+        useEffect(() => {
             if (onChange) {
-                onChange(value)
+                onChange(state.code)
             }
-        }
+        }, [state.code])
 
         useEffect(() => {
             if (noParsing) {
-                setCode(value)
+                dispatch({ type: 'setCode', value })
 
                 return
             }
@@ -221,7 +220,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             if (obj) {
                 final = state.mode === 'json' ? JSON.stringify(obj, null, tabSize) : YAMLStringify(obj)
             }
-            setCode(final)
+            dispatch({ type: 'setCode', value: final })
         }, [value, noParsing])
 
         useEffect(() => {
@@ -235,12 +234,12 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         }, [focus])
 
         function handleOnChange(newValue, e) {
-            setCode(newValue)
+            dispatch({ type: 'setCode', value: newValue })
         }
 
         function handleLanguageChange(mode: 'json' | 'yaml') {
             dispatch({ type: 'changeLanguage', value: mode })
-            setCode(mode === 'json' ? json : yamlCode)
+            dispatch({ type: 'setCode', value: mode === 'json' ? json : yamlCode })
         }
 
         const options: monaco.editor.IEditorConstructionOptions = {
