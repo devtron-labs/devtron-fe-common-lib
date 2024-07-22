@@ -15,7 +15,7 @@
  */
 
 import { getUrlWithSearchParams } from '../../Common'
-import { PolicySubKindType, ResourceKindType, ResourceVersionType } from '../types'
+import { PolicyKindType, ResourceKindType, ResourceVersionType } from '../types'
 
 export interface ClusterType {
     id: number
@@ -31,7 +31,7 @@ export interface ClusterType {
  * K => Type of kind
  * P => Type of version
  */
-interface BaseGetApiUrlProps<T, K extends ResourceKindType | PolicySubKindType, P extends ResourceVersionType> {
+interface BaseGetApiUrlProps<T, K extends ResourceKindType | PolicyKindType, P extends ResourceVersionType> {
     baseUrl: string
     kind: K
     version: P
@@ -41,4 +41,4 @@ interface BaseGetApiUrlProps<T, K extends ResourceKindType | PolicySubKindType, 
 export interface GetResourceApiUrlProps<T> extends BaseGetApiUrlProps<T, ResourceKindType, ResourceVersionType> {}
 
 export interface GetPolicyApiUrlProps<T>
-    extends Omit<BaseGetApiUrlProps<T, PolicySubKindType, ResourceVersionType>, 'baseUrl'> {}
+    extends Omit<BaseGetApiUrlProps<T, PolicyKindType, ResourceVersionType>, 'baseUrl'> {}

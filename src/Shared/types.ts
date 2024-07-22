@@ -427,8 +427,8 @@ export enum ResourceVersionType {
     alpha1 = 'alpha1',
 }
 
-export enum PolicySubKindType {
-    lockConfiguration = 'config-protection',
+export enum PolicyKindType {
+    lockConfiguration = 'lock-configuration',
 }
 
 export interface LastExecutionResultType {
