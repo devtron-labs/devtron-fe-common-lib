@@ -20,7 +20,7 @@ import { preventBodyScroll } from '../../Shared'
 import { stopPropagation } from '../Helper'
 
 export class VisibleModal extends React.Component<{
-    className: string
+    className?: string
     parentClassName?: string
     noBackground?: boolean
     close?: (e) => void
@@ -74,7 +74,7 @@ export class VisibleModal extends React.Component<{
     render() {
         return ReactDOM.createPortal(
             <div
-                className={`visible-modal__body ${this.props.className}`}
+                className={`visible-modal__body ${this.props.className || ''}`}
                 onClick={this.handleBodyClick}
                 data-testid="visible-modal-close"
             >
