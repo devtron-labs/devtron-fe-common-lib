@@ -17,6 +17,12 @@ export interface PluginTagNamesDTO {
     tagNames: string[]
 }
 
+export interface MinParentPluginDTO {
+    id: number
+    pluginName: string
+    icon: string
+}
+
 /**
  * Minimal data of child plugins
  */
