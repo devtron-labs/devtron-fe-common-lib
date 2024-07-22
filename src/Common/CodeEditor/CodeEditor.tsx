@@ -65,6 +65,17 @@ function useCodeEditorContext() {
     return context
 }
 
+/**
+ * NOTE: once monaco editor mounts it doesn't update it's internal onChange state.
+ * Since most of the time onChange methods are declared inside the render body of a component
+ * we should use the latest references of onChange.
+ * Please see: https://github.com/react-monaco-editor/react-monaco-editor/issues/704
+ * Thus as a hack we are using this objects reference to call the latest onChange reference
+ */
+const _onChange = {
+    onChange: null
+}
+
 const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(
     ({
         value,
@@ -100,7 +111,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         const monacoRef = useRef(null)
         const { width, height: windowHeight } = useWindowSize()
         const memoisedReducer = React.useCallback(CodeEditorReducer, [])
-        const [state, dispatch] = useReducer(memoisedReducer, initialState({mode, theme, value, diffView, noParsing}))
+        const [state, dispatch] = useReducer(memoisedReducer, initialState({ mode, theme, value, diffView, noParsing }))
         const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
         const [, originalJson, originlaYaml] = useJsonYaml(defaultValue, tabSize, state.mode, !state.noParsing)
         monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
@@ -193,11 +204,14 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             editorRef.current.layout()
         }, [width, windowHeight])
 
+        /**
+         * NOTE: Please see @_onChange variable
+         */
+        _onChange.onChange = onChange
+
         const setCode = (value: string) => {
             dispatch({ type: 'setCode', value })
-            if (onChange) {
-                onChange(value)
-            }
+            _onChange.onChange?.(value)
         }
 
         useEffect(() => {
