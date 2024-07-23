@@ -37,6 +37,7 @@ export interface CodeEditorInterface {
     noParsing?: boolean
     inline?: boolean
     height?: number | string
+    width?: number | string
     shebang?: string | JSX.Element
     diffView?: boolean
     loading?: boolean
