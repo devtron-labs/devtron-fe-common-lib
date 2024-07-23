@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
+import React, { ReactNode } from 'react'
 import { ImageType } from '../../../Common'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
 
 export interface FeatureDescriptionModalProps {
     title: string
-    renderDescriptionContent?: () => JSX.Element
+    renderDescriptionContent?: () => ReactNode
     closeModalText?: string
     docLink?: string
     closeModal?: () => void
@@ -29,8 +30,12 @@ export interface FeatureDescriptionModalProps {
 }
 
 export interface DescriptorProps extends FeatureDescriptionModalProps {
-    breadCrumbs: Breadcrumb[]
+    breadCrumbs?: Breadcrumb[]
     additionalContainerClasses?: string
     iconClassName?: string
     children?: React.ReactNode
+    showInfoIconTippy?: boolean
+    docLinkText?: string
+    dataTestId?: string
+    additionalContent?: ReactNode
 }

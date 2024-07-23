@@ -61,7 +61,7 @@ export const FeatureDescriptionModal = ({
         >
             {docLink.length > 0 && (
                 <a
-                    className="flex dc__link en-2 bw-1 dc__gap-6 br-4 fw-6 lh-20 px-8 py-6 h-32"
+                    className="flex dc__link en-2 bw-1 dc__gap-6 br-4 fw-6 lh-20 px-8 py-6 h-32 anchor dc__hover-n50"
                     href={docLink}
                     target="_blank"
                     rel="noreferrer"
