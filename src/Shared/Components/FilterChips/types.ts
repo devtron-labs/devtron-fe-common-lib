@@ -37,28 +37,45 @@ export interface FilterChipProps {
      * If passed, the label will be formatted accordingly
      */
     getFormattedValue?: (filterKey: string, filterValue: unknown) => ReactNode
+    showRemoveIcon: boolean
 }
 
-export interface FilterChipsProps<T = Record<string, unknown>>
-    extends Pick<FilterChipProps, 'getFormattedLabel' | 'getFormattedValue'> {
+export type FilterChipsProps<T = Record<string, unknown>> = Pick<
+    FilterChipProps,
+    'getFormattedLabel' | 'getFormattedValue'
+> & {
     /**
      * Current filter configuration
      */
     filterConfig: T
     /**
-     * Callback handler for removing the filters
-     */
-    clearFilters: () => void
-    /**
-     * Handler for removing a applied filter
-     */
-    onRemoveFilter: (filterConfig: T) => void
-    /**
      * Class name for the container
      */
     className?: string
-    /**
-     * Class name for the clear filter button
-     */
-    clearButtonClassName?: string
-}
+} & (
+        | {
+              /**
+               * If false, anything related to removing filters is not shown
+               * @default 'true'
+               */
+              showClearAndRemove: false
+              clearFilters?: never
+              onRemoveFilter?: never
+              clearButtonClassName?: never
+          }
+        | {
+              showClearAndRemove?: true
+              /**
+               * Callback handler for removing the filters
+               */
+              clearFilters: () => void
+              /**
+               * Handler for removing a applied filter
+               */
+              onRemoveFilter: (filterConfig: T) => void
+              /**
+               * Class name for the clear filter button
+               */
+              clearButtonClassName?: string
+          }
+    )
