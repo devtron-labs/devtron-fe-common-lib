@@ -21,4 +21,4 @@ export const getResourceApiUrl = <T>({ baseUrl, kind, version, queryParams }: Ge
     getUrlWithSearchParams(`${baseUrl}/${kind}/${version}`, queryParams)
 
 export const getPolicyApiUrl = <T>({ kind, version, queryParams }: GetPolicyApiUrlProps<T>) =>
-    getUrlWithSearchParams(`global/policy/${version}/${kind}`, queryParams)
+    getUrlWithSearchParams(`global/policy/${kind}/${version}`, queryParams)
