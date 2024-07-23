@@ -15,7 +15,7 @@
  */
 
 import { TranslatableString, englishStringTranslator } from '@rjsf/utils'
-import Tippy from '@tippyjs/react'
+import Tippy from '../Tippy'
 
 /**
  * Override for the TranslatableString from RJSF
@@ -138,8 +138,16 @@ export const getInferredTypeFromValueType = (value) => {
 }
 
 export const getTippyWrapperWithContent =
-    (content, placement?: React.ComponentProps<typeof Tippy>['placement']) => (children) => (
-        <Tippy className="default-tt dc__word-break" arrow={false} placement={placement || 'right'} content={content}>
+    (content, placement?: React.ComponentProps<typeof Tippy>['placement'], truncateWidth = 0) =>
+    (children) => (
+        <Tippy
+            className="default-tt"
+            maxWidth={300}
+            arrow={false}
+            placement={placement || 'right'}
+            content={content}
+            truncateWidth={truncateWidth}
+        >
             {children}
         </Tippy>
     )
