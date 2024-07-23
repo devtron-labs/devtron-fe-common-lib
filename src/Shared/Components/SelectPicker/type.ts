@@ -1,3 +1,4 @@
+import { ServerErrors } from '@Common/ServerError'
 import { OptionType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 import { ReactElement, ReactNode } from 'react'
@@ -91,4 +92,12 @@ export interface SelectPickerProps
      * @default 'ComponentSizeType.small'
      */
     menuSize?: ComponentSizeType
+    /**
+     * If true, would show generic section error state as no options message
+     */
+    optionListError?: ServerErrors
+    /**
+     * Would reload the option list when called in case optionListError is present
+     */
+    reloadOptionList?: () => void
 }
