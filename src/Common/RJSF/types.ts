@@ -16,5 +16,18 @@
 
 import { ComponentProps } from 'react'
 import RJSFForm from '@rjsf/core'
+import { StrictRJSFSchema } from '@rjsf/utils'
 
 export type FormProps = Omit<ComponentProps<typeof RJSFForm>, 'validator'>
+
+interface Hidden {
+    condition: boolean
+    match: string
+}
+
+export interface RJSFFormSchema extends StrictRJSFSchema {
+    properties: {
+        [key: string]: RJSFFormSchema
+    }
+    hidden: Hidden
+}
