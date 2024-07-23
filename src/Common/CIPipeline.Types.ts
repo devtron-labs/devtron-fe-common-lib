@@ -104,6 +104,7 @@ export interface VariableType {
     format: string
     description: string
     defaultValue: string
+    allowEmptyValue: boolean
     variableType: RefVariableType
     refVariableStepIndex: number
     refVariableName: string
