@@ -8,10 +8,14 @@ import { EditImageFormFieldProps, FallbackImageProps } from './types'
 import { DEFAULT_IMAGE_DIMENSIONS, DEFAULT_MAX_IMAGE_SIZE } from './constants'
 import './EditImageFormField.scss'
 
-// NOTE: If want to make image dimensions configurable please change its dimensions as well for icon-dim-48.
 const FallbackImage = ({ showEditIcon, defaultIcon }: FallbackImageProps) => (
     <div
-        className={`flex dc__align-self-start dc__no-shrink br-4 edit-image-form-field__fallback-image icon-dim-48 ${showEditIcon ? 'base-image' : ''}`}
+        className={`flex dc__align-self-start dc__no-shrink br-4 edit-image-form-field__fallback-image p-12 ${showEditIcon ? 'base-image' : ''}`}
+        // Adding inline style to make sure it is configurable through constants
+        style={{
+            height: DEFAULT_IMAGE_DIMENSIONS.height,
+            width: DEFAULT_IMAGE_DIMENSIONS.width,
+        }}
     >
         {defaultIcon}
     </div>
@@ -62,6 +66,11 @@ const EditImageFormField = ({
     }
 
     const handlePreviewImage = async () => {
+        if (errorMessage) {
+            showError(errorMessage)
+            return
+        }
+
         setIsLoading(true)
         try {
             const response = await fetch(url, { mode: 'cors' })
@@ -161,7 +170,7 @@ const EditImageFormField = ({
                     </ButtonWithLoader>
 
                     <button
-                        className="cta secondary h-28 flex"
+                        className="cta cancel h-28 flex"
                         data-testid={`${dataTestIdPrefix}-cancel`}
                         type="button"
                         disabled={isLoading}
