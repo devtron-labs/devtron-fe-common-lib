@@ -15,6 +15,8 @@
  */
 
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
+import { compare as compareJSON, applyPatch } from 'fast-json-patch'
 import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import moment from 'moment'
@@ -724,6 +726,20 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
         })
         return _keys
     })
+
+export const convertJSONPointerToJSONPath = (pointer: string) =>
+    pointer.replace(/\//g, '.').replace(/\./, '$.')
+
+export const flatMapOfJSONPaths = (
+    paths: string[],
+    json: object,
+    resultType: JSONPathOptions['resultType'] = 'path',
+): string[] => paths.flatMap((path) => JSONPath({ path, json, resultType }))
+
+export const applyCompareDiffOnUneditedDocument = (uneditedDocument: object, editedDocument: object) => {
+    const patch = compareJSON(uneditedDocument, editedDocument)
+    return applyPatch(uneditedDocument, patch).newDocument
+}
 
 /**
  * Returns a debounced variant of the function
