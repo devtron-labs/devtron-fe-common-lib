@@ -39,6 +39,7 @@ export interface SelectPickerProps
             | 'required'
             | 'isOptionDisabled'
             | 'placeholder'
+            | 'autoFocus'
         >,
         Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> {
     /**

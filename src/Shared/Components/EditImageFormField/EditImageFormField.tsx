@@ -66,6 +66,11 @@ const EditImageFormField = ({
     }
 
     const handlePreviewImage = async () => {
+        if (!url) {
+            handleSuccess()
+            return
+        }
+
         if (errorMessage) {
             showError(errorMessage)
             return
