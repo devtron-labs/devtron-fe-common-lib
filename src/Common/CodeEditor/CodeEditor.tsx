@@ -75,6 +75,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         tabSize = 2,
         lineDecorationsWidth = 0,
         height = 450,
+        width = '100%',
         inline = false,
         shebang = '',
         onChange,
@@ -98,7 +99,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
 
         const editorRef = useRef(null)
         const monacoRef = useRef(null)
-        const { width, height: windowHeight } = useWindowSize()
+        const { width: windowWidth, height: windowHeight } = useWindowSize()
         const memoisedReducer = React.useCallback(CodeEditorReducer, [])
         const [state, dispatch] = useReducer(memoisedReducer, initialState({mode, theme, value, diffView, noParsing}))
         const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
@@ -191,7 +192,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 return
             }
             editorRef.current.layout()
-        }, [width, windowHeight])
+        }, [windowWidth, windowHeight])
 
         useEffect(() => {
             if (onChange) {
@@ -267,7 +268,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         }
 
         return (
-            <CodeEditorContext.Provider value={{ dispatch, state, handleLanguageChange, error, defaultValue, height }}>
+            <CodeEditorContext.Provider value={{ dispatch, state, handleLanguageChange, error, defaultValue, height, width }}>
                 {children}
                 {loading ? (
                     <CodeEditorPlaceholder customLoader={customLoader} />
@@ -286,7 +287,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                                 theme={state.theme.toLowerCase().split(' ').join('-')}
                                 editorDidMount={editorDidMount}
                                 height={height}
-                                width="100%"
+                                width={width}
                             />
                         ) : (
                             <MonacoEditor
@@ -297,7 +298,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                                 onChange={handleOnChange}
                                 editorDidMount={editorDidMount}
                                 height={height}
-                                width="100%"
+                                width={width}
                             />
                         )}
                     </>
