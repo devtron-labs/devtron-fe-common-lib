@@ -17,6 +17,7 @@
 import React from 'react'
 import Select, { components } from 'react-select'
 import { ReactComponent as ClearIcon } from '../Assets/Icon/ic-appstatus-cancelled.svg'
+import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
 import { ReactComponent as Check } from '../Assets/Icon/ic-check.svg'
 import { ReactComponent as RedWarning } from '../Assets/Icon/ic-error-medium.svg'
 import { Checkbox } from './Checkbox'
@@ -62,8 +63,8 @@ export const SingleSelectOption = (props) => {
 }
 
 /**
- *  Multi value container 
-*/
+ *  Multi value container
+ */
 
 export const MultiValueContainer = (props) => {
     const { children, data, innerProps, selectProps } = props
@@ -76,7 +77,7 @@ export const MultiValueContainer = (props) => {
     )
 }
 /**
- * 
+ *
  * Multi value container with count
  */
 export const MultiValueContainerWithCount = (props: any) => {
@@ -119,10 +120,11 @@ export const MultiValueRemove = (props) => {
     } = props
     return (
         <components.MultiValueRemove {...props}>
-            <ClearIcon
+            <ICErrorCross
                 {...{ onClick, onMouseDown }}
                 onClick={(e) => onClick(data)}
-                style={{ height: '18px', width: '18px' }}
+                className="icon-n5"
+                style={{ height: '14px', width: '14px' }}
             />
         </components.MultiValueRemove>
     )
@@ -138,7 +140,7 @@ export const MultiValueChipContainer = ({ validator, isAllSelected = false, ...p
     return (
         <components.MultiValueContainer {...{ data, innerProps, selectProps }}>
             <div className="flex left fs-12 pl-4 pr-4 dc__ellipsis-right">
-                {!isValidEmail && <RedWarning className="mr-4 icon-dim-16" />}
+                {!isValidEmail && <RedWarning className="mr-4 icon-dim-16 dc__no-shrink" />}
                 <div className={`dc__ellipsis-right ${isValidEmail ? 'cn-9' : 'cr-5'}`}>{label}</div>
             </div>
             {children[1]}

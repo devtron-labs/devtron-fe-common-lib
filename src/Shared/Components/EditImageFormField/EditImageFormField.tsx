@@ -85,7 +85,7 @@ const EditImageFormField = ({
 
             const blob = await response.blob()
             if (blob.size > DEFAULT_MAX_IMAGE_SIZE) {
-                throw new Error(`Please add an image smaller than ${DEFAULT_MAX_IMAGE_SIZE}`)
+                throw new Error(`Please add an image smaller than ${DEFAULT_MAX_IMAGE_SIZE} bytes`)
             }
 
             const src = URL.createObjectURL(blob)

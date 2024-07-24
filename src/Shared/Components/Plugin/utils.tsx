@@ -70,6 +70,7 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
                 parentPluginId: plugin.id,
                 icon: plugin.icon || '',
                 type: plugin.type,
+                pluginIdentifier: plugin.pluginIdentifier || '',
             }
         })
     })

@@ -40,6 +40,7 @@ export interface SelectPickerProps
             | 'isOptionDisabled'
             | 'placeholder'
             | 'autoFocus'
+            | 'onKeyDown'
         >,
         Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> {
     /**

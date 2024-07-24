@@ -96,7 +96,7 @@ interface DetailedPluginVersionType
             DetailedPluginVersionDTO,
             'tags' | 'isLatest' | 'inputVariables' | 'outputVariables' | 'updatedBy' | 'docLink'
         >,
-        Pick<ParentPluginType, 'icon' | 'type'> {
+        Pick<ParentPluginType, 'icon' | 'type' | 'pluginIdentifier'> {
     parentPluginId: ParentPluginType['id']
 }
 
