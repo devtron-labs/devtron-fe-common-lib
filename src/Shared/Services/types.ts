@@ -35,6 +35,7 @@ interface BaseGetApiUrlProps<T, K extends ResourceKindType | PolicyKindType, P e
     baseUrl: string
     kind: K
     version: P
+    suffix?: string
     queryParams?: T extends Parameters<typeof getUrlWithSearchParams>[1] ? T : never
 }
 
