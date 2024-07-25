@@ -26,7 +26,7 @@ const PluginCard = ({
 
     return (
         <div
-            className={`p-12 flexbox dc__gap-16 dc__tab-focus plugin-card dc__visible-hover dc__visible-hover--parent ${showCardBorder ? 'dc__border br-4 dc__hover-n50' : ''}`}
+            className={`p-12 flexbox dc__gap-16 dc__tab-focus plugin-card dc__visible-hover dc__visible-hover--parent ${showCardBorder ? 'dc__border br-4 dc__hover-n50' : 'dc__border-transparent dc__hover-border-n1--imp'}`}
             role="button"
             tabIndex={0}
             onClick={handleSelection}

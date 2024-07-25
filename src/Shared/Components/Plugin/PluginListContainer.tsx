@@ -222,7 +222,7 @@ const PluginListContainer = ({
 
             <APIResponseHandler
                 isLoading={isLoadingPluginData || getIsRequestAborted(pluginDataError)}
-                customLoader={<PluginCardSkeletonList count={5} />}
+                customLoader={<PluginCardSkeletonList />}
                 error={pluginDataError}
                 errorScreenManagerProps={{
                     code: pluginDataError?.code,
