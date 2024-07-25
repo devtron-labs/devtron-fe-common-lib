@@ -42,17 +42,16 @@ const CDEmptyState = ({
 }) => {
     const handleCDEmptyStateButton = () =>
         actionButtonText ? (
-            <div
-                className={`${
-                    actionButtonClass || 'cb-5 bcn-0 en-2'
-                } fcn-0 fw-6 fs-13 flexbox br-4 pl-16 pr-16 pt-8 pb-8 pointer`}
+            <button
+                type="button"
+                className={`${actionButtonClass || ''} cta secondary flex h-32`}
                 onClick={actionHandler}
                 data-testid={dataTestId}
             >
                 {ActionButtonIcon && !actionButtonIconRight && <ActionButtonIcon className="add-icon" />}
                 {actionButtonText}
                 {ActionButtonIcon && actionButtonIconRight && <ActionButtonIcon className="icon-dim-16 ml-8" />}
-            </div>
+            </button>
         ) : null
     return (
         <div className="dc__position-rel" style={{ backgroundColor: 'var(--window-bg)' }}>
