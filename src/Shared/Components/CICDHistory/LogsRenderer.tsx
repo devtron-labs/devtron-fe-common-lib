@@ -256,6 +256,9 @@ export const LogsRenderer = ({
         return lastActionState
     }
 
+    const areEventsProgressing =
+        triggerDetails.podStatus === POD_STATUS.PENDING || !!(eventSource && eventSource.readyState <= 1)
+
     /**
      * If initially parsedLogs are empty, and initialStatus is Success then would set opened as false on each
      * If initialStatus is not success and initial parsedLogs are empty then would set opened as false on each except the last
@@ -297,19 +300,23 @@ export const LogsRenderer = ({
                             !!targetSearchKey,
                         )
                     } else {
+                        const derivedStatus: StageStatusType = areEventsProgressing
+                            ? StageStatusType.PROGRESSING
+                            : StageStatusType.FAILURE
+
                         acc.push({
                             stage: stage || `Untitled stage ${index + 1}`,
                             startTime: startTime || '',
                             endTime: endTime || '',
                             // Would be defining the state when we receive the end status, otherwise it is loading and would be open
                             isOpen: getIsStageOpen(
-                                StageStatusType.PROGRESSING,
+                                derivedStatus,
                                 previousExistingStage.isOpen,
                                 // Wont be present in case of start stage since no logs are present yet
                                 !!searchKeyStatusMap[stage]?.[startTime],
                                 !!targetSearchKey,
                             ),
-                            status: StageStatusType.PROGRESSING,
+                            status: derivedStatus,
                             logs: [],
                         })
                     }
@@ -363,7 +370,7 @@ export const LogsRenderer = ({
         setStageList(newStageList)
         // NOTE: Not adding searchKey as dependency since on mount we would already have searchKey
         // And for other cases we would use handleSearchEnter
-    }, [streamDataList])
+    }, [streamDataList, areEventsProgressing])
 
     const handleSearchEnter = (searchText: string) => {
         handleSearch(searchText)
@@ -382,9 +389,6 @@ export const LogsRenderer = ({
         newLogs[index].isOpen = true
         setStageList(newLogs)
     }
-
-    const areEventsProgressing =
-        triggerDetails.podStatus === POD_STATUS.PENDING || (eventSource && eventSource.readyState <= 1)
 
     const renderLogs = () => {
         if (areStagesAvailable) {

@@ -717,13 +717,16 @@ export const getTimeDifference = (startTime: string, endTime: string): string =>
     }
 
     const seconds = moment(endTime).diff(moment(startTime), 'seconds')
-    const minutes = moment(endTime).diff(moment(startTime), 'minutes') % 60
-    const hours = moment(endTime).diff(moment(startTime), 'hours', true).toFixed(2)
+    const minutes = moment(endTime).diff(moment(startTime), 'minutes')
+    const hours = moment(endTime).diff(moment(startTime), 'hours')
+
     if (seconds < 60) {
         return `${seconds}s`
     }
     if (minutes < 60) {
         return `${minutes}m ${seconds % 60}s`
     }
-    return `${hours}h ${minutes % 60}m ${seconds % 60}s`
+    const leftOverMinutes = minutes - hours * 60
+    const leftOverSeconds = seconds - minutes * 60
+    return `${hours}h ${leftOverMinutes}m ${leftOverSeconds}s`
 }
