@@ -696,7 +696,11 @@ export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime
 export interface LogStageAccordionProps extends StageDetailType {
     handleStageClose: (index: number) => void
     handleStageOpen: (index: number) => void
-    accordionIndex: number
+    stageIndex: number
+    /**
+     * A stage is loading if it is last in current stage list and event is not closed
+     */
+    isLoading: boolean
 }
 
 export interface CreateMarkupReturnType {

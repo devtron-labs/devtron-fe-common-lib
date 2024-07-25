@@ -688,7 +688,7 @@ const HistoryLogs: React.FC<{
             </div>
             {(scrollToTop || scrollToBottom) && (
                 <Scroller
-                    style={{ position: 'fixed', bottom: '25px', right: '32px' }}
+                    style={{ position: 'fixed', bottom: '52px', right: '12px', zIndex: '4' }}
                     {...{ scrollToTop, scrollToBottom }}
                 />
             )}

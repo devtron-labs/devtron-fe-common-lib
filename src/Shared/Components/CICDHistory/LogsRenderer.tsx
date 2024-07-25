@@ -18,7 +18,7 @@ import { useParams } from 'react-router'
 import { useEffect, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
 import DOMPurify from 'dompurify'
-import { ANSI_UP_REGEX } from '@Shared/constants'
+import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
 import {
     Progressing,
     Host,
@@ -184,7 +184,8 @@ export const LogsRenderer = ({
     const [logsList, setLogsList] = useState<string[]>([])
     const { searchKey, handleSearch } = useUrlFilters()
 
-    const areStagesAvailable = streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER) || false
+    const areStagesAvailable =
+        (window._env_.FEATURE_STEP_WISE_LOGS_ENABLE && streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER)) || false
 
     function createMarkup(log: string, targetSearchKey: string = searchKey): CreateMarkupReturnType {
         let isSearchKeyPresent = false
@@ -200,7 +201,7 @@ export const LogsRenderer = ({
                         acc.push(
                             part.replace(
                                 new RegExp(targetSearchKey, 'g'),
-                                `\x1B[48;2;197;141;54m${targetSearchKey}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
+                                `\x1B[0m\x1B[48;2;197;141;54m${targetSearchKey}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
                             ),
                         )
                         if (part.includes(targetSearchKey)) {
@@ -389,32 +390,37 @@ export const LogsRenderer = ({
         if (areStagesAvailable) {
             return (
                 <div
-                    className="flexbox-col dc__gap-8"
+                    className="flexbox-col pb-20 logs-renderer-container"
                     data-testid="check-logs-detail"
                     style={{
                         backgroundColor: '#0C1021',
                     }}
                 >
                     <div
-                        className="flexbox pl-12 logs-renderer__search-bar logs-renderer__filters-border-bottom dc__position-sticky dc__top-0 dc__zi-1"
-                        // Doing this since we have binded 'f' with full screen and SearchVar has not exposed event on search, so on pressing f it goes to full screen
-                        onKeyDown={stopPropagation}
+                        className="flexbox-col pb-7 dc__position-sticky dc__top-0 dc__zi-2"
                         style={{
                             backgroundColor: '#0C1021',
                         }}
                     >
-                        <SearchBar
-                            noBackgroundAndBorder
-                            containerClassName="w-100"
-                            inputProps={{
-                                placeholder: 'Search logs',
-                            }}
-                            handleEnter={handleSearchEnter}
-                            initialSearchText={searchKey}
-                        />
+                        <div
+                            className="flexbox logs-renderer__search-bar logs-renderer__filters-border-bottom pl-12"
+                            // Doing this since we have binded 'f' with full screen and SearchVar has not exposed event on search, so on pressing f it goes to full screen
+                            onKeyDown={stopPropagation}
+                        >
+                            <SearchBar
+                                noBackgroundAndBorder
+                                containerClassName="w-100"
+                                inputProps={{
+                                    placeholder: 'Search logs',
+                                }}
+                                handleEnter={handleSearchEnter}
+                                initialSearchText={searchKey}
+                                size={ComponentSizeType.large}
+                            />
+                        </div>
                     </div>
 
-                    <div className="flexbox-col px-12 dc__gap-8">
+                    <div className="flexbox-col px-12 dc__gap-4">
                         {stageList.map(({ stage, isOpen, logs, endTime, startTime, status }, index) => (
                             <LogStageAccordion
                                 key={`${stage}-${startTime}-log-stage-accordion`}
@@ -426,16 +432,11 @@ export const LogsRenderer = ({
                                 status={status}
                                 handleStageClose={handleStageClose}
                                 handleStageOpen={handleStageOpen}
-                                accordionIndex={index}
+                                stageIndex={index}
+                                isLoading={index === stageList.length - 1 && areEventsProgressing}
                             />
                         ))}
                     </div>
-
-                    {areEventsProgressing && (
-                        <div className="flex left event-source-status pl-24">
-                            <Progressing />
-                        </div>
-                    )}
                 </div>
             )
         }
