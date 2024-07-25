@@ -28,6 +28,14 @@ const LogStageAccordion = ({
         }
     }
 
+    const getFormattedTimeDifference = (): string => {
+        const timeDifference = getTimeDifference(startTime, endTime)
+        if (timeDifference === '0s') {
+            return '< 1s'
+        }
+        return timeDifference
+    }
+
     return (
         <div className="flexbox-col dc__gap-8">
             <button
@@ -50,7 +58,7 @@ const LogStageAccordion = ({
                     </div>
                 </div>
 
-                {!!endTime && <span className="cn-0 fs-13 fw-4 lh-20">{getTimeDifference(startTime, endTime)}</span>}
+                {!!endTime && <span className="cn-0 fs-13 fw-4 lh-20">{getFormattedTimeDifference()}</span>}
             </button>
 
             {isOpen && (
