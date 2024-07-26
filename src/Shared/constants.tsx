@@ -56,6 +56,7 @@ export const API_TOKEN_PREFIX = 'API-TOKEN:'
 export const DEFAULT_SECRET_PLACEHOLDER = '••••••••'
 
 export enum PatchOperationType {
+    add = 'add',
     replace = 'replace',
     remove = 'remove',
 }
