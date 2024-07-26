@@ -477,6 +477,7 @@ export const EXCLUDED_FALSY_VALUES = [undefined, null, '', NaN] as const
 
 export const API_STATUS_CODES = {
     OK: 200,
+    NO_CONTENT: 204,
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
     PERMISSION_DENIED: 403,
