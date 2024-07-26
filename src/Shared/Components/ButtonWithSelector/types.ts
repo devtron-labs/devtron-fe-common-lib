@@ -24,4 +24,5 @@ export interface ButtonWithSelectorProps {
     popUpBodyClassName?: string
     showPopUp?: boolean
     disabled?: boolean
+    isLoading?: boolean
 }
