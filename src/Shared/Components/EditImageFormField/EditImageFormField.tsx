@@ -1,4 +1,5 @@
 import { SyntheticEvent, useState } from 'react'
+import { toast } from 'react-toastify'
 import { showError } from '@Common/Helper'
 import { CustomInput } from '@Common/CustomInput'
 import { ButtonWithLoader, ImageWithFallback } from '@Shared/Components'
@@ -62,17 +63,20 @@ const EditImageFormField = ({
     const handleChange = (event: SyntheticEvent) => {
         const { value } = event.target as HTMLInputElement
         handleURLChange(value)
-        handleError(validateURL(value, false).message)
+        if (value.trim()) {
+            handleError(validateURL(value, false).message)
+        }
     }
 
     const handlePreviewImage = async () => {
         if (!url) {
-            handleSuccess()
+            // Not setting the error since can save without image
+            toast.error('Please enter a valid image URL')
             return
         }
 
         if (errorMessage) {
-            showError(errorMessage)
+            toast.error(errorMessage)
             return
         }
 
@@ -151,7 +155,7 @@ const EditImageFormField = ({
                     <CustomInput
                         name={`${ariaLabelPrefix} url input`}
                         label="Image URL"
-                        labelClassName="m-0 dc__required-field fs-13 fw-4 lh-20 cn-7"
+                        labelClassName="m-0 fs-13 fw-4 lh-20 cn-7"
                         placeholder="Enter image url"
                         value={url}
                         onChange={handleChange}
