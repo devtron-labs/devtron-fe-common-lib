@@ -23,8 +23,11 @@ const PluginList = ({
     const { appId } = useParams<PluginListParamsType>()
 
     const [isLoadingMorePlugins, setIsLoadingMorePlugins] = useState<boolean>(false)
+    const [hasError, setHasError] = useState<boolean>(false)
+
     const handleLoadMore = async () => {
         setIsLoadingMorePlugins(true)
+        setHasError(false)
         try {
             const pluginDataResponse = await abortPreviousRequests(
                 () =>
@@ -40,7 +43,7 @@ const PluginList = ({
 
             handleDataUpdateForPluginResponse(pluginDataResponse, true)
         } catch (error) {
-            // Do nothing
+            setHasError(true)
         } finally {
             setIsLoadingMorePlugins(false)
         }
@@ -73,8 +76,9 @@ const PluginList = ({
 
             {isLoadingMorePlugins && <PluginCardSkeletonList />}
 
-            {/* TODO: Handle on error */}
-            {totalCount > pluginList.length && !isLoadingMorePlugins && <DetectBottom callback={handleLoadMore} />}
+            {totalCount > pluginList.length && !isLoadingMorePlugins && (
+                <DetectBottom callback={handleLoadMore} hasError={hasError} />
+            )}
         </>
     )
 }
