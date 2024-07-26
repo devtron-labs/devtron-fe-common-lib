@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactSelect, { MenuListProps, ValueContainerProps } from 'react-select'
-import { Option, OptionType } from '../../../Common'
+import { OptionType } from '../../../Common'
 import { LoadingIndicator, MenuListWithApplyButton, MultiSelectValueContainer } from '../ReactSelect'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import { PluginTagSelectProps } from './types'
-import { pluginTagSelectStyles } from './utils'
+import { PluginTagOption, pluginTagSelectStyles } from './utils'
 
 const PluginTagSelect = ({
     availableTags,
@@ -78,7 +78,7 @@ const PluginTagSelect = ({
                 LoadingIndicator,
                 NoOptionsMessage: renderNoOptionsMessage,
                 MenuList: renderMenuList,
-                Option,
+                Option: PluginTagOption,
                 ValueContainer: renderValueContainer,
             }}
             menuIsOpen={isMenuOpen}

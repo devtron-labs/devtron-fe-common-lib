@@ -16,21 +16,23 @@
 
 import React from 'react'
 import Select, { components } from 'react-select'
+import Tippy from '@tippyjs/react'
 import { ReactComponent as ClearIcon } from '../Assets/Icon/ic-appstatus-cancelled.svg'
 import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
 import { ReactComponent as Check } from '../Assets/Icon/ic-check.svg'
 import { ReactComponent as RedWarning } from '../Assets/Icon/ic-error-medium.svg'
 import { Checkbox } from './Checkbox'
 import { CHECKBOX_VALUE } from './Types'
+import { ConditionalWrap } from './Helper'
 
 export const Option = (props) => {
-    const { selectOption, data } = props
+    const { selectOption, data, showTippy, tippyPlacement } = props
 
     const handleChange = (e) => {
         selectOption(data)
     }
 
-    return (
+    const renderOption = () => (
         <div
             className="flex left pl-12 cursor dc__gap-8"
             style={{ background: props.isFocused ? 'var(--N100)' : 'transparent' }}
@@ -43,6 +45,26 @@ export const Option = (props) => {
             />
             <components.Option {...props} />
         </div>
+    )
+
+    const renderTippy = (children) => {
+        const placement = tippyPlacement === 'left' || tippyPlacement === 'right' ? tippyPlacement : 'auto'
+        return (
+            <Tippy
+                content={data.label}
+                className="default-tt dc__mxw-200 dc__word-break"
+                placement={placement}
+                arrow={false}
+            >
+                {children}
+            </Tippy>
+        )
+    }
+
+    return (
+        <ConditionalWrap condition={showTippy} wrap={renderTippy}>
+            {renderOption()}
+        </ConditionalWrap>
     )
 }
 

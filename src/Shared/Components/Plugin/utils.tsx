@@ -1,3 +1,6 @@
+import { OptionProps } from 'react-select'
+import { OptionType } from '@Common/Types'
+import { Option } from '@Common/MultiSelectCustomization'
 import { ParentPluginDTO, PluginCreationType, PluginDataStoreType } from './types'
 import { commonSelectStyles } from '../ReactSelect'
 import { stringComparatorBySortOrder } from '../../Helpers'
@@ -99,6 +102,10 @@ export const pluginTagSelectStyles = {
         },
     }),
 }
+
+export const PluginTagOption = (props: OptionProps<OptionType, true>) => (
+    <Option {...props} showTippy placement="left" />
+)
 
 /**
  * @description This method takes the initial plugin data store and updates the keys with the target parent plugin store and plugin version store
