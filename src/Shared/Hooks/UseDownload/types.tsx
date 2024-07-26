@@ -4,4 +4,5 @@ export interface HandleDownloadProps {
     fileName?: string
     showSuccessfulToast?: boolean
     downloadSuccessToastContent?: string
+    showProgress?: boolean
 }
