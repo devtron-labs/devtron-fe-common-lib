@@ -16,7 +16,7 @@
 
 import React, { SyntheticEvent } from 'react'
 import ReactDOM from 'react-dom'
-import { preventBodyScroll } from '../../Shared'
+import { POP_UP_MENU_MODAL_ID, preventBodyScroll } from '../../Shared'
 import { stopPropagation } from '../Helper'
 
 export class VisibleModal extends React.Component<{
@@ -67,6 +67,10 @@ export class VisibleModal extends React.Component<{
     }
 
     handleBodyClick = (e: SyntheticEvent) => {
+        const isPopupMenuPresent = document.getElementById(POP_UP_MENU_MODAL_ID)
+        if (isPopupMenuPresent) {
+            return
+        }
         e.stopPropagation()
 
         this.props.close?.(e)
