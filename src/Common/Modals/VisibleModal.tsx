@@ -46,6 +46,7 @@ export class VisibleModal extends React.Component<{
 
     componentDidMount() {
         document.addEventListener('keydown', this.escFunction)
+        // show is also being used in modal (i.e, pop up menu for case where we have noBackground as false, so it works in syc with VisibleModal with noBackground as false)
         this.modalRef.classList.add(this.props.noBackground ? 'show' : 'show-with-bg')
         preventBodyScroll(true)
 

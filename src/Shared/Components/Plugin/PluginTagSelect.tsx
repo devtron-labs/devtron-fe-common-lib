@@ -62,7 +62,7 @@ const PluginTagSelect = ({
     )
 
     const renderValueContainer = useCallback(
-        (props: ValueContainerProps<OptionType, true>) => <MultiSelectValueContainer {...props} title="Category" />,
+        (props: ValueContainerProps<OptionType, true>) => <MultiSelectValueContainer {...props} title="Tags" />,
         [],
     )
 
@@ -92,7 +92,7 @@ const PluginTagSelect = ({
             hideSelectedOptions={false}
             blurInputOnSelect={false}
             maxMenuHeight={200}
-            placeholder="Select tags"
+            placeholder="Search tags"
             inputId="plugin-tag-select"
             className="w-150"
         />

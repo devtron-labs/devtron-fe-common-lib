@@ -15,7 +15,7 @@
  */
 
 import React from 'react'
-import { GenericEmptyState } from '../../../Common'
+import { GenericEmptyState, ImageType } from '../../../Common'
 import AppNotDeployed from '../../../Assets/Img/app-not-deployed.png'
 import { EMPTY_STATE_STATUS } from '../../constants'
 
@@ -61,6 +61,7 @@ const CDEmptyState = ({
                 title={title || EMPTY_STATE_STATUS.CD_EMPTY_STATE.TITLE}
                 subTitle={subtitle || EMPTY_STATE_STATUS.CD_EMPTY_STATE.SUBTITLE}
                 isButtonAvailable
+                imageType={ImageType.Large}
                 renderButton={handleCDEmptyStateButton}
             />
         </div>

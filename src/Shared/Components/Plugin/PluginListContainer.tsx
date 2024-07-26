@@ -194,6 +194,7 @@ const PluginListContainer = ({
                     handleEnter={handleSearch}
                     inputProps={{
                         placeholder: 'Search plugins',
+                        autoFocus: true,
                     }}
                 />
 

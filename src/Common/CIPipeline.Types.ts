@@ -129,6 +129,7 @@ interface ConditionDetails {
     conditionalValue: string
 }
 
+// FIXME: mountCodeToContainerPath is not here :/
 interface InlineStepDetailType {
     scriptType: ScriptType
     isMountCustomScript?: boolean
