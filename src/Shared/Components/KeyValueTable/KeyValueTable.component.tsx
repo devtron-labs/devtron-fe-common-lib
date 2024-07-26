@@ -35,6 +35,7 @@ export const KeyValueTable = <K extends string>({
     onDelete,
     placeholder,
     isAdditionNotAllowed,
+    readOnly,
 }: KeyValueTableProps<K>) => {
     // CONSTANTS
     const { headers, rows } = config
@@ -168,7 +169,7 @@ export const KeyValueTable = <K extends string>({
     return (
         <div className="dc__border br-4 w-100 bcn-0 key-value">
             <div
-                className={`key-value__row flexbox dc__align-items-center bcn-50 ${!isAdditionNotAllowed || updatedRows.length ? 'dc__border-bottom-n1' : ''}`}
+                className={`key-value__row flexbox dc__align-items-center bcn-50 ${(!readOnly && !isAdditionNotAllowed) || updatedRows.length ? 'dc__border-bottom-n1' : ''}`}
             >
                 {headers.map(({ key, label, className }) =>
                     isSortable && key === firstHeaderKey ? (
@@ -197,18 +198,18 @@ export const KeyValueTable = <K extends string>({
                 )}
                 {!!headerComponent && <div className="px-12">{headerComponent}</div>}
             </div>
-            {!isAdditionNotAllowed && (
+            {!readOnly && !isAdditionNotAllowed && (
                 <div
                     className={`key-value__row flexbox dc__align-items-center ${updatedRows.length ? 'dc__border-bottom-n1' : ''}`}
                 >
                     {headers.map(({ key }) => (
                         <div
                             key={key}
-                            className={`cn-9 fs-13 lh-20 py-8 px-12 flex dc__overflow-auto ${key === firstHeaderKey ? 'dc__align-self-stretch dc__border-right--n1 key-value__header__col-1' : 'flex-grow-1'}`}
+                            className={`cn-9 fs-13 lh-20 flex dc__overflow-auto ${key === firstHeaderKey ? 'dc__align-self-stretch dc__border-right--n1 key-value__header__col-1' : 'flex-grow-1'}`}
                         >
                             <textarea
                                 ref={key === firstHeaderKey ? inputRowRef : undefined}
-                                className="key-value__row-input key-value__row-input--add placeholder-cn5 p-0 lh-20 fs-13 fw-4 dc__no-border-imp dc__no-border-radius"
+                                className="key-value__row-input key-value__row-input--add placeholder-cn5 py-8 px-12 lh-20 fs-13 fw-4 dc__no-border-imp dc__no-border-radius"
                                 value=""
                                 rows={1}
                                 placeholder={placeholder[key]}
@@ -226,7 +227,7 @@ export const KeyValueTable = <K extends string>({
                     {headers.map(({ key }) => (
                         <div
                             key={key}
-                            className={`cn-9 fs-13 lh-20 px-12 dc__overflow-auto flexbox dc__align-items-center dc__gap-4 ${key === firstHeaderKey ? 'dc__align-self-stretch dc__border-right--n1 key-value__header__col-1' : 'flex-grow-1'}`}
+                            className={`cn-9 fs-13 lh-20 dc__overflow-auto flexbox dc__align-items-center dc__gap-4 ${key === firstHeaderKey ? 'dc__align-self-stretch dc__border-right--n1 key-value__header__col-1' : 'flex-grow-1'}`}
                         >
                             {maskValue?.[key] && row.data[key].value ? (
                                 DEFAULT_SECRET_PLACEHOLDER
@@ -234,7 +235,7 @@ export const KeyValueTable = <K extends string>({
                                 <>
                                     <ResizableTagTextArea
                                         {...row.data[key]}
-                                        className="key-value__row-input placeholder-cn5 py-8 px-0 dc__no-border-imp dc__no-border-radius"
+                                        className="key-value__row-input placeholder-cn5 py-8 px-12 dc__no-border-imp dc__no-border-radius"
                                         minHeight={20}
                                         maxHeight={160}
                                         value={row.data[key].value}
@@ -251,6 +252,7 @@ export const KeyValueTable = <K extends string>({
                                                 ? valueTextAreaRef.current?.[row.id]
                                                 : keyTextAreaRef.current?.[row.id]
                                         }
+                                        disabled={readOnly || row.data[key].disabled}
                                         disableOnBlurResizeToMinHeight
                                     />
                                     {row.data[key].required && (
@@ -260,13 +262,18 @@ export const KeyValueTable = <K extends string>({
                             )}
                         </div>
                     ))}
-                    <button
-                        type="button"
-                        className="dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 dc__border-left-n1--important dc__hover-n50"
-                        onClick={onRowDelete(row)}
-                    >
-                        <ICCross aria-label="delete-row" className="icon-dim-16 fcn-4 dc__align-self-start cursor" />
-                    </button>
+                    {!readOnly && (
+                        <button
+                            type="button"
+                            className="dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 dc__border-left-n1--important dc__hover-n50"
+                            onClick={onRowDelete(row)}
+                        >
+                            <ICCross
+                                aria-label="delete-row"
+                                className="icon-dim-16 fcn-4 dc__align-self-start cursor"
+                            />
+                        </button>
+                    )}
                 </div>
             ))}
         </div>
