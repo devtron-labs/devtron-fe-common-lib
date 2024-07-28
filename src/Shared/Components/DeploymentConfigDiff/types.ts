@@ -1,3 +1,5 @@
+import { SortingOrder } from '@Common/Constants'
+
 import { DeploymentHistoryDetail } from '../CICDHistory'
 import { CollapsibleListConfig, CollapsibleListItem } from '../CollapsibleList'
 import { SelectPickerProps } from '../SelectPicker'
@@ -48,6 +50,7 @@ export interface DeploymentConfigDiffProps {
         primaryConfig: DeploymentConfigDiffSelectPickerProps[]
         secondaryConfig: DeploymentConfigDiffSelectPickerProps[]
     }
+    sortOrder?: SortingOrder
     onSortBtnClick?: () => void
     navList: DeploymentConfigDiffNavigationItem[]
     collapsibleNavList: DeploymentConfigDiffNavigationCollapsibleItem[]
@@ -65,7 +68,13 @@ export interface DeploymentConfigDiffNavigationProps
 export interface DeploymentConfigDiffMainProps
     extends Pick<
         DeploymentConfigDiffProps,
-        'isLoading' | 'headerText' | 'configList' | 'scrollIntoViewId' | 'selectorsConfig' | 'onSortBtnClick'
+        | 'isLoading'
+        | 'headerText'
+        | 'configList'
+        | 'scrollIntoViewId'
+        | 'selectorsConfig'
+        | 'sortOrder'
+        | 'onSortBtnClick'
     > {}
 
 export interface DeploymentConfigDiffAccordionProps {

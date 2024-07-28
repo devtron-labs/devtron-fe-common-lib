@@ -3,7 +3,7 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { Progressing } from '@Common/Progressing'
 import { CodeEditor } from '@Common/CodeEditor'
-import { MODES } from '@Common/Constants'
+import { MODES, SortingOrder } from '@Common/Constants'
 
 import { SelectPicker } from '../SelectPicker'
 import { DeploymentHistoryDiffView } from '../CICDHistory'
@@ -16,6 +16,7 @@ export const DeploymentConfigDiffMain = ({
     configList = [],
     scrollIntoViewId,
     selectorsConfig,
+    sortOrder,
     onSortBtnClick,
 }: DeploymentConfigDiffMainProps) => {
     // STATES
@@ -69,7 +70,10 @@ export const DeploymentConfigDiffMain = ({
                 className="dc__unset-button-styles flexbox dc__align-items-center dc__gap-6"
                 onClick={onSortBtnClick}
             >
-                <ICSortArrowDown className="fcn-7 rotate" style={{ ['--rotateBy' as string]: '180deg' }} />
+                <ICSortArrowDown
+                    className="fcn-7 rotate"
+                    style={{ ['--rotateBy' as string]: sortOrder === SortingOrder.ASC ? '0deg' : '180deg' }}
+                />
                 <span className="cn-7 fs-13 lh-20 fw-6">Sort keys</span>
             </button>
         </div>
@@ -118,6 +122,7 @@ export const DeploymentConfigDiffMain = ({
                                 previousConfigAvailable
                                 rootClassName="m-16 mt-0-imp dc__no-top-radius dc__no-top-border"
                                 comparisonBodyClassName="m-16"
+                                sortOrder={sortOrder}
                             />
                         </>
                     )}
