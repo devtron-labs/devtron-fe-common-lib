@@ -15,7 +15,7 @@ import {
     SelectPickerOption,
     SelectPickerValueContainer,
 } from './common'
-import { SelectPickerOptionType, SelectPickerProps } from './type'
+import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 
 /**
  * Generic component for select picker
@@ -110,6 +110,7 @@ const SelectPicker = ({
     disabledTippyContent,
     showSelectedOptionsCount = false,
     menuSize,
+    variant = SelectPickerVariantType.DEFAULT,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
@@ -123,8 +124,9 @@ const SelectPicker = ({
                 error,
                 size,
                 menuSize,
+                variant,
             }),
-        [error, size, menuSize],
+        [error, size, menuSize, variant],
     )
 
     const renderControl = useCallback(

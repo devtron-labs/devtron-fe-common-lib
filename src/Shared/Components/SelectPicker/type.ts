@@ -18,6 +18,11 @@ export interface SelectPickerOptionType extends OptionType<number | string, Reac
     endIcon?: ReactElement
 }
 
+export enum SelectPickerVariantType {
+    DEFAULT = 'default',
+    BORDERLESS = 'borderless',
+}
+
 type SelectProps = ReactSelectProps<SelectPickerOptionType>
 
 // TODO: Add support for border less
@@ -91,4 +96,10 @@ export interface SelectPickerProps
      * @default 'ComponentSizeType.small'
      */
     menuSize?: ComponentSizeType
+    /**
+     * Variant of the select.
+     *
+     * @default SelectPickerVariantType.DEFAULT
+     */
+    variant?: SelectPickerVariantType
 }
