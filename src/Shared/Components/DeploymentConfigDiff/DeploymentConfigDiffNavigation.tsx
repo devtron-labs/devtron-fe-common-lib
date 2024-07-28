@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
@@ -24,12 +24,16 @@ export const DeploymentConfigDiffNavigation = ({
     navHelpText,
 }: DeploymentConfigDiffNavigationProps) => {
     // STATES
-    const [collapsedIds, setCollapsedIds] = useState<Record<string, boolean>>({})
+    const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({})
+
+    useEffect(() => {
+        setExpandedIds(collapsibleNavList.reduce((acc, curr) => ({ ...acc, [curr.id]: !!curr.items.length }), {}))
+    }, [collapsibleNavList])
 
     /** Collapsible List Config. */
     const collapsibleListConfig = collapsibleNavList.map(({ items, ...resListItem }) => ({
         ...resListItem,
-        isExpanded: !collapsedIds[resListItem.id],
+        isExpanded: expandedIds[resListItem.id],
         items: items.map(({ hasDiff, ...resItem }) => ({
             ...resItem,
             ...(hasDiff
@@ -46,7 +50,7 @@ export const DeploymentConfigDiffNavigation = ({
     // METHODS
     /** Handles collapse button click. */
     const onCollapseBtnClick = (id: string) => {
-        setCollapsedIds((prev) => ({ ...prev, [id]: !prev[id] }))
+        setExpandedIds((prev) => ({ ...prev, [id]: !prev[id] }))
     }
 
     // RENDERERS
