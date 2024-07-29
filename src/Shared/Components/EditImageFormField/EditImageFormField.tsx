@@ -6,7 +6,7 @@ import { ButtonWithLoader, ImageWithFallback } from '@Shared/Components'
 import { validateIfImageExist, validateURL } from '@Shared/validations'
 import { ReactComponent as ICPencil } from '@Icons/ic-pencil.svg'
 import { EditImageFormFieldProps, FallbackImageProps } from './types'
-import { DEFAULT_IMAGE_DIMENSIONS, DEFAULT_MAX_IMAGE_SIZE } from './constants'
+import { DEFAULT_IMAGE_DIMENSIONS, DEFAULT_MAX_IMAGE_SIZE, EMPTY_PREVIEW_URL_ERROR_MESSAGE } from './constants'
 import './EditImageFormField.scss'
 
 const FallbackImage = ({ showEditIcon, defaultIcon }: FallbackImageProps) => (
@@ -36,6 +36,8 @@ const EditImageFormField = ({
     const [lastPreviewedURL, setLastPreviewedURL] = useState<string>(url)
     const [isEditing, setIsEditing] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    // Since we need to show error message for empty preview URL but not propagate it to parent, we need to maintain a separate state
+    const [emptyPreviewURLErrorMessage, setEmptyPreviewURLErrorMessage] = useState<string>('')
 
     const handleEnableEditing = () => {
         setIsEditing(true)
@@ -47,6 +49,7 @@ const EditImageFormField = ({
 
     const handleReset = (newURL?: string) => {
         handleLastPreviewedURLChange(newURL ?? lastPreviewedURL)
+        handleURLChange(newURL ?? lastPreviewedURL)
         handleError('')
         setIsEditing(false)
         setIsLoading(false)
@@ -63,15 +66,19 @@ const EditImageFormField = ({
     const handleChange = (event: SyntheticEvent) => {
         const { value } = event.target as HTMLInputElement
         handleURLChange(value)
-        if (value.trim()) {
-            handleError(validateURL(value, false).message)
+        if (!value.trim()) {
+            handleError('')
+            return
         }
+        setEmptyPreviewURLErrorMessage('')
+        handleError(validateURL(value, false).message)
     }
 
     const handlePreviewImage = async () => {
         if (!url) {
             // Not setting the error since can save without image
-            toast.error('Please enter a valid image URL')
+            setEmptyPreviewURLErrorMessage(EMPTY_PREVIEW_URL_ERROR_MESSAGE)
+            toast.error(EMPTY_PREVIEW_URL_ERROR_MESSAGE)
             return
         }
 
@@ -159,10 +166,11 @@ const EditImageFormField = ({
                         placeholder="Enter image url"
                         value={url}
                         onChange={handleChange}
-                        error={errorMessage}
+                        error={errorMessage || emptyPreviewURLErrorMessage}
                         inputWrapClassName="w-100"
                         dataTestid={`${dataTestIdPrefix}-input`}
                         onKeyDown={handleKeyDown}
+                        autoFocus
                     />
                 </div>
 
