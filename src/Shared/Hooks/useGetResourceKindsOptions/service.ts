@@ -42,7 +42,7 @@ export const getEnvironmentOptions = async (): Promise<EnvironmentType[]> => {
     return (
         result?.map((environment) => ({
             id: environment.id,
-            name: environment.cluster_name,
+            name: environment.environment_name,
             isVirtual: environment.isVirtualEnvironment ?? false,
             cluster: environment.cluster_name,
             environmentType: environment.default ? EnvironmentTypeEnum.production : EnvironmentTypeEnum.nonProduction,
