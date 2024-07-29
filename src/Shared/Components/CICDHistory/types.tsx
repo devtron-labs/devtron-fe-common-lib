@@ -551,7 +551,7 @@ export interface ArtifactType {
     artifact: string
     blobStorageEnabled: boolean
     isArtifactUploaded?: boolean
-    getArtifactPromise?: () => Promise<any>
+    downloadArtifactUrl?: string
     isJobView?: boolean
     isJobCI?: boolean
     type: HistoryComponentType

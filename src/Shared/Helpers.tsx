@@ -730,3 +730,11 @@ export const getTimeDifference = (startTime: string, endTime: string): string =>
     const leftOverSeconds = seconds - minutes * 60
     return `${hours}h ${leftOverMinutes}m ${leftOverSeconds}s`
 }
+
+export const getFileNameFromHeaders = (headers: Headers) =>
+    headers
+        ?.get('content-disposition')
+        ?.split(';')
+        ?.find((n) => n.includes('filename='))
+        ?.replace('filename=', '')
+        .trim()

@@ -63,7 +63,7 @@ import {
     VirtualHistoryArtifactProps,
     RunSourceType,
 } from './types'
-import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger, getCDBuildReport } from './service'
+import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger } from './service'
 import { DEFAULT_ENV, TIMEOUT_VALUE, WORKER_POD_BASE_URL } from './constants'
 import { GitTriggers } from '../../types'
 import warn from '../../../Assets/Icon/ic-warning.svg'
@@ -561,6 +561,8 @@ const HistoryLogs: React.FC<{
         workflowId: triggerDetails.id,
     }
 
+    const CDBuildReportUrl = `app/cd-pipeline/workflow/download/${appId}/${envId}/${pipelineId}/${triggerId}`
+
     const [ref, scrollToTop, scrollToBottom] = useScrollable({
         autoBottomScroll: triggerDetails.status.toLowerCase() !== 'succeeded',
     })
@@ -665,7 +667,7 @@ const HistoryLogs: React.FC<{
                                         tagsEditable={tagsEditable}
                                         appReleaseTagNames={appReleaseTags}
                                         hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                                        getArtifactPromise={() => getCDBuildReport(appId, envId, pipelineId, triggerId)}
+                                        downloadArtifactUrl={CDBuildReportUrl}
                                         type={HistoryComponentType.CD}
                                         renderCIListHeader={renderCIListHeader}
                                     />
