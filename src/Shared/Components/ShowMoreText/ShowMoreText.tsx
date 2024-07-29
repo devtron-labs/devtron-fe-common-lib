@@ -15,12 +15,13 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
+import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 
 interface ShowMoreTextProps {
     text: string
 }
 
-export const ShowMoreText = ({ text }: ShowMoreTextProps) => {
+const ShowMoreText = ({ text }: ShowMoreTextProps) => {
     const ellipsisText = useRef(null)
     const [showToggle, setShowToggle] = useState(false)
     const [showAllText, setShowAllText] = useState(false)
@@ -45,10 +46,19 @@ export const ShowMoreText = ({ text }: ShowMoreTextProps) => {
                 {text}
             </span>
             {showToggle && (
-                <div className="cursor cb-5" onClick={toggleShowText}>{`${
-                    showAllText ? 'Show less' : 'Show more'
-                }`}</div>
+                <button
+                    type="button"
+                    className="dc__transparent p-0 flexbox dc__align-items-center dc__gap-4"
+                    onClick={toggleShowText}
+                >
+                    <span className="cb-5 fs-12 fw-6 lh-20">{showAllText ? 'Show less' : 'Show more'}</span>
+                    <ICCaretDown
+                        className={`dc__no-shrink icon-dim-16 flex scb-5 dc__transition--transform ${showAllText ? 'dc__flip-180' : ''}`}
+                    />
+                </button>
             )}
         </div>
     )
 }
+
+export default ShowMoreText
