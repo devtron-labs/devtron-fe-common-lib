@@ -16,8 +16,8 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
+import { useDownload } from '@Shared/Hooks'
 import {
-    showError,
     GenericEmptyState,
     ImageTagsContainer,
     ClipboardButton,
@@ -122,7 +122,7 @@ const Artifacts = ({
     artifact,
     blobStorageEnabled,
     isArtifactUploaded,
-    getArtifactPromise,
+    downloadArtifactUrl,
     ciPipelineId,
     artifactId,
     isJobView,
@@ -137,6 +137,7 @@ const Artifacts = ({
     renderCIListHeader,
 }: ArtifactType) => {
     const { isSuperAdmin } = useSuperAdmin()
+    const { handleDownload } = useDownload()
 
     const { triggerId, buildId } = useParams<{
         triggerId: string
@@ -152,16 +153,10 @@ const Artifacts = ({
     }, [copied])
 
     async function handleArtifact() {
-        try {
-            const response = await getArtifactPromise()
-            const b = await (response as any).blob()
-            const a = document.createElement('a')
-            a.href = URL.createObjectURL(b)
-            a.download = `${buildId || triggerId}.zip`
-            a.click()
-        } catch (err) {
-            showError(err)
-        }
+        await handleDownload({
+            downloadUrl: downloadArtifactUrl,
+            fileName: `${buildId || triggerId}.zip`,
+        })
     }
 
     if (status.toLowerCase() === TERMINAL_STATUS_MAP.RUNNING || status.toLowerCase() === TERMINAL_STATUS_MAP.STARTING) {
@@ -251,7 +246,7 @@ const Artifacts = ({
                 </CIListItem>
             )}
             {blobStorageEnabled &&
-                getArtifactPromise &&
+                downloadArtifactUrl &&
                 (type === HistoryComponentType.CD || isArtifactUploaded || isJobView) && (
                     <CIListItem
                         type="report"
