@@ -37,7 +37,6 @@ export interface customEnv {
     HELM_APP_DETAILS_POLLING_INTERVAL?: number
     EA_APP_DETAILS_POLLING_INTERVAL?: number
     CENTRAL_API_ENDPOINT?: string
-    HIDE_DEPLOYMENT_GROUPS?: boolean
     HIDE_GITOPS_OR_HELM_OPTION?: boolean
     CONFIGURABLE_TIMEOUT?: string
     HIDE_APPLICATION_GROUPS?: boolean

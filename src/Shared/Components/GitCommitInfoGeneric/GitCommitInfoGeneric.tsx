@@ -18,6 +18,7 @@
 import { useState } from 'react'
 import moment from 'moment'
 import Tippy from '@tippyjs/react'
+import ClipboardButton from '@Common/ClipboardButton/ClipboardButton'
 import { stopPropagation } from '../../../Common/Helper'
 import { ReactComponent as Commit } from '../../../Assets/Icon/ic-commit.svg'
 import { ReactComponent as CommitIcon } from '../../../Assets/Icon/ic-code-commit.svg'
@@ -33,6 +34,7 @@ import GitMaterialInfoHeader from './GitMaterialInfoHeader'
 import { DATE_TIME_FORMATS } from '../../../Common/Constants'
 import { MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../constants'
 import { GitCommitInfoGenericProps } from './types'
+import { ReactComponent as Circle } from '../../../Assets/Icon/ic-circle.svg'
 
 const GitCommitInfoGeneric = ({
     materialSourceType,
@@ -198,7 +200,7 @@ const GitCommitInfoGeneric = ({
             )
         }
 
-        return <span data-testid="valid-git-commit">Select</span>
+        return <Circle data-testid="valid-git-commit" />
     }
 
     return (
@@ -215,29 +217,35 @@ const GitCommitInfoGeneric = ({
             {!_isWebhook && (
                 <>
                     {_lowerCaseCommitInfo.commit && (
-                        <div className="ml-16 mr-16 flex dc__content-space">
+                        <div className="flex dc__content-space">
                             {_commitUrl ? (
-                                <a
-                                    href={_commitUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="commit-hash"
-                                    onClick={stopPropagation}
-                                    data-testid={`deployment-history-source-code-material-history${index}`}
-                                >
-                                    <div
-                                        className="material-history__header"
-                                        data-testid={`git-commit-credential${index}`}
+                                <div className="flexbox dc__gap-8">
+                                    <a
+                                        href={_commitUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="commit-hash"
+                                        onClick={stopPropagation}
+                                        data-testid={`deployment-history-source-code-material-history${index}`}
                                     >
-                                        <Commit className="commit-hash__icon" />
-                                        {_lowerCaseCommitInfo.commit}
-                                    </div>
-                                </a>
+                                        <div
+                                            className="material-history__header "
+                                            data-testid={`git-commit-credential${index}`}
+                                        >
+                                            <Commit className="commit-hash__icon" />
+                                            {_lowerCaseCommitInfo.commit.slice(-6)}
+                                        </div>
+                                    </a>
+                                    <ClipboardButton content={_lowerCaseCommitInfo.commit} />
+                                </div>
                             ) : null}
                             {selectedCommitInfo ? (
-                                <div className="material-history__select-text dc_max-width__max-content">
+                                <div className="dc_max-width__max-content">
                                     {_lowerCaseCommitInfo.isselected ? (
-                                        <Check data-testid="selected-git-commit" className="dc__align-right" />
+                                        <Check
+                                            data-testid="selected-git-commit"
+                                            className="dc__align-right icon-dim-20"
+                                        />
                                     ) : (
                                         matSelectionText()
                                     )}
@@ -245,6 +253,14 @@ const GitCommitInfoGeneric = ({
                             ) : null}
                         </div>
                     )}
+                    {_lowerCaseCommitInfo.message ? (
+                        <div
+                            data-testid={`${_lowerCaseCommitInfo.message.trim()}-${isExcluded ? 'excluded' : 'included'}`}
+                            className="material-history__text flex left top material-history-text--padded dc__word-break-all mb-8"
+                        >
+                            <span className="fs-13 fw-6 lh-20 cn-9"> {_lowerCaseCommitInfo.message}</span>
+                        </div>
+                    ) : null}
                     {_lowerCaseCommitInfo.author ? (
                         <div className="material-history__text flex left">
                             <PersonIcon className="icon-dim-16 mr-8" /> {_lowerCaseCommitInfo.author}
@@ -254,15 +270,6 @@ const GitCommitInfoGeneric = ({
                         <div className="material-history__text flex left">
                             <CalendarIcon className="icon-dim-16 mr-8" />
                             {moment(_lowerCaseCommitInfo.date).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
-                        </div>
-                    ) : null}
-                    {_lowerCaseCommitInfo.message ? (
-                        <div
-                            data-testid={`${_lowerCaseCommitInfo.message.trim()}-${isExcluded ? 'excluded' : 'included'}`}
-                            className="material-history__text flex left top material-history-text--padded dc__word-break-all"
-                        >
-                            <MessageIcon className="icon-dim-16 mw-16 mr-8 mt-2" />
-                            {_lowerCaseCommitInfo.message}
                         </div>
                     ) : null}
                 </>
@@ -287,8 +294,12 @@ const GitCommitInfoGeneric = ({
                             ) : null}
                         </div>
                         {selectedCommitInfo ? (
-                            <div className="material-history__select-text flexbox dc__align-items-center dc__content-end fs-12">
-                                {_lowerCaseCommitInfo.isselected ? <Check className="dc__align-right" /> : 'Select'}
+                            <div className="flexbox dc__align-items-center dc__content-end fs-12">
+                                {_lowerCaseCommitInfo.isselected ? (
+                                    <Check className="dc__align-right" />
+                                ) : (
+                                    <Circle data-testid="valid-git-commit" />
+                                )}
                             </div>
                         ) : null}
                     </div>
