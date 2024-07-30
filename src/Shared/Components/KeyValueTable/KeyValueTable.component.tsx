@@ -15,17 +15,33 @@
  *   limitations under the License.
  */
 
-import React, { createRef, useEffect, useRef, useState } from 'react'
+import { createRef, useEffect, useRef, useState, ReactElement } from 'react'
+import Tippy from '@tippyjs/react'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { followCursor } from 'tippy.js'
 
 import { ReactComponent as ICArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
-import { ResizableTagTextArea, SortingOrder, useStateFilters } from '@Common/index'
+import { ConditionalWrap, ResizableTagTextArea, SortingOrder, useStateFilters } from '@Common/index'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 
 import { KeyValueRow, KeyValueTableProps } from './KeyValueTable.types'
 import './KeyValueTable.scss'
+
+const renderWithReadOnlyTippy = (children: ReactElement) => (
+    <Tippy
+        className="default-tt"
+        arrow={false}
+        placement="bottom"
+        content="Cannot edit in read-only mode"
+        followCursor="horizontal"
+        plugins={[followCursor]}
+    >
+        {children}
+    </Tippy>
+)
 
 export const KeyValueTable = <K extends string>({
     config,
@@ -243,52 +259,59 @@ export const KeyValueTable = <K extends string>({
                     className={`key-value__row flexbox dc__align-items-center ${index !== updatedRows.length - 1 ? 'dc__border-bottom-n1' : ''}`}
                 >
                     {headers.map(({ key }) => (
-                        <div
-                            key={key}
-                            className={`cn-9 fs-13 lh-20 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${key === firstHeaderKey ? 'dc__align-self-stretch key-value__header__col-1' : 'dc__border-left-n1 flex-grow-1'}`}
-                        >
-                            {maskValue?.[key] && row.data[key].value ? (
-                                DEFAULT_SECRET_PLACEHOLDER
-                            ) : (
-                                <>
-                                    <ResizableTagTextArea
-                                        {...row.data[key]}
-                                        className={`key-value__row-input placeholder-cn5 py-8 px-12 dc__no-border-radius ${showError && !validationSchema?.(row.data[key].value) ? 'key-value__row-input--error no-hover' : ''}`}
-                                        minHeight={20}
-                                        maxHeight={160}
-                                        value={row.data[key].value}
-                                        placeholder={placeholder[key]}
-                                        onChange={onRowDataEdit(row, key)}
-                                        onBlur={onRowDataBlur(row, key)}
-                                        refVar={
-                                            key === firstHeaderKey
-                                                ? keyTextAreaRef.current?.[row.id]
-                                                : valueTextAreaRef.current?.[row.id]
-                                        }
-                                        dependentRef={
-                                            key === firstHeaderKey
-                                                ? valueTextAreaRef.current?.[row.id]
-                                                : keyTextAreaRef.current?.[row.id]
-                                        }
-                                        disabled={readOnly || row.data[key].disabled}
-                                        disableOnBlurResizeToMinHeight
-                                    />
-                                    {row.data[key].required && (
-                                        <span className="cr-5 fs-16 dc__align-self-start px-6 py-8">*</span>
-                                    )}
-                                    {showError && !validationSchema?.(row.data[key].value) && errorMessages.length && (
-                                        <div className="key-value__error bcn-0 dc__border br-4 py-7 px-8 flexbox-col dc__gap-4">
-                                            {errorMessages.map((error) => (
-                                                <div className="flexbox align-items-center dc__gap-4">
-                                                    <ICClose className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
-                                                    <p className="fs-12 lh-16 cn-7 m-0">{error}</p>
+                        <ConditionalWrap wrap={renderWithReadOnlyTippy} condition={readOnly}>
+                            <div
+                                key={key}
+                                className={`cn-9 fs-13 lh-20 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${key === firstHeaderKey ? 'dc__align-self-stretch key-value__header__col-1' : 'dc__border-left-n1 flex-grow-1'}`}
+                            >
+                                {maskValue?.[key] && row.data[key].value ? (
+                                    <div className="py-8 px-12 h-36 flex">{DEFAULT_SECRET_PLACEHOLDER}</div>
+                                ) : (
+                                    <>
+                                        <ResizableTagTextArea
+                                            {...row.data[key]}
+                                            className={`key-value__row-input placeholder-cn5 py-8 px-12 dc__no-border-radius ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema?.(row.data[key].value) ? 'key-value__row-input--error no-hover' : ''}`}
+                                            minHeight={20}
+                                            maxHeight={160}
+                                            value={row.data[key].value}
+                                            placeholder={placeholder[key]}
+                                            onChange={onRowDataEdit(row, key)}
+                                            onBlur={onRowDataBlur(row, key)}
+                                            refVar={
+                                                key === firstHeaderKey
+                                                    ? keyTextAreaRef.current?.[row.id]
+                                                    : valueTextAreaRef.current?.[row.id]
+                                            }
+                                            dependentRef={
+                                                key === firstHeaderKey
+                                                    ? valueTextAreaRef.current?.[row.id]
+                                                    : keyTextAreaRef.current?.[row.id]
+                                            }
+                                            disabled={readOnly || row.data[key].disabled}
+                                            disableOnBlurResizeToMinHeight
+                                        />
+                                        {row.data[key].required && (
+                                            <span className="cr-5 fs-16 dc__align-self-start px-6 py-8">*</span>
+                                        )}
+                                        {showError &&
+                                            !validationSchema?.(row.data[key].value) &&
+                                            errorMessages.length && (
+                                                <div className="key-value__error bcn-0 dc__border br-4 py-7 px-8 flexbox-col dc__gap-4">
+                                                    {errorMessages.map((error) => (
+                                                        <div
+                                                            key={error}
+                                                            className="flexbox align-items-center dc__gap-4"
+                                                        >
+                                                            <ICClose className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
+                                                            <p className="fs-12 lh-16 cn-7 m-0">{error}</p>
+                                                        </div>
+                                                    ))}
                                                 </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </>
-                            )}
-                        </div>
+                                            )}
+                                    </>
+                                )}
+                            </div>
+                        </ConditionalWrap>
                     ))}
                     {!readOnly && (
                         <button

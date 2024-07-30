@@ -10,7 +10,7 @@ import './CollapsibleList.scss'
 
 const renderWithTippy = (tippyProps: TippyProps) => (children: React.ReactElement) => (
     <Tippy {...tippyProps} className={`default-tt ${tippyProps?.className || ''}`}>
-        <div className="dc__align-self-start">{children}</div>
+        <div className="flex dc__align-self-start">{children}</div>
     </Tippy>
 )
 

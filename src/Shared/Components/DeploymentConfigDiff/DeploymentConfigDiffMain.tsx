@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useState } from 'react'
 
 import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { Progressing } from '@Common/Progressing'
@@ -22,14 +22,13 @@ export const DeploymentConfigDiffMain = ({
     // STATES
     const [expandedView, setExpandedView] = useState<Record<string | number, boolean>>({})
 
-    // REF
-    const scrollRef = useRef<HTMLDivElement>()
-
-    useEffect(() => {
-        if (scrollRef?.current) {
-            scrollRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' })
+    // SCROLL CALLBACK FUNCTION
+    const scroll = useCallback((node: HTMLDivElement) => {
+        if (node !== null) {
+            // scrolls to the item
+            node.scrollIntoView({ behavior: 'smooth' })
         }
-    }, [scrollRef, configList])
+    }, [])
 
     const handleAccordionClick = (id: string) => () => {
         setExpandedView({
@@ -87,7 +86,7 @@ export const DeploymentConfigDiffMain = ({
             return (
                 <DeploymentConfigDiffAccordion
                     key={`${id}-${title}`}
-                    ref={scrollIntoViewId === id ? scrollRef : null}
+                    ref={id === scrollIntoViewId ? scroll : null}
                     id={id}
                     title={title}
                     isExpanded={!expandedView[id]}
@@ -133,8 +132,8 @@ export const DeploymentConfigDiffMain = ({
     return isLoading ? (
         <Progressing fullHeight size={48} />
     ) : (
-        <div className="bcn-0 dc__position-rel deployment-config-diff__main-top">
-            <div className="dc__border-bottom-n1 flexbox dc__align-items-center dc__position-abs dc__top-0 bcn-0 w-100 dc__zi-11">
+        <div className="bcn-0 deployment-config-diff__main-top">
+            <div className="dc__border-bottom-n1 flexbox dc__align-items-center dc__position-sticky dc__top-0 bcn-0 w-100 dc__zi-11">
                 <div className="flexbox dc__align-items-center p-12 dc__gap-4 deployment-config-diff__main-top__header">
                     <p className="m-0 cn-9 fs-13 lh-20">{headerText}</p>
                     {renderHeaderSelectors(selectorsConfig.primaryConfig)}
