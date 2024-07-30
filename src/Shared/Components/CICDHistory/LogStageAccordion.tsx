@@ -41,7 +41,7 @@ const LogStageAccordion = ({
             <button
                 className={`flexbox dc__transparent dc__content-space py-6 px-8 br-4 dc__align-items-center dc__select-text logs-renderer__stage-accordion ${
                     isOpen ? 'logs-renderer__stage-accordion--open-stage' : ''
-                } dc__position-sticky dc__zi-1 dc__top-44`}
+                } dc__position-sticky dc__zi-1 dc__top-74`}
                 type="button"
                 role="tab"
                 onClick={handleAccordionToggle}

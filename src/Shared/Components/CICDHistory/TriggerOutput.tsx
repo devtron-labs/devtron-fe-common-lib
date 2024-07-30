@@ -543,13 +543,11 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                     {triggerDetails.stage !== 'DEPLOY' ? (
                         !triggerDetails.IsVirtualEnvironment && (
                             <Route path={`${path}/logs`}>
-                                <div style={{ height: '100%', overflow: 'auto', background: '#0b0f22' }}>
-                                    <LogsRenderer
-                                        triggerDetails={triggerDetails}
-                                        isBlobStorageConfigured={isBlobStorageConfigured}
-                                        parentType={HistoryComponentType.CD}
-                                    />
-                                </div>
+                                <LogsRenderer
+                                    triggerDetails={triggerDetails}
+                                    isBlobStorageConfigured={isBlobStorageConfigured}
+                                    parentType={HistoryComponentType.CD}
+                                />
 
                                 {(scrollToTop || scrollToBottom) && (
                                     <Scroller

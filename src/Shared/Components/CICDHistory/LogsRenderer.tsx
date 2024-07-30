@@ -85,7 +85,7 @@ const renderBlobNotConfigured = (): JSX.Element => (
 )
 
 const renderConfigurationError = (isBlobStorageConfigured: boolean): JSX.Element => (
-    <div className="flexbox dc__content-center flex-align-center dc__height-inherit">
+    <div className="flexbox dc__content-center flex-align-center dc__height-inherit dark-background">
         {!isBlobStorageConfigured ? renderBlobNotConfigured() : renderLogsNotAvailable()}
     </div>
 )
@@ -401,7 +401,7 @@ export const LogsRenderer = ({
                     }}
                 >
                     <div
-                        className="flexbox-col pb-7 dc__position-sticky dc__top-0 dc__zi-2"
+                        className="flexbox-col pb-7 dc__position-sticky dc__top-30 dc__zi-2"
                         style={{
                             backgroundColor: '#0C1021',
                         }}
@@ -447,7 +447,7 @@ export const LogsRenderer = ({
 
         // Having a fallback for logs that already stored in blob storage
         return (
-            <div className="logs__body" data-testid="check-logs-detail">
+            <div className="logs__body dark-background" data-testid="check-logs-detail">
                 {logsList.map((log: string, index: number) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <div className="flex top left mb-10 lh-24" key={`logs-${index}`}>
