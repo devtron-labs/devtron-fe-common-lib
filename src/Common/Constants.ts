@@ -61,6 +61,7 @@ export const URLS = {
     GLOBAL_CONFIG_DOCKER: '/global-config/docker',
     DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
     GLOBAL_CONFIG_SCOPED_VARIABLES: '/global-config/scoped-variables',
+    NETWORK_STATUS_INTERFACE: '/network-status-interface',
 }
 
 export const ROUTES = {
