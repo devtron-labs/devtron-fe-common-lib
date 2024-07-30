@@ -72,6 +72,7 @@ export interface customEnv {
     HIDE_RESOURCE_WATCHER?: boolean
     ORGANIZATION_NAME?: string
     FEATURE_SCOPED_VARIABLE_ENVIRONMENT_LIST_ENABLE?: boolean
+    HIDE_NETWORK_STATUS_INTERFACE?: boolean
 }
 declare global {
     interface Window {
