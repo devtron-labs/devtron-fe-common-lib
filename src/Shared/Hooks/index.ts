@@ -15,3 +15,4 @@
  */
 
 export * from './UsePrompt'
+export * from './UseDownload'
