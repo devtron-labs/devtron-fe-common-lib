@@ -25,6 +25,7 @@ import {
     DeploymentAppTypes,
     ResponseType,
     PaginationProps,
+    useScrollable,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
 import { AggregationKeys, GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
@@ -391,6 +392,37 @@ export interface TriggerOutputProps extends RenderRunSourceType {
     deploymentHistoryResult: Pick<DeploymentHistoryResult, 'result'>
     setFetchTriggerIdData: React.Dispatch<React.SetStateAction<FetchIdDataStatus>>
     setTriggerHistory: React.Dispatch<React.SetStateAction<Map<Number, History>>>
+    scrollToTop: ReturnType<typeof useScrollable>[1]
+    scrollToBottom: ReturnType<typeof useScrollable>[2]
+}
+
+export interface HistoryLogsProps
+    extends Pick<
+        TriggerOutputProps,
+        | 'scrollToTop'
+        | 'scrollToBottom'
+        | 'setFullScreenView'
+        | 'deploymentHistoryList'
+        | 'setDeploymentHistoryList'
+        | 'deploymentAppType'
+        | 'isBlobStorageConfigured'
+        | 'appReleaseTags'
+        | 'tagsEditable'
+        | 'hideImageTaggingHardDelete'
+        | 'selectedEnvironmentName'
+        | 'processVirtualEnvironmentDeploymentData'
+        | 'renderDeploymentApprovalInfo'
+        | 'renderCIListHeader'
+        | 'renderVirtualHistoryArtifacts'
+    > {
+    triggerDetails: History
+    loading: boolean
+    userApprovalMetadata: UserApprovalMetadataType
+    triggeredByEmail: string
+    artifactId: number
+    ciPipelineId: number
+    resourceId?: number
+    renderRunSource: (runSource: RunSourceType, isDeployedInThisResource: boolean) => JSX.Element
 }
 
 export interface DeploymentStatusDetailBreakdownType {

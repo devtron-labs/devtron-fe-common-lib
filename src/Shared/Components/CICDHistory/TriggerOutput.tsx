@@ -34,15 +34,12 @@ import {
     ZERO_TIME_STRING,
     extractImage,
     useInterval,
-    UserApprovalMetadataType,
-    useScrollable,
     URLS,
     ServerError,
     mapByKey,
 } from '../../../Common'
 import {
     CurrentStatusType,
-    DeploymentTemplateList,
     FetchIdDataStatus,
     FinishedType,
     HistoryComponentType,
@@ -57,11 +54,7 @@ import {
     statusSet,
     terminalStatus,
     History,
-    DeploymentStatusDetailsType,
-    DeploymentStatusDetailsBreakdownDataType,
-    RenderCIListHeaderProps,
-    VirtualHistoryArtifactProps,
-    RunSourceType,
+    HistoryLogsProps,
 } from './types'
 import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger } from './service'
 import { DEFAULT_ENV, TIMEOUT_VALUE, WORKER_POD_BASE_URL } from './constants'
@@ -499,31 +492,7 @@ export const TriggerDetails = React.memo(
     ),
 )
 
-const HistoryLogs: React.FC<{
-    triggerDetails: History
-    loading: boolean
-    setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
-    deploymentHistoryList: DeploymentTemplateList[]
-    setDeploymentHistoryList: React.Dispatch<React.SetStateAction<DeploymentTemplateList[]>>
-    deploymentAppType: DeploymentAppTypes
-    isBlobStorageConfigured: boolean
-    userApprovalMetadata: UserApprovalMetadataType
-    triggeredByEmail: string
-    artifactId: number
-    ciPipelineId: number
-    appReleaseTags: string[]
-    tagsEditable: boolean
-    hideImageTaggingHardDelete: boolean
-    selectedEnvironmentName?: string
-    resourceId?: number
-    renderRunSource: (runSource: RunSourceType, isDeployedInThisResource: boolean) => JSX.Element
-    processVirtualEnvironmentDeploymentData: (
-        data?: DeploymentStatusDetailsType,
-    ) => DeploymentStatusDetailsBreakdownDataType
-    renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
-    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
-    renderVirtualHistoryArtifacts: (virtualHistoryArtifactProps: VirtualHistoryArtifactProps) => JSX.Element
-}> = ({
+const HistoryLogs: React.FC<HistoryLogsProps> = ({
     triggerDetails,
     loading,
     setFullScreenView,
@@ -545,6 +514,8 @@ const HistoryLogs: React.FC<{
     renderDeploymentApprovalInfo,
     renderCIListHeader,
     renderVirtualHistoryArtifacts,
+    scrollToTop,
+    scrollToBottom,
 }) => {
     const { path } = useRouteMatch()
     const { appId, pipelineId, triggerId, envId } = useParams<{
@@ -563,138 +534,133 @@ const HistoryLogs: React.FC<{
 
     const CDBuildReportUrl = `app/cd-pipeline/workflow/download/${appId}/${envId}/${pipelineId}/${triggerId}`
 
-    const [ref, scrollToTop, scrollToBottom] = useScrollable({
-        autoBottomScroll: triggerDetails.status.toLowerCase() !== 'succeeded',
-    })
-
     return (
-        <>
-            <div className="trigger-outputs-container">
-                {loading ? (
-                    <Progressing pageLoader />
-                ) : (
-                    <Switch>
-                        {triggerDetails.stage !== 'DEPLOY' ? (
-                            !triggerDetails.IsVirtualEnvironment && (
-                                <Route path={`${path}/logs`}>
-                                    <div ref={ref} style={{ height: '100%', overflow: 'auto', background: '#0b0f22' }}>
-                                        <LogsRenderer
-                                            triggerDetails={triggerDetails}
-                                            isBlobStorageConfigured={isBlobStorageConfigured}
-                                            parentType={HistoryComponentType.CD}
-                                        />
-                                    </div>
-                                </Route>
-                            )
-                        ) : (
-                            <Route path={`${path}/deployment-steps`}>
-                                <DeploymentDetailSteps
-                                    deploymentStatus={triggerDetails.status}
-                                    deploymentAppType={deploymentAppType}
-                                    userApprovalMetadata={userApprovalMetadata}
-                                    isGitops={
-                                        deploymentAppType === DeploymentAppTypes.GITOPS ||
-                                        deploymentAppType === DeploymentAppTypes.MANIFEST_DOWNLOAD ||
-                                        deploymentAppType === DeploymentAppTypes.MANIFEST_PUSH
-                                    }
-                                    isHelmApps={false}
-                                    isVirtualEnvironment={triggerDetails.IsVirtualEnvironment}
-                                    processVirtualEnvironmentDeploymentData={processVirtualEnvironmentDeploymentData}
-                                    renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}
-                                />
-                            </Route>
-                        )}
-                        <Route path={`${path}/source-code`}>
-                            <GitChanges
-                                gitTriggers={triggerDetails.gitTriggers}
-                                ciMaterials={triggerDetails.ciMaterials}
-                                artifact={triggerDetails.artifact}
-                                userApprovalMetadata={userApprovalMetadata}
-                                triggeredByEmail={triggeredByEmail}
-                                artifactId={artifactId}
-                                ciPipelineId={ciPipelineId}
-                                imageComment={triggerDetails?.imageComment}
-                                imageReleaseTags={triggerDetails?.imageReleaseTags}
-                                appReleaseTagNames={appReleaseTags}
-                                tagsEditable={tagsEditable}
-                                hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                                appliedFilters={triggerDetails.appliedFilters ?? []}
-                                appliedFiltersTimestamp={triggerDetails.appliedFiltersTimestamp}
-                                selectedEnvironmentName={selectedEnvironmentName}
-                                promotionApprovalMetadata={triggerDetails?.promotionApprovalMetadata}
-                                renderCIListHeader={renderCIListHeader}
-                            />
-                        </Route>
-                        {triggerDetails.stage === 'DEPLOY' && (
-                            <Route path={`${path}/configuration`} exact>
-                                <DeploymentHistoryConfigList
-                                    setDeploymentHistoryList={setDeploymentHistoryList}
-                                    deploymentHistoryList={deploymentHistoryList}
-                                    setFullScreenView={setFullScreenView}
-                                />
-                            </Route>
-                        )}
-                        {triggerDetails.stage === 'DEPLOY' && (
-                            <Route
-                                path={`${path}${URLS.DEPLOYMENT_HISTORY_CONFIGURATIONS}/:historyComponent/:baseConfigurationId(\\d+)/:historyComponentName?`}
-                            >
-                                <DeploymentHistoryDetailedView
-                                    setDeploymentHistoryList={setDeploymentHistoryList}
-                                    deploymentHistoryList={deploymentHistoryList}
-                                    setFullScreenView={setFullScreenView}
-                                    renderRunSource={renderRunSource}
-                                    resourceId={resourceId}
-                                />
-                            </Route>
-                        )}
-                        {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
-                            <Route path={`${path}/artifacts`}>
-                                {triggerDetails.IsVirtualEnvironment && renderVirtualHistoryArtifacts ? (
-                                    renderVirtualHistoryArtifacts({
-                                        status: triggerDetails.status,
-                                        title: triggerDetails.helmPackageName,
-                                        params: { ...paramsData, appId: Number(appId), envId: Number(envId) },
-                                    })
-                                ) : (
-                                    <Artifacts
-                                        status={triggerDetails.status}
-                                        artifact={triggerDetails.artifact}
-                                        blobStorageEnabled={triggerDetails.blobStorageEnabled}
-                                        ciPipelineId={triggerDetails.ciPipelineId}
-                                        artifactId={triggerDetails.artifactId}
-                                        imageComment={triggerDetails?.imageComment}
-                                        imageReleaseTags={triggerDetails?.imageReleaseTags}
-                                        tagsEditable={tagsEditable}
-                                        appReleaseTagNames={appReleaseTags}
-                                        hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                                        downloadArtifactUrl={CDBuildReportUrl}
-                                        type={HistoryComponentType.CD}
-                                        renderCIListHeader={renderCIListHeader}
+        <div className="trigger-outputs-container flexbox-col flex-grow-1">
+            {loading ? (
+                <Progressing pageLoader />
+            ) : (
+                <Switch>
+                    {triggerDetails.stage !== 'DEPLOY' ? (
+                        !triggerDetails.IsVirtualEnvironment && (
+                            <Route path={`${path}/logs`}>
+                                <div style={{ height: '100%', overflow: 'auto', background: '#0b0f22' }}>
+                                    <LogsRenderer
+                                        triggerDetails={triggerDetails}
+                                        isBlobStorageConfigured={isBlobStorageConfigured}
+                                        parentType={HistoryComponentType.CD}
+                                    />
+                                </div>
+
+                                {(scrollToTop || scrollToBottom) && (
+                                    <Scroller
+                                        style={{ position: 'fixed', bottom: '52px', right: '12px', zIndex: '4' }}
+                                        {...{ scrollToTop, scrollToBottom }}
                                     />
                                 )}
                             </Route>
-                        )}
-                        <Redirect
-                            to={`${path}/${
-                                // eslint-disable-next-line no-nested-ternary
-                                triggerDetails.stage === 'DEPLOY'
-                                    ? `deployment-steps`
-                                    : triggerDetails.status.toLowerCase() === 'succeeded' ||
-                                        triggerDetails.IsVirtualEnvironment
-                                      ? `artifacts`
-                                      : `logs`
-                            }`}
+                        )
+                    ) : (
+                        <Route path={`${path}/deployment-steps`}>
+                            <DeploymentDetailSteps
+                                deploymentStatus={triggerDetails.status}
+                                deploymentAppType={deploymentAppType}
+                                userApprovalMetadata={userApprovalMetadata}
+                                isGitops={
+                                    deploymentAppType === DeploymentAppTypes.GITOPS ||
+                                    deploymentAppType === DeploymentAppTypes.MANIFEST_DOWNLOAD ||
+                                    deploymentAppType === DeploymentAppTypes.MANIFEST_PUSH
+                                }
+                                isHelmApps={false}
+                                isVirtualEnvironment={triggerDetails.IsVirtualEnvironment}
+                                processVirtualEnvironmentDeploymentData={processVirtualEnvironmentDeploymentData}
+                                renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}
+                            />
+                        </Route>
+                    )}
+                    <Route path={`${path}/source-code`}>
+                        <GitChanges
+                            gitTriggers={triggerDetails.gitTriggers}
+                            ciMaterials={triggerDetails.ciMaterials}
+                            artifact={triggerDetails.artifact}
+                            userApprovalMetadata={userApprovalMetadata}
+                            triggeredByEmail={triggeredByEmail}
+                            artifactId={artifactId}
+                            ciPipelineId={ciPipelineId}
+                            imageComment={triggerDetails?.imageComment}
+                            imageReleaseTags={triggerDetails?.imageReleaseTags}
+                            appReleaseTagNames={appReleaseTags}
+                            tagsEditable={tagsEditable}
+                            hideImageTaggingHardDelete={hideImageTaggingHardDelete}
+                            appliedFilters={triggerDetails.appliedFilters ?? []}
+                            appliedFiltersTimestamp={triggerDetails.appliedFiltersTimestamp}
+                            selectedEnvironmentName={selectedEnvironmentName}
+                            promotionApprovalMetadata={triggerDetails?.promotionApprovalMetadata}
+                            renderCIListHeader={renderCIListHeader}
                         />
-                    </Switch>
-                )}
-            </div>
-            {(scrollToTop || scrollToBottom) && (
-                <Scroller
-                    style={{ position: 'fixed', bottom: '52px', right: '12px', zIndex: '4' }}
-                    {...{ scrollToTop, scrollToBottom }}
-                />
+                    </Route>
+                    {triggerDetails.stage === 'DEPLOY' && (
+                        <Route path={`${path}/configuration`} exact>
+                            <DeploymentHistoryConfigList
+                                setDeploymentHistoryList={setDeploymentHistoryList}
+                                deploymentHistoryList={deploymentHistoryList}
+                                setFullScreenView={setFullScreenView}
+                            />
+                        </Route>
+                    )}
+                    {triggerDetails.stage === 'DEPLOY' && (
+                        <Route
+                            path={`${path}${URLS.DEPLOYMENT_HISTORY_CONFIGURATIONS}/:historyComponent/:baseConfigurationId(\\d+)/:historyComponentName?`}
+                        >
+                            <DeploymentHistoryDetailedView
+                                setDeploymentHistoryList={setDeploymentHistoryList}
+                                deploymentHistoryList={deploymentHistoryList}
+                                setFullScreenView={setFullScreenView}
+                                renderRunSource={renderRunSource}
+                                resourceId={resourceId}
+                            />
+                        </Route>
+                    )}
+                    {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
+                        <Route path={`${path}/artifacts`}>
+                            {triggerDetails.IsVirtualEnvironment && renderVirtualHistoryArtifacts ? (
+                                renderVirtualHistoryArtifacts({
+                                    status: triggerDetails.status,
+                                    title: triggerDetails.helmPackageName,
+                                    params: { ...paramsData, appId: Number(appId), envId: Number(envId) },
+                                })
+                            ) : (
+                                <Artifacts
+                                    status={triggerDetails.status}
+                                    artifact={triggerDetails.artifact}
+                                    blobStorageEnabled={triggerDetails.blobStorageEnabled}
+                                    ciPipelineId={triggerDetails.ciPipelineId}
+                                    artifactId={triggerDetails.artifactId}
+                                    imageComment={triggerDetails?.imageComment}
+                                    imageReleaseTags={triggerDetails?.imageReleaseTags}
+                                    tagsEditable={tagsEditable}
+                                    appReleaseTagNames={appReleaseTags}
+                                    hideImageTaggingHardDelete={hideImageTaggingHardDelete}
+                                    downloadArtifactUrl={CDBuildReportUrl}
+                                    type={HistoryComponentType.CD}
+                                    renderCIListHeader={renderCIListHeader}
+                                />
+                            )}
+                        </Route>
+                    )}
+                    <Redirect
+                        to={`${path}/${
+                            // eslint-disable-next-line no-nested-ternary
+                            triggerDetails.stage === 'DEPLOY'
+                                ? `deployment-steps`
+                                : triggerDetails.status.toLowerCase() === 'succeeded' ||
+                                    triggerDetails.IsVirtualEnvironment
+                                  ? `artifacts`
+                                  : `logs`
+                        }`}
+                    />
+                </Switch>
             )}
-        </>
+        </div>
     )
 }
 
@@ -721,6 +687,8 @@ const TriggerOutput = ({
     renderVirtualHistoryArtifacts,
     renderDeploymentHistoryTriggerMetaText,
     resourceId,
+    scrollToTop,
+    scrollToBottom,
 }: TriggerOutputProps) => {
     const { appId, triggerId, envId, pipelineId } = useParams<{
         appId: string
@@ -855,90 +823,86 @@ const TriggerOutput = ({
 
     return (
         <>
-            <div
-                className={`trigger-details-container ${triggerDetails.triggerMetadata ? 'with-trigger-metadata' : ''}`}
-            >
-                {!fullScreenView && (
-                    <>
-                        <TriggerDetails
-                            type={HistoryComponentType.CD}
-                            status={triggerDetails.status}
-                            startedOn={triggerDetails.startedOn}
-                            finishedOn={triggerDetails.finishedOn}
-                            triggeredBy={triggerDetails.triggeredBy}
-                            triggeredByEmail={triggerDetails.triggeredByEmail}
-                            ciMaterials={triggerDetails.ciMaterials}
-                            gitTriggers={triggerDetails.gitTriggers}
-                            message={triggerDetails.message}
-                            podStatus={triggerDetails.podStatus}
-                            stage={triggerDetails.stage}
-                            artifact={triggerDetails.artifact}
-                            triggerMetadata={triggerDetails.triggerMetadata}
-                            renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
-                        />
-                        <ul className="pl-20 tab-list tab-list--nodes dc__border-bottom">
-                            {triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM && (
-                                <li className="tab-list__tab" data-testid="deployment-history-steps-link">
-                                    <NavLink
-                                        replace
-                                        className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                        activeClassName="active"
-                                        to="deployment-steps"
-                                    >
-                                        Steps
-                                    </NavLink>
-                                </li>
-                            )}
-                            {!(triggerDetails.stage === 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
-                                <li className="tab-list__tab" data-testid="deployment-history-logs-link">
-                                    <NavLink
-                                        replace
-                                        className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                        activeClassName="active"
-                                        to="logs"
-                                    >
-                                        Logs
-                                    </NavLink>
-                                </li>
-                            )}
-                            <li className="tab-list__tab" data-testid="deployment-history-source-code-link">
+            {!fullScreenView && (
+                <>
+                    <TriggerDetails
+                        type={HistoryComponentType.CD}
+                        status={triggerDetails.status}
+                        startedOn={triggerDetails.startedOn}
+                        finishedOn={triggerDetails.finishedOn}
+                        triggeredBy={triggerDetails.triggeredBy}
+                        triggeredByEmail={triggerDetails.triggeredByEmail}
+                        ciMaterials={triggerDetails.ciMaterials}
+                        gitTriggers={triggerDetails.gitTriggers}
+                        message={triggerDetails.message}
+                        podStatus={triggerDetails.podStatus}
+                        stage={triggerDetails.stage}
+                        artifact={triggerDetails.artifact}
+                        triggerMetadata={triggerDetails.triggerMetadata}
+                        renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
+                    />
+                    <ul className="pl-20 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bcn-0 dc__zi-3">
+                        {triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM && (
+                            <li className="tab-list__tab" data-testid="deployment-history-steps-link">
                                 <NavLink
                                     replace
                                     className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
                                     activeClassName="active"
-                                    to="source-code"
+                                    to="deployment-steps"
                                 >
-                                    Source
+                                    Steps
                                 </NavLink>
                             </li>
-                            {triggerDetails.stage === 'DEPLOY' && (
-                                <li className="tab-list__tab" data-testid="deployment-history-configuration-link">
-                                    <NavLink
-                                        replace
-                                        className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                        activeClassName="active"
-                                        to="configuration"
-                                    >
-                                        Configuration
-                                    </NavLink>
-                                </li>
-                            )}
-                            {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
-                                <li className="tab-list__tab" data-testid="deployment-history-artifacts-link">
-                                    <NavLink
-                                        replace
-                                        className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                        activeClassName="active"
-                                        to="artifacts"
-                                    >
-                                        Artifacts
-                                    </NavLink>
-                                </li>
-                            )}
-                        </ul>
-                    </>
-                )}
-            </div>
+                        )}
+                        {!(triggerDetails.stage === 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
+                            <li className="tab-list__tab" data-testid="deployment-history-logs-link">
+                                <NavLink
+                                    replace
+                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
+                                    activeClassName="active"
+                                    to="logs"
+                                >
+                                    Logs
+                                </NavLink>
+                            </li>
+                        )}
+                        <li className="tab-list__tab" data-testid="deployment-history-source-code-link">
+                            <NavLink
+                                replace
+                                className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
+                                activeClassName="active"
+                                to="source-code"
+                            >
+                                Source
+                            </NavLink>
+                        </li>
+                        {triggerDetails.stage === 'DEPLOY' && (
+                            <li className="tab-list__tab" data-testid="deployment-history-configuration-link">
+                                <NavLink
+                                    replace
+                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
+                                    activeClassName="active"
+                                    to="configuration"
+                                >
+                                    Configuration
+                                </NavLink>
+                            </li>
+                        )}
+                        {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
+                            <li className="tab-list__tab" data-testid="deployment-history-artifacts-link">
+                                <NavLink
+                                    replace
+                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
+                                    activeClassName="active"
+                                    to="artifacts"
+                                >
+                                    Artifacts
+                                </NavLink>
+                            </li>
+                        )}
+                    </ul>
+                </>
+            )}
             <HistoryLogs
                 key={triggerDetails.id}
                 triggerDetails={triggerDetails}
@@ -966,6 +930,8 @@ const TriggerOutput = ({
                 renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}
                 renderCIListHeader={renderCIListHeader}
                 renderVirtualHistoryArtifacts={renderVirtualHistoryArtifacts}
+                scrollToTop={scrollToTop}
+                scrollToBottom={scrollToBottom}
             />
         </>
     )
