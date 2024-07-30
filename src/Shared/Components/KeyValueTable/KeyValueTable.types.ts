@@ -98,4 +98,24 @@ export interface KeyValueTableProps<K extends string> {
      * @param deletedRowIndex - The index of the row that was deleted.
      */
     onDelete?: (deletedRowId: string | number) => void
+    /**
+     * Indicates whether to show errors.
+     */
+    showError?: boolean
+    /**
+     * The function to use to validate the value of the cell.
+     * @param value - The value to validate.
+     * @returns Return true if the value is valid, otherwise false
+     * and set `showError` to `true` and provide errorMessages array to show error message.
+     */
+    validationSchema?: (value: string) => boolean
+    /**
+     * An array of error messages to be displayed in the cell error tooltip.
+     */
+    errorMessages?: string[]
+    /**
+     * A callback function called when an error occurs.
+     * @param errorState - The error state, true when any cell has error, otherwise false.
+     */
+    onError?: (errorState: boolean) => void
 }

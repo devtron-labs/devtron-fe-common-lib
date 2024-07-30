@@ -17,13 +17,14 @@
 
 import React, { createRef, useEffect, useRef, useState } from 'react'
 
-import { ReactComponent as ICArrowDown } from '../../../Assets/Icon/ic-sort-arrow-down.svg'
-import { ReactComponent as ICCross } from '../../../Assets/Icon/ic-cross.svg'
-import { ResizableTagTextArea, SortingOrder, useStateFilters } from '../../../Common'
-import { DEFAULT_SECRET_PLACEHOLDER } from '../../constants'
-import { stringComparatorBySortOrder } from '../../Helpers'
-import { KeyValueRow, KeyValueTableProps } from './KeyValueTable.types'
+import { ReactComponent as ICArrowDown } from '@Icons/ic-sort-arrow-down.svg'
+import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
+import { ResizableTagTextArea, SortingOrder, useStateFilters } from '@Common/index'
+import { stringComparatorBySortOrder } from '@Shared/Helpers'
+import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 
+import { KeyValueRow, KeyValueTableProps } from './KeyValueTable.types'
 import './KeyValueTable.scss'
 
 export const KeyValueTable = <K extends string>({
@@ -36,6 +37,10 @@ export const KeyValueTable = <K extends string>({
     placeholder,
     isAdditionNotAllowed,
     readOnly,
+    showError,
+    validationSchema,
+    errorMessages = [],
+    onError,
 }: KeyValueTableProps<K>) => {
     // CONSTANTS
     const { headers, rows } = config
@@ -93,6 +98,15 @@ export const KeyValueTable = <K extends string>({
     // METHODS
     const onSortBtnClick = () => handleSorting(sortBy)
 
+    const checkAllRowsAreValid = (_rows: KeyValueRow<K>[]) => {
+        const isValid = _rows.every(
+            ({ data: _data }) =>
+                validationSchema?.(_data[firstHeaderKey].value) && validationSchema?.(_data[secondHeaderKey].value),
+        )
+
+        return isValid
+    }
+
     const onNewRowAdd = (key: K) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target
 
@@ -108,9 +122,11 @@ export const KeyValueTable = <K extends string>({
             },
             id,
         } as KeyValueRow<K>
+        const editedRows = [data, ...updatedRows]
 
+        onError?.(!checkAllRowsAreValid(editedRows))
         setNewRowAdded(true)
-        setUpdatedRows([data, ...updatedRows])
+        setUpdatedRows(editedRows)
         onChange?.(id, key, value)
 
         keyTextAreaRef.current = {
@@ -125,6 +141,7 @@ export const KeyValueTable = <K extends string>({
 
     const onRowDelete = (row: KeyValueRow<K>) => () => {
         const remainingRows = updatedRows.filter(({ id }) => id !== row.id)
+        onError?.(!checkAllRowsAreValid(remainingRows))
         setUpdatedRows(remainingRows)
 
         delete keyTextAreaRef.current[row.id]
@@ -154,6 +171,7 @@ export const KeyValueTable = <K extends string>({
                 },
             }
             const editedRows = updatedRows.map((_row) => (_row.id === row.id ? rowData : _row))
+            onError?.(!checkAllRowsAreValid(editedRows))
             setUpdatedRows(editedRows)
         }
     }
@@ -205,11 +223,11 @@ export const KeyValueTable = <K extends string>({
                     {headers.map(({ key }) => (
                         <div
                             key={key}
-                            className={`cn-9 fs-13 lh-20 flex dc__overflow-auto ${key === firstHeaderKey ? 'dc__align-self-stretch dc__border-right--n1 key-value__header__col-1' : 'flex-grow-1'}`}
+                            className={`cn-9 fs-13 lh-20 flex dc__overflow-auto ${key === firstHeaderKey ? 'dc__align-self-stretch key-value__header__col-1' : 'flex-grow-1 dc__border-left-n1'}`}
                         >
                             <textarea
                                 ref={key === firstHeaderKey ? inputRowRef : undefined}
-                                className="key-value__row-input key-value__row-input--add placeholder-cn5 py-8 px-12 lh-20 fs-13 fw-4 dc__no-border-imp dc__no-border-radius"
+                                className="key-value__row-input key-value__row-input--add placeholder-cn5 py-8 px-12 lh-20 fs-13 fw-4 dc__no-border-radius"
                                 value=""
                                 rows={1}
                                 placeholder={placeholder[key]}
@@ -227,7 +245,7 @@ export const KeyValueTable = <K extends string>({
                     {headers.map(({ key }) => (
                         <div
                             key={key}
-                            className={`cn-9 fs-13 lh-20 dc__overflow-auto flexbox dc__align-items-center dc__gap-4 ${key === firstHeaderKey ? 'dc__align-self-stretch dc__border-right--n1 key-value__header__col-1' : 'flex-grow-1'}`}
+                            className={`cn-9 fs-13 lh-20 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${key === firstHeaderKey ? 'dc__align-self-stretch key-value__header__col-1' : 'dc__border-left-n1 flex-grow-1'}`}
                         >
                             {maskValue?.[key] && row.data[key].value ? (
                                 DEFAULT_SECRET_PLACEHOLDER
@@ -235,7 +253,7 @@ export const KeyValueTable = <K extends string>({
                                 <>
                                     <ResizableTagTextArea
                                         {...row.data[key]}
-                                        className="key-value__row-input placeholder-cn5 py-8 px-12 dc__no-border-imp dc__no-border-radius"
+                                        className={`key-value__row-input placeholder-cn5 py-8 px-12 dc__no-border-radius ${showError && !validationSchema?.(row.data[key].value) ? 'key-value__row-input--error no-hover' : ''}`}
                                         minHeight={20}
                                         maxHeight={160}
                                         value={row.data[key].value}
@@ -258,6 +276,16 @@ export const KeyValueTable = <K extends string>({
                                     {row.data[key].required && (
                                         <span className="cr-5 fs-16 dc__align-self-start px-6 py-8">*</span>
                                     )}
+                                    {showError && !validationSchema?.(row.data[key].value) && errorMessages.length && (
+                                        <div className="key-value__error bcn-0 dc__border br-4 py-7 px-8 flexbox-col dc__gap-4">
+                                            {errorMessages.map((error) => (
+                                                <div className="flexbox align-items-center dc__gap-4">
+                                                    <ICClose className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
+                                                    <p className="fs-12 lh-16 cn-7 m-0">{error}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </>
                             )}
                         </div>
@@ -265,7 +293,7 @@ export const KeyValueTable = <K extends string>({
                     {!readOnly && (
                         <button
                             type="button"
-                            className="dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 dc__border-left-n1--important dc__hover-n50"
+                            className="dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 dc__border-left-n1--important dc__hover-n50 dc__tab-focus"
                             onClick={onRowDelete(row)}
                         >
                             <ICCross

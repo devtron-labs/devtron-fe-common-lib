@@ -15,7 +15,7 @@
  *   limitations under the License.
  */
 
-.key-value {
+ .key-value {
     &__header {
         &__col-1 {
             flex: 0 0 20%;
@@ -40,14 +40,43 @@
 
     &__row-input {
         outline: none;
-        border: none;
+        border: 1px solid transparent;
+        height: 36px;
         width: 100%;
         background: inherit;
+
+        &:hover:not(:focus):not(.no-hover) {
+            border: 1px solid var(--N200);
+        }
+
+        &:focus {
+            border: 1px solid var(--B500);
+        }
+
+        &--error,
+        &--error:focus,
+        &--error:hover {
+            border: 1px solid var(--R500);
+        }
 
         &--add {
             resize: none;
             border-radius: 4px;
             outline: none;
         }
+    }
+
+    &__row-input:not(:focus):not(:hover) + &__error {
+        display: none;
+    }
+
+    &__error {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 50%;
+        width: 100%;
+        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+        transform: translateX(-50%);
+        z-index: 1;
     }
 }
