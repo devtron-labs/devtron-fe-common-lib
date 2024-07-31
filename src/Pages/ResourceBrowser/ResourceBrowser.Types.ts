@@ -20,13 +20,13 @@ export interface GVKType {
     Group: string
     Version: string
     Kind: Nodes | NodeType
-    shortNames?: string[] | null
 }
 
-export interface ApiResourceGroupType extends Pick<GVKType, 'shortNames'> {
+export interface ApiResourceGroupType {
     gvk: GVKType
     namespaced: boolean
     isGrouped?: boolean
+    shortNames?: string[] | null
 }
 
 export interface ApiResourceType {
