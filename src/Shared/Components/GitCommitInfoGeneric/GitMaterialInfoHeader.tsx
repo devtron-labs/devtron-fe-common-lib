@@ -42,15 +42,17 @@ const GitMaterialInfoHeader = ({
     return (
         <div
             {...props}
-            className="git-commit-info-generic__header p-16 dc__box-shadow fs-12 fw-6 dc__gap-12"
+            className="git-commit-info-generic__header px-16 py-12 dc__box-shadow fs-12 fw-6 dc__gap-12"
             style={style}
         >
             <div className={getGitIcon(repoUrl)} />
-            <div className="flex column left">
-                <div className="repo fs-12 cn-9 fw-6" data-testid={`deployment-history-source-code-repo${index}`}>
-                    /{repo}
+            <div className="flex left left dc__gap-4 fs-13">
+                {/* {getGitMaterialIcon(repoUrl)} */}
+                <div className="repo cn-9 fw-6" data-testid={`deployment-history-source-code-repo${index}`}>
+                    {repo}
                 </div>
-                <div className="branch flex left fs-14 cn-7">
+                <div className="branch flex left cn-7 dc__gap-4">
+                    <span>/</span>
                     <CiPipelineSourceConfig sourceType={materialType} sourceValue={materialValue} showTooltip />
                 </div>
             </div>

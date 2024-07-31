@@ -40,7 +40,7 @@ const MaterialHistory = ({ material, pipelineName, ciPipelineId, selectCommit }:
                     <div
                         data-testid={`material-history-${index}`}
                         key={_commitId}
-                        className={`material-history w-auto ${history.isSelected ? 'material-history-selected' : ''}`}
+                        className={`material-history w-auto cursor ${history.isSelected ? 'material-history-selected' : ''}`}
                         onClick={(e) => onClickMaterialHistory(e, _commitId, history.excluded)}
                     >
                         <GitCommitInfoGeneric
