@@ -9,7 +9,7 @@ import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { AppsGroupedByProjectsType, ClusterDTO } from './types'
 
 export const getAppOptionsGroupedByProjects = async (): Promise<AppsGroupedByProjectsType> => {
-    const { result } = (await get('app/min')) as ResponseType<AppsGroupedByProjectsType>
+    const { result } = (await get(ROUTES.APP_LIST_MIN)) as ResponseType<AppsGroupedByProjectsType>
 
     if (!result) {
         return []
@@ -39,17 +39,17 @@ export const getProjectOptions = async (): Promise<Pick<Teams, 'id' | 'name'>[]>
 }
 
 export const getClusterOptions = async (): Promise<ClusterType[]> => {
-    const { result } = (await get('cluster/autocomplete')) as ResponseType<ClusterDTO[]>
+    const { result } = (await get(ROUTES.CLUSTER_LIST_MIN)) as ResponseType<ClusterDTO[]>
 
     if (!result) {
         return []
     }
 
     return result
-        .map((cluster) => ({
-            id: cluster.id,
-            name: cluster.cluster_name,
-            isVirtual: cluster.isVirtualCluster ?? false,
+        .map(({ id, cluster_name: name, isVirtualCluster }) => ({
+            id,
+            name,
+            isVirtual: isVirtualCluster ?? false,
         }))
         .sort((a, b) => stringComparatorBySortOrder(a.name, b.name))
 }
@@ -62,13 +62,22 @@ export const getEnvironmentOptions = async (): Promise<EnvironmentType[]> => {
     }
 
     return result
-        .map((environment) => ({
-            id: environment.id,
-            name: environment.environment_name,
-            isVirtual: environment.isVirtualEnvironment ?? false,
-            cluster: environment.cluster_name,
-            environmentType: environment.default ? EnvironmentTypeEnum.production : EnvironmentTypeEnum.nonProduction,
-            namespace: environment.namespace,
-        }))
+        .map(
+            ({
+                id,
+                environment_name: name,
+                isVirtualEnvironment,
+                cluster_name: cluster,
+                default: isDefault,
+                namespace,
+            }) => ({
+                id,
+                name,
+                isVirtual: isVirtualEnvironment ?? false,
+                cluster,
+                environmentType: isDefault ? EnvironmentTypeEnum.production : EnvironmentTypeEnum.nonProduction,
+                namespace,
+            }),
+        )
         .sort((a, b) => stringComparatorBySortOrder(a.name, b.name))
 }
