@@ -26,6 +26,7 @@ export const DOCUMENTATION = {
     APP_TAGS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/create-application#tags`,
     APP_OVERVIEW_TAGS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/overview#manage-tags`,
     BLOB_STORAGE: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/getting-started/install/installation-configuration#configuration-of-blob-storage`,
+    GLOBAL_CONFIG_BUILD_INFRA: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/global-configurations/build-infra`,
 }
 
 export const PATTERNS = {
@@ -94,6 +95,9 @@ export const ROUTES = {
     CONFIG_CD_PIPELINE: 'config/cd-pipeline',
     MODULE_CONFIGURED: 'module/config',
     RESOURCE_HISTORY_DEPLOYMENT: 'resource/history/deployment',
+    PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
+    PLUGIN_GLOBAL_LIST_V2: 'plugin/global/list/v2',
+    PLUGIN_GLOBAL_LIST_TAGS: 'plugin/global/list/tags',
 }
 
 export enum KEY_VALUE {
@@ -476,6 +480,8 @@ export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'
 export const EXCLUDED_FALSY_VALUES = [undefined, null, '', NaN] as const
 
 export const API_STATUS_CODES = {
+    OK: 200,
+    NO_CONTENT: 204,
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
     PERMISSION_DENIED: 403,

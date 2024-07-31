@@ -30,7 +30,7 @@ import {
     FetchIdDataStatus,
 } from './types'
 import { getCustomOptionSelectionStyle } from '../ReactSelect'
-import DetectBottom from './DetectBottom'
+import { DetectBottom } from '../DetectBottom'
 import {
     ConditionalWrap,
     DATE_TIME_FORMATS,

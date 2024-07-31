@@ -268,10 +268,6 @@ export const getDeploymentDiffSelector = (
     return get(url)
 }
 
-export function getCDBuildReport(appId, envId, pipelineId, workflowId) {
-    return get(`app/cd-pipeline/workflow/download/${appId}/${envId}/${pipelineId}/${workflowId}`)
-}
-
 export const getTriggerHistory = async ({
     appId,
     envId,

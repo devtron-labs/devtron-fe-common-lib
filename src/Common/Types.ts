@@ -100,7 +100,7 @@ export interface TippyCustomizedProps {
     iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
     onImageLoadError?: (e) => void
     onClose?: () => void
-    infoText?: string
+    infoText?: React.ReactNode
     showCloseButton?: boolean
     arrow?: boolean
     interactive?: boolean
