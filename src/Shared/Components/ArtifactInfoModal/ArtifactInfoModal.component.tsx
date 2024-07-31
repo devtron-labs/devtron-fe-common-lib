@@ -97,7 +97,7 @@ const ArtifactInfoModal = ({
                         }}
                     >
                         {isArtifactInfoAvailable ? (
-                            <div className="select-material">
+                            <div className="select-material p-16 flexbox-col dc__gap-12">
                                 {artifactInfo.materials.map((material) => (
                                     <MaterialHistory material={material} pipelineName="" key={material.id} />
                                 ))}

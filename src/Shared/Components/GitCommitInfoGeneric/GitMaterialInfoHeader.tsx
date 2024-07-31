@@ -42,8 +42,8 @@ const GitMaterialInfoHeader = ({
     return (
         <div
             {...props}
-            className="pl-16 dc__box-shadow mb-12 pb-12 fs-12 fw-6 "
-            style={{ display: 'grid', gridTemplateColumns: '20px 1fr', gridColumnGap: '12px', ...style }}
+            className="git-commit-info-generic__header p-16 dc__box-shadow fs-12 fw-6 dc__gap-12"
+            style={style}
         >
             <div className={getGitIcon(repoUrl)} />
             <div className="flex column left">
