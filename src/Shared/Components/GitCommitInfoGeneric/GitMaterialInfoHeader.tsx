@@ -43,7 +43,7 @@ const GitMaterialInfoHeader = ({
     return (
         <div
             {...props}
-            className="git-commit-info-generic__header px-16 py-12 dc__box-shadow fs-12 fw-6 dc__gap-12"
+            className="git-commit-info-generic__header px-16 py-12 dc__box-shadow fs-12 fw-6 dc__gap-4"
             style={style}
         >
             <div className={getGitIcon(repoUrl)} />
