@@ -33,7 +33,7 @@ const getVariantOverrides = (variant: SelectPickerVariantType): StylesConfig<Sel
                 }),
             }
         default:
-            return {}
+            return null
     }
 }
 
@@ -59,7 +59,7 @@ export const getCommonSelectStyle = ({
         boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.20)',
         width: getMenuWidthFromSize(menuSize),
         zIndex: 'var(--select-picker-menu-index)',
-        ...getVariantOverrides(variant).menu(base, state),
+        ...(getVariantOverrides(variant)?.menu(base, state) || {}),
     }),
     menuList: (base) => ({
         ...base,
@@ -76,7 +76,7 @@ export const getCommonSelectStyle = ({
         gap: '8px',
         opacity: state.isDisabled ? 0.5 : 1,
         flexWrap: 'nowrap',
-        ...getVariantOverrides(variant).control(base, state),
+        ...(getVariantOverrides(variant)?.control(base, state) || {}),
 
         '&:hover': {
             borderColor: state.isDisabled ? 'var(--N200)' : 'var(--N300)',
@@ -176,6 +176,6 @@ export const getCommonSelectStyle = ({
         fontSize: '13px',
         fontWeight: 400,
         lineHeight: '20px',
-        ...getVariantOverrides(variant).singleValue(base, state),
+        ...(getVariantOverrides(variant)?.singleValue(base, state) || {}),
     }),
 })

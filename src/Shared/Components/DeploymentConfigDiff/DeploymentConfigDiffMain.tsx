@@ -20,7 +20,7 @@ export const DeploymentConfigDiffMain = ({
     onSortBtnClick,
 }: DeploymentConfigDiffMainProps) => {
     // STATES
-    const [expandedView, setExpandedView] = useState<Record<string | number, boolean>>({})
+    const [collapsedView, setCollapsedView] = useState<Record<string | number, boolean>>({})
 
     // SCROLL CALLBACK FUNCTION
     const scroll = useCallback((node: HTMLDivElement) => {
@@ -31,9 +31,9 @@ export const DeploymentConfigDiffMain = ({
     }, [])
 
     const handleAccordionClick = (id: string) => () => {
-        setExpandedView({
-            ...expandedView,
-            [id]: !expandedView[id],
+        setCollapsedView({
+            ...collapsedView,
+            [id]: !collapsedView[id],
         })
     }
 
@@ -55,7 +55,7 @@ export const DeploymentConfigDiffMain = ({
             return (
                 <Fragment key={configItem.id}>
                     <div className="dc__mxw-300">
-                        <SelectPicker {...selectPickerProps} />
+                        <SelectPicker {...selectPickerProps} isDisabled={isLoading || selectPickerProps?.isDisabled} />
                     </div>
                     {index !== list.length - 1 && <span className="cn-9 fs-13 lh-20">/</span>}
                 </Fragment>
@@ -66,8 +66,9 @@ export const DeploymentConfigDiffMain = ({
         <div className="dc__border-left p-12 h-100">
             <button
                 type="button"
-                className="dc__unset-button-styles flexbox dc__align-items-center dc__gap-6"
+                className={`dc__unset-button-styles flexbox dc__align-items-center dc__gap-6 ${isLoading ? 'dc__disabled' : ''}`}
                 onClick={onSortBtnClick}
+                disabled={isLoading}
             >
                 <ICSortArrowDown
                     className="fcn-7 rotate"
@@ -89,7 +90,7 @@ export const DeploymentConfigDiffMain = ({
                     ref={id === scrollIntoViewId ? scroll : null}
                     id={id}
                     title={title}
-                    isExpanded={!expandedView[id]}
+                    isExpanded={!collapsedView[id]}
                     hasDiff={hasDiff}
                     handleOnClick={handleAccordionClick(id)}
                 >
@@ -129,9 +130,7 @@ export const DeploymentConfigDiffMain = ({
             )
         })
 
-    return isLoading ? (
-        <Progressing fullHeight size={48} />
-    ) : (
+    return (
         <div className="bcn-0 deployment-config-diff__main-top">
             <div className="dc__border-bottom-n1 flexbox dc__align-items-center dc__position-sticky dc__top-0 bcn-0 w-100 dc__zi-11">
                 <div className="flexbox dc__align-items-center p-12 dc__gap-4 deployment-config-diff__main-top__header">
@@ -146,7 +145,11 @@ export const DeploymentConfigDiffMain = ({
                 </div>
             </div>
             <div className="deployment-config-diff__main-content">
-                <div className="flexbox-col dc__gap-16 p-12">{renderDiffs()}</div>
+                {isLoading ? (
+                    <Progressing fullHeight size={48} />
+                ) : (
+                    <div className="flexbox-col dc__gap-16 p-12">{renderDiffs()}</div>
+                )}
             </div>
         </div>
     )
