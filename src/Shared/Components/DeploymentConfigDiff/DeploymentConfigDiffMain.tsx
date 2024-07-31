@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { Progressing } from '@Common/Progressing'
@@ -14,28 +14,25 @@ export const DeploymentConfigDiffMain = ({
     isLoading,
     headerText = 'Compare With',
     configList = [],
-    scrollIntoViewId,
     selectorsConfig,
     sortOrder,
     onSortBtnClick,
 }: DeploymentConfigDiffMainProps) => {
     // STATES
-    const [collapsedView, setCollapsedView] = useState<Record<string | number, boolean>>({})
-
-    // SCROLL CALLBACK FUNCTION
-    const scroll = useCallback((node: HTMLDivElement) => {
-        if (node !== null) {
-            // scrolls to the item
-            node.scrollIntoView({ behavior: 'smooth' })
-        }
-    }, [])
+    const [expandedView, setExpandedView] = useState<Record<string | number, boolean>>({})
 
     const handleAccordionClick = (id: string) => () => {
-        setCollapsedView({
-            ...collapsedView,
-            [id]: !collapsedView[id],
+        setExpandedView({
+            ...expandedView,
+            [id]: !expandedView[id],
         })
     }
+
+    useEffect(() => {
+        if (!isLoading && configList) {
+            setExpandedView(configList.reduce((acc, curr) => ({ ...acc, [curr.id]: curr.hasDiff }), {}))
+        }
+    }, [isLoading, configList])
 
     const renderHeaderSelectors = (list: DeploymentConfigDiffSelectPickerProps[]) =>
         list.map((configItem, index) => {
@@ -87,10 +84,9 @@ export const DeploymentConfigDiffMain = ({
             return (
                 <DeploymentConfigDiffAccordion
                     key={`${id}-${title}`}
-                    ref={id === scrollIntoViewId ? scroll : null}
                     id={id}
                     title={title}
-                    isExpanded={!collapsedView[id]}
+                    isExpanded={expandedView[id]}
                     hasDiff={hasDiff}
                     handleOnClick={handleAccordionClick(id)}
                 >
@@ -148,7 +144,7 @@ export const DeploymentConfigDiffMain = ({
                 {isLoading ? (
                     <Progressing fullHeight size={48} />
                 ) : (
-                    <div className="flexbox-col dc__gap-16 p-12">{renderDiffs()}</div>
+                    <div className="flexbox-col dc__gap-12 p-12">{renderDiffs()}</div>
                 )}
             </div>
         </div>

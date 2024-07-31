@@ -63,7 +63,7 @@ export const DeploymentConfigDiffNavigation = ({
                     </span>
                 </Link>
             )}
-            <span className="fs-13 lh-20 fw-6 dc__truncate">{navHeading}</span>
+            <span className="fs-13 lh-20 fw-6 cn-9 dc__truncate">{navHeading}</span>
         </div>
     )
 

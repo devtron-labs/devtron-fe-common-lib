@@ -15,12 +15,12 @@ export const DeploymentConfigDiffAccordion = forwardRef<HTMLDivElement, Deployme
             >
                 <ICCaretDown
                     className="icon-dim-16 fsn-6 rotate"
-                    style={{ ['--rotateBy' as string]: isExpanded ? '180deg' : '0deg' }}
+                    style={{ ['--rotateBy' as string]: isExpanded ? '360deg' : '270deg' }}
                 />
                 <p className="m-0 cn-9 fs-13 lh-20">{title}</p>
                 <p
-                    className={`m-0 fs-13 lh-20 fw-6 ${hasDiff ? 'cy-7' : 'cg-5'}`}
-                >{`${hasDiff ? 'Has' : 'No'} Difference`}</p>
+                    className={`m-0 fs-13 lh-20 fw-6 ${hasDiff ? 'cy-7' : 'cg-7'}`}
+                >{`${hasDiff ? 'Has' : 'No'} difference`}</p>
             </button>
             {isExpanded && children}
         </div>
