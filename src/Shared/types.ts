@@ -615,3 +615,11 @@ export interface BatchConfigType {
 export interface scrollableInterface {
     autoBottomScroll: boolean
 }
+
+export enum URLProtocolType {
+    HTTP = 'http:',
+    HTTPS = 'https:',
+    SSH = 'ssh:',
+    SMTP = 'smtp:',
+    S3 = 's3:',
+}
