@@ -65,7 +65,7 @@ const SortableTableHeaderCell = ({
             onClick={isSortable ? triggerSorting : noop}
             disabled={disabled}
         >
-            <span className="dc__uppercase dc__ellipsis-right">{title}</span>
+            <span className="dc__uppercase dc__truncate">{title}</span>
             {renderSortIcon()}
         </button>
     )
