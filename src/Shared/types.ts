@@ -22,6 +22,7 @@ import {
     VulnerabilityType,
     DeploymentAppTypes,
     ServerErrors,
+    SortingParams,
 } from '../Common'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
 
@@ -615,3 +616,22 @@ export interface BatchConfigType {
 export interface scrollableInterface {
     autoBottomScroll: boolean
 }
+
+export type BaseFilterQueryParams<T> = {
+    /**
+     * Offset for the list result
+     */
+    offset?: number
+    /**
+     * Number of items required in the list
+     */
+    size?: number
+    /**
+     * Search string (if any)
+     */
+    searchKey?: string
+    /**
+     * If true, all items are returned with any search / filtering applied without pagination
+     */
+    showAll?: boolean
+} & SortingParams<T>
