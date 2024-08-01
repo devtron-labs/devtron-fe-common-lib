@@ -97,11 +97,12 @@ export const DeploymentConfigDiffMain = ({
                                 <div className="px-12 py-6">{secondaryHeading}</div>
                             </div>
                             <CodeEditor
+                                key={sortOrder}
                                 diffView
                                 defaultValue={primaryList.codeEditorValue.value}
                                 value={secondaryList.codeEditorValue.value}
                                 mode={MODES.YAML}
-                                height="656px"
+                                height="650px"
                                 noParsing
                                 readOnly
                             />
@@ -113,6 +114,7 @@ export const DeploymentConfigDiffMain = ({
                                 <div className="px-12 py-6">{secondaryHeading}</div>
                             </div>
                             <DeploymentHistoryDiffView
+                                key={`${id}-${sortOrder}`}
                                 baseTemplateConfiguration={secondaryList}
                                 currentConfiguration={primaryList}
                                 previousConfigAvailable

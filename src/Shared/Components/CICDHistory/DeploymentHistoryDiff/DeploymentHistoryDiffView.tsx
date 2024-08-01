@@ -17,7 +17,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 import Tippy from '@tippyjs/react'
-import { stringComparatorBySortOrder, yamlComparatorBySortOrder } from '@Shared/Helpers'
+import { yamlComparatorBySortOrder } from '@Shared/Helpers'
 import { MODES, Toggle, YAMLStringify } from '../../../../Common'
 import { DeploymentHistoryParamsType } from './types'
 import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../types'
@@ -143,9 +143,8 @@ const DeploymentHistoryDiffView = ({
                 }`}
             >
                 {baseTemplateConfiguration &&
-                    Object.keys({ ...currentConfiguration?.values, ...baseTemplateConfiguration.values })
-                        .sort((a, b) => stringComparatorBySortOrder(a, b, sortOrder))
-                        .map((configKey, index) => {
+                    Object.keys({ ...currentConfiguration?.values, ...baseTemplateConfiguration.values }).map(
+                        (configKey, index) => {
                             const currentValue = currentConfiguration?.values?.[configKey]
                             const baseValue = baseTemplateConfiguration.values[configKey]
                             const changeBGColor = previousConfigAvailable && currentValue?.value !== baseValue?.value
@@ -172,7 +171,8 @@ const DeploymentHistoryDiffView = ({
                                     )}
                                 </Fragment>
                             )
-                        })}
+                        },
+                    )}
             </div>
 
             {(currentConfiguration?.codeEditorValue?.value || baseTemplateConfiguration?.codeEditorValue?.value) && (
