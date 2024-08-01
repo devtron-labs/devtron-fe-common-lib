@@ -126,6 +126,18 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             },
         })
 
+        monaco.editor.defineTheme(CodeEditorThemesKeys.networkStatusInterface, {
+            base: 'vs-dark',
+            inherit: true,
+            rules: [
+                // @ts-ignore
+                { background: '#1A1A1A' },
+            ],
+            colors: {
+                'editor.background': '#1A1A1A',
+            },
+        })
+
         monaco.editor.defineTheme(CodeEditorThemesKeys.deleteDraft, {
             base: 'vs',
             inherit: true,
