@@ -82,8 +82,10 @@ export interface KeyValueTableProps<K extends string> {
     isSortable?: boolean
     /** An optional React node for a custom header component. */
     headerComponent?: ReactNode
-    /** When true, data addition field will not be shown */
+    /** When true, data addition field will not be shown. */
     isAdditionNotAllowed?: boolean
+    /** When true, data add or update is disabled. */
+    readOnly?: boolean
     /**
      * An optional function to handle changes in the table rows.
      * @param rowId - The id of the row that changed.
