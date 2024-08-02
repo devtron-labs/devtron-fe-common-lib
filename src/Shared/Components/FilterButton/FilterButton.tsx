@@ -65,6 +65,7 @@ const DropdownIndicator = (props) => (
     </components.DropdownIndicator>
 )
 
+// To be replaced with MultiSelectPicker
 const FilterButton: React.FC<FilterButtonPropsType> = ({
     placeholder,
     appliedFilters,
@@ -74,9 +75,18 @@ const FilterButton: React.FC<FilterButtonPropsType> = ({
     getFormattedFilterLabelValue,
     menuAlignFromRight,
 }) => {
+    const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false)
     const [selectedOptions, setSelectedOptions] = useState<OptionType[]>(
         appliedFilters.map((filter) => ({ value: filter, label: getFormattedFilterLabelValue?.(filter) || filter })),
     )
+
+    const handleMenuOpen = () => {
+        setMenuIsOpen(true)
+    }
+
+    const handleMenuClose = () => {
+        setMenuIsOpen(false)
+    }
 
     const handleSelectOnChange: React.ComponentProps<typeof ReactSelect>['onChange'] = (selected: OptionType[]) => {
         setSelectedOptions([...selected])
@@ -84,6 +94,7 @@ const FilterButton: React.FC<FilterButtonPropsType> = ({
 
     const handleApply = () => {
         handleApplyChange(Object.values(selectedOptions).map((option) => option.value))
+        handleMenuClose()
     }
 
     return (
@@ -109,6 +120,9 @@ const FilterButton: React.FC<FilterButtonPropsType> = ({
             styles={getFilterStyle(menuAlignFromRight)}
             // @ts-ignore NOTE: passing this to use in FilterSelectMenuList
             handleApplyFilter={handleApply}
+            menuIsOpen={menuIsOpen}
+            onMenuOpen={handleMenuOpen}
+            onMenuClose={handleMenuClose}
         />
     )
 }
