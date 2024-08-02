@@ -16,8 +16,8 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
+import { useDownload } from '@Shared/Hooks'
 import {
-    showError,
     GenericEmptyState,
     ImageTagsContainer,
     ClipboardButton,
@@ -122,7 +122,7 @@ const Artifacts = ({
     artifact,
     blobStorageEnabled,
     isArtifactUploaded,
-    getArtifactPromise,
+    downloadArtifactUrl,
     ciPipelineId,
     artifactId,
     isJobView,
@@ -137,6 +137,7 @@ const Artifacts = ({
     renderCIListHeader,
 }: ArtifactType) => {
     const { isSuperAdmin } = useSuperAdmin()
+    const { handleDownload } = useDownload()
 
     const { triggerId, buildId } = useParams<{
         triggerId: string
@@ -152,22 +153,16 @@ const Artifacts = ({
     }, [copied])
 
     async function handleArtifact() {
-        try {
-            const response = await getArtifactPromise()
-            const b = await (response as any).blob()
-            const a = document.createElement('a')
-            a.href = URL.createObjectURL(b)
-            a.download = `${buildId || triggerId}.zip`
-            a.click()
-        } catch (err) {
-            showError(err)
-        }
+        await handleDownload({
+            downloadUrl: downloadArtifactUrl,
+            fileName: `${buildId || triggerId}.zip`,
+        })
     }
 
     if (status.toLowerCase() === TERMINAL_STATUS_MAP.RUNNING || status.toLowerCase() === TERMINAL_STATUS_MAP.STARTING) {
         return <CIProgressView />
     }
-    if (isJobView && !blobStorageEnabled) {
+    if (!blobStorageEnabled) {
         return (
             <div className="flex column p-24 w-100 h-100">
                 <GenericEmptyState
@@ -193,15 +188,6 @@ const Artifacts = ({
             </div>
         )
     }
-    if (isJobView && !isArtifactUploaded) {
-        return (
-            <GenericEmptyState
-                title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoFilesFound}
-                subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoFilesGenerated}
-                image={noartifact}
-            />
-        )
-    }
     if (status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED || status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED) {
         if (isJobCI) {
             return (
@@ -219,7 +205,7 @@ const Artifacts = ({
             />
         )
     }
-    if (!artifactId && status.toLowerCase() === TERMINAL_STATUS_MAP.SUCCEEDED) {
+    if (!artifactId && status.toLowerCase() === TERMINAL_STATUS_MAP.SUCCEEDED && !isJobView) {
         return (
             <GenericEmptyState
                 title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsFound}
@@ -259,26 +245,28 @@ const Artifacts = ({
                     </div>
                 </CIListItem>
             )}
-            {blobStorageEnabled && getArtifactPromise && (type === HistoryComponentType.CD || isArtifactUploaded) && (
-                <CIListItem
-                    type="report"
-                    hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                    isSuperAdmin={isSuperAdmin}
-                    renderCIListHeader={renderCIListHeader}
-                >
-                    <div className="flex column left">
-                        <div className="cn-9 fs-14">Reports.zip</div>
-                        <button
-                            type="button"
-                            onClick={handleArtifact}
-                            className="anchor p-0 cb-5 fs-12 flex left pointer"
-                        >
-                            Download
-                            <Download className="ml-5 icon-dim-16" />
-                        </button>
-                    </div>
-                </CIListItem>
-            )}
+            {blobStorageEnabled &&
+                downloadArtifactUrl &&
+                (type === HistoryComponentType.CD || isArtifactUploaded || isJobView) && (
+                    <CIListItem
+                        type="report"
+                        hideImageTaggingHardDelete={hideImageTaggingHardDelete}
+                        isSuperAdmin={isSuperAdmin}
+                        renderCIListHeader={renderCIListHeader}
+                    >
+                        <div className="flex column left">
+                            <div className="cn-9 fs-14">Reports.zip</div>
+                            <button
+                                type="button"
+                                onClick={handleArtifact}
+                                className="anchor p-0 cb-5 fs-12 flex left pointer"
+                            >
+                                Download
+                                <Download className="ml-5 icon-dim-16" />
+                            </button>
+                        </div>
+                    </CIListItem>
+                )}
         </div>
     )
 }
