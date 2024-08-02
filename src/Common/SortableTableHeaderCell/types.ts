@@ -44,4 +44,8 @@ export interface SortableTableHeaderCellProps {
      * @default true
      */
     isSortable?: boolean
+    /**
+     * @default - false
+     */
+    showTippy?: boolean
 }

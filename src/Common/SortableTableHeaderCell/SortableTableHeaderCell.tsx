@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import Tippy from '@tippyjs/react'
 import { ReactComponent as SortIcon } from '../../Assets/Icon/ic-arrow-up-down.svg'
 import { ReactComponent as SortArrowDown } from '../../Assets/Icon/ic-sort-arrow-down.svg'
 import { SortingOrder } from '../Constants'
@@ -41,6 +42,7 @@ const SortableTableHeaderCell = ({
     title,
     disabled,
     isSortable = true,
+    showTippy = false,
 }: SortableTableHeaderCellProps) => {
     const renderSortIcon = () => {
         if (!isSortable) {
@@ -50,13 +52,15 @@ const SortableTableHeaderCell = ({
         if (isSorted) {
             return (
                 <SortArrowDown
-                    className={`icon-dim-12 mw-12 scn-7 dc__transition--transform ${sortOrder === SortingOrder.DESC ? 'dc__flip-180' : ''}`}
+                    className={`icon-dim-12 mw-12 scn-7 dc__no-shrink dc__transition--transform ${sortOrder === SortingOrder.DESC ? 'dc__flip-180' : ''}`}
                 />
             )
         }
 
-        return <SortIcon className="icon-dim-12 mw-12 scn-7" />
+        return <SortIcon className="icon-dim-12 mw-12 scn-7 dc__no-shrink" />
     }
+
+    const renderTitle = () => <span className="dc__uppercase dc__truncate">{title}</span>
 
     return (
         <button
@@ -65,7 +69,13 @@ const SortableTableHeaderCell = ({
             onClick={isSortable ? triggerSorting : noop}
             disabled={disabled}
         >
-            <span className="dc__uppercase dc__truncate">{title}</span>
+            {showTippy ? (
+                <Tippy arrow={false} content={title} className="default-tt dc__mxw-200 dc__word-break">
+                    {renderTitle()}
+                </Tippy>
+            ) : (
+                renderTitle()
+            )}
             {renderSortIcon()}
         </button>
     )
