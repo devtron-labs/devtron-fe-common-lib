@@ -61,7 +61,7 @@ const SortableTableHeaderCell = ({
     return (
         <button
             type="button"
-            className="dc__transparent p-0 bcn-0 cn-7 flex dc__content-start dc__gap-4 dc__select-text"
+            className={`dc__transparent p-0 bcn-0 cn-7 flex dc__content-start dc__gap-4 dc__select-text ${!isSortable ? 'cursor-default' : ''}`}
             onClick={isSortable ? triggerSorting : noop}
             disabled={disabled}
         >
