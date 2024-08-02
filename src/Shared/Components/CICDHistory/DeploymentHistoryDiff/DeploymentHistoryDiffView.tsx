@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 import Tippy from '@tippyjs/react'
 import { yamlComparatorBySortOrder } from '@Shared/Helpers'
@@ -66,30 +66,38 @@ const DeploymentHistoryDiffView = ({
         Object.keys(baseTemplateConfiguration?.codeEditorValue?.variableSnapshot || {}).length !== 0 ||
         Object.keys(currentConfiguration?.codeEditorValue?.variableSnapshot || {}).length !== 0
 
-    const editorValuesRHS = convertVariables
-        ? baseTemplateConfiguration?.codeEditorValue?.resolvedValue
-        : baseTemplateConfiguration?.codeEditorValue?.value
+    const editorValuesRHS = useMemo(() => {
+        if (!baseTemplateConfiguration?.codeEditorValue?.value || isDeleteDraft) {
+            return ''
+        }
 
-    const editorValuesLHS = convertVariables
-        ? currentConfiguration?.codeEditorValue?.resolvedValue
-        : currentConfiguration?.codeEditorValue?.value
+        const editorValue = convertVariables
+            ? baseTemplateConfiguration?.codeEditorValue?.resolvedValue
+            : baseTemplateConfiguration?.codeEditorValue?.value
+
+        return YAMLStringify(JSON.parse(editorValue), {
+            sortMapEntries: (a, b) => yamlComparatorBySortOrder(a, b, sortOrder),
+        })
+    }, [convertVariables, baseTemplateConfiguration, sortOrder, isDeleteDraft])
+
+    const editorValuesLHS = useMemo(() => {
+        if (!currentConfiguration?.codeEditorValue?.value || isUnpublished) {
+            return ''
+        }
+
+        const editorValue = convertVariables
+            ? currentConfiguration?.codeEditorValue?.resolvedValue
+            : currentConfiguration?.codeEditorValue?.value
+
+        return YAMLStringify(JSON.parse(editorValue), {
+            sortMapEntries: (a, b) => yamlComparatorBySortOrder(a, b, sortOrder),
+        })
+    }, [convertVariables, currentConfiguration, sortOrder, isUnpublished])
 
     const renderDeploymentDiffViaCodeEditor = () => (
         <CodeEditor
-            value={
-                !baseTemplateConfiguration?.codeEditorValue?.value || isDeleteDraft
-                    ? ''
-                    : YAMLStringify(JSON.parse(editorValuesRHS), {
-                          sortMapEntries: (a, b) => yamlComparatorBySortOrder(a, b, sortOrder),
-                      })
-            }
-            defaultValue={
-                !currentConfiguration?.codeEditorValue?.value || isUnpublished
-                    ? ''
-                    : YAMLStringify(JSON.parse(editorValuesLHS), {
-                          sortMapEntries: (a, b) => yamlComparatorBySortOrder(a, b, sortOrder),
-                      })
-            }
+            value={editorValuesRHS}
+            defaultValue={editorValuesLHS}
             height={codeEditorHeight}
             diffView={previousConfigAvailable && true}
             readOnly

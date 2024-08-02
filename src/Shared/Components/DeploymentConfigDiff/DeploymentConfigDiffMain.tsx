@@ -140,7 +140,6 @@ export const DeploymentConfigDiffMain = ({
                                 <div className="px-12 py-6">{secondaryHeading}</div>
                             </div>
                             <DeploymentHistoryDiffView
-                                key={`${id}-${sortingConfig?.sortOrder || ''}`}
                                 baseTemplateConfiguration={secondaryList}
                                 currentConfiguration={primaryList}
                                 previousConfigAvailable
