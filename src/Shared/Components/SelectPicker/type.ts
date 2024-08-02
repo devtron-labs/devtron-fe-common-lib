@@ -102,4 +102,10 @@ export interface SelectPickerProps
      * @default SelectPickerVariantType.DEFAULT
      */
     variant?: SelectPickerVariantType
+    /**
+     * Disables the ellipsis on description, it will be shown in full width, wrapped if required.
+     *
+     * @default false
+     */
+    disableDescriptionEllipsis?: boolean
 }

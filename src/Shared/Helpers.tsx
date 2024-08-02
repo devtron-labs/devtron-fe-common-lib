@@ -138,7 +138,12 @@ export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
 }
 
 export const yamlComparatorBySortOrder = (a: Pair, b: Pair, sortOrder: SortingOrder = SortingOrder.ASC) => {
-    const orderMultiplier = sortOrder === SortingOrder.DESC ? -1 : 1
+    let orderMultiplier = 0
+    if (sortOrder === SortingOrder.DESC) {
+        orderMultiplier = -1
+    } else if (sortOrder === SortingOrder.ASC) {
+        orderMultiplier = 1
+    }
     if (a.key < b.key) {
         return -1 * orderMultiplier
     }

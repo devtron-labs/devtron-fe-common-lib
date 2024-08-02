@@ -5,6 +5,7 @@ import Tippy, { TippyProps } from '@tippyjs/react'
 import { ConditionalWrap } from '@Common/Helper'
 import { ReactComponent as ICExpand } from '@Icons/ic-expand.svg'
 
+import { Collapse } from '../Collapse'
 import { CollapsibleListProps } from './CollapsibleList.types'
 import './CollapsibleList.scss'
 
@@ -51,7 +52,7 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                             </ConditionalWrap>
                         )}
                     </div>
-                    {isExpanded && (
+                    <Collapse expand={isExpanded}>
                         <div className="collapsible ml-16 pl-4 dc__border-left">
                             {!items.length ? (
                                 <div className="collapsible__item flexbox dc__gap-8 dc__no-decor no-hover br-4 py-6 px-8">
@@ -96,7 +97,7 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                                 ))
                             )}
                         </div>
-                    )}
+                    </Collapse>
                 </Fragment>
             ))}
         </div>

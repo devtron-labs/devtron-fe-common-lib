@@ -2,6 +2,7 @@ import { forwardRef } from 'react'
 
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 
+import { Collapse } from '../Collapse'
 import { DeploymentConfigDiffAccordionProps } from './types'
 
 export const DeploymentConfigDiffAccordion = forwardRef<HTMLDivElement, DeploymentConfigDiffAccordionProps>(
@@ -22,7 +23,7 @@ export const DeploymentConfigDiffAccordion = forwardRef<HTMLDivElement, Deployme
                     className={`m-0 fs-13 lh-20 fw-6 ${hasDiff ? 'cy-7' : 'cg-7'}`}
                 >{`${hasDiff ? 'Has' : 'No'} difference`}</p>
             </button>
-            {isExpanded && children}
+            <Collapse expand={isExpanded}>{children}</Collapse>
         </div>
     ),
 )

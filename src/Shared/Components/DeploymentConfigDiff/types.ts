@@ -50,8 +50,11 @@ export interface DeploymentConfigDiffProps {
         primaryConfig: DeploymentConfigDiffSelectPickerProps[]
         secondaryConfig: DeploymentConfigDiffSelectPickerProps[]
     }
-    sortOrder?: SortingOrder
-    onSortBtnClick?: () => void
+    sortingConfig?: {
+        sortBy: string
+        sortOrder: SortingOrder
+        handleSorting: () => void
+    }
     navList: DeploymentConfigDiffNavigationItem[]
     collapsibleNavList: DeploymentConfigDiffNavigationCollapsibleItem[]
     goBackURL?: string
@@ -68,13 +71,7 @@ export interface DeploymentConfigDiffNavigationProps
 export interface DeploymentConfigDiffMainProps
     extends Pick<
         DeploymentConfigDiffProps,
-        | 'isLoading'
-        | 'headerText'
-        | 'configList'
-        | 'scrollIntoViewId'
-        | 'selectorsConfig'
-        | 'sortOrder'
-        | 'onSortBtnClick'
+        'isLoading' | 'headerText' | 'configList' | 'scrollIntoViewId' | 'selectorsConfig' | 'sortingConfig'
     > {}
 
 export interface DeploymentConfigDiffAccordionProps {

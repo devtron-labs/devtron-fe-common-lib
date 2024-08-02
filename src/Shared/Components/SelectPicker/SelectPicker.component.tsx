@@ -187,7 +187,7 @@ const SelectPicker = ({
                                 LoadingIndicator: SelectPickerLoadingIndicator,
                                 DropdownIndicator: SelectPickerDropdownIndicator,
                                 Control: renderControl,
-                                Option: SelectPickerOption,
+                                Option: SelectPickerOption(props),
                                 MenuList: renderMenuList,
                                 ClearIndicator: SelectPickerClearIndicator,
                                 ValueContainer: renderValueContainer,

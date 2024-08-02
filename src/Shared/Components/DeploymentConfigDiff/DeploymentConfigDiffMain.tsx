@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 
 import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
+import { ReactComponent as ICSort } from '@Icons/ic-arrow-up-down.svg'
 import { Progressing } from '@Common/Progressing'
 import { CodeEditor } from '@Common/CodeEditor'
 import { MODES, SortingOrder } from '@Common/Constants'
@@ -15,8 +16,8 @@ export const DeploymentConfigDiffMain = ({
     headerText = 'Compare With',
     configList = [],
     selectorsConfig,
-    sortOrder,
-    onSortBtnClick,
+    sortingConfig,
+    scrollIntoViewId,
 }: DeploymentConfigDiffMainProps) => {
     // STATES
     const [expandedView, setExpandedView] = useState<Record<string | number, boolean>>({})
@@ -29,10 +30,21 @@ export const DeploymentConfigDiffMain = ({
     }
 
     useEffect(() => {
-        if (!isLoading && configList) {
-            setExpandedView(configList.reduce((acc, curr) => ({ ...acc, [curr.id]: curr.hasDiff }), {}))
+        if (!isLoading) {
+            setExpandedView(
+                configList.reduce(
+                    (acc, curr) => ({ ...acc, [curr.id]: scrollIntoViewId === curr.id || curr.hasDiff }),
+                    {},
+                ),
+            )
         }
-    }, [isLoading, configList])
+    }, [isLoading])
+
+    useEffect(() => {
+        if (scrollIntoViewId) {
+            setExpandedView((prev) => ({ ...prev, [scrollIntoViewId]: true }))
+        }
+    }, [scrollIntoViewId])
 
     const renderHeaderSelectors = (list: DeploymentConfigDiffSelectPickerProps[]) =>
         list.map((configItem, index) => {
@@ -59,22 +71,36 @@ export const DeploymentConfigDiffMain = ({
             )
         })
 
-    const renderSortButton = () => (
-        <div className="dc__border-left p-12 h-100">
-            <button
-                type="button"
-                className={`dc__unset-button-styles flexbox dc__align-items-center dc__gap-6 ${isLoading ? 'dc__disabled' : ''}`}
-                onClick={onSortBtnClick}
-                disabled={isLoading}
-            >
-                <ICSortArrowDown
-                    className="fcn-7 rotate"
-                    style={{ ['--rotateBy' as string]: sortOrder === SortingOrder.ASC ? '0deg' : '180deg' }}
-                />
-                <span className="cn-7 fs-13 lh-20 fw-6">Sort keys</span>
-            </button>
-        </div>
-    )
+    const renderSortButton = () => {
+        if (sortingConfig) {
+            const { handleSorting, sortBy, sortOrder } = sortingConfig
+
+            return (
+                <div className="dc__border-left p-12 h-100">
+                    <button
+                        type="button"
+                        className={`dc__unset-button-styles flexbox dc__align-items-center dc__gap-6 ${isLoading ? 'dc__disabled' : ''}`}
+                        onClick={handleSorting}
+                        disabled={isLoading}
+                    >
+                        {sortBy ? (
+                            <ICSortArrowDown
+                                className="fcn-7 rotate"
+                                style={{
+                                    ['--rotateBy' as string]: sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
+                                }}
+                            />
+                        ) : (
+                            <ICSort className="icon-dim-12 mw-12 scn-7" />
+                        )}
+                        <span className="cn-7 fs-13 lh-20 fw-6">Sort keys</span>
+                    </button>
+                </div>
+            )
+        }
+
+        return null
+    }
 
     const renderDiffs = () =>
         configList.map(({ id, isDeploymentTemplate, primaryConfig, secondaryConfig, title, hasDiff }) => {
@@ -97,7 +123,7 @@ export const DeploymentConfigDiffMain = ({
                                 <div className="px-12 py-6">{secondaryHeading}</div>
                             </div>
                             <CodeEditor
-                                key={sortOrder}
+                                key={sortingConfig?.sortOrder}
                                 diffView
                                 defaultValue={primaryList.codeEditorValue.value}
                                 value={secondaryList.codeEditorValue.value}
@@ -114,13 +140,13 @@ export const DeploymentConfigDiffMain = ({
                                 <div className="px-12 py-6">{secondaryHeading}</div>
                             </div>
                             <DeploymentHistoryDiffView
-                                key={`${id}-${sortOrder}`}
+                                key={`${id}-${sortingConfig?.sortOrder || ''}`}
                                 baseTemplateConfiguration={secondaryList}
                                 currentConfiguration={primaryList}
                                 previousConfigAvailable
                                 rootClassName="m-16 mt-0-imp dc__no-top-radius dc__no-top-border"
                                 comparisonBodyClassName="m-16"
-                                sortOrder={sortOrder}
+                                sortOrder={sortingConfig?.sortOrder}
                             />
                         </>
                     )}
@@ -139,7 +165,7 @@ export const DeploymentConfigDiffMain = ({
                     <div className="flex-grow-1 flexbox dc__align-items-center dc__gap-4 p-12">
                         {renderHeaderSelectors(selectorsConfig.secondaryConfig)}
                     </div>
-                    {onSortBtnClick && renderSortButton()}
+                    {renderSortButton()}
                 </div>
             </div>
             <div className="deployment-config-diff__main-content">
