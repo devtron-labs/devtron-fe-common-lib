@@ -19,22 +19,22 @@ import { useState } from 'react'
 import moment from 'moment'
 import Tippy from '@tippyjs/react'
 import ClipboardButton from '@Common/ClipboardButton/ClipboardButton'
-import { stopPropagation } from '../../../Common/Helper'
-import { ReactComponent as Commit } from '../../../Assets/Icon/ic-commit.svg'
-import { ReactComponent as CommitIcon } from '../../../Assets/Icon/ic-code-commit.svg'
-import { ReactComponent as PersonIcon } from '../../../Assets/Icon/ic-person.svg'
-import { ReactComponent as CalendarIcon } from '../../../Assets/Icon/ic-calendar.svg'
-import { ReactComponent as MessageIcon } from '../../../Assets/Icon/ic-message.svg'
-import { ReactComponent as BranchIcon } from '../../../Assets/Icon/ic-branch.svg'
-import { ReactComponent as BranchMain } from '../../../Assets/Icon/ic-branch-main.svg'
-import { ReactComponent as Check } from '../../../Assets/Icon/ic-check-circle.svg'
-import { ReactComponent as Abort } from '../../../Assets/Icon/ic-abort.svg'
-import { SourceTypeMap, createGitCommitUrl } from '../../../Common/Common.service'
+import { ReactComponent as Circle } from '@Icons/ic-circle.svg'
+import { ReactComponent as Commit } from '@Icons/ic-commit.svg'
+import { ReactComponent as CommitIcon } from '@Icons/ic-code-commit.svg'
+import { ReactComponent as PersonIcon } from '@Icons/ic-person.svg'
+import { ReactComponent as CalendarIcon } from '@Icons/ic-calendar.svg'
+import { ReactComponent as MessageIcon } from '@Icons/ic-message.svg'
+import { ReactComponent as BranchIcon } from '@Icons/ic-branch.svg'
+import { ReactComponent as BranchMain } from '@Icons/ic-branch-main.svg'
+import { ReactComponent as Check } from '@Icons/ic-check-circle.svg'
+import { ReactComponent as Abort } from '@Icons/ic-abort.svg'
+import { SourceTypeMap, createGitCommitUrl } from '@Common/Common.service'
+import { stopPropagation } from '@Common/Helper'
+import { DATE_TIME_FORMATS } from '@Common/Constants'
 import GitMaterialInfoHeader from './GitMaterialInfoHeader'
-import { DATE_TIME_FORMATS } from '../../../Common/Constants'
 import { MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../constants'
 import { GitCommitInfoGenericProps } from './types'
-import { ReactComponent as Circle } from '../../../Assets/Icon/ic-circle.svg'
 
 const GitCommitInfoGeneric = ({
     materialSourceType,
@@ -245,7 +245,10 @@ const GitCommitInfoGeneric = ({
                                                 {_lowerCaseCommitInfo.commit.slice(0, 7)}
                                             </div>
                                         </a>
-                                        <span className="git-commit-info-generic__copy" data-testid="git-commit-copy">
+                                        <span
+                                            className="git-commit-info-generic__copy dc__visibility-hidden"
+                                            data-testid="git-commit-copy"
+                                        >
                                             <ClipboardButton content={_lowerCaseCommitInfo.commit} />
                                         </span>
                                     </div>
