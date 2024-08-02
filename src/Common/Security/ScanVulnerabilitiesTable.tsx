@@ -14,18 +14,61 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import DOMPurify from 'dompurify'
 import { ScanVulnerabilitiesTableProps, VulnerabilityType } from '../Types'
 import './scanVulnerabilities.css'
+import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
+import { SortingOrder } from '@Common/Constants'
+import { useState } from 'react'
+import { numberComparatorBySortOrder } from '@Shared/Helpers'
 
-export default function ScanVulnerabilitiesTable({ vulnerabilities, hidePolicy, shouldStick }: ScanVulnerabilitiesTableProps) {
+const sortPriority = {
+    'critical': 1,
+    'high': 2,
+    'medium': 3,
+    'low': 4,
+    'unknown': 5
+}
+
+export enum SortBy {
+    SEVERITY = 'severity',
+    PACKAGE = 'package'
+}
+
+// To be replaced with Scan V2 Modal Table
+export default function ScanVulnerabilitiesTable({
+    vulnerabilities,
+    hidePolicy,
+    shouldStick,
+}: ScanVulnerabilitiesTableProps) {
+
+    const [sortConfig, setSortConfig] = useState({
+        sortBy: SortBy.SEVERITY,
+        sortOrder: SortingOrder.ASC,
+    })
+
+    const sortedVulnerabilities = vulnerabilities.sort((a, b) => {
+        return numberComparatorBySortOrder(sortPriority[a.severity], sortPriority[b.severity], sortConfig.sortOrder)
+    })
+
+    // const critical = vulnerabilities.filter((v) => v.severity === 'critical')
+    // const high = vulnerabilities.filter((v) => v.severity === 'high')
+    // const medium = vulnerabilities.filter((v) => v.severity === 'medium')
+    // const low = vulnerabilities.filter((v) => v.severity === 'low')
+    // const unknown = vulnerabilities.filter((v) => v.severity === 'unknown')
+
+    // const ascVulnerabilities = [...critical, ...high, ...medium, ...low, ...unknown]
+    // const descVulnerabilities = [...unknown, ...low, ...medium, ...high, ...critical]
+
+    const triggerSeveritySorting = () => setSortConfig({sortBy: SortBy.SEVERITY, sortOrder: sortConfig.sortOrder === SortingOrder.ASC ? SortingOrder.DESC : SortingOrder.DESC })
+
     const renderRow = (vulnerability: VulnerabilityType) => (
         <tr
             className="dc__security-tab__table-row cursor"
             onClick={(e) => {
                 window.open(`https://cve.mitre.org/cgi-bin/cvename.cgi?name=${vulnerability.name}`, '_blank')
             }}
+            key={vulnerability.name}
         >
             <td className="security-tab__cell-cve dc__cve-cell">
                 <a
@@ -37,14 +80,21 @@ export default function ScanVulnerabilitiesTable({ vulnerabilities, hidePolicy, 
                 </a>
             </td>
             <td className="security-tab__cell-severity">
-                <span className={`dc__fill-${vulnerability.severity?.toLowerCase()}`}>{vulnerability.severity}</span>
+                <span
+                    className={`severity-chip severity-chip--${vulnerability.severity?.toLowerCase()} dc__capitalize dc__w-fit-content`}
+                >
+                    {vulnerability.severity}
+                </span>
             </td>
             <td className="security-tab__cell-package">{vulnerability.package}</td>
             {/* QUERY: Do we need to add DOMPurify at any other key for this table as well? */}
             <td className="security-tab__cell-current-ver">
-                <p className="m-0 cn-9 fs-13 fw-4" dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(vulnerability.version)
-                }} />
+                <p
+                    className="m-0 cn-9 fs-13 fw-4"
+                    dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(vulnerability.version),
+                    }}
+                />
             </td>
             <td className="security-tab__cell-fixed-ver">{vulnerability.fixedVersion}</td>
             {!hidePolicy && (
@@ -60,17 +110,26 @@ export default function ScanVulnerabilitiesTable({ vulnerabilities, hidePolicy, 
     return (
         <table className="security-tab__table">
             <tbody>
-                <tr className={`security-tab__table-header ${shouldStick ? 'dc__position-sticky bcn-0 dc__zi-4 dc__top-0' : ''}`}>
+                <tr
+                    className={`security-tab__table-header ${shouldStick ? 'dc__position-sticky bcn-0 dc__zi-4 dc__top-42' : ''}`}
+                >
                     <th className="security-cell-header security-tab__cell-cve">CVE</th>
-                    <th className="security-cell-header security-tab__cell-severity">Severity</th>
+                    <th className="security-cell-header security-tab__cell-severity">
+                        <SortableTableHeaderCell
+                            title="Severity"
+                            isSorted
+                            isSortable
+                            sortOrder={sortConfig.sortOrder}
+                            triggerSorting={triggerSeveritySorting}
+                            disabled={false}
+                        />
+                    </th>
                     <th className="security-cell-header security-tab__cell-package">Package</th>
                     <th className="security-cell-header security-tab__cell-current-ver">Current Version</th>
                     <th className="security-cell-header security-tab__cell-fixed-ver">Fixed In Version</th>
-                    {!hidePolicy && (
-                        <th className="security-cell-header security-tab__cell-policy">Policy</th>
-                    )}
+                    {!hidePolicy && <th className="security-cell-header security-tab__cell-policy">Policy</th>}
                 </tr>
-                {vulnerabilities.map((vulnerability) => renderRow(vulnerability))}
+                {sortedVulnerabilities.map((vulnerability) => renderRow(vulnerability))}
             </tbody>
         </table>
     )

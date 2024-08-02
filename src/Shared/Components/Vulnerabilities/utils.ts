@@ -24,11 +24,17 @@ export const getParsedScanResult = (scanResult): LastExecutionResultType => {
     const critical = vulnerabilities
         .filter((v) => v.severity === Severity.CRITICAL)
         .sort((a, b) => sortCallback('cveName', a, b))
-    const moderate = vulnerabilities
-        .filter((v) => v.severity === Severity.MODERATE)
+    const high = vulnerabilities
+        .filter((v) => v.severity === Severity.HIGH)
+        .sort((a, b) => sortCallback('cveName', a, b))
+    const medium = vulnerabilities
+        .filter((v) => v.severity === Severity.MEDIUM)
         .sort((a, b) => sortCallback('cveName', a, b))
     const low = vulnerabilities.filter((v) => v.severity === Severity.LOW).sort((a, b) => sortCallback('cveName', a, b))
-    const sortedVulnerabilities = critical.concat(moderate, low)
+    const unknown = vulnerabilities
+        .filter((v) => v.severity === Severity.UNKNOWN)
+        .sort((a, b) => sortCallback('cveName', a, b))
+    const sortedVulnerabilities = critical.concat(medium, low, high, unknown)
 
     return {
         ...(scanResult || {}),
@@ -38,8 +44,10 @@ export const getParsedScanResult = (scanResult): LastExecutionResultType => {
                 : '',
         severityCount: {
             critical: scanResult?.severityCount?.high,
-            moderate: scanResult?.severityCount?.moderate,
+            high: scanResult?.severityCount?.high,
+            medium: scanResult?.severityCount?.moderate,
             low: scanResult?.severityCount?.low,
+            unknown: scanResult?.severityCount?.unknown,
         },
         vulnerabilities: sortedVulnerabilities.map((cve) => ({
             name: cve.cveName,

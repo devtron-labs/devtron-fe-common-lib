@@ -568,7 +568,7 @@ export enum DeploymentAppTypes {
 
 export interface VulnerabilityType {
     name: string
-    severity: 'CRITICAL' | 'MODERATE' | 'LOW'
+    severity: 'critical' | 'high' | 'medium' | 'low' | 'unknown'
     package: string
     version: string
     fixedVersion: string
