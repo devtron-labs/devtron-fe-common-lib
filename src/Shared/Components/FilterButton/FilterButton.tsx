@@ -2,7 +2,7 @@
  * Copyright (c) 2024. Devtron Inc.
  */
 
-import React, { cloneElement, useState } from 'react'
+import React, { cloneElement, useEffect, useState } from 'react'
 import ReactSelect, { MenuListProps, components } from 'react-select'
 import { Option } from '@Common/MultiSelectCustomization'
 import { OptionType } from '@Common/Types'
@@ -74,11 +74,21 @@ const FilterButton: React.FC<FilterButtonPropsType> = ({
     handleApplyChange,
     getFormattedFilterLabelValue,
     menuAlignFromRight,
+    controlWidth,
 }) => {
     const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false)
     const [selectedOptions, setSelectedOptions] = useState<OptionType[]>(
         appliedFilters.map((filter) => ({ value: filter, label: getFormattedFilterLabelValue?.(filter) || filter })),
     )
+
+    useEffect(() => {
+        setSelectedOptions(
+            appliedFilters.map((filter) => ({
+                value: filter,
+                label: getFormattedFilterLabelValue?.(filter) || filter,
+            })),
+        )
+    }, [appliedFilters])
 
     const handleMenuOpen = () => {
         setMenuIsOpen(true)
@@ -117,7 +127,7 @@ const FilterButton: React.FC<FilterButtonPropsType> = ({
                 Option,
                 ValueContainer,
             }}
-            styles={getFilterStyle(menuAlignFromRight)}
+            styles={getFilterStyle(controlWidth, menuAlignFromRight)}
             // @ts-ignore NOTE: passing this to use in FilterSelectMenuList
             handleApplyFilter={handleApply}
             menuIsOpen={menuIsOpen}

@@ -1,6 +1,6 @@
 import { CommonGroupedDropdownStyles } from '../ReactSelect'
 
-export const getFilterStyle = (menuAlignFromRight: boolean) => ({
+export const getFilterStyle = (controlWidth?: string, menuAlignFromRight?: boolean) => ({
     ...CommonGroupedDropdownStyles,
     menu: (base) => ({
         ...base,
@@ -9,8 +9,16 @@ export const getFilterStyle = (menuAlignFromRight: boolean) => ({
     }),
     control: (base, state) => ({
         ...CommonGroupedDropdownStyles.control(base, state),
-        width: 'max-content',
-        maxWidth: '200px',
-        minWidth: '150px',
+        maxHeight: '36px',
+        minHeight: '36px',
+        fontSize: '12px',
+        paddingLeft: '8px',
+        width: controlWidth || '150px',
+    }),
+    container: (base) => ({
+        ...base,
+        height: '36px',
+        width: controlWidth || '150px',
+        maxHeight: '36px',
     }),
 })
