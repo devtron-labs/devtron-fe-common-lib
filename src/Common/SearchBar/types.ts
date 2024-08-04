@@ -55,4 +55,8 @@ export interface SearchBarProps {
      * Hide the background and border of the search
      */
     noBackgroundAndBorder?: boolean
+    /**
+     * Height of the Search bar
+     */
+    height?: '32' | '36'
 }

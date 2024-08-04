@@ -65,6 +65,7 @@ const SearchBar = ({
     debounceTimeout = 300,
     dataTestId = 'search-bar',
     noBackgroundAndBorder = false,
+    height = '32',
 }: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
     const inputRef = useRef<HTMLInputElement>()
@@ -116,7 +117,7 @@ const SearchBar = ({
     return (
         <div className={containerClassName}>
             <div
-                className={`search-bar ${noBackgroundAndBorder ? 'dc__no-border dc__no-background dc__hover-n50' : 'bc-n50 en-2 dc__hover-border-n300'} focus-within-border-b5 dc__block w-100 min-w-200 dc__position-rel br-4 bw-1 h-32`}
+                className={`search-bar ${noBackgroundAndBorder ? 'dc__no-border dc__no-background dc__hover-n50' : 'bc-n50 en-2 dc__hover-border-n300'} focus-within-border-b5 dc__block w-100 min-w-200 dc__position-rel br-4 bw-1 h-${height}`}
             >
                 <Search className="search-bar__icon dc__position-abs icon-color-n6 icon-dim-16" />
                 <input
