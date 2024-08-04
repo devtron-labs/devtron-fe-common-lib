@@ -8,4 +8,5 @@ export interface FilterButtonPropsType {
     disabled?: boolean
     getFormattedFilterLabelValue?: (identifier: string) => string
     menuAlignFromRight?: boolean
+    controlWidth?: string
 }
