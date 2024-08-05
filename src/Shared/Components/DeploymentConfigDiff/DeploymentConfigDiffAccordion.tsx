@@ -6,13 +6,13 @@ import { Collapse } from '../Collapse'
 import { DeploymentConfigDiffAccordionProps } from './types'
 
 export const DeploymentConfigDiffAccordion = forwardRef<HTMLDivElement, DeploymentConfigDiffAccordionProps>(
-    ({ hasDiff, children, title, id, isExpanded, handleOnClick }, ref) => (
+    ({ hasDiff, children, title, id, isExpanded, onClick, onTransitionEnd }, ref) => (
         <div ref={ref} id={id} className="dc__border br-4 deployment-config-diff__accordion">
             <button
                 type="button"
                 className="dc__unset-button-styles px-16 py-10 flexbox dc__align-items-center dc__gap-8 w-100 br-4 bcn-50 dc__position-sticky dc__top-0 dc__zi-10"
                 aria-label="expand-collapse-btn"
-                onClick={handleOnClick}
+                onClick={onClick}
             >
                 <ICCaretDown
                     className="icon-dim-16 fsn-6 rotate"
@@ -23,7 +23,9 @@ export const DeploymentConfigDiffAccordion = forwardRef<HTMLDivElement, Deployme
                     className={`m-0 fs-13 lh-20 fw-6 ${hasDiff ? 'cy-7' : 'cg-7'}`}
                 >{`${hasDiff ? 'Has' : 'No'} difference`}</p>
             </button>
-            <Collapse expand={isExpanded}>{children}</Collapse>
+            <Collapse expand={isExpanded} onTransitionEnd={onTransitionEnd}>
+                {children}
+            </Collapse>
         </div>
     ),
 )

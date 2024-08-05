@@ -29,6 +29,13 @@ export const DeploymentConfigDiffMain = ({
         })
     }
 
+    const handleTransitionEnd = () => {
+        if (scrollIntoViewId) {
+            const element = document.querySelector(`#${scrollIntoViewId}`)
+            element?.scrollIntoView({ block: 'start' })
+        }
+    }
+
     useEffect(() => {
         if (!isLoading) {
             setExpandedView(
@@ -114,7 +121,8 @@ export const DeploymentConfigDiffMain = ({
                     title={title}
                     isExpanded={expandedView[id]}
                     hasDiff={hasDiff}
-                    handleOnClick={handleAccordionClick(id)}
+                    onClick={handleAccordionClick(id)}
+                    onTransitionEnd={handleTransitionEnd}
                 >
                     {isDeploymentTemplate ? (
                         <>

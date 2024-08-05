@@ -3,6 +3,7 @@ import { SortingOrder } from '@Common/Constants'
 import { DeploymentHistoryDetail } from '../CICDHistory'
 import { CollapsibleListConfig, CollapsibleListItem } from '../CollapsibleList'
 import { SelectPickerProps } from '../SelectPicker'
+import { CollapseProps } from '../Collapse'
 
 export interface DeploymentConfigType {
     list: DeploymentHistoryDetail
@@ -74,11 +75,11 @@ export interface DeploymentConfigDiffMainProps
         'isLoading' | 'headerText' | 'configList' | 'scrollIntoViewId' | 'selectorsConfig' | 'sortingConfig'
     > {}
 
-export interface DeploymentConfigDiffAccordionProps {
+export interface DeploymentConfigDiffAccordionProps extends Pick<CollapseProps, 'onTransitionEnd'> {
     id: string
     title: string
     children: React.ReactNode
     hasDiff?: boolean
     isExpanded?: boolean
-    handleOnClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }

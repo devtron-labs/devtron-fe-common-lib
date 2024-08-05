@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 
 import { CollapseProps } from './types'
 
-export const Collapse = ({ expand, children }: CollapseProps) => {
+export const Collapse = ({ expand, onTransitionEnd, children }: CollapseProps) => {
     const ref = useRef<HTMLDivElement>(null)
     const [contentHeight, setContentHeight] = useState(0)
 
@@ -16,10 +16,10 @@ export const Collapse = ({ expand, children }: CollapseProps) => {
         <div
             style={{
                 height: expand ? contentHeight : 0,
-                transitionProperty: 'height',
-                transitionDuration: '0.3s',
+                transition: 'height 200ms ease-out',
                 overflow: 'hidden',
             }}
+            onTransitionEnd={onTransitionEnd}
         >
             <div ref={ref}>{children}</div>
         </div>
