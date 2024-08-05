@@ -262,7 +262,7 @@ const GitCommitInfoGeneric = ({
                                 data-testid={`${_lowerCaseCommitInfo.message.trim()}-${isExcluded ? 'excluded' : 'included'}`}
                                 className="material-history__text lh-20 flex left dc__gap-8 top material-history-text--padded dc__word-break-all"
                             >
-                                <span className="fs-13 fw-6 lh-20 cn-9 dc__ellipsis-right__3rd-line">
+                                <span className="fs-13 fw-6 lh-20 cn-9  dc__truncate--clamp-3">
                                     {_lowerCaseCommitInfo.message}
                                 </span>
                             </div>
