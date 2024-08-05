@@ -246,7 +246,7 @@ const GitCommitInfoGeneric = ({
                                             </div>
                                         </a>
                                         <span
-                                            className="git-commit-info-generic__copy dc__visibility-hidden"
+                                            className="git-commit-info-generic__copy dc__visibility-hidden p-2"
                                             data-testid="git-commit-copy"
                                         >
                                             <ClipboardButton content={_lowerCaseCommitInfo.commit} />
@@ -261,7 +261,9 @@ const GitCommitInfoGeneric = ({
                                 data-testid={`${_lowerCaseCommitInfo.message.trim()}-${isExcluded ? 'excluded' : 'included'}`}
                                 className="material-history__text lh-20 flex left dc__gap-8 top material-history-text--padded dc__word-break-all"
                             >
-                                <span className="fs-13 fw-6 lh-20 cn-9">{_lowerCaseCommitInfo.message}</span>
+                                <span className="fs-13 fw-6 lh-20 cn-9 dc__ellipsis-right__3rd-line">
+                                    {_lowerCaseCommitInfo.message}
+                                </span>
                             </div>
                         ) : null}
                         <div className="flexbox-col dc__gap-4">

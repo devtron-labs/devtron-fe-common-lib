@@ -47,7 +47,7 @@ export default function ClipboardButton({
     const handleDisableTippy = () => setEnableTippy(false)
     const handleCopyContent = useCallback(
         (e?) => {
-            stopPropagation(e)
+           if(e) stopPropagation(e)
             copyToClipboard(content, handleTextCopied)
         },
         [content],

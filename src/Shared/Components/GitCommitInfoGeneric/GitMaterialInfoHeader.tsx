@@ -48,7 +48,10 @@ const GitMaterialInfoHeader = ({
         >
             <div className={getGitIcon(repoUrl)} />
             <div className="flex left left dc__gap-4 fs-13">
-                <div className="repo cn-9 fw-6" data-testid={`deployment-history-source-code-repo${index}`}>
+                <div
+                    className="repo cn-9 fw-6 dc__mxw-250 dc__ellipsis-right"
+                    data-testid={`deployment-history-source-code-repo${index}`}
+                >
                     {repo}
                 </div>
                 <div className="branch flex left cn-7 dc__gap-4">

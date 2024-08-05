@@ -18,7 +18,13 @@ import { SourceTypeMap } from '../../../Common'
 import { GitCommitInfoGeneric } from '../GitCommitInfoGeneric'
 import { MaterialHistoryProps } from './types'
 
-const MaterialHistory = ({ material, pipelineName, ciPipelineId, selectCommit }: MaterialHistoryProps) => {
+const MaterialHistory = ({
+    material,
+    pipelineName,
+    ciPipelineId,
+    selectCommit,
+    isCommitInfoModal,
+}: MaterialHistoryProps) => {
     const onClickMaterialHistory = (e, _commitId, isExcluded) => {
         e.stopPropagation()
         if (selectCommit && !isExcluded) {
@@ -53,10 +59,12 @@ const MaterialHistory = ({ material, pipelineName, ciPipelineId, selectCommit }:
                 const historyList = materialHistoryMapWithTime[date]
                 return (
                     <>
-                        <div className="flex left dc__gap-8">
-                            <span className="fs-12 lh-18 cn-7 fw-6 w-126">{date}</span>
-                            <div className="h-1 bcn-2 w-100" />
-                        </div>
+                        {!isCommitInfoModal && (
+                            <div className="flex left dc__gap-8">
+                                <span className="fs-12 lh-18 cn-7 fw-6 w-126">{date}</span>
+                                <div className="h-1 bcn-2 w-100" />
+                            </div>
+                        )}
 
                         {historyList?.map((history, index) => {
                             const _commitId =
@@ -68,7 +76,7 @@ const MaterialHistory = ({ material, pipelineName, ciPipelineId, selectCommit }:
                                 <div
                                     data-testid={`material-history-${index}`}
                                     key={_commitId}
-                                    className={`material-history w-auto cursor ${history.isSelected ? 'material-history-selected' : ''}`}
+                                    className={`material-history w-auto cursor ${!history.excluded && !isCommitInfoModal ? 'cursor material-history__box-shadow' : ''} ${history.isSelected ? 'material-history-selected' : ''}`}
                                     onClick={(e) => onClickMaterialHistory(e, _commitId, history.excluded)}
                                 >
                                     <GitCommitInfoGeneric
