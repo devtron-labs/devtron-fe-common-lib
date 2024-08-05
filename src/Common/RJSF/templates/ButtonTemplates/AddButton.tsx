@@ -17,7 +17,6 @@
 import { IconButtonProps } from '@rjsf/utils'
 
 import Tippy from '../../../Tippy'
-import { ADD_BUTTON_WIDTH } from '../../constants'
 import { ReactComponent as PlusIcon } from '../../../../Assets/Icon/ic-add.svg'
 
 export const AddButton = ({
@@ -37,12 +36,11 @@ export const AddButton = ({
                 arrow={false}
                 placement="right"
                 content={content}
-                truncateWidth={ADD_BUTTON_WIDTH.MAX_WIDTH_VALUE}
             >
                 <button
                     {...props}
                     type="button"
-                    className={`dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor ${ADD_BUTTON_WIDTH.MAX_WIDTH_CLASSNAME}`}
+                    className="dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor dc__mxw-250"
                     title="Add"
                 >
                     <PlusIcon className="icon-dim-16 fcb-5" />

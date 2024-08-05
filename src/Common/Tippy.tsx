@@ -1,24 +1,21 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useState, Children, cloneElement } from 'react'
 import TippyJS, { TippyProps as TippyJSProps } from '@tippyjs/react'
 
-// TODO: we should generalize this Tippy to work without sending in this truncateWidth
-const Tippy = ({ truncateWidth = 0, children, ...rest }: TippyJSProps & Record<'truncateWidth', number>) => {
-    // NOTE: if showOnTruncate is off then always showTippy
-    const [showTippy, setShowTippy] = useState(!!truncateWidth)
-    const ref = useRef(null)
+const Tippy = ({ children, ...rest }: TippyJSProps) => {
+    const [showTippy, setShowTippy] = useState(false)
 
-    useEffect(() => {
-        if (truncateWidth) {
-            setShowTippy(ref.current?.offsetWidth >= truncateWidth)
+    const refCallback = useCallback((node: HTMLDivElement) => {
+        if (node) {
+            setShowTippy(node.scrollWidth > node.clientWidth)
         }
-    }, [ref.current?.offsetWidth])
+    }, [])
+
+    const child = Children.only(children)
 
     return !showTippy ? (
-        children
+        cloneElement(child, { ...child.props, ref: refCallback })
     ) : (
-        <TippyJS {...rest}>
-            <span ref={ref}>{children}</span>
-        </TippyJS>
+        <TippyJS {...rest}>{cloneElement(child, { ...child.props, ref: refCallback })}</TippyJS>
     )
 }
 

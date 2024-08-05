@@ -138,16 +138,8 @@ export const getInferredTypeFromValueType = (value) => {
 }
 
 export const getTippyWrapperWithContent =
-    (content, placement?: React.ComponentProps<typeof Tippy>['placement'], truncateWidth = 0) =>
-    (children) => (
-        <Tippy
-            className="default-tt"
-            maxWidth={300}
-            arrow={false}
-            placement={placement || 'right'}
-            content={content}
-            truncateWidth={truncateWidth}
-        >
+    (content, placement?: React.ComponentProps<typeof Tippy>['placement']) => (children) => (
+        <Tippy className="default-tt" maxWidth={300} arrow={false} placement={placement || 'right'} content={content}>
             {children}
         </Tippy>
     )
