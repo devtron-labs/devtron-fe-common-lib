@@ -707,3 +707,11 @@ export const decode = (data, isEncoded: boolean = false) =>
             agg[curr.key] = curr.value
             return agg
         }, {})
+
+export const getFileNameFromHeaders = (headers: Headers) =>
+    headers
+        ?.get('content-disposition')
+        ?.split(';')
+        ?.find((n) => n.includes('filename='))
+        ?.replace('filename=', '')
+        .trim()

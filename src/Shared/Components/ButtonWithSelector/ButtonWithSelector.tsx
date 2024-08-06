@@ -19,6 +19,7 @@ import { ReactComponent as ICDropdown } from '../../../Assets/Icon/ic-chevron-do
 import { PopupMenu } from '../../../Common'
 import { ButtonWithSelectorProps } from './types'
 import './buttonWithSelector.scss'
+import { ButtonWithLoader } from '../ButtonWithLoader'
 
 /**
  * Button With Selector
@@ -42,19 +43,21 @@ const ButtonWithSelector = ({
     popUpBodyClassName = '',
     showPopUp = true,
     disabled = false,
+    isLoading = false,
 }: ButtonWithSelectorProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
 
     return (
         <div className="flexbox bcb-5 br-4">
-            <button
-                className={`cta flex h-28 ${showPopUp ? 'dc__no-right-radius' : ''} dc__no-border-imp fs-12 fw-6 lh-20-imp ${className}`}
+            <ButtonWithLoader
+                isLoading={isLoading}
+                rootClassName={`cta flex h-28 ${showPopUp ? 'dc__no-right-radius' : ''} dc__no-border-imp fs-12 fw-6 lh-20-imp ${className}`}
                 type="button"
                 onClick={onClick}
-                disabled={disabled}
+                disabled={isLoading || disabled}
             >
                 {content}
-            </button>
+            </ButtonWithLoader>
             {showPopUp && (
                 <PopupMenu autoClose autoPosition onToggleCallback={setIsMenuOpen}>
                     <PopupMenu.Button
