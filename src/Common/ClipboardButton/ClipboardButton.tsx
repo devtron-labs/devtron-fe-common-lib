@@ -46,6 +46,7 @@ export default function ClipboardButton({
     const handleEnableTippy = () => setEnableTippy(true)
     const handleDisableTippy = () => setEnableTippy(false)
     const handleCopyContent = useCallback(() => copyToClipboard(content, handleTextCopied), [content])
+    const iconClassName = `icon-dim-${iconSize} dc__no-shrink`
 
     useEffect(() => {
         if (!copied) return
@@ -65,28 +66,22 @@ export default function ClipboardButton({
         }
     }, [trigger, handleCopyContent])
     return (
-        <div className="icon-dim-16 flex center">
-            <Tippy
-                className="default-tt"
-                content={copied ? copiedTippyText : 'Copy'}
-                placement="bottom"
-                visible={copied || enableTippy}
-                arrow={false}
+        <Tippy
+            className="default-tt"
+            content={copied ? copiedTippyText : 'Copy'}
+            placement="bottom"
+            visible={copied || enableTippy}
+            arrow={false}
+        >
+            <button
+                type="button"
+                className={`dc__outline-none-imp p-0 flex bcn-0 dc__no-border ${rootClassName}`}
+                onMouseEnter={handleEnableTippy}
+                onMouseLeave={handleDisableTippy}
+                onClick={handleCopyContent}
             >
-                <button
-                    type="button"
-                    className={`dc__outline-none-imp p-0 flex bcn-0 dc__no-border ${rootClassName}`}
-                    onMouseEnter={handleEnableTippy}
-                    onMouseLeave={handleDisableTippy}
-                    onClick={handleCopyContent}
-                >
-                    {copied ? (
-                        <Check className={`icon-dim-${iconSize}`} />
-                    ) : (
-                        <ICCopy className={`icon-dim-${iconSize}`} />
-                    )}
-                </button>
-            </Tippy>
-        </div>
+                {copied ? <Check className={iconClassName} /> : <ICCopy className={iconClassName} />}
+            </button>
+        </Tippy>
     )
 }
