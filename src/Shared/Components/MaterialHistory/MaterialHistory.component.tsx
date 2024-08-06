@@ -76,7 +76,7 @@ const MaterialHistory = ({
                                 <div
                                     data-testid={`material-history-${index}`}
                                     key={_commitId}
-                                    className={`material-history w-auto cursor ${!history.excluded && !isCommitInfoModal ? 'cursor material-history__box-shadow' : ''} ${history.isSelected ? 'material-history-selected' : ''}`}
+                                    className={`material-history w-auto ${!history.excluded && !isCommitInfoModal ? 'cursor material-history__box-shadow' : ''} ${history.isSelected ? 'material-history-selected' : ''}`}
                                     onClick={(e) => onClickMaterialHistory(e, _commitId, history.excluded)}
                                 >
                                     <GitCommitInfoGeneric
