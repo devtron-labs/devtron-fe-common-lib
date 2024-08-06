@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, TransitionEvent, useEffect, useState } from 'react'
 
 import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { ReactComponent as ICSort } from '@Icons/ic-arrow-up-down.svg'
@@ -29,8 +29,8 @@ export const DeploymentConfigDiffMain = ({
         })
     }
 
-    const handleTransitionEnd = () => {
-        if (scrollIntoViewId) {
+    const handleTransitionEnd = (id: string) => (e: TransitionEvent<HTMLDivElement>) => {
+        if (e.target === e.currentTarget && scrollIntoViewId === id) {
             const element = document.querySelector(`#${scrollIntoViewId}`)
             element?.scrollIntoView({ block: 'start' })
         }
@@ -63,6 +63,7 @@ export const DeploymentConfigDiffMain = ({
                         ) : (
                             configItem.text
                         )}
+                        {index !== list.length - 1 && <span className="cn-9 fs-13 lh-20">/</span>}
                     </Fragment>
                 )
             }
@@ -122,7 +123,7 @@ export const DeploymentConfigDiffMain = ({
                     isExpanded={expandedView[id]}
                     hasDiff={hasDiff}
                     onClick={handleAccordionClick(id)}
-                    onTransitionEnd={handleTransitionEnd}
+                    onTransitionEnd={handleTransitionEnd(id)}
                 >
                     {isDeploymentTemplate ? (
                         <>
@@ -164,12 +165,12 @@ export const DeploymentConfigDiffMain = ({
     return (
         <div className="bcn-0 deployment-config-diff__main-top">
             <div className="dc__border-bottom-n1 flexbox dc__align-items-center dc__position-sticky dc__top-0 bcn-0 w-100 dc__zi-11">
-                <div className="flexbox dc__align-items-center p-12 dc__gap-4 deployment-config-diff__main-top__header">
+                <div className="flexbox dc__align-items-center p-12 dc__gap-8 deployment-config-diff__main-top__header">
                     <p className="m-0 cn-9 fs-13 lh-20">{headerText}</p>
                     {renderHeaderSelectors(selectorsConfig.primaryConfig)}
                 </div>
                 <div className="dc__border-left flexbox dc__align-items-center deployment-config-diff__main-top__header">
-                    <div className="flex-grow-1 flexbox dc__align-items-center dc__gap-4 p-12">
+                    <div className="flex-grow-1 flexbox dc__align-items-center dc__gap-8 p-12">
                         {renderHeaderSelectors(selectorsConfig.secondaryConfig)}
                     </div>
                     {renderSortButton()}

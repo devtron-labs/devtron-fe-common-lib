@@ -25,11 +25,11 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                     <div className="flexbox dc__align-items-center dc__gap-4 py-6 px-8 br-4 dc__hover-n50">
                         <button
                             type="button"
-                            className="dc__unset-button-styles mw-none flexbox dc__align-items-center flex-grow-1 p-0 cn-9 fs-12 lh-1-5 fw-6 dc__gap-4"
+                            className="dc__unset-button-styles mw-none flexbox dc__align-items-center flex-grow-1 p-0 cn-9 fs-13 lh-1-5 fw-6 dc__gap-4"
                             onClick={(e) => onCollapseBtnClick(id, e)}
                         >
                             <ICExpand
-                                className="icon-dim-16 fcn-6 dc__no-shrink cursor rotate"
+                                className="icon-dim-20 fcn-6 dc__no-shrink cursor rotate"
                                 style={{ ['--rotateBy' as string]: isExpanded ? '90deg' : '0deg' }}
                             />
                             <span className="flex-grow-1 dc__align-left dc__truncate">{header}</span>
@@ -46,14 +46,14 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                                 >
                                     <headerIconConfig.Icon
                                         {...headerIconConfig.props}
-                                        className={`icon-dim-16 ${headerIconConfig.props?.className || ''}`}
+                                        className={`icon-dim-20 ${headerIconConfig.props?.className || ''}`}
                                     />
                                 </button>
                             </ConditionalWrap>
                         )}
                     </div>
                     <Collapse expand={isExpanded}>
-                        <div className="collapsible ml-16 pl-4 dc__border-left">
+                        <div className="collapsible ml-18 pl-4 dc__border-left">
                             {!items.length ? (
                                 <div className="collapsible__item flexbox dc__gap-8 dc__no-decor no-hover br-4 py-6 px-8">
                                     <span className="collapsible__item__title dc__truncate fs-13 lh-20 cn-5">
@@ -89,7 +89,7 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                                             >
                                                 <iconConfig.Icon
                                                     {...iconConfig.props}
-                                                    className={`icon-dim-16 dc__no-shrink cursor ${iconConfig.props?.className || ''}`}
+                                                    className={`icon-dim-20 dc__no-shrink cursor ${iconConfig.props?.className || ''}`}
                                                 />
                                             </ConditionalWrap>
                                         )}

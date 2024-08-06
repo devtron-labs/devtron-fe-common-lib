@@ -78,7 +78,7 @@ export const DeploymentConfigDiffNavigation = ({
                     onClick={onClick}
                 >
                     <span className="dc__truncate">{title}</span>
-                    {hasDiff && <ICDiffFileUpdated className="icon-dim-16 dc__no-shrink" />}
+                    {hasDiff && <ICDiffFileUpdated className="icon-dim-20 dc__no-shrink" />}
                 </NavLink>
             ))}
             <CollapsibleList config={collapsibleListConfig} onCollapseBtnClick={onCollapseBtnClick} />
