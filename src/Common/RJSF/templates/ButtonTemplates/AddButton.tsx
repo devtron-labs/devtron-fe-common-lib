@@ -32,6 +32,7 @@ export const AddButton = ({
     return (
         <div className="flexbox flex-justify-start">
             <Tippy
+                showOnTruncate
                 className="default-tt dc__word-break"
                 arrow={false}
                 placement="right"

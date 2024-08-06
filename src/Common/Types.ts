@@ -19,6 +19,7 @@ import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
 import { RegistryType } from '../Shared'
+import { TippyProps as TippyJSProps } from '@tippyjs/react'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -935,3 +936,7 @@ export interface EnvironmentHelmResult {
 }
 
 export type EnvironmentListHelmResponse = ResponseType<EnvironmentListHelmResult[]>
+
+export interface TippyProps extends TippyJSProps {
+    showOnTruncate?: boolean
+}

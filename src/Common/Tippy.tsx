@@ -1,11 +1,12 @@
 import { useCallback, useState, Children, cloneElement } from 'react'
-import TippyJS, { TippyProps as TippyJSProps } from '@tippyjs/react'
+import TippyJS from '@tippyjs/react'
+import { TippyProps } from './Types'
 
-const Tippy = ({ children, ...rest }: TippyJSProps) => {
+const Tippy = ({ showOnTruncate = false, children, ...rest }: TippyProps) => {
     const [showTippy, setShowTippy] = useState(false)
 
     const refCallback = useCallback((node: HTMLDivElement) => {
-        if (node) {
+        if (node && showOnTruncate) {
             setShowTippy(node.scrollWidth > node.clientWidth)
         }
     }, [])
