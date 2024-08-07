@@ -254,8 +254,15 @@ export const validateUniqueKeys = (keys: string[]) => {
     }
 }
 
-export const validateSematicVersioning = (version: string): ValidationResponseType => {
-    if (!/^.{0,128}$/.test(version)) {
+export const validateSemanticVersioning = (version: string): ValidationResponseType => {
+    if (!version) {
+        return {
+            isValid: false,
+            message: 'Please provide a version',
+        }
+    }
+
+    if (version.length > 128) {
         return {
             isValid: false,
             message: MESSAGES.getMaxCharMessage(128),
