@@ -44,5 +44,9 @@ export interface SortableTableHeaderCellProps {
      * @default true
      */
     isSortable?: boolean
+    /**
+     * If true, the tippy is shown on Sortable header if text is truncated
+     * @default false
+     */
     showTippyOnTruncate?: boolean
 }
