@@ -420,3 +420,16 @@ export enum ComponentSizeType {
     medium = 'medium',
     large = 'large',
 }
+
+/**
+ * Identifiers for grouped / all resources
+ */
+export enum SelectAllGroupedResourceIdentifiers {
+    // Projects
+    allProjects = '-1',
+
+    // Environments
+    allExistingAndFutureNonProdEnvironments = '-1',
+    allExistingAndFutureProdEnvironments = '-2',
+    allExistingAndFutureEnvironments = '-3',
+}
