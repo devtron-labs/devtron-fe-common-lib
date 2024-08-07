@@ -105,10 +105,11 @@ export interface KeyValueTableProps<K extends string> {
     /**
      * The function to use to validate the value of the cell.
      * @param value - The value to validate.
+     * @param key - The row key of the value.
      * @returns Return true if the value is valid, otherwise false
      * and set `showError` to `true` and provide errorMessages array to show error message.
      */
-    validationSchema?: (value: string) => boolean
+    validationSchema?: (value: string, key: K) => boolean
     /**
      * An array of error messages to be displayed in the cell error tooltip.
      */
