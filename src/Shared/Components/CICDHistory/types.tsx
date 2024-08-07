@@ -25,6 +25,7 @@ import {
     DeploymentAppTypes,
     ResponseType,
     PaginationProps,
+    SortingOrder,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
 import { AggregationKeys, GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
@@ -436,6 +437,7 @@ export interface DeploymentTemplateHistoryType {
     isDeleteDraft?: boolean
     rootClassName?: string
     comparisonBodyClassName?: string
+    sortOrder?: SortingOrder
 }
 export interface DeploymentHistoryDetailRes extends ResponseType {
     result?: DeploymentHistoryDetail
