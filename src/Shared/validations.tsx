@@ -34,7 +34,7 @@ export const MESSAGES = {
 const MAX_DESCRIPTION_LENGTH = 350
 
 export const requiredField = (value: string): ValidationResponseType => {
-    if (!value) {
+    if (!value?.trim()) {
         return { message: 'This field is required', isValid: false }
     }
     return { isValid: true }

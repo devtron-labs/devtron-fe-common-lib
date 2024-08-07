@@ -15,4 +15,5 @@
  */
 
 export * from './UsePrompt'
+export * from './useGetResourceKindsOptions'
 export * from './UseDownload'

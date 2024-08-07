@@ -95,6 +95,8 @@ export const ROUTES = {
     CONFIG_CD_PIPELINE: 'config/cd-pipeline',
     MODULE_CONFIGURED: 'module/config',
     RESOURCE_HISTORY_DEPLOYMENT: 'resource/history/deployment',
+    APP_LIST_MIN: 'app/min',
+    CLUSTER_LIST_MIN: 'cluster/autocomplete',
     PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
     PLUGIN_GLOBAL_LIST_V2: 'plugin/global/list/v2',
     PLUGIN_GLOBAL_LIST_TAGS: 'plugin/global/list/tags',
