@@ -608,7 +608,7 @@ export interface DeploymentHistory {
 
 type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE_GREEN'
 
-interface DeploymentStrategy {
+export interface DeploymentStrategy {
     deploymentTemplate: DeploymentStrategyType
     config: any
     default: boolean
