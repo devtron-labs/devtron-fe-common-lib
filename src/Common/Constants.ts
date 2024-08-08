@@ -98,7 +98,7 @@ export const ROUTES = {
     PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
     PLUGIN_GLOBAL_LIST_V2: 'plugin/global/list/v2',
     PLUGIN_GLOBAL_LIST_TAGS: 'plugin/global/list/tags',
-    PLUGIN_LIST_MIN: 'plugin/global/list/min',
+    PLUGIN_LIST_MIN: 'plugin/global/list/v2/min',
 }
 
 export enum KEY_VALUE {

@@ -96,33 +96,5 @@ export const getAvailablePluginTags = async (appId: number): Promise<string[]> =
     }
 }
 
-// TODO: Remove this mock data and implement the actual API call
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getParentPluginList = async (appId?: number): Promise<ResponseType<MinParentPluginDTO[]>> => {
-    // get<MinParentPluginDTO[]>(getUrlWithSearchParams(ROUTES.PLUGIN_LIST_MIN, { appId }))
-    // eslint-disable-next-line no-promise-executor-return
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    const mockData: MinParentPluginDTO[] = [
-        {
-            id: 1,
-            pluginName: 'Mock Plugin 1',
-            icon: 'https://via.placeholder.com/150',
-        },
-        {
-            id: 2,
-            pluginName: 'Mock Plugin 2',
-            icon: 'https://via.placeholder.com/150',
-        },
-        {
-            id: 3,
-            pluginName: 'Mock Plugin 3',
-            icon: 'https://via.placeholder.com/150',
-        },
-        {
-            id: 4,
-            pluginName: 'Mock Plugin 4',
-            icon: 'https://via.placeholder.com/150',
-        },
-    ]
-    return Promise.resolve({ result: mockData, status: 'OK', code: 200 })
-}
+export const getParentPluginList = async (appId?: number): Promise<ResponseType<MinParentPluginDTO[]>> =>
+    get<MinParentPluginDTO[]>(getUrlWithSearchParams(ROUTES.PLUGIN_LIST_MIN, { appId }))
