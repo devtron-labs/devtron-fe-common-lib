@@ -437,6 +437,7 @@ export enum ResourceVersionType {
 
 export enum PolicyKindType {
     lockConfiguration = 'lock-configuration',
+    imagePromotion = 'lock-configuration',
 }
 
 export interface LastExecutionResultType {
