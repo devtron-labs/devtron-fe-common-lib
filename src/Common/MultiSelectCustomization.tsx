@@ -139,7 +139,6 @@ export const MultiValueRemove = (props) => {
     const {
         data,
         innerProps: { onClick, onMouseDown },
-        selectProps,
     } = props
     return (
         <components.MultiValueRemove {...props}>
