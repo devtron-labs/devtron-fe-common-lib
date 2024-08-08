@@ -63,11 +63,13 @@ const EditImageFormField = ({
     }
 
     const handleReset = (newURL?: string) => {
-        handleLastPreviewedURLChange(newURL ?? lastPreviewedURL)
-        handleURLChange(newURL ?? lastPreviewedURL)
+        const targetURL = newURL ?? lastPreviewedURL
+        handleLastPreviewedURLChange(targetURL)
+        handleURLChange(targetURL)
         handleError('')
         setIsEditing(false)
         setIsLoading(false)
+        setEmptyPreviewURLErrorMessage('')
     }
 
     const handleSuccess = () => {
@@ -111,7 +113,7 @@ const EditImageFormField = ({
 
             const blob = await response.blob()
             if (blob.size > DEFAULT_MAX_IMAGE_SIZE) {
-                throw new Error(`Please add an image smaller than ${DEFAULT_MAX_IMAGE_SIZE} bytes`)
+                throw new Error(`Please add an image smaller than ${DEFAULT_MAX_IMAGE_SIZE / (1024 * 1024)} MB`)
             }
 
             const src = URL.createObjectURL(blob)
