@@ -129,8 +129,7 @@ interface ConditionDetails {
     conditionalValue: string
 }
 
-// FIXME: mountCodeToContainerPath is not here :/
-interface InlineStepDetailType {
+export interface InlineStepDetailType {
     scriptType: ScriptType
     isMountCustomScript?: boolean
     script?: string
@@ -149,6 +148,8 @@ interface InlineStepDetailType {
     inputVariables?: VariableType[]
     outputVariables?: VariableType[]
     conditionDetails: ConditionDetails[]
+    storeScriptAt?: string
+    mountCodeToContainerPath?: string
 }
 
 interface PluginRefStepDetailType {
