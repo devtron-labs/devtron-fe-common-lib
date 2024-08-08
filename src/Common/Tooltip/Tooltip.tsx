@@ -3,8 +3,9 @@ import TippyJS from '@tippyjs/react'
 import { TooltipProps } from './types'
 
 const Tooltip = ({
-    alwaysShowTippyOnHover = false,
-    showOnTruncate = !alwaysShowTippyOnHover,
+    alwaysShowTippyOnHover,
+    // NOTE: if alwaysShowTippyOnHover is being passed by user don't apply truncation logic at all
+    showOnTruncate = alwaysShowTippyOnHover === undefined,
     wordBreak = true,
     children: child,
     ...rest
