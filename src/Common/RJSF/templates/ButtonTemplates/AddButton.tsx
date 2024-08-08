@@ -38,7 +38,7 @@ export const AddButton = ({
                 title="Add"
             >
                 <PlusIcon className="icon-dim-16 fcb-5" />
-                <Tooltip showOnTruncate placement="right" content={content}>
+                <Tooltip placement="right" content={content}>
                     <span className="cb-5 fs-13 lh-34 dc__truncate">{content}</span>
                 </Tooltip>
             </button>
