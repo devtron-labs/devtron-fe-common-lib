@@ -69,6 +69,7 @@ export interface PluginDetailServiceParamsType {
      * @default true
      */
     shouldShowError?: boolean
+    signal?: AbortSignal
 }
 
 export interface PluginDetailPayloadType extends Pick<PluginDetailServiceParamsType, 'appId'> {

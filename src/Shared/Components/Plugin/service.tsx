@@ -17,6 +17,7 @@ export const getPluginsDetail = async ({
     appId,
     parentPluginIds,
     pluginIds,
+    signal,
     shouldShowError = true,
 }: PluginDetailServiceParamsType): Promise<Pick<GetPluginStoreDataReturnType, 'pluginStore'>> => {
     try {
@@ -28,6 +29,7 @@ export const getPluginsDetail = async ({
 
         const { result } = await get<PluginDetailDTO>(
             getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_DETAIL_V2, payload),
+            { signal },
         )
 
         const pluginStore = parsePluginDetailsDTOIntoPluginStore(result?.parentPlugins)
@@ -36,7 +38,7 @@ export const getPluginsDetail = async ({
             pluginStore,
         }
     } catch (error) {
-        if (shouldShowError) {
+        if (shouldShowError && !getIsRequestAborted(error)) {
             showError(error)
         }
         throw error
