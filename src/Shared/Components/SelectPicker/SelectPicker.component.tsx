@@ -126,6 +126,7 @@ const SelectPicker = ({
     disabledTippyContent,
     showSelectedOptionsCount = false,
     menuSize,
+    menuPosition = 'fixed',
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
@@ -208,7 +209,7 @@ const SelectPicker = ({
                             }}
                             styles={selectStyles}
                             menuPlacement="auto"
-                            menuPosition="fixed"
+                            menuPosition={menuPosition}
                             menuShouldScrollIntoView
                             backspaceRemovesValue={false}
                             aria-errormessage={errorElementId}

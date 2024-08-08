@@ -54,6 +54,7 @@ export interface SelectPickerProps
             | 'required'
             | 'isOptionDisabled'
             | 'placeholder'
+            | 'menuPosition'
         >,
         Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> {
     /**
