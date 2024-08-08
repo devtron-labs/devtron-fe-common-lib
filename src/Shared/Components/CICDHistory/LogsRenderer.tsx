@@ -193,6 +193,9 @@ export const LogsRenderer = ({
             // eslint-disable-next-line no-param-reassign
             log = log.replace(/\[[.]*m/, (m) => `\x1B[${m}m`)
 
+            // This piece of code, would highlight the search key in the logs
+            // We will remove color through [0m and add background color of y6, till searchKey is present and then revert back to original color
+            // While reverting if index is 0, would not add any escape code since it is the start of the log
             if (targetSearchKey && areStagesAvailable) {
                 const logParts = log.split(ANSI_UP_REGEX)
                 const availableEscapeCodes = log.match(ANSI_UP_REGEX)
