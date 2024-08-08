@@ -45,7 +45,6 @@ export const TagLabelSelect = ({ isCreateApp, labelTags, setLabelTags, tabIndex 
 
     return (
         <div>
-            {console.log(appType, 'tag labele select')}
             <div className="flexbox dc__content-space mb-8">
                 <div
                     className="dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor"
