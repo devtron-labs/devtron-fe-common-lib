@@ -73,6 +73,7 @@ export interface customEnv {
     ORGANIZATION_NAME: string
     FEATURE_EXTERNAL_FLUX_CD_ENABLE: boolean
     FEATURE_SCOPED_VARIABLE_ENVIRONMENT_LIST_ENABLE?: boolean
+    FEATURE_IMAGE_PROMOTION_ENABLE?: boolean
 }
 declare global {
     interface Window {
