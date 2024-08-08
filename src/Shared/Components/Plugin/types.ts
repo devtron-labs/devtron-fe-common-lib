@@ -9,9 +9,12 @@ export enum PluginCreationType {
     PRESET = 'PRESET',
 }
 
-export interface GetPluginTagsPayloadType {
+export interface PluginAPIBaseQueryParamsType {
     appId: number
 }
+
+export interface GetPluginTagsPayloadType extends PluginAPIBaseQueryParamsType {}
+export interface GetParentPluginListPayloadType extends PluginAPIBaseQueryParamsType {}
 
 export interface PluginTagNamesDTO {
     tagNames: string[]

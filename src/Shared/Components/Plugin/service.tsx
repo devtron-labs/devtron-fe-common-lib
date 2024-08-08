@@ -1,6 +1,7 @@
 import { get, getIsRequestAborted, getUrlWithSearchParams, ResponseType, ROUTES, showError } from '../../../Common'
 import { stringComparatorBySortOrder } from '../../Helpers'
 import {
+    GetParentPluginListPayloadType,
     GetPluginListPayloadType,
     GetPluginStoreDataReturnType,
     GetPluginStoreDataServiceParamsType,
@@ -98,5 +99,7 @@ export const getAvailablePluginTags = async (appId: number): Promise<string[]> =
     }
 }
 
-export const getParentPluginList = async (appId?: number): Promise<ResponseType<MinParentPluginDTO[]>> =>
-    get<MinParentPluginDTO[]>(getUrlWithSearchParams(ROUTES.PLUGIN_LIST_MIN, { appId }))
+export const getParentPluginList = async (appId?: number): Promise<ResponseType<MinParentPluginDTO[]>> => {
+    const queryParams: GetParentPluginListPayloadType = { appId }
+    return get<MinParentPluginDTO[]>(getUrlWithSearchParams(ROUTES.PLUGIN_LIST_MIN, queryParams))
+}

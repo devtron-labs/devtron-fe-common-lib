@@ -227,22 +227,22 @@ function fetchInTime(
     })
 }
 
-export const post = (
+export const post = <T = any>(
     url: string,
     data: object,
     options?: APIOptions,
     isMultipartRequest?: boolean,
-): Promise<ResponseType> => fetchInTime(url, 'POST', data, options, isMultipartRequest)
+): Promise<ResponseType<T>> => fetchInTime(url, 'POST', data, options, isMultipartRequest)
 
-export const put = (url: string, data: object, options?: APIOptions): Promise<ResponseType> =>
+export const put = <T = any>(url: string, data: object, options?: APIOptions): Promise<ResponseType<T>> =>
     fetchInTime(url, 'PUT', data, options)
 
-export const patch = (url: string, data: object, options?: APIOptions): Promise<ResponseType> =>
+export const patch = <T = any>(url: string, data: object, options?: APIOptions): Promise<ResponseType<T>> =>
     fetchInTime(url, 'PATCH', data, options)
 
 export const get = <T = any>(url: string, options?: APIOptions): Promise<ResponseType<T>> => fetchInTime(url, 'GET', null, options)
 
-export const trash = (url: string, data?: object, options?: APIOptions): Promise<ResponseType> =>
+export const trash = <T = any>(url: string, data?: object, options?: APIOptions): Promise<ResponseType<T>> =>
     fetchInTime(url, 'DELETE', data, options)
 
 /**
