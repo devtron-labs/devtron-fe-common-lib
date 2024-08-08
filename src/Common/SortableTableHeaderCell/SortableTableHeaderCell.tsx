@@ -67,13 +67,7 @@ const SortableTableHeaderCell = ({
             onClick={isSortable ? triggerSorting : noop}
             disabled={disabled}
         >
-            <Tooltip
-                showOnTruncate={showTippyOnTruncate}
-                className="default-tt"
-                placement="top"
-                arrow={false}
-                content={title}
-            >
+            <Tooltip showOnTruncate={showTippyOnTruncate} content={title}>
                 <span className="dc__uppercase dc__ellipsis-right">{title}</span>
             </Tooltip>
             {renderSortIcon()}
