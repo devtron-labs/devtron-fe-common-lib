@@ -16,7 +16,7 @@
 
 import { IconButtonProps } from '@rjsf/utils'
 
-import Tooltip from '../../../Tooltip/Tooltip'
+import { Tooltip } from '@Common/Tooltip'
 import { ReactComponent as PlusIcon } from '../../../../Assets/Icon/ic-add.svg'
 
 export const AddButton = ({
@@ -31,23 +31,17 @@ export const AddButton = ({
 
     return (
         <div className="flexbox flex-justify-start">
-            <Tooltip
-                showOnTruncate
-                className="default-tt dc__word-break"
-                arrow={false}
-                placement="right"
-                content={content}
+            <button
+                {...props}
+                type="button"
+                className="dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor dc__mxw-250"
+                title="Add"
             >
-                <button
-                    {...props}
-                    type="button"
-                    className="dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor dc__mxw-250"
-                    title="Add"
-                >
-                    <PlusIcon className="icon-dim-16 fcb-5" />
+                <PlusIcon className="icon-dim-16 fcb-5" />
+                <Tooltip showOnTruncate placement="right" content={content}>
                     <span className="cb-5 fs-13 lh-34 dc__truncate">{content}</span>
-                </button>
-            </Tooltip>
+                </Tooltip>
+            </button>
         </div>
     )
 }

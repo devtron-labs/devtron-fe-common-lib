@@ -19,7 +19,7 @@ import { Tooltip } from '@Common/Tooltip'
 
 export const TitleField = ({ id, title, required, description }: TitleFieldProps & Partial<Record<'description', string>>) => (
     <legend className="fs-13 fw-6 cn-9 lh-20 dc__no-border py-9 mb-0" id={id}>
-        <Tooltip alwaysShowTippyOnHover={!!description}>
+        <Tooltip alwaysShowTippyOnHover={!!description} content={description}>
             <span className={`${description ? 'text-underline-dashed-300' : ''}`}>{title}</span>
         </Tooltip>
         {required && <span className="cr-5">&nbsp;*</span>}

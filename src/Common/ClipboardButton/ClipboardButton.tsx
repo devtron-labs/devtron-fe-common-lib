@@ -75,7 +75,7 @@ export default function ClipboardButton({
         >
             <button
                 type="button"
-                className={`dc__outline-none-imp p-0 flex dc__transparent--imp dc__no-border ${rootClassName}`}
+                className={`dc__outline-none-imp p-0 flex dc__transparent--unstyled dc__no-border ${rootClassName}`}
                 onMouseEnter={handleEnableTippy}
                 onMouseLeave={handleDisableTippy}
                 onClick={handleCopyContent}

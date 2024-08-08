@@ -36,7 +36,7 @@ export const FieldRowWithLabel = ({
     >
         {showLabel && (
             <label className="cn-7 fs-13 lh-20 fw-4 flexbox mb-0" htmlFor={id}>
-                <Tooltip alwaysShowTippyOnHover={!!rawDescription}>
+                <Tooltip alwaysShowTippyOnHover={!!rawDescription} content={rawDescription}>
                     <span className={`dc__ellipsis-right ${rawDescription ? 'text-underline-dashed-300' : ''}`}>
                         {label || DEFAULT_FIELD_TITLE}
                     </span>
