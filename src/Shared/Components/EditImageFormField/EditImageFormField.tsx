@@ -23,6 +23,21 @@ const FallbackImage = ({ showEditIcon, defaultIcon }: FallbackImageProps) => (
 )
 
 // NOTE: Have to replace component in UpsertTenantModal with EditImageFormField when prioritized.
+/**
+ * @example
+ * ```tsx
+ * <EditImageFormField
+ *      url={icon}
+ *      defaultIcon={<ICSampleIcon className="w-100 h-100 dc__opacity-1 p-5" />}
+ *      errorMessage={formError.icon}
+ *      handleError={handleError}
+ *      handleURLChange={handleURLChange}
+ *      ariaLabelPrefix="Edit icon url"
+ *      dataTestIdPrefix="edit-icon-url"
+ *      altText="Form icon"
+ *  />
+ * ```
+ */
 const EditImageFormField = ({
     defaultIcon,
     errorMessage,
