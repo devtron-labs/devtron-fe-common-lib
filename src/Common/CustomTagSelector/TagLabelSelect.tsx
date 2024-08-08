@@ -17,10 +17,10 @@
 import PropagateTagInfo from './PropagateTagInfo'
 import { ReactComponent as Add } from '../../Assets/Icon/ic-add.svg'
 import { DEFAULT_TAG_DATA } from '../Constants'
-import { TagLabelSelectType } from './Types'
+import { APP_TYPE, TagLabelSelectType } from './Types'
 import { TagDetails } from './TagDetails'
 
-export const TagLabelSelect = ({ isCreateApp, labelTags, setLabelTags, tabIndex = 0 }: TagLabelSelectType) => {
+export const TagLabelSelect = ({ isCreateApp, labelTags, setLabelTags, tabIndex = 0, appType }: TagLabelSelectType) => {
     const setTagData = (index, tagValue): void => {
         const _tags = [...labelTags]
         const _tagValue = tagValue
@@ -45,29 +45,29 @@ export const TagLabelSelect = ({ isCreateApp, labelTags, setLabelTags, tabIndex 
 
     return (
         <div>
-            <div>
-                <div className="flexbox dc__content-space mb-8">
-                    <div
-                        className="dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor"
-                        onClick={addNewTag}
-                        data-testid="add-tag-button"
-                    >
-                        <Add className="icon-dim-20 fcb-5" /> Add tag
-                    </div>
-                    {isCreateApp && <PropagateTagInfo isCreateApp={isCreateApp} />}
+            {console.log(appType, 'tag labele select')}
+            <div className="flexbox dc__content-space mb-8">
+                <div
+                    className="dc_width-max-content cb-5 fw-6 fs-13 flexbox mr-20 mb-8 cursor"
+                    onClick={addNewTag}
+                    data-testid="add-tag-button"
+                >
+                    <Add className="icon-dim-20 fcb-5" /> Add
                 </div>
-                <div className="mb-8" data-testid="tag-rows-container">
-                    {labelTags?.map((tagData, index) => (
-                        <TagDetails
-                            key={`tag-${index}`}
-                            index={index}
-                            tagData={tagData}
-                            setTagData={setTagData}
-                            removeTag={removeTag}
-                            tabIndex={tabIndex + (index + 2)}
-                        />
-                    ))}
-                </div>
+                {appType !== APP_TYPE.HELM_CHART && <PropagateTagInfo isCreateApp={isCreateApp} />}
+            </div>
+            <div className="mb-8" data-testid="tag-rows-container">
+                {labelTags?.map((tagData, index) => (
+                    <TagDetails
+                        key={`tag-${index}`}
+                        index={index}
+                        tagData={tagData}
+                        setTagData={setTagData}
+                        removeTag={removeTag}
+                        tabIndex={tabIndex + (index + 2)}
+                        isHelmChart={appType === APP_TYPE.HELM_CHART}
+                    />
+                ))}
             </div>
         </div>
     )

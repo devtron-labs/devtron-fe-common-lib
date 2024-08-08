@@ -38,6 +38,13 @@ export interface TagErrorType {
     isValid: boolean
     messages: string[]
 }
+
+export enum APP_TYPE {
+    HELM_CHART = 'helm-chart',
+    DEVTRON_APPS = 'app',
+    JOB = 'job',
+}
+
 export interface TagLabelSelectType {
     isCreateApp?: boolean
     labelTags: TagType[]
@@ -46,6 +53,7 @@ export interface TagLabelSelectType {
     selectedProjectId?: number
     suggestedTagsOptions?: SuggestedTagOptionType[]
     reloadProjectTags?: boolean
+    appType?: APP_TYPE
 }
 
 export interface TagDetailType {
@@ -55,6 +63,7 @@ export interface TagDetailType {
     removeTag?: (index: number) => void
     tabIndex?: number
     suggestedTagsOptions?: SuggestedTagOptionType[]
+    isHelmChart?: boolean
 }
 
 export interface TagLabelValueSelectorType {
