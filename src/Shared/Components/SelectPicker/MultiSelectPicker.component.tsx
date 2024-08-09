@@ -142,6 +142,8 @@ const MultiSelectPicker = ({
         [error, selectSize, menuSize, variant],
     )
 
+    const isValidNewOption = (inputValue: string) => isCreatable && !!inputValue?.trim()
+
     const renderControl = useCallback(
         (controlProps: ControlProps<SelectPickerOptionType>) => (
             <SelectPickerControl {...controlProps} icon={icon} showSelectedOptionIcon={shouldShowSelectedOptionIcon} />
@@ -231,7 +233,7 @@ const MultiSelectPicker = ({
                             closeMenuOnSelect={false}
                             allowCreateWhileLoading={false}
                             hideSelectedOptions={false}
-                            isValidNewOption={() => isCreatable}
+                            isValidNewOption={isValidNewOption}
                             // onKeyDown
                             // onBlur
                             // onCreateOption
