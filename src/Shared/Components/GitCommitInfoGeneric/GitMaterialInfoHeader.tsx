@@ -15,6 +15,7 @@
  */
 
 import { CiPipelineSourceConfig } from '../CICDHistory/CiPipelineSourceConfig'
+import './gitCommitInfoGeneric.scss'
 
 /* eslint-disable react/prop-types */
 function getGitIcon(repoUrl) {
@@ -42,15 +43,19 @@ const GitMaterialInfoHeader = ({
     return (
         <div
             {...props}
-            className="pl-16 dc__box-shadow mb-12 pb-12 fs-12 fw-6 "
-            style={{ display: 'grid', gridTemplateColumns: '20px 1fr', gridColumnGap: '12px', ...style }}
+            className="git-commit-info-generic__header px-16 py-12 dc__box-shadow fs-12 fw-6 dc__gap-4"
+            style={style}
         >
             <div className={getGitIcon(repoUrl)} />
-            <div className="flex column left">
-                <div className="repo fs-12 cn-9 fw-6" data-testid={`deployment-history-source-code-repo${index}`}>
-                    /{repo}
+            <div className="flex left left dc__gap-4 fs-13">
+                <div
+                    className="repo cn-9 fw-6 dc__mxw-250 dc__ellipsis-right"
+                    data-testid={`deployment-history-source-code-repo${index}`}
+                >
+                    {repo}
                 </div>
-                <div className="branch flex left fs-14 cn-7">
+                <div className="branch flex left cn-7 dc__gap-4">
+                    <span>/</span>
                     <CiPipelineSourceConfig sourceType={materialType} sourceValue={materialValue} showTooltip />
                 </div>
             </div>
