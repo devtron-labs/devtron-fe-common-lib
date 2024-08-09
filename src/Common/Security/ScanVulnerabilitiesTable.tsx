@@ -18,11 +18,11 @@ import DOMPurify from 'dompurify'
 import { ScanVulnerabilitiesTableProps, VulnerabilityType } from '../Types'
 import './scanVulnerabilities.css'
 import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
-import { SortingOrder } from '@Common/Constants'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { numberComparatorBySortOrder, stringComparatorBySortOrder } from '@Shared/Helpers'
-import { SortBy, SortConfig } from './types'
-import { sortPriority } from './constants'
+import { VulnerabilitiesTableSortKeys } from './types'
+import { VULNERABILITIES_SORT_PRIORITY } from '@Common/Constants'
+import { useStateFilters } from '@Common/Hooks'
 
 // To be replaced with Scan V2 Modal Table
 export default function ScanVulnerabilitiesTable({
@@ -30,27 +30,28 @@ export default function ScanVulnerabilitiesTable({
     hidePolicy,
     shouldStick,
 }: ScanVulnerabilitiesTableProps) {
-    const [sortConfig, setSortConfig] = useState<SortConfig>({
-        sortBy: SortBy.SEVERITY,
-        sortOrder: SortingOrder.ASC,
+    const { sortBy, sortOrder, handleSorting } = useStateFilters<VulnerabilitiesTableSortKeys>({
+        initialSortKey: VulnerabilitiesTableSortKeys.SEVERITY,
     })
 
-    const sortedVulnerabilities = useMemo(() => {
-        return vulnerabilities.sort((a, b) => {
-            if (sortConfig.sortBy === SortBy.PACKAGE) {
-                return stringComparatorBySortOrder(a.package, b.package, sortConfig.sortOrder)
-            }
+    const sortedVulnerabilities = useMemo(
+        () =>
+            vulnerabilities.sort((a, b) => {
+                if (sortBy === VulnerabilitiesTableSortKeys.PACKAGE) {
+                    return stringComparatorBySortOrder(a.package, b.package, sortOrder)
+                }
 
-            return numberComparatorBySortOrder(sortPriority[a.severity], sortPriority[b.severity], sortConfig.sortOrder)
-        })
-    }, [sortConfig])
+                return numberComparatorBySortOrder(
+                    VULNERABILITIES_SORT_PRIORITY[a.severity],
+                    VULNERABILITIES_SORT_PRIORITY[b.severity],
+                    sortOrder,
+                )
+            }),
+        [sortBy, sortOrder, vulnerabilities],
+    )
 
-    const triggerSorting = (sortBy: SortBy) => {
-        setSortConfig({
-            sortBy: sortBy,
-            sortOrder: sortConfig.sortOrder === SortingOrder.ASC ? SortingOrder.DESC : SortingOrder.ASC,
-        })
-    }
+    const triggerSeveritySorting = () => handleSorting(VulnerabilitiesTableSortKeys.SEVERITY)
+    const triggerPackageSorting = () => handleSorting(VulnerabilitiesTableSortKeys.PACKAGE)
 
     const renderRow = (vulnerability: VulnerabilityType) => (
         <tr
@@ -100,26 +101,26 @@ export default function ScanVulnerabilitiesTable({
         <table className="security-tab__table">
             <tbody>
                 <tr
-                    className={`security-tab__table-header ${shouldStick ? 'dc__position-sticky bcn-0 dc__zi-4 dc__top-42' : ''}`}
+                    className={`security-tab__table-header ${shouldStick ? 'dc__position-sticky bcn-0 dc__zi-4 dc__top-0' : ''}`}
                 >
                     <th className="security-cell-header security-tab__cell-cve">CVE</th>
                     <th className="security-cell-header security-tab__cell-severity">
                         <SortableTableHeaderCell
                             title="Severity"
-                            isSorted={sortConfig.sortBy === SortBy.SEVERITY}
+                            isSorted={sortBy === VulnerabilitiesTableSortKeys.SEVERITY}
                             isSortable
-                            sortOrder={sortConfig.sortOrder}
-                            triggerSorting={() => triggerSorting(SortBy.SEVERITY)}
+                            sortOrder={sortOrder}
+                            triggerSorting={triggerSeveritySorting}
                             disabled={false}
                         />
                     </th>
                     <th className="security-cell-header security-tab__cell-package">
                         <SortableTableHeaderCell
                             title="Package"
-                            isSorted={sortConfig.sortBy === SortBy.PACKAGE}
+                            isSorted={sortBy === VulnerabilitiesTableSortKeys.PACKAGE}
                             isSortable
-                            sortOrder={sortConfig.sortOrder}
-                            triggerSorting={() => triggerSorting(SortBy.PACKAGE)}
+                            sortOrder={sortOrder}
+                            triggerSorting={triggerPackageSorting}
                             disabled={false}
                         />
                     </th>

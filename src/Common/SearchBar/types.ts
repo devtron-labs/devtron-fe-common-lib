@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { ComponentSizeType } from '@Shared/constants'
+
 export interface SearchBarProps {
     /**
      * Initial search text
@@ -56,7 +58,7 @@ export interface SearchBarProps {
      */
     noBackgroundAndBorder?: boolean
     /**
-     * Height of the Search bar
+     * Height of the Search bar, Large is 36px and Medium is 32px
      */
-    height?: '32' | '36'
+    componentSize?: ComponentSizeType.large | ComponentSizeType.medium
 }

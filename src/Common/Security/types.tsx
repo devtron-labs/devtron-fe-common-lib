@@ -1,11 +1,4 @@
-import { SortingOrder } from '@Common/Constants'
-
-export enum SortBy {
+export enum VulnerabilitiesTableSortKeys {
     SEVERITY = 'severity',
     PACKAGE = 'package',
-}
-
-export interface SortConfig {
-    sortBy: SortBy
-    sortOrder: SortingOrder
 }
