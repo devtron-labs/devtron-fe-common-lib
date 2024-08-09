@@ -75,7 +75,10 @@ export const SelectPickerValueContainer = ({
 
 export const SelectPickerLoadingIndicator = () => <Progressing />
 
-export const SelectPickerOption = (props: OptionProps<SelectPickerOptionType>) => {
+export const SelectPickerOption = ({
+    disableDescriptionEllipsis,
+    ...props
+}: OptionProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'disableDescriptionEllipsis'>) => {
     const { label, data } = props
     const { description, startIcon, endIcon } = data ?? {}
     const showDescription = !!description
@@ -89,7 +92,11 @@ export const SelectPickerOption = (props: OptionProps<SelectPickerOptionType>) =
                 <div className="flex-grow-1">
                     <h4 className="m-0 cn-9 fs-13 fw-4 lh-20 dc__truncate">{label}</h4>
                     {/* Add support for custom ellipsis if required */}
-                    {showDescription && <p className="m-0 fs-12 fw-4 lh-18 cn-7 dc__truncate">{description}</p>}
+                    {showDescription && (
+                        <p className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__truncate' : ''}`}>
+                            {description}
+                        </p>
+                    )}
                 </div>
                 {endIcon && <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>}
             </div>

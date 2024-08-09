@@ -1,4 +1,4 @@
-import ReactSelect, { ControlProps, MenuListProps, ValueContainerProps } from 'react-select'
+import ReactSelect, { ControlProps, MenuListProps, OptionProps, ValueContainerProps } from 'react-select'
 import { ReactElement, useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
@@ -15,7 +15,7 @@ import {
     SelectPickerOption,
     SelectPickerValueContainer,
 } from './common'
-import { SelectPickerOptionType, SelectPickerProps } from './type'
+import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 
 /**
  * Generic component for select picker
@@ -110,6 +110,8 @@ const SelectPicker = ({
     disabledTippyContent,
     showSelectedOptionsCount = false,
     menuSize,
+    variant = SelectPickerVariantType.DEFAULT,
+    disableDescriptionEllipsis = false,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
@@ -123,8 +125,9 @@ const SelectPicker = ({
                 error,
                 size,
                 menuSize,
+                variant,
             }),
-        [error, size, menuSize],
+        [error, size, menuSize, variant],
     )
 
     const renderControl = useCallback(
@@ -146,6 +149,13 @@ const SelectPicker = ({
             <SelectPickerValueContainer {...valueContainerProps} showSelectedOptionsCount={showSelectedOptionsCount} />
         ),
         [showSelectedOptionsCount],
+    )
+
+    const renderOption = useCallback(
+        (optionProps: OptionProps<SelectPickerOptionType>) => (
+            <SelectPickerOption {...optionProps} disableDescriptionEllipsis={disableDescriptionEllipsis} />
+        ),
+        [disableDescriptionEllipsis],
     )
 
     const renderDisabledTippy = (children: ReactElement) => (
@@ -185,7 +195,7 @@ const SelectPicker = ({
                                 LoadingIndicator: SelectPickerLoadingIndicator,
                                 DropdownIndicator: SelectPickerDropdownIndicator,
                                 Control: renderControl,
-                                Option: SelectPickerOption,
+                                Option: renderOption,
                                 MenuList: renderMenuList,
                                 ClearIndicator: SelectPickerClearIndicator,
                                 ValueContainer: renderValueContainer,
