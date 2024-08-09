@@ -104,7 +104,8 @@ export const SelectPickerOption = ({
     return (
         <components.Option {...props}>
             <div className="flexbox dc__align-items-center dc__gap-8">
-                {isMulti && (
+                {/* __isNew__ denotes the new option to be created */}
+                {isMulti && !('__isNew__' in data && data.__isNew__) && (
                     <Checkbox
                         onChange={noop}
                         onClick={handleChange}
