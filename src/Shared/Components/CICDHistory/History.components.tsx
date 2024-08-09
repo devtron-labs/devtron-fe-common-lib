@@ -25,6 +25,7 @@ import GitCommitInfoGeneric from '../GitCommitInfoGeneric/GitCommitInfoGeneric'
 import { CIListItem } from './Artifacts'
 import { ReactComponent as ZoomIn } from '../../../Assets/Icon/ic-fullscreen.svg'
 import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscreen.svg'
+import './cicdHistory.scss'
 
 export const LogResizeButton = ({ fullScreenView, setFullScreenView }: LogResizeButtonType): JSX.Element => {
     const { pathname } = useLocation()
@@ -130,14 +131,14 @@ export const GitChanges = ({
     const extractImageArtifact = extractImage(artifact)
 
     return (
-        <div className="flex column left w-100 ">
+        <div className="history-component__wrapper flex column left w-100 p-16 dc__gap-12">
             {ciMaterials?.map((ciMaterial, index) => {
                 const gitTrigger = gitTriggers[ciMaterial.id]
                 return gitTrigger && (gitTrigger.Commit || gitTrigger.WebhookData?.data) ? (
                     <div
                         // eslint-disable-next-line react/no-array-index-key
                         key={`mat-${gitTrigger?.Commit}-${index}`}
-                        className="bcn-0 pt-12 br-4 en-2 bw-1 pb-12 mt-16 ml-16"
+                        className="bcn-0 br-4 en-2 bw-1"
                         data-testid="source-code-git-hash"
                         style={{ width: 'min( 100%, 800px )' }}
                     >
@@ -160,7 +161,7 @@ export const GitChanges = ({
                 ) : null
             })}
             {artifact && (
-                <div className="flex left column mt-16 mb-16 ml-16" style={{ width: 'min( 100%, 800px )' }}>
+                <div className="history-component__artifact flex left column dc__gap-12">
                     <CIListItem
                         type="deployed-artifact"
                         userApprovalMetadata={userApprovalMetadata}
