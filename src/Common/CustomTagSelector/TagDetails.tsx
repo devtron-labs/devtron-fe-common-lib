@@ -30,7 +30,7 @@ export const TagDetails = ({
     removeTag,
     tabIndex = 1,
     suggestedTagsOptions,
-    isHelmChart,
+    hidePropagateTag,
 }: TagDetailType) => {
     const keyRef = useRef(null)
     const valueRef = useRef(null)
@@ -55,10 +55,9 @@ export const TagDetails = ({
         }
         setTagData(index, _tagData)
     }
-    console.log(isHelmChart)
     return (
         <div className="flexbox mb-8">
-            {!isHelmChart && (
+            {hidePropagateTag && (
                 <div
                     className={`dc__border h-30 pl-4 pr-4 br-4 mr-8 pointer ${tagData.propagate ? 'bcn-7' : ''} ${tagData.key.startsWith('devtron.ai/') ? 'cursor-not-allowed bcn-1' : ''}`}
                     onClick={propagateTagToResource}

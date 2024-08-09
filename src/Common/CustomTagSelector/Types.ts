@@ -53,7 +53,7 @@ export interface TagLabelSelectType {
     selectedProjectId?: number
     suggestedTagsOptions?: SuggestedTagOptionType[]
     reloadProjectTags?: boolean
-    appType?: APP_TYPE
+    hidePropagateTag?: boolean
 }
 
 export interface TagDetailType {
@@ -63,7 +63,7 @@ export interface TagDetailType {
     removeTag?: (index: number) => void
     tabIndex?: number
     suggestedTagsOptions?: SuggestedTagOptionType[]
-    isHelmChart?: boolean
+    hidePropagateTag?: boolean
 }
 
 export interface TagLabelValueSelectorType {

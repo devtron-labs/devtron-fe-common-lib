@@ -17,10 +17,10 @@
 import PropagateTagInfo from './PropagateTagInfo'
 import { ReactComponent as Add } from '../../Assets/Icon/ic-add.svg'
 import { DEFAULT_TAG_DATA } from '../Constants'
-import { APP_TYPE, TagLabelSelectType } from './Types'
+import { TagLabelSelectType } from './Types'
 import { TagDetails } from './TagDetails'
 
-export const TagLabelSelect = ({ isCreateApp, labelTags, setLabelTags, tabIndex = 0, appType }: TagLabelSelectType) => {
+export const TagLabelSelect = ({ isCreateApp, labelTags, setLabelTags, tabIndex = 0, hidePropagateTag }: TagLabelSelectType) => {
     const setTagData = (index, tagValue): void => {
         const _tags = [...labelTags]
         const _tagValue = tagValue
@@ -53,7 +53,7 @@ export const TagLabelSelect = ({ isCreateApp, labelTags, setLabelTags, tabIndex 
                 >
                     <Add className="icon-dim-20 fcb-5" /> Add
                 </div>
-                {appType !== APP_TYPE.HELM_CHART && <PropagateTagInfo isCreateApp={isCreateApp} />}
+                {!hidePropagateTag && <PropagateTagInfo isCreateApp={isCreateApp} />}
             </div>
             <div className="mb-8" data-testid="tag-rows-container">
                 {labelTags?.map((tagData, index) => (
@@ -64,7 +64,7 @@ export const TagLabelSelect = ({ isCreateApp, labelTags, setLabelTags, tabIndex 
                         setTagData={setTagData}
                         removeTag={removeTag}
                         tabIndex={tabIndex + (index + 2)}
-                        isHelmChart={appType === APP_TYPE.HELM_CHART}
+                        hidePropagateTag={hidePropagateTag}
                     />
                 ))}
             </div>
