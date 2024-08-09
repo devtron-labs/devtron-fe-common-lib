@@ -43,6 +43,7 @@ export interface SelectPickerProps
             | 'required'
             | 'isOptionDisabled'
             | 'placeholder'
+            | 'isMulti'
         >,
         Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> {
     /**

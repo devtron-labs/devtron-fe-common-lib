@@ -118,10 +118,13 @@ const MultiSelectPicker = ({
     variant = SelectPickerVariantType.DEFAULT,
     disableDescriptionEllipsis = false,
     getIsOptionValid = () => true,
+    // TODO: Revert
+    isMulti = true,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
     const selectSize = ComponentSizeType.large
+    const shouldShowSelectedOptionIcon = !isMulti && showSelectedOptionIcon
 
     const labelId = `${inputId}-label`
     const errorElementId = `${inputId}-error-msg`
@@ -140,9 +143,9 @@ const MultiSelectPicker = ({
 
     const renderControl = useCallback(
         (controlProps: ControlProps<SelectPickerOptionType>) => (
-            <SelectPickerControl {...controlProps} icon={icon} showSelectedOptionIcon={showSelectedOptionIcon} />
+            <SelectPickerControl {...controlProps} icon={icon} showSelectedOptionIcon={shouldShowSelectedOptionIcon} />
         ),
-        [icon, showSelectedOptionIcon],
+        [icon, shouldShowSelectedOptionIcon],
     )
 
     const renderMenuList = useCallback(
@@ -231,6 +234,7 @@ const MultiSelectPicker = ({
                             // onKeyDown
                             // onBlur
                             // onCreateOption
+                            // getIsOptionDisabled
                         />
                     </div>
                 </ConditionalWrap>

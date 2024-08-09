@@ -229,6 +229,8 @@ export const getCommonSelectStyle = ({
         fontWeight: 400,
         lineHeight: '20px',
         overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'clip',
     }),
     placeholder: (base) => ({
         ...base,
