@@ -44,6 +44,8 @@ export interface SelectPickerProps
             | 'isOptionDisabled'
             | 'placeholder'
             | 'isMulti'
+            | 'getOptionLabel'
+            | 'getOptionValue'
         >,
         Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> {
     /**
@@ -110,4 +112,9 @@ export interface SelectPickerProps
      */
     disableDescriptionEllipsis?: boolean
     getIsOptionValid?: (option: SelectPickerOptionType) => boolean
+    /**
+     * If true, the select picker creates the new option
+     * Only applicable for isMulti: true
+     */
+    isCreatable: boolean
 }

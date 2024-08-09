@@ -120,6 +120,7 @@ const MultiSelectPicker = ({
     getIsOptionValid = () => true,
     // TODO: Revert
     isMulti = true,
+    isCreatable = false,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
@@ -230,7 +231,7 @@ const MultiSelectPicker = ({
                             closeMenuOnSelect={false}
                             allowCreateWhileLoading={false}
                             hideSelectedOptions={false}
-                            // isValidNewOption={() => false}
+                            isValidNewOption={() => isCreatable}
                             // onKeyDown
                             // onBlur
                             // onCreateOption

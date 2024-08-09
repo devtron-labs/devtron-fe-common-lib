@@ -173,7 +173,6 @@ export const MultiValueLabel = ({
                     {iconToDisplay}
                 </div>
             )}
-            {/* TODO: Add support for custom label based on option */}
             <components.MultiValueLabel {...props} />
         </div>
     )
