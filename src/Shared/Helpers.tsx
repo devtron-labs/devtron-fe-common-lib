@@ -17,7 +17,8 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
-import { handleUTCTime, mapByKey, MaterialInfo, shallowEqual, SortingOrder } from '../Common'
+import moment from 'moment'
+import { handleUTCTime, mapByKey, MaterialInfo, shallowEqual, SortingOrder, ZERO_TIME_STRING } from '../Common'
 import {
     AggregationKeys,
     GitTriggers,
@@ -707,6 +708,28 @@ export const decode = (data, isEncoded: boolean = false) =>
             agg[curr.key] = curr.value
             return agg
         }, {})
+
+export const isTimeStringAvailable = (time: string): boolean => !!time && time !== ZERO_TIME_STRING
+
+export const getTimeDifference = (startTime: string, endTime: string): string => {
+    if (!isTimeStringAvailable(startTime) || !isTimeStringAvailable(endTime)) {
+        return '-'
+    }
+
+    const seconds = moment(endTime).diff(moment(startTime), 'seconds')
+    const minutes = moment(endTime).diff(moment(startTime), 'minutes')
+    const hours = moment(endTime).diff(moment(startTime), 'hours')
+
+    if (seconds < 60) {
+        return `${seconds}s`
+    }
+    if (minutes < 60) {
+        return `${minutes}m ${seconds % 60}s`
+    }
+    const leftOverMinutes = minutes - hours * 60
+    const leftOverSeconds = seconds - minutes * 60
+    return `${hours}h ${leftOverMinutes}m ${leftOverSeconds}s`
+}
 
 export const getFileNameFromHeaders = (headers: Headers) =>
     headers
