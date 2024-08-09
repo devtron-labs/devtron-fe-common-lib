@@ -37,7 +37,6 @@ export interface customEnv {
     HELM_APP_DETAILS_POLLING_INTERVAL?: number
     EA_APP_DETAILS_POLLING_INTERVAL?: number
     CENTRAL_API_ENDPOINT?: string
-    HIDE_DEPLOYMENT_GROUPS?: boolean
     HIDE_GITOPS_OR_HELM_OPTION?: boolean
     CONFIGURABLE_TIMEOUT?: string
     HIDE_APPLICATION_GROUPS?: boolean
@@ -72,6 +71,7 @@ export interface customEnv {
     HIDE_RESOURCE_WATCHER?: boolean
     ORGANIZATION_NAME?: string
     FEATURE_SCOPED_VARIABLE_ENVIRONMENT_LIST_ENABLE?: boolean
+    FEATURE_STEP_WISE_LOGS_ENABLE?: boolean
     FEATURE_IMAGE_PROMOTION_ENABLE?: boolean
 }
 declare global {
