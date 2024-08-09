@@ -1,5 +1,6 @@
 import { SortingOrder } from '@Common/Constants'
 
+import { ConfigMapSecretDataConfigDatumDTO, DeploymentTemplateDTO } from '@Shared/Services'
 import { DeploymentHistoryDetail } from '../CICDHistory'
 import { CollapsibleListConfig, CollapsibleListItem } from '../CollapsibleList'
 import { SelectPickerProps } from '../SelectPicker'
@@ -83,3 +84,7 @@ export interface DeploymentConfigDiffAccordionProps extends Pick<CollapseProps, 
     isExpanded?: boolean
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
+
+export type DiffHeadingDataType<DeploymentTemplate> = DeploymentTemplate extends true
+    ? DeploymentTemplateDTO
+    : ConfigMapSecretDataConfigDatumDTO

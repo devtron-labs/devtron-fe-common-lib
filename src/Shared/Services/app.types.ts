@@ -139,3 +139,129 @@ export interface GetCITriggerInfoParamsType {
     envId: number | string
     ciArtifactId: number | string
 }
+
+export enum AppEnvDeploymentConfigType {
+    PUBLISHED_ONLY = 'PublishedOnly',
+    DRAFT_ONLY = 'DraftOnly',
+    PUBLISHED_WITH_DRAFT = 'PublishedWithDraft',
+    PREVIOUS_DEPLOYMENTS = 'PreviousDeployments',
+    DEFAULT_VERSION = 'DefaultVersion',
+}
+
+export interface DraftMetadataDTO {
+    appId: number
+    envId: number
+    resource: number
+    resourceName: string
+    action: number
+    data: string
+    userComment: string
+    changeProposed: boolean
+    protectNotificationConfig: { [key: string]: null }
+    draftId: number
+    draftVersionId: number
+    draftState: number
+    approvers: string[]
+    canApprove: boolean
+    commentsCount: number
+    dataEncrypted: boolean
+    isAppAdmin: boolean
+}
+
+export interface ConfigDatum {
+    name: string
+    type: string
+    external: boolean
+    data: Record<string, string>
+    defaultData: Record<string, string>
+    global: boolean
+    externalType: string
+    esoSecretData: {}
+    defaultESOSecretData: {}
+    secretData: Record<string, string>
+    defaultSecretData: Record<string, string>
+    roleARN: string
+    subPath: boolean
+    filePermission: string
+    overridden: boolean
+    mountPath?: string
+    defaultMountPath?: string
+}
+
+export interface ConfigMapSecretDataConfigDatumDTO extends ConfigDatum {
+    draftMetadata: DraftMetadataDTO
+}
+
+export interface ConfigMapSecretDataType {
+    id: number
+    appId: number
+    configData: ConfigMapSecretDataConfigDatumDTO[]
+}
+
+export enum ConfigResourceType {
+    ConfigMap = 'ConfigMap',
+    Secret = 'Secret',
+    DeploymentTemplate = 'Deployment Template',
+}
+
+export interface DeploymentTemplateDTO {
+    resourceType: ConfigResourceType.DeploymentTemplate
+    data: { [key: string]: any }
+    deploymentDraftData: ConfigMapSecretDataType | null
+}
+
+export interface ConfigMapSecretDataDTO {
+    resourceType: Extract<ConfigResourceType, ConfigResourceType.ConfigMap | ConfigResourceType.Secret>
+    data: ConfigMapSecretDataType
+}
+
+export interface AppEnvDeploymentConfigDTO {
+    deploymentTemplate: DeploymentTemplateDTO | null
+    configMapData: ConfigMapSecretDataDTO | null
+    secretsData: ConfigMapSecretDataDTO | null
+    isAppAdmin: boolean
+}
+
+export interface AppEnvDeploymentConfigPayloadType {
+    appName: string
+    envName: string
+    configType: AppEnvDeploymentConfigType
+    identifierId?: number
+    pipelineId?: number
+    resourceType?: ConfigResourceType
+    resourceId?: number
+    resourceName?: string
+}
+
+export enum TemplateListType {
+    DefaultVersions = 1,
+    PublishedOnEnvironments = 2,
+    DeployedOnSelfEnvironment = 3,
+    DeployedOnOtherEnvironment = 4,
+}
+
+export interface TemplateListDTO {
+    chartRefId: number
+    chartVersion?: string
+    chartType?: string
+    type: TemplateListType
+    environmentId?: number
+    environmentName?: string
+    deploymentTemplateHistoryId?: number
+    finishedOn?: string
+    status?: string
+    pipelineId?: number
+}
+
+export enum DraftState {
+    Init = 1,
+    Discarded = 2,
+    Published = 3,
+    AwaitApproval = 4,
+}
+
+export enum EnvResourceType {
+    ConfigMap = 'configmap',
+    Secret = 'secrets',
+    DeploymentTemplate = 'deployment-template',
+}
