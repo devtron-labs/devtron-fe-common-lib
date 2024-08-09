@@ -3,12 +3,12 @@
         grid-template-columns: repeat(12, 1fr);
         grid-template-rows: repeat(12, 1fr);
 
-        .base-image {
+        & &--base-image {
             grid-column: 1 / span 12;
             grid-row: 1 / span 12;
         }
 
-        .edit-image-icon {
+        & &--edit-image-icon {
             grid-column: 8 / span 4;
             grid-row: 8 / span 4;
         }

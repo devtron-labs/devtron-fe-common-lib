@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from 'react'
+import { KeyboardEvent, SyntheticEvent, useState } from 'react'
 import { toast } from 'react-toastify'
 import { showError } from '@Common/Helper'
 import { CustomInput } from '@Common/CustomInput'
@@ -6,12 +6,17 @@ import { ButtonWithLoader, ImageWithFallback } from '@Shared/Components'
 import { validateIfImageExist, validateURL } from '@Shared/validations'
 import { ReactComponent as ICPencil } from '@Icons/ic-pencil.svg'
 import { EditImageFormFieldProps, FallbackImageProps } from './types'
-import { DEFAULT_IMAGE_DIMENSIONS, DEFAULT_MAX_IMAGE_SIZE, EMPTY_PREVIEW_URL_ERROR_MESSAGE } from './constants'
+import {
+    BASE_IMAGE_CLASS,
+    DEFAULT_IMAGE_DIMENSIONS,
+    DEFAULT_MAX_IMAGE_SIZE,
+    EMPTY_PREVIEW_URL_ERROR_MESSAGE,
+} from './constants'
 import './EditImageFormField.scss'
 
 const FallbackImage = ({ showEditIcon, defaultIcon }: FallbackImageProps) => (
     <div
-        className={`flex dc__align-self-start dc__no-shrink br-4 edit-image-form-field__fallback-image p-12 ${showEditIcon ? 'base-image' : ''}`}
+        className={`flex dc__align-self-start dc__no-shrink br-4 edit-image-form-field__fallback-image p-12 ${showEditIcon ? BASE_IMAGE_CLASS : ''}`}
         // Adding inline style to make sure it is configurable through constants
         style={{
             height: DEFAULT_IMAGE_DIMENSIONS.height,
@@ -62,7 +67,7 @@ const EditImageFormField = ({
         setLastPreviewedURL(newURL)
     }
 
-    const handleReset = (newURL?: string) => {
+    const handleResetToInitialState = (newURL?: string) => {
         const targetURL = newURL ?? lastPreviewedURL
         handleLastPreviewedURLChange(targetURL)
         handleURLChange(targetURL)
@@ -73,11 +78,11 @@ const EditImageFormField = ({
     }
 
     const handleSuccess = () => {
-        handleReset(url)
+        handleResetToInitialState(url)
     }
 
     const handleCancel = () => {
-        handleReset()
+        handleResetToInitialState()
     }
 
     const handleChange = (event: SyntheticEvent) => {
@@ -88,6 +93,7 @@ const EditImageFormField = ({
             return
         }
         setEmptyPreviewURLErrorMessage('')
+        // TODO: Can also restrict to http/s protocol
         handleError(validateURL(value, false).message)
     }
 
@@ -133,8 +139,9 @@ const EditImageFormField = ({
         }
     }
 
-    const handleKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = async (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
+            event.preventDefault()
             await handlePreviewImage()
         }
     }
@@ -161,9 +168,9 @@ const EditImageFormField = ({
                 aria-label={`${ariaLabelPrefix} image`}
                 onClick={handleEnableEditing}
             >
-                {renderImage(true, 'base-image')}
+                {renderImage(true, BASE_IMAGE_CLASS)}
 
-                <div className="flex p-4 br-4 bcn-0 dc__border edit-image-icon dc__zi-1 bcn-0 dc__hover-n50 icon-dim-24">
+                <div className="flex p-4 br-4 bcn-0 dc__border edit-image-form-field__figure-container--edit-image-icon dc__zi-1 bcn-0 dc__hover-n50 icon-dim-24">
                     <ICPencil className="dc__no-shrink icon-dim-16" />
                 </div>
             </button>
@@ -177,7 +184,7 @@ const EditImageFormField = ({
             <div className="flexbox-col dc__gap-16 flex-grow-1">
                 <div className="flexbox-col dc__gap-6 w-100 dc__align-start">
                     <CustomInput
-                        name={`${ariaLabelPrefix} url input`}
+                        name={`${ariaLabelPrefix}-url-input`}
                         label="Image URL"
                         labelClassName="m-0 fs-13 fw-4 lh-20 cn-7"
                         placeholder="Enter image url"

@@ -1,10 +1,10 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 
 export interface EditImageFormFieldProps {
     /**
      * Fallback icon to be shown when image is not available
      */
-    defaultIcon: ReactNode
+    defaultIcon: ReactElement
     /**
      * Would be shown below input, there are two types of error messages:
      * External - Error message handled from state above and would propagate to parent through handleError

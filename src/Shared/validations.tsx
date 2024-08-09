@@ -254,6 +254,11 @@ export const validateUniqueKeys = (keys: string[]) => {
     }
 }
 
+/**
+ * Rules for valid semantic version:
+ * 1. version.length < 128 and not empty
+ * 2. version should follow semantic versioning regex from https://semver.org/
+ */
 export const validateSemanticVersioning = (version: string): ValidationResponseType => {
     if (!version) {
         return {
@@ -285,5 +290,8 @@ export const validateSemanticVersioning = (version: string): ValidationResponseT
     }
 }
 
+/**
+ * A valid display name should be between 3 and 50 characters
+ */
 export const validateDisplayName = (name: string): ValidationResponseType =>
     validateStringLength(name, DISPLAY_NAME_CONSTRAINTS.MAX_LIMIT, DISPLAY_NAME_CONSTRAINTS.MIN_LIMIT)

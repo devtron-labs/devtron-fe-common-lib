@@ -94,8 +94,9 @@ export interface SelectPickerProps
      * @default 'ComponentSizeType.small'
      */
     menuSize?: ComponentSizeType
+    // TODO: Can make generic typing when adding multi select
     /**
-     * If true, would show generic section error state as no options message
+     * If truthy, would show generic section error state as no options message
      */
     optionListError?: ServerErrors
     /**
