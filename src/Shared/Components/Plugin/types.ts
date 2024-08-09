@@ -9,9 +9,12 @@ export enum PluginCreationType {
     PRESET = 'PRESET',
 }
 
-export interface GetPluginTagsPayloadType {
+export interface PluginAPIBaseQueryParamsType {
     appId: number
 }
+
+export interface GetPluginTagsPayloadType extends PluginAPIBaseQueryParamsType {}
+export interface GetParentPluginListPayloadType extends PluginAPIBaseQueryParamsType {}
 
 export interface PluginTagNamesDTO {
     tagNames: string[]
@@ -51,7 +54,10 @@ export interface ParentPluginDTO {
     type: PluginCreationType
     icon: string
     pluginVersions: PluginVersionsDTO
+    pluginIdentifier: string
 }
+
+export interface MinParentPluginDTO extends Pick<ParentPluginDTO, 'id' | 'name' | 'icon'> {}
 
 export interface PluginDetailDTO {
     parentPlugins: ParentPluginDTO[]
@@ -66,6 +72,7 @@ export interface PluginDetailServiceParamsType {
      * @default true
      */
     shouldShowError?: boolean
+    signal?: AbortSignal
 }
 
 export interface PluginDetailPayloadType extends Pick<PluginDetailServiceParamsType, 'appId'> {
@@ -77,7 +84,8 @@ export interface PluginListFiltersType extends Pick<BaseFilterQueryParams<unknow
     selectedTags: string[]
 }
 
-interface ParentPluginType extends Pick<ParentPluginDTO, 'id' | 'name' | 'description' | 'type' | 'icon'> {
+interface ParentPluginType
+    extends Pick<ParentPluginDTO, 'id' | 'name' | 'description' | 'type' | 'icon' | 'pluginIdentifier'> {
     latestVersionId: MinimalPluginVersionDataDTO['id']
     pluginVersions: MinimalPluginVersionDataDTO[]
 }
@@ -88,7 +96,7 @@ interface DetailedPluginVersionType
             DetailedPluginVersionDTO,
             'tags' | 'isLatest' | 'inputVariables' | 'outputVariables' | 'updatedBy' | 'docLink'
         >,
-        Pick<ParentPluginType, 'icon' | 'type'> {
+        Pick<ParentPluginType, 'icon' | 'type' | 'pluginIdentifier'> {
     parentPluginId: ParentPluginType['id']
 }
 

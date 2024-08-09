@@ -194,6 +194,7 @@ const PluginListContainer = ({
                     handleEnter={handleSearch}
                     inputProps={{
                         placeholder: 'Search plugins',
+                        autoFocus: true,
                     }}
                 />
 
@@ -222,7 +223,7 @@ const PluginListContainer = ({
 
             <APIResponseHandler
                 isLoading={isLoadingPluginData || getIsRequestAborted(pluginDataError)}
-                customLoader={<PluginCardSkeletonList count={5} />}
+                customLoader={<PluginCardSkeletonList />}
                 error={pluginDataError}
                 errorScreenManagerProps={{
                     code: pluginDataError?.code,

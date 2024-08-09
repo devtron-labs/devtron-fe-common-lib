@@ -17,6 +17,7 @@
 import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { ModalType } from '../Types'
+import { POP_UP_MENU_MODAL_ID } from '@Shared/constants'
 
 /**
  * @deprecated Use VisibleModal instead
@@ -78,7 +79,7 @@ export const Modal = ({
                 innerRef.current = el
             }}
             id="popup"
-            className={`${rootClassName} popup ${modal ? 'modal' : ''}`}
+            className={`${rootClassName} ${POP_UP_MENU_MODAL_ID} ${modal ? 'modal' : ''}`}
             style={{ ...style }}
         >
             {children}

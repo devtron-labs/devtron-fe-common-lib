@@ -16,11 +16,11 @@
 
 import React, { SyntheticEvent } from 'react'
 import ReactDOM from 'react-dom'
-import { preventBodyScroll } from '../../Shared'
+import { POP_UP_MENU_MODAL_ID, preventBodyScroll } from '../../Shared'
 import { stopPropagation } from '../Helper'
 
 export class VisibleModal extends React.Component<{
-    className: string
+    className?: string
     parentClassName?: string
     noBackground?: boolean
     close?: (e) => void
@@ -46,6 +46,7 @@ export class VisibleModal extends React.Component<{
 
     componentDidMount() {
         document.addEventListener('keydown', this.escFunction)
+        // show is also being used in modal (i.e, pop up menu for case where we have noBackground as false, so it works in syc with VisibleModal with noBackground as false)
         this.modalRef.classList.add(this.props.noBackground ? 'show' : 'show-with-bg')
         preventBodyScroll(true)
 
@@ -66,6 +67,10 @@ export class VisibleModal extends React.Component<{
     }
 
     handleBodyClick = (e: SyntheticEvent) => {
+        const isPopupMenuPresent = document.getElementById(POP_UP_MENU_MODAL_ID)
+        if (isPopupMenuPresent) {
+            return
+        }
         e.stopPropagation()
 
         this.props.close?.(e)
@@ -74,7 +79,7 @@ export class VisibleModal extends React.Component<{
     render() {
         return ReactDOM.createPortal(
             <div
-                className={`visible-modal__body ${this.props.className}`}
+                className={`visible-modal__body ${this.props.className || ''}`}
                 onClick={this.handleBodyClick}
                 data-testid="visible-modal-close"
             >

@@ -222,10 +222,10 @@ export interface RadioGroupItemProps {
 export interface RadioGroupInterface {
     name: string
     onChange: any
-    className?: string
     initialTab: string
-    disabled: boolean
     children: ReactNode
+    disabled?: boolean
+    className?: string
 }
 
 export interface RadioInterface {

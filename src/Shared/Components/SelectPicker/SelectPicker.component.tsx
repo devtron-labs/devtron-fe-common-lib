@@ -1,10 +1,11 @@
-import ReactSelect, { ControlProps, MenuListProps, ValueContainerProps } from 'react-select'
 import { ReactElement, useCallback, useMemo } from 'react'
-import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
-import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
+import ReactSelect, { ControlProps, MenuListProps, ValueContainerProps } from 'react-select'
+import Tippy from '@tippyjs/react'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConditionalWrap } from '@Common/Helper'
-import Tippy from '@tippyjs/react'
+import { GenericSectionErrorState } from '@Shared/Components/GenericSectionErrorState'
+import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
+import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
 import { getCommonSelectStyle } from './utils'
 import {
     SelectPickerClearIndicator,
@@ -110,6 +111,8 @@ const SelectPicker = ({
     disabledTippyContent,
     showSelectedOptionsCount = false,
     menuSize,
+    optionListError,
+    reloadOptionList,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
@@ -147,6 +150,14 @@ const SelectPicker = ({
         ),
         [showSelectedOptionsCount],
     )
+
+    const renderNoOptionsMessage = () => {
+        if (optionListError) {
+            return <GenericSectionErrorState reload={reloadOptionList} />
+        }
+
+        return <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8">No options</p>
+    }
 
     const renderDisabledTippy = (children: ReactElement) => (
         <Tippy content={disabledTippyContent} placement="top" className="default-tt" arrow={false}>
@@ -189,6 +200,7 @@ const SelectPicker = ({
                                 MenuList: renderMenuList,
                                 ClearIndicator: SelectPickerClearIndicator,
                                 ValueContainer: renderValueContainer,
+                                NoOptionsMessage: renderNoOptionsMessage,
                             }}
                             styles={selectStyles}
                             menuPlacement="auto"

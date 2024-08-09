@@ -420,3 +420,5 @@ export enum ComponentSizeType {
     medium = 'medium',
     large = 'large',
 }
+
+export const POP_UP_MENU_MODAL_ID = 'popup'

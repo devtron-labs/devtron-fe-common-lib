@@ -19,7 +19,7 @@ const PluginCardSkeleton = () => (
     </div>
 )
 
-const PluginCardSkeletonList = ({ count = 3 }: PluginCardSkeletonListProps) => (
+const PluginCardSkeletonList = ({ count = 2 }: PluginCardSkeletonListProps) => (
     <>
         {Array(count)
             .fill(0)

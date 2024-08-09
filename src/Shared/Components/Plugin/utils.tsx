@@ -1,3 +1,6 @@
+import { OptionProps } from 'react-select'
+import { OptionType } from '@Common/Types'
+import { Option } from '@Common/MultiSelectCustomization'
 import { ParentPluginDTO, PluginCreationType, PluginDataStoreType } from './types'
 import { commonSelectStyles } from '../ReactSelect'
 import { stringComparatorBySortOrder } from '../../Helpers'
@@ -45,6 +48,7 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
             description: plugin.description || '',
             type: plugin.type,
             icon: plugin.icon || '',
+            pluginIdentifier: plugin.pluginIdentifier || '',
             // Assuming latest version is always present
             latestVersionId: pluginVersions[latestPluginVersionIndex].id,
             pluginVersions,
@@ -69,6 +73,7 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
                 parentPluginId: plugin.id,
                 icon: plugin.icon || '',
                 type: plugin.type,
+                pluginIdentifier: plugin.pluginIdentifier || '',
             }
         })
     })
@@ -84,7 +89,7 @@ export const pluginTagSelectStyles = {
     option: (base, state) => ({
         ...base,
         height: '36px',
-        padding: '8px 12px',
+        padding: '8px 0px',
         backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
         color: 'var(--N900)',
         cursor: 'pointer',
@@ -97,6 +102,10 @@ export const pluginTagSelectStyles = {
         },
     }),
 }
+
+export const PluginTagOption = (props: OptionProps<OptionType, true>) => (
+    <Option {...props} showTippy placement="left" />
+)
 
 /**
  * @description This method takes the initial plugin data store and updates the keys with the target parent plugin store and plugin version store

@@ -14,26 +14,13 @@
  * limitations under the License.
  */
 
+import { ModuleStatus } from '@Shared/types'
 import { ResponseType, TippyCustomizedProps } from '../../../Common'
 
 export enum InstallationType {
     OSS_KUBECTL = 'oss_kubectl',
     OSS_HELM = 'oss_helm',
     ENTERPRISE = 'enterprise',
-}
-
-export enum ModuleStatus {
-    HEALTHY = 'healthy',
-    NONE = 'none',
-    UNKNOWN = 'unknown',
-    UPGRADING = 'upgrading',
-    UPGRADE_FAILED = 'upgradeFailed',
-    // Module Status
-    INSTALLED = 'installed',
-    INSTALLING = 'installing',
-    INSTALL_FAILED = 'installFailed',
-    NOT_INSTALLED = 'notInstalled',
-    TIMEOUT = 'timeout',
 }
 
 export interface PageHeaderType {

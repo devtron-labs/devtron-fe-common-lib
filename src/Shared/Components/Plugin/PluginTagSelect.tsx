@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactSelect, { MenuListProps, ValueContainerProps } from 'react-select'
-import { Option, OptionType } from '../../../Common'
+import { OptionType } from '../../../Common'
 import { LoadingIndicator, MenuListWithApplyButton, MultiSelectValueContainer } from '../ReactSelect'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import { PluginTagSelectProps } from './types'
-import { pluginTagSelectStyles } from './utils'
+import { PluginTagOption, pluginTagSelectStyles } from './utils'
 
 const PluginTagSelect = ({
     availableTags,
@@ -62,7 +62,7 @@ const PluginTagSelect = ({
     )
 
     const renderValueContainer = useCallback(
-        (props: ValueContainerProps<OptionType, true>) => <MultiSelectValueContainer {...props} title="Category" />,
+        (props: ValueContainerProps<OptionType, true>) => <MultiSelectValueContainer {...props} title="Tags" />,
         [],
     )
 
@@ -78,7 +78,7 @@ const PluginTagSelect = ({
                 LoadingIndicator,
                 NoOptionsMessage: renderNoOptionsMessage,
                 MenuList: renderMenuList,
-                Option,
+                Option: PluginTagOption,
                 ValueContainer: renderValueContainer,
             }}
             menuIsOpen={isMenuOpen}
@@ -92,7 +92,7 @@ const PluginTagSelect = ({
             hideSelectedOptions={false}
             blurInputOnSelect={false}
             maxMenuHeight={200}
-            placeholder="Select tags"
+            placeholder="Search tags"
             inputId="plugin-tag-select"
             className="w-150"
         />
