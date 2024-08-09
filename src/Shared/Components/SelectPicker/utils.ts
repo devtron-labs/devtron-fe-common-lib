@@ -85,7 +85,7 @@ export const getCommonSelectStyle = ({
         // Override the padding of the first group header
         '> div': {
             '> :first-child': {
-                paddingTop: '0 !important',
+                paddingTop: 0,
             },
         },
     }),
