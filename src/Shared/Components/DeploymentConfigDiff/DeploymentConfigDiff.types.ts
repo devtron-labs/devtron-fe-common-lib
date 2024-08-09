@@ -63,6 +63,7 @@ export interface DeploymentConfigDiffProps {
     selectorsConfig: {
         primaryConfig: DeploymentConfigDiffSelectPickerProps[]
         secondaryConfig: DeploymentConfigDiffSelectPickerProps[]
+        hideDivider?: boolean
     }
     sortingConfig?: {
         sortBy: string

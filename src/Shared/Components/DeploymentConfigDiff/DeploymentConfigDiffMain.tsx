@@ -65,7 +65,9 @@ export const DeploymentConfigDiffMain = ({
                         ) : (
                             configItem.text
                         )}
-                        {index !== list.length - 1 && <span className="cn-9 fs-13 lh-20">/</span>}
+                        {!selectorsConfig?.hideDivider && index !== list.length - 1 && (
+                            <span className="cn-9 fs-13 lh-20">/</span>
+                        )}
                     </Fragment>
                 )
             }
@@ -74,13 +76,15 @@ export const DeploymentConfigDiffMain = ({
 
             return (
                 <Fragment key={configItem.id}>
-                    <div className="dc__mxw-300">
+                    <div className="dc__mxw-200">
                         <SelectPicker<string | number, false>
                             {...selectPickerProps}
                             isDisabled={isLoading || selectPickerProps?.isDisabled}
                         />
                     </div>
-                    {index !== list.length - 1 && <span className="cn-9 fs-13 lh-20">/</span>}
+                    {!selectorsConfig?.hideDivider && index !== list.length - 1 && (
+                        <span className="cn-9 fs-13 lh-20">/</span>
+                    )}
                 </Fragment>
             )
         })
@@ -170,7 +174,7 @@ export const DeploymentConfigDiffMain = ({
         })
 
     return (
-        <div className="bcn-0 deployment-config-diff__main-top">
+        <div className="bcn-0 deployment-config-diff__main-top flexbox-col min-h-100">
             <div className="dc__border-bottom-n1 flexbox dc__align-items-center dc__position-sticky dc__top-0 bcn-0 w-100 dc__zi-11">
                 <div className="flexbox dc__align-items-center p-12 dc__gap-8 deployment-config-diff__main-top__header">
                     <p className="m-0 cn-9 fs-13 lh-20">{headerText}</p>
@@ -183,7 +187,7 @@ export const DeploymentConfigDiffMain = ({
                     {renderSortButton()}
                 </div>
             </div>
-            <div className="deployment-config-diff__main-content">
+            <div className="deployment-config-diff__main-content dc__overflow-y-auto">
                 {errorConfig?.error && <ErrorScreenManager code={errorConfig.code} reload={errorConfig.reload} />}
                 {!errorConfig?.error &&
                     (isLoading ? (
