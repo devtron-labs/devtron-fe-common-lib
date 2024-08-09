@@ -115,6 +115,8 @@ export const getCommonSelectStyle = ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
+        position: 'sticky',
+        top: 0,
     }),
     input: (base) => ({
         ...base,
