@@ -7,6 +7,7 @@ import { ReactComponent as ICInfoOutlined } from '@Icons/ic-info-outlined.svg'
 import { ReactComponent as ICDiffFileUpdated } from '@Icons/ic-diff-file-updated.svg'
 import { StyledRadioGroup } from '@Common/index'
 
+import { checkNavLinkActiveState } from '../CollapsibleList/utils'
 import { CollapsibleList } from '../CollapsibleList'
 import { DeploymentConfigDiffNavigationProps } from './DeploymentConfigDiff.types'
 
@@ -107,6 +108,7 @@ export const DeploymentConfigDiffNavigation = ({
                 <NavLink
                     key={title}
                     data-testid="env-deployment-template"
+                    isActive={checkNavLinkActiveState(href)}
                     className="dc__nav-item cursor dc__gap-8 fs-13 lh-32 cn-7 w-100 br-4 px-8 flexbox dc__align-items-center dc__content-space dc__no-decor"
                     to={href}
                     onClick={onClick}
