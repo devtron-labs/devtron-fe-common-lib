@@ -57,7 +57,7 @@ export const TagDetails = ({
     }
     return (
         <div className="flexbox mb-8">
-            {hidePropagateTag && (
+            {!hidePropagateTag && (
                 <div
                     className={`dc__border h-30 pl-4 pr-4 br-4 mr-8 pointer ${tagData.propagate ? 'bcn-7' : ''} ${tagData.key.startsWith('devtron.ai/') ? 'cursor-not-allowed bcn-1' : ''}`}
                     onClick={propagateTagToResource}
