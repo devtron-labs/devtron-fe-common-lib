@@ -55,9 +55,10 @@ export const getCommonSelectStyle = ({
     menuSize,
     variant,
     getIsOptionValid,
+    isGroupHeadingSelectable,
 }: Pick<
     SelectPickerProps,
-    'error' | 'size' | 'menuSize' | 'variant' | 'getIsOptionValid'
+    'error' | 'size' | 'menuSize' | 'variant' | 'getIsOptionValid' | 'isGroupHeadingSelectable'
 >): StylesConfig<SelectPickerOptionType> => ({
     container: (base, state) => ({
         ...base,
@@ -226,6 +227,10 @@ export const getCommonSelectStyle = ({
         position: 'sticky',
         top: 0,
         zIndex: 1,
+
+        ...(isGroupHeadingSelectable && {
+            cursor: 'pointer',
+        }),
     }),
     input: (base) => ({
         ...base,

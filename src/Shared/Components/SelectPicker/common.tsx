@@ -260,11 +260,7 @@ export const SelectPickerGroupHeading = ({
     }
 
     return (
-        <components.GroupHeading
-            {...props}
-            onClick={toggleGroupHeadingSelection}
-            className={`${props.className} cursor`}
-        >
+        <components.GroupHeading {...props} onClick={toggleGroupHeadingSelection}>
             <div className="flexbox dc__align-items-center dc__gap-8">
                 {/* __isNew__ denotes the new option to be created */}
                 {isGroupHeadingSelectable && (

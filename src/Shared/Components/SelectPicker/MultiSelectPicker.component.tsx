@@ -147,8 +147,9 @@ const MultiSelectPicker = ({
                 menuSize,
                 variant,
                 getIsOptionValid,
+                isGroupHeadingSelectable,
             }),
-        [error, selectSize, menuSize, variant],
+        [error, selectSize, menuSize, variant, isGroupHeadingSelectable],
     )
 
     const isValidNewOption = (inputValue: string) => isCreatable && !!inputValue?.trim()
@@ -243,7 +244,7 @@ const MultiSelectPicker = ({
                             menuPlacement="auto"
                             menuPosition="fixed"
                             menuShouldScrollIntoView
-                            backspaceRemovesValue={false}
+                            backspaceRemovesValue={isMulti}
                             aria-errormessage={errorElementId}
                             aria-invalid={!!error}
                             aria-labelledby={labelId}
