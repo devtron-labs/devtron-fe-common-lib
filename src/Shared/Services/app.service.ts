@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
-import { ROUTES, ResponseType, get, showError } from '../../Common'
-import { CIMaterialInfoDTO, CIMaterialInfoType, GetCITriggerInfoParamsType } from './app.types'
+import { ROUTES, ResponseType, get, getUrlWithSearchParams, showError } from '../../Common'
+import {
+    CIMaterialInfoDTO,
+    CIMaterialInfoType,
+    GetCITriggerInfoParamsType,
+    AppEnvDeploymentConfigDTO,
+    AppEnvDeploymentConfigPayloadType,
+} from './app.types'
 import { getParsedCIMaterialInfo } from './utils'
 
 export const getCITriggerInfo = async (params: GetCITriggerInfoParamsType): Promise<CIMaterialInfoType> => {
@@ -48,3 +54,9 @@ export const getArtifactInfo = async (
         throw err
     }
 }
+
+export const getAppEnvDeploymentConfig = (
+    params: AppEnvDeploymentConfigPayloadType,
+    signal?: AbortSignal,
+): Promise<ResponseType<AppEnvDeploymentConfigDTO>> =>
+    get(getUrlWithSearchParams(ROUTES.CONFIG_DATA, params), { signal })
