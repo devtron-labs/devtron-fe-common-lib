@@ -238,7 +238,6 @@ const MultiSelectPicker = ({
                                 MultiValueLabel: renderMultiValueLabel,
                                 MultiValueRemove,
                                 GroupHeading: renderGroupHeading,
-                                // MultiValueContainer,
                             }}
                             styles={selectStyles}
                             menuPlacement="auto"
@@ -252,10 +251,6 @@ const MultiSelectPicker = ({
                             allowCreateWhileLoading={false}
                             hideSelectedOptions={false}
                             isValidNewOption={isValidNewOption}
-                            // onKeyDown
-                            // onBlur
-                            // onCreateOption
-                            // getIsOptionDisabled
                         />
                     </div>
                 </ConditionalWrap>
