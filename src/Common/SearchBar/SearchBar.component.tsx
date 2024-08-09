@@ -116,6 +116,14 @@ const SearchBar = ({
         }
     }
 
+    const inputCallbackRef: React.RefCallback<HTMLInputElement> = (node = null) => {
+        if (inputProps.ref) {
+            // eslint-disable-next-line no-param-reassign
+            inputProps.ref.current = node
+        }
+        inputRef.current = node
+    }
+
     return (
         <div className={containerClassName}>
             <div
@@ -133,7 +141,7 @@ const SearchBar = ({
                     } ${noBackgroundAndBorder ? 'dc__no-background' : 'bc-n50'}`}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    ref={inputRef}
+                    ref={inputCallbackRef}
                 />
                 {/* TODO: Sync with product since it should have ic-enter in case of not applied */}
                 {showClearButton && (

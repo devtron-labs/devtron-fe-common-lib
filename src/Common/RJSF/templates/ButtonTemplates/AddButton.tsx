@@ -16,8 +16,7 @@
 
 import { IconButtonProps } from '@rjsf/utils'
 
-import Tippy from '../../../Tippy'
-import { ADD_BUTTON_WIDTH } from '../../constants'
+import { Tooltip } from '@Common/Tooltip'
 import { ReactComponent as PlusIcon } from '../../../../Assets/Icon/ic-add.svg'
 
 export const AddButton = ({
@@ -32,23 +31,17 @@ export const AddButton = ({
 
     return (
         <div className="flexbox flex-justify-start">
-            <Tippy
-                className="default-tt dc__word-break"
-                arrow={false}
-                placement="right"
-                content={content}
-                truncateWidth={ADD_BUTTON_WIDTH.MAX_WIDTH_VALUE}
+            <button
+                {...props}
+                type="button"
+                className="dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor dc__mxw-250"
+                title="Add"
             >
-                <button
-                    {...props}
-                    type="button"
-                    className={`dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor ${ADD_BUTTON_WIDTH.MAX_WIDTH_CLASSNAME}`}
-                    title="Add"
-                >
-                    <PlusIcon className="icon-dim-16 fcb-5" />
+                <PlusIcon className="icon-dim-16 fcb-5" />
+                <Tooltip placement="right" content={content}>
                     <span className="cb-5 fs-13 lh-34 dc__truncate">{content}</span>
-                </button>
-            </Tippy>
+                </Tooltip>
+            </button>
         </div>
     )
 }

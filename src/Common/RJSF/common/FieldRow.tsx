@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-import React from 'react'
-import { ConditionalWrap } from '../../Helper'
+import { Tooltip } from '@Common/Tooltip'
 import { FieldRowProps } from './types'
 import { DEFAULT_FIELD_TITLE } from '../constants'
-import { getTippyWrapperWithContent } from '../utils'
 
 export const FieldRowWithLabel = ({
     showLabel,
@@ -38,11 +36,11 @@ export const FieldRowWithLabel = ({
     >
         {showLabel && (
             <label className="cn-7 fs-13 lh-20 fw-4 flexbox mb-0" htmlFor={id}>
-                <ConditionalWrap condition={!!rawDescription} wrap={getTippyWrapperWithContent(rawDescription, 'top')}>
+                <Tooltip alwaysShowTippyOnHover={!!rawDescription} content={rawDescription}>
                     <span className={`dc__ellipsis-right ${rawDescription ? 'text-underline-dashed-300' : ''}`}>
                         {label || DEFAULT_FIELD_TITLE}
                     </span>
-                </ConditionalWrap>
+                </Tooltip>
                 {required && <span className="cr-5">&nbsp;*</span>}
             </label>
         )}
