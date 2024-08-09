@@ -6,10 +6,16 @@ import {
     ClearIndicatorProps,
     ValueContainerProps,
     MenuListProps,
+    MultiValueRemoveProps,
+    MultiValueProps,
 } from 'react-select'
 import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { ChangeEvent } from 'react'
+import { noop } from '@Common/Helper'
+import { CHECKBOX_VALUE } from '@Common/Types'
+import { Checkbox } from '@Common/Checkbox'
 import { SelectPickerOptionType, SelectPickerProps } from './type'
 
 export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps<SelectPickerOptionType>) => {
@@ -24,7 +30,7 @@ export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps<Sele
 
 export const SelectPickerClearIndicator = (props: ClearIndicatorProps<SelectPickerOptionType>) => (
     <components.ClearIndicator {...props}>
-        <ICClose className="icon-dim-16 fcn-6 dc__no-shrink" />
+        <ICClose className="icon-dim-16 icon-use-fill-n6 dc__no-shrink" />
     </components.ClearIndicator>
 )
 
@@ -79,26 +85,52 @@ export const SelectPickerOption = ({
     disableDescriptionEllipsis,
     ...props
 }: OptionProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'disableDescriptionEllipsis'>) => {
-    const { label, data } = props
+    const {
+        label,
+        data,
+        selectProps: { isMulti },
+        selectOption,
+    } = props
     const { description, startIcon, endIcon } = data ?? {}
     const showDescription = !!description
 
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        selectOption(data)
+    }
+
     return (
         <components.Option {...props}>
-            <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
-                {startIcon && (
-                    <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
+            <div className="flexbox dc__align-items-center dc__gap-8">
+                {isMulti && (
+                    <Checkbox
+                        onChange={noop}
+                        onClick={handleChange}
+                        isChecked={props.isSelected || false}
+                        value={CHECKBOX_VALUE.CHECKED}
+                        rootClassName="mb-0 w-20"
+                    />
                 )}
-                <div className="flex-grow-1">
-                    <h4 className="m-0 cn-9 fs-13 fw-4 lh-20 dc__truncate">{label}</h4>
-                    {/* Add support for custom ellipsis if required */}
-                    {showDescription && (
-                        <p className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__truncate' : ''}`}>
-                            {description}
-                        </p>
+                <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
+                    {startIcon && (
+                        <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
+                    )}
+                    <div className="flex-grow-1">
+                        <h4 className="m-0 cn-9 fs-13 fw-4 lh-20 dc__truncate">{label}</h4>
+                        {/* Add support for custom ellipsis if required */}
+                        {showDescription && (
+                            <p
+                                className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__truncate' : ''}`}
+                            >
+                                {description}
+                            </p>
+                        )}
+                    </div>
+                    {endIcon && (
+                        <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>
                     )}
                 </div>
-                {endIcon && <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>}
             </div>
         </components.Option>
     )
@@ -120,5 +152,52 @@ export const SelectPickerMenuList = ({
                 </div>
             )}
         </components.MenuList>
+    )
+}
+
+export const MultiValueLabel = (props: MultiValueProps<SelectPickerOptionType, true>) => {
+    const { data } = props
+    const iconToDisplay = data.startIcon || data.endIcon
+
+    return (
+        <div className="flex dc__gap-4">
+            {iconToDisplay && (
+                <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{iconToDisplay}</div>
+            )}
+            <components.MultiValueLabel {...props} />
+        </div>
+    )
+}
+
+export const MultiValueRemove = (props: MultiValueRemoveProps) => (
+    <components.MultiValueLabel {...props}>
+        <span className="flex dc__no-shrink">
+            <ICClose className="icon-dim-12 icon-use-fill-n6" />
+        </span>
+    </components.MultiValueLabel>
+)
+
+export const MultiValueOption = ({ children, ...props }: OptionProps<SelectPickerOptionType, true>) => {
+    const { selectOption, data } = props
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        selectOption(data)
+    }
+
+    return (
+        <components.Option {...props}>
+            <div className="flexbox dc__align-items-center dc__gap-8">
+                <Checkbox
+                    onChange={noop}
+                    onClick={handleChange}
+                    isChecked={props.isSelected || false}
+                    value={CHECKBOX_VALUE.CHECKED}
+                    rootClassName="mb-0 w-20"
+                />
+                {children}
+            </div>
+        </components.Option>
     )
 }

@@ -1,4 +1,5 @@
-import ReactSelect, { ControlProps, MenuListProps, OptionProps, ValueContainerProps } from 'react-select'
+import { ControlProps, MenuListProps, OptionProps, ValueContainerProps } from 'react-select'
+import CreatableSelect from 'react-select/creatable'
 import { ReactElement, useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
@@ -7,6 +8,8 @@ import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
 import { getCommonSelectStyle } from './utils'
 import {
+    MultiValueLabel,
+    MultiValueRemove,
     SelectPickerClearIndicator,
     SelectPickerControl,
     SelectPickerDropdownIndicator,
@@ -98,7 +101,7 @@ import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } fr
  * <SelectPicker ... showSelectedOptionsCount />
  * ```
  */
-const SelectPicker = ({
+const MultiSelectPicker = ({
     error,
     icon,
     renderMenuListFooter,
@@ -146,7 +149,7 @@ const SelectPicker = ({
 
     const renderValueContainer = useCallback(
         (valueContainerProps: ValueContainerProps<SelectPickerOptionType>) => (
-            <SelectPickerValueContainer {...valueContainerProps} showSelectedOptionsCount={false} />
+            <SelectPickerValueContainer {...valueContainerProps} showSelectedOptionsCount={showSelectedOptionsCount} />
         ),
         [showSelectedOptionsCount],
     )
@@ -187,8 +190,9 @@ const SelectPicker = ({
                 )}
                 <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
                     <div className="w-100">
-                        <ReactSelect<SelectPickerOptionType, boolean>
+                        <CreatableSelect<SelectPickerOptionType, true>
                             {...props}
+                            isMulti
                             placeholder={placeholder}
                             components={{
                                 IndicatorSeparator: null,
@@ -199,6 +203,10 @@ const SelectPicker = ({
                                 MenuList: renderMenuList,
                                 ClearIndicator: SelectPickerClearIndicator,
                                 ValueContainer: renderValueContainer,
+                                MultiValueLabel,
+                                MultiValueRemove,
+
+                                // MultiValueContainer
                             }}
                             styles={selectStyles}
                             menuPlacement="auto"
@@ -208,6 +216,8 @@ const SelectPicker = ({
                             aria-errormessage={errorElementId}
                             aria-invalid={!!error}
                             aria-labelledby={labelId}
+                            closeMenuOnSelect={false}
+                            allowCreateWhileLoading={false}
                             hideSelectedOptions={false}
                         />
                     </div>
@@ -230,4 +240,4 @@ const SelectPicker = ({
     )
 }
 
-export default SelectPicker
+export default MultiSelectPicker

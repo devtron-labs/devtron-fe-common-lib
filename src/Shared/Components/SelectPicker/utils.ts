@@ -144,6 +144,7 @@ export const getCommonSelectStyle = ({
         whiteSpace: 'nowrap',
         position: 'sticky',
         top: 0,
+        zIndex: 1,
     }),
     input: (base) => ({
         ...base,
