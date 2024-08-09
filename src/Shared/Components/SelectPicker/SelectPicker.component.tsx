@@ -1,4 +1,12 @@
-import ReactSelect, { ControlProps, MenuListProps, OptionProps, ValueContainerProps } from 'react-select'
+import ReactSelect, {
+    ControlProps,
+    GroupHeadingProps,
+    MenuListProps,
+    MultiValueProps,
+    OptionProps,
+    ValueContainerProps,
+} from 'react-select'
+import CreatableSelect from 'react-select/creatable'
 import { ReactElement, useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
@@ -7,9 +15,12 @@ import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
 import { getCommonSelectStyle } from './utils'
 import {
+    MultiValueLabel,
+    MultiValueRemove,
     SelectPickerClearIndicator,
     SelectPickerControl,
     SelectPickerDropdownIndicator,
+    SelectPickerGroupHeading,
     SelectPickerLoadingIndicator,
     SelectPickerMenuList,
     SelectPickerOption,
@@ -112,9 +123,16 @@ const SelectPicker = ({
     menuSize,
     variant = SelectPickerVariantType.DEFAULT,
     disableDescriptionEllipsis = false,
+    getIsOptionValid = () => true,
+    isCreatable = false,
+    isGroupHeadingSelectable = false,
+    isMulti,
     ...props
 }: SelectPickerProps) => {
-    const { inputId, required, isDisabled } = props
+    const { inputId, required, isDisabled, controlShouldRenderValue } = props
+    // Only large variant is supported for multi select picker
+    const selectSize = isMulti && !controlShouldRenderValue ? ComponentSizeType.large : size
+    const shouldShowSelectedOptionIcon = !isMulti && showSelectedOptionIcon
 
     const labelId = `${inputId}-label`
     const errorElementId = `${inputId}-error-msg`
@@ -123,18 +141,22 @@ const SelectPicker = ({
         () =>
             getCommonSelectStyle({
                 error,
-                size,
+                size: selectSize,
                 menuSize,
                 variant,
+                getIsOptionValid,
+                isGroupHeadingSelectable,
             }),
-        [error, size, menuSize, variant],
+        [error, selectSize, menuSize, variant, isGroupHeadingSelectable],
     )
+
+    const isValidNewOption = (inputValue: string) => isCreatable && !!inputValue?.trim()
 
     const renderControl = useCallback(
         (controlProps: ControlProps<SelectPickerOptionType>) => (
-            <SelectPickerControl {...controlProps} icon={icon} showSelectedOptionIcon={showSelectedOptionIcon} />
+            <SelectPickerControl {...controlProps} icon={icon} showSelectedOptionIcon={shouldShowSelectedOptionIcon} />
         ),
-        [icon, showSelectedOptionIcon],
+        [icon, shouldShowSelectedOptionIcon],
     )
 
     const renderMenuList = useCallback(
@@ -146,7 +168,7 @@ const SelectPicker = ({
 
     const renderValueContainer = useCallback(
         (valueContainerProps: ValueContainerProps<SelectPickerOptionType>) => (
-            <SelectPickerValueContainer {...valueContainerProps} showSelectedOptionsCount={false} />
+            <SelectPickerValueContainer {...valueContainerProps} showSelectedOptionsCount={showSelectedOptionsCount} />
         ),
         [showSelectedOptionsCount],
     )
@@ -156,6 +178,17 @@ const SelectPicker = ({
             <SelectPickerOption {...optionProps} disableDescriptionEllipsis={disableDescriptionEllipsis} />
         ),
         [disableDescriptionEllipsis],
+    )
+
+    const renderMultiValueLabel = (multiValueLabelProps: MultiValueProps<SelectPickerOptionType, true>) => (
+        <MultiValueLabel {...multiValueLabelProps} getIsOptionValid={getIsOptionValid} />
+    )
+
+    const renderGroupHeading = useCallback(
+        (groupHeadingProps: GroupHeadingProps<SelectPickerOptionType>) => (
+            <SelectPickerGroupHeading {...groupHeadingProps} isGroupHeadingSelectable={isGroupHeadingSelectable} />
+        ),
+        [isGroupHeadingSelectable],
     )
 
     const renderDisabledTippy = (children: ReactElement) => (
@@ -187,29 +220,62 @@ const SelectPicker = ({
                 )}
                 <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
                     <div className="w-100">
-                        <ReactSelect<SelectPickerOptionType, boolean>
-                            {...props}
-                            placeholder={placeholder}
-                            components={{
-                                IndicatorSeparator: null,
-                                LoadingIndicator: SelectPickerLoadingIndicator,
-                                DropdownIndicator: SelectPickerDropdownIndicator,
-                                Control: renderControl,
-                                Option: renderOption,
-                                MenuList: renderMenuList,
-                                ClearIndicator: SelectPickerClearIndicator,
-                                ValueContainer: renderValueContainer,
-                            }}
-                            styles={selectStyles}
-                            menuPlacement="auto"
-                            menuPosition="fixed"
-                            menuShouldScrollIntoView
-                            backspaceRemovesValue={false}
-                            aria-errormessage={errorElementId}
-                            aria-invalid={!!error}
-                            aria-labelledby={labelId}
-                            hideSelectedOptions={false}
-                        />
+                        {isMulti ? (
+                            <CreatableSelect<SelectPickerOptionType, true>
+                                {...props}
+                                isMulti
+                                placeholder={placeholder}
+                                components={{
+                                    IndicatorSeparator: null,
+                                    LoadingIndicator: SelectPickerLoadingIndicator,
+                                    DropdownIndicator: SelectPickerDropdownIndicator,
+                                    Control: renderControl,
+                                    Option: renderOption,
+                                    MenuList: renderMenuList,
+                                    ClearIndicator: SelectPickerClearIndicator,
+                                    ValueContainer: renderValueContainer,
+                                    MultiValueLabel: renderMultiValueLabel,
+                                    MultiValueRemove,
+                                    GroupHeading: renderGroupHeading,
+                                }}
+                                styles={selectStyles}
+                                menuPlacement="auto"
+                                menuPosition="fixed"
+                                menuShouldScrollIntoView
+                                backspaceRemovesValue
+                                aria-errormessage={errorElementId}
+                                aria-invalid={!!error}
+                                aria-labelledby={labelId}
+                                closeMenuOnSelect={false}
+                                allowCreateWhileLoading={false}
+                                hideSelectedOptions={false}
+                                isValidNewOption={isValidNewOption}
+                            />
+                        ) : (
+                            <ReactSelect<SelectPickerOptionType, false>
+                                {...props}
+                                placeholder={placeholder}
+                                components={{
+                                    IndicatorSeparator: null,
+                                    LoadingIndicator: SelectPickerLoadingIndicator,
+                                    DropdownIndicator: SelectPickerDropdownIndicator,
+                                    Control: renderControl,
+                                    Option: renderOption,
+                                    MenuList: renderMenuList,
+                                    ClearIndicator: SelectPickerClearIndicator,
+                                    ValueContainer: renderValueContainer,
+                                }}
+                                styles={selectStyles}
+                                menuPlacement="auto"
+                                menuPosition="fixed"
+                                menuShouldScrollIntoView
+                                backspaceRemovesValue={false}
+                                aria-errormessage={errorElementId}
+                                aria-invalid={!!error}
+                                aria-labelledby={labelId}
+                                hideSelectedOptions={false}
+                            />
+                        )}
                     </div>
                 </ConditionalWrap>
             </div>

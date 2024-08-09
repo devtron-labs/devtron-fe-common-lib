@@ -128,4 +128,5 @@ export interface SelectPickerProps
      * @default false
      */
     isGroupHeadingSelectable?: boolean
+    // TODO: Improve typing and add support for custom option list; isMenuOpen prop expose?
 }
