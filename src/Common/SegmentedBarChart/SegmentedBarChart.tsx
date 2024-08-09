@@ -26,13 +26,9 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     labelClassName,
 }) => {
     const total = entities.reduce((sum, entity) => entity.value + sum, 0)
+    const filteredEntities = entities.filter((entity) => entity.value)
 
-    const calcSegmentWidth = (entity: Entity) => {
-        if (!entity.value) {
-            return '100%'
-        }
-        return `${(entity.value / total) * 100}%`
-    }
+    const calcSegmentWidth = (entity: Entity) => `${(entity.value / total) * 100}%`
 
     return (
         <div className={`flexbox-col w-100 dc__gap-12 ${rootClassName}`}>
@@ -50,7 +46,7 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
                 ))}
             </div>
             <div className="flexbox dc__gap-2">
-                {entities?.map((entity, index, map) => (
+                {filteredEntities?.map((entity, index, map) => (
                     <div
                         key={entity.label}
                         className={`h-8 ${index === 0 ? 'dc__left-radius-4' : ''} ${
