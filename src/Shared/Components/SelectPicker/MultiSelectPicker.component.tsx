@@ -1,4 +1,11 @@
-import { ControlProps, MenuListProps, MultiValueProps, OptionProps, ValueContainerProps } from 'react-select'
+import {
+    ControlProps,
+    GroupHeadingProps,
+    MenuListProps,
+    MultiValueProps,
+    OptionProps,
+    ValueContainerProps,
+} from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { ReactElement, useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
@@ -13,6 +20,7 @@ import {
     SelectPickerClearIndicator,
     SelectPickerControl,
     SelectPickerDropdownIndicator,
+    SelectPickerGroupHeading,
     SelectPickerLoadingIndicator,
     SelectPickerMenuList,
     SelectPickerOption,
@@ -121,6 +129,7 @@ const MultiSelectPicker = ({
     // TODO: Revert
     isMulti = true,
     isCreatable = false,
+    isGroupHeadingSelectable = false,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
@@ -176,6 +185,13 @@ const MultiSelectPicker = ({
         <MultiValueLabel {...multiValueLabelProps} getIsOptionValid={getIsOptionValid} />
     )
 
+    const renderGroupHeading = useCallback(
+        (groupHeadingProps: GroupHeadingProps<SelectPickerOptionType>) => (
+            <SelectPickerGroupHeading {...groupHeadingProps} isGroupHeadingSelectable={isGroupHeadingSelectable} />
+        ),
+        [isGroupHeadingSelectable],
+    )
+
     const renderDisabledTippy = (children: ReactElement) => (
         <Tippy content={disabledTippyContent} placement="top" className="default-tt" arrow={false}>
             {children}
@@ -220,6 +236,7 @@ const MultiSelectPicker = ({
                                 ValueContainer: renderValueContainer,
                                 MultiValueLabel: renderMultiValueLabel,
                                 MultiValueRemove,
+                                GroupHeading: renderGroupHeading,
                                 // MultiValueContainer,
                             }}
                             styles={selectStyles}

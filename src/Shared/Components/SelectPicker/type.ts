@@ -46,6 +46,7 @@ export interface SelectPickerProps
             | 'isMulti'
             | 'getOptionLabel'
             | 'getOptionValue'
+            | 'isOptionSelected'
         >,
         Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> {
     /**
@@ -115,6 +116,16 @@ export interface SelectPickerProps
     /**
      * If true, the select picker creates the new option
      * Only applicable for isMulti: true
+     *
+     * @default false
      */
-    isCreatable: boolean
+    isCreatable?: boolean
+    /**
+     * If true, the group heading can be selected
+     *
+     * Only applicable for isMulti: true
+     *
+     * @default false
+     */
+    isGroupHeadingSelectable?: boolean
 }

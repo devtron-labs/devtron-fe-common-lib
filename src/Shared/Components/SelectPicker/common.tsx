@@ -8,6 +8,8 @@ import {
     MenuListProps,
     MultiValueRemoveProps,
     MultiValueProps,
+    GroupHeadingProps,
+    MultiValue,
 } from 'react-select'
 import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
@@ -17,6 +19,7 @@ import { ChangeEvent } from 'react'
 import { noop } from '@Common/Helper'
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { Checkbox } from '@Common/Checkbox'
+import { ReactSelectInputAction } from '@Common/Constants'
 import { SelectPickerOptionType, SelectPickerProps } from './type'
 
 export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps<SelectPickerOptionType>) => {
@@ -111,7 +114,7 @@ export const SelectPickerOption = ({
                         onClick={handleChange}
                         isChecked={props.isSelected || false}
                         value={CHECKBOX_VALUE.CHECKED}
-                        rootClassName="mb-0 w-20 p-2 dc__align-self-start"
+                        rootClassName="mb-0 w-20 p-2 dc__align-self-start dc__no-shrink"
                     />
                 )}
                 <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
@@ -186,3 +189,95 @@ export const MultiValueRemove = (props: MultiValueRemoveProps) => (
         </span>
     </components.MultiValueLabel>
 )
+
+export const SelectPickerGroupHeading = ({
+    isGroupHeadingSelectable,
+    ...props
+}: GroupHeadingProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'isGroupHeadingSelectable'>) => {
+    const { data, selectProps } = props
+
+    if (!data.label) {
+        return null
+    }
+
+    if (!isGroupHeadingSelectable || !selectProps.isMulti) {
+        return <components.GroupHeading {...props} />
+    }
+
+    const selectedOptions = (selectProps.value as MultiValue<SelectPickerOptionType>) ?? []
+    const groupHeadingOptions = data.options ?? []
+
+    const selectedOptionsMapByValue = selectedOptions.reduce<Record<string, true>>((acc, option) => {
+        acc[selectProps.getOptionValue(option)] = true
+        return acc
+    }, {})
+
+    const isGroupSelected =
+        isGroupHeadingSelectable &&
+        groupHeadingOptions
+            .map((option) => selectProps.getOptionValue(option))
+            .every((value) => selectedOptionsMapByValue[value])
+
+    const toggleGroupHeadingSelection = () => {
+        const groupOptionsMapByValue = groupHeadingOptions.reduce<Record<string, true>>((acc, option) => {
+            acc[selectProps.getOptionValue(option)] = true
+            return acc
+        }, {})
+
+        if (isGroupSelected) {
+            selectProps?.onChange?.(
+                selectedOptions.filter(
+                    (selectedOption) => !groupOptionsMapByValue[selectProps.getOptionValue(selectedOption)],
+                ),
+                {
+                    action: ReactSelectInputAction.deselectOption,
+                    option: null,
+                },
+            )
+
+            return
+        }
+
+        selectProps?.onChange?.(
+            [
+                ...selectedOptions.filter(
+                    (selectedOption) => !groupOptionsMapByValue[selectProps.getOptionValue(selectedOption)],
+                ),
+                ...structuredClone(groupHeadingOptions),
+            ],
+            {
+                action: ReactSelectInputAction.selectOption,
+                option: null,
+            },
+        )
+    }
+
+    const handleToggleCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        toggleGroupHeadingSelection()
+    }
+
+    return (
+        <components.GroupHeading
+            {...props}
+            onClick={toggleGroupHeadingSelection}
+            className={`${props.className} cursor`}
+        >
+            <div className="flexbox dc__align-items-center dc__gap-8">
+                {/* __isNew__ denotes the new option to be created */}
+                {isGroupHeadingSelectable && (
+                    <Checkbox
+                        onChange={noop}
+                        onClick={handleToggleCheckbox}
+                        isChecked={isGroupSelected}
+                        value={CHECKBOX_VALUE.CHECKED}
+                        rootClassName="mb-0 w-20 p-2 dc__align-self-start dc__no-shrink"
+                    />
+                )}
+                <div className="dc__truncate">{props.data.label}</div>
+            </div>
+        </components.GroupHeading>
+    )
+}
