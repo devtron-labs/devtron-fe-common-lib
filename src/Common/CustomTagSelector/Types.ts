@@ -38,13 +38,6 @@ export interface TagErrorType {
     isValid: boolean
     messages: string[]
 }
-
-export enum APP_TYPE {
-    HELM_CHART = 'helm-chart',
-    DEVTRON_APPS = 'app',
-    JOB = 'job',
-}
-
 export interface TagLabelSelectType {
     isCreateApp?: boolean
     labelTags: TagType[]
