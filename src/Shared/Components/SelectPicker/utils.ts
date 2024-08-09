@@ -54,7 +54,11 @@ export const getCommonSelectStyle = ({
     size,
     menuSize,
     variant,
-}: Pick<SelectPickerProps, 'error' | 'size' | 'menuSize' | 'variant'>): StylesConfig<SelectPickerOptionType> => ({
+    getIsOptionValid,
+}: Pick<
+    SelectPickerProps,
+    'error' | 'size' | 'menuSize' | 'variant' | 'getIsOptionValid'
+>): StylesConfig<SelectPickerOptionType> => ({
     container: (base, state) => ({
         ...base,
         ...(state.isDisabled && {
@@ -147,18 +151,22 @@ export const getCommonSelectStyle = ({
             gap: '8px',
         }),
     }),
-    multiValue: (base) => ({
-        ...base,
-        background: 'var(--N0)',
-        border: '1px solid var(--N200)',
-        borderRadius: '4px',
-        padding: '1px 5px',
-        maxWidth: '250px',
-        margin: 0,
-        display: 'flex',
-        alignItems: 'center',
-        gap: '4px',
-    }),
+    multiValue: (base, state) => {
+        const isOptionValid = getIsOptionValid(state.data)
+
+        return {
+            ...base,
+            background: isOptionValid ? 'var(--N0)' : 'var(--R100)',
+            border: isOptionValid ? '1px solid var(--N200)' : '1px solid var(--R200)',
+            borderRadius: '4px',
+            padding: '1px 5px',
+            maxWidth: '250px',
+            margin: 0,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+        }
+    },
     multiValueLabel: (base) => ({
         ...base,
         borderRadius: 0,

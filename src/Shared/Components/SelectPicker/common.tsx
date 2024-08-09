@@ -12,6 +12,7 @@ import {
 import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
 import { ChangeEvent } from 'react'
 import { noop } from '@Common/Helper'
 import { CHECKBOX_VALUE } from '@Common/Types'
@@ -155,9 +156,13 @@ export const SelectPickerMenuList = ({
     )
 }
 
-export const MultiValueLabel = (props: MultiValueProps<SelectPickerOptionType, true>) => {
+export const MultiValueLabel = ({
+    getIsOptionValid,
+    ...props
+}: MultiValueProps<SelectPickerOptionType, true> & Pick<SelectPickerProps, 'getIsOptionValid'>) => {
     const { data, selectProps } = props
-    const iconToDisplay = data.startIcon || data.endIcon
+    const isOptionValid = getIsOptionValid(data)
+    const iconToDisplay = isOptionValid ? data.startIcon || data.endIcon : <ICErrorExclamation />
 
     return (
         <div className="flex dc__gap-4 mw-0">
@@ -180,28 +185,3 @@ export const MultiValueRemove = (props: MultiValueRemoveProps) => (
         </span>
     </components.MultiValueLabel>
 )
-
-export const MultiValueOption = ({ children, ...props }: OptionProps<SelectPickerOptionType, true>) => {
-    const { selectOption, data } = props
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault()
-        e.stopPropagation()
-        selectOption(data)
-    }
-
-    return (
-        <components.Option {...props}>
-            <div className="flexbox dc__align-items-center dc__gap-8">
-                <Checkbox
-                    onChange={noop}
-                    onClick={handleChange}
-                    isChecked={props.isSelected || false}
-                    value={CHECKBOX_VALUE.CHECKED}
-                    rootClassName="mb-0 w-20"
-                />
-                {children}
-            </div>
-        </components.Option>
-    )
-}

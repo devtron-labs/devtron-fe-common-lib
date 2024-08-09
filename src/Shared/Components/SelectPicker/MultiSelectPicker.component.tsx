@@ -1,4 +1,4 @@
-import { ControlProps, MenuListProps, OptionProps, ValueContainerProps } from 'react-select'
+import { ControlProps, MenuListProps, MultiValueProps, OptionProps, ValueContainerProps } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { ReactElement, useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
@@ -117,6 +117,7 @@ const MultiSelectPicker = ({
     menuSize,
     variant = SelectPickerVariantType.DEFAULT,
     disableDescriptionEllipsis = false,
+    getIsOptionValid = () => true,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
@@ -132,6 +133,7 @@ const MultiSelectPicker = ({
                 size: selectSize,
                 menuSize,
                 variant,
+                getIsOptionValid,
             }),
         [error, selectSize, menuSize, variant],
     )
@@ -162,6 +164,10 @@ const MultiSelectPicker = ({
             <SelectPickerOption {...optionProps} disableDescriptionEllipsis={disableDescriptionEllipsis} />
         ),
         [disableDescriptionEllipsis],
+    )
+
+    const renderMultiValueLabel = (multiValueLabelProps: MultiValueProps<SelectPickerOptionType, true>) => (
+        <MultiValueLabel {...multiValueLabelProps} getIsOptionValid={getIsOptionValid} />
     )
 
     const renderDisabledTippy = (children: ReactElement) => (
@@ -206,10 +212,9 @@ const MultiSelectPicker = ({
                                 MenuList: renderMenuList,
                                 ClearIndicator: SelectPickerClearIndicator,
                                 ValueContainer: renderValueContainer,
-                                MultiValueLabel,
+                                MultiValueLabel: renderMultiValueLabel,
                                 MultiValueRemove,
-
-                                // MultiValueContainer
+                                // MultiValueContainer,
                             }}
                             styles={selectStyles}
                             menuPlacement="auto"
@@ -222,6 +227,10 @@ const MultiSelectPicker = ({
                             closeMenuOnSelect={false}
                             allowCreateWhileLoading={false}
                             hideSelectedOptions={false}
+                            // isValidNewOption={() => false}
+                            // onKeyDown
+                            // onBlur
+                            // onCreateOption
                         />
                     </div>
                 </ConditionalWrap>

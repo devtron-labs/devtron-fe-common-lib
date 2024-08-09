@@ -108,4 +108,5 @@ export interface SelectPickerProps
      * @default false
      */
     disableDescriptionEllipsis?: boolean
+    getIsOptionValid?: (option: SelectPickerOptionType) => boolean
 }
