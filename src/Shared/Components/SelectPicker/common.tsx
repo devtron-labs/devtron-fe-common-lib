@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import Tippy, { TippyProps } from '@tippyjs/react'
 import {
     components,
     DropdownIndicatorProps,
@@ -31,13 +32,19 @@ import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
 import { ChangeEvent } from 'react'
-import { noop } from '@Common/Helper'
+import { ConditionalWrap, noop } from '@Common/Helper'
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { Checkbox } from '@Common/Checkbox'
 import { ReactSelectInputAction } from '@Common/Constants'
 import { isNullOrUndefined } from '@Shared/Helpers'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
+
+const renderWithTippy = (tippyProps: TippyProps) => (children: React.ReactElement) => (
+    <Tippy {...tippyProps} className={`default-tt ${tippyProps?.className || ''}`}>
+        {children}
+    </Tippy>
+)
 
 export const SelectPickerDropdownIndicator = <OptionValue,>(
     props: DropdownIndicatorProps<SelectPickerOptionType<OptionValue>>,
@@ -124,7 +131,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
         isDisabled,
         isSelected,
     } = props
-    const { description, startIcon, endIcon } = data ?? {}
+    const { description, startIcon, endIcon, tooltipProps } = data ?? {}
     const showDescription = !!description
     // __isNew__ denotes the new option to be created
     const isCreatableOption = '__isNew__' in data && data.__isNew__
@@ -137,39 +144,41 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
 
     return (
         <components.Option {...props}>
-            <div className="flexbox dc__align-items-center dc__gap-8">
-                {isMulti && !isCreatableOption && (
-                    <Checkbox
-                        onChange={noop}
-                        onClick={handleChange}
-                        isChecked={isSelected || false}
-                        value={CHECKBOX_VALUE.CHECKED}
-                        rootClassName="mb-0 w-20 p-2 dc__align-self-start dc__no-shrink"
-                        disabled={isDisabled}
-                    />
-                )}
-                <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
-                    {startIcon && (
-                        <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
+            <ConditionalWrap condition={!!tooltipProps?.content} wrap={renderWithTippy(tooltipProps)}>
+                <div className="flexbox dc__align-items-center dc__gap-8">
+                    {isMulti && !isCreatableOption && (
+                        <Checkbox
+                            onChange={noop}
+                            onClick={handleChange}
+                            isChecked={isSelected || false}
+                            value={CHECKBOX_VALUE.CHECKED}
+                            rootClassName="mb-0 w-20 p-2 dc__align-self-start dc__no-shrink"
+                            disabled={isDisabled}
+                        />
                     )}
-                    <div className="flex-grow-1">
-                        <h4 className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}>
-                            {label}
-                        </h4>
-                        {/* Add support for custom ellipsis if required */}
-                        {showDescription && (
-                            <p
-                                className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__ellipsis-right__2nd-line' : ''}`}
-                            >
-                                {description}
-                            </p>
+                    <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
+                        {startIcon && (
+                            <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
+                        )}
+                        <div className="flex-grow-1">
+                            <h4 className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}>
+                                {label}
+                            </h4>
+                            {/* Add support for custom ellipsis if required */}
+                            {showDescription && (
+                                <p
+                                    className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__ellipsis-right__2nd-line' : ''}`}
+                                >
+                                    {description}
+                                </p>
+                            )}
+                        </div>
+                        {endIcon && (
+                            <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>
                         )}
                     </div>
-                    {endIcon && (
-                        <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>
-                    )}
                 </div>
-            </div>
+            </ConditionalWrap>
         </components.Option>
     )
 }
