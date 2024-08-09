@@ -406,10 +406,36 @@ export const APP_STATUS_HEADERS = ['KIND', 'NAME', 'STATUS', 'MESSAGE']
 export const MATERIAL_EXCLUDE_TIPPY_TEXT =
     'Not available for build as this commit contains changes in excluded files or folders'
 
+export const AppListConstants = {
+    SAMPLE_NODE_REPO_URL: 'https://github.com/devtron-labs/getting-started-nodejs',
+    CREATE_DEVTRON_APP_URL: 'create-d-app',
+    AppTabs: {
+        DEVTRON_APPS: 'Devtron Apps',
+        HELM_APPS: 'Helm Apps',
+        ARGO_APPS: 'ArgoCD Apps',
+        FLUX_APPS: 'FluxCD Apps',
+    },
+    AppType: {
+        DEVTRON_APPS: 'd',
+        HELM_APPS: 'h',
+        ARGO_APPS: 'a',
+        FLUX_APPS: 'f',
+    },
+    FilterType: {
+        PROJECT: 'team',
+        CLUTSER: 'cluster',
+        NAMESPACE: 'namespace',
+        ENVIRONMENT: 'environment',
+        APP_STATUS: 'appStatus',
+        TEMPLATE_TYPE: 'templateType',
+    },
+}
+
 export enum K8sResourcePayloadAppType {
     DEVTRON_APP = 0,
     HELM_APP = 1,
     EXTERNAL_ARGO_APP = 2,
+    EXTERNAL_FLUX_APP = 3,
 }
 
 // Disallowing this rule since ansi specifically works with escape characters
