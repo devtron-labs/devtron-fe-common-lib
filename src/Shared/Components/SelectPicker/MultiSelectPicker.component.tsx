@@ -109,7 +109,9 @@ const MultiSelectPicker = ({
     placeholder = 'Select a option',
     label,
     showSelectedOptionIcon = true,
-    size = ComponentSizeType.medium,
+    // Intentionally left this unused; as smaller variant is not supported
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    size,
     disabledTippyContent,
     showSelectedOptionsCount = false,
     menuSize,
@@ -118,6 +120,7 @@ const MultiSelectPicker = ({
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
+    const selectSize = ComponentSizeType.large
 
     const labelId = `${inputId}-label`
     const errorElementId = `${inputId}-error-msg`
@@ -126,11 +129,11 @@ const MultiSelectPicker = ({
         () =>
             getCommonSelectStyle({
                 error,
-                size,
+                size: selectSize,
                 menuSize,
                 variant,
             }),
-        [error, size, menuSize, variant],
+        [error, selectSize, menuSize, variant],
     )
 
     const renderControl = useCallback(

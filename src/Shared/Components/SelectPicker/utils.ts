@@ -37,6 +37,18 @@ const getVariantOverrides = (variant: SelectPickerVariantType): StylesConfig<Sel
     }
 }
 
+const getOptionBgColor = (state: Parameters<StylesConfig<SelectPickerOptionType>['option']>[1]): string => {
+    if (state.isSelected && !state.selectProps.isMulti) {
+        return 'var(--B100)'
+    }
+
+    if (state.isFocused) {
+        return 'var(--N50)'
+    }
+
+    return 'var(--N0)'
+}
+
 export const getCommonSelectStyle = ({
     error,
     size,
@@ -89,8 +101,7 @@ export const getCommonSelectStyle = ({
     option: (base, state) => ({
         ...base,
         color: 'var(--N900)',
-        // eslint-disable-next-line no-nested-ternary
-        backgroundColor: state.isSelected ? 'var(--B100)' : state.isFocused ? 'var(--N50)' : 'var(--N0)',
+        backgroundColor: getOptionBgColor(state),
         padding: '6px 8px',
         cursor: 'pointer',
         fontSize: '13px',
@@ -99,6 +110,10 @@ export const getCommonSelectStyle = ({
 
         ':active': {
             backgroundColor: 'var(--N100)',
+        },
+
+        ':hover': {
+            backgroundColor: 'var(--N50)',
         },
     }),
     dropdownIndicator: (base, state) => ({
@@ -111,11 +126,59 @@ export const getCommonSelectStyle = ({
     clearIndicator: (base) => ({
         ...base,
         padding: 0,
+
+        '&:hover': {
+            backgroundColor: 'transparent',
+            color: 'inherit',
+
+            'svg use': {
+                fill: 'var(--R500)',
+            },
+        },
     }),
-    valueContainer: (base) => ({
+    valueContainer: (base, state) => ({
         ...base,
         padding: '0',
         fontWeight: '400',
+        ...(state.selectProps.isMulti && {
+            gap: '8px',
+        }),
+    }),
+    multiValue: (base) => ({
+        ...base,
+        background: 'var(--N0)',
+        border: '1px solid var(--N200)',
+        borderRadius: '4px',
+        padding: '1px 5px',
+        maxWidth: '250px',
+        margin: 0,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+    }),
+    multiValueLabel: (base) => ({
+        ...base,
+        borderRadius: 0,
+        color: 'var(--N900)',
+        fontSize: '12px',
+        fontWeight: 400,
+        lineHeight: '20px',
+        padding: 0,
+        paddingLeft: 0,
+    }),
+    multiValueRemove: (base) => ({
+        ...base,
+        padding: 0,
+        borderRadius: 0,
+
+        '&:hover': {
+            backgroundColor: 'transparent',
+            color: 'inherit',
+
+            'svg use': {
+                fill: 'var(--R500)',
+            },
+        },
     }),
     loadingMessage: (base) => ({
         ...base,
