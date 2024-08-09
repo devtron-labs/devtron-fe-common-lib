@@ -110,7 +110,7 @@ export const SelectPickerOption = ({
                         onClick={handleChange}
                         isChecked={props.isSelected || false}
                         value={CHECKBOX_VALUE.CHECKED}
-                        rootClassName="mb-0 w-20"
+                        rootClassName="mb-0 w-20 p-2 dc__align-self-start"
                     />
                 )}
                 <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
