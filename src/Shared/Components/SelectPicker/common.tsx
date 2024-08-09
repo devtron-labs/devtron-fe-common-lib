@@ -156,13 +156,17 @@ export const SelectPickerMenuList = ({
 }
 
 export const MultiValueLabel = (props: MultiValueProps<SelectPickerOptionType, true>) => {
-    const { data } = props
+    const { data, selectProps } = props
     const iconToDisplay = data.startIcon || data.endIcon
 
     return (
-        <div className="flex dc__gap-4">
+        <div className="flex dc__gap-4 mw-0">
             {iconToDisplay && (
-                <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{iconToDisplay}</div>
+                <div
+                    className={`dc__no-shrink ${selectProps.isMulti ? 'icon-dim-16' : 'icon-dim-20'} flex dc__fill-available-space`}
+                >
+                    {iconToDisplay}
+                </div>
             )}
             <components.MultiValueLabel {...props} />
         </div>

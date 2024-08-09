@@ -88,6 +88,9 @@ export const getCommonSelectStyle = ({
         gap: '8px',
         opacity: state.isDisabled ? 0.5 : 1,
         flexWrap: 'nowrap',
+        maxHeight: '120px',
+        overflow: 'auto',
+        alignItems: 'safe center',
         ...(getVariantOverrides(variant)?.control(base, state) || {}),
 
         '&:hover': {
