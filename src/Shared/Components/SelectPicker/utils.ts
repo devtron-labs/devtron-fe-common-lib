@@ -1,5 +1,6 @@
+import { CHECKBOX_VALUE } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
-import { StylesConfig } from 'react-select'
+import { MultiValue, StylesConfig } from 'react-select'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 
 const getMenuWidthFromSize = (menuSize: SelectPickerProps['menuSize']): string => {
@@ -270,3 +271,29 @@ export const getCommonSelectStyle = ({
         ...(getVariantOverrides(variant)?.singleValue(base, state) || {}),
     }),
 })
+
+export const getGroupCheckboxValue = (
+    groupHeadingOptions: readonly SelectPickerOptionType[],
+    selectedOptions: MultiValue<SelectPickerOptionType>,
+    getOptionValue: (option: SelectPickerOptionType) => string,
+) => {
+    const selectedOptionsMapByValue = selectedOptions.reduce<Record<string, true>>((acc, option) => {
+        acc[getOptionValue(option)] = true
+        return acc
+    }, {})
+    const groupOptionsComputedValue = groupHeadingOptions.map((option) => getOptionValue(option))
+
+    const isEveryOptionInGroupSelected = groupOptionsComputedValue.every((value) => selectedOptionsMapByValue[value])
+
+    if (isEveryOptionInGroupSelected) {
+        return CHECKBOX_VALUE.CHECKED
+    }
+
+    const isSomeOptionInGroupSelected = groupOptionsComputedValue.some((value) => selectedOptionsMapByValue[value])
+
+    if (isSomeOptionInGroupSelected) {
+        return CHECKBOX_VALUE.INTERMEDIATE
+    }
+
+    return null
+}

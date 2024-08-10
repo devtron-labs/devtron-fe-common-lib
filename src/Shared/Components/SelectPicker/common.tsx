@@ -21,6 +21,7 @@ import { CHECKBOX_VALUE } from '@Common/Types'
 import { Checkbox } from '@Common/Checkbox'
 import { ReactSelectInputAction } from '@Common/Constants'
 import { SelectPickerOptionType, SelectPickerProps } from './type'
+import { getGroupCheckboxValue } from './utils'
 
 export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps<SelectPickerOptionType>) => {
     const { isDisabled } = props
@@ -207,16 +208,7 @@ export const SelectPickerGroupHeading = ({
     const selectedOptions = (selectProps.value as MultiValue<SelectPickerOptionType>) ?? []
     const groupHeadingOptions = data.options ?? []
 
-    const selectedOptionsMapByValue = selectedOptions.reduce<Record<string, true>>((acc, option) => {
-        acc[selectProps.getOptionValue(option)] = true
-        return acc
-    }, {})
-
-    const isGroupSelected =
-        isGroupHeadingSelectable &&
-        groupHeadingOptions
-            .map((option) => selectProps.getOptionValue(option))
-            .every((value) => selectedOptionsMapByValue[value])
+    const checkboxValue = getGroupCheckboxValue(groupHeadingOptions, selectedOptions, selectProps.getOptionValue)
 
     const toggleGroupHeadingSelection = () => {
         const groupOptionsMapByValue = groupHeadingOptions.reduce<Record<string, true>>((acc, option) => {
@@ -224,7 +216,8 @@ export const SelectPickerGroupHeading = ({
             return acc
         }, {})
 
-        if (isGroupSelected) {
+        // Clear all the selection(s) in the group if any of the option is selected
+        if (checkboxValue) {
             selectProps?.onChange?.(
                 selectedOptions.filter(
                     (selectedOption) => !groupOptionsMapByValue[selectProps.getOptionValue(selectedOption)],
@@ -238,6 +231,7 @@ export const SelectPickerGroupHeading = ({
             return
         }
 
+        // Select all options
         selectProps?.onChange?.(
             [
                 ...selectedOptions.filter(
@@ -267,8 +261,8 @@ export const SelectPickerGroupHeading = ({
                     <Checkbox
                         onChange={noop}
                         onClick={handleToggleCheckbox}
-                        isChecked={isGroupSelected}
-                        value={CHECKBOX_VALUE.CHECKED}
+                        isChecked={!!checkboxValue}
+                        value={checkboxValue}
                         rootClassName="mb-0 w-20 p-2 dc__align-self-start dc__no-shrink"
                     />
                 )}
