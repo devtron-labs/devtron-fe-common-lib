@@ -18,7 +18,13 @@ import { SourceTypeMap } from '../../../Common'
 import { GitCommitInfoGeneric } from '../GitCommitInfoGeneric'
 import { MaterialHistoryProps } from './types'
 
-const MaterialHistory = ({ material, pipelineName, ciPipelineId, selectCommit }: MaterialHistoryProps) => {
+const MaterialHistory = ({
+    material,
+    pipelineName,
+    ciPipelineId,
+    selectCommit,
+    isCommitInfoModal,
+}: MaterialHistoryProps) => {
     const onClickMaterialHistory = (e, _commitId, isExcluded) => {
         e.stopPropagation()
         if (selectCommit && !isExcluded) {
@@ -26,35 +32,68 @@ const MaterialHistory = ({ material, pipelineName, ciPipelineId, selectCommit }:
         }
     }
 
+    const getMaterialHistoryMapWithTime = () => {
+        const historyTimeMap = {}
+
+        material.history?.forEach((history) => {
+            const newDate = history.date.substring(0, 16)
+
+            if (!historyTimeMap[newDate]) {
+                historyTimeMap[newDate] = []
+            }
+            historyTimeMap[newDate].push(history)
+        })
+
+        return historyTimeMap
+    }
+    // Retrieve the history map
+    const materialHistoryMapWithTime = getMaterialHistoryMapWithTime()
+    // Retrieve the keys of the history map
+    const dateKeys = Object.keys(materialHistoryMapWithTime)
+
     return (
         // added for consistent typing
         // eslint-disable-next-line react/jsx-no-useless-fragment
         <>
-            {material?.history?.map((history, index) => {
-                const _commitId =
-                    material.type === SourceTypeMap.WEBHOOK && history.webhookData
-                        ? history.webhookData.id.toString()
-                        : history.commit
-
+            {dateKeys.map((date) => {
+                const historyList = materialHistoryMapWithTime[date]
                 return (
-                    <div
-                        data-testid={`material-history-${index}`}
-                        key={_commitId}
-                        className={`material-history w-auto mt-12 ${history.isSelected ? 'material-history-selected' : ''}`}
-                        onClick={(e) => onClickMaterialHistory(e, _commitId, history.excluded)}
-                    >
-                        <GitCommitInfoGeneric
-                            index={index}
-                            materialUrl={material.gitURL}
-                            showMaterialInfoHeader={pipelineName === ''}
-                            commitInfo={history}
-                            materialSourceType={material.type}
-                            selectedCommitInfo={selectCommit}
-                            materialSourceValue={material.value}
-                            canTriggerBuild={!history.excluded}
-                            isExcluded={history.excluded}
-                        />
-                    </div>
+                    <>
+                        {!isCommitInfoModal && (
+                            <div className="flex left dc__gap-8">
+                                <span className="fs-12 lh-18 cn-7 fw-6 w-130">{date}</span>
+                                <div className="h-1 bcn-2 w-100" />
+                            </div>
+                        )}
+
+                        {historyList?.map((history, index) => {
+                            const _commitId =
+                                material.type === SourceTypeMap.WEBHOOK && history.webhookData
+                                    ? history.webhookData.id.toString()
+                                    : history.commit
+
+                            return (
+                                <div
+                                    data-testid={`material-history-${index}`}
+                                    key={_commitId}
+                                    className={`material-history w-auto ${!history.excluded && !isCommitInfoModal ? 'cursor material-history__box-shadow' : ''} ${history.isSelected ? 'material-history-selected' : ''}`}
+                                    onClick={(e) => onClickMaterialHistory(e, _commitId, history.excluded)}
+                                >
+                                    <GitCommitInfoGeneric
+                                        index={index}
+                                        materialUrl={material.gitURL}
+                                        showMaterialInfoHeader={pipelineName === ''}
+                                        commitInfo={history}
+                                        materialSourceType={material.type}
+                                        selectedCommitInfo={selectCommit}
+                                        materialSourceValue={material.value}
+                                        canTriggerBuild={!history.excluded}
+                                        isExcluded={history.excluded}
+                                    />
+                                </div>
+                            )
+                        })}
+                    </>
                 )
             })}
         </>
