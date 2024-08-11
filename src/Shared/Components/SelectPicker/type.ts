@@ -27,6 +27,8 @@ type SelectProps = ReactSelectProps<SelectPickerOptionType>
 
 export type SelectPickerProps = Pick<
     SelectProps,
+    | 'name'
+    | 'classNamePrefix'
     | 'options'
     | 'value'
     | 'onChange'
@@ -45,7 +47,7 @@ export type SelectPickerProps = Pick<
     | 'getOptionValue'
     | 'isOptionSelected'
 > &
-    Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> & {
+    Required<Pick<SelectProps, 'inputId'>> & {
         /**
          * Icon to be rendered in the control
          */

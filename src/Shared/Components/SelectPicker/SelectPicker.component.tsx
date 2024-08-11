@@ -125,6 +125,8 @@ const SelectPicker = ({
     disableDescriptionEllipsis = false,
     multiSelectProps = {},
     isMulti,
+    name,
+    classNamePrefix,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled, controlShouldRenderValue } = props
@@ -224,6 +226,8 @@ const SelectPicker = ({
                             <CreatableSelect<SelectPickerOptionType, true>
                                 {...props}
                                 isMulti
+                                name={name || inputId}
+                                classNamePrefix={classNamePrefix || inputId}
                                 placeholder={placeholder}
                                 components={{
                                     IndicatorSeparator: null,
@@ -254,6 +258,8 @@ const SelectPicker = ({
                         ) : (
                             <ReactSelect<SelectPickerOptionType, false>
                                 {...props}
+                                name={name || inputId}
+                                classNamePrefix={classNamePrefix || inputId}
                                 placeholder={placeholder}
                                 components={{
                                     IndicatorSeparator: null,
