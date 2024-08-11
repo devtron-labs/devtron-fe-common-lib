@@ -123,13 +123,13 @@ const SelectPicker = ({
     menuSize,
     variant = SelectPickerVariantType.DEFAULT,
     disableDescriptionEllipsis = false,
-    getIsOptionValid = () => true,
-    isCreatable = false,
-    isGroupHeadingSelectable = false,
+    multiSelectProps = {},
     isMulti,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled, controlShouldRenderValue } = props
+    const { isCreatable = false, isGroupHeadingSelectable = false, getIsOptionValid = () => true } = multiSelectProps
+
     // Only large variant is supported for multi select picker
     const selectSize = isMulti && !controlShouldRenderValue ? ComponentSizeType.large : size
     const shouldShowSelectedOptionIcon = !isMulti && showSelectedOptionIcon

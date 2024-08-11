@@ -57,10 +57,11 @@ export const getCommonSelectStyle = ({
     variant,
     getIsOptionValid,
     isGroupHeadingSelectable,
-}: Pick<
-    SelectPickerProps,
-    'error' | 'size' | 'menuSize' | 'variant' | 'getIsOptionValid' | 'isGroupHeadingSelectable'
->): StylesConfig<SelectPickerOptionType> => ({
+}: Pick<SelectPickerProps, 'error' | 'size' | 'menuSize' | 'variant'> &
+    Pick<
+        SelectPickerProps['multiSelectProps'],
+        'getIsOptionValid' | 'isGroupHeadingSelectable'
+    >): StylesConfig<SelectPickerOptionType> => ({
     container: (base, state) => ({
         ...base,
         ...(state.isDisabled && {

@@ -164,7 +164,7 @@ export const SelectPickerMenuList = ({
 export const MultiValueLabel = ({
     getIsOptionValid,
     ...props
-}: MultiValueProps<SelectPickerOptionType, true> & Pick<SelectPickerProps, 'getIsOptionValid'>) => {
+}: MultiValueProps<SelectPickerOptionType, true> & Pick<SelectPickerProps['multiSelectProps'], 'getIsOptionValid'>) => {
     const { data, selectProps } = props
     const isOptionValid = getIsOptionValid(data)
     const iconToDisplay = isOptionValid ? data.startIcon || data.endIcon : <ICErrorExclamation />
@@ -194,7 +194,8 @@ export const MultiValueRemove = (props: MultiValueRemoveProps) => (
 export const SelectPickerGroupHeading = ({
     isGroupHeadingSelectable,
     ...props
-}: GroupHeadingProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'isGroupHeadingSelectable'>) => {
+}: GroupHeadingProps<SelectPickerOptionType> &
+    Pick<SelectPickerProps['multiSelectProps'], 'isGroupHeadingSelectable'>) => {
     const { data, selectProps } = props
 
     if (!data.label) {

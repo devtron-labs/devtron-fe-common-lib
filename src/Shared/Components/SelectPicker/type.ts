@@ -25,108 +25,118 @@ export enum SelectPickerVariantType {
 
 type SelectProps = ReactSelectProps<SelectPickerOptionType>
 
-export interface SelectPickerProps
-    extends Pick<
-            SelectProps,
-            | 'options'
-            | 'value'
-            | 'onChange'
-            | 'isSearchable'
-            | 'isClearable'
-            | 'isLoading'
-            | 'hideSelectedOptions'
-            | 'controlShouldRenderValue'
-            | 'closeMenuOnSelect'
-            | 'isDisabled'
-            | 'isLoading'
-            | 'required'
-            | 'isOptionDisabled'
-            | 'placeholder'
-            | 'isMulti'
-            | 'getOptionLabel'
-            | 'getOptionValue'
-            | 'isOptionSelected'
-            | 'isOptionDisabled'
-        >,
-        Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> {
-    /**
-     * Icon to be rendered in the control
-     */
-    icon?: ReactElement
-    /**
-     * Error message for the select
-     */
-    error?: ReactNode
-    /**
-     * Render function for the footer at the bottom of menu list. It is sticky by default
-     */
-    renderMenuListFooter?: () => ReactNode
-    /**
-     * Info text for the select, if any
-     */
-    helperText?: ReactNode
-    /**
-     * Label for the select. if required is added, the corresponding * is also added
-     */
-    label?: ReactNode
-    /**
-     * If true, the selected option icon is shown in the container.
-     * startIcon has higher priority than endIcon.
-     *
-     * @default 'true'
-     */
-    showSelectedOptionIcon?: boolean
-    /**
-     * Height of the dropdown
-     *
-     * @default 'ComponentSizeType.medium'
-     */
-    size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large>
-    /**
-     * Content to be shown in a tippy when disabled
-     */
-    disabledTippyContent?: ReactNode
-    /**
-     * If true, the selected options count is shown in a chip inside ValueContainer
-     *
-     * @default 'false'
-     */
-    showSelectedOptionsCount?: boolean
-    /**
-     * Width of the menu list
-     *
-     * Note: the overflow needs to be handled explicitly for non-small variants
-     *
-     * @default 'ComponentSizeType.small'
-     */
-    menuSize?: ComponentSizeType
-    /**
-     * Variant of the select.
-     *
-     * @default SelectPickerVariantType.DEFAULT
-     */
-    variant?: SelectPickerVariantType
-    /**
-     * Disables the ellipsis on description, it will be shown in full width, wrapped if required.
-     *
-     * @default false
-     */
-    disableDescriptionEllipsis?: boolean
-    getIsOptionValid?: (option: SelectPickerOptionType) => boolean
-    /**
-     * If true, the select picker creates the new option
-     * Only applicable for isMulti: true
-     *
-     * @default false
-     */
-    isCreatable?: boolean
-    /**
-     * If true, the group heading can be selected
-     *
-     * Only applicable for isMulti: true
-     *
-     * @default false
-     */
-    isGroupHeadingSelectable?: boolean
-    // TODO: Improve typing and add support for custom option list; isMenuOpen prop expose?
-}
+export type SelectPickerProps = Pick<
+    SelectProps,
+    | 'options'
+    | 'value'
+    | 'onChange'
+    | 'isSearchable'
+    | 'isClearable'
+    | 'isLoading'
+    | 'hideSelectedOptions'
+    | 'controlShouldRenderValue'
+    | 'closeMenuOnSelect'
+    | 'isDisabled'
+    | 'isLoading'
+    | 'required'
+    | 'isOptionDisabled'
+    | 'placeholder'
+    | 'getOptionLabel'
+    | 'getOptionValue'
+    | 'isOptionSelected'
+> &
+    Required<Pick<SelectProps, 'classNamePrefix' | 'inputId' | 'name'>> & {
+        /**
+         * Icon to be rendered in the control
+         */
+        icon?: ReactElement
+        /**
+         * Error message for the select
+         */
+        error?: ReactNode
+        /**
+         * Render function for the footer at the bottom of menu list. It is sticky by default
+         */
+        renderMenuListFooter?: () => ReactNode
+        /**
+         * Info text for the select, if any
+         */
+        helperText?: ReactNode
+        /**
+         * Label for the select. if required is added, the corresponding * is also added
+         */
+        label?: ReactNode
+        /**
+         * If true, the selected option icon is shown in the container.
+         * startIcon has higher priority than endIcon.
+         *
+         * @default 'true'
+         */
+        showSelectedOptionIcon?: boolean
+        /**
+         * Height of the dropdown
+         *
+         * @default 'ComponentSizeType.medium'
+         */
+        size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large>
+        /**
+         * Content to be shown in a tippy when disabled
+         */
+        disabledTippyContent?: ReactNode
+        /**
+         * If true, the selected options count is shown in a chip inside ValueContainer
+         *
+         * @default 'false'
+         */
+        showSelectedOptionsCount?: boolean
+        /**
+         * Width of the menu list
+         *
+         * Note: the overflow needs to be handled explicitly for non-small variants
+         *
+         * @default 'ComponentSizeType.small'
+         */
+        menuSize?: ComponentSizeType
+        /**
+         * Variant of the select.
+         *
+         * @default SelectPickerVariantType.DEFAULT
+         */
+        variant?: SelectPickerVariantType
+        /**
+         * Disables the ellipsis on description, it will be shown in full width, wrapped if required.
+         *
+         * @default false
+         */
+        disableDescriptionEllipsis?: boolean
+        // TODO: Improve typing and add support for custom option list; isMenuOpen prop expose?
+    } & (
+        | {
+              isMulti?: never
+              multiSelectProps?: never
+          }
+        | {
+              isMulti: boolean
+              multiSelectProps?: {
+                  /**
+                   * If true, the select picker creates the new option
+                   * Only applicable for isMulti: true
+                   *
+                   * @default false
+                   */
+                  isCreatable?: boolean
+                  /**
+                   * If true, the group heading can be selected
+                   *
+                   * Only applicable for isMulti: true
+                   *
+                   * @default false
+                   */
+                  isGroupHeadingSelectable?: boolean
+                  /**
+                   * Callback handler to check if the given selection is valid or not
+                   */
+                  getIsOptionValid?: (option: SelectPickerOptionType) => boolean
+              }
+          }
+    )
