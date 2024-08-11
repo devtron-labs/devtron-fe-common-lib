@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
+import { cloneElement } from 'react'
 import Tippy from '@tippyjs/react'
-import { components, MenuListProps } from 'react-select'
-import { Progressing, stopPropagation } from '../../../Common'
+import { components, MenuListProps, ValueContainerProps } from 'react-select'
+import { OptionType, Progressing, stopPropagation } from '../../../Common'
+import { ReactComponent as ICSearch } from '../../../Assets/Icon/ic-search.svg'
+import { ReactComponent as ICFilter } from '../../../Assets/Icon/ic-filter.svg'
+import { ReactComponent as ICFilterApplied } from '../../../Assets/Icon/ic-filter-applied.svg'
 
 export const getCommonSelectStyle = (styleOverrides = {}) => ({
     container: (base, state) => ({
@@ -188,20 +192,78 @@ export const commonSelectStyles = getCommonSelectStyle()
 export const MenuListWithApplyButton = ({
     handleApplyFilter,
     ...props
-}: MenuListProps & { handleApplyFilter: () => void }) => (
-    <>
-        <components.MenuList {...props} />
-        {props.selectProps.options.length > 0 && (
-            <div className="p-8 dc__position-sticky dc__bottom-0 dc__border-top-n1 bcn-0 dc__bottom-radius-4">
-                <button
-                    type="button"
-                    className="dc__unset-button-styles w-100 br-4 h-28 flex bcb-5 cn-0 fw-6 lh-28 fs-12 h-28 br-4 pt-5 pr-12 pb-5 pl-12"
-                    onClick={handleApplyFilter}
-                    aria-label="Apply filters"
-                >
-                    Apply
-                </button>
+}: MenuListProps & { handleApplyFilter: () => void }) => {
+    const handleApplyClick = () => {
+        props.selectProps.onInputChange('', {
+            action: 'set-value',
+            prevInputValue: props.selectProps.inputValue,
+        })
+        handleApplyFilter()
+    }
+
+    return (
+        <>
+            <components.MenuList {...props} />
+            {props.selectProps.options.length > 0 && (
+                <div className="p-8 dc__position-sticky dc__bottom-0 dc__border-top-n1 bcn-0 dc__bottom-radius-4">
+                    <button
+                        type="button"
+                        className="dc__unset-button-styles w-100 br-4 h-28 flex bcb-5 cn-0 fw-6 lh-28 fs-12 h-28 br-4 pt-5 pr-12 pb-5 pl-12"
+                        onClick={handleApplyClick}
+                        aria-label="Apply filters"
+                    >
+                        Apply
+                    </button>
+                </div>
+            )}
+        </>
+    )
+}
+
+export const MultiSelectValueContainer = ({
+    title,
+    ...props
+}: ValueContainerProps<OptionType, true> & { title: string }) => {
+    const { children, selectProps, getValue } = props
+    const value = getValue() || []
+
+    const renderContainer = () => {
+        if (selectProps.menuIsOpen) {
+            if (!selectProps.inputValue) {
+                return (
+                    <>
+                        <ICSearch className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
+                        <span className="dc__position-abs dc__left-35 cn-5 ml-2">{selectProps.placeholder}</span>
+                    </>
+                )
+            }
+
+            return <ICSearch className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
+        }
+
+        if (value.length) {
+            return (
+                <>
+                    <ICFilterApplied className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
+                    <span className="dc__position-abs dc__left-35 cn-9 fs-13 fw-4 lh-20">{title}</span>
+                </>
+            )
+        }
+
+        return (
+            <>
+                <ICFilter className="icon-dim-16 dc__no-shrink mr-4 mw-18" />
+                <span className="dc__position-abs dc__left-35 cn-5 fs-13 fw-4 lh-20">{title}</span>
+            </>
+        )
+    }
+
+    return (
+        <components.ValueContainer {...props}>
+            <div className="flexbox dc__align-items-center">
+                {renderContainer()}
+                {cloneElement(children[1])}
             </div>
-        )}
-    </>
-)
+        </components.ValueContainer>
+    )
+}

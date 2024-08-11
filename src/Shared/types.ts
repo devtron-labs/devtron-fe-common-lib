@@ -22,6 +22,7 @@ import {
     VulnerabilityType,
     DeploymentAppTypes,
     ServerErrors,
+    SortingParams,
 } from '../Common'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
 
@@ -162,6 +163,7 @@ export enum AppType {
     DEVTRON_HELM_CHART = 'devtron_helm_chart',
     EXTERNAL_HELM_CHART = 'external_helm_chart',
     EXTERNAL_ARGO_APP = 'external_argo_app',
+    EXTERNAL_FLUX_APP = 'external_flux_app',
 }
 
 export interface HelmReleaseStatus {
@@ -178,6 +180,11 @@ interface MaterialInfo {
     revision: string
     url: string
     webhookData: string
+}
+export interface FluxAppStatusDetail {
+    status: string
+    message: string
+    reason: string
 }
 export interface AppDetails {
     appId?: number
@@ -220,6 +227,8 @@ export interface AppDetails {
     helmPackageName?: string
     appStatus?: string
     chartAvatar?: string
+    fluxTemplateType?: string
+    FluxAppStatusDetail?: FluxAppStatusDetail
 }
 
 export enum RegistryType {
@@ -615,3 +624,22 @@ export interface BatchConfigType {
 export interface scrollableInterface {
     autoBottomScroll: boolean
 }
+
+export type BaseFilterQueryParams<T> = {
+    /**
+     * Offset for the list result
+     */
+    offset?: number
+    /**
+     * Number of items required in the list
+     */
+    size?: number
+    /**
+     * Search string (if any)
+     */
+    searchKey?: string
+    /**
+     * If true, all items are returned with any search / filtering applied without pagination
+     */
+    showAll?: boolean
+} & SortingParams<T>
