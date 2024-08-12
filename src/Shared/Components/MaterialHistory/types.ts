@@ -21,4 +21,5 @@ export interface MaterialHistoryProps {
     pipelineName: string
     ciPipelineId?: string
     selectCommit?: (materialId: string, commit: string, ciPipelineId?: string) => void
+    isCommitInfoModal?: boolean
 }
