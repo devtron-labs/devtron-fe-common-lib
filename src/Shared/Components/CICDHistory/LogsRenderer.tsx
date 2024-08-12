@@ -19,6 +19,7 @@ import { useEffect, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
 import DOMPurify from 'dompurify'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
+import { escapeRegExp } from '@Shared/Helpers'
 import {
     Progressing,
     Host,
@@ -197,19 +198,21 @@ export const LogsRenderer = ({
             // We will remove color through [0m and add background color of y6, till searchKey is present and then revert back to original color
             // While reverting if index is 0, would not add any escape code since it is the start of the log
             if (targetSearchKey && areStagesAvailable) {
+                // Search is working on assumption that color codes are not nested for words.
                 const logParts = log.split(ANSI_UP_REGEX)
-                const availableEscapeCodes = log.match(ANSI_UP_REGEX)
+                const availableEscapeCodes = log.match(ANSI_UP_REGEX) || []
+                const searchRegex = new RegExp(`(${escapeRegExp(targetSearchKey)})`, 'g')
                 const parts = logParts.reduce((acc, part, index) => {
                     try {
+                        // Question: Can we directly set it as true inside the replace function?
+                        isSearchKeyPresent = isSearchKeyPresent || searchRegex.test(part)
                         acc.push(
                             part.replace(
-                                new RegExp(targetSearchKey, 'g'),
-                                `\x1B[0m\x1B[48;2;197;141;54m${targetSearchKey}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
+                                searchRegex,
+                                (match) =>
+                                    `\x1B[0m\x1B[48;2;197;141;54m${match}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
                             ),
                         )
-                        if (part.includes(targetSearchKey)) {
-                            isSearchKeyPresent = true
-                        }
                     } catch (searchRegexError) {
                         acc.push(part)
                     }
