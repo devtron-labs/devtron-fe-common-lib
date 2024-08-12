@@ -21,6 +21,7 @@ import { ReactComponent as Clear } from '@Icons/ic-error-cross.svg'
 import { SearchBarProps } from './types'
 import './searchBar.scss'
 import { debounce } from '../Helper'
+import { getSearchBarHeightFromSize } from './utils'
 
 /**
  * Generic search input component with support for enter based and debounced search
@@ -66,7 +67,7 @@ const SearchBar = ({
     debounceTimeout = 300,
     dataTestId = 'search-bar',
     noBackgroundAndBorder = false,
-    componentSize = ComponentSizeType.medium,
+    size = ComponentSizeType.medium,
 }: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
     const inputRef = useRef<HTMLInputElement>()
@@ -115,10 +116,18 @@ const SearchBar = ({
         }
     }
 
+    const inputCallbackRef: React.RefCallback<HTMLInputElement> = (node = null) => {
+        if (inputProps.ref) {
+            // eslint-disable-next-line no-param-reassign
+            inputProps.ref.current = node
+        }
+        inputRef.current = node
+    }
+
     return (
         <div className={containerClassName}>
             <div
-                className={`search-bar ${noBackgroundAndBorder ? 'dc__no-border dc__no-background dc__hover-n50' : 'bc-n50 en-2 dc__hover-border-n300'} focus-within-border-b5 dc__block w-100 min-w-200 dc__position-rel br-4 bw-1 ${componentSize === ComponentSizeType.large ? 'h-36' : 'h-32'}`}
+                className={`search-bar ${noBackgroundAndBorder ? 'dc__no-border dc__no-background dc__hover-n50' : 'bc-n50 en-2 dc__hover-border-n300'} focus-within-border-b5 dc__block w-100 min-w-200 dc__position-rel br-4 bw-1 ${getSearchBarHeightFromSize(size)}`}
             >
                 <Search className="search-bar__icon dc__position-abs icon-color-n6 icon-dim-16" />
                 <input
@@ -132,7 +141,7 @@ const SearchBar = ({
                     } ${noBackgroundAndBorder ? 'dc__no-background' : 'bc-n50'}`}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    ref={inputRef}
+                    ref={inputCallbackRef}
                 />
                 {/* TODO: Sync with product since it should have ic-enter in case of not applied */}
                 {showClearButton && (

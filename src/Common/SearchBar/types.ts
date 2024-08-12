@@ -34,7 +34,8 @@ export interface SearchBarProps {
     /**
      * Input props for the search input
      */
-    inputProps?: React.InputHTMLAttributes<HTMLInputElement>
+    inputProps?: React.InputHTMLAttributes<HTMLInputElement> &
+        Partial<Record<'ref', React.MutableRefObject<HTMLInputElement>>>
     /**
      * Class name for the container; can be used for handling width
      */
@@ -58,7 +59,9 @@ export interface SearchBarProps {
      */
     noBackgroundAndBorder?: boolean
     /**
-     * Height of the Search bar, Large is 36px and Medium is 32px
+     * Height of the searchbar
+     *
+     * @default 'ComponentSizeType.medium'
      */
-    componentSize?: ComponentSizeType.large | ComponentSizeType.medium
+    size?: ComponentSizeType.medium | ComponentSizeType.large
 }

@@ -163,6 +163,7 @@ export enum AppType {
     DEVTRON_HELM_CHART = 'devtron_helm_chart',
     EXTERNAL_HELM_CHART = 'external_helm_chart',
     EXTERNAL_ARGO_APP = 'external_argo_app',
+    EXTERNAL_FLUX_APP = 'external_flux_app',
 }
 
 export interface HelmReleaseStatus {
@@ -179,6 +180,11 @@ interface MaterialInfo {
     revision: string
     url: string
     webhookData: string
+}
+export interface FluxAppStatusDetail {
+    status: string
+    message: string
+    reason: string
 }
 export interface AppDetails {
     appId?: number
@@ -221,6 +227,8 @@ export interface AppDetails {
     helmPackageName?: string
     appStatus?: string
     chartAvatar?: string
+    fluxTemplateType?: string
+    FluxAppStatusDetail?: FluxAppStatusDetail
 }
 
 export enum RegistryType {
@@ -424,10 +432,13 @@ export enum ResourceKindType {
     installation = 'installation',
     environment = 'environment',
     cdPipeline = 'cd-pipeline',
+    project = 'project',
 }
 
 /**
  * Versions support for the resources on BE
+ *
+ * TODO: Rename to ApiVersionType
  */
 export enum ResourceVersionType {
     v1 = 'v1',
@@ -441,6 +452,10 @@ export interface SeverityCount {
     low: number
     unknown: number
 }
+export enum PolicyKindType {
+    lockConfiguration = 'lock-configuration',
+}
+
 export interface LastExecutionResultType {
     lastExecution: string
     severityCount: SeverityCount

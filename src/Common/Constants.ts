@@ -34,6 +34,7 @@ export const PATTERNS = {
     KUBERNETES_KEY_NAME: /^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$/,
     START_END_ALPHANUMERIC: /^([Az09].*[A-Za-z0-9])$|[A-Za-z0-9]$/,
     ALPHANUMERIC_WITH_SPECIAL_CHAR: /^[A-Za-z0-9._-]+$/, // allow alphanumeric,(.) ,(-),(_)
+    ESCAPED_CHARACTERS: /[.*+?^${}()|[\]\\]/g,
 }
 
 export const URLS = {
@@ -95,6 +96,8 @@ export const ROUTES = {
     CONFIG_CD_PIPELINE: 'config/cd-pipeline',
     MODULE_CONFIGURED: 'module/config',
     RESOURCE_HISTORY_DEPLOYMENT: 'resource/history/deployment',
+    APP_LIST_MIN: 'app/min',
+    CLUSTER_LIST_MIN: 'cluster/autocomplete',
     PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
     PLUGIN_GLOBAL_LIST_V2: 'plugin/global/list/v2',
     PLUGIN_GLOBAL_LIST_TAGS: 'plugin/global/list/tags',

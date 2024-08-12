@@ -564,6 +564,7 @@ export enum DeploymentAppTypes {
     GITOPS = 'argo_cd',
     MANIFEST_DOWNLOAD = 'manifest_download',
     MANIFEST_PUSH = 'manifest_push',
+    FLUX = 'flux',
 }
 
 export interface VulnerabilityType {
