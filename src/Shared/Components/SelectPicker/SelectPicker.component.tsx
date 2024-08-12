@@ -24,7 +24,7 @@ import ReactSelect, {
     ValueContainerProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { ForwardedRef, forwardRef, ReactElement, useCallback, useMemo } from 'react'
+import { MutableRefObject, ReactElement, useCallback, useMemo } from 'react'
 
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
@@ -173,233 +173,218 @@ import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } fr
  * />
  * ```
  */
-const SelectPicker = forwardRef(
-    (
-        {
-            error,
-            icon,
-            renderMenuListFooter,
-            helperText,
-            placeholder = 'Select a option',
-            label,
-            showSelectedOptionIcon = true,
-            size = ComponentSizeType.medium,
-            disabledTippyContent,
-            showSelectedOptionsCount = false,
-            menuSize,
-            menuPosition = 'fixed',
-            variant = SelectPickerVariantType.DEFAULT,
-            disableDescriptionEllipsis = false,
-            multiSelectProps = {},
-            isMulti,
-            name,
-            classNamePrefix,
-            renderCustomOptions,
-            shouldRenderCustomOptions = false,
-            isSearchable,
-            ...props
-        }: SelectPickerProps,
-        ref: ForwardedRef<SelectInstance<SelectPickerOptionType>>,
-    ) => {
-        const { inputId, required, isDisabled, controlShouldRenderValue, value } = props
-        const {
-            isCreatable = false,
-            isGroupHeadingSelectable = false,
-            getIsOptionValid = () => true,
-        } = multiSelectProps
+const SelectPicker = ({
+    error,
+    icon,
+    renderMenuListFooter,
+    helperText,
+    placeholder = 'Select a option',
+    label,
+    showSelectedOptionIcon = true,
+    size = ComponentSizeType.medium,
+    disabledTippyContent,
+    showSelectedOptionsCount = false,
+    menuSize,
+    menuPosition = 'fixed',
+    variant = SelectPickerVariantType.DEFAULT,
+    disableDescriptionEllipsis = false,
+    multiSelectProps = {},
+    isMulti,
+    name,
+    classNamePrefix,
+    renderCustomOptions,
+    shouldRenderCustomOptions = false,
+    isSearchable,
+    selectRef,
+    ...props
+}: SelectPickerProps) => {
+    const { inputId, required, isDisabled, controlShouldRenderValue, value } = props
+    const { isCreatable = false, isGroupHeadingSelectable = false, getIsOptionValid = () => true } = multiSelectProps
 
-        // Only large variant is supported for multi select picker
-        const selectSize = isMulti && !controlShouldRenderValue ? ComponentSizeType.large : size
-        const shouldShowSelectedOptionIcon = !isMulti && showSelectedOptionIcon
-        const isSelectSearchable = !shouldRenderCustomOptions && isSearchable
+    // Only large variant is supported for multi select picker
+    const selectSize = isMulti && !controlShouldRenderValue ? ComponentSizeType.large : size
+    const shouldShowSelectedOptionIcon = !isMulti && showSelectedOptionIcon
+    const isSelectSearchable = !shouldRenderCustomOptions && isSearchable
 
-        const labelId = `${inputId}-label`
-        const errorElementId = `${inputId}-error-msg`
+    const labelId = `${inputId}-label`
+    const errorElementId = `${inputId}-error-msg`
 
-        const selectStyles = useMemo(
-            () =>
-                getCommonSelectStyle({
-                    error,
-                    size: selectSize,
-                    menuSize,
-                    variant,
-                    getIsOptionValid,
-                    isGroupHeadingSelectable,
-                }),
-            [error, selectSize, menuSize, variant, isGroupHeadingSelectable],
-        )
+    const selectStyles = useMemo(
+        () =>
+            getCommonSelectStyle({
+                error,
+                size: selectSize,
+                menuSize,
+                variant,
+                getIsOptionValid,
+                isGroupHeadingSelectable,
+            }),
+        [error, selectSize, menuSize, variant, isGroupHeadingSelectable],
+    )
 
-        // Used to show the create new option for creatable select
-        // TODO: FilterButton; Target Platform
-        const isValidNewOption = (inputValue: string) =>
-            isCreatable &&
-            !!inputValue?.trim() &&
-            !getSelectPickerOptionByValue(value as SelectPickerOptionType[], inputValue.trim(), null)
+    // Used to show the create new option for creatable select
+    // TODO: FilterButton; Target Platform
+    const isValidNewOption = (inputValue: string) =>
+        isCreatable &&
+        !!inputValue?.trim() &&
+        !getSelectPickerOptionByValue(value as SelectPickerOptionType[], inputValue.trim(), null)
 
-        const renderControl = useCallback(
-            (controlProps: ControlProps<SelectPickerOptionType>) => (
-                <SelectPickerControl
-                    {...controlProps}
-                    icon={icon}
-                    showSelectedOptionIcon={shouldShowSelectedOptionIcon}
-                />
-            ),
-            [icon, shouldShowSelectedOptionIcon],
-        )
+    const renderControl = useCallback(
+        (controlProps: ControlProps<SelectPickerOptionType>) => (
+            <SelectPickerControl {...controlProps} icon={icon} showSelectedOptionIcon={shouldShowSelectedOptionIcon} />
+        ),
+        [icon, shouldShowSelectedOptionIcon],
+    )
 
-        const renderMenuList = useCallback(
-            (menuProps: MenuListProps<SelectPickerOptionType>) => (
-                <SelectPickerMenuList
-                    {...menuProps}
-                    renderMenuListFooter={renderMenuListFooter}
-                    renderCustomOptions={renderCustomOptions}
-                    shouldRenderCustomOptions={shouldRenderCustomOptions}
-                />
-            ),
-            [shouldRenderCustomOptions],
-        )
+    const renderMenuList = useCallback(
+        (menuProps: MenuListProps<SelectPickerOptionType>) => (
+            <SelectPickerMenuList
+                {...menuProps}
+                renderMenuListFooter={renderMenuListFooter}
+                renderCustomOptions={renderCustomOptions}
+                shouldRenderCustomOptions={shouldRenderCustomOptions}
+            />
+        ),
+        [shouldRenderCustomOptions],
+    )
 
-        const renderValueContainer = useCallback(
-            (valueContainerProps: ValueContainerProps<SelectPickerOptionType>) => (
-                <SelectPickerValueContainer
-                    {...valueContainerProps}
-                    showSelectedOptionsCount={showSelectedOptionsCount}
-                />
-            ),
-            [showSelectedOptionsCount],
-        )
+    const renderValueContainer = useCallback(
+        (valueContainerProps: ValueContainerProps<SelectPickerOptionType>) => (
+            <SelectPickerValueContainer {...valueContainerProps} showSelectedOptionsCount={showSelectedOptionsCount} />
+        ),
+        [showSelectedOptionsCount],
+    )
 
-        const renderOption = useCallback(
-            (optionProps: OptionProps<SelectPickerOptionType>) => (
-                <SelectPickerOption {...optionProps} disableDescriptionEllipsis={disableDescriptionEllipsis} />
-            ),
-            [disableDescriptionEllipsis],
-        )
+    const renderOption = useCallback(
+        (optionProps: OptionProps<SelectPickerOptionType>) => (
+            <SelectPickerOption {...optionProps} disableDescriptionEllipsis={disableDescriptionEllipsis} />
+        ),
+        [disableDescriptionEllipsis],
+    )
 
-        const renderMultiValueLabel = (multiValueLabelProps: MultiValueProps<SelectPickerOptionType, true>) => (
-            <SelectPickerMultiValueLabel {...multiValueLabelProps} getIsOptionValid={getIsOptionValid} />
-        )
+    const renderMultiValueLabel = (multiValueLabelProps: MultiValueProps<SelectPickerOptionType, true>) => (
+        <SelectPickerMultiValueLabel {...multiValueLabelProps} getIsOptionValid={getIsOptionValid} />
+    )
 
-        const renderGroupHeading = useCallback(
-            (groupHeadingProps: GroupHeadingProps<SelectPickerOptionType>) => (
-                <SelectPickerGroupHeading {...groupHeadingProps} isGroupHeadingSelectable={isGroupHeadingSelectable} />
-            ),
-            [isGroupHeadingSelectable],
-        )
+    const renderGroupHeading = useCallback(
+        (groupHeadingProps: GroupHeadingProps<SelectPickerOptionType>) => (
+            <SelectPickerGroupHeading {...groupHeadingProps} isGroupHeadingSelectable={isGroupHeadingSelectable} />
+        ),
+        [isGroupHeadingSelectable],
+    )
 
-        const renderDisabledTippy = (children: ReactElement) => (
-            <Tippy content={disabledTippyContent} placement="top" className="default-tt" arrow={false}>
-                {children}
-            </Tippy>
-        )
+    const renderDisabledTippy = (children: ReactElement) => (
+        <Tippy content={disabledTippyContent} placement="top" className="default-tt" arrow={false}>
+            {children}
+        </Tippy>
+    )
 
-        return (
-            <div className="flex column left top dc__gap-4">
-                {/* Note: Common out for fields */}
-                <div className="flex column left top dc__gap-6 w-100">
-                    {label && (
-                        <label
-                            className="fs-13 lh-20 cn-7 fw-4 dc__block mb-0"
-                            htmlFor={inputId}
-                            data-testid={`label-${inputId}`}
-                            id={labelId}
-                        >
-                            {typeof label === 'string' ? (
-                                <span className={`flex left ${required ? 'dc__required-field' : ''}`}>
-                                    <span className="dc__truncate">{label}</span>
-                                    {required && <span>&nbsp;</span>}
-                                </span>
-                            ) : (
-                                label
-                            )}
-                        </label>
-                    )}
-                    <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
-                        <div className="w-100">
-                            {isMulti ? (
-                                <CreatableSelect<SelectPickerOptionType, true>
-                                    {...props}
-                                    ref={ref as unknown as ForwardedRef<SelectInstance<SelectPickerOptionType, true>>}
-                                    isMulti
-                                    name={name || inputId}
-                                    classNamePrefix={classNamePrefix || inputId}
-                                    isSearchable={isSelectSearchable}
-                                    placeholder={placeholder}
-                                    components={{
-                                        IndicatorSeparator: null,
-                                        LoadingIndicator: SelectPickerLoadingIndicator,
-                                        DropdownIndicator: SelectPickerDropdownIndicator,
-                                        Control: renderControl,
-                                        Option: renderOption,
-                                        MenuList: renderMenuList,
-                                        ClearIndicator: SelectPickerClearIndicator,
-                                        ValueContainer: renderValueContainer,
-                                        MultiValueLabel: renderMultiValueLabel,
-                                        MultiValueRemove: SelectPickerMultiValueRemove,
-                                        GroupHeading: renderGroupHeading,
-                                    }}
-                                    styles={selectStyles}
-                                    menuPlacement="auto"
-                                    menuPosition={menuPosition}
-                                    menuShouldScrollIntoView
-                                    backspaceRemovesValue
-                                    aria-errormessage={errorElementId}
-                                    aria-invalid={!!error}
-                                    aria-labelledby={labelId}
-                                    closeMenuOnSelect={false}
-                                    allowCreateWhileLoading={false}
-                                    hideSelectedOptions={false}
-                                    isValidNewOption={isValidNewOption}
-                                    createOptionPosition="first"
-                                />
-                            ) : (
-                                <ReactSelect<SelectPickerOptionType, false>
-                                    {...props}
-                                    ref={ref}
-                                    name={name || inputId}
-                                    classNamePrefix={classNamePrefix || inputId}
-                                    isSearchable={isSelectSearchable}
-                                    placeholder={placeholder}
-                                    components={{
-                                        IndicatorSeparator: null,
-                                        LoadingIndicator: SelectPickerLoadingIndicator,
-                                        DropdownIndicator: SelectPickerDropdownIndicator,
-                                        Control: renderControl,
-                                        Option: renderOption,
-                                        MenuList: renderMenuList,
-                                        ClearIndicator: SelectPickerClearIndicator,
-                                        ValueContainer: renderValueContainer,
-                                    }}
-                                    styles={selectStyles}
-                                    menuPlacement="auto"
-                                    menuPosition={menuPosition}
-                                    menuShouldScrollIntoView
-                                    backspaceRemovesValue={false}
-                                    aria-errormessage={errorElementId}
-                                    aria-invalid={!!error}
-                                    aria-labelledby={labelId}
-                                    hideSelectedOptions={false}
-                                />
-                            )}
-                        </div>
-                    </ConditionalWrap>
-                </div>
-                {error && (
-                    <div className="flex left dc__gap-4 cr-5 fs-11 lh-16 fw-4" id={errorElementId}>
-                        <ErrorIcon className="icon-dim-16 p-1 form__icon--error dc__no-shrink dc__align-self-start" />
-                        <span className="dc__ellipsis-right__2nd-line">{error}</span>
-                    </div>
+    return (
+        <div className="flex column left top dc__gap-4">
+            {/* Note: Common out for fields */}
+            <div className="flex column left top dc__gap-6 w-100">
+                {label && (
+                    <label
+                        className="fs-13 lh-20 cn-7 fw-4 dc__block mb-0"
+                        htmlFor={inputId}
+                        data-testid={`label-${inputId}`}
+                        id={labelId}
+                    >
+                        {typeof label === 'string' ? (
+                            <span className={`flex left ${required ? 'dc__required-field' : ''}`}>
+                                <span className="dc__truncate">{label}</span>
+                                {required && <span>&nbsp;</span>}
+                            </span>
+                        ) : (
+                            label
+                        )}
+                    </label>
                 )}
-                {/* Note: Common out for input fields */}
-                {helperText && (
-                    <div className="flex left dc__gap-4 fs-11 lh-16 cn-7">
-                        <ICInfoFilledOverride className="icon-dim-16 dc__no-shrink dc__align-self-start" />
-                        <span className="dc__ellipsis-right__2nd-line">{helperText}</span>
+                <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
+                    <div className="w-100">
+                        {isMulti ? (
+                            <CreatableSelect<SelectPickerOptionType, true>
+                                {...props}
+                                ref={selectRef as MutableRefObject<SelectInstance<SelectPickerOptionType, true>>}
+                                isMulti
+                                name={name || inputId}
+                                classNamePrefix={classNamePrefix || inputId}
+                                isSearchable={isSelectSearchable}
+                                placeholder={placeholder}
+                                components={{
+                                    IndicatorSeparator: null,
+                                    LoadingIndicator: SelectPickerLoadingIndicator,
+                                    DropdownIndicator: SelectPickerDropdownIndicator,
+                                    Control: renderControl,
+                                    Option: renderOption,
+                                    MenuList: renderMenuList,
+                                    ClearIndicator: SelectPickerClearIndicator,
+                                    ValueContainer: renderValueContainer,
+                                    MultiValueLabel: renderMultiValueLabel,
+                                    MultiValueRemove: SelectPickerMultiValueRemove,
+                                    GroupHeading: renderGroupHeading,
+                                }}
+                                styles={selectStyles}
+                                menuPlacement="auto"
+                                menuPosition={menuPosition}
+                                menuShouldScrollIntoView
+                                backspaceRemovesValue
+                                aria-errormessage={errorElementId}
+                                aria-invalid={!!error}
+                                aria-labelledby={labelId}
+                                closeMenuOnSelect={false}
+                                allowCreateWhileLoading={false}
+                                hideSelectedOptions={false}
+                                isValidNewOption={isValidNewOption}
+                                createOptionPosition="first"
+                            />
+                        ) : (
+                            <ReactSelect<SelectPickerOptionType, false>
+                                {...props}
+                                ref={selectRef as MutableRefObject<SelectInstance<SelectPickerOptionType>>}
+                                name={name || inputId}
+                                classNamePrefix={classNamePrefix || inputId}
+                                isSearchable={isSelectSearchable}
+                                placeholder={placeholder}
+                                components={{
+                                    IndicatorSeparator: null,
+                                    LoadingIndicator: SelectPickerLoadingIndicator,
+                                    DropdownIndicator: SelectPickerDropdownIndicator,
+                                    Control: renderControl,
+                                    Option: renderOption,
+                                    MenuList: renderMenuList,
+                                    ClearIndicator: SelectPickerClearIndicator,
+                                    ValueContainer: renderValueContainer,
+                                }}
+                                styles={selectStyles}
+                                menuPlacement="auto"
+                                menuPosition={menuPosition}
+                                menuShouldScrollIntoView
+                                backspaceRemovesValue={false}
+                                aria-errormessage={errorElementId}
+                                aria-invalid={!!error}
+                                aria-labelledby={labelId}
+                                hideSelectedOptions={false}
+                            />
+                        )}
                     </div>
-                )}
+                </ConditionalWrap>
             </div>
-        )
-    },
-)
+            {error && (
+                <div className="flex left dc__gap-4 cr-5 fs-11 lh-16 fw-4" id={errorElementId}>
+                    <ErrorIcon className="icon-dim-16 p-1 form__icon--error dc__no-shrink dc__align-self-start" />
+                    <span className="dc__ellipsis-right__2nd-line">{error}</span>
+                </div>
+            )}
+            {/* Note: Common out for input fields */}
+            {helperText && (
+                <div className="flex left dc__gap-4 fs-11 lh-16 cn-7">
+                    <ICInfoFilledOverride className="icon-dim-16 dc__no-shrink dc__align-self-start" />
+                    <span className="dc__ellipsis-right__2nd-line">{helperText}</span>
+                </div>
+            )}
+        </div>
+    )
+}
 
 export default SelectPicker

@@ -16,11 +16,11 @@
 
 import { OptionType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
-import { ReactElement, ReactNode } from 'react'
-import { GroupBase, Props as ReactSelectProps } from 'react-select'
+import { MutableRefObject, ReactElement, ReactNode } from 'react'
+import { GroupBase, Props as ReactSelectProps, SelectInstance } from 'react-select'
 import { CreatableProps } from 'react-select/creatable'
 
-export interface SelectPickerOptionType extends OptionType<number | string, ReactNode> {
+export interface SelectPickerOptionType extends OptionType<number | string | object, ReactNode> {
     /**
      * Description to be displayed for the option
      */
@@ -132,6 +132,12 @@ export type SelectPickerProps = Pick<
          * @default false
          */
         disableDescriptionEllipsis?: boolean
+        /**
+         * Ref for the select picker
+         */
+        selectRef?: MutableRefObject<
+            SelectInstance<SelectPickerOptionType> | SelectInstance<SelectPickerOptionType, true>
+        >
     } & (
         | {
               isMulti?: never
