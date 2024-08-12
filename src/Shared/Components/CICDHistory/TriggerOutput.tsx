@@ -19,7 +19,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import Tippy from '@tippyjs/react'
+import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
 import {
     ConfirmationDialog,
     DATE_TIME_FORMATS,
@@ -30,7 +30,6 @@ import {
     createGitCommitUrl,
     useAsync,
     not,
-    TippyTheme,
     ZERO_TIME_STRING,
     extractImage,
     useInterval,
@@ -66,34 +65,35 @@ import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryDetailedView, DeploymentHistoryConfigList } from './DeploymentHistoryDiff'
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
-import './cicdHistory.scss'
 import { statusColor as colorMap, EMPTY_STATE_STATUS } from '../../constants'
+import './cicdHistory.scss'
+import { ShowMoreText } from '../ShowMoreText'
 
 const Finished = React.memo(
     ({ status, finishedOn, artifact, type }: FinishedType): JSX.Element => (
-        <div className="flex column left dc__min-width-fit-content">
+        <div className="flexbox py-12 dc__gap-8 left dc__min-width-fit-content dc__align-items-center">
             <div
                 className={`${status} fs-14 fw-6 ${TERMINAL_STATUS_COLOR_CLASS_MAP[status.toLowerCase()] || 'cn-5'}`}
                 data-testid="deployment-status-text"
             >
                 {status && status.toLowerCase() === 'cancelled' ? 'ABORTED' : status}
             </div>
-            <div className="flex left">
-                {finishedOn && finishedOn !== ZERO_TIME_STRING && (
-                    <time className="dc__vertical-align-middle">
-                        {moment(finishedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
-                    </time>
-                )}
-                {type === HistoryComponentType.CI && artifact && (
-                    <>
-                        <div className="dc__bullet mr-6 ml-6" />
-                        <div className="dc__app-commit__hash ">
-                            <img src={docker} alt="docker" className="commit-hash__icon grayscale" />
-                            {extractImage(artifact)}
-                        </div>
-                    </>
-                )}
-            </div>
+
+            {finishedOn && finishedOn !== ZERO_TIME_STRING && (
+                <time className="dc__vertical-align-middle">
+                    {moment(finishedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
+                </time>
+            )}
+
+            {type === HistoryComponentType.CI && artifact && (
+                <>
+                    <div className="dc__bullet" />
+                    <div className="dc__app-commit__hash">
+                        <img src={docker} alt="docker" className="commit-hash__icon grayscale" />
+                        {extractImage(artifact)}
+                    </div>
+                </>
+            )}
         </div>
     ),
 )
@@ -113,212 +113,162 @@ const WorkerStatus = React.memo(
                 <NavLink to={`${WORKER_POD_BASE_URL}/${workerPodName}/logs`} target="_blank" className="anchor">
                     <div className="mr-10">View worker pod</div>
                 </NavLink>
-            ) : (
-                <div className="mr-10">Worker</div>
-            )
+            ) : null
 
         return (
-            <>
-                <span style={{ height: '80%', borderRight: '1px solid var(--N100)', margin: '0 16px' }} />
-                <div className="flex left column">
-                    <div className="flex left fs-14">
-                        {stage === 'DEPLOY' ? <div className="mr-10">Message</div> : getViewWorker()}
-                        {podStatus && (
-                            <div className="fw-6" style={{ color: colorMap[podStatus.toLowerCase()] }}>
-                                {podStatus}
-                            </div>
-                        )}
-                    </div>
-                    {message && (
-                        <Tippy
-                            theme={TippyTheme.black}
-                            className="default-tt"
-                            arrow={false}
-                            placement="bottom-start"
-                            animation="shift-toward-subtle"
-                            content={message}
-                        >
-                            <div className="fs-12 cn-7 dc__ellipsis-right__2nd-line">{message}</div>
-                        </Tippy>
-                    )}
+            <div className="display-grid trigger-details__grid">
+                <div className="flex">
+                    <ICLines className="icon-dim-20 dc__no-shrink scn-7" />
                 </div>
-            </>
-        )
-    },
-)
 
-const ProgressingStatus = React.memo(
-    ({ status, message, podStatus, stage, type, finishedOn, workerPodName }: ProgressingStatusType): JSX.Element => {
-        const [aborting, setAborting] = useState(false)
-        const [abortConfirmation, setAbortConfirmation] = useState(false)
-        const [abortError, setAbortError] = useState<{
-            status: boolean
-            message: string
-        }>({
-            status: false,
-            message: '',
-        })
-        const { buildId, triggerId, pipelineId } = useParams<{
-            buildId: string
-            triggerId: string
-            pipelineId: string
-        }>()
-        let abort = null
-        if (type === HistoryComponentType.CI) {
-            abort = (isForceAbort: boolean) => cancelCiTrigger({ pipelineId, workflowId: buildId }, isForceAbort)
-        } else if (stage !== 'DEPLOY') {
-            abort = () => cancelPrePostCdTrigger(pipelineId, triggerId)
-        }
-
-        async function abortRunning() {
-            setAborting(true)
-            try {
-                await abort(abortError.status)
-                toast.success('Build Aborted')
-                setAbortConfirmation(false)
-                setAbortError({
-                    status: false,
-                    message: '',
-                })
-            } catch (error) {
-                setAborting(false)
-                setAbortConfirmation(false)
-                if (error.code === 400) {
-                    // code 400 is for aborting a running build
-                    const { errors } = error
-                    setAbortError({
-                        status: true,
-                        message: errors[0].userMessage,
-                    })
-                }
-            }
-        }
-
-        const toggleAbortConfiguration = (): void => {
-            setAbortConfirmation(not)
-        }
-        const closeForceAbortModal = (): void => {
-            setAbortError({
-                status: false,
-                message: '',
-            })
-        }
-        return (
-            <>
-                <div className="flex left mb-24">
-                    <div className="dc__min-width-fit-content">
-                        <div className={`${status} fs-14 fw-6 flex left inprogress-status-color`}>In progress</div>
+                <div className="flexbox-col">
+                    <div className="flexbox cn-9 fs-13 fw-4 lh-20">
+                        <span>Worker</span>&nbsp;
+                        {podStatus && <span>{podStatus.toLowerCase()}&nbsp;</span>}
+                        {stage !== 'DEPLOY' && getViewWorker()}
                     </div>
 
-                    {abort && (
-                        <button
-                            type="button"
-                            className="flex cta delete er-5 bw-1 fw-6 fs-13 h-28 ml-16"
-                            onClick={toggleAbortConfiguration}
-                        >
-                            Abort
-                        </button>
-                    )}
-                    <WorkerStatus
-                        message={message}
-                        podStatus={podStatus}
-                        stage={stage}
-                        finishedOn={finishedOn}
-                        workerPodName={workerPodName}
-                    />
+                    {message && <ShowMoreText text={message} />}
                 </div>
-                {abortConfirmation && (
-                    <ConfirmationDialog>
-                        <ConfirmationDialog.Icon src={warn} />
-                        <ConfirmationDialog.Body
-                            title={
-                                type === HistoryComponentType.CD
-                                    ? `Abort ${stage.toLowerCase()}-deployment?`
-                                    : 'Abort build?'
-                            }
-                        />
-                        <p className="fs-13 cn-7 lh-1-54">
-                            {type === HistoryComponentType.CD
-                                ? 'Are you sure you want to abort this stage?'
-                                : 'Are you sure you want to abort this build?'}
-                        </p>
-                        <ConfirmationDialog.ButtonGroup>
-                            <button type="button" className="cta cancel" onClick={toggleAbortConfiguration}>
-                                Cancel
-                            </button>
-                            <button type="button" className="cta delete" onClick={abortRunning}>
-                                {aborting ? <Progressing /> : 'Yes, Abort'}
-                            </button>
-                        </ConfirmationDialog.ButtonGroup>
-                    </ConfirmationDialog>
-                )}
-                {abortError.status && (
-                    <ConfirmationDialog>
-                        <ConfirmationDialog.Icon src={warn} />
-                        <ConfirmationDialog.Body title="Could not abort build!" />
-                        <div className="w-100 bc-n50 h-36 flexbox dc__align-items-center">
-                            <span className="pl-12">Error: {abortError.message}</span>
-                        </div>
-                        <div className="fs-13 fw-6 pt-12 cn-7 lh-1-54">
-                            <span>Please try to force abort</span>
-                        </div>
-                        <div className="pt-4 fw-4 cn-7 lh-1-54">
-                            <span>Some resource might get orphaned which will be cleaned up with Job-lifecycle</span>
-                        </div>
-                        <ConfirmationDialog.ButtonGroup>
-                            <button type="button" className="cta cancel" onClick={closeForceAbortModal}>
-                                Cancel
-                            </button>
-                            <button type="button" className="cta delete" onClick={abortRunning}>
-                                {aborting ? <Progressing /> : 'Force Abort'}
-                            </button>
-                        </ConfirmationDialog.ButtonGroup>
-                    </ConfirmationDialog>
-                )}
-            </>
-        )
-    },
-)
-
-const CurrentStatus = React.memo(
-    ({
-        status,
-        finishedOn,
-        artifact,
-        message,
-        podStatus,
-        stage,
-        type,
-        isJobView,
-        workerPodName,
-    }: CurrentStatusType): JSX.Element => {
-        if (PROGRESSING_STATUS[status.toLowerCase()]) {
-            return (
-                <ProgressingStatus
-                    status={status}
-                    message={message}
-                    podStatus={podStatus}
-                    stage={stage}
-                    type={type}
-                    finishedOn={finishedOn}
-                    workerPodName={workerPodName}
-                />
-            )
-        }
-        return (
-            <div className={`flex left ${isJobView ? 'mb-24' : ''}`}>
-                <Finished status={status} finishedOn={finishedOn} artifact={artifact} type={type} />
-                <WorkerStatus
-                    message={message}
-                    podStatus={podStatus}
-                    stage={stage}
-                    finishedOn={finishedOn}
-                    workerPodName={workerPodName}
-                />
             </div>
         )
     },
 )
+
+const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatusType): JSX.Element => {
+    const [aborting, setAborting] = useState(false)
+    const [abortConfirmation, setAbortConfirmation] = useState(false)
+    const [abortError, setAbortError] = useState<{
+        status: boolean
+        message: string
+    }>({
+        status: false,
+        message: '',
+    })
+    const { buildId, triggerId, pipelineId } = useParams<{
+        buildId: string
+        triggerId: string
+        pipelineId: string
+    }>()
+    let abort = null
+    if (type === HistoryComponentType.CI) {
+        abort = (isForceAbort: boolean) => cancelCiTrigger({ pipelineId, workflowId: buildId }, isForceAbort)
+    } else if (stage !== 'DEPLOY') {
+        abort = () => cancelPrePostCdTrigger(pipelineId, triggerId)
+    }
+
+    async function abortRunning() {
+        setAborting(true)
+        try {
+            await abort(abortError.status)
+            toast.success('Build Aborted')
+            setAbortConfirmation(false)
+            setAbortError({
+                status: false,
+                message: '',
+            })
+        } catch (error) {
+            setAborting(false)
+            setAbortConfirmation(false)
+            if (error.code === 400) {
+                // code 400 is for aborting a running build
+                const { errors } = error
+                setAbortError({
+                    status: true,
+                    message: errors[0].userMessage,
+                })
+            }
+        }
+    }
+
+    const toggleAbortConfiguration = (): void => {
+        setAbortConfirmation(not)
+    }
+    const closeForceAbortModal = (): void => {
+        setAbortError({
+            status: false,
+            message: '',
+        })
+    }
+    return (
+        <>
+            <div className="flex dc__gap-8 left py-12">
+                <div className="dc__min-width-fit-content">
+                    <div className={`${status} fs-14 fw-6 flex left inprogress-status-color`}>In progress</div>
+                </div>
+
+                <span className="cn-5 fs-13 fw-4 lh-20">/</span>
+
+                {abort && (
+                    <button
+                        type="button"
+                        className="flex cta delete er-5 bw-1 fw-6 fs-13 h-28"
+                        onClick={toggleAbortConfiguration}
+                    >
+                        Abort
+                    </button>
+                )}
+            </div>
+
+            {abortConfirmation && (
+                <ConfirmationDialog>
+                    <ConfirmationDialog.Icon src={warn} />
+                    <ConfirmationDialog.Body
+                        title={
+                            type === HistoryComponentType.CD
+                                ? `Abort ${stage.toLowerCase()}-deployment?`
+                                : 'Abort build?'
+                        }
+                    />
+                    <p className="fs-13 cn-7 lh-1-54">
+                        {type === HistoryComponentType.CD
+                            ? 'Are you sure you want to abort this stage?'
+                            : 'Are you sure you want to abort this build?'}
+                    </p>
+                    <ConfirmationDialog.ButtonGroup>
+                        <button type="button" className="cta cancel" onClick={toggleAbortConfiguration}>
+                            Cancel
+                        </button>
+                        <button type="button" className="cta delete" onClick={abortRunning}>
+                            {aborting ? <Progressing /> : 'Yes, Abort'}
+                        </button>
+                    </ConfirmationDialog.ButtonGroup>
+                </ConfirmationDialog>
+            )}
+
+            {abortError.status && (
+                <ConfirmationDialog>
+                    <ConfirmationDialog.Icon src={warn} />
+                    <ConfirmationDialog.Body title="Could not abort build!" />
+                    <div className="w-100 bc-n50 h-36 flexbox dc__align-items-center">
+                        <span className="pl-12">Error: {abortError.message}</span>
+                    </div>
+                    <div className="fs-13 fw-6 pt-12 cn-7 lh-1-54">
+                        <span>Please try to force abort</span>
+                    </div>
+                    <div className="pt-4 fw-4 cn-7 lh-1-54">
+                        <span>Some resource might get orphaned which will be cleaned up with Job-lifecycle</span>
+                    </div>
+                    <ConfirmationDialog.ButtonGroup>
+                        <button type="button" className="cta cancel" onClick={closeForceAbortModal}>
+                            Cancel
+                        </button>
+                        <button type="button" className="cta delete" onClick={abortRunning}>
+                            {aborting ? <Progressing /> : 'Force Abort'}
+                        </button>
+                    </ConfirmationDialog.ButtonGroup>
+                </ConfirmationDialog>
+            )}
+        </>
+    )
+})
+
+const CurrentStatus = React.memo(({ status, finishedOn, artifact, stage, type }: CurrentStatusType): JSX.Element => {
+    if (PROGRESSING_STATUS[status.toLowerCase()]) {
+        return <ProgressingStatus status={status} stage={stage} type={type} />
+    }
+    return <Finished status={status} finishedOn={finishedOn} artifact={artifact} type={type} />
+})
 
 const StartDetails = ({
     startedOn,
@@ -336,18 +286,25 @@ const StartDetails = ({
     const { url } = useRouteMatch()
     const { pathname } = useLocation()
     return (
-        <div className={`trigger-details__start flex column left ${isJobView ? 'mt-4' : ''}`}>
-            <div className="cn-9 fs-14 fw-6" data-testid="deployment-history-start-heading">
-                Start
-            </div>
-            <div className="flex left">
+        <div className="py-12 w-100 pr-20 flex column left dc__border-bottom-n1">
+            <div className="flexbox dc__gap-8 dc__align-items-center">
+                <span className="cn-9 fs-13 fw-6 lh-20" data-testid="deployment-history-start-heading">
+                    Start
+                </span>
+
                 <time className="cn-7 fs-12">
                     {moment(startedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
                 </time>
-                <div className="dc__bullet mr-6 ml-6" />
-                <div className="trigger-details__trigger-by cn-7 fs-12 mr-12">
+
+                <div className="dc__bullet" />
+
+                <div className="trigger-details__trigger-by cn-7 fs-12">
                     {triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}
                 </div>
+
+                {/* Have to add a div, so add to convert the gap to 16 */}
+                <div />
+
                 {type === HistoryComponentType.CD ? (
                     // eslint-disable-next-line react/jsx-no-useless-fragment
                     <>
@@ -369,7 +326,7 @@ const StartDetails = ({
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         href={createGitCommitUrl(ciMaterial.url, gitDetail.Commit)}
-                                        className="dc__app-commit__hash mr-12 bcn-1 cn-7"
+                                        className="dc__app-commit__hash bcn-1 cn-7"
                                     >
                                         {gitDetail.Commit?.substr(0, 7)}
                                     </a>
@@ -387,8 +344,9 @@ const StartDetails = ({
                         ) : null
                     })
                 )}
+
                 {!pathname.includes('source-code') && (
-                    <Link to={`${url}/source-code`} className="anchor ml-8" data-testid="commit-details-link">
+                    <Link to={`${url}/source-code`} className="anchor" data-testid="commit-details-link">
                         Commit details
                     </Link>
                 )}
@@ -397,11 +355,12 @@ const StartDetails = ({
             {triggerMetadata &&
                 renderDeploymentHistoryTriggerMetaText &&
                 renderDeploymentHistoryTriggerMetaText(triggerMetadata)}
+
             {isJobView && (
-                <div className="pt-4 pb-4 pr-0 pl-0">
-                    <span className="fw-6 fs-14">Env</span>
-                    <span className="fs-12 mb-4 ml-8">{environmentName !== '' ? environmentName : DEFAULT_ENV}</span>
-                    {environmentName === '' && <span className="fw-4 fs-11 ml-4 dc__italic-font-style">(Default)</span>}
+                <div className="flexbox dc__align-items-center dc__gap-4">
+                    <span className="cn-9 fs-13 fw-6 lh-20">Env</span>
+                    <span className="fs-12 lh-20">{environmentName !== '' ? environmentName : DEFAULT_ENV}</span>
+                    {environmentName === '' && <i className="fw-4 fs-11 lh-20">(Default)</i>}
                 </div>
             )}
         </div>
@@ -458,36 +417,47 @@ export const TriggerDetails = React.memo(
         triggerMetadata,
         renderDeploymentHistoryTriggerMetaText,
     }: TriggerDetailsType): JSX.Element => (
-        <div className="trigger-details">
-            <div className="flex">
-                <TriggerDetailsStatusIcon status={status?.toLowerCase()} isDeploymentWindowInfo={!!triggerMetadata} />
+        // TODO: Test deployment window
+        <div className="trigger-details flexbox-col">
+            <div className="display-grid trigger-details__grid">
+                <div className="flex">
+                    <TriggerDetailsStatusIcon
+                        status={status?.toLowerCase()}
+                        isDeploymentWindowInfo={!!triggerMetadata}
+                    />
+                </div>
+                <div className="trigger-details__summary flexbox-col flex-grow-1">
+                    <StartDetails
+                        startedOn={startedOn}
+                        triggeredBy={triggeredBy}
+                        triggeredByEmail={triggeredByEmail}
+                        ciMaterials={ciMaterials}
+                        gitTriggers={gitTriggers}
+                        artifact={artifact}
+                        type={type}
+                        environmentName={environmentName}
+                        isJobView={isJobView}
+                        triggerMetadata={triggerMetadata}
+                        renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
+                    />
+
+                    <CurrentStatus
+                        status={status}
+                        finishedOn={finishedOn}
+                        artifact={artifact}
+                        stage={stage}
+                        type={type}
+                    />
+                </div>
             </div>
-            <div className="trigger-details__summary">
-                <StartDetails
-                    startedOn={startedOn}
-                    triggeredBy={triggeredBy}
-                    triggeredByEmail={triggeredByEmail}
-                    ciMaterials={ciMaterials}
-                    gitTriggers={gitTriggers}
-                    artifact={artifact}
-                    type={type}
-                    environmentName={environmentName}
-                    isJobView={isJobView}
-                    triggerMetadata={triggerMetadata}
-                    renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
-                />
-                <CurrentStatus
-                    status={status}
-                    finishedOn={finishedOn}
-                    artifact={artifact}
-                    message={message}
-                    podStatus={podStatus}
-                    stage={stage}
-                    type={type}
-                    isJobView={isJobView}
-                    workerPodName={workerPodName}
-                />
-            </div>
+
+            <WorkerStatus
+                message={message}
+                podStatus={podStatus}
+                stage={stage}
+                finishedOn={finishedOn}
+                workerPodName={workerPodName}
+            />
         </div>
     ),
 )
@@ -839,7 +809,7 @@ const TriggerOutput = ({
                         triggerMetadata={triggerDetails.triggerMetadata}
                         renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
                     />
-                    <ul className="pl-20 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bcn-0 dc__zi-3">
+                    <ul className="pl-50 pr-20 pt-8 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bcn-0 dc__zi-3">
                         {triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM && (
                             <li className="tab-list__tab" data-testid="deployment-history-steps-link">
                                 <NavLink

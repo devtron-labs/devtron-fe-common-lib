@@ -85,7 +85,7 @@ const renderBlobNotConfigured = (): JSX.Element => (
 )
 
 const renderConfigurationError = (isBlobStorageConfigured: boolean): JSX.Element => (
-    <div className="flexbox dc__content-center flex-align-center dc__height-inherit dark-background">
+    <div className="flexbox dc__content-center flex-grow-1 flex-align-center dc__height-inherit dark-background">
         {!isBlobStorageConfigured ? renderBlobNotConfigured() : renderLogsNotAvailable()}
     </div>
 )
@@ -397,14 +397,14 @@ export const LogsRenderer = ({
         if (areStagesAvailable) {
             return (
                 <div
-                    className="flexbox-col pb-20 logs-renderer-container"
+                    className="flexbox-col pb-20 logs-renderer-container flex-grow-1"
                     data-testid="check-logs-detail"
                     style={{
                         backgroundColor: '#0C1021',
                     }}
                 >
                     <div
-                        className="flexbox-col pb-7 dc__position-sticky dc__top-30 dc__zi-2"
+                        className="flexbox-col pb-7 dc__position-sticky dc__top-38 dc__zi-2"
                         style={{
                             backgroundColor: '#0C1021',
                         }}
@@ -475,6 +475,7 @@ export const LogsRenderer = ({
         )
     }
 
+    // TODO: Test renderConfigurationError
     return triggerDetails.podStatus !== POD_STATUS.PENDING &&
         logsNotAvailable &&
         (!isBlobStorageConfigured || !triggerDetails.blobStorageEnabled)
