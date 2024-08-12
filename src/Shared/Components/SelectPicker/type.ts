@@ -59,6 +59,7 @@ export type SelectPickerProps = Pick<
     | 'required'
     | 'isOptionDisabled'
     | 'placeholder'
+    | 'menuPosition'
     | 'getOptionLabel'
     | 'getOptionValue'
     | 'isOptionSelected'

@@ -141,6 +141,7 @@ const SelectPicker = forwardRef(
             disabledTippyContent,
             showSelectedOptionsCount = false,
             menuSize,
+            menuPosition = 'fixed',
             variant = SelectPickerVariantType.DEFAULT,
             disableDescriptionEllipsis = false,
             multiSelectProps = {},
@@ -288,7 +289,7 @@ const SelectPicker = forwardRef(
                                     }}
                                     styles={selectStyles}
                                     menuPlacement="auto"
-                                    menuPosition="fixed"
+                                    menuPosition={menuPosition}
                                     menuShouldScrollIntoView
                                     backspaceRemovesValue
                                     aria-errormessage={errorElementId}
@@ -320,7 +321,7 @@ const SelectPicker = forwardRef(
                                     }}
                                     styles={selectStyles}
                                     menuPlacement="auto"
-                                    menuPosition="fixed"
+                                    menuPosition={menuPosition}
                                     menuShouldScrollIntoView
                                     backspaceRemovesValue={false}
                                     aria-errormessage={errorElementId}
