@@ -93,6 +93,7 @@ export const getCommonSelectStyle = ({
         border: '1px solid var(--N200)',
         boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.20)',
         width: getMenuWidthFromSize(menuSize),
+        minWidth: '200px',
         zIndex: 'var(--select-picker-menu-index)',
         ...(getVariantOverrides(variant)?.menu(base, state) || {}),
     }),

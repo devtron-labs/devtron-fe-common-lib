@@ -2,21 +2,20 @@
  * Copyright (c) 2024. Devtron Inc.
  */
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import SelectPicker from './SelectPicker.component'
-import { FilterSelectPickerProps, SelectPickerProps } from './type'
+import { FilterSelectPickerProps, SelectPickerOptionType, SelectPickerProps } from './type'
 
-const FilterSelectPicker = ({ appliedFilterOptions, handleApplyFilter, ...props }: FilterSelectPickerProps) => {
+const FilterSelectPicker = ({
+    appliedFilterOptions,
+    handleApplyFilter,
+    options,
+    ...props
+}: FilterSelectPickerProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
-    const [selectedOptions, setSelectedOptions] = useState<FilterSelectPickerProps['options']>()
-
-    const resetSelectedOptions = () => {
-        setSelectedOptions(structuredClone(appliedFilterOptions))
-    }
-
-    useEffect(() => {
-        resetSelectedOptions()
-    }, [appliedFilterOptions])
+    const [selectedOptions, setSelectedOptions] = useState<SelectPickerOptionType[]>(
+        structuredClone(appliedFilterOptions ?? []),
+    )
 
     const openMenu = () => {
         setIsMenuOpen(true)
@@ -32,7 +31,7 @@ const FilterSelectPicker = ({ appliedFilterOptions, handleApplyFilter, ...props 
 
     const handleMenuClose = () => {
         closeMenu()
-        resetSelectedOptions()
+        setSelectedOptions(structuredClone(appliedFilterOptions ?? []))
     }
 
     const handleApplyClick = () => {
@@ -54,17 +53,21 @@ const FilterSelectPicker = ({ appliedFilterOptions, handleApplyFilter, ...props 
     )
 
     return (
-        <div>
-            <SelectPicker
-                {...props}
-                isMulti
-                menuIsOpen={isMenuOpen}
-                onMenuOpen={openMenu}
-                onMenuClose={handleMenuClose}
-                onChange={handleSelectOnChange}
-                renderMenuListFooter={renderApplyButton}
-            />
-        </div>
+        <SelectPicker
+            {...props}
+            options={options}
+            value={selectedOptions}
+            isMulti
+            menuIsOpen={isMenuOpen}
+            onMenuOpen={openMenu}
+            onMenuClose={handleMenuClose}
+            onChange={handleSelectOnChange}
+            renderMenuListFooter={renderApplyButton}
+            controlShouldRenderValue={false}
+            showSelectedOptionsCount
+            isSearchable
+            isClearable={false}
+        />
     )
 }
 

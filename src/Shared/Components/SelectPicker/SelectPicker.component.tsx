@@ -207,7 +207,7 @@ const SelectPicker = ({
     } = multiSelectProps
 
     // Only large variant is supported for multi select picker
-    const selectSize = isMulti && !controlShouldRenderValue ? ComponentSizeType.large : size
+    const selectSize = isMulti && controlShouldRenderValue ? ComponentSizeType.large : size
     const shouldShowSelectedOptionIcon = !isMulti && showSelectedOptionIcon
     const isSelectSearchable = !shouldRenderCustomOptions && isSearchable
 
@@ -249,7 +249,7 @@ const SelectPicker = ({
                 shouldRenderCustomOptions={shouldRenderCustomOptions}
             />
         ),
-        [shouldRenderCustomOptions],
+        [shouldRenderCustomOptions, renderMenuListFooter, renderCustomOptions],
     )
 
     const renderValueContainer = useCallback(
