@@ -24,7 +24,6 @@ import {
     MenuListProps,
     MultiValueRemoveProps,
     MultiValueProps,
-    GroupHeadingProps,
     MultiValue,
 } from 'react-select'
 import { Progressing } from '@Common/Progressing'
@@ -36,10 +35,12 @@ import { noop } from '@Common/Helper'
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { Checkbox } from '@Common/Checkbox'
 import { ReactSelectInputAction } from '@Common/Constants'
-import { SelectPickerOptionType, SelectPickerProps } from './type'
+import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
 
-export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps<SelectPickerOptionType>) => {
+export const SelectPickerDropdownIndicator = <OptionValue,>(
+    props: DropdownIndicatorProps<SelectPickerOptionType<OptionValue>>,
+) => {
     const { isDisabled } = props
 
     return (
@@ -49,21 +50,24 @@ export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps<Sele
     )
 }
 
-export const SelectPickerClearIndicator = (props: ClearIndicatorProps<SelectPickerOptionType>) => (
+export const SelectPickerClearIndicator = <OptionValue,>(
+    props: ClearIndicatorProps<SelectPickerOptionType<OptionValue>>,
+) => (
     <components.ClearIndicator {...props}>
         <ICClose className="icon-dim-16 icon-use-fill-n6 dc__no-shrink" />
     </components.ClearIndicator>
 )
 
-export const SelectPickerControl = ({
+export const SelectPickerControl = <OptionValue, IsMulti extends boolean>({
     icon,
     showSelectedOptionIcon,
     ...props
-}: ControlProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'icon' | 'showSelectedOptionIcon'>) => {
+}: ControlProps<SelectPickerOptionType<OptionValue>> &
+    Pick<SelectPickerProps<OptionValue, IsMulti>, 'icon' | 'showSelectedOptionIcon'>) => {
     const { children, getValue } = props
     const { startIcon, endIcon } = getValue()?.[0] ?? {}
 
-    let iconToDisplay = icon
+    let iconToDisplay: SelectPickerOptionType<OptionValue>['startIcon'] = icon
 
     if (showSelectedOptionIcon && (startIcon || endIcon)) {
         iconToDisplay = startIcon || endIcon
@@ -79,10 +83,11 @@ export const SelectPickerControl = ({
     )
 }
 
-export const SelectPickerValueContainer = ({
+export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>({
     showSelectedOptionsCount,
     ...props
-}: ValueContainerProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'showSelectedOptionsCount'>) => {
+}: ValueContainerProps<SelectPickerOptionType<OptionValue>> &
+    Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount'>) => {
     const { getValue } = props
     const selectedOptionsLength = (getValue() ?? []).length
 
@@ -102,10 +107,11 @@ export const SelectPickerValueContainer = ({
 
 export const SelectPickerLoadingIndicator = () => <Progressing />
 
-export const SelectPickerOption = ({
+export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
     disableDescriptionEllipsis,
     ...props
-}: OptionProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'disableDescriptionEllipsis'>) => {
+}: OptionProps<SelectPickerOptionType<OptionValue>> &
+    Pick<SelectPickerProps<OptionValue, IsMulti>, 'disableDescriptionEllipsis'>) => {
     const {
         label,
         data,
@@ -161,13 +167,16 @@ export const SelectPickerOption = ({
     )
 }
 
-export const SelectPickerMenuList = ({
+export const SelectPickerMenuList = <OptionValue, IsMulti extends boolean>({
     renderMenuListFooter,
     shouldRenderCustomOptions,
     renderCustomOptions,
     ...props
-}: MenuListProps<SelectPickerOptionType> &
-    Pick<SelectPickerProps, 'renderMenuListFooter' | 'shouldRenderCustomOptions' | 'renderCustomOptions'>) => {
+}: MenuListProps<SelectPickerOptionType<OptionValue>> &
+    Pick<
+        SelectPickerProps<OptionValue, IsMulti>,
+        'renderMenuListFooter' | 'shouldRenderCustomOptions' | 'renderCustomOptions'
+    >) => {
     const { children } = props
 
     return (
@@ -183,10 +192,11 @@ export const SelectPickerMenuList = ({
     )
 }
 
-export const SelectPickerMultiValueLabel = ({
+export const SelectPickerMultiValueLabel = <OptionValue, IsMulti extends boolean>({
     getIsOptionValid,
     ...props
-}: MultiValueProps<SelectPickerOptionType, true> & Pick<SelectPickerProps['multiSelectProps'], 'getIsOptionValid'>) => {
+}: MultiValueProps<SelectPickerOptionType<OptionValue>, true> &
+    Pick<SelectPickerProps<OptionValue, IsMulti>['multiSelectProps'], 'getIsOptionValid'>) => {
     const { data, selectProps } = props
     const isOptionValid = getIsOptionValid(data)
     const iconToDisplay = isOptionValid ? data.startIcon || data.endIcon : <ICErrorExclamation />
@@ -213,11 +223,10 @@ export const SelectPickerMultiValueRemove = (props: MultiValueRemoveProps) => (
     </components.MultiValueLabel>
 )
 
-export const SelectPickerGroupHeading = ({
+export const SelectPickerGroupHeading = <OptionValue,>({
     isGroupHeadingSelectable,
     ...props
-}: GroupHeadingProps<SelectPickerOptionType> &
-    Pick<SelectPickerProps['multiSelectProps'], 'isGroupHeadingSelectable'>) => {
+}: SelectPickerGroupHeadingProps<OptionValue>) => {
     const { data, selectProps } = props
 
     if (!data.label) {
@@ -228,7 +237,7 @@ export const SelectPickerGroupHeading = ({
         return <components.GroupHeading {...props} />
     }
 
-    const selectedOptions = (selectProps.value as MultiValue<SelectPickerOptionType>) ?? []
+    const selectedOptions = (selectProps.value as MultiValue<SelectPickerOptionType<OptionValue>>) ?? []
     const groupHeadingOptions = data.options ?? []
 
     const checkboxValue = getGroupCheckboxValue(groupHeadingOptions, selectedOptions, selectProps.getOptionValue)

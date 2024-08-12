@@ -19,7 +19,9 @@ import { ComponentSizeType } from '@Shared/constants'
 import { GroupBase, MultiValue, OptionsOrGroups, StylesConfig } from 'react-select'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 
-const getMenuWidthFromSize = (menuSize: SelectPickerProps['menuSize']): string => {
+const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
+    menuSize: SelectPickerProps<OptionValue, IsMulti>['menuSize'],
+): string => {
     switch (menuSize) {
         case ComponentSizeType.medium:
             return '125%'
@@ -31,7 +33,9 @@ const getMenuWidthFromSize = (menuSize: SelectPickerProps['menuSize']): string =
     }
 }
 
-const getVariantOverrides = (variant: SelectPickerVariantType): StylesConfig<SelectPickerOptionType> => {
+const getVariantOverrides = <OptionValue>(
+    variant: SelectPickerVariantType,
+): StylesConfig<SelectPickerOptionType<OptionValue>> => {
     switch (variant) {
         case SelectPickerVariantType.BORDER_LESS:
             return {
@@ -54,7 +58,9 @@ const getVariantOverrides = (variant: SelectPickerVariantType): StylesConfig<Sel
     }
 }
 
-const getOptionBgColor = (state: Parameters<StylesConfig<SelectPickerOptionType>['option']>[1]): string => {
+const getOptionBgColor = <OptionValue>(
+    state: Parameters<StylesConfig<SelectPickerOptionType<OptionValue>>['option']>[1],
+): string => {
     if (state.isSelected && !state.selectProps.isMulti) {
         return 'var(--B100)'
     }
@@ -66,18 +72,18 @@ const getOptionBgColor = (state: Parameters<StylesConfig<SelectPickerOptionType>
     return 'var(--N0)'
 }
 
-export const getCommonSelectStyle = ({
+export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     error,
     size,
     menuSize,
     variant,
     getIsOptionValid,
     isGroupHeadingSelectable,
-}: Pick<SelectPickerProps, 'error' | 'size' | 'menuSize' | 'variant'> &
+}: Pick<SelectPickerProps<OptionValue, IsMulti>, 'error' | 'size' | 'menuSize' | 'variant'> &
     Pick<
-        SelectPickerProps['multiSelectProps'],
+        SelectPickerProps<OptionValue, IsMulti>['multiSelectProps'],
         'getIsOptionValid' | 'isGroupHeadingSelectable'
-    >): StylesConfig<SelectPickerOptionType> => ({
+    >): StylesConfig<SelectPickerOptionType<OptionValue>> => ({
     container: (base, state) => ({
         ...base,
         ...(state.isDisabled && {
@@ -288,10 +294,10 @@ export const getCommonSelectStyle = ({
     }),
 })
 
-export const getGroupCheckboxValue = (
-    groupHeadingOptions: readonly SelectPickerOptionType[],
-    selectedOptions: MultiValue<SelectPickerOptionType>,
-    getOptionValue: (option: SelectPickerOptionType) => string,
+export const getGroupCheckboxValue = <OptionValue>(
+    groupHeadingOptions: readonly SelectPickerOptionType<OptionValue>[],
+    selectedOptions: MultiValue<SelectPickerOptionType<OptionValue>>,
+    getOptionValue: (option: SelectPickerOptionType<OptionValue>) => string,
 ) => {
     const selectedOptionsMapByValue = selectedOptions.reduce<Record<string, true>>((acc, option) => {
         acc[getOptionValue(option)] = true
@@ -322,11 +328,11 @@ export const getGroupCheckboxValue = (
  * @param defaultOption - The default option to return if no match is found.
  * @returns The matched option or the default option if no match is found.
  */
-export const getSelectPickerOptionByValue = (
-    optionsList: OptionsOrGroups<SelectPickerOptionType, GroupBase<SelectPickerOptionType>>,
+export const getSelectPickerOptionByValue = <OptionValue>(
+    optionsList: OptionsOrGroups<SelectPickerOptionType<OptionValue>, GroupBase<SelectPickerOptionType<OptionValue>>>,
     value: string | number,
-    defaultOption: SelectPickerOptionType = { label: '', value: '' },
-): SelectPickerOptionType => {
+    defaultOption: SelectPickerOptionType<OptionValue> = { label: '', value: '' as unknown as OptionValue },
+): SelectPickerOptionType<OptionValue> => {
     const foundOption = (optionsList ?? []).reduce(
         (acc, curr) => {
             if (!acc.notFound) return acc

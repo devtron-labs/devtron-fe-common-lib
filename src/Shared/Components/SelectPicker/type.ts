@@ -17,10 +17,10 @@
 import { OptionType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 import { MutableRefObject, ReactElement, ReactNode } from 'react'
-import { GroupBase, Props as ReactSelectProps, SelectInstance } from 'react-select'
+import { GroupBase, GroupHeadingProps, Props as ReactSelectProps, SelectInstance } from 'react-select'
 import { CreatableProps } from 'react-select/creatable'
 
-export interface SelectPickerOptionType extends OptionType<number | string | object, ReactNode> {
+export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
     /**
      * Description to be displayed for the option
      */
@@ -40,10 +40,14 @@ export enum SelectPickerVariantType {
     BORDER_LESS = 'border-less',
 }
 
-type SelectProps = ReactSelectProps<SelectPickerOptionType, boolean, GroupBase<SelectPickerOptionType>>
+type SelectProps<OptionValue, IsMulti extends boolean> = ReactSelectProps<
+    SelectPickerOptionType<OptionValue>,
+    IsMulti,
+    GroupBase<SelectPickerOptionType<OptionValue>>
+>
 
-export type SelectPickerProps = Pick<
-    SelectProps,
+export type SelectPickerProps<OptionValue = number | string, IsMulti extends boolean = false> = Pick<
+    SelectProps<OptionValue, IsMulti>,
     | 'name'
     | 'classNamePrefix'
     | 'options'
@@ -69,7 +73,7 @@ export type SelectPickerProps = Pick<
     | 'onMenuClose'
     | 'autoFocus'
 > &
-    Required<Pick<SelectProps, 'inputId'>> & {
+    Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> & {
         /**
          * Icon to be rendered in the control
          */
@@ -136,23 +140,23 @@ export type SelectPickerProps = Pick<
         /**
          * Ref for the select picker
          */
-        selectRef?: MutableRefObject<
-            SelectInstance<SelectPickerOptionType> | SelectInstance<SelectPickerOptionType, true>
-        >
-    } & (
-        | {
-              isMulti?: never
-              multiSelectProps?: never
-          }
-        | {
-              isMulti: boolean
+        selectRef?: IsMulti extends true
+            ? MutableRefObject<SelectInstance<SelectPickerOptionType<OptionValue>, true>>
+            : MutableRefObject<SelectInstance<SelectPickerOptionType<OptionValue>>>
+    } & (IsMulti extends true
+        ? {
+              isMulti: IsMulti | boolean
               multiSelectProps?: Pick<
-                  CreatableProps<SelectPickerOptionType, true, GroupBase<SelectPickerOptionType>>,
+                  CreatableProps<
+                      SelectPickerOptionType<OptionValue>,
+                      true,
+                      GroupBase<SelectPickerOptionType<OptionValue>>
+                  >,
                   'onCreateOption'
               > & {
                   /**
                    * If true, the select picker creates the new option
-                   * Only applicable for isMulti: true
+                   * Only applicable for IsMulti: true
                    *
                    * @default false
                    */
@@ -160,7 +164,7 @@ export type SelectPickerProps = Pick<
                   /**
                    * If true, the group heading can be selected
                    *
-                   * Only applicable for isMulti: true
+                   * Only applicable for IsMulti: true
                    *
                    * @default false
                    */
@@ -168,10 +172,13 @@ export type SelectPickerProps = Pick<
                   /**
                    * Callback handler to check if the given selection is valid or not
                    */
-                  getIsOptionValid?: (option: SelectPickerOptionType) => boolean
+                  getIsOptionValid?: (option: SelectPickerOptionType<OptionValue>) => boolean
               }
           }
-    ) &
+        : {
+              isMulti?: never
+              multiSelectProps?: never
+          }) &
     (
         | {
               /**
@@ -195,9 +202,16 @@ export type SelectPickerProps = Pick<
           }
     )
 
+// Doing like this, because of global export error GroupHeadingPropsDefinedProps
+export type SelectPickerGroupHeadingProps<OptionValue> = GroupHeadingProps<SelectPickerOptionType<OptionValue>> & {
+    isGroupHeadingSelectable: boolean
+}
+
 export interface FilterSelectPickerProps
-    extends Required<Pick<SelectPickerProps, 'options' | 'isDisabled' | 'placeholder' | 'isLoading'>>,
-        Pick<SelectPickerProps, 'selectRef' | 'inputId' | 'menuPosition' | 'autoFocus'> {
-    appliedFilterOptions: SelectPickerProps['options']
-    handleApplyFilter: (filtersToApply: SelectPickerOptionType[]) => void
+    extends Required<
+            Pick<SelectPickerProps<number | string, true>, 'options' | 'isDisabled' | 'placeholder' | 'isLoading'>
+        >,
+        Pick<SelectPickerProps<number | string, true>, 'selectRef' | 'inputId' | 'menuPosition' | 'autoFocus'> {
+    appliedFilterOptions: SelectPickerProps<number | string, true>['options']
+    handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
 }

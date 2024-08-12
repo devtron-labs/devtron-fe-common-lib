@@ -173,7 +173,7 @@ import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } fr
  * />
  * ```
  */
-const SelectPicker = ({
+const SelectPicker = <OptionValue, IsMulti extends boolean>({
     error,
     icon,
     renderMenuListFooter,
@@ -197,7 +197,7 @@ const SelectPicker = ({
     isSearchable,
     selectRef,
     ...props
-}: SelectPickerProps) => {
+}: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value } = props
     const {
         isCreatable = false,
@@ -231,17 +231,17 @@ const SelectPicker = ({
     const isValidNewOption = (inputValue: string) =>
         isCreatable &&
         !!inputValue?.trim() &&
-        !getSelectPickerOptionByValue(value as SelectPickerOptionType[], inputValue.trim(), null)
+        !getSelectPickerOptionByValue(value as SelectPickerOptionType<OptionValue>[], inputValue.trim(), null)
 
     const renderControl = useCallback(
-        (controlProps: ControlProps<SelectPickerOptionType>) => (
+        (controlProps: ControlProps<SelectPickerOptionType<OptionValue>>) => (
             <SelectPickerControl {...controlProps} icon={icon} showSelectedOptionIcon={shouldShowSelectedOptionIcon} />
         ),
         [icon, shouldShowSelectedOptionIcon],
     )
 
     const renderMenuList = useCallback(
-        (menuProps: MenuListProps<SelectPickerOptionType>) => (
+        (menuProps: MenuListProps<SelectPickerOptionType<OptionValue>>) => (
             <SelectPickerMenuList
                 {...menuProps}
                 renderMenuListFooter={renderMenuListFooter}
@@ -253,25 +253,25 @@ const SelectPicker = ({
     )
 
     const renderValueContainer = useCallback(
-        (valueContainerProps: ValueContainerProps<SelectPickerOptionType>) => (
+        (valueContainerProps: ValueContainerProps<SelectPickerOptionType<OptionValue>>) => (
             <SelectPickerValueContainer {...valueContainerProps} showSelectedOptionsCount={showSelectedOptionsCount} />
         ),
         [showSelectedOptionsCount],
     )
 
     const renderOption = useCallback(
-        (optionProps: OptionProps<SelectPickerOptionType>) => (
+        (optionProps: OptionProps<SelectPickerOptionType<OptionValue>>) => (
             <SelectPickerOption {...optionProps} disableDescriptionEllipsis={disableDescriptionEllipsis} />
         ),
         [disableDescriptionEllipsis],
     )
 
-    const renderMultiValueLabel = (multiValueLabelProps: MultiValueProps<SelectPickerOptionType, true>) => (
-        <SelectPickerMultiValueLabel {...multiValueLabelProps} getIsOptionValid={getIsOptionValid} />
-    )
+    const renderMultiValueLabel = (
+        multiValueLabelProps: MultiValueProps<SelectPickerOptionType<OptionValue>, true>,
+    ) => <SelectPickerMultiValueLabel {...multiValueLabelProps} getIsOptionValid={getIsOptionValid} />
 
     const renderGroupHeading = useCallback(
-        (groupHeadingProps: GroupHeadingProps<SelectPickerOptionType>) => (
+        (groupHeadingProps: GroupHeadingProps<SelectPickerOptionType<OptionValue>>) => (
             <SelectPickerGroupHeading {...groupHeadingProps} isGroupHeadingSelectable={isGroupHeadingSelectable} />
         ),
         [isGroupHeadingSelectable],
@@ -308,9 +308,9 @@ const SelectPicker = ({
                 <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
                     <div className="w-100">
                         {isMulti ? (
-                            <CreatableSelect<SelectPickerOptionType, true>
+                            <CreatableSelect
                                 {...props}
-                                ref={selectRef as MutableRefObject<SelectInstance<SelectPickerOptionType, true>>}
+                                ref={selectRef as SelectPickerProps<OptionValue, true>['selectRef']}
                                 isMulti
                                 name={name || inputId}
                                 classNamePrefix={classNamePrefix || inputId}
@@ -345,9 +345,9 @@ const SelectPicker = ({
                                 onCreateOption={onCreateOption}
                             />
                         ) : (
-                            <ReactSelect<SelectPickerOptionType, false>
+                            <ReactSelect
                                 {...props}
-                                ref={selectRef as MutableRefObject<SelectInstance<SelectPickerOptionType>>}
+                                ref={selectRef as MutableRefObject<SelectInstance<SelectPickerOptionType<OptionValue>>>}
                                 name={name || inputId}
                                 classNamePrefix={classNamePrefix || inputId}
                                 isSearchable={isSelectSearchable}
