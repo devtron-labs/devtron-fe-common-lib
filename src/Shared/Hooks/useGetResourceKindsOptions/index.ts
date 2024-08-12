@@ -14,11 +14,5 @@
  * limitations under the License.
  */
 
-import { getUrlWithSearchParams } from '../../Common'
-import { GetPolicyApiUrlProps, GetResourceApiUrlProps } from './types'
-
-export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryParams }: GetResourceApiUrlProps<T>) =>
-    getUrlWithSearchParams(`${baseUrl}/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
-
-export const getPolicyApiUrl = <T>({ kind, version, queryParams, suffix }: GetPolicyApiUrlProps<T>) =>
-    getUrlWithSearchParams(`global/policy/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
+export { default as useGetResourceKindsOptions } from './useGetResourceKindsOptions'
+export type { UseGetResourceKindsOptionsProps, UseGetResourceKindOptionsReturnType } from './types'
