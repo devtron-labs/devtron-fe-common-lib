@@ -17,7 +17,8 @@
 import { OptionType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 import { ReactElement, ReactNode } from 'react'
-import { Props as ReactSelectProps } from 'react-select'
+import { GroupBase, Props as ReactSelectProps } from 'react-select'
+import { CreatableProps } from 'react-select/creatable'
 
 export interface SelectPickerOptionType extends OptionType<number | string, ReactNode> {
     /**
@@ -39,7 +40,7 @@ export enum SelectPickerVariantType {
     BORDER_LESS = 'border-less',
 }
 
-type SelectProps = ReactSelectProps<SelectPickerOptionType>
+type SelectProps = ReactSelectProps<SelectPickerOptionType, boolean, GroupBase<SelectPickerOptionType>>
 
 export type SelectPickerProps = Pick<
     SelectProps,
@@ -138,7 +139,10 @@ export type SelectPickerProps = Pick<
           }
         | {
               isMulti: boolean
-              multiSelectProps?: {
+              multiSelectProps?: Pick<
+                  CreatableProps<SelectPickerOptionType, true, GroupBase<SelectPickerOptionType>>,
+                  'onCreateOption'
+              > & {
                   /**
                    * If true, the select picker creates the new option
                    * Only applicable for isMulti: true

@@ -31,7 +31,7 @@ import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-ov
 import { ComponentSizeType } from '@Shared/constants'
 import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
-import { getCommonSelectStyle } from './utils'
+import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
 import {
     SelectPickerMultiValueLabel,
     SelectPickerMultiValueRemove,
@@ -201,7 +201,7 @@ const SelectPicker = forwardRef(
         }: SelectPickerProps,
         ref: ForwardedRef<SelectInstance<SelectPickerOptionType>>,
     ) => {
-        const { inputId, required, isDisabled, controlShouldRenderValue } = props
+        const { inputId, required, isDisabled, controlShouldRenderValue, value } = props
         const {
             isCreatable = false,
             isGroupHeadingSelectable = false,
@@ -230,7 +230,11 @@ const SelectPicker = forwardRef(
         )
 
         // Used to show the create new option for creatable select
-        const isValidNewOption = (inputValue: string) => isCreatable && !!inputValue?.trim()
+        // TODO: FilterButton; Target Platform
+        const isValidNewOption = (inputValue: string) =>
+            isCreatable &&
+            !!inputValue?.trim() &&
+            !getSelectPickerOptionByValue(value as SelectPickerOptionType[], inputValue.trim(), null)
 
         const renderControl = useCallback(
             (controlProps: ControlProps<SelectPickerOptionType>) => (

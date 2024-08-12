@@ -16,7 +16,7 @@
 
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
-import { MultiValue, StylesConfig } from 'react-select'
+import { GroupBase, MultiValue, OptionsOrGroups, StylesConfig } from 'react-select'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 
 const getMenuWidthFromSize = (menuSize: SelectPickerProps['menuSize']): string => {
@@ -311,4 +311,40 @@ export const getGroupCheckboxValue = (
     }
 
     return null
+}
+
+/**
+ * Retrieves an option from the options list based on the provided value.
+ *
+ * @param optionsList - The list of options or groups of options.
+ * @param value - The value to compare against the options' values.
+ * @param defaultOption - The default option to return if no match is found.
+ * @returns The matched option or the default option if no match is found.
+ */
+export const getSelectPickerOptionByValue = (
+    optionsList: OptionsOrGroups<SelectPickerOptionType, GroupBase<SelectPickerOptionType>>,
+    value: string | number,
+    defaultOption: SelectPickerOptionType = { label: '', value: '' },
+): SelectPickerOptionType => {
+    const foundOption = (optionsList ?? []).reduce(
+        (acc, curr) => {
+            if (!acc.notFound) return acc
+
+            if ('value' in curr && curr.value === value) {
+                return { data: curr, notFound: false }
+            }
+
+            if ('options' in curr && curr.options) {
+                const nestedOption = curr.options.find(({ value: _value }) => _value === value)
+                if (nestedOption) {
+                    return { data: nestedOption, notFound: false }
+                }
+            }
+
+            return acc
+        },
+        { notFound: true, data: defaultOption },
+    ).data
+
+    return foundOption
 }
