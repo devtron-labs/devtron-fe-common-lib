@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import { TIMELINE_STATUS } from '@Shared/constants'
+import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
+import { ReactComponent as ICFailure } from '@Icons/ic-failure.svg'
 import {
     TriggerHistoryFilterCriteriaProps,
     DeploymentHistoryResultObject,
@@ -31,6 +33,7 @@ import { ReactComponent as Disconnect } from '../../../Assets/Icon/ic-disconnect
 import { ReactComponent as TimeOut } from '../../../Assets/Icon/ic-timeout-red.svg'
 import { ReactComponent as ICCheck } from '../../../Assets/Icon/ic-check.svg'
 import { ReactComponent as ICInProgress } from '../../../Assets/Icon/ic-in-progress.svg'
+import { TERMINAL_STATUS_MAP } from './constants'
 
 export const getTriggerHistoryFilterCriteria = ({
     appId,
@@ -135,5 +138,40 @@ export const getStageStatusIcon = (status: StageStatusType): JSX.Element => {
             return <Close className="dc__no-shrink icon-dim-16 fcr-5" />
         default:
             return <ICInProgress className="dc__no-shrink icon-dim-16 ic-in-progress-orange" />
+    }
+}
+
+export const getTriggerStatusIcon = (triggerDetailStatus: string) => {
+    const triggerStatus = triggerDetailStatus?.toUpperCase()
+
+    switch (triggerStatus) {
+        case TIMELINE_STATUS.ABORTED:
+        case TERMINAL_STATUS_MAP.CANCELLED:
+            return <ICAborted className="icon-dim-20 dc__no-shrink" />
+
+        case TIMELINE_STATUS.DEGRADED:
+        case TERMINAL_STATUS_MAP.FAILED:
+        case TERMINAL_STATUS_MAP.ERROR:
+            return <ICFailure className="icon-dim-20 dc__no-shrink" />
+
+        case TIMELINE_STATUS.INPROGRESS:
+        case TERMINAL_STATUS_MAP.RUNNING:
+        case TERMINAL_STATUS_MAP.PROGRESSING:
+        case TERMINAL_STATUS_MAP.STARTING:
+        case TERMINAL_STATUS_MAP.INITIATING:
+            return <ICInProgress className="dc__no-shrink icon-dim-16 ic-in-progress-orange" />
+
+        case TIMELINE_STATUS.HEALTHY:
+        case TERMINAL_STATUS_MAP.SUCCEEDED:
+            return <div className="dc__app-summary__icon dc__no-shrink icon-dim-20 succeeded" />
+
+        default:
+            return (
+                <div
+                    className={`dc__app-summary__icon dc__no-shrink icon-dim-20 ${triggerStatus
+                        ?.toLocaleLowerCase()
+                        .replace(/\s+/g, '')}`}
+                />
+            )
     }
 }
