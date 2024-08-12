@@ -24,6 +24,7 @@ const FilterChip = ({
     handleRemoveFilter,
     getFormattedLabel = noop,
     getFormattedValue = noop,
+    showRemoveIcon,
     shouldHideLabel = false,
 }: FilterChipProps) => {
     const removeFilter = () => {
@@ -45,14 +46,16 @@ const FilterChip = ({
                     </>
                 )}
                 <span className="dc__ellipsis-right">{valueToDisplay}</span>
-                <button
-                    type="button"
-                    className="flex p-0 dc__transparent"
-                    onClick={removeFilter}
-                    aria-label="Remove filter"
-                >
-                    <CloseIcon className="icon-dim-12 icon-use-fill-n6" />
-                </button>
+                {showRemoveIcon && (
+                    <button
+                        type="button"
+                        className="flex p-0 dc__transparent dc__hover-n50 br-4"
+                        onClick={removeFilter}
+                        aria-label="Remove filter"
+                    >
+                        <CloseIcon className="icon-dim-12 icon-use-fill-n6" />
+                    </button>
+                )}
             </div>
         )
     )
@@ -69,6 +72,7 @@ const FilterChips = <T = Record<string, unknown>,>({
     getFormattedValue,
     className = '',
     clearButtonClassName = '',
+    showClearAndRemove = true,
     shouldHideLabel,
 }: FilterChipsProps<T>) => {
     const handleRemoveFilter = (filterKey, valueToRemove) => {
@@ -101,6 +105,7 @@ const FilterChips = <T = Record<string, unknown>,>({
                                 handleRemoveFilter={handleRemoveFilter}
                                 getFormattedLabel={getFormattedLabel}
                                 getFormattedValue={getFormattedValue}
+                                showRemoveIcon={showClearAndRemove}
                                 shouldHideLabel={shouldHideLabel}
                             />
                         ))
@@ -112,19 +117,22 @@ const FilterChips = <T = Record<string, unknown>,>({
                             handleRemoveFilter={handleRemoveFilter}
                             getFormattedLabel={getFormattedLabel}
                             getFormattedValue={getFormattedValue}
+                            showRemoveIcon={showClearAndRemove}
                             shouldHideLabel={shouldHideLabel}
                         />
                     ),
                 )}
-                <div className="flex">
-                    <button
-                        type="button"
-                        className={`cta text fs-13-imp lh-20-imp h-20 p-0-imp ${clearButtonClassName}`}
-                        onClick={clearFilters}
-                    >
-                        Clear All Filters
-                    </button>
-                </div>
+                {showClearAndRemove && (
+                    <div className="flex">
+                        <button
+                            type="button"
+                            className={`cta text fs-13-imp lh-20-imp h-20 p-0-imp ${clearButtonClassName}`}
+                            onClick={clearFilters}
+                        >
+                            Clear All Filters
+                        </button>
+                    </div>
+                )}
             </div>
         )
     )

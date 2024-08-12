@@ -378,7 +378,7 @@ const StartDetails = ({
                                         href={createGitCommitUrl(ciMaterial.url, gitDetail.Commit)}
                                         className="dc__app-commit__hash mr-12 bcn-1 cn-7"
                                     >
-                                        {gitDetail.Commit?.substr(0, 8)}
+                                        {gitDetail.Commit?.substr(0, 7)}
                                     </a>
                                 )}
                                 {ciMaterial.type === 'WEBHOOK' &&
@@ -386,7 +386,7 @@ const StartDetails = ({
                                     gitDetail.WebhookData.Data && (
                                         <span className="dc__app-commit__hash">
                                             {gitDetail.WebhookData.EventActionType === 'merged'
-                                                ? gitDetail.WebhookData.Data['target checkout']?.substr(0, 8)
+                                                ? gitDetail.WebhookData.Data['target checkout']?.substr(0, 7)
                                                 : gitDetail.WebhookData.Data['target checkout']}
                                         </span>
                                     )}
@@ -690,7 +690,7 @@ const HistoryLogs: React.FC<{
             </div>
             {(scrollToTop || scrollToBottom) && (
                 <Scroller
-                    style={{ position: 'fixed', bottom: '25px', right: '32px' }}
+                    style={{ position: 'fixed', bottom: '52px', right: '12px', zIndex: '4' }}
                     {...{ scrollToTop, scrollToBottom }}
                 />
             )}
