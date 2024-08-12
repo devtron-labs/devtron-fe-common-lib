@@ -131,7 +131,6 @@ export type SelectPickerProps = Pick<
          * @default false
          */
         disableDescriptionEllipsis?: boolean
-        // TODO: ref support?
     } & (
         | {
               isMulti?: never

@@ -126,6 +126,52 @@ import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } fr
  * ```tsx
  * <SelectPicker ... showSelectedOptionsCount />
  * ```
+ * @example Multi Select
+ * ```tsx
+ * <SelectPicker ... isMulti />
+ * ```
+ *
+ * @example Creatable Multi Select
+ * ```tsx
+ * <SelectPicker
+ *      ...
+ *      isMulti
+ *      multiSelectProps={{
+ *          isCreatable: true
+ *      }}
+ * />
+ * ```
+ *
+ * @example Multi Select with group heading selectable
+ * ```tsx
+ * <SelectPicker
+ *      ...
+ *      isMulti
+ *      multiSelectProps={{
+ *          isGroupHeadingSelectable: true
+ *      }}
+ * />
+ * ```
+ *
+ * @example Multi Select with selected option validator
+ * ```tsx
+ * <SelectPicker
+ *      ...
+ *      isMulti
+ *      multiSelectProps={{
+ *          getIsOptionValid: (option) => boolean
+ *      }}
+ * />
+ * ```
+ *
+ * @example Custom options rendering support (menuIsOpen needs to be handled by consumer)
+ * ```tsx
+ * <SelectPicker
+ *      ...
+ *      shouldRenderCustomOptions
+ *      renderCustomOptions={() => <div />}
+ * />
+ * ```
  */
 const SelectPicker = forwardRef(
     (
