@@ -70,7 +70,7 @@ export const CIListItem = ({
     return (
         <>
             {type === 'deployed-artifact' && (
-                <div className="flex mb-12 dc__width-inherit">
+                <div className="flex dc__width-inherit">
                     <div className="w-50 text-underline-dashed-300" />
                     <Down className="icon-dim-16 ml-8 mr-8" style={{ transform: 'rotate(90deg)' }} />
                     <div className="w-50 text-underline-dashed-300" />
@@ -89,7 +89,7 @@ export const CIListItem = ({
                 })}
 
             <div
-                className={`dc__h-fit-content ci-artifact ci-artifact--${type} image-tag-parent-card bcn-0 br-4 dc__border p-12 w-100 dc__mxw-800 ${
+                className={`dc__h-fit-content ci-artifact image-tag-parent-card bcn-0 br-4 dc__border p-12 w-100 dc__mxw-800 ci-artifact--${type} ${
                     headerMetaDataPresent && renderCIListHeader ? 'dc__no-top-radius dc__no-top-border' : ''
                 }`}
                 data-testid="hover-on-report-artifact"
@@ -215,7 +215,7 @@ const Artifacts = ({
         )
     }
     return (
-        <div className={`flex left column p-16 ${jobCIClass ?? ''}`}>
+        <div className={`flex left column dc__gap-12 ${jobCIClass ?? ''}`}>
             {!isJobView && type !== HistoryComponentType.CD && (
                 <CIListItem
                     type="artifact"
