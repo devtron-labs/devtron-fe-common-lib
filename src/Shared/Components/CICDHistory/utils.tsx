@@ -141,36 +141,57 @@ export const getStageStatusIcon = (status: StageStatusType): JSX.Element => {
     }
 }
 
-export const getTriggerStatusIcon = (triggerDetailStatus: string) => {
+const renderAbortedTriggerIcon = (): JSX.Element => <ICAborted className="icon-dim-20 dc__no-shrink" />
+const renderFailedTriggerIcon = (): JSX.Element => <ICFailure className="icon-dim-20 dc__no-shrink" />
+const renderProgressingTriggerIcon = (): JSX.Element => (
+    <ICInProgress className="dc__no-shrink icon-dim-20 ic-in-progress-orange" />
+)
+const renderSuccessTriggerIcon = (): JSX.Element => (
+    <div className="dc__app-summary__icon dc__no-shrink icon-dim-20 succeeded" />
+)
+
+export const getTriggerStatusIcon = (triggerDetailStatus: string): JSX.Element => {
     const triggerStatus = triggerDetailStatus?.toUpperCase()
 
+    // First check for TIMELINE_STATUS so as to not break existing functionality
+    // eslint-disable-next-line default-case
     switch (triggerStatus) {
         case TIMELINE_STATUS.ABORTED:
-        case TERMINAL_STATUS_MAP.CANCELLED:
-            return <ICAborted className="icon-dim-20 dc__no-shrink" />
-
+            return renderAbortedTriggerIcon()
         case TIMELINE_STATUS.DEGRADED:
+            return renderFailedTriggerIcon()
+        case TIMELINE_STATUS.INPROGRESS:
+            return renderProgressingTriggerIcon()
+        case TIMELINE_STATUS.HEALTHY:
+            return renderSuccessTriggerIcon()
+    }
+
+    const lowerCaseTriggerStatus = triggerStatus?.toLocaleLowerCase()
+
+    switch (lowerCaseTriggerStatus) {
+        case TERMINAL_STATUS_MAP.CANCELLED:
+            return renderAbortedTriggerIcon()
+
         case TERMINAL_STATUS_MAP.FAILED:
         case TERMINAL_STATUS_MAP.ERROR:
-            return <ICFailure className="icon-dim-20 dc__no-shrink" />
+            return renderFailedTriggerIcon()
 
-        case TIMELINE_STATUS.INPROGRESS:
         case TERMINAL_STATUS_MAP.RUNNING:
         case TERMINAL_STATUS_MAP.PROGRESSING:
         case TERMINAL_STATUS_MAP.STARTING:
         case TERMINAL_STATUS_MAP.INITIATING:
-            return <ICInProgress className="dc__no-shrink icon-dim-16 ic-in-progress-orange" />
+            return renderProgressingTriggerIcon()
 
-        case TIMELINE_STATUS.HEALTHY:
         case TERMINAL_STATUS_MAP.SUCCEEDED:
-            return <div className="dc__app-summary__icon dc__no-shrink icon-dim-20 succeeded" />
+            return renderSuccessTriggerIcon()
 
         default:
             return (
                 <div
-                    className={`dc__app-summary__icon dc__no-shrink icon-dim-20 ${triggerStatus
-                        ?.toLocaleLowerCase()
-                        .replace(/\s+/g, '')}`}
+                    className={`dc__app-summary__icon dc__no-shrink icon-dim-20 ${lowerCaseTriggerStatus.replace(
+                        /\s+/g,
+                        '',
+                    )}`}
                 />
             )
     }
