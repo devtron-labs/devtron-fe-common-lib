@@ -167,7 +167,7 @@ export const getCommonSelectStyle = ({
         padding: '0',
         fontWeight: '400',
         ...(state.selectProps.isMulti && {
-            gap: '8px',
+            gap: '6px',
         }),
     }),
     multiValue: (base, state) => {
@@ -202,8 +202,9 @@ export const getCommonSelectStyle = ({
         borderRadius: 0,
 
         '&:hover': {
-            backgroundColor: 'transparent',
+            backgroundColor: 'var(--R100)',
             color: 'inherit',
+            borderRadius: '2px',
 
             'svg use': {
                 fill: 'var(--R500)',

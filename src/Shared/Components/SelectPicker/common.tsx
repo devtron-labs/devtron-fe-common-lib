@@ -175,7 +175,7 @@ export const SelectPickerMenuList = ({
             <div className="py-4 cursor">{shouldRenderCustomOptions ? renderCustomOptions() : children}</div>
             {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
             {!shouldRenderCustomOptions && renderMenuListFooter && (
-                <div className=" dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bcn-0">
+                <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bcn-0 dc__zi-2">
                     {renderMenuListFooter()}
                 </div>
             )}
@@ -192,7 +192,7 @@ export const SelectPickerMultiValueLabel = ({
     const iconToDisplay = isOptionValid ? data.startIcon || data.endIcon : <ICErrorExclamation />
 
     return (
-        <div className="flex dc__gap-4 mw-0">
+        <div className="flex dc__gap-4 mw-0 dc__truncate">
             {iconToDisplay && (
                 <div
                     className={`dc__no-shrink ${selectProps.isMulti ? 'icon-dim-16' : 'icon-dim-20'} flex dc__fill-available-space`}
