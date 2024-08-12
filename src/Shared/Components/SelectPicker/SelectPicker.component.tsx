@@ -127,6 +127,9 @@ const SelectPicker = ({
     isMulti,
     name,
     classNamePrefix,
+    renderCustomOptions,
+    shouldRenderCustomOptions = false,
+    isSearchable,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled, controlShouldRenderValue } = props
@@ -135,6 +138,7 @@ const SelectPicker = ({
     // Only large variant is supported for multi select picker
     const selectSize = isMulti && !controlShouldRenderValue ? ComponentSizeType.large : size
     const shouldShowSelectedOptionIcon = !isMulti && showSelectedOptionIcon
+    const isSelectSearchable = !shouldRenderCustomOptions && isSearchable
 
     const labelId = `${inputId}-label`
     const errorElementId = `${inputId}-error-msg`
@@ -163,9 +167,14 @@ const SelectPicker = ({
 
     const renderMenuList = useCallback(
         (menuProps: MenuListProps<SelectPickerOptionType>) => (
-            <SelectPickerMenuList {...menuProps} renderMenuListFooter={renderMenuListFooter} />
+            <SelectPickerMenuList
+                {...menuProps}
+                renderMenuListFooter={renderMenuListFooter}
+                renderCustomOptions={renderCustomOptions}
+                shouldRenderCustomOptions={shouldRenderCustomOptions}
+            />
         ),
-        [],
+        [shouldRenderCustomOptions],
     )
 
     const renderValueContainer = useCallback(
@@ -228,6 +237,7 @@ const SelectPicker = ({
                                 isMulti
                                 name={name || inputId}
                                 classNamePrefix={classNamePrefix || inputId}
+                                isSearchable={isSelectSearchable}
                                 placeholder={placeholder}
                                 components={{
                                     IndicatorSeparator: null,
@@ -260,6 +270,7 @@ const SelectPicker = ({
                                 {...props}
                                 name={name || inputId}
                                 classNamePrefix={classNamePrefix || inputId}
+                                isSearchable={isSelectSearchable}
                                 placeholder={placeholder}
                                 components={{
                                     IndicatorSeparator: null,

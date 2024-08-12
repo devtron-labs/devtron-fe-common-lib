@@ -46,6 +46,9 @@ export type SelectPickerProps = Pick<
     | 'getOptionLabel'
     | 'getOptionValue'
     | 'isOptionSelected'
+    | 'menuIsOpen'
+    | 'onMenuOpen'
+    | 'onMenuClose'
 > &
     Required<Pick<SelectProps, 'inputId'>> & {
         /**
@@ -111,7 +114,7 @@ export type SelectPickerProps = Pick<
          * @default false
          */
         disableDescriptionEllipsis?: boolean
-        // TODO: Improve typing and add support for custom option list; isMenuOpen prop expose?
+        // TODO: ref support?
     } & (
         | {
               isMulti?: never
@@ -140,5 +143,27 @@ export type SelectPickerProps = Pick<
                    */
                   getIsOptionValid?: (option: SelectPickerOptionType) => boolean
               }
+          }
+    ) &
+    (
+        | {
+              /**
+               * If true, custom options are rendered in the menuList component of react select
+               *
+               * Note: renderCustomOptions is required to be passed; renderMenuListFooter is also not called
+               *
+               * @default false
+               */
+              shouldRenderCustomOptions: boolean
+              /**
+               * Callback handler for custom options
+               *
+               * Imp Note: The menu open/close needs to handled by the consumer in this case
+               */
+              renderCustomOptions: () => ReactElement
+          }
+        | {
+              shouldRenderCustomOptions?: never
+              renderCustomOptions?: never
           }
     )

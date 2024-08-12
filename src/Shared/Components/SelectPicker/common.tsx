@@ -144,15 +144,18 @@ export const SelectPickerOption = ({
 
 export const SelectPickerMenuList = ({
     renderMenuListFooter,
+    shouldRenderCustomOptions,
+    renderCustomOptions,
     ...props
-}: MenuListProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'renderMenuListFooter'>) => {
+}: MenuListProps<SelectPickerOptionType> &
+    Pick<SelectPickerProps, 'renderMenuListFooter' | 'shouldRenderCustomOptions' | 'renderCustomOptions'>) => {
     const { children } = props
 
     return (
         <components.MenuList {...props}>
-            <div className="py-4 cursor">{children}</div>
+            <div className="py-4 cursor">{shouldRenderCustomOptions ? renderCustomOptions() : children}</div>
             {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
-            {renderMenuListFooter && (
+            {!shouldRenderCustomOptions && renderMenuListFooter && (
                 <div className=" dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bcn-0">
                     {renderMenuListFooter()}
                 </div>
