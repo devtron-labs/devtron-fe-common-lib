@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICInfoOutlined } from '@Icons/ic-info-outlined.svg'
@@ -41,6 +42,7 @@ export const DeploymentConfigDiffNavigation = ({
                       iconConfig: {
                           Icon: ICDiffFileUpdated,
                           props: { className: 'icon-dim-16 dc__no-shrink' },
+                          tooltipProps: { content: 'File has difference', arrow: false, placement: 'right' as const },
                       },
                   }
                 : {}),
@@ -78,7 +80,13 @@ export const DeploymentConfigDiffNavigation = ({
                     onClick={onClick}
                 >
                     <span className="dc__truncate">{title}</span>
-                    {hasDiff && <ICDiffFileUpdated className="icon-dim-20 dc__no-shrink" />}
+                    {hasDiff && (
+                        <Tippy className="default-tt" content="File has difference" arrow={false} placement="right">
+                            <div className="flex">
+                                <ICDiffFileUpdated className="icon-dim-20 dc__no-shrink" />
+                            </div>
+                        </Tippy>
+                    )}
                 </NavLink>
             ))}
             <CollapsibleList config={collapsibleListConfig} onCollapseBtnClick={onCollapseBtnClick} />
