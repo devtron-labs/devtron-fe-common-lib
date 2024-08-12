@@ -71,7 +71,7 @@ import { ShowMoreText } from '../ShowMoreText'
 
 const Finished = React.memo(
     ({ status, finishedOn, artifact, type }: FinishedType): JSX.Element => (
-        <div className="flexbox py-12 dc__gap-8 left dc__min-width-fit-content dc__align-items-center">
+        <div className="flexbox pt-12 dc__gap-8 left dc__min-width-fit-content dc__align-items-center">
             <div
                 className={`${status} fs-14 fw-6 ${TERMINAL_STATUS_COLOR_CLASS_MAP[status.toLowerCase()] || 'cn-5'}`}
                 data-testid="deployment-status-text"
@@ -286,7 +286,7 @@ const StartDetails = ({
     const { url } = useRouteMatch()
     const { pathname } = useLocation()
     return (
-        <div className="py-12 w-100 pr-20 flex column left dc__border-bottom-n1">
+        <div className="pb-12 w-100 pr-20 flex column left dc__border-bottom-n1">
             <div className="flexbox dc__gap-8 dc__align-items-center">
                 <span className="cn-9 fs-13 fw-6 lh-20" data-testid="deployment-history-start-heading">
                     Start
@@ -368,33 +368,31 @@ const StartDetails = ({
 }
 
 const TriggerDetailsStatusIcon = React.memo(
-    ({ status, isDeploymentWindowInfo }: TriggerDetailsStatusIconType): JSX.Element => {
-        let viewBox = '0 0 25 87'
-        let height = '87'
-        let cyEndCircle = '74.5'
-        let y2Line = '69'
-        if (isDeploymentWindowInfo) {
-            viewBox = '0 0 25 118'
-            height = '118'
-            cyEndCircle = '105'
-            y2Line = '100'
-        }
-        return (
-            <svg width="25" height={height} viewBox={viewBox} fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12.5" cy="6.5" r="6" fill="white" stroke="#3B444C" />
+    ({ status }: TriggerDetailsStatusIconType): JSX.Element => (
+        <div className="flexbox-col">
+            <div className="flex">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="5" cy="5" r="4.5" fill="white" stroke="#3B444C" />
+                </svg>
+            </div>
+
+            <div className="flex flex-grow-1">
+                <div className="dc__border-left--n7 h-100" />
+            </div>
+
+            <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle
                     cx="12.5"
-                    cy={cyEndCircle}
+                    cy="12"
                     r="6"
                     fill={colorMap[status]}
                     stroke={colorMap[status]}
                     strokeWidth="12"
                     strokeOpacity="0.3"
                 />
-                <line x1="12.5" y1="11.9997" x2="12.5362" y2={y2Line} stroke="#3B444C" />
             </svg>
-        )
-    },
+        </div>
+    ),
 )
 
 export const TriggerDetails = React.memo(
@@ -418,13 +416,10 @@ export const TriggerDetails = React.memo(
         renderDeploymentHistoryTriggerMetaText,
     }: TriggerDetailsType): JSX.Element => (
         // TODO: Test deployment window
-        <div className="trigger-details flexbox-col">
-            <div className="display-grid trigger-details__grid">
-                <div className="flex">
-                    <TriggerDetailsStatusIcon
-                        status={status?.toLowerCase()}
-                        isDeploymentWindowInfo={!!triggerMetadata}
-                    />
+        <div className="trigger-details flexbox-col pb-4">
+            <div className="display-grid trigger-details__grid py-12">
+                <div className="flexbox dc__content-center">
+                    <TriggerDetailsStatusIcon status={status?.toLowerCase()} />
                 </div>
                 <div className="trigger-details__summary flexbox-col flex-grow-1">
                     <StartDetails

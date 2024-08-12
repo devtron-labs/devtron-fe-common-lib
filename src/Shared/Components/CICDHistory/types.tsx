@@ -243,7 +243,6 @@ export interface FinishedType {
 
 export interface TriggerDetailsStatusIconType {
     status: string
-    isDeploymentWindowInfo?: boolean
 }
 
 export interface LogsRendererType {
