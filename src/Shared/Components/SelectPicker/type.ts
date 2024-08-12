@@ -67,6 +67,7 @@ export type SelectPickerProps = Pick<
     | 'menuIsOpen'
     | 'onMenuOpen'
     | 'onMenuClose'
+    | 'autoFocus'
 > &
     Required<Pick<SelectProps, 'inputId'>> & {
         /**
@@ -193,3 +194,10 @@ export type SelectPickerProps = Pick<
               renderCustomOptions?: never
           }
     )
+
+export interface FilterSelectPickerProps
+    extends Required<Pick<SelectPickerProps, 'options' | 'isDisabled' | 'placeholder' | 'isLoading'>>,
+        Pick<SelectPickerProps, 'selectRef' | 'inputId' | 'menuPosition' | 'autoFocus'> {
+    appliedFilterOptions: SelectPickerProps['options']
+    handleApplyFilter: (filtersToApply: SelectPickerProps['options']) => void
+}

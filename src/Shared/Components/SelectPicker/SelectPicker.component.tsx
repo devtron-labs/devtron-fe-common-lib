@@ -228,7 +228,6 @@ const SelectPicker = ({
     )
 
     // Used to show the create new option for creatable select
-    // TODO: FilterButton; Target Platform
     const isValidNewOption = (inputValue: string) =>
         isCreatable &&
         !!inputValue?.trim() &&
