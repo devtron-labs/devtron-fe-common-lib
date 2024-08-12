@@ -136,12 +136,12 @@ export const CiPipelineSourceConfig = ({
         <div className={`flex left ${showTooltip ? 'branch-name' : ''}`}>
             {loading && showIcons && <span className="dc__loading-dots">loading</span>}
             {!loading && (
-                <>
+                <div className="flex dc__gap-4">
                     {showIcons && (
                         <img
                             src={_isWebhook ? webhookIcon : isRegexOrBranchIcon}
                             alt="branch"
-                            className="icon-dim-12 mr-5"
+                            className="icon-dim-12"
                         />
                     )}
                     {showTooltip && (
@@ -151,7 +151,10 @@ export const CiPipelineSourceConfig = ({
                             placement="bottom"
                             content={sourceValueAdv}
                         >
-                            <div className="flex" style={{ maxWidth: !baseText ? 'calc(100% - 15px)' : 'auto' }}>
+                            <div
+                                className="flex left dc__gap-4"
+                                style={{ maxWidth: !baseText ? 'calc(100% - 15px)' : 'auto' }}
+                            >
                                 {!baseText && (
                                     <>
                                         <div
@@ -162,9 +165,7 @@ export const CiPipelineSourceConfig = ({
                                             {sourceValueBase}
                                         </div>
                                         {sourceValue !== DEFAULT_GIT_BRANCH_VALUE && (
-                                            <div className="mt-2">
-                                                <Info className="icon-dim-12 fcn-5 ml-4" />
-                                            </div>
+                                            <Info className="icon-dim-12 fcn-5" />
                                         )}
                                     </>
                                 )}
@@ -177,7 +178,7 @@ export const CiPipelineSourceConfig = ({
                         </Tippy>
                     )}
                     {!showTooltip && <span className="dc__ellipsis-right">{sourceValueAdv}</span>}
-                </>
+                </div>
             )}
         </div>
     )

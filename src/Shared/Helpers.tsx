@@ -18,7 +18,15 @@
 import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
 import moment from 'moment'
-import { handleUTCTime, mapByKey, MaterialInfo, shallowEqual, SortingOrder, ZERO_TIME_STRING } from '../Common'
+import {
+    handleUTCTime,
+    mapByKey,
+    MaterialInfo,
+    PATTERNS,
+    shallowEqual,
+    SortingOrder,
+    ZERO_TIME_STRING,
+} from '../Common'
 import {
     AggregationKeys,
     GitTriggers,
@@ -54,7 +62,8 @@ interface HighlightSearchTextProps {
     highlightClasses?: string
 }
 
-// Disabling default export since this is a helper function and we would have to export a lot of functions in future.
+export const escapeRegExp = (text: string): string => text.replace(PATTERNS.ESCAPED_CHARACTERS, '\\$&')
+
 export const highlightSearchText = ({ searchText, text, highlightClasses }: HighlightSearchTextProps): string => {
     if (!searchText) {
         return text

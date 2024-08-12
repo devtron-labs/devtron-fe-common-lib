@@ -34,7 +34,8 @@ export interface SearchBarProps {
     /**
      * Input props for the search input
      */
-    inputProps?: React.InputHTMLAttributes<HTMLInputElement>
+    inputProps?: React.InputHTMLAttributes<HTMLInputElement> &
+        Partial<Record<'ref', React.MutableRefObject<HTMLInputElement>>>
     /**
      * Class name for the container; can be used for handling width
      */

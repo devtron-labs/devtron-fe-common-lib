@@ -305,3 +305,9 @@
         border-top: 0;
     }
 }
+
+.history-component__wrapper{
+    .history-component__artifact{
+        width: min( 100%, 800px )
+    }
+}
