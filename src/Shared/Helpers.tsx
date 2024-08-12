@@ -18,7 +18,6 @@
 import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
 import { Pair } from 'yaml'
-import { GroupBase, OptionsOrGroups } from 'react-select'
 import { handleUTCTime, mapByKey, MaterialInfo, shallowEqual, SortingOrder } from '../Common'
 import {
     AggregationKeys,
@@ -37,7 +36,6 @@ import {
     DeploymentStatusDetailsBreakdownDataType,
     DeploymentStatusDetailsType,
     PodMetadatum,
-    SelectPickerOptionType,
 } from './Components'
 import { getAggregator } from '../Pages'
 
@@ -734,39 +732,3 @@ export const getFileNameFromHeaders = (headers: Headers) =>
         ?.find((n) => n.includes('filename='))
         ?.replace('filename=', '')
         .trim()
-
-/**
- * Retrieves an option from the options list based on the provided value.
- *
- * @param optionsList - The list of options or groups of options.
- * @param value - The value to compare against the options' values.
- * @param defaultOption - The default option to return if no match is found.
- * @returns The matched option or the default option if no match is found.
- */
-export const getSelectPickerOptionByValue = (
-    optionsList: OptionsOrGroups<SelectPickerOptionType, GroupBase<SelectPickerOptionType>>,
-    value: string | number,
-    defaultOption: SelectPickerOptionType = { label: '', value: '' },
-): SelectPickerOptionType => {
-    const foundOption = optionsList.reduce(
-        (acc, curr) => {
-            if (!acc.notFound) return acc
-
-            if ('value' in curr && curr.value === value) {
-                return { data: curr, notFound: false }
-            }
-
-            if (!('value' in curr)) {
-                const nestedOption = curr.options.find(({ value: _value }) => _value === value)
-                if (nestedOption) {
-                    return { data: nestedOption, notFound: false }
-                }
-            }
-
-            return acc
-        },
-        { notFound: true, data: defaultOption },
-    ).data
-
-    return foundOption
-}

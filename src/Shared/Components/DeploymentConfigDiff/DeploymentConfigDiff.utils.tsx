@@ -300,22 +300,20 @@ const getDiffHeading = <DeploymentTemplate extends boolean>(
     let isDraft = false
     let isApprovalPending = false
 
-    if (deploymentTemplate) {
+    if (!data) {
+        doesNotExist = true
+    } else if (deploymentTemplate) {
         const _data = data as DeploymentTemplateDTO
-        if (!_data) {
-            doesNotExist = true
-        } else if (_data?.deploymentDraftData?.configData[0].draftMetadata.draftState === DraftState.Init) {
+        if (_data.deploymentDraftData?.configData[0].draftMetadata.draftState === DraftState.Init) {
             isDraft = true
-        } else if (_data?.deploymentDraftData?.configData[0].draftMetadata.draftState === DraftState.AwaitApproval) {
+        } else if (_data.deploymentDraftData?.configData[0].draftMetadata.draftState === DraftState.AwaitApproval) {
             isApprovalPending = true
         }
     } else {
         const _data = data as ConfigMapSecretDataConfigDatumDTO
-        if (!_data) {
-            doesNotExist = true
-        } else if (_data?.draftMetadata?.draftState === DraftState.Init) {
+        if (_data.draftMetadata?.draftState === DraftState.Init) {
             isDraft = true
-        } else if (_data?.draftMetadata?.draftState === DraftState.AwaitApproval) {
+        } else if (_data.draftMetadata?.draftState === DraftState.AwaitApproval) {
             isApprovalPending = true
         }
     }

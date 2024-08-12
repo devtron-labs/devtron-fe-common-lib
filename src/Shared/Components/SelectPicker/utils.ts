@@ -1,5 +1,5 @@
 import { ComponentSizeType } from '@Shared/constants'
-import { StylesConfig } from 'react-select'
+import { GroupBase, OptionsOrGroups, StylesConfig } from 'react-select'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 
 const getMenuWidthFromSize = (menuSize: SelectPickerProps['menuSize']): string => {
@@ -179,3 +179,39 @@ export const getCommonSelectStyle = ({
         ...(getVariantOverrides(variant)?.singleValue(base, state) || {}),
     }),
 })
+
+/**
+ * Retrieves an option from the options list based on the provided value.
+ *
+ * @param optionsList - The list of options or groups of options.
+ * @param value - The value to compare against the options' values.
+ * @param defaultOption - The default option to return if no match is found.
+ * @returns The matched option or the default option if no match is found.
+ */
+export const getSelectPickerOptionByValue = (
+    optionsList: OptionsOrGroups<SelectPickerOptionType, GroupBase<SelectPickerOptionType>>,
+    value: string | number,
+    defaultOption: SelectPickerOptionType = { label: '', value: '' },
+): SelectPickerOptionType => {
+    const foundOption = optionsList.reduce(
+        (acc, curr) => {
+            if (!acc.notFound) return acc
+
+            if ('value' in curr && curr.value === value) {
+                return { data: curr, notFound: false }
+            }
+
+            if ('options' in curr) {
+                const nestedOption = curr.options.find(({ value: _value }) => _value === value)
+                if (nestedOption) {
+                    return { data: nestedOption, notFound: false }
+                }
+            }
+
+            return acc
+        },
+        { notFound: true, data: defaultOption },
+    ).data
+
+    return foundOption
+}
