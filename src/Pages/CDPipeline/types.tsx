@@ -1,4 +1,4 @@
-import { FormType, StepType } from '@Common/CIPipeline.Types'
+import { BuildStageType, FormType } from '@Common/CIPipeline.Types'
 import { DeploymentAppTypes } from '@Common/Types'
 import { DeploymentStrategy } from '@Shared/Components'
 
@@ -22,10 +22,8 @@ export interface Environment {
     isDigestEnforcedForEnv?: boolean
 }
 
-export interface PipelineBuildStageType {
-    id: number
+export interface PipelineBuildStageType extends BuildStageType {
     triggerType?: string
-    steps: StepType[]
 }
 
 export interface SavedDeploymentStrategy extends DeploymentStrategy {
@@ -41,8 +39,8 @@ export interface CustomTagType {
 }
 
 export enum ReleaseMode {
-    CREATE = 'create',
-    LINK = 'link',
+    NEW_DEPLOYMENT = 'create',
+    MIGRATE_HELM = 'link',
 }
 
 export interface CDFormType {
