@@ -114,6 +114,8 @@ export const SelectPickerOption = ({
     } = props
     const { description, startIcon, endIcon } = data ?? {}
     const showDescription = !!description
+    // __isNew__ denotes the new option to be created
+    const isCreatableOption = '__isNew__' in data && data.__isNew__
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -124,8 +126,7 @@ export const SelectPickerOption = ({
     return (
         <components.Option {...props}>
             <div className="flexbox dc__align-items-center dc__gap-8">
-                {/* __isNew__ denotes the new option to be created */}
-                {isMulti && !('__isNew__' in data && data.__isNew__) && (
+                {isMulti && !isCreatableOption && (
                     <Checkbox
                         onChange={noop}
                         onClick={handleChange}
@@ -139,7 +140,9 @@ export const SelectPickerOption = ({
                         <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
                     )}
                     <div className="flex-grow-1">
-                        <h4 className="m-0 cn-9 fs-13 fw-4 lh-20 dc__truncate">{label}</h4>
+                        <h4 className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}>
+                            {label}
+                        </h4>
                         {/* Add support for custom ellipsis if required */}
                         {showDescription && (
                             <p
@@ -276,7 +279,6 @@ export const SelectPickerGroupHeading = ({
     return (
         <components.GroupHeading {...props} onClick={toggleGroupHeadingSelection}>
             <div className="flexbox dc__align-items-center dc__gap-8">
-                {/* __isNew__ denotes the new option to be created */}
                 {isGroupHeadingSelectable && (
                     <Checkbox
                         onChange={noop}

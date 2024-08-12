@@ -99,13 +99,6 @@ export const getCommonSelectStyle = ({
     menuList: (base) => ({
         ...base,
         padding: 0,
-
-        // Override the padding of the first group header
-        '> div': {
-            '> :first-child': {
-                paddingTop: 0,
-            },
-        },
     }),
     control: (base, state) => ({
         ...base,
@@ -229,6 +222,10 @@ export const getCommonSelectStyle = ({
         ...base,
         paddingTop: '4px',
         paddingBottom: 0,
+
+        '&:first-child': {
+            paddingTop: 0,
+        },
     }),
     groupHeading: (base) => ({
         ...base,
