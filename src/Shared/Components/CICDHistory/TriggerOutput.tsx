@@ -20,6 +20,7 @@ import { Link, NavLink } from 'react-router-dom'
 import moment from 'moment'
 import { toast } from 'react-toastify'
 import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
+import { ShowMoreText } from '@Shared/Components/ShowMoreText'
 import {
     ConfirmationDialog,
     DATE_TIME_FORMATS,
@@ -65,9 +66,8 @@ import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryDetailedView, DeploymentHistoryConfigList } from './DeploymentHistoryDiff'
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
-import { statusColor as colorMap, EMPTY_STATE_STATUS } from '../../constants'
+import { statusColor as colorMap, EMPTY_STATE_STATUS, PULSATING_STATUS_MAP } from '../../constants'
 import './cicdHistory.scss'
-import { ShowMoreText } from '../ShowMoreText'
 
 const Finished = React.memo(
     ({ status, finishedOn, artifact, type }: FinishedType): JSX.Element => (
@@ -117,14 +117,16 @@ const WorkerStatus = React.memo(
 
         return (
             <div className="display-grid trigger-details__grid">
-                <div className="flex">
+                <div className="flexbox dc__content-center">
                     <ICLines className="icon-dim-20 dc__no-shrink scn-7" />
                 </div>
 
                 <div className="flexbox-col">
-                    <div className="flexbox cn-9 fs-13 fw-4 lh-20">
-                        <span>Worker</span>&nbsp;
-                        {podStatus && <span>{podStatus.toLowerCase()}&nbsp;</span>}
+                    <div className="flexbox dc__gap-8">
+                        <div className="flexbox cn-9 fs-13 fw-4 lh-20">
+                            <span>Worker</span>&nbsp;
+                            {podStatus && <span>{podStatus.toLowerCase()}&nbsp;</span>}
+                        </div>
                         {stage !== 'DEPLOY' && getViewWorker()}
                     </div>
 
@@ -192,7 +194,7 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
     }
     return (
         <>
-            <div className="flex dc__gap-8 left py-12">
+            <div className="flex dc__gap-8 left pt-12">
                 <div className="dc__min-width-fit-content">
                     <div className={`${status} fs-14 fw-6 flex left inprogress-status-color`}>In progress</div>
                 </div>
@@ -202,7 +204,7 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
                 {abort && (
                     <button
                         type="button"
-                        className="flex cta delete er-5 bw-1 fw-6 fs-13 h-28"
+                        className="flex dc__transparent cr-5 fs-13 fw-6 lh-20"
                         onClick={toggleAbortConfiguration}
                     >
                         Abort
@@ -380,16 +382,22 @@ const TriggerDetailsStatusIcon = React.memo(
                 <div className="dc__border-left--n7 h-100" />
             </div>
 
-            <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle
-                    cx="12.5"
-                    cy="12"
-                    r="6"
-                    fill={colorMap[status]}
-                    stroke={colorMap[status]}
-                    strokeWidth="12"
-                    strokeOpacity="0.3"
-                />
+            <svg
+                width="10"
+                height="10"
+                viewBox="0 0 10 10"
+                fill="none"
+                className={`br-6 ${PULSATING_STATUS_MAP[status] ? 'dc__pulsate' : ''}`}
+                style={
+                    !PULSATING_STATUS_MAP[status]
+                        ? {
+                              boxShadow: `0 0 10px ${colorMap[status]}`,
+                          }
+                        : {}
+                }
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <circle cx="5" cy="5" r="4.5" fill={colorMap[status]} stroke={colorMap[status]} strokeOpacity="0.3" />
             </svg>
         </div>
     ),

@@ -387,11 +387,11 @@ export const statusColor = {
     healthy: 'var(--G500)',
     notdeployed: 'var(--N500)',
     missing: 'var(--N700)',
-    progressing: 'var(--orange)',
-    initiating: 'var(--orange)',
-    starting: '#FF7E5B',
+    progressing: 'var(--O500)',
+    initiating: 'var(--O500)',
+    starting: 'var(--O500)',
     succeeded: '#1dad70',
-    running: '#FF7E5B',
+    running: 'var(--O500)',
     failed: '#f33e3e',
     error: '#f33e3e',
     cancelled: '#767d84',
@@ -399,6 +399,13 @@ export const statusColor = {
     timedout: '#f33e3e',
     unabletofetch: '#f33e3e',
     hibernating: 'var(--N700)',
+}
+
+export const PULSATING_STATUS_MAP = {
+    progressing: true,
+    initiating: true,
+    starting: true,
+    running: true,
 }
 
 export const APP_STATUS_HEADERS = ['KIND', 'NAME', 'STATUS', 'MESSAGE']
