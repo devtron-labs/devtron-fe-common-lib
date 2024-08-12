@@ -21,14 +21,12 @@ import ReactGA from 'react-ga4'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { configureMonacoYaml } from 'monaco-yaml'
 
-import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-error-exclamation.svg'
 import { ReactComponent as WarningIcon } from '../../Assets/Icon/ic-warning.svg'
 import './codeEditor.scss'
 import 'monaco-editor'
 
-import YamlWorker from '../../yaml.worker.js?worker'
 import { YAMLStringify, cleanKubeManifest, useJsonYaml } from '../Helper'
 import { useWindowSize } from '../Hooks'
 import Select from '../Select/Select'
@@ -48,10 +46,18 @@ import { MODES } from '../Constants'
 
 self.MonacoEnvironment = {
     getWorker(_, label) {
-        if (label === MODES.YAML) {
-            return new YamlWorker()
+        const getWorkerModule = (moduleUrl: string) => {
+            return new Worker(self.MonacoEnvironment.getWorkerUrl(moduleUrl, label), {
+                name: label,
+                type: 'module',
+            })
         }
-        return new editorWorker()
+
+        if (label === MODES.YAML) {
+            return getWorkerModule('../../yaml.worker.js?worker')
+        }
+
+        return getWorkerModule('/monaco-editor/esm/vs/editor/editor.worker?worker')
     },
 }
 
@@ -73,7 +79,7 @@ function useCodeEditorContext() {
  * Thus as a hack we are using this objects reference to call the latest onChange reference
  */
 const _onChange = {
-    onChange: null
+    onChange: null,
 }
 
 const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(

@@ -15,16 +15,33 @@
  *   limitations under the License.
  */
 
-import React, { createRef, useEffect, useRef, useState } from 'react'
+import { createRef, useEffect, useRef, useState, ReactElement, Fragment } from 'react'
+import Tippy from '@tippyjs/react'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { followCursor } from 'tippy.js'
 
-import { ReactComponent as ICArrowDown } from '../../../Assets/Icon/ic-sort-arrow-down.svg'
-import { ReactComponent as ICCross } from '../../../Assets/Icon/ic-cross.svg'
-import { ResizableTagTextArea, SortingOrder, useStateFilters } from '../../../Common'
-import { DEFAULT_SECRET_PLACEHOLDER } from '../../constants'
-import { stringComparatorBySortOrder } from '../../Helpers'
+import { ReactComponent as ICArrowDown } from '@Icons/ic-sort-arrow-down.svg'
+import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
+import { ConditionalWrap, ResizableTagTextArea, SortingOrder, useStateFilters } from '@Common/index'
+import { stringComparatorBySortOrder } from '@Shared/Helpers'
+import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
+
 import { KeyValueRow, KeyValueTableProps } from './KeyValueTable.types'
-
 import './KeyValueTable.scss'
+
+const renderWithReadOnlyTippy = (children: ReactElement) => (
+    <Tippy
+        className="default-tt"
+        arrow={false}
+        placement="bottom"
+        content="Cannot edit in read-only mode"
+        followCursor="horizontal"
+        plugins={[followCursor]}
+    >
+        {children}
+    </Tippy>
+)
 
 export const KeyValueTable = <K extends string>({
     config,
@@ -36,6 +53,10 @@ export const KeyValueTable = <K extends string>({
     placeholder,
     isAdditionNotAllowed,
     readOnly,
+    showError,
+    validationSchema,
+    errorMessages = [],
+    onError,
 }: KeyValueTableProps<K>) => {
     // CONSTANTS
     const { headers, rows } = config
@@ -45,6 +66,9 @@ export const KeyValueTable = <K extends string>({
     // STATES
     const [updatedRows, setUpdatedRows] = useState<KeyValueRow<K>[]>(rows)
     const [newRowAdded, setNewRowAdded] = useState(false)
+
+    /** Boolean determining if table has rows. */
+    const hasRows = (!readOnly && !isAdditionNotAllowed) || !!updatedRows.length
 
     // HOOKS
     const { sortBy, sortOrder, handleSorting } = useStateFilters({
@@ -93,6 +117,16 @@ export const KeyValueTable = <K extends string>({
     // METHODS
     const onSortBtnClick = () => handleSorting(sortBy)
 
+    const checkAllRowsAreValid = (_rows: KeyValueRow<K>[]) => {
+        const isValid = _rows.every(
+            ({ data: _data }) =>
+                validationSchema?.(_data[firstHeaderKey].value, firstHeaderKey) &&
+                validationSchema?.(_data[secondHeaderKey].value, secondHeaderKey),
+        )
+
+        return isValid
+    }
+
     const onNewRowAdd = (key: K) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target
 
@@ -108,9 +142,11 @@ export const KeyValueTable = <K extends string>({
             },
             id,
         } as KeyValueRow<K>
+        const editedRows = [data, ...updatedRows]
 
+        onError?.(!checkAllRowsAreValid(editedRows))
         setNewRowAdded(true)
-        setUpdatedRows([data, ...updatedRows])
+        setUpdatedRows(editedRows)
         onChange?.(id, key, value)
 
         keyTextAreaRef.current = {
@@ -125,6 +161,7 @@ export const KeyValueTable = <K extends string>({
 
     const onRowDelete = (row: KeyValueRow<K>) => () => {
         const remainingRows = updatedRows.filter(({ id }) => id !== row.id)
+        onError?.(!checkAllRowsAreValid(remainingRows))
         setUpdatedRows(remainingRows)
 
         delete keyTextAreaRef.current[row.id]
@@ -154,6 +191,7 @@ export const KeyValueTable = <K extends string>({
                 },
             }
             const editedRows = updatedRows.map((_row) => (_row.id === row.id ? rowData : _row))
+            onError?.(!checkAllRowsAreValid(editedRows))
             setUpdatedRows(editedRows)
         }
     }
@@ -167,115 +205,151 @@ export const KeyValueTable = <K extends string>({
     }
 
     return (
-        <div className="dc__border br-4 w-100 bcn-0 key-value">
-            <div
-                className={`key-value__row flexbox dc__align-items-center bcn-50 ${(!readOnly && !isAdditionNotAllowed) || updatedRows.length ? 'dc__border-bottom-n1' : ''}`}
-            >
-                {headers.map(({ key, label, className }) =>
-                    isSortable && key === firstHeaderKey ? (
-                        <button
-                            key={key}
-                            type="button"
-                            className={`dc__unset-button-styles cn-9 fs-13 lh-20 py-8 px-12 fw-6 flexbox dc__align-items-center dc__gap-2 dc__align-self-stretch key-value__header__col-1 ${className || ''}`}
-                            onClick={onSortBtnClick}
-                        >
-                            {label}
-                            <ICArrowDown
-                                className="icon-dim-16 scn-7 rotate cursor"
-                                style={{
-                                    ['--rotateBy' as string]: sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
-                                }}
-                            />
-                        </button>
-                    ) : (
-                        <div
-                            key={key}
-                            className={`cn-9 fs-13 lh-20 py-8 px-12 fw-6 flexbox dc__align-items-center dc__gap-2 ${key === firstHeaderKey ? 'dc__align-self-stretch dc__border-right--n1 key-value__header__col-1' : 'flex-grow-1 dc__border-left-n1'} ${className || ''}`}
-                        >
-                            {label}
-                        </div>
-                    ),
-                )}
-                {!!headerComponent && <div className="px-12">{headerComponent}</div>}
-            </div>
-            {!readOnly && !isAdditionNotAllowed && (
-                <div
-                    className={`key-value__row flexbox dc__align-items-center ${updatedRows.length ? 'dc__border-bottom-n1' : ''}`}
-                >
-                    {headers.map(({ key }) => (
-                        <div
-                            key={key}
-                            className={`cn-9 fs-13 lh-20 flex dc__overflow-auto ${key === firstHeaderKey ? 'dc__align-self-stretch dc__border-right--n1 key-value__header__col-1' : 'flex-grow-1'}`}
-                        >
-                            <textarea
-                                ref={key === firstHeaderKey ? inputRowRef : undefined}
-                                className="key-value__row-input key-value__row-input--add placeholder-cn5 py-8 px-12 lh-20 fs-13 fw-4 dc__no-border-imp dc__no-border-radius"
-                                value=""
-                                rows={1}
-                                placeholder={placeholder[key]}
-                                onChange={onNewRowAdd(key)}
-                            />
-                        </div>
-                    ))}
-                </div>
-            )}
-            {updatedRows.map((row, index) => (
-                <div
-                    key={row.id}
-                    className={`key-value__row flexbox dc__align-items-center ${index !== updatedRows.length - 1 ? 'dc__border-bottom-n1' : ''}`}
-                >
-                    {headers.map(({ key }) => (
-                        <div
-                            key={key}
-                            className={`cn-9 fs-13 lh-20 dc__overflow-auto flexbox dc__align-items-center dc__gap-4 ${key === firstHeaderKey ? 'dc__align-self-stretch dc__border-right--n1 key-value__header__col-1' : 'flex-grow-1'}`}
-                        >
-                            {maskValue?.[key] && row.data[key].value ? (
-                                DEFAULT_SECRET_PLACEHOLDER
-                            ) : (
-                                <>
-                                    <ResizableTagTextArea
-                                        {...row.data[key]}
-                                        className="key-value__row-input placeholder-cn5 py-8 px-12 dc__no-border-imp dc__no-border-radius"
-                                        minHeight={20}
-                                        maxHeight={160}
-                                        value={row.data[key].value}
-                                        placeholder={placeholder[key]}
-                                        onChange={onRowDataEdit(row, key)}
-                                        onBlur={onRowDataBlur(row, key)}
-                                        refVar={
-                                            key === firstHeaderKey
-                                                ? keyTextAreaRef.current?.[row.id]
-                                                : valueTextAreaRef.current?.[row.id]
-                                        }
-                                        dependentRef={
-                                            key === firstHeaderKey
-                                                ? valueTextAreaRef.current?.[row.id]
-                                                : keyTextAreaRef.current?.[row.id]
-                                        }
-                                        disabled={readOnly || row.data[key].disabled}
-                                        disableOnBlurResizeToMinHeight
+        <>
+            <div className={`bcn-2 p-1 ${hasRows ? 'dc__top-radius-4' : 'br-4'}`}>
+                <div className="key-value-table two-columns w-100 bcn-1 br-4">
+                    <div className="key-value-table__row">
+                        {headers.map(({ key, label, className }) =>
+                            isSortable && key === firstHeaderKey ? (
+                                <button
+                                    key={key}
+                                    type="button"
+                                    className={`bcn-50 dc__unset-button-styles cn-9 fs-13 lh-20-imp py-8 px-12 fw-6 flexbox dc__align-items-center dc__gap-2 ${updatedRows.length || (!readOnly && !isAdditionNotAllowed) ? 'dc__top-left-radius' : 'dc__left-radius-4'} ${className || ''}`}
+                                    onClick={onSortBtnClick}
+                                >
+                                    {label}
+                                    <ICArrowDown
+                                        className="icon-dim-16 scn-7 rotate cursor"
+                                        style={{
+                                            ['--rotateBy' as string]:
+                                                sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
+                                        }}
                                     />
-                                    {row.data[key].required && (
-                                        <span className="cr-5 fs-16 dc__align-self-start px-6 py-8">*</span>
-                                    )}
-                                </>
-                            )}
-                        </div>
-                    ))}
-                    {!readOnly && (
-                        <button
-                            type="button"
-                            className="dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 dc__border-left-n1--important dc__hover-n50"
-                            onClick={onRowDelete(row)}
+                                </button>
+                            ) : (
+                                <div
+                                    key={key}
+                                    className={`bcn-50 cn-9 fs-13 lh-20 py-8 px-12 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${key === firstHeaderKey ? `${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : `${hasRows ? 'dc__top-right-radius' : 'dc__right-radius-4'}`}  ${className || ''}`}
+                                >
+                                    {label}
+                                    {!!headerComponent && headerComponent}
+                                </div>
+                            ),
+                        )}
+                    </div>
+                </div>
+            </div>
+            {hasRows && (
+                <div className="bcn-2 px-1 pb-1 dc__bottom-radius-4">
+                    {!readOnly && !isAdditionNotAllowed && (
+                        <div
+                            className={`key-value-table two-columns-top-row bcn-1 ${updatedRows.length ? 'pb-1' : 'dc__bottom-radius-4'}`}
                         >
-                            <ICCross
-                                aria-label="delete-row"
-                                className="icon-dim-16 fcn-4 dc__align-self-start cursor"
-                            />
-                        </button>
+                            <div className="key-value-table__row">
+                                {headers.map(({ key }) => (
+                                    <div
+                                        key={key}
+                                        className={`key-value-table__cell bcn-0 flex dc__overflow-auto ${(!updatedRows.length && (key === firstHeaderKey ? 'dc__bottom-left-radius' : 'dc__bottom-right-radius')) || ''}`}
+                                    >
+                                        <textarea
+                                            ref={key === firstHeaderKey ? inputRowRef : undefined}
+                                            className="key-value-table__cell-input key-value-table__cell-input--add placeholder-cn5 py-8 px-12 cn-9 lh-20 fs-13 fw-4 dc__no-border-radius"
+                                            value=""
+                                            rows={1}
+                                            placeholder={placeholder[key]}
+                                            onChange={onNewRowAdd(key)}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    {!!updatedRows.length && (
+                        <div
+                            className={`key-value-table w-100 bcn-1 dc__bottom-radius-4 ${!readOnly ? 'three-columns' : 'two-columns'}`}
+                        >
+                            {updatedRows.map((row) => (
+                                <div key={row.id} className="key-value-table__row">
+                                    {headers.map(({ key }) => (
+                                        <Fragment key={key}>
+                                            <ConditionalWrap wrap={renderWithReadOnlyTippy} condition={readOnly}>
+                                                <div
+                                                    className={`key-value-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema?.(row.data[key].value, key) ? 'key-value-table__cell--error no-hover' : ''}`}
+                                                >
+                                                    {maskValue?.[key] && row.data[key].value ? (
+                                                        <div className="py-8 px-12 h-36 flex">
+                                                            {DEFAULT_SECRET_PLACEHOLDER}
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                            <ResizableTagTextArea
+                                                                {...row.data[key]}
+                                                                className={`key-value-table__cell-input placeholder-cn5 py-8 px-12 cn-9 fs-13 lh-20 dc__no-border-radius ${readOnly || row.data[key].disabled ? 'cursor-not-allowed' : ''}`}
+                                                                minHeight={20}
+                                                                maxHeight={160}
+                                                                value={row.data[key].value}
+                                                                placeholder={placeholder[key]}
+                                                                onChange={onRowDataEdit(row, key)}
+                                                                onBlur={onRowDataBlur(row, key)}
+                                                                refVar={
+                                                                    key === firstHeaderKey
+                                                                        ? keyTextAreaRef.current?.[row.id]
+                                                                        : valueTextAreaRef.current?.[row.id]
+                                                                }
+                                                                dependentRef={
+                                                                    key === firstHeaderKey
+                                                                        ? valueTextAreaRef.current?.[row.id]
+                                                                        : keyTextAreaRef.current?.[row.id]
+                                                                }
+                                                                disabled={readOnly || row.data[key].disabled}
+                                                                disableOnBlurResizeToMinHeight
+                                                            />
+                                                            {row.data[key].required && (
+                                                                <span className="cr-5 fs-16 dc__align-self-start px-6 py-8">
+                                                                    *
+                                                                </span>
+                                                            )}
+                                                            {showError &&
+                                                                !validationSchema?.(row.data[key].value, key) &&
+                                                                errorMessages.length && (
+                                                                    <div className="key-value-table__error bcn-0 dc__border br-4 py-7 px-8 flexbox-col dc__gap-4">
+                                                                        {errorMessages.map((error) => (
+                                                                            <div
+                                                                                key={error}
+                                                                                className="flexbox align-items-center dc__gap-4"
+                                                                            >
+                                                                                <ICClose className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
+                                                                                <p className="fs-12 lh-16 cn-7 m-0">
+                                                                                    {error}
+                                                                                </p>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                )}
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </ConditionalWrap>
+                                        </Fragment>
+                                    ))}
+                                    {!readOnly && (
+                                        <button
+                                            type="button"
+                                            className="key-value-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 dc__hover-n50 dc__tab-focus"
+                                            onClick={onRowDelete(row)}
+                                        >
+                                            <ICCross
+                                                aria-label="delete-row"
+                                                className="icon-dim-16 fcn-4 dc__align-self-start cursor"
+                                            />
+                                        </button>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
                     )}
                 </div>
-            ))}
-        </div>
+            )}
+        </>
     )
 }

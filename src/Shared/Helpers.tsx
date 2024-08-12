@@ -17,6 +17,7 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
+import { Pair } from 'yaml'
 import { handleUTCTime, mapByKey, MaterialInfo, shallowEqual, SortingOrder } from '../Common'
 import {
     AggregationKeys,
@@ -134,6 +135,22 @@ export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
         default:
             return <ICWebhook className="icon-dim-12" />
     }
+}
+
+export const yamlComparatorBySortOrder = (a: Pair, b: Pair, sortOrder: SortingOrder = SortingOrder.ASC) => {
+    let orderMultiplier = 0
+    if (sortOrder === SortingOrder.DESC) {
+        orderMultiplier = -1
+    } else if (sortOrder === SortingOrder.ASC) {
+        orderMultiplier = 1
+    }
+    if (a.key < b.key) {
+        return -1 * orderMultiplier
+    }
+    if (a.key > b.key) {
+        return 1 * orderMultiplier
+    }
+    return 0
 }
 
 export const useIntersection = (
