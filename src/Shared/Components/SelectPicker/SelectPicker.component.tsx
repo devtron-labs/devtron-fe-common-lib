@@ -198,7 +198,7 @@ const SelectPicker = ({
     selectRef,
     ...props
 }: SelectPickerProps) => {
-    const { inputId, required, isDisabled, controlShouldRenderValue, value } = props
+    const { inputId, required, isDisabled, controlShouldRenderValue = true, value } = props
     const {
         isCreatable = false,
         isGroupHeadingSelectable = false,
@@ -283,6 +283,7 @@ const SelectPicker = ({
         </Tippy>
     )
 
+    // TODO: fix the right overflow/left overflow issue for menu
     return (
         <div className="flex column left top dc__gap-4">
             {/* Note: Common out for fields */}
