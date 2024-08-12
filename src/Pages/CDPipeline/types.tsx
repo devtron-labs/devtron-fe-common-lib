@@ -1,6 +1,7 @@
 import { BuildStageType, FormType } from '@Common/CIPipeline.Types'
 import { DeploymentAppTypes } from '@Common/Types'
 import { DeploymentStrategy } from '@Shared/Components'
+import { EnvListMinDTO } from '@Shared/types'
 
 interface ConfigSecretType {
     label: string
@@ -8,18 +9,17 @@ interface ConfigSecretType {
     type: string
 }
 
-export interface Environment {
-    description?: string
-    id: number
+export interface Environment
+    extends Pick<EnvListMinDTO, 'id' | 'active' | 'namespace' | 'isClusterCdActive'>,
+        Partial<
+            Pick<
+                EnvListMinDTO,
+                'isVirtualEnvironment' | 'allowedDeploymentTypes' | 'description' | 'isDigestEnforcedForEnv'
+            >
+        > {
     name: string
-    namespace: string
-    active: boolean
     clusterName: string
     clusterId: string
-    isClusterCdActive: boolean
-    isVirtualEnvironment?: boolean
-    allowedDeploymentTypes?: DeploymentAppTypes[]
-    isDigestEnforcedForEnv?: boolean
 }
 
 export interface PipelineBuildStageType extends BuildStageType {
