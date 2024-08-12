@@ -17,12 +17,40 @@
 import { useParams } from 'react-router'
 import { useEffect, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
-import { Progressing, Host, useInterval, DOCUMENTATION, ROUTES } from '../../../Common'
-import { DeploymentHistoryBaseParamsType, HistoryComponentType, LogsRendererType } from './types'
+import DOMPurify from 'dompurify'
+import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
+import { escapeRegExp } from '@Shared/Helpers'
+import {
+    Progressing,
+    Host,
+    useInterval,
+    DOCUMENTATION,
+    ROUTES,
+    SearchBar,
+    useUrlFilters,
+    stopPropagation,
+} from '../../../Common'
+import LogStageAccordion from './LogStageAccordion'
+import {
+    EVENT_STREAM_EVENTS_MAP,
+    LOGS_RETRY_COUNT,
+    LOGS_STAGE_IDENTIFIER,
+    LOGS_STAGE_STREAM_SEPARATOR,
+    POD_STATUS,
+} from './constants'
+import {
+    CreateMarkupReturnType,
+    DeploymentHistoryBaseParamsType,
+    HistoryComponentType,
+    LogsRendererType,
+    StageDetailType,
+    StageInfoDTO,
+    StageStatusType,
+} from './types'
 import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
-import { EVENT_STREAM_EVENTS_MAP, LOGS_RETRY_COUNT, POD_STATUS } from './constants'
+import './LogsRenderer.scss'
 
 const renderLogsNotAvailable = (subtitle?: string): JSX.Element => (
     <div className="flexbox dc__content-center flex-align-center dc__height-inherit">
@@ -63,13 +91,13 @@ const renderConfigurationError = (isBlobStorageConfigured: boolean): JSX.Element
     </div>
 )
 
-function useCIEventSource(url: string, maxLength?: number) {
+const useCIEventSource = (url: string, maxLength?: number): [string[], EventSource, boolean] => {
     const [dataVal, setDataVal] = useState([])
     let retryCount = LOGS_RETRY_COUNT
     const [logsNotAvailableError, setLogsNotAvailableError] = useState<boolean>(false)
     const [interval, setInterval] = useState(1000)
     const buffer = useRef([])
-    const eventSourceRef = useRef(null)
+    const eventSourceRef = useRef<EventSource>(null)
 
     function populateData() {
         setDataVal((data) => [...data, ...buffer.current])
@@ -149,43 +177,312 @@ export const LogsRenderer = ({
         parentType === HistoryComponentType.CI
             ? `${Host}/${ROUTES.CI_CONFIG_GET}/${pipelineId}/workflow/${triggerDetails.id}/logs`
             : `${Host}/${ROUTES.CD_MATERIAL_GET}/workflow/logs/${appId}/${envId}/${pipelineId}/${triggerDetails.id}`
-    const [logs, eventSource, logsNotAvailable] = useCIEventSource(
+    const [streamDataList, eventSource, logsNotAvailable] = useCIEventSource(
         triggerDetails.podStatus && triggerDetails.podStatus !== POD_STATUS.PENDING && logsURL,
     )
-    function createMarkup(log: string): {
-        __html: string
-    } {
+    const [stageList, setStageList] = useState<StageDetailType[]>([])
+    // State for logs list in case no stages are available
+    const [logsList, setLogsList] = useState<string[]>([])
+    const { searchKey, handleSearch } = useUrlFilters()
+
+    const areStagesAvailable =
+        (window._env_.FEATURE_STEP_WISE_LOGS_ENABLE && streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER)) || false
+
+    function createMarkup(log: string, targetSearchKey: string = searchKey): CreateMarkupReturnType {
+        let isSearchKeyPresent = false
         try {
             // eslint-disable-next-line no-param-reassign
             log = log.replace(/\[[.]*m/, (m) => `\x1B[${m}m`)
+
+            // This piece of code, would highlight the search key in the logs
+            // We will remove color through [0m and add background color of y6, till searchKey is present and then revert back to original color
+            // While reverting if index is 0, would not add any escape code since it is the start of the log
+            if (targetSearchKey && areStagesAvailable) {
+                // Search is working on assumption that color codes are not nested for words.
+                const logParts = log.split(ANSI_UP_REGEX)
+                const availableEscapeCodes = log.match(ANSI_UP_REGEX) || []
+                const searchRegex = new RegExp(`(${escapeRegExp(targetSearchKey)})`, 'g')
+                const parts = logParts.reduce((acc, part, index) => {
+                    try {
+                        // Question: Can we directly set it as true inside the replace function?
+                        isSearchKeyPresent = isSearchKeyPresent || searchRegex.test(part)
+                        acc.push(
+                            part.replace(
+                                searchRegex,
+                                (match) =>
+                                    `\x1B[0m\x1B[48;2;197;141;54m${match}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
+                            ),
+                        )
+                    } catch (searchRegexError) {
+                        acc.push(part)
+                    }
+
+                    if (index < logParts.length - 1) {
+                        acc.push(availableEscapeCodes[index])
+                    }
+                    return acc
+                }, [])
+                // eslint-disable-next-line no-param-reassign
+                log = parts.join('')
+            }
             const ansiUp = new AnsiUp()
-            return { __html: ansiUp.ansi_to_html(log) }
+            return { __html: ansiUp.ansi_to_html(log), isSearchKeyPresent }
         } catch (err) {
-            return { __html: log }
+            return { __html: log, isSearchKeyPresent }
         }
+    }
+
+    /**
+     *
+     * @param status - status of the stage
+     * @param lastUserActionState - If true, user had opened the stage else closed the stage
+     * @param isSearchKeyPresent - If search key is present in the logs of that stage
+     * @param isFromSearchAction - If the action is from search action
+     * @returns
+     */
+    const getIsStageOpen = (
+        status: StageStatusType,
+        lastUserActionState: boolean | undefined,
+        isSearchKeyPresent: boolean,
+        isFromSearchAction: boolean,
+    ): boolean => {
+        const isInitialState = stageList.length === 0
+        const lastActionState = lastUserActionState ?? true
+
+        // In case of search action, would open the stage if search key is present
+        // If search key is not present would return the last action state, if no action taken would return true(that is stage is new or being loaded)
+        if (isFromSearchAction) {
+            return isSearchKeyPresent || lastActionState
+        }
+
+        if (isInitialState) {
+            return status !== StageStatusType.SUCCESS || isSearchKeyPresent
+        }
+
+        return lastActionState
+    }
+
+    const areEventsProgressing =
+        triggerDetails.podStatus === POD_STATUS.PENDING || !!(eventSource && eventSource.readyState <= 1)
+
+    /**
+     * If initially parsedLogs are empty, and initialStatus is Success then would set opened as false on each
+     * If initialStatus is not success and initial parsedLogs are empty then would set opened as false on each except the last
+     * In case data is already present we will just find user's last action else would open the stage
+     */
+    const getStageListFromStreamData = (targetSearchKey?: string): StageDetailType[] => {
+        // Would be using this to get last user action on stage
+        const previousStageMap: Readonly<Record<string, Readonly<Record<string, StageDetailType>>>> = stageList.reduce(
+            (acc, stageDetails) => {
+                if (!acc[stageDetails.stage]) {
+                    acc[stageDetails.stage] = {}
+                }
+                acc[stageDetails.stage][stageDetails.startTime] = stageDetails
+                return acc
+            },
+            {} as Record<string, Record<string, StageDetailType>>,
+        )
+
+        // Map of stage as key and value as object with key as start time and value as boolean depicting if search key is present or not
+        const searchKeyStatusMap: Record<string, Record<string, boolean>> = {}
+
+        return streamDataList.reduce((acc, streamItem: string, index) => {
+            if (streamItem.startsWith(LOGS_STAGE_IDENTIFIER)) {
+                try {
+                    const { stage, startTime, endTime, status }: StageInfoDTO = JSON.parse(
+                        streamItem.split(LOGS_STAGE_STREAM_SEPARATOR)[1],
+                    )
+                    const existingStage = acc.find((item) => item.stage === stage && item.startTime === startTime)
+                    const previousExistingStage = previousStageMap[stage]?.[startTime] ?? ({} as StageDetailType)
+
+                    if (existingStage) {
+                        // Would update the existing stage with new endTime
+                        existingStage.endTime = endTime
+                        existingStage.status = status
+                        existingStage.isOpen = getIsStageOpen(
+                            status,
+                            previousExistingStage.isOpen,
+                            !!searchKeyStatusMap[stage]?.[startTime],
+                            !!targetSearchKey,
+                        )
+                    } else {
+                        const derivedStatus: StageStatusType = areEventsProgressing
+                            ? StageStatusType.PROGRESSING
+                            : StageStatusType.FAILURE
+
+                        acc.push({
+                            stage: stage || `Untitled stage ${index + 1}`,
+                            startTime: startTime || '',
+                            endTime: endTime || '',
+                            // Would be defining the state when we receive the end status, otherwise it is loading and would be open
+                            isOpen: getIsStageOpen(
+                                derivedStatus,
+                                previousExistingStage.isOpen,
+                                // Wont be present in case of start stage since no logs are present yet
+                                !!searchKeyStatusMap[stage]?.[startTime],
+                                !!targetSearchKey,
+                            ),
+                            status: derivedStatus,
+                            logs: [],
+                        })
+                    }
+                    return acc
+                } catch (e) {
+                    // In case of error would not create
+                    return acc
+                }
+            }
+
+            // Ideally in case of parallel build should receive stage name with logs
+            // NOTE: For now would always append log to last stage, can show a loader on stage tiles till processed
+            if (acc.length > 0) {
+                // In case targetSearchKey is not present createMarkup will internally fallback to searchKey
+                const { __html, isSearchKeyPresent } = createMarkup(streamItem, targetSearchKey)
+
+                const lastStage = acc[acc.length - 1]
+                lastStage.logs.push(__html)
+                if (isSearchKeyPresent) {
+                    lastStage.isOpen = getIsStageOpen(
+                        lastStage.status,
+                        previousStageMap[lastStage.stage]?.[lastStage.startTime]?.isOpen,
+                        true,
+                        !!targetSearchKey,
+                    )
+
+                    if (!searchKeyStatusMap[lastStage.stage]) {
+                        searchKeyStatusMap[lastStage.stage] = {}
+                    }
+
+                    searchKeyStatusMap[lastStage.stage][lastStage.startTime] = true
+                }
+            }
+
+            return acc
+        }, [] as StageDetailType[])
+    }
+
+    useEffect(() => {
+        if (!streamDataList?.length) {
+            return
+        }
+
+        if (!areStagesAvailable) {
+            const newLogs = streamDataList.map((logItem) => createMarkup(logItem).__html)
+            setLogsList(newLogs)
+            return
+        }
+
+        const newStageList = getStageListFromStreamData()
+        setStageList(newStageList)
+        // NOTE: Not adding searchKey as dependency since on mount we would already have searchKey
+        // And for other cases we would use handleSearchEnter
+    }, [streamDataList, areEventsProgressing])
+
+    const handleSearchEnter = (searchText: string) => {
+        handleSearch(searchText)
+        const newStageList = getStageListFromStreamData(searchText)
+        setStageList(newStageList)
+    }
+
+    const handleStageClose = (index: number) => {
+        const newLogs = structuredClone(stageList)
+        newLogs[index].isOpen = false
+        setStageList(newLogs)
+    }
+
+    const handleStageOpen = (index: number) => {
+        const newLogs = structuredClone(stageList)
+        newLogs[index].isOpen = true
+        setStageList(newLogs)
+    }
+
+    const renderLogs = () => {
+        if (areStagesAvailable) {
+            return (
+                <div
+                    className="flexbox-col pb-20 logs-renderer-container"
+                    data-testid="check-logs-detail"
+                    style={{
+                        backgroundColor: '#0C1021',
+                    }}
+                >
+                    <div
+                        className="flexbox-col pb-7 dc__position-sticky dc__top-0 dc__zi-2"
+                        style={{
+                            backgroundColor: '#0C1021',
+                        }}
+                    >
+                        <div
+                            className="flexbox logs-renderer__search-bar logs-renderer__filters-border-bottom pl-12"
+                            // Doing this since we have binded 'f' with full screen and SearchVar has not exposed event on search, so on pressing f it goes to full screen
+                            onKeyDown={stopPropagation}
+                        >
+                            <SearchBar
+                                noBackgroundAndBorder
+                                containerClassName="w-100"
+                                inputProps={{
+                                    placeholder: 'Search logs',
+                                }}
+                                handleEnter={handleSearchEnter}
+                                initialSearchText={searchKey}
+                                size={ComponentSizeType.large}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="flexbox-col px-12 dc__gap-4">
+                        {stageList.map(({ stage, isOpen, logs, endTime, startTime, status }, index) => (
+                            <LogStageAccordion
+                                key={`${stage}-${startTime}-log-stage-accordion`}
+                                stage={stage}
+                                isOpen={isOpen}
+                                logs={logs}
+                                endTime={endTime}
+                                startTime={startTime}
+                                status={status}
+                                handleStageClose={handleStageClose}
+                                handleStageOpen={handleStageOpen}
+                                stageIndex={index}
+                                isLoading={index === stageList.length - 1 && areEventsProgressing}
+                            />
+                        ))}
+                    </div>
+                </div>
+            )
+        }
+
+        // Having a fallback for logs that already stored in blob storage
+        return (
+            <div className="logs__body" data-testid="check-logs-detail">
+                {logsList.map((log: string, index: number) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div className="flex top left mb-10 lh-24" key={`logs-${index}`}>
+                        <span className="cn-4 col-2 pr-10">{index + 1}</span>
+                        {/* eslint-disable-next-line react/no-danger */}
+                        <p
+                            className="mono fs-14 mb-0-imp"
+                            // eslint-disable-next-line react/no-danger
+                            dangerouslySetInnerHTML={{
+                                __html: DOMPurify.sanitize(log),
+                            }}
+                        />
+                    </div>
+                ))}
+
+                {areEventsProgressing && (
+                    <div className="flex left event-source-status">
+                        <Progressing />
+                    </div>
+                )}
+            </div>
+        )
     }
 
     return triggerDetails.podStatus !== POD_STATUS.PENDING &&
         logsNotAvailable &&
-        (!isBlobStorageConfigured || !triggerDetails.blobStorageEnabled) ? (
-        renderConfigurationError(isBlobStorageConfigured)
-    ) : (
-        <div className="logs__body" data-testid="check-logs-detail">
-            {logs.map((log: string, index: number) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <div className="flex top left mb-10 lh-24" key={`logs-${index}`}>
-                    <span className="cn-4 col-2 pr-10">{index + 1}</span>
-                    {/* eslint-disable-next-line react/no-danger */}
-                    <p className="mono fs-14 mb-0-imp" dangerouslySetInnerHTML={createMarkup(log)} />
-                </div>
-            ))}
-            {(triggerDetails.podStatus === POD_STATUS.PENDING || (eventSource && eventSource.readyState <= 1)) && (
-                <div className="flex left event-source-status">
-                    <Progressing />
-                </div>
-            )}
-        </div>
-    )
+        (!isBlobStorageConfigured || !triggerDetails.blobStorageEnabled)
+        ? renderConfigurationError(isBlobStorageConfigured)
+        : renderLogs()
 }
 
 export default LogsRenderer

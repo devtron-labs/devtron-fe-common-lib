@@ -19,6 +19,7 @@ import {
     DeploymentHistoryResultObject,
     DeploymentHistory,
     TriggerHistoryFilterCriteriaType,
+    StageStatusType,
 } from './types'
 import { ResourceKindType } from '../../types'
 import { ReactComponent as Close } from '../../../Assets/Icon/ic-close.svg'
@@ -28,6 +29,8 @@ import { ReactComponent as Error } from '../../../Assets/Icon/ic-error-exclamati
 import { ReactComponent as Timer } from '../../../Assets/Icon/ic-timer.svg'
 import { ReactComponent as Disconnect } from '../../../Assets/Icon/ic-disconnected.svg'
 import { ReactComponent as TimeOut } from '../../../Assets/Icon/ic-timeout-red.svg'
+import { ReactComponent as ICCheck } from '../../../Assets/Icon/ic-check.svg'
+import { ReactComponent as ICInProgress } from '../../../Assets/Icon/ic-in-progress.svg'
 
 export const getTriggerHistoryFilterCriteria = ({
     appId,
@@ -121,5 +124,16 @@ export const renderIcon = (iconState: string): JSX.Element => {
             return <TimeOut className="icon-dim-20" />
         default:
             return <Timer className="icon-dim-20 timer-icon" />
+    }
+}
+
+export const getStageStatusIcon = (status: StageStatusType): JSX.Element => {
+    switch (status) {
+        case StageStatusType.SUCCESS:
+            return <ICCheck className="dc__no-shrink icon-dim-16 scg-5" />
+        case StageStatusType.FAILURE:
+            return <Close className="dc__no-shrink icon-dim-16 fcr-5" />
+        default:
+            return <ICInProgress className="dc__no-shrink icon-dim-16 ic-in-progress-orange" />
     }
 }
