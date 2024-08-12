@@ -33,8 +33,8 @@ import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
 import { getCommonSelectStyle } from './utils'
 import {
-    MultiValueLabel,
-    MultiValueRemove,
+    SelectPickerMultiValueLabel,
+    SelectPickerMultiValueRemove,
     SelectPickerClearIndicator,
     SelectPickerControl,
     SelectPickerDropdownIndicator,
@@ -183,6 +183,7 @@ const SelectPicker = forwardRef(
             [error, selectSize, menuSize, variant, isGroupHeadingSelectable],
         )
 
+        // Used to show the create new option for creatable select
         const isValidNewOption = (inputValue: string) => isCreatable && !!inputValue?.trim()
 
         const renderControl = useCallback(
@@ -226,7 +227,7 @@ const SelectPicker = forwardRef(
         )
 
         const renderMultiValueLabel = (multiValueLabelProps: MultiValueProps<SelectPickerOptionType, true>) => (
-            <MultiValueLabel {...multiValueLabelProps} getIsOptionValid={getIsOptionValid} />
+            <SelectPickerMultiValueLabel {...multiValueLabelProps} getIsOptionValid={getIsOptionValid} />
         )
 
         const renderGroupHeading = useCallback(
@@ -284,7 +285,7 @@ const SelectPicker = forwardRef(
                                         ClearIndicator: SelectPickerClearIndicator,
                                         ValueContainer: renderValueContainer,
                                         MultiValueLabel: renderMultiValueLabel,
-                                        MultiValueRemove,
+                                        MultiValueRemove: SelectPickerMultiValueRemove,
                                         GroupHeading: renderGroupHeading,
                                     }}
                                     styles={selectStyles}

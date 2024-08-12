@@ -183,7 +183,7 @@ export const SelectPickerMenuList = ({
     )
 }
 
-export const MultiValueLabel = ({
+export const SelectPickerMultiValueLabel = ({
     getIsOptionValid,
     ...props
 }: MultiValueProps<SelectPickerOptionType, true> & Pick<SelectPickerProps['multiSelectProps'], 'getIsOptionValid'>) => {
@@ -205,7 +205,7 @@ export const MultiValueLabel = ({
     )
 }
 
-export const MultiValueRemove = (props: MultiValueRemoveProps) => (
+export const SelectPickerMultiValueRemove = (props: MultiValueRemoveProps) => (
     <components.MultiValueLabel {...props}>
         <span className="flex dc__no-shrink">
             <ICClose className="icon-dim-12 icon-use-fill-n6" />
