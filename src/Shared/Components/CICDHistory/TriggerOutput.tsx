@@ -199,16 +199,17 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
                     <div className={`${status} fs-14 fw-6 flex left inprogress-status-color`}>In progress</div>
                 </div>
 
-                <span className="cn-5 fs-13 fw-4 lh-20">/</span>
-
                 {abort && (
-                    <button
-                        type="button"
-                        className="flex dc__transparent cr-5 fs-13 fw-6 lh-20"
-                        onClick={toggleAbortConfiguration}
-                    >
-                        Abort
-                    </button>
+                    <>
+                        <span className="cn-5 fs-13 fw-4 lh-20">/</span>
+                        <button
+                            type="button"
+                            className="flex dc__transparent cr-5 fs-13 fw-6 lh-20"
+                            onClick={toggleAbortConfiguration}
+                        >
+                            Abort
+                        </button>
+                    </>
                 )}
             </div>
 
