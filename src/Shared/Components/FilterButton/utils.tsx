@@ -21,4 +21,19 @@ export const getFilterStyle = (controlWidth?: string, menuAlignFromRight?: boole
         width: controlWidth || '150px',
         maxHeight: '36px',
     }),
+    option: (base, state) => ({
+        ...base,
+        height: '36px',
+        padding: '8px 12px',
+        backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
+        color: 'var(--N900)',
+        cursor: 'pointer',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+
+        ':active': {
+            backgroundColor: 'var(--N100)',
+        },
+    }),
 })
