@@ -199,7 +199,12 @@ const SelectPicker = ({
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled, controlShouldRenderValue, value } = props
-    const { isCreatable = false, isGroupHeadingSelectable = false, getIsOptionValid = () => true } = multiSelectProps
+    const {
+        isCreatable = false,
+        isGroupHeadingSelectable = false,
+        getIsOptionValid = () => true,
+        onCreateOption,
+    } = multiSelectProps
 
     // Only large variant is supported for multi select picker
     const selectSize = isMulti && !controlShouldRenderValue ? ComponentSizeType.large : size
@@ -337,6 +342,7 @@ const SelectPicker = ({
                                 hideSelectedOptions={false}
                                 isValidNewOption={isValidNewOption}
                                 createOptionPosition="first"
+                                onCreateOption={onCreateOption}
                             />
                         ) : (
                             <ReactSelect<SelectPickerOptionType, false>
