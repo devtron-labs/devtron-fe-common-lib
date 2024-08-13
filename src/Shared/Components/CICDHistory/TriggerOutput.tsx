@@ -21,6 +21,9 @@ import moment from 'moment'
 import { toast } from 'react-toastify'
 import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
 import { ShowMoreText } from '@Shared/Components/ShowMoreText'
+import { getHandleOpenURL } from '@Shared/Helpers'
+import { ImageChipCell } from '@Shared/Components/ImageChipCell'
+import { CommitChipCell } from '@Shared/Components/CommitChipCell'
 import {
     ConfirmationDialog,
     DATE_TIME_FORMATS,
@@ -65,7 +68,6 @@ import { DeploymentHistoryDetailedView, DeploymentHistoryConfigList } from './De
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
 import { statusColor as colorMap, EMPTY_STATE_STATUS, PULSATING_STATUS_MAP } from '../../constants'
-import { ImageChipCell } from '../ImageChipCell'
 import './cicdHistory.scss'
 
 const Finished = React.memo(
@@ -284,6 +286,7 @@ const StartDetails = ({
 }: StartDetailsType): JSX.Element => {
     const { url } = useRouteMatch()
     const { pathname } = useLocation()
+
     return (
         <div className="pb-12 w-100 pr-20 flex column left dc__border-bottom-n1">
             <div className="flexbox dc__gap-8 dc__align-items-center">
@@ -313,24 +316,25 @@ const StartDetails = ({
                         const gitDetail: GitTriggers = gitTriggers[ciMaterial.id]
                         return gitDetail ? (
                             <React.Fragment key={ciMaterial.id}>
-                                {ciMaterial.type !== 'WEBHOOK' && (
-                                    <a
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        href={createGitCommitUrl(ciMaterial.url, gitDetail.Commit)}
-                                        className="dc__app-commit__hash bcn-1 cn-7"
-                                    >
-                                        {gitDetail.Commit?.substr(0, 7)}
-                                    </a>
+                                {ciMaterial.type !== 'WEBHOOK' && gitDetail.Commit && (
+                                    <CommitChipCell
+                                        commits={[gitDetail.Commit]}
+                                        handleClick={getHandleOpenURL(
+                                            createGitCommitUrl(ciMaterial.url, gitDetail.Commit),
+                                        )}
+                                    />
                                 )}
                                 {ciMaterial.type === 'WEBHOOK' &&
                                     gitDetail.WebhookData &&
-                                    gitDetail.WebhookData.Data && (
-                                        <span className="dc__app-commit__hash">
-                                            {gitDetail.WebhookData.EventActionType === 'merged'
-                                                ? gitDetail.WebhookData.Data['target checkout']?.substr(0, 7)
-                                                : gitDetail.WebhookData.Data['target checkout']}
-                                        </span>
+                                    gitDetail.WebhookData.Data &&
+                                    gitDetail.WebhookData.Data['target checkout'] && (
+                                        <CommitChipCell
+                                            commits={
+                                                gitDetail.WebhookData.EventActionType === 'merged'
+                                                    ? gitDetail.WebhookData.Data['target checkout'].substr(0, 7)
+                                                    : gitDetail.WebhookData.Data['target checkout']
+                                            }
+                                        />
                                     )}
                             </React.Fragment>
                         ) : null
@@ -413,12 +417,12 @@ export const TriggerDetails = React.memo(
         triggerMetadata,
         renderDeploymentHistoryTriggerMetaText,
     }: TriggerDetailsType): JSX.Element => (
-        <div className="trigger-details flexbox-col pb-4">
+        <div className="trigger-details flexbox-col pb-12">
             <div className="display-grid trigger-details__grid py-12">
                 <div className="flexbox dc__content-center">
                     <TriggerDetailsStatusIcon status={status?.toLowerCase()} />
                 </div>
-                <div className="trigger-details__summary flexbox-col flex-grow-1">
+                <div className="trigger-details__summary flexbox-col flex-grow-1 lh-20">
                     <StartDetails
                         startedOn={startedOn}
                         triggeredBy={triggeredBy}
