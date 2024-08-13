@@ -218,7 +218,10 @@ export interface FilterSelectPickerProps
     extends Required<
             Pick<SelectPickerProps<number | string, true>, 'options' | 'isDisabled' | 'placeholder' | 'isLoading'>
         >,
-        Pick<SelectPickerProps<number | string, true>, 'selectRef' | 'inputId' | 'menuPosition' | 'autoFocus'> {
+        Pick<
+            SelectPickerProps<number | string, true>,
+            'selectRef' | 'inputId' | 'menuPosition' | 'autoFocus' | 'shouldMenuAlignRight'
+        > {
     appliedFilterOptions: SelectPickerProps<number | string, true>['options']
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
 }
