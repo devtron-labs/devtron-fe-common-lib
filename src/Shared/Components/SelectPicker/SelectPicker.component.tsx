@@ -225,6 +225,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     const labelId = `${inputId}-label`
     const errorElementId = `${inputId}-error-msg`
 
+    // Option disabled, group null state, checkbox hover, create option visibility (scroll reset on search)
     const selectStyles = useMemo(
         () =>
             getCommonSelectStyle({

@@ -149,6 +149,13 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         ':hover': {
             backgroundColor: 'var(--N50)',
         },
+
+        ...(state.isDisabled && {
+            cursor: 'not-allowed',
+            // Adding to ensure no active or hover is applied
+            // backgroundColor: 'var(--N0) !important',
+            opacity: 0.5,
+        }),
     }),
     dropdownIndicator: (base, state) => ({
         ...base,

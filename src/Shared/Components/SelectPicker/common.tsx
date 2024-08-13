@@ -117,6 +117,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
         data,
         selectProps: { isMulti },
         selectOption,
+        isDisabled,
     } = props
     const { description, startIcon, endIcon } = data ?? {}
     const showDescription = !!description
@@ -139,6 +140,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                         isChecked={props.isSelected || false}
                         value={CHECKBOX_VALUE.CHECKED}
                         rootClassName="mb-0 w-20 p-2 dc__align-self-start dc__no-shrink"
+                        disabled={isDisabled}
                     />
                 )}
                 <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
