@@ -32,7 +32,6 @@ import {
     useAsync,
     not,
     ZERO_TIME_STRING,
-    extractImage,
     useInterval,
     URLS,
     ServerError,
@@ -60,13 +59,13 @@ import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigg
 import { DEFAULT_ENV, TIMEOUT_VALUE, WORKER_POD_BASE_URL } from './constants'
 import { GitTriggers } from '../../types'
 import warn from '../../../Assets/Icon/ic-warning.svg'
-import docker from '../../../Assets/Icon/ic-docker.svg'
 import { LogsRenderer } from './LogsRenderer'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryDetailedView, DeploymentHistoryConfigList } from './DeploymentHistoryDiff'
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
 import { statusColor as colorMap, EMPTY_STATE_STATUS, PULSATING_STATUS_MAP } from '../../constants'
+import { ImageChipCell } from '../ImageChipCell'
 import './cicdHistory.scss'
 
 const Finished = React.memo(
@@ -88,10 +87,7 @@ const Finished = React.memo(
             {type === HistoryComponentType.CI && artifact && (
                 <>
                     <div className="dc__bullet" />
-                    <div className="dc__app-commit__hash">
-                        <img src={docker} alt="docker" className="commit-hash__icon grayscale" />
-                        {extractImage(artifact)}
-                    </div>
+                    <ImageChipCell imagePath={artifact} placement="top" />
                 </>
             )}
         </div>
@@ -111,7 +107,7 @@ const WorkerStatus = React.memo(
         const getViewWorker = () =>
             showLink ? (
                 <NavLink to={`${WORKER_POD_BASE_URL}/${workerPodName}/logs`} target="_blank" className="anchor">
-                    <div className="mr-10">View worker pod</div>
+                    <span className="mr-10 fs-13">View worker pod</span>
                 </NavLink>
             ) : null
 
@@ -310,14 +306,7 @@ const StartDetails = ({
 
                 {type === HistoryComponentType.CD ? (
                     // eslint-disable-next-line react/jsx-no-useless-fragment
-                    <>
-                        {artifact && (
-                            <div className="dc__app-commit__hash" data-testid="docker-image-hash">
-                                <img src={docker} alt="docker" className="commit-hash__icon grayscale" />
-                                {artifact.split(':')[1]}
-                            </div>
-                        )}
-                    </>
+                    <>{artifact && <ImageChipCell imagePath={artifact} placement="top" />}</>
                 ) : (
                     Object.keys(gitTriggers ?? {}).length > 0 &&
                     ciMaterials?.map((ciMaterial) => {

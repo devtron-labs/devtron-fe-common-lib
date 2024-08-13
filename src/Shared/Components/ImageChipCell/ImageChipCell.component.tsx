@@ -15,13 +15,20 @@
  */
 
 import Tippy from '@tippyjs/react'
+import { noop } from '@Common/Helper'
 import { ReactComponent as DockerIcon } from '../../../Assets/Icon/ic-docker.svg'
 import { ImageChipCellProps } from './types'
 import './imageChipCell.scss'
 
-const ImageChipCell = ({ handleClick, imagePath, isExpanded, registryType }: ImageChipCellProps) => (
+const ImageChipCell = ({
+    imagePath,
+    registryType,
+    handleClick = noop,
+    isExpanded = false,
+    placement = 'auto',
+}: ImageChipCellProps) => (
     <div className="cn-7 fs-14 lh-20 flexbox">
-        <Tippy content={imagePath} className="default-tt" placement="auto" arrow={false}>
+        <Tippy content={imagePath} className="default-tt" placement={placement} arrow={false}>
             <button
                 type="button"
                 className={`display-grid dc__align-items-center image-chip-cell__container ${isExpanded ? 'image-chip-cell__container--expanded' : ''} bcn-1 br-6 dc__transparent py-0 px-6 cursor max-w-100`}
