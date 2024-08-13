@@ -245,11 +245,6 @@ export interface TriggerDetailsStatusIconType {
     status: string
 }
 
-export interface LogsRendererType {
-    triggerDetails: History
-    isBlobStorageConfigured: boolean
-    parentType: HistoryComponentType
-}
 export interface SyncStageResourceDetail {
     id: number
     cdWorkflowRunnerId: number
@@ -406,6 +401,7 @@ export interface HistoryLogsProps
         | 'renderDeploymentApprovalInfo'
         | 'renderCIListHeader'
         | 'renderVirtualHistoryArtifacts'
+        | 'fullScreenView'
     > {
     triggerDetails: History
     loading: boolean
@@ -415,6 +411,11 @@ export interface HistoryLogsProps
     ciPipelineId: number
     resourceId?: number
     renderRunSource: (runSource: RunSourceType, isDeployedInThisResource: boolean) => JSX.Element
+}
+
+export interface LogsRendererType
+    extends Pick<HistoryLogsProps, 'fullScreenView' | 'triggerDetails' | 'isBlobStorageConfigured'> {
+    parentType: HistoryComponentType
 }
 
 export interface DeploymentStatusDetailBreakdownType {
@@ -717,7 +718,7 @@ export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime
     isOpen: boolean
 }
 
-export interface LogStageAccordionProps extends StageDetailType {
+export interface LogStageAccordionProps extends StageDetailType, Pick<LogsRendererType, 'fullScreenView'> {
     handleStageClose: (index: number) => void
     handleStageOpen: (index: number) => void
     stageIndex: number

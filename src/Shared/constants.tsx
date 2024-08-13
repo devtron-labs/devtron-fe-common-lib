@@ -380,7 +380,7 @@ export const statusIcon = {
 }
 
 export const statusColor = {
-    suspended: '#ffaa00',
+    suspended: 'var(--Y500)',
     unknown: 'var(--N700)',
     queued: 'var(--N700)',
     degraded: 'var(--R500)',

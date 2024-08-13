@@ -171,6 +171,7 @@ export const LogsRenderer = ({
     triggerDetails,
     isBlobStorageConfigured,
     parentType,
+    fullScreenView,
 }: LogsRendererType): JSX.Element => {
     const { pipelineId, envId, appId } = useParams<DeploymentHistoryBaseParamsType>()
     const logsURL =
@@ -407,7 +408,7 @@ export const LogsRenderer = ({
                     }}
                 >
                     <div
-                        className="flexbox-col pb-7 dc__position-sticky dc__top-38 dc__zi-2"
+                        className={`flexbox-col pb-7 dc__position-sticky dc__zi-2 ${fullScreenView ? 'dc__top-0' : 'dc__top-38'}`}
                         style={{
                             backgroundColor: '#0C1021',
                         }}
@@ -444,6 +445,7 @@ export const LogsRenderer = ({
                                 handleStageOpen={handleStageOpen}
                                 stageIndex={index}
                                 isLoading={index === stageList.length - 1 && areEventsProgressing}
+                                fullScreenView={fullScreenView}
                             />
                         ))}
                     </div>

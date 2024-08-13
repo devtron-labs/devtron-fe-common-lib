@@ -483,6 +483,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
     renderVirtualHistoryArtifacts,
     scrollToTop,
     scrollToBottom,
+    fullScreenView,
 }) => {
     const { path } = useRouteMatch()
     const { appId, pipelineId, triggerId, envId } = useParams<{
@@ -514,6 +515,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                     triggerDetails={triggerDetails}
                                     isBlobStorageConfigured={isBlobStorageConfigured}
                                     parentType={HistoryComponentType.CD}
+                                    fullScreenView={fullScreenView}
                                 />
 
                                 {(scrollToTop || scrollToBottom) && (
@@ -898,6 +900,7 @@ const TriggerOutput = ({
                 renderVirtualHistoryArtifacts={renderVirtualHistoryArtifacts}
                 scrollToTop={scrollToTop}
                 scrollToBottom={scrollToBottom}
+                fullScreenView={fullScreenView}
             />
         </>
     )
