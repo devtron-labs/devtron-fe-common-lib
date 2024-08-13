@@ -424,7 +424,6 @@ export const TriggerDetails = React.memo(
         triggerMetadata,
         renderDeploymentHistoryTriggerMetaText,
     }: TriggerDetailsType): JSX.Element => (
-        // TODO: Test deployment window
         <div className="trigger-details flexbox-col pb-4">
             <div className="display-grid trigger-details__grid py-12">
                 <div className="flexbox dc__content-center">

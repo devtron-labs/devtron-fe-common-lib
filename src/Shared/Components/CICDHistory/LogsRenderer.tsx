@@ -453,7 +453,7 @@ export const LogsRenderer = ({
 
         // Having a fallback for logs that already stored in blob storage
         return (
-            <div className="logs__body dark-background" data-testid="check-logs-detail">
+            <div className="logs__body dark-background flex-grow-1" data-testid="check-logs-detail">
                 {logsList.map((log: string, index: number) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <div className="flex top left mb-10 lh-24" key={`logs-${index}`}>
@@ -478,7 +478,6 @@ export const LogsRenderer = ({
         )
     }
 
-    // TODO: Test renderConfigurationError
     return triggerDetails.podStatus !== POD_STATUS.PENDING &&
         logsNotAvailable &&
         (!isBlobStorageConfigured || !triggerDetails.blobStorageEnabled)
