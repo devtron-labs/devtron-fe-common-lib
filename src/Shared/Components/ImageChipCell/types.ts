@@ -17,10 +17,18 @@ import Tippy from '@tippyjs/react'
 import { ComponentProps, SyntheticEvent } from 'react'
 import { RegistryType } from '../../types'
 
-export interface ImageChipCellProps {
+type ImageChipCellButtonActionProps =
+    | {
+          handleClick: (e: SyntheticEvent) => void
+          isExpanded: boolean
+      }
+    | {
+          handleClick?: never
+          isExpanded?: never
+      }
+
+export type ImageChipCellProps = {
     imagePath: string
-    isExpanded?: boolean
-    handleClick?: (e: SyntheticEvent) => void
     registryType?: RegistryType
     placement?: ComponentProps<typeof Tippy>['placement']
-}
+} & ImageChipCellButtonActionProps
