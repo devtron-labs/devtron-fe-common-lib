@@ -79,7 +79,8 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     variant,
     getIsOptionValid,
     isGroupHeadingSelectable,
-}: Pick<SelectPickerProps<OptionValue, IsMulti>, 'error' | 'size' | 'menuSize' | 'variant'> &
+    shouldMenuAlignRight,
+}: Pick<SelectPickerProps<OptionValue, IsMulti>, 'error' | 'size' | 'menuSize' | 'variant' | 'shouldMenuAlignRight'> &
     Pick<
         SelectPickerProps<OptionValue, IsMulti>['multiSelectProps'],
         'getIsOptionValid' | 'isGroupHeadingSelectable'
@@ -101,6 +102,9 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         width: getMenuWidthFromSize(menuSize),
         minWidth: '200px',
         zIndex: 'var(--select-picker-menu-index)',
+        ...(shouldMenuAlignRight && {
+            right: 0,
+        }),
         ...(getVariantOverrides(variant)?.menu(base, state) || {}),
     }),
     menuList: (base) => ({
@@ -110,6 +114,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     control: (base, state) => ({
         ...base,
         minHeight: size === ComponentSizeType.medium ? 'auto' : '36px',
+        minWidth: '56px',
         boxShadow: 'none',
         backgroundColor: 'var(--N50)',
         border: `1px solid ${error ? 'var(--R500)' : 'var(--N200)'}`,

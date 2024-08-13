@@ -143,6 +143,13 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
         selectRef?: IsMulti extends true
             ? MutableRefObject<SelectInstance<SelectPickerOptionType<OptionValue>, true>>
             : MutableRefObject<SelectInstance<SelectPickerOptionType<OptionValue>>>
+        /**
+         * If true, the menu is aligned at the right end to prevent going outside of viewport
+         * in case of menu being larger than the control
+         *
+         * @default false
+         */
+        shouldMenuAlignRight?: boolean
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean

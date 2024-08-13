@@ -172,6 +172,14 @@ import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } fr
  *      renderCustomOptions={() => <div />}
  * />
  * ```
+ *
+ * @example Align the menu at the right most end
+ * ```tsx
+ * <SelectPicker
+ *      ...
+ *      shouldMenuAlignRight
+ * />
+ * ```
  */
 const SelectPicker = <OptionValue, IsMulti extends boolean>({
     error,
@@ -196,6 +204,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     shouldRenderCustomOptions = false,
     isSearchable,
     selectRef,
+    shouldMenuAlignRight = false,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value } = props
@@ -223,8 +232,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                 variant,
                 getIsOptionValid,
                 isGroupHeadingSelectable,
+                shouldMenuAlignRight,
             }),
-        [error, selectSize, menuSize, variant, isGroupHeadingSelectable],
+        [error, selectSize, menuSize, variant, isGroupHeadingSelectable, shouldMenuAlignRight],
     )
 
     // Used to show the create new option for creatable select
@@ -283,7 +293,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         </Tippy>
     )
 
-    // TODO: fix the right overflow/left overflow issue for menu
     return (
         <div className="flex column left top dc__gap-4">
             {/* Note: Common out for fields */}
