@@ -247,35 +247,25 @@ export const SelectPickerGroupHeading = <OptionValue,>({
             acc[selectProps.getOptionValue(option)] = true
             return acc
         }, {})
+        const selectedOptionsWithoutGroupOptions = selectedOptions.filter(
+            (selectedOption) => !groupOptionsMapByValue[selectProps.getOptionValue(selectedOption)],
+        )
 
         // Clear all the selection(s) in the group if any of the option is selected
         if (checkboxValue) {
-            selectProps?.onChange?.(
-                selectedOptions.filter(
-                    (selectedOption) => !groupOptionsMapByValue[selectProps.getOptionValue(selectedOption)],
-                ),
-                {
-                    action: ReactSelectInputAction.deselectOption,
-                    option: null,
-                },
-            )
+            selectProps?.onChange?.(selectedOptionsWithoutGroupOptions, {
+                action: ReactSelectInputAction.deselectOption,
+                option: null,
+            })
 
             return
         }
 
         // Select all options
-        selectProps?.onChange?.(
-            [
-                ...selectedOptions.filter(
-                    (selectedOption) => !groupOptionsMapByValue[selectProps.getOptionValue(selectedOption)],
-                ),
-                ...structuredClone(groupHeadingOptions),
-            ],
-            {
-                action: ReactSelectInputAction.selectOption,
-                option: null,
-            },
-        )
+        selectProps?.onChange?.([...selectedOptionsWithoutGroupOptions, ...structuredClone(groupHeadingOptions)], {
+            action: ReactSelectInputAction.selectOption,
+            option: null,
+        })
     }
 
     const handleToggleCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
