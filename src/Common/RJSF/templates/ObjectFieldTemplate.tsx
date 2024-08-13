@@ -15,10 +15,10 @@
  */
 
 import { ObjectFieldTemplateProps, canExpand, titleId } from '@rjsf/utils'
+import { JSONPath } from 'jsonpath-plus'
 import { FieldRowWithLabel } from '../common/FieldRow'
 import { TitleField } from './TitleField'
 import { AddButton } from './ButtonTemplates'
-import { JSONPath } from 'jsonpath-plus'
 import { RJSFFormSchema } from '../types'
 
 const Field = ({

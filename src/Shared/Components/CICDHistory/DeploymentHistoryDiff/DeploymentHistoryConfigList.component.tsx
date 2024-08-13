@@ -16,8 +16,7 @@
 
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import { useRouteMatch, useParams } from 'react-router'
+import { NavLink, useRouteMatch, useParams } from 'react-router-dom'
 import { GenericEmptyState, Progressing } from '../../../../Common'
 import { ReactComponent as ICChevron } from '../../../../Assets/Icon/ic-chevron-down.svg'
 import { DeploymentHistoryParamsType, TemplateConfiguration } from './types'

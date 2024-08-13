@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
 import DOMPurify from 'dompurify'

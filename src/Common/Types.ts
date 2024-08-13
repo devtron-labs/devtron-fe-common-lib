@@ -155,7 +155,8 @@ export interface GenericEmptyStateType {
 }
 
 export interface ErrorPageType
-    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>, Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
+    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>,
+        Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
     code: number
     heightToDeduct?: number
     redirectURL?: string
@@ -388,9 +389,9 @@ export interface DeploymentWindowArtifactMetadata {
 }
 
 export interface ArtifactReleaseMappingType {
-    id : number, 
-    identifier: string,
-    releaseVersion: string,
+    id: number
+    identifier: string
+    releaseVersion: string
     name: string
     kind: string
     version: string

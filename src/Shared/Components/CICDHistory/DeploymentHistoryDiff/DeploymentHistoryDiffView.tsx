@@ -15,7 +15,7 @@
  */
 
 import { Fragment, useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import Tippy from '@tippyjs/react'
 import { MODES, Toggle, YAMLStringify } from '../../../../Common'
 import { DeploymentHistoryParamsType } from './types'

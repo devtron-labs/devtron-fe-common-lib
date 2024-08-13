@@ -17,7 +17,7 @@
 import React, { SyntheticEvent } from 'react'
 import ReactDOM from 'react-dom'
 import { preventBodyScroll } from '../../Shared'
-import { stopPropagation } from '../Helper';
+import { stopPropagation } from '../Helper'
 
 export class VisibleModal2 extends React.Component<{ className: string; close?: (e) => void }> {
     modalRef = document.getElementById('visible-modal-2')

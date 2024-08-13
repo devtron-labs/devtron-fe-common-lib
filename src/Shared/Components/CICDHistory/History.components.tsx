@@ -16,7 +16,7 @@
 
 import Tippy from '@tippyjs/react'
 import { useEffect } from 'react'
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router-dom'
 import { ClipboardButton, GenericEmptyState, extractImage, useKeyDown, useSuperAdmin } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'

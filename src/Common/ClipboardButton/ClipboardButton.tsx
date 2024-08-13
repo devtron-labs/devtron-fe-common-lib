@@ -42,12 +42,14 @@ export default function ClipboardButton({
     const [copied, setCopied] = useState<boolean>(false)
     const [enableTippy, setEnableTippy] = useState<boolean>(false)
 
-    const handleTextCopied = () => {setCopied(true)}
+    const handleTextCopied = () => {
+        setCopied(true)
+    }
     const handleEnableTippy = () => setEnableTippy(true)
     const handleDisableTippy = () => setEnableTippy(false)
     const handleCopyContent = useCallback(
         (e?) => {
-           if(e) stopPropagation(e)
+            if (e) stopPropagation(e)
             copyToClipboard(content, handleTextCopied)
         },
         [content],

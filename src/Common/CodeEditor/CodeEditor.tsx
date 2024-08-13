@@ -73,7 +73,7 @@ function useCodeEditorContext() {
  * Thus as a hack we are using this objects reference to call the latest onChange reference
  */
 const _onChange = {
-    onChange: null
+    onChange: null,
 }
 
 const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(
