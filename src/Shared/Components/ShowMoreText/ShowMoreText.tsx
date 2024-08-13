@@ -19,9 +19,10 @@ import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 
 interface ShowMoreTextProps {
     text: string
+    textClass?: string
 }
 
-const ShowMoreText = ({ text }: ShowMoreTextProps) => {
+const ShowMoreText = ({ text, textClass }: ShowMoreTextProps) => {
     const ellipsisText = useRef(null)
     const [showToggle, setShowToggle] = useState(false)
     const [showAllText, setShowAllText] = useState(false)
@@ -39,10 +40,17 @@ const ShowMoreText = ({ text }: ShowMoreTextProps) => {
     const toggleShowText = () => {
         setShowAllText(!showAllText)
     }
+    const getTextClassName = () => {
+        if (showAllText) {
+            return textClass || ''
+        }
+
+        return `${textClass} dc__truncate`
+    }
 
     return (
         <div className="min-w-385 pr-20">
-            <span ref={ellipsisText} className={`${showAllText ? '' : 'dc__truncate '}`}>
+            <span ref={ellipsisText} className={getTextClassName()}>
                 {text}
             </span>
             {showToggle && (

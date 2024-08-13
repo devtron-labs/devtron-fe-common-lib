@@ -75,14 +75,14 @@ const Finished = React.memo(
     ({ status, finishedOn, artifact, type }: FinishedType): JSX.Element => (
         <div className="flexbox pt-12 dc__gap-8 left dc__min-width-fit-content dc__align-items-center">
             <div
-                className={`${status} fs-14 fw-6 ${TERMINAL_STATUS_COLOR_CLASS_MAP[status.toLowerCase()] || 'cn-5'}`}
+                className={`${status} fs-13 fw-6 ${TERMINAL_STATUS_COLOR_CLASS_MAP[status.toLowerCase()] || 'cn-5'}`}
                 data-testid="deployment-status-text"
             >
-                {status && status.toLowerCase() === 'cancelled' ? 'ABORTED' : status}
+                {status && status.toLowerCase() === 'cancelled' ? 'Aborted' : status}
             </div>
 
             {finishedOn && finishedOn !== ZERO_TIME_STRING && (
-                <time className="dc__vertical-align-middle">
+                <time className="dc__vertical-align-middle fs-13">
                     {moment(finishedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
                 </time>
             )}
@@ -115,7 +115,7 @@ const WorkerStatus = React.memo(
             ) : null
 
         return (
-            <div className="display-grid trigger-details__grid">
+            <div className="display-grid trigger-details__grid py-4">
                 <div className="flexbox dc__content-center">
                     <ICLines className="icon-dim-20 dc__no-shrink scn-7" />
                 </div>
@@ -295,13 +295,13 @@ const StartDetails = ({
                     Start
                 </span>
 
-                <time className="cn-7 fs-12">
+                <time className="cn-7 fs-13">
                     {moment(startedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
                 </time>
 
                 <div className="dc__bullet" />
 
-                <div className="trigger-details__trigger-by cn-7 fs-12">
+                <div className="trigger-details__trigger-by cn-7 fs-13">
                     {triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}
                 </div>
 
@@ -343,7 +343,7 @@ const StartDetails = ({
                 )}
 
                 {!pathname.includes('source-code') && (
-                    <Link to={`${url}/source-code`} className="anchor" data-testid="commit-details-link">
+                    <Link to={`${url}/source-code`} className="anchor fs-13" data-testid="commit-details-link">
                         Commit details
                     </Link>
                 )}
