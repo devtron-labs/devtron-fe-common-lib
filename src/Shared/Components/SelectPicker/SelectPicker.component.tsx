@@ -22,6 +22,7 @@ import ReactSelect, {
     OptionProps,
     SelectInstance,
     ValueContainerProps,
+    MenuPlacement,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { MutableRefObject, ReactElement, useCallback, useMemo } from 'react'
@@ -293,6 +294,37 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         </Tippy>
     )
 
+    const commonProps = useMemo(
+        () => ({
+            name: name || inputId,
+            classNamePrefix: classNamePrefix || inputId,
+            isSearchable: isSelectSearchable,
+            placeholder,
+            styles: selectStyles,
+            menuPlacement: 'auto' as MenuPlacement,
+            menuPosition,
+            menuShouldScrollIntoView: true,
+            backspaceRemovesValue: isMulti,
+            'aria-errormessage': errorElementId,
+            'aria-invalid': !!error,
+            'aria-labelledby': labelId,
+            hideSelectedOptions: false,
+        }),
+        [
+            name,
+            inputId,
+            classNamePrefix,
+            isSelectSearchable,
+            placeholder,
+            selectStyles,
+            menuPosition,
+            errorElementId,
+            error,
+            labelId,
+            isMulti,
+        ],
+    )
+
     return (
         <div className="flex column left top dc__gap-4">
             {/* Note: Common out for fields */}
@@ -319,12 +351,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         {isMulti ? (
                             <CreatableSelect
                                 {...props}
-                                ref={selectRef as SelectPickerProps<OptionValue, true>['selectRef']}
+                                {...commonProps}
                                 isMulti
-                                name={name || inputId}
-                                classNamePrefix={classNamePrefix || inputId}
-                                isSearchable={isSelectSearchable}
-                                placeholder={placeholder}
+                                ref={selectRef as SelectPickerProps<OptionValue, true>['selectRef']}
                                 components={{
                                     IndicatorSeparator: null,
                                     LoadingIndicator: SelectPickerLoadingIndicator,
@@ -338,17 +367,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                     MultiValueRemove: SelectPickerMultiValueRemove,
                                     GroupHeading: renderGroupHeading,
                                 }}
-                                styles={selectStyles}
-                                menuPlacement="auto"
-                                menuPosition={menuPosition}
-                                menuShouldScrollIntoView
-                                backspaceRemovesValue
-                                aria-errormessage={errorElementId}
-                                aria-invalid={!!error}
-                                aria-labelledby={labelId}
                                 closeMenuOnSelect={false}
                                 allowCreateWhileLoading={false}
-                                hideSelectedOptions={false}
                                 isValidNewOption={isValidNewOption}
                                 createOptionPosition="first"
                                 onCreateOption={onCreateOption}
@@ -356,11 +376,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         ) : (
                             <ReactSelect
                                 {...props}
+                                {...commonProps}
                                 ref={selectRef as MutableRefObject<SelectInstance<SelectPickerOptionType<OptionValue>>>}
-                                name={name || inputId}
-                                classNamePrefix={classNamePrefix || inputId}
-                                isSearchable={isSelectSearchable}
-                                placeholder={placeholder}
                                 components={{
                                     IndicatorSeparator: null,
                                     LoadingIndicator: SelectPickerLoadingIndicator,
@@ -371,15 +388,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                     ClearIndicator: SelectPickerClearIndicator,
                                     ValueContainer: renderValueContainer,
                                 }}
-                                styles={selectStyles}
-                                menuPlacement="auto"
-                                menuPosition={menuPosition}
-                                menuShouldScrollIntoView
-                                backspaceRemovesValue={false}
-                                aria-errormessage={errorElementId}
-                                aria-invalid={!!error}
-                                aria-labelledby={labelId}
-                                hideSelectedOptions={false}
                             />
                         )}
                     </div>
