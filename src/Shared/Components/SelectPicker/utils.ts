@@ -39,11 +39,8 @@ const getVariantOverrides = <OptionValue>(
     switch (variant) {
         case SelectPickerVariantType.BORDER_LESS:
             return {
-                menu: () => ({
-                    width: '250px',
-                }),
                 control: () => ({
-                    backgroundColor: 'var(--N0)',
+                    backgroundColor: 'transparent',
                     border: 'none',
                     padding: 0,
                     gap: '2px',
@@ -92,7 +89,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
             pointerEvents: 'auto',
         }),
     }),
-    menu: (base, state) => ({
+    menu: (base) => ({
         ...base,
         overflow: 'hidden',
         marginBlock: '4px',
@@ -105,7 +102,6 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         ...(shouldMenuAlignRight && {
             right: 0,
         }),
-        ...(getVariantOverrides(variant)?.menu(base, state) || {}),
     }),
     menuList: (base) => ({
         ...base,

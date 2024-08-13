@@ -150,6 +150,12 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * @default false
          */
         shouldMenuAlignRight?: boolean
+        /**
+         * If true, the select spans to the max available width
+         *
+         * @default false
+         */
+        fullWidth?: boolean
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean

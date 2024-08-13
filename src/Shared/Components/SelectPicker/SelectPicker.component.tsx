@@ -206,6 +206,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     isSearchable,
     selectRef,
     shouldMenuAlignRight = false,
+    fullWidth = false,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value } = props
@@ -326,7 +327,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     )
 
     return (
-        <div className="flex column left top dc__gap-4">
+        <div className={`flex column left top dc__gap-4 ${fullWidth ? 'w-100' : ''}`}>
             {/* Note: Common out for fields */}
             <div className="flex column left top dc__gap-6 w-100">
                 {label && (
