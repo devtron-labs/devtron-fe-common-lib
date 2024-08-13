@@ -19,11 +19,12 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import moment from 'moment'
 import { toast } from 'react-toastify'
-import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
 import { ShowMoreText } from '@Shared/Components/ShowMoreText'
 import { getHandleOpenURL } from '@Shared/Helpers'
 import { ImageChipCell } from '@Shared/Components/ImageChipCell'
 import { CommitChipCell } from '@Shared/Components/CommitChipCell'
+import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
+import { ReactComponent as ICPulsateStatus } from '@Icons/ic-pulsate-status.svg'
 import {
     ConfirmationDialog,
     DATE_TIME_FORMATS,
@@ -67,7 +68,7 @@ import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryDetailedView, DeploymentHistoryConfigList } from './DeploymentHistoryDiff'
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
-import { statusColor as colorMap, EMPTY_STATE_STATUS } from '../../constants'
+import { statusColor as colorMap, EMPTY_STATE_STATUS, PULSATING_STATUS_MAP } from '../../constants'
 import './cicdHistory.scss'
 
 const Finished = React.memo(
@@ -377,18 +378,22 @@ const TriggerDetailsStatusIcon = React.memo(
                 <div className="dc__border-left--n7 h-100" />
             </div>
 
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle
-                    cx="10"
-                    cy="10"
-                    r="5"
-                    fill={colorMap[status]}
-                    stroke={colorMap[status]}
-                    strokeOpacity="0.3"
-                    strokeWidth="10"
-                />
-                <path d="M10 0L10 5" stroke="var(--N700)" />
-            </svg>
+            {PULSATING_STATUS_MAP[status] ? (
+                <ICPulsateStatus />
+            ) : (
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle
+                        cx="10"
+                        cy="10"
+                        r="5"
+                        fill={colorMap[status]}
+                        stroke={colorMap[status]}
+                        strokeOpacity="0.3"
+                        strokeWidth="10"
+                    />
+                    <path d="M10 0L10 5" stroke="var(--N700)" />
+                </svg>
+            )}
         </div>
     ),
 )
