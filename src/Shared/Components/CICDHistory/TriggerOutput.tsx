@@ -129,7 +129,8 @@ const WorkerStatus = React.memo(
                         {stage !== 'DEPLOY' && getViewWorker()}
                     </div>
 
-                    {message && <ShowMoreText text={message} />}
+                    {/* Need key since using ref inside of this component as useEffect dependency, so there were issues while switching builds */}
+                    {message && <ShowMoreText text={message} key={message} />}
                 </div>
             </div>
         )
@@ -610,7 +611,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                     downloadArtifactUrl={CDBuildReportUrl}
                                     type={HistoryComponentType.CD}
                                     renderCIListHeader={renderCIListHeader}
-                                    rootClassName="p-16"
+                                    rootClassName="p-16 flex-grow-1"
                                 />
                             )}
                         </Route>
