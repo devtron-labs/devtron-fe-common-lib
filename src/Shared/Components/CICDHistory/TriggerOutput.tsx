@@ -67,7 +67,7 @@ import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryDetailedView, DeploymentHistoryConfigList } from './DeploymentHistoryDiff'
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
-import { statusColor as colorMap, EMPTY_STATE_STATUS, PULSATING_STATUS_MAP } from '../../constants'
+import { statusColor as colorMap, EMPTY_STATE_STATUS } from '../../constants'
 import './cicdHistory.scss'
 
 const Finished = React.memo(
@@ -367,8 +367,9 @@ const TriggerDetailsStatusIcon = React.memo(
     ({ status }: TriggerDetailsStatusIconType): JSX.Element => (
         <div className="flexbox-col">
             <div className="flex">
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="5" cy="5" r="4.5" fill="white" stroke="#3B444C" />
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10" cy="10" r="5" stroke="var(--N700)" />
+                    <path d="M10 15L10 20" stroke="var(--N700)" />
                 </svg>
             </div>
 
@@ -376,22 +377,17 @@ const TriggerDetailsStatusIcon = React.memo(
                 <div className="dc__border-left--n7 h-100" />
             </div>
 
-            <svg
-                width="10"
-                height="10"
-                viewBox="0 0 10 10"
-                fill="none"
-                className={`br-6 ${PULSATING_STATUS_MAP[status] ? 'dc__pulsate' : ''}`}
-                style={
-                    !PULSATING_STATUS_MAP[status]
-                        ? {
-                              boxShadow: `0 0 10px ${colorMap[status]}`,
-                          }
-                        : {}
-                }
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <circle cx="5" cy="5" r="4.5" fill={colorMap[status]} stroke={colorMap[status]} strokeOpacity="0.3" />
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle
+                    cx="10"
+                    cy="10"
+                    r="5"
+                    fill={colorMap[status]}
+                    stroke={colorMap[status]}
+                    strokeOpacity="0.3"
+                    strokeWidth="10"
+                />
+                <path d="M10 0L10 5" stroke="var(--N700)" />
             </svg>
         </div>
     ),
