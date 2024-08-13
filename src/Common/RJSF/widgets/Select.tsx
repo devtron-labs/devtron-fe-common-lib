@@ -15,7 +15,6 @@
  */
 
 import React from 'react'
-import isEqual from 'lodash/isEqual'
 import { WidgetProps } from '@rjsf/utils'
 import ReactSelect, { MenuListProps, components } from 'react-select'
 import { PLACEHOLDERS } from '../constants'
@@ -58,8 +57,8 @@ export const Select = (props: WidgetProps) => {
 
     const getOption = (value) =>
         multiple
-            ? selectOptions.filter((option) => value.some((val) => isEqual(val, option.value)))
-            : selectOptions.find((option) => isEqual(value, option.value))
+            ? selectOptions.filter((option) => value.some((val) => val === option.value))
+            : selectOptions.find((option) => value === option.value)
 
     return (
         <ReactSelect
