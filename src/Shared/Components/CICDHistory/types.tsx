@@ -585,7 +585,7 @@ export interface ArtifactType {
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
     hideImageTaggingHardDelete?: boolean
-    jobCIClass?: string
+    rootClassName?: string
     renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
 }
 

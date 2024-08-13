@@ -614,6 +614,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                     downloadArtifactUrl={CDBuildReportUrl}
                                     type={HistoryComponentType.CD}
                                     renderCIListHeader={renderCIListHeader}
+                                    rootClassName="p-16"
                                 />
                             )}
                         </Route>
