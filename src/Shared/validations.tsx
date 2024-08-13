@@ -39,7 +39,7 @@ const DISPLAY_NAME_CONSTRAINTS = {
 }
 
 export const requiredField = (value: string): ValidationResponseType => {
-    if (!value) {
+    if (!value?.trim()) {
         return { message: 'This field is required', isValid: false }
     }
     return { isValid: true }

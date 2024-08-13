@@ -430,14 +430,21 @@ export enum ResourceKindType {
     installation = 'installation',
     environment = 'environment',
     cdPipeline = 'cd-pipeline',
+    project = 'project',
 }
 
 /**
  * Versions support for the resources on BE
+ *
+ * TODO: Rename to ApiVersionType
  */
 export enum ResourceVersionType {
     v1 = 'v1',
     alpha1 = 'alpha1',
+}
+
+export enum PolicyKindType {
+    lockConfiguration = 'lock-configuration',
 }
 
 export interface LastExecutionResultType {

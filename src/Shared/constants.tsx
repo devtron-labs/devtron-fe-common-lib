@@ -451,3 +451,16 @@ export enum ComponentSizeType {
 }
 
 export const POP_UP_MENU_MODAL_ID = 'popup'
+
+/**
+ * Identifiers for grouped / all resources
+ */
+export enum SelectAllGroupedResourceIdentifiers {
+    // Projects
+    allProjects = '-1',
+
+    // Environments
+    allExistingAndFutureNonProdEnvironments = '-1',
+    allExistingAndFutureProdEnvironments = '-2',
+    allExistingAndFutureEnvironments = '-3',
+}
