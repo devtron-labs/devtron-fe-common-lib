@@ -209,7 +209,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     fullWidth = false,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
-    const { inputId, required, isDisabled, controlShouldRenderValue = true, value } = props
+    const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options } = props
     const {
         isCreatable = false,
         isGroupHeadingSelectable = false,
@@ -240,11 +240,17 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         [error, selectSize, menuSize, variant, isGroupHeadingSelectable, shouldMenuAlignRight],
     )
 
-    // Used to show the create new option for creatable select
-    const isValidNewOption = (inputValue: string) =>
-        isCreatable &&
-        !!inputValue?.trim() &&
-        !getSelectPickerOptionByValue(value as SelectPickerOptionType<OptionValue>[], inputValue.trim(), null)
+    // Used to show the create new option for creatable select and the option(s) doesn't have the input value
+    const isValidNewOption = (inputValue: string) => {
+        const trimmedInput = inputValue?.trim()
+
+        return (
+            isCreatable &&
+            !!trimmedInput &&
+            !getSelectPickerOptionByValue(value as SelectPickerOptionType<OptionValue>[], trimmedInput, null) &&
+            !getSelectPickerOptionByValue(options, trimmedInput, null)
+        )
+    }
 
     const renderControl = useCallback(
         (controlProps: ControlProps<SelectPickerOptionType<OptionValue>>) => (

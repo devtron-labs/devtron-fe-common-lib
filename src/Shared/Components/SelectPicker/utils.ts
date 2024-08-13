@@ -341,7 +341,11 @@ export const getSelectPickerOptionByValue = <OptionValue>(
     value: string | number,
     defaultOption: SelectPickerOptionType<OptionValue> = { label: '', value: '' as unknown as OptionValue },
 ): SelectPickerOptionType<OptionValue> => {
-    const foundOption = (optionsList ?? []).reduce(
+    if (!Array.isArray(optionsList)) {
+        return defaultOption
+    }
+
+    const foundOption = optionsList.reduce(
         (acc, curr) => {
             if (!acc.notFound) return acc
 
