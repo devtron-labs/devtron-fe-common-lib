@@ -290,8 +290,8 @@ const StartDetails = ({
     const { pathname } = useLocation()
 
     return (
-        <div className="pb-12 w-100 pr-20 flex column left dc__border-bottom-n1">
-            <div className="flexbox dc__gap-8 dc__align-items-center">
+        <div className="w-100 pr-20 flex column left dc__border-bottom-n1">
+            <div className="flexbox dc__gap-8 dc__align-items-center pb-12">
                 <span className="cn-9 fs-13 fw-6 lh-20" data-testid="deployment-history-start-heading">
                     Start
                 </span>
@@ -355,7 +355,7 @@ const StartDetails = ({
                 renderDeploymentHistoryTriggerMetaText(triggerMetadata)}
 
             {isJobView && (
-                <div className="flexbox dc__align-items-center dc__gap-4">
+                <div className="flexbox dc__align-items-center dc__gap-8 pb-8">
                     <span className="cn-9 fs-13 fw-6 lh-20">Env</span>
                     <span className="fs-12 lh-20">{environmentName !== '' ? environmentName : DEFAULT_ENV}</span>
                     {environmentName === '' && <i className="fw-4 fs-11 lh-20">(Default)</i>}
