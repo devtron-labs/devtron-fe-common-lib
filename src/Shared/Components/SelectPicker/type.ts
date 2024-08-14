@@ -85,7 +85,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
         /**
          * Render function for the footer at the bottom of menu list. It is sticky by default
          */
-        renderMenuListFooter?: () => ReactNode
+        renderMenuListFooter?: (selectedOptions: SelectProps<OptionValue, IsMulti>['value']) => ReactNode
         /**
          * Info text for the select, if any
          */
@@ -101,6 +101,10 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * @default 'true'
          */
         showSelectedOptionIcon?: boolean
+        /**
+         * Custom selected options count for use cases like filters
+         */
+        customSelectedOptionsCount?: number
         /**
          * Height of the dropdown
          *

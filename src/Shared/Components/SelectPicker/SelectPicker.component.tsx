@@ -207,6 +207,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     selectRef,
     shouldMenuAlignRight = false,
     fullWidth = false,
+    customSelectedOptionsCount = null,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options } = props
@@ -268,14 +269,18 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                 shouldRenderCustomOptions={shouldRenderCustomOptions}
             />
         ),
-        [shouldRenderCustomOptions, renderMenuListFooter, renderCustomOptions],
+        [shouldRenderCustomOptions],
     )
 
     const renderValueContainer = useCallback(
         (valueContainerProps: ValueContainerProps<SelectPickerOptionType<OptionValue>>) => (
-            <SelectPickerValueContainer {...valueContainerProps} showSelectedOptionsCount={showSelectedOptionsCount} />
+            <SelectPickerValueContainer
+                {...valueContainerProps}
+                showSelectedOptionsCount={showSelectedOptionsCount}
+                customSelectedOptionsCount={customSelectedOptionsCount}
+            />
         ),
-        [showSelectedOptionsCount],
+        [showSelectedOptionsCount, customSelectedOptionsCount],
     )
 
     const renderOption = useCallback(

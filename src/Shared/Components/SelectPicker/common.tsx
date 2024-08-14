@@ -35,6 +35,7 @@ import { noop } from '@Common/Helper'
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { Checkbox } from '@Common/Checkbox'
 import { ReactSelectInputAction } from '@Common/Constants'
+import { isNullOrUndefined } from '@Shared/Helpers'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
 
@@ -85,11 +86,14 @@ export const SelectPickerControl = <OptionValue, IsMulti extends boolean>({
 
 export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>({
     showSelectedOptionsCount,
+    customSelectedOptionsCount,
     ...props
 }: ValueContainerProps<SelectPickerOptionType<OptionValue>> &
-    Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount'>) => {
+    Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount' | 'customSelectedOptionsCount'>) => {
     const { getValue } = props
-    const selectedOptionsLength = (getValue() ?? []).length
+    const selectedOptionsLength = isNullOrUndefined(customSelectedOptionsCount)
+        ? (getValue() ?? []).length
+        : customSelectedOptionsCount
 
     return (
         <div className="flex left dc__gap-8 flex-grow-1">
@@ -97,7 +101,7 @@ export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>
                 <components.ValueContainer {...props} />
             </div>
             {showSelectedOptionsCount && selectedOptionsLength > 0 && (
-                <div className="bcb-5 dc__border-radius-4-imp pl-5 pr-5 cn-0 fs-12 fw-6 lh-18 dc__truncate dc__no-shrink">
+                <div className="bcb-50 dc__border eb-2 dc__border-radius-4-imp pl-5 pr-5 cb-5 fs-12 fw-6 lh-18 dc__truncate dc__no-shrink">
                     {selectedOptionsLength}
                 </div>
             )}
@@ -181,7 +185,7 @@ export const SelectPickerMenuList = <OptionValue, IsMulti extends boolean>({
     >) => {
     const {
         children,
-        selectProps: { inputValue },
+        selectProps: { inputValue, value },
     } = props
 
     return (
@@ -191,7 +195,8 @@ export const SelectPickerMenuList = <OptionValue, IsMulti extends boolean>({
             {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
             {!shouldRenderCustomOptions && renderMenuListFooter && (
                 <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bcn-0 dc__zi-2">
-                    {renderMenuListFooter()}
+                    {/* Passing down value as a prop to ensure that the menu list is not re-rendered and scrolled to top on click */}
+                    {renderMenuListFooter(value)}
                 </div>
             )}
         </components.MenuList>
