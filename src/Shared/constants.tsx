@@ -401,7 +401,7 @@ export const statusColor = {
     hibernating: 'var(--N700)',
 }
 
-export const PULSATING_STATUS_MAP = {
+export const PULSATING_STATUS_MAP: { [key in keyof typeof statusColor]?: boolean } = {
     progressing: true,
     initiating: true,
     starting: true,

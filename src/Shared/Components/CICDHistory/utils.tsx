@@ -15,7 +15,7 @@
  */
 import { TIMELINE_STATUS } from '@Shared/constants'
 import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
-import { ReactComponent as ICFailure } from '@Icons/ic-failure.svg'
+import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
 import {
     TriggerHistoryFilterCriteriaProps,
     DeploymentHistoryResultObject,
@@ -142,7 +142,9 @@ export const getStageStatusIcon = (status: StageStatusType): JSX.Element => {
 }
 
 const renderAbortedTriggerIcon = (): JSX.Element => <ICAborted className="icon-dim-20 dc__no-shrink" />
-const renderFailedTriggerIcon = (): JSX.Element => <ICFailure className="icon-dim-20 dc__no-shrink" />
+const renderFailedTriggerIcon = (): JSX.Element => (
+    <ICErrorCross className="icon-dim-20 dc__no-shrink ic-error-cross-red" />
+)
 const renderProgressingTriggerIcon = (): JSX.Element => (
     <ICInProgress className="dc__no-shrink icon-dim-20 ic-in-progress-orange" />
 )
