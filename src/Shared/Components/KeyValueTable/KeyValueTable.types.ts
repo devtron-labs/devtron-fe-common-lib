@@ -81,8 +81,10 @@ export interface KeyValueTableProps<K extends string> {
     isSortable?: boolean
     /** An optional React node for a custom header component. */
     headerComponent?: ReactNode
-    /** When true, data addition field will not be shown */
+    /** When true, data addition field will not be shown. */
     isAdditionNotAllowed?: boolean
+    /** When true, data add or update is disabled. */
+    readOnly?: boolean
     /**
      * An optional function to handle changes in the table rows.
      * @param rowId - The id of the row that changed.
@@ -95,4 +97,25 @@ export interface KeyValueTableProps<K extends string> {
      * @param deletedRowIndex - The index of the row that was deleted.
      */
     onDelete?: (deletedRowId: string | number) => void
+    /**
+     * Indicates whether to show errors.
+     */
+    showError?: boolean
+    /**
+     * The function to use to validate the value of the cell.
+     * @param value - The value to validate.
+     * @param key - The row key of the value.
+     * @returns Return true if the value is valid, otherwise false
+     * and set `showError` to `true` and provide errorMessages array to show error message.
+     */
+    validationSchema?: (value: string, key: K) => boolean
+    /**
+     * An array of error messages to be displayed in the cell error tooltip.
+     */
+    errorMessages?: string[]
+    /**
+     * A callback function called when an error occurs.
+     * @param errorState - The error state, true when any cell has error, otherwise false.
+     */
+    onError?: (errorState: boolean) => void
 }
