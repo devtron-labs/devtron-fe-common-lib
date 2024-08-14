@@ -130,7 +130,7 @@ const WorkerStatus = React.memo(
                     </div>
 
                     {/* Need key since using ref inside of this component as useEffect dependency, so there were issues while switching builds */}
-                    {message && <ShowMoreText text={message} key={message} />}
+                    {message && <ShowMoreText text={message} key={message} textClass="cn-7" />}
                 </div>
             </div>
         )
@@ -358,7 +358,7 @@ const StartDetails = ({
                 <div className="flexbox dc__align-items-center dc__gap-8 pb-8">
                     <span className="cn-9 fs-13 fw-6 lh-20">Env</span>
                     <span className="fs-12 lh-20">{environmentName !== '' ? environmentName : DEFAULT_ENV}</span>
-                    {environmentName === '' && <i className="fw-4 fs-11 lh-20">(Default)</i>}
+                    {environmentName === '' && <i className="fw-4 fs-12 lh-20">(Default)</i>}
                 </div>
             )}
         </div>

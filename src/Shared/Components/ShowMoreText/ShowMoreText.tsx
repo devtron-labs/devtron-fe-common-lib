@@ -45,7 +45,7 @@ const ShowMoreText = ({ text, textClass }: ShowMoreTextProps) => {
             return textClass || ''
         }
 
-        return `${textClass} dc__truncate`
+        return `${textClass || ''} dc__truncate`
     }
 
     return (
