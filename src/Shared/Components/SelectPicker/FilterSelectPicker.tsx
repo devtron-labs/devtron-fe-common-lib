@@ -21,7 +21,10 @@ const FilterSelectPicker = ({
 
     const appliedFiltersCount = appliedFilterOptions?.length ?? 0
 
-    const filterIcon = useMemo(() => (appliedFiltersCount ? <ICFilterApplied /> : <ICFilter />), [appliedFiltersCount])
+    const filterIcon = useMemo(
+        () => (appliedFiltersCount ? <ICFilterApplied className="p-2" /> : <ICFilter className="p-2" />),
+        [appliedFiltersCount],
+    )
 
     const openMenu = () => {
         setIsMenuOpen(true)
