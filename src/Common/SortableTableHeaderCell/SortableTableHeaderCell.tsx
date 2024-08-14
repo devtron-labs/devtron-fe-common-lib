@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import Tippy from '@tippyjs/react'
+import { Tooltip } from '@Common/Tooltip'
 import { ReactComponent as SortIcon } from '../../Assets/Icon/ic-arrow-up-down.svg'
 import { ReactComponent as SortArrowDown } from '../../Assets/Icon/ic-sort-arrow-down.svg'
 import { SortingOrder } from '../Constants'
@@ -42,7 +42,7 @@ const SortableTableHeaderCell = ({
     title,
     disabled,
     isSortable = true,
-    showTippy = false,
+    showTippyOnTruncate = false,
 }: SortableTableHeaderCellProps) => {
     const renderSortIcon = () => {
         if (!isSortable) {
@@ -60,22 +60,16 @@ const SortableTableHeaderCell = ({
         return <SortIcon className="icon-dim-12 mw-12 scn-7 dc__no-shrink" />
     }
 
-    const renderTitle = () => <span className="dc__uppercase dc__truncate">{title}</span>
-
     return (
         <button
             type="button"
-            className="dc__transparent p-0 bcn-0 cn-7 flex dc__content-start dc__gap-4 dc__select-text"
+            className={`dc__transparent p-0 bcn-0 cn-7 flex dc__content-start dc__gap-4 dc__select-text ${!isSortable ? 'cursor-default' : ''}`}
             onClick={isSortable ? triggerSorting : noop}
             disabled={disabled}
         >
-            {showTippy ? (
-                <Tippy arrow={false} content={title} className="default-tt dc__mxw-200 dc__word-break">
-                    {renderTitle()}
-                </Tippy>
-            ) : (
-                renderTitle()
-            )}
+            <Tooltip showOnTruncate={showTippyOnTruncate} content={title}>
+                <span className="dc__uppercase dc__ellipsis-right">{title}</span>
+            </Tooltip>
             {renderSortIcon()}
         </button>
     )

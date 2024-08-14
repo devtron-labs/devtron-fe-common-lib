@@ -78,3 +78,7 @@ export const LOGS_RETRY_COUNT = 3
 export const DEPLOYMENT_STATUS_QUERY_PARAM = 'deployment-status'
 
 export const MANIFEST_STATUS_HEADERS = ['KIND', 'NAME', 'SYNC STATUS', 'MESSAGE']
+
+export const LOGS_STAGE_IDENTIFIER = 'STAGE_INFO'
+
+export const LOGS_STAGE_STREAM_SEPARATOR = '|'
