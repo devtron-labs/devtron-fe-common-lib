@@ -25,7 +25,7 @@
         overflow: hidden;
     }
 
-    .radio-group input[type=checkbox]:checked+.radio__item-label {
+    .radio-group input[type='checkbox']:checked + .radio__item-label {
         background: var(--N700);
         border-radius: 0;
         color: var(--white);
