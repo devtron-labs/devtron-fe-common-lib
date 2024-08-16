@@ -22,6 +22,7 @@ import { followCursor } from 'tippy.js'
 import { ReactComponent as ICArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
+import { ReactComponent as ICAdd } from '@Icons/ic-add.svg'
 import { ConditionalWrap, ResizableTagTextArea, SortingOrder, useStateFilters } from '@Common/index'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
@@ -64,10 +65,13 @@ export const KeyValueTable = <K extends string>({
 
     // STATES
     const [updatedRows, setUpdatedRows] = useState<KeyValueRow<K>[]>(rows)
+    /** State to trigger useEffect to trigger autoFocus */
     const [newRowAdded, setNewRowAdded] = useState(false)
 
     /** Boolean determining if table has rows. */
     const hasRows = (!readOnly && !isAdditionNotAllowed) || !!updatedRows.length
+    // TODO: See null checks
+    const isFirstRowEmpty = !updatedRows[0]?.data[firstHeaderKey].value && !updatedRows[0]?.data[secondHeaderKey].value
 
     // HOOKS
     const { sortBy, sortOrder, handleSorting } = useStateFilters({
@@ -85,37 +89,6 @@ export const KeyValueTable = <K extends string>({
         valueTextAreaRef.current = updatedRows.reduce((acc, curr) => ({ ...acc, [curr.id]: createRef() }), {})
     }
 
-    useEffect(() => {
-        const sortedRows = [...updatedRows]
-        sortedRows.sort((a, b) => stringComparatorBySortOrder(a.data[sortBy].value, b.data[sortBy].value, sortOrder))
-        setUpdatedRows(sortedRows)
-    }, [sortOrder])
-
-    useEffect(() => {
-        const firstRow = updatedRows?.[0]
-        if (firstRow && newRowAdded) {
-            setNewRowAdded(false)
-
-            if (
-                !firstRow.data[secondHeaderKey].value &&
-                keyTextAreaRef.current[firstRow.id].current &&
-                valueTextAreaRef.current[firstRow.id].current
-            ) {
-                keyTextAreaRef.current[firstRow.id].current.focus()
-            }
-            if (
-                !firstRow.data[firstHeaderKey].value &&
-                keyTextAreaRef.current[firstRow.id].current &&
-                valueTextAreaRef.current[firstRow.id].current
-            ) {
-                valueTextAreaRef.current[firstRow.id].current.focus()
-            }
-        }
-    }, [newRowAdded])
-
-    // METHODS
-    const onSortBtnClick = () => handleSorting(sortBy)
-
     const checkAllRowsAreValid = (_rows: KeyValueRow<K>[]) => {
         const isValid = _rows.every(
             ({ data: _data }) =>
@@ -126,40 +99,106 @@ export const KeyValueTable = <K extends string>({
         return isValid
     }
 
-    const onNewRowAdd = (key: K) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const { value } = e.target
-
+    const getEmptyRow = (): KeyValueRow<K> => {
         const id = (Date.now() * Math.random()).toString(16)
         const data = {
             data: {
                 [firstHeaderKey]: {
-                    value: key === firstHeaderKey ? value : '',
+                    value: '',
                 },
                 [secondHeaderKey]: {
-                    value: key === secondHeaderKey ? value : '',
+                    value: '',
                 },
             },
             id,
         } as KeyValueRow<K>
-        const editedRows = [data, ...updatedRows]
+
+        return data
+    }
+
+    const handleAddNewRow = () => {
+        const data = getEmptyRow()
+        const editedRows = [...updatedRows, data]
+
+        const { id } = data
 
         onError?.(!checkAllRowsAreValid(editedRows))
         setNewRowAdded(true)
         setUpdatedRows(editedRows)
-        onChange?.(id, key, value)
 
         keyTextAreaRef.current = {
-            ...keyTextAreaRef.current,
-            [id]: createRef(),
+            ...(keyTextAreaRef.current || {}),
+            [id as string]: createRef(),
         }
         valueTextAreaRef.current = {
-            ...valueTextAreaRef.current,
-            [id]: createRef(),
+            ...(valueTextAreaRef.current || {}),
+            [id as string]: createRef(),
         }
     }
 
+    useEffect(() => {
+        if (!readOnly && !isAdditionNotAllowed && !updatedRows.length) {
+            handleAddNewRow()
+        }
+    }, [])
+
+    useEffect(() => {
+        setUpdatedRows((prevRows) => {
+            const sortedRows = [...prevRows]
+            sortedRows.sort((a, b) =>
+                stringComparatorBySortOrder(a.data[sortBy].value, b.data[sortBy].value, sortOrder),
+            )
+            return sortedRows
+        })
+    }, [sortOrder])
+
+    useEffect(() => {
+        const lastRow = updatedRows?.length ? updatedRows[updatedRows.length - 1] : null
+        if (lastRow && newRowAdded) {
+            setNewRowAdded(false)
+
+            if (
+                !lastRow.data[firstHeaderKey].value &&
+                keyTextAreaRef.current[lastRow.id].current &&
+                valueTextAreaRef.current[lastRow.id].current
+            ) {
+                valueTextAreaRef.current[lastRow.id].current.focus()
+            }
+            if (
+                !lastRow.data[secondHeaderKey].value &&
+                keyTextAreaRef.current[lastRow.id].current &&
+                valueTextAreaRef.current[lastRow.id].current
+            ) {
+                keyTextAreaRef.current[lastRow.id].current.focus()
+            }
+        }
+    }, [newRowAdded])
+
+    // METHODS
+    const onSortBtnClick = () => handleSorting(sortBy)
+
     const onRowDelete = (row: KeyValueRow<K>) => () => {
         const remainingRows = updatedRows.filter(({ id }) => id !== row.id)
+
+        if (remainingRows.length === 0 && !isAdditionNotAllowed) {
+            const emptyRowData = getEmptyRow()
+            const { id } = emptyRowData
+
+            setNewRowAdded(true)
+            onError?.(!checkAllRowsAreValid([emptyRowData]))
+            setUpdatedRows([emptyRowData])
+
+            keyTextAreaRef.current = {
+                [id as string]: createRef(),
+            }
+            valueTextAreaRef.current = {
+                [id as string]: createRef(),
+            }
+
+            onDelete?.(row.id)
+            return
+        }
+
         onError?.(!checkAllRowsAreValid(remainingRows))
         setUpdatedRows(remainingRows)
 
@@ -203,34 +242,58 @@ export const KeyValueTable = <K extends string>({
         }
     }
 
+    const renderFirstHeader = (key: K, label: string, className: string) => (
+        <div
+            key={key}
+            className={`bcn-50 py-8 px-12 flexbox dc__content-space dc__align-items-center ${updatedRows.length || (!readOnly && !isAdditionNotAllowed) ? 'dc__top-left-radius' : 'dc__left-radius-4'} ${className || ''}`}
+        >
+            {isSortable ? (
+                <button
+                    type="button"
+                    className="cn-9 fs-13 lh-20-imp fw-6 flexbox dc__align-items-center dc__gap-2"
+                    onClick={onSortBtnClick}
+                >
+                    {label}
+                    <ICArrowDown
+                        className="icon-dim-16 dc__no-shrink scn-7 rotate cursor"
+                        style={{
+                            ['--rotateBy' as string]: sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
+                        }}
+                    />
+                </button>
+            ) : (
+                <div
+                    className={`cn-9 fs-13 lh-20 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
+                >
+                    {label}
+                    {/* TODO: Test this */}
+                    {!!headerComponent && headerComponent}
+                </div>
+            )}
+
+            <button type="button" className="dc__transparent p-0 flex dc__gap-4" onClick={handleAddNewRow}>
+                <ICAdd className="icon-dim-12 fcb-5 dc__no-shrink" />
+                <span className="cb-5 fs-12 fw-6 lh-20">Add</span>
+            </button>
+        </div>
+    )
+
     return (
         <>
             <div className={`bcn-2 p-1 ${hasRows ? 'dc__top-radius-4' : 'br-4'}`}>
                 <div className="key-value-table two-columns w-100 bcn-1 br-4">
+                    {/* HEADER */}
                     <div className="key-value-table__row">
                         {headers.map(({ key, label, className }) =>
-                            isSortable && key === firstHeaderKey ? (
-                                <button
-                                    key={key}
-                                    type="button"
-                                    className={`bcn-50 dc__unset-button-styles cn-9 fs-13 lh-20-imp py-8 px-12 fw-6 flexbox dc__align-items-center dc__gap-2 ${updatedRows.length || (!readOnly && !isAdditionNotAllowed) ? 'dc__top-left-radius' : 'dc__left-radius-4'} ${className || ''}`}
-                                    onClick={onSortBtnClick}
-                                >
-                                    {label}
-                                    <ICArrowDown
-                                        className="icon-dim-16 scn-7 rotate cursor"
-                                        style={{
-                                            ['--rotateBy' as string]:
-                                                sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
-                                        }}
-                                    />
-                                </button>
+                            key === firstHeaderKey ? (
+                                renderFirstHeader(key, label, className)
                             ) : (
                                 <div
                                     key={key}
                                     className={`bcn-50 cn-9 fs-13 lh-20 py-8 px-12 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${key === firstHeaderKey ? `${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : `${hasRows ? 'dc__top-right-radius' : 'dc__right-radius-4'}`}  ${className || ''}`}
                                 >
                                     {label}
+                                    {/* TODO: Test this */}
                                     {!!headerComponent && headerComponent}
                                 </div>
                             ),
@@ -238,31 +301,9 @@ export const KeyValueTable = <K extends string>({
                     </div>
                 </div>
             </div>
+
             {hasRows && (
                 <div className="bcn-2 px-1 pb-1 dc__bottom-radius-4">
-                    {!readOnly && !isAdditionNotAllowed && (
-                        <div
-                            className={`key-value-table two-columns-top-row bcn-1 ${updatedRows.length ? 'pb-1' : 'dc__bottom-radius-4'}`}
-                        >
-                            <div className="key-value-table__row">
-                                {headers.map(({ key }) => (
-                                    <div
-                                        key={key}
-                                        className={`key-value-table__cell bcn-0 flex dc__overflow-auto ${(!updatedRows.length && (key === firstHeaderKey ? 'dc__bottom-left-radius' : 'dc__bottom-right-radius')) || ''}`}
-                                    >
-                                        <textarea
-                                            ref={key === firstHeaderKey ? inputRowRef : undefined}
-                                            className="key-value-table__cell-input key-value-table__cell-input--add placeholder-cn5 py-8 px-12 cn-9 lh-20 fs-13 fw-4 dc__no-border-radius"
-                                            value=""
-                                            rows={1}
-                                            placeholder={placeholder[key]}
-                                            onChange={onNewRowAdd(key)}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
                     {!!updatedRows.length && (
                         <div
                             className={`key-value-table w-100 bcn-1 dc__bottom-radius-4 ${!readOnly ? 'three-columns' : 'two-columns'}`}
@@ -334,12 +375,13 @@ export const KeyValueTable = <K extends string>({
                                     {!readOnly && (
                                         <button
                                             type="button"
-                                            className="key-value-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 dc__hover-n50 dc__tab-focus"
+                                            className={`key-value-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 dc__hover-n50 dc__tab-focus ${updatedRows.length === 1 && isFirstRowEmpty ? 'dc__disabled' : ''}`}
                                             onClick={onRowDelete(row)}
+                                            disabled={updatedRows.length === 1 && isFirstRowEmpty}
                                         >
                                             <ICCross
                                                 aria-label="delete-row"
-                                                className="icon-dim-16 fcn-4 dc__align-self-start cursor"
+                                                className="icon-dim-16 fcn-4 dc__align-self-start"
                                             />
                                         </button>
                                     )}
