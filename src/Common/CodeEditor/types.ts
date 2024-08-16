@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { XORProps } from '@Common/Types'
 import { MODES } from '../Constants'
 
 export interface InformationBarProps {
@@ -47,15 +48,23 @@ interface CodeEditorBaseInterface {
     isKubernetes?: boolean
     cleanData?: boolean
     chartVersion?: any
+    /**
+     * Defines the minHeight of MonacoEditor in pixels or relative units
+     * @default 300
+     */
     minHeight?: number | string
 }
 
-type XORProps<P extends string, S extends string, T extends Record<P | S, any>> =
-    | (Partial<Record<P, never>> & Partial<Record<S, T[S]>>)
-    | (Partial<Record<P, T[P]>> & Partial<Record<S, never>>)
-
 interface CodeEditorXORProps {
+    /**
+     * Defines the height of MonacoEditor in pixels or relative units
+     * @default 300
+     */
     height: number | string
+    /**
+     * If adjustEditorHeightToContent is true the Editor grows and shrinks by its content's height
+     * @default false
+     */
     adjustEditorHeightToContent: boolean
 }
 

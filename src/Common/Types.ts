@@ -936,3 +936,7 @@ export interface EnvironmentHelmResult {
 }
 
 export type EnvironmentListHelmResponse = ResponseType<EnvironmentListHelmResult[]>
+
+export type XORProps<P extends string, S extends string, T extends Record<P | S, any>> =
+    | (Partial<Record<P, never>> & Partial<Record<S, T[S]>>)
+    | (Partial<Record<P, T[P]>> & Partial<Record<S, never>>)
