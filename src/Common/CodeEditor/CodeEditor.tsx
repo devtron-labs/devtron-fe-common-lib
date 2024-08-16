@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useReducer, useRef } from 'react'
+import React, { useEffect, useReducer, useRef, useMemo, useState } from 'react'
 import MonacoEditor, { MonacoDiffEditor } from 'react-monaco-editor'
 import YAML from 'yaml'
 import ReactGA from 'react-ga4'
@@ -73,8 +73,10 @@ function useCodeEditorContext() {
  * Thus as a hack we are using this objects reference to call the latest onChange reference
  */
 const _onChange = {
-    onChange: null
+    onChange: null,
 }
+
+const DEFAULT_EDITOR_HEIGHT = 450
 
 const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(
     ({
@@ -85,7 +87,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         children,
         tabSize = 2,
         lineDecorationsWidth = 0,
-        height = 450,
+        height = DEFAULT_EDITOR_HEIGHT,
         inline = false,
         shebang = '',
         onChange,
@@ -101,6 +103,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         cleanData = false,
         onBlur,
         onFocus,
+        adjustEditorHeightToContent = false,
     }) => {
         if (cleanData) {
             value = cleanKubeManifest(value)
@@ -114,6 +117,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         const [state, dispatch] = useReducer(memoisedReducer, initialState({ mode, theme, value, diffView, noParsing }))
         const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
         const [, originalJson, originlaYaml] = useJsonYaml(defaultValue, tabSize, state.mode, !state.noParsing)
+        const [contentHeight, setContentHeight] = useState(height)
         monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
             base: 'vs-dark',
             inherit: true,
@@ -146,6 +150,13 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             },
         })
 
+        const editorHeight = useMemo(() => {
+            if (!adjustEditorHeightToContent) {
+                return height
+            }
+            return contentHeight
+        }, [height, contentHeight, adjustEditorHeightToContent])
+
         function editorDidMount(editor, monaco) {
             if (
                 mode === MODES.YAML &&
@@ -164,8 +175,14 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 if (typeof editor.onDidBlurEditorWidget === 'function' && typeof onBlur === 'function') {
                     editor.onDidBlurEditorWidget(onBlur)
                 }
-            }
 
+                if (adjustEditorHeightToContent) {
+                    setContentHeight(editor.getContentHeight())
+                    editor.onDidContentSizeChange(() => {
+                        setContentHeight(editor.getContentHeight())
+                    })
+                }
+            }
             editorRef.current = editor
             monacoRef.current = monaco
         }
@@ -282,7 +299,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         }
 
         return (
-            <CodeEditorContext.Provider value={{ dispatch, state, handleLanguageChange, error, defaultValue, height }}>
+            <CodeEditorContext.Provider value={{ dispatch, state, handleLanguageChange, error, defaultValue, height: editorHeight }}>
                 {children}
                 {loading ? (
                     <CodeEditorPlaceholder customLoader={customLoader} />
@@ -300,7 +317,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                                 options={diffViewOptions}
                                 theme={state.theme.toLowerCase().split(' ').join('-')}
                                 editorDidMount={editorDidMount}
-                                height={height}
+                                height={editorHeight}
                                 width="100%"
                             />
                         ) : (
@@ -311,7 +328,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                                 options={options}
                                 onChange={handleOnChange}
                                 editorDidMount={editorDidMount}
-                                height={height}
+                                height={editorHeight}
                                 width="100%"
                             />
                         )}
