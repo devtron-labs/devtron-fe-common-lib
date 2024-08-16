@@ -76,7 +76,7 @@ const _onChange = {
     onChange: null,
 }
 
-const DEFAULT_EDITOR_HEIGHT = 450
+const DEFAULT_EDITOR_HEIGHT = 300
 
 const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(
     ({
@@ -104,6 +104,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         onBlur,
         onFocus,
         adjustEditorHeightToContent = false,
+        minHeight = DEFAULT_EDITOR_HEIGHT,
     }) => {
         if (cleanData) {
             value = cleanKubeManifest(value)
@@ -299,12 +300,14 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         }
 
         return (
-            <CodeEditorContext.Provider value={{ dispatch, state, handleLanguageChange, error, defaultValue, height: editorHeight }}>
+            <CodeEditorContext.Provider
+                value={{ dispatch, state, handleLanguageChange, error, defaultValue, height: editorHeight }}
+            >
                 {children}
                 {loading ? (
                     <CodeEditorPlaceholder customLoader={customLoader} />
                 ) : (
-                    <>
+                    <div style={{ ['--editor-min-height' as string]: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }}>
                         {shebang && <div className="shebang">{shebang}</div>}
                         {state.diffMode ? (
                             <MonacoDiffEditor
@@ -332,7 +335,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                                 width="100%"
                             />
                         )}
-                    </>
+                    </div>
                 )}
             </CodeEditorContext.Provider>
         )

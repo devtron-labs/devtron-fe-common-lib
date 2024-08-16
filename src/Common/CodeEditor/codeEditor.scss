@@ -102,7 +102,7 @@
 }
 
 .react-monaco-editor-container {
-    min-height: 300px;
+    min-height: var(--editor-min-height);
 }
 
 .code-editor__warning {

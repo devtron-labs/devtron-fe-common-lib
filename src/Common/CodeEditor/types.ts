@@ -22,7 +22,7 @@ export interface InformationBarProps {
     children?: React.ReactNode
 }
 
-export interface CodeEditorInterface {
+interface CodeEditorBaseInterface {
     value?: string
     lineDecorationsWidth?: number
     responseType?: string
@@ -36,7 +36,6 @@ export interface CodeEditorInterface {
     readOnly?: boolean
     noParsing?: boolean
     inline?: boolean
-    height?: number | string
     shebang?: string | JSX.Element
     diffView?: boolean
     loading?: boolean
@@ -48,8 +47,20 @@ export interface CodeEditorInterface {
     isKubernetes?: boolean
     cleanData?: boolean
     chartVersion?: any
-    adjustEditorHeightToContent?: boolean
+    minHeight?: number | string
 }
+
+type XORProps<P extends string, S extends string, T extends Record<P | S, any>> =
+    | (Partial<Record<P, never>> & Partial<Record<S, T[S]>>)
+    | (Partial<Record<P, T[P]>> & Partial<Record<S, never>>)
+
+interface CodeEditorXORProps {
+    height: number | string
+    adjustEditorHeightToContent: boolean
+}
+
+export type CodeEditorInterface = CodeEditorBaseInterface &
+    XORProps<'height', 'adjustEditorHeightToContent', CodeEditorXORProps>
 
 export interface CodeEditorHeaderInterface {
     children?: any
