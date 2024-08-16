@@ -18,7 +18,7 @@ import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
-import { RegistryType } from '../Shared'
+import { RegistryType, RuntimeParamsListItemType } from '../Shared'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -629,6 +629,7 @@ export interface CDMaterialsMetaInfo {
      * This is the ID of user that has request the material
      */
     requestedUserId: number
+    runtimeParams: RuntimeParamsListItemType[]
 }
 
 export interface ImagePromotionMaterialInfo {

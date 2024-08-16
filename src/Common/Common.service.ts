@@ -15,6 +15,8 @@
  */
 
 import moment from 'moment'
+import { RuntimeParamsAPIResponseType } from '@Shared/types'
+import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
 import { ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
@@ -80,7 +82,13 @@ export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
 }
 
-const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: number, artifactStatus?: string, disableDefaultSelection?: boolean) => {
+const cdMaterialListModal = (
+    artifacts: any[],
+    offset: number,
+    artifactId?: number,
+    artifactStatus?: string,
+    disableDefaultSelection?: boolean,
+) => {
     if (!artifacts || !artifacts.length) return []
 
     const markFirstSelected = offset === 0
@@ -185,6 +193,11 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
     }
 }
 
+export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType) =>
+    Object.entries(response?.envVariables || {})
+        .map(([key, value], index) => ({ key, value, id: index }))
+        .sort((a, b) => stringComparatorBySortOrder(a.key, b.key))
+
 const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
     if (!cdMaterialsResult) {
         return {
@@ -194,6 +207,7 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
             resourceFilters: [],
             totalCount: 0,
             requestedUserId: 0,
+            runtimeParams: [],
         }
     }
 
@@ -204,6 +218,8 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
         resourceFilters: cdMaterialsResult.resourceFilters ?? [],
         totalCount: cdMaterialsResult.totalCount ?? 0,
         requestedUserId: cdMaterialsResult.requestedUserId,
+        // TODO: Get this casing fixed from API
+        runtimeParams: parseRuntimeParams(cdMaterialsResult.runtime_params),
     }
 }
 
@@ -366,8 +382,8 @@ export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType
 }
 
 export function getNamespaceListMin(clusterIdsCsv: string): Promise<EnvironmentListHelmResponse> {
-  const URL = `${ROUTES.NAMESPACE}/autocomplete?ids=${clusterIdsCsv}`
-  return get(URL)
+    const URL = `${ROUTES.NAMESPACE}/autocomplete?ids=${clusterIdsCsv}`
+    return get(URL)
 }
 export function getWebhookEventsForEventId(eventId: string | number) {
     const URL = `${ROUTES.GIT_HOST_EVENT}/${eventId}`
