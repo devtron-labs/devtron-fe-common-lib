@@ -21,6 +21,7 @@ import { PLACEHOLDERS } from '../constants'
 import { getCommonSelectStyle } from '../utils'
 
 import { ReactComponent as ArrowDown } from '../../../Assets/Icon/ic-chevron-down.svg'
+import { deepEqual } from '@Common/Helper'
 
 const commonStyles = getCommonSelectStyle()
 
@@ -57,8 +58,8 @@ export const Select = (props: WidgetProps) => {
 
     const getOption = (value) =>
         multiple
-            ? selectOptions.filter((option) => value.some((val) => val === option.value))
-            : selectOptions.find((option) => value === option.value)
+            ? selectOptions.filter((option) => value.some((val) => deepEqual(val, option.value)))
+            : selectOptions.find((option) => deepEqual(value, option.value))
 
     return (
         <ReactSelect
