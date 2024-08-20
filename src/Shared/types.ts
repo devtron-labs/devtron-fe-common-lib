@@ -426,6 +426,7 @@ export enum ResourceKindType {
     cluster = 'cluster',
     release = 'release',
     releaseTrack = 'release-track',
+    releaseChannel = 'release-channel',
     tenant = 'tenant',
     installation = 'installation',
     environment = 'environment',
