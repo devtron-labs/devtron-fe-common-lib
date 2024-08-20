@@ -2,7 +2,6 @@ import { Link, NavLink } from 'react-router-dom'
 
 import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICWarning } from '@Icons/ic-warning-y6.svg'
-import { checkNavLinkActiveState } from '@Shared/Helpers'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { TabGroupProps, TabProps } from './TabGroup.types'
@@ -67,7 +66,6 @@ const Tab = ({
                 return (
                     <NavLink
                         className={`${tabClassName} dc__no-decor tab-group__tab__nav-link flexbox dc__align-items-center dc__gap-6`}
-                        isActive={checkNavLinkActiveState(props.to)}
                         {...props}
                     >
                         {content}
