@@ -123,7 +123,7 @@ export const KeyValueTable = <K extends string>({
                     ({ id, data }) => id === rowId && data[secondHeaderKey].value,
                 )
                 if (isValuePresentAtRow) {
-                    return true
+                    return false
                 }
             }
         }
