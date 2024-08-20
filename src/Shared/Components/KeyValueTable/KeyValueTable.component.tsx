@@ -107,15 +107,24 @@ export const KeyValueTable = <K extends string>({
         [updatedRows],
     )
 
-    const validationSchema: typeof parentValidationSchema = (value, key, rowId) => {
-        if (validateDuplicateKeys && key === firstHeaderKey && updatedRowsKeysFrequency[value] > 1) {
-            return false
-        }
+    const validationSchema = (
+        value: Parameters<typeof parentValidationSchema>[0],
+        key: Parameters<typeof parentValidationSchema>[1],
+        rowId: Parameters<typeof parentValidationSchema>[2],
+        shouldTriggerCustomValidation: boolean = true,
+    ) => {
+        if (shouldTriggerCustomValidation) {
+            if (validateDuplicateKeys && key === firstHeaderKey && updatedRowsKeysFrequency[value] > 1) {
+                return false
+            }
 
-        if (validateEmptyKeys && key === firstHeaderKey && !value) {
-            const isValuePresentAtRow = updatedRows.some(({ id, data }) => id === rowId && data[secondHeaderKey].value)
-            if (isValuePresentAtRow) {
-                return true
+            if (validateEmptyKeys && key === firstHeaderKey && !value) {
+                const isValuePresentAtRow = updatedRows.some(
+                    ({ id, data }) => id === rowId && data[secondHeaderKey].value,
+                )
+                if (isValuePresentAtRow) {
+                    return true
+                }
             }
         }
 
@@ -159,10 +168,11 @@ export const KeyValueTable = <K extends string>({
             }
         }
 
+        // Sending custom validation as false since already checked above
         const isValid = editedRows.every(
             ({ data: _data, id }) =>
-                validationSchema(_data[firstHeaderKey].value, firstHeaderKey, id) &&
-                validationSchema(_data[secondHeaderKey].value, secondHeaderKey, id),
+                validationSchema(_data[firstHeaderKey].value, firstHeaderKey, id, false) &&
+                validationSchema(_data[secondHeaderKey].value, secondHeaderKey, id, false),
         )
 
         return isValid
