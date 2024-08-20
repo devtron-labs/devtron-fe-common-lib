@@ -1,11 +1,53 @@
 import { LinkProps, NavLinkProps } from 'react-router-dom'
 
 import { ComponentSizeType } from '@Shared/constants'
+import { DataAttributes } from '@Shared/types'
 
-type TabComponentProps<TabTypeProps> = TabTypeProps & {
-    'data-testid'?: string
-    'data-action'?: string
-}
+type TabComponentProps<TabTypeProps> = TabTypeProps & DataAttributes
+
+type ConditionalTabType =
+    | {
+          /**
+           *  Type of the tab, either `button`, `link` or `navLink`.
+           */
+          tabType: 'button'
+          /**
+           * Props passed to button component.
+           */
+          props?: TabComponentProps<Omit<React.ComponentProps<'button'>, 'className' | 'style'>>
+          /**
+           * Indicates if the tab is currently active.
+           */
+          active?: boolean
+      }
+    | {
+          /**
+           *  Type of the tab, either `button`, `link` or `navLink`.
+           */
+          tabType: 'navLink'
+          /**
+           * Props passed to nav link component.
+           */
+          props: TabComponentProps<Omit<NavLinkProps, 'className' | 'style' | 'isActive' | 'activeClassName'>>
+          /**
+           * Active state is determined by matching the URL.
+           */
+          active?: false
+      }
+    | {
+          /**
+           *  Type of the tab, either `button`, `link` or `navLink`.
+           */
+          tabType: 'link'
+          /**
+           * Props passed to link component.
+           */
+          props: TabComponentProps<Omit<LinkProps, 'className' | 'style'>>
+          /**
+           * Indicates if the tab is currently active.
+           */
+          active?: boolean
+      }
 
 export type TabProps = {
     /**
@@ -43,50 +85,7 @@ export type TabProps = {
      * @note error state will take precedence over warning state.
      */
     showError?: boolean
-} & (
-    | {
-          /**
-           *  Type of the tab, either 'button', 'link' or 'navLink'.
-           */
-          tabType: 'button'
-          /**
-           * Props passed to button component.
-           */
-          props: TabComponentProps<Omit<React.ComponentProps<'button'>, 'className' | 'style'>>
-          /**
-           * Indicates if the tab is currently active.
-           */
-          active?: boolean
-      }
-    | {
-          /**
-           *  Type of the tab, either 'button', 'link' or 'navLink'.
-           */
-          tabType: 'link'
-          /**
-           * Props passed to link component.
-           */
-          props: TabComponentProps<Omit<LinkProps, 'className' | 'style'>>
-          /**
-           * Indicates if the tab is currently active.
-           */
-          active?: boolean
-      }
-    | {
-          /**
-           *  Type of the tab, either 'button', 'link' or 'navLink'.
-           */
-          tabType: 'navLink'
-          /**
-           * Props passed to nav link component.
-           */
-          props: TabComponentProps<Omit<NavLinkProps, 'className' | 'style'>>
-          /**
-           * Active state is determined by matching the URL.
-           */
-          active?: never
-      }
-)
+} & ConditionalTabType
 
 export interface TabGroupProps {
     /**
@@ -97,7 +96,7 @@ export interface TabGroupProps {
      * Size of the tabs.
      * @default ComponentSizeType.large
      */
-    size?: ComponentSizeType.large
+    size?: ComponentSizeType.large | ComponentSizeType.medium
     /**
      * Optional component to be rendered on the right side of the tab list.
      */

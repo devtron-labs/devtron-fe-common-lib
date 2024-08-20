@@ -18,6 +18,7 @@
 import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
 import moment from 'moment'
+import { NavLinkProps } from 'react-router-dom'
 import {
     handleUTCTime,
     mapByKey,
@@ -747,3 +748,40 @@ export const getFileNameFromHeaders = (headers: Headers) =>
         ?.find((n) => n.includes('filename='))
         ?.replace('filename=', '')
         .trim()
+
+/**
+ * Determines if a navigation link is active based on the current location.
+ *
+ * This function checks if the provided `href` matches the current location's pathname
+ * and/or search query, and returns a boolean indicating whether the link should be considered active.
+ *
+ * @param href - The target URL or path to compare against the current location.
+ *
+ * @returns A function that takes the current location and returns a boolean:
+ * - `true` if the `href` matches the current location's pathname and/or search query.
+ * - `false` otherwise.
+ */
+export const checkNavLinkActiveState =
+    (href: NavLinkProps['to']): NavLinkProps['isActive'] =>
+    (_, location) => {
+        let _href = ''
+        if (typeof href === 'string') {
+            _href = href
+        } else if (typeof href === 'object') {
+            const { pathname, search } = href
+            _href = `${pathname}${!search.includes('?') ? `?${search}` : search}`
+        }
+        const [pathString, queryString] = _href.split('?')
+
+        if (pathString && queryString) {
+            return `${location.pathname}${location.search}` === _href
+        }
+        if (pathString) {
+            return location.pathname === pathString
+        }
+        if (queryString) {
+            return location.search === `?${queryString}`
+        }
+
+        return false
+    }

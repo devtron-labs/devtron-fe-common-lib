@@ -62,6 +62,22 @@
             &.active {
                 color: var(--B500);
                 font-weight: 600;
+
+                > .tab-group__tab__icon--fill {
+                    fill: var(--B500);
+
+                    path {
+                        fill: var(--B500);
+                    }
+                }
+
+                > .tab-group__tab__icon--stroke {
+                    stroke: var(--B500);
+
+                    path {
+                        stroke: var(--B500);
+                    }
+                }
             }
 
             &:not(.active) {
