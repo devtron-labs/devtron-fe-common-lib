@@ -101,6 +101,8 @@ export const ROUTES = {
     PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
     PLUGIN_GLOBAL_LIST_V2: 'plugin/global/list/v2',
     PLUGIN_GLOBAL_LIST_TAGS: 'plugin/global/list/tags',
+    K8S_RESOURCE_SECURITY: 'k8s/resource/security',
+    SCAN_RESULT: 'scan-result',
 }
 
 export enum KEY_VALUE {

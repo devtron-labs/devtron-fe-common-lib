@@ -45,7 +45,6 @@ export { default as GenericFilterEmptyState } from './EmptyState/GenericFilterEm
 export * from './SearchBar'
 export * from './SortableTableHeaderCell'
 export { default as Toggle } from './Toggle/Toggle'
-export { default as ScanVulnerabilitiesTable } from './Security/ScanVulnerabilitiesTable'
 export { default as StyledRadioGroup } from './RadioGroup/RadioGroup'
 export * from './CIPipeline.Types'
 export * from './Policy.Types'

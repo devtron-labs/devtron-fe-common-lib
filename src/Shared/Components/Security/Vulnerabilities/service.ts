@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { ROUTES, get, getUrlWithSearchParams } from '../../../Common'
-import { LastExecutionResponseType } from '../../types'
+import { ROUTES, get, getUrlWithSearchParams } from '../../../../Common'
+import { LastExecutionResponseType } from '../../../types'
 import { parseLastExecutionResponse } from './utils'
 
 export function getLastExecutionByArtifactAppEnv(

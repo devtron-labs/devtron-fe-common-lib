@@ -26,6 +26,7 @@ export interface ImageCardAccordionProps extends MaterialSecurityInfoType {
     changesCard: ReactNode
     isScanned: boolean
     isScanEnabled: boolean
+    isScanV2Enabled: boolean
 }
 
 export interface SecurityDetailsType {

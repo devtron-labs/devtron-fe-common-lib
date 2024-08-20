@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-export const NO_VULNERABILITY_TEXT = {
-    SECURED: 'You’re secure!',
-    NO_VULNERABILITY_FOUND: 'No security vulnerability found for this image.',
+import { MaterialSecurityInfoType } from '../../../types'
+
+export interface VulnerabilitiesProps extends MaterialSecurityInfoType {
+    artifactId: number
+    applicationId: number
+    environmentId: number
+    setVulnerabilityCount: React.Dispatch<React.SetStateAction<number>>
+    isScanV2Enabled: boolean
 }

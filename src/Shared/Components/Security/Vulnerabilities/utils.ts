@@ -16,9 +16,9 @@
 
 import moment from 'moment'
 import { numberComparatorBySortOrder } from '@Shared/Helpers'
-import { DATE_TIME_FORMAT_STRING } from '../../constants'
-import { SortingOrder, VULNERABILITIES_SORT_PRIORITY, ZERO_TIME_STRING } from '../../../Common'
-import { LastExecutionResponseType, LastExecutionResultType } from '../../types'
+import { DATE_TIME_FORMAT_STRING } from '../../../constants'
+import { SortingOrder, VULNERABILITIES_SORT_PRIORITY, ZERO_TIME_STRING } from '../../../../Common'
+import { LastExecutionResponseType, LastExecutionResultType } from '../../../types'
 
 export const getSortedVulnerabilities = (vulnerabilities) =>
     vulnerabilities.sort((a, b) =>

@@ -15,11 +15,13 @@
  */
 
 import { useEffect } from 'react'
-import { Progressing, ScanVulnerabilitiesTable, useAsync } from '../../../Common'
-import { ScannedByToolModal } from '../ScannedByToolModal'
-import { NO_VULNERABILITY_TEXT } from './constants'
+import { EMPTY_STATE_STATUS } from '@Shared/constants'
+import { Progressing, useAsync } from '../../../../Common'
+import { ScannedByToolModal } from '../../ScannedByToolModal'
 import { getLastExecutionByArtifactAppEnv } from './service'
 import { VulnerabilitiesProps } from './types'
+import { SecuritySummaryCard } from '../SecuritySummaryCard'
+import { getSecurityScan } from '../SecurityModal'
 
 const Vulnerabilities = ({
     isScanned,
@@ -28,21 +30,35 @@ const Vulnerabilities = ({
     applicationId,
     environmentId,
     setVulnerabilityCount,
+    isScanV2Enabled,
 }: VulnerabilitiesProps) => {
     const [areVulnerabilitiesLoading, vulnerabilitiesResponse, vulnerabilitiesError, reloadVulnerabilities] = useAsync(
         () => getLastExecutionByArtifactAppEnv(artifactId, applicationId, environmentId),
         [],
-        isScanned && isScanEnabled,
+        isScanned && isScanEnabled && !isScanV2Enabled,
+        {
+            resetOnChange: false,
+        },
+    )
+
+    const [scanResultLoading, scanResultResponse, scanResultError, reloadScanResult] = useAsync(
+        () => getSecurityScan({ artifactId, appId: applicationId, envId: environmentId }),
+        [],
+        isScanned && isScanEnabled && isScanV2Enabled,
         {
             resetOnChange: false,
         },
     )
 
     useEffect(() => {
-        if (vulnerabilitiesResponse) {
+        if (scanResultResponse && isScanV2Enabled) {
+            setVulnerabilityCount(scanResultResponse?.result?.imageScan?.vulnerability?.list?.length)
+            return
+        }
+        if (vulnerabilitiesResponse && !isScanV2Enabled) {
             setVulnerabilityCount(vulnerabilitiesResponse.result.vulnerabilities?.length)
         }
-    }, [vulnerabilitiesResponse])
+    }, [vulnerabilitiesResponse, scanResultResponse])
 
     if (!isScanned) {
         return (
@@ -60,7 +76,7 @@ const Vulnerabilities = ({
         )
     }
 
-    if (areVulnerabilitiesLoading) {
+    if (areVulnerabilitiesLoading || scanResultLoading) {
         return (
             <div className="security-tab-empty">
                 <Progressing />
@@ -68,11 +84,15 @@ const Vulnerabilities = ({
         )
     }
 
-    if (vulnerabilitiesError) {
+    if (vulnerabilitiesError || scanResultError) {
         return (
             <div className="security-tab-empty">
                 <p className="security-tab-empty__title">Failed to fetch vulnerabilities</p>
-                <button className="cta secondary" type="button" onClick={reloadVulnerabilities}>
+                <button
+                    className="cta secondary"
+                    type="button"
+                    onClick={isScanV2Enabled ? reloadScanResult : reloadVulnerabilities}
+                >
                     Reload
                 </button>
             </div>
@@ -82,8 +102,10 @@ const Vulnerabilities = ({
     if (vulnerabilitiesResponse.result.vulnerabilities.length === 0) {
         return (
             <div className="security-tab-empty">
-                <p className="security-tab-empty__title">{NO_VULNERABILITY_TEXT.SECURED}</p>
-                <p>{NO_VULNERABILITY_TEXT.NO_VULNERABILITY_FOUND}</p>
+                <p className="security-tab-empty__title">
+                    {EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.TITLE}
+                </p>
+                <p>{EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.SUBTITLE}</p>
                 <p className="security-tab-empty__subtitle">{vulnerabilitiesResponse.result.lastExecution}</p>
                 <p className="pt-8 pb-8 pl-16 pr-16 flexbox dc__align-items-center">
                     <ScannedByToolModal scanToolId={vulnerabilitiesResponse.result.scanToolId} />
@@ -93,17 +115,14 @@ const Vulnerabilities = ({
     }
 
     return (
-        <div className="security-tab">
-            <div className="flexbox dc__content-space">
-                <span className="flex left security-tab__last-scanned ">
-                    Scanned on {vulnerabilitiesResponse.result.lastExecution}&nbsp;
-                </span>
-                <span className="flex right">
-                    <ScannedByToolModal scanToolId={vulnerabilitiesResponse.result.scanToolId} />
-                </span>
-            </div>
-
-            <ScanVulnerabilitiesTable vulnerabilities={vulnerabilitiesResponse.result.vulnerabilities} />
+        <div className="p-12">
+            <SecuritySummaryCard
+                severityCount={vulnerabilitiesResponse.result.severityCount}
+                scanToolId={vulnerabilitiesResponse.result.scanToolId}
+                {...(isScanV2Enabled
+                    ? { appDetailsPayload: { appId: 7, envId: 2, artifactId: 235 } }
+                    : { executionDetailsPayload: { appId: applicationId, envId: environmentId, artifactId } })}
+            />
         </div>
     )
 }
