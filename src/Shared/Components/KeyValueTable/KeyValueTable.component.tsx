@@ -113,7 +113,7 @@ export const KeyValueTable = <K extends string>({
         }
 
         if (validateEmptyKeys && key === firstHeaderKey && !value) {
-            const isValuePresentAtRow = updatedRows.some(({ id }) => id === rowId && value)
+            const isValuePresentAtRow = updatedRows.some(({ id, data }) => id === rowId && data[secondHeaderKey].value)
             if (isValuePresentAtRow) {
                 return true
             }
