@@ -232,6 +232,6 @@ export interface FilterSelectPickerProps
             SelectPickerProps<number | string, true>,
             'selectRef' | 'inputId' | 'menuPosition' | 'autoFocus' | 'shouldMenuAlignRight'
         > {
-    appliedFilterOptions: SelectPickerProps<number | string, true>['options']
+    appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
 }
