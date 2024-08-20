@@ -218,8 +218,7 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
         resourceFilters: cdMaterialsResult.resourceFilters ?? [],
         totalCount: cdMaterialsResult.totalCount ?? 0,
         requestedUserId: cdMaterialsResult.requestedUserId,
-        // TODO: Get this casing fixed from API
-        runtimeParams: parseRuntimeParams(cdMaterialsResult.runtime_params),
+        runtimeParams: parseRuntimeParams(cdMaterialsResult.runtimeParams),
     }
 }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { createRef, useEffect, useRef, useState, ReactElement, Fragment } from 'react'
+import { createRef, useEffect, useRef, useState, ReactElement, Fragment, useMemo } from 'react'
 import Tippy from '@tippyjs/react'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
@@ -29,6 +29,7 @@ import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 
 import { KeyValueRow, KeyValueTableProps } from './KeyValueTable.types'
 import './KeyValueTable.scss'
+import { DUPLICATE_KEYS_VALIDATION_MESSAGE } from './constants'
 
 const renderWithReadOnlyTippy = (children: ReactElement) => (
     <Tippy
@@ -54,9 +55,10 @@ export const KeyValueTable = <K extends string>({
     isAdditionNotAllowed,
     readOnly,
     showError,
-    validationSchema,
-    errorMessages = [],
+    validationSchema: parentValidationSchema,
+    errorMessages: parentErrorMessages = [],
     onError,
+    validateDuplicateKeys = false,
 }: KeyValueTableProps<K>) => {
     // CONSTANTS
     const { headers, rows } = config
@@ -89,11 +91,60 @@ export const KeyValueTable = <K extends string>({
         valueTextAreaRef.current = updatedRows.reduce((acc, curr) => ({ ...acc, [curr.id]: createRef() }), {})
     }
 
-    const checkAllRowsAreValid = (_rows: KeyValueRow<K>[]) => {
-        const isValid = _rows.every(
+    const updatedRowsKeysFrequency: Record<string, number> = useMemo(
+        () =>
+            updatedRows.reduce(
+                (acc, curr) => {
+                    const currentKey = curr.data[firstHeaderKey].value
+                    if (currentKey) {
+                        acc[currentKey] = (acc[currentKey] || 0) + 1
+                    }
+                    return acc
+                },
+                {} as Record<string, number>,
+            ),
+        [updatedRows],
+    )
+
+    const validationSchema: typeof parentValidationSchema = (value, key) => {
+        if (validateDuplicateKeys && updatedRowsKeysFrequency[value] > 1) {
+            return false
+        }
+
+        if (parentValidationSchema) {
+            return parentValidationSchema(value, key)
+        }
+
+        return true
+    }
+
+    const checkAllRowsAreValid = (editedRows: KeyValueRow<K>[]) => {
+        if (validateDuplicateKeys) {
+            const { isAnyKeyDuplicated } = editedRows.reduce(
+                (acc, curr) => {
+                    const { keysFrequency } = acc
+                    const currentKey = curr.data[firstHeaderKey].value
+                    if (currentKey) {
+                        keysFrequency[currentKey] = (keysFrequency[currentKey] || 0) + 1
+                    }
+
+                    return {
+                        isAnyKeyDuplicated: acc.isAnyKeyDuplicated || keysFrequency[currentKey] > 1,
+                        keysFrequency,
+                    }
+                },
+                { isAnyKeyDuplicated: false, keysFrequency: {} as Record<string, number> },
+            )
+
+            if (isAnyKeyDuplicated) {
+                return false
+            }
+        }
+
+        const isValid = editedRows.every(
             ({ data: _data }) =>
-                validationSchema?.(_data[firstHeaderKey].value, firstHeaderKey) &&
-                validationSchema?.(_data[secondHeaderKey].value, secondHeaderKey),
+                validationSchema(_data[firstHeaderKey].value, firstHeaderKey) &&
+                validationSchema(_data[secondHeaderKey].value, secondHeaderKey),
         )
 
         return isValid
@@ -118,7 +169,7 @@ export const KeyValueTable = <K extends string>({
 
     const handleAddNewRow = () => {
         const data = getEmptyRow()
-        const editedRows = [...updatedRows, data]
+        const editedRows = [data, ...updatedRows]
 
         const { id } = data
 
@@ -153,23 +204,24 @@ export const KeyValueTable = <K extends string>({
     }, [sortOrder])
 
     useEffect(() => {
-        const lastRow = updatedRows?.length ? updatedRows[updatedRows.length - 1] : null
-        if (lastRow && newRowAdded) {
+        const firstRow = updatedRows?.[0]
+
+        if (firstRow && newRowAdded) {
             setNewRowAdded(false)
 
             if (
-                !lastRow.data[firstHeaderKey].value &&
-                keyTextAreaRef.current[lastRow.id].current &&
-                valueTextAreaRef.current[lastRow.id].current
+                !firstRow.data[firstHeaderKey].value &&
+                keyTextAreaRef.current[firstRow.id].current &&
+                valueTextAreaRef.current[firstRow.id].current
             ) {
-                valueTextAreaRef.current[lastRow.id].current.focus()
+                valueTextAreaRef.current[firstRow.id].current.focus()
             }
             if (
-                !lastRow.data[secondHeaderKey].value &&
-                keyTextAreaRef.current[lastRow.id].current &&
-                valueTextAreaRef.current[lastRow.id].current
+                !firstRow.data[secondHeaderKey].value &&
+                keyTextAreaRef.current[firstRow.id].current &&
+                valueTextAreaRef.current[firstRow.id].current
             ) {
-                keyTextAreaRef.current[lastRow.id].current.focus()
+                keyTextAreaRef.current[firstRow.id].current.focus()
             }
         }
     }, [newRowAdded])
@@ -239,6 +291,7 @@ export const KeyValueTable = <K extends string>({
 
         if (value || row.data[key === firstHeaderKey ? secondHeaderKey : firstHeaderKey].value) {
             onChange?.(row.id, key, value)
+            onError?.(!checkAllRowsAreValid(updatedRows))
         }
     }
 
@@ -278,6 +331,30 @@ export const KeyValueTable = <K extends string>({
         </div>
     )
 
+    const renderErrorMessage = (errorMessage: string) => (
+        <div key={errorMessage} className="flexbox align-items-center dc__gap-4">
+            <ICClose className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
+            <p className="fs-12 lh-16 cn-7 m-0">{errorMessage}</p>
+        </div>
+    )
+
+    const renderErrorMessages = (
+        value: Parameters<typeof validationSchema>[0],
+        key: Parameters<typeof validationSchema>[1],
+    ) => {
+        const showErrorMessages = showError && !validationSchema(value, key)
+        if (!showErrorMessages) {
+            return null
+        }
+
+        return (
+            <div className="key-value-table__error bcn-0 dc__border br-4 py-7 px-8 flexbox-col dc__gap-4">
+                {validateDuplicateKeys && renderErrorMessage(DUPLICATE_KEYS_VALIDATION_MESSAGE)}
+                {parentErrorMessages.map((error) => renderErrorMessage(error))}
+            </div>
+        )
+    }
+
     return (
         <>
             <div className={`bcn-2 p-1 ${hasRows ? 'dc__top-radius-4' : 'br-4'}`}>
@@ -314,7 +391,7 @@ export const KeyValueTable = <K extends string>({
                                         <Fragment key={key}>
                                             <ConditionalWrap wrap={renderWithReadOnlyTippy} condition={readOnly}>
                                                 <div
-                                                    className={`key-value-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema?.(row.data[key].value, key) ? 'key-value-table__cell--error no-hover' : ''}`}
+                                                    className={`key-value-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key) ? 'key-value-table__cell--error no-hover' : ''}`}
                                                 >
                                                     {maskValue?.[key] && row.data[key].value ? (
                                                         <div className="py-8 px-12 h-36 flex">
@@ -349,23 +426,7 @@ export const KeyValueTable = <K extends string>({
                                                                     *
                                                                 </span>
                                                             )}
-                                                            {showError &&
-                                                                !validationSchema?.(row.data[key].value, key) &&
-                                                                errorMessages.length && (
-                                                                    <div className="key-value-table__error bcn-0 dc__border br-4 py-7 px-8 flexbox-col dc__gap-4">
-                                                                        {errorMessages.map((error) => (
-                                                                            <div
-                                                                                key={error}
-                                                                                className="flexbox align-items-center dc__gap-4"
-                                                                            >
-                                                                                <ICClose className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
-                                                                                <p className="fs-12 lh-16 cn-7 m-0">
-                                                                                    {error}
-                                                                                </p>
-                                                                            </div>
-                                                                        ))}
-                                                                    </div>
-                                                                )}
+                                                            {renderErrorMessages(row.data[key].value, key)}
                                                         </>
                                                     )}
                                                 </div>

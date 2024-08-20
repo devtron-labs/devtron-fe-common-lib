@@ -55,6 +55,25 @@ export interface KeyValueConfig<K extends string> {
     rows: KeyValueRow<K>[]
 }
 
+type ErrorUIProps =
+    | {
+          /**
+           * Indicates whether to show errors.
+           */
+          showError: true
+          /**
+           * If true, would show error tooltip on the cell.
+           */
+          validateDuplicateKeys?: boolean
+      }
+    | {
+          /**
+           * Indicates whether to show errors.
+           */
+          showError?: false
+          validateDuplicateKeys?: never
+      }
+
 /**
  * Type representing a mask for key-value pairs.
  * @template K - A string representing the key type.
@@ -71,7 +90,7 @@ export type KeyValuePlaceholder<K extends string> = {
  * Interface representing the properties for a key-value table component.
  * @template K - A string representing the key type.
  */
-export interface KeyValueTableProps<K extends string> {
+export type KeyValueTableProps<K extends string> = {
     /** The configuration for the key-value table. */
     config: KeyValueConfig<K>
     /** An optional mask for the key-value pairs. */
@@ -98,10 +117,6 @@ export interface KeyValueTableProps<K extends string> {
      */
     onDelete?: (deletedRowId: string | number) => void
     /**
-     * Indicates whether to show errors.
-     */
-    showError?: boolean
-    /**
      * The function to use to validate the value of the cell.
      * @param value - The value to validate.
      * @param key - The row key of the value.
@@ -118,4 +133,4 @@ export interface KeyValueTableProps<K extends string> {
      * @param errorState - The error state, true when any cell has error, otherwise false.
      */
     onError?: (errorState: boolean) => void
-}
+} & ErrorUIProps

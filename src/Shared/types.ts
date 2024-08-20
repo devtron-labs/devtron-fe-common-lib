@@ -662,6 +662,6 @@ export interface RuntimeParamsListItemType extends KeyValueListType {
 }
 
 export enum RuntimeParamsHeadingType {
-    KEY = 'Key',
-    VALUE = 'Value',
+    KEY = 'key',
+    VALUE = 'value',
 }
