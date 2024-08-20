@@ -28,8 +28,8 @@ import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 
 import { KeyValueRow, KeyValueTableProps } from './KeyValueTable.types'
+import { DUPLICATE_KEYS_VALIDATION_MESSAGE, EMPTY_KEY_VALIDATION_MESSAGE } from './constants'
 import './KeyValueTable.scss'
-import { DUPLICATE_KEYS_VALIDATION_MESSAGE } from './constants'
 
 const renderWithReadOnlyTippy = (children: ReactElement) => (
     <Tippy
@@ -59,6 +59,7 @@ export const KeyValueTable = <K extends string>({
     errorMessages: parentErrorMessages = [],
     onError,
     validateDuplicateKeys = false,
+    validateEmptyKeys = false,
 }: KeyValueTableProps<K>) => {
     // CONSTANTS
     const { headers, rows } = config
@@ -106,13 +107,20 @@ export const KeyValueTable = <K extends string>({
         [updatedRows],
     )
 
-    const validationSchema: typeof parentValidationSchema = (value, key) => {
+    const validationSchema: typeof parentValidationSchema = (value, key, rowId) => {
         if (validateDuplicateKeys && key === firstHeaderKey && updatedRowsKeysFrequency[value] > 1) {
             return false
         }
 
+        if (validateEmptyKeys && key === firstHeaderKey && !value) {
+            const isValuePresentAtRow = updatedRows.some(({ id }) => id === rowId && value)
+            if (isValuePresentAtRow) {
+                return true
+            }
+        }
+
         if (parentValidationSchema) {
-            return parentValidationSchema(value, key)
+            return parentValidationSchema(value, key, rowId)
         }
 
         return true
@@ -141,10 +149,20 @@ export const KeyValueTable = <K extends string>({
             }
         }
 
+        if (validateEmptyKeys) {
+            const isEmptyKeyPresent = editedRows.some(
+                (row) => !row.data[firstHeaderKey].value && row.data[secondHeaderKey].value,
+            )
+
+            if (isEmptyKeyPresent) {
+                return false
+            }
+        }
+
         const isValid = editedRows.every(
-            ({ data: _data }) =>
-                validationSchema(_data[firstHeaderKey].value, firstHeaderKey) &&
-                validationSchema(_data[secondHeaderKey].value, secondHeaderKey),
+            ({ data: _data, id }) =>
+                validationSchema(_data[firstHeaderKey].value, firstHeaderKey, id) &&
+                validationSchema(_data[secondHeaderKey].value, secondHeaderKey, id),
         )
 
         return isValid
@@ -341,8 +359,9 @@ export const KeyValueTable = <K extends string>({
     const renderErrorMessages = (
         value: Parameters<typeof validationSchema>[0],
         key: Parameters<typeof validationSchema>[1],
+        rowId: KeyValueRow<K>['id'],
     ) => {
-        const showErrorMessages = showError && !validationSchema(value, key)
+        const showErrorMessages = showError && !validationSchema(value, key, rowId)
         if (!showErrorMessages) {
             return null
         }
@@ -350,6 +369,7 @@ export const KeyValueTable = <K extends string>({
         return (
             <div className="key-value-table__error bcn-0 dc__border br-4 py-7 px-8 flexbox-col dc__gap-4">
                 {validateDuplicateKeys && renderErrorMessage(DUPLICATE_KEYS_VALIDATION_MESSAGE)}
+                {validateEmptyKeys && renderErrorMessage(EMPTY_KEY_VALIDATION_MESSAGE)}
                 {parentErrorMessages.map((error) => renderErrorMessage(error))}
             </div>
         )
@@ -391,7 +411,7 @@ export const KeyValueTable = <K extends string>({
                                         <Fragment key={key}>
                                             <ConditionalWrap wrap={renderWithReadOnlyTippy} condition={readOnly}>
                                                 <div
-                                                    className={`key-value-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key) ? 'key-value-table__cell--error no-hover' : ''}`}
+                                                    className={`key-value-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key, row.id) ? 'key-value-table__cell--error no-hover' : ''}`}
                                                 >
                                                     {maskValue?.[key] && row.data[key].value ? (
                                                         <div className="py-8 px-12 h-36 flex">
@@ -426,7 +446,7 @@ export const KeyValueTable = <K extends string>({
                                                                     *
                                                                 </span>
                                                             )}
-                                                            {renderErrorMessages(row.data[key].value, key)}
+                                                            {renderErrorMessages(row.data[key].value, key, row.id)}
                                                         </>
                                                     )}
                                                 </div>

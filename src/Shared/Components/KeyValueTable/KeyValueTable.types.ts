@@ -62,9 +62,15 @@ type ErrorUIProps =
            */
           showError: true
           /**
-           * If true, would show error tooltip on the cell.
+           * @default - false
+           * If true, would validate for duplicate keys and if present would show error tooltip on the cell.
            */
           validateDuplicateKeys?: boolean
+          /**
+           * @default - false
+           * If true, would validate for rows having values but no key and if error would show error tooltip on the cell.
+           */
+          validateEmptyKeys?: boolean
       }
     | {
           /**
@@ -72,6 +78,7 @@ type ErrorUIProps =
            */
           showError?: false
           validateDuplicateKeys?: never
+          validateEmptyKeys?: never
       }
 
 /**
@@ -120,10 +127,11 @@ export type KeyValueTableProps<K extends string> = {
      * The function to use to validate the value of the cell.
      * @param value - The value to validate.
      * @param key - The row key of the value.
+     * @param rowId - The id of the row.
      * @returns Return true if the value is valid, otherwise false
      * and set `showError` to `true` and provide errorMessages array to show error message.
      */
-    validationSchema?: (value: string, key: K) => boolean
+    validationSchema?: (value: string, key: K, rowId: string | number) => boolean
     /**
      * An array of error messages to be displayed in the cell error tooltip.
      */
