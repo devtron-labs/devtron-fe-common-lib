@@ -78,7 +78,7 @@ export const KeyValueTable = <K extends string>({
 
     // HOOKS
     const { sortBy, sortOrder, handleSorting } = useStateFilters({
-        initialSortKey: firstHeaderKey,
+        initialSortKey: isSortable ? firstHeaderKey : null,
     })
     const inputRowRef = useRef<HTMLTextAreaElement>()
     const keyTextAreaRef = useRef<Record<string, React.RefObject<HTMLTextAreaElement>>>()
@@ -212,13 +212,15 @@ export const KeyValueTable = <K extends string>({
     }, [])
 
     useEffect(() => {
-        setUpdatedRows((prevRows) => {
-            const sortedRows = [...prevRows]
-            sortedRows.sort((a, b) =>
-                stringComparatorBySortOrder(a.data[sortBy].value, b.data[sortBy].value, sortOrder),
-            )
-            return sortedRows
-        })
+        if (isSortable) {
+            setUpdatedRows((prevRows) => {
+                const sortedRows = [...prevRows]
+                sortedRows.sort((a, b) =>
+                    stringComparatorBySortOrder(a.data[sortBy].value, b.data[sortBy].value, sortOrder),
+                )
+                return sortedRows
+            })
+        }
     }, [sortOrder])
 
     useEffect(() => {
