@@ -107,7 +107,7 @@ export const KeyValueTable = <K extends string>({
     )
 
     const validationSchema: typeof parentValidationSchema = (value, key) => {
-        if (validateDuplicateKeys && updatedRowsKeysFrequency[value] > 1) {
+        if (validateDuplicateKeys && key === firstHeaderKey && updatedRowsKeysFrequency[value] > 1) {
             return false
         }
 
