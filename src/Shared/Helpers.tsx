@@ -135,6 +135,19 @@ export const numberComparatorBySortOrder = (
     sortOrder: SortingOrder = SortingOrder.ASC,
 ): number => (sortOrder === SortingOrder.ASC ? a - b : b - a)
 
+export function versionComparatorBySortOrder(
+    a: Record<string, any>,
+    b: Record<string, any>,
+    compareKey: string,
+    orderBy: SortingOrder,
+) {
+    if (orderBy === SortingOrder.DESC) {
+        return b[compareKey].localeCompare(a[compareKey], undefined, { numeric: true })
+    }
+
+    return a[compareKey].localeCompare(b[compareKey], undefined, { numeric: true })
+}
+
 export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
     switch (eventName) {
         case WebhookEventNameType.PULL_REQUEST:
