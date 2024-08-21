@@ -62,6 +62,7 @@ export const URLS = {
     GLOBAL_CONFIG_DOCKER: '/global-config/docker',
     DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
     GLOBAL_CONFIG_SCOPED_VARIABLES: '/global-config/scoped-variables',
+    NETWORK_STATUS_INTERFACE: '/network-status-interface',
 }
 
 export const ROUTES = {
@@ -96,11 +97,15 @@ export const ROUTES = {
     CONFIG_CD_PIPELINE: 'config/cd-pipeline',
     MODULE_CONFIGURED: 'module/config',
     RESOURCE_HISTORY_DEPLOYMENT: 'resource/history/deployment',
+    ATTRIBUTES: 'attributes',
+    ATTRIBUTES_CREATE: 'attributes/create',
+    ATTRIBUTES_UPDATE: 'attributes/update',
     APP_LIST_MIN: 'app/min',
     CLUSTER_LIST_MIN: 'cluster/autocomplete',
     PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
     PLUGIN_GLOBAL_LIST_V2: 'plugin/global/list/v2',
     PLUGIN_GLOBAL_LIST_TAGS: 'plugin/global/list/tags',
+    CONFIG_DATA: 'config/data',
 }
 
 export enum KEY_VALUE {
@@ -520,4 +525,12 @@ export const DATE_TIME_FORMATS = {
     TWELVE_HOURS_EXPORT_FORMAT: 'DD-MMM-YYYY hh.mm A',
     DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
     DD_MMM_YYYY: 'DD MMM YYYY',
+}
+
+export const VULNERABILITIES_SORT_PRIORITY = {
+    critical: 1,
+    high: 2,
+    medium: 3,
+    low: 4,
+    unknown: 5,
 }

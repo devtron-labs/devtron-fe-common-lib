@@ -254,8 +254,10 @@ export enum DefaultUserKey {
 
 export enum Severity {
     CRITICAL = 'critical',
-    MODERATE = 'moderate',
+    HIGH = 'high',
+    MEDIUM = 'medium',
     LOW = 'low',
+    UNKNOWN = 'unknown',
 }
 
 export enum ImagePromotionTabs {
@@ -449,17 +451,20 @@ export enum ResourceVersionType {
     alpha1 = 'alpha1',
 }
 
+export interface SeverityCount {
+    critical: number
+    high: number
+    medium: number
+    low: number
+    unknown: number
+}
 export enum PolicyKindType {
     lockConfiguration = 'lock-configuration',
 }
 
 export interface LastExecutionResultType {
     lastExecution: string
-    severityCount: {
-        critical: number
-        moderate: number
-        low: number
-    }
+    severityCount: SeverityCount
     vulnerabilities: VulnerabilityType[]
     scanExecutionId?: number
     appId?: number
@@ -636,6 +641,14 @@ export interface BatchConfigType {
 }
 export interface scrollableInterface {
     autoBottomScroll: boolean
+}
+
+export enum URLProtocolType {
+    HTTP = 'http:',
+    HTTPS = 'https:',
+    SSH = 'ssh:',
+    SMTP = 'smtp:',
+    S3 = 's3:',
 }
 
 export type BaseFilterQueryParams<T> = {

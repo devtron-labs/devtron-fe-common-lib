@@ -21,14 +21,12 @@ import ReactGA from 'react-ga4'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { configureMonacoYaml } from 'monaco-yaml'
 
-import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-error-exclamation.svg'
 import { ReactComponent as WarningIcon } from '../../Assets/Icon/ic-warning.svg'
 import './codeEditor.scss'
 import 'monaco-editor'
 
-import YamlWorker from '../../yaml.worker.js?worker'
 import { YAMLStringify, cleanKubeManifest, useJsonYaml } from '../Helper'
 import { useWindowSize } from '../Hooks'
 import Select from '../Select/Select'
@@ -45,15 +43,6 @@ import {
 } from './types'
 import { CodeEditorReducer, initialState } from './CodeEditor.reducer'
 import { MODES } from '../Constants'
-
-self.MonacoEnvironment = {
-    getWorker(_, label) {
-        if (label === MODES.YAML) {
-            return new YamlWorker()
-        }
-        return new editorWorker()
-    },
-}
 
 const CodeEditorContext = React.createContext(null)
 
@@ -73,7 +62,7 @@ function useCodeEditorContext() {
  * Thus as a hack we are using this objects reference to call the latest onChange reference
  */
 const _onChange = {
-    onChange: null
+    onChange: null,
 }
 
 const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(
@@ -123,6 +112,18 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             ],
             colors: {
                 'editor.background': '#0B0F22',
+            },
+        })
+
+        monaco.editor.defineTheme(CodeEditorThemesKeys.networkStatusInterface, {
+            base: 'vs-dark',
+            inherit: true,
+            rules: [
+                // @ts-ignore
+                { background: '#1A1A1A' },
+            ],
+            colors: {
+                'editor.background': '#1A1A1A',
             },
         })
 
