@@ -80,7 +80,6 @@ export const KeyValueTable = <K extends string>({
     const { sortBy, sortOrder, handleSorting } = useStateFilters({
         initialSortKey: isSortable ? firstHeaderKey : null,
     })
-    const inputRowRef = useRef<HTMLTextAreaElement>()
     const keyTextAreaRef = useRef<Record<string, React.RefObject<HTMLTextAreaElement>>>()
     const valueTextAreaRef = useRef<Record<string, React.RefObject<HTMLTextAreaElement>>>()
 
@@ -114,13 +113,15 @@ export const KeyValueTable = <K extends string>({
         shouldTriggerCustomValidation: boolean = true,
     ) => {
         if (shouldTriggerCustomValidation) {
-            if (validateDuplicateKeys && key === firstHeaderKey && updatedRowsKeysFrequency[value] > 1) {
+            const trimmedValue = value.trim()
+
+            if (validateDuplicateKeys && key === firstHeaderKey && updatedRowsKeysFrequency[trimmedValue] > 1) {
                 return false
             }
 
-            if (validateEmptyKeys && key === firstHeaderKey && !value) {
+            if (validateEmptyKeys && key === firstHeaderKey && !trimmedValue) {
                 const isValuePresentAtRow = updatedRows.some(
-                    ({ id, data }) => id === rowId && data[secondHeaderKey].value,
+                    ({ id, data }) => id === rowId && data[secondHeaderKey].value.trim(),
                 )
                 if (isValuePresentAtRow) {
                     return false
@@ -140,7 +141,8 @@ export const KeyValueTable = <K extends string>({
             const { isAnyKeyDuplicated } = editedRows.reduce(
                 (acc, curr) => {
                     const { keysFrequency } = acc
-                    const currentKey = curr.data[firstHeaderKey].value
+                    const currentKey = curr.data[firstHeaderKey].value.trim()
+
                     if (currentKey) {
                         keysFrequency[currentKey] = (keysFrequency[currentKey] || 0) + 1
                     }
@@ -160,7 +162,7 @@ export const KeyValueTable = <K extends string>({
 
         if (validateEmptyKeys) {
             const isEmptyKeyPresent = editedRows.some(
-                (row) => !row.data[firstHeaderKey].value && row.data[secondHeaderKey].value,
+                (row) => !row.data[firstHeaderKey].value.trim() && row.data[secondHeaderKey].value.trim(),
             )
 
             if (isEmptyKeyPresent) {
@@ -292,28 +294,19 @@ export const KeyValueTable = <K extends string>({
 
     const onRowDataEdit = (row: KeyValueRow<K>, key: K) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target
-
-        if (!value && !row.data[key === firstHeaderKey ? secondHeaderKey : firstHeaderKey].value) {
-            onRowDelete(row)()
-
-            if (inputRowRef.current) {
-                inputRowRef.current.focus()
-            }
-        } else {
-            const rowData = {
-                ...row,
-                data: {
-                    ...row.data,
-                    [key]: {
-                        ...row.data[key],
-                        value,
-                    },
+        const rowData = {
+            ...row,
+            data: {
+                ...row.data,
+                [key]: {
+                    ...row.data[key],
+                    value,
                 },
-            }
-            const editedRows = updatedRows.map((_row) => (_row.id === row.id ? rowData : _row))
-            onError?.(!checkAllRowsAreValid(editedRows))
-            setUpdatedRows(editedRows)
+            },
         }
+        const editedRows = updatedRows.map((_row) => (_row.id === row.id ? rowData : _row))
+        onError?.(!checkAllRowsAreValid(editedRows))
+        setUpdatedRows(editedRows)
     }
 
     const onRowDataBlur = (row: KeyValueRow<K>, key: K) => (e: React.FocusEvent<HTMLTextAreaElement>) => {
@@ -333,7 +326,7 @@ export const KeyValueTable = <K extends string>({
             {isSortable ? (
                 <button
                     type="button"
-                    className="cn-9 fs-13 lh-20-imp fw-6 flexbox dc__align-items-center dc__gap-2"
+                    className="cn-7 fs-12 lh-20-imp fw-6 flexbox dc__align-items-center dc__gap-2"
                     onClick={onSortBtnClick}
                 >
                     {label}
@@ -346,7 +339,7 @@ export const KeyValueTable = <K extends string>({
                 </button>
             ) : (
                 <div
-                    className={`cn-9 fs-13 lh-20 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
+                    className={`cn-7 fs-12 lh-20 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
                 >
                     {label}
                     {/* TODO: Test this */}
