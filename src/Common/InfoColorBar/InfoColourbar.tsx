@@ -16,6 +16,7 @@
 
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Tooltip } from '@Common/Tooltip'
 import { InfoColourBarType } from '../Types'
 import './infoColourBar.scss'
 
@@ -90,7 +91,9 @@ const InfoColourBar = ({
                         <Icon className={`icon-dim-${iconSize ?? '20'} ${iconClass || ''} mr-8`} />
                     </div>}
                     <div className={`info-bar-message-wrapper ${linkClass || ''}`}>
-                        <span className={linkText && redirectLink ? 'mr-5' : ''}>{message}</span>
+                        <Tooltip content={message}>
+                            <span className={`dc__truncate ${linkText && redirectLink ? 'mr-5' : ''}`}>{message}</span>
+                        </Tooltip>
                         {renderLink()}
                     </div>
                 </div>
