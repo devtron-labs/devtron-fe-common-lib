@@ -206,7 +206,7 @@ const Artifacts = ({
         )
     }
     return (
-        <div className={`flex left column dc__gap-12 ${rootClassName ?? ''}`}>
+        <div className={`flex left column dc__gap-12 dc__content-start ${rootClassName ?? ''}`}>
             {!isJobView && type !== HistoryComponentType.CD && (
                 <CIListItem
                     type="artifact"
