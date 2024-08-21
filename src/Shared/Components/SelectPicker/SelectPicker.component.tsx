@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import ReactSelect, { ControlProps, MenuListProps, ValueContainerProps } from 'react-select'
 import { ReactElement, useCallback, useMemo } from 'react'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
@@ -15,7 +31,7 @@ import {
     SelectPickerOption,
     SelectPickerValueContainer,
 } from './common'
-import { SelectPickerOptionType, SelectPickerProps } from './type'
+import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 
 /**
  * Generic component for select picker
@@ -110,6 +126,7 @@ const SelectPicker = ({
     disabledTippyContent,
     showSelectedOptionsCount = false,
     menuSize,
+    variant = SelectPickerVariantType.DEFAULT,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
@@ -123,8 +140,9 @@ const SelectPicker = ({
                 error,
                 size,
                 menuSize,
+                variant,
             }),
-        [error, size, menuSize],
+        [error, size, menuSize, variant],
     )
 
     const renderControl = useCallback(
@@ -185,7 +203,7 @@ const SelectPicker = ({
                                 LoadingIndicator: SelectPickerLoadingIndicator,
                                 DropdownIndicator: SelectPickerDropdownIndicator,
                                 Control: renderControl,
-                                Option: SelectPickerOption,
+                                Option: SelectPickerOption(props),
                                 MenuList: renderMenuList,
                                 ClearIndicator: SelectPickerClearIndicator,
                                 ValueContainer: renderValueContainer,

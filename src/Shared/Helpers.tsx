@@ -17,8 +17,17 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
+import { Pair } from 'yaml'
 import moment from 'moment'
-import { handleUTCTime, mapByKey, MaterialInfo, shallowEqual, SortingOrder, ZERO_TIME_STRING } from '../Common'
+import {
+    handleUTCTime,
+    mapByKey,
+    MaterialInfo,
+    shallowEqual,
+    SortingOrder,
+    PATTERNS,
+    ZERO_TIME_STRING,
+} from '../Common'
 import {
     AggregationKeys,
     GitTriggers,
@@ -54,7 +63,8 @@ interface HighlightSearchTextProps {
     highlightClasses?: string
 }
 
-// Disabling default export since this is a helper function and we would have to export a lot of functions in future.
+export const escapeRegExp = (text: string): string => text.replace(PATTERNS.ESCAPED_CHARACTERS, '\\$&')
+
 export const highlightSearchText = ({ searchText, text, highlightClasses }: HighlightSearchTextProps): string => {
     if (!searchText) {
         return text
@@ -135,6 +145,22 @@ export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
         default:
             return <ICWebhook className="icon-dim-12" />
     }
+}
+
+export const yamlComparatorBySortOrder = (a: Pair, b: Pair, sortOrder: SortingOrder = SortingOrder.ASC) => {
+    let orderMultiplier = 0
+    if (sortOrder === SortingOrder.DESC) {
+        orderMultiplier = -1
+    } else if (sortOrder === SortingOrder.ASC) {
+        orderMultiplier = 1
+    }
+    if (a.key < b.key) {
+        return -1 * orderMultiplier
+    }
+    if (a.key > b.key) {
+        return 1 * orderMultiplier
+    }
+    return 0
 }
 
 export const useIntersection = (

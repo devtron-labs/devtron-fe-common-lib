@@ -163,6 +163,7 @@ export enum AppType {
     DEVTRON_HELM_CHART = 'devtron_helm_chart',
     EXTERNAL_HELM_CHART = 'external_helm_chart',
     EXTERNAL_ARGO_APP = 'external_argo_app',
+    EXTERNAL_FLUX_APP = 'external_flux_app',
 }
 
 export interface HelmReleaseStatus {
@@ -179,6 +180,11 @@ interface MaterialInfo {
     revision: string
     url: string
     webhookData: string
+}
+export interface FluxAppStatusDetail {
+    status: string
+    message: string
+    reason: string
 }
 export interface AppDetails {
     appId?: number
@@ -221,6 +227,8 @@ export interface AppDetails {
     helmPackageName?: string
     appStatus?: string
     chartAvatar?: string
+    fluxTemplateType?: string
+    FluxAppStatusDetail?: FluxAppStatusDetail
 }
 
 export enum RegistryType {
@@ -245,8 +253,10 @@ export enum DefaultUserKey {
 
 export enum Severity {
     CRITICAL = 'critical',
-    MODERATE = 'moderate',
+    HIGH = 'high',
+    MEDIUM = 'medium',
     LOW = 'low',
+    UNKNOWN = 'unknown',
 }
 
 export enum ImagePromotionTabs {
@@ -422,23 +432,33 @@ export enum ResourceKindType {
     installation = 'installation',
     environment = 'environment',
     cdPipeline = 'cd-pipeline',
+    project = 'project',
 }
 
 /**
  * Versions support for the resources on BE
+ *
+ * TODO: Rename to ApiVersionType
  */
 export enum ResourceVersionType {
     v1 = 'v1',
     alpha1 = 'alpha1',
 }
 
+export interface SeverityCount {
+    critical: number
+    high: number
+    medium: number
+    low: number
+    unknown: number
+}
+export enum PolicyKindType {
+    lockConfiguration = 'lock-configuration',
+}
+
 export interface LastExecutionResultType {
     lastExecution: string
-    severityCount: {
-        critical: number
-        moderate: number
-        low: number
-    }
+    severityCount: SeverityCount
     vulnerabilities: VulnerabilityType[]
     scanExecutionId?: number
     appId?: number
@@ -615,6 +635,14 @@ export interface BatchConfigType {
 }
 export interface scrollableInterface {
     autoBottomScroll: boolean
+}
+
+export enum URLProtocolType {
+    HTTP = 'http:',
+    HTTPS = 'https:',
+    SSH = 'ssh:',
+    SMTP = 'smtp:',
+    S3 = 's3:',
 }
 
 export type BaseFilterQueryParams<T> = {

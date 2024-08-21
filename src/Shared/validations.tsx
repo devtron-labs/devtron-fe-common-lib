@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { URLProtocolType } from './types'
+
 export interface ValidationResponseType {
     isValid: boolean
     message?: string
@@ -34,7 +36,7 @@ export const MESSAGES = {
 const MAX_DESCRIPTION_LENGTH = 350
 
 export const requiredField = (value: string): ValidationResponseType => {
-    if (!value) {
+    if (!value?.trim()) {
         return { message: 'This field is required', isValid: false }
     }
     return { isValid: true }
@@ -194,6 +196,35 @@ export const validateURL = (url: string, allowBase64Url: boolean = true): Valida
 
     return {
         isValid: true,
+    }
+}
+
+export const validateProtocols = (
+    url: string,
+    protocols: URLProtocolType[],
+    isRequired?: boolean,
+): ValidationResponseType => {
+    if (isRequired && !url) {
+        return {
+            isValid: false,
+            message: 'This field is required',
+        }
+    }
+
+    try {
+        const { protocol } = new URL(url)
+        if (protocol && protocols.includes(protocol as URLProtocolType)) {
+            return {
+                isValid: true,
+            }
+        }
+    } catch (error) {
+        // Do nothing
+    }
+
+    return {
+        isValid: false,
+        message: `Invalid URL/protocol. Supported protocols are: ${protocols.join(', ')}`,
     }
 }
 

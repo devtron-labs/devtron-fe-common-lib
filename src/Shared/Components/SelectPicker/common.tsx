@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {
     components,
     DropdownIndicatorProps,
@@ -75,27 +91,37 @@ export const SelectPickerValueContainer = ({
 
 export const SelectPickerLoadingIndicator = () => <Progressing />
 
-export const SelectPickerOption = (props: OptionProps<SelectPickerOptionType>) => {
-    const { label, data } = props
-    const { description, startIcon, endIcon } = data ?? {}
-    const showDescription = !!description
+export const SelectPickerOption =
+    ({ disableDescriptionEllipsis = false }: SelectPickerProps) =>
+    (props: OptionProps<SelectPickerOptionType>) => {
+        const { label, data } = props
+        const { description, startIcon, endIcon } = data ?? {}
+        const showDescription = !!description
 
-    return (
-        <components.Option {...props}>
-            <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
-                {startIcon && (
-                    <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
-                )}
-                <div className="flex-grow-1">
-                    <h4 className="m-0 cn-9 fs-13 fw-4 lh-20 dc__truncate">{label}</h4>
-                    {/* Add support for custom ellipsis if required */}
-                    {showDescription && <p className="m-0 fs-12 fw-4 lh-18 cn-7 dc__truncate">{description}</p>}
+        return (
+            <components.Option {...props}>
+                <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
+                    {startIcon && (
+                        <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
+                    )}
+                    <div className="flex-grow-1">
+                        <h4 className="m-0 cn-9 fs-13 fw-4 lh-20 dc__truncate">{label}</h4>
+                        {/* Add support for custom ellipsis if required */}
+                        {showDescription && (
+                            <p
+                                className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__truncate' : ''}`}
+                            >
+                                {description}
+                            </p>
+                        )}
+                    </div>
+                    {endIcon && (
+                        <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>
+                    )}
                 </div>
-                {endIcon && <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>}
-            </div>
-        </components.Option>
-    )
-}
+            </components.Option>
+        )
+    }
 
 export const SelectPickerMenuList = ({
     renderMenuListFooter,

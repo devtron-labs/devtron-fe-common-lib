@@ -18,7 +18,7 @@ import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
-import { RegistryType } from '../Shared'
+import { RegistryType, Severity } from '../Shared'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -564,11 +564,12 @@ export enum DeploymentAppTypes {
     GITOPS = 'argo_cd',
     MANIFEST_DOWNLOAD = 'manifest_download',
     MANIFEST_PUSH = 'manifest_push',
+    FLUX = 'flux',
 }
 
 export interface VulnerabilityType {
     name: string
-    severity: 'CRITICAL' | 'MODERATE' | 'LOW'
+    severity: Severity
     package: string
     version: string
     fixedVersion: string

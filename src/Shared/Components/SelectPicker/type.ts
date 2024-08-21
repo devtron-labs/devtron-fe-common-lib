@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { OptionType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 import { ReactElement, ReactNode } from 'react'
@@ -16,6 +32,11 @@ export interface SelectPickerOptionType extends OptionType<number | string, Reac
      * Icon at the end of the option
      */
     endIcon?: ReactElement
+}
+
+export enum SelectPickerVariantType {
+    DEFAULT = 'default',
+    BORDERLESS = 'borderless',
 }
 
 type SelectProps = ReactSelectProps<SelectPickerOptionType>
@@ -91,4 +112,16 @@ export interface SelectPickerProps
      * @default 'ComponentSizeType.small'
      */
     menuSize?: ComponentSizeType
+    /**
+     * Variant of the select.
+     *
+     * @default SelectPickerVariantType.DEFAULT
+     */
+    variant?: SelectPickerVariantType
+    /**
+     * Disables the ellipsis on description, it will be shown in full width, wrapped if required.
+     *
+     * @default false
+     */
+    disableDescriptionEllipsis?: boolean
 }

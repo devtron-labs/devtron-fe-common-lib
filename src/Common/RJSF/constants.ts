@@ -21,8 +21,3 @@ export const PLACEHOLDERS = {
 }
 
 export const DEFAULT_FIELD_TITLE = 'Key not available'
-
-export const ADD_BUTTON_WIDTH = {
-    MAX_WIDTH_VALUE: 250,
-    MAX_WIDTH_CLASSNAME: 'dc__mxw-250',
-}

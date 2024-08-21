@@ -14,10 +14,5 @@
  * limitations under the License.
  */
 
-export interface ScannedObjectBarProps {
-    criticalVulnerabilitiesCount: number
-    moderateVulnerabilitiesCount: number
-    lowVulnerabilitiesCount: number
-    objectBarClassName?: string
-    removeObjectCountMargin?: boolean
-}
+export { default as useGetResourceKindsOptions } from './useGetResourceKindsOptions'
+export type { UseGetResourceKindsOptionsProps, UseGetResourceKindOptionsReturnType } from './types'
