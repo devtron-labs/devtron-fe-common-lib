@@ -525,3 +525,11 @@ export const DATE_TIME_FORMATS = {
     DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
     DD_MMM_YYYY: 'DD MMM YYYY',
 }
+
+export const VULNERABILITIES_SORT_PRIORITY = {
+    critical: 1,
+    high: 2,
+    medium: 3,
+    low: 4,
+    unknown: 5,
+}
