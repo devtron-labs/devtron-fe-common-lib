@@ -6,14 +6,16 @@ export type DeploymentChartListDTO = Array<{
     version: string
 }>
 
+interface DeploymentChartVersionsType {
+    id: number
+    version: string
+    description: string
+}
+
 export interface DeploymentChartType {
     name: string
     isUserUploaded: boolean
-    versions: {
-        id: number
-        version: string
-        description: string
-    }[]
+    versions: DeploymentChartVersionsType[]
 }
 
 export enum DEVTRON_DEPLOYMENT_CHART_NAMES {
