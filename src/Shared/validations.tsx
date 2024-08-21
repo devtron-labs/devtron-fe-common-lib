@@ -218,16 +218,13 @@ export const validateProtocols = (
                 isValid: true,
             }
         }
-
-        return {
-            isValid: false,
-            message: `Invalid URL/protocol. Supported protocols are: ${protocols.join(', ')}`,
-        }
     } catch (error) {
-        return {
-            isValid: false,
-            message: `Invalid URL/protocol. Supported protocols are: ${protocols.join(', ')}`,
-        }
+        // Do nothing
+    }
+
+    return {
+        isValid: false,
+        message: `Invalid URL/protocol. Supported protocols are: ${protocols.join(', ')}`,
     }
 }
 
