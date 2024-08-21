@@ -28,7 +28,7 @@ type ConditionalTabType =
           /**
            * Props passed to nav link component.
            */
-          props: TabComponentProps<Omit<NavLinkProps, 'className' | 'style' | 'isActive' | 'activeClassName'>>
+          props: TabComponentProps<Omit<NavLinkProps, 'className' | 'style' | 'activeClassName'>>
           /**
            * Active state is determined by matching the URL.
            */

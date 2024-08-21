@@ -43,7 +43,7 @@ const Tab = ({
                 {!showError && showWarning && <ICWarning className="icon-dim-14" />}
                 {!showError && !showWarning && Icon && (
                     <Icon
-                        className={`icon-dim-14 ${iconType === 'fill' ? 'tab-group__tab__icon--fill' : 'tab-group__tab__icon--stroke'} ${(active && (iconType === 'fill' ? 'fcb-5' : 'scb-5')) || ''}`}
+                        className={`icon-dim-14 ${iconType === 'fill' ? 'tab-group__tab__icon--fill' : 'tab-group__tab__icon--stroke'} ${(active && (iconType === 'fill' ? 'fcb-5' : 'scb-5')) || (iconType === 'fill' ? 'fcn-7' : 'scn-7')}`}
                     />
                 )}
                 {label}
@@ -86,7 +86,7 @@ const Tab = ({
 
     return (
         <li
-            className={`tab-group__tab cursor lh-20 ${active ? 'tab-group__tab--active cb-5 fw-6' : 'cn-9'} ${alignActiveBorderWithContainer ? 'tab-group__tab--align-active-border' : ''}`}
+            className={`tab-group__tab cursor lh-20 ${active ? 'tab-group__tab--active cb-5 fw-6' : 'cn-9 fw-4'} ${alignActiveBorderWithContainer ? 'tab-group__tab--align-active-border' : ''}`}
         >
             {getTabComponent()}
         </li>
