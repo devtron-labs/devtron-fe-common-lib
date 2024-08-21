@@ -44,23 +44,6 @@ import {
 import { CodeEditorReducer, initialState } from './CodeEditor.reducer'
 import { MODES } from '../Constants'
 
-self.MonacoEnvironment = {
-    getWorker(_, label) {
-        const getWorkerModule = (moduleUrl: string) => {
-            return new Worker(self.MonacoEnvironment.getWorkerUrl(moduleUrl, label), {
-                name: label,
-                type: 'module',
-            })
-        }
-
-        if (label === MODES.YAML) {
-            return getWorkerModule('../../yaml.worker.js?worker')
-        }
-
-        return getWorkerModule('/monaco-editor/esm/vs/editor/editor.worker?worker')
-    },
-}
-
 const CodeEditorContext = React.createContext(null)
 
 function useCodeEditorContext() {
