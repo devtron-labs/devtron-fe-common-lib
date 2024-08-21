@@ -71,10 +71,12 @@ export const KeyValueTable = <K extends string>({
     /** State to trigger useEffect to trigger autoFocus */
     const [newRowAdded, setNewRowAdded] = useState(false)
 
+    const isActionDisabled = readOnly || isAdditionNotAllowed
+
     /** Boolean determining if table has rows. */
     const hasRows = (!readOnly && !isAdditionNotAllowed) || !!updatedRows.length
-    // TODO: See null checks
     const isFirstRowEmpty = !updatedRows[0]?.data[firstHeaderKey].value && !updatedRows[0]?.data[secondHeaderKey].value
+    const disableDeleteRow = updatedRows.length === 1 && isFirstRowEmpty
 
     // HOOKS
     const { sortBy, sortOrder, handleSorting } = useStateFilters({
@@ -218,7 +220,7 @@ export const KeyValueTable = <K extends string>({
     }
 
     useEffect(() => {
-        if (!readOnly && !isAdditionNotAllowed && !updatedRows.length) {
+        if (!isActionDisabled && !updatedRows.length) {
             handleAddNewRow()
         }
     }, [])
@@ -226,7 +228,7 @@ export const KeyValueTable = <K extends string>({
     useEffect(() => {
         if (isSortable) {
             setUpdatedRows((prevRows) => {
-                const sortedRows = [...prevRows]
+                const sortedRows = structuredClone(prevRows)
                 sortedRows.sort((a, b) =>
                     stringComparatorBySortOrder(a.data[sortBy].value, b.data[sortBy].value, sortOrder),
                 )
@@ -236,23 +238,17 @@ export const KeyValueTable = <K extends string>({
     }, [sortOrder])
 
     useEffect(() => {
-        const firstRow = updatedRows?.[0]
+        const firstRow = updatedRows[0]
 
         if (firstRow && newRowAdded) {
             setNewRowAdded(false)
+            const areKeyAndValueTextAreaRefsPresent =
+                keyTextAreaRef.current[firstRow.id].current && valueTextAreaRef.current[firstRow.id].current
 
-            if (
-                !firstRow.data[firstHeaderKey].value &&
-                keyTextAreaRef.current[firstRow.id].current &&
-                valueTextAreaRef.current[firstRow.id].current
-            ) {
+            if (!firstRow.data[firstHeaderKey].value && areKeyAndValueTextAreaRefsPresent) {
                 valueTextAreaRef.current[firstRow.id].current.focus()
             }
-            if (
-                !firstRow.data[secondHeaderKey].value &&
-                keyTextAreaRef.current[firstRow.id].current &&
-                valueTextAreaRef.current[firstRow.id].current
-            ) {
+            if (!firstRow.data[secondHeaderKey].value && areKeyAndValueTextAreaRefsPresent) {
                 keyTextAreaRef.current[firstRow.id].current.focus()
             }
         }
@@ -320,8 +316,8 @@ export const KeyValueTable = <K extends string>({
 
     const renderFirstHeader = (key: K, label: string, className: string) => (
         <div
-            key={key}
-            className={`bcn-50 py-8 px-12 flexbox dc__content-space dc__align-items-center ${updatedRows.length || (!readOnly && !isAdditionNotAllowed) ? 'dc__top-left-radius' : 'dc__left-radius-4'} ${className || ''}`}
+            key={`${key}-header`}
+            className={`bcn-50 py-8 px-12 flexbox dc__content-space dc__align-items-center ${updatedRows.length || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'} ${className || ''}`}
         >
             {isSortable ? (
                 <button
@@ -342,12 +338,16 @@ export const KeyValueTable = <K extends string>({
                     className={`cn-7 fs-12 lh-20 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
                 >
                     {label}
-                    {/* TODO: Test this */}
                     {!!headerComponent && headerComponent}
                 </div>
             )}
 
-            <button type="button" className="dc__transparent p-0 flex dc__gap-4" onClick={handleAddNewRow}>
+            <button
+                type="button"
+                className={`dc__transparent p-0 flex dc__gap-4 ${isActionDisabled ? 'dc__disabled' : ''}`}
+                disabled={isActionDisabled}
+                onClick={handleAddNewRow}
+            >
                 <ICAdd className="icon-dim-12 fcb-5 dc__no-shrink" />
                 <span className="cb-5 fs-12 fw-6 lh-20">Add</span>
             </button>
@@ -395,7 +395,6 @@ export const KeyValueTable = <K extends string>({
                                     className={`bcn-50 cn-9 fs-13 lh-20 py-8 px-12 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${key === firstHeaderKey ? `${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : `${hasRows ? 'dc__top-right-radius' : 'dc__right-radius-4'}`}  ${className || ''}`}
                                 >
                                     {label}
-                                    {/* TODO: Test this */}
                                     {!!headerComponent && headerComponent}
                                 </div>
                             ),
@@ -461,9 +460,9 @@ export const KeyValueTable = <K extends string>({
                                     {!readOnly && (
                                         <button
                                             type="button"
-                                            className={`key-value-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 dc__hover-n50 dc__tab-focus ${updatedRows.length === 1 && isFirstRowEmpty ? 'dc__disabled' : ''}`}
+                                            className={`key-value-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 dc__hover-n50 dc__tab-focus ${disableDeleteRow ? 'dc__disabled' : ''}`}
                                             onClick={onRowDelete(row)}
-                                            disabled={updatedRows.length === 1 && isFirstRowEmpty}
+                                            disabled={disableDeleteRow}
                                         >
                                             <ICCross
                                                 aria-label="delete-row"
