@@ -326,7 +326,7 @@ export const KeyValueTable = <K extends string>({
             {isSortable ? (
                 <button
                     type="button"
-                    className="cn-7 fs-12 lh-20-imp fw-6 flexbox dc__align-items-center dc__gap-2"
+                    className="cn-7 fs-12 lh-20-imp fw-6 flexbox dc__align-items-center dc__gap-2 dc__transparent"
                     onClick={onSortBtnClick}
                 >
                     {label}
