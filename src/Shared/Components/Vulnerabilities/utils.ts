@@ -15,31 +15,36 @@
  */
 
 import moment from 'moment'
+import { numberComparatorBySortOrder } from '@Shared/Helpers'
 import { DATE_TIME_FORMAT_STRING } from '../../constants'
-import { ZERO_TIME_STRING, sortCallback } from '../../../Common'
-import { LastExecutionResponseType, LastExecutionResultType, Severity } from '../../types'
+import { SortingOrder, VULNERABILITIES_SORT_PRIORITY, ZERO_TIME_STRING } from '../../../Common'
+import { LastExecutionResponseType, LastExecutionResultType } from '../../types'
+
+export const getSortedVulnerabilities = (vulnerabilities) =>
+    vulnerabilities.sort((a, b) =>
+        numberComparatorBySortOrder(
+            VULNERABILITIES_SORT_PRIORITY[a.severity],
+            VULNERABILITIES_SORT_PRIORITY[b.severity],
+            SortingOrder.ASC,
+        ),
+    )
 
 export const getParsedScanResult = (scanResult): LastExecutionResultType => {
     const vulnerabilities = scanResult?.vulnerabilities || []
-    const critical = vulnerabilities
-        .filter((v) => v.severity === Severity.CRITICAL)
-        .sort((a, b) => sortCallback('cveName', a, b))
-    const moderate = vulnerabilities
-        .filter((v) => v.severity === Severity.MODERATE)
-        .sort((a, b) => sortCallback('cveName', a, b))
-    const low = vulnerabilities.filter((v) => v.severity === Severity.LOW).sort((a, b) => sortCallback('cveName', a, b))
-    const sortedVulnerabilities = critical.concat(moderate, low)
+    const sortedVulnerabilities = getSortedVulnerabilities(vulnerabilities)
 
     return {
         ...(scanResult || {}),
         lastExecution:
             scanResult?.executionTime && scanResult.executionTime !== ZERO_TIME_STRING
-                ? moment(scanResult.executionTime).utc(false).format(DATE_TIME_FORMAT_STRING)
+                ? moment(scanResult.executionTime).format(DATE_TIME_FORMAT_STRING)
                 : '',
         severityCount: {
-            critical: scanResult?.severityCount?.high,
-            moderate: scanResult?.severityCount?.moderate,
-            low: scanResult?.severityCount?.low,
+            critical: scanResult?.severityCount?.critical ?? 0,
+            high: scanResult?.severityCount?.high ?? 0,
+            medium: scanResult?.severityCount?.medium ?? 0,
+            low: scanResult?.severityCount?.low ?? 0,
+            unknown: scanResult?.severityCount?.unknown ?? 0,
         },
         vulnerabilities: sortedVulnerabilities.map((cve) => ({
             name: cve.cveName,
