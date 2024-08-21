@@ -747,3 +747,16 @@ export const getFileNameFromHeaders = (headers: Headers) =>
         ?.find((n) => n.includes('filename='))
         ?.replace('filename=', '')
         .trim()
+
+export function versionComparator(
+    a: Record<string, any>,
+    b: Record<string, any>,
+    compareKey: string,
+    orderBy: SortingOrder,
+) {
+    if (orderBy === SortingOrder.DESC) {
+        return b[compareKey].localeCompare(a[compareKey], undefined, { numeric: true })
+    }
+
+    return a[compareKey].localeCompare(b[compareKey], undefined, { numeric: true })
+}

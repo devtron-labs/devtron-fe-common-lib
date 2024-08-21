@@ -17,4 +17,4 @@
 export { RJSFForm } from './Form'
 export * from './types'
 export { getInferredTypeFromValueType, getRedirectionProps } from './utils'
-export { HideSubmitButtonUISchema } from './constants'
+export { HIDE_SUBMIT_BUTTON_UI_SCHEMA } from './constants'

@@ -172,6 +172,12 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 })
             }
 
+            if (mode === MODES.JSON) {
+                monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+                    validate: true,
+                })
+            }
+
             editorRef.current = editor
             monacoRef.current = monaco
         }
