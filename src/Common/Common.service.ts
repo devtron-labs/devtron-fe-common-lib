@@ -15,7 +15,7 @@
  */
 
 import moment from 'moment'
-import { RuntimeParamsAPIResponseType } from '@Shared/types'
+import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
 import { ROUTES } from './Constants'
@@ -193,7 +193,7 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
     }
 }
 
-export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType) =>
+export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): RuntimeParamsListItemType[] =>
     Object.entries(response?.envVariables || {})
         .map(([key, value], index) => ({ key, value, id: index }))
         .sort((a, b) => stringComparatorBySortOrder(a.key, b.key))
