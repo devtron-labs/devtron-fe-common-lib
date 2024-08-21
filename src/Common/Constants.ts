@@ -62,6 +62,7 @@ export const URLS = {
     GLOBAL_CONFIG_DOCKER: '/global-config/docker',
     DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
     GLOBAL_CONFIG_SCOPED_VARIABLES: '/global-config/scoped-variables',
+    NETWORK_STATUS_INTERFACE: '/network-status-interface',
 }
 
 export const ROUTES = {
@@ -96,6 +97,9 @@ export const ROUTES = {
     CONFIG_CD_PIPELINE: 'config/cd-pipeline',
     MODULE_CONFIGURED: 'module/config',
     RESOURCE_HISTORY_DEPLOYMENT: 'resource/history/deployment',
+    ATTRIBUTES: 'attributes',
+    ATTRIBUTES_CREATE: 'attributes/create',
+    ATTRIBUTES_UPDATE: 'attributes/update',
     APP_LIST_MIN: 'app/min',
     CLUSTER_LIST_MIN: 'cluster/autocomplete',
     PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
