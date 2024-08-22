@@ -123,5 +123,11 @@ export interface SelectPickerProps
      * @default false
      */
     disableDescriptionEllipsis?: boolean
-    menuAlignToRight?: boolean
+    /**
+     * If true, the menu is aligned at the right end to prevent going outside of viewport
+     * in case of menu being larger than the control
+     *
+     * @default false
+     */
+    shouldMenuAlignRight?: boolean
 }
