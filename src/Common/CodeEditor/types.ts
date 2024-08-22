@@ -85,6 +85,7 @@ export enum CodeEditorThemesKeys {
     deleteDraft = 'delete-draft',
     unpublished = 'unpublished',
     vs = 'vs',
+    networkStatusInterface = 'network-status-interface',
 }
 
 export interface CodeEditorInitialValueType {

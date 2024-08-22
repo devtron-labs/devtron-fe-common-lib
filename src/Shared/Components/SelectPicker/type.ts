@@ -34,6 +34,11 @@ export interface SelectPickerOptionType extends OptionType<number | string, Reac
     endIcon?: ReactElement
 }
 
+export enum SelectPickerVariantType {
+    DEFAULT = 'default',
+    BORDERLESS = 'borderless',
+}
+
 type SelectProps = ReactSelectProps<SelectPickerOptionType>
 
 // TODO: Add support for border less
@@ -107,4 +112,16 @@ export interface SelectPickerProps
      * @default 'ComponentSizeType.small'
      */
     menuSize?: ComponentSizeType
+    /**
+     * Variant of the select.
+     *
+     * @default SelectPickerVariantType.DEFAULT
+     */
+    variant?: SelectPickerVariantType
+    /**
+     * Disables the ellipsis on description, it will be shown in full width, wrapped if required.
+     *
+     * @default false
+     */
+    disableDescriptionEllipsis?: boolean
 }
