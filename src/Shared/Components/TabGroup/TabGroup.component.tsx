@@ -48,7 +48,7 @@ const Tab = ({
                 )}
                 {label}
                 {badge !== null && <div className="tab-group__tab__badge bcn-1 flex fs-12 lh-18 cn-7">{badge}</div>}
-                {showIndicator && <span className="tab-group__tab__indicator bcr-5 mt-12 dc__align-self-start" />}
+                {showIndicator && <span className="tab-group__tab__indicator bcr-5 mt-4 dc__align-self-start" />}
             </>
         )
 
