@@ -323,6 +323,28 @@ export interface UserApprovalConfigType {
     requiredCount: number
 }
 
+export interface UserGroupApproverType {
+    email: string
+    // Will derive from approvedUsersData list
+    hasApproved: boolean
+    hasAccess: boolean
+}
+
+export interface UserGroupDataType {
+    // Mapping email to data
+    dataStore: Record<string, UserGroupApproverType>
+    requiredCount: number
+    emails: string[]
+}
+
+interface ImageApprovalPolicyType {
+    isPolicyConfigured: boolean
+    specificUsersData: UserGroupDataType
+    userGroupData: Record<string, UserGroupDataType>
+    // Assuming name of groups are unique
+    validGroups: string[]
+}
+
 interface ApprovalUserDataType {
     dataId: number
     userActionTime: string
@@ -617,6 +639,7 @@ export interface CDMaterialsApprovalInfo {
     approvalUsers: string[]
     userApprovalConfig: UserApprovalConfigType
     canApproverDeploy: boolean
+    imageApprovalPolicyDetails: ImageApprovalPolicyType
 }
 
 export interface CDMaterialsMetaInfo {

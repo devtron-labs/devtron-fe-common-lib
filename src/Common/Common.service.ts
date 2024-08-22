@@ -32,6 +32,8 @@ import {
     CDMaterialFilterQuery,
     ImagePromotionMaterialInfo,
     EnvironmentListHelmResponse,
+    UserGroupApproverType,
+    UserGroupDataType,
 } from './Types'
 import { ApiResourceType } from '../Pages'
 
@@ -169,12 +171,27 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
     return materials
 }
 
+const SPECIFIC_EMAILS = [
+    'specific-email-1@devtron.ai',
+    'specific-email-2@devtron.ai',
+    'specific-email-3@devtron.ai',
+    'specific-email-4@devtron.ai',
+]
+
+const VALID_GROUPS = [
+    'managers',
+    'security',
+    'devops',
+    'developers',
+]
+
 const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResult): CDMaterialsApprovalInfo => {
     if (!enableApproval || !cdMaterialsResult) {
         return {
             approvalUsers: [],
             userApprovalConfig: null,
             canApproverDeploy: cdMaterialsResult?.canApproverDeploy ?? false,
+            imageApprovalPolicyDetails: null,
         }
     }
 
@@ -182,6 +199,39 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
         approvalUsers: cdMaterialsResult.approvalUsers,
         userApprovalConfig: cdMaterialsResult.userApprovalConfig,
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
+        imageApprovalPolicyDetails: {
+            isPolicyConfigured: true,
+            specificUsersData: {
+                dataStore: SPECIFIC_EMAILS.reduce((acc, email, index) => {
+                    acc[email] = {
+                        email,
+                        hasAccess: index % 2 === 0,
+                        hasApproved: index % 2 !== 0,
+                    }
+                    return acc
+                }, {} as Record<string, UserGroupApproverType>),
+                requiredCount: SPECIFIC_EMAILS.length,
+                emails: SPECIFIC_EMAILS,
+            },
+            userGroupData: VALID_GROUPS.reduce((acc, userGroup) => {
+                const emails = [`${userGroup}-1@devtron.ai`, `${userGroup}-2@devtron.ai`, `${userGroup}-3@devtron.ai`]
+
+                acc[userGroup] = {
+                    dataStore: emails.reduce((acc, email, index) => {
+                        acc[email] = {
+                            email,
+                            hasAccess: index % 2 === 0,
+                            hasApproved: index % 2 !== 0,
+                        }
+                        return acc
+                    }, {} as Record<string, UserGroupApproverType>),
+                    requiredCount: emails.length,
+                    emails,
+                }
+                return acc
+            }, {} as Record<string, UserGroupDataType>),
+            validGroups: VALID_GROUPS,
+        }
     }
 }
 
