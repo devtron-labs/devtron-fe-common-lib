@@ -15,5 +15,5 @@
  */
 
 export * from './constants'
-export type { UserListFilterParams, UserRoleGroup } from './types'
+export type { UserListFilterParams, UserRoleGroup, UserGroupType } from './types'
 export * from './shared'

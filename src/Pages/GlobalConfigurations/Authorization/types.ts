@@ -48,3 +48,20 @@ export interface UserRoleGroup {
      */
     timeToLive: string
 }
+
+export interface UserGroupType {
+    /**
+     * Unique display name of the user group
+     */
+    name: string
+    /**
+     * Unique id of the user group
+     *
+     * Follows the validation for app name
+     */
+    userGroupId: string
+    /**
+     * Associated description
+     */
+    description: string
+}
