@@ -46,6 +46,7 @@ export interface TagLabelSelectType {
     selectedProjectId?: number
     suggestedTagsOptions?: SuggestedTagOptionType[]
     reloadProjectTags?: boolean
+    hidePropagateTag?: boolean
 }
 
 export interface TagDetailType {
@@ -55,6 +56,7 @@ export interface TagDetailType {
     removeTag?: (index: number) => void
     tabIndex?: number
     suggestedTagsOptions?: SuggestedTagOptionType[]
+    hidePropagateTag?: boolean
 }
 
 export interface TagLabelValueSelectorType {
