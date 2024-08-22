@@ -14,17 +14,13 @@
   - limitations under the License.
   -->
 
-<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-    <g fill="none" fill-rule="evenodd">
-        <path d="M0 0h48v48H0z"/>
-        <g fill="#FFEBEB" stroke="#F33E3E" stroke-linejoin="round" stroke-width="2">
-            <path d="M7 24h24v17a4 4 0 0 1-4 4H11a4 4 0 0 1-4-4V24z"/>
-            <path stroke-linecap="round" d="M19 29.5v10M24 29.5v10M14 29.5v10"/>
-        </g>
-        <path stroke="#F33E3E" stroke-dasharray="17,3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M42 10a3 3 0 0 1 0 6H31M38 23a3 3 0 0 0-3-3h-8"/>
-        <g stroke="#F33E3E" stroke-linejoin="round" stroke-width="2" transform="rotate(-10 36.29 -8.86)">
-            <rect width="30" height="5" y="6" fill="#FFEBEB" rx="1"/>
-            <path d="M11 0h8a2 2 0 0 1 2 2v4H9V2a2 2 0 0 1 2-2z"/>
-        </g>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="46" viewBox="0 0 44 46" fill="none">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M5 24H29V41C29 43.2091 27.2091 45 25 45H9C6.79086 45 5 43.2091 5 41V24Z" fill="#F33E3E" fill-opacity="0.12" stroke="#F33E3E" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M17 29.5V39.5" stroke="#F33E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M22 29.5V39.5" stroke="#F33E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 29.5V39.5" stroke="#F33E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M40 10C41.6569 10 43 11.3431 43 13C43 14.6569 41.6569 16 40 16H31" stroke="#F33E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M36 23C36 21.3431 34.6569 20 33 20H25" stroke="#F33E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M29.6903 7.03989L2.11567 11.902C1.57177 11.9979 1.2086 12.5166 1.30451 13.0605L1.82545 16.0149C1.92136 16.5588 2.44001 16.922 2.98391 16.8261L30.5585 11.9639C31.1024 11.868 31.4656 11.3494 31.3697 10.8055L30.8487 7.85105C30.7528 7.30715 30.2342 6.94398 29.6903 7.03989Z" fill="#F33E3E" fill-opacity="0.12" stroke="#F33E3E" stroke-width="2" stroke-linejoin="round"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M10.9227 4.25671L18.8012 2.86752C19.889 2.67572 20.9263 3.40205 21.1181 4.48984L21.8127 8.42907L9.99501 10.5129L9.30042 6.57362C9.10861 5.48583 9.83495 4.44851 10.9227 4.25671Z" stroke="#F33E3E" stroke-width="2" stroke-linejoin="round"/>
 </svg>
