@@ -50,5 +50,5 @@ export * from './Plugin'
 export * from './KeyValueTable'
 export * from './SelectPicker'
 export * from './DetectBottom'
-// TODO: Remove
+// TODO: Remove after MultiSelectPicker is merged
 export * from './SelectPickerCustom'
