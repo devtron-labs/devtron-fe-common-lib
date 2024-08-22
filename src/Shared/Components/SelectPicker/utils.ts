@@ -58,7 +58,11 @@ export const getCommonSelectStyle = ({
     size,
     menuSize,
     variant,
-}: Pick<SelectPickerProps, 'error' | 'size' | 'menuSize' | 'variant'>): StylesConfig<SelectPickerOptionType> => ({
+    menuAlignToRight,
+}: Pick<
+    SelectPickerProps,
+    'error' | 'size' | 'menuSize' | 'variant' | 'menuAlignToRight'
+>): StylesConfig<SelectPickerOptionType> => ({
     container: (base, state) => ({
         ...base,
         ...(state.isDisabled && {
@@ -76,6 +80,7 @@ export const getCommonSelectStyle = ({
         width: getMenuWidthFromSize(menuSize),
         zIndex: 'var(--select-picker-menu-index)',
         ...(getVariantOverrides(variant)?.menu(base, state) || {}),
+        ...(menuAlignToRight ? { right: 0 } : {}),
     }),
     menuList: (base) => ({
         ...base,

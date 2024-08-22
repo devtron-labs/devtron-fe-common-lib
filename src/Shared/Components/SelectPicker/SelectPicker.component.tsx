@@ -127,6 +127,7 @@ const SelectPicker = ({
     showSelectedOptionsCount = false,
     menuSize,
     variant = SelectPickerVariantType.DEFAULT,
+    menuAlignToRight = false,
     ...props
 }: SelectPickerProps) => {
     const { inputId, required, isDisabled } = props
@@ -141,6 +142,7 @@ const SelectPicker = ({
                 size,
                 menuSize,
                 variant,
+                menuAlignToRight,
             }),
         [error, size, menuSize, variant],
     )
