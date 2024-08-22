@@ -637,6 +637,14 @@ export interface scrollableInterface {
     autoBottomScroll: boolean
 }
 
+export enum URLProtocolType {
+    HTTP = 'http:',
+    HTTPS = 'https:',
+    SSH = 'ssh:',
+    SMTP = 'smtp:',
+    S3 = 's3:',
+}
+
 export type BaseFilterQueryParams<T> = {
     /**
      * Offset for the list result
