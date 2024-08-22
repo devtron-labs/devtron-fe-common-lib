@@ -49,7 +49,7 @@ export interface UserRoleGroup {
     timeToLive: string
 }
 
-export interface UserGroupType {
+export interface UserGroupDTO {
     /**
      * Unique display name of the user group
      */
@@ -65,3 +65,5 @@ export interface UserGroupType {
      */
     description: string
 }
+
+export interface UserGroupType extends UserGroupDTO {}

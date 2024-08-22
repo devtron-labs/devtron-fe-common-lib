@@ -19,6 +19,6 @@ export { default as FilterSelectPickerCustom } from './FilterSelectPicker'
 export type {
     SelectPickerOptionType as SelectPickerCustomOptionType,
     SelectPickerVariantType as SelectPickerCustomVariantType,
-    SelectPickerProps as SelectCustomPickerProps,
-    FilterSelectPickerProps as FilterSelectCustomPickerProps,
+    SelectPickerProps as SelectPickerCustomProps,
+    FilterSelectPickerProps as FilterSelectPickerCustomProps,
 } from './type'
