@@ -42,17 +42,17 @@ const useDownload = () => {
         downloadSuccessToastContent = 'Downloaded Successfully',
     }: HandleDownloadProps): Promise<Error | ServerErrors> => {
         setIsDownloading(true)
-        if (showFilePreparingToast) {
-            toast.info(
-                <ToastBody
-                    title="Preparing file for download"
-                    subtitle="File will be downloaded when it is available."
-                />,
-            )
-        }
         try {
             const response = await getDownloadResponse(downloadUrl)
             if (response.status === API_STATUS_CODES.OK) {
+                if (showFilePreparingToast) {
+                    toast.info(
+                        <ToastBody
+                            title="Preparing file for download"
+                            subtitle="File will be downloaded when it is available."
+                        />,
+                    )
+                }
                 const data = await (response as any).blob()
 
                 // Create a new URL object
