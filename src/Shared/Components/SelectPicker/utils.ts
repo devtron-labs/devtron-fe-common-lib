@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
+import { CHECKBOX_VALUE } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
-import { GroupBase, OptionsOrGroups, StylesConfig } from 'react-select'
+import { GroupBase, MultiValue, OptionsOrGroups, StylesConfig } from 'react-select'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 
-const getMenuWidthFromSize = (menuSize: SelectPickerProps['menuSize']): string => {
+const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
+    menuSize: SelectPickerProps<OptionValue, IsMulti>['menuSize'],
+): string => {
     switch (menuSize) {
         case ComponentSizeType.medium:
             return '125%'
@@ -30,15 +33,14 @@ const getMenuWidthFromSize = (menuSize: SelectPickerProps['menuSize']): string =
     }
 }
 
-const getVariantOverrides = (variant: SelectPickerVariantType): StylesConfig<SelectPickerOptionType> => {
+const getVariantOverrides = <OptionValue>(
+    variant: SelectPickerVariantType,
+): StylesConfig<SelectPickerOptionType<OptionValue>> => {
     switch (variant) {
-        case SelectPickerVariantType.BORDERLESS:
+        case SelectPickerVariantType.BORDER_LESS:
             return {
-                menu: () => ({
-                    width: '250px',
-                }),
                 control: () => ({
-                    backgroundColor: 'var(--N0)',
+                    backgroundColor: 'transparent',
                     border: 'none',
                     padding: 0,
                     gap: '2px',
@@ -53,12 +55,33 @@ const getVariantOverrides = (variant: SelectPickerVariantType): StylesConfig<Sel
     }
 }
 
-export const getCommonSelectStyle = ({
+const getOptionBgColor = <OptionValue>(
+    state: Parameters<StylesConfig<SelectPickerOptionType<OptionValue>>['option']>[1],
+): string => {
+    if (state.isSelected && !state.selectProps.isMulti) {
+        return 'var(--B100)'
+    }
+
+    if (state.isFocused) {
+        return 'var(--N50)'
+    }
+
+    return 'var(--N0)'
+}
+
+export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     error,
     size,
     menuSize,
     variant,
-}: Pick<SelectPickerProps, 'error' | 'size' | 'menuSize' | 'variant'>): StylesConfig<SelectPickerOptionType> => ({
+    getIsOptionValid,
+    isGroupHeadingSelectable,
+    shouldMenuAlignRight,
+}: Pick<SelectPickerProps<OptionValue, IsMulti>, 'error' | 'size' | 'menuSize' | 'variant' | 'shouldMenuAlignRight'> &
+    Pick<
+        SelectPickerProps<OptionValue, IsMulti>['multiSelectProps'],
+        'getIsOptionValid' | 'isGroupHeadingSelectable'
+    >): StylesConfig<SelectPickerOptionType<OptionValue>> => ({
     container: (base, state) => ({
         ...base,
         ...(state.isDisabled && {
@@ -66,7 +89,7 @@ export const getCommonSelectStyle = ({
             pointerEvents: 'auto',
         }),
     }),
-    menu: (base, state) => ({
+    menu: (base) => ({
         ...base,
         overflow: 'hidden',
         marginBlock: '4px',
@@ -74,8 +97,11 @@ export const getCommonSelectStyle = ({
         border: '1px solid var(--N200)',
         boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.20)',
         width: getMenuWidthFromSize(menuSize),
+        minWidth: '200px',
         zIndex: 'var(--select-picker-menu-index)',
-        ...(getVariantOverrides(variant)?.menu(base, state) || {}),
+        ...(shouldMenuAlignRight && {
+            right: 0,
+        }),
     }),
     menuList: (base) => ({
         ...base,
@@ -84,6 +110,7 @@ export const getCommonSelectStyle = ({
     control: (base, state) => ({
         ...base,
         minHeight: size === ComponentSizeType.medium ? 'auto' : '36px',
+        minWidth: '100px',
         boxShadow: 'none',
         backgroundColor: 'var(--N50)',
         border: `1px solid ${error ? 'var(--R500)' : 'var(--N200)'}`,
@@ -92,6 +119,9 @@ export const getCommonSelectStyle = ({
         gap: '8px',
         opacity: state.isDisabled ? 0.5 : 1,
         flexWrap: 'nowrap',
+        maxHeight: '120px',
+        overflow: 'auto',
+        alignItems: 'safe center',
         ...(getVariantOverrides(variant)?.control(base, state) || {}),
 
         '&:hover': {
@@ -105,8 +135,7 @@ export const getCommonSelectStyle = ({
     option: (base, state) => ({
         ...base,
         color: 'var(--N900)',
-        // eslint-disable-next-line no-nested-ternary
-        backgroundColor: state.isSelected ? 'var(--B100)' : state.isFocused ? 'var(--N50)' : 'var(--N0)',
+        backgroundColor: getOptionBgColor(state),
         padding: '6px 8px',
         cursor: 'pointer',
         fontSize: '13px',
@@ -116,6 +145,15 @@ export const getCommonSelectStyle = ({
         ':active': {
             backgroundColor: 'var(--N100)',
         },
+
+        ':hover': {
+            backgroundColor: 'var(--N50)',
+        },
+
+        ...(state.isDisabled && {
+            cursor: 'not-allowed',
+            opacity: 0.5,
+        }),
     }),
     dropdownIndicator: (base, state) => ({
         ...base,
@@ -127,11 +165,64 @@ export const getCommonSelectStyle = ({
     clearIndicator: (base) => ({
         ...base,
         padding: 0,
+
+        '&:hover': {
+            backgroundColor: 'transparent',
+            color: 'inherit',
+
+            'svg use': {
+                fill: 'var(--R500)',
+            },
+        },
     }),
-    valueContainer: (base) => ({
+    valueContainer: (base, state) => ({
         ...base,
         padding: '0',
         fontWeight: '400',
+        ...(state.selectProps.isMulti && {
+            gap: '6px',
+        }),
+    }),
+    multiValue: (base, state) => {
+        const isOptionValid = getIsOptionValid(state.data)
+
+        return {
+            ...base,
+            background: isOptionValid ? 'var(--N0)' : 'var(--R100)',
+            border: isOptionValid ? '1px solid var(--N200)' : '1px solid var(--R200)',
+            borderRadius: '4px',
+            padding: '1px 5px',
+            maxWidth: '250px',
+            margin: 0,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+        }
+    },
+    multiValueLabel: (base) => ({
+        ...base,
+        borderRadius: 0,
+        color: 'var(--N900)',
+        fontSize: '12px',
+        fontWeight: 400,
+        lineHeight: '20px',
+        padding: 0,
+        paddingLeft: 0,
+    }),
+    multiValueRemove: (base) => ({
+        ...base,
+        padding: 0,
+        borderRadius: 0,
+
+        '&:hover': {
+            backgroundColor: 'var(--R100)',
+            color: 'inherit',
+            borderRadius: '2px',
+
+            'svg use': {
+                fill: 'var(--R500)',
+            },
+        },
     }),
     loadingMessage: (base) => ({
         ...base,
@@ -145,6 +236,10 @@ export const getCommonSelectStyle = ({
         ...base,
         paddingTop: '4px',
         paddingBottom: 0,
+
+        '&:first-child': {
+            paddingTop: 0,
+        },
     }),
     groupHeading: (base) => ({
         ...base,
@@ -158,6 +253,13 @@ export const getCommonSelectStyle = ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
+        position: 'sticky',
+        top: 0,
+        zIndex: 1,
+
+        ...(isGroupHeadingSelectable && {
+            cursor: 'pointer',
+        }),
     }),
     input: (base) => ({
         ...base,
@@ -168,6 +270,8 @@ export const getCommonSelectStyle = ({
         fontWeight: 400,
         lineHeight: '20px',
         overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'clip',
     }),
     placeholder: (base) => ({
         ...base,
@@ -196,6 +300,32 @@ export const getCommonSelectStyle = ({
     }),
 })
 
+export const getGroupCheckboxValue = <OptionValue>(
+    groupHeadingOptions: readonly SelectPickerOptionType<OptionValue>[],
+    selectedOptions: MultiValue<SelectPickerOptionType<OptionValue>>,
+    getOptionValue: (option: SelectPickerOptionType<OptionValue>) => string,
+) => {
+    const selectedOptionsMapByValue = selectedOptions.reduce<Record<string, true>>((acc, option) => {
+        acc[getOptionValue(option)] = true
+        return acc
+    }, {})
+    const groupOptionsComputedValue = groupHeadingOptions.map((option) => getOptionValue(option))
+
+    const isEveryOptionInGroupSelected = groupOptionsComputedValue.every((value) => selectedOptionsMapByValue[value])
+
+    if (isEveryOptionInGroupSelected) {
+        return CHECKBOX_VALUE.CHECKED
+    }
+
+    const isSomeOptionInGroupSelected = groupOptionsComputedValue.some((value) => selectedOptionsMapByValue[value])
+
+    if (isSomeOptionInGroupSelected) {
+        return CHECKBOX_VALUE.INTERMEDIATE
+    }
+
+    return null
+}
+
 /**
  * Retrieves an option from the options list based on the provided value.
  *
@@ -204,11 +334,15 @@ export const getCommonSelectStyle = ({
  * @param defaultOption - The default option to return if no match is found.
  * @returns The matched option or the default option if no match is found.
  */
-export const getSelectPickerOptionByValue = (
-    optionsList: OptionsOrGroups<SelectPickerOptionType, GroupBase<SelectPickerOptionType>>,
-    value: string | number,
-    defaultOption: SelectPickerOptionType = { label: '', value: '' },
-): SelectPickerOptionType => {
+export const getSelectPickerOptionByValue = <OptionValue>(
+    optionsList: OptionsOrGroups<SelectPickerOptionType<OptionValue>, GroupBase<SelectPickerOptionType<OptionValue>>>,
+    value: OptionValue,
+    defaultOption: SelectPickerOptionType<OptionValue> = { label: '', value: '' as unknown as OptionValue },
+): SelectPickerOptionType<OptionValue> => {
+    if (!Array.isArray(optionsList)) {
+        return defaultOption
+    }
+
     const foundOption = optionsList.reduce(
         (acc, curr) => {
             if (!acc.notFound) return acc
@@ -217,7 +351,7 @@ export const getSelectPickerOptionByValue = (
                 return { data: curr, notFound: false }
             }
 
-            if ('options' in curr) {
+            if ('options' in curr && curr.options) {
                 const nestedOption = curr.options.find(({ value: _value }) => _value === value)
                 if (nestedOption) {
                     return { data: nestedOption, notFound: false }
