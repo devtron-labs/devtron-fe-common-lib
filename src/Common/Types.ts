@@ -325,8 +325,6 @@ export interface UserApprovalConfigType {
 
 export interface UserGroupApproverType {
     email: string
-    // Will derive from approvedUsersData list
-    hasApproved: boolean
     hasAccess: boolean
 }
 

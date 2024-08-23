@@ -206,14 +206,15 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
                     acc[email] = {
                         email,
                         hasAccess: index % 2 === 0,
-                        hasApproved: index % 2 !== 0,
                     }
                     return acc
                 }, {} as Record<string, UserGroupApproverType>),
                 requiredCount: SPECIFIC_EMAILS.length,
+                // TODO: Sort these arrays
                 emails: SPECIFIC_EMAILS,
             },
             userGroupData: VALID_GROUPS.reduce((acc, userGroup) => {
+            // TODO: Sort these arrays
                 const emails = [`${userGroup}-1@devtron.ai`, `${userGroup}-2@devtron.ai`, `${userGroup}-3@devtron.ai`]
 
                 acc[userGroup] = {
@@ -221,7 +222,6 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
                         acc[email] = {
                             email,
                             hasAccess: index % 2 === 0,
-                            hasApproved: index % 2 !== 0,
                         }
                         return acc
                     }, {} as Record<string, UserGroupApproverType>),
@@ -230,6 +230,7 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
                 }
                 return acc
             }, {} as Record<string, UserGroupDataType>),
+            // TODO: Sort these arrays
             validGroups: VALID_GROUPS,
         }
     }
