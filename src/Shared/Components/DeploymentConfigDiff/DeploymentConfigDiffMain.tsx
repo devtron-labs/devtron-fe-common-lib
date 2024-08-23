@@ -69,10 +69,14 @@ export const DeploymentConfigDiffMain = ({
             }
 
             const { selectPickerProps } = configItem
+
             return (
                 <Fragment key={configItem.id}>
                     <div className="dc__mxw-300">
-                        <SelectPicker {...selectPickerProps} isDisabled={isLoading || selectPickerProps?.isDisabled} />
+                        <SelectPicker<string | number, false>
+                            {...selectPickerProps}
+                            isDisabled={isLoading || selectPickerProps?.isDisabled}
+                        />
                     </div>
                     {index !== list.length - 1 && <span className="cn-9 fs-13 lh-20">/</span>}
                 </Fragment>
