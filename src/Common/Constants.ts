@@ -62,6 +62,7 @@ export const URLS = {
     GLOBAL_CONFIG_DOCKER: '/global-config/docker',
     DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
     GLOBAL_CONFIG_SCOPED_VARIABLES: '/global-config/scoped-variables',
+    GLOBAL_CONFIG_DEPLOYMENT_CHARTS_LIST: '/global-config/deployment-charts',
     NETWORK_STATUS_INTERFACE: '/network-status-interface',
 }
 
@@ -105,6 +106,7 @@ export const ROUTES = {
     PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
     PLUGIN_GLOBAL_LIST_V2: 'plugin/global/list/v2',
     PLUGIN_GLOBAL_LIST_TAGS: 'plugin/global/list/tags',
+    DEPLOYMENT_CHARTS_LIST: 'deployment/template/fetch',
     CONFIG_DATA: 'config/data',
 }
 
