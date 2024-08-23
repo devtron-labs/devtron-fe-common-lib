@@ -21,3 +21,9 @@ export const PLACEHOLDERS = {
 }
 
 export const DEFAULT_FIELD_TITLE = 'Key not available'
+
+export const HIDE_SUBMIT_BUTTON_UI_SCHEMA = {
+    'ui:submitButtonOptions': {
+        norender: true,
+    },
+}

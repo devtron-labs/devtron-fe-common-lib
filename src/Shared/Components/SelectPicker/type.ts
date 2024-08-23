@@ -41,7 +41,6 @@ export enum SelectPickerVariantType {
 
 type SelectProps = ReactSelectProps<SelectPickerOptionType>
 
-// TODO: Add support for border less
 export interface SelectPickerProps
     extends Pick<
             SelectProps,
@@ -124,4 +123,11 @@ export interface SelectPickerProps
      * @default false
      */
     disableDescriptionEllipsis?: boolean
+    /**
+     * If true, the menu is aligned at the right end to prevent going outside of viewport
+     * in case of menu being larger than the control
+     *
+     * @default false
+     */
+    shouldMenuAlignRight?: boolean
 }
