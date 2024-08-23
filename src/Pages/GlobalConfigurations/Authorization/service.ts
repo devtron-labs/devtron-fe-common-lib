@@ -5,6 +5,7 @@ import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { DefaultUserKey } from '@Shared/types'
 import { GroupBase } from 'react-select'
 
+// FIXME: Common out the typing and url from dashboard
 export const getUserAndApiTokenOptions = async (): Promise<GroupBase<SelectPickerCustomOptionType<string>>[]> => {
     const [{ result: userResponse }, { result: apiTokenResponse }] = await Promise.all([
         get('user/v2'),
