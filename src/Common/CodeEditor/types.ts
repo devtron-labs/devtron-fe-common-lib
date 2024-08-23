@@ -48,6 +48,7 @@ export interface CodeEditorInterface {
     isKubernetes?: boolean
     cleanData?: boolean
     chartVersion?: any
+    adjustEditorHeightToContent?: boolean
 }
 
 export interface CodeEditorHeaderInterface {
