@@ -777,3 +777,11 @@ export const getFileNameFromHeaders = (headers: Headers) =>
         ?.find((n) => n.includes('filename='))
         ?.replace('filename=', '')
         .trim()
+
+/**
+ * @description - Function to open a new tab with the given url
+ * @param url - url to be opened in new tab
+ */
+export const getHandleOpenURL = (url: string) => () => {
+    window.open(url, '_blank', 'noreferrer')
+}

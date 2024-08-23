@@ -86,7 +86,7 @@ const renderBlobNotConfigured = (): JSX.Element => (
 )
 
 const renderConfigurationError = (isBlobStorageConfigured: boolean): JSX.Element => (
-    <div className="flexbox dc__content-center flex-align-center dc__height-inherit">
+    <div className="flexbox dc__content-center flex-grow-1 flex-align-center dc__height-inherit dark-background">
         {!isBlobStorageConfigured ? renderBlobNotConfigured() : renderLogsNotAvailable()}
     </div>
 )
@@ -171,6 +171,7 @@ export const LogsRenderer = ({
     triggerDetails,
     isBlobStorageConfigured,
     parentType,
+    fullScreenView,
 }: LogsRendererType): JSX.Element => {
     const { pipelineId, envId, appId } = useParams<DeploymentHistoryBaseParamsType>()
     const logsURL =
@@ -400,14 +401,14 @@ export const LogsRenderer = ({
         if (areStagesAvailable) {
             return (
                 <div
-                    className="flexbox-col pb-20 logs-renderer-container"
+                    className="flexbox-col pb-20 logs-renderer-container flex-grow-1"
                     data-testid="check-logs-detail"
                     style={{
                         backgroundColor: '#0C1021',
                     }}
                 >
                     <div
-                        className="flexbox-col pb-7 dc__position-sticky dc__top-0 dc__zi-2"
+                        className={`flexbox-col pb-7 dc__position-sticky dc__zi-2 ${fullScreenView ? 'dc__top-0' : 'dc__top-38'}`}
                         style={{
                             backgroundColor: '#0C1021',
                         }}
@@ -444,6 +445,7 @@ export const LogsRenderer = ({
                                 handleStageOpen={handleStageOpen}
                                 stageIndex={index}
                                 isLoading={index === stageList.length - 1 && areEventsProgressing}
+                                fullScreenView={fullScreenView}
                             />
                         ))}
                     </div>
@@ -453,7 +455,7 @@ export const LogsRenderer = ({
 
         // Having a fallback for logs that already stored in blob storage
         return (
-            <div className="logs__body" data-testid="check-logs-detail">
+            <div className="logs__body dark-background flex-grow-1" data-testid="check-logs-detail">
                 {logsList.map((log: string, index: number) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <div className="flex top left mb-10 lh-24" key={`logs-${index}`}>
