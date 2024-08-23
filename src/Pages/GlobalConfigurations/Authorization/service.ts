@@ -1,5 +1,6 @@
 import { get } from '@Common/index'
 import { SelectPickerCustomOptionType } from '@Shared/Components'
+import { API_TOKEN_PREFIX } from '@Shared/constants'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { DefaultUserKey } from '@Shared/types'
 import { GroupBase } from 'react-select'
@@ -26,7 +27,8 @@ export const getUserAndApiTokenOptions = async (): Promise<GroupBase<SelectPicke
             options: (apiTokenResponse ?? [])
                 .sort((a, b) => stringComparatorBySortOrder(a.userIdentifier, b.userIdentifier))
                 .map(({ userIdentifier }) => ({
-                    label: userIdentifier,
+                    // Remove the API Token Prefix
+                    label: userIdentifier.startsWith(API_TOKEN_PREFIX) ? userIdentifier.split(':')[1] : userIdentifier,
                     value: userIdentifier,
                 })),
         },
