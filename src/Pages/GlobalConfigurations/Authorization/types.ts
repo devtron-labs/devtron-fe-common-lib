@@ -62,11 +62,19 @@ export interface UserGroupDTO {
     identifier: string
     /**
      * Associated description
+     *
+     * @default ''
      */
     description?: string
+    /**
+     * Number of users assigned to the group
+     *
+     * @default 0
+     */
+    usersCount?: number
 }
 
-export interface UserGroupType extends Required<Pick<UserGroupDTO, 'description' | 'name'>> {
+export interface UserGroupType extends Required<Pick<UserGroupDTO, 'description' | 'name' | 'usersCount'>> {
     /**
      * Unique id of the user group
      *
