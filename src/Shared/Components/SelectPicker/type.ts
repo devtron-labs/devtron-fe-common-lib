@@ -55,7 +55,6 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     | 'onChange'
     | 'isSearchable'
     | 'isClearable'
-    | 'isLoading'
     | 'hideSelectedOptions'
     | 'controlShouldRenderValue'
     | 'closeMenuOnSelect'

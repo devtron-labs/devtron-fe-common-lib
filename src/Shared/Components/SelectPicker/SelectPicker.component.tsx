@@ -248,8 +248,12 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         return (
             isCreatable &&
             !!trimmedInput &&
-            !getSelectPickerOptionByValue(value as SelectPickerOptionType<OptionValue>[], trimmedInput, null) &&
-            !getSelectPickerOptionByValue(options, trimmedInput, null)
+            !getSelectPickerOptionByValue<OptionValue>(
+                value as SelectPickerOptionType<OptionValue>[],
+                trimmedInput as OptionValue,
+                null,
+            ) &&
+            !getSelectPickerOptionByValue<OptionValue>(options, trimmedInput as OptionValue, null)
         )
     }
 

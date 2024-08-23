@@ -25,6 +25,7 @@ import {
     DeploymentAppTypes,
     ResponseType,
     PaginationProps,
+    SortingOrder,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
 import { AggregationKeys, GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
@@ -435,6 +436,8 @@ export interface DeploymentTemplateHistoryType {
     isUnpublished?: boolean
     isDeleteDraft?: boolean
     rootClassName?: string
+    comparisonBodyClassName?: string
+    sortOrder?: SortingOrder
 }
 export interface DeploymentHistoryDetailRes extends ResponseType {
     result?: DeploymentHistoryDetail
@@ -608,7 +611,7 @@ export interface DeploymentHistory {
 
 type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE_GREEN'
 
-interface DeploymentStrategy {
+export interface DeploymentStrategy {
     deploymentTemplate: DeploymentStrategyType
     config: any
     default: boolean
