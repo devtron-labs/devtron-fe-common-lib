@@ -71,6 +71,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     | 'onMenuOpen'
     | 'onMenuClose'
     | 'autoFocus'
+    | 'onBlur'
 > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> & {
         /**

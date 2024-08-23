@@ -311,6 +311,15 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         </Tippy>
     )
 
+    const handleCreateOption: SelectPickerProps<OptionValue, true>['multiSelectProps']['onCreateOption'] = (
+        inputValue,
+    ) => {
+        const trimmedInputValue = inputValue?.trim()
+        if (trimmedInputValue) {
+            onCreateOption(trimmedInputValue)
+        }
+    }
+
     const commonProps = useMemo(
         () => ({
             name: name || inputId,
@@ -388,7 +397,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 allowCreateWhileLoading={false}
                                 isValidNewOption={isValidNewOption}
                                 createOptionPosition="first"
-                                onCreateOption={onCreateOption}
+                                onCreateOption={handleCreateOption}
                             />
                         ) : (
                             <ReactSelect
