@@ -87,7 +87,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         cleanData = false,
         onBlur,
         onFocus,
-        adjustEditorHeightToContent,
+        adjustEditorHeightToContent = false,
     }) => {
         if (cleanData) {
             value = cleanKubeManifest(value)
