@@ -74,7 +74,8 @@ export interface UserGroupDTO {
     usersCount?: number
 }
 
-export interface UserGroupType extends Required<Pick<UserGroupDTO, 'description' | 'name' | 'usersCount'>> {
+export interface UserGroupType
+    extends Required<Pick<UserGroupDTO, 'description' | 'name' | 'usersCount' | 'identifier'>> {
     /**
      * Unique id of the user group
      *
