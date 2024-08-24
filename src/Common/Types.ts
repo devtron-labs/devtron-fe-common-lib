@@ -19,6 +19,7 @@ import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
 import { RegistryType } from '../Shared'
+import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -319,8 +320,10 @@ export enum DeploymentNodeType {
     APPROVAL = 'APPROVAL',
 }
 
-export interface UserApprovalConfigType {
-    requiredCount: number
+export enum ManualApprovalType {
+    specific = 'SPECIFIC',
+    any = 'ANY',
+    notConfigured = 'NOT_CONFIGURED',
 }
 
 export interface UserGroupApproverType {
@@ -342,6 +345,28 @@ interface ImageApprovalPolicyType {
     // Assuming name of groups are unique
     validGroups: string[]
 }
+// TODO: Need to verify this change for all impacting areas
+export interface UserApprovalConfigType {
+    type: ManualApprovalType
+    requiredCount: number
+    specificUsers: {
+        identifiers: string[]
+    }
+    userGroups: (Pick<UserGroupDTO, 'identifier'> & {
+        requiredCount: number
+    })[]
+}
+
+export type UserApprovalConfigPayloadType =
+    | ({
+          type: ManualApprovalType.any
+      } & Pick<UserApprovalConfigType, 'requiredCount'>)
+    | ({
+          type: ManualApprovalType.specific
+      } & Pick<UserApprovalConfigType, 'userGroups' | 'specificUsers'>)
+    | {
+          type: ManualApprovalType.notConfigured
+      }
 
 interface ApprovalUserDataType {
     dataId: number

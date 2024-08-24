@@ -59,11 +59,26 @@ export interface UserGroupDTO {
      *
      * Follows the validation for app name
      */
-    userGroupId: string
+    identifier: string
     /**
      * Associated description
+     *
+     * @default ''
      */
-    description: string
+    description?: string
+    /**
+     * Number of users assigned to the group
+     *
+     * @default 0
+     */
+    usersCount?: number
 }
 
-export interface UserGroupType extends UserGroupDTO {}
+export interface UserGroupType extends Required<Pick<UserGroupDTO, 'description' | 'name' | 'usersCount'>> {
+    /**
+     * Unique id of the user group
+     *
+     * Follows the validation for app name
+     */
+    userGroupId: string
+}
