@@ -33,7 +33,7 @@ import {
     ImagePromotionMaterialInfo,
     EnvironmentListHelmResponse,
     UserGroupApproverType,
-    UserGroupDataType,
+    ImageApprovalPolicyUserGroupDataType,
 } from './Types'
 import { ApiResourceType } from '../Pages'
 
@@ -197,6 +197,7 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
 
     return {
         approvalUsers: cdMaterialsResult.approvalUsers,
+        // TODO: use sanitizeUserApprovalConfig
         userApprovalConfig: cdMaterialsResult.userApprovalConfig,
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
         imageApprovalPolicyDetails: {
@@ -229,7 +230,8 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
                     emails,
                 }
                 return acc
-            }, {} as Record<string, UserGroupDataType>),
+            }, {} as Record<string, ImageApprovalPolicyUserGroupDataType>),
+            // TODO: getUserGroupList
             // TODO: Sort these arrays
             validGroups: VALID_GROUPS,
         }

@@ -328,7 +328,7 @@ export interface UserGroupApproverType {
     hasAccess: boolean
 }
 
-export interface UserGroupDataType {
+export interface ImageApprovalPolicyUserGroupDataType {
     // Mapping email to data
     dataStore: Record<string, UserGroupApproverType>
     requiredCount: number
@@ -337,8 +337,8 @@ export interface UserGroupDataType {
 
 interface ImageApprovalPolicyType {
     isPolicyConfigured: boolean
-    specificUsersData: UserGroupDataType
-    userGroupData: Record<string, UserGroupDataType>
+    specificUsersData: ImageApprovalPolicyUserGroupDataType
+    userGroupData: Record<string, ImageApprovalPolicyUserGroupDataType>
     // Assuming name of groups are unique
     validGroups: string[]
 }
