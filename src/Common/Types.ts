@@ -351,7 +351,8 @@ export interface UserApprovalConfigType {
     requiredCount: number
     specificUsers: {
         identifiers: string[]
-        requiredCount: number
+        // FIXME: Remove this ? check later when time permits
+        requiredCount?: number
     }
     userGroups: (Pick<UserGroupDTO, 'identifier'> & {
         requiredCount: number
