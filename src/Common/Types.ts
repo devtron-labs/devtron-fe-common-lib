@@ -338,13 +338,16 @@ export interface ImageApprovalPolicyUserGroupDataType {
     emails: string[]
 }
 
-interface ImageApprovalPolicyType {
+export interface ImageApprovalPolicyType {
     isPolicyConfigured: boolean
     specificUsersData: ImageApprovalPolicyUserGroupDataType
     userGroupData: Record<string, ImageApprovalPolicyUserGroupDataType>
     // Assuming name of groups are unique
     validGroups: string[]
 }
+
+export type ImageApprovalUsersInfoDTO = Record<string, Pick<UserGroupDTO, 'identifier' | 'name'>[]>
+
 // TODO: Need to verify this change for all impacting areas
 export interface UserApprovalConfigType {
     type: ManualApprovalType

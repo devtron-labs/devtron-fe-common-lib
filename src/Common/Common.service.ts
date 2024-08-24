@@ -34,10 +34,13 @@ import {
     EnvironmentListHelmResponse,
     UserGroupApproverType,
     ImageApprovalPolicyUserGroupDataType,
-    ManualApprovalType,
-    UserApprovalConfigType,
+    ImageApprovalPolicyType,
+    ImageApprovalUsersInfoDTO,
 } from './Types'
 import { ApiResourceType } from '../Pages'
+import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
+import { API_TOKEN_PREFIX } from '@Shared/constants'
+import { DefaultUserKey } from '@Shared/types'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -84,7 +87,13 @@ export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
 }
 
-const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: number, artifactStatus?: string, disableDefaultSelection?: boolean) => {
+const cdMaterialListModal = (
+    artifacts: any[],
+    offset: number,
+    artifactId?: number,
+    artifactStatus?: string,
+    disableDefaultSelection?: boolean,
+) => {
     if (!artifacts || !artifacts.length) return []
 
     const markFirstSelected = offset === 0
@@ -173,29 +182,91 @@ const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: numb
     return materials
 }
 
-const SPECIFIC_EMAILS = [
-    'specific-email-1@devtron.ai',
-    'specific-email-2@devtron.ai',
-    'specific-email-3@devtron.ai',
-    'specific-email-4@devtron.ai',
-]
+const getImageApprovalPolicyDetailsFromMaterialResult = (cdMaterialsResult): ImageApprovalPolicyType => {
+    const approvalUsers: string[] = cdMaterialsResult.approvalUsers || []
+    const userApprovalConfig = sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig)
+    const isPolicyConfigured = getIsManualApprovalSpecific(userApprovalConfig)
+    const imageApprovalUsersInfo: ImageApprovalUsersInfoDTO = cdMaterialsResult.imageApprovalUsersInfo || {}
 
-const VALID_GROUPS = [
-    'managers',
-    'security',
-    'devops',
-    'developers',
-]
+    const approvalUsersMap = approvalUsers.reduce(
+        (acc, user) => {
+            acc[user] = true
+            return acc
+        },
+        {} as Record<string, true>,
+    )
 
-export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfigType): UserApprovalConfigType => ({
-    requiredCount: userApprovalConfig?.requiredCount ?? 0,
-    type: userApprovalConfig?.type ?? ManualApprovalType.notConfigured,
-    specificUsers: {
-        identifiers: userApprovalConfig?.specificUsers?.identifiers ?? [],
-        requiredCount: userApprovalConfig?.specificUsers?.identifiers?.length ?? 0,
-    },
-    userGroups: userApprovalConfig?.userGroups ?? [],
-})
+    const specificUsersAPIToken = userApprovalConfig.specificUsers.identifiers
+        .filter((user) => user.startsWith(API_TOKEN_PREFIX))
+        .sort(stringComparatorBySortOrder)
+    const specificUsersEmails = userApprovalConfig.specificUsers.identifiers
+        .filter((user) => !user.startsWith(API_TOKEN_PREFIX) && user !== DefaultUserKey.system)
+        .sort(stringComparatorBySortOrder)
+
+    const specificUsersData: ImageApprovalPolicyType['specificUsersData'] = {
+        dataStore: userApprovalConfig.specificUsers.identifiers.reduce(
+            (acc, email) => {
+                acc[email] = {
+                    email,
+                    hasAccess: approvalUsersMap[email] ?? false,
+                }
+                return acc
+            },
+            {} as Record<string, UserGroupApproverType>,
+        ),
+        requiredCount: userApprovalConfig.specificUsers.requiredCount,
+        emails: specificUsersEmails.concat(specificUsersAPIToken),
+    }
+
+    const validGroups = userApprovalConfig.userGroups.map((group) => group.identifier)
+
+    const usersList = Object.keys(imageApprovalUsersInfo).filter((user) => user !== DefaultUserKey.system)
+    const userToGroupMap = usersList.reduce(
+        (acc, user) => {
+            const userGroups = imageApprovalUsersInfo[user] || []
+            userGroups.forEach((group) => {
+                if (!acc[group.identifier]) {
+                    acc[group.identifier] = {}
+                }
+                acc[group.identifier][user] = true
+            })
+            return acc
+        },
+        {} as Record<string, Record<string, true>>,
+    )
+
+    return {
+        isPolicyConfigured,
+        specificUsersData,
+        userGroupData: userApprovalConfig.userGroups.reduce(
+            (acc, group) => {
+                const identifier = group.identifier
+                // No need of handling api tokens here since they are not part of user groups
+                const users = Object.keys(userToGroupMap[identifier] || {}).sort(stringComparatorBySortOrder)
+
+                acc[identifier] = {
+                    dataStore: users.reduce(
+                        (acc, user) => {
+                            acc[user] = {
+                                email: user,
+                                hasAccess: approvalUsersMap[user] ?? false,
+                            }
+                            return acc
+                        },
+                        {} as Record<string, UserGroupApproverType>,
+                    ),
+                    requiredCount: group.requiredCount,
+                    emails: users,
+                }
+
+                return acc
+            },
+            {} as Record<string, ImageApprovalPolicyUserGroupDataType>,
+        ),
+        // Not sorting since would change them in approval info modal to name
+        validGroups,
+    }
+}
 
 const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResult): CDMaterialsApprovalInfo => {
     if (!enableApproval || !cdMaterialsResult) {
@@ -211,41 +282,7 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
         approvalUsers: cdMaterialsResult.approvalUsers,
         userApprovalConfig: sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig),
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
-        imageApprovalPolicyDetails: {
-            isPolicyConfigured: true,
-            specificUsersData: {
-                dataStore: SPECIFIC_EMAILS.reduce((acc, email, index) => {
-                    acc[email] = {
-                        email,
-                        hasAccess: index % 2 === 0,
-                    }
-                    return acc
-                }, {} as Record<string, UserGroupApproverType>),
-                requiredCount: SPECIFIC_EMAILS.length,
-                // TODO: Sort these arrays
-                emails: SPECIFIC_EMAILS,
-            },
-            userGroupData: VALID_GROUPS.reduce((acc, userGroup) => {
-            // TODO: Sort these arrays
-                const emails = [`${userGroup}-1@devtron.ai`, `${userGroup}-2@devtron.ai`, `${userGroup}-3@devtron.ai`]
-
-                acc[userGroup] = {
-                    dataStore: emails.reduce((acc, email, index) => {
-                        acc[email] = {
-                            email,
-                            hasAccess: index % 2 === 0,
-                        }
-                        return acc
-                    }, {} as Record<string, UserGroupApproverType>),
-                    requiredCount: emails.length,
-                    emails,
-                }
-                return acc
-            }, {} as Record<string, ImageApprovalPolicyUserGroupDataType>),
-            // TODO: getUserGroupList
-            // TODO: Sort these arrays
-            validGroups: VALID_GROUPS,
-        }
+        imageApprovalPolicyDetails: getImageApprovalPolicyDetailsFromMaterialResult(cdMaterialsResult),
     }
 }
 
@@ -430,8 +467,8 @@ export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType
 }
 
 export function getNamespaceListMin(clusterIdsCsv: string): Promise<EnvironmentListHelmResponse> {
-  const URL = `${ROUTES.NAMESPACE}/autocomplete?ids=${clusterIdsCsv}`
-  return get(URL)
+    const URL = `${ROUTES.NAMESPACE}/autocomplete?ids=${clusterIdsCsv}`
+    return get(URL)
 }
 export function getWebhookEventsForEventId(eventId: string | number) {
     const URL = `${ROUTES.GIT_HOST_EVENT}/${eventId}`
