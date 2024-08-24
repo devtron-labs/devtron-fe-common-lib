@@ -34,6 +34,8 @@ import {
     EnvironmentListHelmResponse,
     UserGroupApproverType,
     ImageApprovalPolicyUserGroupDataType,
+    ManualApprovalType,
+    UserApprovalConfigType,
 } from './Types'
 import { ApiResourceType } from '../Pages'
 
@@ -185,6 +187,16 @@ const VALID_GROUPS = [
     'developers',
 ]
 
+export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfigType): UserApprovalConfigType => ({
+    requiredCount: userApprovalConfig?.requiredCount ?? 0,
+    type: userApprovalConfig?.type ?? ManualApprovalType.notConfigured,
+    specificUsers: {
+        identifiers: userApprovalConfig?.specificUsers?.identifiers ?? [],
+        requiredCount: userApprovalConfig?.specificUsers?.identifiers?.length ?? 0,
+    },
+    userGroups: userApprovalConfig?.userGroups ?? [],
+})
+
 const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResult): CDMaterialsApprovalInfo => {
     if (!enableApproval || !cdMaterialsResult) {
         return {
@@ -197,8 +209,7 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
 
     return {
         approvalUsers: cdMaterialsResult.approvalUsers,
-        // TODO: use sanitizeUserApprovalConfig
-        userApprovalConfig: cdMaterialsResult.userApprovalConfig,
+        userApprovalConfig: sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig),
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
         imageApprovalPolicyDetails: {
             isPolicyConfigured: true,

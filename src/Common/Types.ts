@@ -351,6 +351,7 @@ export interface UserApprovalConfigType {
     requiredCount: number
     specificUsers: {
         identifiers: string[]
+        requiredCount: number
     }
     userGroups: (Pick<UserGroupDTO, 'identifier'> & {
         requiredCount: number
@@ -375,6 +376,7 @@ interface ApprovalUserDataType {
     userEmail: string
     userId: number
     userResponse: number
+    userGroups?: Pick<UserGroupDTO, 'identifier' | 'name'>[]
 }
 
 export interface UserApprovalMetadataType {
@@ -382,6 +384,7 @@ export interface UserApprovalMetadataType {
     approvalRuntimeState: number
     approvedUsersData: ApprovalUserDataType[]
     requestedUserData: ApprovalUserDataType
+    approvalConfig?: UserApprovalConfigType
 }
 
 export enum FilterStates {
