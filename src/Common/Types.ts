@@ -448,6 +448,15 @@ export interface ArtifactReleaseMappingType {
     version: string
 }
 
+export interface CDMaterialListModalServiceUtilProps {
+    artifacts: any[],
+    offset: number,
+    artifactId?: number,
+    artifactStatus?: string,
+    disableDefaultSelection?: boolean,
+    userApprovalConfig?: UserApprovalConfigType,
+}
+
 export interface CDMaterialType {
     index: number
     id: string

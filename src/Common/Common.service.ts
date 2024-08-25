@@ -37,6 +37,8 @@ import {
     ImageApprovalPolicyType,
     ImageApprovalUsersInfoDTO,
     UserApprovalMetadataType,
+    UserApprovalConfigType,
+    CDMaterialListModalServiceUtilProps,
 } from './Types'
 import { ApiResourceType } from '../Pages'
 import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
@@ -88,12 +90,16 @@ export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
 }
 
-const sanitizeApprovalConfigFromApprovalMetadata = (approvalMetadata: UserApprovalMetadataType):UserApprovalMetadataType  => {
+const sanitizeApprovalConfigFromApprovalMetadata = (
+    approvalMetadata: UserApprovalMetadataType,
+    userApprovalConfig: UserApprovalConfigType,
+): UserApprovalMetadataType => {
     if (!approvalMetadata) {
         return null
     }
 
     const approvedUsersData = approvalMetadata.approvedUsersData || []
+    const unsanitizedApprovalConfig = approvalMetadata.approvalConfig || userApprovalConfig
 
     return {
         ...approvalMetadata,
@@ -101,17 +107,18 @@ const sanitizeApprovalConfigFromApprovalMetadata = (approvalMetadata: UserApprov
             ...userData,
             userGroups: userData.userGroups?.filter((group) => !!group?.identifier && !!group?.name) ?? [],
         })),
-        approvalConfig: sanitizeUserApprovalConfig(approvalMetadata.approvalConfig),
+        approvalConfig: sanitizeUserApprovalConfig(unsanitizedApprovalConfig),
     }
 }
 
-const cdMaterialListModal = (
-    artifacts: any[],
-    offset: number,
-    artifactId?: number,
-    artifactStatus?: string,
-    disableDefaultSelection?: boolean,
-) => {
+const cdMaterialListModal = ({
+    artifacts,
+    offset,
+    artifactId,
+    artifactStatus,
+    disableDefaultSelection,
+    userApprovalConfig,
+}: CDMaterialListModalServiceUtilProps) => {
     if (!artifacts || !artifacts.length) return []
 
     const markFirstSelected = offset === 0
@@ -155,7 +162,10 @@ const cdMaterialListModal = (
             vulnerable: material.vulnerable,
             runningOnParentCd: material.runningOnParentCd,
             artifactStatus: artifactStatusValue,
-            userApprovalMetadata: sanitizeApprovalConfigFromApprovalMetadata(material.userApprovalMetadata),
+            userApprovalMetadata: sanitizeApprovalConfigFromApprovalMetadata(
+                material.userApprovalMetadata,
+                userApprovalConfig,
+            ),
             triggeredBy: material.triggeredBy,
             isVirtualEnvironment: material.isVirtualEnvironment,
             imageComment: material.imageComment,
@@ -356,13 +366,14 @@ export const processCDMaterialServiceResponse = (
         }
     }
 
-    const materials = cdMaterialListModal(
-        cdMaterialsResult.ci_artifacts,
-        offset ?? 0,
-        cdMaterialsResult.latest_wf_artifact_id,
-        cdMaterialsResult.latest_wf_artifact_status,
+    const materials = cdMaterialListModal({
+        artifacts: cdMaterialsResult.ci_artifacts,
+        offset: offset ?? 0,
+        artifactId: cdMaterialsResult.latest_wf_artifact_id,
+        artifactStatus: cdMaterialsResult.latest_wf_artifact_status,
         disableDefaultSelection,
-    )
+        userApprovalConfig: cdMaterialsResult.userApprovalConfig,
+    })
     const approvalInfo = processCDMaterialsApprovalInfo(
         stage === DeploymentNodeType.CD || stage === DeploymentNodeType.APPROVAL,
         cdMaterialsResult,
