@@ -36,6 +36,7 @@ import {
     ImageApprovalPolicyUserGroupDataType,
     ImageApprovalPolicyType,
     ImageApprovalUsersInfoDTO,
+    UserApprovalMetadataType,
 } from './Types'
 import { ApiResourceType } from '../Pages'
 import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
@@ -85,6 +86,23 @@ export function getUserRole(appName?: string): Promise<UserRole> {
 
 export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
+}
+
+const sanitizeApprovalConfigFromApprovalMetadata = (approvalMetadata: UserApprovalMetadataType):UserApprovalMetadataType  => {
+    if (!approvalMetadata) {
+        return null
+    }
+
+    const approvedUsersData = approvalMetadata.approvedUsersData || []
+
+    return {
+        ...approvalMetadata,
+        approvedUsersData: approvedUsersData.map((userData) => ({
+            ...userData,
+            userGroups: userData.userGroups?.filter((group) => !!group?.identifier && !!group?.name) ?? [],
+        })),
+        approvalConfig: sanitizeUserApprovalConfig(approvalMetadata.approvalConfig),
+    }
 }
 
 const cdMaterialListModal = (
@@ -137,7 +155,7 @@ const cdMaterialListModal = (
             vulnerable: material.vulnerable,
             runningOnParentCd: material.runningOnParentCd,
             artifactStatus: artifactStatusValue,
-            userApprovalMetadata: material.userApprovalMetadata,
+            userApprovalMetadata: sanitizeApprovalConfigFromApprovalMetadata(material.userApprovalMetadata),
             triggeredBy: material.triggeredBy,
             isVirtualEnvironment: material.isVirtualEnvironment,
             imageComment: material.imageComment,
@@ -221,7 +239,7 @@ const getImageApprovalPolicyDetailsFromMaterialResult = (cdMaterialsResult): Ima
     const validGroups = userApprovalConfig.userGroups.map((group) => group.identifier)
 
     const usersList = Object.keys(imageApprovalUsersInfo).filter((user) => user !== DefaultUserKey.system)
-    const userToGroupMap = usersList.reduce(
+    const groupIdentifierToUsersMap = usersList.reduce(
         (acc, user) => {
             const userGroups = imageApprovalUsersInfo[user] || []
             userGroups.forEach((group) => {
@@ -242,7 +260,7 @@ const getImageApprovalPolicyDetailsFromMaterialResult = (cdMaterialsResult): Ima
             (acc, group) => {
                 const identifier = group.identifier
                 // No need of handling api tokens here since they are not part of user groups
-                const users = Object.keys(userToGroupMap[identifier] || {}).sort(stringComparatorBySortOrder)
+                const users = Object.keys(groupIdentifierToUsersMap[identifier] || {}).sort(stringComparatorBySortOrder)
 
                 acc[identifier] = {
                     dataStore: users.reduce(
