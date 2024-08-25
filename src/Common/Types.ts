@@ -678,6 +678,9 @@ export interface CDMaterialsApprovalInfo {
     approvalUsers: string[]
     userApprovalConfig: UserApprovalConfigType
     canApproverDeploy: boolean
+    /**
+     * Only available incase of approvals do'nt use in cd materials or any other flow since approvalUsers are not present there
+     */
     imageApprovalPolicyDetails: ImageApprovalPolicyType
 }
 
