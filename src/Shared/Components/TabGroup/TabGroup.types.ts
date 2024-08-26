@@ -85,6 +85,10 @@ export type TabProps = {
      * @note error state will take precedence over warning state.
      */
     showError?: boolean
+    /**
+     * Disables the tab, preventing interaction and indicating an inactive state.
+     */
+    disabled?: boolean
 } & ConditionalTabType
 
 export interface TabGroupProps {

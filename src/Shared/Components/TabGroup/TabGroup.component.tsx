@@ -21,6 +21,7 @@ const Tab = ({
     showIndicator,
     showError,
     showWarning,
+    disabled,
 }: TabProps & Pick<TabGroupProps, 'size' | 'alignActiveBorderWithContainer' | 'hideTopPadding'>) => {
     const getClassNameBySize = () => {
         switch (size) {
@@ -62,7 +63,8 @@ const Tab = ({
             case 'link':
                 return (
                     <Link
-                        className={`${tabClassName} dc__no-decor flexbox dc__align-items-center dc__gap-6`}
+                        className={`${tabClassName} dc__no-decor flexbox dc__align-items-center dc__gap-6 ${disabled ? 'cursor-not-allowed' : ''}`}
+                        aria-disabled={disabled}
                         {...props}
                     >
                         {content}
@@ -71,7 +73,8 @@ const Tab = ({
             case 'navLink':
                 return (
                     <NavLink
-                        className={`${tabClassName} dc__no-decor tab-group__tab__nav-link flexbox dc__align-items-center dc__gap-6`}
+                        className={`${tabClassName} dc__no-decor tab-group__tab__nav-link flexbox dc__align-items-center dc__gap-6 ${disabled ? 'cursor-not-allowed' : ''}`}
+                        aria-disabled={disabled}
                         {...props}
                     >
                         {content}
@@ -81,7 +84,8 @@ const Tab = ({
                 return (
                     <button
                         type="button"
-                        className={`dc__unset-button-styles ${tabClassName} flexbox dc__align-items-center dc__gap-6`}
+                        className={`dc__unset-button-styles ${tabClassName} flexbox dc__align-items-center dc__gap-6 ${disabled ? 'cursor-not-allowed' : ''}`}
+                        disabled={disabled}
                         {...props}
                     >
                         {content}
