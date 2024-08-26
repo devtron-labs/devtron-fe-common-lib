@@ -248,7 +248,9 @@ const getImageApprovalPolicyDetailsFromMaterialResult = (cdMaterialsResult): Ima
 
     const validGroups = userApprovalConfig.userGroups.map((group) => group.identifier)
 
-    const usersList = Object.keys(imageApprovalUsersInfo).filter((user) => user !== DefaultUserKey.system)
+    // Have moved from Object.keys(imageApprovalUsersInfo) to approvalUsers since backend is not filtering out the users without approval
+    // TODO: This check should be on BE. Need to remove this once BE is updated 
+    const usersList = approvalUsers.filter((user) => user !== DefaultUserKey.system)
     const groupIdentifierToUsersMap = usersList.reduce(
         (acc, user) => {
             const userGroups = imageApprovalUsersInfo[user] || []
@@ -277,6 +279,7 @@ const getImageApprovalPolicyDetailsFromMaterialResult = (cdMaterialsResult): Ima
                         (acc, user) => {
                             acc[user] = {
                                 email: user,
+                                // As of now it will always be true, but UI has handled it in a way that can support false as well
                                 hasAccess: approvalUsersMap[user] ?? false,
                             }
                             return acc
