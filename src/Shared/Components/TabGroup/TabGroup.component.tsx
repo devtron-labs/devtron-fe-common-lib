@@ -1,7 +1,7 @@
 import { Link, NavLink } from 'react-router-dom'
 
 import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
-import { ReactComponent as ICWarning } from '@Icons/ic-warning-y6.svg'
+import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { TabGroupProps, TabProps } from './TabGroup.types'
@@ -27,27 +27,33 @@ const Tab = ({
             case ComponentSizeType.medium:
                 return {
                     tabClassName: `fs-12 ${!hideTopPadding ? 'pt-6' : ''} ${alignActiveBorderWithContainer ? 'pb-5' : 'pb-6'}`,
+                    iconClassName: 'icon-dim-14',
+                    badgeClassName: 'fs-11 lh-18 tab-group__tab__badge--medium',
                 }
             default:
                 return {
                     tabClassName: `fs-13 ${!hideTopPadding ? 'pt-8' : ''} ${alignActiveBorderWithContainer ? 'pb-7' : 'pb-8'}`,
+                    iconClassName: 'icon-dim-16',
+                    badgeClassName: 'fs-12 lh-20',
                 }
         }
     }
-    const { tabClassName } = getClassNameBySize()
+    const { tabClassName, iconClassName, badgeClassName } = getClassNameBySize()
 
     const getTabComponent = () => {
         const content = (
             <>
-                {showError && <ICErrorExclamation className="icon-dim-14" />}
-                {!showError && showWarning && <ICWarning className="icon-dim-14" />}
+                {showError && <ICErrorExclamation className={`${iconClassName}`} />}
+                {!showError && showWarning && <ICWarning className={`${iconClassName} tab-group__tab__warning-icon`} />}
                 {!showError && !showWarning && Icon && (
                     <Icon
-                        className={`icon-dim-14 ${iconType === 'fill' ? 'tab-group__tab__icon--fill' : 'tab-group__tab__icon--stroke'} ${(active && (iconType === 'fill' ? 'fcb-5' : 'scb-5')) || (iconType === 'fill' ? 'fcn-7' : 'scn-7')}`}
+                        className={`${iconClassName} ${iconType === 'fill' ? 'tab-group__tab__icon--fill' : 'tab-group__tab__icon--stroke'} ${(active && (iconType === 'fill' ? 'fcb-5' : 'scb-5')) || (iconType === 'fill' ? 'fcn-7' : 'scn-7')}`}
                     />
                 )}
                 {label}
-                {badge !== null && <div className="tab-group__tab__badge bcn-1 flex fs-12 lh-18 cn-7">{badge}</div>}
+                {badge !== null && (
+                    <div className={`tab-group__tab__badge ${badgeClassName} bcn-1 flex cn-7`}>{badge}</div>
+                )}
                 {showIndicator && <span className="tab-group__tab__indicator bcr-5 mt-4 dc__align-self-start" />}
             </>
         )
