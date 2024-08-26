@@ -448,6 +448,15 @@ export interface ArtifactReleaseMappingType {
     version: string
 }
 
+export interface CDMaterialListModalServiceUtilProps {
+    artifacts: any[],
+    offset: number,
+    artifactId?: number,
+    artifactStatus?: string,
+    disableDefaultSelection?: boolean,
+    userApprovalConfig?: UserApprovalConfigType,
+}
+
 export interface CDMaterialType {
     index: number
     id: string
@@ -669,6 +678,9 @@ export interface CDMaterialsApprovalInfo {
     approvalUsers: string[]
     userApprovalConfig: UserApprovalConfigType
     canApproverDeploy: boolean
+    /**
+     * Only available incase of approvals do'nt use in cd materials or any other flow since approvalUsers are not present there
+     */
     imageApprovalPolicyDetails: ImageApprovalPolicyType
 }
 
