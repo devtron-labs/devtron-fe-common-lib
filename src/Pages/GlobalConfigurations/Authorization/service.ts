@@ -1,19 +1,24 @@
-import { get } from '@Common/index'
+import { get, getUrlWithSearchParams } from '@Common/index'
 import { SelectPickerCustomOptionType } from '@Shared/Components'
 import { API_TOKEN_PREFIX } from '@Shared/constants'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
-import { DefaultUserKey } from '@Shared/types'
+import { DefaultUserKey, BaseFilterQueryParams } from '@Shared/types'
 import { GroupBase } from 'react-select'
 
 // FIXME: Common out the typing and url from dashboard
 export const getUserAndApiTokenOptions = async (): Promise<GroupBase<SelectPickerCustomOptionType<string>>[]> => {
-    const [{ result: userResponse }, { result: apiTokenResponse }] = await Promise.all([
-        get('user/v2'),
-        get('api-token'),
-    ])
+    const userUrl = getUrlWithSearchParams('user/v2', {
+        showAll: true,
+    } as BaseFilterQueryParams<never>)
 
-    return [
-        {
+    const [userPromise, apiTokenPromise] = await Promise.allSettled([get(userUrl), get('api-token')])
+
+    const options: GroupBase<SelectPickerCustomOptionType<string>>[] = []
+
+    if (userPromise.status === 'fulfilled') {
+        const { result: userResponse } = userPromise.value
+
+        options.push({
             label: 'Users',
             options: (userResponse?.users ?? [])
                 .sort((a, b) => stringComparatorBySortOrder(a.email_id, b.email_id))
@@ -22,8 +27,13 @@ export const getUserAndApiTokenOptions = async (): Promise<GroupBase<SelectPicke
                     label: emailId,
                     value: emailId,
                 })),
-        },
-        {
+        })
+    }
+
+    if (apiTokenPromise.status === 'fulfilled') {
+        const { result: apiTokenResponse } = apiTokenPromise.value
+
+        options.push({
             label: 'API Tokens',
             options: (apiTokenResponse ?? [])
                 .sort((a, b) => stringComparatorBySortOrder(a.userIdentifier, b.userIdentifier))
@@ -32,6 +42,8 @@ export const getUserAndApiTokenOptions = async (): Promise<GroupBase<SelectPicke
                     label: userIdentifier.startsWith(API_TOKEN_PREFIX) ? userIdentifier.split(':')[1] : userIdentifier,
                     value: userIdentifier,
                 })),
-        },
-    ]
+        })
+    }
+
+    return options
 }
