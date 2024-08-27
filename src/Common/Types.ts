@@ -18,7 +18,7 @@ import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
-import { RegistryType } from '../Shared'
+import { RegistryType, Severity } from '../Shared'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -155,7 +155,8 @@ export interface GenericEmptyStateType {
 }
 
 export interface ErrorPageType
-    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>, Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
+    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>,
+        Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
     code: number
     heightToDeduct?: number
     redirectURL?: string
@@ -388,9 +389,9 @@ export interface DeploymentWindowArtifactMetadata {
 }
 
 export interface ArtifactReleaseMappingType {
-    id : number, 
-    identifier: string,
-    releaseVersion: string,
+    id: number
+    identifier: string
+    releaseVersion: string
     name: string
     kind: string
     version: string
@@ -569,7 +570,7 @@ export enum DeploymentAppTypes {
 
 export interface VulnerabilityType {
     name: string
-    severity: 'CRITICAL' | 'MODERATE' | 'LOW'
+    severity: Severity
     package: string
     version: string
     fixedVersion: string

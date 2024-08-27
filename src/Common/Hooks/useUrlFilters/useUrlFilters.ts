@@ -16,7 +16,7 @@
 
 import { useMemo } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '../../Constants'
+import { DEFAULT_BASE_PAGE_SIZE, EXCLUDED_FALSY_VALUES, SortingOrder } from '../../Constants'
 import { DEFAULT_PAGE_NUMBER, URL_FILTER_KEYS } from './constants'
 import { UseUrlFiltersProps, UseUrlFiltersReturnType } from './types'
 
@@ -130,7 +130,7 @@ const useUrlFilters = <T = string, K = unknown>({
 
     const updateSearchParams = (paramsToSerialize: Partial<K>) => {
         Object.keys(paramsToSerialize).forEach((key) => {
-            if (paramsToSerialize[key]) {
+            if (!EXCLUDED_FALSY_VALUES.includes(paramsToSerialize[key])) {
                 if (Array.isArray(paramsToSerialize[key])) {
                     searchParams.delete(key)
                     paramsToSerialize[key].forEach((val) => {
@@ -139,6 +139,8 @@ const useUrlFilters = <T = string, K = unknown>({
                 } else {
                     searchParams.set(key, paramsToSerialize[key])
                 }
+            } else {
+                searchParams.delete(key)
             }
         })
         // Not replacing the params as it is being done by _resetPageNumber

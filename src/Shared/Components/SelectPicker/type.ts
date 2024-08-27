@@ -55,7 +55,6 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     | 'onChange'
     | 'isSearchable'
     | 'isClearable'
-    | 'isLoading'
     | 'hideSelectedOptions'
     | 'controlShouldRenderValue'
     | 'closeMenuOnSelect'
@@ -72,6 +71,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     | 'onMenuOpen'
     | 'onMenuClose'
     | 'autoFocus'
+    | 'onBlur'
 > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> & {
         /**

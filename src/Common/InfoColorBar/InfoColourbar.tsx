@@ -32,7 +32,7 @@ const InfoColourBar = ({
     linkClass,
     internalLink,
     styles,
-    hideIcon = false
+    hideIcon = false,
 }: InfoColourBarType) => {
     const renderLink = () => {
         if (!linkText) {
@@ -86,9 +86,11 @@ const InfoColourBar = ({
                 style={styles}
             >
                 <div className={`flex top ${typeof renderActionButton === 'function' ? 'mr-5' : ''}`}>
-                    {!hideIcon && <div className={`icon-dim-${iconSize ?? '20'} mr-10`}>
-                        <Icon className={`icon-dim-${iconSize ?? '20'} ${iconClass || ''} mr-8`} />
-                    </div>}
+                    {!hideIcon && (
+                        <div className={`icon-dim-${iconSize ?? '20'} mr-10`}>
+                            <Icon className={`icon-dim-${iconSize ?? '20'} ${iconClass || ''} mr-8`} />
+                        </div>
+                    )}
                     <div className={`info-bar-message-wrapper ${linkClass || ''}`}>
                         <span className={linkText && redirectLink ? 'mr-5' : ''}>{message}</span>
                         {renderLink()}

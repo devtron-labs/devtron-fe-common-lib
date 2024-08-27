@@ -336,7 +336,7 @@ export const getGroupCheckboxValue = <OptionValue>(
  */
 export const getSelectPickerOptionByValue = <OptionValue>(
     optionsList: OptionsOrGroups<SelectPickerOptionType<OptionValue>, GroupBase<SelectPickerOptionType<OptionValue>>>,
-    value: string | number,
+    value: OptionValue,
     defaultOption: SelectPickerOptionType<OptionValue> = { label: '', value: '' as unknown as OptionValue },
 ): SelectPickerOptionType<OptionValue> => {
     if (!Array.isArray(optionsList)) {

@@ -248,8 +248,12 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         return (
             isCreatable &&
             !!trimmedInput &&
-            !getSelectPickerOptionByValue(value as SelectPickerOptionType<OptionValue>[], trimmedInput, null) &&
-            !getSelectPickerOptionByValue(options, trimmedInput, null)
+            !getSelectPickerOptionByValue<OptionValue>(
+                value as SelectPickerOptionType<OptionValue>[],
+                trimmedInput as OptionValue,
+                null,
+            ) &&
+            !getSelectPickerOptionByValue<OptionValue>(options, trimmedInput as OptionValue, null)
         )
     }
 
@@ -306,6 +310,15 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             {children}
         </Tippy>
     )
+
+    const handleCreateOption: SelectPickerProps<OptionValue, true>['multiSelectProps']['onCreateOption'] = (
+        inputValue,
+    ) => {
+        const trimmedInputValue = inputValue?.trim()
+        if (trimmedInputValue) {
+            onCreateOption(trimmedInputValue)
+        }
+    }
 
     const commonProps = useMemo(
         () => ({
@@ -384,7 +397,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 allowCreateWhileLoading={false}
                                 isValidNewOption={isValidNewOption}
                                 createOptionPosition="first"
-                                onCreateOption={onCreateOption}
+                                onCreateOption={handleCreateOption}
                             />
                         ) : (
                             <ReactSelect

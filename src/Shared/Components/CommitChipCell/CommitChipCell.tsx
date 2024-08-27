@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
+import { noop } from '@Common/Helper'
 import { ReactComponent as CommitIcon } from '../../../Assets/Icon/ic-code-commit.svg'
 import { CommitChipCellProps } from './types'
 
-const CommitChipCell = ({ handleClick, commits }: CommitChipCellProps) =>
+const CommitChipCell = ({ handleClick = noop, commits }: CommitChipCellProps) =>
     commits?.length > 0 ? (
         <div className="flexbox">
             <button
                 type="button"
-                className="dc__transparent p-0 flexbox dc__gap-4 fs-14 lh-20 cb-5 dc__ellipsis-right mono cursor"
+                className="dc__transparent p-0 flexbox dc__gap-4 fs-14 lh-20 cb-5 dc__truncate mono cursor"
                 onClick={handleClick}
             >
                 <span className="flex dc__gap-4 br-4 pl-6 pr-6 bcb-1">

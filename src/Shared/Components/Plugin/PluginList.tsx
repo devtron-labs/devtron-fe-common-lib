@@ -15,7 +15,7 @@
  */
 
 import { useState } from 'react'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import PluginCard from './PluginCard'
 import { DetectBottom } from '../DetectBottom'
 import PluginCardSkeletonList from './PluginCardSkeletonList'

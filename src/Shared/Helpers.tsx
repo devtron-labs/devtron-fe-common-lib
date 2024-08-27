@@ -17,14 +17,15 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
+import { Pair } from 'yaml'
 import moment from 'moment'
 import {
     handleUTCTime,
     mapByKey,
     MaterialInfo,
-    PATTERNS,
     shallowEqual,
     SortingOrder,
+    PATTERNS,
     ZERO_TIME_STRING,
 } from '../Common'
 import {
@@ -135,6 +136,19 @@ export const numberComparatorBySortOrder = (
     sortOrder: SortingOrder = SortingOrder.ASC,
 ): number => (sortOrder === SortingOrder.ASC ? a - b : b - a)
 
+export function versionComparatorBySortOrder(
+    a: Record<string, any>,
+    b: Record<string, any>,
+    compareKey: string,
+    orderBy: SortingOrder,
+) {
+    if (orderBy === SortingOrder.DESC) {
+        return b[compareKey].localeCompare(a[compareKey], undefined, { numeric: true })
+    }
+
+    return a[compareKey].localeCompare(b[compareKey], undefined, { numeric: true })
+}
+
 export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
     switch (eventName) {
         case WebhookEventNameType.PULL_REQUEST:
@@ -144,6 +158,22 @@ export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
         default:
             return <ICWebhook className="icon-dim-12" />
     }
+}
+
+export const yamlComparatorBySortOrder = (a: Pair, b: Pair, sortOrder: SortingOrder = SortingOrder.ASC) => {
+    let orderMultiplier = 0
+    if (sortOrder === SortingOrder.DESC) {
+        orderMultiplier = -1
+    } else if (sortOrder === SortingOrder.ASC) {
+        orderMultiplier = 1
+    }
+    if (a.key < b.key) {
+        return -1 * orderMultiplier
+    }
+    if (a.key > b.key) {
+        return 1 * orderMultiplier
+    }
+    return 0
 }
 
 export const useIntersection = (
@@ -747,3 +777,11 @@ export const getFileNameFromHeaders = (headers: Headers) =>
         ?.find((n) => n.includes('filename='))
         ?.replace('filename=', '')
         .trim()
+
+/**
+ * @description - Function to open a new tab with the given url
+ * @param url - url to be opened in new tab
+ */
+export const getHandleOpenURL = (url: string) => () => {
+    window.open(url, '_blank', 'noreferrer')
+}
