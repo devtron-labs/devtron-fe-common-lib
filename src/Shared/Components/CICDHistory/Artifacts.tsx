@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import { useDownload } from '@Shared/Hooks'
 import {
     GenericEmptyState,

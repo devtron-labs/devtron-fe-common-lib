@@ -63,8 +63,8 @@ export const SingleSelectOption = (props) => {
 }
 
 /**
- *  Multi value container 
-*/
+ *  Multi value container
+ */
 
 export const MultiValueContainer = (props) => {
     const { children, data, innerProps, selectProps } = props
@@ -77,7 +77,7 @@ export const MultiValueContainer = (props) => {
     )
 }
 /**
- * 
+ *
  * Multi value container with count
  */
 export const MultiValueContainerWithCount = (props: any) => {

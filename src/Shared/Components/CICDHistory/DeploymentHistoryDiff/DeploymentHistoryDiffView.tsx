@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
+import { useParams } from 'react-router-dom'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
-import { useParams } from 'react-router'
 import Tippy from '@tippyjs/react'
 import { yamlComparatorBySortOrder } from '@Shared/Helpers'
 import { MODES, Toggle, YAMLStringify } from '../../../../Common'
