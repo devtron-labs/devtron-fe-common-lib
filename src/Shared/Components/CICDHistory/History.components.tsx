@@ -161,7 +161,7 @@ export const GitChanges = ({
                 ) : null
             })}
             {artifact && (
-                <div className="history-component__artifact flex left column dc__gap-12">
+                <div className="history-component__artifact flex left column">
                     <CIListItem
                         type="deployed-artifact"
                         userApprovalMetadata={userApprovalMetadata}

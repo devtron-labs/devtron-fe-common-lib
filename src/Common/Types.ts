@@ -326,12 +326,36 @@ export enum ManualApprovalType {
     notConfigured = 'NOT_CONFIGURED',
 }
 
+export interface UserGroupApproverType {
+    email: string
+    hasAccess: boolean
+}
+
+export interface ImageApprovalPolicyUserGroupDataType {
+    // Mapping email to data
+    dataStore: Record<string, UserGroupApproverType>
+    requiredCount: number
+    emails: string[]
+}
+
+export interface ImageApprovalPolicyType {
+    isPolicyConfigured: boolean
+    specificUsersData: ImageApprovalPolicyUserGroupDataType
+    userGroupData: Record<string, ImageApprovalPolicyUserGroupDataType>
+    // Assuming name of groups are unique
+    validGroups: string[]
+}
+
+export type ImageApprovalUsersInfoDTO = Record<string, Pick<UserGroupDTO, 'identifier' | 'name'>[]>
+
 // TODO: Need to verify this change for all impacting areas
 export interface UserApprovalConfigType {
     type: ManualApprovalType
     requiredCount: number
     specificUsers: {
         identifiers: string[]
+        // FIXME: Remove this ? check later when time permits
+        requiredCount?: number
     }
     userGroups: (Pick<UserGroupDTO, 'identifier'> & {
         requiredCount: number
@@ -356,6 +380,7 @@ interface ApprovalUserDataType {
     userEmail: string
     userId: number
     userResponse: number
+    userGroups?: Pick<UserGroupDTO, 'identifier' | 'name'>[]
 }
 
 export interface UserApprovalMetadataType {
@@ -363,6 +388,7 @@ export interface UserApprovalMetadataType {
     approvalRuntimeState: number
     approvedUsersData: ApprovalUserDataType[]
     requestedUserData: ApprovalUserDataType
+    approvalConfig?: UserApprovalConfigType
 }
 
 export enum FilterStates {
@@ -420,6 +446,15 @@ export interface ArtifactReleaseMappingType {
     name: string
     kind: string
     version: string
+}
+
+export interface CDMaterialListModalServiceUtilProps {
+    artifacts: any[],
+    offset: number,
+    artifactId?: number,
+    artifactStatus?: string,
+    disableDefaultSelection?: boolean,
+    userApprovalConfig?: UserApprovalConfigType,
 }
 
 export interface CDMaterialType {
@@ -643,6 +678,10 @@ export interface CDMaterialsApprovalInfo {
     approvalUsers: string[]
     userApprovalConfig: UserApprovalConfigType
     canApproverDeploy: boolean
+    /**
+     * Only available incase of approvals do'nt use in cd materials or any other flow since approvalUsers are not present there
+     */
+    imageApprovalPolicyDetails: ImageApprovalPolicyType
 }
 
 export interface CDMaterialsMetaInfo {

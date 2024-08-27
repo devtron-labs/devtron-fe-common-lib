@@ -20,11 +20,13 @@ import Tippy from '@tippyjs/react'
 import moment from 'moment'
 import {
     handleUTCTime,
+    ManualApprovalType,
     mapByKey,
     MaterialInfo,
     PATTERNS,
     shallowEqual,
     SortingOrder,
+    UserApprovalConfigType,
     ZERO_TIME_STRING,
 } from '../Common'
 import {
@@ -760,3 +762,23 @@ export const getFileNameFromHeaders = (headers: Headers) =>
         ?.find((n) => n.includes('filename='))
         ?.replace('filename=', '')
         .trim()
+
+export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfigType): UserApprovalConfigType => ({
+    requiredCount: userApprovalConfig?.requiredCount ?? 0,
+    type: userApprovalConfig?.type ?? ManualApprovalType.notConfigured,
+    specificUsers: {
+        identifiers: userApprovalConfig?.specificUsers?.identifiers ?? [],
+        requiredCount: userApprovalConfig?.specificUsers?.identifiers?.length ?? 0,
+    },
+    userGroups: userApprovalConfig?.userGroups ?? [],
+})
+
+/**
+ * Manual approval is considered configured only if the type is not notConfigured
+ */
+export const getIsManualApprovalConfigured = (userApprovalConfig?: Pick<UserApprovalConfigType, 'type'>) =>
+    // Added null check for backward compatibility
+    !!userApprovalConfig?.type && userApprovalConfig.type !== ManualApprovalType.notConfigured
+
+export const getIsManualApprovalSpecific = (userApprovalConfig?: Pick<UserApprovalConfigType, 'type'>) =>
+    getIsManualApprovalConfigured(userApprovalConfig) && userApprovalConfig.type === ManualApprovalType.specific
