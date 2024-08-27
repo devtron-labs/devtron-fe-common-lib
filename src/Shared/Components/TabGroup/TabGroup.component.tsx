@@ -41,16 +41,23 @@ const Tab = ({
     }
     const { tabClassName, iconClassName, badgeClassName } = getClassNameBySize()
 
+    const getIconColorClass = () => {
+        if (iconType === 'fill') {
+            return `tab-group__tab__icon--fill ${active ? 'fcb-5' : 'fcn-7'}`
+        }
+        if (iconType === 'stroke') {
+            return `tab-group__tab__icon--stroke ${active ? 'scb-5' : 'scn-7'}`
+        }
+
+        return ''
+    }
+
     const getTabComponent = () => {
         const content = (
             <>
                 {showError && <ICErrorExclamation className={`${iconClassName}`} />}
-                {!showError && showWarning && <ICWarning className={`${iconClassName} tab-group__tab__warning-icon`} />}
-                {!showError && !showWarning && Icon && (
-                    <Icon
-                        className={`${iconClassName} ${iconType === 'fill' ? 'tab-group__tab__icon--fill' : 'tab-group__tab__icon--stroke'} ${(active && (iconType === 'fill' ? 'fcb-5' : 'scb-5')) || (iconType === 'fill' ? 'fcn-7' : 'scn-7')}`}
-                    />
-                )}
+                {!showError && showWarning && <ICWarning className={`${iconClassName} warning-icon-y7`} />}
+                {!showError && !showWarning && Icon && <Icon className={`${iconClassName} ${getIconColorClass()}`} />}
                 {label}
                 {badge !== null && (
                     <div className={`tab-group__tab__badge ${badgeClassName} bcn-1 flex cn-7`}>{badge}</div>

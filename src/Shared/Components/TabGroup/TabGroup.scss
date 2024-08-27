@@ -2,6 +2,7 @@
     list-style: none;
 
     &__tab {
+        $parent-selector: &;
         position: relative;
 
         &::after {
@@ -23,7 +24,7 @@
         &:hover {
             color: var(--B500);
 
-            .tab-group__tab__icon {
+            #{$parent-selector}__icon {
                 &--stroke {
                     stroke: var(--B500);
 
@@ -61,18 +62,12 @@
             border-radius: 100%;
         }
 
-        &__warning-icon {
-            > g path:nth-of-type(2) {
-                fill: var(--Y700);
-            }
-        }
-
         &__nav-link {
             &.active {
                 color: var(--B500);
                 font-weight: 600;
 
-                > .tab-group__tab__icon--fill {
+                > #{$parent-selector}__icon--fill {
                     fill: var(--B500);
 
                     path {
@@ -80,7 +75,7 @@
                     }
                 }
 
-                > .tab-group__tab__icon--stroke {
+                > #{$parent-selector}__icon--stroke {
                     stroke: var(--B500);
 
                     path {

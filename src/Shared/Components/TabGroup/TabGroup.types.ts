@@ -104,7 +104,7 @@ export interface TabGroupProps {
     /**
      * Optional component to be rendered on the right side of the tab list.
      */
-    rightComponent?: React.ReactNode
+    rightComponent?: React.ReactElement
     /**
      * Set to `true` to align the active tab's border with the bottom border of the parent container.
      * @default false
