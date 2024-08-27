@@ -251,7 +251,9 @@ export const validateUniqueKeys = (keys: string[]) => {
 
 export const validateJSON = (json: string): ValidationResponseType => {
     try {
-        JSON.parse(json)
+        if (json) {
+            JSON.parse(json)
+        }
         return {
             isValid: true,
         }

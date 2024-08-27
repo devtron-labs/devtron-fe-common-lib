@@ -1,270 +1,73 @@
 {
     "type": "object",
     "properties": {
-        "args": {
-            "type": "object",
-            "title": "Arguments",
-            "properties": {
-                "value": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "title": "Value",
-                    "hidden": {
-                        "condition": false,
-                        "match": "enabled"
+        "ContainerPort": {
+            "type": "array",
+            "description": "Defines ports on which application services will be exposed to other services",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "port": {
+                        "type": "integer",
+                        "description": "Port at which your application will run"
                     }
-                },
-                "enabled": {
-                    "type": "boolean",
-                    "title": "Enabled"
                 }
-            }
-        },
-        "command": {
-            "type": "object",
-            "title": "Command",
-            "properties": {
-                "value": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "title": "Value",
-                    "hidden": {
-                        "condition": false,
-                        "match": "enabled"
-                    }
-                },
-                "enabled": {
-                    "type": "boolean",
-                    "title": "Enabled"
-                }
-            }
-        },
-        "ingress": {
-            "type": "object",
-            "title": "HTTP Requests Routes",
-            "properties": {
-                "className": {
-                    "type": "string",
-                    "title": "Class",
-                    "hidden": {
-                        "condition": false,
-                        "match": "enabled"
-                    }
-                },
-                "hosts": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "host": {
-                                "type": "string"
-                            },
-                            "paths": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    },
-                    "hidden": {
-                        "condition": false,
-                        "match": "enabled"
-                    }
-                },
-                "enabled": {
-                    "type": "boolean",
-                    "title": "Enable HTTP Requests Routes"
-                }
-            }
+            },
+            "title": "Container Port"
         },
         "resources": {
             "type": "object",
             "title": "Resources (CPU & RAM)",
+            "description": "Minimum and maximum RAM and CPU available to the application",
             "properties": {
                 "limits": {
                     "type": "object",
+                    "description": "Maximum RAM and CPU available to the application",
                     "required": ["cpu", "memory"],
                     "properties": {
                         "cpu": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Maximum allowed CPU limit"
                         },
                         "memory": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Maximum allowed memory limit"
                         }
                     }
                 },
                 "requests": {
                     "type": "object",
+                    "description": "Minimum RAM and CPU available to the application",
                     "properties": {
                         "cpu": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Minimum CPU value"
                         },
                         "memory": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Minimum memory value"
                         }
                     }
                 }
             }
         },
-        "autoscaling": {
-            "type": "object",
-            "title": "Autoscaling",
-            "properties": {
-                "MaxReplicas": {
-                    "type": ["integer", "string"],
-                    "title": "Maximum Replicas",
-                    "pattern": "^[a-zA-Z0-9-+\/*%_\\s]+$",
-                    "hidden": {
-                        "condition": false,
-                        "match": "enabled"
-                    }
-                },
-                "MinReplicas": {
-                    "type": ["integer", "string"],
-                    "title": "Minimum Replicas",
-                    "pattern": "^[a-zA-Z0-9-+\/*%_\\s]+$",
-                    "hidden": {
-                        "condition": false,
-                        "match": "enabled"
-                    }
-                },
-                "TargetCPUUtilizationPercentage": {
-                    "type": ["integer", "string"],
-                    "title": "Target CPU Utilization Percentage",
-                    "pattern": "^[a-zA-Z0-9-+\/*%_\\s]+$",
-                    "hidden": {
-                        "condition": false,
-                        "match": "enabled"
-                    }
-                },
-                "TargetMemoryUtilizationPercentage": {
-                    "type": ["integer", "string"],
-                    "title": "TargetMemoryUtilizationPercentage",
-                    "pattern": "^[a-zA-Z0-9-+\/*%_\\s]+$",
-                    "hidden": {
-                        "condition": false,
-                        "match": "enabled"
-                    }
-                },
-                "enabled": {
-                    "type": "boolean",
-                    "title": "Enabled"
-                }
-            }
-        },
         "EnvVariables": {
             "type": "array",
+            "description": "Contains environment variables needed by the containers",
             "items": {
                 "type": "object",
                 "properties": {
-                    "key": {
-                        "type": "string"
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the environment variables"
                     },
                     "value": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Value of the environment variables"
                     }
                 }
             },
             "title": "Environment Variables"
-        },
-        "ContainerPort": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "port": {
-                        "type": ["integer", "string"]
-                    },
-                    "servicePort": {
-                        "type": ["integer", "string"]
-                    }
-                },
-                "required": ["port", "servicePort"]
-            },
-            "title": "Container Port"
-        },
-        "service": {
-            "type": "object",
-            "title": "Service",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "title": "Type"
-                },
-                "annotations": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    },
-                    "title": "Annotations"
-                }
-            }
-        },
-        "ReadinessProbe": {
-            "type": "object",
-            "title": "Readiness Probe",
-            "properties": {
-                "Path": {
-                    "type": "string"
-                },
-                "port": {
-                    "type": ["integer", "string"]
-                }
-            }
-        },
-        "LivenessProbe": {
-            "type": "object",
-            "title": "Liveness Probe",
-            "properties": {
-                "Path": {
-                    "type": "string"
-                },
-                "port": {
-                    "type": ["integer", "string"]
-                }
-            }
-        },
-        "tolerations": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "key": {
-                        "type": "string"
-                    },
-                    "operator": {
-                        "type": "string",
-                        "pattern": "Equal|Exists"
-                    },
-                    "value": {
-                        "type": "string"
-                    },
-                    "effect": {
-                        "type": "string",
-                        "pattern": "NoSchedule|PreferNoSchedule|NoExecute"
-                    }
-                }
-            }
-        },
-        "serviceAccount": {
-            "type": "object",
-            "properties": {
-                "create": {
-                    "type": "boolean"
-                },
-                "name": {
-                    "type": "string",
-                    "hidden": {
-                        "condition": false,
-                        "match": "create"
-                    }
-                }
-            }
         }
     }
 }
