@@ -148,8 +148,8 @@ export const DeploymentConfigDiffMain = ({
                             />
                         </>
                     ) : (
-                        <>
-                            <div className="bcn-1 deployment-diff__upper dc__top-radius-4 mt-16 ml-16 mr-16 dc__border-right dc__border-left dc__border-top">
+                        <div className="p-16">
+                            <div className="bcn-1 deployment-diff__upper dc__top-radius-4 dc__border-right dc__border-left dc__border-top">
                                 <div className="px-12 py-6 dc__border-right">{primaryHeading}</div>
                                 <div className="px-12 py-6">{secondaryHeading}</div>
                             </div>
@@ -157,11 +157,11 @@ export const DeploymentConfigDiffMain = ({
                                 baseTemplateConfiguration={secondaryList}
                                 currentConfiguration={primaryList}
                                 previousConfigAvailable
-                                rootClassName="m-16 mt-0-imp dc__no-top-radius dc__no-top-border"
-                                comparisonBodyClassName="m-16"
+                                rootClassName="m-0 dc__no-top-radius dc__no-top-border"
+                                comparisonBodyClassName="deployment-config-diff__main-content__comparison"
                                 sortOrder={sortingConfig?.sortOrder}
                             />
-                        </>
+                        </div>
                     )}
                 </DeploymentConfigDiffAccordion>
             )
