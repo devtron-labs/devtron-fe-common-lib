@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDownload } from '@Shared/Hooks'
 import {
@@ -133,7 +132,7 @@ const Artifacts = ({
     appReleaseTagNames,
     tagsEditable,
     hideImageTaggingHardDelete,
-    jobCIClass,
+    rootClassName,
     renderCIListHeader,
 }: ArtifactType) => {
     const { isSuperAdmin } = useSuperAdmin()
@@ -143,14 +142,6 @@ const Artifacts = ({
         triggerId: string
         buildId: string
     }>()
-    const [copied, setCopied] = useState(false)
-
-    useEffect(() => {
-        if (!copied) {
-            return
-        }
-        setTimeout(() => setCopied(false), 2000)
-    }, [copied])
 
     async function handleArtifact() {
         await handleDownload({
@@ -215,7 +206,7 @@ const Artifacts = ({
         )
     }
     return (
-        <div className={`flex left column dc__gap-12 ${jobCIClass ?? ''}`}>
+        <div className={`flex left column dc__gap-12 dc__content-start ${rootClassName ?? ''}`}>
             {!isJobView && type !== HistoryComponentType.CD && (
                 <CIListItem
                     type="artifact"

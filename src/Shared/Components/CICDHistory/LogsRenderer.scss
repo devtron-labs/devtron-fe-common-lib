@@ -18,6 +18,16 @@
                     border: none !important;
                     background: transparent;
                 }
+
+                &__icon {
+                    path:nth-child(1) {
+                        fill: none !important;
+                    }
+                
+                    path:nth-child(2) {
+                        fill: var(--N400);
+                    }
+                }
             }
 
             .search-bar:focus-within {

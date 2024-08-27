@@ -61,7 +61,7 @@ const DeploymentHistoryConfigList = ({
                     setFullScreenView(false)
                 }}
                 data-testid={`configuration-link-option-${index}`}
-                className="bcb-1 dc__no-decor bcn-0 cn-9 pl-16 pr-16 pt-12 pb-12 br-4 en-2 bw-1 mb-12 flex dc__content-space cursor lh-20"
+                className="bcb-1 dc__no-decor bcn-0 cn-9 pl-16 pr-16 pt-12 pb-12 br-4 en-2 bw-1 flex dc__content-space cursor lh-20"
             >
                 {childComponentName || currentComponent.DISPLAY_NAME}
                 <ICChevron className="icon-dim-20 fcn-6 dc__flip-270" />
@@ -83,10 +83,10 @@ const DeploymentHistoryConfigList = ({
                 deploymentHistoryList &&
                 deploymentHistoryList.map((historicalComponent, index) => (
                     // eslint-disable-next-line react/no-array-index-key
-                    <div className="m-20 fs-13 cn-9" key={`history-list__${index}`}>
+                    <div className="px-20 pt-20 fs-13 cn-9" key={`history-list__${index}`}>
                         {historicalComponent.childList?.length > 0 ? (
                             <>
-                                <div className="fs-14 fw-6 mb-12 ">
+                                <div className="fs-14 fw-6 mb-12">
                                     {DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP[historicalComponent.name].DISPLAY_NAME}
                                 </div>
                                 {historicalComponent.childList.map((historicalComponentName, childIndex) =>

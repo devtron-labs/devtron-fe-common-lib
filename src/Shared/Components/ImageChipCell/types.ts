@@ -13,13 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { SyntheticEvent } from 'react'
+import Tippy from '@tippyjs/react'
+import { ComponentProps, SyntheticEvent } from 'react'
 import { RegistryType } from '../../types'
 
-export interface ImageChipCellProps {
-    handleClick: (e: SyntheticEvent) => void
+type ImageChipCellButtonActionProps =
+    | {
+          handleClick: (e: SyntheticEvent) => void
+          isExpanded: boolean
+      }
+    | {
+          handleClick?: never
+          isExpanded?: never
+      }
+
+export type ImageChipCellProps = {
     imagePath: string
-    isExpanded: boolean
-    registryType: RegistryType
-}
+    registryType?: RegistryType
+    placement?: ComponentProps<typeof Tippy>['placement']
+} & ImageChipCellButtonActionProps

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { URLProtocolType } from './types'
+
 export interface ValidationResponseType {
     isValid: boolean
     message?: string
@@ -197,6 +199,35 @@ export const validateURL = (url: string, allowBase64Url: boolean = true): Valida
     }
 }
 
+export const validateProtocols = (
+    url: string,
+    protocols: URLProtocolType[],
+    isRequired?: boolean,
+): ValidationResponseType => {
+    if (isRequired && !url) {
+        return {
+            isValid: false,
+            message: 'This field is required',
+        }
+    }
+
+    try {
+        const { protocol } = new URL(url)
+        if (protocol && protocols.includes(protocol as URLProtocolType)) {
+            return {
+                isValid: true,
+            }
+        }
+    } catch (error) {
+        // Do nothing
+    }
+
+    return {
+        isValid: false,
+        message: `Invalid URL/protocol. Supported protocols are: ${protocols.join(', ')}`,
+    }
+}
+
 export const validateIfImageExist = (url: string): Promise<ValidationResponseType> =>
     new Promise<ValidationResponseType>((resolve) => {
         const img = new Image()
@@ -246,5 +277,21 @@ export const validateUniqueKeys = (keys: string[]) => {
     return {
         isValid: false,
         message: `Duplicate variable name: ${duplicateKeys.join(', ')}`,
+    }
+}
+
+export const validateJSON = (json: string): ValidationResponseType => {
+    try {
+        if (json) {
+            JSON.parse(json)
+        }
+        return {
+            isValid: true,
+        }
+    } catch (err) {
+        return {
+            isValid: false,
+            message: err.message,
+        }
     }
 }

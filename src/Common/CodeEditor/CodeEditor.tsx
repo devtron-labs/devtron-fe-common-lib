@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useReducer, useRef } from 'react'
+import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import MonacoEditor, { MonacoDiffEditor } from 'react-monaco-editor'
 import YAML from 'yaml'
 import ReactGA from 'react-ga4'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { configureMonacoYaml } from 'monaco-yaml'
 
-import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-error-exclamation.svg'
 import { ReactComponent as WarningIcon } from '../../Assets/Icon/ic-warning.svg'
 import './codeEditor.scss'
 import 'monaco-editor'
 
-import YamlWorker from '../../yaml.worker.js?worker'
 import { YAMLStringify, cleanKubeManifest, useJsonYaml } from '../Helper'
 import { useWindowSize } from '../Hooks'
 import Select from '../Select/Select'
@@ -46,15 +44,6 @@ import {
 import { CodeEditorReducer, initialState } from './CodeEditor.reducer'
 import { MODES } from '../Constants'
 
-self.MonacoEnvironment = {
-    getWorker(_, label) {
-        if (label === MODES.YAML) {
-            return new YamlWorker()
-        }
-        return new editorWorker()
-    },
-}
-
 const CodeEditorContext = React.createContext(null)
 
 function useCodeEditorContext() {
@@ -66,12 +55,9 @@ function useCodeEditorContext() {
 }
 
 /**
- * NOTE: once monaco editor mounts it doesn't update it's internal onChange state.
- * Since most of the time onChange methods are declared inside the render body of a component
- * we should use the latest references of onChange.
- * Please see: https://github.com/react-monaco-editor/react-monaco-editor/issues/704
- * Thus as a hack we are using this objects reference to call the latest onChange reference
- */
+ * TODO: can be removed with this new merge into react-monaco-editor :)
+ * see: https://github.com/react-monaco-editor/react-monaco-editor/pull/955
+ * */
 const _onChange = {
     onChange: null,
 }
@@ -101,6 +87,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         cleanData = false,
         onBlur,
         onFocus,
+        adjustEditorHeightToContent = false,
     }) => {
         if (cleanData) {
             value = cleanKubeManifest(value)
@@ -114,6 +101,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         const [state, dispatch] = useReducer(memoisedReducer, initialState({ mode, theme, value, diffView, noParsing }))
         const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
         const [, originalJson, originlaYaml] = useJsonYaml(defaultValue, tabSize, state.mode, !state.noParsing)
+        const [contentHeight, setContentHeight] = useState(height)
         monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
             base: 'vs-dark',
             inherit: true,
@@ -123,6 +111,18 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             ],
             colors: {
                 'editor.background': '#0B0F22',
+            },
+        })
+
+        monaco.editor.defineTheme(CodeEditorThemesKeys.networkStatusInterface, {
+            base: 'vs-dark',
+            inherit: true,
+            rules: [
+                // @ts-ignore
+                { background: '#1A1A1A' },
+            ],
+            colors: {
+                'editor.background': '#1A1A1A',
             },
         })
 
@@ -166,9 +166,23 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 }
             }
 
+            if (adjustEditorHeightToContent) {
+                setContentHeight(editor.getContentHeight())
+                editor.onDidContentSizeChange(() => {
+                    setContentHeight(editor.getContentHeight())
+                })
+            }
+
             editorRef.current = editor
             monacoRef.current = monaco
         }
+
+        const editorHeight = useMemo(() => {
+            if (!adjustEditorHeightToContent) {
+                return height
+            }
+            return contentHeight
+        }, [height, contentHeight, adjustEditorHeightToContent])
 
         useEffect(() => {
             if (!validatorSchema) {
@@ -282,7 +296,9 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         }
 
         return (
-            <CodeEditorContext.Provider value={{ dispatch, state, handleLanguageChange, error, defaultValue, height }}>
+            <CodeEditorContext.Provider
+                value={{ dispatch, state, handleLanguageChange, error, defaultValue, height: editorHeight }}
+            >
                 {children}
                 {loading ? (
                     <CodeEditorPlaceholder customLoader={customLoader} />
@@ -300,7 +316,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                                 options={diffViewOptions}
                                 theme={state.theme.toLowerCase().split(' ').join('-')}
                                 editorDidMount={editorDidMount}
-                                height={height}
+                                height={editorHeight}
                                 width="100%"
                             />
                         ) : (
@@ -311,7 +327,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                                 options={options}
                                 onChange={handleOnChange}
                                 editorDidMount={editorDidMount}
-                                height={height}
+                                height={editorHeight}
                                 width="100%"
                             />
                         )}

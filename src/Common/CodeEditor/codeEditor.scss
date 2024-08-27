@@ -165,3 +165,9 @@
 .monaco-editor-hover {
     margin-left: 40px;
 }
+
+.monaco-scrollable-element {
+    & > .visible {
+        z-index: 9;
+    }
+}

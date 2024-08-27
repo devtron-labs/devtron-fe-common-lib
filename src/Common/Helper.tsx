@@ -561,7 +561,10 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
  * @param url URL to which the search params needs to be added
  * @param params Object for the search parameters
  */
-export const getUrlWithSearchParams = (url: string, params: Record<string | number, any> = {}) => {
+export const getUrlWithSearchParams = <T extends string | number = string | number>(
+    url: string,
+    params = {} as Partial<Record<T, any>>,
+) => {
     const searchParams = new URLSearchParams()
     Object.keys(params).forEach((key) => {
         if (!EXCLUDED_FALSY_VALUES.includes(params[key])) {
