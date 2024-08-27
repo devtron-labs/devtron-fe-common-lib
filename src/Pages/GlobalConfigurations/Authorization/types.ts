@@ -24,6 +24,11 @@ export type UserListFilterParams = BaseFilterQueryParams<UserListSortableKeys> &
     status: UserStatus[]
 }
 
+export interface UserMinType {
+    id: number
+    emailId: string
+}
+
 export interface UserRoleGroup {
     /**
      * Id of the permission group
