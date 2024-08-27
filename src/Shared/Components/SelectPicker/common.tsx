@@ -22,13 +22,26 @@ import {
     ClearIndicatorProps,
     ValueContainerProps,
     MenuListProps,
+    MultiValueRemoveProps,
+    MultiValueProps,
+    MultiValue,
 } from 'react-select'
 import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { SelectPickerOptionType, SelectPickerProps } from './type'
+import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
+import { ChangeEvent } from 'react'
+import { noop } from '@Common/Helper'
+import { CHECKBOX_VALUE } from '@Common/Types'
+import { Checkbox } from '@Common/Checkbox'
+import { ReactSelectInputAction } from '@Common/Constants'
+import { isNullOrUndefined } from '@Shared/Helpers'
+import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
+import { getGroupCheckboxValue } from './utils'
 
-export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps<SelectPickerOptionType>) => {
+export const SelectPickerDropdownIndicator = <OptionValue,>(
+    props: DropdownIndicatorProps<SelectPickerOptionType<OptionValue>>,
+) => {
     const { isDisabled } = props
 
     return (
@@ -38,21 +51,24 @@ export const SelectPickerDropdownIndicator = (props: DropdownIndicatorProps<Sele
     )
 }
 
-export const SelectPickerClearIndicator = (props: ClearIndicatorProps<SelectPickerOptionType>) => (
+export const SelectPickerClearIndicator = <OptionValue,>(
+    props: ClearIndicatorProps<SelectPickerOptionType<OptionValue>>,
+) => (
     <components.ClearIndicator {...props}>
-        <ICClose className="icon-dim-16 fcn-6 dc__no-shrink" />
+        <ICClose className="icon-dim-16 icon-use-fill-n6 dc__no-shrink" />
     </components.ClearIndicator>
 )
 
-export const SelectPickerControl = ({
+export const SelectPickerControl = <OptionValue, IsMulti extends boolean>({
     icon,
     showSelectedOptionIcon,
     ...props
-}: ControlProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'icon' | 'showSelectedOptionIcon'>) => {
+}: ControlProps<SelectPickerOptionType<OptionValue>> &
+    Pick<SelectPickerProps<OptionValue, IsMulti>, 'icon' | 'showSelectedOptionIcon'>) => {
     const { children, getValue } = props
     const { startIcon, endIcon } = getValue()?.[0] ?? {}
 
-    let iconToDisplay = icon
+    let iconToDisplay: SelectPickerOptionType<OptionValue>['startIcon'] = icon
 
     if (showSelectedOptionIcon && (startIcon || endIcon)) {
         iconToDisplay = startIcon || endIcon
@@ -68,12 +84,16 @@ export const SelectPickerControl = ({
     )
 }
 
-export const SelectPickerValueContainer = ({
+export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>({
     showSelectedOptionsCount,
+    customSelectedOptionsCount,
     ...props
-}: ValueContainerProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'showSelectedOptionsCount'>) => {
+}: ValueContainerProps<SelectPickerOptionType<OptionValue>> &
+    Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount' | 'customSelectedOptionsCount'>) => {
     const { getValue } = props
-    const selectedOptionsLength = (getValue() ?? []).length
+    const selectedOptionsLength = isNullOrUndefined(customSelectedOptionsCount)
+        ? (getValue() ?? []).length
+        : customSelectedOptionsCount
 
     return (
         <div className="flex left dc__gap-8 flex-grow-1">
@@ -81,7 +101,7 @@ export const SelectPickerValueContainer = ({
                 <components.ValueContainer {...props} />
             </div>
             {showSelectedOptionsCount && selectedOptionsLength > 0 && (
-                <div className="bcb-5 dc__border-radius-4-imp pl-5 pr-5 cn-0 fs-12 fw-6 lh-18 dc__truncate dc__no-shrink">
+                <div className="bcb-50 dc__border eb-2 dc__border-radius-4-imp pl-5 pr-5 cb-5 fs-12 fw-6 lh-18 dc__truncate dc__no-shrink">
                     {selectedOptionsLength}
                 </div>
             )}
@@ -91,25 +111,54 @@ export const SelectPickerValueContainer = ({
 
 export const SelectPickerLoadingIndicator = () => <Progressing />
 
-export const SelectPickerOption =
-    ({ disableDescriptionEllipsis = false }: SelectPickerProps) =>
-    (props: OptionProps<SelectPickerOptionType>) => {
-        const { label, data } = props
-        const { description, startIcon, endIcon } = data ?? {}
-        const showDescription = !!description
+export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
+    disableDescriptionEllipsis,
+    ...props
+}: OptionProps<SelectPickerOptionType<OptionValue>> &
+    Pick<SelectPickerProps<OptionValue, IsMulti>, 'disableDescriptionEllipsis'>) => {
+    const {
+        label,
+        data,
+        selectProps: { isMulti },
+        selectOption,
+        isDisabled,
+    } = props
+    const { description, startIcon, endIcon } = data ?? {}
+    const showDescription = !!description
+    // __isNew__ denotes the new option to be created
+    const isCreatableOption = '__isNew__' in data && data.__isNew__
 
-        return (
-            <components.Option {...props}>
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        selectOption(data)
+    }
+
+    return (
+        <components.Option {...props}>
+            <div className="flexbox dc__align-items-center dc__gap-8">
+                {isMulti && !isCreatableOption && (
+                    <Checkbox
+                        onChange={noop}
+                        onClick={handleChange}
+                        isChecked={props.isSelected || false}
+                        value={CHECKBOX_VALUE.CHECKED}
+                        rootClassName="mb-0 w-20 p-2 dc__align-self-start dc__no-shrink"
+                        disabled={isDisabled}
+                    />
+                )}
                 <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
                     {startIcon && (
                         <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
                     )}
                     <div className="flex-grow-1">
-                        <h4 className="m-0 cn-9 fs-13 fw-4 lh-20 dc__truncate">{label}</h4>
+                        <h4 className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}>
+                            {label}
+                        </h4>
                         {/* Add support for custom ellipsis if required */}
                         {showDescription && (
                             <p
-                                className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__truncate' : ''}`}
+                                className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__ellipsis-right__2nd-line' : ''}`}
                             >
                                 {description}
                             </p>
@@ -119,25 +168,138 @@ export const SelectPickerOption =
                         <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>
                     )}
                 </div>
-            </components.Option>
-        )
-    }
+            </div>
+        </components.Option>
+    )
+}
 
-export const SelectPickerMenuList = ({
+export const SelectPickerMenuList = <OptionValue, IsMulti extends boolean>({
     renderMenuListFooter,
+    shouldRenderCustomOptions,
+    renderCustomOptions,
     ...props
-}: MenuListProps<SelectPickerOptionType> & Pick<SelectPickerProps, 'renderMenuListFooter'>) => {
-    const { children } = props
+}: MenuListProps<SelectPickerOptionType<OptionValue>> &
+    Pick<
+        SelectPickerProps<OptionValue, IsMulti>,
+        'renderMenuListFooter' | 'shouldRenderCustomOptions' | 'renderCustomOptions'
+    >) => {
+    const {
+        children,
+        selectProps: { inputValue, value },
+    } = props
 
     return (
-        <components.MenuList {...props}>
-            <div className="py-4 cursor">{children}</div>
+        // added key here to explicitly re-render the list on input change so that the top option is rendered
+        <components.MenuList {...props} key={inputValue}>
+            <div className="py-4 cursor">{shouldRenderCustomOptions ? renderCustomOptions() : children}</div>
             {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
-            {renderMenuListFooter && (
-                <div className=" dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bcn-0">
-                    {renderMenuListFooter()}
+            {!shouldRenderCustomOptions && renderMenuListFooter && (
+                <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bcn-0 dc__zi-2">
+                    {/* Passing down value as a prop to ensure that the menu list is not re-rendered and scrolled to top on click */}
+                    {renderMenuListFooter(value)}
                 </div>
             )}
         </components.MenuList>
+    )
+}
+
+export const SelectPickerMultiValueLabel = <OptionValue, IsMulti extends boolean>({
+    getIsOptionValid,
+    ...props
+}: MultiValueProps<SelectPickerOptionType<OptionValue>, true> &
+    Pick<SelectPickerProps<OptionValue, IsMulti>['multiSelectProps'], 'getIsOptionValid'>) => {
+    const { data, selectProps } = props
+    const isOptionValid = getIsOptionValid(data)
+    const iconToDisplay = isOptionValid ? data.startIcon || data.endIcon : <ICErrorExclamation />
+
+    return (
+        <div className="flex dc__gap-4 mw-0 dc__truncate">
+            {iconToDisplay && (
+                <div
+                    className={`dc__no-shrink ${selectProps.isMulti ? 'icon-dim-16' : 'icon-dim-20'} flex dc__fill-available-space`}
+                >
+                    {iconToDisplay}
+                </div>
+            )}
+            <components.MultiValueLabel {...props} />
+        </div>
+    )
+}
+
+export const SelectPickerMultiValueRemove = (props: MultiValueRemoveProps) => (
+    <components.MultiValueLabel {...props}>
+        <span className="flex dc__no-shrink">
+            <ICClose className="icon-dim-12 icon-use-fill-n6" />
+        </span>
+    </components.MultiValueLabel>
+)
+
+export const SelectPickerGroupHeading = <OptionValue,>({
+    isGroupHeadingSelectable,
+    ...props
+}: SelectPickerGroupHeadingProps<OptionValue>) => {
+    const { data, selectProps } = props
+
+    if (!data.label) {
+        return null
+    }
+
+    if (!isGroupHeadingSelectable || !selectProps.isMulti) {
+        return <components.GroupHeading {...props} />
+    }
+
+    const selectedOptions = (selectProps.value as MultiValue<SelectPickerOptionType<OptionValue>>) ?? []
+    const groupHeadingOptions = data.options ?? []
+
+    const checkboxValue = getGroupCheckboxValue(groupHeadingOptions, selectedOptions, selectProps.getOptionValue)
+
+    const toggleGroupHeadingSelection = () => {
+        const groupOptionsMapByValue = groupHeadingOptions.reduce<Record<string, true>>((acc, option) => {
+            acc[selectProps.getOptionValue(option)] = true
+            return acc
+        }, {})
+        const selectedOptionsWithoutGroupOptions = selectedOptions.filter(
+            (selectedOption) => !groupOptionsMapByValue[selectProps.getOptionValue(selectedOption)],
+        )
+
+        // Clear all the selection(s) in the group if any of the option is selected
+        if (checkboxValue) {
+            selectProps?.onChange?.(selectedOptionsWithoutGroupOptions, {
+                action: ReactSelectInputAction.deselectOption,
+                option: null,
+            })
+
+            return
+        }
+
+        // Select all options
+        selectProps?.onChange?.([...selectedOptionsWithoutGroupOptions, ...structuredClone(groupHeadingOptions)], {
+            action: ReactSelectInputAction.selectOption,
+            option: null,
+        })
+    }
+
+    const handleToggleCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        toggleGroupHeadingSelection()
+    }
+
+    return (
+        <components.GroupHeading {...props} onClick={toggleGroupHeadingSelection}>
+            <div className="flexbox dc__align-items-center dc__gap-8">
+                {isGroupHeadingSelectable && (
+                    <Checkbox
+                        onChange={noop}
+                        onClick={handleToggleCheckbox}
+                        isChecked={!!checkboxValue}
+                        value={checkboxValue}
+                        rootClassName="mb-0 w-20 p-2 dc__align-self-start dc__no-shrink"
+                    />
+                )}
+                <div className="dc__truncate">{props.data.label}</div>
+            </div>
+        </components.GroupHeading>
     )
 }

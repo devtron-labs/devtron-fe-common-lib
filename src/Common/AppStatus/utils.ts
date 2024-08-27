@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { TIMELINE_STATUS } from "../../Shared/constants"
+import { TIMELINE_STATUS } from '../../Shared/constants'
 
 export const triggerStatus = (triggerDetailStatus: string): string => {
     const triggerStatus = triggerDetailStatus?.toUpperCase()
