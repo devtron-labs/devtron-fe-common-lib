@@ -64,4 +64,8 @@ export interface SearchBarProps {
      * @default 'ComponentSizeType.medium'
      */
     size?: ComponentSizeType.medium | ComponentSizeType.large
+    /**
+     * Input Class Name
+     */
+    inputClassName?: string
 }

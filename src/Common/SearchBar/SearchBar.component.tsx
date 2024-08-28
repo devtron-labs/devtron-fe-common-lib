@@ -68,6 +68,7 @@ const SearchBar = ({
     dataTestId = 'search-bar',
     noBackgroundAndBorder = false,
     size = ComponentSizeType.medium,
+    inputClassName = '',
 }: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
     const inputRef = useRef<HTMLInputElement>()
@@ -138,7 +139,7 @@ const SearchBar = ({
                     defaultValue={initialSearchText}
                     className={`search-bar__input  dc__position-abs w-100 h-100 br-4 dc__no-border pt-6 pr-10 pb-6 pl-30 fs-13 lh-20 fw-4 cn-9 placeholder-cn5 ${
                         showClearButton ? 'pr-30' : 'pr-10'
-                    } ${noBackgroundAndBorder ? 'dc__no-background' : 'bc-n50'}`}
+                    } ${noBackgroundAndBorder ? 'dc__no-background' : 'bc-n50'}  ${inputClassName}`}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     ref={inputCallbackRef}
