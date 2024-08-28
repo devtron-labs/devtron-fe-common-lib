@@ -15,7 +15,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import { APIResponseHandler } from '../APIResponseHandler'
 import PluginTagSelect from './PluginTagSelect'
 import PluginList from './PluginList'

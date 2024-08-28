@@ -15,7 +15,6 @@
  */
 
 .search-bar {
-
     &:focus,
     &:focus-within {
         outline: none;
@@ -23,7 +22,6 @@
     }
 
     &__input {
-
         &:focus,
         &:focus-visible {
             border: none;
