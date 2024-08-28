@@ -15,7 +15,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { useHistory, useParams, useRouteMatch } from 'react-router'
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom'
 import { DeploymentAppTypes, GenericEmptyState, Progressing, URLS } from '../../../Common'
 import { DEPLOYMENT_STATUS, TIMELINE_STATUS, EMPTY_STATE_STATUS } from '../../constants'
 import { getDeploymentStatusDetail } from './service'
