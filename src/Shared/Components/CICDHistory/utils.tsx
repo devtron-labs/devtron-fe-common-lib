@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import { TIMELINE_STATUS } from '@Shared/constants'
+import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
+import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
 import {
     TriggerHistoryFilterCriteriaProps,
     DeploymentHistoryResultObject,
@@ -31,6 +33,7 @@ import { ReactComponent as Disconnect } from '../../../Assets/Icon/ic-disconnect
 import { ReactComponent as TimeOut } from '../../../Assets/Icon/ic-timeout-red.svg'
 import { ReactComponent as ICCheck } from '../../../Assets/Icon/ic-check.svg'
 import { ReactComponent as ICInProgress } from '../../../Assets/Icon/ic-in-progress.svg'
+import { TERMINAL_STATUS_MAP } from './constants'
 
 export const getTriggerHistoryFilterCriteria = ({
     appId,
@@ -135,5 +138,63 @@ export const getStageStatusIcon = (status: StageStatusType): JSX.Element => {
             return <Close className="dc__no-shrink icon-dim-16 fcr-5" />
         default:
             return <ICInProgress className="dc__no-shrink icon-dim-16 ic-in-progress-orange" />
+    }
+}
+
+const renderAbortedTriggerIcon = (): JSX.Element => <ICAborted className="icon-dim-20 dc__no-shrink" />
+const renderFailedTriggerIcon = (): JSX.Element => (
+    <ICErrorCross className="icon-dim-20 dc__no-shrink ic-error-cross-red" />
+)
+const renderProgressingTriggerIcon = (): JSX.Element => (
+    <ICInProgress className="dc__no-shrink icon-dim-20 ic-in-progress-orange" />
+)
+const renderSuccessTriggerIcon = (): JSX.Element => (
+    <div className="dc__app-summary__icon dc__no-shrink icon-dim-20 succeeded" />
+)
+
+export const getTriggerStatusIcon = (triggerDetailStatus: string): JSX.Element => {
+    const triggerStatus = triggerDetailStatus?.toUpperCase()
+
+    // First check for TIMELINE_STATUS so as to not break existing functionality
+    // eslint-disable-next-line default-case
+    switch (triggerStatus) {
+        case TIMELINE_STATUS.ABORTED:
+            return renderAbortedTriggerIcon()
+        case TIMELINE_STATUS.DEGRADED:
+            return renderFailedTriggerIcon()
+        case TIMELINE_STATUS.INPROGRESS:
+            return renderProgressingTriggerIcon()
+        case TIMELINE_STATUS.HEALTHY:
+            return renderSuccessTriggerIcon()
+    }
+
+    const lowerCaseTriggerStatus = triggerStatus?.toLocaleLowerCase()
+
+    switch (lowerCaseTriggerStatus) {
+        case TERMINAL_STATUS_MAP.CANCELLED:
+            return renderAbortedTriggerIcon()
+
+        case TERMINAL_STATUS_MAP.FAILED:
+        case TERMINAL_STATUS_MAP.ERROR:
+            return renderFailedTriggerIcon()
+
+        case TERMINAL_STATUS_MAP.RUNNING:
+        case TERMINAL_STATUS_MAP.PROGRESSING:
+        case TERMINAL_STATUS_MAP.STARTING:
+        case TERMINAL_STATUS_MAP.INITIATING:
+            return renderProgressingTriggerIcon()
+
+        case TERMINAL_STATUS_MAP.SUCCEEDED:
+            return renderSuccessTriggerIcon()
+
+        default:
+            return (
+                <div
+                    className={`dc__app-summary__icon dc__no-shrink icon-dim-20 ${lowerCaseTriggerStatus.replace(
+                        /\s+/g,
+                        '',
+                    )}`}
+                />
+            )
     }
 }

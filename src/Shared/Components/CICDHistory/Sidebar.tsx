@@ -42,9 +42,9 @@ import { ReactComponent as ICArrowBackward } from '../../../Assets/Icon/ic-arrow
 import { ReactComponent as ICDocker } from '../../../Assets/Icon/ic-docker.svg'
 import { GitTriggers } from '../../types'
 import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
-import { triggerStatus } from '../../../Common/AppStatus/utils'
 import { HISTORY_LABEL, FILTER_STYLE } from './constants'
 import { statusColor as colorMap } from '../../constants'
+import { getTriggerStatusIcon } from './utils'
 
 const SummaryTooltipCard = React.memo(
     ({
@@ -217,11 +217,7 @@ const HistorySummaryCard = React.memo(
                     ref={assignTargetCardRef}
                 >
                     <div className="w-100 deployment-history-card">
-                        <div
-                            className={`dc__app-summary__icon icon-dim-20 ${triggerStatus(status)
-                                ?.toLocaleLowerCase()
-                                .replace(/\s+/g, '')}`}
-                        />
+                        {getTriggerStatusIcon(status)}
                         <div className="flexbox-col dc__gap-8">
                             <div className="flex column left dc__ellipsis-right">
                                 <div className="cn-9 fs-14">
