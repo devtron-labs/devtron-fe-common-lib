@@ -31,7 +31,7 @@ export const convertDeploymentChartListToChartType = (data: DeploymentChartListD
         {} as Record<string, DeploymentChartType>,
     )
     const result = Object.values(chartMap).map((element) => {
-        element.versions?.sort((a, b) => versionComparatorBySortOrder(a, b, 'version', SortingOrder.DESC))
+        element.versions.sort((a, b) => versionComparatorBySortOrder(a, b, 'version', SortingOrder.DESC))
         return element
     })
     return result

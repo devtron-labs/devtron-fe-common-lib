@@ -479,9 +479,7 @@ export function fetchChartTemplateVersions() {
     return get(`${ROUTES.DEPLOYMENT_TEMPLATE_LIST}?appId=-1&envId=-1`)
 }
 
-export const getDefaultConfig = (): Promise<ResponseType> => {
-    return get(`${ROUTES.NOTIFIER}/channel/config`)
-}
+export const getDefaultConfig = (): Promise<ResponseType> => get(`${ROUTES.NOTIFIER}/channel/config`)
 
 export function getEnvironmentListMinPublic(includeAllowedDeploymentTypes?: boolean) {
     return get(
@@ -494,9 +492,8 @@ export function getClusterListMin() {
     return get(URL)
 }
 
-export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType<ApiResourceType>> => {
-    return get(`${ROUTES.API_RESOURCE}/${ROUTES.GVK}/${clusterId}`)
-}
+export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType<ApiResourceType>> =>
+    get(`${ROUTES.API_RESOURCE}/${ROUTES.GVK}/${clusterId}`)
 
 export function getNamespaceListMin(clusterIdsCsv: string): Promise<EnvironmentListHelmResponse> {
     const URL = `${ROUTES.NAMESPACE}/autocomplete?ids=${clusterIdsCsv}`

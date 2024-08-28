@@ -1,5 +1,5 @@
 import { get, ResponseType, ROUTES } from '@Common/index'
-import { SelectPickerCustomOptionType } from '@Shared/Components'
+import { SelectPickerOptionType } from '@Shared/Components'
 import { API_TOKEN_PREFIX } from '@Shared/constants'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { DefaultUserKey } from '@Shared/types'
@@ -8,7 +8,7 @@ import { UserMinType } from './types'
 import { getUserAndApiTokenOption } from './utils'
 
 // FIXME: Common out the typing and url from dashboard
-export const getUserAndApiTokenOptions = async (): Promise<GroupBase<SelectPickerCustomOptionType<string>>[]> => {
+export const getUserAndApiTokenOptions = async (): Promise<GroupBase<SelectPickerOptionType<string>>[]> => {
     const { result } = (await get(ROUTES.USER_LIST_MIN)) as ResponseType<UserMinType[]>
 
     if (!result) {

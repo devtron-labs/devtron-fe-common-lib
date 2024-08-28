@@ -15,13 +15,13 @@
  */
 
 import React from 'react'
-import isEqual from 'lodash/isEqual'
 import { WidgetProps } from '@rjsf/utils'
 import ReactSelect, { MenuListProps, components } from 'react-select'
 import { PLACEHOLDERS } from '../constants'
 import { getCommonSelectStyle } from '../utils'
 
 import { ReactComponent as ArrowDown } from '../../../Assets/Icon/ic-chevron-down.svg'
+import { deepEqual } from '@Common/Helper'
 
 const commonStyles = getCommonSelectStyle()
 
@@ -58,8 +58,8 @@ export const Select = (props: WidgetProps) => {
 
     const getOption = (value) =>
         multiple
-            ? selectOptions.filter((option) => value.some((val) => isEqual(val, option.value)))
-            : selectOptions.find((option) => isEqual(value, option.value))
+            ? selectOptions.filter((option) => value.some((val) => deepEqual(val, option.value)))
+            : selectOptions.find((option) => deepEqual(value, option.value))
 
     return (
         <ReactSelect

@@ -17,16 +17,17 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
+import { Pair } from 'yaml'
 import moment from 'moment'
 import {
     handleUTCTime,
     ManualApprovalType,
     mapByKey,
     MaterialInfo,
-    PATTERNS,
     shallowEqual,
     SortingOrder,
     UserApprovalConfigType,
+    PATTERNS,
     ZERO_TIME_STRING,
 } from '../Common'
 import {
@@ -159,6 +160,22 @@ export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
         default:
             return <ICWebhook className="icon-dim-12" />
     }
+}
+
+export const yamlComparatorBySortOrder = (a: Pair, b: Pair, sortOrder: SortingOrder = SortingOrder.ASC) => {
+    let orderMultiplier = 0
+    if (sortOrder === SortingOrder.DESC) {
+        orderMultiplier = -1
+    } else if (sortOrder === SortingOrder.ASC) {
+        orderMultiplier = 1
+    }
+    if (a.key < b.key) {
+        return -1 * orderMultiplier
+    }
+    if (a.key > b.key) {
+        return 1 * orderMultiplier
+    }
+    return 0
 }
 
 export const useIntersection = (
@@ -782,3 +799,11 @@ export const getIsManualApprovalConfigured = (userApprovalConfig?: Pick<UserAppr
 
 export const getIsManualApprovalSpecific = (userApprovalConfig?: Pick<UserApprovalConfigType, 'type'>) =>
     getIsManualApprovalConfigured(userApprovalConfig) && userApprovalConfig.type === ManualApprovalType.specific
+
+/**
+ * @description - Function to open a new tab with the given url
+ * @param url - url to be opened in new tab
+ */
+export const getHandleOpenURL = (url: string) => () => {
+    window.open(url, '_blank', 'noreferrer')
+}

@@ -34,10 +34,10 @@
         display: flex;
         align-items: center;
     }
-    .radio+.radio {
+    .radio + .radio {
         margin-top: 0;
     }
-    input[type=checkbox] {
+    input[type='checkbox'] {
         display: contents;
         overflow: hidden;
         max-width: 0px;
@@ -45,7 +45,7 @@
         opacity: 0;
         margin: unset;
     }
-    input+.radio__item-label {
+    input + .radio__item-label {
         padding: 4px 6px;
         height: 100%;
         width: 100%;
@@ -54,7 +54,7 @@
         transition: all 0.5s;
         cursor: pointer;
     }
-    input[type=checkbox]:checked+.radio__item-label {
+    input[type='checkbox']:checked + .radio__item-label {
         background: #2c3354;
         color: white;
         border-radius: 4px;
