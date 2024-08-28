@@ -21,4 +21,8 @@
         height: calc(100vh - 122px);
         overflow: auto;
     }
+
+    & .react-monaco-editor-container {
+        min-height: 100px;
+    }
 }

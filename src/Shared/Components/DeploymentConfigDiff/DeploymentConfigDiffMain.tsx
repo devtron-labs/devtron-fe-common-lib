@@ -141,7 +141,8 @@ export const DeploymentConfigDiffMain = ({
                                 defaultValue={primaryList.codeEditorValue.value}
                                 value={secondaryList.codeEditorValue.value}
                                 mode={MODES.YAML}
-                                height="650px"
+                                disableSearch
+                                adjustEditorHeightToContent
                                 noParsing
                                 readOnly
                             />
