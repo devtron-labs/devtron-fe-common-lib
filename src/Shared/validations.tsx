@@ -279,3 +279,19 @@ export const validateUniqueKeys = (keys: string[]) => {
         message: `Duplicate variable name: ${duplicateKeys.join(', ')}`,
     }
 }
+
+export const validateJSON = (json: string): ValidationResponseType => {
+    try {
+        if (json) {
+            JSON.parse(json)
+        }
+        return {
+            isValid: true,
+        }
+    } catch (err) {
+        return {
+            isValid: false,
+            message: err.message,
+        }
+    }
+}

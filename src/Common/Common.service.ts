@@ -80,7 +80,13 @@ export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
 }
 
-const cdMaterialListModal = (artifacts: any[], offset: number, artifactId?: number, artifactStatus?: string, disableDefaultSelection?: boolean) => {
+const cdMaterialListModal = (
+    artifacts: any[],
+    offset: number,
+    artifactId?: number,
+    artifactStatus?: string,
+    disableDefaultSelection?: boolean,
+) => {
     if (!artifacts || !artifacts.length) return []
 
     const markFirstSelected = offset === 0
@@ -346,9 +352,7 @@ export function fetchChartTemplateVersions() {
     return get(`${ROUTES.DEPLOYMENT_TEMPLATE_LIST}?appId=-1&envId=-1`)
 }
 
-export const getDefaultConfig = (): Promise<ResponseType> => {
-    return get(`${ROUTES.NOTIFIER}/channel/config`)
-}
+export const getDefaultConfig = (): Promise<ResponseType> => get(`${ROUTES.NOTIFIER}/channel/config`)
 
 export function getEnvironmentListMinPublic(includeAllowedDeploymentTypes?: boolean) {
     return get(
@@ -361,13 +365,12 @@ export function getClusterListMin() {
     return get(URL)
 }
 
-export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType<ApiResourceType>> => {
-    return get(`${ROUTES.API_RESOURCE}/${ROUTES.GVK}/${clusterId}`)
-}
+export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType<ApiResourceType>> =>
+    get(`${ROUTES.API_RESOURCE}/${ROUTES.GVK}/${clusterId}`)
 
 export function getNamespaceListMin(clusterIdsCsv: string): Promise<EnvironmentListHelmResponse> {
-  const URL = `${ROUTES.NAMESPACE}/autocomplete?ids=${clusterIdsCsv}`
-  return get(URL)
+    const URL = `${ROUTES.NAMESPACE}/autocomplete?ids=${clusterIdsCsv}`
+    return get(URL)
 }
 export function getWebhookEventsForEventId(eventId: string | number) {
     const URL = `${ROUTES.GIT_HOST_EVENT}/${eventId}`

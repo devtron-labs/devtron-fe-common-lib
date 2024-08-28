@@ -15,10 +15,10 @@
  */
 
 import { ObjectFieldTemplateProps, canExpand, titleId } from '@rjsf/utils'
+import { JSONPath } from 'jsonpath-plus'
 import { FieldRowWithLabel } from '../common/FieldRow'
 import { TitleField } from './TitleField'
 import { AddButton } from './ButtonTemplates'
-import { JSONPath } from 'jsonpath-plus'
 import { RJSFFormSchema } from '../types'
 
 const Field = ({
@@ -53,10 +53,13 @@ const Field = ({
             if (!hiddenSchemaProp) {
                 return true
             }
-            const value = JSONPath({ path: hiddenSchemaProp.match, json: formData })?.[0]
-            const isHidden = value === undefined || hiddenSchemaProp.condition === value
-            // NOTE: if should be hidden then filter it out i.e return false
-            return !isHidden
+            try {
+                const value = JSONPath({ path: hiddenSchemaProp.match, json: formData })?.[0]
+                const isHidden = value === undefined || hiddenSchemaProp.condition === value
+                return !isHidden
+            } catch {
+                return true
+            }
         })
         // NOTE: we probably should use uiSchema instead?
         .sort((prop) => (schema.properties?.[prop.name]?.type === 'boolean' ? -1 : 1))

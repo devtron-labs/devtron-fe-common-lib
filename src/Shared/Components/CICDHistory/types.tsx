@@ -25,6 +25,7 @@ import {
     DeploymentAppTypes,
     ResponseType,
     PaginationProps,
+    useScrollable,
     SortingOrder,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
@@ -182,12 +183,8 @@ export interface CurrentStatusType {
     status: string
     finishedOn: string
     artifact: string
-    message: string
-    podStatus: string
     stage: DeploymentStageType
     type: HistoryComponentType
-    isJobView?: boolean
-    workerPodName?: string
 }
 
 export interface StartDetailsType {
@@ -226,12 +223,8 @@ export interface TriggerDetailsType {
 
 export interface ProgressingStatusType {
     status: string
-    message: string
-    podStatus: string
     stage: DeploymentStageType
     type: HistoryComponentType
-    finishedOn?: string
-    workerPodName?: string
 }
 
 export interface WorkerStatusType {
@@ -251,14 +244,8 @@ export interface FinishedType {
 
 export interface TriggerDetailsStatusIconType {
     status: string
-    isDeploymentWindowInfo?: boolean
 }
 
-export interface LogsRendererType {
-    triggerDetails: History
-    isBlobStorageConfigured: boolean
-    parentType: HistoryComponentType
-}
 export interface SyncStageResourceDetail {
     id: number
     cdWorkflowRunnerId: number
@@ -296,6 +283,7 @@ export const TERMINAL_STATUS_COLOR_CLASS_MAP = {
     [TERMINAL_STATUS_MAP.SUCCEEDED]: 'cg-5',
     [TERMINAL_STATUS_MAP.HEALTHY]: 'cg-5',
     [TERMINAL_STATUS_MAP.FAILED]: 'cr-5',
+    [TERMINAL_STATUS_MAP.CANCELLED]: 'cr-5',
     [TERMINAL_STATUS_MAP.ERROR]: 'cr-5',
 }
 
@@ -392,6 +380,43 @@ export interface TriggerOutputProps extends RenderRunSourceType {
     deploymentHistoryResult: Pick<DeploymentHistoryResult, 'result'>
     setFetchTriggerIdData: React.Dispatch<React.SetStateAction<FetchIdDataStatus>>
     setTriggerHistory: React.Dispatch<React.SetStateAction<Map<Number, History>>>
+    scrollToTop: ReturnType<typeof useScrollable>[1]
+    scrollToBottom: ReturnType<typeof useScrollable>[2]
+}
+
+export interface HistoryLogsProps
+    extends Pick<
+        TriggerOutputProps,
+        | 'scrollToTop'
+        | 'scrollToBottom'
+        | 'setFullScreenView'
+        | 'deploymentHistoryList'
+        | 'setDeploymentHistoryList'
+        | 'deploymentAppType'
+        | 'isBlobStorageConfigured'
+        | 'appReleaseTags'
+        | 'tagsEditable'
+        | 'hideImageTaggingHardDelete'
+        | 'selectedEnvironmentName'
+        | 'processVirtualEnvironmentDeploymentData'
+        | 'renderDeploymentApprovalInfo'
+        | 'renderCIListHeader'
+        | 'renderVirtualHistoryArtifacts'
+        | 'fullScreenView'
+    > {
+    triggerDetails: History
+    loading: boolean
+    userApprovalMetadata: UserApprovalMetadataType
+    triggeredByEmail: string
+    artifactId: number
+    ciPipelineId: number
+    resourceId?: number
+    renderRunSource: (runSource: RunSourceType, isDeployedInThisResource: boolean) => JSX.Element
+}
+
+export interface LogsRendererType
+    extends Pick<HistoryLogsProps, 'fullScreenView' | 'triggerDetails' | 'isBlobStorageConfigured'> {
+    parentType: HistoryComponentType
 }
 
 export interface DeploymentStatusDetailBreakdownType {
@@ -565,7 +590,7 @@ export interface ArtifactType {
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
     hideImageTaggingHardDelete?: boolean
-    jobCIClass?: string
+    rootClassName?: string
     renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
 }
 
@@ -696,7 +721,7 @@ export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime
     isOpen: boolean
 }
 
-export interface LogStageAccordionProps extends StageDetailType {
+export interface LogStageAccordionProps extends StageDetailType, Pick<LogsRendererType, 'fullScreenView'> {
     handleStageClose: (index: number) => void
     handleStageOpen: (index: number) => void
     stageIndex: number

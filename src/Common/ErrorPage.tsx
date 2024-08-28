@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { ERROR_STATUS_CODE, ERROR_EMPTY_SCREEN, ROUTES } from './Constants'
 import GenericEmptyState from './EmptyState/GenericEmptyState'
 import { ErrorPageType } from './Types'
