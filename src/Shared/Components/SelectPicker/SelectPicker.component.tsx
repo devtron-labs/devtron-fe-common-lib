@@ -17,7 +17,6 @@
 import ReactSelect, {
     ControlProps,
     GroupHeadingProps,
-    MenuListProps,
     MultiValueProps,
     OptionProps,
     SelectInstance,
@@ -186,7 +185,6 @@ import { GenericSectionErrorState } from '../GenericSectionErrorState'
 const SelectPicker = <OptionValue, IsMulti extends boolean>({
     error,
     icon,
-    renderMenuListFooter,
     helperText,
     placeholder = 'Select a option',
     label,
@@ -204,7 +202,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     isMulti,
     name,
     classNamePrefix,
-    renderCustomOptions,
     shouldRenderCustomOptions = false,
     isSearchable,
     selectRef,
@@ -265,18 +262,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             <SelectPickerControl {...controlProps} icon={icon} showSelectedOptionIcon={shouldShowSelectedOptionIcon} />
         ),
         [icon, shouldShowSelectedOptionIcon],
-    )
-
-    const renderMenuList = useCallback(
-        (menuProps: MenuListProps<SelectPickerOptionType<OptionValue>>) => (
-            <SelectPickerMenuList
-                {...menuProps}
-                renderMenuListFooter={renderMenuListFooter}
-                renderCustomOptions={renderCustomOptions}
-                shouldRenderCustomOptions={shouldRenderCustomOptions}
-            />
-        ),
-        [shouldRenderCustomOptions],
     )
 
     const renderValueContainer = useCallback(
@@ -346,6 +331,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             'aria-invalid': !!error,
             'aria-labelledby': labelId,
             hideSelectedOptions: false,
+            shouldRenderCustomOptions: shouldRenderCustomOptions || false,
         }),
         [
             name,
@@ -359,6 +345,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             error,
             labelId,
             isMulti,
+            shouldRenderCustomOptions,
         ],
     )
 
@@ -397,7 +384,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                     DropdownIndicator: SelectPickerDropdownIndicator,
                                     Control: renderControl,
                                     Option: renderOption,
-                                    MenuList: renderMenuList,
+                                    MenuList: SelectPickerMenuList,
                                     ClearIndicator: SelectPickerClearIndicator,
                                     ValueContainer: renderValueContainer,
                                     MultiValueLabel: renderMultiValueLabel,
@@ -422,7 +409,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                     DropdownIndicator: SelectPickerDropdownIndicator,
                                     Control: renderControl,
                                     Option: renderOption,
-                                    MenuList: renderMenuList,
+                                    MenuList: SelectPickerMenuList,
                                     ClearIndicator: SelectPickerClearIndicator,
                                     ValueContainer: renderValueContainer,
                                     NoOptionsMessage: renderNoOptionsMessage,

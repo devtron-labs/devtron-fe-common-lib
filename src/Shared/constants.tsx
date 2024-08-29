@@ -471,3 +471,5 @@ export enum SelectAllGroupedResourceIdentifiers {
     allExistingAndFutureProdEnvironments = '-2',
     allExistingAndFutureEnvironments = '-3',
 }
+
+export const TRIGGER_STATUS_PROGRESSING = ['progressing', 'initiating', 'running', 'starting']
