@@ -48,11 +48,11 @@
         }
 
         &__badge {
-            border-radius: 100%;
-            width: 20px;
+            border-radius: 10px;
+            min-width: 20px;
 
             &--medium {
-                width: 18px;
+                min-width: 18px;
             }
         }
 

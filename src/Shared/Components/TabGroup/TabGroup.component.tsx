@@ -60,7 +60,7 @@ const Tab = ({
                 {!showError && !showWarning && Icon && <Icon className={`${iconClassName} ${getIconColorClass()}`} />}
                 {label}
                 {badge !== null && (
-                    <div className={`tab-group__tab__badge ${badgeClassName} bcn-1 flex cn-7`}>{badge}</div>
+                    <div className={`tab-group__tab__badge bcn-1 cn-7 flex px-4 ${badgeClassName}`}>{badge}</div>
                 )}
                 {showIndicator && <span className="tab-group__tab__indicator bcr-5 mt-4 dc__align-self-start" />}
             </>
