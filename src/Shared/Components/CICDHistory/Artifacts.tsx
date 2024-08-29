@@ -188,7 +188,11 @@ const Artifacts = ({
             </div>
         )
     }
-    if (status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED || status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED) {
+    if (
+        status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED ||
+        status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED ||
+        status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR
+    ) {
         if (isJobCI) {
             return (
                 <GenericEmptyState
