@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { ConfigurationType } from './types'
+
 export const ARTIFACT_STATUS = {
     PROGRESSING: 'Progressing',
     DEGRADED: 'Degraded',
@@ -471,3 +473,5 @@ export enum SelectAllGroupedResourceIdentifiers {
 }
 
 export const TRIGGER_STATUS_PROGRESSING = ['progressing', 'initiating', 'running', 'starting']
+
+export const CONFIGURATION_TYPE_VALUES = Object.values(ConfigurationType)
