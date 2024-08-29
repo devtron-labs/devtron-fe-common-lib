@@ -479,3 +479,5 @@ export const CD_MATERIAL_SIDEBAR_TABS: OptionType<CDMaterialSidebarType, CDMater
     value: tabValue,
     label: tabValue,
 }))
+
+export const TRIGGER_STATUS_PROGRESSING = ['progressing', 'initiating', 'running', 'starting']

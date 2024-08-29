@@ -16,8 +16,7 @@
 
 import { useEffect, useState } from 'react'
 import ReactSelect from 'react-select'
-import { useHistory, useRouteMatch, useParams } from 'react-router'
-import { NavLink } from 'react-router-dom'
+import { useHistory, useRouteMatch, useParams, NavLink } from 'react-router-dom'
 import moment from 'moment'
 import Tippy from '@tippyjs/react'
 import { DATE_TIME_FORMATS, URLS, showError } from '../../../../Common'

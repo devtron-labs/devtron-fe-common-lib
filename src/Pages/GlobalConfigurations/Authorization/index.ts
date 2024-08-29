@@ -15,5 +15,7 @@
  */
 
 export * from './constants'
-export type { UserListFilterParams, UserRoleGroup } from './types'
+export type { UserListFilterParams, UserRoleGroup, UserGroupDTO, UserGroupType } from './types'
 export * from './shared'
+export * from './service'
+export { getUserAndApiTokenOption } from './utils'

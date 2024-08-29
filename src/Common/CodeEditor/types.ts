@@ -22,7 +22,7 @@ export interface InformationBarProps {
     children?: React.ReactNode
 }
 
-export interface CodeEditorInterface {
+interface CodeEditorBaseInterface {
     value?: string
     lineDecorationsWidth?: number
     responseType?: string
@@ -36,7 +36,6 @@ export interface CodeEditorInterface {
     readOnly?: boolean
     noParsing?: boolean
     inline?: boolean
-    height?: number | string
     shebang?: string | JSX.Element
     diffView?: boolean
     loading?: boolean
@@ -48,8 +47,19 @@ export interface CodeEditorInterface {
     isKubernetes?: boolean
     cleanData?: boolean
     chartVersion?: any
-    adjustEditorHeightToContent?: boolean
 }
+
+export type CodeEditorInterface = CodeEditorBaseInterface &
+    (
+        | {
+              adjustEditorHeightToContent?: boolean
+              height?: never
+          }
+        | {
+              adjustEditorHeightToContent?: never
+              height?: number | string
+          }
+    )
 
 export interface CodeEditorHeaderInterface {
     children?: any

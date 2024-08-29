@@ -83,7 +83,7 @@
             background-color: transparent;
             color: var(--N900);
 
-            &__focused+.DateInput_fang {
+            &__focused + .DateInput_fang {
                 display: none;
             }
 

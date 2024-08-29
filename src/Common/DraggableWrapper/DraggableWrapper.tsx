@@ -34,7 +34,7 @@ export default function DraggableWrapper({
     parentRef,
     boundaryGap = 16,
     childDivProps = {},
-    layoutFixDelta = 0
+    layoutFixDelta = 0,
 }: DraggableWrapperProps) {
     const windowSize = useWindowSize()
     const nodeRef = useRef<HTMLDivElement>(null)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import { useDownload } from '@Shared/Hooks'
 import {
     GenericEmptyState,
@@ -69,7 +69,7 @@ export const CIListItem = ({
     return (
         <>
             {type === 'deployed-artifact' && (
-                <div className="flex dc__width-inherit">
+                <div className="flex dc__width-inherit pb-12">
                     <div className="w-50 text-underline-dashed-300" />
                     <Down className="icon-dim-16 ml-8 mr-8" style={{ transform: 'rotate(90deg)' }} />
                     <div className="w-50 text-underline-dashed-300" />

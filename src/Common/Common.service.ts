@@ -16,7 +16,7 @@
 
 import moment from 'moment'
 import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
-import { stringComparatorBySortOrder } from '@Shared/Helpers'
+import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
 import { ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
@@ -34,8 +34,17 @@ import {
     CDMaterialFilterQuery,
     ImagePromotionMaterialInfo,
     EnvironmentListHelmResponse,
+    UserGroupApproverType,
+    ImageApprovalPolicyUserGroupDataType,
+    ImageApprovalPolicyType,
+    ImageApprovalUsersInfoDTO,
+    UserApprovalMetadataType,
+    UserApprovalConfigType,
+    CDMaterialListModalServiceUtilProps,
 } from './Types'
 import { ApiResourceType } from '../Pages'
+import { API_TOKEN_PREFIX } from '@Shared/constants'
+import { DefaultUserKey } from '@Shared/types'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -82,13 +91,35 @@ export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
 }
 
-const cdMaterialListModal = (
-    artifacts: any[],
-    offset: number,
-    artifactId?: number,
-    artifactStatus?: string,
-    disableDefaultSelection?: boolean,
-) => {
+const sanitizeApprovalConfigFromApprovalMetadata = (
+    approvalMetadata: UserApprovalMetadataType,
+    userApprovalConfig: UserApprovalConfigType,
+): UserApprovalMetadataType => {
+    if (!approvalMetadata) {
+        return null
+    }
+
+    const approvedUsersData = approvalMetadata.approvedUsersData || []
+    const unsanitizedApprovalConfig = approvalMetadata.approvalConfig || userApprovalConfig
+
+    return {
+        ...approvalMetadata,
+        approvedUsersData: approvedUsersData.map((userData) => ({
+            ...userData,
+            userGroups: userData.userGroups?.filter((group) => !!group?.identifier && !!group?.name) ?? [],
+        })),
+        approvalConfig: sanitizeUserApprovalConfig(unsanitizedApprovalConfig),
+    }
+}
+
+const cdMaterialListModal = ({
+    artifacts,
+    offset,
+    artifactId,
+    artifactStatus,
+    disableDefaultSelection,
+    userApprovalConfig,
+}: CDMaterialListModalServiceUtilProps) => {
     if (!artifacts || !artifacts.length) return []
 
     const markFirstSelected = offset === 0
@@ -132,7 +163,10 @@ const cdMaterialListModal = (
             vulnerable: material.vulnerable,
             runningOnParentCd: material.runningOnParentCd,
             artifactStatus: artifactStatusValue,
-            userApprovalMetadata: material.userApprovalMetadata,
+            userApprovalMetadata: sanitizeApprovalConfigFromApprovalMetadata(
+                material.userApprovalMetadata,
+                userApprovalConfig,
+            ),
             triggeredBy: material.triggeredBy,
             isVirtualEnvironment: material.isVirtualEnvironment,
             imageComment: material.imageComment,
@@ -177,19 +211,110 @@ const cdMaterialListModal = (
     return materials
 }
 
+const getImageApprovalPolicyDetailsFromMaterialResult = (cdMaterialsResult): ImageApprovalPolicyType => {
+    const approvalUsers: string[] = cdMaterialsResult.approvalUsers || []
+    const userApprovalConfig = sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig)
+    const isPolicyConfigured = getIsManualApprovalSpecific(userApprovalConfig)
+    const imageApprovalUsersInfo: ImageApprovalUsersInfoDTO = cdMaterialsResult.imageApprovalUsersInfo || {}
+
+    const approvalUsersMap = approvalUsers.reduce(
+        (acc, user) => {
+            acc[user] = true
+            return acc
+        },
+        {} as Record<string, true>,
+    )
+
+    const specificUsersAPIToken = userApprovalConfig.specificUsers.identifiers
+        .filter((user) => user.startsWith(API_TOKEN_PREFIX))
+        .sort(stringComparatorBySortOrder)
+    const specificUsersEmails = userApprovalConfig.specificUsers.identifiers
+        .filter((user) => !user.startsWith(API_TOKEN_PREFIX) && user !== DefaultUserKey.system)
+        .sort(stringComparatorBySortOrder)
+
+    const specificUsersData: ImageApprovalPolicyType['specificUsersData'] = {
+        dataStore: userApprovalConfig.specificUsers.identifiers.reduce(
+            (acc, email) => {
+                acc[email] = {
+                    email,
+                    hasAccess: approvalUsersMap[email] ?? false,
+                }
+                return acc
+            },
+            {} as Record<string, UserGroupApproverType>,
+        ),
+        requiredCount: userApprovalConfig.specificUsers.requiredCount,
+        emails: specificUsersEmails.concat(specificUsersAPIToken),
+    }
+
+    const validGroups = userApprovalConfig.userGroups.map((group) => group.identifier)
+
+    // Have moved from Object.keys(imageApprovalUsersInfo) to approvalUsers since backend is not filtering out the users without approval
+    // TODO: This check should be on BE. Need to remove this once BE is updated 
+    const usersList = approvalUsers.filter((user) => user !== DefaultUserKey.system)
+    const groupIdentifierToUsersMap = usersList.reduce(
+        (acc, user) => {
+            const userGroups = imageApprovalUsersInfo[user] || []
+            userGroups.forEach((group) => {
+                if (!acc[group.identifier]) {
+                    acc[group.identifier] = {}
+                }
+                acc[group.identifier][user] = true
+            })
+            return acc
+        },
+        {} as Record<string, Record<string, true>>,
+    )
+
+    return {
+        isPolicyConfigured,
+        specificUsersData,
+        userGroupData: userApprovalConfig.userGroups.reduce(
+            (acc, group) => {
+                const identifier = group.identifier
+                // No need of handling api tokens here since they are not part of user groups
+                const users = Object.keys(groupIdentifierToUsersMap[identifier] || {}).sort(stringComparatorBySortOrder)
+
+                acc[identifier] = {
+                    dataStore: users.reduce(
+                        (acc, user) => {
+                            acc[user] = {
+                                email: user,
+                                // As of now it will always be true, but UI has handled it in a way that can support false as well
+                                hasAccess: approvalUsersMap[user] ?? false,
+                            }
+                            return acc
+                        },
+                        {} as Record<string, UserGroupApproverType>,
+                    ),
+                    requiredCount: group.requiredCount,
+                    emails: users,
+                }
+
+                return acc
+            },
+            {} as Record<string, ImageApprovalPolicyUserGroupDataType>,
+        ),
+        // Not sorting since would change them in approval info modal to name
+        validGroups,
+    }
+}
+
 const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResult): CDMaterialsApprovalInfo => {
     if (!enableApproval || !cdMaterialsResult) {
         return {
             approvalUsers: [],
             userApprovalConfig: null,
             canApproverDeploy: cdMaterialsResult?.canApproverDeploy ?? false,
+            imageApprovalPolicyDetails: null,
         }
     }
 
     return {
         approvalUsers: cdMaterialsResult.approvalUsers,
-        userApprovalConfig: cdMaterialsResult.userApprovalConfig,
+        userApprovalConfig: sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig),
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
+        imageApprovalPolicyDetails: getImageApprovalPolicyDetailsFromMaterialResult(cdMaterialsResult),
     }
 }
 
@@ -252,13 +377,14 @@ export const processCDMaterialServiceResponse = (
         }
     }
 
-    const materials = cdMaterialListModal(
-        cdMaterialsResult.ci_artifacts,
-        offset ?? 0,
-        cdMaterialsResult.latest_wf_artifact_id,
-        cdMaterialsResult.latest_wf_artifact_status,
+    const materials = cdMaterialListModal({
+        artifacts: cdMaterialsResult.ci_artifacts,
+        offset: offset ?? 0,
+        artifactId: cdMaterialsResult.latest_wf_artifact_id,
+        artifactStatus: cdMaterialsResult.latest_wf_artifact_status,
         disableDefaultSelection,
-    )
+        userApprovalConfig: cdMaterialsResult.userApprovalConfig,
+    })
     const approvalInfo = processCDMaterialsApprovalInfo(
         stage === DeploymentNodeType.CD || stage === DeploymentNodeType.APPROVAL,
         cdMaterialsResult,
@@ -361,9 +487,7 @@ export function fetchChartTemplateVersions() {
     return get(`${ROUTES.DEPLOYMENT_TEMPLATE_LIST}?appId=-1&envId=-1`)
 }
 
-export const getDefaultConfig = (): Promise<ResponseType> => {
-    return get(`${ROUTES.NOTIFIER}/channel/config`)
-}
+export const getDefaultConfig = (): Promise<ResponseType> => get(`${ROUTES.NOTIFIER}/channel/config`)
 
 export function getEnvironmentListMinPublic(includeAllowedDeploymentTypes?: boolean) {
     return get(
@@ -376,9 +500,8 @@ export function getClusterListMin() {
     return get(URL)
 }
 
-export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType<ApiResourceType>> => {
-    return get(`${ROUTES.API_RESOURCE}/${ROUTES.GVK}/${clusterId}`)
-}
+export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType<ApiResourceType>> =>
+    get(`${ROUTES.API_RESOURCE}/${ROUTES.GVK}/${clusterId}`)
 
 export function getNamespaceListMin(clusterIdsCsv: string): Promise<EnvironmentListHelmResponse> {
     const URL = `${ROUTES.NAMESPACE}/autocomplete?ids=${clusterIdsCsv}`
