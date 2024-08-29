@@ -408,7 +408,7 @@ export const LogsRenderer = ({
                     }}
                 >
                     <div
-                        className={`flexbox-col pb-7 dc__position-sticky dc__zi-2 ${fullScreenView ? 'dc__top-0' : 'dc__top-38'}`}
+                        className={`flexbox-col pb-7 dc__position-sticky dc__zi-2 ${fullScreenView ? 'dc__top-0' : 'dc__top-36'}`}
                         style={{
                             backgroundColor: '#0C1021',
                         }}
