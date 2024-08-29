@@ -47,9 +47,9 @@ const FilterSelectPicker = ({
         setSelectedOptions(structuredClone(appliedFilterOptions ?? []))
     }
 
-    const renderApplyButton = (optionsSelected: Parameters<FilterSelectPickerProps['handleApplyFilter']>[0]) => {
+    const renderApplyButton = () => {
         const handleApplyClick = () => {
-            handleApplyFilter(optionsSelected)
+            handleApplyFilter(selectedOptions)
             closeMenu()
         }
 
