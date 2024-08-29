@@ -49,7 +49,7 @@ declare module 'react-select/base' {
         /**
          * Render function for the footer at the bottom of menu list. It is sticky by default
          */
-        renderMenuListFooter?: (selectedOptions: SelectProps<string | number, IsMulti>['value']) => ReactNode
+        renderMenuListFooter?: () => ReactNode
         /**
          * If true, custom options are rendered in the menuList component of react select
          *

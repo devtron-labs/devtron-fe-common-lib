@@ -181,7 +181,7 @@ import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } fr
  * />
  * ```
  */
-const SelectPicker = <OptionValue extends string | number, IsMulti extends boolean>({
+const SelectPicker = <OptionValue, IsMulti extends boolean>({
     error,
     icon,
     helperText,
