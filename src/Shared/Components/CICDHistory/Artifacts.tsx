@@ -179,7 +179,11 @@ const Artifacts = ({
             </div>
         )
     }
-    if (status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED || status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED) {
+    if (
+        status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED ||
+        status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED ||
+        status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR
+    ) {
         if (isJobCI) {
             return (
                 <GenericEmptyState
@@ -192,14 +196,6 @@ const Artifacts = ({
         return (
             <GenericEmptyState
                 title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsGenerated}
-                subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsError}
-            />
-        )
-    }
-    if (status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR) {
-        return (
-            <GenericEmptyState
-                title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsError}
                 subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsError}
             />
         )
