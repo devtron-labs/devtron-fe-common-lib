@@ -663,3 +663,8 @@ export type BaseFilterQueryParams<T> = {
      */
     showAll?: boolean
 } & SortingParams<T>
+
+export enum ConfigurationType {
+    GUI = 'GUI',
+    YAML = 'YAML',
+}

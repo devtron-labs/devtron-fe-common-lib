@@ -16,4 +16,4 @@
 
 export * from './GlobalConfigurations'
 export * from './ResourceBrowser'
-export * from './CDPipeline'
+export * from './Applications'
