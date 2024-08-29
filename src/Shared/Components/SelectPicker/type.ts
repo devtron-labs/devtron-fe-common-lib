@@ -98,10 +98,13 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     | 'onMenuClose'
     | 'autoFocus'
     | 'onBlur'
-    | 'renderMenuListFooter'
-    | 'shouldRenderCustomOptions'
-    | 'renderCustomOptions'
 > &
+    Partial<
+        Pick<
+            SelectProps<OptionValue, IsMulti>,
+            'renderMenuListFooter' | 'shouldRenderCustomOptions' | 'renderCustomOptions'
+        >
+    > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> & {
         /**
          * Icon to be rendered in the control
