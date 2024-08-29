@@ -186,7 +186,6 @@ export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPi
             {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
             {!shouldRenderCustomOptions && renderMenuListFooter && (
                 <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bcn-0 dc__zi-2">
-                    {/* Passing down value as a prop to ensure that the menu list is not re-rendered and scrolled to top on click */}
                     {renderMenuListFooter()}
                 </div>
             )}
