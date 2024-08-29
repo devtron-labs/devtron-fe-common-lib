@@ -196,6 +196,14 @@ const Artifacts = ({
             />
         )
     }
+    if (status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR) {
+        return (
+            <GenericEmptyState
+                title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsError}
+                subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsError}
+            />
+        )
+    }
     if (!artifactId && status.toLowerCase() === TERMINAL_STATUS_MAP.SUCCEEDED && !isJobView) {
         return (
             <GenericEmptyState
