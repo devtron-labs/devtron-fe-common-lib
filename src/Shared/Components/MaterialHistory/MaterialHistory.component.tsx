@@ -59,7 +59,7 @@ const MaterialHistory = ({
                 const historyList = materialHistoryMapWithTime[date]
                 return (
                     <>
-                        {!isCommitInfoModal && (
+                        {!isCommitInfoModal && material.type !== SourceTypeMap.WEBHOOK && (
                             <div className="flex left dc__gap-8">
                                 <span className="fs-12 lh-18 cn-7 fw-6 w-130">{date}</span>
                                 <div className="h-1 bcn-2 w-100" />
