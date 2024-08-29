@@ -173,19 +173,12 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
     )
 }
 
-export const SelectPickerMenuList = <OptionValue, IsMulti extends boolean>({
-    renderMenuListFooter,
-    shouldRenderCustomOptions,
-    renderCustomOptions,
-    ...props
-}: MenuListProps<SelectPickerOptionType<OptionValue>> &
-    Pick<
-        SelectPickerProps<OptionValue, IsMulti>,
-        'renderMenuListFooter' | 'shouldRenderCustomOptions' | 'renderCustomOptions'
-    >) => {
+export const SelectPickerMenuList = <OptionValue extends string | number>(
+    props: MenuListProps<SelectPickerOptionType<OptionValue>>,
+) => {
     const {
         children,
-        selectProps: { inputValue, value },
+        selectProps: { inputValue, value, renderMenuListFooter, shouldRenderCustomOptions, renderCustomOptions },
     } = props
 
     return (
