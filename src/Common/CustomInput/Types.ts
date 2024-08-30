@@ -37,7 +37,6 @@ export interface CustomInputProps {
     handleOnBlur?: (e) => void
     readOnly?: boolean
     noTrim?: boolean
-    ref?: React.LegacyRef<HTMLInputElement>
     onKeyPress?: (e) => void
     defaultValue?: string | number | ReadonlyArray<string> | undefined
     onKeyDown?: (e) => void

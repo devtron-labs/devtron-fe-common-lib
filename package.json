@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "0.2.20-beta-1",
+    "version": "0.2.20-beta-8",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
