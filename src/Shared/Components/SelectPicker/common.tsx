@@ -173,19 +173,10 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
     )
 }
 
-export const SelectPickerMenuList = <OptionValue, IsMulti extends boolean>({
-    renderMenuListFooter,
-    shouldRenderCustomOptions,
-    renderCustomOptions,
-    ...props
-}: MenuListProps<SelectPickerOptionType<OptionValue>> &
-    Pick<
-        SelectPickerProps<OptionValue, IsMulti>,
-        'renderMenuListFooter' | 'shouldRenderCustomOptions' | 'renderCustomOptions'
-    >) => {
+export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPickerOptionType<OptionValue>>) => {
     const {
         children,
-        selectProps: { inputValue, value },
+        selectProps: { inputValue, renderMenuListFooter, shouldRenderCustomOptions, renderCustomOptions },
     } = props
 
     return (
@@ -195,8 +186,7 @@ export const SelectPickerMenuList = <OptionValue, IsMulti extends boolean>({
             {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
             {!shouldRenderCustomOptions && renderMenuListFooter && (
                 <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bcn-0 dc__zi-2">
-                    {/* Passing down value as a prop to ensure that the menu list is not re-rendered and scrolled to top on click */}
-                    {renderMenuListFooter(value)}
+                    {renderMenuListFooter()}
                 </div>
             )}
         </components.MenuList>

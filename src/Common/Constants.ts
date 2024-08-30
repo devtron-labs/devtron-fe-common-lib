@@ -107,6 +107,7 @@ export const ROUTES = {
     PLUGIN_GLOBAL_LIST_V2: 'plugin/global/list/v2',
     PLUGIN_GLOBAL_LIST_TAGS: 'plugin/global/list/tags',
     DEPLOYMENT_CHARTS_LIST: 'deployment/template/fetch',
+    USER_LIST_MIN: 'user/list/min',
     CONFIG_DATA: 'config/data',
 }
 
