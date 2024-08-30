@@ -1,13 +1,14 @@
 import { ConfigurationType } from '@Shared/types'
 
-export enum DeploymentTemplateCompareModes {
-    VALUES = 'values',
-    MANIFEST = 'manifest',
+export enum DeploymentTemplateTabsType {
+    EDIT = 1,
+    COMPARE = 2,
+    PUBLISHED = 3,
 }
 
 export interface DeploymentTemplateQueryParamsType {
     hideLockedKeys: boolean
     resolveScopedVariables: boolean
-    compareMode: DeploymentTemplateCompareModes
+    selectedTab: DeploymentTemplateTabsType
     editMode: ConfigurationType
 }

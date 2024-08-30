@@ -668,3 +668,8 @@ export enum ConfigurationType {
     GUI = 'GUI',
     YAML = 'YAML',
 }
+
+export interface BaseURLParams {
+    appId: string
+    envId: string
+}
