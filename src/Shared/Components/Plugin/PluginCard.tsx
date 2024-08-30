@@ -84,7 +84,7 @@ const PluginCard = ({
                             </div>
 
                             {docLink && (
-                                <div className="flexbox dc__gap-4 dc__visible-hover--child dc__align-items-center">
+                                <div className="flexbox dc__gap-4 dc__visible-hover--child dc__align-items-center dc__no-shrink">
                                     <a
                                         href={docLink}
                                         className="anchor fs-12 fw-6 lh-20"
