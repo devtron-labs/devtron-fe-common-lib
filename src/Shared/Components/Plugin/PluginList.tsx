@@ -55,7 +55,7 @@ const PluginList = ({
             )
 
             handleDataUpdateForPluginResponse(pluginDataResponse, true)
-        } catch (error) {
+        } catch {
             // Do nothing
         } finally {
             setIsLoadingMorePlugins(false)
