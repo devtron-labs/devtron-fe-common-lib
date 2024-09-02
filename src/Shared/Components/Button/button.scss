@@ -10,6 +10,7 @@
 
     // Custom state for loader
     .loader {
+        visibility: visible;
         position: absolute;
 
         svg,
@@ -164,5 +165,9 @@
                 text-decoration: underline;
             }
         }
+    }
+
+    &--loading > * {
+        visibility: hidden;
     }
 }
