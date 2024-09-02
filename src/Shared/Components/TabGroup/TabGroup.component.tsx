@@ -6,6 +6,7 @@ import { ComponentSizeType } from '@Shared/constants'
 
 import { TabGroupProps, TabProps } from './TabGroup.types'
 import './TabGroup.scss'
+import { getClassNameBySize, getIconColorClass } from './TabGroup.utils'
 
 const Tab = ({
     label,
@@ -23,44 +24,23 @@ const Tab = ({
     showWarning,
     disabled,
 }: TabProps & Pick<TabGroupProps, 'size' | 'alignActiveBorderWithContainer' | 'hideTopPadding'>) => {
-    const getClassNameBySize = () => {
-        switch (size) {
-            case ComponentSizeType.medium:
-                return {
-                    tabClassName: `fs-12 ${!hideTopPadding ? 'pt-6' : ''} ${alignActiveBorderWithContainer ? 'pb-5' : 'pb-6'}`,
-                    iconClassName: 'icon-dim-14',
-                    badgeClassName: 'fs-11 lh-18 tab-group__tab__badge--medium',
-                }
-            default:
-                return {
-                    tabClassName: `fs-13 ${!hideTopPadding ? 'pt-8' : ''} ${alignActiveBorderWithContainer ? 'pb-7' : 'pb-8'}`,
-                    iconClassName: 'icon-dim-16',
-                    badgeClassName: 'fs-12 lh-20',
-                }
-        }
-    }
-    const { tabClassName, iconClassName, badgeClassName } = getClassNameBySize()
-
-    const getIconColorClass = () => {
-        if (iconType === 'fill') {
-            return `tab-group__tab__icon--fill ${active ? 'fcb-5' : 'fcn-7'}`
-        }
-        if (iconType === 'stroke') {
-            return `tab-group__tab__icon--stroke ${active ? 'scb-5' : 'scn-7'}`
-        }
-
-        return ''
-    }
+    const { tabClassName, iconClassName, badgeClassName } = getClassNameBySize({
+        size,
+        hideTopPadding,
+        alignActiveBorderWithContainer,
+    })
 
     const getTabComponent = () => {
         const content = (
             <>
                 {showError && <ICErrorExclamation className={`${iconClassName}`} />}
                 {!showError && showWarning && <ICWarning className={`${iconClassName} warning-icon-y7`} />}
-                {!showError && !showWarning && Icon && <Icon className={`${iconClassName} ${getIconColorClass()}`} />}
+                {!showError && !showWarning && Icon && (
+                    <Icon className={`${iconClassName} ${getIconColorClass({ iconType, active })}`} />
+                )}
                 {label}
                 {badge !== null && (
-                    <div className={`tab-group__tab__badge bcn-1 cn-7 flex px-4 ${badgeClassName}`}>{badge}</div>
+                    <div className={`tab-group__tab__badge bcn-1 cn-7 fw-6 flex px-4 ${badgeClassName}`}>{badge}</div>
                 )}
                 {showIndicator && <span className="tab-group__tab__indicator bcr-5 mt-4 dc__align-self-start" />}
             </>
