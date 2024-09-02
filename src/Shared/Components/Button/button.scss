@@ -10,13 +10,19 @@
     color: inherit;
     border: none;
     outline: inherit;
+    text-decoration: none;
+    text-transform: capitalize;
 
-    &:focus,
-    &:active,
-    &:hover {
-        outline: unset;
-        // border: unset;
-    }
+    // &:focus,
+    // &:active,
+    // &:hover {
+    //     outline: unset;
+    //     // border: unset;
+    // }
+
+    // &:focus {
+    //     outline: auto;
+    // }
 
     &__primary {
         $border-color: transparent;
@@ -24,24 +30,64 @@
 
         &--default {
             @include button-variant-styles(var(--B500), $text-color, $border-color);
+
+            &:hover {
+                background: var(--B600);
+            }
+
+            &:active {
+                background: var(--B700);
+            }
         }
 
         &--negative {
             @include button-variant-styles(var(--R500), $text-color, $border-color);
+
+            &:hover {
+                background: var(--R600);
+            }
+
+            &:active {
+                background: var(--R700);
+            }
         }
 
         &--positive {
             @include button-variant-styles(var(--G500), $text-color, $border-color);
+
+            &:hover {
+                background: var(--G600);
+            }
+
+            &:active {
+                background: var(--G700);
+            }
         }
 
         &--warning {
             $text-color: var(--N900);
 
-            @include button-variant-styles(var(--Y500), var(--N900), $border-color);
+            @include button-variant-styles(var(--Y500), $text-color, $border-color);
+
+            &:hover {
+                background: var(--Y600);
+            }
+
+            &:active {
+                background: var(--Y700);
+            }
         }
 
         &--neutral {
             @include button-variant-styles(var(--N500), $text-color, $border-color);
+
+            &:hover {
+                background: var(--N600);
+            }
+
+            &:active {
+                background: var(--N700);
+            }
         }
     }
 
@@ -51,22 +97,62 @@
 
         &--default {
             @include button-variant-styles($background, var(--B500), $border-color);
+
+            &:hover {
+                background: var(--B100);
+            }
+
+            &:active {
+                background: var(--B200);
+            }
         }
 
         &--negative {
             @include button-variant-styles($background, var(--R600), $border-color);
+
+            &:hover {
+                background: var(--R100);
+            }
+
+            &:active {
+                background: var(--R200);
+            }
         }
 
         &--positive {
             @include button-variant-styles($background, var(--G600), $border-color);
+
+            &:hover {
+                background: var(--G100);
+            }
+
+            &:active {
+                background: var(--G200);
+            }
         }
 
         &--warning {
             @include button-variant-styles($background, var(--Y700), $border-color);
+
+            &:hover {
+                background: var(--Y100);
+            }
+
+            &:active {
+                background: var(--Y200);
+            }
         }
 
         &--neutral {
             @include button-variant-styles($background, var(--N700), $border-color);
+
+            &:hover {
+                background: var(--N100);
+            }
+
+            &:active {
+                background: var(--N200);
+            }
         }
     }
 
@@ -96,7 +182,77 @@
         }
     }
 
+    &__text {
+        &--default {
+
+            &:hover {
+                background: var(--B100);
+            }
+
+            &:active {
+                background: var(--B200);
+            }
+        }
+
+        &--negative {
+
+            &:hover {
+                background: var(--R100);
+            }
+
+            &:active {
+                background: var(--R200);
+            }
+        }
+
+        &--positive {
+
+            &:hover {
+                background: var(--G100);
+            }
+
+            &:active {
+                background: var(--G200);
+            }
+        }
+
+        &--warning {
+
+            &:hover {
+                background: var(--Y100);
+            }
+
+            &:active {
+                background: var(--Y200);
+            }
+        }
+
+        &--neutral {
+
+            &:hover {
+                background: var(--N100);
+            }
+
+            &:active {
+                background: var(--N200);
+            }
+        }
+    }
+
     &__link {
-        padding: 0;
+
+        &--default,
+        &--negative,
+        &--positive,
+        &--warning,
+        &--neutral {
+            padding: 0;
+            min-width: 0;
+            border: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
 }
