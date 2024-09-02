@@ -62,6 +62,8 @@ const _onChange = {
     onChange: null,
 }
 
+const INITIAL_HEIGHT_WHEN_DYNAMIC_HEIGHT = 100
+
 const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(
     ({
         value,
@@ -88,6 +90,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         onBlur,
         onFocus,
         adjustEditorHeightToContent = false,
+        disableSearch = false,
     }) => {
         if (cleanData) {
             value = cleanKubeManifest(value)
@@ -101,7 +104,9 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         const [state, dispatch] = useReducer(memoisedReducer, initialState({ mode, theme, value, diffView, noParsing }))
         const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
         const [, originalJson, originlaYaml] = useJsonYaml(defaultValue, tabSize, state.mode, !state.noParsing)
-        const [contentHeight, setContentHeight] = useState(height)
+        const [contentHeight, setContentHeight] = useState(
+            adjustEditorHeightToContent ? INITIAL_HEIGHT_WHEN_DYNAMIC_HEIGHT : height,
+        )
         monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
             base: 'vs-dark',
             inherit: true,
@@ -146,7 +151,19 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             },
         })
 
-        function editorDidMount(editor, monaco) {
+        useEffect(() => {
+            const rule = !disableSearch
+                ? null
+                : monaco.editor.addKeybindingRule({
+                      command: null,
+                      keybinding: monaco.KeyCode.KeyF | monaco.KeyMod.CtrlCmd,
+                  })
+            return () => {
+                rule?.dispose()
+            }
+        }, [disableSearch])
+
+        const editorDidMount = (editor, monaco) => {
             if (
                 mode === MODES.YAML &&
                 editor &&
@@ -166,11 +183,33 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 }
             }
 
-            if (adjustEditorHeightToContent) {
-                setContentHeight(editor.getContentHeight())
-                editor.onDidContentSizeChange(() => {
+            if (adjustEditorHeightToContent && editor) {
+                if (!('getModifiedEditor' in editor)) {
+                    editor.onDidContentSizeChange(() => {
+                        setContentHeight(editor.getContentHeight())
+                    })
                     setContentHeight(editor.getContentHeight())
+                    return
+                }
+                const modifiedEditor = editor.getModifiedEditor()
+                const originalEditor = editor.getOriginalEditor()
+                originalEditor.onDidContentSizeChange(() => {
+                    setContentHeight(
+                        Math.max(
+                            typeof contentHeight === 'number' ? contentHeight : Number.MIN_SAFE_INTEGER,
+                            originalEditor.getContentHeight(),
+                        ),
+                    )
                 })
+                modifiedEditor.onDidContentSizeChange(() => {
+                    setContentHeight(
+                        Math.max(
+                            typeof contentHeight === 'number' ? contentHeight : Number.MIN_SAFE_INTEGER,
+                            modifiedEditor.getContentHeight(),
+                        ),
+                    )
+                })
+                setContentHeight(Math.max(modifiedEditor.getContentHeight(), modifiedEditor.getContentHeight()))
             }
 
             editorRef.current = editor
@@ -278,12 +317,24 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             lineDecorationsWidth,
             automaticLayout: true,
             scrollBeyondLastLine: false,
+            ...(adjustEditorHeightToContent
+                ? {
+                      overviewRulerLanes: adjustEditorHeightToContent ? 0 : 1,
+                  }
+                : {}),
             minimap: {
                 enabled: false,
             },
             scrollbar: {
                 alwaysConsumeMouseWheel: false,
                 vertical: inline ? 'hidden' : 'auto',
+                ...(adjustEditorHeightToContent
+                    ? {
+                          vertical: 'hidden',
+                          verticalScrollbarSize: 0,
+                          verticalSliderSize: 0,
+                      }
+                    : {}),
             },
             lineNumbers(lineNumber) {
                 return `<span style="padding-right:6px">${lineNumber}</span>`

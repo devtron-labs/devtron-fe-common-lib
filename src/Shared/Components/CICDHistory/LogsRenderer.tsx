@@ -214,7 +214,7 @@ export const LogsRenderer = ({
                                     `\x1B[0m\x1B[48;2;197;141;54m${match}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
                             ),
                         )
-                    } catch (searchRegexError) {
+                    } catch {
                         acc.push(part)
                     }
 
@@ -228,7 +228,7 @@ export const LogsRenderer = ({
             }
             const ansiUp = new AnsiUp()
             return { __html: ansiUp.ansi_to_html(log), isSearchKeyPresent }
-        } catch (err) {
+        } catch {
             return { __html: log, isSearchKeyPresent }
         }
     }
@@ -328,7 +328,7 @@ export const LogsRenderer = ({
                         })
                     }
                     return acc
-                } catch (e) {
+                } catch {
                     // In case of error would not create
                     return acc
                 }
