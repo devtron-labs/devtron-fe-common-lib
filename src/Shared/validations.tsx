@@ -218,7 +218,7 @@ export const validateProtocols = (
                 isValid: true,
             }
         }
-    } catch (error) {
+    } catch {
         // Do nothing
     }
 
