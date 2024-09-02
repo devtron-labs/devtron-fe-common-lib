@@ -14,15 +14,17 @@ const Button = ({
     text,
     startIcon,
     endIcon,
+    disabled,
 }: ButtonProps) => {
     const iconClass = `dc__no-shrink flex dc__fill-available-space ${BUTTON_SIZE_TO_ICON_CLASS_NAME_MAP[size]}`
 
     return (
         <button
             {...buttonProps}
+            disabled={disabled}
             // eslint-disable-next-line react/button-has-type
             type={buttonProps.type || 'button'}
-            className={`br-4 flex cursor dc__mnw-100 ${getButtonDerivedClass({ size, variant, style })} ${buttonProps.className || ''}`}
+            className={`br-4 flex cursor dc__mnw-100 dc__tab-focus ${getButtonDerivedClass({ size, variant, style })} ${disabled ? 'dc__disabled' : ''} ${buttonProps.className || ''}`}
         >
             {startIcon && <span className={iconClass}>{startIcon}</span>}
             <span className="dc__mxw-150 dc__align-left dc__truncate">{text}</span>

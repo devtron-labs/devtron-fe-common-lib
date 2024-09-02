@@ -17,11 +17,13 @@ export enum ButtonStyleType {
 }
 
 export interface ButtonProps {
-    buttonProps?: ButtonHTMLAttributes<HTMLButtonElement>
+    buttonProps?: Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'>
     variant?: ButtonVariantType
     size?: ComponentSizeType
     style?: ButtonStyleType
     text: string
     startIcon?: ReactElement
     endIcon?: ReactElement
+    disabled?: boolean
+    isLoading?: boolean
 }
