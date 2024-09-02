@@ -75,7 +75,7 @@ export const highlightSearchText = ({ searchText, text, highlightClasses }: High
     try {
         const regex = new RegExp(searchText, 'gi')
         return text.replace(regex, (match) => `<span class="${highlightClasses}">${match}</span>`)
-    } catch (error) {
+    } catch {
         return text
     }
 }
