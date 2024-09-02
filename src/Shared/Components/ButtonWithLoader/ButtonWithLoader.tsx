@@ -19,7 +19,7 @@
 import React, { Component } from 'react'
 import { Progressing } from '../../../Common'
 
-export interface ButtonProps {
+export interface ButtonWithLoaderProps {
     disabled?: boolean
     rootClassName: string
     isLoading: boolean
@@ -29,7 +29,7 @@ export interface ButtonProps {
     type?: 'submit' | 'reset' | 'button'
 }
 
-export class ButtonWithLoader extends Component<ButtonProps> {
+export class ButtonWithLoader extends Component<ButtonWithLoaderProps> {
     constructor(props) {
         super(props)
         this.clickHandler = this.clickHandler.bind(this)

@@ -1,0 +1,102 @@
+@mixin button-variant-styles($background, $text-color, $border-color) {
+    background: $background;
+    color: $text-color;
+    border: 1px solid $border-color;
+}
+
+.button {
+    // Reset the default styles
+    background: none;
+    color: inherit;
+    border: none;
+    outline: inherit;
+
+    &:focus,
+    &:active,
+    &:hover {
+        outline: unset;
+        // border: unset;
+    }
+
+    &__primary {
+        $border-color: transparent;
+        $text-color: var(--N0);
+
+        &--default {
+            @include button-variant-styles(var(--B500), $text-color, $border-color);
+        }
+
+        &--negative {
+            @include button-variant-styles(var(--R500), $text-color, $border-color);
+        }
+
+        &--positive {
+            @include button-variant-styles(var(--G500), $text-color, $border-color);
+        }
+
+        &--warning {
+            $text-color: var(--N900);
+
+            @include button-variant-styles(var(--Y500), var(--N900), $border-color);
+        }
+
+        &--neutral {
+            @include button-variant-styles(var(--N500), $text-color, $border-color);
+        }
+    }
+
+    &__secondary {
+        $background: var(--N0);
+        $border-color: var(--N200);
+
+        &--default {
+            @include button-variant-styles($background, var(--B500), $border-color);
+        }
+
+        &--negative {
+            @include button-variant-styles($background, var(--R600), $border-color);
+        }
+
+        &--positive {
+            @include button-variant-styles($background, var(--G600), $border-color);
+        }
+
+        &--warning {
+            @include button-variant-styles($background, var(--Y700), $border-color);
+        }
+
+        &--neutral {
+            @include button-variant-styles($background, var(--N700), $border-color);
+        }
+    }
+
+    &__text,
+    &__link {
+        $background: transparent;
+        $border-color: transparent;
+
+        &--default {
+            @include button-variant-styles($background, var(--B500), $border-color);
+        }
+
+        &--negative {
+            @include button-variant-styles($background, var(--R600), $border-color);
+        }
+
+        &--positive {
+            @include button-variant-styles($background, var(--G600), $border-color);
+        }
+
+        &--warning {
+            @include button-variant-styles($background, var(--Y700), $border-color);
+        }
+
+        &--neutral {
+            @include button-variant-styles($background, var(--N700), $border-color);
+        }
+    }
+
+    &__link {
+        padding: 0;
+    }
+}

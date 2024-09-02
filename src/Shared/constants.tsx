@@ -452,9 +452,11 @@ export const ANSI_UP_REGEX = /\x1B\[.*?m/g
  * Size variants for components
  */
 export enum ComponentSizeType {
+    xs = 'xs',
     small = 'small',
     medium = 'medium',
     large = 'large',
+    xl = 'xl',
 }
 
 export const POP_UP_MENU_MODAL_ID = 'popup'
