@@ -457,6 +457,8 @@ export enum ComponentSizeType {
     large = 'large',
 }
 
+export const POP_UP_MENU_MODAL_ID = 'popup'
+
 /**
  * Identifiers for grouped / all resources
  */

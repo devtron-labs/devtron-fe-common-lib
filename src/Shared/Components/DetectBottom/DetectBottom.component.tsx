@@ -16,12 +16,14 @@
 
 import { useEffect, useRef } from 'react'
 import { useIntersection } from '../../Helpers'
+import { GenericSectionErrorState } from '../GenericSectionErrorState'
 
 interface DetectBottomProps {
     callback: () => void
+    hasError?: boolean
 }
 
-const DetectBottom = ({ callback }: DetectBottomProps) => {
+const DetectBottom = ({ callback, hasError }: DetectBottomProps) => {
     const target = useRef<HTMLSpanElement>(null)
     const intersected = useIntersection(target, {
         rootMargin: '0px',
@@ -33,6 +35,14 @@ const DetectBottom = ({ callback }: DetectBottomProps) => {
             callback()
         }
     }, [intersected])
+
+    if (hasError) {
+        return (
+            <div className="p-24 flex">
+                <GenericSectionErrorState reload={callback} />
+            </div>
+        )
+    }
 
     return <span className="pb-5" ref={target} />
 }

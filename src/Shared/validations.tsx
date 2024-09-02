@@ -31,9 +31,14 @@ export const MESSAGES = {
     VALID_POSITIVE_NUMBER: 'This field should be a valid positive number',
     VALID_POSITIVE_INTEGER: 'This field should be a valid positive integer',
     MAX_SAFE_INTEGER: `Maximum allowed value is ${Number.MAX_SAFE_INTEGER}`,
+    INVALID_SEMANTIC_VERSION: 'Please follow semantic versioning',
 }
 
 const MAX_DESCRIPTION_LENGTH = 350
+const DISPLAY_NAME_CONSTRAINTS = {
+    MAX_LIMIT: 50,
+    MIN_LIMIT: 3,
+}
 
 export const requiredField = (value: string): ValidationResponseType => {
     if (!value?.trim()) {
@@ -279,6 +284,48 @@ export const validateUniqueKeys = (keys: string[]) => {
         message: `Duplicate variable name: ${duplicateKeys.join(', ')}`,
     }
 }
+
+/**
+ * Rules for valid semantic version:
+ * 1. version.length < 128 and not empty
+ * 2. version should follow semantic versioning regex from https://semver.org/
+ */
+export const validateSemanticVersioning = (version: string): ValidationResponseType => {
+    if (!version) {
+        return {
+            isValid: false,
+            message: 'Please provide a version',
+        }
+    }
+
+    if (version.length > 128) {
+        return {
+            isValid: false,
+            message: MESSAGES.getMaxCharMessage(128),
+        }
+    }
+
+    if (
+        !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/.test(
+            version,
+        )
+    ) {
+        return {
+            isValid: false,
+            message: MESSAGES.INVALID_SEMANTIC_VERSION,
+        }
+    }
+
+    return {
+        isValid: true,
+    }
+}
+
+/**
+ * A valid display name should be between 3 and 50 characters
+ */
+export const validateDisplayName = (name: string): ValidationResponseType =>
+    validateStringLength(name, DISPLAY_NAME_CONSTRAINTS.MAX_LIMIT, DISPLAY_NAME_CONSTRAINTS.MIN_LIMIT)
 
 export const validateJSON = (json: string): ValidationResponseType => {
     try {
