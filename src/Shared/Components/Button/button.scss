@@ -4,8 +4,19 @@
     border: 1px solid $border-color;
 
     svg,
-    svg>* {
+    svg * {
         stroke: $text-color;
+    }
+
+    // Custom state for loader
+    .loader {
+        position: absolute;
+
+        svg,
+        svg * {
+            fill: $text-color;
+            stroke: none;
+        }
     }
 }
 
@@ -27,8 +38,6 @@
     color: inherit;
     border: none;
     outline: inherit;
-    text-decoration: none;
-    text-transform: capitalize;
 
     &__primary {
         $border-color: transparent;
