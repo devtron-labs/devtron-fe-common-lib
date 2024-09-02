@@ -146,7 +146,7 @@ export const CustomInput = ({
 
             {getInputError()}
             {helperText && (
-                <div className="flex left top dc__gap-4 fs-11 lh-16 cn-7 mt-4">
+                <div className="flex left top dc__gap-4 fs-11 lh-16 cn-7 pt-4">
                     <Info className="icon-dim-16" />
                     <div>{helperText}</div>
                 </div>
