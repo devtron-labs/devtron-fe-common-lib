@@ -57,18 +57,18 @@ import './button.scss'
  *
  */
 const Button = ({
+    dataTestId,
+    text,
     variant = ButtonVariantType.primary,
     size = ComponentSizeType.large,
     style = ButtonStyleType.default,
-    text,
-    startIcon,
-    endIcon,
-    disabled,
-    isLoading,
-    showTippy,
-    tippyContent,
+    startIcon = null,
+    endIcon = null,
+    disabled = false,
+    isLoading = false,
+    showTippy = false,
+    tippyContent = null,
     type = 'button',
-    dataTestId,
     ...props
 }: ButtonProps) => {
     const isDisabled = disabled || isLoading
