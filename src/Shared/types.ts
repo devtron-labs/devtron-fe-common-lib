@@ -24,6 +24,7 @@ import {
     ServerErrors,
     SortingParams,
 } from '../Common'
+import { KeyValueListType } from './Components'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
@@ -339,6 +340,11 @@ export interface RuntimeParamsTriggerPayloadType {
 
 export enum CIMaterialSidebarType {
     CODE_SOURCE = 'Code Source',
+    PARAMETERS = 'Parameters',
+}
+
+export enum CDMaterialSidebarType {
+    IMAGE = 'Image',
     PARAMETERS = 'Parameters',
 }
 
@@ -663,3 +669,12 @@ export type BaseFilterQueryParams<T> = {
      */
     showAll?: boolean
 } & SortingParams<T>
+
+export interface RuntimeParamsListItemType extends KeyValueListType {
+    id: number
+}
+
+export enum RuntimeParamsHeadingType {
+    KEY = 'key',
+    VALUE = 'value',
+}

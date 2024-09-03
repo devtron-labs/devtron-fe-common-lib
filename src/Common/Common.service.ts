@@ -15,6 +15,8 @@
  */
 
 import moment from 'moment'
+import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
+import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
 import { ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
@@ -41,7 +43,6 @@ import {
     CDMaterialListModalServiceUtilProps,
 } from './Types'
 import { ApiResourceType } from '../Pages'
-import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { API_TOKEN_PREFIX } from '@Shared/constants'
 import { DefaultUserKey } from '@Shared/types'
 
@@ -317,6 +318,11 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
     }
 }
 
+export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): RuntimeParamsListItemType[] =>
+    Object.entries(response?.envVariables || {})
+        .map(([key, value], index) => ({ key, value, id: index }))
+        .sort((a, b) => stringComparatorBySortOrder(a.key, b.key))
+
 const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
     if (!cdMaterialsResult) {
         return {
@@ -326,6 +332,7 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
             resourceFilters: [],
             totalCount: 0,
             requestedUserId: 0,
+            runtimeParams: [],
         }
     }
 
@@ -336,6 +343,7 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
         resourceFilters: cdMaterialsResult.resourceFilters ?? [],
         totalCount: cdMaterialsResult.totalCount ?? 0,
         requestedUserId: cdMaterialsResult.requestedUserId,
+        runtimeParams: parseRuntimeParams(cdMaterialsResult.runtimeParams),
     }
 }
 
