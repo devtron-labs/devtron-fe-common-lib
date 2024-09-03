@@ -775,6 +775,8 @@ export interface AppEnvironment {
     isProtected?: boolean
     pipelineId?: number
     latestCdWorkflowRunnerId?: number
+    commits?: string[]
+    ciArtifactId?: number
 }
 
 export interface Strategy {
@@ -903,13 +905,6 @@ export interface CiPipeline {
     }
     isOffendingMandatoryPlugin?: boolean
     pipelineType?: string
-}
-
-export interface DeploymentChartVersionType {
-    chartRefId: number
-    chartVersion: string
-    chartType: string
-    type: number
 }
 
 export interface ChartVersionAndTypeSelectorProps {
