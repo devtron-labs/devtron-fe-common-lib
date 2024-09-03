@@ -68,6 +68,7 @@ const Button = ({
     showTippy,
     tippyContent,
     type = 'button',
+    dataTestId,
     ...props
 }: ButtonProps) => {
     const isDisabled = disabled || isLoading
@@ -82,6 +83,7 @@ const Button = ({
                     // eslint-disable-next-line react/button-has-type
                     type={type}
                     className={`br-4 flex cursor dc__mnw-100 dc__tab-focus dc__position-rel dc__capitalize ${getButtonDerivedClass({ size, variant, style, isLoading })} ${isDisabled ? 'dc__disabled' : ''}`}
+                    data-testid={dataTestId}
                 >
                     {startIcon && <span className={iconClass}>{startIcon}</span>}
                     <span className="dc__mxw-150 dc__align-left dc__truncate">{text}</span>

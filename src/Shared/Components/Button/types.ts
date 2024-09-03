@@ -52,6 +52,7 @@ export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'childre
      * If true, the loading state is shown for the button with disabled
      */
     isLoading?: boolean
+    dataTestId: string
 } & (
         | {
               /**
