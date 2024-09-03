@@ -1,3 +1,4 @@
+import { TooltipProps } from '@Common/Tooltip/types'
 import { ComponentSizeType } from '@Shared/constants'
 import { ButtonHTMLAttributes, ReactElement } from 'react'
 
@@ -16,7 +17,7 @@ export enum ButtonStyleType {
     neutral = 'neutral',
 }
 
-export interface ButtonProps {
+export type ButtonProps = {
     buttonProps?: Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'>
     variant?: ButtonVariantType
     size?: ComponentSizeType
@@ -26,4 +27,13 @@ export interface ButtonProps {
     endIcon?: ReactElement
     disabled?: boolean
     isLoading?: boolean
-}
+} & (
+    | {
+          showTippy: boolean
+          tippyContent: TooltipProps['content']
+      }
+    | {
+          showTippy?: never
+          tippyContent?: never
+      }
+)
