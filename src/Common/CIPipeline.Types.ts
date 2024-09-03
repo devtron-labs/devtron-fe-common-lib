@@ -104,6 +104,7 @@ export interface VariableType {
     format: string
     description: string
     defaultValue: string
+    allowEmptyValue: boolean
     variableType: RefVariableType
     refVariableStepIndex: number
     refVariableName: string
@@ -128,7 +129,7 @@ interface ConditionDetails {
     conditionalValue: string
 }
 
-interface InlineStepDetailType {
+export interface InlineStepDetailType {
     scriptType: ScriptType
     isMountCustomScript?: boolean
     script?: string
@@ -147,6 +148,8 @@ interface InlineStepDetailType {
     inputVariables?: VariableType[]
     outputVariables?: VariableType[]
     conditionDetails: ConditionDetails[]
+    storeScriptAt?: string
+    mountCodeToContainerPath?: string
 }
 
 interface PluginRefStepDetailType {

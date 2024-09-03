@@ -46,7 +46,6 @@ const getVariantOverrides = <OptionValue>(
                     gap: '2px',
                 }),
                 singleValue: () => ({
-                    color: 'var(--B500)',
                     fontWeight: 600,
                 }),
             }

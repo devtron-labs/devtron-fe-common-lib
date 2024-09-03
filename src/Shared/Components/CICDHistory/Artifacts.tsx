@@ -69,7 +69,7 @@ export const CIListItem = ({
     return (
         <>
             {type === 'deployed-artifact' && (
-                <div className="flex dc__width-inherit">
+                <div className="flex dc__width-inherit pb-12">
                     <div className="w-50 text-underline-dashed-300" />
                     <Down className="icon-dim-16 ml-8 mr-8" style={{ transform: 'rotate(90deg)' }} />
                     <div className="w-50 text-underline-dashed-300" />
@@ -179,7 +179,11 @@ const Artifacts = ({
             </div>
         )
     }
-    if (status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED || status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED) {
+    if (
+        status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED ||
+        status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED ||
+        status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR
+    ) {
         if (isJobCI) {
             return (
                 <GenericEmptyState

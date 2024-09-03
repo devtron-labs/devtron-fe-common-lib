@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
+import { ServerErrors } from '@Common/ServerError'
 import { OptionType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 import { MutableRefObject, ReactElement, ReactNode } from 'react'
 import { GroupBase, GroupHeadingProps, Props as ReactSelectProps, SelectInstance } from 'react-select'
 import { CreatableProps } from 'react-select/creatable'
+// This import allows to extend the base interface in react-select module via module augmentation
+import type {} from 'react-select/base'
 
 export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
     /**
@@ -35,16 +38,40 @@ export interface SelectPickerOptionType<OptionValue = string | number> extends O
     endIcon?: ReactElement
 }
 
-export enum SelectPickerVariantType {
-    DEFAULT = 'default',
-    BORDER_LESS = 'border-less',
-}
-
 type SelectProps<OptionValue, IsMulti extends boolean> = ReactSelectProps<
     SelectPickerOptionType<OptionValue>,
     IsMulti,
     GroupBase<SelectPickerOptionType<OptionValue>>
 >
+
+declare module 'react-select/base' {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export interface Props<Option, IsMulti extends boolean, Group extends GroupBase<Option>> {
+        /**
+         * Render function for the footer at the bottom of menu list. It is sticky by default
+         */
+        renderMenuListFooter?: () => ReactNode
+        /**
+         * If true, custom options are rendered in the menuList component of react select
+         *
+         * Note: renderCustomOptions is required to be passed; renderMenuListFooter is also not called
+         *
+         * @default false
+         */
+        shouldRenderCustomOptions?: boolean
+        /**
+         * Callback handler for custom options
+         *
+         * Imp Note: The menu open/close needs to handled by the consumer in this case
+         */
+        renderCustomOptions?: () => ReactElement
+    }
+}
+
+export enum SelectPickerVariantType {
+    DEFAULT = 'default',
+    BORDER_LESS = 'border-less',
+}
 
 export type SelectPickerProps<OptionValue = number | string, IsMulti extends boolean = false> = Pick<
     SelectProps<OptionValue, IsMulti>,
@@ -72,7 +99,14 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     | 'onMenuClose'
     | 'autoFocus'
     | 'onBlur'
+    | 'onKeyDown'
 > &
+    Partial<
+        Pick<
+            SelectProps<OptionValue, IsMulti>,
+            'renderMenuListFooter' | 'shouldRenderCustomOptions' | 'renderCustomOptions'
+        >
+    > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> & {
         /**
          * Icon to be rendered in the control
@@ -82,10 +116,6 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * Error message for the select
          */
         error?: ReactNode
-        /**
-         * Render function for the footer at the bottom of menu list. It is sticky by default
-         */
-        renderMenuListFooter?: (selectedOptions: SelectProps<OptionValue, IsMulti>['value']) => ReactNode
         /**
          * Info text for the select, if any
          */
@@ -160,6 +190,15 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * @default false
          */
         fullWidth?: boolean
+        // TODO: Can make generic typing when adding multi select
+        /**
+         * If truthy, would show generic section error state as no options message
+         */
+        optionListError?: ServerErrors
+        /**
+         * Would reload the option list when called in case optionListError is present
+         */
+        reloadOptionList?: () => void
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean
@@ -195,29 +234,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
         : {
               isMulti?: never
               multiSelectProps?: never
-          }) &
-    (
-        | {
-              /**
-               * If true, custom options are rendered in the menuList component of react select
-               *
-               * Note: renderCustomOptions is required to be passed; renderMenuListFooter is also not called
-               *
-               * @default false
-               */
-              shouldRenderCustomOptions: boolean
-              /**
-               * Callback handler for custom options
-               *
-               * Imp Note: The menu open/close needs to handled by the consumer in this case
-               */
-              renderCustomOptions: () => ReactElement
-          }
-        | {
-              shouldRenderCustomOptions?: never
-              renderCustomOptions?: never
-          }
-    )
+          })
 
 // Doing like this, because of global export error GroupHeadingPropsDefinedProps
 export type SelectPickerGroupHeadingProps<OptionValue> = GroupHeadingProps<SelectPickerOptionType<OptionValue>> & {
@@ -232,6 +249,6 @@ export interface FilterSelectPickerProps
             SelectPickerProps<number | string, true>,
             'selectRef' | 'inputId' | 'menuPosition' | 'autoFocus' | 'shouldMenuAlignRight'
         > {
-    appliedFilterOptions: SelectPickerProps<number | string, true>['options']
+    appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
 }

@@ -2,7 +2,7 @@
  * Copyright (c) 2024. Devtron Inc.
  */
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ReactComponent as ICFilter } from '@Icons/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '@Icons/ic-filter-applied.svg'
 import SelectPicker from './SelectPicker.component'
@@ -21,6 +21,10 @@ const FilterSelectPicker = ({
 
     const appliedFiltersCount = appliedFilterOptions?.length ?? 0
 
+    useEffect(() => {
+        setSelectedOptions(appliedFilterOptions ?? [])
+    }, [appliedFilterOptions])
+
     const filterIcon = useMemo(
         () => (appliedFiltersCount ? <ICFilterApplied className="p-2" /> : <ICFilter className="p-2" />),
         [appliedFiltersCount],
@@ -35,7 +39,7 @@ const FilterSelectPicker = ({
     }
 
     const handleSelectOnChange: SelectPickerProps<number | string, true>['onChange'] = (selectedOptionsToUpdate) => {
-        setSelectedOptions(structuredClone(selectedOptionsToUpdate))
+        setSelectedOptions(structuredClone(selectedOptionsToUpdate) as SelectPickerOptionType[])
     }
 
     const handleMenuClose = () => {
@@ -43,9 +47,9 @@ const FilterSelectPicker = ({
         setSelectedOptions(structuredClone(appliedFilterOptions ?? []))
     }
 
-    const renderApplyButton = (optionsSelected: Parameters<FilterSelectPickerProps['handleApplyFilter']>[0]) => {
+    const renderApplyButton = () => {
         const handleApplyClick = () => {
-            handleApplyFilter(optionsSelected)
+            handleApplyFilter(selectedOptions)
             closeMenu()
         }
 

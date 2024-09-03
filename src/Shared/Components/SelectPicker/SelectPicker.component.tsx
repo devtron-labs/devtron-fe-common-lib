@@ -17,7 +17,6 @@
 import ReactSelect, {
     ControlProps,
     GroupHeadingProps,
-    MenuListProps,
     MultiValueProps,
     OptionProps,
     SelectInstance,
@@ -46,6 +45,7 @@ import {
     SelectPickerValueContainer,
 } from './common'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
+import { GenericSectionErrorState } from '../GenericSectionErrorState'
 
 /**
  * Generic component for select picker
@@ -185,7 +185,6 @@ import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } fr
 const SelectPicker = <OptionValue, IsMulti extends boolean>({
     error,
     icon,
-    renderMenuListFooter,
     helperText,
     placeholder = 'Select a option',
     label,
@@ -194,6 +193,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     disabledTippyContent,
     showSelectedOptionsCount = false,
     menuSize,
+    optionListError,
+    reloadOptionList,
     menuPosition = 'fixed',
     variant = SelectPickerVariantType.DEFAULT,
     disableDescriptionEllipsis = false,
@@ -201,7 +202,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     isMulti,
     name,
     classNamePrefix,
-    renderCustomOptions,
     shouldRenderCustomOptions = false,
     isSearchable,
     selectRef,
@@ -264,18 +264,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         [icon, shouldShowSelectedOptionIcon],
     )
 
-    const renderMenuList = useCallback(
-        (menuProps: MenuListProps<SelectPickerOptionType<OptionValue>>) => (
-            <SelectPickerMenuList
-                {...menuProps}
-                renderMenuListFooter={renderMenuListFooter}
-                renderCustomOptions={renderCustomOptions}
-                shouldRenderCustomOptions={shouldRenderCustomOptions}
-            />
-        ),
-        [shouldRenderCustomOptions],
-    )
-
     const renderValueContainer = useCallback(
         (valueContainerProps: ValueContainerProps<SelectPickerOptionType<OptionValue>>) => (
             <SelectPickerValueContainer
@@ -304,6 +292,14 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         ),
         [isGroupHeadingSelectable],
     )
+
+    const renderNoOptionsMessage = () => {
+        if (optionListError) {
+            return <GenericSectionErrorState reload={reloadOptionList} />
+        }
+
+        return <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8">No options</p>
+    }
 
     const renderDisabledTippy = (children: ReactElement) => (
         <Tippy content={disabledTippyContent} placement="top" className="default-tt" arrow={false}>
@@ -335,6 +331,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             'aria-invalid': !!error,
             'aria-labelledby': labelId,
             hideSelectedOptions: false,
+            shouldRenderCustomOptions: shouldRenderCustomOptions || false,
         }),
         [
             name,
@@ -348,6 +345,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             error,
             labelId,
             isMulti,
+            shouldRenderCustomOptions,
         ],
     )
 
@@ -386,12 +384,13 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                     DropdownIndicator: SelectPickerDropdownIndicator,
                                     Control: renderControl,
                                     Option: renderOption,
-                                    MenuList: renderMenuList,
+                                    MenuList: SelectPickerMenuList,
                                     ClearIndicator: SelectPickerClearIndicator,
                                     ValueContainer: renderValueContainer,
                                     MultiValueLabel: renderMultiValueLabel,
                                     MultiValueRemove: SelectPickerMultiValueRemove,
                                     GroupHeading: renderGroupHeading,
+                                    NoOptionsMessage: renderNoOptionsMessage,
                                 }}
                                 closeMenuOnSelect={false}
                                 allowCreateWhileLoading={false}
@@ -410,9 +409,10 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                     DropdownIndicator: SelectPickerDropdownIndicator,
                                     Control: renderControl,
                                     Option: renderOption,
-                                    MenuList: renderMenuList,
+                                    MenuList: SelectPickerMenuList,
                                     ClearIndicator: SelectPickerClearIndicator,
                                     ValueContainer: renderValueContainer,
+                                    NoOptionsMessage: renderNoOptionsMessage,
                                 }}
                             />
                         )}

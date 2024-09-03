@@ -47,6 +47,11 @@ interface CodeEditorBaseInterface {
     isKubernetes?: boolean
     cleanData?: boolean
     chartVersion?: any
+    /**
+     * If true, disable the in-built search of monaco editor
+     * @default false
+     */
+    disableSearch?: boolean
 }
 
 export type CodeEditorInterface = CodeEditorBaseInterface &
