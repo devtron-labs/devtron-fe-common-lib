@@ -17,23 +17,21 @@ export enum ButtonStyleType {
     neutral = 'neutral',
 }
 
-export type ButtonProps = {
-    buttonProps?: Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'>
+export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'styles' | 'className'> & {
     variant?: ButtonVariantType
     size?: ComponentSizeType
     style?: ButtonStyleType
     text: string
     startIcon?: ReactElement
     endIcon?: ReactElement
-    disabled?: boolean
     isLoading?: boolean
 } & (
-    | {
-          showTippy: boolean
-          tippyContent: TooltipProps['content']
-      }
-    | {
-          showTippy?: never
-          tippyContent?: never
-      }
-)
+        | {
+              showTippy: boolean
+              tippyContent: TooltipProps['content']
+          }
+        | {
+              showTippy?: never
+              tippyContent?: never
+          }
+    )

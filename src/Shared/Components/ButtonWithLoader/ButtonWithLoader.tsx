@@ -29,6 +29,9 @@ export interface ButtonWithLoaderProps {
     type?: 'submit' | 'reset' | 'button'
 }
 
+/**
+ * @deprecated use Button instead
+ */
 export class ButtonWithLoader extends Component<ButtonWithLoaderProps> {
     constructor(props) {
         super(props)
