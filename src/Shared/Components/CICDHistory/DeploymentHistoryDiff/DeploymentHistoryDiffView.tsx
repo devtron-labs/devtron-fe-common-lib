@@ -15,7 +15,7 @@
  */
 
 import { useParams } from 'react-router-dom'
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { yamlComparatorBySortOrder } from '@Shared/Helpers'
 import { MODES, Toggle, YAMLStringify } from '../../../../Common'
@@ -25,6 +25,7 @@ import CodeEditor from '../../../../Common/CodeEditor/CodeEditor'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
 import { ReactComponent as Info } from '../../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ViewVariablesIcon } from '../../../../Assets/Icon/ic-view-variable-toggle.svg'
+import './styles.scss'
 
 const DeploymentHistoryDiffView = ({
     currentConfiguration,
@@ -37,19 +38,8 @@ const DeploymentHistoryDiffView = ({
     sortOrder = null,
 }: DeploymentTemplateHistoryType) => {
     const { historyComponent, historyComponentName } = useParams<DeploymentHistoryParamsType>()
-    const ref = useRef(null)
-    const [codeEditorHeight, setCodeEditorHeight] = useState('')
-    const { innerHeight } = window
 
     const [convertVariables, setConvertVariables] = useState(false)
-
-    useEffect(() => {
-        if (ref.current) {
-            // eslint-disable-next-line no-unsafe-optional-chaining
-            const dynamicHeight = ref.current?.clientHeight + 255 + (!previousConfigAvailable ? 55 : 0)
-            setCodeEditorHeight(`${innerHeight - dynamicHeight < 400 ? 400 : innerHeight - dynamicHeight}px`)
-        }
-    }, [ref.current?.clientHeight])
 
     const getTheme = () => {
         if (isDeleteDraft) {
@@ -98,7 +88,8 @@ const DeploymentHistoryDiffView = ({
         <CodeEditor
             value={editorValuesRHS}
             defaultValue={editorValuesLHS}
-            height={codeEditorHeight}
+            adjustEditorHeightToContent
+            disableSearch
             diffView={previousConfigAvailable && true}
             readOnly
             noParsing
@@ -127,7 +118,7 @@ const DeploymentHistoryDiffView = ({
     )
 
     return (
-        <div>
+        <div className="deployment-history-diff-view">
             {!previousConfigAvailable && (
                 <div className="bcb-1 eb-2 pt-8 pb-8 br-4 flexbox pl-4 cn-9 fs-13 mt-16 mb-16 mr-20 ml-20">
                     <Info className="mr-8 ml-14 icon-dim-20" />
@@ -145,7 +136,6 @@ const DeploymentHistoryDiffView = ({
                 className={`en-2 bw-1 br-4 bcn-0 mt-16 mb-16 mr-20 ml-20 pt-2 pb-2 ${
                     previousConfigAvailable ? 'deployment-diff__upper' : ''
                 } ${rootClassName ?? ''}`}
-                ref={ref}
                 data-testid={`configuration-link-${
                     previousConfigAvailable ? 'previous-deployment' : 'no-previous-deployment'
                 }`}

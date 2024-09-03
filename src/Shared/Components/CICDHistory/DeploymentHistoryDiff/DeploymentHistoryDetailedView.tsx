@@ -116,11 +116,13 @@ const DeploymentHistoryDetailedView = ({
                 {loader ? (
                     <Progressing pageLoader />
                 ) : (
-                    <DeploymentHistoryDiffView
-                        currentConfiguration={currentConfiguration}
-                        baseTemplateConfiguration={baseTemplateConfiguration}
-                        previousConfigAvailable={previousConfigAvailable}
-                    />
+                    <div className="dc__overflow-scroll">
+                        <DeploymentHistoryDiffView
+                            currentConfiguration={currentConfiguration}
+                            baseTemplateConfiguration={baseTemplateConfiguration}
+                            previousConfigAvailable={previousConfigAvailable}
+                        />
+                    </div>
                 )}
             </div>
         </>

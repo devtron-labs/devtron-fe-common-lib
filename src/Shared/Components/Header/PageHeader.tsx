@@ -69,7 +69,7 @@ const PageHeader = ({
                 serverInfo: result,
                 fetchingServerInfo: false,
             })
-        } catch (err) {
+        } catch {
             setCurrentServerInfo({
                 serverInfo: currentServerInfo.serverInfo,
                 fetchingServerInfo: false,
