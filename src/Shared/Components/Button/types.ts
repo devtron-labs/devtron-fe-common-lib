@@ -22,19 +22,19 @@ export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'childre
     /**
      * Variant of the button
      *
-     * @default 'ButtonVariantType.primary'
+     * @default ButtonVariantType.primary
      */
     variant?: ButtonVariantType
     /**
      * Size of the button
      *
-     * @default 'ComponentSizeType.large'
+     * @default ComponentSizeType.large
      */
     size?: ComponentSizeType
     /**
      * Style to be applied on the button
      *
-     * @default 'ButtonStyleType.default'
+     * @default ButtonStyleType.default
      */
     style?: ButtonStyleType
     /**
