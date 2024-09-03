@@ -10,5 +10,6 @@ export interface DeploymentTemplateQueryParamsType {
     hideLockedKeys: boolean
     resolveScopedVariables: boolean
     selectedTab: DeploymentTemplateTabsType
+    showReadMe: boolean
     editMode: ConfigurationType
 }
