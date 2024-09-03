@@ -66,8 +66,8 @@ const Button = ({
     endIcon = null,
     disabled = false,
     isLoading = false,
-    showTippy = false,
-    tippyContent = null,
+    showTooltip = false,
+    tooltipProps = {},
     type = 'button',
     ...props
 }: ButtonProps) => {
@@ -75,7 +75,7 @@ const Button = ({
     const iconClass = `dc__no-shrink flex dc__fill-available-space ${BUTTON_SIZE_TO_ICON_CLASS_NAME_MAP[size]}`
 
     return (
-        <Tooltip content={tippyContent} alwaysShowTippyOnHover={showTippy && !!tippyContent}>
+        <Tooltip {...tooltipProps} alwaysShowTippyOnHover={showTooltip && !!tooltipProps?.content}>
             <div>
                 <button
                     {...props}

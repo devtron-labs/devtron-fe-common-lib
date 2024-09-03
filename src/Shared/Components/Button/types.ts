@@ -57,16 +57,16 @@ export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'childre
 } & (
         | {
               /**
-               * If true, the tippy is shown for the button
+               * If true, the tooltip is shown for the button
                */
-              showTippy: boolean
+              showTooltip: boolean
               /**
-               * Tippy content to be shown for use cases like disabled etc
+               * Props for tooltip
                */
-              tippyContent: TooltipProps['content']
+              tooltipProps: Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate'>
           }
         | {
-              showTippy?: never
-              tippyContent?: never
+              showTooltip?: never
+              tooltipProps?: never
           }
     )
