@@ -102,7 +102,7 @@ export const getRedirectionProps = (
             rel: isInternalUrl ? undefined : 'external noreferrer',
             url,
         }
-    } catch (err) {
+    } catch {
         return {
             href: url,
             target: '_blank',

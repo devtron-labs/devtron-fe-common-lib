@@ -6,7 +6,10 @@ import { Collapse } from '../Collapse'
 import { DeploymentConfigDiffAccordionProps } from './types'
 
 export const DeploymentConfigDiffAccordion = forwardRef<HTMLDivElement, DeploymentConfigDiffAccordionProps>(
-    ({ hasDiff, children, title, id, isExpanded, onClick, onTransitionEnd }, ref) => (
+    (
+        { hasDiff, children, title, id, isExpanded, onClick, onTransitionEnd }: DeploymentConfigDiffAccordionProps,
+        ref,
+    ) => (
         <div ref={ref} id={id} className="dc__border br-4 deployment-config-diff__accordion">
             <button
                 type="button"
