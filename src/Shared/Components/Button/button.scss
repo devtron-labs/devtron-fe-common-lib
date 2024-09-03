@@ -23,11 +23,15 @@
     }
 }
 
-@mixin pseudo-states($hover-bg-color, $active-bg-color) {
+@mixin pseudo-states($hover-bg-color, $active-bg-color, $hover-border-color: null) {
     $parent-selector: &;
 
     &:hover:enabled {
         background: $hover-bg-color;
+
+        @if ($hover-border-color) {
+            border-color: $hover-border-color;
+        }
     }
 
     &:active:enabled {
@@ -62,15 +66,13 @@
         }
 
         &--warning {
-            $text-color: var(--N900);
-
-            @include button-variant-styles(var(--Y500), $text-color, $border-color);
+            @include button-variant-styles(var(--Y500), var(--N900), $border-color);
             @include pseudo-states(var(--Y600), var(--Y700));
         }
 
         &--neutral {
-            @include button-variant-styles(var(--N500), $text-color, $border-color);
-            @include pseudo-states(var(--N600), var(--N700));
+            @include button-variant-styles(var(--N600), $text-color, $border-color);
+            @include pseudo-states(var(--N700), var(--N800));
         }
     }
 
@@ -80,27 +82,27 @@
 
         &--default {
             @include button-variant-styles($background, var(--B500), $border-color);
-            @include pseudo-states(var(--B100), var(--B200));
+            @include pseudo-states(var(--B100), var(--B200), var(--B500));
         }
 
         &--negative {
             @include button-variant-styles($background, var(--R600), $border-color);
-            @include pseudo-states(var(--R100), var(--R200));
+            @include pseudo-states(var(--R100), var(--R200), var(--R600));
         }
 
         &--positive {
             @include button-variant-styles($background, var(--G600), $border-color);
-            @include pseudo-states(var(--G100), var(--G200));
+            @include pseudo-states(var(--G100), var(--G200), var(--G600));
         }
 
         &--warning {
             @include button-variant-styles($background, var(--Y700), $border-color);
-            @include pseudo-states(var(--Y100), var(--Y200));
+            @include pseudo-states(var(--Y100), var(--Y200), var(--Y700));
         }
 
         &--neutral {
             @include button-variant-styles($background, var(--N700), $border-color);
-            @include pseudo-states(var(--N100), var(--N200));
+            @include pseudo-states(var(--N100), var(--N200), var(--N700));
         }
     }
 
@@ -173,7 +175,11 @@
     }
 
     // Hide the visibility for the button child elements when loading is true
-    &--loading>* {
-        visibility: hidden;
+    &--loading {
+        opacity: 1;
+
+        &>* {
+            visibility: hidden;
+        }
     }
 }
