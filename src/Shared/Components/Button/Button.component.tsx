@@ -6,6 +6,56 @@ import { BUTTON_SIZE_TO_ICON_CLASS_NAME_MAP, BUTTON_SIZE_TO_LOADER_SIZE_MAP } fr
 import { getButtonDerivedClass } from './utils'
 import './button.scss'
 
+/**
+ * Generic component for Button.
+ * Should be used in combination of variant, size and style.
+ *
+ * @example Default button
+ * ```tsx
+ * <Button text="Hello World"  />
+ * ```
+ *
+ * @example Custom variant
+ * ```tsx
+ * <Button text="Hello World" variant={ButtonVariantType.secondary}  />
+ * ```
+ *
+ * @example Custom size
+ * ```tsx
+ * <Button text="Hello World" size={ComponentSizeType.medium}  />
+ * ```
+ *
+ * @example Custom style
+ * ```tsx
+ * <Button text="Hello World" style={ButtonStyleType.positive}  />
+ * ```
+ *
+ * @example Disabled state
+ * ```tsx
+ * <Button text="Hello World" disabled  />
+ * ```
+ *
+ * @example Loading state
+ * ```tsx
+ * <Button text="Hello World" isLoading  />
+ * ```
+ *
+ * @example With start icon
+ * ```tsx
+ * <Button text="Hello World" startIcon={<ICCube />}  />
+ * ```
+ *
+ * @example With end icon
+ * ```tsx
+ * <Button text="Hello World" endIcon={<ICCube />}  />
+ * ```
+ *
+ * @example With tippy
+ * ```tsx
+ * <Button text="Hello World" showTippy tippyContent="Tippy content"  />
+ * ```
+ *
+ */
 const Button = ({
     variant = ButtonVariantType.primary,
     size = ComponentSizeType.large,

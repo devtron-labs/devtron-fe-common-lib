@@ -3,12 +3,14 @@
     color: $text-color;
     border: 1px solid $border-color;
 
+    // Only stroke icons are supposed to be used with button
     svg,
     svg * {
         stroke: $text-color;
     }
 
     // Custom state for loader
+    // Added using css to ensure using the respective text-color
     .loader {
         visibility: visible;
         position: absolute;
@@ -102,6 +104,7 @@
         }
     }
 
+    // Base styling is same for text and link button
     &__text,
     &__link {
         $background: transparent;
@@ -128,6 +131,7 @@
         }
     }
 
+    // Pseudo states for text button
     &__text {
         &--default {
             @include pseudo-states(var(--B100), var(--B200));
@@ -150,6 +154,7 @@
         }
     }
 
+    // Overrides for link button
     &__link {
 
         &--default,
@@ -167,6 +172,7 @@
         }
     }
 
+    // Hide the visibility for the button child elements when loading is true
     &--loading>* {
         visibility: hidden;
     }
