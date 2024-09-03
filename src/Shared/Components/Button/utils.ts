@@ -1,5 +1,5 @@
 import { BUTTON_SIZE_TO_CLASS_NAME_MAP } from './constants'
-import { ButtonProps, ButtonStyleType, ButtonVariantType } from './types'
+import { ButtonProps } from './types'
 
 export const getButtonDerivedClass = ({
     size,
@@ -7,4 +7,4 @@ export const getButtonDerivedClass = ({
     style,
     isLoading,
 }: Pick<ButtonProps, 'variant' | 'size' | 'style' | 'isLoading'>) =>
-    `button button__${ButtonVariantType[variant]}--${ButtonStyleType[style]} ${BUTTON_SIZE_TO_CLASS_NAME_MAP[size]} ${isLoading ? 'button--loading' : ''}`
+    `button button__${variant}--${style} ${BUTTON_SIZE_TO_CLASS_NAME_MAP[size]} ${isLoading ? 'button--loading' : ''}`

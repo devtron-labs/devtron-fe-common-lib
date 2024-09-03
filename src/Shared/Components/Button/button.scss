@@ -106,9 +106,9 @@
         }
     }
 
-    // Base styling is same for text and link button
-    &__text,
-    &__link {
+    // Base styling is same for border-less and text button
+    &__border-less,
+    &__text {
         $background: transparent;
         $border-color: transparent;
 
@@ -133,8 +133,8 @@
         }
     }
 
-    // Pseudo states for text button
-    &__text {
+    // Pseudo states for border-less button
+    &__border-less {
         &--default {
             @include pseudo-states(var(--B100), var(--B200));
         }
@@ -156,8 +156,8 @@
         }
     }
 
-    // Overrides for link button
-    &__link {
+    // Overrides for text button
+    &__text {
 
         &--default,
         &--negative,

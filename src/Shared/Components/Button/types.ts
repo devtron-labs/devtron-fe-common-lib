@@ -2,11 +2,12 @@ import { TooltipProps } from '@Common/Tooltip/types'
 import { ComponentSizeType } from '@Shared/constants'
 import { ButtonHTMLAttributes, ReactElement } from 'react'
 
+// Using the same for BEM class elements
 export enum ButtonVariantType {
     primary = 'primary',
     secondary = 'secondary',
+    borderLess = 'border-less',
     text = 'text',
-    link = 'link',
 }
 
 export enum ButtonStyleType {
