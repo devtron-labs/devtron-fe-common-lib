@@ -176,7 +176,8 @@
 
     // Hide the visibility for the button child elements when loading is true
     &--loading {
-        opacity: 1;
+        // Override the opacity from dc__disabled
+        opacity: 1 !important;
 
         &>* {
             visibility: hidden;
