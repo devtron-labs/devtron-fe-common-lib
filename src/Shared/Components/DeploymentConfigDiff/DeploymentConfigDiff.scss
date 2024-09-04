@@ -25,4 +25,8 @@
             margin: 16px 0 0;
         }
     }
+
+    & .react-monaco-editor-container {
+        min-height: 100px;
+    }
 }

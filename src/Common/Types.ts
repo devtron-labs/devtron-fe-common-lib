@@ -16,10 +16,10 @@
 
 import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
+import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
-import { UserGroupDTO } from '@Pages/GlobalConfigurations'
-import { RegistryType, Severity } from '../Shared'
+import { RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -224,10 +224,10 @@ export interface RadioGroupItemProps {
 export interface RadioGroupInterface {
     name: string
     onChange: any
-    className?: string
     initialTab: string
-    disabled: boolean
     children: ReactNode
+    disabled?: boolean
+    className?: string
 }
 
 export interface RadioInterface {
@@ -695,6 +695,7 @@ export interface CDMaterialsMetaInfo {
      * This is the ID of user that has request the material
      */
     requestedUserId: number
+    runtimeParams: RuntimeParamsListItemType[]
 }
 
 export interface ImagePromotionMaterialInfo {
