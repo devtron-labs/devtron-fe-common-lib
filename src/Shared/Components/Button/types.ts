@@ -1,6 +1,7 @@
 import { TooltipProps } from '@Common/Tooltip/types'
 import { ComponentSizeType } from '@Shared/constants'
 import { ButtonHTMLAttributes, ReactElement } from 'react'
+import { LinkProps } from 'react-router-dom'
 
 // Using the same for BEM class elements
 export enum ButtonVariantType {
@@ -18,7 +19,39 @@ export enum ButtonStyleType {
     neutral = 'neutral',
 }
 
-export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'styles' | 'className'> & {
+export enum ButtonComponentType {
+    button = 'button',
+    link = 'link',
+}
+
+export type ButtonProps = (
+    | {
+          /**
+           * Component to be rendered from the available options
+           *
+           * @default ButtonComponentType.button
+           */
+          component?: ButtonComponentType.button | never
+          /**
+           * Props for the button component
+           */
+          buttonProps?: Omit<
+              ButtonHTMLAttributes<HTMLButtonElement>,
+              'children' | 'styles' | 'className' | 'disabled' | 'onClick'
+          >
+          linkProps?: never
+          onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick']
+      }
+    | {
+          component: ButtonComponentType.link
+          /**
+           * Props for the link component
+           */
+          linkProps: Omit<LinkProps, 'children' | 'styles' | 'className' | 'onClick'>
+          buttonProps?: never
+          onClick?: LinkProps['onClick']
+      }
+) & {
     /**
      * Variant of the button
      *
@@ -53,7 +86,16 @@ export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'childre
      * If true, the loading state is shown for the button with disabled
      */
     isLoading?: boolean
+    /**
+     * Test id for the component
+     */
     dataTestId: string
+    /**
+     * If true, the button is disabled
+     *
+     * @default false
+     */
+    disabled?: boolean
 } & (
         | {
               /**
