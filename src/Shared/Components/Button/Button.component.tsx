@@ -104,6 +104,15 @@ const ButtonElement = ({
  * <Button text="Hello World" showTippy tippyContent="Tippy content"  />
  * ```
  *
+ * @example With onClick
+ * ```tsx
+ * <Button text="Hello World" onClick={noop}  />
+ * ```
+ *
+ * @example Link component
+ * ```tsx
+ * <Button component={ButtonComponentType.link} linkProps={{ to: '#' }} />
+ * ```
  */
 const Button = ({
     dataTestId,
