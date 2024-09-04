@@ -3,6 +3,10 @@
     color: $text-color;
     border: 1px solid $border-color;
 
+    &.button__link {
+        color: $text-color;
+    }
+
     // Only stroke icons are supposed to be used with button
     svg,
     svg * {
@@ -170,7 +174,7 @@
             border: none;
 
             &:hover {
-                text-decoration: underline;
+                text-decoration: underline !important;
             }
         }
     }
@@ -182,6 +186,12 @@
 
         &>* {
             visibility: hidden;
+        }
+    }
+
+    &__link {
+        &:hover {
+            text-decoration: none;
         }
     }
 }

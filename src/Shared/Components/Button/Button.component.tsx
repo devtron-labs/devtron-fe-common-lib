@@ -37,7 +37,8 @@ const ButtonElement = ({
             <Link
                 {...linkProps}
                 {...props}
-                className={`${props.className} ${props.disabled ? 'dc__disable-click' : ''}`}
+                // Added the specific class to ensure that the link override is applied
+                className={`${props.className} button__link ${props.disabled ? 'dc__disable-click' : ''}`}
                 onClick={onClick as LinkProps['onClick']}
             />
         )
