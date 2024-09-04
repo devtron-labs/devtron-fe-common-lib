@@ -6,7 +6,7 @@ import { ComponentSizeType } from '@Shared/constants'
 
 import { TabGroupProps, TabProps } from './TabGroup.types'
 import './TabGroup.scss'
-import { getClassNameBySize, getIconColorClass } from './TabGroup.utils'
+import { getClassNameBySizeMap, getIconColorClassMap } from './TabGroup.utils'
 
 const Tab = ({
     label,
@@ -24,11 +24,10 @@ const Tab = ({
     showWarning,
     disabled,
 }: TabProps & Pick<TabGroupProps, 'size' | 'alignActiveBorderWithContainer' | 'hideTopPadding'>) => {
-    const { tabClassName, iconClassName, badgeClassName } = getClassNameBySize({
-        size,
+    const { tabClassName, iconClassName, badgeClassName } = getClassNameBySizeMap({
         hideTopPadding,
         alignActiveBorderWithContainer,
-    })
+    })[size]
 
     const getTabComponent = () => {
         const content = (
@@ -36,7 +35,7 @@ const Tab = ({
                 {showError && <ICErrorExclamation className={`${iconClassName}`} />}
                 {!showError && showWarning && <ICWarning className={`${iconClassName} warning-icon-y7`} />}
                 {!showError && !showWarning && Icon && (
-                    <Icon className={`${iconClassName} ${getIconColorClass({ iconType, active })}`} />
+                    <Icon className={`${iconClassName} ${getIconColorClassMap({ active })[iconType] || ''}`} />
                 )}
                 {label}
                 {badge !== null && (
