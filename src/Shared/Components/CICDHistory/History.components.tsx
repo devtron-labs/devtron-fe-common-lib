@@ -16,7 +16,7 @@
 
 import Tippy from '@tippyjs/react'
 import { useEffect } from 'react'
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router-dom'
 import { ClipboardButton, GenericEmptyState, extractImage, useKeyDown, useSuperAdmin } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
@@ -161,7 +161,7 @@ export const GitChanges = ({
                 ) : null
             })}
             {artifact && (
-                <div className="history-component__artifact flex left column dc__gap-12">
+                <div className="history-component__artifact flex left column">
                     <CIListItem
                         type="deployed-artifact"
                         userApprovalMetadata={userApprovalMetadata}

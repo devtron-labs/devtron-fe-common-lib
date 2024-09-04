@@ -24,6 +24,7 @@ import {
     ServerErrors,
     SortingParams,
 } from '../Common'
+import { KeyValueListType } from './Components'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
@@ -342,6 +343,11 @@ export enum CIMaterialSidebarType {
     PARAMETERS = 'Parameters',
 }
 
+export enum CDMaterialSidebarType {
+    IMAGE = 'Image',
+    PARAMETERS = 'Parameters',
+}
+
 /**
  * @example Usage with specific enum for path & `unknown` type for value
  * ```ts
@@ -638,6 +644,14 @@ export interface scrollableInterface {
     autoBottomScroll: boolean
 }
 
+export enum URLProtocolType {
+    HTTP = 'http:',
+    HTTPS = 'https:',
+    SSH = 'ssh:',
+    SMTP = 'smtp:',
+    S3 = 's3:',
+}
+
 export type BaseFilterQueryParams<T> = {
     /**
      * Offset for the list result
@@ -656,3 +670,12 @@ export type BaseFilterQueryParams<T> = {
      */
     showAll?: boolean
 } & SortingParams<T>
+
+export interface RuntimeParamsListItemType extends KeyValueListType {
+    id: number
+}
+
+export enum RuntimeParamsHeadingType {
+    KEY = 'key',
+    VALUE = 'value',
+}

@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+import { OptionType } from '@Common/Types'
+import { CDMaterialSidebarType } from './types'
+
 export const ARTIFACT_STATUS = {
     PROGRESSING: 'Progressing',
     DEGRADED: 'Degraded',
@@ -380,25 +383,32 @@ export const statusIcon = {
 }
 
 export const statusColor = {
-    suspended: '#ffaa00',
+    suspended: 'var(--Y500)',
     unknown: 'var(--N700)',
     queued: 'var(--N700)',
     degraded: 'var(--R500)',
     healthy: 'var(--G500)',
     notdeployed: 'var(--N500)',
     missing: 'var(--N700)',
-    progressing: 'var(--orange)',
-    initiating: 'var(--orange)',
-    starting: '#FF7E5B',
-    succeeded: '#1dad70',
-    running: '#FF7E5B',
-    failed: '#f33e3e',
-    error: '#f33e3e',
-    cancelled: '#767d84',
-    aborted: '#767d84',
-    timedout: '#f33e3e',
-    unabletofetch: '#f33e3e',
+    progressing: 'var(--O500)',
+    initiating: 'var(--O500)',
+    starting: 'var(--O500)',
+    succeeded: 'var(--G500)',
+    running: 'var(--O500)',
+    failed: 'var(--R500)',
+    error: 'var(--R500)',
+    cancelled: 'var(--R500)',
+    aborted: 'var(--R500)',
+    timedout: 'var(--R500)',
+    unabletofetch: 'var(--R500)',
     hibernating: 'var(--N700)',
+}
+
+export const PULSATING_STATUS_MAP: { [key in keyof typeof statusColor]?: boolean } = {
+    progressing: true,
+    initiating: true,
+    starting: true,
+    running: true,
 }
 
 export const APP_STATUS_HEADERS = ['KIND', 'NAME', 'STATUS', 'MESSAGE']
@@ -445,10 +455,14 @@ export const ANSI_UP_REGEX = /\x1B\[.*?m/g
  * Size variants for components
  */
 export enum ComponentSizeType {
+    xs = 'xs',
     small = 'small',
     medium = 'medium',
     large = 'large',
+    xl = 'xl',
 }
+
+export const POP_UP_MENU_MODAL_ID = 'popup'
 
 /**
  * Identifiers for grouped / all resources
@@ -462,3 +476,12 @@ export enum SelectAllGroupedResourceIdentifiers {
     allExistingAndFutureProdEnvironments = '-2',
     allExistingAndFutureEnvironments = '-3',
 }
+
+export const CD_MATERIAL_SIDEBAR_TABS: OptionType<CDMaterialSidebarType, CDMaterialSidebarType>[] = Object.values(
+    CDMaterialSidebarType,
+).map((tabValue) => ({
+    value: tabValue,
+    label: tabValue,
+}))
+
+export const TRIGGER_STATUS_PROGRESSING = ['progressing', 'initiating', 'running', 'starting']

@@ -17,10 +17,12 @@
 import { get, getIsRequestAborted, getUrlWithSearchParams, ResponseType, ROUTES, showError } from '../../../Common'
 import { stringComparatorBySortOrder } from '../../Helpers'
 import {
+    GetParentPluginListPayloadType,
     GetPluginListPayloadType,
     GetPluginStoreDataReturnType,
     GetPluginStoreDataServiceParamsType,
     GetPluginTagsPayloadType,
+    MinParentPluginDTO,
     PluginDetailDTO,
     PluginDetailPayloadType,
     PluginDetailServiceParamsType,
@@ -32,6 +34,7 @@ export const getPluginsDetail = async ({
     appId,
     parentPluginIds,
     pluginIds,
+    signal,
     shouldShowError = true,
 }: PluginDetailServiceParamsType): Promise<Pick<GetPluginStoreDataReturnType, 'pluginStore'>> => {
     try {
@@ -41,9 +44,10 @@ export const getPluginsDetail = async ({
             pluginId: pluginIds,
         }
 
-        const { result } = (await get(
+        const { result } = await get<PluginDetailDTO>(
             getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_DETAIL_V2, payload),
-        )) as ResponseType<PluginDetailDTO>
+            { signal },
+        )
 
         const pluginStore = parsePluginDetailsDTOIntoPluginStore(result?.parentPlugins)
 
@@ -51,7 +55,7 @@ export const getPluginsDetail = async ({
             pluginStore,
         }
     } catch (error) {
-        if (shouldShowError) {
+        if (shouldShowError && !getIsRequestAborted(error)) {
             showError(error)
         }
         throw error
@@ -73,9 +77,9 @@ export const getPluginStoreData = async ({
             size: 20,
             tag: selectedTags,
         }
-        const { result } = (await get(getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_V2, payload), {
+        const { result } = await get<PluginDetailDTO>(getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_V2, payload), {
             signal,
-        })) as ResponseType<PluginDetailDTO>
+        })
 
         const pluginStore = parsePluginDetailsDTOIntoPluginStore(result?.parentPlugins)
         return {
@@ -97,9 +101,7 @@ export const getAvailablePluginTags = async (appId: number): Promise<string[]> =
             appId,
         }
 
-        const { result } = (await get(
-            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_TAGS, payload),
-        )) as ResponseType<PluginTagNamesDTO>
+        const { result } = await get<PluginTagNamesDTO>(getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_TAGS, payload))
 
         if (!result?.tagNames) {
             return []
@@ -111,4 +113,9 @@ export const getAvailablePluginTags = async (appId: number): Promise<string[]> =
         showError(error)
         throw error
     }
+}
+
+export const getParentPluginList = async (appId?: number): Promise<ResponseType<MinParentPluginDTO[]>> => {
+    const queryParams: GetParentPluginListPayloadType = { appId }
+    return get<MinParentPluginDTO[]>(getUrlWithSearchParams(ROUTES.PLUGIN_LIST_MIN, queryParams))
 }

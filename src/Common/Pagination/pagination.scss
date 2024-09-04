@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-.pagination-wrapper {
-    display: flex;
-    align-items: center;
-    padding: 0px 24px;
-    justify-content: space-between;
-    margin: 0px;
-    background-color: var(--white);
-}
-
 .pagination {
     margin-top: 16px;
     margin-bottom: 16px;
@@ -55,7 +46,7 @@
     width: 64px;
     position: absolute;
     bottom: 31px;
-    background-color: var(--white);;
+    background-color: var(--white);
 }
 
 .select__button {
@@ -99,6 +90,7 @@
     background-color: var(--white);
     padding: 0px;
     user-select: none;
+    border: none;
 }
 
 .page__button--icon {

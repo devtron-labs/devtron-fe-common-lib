@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import { useDownload } from '@Shared/Hooks'
 import {
     GenericEmptyState,
@@ -70,7 +69,7 @@ export const CIListItem = ({
     return (
         <>
             {type === 'deployed-artifact' && (
-                <div className="flex dc__width-inherit">
+                <div className="flex dc__width-inherit pb-12">
                     <div className="w-50 text-underline-dashed-300" />
                     <Down className="icon-dim-16 ml-8 mr-8" style={{ transform: 'rotate(90deg)' }} />
                     <div className="w-50 text-underline-dashed-300" />
@@ -133,7 +132,7 @@ const Artifacts = ({
     appReleaseTagNames,
     tagsEditable,
     hideImageTaggingHardDelete,
-    jobCIClass,
+    rootClassName,
     renderCIListHeader,
 }: ArtifactType) => {
     const { isSuperAdmin } = useSuperAdmin()
@@ -143,14 +142,6 @@ const Artifacts = ({
         triggerId: string
         buildId: string
     }>()
-    const [copied, setCopied] = useState(false)
-
-    useEffect(() => {
-        if (!copied) {
-            return
-        }
-        setTimeout(() => setCopied(false), 2000)
-    }, [copied])
 
     async function handleArtifact() {
         await handleDownload({
@@ -188,7 +179,11 @@ const Artifacts = ({
             </div>
         )
     }
-    if (status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED || status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED) {
+    if (
+        status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED ||
+        status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED ||
+        status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR
+    ) {
         if (isJobCI) {
             return (
                 <GenericEmptyState
@@ -215,7 +210,7 @@ const Artifacts = ({
         )
     }
     return (
-        <div className={`flex left column dc__gap-12 ${jobCIClass ?? ''}`}>
+        <div className={`flex left column dc__gap-12 dc__content-start ${rootClassName ?? ''}`}>
             {!isJobView && type !== HistoryComponentType.CD && (
                 <CIListItem
                     type="artifact"

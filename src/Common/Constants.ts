@@ -62,6 +62,8 @@ export const URLS = {
     GLOBAL_CONFIG_DOCKER: '/global-config/docker',
     DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
     GLOBAL_CONFIG_SCOPED_VARIABLES: '/global-config/scoped-variables',
+    GLOBAL_CONFIG_DEPLOYMENT_CHARTS_LIST: '/global-config/deployment-charts',
+    NETWORK_STATUS_INTERFACE: '/network-status-interface',
 }
 
 export const ROUTES = {
@@ -96,6 +98,9 @@ export const ROUTES = {
     CONFIG_CD_PIPELINE: 'config/cd-pipeline',
     MODULE_CONFIGURED: 'module/config',
     RESOURCE_HISTORY_DEPLOYMENT: 'resource/history/deployment',
+    ATTRIBUTES: 'attributes',
+    ATTRIBUTES_CREATE: 'attributes/create',
+    ATTRIBUTES_UPDATE: 'attributes/update',
     APP_LIST_MIN: 'app/min',
     CLUSTER_LIST_MIN: 'cluster/autocomplete',
     PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
@@ -103,6 +108,10 @@ export const ROUTES = {
     PLUGIN_GLOBAL_LIST_TAGS: 'plugin/global/list/tags',
     K8S_RESOURCE_SECURITY: 'k8s/resource/security',
     SCAN_RESULT: 'scan-result',
+    PLUGIN_LIST_MIN: 'plugin/global/list/v2/min',
+    DEPLOYMENT_CHARTS_LIST: 'deployment/template/fetch',
+    USER_LIST_MIN: 'user/list/min',
+    CONFIG_DATA: 'config/data',
 }
 
 export enum KEY_VALUE {
@@ -523,6 +532,8 @@ export const DATE_TIME_FORMATS = {
     DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
     DD_MMM_YYYY: 'DD MMM YYYY',
 }
+
+export const SEMANTIC_VERSION_DOCUMENTATION_LINK = 'https://semver.org/'
 
 export const VULNERABILITIES_SORT_PRIORITY = {
     critical: 1,

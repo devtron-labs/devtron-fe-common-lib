@@ -15,7 +15,7 @@
  */
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import { showError, Progressing } from '../../../../Common'
 import DeploymentHistoryHeader from './DeploymentHistoryHeader'
 import DeploymentHistoryDiffView from './DeploymentHistoryDiffView'
@@ -116,11 +116,13 @@ const DeploymentHistoryDetailedView = ({
                 {loader ? (
                     <Progressing pageLoader />
                 ) : (
-                    <DeploymentHistoryDiffView
-                        currentConfiguration={currentConfiguration}
-                        baseTemplateConfiguration={baseTemplateConfiguration}
-                        previousConfigAvailable={previousConfigAvailable}
-                    />
+                    <div className="dc__overflow-scroll">
+                        <DeploymentHistoryDiffView
+                            currentConfiguration={currentConfiguration}
+                            baseTemplateConfiguration={baseTemplateConfiguration}
+                            previousConfigAvailable={previousConfigAvailable}
+                        />
+                    </div>
                 )}
             </div>
         </>

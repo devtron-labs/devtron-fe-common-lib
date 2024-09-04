@@ -15,7 +15,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import { APIResponseHandler } from '../APIResponseHandler'
 import PluginTagSelect from './PluginTagSelect'
 import PluginList from './PluginList'
@@ -210,6 +210,7 @@ const PluginListContainer = ({
                     handleEnter={handleSearch}
                     inputProps={{
                         placeholder: 'Search plugins',
+                        autoFocus: true,
                     }}
                 />
 
@@ -238,7 +239,7 @@ const PluginListContainer = ({
 
             <APIResponseHandler
                 isLoading={isLoadingPluginData || getIsRequestAborted(pluginDataError)}
-                customLoader={<PluginCardSkeletonList count={5} />}
+                customLoader={<PluginCardSkeletonList />}
                 error={pluginDataError}
                 errorScreenManagerProps={{
                     code: pluginDataError?.code,
