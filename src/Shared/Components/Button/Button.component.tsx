@@ -1,10 +1,59 @@
+import { ButtonHTMLAttributes, PropsWithChildren } from 'react'
+import { Link, LinkProps } from 'react-router-dom'
 import { Progressing } from '@Common/Progressing'
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
-import { ButtonProps, ButtonStyleType, ButtonVariantType } from './types'
+import { ButtonComponentType, ButtonProps, ButtonStyleType, ButtonVariantType } from './types'
 import { BUTTON_SIZE_TO_ICON_CLASS_NAME_MAP, BUTTON_SIZE_TO_LOADER_SIZE_MAP } from './constants'
 import { getButtonDerivedClass } from './utils'
 import './button.scss'
+
+const ButtonElement = ({
+    component = ButtonComponentType.button,
+    linkProps,
+    buttonProps,
+    onClick,
+    ...props
+}: PropsWithChildren<
+    Omit<
+        ButtonProps,
+        | 'text'
+        | 'variant'
+        | 'size'
+        | 'style'
+        | 'startIcon'
+        | 'endIcon'
+        | 'showTooltip'
+        | 'tooltipProps'
+        | 'dataTestId'
+        | 'isLoading'
+    > & {
+        className: string
+        'data-testid': ButtonProps['dataTestId']
+    }
+>) => {
+    if (component === ButtonComponentType.link) {
+        return (
+            <Link
+                {...linkProps}
+                {...props}
+                // Added the specific class to ensure that the link override is applied
+                className={`${props.className} button__link ${props.disabled ? 'dc__disable-click' : ''}`}
+                onClick={onClick as LinkProps['onClick']}
+            />
+        )
+    }
+
+    return (
+        <button
+            {...buttonProps}
+            {...props}
+            // eslint-disable-next-line react/button-has-type
+            type={buttonProps?.type || 'button'}
+            onClick={onClick as ButtonHTMLAttributes<HTMLButtonElement>['onClick']}
+        />
+    )
+}
 
 /**
  * Generic component for Button.
@@ -55,6 +104,15 @@ import './button.scss'
  * <Button text="Hello World" showTippy tippyContent="Tippy content"  />
  * ```
  *
+ * @example With onClick
+ * ```tsx
+ * <Button text="Hello World" onClick={noop}  />
+ * ```
+ *
+ * @example Link component
+ * ```tsx
+ * <Button component={ButtonComponentType.link} linkProps={{ to: '#' }} />
+ * ```
  */
 const Button = ({
     dataTestId,
@@ -68,7 +126,6 @@ const Button = ({
     isLoading = false,
     showTooltip = false,
     tooltipProps = {},
-    type = 'button',
     ...props
 }: ButtonProps) => {
     const isDisabled = disabled || isLoading
@@ -77,11 +134,9 @@ const Button = ({
     return (
         <Tooltip {...tooltipProps} alwaysShowTippyOnHover={showTooltip && !!tooltipProps?.content}>
             <div>
-                <button
+                <ButtonElement
                     {...props}
                     disabled={isDisabled}
-                    // eslint-disable-next-line react/button-has-type
-                    type={type}
                     className={`br-4 flex cursor dc__mnw-100 dc__tab-focus dc__position-rel dc__capitalize ${getButtonDerivedClass({ size, variant, style, isLoading })} ${isDisabled ? 'dc__disabled' : ''}`}
                     data-testid={dataTestId}
                 >
@@ -89,7 +144,7 @@ const Button = ({
                     <span className="dc__mxw-150 dc__align-left dc__truncate">{text}</span>
                     {endIcon && <span className={iconClass}>{endIcon}</span>}
                     {isLoading && <Progressing size={BUTTON_SIZE_TO_LOADER_SIZE_MAP[size]} />}
-                </button>
+                </ButtonElement>
             </div>
         </Tooltip>
     )
