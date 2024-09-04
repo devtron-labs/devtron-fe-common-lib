@@ -3,7 +3,7 @@ import { forwardRef } from 'react'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 
 import { Collapse } from '../Collapse'
-import { DeploymentConfigDiffAccordionProps } from './types'
+import { DeploymentConfigDiffAccordionProps } from './DeploymentConfigDiff.types'
 
 export const DeploymentConfigDiffAccordion = forwardRef<HTMLDivElement, DeploymentConfigDiffAccordionProps>(
     (

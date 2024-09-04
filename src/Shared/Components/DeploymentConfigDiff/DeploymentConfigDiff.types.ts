@@ -1,6 +1,13 @@
 import { SortingOrder } from '@Common/Constants'
 
-import { ConfigMapSecretDataConfigDatumDTO, DeploymentTemplateDTO } from '@Shared/Services'
+import {
+    AppEnvDeploymentConfigDTO,
+    ConfigMapSecretDataConfigDatumDTO,
+    DeploymentTemplateDTO,
+    EnvResourceType,
+    ManifestTemplateDTO,
+} from '@Shared/Services'
+
 import { DeploymentHistoryDetail } from '../CICDHistory'
 import { CollapsibleListConfig, CollapsibleListItem } from '../CollapsibleList'
 import { SelectPickerProps } from '../SelectPicker'
@@ -45,6 +52,11 @@ export interface DeploymentConfigDiffNavigationCollapsibleItem
 
 export interface DeploymentConfigDiffProps {
     isLoading?: boolean
+    errorConfig?: {
+        error: boolean
+        code: number
+        reload: () => void
+    }
     configList: DeploymentConfigListItem[]
     headerText?: string
     scrollIntoViewId?: string
@@ -62,18 +74,31 @@ export interface DeploymentConfigDiffProps {
     goBackURL?: string
     navHeading: string
     navHelpText?: string
+    tabConfig?: {
+        tabs: {
+            value: string
+            href: string
+        }[]
+        onClick: (tab: string) => void
+    }
 }
 
 export interface DeploymentConfigDiffNavigationProps
     extends Pick<
         DeploymentConfigDiffProps,
-        'isLoading' | 'navList' | 'collapsibleNavList' | 'goBackURL' | 'navHeading' | 'navHelpText'
+        'isLoading' | 'navList' | 'collapsibleNavList' | 'goBackURL' | 'navHeading' | 'navHelpText' | 'tabConfig'
     > {}
 
 export interface DeploymentConfigDiffMainProps
     extends Pick<
         DeploymentConfigDiffProps,
-        'isLoading' | 'headerText' | 'configList' | 'scrollIntoViewId' | 'selectorsConfig' | 'sortingConfig'
+        | 'isLoading'
+        | 'errorConfig'
+        | 'headerText'
+        | 'configList'
+        | 'scrollIntoViewId'
+        | 'selectorsConfig'
+        | 'sortingConfig'
     > {}
 
 export interface DeploymentConfigDiffAccordionProps extends Pick<CollapseProps, 'onTransitionEnd'> {
@@ -88,3 +113,18 @@ export interface DeploymentConfigDiffAccordionProps extends Pick<CollapseProps, 
 export type DiffHeadingDataType<DeploymentTemplate> = DeploymentTemplate extends true
     ? DeploymentTemplateDTO
     : ConfigMapSecretDataConfigDatumDTO
+
+export type AppEnvDeploymentConfigListParams<IsManifestView> = (IsManifestView extends true
+    ? {
+          currentList: ManifestTemplateDTO
+          compareList: ManifestTemplateDTO
+          sortOrder?: never
+      }
+    : {
+          currentList: AppEnvDeploymentConfigDTO
+          compareList: AppEnvDeploymentConfigDTO
+          sortOrder?: SortingOrder
+      }) & {
+    getNavItemHref: (resourceType: EnvResourceType, resourceName: string) => string
+    isManifestView?: IsManifestView
+}

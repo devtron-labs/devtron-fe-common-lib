@@ -7,7 +7,7 @@ import { ReactComponent as ICInfoOutlined } from '@Icons/ic-info-outlined.svg'
 import { ReactComponent as ICDiffFileUpdated } from '@Icons/ic-diff-file-updated.svg'
 
 import { CollapsibleList } from '../CollapsibleList'
-import { DeploymentConfigDiffNavigationProps } from './types'
+import { DeploymentConfigDiffNavigationProps } from './DeploymentConfigDiff.types'
 
 // LOADING SHIMMER
 const ShimmerText = ({ width }: { width: string }) => (
@@ -23,6 +23,7 @@ export const DeploymentConfigDiffNavigation = ({
     goBackURL,
     navHeading,
     navHelpText,
+    tabConfig,
 }: DeploymentConfigDiffNavigationProps) => {
     // STATES
     const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({})
@@ -55,12 +56,15 @@ export const DeploymentConfigDiffNavigation = ({
         setExpandedIds((prev) => ({ ...prev, [id]: !prev[id] }))
     }
 
+    /** Handles tab click. */
+    const onTabClick = (tab: string) => () => tabConfig?.onClick?.(tab)
+
     // RENDERERS
     const renderTopContent = () => (
         <div className="p-12 flexbox dc__align-items-center dc__gap-8 dc__border-bottom-n1">
             {goBackURL && (
                 <Link to={goBackURL}>
-                    <span className="dc__border br-4 p-1 flex bcn-50">
+                    <span className="dc__border br-4 p-1 flex dc__hover-n50">
                         <ICClose className="icon-dim-16 fcn-6" />
                     </span>
                 </Link>
@@ -68,6 +72,31 @@ export const DeploymentConfigDiffNavigation = ({
             <span className="fs-13 lh-20 fw-6 cn-9 dc__truncate">{navHeading}</span>
         </div>
     )
+
+    const renderTabConfig = () => {
+        const { tabs } = tabConfig
+
+        return (
+            <div className="p-12">
+                <ul className="deployment-config-diff__tab-list p-0 m-0 flexbox dc__align-items-center dc__border br-4 dc__text-center dc__overflow-hidden">
+                    {tabs.map((tab, index) => (
+                        <li className={`flex-1 ${index !== tabs.length - 1 ? 'dc__border-right' : ''}`}>
+                            <NavLink
+                                key={tab.value}
+                                to={tab.href}
+                                activeClassName="deployment-config-diff__tab--active bcn-1"
+                                className={`deployment-config-diff__tab dc__inline-block w-100 dc__no-decor px-8 py-1 fs-12 lh-20 bcn-0 ${isLoading ? 'dc__opacity-0_5 cursor-not-allowed' : ''}`}
+                                onClick={onTabClick(tab.value)}
+                                aria-disabled={isLoading}
+                            >
+                                {tab.value}
+                            </NavLink>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        )
+    }
 
     const renderContent = () => (
         <>
@@ -106,6 +135,7 @@ export const DeploymentConfigDiffNavigation = ({
     return (
         <div className="bcn-0 dc__border-right">
             {renderTopContent()}
+            {!!tabConfig?.tabs.length && renderTabConfig()}
             <div className="mw-none p-8">{isLoading ? renderLoading() : renderContent()}</div>
         </div>
     )
