@@ -26,7 +26,7 @@
 @mixin pseudo-states($hover-bg-color, $active-bg-color, $hover-border-color: null) {
     $parent-selector: &;
 
-    &:hover:enabled {
+    &:hover:not([disabled]) {
         background: $hover-bg-color;
 
         @if ($hover-border-color) {
@@ -34,7 +34,7 @@
         }
     }
 
-    &:active:enabled {
+    &:active:not([disabled]) {
         background: $active-bg-color;
     }
 }
@@ -45,6 +45,7 @@
     color: inherit;
     border: none;
     outline: inherit;
+    text-decoration: none;
 
     &__primary {
         $border-color: transparent;
