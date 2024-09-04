@@ -247,7 +247,13 @@ export interface FilterSelectPickerProps
         >,
         Pick<
             SelectPickerProps<number | string, true>,
-            'selectRef' | 'inputId' | 'menuPosition' | 'autoFocus' | 'shouldMenuAlignRight'
+            | 'selectRef'
+            | 'inputId'
+            | 'menuPosition'
+            | 'autoFocus'
+            | 'shouldMenuAlignRight'
+            | 'optionListError'
+            | 'reloadOptionList'
         > {
     appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
