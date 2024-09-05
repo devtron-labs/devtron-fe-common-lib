@@ -14,6 +14,7 @@ export enum ButtonVariantType {
 export enum ButtonStyleType {
     default = 'default',
     negative = 'negative',
+    negativeGrey = 'negative-grey',
     positive = 'positive',
     warning = 'warning',
     neutral = 'neutral',
