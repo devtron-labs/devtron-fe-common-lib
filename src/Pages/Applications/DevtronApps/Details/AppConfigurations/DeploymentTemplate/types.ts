@@ -1,6 +1,7 @@
-import { ReactNode } from 'react'
+import { MutableRefObject, ReactNode } from 'react'
 import { AppEnvironment } from '@Common/Types'
-import { ConfigurationType } from '@Shared/types'
+import { ConfigKeysWithLockType, ConfigurationType } from '@Shared/types'
+import { Operation } from 'fast-json-patch'
 
 export enum DeploymentTemplateTabsType {
     EDIT = 1,
@@ -194,9 +195,62 @@ export interface DeploymentConfigContextType {
     handleChangeToYAMLMode?: () => void
     handleChangeToGUIMode?: () => void
     editorOnChange?: (str: string) => void
+    handleDisableResolveScopedVariables: () => void
+    lockedConfigKeysWithLockType: ConfigKeysWithLockType
+    handleUpdateRemovedPatches: (patches: Operation[]) => void
+    removedPatches: MutableRefObject<Operation[]>
+}
+
+export interface GetResolvedDeploymentTemplateReturnType {
+    resolvedData: string
+    areVariablesPresent: boolean
 }
 
 export interface DeploymentTemplateProviderProps {
     children: ReactNode
     value: DeploymentConfigContextType
+}
+
+export enum ValuesAndManifestFlagDTO {
+    DEPLOYMENT_TEMPLATE = 1,
+    MANIFEST = 2,
+}
+
+export interface GetResolvedDeploymentTemplatePayloadType {
+    appId: number
+    chartRefId: number
+    /**
+     * String to be resolved
+     */
+    values: string
+    valuesAndManifestFlag: ValuesAndManifestFlagDTO.DEPLOYMENT_TEMPLATE
+    /**
+     * EnvId for the given VALUE
+     */
+    envId?: number
+}
+
+export interface GetResolvedDeploymentTemplateProps
+    extends Omit<GetResolvedDeploymentTemplatePayloadType, 'valuesAndManifestFlag'> {}
+
+export interface ResolvedDeploymentTemplateDTO {
+    /**
+     * Template with encoded variables
+     */
+    data: string
+    /**
+     * Template with resolved variables
+     */
+    resolvedData: string
+    variableSnapshot: Record<string, string>
+}
+
+export interface UseDeploymentTemplateComputedDataProps
+    extends Pick<DeploymentTemplateQueryParamsType, 'resolveScopedVariables'> {}
+
+export interface UseDeploymentTemplateComputedDataReturnType {
+    editedDocument: string
+    uneditedDocument: string
+    isResolvingVariables: boolean
+    uneditedDocumentWithoutLockedKeys?: string
 }

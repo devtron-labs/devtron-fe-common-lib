@@ -673,3 +673,8 @@ export interface BaseURLParams {
     appId: string
     envId: string
 }
+
+export interface ConfigKeysWithLockType {
+    config: string[]
+    allowed: boolean
+}
