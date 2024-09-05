@@ -254,3 +254,9 @@ export interface UseDeploymentTemplateComputedDataReturnType {
     isResolvingVariables: boolean
     uneditedDocumentWithoutLockedKeys?: string
 }
+
+export interface GetDeploymentTemplateEditorKeyProps {
+    resolveScopedVariables: boolean
+    hideLockedKeys: boolean
+    isResolvingVariables: boolean
+}

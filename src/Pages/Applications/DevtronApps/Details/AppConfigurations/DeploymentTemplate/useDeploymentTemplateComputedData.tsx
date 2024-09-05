@@ -61,8 +61,7 @@ const useDeploymentTemplateComputedData = ({
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             handleGetResolvedData()
         }
-        // TODO: Should we add chartConfigLoading as dependency?
-    }, [resolveScopedVariables, appId, envId, selectedChartRefId])
+    }, [resolveScopedVariables, appId, envId])
 
     const editedDocument = resolveScopedVariables ? resolvedEditorTemplate : editorTemplate
     const uneditedDocument = resolveScopedVariables ? resolvedOriginalTemplate : originalTemplate
