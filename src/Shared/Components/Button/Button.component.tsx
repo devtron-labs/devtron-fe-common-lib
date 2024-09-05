@@ -2,6 +2,7 @@ import { ButtonHTMLAttributes, PropsWithChildren } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 import { Progressing } from '@Common/Progressing'
 import { Tooltip } from '@Common/Tooltip'
+import { TooltipProps } from '@Common/Tooltip/types'
 import { ComponentSizeType } from '@Shared/constants'
 import { ButtonComponentType, ButtonProps, ButtonStyleType, ButtonVariantType } from './types'
 import { getButtonDerivedClass, getButtonIconClassName, getButtonLoaderSize } from './utils'
@@ -142,8 +143,22 @@ const Button = ({
         icon,
     })}`
 
+    const getTooltipProps = (): TooltipProps => {
+        if (!showTooltip && icon && ariaLabel) {
+            return {
+                alwaysShowTippyOnHover: true,
+                content: ariaLabel,
+            }
+        }
+
+        return {
+            alwaysShowTippyOnHover: showTooltip && !!tooltipProps?.content,
+            ...tooltipProps,
+        }
+    }
+
     return (
-        <Tooltip {...tooltipProps} alwaysShowTippyOnHover={showTooltip && !!tooltipProps?.content}>
+        <Tooltip {...getTooltipProps()}>
             <div>
                 <ButtonElement
                     {...props}
