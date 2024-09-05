@@ -30,6 +30,7 @@ export interface AppDetailsPayload {
     envId?: number | string
     installedAppId?: number | string
     artifactId?: number | string
+    installedAppVersionHistoryId?: number | string
 }
 
 export interface ExecutionDetailsPayload extends Partial<Pick<AppDetailsPayload, 'appId' | 'envId'>> {

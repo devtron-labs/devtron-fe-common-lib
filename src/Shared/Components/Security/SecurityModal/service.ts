@@ -79,7 +79,14 @@ export const getSecurityScan = async ({
     envId,
     installedAppId,
     artifactId,
+    installedAppVersionHistoryId,
 }: SecurityModalPropsType['appDetailsPayload']) => {
-    const url = getUrlWithSearchParams(ROUTES.SCAN_RESULT, { appId, envId, installedAppId, artifactId })
+    const url = getUrlWithSearchParams(ROUTES.SCAN_RESULT, {
+        appId,
+        envId,
+        installedAppId,
+        artifactId,
+        installedAppVersionHistoryId,
+    })
     return get(url) as Promise<ResponseType<ApiResponseResultType>>
 }

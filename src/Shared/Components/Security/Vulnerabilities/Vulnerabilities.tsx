@@ -120,7 +120,7 @@ const Vulnerabilities = ({
                 severityCount={vulnerabilitiesResponse.result.severityCount}
                 scanToolId={vulnerabilitiesResponse.result.scanToolId}
                 {...(isScanV2Enabled
-                    ? { appDetailsPayload: { appId: 7, envId: 2, artifactId: 235 } }
+                    ? { appDetailsPayload: { appId: applicationId, envId: environmentId, artifactId } }
                     : { executionDetailsPayload: { appId: applicationId, envId: environmentId, artifactId } })}
             />
         </div>

@@ -5,4 +5,4 @@
 export { default as SecurityModal } from './SecurityModal'
 export { getSecurityScan } from './service'
 export { getSecurityScanSeveritiesCount } from './utils'
-export type { AppDetailsPayload, ExecutionDetailsPayload } from './types'
+export type { AppDetailsPayload, ExecutionDetailsPayload, ApiResponseResultType } from './types'

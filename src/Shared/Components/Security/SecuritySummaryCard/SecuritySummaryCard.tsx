@@ -13,7 +13,7 @@ const SecuritySummaryCard = ({
     executionDetailsPayload,
 }: SecuritySummaryCardProps) => {
     const [showSecurityModal, setShowSecurityModal] = useState<boolean>(false)
-    const { critical, high, medium, low, unknown } = severityCount
+    const { critical = 0, high = 0, medium = 0, low = 0, unknown = 0 } = severityCount
     const totalCount = critical + high + medium + low + unknown
     const entities = [
         { label: SEVERITIES.CRITICAL.label, color: SEVERITIES.CRITICAL.color, value: critical },
