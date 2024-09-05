@@ -119,7 +119,14 @@ export type ButtonProps = (
               endIcon?: ReactElement
           }
         | {
+              /**
+               * If provided, icon button is rendered
+               */
               icon: ReactElement
+              /**
+               * Label for the icon button for accessibility.
+               * Shown on hover in tooltip if tippy is not provided explicitly
+               */
               ariaLabel: string
               text?: never
               startIcon?: never

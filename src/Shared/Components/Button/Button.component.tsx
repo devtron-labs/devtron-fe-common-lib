@@ -114,6 +114,11 @@ const ButtonElement = ({
  * ```tsx
  * <Button component={ButtonComponentType.link} linkProps={{ to: '#' }} />
  * ```
+ *
+ * @example Icon button
+ * ```tsx
+ * <Button icon={<ICCube />} ariaLabel="Label" />
+ * ```
  */
 const Button = ({
     dataTestId,
