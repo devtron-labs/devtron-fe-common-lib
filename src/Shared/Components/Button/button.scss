@@ -7,10 +7,12 @@
         color: $text-color;
     }
 
-    // Only stroke icons are supposed to be used with button
-    svg,
-    svg * {
+    svg *[stroke^="#"] {
         stroke: $text-color;
+    }
+
+    svg *[fill^="#"] {
+        fill: $text-color;
     }
 
     // Custom state for loader

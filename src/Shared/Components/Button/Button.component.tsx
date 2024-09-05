@@ -4,8 +4,7 @@ import { Progressing } from '@Common/Progressing'
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { ButtonComponentType, ButtonProps, ButtonStyleType, ButtonVariantType } from './types'
-import { BUTTON_SIZE_TO_ICON_CLASS_NAME_MAP, BUTTON_SIZE_TO_LOADER_SIZE_MAP } from './constants'
-import { getButtonDerivedClass } from './utils'
+import { getButtonDerivedClass, getButtonIconClassName, getButtonLoaderSize } from './utils'
 import './button.scss'
 
 const ButtonElement = ({
@@ -27,9 +26,11 @@ const ButtonElement = ({
         | 'tooltipProps'
         | 'dataTestId'
         | 'isLoading'
+        | 'ariaLabel'
     > & {
         className: string
         'data-testid': ButtonProps['dataTestId']
+        'aria-label': ButtonProps['ariaLabel']
     }
 >) => {
     if (component === ButtonComponentType.link) {
@@ -126,10 +127,15 @@ const Button = ({
     isLoading = false,
     showTooltip = false,
     tooltipProps = {},
+    icon = null,
+    ariaLabel = null,
     ...props
 }: ButtonProps) => {
     const isDisabled = disabled || isLoading
-    const iconClass = `dc__no-shrink flex dc__fill-available-space ${BUTTON_SIZE_TO_ICON_CLASS_NAME_MAP[size]}`
+    const iconClass = `dc__no-shrink flex dc__fill-available-space ${getButtonIconClassName({
+        size,
+        icon,
+    })}`
 
     return (
         <Tooltip {...tooltipProps} alwaysShowTippyOnHover={showTooltip && !!tooltipProps?.content}>
@@ -137,13 +143,27 @@ const Button = ({
                 <ButtonElement
                     {...props}
                     disabled={isDisabled}
-                    className={`br-4 flex cursor dc__mnw-100 dc__tab-focus dc__position-rel dc__capitalize ${getButtonDerivedClass({ size, variant, style, isLoading })} ${isDisabled ? 'dc__disabled' : ''}`}
+                    className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${getButtonDerivedClass({ size, variant, style, isLoading, icon })} ${isDisabled ? 'dc__disabled' : ''}`}
                     data-testid={dataTestId}
+                    aria-label={ariaLabel}
                 >
-                    {startIcon && <span className={iconClass}>{startIcon}</span>}
-                    <span className="dc__mxw-150 dc__align-left dc__truncate">{text}</span>
-                    {endIcon && <span className={iconClass}>{endIcon}</span>}
-                    {isLoading && <Progressing size={BUTTON_SIZE_TO_LOADER_SIZE_MAP[size]} />}
+                    {icon ? (
+                        <span className={iconClass}>{icon}</span>
+                    ) : (
+                        <>
+                            {startIcon && <span className={iconClass}>{startIcon}</span>}
+                            <span className="dc__mxw-150 dc__align-left dc__truncate">{text}</span>
+                            {endIcon && <span className={iconClass}>{endIcon}</span>}
+                        </>
+                    )}
+                    {isLoading && (
+                        <Progressing
+                            size={getButtonLoaderSize({
+                                size,
+                                icon,
+                            })}
+                        />
+                    )}
                 </ButtonElement>
             </div>
         </Tooltip>

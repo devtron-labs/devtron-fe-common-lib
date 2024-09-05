@@ -71,18 +71,6 @@ export type ButtonProps = (
      */
     style?: ButtonStyleType
     /**
-     * Text to be displayed in the button
-     */
-    text: string
-    /**
-     * If provided, icon to be displayed at the start of the button
-     */
-    startIcon?: ReactElement
-    /**
-     * If provided, icon to be displayed at the end of the button
-     */
-    endIcon?: ReactElement
-    /**
      * If true, the loading state is shown for the button with disabled
      */
     isLoading?: boolean
@@ -110,5 +98,30 @@ export type ButtonProps = (
         | {
               showTooltip?: never
               tooltipProps?: never
+          }
+    ) &
+    (
+        | {
+              icon?: never
+              ariaLabel?: never
+              /**
+               * Text to be displayed in the button
+               */
+              text: string
+              /**
+               * If provided, icon to be displayed at the start of the button
+               */
+              startIcon?: ReactElement
+              /**
+               * If provided, icon to be displayed at the end of the button
+               */
+              endIcon?: ReactElement
+          }
+        | {
+              icon: ReactElement
+              ariaLabel: string
+              text?: never
+              startIcon?: never
+              endIcon?: never
           }
     )
