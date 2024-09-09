@@ -193,7 +193,7 @@
         }
 
         &--neutral {
-            @include pseudo-states(var(--N200), var(--N300));
+            @include pseudo-states(var(--N100), var(--N200));
         }
     }
 
