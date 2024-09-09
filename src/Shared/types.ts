@@ -671,6 +671,8 @@ export type BaseFilterQueryParams<T> = {
     showAll?: boolean
 } & SortingParams<T>
 
+export type DataAttributes = Record<`data-${string}`, unknown>
+
 export interface RuntimeParamsListItemType extends KeyValueListType {
     id: number
 }
