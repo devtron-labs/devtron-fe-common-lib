@@ -181,7 +181,7 @@
         }
 
         &--negative-grey {
-            @include pseudo-states(var(--R100), var(--R200), null, var(--R500));
+            @include pseudo-states(var(--R100), var(--R200), null, var(--R600));
         }
 
         &--positive {
@@ -193,7 +193,7 @@
         }
 
         &--neutral {
-            @include pseudo-states(var(--N100), var(--N200));
+            @include pseudo-states(var(--N200), var(--N300));
         }
     }
 
