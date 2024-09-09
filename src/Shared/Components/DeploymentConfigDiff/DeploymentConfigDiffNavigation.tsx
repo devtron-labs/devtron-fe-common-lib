@@ -74,23 +74,22 @@ export const DeploymentConfigDiffNavigation = ({
     )
 
     const renderTabConfig = () => {
-        const { tabs } = tabConfig
+        const { tabs, activeTab } = tabConfig
 
         return (
             <div className="p-12">
                 <ul className="deployment-config-diff__tab-list p-0 m-0 flexbox dc__align-items-center dc__border br-4 dc__text-center dc__overflow-hidden">
                     {tabs.map((tab, index) => (
                         <li className={`flex-1 ${index !== tabs.length - 1 ? 'dc__border-right' : ''}`}>
-                            <NavLink
-                                key={tab.value}
-                                to={tab.href}
-                                activeClassName="deployment-config-diff__tab--active bcn-1"
-                                className={`deployment-config-diff__tab dc__inline-block w-100 dc__no-decor px-8 py-1 fs-12 lh-20 bcn-0 ${isLoading ? 'dc__opacity-0_5 cursor-not-allowed' : ''}`}
-                                onClick={onTabClick(tab.value)}
-                                aria-disabled={isLoading}
+                            <button
+                                key={tab}
+                                type="button"
+                                className={`dc__transparent w-100 dc__no-decor px-8 py-1 fs-12 lh-20 fw-6 ${activeTab === tab ? 'bcn-1 cn-9' : 'bcn-0 cn-7'} ${isLoading ? 'dc__opacity-0_5 cursor-not-allowed' : ''}`}
+                                onClick={onTabClick(tab)}
+                                disabled={isLoading}
                             >
-                                {tab.value}
-                            </NavLink>
+                                {tab}
+                            </button>
                         </li>
                     ))}
                 </ul>

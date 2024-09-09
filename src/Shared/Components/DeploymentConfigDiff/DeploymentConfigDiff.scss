@@ -40,14 +40,4 @@
     &__tab-list {
         list-style: none;
     }
-
-    &__tab {
-        &, &:hover {
-            color: var(--N700);
-        }
-
-        &--active, &--active:hover {
-            color: var(--N900);
-        }
-    }
 }

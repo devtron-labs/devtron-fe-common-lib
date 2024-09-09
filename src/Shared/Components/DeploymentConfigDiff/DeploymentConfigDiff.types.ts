@@ -75,10 +75,8 @@ export interface DeploymentConfigDiffProps {
     navHeading: string
     navHelpText?: string
     tabConfig?: {
-        tabs: {
-            value: string
-            href: string
-        }[]
+        tabs: string[]
+        activeTab: string
         onClick: (tab: string) => void
     }
 }
