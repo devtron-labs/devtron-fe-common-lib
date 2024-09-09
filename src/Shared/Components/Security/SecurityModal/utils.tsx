@@ -119,7 +119,7 @@ export const parseExecutionDetailResponse = (scanResult): ApiResponseResultType 
             },
             list: [
                 {
-                    image: 'image-name', // TODO: get image name from execution details api
+                    image: scanResult.image,
                     summary: {
                         severities: {
                             [SeveritiesDTO.CRITICAL]: scanResult.severityCount?.critical || 0,
