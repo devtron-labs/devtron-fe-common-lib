@@ -16,6 +16,7 @@
 
 import { ObjectFieldTemplateProps, canExpand, titleId } from '@rjsf/utils'
 import { JSONPath } from 'jsonpath-plus'
+import { convertJSONPointerToJSONPath } from '@Common/Helper'
 import { FieldRowWithLabel } from '../common/FieldRow'
 import { TitleField } from './TitleField'
 import { AddButton } from './ButtonTemplates'
@@ -33,6 +34,7 @@ const Field = ({
     schema,
     title,
     uiSchema,
+    formContext,
 }: ObjectFieldTemplateProps<any, RJSFFormSchema, any>) => {
     const hasAdditionalProperties = !!schema.additionalProperties
 
@@ -54,8 +56,19 @@ const Field = ({
                 return true
             }
             try {
-                const value = JSONPath({ path: hiddenSchemaProp.match, json: formData })?.[0]
-                const isHidden = value === undefined || hiddenSchemaProp.condition === value
+                if (!hiddenSchemaProp.path) {
+                    throw new Error('Empty path element')
+                }
+                let path = ''
+                if (hiddenSchemaProp.path.match(/^\w+(\/\w+)*$/g) && hiddenSchemaProp.path.charAt(0) !== '/') {
+                    path = convertJSONPointerToJSONPath(`/${hiddenSchemaProp.path}`)
+                }
+                // NOTE: formContext is the formData passed to RJSFForm
+                const value = JSONPath({
+                    path,
+                    json: formContext,
+                })?.[0]
+                const isHidden = value === undefined || hiddenSchemaProp.value === value
                 return !isHidden
             } catch {
                 return true

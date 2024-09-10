@@ -21,8 +21,8 @@ import { StrictRJSFSchema } from '@rjsf/utils'
 export type FormProps = Omit<ComponentProps<typeof RJSFForm>, 'validator'>
 
 interface Hidden {
-    condition: boolean
-    match: string
+    value: boolean
+    path: string
 }
 
 export interface RJSFFormSchema extends StrictRJSFSchema {
