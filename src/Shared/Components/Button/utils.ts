@@ -31,4 +31,4 @@ export const getButtonDerivedClass = ({
     isLoading,
     icon,
 }: Pick<ButtonProps, 'variant' | 'size' | 'style' | 'isLoading' | 'icon'>) =>
-    `button button__${variant}--${style} ${icon ? ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP[size] : `${BUTTON_SIZE_TO_CLASS_NAME_MAP[size]} dc__mnw-100`} ${isLoading ? 'button--loading' : ''}`
+    `button button__${variant}--${style} ${icon ? ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP[size] : `${BUTTON_SIZE_TO_CLASS_NAME_MAP[size]} mw-64`} ${isLoading ? 'button--loading' : ''}`
