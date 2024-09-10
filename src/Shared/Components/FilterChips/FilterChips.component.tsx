@@ -49,7 +49,7 @@ const FilterChip = ({
                 {showRemoveIcon && (
                     <button
                         type="button"
-                        className="flex p-0 dc__transparent dc__hover-n50 br-4"
+                        className="flex p-0 dc__transparent dc__hover-remove-btn"
                         onClick={removeFilter}
                         aria-label="Remove filter"
                     >

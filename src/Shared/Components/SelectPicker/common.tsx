@@ -122,6 +122,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
         selectProps: { isMulti },
         selectOption,
         isDisabled,
+        isSelected,
     } = props
     const { description, startIcon, endIcon } = data ?? {}
     const showDescription = !!description
@@ -141,7 +142,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                     <Checkbox
                         onChange={noop}
                         onClick={handleChange}
-                        isChecked={props.isSelected || false}
+                        isChecked={isSelected || false}
                         value={CHECKBOX_VALUE.CHECKED}
                         rootClassName="mb-0 w-20 p-2 dc__align-self-start dc__no-shrink"
                         disabled={isDisabled}

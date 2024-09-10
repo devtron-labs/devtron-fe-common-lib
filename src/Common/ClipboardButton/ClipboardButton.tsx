@@ -34,7 +34,7 @@ export default function ClipboardButton({
     content,
     copiedTippyText = 'Copied!',
     duration = 1000,
-    trigger = false,
+    trigger,
     setTrigger = noop,
     rootClassName = '',
     iconSize = 16,
@@ -45,6 +45,8 @@ export default function ClipboardButton({
     const handleTextCopied = () => {
         setCopied(true)
     }
+    const isTriggerUndefined = typeof trigger === 'undefined'
+
     const handleEnableTippy = () => setEnableTippy(true)
     const handleDisableTippy = () => setEnableTippy(false)
     const handleCopyContent = useCallback(
@@ -68,7 +70,7 @@ export default function ClipboardButton({
     }, [copied, duration, setTrigger])
 
     useEffect(() => {
-        if (trigger) {
+        if (!isTriggerUndefined && trigger) {
             setCopied(true)
             handleCopyContent()
         }
@@ -86,7 +88,7 @@ export default function ClipboardButton({
                 className={`dc__outline-none-imp p-0 flex dc__transparent--unstyled dc__no-border ${rootClassName}`}
                 onMouseEnter={handleEnableTippy}
                 onMouseLeave={handleDisableTippy}
-                onClick={handleCopyContent}
+                onClick={isTriggerUndefined && handleCopyContent}
             >
                 {copied ? <Check className={iconClassName} /> : <ICCopy className={iconClassName} />}
             </button>
