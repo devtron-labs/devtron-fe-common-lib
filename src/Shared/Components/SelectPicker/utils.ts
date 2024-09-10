@@ -124,7 +124,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         border: `1px solid ${error ? 'var(--R500)' : 'var(--N200)'}`,
         cursor: state.isDisabled ? 'not-allowed' : 'pointer',
         padding: '5px 8px',
-        gap: '8px',
+        gap: '6px',
         opacity: state.isDisabled ? 0.5 : 1,
         flexWrap: 'nowrap',
         maxHeight: '120px',

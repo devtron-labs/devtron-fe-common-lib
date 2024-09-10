@@ -208,6 +208,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     shouldMenuAlignRight = false,
     fullWidth = false,
     customSelectedOptionsCount = null,
+    renderMenuListFooter,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options } = props
@@ -397,6 +398,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 isValidNewOption={isValidNewOption}
                                 createOptionPosition="first"
                                 onCreateOption={handleCreateOption}
+                                renderMenuListFooter={!optionListError && renderMenuListFooter}
                             />
                         ) : (
                             <ReactSelect
@@ -414,6 +416,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                     ValueContainer: renderValueContainer,
                                     NoOptionsMessage: renderNoOptionsMessage,
                                 }}
+                                renderMenuListFooter={!optionListError && renderMenuListFooter}
                             />
                         )}
                     </div>
