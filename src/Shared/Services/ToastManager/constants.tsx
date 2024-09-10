@@ -27,31 +27,36 @@ export const TOAST_BASE_CONFIG: ToastContainerProps = {
 
 export const TOAST_VARIANT_TO_CONFIG_MAP: Record<
     ToastVariantType,
-    Required<Pick<ToastProps, 'icon' | 'title'>> & Pick<ToastOptions, 'type'>
+    Required<Pick<ToastProps, 'icon' | 'title' | 'progressBarBg'>> & Pick<ToastOptions, 'type'>
 > = {
     [ToastVariantType.info]: {
         icon: <ICInfoFilled />,
         type: 'info',
         title: 'Information',
+        progressBarBg: 'var(--B500)',
     },
     [ToastVariantType.success]: {
         icon: <ICSuccess />,
         type: 'success',
         title: 'Success',
+        progressBarBg: 'var(--G500)',
     },
     [ToastVariantType.error]: {
         icon: <ICError />,
         type: 'error',
         title: 'Error',
+        progressBarBg: 'var(--R500)',
     },
     [ToastVariantType.warn]: {
         icon: <ICWarning className="warning-icon-y5-imp" />,
         type: 'warning',
         title: 'Warning',
+        progressBarBg: 'var(--Y500)',
     },
     [ToastVariantType.notAuthorized]: {
         icon: <ICLocked />,
         type: 'warning',
         title: 'Not authorized',
+        progressBarBg: 'var(--Y500)',
     },
 }

@@ -2,7 +2,11 @@ import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 import { ToastProps } from './types'
 
-export const ToastContent = ({ title, description, buttonProps }: Omit<ToastProps, 'variant'>) => (
+export const ToastContent = ({
+    title,
+    description,
+    buttonProps,
+}: Pick<ToastProps, 'title' | 'description' | 'buttonProps'>) => (
     <div className="flexbox-col dc__gap-8">
         <div className="flexbox-col dc__gap-4">
             <h3 className="m-0 fs-13 fw-6 lh-20 cn-0 dc__truncate">{title}</h3>

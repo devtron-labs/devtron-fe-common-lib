@@ -15,4 +15,5 @@ export interface ToastProps {
     icon?: ReactElement
     variant?: ToastVariantType
     buttonProps?: ButtonProps
+    progressBarBg?: `var(--${string})`
 }
