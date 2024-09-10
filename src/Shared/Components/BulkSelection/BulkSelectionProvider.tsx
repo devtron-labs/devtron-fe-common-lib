@@ -37,7 +37,7 @@ const BulkSelectionContext = createContext<UseBulkSelectionReturnType<any>>({
     selectedIdentifiers: {},
     handleBulkSelection: noop,
     isChecked: false,
-    checkboxValue: CHECKBOX_VALUE.CHECKED,
+    checkboxValue: CHECKBOX_VALUE?.CHECKED,
     isBulkSelectionApplied: false,
     getSelectedIdentifiersCount: noop,
 })

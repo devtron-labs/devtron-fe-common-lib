@@ -1045,3 +1045,7 @@ export function asyncWrap(promise): any[] {
 }
 
 export const prefixZeroIfSingleDigit = (value: number = 0) => (value > 0 && value < 10 ? `0${value}` : value)
+
+export const getContainerRegistryIcon = (registryValue: string) => (
+    <div className={`dc__registry-icon dc__git-logo mr-5 ${registryValue}`} />
+)
