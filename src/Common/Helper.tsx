@@ -30,17 +30,6 @@ import { AsyncOptions, AsyncState, UseSearchString } from './Types'
 import { scrollableInterface, DATE_TIME_FORMAT_STRING } from '../Shared'
 import { ReactComponent as ArrowDown } from '../Assets/Icon/ic-chevron-down.svg'
 
-toast.configure({
-    autoClose: 3000,
-    hideProgressBar: true,
-    pauseOnHover: true,
-    pauseOnFocusLoss: true,
-    closeOnClick: false,
-    newestOnTop: true,
-    toastClassName: 'devtron-toast',
-    bodyClassName: 'devtron-toast__body',
-})
-
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
         serverError.errors.map(({ userMessage, internalMessage }) => {

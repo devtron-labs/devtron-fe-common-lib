@@ -395,7 +395,7 @@ export const ImageTagsContainer = ({
                     </div>
                     {showTagsWarning && (
                         <div className="cn-7 mb-8 flex left">
-                            <Info className="form__icon--info icon-dim-16 mr-2" />
+                            <Info className="icon-dim-16 mr-2" />
                             Tags cannot be edited/removed later
                         </div>
                     )}

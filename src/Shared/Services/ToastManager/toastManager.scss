@@ -1,0 +1,39 @@
+.Toastify__toast-container {
+    padding: 0;
+    width: 320px;
+}
+
+.custom-toast {
+    max-height: none;
+    padding: 12px;
+    box-shadow: none;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    min-height: 0;
+    color: var(--N0);
+    background: #1B1C1E;
+    font-family: inherit;
+
+    &__body {
+        margin: 0;
+        padding: 0;
+        gap: 8px;
+        align-items: flex-start;
+        align-self: center;
+
+        > .Toastify__toast-icon {
+            margin: 0;
+            width: auto;
+            align-self: flex-start;
+        }
+
+        button {
+            color: var(--N0);
+
+            &:hover, &:active {
+                color: var(--N0);
+            }
+        }
+    }
+    // TODO: fix the styling for progress bar
+}
