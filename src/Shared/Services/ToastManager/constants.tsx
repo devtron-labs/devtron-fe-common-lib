@@ -5,7 +5,6 @@ import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { ReactComponent as ICError } from '@Icons/ic-error.svg'
 import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICLocked } from '@Icons/ic-locked.svg'
-import { ReactComponent as ICSparkles } from '@Icons/ic-sparkles.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ToastVariantType } from './types'
 
@@ -48,9 +47,5 @@ export const TOAST_VARIANT_TO_CONFIG_MAP: Record<
     [ToastVariantType.notAuthorized]: {
         icon: <ICLocked />,
         type: 'warning',
-    },
-    [ToastVariantType.updateAvailable]: {
-        icon: <ICSparkles />,
-        type: 'info',
     },
 }

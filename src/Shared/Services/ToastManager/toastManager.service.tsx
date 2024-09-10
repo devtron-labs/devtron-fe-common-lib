@@ -19,14 +19,16 @@ class ToastManager {
 
     // eslint-disable-next-line class-methods-use-this
     showToast = (
-        { variant = ToastVariantType.info, ...toastProps }: ToastProps,
+        { variant = ToastVariantType.info, icon: customIcon, ...toastProps }: ToastProps,
         options: Pick<ToastOptions, 'autoClose'> = {},
     ) => {
         const { icon, type } = TOAST_VARIANT_TO_CONFIG_MAP[variant]
 
         return toast(<ToastContent {...toastProps} />, {
             ...options,
-            icon: () => <div className="dc__no-shrink flex dc__fill-available-space icon-dim-20">{icon}</div>,
+            icon: () => (
+                <div className="dc__no-shrink flex dc__fill-available-space icon-dim-20">{customIcon ?? icon}</div>
+            ),
             type,
         })
     }

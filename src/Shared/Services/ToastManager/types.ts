@@ -1,4 +1,5 @@
 import { ButtonProps } from '@Shared/Components'
+import { ReactElement } from 'react'
 
 export enum ToastVariantType {
     info = 'info',
@@ -6,12 +7,12 @@ export enum ToastVariantType {
     error = 'error',
     warn = 'warn',
     notAuthorized = 'notAuthorized',
-    updateAvailable = 'updateAvailable',
 }
 
 export interface ToastProps {
     title: string
     description?: string
+    icon?: ReactElement
     variant?: ToastVariantType
     buttonProps?: ButtonProps
 }
