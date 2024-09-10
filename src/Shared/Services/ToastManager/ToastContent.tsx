@@ -6,7 +6,7 @@ export const ToastContent = ({ title, description, buttonProps }: Omit<ToastProp
     <div className="flexbox-col dc__gap-8">
         <div className="flexbox-col dc__gap-4">
             <h3 className="m-0 fs-13 fw-6 lh-20 cn-0 dc__truncate">{title}</h3>
-            {description && <p className="fs-12 fw-4 lh-18 m-0 dc__truncate--clamp-6">{description}</p>}
+            <p className="fs-12 fw-4 lh-18 m-0 dc__truncate--clamp-6">{description}</p>
         </div>
         {buttonProps && (
             <Button

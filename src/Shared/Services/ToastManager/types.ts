@@ -10,8 +10,8 @@ export enum ToastVariantType {
 }
 
 export interface ToastProps {
-    title: string
-    description?: string
+    title?: string
+    description: string
     icon?: ReactElement
     variant?: ToastVariantType
     buttonProps?: ButtonProps
