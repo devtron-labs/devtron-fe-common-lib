@@ -10,8 +10,10 @@ export enum DeploymentTemplateTabsType {
 }
 
 export interface DeploymentTemplateQueryParamsType {
-    hideLockedKeys: boolean
-    resolveScopedVariables: boolean
+    // TODO: Remove it from params itself
+    hideLockedKeys?: boolean
+    // TODO: Remove it from params itself
+    resolveScopedVariables?: boolean
     selectedTab: DeploymentTemplateTabsType
     showReadMe: boolean
     editMode: ConfigurationType
@@ -259,4 +261,50 @@ export interface GetDeploymentTemplateEditorKeyProps {
     resolveScopedVariables: boolean
     hideLockedKeys: boolean
     isResolvingVariables: boolean
+}
+
+interface DeploymentTemplateChartConfigType {
+    id: number
+    // TODO: May not need this
+    refChartTemplate: string
+    // TODO: May not need this
+    refChartTemplateVersion: string
+    chartRefId: number
+    readme: string
+}
+
+export interface SelectedChartDetailsType {
+    selectedChartRefId: number
+    selectedChart: DeploymentChartVersionType
+}
+
+export interface DeploymentTemplateConfigState extends SelectedChartDetailsType {
+    originalTemplate: Record<string, string>
+    chartConfig: DeploymentTemplateChartConfigType
+    isAppMetricsEnabled: boolean
+    // TODO: Maybe can remove this
+    readme: string
+    schema: Record<string, string>
+    // FIXME: need this in case of protected draft as well since they can be different
+    guiSchema: string
+    /**
+     * API response from getDraftByResourceName
+     * FIXME: Can we move it as separate type
+     */
+    latestDraft?: any
+    /**
+     * Stringified JSON of the deployment template
+     */
+    editorTemplate: string
+    /**
+     * Stringified JSON of the deployment template with locked keys removed
+     */
+    editorTemplateWithoutLockedKeys: string
+}
+
+export interface NewDeploymentTemplateContextType
+    extends Pick<DeploymentTemplateQueryParamsType, 'editMode' | 'selectedTab' | 'showReadMe'> {
+    editorTemplate: string
+    publishedTemplateData: DeploymentTemplateConfigState
+    isLoadingInitialData: boolean
 }
