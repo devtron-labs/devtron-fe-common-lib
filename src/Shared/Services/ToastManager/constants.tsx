@@ -47,7 +47,7 @@ export const TOAST_VARIANT_TO_CONFIG_MAP: Record<
     },
     [ToastVariantType.notAuthorized]: {
         icon: <ICLocked />,
-        type: 'info',
+        type: 'warning',
     },
     [ToastVariantType.updateAvailable]: {
         icon: <ICSparkles />,
