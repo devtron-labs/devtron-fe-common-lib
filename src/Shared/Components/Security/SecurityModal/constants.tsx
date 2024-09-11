@@ -2,7 +2,7 @@
  * Copyright (c) 2024. Devtron Inc.
  */
 
-import { SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
+import { SCAN_TOOL_ID_CLAIR, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
 import PageNotFound from '@Images/ic-page-not-found.svg'
 import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
 import { CATEGORIES, SUB_CATEGORIES, SeveritiesDTO, SortOrderEnum, EmptyStateType, StatusType } from './types'
@@ -88,4 +88,5 @@ export const SCAN_IN_PROGRESS_EMPTY_STATE: EmptyStateType = {
 
 export const MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID: Record<StatusType['scanToolName'], number> = {
     TRIVY: SCAN_TOOL_ID_TRIVY,
+    CLAIR: SCAN_TOOL_ID_CLAIR,
 }

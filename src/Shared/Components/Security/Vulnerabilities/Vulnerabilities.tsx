@@ -15,7 +15,8 @@
  */
 
 import { useEffect } from 'react'
-import { EMPTY_STATE_STATUS } from '@Shared/constants'
+import { EMPTY_STATE_STATUS, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
+import { SeverityCount } from '@Shared/types'
 import { Progressing, useAsync } from '../../../../Common'
 import { ScannedByToolModal } from '../../ScannedByToolModal'
 import { getLastExecutionByArtifactAppEnv } from './service'
@@ -60,7 +61,11 @@ const Vulnerabilities = ({
         }
     }, [vulnerabilitiesResponse, scanResultResponse])
 
-    if (!isScanned) {
+    if (
+        !isScanned ||
+        (vulnerabilitiesResponse && !vulnerabilitiesResponse.result.scanned) ||
+        (scanResultResponse && !scanResultResponse?.result.scanned)
+    ) {
         return (
             <div className="security-tab-empty">
                 <p className="security-tab-empty__title">Image was not scanned</p>
@@ -99,16 +104,33 @@ const Vulnerabilities = ({
         )
     }
 
-    if (vulnerabilitiesResponse.result.vulnerabilities.length === 0) {
+    const imageScanSeverities = scanResultResponse?.result.imageScan.vulnerability?.summary.severities
+    const severityCount: SeverityCount = isScanV2Enabled
+        ? {
+              critical: imageScanSeverities?.CRITICAL || 0,
+              high: imageScanSeverities?.HIGH || 0,
+              medium: imageScanSeverities?.MEDIUM || 0,
+              low: imageScanSeverities?.LOW || 0,
+              unknown: imageScanSeverities?.UNKNOWN || 0,
+          }
+        : vulnerabilitiesResponse?.result.severityCount
+
+    const totalCount =
+        severityCount.critical + severityCount.high + severityCount.low + severityCount.medium + severityCount.unknown
+
+    if (!totalCount) {
         return (
             <div className="security-tab-empty">
                 <p className="security-tab-empty__title">
                     {EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.TITLE}
                 </p>
                 <p>{EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.SUBTITLE}</p>
-                <p className="security-tab-empty__subtitle">{vulnerabilitiesResponse.result.lastExecution}</p>
+                <p className="security-tab-empty__subtitle">
+                    {vulnerabilitiesResponse?.result.lastExecution ??
+                        scanResultResponse?.result.imageScan.vulnerability.list[0].StartedOn}
+                </p>
                 <p className="pt-8 pb-8 pl-16 pr-16 flexbox dc__align-items-center">
-                    <ScannedByToolModal scanToolId={vulnerabilitiesResponse.result.scanToolId} />
+                    <ScannedByToolModal scanToolId={vulnerabilitiesResponse?.result.scanToolId ?? SCAN_TOOL_ID_TRIVY} />
                 </p>
             </div>
         )
@@ -117,8 +139,8 @@ const Vulnerabilities = ({
     return (
         <div className="p-12">
             <SecuritySummaryCard
-                severityCount={vulnerabilitiesResponse.result.severityCount}
-                scanToolId={vulnerabilitiesResponse.result.scanToolId}
+                severityCount={severityCount}
+                scanToolId={vulnerabilitiesResponse?.result.scanToolId ?? SCAN_TOOL_ID_TRIVY}
                 {...(isScanV2Enabled
                     ? { appDetailsPayload: { appId: applicationId, envId: environmentId, artifactId } }
                     : { executionDetailsPayload: { appId: applicationId, envId: environmentId, artifactId } })}

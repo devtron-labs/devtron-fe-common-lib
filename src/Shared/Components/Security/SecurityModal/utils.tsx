@@ -8,6 +8,7 @@ import { Severity } from '@Shared/types'
 import { VulnerabilityType } from '@Common/Types'
 import { ZERO_TIME_STRING } from '@Common/Constants'
 import { ReactComponent as NoVulnerability } from '@Icons/ic-vulnerability-not-found.svg'
+import { SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
 import {
     ApiResponseResultType,
     SeveritiesDTO,
@@ -136,12 +137,12 @@ export const parseExecutionDetailResponse = (scanResult): ApiResponseResultType 
                         fixedInVersion: vulnerability?.fixedVersion,
                         severity: getSeverityFromVulnerabilitySeverity(vulnerability?.severity),
                     })),
-                    scanToolName: 'TRIVY' /* TODO: need to create a mapping */, // this can be acc to scan tool id
+                    scanToolName: scanResult.scanToolId === SCAN_TOOL_ID_TRIVY ? 'TRIVY' : 'CLAIR',
                     StartedOn:
                         scanResult.executionTime && scanResult.executionTime !== ZERO_TIME_STRING
                             ? scanResult.executionTime
                             : '--',
-                    status: 'Completed', // TODO: get status from executionDetailsApi
+                    status: scanResult.scanned ? 'Completed' : 'Progressing',
                 },
             ],
         },

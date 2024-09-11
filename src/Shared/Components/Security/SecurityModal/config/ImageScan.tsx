@@ -4,7 +4,7 @@
 
 import dayjs from 'dayjs'
 import { Progressing } from '@Common/Progressing'
-import { ReactComponent as ICError } from '@Icons/ic-error.svg'
+import { ReactComponent as ICError } from '@Icons/ic-error-cross.svg'
 import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { ZERO_TIME_STRING, DATE_TIME_FORMATS } from '../../../../../Common/Constants'
 import {
@@ -118,7 +118,7 @@ const getImageScanProgressingState = (status: StatusType['status']) => {
         case 'Completed':
             return <ICSuccess className="icon-dim-16" />
         case 'Failed':
-            return <ICError className="icon-dim-16" />
+            return <ICError className="icon-dim-16 ic-error-cross-red" />
         case 'Progressing':
             return (
                 <Progressing

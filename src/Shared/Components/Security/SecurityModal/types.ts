@@ -119,7 +119,7 @@ export interface InfoCardPropsType {
 export interface StatusType {
     status: 'Completed' | 'Running' | 'Failed' | 'Progressing'
     StartedOn: string
-    scanToolName: 'TRIVY'
+    scanToolName: 'TRIVY' | 'CLAIR'
 }
 
 export type DetailViewDataType = {
