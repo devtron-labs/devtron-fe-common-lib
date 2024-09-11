@@ -15,7 +15,6 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { toast } from 'react-toastify'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as Add } from '../Assets/Icon/ic-add.svg'
 import { ReactComponent as Close } from '../Assets/Icon/ic-cross.svg'
@@ -30,7 +29,7 @@ import { ImageButtonType, ImageTaggingContainerType, ReleaseTag } from './ImageT
 import { showError, stopPropagation } from './Helper'
 import { setImageTags } from './Common.service'
 import { Progressing } from './Progressing'
-import { InfoIconTippy } from '../Shared'
+import { InfoIconTippy, ToastManager, ToastVariantType } from '../Shared'
 
 export const ImageTagsContainer = ({
     // Setting it to zero in case of external pipeline
@@ -257,7 +256,10 @@ export const ImageTagsContainer = ({
             .catch((err) => {
                 // Fix toast message
                 if (err.errors?.[0]?.userMessage?.appReleaseTags?.length) {
-                    toast.error(err.errors?.[0]?.internalMessage)
+                    ToastManager.showToast({
+                        variant: ToastVariantType.error,
+                        description: err.errors?.[0]?.internalMessage,
+                    })
                     errorStateHandling(err.errors)
                 } else {
                     showError(err)

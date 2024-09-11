@@ -16,11 +16,11 @@
 
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import info from '../../Assets/Icon/ic-info-filled.svg'
 import { ConfirmationDialog, DeleteDialog } from '../Dialogs'
 import { ServerErrors } from '../ServerError'
 import { DeleteComponentProps } from './types'
+import { ToastManager, ToastVariantType } from '@Shared/Services'
 
 const DeleteComponent = ({
     setDeleting,
@@ -43,7 +43,10 @@ const DeleteComponent = ({
         setDeleting(true)
         try {
             await deleteComponent(payload)
-            toast.success('Successfully deleted')
+            ToastManager.showToast({
+                variant: ToastVariantType.success,
+                description: 'Successfully deleted',
+            })
             toggleConfirmation(false)
             if (redirectTo) {
                 push(url)

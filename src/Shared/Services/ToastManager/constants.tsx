@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { ToastOptions, ToastContainerProps } from 'react-toastify'
 import { ReactComponent as ICInfoFilled } from '@Icons/ic-info-filled.svg'
 import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'

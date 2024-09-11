@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { toast, ToastContainer, ToastOptions } from 'react-toastify'
 import { ToastProps, ToastVariantType } from './types'
 import { TOAST_BASE_CONFIG, TOAST_VARIANT_TO_CONFIG_MAP } from './constants'
