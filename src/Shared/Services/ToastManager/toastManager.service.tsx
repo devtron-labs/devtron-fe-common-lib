@@ -5,6 +5,65 @@ import { TOAST_BASE_CONFIG, TOAST_VARIANT_TO_CONFIG_MAP } from './constants'
 import { ToastContent } from './ToastContent'
 import './toastManager.scss'
 
+/**
+ * Service for handling toast across the application
+ *
+ * Note: The application needs to have `ToastManagerContainer` at the root
+ * level for the toast to work
+ *
+ * @example Default Usage
+ * ```ts
+ * ToastManager.showToast({
+ *   description: 'Lorem ipsum'
+ * })
+ * ```
+ *
+ * @example Custom Title
+ * ```ts
+ * ToastManager.showToast({
+ *   description: 'Lorem ipsum',
+ *   title: 'Toast title'
+ * })
+ * ```
+ *
+ * @example With Button
+ * ```ts
+ * ToastManager.showToast({
+ *   description: 'Lorem ipsum',
+ *   buttonProps: {
+ *     dataTestId: 'toast-btn',
+ *     text: 'Reload',
+ *     startIcon: <ICArrowClockwise />
+ *   }
+ * })
+ * ```
+ *
+ * @example Auto close disabled
+ * ```ts
+ * ToastManager.showToast({
+ *   description: 'Lorem ipsum',
+ *   toastOptions: {
+ *     autoClose: false,
+ *   },
+ * })
+ * ```
+ *
+ * @example Custom progress bar color
+ * ```ts
+ * ToastManager.showToast({
+ *   description: 'Lorem ipsum',
+ *   progressBarBg: 'var(--N700)',
+ * })
+ * ```
+ *
+ * @example Custom icon
+ * ```ts
+ * ToastManager.showToast({
+ *   description: 'Lorem ipsum',
+ *   icon: <ICCube />,
+ * })
+ * ```
+ */
 class ToastManager {
     // eslint-disable-next-line no-use-before-define
     static #instance: ToastManager
