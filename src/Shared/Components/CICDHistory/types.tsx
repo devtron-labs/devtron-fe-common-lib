@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CSSProperties } from 'react'
+import { CSSProperties, ReactElement } from 'react'
 import {
     OptionType,
     UserApprovalMetadataType,
@@ -82,6 +82,17 @@ export interface CICDSidebarFilterOptionType extends OptionType {
     deploymentAppDeleteRequest?: boolean
 }
 
+// The values can be undefined because of old data
+export interface TargetConfigType {
+    tenantIcon?: string
+    tenantId?: string
+    tenantName?: string
+    installationId?: string
+    installationName?: string
+    releaseChannelId?: string
+    releaseChannelName?: string
+}
+
 export interface History {
     id: number
     name: string
@@ -116,6 +127,7 @@ export interface History {
     promotionApprovalMetadata?: PromotionApprovalMetadataType
     triggerMetadata?: string
     runSource?: RunSourceType
+    targetConfig?: TargetConfigType
 }
 
 export interface DeploymentHistoryResultObject {
@@ -199,9 +211,14 @@ export interface StartDetailsType {
     isJobView?: boolean
     triggerMetadata?: string
     renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string) => JSX.Element
+    /**
+     * Callback handler for showing the target config
+     */
+    renderTargetConfigInfo?: () => ReactElement
+    stage: DeploymentStageType
 }
 
-export interface TriggerDetailsType {
+export interface TriggerDetailsType extends Pick<StartDetailsType, 'renderTargetConfigInfo'> {
     status: string
     startedOn: string
     finishedOn: string
@@ -356,7 +373,7 @@ export interface VirtualHistoryArtifactProps {
         workflowId: number
     }
 }
-export interface TriggerOutputProps extends RenderRunSourceType {
+export interface TriggerOutputProps extends RenderRunSourceType, Pick<TriggerDetailsType, 'renderTargetConfigInfo'> {
     fullScreenView: boolean
     triggerHistory: Map<number, History>
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
