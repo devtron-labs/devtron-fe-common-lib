@@ -20,14 +20,20 @@ import { StrictRJSFSchema } from '@rjsf/utils'
 
 export type FormProps = Omit<ComponentProps<typeof RJSFForm>, 'validator'>
 
-interface Hidden {
-    value: boolean
-    path: string
-}
+export type HiddenType =
+    | {
+          value: any
+          path: string
+      }
+    | {
+          condition: any
+          value: string
+      }
+    | string
 
 export interface RJSFFormSchema extends StrictRJSFSchema {
     properties: {
         [key: string]: RJSFFormSchema
     }
-    hidden: Hidden
+    hidden: HiddenType
 }

@@ -15,6 +15,7 @@
  */
 
 import { TranslatableString, englishStringTranslator } from '@rjsf/utils'
+import { HiddenType } from './types'
 
 /**
  * Override for the TranslatableString from RJSF
@@ -133,5 +134,38 @@ export const getInferredTypeFromValueType = (value) => {
         default:
             // Unsupported or undefined types
             return 'null'
+    }
+}
+
+const conformPathToPointers = (path: string) => {
+    const trimmedPath = path.trim()
+    const isSlashSeparatedPathMissingBeginSlash = trimmedPath.match(/^\w+(\/\w+)*$/g)
+    if (isSlashSeparatedPathMissingBeginSlash) {
+        return `/${trimmedPath}`
+    }
+    const isDotSeparatedPath = trimmedPath.match(/^\w+(\.\w+)*$/g)
+    if (isDotSeparatedPath) {
+        // NOTE: replacing dots with forward slash (/)
+        return `/${trimmedPath.replaceAll(/\./g, '/')}`
+    }
+    return trimmedPath
+}
+
+export const parseSchemaHiddenType = (hiddenSchema: HiddenType) => {
+    if (typeof hiddenSchema === 'string') {
+        return {
+            value: false,
+            path: conformPathToPointers(hiddenSchema),
+        }
+    }
+    if ('condition' in hiddenSchema) {
+        return {
+            value: hiddenSchema.condition,
+            path: conformPathToPointers(hiddenSchema.value),
+        }
+    }
+    return {
+        ...hiddenSchema,
+        path: conformPathToPointers(hiddenSchema.path),
     }
 }

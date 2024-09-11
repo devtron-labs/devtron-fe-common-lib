@@ -21,6 +21,7 @@ import { FieldRowWithLabel } from '../common/FieldRow'
 import { TitleField } from './TitleField'
 import { AddButton } from './ButtonTemplates'
 import { RJSFFormSchema } from '../types'
+import { parseSchemaHiddenType } from '../utils'
 
 const Field = ({
     disabled,
@@ -56,19 +57,19 @@ const Field = ({
                 return true
             }
             try {
-                if (!hiddenSchemaProp.path) {
-                    throw new Error('Empty path element')
+                const hiddenSchema = parseSchemaHiddenType(hiddenSchemaProp)
+                if (!hiddenSchema.path) {
+                    throw new Error('Empty path property of hidden descriptor field')
                 }
-                let path = ''
-                if (hiddenSchemaProp.path.match(/^\w+(\/\w+)*$/g) && hiddenSchemaProp.path.charAt(0) !== '/') {
-                    path = convertJSONPointerToJSONPath(`/${hiddenSchemaProp.path}`)
+                if (!hiddenSchema.path.match(/^\/\w+(\/\w+)*$/g)) {
+                    throw new Error('Provided path is not a valid JSON pointer')
                 }
                 // NOTE: formContext is the formData passed to RJSFForm
                 const value = JSONPath({
-                    path,
+                    path: convertJSONPointerToJSONPath(hiddenSchema.path),
                     json: formContext,
                 })?.[0]
-                const isHidden = value === undefined || hiddenSchemaProp.value === value
+                const isHidden = value === undefined || hiddenSchema.value === value
                 return !isHidden
             } catch {
                 return true
