@@ -53,25 +53,13 @@ const Vulnerabilities = ({
 
     useEffect(() => {
         if (scanResultResponse && isScanV2Enabled) {
-            setVulnerabilityCount(scanResultResponse?.result?.imageScan?.vulnerability?.list?.length)
+            setVulnerabilityCount(scanResultResponse.result.imageScan.vulnerability?.list?.length)
             return
         }
         if (vulnerabilitiesResponse && !isScanV2Enabled) {
             setVulnerabilityCount(vulnerabilitiesResponse.result.vulnerabilities?.length)
         }
     }, [vulnerabilitiesResponse, scanResultResponse])
-
-    if (
-        !isScanned ||
-        (vulnerabilitiesResponse && !vulnerabilitiesResponse.result.scanned) ||
-        (scanResultResponse && !scanResultResponse?.result.scanned)
-    ) {
-        return (
-            <div className="security-tab-empty">
-                <p className="security-tab-empty__title">Image was not scanned</p>
-            </div>
-        )
-    }
 
     if (!isScanEnabled) {
         return (
@@ -85,6 +73,18 @@ const Vulnerabilities = ({
         return (
             <div className="security-tab-empty">
                 <Progressing />
+            </div>
+        )
+    }
+
+    if (
+        !isScanned ||
+        (vulnerabilitiesResponse && !vulnerabilitiesResponse.result.scanned) ||
+        (scanResultResponse && !scanResultResponse?.result.scanned)
+    ) {
+        return (
+            <div className="security-tab-empty">
+                <p className="security-tab-empty__title">Image was not scanned</p>
             </div>
         )
     }
@@ -113,7 +113,7 @@ const Vulnerabilities = ({
               low: imageScanSeverities?.LOW || 0,
               unknown: imageScanSeverities?.UNKNOWN || 0,
           }
-        : vulnerabilitiesResponse?.result.severityCount
+        : vulnerabilitiesResponse.result.severityCount
 
     const totalCount =
         severityCount.critical + severityCount.high + severityCount.low + severityCount.medium + severityCount.unknown
@@ -129,9 +129,9 @@ const Vulnerabilities = ({
                     {vulnerabilitiesResponse?.result.lastExecution ??
                         scanResultResponse?.result.imageScan.vulnerability.list[0].StartedOn}
                 </p>
-                <p className="pt-8 pb-8 pl-16 pr-16 flexbox dc__align-items-center">
+                <div className="pt-8 pb-8 pl-16 pr-16 flexbox dc__align-items-center">
                     <ScannedByToolModal scanToolId={vulnerabilitiesResponse?.result.scanToolId ?? SCAN_TOOL_ID_TRIVY} />
-                </p>
+                </div>
             </div>
         )
     }

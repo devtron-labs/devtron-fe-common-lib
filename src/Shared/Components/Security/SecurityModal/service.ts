@@ -18,7 +18,6 @@ import { getTotalVulnerabilityCount, parseExecutionDetailResponse, parseGetResou
 export const getExecutionDetails = async (
     executionDetailPayload: SecurityModalPropsType['executionDetailsPayload'],
 ): Promise<ResponseType<ApiResponseResultType>> => {
-    // To replace url with constants in common
     const url = getUrlWithSearchParams(ROUTES.SECURITY_SCAN_EXECUTION_DETAILS, executionDetailPayload)
     const response = await get(url)
     return { ...response, result: parseExecutionDetailResponse(response.result) }
