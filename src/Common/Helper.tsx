@@ -27,8 +27,7 @@ import { ERROR_EMPTY_SCREEN, SortingOrder, EXCLUDED_FALSY_VALUES, DISCORD_LINK, 
 import { ServerErrors } from './ServerError'
 import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
-import { scrollableInterface } from '../Shared'
-import { DATE_TIME_FORMAT_STRING } from '../Shared'
+import { scrollableInterface, DATE_TIME_FORMAT_STRING } from '../Shared'
 import { ReactComponent as ArrowDown } from '../Assets/Icon/ic-chevron-down.svg'
 
 toast.configure({
@@ -730,8 +729,7 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
         return _keys
     })
 
-export const convertJSONPointerToJSONPath = (pointer: string) =>
-    pointer.replace(/\//g, '.').replace(/\./, '$.')
+export const convertJSONPointerToJSONPath = (pointer: string) => pointer.replace(/\//g, '.').replace(/\./, '$.')
 
 export const flatMapOfJSONPaths = (
     paths: string[],
@@ -775,15 +773,16 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
 
     if (isNaN(dateA) && isNaN(dateB)) {
         return 0 // Both dates are invalid, consider them equal
-    } else if (isNaN(dateA)) {
+    }
+    if (isNaN(dateA)) {
         // dateA is invalid, move it to the end if sorting ASC, otherwise to the beginning
         return sortOrder === SortingOrder.ASC ? 1 : -1
-    } else if (isNaN(dateB)) {
+    }
+    if (isNaN(dateB)) {
         // dateB is invalid, move it to the end if sorting ASC, otherwise to the beginning
         return sortOrder === SortingOrder.ASC ? -1 : 1
-    } else {
-        return sortOrder === SortingOrder.ASC ? dateB - dateA : dateA - dateB
     }
+    return sortOrder === SortingOrder.ASC ? dateB - dateA : dateA - dateB
 }
 
 /**
@@ -1027,13 +1026,11 @@ export function useKeyDown() {
     return keys
 }
 
-export const DropdownIndicator = (props) => {
-    return (
-        <components.DropdownIndicator {...props}>
-            <ArrowDown className="icon-dim-20 icon-n6" />
-        </components.DropdownIndicator>
-    )
-}
+export const DropdownIndicator = (props) => (
+    <components.DropdownIndicator {...props}>
+        <ArrowDown className="icon-dim-20 icon-n6" />
+    </components.DropdownIndicator>
+)
 
 export function mapByKey<T = Map<any, any>>(arr: any[], id: string): T {
     if (!Array.isArray(arr)) {

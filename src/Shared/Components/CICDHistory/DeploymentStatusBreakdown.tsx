@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useRouteMatch } from 'react-router'
+import { useRouteMatch } from 'react-router-dom'
 import { URLS } from '../../../Common'
 import { TIMELINE_STATUS } from '../../constants'
 import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'

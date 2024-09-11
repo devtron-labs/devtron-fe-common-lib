@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
 import DOMPurify from 'dompurify'
@@ -214,7 +214,7 @@ export const LogsRenderer = ({
                                     `\x1B[0m\x1B[48;2;197;141;54m${match}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
                             ),
                         )
-                    } catch (searchRegexError) {
+                    } catch {
                         acc.push(part)
                     }
 
@@ -228,7 +228,7 @@ export const LogsRenderer = ({
             }
             const ansiUp = new AnsiUp()
             return { __html: ansiUp.ansi_to_html(log), isSearchKeyPresent }
-        } catch (err) {
+        } catch {
             return { __html: log, isSearchKeyPresent }
         }
     }
@@ -328,7 +328,7 @@ export const LogsRenderer = ({
                         })
                     }
                     return acc
-                } catch (e) {
+                } catch {
                     // In case of error would not create
                     return acc
                 }
@@ -408,7 +408,7 @@ export const LogsRenderer = ({
                     }}
                 >
                     <div
-                        className={`flexbox-col pb-7 dc__position-sticky dc__zi-2 ${fullScreenView ? 'dc__top-0' : 'dc__top-38'}`}
+                        className={`flexbox-col pb-7 dc__position-sticky dc__zi-2 ${fullScreenView ? 'dc__top-0' : 'dc__top-36'}`}
                         style={{
                             backgroundColor: '#0C1021',
                         }}
