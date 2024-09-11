@@ -10,6 +10,14 @@ export const BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> 
     [ComponentSizeType.xl]: 'px-15 py-9 fs-14 lh-20 fw-6 dc__gap-12',
 } as const
 
+export const ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> = {
+    [ComponentSizeType.xs]: 'p-3',
+    [ComponentSizeType.small]: 'p-5',
+    [ComponentSizeType.medium]: 'p-7',
+    [ComponentSizeType.large]: 'p-7',
+    [ComponentSizeType.xl]: 'p-7',
+} as const
+
 export const BUTTON_SIZE_TO_ICON_CLASS_NAME_MAP: Record<ButtonProps['size'], string> = {
     [ComponentSizeType.xs]: 'icon-dim-12',
     [ComponentSizeType.small]: 'icon-dim-12',
@@ -18,10 +26,26 @@ export const BUTTON_SIZE_TO_ICON_CLASS_NAME_MAP: Record<ButtonProps['size'], str
     [ComponentSizeType.xl]: 'icon-dim-20',
 } as const
 
+export const ICON_BUTTON_SIZE_TO_ICON_CLASS_NAME_MAP: Record<ButtonProps['size'], string> = {
+    [ComponentSizeType.xs]: 'icon-dim-16',
+    [ComponentSizeType.small]: 'icon-dim-16',
+    [ComponentSizeType.medium]: 'icon-dim-16',
+    [ComponentSizeType.large]: 'icon-dim-20',
+    [ComponentSizeType.xl]: 'icon-dim-24',
+} as const
+
 export const BUTTON_SIZE_TO_LOADER_SIZE_MAP: Record<ButtonProps['size'], ProgressingProps['size']> = {
     [ComponentSizeType.xs]: 12,
     [ComponentSizeType.small]: 12,
     [ComponentSizeType.medium]: 16,
     [ComponentSizeType.large]: 16,
     [ComponentSizeType.xl]: 20,
+} as const
+
+export const ICON_BUTTON_SIZE_TO_LOADER_SIZE_MAP: Record<ButtonProps['size'], ProgressingProps['size']> = {
+    [ComponentSizeType.xs]: 16,
+    [ComponentSizeType.small]: 16,
+    [ComponentSizeType.medium]: 16,
+    [ComponentSizeType.large]: 20,
+    [ComponentSizeType.xl]: 24,
 } as const
