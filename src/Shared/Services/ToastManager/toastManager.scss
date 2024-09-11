@@ -25,19 +25,29 @@
         align-items: flex-start;
         align-self: center;
 
-        > .Toastify__toast-icon {
+        >.Toastify__toast-icon {
             margin: 0;
             width: auto;
             align-self: flex-start;
         }
+    }
 
+    &__content {
         button {
             color: var(--N0);
 
-            &:hover, &:active {
+            svg *[stroke^="#"] {
+                stroke: var(--N0);
+            }
+        
+            svg *[fill^="#"] {
+                fill: var(--N0);
+            }
+
+            &:hover,
+            &:active {
                 color: var(--N0);
             }
         }
     }
-    // TODO: fix the styling for progress bar
 }

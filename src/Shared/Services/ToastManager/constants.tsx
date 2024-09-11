@@ -1,4 +1,3 @@
-import { MouseEventHandler } from 'react'
 import { ToastOptions, ToastContainerProps } from 'react-toastify'
 import { ReactComponent as ICInfoFilled } from '@Icons/ic-info-filled.svg'
 import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
@@ -6,6 +5,8 @@ import { ReactComponent as ICError } from '@Icons/ic-error.svg'
 import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICLocked } from '@Icons/ic-locked.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
+import { ComponentSizeType } from '@Shared/constants'
 import { ToastProps, ToastVariantType } from './types'
 
 export const TOAST_BASE_CONFIG: ToastContainerProps = {
@@ -18,9 +19,14 @@ export const TOAST_BASE_CONFIG: ToastContainerProps = {
     toastClassName: 'custom-toast',
     bodyClassName: 'custom-toast__body',
     closeButton: ({ closeToast }) => (
-        <ICClose
-            className="icon-dim-24 p-4 flex dc__no-shrink fcn-0 cursor"
-            onClick={closeToast as MouseEventHandler}
+        <Button
+            icon={<ICClose className="fcn-0" />}
+            onClick={closeToast}
+            dataTestId="close-toast"
+            ariaLabel="Close toast"
+            size={ComponentSizeType.xs}
+            variant={ButtonVariantType.text}
+            style={ButtonStyleType.neutral}
         />
     ),
 }
