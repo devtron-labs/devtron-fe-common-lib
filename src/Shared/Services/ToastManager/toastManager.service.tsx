@@ -1,5 +1,4 @@
 import { toast, ToastContainer, ToastOptions } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 import { ToastProps, ToastVariantType } from './types'
 import { TOAST_BASE_CONFIG, TOAST_VARIANT_TO_CONFIG_MAP } from './constants'
 import { ToastContent } from './ToastContent'
@@ -98,13 +97,13 @@ class ToastManager {
                     <div className="dc__no-shrink flex dc__fill-available-space icon-dim-20">{customIcon ?? icon}</div>
                 ),
                 type,
+                progressStyle: {
+                    background: customProgressBarBg || progressBarBg,
+                },
                 // Show the progress bar if the auto close is disabled
                 ...(options.autoClose === false
                     ? {
                           progress: 1,
-                          progressStyle: {
-                              background: customProgressBarBg || progressBarBg,
-                          },
                       }
                     : {}),
             },
