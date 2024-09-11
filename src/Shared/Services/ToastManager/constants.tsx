@@ -20,15 +20,17 @@ export const TOAST_BASE_CONFIG: ToastContainerProps = {
     toastClassName: 'custom-toast',
     bodyClassName: 'custom-toast__body',
     closeButton: ({ closeToast }) => (
-        <Button
-            icon={<ICClose className="fcn-0" />}
-            onClick={closeToast}
-            dataTestId="close-toast"
-            ariaLabel="Close toast"
-            size={ComponentSizeType.xs}
-            variant={ButtonVariantType.text}
-            style={ButtonStyleType.neutral}
-        />
+        <div className="custom-toast__close-btn">
+            <Button
+                icon={<ICClose className="fcn-0" />}
+                onClick={closeToast}
+                dataTestId="close-toast"
+                ariaLabel="Close toast"
+                size={ComponentSizeType.xs}
+                variant={ButtonVariantType.text}
+                style={ButtonStyleType.neutral}
+            />
+        </div>
     ),
 }
 

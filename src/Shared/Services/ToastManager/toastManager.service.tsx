@@ -76,6 +76,9 @@ class ToastManager {
         return ToastManager.#instance
     }
 
+    /**
+     * Handler for showing the toast
+     */
     // eslint-disable-next-line class-methods-use-this
     showToast = (
         {
@@ -110,6 +113,16 @@ class ToastManager {
             },
         )
     }
+
+    /**
+     * Handler for dismissing an existing toast
+     */
+    dismissToast = toast.dismiss
+
+    /**
+     * Handler for checking if the toast is active
+     */
+    isToastActive = toast.isActive
 }
 
 export const ToastManagerContainer = () => <ToastContainer {...TOAST_BASE_CONFIG} />

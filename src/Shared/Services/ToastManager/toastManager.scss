@@ -60,4 +60,13 @@
             }
         }
     }
+
+    // Custom styling for close btn
+    &__close-btn {
+        svg {
+            use {
+                fill: var(--N0) !important;
+            }
+        }
+    }
 }
