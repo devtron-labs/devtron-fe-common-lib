@@ -1,11 +1,17 @@
 @import 'react-toastify/dist/ReactToastify.css';
 
-.Toastify__toast-container {
-    padding: 0;
-    width: 280px;
+.Toastify {
+    &__toast-container {
+        padding: 0;
+        width: 280px;
 
-    &--top-right {
-        top: 8em;
+        &--top-right {
+            top: 8em;
+        }
+    }
+
+    &__progress-bar {
+        height: 3px;
     }
 }
 
@@ -35,6 +41,7 @@
     }
 
     &__content {
+
         // Override the style for the action button
         button {
             color: var(--N0);
@@ -42,7 +49,7 @@
             svg *[stroke^="#"] {
                 stroke: var(--N0);
             }
-        
+
             svg *[fill^="#"] {
                 fill: var(--N0);
             }
