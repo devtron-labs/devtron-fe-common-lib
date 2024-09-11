@@ -45,6 +45,7 @@ import {
     SelectPickerValueContainer,
 } from './common'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
+import { GenericSectionErrorState } from '../GenericSectionErrorState'
 
 /**
  * Generic component for select picker
@@ -192,6 +193,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     disabledTippyContent,
     showSelectedOptionsCount = false,
     menuSize,
+    optionListError,
+    reloadOptionList,
     menuPosition = 'fixed',
     variant = SelectPickerVariantType.DEFAULT,
     disableDescriptionEllipsis = false,
@@ -205,6 +208,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     shouldMenuAlignRight = false,
     fullWidth = false,
     customSelectedOptionsCount = null,
+    renderMenuListFooter,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options } = props
@@ -289,6 +293,14 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         ),
         [isGroupHeadingSelectable],
     )
+
+    const renderNoOptionsMessage = () => {
+        if (optionListError) {
+            return <GenericSectionErrorState reload={reloadOptionList} />
+        }
+
+        return <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8">No options</p>
+    }
 
     const renderDisabledTippy = (children: ReactElement) => (
         <Tippy content={disabledTippyContent} placement="top" className="default-tt" arrow={false}>
@@ -379,12 +391,14 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                     MultiValueLabel: renderMultiValueLabel,
                                     MultiValueRemove: SelectPickerMultiValueRemove,
                                     GroupHeading: renderGroupHeading,
+                                    NoOptionsMessage: renderNoOptionsMessage,
                                 }}
                                 closeMenuOnSelect={false}
                                 allowCreateWhileLoading={false}
                                 isValidNewOption={isValidNewOption}
                                 createOptionPosition="first"
                                 onCreateOption={handleCreateOption}
+                                renderMenuListFooter={!optionListError && renderMenuListFooter}
                             />
                         ) : (
                             <ReactSelect
@@ -400,7 +414,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                     MenuList: SelectPickerMenuList,
                                     ClearIndicator: SelectPickerClearIndicator,
                                     ValueContainer: renderValueContainer,
+                                    NoOptionsMessage: renderNoOptionsMessage,
                                 }}
+                                renderMenuListFooter={!optionListError && renderMenuListFooter}
                             />
                         )}
                     </div>

@@ -29,7 +29,7 @@ const Tooltip = ({
             arrow={false}
             placement="top"
             {...rest}
-            className={`default-tt ${wordBreak ? 'dc__word-break-all' : ''} dc__mxw-200 ${rest.className}`}
+            className={`default-tt ${wordBreak ? 'dc__word-break-all' : ''} dc__mxw-200-imp ${rest.className}`}
         >
             {cloneElement(child, { ...child.props, onMouseEnter: handleMouseEnterEvent })}
         </TippyJS>

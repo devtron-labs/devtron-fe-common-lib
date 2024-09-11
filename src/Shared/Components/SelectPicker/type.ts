@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { ServerErrors } from '@Common/ServerError'
 import { OptionType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 import { MutableRefObject, ReactElement, ReactNode } from 'react'
@@ -98,6 +99,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     | 'onMenuClose'
     | 'autoFocus'
     | 'onBlur'
+    | 'onKeyDown'
 > &
     Partial<
         Pick<
@@ -188,6 +190,15 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * @default false
          */
         fullWidth?: boolean
+        // TODO: Can make generic typing when adding multi select
+        /**
+         * If truthy, would show generic section error state as no options message
+         */
+        optionListError?: ServerErrors
+        /**
+         * Would reload the option list when called in case optionListError is present
+         */
+        reloadOptionList?: () => void
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean
@@ -236,7 +247,13 @@ export interface FilterSelectPickerProps
         >,
         Pick<
             SelectPickerProps<number | string, true>,
-            'selectRef' | 'inputId' | 'menuPosition' | 'autoFocus' | 'shouldMenuAlignRight'
+            | 'selectRef'
+            | 'inputId'
+            | 'menuPosition'
+            | 'autoFocus'
+            | 'shouldMenuAlignRight'
+            | 'optionListError'
+            | 'reloadOptionList'
         > {
     appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
