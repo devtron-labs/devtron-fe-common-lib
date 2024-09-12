@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { getContainerRegistryIcon } from './Helper'
 import { RegistryTypeDetailType } from './Types'
+import { getContainerRegistryIcon } from './utils'
 
 export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
