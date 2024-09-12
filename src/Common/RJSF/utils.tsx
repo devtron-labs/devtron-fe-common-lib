@@ -15,7 +15,7 @@
  */
 
 import { TranslatableString, englishStringTranslator } from '@rjsf/utils'
-import { HiddenType } from './types'
+import { HiddenType, MetaHiddenType } from './types'
 
 /**
  * Override for the TranslatableString from RJSF
@@ -151,7 +151,10 @@ const conformPathToPointers = (path: string) => {
     return trimmedPath
 }
 
-export const parseSchemaHiddenType = (hiddenSchema: HiddenType) => {
+export const parseSchemaHiddenType = (hiddenSchema: HiddenType): MetaHiddenType => {
+    if (!hiddenSchema) {
+        return null
+    }
     if (typeof hiddenSchema === 'string') {
         return {
             value: false,

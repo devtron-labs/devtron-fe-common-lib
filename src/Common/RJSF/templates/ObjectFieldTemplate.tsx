@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ObjectFieldTemplateProps, canExpand, titleId } from '@rjsf/utils'
+import { ObjectFieldTemplateProps, canExpand, titleId, deepEquals } from '@rjsf/utils'
 import { JSONPath } from 'jsonpath-plus'
 import { convertJSONPointerToJSONPath } from '@Common/Helper'
 import { FieldRowWithLabel } from '../common/FieldRow'
@@ -69,7 +69,7 @@ const Field = ({
                     path: convertJSONPointerToJSONPath(hiddenSchema.path),
                     json: formContext,
                 })?.[0]
-                const isHidden = value === undefined || hiddenSchema.value === value
+                const isHidden = value === undefined || deepEquals(hiddenSchema.value, value)
                 return !isHidden
             } catch {
                 return true

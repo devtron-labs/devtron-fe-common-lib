@@ -20,11 +20,13 @@ import { StrictRJSFSchema } from '@rjsf/utils'
 
 export type FormProps = Omit<ComponentProps<typeof RJSFForm>, 'validator'>
 
+export interface MetaHiddenType {
+    value: any
+    path: string
+}
+
 export type HiddenType =
-    | {
-          value: any
-          path: string
-      }
+    | MetaHiddenType
     | {
           condition: any
           value: string
