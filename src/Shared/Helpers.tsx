@@ -29,6 +29,7 @@ import {
     UserApprovalConfigType,
     PATTERNS,
     ZERO_TIME_STRING,
+    noop,
 } from '../Common'
 import {
     AggregationKeys,
@@ -138,17 +139,12 @@ export const numberComparatorBySortOrder = (
     sortOrder: SortingOrder = SortingOrder.ASC,
 ): number => (sortOrder === SortingOrder.ASC ? a - b : b - a)
 
-export function versionComparatorBySortOrder(
-    a: Record<string, any>,
-    b: Record<string, any>,
-    compareKey: string,
-    orderBy: SortingOrder,
-) {
+export function versionComparatorBySortOrder(a: string, b: string, orderBy = SortingOrder.ASC) {
     if (orderBy === SortingOrder.DESC) {
-        return b[compareKey].localeCompare(a[compareKey], undefined, { numeric: true })
+        return a.localeCompare(b, undefined, { numeric: true })
     }
 
-    return a[compareKey].localeCompare(b[compareKey], undefined, { numeric: true })
+    return b.localeCompare(a, undefined, { numeric: true })
 }
 
 export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
@@ -806,4 +802,22 @@ export const getIsManualApprovalSpecific = (userApprovalConfig?: Pick<UserApprov
  */
 export const getHandleOpenURL = (url: string) => () => {
     window.open(url, '_blank', 'noreferrer')
+}
+
+export const getDefaultValueFromType = (value: unknown) => {
+    switch (typeof value) {
+        case 'number':
+            return 0
+        case 'string':
+            return ''
+        case 'object':
+            if (value === null) {
+                return null
+            }
+            return Array.isArray(value) ? [] : {}
+        case 'function':
+            return noop
+        default:
+            return null
+    }
 }
