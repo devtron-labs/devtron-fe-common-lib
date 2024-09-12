@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
+import React, { HTMLInputTypeAttribute, InputHTMLAttributes, ReactNode } from 'react'
 
 export interface CustomInputProps {
     name: string
@@ -33,11 +33,10 @@ export interface CustomInputProps {
     autoFocus?: boolean
     rootClassName?: string
     error?: string[] | string
-    helperText?: string
+    helperText?: ReactNode
     handleOnBlur?: (e) => void
     readOnly?: boolean
     noTrim?: boolean
-    ref?: React.LegacyRef<HTMLInputElement>
     onKeyPress?: (e) => void
     defaultValue?: string | number | ReadonlyArray<string> | undefined
     onKeyDown?: (e) => void

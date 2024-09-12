@@ -24,6 +24,11 @@ export type UserListFilterParams = BaseFilterQueryParams<UserListSortableKeys> &
     status: UserStatus[]
 }
 
+export interface UserMinType {
+    id: number
+    emailId: string
+}
+
 export interface UserRoleGroup {
     /**
      * Id of the permission group
@@ -47,4 +52,39 @@ export interface UserRoleGroup {
      * Timeout for the role group
      */
     timeToLive: string
+}
+
+export interface UserGroupDTO {
+    /**
+     * Unique display name of the user group
+     */
+    name: string
+    /**
+     * Unique id of the user group
+     *
+     * Follows the validation for app name
+     */
+    identifier: string
+    /**
+     * Associated description
+     *
+     * @default ''
+     */
+    description?: string
+    /**
+     * Number of users assigned to the group
+     *
+     * @default 0
+     */
+    usersCount?: number
+}
+
+export interface UserGroupType
+    extends Required<Pick<UserGroupDTO, 'description' | 'name' | 'usersCount' | 'identifier'>> {
+    /**
+     * Unique id of the user group
+     *
+     * Follows the validation for app name
+     */
+    userGroupId: string
 }

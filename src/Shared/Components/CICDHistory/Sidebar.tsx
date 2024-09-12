@@ -17,9 +17,8 @@
 import React, { useEffect, useRef } from 'react'
 import TippyHeadless from '@tippyjs/react/headless'
 import ReactGA from 'react-ga4'
-import { useHistory, useParams, useRouteMatch, generatePath, useLocation } from 'react-router'
+import { useHistory, useParams, useRouteMatch, generatePath, useLocation, NavLink } from 'react-router-dom'
 import ReactSelect, { components } from 'react-select'
-import { NavLink } from 'react-router-dom'
 import moment from 'moment'
 import {
     SidebarType,

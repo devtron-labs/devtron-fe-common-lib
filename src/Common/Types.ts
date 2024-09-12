@@ -16,9 +16,10 @@
 
 import React, { ReactNode, CSSProperties } from 'react'
 import { Placement } from 'tippy.js'
+import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
-import { RegistryType, Severity } from '../Shared'
+import { RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -155,7 +156,8 @@ export interface GenericEmptyStateType {
 }
 
 export interface ErrorPageType
-    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>, Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
+    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>,
+        Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
     code: number
     heightToDeduct?: number
     redirectURL?: string
@@ -222,10 +224,10 @@ export interface RadioGroupItemProps {
 export interface RadioGroupInterface {
     name: string
     onChange: any
-    className?: string
     initialTab: string
-    disabled: boolean
     children: ReactNode
+    disabled?: boolean
+    className?: string
 }
 
 export interface RadioInterface {
@@ -319,9 +321,58 @@ export enum DeploymentNodeType {
     APPROVAL = 'APPROVAL',
 }
 
-export interface UserApprovalConfigType {
-    requiredCount: number
+export enum ManualApprovalType {
+    specific = 'SPECIFIC',
+    any = 'ANY',
+    notConfigured = 'NOT_CONFIGURED',
 }
+
+export interface UserGroupApproverType {
+    email: string
+    hasAccess: boolean
+}
+
+export interface ImageApprovalPolicyUserGroupDataType {
+    // Mapping email to data
+    dataStore: Record<string, UserGroupApproverType>
+    requiredCount: number
+    emails: string[]
+}
+
+export interface ImageApprovalPolicyType {
+    isPolicyConfigured: boolean
+    specificUsersData: ImageApprovalPolicyUserGroupDataType
+    userGroupData: Record<string, ImageApprovalPolicyUserGroupDataType>
+    // Assuming name of groups are unique
+    validGroups: string[]
+}
+
+export type ImageApprovalUsersInfoDTO = Record<string, Pick<UserGroupDTO, 'identifier' | 'name'>[]>
+
+// TODO: Need to verify this change for all impacting areas
+export interface UserApprovalConfigType {
+    type: ManualApprovalType
+    requiredCount: number
+    specificUsers: {
+        identifiers: string[]
+        // FIXME: Remove this ? check later when time permits
+        requiredCount?: number
+    }
+    userGroups: (Pick<UserGroupDTO, 'identifier'> & {
+        requiredCount: number
+    })[]
+}
+
+export type UserApprovalConfigPayloadType =
+    | ({
+          type: ManualApprovalType.any
+      } & Pick<UserApprovalConfigType, 'requiredCount'>)
+    | ({
+          type: ManualApprovalType.specific
+      } & Pick<UserApprovalConfigType, 'userGroups' | 'specificUsers'>)
+    | {
+          type: ManualApprovalType.notConfigured
+      }
 
 interface ApprovalUserDataType {
     dataId: number
@@ -330,6 +381,7 @@ interface ApprovalUserDataType {
     userEmail: string
     userId: number
     userResponse: number
+    userGroups?: Pick<UserGroupDTO, 'identifier' | 'name'>[]
 }
 
 export interface UserApprovalMetadataType {
@@ -337,6 +389,7 @@ export interface UserApprovalMetadataType {
     approvalRuntimeState: number
     approvedUsersData: ApprovalUserDataType[]
     requestedUserData: ApprovalUserDataType
+    approvalConfig?: UserApprovalConfigType
 }
 
 export enum FilterStates {
@@ -388,12 +441,21 @@ export interface DeploymentWindowArtifactMetadata {
 }
 
 export interface ArtifactReleaseMappingType {
-    id : number, 
-    identifier: string,
-    releaseVersion: string,
+    id: number
+    identifier: string
+    releaseVersion: string
     name: string
     kind: string
     version: string
+}
+
+export interface CDMaterialListModalServiceUtilProps {
+    artifacts: any[],
+    offset: number,
+    artifactId?: number,
+    artifactStatus?: string,
+    disableDefaultSelection?: boolean,
+    userApprovalConfig?: UserApprovalConfigType,
 }
 
 export interface CDMaterialType {
@@ -617,6 +679,10 @@ export interface CDMaterialsApprovalInfo {
     approvalUsers: string[]
     userApprovalConfig: UserApprovalConfigType
     canApproverDeploy: boolean
+    /**
+     * Only available incase of approvals do'nt use in cd materials or any other flow since approvalUsers are not present there
+     */
+    imageApprovalPolicyDetails: ImageApprovalPolicyType
 }
 
 export interface CDMaterialsMetaInfo {
@@ -629,6 +695,7 @@ export interface CDMaterialsMetaInfo {
      * This is the ID of user that has request the material
      */
     requestedUserId: number
+    runtimeParams: RuntimeParamsListItemType[]
 }
 
 export interface ImagePromotionMaterialInfo {

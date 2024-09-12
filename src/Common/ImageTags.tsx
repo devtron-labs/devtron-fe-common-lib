@@ -280,14 +280,12 @@ export const ImageTagsContainer = ({
         <div className="h-250 fs-13 dc__overflow-scroll p-12">
             <div>Image labels allow you to tag container images with readable and relatable labels eg. v1.0.</div>
             <ul className="pl-20 mt-8">
-                <li>
-                    A label can only be added if a workflow has CD pipelines deploying to Production environments.
-                </li>
+                <li>A label can only be added if a workflow has CD pipelines deploying to Production environments.</li>
                 <li>Multiple labels can be added to an image.</li>
                 <li>Multiple images in an application cannot have the same label.</li>
                 <li>
-                    Labels cannot be deleted once saved. Although, you can soft delete a label if an unwanted label has been
-                    added.
+                    Labels cannot be deleted once saved. Although, you can soft delete a label if an unwanted label has
+                    been added.
                 </li>
             </ul>
         </div>

@@ -50,7 +50,7 @@ export const WrapIfAdditionalTemplate = ({
                         />
                     </div>
                     <div>{children}</div>
-                    <div className="dc__position-abs remove-btn__container" style={{ right: "-28px", top: "9px" }}>
+                    <div className="dc__position-abs remove-btn__container" style={{ right: '-28px', top: '9px' }}>
                         <RemoveButton
                             disabled={disabled || readonly}
                             onClick={onDropPropertyClick(label)}

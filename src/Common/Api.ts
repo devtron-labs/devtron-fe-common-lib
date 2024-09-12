@@ -114,10 +114,10 @@ async function handleServerError(contentType, response) {
     throw serverError
 }
 
-async function fetchAPI(
+async function fetchAPI<K = object>(
     url: string,
     type: string,
-    data: object,
+    data: K,
     signal: AbortSignal,
     preventAutoLogout = false,
     isMultipartRequest?: boolean,
@@ -185,10 +185,10 @@ async function fetchAPI(
     )
 }
 
-function fetchInTime(
+function fetchInTime<T = object>(
     url: string,
     type: string,
-    data: object,
+    data: T,
     options?: APIOptions,
     isMultipartRequest?: boolean,
 ): Promise<ResponseType> {
@@ -227,23 +227,24 @@ function fetchInTime(
     })
 }
 
-export const post = (
+export const post = <T = any, K = object>(
     url: string,
-    data: object,
+    data: K,
     options?: APIOptions,
     isMultipartRequest?: boolean,
-): Promise<ResponseType> => fetchInTime(url, 'POST', data, options, isMultipartRequest)
+): Promise<ResponseType<T>> => fetchInTime<K>(url, 'POST', data, options, isMultipartRequest)
 
-export const put = (url: string, data: object, options?: APIOptions): Promise<ResponseType> =>
-    fetchInTime(url, 'PUT', data, options)
+export const put = <T = any, K = object>(url: string, data: K, options?: APIOptions): Promise<ResponseType<T>> =>
+    fetchInTime<K>(url, 'PUT', data, options)
 
-export const patch = (url: string, data: object, options?: APIOptions): Promise<ResponseType> =>
-    fetchInTime(url, 'PATCH', data, options)
+export const patch = <T = any, K = object>(url: string, data: K, options?: APIOptions): Promise<ResponseType<T>> =>
+    fetchInTime<K>(url, 'PATCH', data, options)
 
-export const get = (url: string, options?: APIOptions): Promise<ResponseType> => fetchInTime(url, 'GET', null, options)
+export const get = <T = any>(url: string, options?: APIOptions): Promise<ResponseType<T>> =>
+    fetchInTime(url, 'GET', null, options)
 
-export const trash = (url: string, data?: object, options?: APIOptions): Promise<ResponseType> =>
-    fetchInTime(url, 'DELETE', data, options)
+export const trash = <T = any, K = object>(url: string, data?: K, options?: APIOptions): Promise<ResponseType<T>> =>
+    fetchInTime<K>(url, 'DELETE', data, options)
 
 /**
  * Aborts the previous request before triggering next request
@@ -263,4 +264,4 @@ export const abortPreviousRequests = <T>(
  */
 export const getIsRequestAborted = (error) =>
     // The 0 code is common for aborted and blocked requests
-    error && error.code === 0 && error.message.search('abort\|aborted')
+    error && error.code === 0 && error.message.search('abort|aborted')
