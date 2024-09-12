@@ -309,17 +309,29 @@ export interface NewDeploymentTemplateContextType
     isLoadingInitialData: boolean
 }
 
-export interface DTApplicationMetricsFormFieldProps
-    extends Pick<DeploymentTemplateQueryParamsType, 'selectedTab' | 'showReadMe'> {
-    showApplicationMetrics: boolean
-    isLoading: boolean
-    selectedChart: DeploymentChartVersionType
-    isDisabled: boolean
-    toggleAppMetrics: () => void
-    isAppMetricsEnabled: boolean
+type DTApplicationMetricsReadOnlyProps = {
+    isLoading?: never
+    selectedChart?: never
+    isDisabled?: never
+    toggleAppMetrics?: never
+    selectedTab?: never
+    showReadMe?: never
     /**
      * @default - false
      * If true, would only text depicting the information whether the application metrics is enabled or not
      */
-    onlyShowCurrentStatus?: boolean
+    onlyShowCurrentStatus: true
 }
+
+type DTApplicationMetricsActionProps = {
+    isLoading: boolean
+    selectedChart: DeploymentChartVersionType
+    isDisabled: boolean
+    toggleAppMetrics: () => void
+    onlyShowCurrentStatus?: false
+} & Pick<DeploymentTemplateQueryParamsType, 'selectedTab' | 'showReadMe'>
+
+export type DTApplicationMetricsFormFieldProps = {
+    isAppMetricsEnabled: boolean
+    showApplicationMetrics: boolean
+} & (DTApplicationMetricsActionProps | DTApplicationMetricsReadOnlyProps)

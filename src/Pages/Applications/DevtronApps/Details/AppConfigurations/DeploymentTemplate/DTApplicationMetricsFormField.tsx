@@ -22,19 +22,19 @@ const DTApplicationMetricsFormField = ({
         return null
     }
 
-    const isCompareTab = selectedTab === DeploymentTemplateTabsType.COMPARE && !showReadMe
-
     if (onlyShowCurrentStatus) {
         return (
             <div className="flexbox dc__align-items-center dc__gap-8 fs-13 fw-4 lh-20 cn-9">
                 <ICInfoFilledOverride className="icon-dim-16 dc__no-shrink" />
                 <div className="flexbox dc__gap-7">
-                    <span>Application metrics are</span>
+                    <span>Application metrics are</span>&nbsp;
                     <span className="fw-6">{isAppMetricsEnabled ? 'Enabled' : 'Not enabled'}</span>
                 </div>
             </div>
         )
     }
+
+    const isCompareTab = selectedTab === DeploymentTemplateTabsType.COMPARE && !showReadMe
 
     const getInfoText = (): string => {
         if (!selectedChart.isAppMetricsSupported) {
@@ -55,50 +55,50 @@ const DTApplicationMetricsFormField = ({
     return (
         <div className="flexbox dc__gap-8">
             <Checkbox
-                rootClassName={`mb-0 mt-2 dc__align-start ${!selectedChart.isAppMetricsSupported ? 'dc__disabled' : ''}`}
+                rootClassName={`mb-0 mt-2 dc__align-start w-100 ${!selectedChart.isAppMetricsSupported ? 'dc__disabled' : ''}`}
                 isChecked={isAppMetricsEnabled}
                 value={CHECKBOX_VALUE.CHECKED}
                 onChange={toggleAppMetrics}
                 dataTestId="app-metrics-checkbox"
                 disabled={isDisabled || !selectedChart.isAppMetricsSupported}
-            />
+            >
+                <div className="flex column left">
+                    <div className="flex left fs-13 dc__gap-8">
+                        <b className="fw-6 lh-18 cn-9">Show application metrics</b>
 
-            <div className="flex column left">
-                <div className="flex left fs-13 dc__gap-8">
-                    <b className="fw-6 lh-18 cn-9">Show application metrics</b>
-
-                    {isCompareTab || showReadMe ? (
-                        <Tooltip alwaysShowTippyOnHover content={getInfoText()}>
-                            <button
-                                type="button"
-                                aria-label="show-app-metrics-info"
-                                className="flex dc__transparent icon-dim-16"
+                        {isCompareTab || showReadMe ? (
+                            <Tooltip alwaysShowTippyOnHover content={getInfoText()}>
+                                <button
+                                    type="button"
+                                    aria-label="show-app-metrics-info"
+                                    className="flex dc__transparent icon-dim-16"
+                                >
+                                    <ICHelpOutline className="icon-dim-16 dc__no-shrink" />
+                                </button>
+                            </Tooltip>
+                        ) : (
+                            <a
+                                data-testid="app-metrics-learnmore-link"
+                                href={DOCUMENTATION.APP_METRICS}
+                                target="_blank"
+                                className="anchor"
+                                rel="noreferrer noopener"
                             >
-                                <ICHelpOutline className="icon-dim-16 dc__no-shrink" />
-                            </button>
-                        </Tooltip>
-                    ) : (
-                        <a
-                            data-testid="app-metrics-learnmore-link"
-                            href={DOCUMENTATION.APP_METRICS}
-                            target="_blank"
-                            className="anchor"
-                            rel="noreferrer noopener"
+                                Learn more
+                            </a>
+                        )}
+                    </div>
+
+                    {!isCompareTab && (
+                        <div
+                            data-testid="app-metrics-info-text"
+                            className={`fs-13 fw-4 lh-18 ${!selectedChart.isAppMetricsSupported ? 'cr-5' : 'cn-7'}`}
                         >
-                            Learn more
-                        </a>
+                            {getInfoText()}
+                        </div>
                     )}
                 </div>
-
-                {!isCompareTab && !showReadMe && (
-                    <div
-                        data-testid="app-metrics-info-text"
-                        className={`fs-13 fw-4 lh-18 ${!selectedChart.isAppMetricsSupported ? 'cr-5' : 'cn-7'}`}
-                    >
-                        {getInfoText()}
-                    </div>
-                )}
-            </div>
+            </Checkbox>
         </div>
     )
 }
