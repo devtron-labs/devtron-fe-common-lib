@@ -15,7 +15,6 @@
  */
 
 import { FormEvent, useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 import { showError, useAsync } from '../../../Common'
 import { getBuildInfraProfileByName, createBuildInfraProfile, updateBuildInfraProfile } from './services'
 import {
@@ -43,6 +42,8 @@ import {
     validateRequiredPositiveNumber,
     getCommonSelectStyle,
     validateRequiredPositiveInteger,
+    ToastVariantType,
+    ToastManager,
 } from '../../../Shared'
 
 export const validateRequestLimit = ({
@@ -419,7 +420,10 @@ export const useBuildInfraForm = ({
             ).length > 0
 
         if (hasErrors) {
-            toast.error(BUILD_INFRA_TEXT.INVALID_FORM_MESSAGE)
+            ToastManager.showToast({
+                variant: ToastVariantType.error,
+                description: BUILD_INFRA_TEXT.INVALID_FORM_MESSAGE,
+            })
             return
         }
 
@@ -431,7 +435,10 @@ export const useBuildInfraForm = ({
                 await createBuildInfraProfile({ profileInput })
             }
             setLoadingActionRequest(false)
-            toast.success(BUILD_INFRA_TEXT.getSubmitSuccessMessage(profileInput.name, editProfile))
+            ToastManager.showToast({
+                variant: ToastVariantType.success,
+                description: BUILD_INFRA_TEXT.getSubmitSuccessMessage(profileInput.name, editProfile),
+            })
 
             if (handleSuccessRedirection) {
                 handleSuccessRedirection()

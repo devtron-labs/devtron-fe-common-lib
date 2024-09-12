@@ -2,10 +2,10 @@ import { ButtonHTMLAttributes, PropsWithChildren } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 import { Progressing } from '@Common/Progressing'
 import { Tooltip } from '@Common/Tooltip'
+import { TooltipProps } from '@Common/Tooltip/types'
 import { ComponentSizeType } from '@Shared/constants'
 import { ButtonComponentType, ButtonProps, ButtonStyleType, ButtonVariantType } from './types'
-import { BUTTON_SIZE_TO_ICON_CLASS_NAME_MAP, BUTTON_SIZE_TO_LOADER_SIZE_MAP } from './constants'
-import { getButtonDerivedClass } from './utils'
+import { getButtonDerivedClass, getButtonIconClassName, getButtonLoaderSize } from './utils'
 import './button.scss'
 
 const ButtonElement = ({
@@ -27,9 +27,11 @@ const ButtonElement = ({
         | 'tooltipProps'
         | 'dataTestId'
         | 'isLoading'
+        | 'ariaLabel'
     > & {
         className: string
         'data-testid': ButtonProps['dataTestId']
+        'aria-label': ButtonProps['ariaLabel']
     }
 >) => {
     if (component === ButtonComponentType.link) {
@@ -113,6 +115,11 @@ const ButtonElement = ({
  * ```tsx
  * <Button component={ButtonComponentType.link} linkProps={{ to: '#' }} />
  * ```
+ *
+ * @example Icon button
+ * ```tsx
+ * <Button icon={<ICCube />} ariaLabel="Label" />
+ * ```
  */
 const Button = ({
     dataTestId,
@@ -126,24 +133,57 @@ const Button = ({
     isLoading = false,
     showTooltip = false,
     tooltipProps = {},
+    icon = null,
+    ariaLabel = null,
     ...props
 }: ButtonProps) => {
     const isDisabled = disabled || isLoading
-    const iconClass = `dc__no-shrink flex dc__fill-available-space ${BUTTON_SIZE_TO_ICON_CLASS_NAME_MAP[size]}`
+    const iconClass = `dc__no-shrink flex dc__fill-available-space ${getButtonIconClassName({
+        size,
+        icon,
+    })}`
+
+    const getTooltipProps = (): TooltipProps => {
+        if (!showTooltip && icon && ariaLabel) {
+            return {
+                alwaysShowTippyOnHover: true,
+                content: ariaLabel,
+            }
+        }
+
+        return {
+            alwaysShowTippyOnHover: showTooltip && !!tooltipProps?.content,
+            ...tooltipProps,
+        }
+    }
 
     return (
-        <Tooltip {...tooltipProps} alwaysShowTippyOnHover={showTooltip && !!tooltipProps?.content}>
+        <Tooltip {...getTooltipProps()}>
             <div>
                 <ButtonElement
                     {...props}
                     disabled={isDisabled}
-                    className={`br-4 flex cursor dc__mnw-100 dc__tab-focus dc__position-rel dc__capitalize ${getButtonDerivedClass({ size, variant, style, isLoading })} ${isDisabled ? 'dc__disabled' : ''}`}
+                    className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${getButtonDerivedClass({ size, variant, style, isLoading, icon })} ${isDisabled ? 'dc__disabled' : ''}`}
                     data-testid={dataTestId}
+                    aria-label={ariaLabel}
                 >
-                    {startIcon && <span className={iconClass}>{startIcon}</span>}
-                    <span className="dc__mxw-150 dc__align-left dc__truncate">{text}</span>
-                    {endIcon && <span className={iconClass}>{endIcon}</span>}
-                    {isLoading && <Progressing size={BUTTON_SIZE_TO_LOADER_SIZE_MAP[size]} />}
+                    {icon ? (
+                        <span className={iconClass}>{icon}</span>
+                    ) : (
+                        <>
+                            {startIcon && <span className={iconClass}>{startIcon}</span>}
+                            <span className="dc__mxw-150 dc__align-left dc__truncate">{text}</span>
+                            {endIcon && <span className={iconClass}>{endIcon}</span>}
+                        </>
+                    )}
+                    {isLoading && (
+                        <Progressing
+                            size={getButtonLoaderSize({
+                                size,
+                                icon,
+                            })}
+                        />
+                    )}
                 </ButtonElement>
             </div>
         </Tooltip>
