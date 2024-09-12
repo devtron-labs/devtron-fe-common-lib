@@ -21,6 +21,7 @@ import { ConfirmationDialog, DeleteDialog } from '../Dialogs'
 import { ServerErrors } from '../ServerError'
 import { DeleteComponentProps } from './types'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
+import { showError } from '@Common/Helper'
 
 const DeleteComponent = ({
     setDeleting,
@@ -36,11 +37,13 @@ const DeleteComponent = ({
     configuration = '',
     closeCustomComponent,
 }: DeleteComponentProps) => {
+    const [isDeleting, setIsDeleting] = useState(false)
     const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(false)
     const { push } = useHistory()
 
     async function handleDelete() {
         setDeleting(true)
+        setIsDeleting(true)
         try {
             await deleteComponent(payload)
             ToastManager.showToast({
@@ -59,9 +62,12 @@ const DeleteComponent = ({
         } catch (serverError) {
             if (serverError instanceof ServerErrors && serverError.code === 500) {
                 setCannotDeleteDialogModal(true)
+            } else {
+                showError(serverError)
             }
         } finally {
             setDeleting(false)
+            setIsDeleting(false)
         }
     }
 
@@ -92,6 +98,7 @@ const DeleteComponent = ({
             delete={handleDelete}
             closeDelete={() => toggleConfirmation(false)}
             dataTestId="delete-dialog"
+            apiCallInProgress={isDeleting}
         >
             <DeleteDialog.Description>
                 <p>Are you sure you want to delete this {configuration || component}? </p>
