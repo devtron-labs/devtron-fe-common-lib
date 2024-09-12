@@ -14,6 +14,7 @@ export enum ButtonVariantType {
 export enum ButtonStyleType {
     default = 'default',
     negative = 'negative',
+    negativeGrey = 'negative-grey',
     positive = 'positive',
     warning = 'warning',
     neutral = 'neutral',
@@ -71,18 +72,6 @@ export type ButtonProps = (
      */
     style?: ButtonStyleType
     /**
-     * Text to be displayed in the button
-     */
-    text: string
-    /**
-     * If provided, icon to be displayed at the start of the button
-     */
-    startIcon?: ReactElement
-    /**
-     * If provided, icon to be displayed at the end of the button
-     */
-    endIcon?: ReactElement
-    /**
      * If true, the loading state is shown for the button with disabled
      */
     isLoading?: boolean
@@ -110,5 +99,37 @@ export type ButtonProps = (
         | {
               showTooltip?: never
               tooltipProps?: never
+          }
+    ) &
+    (
+        | {
+              icon?: never
+              ariaLabel?: never
+              /**
+               * Text to be displayed in the button
+               */
+              text: string
+              /**
+               * If provided, icon to be displayed at the start of the button
+               */
+              startIcon?: ReactElement
+              /**
+               * If provided, icon to be displayed at the end of the button
+               */
+              endIcon?: ReactElement
+          }
+        | {
+              /**
+               * If provided, icon button is rendered
+               */
+              icon: ReactElement
+              /**
+               * Label for the icon button for accessibility.
+               * Shown on hover in tooltip if tippy is not provided explicitly
+               */
+              ariaLabel: string
+              text?: never
+              startIcon?: never
+              endIcon?: never
           }
     )
