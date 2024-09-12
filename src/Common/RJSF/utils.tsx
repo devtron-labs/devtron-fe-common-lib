@@ -155,20 +155,21 @@ export const parseSchemaHiddenType = (hiddenSchema: HiddenType): MetaHiddenType 
     if (!hiddenSchema) {
         return null
     }
-    if (typeof hiddenSchema === 'string') {
+    const clone = structuredClone(hiddenSchema)
+    if (typeof clone === 'string') {
         return {
             value: false,
-            path: conformPathToPointers(hiddenSchema),
+            path: conformPathToPointers(clone),
         }
     }
-    if ('condition' in hiddenSchema) {
+    if ('condition' in clone) {
         return {
-            value: hiddenSchema.condition,
-            path: conformPathToPointers(hiddenSchema.value),
+            value: clone.condition,
+            path: conformPathToPointers(clone.value),
         }
     }
     return {
-        ...hiddenSchema,
-        path: conformPathToPointers(hiddenSchema.path),
+        ...clone,
+        path: conformPathToPointers(clone.path),
     }
 }
