@@ -1,6 +1,10 @@
 @import 'react-toastify/dist/ReactToastify.css';
 
 .Toastify {
+    &__toast {
+        gap: 8px;
+    }
+
     &__toast-container {
         padding: 0;
         width: 280px;
@@ -63,9 +67,16 @@
 
     // Custom styling for close btn
     &__close-btn {
-        svg {
-            use {
-                fill: var(--N0) !important;
+        button {
+            svg {
+                use {
+                    fill: var(--N0) !important;
+                }
+            }
+
+            &:hover,
+            &:active {
+                background: #fff3 !important;
             }
         }
     }

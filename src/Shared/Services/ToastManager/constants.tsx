@@ -27,8 +27,9 @@ export const TOAST_BASE_CONFIG: ToastContainerProps = {
                 dataTestId="close-toast"
                 ariaLabel="Close toast"
                 size={ComponentSizeType.xs}
-                variant={ButtonVariantType.text}
+                variant={ButtonVariantType.borderLess}
                 style={ButtonStyleType.neutral}
+                showAriaLabelInTippy={false}
             />
         </div>
     ),
