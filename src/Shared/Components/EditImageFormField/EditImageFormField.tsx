@@ -1,9 +1,9 @@
 import { KeyboardEvent, SyntheticEvent, useState } from 'react'
-import { toast } from 'react-toastify'
 import { showError } from '@Common/Helper'
 import { CustomInput } from '@Common/CustomInput'
 import { ButtonWithLoader, ImageWithFallback } from '@Shared/Components'
 import { validateIfImageExist, validateURL } from '@Shared/validations'
+import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { ReactComponent as ICPencil } from '@Icons/ic-pencil.svg'
 import { EditImageFormFieldProps, FallbackImageProps } from './types'
 import {
@@ -101,12 +101,18 @@ const EditImageFormField = ({
         if (!url) {
             // Not setting the error since can save without image
             setEmptyPreviewURLErrorMessage(EMPTY_PREVIEW_URL_ERROR_MESSAGE)
-            toast.error(EMPTY_PREVIEW_URL_ERROR_MESSAGE)
+            ToastManager.showToast({
+                variant: ToastVariantType.error,
+                description: EMPTY_PREVIEW_URL_ERROR_MESSAGE,
+            })
             return
         }
 
         if (errorMessage) {
-            toast.error(errorMessage)
+            ToastManager.showToast({
+                variant: ToastVariantType.error,
+                description: errorMessage,
+            })
             return
         }
 

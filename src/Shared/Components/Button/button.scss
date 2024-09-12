@@ -206,8 +206,8 @@
         &--positive,
         &--warning,
         &--neutral {
-            padding: 0;
-            min-width: 0;
+            padding: 0 !important;
+            min-width: 0 !important;
             border: none;
 
             &:hover {
