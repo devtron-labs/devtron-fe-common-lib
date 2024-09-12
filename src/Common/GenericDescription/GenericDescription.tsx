@@ -18,7 +18,6 @@ import { useState, useRef, useEffect } from 'react'
 import Tippy from '@tippyjs/react'
 import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
-import { toast } from 'react-toastify'
 import moment from 'moment'
 import Markdown from '../Markdown/MarkDown'
 import { DATE_TIME_FORMATS, deepEqual, showError } from '..'
@@ -31,7 +30,7 @@ import {
     MARKDOWN_EDITOR_COMMAND_TITLE,
     MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT,
 } from '../Markdown/constant'
-import { ButtonWithLoader } from '../../Shared'
+import { ButtonWithLoader, ToastManager, ToastVariantType } from '../../Shared'
 import { ReactComponent as HeaderIcon } from '../../Assets/Icon/ic-header.svg'
 import { ReactComponent as BoldIcon } from '../../Assets/Icon/ic-bold.svg'
 import { ReactComponent as ItalicIcon } from '../../Assets/Icon/ic-italic.svg'
@@ -73,7 +72,10 @@ const GenericDescription = ({
     const validateDescriptionText = (description: string): boolean => {
         let isValid = true
         if (description.length === 0) {
-            toast.error(DESCRIPTION_EMPTY_ERROR_MSG)
+            ToastManager.showToast({
+                variant: ToastVariantType.error,
+                description: DESCRIPTION_EMPTY_ERROR_MSG,
+            })
             isValid = false
         }
         return isValid
