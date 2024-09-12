@@ -21,25 +21,12 @@ import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import moment from 'moment'
 import { useLocation } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import YAML from 'yaml'
-import { ERROR_EMPTY_SCREEN, SortingOrder, EXCLUDED_FALSY_VALUES, DISCORD_LINK, ZERO_TIME_STRING } from './Constants'
+import { ERROR_EMPTY_SCREEN, SortingOrder, EXCLUDED_FALSY_VALUES, DISCORD_LINK, ZERO_TIME_STRING, TOAST_ACCESS_DENIED } from './Constants'
 import { ServerErrors } from './ServerError'
-import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
-import { scrollableInterface, DATE_TIME_FORMAT_STRING } from '../Shared'
+import { scrollableInterface, DATE_TIME_FORMAT_STRING, ToastManager, ToastVariantType } from '../Shared'
 import { ReactComponent as ArrowDown } from '../Assets/Icon/ic-chevron-down.svg'
-
-toast.configure({
-    autoClose: 3000,
-    hideProgressBar: true,
-    pauseOnHover: true,
-    pauseOnFocusLoss: true,
-    closeOnClick: false,
-    newestOnTop: true,
-    toastClassName: 'devtron-toast',
-    bodyClassName: 'devtron-toast__body',
-})
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
@@ -49,10 +36,16 @@ export function showError(serverError, showToastOnUnknownError = true, hideAcces
                 (userMessage === ERROR_EMPTY_SCREEN.UNAUTHORIZED || userMessage === ERROR_EMPTY_SCREEN.FORBIDDEN)
             ) {
                 if (!hideAccessError) {
-                    toastAccessDenied()
+                    ToastManager.showToast({
+                        variant: ToastVariantType.notAuthorized,
+                        description: TOAST_ACCESS_DENIED.SUBTITLE,
+                    })
                 }
             } else {
-                toast.error(userMessage || internalMessage)
+                ToastManager.showToast({
+                    variant: ToastVariantType.error,
+                    description: userMessage || internalMessage,
+                })
             }
         })
     } else {
@@ -62,9 +55,15 @@ export function showError(serverError, showToastOnUnknownError = true, hideAcces
 
         if (showToastOnUnknownError) {
             if (serverError.message) {
-                toast.error(serverError.message)
+                ToastManager.showToast({
+                    variant: ToastVariantType.error,
+                    description: serverError.message,
+                })
             } else {
-                toast.error('Some Error Occurred')
+                ToastManager.showToast({
+                    variant: ToastVariantType.error,
+                    description: 'Some Error Occurred',
+                })
             }
         }
     }
@@ -361,7 +360,10 @@ export function copyToClipboard(str, callback = noop) {
                 callback()
             })
             .catch(() => {
-                toast.error('Failed to copy to clipboard')
+                ToastManager.showToast({
+                    variant: ToastVariantType.error,
+                    description: 'Failed to copy to clipboard',
+                })
             })
     } else {
         unsecureCopyToClipboard(str, callback)
