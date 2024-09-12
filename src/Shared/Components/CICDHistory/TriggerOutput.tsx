@@ -17,13 +17,15 @@
 import { Redirect, Route, Switch, useLocation, useParams, useRouteMatch, Link, NavLink } from 'react-router-dom'
 import React, { useEffect, useMemo, useState } from 'react'
 import moment from 'moment'
-import { toast } from 'react-toastify'
 import { ShowMoreText } from '@Shared/Components/ShowMoreText'
 import { getHandleOpenURL } from '@Shared/Helpers'
 import { ImageChipCell } from '@Shared/Components/ImageChipCell'
 import { CommitChipCell } from '@Shared/Components/CommitChipCell'
 import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
 import { ReactComponent as ICPulsateStatus } from '@Icons/ic-pulsate-status.svg'
+import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
+import { getDeploymentStageTitle } from '@Pages/App'
+import { ToastManager, ToastVariantType } from '@Shared/Services'
 import {
     ConfirmationDialog,
     DATE_TIME_FORMATS,
@@ -162,7 +164,10 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
         setAborting(true)
         try {
             await abort(abortError.status)
-            toast.success('Build Aborted')
+            ToastManager.showToast({
+                variant: ToastVariantType.success,
+                description: 'Build Aborted',
+            })
             setAbortConfirmation(false)
             setAbortError({
                 status: false,
@@ -284,6 +289,8 @@ const StartDetails = ({
     isJobView,
     triggerMetadata,
     renderDeploymentHistoryTriggerMetaText,
+    renderTargetConfigInfo,
+    stage,
 }: StartDetailsType): JSX.Element => {
     const { url } = useRouteMatch()
     const { pathname } = useLocation()
@@ -291,9 +298,24 @@ const StartDetails = ({
     return (
         <div className="w-100 pr-20 flex column left dc__border-bottom-n1">
             <div className="flexbox dc__gap-8 dc__align-items-center pb-12">
-                <span className="cn-9 fs-13 fw-6 lh-20" data-testid="deployment-history-start-heading">
-                    Start
-                </span>
+                <div className="flex left dc__gap-4 cn-9 fs-13 fw-6 lh-20">
+                    <div className="flex left dc__no-shrink dc__gap-4" data-testid="deployment-history-start-heading">
+                        <div>Start</div>
+                        {stage && (
+                            <>
+                                <div className="dc__bullet" />
+                                <div className="dc__first-letter-capitalize">{getDeploymentStageTitle(stage)}</div>
+                            </>
+                        )}
+                    </div>
+                    {environmentName && (
+                        <>
+                            <ICArrowRight className="icon-dim-14 scn-9 dc__no-shrink" />
+                            <span className="dc__truncate">{environmentName}</span>
+                        </>
+                    )}
+                    {renderTargetConfigInfo?.()}
+                </div>
 
                 <time className="cn-7 fs-13">
                     {moment(startedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
@@ -417,6 +439,7 @@ export const TriggerDetails = React.memo(
         workerPodName,
         triggerMetadata,
         renderDeploymentHistoryTriggerMetaText,
+        renderTargetConfigInfo,
     }: TriggerDetailsType): JSX.Element => (
         <div className="trigger-details flexbox-col pb-12">
             <div className="display-grid trigger-details__grid py-12">
@@ -436,6 +459,8 @@ export const TriggerDetails = React.memo(
                         isJobView={isJobView}
                         triggerMetadata={triggerMetadata}
                         renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
+                        renderTargetConfigInfo={renderTargetConfigInfo}
+                        stage={stage}
                     />
 
                     <CurrentStatus
@@ -657,6 +682,7 @@ const TriggerOutput = ({
     resourceId,
     scrollToTop,
     scrollToBottom,
+    renderTargetConfigInfo,
 }: TriggerOutputProps) => {
     const { appId, triggerId, envId, pipelineId } = useParams<{
         appId: string
@@ -686,12 +712,15 @@ const TriggerOutput = ({
             const appliedFiltersTimestamp = triggerHistory.get(syncTriggerId)?.appliedFiltersTimestamp
             const promotionApprovalMetadata = triggerHistory.get(syncTriggerId)?.promotionApprovalMetadata
             const runSource = triggerHistory.get(syncTriggerId)?.runSource
+            const targetConfig = triggerHistory.get(syncTriggerId)?.targetConfig
+
             // These changes are not subject to change after refresh, add data which will not change
             const additionalDataObject = {
                 ...(appliedFilters.length ? { appliedFilters } : {}),
                 ...(appliedFiltersTimestamp ? { appliedFiltersTimestamp } : {}),
                 ...(promotionApprovalMetadata ? { promotionApprovalMetadata } : {}),
                 ...(runSource ? { runSource } : {}),
+                ...(targetConfig ? { targetConfig } : {}),
             }
             setTriggerHistory((newTriggerHistory) => {
                 newTriggerHistory.set(syncTriggerId, { ...syncTriggerDetail, ...additionalDataObject })
@@ -808,6 +837,8 @@ const TriggerOutput = ({
                         artifact={triggerDetails.artifact}
                         triggerMetadata={triggerDetails.triggerMetadata}
                         renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
+                        environmentName={selectedEnvironmentName}
+                        renderTargetConfigInfo={renderTargetConfigInfo}
                     />
                     <ul className="pl-50 pr-20 pt-8 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bcn-0 dc__zi-3">
                         {triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM && (

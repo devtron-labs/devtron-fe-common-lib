@@ -108,13 +108,24 @@ module.exports = {
         'import/no-cycle': 'off',
         'import/prefer-default-export': 'off',
         'no-restricted-exports': 'off',
-        'import/named': 'off'
+        'import/named': 'off',
     },
     overrides: [
         {
             files: ['*.ts', '*.tsx'],
             rules: {
                 'no-undef': 'off',
+                'no-restricted-imports': [
+                    'error',
+                    {
+                        paths: [
+                            {
+                                name: 'react-toastify',
+                                message: 'Please use "ToastManager.showToast" instead.',
+                            }
+                        ],
+                    },
+                ],
             },
         },
     ],

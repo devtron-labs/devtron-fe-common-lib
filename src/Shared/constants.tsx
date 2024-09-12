@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { ConfigurationType } from './types'
+import { OptionType } from '@Common/Types'
+import { CDMaterialSidebarType, ConfigurationType } from './types'
 
 export const ARTIFACT_STATUS = {
     PROGRESSING: 'Progressing',
@@ -454,9 +455,11 @@ export const ANSI_UP_REGEX = /\x1B\[.*?m/g
  * Size variants for components
  */
 export enum ComponentSizeType {
+    xs = 'xs',
     small = 'small',
     medium = 'medium',
     large = 'large',
+    xl = 'xl',
 }
 
 export const POP_UP_MENU_MODAL_ID = 'popup'
@@ -473,6 +476,13 @@ export enum SelectAllGroupedResourceIdentifiers {
     allExistingAndFutureProdEnvironments = '-2',
     allExistingAndFutureEnvironments = '-3',
 }
+
+export const CD_MATERIAL_SIDEBAR_TABS: OptionType<CDMaterialSidebarType, CDMaterialSidebarType>[] = Object.values(
+    CDMaterialSidebarType,
+).map((tabValue) => ({
+    value: tabValue,
+    label: tabValue,
+}))
 
 export const TRIGGER_STATUS_PROGRESSING = ['progressing', 'initiating', 'running', 'starting']
 
