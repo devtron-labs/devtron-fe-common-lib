@@ -28,6 +28,7 @@ const ButtonElement = ({
         | 'dataTestId'
         | 'isLoading'
         | 'ariaLabel'
+        | 'showAriaLabelInTippy'
     > & {
         className: string
         'data-testid': ButtonProps['dataTestId']
@@ -135,6 +136,7 @@ const Button = ({
     tooltipProps = {},
     icon = null,
     ariaLabel = null,
+    showAriaLabelInTippy = true,
     ...props
 }: ButtonProps) => {
     const isDisabled = disabled || isLoading
@@ -144,7 +146,8 @@ const Button = ({
     })}`
 
     const getTooltipProps = (): TooltipProps => {
-        if (!showTooltip && icon && ariaLabel) {
+        // Show the aria label as tippy only if the action based tippy is not to be shown
+        if (!showTooltip && showAriaLabelInTippy && icon && ariaLabel) {
             return {
                 alwaysShowTippyOnHover: true,
                 content: ariaLabel,
