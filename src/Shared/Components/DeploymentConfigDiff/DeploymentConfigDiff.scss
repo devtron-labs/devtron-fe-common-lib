@@ -38,6 +38,12 @@
     }
 
     &__tab-list {
-        list-style: none;
+        label {
+            flex-grow: 1
+        }
+
+        .radio__item-label {
+            justify-content: center;
+        }
     }
 }

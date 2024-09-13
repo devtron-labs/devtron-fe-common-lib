@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICInfoOutlined } from '@Icons/ic-info-outlined.svg'
 import { ReactComponent as ICDiffFileUpdated } from '@Icons/ic-diff-file-updated.svg'
+import { StyledRadioGroup } from '@Common/index'
 
 import { CollapsibleList } from '../CollapsibleList'
 import { DeploymentConfigDiffNavigationProps } from './DeploymentConfigDiff.types'
@@ -57,7 +58,12 @@ export const DeploymentConfigDiffNavigation = ({
     }
 
     /** Handles tab click. */
-    const onTabClick = (tab: string) => () => tabConfig?.onClick?.(tab)
+    const onTabClick = (e: ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target
+        if (tabConfig?.activeTab !== value) {
+            tabConfig?.onClick?.(value)
+        }
+    }
 
     // RENDERERS
     const renderTopContent = () => (
@@ -78,21 +84,19 @@ export const DeploymentConfigDiffNavigation = ({
 
         return (
             <div className="p-12">
-                <ul className="deployment-config-diff__tab-list p-0 m-0 flexbox dc__align-items-center dc__border br-4 dc__text-center dc__overflow-hidden">
-                    {tabs.map((tab, index) => (
-                        <li className={`flex-1 ${index !== tabs.length - 1 ? 'dc__border-right' : ''}`}>
-                            <button
-                                key={tab}
-                                type="button"
-                                className={`dc__transparent w-100 dc__no-decor px-8 py-1 fs-12 lh-20 fw-6 ${activeTab === tab ? 'bcn-1 cn-9' : 'bcn-0 cn-7'} ${isLoading ? 'dc__opacity-0_5 cursor-not-allowed' : ''}`}
-                                onClick={onTabClick(tab)}
-                                disabled={isLoading}
-                            >
-                                {tab}
-                            </button>
-                        </li>
+                <StyledRadioGroup
+                    name="deployment-config-diff-tab-list"
+                    initialTab={activeTab}
+                    onChange={onTabClick}
+                    disabled={isLoading}
+                    className="gui-yaml-switch deployment-config-diff__tab-list"
+                >
+                    {tabs.map((tab) => (
+                        <StyledRadioGroup.Radio key={tab} value={tab} className="fs-12 lh-20 cn-7 fw-6">
+                            {tab}
+                        </StyledRadioGroup.Radio>
                     ))}
-                </ul>
+                </StyledRadioGroup>
             </div>
         )
     }
