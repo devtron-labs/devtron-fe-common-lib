@@ -137,7 +137,10 @@ export const getInferredTypeFromValueType = (value) => {
     }
 }
 
-const conformPathToPointers = (path: string) => {
+const conformPathToPointers = (path: string): string => {
+    if (!path) {
+        return ''
+    }
     const trimmedPath = path.trim()
     const isSlashSeparatedPathMissingBeginSlash = trimmedPath.match(/^\w+(\/\w+)*$/g)
     if (isSlashSeparatedPathMissingBeginSlash) {
@@ -151,6 +154,11 @@ const conformPathToPointers = (path: string) => {
     return trimmedPath
 }
 
+const emptyMetaHiddenTypeInstance: MetaHiddenType = {
+    value: false,
+    path: '',
+}
+
 export const parseSchemaHiddenType = (hiddenSchema: HiddenType): MetaHiddenType => {
     if (!hiddenSchema) {
         return null
@@ -162,14 +170,20 @@ export const parseSchemaHiddenType = (hiddenSchema: HiddenType): MetaHiddenType 
             path: conformPathToPointers(clone),
         }
     }
-    if ('condition' in clone) {
+    if (typeof clone !== 'object') {
+        return structuredClone(emptyMetaHiddenTypeInstance)
+    }
+    if ('condition' in clone && 'value' in clone) {
         return {
             value: clone.condition,
             path: conformPathToPointers(clone.value),
         }
     }
-    return {
-        ...clone,
-        path: conformPathToPointers(clone.path),
+    if ('value' in clone && 'path' in clone) {
+        return {
+            value: clone.value,
+            path: conformPathToPointers(clone.path),
+        }
     }
+    return structuredClone(emptyMetaHiddenTypeInstance)
 }

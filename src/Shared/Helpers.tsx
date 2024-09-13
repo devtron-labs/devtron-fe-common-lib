@@ -141,10 +141,10 @@ export const numberComparatorBySortOrder = (
 
 export function versionComparatorBySortOrder(a: string, b: string, orderBy = SortingOrder.ASC) {
     if (orderBy === SortingOrder.DESC) {
-        return a.localeCompare(b, undefined, { numeric: true })
+        return a?.localeCompare(b, undefined, { numeric: true }) ?? 1
     }
 
-    return b.localeCompare(a, undefined, { numeric: true })
+    return b?.localeCompare(a, undefined, { numeric: true }) ?? 1
 }
 
 export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
