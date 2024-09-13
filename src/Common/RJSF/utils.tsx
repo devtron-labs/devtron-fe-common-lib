@@ -173,13 +173,18 @@ export const parseSchemaHiddenType = (hiddenSchema: HiddenType): MetaHiddenType 
     if (typeof clone !== 'object') {
         return structuredClone(emptyMetaHiddenTypeInstance)
     }
-    if ('condition' in clone && 'value' in clone) {
+    if (
+        Object.hasOwn(clone, 'condition') &&
+        'condition' in clone &&
+        Object.hasOwn(clone, 'value') &&
+        'value' in clone
+    ) {
         return {
             value: clone.condition,
             path: conformPathToPointers(clone.value),
         }
     }
-    if ('value' in clone && 'path' in clone) {
+    if (Object.hasOwn(clone, 'value') && 'value' in clone && Object.hasOwn(clone, 'path') && 'path' in clone) {
         return {
             value: clone.value,
             path: conformPathToPointers(clone.path),
