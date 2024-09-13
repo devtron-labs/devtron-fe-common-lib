@@ -20,12 +20,6 @@ import { StyledRadioGroup as RadioGroup } from '../../../Common'
 import { NodeStatus, StatusFilterButtonType } from './types'
 import { IndexStore } from '../../Store'
 
-interface TabState {
-    status: string
-    count: number
-    isSelected: boolean
-}
-
 export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: StatusFilterButtonType) => {
     const [selectedTab, setSelectedTab] = useState('all')
 
@@ -83,28 +77,36 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
 
     return (
         <RadioGroup
-            className="gui-yaml-switch"
-            name="yaml-mode"
+            className="gui-yaml-switch status-filter-button"
+            name="status-filter-button"
             initialTab={selectedTab}
             disabled={false}
             onChange={handleTabSwitch}
         >
-            {filters.length &&
-                filters.map(
-                    (filter: TabState, index: number) =>
-                        filter.count > 0 && (
-                            <RadioGroup.Radio value={filter.status}>
-                                {index !== 0 && (
+            {filters.map(
+                (filter, index) =>
+                    filter.count > 0 && (
+                        <RadioGroup.Radio
+                            value={filter.status}
+                            showTippy={index !== 0}
+                            tippyPlacement="top"
+                            tippyContent={filter.status}
+                            tippyClass="w-100 dc__first-letter-capitalize"
+                        >
+                            {index !== 0 ? (
+                                <>
                                     <span
-                                        className={`dc__app-summary__icon icon-dim-16 mr-6 ${filter.status} ${filter.status}--node`}
+                                        className={`dc__app-summary__icon icon-dim-16 ${filter.status} ${filter.status}--node`}
                                         style={{ zIndex: 'unset' }}
                                     />
-                                )}
-                                <span className="dc__first-letter-capitalize">{filter.status}</span>
-                                <span className="pl-4">({filter.count})</span>
-                            </RadioGroup.Radio>
-                        ),
-                )}
+                                    <span>{filter.count}</span>
+                                </>
+                            ) : (
+                                <span className="dc__first-letter-capitalize">{`${filter.status} (${filter.count})`}</span>
+                            )}
+                        </RadioGroup.Radio>
+                    ),
+            )}
         </RadioGroup>
     )
 }

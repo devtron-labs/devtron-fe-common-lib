@@ -23,9 +23,20 @@ export const getClassNameBySizeMap = ({
         iconClassName: 'icon-dim-16',
         badgeClassName: 'fs-12 lh-20',
     },
+    [ComponentSizeType.xl]: {
+        tabClassName: `min-w-200 fs-13 ${!hideTopPadding ? 'pt-10' : ''} ${alignActiveBorderWithContainer ? 'pb-9' : 'pb-10'}`,
+        iconClassName: 'icon-dim-16',
+        badgeClassName: 'fs-12 lh-20',
+    },
 })
 
 export const getIconColorClassMap = ({ active }: Pick<TabProps, 'active'>): Record<TabProps['iconType'], string> => ({
     fill: `tab-group__tab__icon--fill ${active ? 'fcb-5' : 'fcn-7'}`,
     stroke: `tab-group__tab__icon--stroke ${active ? 'scb-5' : 'scn-7'}`,
 })
+
+export const tabGroupClassMap: Record<TabGroupProps['size'], string> = {
+    [ComponentSizeType.medium]: 'dc__gap-12',
+    [ComponentSizeType.large]: 'dc__gap-16',
+    [ComponentSizeType.xl]: 'dc__gap-16',
+}

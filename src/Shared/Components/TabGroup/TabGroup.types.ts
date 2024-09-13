@@ -59,6 +59,11 @@ export type TabProps = {
      */
     label: string
     /**
+     * Description for the tab.
+     * @note - If passed as a `string[]`, it will be rendered with a bullet in-between strings.
+     */
+    description?: string | string[]
+    /**
      * Icon component to be displayed in the tab.
      * This should be a functional component that renders an SVG.
      */
@@ -100,7 +105,7 @@ export interface TabGroupProps {
      * Size of the tabs.
      * @default ComponentSizeType.large
      */
-    size?: ComponentSizeType.large | ComponentSizeType.medium
+    size?: ComponentSizeType.large | ComponentSizeType.medium | ComponentSizeType.xl
     /**
      * Optional component to be rendered on the right side of the tab list.
      */
