@@ -17,12 +17,12 @@
 import { useEffect } from 'react'
 import { EMPTY_STATE_STATUS, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
 import { SeverityCount } from '@Shared/types'
-import { Progressing, useAsync } from '../../../../Common'
+import { Progressing } from '../../../../Common'
 import { ScannedByToolModal } from '../../ScannedByToolModal'
-import { getLastExecutionByArtifactAppEnv } from './service'
 import { VulnerabilitiesProps } from './types'
 import { SecuritySummaryCard } from '../SecuritySummaryCard'
-import { getSecurityScan } from '../SecurityModal'
+import { getSeverityCountFromSummary, getTotalSeverityCount } from '../utils'
+import { useGetSecurityVulnerabilities } from './utils'
 
 const Vulnerabilities = ({
     isScanned,
@@ -33,33 +33,25 @@ const Vulnerabilities = ({
     setVulnerabilityCount,
     isScanV2Enabled,
 }: VulnerabilitiesProps) => {
-    const [areVulnerabilitiesLoading, vulnerabilitiesResponse, vulnerabilitiesError, reloadVulnerabilities] = useAsync(
-        () => getLastExecutionByArtifactAppEnv(artifactId, applicationId, environmentId),
-        [],
-        isScanned && isScanEnabled && !isScanV2Enabled,
-        {
-            resetOnChange: false,
-        },
-    )
-
-    const [scanResultLoading, scanResultResponse, scanResultError, reloadScanResult] = useAsync(
-        () => getSecurityScan({ artifactId, appId: applicationId, envId: environmentId }),
-        [],
-        isScanned && isScanEnabled && isScanV2Enabled,
-        {
-            resetOnChange: false,
-        },
-    )
+    const { scanDetailsLoading, scanResultResponse, executionDetailsResponse, scanDetailsError, reloadScanDetails } =
+        useGetSecurityVulnerabilities({
+            appId: applicationId,
+            envId: environmentId,
+            artifactId,
+            isScanEnabled,
+            isScanned,
+            isScanV2Enabled,
+        })
 
     useEffect(() => {
         if (scanResultResponse && isScanV2Enabled) {
             setVulnerabilityCount(scanResultResponse.result.imageScan.vulnerability?.list?.length)
             return
         }
-        if (vulnerabilitiesResponse && !isScanV2Enabled) {
-            setVulnerabilityCount(vulnerabilitiesResponse.result.vulnerabilities?.length)
+        if (executionDetailsResponse && !isScanV2Enabled) {
+            setVulnerabilityCount(executionDetailsResponse.result.vulnerabilities?.length)
         }
-    }, [vulnerabilitiesResponse, scanResultResponse])
+    }, [executionDetailsResponse, scanResultResponse])
 
     if (!isScanEnabled) {
         return (
@@ -69,7 +61,7 @@ const Vulnerabilities = ({
         )
     }
 
-    if (areVulnerabilitiesLoading || scanResultLoading) {
+    if (scanDetailsLoading) {
         return (
             <div className="security-tab-empty">
                 <Progressing />
@@ -79,7 +71,7 @@ const Vulnerabilities = ({
 
     if (
         !isScanned ||
-        (vulnerabilitiesResponse && !vulnerabilitiesResponse.result.scanned) ||
+        (executionDetailsResponse && !executionDetailsResponse.result.scanned) ||
         (scanResultResponse && !scanResultResponse?.result.scanned)
     ) {
         return (
@@ -89,34 +81,23 @@ const Vulnerabilities = ({
         )
     }
 
-    if (vulnerabilitiesError || scanResultError) {
+    if (scanDetailsError) {
         return (
             <div className="security-tab-empty">
                 <p className="security-tab-empty__title">Failed to fetch vulnerabilities</p>
-                <button
-                    className="cta secondary"
-                    type="button"
-                    onClick={isScanV2Enabled ? reloadScanResult : reloadVulnerabilities}
-                >
+                <button className="cta secondary" type="button" onClick={reloadScanDetails}>
                     Reload
                 </button>
             </div>
         )
     }
 
-    const imageScanSeverities = scanResultResponse?.result.imageScan.vulnerability?.summary.severities
+    const scanResultSeverities = scanResultResponse?.result.imageScan.vulnerability?.summary.severities
     const severityCount: SeverityCount = isScanV2Enabled
-        ? {
-              critical: imageScanSeverities?.CRITICAL || 0,
-              high: imageScanSeverities?.HIGH || 0,
-              medium: imageScanSeverities?.MEDIUM || 0,
-              low: imageScanSeverities?.LOW || 0,
-              unknown: imageScanSeverities?.UNKNOWN || 0,
-          }
-        : vulnerabilitiesResponse.result.severityCount
+        ? getSeverityCountFromSummary(scanResultSeverities)
+        : executionDetailsResponse.result.severityCount ?? { critical: 0, high: 0, medium: 0, low: 0, unknown: 0 }
 
-    const totalCount =
-        severityCount.critical + severityCount.high + severityCount.low + severityCount.medium + severityCount.unknown
+    const totalCount = getTotalSeverityCount(severityCount)
 
     if (!totalCount) {
         return (
@@ -126,11 +107,13 @@ const Vulnerabilities = ({
                 </p>
                 <p>{EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.SUBTITLE}</p>
                 <p className="security-tab-empty__subtitle">
-                    {vulnerabilitiesResponse?.result.lastExecution ??
-                        scanResultResponse?.result.imageScan.vulnerability.list[0].StartedOn}
+                    {executionDetailsResponse?.result.lastExecution ??
+                        scanResultResponse?.result.imageScan.vulnerability?.list[0].StartedOn}
                 </p>
                 <div className="pt-8 pb-8 pl-16 pr-16 flexbox dc__align-items-center">
-                    <ScannedByToolModal scanToolId={vulnerabilitiesResponse?.result.scanToolId ?? SCAN_TOOL_ID_TRIVY} />
+                    <ScannedByToolModal
+                        scanToolId={executionDetailsResponse?.result.scanToolId ?? SCAN_TOOL_ID_TRIVY}
+                    />
                 </div>
             </div>
         )
@@ -140,7 +123,7 @@ const Vulnerabilities = ({
         <div className="p-12">
             <SecuritySummaryCard
                 severityCount={severityCount}
-                scanToolId={vulnerabilitiesResponse?.result.scanToolId ?? SCAN_TOOL_ID_TRIVY}
+                scanToolId={executionDetailsResponse?.result.scanToolId ?? SCAN_TOOL_ID_TRIVY}
                 {...(isScanV2Enabled
                     ? { appDetailsPayload: { appId: applicationId, envId: environmentId, artifactId } }
                     : { executionDetailsPayload: { appId: applicationId, envId: environmentId, artifactId } })}

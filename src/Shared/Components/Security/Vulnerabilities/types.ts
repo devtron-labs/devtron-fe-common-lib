@@ -15,6 +15,8 @@
  */
 
 import { MaterialSecurityInfoType } from '../../../types'
+import { getSecurityScan } from '../SecurityModal'
+import { getLastExecutionByArtifactAppEnv } from './service'
 
 export interface VulnerabilitiesProps extends MaterialSecurityInfoType {
     artifactId: number
@@ -22,4 +24,21 @@ export interface VulnerabilitiesProps extends MaterialSecurityInfoType {
     environmentId: number
     setVulnerabilityCount: React.Dispatch<React.SetStateAction<number>>
     isScanV2Enabled: boolean
+}
+
+export interface UseGetSecurityVulnerabilitiesProps {
+    artifactId: string
+    appId: string
+    envId: string
+    isScanned: boolean
+    isScanEnabled: boolean
+    isScanV2Enabled: boolean
+}
+
+export interface UseGetSecurityVulnerabilitiesReturnType {
+    scanDetailsLoading: boolean
+    scanResultResponse: Awaited<ReturnType<typeof getSecurityScan>>
+    executionDetailsResponse: Awaited<ReturnType<typeof getLastExecutionByArtifactAppEnv>>
+    scanDetailsError: any
+    reloadScanDetails: () => void
 }

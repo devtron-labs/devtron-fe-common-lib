@@ -17,8 +17,11 @@
 import moment from 'moment'
 import { numberComparatorBySortOrder } from '@Shared/Helpers'
 import { DATE_TIME_FORMAT_STRING } from '../../../constants'
-import { SortingOrder, VULNERABILITIES_SORT_PRIORITY, ZERO_TIME_STRING } from '../../../../Common'
+import { SortingOrder, useAsync, VULNERABILITIES_SORT_PRIORITY, ZERO_TIME_STRING } from '../../../../Common'
 import { LastExecutionResponseType, LastExecutionResultType } from '../../../types'
+import { getLastExecutionByArtifactAppEnv } from './service'
+import { getSecurityScan } from '../SecurityModal'
+import { UseGetSecurityVulnerabilitiesReturnType } from './types'
 
 export const getSortedVulnerabilities = (vulnerabilities) =>
     vulnerabilities.sort((a, b) =>
@@ -61,3 +64,38 @@ export const parseLastExecutionResponse = (response): LastExecutionResponseType 
     ...response,
     result: getParsedScanResult(response.result),
 })
+
+export const useGetSecurityVulnerabilities = ({
+    artifactId,
+    appId,
+    envId,
+    isScanned,
+    isScanEnabled,
+    isScanV2Enabled,
+}): UseGetSecurityVulnerabilitiesReturnType => {
+    const [executionDetailsLoading, executionDetailsResponse, executionDetailsError, reloadExecutionDetails] = useAsync(
+        () => getLastExecutionByArtifactAppEnv(artifactId, appId, envId),
+        [],
+        isScanned && isScanEnabled && !isScanV2Enabled,
+        {
+            resetOnChange: false,
+        },
+    )
+
+    const [scanResultLoading, scanResultResponse, scanResultError, reloadScanResult] = useAsync(
+        () => getSecurityScan({ artifactId, appId, envId }),
+        [],
+        isScanned && isScanEnabled && isScanV2Enabled,
+        {
+            resetOnChange: false,
+        },
+    )
+
+    return {
+        scanDetailsLoading: scanResultLoading || executionDetailsLoading,
+        scanResultResponse,
+        executionDetailsResponse,
+        scanDetailsError: scanResultError || executionDetailsError,
+        reloadScanDetails: isScanV2Enabled ? reloadScanResult : reloadExecutionDetails,
+    }
+}
