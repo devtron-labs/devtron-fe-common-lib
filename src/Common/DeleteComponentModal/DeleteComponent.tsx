@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import info from '../../Assets/Icon/ic-info-filled.svg'
 import { ConfirmationDialog, DeleteDialog } from '../Dialogs'
@@ -42,7 +42,7 @@ const DeleteComponent = ({
     const { push } = useHistory()
 
     async function handleDelete() {
-        setDeleting(true)
+        setDeleting?.(true)
         setIsDeleting(true)
         try {
             await deleteComponent(payload)
@@ -66,7 +66,7 @@ const DeleteComponent = ({
                 showError(serverError)
             }
         } finally {
-            setDeleting(false)
+            setDeleting?.(false)
             setIsDeleting(false)
         }
     }

@@ -15,7 +15,10 @@
  */
 
 export interface DeleteComponentProps {
-    setDeleting: (boolean) => void
+    /**
+     * @deprecated - Delete component internally handles loading for the `Delete Button`.
+     */
+    setDeleting?: (boolean) => void
     toggleConfirmation: any
     deleteComponent: (any) => Promise<any>
     title: string
