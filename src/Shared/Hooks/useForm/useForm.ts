@@ -13,45 +13,48 @@ import {
 /**
  * A custom hook to manage form state, validation, and submission handling.
  *
- * @template T - A record type representing form data.
- * @param options (optional) - Options for initial form values, validation rules, and form mode.
- * @param options.validations - An object containing validation rules for form fields.
- * @param options.initialValues - An object representing the initial values of the form.
- * @param options.mode (default: `onChange`) - A string to set validation mode, either 'onChange' or 'onBlur'.
- * @returns Returns form state, handlers for change and submission, validation errors, and a trigger function for manual validation.
+ * @param options - Optional configuration object for the form.
+ * @returns The form state and utility methods
  */
 export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
+    /** An object containing validation rules for each form field. */
     validations?: UseFormValidations<T>
+    /** An object representing the initial values for the form fields. */
     initialValues?: Partial<T>
-    mode?: 'onChange' | 'onBlur'
+    /** Defines when validation should occur:
+     * - 'onChange': Validation occurs when the user modifies the input
+     * - 'onBlur': Validation occurs when the input loses focus.
+     *  @default 'onChange'
+     */
+    validationMode?: 'onChange' | 'onBlur'
 }) => {
     const [data, setData] = useState<T>((options?.initialValues || {}) as T)
     const [dirtyFields, setDirtyFields] = useState<DirtyFields<T>>({})
     const [touchedFields, setTouchedFields] = useState<TouchedFields<T>>({})
     const [errors, setErrors] = useState<UseFormErrors<T>>({})
+    const [enableValidationOnChange, setEnableValidationOnChange] = useState<Partial<Record<keyof T, boolean>>>({})
 
     /**
-     * Handles change events for form inputs, updates the form data, and triggers validation.
+     * Handles change events for form fields, updates the form data, and triggers validation.
      *
-     * @template S - The sanitized value type.
      * @param key - The key of the form field to be updated.
      * @param sanitizeFn - An optional function to sanitize the input value.
      * @returns The event handler for input changes.
      */
     const onChange =
-        <S extends unknown>(key: keyof T, sanitizeFn?: (value: string) => S) =>
-        (e: ChangeEvent<HTMLInputElement & HTMLSelectElement>) => {
-            const value = sanitizeFn ? sanitizeFn(e.target.value) : e.target.value
+        <V extends unknown = string, S extends unknown = unknown>(key: keyof T, sanitizeFn?: (value: V) => S) =>
+        // TODO: add support for `Checkbox`, `SelectPicker` and `RadioGroup` components
+        (e: ChangeEvent<HTMLInputElement>) => {
+            const value = sanitizeFn ? sanitizeFn(e.target.value as V) : e.target.value
             setData({
                 ...data,
                 [key]: value,
             })
-            setTouchedFields({
-                ...data,
-                [key]: true,
-            })
+            const initialValues: Partial<T> = options?.initialValues ?? {}
+            setDirtyFields({ ...dirtyFields, [key]: initialValues[key] === data[key] })
 
-            if (!options?.mode || options?.mode === 'onChange' || dirtyFields[key]) {
+            const validationMode = options?.validationMode ?? 'onChange'
+            if (validationMode === 'onChange' || enableValidationOnChange[key] || errors[key]) {
                 const validations = options?.validations ?? {}
                 const error = checkValidation<T>(value as T[keyof T], validations[key as string])
                 setErrors({ ...errors, [key]: error })
@@ -59,18 +62,37 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
         }
 
     /**
-     * Handles blur events for form inputs and triggers validation if the form mode is 'onBlur'.
+     * Handles blur events for form fields and triggers validation if the form mode is 'onBlur'.
      *
-     * @param key - The key of the form field to be validated on blur.
+     * @param key - The key of the form field.
      * @returns The event handler for the blur event.
      */
-    const onBlur = (key: keyof T) => () => {
-        setDirtyFields({ ...dirtyFields, [key]: options?.initialValues?.[key] === data[key] })
-        if (options?.mode === 'onBlur') {
+    const onBlur = (key: keyof T, noTrim: boolean) => () => {
+        if (!noTrim) {
+            setData({ ...data, [key]: data[key].trim() })
+        }
+
+        if (options?.validationMode === 'onBlur') {
             const validations = options?.validations ?? {}
             const error = checkValidation<T>(data[key] as T[keyof T], validations[key as string])
+            if (error && !enableValidationOnChange[key]) {
+                setEnableValidationOnChange({ ...enableValidationOnChange, [key]: true })
+            }
             setErrors({ ...errors, [key]: error })
         }
+    }
+
+    /**
+     * Handles the focus event for form fields and updates the `touchedFields` state to mark the field as touched.
+     *
+     * @param key - The key of the form field.
+     * @return The event handler for the focus event.
+     */
+    const onFocus = (key: keyof T) => () => {
+        setTouchedFields({
+            ...data,
+            [key]: true,
+        })
     }
 
     /**
@@ -81,6 +103,12 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
      */
     const handleSubmit = (onValid: UseFormSubmitHandler<T>) => (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
+        // Enables validation for all form fields if not enabled after form submission.
+        if (Object.keys(enableValidationOnChange) !== Object.keys(data)) {
+            setEnableValidationOnChange(Object.keys(data).reduce((acc, key) => ({ ...acc, [key]: true }), {}))
+        }
+
         const validations = options?.validations
         if (validations) {
             const newErrors: UseFormErrors<T> = {}
@@ -149,25 +177,68 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
     }
 
     /**
-     * Registers form input fields with onChange and onBlur handlers.
+     * Registers form input fields with onChange, onBlur and onFocus handlers.
      *
      * @param name - The key of the form field to register.
      * @param sanitizeFn - An optional function to sanitize the input value.
-     * @returns An object containing `onChange` and `onBlur` event handlers.
+     * @returns An object containing form field `name`, `onChange`, `onBlur` and `onFocus` event handlers.
      */
-    const register = <S extends unknown>(name: keyof T, sanitizeFn?: (value: string) => S) => ({
+    const register = <V extends unknown = string, S extends unknown = unknown>(
+        name: keyof T,
+        sanitizeFn?: (value: V) => S,
+        registerOptions?: {
+            /**
+             * Prevents the input value from being trimmed.
+             *
+             * If `noTrim` is set to true, the input value will not be automatically trimmed.\
+             * This can be useful when whitespace is required for certain inputs.
+             *
+             * @default false - By default, the input will be trimmed.
+             */
+            noTrim?: boolean
+        },
+    ) => ({
         onChange: onChange(name, sanitizeFn),
-        onBlur: onBlur(name),
+        onBlur: onBlur(name, registerOptions?.noTrim),
+        onFocus: onFocus(name),
+        name,
     })
 
     return {
+        /** The current form data. */
         data,
+        /** An object containing validation errors for each form field. */
         errors,
+        /**
+         * Registers form input fields with onChange, onBlur and onFocus handlers.
+         *
+         * @param name - The key of the form field to register.
+         * @param sanitizeFn - An optional function to sanitize the input value.
+         * @returns An object containing form field `name`, `onChange`, `onBlur` and `onFocus` event handlers.
+         */
         register,
+        /**
+         * Handles form submission, validates all form fields, and calls the provided `onValid` function if valid.
+         *
+         * @param onValid - A function to handle valid form data on submission.
+         * @returns The event handler for form submission.
+         */
         handleSubmit,
+        /**
+         * Manually triggers validation for specific form fields.
+         *
+         * @param name - The key(s) of the form field(s) to validate.
+         * @returns The validation error(s), if any.
+         */
         trigger,
-        touchedFields,
-        dirtyFields,
-        isDirty: Object.values(dirtyFields).some((value) => value),
+        /** An object representing additional form state. */
+        formState: {
+            /** An object indicating which fields have been touched (interacted with). */
+            touchedFields,
+            /** An object indicating which fields have been modified. */
+            dirtyFields,
+            /** A boolean indicating if any field has been modified. */
+            isDirty: Object.values(dirtyFields).some((value) => value),
+        },
     }
 }
