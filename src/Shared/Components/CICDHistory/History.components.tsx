@@ -28,6 +28,7 @@ import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscre
 import './cicdHistory.scss'
 
 export const LogResizeButton = ({
+    shortcutCombo = 'f',
     onlyOnLogs = true,
     disableKeybindings = false,
     fullScreenView,
@@ -62,7 +63,7 @@ export const LogResizeButton = ({
                 placement="top"
                 arrow={false}
                 className="default-tt"
-                content={fullScreenView ? 'Exit fullscreen (f)' : 'Enter fullscreen (f)'}
+                content={fullScreenView ? `Exit fullscreen (${shortcutCombo})` : `Enter fullscreen (${shortcutCombo})`}
             >
                 <div>
                     {fullScreenView ? (
