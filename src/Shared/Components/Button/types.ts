@@ -105,6 +105,7 @@ export type ButtonProps = (
         | {
               icon?: never
               ariaLabel?: never
+              showAriaLabelInTippy?: never
               /**
                * Text to be displayed in the button
                */
@@ -123,6 +124,12 @@ export type ButtonProps = (
                * If provided, icon button is rendered
                */
               icon: ReactElement
+              /**
+               * If false, the ariaLabel is not shown in tippy
+               *
+               * @default true
+               */
+              showAriaLabelInTippy?: boolean
               /**
                * Label for the icon button for accessibility.
                * Shown on hover in tooltip if tippy is not provided explicitly
