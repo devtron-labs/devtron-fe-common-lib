@@ -21,15 +21,24 @@ import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } fr
 
 const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
     menuSize: SelectPickerProps<OptionValue, IsMulti>['menuSize'],
-): string => {
+): { width: string; minWidth: string } => {
     switch (menuSize) {
         case ComponentSizeType.medium:
-            return '125%'
+            return {
+                width: '125%',
+                minWidth: '250px',
+            }
         case ComponentSizeType.large:
-            return '150%'
+            return {
+                width: '150%',
+                minWidth: '300px',
+            }
         case ComponentSizeType.small:
         default:
-            return '100%'
+            return {
+                width: '100%',
+                minWidth: '200px',
+            }
     }
 }
 
@@ -95,8 +104,8 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         backgroundColor: 'var(--N0)',
         border: '1px solid var(--N200)',
         boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.20)',
-        width: getMenuWidthFromSize(menuSize),
-        minWidth: '200px',
+        width: getMenuWidthFromSize(menuSize).width,
+        minWidth: getMenuWidthFromSize(menuSize).minWidth,
         zIndex: 'var(--select-picker-menu-index)',
         ...(shouldMenuAlignRight && {
             right: 0,
