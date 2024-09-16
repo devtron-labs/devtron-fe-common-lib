@@ -27,7 +27,12 @@ import { ReactComponent as ZoomIn } from '../../../Assets/Icon/ic-fullscreen.svg
 import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscreen.svg'
 import './cicdHistory.scss'
 
-export const LogResizeButton = ({ fullScreenView, setFullScreenView }: LogResizeButtonType): JSX.Element => {
+export const LogResizeButton = ({
+    onlyOnLogs = true,
+    disableKeybindings = false,
+    fullScreenView,
+    setFullScreenView,
+}: LogResizeButtonType): JSX.Element => {
     const { pathname } = useLocation()
 
     const keys = useKeyDown()
@@ -37,7 +42,7 @@ export const LogResizeButton = ({ fullScreenView, setFullScreenView }: LogResize
     }
 
     useEffect(() => {
-        if (!pathname.includes('/logs')) {
+        if ((!pathname.includes('/logs') && onlyOnLogs) || disableKeybindings) {
             return
         }
         // eslint-disable-next-line default-case
@@ -52,7 +57,7 @@ export const LogResizeButton = ({ fullScreenView, setFullScreenView }: LogResize
     }, [keys])
 
     return (
-        pathname.includes('/logs') && (
+        (pathname.includes('/logs') || !onlyOnLogs) && (
             <Tippy
                 placement="top"
                 arrow={false}

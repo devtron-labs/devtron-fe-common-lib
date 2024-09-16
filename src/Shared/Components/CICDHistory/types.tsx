@@ -46,6 +46,8 @@ export enum FetchIdDataStatus {
 }
 
 export interface LogResizeButtonType {
+    onlyOnLogs?: boolean
+    disableKeybindings?: boolean
     fullScreenView: boolean
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
 }
