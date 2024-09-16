@@ -5,14 +5,16 @@ import { ReactComponent as ICSort } from '@Icons/ic-arrow-up-down.svg'
 import { Progressing } from '@Common/Progressing'
 import { CodeEditor } from '@Common/CodeEditor'
 import { MODES, SortingOrder } from '@Common/Constants'
+import ErrorScreenManager from '@Common/ErrorScreenManager'
 
 import { SelectPicker } from '../SelectPicker'
 import { DeploymentHistoryDiffView } from '../CICDHistory'
 import { DeploymentConfigDiffAccordion } from './DeploymentConfigDiffAccordion'
-import { DeploymentConfigDiffMainProps, DeploymentConfigDiffSelectPickerProps } from './types'
+import { DeploymentConfigDiffMainProps, DeploymentConfigDiffSelectPickerProps } from './DeploymentConfigDiff.types'
 
 export const DeploymentConfigDiffMain = ({
     isLoading,
+    errorConfig,
     headerText = 'Compare With',
     configList = [],
     selectorsConfig,
@@ -131,7 +133,7 @@ export const DeploymentConfigDiffMain = ({
                 >
                     {isDeploymentTemplate ? (
                         <>
-                            <div className="bcn-1 deployment-diff__upper dc__border-top">
+                            <div className="bcn-1 deployment-config-diff__main-content__heading dc__border-top">
                                 <div className="px-12 py-6 dc__border-right">{primaryHeading}</div>
                                 <div className="px-12 py-6">{secondaryHeading}</div>
                             </div>
@@ -182,11 +184,13 @@ export const DeploymentConfigDiffMain = ({
                 </div>
             </div>
             <div className="deployment-config-diff__main-content">
-                {isLoading ? (
-                    <Progressing fullHeight size={48} />
-                ) : (
-                    <div className="flexbox-col dc__gap-12 p-12">{renderDiffs()}</div>
-                )}
+                {errorConfig?.error && <ErrorScreenManager code={errorConfig.code} reload={errorConfig.reload} />}
+                {!errorConfig?.error &&
+                    (isLoading ? (
+                        <Progressing fullHeight size={48} />
+                    ) : (
+                        <div className="flexbox-col dc__gap-12 p-12">{renderDiffs()}</div>
+                    ))}
             </div>
         </div>
     )

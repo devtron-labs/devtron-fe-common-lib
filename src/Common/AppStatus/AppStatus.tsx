@@ -15,6 +15,7 @@
  */
 
 import Tippy from '@tippyjs/react'
+import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
 import { ReactComponent as InfoIcon } from '../../Assets/Icon/ic-info-outlined.svg'
 import { StatusConstants, YET_TO_RUN } from './constants'
 import { AppStatusType } from './types'
@@ -52,7 +53,11 @@ export default function AppStatus({
 
     const renderIcon = () => {
         if (iconClass) {
-            return <span className={`dc__app-summary__icon icon-dim-16 ${iconClass} ${iconClass}--node`} />
+            return iconClass === 'failed' || iconClass === 'error' ? (
+                <ICErrorCross className="icon-dim-16 dc__no-shrink ic-error-cross-red" />
+            ) : (
+                <span className={`dc__app-summary__icon icon-dim-16 ${iconClass} ${iconClass}--node`} />
+            )
         }
         if (isVirtualEnv) {
             return (
