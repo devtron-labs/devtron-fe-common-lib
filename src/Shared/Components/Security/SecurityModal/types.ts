@@ -20,11 +20,6 @@ export interface GetResourceScanDetailsPayloadType {
     isAppDetailView?: boolean
 }
 
-interface SecurityModalBaseProps {
-    handleModalClose: (event?: React.MouseEvent<HTMLElement>) => void
-    isExternalCI?: boolean
-}
-
 export interface AppDetailsPayload {
     appId?: number | string
     envId?: number | string
@@ -37,27 +32,6 @@ export interface ExecutionDetailsPayload extends Partial<Pick<AppDetailsPayload,
     imageScanDeployInfoId?: number | string
     artifactId?: number | string
 }
-
-interface SecurityModalAppDetailsPropsType {
-    appDetailsPayload: AppDetailsPayload
-    resourceScanPayload?: never
-    executionDetailsPayload?: never
-}
-
-interface SecurityModalResourceScanPropsType {
-    appDetailsPayload?: never
-    resourceScanPayload: GetResourceScanDetailsPayloadType
-    executionDetailsPayload?: never
-}
-
-interface SecurityModalExecutionDetailsPropsType {
-    appDetailsPayload?: never
-    resourceScanPayload?: never
-    executionDetailsPayload: ExecutionDetailsPayload
-}
-
-export type SecurityModalPropsType = SecurityModalBaseProps &
-    (SecurityModalAppDetailsPropsType | SecurityModalResourceScanPropsType | SecurityModalExecutionDetailsPropsType)
 
 export const CATEGORIES = {
     IMAGE_SCAN: 'imageScan',
@@ -135,10 +109,11 @@ export type SecurityModalStateType = {
     detailViewData: DetailViewDataType[]
 }
 
-export interface SidebarPropsType extends Pick<SecurityModalBaseProps, 'isExternalCI'> {
+export interface SidebarPropsType {
     isHelmApp: boolean
     modalState: SecurityModalStateType
     setModalState: React.Dispatch<React.SetStateAction<SecurityModalStateType>>
+    isExternalCI: boolean
 }
 
 export enum SeveritiesDTO {
@@ -270,6 +245,19 @@ export type ApiResponseResultType = {
     [CATEGORIES.CODE_SCAN]: CodeScan
     [CATEGORIES.KUBERNETES_MANIFEST]: KubernetesManifest
 }
+
+interface SecurityModalBaseProps extends Partial<Pick<SidebarPropsType, 'isExternalCI'>> {
+    isLoading: boolean
+    error: any
+    responseData: ApiResponseResultType
+    handleModalClose: (event?: React.MouseEvent<HTMLElement>) => void
+    Sidebar: React.FC<SidebarPropsType>
+    isHelmApp?: boolean
+    isResourceScan?: boolean
+    isSecurityScanV2Enabled: boolean
+}
+
+export type SecurityModalPropsType = SecurityModalBaseProps
 
 export interface IndexedTextDisplayPropsType {
     title: string

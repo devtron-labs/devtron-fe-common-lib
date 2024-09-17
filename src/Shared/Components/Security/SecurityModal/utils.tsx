@@ -131,9 +131,9 @@ export const parseExecutionDetailResponse = (scanResult): ApiResponseResultType 
                         },
                     },
                     list: scanResult.vulnerabilities?.map((vulnerability) => ({
-                        cveId: vulnerability?.cveName,
+                        cveId: vulnerability?.name,
                         package: vulnerability?.package,
-                        currentVersion: vulnerability?.currentVersion,
+                        currentVersion: vulnerability?.version,
                         fixedInVersion: vulnerability?.fixedVersion,
                         severity: getSeverityFromVulnerabilitySeverity(vulnerability?.severity),
                     })),

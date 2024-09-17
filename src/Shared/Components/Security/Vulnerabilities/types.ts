@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
+import { ResponseType } from '@Common/Types'
+import { ImageCardAccordionProps } from '@Shared/Components/ImageCardAccordion/types'
 import { MaterialSecurityInfoType } from '../../../types'
-import { getSecurityScan } from '../SecurityModal'
+import { ApiResponseResultType } from '../SecurityModal'
 import { getLastExecutionByArtifactAppEnv } from './service'
 
-export interface VulnerabilitiesProps extends MaterialSecurityInfoType {
+export interface VulnerabilitiesProps
+    extends MaterialSecurityInfoType,
+        Pick<ImageCardAccordionProps, 'SecurityModalSidebar' | 'getSecurityScan'> {
     artifactId: number
     applicationId: number
     environmentId: number
@@ -26,7 +30,7 @@ export interface VulnerabilitiesProps extends MaterialSecurityInfoType {
     isScanV2Enabled: boolean
 }
 
-export interface UseGetSecurityVulnerabilitiesProps {
+export interface UseGetSecurityVulnerabilitiesProps extends Pick<ImageCardAccordionProps, 'getSecurityScan'> {
     artifactId: string
     appId: string
     envId: string
@@ -37,7 +41,7 @@ export interface UseGetSecurityVulnerabilitiesProps {
 
 export interface UseGetSecurityVulnerabilitiesReturnType {
     scanDetailsLoading: boolean
-    scanResultResponse: Awaited<ReturnType<typeof getSecurityScan>>
+    scanResultResponse: ResponseType<ApiResponseResultType>
     executionDetailsResponse: Awaited<ReturnType<typeof getLastExecutionByArtifactAppEnv>>
     scanDetailsError: any
     reloadScanDetails: () => void

@@ -1,18 +1,12 @@
 import { SeverityCount } from '@Shared/types'
-import { AppDetailsPayload, ExecutionDetailsPayload } from '../SecurityModal'
-
-interface ExecutionDetailsPayloadType {
-    executionDetailsPayload: ExecutionDetailsPayload
-    appDetailsPayload?: never
-}
-
-interface AppDetailsPayloadType {
-    executionDetailsPayload?: never
-    appDetailsPayload: AppDetailsPayload
-}
+import { ImageCardAccordionProps } from '@Shared/Components/ImageCardAccordion/types'
+import { ApiResponseResultType } from '../SecurityModal'
 
 export type SecuritySummaryCardProps = {
     severityCount: SeverityCount
     scanToolId: number
     rootClassName?: string
-} & (ExecutionDetailsPayloadType | AppDetailsPayloadType)
+    isHelmApp?: boolean
+    isSecurityScanV2Enabled: boolean
+    responseData: ApiResponseResultType
+} & Pick<ImageCardAccordionProps, 'SecurityModalSidebar'>
