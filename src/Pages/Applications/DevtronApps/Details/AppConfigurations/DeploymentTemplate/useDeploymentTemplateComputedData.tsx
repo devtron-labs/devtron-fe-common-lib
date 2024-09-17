@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 import { BaseURLParams } from '@Shared/types'
 import { UseDeploymentTemplateComputedDataProps, UseDeploymentTemplateComputedDataReturnType } from './types'
 import { getResolvedDeploymentTemplate } from './service'
@@ -25,6 +24,7 @@ const useDeploymentTemplateComputedData = ({
             appId: +appId,
             chartRefId: selectedChartRefId,
             values: value,
+            valuesAndManifestFlag: null,
             ...(envId && { envId: +envId }),
         })
         return resolvedData
@@ -40,8 +40,6 @@ const useDeploymentTemplateComputedData = ({
             ])
 
             if (!resolvedEditorTemplateResponse.areVariablesPresent) {
-                // TODO: Use constant from dashboard
-                toast.error('No valid variable found on this page')
                 handleDisableResolveScopedVariables()
                 return
             }

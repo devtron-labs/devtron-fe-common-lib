@@ -2,6 +2,7 @@ import { MutableRefObject, ReactNode } from 'react'
 import { AppEnvironment } from '@Common/Types'
 import { ConfigKeysWithLockType, ConfigurationType } from '@Shared/types'
 import { Operation } from 'fast-json-patch'
+import { TemplateListType } from '@Shared/Services'
 
 export enum DeploymentTemplateTabsType {
     EDIT = 1,
@@ -205,6 +206,7 @@ export interface DeploymentConfigContextType {
 
 export interface GetResolvedDeploymentTemplateReturnType {
     resolvedData: string
+    data: string
     areVariablesPresent: boolean
 }
 
@@ -218,22 +220,35 @@ export enum ValuesAndManifestFlagDTO {
     MANIFEST = 2,
 }
 
-export interface GetResolvedDeploymentTemplatePayloadType {
-    appId: number
-    chartRefId: number
+type GetResolvedDeploymentTemplateCustomValuesPayloadType = {
     /**
      * String to be resolved
      */
     values: string
-    valuesAndManifestFlag: ValuesAndManifestFlagDTO.DEPLOYMENT_TEMPLATE
+    type?: never
+    deploymentTemplateHistoryId?: never
+    pipelineId?: never
+}
+
+type GetHistoricResolvedDeploymentTemplatePayloadType = {
+    values?: never
+    type: TemplateListType
+    deploymentTemplateHistoryId: number
+    pipelineId: number
+}
+
+export type GetResolvedDeploymentTemplatePayloadType = {
+    appId: number
     /**
      * EnvId for the given VALUE
      */
     envId?: number
-}
+    chartRefId: number
+    valuesAndManifestFlag: ValuesAndManifestFlagDTO.DEPLOYMENT_TEMPLATE
+} & (GetHistoricResolvedDeploymentTemplatePayloadType | GetResolvedDeploymentTemplateCustomValuesPayloadType)
 
-export interface GetResolvedDeploymentTemplateProps
-    extends Omit<GetResolvedDeploymentTemplatePayloadType, 'valuesAndManifestFlag'> {}
+// FIXME: There is no need to send valuesAndManifestFlag but there was typing issue while omitting so need to fix later
+export type GetResolvedDeploymentTemplateProps = GetResolvedDeploymentTemplatePayloadType
 
 export interface ResolvedDeploymentTemplateDTO {
     /**
