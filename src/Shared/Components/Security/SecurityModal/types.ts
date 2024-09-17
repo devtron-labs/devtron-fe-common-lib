@@ -6,6 +6,7 @@ import React from 'react'
 import { GenericEmptyStateType } from '@Common/Types'
 import { LastExecutionResultType, NodeType, Nodes } from '@Shared/types'
 import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
+import { ServerErrors } from '@Common/ServerError'
 
 export interface GetResourceScanDetailsPayloadType {
     name: string
@@ -248,7 +249,7 @@ export type ApiResponseResultType = {
 
 interface SecurityModalBaseProps extends Partial<Pick<SidebarPropsType, 'isExternalCI'>> {
     isLoading: boolean
-    error: any
+    error: ServerErrors
     responseData: ApiResponseResultType
     handleModalClose: (event?: React.MouseEvent<HTMLElement>) => void
     Sidebar: React.FC<SidebarPropsType>

@@ -48,7 +48,6 @@ const ImageCardAccordion = ({
     changesCard,
     isScanned,
     isScanEnabled,
-    isScanV2Enabled,
     SecurityModalSidebar,
     getSecurityScan,
 }: ImageCardAccordionProps) => {
@@ -77,7 +76,6 @@ const ImageCardAccordion = ({
                 applicationId={applicationId}
                 environmentId={environmentId}
                 setVulnerabilityCount={setVulnerabilityCount}
-                isScanV2Enabled={isScanV2Enabled}
                 SecurityModalSidebar={SecurityModalSidebar}
                 getSecurityScan={getSecurityScan}
             />

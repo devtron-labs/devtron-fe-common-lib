@@ -27,9 +27,12 @@ export interface ImageCardAccordionProps extends MaterialSecurityInfoType {
     changesCard: ReactNode
     isScanned: boolean
     isScanEnabled: boolean
-    isScanV2Enabled: boolean
     SecurityModalSidebar: React.FC<SidebarPropsType>
-    getSecurityScan: ({ appId, envId, artifactId }: AppDetailsPayload) => Promise<ResponseType<ApiResponseResultType>>
+    getSecurityScan: ({
+        appId,
+        envId,
+        artifactId,
+    }: Pick<AppDetailsPayload, 'appId' | 'envId' | 'artifactId'>) => Promise<ResponseType<ApiResponseResultType>>
 }
 
 export interface SecurityDetailsType {

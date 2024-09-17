@@ -19,14 +19,15 @@ export const getExecutionDetails = async (
         scanExecutionId: response.result.ScanExecutionId,
         lastExecution: response.result.executionTime,
         objectType: response.result.objectType,
-        vulnerabilities: response.result.vulnerabilities?.map((cve) => ({
-            name: cve.cveName,
-            severity: cve.severity,
-            package: cve.package,
-            version: cve.currentVersion,
-            fixedVersion: cve.fixedVersion,
-            policy: cve.permission,
-        })),
+        vulnerabilities:
+            response.result?.vulnerabilities?.map((cve) => ({
+                name: cve.cveName,
+                severity: cve.severity,
+                package: cve.package,
+                version: cve.currentVersion,
+                fixedVersion: cve.fixedVersion,
+                policy: cve.permission,
+            })) || [],
     }
     return { ...response, result: parseExecutionDetailResponse(parsedResult) }
 }

@@ -85,7 +85,7 @@ export const useGetSecurityVulnerabilities = ({
     const [scanResultLoading, scanResultResponse, scanResultError, reloadScanResult] = useAsync(
         () => getSecurityScan({ artifactId, appId, envId }),
         [],
-        isScanned && isScanEnabled && isScanV2Enabled,
+        isScanned && isScanEnabled && isScanV2Enabled && !!getSecurityScan,
         {
             resetOnChange: false,
         },

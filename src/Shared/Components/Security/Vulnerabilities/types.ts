@@ -27,7 +27,6 @@ export interface VulnerabilitiesProps
     applicationId: number
     environmentId: number
     setVulnerabilityCount: React.Dispatch<React.SetStateAction<number>>
-    isScanV2Enabled: boolean
 }
 
 export interface UseGetSecurityVulnerabilitiesProps extends Pick<ImageCardAccordionProps, 'getSecurityScan'> {

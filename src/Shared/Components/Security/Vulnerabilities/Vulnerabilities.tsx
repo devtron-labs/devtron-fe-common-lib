@@ -32,10 +32,10 @@ const Vulnerabilities = ({
     applicationId,
     environmentId,
     setVulnerabilityCount,
-    isScanV2Enabled,
     SecurityModalSidebar,
     getSecurityScan,
 }: VulnerabilitiesProps) => {
+    const isScanV2Enabled = window._env_.ENABLE_RESOURCE_SCAN_V2
     const { scanDetailsLoading, scanResultResponse, executionDetailsResponse, scanDetailsError, reloadScanDetails } =
         useGetSecurityVulnerabilities({
             appId: String(applicationId),
