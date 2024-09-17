@@ -350,3 +350,8 @@ export type DTApplicationMetricsFormFieldProps = {
     isAppMetricsEnabled: boolean
     showApplicationMetrics: boolean
 } & (DTApplicationMetricsActionProps | DTApplicationMetricsReadOnlyProps)
+
+export enum CompareFromApprovalOptionsValuesType {
+    APPROVAL_PENDING = 1,
+    VALUES_FROM_DRAFT = 2,
+}
