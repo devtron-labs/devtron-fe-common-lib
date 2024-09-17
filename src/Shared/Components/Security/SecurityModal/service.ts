@@ -15,10 +15,10 @@ export const getExecutionDetails = async (
     const url = getUrlWithSearchParams(ROUTES.SECURITY_SCAN_EXECUTION_DETAILS, executionDetailPayload)
     const response = await get(url)
     const parsedResult = {
-        ...response.result,
-        scanExecutionId: response.result.ScanExecutionId,
-        lastExecution: response.result.executionTime,
-        objectType: response.result.objectType,
+        ...(response.result || {}),
+        scanExecutionId: response.result?.ScanExecutionId,
+        lastExecution: response.result?.executionTime,
+        objectType: response.result?.objectType,
         vulnerabilities:
             response.result?.vulnerabilities?.map((cve) => ({
                 name: cve.cveName,
