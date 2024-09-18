@@ -48,7 +48,8 @@ const ImageCardAccordion = ({
     changesCard,
     isScanned,
     isScanEnabled,
-    isScanV2Enabled,
+    SecurityModalSidebar,
+    getSecurityScan,
 }: ImageCardAccordionProps) => {
     const [isOpened, setIsOpened] = useState<boolean>(false)
     const [activeTab, setActiveTab] = useState<CDModalTabType>(CDModalTab.Changes)
@@ -75,7 +76,8 @@ const ImageCardAccordion = ({
                 applicationId={applicationId}
                 environmentId={environmentId}
                 setVulnerabilityCount={setVulnerabilityCount}
-                isScanV2Enabled={isScanV2Enabled}
+                SecurityModalSidebar={SecurityModalSidebar}
+                getSecurityScan={getSecurityScan}
             />
         )
     }

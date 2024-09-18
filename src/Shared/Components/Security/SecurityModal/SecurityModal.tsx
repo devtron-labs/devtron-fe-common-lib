@@ -6,7 +6,6 @@ import React, { useState } from 'react'
 import {
     ErrorScreenManager,
     ClipboardButton,
-    useAsync,
     GenericEmptyState,
     ImageType,
     Progressing,
@@ -15,9 +14,8 @@ import {
 } from '@Common/index'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICBack } from '@Icons/ic-caret-down.svg'
-import { Sidebar, Table, InfoCard } from './components'
+import { Table, InfoCard } from './components'
 import { DEFAULT_SECURITY_MODAL_STATE } from './constants'
-import { getExecutionDetails, getResourceScanDetails, getSecurityScan } from './service'
 import { getTableData, getInfoCardData } from './config'
 import { SecurityModalPropsType, SecurityModalStateType, DetailViewDataType } from './types'
 import { getEmptyStateValues } from './config/EmptyState'
@@ -34,25 +32,19 @@ import './styles.scss'
  * For further detail please refer the types to understand the Api Response and workflow of the modal component.
  * */
 const SecurityModal: React.FC<SecurityModalPropsType> = ({
-    appDetailsPayload,
-    resourceScanPayload,
-    executionDetailsPayload,
+    Sidebar,
     handleModalClose,
-    isExternalCI,
+    isLoading,
+    error,
+    responseData,
+    isResourceScan = false,
+    isHelmApp = false,
+    isSecurityScanV2Enabled = false,
+    isExternalCI = false,
 }) => {
     const [state, setState] = useState<SecurityModalStateType>(DEFAULT_SECURITY_MODAL_STATE)
 
-    const [loading, _data, error] = useAsync(() => {
-        if (appDetailsPayload) {
-            return getSecurityScan(appDetailsPayload)
-        }
-        if (executionDetailsPayload) {
-            return getExecutionDetails(executionDetailsPayload)
-        }
-        return getResourceScanDetails(resourceScanPayload)
-    })
-
-    const data = _data?.result || null
+    const data = responseData ?? null
 
     const setDetailViewData = (detailViewData: DetailViewDataType) => {
         setState((prevState) => ({
@@ -140,7 +132,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     }
 
     const renderContent = () => {
-        if (loading) {
+        if (isLoading) {
             return (
                 <div className="h-100 w-100 flex">
                     <Progressing size={24} pageLoader />
@@ -160,9 +152,9 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
             /* NOTE: the height is restricted to (viewport - header) height since we need overflow-scroll */
             <div className="flexbox" style={{ height: 'calc(100vh - 49px)' }}>
                 {/* NOTE: only show sidebar in AppDetails */}
-                {appDetailsPayload && (
+                {isSecurityScanV2Enabled && !isResourceScan && Sidebar && (
                     <Sidebar
-                        isHelmApp={!!appDetailsPayload?.installedAppId}
+                        isHelmApp={isHelmApp}
                         modalState={state}
                         setModalState={setState}
                         isExternalCI={isExternalCI}
@@ -180,7 +172,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     return (
         <VisibleModal2 className="dc__position-rel" close={handleModalClose}>
             <div
-                className={`${resourceScanPayload ? 'w-800' : 'w-1024'} h-100vh bcn-0 flexbox-col dc__right-0 dc__top-0 dc__position-abs`}
+                className={`${isResourceScan ? 'w-800' : 'w-1024'} h-100vh bcn-0 flexbox-col dc__right-0 dc__top-0 dc__position-abs`}
                 onClick={stopPropagation}
             >
                 {renderHeader()}

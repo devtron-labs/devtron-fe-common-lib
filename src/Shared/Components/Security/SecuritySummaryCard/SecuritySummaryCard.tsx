@@ -9,8 +9,10 @@ const SecuritySummaryCard = ({
     severityCount,
     scanToolId,
     rootClassName,
-    appDetailsPayload,
-    executionDetailsPayload,
+    isHelmApp = false,
+    SecurityModalSidebar,
+    responseData,
+    isSecurityScanV2Enabled,
 }: SecuritySummaryCardProps) => {
     const [showSecurityModal, setShowSecurityModal] = useState<boolean>(false)
     const { critical = 0, high = 0, medium = 0, low = 0, unknown = 0 } = severityCount
@@ -58,7 +60,12 @@ const SecuritySummaryCard = ({
             {showSecurityModal && (
                 <SecurityModal
                     handleModalClose={handleCloseSecurityModal}
-                    {...(appDetailsPayload ? { appDetailsPayload } : { executionDetailsPayload })}
+                    isHelmApp={isHelmApp}
+                    isSecurityScanV2Enabled={isSecurityScanV2Enabled}
+                    Sidebar={SecurityModalSidebar}
+                    isLoading={false} // Loading and error are handled on parent components
+                    error={null}
+                    responseData={responseData}
                 />
             )}
         </>

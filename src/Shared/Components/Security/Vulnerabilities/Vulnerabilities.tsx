@@ -23,6 +23,7 @@ import { VulnerabilitiesProps } from './types'
 import { SecuritySummaryCard } from '../SecuritySummaryCard'
 import { getSeverityCountFromSummary, getTotalSeverityCount } from '../utils'
 import { useGetSecurityVulnerabilities } from './utils'
+import { parseExecutionDetailResponse } from '../SecurityModal/utils'
 
 const Vulnerabilities = ({
     isScanned,
@@ -31,16 +32,19 @@ const Vulnerabilities = ({
     applicationId,
     environmentId,
     setVulnerabilityCount,
-    isScanV2Enabled,
+    SecurityModalSidebar,
+    getSecurityScan,
 }: VulnerabilitiesProps) => {
+    const isScanV2Enabled = window._env_.ENABLE_RESOURCE_SCAN_V2
     const { scanDetailsLoading, scanResultResponse, executionDetailsResponse, scanDetailsError, reloadScanDetails } =
         useGetSecurityVulnerabilities({
-            appId: applicationId,
-            envId: environmentId,
-            artifactId,
+            appId: String(applicationId),
+            envId: String(environmentId),
+            artifactId: String(artifactId),
             isScanEnabled,
             isScanned,
             isScanV2Enabled,
+            getSecurityScan,
         })
 
     useEffect(() => {
@@ -124,9 +128,14 @@ const Vulnerabilities = ({
             <SecuritySummaryCard
                 severityCount={severityCount}
                 scanToolId={executionDetailsResponse?.result.scanToolId ?? SCAN_TOOL_ID_TRIVY}
-                {...(isScanV2Enabled
-                    ? { appDetailsPayload: { appId: applicationId, envId: environmentId, artifactId } }
-                    : { executionDetailsPayload: { appId: applicationId, envId: environmentId, artifactId } })}
+                responseData={
+                    isScanV2Enabled
+                        ? scanResultResponse?.result
+                        : parseExecutionDetailResponse(executionDetailsResponse?.result)
+                }
+                isHelmApp={false} // Image card is not visible for helm app
+                isSecurityScanV2Enabled={isScanV2Enabled}
+                SecurityModalSidebar={SecurityModalSidebar}
             />
         </div>
     )

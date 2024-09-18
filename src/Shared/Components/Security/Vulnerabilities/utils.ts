@@ -20,8 +20,7 @@ import { DATE_TIME_FORMAT_STRING } from '../../../constants'
 import { SortingOrder, useAsync, VULNERABILITIES_SORT_PRIORITY, ZERO_TIME_STRING } from '../../../../Common'
 import { LastExecutionResponseType, LastExecutionResultType } from '../../../types'
 import { getLastExecutionByArtifactAppEnv } from './service'
-import { getSecurityScan } from '../SecurityModal'
-import { UseGetSecurityVulnerabilitiesReturnType } from './types'
+import { UseGetSecurityVulnerabilitiesProps, UseGetSecurityVulnerabilitiesReturnType } from './types'
 
 export const getSortedVulnerabilities = (vulnerabilities) =>
     vulnerabilities.sort((a, b) =>
@@ -72,7 +71,8 @@ export const useGetSecurityVulnerabilities = ({
     isScanned,
     isScanEnabled,
     isScanV2Enabled,
-}): UseGetSecurityVulnerabilitiesReturnType => {
+    getSecurityScan,
+}: UseGetSecurityVulnerabilitiesProps): UseGetSecurityVulnerabilitiesReturnType => {
     const [executionDetailsLoading, executionDetailsResponse, executionDetailsError, reloadExecutionDetails] = useAsync(
         () => getLastExecutionByArtifactAppEnv(artifactId, appId, envId),
         [],
@@ -85,7 +85,7 @@ export const useGetSecurityVulnerabilities = ({
     const [scanResultLoading, scanResultResponse, scanResultError, reloadScanResult] = useAsync(
         () => getSecurityScan({ artifactId, appId, envId }),
         [],
-        isScanned && isScanEnabled && isScanV2Enabled,
+        isScanned && isScanEnabled && isScanV2Enabled && !!getSecurityScan,
         {
             resetOnChange: false,
         },
