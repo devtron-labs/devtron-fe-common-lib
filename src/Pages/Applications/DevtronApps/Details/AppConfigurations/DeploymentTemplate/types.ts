@@ -293,29 +293,39 @@ export interface SelectedChartDetailsType {
     selectedChart: DeploymentChartVersionType
 }
 
-export interface DeploymentTemplateConfigState extends SelectedChartDetailsType {
-    originalTemplate: Record<string, string>
+interface EnvironmentConfigType {
+    id: number
+    status: number
+    manualReviewed: boolean
+    active: boolean
+    namespace: string
+}
+
+interface BaseDeploymentTemplateConfigState {
     chartConfig: DeploymentTemplateChartConfigType
+    isOverridden?: never
+    environmentConfig?: never
+}
+
+interface EnvironmentOverrideDeploymentTemplateConfigState {
+    chartConfig?: never
+    isOverridden: boolean
+    environmentConfig: EnvironmentConfigType
+}
+
+interface DeploymentTemplateConfigCommonState extends SelectedChartDetailsType {
+    originalTemplate: Record<string, string>
     isAppMetricsEnabled: boolean
-    // TODO: Maybe can remove this
     readme: string
     schema: Record<string, string>
-    // FIXME: need this in case of protected draft as well since they can be different
     guiSchema: string
-    /**
-     * API response from getDraftByResourceName
-     * FIXME: Can we move it as separate type
-     */
     latestDraft?: any
-    /**
-     * Stringified JSON of the deployment template
-     */
     editorTemplate: string
-    /**
-     * Stringified JSON of the deployment template with locked keys removed
-     */
     editorTemplateWithoutLockedKeys: string
 }
+
+export type DeploymentTemplateConfigState = DeploymentTemplateConfigCommonState &
+    (BaseDeploymentTemplateConfigState | EnvironmentOverrideDeploymentTemplateConfigState)
 
 export interface NewDeploymentTemplateContextType
     extends Pick<DeploymentTemplateQueryParamsType, 'editMode' | 'selectedTab' | 'showReadMe'> {
