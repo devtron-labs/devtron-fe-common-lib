@@ -50,7 +50,7 @@ const Tab = ({
                     {showIndicator && <span className="tab-group__tab__indicator bcr-5 mt-4 dc__align-self-start" />}
                 </p>
                 {description && (
-                    <p className="m-0 fs-12 lh-16 fw-4 cn-7 flex dc__gap-4">
+                    <p className="m-0 fs-12 lh-16 fw-4 cn-7 flexbox dc__align-items-center dc__gap-4">
                         {Array.isArray(description)
                             ? description.map((desc, idx) => (
                                   <Fragment key={desc}>
@@ -85,6 +85,15 @@ const Tab = ({
                         {content}
                     </NavLink>
                 )
+            case 'block':
+                return (
+                    <div
+                        className={`flexbox-col fw-6 ${tabClassName} ${disabled ? 'cursor-not-allowed' : ''}`}
+                        {...props}
+                    >
+                        {content}
+                    </div>
+                )
             default:
                 return (
                     <button
@@ -101,7 +110,7 @@ const Tab = ({
 
     return (
         <li
-            className={`tab-group__tab cursor lh-20 ${active ? 'tab-group__tab--active cb-5 fw-6' : 'cn-9 fw-4'} ${alignActiveBorderWithContainer ? 'tab-group__tab--align-active-border' : ''}`}
+            className={`tab-group__tab lh-20 ${active ? 'tab-group__tab--active cb-5 fw-6' : 'cn-9 fw-4'} ${alignActiveBorderWithContainer ? 'tab-group__tab--align-active-border' : ''} ${tabType === 'block' ? 'tab-group__tab--block' : 'cursor'}`}
         >
             {getTabComponent()}
         </li>

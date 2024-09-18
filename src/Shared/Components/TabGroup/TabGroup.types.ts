@@ -8,7 +8,7 @@ type TabComponentProps<TabTypeProps> = TabTypeProps & DataAttributes
 type ConditionalTabType =
     | {
           /**
-           *  Type of the tab, either `button`, `link` or `navLink`.
+           * Type of the tab, either `button`, `link`, `navLink` or `block`.
            */
           tabType: 'button'
           /**
@@ -22,7 +22,7 @@ type ConditionalTabType =
       }
     | {
           /**
-           *  Type of the tab, either `button`, `link` or `navLink`.
+           * Type of the tab, either `button`, `link`, `navLink` or `block`.
            */
           tabType: 'navLink'
           /**
@@ -32,11 +32,11 @@ type ConditionalTabType =
           /**
            * Active state is determined by matching the URL.
            */
-          active?: false
+          active?: never | false
       }
     | {
           /**
-           *  Type of the tab, either `button`, `link` or `navLink`.
+           * Type of the tab, either `button`, `link`, `navLink` or `block`.
            */
           tabType: 'link'
           /**
@@ -47,6 +47,21 @@ type ConditionalTabType =
            * Indicates if the tab is currently active.
            */
           active?: boolean
+      }
+    | {
+          /**
+           * Type of the tab, either `button`, `link`, `navLink` or `block`.
+           * @note When `tabType` is set to `block`, the tab becomes non-interactive. It won't be active and will not have hover states.
+           */
+          tabType: 'block'
+          /**
+           * Props passed to div component.
+           */
+          props?: TabComponentProps<Omit<React.ComponentProps<'div'>, 'className' | 'style'>>
+          /**
+           * Indicates if the tab is currently active.
+           */
+          active?: never | false
       }
 
 export type TabProps = {

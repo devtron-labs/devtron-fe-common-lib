@@ -21,7 +21,7 @@
             bottom: -1px;
         }
 
-        &:hover {
+        &:hover:not(.tab-group__tab--block) {
             color: var(--B500);
 
             #{$parent-selector}__icon {
