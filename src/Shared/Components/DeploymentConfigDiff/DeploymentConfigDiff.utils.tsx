@@ -367,16 +367,46 @@ const getDiffHeading = <DeploymentTemplate extends boolean>(
     )
 }
 
+const getConfigMapSecretResolvedValues = (configMapSecretData: ConfigMapSecretDataDTO, convertVariables: boolean) => {
+    const resolvedData: ConfigMapSecretDataConfigDatumDTO[] =
+        ((convertVariables && JSON.parse(configMapSecretData?.resolvedValue || null)) || configMapSecretData?.data)
+            ?.configData || []
+
+    const data =
+        (convertVariables &&
+            resolvedData.map((item, index) => {
+                if (configMapSecretData.data.configData[index].draftMetadata) {
+                    const resolvedDraftData =
+                        configMapSecretData.data.configData[index].draftMetadata.draftResolvedValue ||
+                        configMapSecretData.data.configData[index].draftMetadata.data
+
+                    return {
+                        ...configMapSecretData.data.configData[index],
+                        draftMetadata: {
+                            ...configMapSecretData.data.configData[index].draftMetadata,
+                            data: resolvedDraftData,
+                        },
+                    }
+                }
+
+                return item
+            })) ||
+        resolvedData
+
+    return data
+}
+
 const getConfigMapSecretData = (
     compareToList: ConfigMapSecretDataDTO,
     compareWithList: ConfigMapSecretDataDTO,
     resourceType: ConfigResourceType,
     compareToIsAdmin: boolean,
     compareWithIsAdmin: boolean,
+    convertVariables: boolean,
 ) => {
     const combinedList = mergeConfigDataArraysByName(
-        compareToList?.data.configData || [],
-        compareWithList?.data.configData || [],
+        getConfigMapSecretResolvedValues(compareToList, convertVariables),
+        getConfigMapSecretResolvedValues(compareWithList, convertVariables),
     )
 
     const deploymentConfig = combinedList.map(([currentItem, compareItem]) => {
@@ -407,6 +437,21 @@ const getConfigMapSecretData = (
     return deploymentConfig
 }
 
+const getConfigDataWithResolvedDeploymentTemplate = (
+    data: AppEnvDeploymentConfigListParams<false>['currentList'],
+    resolvedData: AppEnvDeploymentConfigListParams<false>['currentDeploymentTemplateResolvedData'],
+) =>
+    data && resolvedData?.deploymentTemplate
+        ? {
+              ...data,
+              deploymentTemplate: {
+                  ...data.deploymentTemplate,
+                  deploymentDraftData: null,
+                  data: resolvedData.deploymentTemplate.resolvedValue,
+              },
+          }
+        : data
+
 /**
  * Generates a list of deployment configurations for application environments and identifies changes between the current and compare lists.
  *
@@ -425,14 +470,23 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
     getNavItemHref,
     isManifestView,
     sortOrder,
+    convertVariables = false,
+    currentDeploymentTemplateResolvedData,
+    compareDeploymentTemplateResolvedData,
 }: AppEnvDeploymentConfigListParams<ManifestView>): {
     configList: DeploymentConfigDiffProps['configList']
     navList: DeploymentConfigDiffProps['navList']
     collapsibleNavList: DeploymentConfigDiffProps['collapsibleNavList']
 } => {
     if (!isManifestView) {
-        const _currentList = currentList as AppEnvDeploymentConfigListParams<false>['currentList']
-        const _compareList = compareList as AppEnvDeploymentConfigListParams<false>['compareList']
+        const _currentList = getConfigDataWithResolvedDeploymentTemplate(
+            currentList as AppEnvDeploymentConfigListParams<false>['currentList'],
+            currentDeploymentTemplateResolvedData,
+        )
+        const _compareList = getConfigDataWithResolvedDeploymentTemplate(
+            compareList as AppEnvDeploymentConfigListParams<false>['compareList'],
+            compareDeploymentTemplateResolvedData,
+        )
         const currentDeploymentData = getDeploymentTemplateDiffViewData(_currentList.deploymentTemplate, sortOrder)
         const compareDeploymentData = getDeploymentTemplateDiffViewData(_compareList.deploymentTemplate, sortOrder)
 
@@ -457,6 +511,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
             ConfigResourceType.ConfigMap,
             _currentList.isAppAdmin,
             _compareList.isAppAdmin,
+            convertVariables,
         )
 
         const secretData = getConfigMapSecretData(
@@ -465,6 +520,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
             ConfigResourceType.Secret,
             _currentList.isAppAdmin,
             _compareList.isAppAdmin,
+            convertVariables,
         )
 
         const configList: DeploymentConfigDiffProps['configList'] = [deploymentTemplateData, ...cmData, ...secretData]

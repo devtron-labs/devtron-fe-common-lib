@@ -1,12 +1,17 @@
 import { Fragment, TransitionEvent, useEffect, useState } from 'react'
+import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { ReactComponent as ICSort } from '@Icons/ic-arrow-up-down.svg'
+import { ReactComponent as ICViewVariableToggle } from '@Icons/ic-view-variable-toggle.svg'
 import { Progressing } from '@Common/Progressing'
 import { CodeEditor } from '@Common/CodeEditor'
 import { MODES, SortingOrder } from '@Common/Constants'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
+import Toggle from '@Common/Toggle/Toggle'
+import { ComponentSizeType } from '@Shared/constants'
 
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { SelectPicker } from '../SelectPicker'
 import { DeploymentHistoryDiffView } from '../CICDHistory'
 import { DeploymentConfigDiffAccordion } from './DeploymentConfigDiffAccordion'
@@ -20,6 +25,7 @@ export const DeploymentConfigDiffMain = ({
     selectorsConfig,
     sortingConfig,
     scrollIntoViewId,
+    scopeVariablesConfig,
 }: DeploymentConfigDiffMainProps) => {
     // STATES
     const [expandedView, setExpandedView] = useState<Record<string | number, boolean>>({})
@@ -94,26 +100,55 @@ export const DeploymentConfigDiffMain = ({
             const { handleSorting, sortBy, sortOrder } = sortingConfig
 
             return (
-                <div className="dc__border-left p-12 h-100">
-                    <button
-                        type="button"
-                        className={`dc__unset-button-styles flexbox dc__align-items-center dc__gap-6 ${isLoading ? 'dc__disabled' : ''}`}
-                        onClick={handleSorting}
-                        disabled={isLoading}
-                    >
-                        {sortBy ? (
+                <Button
+                    dataTestId="config-diff-sort-button"
+                    text="Sort keys"
+                    variant={ButtonVariantType.borderLess}
+                    style={ButtonStyleType.neutral}
+                    size={ComponentSizeType.small}
+                    startIcon={
+                        sortBy ? (
                             <ICSortArrowDown
-                                className="fcn-7 rotate"
+                                className="rotate"
                                 style={{
                                     ['--rotateBy' as string]: sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
                                 }}
                             />
                         ) : (
-                            <ICSort className="icon-dim-12 mw-12 scn-7" />
-                        )}
-                        <span className="cn-7 fs-13 lh-20 fw-6">Sort keys</span>
-                    </button>
-                </div>
+                            <ICSort />
+                        )
+                    }
+                    onClick={handleSorting}
+                    disabled={isLoading}
+                />
+            )
+        }
+
+        return null
+    }
+
+    const renderScopeVariablesButton = () => {
+        if (scopeVariablesConfig) {
+            const { convertVariables } = scopeVariablesConfig
+
+            return (
+                <Tippy
+                    content={convertVariables ? 'Hide variables values' : 'Show variables values'}
+                    placement="bottom-start"
+                    animation="shift-away"
+                    className="default-tt"
+                    arrow={false}
+                >
+                    <div className="w-40 h-20">
+                        <Toggle
+                            selected={scopeVariablesConfig.convertVariables}
+                            color="var(--V500)"
+                            onSelect={scopeVariablesConfig.onConvertVariablesClick}
+                            Icon={ICViewVariableToggle}
+                            throttleOnChange
+                        />
+                    </div>
+                </Tippy>
             )
         }
 
@@ -142,7 +177,7 @@ export const DeploymentConfigDiffMain = ({
                                 <div className="px-12 py-6">{secondaryHeading}</div>
                             </div>
                             <CodeEditor
-                                key={sortingConfig?.sortOrder}
+                                key={`${sortingConfig?.sortOrder}-${scopeVariablesConfig?.convertVariables}`}
                                 diffView
                                 defaultValue={primaryList.codeEditorValue.value}
                                 value={secondaryList.codeEditorValue.value}
@@ -184,7 +219,12 @@ export const DeploymentConfigDiffMain = ({
                     <div className="flex-grow-1 flexbox dc__align-items-center dc__gap-8 p-12">
                         {renderHeaderSelectors(selectorsConfig.secondaryConfig)}
                     </div>
-                    {renderSortButton()}
+                    {(sortingConfig || scopeVariablesConfig) && (
+                        <div className="dc__border-left flex dc__gap-8 pr-12 pl-8 py-8">
+                            {renderSortButton()}
+                            {renderScopeVariablesButton()}
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="deployment-config-diff__main-content dc__overflow-y-auto">

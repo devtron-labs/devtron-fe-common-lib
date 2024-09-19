@@ -161,6 +161,7 @@ export interface DraftMetadataDTO {
     draftId: number
     draftVersionId: number
     draftState: number
+    draftResolvedValue: string
     approvers: string[]
     canApprove: boolean
     commentsCount: number
@@ -206,13 +207,19 @@ export enum ConfigResourceType {
 
 export interface DeploymentTemplateDTO {
     resourceType: ConfigResourceType.DeploymentTemplate
-    data: { [key: string]: any }
+    data: Record<string, any>
     deploymentDraftData: ConfigMapSecretDataType | null
+    variableSnapshot: {
+        'Deployment Template': Record<string, string>
+    }
+    resolvedValue: Record<string, any>
 }
 
 export interface ConfigMapSecretDataDTO {
     resourceType: Extract<ConfigResourceType, ConfigResourceType.ConfigMap | ConfigResourceType.Secret>
     data: ConfigMapSecretDataType
+    variableSnapshot: Record<string, Record<string, string>>
+    resolvedValue: string
 }
 
 export interface AppEnvDeploymentConfigDTO {
@@ -222,16 +229,30 @@ export interface AppEnvDeploymentConfigDTO {
     isAppAdmin: boolean
 }
 
-export interface AppEnvDeploymentConfigPayloadType {
-    appName: string
-    envName: string
-    configType: AppEnvDeploymentConfigType
-    identifierId?: number
-    pipelineId?: number
-    resourceType?: ConfigResourceType
-    resourceId?: number
-    resourceName?: string
-}
+export type AppEnvDeploymentConfigPayloadType =
+    | {
+          appName: string
+          envName: string
+          configType: AppEnvDeploymentConfigType
+          identifierId?: number
+          pipelineId?: number
+          resourceType?: ConfigResourceType
+          resourceId?: number
+          resourceName?: string
+          configArea?: 'AppConfiguration'
+      }
+    | {
+          appName: string
+          envName: string
+          configArea: 'ResolveData'
+      }
+    | {
+          appName: string
+          envName: string
+          pipelineId: number
+          configArea: 'CdRollback' | 'DeploymentHistory'
+          wfrId: number
+      }
 
 export enum TemplateListType {
     DefaultVersions = 1,

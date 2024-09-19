@@ -80,6 +80,10 @@ export interface DeploymentConfigDiffProps {
         activeTab: string
         onClick: (tab: string) => void
     }
+    scopeVariablesConfig?: {
+        convertVariables: boolean
+        onConvertVariablesClick: () => void
+    }
 }
 
 export interface DeploymentConfigDiffNavigationProps
@@ -98,6 +102,7 @@ export interface DeploymentConfigDiffMainProps
         | 'scrollIntoViewId'
         | 'selectorsConfig'
         | 'sortingConfig'
+        | 'scopeVariablesConfig'
     > {}
 
 export interface DeploymentConfigDiffAccordionProps extends Pick<CollapseProps, 'onTransitionEnd'> {
@@ -126,4 +131,7 @@ export type AppEnvDeploymentConfigListParams<IsManifestView> = (IsManifestView e
       }) & {
     getNavItemHref: (resourceType: EnvResourceType, resourceName: string) => string
     isManifestView?: IsManifestView
+    convertVariables?: boolean
+    currentDeploymentTemplateResolvedData?: AppEnvDeploymentConfigDTO
+    compareDeploymentTemplateResolvedData?: AppEnvDeploymentConfigDTO
 }
