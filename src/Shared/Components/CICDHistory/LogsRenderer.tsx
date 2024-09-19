@@ -15,7 +15,7 @@
  */
 
 import { useParams } from 'react-router-dom'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
 import DOMPurify from 'dompurify'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
@@ -188,7 +188,7 @@ export const LogsRenderer = ({
     const [logsList, setLogsList] = useState<string[]>([])
     const { searchKey, handleSearch } = useUrlFilters()
 
-    const areAllStagesExpanded = stageList.every((item) => item.isOpen)
+    const areAllStagesExpanded = useMemo(() => stageList.every((item) => item.isOpen), [stageList])
 
     const areStagesAvailable =
         (window._env_.FEATURE_STEP_WISE_LOGS_ENABLE && streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER)) || false
