@@ -31,6 +31,7 @@ import {
     SearchBar,
     useUrlFilters,
     stopPropagation,
+    Tooltip,
 } from '../../../Common'
 import LogStageAccordion from './LogStageAccordion'
 import {
@@ -441,18 +442,27 @@ export const LogsRenderer = ({
                                 initialSearchText={searchKey}
                                 size={ComponentSizeType.large}
                             />
-                            <button
-                                type="button"
-                                className="dc__unset-button-styles px-10 flex dc__bg-n0--opacity-0_2"
-                                onClick={handleToggleOpenAllStages}
-                                aria-label="Expand all stages"
+                            <Tooltip
+                                shortcutKeyCombo={{
+                                    text: areAllStagesExpanded ? 'Collapse all stages' : 'Expand all stages',
+                                    combo: ['Ctrl / ⌘', '⇧', 'F'],
+                                }}
+                                className="dc__mxw-500"
+                                placement="left"
                             >
-                                {areAllStagesExpanded ? (
-                                    <ICExpandAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
-                                ) : (
-                                    <ICCollapseAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
-                                )}
-                            </button>
+                                <button
+                                    type="button"
+                                    className="dc__unset-button-styles px-10 flex dc__bg-n0--opacity-0_2"
+                                    onClick={handleToggleOpenAllStages}
+                                    aria-label="Expand all stages"
+                                >
+                                    {areAllStagesExpanded ? (
+                                        <ICExpandAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
+                                    ) : (
+                                        <ICCollapseAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
+                                    )}
+                                </button>
+                            </Tooltip>
                         </div>
                     </div>
 

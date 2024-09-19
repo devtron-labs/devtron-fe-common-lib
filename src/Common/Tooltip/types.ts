@@ -12,6 +12,11 @@ type BaseTooltipProps =
            * @default false
            */
           alwaysShowTippyOnHover?: never
+          /**
+           * If true, use the common styling for shortcuts
+           * @default false
+           */
+          shortcutKeyCombo?: never
       }
     | {
           /**
@@ -21,9 +26,34 @@ type BaseTooltipProps =
           showOnTruncate?: never
           /**
            * If true, wrap with tippy irrespective of other options
-           * @default false
+           * @default true
            */
           alwaysShowTippyOnHover?: boolean
+          /**
+           * If true, use the common styling for shortcuts
+           * @default false
+           */
+          shortcutKeyCombo?: never
+      }
+    | {
+          /**
+           * If true, show tippy on truncate
+           * @default false
+           */
+          showOnTruncate?: never
+          /**
+           * If showOnTruncate is defined this prop doesn't work
+           * @default false
+           */
+          alwaysShowTippyOnHover?: never
+          /**
+           * If true, use the common styling for shortcuts
+           * @default true
+           */
+          shortcutKeyCombo?: {
+              text: string
+              combo: string[]
+          }
       }
 
 export type TooltipProps = BaseTooltipProps &

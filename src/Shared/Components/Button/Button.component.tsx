@@ -154,10 +154,14 @@ const Button = ({
             }
         }
 
-        return {
-            alwaysShowTippyOnHover: showTooltip && !!tooltipProps?.content,
-            ...tooltipProps,
+        if (!tooltipProps.shortcutKeyCombo) {
+            return {
+                alwaysShowTippyOnHover: showTooltip && !!tooltipProps?.content,
+                ...(tooltipProps as Omit<TooltipProps, 'shortcutKeyCombo' | 'showOnTruncate'>),
+            }
         }
+
+        return tooltipProps
     }
 
     return (
