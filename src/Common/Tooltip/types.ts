@@ -1,5 +1,15 @@
 import { TippyProps } from '@tippyjs/react'
 
+const isMacOS = navigator.userAgent.toUpperCase().includes('MAC')
+
+export const KEYBOARD_KEYS_MAP = {
+    Control: isMacOS ? '⌘' : 'Ctrl',
+    Shift: '⇧',
+    F: 'F',
+} as const
+
+export type SupportedKeyboardKeysType = keyof typeof KEYBOARD_KEYS_MAP
+
 type BaseTooltipProps =
     | {
           /**
@@ -52,7 +62,7 @@ type BaseTooltipProps =
            */
           shortcutKeyCombo?: {
               text: string
-              combo: string[]
+              combo: SupportedKeyboardKeysType[]
           }
       }
 

@@ -1,4 +1,4 @@
-import { TooltipProps } from './types'
+import { KEYBOARD_KEYS_MAP, TooltipProps } from './types'
 
 const ShortcutKeyComboTooltipContent = ({ text, combo }: TooltipProps['shortcutKeyCombo']) => (
     <div className="flexbox dc__gap-8 px-8 py-4 flex-wrap">
@@ -6,7 +6,7 @@ const ShortcutKeyComboTooltipContent = ({ text, combo }: TooltipProps['shortcutK
         <div className="flexbox dc__gap-4 dc__align-items-center flex-wrap">
             {combo.map((key) => (
                 <span key={key} className="shortcut-keys__chip dc__capitalize lh-16 fs-11 fw-5 flex">
-                    {key}
+                    {KEYBOARD_KEYS_MAP[key]}
                 </span>
             ))}
         </div>

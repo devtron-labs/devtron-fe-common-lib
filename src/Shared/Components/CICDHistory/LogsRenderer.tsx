@@ -445,7 +445,7 @@ export const LogsRenderer = ({
                             <Tooltip
                                 shortcutKeyCombo={{
                                     text: areAllStagesExpanded ? 'Collapse all stages' : 'Expand all stages',
-                                    combo: ['Ctrl / ⌘', '⇧', 'F'],
+                                    combo: ['Control', 'Shift', 'F'] as const,
                                 }}
                                 className="dc__mxw-500"
                                 placement="left"
