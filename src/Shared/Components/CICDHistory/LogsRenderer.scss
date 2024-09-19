@@ -23,7 +23,7 @@
                     path:nth-child(1) {
                         fill: none !important;
                     }
-                
+
                     path:nth-child(2) {
                         fill: var(--N400);
                     }
@@ -56,6 +56,10 @@
 
         &__filters-border-bottom {
             border-bottom: 1px solid #2c3354;
+
+            & > :not(:first-child) {
+                border-left: 1px solid #2C3354;
+            }
         }
     }
 }

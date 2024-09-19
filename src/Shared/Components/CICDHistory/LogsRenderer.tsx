@@ -20,6 +20,8 @@ import AnsiUp from 'ansi_up'
 import DOMPurify from 'dompurify'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
 import { escapeRegExp } from '@Shared/Helpers'
+import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
+import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
 import {
     Progressing,
     Host,
@@ -182,9 +184,15 @@ export const LogsRenderer = ({
         triggerDetails.podStatus && triggerDetails.podStatus !== POD_STATUS.PENDING && logsURL,
     )
     const [stageList, setStageList] = useState<StageDetailType[]>([])
+    const [openAllStages, setOpenAllStages] = useState(false)
     // State for logs list in case no stages are available
     const [logsList, setLogsList] = useState<string[]>([])
     const { searchKey, handleSearch } = useUrlFilters()
+
+    const handleSetStageList = (list: StageDetailType[]) => {
+        setOpenAllStages(list.every((item) => item.isOpen))
+        setStageList(list)
+    }
 
     const areStagesAvailable =
         (window._env_.FEATURE_STEP_WISE_LOGS_ENABLE && streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER)) || false
@@ -374,7 +382,7 @@ export const LogsRenderer = ({
         }
 
         const newStageList = getStageListFromStreamData()
-        setStageList(newStageList)
+        handleSetStageList(newStageList)
         // NOTE: Not adding searchKey as dependency since on mount we would already have searchKey
         // And for other cases we would use handleSearchEnter
     }, [streamDataList, areEventsProgressing])
@@ -382,19 +390,28 @@ export const LogsRenderer = ({
     const handleSearchEnter = (searchText: string) => {
         handleSearch(searchText)
         const newStageList = getStageListFromStreamData(searchText)
-        setStageList(newStageList)
+        handleSetStageList(newStageList)
     }
 
     const handleStageClose = (index: number) => {
         const newLogs = structuredClone(stageList)
         newLogs[index].isOpen = false
-        setStageList(newLogs)
+        handleSetStageList(newLogs)
     }
 
     const handleStageOpen = (index: number) => {
         const newLogs = structuredClone(stageList)
         newLogs[index].isOpen = true
-        setStageList(newLogs)
+        handleSetStageList(newLogs)
+    }
+
+    const handleToggleOpenAllStages = () => {
+        handleSetStageList(
+            stageList.map((stage) => ({
+                ...stage,
+                isOpen: !openAllStages,
+            })),
+        )
     }
 
     const renderLogs = () => {
@@ -428,6 +445,18 @@ export const LogsRenderer = ({
                                 initialSearchText={searchKey}
                                 size={ComponentSizeType.large}
                             />
+                            <button
+                                type="button"
+                                className="dc__unset-button-styles px-10 flex dc__bg-n0--opacity-0_2"
+                                onClick={handleToggleOpenAllStages}
+                                aria-label="Expand all stages"
+                            >
+                                {openAllStages ? (
+                                    <ICExpandAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
+                                ) : (
+                                    <ICCollapseAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
+                                )}
+                            </button>
                         </div>
                     </div>
 
