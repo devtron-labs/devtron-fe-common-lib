@@ -17,7 +17,7 @@
 import Tippy from '@tippyjs/react'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { ClipboardButton, GenericEmptyState, extractImage, useKeyDown, useSuperAdmin } from '../../../Common'
+import { ClipboardButton, GenericEmptyState, Tooltip, extractImage, useKeyDown, useSuperAdmin } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { GitChangesType, LogResizeButtonType, ScrollerType } from './types'
@@ -28,7 +28,7 @@ import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscre
 import './cicdHistory.scss'
 
 export const LogResizeButton = ({
-    shortcutCombo = 'f',
+    shortcutCombo = ['F'],
     onlyOnLogs = true,
     disableKeybindings = false,
     fullScreenView,
@@ -57,22 +57,31 @@ export const LogResizeButton = ({
         }
     }, [keys])
 
+    const renderFullscreenTooltipContent = () => (
+        <div className="flexbox dc__gap-8 px-8 py-4">
+            <span className="lh-18 fs-12 fw-4 cn-0">{fullScreenView ? 'Exit fullscreen' : 'Enter fullscreen'}</span>
+            <div className="flexbox dc__gap-4">
+                {shortcutCombo.map((key) => (
+                    <span key={key} className="shortcut-keys__chip dc__capitalize lh-16 fs-11 fw-5 flex">
+                        {key}
+                    </span>
+                ))}
+            </div>
+        </div>
+    )
+
     return (
         (pathname.includes('/logs') || !onlyOnLogs) && (
-            <Tippy
-                placement="top"
-                arrow={false}
-                className="default-tt"
-                content={fullScreenView ? `Exit fullscreen (${shortcutCombo})` : `Enter fullscreen (${shortcutCombo})`}
+            <Tooltip
+                placement="left"
+                className="shortcut-keys__tippy"
+                content={renderFullscreenTooltipContent()}
+                alwaysShowTippyOnHover
             >
-                <div>
-                    {fullScreenView ? (
-                        <ZoomOut className="zoom zoom--out pointer dc__zi-4" onClick={toggleFullScreen} />
-                    ) : (
-                        <ZoomIn className="zoom zoom--in pointer dc__zi-4" onClick={toggleFullScreen} />
-                    )}
+                <div className={`zoom ${fullScreenView ? 'zoom--out' : 'zoom--in'} pointer dc__zi-4 flex`}>
+                    {fullScreenView ? <ZoomOut onClick={toggleFullScreen} /> : <ZoomIn onClick={toggleFullScreen} />}
                 </div>
-            </Tippy>
+            </Tooltip>
         )
     )
 }

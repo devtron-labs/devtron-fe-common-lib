@@ -46,7 +46,7 @@ export enum FetchIdDataStatus {
 }
 
 export interface LogResizeButtonType {
-    shortcutCombo?: string
+    shortcutCombo?: string[]
     onlyOnLogs?: boolean
     disableKeybindings?: boolean
     fullScreenView: boolean
