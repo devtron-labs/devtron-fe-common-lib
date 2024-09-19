@@ -457,9 +457,9 @@ export const LogsRenderer = ({
                                     aria-label="Expand all stages"
                                 >
                                     {areAllStagesExpanded ? (
-                                        <ICExpandAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
-                                    ) : (
                                         <ICCollapseAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
+                                    ) : (
+                                        <ICExpandAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
                                     )}
                                 </button>
                             </Tooltip>
