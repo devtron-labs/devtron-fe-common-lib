@@ -15,7 +15,7 @@
  */
 
 import Tippy from '@tippyjs/react'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { withShortcut, IWithShortcut } from 'react-keybind'
 import {
@@ -44,12 +44,11 @@ export const LogResizeButton = withShortcut(
         shortcut,
     }: LogResizeButtonType & IWithShortcut): JSX.Element => {
         const { pathname } = useLocation()
-        const zoomButtonRef = useRef<HTMLButtonElement>(null)
 
-        const toggleFullScreen = () => {
+        const toggleFullScreen = useCallback((): void => {
             // NOTE: need to use ref due to the problem of stale function reference after registering the callback
-            setFullScreenView(!(zoomButtonRef.current.dataset.isFullscreenView === 'true'))
-        }
+            setFullScreenView(!fullScreenView)
+        }, [fullScreenView])
 
         const showButton = pathname.includes('/logs') || !onlyOnLogs
         const doesShortcutContainCmdKey = shortcutCombo.some((key) => key === 'Control') && IS_PLATFORM_MAC_OS
@@ -72,7 +71,7 @@ export const LogResizeButton = withShortcut(
             return () => {
                 shortcut.unregisterShortcut([combo])
             }
-        }, [showButton])
+        }, [showButton, toggleFullScreen])
 
         return (
             showButton && (
@@ -85,13 +84,15 @@ export const LogResizeButton = withShortcut(
                 >
                     <button
                         type="button"
-                        aria-label="Enter/Exit fullscreen"
-                        ref={zoomButtonRef}
-                        data-is-fullscreen-view={fullScreenView}
-                        className={`zoom ${fullScreenView ? 'zoom--out' : 'zoom--in'} pointer dc__zi-4 flex dc__transparent`}
+                        aria-label="Enter/Exit fullscreen view"
+                        className="zoom dc__zi-4 flex dc__transparent log-resize-button"
                         onClick={toggleFullScreen}
                     >
-                        {fullScreenView ? <ZoomOut className="icon-dim-16" /> : <ZoomIn className="icon-dim-16" />}
+                        {fullScreenView ? (
+                            <ZoomOut className="icon-dim-16 dc__no-shrink" />
+                        ) : (
+                            <ZoomIn className="icon-dim-16 dc__no-shrink" />
+                        )}
                     </button>
                 </Tooltip>
             )
