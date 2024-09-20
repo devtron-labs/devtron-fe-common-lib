@@ -105,7 +105,7 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
         e.preventDefault()
 
         // Enables validation for all form fields if not enabled after form submission.
-        if (Object.keys(enableValidationOnChange) !== Object.keys(data)) {
+        if (Object.keys(enableValidationOnChange).length !== Object.keys(data).length) {
             setEnableValidationOnChange(Object.keys(data).reduce((acc, key) => ({ ...acc, [key]: true }), {}))
         }
 
