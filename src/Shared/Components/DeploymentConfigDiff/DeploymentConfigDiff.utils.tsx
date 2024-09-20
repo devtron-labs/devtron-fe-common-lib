@@ -5,7 +5,12 @@ import { stringComparatorBySortOrder, yamlComparatorBySortOrder } from '@Shared/
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '@Shared/constants'
 import { YAMLStringify } from '@Common/Helper'
 import { SortingOrder } from '@Common/Constants'
-import { DeploymentConfigDiffProps, DiffHeadingDataType, prepareHistoryData } from '@Shared/Components'
+import {
+    DeploymentConfigDiffProps,
+    DeploymentHistorySingleValue,
+    DiffHeadingDataType,
+    prepareHistoryData,
+} from '@Shared/Components'
 
 import {
     AppEnvDeploymentConfigDTO,
@@ -70,6 +75,20 @@ export const mergeConfigDataArraysByName = (
     })
 
     return Array.from(dataMap.values())
+}
+
+/**
+ * Checks if the given secret is an external Kubernetes secret.
+ *
+ * @param secret - The secret data object to check.
+ * @returns `true` if the secret is an external Kubernetes secret else `false` \
+ * or `null` if the secret is invalid.
+ */
+const isExternalKubernetesSecret = (secret: ConfigMapSecretDataConfigDatumDTO) => {
+    if (!secret) {
+        return null
+    }
+    return secret.subPath && secret.external && secret.externalType === 'KubernetesSecret'
 }
 
 /**
@@ -174,8 +193,8 @@ const getCodeEditorData = (
     const compareToConfigData = getConfigData(compareToValue, type)
     const compareWithConfigData = getConfigData(compareWithValue, type)
 
-    let compareToCodeEditorData
-    let compareWithCodeEditorData
+    let compareToCodeEditorData: DeploymentHistorySingleValue
+    let compareWithCodeEditorData: DeploymentHistorySingleValue
 
     if (type === ConfigResourceType.Secret) {
         const { compareToObfuscatedData, compareWithObfuscatedData } = getObfuscatedData(
@@ -187,12 +206,26 @@ const getCodeEditorData = (
 
         compareToCodeEditorData = {
             displayName: 'data',
-            value: JSON.stringify(compareToObfuscatedData) || '',
+            ...(isExternalKubernetesSecret(compareToValue)
+                ? {
+                      value: null,
+                      resolvedValue: JSON.stringify(compareToObfuscatedData) || '',
+                  }
+                : {
+                      value: JSON.stringify(compareToObfuscatedData) || '',
+                  }),
         }
 
         compareWithCodeEditorData = {
             displayName: 'data',
-            value: JSON.stringify(compareWithObfuscatedData) || '',
+            ...(isExternalKubernetesSecret(compareWithValue)
+                ? {
+                      value: null,
+                      resolvedValue: JSON.stringify(compareWithObfuscatedData) || '',
+                  }
+                : {
+                      value: JSON.stringify(compareWithObfuscatedData) || '',
+                  }),
         }
     } else {
         compareToCodeEditorData = {
