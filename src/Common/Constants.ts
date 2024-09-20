@@ -548,3 +548,5 @@ export const VULNERABILITIES_SORT_PRIORITY = {
     low: 4,
     unknown: 5,
 }
+
+export const IS_PLATFORM_MAC_OS = window.navigator.userAgent.toUpperCase().includes('MAC')

@@ -27,6 +27,7 @@ import {
     PaginationProps,
     useScrollable,
     SortingOrder,
+    SupportedKeyboardKeysType,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
 import { AggregationKeys, GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
@@ -46,9 +47,8 @@ export enum FetchIdDataStatus {
 }
 
 export interface LogResizeButtonType {
-    shortcutCombo?: string[]
+    shortcutCombo?: SupportedKeyboardKeysType[]
     onlyOnLogs?: boolean
-    disableKeybindings?: boolean
     fullScreenView: boolean
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
 }
