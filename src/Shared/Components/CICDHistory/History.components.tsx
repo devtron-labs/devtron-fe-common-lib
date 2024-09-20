@@ -85,7 +85,7 @@ export const LogResizeButton = withShortcut(
                     <button
                         type="button"
                         aria-label="Enter/Exit fullscreen view"
-                        className="zoom dc__zi-4 flex dc__transparent log-resize-button"
+                        className="zoom dc__zi-4 flex dc__no-border log-resize-button"
                         onClick={toggleFullScreen}
                     >
                         {fullScreenView ? (
