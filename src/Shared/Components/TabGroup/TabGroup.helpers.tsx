@@ -8,13 +8,18 @@ export const getTabIcon = ({
     showError,
     showWarning,
     className,
-}: Pick<TabProps, 'showError' | 'showWarning' | 'icon'> & { className: string }) => (
-    <>
-        {showError && <ICErrorExclamation className={`${className}`} />}
-        {!showError && showWarning && <ICWarning className={`${className} warning-icon-y7`} />}
-        {!showError && !showWarning && Icon && <Icon className={`${className} tab-group__tab__icon`} />}
-    </>
-)
+}: Pick<TabProps, 'showError' | 'showWarning' | 'icon'> & { className: string }) => {
+    if (showError) {
+        return <ICErrorExclamation className={className} />
+    }
+    if (showWarning) {
+        return <ICWarning className={`${className} warning-icon-y7`} />
+    }
+    if (Icon) {
+        return <Icon className={`${className} tab-group__tab__icon`} />
+    }
+    return null
+}
 
 export const getTabBadge = (badge: TabProps['badge'], className: string) =>
     badge !== null && <div className={`tab-group__tab__badge bcn-1 cn-7 fw-6 flex px-4 ${className}`}>{badge}</div>
