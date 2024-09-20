@@ -48,7 +48,7 @@ export enum FetchIdDataStatus {
 
 export interface LogResizeButtonType {
     shortcutCombo?: SupportedKeyboardKeysType[]
-    onlyOnLogs?: boolean
+    showOnlyWhenPathIncludesLogs?: boolean
     fullScreenView: boolean
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
 }

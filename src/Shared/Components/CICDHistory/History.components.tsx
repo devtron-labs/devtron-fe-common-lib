@@ -38,7 +38,7 @@ import './cicdHistory.scss'
 export const LogResizeButton = withShortcut(
     ({
         shortcutCombo = ['F'],
-        onlyOnLogs = true,
+        showOnlyWhenPathIncludesLogs = true,
         fullScreenView,
         setFullScreenView,
         shortcut,
@@ -50,7 +50,7 @@ export const LogResizeButton = withShortcut(
             setFullScreenView(!fullScreenView)
         }, [fullScreenView])
 
-        const showButton = pathname.includes('/logs') || !onlyOnLogs
+        const showButton = !showOnlyWhenPathIncludesLogs || pathname.includes('/logs')
         const doesShortcutContainCmdKey = shortcutCombo.some((key) => key === 'Control') && IS_PLATFORM_MAC_OS
 
         useEffect(() => {
