@@ -51,7 +51,7 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
                 [key]: value,
             })
             const initialValues: Partial<T> = options?.initialValues ?? {}
-            setDirtyFields({ ...dirtyFields, [key]: initialValues[key] === data[key] })
+            setDirtyFields({ ...dirtyFields, [key]: initialValues[key] !== value })
 
             const validationMode = options?.validationMode ?? 'onChange'
             if (validationMode === 'onChange' || enableValidationOnChange[key] || errors[key]) {
@@ -90,7 +90,7 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
      */
     const onFocus = (key: keyof T) => () => {
         setTouchedFields({
-            ...data,
+            ...touchedFields,
             [key]: true,
         })
     }
