@@ -22,6 +22,7 @@ import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
 import { escapeRegExp } from '@Shared/Helpers'
 import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
 import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
+import { withShortcut, IWithShortcut } from 'react-keybind'
 import {
     Progressing,
     Host,
@@ -30,7 +31,6 @@ import {
     ROUTES,
     SearchBar,
     useUrlFilters,
-    stopPropagation,
     Tooltip,
 } from '../../../Common'
 import LogStageAccordion from './LogStageAccordion'
@@ -170,12 +170,13 @@ const useCIEventSource = (url: string, maxLength?: number): [string[], EventSour
     return [dataVal, eventSourceRef.current, logsNotAvailableError]
 }
 
-export const LogsRenderer = ({
+const LogsRenderer = ({
     triggerDetails,
     isBlobStorageConfigured,
     parentType,
     fullScreenView,
-}: LogsRendererType): JSX.Element => {
+    shortcut,
+}: LogsRendererType & IWithShortcut) => {
     const { pipelineId, envId, appId } = useParams<DeploymentHistoryBaseParamsType>()
     const logsURL =
         parentType === HistoryComponentType.CI
@@ -188,6 +189,7 @@ export const LogsRenderer = ({
     // State for logs list in case no stages are available
     const [logsList, setLogsList] = useState<string[]>([])
     const { searchKey, handleSearch } = useUrlFilters()
+    const accordionExpansionStateTogglerButtonRef = useRef<HTMLButtonElement>(null)
 
     const areAllStagesExpanded = useMemo(() => stageList.every((item) => item.isOpen), [stageList])
 
@@ -384,6 +386,29 @@ export const LogsRenderer = ({
         // And for other cases we would use handleSearchEnter
     }, [streamDataList, areEventsProgressing])
 
+    const handleToggleOpenAllStages = () => {
+        setStageList((prev) =>
+            prev.map((stage) => ({
+                ...stage,
+                // NOTE: need to use ref due to the problem of stale function reference after registering the callback
+                isOpen: !(accordionExpansionStateTogglerButtonRef.current.dataset.toggleState === 'true'),
+            })),
+        )
+    }
+
+    useEffect(() => {
+        shortcut.registerShortcut(
+            handleToggleOpenAllStages,
+            ['e'],
+            'ExpandCollapseLogStages',
+            'Expand/Collapse all log stages',
+        )
+
+        return () => {
+            shortcut.unregisterShortcut(['e'])
+        }
+    }, [])
+
     const handleSearchEnter = (searchText: string) => {
         handleSearch(searchText)
         const newStageList = getStageListFromStreamData(searchText)
@@ -402,15 +427,6 @@ export const LogsRenderer = ({
         setStageList(newLogs)
     }
 
-    const handleToggleOpenAllStages = () => {
-        setStageList(
-            stageList.map((stage) => ({
-                ...stage,
-                isOpen: !areAllStagesExpanded,
-            })),
-        )
-    }
-
     const renderLogs = () => {
         if (areStagesAvailable) {
             return (
@@ -427,11 +443,7 @@ export const LogsRenderer = ({
                             backgroundColor: '#0C1021',
                         }}
                     >
-                        <div
-                            className="flexbox logs-renderer__search-bar logs-renderer__filters-border-bottom pl-12"
-                            // Doing this since we have binded 'f' with full screen and SearchVar has not exposed event on search, so on pressing f it goes to full screen
-                            onKeyDown={stopPropagation}
-                        >
+                        <div className="flexbox logs-renderer__search-bar logs-renderer__filters-border-bottom pl-12">
                             <SearchBar
                                 noBackgroundAndBorder
                                 containerClassName="w-100"
@@ -445,16 +457,18 @@ export const LogsRenderer = ({
                             <Tooltip
                                 shortcutKeyCombo={{
                                     text: areAllStagesExpanded ? 'Collapse all stages' : 'Expand all stages',
-                                    combo: ['Control', 'Shift', 'F'] as const,
+                                    combo: ['E'] as const,
                                 }}
                                 className="dc__mxw-500"
                                 placement="left"
                             >
                                 <button
                                     type="button"
-                                    className="dc__unset-button-styles px-10 flex dc__bg-n0--opacity-0_2"
+                                    className="dc__unset-button-styles px-10 flex dc__bg-n0--opacity-0_2 pointer"
                                     onClick={handleToggleOpenAllStages}
                                     aria-label="Expand all stages"
+                                    data-toggle-state={areAllStagesExpanded}
+                                    ref={accordionExpansionStateTogglerButtonRef}
                                 >
                                     {areAllStagesExpanded ? (
                                         <ICCollapseAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
@@ -522,4 +536,4 @@ export const LogsRenderer = ({
         : renderLogs()
 }
 
-export default LogsRenderer
+export default withShortcut(LogsRenderer)

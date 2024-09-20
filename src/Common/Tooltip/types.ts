@@ -6,6 +6,7 @@ export const KEYBOARD_KEYS_MAP = {
     Control: isMacOS ? '⌘' : 'Ctrl',
     Shift: '⇧',
     F: 'F',
+    E: 'E',
 } as const
 
 export type SupportedKeyboardKeysType = keyof typeof KEYBOARD_KEYS_MAP
