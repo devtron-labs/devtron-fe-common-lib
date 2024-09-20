@@ -1,11 +1,10 @@
 import { Link, NavLink } from 'react-router-dom'
 
-import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
-import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { TabGroupProps, TabProps } from './TabGroup.types'
 import { getClassNameBySizeMap, tabGroupClassMap } from './TabGroup.utils'
+import { getTabBadge, getTabDescription, getTabIcon, getTabIndicator } from './TabGroup.helpers'
 
 import './TabGroup.scss'
 
@@ -14,7 +13,7 @@ const Tab = ({
     props,
     tabType,
     active,
-    icon: Icon,
+    icon,
     size,
     badge = null,
     alignActiveBorderWithContainer,
@@ -34,29 +33,12 @@ const Tab = ({
         const content = (
             <>
                 <p className="m-0 flexbox dc__align-items-center dc__gap-6">
-                    {showError && <ICErrorExclamation className={`${iconClassName}`} />}
-                    {!showError && showWarning && <ICWarning className={`${iconClassName} warning-icon-y7`} />}
-                    {!showError && !showWarning && Icon && <Icon className={`${iconClassName} tab-group__tab__icon`} />}
+                    {getTabIcon({ className: iconClassName, icon, showError, showWarning })}
                     {label}
-                    {badge !== null && (
-                        <div className={`tab-group__tab__badge bcn-1 cn-7 fw-6 flex px-4 ${badgeClassName}`}>
-                            {badge}
-                        </div>
-                    )}
-                    {showIndicator && <span className="tab-group__tab__indicator bcr-5 mt-4 dc__align-self-start" />}
+                    {getTabBadge(badge, badgeClassName)}
+                    {getTabIndicator(showIndicator)}
                 </p>
-                {description && (
-                    <ul className="tab-group__tab__description m-0 p-0 fs-12 lh-16 fw-4 cn-7 flexbox dc__align-items-center dc__gap-4">
-                        {Array.isArray(description)
-                            ? description.map((desc, idx) => (
-                                  <li key={desc} className="flex dc__gap-4">
-                                      {!!idx && <span className="dc__bullet" />}
-                                      {desc}
-                                  </li>
-                              ))
-                            : description}
-                    </ul>
-                )}
+                {getTabDescription(description)}
             </>
         )
 
