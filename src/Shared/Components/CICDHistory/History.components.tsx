@@ -31,11 +31,12 @@ import './cicdHistory.scss'
 export const LogResizeButton = withShortcut(
     ({ fullScreenView, setFullScreenView, shortcut }: LogResizeButtonType & IWithShortcut): JSX.Element => {
         const { pathname } = useLocation()
-        const zoomButtonRef = useRef<HTMLDivElement>(null)
+        const isFullscreenViewRef = useRef(fullScreenView)
+        isFullscreenViewRef.current = fullScreenView
 
         const toggleFullScreen = (): void => {
             // NOTE: need to use ref due to the problem of stale function reference after registering the callback
-            setFullScreenView(!(zoomButtonRef.current.dataset.isFullscreenView === 'true'))
+            setFullScreenView(!isFullscreenViewRef.current)
         }
 
         useEffect(() => {
@@ -62,14 +63,18 @@ export const LogResizeButton = withShortcut(
                         combo: ['F'] as const,
                     }}
                 >
-                    <div
-                        ref={zoomButtonRef}
-                        data-is-fullscreen-view={fullScreenView}
-                        className={`zoom ${fullScreenView ? 'zoom--out' : 'zoom--in'} pointer dc__zi-4 flex`}
+                    <button
+                        type="button"
+                        aria-label="Enter/Exit fullscreen view"
+                        className="zoom dc__zi-4 flex dc__transparent log-resize-button"
                         onClick={toggleFullScreen}
                     >
-                        {fullScreenView ? <ZoomOut className="icon-dim-16" /> : <ZoomIn className="icon-dim-16" />}
-                    </div>
+                        {fullScreenView ? (
+                            <ZoomOut className="icon-dim-16 dc__no-shrink" />
+                        ) : (
+                            <ZoomIn className="icon-dim-16 dc__no-shrink" />
+                        )}
+                    </button>
                 </Tooltip>
             )
         )
