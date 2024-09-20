@@ -1,6 +1,6 @@
 import { ComponentSizeType } from '@Shared/constants'
 
-import { TabGroupProps, TabProps } from './TabGroup.types'
+import { TabGroupProps } from './TabGroup.types'
 
 export const getClassNameBySizeMap = ({
     hideTopPadding,
@@ -28,11 +28,6 @@ export const getClassNameBySizeMap = ({
         iconClassName: 'icon-dim-16',
         badgeClassName: 'fs-12 lh-20',
     },
-})
-
-export const getIconColorClassMap = ({ active }: Pick<TabProps, 'active'>): Record<TabProps['iconType'], string> => ({
-    fill: `tab-group__tab__icon--fill ${active ? 'fcb-5' : 'fcn-7'}`,
-    stroke: `tab-group__tab__icon--stroke ${active ? 'scb-5' : 'scn-7'}`,
 })
 
 export const tabGroupClassMap: Record<TabGroupProps['size'], string> = {

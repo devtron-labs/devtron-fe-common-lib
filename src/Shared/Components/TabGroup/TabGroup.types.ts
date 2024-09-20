@@ -84,10 +84,6 @@ export type TabProps = {
      */
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     /**
-     * Type of the icon, determining whether it uses a stroke or fill style.
-     */
-    iconType?: 'stroke' | 'fill'
-    /**
      * Badge number to be displayed on the tab, typically for notifications.
      */
     badge?: number

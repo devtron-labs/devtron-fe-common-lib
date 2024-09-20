@@ -1,9 +1,21 @@
+@mixin svg-styles($color) {
+    svg.tab-group__tab__icon *[stroke^='#'] {
+        stroke: $color;
+    }
+
+    svg.tab-group__tab__icon *[fill^='#'] {
+        fill: $color;
+    }
+}
+
 .tab-group {
     list-style: none;
 
     &__tab {
         $parent-selector: &;
         position: relative;
+
+        @include svg-styles(var(--N700));
 
         &::after {
             content: '';
@@ -23,28 +35,15 @@
 
         &:hover:not(.tab-group__tab--block) {
             color: var(--B500);
-
-            #{$parent-selector}__icon {
-                &--stroke {
-                    stroke: var(--B500);
-
-                    path {
-                        stroke: var(--B500);
-                    }
-                }
-
-                &--fill {
-                    fill: var(--B500);
-
-                    path {
-                        fill: var(--B500);
-                    }
-                }
-            }
+            @include svg-styles(var(--B500));
         }
 
-        &--active::after {
-            background-color: var(--B500);
+        &--active {
+            @include svg-styles(var(--B500));
+
+            &::after {
+                background-color: var(--B500);
+            }
         }
 
         &__badge {
@@ -62,26 +61,15 @@
             border-radius: 100%;
         }
 
+        &__description {
+            list-style: none;
+        }
+
         &__nav-link {
             &.active {
                 color: var(--B500);
                 font-weight: 600;
-
-                #{$parent-selector}__icon--fill {
-                    fill: var(--B500);
-
-                    path {
-                        fill: var(--B500);
-                    }
-                }
-
-                #{$parent-selector}__icon--stroke {
-                    stroke: var(--B500);
-
-                    path {
-                        stroke: var(--B500);
-                    }
-                }
+                @include svg-styles(var(--B500));
             }
 
             &:not(.active) {

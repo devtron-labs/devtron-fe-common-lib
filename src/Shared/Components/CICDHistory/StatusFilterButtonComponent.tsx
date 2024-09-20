@@ -21,6 +21,8 @@ import { PopupMenu, StyledRadioGroup as RadioGroup } from '../../../Common'
 import { NodeStatus, StatusFilterButtonType } from './types'
 import { IndexStore } from '../../Store'
 
+import './StatusFilterButtonComponent.scss'
+
 export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: StatusFilterButtonType) => {
     const [selectedTab, setSelectedTab] = useState('all')
 
