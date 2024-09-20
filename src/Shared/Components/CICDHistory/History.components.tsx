@@ -15,7 +15,7 @@
  */
 
 import Tippy from '@tippyjs/react'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { withShortcut, IWithShortcut } from 'react-keybind'
 import { ClipboardButton, GenericEmptyState, Tooltip, extractImage, useSuperAdmin } from '../../../Common'
@@ -31,28 +31,28 @@ import './cicdHistory.scss'
 export const LogResizeButton = withShortcut(
     ({ fullScreenView, setFullScreenView, shortcut }: LogResizeButtonType & IWithShortcut): JSX.Element => {
         const { pathname } = useLocation()
-        const isFullscreenViewRef = useRef(fullScreenView)
-        isFullscreenViewRef.current = fullScreenView
 
-        const toggleFullScreen = (): void => {
+        const toggleFullScreen = useCallback((): void => {
             // NOTE: need to use ref due to the problem of stale function reference after registering the callback
-            setFullScreenView(!isFullscreenViewRef.current)
-        }
+            setFullScreenView(!fullScreenView)
+        }, [fullScreenView])
 
         useEffect(() => {
-            shortcut.registerShortcut(toggleFullScreen, ['f'], 'ToggleFullscreen', 'Enter/Exit fullscreen')
-            shortcut.registerShortcut(
-                () => setFullScreenView(false),
-                ['Escape'],
-                'ToggleFullscreen',
-                'Enter/Exit fullscreen',
-            )
+            if (pathname.includes('/logs')) {
+                shortcut.registerShortcut(toggleFullScreen, ['f'], 'ToggleFullscreen', 'Enter/Exit fullscreen')
+                shortcut.registerShortcut(
+                    () => setFullScreenView(false),
+                    ['Escape'],
+                    'ToggleFullscreen',
+                    'Enter/Exit fullscreen',
+                )
+            }
 
             return () => {
                 shortcut.unregisterShortcut(['f'])
                 shortcut.unregisterShortcut(['Escape'])
             }
-        }, [pathname.includes('/logs')])
+        }, [pathname, toggleFullScreen])
 
         return (
             pathname.includes('/logs') && (

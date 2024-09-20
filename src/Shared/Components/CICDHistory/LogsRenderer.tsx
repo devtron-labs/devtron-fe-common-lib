@@ -15,7 +15,7 @@
  */
 
 import { useParams } from 'react-router-dom'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
 import DOMPurify from 'dompurify'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
@@ -189,7 +189,6 @@ const LogsRenderer = ({
     // State for logs list in case no stages are available
     const [logsList, setLogsList] = useState<string[]>([])
     const { searchKey, handleSearch } = useUrlFilters()
-    const accordionExpansionStateTogglerButtonRef = useRef<HTMLButtonElement>(null)
 
     const areAllStagesExpanded = useMemo(() => stageList.every((item) => item.isOpen), [stageList])
 
@@ -386,15 +385,14 @@ const LogsRenderer = ({
         // And for other cases we would use handleSearchEnter
     }, [streamDataList, areEventsProgressing])
 
-    const handleToggleOpenAllStages = () => {
+    const handleToggleOpenAllStages = useCallback(() => {
         setStageList((prev) =>
             prev.map((stage) => ({
                 ...stage,
-                // NOTE: need to use ref due to the problem of stale function reference after registering the callback
-                isOpen: !(accordionExpansionStateTogglerButtonRef.current.dataset.toggleState === 'true'),
+                isOpen: !areAllStagesExpanded,
             })),
         )
-    }
+    }, [areAllStagesExpanded])
 
     useEffect(() => {
         shortcut.registerShortcut(
@@ -407,7 +405,7 @@ const LogsRenderer = ({
         return () => {
             shortcut.unregisterShortcut(['e'])
         }
-    }, [])
+    }, [handleToggleOpenAllStages])
 
     const handleSearchEnter = (searchText: string) => {
         handleSearch(searchText)
@@ -468,7 +466,6 @@ const LogsRenderer = ({
                                     onClick={handleToggleOpenAllStages}
                                     aria-label="Expand all stages"
                                     data-toggle-state={areAllStagesExpanded}
-                                    ref={accordionExpansionStateTogglerButtonRef}
                                 >
                                     {areAllStagesExpanded ? (
                                         <ICCollapseAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
