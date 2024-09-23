@@ -7,7 +7,6 @@ import { ReactComponent as ICExpand } from '@Icons/ic-expand.svg'
 
 import { Collapse } from '../Collapse'
 import { CollapsibleListProps } from './CollapsibleList.types'
-import { checkNavLinkActiveState } from './utils'
 import './CollapsibleList.scss'
 
 const renderWithTippy = (tippyProps: TippyProps) => (children: React.ReactElement) => (
@@ -67,7 +66,6 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                                         key={title}
                                         to={href}
                                         className="collapsible__item flexbox dc__align-items-center dc__gap-8 dc__no-decor br-4 py-6 px-8 cursor"
-                                        isActive={checkNavLinkActiveState(href)}
                                         onClick={(e) => {
                                             // Prevent navigation to the same page
                                             if (href === pathname) {

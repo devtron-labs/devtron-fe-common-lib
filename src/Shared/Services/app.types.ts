@@ -203,6 +203,7 @@ export enum ConfigResourceType {
     ConfigMap = 'ConfigMap',
     Secret = 'Secret',
     DeploymentTemplate = 'Deployment Template',
+    PipelineStrategy = 'Pipeline Strategy',
 }
 
 export interface DeploymentTemplateDTO {
@@ -212,6 +213,8 @@ export interface DeploymentTemplateDTO {
     variableSnapshot: {
         'Deployment Template': Record<string, string>
     }
+    templateVersion: string
+    isAppMetricsEnabled?: true
     resolvedValue: Record<string, any>
 }
 
@@ -222,10 +225,18 @@ export interface ConfigMapSecretDataDTO {
     resolvedValue: string
 }
 
+export interface PipelineConfigDataDTO {
+    resourceType: ConfigResourceType.PipelineStrategy
+    data: Record<string, any>
+    pipelineTriggerType: string
+    Strategy: string
+}
+
 export interface AppEnvDeploymentConfigDTO {
     deploymentTemplate: DeploymentTemplateDTO | null
     configMapData: ConfigMapSecretDataDTO | null
     secretsData: ConfigMapSecretDataDTO | null
+    pipelineConfigData?: PipelineConfigDataDTO
     isAppAdmin: boolean
 }
 
@@ -292,4 +303,5 @@ export enum EnvResourceType {
     Secret = 'secrets',
     DeploymentTemplate = 'deployment-template',
     Manifest = 'manifest',
+    PipelineConfiguration = 'pipeline-configuration',
 }

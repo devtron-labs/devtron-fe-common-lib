@@ -34,7 +34,6 @@ const DeploymentHistoryDiffView = ({
     isUnpublished,
     isDeleteDraft,
     rootClassName,
-    comparisonBodyClassName,
     sortOrder = null,
 }: DeploymentTemplateHistoryType) => {
     const { historyComponent, historyComponentName } = useParams<DeploymentHistoryParamsType>()
@@ -133,7 +132,7 @@ const DeploymentHistoryDiffView = ({
                 </div>
             )}
             <div
-                className={`en-2 bw-1 br-4 bcn-0 mt-16 mb-16 mr-20 ml-20 pt-2 pb-2 ${
+                className={`en-2 bw-1 br-4 bcn-0 py-4 ${
                     previousConfigAvailable ? 'deployment-diff__upper' : ''
                 } ${rootClassName ?? ''}`}
                 data-testid={`configuration-link-${
@@ -174,7 +173,7 @@ const DeploymentHistoryDiffView = ({
             </div>
 
             {(currentConfiguration?.codeEditorValue?.value || baseTemplateConfiguration?.codeEditorValue?.value) && (
-                <div className={`en-2 bw-1 br-4 mr-20 ml-20 mb-20 ${comparisonBodyClassName || ''}`}>
+                <div className="en-2 bw-1 br-4 mt-16">
                     <div
                         className="code-editor-header-value pl-16 pr-16 pt-12 pb-12 fs-13 fw-6 cn-9 bcn-0 dc__top-radius-4 dc__border-bottom"
                         data-testid="configuration-link-comparison-body-heading"
