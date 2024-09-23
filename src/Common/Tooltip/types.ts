@@ -39,7 +39,7 @@ type BaseTooltipProps =
            * If true, wrap with tippy irrespective of other options
            * @default true
            */
-          alwaysShowTippyOnHover?: boolean
+          alwaysShowTippyOnHover: boolean
           /**
            * If true, use the common styling for shortcuts
            * @default undefined
@@ -62,7 +62,7 @@ type BaseTooltipProps =
            * If true, use the common styling for shortcuts
            * @default undefined
            */
-          shortcutKeyCombo?: {
+          shortcutKeyCombo: {
               text: string
               combo: SupportedKeyboardKeysType[]
           }
