@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-import { ObjectFieldTemplateProps, canExpand, titleId } from '@rjsf/utils'
+import { ObjectFieldTemplateProps, canExpand, titleId, deepEquals } from '@rjsf/utils'
 import { JSONPath } from 'jsonpath-plus'
+import { convertJSONPointerToJSONPath } from '@Common/Helper'
 import { FieldRowWithLabel } from '../common/FieldRow'
 import { TitleField } from './TitleField'
 import { AddButton } from './ButtonTemplates'
 import { RJSFFormSchema } from '../types'
+import { parseSchemaHiddenType } from '../utils'
 
 const Field = ({
     disabled,
@@ -33,6 +35,7 @@ const Field = ({
     schema,
     title,
     uiSchema,
+    formContext,
 }: ObjectFieldTemplateProps<any, RJSFFormSchema, any>) => {
     const hasAdditionalProperties = !!schema.additionalProperties
 
@@ -54,8 +57,19 @@ const Field = ({
                 return true
             }
             try {
-                const value = JSONPath({ path: hiddenSchemaProp.match, json: formData })?.[0]
-                const isHidden = value === undefined || hiddenSchemaProp.condition === value
+                const hiddenSchema = parseSchemaHiddenType(hiddenSchemaProp)
+                if (!hiddenSchema.path) {
+                    throw new Error('Empty path property of hidden descriptor field')
+                }
+                if (!hiddenSchema.path.match(/^\/\w+(\/\w+)*$/g)) {
+                    throw new Error('Provided path is not a valid JSON pointer')
+                }
+                // NOTE: formContext is the formData passed to RJSFForm
+                const value = JSONPath({
+                    path: convertJSONPointerToJSONPath(hiddenSchema.path),
+                    json: formContext,
+                })?.[0]
+                const isHidden = value === undefined || deepEquals(hiddenSchema.value, value)
                 return !isHidden
             } catch {
                 return true
