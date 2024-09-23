@@ -34,7 +34,7 @@ export interface CustomInputProps {
     rootClassName?: string
     error?: string[] | string
     helperText?: ReactNode
-    handleOnBlur?: (e) => void
+    onBlur?: (e) => void
     readOnly?: boolean
     noTrim?: boolean
     onKeyPress?: (e) => void
