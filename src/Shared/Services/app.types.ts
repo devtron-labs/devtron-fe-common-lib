@@ -253,6 +253,12 @@ export interface TemplateListDTO {
     pipelineId?: number
 }
 
+export interface ManifestTemplateDTO {
+    data: string
+    resolvedData: string
+    variableSnapshot: null
+}
+
 export enum DraftState {
     Init = 1,
     Discarded = 2,
@@ -264,4 +270,5 @@ export enum EnvResourceType {
     ConfigMap = 'configmap',
     Secret = 'secrets',
     DeploymentTemplate = 'deployment-template',
+    Manifest = 'manifest',
 }

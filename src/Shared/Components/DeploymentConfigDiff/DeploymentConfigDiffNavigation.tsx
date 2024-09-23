@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICInfoOutlined } from '@Icons/ic-info-outlined.svg'
 import { ReactComponent as ICDiffFileUpdated } from '@Icons/ic-diff-file-updated.svg'
+import { StyledRadioGroup } from '@Common/index'
 
 import { CollapsibleList } from '../CollapsibleList'
-import { DeploymentConfigDiffNavigationProps } from './types'
+import { DeploymentConfigDiffNavigationProps } from './DeploymentConfigDiff.types'
 
 // LOADING SHIMMER
 const ShimmerText = ({ width }: { width: string }) => (
@@ -23,6 +24,7 @@ export const DeploymentConfigDiffNavigation = ({
     goBackURL,
     navHeading,
     navHelpText,
+    tabConfig,
 }: DeploymentConfigDiffNavigationProps) => {
     // STATES
     const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({})
@@ -55,12 +57,20 @@ export const DeploymentConfigDiffNavigation = ({
         setExpandedIds((prev) => ({ ...prev, [id]: !prev[id] }))
     }
 
+    /** Handles tab click. */
+    const onTabClick = (e: ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target
+        if (tabConfig?.activeTab !== value) {
+            tabConfig?.onClick?.(value)
+        }
+    }
+
     // RENDERERS
     const renderTopContent = () => (
         <div className="p-12 flexbox dc__align-items-center dc__gap-8 dc__border-bottom-n1">
             {goBackURL && (
                 <Link to={goBackURL}>
-                    <span className="dc__border br-4 p-1 flex bcn-50">
+                    <span className="dc__border br-4 p-1 flex dc__hover-n50">
                         <ICClose className="icon-dim-16 fcn-6" />
                     </span>
                 </Link>
@@ -68,6 +78,28 @@ export const DeploymentConfigDiffNavigation = ({
             <span className="fs-13 lh-20 fw-6 cn-9 dc__truncate">{navHeading}</span>
         </div>
     )
+
+    const renderTabConfig = () => {
+        const { tabs, activeTab } = tabConfig
+
+        return (
+            <div className="p-12">
+                <StyledRadioGroup
+                    name="deployment-config-diff-tab-list"
+                    initialTab={activeTab}
+                    onChange={onTabClick}
+                    disabled={isLoading}
+                    className="gui-yaml-switch deployment-config-diff__tab-list"
+                >
+                    {tabs.map((tab) => (
+                        <StyledRadioGroup.Radio key={tab} value={tab} className="fs-12 lh-20 cn-7 fw-6">
+                            {tab}
+                        </StyledRadioGroup.Radio>
+                    ))}
+                </StyledRadioGroup>
+            </div>
+        )
+    }
 
     const renderContent = () => (
         <>
@@ -106,6 +138,7 @@ export const DeploymentConfigDiffNavigation = ({
     return (
         <div className="bcn-0 dc__border-right">
             {renderTopContent()}
+            {!!tabConfig?.tabs.length && renderTabConfig()}
             <div className="mw-none p-8">{isLoading ? renderLoading() : renderContent()}</div>
         </div>
     )

@@ -15,6 +15,7 @@
  */
 
 import { RegistryTypeDetailType } from './Types'
+import { getContainerRegistryIcon } from './utils'
 
 export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
@@ -209,6 +210,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
+        startIcon: getContainerRegistryIcon('ecr'),
     },
     'docker-hub': {
         value: 'docker-hub',
@@ -232,6 +234,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
+        startIcon: getContainerRegistryIcon('docker-hub'),
     },
     acr: {
         value: 'acr',
@@ -256,6 +259,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
+        startIcon: getContainerRegistryIcon('acr'),
     },
     'artifact-registry': {
         value: 'artifact-registry',
@@ -279,6 +283,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: 'Paste json file content here',
         },
+        startIcon: getContainerRegistryIcon('artifact-registry'),
     },
     gcr: {
         value: 'gcr',
@@ -302,6 +307,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: 'Paste json file content here',
         },
+        startIcon: getContainerRegistryIcon('gcr'),
     },
     quay: {
         value: 'quay',
@@ -325,6 +331,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
+        startIcon: getContainerRegistryIcon('quay'),
     },
     other: {
         value: 'other',
@@ -348,6 +355,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
+        startIcon: getContainerRegistryIcon('other'),
     },
 }
 
