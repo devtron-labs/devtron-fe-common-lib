@@ -3,11 +3,21 @@ import { forwardRef } from 'react'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 
 import { Collapse } from '../Collapse'
-import { DeploymentConfigDiffAccordionProps } from './DeploymentConfigDiff.types'
+import { DeploymentConfigDiffAccordionProps, DeploymentConfigDiffState } from './DeploymentConfigDiff.types'
+import { diffStateTextColorMap, diffStateTextMap } from './DeploymentConfigDiff.utils'
 
 export const DeploymentConfigDiffAccordion = forwardRef<HTMLDivElement, DeploymentConfigDiffAccordionProps>(
     (
-        { hasDiff, children, title, id, isExpanded, onClick, onTransitionEnd }: DeploymentConfigDiffAccordionProps,
+        {
+            diffState,
+            showDetailedDiffState,
+            children,
+            title,
+            id,
+            isExpanded,
+            onClick,
+            onTransitionEnd,
+        }: DeploymentConfigDiffAccordionProps,
         ref,
     ) => (
         <div ref={ref} id={id} className="dc__border br-4 deployment-config-diff__accordion">
@@ -23,8 +33,12 @@ export const DeploymentConfigDiffAccordion = forwardRef<HTMLDivElement, Deployme
                 />
                 <p className="m-0 cn-9 fs-13 lh-20">{title}</p>
                 <p
-                    className={`m-0 fs-13 lh-20 fw-6 ${hasDiff ? 'cy-7' : 'cg-7'}`}
-                >{`${hasDiff ? 'Has' : 'No'} difference`}</p>
+                    className={`m-0 fs-13 lh-20 fw-6 ${showDetailedDiffState ? diffStateTextColorMap[diffState] : (diffState !== DeploymentConfigDiffState.NO_DIFF && 'cy-7') || 'cg-7'}`}
+                >
+                    {showDetailedDiffState
+                        ? diffStateTextMap[diffState]
+                        : `${diffState !== DeploymentConfigDiffState.NO_DIFF ? 'Has' : 'No'} difference`}
+                </p>
             </button>
             <Collapse expand={isExpanded} onTransitionEnd={onTransitionEnd}>
                 {children}

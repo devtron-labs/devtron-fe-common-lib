@@ -377,14 +377,13 @@ export interface TriggerOutputProps extends RenderRunSourceType, Pick<TriggerDet
     fullScreenView: boolean
     triggerHistory: Map<number, History>
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
-    deploymentHistoryList: DeploymentTemplateList[]
-    setDeploymentHistoryList: React.Dispatch<React.SetStateAction<DeploymentTemplateList[]>>
     deploymentAppType: DeploymentAppTypes
     isBlobStorageConfigured: boolean
     appReleaseTags: string[]
     tagsEditable: boolean
     hideImageTaggingHardDelete: boolean
     fetchIdData: FetchIdDataStatus
+    appName: string
     selectedEnvironmentName?: string
     renderCIListHeader?: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
     renderDeploymentApprovalInfo?: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
@@ -407,8 +406,6 @@ export interface HistoryLogsProps
         | 'scrollToTop'
         | 'scrollToBottom'
         | 'setFullScreenView'
-        | 'deploymentHistoryList'
-        | 'setDeploymentHistoryList'
         | 'deploymentAppType'
         | 'isBlobStorageConfigured'
         | 'appReleaseTags'
@@ -420,6 +417,8 @@ export interface HistoryLogsProps
         | 'renderCIListHeader'
         | 'renderVirtualHistoryArtifacts'
         | 'fullScreenView'
+        | 'appName'
+        | 'triggerHistory'
     > {
     triggerDetails: History
     loading: boolean
@@ -478,7 +477,6 @@ export interface DeploymentTemplateHistoryType {
     isUnpublished?: boolean
     isDeleteDraft?: boolean
     rootClassName?: string
-    comparisonBodyClassName?: string
     sortOrder?: SortingOrder
 }
 export interface DeploymentHistoryDetailRes extends ResponseType {
