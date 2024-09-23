@@ -5,9 +5,9 @@ import {
     ConfigMapSecretDataConfigDatumDTO,
     DeploymentTemplateDTO,
     EnvResourceType,
-    ManifestTemplateDTO,
 } from '@Shared/Services'
 
+import { ManifestTemplateDTO } from '@Pages/Applications'
 import { DeploymentHistoryDetail } from '../CICDHistory'
 import { CollapsibleListConfig, CollapsibleListItem } from '../CollapsibleList'
 import { SelectPickerProps } from '../SelectPicker'

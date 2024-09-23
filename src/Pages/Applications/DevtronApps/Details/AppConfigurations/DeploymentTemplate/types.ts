@@ -74,18 +74,27 @@ type GetHistoricResolvedDeploymentTemplatePayloadType = {
     pipelineId: number
 }
 
-export type GetResolvedDeploymentTemplatePayloadType = {
+type GetDeploymentTemplateAndManifestBasePayload = {
     appId: number
     /**
      * EnvId for the given VALUE
      */
     envId?: number
     chartRefId: number
-    valuesAndManifestFlag: ValuesAndManifestFlagDTO.DEPLOYMENT_TEMPLATE
 } & (GetHistoricResolvedDeploymentTemplatePayloadType | GetResolvedDeploymentTemplateCustomValuesPayloadType)
+
+export type GetResolvedDeploymentTemplatePayloadType = {
+    valuesAndManifestFlag: ValuesAndManifestFlagDTO.DEPLOYMENT_TEMPLATE
+} & GetDeploymentTemplateAndManifestBasePayload
 
 // FIXME: There is no need to send valuesAndManifestFlag but there was typing issue while omitting so need to fix later
 export type GetResolvedDeploymentTemplateProps = GetResolvedDeploymentTemplatePayloadType
+
+export type GetDeploymentManifestProps = GetDeploymentTemplateAndManifestBasePayload
+
+export type GetDeploymentManifestPayloadType = {
+    valuesAndManifestFlag: ValuesAndManifestFlagDTO.MANIFEST
+} & GetDeploymentTemplateAndManifestBasePayload
 
 export interface ResolvedDeploymentTemplateDTO {
     /**
@@ -99,21 +108,7 @@ export interface ResolvedDeploymentTemplateDTO {
     variableSnapshot: Record<string, string>
 }
 
-export interface UseDeploymentTemplateComputedDataProps
-    extends Pick<DeploymentTemplateQueryParamsType, 'resolveScopedVariables'> {}
-
-export interface UseDeploymentTemplateComputedDataReturnType {
-    editedDocument: string
-    uneditedDocument: string
-    isResolvingVariables: boolean
-    uneditedDocumentWithoutLockedKeys?: string
-}
-
-export interface GetDeploymentTemplateEditorKeyProps {
-    resolveScopedVariables: boolean
-    hideLockedKeys: boolean
-    isResolvingVariables: boolean
-}
+export interface ManifestTemplateDTO extends Pick<ResolvedDeploymentTemplateDTO, 'data'> {}
 
 interface DeploymentTemplateChartConfigType {
     id: number
