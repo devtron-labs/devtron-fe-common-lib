@@ -1,7 +1,5 @@
 export * from './types'
 export * from './constants'
-export * from './DeploymentTemplateProvider'
 export * from './service'
 export * from './utils'
-export { default as useDeploymentTemplateComputedData } from './useDeploymentTemplateComputedData'
 export { default as DTApplicationMetricsFormField } from './DTApplicationMetricsFormField'
