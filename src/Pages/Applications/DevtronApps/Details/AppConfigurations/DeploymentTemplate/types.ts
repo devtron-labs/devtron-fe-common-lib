@@ -87,7 +87,10 @@ export interface DeploymentConfigStateAction {
 export interface DeploymentChartVersionType {
     id: number | string
     version: string
-    chartRefId: number
+    /**
+     * BEWARE: This field may or may not exist, not sure why it was there in first place
+     */
+    chartRefId?: number
     type: number
     deploymentTemplateHistoryId: number
     pipelineId: number
@@ -95,6 +98,7 @@ export interface DeploymentChartVersionType {
     name: string
     description?: string
     isAppMetricsSupported: boolean
+    userUploaded?: boolean
 }
 
 export interface DeploymentChartOptionType extends DeploymentChartVersionType {
@@ -313,7 +317,10 @@ interface EnvironmentOverrideDeploymentTemplateConfigState {
     environmentConfig: EnvironmentConfigType
 }
 
-interface DeploymentTemplateConfigCommonState extends SelectedChartDetailsType {
+export interface DeploymentTemplateConfigCommonState extends SelectedChartDetailsType {
+    /**
+     * The first ever state of the deployment template
+     */
     originalTemplate: Record<string, string>
     isAppMetricsEnabled: boolean
     readme: string
