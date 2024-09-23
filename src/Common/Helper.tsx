@@ -22,10 +22,24 @@ import * as Sentry from '@sentry/browser'
 import moment from 'moment'
 import { useLocation } from 'react-router-dom'
 import YAML from 'yaml'
-import { ERROR_EMPTY_SCREEN, SortingOrder, EXCLUDED_FALSY_VALUES, DISCORD_LINK, ZERO_TIME_STRING, TOAST_ACCESS_DENIED } from './Constants'
+import { deepEquals } from '@rjsf/utils'
+import {
+    ERROR_EMPTY_SCREEN,
+    SortingOrder,
+    EXCLUDED_FALSY_VALUES,
+    DISCORD_LINK,
+    ZERO_TIME_STRING,
+    TOAST_ACCESS_DENIED,
+} from './Constants'
 import { ServerErrors } from './ServerError'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
-import { scrollableInterface, DATE_TIME_FORMAT_STRING, ToastManager, ToastVariantType } from '../Shared'
+import {
+    scrollableInterface,
+    DATE_TIME_FORMAT_STRING,
+    ToastManager,
+    ToastVariantType,
+    versionComparatorBySortOrder,
+} from '../Shared'
 import { ReactComponent as ArrowDown } from '../Assets/Icon/ic-chevron-down.svg'
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
@@ -620,6 +634,7 @@ export const getFilteredChartVersions = (charts, selectedChartType) =>
     // Filter chart versions based on selected chart type
     charts
         .filter((item) => item?.chartType === selectedChartType.value)
+        .sort((a, b) => versionComparatorBySortOrder(a?.chartVersion, b?.chartVersion))
         .map((item) => ({
             value: item?.chartVersion,
             label: item?.chartVersion,
@@ -818,28 +833,7 @@ export const compareObjectLength = (objA: any, objB: any): boolean => {
  * Return deep copy of the object
  */
 export function deepEqual(configA: any, configB: any): boolean {
-    try {
-        if (configA === configB) {
-            return true
-        }
-        if ((configA && !configB) || (!configA && configB) || !compareObjectLength(configA, configB)) {
-            return false
-        }
-        let isEqual = true
-        for (const idx in configA) {
-            if (!isEqual) {
-                break
-            } else if (typeof configA[idx] === 'object' && typeof configB[idx] === 'object') {
-                isEqual = deepEqual(configA[idx], configB[idx])
-            } else if (configA[idx] !== configB[idx]) {
-                isEqual = false
-            }
-        }
-        return isEqual
-    } catch (err) {
-        showError(err)
-        return true
-    }
+    return deepEquals(configA, configB)
 }
 
 export function shallowEqual(objA, objB) {
