@@ -1,9 +1,8 @@
+import { IS_PLATFORM_MAC_OS } from '@Common/Constants'
 import { TippyProps } from '@tippyjs/react'
 
-const isMacOS = navigator.userAgent.toUpperCase().includes('MAC')
-
 export const KEYBOARD_KEYS_MAP = {
-    Control: isMacOS ? '⌘' : 'Ctrl',
+    Control: IS_PLATFORM_MAC_OS ? '⌘' : 'Ctrl',
     Shift: '⇧',
     F: 'F',
     E: 'E',

@@ -18,7 +18,14 @@ import Tippy from '@tippyjs/react'
 import { useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { withShortcut, IWithShortcut } from 'react-keybind'
-import { ClipboardButton, GenericEmptyState, Tooltip, extractImage, useSuperAdmin } from '../../../Common'
+import {
+    ClipboardButton,
+    GenericEmptyState,
+    Tooltip,
+    extractImage,
+    IS_PLATFORM_MAC_OS,
+    useSuperAdmin,
+} from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { GitChangesType, LogResizeButtonType, ScrollerType } from './types'
@@ -29,7 +36,13 @@ import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscre
 import './cicdHistory.scss'
 
 export const LogResizeButton = withShortcut(
-    ({ fullScreenView, setFullScreenView, shortcut }: LogResizeButtonType & IWithShortcut): JSX.Element => {
+    ({
+        shortcutCombo = ['F'],
+        showOnlyWhenPathIncludesLogs = true,
+        fullScreenView,
+        setFullScreenView,
+        shortcut,
+    }: LogResizeButtonType & IWithShortcut): JSX.Element => {
         const { pathname } = useLocation()
 
         const toggleFullScreen = useCallback((): void => {
@@ -37,36 +50,42 @@ export const LogResizeButton = withShortcut(
             setFullScreenView(!fullScreenView)
         }, [fullScreenView])
 
+        const showButton = !showOnlyWhenPathIncludesLogs || pathname.includes('/logs')
+        const doesShortcutContainCmdKey = shortcutCombo.some((key) => key === 'Control') && IS_PLATFORM_MAC_OS
+
         useEffect(() => {
-            if (pathname.includes('/logs')) {
-                shortcut.registerShortcut(toggleFullScreen, ['f'], 'ToggleFullscreen', 'Enter/Exit fullscreen')
-                shortcut.registerShortcut(
-                    () => setFullScreenView(false),
-                    ['Escape'],
-                    'ToggleFullscreen',
-                    'Enter/Exit fullscreen',
-                )
+            const combo = shortcutCombo
+                .map((key) => {
+                    if (key === 'Control') {
+                        return IS_PLATFORM_MAC_OS ? 'cmd' : 'ctrl'
+                    }
+                    return key.toLowerCase()
+                })
+                .join('+')
+
+            // FIXME: disabling shortcut for macos since pressing cmd breaks shortcuts through react-keybind
+            if (showButton && shortcutCombo.length && !doesShortcutContainCmdKey) {
+                shortcut.registerShortcut(toggleFullScreen, [combo], 'ToggleFullscreen', 'Enter/Exit fullscreen')
             }
 
             return () => {
-                shortcut.unregisterShortcut(['f'])
-                shortcut.unregisterShortcut(['Escape'])
+                shortcut.unregisterShortcut([combo])
             }
-        }, [pathname, toggleFullScreen])
+        }, [showButton, toggleFullScreen])
 
         return (
-            pathname.includes('/logs') && (
+            showButton && (
                 <Tooltip
                     placement="left"
                     shortcutKeyCombo={{
                         text: fullScreenView ? 'Exit fullscreen' : 'Enter fullscreen',
-                        combo: ['F'] as const,
+                        combo: doesShortcutContainCmdKey ? null : shortcutCombo,
                     }}
                 >
                     <button
                         type="button"
                         aria-label="Enter/Exit fullscreen view"
-                        className="zoom dc__zi-4 flex dc__transparent log-resize-button"
+                        className="zoom dc__zi-4 flex dc__no-border log-resize-button"
                         onClick={toggleFullScreen}
                     >
                         {fullScreenView ? (
