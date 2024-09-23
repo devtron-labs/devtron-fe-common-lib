@@ -191,6 +191,7 @@ const LogsRenderer = ({
     const { searchKey, handleSearch } = useUrlFilters()
 
     const areAllStagesExpanded = useMemo(() => stageList.every((item) => item.isOpen), [stageList])
+    const shortcutTippyText = areAllStagesExpanded ? 'Collapse all stages' : 'Expand all stages'
 
     const areStagesAvailable =
         (window._env_.FEATURE_STEP_WISE_LOGS_ENABLE && streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER)) || false
@@ -454,7 +455,7 @@ const LogsRenderer = ({
                             />
                             <Tooltip
                                 shortcutKeyCombo={{
-                                    text: areAllStagesExpanded ? 'Collapse all stages' : 'Expand all stages',
+                                    text: shortcutTippyText,
                                     combo: ['E'] as const,
                                 }}
                                 className="dc__mxw-500"
@@ -462,10 +463,9 @@ const LogsRenderer = ({
                             >
                                 <button
                                     type="button"
-                                    className="dc__unset-button-styles px-10 flex dc__bg-n0--opacity-0_2 pointer"
+                                    className="dc__unset-button-styles px-10 flex dc__bg-n0--opacity-0_2"
                                     onClick={handleToggleOpenAllStages}
-                                    aria-label="Expand all stages"
-                                    data-toggle-state={areAllStagesExpanded}
+                                    aria-label={shortcutTippyText}
                                 >
                                     {areAllStagesExpanded ? (
                                         <ICCollapseAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />

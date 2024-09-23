@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import Tippy from '@tippyjs/react'
 import { useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { withShortcut, IWithShortcut } from 'react-keybind'
@@ -102,7 +101,7 @@ export const LogResizeButton = withShortcut(
 
 export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): JSX.Element => (
     <div style={style} className="dc__element-scroller flex column top br-4">
-        <Tippy className="default-tt" arrow={false} content="Scroll to Top" placement="left">
+        <Tooltip content="Scroll to Top" placement="left">
             <button
                 className="flex"
                 disabled={!scrollToTop}
@@ -112,8 +111,8 @@ export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): 
             >
                 <DropDownIcon className="rotate" style={{ ['--rotateBy' as any]: '180deg' }} />
             </button>
-        </Tippy>
-        <Tippy className="default-tt" arrow={false} content="Scroll to Bottom" placement="left">
+        </Tooltip>
+        <Tooltip content="Scroll to Bottom" placement="left">
             <button
                 className="flex"
                 disabled={!scrollToBottom}
@@ -123,7 +122,7 @@ export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): 
             >
                 <DropDownIcon className="rotate" />
             </button>
-        </Tippy>
+        </Tooltip>
     </div>
 )
 

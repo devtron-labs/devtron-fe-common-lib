@@ -94,7 +94,10 @@ export type ButtonProps = (
               /**
                * Props for tooltip
                */
-              tooltipProps: Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate'>
+              // TODO: using some typing somersaults here, clean it up later
+              tooltipProps:
+                  | Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate' | 'shortcutKeyCombo'>
+                  | Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate' | 'content'>
           }
         | {
               showTooltip?: never

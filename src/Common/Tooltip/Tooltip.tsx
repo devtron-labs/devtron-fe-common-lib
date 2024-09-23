@@ -7,7 +7,7 @@ import './styles.scss'
 const Tooltip = ({
     shortcutKeyCombo,
     alwaysShowTippyOnHover,
-    // NOTE: if alwaysShowTippyOnHover is being passed by user don't apply truncation logic at all
+    // NOTE: if alwaysShowTippyOnHover or shortcutKeyCombo are being passed by user don't apply truncation logic at all
     showOnTruncate = alwaysShowTippyOnHover === undefined && shortcutKeyCombo === undefined,
     wordBreak = true,
     children: child,

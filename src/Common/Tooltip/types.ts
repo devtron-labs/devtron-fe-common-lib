@@ -27,6 +27,7 @@ type BaseTooltipProps =
            * @default false
            */
           shortcutKeyCombo?: never
+          content: TippyProps['content']
       }
     | {
           /**
@@ -44,6 +45,7 @@ type BaseTooltipProps =
            * @default false
            */
           shortcutKeyCombo?: never
+          content: TippyProps['content']
       }
     | {
           /**
@@ -55,11 +57,12 @@ type BaseTooltipProps =
            * If showOnTruncate is defined this prop doesn't work
            * @default false
            */
-          alwaysShowTippyOnHover?: never
+          alwaysShowTippyOnHover?: boolean
           /**
            * If true, use the common styling for shortcuts
            * @default true
            */
+          content?: never
           shortcutKeyCombo?: {
               text: string
               combo: SupportedKeyboardKeysType[]

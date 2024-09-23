@@ -47,7 +47,15 @@ export enum FetchIdDataStatus {
 }
 
 export interface LogResizeButtonType {
+    /**
+     * If given, that shortcut combo will be bound to the button
+     * @default null
+     */
     shortcutCombo?: SupportedKeyboardKeysType[]
+    /**
+     * If true, only show the button when location.pathname contains '/logs'
+     * @default true
+     */
     showOnlyWhenPathIncludesLogs?: boolean
     fullScreenView: boolean
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
