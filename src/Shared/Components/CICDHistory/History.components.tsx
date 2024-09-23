@@ -15,9 +15,10 @@
  */
 
 import Tippy from '@tippyjs/react'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { ClipboardButton, GenericEmptyState, extractImage, useKeyDown, useSuperAdmin } from '../../../Common'
+import { withShortcut, IWithShortcut } from 'react-keybind'
+import { ClipboardButton, GenericEmptyState, Tooltip, extractImage, useSuperAdmin } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { GitChangesType, LogResizeButtonType, ScrollerType } from './types'
@@ -27,53 +28,62 @@ import { ReactComponent as ZoomIn } from '../../../Assets/Icon/ic-fullscreen.svg
 import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscreen.svg'
 import './cicdHistory.scss'
 
-export const LogResizeButton = ({ fullScreenView, setFullScreenView }: LogResizeButtonType): JSX.Element => {
-    const { pathname } = useLocation()
+export const LogResizeButton = withShortcut(
+    ({ fullScreenView, setFullScreenView, shortcut }: LogResizeButtonType & IWithShortcut): JSX.Element => {
+        const { pathname } = useLocation()
 
-    const keys = useKeyDown()
+        const toggleFullScreen = useCallback((): void => {
+            // NOTE: need to use ref due to the problem of stale function reference after registering the callback
+            setFullScreenView(!fullScreenView)
+        }, [fullScreenView])
 
-    const toggleFullScreen = (): void => {
-        setFullScreenView(!fullScreenView)
-    }
+        useEffect(() => {
+            if (pathname.includes('/logs')) {
+                shortcut.registerShortcut(toggleFullScreen, ['f'], 'ToggleFullscreen', 'Enter/Exit fullscreen')
+                shortcut.registerShortcut(
+                    () => setFullScreenView(false),
+                    ['Escape'],
+                    'ToggleFullscreen',
+                    'Enter/Exit fullscreen',
+                )
+            }
 
-    useEffect(() => {
-        if (!pathname.includes('/logs')) {
-            return
-        }
-        // eslint-disable-next-line default-case
-        switch (keys.join('')) {
-            case 'f':
-                toggleFullScreen()
-                break
-            case 'Escape':
-                setFullScreenView(false)
-                break
-        }
-    }, [keys])
+            return () => {
+                shortcut.unregisterShortcut(['f'])
+                shortcut.unregisterShortcut(['Escape'])
+            }
+        }, [pathname, toggleFullScreen])
 
-    return (
-        pathname.includes('/logs') && (
-            <Tippy
-                placement="top"
-                arrow={false}
-                className="default-tt"
-                content={fullScreenView ? 'Exit fullscreen (f)' : 'Enter fullscreen (f)'}
-            >
-                <div>
-                    {fullScreenView ? (
-                        <ZoomOut className="zoom zoom--out pointer dc__zi-4" onClick={toggleFullScreen} />
-                    ) : (
-                        <ZoomIn className="zoom zoom--in pointer dc__zi-4" onClick={toggleFullScreen} />
-                    )}
-                </div>
-            </Tippy>
+        return (
+            pathname.includes('/logs') && (
+                <Tooltip
+                    placement="left"
+                    shortcutKeyCombo={{
+                        text: fullScreenView ? 'Exit fullscreen' : 'Enter fullscreen',
+                        combo: ['F'] as const,
+                    }}
+                >
+                    <button
+                        type="button"
+                        aria-label="Enter/Exit fullscreen view"
+                        className="zoom dc__zi-4 flex dc__transparent log-resize-button"
+                        onClick={toggleFullScreen}
+                    >
+                        {fullScreenView ? (
+                            <ZoomOut className="icon-dim-16 dc__no-shrink" />
+                        ) : (
+                            <ZoomIn className="icon-dim-16 dc__no-shrink" />
+                        )}
+                    </button>
+                </Tooltip>
+            )
         )
-    )
-}
+    },
+)
 
 export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): JSX.Element => (
     <div style={style} className="dc__element-scroller flex column top br-4">
-        <Tippy className="default-tt" arrow={false} content="Scroll to Top">
+        <Tippy className="default-tt" arrow={false} content="Scroll to Top" placement="left">
             <button
                 className="flex"
                 disabled={!scrollToTop}
@@ -84,7 +94,7 @@ export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): 
                 <DropDownIcon className="rotate" style={{ ['--rotateBy' as any]: '180deg' }} />
             </button>
         </Tippy>
-        <Tippy className="default-tt" arrow={false} content="Scroll to Bottom">
+        <Tippy className="default-tt" arrow={false} content="Scroll to Bottom" placement="left">
             <button
                 className="flex"
                 disabled={!scrollToBottom}
