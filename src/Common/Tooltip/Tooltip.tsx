@@ -25,9 +25,11 @@ const Tooltip = ({
         }
     }
 
-    return (!showOnTruncate || !isTextTruncated) && !alwaysShowTippyOnHover && !shortcutKeyCombo ? (
-        cloneElement(child, { ...child.props, onMouseEnter: handleMouseEnterEvent })
-    ) : (
+    const showTooltipWhenShortcutKeyComboProvided =
+        !!shortcutKeyCombo && (alwaysShowTippyOnHover === undefined || alwaysShowTippyOnHover)
+    const showTooltipOnTruncate = showOnTruncate && isTextTruncated
+
+    return showTooltipOnTruncate || showTooltipWhenShortcutKeyComboProvided || alwaysShowTippyOnHover ? (
         <TippyJS
             arrow={false}
             placement="top"
@@ -39,6 +41,8 @@ const Tooltip = ({
         >
             {cloneElement(child, { ...child.props, onMouseEnter: handleMouseEnterEvent })}
         </TippyJS>
+    ) : (
+        cloneElement(child, { ...child.props, onMouseEnter: handleMouseEnterEvent })
     )
 }
 

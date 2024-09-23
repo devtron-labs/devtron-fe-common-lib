@@ -45,7 +45,6 @@ export const LogResizeButton = withShortcut(
         const { pathname } = useLocation()
 
         const toggleFullScreen = useCallback((): void => {
-            // NOTE: need to use ref due to the problem of stale function reference after registering the callback
             setFullScreenView(!fullScreenView)
         }, [fullScreenView])
 
@@ -101,7 +100,7 @@ export const LogResizeButton = withShortcut(
 
 export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): JSX.Element => (
     <div style={style} className="dc__element-scroller flex column top br-4">
-        <Tooltip content="Scroll to Top" placement="left">
+        <Tooltip alwaysShowTippyOnHover content="Scroll to Top" placement="left">
             <button
                 className="flex"
                 disabled={!scrollToTop}
@@ -112,7 +111,7 @@ export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): 
                 <DropDownIcon className="rotate" style={{ ['--rotateBy' as any]: '180deg' }} />
             </button>
         </Tooltip>
-        <Tooltip content="Scroll to Bottom" placement="left">
+        <Tooltip alwaysShowTippyOnHover content="Scroll to Bottom" placement="left">
             <button
                 className="flex"
                 disabled={!scrollToBottom}

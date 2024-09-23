@@ -24,7 +24,7 @@ type BaseTooltipProps =
           alwaysShowTippyOnHover?: never
           /**
            * If true, use the common styling for shortcuts
-           * @default false
+           * @default undefined
            */
           shortcutKeyCombo?: never
           content: TippyProps['content']
@@ -42,7 +42,7 @@ type BaseTooltipProps =
           alwaysShowTippyOnHover?: boolean
           /**
            * If true, use the common styling for shortcuts
-           * @default false
+           * @default undefined
            */
           shortcutKeyCombo?: never
           content: TippyProps['content']
@@ -60,13 +60,13 @@ type BaseTooltipProps =
           alwaysShowTippyOnHover?: boolean
           /**
            * If true, use the common styling for shortcuts
-           * @default true
+           * @default undefined
            */
-          content?: never
           shortcutKeyCombo?: {
               text: string
               combo: SupportedKeyboardKeysType[]
           }
+          content?: never
       }
 
 export type TooltipProps = BaseTooltipProps &
