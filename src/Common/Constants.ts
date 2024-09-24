@@ -111,6 +111,9 @@ export const ROUTES = {
     DEPLOYMENT_CHARTS_LIST: 'deployment/template/fetch',
     USER_LIST_MIN: 'user/list/min',
     CONFIG_DATA: 'config/data',
+    DEPLOYMENT_OPTIONS: 'app/template/list',
+    CHART_REFERENCES_MIN: 'chartref/autocomplete',
+    DEPLOYMENT_VALUES_MANIFEST: 'app/template/data',
 }
 
 export enum KEY_VALUE {
