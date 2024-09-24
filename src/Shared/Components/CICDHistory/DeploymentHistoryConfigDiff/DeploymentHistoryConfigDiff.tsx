@@ -22,6 +22,9 @@ export const DeploymentHistoryConfigDiff = ({
     wfrId,
     triggerHistory,
     setFullScreenView,
+    runSource,
+    resourceId,
+    renderRunSource,
 }: DeploymentHistoryConfigDiffProps) => {
     // HOOKS
     const { path, params } = useRouteMatch()
@@ -182,23 +185,20 @@ export const DeploymentHistoryConfigDiff = ({
         [deploymentConfigList],
     )
 
+    const isLoading = compareDeploymentConfigLoader || deploymentTemplateResolvedDataLoader
+    const isError =
+        compareDeploymentConfigErr ||
+        (deploymentTemplateResolvedDataErr && !getIsRequestAborted(deploymentTemplateResolvedDataErr))
+
     return (
         <Switch>
             <Route path={`${path}/:resourceType(${Object.values(EnvResourceType).join('|')})/:resourceName?`}>
                 <DeploymentHistoryConfigDiffCompare
                     {...deploymentConfigList}
-                    isLoading={
-                        (compareDeploymentConfigLoader || deploymentTemplateResolvedDataLoader) &&
-                        (!compareDeploymentConfigErr ||
-                            (deploymentTemplateResolvedDataErr &&
-                                !getIsRequestAborted(deploymentTemplateResolvedDataErr)))
-                    }
+                    isLoading={isLoading || (!isError && !deploymentConfigList)}
                     errorConfig={{
                         code: compareDeploymentConfigErr?.code || deploymentTemplateResolvedDataErr?.code,
-                        error:
-                            compareDeploymentConfigErr ||
-                            (deploymentTemplateResolvedDataErr &&
-                                !getIsRequestAborted(deploymentTemplateResolvedDataErr)),
+                        error: isError && !isLoading,
                         reload,
                     }}
                     envName={envName}
@@ -208,14 +208,17 @@ export const DeploymentHistoryConfigDiff = ({
                     setFullScreenView={setFullScreenView}
                     convertVariables={convertVariables}
                     setConvertVariables={setConvertVariables}
+                    runSource={runSource}
+                    resourceId={resourceId}
+                    renderRunSource={renderRunSource}
                 />
             </Route>
             <Route>
-                {compareDeploymentConfigErr && !compareDeploymentConfigLoader ? (
+                {isError && !isLoading ? (
                     <ErrorScreenManager code={compareDeploymentConfigErr?.code} reload={reload} />
                 ) : (
                     <div className="p-16 flexbox-col dc__gap-16 bcn-0 h-100">
-                        {compareDeploymentConfigLoader || !deploymentConfigList ? (
+                        {isLoading || (!isError && !deploymentConfigList) ? (
                             <Progressing fullHeight size={48} />
                         ) : (
                             <>

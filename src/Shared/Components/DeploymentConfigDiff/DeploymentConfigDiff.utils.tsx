@@ -454,7 +454,7 @@ const getConfigMapSecretData = (
         getConfigMapSecretResolvedValues(compareWithList, convertVariables),
     )
 
-    const deploymentConfig = combinedList.map(([currentItem, compareItem]) => {
+    const deploymentConfig: DeploymentConfigDiffProps['configList'] = combinedList.map(([currentItem, compareItem]) => {
         const { compareToDiff, compareWithDiff, diffState } = getDiffViewData(
             currentItem,
             compareItem,
@@ -465,6 +465,8 @@ const getConfigMapSecretData = (
 
         return {
             id: `${resourceType === ConfigResourceType.ConfigMap ? EnvResourceType.ConfigMap : EnvResourceType.Secret}-${currentItem?.name || compareItem?.name}`,
+            pathType:
+                resourceType === ConfigResourceType.ConfigMap ? EnvResourceType.ConfigMap : EnvResourceType.Secret,
             title: `${resourceType === ConfigResourceType.ConfigMap ? 'ConfigMap' : 'Secret'} / ${currentItem?.name || compareItem?.name}`,
             name: currentItem?.name || compareItem?.name,
             primaryConfig: {
@@ -537,6 +539,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
 
         const deploymentTemplateData = {
             id: EnvResourceType.DeploymentTemplate,
+            pathType: EnvResourceType.DeploymentTemplate,
             title: 'Deployment Template',
             primaryConfig: {
                 heading: getDiffHeading(_compareList.deploymentTemplate, true),
@@ -560,7 +563,8 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
             currentPipelineConfigData = getPipelineConfigDiffViewData(_currentList.pipelineConfigData)
             comparePipelineConfigData = getPipelineConfigDiffViewData(_compareList.pipelineConfigData)
             pipelineConfigData = {
-                id: EnvResourceType.PipelineConfiguration,
+                id: EnvResourceType.PipelineStrategy,
+                pathType: EnvResourceType.PipelineStrategy,
                 title: 'Pipeline Configuration',
                 primaryConfig: {
                     heading: null,
@@ -617,7 +621,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
                       {
                           title: pipelineConfigData.title,
                           diffState: pipelineConfigData.diffState,
-                          href: getNavItemHref(EnvResourceType.PipelineConfiguration, null),
+                          href: getNavItemHref(EnvResourceType.PipelineStrategy, null),
                           onClick: () => {
                               const element = document.querySelector(`#${pipelineConfigData.id}`)
                               element?.scrollIntoView({ block: 'start' })
@@ -673,6 +677,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
 
     const manifestData = {
         id: EnvResourceType.Manifest,
+        pathType: EnvResourceType.Manifest,
         title: 'Manifest Output',
         primaryConfig: {
             heading: <span className="fs-12 fw-6 cn-9">Generated Manifest</span>,

@@ -90,7 +90,7 @@ export const DeploymentConfigDiffMain = ({
 
             return (
                 <Fragment key={configItem.id}>
-                    <div className="dc__mxw-200">
+                    <div className="dc__mxw-300">
                         <SelectPicker<string | number, false>
                             {...selectPickerProps}
                             isDisabled={isLoading || selectPickerProps?.isDisabled}

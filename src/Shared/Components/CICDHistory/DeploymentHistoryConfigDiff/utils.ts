@@ -2,9 +2,10 @@ import moment from 'moment'
 
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { DeploymentStageType } from '@Shared/constants'
+import { SelectPickerOptionType } from '@Shared/Components/SelectPicker'
 
 import { History } from '../types'
-import { renderPipelineDeploymentStatusIcon } from './helpers'
+import { renderPipelineDeploymentOptionDescription, renderPipelineDeploymentStatusIcon } from './helpers'
 import { DeploymentHistoryConfigDiffProps } from './types'
 
 export const getPipelineDeployments = (triggerHistory: DeploymentHistoryConfigDiffProps['triggerHistory']) =>
@@ -25,15 +26,32 @@ export const getPipelineDeploymentsWfrIds = ({
     }
 }
 
-export const getPipelineDeploymentsOptions = (pipelineDeployments: History[], wfrId: number) => {
+export const getPipelineDeploymentsOptions = ({
+    pipelineDeployments,
+    wfrId,
+    renderRunSource,
+    resourceId,
+    runSource,
+}: Required<Pick<DeploymentHistoryConfigDiffProps, 'renderRunSource' | 'runSource' | 'resourceId'>> & {
+    pipelineDeployments: History[]
+    wfrId: number
+}) => {
     const currentDeploymentIndex = pipelineDeployments.findIndex(({ id }) => id === wfrId)
     const previousDeployments = pipelineDeployments.slice(currentDeploymentIndex + 1)
 
-    const pipelineDeploymentsOptions = previousDeployments.map(
-        ({ id, finishedOn, stage, triggeredBy, triggeredByEmail, status }) => ({
+    const pipelineDeploymentsOptions: SelectPickerOptionType<number>[] = previousDeployments.map(
+        ({ id, finishedOn, stage, triggeredBy, triggeredByEmail, status, artifact }) => ({
             value: id,
             label: moment(finishedOn).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT),
-            description: `${stage}  ·  ${triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}`,
+            description: renderPipelineDeploymentOptionDescription({
+                stage,
+                triggeredByEmail,
+                triggeredBy,
+                artifact,
+                renderRunSource,
+                resourceId,
+                runSource,
+            }),
             startIcon: renderPipelineDeploymentStatusIcon(status),
         }),
     )

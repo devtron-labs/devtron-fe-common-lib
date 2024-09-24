@@ -303,5 +303,5 @@ export enum EnvResourceType {
     Secret = 'secrets',
     DeploymentTemplate = 'deployment-template',
     Manifest = 'manifest',
-    PipelineConfiguration = 'pipeline-configuration',
+    PipelineStrategy = 'pipeline-strategy',
 }

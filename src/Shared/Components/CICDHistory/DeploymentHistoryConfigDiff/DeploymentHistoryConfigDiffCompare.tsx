@@ -9,6 +9,7 @@ import {
     SelectPickerOptionType,
     SelectPickerVariantType,
 } from '@Shared/Components/SelectPicker'
+import { ComponentSizeType } from '@Shared/constants'
 
 import { DeploymentHistoryDiffDetailedProps, DeploymentHistoryConfigDiffQueryParams } from './types'
 import { getPipelineDeploymentsOptions, parseDeploymentHistoryDiffSearchParams } from './utils'
@@ -21,6 +22,9 @@ export const DeploymentHistoryConfigDiffCompare = ({
     previousWfrId,
     convertVariables,
     setConvertVariables,
+    runSource,
+    renderRunSource,
+    resourceId,
     ...props
 }: DeploymentHistoryDiffDetailedProps) => {
     // HOOKS
@@ -47,7 +51,13 @@ export const DeploymentHistoryConfigDiffCompare = ({
     }, [])
 
     // DEPLOYMENT_CONFIG_DIFF_PROPS
-    const { currentDeployment, pipelineDeploymentsOptions } = getPipelineDeploymentsOptions(pipelineDeployments, wfrId)
+    const { currentDeployment, pipelineDeploymentsOptions } = getPipelineDeploymentsOptions({
+        pipelineDeployments,
+        wfrId,
+        runSource,
+        renderRunSource,
+        resourceId,
+    })
 
     const deploymentSelectorOnChange = ({ value }: SelectPickerOptionType<number>) => {
         updateSearchParams({ compareWfrId: value })
@@ -68,6 +78,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
                     value: getSelectPickerOptionByValue(pipelineDeploymentsOptions, compareWfrId, null),
                     onChange: deploymentSelectorOnChange,
                     showSelectedOptionIcon: false,
+                    menuSize: ComponentSizeType.large,
                 },
             },
         ],

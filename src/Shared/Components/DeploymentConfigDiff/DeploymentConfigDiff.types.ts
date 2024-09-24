@@ -28,6 +28,8 @@ export interface DeploymentConfigType {
 export interface DeploymentConfigListItem {
     id: string
     title: string
+    name?: string
+    pathType: EnvResourceType
     primaryConfig: DeploymentConfigType
     secondaryConfig: DeploymentConfigType
     diffState: DeploymentConfigDiffState

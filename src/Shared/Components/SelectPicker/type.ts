@@ -28,7 +28,7 @@ export interface SelectPickerOptionType<OptionValue = string | number> extends O
     /**
      * Description to be displayed for the option
      */
-    description?: string
+    description?: ReactNode
     /**
      * Icon at the start of the option
      */

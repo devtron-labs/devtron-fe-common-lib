@@ -498,6 +498,8 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
     tagsEditable,
     hideImageTaggingHardDelete,
     selectedEnvironmentName,
+    resourceId,
+    renderRunSource,
     processVirtualEnvironmentDeploymentData,
     renderDeploymentApprovalInfo,
     renderCIListHeader,
@@ -597,6 +599,9 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                 wfrId={+triggerId}
                                 triggerHistory={triggerHistory}
                                 setFullScreenView={setFullScreenView}
+                                resourceId={resourceId}
+                                renderRunSource={renderRunSource}
+                                runSource={triggerDetails.runSource}
                             />
                         </Route>
                     )}

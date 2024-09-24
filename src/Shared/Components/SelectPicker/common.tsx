@@ -165,13 +165,16 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                                 {label}
                             </h4>
                             {/* Add support for custom ellipsis if required */}
-                            {showDescription && (
-                                <p
-                                    className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__ellipsis-right__2nd-line' : ''}`}
-                                >
-                                    {description}
-                                </p>
-                            )}
+                            {showDescription &&
+                                (typeof description === 'string' ? (
+                                    <p
+                                        className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__ellipsis-right__2nd-line' : ''}`}
+                                    >
+                                        {description}
+                                    </p>
+                                ) : (
+                                    description
+                                ))}
                         </div>
                         {endIcon && (
                             <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>

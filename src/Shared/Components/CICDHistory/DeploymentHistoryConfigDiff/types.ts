@@ -3,13 +3,15 @@ import { Dispatch, SetStateAction } from 'react'
 import { DeploymentConfigDiffProps } from '@Shared/Components/DeploymentConfigDiff'
 import { EnvResourceType } from '@Shared/Services'
 
-import { History } from '../types'
+import { History, HistoryLogsProps, RunSourceType } from '../types'
 
-export interface DeploymentHistoryConfigDiffProps {
+export interface DeploymentHistoryConfigDiffProps
+    extends Required<Pick<HistoryLogsProps, 'renderRunSource' | 'resourceId'>> {
     appName: string
     envName: string
     pipelineId: number
     wfrId: number
+    runSource: RunSourceType
     triggerHistory: Map<number, History>
     setFullScreenView: (fullscreen: boolean) => void
 }
@@ -18,7 +20,12 @@ export type DeploymentHistoryDiffDetailedProps = Pick<
     DeploymentConfigDiffProps,
     'collapsibleNavList' | 'configList' | 'errorConfig' | 'isLoading' | 'navList'
 > &
-    Pick<DeploymentHistoryConfigDiffProps, 'setFullScreenView' | 'wfrId' | 'envName'> & {
+    Required<
+        Pick<
+            DeploymentHistoryConfigDiffProps,
+            'setFullScreenView' | 'wfrId' | 'envName' | 'renderRunSource' | 'resourceId' | 'runSource'
+        >
+    > & {
         pipelineDeployments: History[]
         previousWfrId: number
         convertVariables: boolean
