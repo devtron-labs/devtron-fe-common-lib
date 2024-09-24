@@ -41,6 +41,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     isHelmApp = false,
     isSecurityScanV2Enabled = false,
     isExternalCI = false,
+    hidePolicy = false,
 }) => {
     const [state, setState] = useState<SecurityModalStateType>(DEFAULT_SECURITY_MODAL_STATE)
 
@@ -108,7 +109,8 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
 
         /* NOTE: if detailView is active show data gathered from that */
         const { headers, rows, defaultSortIndex, hasExpandableRows } =
-            selectedDetailViewData || getTableData(data, state.category, state.subCategory, setDetailViewData)
+            selectedDetailViewData ||
+            getTableData(data, state.category, state.subCategory, setDetailViewData, hidePolicy)
 
         const { entities, lastScanTimeString, scanToolId } =
             selectedDetailViewData || getInfoCardData(data, state.category, state.subCategory)
