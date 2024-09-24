@@ -1,5 +1,6 @@
 import { ConfigurationType } from '@Shared/types'
 import { TemplateListType } from '@Shared/Services'
+import { ConfigHeaderTabType } from '../types'
 
 export enum DeploymentTemplateTabsType {
     EDIT = 1,
@@ -7,14 +8,18 @@ export enum DeploymentTemplateTabsType {
     PUBLISHED = 3,
 }
 
+export enum DeploymentTemplateQueryParams {
+    EDIT_MODE = 'editMode',
+    SELECTED_TAB = 'selectedTab',
+    SHOW_READ_ME = 'showReadMe',
+    CONFIG_HEADER_TAB = 'configHeaderTab',
+}
+
 export interface DeploymentTemplateQueryParamsType {
-    // TODO: Remove it from params itself
-    hideLockedKeys?: boolean
-    // TODO: Remove it from params itself
-    resolveScopedVariables?: boolean
     selectedTab: DeploymentTemplateTabsType
     showReadMe: boolean
     editMode: ConfigurationType
+    configHeaderTab: ConfigHeaderTabType
 }
 
 export type DeploymentChartOptionkind = 'base' | 'env' | 'chartVersion' | 'deployment'
