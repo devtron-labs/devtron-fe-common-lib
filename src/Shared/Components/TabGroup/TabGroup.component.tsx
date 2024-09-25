@@ -34,10 +34,10 @@ const Tab = ({
             React.MouseEvent<HTMLAnchorElement, MouseEvent> &
             React.MouseEvent<HTMLDivElement, MouseEvent>,
     ) => {
-        props?.onClick(e)
         if (active || e.currentTarget.classList.contains('active')) {
             e.preventDefault()
         }
+        props?.onClick(e)
     }
 
     const getTabComponent = () => {
