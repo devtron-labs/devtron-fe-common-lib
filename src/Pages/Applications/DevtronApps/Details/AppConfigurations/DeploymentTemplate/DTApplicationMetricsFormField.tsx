@@ -5,7 +5,7 @@ import { Tooltip } from '@Common/Tooltip'
 import { DOCUMENTATION } from '@Common/Constants'
 import { ReactComponent as ICHelpOutline } from '@Icons/ic-help-outline.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
-import { DeploymentTemplateTabsType, DTApplicationMetricsFormFieldProps } from './types'
+import { DTApplicationMetricsFormFieldProps } from './types'
 
 const DTApplicationMetricsFormField = ({
     showApplicationMetrics,
@@ -15,7 +15,7 @@ const DTApplicationMetricsFormField = ({
     toggleAppMetrics,
     isAppMetricsEnabled,
     showReadMe,
-    selectedTab,
+    isCompareView,
     onlyShowCurrentStatus = false,
 }: DTApplicationMetricsFormFieldProps) => {
     if (!showApplicationMetrics) {
@@ -33,8 +33,6 @@ const DTApplicationMetricsFormField = ({
             </div>
         )
     }
-
-    const isCompareTab = selectedTab === DeploymentTemplateTabsType.COMPARE && !showReadMe
 
     const getInfoText = (): string => {
         if (!selectedChart.isAppMetricsSupported) {
@@ -66,7 +64,7 @@ const DTApplicationMetricsFormField = ({
                     <div className="flex left fs-13 dc__gap-8">
                         <b className="fw-6 lh-18 cn-9">Show application metrics</b>
 
-                        {isCompareTab || showReadMe ? (
+                        {isCompareView || showReadMe ? (
                             <Tooltip alwaysShowTippyOnHover content={getInfoText()}>
                                 <button
                                     type="button"
@@ -89,7 +87,7 @@ const DTApplicationMetricsFormField = ({
                         )}
                     </div>
 
-                    {!isCompareTab && (
+                    {!isCompareView && (
                         <div
                             data-testid="app-metrics-info-text"
                             className={`fs-13 fw-4 lh-18 ${!selectedChart.isAppMetricsSupported ? 'cr-5' : 'cn-7'}`}

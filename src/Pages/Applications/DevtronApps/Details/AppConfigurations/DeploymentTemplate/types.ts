@@ -1,26 +1,4 @@
-import { ConfigurationType } from '@Shared/types'
 import { TemplateListType } from '@Shared/Services'
-import { ConfigHeaderTabType } from '../types'
-
-export enum DeploymentTemplateTabsType {
-    EDIT = 1,
-    COMPARE = 2,
-    PUBLISHED = 3,
-}
-
-export enum DeploymentTemplateQueryParams {
-    EDIT_MODE = 'editMode',
-    SELECTED_TAB = 'selectedTab',
-    SHOW_READ_ME = 'showReadMe',
-    CONFIG_HEADER_TAB = 'configHeaderTab',
-}
-
-export interface DeploymentTemplateQueryParamsType {
-    selectedTab: DeploymentTemplateTabsType
-    showReadMe: boolean
-    editMode: ConfigurationType
-    configHeaderTab: ConfigHeaderTabType
-}
 
 export type DeploymentChartOptionkind = 'base' | 'env' | 'chartVersion' | 'deployment'
 
@@ -167,19 +145,12 @@ export interface DeploymentTemplateConfigCommonState extends SelectedChartDetail
 export type DeploymentTemplateConfigState = DeploymentTemplateConfigCommonState &
     (BaseDeploymentTemplateConfigState | EnvironmentOverrideDeploymentTemplateConfigState)
 
-export interface NewDeploymentTemplateContextType
-    extends Pick<DeploymentTemplateQueryParamsType, 'editMode' | 'selectedTab' | 'showReadMe'> {
-    editorTemplate: string
-    publishedTemplateData: DeploymentTemplateConfigState
-    isLoadingInitialData: boolean
-}
-
 type DTApplicationMetricsReadOnlyProps = {
     isLoading?: never
     selectedChart?: never
     isDisabled?: never
     toggleAppMetrics?: never
-    selectedTab?: never
+    isCompareView?: never
     showReadMe?: never
     /**
      * @default - false
@@ -194,7 +165,9 @@ type DTApplicationMetricsActionProps = {
     isDisabled: boolean
     toggleAppMetrics: () => void
     onlyShowCurrentStatus?: false
-} & Pick<DeploymentTemplateQueryParamsType, 'selectedTab' | 'showReadMe'>
+    isCompareView: boolean
+    showReadMe: boolean
+}
 
 export type DTApplicationMetricsFormFieldProps = {
     isAppMetricsEnabled: boolean
