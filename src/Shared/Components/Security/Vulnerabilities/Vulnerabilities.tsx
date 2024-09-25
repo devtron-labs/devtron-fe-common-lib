@@ -30,7 +30,6 @@ const Vulnerabilities = ({
     isScanEnabled,
     artifactId,
     applicationId,
-    environmentId,
     setVulnerabilityCount,
     SecurityModalSidebar,
     getSecurityScan,
@@ -39,7 +38,6 @@ const Vulnerabilities = ({
     const { scanDetailsLoading, scanResultResponse, executionDetailsResponse, scanDetailsError, reloadScanDetails } =
         useGetSecurityVulnerabilities({
             appId: String(applicationId),
-            envId: String(environmentId),
             artifactId: String(artifactId),
             isScanEnabled,
             isScanned,

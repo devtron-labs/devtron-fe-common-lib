@@ -64,7 +64,7 @@ import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigg
 import { DEFAULT_ENV, TIMEOUT_VALUE, WORKER_POD_BASE_URL } from './constants'
 import { GitTriggers } from '../../types'
 import warn from '../../../Assets/Icon/ic-warning.svg'
-import { LogsRenderer } from './LogsRenderer'
+import LogsRenderer from './LogsRenderer'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryDetailedView, DeploymentHistoryConfigList } from './DeploymentHistoryDiff'
 import { GitChanges, Scroller } from './History.components'

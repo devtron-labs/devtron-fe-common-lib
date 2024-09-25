@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-import Tippy from '@tippyjs/react'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { ClipboardButton, GenericEmptyState, extractImage, useKeyDown, useSuperAdmin } from '../../../Common'
+import { withShortcut, IWithShortcut } from 'react-keybind'
+import {
+    ClipboardButton,
+    GenericEmptyState,
+    Tooltip,
+    extractImage,
+    IS_PLATFORM_MAC_OS,
+    useSuperAdmin,
+} from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { GitChangesType, LogResizeButtonType, ScrollerType } from './types'
@@ -27,53 +34,73 @@ import { ReactComponent as ZoomIn } from '../../../Assets/Icon/ic-fullscreen.svg
 import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscreen.svg'
 import './cicdHistory.scss'
 
-export const LogResizeButton = ({ fullScreenView, setFullScreenView }: LogResizeButtonType): JSX.Element => {
-    const { pathname } = useLocation()
+export const LogResizeButton = withShortcut(
+    ({
+        shortcutCombo = ['F'],
+        showOnlyWhenPathIncludesLogs = true,
+        fullScreenView,
+        setFullScreenView,
+        shortcut,
+    }: LogResizeButtonType & IWithShortcut): JSX.Element => {
+        const { pathname } = useLocation()
 
-    const keys = useKeyDown()
+        const toggleFullScreen = useCallback((): void => {
+            setFullScreenView(!fullScreenView)
+        }, [fullScreenView])
 
-    const toggleFullScreen = (): void => {
-        setFullScreenView(!fullScreenView)
-    }
+        const showButton = !showOnlyWhenPathIncludesLogs || pathname.includes('/logs')
+        const doesShortcutContainCmdKey = shortcutCombo.some((key) => key === 'Control') && IS_PLATFORM_MAC_OS
 
-    useEffect(() => {
-        if (!pathname.includes('/logs')) {
-            return
-        }
-        // eslint-disable-next-line default-case
-        switch (keys.join('')) {
-            case 'f':
-                toggleFullScreen()
-                break
-            case 'Escape':
-                setFullScreenView(false)
-                break
-        }
-    }, [keys])
+        useEffect(() => {
+            const combo = shortcutCombo
+                .map((key) => {
+                    if (key === 'Control') {
+                        return IS_PLATFORM_MAC_OS ? 'cmd' : 'ctrl'
+                    }
+                    return key.toLowerCase()
+                })
+                .join('+')
 
-    return (
-        pathname.includes('/logs') && (
-            <Tippy
-                placement="top"
-                arrow={false}
-                className="default-tt"
-                content={fullScreenView ? 'Exit fullscreen (f)' : 'Enter fullscreen (f)'}
-            >
-                <div>
-                    {fullScreenView ? (
-                        <ZoomOut className="zoom zoom--out pointer dc__zi-4" onClick={toggleFullScreen} />
-                    ) : (
-                        <ZoomIn className="zoom zoom--in pointer dc__zi-4" onClick={toggleFullScreen} />
-                    )}
-                </div>
-            </Tippy>
+            // FIXME: disabling shortcut for macos since pressing cmd breaks shortcuts through react-keybind
+            if (showButton && shortcutCombo.length && !doesShortcutContainCmdKey) {
+                shortcut.registerShortcut(toggleFullScreen, [combo], 'ToggleFullscreen', 'Enter/Exit fullscreen')
+            }
+
+            return () => {
+                shortcut.unregisterShortcut([combo])
+            }
+        }, [showButton, toggleFullScreen])
+
+        return (
+            showButton && (
+                <Tooltip
+                    placement="left"
+                    shortcutKeyCombo={{
+                        text: fullScreenView ? 'Exit fullscreen' : 'Enter fullscreen',
+                        combo: doesShortcutContainCmdKey ? null : shortcutCombo,
+                    }}
+                >
+                    <button
+                        type="button"
+                        aria-label="Enter/Exit fullscreen view"
+                        className="zoom dc__zi-4 flex dc__no-border log-resize-button"
+                        onClick={toggleFullScreen}
+                    >
+                        {fullScreenView ? (
+                            <ZoomOut className="icon-dim-16 dc__no-shrink" />
+                        ) : (
+                            <ZoomIn className="icon-dim-16 dc__no-shrink" />
+                        )}
+                    </button>
+                </Tooltip>
+            )
         )
-    )
-}
+    },
+)
 
 export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): JSX.Element => (
     <div style={style} className="dc__element-scroller flex column top br-4">
-        <Tippy className="default-tt" arrow={false} content="Scroll to Top">
+        <Tooltip alwaysShowTippyOnHover content="Scroll to Top" placement="left">
             <button
                 className="flex"
                 disabled={!scrollToTop}
@@ -83,8 +110,8 @@ export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): 
             >
                 <DropDownIcon className="rotate" style={{ ['--rotateBy' as any]: '180deg' }} />
             </button>
-        </Tippy>
-        <Tippy className="default-tt" arrow={false} content="Scroll to Bottom">
+        </Tooltip>
+        <Tooltip alwaysShowTippyOnHover content="Scroll to Bottom" placement="left">
             <button
                 className="flex"
                 disabled={!scrollToBottom}
@@ -94,7 +121,7 @@ export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): 
             >
                 <DropDownIcon className="rotate" />
             </button>
-        </Tippy>
+        </Tooltip>
     </div>
 )
 

@@ -44,7 +44,6 @@ const ImageCardAccordion = ({
     isSecurityModuleInstalled,
     artifactId,
     applicationId,
-    environmentId,
     changesCard,
     isScanned,
     isScanEnabled,
@@ -74,7 +73,6 @@ const ImageCardAccordion = ({
                 isScanEnabled={isScanEnabled}
                 artifactId={artifactId}
                 applicationId={applicationId}
-                environmentId={environmentId}
                 setVulnerabilityCount={setVulnerabilityCount}
                 SecurityModalSidebar={SecurityModalSidebar}
                 getSecurityScan={getSecurityScan}

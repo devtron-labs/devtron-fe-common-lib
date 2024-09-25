@@ -23,7 +23,6 @@ export interface ImageCardAccordionProps extends MaterialSecurityInfoType {
     isSecurityModuleInstalled: boolean
     artifactId: number
     applicationId: number
-    environmentId: number
     changesCard: ReactNode
     isScanned: boolean
     isScanEnabled: boolean
