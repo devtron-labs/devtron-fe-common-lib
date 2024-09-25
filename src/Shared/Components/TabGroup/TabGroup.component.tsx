@@ -29,6 +29,17 @@ const Tab = ({
         alignActiveBorderWithContainer,
     })[size]
 
+    const onClickHandler = (
+        e: React.MouseEvent<HTMLButtonElement, MouseEvent> &
+            React.MouseEvent<HTMLAnchorElement, MouseEvent> &
+            React.MouseEvent<HTMLDivElement, MouseEvent>,
+    ) => {
+        if (active || e.currentTarget.classList.contains('active')) {
+            e.preventDefault()
+        }
+        props?.onClick(e)
+    }
+
     const getTabComponent = () => {
         const content = (
             <>
@@ -49,6 +60,7 @@ const Tab = ({
                         className={`${tabClassName} dc__no-decor flexbox-col ${disabled ? 'cursor-not-allowed' : ''}`}
                         aria-disabled={disabled}
                         {...props}
+                        onClick={onClickHandler}
                     >
                         {content}
                     </Link>
@@ -59,6 +71,7 @@ const Tab = ({
                         className={`${tabClassName} dc__no-decor flexbox-col tab-group__tab__nav-link ${disabled ? 'cursor-not-allowed' : ''}`}
                         aria-disabled={disabled}
                         {...props}
+                        onClick={onClickHandler}
                     >
                         {content}
                     </NavLink>
@@ -79,6 +92,7 @@ const Tab = ({
                         className={`dc__unset-button-styles flexbox-col ${tabClassName} ${disabled ? 'cursor-not-allowed' : ''}`}
                         disabled={disabled}
                         {...props}
+                        onClick={onClickHandler}
                     >
                         {content}
                     </button>
