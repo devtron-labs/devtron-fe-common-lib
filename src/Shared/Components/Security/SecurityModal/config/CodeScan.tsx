@@ -33,7 +33,7 @@ import {
 } from '../types'
 import { OpenDetailViewButton } from '../components'
 
-export const getCodeScanVulnerabilities = (data: CodeScan['vulnerability']) => ({
+export const getCodeScanVulnerabilities = (data: CodeScan['vulnerability'], hidePolicy: boolean) => ({
     headers: [
         { headerText: 'cve id', isSortable: false, width: 150 },
         {
@@ -46,6 +46,7 @@ export const getCodeScanVulnerabilities = (data: CodeScan['vulnerability']) => (
         { headerText: 'package', isSortable: true, width: 143.33 },
         { headerText: 'current version', isSortable: false, width: 143.33 },
         { headerText: 'fixed in version', isSortable: false, width: 143.33 },
+        !hidePolicy && { headerText: 'policy', isSortable: false, width: 143.33 },
     ],
     rows: !data?.list?.length
         ? null
@@ -86,6 +87,14 @@ export const getCodeScanVulnerabilities = (data: CodeScan['vulnerability']) => (
                   {
                       component: null,
                       cellContent: element.fixedInVersion,
+                  },
+                  !hidePolicy && {
+                      component: (
+                          <span className={`security-policy--${element.permission?.toLowerCase()}`}>
+                              {element.permission}
+                          </span>
+                      ),
+                      cellContent: element.permission,
                   },
               ],
           })),
@@ -376,10 +385,11 @@ export const getCodeScanTableData = (
     data: CodeScan,
     subCategory: SecurityModalStateType['subCategory'],
     setDetailViewData: OpenDetailViewButtonProps['setDetailViewData'],
+    hidePolicy: boolean,
 ): TablePropsType => {
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
-            return getCodeScanVulnerabilities(data[subCategory])
+            return getCodeScanVulnerabilities(data[subCategory], hidePolicy)
         case SUB_CATEGORIES.LICENSE:
             return getCodeScanLicense(data[subCategory])
         case SUB_CATEGORIES.MISCONFIGURATIONS:

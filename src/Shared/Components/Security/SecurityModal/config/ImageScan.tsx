@@ -51,6 +51,7 @@ const getVulnerabilitiesDetailBaseData = (element: ImageScanVulnerabilityListTyp
 const getGroupedVulnerabilitiesDetailData = (
     element: ImageScanVulnerabilityListType,
     setDetailViewData: OpenDetailViewButtonProps['setDetailViewData'],
+    hidePolicy: boolean,
 ) => {
     const list = !element?.list?.length ? null : groupByTarget(element.list)
 
@@ -81,7 +82,7 @@ const getGroupedVulnerabilitiesDetailData = (
                                           summary: child.summary,
                                       }),
                                       titlePrefix: 'Source',
-                                      ...getCodeScanVulnerabilities(child),
+                                      ...getCodeScanVulnerabilities(child, hidePolicy),
                                   }}
                                   setDetailViewData={setDetailViewData}
                               >
@@ -102,15 +103,16 @@ const getGroupedVulnerabilitiesDetailData = (
 const getVulnerabilitiesDetailData = (
     element: ImageScanVulnerabilityListType,
     setDetailViewData: OpenDetailViewButtonProps['setDetailViewData'],
+    hidePolicy: boolean,
 ) => {
     const shouldGroupByTarget = element.list.every((item) => !!item.target)
     if (!shouldGroupByTarget) {
         return {
             ...getVulnerabilitiesDetailBaseData(element),
-            ...getCodeScanVulnerabilities(element),
+            ...getCodeScanVulnerabilities(element, hidePolicy),
         }
     }
-    return getGroupedVulnerabilitiesDetailData(element, setDetailViewData)
+    return getGroupedVulnerabilitiesDetailData(element, setDetailViewData, hidePolicy)
 }
 
 const getImageScanProgressingState = (status: StatusType['status']) => {
@@ -147,6 +149,7 @@ const getTimeString = (timeString: string, status: StatusType['status']) => {
 const getVulnerabilitiesData = (
     data: ImageScan['vulnerability'],
     setDetailViewData: OpenDetailViewButtonProps['setDetailViewData'],
+    hidePolicy: boolean,
 ) => ({
     headers: [
         { headerText: 'image', isSortable: false, width: 256 },
@@ -162,7 +165,7 @@ const getVulnerabilitiesData = (
                   {
                       component: (
                           <OpenDetailViewButton
-                              detailViewData={getVulnerabilitiesDetailData(element, setDetailViewData)}
+                              detailViewData={getVulnerabilitiesDetailData(element, setDetailViewData, hidePolicy)}
                               setDetailViewData={setDetailViewData}
                           >
                               <span className="cb-5 fw-4 cursor">{element.image}</span>
@@ -292,10 +295,11 @@ export const getImageScanTableData = (
     data: ImageScan,
     subCategory: SecurityModalStateType['subCategory'],
     setDetailViewData: OpenDetailViewButtonProps['setDetailViewData'],
+    hidePolicy: boolean,
 ): TablePropsType => {
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
-            return getVulnerabilitiesData(data[subCategory], setDetailViewData)
+            return getVulnerabilitiesData(data[subCategory], setDetailViewData, hidePolicy)
         case SUB_CATEGORIES.LICENSE:
             return getLicenseData(data[subCategory], setDetailViewData)
         default:
