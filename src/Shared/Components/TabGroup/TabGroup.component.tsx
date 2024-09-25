@@ -37,7 +37,7 @@ const Tab = ({
         if (active || e.currentTarget.classList.contains('active')) {
             e.preventDefault()
         }
-        props?.onClick(e)
+        props?.onClick?.(e)
     }
 
     const getTabComponent = () => {
