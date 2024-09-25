@@ -5,7 +5,7 @@ import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { ReactComponent as ICError } from '@Icons/ic-error.svg'
 import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICLocked } from '@Icons/ic-locked.svg'
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 import { ToastProps, ToastVariantType } from './types'
@@ -22,7 +22,7 @@ export const TOAST_BASE_CONFIG: ToastContainerProps = {
     closeButton: ({ closeToast }) => (
         <div className="custom-toast__close-btn">
             <Button
-                icon={<ICClose className="fcn-0" />}
+                icon={<ICCross className="fcn-0" />}
                 onClick={closeToast}
                 dataTestId="close-toast"
                 ariaLabel="Close toast"
