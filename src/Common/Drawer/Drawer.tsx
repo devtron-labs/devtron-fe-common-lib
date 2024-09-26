@@ -41,6 +41,7 @@ export const Drawer = ({
     maxWidth,
     parentClassName,
     onEscape,
+    onClose,
 }: drawerInterface) => {
     const drawerRef = useRef(null)
     useEffect(() => {
@@ -61,7 +62,7 @@ export const Drawer = ({
         style['--height'] = height
     }
     return (
-        <VisibleModal className="drawer--container" parentClassName={parentClassName || ''} onEscape={onEscape}>
+        <VisibleModal className="drawer--container" parentClassName={parentClassName || ''} onEscape={onEscape} close={onClose}>
             <aside style={style} ref={drawerRef} className={`drawer ${position}`}>
                 {children}
             </aside>

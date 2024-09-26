@@ -24,6 +24,7 @@ import {
     ServerErrors,
     SortingParams,
 } from '../Common'
+import { KeyValueListType } from './Components'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
@@ -163,6 +164,7 @@ export enum AppType {
     DEVTRON_HELM_CHART = 'devtron_helm_chart',
     EXTERNAL_HELM_CHART = 'external_helm_chart',
     EXTERNAL_ARGO_APP = 'external_argo_app',
+    EXTERNAL_FLUX_APP = 'external_flux_app',
 }
 
 export interface HelmReleaseStatus {
@@ -179,6 +181,11 @@ interface MaterialInfo {
     revision: string
     url: string
     webhookData: string
+}
+export interface FluxAppStatusDetail {
+    status: string
+    message: string
+    reason: string
 }
 export interface AppDetails {
     appId?: number
@@ -221,6 +228,8 @@ export interface AppDetails {
     helmPackageName?: string
     appStatus?: string
     chartAvatar?: string
+    fluxTemplateType?: string
+    FluxAppStatusDetail?: FluxAppStatusDetail
 }
 
 export enum RegistryType {
@@ -245,8 +254,10 @@ export enum DefaultUserKey {
 
 export enum Severity {
     CRITICAL = 'critical',
-    MODERATE = 'moderate',
+    HIGH = 'high',
+    MEDIUM = 'medium',
     LOW = 'low',
+    UNKNOWN = 'unknown',
 }
 
 export enum ImagePromotionTabs {
@@ -329,6 +340,11 @@ export interface RuntimeParamsTriggerPayloadType {
 
 export enum CIMaterialSidebarType {
     CODE_SOURCE = 'Code Source',
+    PARAMETERS = 'Parameters',
+}
+
+export enum CDMaterialSidebarType {
+    IMAGE = 'Image',
     PARAMETERS = 'Parameters',
 }
 
@@ -418,6 +434,7 @@ export enum ResourceKindType {
     cluster = 'cluster',
     release = 'release',
     releaseTrack = 'release-track',
+    releaseChannel = 'release-channel',
     tenant = 'tenant',
     installation = 'installation',
     environment = 'environment',
@@ -435,18 +452,23 @@ export enum ResourceVersionType {
     alpha1 = 'alpha1',
 }
 
+export interface SeverityCount {
+    critical: number
+    high: number
+    medium: number
+    low: number
+    unknown: number
+}
 export enum PolicyKindType {
     lockConfiguration = 'lock-configuration',
-    imagePromotion = 'lock-configuration',
+    imagePromotion = 'image-promotion',
+    // TODO: Update after BE is ready
+    plugins = 'lock-configuration',
 }
 
 export interface LastExecutionResultType {
     lastExecution: string
-    severityCount: {
-        critical: number
-        moderate: number
-        low: number
-    }
+    severityCount: SeverityCount
     vulnerabilities: VulnerabilityType[]
     scanExecutionId?: number
     appId?: number
@@ -460,6 +482,7 @@ export interface LastExecutionResultType {
     scanned?: boolean
     scanEnabled?: boolean
     scanToolId?: number
+    imageScanDeployInfoId?: number
 }
 
 export interface LastExecutionResponseType extends ResponseType<LastExecutionResultType> {}
@@ -625,6 +648,14 @@ export interface scrollableInterface {
     autoBottomScroll: boolean
 }
 
+export enum URLProtocolType {
+    HTTP = 'http:',
+    HTTPS = 'https:',
+    SSH = 'ssh:',
+    SMTP = 'smtp:',
+    S3 = 's3:',
+}
+
 export type BaseFilterQueryParams<T> = {
     /**
      * Offset for the list result
@@ -643,3 +674,14 @@ export type BaseFilterQueryParams<T> = {
      */
     showAll?: boolean
 } & SortingParams<T>
+
+export type DataAttributes = Record<`data-${string}`, unknown>
+
+export interface RuntimeParamsListItemType extends KeyValueListType {
+    id: number
+}
+
+export enum RuntimeParamsHeadingType {
+    KEY = 'key',
+    VALUE = 'value',
+}

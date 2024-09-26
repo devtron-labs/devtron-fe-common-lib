@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import { useDownload } from '@Shared/Hooks'
 import {
     GenericEmptyState,
@@ -70,7 +69,7 @@ export const CIListItem = ({
     return (
         <>
             {type === 'deployed-artifact' && (
-                <div className="flex mb-12 dc__width-inherit">
+                <div className="flex dc__width-inherit pb-12">
                     <div className="w-50 text-underline-dashed-300" />
                     <Down className="icon-dim-16 ml-8 mr-8" style={{ transform: 'rotate(90deg)' }} />
                     <div className="w-50 text-underline-dashed-300" />
@@ -89,7 +88,7 @@ export const CIListItem = ({
                 })}
 
             <div
-                className={`dc__h-fit-content ci-artifact ci-artifact--${type} image-tag-parent-card bcn-0 br-4 dc__border p-12 w-100 dc__mxw-800 ${
+                className={`dc__h-fit-content ci-artifact image-tag-parent-card bcn-0 br-4 dc__border p-12 w-100 dc__mxw-800 ci-artifact--${type} ${
                     headerMetaDataPresent && renderCIListHeader ? 'dc__no-top-radius dc__no-top-border' : ''
                 }`}
                 data-testid="hover-on-report-artifact"
@@ -133,7 +132,7 @@ const Artifacts = ({
     appReleaseTagNames,
     tagsEditable,
     hideImageTaggingHardDelete,
-    jobCIClass,
+    rootClassName,
     renderCIListHeader,
 }: ArtifactType) => {
     const { isSuperAdmin } = useSuperAdmin()
@@ -143,14 +142,6 @@ const Artifacts = ({
         triggerId: string
         buildId: string
     }>()
-    const [copied, setCopied] = useState(false)
-
-    useEffect(() => {
-        if (!copied) {
-            return
-        }
-        setTimeout(() => setCopied(false), 2000)
-    }, [copied])
 
     async function handleArtifact() {
         await handleDownload({
@@ -162,33 +153,11 @@ const Artifacts = ({
     if (status.toLowerCase() === TERMINAL_STATUS_MAP.RUNNING || status.toLowerCase() === TERMINAL_STATUS_MAP.STARTING) {
         return <CIProgressView />
     }
-    if (!blobStorageEnabled) {
-        return (
-            <div className="flex column p-24 w-100 h-100">
-                <GenericEmptyState
-                    title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoFilesFound}
-                    subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.BlobStorageNotConfigured}
-                    image={noartifact}
-                />
-                <div className="flexbox pt-8 pr-12 pb-8 pl-12 bcv-1 ev-2 bw-1 br-4 dc__position-abs-b-20">
-                    <ICHelpOutline className="icon-dim-20 fcv-5" />
-                    <span className="fs-13 fw-4 mr-8 ml-8">
-                        {EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.StoreFiles}
-                    </span>
-                    <a
-                        className="fs-13 fw-6 cb-5 dc__no-decor"
-                        href={DOCUMENTATION.BLOB_STORAGE}
-                        target="_blank"
-                        rel="noreferrer"
-                    >
-                        {EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.ConfigureBlobStorage}
-                    </a>
-                    <OpenInNew className="icon-dim-20 ml-8" />
-                </div>
-            </div>
-        )
-    }
-    if (status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED || status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED) {
+    if (
+        status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED ||
+        status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED ||
+        status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR
+    ) {
         if (isJobCI) {
             return (
                 <GenericEmptyState
@@ -205,7 +174,7 @@ const Artifacts = ({
             />
         )
     }
-    if (!artifactId && status.toLowerCase() === TERMINAL_STATUS_MAP.SUCCEEDED && !isJobView) {
+    if (!artifactId && status.toLowerCase() === TERMINAL_STATUS_MAP.SUCCEEDED) {
         return (
             <GenericEmptyState
                 title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsFound}
@@ -215,8 +184,8 @@ const Artifacts = ({
         )
     }
     return (
-        <div className={`flex left column p-16 ${jobCIClass ?? ''}`}>
-            {!isJobView && type !== HistoryComponentType.CD && (
+        <>
+            <div className={`flex left column dc__gap-12 dc__content-start ${rootClassName ?? ''}`}>
                 <CIListItem
                     type="artifact"
                     ciPipelineId={ciPipelineId}
@@ -244,30 +213,49 @@ const Artifacts = ({
                         </div>
                     </div>
                 </CIListItem>
+                {blobStorageEnabled &&
+                    downloadArtifactUrl &&
+                    (type === HistoryComponentType.CD || isArtifactUploaded || isJobView) && (
+                        <CIListItem
+                            type="report"
+                            hideImageTaggingHardDelete={hideImageTaggingHardDelete}
+                            isSuperAdmin={isSuperAdmin}
+                            renderCIListHeader={renderCIListHeader}
+                        >
+                            <div className="flex column left">
+                                <div className="cn-9 fs-14">Reports.zip</div>
+                                <button
+                                    type="button"
+                                    onClick={handleArtifact}
+                                    className="anchor p-0 cb-5 fs-12 flex left pointer"
+                                >
+                                    Download
+                                    <Download className="ml-5 icon-dim-16" />
+                                </button>
+                            </div>
+                        </CIListItem>
+                    )}
+            </div>
+            {!blobStorageEnabled && (
+                <div className="flexbox dc__position-abs-b-20 dc__content-center w-100">
+                    <div className="flexbox pt-8 pr-12 pb-8 pl-12 bcv-1 ev-2 bw-1 br-4">
+                        <ICHelpOutline className="icon-dim-20 fcv-5" />
+                        <span className="fs-13 fw-4 mr-8 ml-8">
+                            {EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.StoreFiles}
+                        </span>
+                        <a
+                            className="fs-13 fw-6 cb-5 dc__no-decor"
+                            href={DOCUMENTATION.BLOB_STORAGE}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            {EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.ConfigureBlobStorage}
+                        </a>
+                        <OpenInNew className="icon-dim-20 ml-8" />
+                    </div>
+                </div>
             )}
-            {blobStorageEnabled &&
-                downloadArtifactUrl &&
-                (type === HistoryComponentType.CD || isArtifactUploaded || isJobView) && (
-                    <CIListItem
-                        type="report"
-                        hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                        isSuperAdmin={isSuperAdmin}
-                        renderCIListHeader={renderCIListHeader}
-                    >
-                        <div className="flex column left">
-                            <div className="cn-9 fs-14">Reports.zip</div>
-                            <button
-                                type="button"
-                                onClick={handleArtifact}
-                                className="anchor p-0 cb-5 fs-12 flex left pointer"
-                            >
-                                Download
-                                <Download className="ml-5 icon-dim-16" />
-                            </button>
-                        </div>
-                    </CIListItem>
-                )}
-        </div>
+        </>
     )
 }
 

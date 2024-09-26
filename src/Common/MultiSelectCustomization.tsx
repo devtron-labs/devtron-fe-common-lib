@@ -16,20 +16,23 @@
 
 import React from 'react'
 import Select, { components } from 'react-select'
+import Tippy from '@tippyjs/react'
+import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
 import { ReactComponent as ClearIcon } from '../Assets/Icon/ic-appstatus-cancelled.svg'
 import { ReactComponent as Check } from '../Assets/Icon/ic-check.svg'
 import { ReactComponent as RedWarning } from '../Assets/Icon/ic-error-medium.svg'
 import { Checkbox } from './Checkbox'
 import { CHECKBOX_VALUE } from './Types'
+import { ConditionalWrap } from './Helper'
 
 export const Option = (props) => {
-    const { selectOption, data, isDisabled } = props
+    const { selectOption, data, isDisabled, showTippy, tippyPlacement } = props
 
     const handleChange = (e) => {
         selectOption(data)
     }
 
-    return (
+    const renderOption = () => (
         <div
             className={`flex left pl-12 cursor dc__gap-8 ${isDisabled ? 'dc__disabled' : ''}`}
             style={{ background: props.isFocused ? 'var(--N100)' : 'transparent' }}
@@ -43,6 +46,26 @@ export const Option = (props) => {
             />
             <components.Option {...props} />
         </div>
+    )
+
+    const renderTippy = (children) => {
+        const placement = tippyPlacement === 'left' || tippyPlacement === 'right' ? tippyPlacement : 'auto'
+        return (
+            <Tippy
+                content={data.label}
+                className="default-tt dc__mxw-200 dc__word-break"
+                placement={placement}
+                arrow={false}
+            >
+                {children}
+            </Tippy>
+        )
+    }
+
+    return (
+        <ConditionalWrap condition={showTippy} wrap={renderTippy}>
+            {renderOption()}
+        </ConditionalWrap>
     )
 }
 
@@ -63,8 +86,8 @@ export const SingleSelectOption = (props) => {
 }
 
 /**
- *  Multi value container 
-*/
+ *  Multi value container
+ */
 
 export const MultiValueContainer = (props) => {
     const { children, data, innerProps, selectProps } = props
@@ -77,7 +100,7 @@ export const MultiValueContainer = (props) => {
     )
 }
 /**
- * 
+ *
  * Multi value container with count
  */
 export const MultiValueContainerWithCount = (props: any) => {
@@ -116,14 +139,14 @@ export const MultiValueRemove = (props) => {
     const {
         data,
         innerProps: { onClick, onMouseDown },
-        selectProps,
     } = props
     return (
         <components.MultiValueRemove {...props}>
-            <ClearIcon
+            <ICErrorCross
                 {...{ onClick, onMouseDown }}
                 onClick={(e) => onClick(data)}
-                style={{ height: '18px', width: '18px' }}
+                className="icon-n5"
+                style={{ height: '14px', width: '14px' }}
             />
         </components.MultiValueRemove>
     )
@@ -139,7 +162,7 @@ export const MultiValueChipContainer = ({ validator, isAllSelected = false, ...p
     return (
         <components.MultiValueContainer {...{ data, innerProps, selectProps }}>
             <div className="flex left fs-12 pl-4 pr-4 dc__ellipsis-right">
-                {!isValidEmail && <RedWarning className="mr-4 icon-dim-16" />}
+                {!isValidEmail && <RedWarning className="mr-4 icon-dim-16 dc__no-shrink" />}
                 <div className={`dc__ellipsis-right ${isValidEmail ? 'cn-9' : 'cr-5'}`}>{label}</div>
             </div>
             {children[1]}

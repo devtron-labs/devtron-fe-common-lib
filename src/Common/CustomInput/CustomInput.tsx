@@ -17,6 +17,7 @@
 import { CustomInputProps } from './Types'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled-override.svg'
 import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-warning.svg'
+import { useEffect, useRef } from 'react'
 
 export const CustomInput = ({
     name,
@@ -36,10 +37,9 @@ export const CustomInput = ({
     rootClassName = '',
     autoComplete = 'off',
     helperText = '',
-    handleOnBlur,
+    onBlur,
     readOnly = false,
     noTrim = false,
-    ref,
     onKeyPress,
     defaultValue,
     onKeyDown,
@@ -48,6 +48,17 @@ export const CustomInput = ({
     inputWrapClassName = '',
     inputProps = {},
 }: CustomInputProps) => {
+    const inputRef = useRef<HTMLInputElement>()
+
+    useEffect(() => {
+        setTimeout(() => {
+            // Added timeout to ensure the autofocus code is executed post the re-renders
+            if (inputRef.current && autoFocus) {
+                inputRef.current.focus()
+            }
+        }, 100)
+    }, [autoFocus])
+
     function handleError(error: any): any[] {
         if (!Array.isArray(error)) {
             return [error]
@@ -55,22 +66,22 @@ export const CustomInput = ({
         return error
     }
 
-    const onBlur = (event) => {
+    const handleOnBlur = (event) => {
         // NOTE: This is to prevent the input from being trimmed when the user do not want to trim the input
         if (!noTrim) {
             event.stopPropagation()
             event.target.value = event.target.value?.trim()
             onChange(event)
         }
-        if (typeof handleOnBlur === 'function') {
-            handleOnBlur(event)
+        if (typeof onBlur === 'function') {
+            onBlur(event)
         }
     }
 
     const renderFormErrorWithIcon = (error: string) => (
-        <div className="form__error" key={error}>
-            <ErrorIcon className="form__icon form__icon--error" />
-            {error}
+        <div className="flex left mt-4 mb-4 dc__gap-4 cr-5 fs-11 lh-16 fw-4" key={error}>
+            <ErrorIcon className="icon-dim-16 p-1 form__icon--error dc__align-self-start dc__no-shrink" />
+            <span>{error}</span>
             {error && typeof additionalErrorInfo === 'function' && additionalErrorInfo()}
         </div>
     )
@@ -116,7 +127,7 @@ export const CustomInput = ({
                     e.persist()
                     onChange(e)
                 }}
-                onBlur={onBlur}
+                onBlur={handleOnBlur}
                 onFocus={onFocus}
                 placeholder={placeholder}
                 value={value}
@@ -124,20 +135,20 @@ export const CustomInput = ({
                 tabIndex={tabIndex}
                 autoFocus={autoFocus}
                 readOnly={readOnly}
-                ref={ref}
                 onKeyPress={onKeyPress}
                 defaultValue={defaultValue}
                 onKeyDown={onKeyDown}
                 required={required}
                 // Will be passing other props like other data attributes etc from inputProps
                 {...inputProps}
+                ref={inputRef}
             />
 
             {getInputError()}
             {helperText && (
-                 <div className="flex left top dc__gap-4 fs-11 lh-16 cn-7">
-                 <Info className="icon-dim-16" />
-                 <div>{helperText}</div>
+                <div className="flex left top dc__gap-4 fs-11 lh-16 cn-7 pt-4">
+                    <Info className="icon-dim-16" />
+                    <div>{helperText}</div>
                 </div>
             )}
         </div>

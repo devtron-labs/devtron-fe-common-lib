@@ -22,7 +22,7 @@ import { ReactComponent as DropDown } from '../../../../Assets/Icon/ic-dropdown-
 import { ReactComponent as ChartIcon } from '../../../../Assets/Icon/ic-charts.svg'
 import { ReactComponent as AddIcon } from '../../../../Assets/Icon/ic-add.svg'
 import { ReactComponent as JobIcon } from '../../../../Assets/Icon/ic-k8s-job.svg'
-import AppListConstants from './constants'
+import { AppListConstants } from '../../../constants'
 import './HeaderWithCreateButton.scss'
 import { useMainContext } from '../../../Providers'
 
@@ -46,11 +46,7 @@ export const HeaderWithCreateButton = ({ headerName }: HeaderWithCreateButtonPro
     }
 
     const openCreateDevtronAppModel = () => {
-        const canOpenModalWithDevtronApps = params.appType
-            ? params.appType === AppListConstants.AppType.DEVTRON_APPS
-            : serverMode === SERVER_MODE.FULL
-        const _appType = canOpenModalWithDevtronApps ? AppListConstants.AppType.DEVTRON_APPS : URLS.APP_LIST_HELM
-        const _urlPrefix = `${URLS.APP}/${URLS.APP_LIST}/${_appType}`
+        const _urlPrefix = `${URLS.APP}/${URLS.APP_LIST}/${params.appType ?? AppListConstants.AppType.DEVTRON_APPS}`
         history.push(`${_urlPrefix}/${AppListConstants.CREATE_DEVTRON_APP_URL}${location.search}`)
     }
 

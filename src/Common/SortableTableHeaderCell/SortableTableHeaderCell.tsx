@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Tooltip } from '@Common/Tooltip'
 import { ReactComponent as SortIcon } from '../../Assets/Icon/ic-arrow-up-down.svg'
 import { ReactComponent as SortArrowDown } from '../../Assets/Icon/ic-sort-arrow-down.svg'
 import { SortingOrder } from '../Constants'
@@ -41,6 +42,7 @@ const SortableTableHeaderCell = ({
     title,
     disabled,
     isSortable = true,
+    showTippyOnTruncate = false,
 }: SortableTableHeaderCellProps) => {
     const renderSortIcon = () => {
         if (!isSortable) {
@@ -50,12 +52,12 @@ const SortableTableHeaderCell = ({
         if (isSorted) {
             return (
                 <SortArrowDown
-                    className={`icon-dim-12 mw-12 scn-7 dc__transition--transform ${sortOrder === SortingOrder.DESC ? 'dc__flip-180' : ''}`}
+                    className={`icon-dim-12 mw-12 scn-7 dc__no-shrink dc__transition--transform ${sortOrder === SortingOrder.DESC ? 'dc__flip-180' : ''}`}
                 />
             )
         }
 
-        return <SortIcon className="icon-dim-12 mw-12 scn-7" />
+        return <SortIcon className="icon-dim-12 mw-12 scn-7 dc__no-shrink" />
     }
 
     return (
@@ -65,7 +67,9 @@ const SortableTableHeaderCell = ({
             onClick={isSortable ? triggerSorting : noop}
             disabled={disabled}
         >
-            <span className="dc__uppercase dc__ellipsis-right">{title}</span>
+            <Tooltip showOnTruncate={showTippyOnTruncate} content={title}>
+                <span className="dc__uppercase dc__ellipsis-right">{title}</span>
+            </Tooltip>
             {renderSortIcon()}
         </button>
     )

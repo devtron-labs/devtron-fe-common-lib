@@ -92,3 +92,31 @@ input:checked + .toggle__slider {
 input:focus + .toggle__slider {
     box-shadow: 0 0 1px var(--color);
 }
+
+.dc__toggle-square-toggle {
+    .toggle__slider {
+        border-color: var(--color);
+        background-color: var(--color) !important;
+
+        &:before {
+            background-color: transparent;
+        }
+
+        &.with-icon svg {
+            height: 16px;
+            width: 16px;
+            margin-top: 1px;
+            background-color: var(--N0);
+            left: 0;
+            padding: 0;
+            border-radius: 3px;
+        }
+    }
+
+    input:checked + .toggle__slider {
+        &.with-icon svg {
+            left: -6px;
+            background-color: var(--N0);
+        }
+    }
+}

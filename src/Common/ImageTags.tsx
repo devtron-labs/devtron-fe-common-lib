@@ -15,7 +15,6 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { toast } from 'react-toastify'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as Add } from '../Assets/Icon/ic-add.svg'
 import { ReactComponent as Close } from '../Assets/Icon/ic-cross.svg'
@@ -30,7 +29,7 @@ import { ImageButtonType, ImageTaggingContainerType, ReleaseTag } from './ImageT
 import { showError, stopPropagation } from './Helper'
 import { setImageTags } from './Common.service'
 import { Progressing } from './Progressing'
-import { InfoIconTippy } from '../Shared'
+import { InfoIconTippy, ToastManager, ToastVariantType } from '../Shared'
 
 export const ImageTagsContainer = ({
     // Setting it to zero in case of external pipeline
@@ -257,7 +256,10 @@ export const ImageTagsContainer = ({
             .catch((err) => {
                 // Fix toast message
                 if (err.errors?.[0]?.userMessage?.appReleaseTags?.length) {
-                    toast.error(err.errors?.[0]?.internalMessage)
+                    ToastManager.showToast({
+                        variant: ToastVariantType.error,
+                        description: err.errors?.[0]?.internalMessage,
+                    })
                     errorStateHandling(err.errors)
                 } else {
                     showError(err)
@@ -280,14 +282,12 @@ export const ImageTagsContainer = ({
         <div className="h-250 fs-13 dc__overflow-scroll p-12">
             <div>Image labels allow you to tag container images with readable and relatable labels eg. v1.0.</div>
             <ul className="pl-20 mt-8">
-                <li>
-                    A label can only be added if a workflow has CD pipelines deploying to Production environments.
-                </li>
+                <li>A label can only be added if a workflow has CD pipelines deploying to Production environments.</li>
                 <li>Multiple labels can be added to an image.</li>
                 <li>Multiple images in an application cannot have the same label.</li>
                 <li>
-                    Labels cannot be deleted once saved. Although, you can soft delete a label if an unwanted label has been
-                    added.
+                    Labels cannot be deleted once saved. Although, you can soft delete a label if an unwanted label has
+                    been added.
                 </li>
             </ul>
         </div>
@@ -397,7 +397,7 @@ export const ImageTagsContainer = ({
                     </div>
                     {showTagsWarning && (
                         <div className="cn-7 mb-8 flex left">
-                            <Info className="form__icon--info icon-dim-16 mr-2" />
+                            <Info className="icon-dim-16 mr-2" />
                             Tags cannot be edited/removed later
                         </div>
                     )}

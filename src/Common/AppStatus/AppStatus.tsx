@@ -15,6 +15,7 @@
  */
 
 import Tippy from '@tippyjs/react'
+import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
 import { ReactComponent as InfoIcon } from '../../Assets/Icon/ic-info-outlined.svg'
 import { StatusConstants, YET_TO_RUN } from './constants'
 import { AppStatusType } from './types'
@@ -33,14 +34,30 @@ export default function AppStatus({
     }
     const appStatusLowerCase = status?.toLowerCase()
     const isNotDeployed = appStatusLowerCase === StatusConstants.NOT_DEPLOYED.noSpaceLower
-    const iconClass = isNotDeployed ? StatusConstants.NOT_DEPLOYED.lowerCase : appStatusLowerCase
+    const isNotReady = appStatus === StatusConstants.NOT_READY.normalCase
     const statusMessage = status || (isVirtualEnv ? StatusConstants.NOT_AVILABLE.normalCase : '-')
     const notDeployed = isJobView ? YET_TO_RUN : StatusConstants.NOT_DEPLOYED.normalCase
     const textContent = isNotDeployed ? notDeployed : statusMessage
 
+    const getIconClass = () => {
+        if (isNotDeployed) {
+            return StatusConstants.NOT_DEPLOYED.lowerCase
+        }
+        if (isNotReady) {
+            return StatusConstants.NOT_READY.lowerCase
+        }
+        return appStatusLowerCase
+    }
+
+    const iconClass = getIconClass()
+
     const renderIcon = () => {
         if (iconClass) {
-            return <span className={`dc__app-summary__icon icon-dim-16 ${iconClass} ${iconClass}--node`} />
+            return iconClass === 'failed' || iconClass === 'error' ? (
+                <ICErrorCross className="icon-dim-16 dc__no-shrink ic-error-cross-red" />
+            ) : (
+                <span className={`dc__app-summary__icon icon-dim-16 ${iconClass} ${iconClass}--node`} />
+            )
         }
         if (isVirtualEnv) {
             return (
