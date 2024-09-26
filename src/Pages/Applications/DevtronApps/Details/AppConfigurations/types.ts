@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, SyntheticEvent } from 'react'
 
 export enum ConfigHeaderTabType {
     VALUES = 'values',
@@ -19,7 +19,7 @@ export enum OverrideMergeStrategyType {
 
 export interface ConfigToolbarPopupMenuConfigType {
     text: string
-    onClick: () => void
+    onClick: (event: SyntheticEvent) => void
     dataTestId: string
     disabled?: boolean
     icon?: ReactNode | null
