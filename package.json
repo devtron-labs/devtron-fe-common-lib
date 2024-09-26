@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "0.3.9",
+    "version": "0.3.15",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -73,7 +73,6 @@
         "vite-tsconfig-paths": "5.0.1"
     },
     "peerDependencies": {
-        "react-select": "5.8.0",
         "@rjsf/core": "^5.13.3",
         "@rjsf/utils": "^5.13.3",
         "@rjsf/validator-ajv8": "^5.13.3",
@@ -87,15 +86,18 @@
         "react-mde": "^11.5.0",
         "react-router": "^5.3.0",
         "react-router-dom": "^5.3.0",
+        "react-select": "5.8.0",
+        "react-keybind": "^0.9.4",
         "rxjs": "^7.8.1",
         "yaml": "^2.4.1"
     },
     "dependencies": {
         "@types/react-dates": "^21.8.6",
         "ansi_up": "^5.2.1",
+        "dayjs": "^1.11.12",
         "fast-json-patch": "^3.1.1",
-        "react-dates": "^21.8.0",
         "jsonpath-plus": "^9.0.0",
+        "react-dates": "^21.8.0",
         "react-monaco-editor": "^0.54.0",
         "sass": "^1.69.7",
         "tslib": "2.7.0"

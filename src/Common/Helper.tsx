@@ -22,10 +22,24 @@ import * as Sentry from '@sentry/browser'
 import moment from 'moment'
 import { useLocation } from 'react-router-dom'
 import YAML from 'yaml'
-import { ERROR_EMPTY_SCREEN, SortingOrder, EXCLUDED_FALSY_VALUES, DISCORD_LINK, ZERO_TIME_STRING, TOAST_ACCESS_DENIED } from './Constants'
+import { deepEquals } from '@rjsf/utils'
+import {
+    ERROR_EMPTY_SCREEN,
+    SortingOrder,
+    EXCLUDED_FALSY_VALUES,
+    DISCORD_LINK,
+    ZERO_TIME_STRING,
+    TOAST_ACCESS_DENIED,
+} from './Constants'
 import { ServerErrors } from './ServerError'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
-import { scrollableInterface, DATE_TIME_FORMAT_STRING, ToastManager, ToastVariantType } from '../Shared'
+import {
+    scrollableInterface,
+    DATE_TIME_FORMAT_STRING,
+    ToastManager,
+    ToastVariantType,
+    versionComparatorBySortOrder,
+} from '../Shared'
 import { ReactComponent as ArrowDown } from '../Assets/Icon/ic-chevron-down.svg'
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
@@ -190,110 +204,6 @@ export function getCookie(sKey) {
             '$1',
         ) || null
     )
-}
-
-export function useForm(stateSchema, validationSchema = {}, callback) {
-    const [state, setState] = useState(stateSchema)
-    const [disable, setDisable] = useState(true)
-    const [isDirty, setIsDirty] = useState(false)
-
-    // Disable button in initial render.
-    useEffect(() => {
-        setDisable(true)
-    }, [])
-
-    // For every changed in our state this will be fired
-    // To be able to disable the button
-    useEffect(() => {
-        if (isDirty) {
-            setDisable(validateState(state))
-        }
-    }, [state, isDirty])
-
-    // Used to disable submit button if there's an error in state
-    // or the required field in state has no value.
-    // Wrapped in useCallback to cached the function to avoid intensive memory leaked
-    // in every re-render in component
-    const validateState = useCallback(
-        (state) => {
-            // check errors in all fields
-            const hasErrorInState = Object.keys(validationSchema).some((key) => {
-                const isInputFieldRequired = validationSchema[key].required
-                const stateValue = state[key].value // state value
-                const stateError = state[key].error // state error
-                return (isInputFieldRequired && !stateValue) || stateError
-            })
-            return hasErrorInState
-        },
-        [state, validationSchema],
-    )
-
-    function validateField(name, value): string | string[] {
-        if (validationSchema[name].required) {
-            if (!value) {
-                return 'This is a required field.'
-            }
-        }
-
-        function _validateSingleValidator(validator, value) {
-            if (value && !validator.regex.test(value)) {
-                return false
-            }
-            return true
-        }
-
-        // single validator
-        const _validator = validationSchema[name].validator
-        if (_validator && typeof _validator === 'object') {
-            if (!_validateSingleValidator(_validator, value)) {
-                return _validator.error
-            }
-        }
-
-        // multiple validators
-        const _validators = validationSchema[name].validators
-        if (_validators && typeof _validators === 'object' && Array.isArray(_validators)) {
-            const errors = []
-            _validators.forEach((_validator) => {
-                if (!_validateSingleValidator(_validator, value)) {
-                    errors.push(_validator.error)
-                }
-            })
-            if (errors.length > 0) {
-                return errors
-            }
-        }
-
-        return ''
-    }
-
-    const handleOnChange = useCallback(
-        (event) => {
-            setIsDirty(true)
-
-            const { name, value } = event.target
-            const error = validateField(name, value)
-            setState((prevState) => ({
-                ...prevState,
-                [name]: { value, error },
-            }))
-        },
-        [validationSchema],
-    )
-
-    const handleOnSubmit = (event) => {
-        event.preventDefault()
-        const newState = Object.keys(validationSchema).reduce((agg, curr) => {
-            agg[curr] = { ...state[curr], error: validateField(curr, state[curr].value) }
-            return agg
-        }, state)
-        if (!validateState(newState)) {
-            callback(state)
-        } else {
-            setState({ ...newState })
-        }
-    }
-    return { state, disable, handleOnChange, handleOnSubmit }
 }
 
 export function handleUTCTime(ts: string, isRelativeTime = false) {
@@ -620,6 +530,7 @@ export const getFilteredChartVersions = (charts, selectedChartType) =>
     // Filter chart versions based on selected chart type
     charts
         .filter((item) => item?.chartType === selectedChartType.value)
+        .sort((a, b) => versionComparatorBySortOrder(a?.chartVersion, b?.chartVersion))
         .map((item) => ({
             value: item?.chartVersion,
             label: item?.chartVersion,
@@ -818,28 +729,7 @@ export const compareObjectLength = (objA: any, objB: any): boolean => {
  * Return deep copy of the object
  */
 export function deepEqual(configA: any, configB: any): boolean {
-    try {
-        if (configA === configB) {
-            return true
-        }
-        if ((configA && !configB) || (!configA && configB) || !compareObjectLength(configA, configB)) {
-            return false
-        }
-        let isEqual = true
-        for (const idx in configA) {
-            if (!isEqual) {
-                break
-            } else if (typeof configA[idx] === 'object' && typeof configB[idx] === 'object') {
-                isEqual = deepEqual(configA[idx], configB[idx])
-            } else if (configA[idx] !== configB[idx]) {
-                isEqual = false
-            }
-        }
-        return isEqual
-    } catch (err) {
-        showError(err)
-        return true
-    }
+    return deepEquals(configA, configB)
 }
 
 export function shallowEqual(objA, objB) {

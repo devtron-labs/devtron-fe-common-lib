@@ -479,6 +479,7 @@ export interface LastExecutionResultType {
     scanned?: boolean
     scanEnabled?: boolean
     scanToolId?: number
+    imageScanDeployInfoId?: number
 }
 
 export interface LastExecutionResponseType extends ResponseType<LastExecutionResultType> {}
