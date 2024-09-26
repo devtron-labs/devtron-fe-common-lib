@@ -21,7 +21,6 @@ export interface ConfigToolbarPopupMenuConfigType {
     text: string
     onClick: () => void
     dataTestId: string
-    itemKey: string
     disabled?: boolean
     icon?: ReactNode | null
 }

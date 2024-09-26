@@ -1,4 +1,5 @@
 import { TemplateListType } from '@Shared/Services'
+import { OverrideMergeStrategyType } from '../types'
 
 export type DeploymentChartOptionkind = 'base' | 'env' | 'chartVersion' | 'deployment'
 
@@ -120,12 +121,14 @@ interface BaseDeploymentTemplateConfigState {
     chartConfig: DeploymentTemplateChartConfigType
     isOverridden?: never
     environmentConfig?: never
+    mergeStrategy?: never
 }
 
 interface EnvironmentOverrideDeploymentTemplateConfigState {
     chartConfig?: never
     isOverridden: boolean
     environmentConfig: EnvironmentConfigType
+    mergeStrategy: OverrideMergeStrategyType
 }
 
 export interface DeploymentTemplateConfigCommonState extends SelectedChartDetailsType {
