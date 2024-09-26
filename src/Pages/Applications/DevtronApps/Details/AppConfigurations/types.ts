@@ -24,3 +24,8 @@ export interface ConfigToolbarPopupMenuConfigType {
     disabled?: boolean
     icon?: ReactNode | null
 }
+
+export enum ConfigToolbarPopupNodeType {
+    DISCARD_DRAFT = 'discardDraft',
+    EDIT_HISTORY = 'editHistory',
+}
