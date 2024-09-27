@@ -40,9 +40,9 @@ export const getPipelineDeploymentsOptions = ({
     const previousDeployments = pipelineDeployments.slice(currentDeploymentIndex + 1)
 
     const pipelineDeploymentsOptions: SelectPickerOptionType<number>[] = previousDeployments.map(
-        ({ id, finishedOn, stage, triggeredBy, triggeredByEmail, status, artifact }) => ({
+        ({ id, startedOn, stage, triggeredBy, triggeredByEmail, status, artifact }) => ({
             value: id,
-            label: moment(finishedOn).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT),
+            label: moment(startedOn).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT),
             description: renderPipelineDeploymentOptionDescription({
                 stage,
                 triggeredByEmail,
@@ -55,7 +55,7 @@ export const getPipelineDeploymentsOptions = ({
             startIcon: renderPipelineDeploymentStatusIcon(status),
         }),
     )
-    const currentDeployment = moment(pipelineDeployments[currentDeploymentIndex].finishedOn).format(
+    const currentDeployment = moment(pipelineDeployments[currentDeploymentIndex].startedOn).format(
         DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
     )
 

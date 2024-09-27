@@ -16,6 +16,7 @@ import {
     DiffHeadingDataType,
     prepareHistoryData,
 } from '@Shared/Components'
+import { deepEqual } from '@Common/Helper'
 
 import {
     ConfigMapSecretDataConfigDatumDTO,
@@ -233,22 +234,25 @@ const getCodeEditorData = (
 }
 
 /**
- * Compares two string values and returns the appropriate deployment configuration difference state.
+ * Compares two values and returns the appropriate deployment configuration difference state.
  *
  * @param compareToValue - The original value to compare.
  * @param compareWithValue - The new value to compare against the original.
  * @returns `DeploymentConfigDiffState` enum value indicating the difference between the two values
  */
-const getDiffState = (compareToValue: string, compareWithValue: string) => {
-    if (!compareToValue && compareWithValue) {
+const getDiffState = (compareToValue: DeploymentHistoryDetail, compareWithValue: DeploymentHistoryDetail) => {
+    const isCompareToPresent = !!compareToValue.codeEditorValue.value
+    const isCompareWithPresent = !!compareWithValue.codeEditorValue.value
+
+    if (!isCompareToPresent && isCompareWithPresent) {
         return DeploymentConfigDiffState.DELETED
     }
 
-    if (compareToValue && !compareWithValue) {
+    if (isCompareToPresent && !isCompareWithPresent) {
         return DeploymentConfigDiffState.ADDED
     }
 
-    if (compareToValue !== compareWithValue) {
+    if (!deepEqual(compareToValue, compareWithValue)) {
         return DeploymentConfigDiffState.HAS_DIFF
     }
 
@@ -305,7 +309,7 @@ const getDiffViewData = (
     return {
         compareToDiff,
         compareWithDiff,
-        diffState: getDiffState(compareToCodeEditorData.value, compareWithCodeEditorData.value),
+        diffState: getDiffState(compareToDiff, compareWithDiff),
     }
 }
 
@@ -549,10 +553,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
                 heading: getDiffHeading(_currentList.deploymentTemplate, true),
                 list: currentDeploymentData,
             },
-            diffState: getDiffState(
-                currentDeploymentData.codeEditorValue.value,
-                compareDeploymentData.codeEditorValue.value,
-            ),
+            diffState: getDiffState(currentDeploymentData, compareDeploymentData),
         }
 
         let currentPipelineConfigData: DeploymentHistoryDetail
@@ -574,10 +575,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
                     heading: null,
                     list: currentPipelineConfigData,
                 },
-                diffState: getDiffState(
-                    currentPipelineConfigData.codeEditorValue.value,
-                    comparePipelineConfigData.codeEditorValue.value,
-                ),
+                diffState: getDiffState(currentPipelineConfigData, comparePipelineConfigData),
             }
         }
 
@@ -687,7 +685,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
             heading: <span className="fs-12 fw-6 cn-9">Generated Manifest</span>,
             list: currentManifestData,
         },
-        diffState: getDiffState(currentManifestData.codeEditorValue.value, compareManifestData.codeEditorValue.value),
+        diffState: getDiffState(currentManifestData, compareManifestData),
         singleView: true,
     }
 
