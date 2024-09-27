@@ -7,7 +7,7 @@ import { ReactComponent as ICInfoOutlined } from '@Icons/ic-info-outlined.svg'
 import { ReactComponent as ICDiffFileUpdated } from '@Icons/ic-diff-file-updated.svg'
 import { StyledRadioGroup } from '@Common/index'
 
-import { CollapsibleList } from '../CollapsibleList'
+import { CollapsibleList, CollapsibleListConfig } from '../CollapsibleList'
 import { DeploymentConfigDiffNavigationProps } from './DeploymentConfigDiff.types'
 
 // LOADING SHIMMER
@@ -34,10 +34,11 @@ export const DeploymentConfigDiffNavigation = ({
     }, [collapsibleNavList])
 
     /** Collapsible List Config. */
-    const collapsibleListConfig = collapsibleNavList.map(({ items, ...resListItem }) => ({
+    const collapsibleListConfig: CollapsibleListConfig[] = collapsibleNavList.map(({ items, ...resListItem }) => ({
         ...resListItem,
         isExpanded: expandedIds[resListItem.id],
         items: items.map(({ hasDiff, ...resItem }) => ({
+            tabType: 'navLink',
             ...resItem,
             ...(hasDiff
                 ? {

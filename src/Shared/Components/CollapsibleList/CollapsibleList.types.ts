@@ -1,7 +1,35 @@
 import React from 'react'
 import { TippyProps } from '@tippyjs/react'
 
-export interface CollapsibleListItem {
+interface ButtonTab {
+    tabType: 'button'
+    /**
+     * Is tab active ( for button tab )
+     */
+    isActive: boolean
+    /**
+     * The callback function to handle click events on the button.
+     */
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+    href?: never
+}
+
+interface NavLinkTab {
+    tabType: 'navLink'
+    /**
+     * The URL of the nav link.
+     */
+    href: string
+    /**
+     * The callback function to handle click events on the nav link.
+     */
+    onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void
+    isActive?: never
+}
+
+type ConditionalTabType = ButtonTab | NavLinkTab
+
+export type CollapsibleListItem = ConditionalTabType & {
     /**
      * The title of the list item.
      */
@@ -27,14 +55,6 @@ export interface CollapsibleListItem {
          */
         tooltipProps?: TippyProps
     }
-    /**
-     * The URL of the nav link.
-     */
-    href?: string
-    /**
-     * The callback function to handle click events on the nav link.
-     */
-    onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void
 }
 
 export interface CollapsibleListConfig {
