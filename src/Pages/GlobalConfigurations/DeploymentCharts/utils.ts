@@ -1,5 +1,4 @@
 import { versionComparatorBySortOrder } from '@Shared/Helpers'
-import { SortingOrder } from '@Common/Constants'
 import { DeploymentChartListDTO, DeploymentChartType, DEVTRON_DEPLOYMENT_CHART_NAMES } from './types'
 import fallbackGuiSchema from './basicViewSchema.json'
 
@@ -31,7 +30,7 @@ export const convertDeploymentChartListToChartType = (data: DeploymentChartListD
         {} as Record<string, DeploymentChartType>,
     )
     const result = Object.values(chartMap).map((element) => {
-        element.versions.sort((a, b) => versionComparatorBySortOrder(a, b, 'version', SortingOrder.DESC))
+        element.versions.sort((a, b) => versionComparatorBySortOrder(a.version, b.version))
         return element
     })
     return result

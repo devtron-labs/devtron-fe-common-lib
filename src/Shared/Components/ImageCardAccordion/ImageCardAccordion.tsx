@@ -16,7 +16,7 @@
 
 import { useState } from 'react'
 import { CDModalTab, CDModalTabType } from '../../../Common'
-import { Vulnerabilities } from '../Vulnerabilities'
+import { Vulnerabilities } from '../Security/Vulnerabilities'
 import { AccordionItemProps, ImageCardAccordionProps } from './types'
 import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
 
@@ -44,10 +44,11 @@ const ImageCardAccordion = ({
     isSecurityModuleInstalled,
     artifactId,
     applicationId,
-    environmentId,
     changesCard,
     isScanned,
     isScanEnabled,
+    SecurityModalSidebar,
+    getSecurityScan,
 }: ImageCardAccordionProps) => {
     const [isOpened, setIsOpened] = useState<boolean>(false)
     const [activeTab, setActiveTab] = useState<CDModalTabType>(CDModalTab.Changes)
@@ -72,8 +73,9 @@ const ImageCardAccordion = ({
                 isScanEnabled={isScanEnabled}
                 artifactId={artifactId}
                 applicationId={applicationId}
-                environmentId={environmentId}
                 setVulnerabilityCount={setVulnerabilityCount}
+                SecurityModalSidebar={SecurityModalSidebar}
+                getSecurityScan={getSecurityScan}
             />
         )
     }
@@ -90,7 +92,6 @@ const ImageCardAccordion = ({
                                 setActiveTab={setActiveTab}
                                 buttonText="Changes"
                             />
-
                             <AccordionItem
                                 currentTab={CDModalTab.Security}
                                 activeTab={activeTab}

@@ -8,18 +8,19 @@ import { SortingOrder } from '@Common/Constants'
 import {
     DeploymentConfigDiffProps,
     DeploymentHistorySingleValue,
+    AppEnvDeploymentConfigListParams,
     DiffHeadingDataType,
     prepareHistoryData,
 } from '@Shared/Components'
 
 import {
-    AppEnvDeploymentConfigDTO,
     ConfigMapSecretDataConfigDatumDTO,
     ConfigMapSecretDataDTO,
     ConfigResourceType,
     DeploymentTemplateDTO,
     DraftState,
     EnvResourceType,
+    ManifestTemplateDTO,
     TemplateListDTO,
     TemplateListType,
 } from '../../Services/app.types'
@@ -325,6 +326,20 @@ const getDeploymentTemplateDiffViewData = (data: DeploymentTemplateDTO | null, s
     return diffViewData
 }
 
+const getManifestDiffViewData = (data: ManifestTemplateDTO) => {
+    const codeEditorValue = {
+        displayName: 'data',
+        value: data.data,
+    }
+
+    const diffViewData = prepareHistoryData(
+        { codeEditorValue },
+        DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP.DEPLOYMENT_TEMPLATE.VALUE,
+    )
+
+    return diffViewData
+}
+
 const getDiffHeading = <DeploymentTemplate extends boolean>(
     data: DiffHeadingDataType<DeploymentTemplate>,
     deploymentTemplate?: DeploymentTemplate,
@@ -424,105 +439,153 @@ const getConfigMapSecretData = (
 /**
  * Generates a list of deployment configurations for application environments and identifies changes between the current and compare lists.
  *
- * @param currentList - The current deployment configuration list.
- * @param compareList - The deployment configuration list to compare against.
- * @param getNavItemHref - A function to generate navigation item URLs based on the resource type and resource name.
- * @param sortOrder - (Optional) The order in which to sort the deployment templates.
+ * @param params - An object containing the following properties:
+ * @param params.currentList - The current deployment configuration list.
+ * @param params.compareList - The deployment configuration list to compare against.
+ * @param params.getNavItemHref - A function to generate navigation item URLs based on the resource type and resource name.
+ * @param params.isManifestView - A boolean that, when true, modifies the output for a manifest view.
+ * @param params.sortOrder - (Optional) The order in which to sort the deployment templates.
  *
  * @returns An object containing the combined deployment configuration list, a collapsible navigation list, and a navigation list.
  */
-export const getAppEnvDeploymentConfigList = (
-    currentList: AppEnvDeploymentConfigDTO,
-    compareList: AppEnvDeploymentConfigDTO,
-    getNavItemHref: (resourceType: EnvResourceType, resourceName: string) => string,
-    sortOrder?: SortingOrder,
-): {
+export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = false>({
+    currentList,
+    compareList,
+    getNavItemHref,
+    isManifestView,
+    sortOrder,
+}: AppEnvDeploymentConfigListParams<ManifestView>): {
     configList: DeploymentConfigDiffProps['configList']
     navList: DeploymentConfigDiffProps['navList']
     collapsibleNavList: DeploymentConfigDiffProps['collapsibleNavList']
 } => {
-    const currentDeploymentData = getDeploymentTemplateDiffViewData(currentList.deploymentTemplate, sortOrder)
-    const compareDeploymentData = getDeploymentTemplateDiffViewData(compareList.deploymentTemplate, sortOrder)
+    if (!isManifestView) {
+        const _currentList = currentList as AppEnvDeploymentConfigListParams<false>['currentList']
+        const _compareList = compareList as AppEnvDeploymentConfigListParams<false>['compareList']
+        const currentDeploymentData = getDeploymentTemplateDiffViewData(_currentList.deploymentTemplate, sortOrder)
+        const compareDeploymentData = getDeploymentTemplateDiffViewData(_compareList.deploymentTemplate, sortOrder)
 
-    const deploymentTemplateData = {
-        id: EnvResourceType.DeploymentTemplate,
-        title: 'Deployment Template',
+        const deploymentTemplateData = {
+            id: EnvResourceType.DeploymentTemplate,
+            title: 'Deployment Template',
+            primaryConfig: {
+                heading: getDiffHeading(_compareList.deploymentTemplate, true),
+                list: compareDeploymentData,
+            },
+            secondaryConfig: {
+                heading: getDiffHeading(_currentList.deploymentTemplate, true),
+                list: currentDeploymentData,
+            },
+            hasDiff: currentDeploymentData.codeEditorValue.value !== compareDeploymentData.codeEditorValue.value,
+            isDeploymentTemplate: true,
+        }
+
+        const cmData = getConfigMapSecretData(
+            _currentList.configMapData,
+            _compareList.configMapData,
+            ConfigResourceType.ConfigMap,
+            _currentList.isAppAdmin,
+            _compareList.isAppAdmin,
+        )
+
+        const secretData = getConfigMapSecretData(
+            _currentList.secretsData,
+            _compareList.secretsData,
+            ConfigResourceType.Secret,
+            _currentList.isAppAdmin,
+            _compareList.isAppAdmin,
+        )
+
+        const configList: DeploymentConfigDiffProps['configList'] = [deploymentTemplateData, ...cmData, ...secretData]
+
+        const navList: DeploymentConfigDiffProps['navList'] = [
+            {
+                title: deploymentTemplateData.title,
+                hasDiff: deploymentTemplateData.hasDiff,
+                href: getNavItemHref(EnvResourceType.DeploymentTemplate, null),
+                onClick: () => {
+                    const element = document.querySelector(`#${deploymentTemplateData.id}`)
+                    element?.scrollIntoView({ block: 'start' })
+                },
+            },
+        ]
+
+        const collapsibleNavList: DeploymentConfigDiffProps['collapsibleNavList'] = [
+            {
+                header: 'ConfigMaps',
+                id: EnvResourceType.ConfigMap,
+                items: cmData.map(({ name, hasDiff, id }) => ({
+                    title: name,
+                    hasDiff,
+                    href: getNavItemHref(EnvResourceType.ConfigMap, name),
+                    onClick: () => {
+                        const element = document.querySelector(`#${id}`)
+                        element?.scrollIntoView({ block: 'start' })
+                    },
+                })),
+                noItemsText: 'No configmaps',
+            },
+            {
+                header: 'Secrets',
+                id: EnvResourceType.Secret,
+                items: secretData.map(({ name, hasDiff, id }) => ({
+                    title: name,
+                    hasDiff,
+                    href: getNavItemHref(EnvResourceType.Secret, name),
+                    onClick: () => {
+                        const element = document.querySelector(`#${id}`)
+                        element?.scrollIntoView({ block: 'start' })
+                    },
+                })),
+                noItemsText: 'No secrets',
+            },
+        ]
+
+        return {
+            configList,
+            collapsibleNavList,
+            navList,
+        }
+    }
+
+    const _currentList = currentList as AppEnvDeploymentConfigListParams<true>['currentList']
+    const _compareList = compareList as AppEnvDeploymentConfigListParams<true>['compareList']
+
+    const currentManifestData = getManifestDiffViewData(_currentList)
+    const compareManifestData = getManifestDiffViewData(_compareList)
+
+    const manifestData = {
+        id: EnvResourceType.Manifest,
+        title: 'Manifest Output',
         primaryConfig: {
-            heading: getDiffHeading(compareList.deploymentTemplate, true),
-            list: compareDeploymentData,
+            heading: <span className="fs-12 fw-6 cn-9">Generated Manifest</span>,
+            list: compareManifestData,
         },
         secondaryConfig: {
-            heading: getDiffHeading(currentList.deploymentTemplate, true),
-            list: currentDeploymentData,
+            heading: <span className="fs-12 fw-6 cn-9">Generated Manifest</span>,
+            list: currentManifestData,
         },
-        hasDiff: currentDeploymentData.codeEditorValue.value !== compareDeploymentData.codeEditorValue.value,
+        hasDiff: currentManifestData.codeEditorValue.value !== compareManifestData.codeEditorValue.value,
         isDeploymentTemplate: true,
     }
 
-    const cmData = getConfigMapSecretData(
-        currentList.configMapData,
-        compareList.configMapData,
-        ConfigResourceType.ConfigMap,
-        currentList.isAppAdmin,
-        compareList.isAppAdmin,
-    )
-
-    const secretData = getConfigMapSecretData(
-        currentList.secretsData,
-        compareList.secretsData,
-        ConfigResourceType.Secret,
-        currentList.isAppAdmin,
-        compareList.isAppAdmin,
-    )
-
-    const configList: DeploymentConfigDiffProps['configList'] = [deploymentTemplateData, ...cmData, ...secretData]
+    const configList: DeploymentConfigDiffProps['configList'] = [manifestData]
 
     const navList: DeploymentConfigDiffProps['navList'] = [
         {
-            title: deploymentTemplateData.title,
-            hasDiff: deploymentTemplateData.hasDiff,
-            href: getNavItemHref(EnvResourceType.DeploymentTemplate, null),
+            title: manifestData.title,
+            hasDiff: manifestData.hasDiff,
+            href: getNavItemHref(EnvResourceType.Manifest, null),
             onClick: () => {
-                const element = document.querySelector(`#${deploymentTemplateData.id}`)
+                const element = document.querySelector(`#${manifestData.id}`)
                 element?.scrollIntoView({ block: 'start' })
             },
         },
     ]
 
-    const collapsibleNavList: DeploymentConfigDiffProps['collapsibleNavList'] = [
-        {
-            header: 'ConfigMaps',
-            id: EnvResourceType.ConfigMap,
-            items: cmData.map(({ name, hasDiff, id }) => ({
-                title: name,
-                hasDiff,
-                href: getNavItemHref(EnvResourceType.ConfigMap, name),
-                onClick: () => {
-                    const element = document.querySelector(`#${id}`)
-                    element?.scrollIntoView({ block: 'start' })
-                },
-            })),
-            noItemsText: 'No configmaps',
-        },
-        {
-            header: 'Secrets',
-            id: EnvResourceType.Secret,
-            items: secretData.map(({ name, hasDiff, id }) => ({
-                title: name,
-                hasDiff,
-                href: getNavItemHref(EnvResourceType.Secret, name),
-                onClick: () => {
-                    const element = document.querySelector(`#${id}`)
-                    element?.scrollIntoView({ block: 'start' })
-                },
-            })),
-            noItemsText: 'No secrets',
-        },
-    ]
-
     return {
         configList,
-        collapsibleNavList,
+        collapsibleNavList: [],
         navList,
     }
 }

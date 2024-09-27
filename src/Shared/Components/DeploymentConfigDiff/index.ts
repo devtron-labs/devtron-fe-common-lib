@@ -1,3 +1,3 @@
 export * from './DeploymentConfigDiff.component'
-export * from './types'
+export * from './DeploymentConfigDiff.types'
 export * from './DeploymentConfigDiff.utils'
