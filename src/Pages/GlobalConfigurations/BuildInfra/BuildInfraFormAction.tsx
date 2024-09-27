@@ -15,10 +15,9 @@
  */
 
 import { FormEvent, FunctionComponent, useMemo } from 'react'
-import ReactSelect from 'react-select'
+import { SelectPicker } from '@Shared/Components/SelectPicker'
 import { BuildInfraFormActionProps } from './types'
 import { OptionType } from '../../../Common'
-import { unitSelectorStyles } from './utils'
 import { BUILD_INFRA_INPUT_CONSTRAINTS } from './constants'
 import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
 
@@ -93,19 +92,14 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                 </div>
 
                 {profileUnitsMap && (
-                    <ReactSelect
+                    <SelectPicker
+                        inputId={`${actionType}-unit`}
                         classNamePrefix="unit-dropdown"
                         name={`${actionType}-unit`}
-                        className="bcn-0 dc__mxw-120"
                         options={unitOptions}
                         value={currentUnit}
                         onChange={handleUnitChange}
                         isSearchable={false}
-                        components={{
-                            IndicatorSeparator: null,
-                            ClearIndicator: null,
-                        }}
-                        styles={unitSelectorStyles()}
                     />
                 )}
             </div>

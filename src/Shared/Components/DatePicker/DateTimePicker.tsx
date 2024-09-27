@@ -15,28 +15,22 @@
  */
 
 import { SingleDatePicker } from 'react-dates'
-import ReactSelect, { SelectInstance } from 'react-select'
+import { SelectInstance } from 'react-select'
 import moment from 'moment'
 import CustomizableCalendarDay from 'react-dates/esm/components/CustomizableCalendarDay'
 import { useState } from 'react'
-import {
-    DEFAULT_TIME_OPTIONS,
-    DropdownIndicatorTimePicker,
-    getTimePickerStyles,
-    getTimeValue,
-    updateDate,
-    updateTime,
-} from './utils'
+import { ReactComponent as ClockIcon } from '@Icons/ic-clock.svg'
+import { ReactComponent as CalendarIcon } from '@Icons/ic-calendar.svg'
+import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
+import { ComponentSizeType } from '@Shared/constants'
+import { DEFAULT_TIME_OPTIONS, getTimeValue, updateDate, updateTime } from './utils'
 import { DateTimePickerProps } from './types'
 import { DATE_PICKER_IDS, DATE_PICKER_PLACEHOLDER, customDayStyles } from './constants'
 import './datePicker.scss'
-import { ReactComponent as CalendarIcon } from '../../../Assets/Icon/ic-calendar.svg'
-import { ReactComponent as ICWarning } from '../../../Assets/Icon/ic-warning.svg'
 import { DATE_TIME_FORMATS } from '../../../Common'
 import 'react-dates/initialize'
 import 'react-dates/lib/css/_datepicker.css'
-
-const timePickerStyles = getTimePickerStyles()
+import { SelectPicker } from '../SelectPicker'
 
 const DateTimePicker = ({
     date: dateObject = new Date(),
@@ -103,23 +97,19 @@ const DateTimePicker = ({
                 />
                 {!hideTimeSelect && (
                     <div className="dc__no-shrink">
-                        <ReactSelect
+                        <SelectPicker
+                            inputId={DATE_PICKER_IDS.TIME}
                             placeholder={DATE_PICKER_PLACEHOLDER.DEFAULT_TIME}
                             options={DEFAULT_TIME_OPTIONS}
-                            menuPlacement="auto"
-                            menuPosition="fixed"
-                            components={{
-                                IndicatorSeparator: null,
-                                ClearIndicator: null,
-                                DropdownIndicator: DropdownIndicatorTimePicker,
-                            }}
+                            icon={<ClockIcon className="icon-dim-20 fcn-6" />}
                             isSearchable={false}
-                            styles={timePickerStyles}
+                            hideSelectedOptions
                             isDisabled={disabled}
                             {...timePickerProps}
                             value={selectedTimeOption}
                             onChange={handleTimeChange}
                             data-testid={dataTestIdForTime}
+                            menuSize={ComponentSizeType.xs}
                         />
                     </div>
                 )}

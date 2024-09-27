@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import ReactSelect from 'react-select'
-import { DEFAULT_TIME_OPTIONS, DropdownIndicatorTimePicker, getTimePickerStyles } from './utils'
+import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
+import { ReactComponent as ClockIcon } from '@Icons/ic-clock.svg'
+import { DEFAULT_TIME_OPTIONS } from './utils'
 import { TimeSelectProps } from './types'
-import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
 import { DATE_PICKER_IDS } from './constants'
+import { SelectPicker } from '../SelectPicker'
 
 export const TimePickerSelect = ({
     disabled = false,
@@ -27,27 +28,23 @@ export const TimePickerSelect = ({
     error,
     selectedTimeOption,
 }: TimeSelectProps) => {
-    const timeSelectStyles = getTimePickerStyles()
-
+    const handleTimeSelectChange = (selectedOption) => {
+        onChange(selectedOption)
+    }
     return (
         <>
             <div className="dc__no-shrink">
-                <ReactSelect
+                <SelectPicker
+                    inputId={DATE_PICKER_IDS.TIME}
                     placeholder="12:00 AM"
                     options={DEFAULT_TIME_OPTIONS}
-                    menuPlacement="auto"
                     menuPosition="fixed"
-                    components={{
-                        IndicatorSeparator: null,
-                        ClearIndicator: null,
-                        DropdownIndicator: DropdownIndicatorTimePicker,
-                    }}
                     isSearchable={false}
-                    styles={timeSelectStyles}
                     isDisabled={disabled}
                     {...timePickerProps}
                     value={selectedTimeOption}
-                    onChange={onChange}
+                    icon={<ClockIcon className="icon-dim-20 fcn-6" />}
+                    onChange={handleTimeSelectChange}
                     data-testid={DATE_PICKER_IDS.TIME}
                 />
             </div>
