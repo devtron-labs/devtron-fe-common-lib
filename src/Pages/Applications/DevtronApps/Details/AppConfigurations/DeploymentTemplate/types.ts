@@ -181,3 +181,9 @@ export enum CompareFromApprovalOptionsValuesType {
     APPROVAL_PENDING = 1,
     VALUES_FROM_DRAFT = 2,
 }
+
+export enum DryRunEditorMode {
+    APPROVAL_PENDING = 'approvalPending',
+    VALUES_FROM_DRAFT = 'valuesFromDraft',
+    PUBLISHED_VALUES = 'publishedValues',
+}
