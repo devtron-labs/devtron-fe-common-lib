@@ -634,7 +634,6 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                     appReleaseTagNames={appReleaseTags}
                                     hideImageTaggingHardDelete={hideImageTaggingHardDelete}
                                     downloadArtifactUrl={CDBuildReportUrl}
-                                    type={HistoryComponentType.CD}
                                     renderCIListHeader={renderCIListHeader}
                                     rootClassName="p-16 flex-grow-1"
                                 />
