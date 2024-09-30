@@ -154,9 +154,11 @@ const Artifacts = ({
         return <CIProgressView />
     }
     if (
-        status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED ||
-        status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED ||
-        status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR
+        (status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED ||
+            status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED ||
+            status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR) &&
+        !isArtifactUploaded &&
+        !artifactId
     ) {
         if (isJobCI) {
             return (
@@ -174,7 +176,7 @@ const Artifacts = ({
             />
         )
     }
-    if (!artifactId && status.toLowerCase() === TERMINAL_STATUS_MAP.SUCCEEDED) {
+    if (!artifactId && !isArtifactUploaded && status.toLowerCase() === TERMINAL_STATUS_MAP.SUCCEEDED) {
         return (
             <GenericEmptyState
                 title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsFound}
@@ -186,33 +188,35 @@ const Artifacts = ({
     return (
         <>
             <div className={`flex left column dc__gap-12 dc__content-start ${rootClassName ?? ''}`}>
-                <CIListItem
-                    type="artifact"
-                    ciPipelineId={ciPipelineId}
-                    artifactId={artifactId}
-                    imageComment={imageComment}
-                    imageReleaseTags={imageReleaseTags}
-                    appReleaseTagNames={appReleaseTagNames}
-                    tagsEditable={tagsEditable}
-                    hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                    isSuperAdmin={isSuperAdmin}
-                    renderCIListHeader={renderCIListHeader}
-                >
-                    <div className="flex column left hover-trigger">
-                        <div className="cn-9 fs-14 flex left" data-testid="artifact-text-visibility">
-                            {extractImage(artifact)}
-                            <div className="pl-4">
-                                <ClipboardButton content={extractImage(artifact)} />
+                {!!artifactId && (
+                    <CIListItem
+                        type="artifact"
+                        ciPipelineId={ciPipelineId}
+                        artifactId={artifactId}
+                        imageComment={imageComment}
+                        imageReleaseTags={imageReleaseTags}
+                        appReleaseTagNames={appReleaseTagNames}
+                        tagsEditable={tagsEditable}
+                        hideImageTaggingHardDelete={hideImageTaggingHardDelete}
+                        isSuperAdmin={isSuperAdmin}
+                        renderCIListHeader={renderCIListHeader}
+                    >
+                        <div className="flex column left hover-trigger">
+                            <div className="cn-9 fs-14 flex left" data-testid="artifact-text-visibility">
+                                {extractImage(artifact)}
+                                <div className="pl-4">
+                                    <ClipboardButton content={extractImage(artifact)} />
+                                </div>
+                            </div>
+                            <div className="cn-7 fs-12 flex left" data-testid="artifact-image-text">
+                                {artifact}
+                                <div className="pl-4">
+                                    <ClipboardButton content={artifact} />
+                                </div>
                             </div>
                         </div>
-                        <div className="cn-7 fs-12 flex left" data-testid="artifact-image-text">
-                            {artifact}
-                            <div className="pl-4">
-                                <ClipboardButton content={artifact} />
-                            </div>
-                        </div>
-                    </div>
-                </CIListItem>
+                    </CIListItem>
+                )}
                 {blobStorageEnabled &&
                     downloadArtifactUrl &&
                     (type === HistoryComponentType.CD || isArtifactUploaded || isJobView) && (

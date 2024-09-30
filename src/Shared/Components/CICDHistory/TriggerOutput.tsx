@@ -625,6 +625,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                     status={triggerDetails.status}
                                     artifact={triggerDetails.artifact}
                                     blobStorageEnabled={triggerDetails.blobStorageEnabled}
+                                    isArtifactUploaded={triggerDetails.isArtifactUploaded}
                                     ciPipelineId={triggerDetails.ciPipelineId}
                                     artifactId={triggerDetails.artifactId}
                                     imageComment={triggerDetails?.imageComment}
