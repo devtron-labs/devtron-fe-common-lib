@@ -153,38 +153,39 @@ const Artifacts = ({
     if (status.toLowerCase() === TERMINAL_STATUS_MAP.RUNNING || status.toLowerCase() === TERMINAL_STATUS_MAP.STARTING) {
         return <CIProgressView />
     }
-    if (
-        (status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED ||
+    // If artifactId is not 0 image info is shown, if isArtifactUploaded is true reports are shown
+    // In case both are not present empty state is shown
+    // isArtifactUploaded can be true even if status is failed
+    if (!isArtifactUploaded && !artifactId) {
+        if (
+            status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED ||
             status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED ||
-            status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR) &&
-        !isArtifactUploaded &&
-        !artifactId
-    ) {
-        if (isJobCI) {
-            return (
+            status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR
+        ) {
+            return isJobCI ? (
                 <GenericEmptyState
                     title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.FailedToFetchArtifacts}
                     subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.FailedToFetchArtifactsError}
                 />
+            ) : (
+                <GenericEmptyState
+                    title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsGenerated}
+                    subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsError}
+                />
             )
         }
 
-        return (
-            <GenericEmptyState
-                title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsGenerated}
-                subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsError}
-            />
-        )
+        if (status.toLowerCase() === TERMINAL_STATUS_MAP.SUCCEEDED) {
+            return (
+                <GenericEmptyState
+                    title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsFound}
+                    subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsFoundError}
+                    image={noartifact}
+                />
+            )
+        }
     }
-    if (!artifactId && !isArtifactUploaded && status.toLowerCase() === TERMINAL_STATUS_MAP.SUCCEEDED) {
-        return (
-            <GenericEmptyState
-                title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsFound}
-                subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsFoundError}
-                image={noartifact}
-            />
-        )
-    }
+
     return (
         <>
             <div className={`flex left column dc__gap-12 dc__content-start ${rootClassName ?? ''}`}>
