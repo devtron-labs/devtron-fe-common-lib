@@ -190,6 +190,8 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * @default false
          */
         fullWidth?: boolean
+        isCreatableSingleSelect?: boolean
+        menuIsOpen?: boolean
         // TODO: Can make generic typing when adding multi select
         /**
          * If truthy, would show generic section error state as no options message

@@ -209,6 +209,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     fullWidth = false,
     customSelectedOptionsCount = null,
     renderMenuListFooter,
+    isCreatableSingleSelect = false,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options } = props
@@ -350,6 +351,50 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         ],
     )
 
+    const renderSingleSelectPicker = () =>
+        isCreatableSingleSelect ? (
+            <CreatableSelect
+                {...props}
+                {...commonProps}
+                ref={selectRef as SelectPickerProps<OptionValue, true>['selectRef']}
+                components={{
+                    IndicatorSeparator: null,
+                    LoadingIndicator: SelectPickerLoadingIndicator,
+                    DropdownIndicator: SelectPickerDropdownIndicator,
+                    Control: renderControl,
+                    Option: renderOption,
+                    MenuList: SelectPickerMenuList,
+                    ClearIndicator: SelectPickerClearIndicator,
+                    ValueContainer: renderValueContainer,
+                    GroupHeading: renderGroupHeading,
+                    NoOptionsMessage: renderNoOptionsMessage,
+                }}
+                allowCreateWhileLoading={false}
+                isValidNewOption={isValidNewOption}
+                createOptionPosition="first"
+                onCreateOption={handleCreateOption}
+                renderMenuListFooter={!optionListError && renderMenuListFooter}
+            />
+        ) : (
+            <ReactSelect
+                {...props}
+                {...commonProps}
+                ref={selectRef as MutableRefObject<SelectInstance<SelectPickerOptionType<OptionValue>>>}
+                components={{
+                    IndicatorSeparator: null,
+                    LoadingIndicator: SelectPickerLoadingIndicator,
+                    DropdownIndicator: SelectPickerDropdownIndicator,
+                    Control: renderControl,
+                    Option: renderOption,
+                    MenuList: SelectPickerMenuList,
+                    ClearIndicator: SelectPickerClearIndicator,
+                    ValueContainer: renderValueContainer,
+                    NoOptionsMessage: renderNoOptionsMessage,
+                }}
+                renderMenuListFooter={!optionListError && renderMenuListFooter}
+            />
+        )
+
     return (
         <div className={`flex column left top dc__gap-4 ${fullWidth ? 'w-100' : ''}`}>
             {/* Note: Common out for fields */}
@@ -377,7 +422,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             <CreatableSelect
                                 {...props}
                                 {...commonProps}
-                                isMulti
+                                isMulti={isMulti}
                                 ref={selectRef as SelectPickerProps<OptionValue, true>['selectRef']}
                                 components={{
                                     IndicatorSeparator: null,
@@ -401,23 +446,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 renderMenuListFooter={!optionListError && renderMenuListFooter}
                             />
                         ) : (
-                            <ReactSelect
-                                {...props}
-                                {...commonProps}
-                                ref={selectRef as MutableRefObject<SelectInstance<SelectPickerOptionType<OptionValue>>>}
-                                components={{
-                                    IndicatorSeparator: null,
-                                    LoadingIndicator: SelectPickerLoadingIndicator,
-                                    DropdownIndicator: SelectPickerDropdownIndicator,
-                                    Control: renderControl,
-                                    Option: renderOption,
-                                    MenuList: SelectPickerMenuList,
-                                    ClearIndicator: SelectPickerClearIndicator,
-                                    ValueContainer: renderValueContainer,
-                                    NoOptionsMessage: renderNoOptionsMessage,
-                                }}
-                                renderMenuListFooter={!optionListError && renderMenuListFooter}
-                            />
+                            renderSingleSelectPicker()
                         )}
                     </div>
                 </ConditionalWrap>
