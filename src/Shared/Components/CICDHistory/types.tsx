@@ -27,6 +27,7 @@ import {
     PaginationProps,
     useScrollable,
     SortingOrder,
+    SupportedKeyboardKeysType,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
 import { AggregationKeys, GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
@@ -46,6 +47,16 @@ export enum FetchIdDataStatus {
 }
 
 export interface LogResizeButtonType {
+    /**
+     * If given, that shortcut combo will be bound to the button
+     * @default null
+     */
+    shortcutCombo?: SupportedKeyboardKeysType[]
+    /**
+     * If true, only show the button when location.pathname contains '/logs'
+     * @default true
+     */
+    showOnlyWhenPathIncludesLogs?: boolean
     fullScreenView: boolean
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -597,9 +608,7 @@ export interface ArtifactType {
     blobStorageEnabled: boolean
     isArtifactUploaded?: boolean
     downloadArtifactUrl?: string
-    isJobView?: boolean
     isJobCI?: boolean
-    type: HistoryComponentType
     ciPipelineId?: number
     artifactId?: number
     imageComment?: ImageComment

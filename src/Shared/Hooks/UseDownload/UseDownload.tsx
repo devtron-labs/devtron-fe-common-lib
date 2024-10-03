@@ -15,12 +15,11 @@
  */
 
 import { showError } from '@Common/Helper'
-import { ToastBody } from '@Common/ToastBody'
 import { useState } from 'react'
-import { toast } from 'react-toastify'
 import { API_STATUS_CODES } from '@Common/Constants'
 import { ServerErrors } from '@Common/ServerError'
 import { getFileNameFromHeaders } from '@Shared/Helpers'
+import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { getDownloadResponse } from './service'
 import { HandleDownloadProps } from './types'
 
@@ -46,12 +45,11 @@ const useDownload = () => {
             const response = await getDownloadResponse(downloadUrl)
             if (response.status === API_STATUS_CODES.OK) {
                 if (showFilePreparingToast) {
-                    toast.info(
-                        <ToastBody
-                            title="Preparing file for download"
-                            subtitle="File will be downloaded when it is available."
-                        />,
-                    )
+                    ToastManager.showToast({
+                        variant: ToastVariantType.info,
+                        title: 'Preparing file for download',
+                        description: 'File will be downloaded when it is available.',
+                    })
                 }
                 const data = await (response as any).blob()
 
@@ -77,7 +75,10 @@ const useDownload = () => {
                 }, 0)
 
                 if (showSuccessfulToast) {
-                    toast.success(downloadSuccessToastContent)
+                    ToastManager.showToast({
+                        variant: ToastVariantType.success,
+                        description: downloadSuccessToastContent,
+                    })
                 }
             } else if (response.status === API_STATUS_CODES.NO_CONTENT) {
                 throw new Error('No content to download')

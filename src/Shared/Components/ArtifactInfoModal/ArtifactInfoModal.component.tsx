@@ -19,7 +19,7 @@ import { getArtifactInfo, getCITriggerInfo } from '../../Services/app.service'
 import { APIResponseHandler } from '../APIResponseHandler'
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 import { ReactComponent as ICArrowDown } from '../../../Assets/Icon/ic-arrow-down.svg'
-import { Artifacts, HistoryComponentType } from '../CICDHistory'
+import { Artifacts } from '../CICDHistory'
 import MaterialHistory from '../MaterialHistory/MaterialHistory.component'
 import { ArtifactInfoModalProps } from './types'
 
@@ -118,8 +118,6 @@ const ArtifactInfoModal = ({
                                     artifact={artifactInfo.image}
                                     blobStorageEnabled
                                     isArtifactUploaded={false}
-                                    isJobView={false}
-                                    type={HistoryComponentType.CI}
                                     imageReleaseTags={artifactInfo.imageReleaseTags}
                                     imageComment={artifactInfo.imageComment}
                                     ciPipelineId={artifactInfo.ciPipelineId}

@@ -37,7 +37,7 @@ export const CustomInput = ({
     rootClassName = '',
     autoComplete = 'off',
     helperText = '',
-    handleOnBlur,
+    onBlur,
     readOnly = false,
     noTrim = false,
     onKeyPress,
@@ -66,15 +66,15 @@ export const CustomInput = ({
         return error
     }
 
-    const onBlur = (event) => {
+    const handleOnBlur = (event) => {
         // NOTE: This is to prevent the input from being trimmed when the user do not want to trim the input
         if (!noTrim) {
             event.stopPropagation()
             event.target.value = event.target.value?.trim()
             onChange(event)
         }
-        if (typeof handleOnBlur === 'function') {
-            handleOnBlur(event)
+        if (typeof onBlur === 'function') {
+            onBlur(event)
         }
     }
 
@@ -127,7 +127,7 @@ export const CustomInput = ({
                     e.persist()
                     onChange(e)
                 }}
-                onBlur={onBlur}
+                onBlur={handleOnBlur}
                 onFocus={onFocus}
                 placeholder={placeholder}
                 value={value}

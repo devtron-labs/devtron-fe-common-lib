@@ -1,3 +1,13 @@
+@mixin svg-styles($color) {
+    svg *[stroke^="#"] {
+        stroke: $color;
+    }
+
+    svg *[fill^="#"] {
+        fill: $color;
+    }
+}
+
 @mixin button-variant-styles($background, $text-color, $border-color) {
     background: $background;
     color: $text-color;
@@ -7,11 +17,7 @@
         color: $text-color;
     }
 
-    // Only stroke icons are supposed to be used with button
-    svg,
-    svg * {
-        stroke: $text-color;
-    }
+    @include svg-styles($text-color);
 
     // Custom state for loader
     // Added using css to ensure using the respective text-color
@@ -27,7 +33,7 @@
     }
 }
 
-@mixin pseudo-states($hover-bg-color, $active-bg-color, $hover-border-color: null) {
+@mixin pseudo-states($hover-bg-color, $active-bg-color, $hover-border-color: null, $color: null) {
     $parent-selector: &;
 
     &:hover:not([disabled]) {
@@ -36,10 +42,22 @@
         @if ($hover-border-color) {
             border-color: $hover-border-color;
         }
+
+        @if ($color) {
+            color: $color;
+
+            @include svg-styles($color);
+        }
     }
 
     &:active:not([disabled]) {
         background: $active-bg-color;
+
+        @if ($color) {
+            color: $color;
+    
+            @include svg-styles($color);
+        }
     }
 }
 
@@ -63,6 +81,11 @@
         &--negative {
             @include button-variant-styles(var(--R500), $text-color, $border-color);
             @include pseudo-states(var(--R600), var(--R700));
+        }
+
+        &--negative-grey {
+            @include button-variant-styles(var(--N600), $text-color, $border-color);
+            @include pseudo-states(var(--R600), var(--R700), null, $text-color);
         }
 
         &--positive {
@@ -92,7 +115,12 @@
 
         &--negative {
             @include button-variant-styles($background, var(--R600), $border-color);
-            @include pseudo-states(var(--R100), var(--R200), var(--R600));
+            @include pseudo-states(var(--R100), var(--R200), var(--R600), var(--R600));
+        }
+
+        &--negative-grey {
+            @include button-variant-styles($background, var(--N700), $border-color);
+            @include pseudo-states(var(--R100), var(--R200), var(--R600), var(--R600));
         }
 
         &--positive {
@@ -125,6 +153,10 @@
             @include button-variant-styles($background, var(--R600), $border-color);
         }
 
+        &--negative-grey {
+            @include button-variant-styles($background, var(--N700), $border-color);
+        }
+
         &--positive {
             @include button-variant-styles($background, var(--G600), $border-color);
         }
@@ -148,6 +180,10 @@
             @include pseudo-states(var(--R100), var(--R200));
         }
 
+        &--negative-grey {
+            @include pseudo-states(var(--R100), var(--R200), null, var(--R600));
+        }
+
         &--positive {
             @include pseudo-states(var(--G100), var(--G200));
         }
@@ -166,6 +202,7 @@
 
         &--default,
         &--negative,
+        &--negative-grey,
         &--positive,
         &--warning,
         &--neutral {
