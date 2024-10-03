@@ -608,9 +608,7 @@ export interface ArtifactType {
     blobStorageEnabled: boolean
     isArtifactUploaded?: boolean
     downloadArtifactUrl?: string
-    isJobView?: boolean
     isJobCI?: boolean
-    type: HistoryComponentType
     ciPipelineId?: number
     artifactId?: number
     imageComment?: ImageComment
