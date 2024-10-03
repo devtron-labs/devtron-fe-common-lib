@@ -16,6 +16,7 @@
 
 import { FormEvent, FunctionComponent, useMemo } from 'react'
 import { SelectPicker } from '@Shared/Components/SelectPicker'
+import { ComponentSizeType } from '@Shared/constants'
 import { BuildInfraFormActionProps } from './types'
 import { OptionType } from '../../../Common'
 import { BUILD_INFRA_INPUT_CONSTRAINTS } from './constants'
@@ -100,6 +101,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         value={currentUnit}
                         onChange={handleUnitChange}
                         isSearchable={false}
+                        size={ComponentSizeType.large}
                     />
                 )}
             </div>
