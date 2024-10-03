@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import Tippy, { TippyProps } from '@tippyjs/react'
 import {
     components,
     DropdownIndicatorProps,
@@ -32,19 +31,27 @@ import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
 import { ChangeEvent } from 'react'
-import { ConditionalWrap, noop } from '@Common/Helper'
+import { noop } from '@Common/Helper'
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { Checkbox } from '@Common/Checkbox'
 import { ReactSelectInputAction } from '@Common/Constants'
 import { isNullOrUndefined } from '@Shared/Helpers'
+import { Tooltip } from '@Common/Tooltip'
+import { TooltipProps } from '@Common/Tooltip/types'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
 
-const renderWithTippy = (tippyProps: TippyProps) => (children: React.ReactElement) => (
-    <Tippy {...tippyProps} className={`default-tt ${tippyProps?.className || ''}`}>
-        {children}
-    </Tippy>
-)
+const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps']): TooltipProps => {
+    if (Object.hasOwn(tooltipProps, 'shortcutKeyCombo') && 'shortcutKeyCombo' in tooltipProps) {
+        return tooltipProps
+    }
+
+    return {
+        // TODO: using some typing somersaults here, clean it up later
+        alwaysShowTippyOnHover: !!(tooltipProps as Required<Pick<TooltipProps, 'content'>>)?.content,
+        ...(tooltipProps as Required<Pick<TooltipProps, 'content'>>),
+    }
+}
 
 export const SelectPickerDropdownIndicator = <OptionValue,>(
     props: DropdownIndicatorProps<SelectPickerOptionType<OptionValue>>,
@@ -144,7 +151,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
 
     return (
         <components.Option {...props}>
-            <ConditionalWrap condition={!!tooltipProps?.content} wrap={renderWithTippy(tooltipProps)}>
+            <Tooltip {...getTooltipProps(tooltipProps)}>
                 <div className="flexbox dc__align-items-center dc__gap-8">
                     {isMulti && !isCreatableOption && (
                         <Checkbox
@@ -173,7 +180,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                                         {description}
                                     </p>
                                 ) : (
-                                    description
+                                    <div className="fs-12 lh-18">{description}</div>
                                 ))}
                         </div>
                         {endIcon && (
@@ -181,7 +188,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                         )}
                     </div>
                 </div>
-            </ConditionalWrap>
+            </Tooltip>
         </components.Option>
     )
 }

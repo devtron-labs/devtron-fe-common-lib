@@ -22,7 +22,7 @@ export const getPipelineDeploymentsWfrIds = ({
 
     return {
         currentWfrId: wfrId,
-        previousWfrId: previousWfrId ?? null,
+        previousWfrId,
     }
 }
 

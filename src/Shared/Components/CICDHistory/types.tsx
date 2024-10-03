@@ -488,6 +488,7 @@ export interface DeploymentTemplateHistoryType {
     isUnpublished?: boolean
     isDeleteDraft?: boolean
     rootClassName?: string
+    sortBy?: string
     sortOrder?: SortingOrder
 }
 export interface DeploymentHistoryDetailRes extends ResponseType {

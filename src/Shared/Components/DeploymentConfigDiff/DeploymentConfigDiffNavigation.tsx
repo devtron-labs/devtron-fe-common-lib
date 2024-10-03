@@ -8,7 +8,7 @@ import { StyledRadioGroup } from '@Common/index'
 
 import { CollapsibleList } from '../CollapsibleList'
 import { DeploymentConfigDiffNavigationProps, DeploymentConfigDiffState } from './DeploymentConfigDiff.types'
-import { diffStateIconMap, diffStateTooltipTextMap } from './DeploymentConfigDiff.utils'
+import { diffStateIconMap, diffStateTooltipTextMap } from './DeploymentConfigDiff.constants'
 
 // LOADING SHIMMER
 const ShimmerText = ({ width }: { width: string }) => (

@@ -1,11 +1,6 @@
-import { FunctionComponent, SVGProps } from 'react'
-
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICStamp } from '@Icons/ic-stamp.svg'
 import { ReactComponent as ICEditFile } from '@Icons/ic-edit-file.svg'
-import { ReactComponent as ICDiffFileUpdated } from '@Icons/ic-diff-file-updated.svg'
-import { ReactComponent as ICDiffFileAdded } from '@Icons/ic-diff-file-added.svg'
-import { ReactComponent as ICDiffFileRemoved } from '@Icons/ic-diff-file-removed.svg'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '@Shared/constants'
 import {
@@ -467,10 +462,12 @@ const getConfigMapSecretData = (
             compareWithIsAdmin,
         )
 
+        const pathType =
+            resourceType === ConfigResourceType.ConfigMap ? EnvResourceType.ConfigMap : EnvResourceType.Secret
+
         return {
-            id: `${resourceType === ConfigResourceType.ConfigMap ? EnvResourceType.ConfigMap : EnvResourceType.Secret}-${currentItem?.name || compareItem?.name}`,
-            pathType:
-                resourceType === ConfigResourceType.ConfigMap ? EnvResourceType.ConfigMap : EnvResourceType.Secret,
+            id: `${pathType}-${currentItem?.name || compareItem?.name}`,
+            pathType,
             title: `${resourceType === ConfigResourceType.ConfigMap ? 'ConfigMap' : 'Secret'} / ${currentItem?.name || compareItem?.name}`,
             name: currentItem?.name || compareItem?.name,
             primaryConfig: {
@@ -530,27 +527,27 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
     collapsibleNavList: DeploymentConfigDiffProps['collapsibleNavList']
 } => {
     if (!isManifestView) {
-        const _currentList = getConfigDataWithResolvedDeploymentTemplate(
+        const compareToObject = getConfigDataWithResolvedDeploymentTemplate(
             currentList as AppEnvDeploymentConfigListParams<false>['currentList'],
             currentDeploymentTemplateResolvedData,
         )
-        const _compareList = getConfigDataWithResolvedDeploymentTemplate(
+        const compareWithObject = getConfigDataWithResolvedDeploymentTemplate(
             compareList as AppEnvDeploymentConfigListParams<false>['compareList'],
             compareDeploymentTemplateResolvedData,
         )
-        const currentDeploymentData = getDeploymentTemplateDiffViewData(_currentList.deploymentTemplate)
-        const compareDeploymentData = getDeploymentTemplateDiffViewData(_compareList.deploymentTemplate)
+        const currentDeploymentData = getDeploymentTemplateDiffViewData(compareToObject.deploymentTemplate)
+        const compareDeploymentData = getDeploymentTemplateDiffViewData(compareWithObject.deploymentTemplate)
 
         const deploymentTemplateData = {
             id: EnvResourceType.DeploymentTemplate,
             pathType: EnvResourceType.DeploymentTemplate,
             title: 'Deployment Template',
             primaryConfig: {
-                heading: getDiffHeading(_compareList.deploymentTemplate, true),
+                heading: getDiffHeading(compareWithObject.deploymentTemplate, true),
                 list: compareDeploymentData,
             },
             secondaryConfig: {
-                heading: getDiffHeading(_currentList.deploymentTemplate, true),
+                heading: getDiffHeading(compareToObject.deploymentTemplate, true),
                 list: currentDeploymentData,
             },
             diffState: getDiffState(currentDeploymentData, compareDeploymentData),
@@ -560,9 +557,9 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
         let comparePipelineConfigData: DeploymentHistoryDetail
         let pipelineConfigData: DeploymentConfigDiffProps['configList'][0]
 
-        if (_currentList.pipelineConfigData || _compareList.pipelineConfigData) {
-            currentPipelineConfigData = getPipelineConfigDiffViewData(_currentList.pipelineConfigData)
-            comparePipelineConfigData = getPipelineConfigDiffViewData(_compareList.pipelineConfigData)
+        if (compareToObject.pipelineConfigData || compareWithObject.pipelineConfigData) {
+            currentPipelineConfigData = getPipelineConfigDiffViewData(compareToObject.pipelineConfigData)
+            comparePipelineConfigData = getPipelineConfigDiffViewData(compareWithObject.pipelineConfigData)
             pipelineConfigData = {
                 id: EnvResourceType.PipelineStrategy,
                 pathType: EnvResourceType.PipelineStrategy,
@@ -580,20 +577,20 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
         }
 
         const cmData = getConfigMapSecretData(
-            _currentList.configMapData,
-            _compareList.configMapData,
+            compareToObject.configMapData,
+            compareWithObject.configMapData,
             ConfigResourceType.ConfigMap,
-            _currentList.isAppAdmin,
-            _compareList.isAppAdmin,
+            compareToObject.isAppAdmin,
+            compareWithObject.isAppAdmin,
             convertVariables,
         )
 
         const secretData = getConfigMapSecretData(
-            _currentList.secretsData,
-            _compareList.secretsData,
+            compareToObject.secretsData,
+            compareWithObject.secretsData,
             ConfigResourceType.Secret,
-            _currentList.isAppAdmin,
-            _compareList.isAppAdmin,
+            compareToObject.isAppAdmin,
+            compareWithObject.isAppAdmin,
             convertVariables,
         )
 
@@ -667,11 +664,11 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
         }
     }
 
-    const _currentList = currentList as AppEnvDeploymentConfigListParams<true>['currentList']
-    const _compareList = compareList as AppEnvDeploymentConfigListParams<true>['compareList']
+    const compareToObject = currentList as AppEnvDeploymentConfigListParams<true>['currentList']
+    const compareWithObject = compareList as AppEnvDeploymentConfigListParams<true>['compareList']
 
-    const currentManifestData = getManifestDiffViewData(_currentList)
-    const compareManifestData = getManifestDiffViewData(_compareList)
+    const currentManifestData = getManifestDiffViewData(compareToObject)
+    const compareManifestData = getManifestDiffViewData(compareWithObject)
 
     const manifestData = {
         id: EnvResourceType.Manifest,
@@ -739,31 +736,3 @@ export const getDefaultVersionAndPreviousDeploymentOptions = (data: TemplateList
             previousDeployments: [],
         },
     )
-
-export const diffStateTextMap: Record<DeploymentConfigDiffState, string> = {
-    hasDiff: 'Has difference',
-    added: 'Added',
-    deleted: 'Deleted',
-    noDiff: 'No change',
-}
-
-export const diffStateIconMap: Record<DeploymentConfigDiffState, FunctionComponent<SVGProps<SVGSVGElement>>> = {
-    hasDiff: ICDiffFileUpdated,
-    added: ICDiffFileAdded,
-    deleted: ICDiffFileRemoved,
-    noDiff: null,
-}
-
-export const diffStateTooltipTextMap: Record<DeploymentConfigDiffState, string> = {
-    hasDiff: 'File has difference',
-    added: 'File has been added',
-    deleted: 'File has been deleted',
-    noDiff: null,
-}
-
-export const diffStateTextColorMap: Record<DeploymentConfigDiffState, `c${string}`> = {
-    hasDiff: 'cy-7',
-    added: 'cg-5',
-    deleted: 'cr-5',
-    noDiff: 'cn-7',
-}

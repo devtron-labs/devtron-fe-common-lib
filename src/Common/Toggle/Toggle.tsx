@@ -50,7 +50,7 @@ const Toggle = ({
         }
     }
 
-    const throttledHandleClick = useCallback(throttle(handleClick, 500), [])
+    const throttledHandleClick = useCallback(throttle(handleClick, 500), [disabled])
 
     return (
         <label

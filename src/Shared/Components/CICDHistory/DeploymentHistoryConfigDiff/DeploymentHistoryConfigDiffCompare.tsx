@@ -32,7 +32,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
 
     // URL FILTERS
     const { compareWfrId, updateSearchParams, sortBy, sortOrder, handleSorting } = useUrlFilters<
-        'sort-config' | '',
+        string,
         DeploymentHistoryConfigDiffQueryParams
     >({
         parseSearchParams: parseDeploymentHistoryDiffSearchParams(previousWfrId),

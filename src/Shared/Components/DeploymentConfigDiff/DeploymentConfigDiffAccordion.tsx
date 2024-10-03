@@ -4,7 +4,7 @@ import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 
 import { Collapse } from '../Collapse'
 import { DeploymentConfigDiffAccordionProps, DeploymentConfigDiffState } from './DeploymentConfigDiff.types'
-import { diffStateTextColorMap, diffStateTextMap } from './DeploymentConfigDiff.utils'
+import { diffStateTextColorMap, diffStateTextMap } from './DeploymentConfigDiff.constants'
 
 export const DeploymentConfigDiffAccordion = forwardRef<HTMLDivElement, DeploymentConfigDiffAccordionProps>(
     (
