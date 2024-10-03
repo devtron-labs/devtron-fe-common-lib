@@ -1,4 +1,4 @@
-import { TemplateListType } from '@Shared/Services'
+import { DraftMetadataDTO, TemplateListType } from '@Shared/Services'
 import { OverrideMergeStrategyType } from '../types'
 
 export type DeploymentChartOptionkind = 'base' | 'env' | 'chartVersion' | 'deployment'
@@ -140,7 +140,7 @@ export interface DeploymentTemplateConfigCommonState extends SelectedChartDetail
     readme: string
     schema: Record<string, string>
     guiSchema: string
-    latestDraft?: any
+    latestDraft?: DraftMetadataDTO
     editorTemplate: string
     editorTemplateWithoutLockedKeys: string
 }

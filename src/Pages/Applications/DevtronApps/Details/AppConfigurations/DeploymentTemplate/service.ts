@@ -38,7 +38,7 @@ export const getResolvedDeploymentTemplate = async (
             valuesAndManifestFlag: ValuesAndManifestFlagDTO.DEPLOYMENT_TEMPLATE,
         }
 
-        const { result } = await post<ResolvedDeploymentTemplateDTO>(`${ROUTES.APP_TEMPLATE_DATA}`, payload)
+        const { result } = await post<ResolvedDeploymentTemplateDTO>(ROUTES.APP_TEMPLATE_DATA, payload)
         const areVariablesPresent = result.variableSnapshot && Object.keys(result.variableSnapshot).length > 0
 
         const parsedData = YAML.parse(result.data)
