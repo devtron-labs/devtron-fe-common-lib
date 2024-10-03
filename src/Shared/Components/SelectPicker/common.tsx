@@ -41,15 +41,22 @@ import { TooltipProps } from '@Common/Tooltip/types'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
 
-const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps']): TooltipProps => {
-    if (Object.hasOwn(tooltipProps, 'shortcutKeyCombo') && 'shortcutKeyCombo' in tooltipProps) {
-        return tooltipProps
+const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
+    if (tooltipProps) {
+        if (Object.hasOwn(tooltipProps, 'shortcutKeyCombo') && 'shortcutKeyCombo' in tooltipProps) {
+            return tooltipProps
+        }
+
+        return {
+            // TODO: using some typing somersaults here, clean it up later
+            alwaysShowTippyOnHover: !!(tooltipProps as Required<Pick<TooltipProps, 'content'>>)?.content,
+            ...(tooltipProps as Required<Pick<TooltipProps, 'content'>>),
+        }
     }
 
     return {
-        // TODO: using some typing somersaults here, clean it up later
-        alwaysShowTippyOnHover: !!(tooltipProps as Required<Pick<TooltipProps, 'content'>>)?.content,
-        ...(tooltipProps as Required<Pick<TooltipProps, 'content'>>),
+        alwaysShowTippyOnHover: false,
+        content: null,
     }
 }
 
