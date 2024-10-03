@@ -210,6 +210,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     customSelectedOptionsCount = null,
     renderMenuListFooter,
     isCreatableSingleSelect = false,
+    inputValue,
+    onInputChange,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options } = props
@@ -244,8 +246,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     )
 
     // Used to show the create new option for creatable select and the option(s) doesn't have the input value
-    const isValidNewOption = (inputValue: string) => {
-        const trimmedInput = inputValue?.trim()
+    const isValidNewOption = (_inputValue: string) => {
+        const trimmedInput = _inputValue?.trim()
 
         return (
             isCreatable &&
@@ -310,9 +312,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     )
 
     const handleCreateOption: SelectPickerProps<OptionValue, true>['multiSelectProps']['onCreateOption'] = (
-        inputValue,
+        _inputValue,
     ) => {
-        const trimmedInputValue = inputValue?.trim()
+        const trimmedInputValue = _inputValue?.trim()
         if (trimmedInputValue) {
             onCreateOption(trimmedInputValue)
         }
@@ -444,6 +446,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 createOptionPosition="first"
                                 onCreateOption={handleCreateOption}
                                 renderMenuListFooter={!optionListError && renderMenuListFooter}
+                                inputValue={inputValue}
+                                onInputChange={onInputChange}
                             />
                         ) : (
                             renderSingleSelectPicker()
