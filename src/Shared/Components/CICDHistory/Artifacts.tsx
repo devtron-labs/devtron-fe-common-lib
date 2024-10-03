@@ -32,7 +32,7 @@ import { ReactComponent as Down } from '../../../Assets/Icon/ic-arrow-forward.sv
 import docker from '../../../Assets/Icon/ic-docker.svg'
 import folder from '../../../Assets/Icon/ic-folder.svg'
 import noartifact from '../../../Assets/Img/no-artifact@2x.png'
-import { ArtifactType, CIListItemType, HistoryComponentType } from './types'
+import { ArtifactType, CIListItemType } from './types'
 import { TERMINAL_STATUS_MAP } from './constants'
 import { EMPTY_STATE_STATUS } from '../../constants'
 
@@ -124,11 +124,9 @@ const Artifacts = ({
     downloadArtifactUrl,
     ciPipelineId,
     artifactId,
-    isJobView,
     isJobCI,
     imageComment,
     imageReleaseTags,
-    type,
     appReleaseTagNames,
     tagsEditable,
     hideImageTaggingHardDelete,
@@ -153,88 +151,96 @@ const Artifacts = ({
     if (status.toLowerCase() === TERMINAL_STATUS_MAP.RUNNING || status.toLowerCase() === TERMINAL_STATUS_MAP.STARTING) {
         return <CIProgressView />
     }
-    if (
-        status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED ||
-        status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED ||
-        status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR
-    ) {
-        if (isJobCI) {
+    // If artifactId is not 0 image info is shown, if isArtifactUploaded is true reports are shown
+    // In case both are not present empty state is shown
+    // isArtifactUploaded can be true even if status is failed
+
+    // NOTE: This means there are no reports and no image artifacts i.e. empty state
+    if (!isArtifactUploaded && !artifactId) {
+        if (
+            status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED ||
+            status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED ||
+            status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR
+        ) {
             return (
                 <GenericEmptyState
-                    title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.FailedToFetchArtifacts}
-                    subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.FailedToFetchArtifactsError}
+                    title={
+                        isJobCI
+                            ? EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.FailedToFetchArtifacts
+                            : EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsGenerated
+                    }
+                    subTitle={
+                        isJobCI
+                            ? EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.FailedToFetchArtifactsError
+                            : EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsError
+                    }
                 />
             )
         }
 
-        return (
-            <GenericEmptyState
-                title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsGenerated}
-                subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsError}
-            />
-        )
+        if (status.toLowerCase() === TERMINAL_STATUS_MAP.SUCCEEDED) {
+            return (
+                <GenericEmptyState
+                    title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsFound}
+                    subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsFoundError}
+                    image={noartifact}
+                />
+            )
+        }
     }
-    if (!artifactId && status.toLowerCase() === TERMINAL_STATUS_MAP.SUCCEEDED) {
-        return (
-            <GenericEmptyState
-                title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsFound}
-                subTitle={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsFoundError}
-                image={noartifact}
-            />
-        )
-    }
+
     return (
         <>
             <div className={`flex left column dc__gap-12 dc__content-start ${rootClassName ?? ''}`}>
-                <CIListItem
-                    type="artifact"
-                    ciPipelineId={ciPipelineId}
-                    artifactId={artifactId}
-                    imageComment={imageComment}
-                    imageReleaseTags={imageReleaseTags}
-                    appReleaseTagNames={appReleaseTagNames}
-                    tagsEditable={tagsEditable}
-                    hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                    isSuperAdmin={isSuperAdmin}
-                    renderCIListHeader={renderCIListHeader}
-                >
-                    <div className="flex column left hover-trigger">
-                        <div className="cn-9 fs-14 flex left" data-testid="artifact-text-visibility">
-                            {extractImage(artifact)}
-                            <div className="pl-4">
-                                <ClipboardButton content={extractImage(artifact)} />
+                {!!artifactId && (
+                    <CIListItem
+                        type="artifact"
+                        ciPipelineId={ciPipelineId}
+                        artifactId={artifactId}
+                        imageComment={imageComment}
+                        imageReleaseTags={imageReleaseTags}
+                        appReleaseTagNames={appReleaseTagNames}
+                        tagsEditable={tagsEditable}
+                        hideImageTaggingHardDelete={hideImageTaggingHardDelete}
+                        isSuperAdmin={isSuperAdmin}
+                        renderCIListHeader={renderCIListHeader}
+                    >
+                        <div className="flex column left hover-trigger">
+                            <div className="cn-9 fs-14 flex left" data-testid="artifact-text-visibility">
+                                {extractImage(artifact)}
+                                <div className="pl-4">
+                                    <ClipboardButton content={extractImage(artifact)} />
+                                </div>
+                            </div>
+                            <div className="cn-7 fs-12 flex left" data-testid="artifact-image-text">
+                                {artifact}
+                                <div className="pl-4">
+                                    <ClipboardButton content={artifact} />
+                                </div>
                             </div>
                         </div>
-                        <div className="cn-7 fs-12 flex left" data-testid="artifact-image-text">
-                            {artifact}
-                            <div className="pl-4">
-                                <ClipboardButton content={artifact} />
-                            </div>
+                    </CIListItem>
+                )}
+                {blobStorageEnabled && downloadArtifactUrl && isArtifactUploaded && (
+                    <CIListItem
+                        type="report"
+                        hideImageTaggingHardDelete={hideImageTaggingHardDelete}
+                        isSuperAdmin={isSuperAdmin}
+                        renderCIListHeader={renderCIListHeader}
+                    >
+                        <div className="flex column left">
+                            <div className="cn-9 fs-14">Reports.zip</div>
+                            <button
+                                type="button"
+                                onClick={handleArtifact}
+                                className="anchor p-0 cb-5 fs-12 flex left pointer"
+                            >
+                                Download
+                                <Download className="ml-5 icon-dim-16" />
+                            </button>
                         </div>
-                    </div>
-                </CIListItem>
-                {blobStorageEnabled &&
-                    downloadArtifactUrl &&
-                    (type === HistoryComponentType.CD || isArtifactUploaded || isJobView) && (
-                        <CIListItem
-                            type="report"
-                            hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                            isSuperAdmin={isSuperAdmin}
-                            renderCIListHeader={renderCIListHeader}
-                        >
-                            <div className="flex column left">
-                                <div className="cn-9 fs-14">Reports.zip</div>
-                                <button
-                                    type="button"
-                                    onClick={handleArtifact}
-                                    className="anchor p-0 cb-5 fs-12 flex left pointer"
-                                >
-                                    Download
-                                    <Download className="ml-5 icon-dim-16" />
-                                </button>
-                            </div>
-                        </CIListItem>
-                    )}
+                    </CIListItem>
+                )}
             </div>
             {!blobStorageEnabled && (
                 <div className="flexbox dc__position-abs-b-20 dc__content-center w-100">

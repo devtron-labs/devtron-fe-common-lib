@@ -618,6 +618,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                     status={triggerDetails.status}
                                     artifact={triggerDetails.artifact}
                                     blobStorageEnabled={triggerDetails.blobStorageEnabled}
+                                    isArtifactUploaded={triggerDetails.isArtifactUploaded}
                                     ciPipelineId={triggerDetails.ciPipelineId}
                                     artifactId={triggerDetails.artifactId}
                                     imageComment={triggerDetails?.imageComment}
@@ -626,7 +627,6 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                     appReleaseTagNames={appReleaseTags}
                                     hideImageTaggingHardDelete={hideImageTaggingHardDelete}
                                     downloadArtifactUrl={CDBuildReportUrl}
-                                    type={HistoryComponentType.CD}
                                     renderCIListHeader={renderCIListHeader}
                                     rootClassName="p-16 flex-grow-1"
                                 />

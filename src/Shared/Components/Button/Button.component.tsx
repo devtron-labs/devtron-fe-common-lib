@@ -180,7 +180,7 @@ const Button = ({
                     ) : (
                         <>
                             {startIcon && <span className={iconClass}>{startIcon}</span>}
-                            <span className="dc__mxw-150 dc__align-left dc__truncate">{text}</span>
+                            <span className="dc__align-left">{text}</span>
                             {endIcon && <span className={iconClass}>{endIcon}</span>}
                         </>
                     )}
