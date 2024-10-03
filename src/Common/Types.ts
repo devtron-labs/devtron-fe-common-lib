@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { ReactNode, CSSProperties } from 'react'
+import React, { ReactNode, CSSProperties, ReactElement } from 'react'
 import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
@@ -639,12 +639,6 @@ export interface VulnerabilityType {
     url?: string
 }
 
-export interface ScanVulnerabilitiesTableProps {
-    vulnerabilities: VulnerabilityType[]
-    hidePolicy?: boolean
-    shouldStick?: boolean
-}
-
 export interface MaterialInfo {
     revision: string
     modifiedTime: string | Date
@@ -726,6 +720,7 @@ export interface RegistryTypeDetailType {
     registryURL: InputDetailType
     id: InputDetailType
     password: InputDetailType
+    startIcon: ReactElement
 }
 
 export interface UseSearchString {

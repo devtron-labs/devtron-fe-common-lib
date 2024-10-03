@@ -15,11 +15,14 @@
  */
 
 import { useParams } from 'react-router-dom'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
 import DOMPurify from 'dompurify'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
 import { escapeRegExp } from '@Shared/Helpers'
+import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
+import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
+import { withShortcut, IWithShortcut } from 'react-keybind'
 import {
     Progressing,
     Host,
@@ -28,7 +31,7 @@ import {
     ROUTES,
     SearchBar,
     useUrlFilters,
-    stopPropagation,
+    Tooltip,
 } from '../../../Common'
 import LogStageAccordion from './LogStageAccordion'
 import {
@@ -167,12 +170,13 @@ const useCIEventSource = (url: string, maxLength?: number): [string[], EventSour
     return [dataVal, eventSourceRef.current, logsNotAvailableError]
 }
 
-export const LogsRenderer = ({
+const LogsRenderer = ({
     triggerDetails,
     isBlobStorageConfigured,
     parentType,
     fullScreenView,
-}: LogsRendererType): JSX.Element => {
+    shortcut,
+}: LogsRendererType & IWithShortcut) => {
     const { pipelineId, envId, appId } = useParams<DeploymentHistoryBaseParamsType>()
     const logsURL =
         parentType === HistoryComponentType.CI
@@ -185,6 +189,9 @@ export const LogsRenderer = ({
     // State for logs list in case no stages are available
     const [logsList, setLogsList] = useState<string[]>([])
     const { searchKey, handleSearch } = useUrlFilters()
+
+    const areAllStagesExpanded = useMemo(() => stageList.every((item) => item.isOpen), [stageList])
+    const shortcutTippyText = areAllStagesExpanded ? 'Collapse all stages' : 'Expand all stages'
 
     const areStagesAvailable =
         (window._env_.FEATURE_STEP_WISE_LOGS_ENABLE && streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER)) || false
@@ -379,6 +386,28 @@ export const LogsRenderer = ({
         // And for other cases we would use handleSearchEnter
     }, [streamDataList, areEventsProgressing])
 
+    const handleToggleOpenAllStages = useCallback(() => {
+        setStageList((prev) =>
+            prev.map((stage) => ({
+                ...stage,
+                isOpen: !areAllStagesExpanded,
+            })),
+        )
+    }, [areAllStagesExpanded])
+
+    useEffect(() => {
+        shortcut.registerShortcut(
+            handleToggleOpenAllStages,
+            ['e'],
+            'ExpandCollapseLogStages',
+            'Expand/Collapse all log stages',
+        )
+
+        return () => {
+            shortcut.unregisterShortcut(['e'])
+        }
+    }, [handleToggleOpenAllStages])
+
     const handleSearchEnter = (searchText: string) => {
         handleSearch(searchText)
         const newStageList = getStageListFromStreamData(searchText)
@@ -413,11 +442,7 @@ export const LogsRenderer = ({
                             backgroundColor: '#0C1021',
                         }}
                     >
-                        <div
-                            className="flexbox logs-renderer__search-bar logs-renderer__filters-border-bottom pl-12"
-                            // Doing this since we have binded 'f' with full screen and SearchVar has not exposed event on search, so on pressing f it goes to full screen
-                            onKeyDown={stopPropagation}
-                        >
+                        <div className="flexbox logs-renderer__search-bar logs-renderer__filters-border-bottom pl-12">
                             <SearchBar
                                 noBackgroundAndBorder
                                 containerClassName="w-100"
@@ -428,6 +453,27 @@ export const LogsRenderer = ({
                                 initialSearchText={searchKey}
                                 size={ComponentSizeType.large}
                             />
+                            <Tooltip
+                                shortcutKeyCombo={{
+                                    text: shortcutTippyText,
+                                    combo: ['E'] as const,
+                                }}
+                                className="dc__mxw-500"
+                                placement="left"
+                            >
+                                <button
+                                    type="button"
+                                    className="dc__unset-button-styles px-10 flex dc__bg-n0--opacity-0_2"
+                                    onClick={handleToggleOpenAllStages}
+                                    aria-label={shortcutTippyText}
+                                >
+                                    {areAllStagesExpanded ? (
+                                        <ICCollapseAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
+                                    ) : (
+                                        <ICExpandAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
+                                    )}
+                                </button>
+                            </Tooltip>
                         </div>
                     </div>
 
@@ -487,4 +533,4 @@ export const LogsRenderer = ({
         : renderLogs()
 }
 
-export default LogsRenderer
+export default withShortcut(LogsRenderer)

@@ -39,6 +39,7 @@ export const RJSFForm = (props: FormProps) => (
             ...templates,
             ...props.templates,
         }}
+        formContext={props.formData}
         widgets={{ ...widgets, ...props.widgets }}
         translateString={translateString}
     />

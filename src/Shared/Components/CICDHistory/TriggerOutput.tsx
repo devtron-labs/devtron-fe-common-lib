@@ -17,7 +17,6 @@
 import { Redirect, Route, Switch, useLocation, useParams, useRouteMatch, Link, NavLink } from 'react-router-dom'
 import React, { useEffect, useMemo, useState } from 'react'
 import moment from 'moment'
-import { toast } from 'react-toastify'
 import { ShowMoreText } from '@Shared/Components/ShowMoreText'
 import { getHandleOpenURL } from '@Shared/Helpers'
 import { ImageChipCell } from '@Shared/Components/ImageChipCell'
@@ -26,6 +25,7 @@ import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
 import { ReactComponent as ICPulsateStatus } from '@Icons/ic-pulsate-status.svg'
 import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
 import { getDeploymentStageTitle } from '@Pages/App'
+import { ToastManager, ToastVariantType } from '@Shared/Services'
 import {
     ConfirmationDialog,
     DATE_TIME_FORMATS,
@@ -64,7 +64,7 @@ import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigg
 import { DEFAULT_ENV, TIMEOUT_VALUE, WORKER_POD_BASE_URL } from './constants'
 import { GitTriggers } from '../../types'
 import warn from '../../../Assets/Icon/ic-warning.svg'
-import { LogsRenderer } from './LogsRenderer'
+import LogsRenderer from './LogsRenderer'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryDetailedView, DeploymentHistoryConfigList } from './DeploymentHistoryDiff'
 import { GitChanges, Scroller } from './History.components'
@@ -164,7 +164,10 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
         setAborting(true)
         try {
             await abort(abortError.status)
-            toast.success('Build Aborted')
+            ToastManager.showToast({
+                variant: ToastVariantType.success,
+                description: 'Build Aborted',
+            })
             setAbortConfirmation(false)
             setAbortError({
                 status: false,
