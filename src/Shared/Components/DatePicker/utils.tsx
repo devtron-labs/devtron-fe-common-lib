@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { OptionType } from '../../../Common'
+import { SelectPickerOptionType } from '../SelectPicker'
 import { MONTHLY_DATES_CONFIG, TIME_OPTIONS_CONFIG } from './constants'
 
 /**
@@ -27,13 +27,15 @@ export const MONTHLY_DATE_OPTIONS = Object.entries(MONTHLY_DATES_CONFIG).map(([l
 
 /**
  * Return the options for the time in label and value format
- * @type {OptionType[]}
+ * @type {SelectPickerOptionType[]}
  */
 // eslint-disable-next-line import/prefer-default-export
-export const DEFAULT_TIME_OPTIONS: OptionType[] = Object.entries(TIME_OPTIONS_CONFIG).map(([label, value]) => ({
-    label,
-    value,
-}))
+export const DEFAULT_TIME_OPTIONS: SelectPickerOptionType[] = Object.entries(TIME_OPTIONS_CONFIG).map(
+    ([label, value]) => ({
+        label,
+        value,
+    }),
+)
 
 const formatTimePart = (value: number) => (value < 10 ? `0${value}` : value)
 /**
@@ -57,7 +59,7 @@ export const updateTime = (currentDateObj: Date, timeString: string) => {
     const updatedDate = new Date(currentDateObj)
     updatedDate.setHours(hours, minutes, seconds)
 
-    return updatedDate
+    return { label: updatedDate, value: updatedDate }
 }
 
 /**

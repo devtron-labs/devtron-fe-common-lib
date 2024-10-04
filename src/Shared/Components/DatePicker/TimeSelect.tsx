@@ -27,33 +27,28 @@ export const TimePickerSelect = ({
     timePickerProps,
     error,
     selectedTimeOption,
-}: TimeSelectProps) => {
-    const handleTimeSelectChange = (selectedOption) => {
-        onChange(selectedOption)
-    }
-    return (
-        <>
-            <div className="dc__no-shrink">
-                <SelectPicker
-                    inputId={DATE_PICKER_IDS.TIME}
-                    placeholder="12:00 AM"
-                    options={DEFAULT_TIME_OPTIONS}
-                    menuPosition="fixed"
-                    isSearchable={false}
-                    isDisabled={disabled}
-                    {...timePickerProps}
-                    value={selectedTimeOption}
-                    icon={<ClockIcon className="icon-dim-20 fcn-6" />}
-                    onChange={handleTimeSelectChange}
-                    data-testid={DATE_PICKER_IDS.TIME}
-                />
+}: TimeSelectProps) => (
+    <>
+        <div className="dc__no-shrink">
+            <SelectPicker
+                inputId={DATE_PICKER_IDS.TIME}
+                placeholder="12:00 AM"
+                options={DEFAULT_TIME_OPTIONS}
+                menuPosition="fixed"
+                isSearchable={false}
+                isDisabled={disabled}
+                {...timePickerProps}
+                value={selectedTimeOption}
+                icon={<ClockIcon className="icon-dim-20 fcn-6" />}
+                onChange={onChange}
+                data-testid={DATE_PICKER_IDS.TIME}
+            />
+        </div>
+        {error && (
+            <div className="form__error">
+                <ErrorIcon className="form__icon form__icon--error" />
+                {error}
             </div>
-            {error && (
-                <div className="form__error">
-                    <ErrorIcon className="form__icon form__icon--error" />
-                    {error}
-                </div>
-            )}
-        </>
-    )
-}
+        )}
+    </>
+)

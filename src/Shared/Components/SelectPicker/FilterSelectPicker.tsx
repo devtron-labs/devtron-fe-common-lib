@@ -23,10 +23,6 @@ const FilterSelectPicker = ({
 
     const appliedFiltersCount = appliedFilterOptions?.length ?? 0
 
-    const handleInputChange = (_inputValue) => {
-        setInputValue(_inputValue)
-    }
-
     useEffect(() => {
         setSelectedOptions(appliedFilterOptions ?? [])
     }, [appliedFilterOptions])
@@ -93,7 +89,7 @@ const FilterSelectPicker = ({
                 customSelectedOptionsCount={appliedFiltersCount}
                 icon={filterIcon}
                 inputValue={inputValue}
-                onInputChange={handleInputChange}
+                onInputChange={setInputValue}
             />
         </div>
     )

@@ -192,7 +192,16 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * @default false
          */
         fullWidth?: boolean
+        /**
+         * If true, the select is single creatable select
+         *
+         * @default false
+         */
         isCreatableSingleSelect?: boolean
+        /**
+         *
+         * If true, the select menu is open
+         */
         menuIsOpen?: boolean
         // TODO: Can make generic typing when adding multi select
         /**
