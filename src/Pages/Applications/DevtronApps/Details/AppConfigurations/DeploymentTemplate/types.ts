@@ -158,7 +158,19 @@ type DTApplicationMetricsReadOnlyProps = {
      * If true, would only text depicting the information whether the application metrics is enabled or not
      */
     onlyShowCurrentStatus: true
+    parsingError?: never
+    restoreLastSavedYAML?: never
 }
+
+type DTApplicationMetricsParseErrorProps =
+    | {
+          parsingError: string
+          restoreLastSavedYAML: () => void
+      }
+    | {
+          parsingError?: never
+          restoreLastSavedYAML?: never
+      }
 
 type DTApplicationMetricsActionProps = {
     isLoading: boolean
@@ -166,7 +178,7 @@ type DTApplicationMetricsActionProps = {
     isDisabled: boolean
     toggleAppMetrics: () => void
     onlyShowCurrentStatus?: false
-}
+} & DTApplicationMetricsParseErrorProps
 
 export type DTApplicationMetricsFormFieldProps = {
     isAppMetricsEnabled: boolean
