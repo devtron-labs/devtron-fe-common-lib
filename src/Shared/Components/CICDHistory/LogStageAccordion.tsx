@@ -1,6 +1,7 @@
 import DOMPurify from 'dompurify'
 import { getTimeDifference } from '@Shared/Helpers'
-import { LogStageAccordionProps } from './types'
+import { RefCallback } from 'react'
+import { LogStageAccordionProps, StageDetailType } from './types'
 import { getStageStatusIcon } from './utils'
 import { ReactComponent as ICCaretDown } from '../../../Assets/Icon/ic-caret-down.svg'
 
@@ -20,6 +21,7 @@ const LogStageAccordion = ({
     stageIndex,
     isLoading,
     fullScreenView,
+    searchIndex,
 }: LogStageAccordionProps) => {
     const handleAccordionToggle = () => {
         if (isOpen) {
@@ -35,6 +37,12 @@ const LogStageAccordion = ({
             return '< 1s'
         }
         return timeDifference
+    }
+
+    const scrollIntoView: RefCallback<HTMLSpanElement> = (node) => {
+        if (node) {
+            node.scrollIntoView({ block: 'center' })
+        }
     }
 
     return (
@@ -64,23 +72,33 @@ const LogStageAccordion = ({
 
             {isOpen && (
                 <div className="flexbox-col dc__gap-4">
-                    {logs.map((log: string, logsIndex: number) => (
-                        <LogsItemContainer
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={`logs-${stage}-${startTime}-${logsIndex}`}
-                        >
-                            <span className="cn-4 col-2 lh-20 dc__text-align-end dc__word-break mono fs-14">
-                                {logsIndex + 1}
-                            </span>
-                            <p
-                                className="mono fs-14 mb-0-imp cn-0 dc__word-break lh-20"
-                                // eslint-disable-next-line react/no-danger
-                                dangerouslySetInnerHTML={{
-                                    __html: DOMPurify.sanitize(log),
-                                }}
-                            />
-                        </LogsItemContainer>
-                    ))}
+                    {logs.map((log: StageDetailType['logs'][number], logsIndex: number) => {
+                        const isSearchMatched = log.containsSearchText && `${stageIndex}-${logsIndex}` === searchIndex
+                        return (
+                            <LogsItemContainer
+                                // eslint-disable-next-line react/no-array-index-key
+                                key={`logs-${stage}-${startTime}-${logsIndex}`}
+                            >
+                                <span
+                                    ref={isSearchMatched ? scrollIntoView : null}
+                                    className="cn-4 col-2 lh-20 dc__text-align-end dc__word-break mono fs-14"
+                                >
+                                    {logsIndex + 1}
+                                </span>
+                                <p
+                                    className="mono fs-14 mb-0-imp cn-0 dc__word-break lh-20"
+                                    // eslint-disable-next-line react/no-danger
+                                    dangerouslySetInnerHTML={{
+                                        __html: DOMPurify.sanitize(
+                                            isSearchMatched
+                                                ? log.text.replace(/rgb\(197,141,54\)/g, 'rgb(255,0,0)')
+                                                : log.text,
+                                        ),
+                                    }}
+                                />
+                            </LogsItemContainer>
+                        )
+                    })}
 
                     {isLoading && (
                         <LogsItemContainer>

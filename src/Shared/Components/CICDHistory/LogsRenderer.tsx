@@ -186,6 +186,8 @@ const LogsRenderer = ({
         triggerDetails.podStatus && triggerDetails.podStatus !== POD_STATUS.PENDING && logsURL,
     )
     const [stageList, setStageList] = useState<StageDetailType[]>([])
+    const [searchKeys, setSearchKeys] = useState<string[]>([])
+    const [selectedSearchKeyIndex, setSelectedSearchKeyIndex] = useState<number>(0)
     // State for logs list in case no stages are available
     const [logsList, setLogsList] = useState<string[]>([])
     const { searchKey, handleSearch } = useUrlFilters()
@@ -234,9 +236,12 @@ const LogsRenderer = ({
                 log = parts.join('')
             }
             const ansiUp = new AnsiUp()
-            return { __html: ansiUp.ansi_to_html(log), isSearchKeyPresent }
+            return {
+                __html: { text: ansiUp.ansi_to_html(log), containsSearchText: isSearchKeyPresent },
+                isSearchKeyPresent,
+            }
         } catch {
-            return { __html: log, isSearchKeyPresent }
+            return { __html: { text: log, containsSearchText: isSearchKeyPresent }, isSearchKeyPresent }
         }
     }
 
@@ -294,7 +299,9 @@ const LogsRenderer = ({
         // Map of stage as key and value as object with key as start time and value as boolean depicting if search key is present or not
         const searchKeyStatusMap: Record<string, Record<string, boolean>> = {}
 
-        return streamDataList.reduce((acc, streamItem: string, index) => {
+        const searchKeysList = []
+
+        const newStageList = streamDataList.reduce((acc, streamItem: string, index) => {
             if (streamItem.startsWith(LOGS_STAGE_IDENTIFIER)) {
                 try {
                     const { stage, startTime, endTime, status }: StageInfoDTO = JSON.parse(
@@ -362,11 +369,16 @@ const LogsRenderer = ({
                     }
 
                     searchKeyStatusMap[lastStage.stage][lastStage.startTime] = true
+
+                    searchKeysList.push(`${acc.length - 1}-${lastStage.logs.length - 1}`)
                 }
             }
 
             return acc
         }, [] as StageDetailType[])
+
+        setSearchKeys(searchKeysList)
+        return newStageList
     }
 
     useEffect(() => {
@@ -375,7 +387,7 @@ const LogsRenderer = ({
         }
 
         if (!areStagesAvailable) {
-            const newLogs = streamDataList.map((logItem) => createMarkup(logItem).__html)
+            const newLogs = streamDataList.map((logItem) => createMarkup(logItem).__html.text)
             setLogsList(newLogs)
             return
         }
@@ -411,6 +423,11 @@ const LogsRenderer = ({
     const handleSearchEnter = (searchText: string) => {
         handleSearch(searchText)
         const newStageList = getStageListFromStreamData(searchText)
+        if (searchKey === searchText) {
+            setSelectedSearchKeyIndex((selectedSearchKeyIndex + 1) % searchKeys.length)
+        } else {
+            setSelectedSearchKeyIndex(0)
+        }
         setStageList(newStageList)
     }
 
@@ -492,6 +509,7 @@ const LogsRenderer = ({
                                 stageIndex={index}
                                 isLoading={index === stageList.length - 1 && areEventsProgressing}
                                 fullScreenView={fullScreenView}
+                                searchIndex={searchKeys[selectedSearchKeyIndex]}
                             />
                         ))}
                     </div>

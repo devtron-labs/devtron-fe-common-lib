@@ -782,8 +782,10 @@ export function useScrollable(options: scrollableInterface) {
     const targetRef = useRef(null)
     const raf_id = useRef(0)
     const wheelListener = useRef(null)
-    const [scrollHeight, setScrollHeight] = useState(0)
-    const [scrollTop, setScrollTop] = useState(0)
+    const heightTopRef = useRef<Record<'scrollTop' | 'scrollHeight', number>>({
+        scrollHeight: 0,
+        scrollTop: 0
+    })
     const [autoBottom, toggleAutoBottom] = useState(false)
 
     const target = useCallback((node) => {
@@ -815,7 +817,7 @@ export function useScrollable(options: scrollableInterface) {
             targetRef.current.scrollHeight - targetRef.current.scrollTop ===
             targetRef.current.clientHeight
         )
-        if (scrollTop === 0) {
+        if (heightTopRef.current.scrollTop === 0) {
             topScrollable = false
         }
 
@@ -823,7 +825,7 @@ export function useScrollable(options: scrollableInterface) {
             toggleAutoBottom(true)
         }
         return [topScrollable, bottomScrollable]
-    }, [scrollHeight, scrollTop])
+    }, [heightTopRef.current.scrollHeight, heightTopRef.current.scrollTop])
 
     useEffect(() => {
         if (options.autoBottomScroll) {
@@ -839,17 +841,17 @@ export function useScrollable(options: scrollableInterface) {
                 return
             }
             targetRef.current.scrollBy({
-                top: scrollHeight,
+                top: heightTopRef.current.scrollHeight,
                 left: 0,
             })
         },
         500,
-        [scrollHeight, autoBottom],
+        [heightTopRef.current.scrollHeight, autoBottom],
     )
 
     function scrollToTop(e) {
         targetRef.current.scrollBy({
-            top: -1 * scrollTop,
+            top: -1 * heightTopRef.current.scrollTop,
             left: 0,
             behavior: 'smooth',
         })
@@ -861,7 +863,7 @@ export function useScrollable(options: scrollableInterface) {
     function scrollToBottom(e) {
         toggleAutoBottom(true)
         targetRef.current.scrollBy({
-            top: scrollHeight,
+            top: heightTopRef.current.scrollHeight,
             left: 0,
             behavior: 'smooth',
         })
@@ -872,8 +874,8 @@ export function useScrollable(options: scrollableInterface) {
             return
         }
 
-        setScrollHeight(targetRef.current.scrollHeight)
-        setScrollTop(targetRef.current.scrollTop)
+        heightTopRef.current.scrollHeight = targetRef.current.scrollHeight
+        heightTopRef.current.scrollTop = targetRef.current.scrollTop
         raf_id.current = requestAnimationFrame(rAFCallback)
     }
 

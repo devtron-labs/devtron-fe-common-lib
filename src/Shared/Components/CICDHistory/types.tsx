@@ -743,7 +743,10 @@ export interface StageInfoDTO {
 }
 
 export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime' | 'endTime' | 'status'> {
-    logs: string[]
+    logs: {
+        text: string
+        containsSearchText: boolean
+    }[]
     isOpen: boolean
 }
 
@@ -755,10 +758,11 @@ export interface LogStageAccordionProps extends StageDetailType, Pick<LogsRender
      * A stage is loading if it is last in current stage list and event is not closed
      */
     isLoading: boolean
+    searchIndex: string
 }
 
 export interface CreateMarkupReturnType {
-    __html: string
+    __html: StageDetailType['logs'][number]
     isSearchKeyPresent: boolean
 }
 
