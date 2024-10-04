@@ -743,10 +743,7 @@ export interface StageInfoDTO {
 }
 
 export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime' | 'endTime' | 'status'> {
-    logs: {
-        text: string
-        containsSearchText: boolean
-    }[]
+    logs: string[]
     isOpen: boolean
 }
 
@@ -762,10 +759,15 @@ export interface LogStageAccordionProps extends StageDetailType, Pick<LogsRender
 }
 
 export interface CreateMarkupReturnType {
-    __html: StageDetailType['logs'][number]
+    __html: string
     isSearchKeyPresent: boolean
 }
 
 export type TriggerHistoryFilterCriteriaType = `${string}|${string}|${string}`[]
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])
 export const statusSet = new Set(['starting', 'running', 'pending'])
+
+export interface SearchResultsStateType {
+    results: string[]
+    currentIndex: number
+}

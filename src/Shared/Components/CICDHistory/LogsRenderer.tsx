@@ -23,6 +23,7 @@ import { escapeRegExp } from '@Shared/Helpers'
 import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
 import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
 import { withShortcut, IWithShortcut } from 'react-keybind'
+import { ReactComponent as ICArrow } from '@Icons/ic-caret-down-small.svg'
 import {
     Progressing,
     Host,
@@ -46,6 +47,7 @@ import {
     DeploymentHistoryBaseParamsType,
     HistoryComponentType,
     LogsRendererType,
+    SearchResultsStateType,
     StageDetailType,
     StageInfoDTO,
     StageStatusType,
@@ -54,6 +56,7 @@ import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
 import './LogsRenderer.scss'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 
 const renderLogsNotAvailable = (subtitle?: string): JSX.Element => (
     <div className="flexbox dc__content-center flex-align-center dc__height-inherit">
@@ -186,11 +189,15 @@ const LogsRenderer = ({
         triggerDetails.podStatus && triggerDetails.podStatus !== POD_STATUS.PENDING && logsURL,
     )
     const [stageList, setStageList] = useState<StageDetailType[]>([])
-    const [searchKeys, setSearchKeys] = useState<string[]>([])
-    const [selectedSearchKeyIndex, setSelectedSearchKeyIndex] = useState<number>(0)
+    const [searchResults, setSearchResults] = useState<SearchResultsStateType>({
+        results: [],
+        currentIndex: 0,
+    })
     // State for logs list in case no stages are available
     const [logsList, setLogsList] = useState<string[]>([])
     const { searchKey, handleSearch } = useUrlFilters()
+
+    const hasSearchResults = searchResults.results.length > 0
 
     const areAllStagesExpanded = useMemo(() => stageList.every((item) => item.isOpen), [stageList])
     const shortcutTippyText = areAllStagesExpanded ? 'Collapse all stages' : 'Expand all stages'
@@ -237,11 +244,11 @@ const LogsRenderer = ({
             }
             const ansiUp = new AnsiUp()
             return {
-                __html: { text: ansiUp.ansi_to_html(log), containsSearchText: isSearchKeyPresent },
+                __html: ansiUp.ansi_to_html(log),
                 isSearchKeyPresent,
             }
         } catch {
-            return { __html: { text: log, containsSearchText: isSearchKeyPresent }, isSearchKeyPresent }
+            return { __html: log, isSearchKeyPresent }
         }
     }
 
@@ -299,7 +306,7 @@ const LogsRenderer = ({
         // Map of stage as key and value as object with key as start time and value as boolean depicting if search key is present or not
         const searchKeyStatusMap: Record<string, Record<string, boolean>> = {}
 
-        const searchKeysList = []
+        const searchMatchResults = []
 
         const newStageList = streamDataList.reduce((acc, streamItem: string, index) => {
             if (streamItem.startsWith(LOGS_STAGE_IDENTIFIER)) {
@@ -370,14 +377,18 @@ const LogsRenderer = ({
 
                     searchKeyStatusMap[lastStage.stage][lastStage.startTime] = true
 
-                    searchKeysList.push(`${acc.length - 1}-${lastStage.logs.length - 1}`)
+                    searchMatchResults.push(`${acc.length - 1}-${lastStage.logs.length - 1}`)
                 }
             }
 
             return acc
         }, [] as StageDetailType[])
 
-        setSearchKeys(searchKeysList)
+        setSearchResults((prev) => ({
+            ...prev,
+            results: searchMatchResults,
+        }))
+
         return newStageList
     }
 
@@ -387,7 +398,7 @@ const LogsRenderer = ({
         }
 
         if (!areStagesAvailable) {
-            const newLogs = streamDataList.map((logItem) => createMarkup(logItem).__html.text)
+            const newLogs = streamDataList.map((logItem) => createMarkup(logItem).__html)
             setLogsList(newLogs)
             return
         }
@@ -420,13 +431,35 @@ const LogsRenderer = ({
         }
     }, [handleToggleOpenAllStages])
 
+    const handleNextSearchResult = () => {
+        if (searchResults.results.length > 0) {
+            setSearchResults({
+                ...searchResults,
+                currentIndex: (searchResults.currentIndex + 1) % searchResults.results.length,
+            })
+        }
+    }
+
+    const handlePrevSearchResult = () => {
+        if (searchResults.results.length > 0) {
+            setSearchResults({
+                ...searchResults,
+                currentIndex:
+                    searchResults.currentIndex > 0 ? searchResults.currentIndex - 1 : searchResults.results.length - 1,
+            })
+        }
+    }
+
     const handleSearchEnter = (searchText: string) => {
         handleSearch(searchText)
         const newStageList = getStageListFromStreamData(searchText)
         if (searchKey === searchText) {
-            setSelectedSearchKeyIndex((selectedSearchKeyIndex + 1) % searchKeys.length)
+            handleNextSearchResult()
         } else {
-            setSelectedSearchKeyIndex(0)
+            setSearchResults((prev) => ({
+                ...prev,
+                currentIndex: 0,
+            }))
         }
         setStageList(newStageList)
     }
@@ -470,6 +503,37 @@ const LogsRenderer = ({
                                 initialSearchText={searchKey}
                                 size={ComponentSizeType.large}
                             />
+                            {!!searchKey && (
+                                <div className="flexbox px-10 py-6 dc__gap-8 dc__align-items-center">
+                                    <span className="fs-13 fw-4 lh-20 cn-0">
+                                        {hasSearchResults ? searchResults.currentIndex + 1 : 0}/
+                                        {searchResults.results.length}&nbsp;results
+                                    </span>
+                                    <div className="flexbox dc__gap-4">
+                                        {/* NOTE: overriding button hover state background until styles for dark backgrounds are fixed */}
+                                        <Button
+                                            icon={<ICArrow className="scn-0 dc__flip-180" />}
+                                            disabled={!hasSearchResults}
+                                            onClick={handlePrevSearchResult}
+                                            dataTestId="logs-previous-search-match"
+                                            ariaLabel="Focus the previous search result match"
+                                            size={ComponentSizeType.xs}
+                                            variant={ButtonVariantType.borderLess}
+                                            style={ButtonStyleType.neutral}
+                                        />
+                                        <Button
+                                            icon={<ICArrow className="scn-0" />}
+                                            disabled={!hasSearchResults}
+                                            onClick={handleNextSearchResult}
+                                            dataTestId="logs-next-search-match"
+                                            ariaLabel="Focus the next search result match"
+                                            size={ComponentSizeType.xs}
+                                            variant={ButtonVariantType.borderLess}
+                                            style={ButtonStyleType.neutral}
+                                        />
+                                    </div>
+                                </div>
+                            )}
                             <Tooltip
                                 shortcutKeyCombo={{
                                     text: shortcutTippyText,
@@ -509,7 +573,7 @@ const LogsRenderer = ({
                                 stageIndex={index}
                                 isLoading={index === stageList.length - 1 && areEventsProgressing}
                                 fullScreenView={fullScreenView}
-                                searchIndex={searchKeys[selectedSearchKeyIndex]}
+                                searchIndex={searchResults.results[searchResults.currentIndex]}
                             />
                         ))}
                     </div>
