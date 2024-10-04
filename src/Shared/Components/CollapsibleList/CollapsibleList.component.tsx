@@ -29,7 +29,7 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                         >
                             <ICExpand
                                 className="icon-dim-20 fcn-6 dc__no-shrink cursor rotate"
-                                style={{ ['--rotateBy' as string]: isExpanded ? '90deg' : '0deg' }}
+                                style={{ ['--rotateBy' as string]: isExpanded ? '0deg' : '-90deg' }}
                             />
                             <span className="flex-grow-1 dc__align-left dc__truncate">{header}</span>
                         </button>
