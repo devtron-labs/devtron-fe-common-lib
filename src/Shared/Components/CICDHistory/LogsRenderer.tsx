@@ -56,7 +56,6 @@ import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
 import './LogsRenderer.scss'
-import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 
 const renderLogsNotAvailable = (subtitle?: string): JSX.Element => (
     <div className="flexbox dc__content-center flex-align-center dc__height-inherit">
@@ -205,7 +204,11 @@ const LogsRenderer = ({
     const areStagesAvailable =
         (window._env_.FEATURE_STEP_WISE_LOGS_ENABLE && streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER)) || false
 
-    function createMarkup(log: string, targetSearchKey: string = searchKey): CreateMarkupReturnType {
+    function createMarkup(
+        log: string,
+        useCurrentSelectionColor = false,
+        targetSearchKey: string = searchKey,
+    ): CreateMarkupReturnType {
         let isSearchKeyPresent = false
         try {
             // eslint-disable-next-line no-param-reassign
@@ -227,7 +230,7 @@ const LogsRenderer = ({
                             part.replace(
                                 searchRegex,
                                 (match) =>
-                                    `\x1B[0m\x1B[48;2;197;141;54m${match}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
+                                    `\x1B[0m\x1B[48;2;${useCurrentSelectionColor ? '0;102;204' : '197;141;54'}m${match}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
                             ),
                         )
                     } catch {
@@ -290,7 +293,7 @@ const LogsRenderer = ({
      * If initialStatus is not success and initial parsedLogs are empty then would set opened as false on each except the last
      * In case data is already present we will just find user's last action else would open the stage
      */
-    const getStageListFromStreamData = (targetSearchKey?: string): StageDetailType[] => {
+    const getStageListFromStreamData = (currentSearchIndex: number, targetSearchKey?: string): StageDetailType[] => {
         // Would be using this to get last user action on stage
         const previousStageMap: Readonly<Record<string, Readonly<Record<string, StageDetailType>>>> = stageList.reduce(
             (acc, stageDetails) => {
@@ -359,7 +362,13 @@ const LogsRenderer = ({
             // NOTE: For now would always append log to last stage, can show a loader on stage tiles till processed
             if (acc.length > 0) {
                 // In case targetSearchKey is not present createMarkup will internally fallback to searchKey
-                const { __html, isSearchKeyPresent } = createMarkup(streamItem, targetSearchKey)
+                const { __html, isSearchKeyPresent } = createMarkup(
+                    streamItem,
+                    // NOTE: the last matched search result was added to the searchMatchResults list
+                    // therefore if currentSearchIndex matches it's length then paint it blue if searchKey is present
+                    currentSearchIndex === searchMatchResults.length,
+                    targetSearchKey,
+                )
 
                 const lastStage = acc[acc.length - 1]
                 lastStage.logs.push(__html)
@@ -403,7 +412,7 @@ const LogsRenderer = ({
             return
         }
 
-        const newStageList = getStageListFromStreamData()
+        const newStageList = getStageListFromStreamData(searchResults.currentIndex)
         setStageList(newStageList)
         // NOTE: Not adding searchKey as dependency since on mount we would already have searchKey
         // And for other cases we would use handleSearchEnter
@@ -433,35 +442,39 @@ const LogsRenderer = ({
 
     const handleNextSearchResult = () => {
         if (searchResults.results.length > 0) {
+            const currentIndex = (searchResults.currentIndex + 1) % searchResults.results.length
             setSearchResults({
                 ...searchResults,
-                currentIndex: (searchResults.currentIndex + 1) % searchResults.results.length,
+                currentIndex,
             })
+            setStageList(getStageListFromStreamData(currentIndex, searchKey))
         }
     }
 
     const handlePrevSearchResult = () => {
         if (searchResults.results.length > 0) {
+            const currentIndex =
+                searchResults.currentIndex > 0 ? searchResults.currentIndex - 1 : searchResults.results.length - 1
             setSearchResults({
                 ...searchResults,
-                currentIndex:
-                    searchResults.currentIndex > 0 ? searchResults.currentIndex - 1 : searchResults.results.length - 1,
+                currentIndex,
             })
+            setStageList(getStageListFromStreamData(currentIndex, searchKey))
         }
     }
 
     const handleSearchEnter = (searchText: string) => {
         handleSearch(searchText)
-        const newStageList = getStageListFromStreamData(searchText)
         if (searchKey === searchText) {
             handleNextSearchResult()
         } else {
+            const currentIndex = 0
             setSearchResults((prev) => ({
                 ...prev,
-                currentIndex: 0,
+                currentIndex,
             }))
+            setStageList(getStageListFromStreamData(currentIndex, searchText))
         }
-        setStageList(newStageList)
     }
 
     const handleStageClose = (index: number) => {
@@ -510,27 +523,26 @@ const LogsRenderer = ({
                                         {searchResults.results.length}&nbsp;results
                                     </span>
                                     <div className="flexbox dc__gap-4">
-                                        {/* NOTE: overriding button hover state background until styles for dark backgrounds are fixed */}
-                                        <Button
-                                            icon={<ICArrow className="scn-0 dc__flip-180" />}
-                                            disabled={!hasSearchResults}
+                                        <button
+                                            type="button"
+                                            className={`dc__unset-button-styles flex p-4 dc__bg-n0--opacity-0_2 ${!hasSearchResults ? 'dc__disabled' : ''}`}
                                             onClick={handlePrevSearchResult}
-                                            dataTestId="logs-previous-search-match"
-                                            ariaLabel="Focus the previous search result match"
-                                            size={ComponentSizeType.xs}
-                                            variant={ButtonVariantType.borderLess}
-                                            style={ButtonStyleType.neutral}
-                                        />
-                                        <Button
-                                            icon={<ICArrow className="scn-0" />}
+                                            data-testid="logs-previous-search-match"
+                                            aria-label="Focus the previous search result match"
                                             disabled={!hasSearchResults}
+                                        >
+                                            <ICArrow className="scn-0 dc__flip-180 icon-dim-16 dc__no-shrink" />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`dc__unset-button-styles flex p-4 dc__bg-n0--opacity-0_2 ${!hasSearchResults ? 'dc__disabled' : ''}`}
                                             onClick={handleNextSearchResult}
-                                            dataTestId="logs-next-search-match"
-                                            ariaLabel="Focus the next search result match"
-                                            size={ComponentSizeType.xs}
-                                            variant={ButtonVariantType.borderLess}
-                                            style={ButtonStyleType.neutral}
-                                        />
+                                            data-testid="logs-next-search-match"
+                                            aria-label="Focus the next search result match"
+                                            disabled={!hasSearchResults}
+                                        >
+                                            <ICArrow className="scn-0 icon-dim-16 dc__no-shrink" />
+                                        </button>
                                     </div>
                                 </div>
                             )}

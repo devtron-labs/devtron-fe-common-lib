@@ -103,11 +103,7 @@ const LogStageAccordion = ({
                                     className="mono fs-14 mb-0-imp cn-0 dc__word-break lh-20"
                                     // eslint-disable-next-line react/no-danger
                                     dangerouslySetInnerHTML={{
-                                        __html: DOMPurify.sanitize(
-                                            doesLineContainSearchMatch
-                                                ? log.replace(/rgb\(197,141,54\)/g, 'rgb(0,102,204)')
-                                                : log,
-                                        ),
+                                        __html: DOMPurify.sanitize(log),
                                     }}
                                 />
                             </LogsItemContainer>
