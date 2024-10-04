@@ -138,5 +138,5 @@ export interface DateTimePickerProps
     /**
      * Function to handle date change
      */
-    onChange: (date) => void
+    onChange: (date: Date) => void
 }

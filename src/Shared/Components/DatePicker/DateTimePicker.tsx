@@ -60,7 +60,7 @@ const DateTimePicker = ({
     }
 
     const handleTimeChange = (option) => {
-        onChange(updateTime(dateObject, option.value))
+        onChange(updateTime(dateObject, option.value).value)
     }
 
     const today = moment()

@@ -358,7 +358,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             <CreatableSelect
                 {...props}
                 {...commonProps}
-                ref={selectRef as SelectPickerProps<OptionValue, true>['selectRef']}
+                ref={selectRef as SelectPickerProps<OptionValue, false>['selectRef']}
                 components={{
                     IndicatorSeparator: null,
                     LoadingIndicator: SelectPickerLoadingIndicator,
@@ -424,7 +424,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             <CreatableSelect
                                 {...props}
                                 {...commonProps}
-                                isMulti={isMulti}
+                                isMulti
                                 ref={selectRef as SelectPickerProps<OptionValue, true>['selectRef']}
                                 components={{
                                     IndicatorSeparator: null,

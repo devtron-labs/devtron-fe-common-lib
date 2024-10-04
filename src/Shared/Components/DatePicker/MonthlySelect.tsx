@@ -33,7 +33,6 @@ export const MonthlySelect = ({
             value={selectedMonthlyDate}
             onChange={onChange}
             data-testid={dataTestId}
-            menuPosition="fixed"
         />
     </div>
 )
