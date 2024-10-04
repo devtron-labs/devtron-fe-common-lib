@@ -153,8 +153,6 @@ type DTApplicationMetricsReadOnlyProps = {
     selectedChart?: never
     isDisabled?: never
     toggleAppMetrics?: never
-    isCompareView?: never
-    showReadMe?: never
     /**
      * @default - false
      * If true, would only text depicting the information whether the application metrics is enabled or not
@@ -168,8 +166,6 @@ type DTApplicationMetricsActionProps = {
     isDisabled: boolean
     toggleAppMetrics: () => void
     onlyShowCurrentStatus?: false
-    isCompareView: boolean
-    showReadMe: boolean
 }
 
 export type DTApplicationMetricsFormFieldProps = {
