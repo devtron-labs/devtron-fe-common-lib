@@ -17,7 +17,6 @@
 import { Moment } from 'moment'
 import { SelectInstance } from 'react-select'
 import { SingleDatePickerShape } from 'react-dates'
-import { OptionType } from '../../../Common'
 import { SelectPickerOptionType } from '../SelectPicker'
 
 export interface SingleDatePickerProps {
@@ -57,7 +56,7 @@ export interface MonthlySelectProps extends Pick<SingleDatePickerProps, 'dataTes
      *
      * @default 'new Date()'
      */
-    selectedMonthlyDate: OptionType
+    selectedMonthlyDate: SelectPickerOptionType
     /**
      * Onchange handle picker type
      */
