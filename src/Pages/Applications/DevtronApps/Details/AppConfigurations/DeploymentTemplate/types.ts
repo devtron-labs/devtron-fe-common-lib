@@ -71,7 +71,6 @@ export type GetResolvedDeploymentTemplatePayloadType = {
     valuesAndManifestFlag: ValuesAndManifestFlagDTO.DEPLOYMENT_TEMPLATE
 } & GetDeploymentTemplateAndManifestBasePayload
 
-// FIXME: There is no need to send valuesAndManifestFlag but there was typing issue while omitting so need to fix later
 export type GetResolvedDeploymentTemplateProps = GetResolvedDeploymentTemplatePayloadType
 
 export type GetDeploymentManifestProps = GetDeploymentTemplateAndManifestBasePayload
@@ -96,9 +95,13 @@ export interface ManifestTemplateDTO extends Pick<ResolvedDeploymentTemplateDTO,
 
 interface DeploymentTemplateChartConfigType {
     id: number
-    // TODO: May not need this
+    /**
+     * Not consumed on UI just need to send in payload while update
+     */
     refChartTemplate: string
-    // TODO: May not need this
+    /**
+     * Not consumed on UI just need to send in payload while update
+     */
     refChartTemplateVersion: string
     chartRefId: number
     readme: string
