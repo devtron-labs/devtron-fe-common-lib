@@ -13,14 +13,14 @@ export const checkValidation = <T extends Record<keyof T, any> = {}>(
     validation: UseFormValidation,
 ): string | string[] | null => {
     if (
-        (typeof validation?.required === 'object' ? validation.required.value : validation.required) &&
+        validation?.required &&
+        (typeof validation.required === 'object' ? validation.required.value : validation.required) &&
         (value === null || value === undefined || value === '')
     ) {
-        return typeof validation?.required === 'object' ? validation.required.message : 'This is a required field'
+        return typeof validation.required === 'object' ? validation.required.message : 'This is a required field'
     }
 
     const errors = []
-
     const pattern = validation?.pattern
     if (Array.isArray(pattern)) {
         const error = pattern.reduce<string[]>((acc, p) => {
@@ -53,5 +53,9 @@ export const checkValidation = <T extends Record<keyof T, any> = {}>(
         errors.push(custom.message)
     }
 
-    return errors.length ? errors : null
+    if (!errors.length) {
+        return null
+    }
+
+    return errors.length === 1 ? errors[0] : errors
 }

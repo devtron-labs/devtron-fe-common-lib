@@ -32,11 +32,11 @@ type ValidationPattern =
  */
 type ValidationCustom =
     | {
-          isValid: (value: string) => boolean
+          isValid: (value: any) => boolean
           message: string
       }
     | {
-          isValid: (value: string) => boolean
+          isValid: (value: any) => boolean
           message: string
       }[]
 
@@ -72,7 +72,9 @@ export type TouchedFields<T> = Partial<Record<keyof T, boolean>>
  * Defines the structure for form validations.
  * Maps each form field to its corresponding validation rules.
  */
-export type UseFormValidations<T extends {}> = Partial<Record<keyof T, UseFormValidation>>
+export type UseFormValidations<T extends {}> =
+    | ((formData: T) => Partial<Record<keyof T, UseFormValidation>>)
+    | Partial<Record<keyof T, UseFormValidation>>
 
 /**
  * Describes the function signature for handling form submission.
@@ -81,3 +83,11 @@ export type UseFormValidations<T extends {}> = Partial<Record<keyof T, UseFormVa
  * @param e - The form event, optionally passed when the form is submitted.
  */
 export type UseFormSubmitHandler<T extends {}> = (data: T, e?: FormEvent<HTMLFormElement>) => void
+
+/**
+ * A type defining the function signature for handling form validation errors.
+ *
+ * @param errors - An object containing the validation errors for form fields.
+ * @param e - The form event, optionally passed when the form is submitted.
+ */
+export type UseFormErrorHandler<T extends {}> = (errors: UseFormErrors<T>, e?: FormEvent<HTMLFormElement>) => void

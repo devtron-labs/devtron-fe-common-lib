@@ -1,6 +1,6 @@
 import YAML from 'yaml'
 import { showError, YAMLStringify } from '@Common/Helper'
-import { post } from '@Common/Api'
+import { getIsRequestAborted, post } from '@Common/Api'
 import { ROUTES } from '@Common/Constants'
 import { ResponseType } from '@Common/Types'
 import {
@@ -31,6 +31,7 @@ export const getDeploymentManifest = async (
 
 export const getResolvedDeploymentTemplate = async (
     params: GetResolvedDeploymentTemplateProps,
+    signal?: AbortSignal,
 ): Promise<GetResolvedDeploymentTemplateReturnType> => {
     try {
         const payload: GetResolvedDeploymentTemplatePayloadType = {
@@ -38,7 +39,9 @@ export const getResolvedDeploymentTemplate = async (
             valuesAndManifestFlag: ValuesAndManifestFlagDTO.DEPLOYMENT_TEMPLATE,
         }
 
-        const { result } = await post<ResolvedDeploymentTemplateDTO>(ROUTES.APP_TEMPLATE_DATA, payload)
+        const { result } = await post<ResolvedDeploymentTemplateDTO>(ROUTES.APP_TEMPLATE_DATA, payload, {
+            signal,
+        })
         const areVariablesPresent = result.variableSnapshot && Object.keys(result.variableSnapshot).length > 0
 
         const parsedData = YAML.parse(result.data)
@@ -50,7 +53,10 @@ export const getResolvedDeploymentTemplate = async (
             areVariablesPresent,
         }
     } catch (error) {
-        showError(error)
-        throw error
+        if (!getIsRequestAborted(error)) {
+            showError(error)
+            throw error
+        }
+        return null
     }
 }

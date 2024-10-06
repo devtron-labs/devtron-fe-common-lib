@@ -35,9 +35,10 @@ const DeploymentHistoryDiffView = ({
     isDeleteDraft,
     rootClassName,
     comparisonBodyClassName,
-    sortOrder = null,
+    sortingConfig,
 }: DeploymentTemplateHistoryType) => {
     const { historyComponent, historyComponentName } = useParams<DeploymentHistoryParamsType>()
+    const { sortBy, sortOrder } = sortingConfig ?? { sortBy: '', sortOrder: null }
 
     const [convertVariables, setConvertVariables] = useState(false)
 
@@ -66,7 +67,7 @@ const DeploymentHistoryDiffView = ({
             : baseTemplateConfiguration?.codeEditorValue?.value
 
         return YAMLStringify(JSON.parse(editorValue), {
-            sortMapEntries: (a, b) => yamlComparatorBySortOrder(a, b, sortOrder),
+            sortMapEntries: sortBy ? (a, b) => yamlComparatorBySortOrder(a, b, sortOrder) : null,
         })
     }, [convertVariables, baseTemplateConfiguration, sortOrder, isDeleteDraft])
 
@@ -86,6 +87,7 @@ const DeploymentHistoryDiffView = ({
 
     const renderDeploymentDiffViaCodeEditor = () => (
         <CodeEditor
+            key={`${sortBy}-${sortOrder}`}
             value={editorValuesRHS}
             defaultValue={editorValuesLHS}
             adjustEditorHeightToContent
