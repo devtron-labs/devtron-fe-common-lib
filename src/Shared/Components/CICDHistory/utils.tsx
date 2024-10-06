@@ -198,3 +198,6 @@ export const getTriggerStatusIcon = (triggerDetailStatus: string): JSX.Element =
             )
     }
 }
+
+export const getLogSearchIndex = (stageIndex: number, lineNumberInsideStage: number) =>
+    `${stageIndex}-${lineNumberInsideStage}`

@@ -2,7 +2,7 @@ import DOMPurify from 'dompurify'
 import { getTimeDifference } from '@Shared/Helpers'
 import { RefCallback } from 'react'
 import { LogStageAccordionProps } from './types'
-import { getStageStatusIcon } from './utils'
+import { getLogSearchIndex, getStageStatusIcon } from './utils'
 import { ReactComponent as ICCaretDown } from '../../../Assets/Icon/ic-caret-down.svg'
 
 const LogsItemContainer = ({ children }: { children: React.ReactNode }) => (
@@ -85,7 +85,7 @@ const LogStageAccordion = ({
             {isOpen && (
                 <div className="flexbox-col dc__gap-4">
                     {logs.map((log: string, logsIndex: number) => {
-                        const doesLineContainSearchMatch = `${stageIndex}-${logsIndex}` === searchIndex
+                        const doesLineContainSearchMatch = getLogSearchIndex(stageIndex, logsIndex) === searchIndex
 
                         return (
                             <LogsItemContainer
