@@ -110,9 +110,15 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
         >
     > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> &
-    Pick<
-        CreatableProps<SelectPickerOptionType<OptionValue>, IsMulti, GroupBase<SelectPickerOptionType<OptionValue>>>,
-        'onCreateOption'
+    Partial<
+        Pick<
+            CreatableProps<
+                SelectPickerOptionType<OptionValue>,
+                IsMulti,
+                GroupBase<SelectPickerOptionType<OptionValue>>
+            >,
+            'onCreateOption'
+        >
     > & {
         /**
          * Icon to be rendered in the control
