@@ -50,9 +50,7 @@ export interface SingleDatePickerProps {
     dataTestId?: string
 }
 
-export interface DateSelectPickerType extends SelectPickerOptionType {
-    value: string
-}
+export type DateSelectPickerType = SelectPickerOptionType<string>
 
 export interface MonthlySelectProps extends Pick<SingleDatePickerProps, 'dataTestId'> {
     /**

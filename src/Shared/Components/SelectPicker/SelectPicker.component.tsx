@@ -391,7 +391,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 GroupHeading: renderGroupHeading,
                                 NoOptionsMessage: renderNoOptionsMessage,
                             }}
-                            closeMenuOnSelect={closeMenuOnSelect}
+                            closeMenuOnSelect={!isMulti || closeMenuOnSelect}
                             allowCreateWhileLoading={false}
                             isValidNewOption={isValidNewOption}
                             createOptionPosition="first"
