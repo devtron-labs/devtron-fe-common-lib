@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { BaseSyntheticEvent, ChangeEvent, useState } from 'react'
 
 import { deepEqual } from '@Common/Helper'
 
@@ -149,8 +149,9 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
      *          performs validation, and triggers either `onValid` or `onError` based on the result.
      */
     const handleSubmit =
-        (onValid: UseFormSubmitHandler<T>, onError?: UseFormErrorHandler<T>) => (e: FormEvent<HTMLFormElement>) => {
-            e.preventDefault()
+        (onValid: UseFormSubmitHandler<T>, onError?: UseFormErrorHandler<T>) =>
+        (e?: BaseSyntheticEvent): Promise<void> => {
+            e?.preventDefault()
 
             // Enables validation for all form fields if not enabled yet after form submission.
             if (Object.keys(enableValidationOnChange).length !== Object.keys(data).length) {

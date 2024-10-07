@@ -483,7 +483,7 @@ const Information: React.FC<InformationBarProps> = (props) => (
 
 const Clipboard = () => {
     const { state } = useCodeEditorContext()
-    return <ClipboardButton content={state.code} rootClassName="bcn-1" iconSize={20} />
+    return <ClipboardButton content={state.code} iconSize={16} />
 }
 
 const SplitPane = ({}) => {

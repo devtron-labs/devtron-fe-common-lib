@@ -1,4 +1,4 @@
-import { FormEvent } from 'react'
+import { BaseSyntheticEvent } from 'react'
 
 /**
  * Describes the "required" validation rule.
@@ -80,14 +80,14 @@ export type UseFormValidations<T extends {}> =
  * Describes the function signature for handling form submission.
  *
  * @param data - The form data collected during submission.
- * @param e - The form event, optionally passed when the form is submitted.
+ * @param e - The event, optionally passed when `handleSubmit` is called.
  */
-export type UseFormSubmitHandler<T extends {}> = (data: T, e?: FormEvent<HTMLFormElement>) => void
+export type UseFormSubmitHandler<T extends {}> = (data: T, e?: BaseSyntheticEvent) => void
 
 /**
  * A type defining the function signature for handling form validation errors.
  *
  * @param errors - An object containing the validation errors for form fields.
- * @param e - The form event, optionally passed when the form is submitted.
+ * @param e - The event, optionally passed when `handleSubmit` is called.
  */
-export type UseFormErrorHandler<T extends {}> = (errors: UseFormErrors<T>, e?: FormEvent<HTMLFormElement>) => void
+export type UseFormErrorHandler<T extends {}> = (errors: UseFormErrors<T>, e?: BaseSyntheticEvent) => void
