@@ -15,6 +15,7 @@ import {
 
 export const getDeploymentManifest = async (
     params: GetDeploymentManifestProps,
+    abortSignal?: AbortSignal,
 ): Promise<ResponseType<ResolvedDeploymentTemplateDTO>> => {
     try {
         const payload: GetDeploymentManifestPayloadType = {
@@ -22,7 +23,7 @@ export const getDeploymentManifest = async (
             valuesAndManifestFlag: ValuesAndManifestFlagDTO.MANIFEST,
         }
 
-        return post<ResolvedDeploymentTemplateDTO>(ROUTES.APP_TEMPLATE_DATA, payload)
+        return post<ResolvedDeploymentTemplateDTO>(ROUTES.APP_TEMPLATE_DATA, payload, { signal: abortSignal })
     } catch (error) {
         showError(error)
         throw error
