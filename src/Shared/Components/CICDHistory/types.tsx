@@ -763,11 +763,21 @@ export interface CreateMarkupReturnType {
     isSearchKeyPresent: boolean
 }
 
-export interface CreateMarkupPropsType {
-    log: string
-    useCurrentSelectionColor?: boolean
-    targetSearchKey?: string
-}
+export type CreateMarkupPropsType =
+    | {
+          log: string
+          currentIndex?: never
+          targetSearchKey?: never
+          searchMatchResults?: never
+          searchIndex?: never
+      }
+    | {
+          log: string
+          currentIndex: number
+          targetSearchKey: string
+          searchMatchResults: string[]
+          searchIndex: string
+      }
 
 export type TriggerHistoryFilterCriteriaType = `${string}|${string}|${string}`[]
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])

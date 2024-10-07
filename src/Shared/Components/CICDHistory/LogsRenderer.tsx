@@ -205,8 +205,10 @@ const LogsRenderer = ({
 
     function createMarkup({
         log,
-        useCurrentSelectionColor = false,
+        currentIndex = -1,
         targetSearchKey = searchKey,
+        searchMatchResults = null,
+        searchIndex = '',
     }: CreateMarkupPropsType): CreateMarkupReturnType {
         let isSearchKeyPresent = false
         try {
@@ -226,11 +228,12 @@ const LogsRenderer = ({
                         // Question: Can we directly set it as true inside the replace function?
                         isSearchKeyPresent = isSearchKeyPresent || searchRegex.test(part)
                         acc.push(
-                            part.replace(
-                                searchRegex,
-                                (match) =>
-                                    `\x1B[0m\x1B[48;2;${useCurrentSelectionColor ? '0;102;204' : '197;141;54'}m${match}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
-                            ),
+                            part.replace(searchRegex, (match) => {
+                                if (searchIndex) {
+                                    searchMatchResults?.push(searchIndex)
+                                }
+                                return `\x1B[0m\x1B[48;2;${searchMatchResults && currentIndex === searchMatchResults.length - 1 ? '0;102;204' : '197;141;54'}m${match}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`
+                            }),
                         )
                     } catch {
                         acc.push(part)
@@ -360,16 +363,22 @@ const LogsRenderer = ({
             // Ideally in case of parallel build should receive stage name with logs
             // NOTE: For now would always append log to last stage, can show a loader on stage tiles till processed
             if (acc.length > 0) {
+                const lastStage = acc[acc.length - 1]
+
+                const searchIndex = getLogSearchIndex({
+                    stageIndex: acc.length - 1,
+                    lineNumberInsideStage: lastStage.logs.length,
+                })
+
                 // In case targetSearchKey is not present createMarkup will internally fallback to searchKey
                 const { __html, isSearchKeyPresent } = createMarkup({
                     log: streamItem,
-                    // NOTE: the last matched search result was added to the searchMatchResults list
-                    // therefore if currentSearchIndex matches it's length then paint it blue if searchKey is present
-                    useCurrentSelectionColor: currentIndex === searchMatchResults.length,
+                    currentIndex,
+                    searchMatchResults,
                     targetSearchKey,
+                    searchIndex,
                 })
 
-                const lastStage = acc[acc.length - 1]
                 lastStage.logs.push(__html)
                 if (isSearchKeyPresent) {
                     lastStage.isOpen = getIsStageOpen(
@@ -384,13 +393,6 @@ const LogsRenderer = ({
                     }
 
                     searchKeyStatusMap[lastStage.stage][lastStage.startTime] = true
-
-                    searchMatchResults.push(
-                        getLogSearchIndex({
-                            stageIndex: acc.length - 1,
-                            lineNumberInsideStage: lastStage.logs.length - 1,
-                        }),
-                    )
                 }
             }
 
