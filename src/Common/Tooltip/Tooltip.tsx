@@ -37,7 +37,7 @@ const Tooltip = ({
             maxWidth=""
             {...rest}
             {...(shortcutKeyCombo ? { content: <ShortcutKeyComboTooltipContent {...shortcutKeyCombo} /> } : {})}
-            className={`${shortcutKeyCombo ? 'shortcut-keys__tippy' : 'default-tt'} ${wordBreak ? 'dc__word-break-all' : ''} dc__mxw-200 ${rest.className ?? ''}`}
+            className={`${shortcutKeyCombo ? 'shortcut-keys__tippy' : 'default-tt'} ${wordBreak ? 'dc__word-break' : ''} dc__mxw-200 ${rest.className ?? ''}`}
         >
             {cloneElement(child, { ...child.props, onMouseEnter: handleMouseEnterEvent })}
         </TippyJS>

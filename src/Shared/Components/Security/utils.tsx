@@ -20,3 +20,6 @@ export const getSeverityCountFromSummary = (
     low: scanResultSeverities?.LOW || 0,
     unknown: scanResultSeverities?.UNKNOWN || 0,
 })
+
+export const getCVEUrlFromCVEName = (cveName: string): string =>
+    `https://cve.mitre.org/cgi-bin/cvename.cgi?name=${cveName}`
