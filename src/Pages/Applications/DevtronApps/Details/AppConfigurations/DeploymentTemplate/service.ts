@@ -22,7 +22,7 @@ export const getDeploymentManifest = async (
             valuesAndManifestFlag: ValuesAndManifestFlagDTO.MANIFEST,
         }
 
-        return await post<ResolvedDeploymentTemplateDTO>(`${ROUTES.APP_TEMPLATE_DATA}`, payload)
+        return post<ResolvedDeploymentTemplateDTO>(ROUTES.APP_TEMPLATE_DATA, payload)
     } catch (error) {
         showError(error)
         throw error
@@ -42,7 +42,7 @@ export const getResolvedDeploymentTemplate = async (
         const { result } = await post<ResolvedDeploymentTemplateDTO>(ROUTES.APP_TEMPLATE_DATA, payload, {
             signal,
         })
-        const areVariablesPresent = result.variableSnapshot && Object.keys(result.variableSnapshot).length > 0
+        const areVariablesPresent = Object.keys(result.variableSnapshot || {}).length > 0
 
         const parsedData = YAML.parse(result.data)
         const parsedResolvedData = YAML.parse(result.resolvedData)

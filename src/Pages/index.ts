@@ -16,6 +16,4 @@
 
 export * from './GlobalConfigurations'
 export * from './ResourceBrowser'
-// FIXME: Need to merge both
 export * from './Applications'
-export * from './App'
