@@ -17,7 +17,7 @@
 import { Moment } from 'moment'
 import { SelectInstance } from 'react-select'
 import { SingleDatePickerShape } from 'react-dates'
-import { OptionType } from '../../../Common'
+import { SelectPickerOptionType } from '../SelectPicker'
 
 export interface SingleDatePickerProps {
     /**
@@ -50,13 +50,15 @@ export interface SingleDatePickerProps {
     dataTestId?: string
 }
 
+export type DateSelectPickerType = SelectPickerOptionType<string>
+
 export interface MonthlySelectProps extends Pick<SingleDatePickerProps, 'dataTestId'> {
     /**
      * Current selected date object
      *
      * @default 'new Date()'
      */
-    selectedMonthlyDate: OptionType
+    selectedMonthlyDate: DateSelectPickerType
     /**
      * Onchange handle picker type
      */
@@ -73,7 +75,7 @@ export interface TimeSelectProps {
     /**
      * Handler for updating the date from the parent component
      */
-    onChange: (date: Date) => void
+    onChange: (date: DateSelectPickerType) => void
     /**
      * Props for the time picker
      */
@@ -89,7 +91,7 @@ export interface TimeSelectProps {
     /**
      * Id for the component
      */
-    default12HourTime: OptionType
+    default12HourTime: DateSelectPickerType
     /**
      * Data test id for time picker
      */
@@ -97,11 +99,11 @@ export interface TimeSelectProps {
     /**
      * To hide time selector
      */
-    selectedTimeOption: OptionType
+    selectedTimeOption: DateSelectPickerType
 }
 
 export interface DateTimePickerProps
-    extends Pick<TimeSelectProps, 'date' | 'onChange' | 'timePickerProps' | 'error' | 'disabled' | 'dataTestIdForTime'>,
+    extends Pick<TimeSelectProps, 'date' | 'timePickerProps' | 'error' | 'disabled' | 'dataTestIdForTime'>,
         Pick<SingleDatePickerShape, 'openDirection'> {
     /**
      * Props for the date picker
@@ -135,4 +137,8 @@ export interface DateTimePickerProps
      * Data test id for date picker
      */
     dataTestidForDate?: string
+    /**
+     * Function to handle date change
+     */
+    onChange: (date: Date) => void
 }

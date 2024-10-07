@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-import ReactSelect, {
+import {
     ControlProps,
     GroupHeadingProps,
     MultiValueProps,
     OptionProps,
-    SelectInstance,
     ValueContainerProps,
     MenuPlacement,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { MutableRefObject, ReactElement, useCallback, useMemo } from 'react'
+import { ReactElement, useCallback, useMemo } from 'react'
 
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
@@ -209,15 +208,15 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     fullWidth = false,
     customSelectedOptionsCount = null,
     renderMenuListFooter,
+    inputValue,
+    onInputChange,
+    isCreatable = false,
+    onCreateOption,
+    closeMenuOnSelect = false,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options } = props
-    const {
-        isCreatable = false,
-        isGroupHeadingSelectable = false,
-        getIsOptionValid = () => true,
-        onCreateOption,
-    } = multiSelectProps
+    const { isGroupHeadingSelectable = false, getIsOptionValid = () => true } = multiSelectProps
 
     // Only large variant is supported for multi select picker
     const selectSize = isMulti && controlShouldRenderValue ? ComponentSizeType.large : size
@@ -243,8 +242,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     )
 
     // Used to show the create new option for creatable select and the option(s) doesn't have the input value
-    const isValidNewOption = (inputValue: string) => {
-        const trimmedInput = inputValue?.trim()
+    const isValidNewOption = (_inputValue: string) => {
+        const trimmedInput = _inputValue?.trim()
 
         return (
             isCreatable &&
@@ -308,10 +307,10 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         </Tippy>
     )
 
-    const handleCreateOption: SelectPickerProps<OptionValue, true>['multiSelectProps']['onCreateOption'] = (
-        inputValue,
-    ) => {
-        const trimmedInputValue = inputValue?.trim()
+    const handleCreateOption: SelectPickerProps<OptionValue, boolean>['onCreateOption'] = (
+        _inputValue: string,
+    ): void => {
+        const trimmedInputValue = _inputValue?.trim()
         if (trimmedInputValue) {
             onCreateOption(trimmedInputValue)
         }
@@ -373,52 +372,34 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                 )}
                 <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
                     <div className="w-100">
-                        {isMulti ? (
-                            <CreatableSelect
-                                {...props}
-                                {...commonProps}
-                                isMulti
-                                ref={selectRef as SelectPickerProps<OptionValue, true>['selectRef']}
-                                components={{
-                                    IndicatorSeparator: null,
-                                    LoadingIndicator: SelectPickerLoadingIndicator,
-                                    DropdownIndicator: SelectPickerDropdownIndicator,
-                                    Control: renderControl,
-                                    Option: renderOption,
-                                    MenuList: SelectPickerMenuList,
-                                    ClearIndicator: SelectPickerClearIndicator,
-                                    ValueContainer: renderValueContainer,
-                                    MultiValueLabel: renderMultiValueLabel,
-                                    MultiValueRemove: SelectPickerMultiValueRemove,
-                                    GroupHeading: renderGroupHeading,
-                                    NoOptionsMessage: renderNoOptionsMessage,
-                                }}
-                                closeMenuOnSelect={false}
-                                allowCreateWhileLoading={false}
-                                isValidNewOption={isValidNewOption}
-                                createOptionPosition="first"
-                                onCreateOption={handleCreateOption}
-                                renderMenuListFooter={!optionListError && renderMenuListFooter}
-                            />
-                        ) : (
-                            <ReactSelect
-                                {...props}
-                                {...commonProps}
-                                ref={selectRef as MutableRefObject<SelectInstance<SelectPickerOptionType<OptionValue>>>}
-                                components={{
-                                    IndicatorSeparator: null,
-                                    LoadingIndicator: SelectPickerLoadingIndicator,
-                                    DropdownIndicator: SelectPickerDropdownIndicator,
-                                    Control: renderControl,
-                                    Option: renderOption,
-                                    MenuList: SelectPickerMenuList,
-                                    ClearIndicator: SelectPickerClearIndicator,
-                                    ValueContainer: renderValueContainer,
-                                    NoOptionsMessage: renderNoOptionsMessage,
-                                }}
-                                renderMenuListFooter={!optionListError && renderMenuListFooter}
-                            />
-                        )}
+                        <CreatableSelect
+                            {...props}
+                            {...commonProps}
+                            isMulti={isMulti}
+                            ref={selectRef}
+                            components={{
+                                IndicatorSeparator: null,
+                                LoadingIndicator: SelectPickerLoadingIndicator,
+                                DropdownIndicator: SelectPickerDropdownIndicator,
+                                Control: renderControl,
+                                Option: renderOption,
+                                MenuList: SelectPickerMenuList,
+                                ClearIndicator: SelectPickerClearIndicator,
+                                ValueContainer: renderValueContainer,
+                                MultiValueLabel: renderMultiValueLabel,
+                                MultiValueRemove: SelectPickerMultiValueRemove,
+                                GroupHeading: renderGroupHeading,
+                                NoOptionsMessage: renderNoOptionsMessage,
+                            }}
+                            closeMenuOnSelect={!isMulti || closeMenuOnSelect}
+                            allowCreateWhileLoading={false}
+                            isValidNewOption={isValidNewOption}
+                            createOptionPosition="first"
+                            onCreateOption={handleCreateOption}
+                            renderMenuListFooter={!optionListError && renderMenuListFooter}
+                            inputValue={inputValue}
+                            onInputChange={onInputChange}
+                        />
                     </div>
                 </ConditionalWrap>
             </div>
