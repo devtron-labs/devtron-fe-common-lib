@@ -220,7 +220,7 @@ const LogsRenderer = ({
                 // Search is working on assumption that color codes are not nested for words.
                 const logParts = log.split(ANSI_UP_REGEX)
                 const availableEscapeCodes = log.match(ANSI_UP_REGEX) || []
-                const searchRegex = new RegExp(`(${escapeRegExp(targetSearchKey)})`, 'g')
+                const searchRegex = new RegExp(`(${escapeRegExp(targetSearchKey)})`, 'ig')
                 const parts = logParts.reduce((acc, part, index) => {
                     try {
                         // Question: Can we directly set it as true inside the replace function?
