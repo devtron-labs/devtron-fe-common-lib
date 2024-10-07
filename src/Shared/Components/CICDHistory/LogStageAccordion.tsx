@@ -85,7 +85,8 @@ const LogStageAccordion = ({
             {isOpen && (
                 <div className="flexbox-col dc__gap-4">
                     {logs.map((log: string, logsIndex: number) => {
-                        const doesLineContainSearchMatch = getLogSearchIndex(stageIndex, logsIndex) === searchIndex
+                        const doesLineContainSearchMatch =
+                            getLogSearchIndex({ stageIndex, lineNumberInsideStage: logsIndex }) === searchIndex
 
                         return (
                             <LogsItemContainer

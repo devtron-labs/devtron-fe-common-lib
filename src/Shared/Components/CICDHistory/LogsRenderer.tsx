@@ -385,7 +385,12 @@ const LogsRenderer = ({
 
                     searchKeyStatusMap[lastStage.stage][lastStage.startTime] = true
 
-                    searchMatchResults.push(getLogSearchIndex(acc.length - 1, lastStage.logs.length - 1))
+                    searchMatchResults.push(
+                        getLogSearchIndex({
+                            stageIndex: acc.length - 1,
+                            lineNumberInsideStage: lastStage.logs.length - 1,
+                        }),
+                    )
                 }
             }
 
