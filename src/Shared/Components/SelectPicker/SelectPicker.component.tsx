@@ -212,15 +212,12 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     isCreatableSingleSelect = false,
     inputValue,
     onInputChange,
+    isCreatable = false,
+    onCreateOption,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options } = props
-    const {
-        isCreatable = false,
-        isGroupHeadingSelectable = false,
-        getIsOptionValid = () => true,
-        onCreateOption,
-    } = multiSelectProps
+    const { isGroupHeadingSelectable = false, getIsOptionValid = () => true } = multiSelectProps
 
     // Only large variant is supported for multi select picker
     const selectSize = isMulti && controlShouldRenderValue ? ComponentSizeType.large : size
@@ -311,10 +308,10 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         </Tippy>
     )
 
-    const handleCreateOption: SelectPickerProps<OptionValue, true>['multiSelectProps']['onCreateOption'] = (
-        _inputValue,
-    ) => {
-        const trimmedInputValue = _inputValue?.trim()
+    const handleCreateOption: SelectPickerProps<OptionValue, boolean>['onCreateOption'] = (
+        inputValue: string,
+    ): void => {
+        const trimmedInputValue = inputValue?.trim()
         if (trimmedInputValue) {
             onCreateOption(trimmedInputValue)
         }
