@@ -639,12 +639,6 @@ export interface VulnerabilityType {
     url?: string
 }
 
-export interface ScanVulnerabilitiesTableProps {
-    vulnerabilities: VulnerabilityType[]
-    hidePolicy?: boolean
-    shouldStick?: boolean
-}
-
 export interface MaterialInfo {
     revision: string
     modifiedTime: string | Date

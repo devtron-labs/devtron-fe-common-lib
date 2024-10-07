@@ -19,8 +19,8 @@ import { numberComparatorBySortOrder } from '@Shared/Helpers'
 import { DATE_TIME_FORMAT_STRING } from '../../../constants'
 import { SortingOrder, useAsync, VULNERABILITIES_SORT_PRIORITY, ZERO_TIME_STRING } from '../../../../Common'
 import { LastExecutionResponseType, LastExecutionResultType } from '../../../types'
-import { getLastExecutionByArtifactApp } from './service'
 import { UseGetSecurityVulnerabilitiesProps, UseGetSecurityVulnerabilitiesReturnType } from './types'
+import { getExecutionDetails } from '../SecurityModal'
 
 export const getSortedVulnerabilities = (vulnerabilities) =>
     vulnerabilities.sort((a, b) =>
@@ -67,13 +67,14 @@ export const parseLastExecutionResponse = (response): LastExecutionResponseType 
 export const useGetSecurityVulnerabilities = ({
     artifactId,
     appId,
+    envId,
     isScanned,
     isScanEnabled,
     isScanV2Enabled,
     getSecurityScan,
 }: UseGetSecurityVulnerabilitiesProps): UseGetSecurityVulnerabilitiesReturnType => {
     const [executionDetailsLoading, executionDetailsResponse, executionDetailsError, reloadExecutionDetails] = useAsync(
-        () => getLastExecutionByArtifactApp(artifactId, appId),
+        () => getExecutionDetails({ artifactId, appId, envId }),
         [],
         isScanned && isScanEnabled && !isScanV2Enabled,
         {
@@ -82,7 +83,7 @@ export const useGetSecurityVulnerabilities = ({
     )
 
     const [scanResultLoading, scanResultResponse, scanResultError, reloadScanResult] = useAsync(
-        () => getSecurityScan({ artifactId, appId }),
+        () => getSecurityScan({ artifactId, appId, envId }),
         [],
         isScanned && isScanEnabled && isScanV2Enabled && !!getSecurityScan,
         {
@@ -92,8 +93,7 @@ export const useGetSecurityVulnerabilities = ({
 
     return {
         scanDetailsLoading: scanResultLoading || executionDetailsLoading,
-        scanResultResponse,
-        executionDetailsResponse,
+        scanResultResponse: isScanV2Enabled ? scanResultResponse : executionDetailsResponse,
         scanDetailsError: scanResultError || executionDetailsError,
         reloadScanDetails: isScanV2Enabled ? reloadScanResult : reloadExecutionDetails,
     }
