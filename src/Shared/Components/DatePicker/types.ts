@@ -50,13 +50,17 @@ export interface SingleDatePickerProps {
     dataTestId?: string
 }
 
+export interface DateSelectPickerType extends SelectPickerOptionType {
+    value: string
+}
+
 export interface MonthlySelectProps extends Pick<SingleDatePickerProps, 'dataTestId'> {
     /**
      * Current selected date object
      *
      * @default 'new Date()'
      */
-    selectedMonthlyDate: SelectPickerOptionType
+    selectedMonthlyDate: DateSelectPickerType
     /**
      * Onchange handle picker type
      */
@@ -73,7 +77,7 @@ export interface TimeSelectProps {
     /**
      * Handler for updating the date from the parent component
      */
-    onChange: (date: SelectPickerOptionType) => void
+    onChange: (date: DateSelectPickerType) => void
     /**
      * Props for the time picker
      */
@@ -89,7 +93,7 @@ export interface TimeSelectProps {
     /**
      * Id for the component
      */
-    default12HourTime: SelectPickerOptionType
+    default12HourTime: DateSelectPickerType
     /**
      * Data test id for time picker
      */
@@ -97,7 +101,7 @@ export interface TimeSelectProps {
     /**
      * To hide time selector
      */
-    selectedTimeOption: SelectPickerOptionType
+    selectedTimeOption: DateSelectPickerType
 }
 
 export interface DateTimePickerProps
