@@ -26,7 +26,7 @@ export const getExecutionDetails = async (
                 package: cve.package,
                 version: cve.currentVersion,
                 fixedVersion: cve.fixedVersion,
-                policy: cve.permission,
+                permission: cve.permission,
             })) || [],
     }
     return { ...response, result: parseExecutionDetailResponse(parsedResult) }

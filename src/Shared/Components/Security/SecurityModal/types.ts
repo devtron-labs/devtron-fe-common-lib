@@ -148,6 +148,7 @@ export interface CodeScanVulnerabilityType {
     package: string
     currentVersion: string
     fixedInVersion: string
+    permission?: string
 }
 
 export interface ImageScanVulnerabilityType extends CodeScanVulnerabilityType {
@@ -256,6 +257,7 @@ interface SecurityModalBaseProps extends Partial<Pick<SidebarPropsType, 'isExter
     isHelmApp?: boolean
     isResourceScan?: boolean
     isSecurityScanV2Enabled: boolean
+    hidePolicy?: boolean
 }
 
 export type SecurityModalPropsType = SecurityModalBaseProps

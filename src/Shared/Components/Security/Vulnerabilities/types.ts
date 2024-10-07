@@ -18,19 +18,20 @@ import { ResponseType } from '@Common/Types'
 import { ImageCardAccordionProps } from '@Shared/Components/ImageCardAccordion/types'
 import { MaterialSecurityInfoType } from '../../../types'
 import { ApiResponseResultType } from '../SecurityModal'
-import { getLastExecutionByArtifactApp } from './service'
 
 export interface VulnerabilitiesProps
     extends MaterialSecurityInfoType,
         Pick<ImageCardAccordionProps, 'SecurityModalSidebar' | 'getSecurityScan'> {
     artifactId: number
     applicationId: number
+    environmentId: number
     setVulnerabilityCount: React.Dispatch<React.SetStateAction<number>>
 }
 
 export interface UseGetSecurityVulnerabilitiesProps extends Pick<ImageCardAccordionProps, 'getSecurityScan'> {
     artifactId: string
     appId: string
+    envId: number
     isScanned: boolean
     isScanEnabled: boolean
     isScanV2Enabled: boolean
@@ -39,7 +40,6 @@ export interface UseGetSecurityVulnerabilitiesProps extends Pick<ImageCardAccord
 export interface UseGetSecurityVulnerabilitiesReturnType {
     scanDetailsLoading: boolean
     scanResultResponse: ResponseType<ApiResponseResultType>
-    executionDetailsResponse: Awaited<ReturnType<typeof getLastExecutionByArtifactApp>>
     scanDetailsError: any
     reloadScanDetails: () => void
 }
