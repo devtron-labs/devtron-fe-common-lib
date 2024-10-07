@@ -1,6 +1,6 @@
 import YAML from 'yaml'
 import { showError, YAMLStringify } from '@Common/Helper'
-import { post } from '@Common/Api'
+import { getIsRequestAborted, post } from '@Common/Api'
 import { ROUTES } from '@Common/Constants'
 import { ResponseType } from '@Common/Types'
 import {
@@ -25,7 +25,9 @@ export const getDeploymentManifest = async (
 
         return post<ResolvedDeploymentTemplateDTO>(ROUTES.APP_TEMPLATE_DATA, payload, { signal: abortSignal })
     } catch (error) {
-        showError(error)
+        if (!getIsRequestAborted(error)) {
+            showError(error)
+        }
         throw error
     }
 }
