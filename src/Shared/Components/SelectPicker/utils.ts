@@ -53,7 +53,6 @@ const getVariantOverrides = <OptionValue>(
                     border: 'none',
                     padding: 0,
                     gap: '2px',
-                    overflow: 'hidden !important',
                 }),
                 singleValue: () => ({
                     fontWeight: 600,
