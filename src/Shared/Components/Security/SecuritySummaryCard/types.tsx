@@ -9,4 +9,5 @@ export type SecuritySummaryCardProps = {
     isHelmApp?: boolean
     isSecurityScanV2Enabled: boolean
     responseData: ApiResponseResultType
+    hidePolicy?: boolean
 } & Pick<ImageCardAccordionProps, 'SecurityModalSidebar'>
