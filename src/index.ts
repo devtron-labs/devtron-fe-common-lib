@@ -76,6 +76,7 @@ export interface customEnv {
     SYSTEM_CONTROLLER_LISTING_TIMEOUT?: number
     FEATURE_STEP_WISE_LOGS_ENABLE?: boolean
     FEATURE_IMAGE_PROMOTION_ENABLE?: boolean
+    FEATURE_CD_MANDATORY_PLUGINS_ENABLE?: boolean
 }
 declare global {
     interface Window {
