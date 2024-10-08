@@ -151,6 +151,4 @@ export type AppEnvDeploymentConfigListParams<IsManifestView> = (IsManifestView e
     getNavItemHref: (resourceType: EnvResourceType, resourceName: string) => string
     isManifestView?: IsManifestView
     convertVariables?: boolean
-    currentDeploymentTemplateResolvedData?: AppEnvDeploymentConfigDTO
-    compareDeploymentTemplateResolvedData?: AppEnvDeploymentConfigDTO
 }

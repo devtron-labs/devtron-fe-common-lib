@@ -515,20 +515,42 @@ const getConfigMapSecretData = (
     return deploymentConfig
 }
 
+const getDeploymentTemplateResolvedData = (deploymentTemplate: DeploymentTemplateDTO) => {
+    try {
+        if (deploymentTemplate.deploymentDraftData) {
+            return JSON.parse(deploymentTemplate.deploymentDraftData.configData[0].draftMetadata.draftResolvedValue)
+        }
+        return deploymentTemplate.resolvedValue
+    } catch {
+        return null
+    }
+}
+
 const getConfigDataWithResolvedDeploymentTemplate = (
-    data: AppEnvDeploymentConfigListParams<false>['currentList'],
-    resolvedData: AppEnvDeploymentConfigListParams<false>['currentDeploymentTemplateResolvedData'],
-) =>
-    data && resolvedData?.deploymentTemplate
+    data: AppEnvDeploymentConfigListParams<false>['compareList'],
+    convertVariables: boolean,
+) => {
+    if (!data.deploymentTemplate) {
+        return data
+    }
+
+    const deploymentTemplateResolvedData = getDeploymentTemplateResolvedData(data.deploymentTemplate)
+
+    return convertVariables
         ? {
               ...data,
               deploymentTemplate: {
                   ...data.deploymentTemplate,
-                  deploymentDraftData: null,
-                  data: resolvedData.deploymentTemplate.resolvedValue,
+                  ...(deploymentTemplateResolvedData
+                      ? {
+                            data: deploymentTemplateResolvedData,
+                            deploymentDraftData: null,
+                        }
+                      : {}),
               },
           }
         : data
+}
 
 /**
  * Generates a list of deployment configurations for application environments and identifies changes between the current and compare lists.
@@ -548,8 +570,6 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
     getNavItemHref,
     isManifestView,
     convertVariables = false,
-    currentDeploymentTemplateResolvedData,
-    compareDeploymentTemplateResolvedData,
 }: AppEnvDeploymentConfigListParams<ManifestView>): {
     configList: DeploymentConfigDiffProps['configList']
     navList: DeploymentConfigDiffProps['navList']
@@ -558,11 +578,11 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
     if (!isManifestView) {
         const compareToObject = getConfigDataWithResolvedDeploymentTemplate(
             currentList as AppEnvDeploymentConfigListParams<false>['currentList'],
-            currentDeploymentTemplateResolvedData,
+            convertVariables,
         )
         const compareWithObject = getConfigDataWithResolvedDeploymentTemplate(
             compareList as AppEnvDeploymentConfigListParams<false>['compareList'],
-            compareDeploymentTemplateResolvedData,
+            convertVariables,
         )
         const currentDeploymentData = getDeploymentTemplateDiffViewData(compareToObject.deploymentTemplate)
         const compareDeploymentData = getDeploymentTemplateDiffViewData(compareWithObject.deploymentTemplate)
@@ -733,15 +753,6 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
         configList,
         collapsibleNavList: [],
         navList,
-    }
-}
-
-export const getDeploymentTemplateValues = (deploymentTemplate: DeploymentTemplateDTO) => {
-    try {
-        const data = getDeploymentTemplateData(deploymentTemplate)
-        return JSON.stringify(data)
-    } catch {
-        return null
     }
 }
 
