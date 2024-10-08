@@ -255,11 +255,6 @@ export type AppEnvDeploymentConfigPayloadType =
     | {
           appName: string
           envName: string
-          configArea: 'ResolveData'
-      }
-    | {
-          appName: string
-          envName: string
           pipelineId: number
           configArea: 'CdRollback' | 'DeploymentHistory'
           wfrId: number

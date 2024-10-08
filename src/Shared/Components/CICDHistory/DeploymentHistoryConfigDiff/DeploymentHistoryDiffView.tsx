@@ -86,7 +86,7 @@ const DeploymentHistoryDiffView = ({
 
     const renderDeploymentDiffViaCodeEditor = () => (
         <CodeEditor
-            key={`${sortBy}-${sortOrder}`}
+            key={JSON.stringify(editorValuesLHS)}
             value={editorValuesRHS}
             defaultValue={editorValuesLHS}
             adjustEditorHeightToContent
