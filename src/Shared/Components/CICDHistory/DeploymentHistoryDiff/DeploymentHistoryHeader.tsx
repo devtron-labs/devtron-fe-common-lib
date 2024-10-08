@@ -15,16 +15,15 @@
  */
 
 import { useEffect, useState } from 'react'
-import ReactSelect from 'react-select'
 import { useHistory, useRouteMatch, useParams, NavLink } from 'react-router-dom'
 import moment from 'moment'
 import Tippy from '@tippyjs/react'
+import { SelectPicker } from '@Shared/Components/SelectPicker'
 import { DATE_TIME_FORMATS, URLS, showError } from '../../../../Common'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
 import { ReactComponent as LeftIcon } from '../../../../Assets/Icon/ic-arrow-backward.svg'
 import { DeploymentTemplateOptions, DeploymentHistoryParamsType, CompareWithBaseConfiguration } from './types'
 import { getDeploymentDiffSelector } from '../service'
-import { dropdownStyles, Option } from './utils'
 
 const DeploymentHistoryHeader = ({
     selectedDeploymentTemplate,
@@ -118,17 +117,13 @@ const DeploymentHistoryHeader = ({
             </div>
             <div style={{ minWidth: '200px' }}>
                 {deploymentTemplateOption.length > 0 ? (
-                    <ReactSelect
+                    <SelectPicker
+                        inputId="compare-with-select"
                         placeholder="Select Timestamp"
                         classNamePrefix="configuration-compare-with-dropdown"
                         isSearchable={false}
-                        styles={dropdownStyles}
                         onChange={onClickTimeStampSelector}
                         options={deploymentTemplateOption}
-                        components={{
-                            IndicatorSeparator: null,
-                            Option,
-                        }}
                         value={selectedDeploymentTemplate || deploymentTemplateOption[0]}
                     />
                 ) : (

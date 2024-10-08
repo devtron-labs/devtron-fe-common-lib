@@ -13,7 +13,7 @@ import {
     VisibleModal2,
 } from '@Common/index'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { ReactComponent as ICBack } from '@Icons/ic-caret-down.svg'
+import { ReactComponent as ICBack } from '@Icons/ic-caret-left-small.svg'
 import { Table, InfoCard } from './components'
 import { DEFAULT_SECURITY_MODAL_STATE } from './constants'
 import { getTableData, getInfoCardData } from './config'
@@ -41,6 +41,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     isHelmApp = false,
     isSecurityScanV2Enabled = false,
     isExternalCI = false,
+    hidePolicy = false,
 }) => {
     const [state, setState] = useState<SecurityModalStateType>(DEFAULT_SECURITY_MODAL_STATE)
 
@@ -85,7 +86,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
                 onClick={handleBackFromDetailView}
             >
                 <div className="dc__border-radius-4-imp dc__hover-n50 dc__border c-n50 flex">
-                    <ICBack className="icon-dim-16 dc__flip-90" />
+                    <ICBack className="icon-dim-16" />
                 </div>
             </button>
             <div className="flexbox dc__gap-4" data-testid="security-detail-view-strip">
@@ -108,7 +109,8 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
 
         /* NOTE: if detailView is active show data gathered from that */
         const { headers, rows, defaultSortIndex, hasExpandableRows } =
-            selectedDetailViewData || getTableData(data, state.category, state.subCategory, setDetailViewData)
+            selectedDetailViewData ||
+            getTableData(data, state.category, state.subCategory, setDetailViewData, hidePolicy)
 
         const { entities, lastScanTimeString, scanToolId } =
             selectedDetailViewData || getInfoCardData(data, state.category, state.subCategory)
