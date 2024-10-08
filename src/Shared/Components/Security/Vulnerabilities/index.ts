@@ -16,4 +16,3 @@
 
 export { default as Vulnerabilities } from './Vulnerabilities'
 export * from './utils'
-export * from './service'

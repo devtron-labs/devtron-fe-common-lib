@@ -136,6 +136,7 @@ export const parseExecutionDetailResponse = (scanResult): ApiResponseResultType 
                         currentVersion: vulnerability?.version,
                         fixedInVersion: vulnerability?.fixedVersion,
                         severity: getSeverityFromVulnerabilitySeverity(vulnerability?.severity),
+                        permission: vulnerability?.permission,
                     })),
                     scanToolName: scanResult.scanToolId === SCAN_TOOL_ID_TRIVY ? 'TRIVY' : 'CLAIR',
                     StartedOn:
