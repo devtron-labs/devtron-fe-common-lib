@@ -59,13 +59,12 @@ export const SelectPickerClearIndicator = <OptionValue,>(
     </components.ClearIndicator>
 )
 
-export const SelectPickerControl = <OptionValue, IsMulti extends boolean>({
-    icon,
-    showSelectedOptionIcon,
-    ...props
-}: ControlProps<SelectPickerOptionType<OptionValue>> &
-    Pick<SelectPickerProps<OptionValue, IsMulti>, 'icon' | 'showSelectedOptionIcon'>) => {
-    const { children, getValue } = props
+export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPickerOptionType<OptionValue>>) => {
+    const {
+        children,
+        getValue,
+        selectProps: { icon, showSelectedOptionIcon },
+    } = props
     const { startIcon, endIcon } = getValue()?.[0] ?? {}
 
     let iconToDisplay: SelectPickerOptionType<OptionValue>['startIcon'] = icon

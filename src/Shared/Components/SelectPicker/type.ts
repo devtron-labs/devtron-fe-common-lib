@@ -65,6 +65,17 @@ declare module 'react-select/base' {
          * Imp Note: The menu open/close needs to handled by the consumer in this case
          */
         renderCustomOptions?: () => ReactElement
+        /**
+         * Icon to be rendered in the control
+         */
+        icon?: ReactElement
+        /**
+         * If true, the selected option icon is shown in the container.
+         * startIcon has higher priority than endIcon.
+         *
+         * @default 'true'
+         */
+        showSelectedOptionIcon?: boolean
     }
 }
 
@@ -107,7 +118,11 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     Partial<
         Pick<
             SelectProps<OptionValue, IsMulti>,
-            'renderMenuListFooter' | 'shouldRenderCustomOptions' | 'renderCustomOptions'
+            | 'renderMenuListFooter'
+            | 'shouldRenderCustomOptions'
+            | 'renderCustomOptions'
+            | 'icon'
+            | 'showSelectedOptionIcon'
         >
     > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> &
@@ -122,10 +137,6 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
         >
     > & {
         /**
-         * Icon to be rendered in the control
-         */
-        icon?: ReactElement
-        /**
          * Error message for the select
          */
         error?: ReactNode
@@ -137,13 +148,6 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * Label for the select. if required is added, the corresponding * is also added
          */
         label?: ReactNode
-        /**
-         * If true, the selected option icon is shown in the container.
-         * startIcon has higher priority than endIcon.
-         *
-         * @default 'true'
-         */
-        showSelectedOptionIcon?: boolean
         /**
          * Custom selected options count for use cases like filters
          */

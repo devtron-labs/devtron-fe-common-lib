@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-import {
-    ControlProps,
-    GroupHeadingProps,
-    MultiValueProps,
-    OptionProps,
-    ValueContainerProps,
-    MenuPlacement,
-} from 'react-select'
+import { GroupHeadingProps, MultiValueProps, OptionProps, ValueContainerProps, MenuPlacement } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { ReactElement, useCallback, useMemo } from 'react'
 
@@ -257,13 +250,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         )
     }
 
-    const renderControl = useCallback(
-        (controlProps: ControlProps<SelectPickerOptionType<OptionValue>>) => (
-            <SelectPickerControl {...controlProps} icon={icon} showSelectedOptionIcon={shouldShowSelectedOptionIcon} />
-        ),
-        [icon, shouldShowSelectedOptionIcon],
-    )
-
     const renderValueContainer = useCallback(
         (valueContainerProps: ValueContainerProps<SelectPickerOptionType<OptionValue>>) => (
             <SelectPickerValueContainer
@@ -381,7 +367,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 IndicatorSeparator: null,
                                 LoadingIndicator: SelectPickerLoadingIndicator,
                                 DropdownIndicator: SelectPickerDropdownIndicator,
-                                Control: renderControl,
+                                Control: SelectPickerControl,
                                 Option: renderOption,
                                 MenuList: SelectPickerMenuList,
                                 ClearIndicator: SelectPickerClearIndicator,
@@ -399,6 +385,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             renderMenuListFooter={!optionListError && renderMenuListFooter}
                             inputValue={inputValue}
                             onInputChange={onInputChange}
+                            icon={icon}
+                            showSelectedOptionIcon={shouldShowSelectedOptionIcon}
                         />
                     </div>
                 </ConditionalWrap>
