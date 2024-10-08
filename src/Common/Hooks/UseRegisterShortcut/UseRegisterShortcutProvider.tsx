@@ -14,19 +14,81 @@
  * limitations under the License.
  */
 
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { deepEquals } from '@rjsf/utils'
 import { context } from './UseRegisterShortcutContext'
-import { UseRegisterShortcutProviderType } from './types'
+import { UseRegisterShortcutProviderType, ShortcutType } from './types'
+import { preprocessKeys } from './utils'
+
+const ignoreTags = ['INPUT'].map((key) => key.toUpperCase())
 
 const UseRegisterShortcutProvider = ({ children }: UseRegisterShortcutProviderType) => {
-    const [registerShortcut, setRegisterShortcut] = useState(true)
+    const disableShortcuts = useRef<boolean>()
+    const shortcuts = useRef<Array<ShortcutType>>([])
+    const keysDown = useRef<string[]>([])
+
+    const registerShortcut = useCallback(({ keys, callback }: ShortcutType) => {
+        const processedKeys = preprocessKeys(keys)
+        const match = shortcuts.current.find((shortcut) => deepEquals(shortcut.keys, processedKeys))
+
+        if (match) {
+            match.callback = callback
+            return
+        }
+
+        shortcuts.current.push({ keys: processedKeys, callback })
+    }, [])
+
+    const unregisterShortcut = useCallback((keys: ShortcutType['keys']) => {
+        const processedKeys = preprocessKeys(keys)
+        shortcuts.current = shortcuts.current.filter((shortcut) => !deepEquals(shortcut.keys, processedKeys))
+    }, [])
+
+    const setDisableShortcuts = useCallback((shouldDisable: boolean) => {
+        disableShortcuts.current = shouldDisable
+    }, [])
+
+    const handleKeydownEvent = useCallback((event: KeyboardEvent) => {
+        if (ignoreTags.indexOf((event.target as HTMLElement).tagName.toUpperCase()) > -1) {
+            return
+        }
+
+        if (!disableShortcuts.current) {
+            keysDown.current = [...keysDown.current, event.key.toUpperCase()]
+        }
+    }, [])
+
+    const handleKeyupEvent = useCallback(() => {
+        if (!keysDown.current.length) {
+            return
+        }
+
+        shortcuts.current.forEach((shortcut) => {
+            if (keysDown.current.every((key) => (shortcut.keys as string[]).includes(key.toUpperCase()))) {
+                shortcut.callback()
+            }
+        })
+
+        keysDown.current = []
+    }, [])
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeydownEvent)
+        window.addEventListener('keyup', handleKeyupEvent)
+
+        return () => {
+            window.removeEventListener('keydown', handleKeydownEvent)
+            window.removeEventListener('keyup', handleKeyupEvent)
+        }
+    }, [])
 
     const providerValue = useMemo(
         () => ({
             registerShortcut,
-            setRegisterShortcut: (allowShortcut: boolean) => setRegisterShortcut(allowShortcut),
+            unregisterShortcut,
+            setDisableShortcuts,
         }),
-        [registerShortcut],
+        [],
     )
 
     return <context.Provider value={providerValue}>{children}</context.Provider>

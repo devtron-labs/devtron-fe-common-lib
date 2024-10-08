@@ -110,6 +110,8 @@ const DateTimePicker = ({
                             onChange={handleTimeChange}
                             data-testid={dataTestIdForTime}
                             menuSize={ComponentSizeType.xs}
+                            menuPosition="absolute"
+                            size={ComponentSizeType.large}
                         />
                     </div>
                 )}

@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
+import { SupportedKeyboardKeysType } from '@Common/Tooltip'
+
+export interface ShortcutType {
+    keys: SupportedKeyboardKeysType[]
+    callback: () => void
+}
+
 export interface UseRegisterShortcutContextType {
-    registerShortcut: boolean
-    setRegisterShortcut: (allowShortcut: boolean) => void
+    registerShortcut: (props: ShortcutType) => void
+    unregisterShortcut: (keys: ShortcutType['keys']) => void
+    setDisableShortcuts: (shouldDisable: boolean) => void
 }
 
 export interface UseRegisterShortcutProviderType {
