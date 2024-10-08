@@ -15,7 +15,7 @@
  */
 
 import { useEffect } from 'react'
-import { EMPTY_STATE_STATUS, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
+import { EMPTY_STATE_STATUS, SCAN_TOOL_ID_CLAIR, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
 import { SeverityCount } from '@Shared/types'
 import { Progressing } from '../../../../Common'
 import { ScannedByToolModal } from '../../ScannedByToolModal'
@@ -23,22 +23,23 @@ import { VulnerabilitiesProps } from './types'
 import { SecuritySummaryCard } from '../SecuritySummaryCard'
 import { getSeverityCountFromSummary, getTotalSeverityCount } from '../utils'
 import { useGetSecurityVulnerabilities } from './utils'
-import { parseExecutionDetailResponse } from '../SecurityModal/utils'
 
 const Vulnerabilities = ({
     isScanned,
     isScanEnabled,
     artifactId,
     applicationId,
+    environmentId,
     setVulnerabilityCount,
     SecurityModalSidebar,
     getSecurityScan,
 }: VulnerabilitiesProps) => {
     const isScanV2Enabled = window._env_.ENABLE_RESOURCE_SCAN_V2
-    const { scanDetailsLoading, scanResultResponse, executionDetailsResponse, scanDetailsError, reloadScanDetails } =
+    const { scanDetailsLoading, scanResultResponse, scanDetailsError, reloadScanDetails } =
         useGetSecurityVulnerabilities({
             appId: String(applicationId),
             artifactId: String(artifactId),
+            envId: environmentId,
             isScanEnabled,
             isScanned,
             isScanV2Enabled,
@@ -46,14 +47,10 @@ const Vulnerabilities = ({
         })
 
     useEffect(() => {
-        if (scanResultResponse && isScanV2Enabled) {
-            setVulnerabilityCount(scanResultResponse.result.imageScan.vulnerability?.list?.length)
-            return
+        if (scanResultResponse) {
+            setVulnerabilityCount(scanResultResponse.result.imageScan.vulnerability?.list?.[0].list?.length)
         }
-        if (executionDetailsResponse && !isScanV2Enabled) {
-            setVulnerabilityCount(executionDetailsResponse.result.vulnerabilities?.length)
-        }
-    }, [executionDetailsResponse, scanResultResponse])
+    }, [scanResultResponse])
 
     if (!isScanEnabled) {
         return (
@@ -71,11 +68,7 @@ const Vulnerabilities = ({
         )
     }
 
-    if (
-        !isScanned ||
-        (executionDetailsResponse && !executionDetailsResponse.result.scanned) ||
-        (scanResultResponse && !scanResultResponse?.result.scanned)
-    ) {
+    if (!isScanned || (scanResultResponse && !scanResultResponse?.result.scanned)) {
         return (
             <div className="security-tab-empty">
                 <p className="security-tab-empty__title">Image was not scanned</p>
@@ -94,10 +87,12 @@ const Vulnerabilities = ({
         )
     }
 
+    const scanToolId =
+        scanResultResponse?.result.imageScan.vulnerability?.list[0].scanToolName === 'TRIVY'
+            ? SCAN_TOOL_ID_TRIVY
+            : SCAN_TOOL_ID_CLAIR
     const scanResultSeverities = scanResultResponse?.result.imageScan.vulnerability?.summary.severities
-    const severityCount: SeverityCount = isScanV2Enabled
-        ? getSeverityCountFromSummary(scanResultSeverities)
-        : executionDetailsResponse.result.severityCount ?? { critical: 0, high: 0, medium: 0, low: 0, unknown: 0 }
+    const severityCount: SeverityCount = getSeverityCountFromSummary(scanResultSeverities)
 
     const totalCount = getTotalSeverityCount(severityCount)
 
@@ -109,13 +104,10 @@ const Vulnerabilities = ({
                 </p>
                 <p>{EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.SUBTITLE}</p>
                 <p className="security-tab-empty__subtitle">
-                    {executionDetailsResponse?.result.lastExecution ??
-                        scanResultResponse?.result.imageScan.vulnerability?.list[0].StartedOn}
+                    {scanResultResponse?.result.imageScan.vulnerability?.list[0].StartedOn}
                 </p>
                 <div className="pt-8 pb-8 pl-16 pr-16 flexbox dc__align-items-center">
-                    <ScannedByToolModal
-                        scanToolId={executionDetailsResponse?.result.scanToolId ?? SCAN_TOOL_ID_TRIVY}
-                    />
+                    <ScannedByToolModal scanToolId={scanToolId} />
                 </div>
             </div>
         )
@@ -125,15 +117,12 @@ const Vulnerabilities = ({
         <div className="p-12">
             <SecuritySummaryCard
                 severityCount={severityCount}
-                scanToolId={executionDetailsResponse?.result.scanToolId ?? SCAN_TOOL_ID_TRIVY}
-                responseData={
-                    isScanV2Enabled
-                        ? scanResultResponse?.result
-                        : parseExecutionDetailResponse(executionDetailsResponse?.result)
-                }
+                scanToolId={scanToolId}
+                responseData={scanResultResponse?.result}
                 isHelmApp={false} // Image card is not visible for helm app
                 isSecurityScanV2Enabled={isScanV2Enabled}
                 SecurityModalSidebar={SecurityModalSidebar}
+                hidePolicy={!environmentId}
             />
         </div>
     )

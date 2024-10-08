@@ -755,12 +755,29 @@ export interface LogStageAccordionProps extends StageDetailType, Pick<LogsRender
      * A stage is loading if it is last in current stage list and event is not closed
      */
     isLoading: boolean
+    searchIndex: string
 }
 
 export interface CreateMarkupReturnType {
     __html: string
     isSearchKeyPresent: boolean
 }
+
+export type CreateMarkupPropsType =
+    | {
+          log: string
+          currentIndex?: never
+          targetSearchKey?: never
+          searchMatchResults?: never
+          searchIndex?: never
+      }
+    | {
+          log: string
+          currentIndex: number
+          targetSearchKey: string
+          searchMatchResults: string[]
+          searchIndex: string
+      }
 
 export type TriggerHistoryFilterCriteriaType = `${string}|${string}|${string}`[]
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])

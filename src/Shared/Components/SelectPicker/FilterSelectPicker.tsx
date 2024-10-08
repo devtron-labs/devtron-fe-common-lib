@@ -15,6 +15,8 @@ const FilterSelectPicker = ({
     ...props
 }: FilterSelectPickerProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [inputValue, setInputValue] = useState('')
+
     const [selectedOptions, setSelectedOptions] = useState<SelectPickerOptionType[]>(
         structuredClone(appliedFilterOptions ?? []),
     )
@@ -39,6 +41,7 @@ const FilterSelectPicker = ({
     }
 
     const handleSelectOnChange: SelectPickerProps<number | string, true>['onChange'] = (selectedOptionsToUpdate) => {
+        setInputValue(inputValue)
         setSelectedOptions(structuredClone(selectedOptionsToUpdate) as SelectPickerOptionType[])
     }
 
@@ -85,6 +88,8 @@ const FilterSelectPicker = ({
                 isClearable={false}
                 customSelectedOptionsCount={appliedFiltersCount}
                 icon={filterIcon}
+                inputValue={inputValue}
+                onInputChange={setInputValue}
             />
         </div>
     )

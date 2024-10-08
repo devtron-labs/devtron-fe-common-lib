@@ -101,6 +101,8 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     | 'onBlur'
     | 'onKeyDown'
     | 'formatOptionLabel'
+    | 'onInputChange'
+    | 'inputValue'
 > &
     Partial<
         Pick<
@@ -108,7 +110,17 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
             'renderMenuListFooter' | 'shouldRenderCustomOptions' | 'renderCustomOptions'
         >
     > &
-    Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> & {
+    Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> &
+    Partial<
+        Pick<
+            CreatableProps<
+                SelectPickerOptionType<OptionValue>,
+                IsMulti,
+                GroupBase<SelectPickerOptionType<OptionValue>>
+            >,
+            'onCreateOption'
+        >
+    > & {
         /**
          * Icon to be rendered in the control
          */
@@ -200,24 +212,16 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * Would reload the option list when called in case optionListError is present
          */
         reloadOptionList?: () => void
+        /**
+         * If true, the select picker creates the new option
+         *
+         * @default false
+         */
+        isCreatable?: boolean
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean
-              multiSelectProps?: Pick<
-                  CreatableProps<
-                      SelectPickerOptionType<OptionValue>,
-                      true,
-                      GroupBase<SelectPickerOptionType<OptionValue>>
-                  >,
-                  'onCreateOption'
-              > & {
-                  /**
-                   * If true, the select picker creates the new option
-                   * Only applicable for IsMulti: true
-                   *
-                   * @default false
-                   */
-                  isCreatable?: boolean
+              multiSelectProps?: {
                   /**
                    * If true, the group heading can be selected
                    *

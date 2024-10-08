@@ -118,7 +118,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     control: (base, state) => ({
         ...base,
         minHeight: size === ComponentSizeType.medium ? 'auto' : '36px',
-        minWidth: '100px',
+        minWidth: '56px',
         boxShadow: 'none',
         backgroundColor: 'var(--N50)',
         border: `1px solid ${error ? 'var(--R500)' : 'var(--N200)'}`,
