@@ -24,8 +24,7 @@ const InvalidYAMLTippyWrapper = ({ parsingError, restoreLastSavedYAML, children 
         )
     }
 
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <>{children}</>
+    return children
 }
 
 export default InvalidYAMLTippyWrapper

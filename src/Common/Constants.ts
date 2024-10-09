@@ -509,6 +509,7 @@ export const API_STATUS_CODES = {
     PERMISSION_DENIED: 403,
     NOT_FOUND: 404,
     EXPECTATION_FAILED: 417,
+    LOCKED: 423,
 }
 
 export enum SERVER_MODE {
