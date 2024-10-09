@@ -5,7 +5,7 @@ import { ConditionalWrap } from '@Common/Helper'
 import { ReactComponent as ICExpand } from '@Icons/ic-expand.svg'
 
 import { Collapse } from '../Collapse'
-import { CollapsibleListItem, CollapsibleListProps } from './CollapsibleList.types'
+import { CollapsibleListItem, CollapsibleListProps, TabOptions } from './CollapsibleList.types'
 import './CollapsibleList.scss'
 
 const renderWithTippy = (tippyProps: TippyProps) => (children: React.ReactElement) => (
@@ -14,10 +14,14 @@ const renderWithTippy = (tippyProps: TippyProps) => (children: React.ReactElemen
     </Tippy>
 )
 
-export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListProps) => {
+export const CollapsibleList = <TabType extends TabOptions>({
+    config,
+    tabType,
+    onCollapseBtnClick,
+}: CollapsibleListProps<TabType>) => {
     const { pathname } = useLocation()
 
-    const getTabContent = (item: CollapsibleListItem) => {
+    const getTabContent = (item: CollapsibleListItem<TabOptions>) => {
         const { title, subtitle, iconConfig } = item
         return (
             <>
@@ -40,27 +44,8 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
         )
     }
 
-    const getTabItem = (item: CollapsibleListItem) => {
-        const { title, href, isActive, onClick, tabType } = item
-        if (tabType === 'navLink') {
-            return (
-                <NavLink
-                    key={title}
-                    to={href}
-                    className="collapsible__item flexbox dc__align-items-center dc__gap-8 dc__no-decor br-4 py-6 px-8 cursor"
-                    onClick={(e) => {
-                        // Prevent navigation to the same page
-                        if (href === pathname) {
-                            e.preventDefault()
-                        }
-                        onClick?.(e)
-                    }}
-                >
-                    {getTabContent(item)}
-                </NavLink>
-            )
-        }
-        // Since is active is boolean we need to explicitly handle for null
+    const getButtonTabItem = (item: CollapsibleListItem<'button'>) => {
+        const { title, isActive, onClick } = item
         return (
             <button
                 key={title}
@@ -76,6 +61,26 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
             >
                 {getTabContent(item)}
             </button>
+        )
+    }
+
+    const getNavLinkTabItem = (item: CollapsibleListItem<'navLink'>) => {
+        const { title, href, onClick } = item
+        return (
+            <NavLink
+                key={title}
+                to={href}
+                className="collapsible__item flexbox dc__align-items-center dc__gap-8 dc__no-decor br-4 py-6 px-8 cursor"
+                onClick={(e) => {
+                    // Prevent navigation to the same page
+                    if (href === pathname) {
+                        e.preventDefault()
+                    }
+                    onClick?.(e)
+                }}
+            >
+                {getTabContent(item)}
+            </NavLink>
         )
     }
 
@@ -122,7 +127,11 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                                     </span>
                                 </div>
                             ) : (
-                                items.map((item) => getTabItem(item))
+                                items.map((item) =>
+                                    tabType === 'button'
+                                        ? getButtonTabItem(item as CollapsibleListItem<'button'>)
+                                        : getNavLinkTabItem(item as CollapsibleListItem<'navLink'>),
+                                )
                             )}
                         </div>
                     </Collapse>

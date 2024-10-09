@@ -41,14 +41,14 @@ export type DeploymentConfigDiffSelectPickerProps =
           selectPickerProps: SelectPickerProps
       }
 
-export interface DeploymentConfigDiffNavigationItem extends Pick<CollapsibleListItem, 'title'> {
+export interface DeploymentConfigDiffNavigationItem extends Pick<CollapsibleListItem<'navLink'>, 'title'> {
     hasDiff?: boolean
     href: string
     onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void
 }
 
 export interface DeploymentConfigDiffNavigationCollapsibleItem
-    extends Pick<CollapsibleListConfig, 'id' | 'header' | 'noItemsText'> {
+    extends Pick<CollapsibleListConfig<'navLink'>, 'id' | 'header' | 'noItemsText'> {
     items: DeploymentConfigDiffNavigationItem[]
 }
 
