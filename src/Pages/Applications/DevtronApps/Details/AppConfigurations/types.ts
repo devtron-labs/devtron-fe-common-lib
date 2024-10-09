@@ -23,6 +23,7 @@ export interface ConfigToolbarPopupMenuConfigType {
     dataTestId: string
     disabled?: boolean
     icon?: ReactNode | null
+    variant?: 'default' | 'negative'
 }
 
 export enum ConfigToolbarPopupNodeType {

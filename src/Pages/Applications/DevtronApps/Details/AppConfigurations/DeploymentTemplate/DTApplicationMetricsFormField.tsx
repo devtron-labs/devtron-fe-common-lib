@@ -26,8 +26,8 @@ const DTApplicationMetricsFormField = ({
         return (
             <div className="flexbox dc__align-items-center dc__gap-8 fs-13 fw-4 lh-20 cn-9">
                 <ICInfoFilledOverride className="icon-dim-16 dc__no-shrink" />
-                <div className="flexbox">
-                    <span>Application metrics are</span>&nbsp;
+                <div className="flexbox dc__gap-6">
+                    <span>Application metrics are</span>
                     <span className="fw-6">{isAppMetricsEnabled ? 'Enabled' : 'Not enabled'}</span>
                 </div>
             </div>
@@ -48,7 +48,7 @@ const DTApplicationMetricsFormField = ({
             <InvalidYAMLTippyWrapper parsingError={parsingError} restoreLastSavedYAML={restoreLastSavedYAML}>
                 <div>
                     <Checkbox
-                        rootClassName={`mb-0 dc__align-start ${!selectedChart.isAppMetricsSupported ? 'dc__disabled' : ''}`}
+                        rootClassName={`mb-0 dc__align-items-center ${!selectedChart.isAppMetricsSupported ? 'dc__disabled' : ''}`}
                         isChecked={isAppMetricsEnabled}
                         value={CHECKBOX_VALUE.CHECKED}
                         onChange={toggleAppMetrics}
@@ -64,14 +64,14 @@ const DTApplicationMetricsFormField = ({
                 </div>
             </InvalidYAMLTippyWrapper>
 
-            <div className={`flexbox ${selectedChart.isAppMetricsSupported ? 'pl-8' : ''}`}>
+            <div className="flexbox dc__gap-6 pl-6 dc__align-items-center">
                 {!selectedChart.isAppMetricsSupported && (
                     <Tooltip
                         alwaysShowTippyOnHover
                         content={`Application metrics is not supported for ${selectedChart.name} version ${selectedChart.version}.`}
                     >
                         <span className="cr-5 fs-13 fw-4 lh-20 dc__border-bottom-dashed--n3 dc__no-shrink">
-                            &nbsp;Not supported &nbsp;
+                            Not supported
                         </span>
                     </Tooltip>
                 )}
