@@ -52,9 +52,9 @@ export interface UseFormValidation {
 
 /**
  * Represents the structure for form validation errors.
- * Maps each field to an error message or an array of error messages.
+ * Maps each field to an array of error messages.
  */
-export type UseFormErrors<T> = Partial<Record<keyof T, string | string[]>>
+export type UseFormErrors<T> = Partial<Record<keyof T, string[]>>
 
 /**
  * Represents the fields that have been modified ("dirty") in the form.

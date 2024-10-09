@@ -87,6 +87,7 @@ const DeploymentHistoryDiffView = ({
 
     const renderDeploymentDiffViaCodeEditor = () => (
         <CodeEditor
+            // TODO: Add key from prop
             key={`${sortBy}-${sortOrder}`}
             value={editorValuesRHS}
             defaultValue={editorValuesLHS}

@@ -12,6 +12,7 @@ import {
     ResolvedDeploymentTemplateDTO,
     ValuesAndManifestFlagDTO,
 } from './types'
+import { GET_RESOLVED_DEPLOYMENT_TEMPLATE_EMPTY_RESPONSE } from './constants'
 
 export const getDeploymentManifest = async (
     params: GetDeploymentManifestProps,
@@ -60,6 +61,6 @@ export const getResolvedDeploymentTemplate = async (
             showError(error)
             throw error
         }
-        return null
+        return GET_RESOLVED_DEPLOYMENT_TEMPLATE_EMPTY_RESPONSE
     }
 }

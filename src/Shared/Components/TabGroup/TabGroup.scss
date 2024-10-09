@@ -33,7 +33,7 @@
             bottom: -1px;
         }
 
-        &:hover:not(.tab-group__tab--block):not(.dc__opacity-0_5) {
+        &:hover:not(.tab-group__tab--block):not(.dc__disabled) {
             color: var(--B500);
             @include svg-styles(var(--B500));
         }
