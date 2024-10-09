@@ -17,6 +17,7 @@
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 import { GroupBase, MultiValue, OptionsOrGroups, StylesConfig } from 'react-select'
+import { getComponentSizeMagnitude } from '@Shared/Helpers'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 
 const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
@@ -77,6 +78,24 @@ const getOptionBgColor = <OptionValue>(
     return 'var(--N0)'
 }
 
+const getFontSize = (size: ComponentSizeType): string => {
+    switch (size) {
+        case ComponentSizeType.small:
+            return '12px'
+        default:
+            return '13px'
+    }
+}
+
+const getIconSize = (size: ComponentSizeType): { width: string; height: string } => {
+    switch (size) {
+        case ComponentSizeType.small:
+            return { width: '12px', height: '12px' }
+        default:
+            return { width: '16px', height: '16px' }
+    }
+}
+
 export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     error,
     size,
@@ -117,7 +136,8 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     }),
     control: (base, state) => ({
         ...base,
-        minHeight: size === ComponentSizeType.medium ? 'auto' : '36px',
+        minHeight:
+            getComponentSizeMagnitude(size) <= getComponentSizeMagnitude(ComponentSizeType.medium) ? 'auto' : '36px',
         minWidth: '56px',
         boxShadow: 'none',
         backgroundColor: 'var(--N50)',
@@ -165,6 +185,10 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     }),
     dropdownIndicator: (base, state) => ({
         ...base,
+        ...getIconSize(size),
+        display: 'flex',
+        alignItems: 'center',
+        flexShrink: '0',
         color: 'var(--N600)',
         padding: '0',
         transition: 'all .2s ease',
@@ -173,6 +197,10 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     clearIndicator: (base) => ({
         ...base,
         padding: 0,
+        ...getIconSize(size),
+        display: 'flex',
+        alignItems: 'center',
+        flexShrink: '0',
 
         '&:hover': {
             backgroundColor: 'transparent',
@@ -274,7 +302,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         margin: 0,
         padding: 0,
         color: 'var(--N900)',
-        size: '13px',
+        size: getFontSize(size),
         fontWeight: 400,
         lineHeight: '20px',
         overflow: 'hidden',
@@ -284,7 +312,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     placeholder: (base) => ({
         ...base,
         color: 'var(--N500)',
-        fontSize: '13px',
+        fontSize: getFontSize(size),
         lineHeight: '20px',
         fontWeight: 400,
         margin: 0,
@@ -301,7 +329,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         ...base,
         margin: 0,
         color: 'var(--N900)',
-        fontSize: '13px',
+        fontSize: getFontSize(size),
         fontWeight: 400,
         lineHeight: '20px',
         ...(getVariantOverrides(variant)?.singleValue(base, state) || {}),
