@@ -16,7 +16,7 @@
 
 import { useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { URLS } from '@Common/Constants'
 import { ReactComponent as InfoIcon } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as Chat } from '../../../Assets/Icon/ic-chat-circle-dots.svg'
