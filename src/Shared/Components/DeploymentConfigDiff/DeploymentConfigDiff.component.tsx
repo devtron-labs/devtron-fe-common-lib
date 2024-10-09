@@ -12,9 +12,11 @@ export const DeploymentConfigDiff = ({
     navHeading,
     navHelpText,
     tabConfig,
+    showDetailedDiffState,
+    renderedInDrawer,
     ...resProps
 }: DeploymentConfigDiffProps) => (
-    <div className="deployment-config-diff">
+    <div className={`deployment-config-diff ${renderedInDrawer ? 'deployment-config-diff--drawer' : ''}`}>
         <DeploymentConfigDiffNavigation
             isLoading={isLoading}
             collapsibleNavList={collapsibleNavList}
@@ -23,7 +25,13 @@ export const DeploymentConfigDiff = ({
             navHeading={navHeading}
             navHelpText={navHelpText}
             tabConfig={tabConfig}
+            showDetailedDiffState={showDetailedDiffState}
         />
-        <DeploymentConfigDiffMain isLoading={isLoading} configList={configList} {...resProps} />
+        <DeploymentConfigDiffMain
+            isLoading={isLoading}
+            configList={configList}
+            showDetailedDiffState={showDetailedDiffState}
+            {...resProps}
+        />
     </div>
 )
