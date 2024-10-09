@@ -2,7 +2,6 @@ import React from 'react'
 import { TippyProps } from '@tippyjs/react'
 
 interface ButtonTab {
-    tabType: 'button'
     /**
      * Is tab active ( for button tab )
      */
@@ -15,7 +14,6 @@ interface ButtonTab {
 }
 
 interface NavLinkTab {
-    tabType: 'navLink'
     /**
      * The URL of the nav link.
      */
@@ -27,9 +25,11 @@ interface NavLinkTab {
     isActive?: never
 }
 
-type ConditionalTabType = ButtonTab | NavLinkTab
+export type TabOptions = 'button' | 'navLink'
 
-export type CollapsibleListItem = ConditionalTabType & {
+type ConditionalTabType<TabType extends TabOptions> = TabType extends 'button' ? ButtonTab : NavLinkTab
+
+export type CollapsibleListItem<TabType extends TabOptions> = ConditionalTabType<TabType> & {
     /**
      * The title of the list item.
      */
@@ -57,7 +57,7 @@ export type CollapsibleListItem = ConditionalTabType & {
     }
 }
 
-export interface CollapsibleListConfig {
+export interface CollapsibleListConfig<TabType extends 'button' | 'navLink'> {
     /**
      * The unique identifier for the collapsible list.
      */
@@ -95,18 +95,22 @@ export interface CollapsibleListConfig {
     /**
      * An array of items to be displayed in the collapsible list.
      */
-    items: CollapsibleListItem[]
+    items: CollapsibleListItem<TabType>[]
     /**
      * Boolean indicating whether the list is expanded or not.
      */
     isExpanded?: boolean
 }
 
-export interface CollapsibleListProps {
+export interface CollapsibleListProps<TabType extends TabOptions> {
     /**
      * An array of collapsible list configurations.
      */
-    config: CollapsibleListConfig[]
+    config: CollapsibleListConfig<TabType>[]
+    /**
+     * Type of tab list: button or navLink
+     */
+    tabType: TabType
     /**
      * Function to handle the collapse button click event.
      *

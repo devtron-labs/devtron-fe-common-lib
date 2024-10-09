@@ -34,23 +34,28 @@ export const DeploymentConfigDiffNavigation = ({
     }, [collapsibleNavList])
 
     /** Collapsible List Config. */
-    const collapsibleListConfig: CollapsibleListConfig[] = collapsibleNavList.map(({ items, ...resListItem }) => ({
-        ...resListItem,
-        isExpanded: expandedIds[resListItem.id],
-        items: items.map(({ hasDiff, ...resItem }) => ({
-            tabType: 'navLink',
-            ...resItem,
-            ...(hasDiff
-                ? {
-                      iconConfig: {
-                          Icon: ICDiffFileUpdated,
-                          props: { className: 'icon-dim-16 dc__no-shrink' },
-                          tooltipProps: { content: 'File has difference', arrow: false, placement: 'right' as const },
-                      },
-                  }
-                : {}),
-        })),
-    }))
+    const collapsibleListConfig: CollapsibleListConfig<'navLink'>[] = collapsibleNavList.map(
+        ({ items, ...resListItem }) => ({
+            ...resListItem,
+            isExpanded: expandedIds[resListItem.id],
+            items: items.map(({ hasDiff, ...resItem }) => ({
+                ...resItem,
+                ...(hasDiff
+                    ? {
+                          iconConfig: {
+                              Icon: ICDiffFileUpdated,
+                              props: { className: 'icon-dim-16 dc__no-shrink' },
+                              tooltipProps: {
+                                  content: 'File has difference',
+                                  arrow: false,
+                                  placement: 'right' as const,
+                              },
+                          },
+                      }
+                    : {}),
+            })),
+        }),
+    )
 
     // METHODS
     /** Handles collapse button click. */
@@ -122,7 +127,7 @@ export const DeploymentConfigDiffNavigation = ({
                     )}
                 </NavLink>
             ))}
-            <CollapsibleList config={collapsibleListConfig} onCollapseBtnClick={onCollapseBtnClick} />
+            <CollapsibleList config={collapsibleListConfig} tabType="navLink" onCollapseBtnClick={onCollapseBtnClick} />
             {navHelpText && (
                 <div className="mt-8 py-6 px-8 flexbox dc__align-items-center dc__gap-8">
                     <span className="flex p-2 dc__align-self-start">
