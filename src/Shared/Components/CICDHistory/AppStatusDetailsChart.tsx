@@ -20,7 +20,7 @@ import { useHistory } from 'react-router'
 import { URLS } from '@Common/Constants'
 import { ReactComponent as InfoIcon } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as Chat } from '../../../Assets/Icon/ic-chat-circle-dots.svg'
-import { AppStatusDetailsChartType, AggregatedNodes, STATUS_SORTING_ORDER } from './types'
+import { AppStatusDetailsChartType, AggregatedNodes, STATUS_SORTING_ORDER, NodeFilters } from './types'
 import { StatusFilterButtonComponent } from './StatusFilterButtonComponent'
 import { DEPLOYMENT_STATUS, APP_STATUS_HEADERS, ComponentSizeType } from '../../constants'
 import { IndexStore } from '../../Store'
@@ -116,7 +116,7 @@ const AppStatusDetailsChart = ({
                             .filter(
                                 (nodeDetails) =>
                                     currentFilter === 'all' ||
-                                    (currentFilter === 'drifted' && nodeDetails.hasDrift) ||
+                                    (currentFilter === NodeFilters.Drifted && nodeDetails.hasDrift) ||
                                     nodeDetails.health.status?.toLowerCase() === currentFilter,
                             )
                             .map((nodeDetails) => (
