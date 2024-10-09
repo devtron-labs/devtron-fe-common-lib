@@ -517,6 +517,8 @@ export interface DeploymentHistorySidebarType {
 export interface AppStatusDetailsChartType {
     filterRemoveHealth?: boolean
     showFooter: boolean
+    showConfigDriftInfo?: boolean
+    onClose?: () => void
 }
 
 export interface StatusFilterButtonType {
@@ -531,6 +533,10 @@ export enum NodeStatus {
     Missing = 'missing',
     Suspended = 'suspended',
     Unknown = 'unknown',
+}
+
+export enum NodeFilters {
+    Drifted = 'drifted',
 }
 
 type NodesMap = {

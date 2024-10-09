@@ -18,9 +18,8 @@
 import { useEffect, useState } from 'react'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { PopupMenu, StyledRadioGroup as RadioGroup } from '../../../Common'
-import { NodeStatus, StatusFilterButtonType } from './types'
+import { NodeFilters, NodeStatus, StatusFilterButtonType } from './types'
 import { IndexStore } from '../../Store'
-
 import './StatusFilterButtonComponent.scss'
 
 export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: StatusFilterButtonType) => {
@@ -32,9 +31,14 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
     let progressingNodeCount: number = 0
     let failedNodeCount: number = 0
     let missingNodeCount: number = 0
+    let driftedNodeCount: number = 0
 
     nodes?.forEach((_node) => {
         const _nodeHealth = _node.health?.status
+
+        if (_node.hasDrift) {
+            driftedNodeCount += 1
+        }
 
         if (_nodeHealth?.toLowerCase() === NodeStatus.Healthy) {
             healthyNodeCount += 1
@@ -58,6 +62,7 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
             isSelected: NodeStatus.Progressing == selectedTab,
         },
         { status: NodeStatus.Healthy, count: healthyNodeCount, isSelected: NodeStatus.Healthy == selectedTab },
+        { status: NodeFilters.Drifted, count: driftedNodeCount, isSelected: selectedTab === NodeFilters.Drifted },
     ]
     const validFilterOptions = filterOptions.filter(({ count }) => count > 0)
     const displayedInlineFilters = validFilterOptions.slice(
@@ -72,7 +77,8 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
             (selectedTab === NodeStatus.Healthy && healthyNodeCount === 0) ||
             (selectedTab === NodeStatus.Degraded && failedNodeCount === 0) ||
             (selectedTab === NodeStatus.Progressing && progressingNodeCount === 0) ||
-            (selectedTab === NodeStatus.Missing && missingNodeCount === 0)
+            (selectedTab === NodeStatus.Missing && missingNodeCount === 0) ||
+            (selectedTab === NodeFilters.Drifted && driftedNodeCount === 0)
         ) {
             setSelectedTab('all')
         } else if (handleFilterClick) {
