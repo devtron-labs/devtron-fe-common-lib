@@ -13,6 +13,7 @@ import {
     prepareHistoryData,
 } from '@Shared/Components'
 
+import { ManifestTemplateDTO } from '@Pages/Applications'
 import {
     ConfigMapSecretDataConfigDatumDTO,
     ConfigMapSecretDataDTO,
@@ -20,7 +21,6 @@ import {
     DeploymentTemplateDTO,
     DraftState,
     EnvResourceType,
-    ManifestTemplateDTO,
     TemplateListDTO,
     TemplateListType,
 } from '../../Services/app.types'

@@ -161,7 +161,7 @@ export const DeploymentConfigDiffMain = ({
                                 previousConfigAvailable
                                 rootClassName="m-0 dc__no-top-radius dc__no-top-border"
                                 comparisonBodyClassName="deployment-config-diff__main-content__comparison"
-                                sortOrder={sortingConfig?.sortOrder}
+                                sortingConfig={sortingConfig}
                             />
                         </div>
                     )}

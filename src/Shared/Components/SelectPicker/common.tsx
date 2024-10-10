@@ -46,7 +46,7 @@ export const SelectPickerDropdownIndicator = <OptionValue,>(
 
     return (
         <components.DropdownIndicator {...props}>
-            <ICCaretDown className={`icon-dim-16 ${isDisabled ? 'scn-3' : 'scn-6'} dc__no-shrink`} />
+            <ICCaretDown className={isDisabled ? 'scn-3' : 'scn-6'} />
         </components.DropdownIndicator>
     )
 }
@@ -55,7 +55,7 @@ export const SelectPickerClearIndicator = <OptionValue,>(
     props: ClearIndicatorProps<SelectPickerOptionType<OptionValue>>,
 ) => (
     <components.ClearIndicator {...props}>
-        <ICClose className="icon-dim-16 icon-use-fill-n6 dc__no-shrink" />
+        <ICClose className="icon-use-fill-n6" />
     </components.ClearIndicator>
 )
 
@@ -100,6 +100,7 @@ export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>
             <div className="flex left">
                 <components.ValueContainer {...props} />
             </div>
+            {/* Size will not work here need to go in details later when prioritized */}
             {showSelectedOptionsCount && selectedOptionsLength > 0 && (
                 <div className="bcb-50 dc__border eb-2 dc__border-radius-4-imp pl-5 pr-5 cb-5 fs-12 fw-6 lh-18 dc__truncate dc__no-shrink">
                     {selectedOptionsLength}

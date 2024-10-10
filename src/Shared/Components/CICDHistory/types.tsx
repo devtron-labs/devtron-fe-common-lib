@@ -490,7 +490,10 @@ export interface DeploymentTemplateHistoryType {
     isDeleteDraft?: boolean
     rootClassName?: string
     comparisonBodyClassName?: string
-    sortOrder?: SortingOrder
+    sortingConfig?: {
+        sortBy: string
+        sortOrder: SortingOrder
+    }
 }
 export interface DeploymentHistoryDetailRes extends ResponseType {
     result?: DeploymentHistoryDetail
