@@ -178,6 +178,7 @@ export interface GetPluginStoreDataServiceParamsType extends Pick<PluginListFilt
     signal: AbortSignal
     appId: number
     offset?: number
+    size?: number
 }
 
 export interface GetPluginListPayloadType
