@@ -23,6 +23,7 @@ import { escapeRegExp } from '@Shared/Helpers'
 import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
 import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
 import { withShortcut, IWithShortcut } from 'react-keybind'
+import { ReactComponent as ICArrow } from '@Icons/ic-caret-down.svg'
 import {
     Progressing,
     Host,
@@ -42,6 +43,7 @@ import {
     POD_STATUS,
 } from './constants'
 import {
+    CreateMarkupPropsType,
     CreateMarkupReturnType,
     DeploymentHistoryBaseParamsType,
     HistoryComponentType,
@@ -50,6 +52,7 @@ import {
     StageInfoDTO,
     StageStatusType,
 } from './types'
+import { getLogSearchIndex } from './utils'
 import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
@@ -186,9 +189,13 @@ const LogsRenderer = ({
         triggerDetails.podStatus && triggerDetails.podStatus !== POD_STATUS.PENDING && logsURL,
     )
     const [stageList, setStageList] = useState<StageDetailType[]>([])
+    const [searchResults, setSearchResults] = useState<string[]>([])
+    const [currentSearchIndex, setCurrentSearchIndex] = useState<number>(0)
     // State for logs list in case no stages are available
     const [logsList, setLogsList] = useState<string[]>([])
     const { searchKey, handleSearch } = useUrlFilters()
+
+    const hasSearchResults = searchResults.length > 0
 
     const areAllStagesExpanded = useMemo(() => stageList.every((item) => item.isOpen), [stageList])
     const shortcutTippyText = areAllStagesExpanded ? 'Collapse all stages' : 'Expand all stages'
@@ -196,7 +203,13 @@ const LogsRenderer = ({
     const areStagesAvailable =
         (window._env_.FEATURE_STEP_WISE_LOGS_ENABLE && streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER)) || false
 
-    function createMarkup(log: string, targetSearchKey: string = searchKey): CreateMarkupReturnType {
+    function createMarkup({
+        log,
+        currentIndex = -1,
+        targetSearchKey = searchKey,
+        searchMatchResults = null,
+        searchIndex = '',
+    }: CreateMarkupPropsType): CreateMarkupReturnType {
         let isSearchKeyPresent = false
         try {
             // eslint-disable-next-line no-param-reassign
@@ -209,17 +222,18 @@ const LogsRenderer = ({
                 // Search is working on assumption that color codes are not nested for words.
                 const logParts = log.split(ANSI_UP_REGEX)
                 const availableEscapeCodes = log.match(ANSI_UP_REGEX) || []
-                const searchRegex = new RegExp(`(${escapeRegExp(targetSearchKey)})`, 'g')
+                const searchRegex = new RegExp(`(${escapeRegExp(targetSearchKey)})`, 'ig')
                 const parts = logParts.reduce((acc, part, index) => {
                     try {
                         // Question: Can we directly set it as true inside the replace function?
                         isSearchKeyPresent = isSearchKeyPresent || searchRegex.test(part)
                         acc.push(
-                            part.replace(
-                                searchRegex,
-                                (match) =>
-                                    `\x1B[0m\x1B[48;2;197;141;54m${match}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`,
-                            ),
+                            part.replace(searchRegex, (match) => {
+                                if (searchIndex) {
+                                    searchMatchResults?.push(searchIndex)
+                                }
+                                return `\x1B[0m\x1B[48;2;${searchMatchResults && currentIndex === searchMatchResults.length - 1 ? '0;102;204' : '197;141;54'}m${match}\x1B[0m${index > 0 ? availableEscapeCodes[index - 1] : ''}`
+                            }),
                         )
                     } catch {
                         acc.push(part)
@@ -234,7 +248,10 @@ const LogsRenderer = ({
                 log = parts.join('')
             }
             const ansiUp = new AnsiUp()
-            return { __html: ansiUp.ansi_to_html(log), isSearchKeyPresent }
+            return {
+                __html: ansiUp.ansi_to_html(log),
+                isSearchKeyPresent,
+            }
         } catch {
             return { __html: log, isSearchKeyPresent }
         }
@@ -278,7 +295,7 @@ const LogsRenderer = ({
      * If initialStatus is not success and initial parsedLogs are empty then would set opened as false on each except the last
      * In case data is already present we will just find user's last action else would open the stage
      */
-    const getStageListFromStreamData = (targetSearchKey?: string): StageDetailType[] => {
+    const getStageListFromStreamData = (currentIndex: number, targetSearchKey?: string): StageDetailType[] => {
         // Would be using this to get last user action on stage
         const previousStageMap: Readonly<Record<string, Readonly<Record<string, StageDetailType>>>> = stageList.reduce(
             (acc, stageDetails) => {
@@ -294,7 +311,9 @@ const LogsRenderer = ({
         // Map of stage as key and value as object with key as start time and value as boolean depicting if search key is present or not
         const searchKeyStatusMap: Record<string, Record<string, boolean>> = {}
 
-        return streamDataList.reduce((acc, streamItem: string, index) => {
+        const searchMatchResults = []
+
+        const newStageList = streamDataList.reduce((acc, streamItem: string, index) => {
             if (streamItem.startsWith(LOGS_STAGE_IDENTIFIER)) {
                 try {
                     const { stage, startTime, endTime, status }: StageInfoDTO = JSON.parse(
@@ -344,10 +363,22 @@ const LogsRenderer = ({
             // Ideally in case of parallel build should receive stage name with logs
             // NOTE: For now would always append log to last stage, can show a loader on stage tiles till processed
             if (acc.length > 0) {
-                // In case targetSearchKey is not present createMarkup will internally fallback to searchKey
-                const { __html, isSearchKeyPresent } = createMarkup(streamItem, targetSearchKey)
-
                 const lastStage = acc[acc.length - 1]
+
+                const searchIndex = getLogSearchIndex({
+                    stageIndex: acc.length - 1,
+                    lineNumberInsideStage: lastStage.logs.length,
+                })
+
+                // In case targetSearchKey is not present createMarkup will internally fallback to searchKey
+                const { __html, isSearchKeyPresent } = createMarkup({
+                    log: streamItem,
+                    currentIndex,
+                    searchMatchResults,
+                    targetSearchKey,
+                    searchIndex,
+                })
+
                 lastStage.logs.push(__html)
                 if (isSearchKeyPresent) {
                     lastStage.isOpen = getIsStageOpen(
@@ -367,6 +398,10 @@ const LogsRenderer = ({
 
             return acc
         }, [] as StageDetailType[])
+
+        setSearchResults(searchMatchResults)
+
+        return newStageList
     }
 
     useEffect(() => {
@@ -375,12 +410,12 @@ const LogsRenderer = ({
         }
 
         if (!areStagesAvailable) {
-            const newLogs = streamDataList.map((logItem) => createMarkup(logItem).__html)
+            const newLogs = streamDataList.map((logItem) => createMarkup({ log: logItem }).__html)
             setLogsList(newLogs)
             return
         }
 
-        const newStageList = getStageListFromStreamData()
+        const newStageList = getStageListFromStreamData(currentSearchIndex)
         setStageList(newStageList)
         // NOTE: Not adding searchKey as dependency since on mount we would already have searchKey
         // And for other cases we would use handleSearchEnter
@@ -408,10 +443,34 @@ const LogsRenderer = ({
         }
     }, [handleToggleOpenAllStages])
 
+    const handleCycleSearchResult = (type: 'prev' | 'next' | 'reset', searchText = searchKey) => {
+        if (searchResults.length > 0 || type === 'reset') {
+            let currentIndex = 0
+            if (type === 'next') {
+                currentIndex = (currentSearchIndex + 1) % searchResults.length
+            } else if (type === 'prev') {
+                currentIndex = currentSearchIndex > 0 ? currentSearchIndex - 1 : searchResults.length - 1
+            }
+            setCurrentSearchIndex(currentIndex)
+            setStageList(getStageListFromStreamData(currentIndex, searchText))
+        }
+    }
+
+    const handleNextSearchResult = () => {
+        handleCycleSearchResult('next')
+    }
+
+    const handlePrevSearchResult = () => {
+        handleCycleSearchResult('prev')
+    }
+
     const handleSearchEnter = (searchText: string) => {
         handleSearch(searchText)
-        const newStageList = getStageListFromStreamData(searchText)
-        setStageList(newStageList)
+        if (searchKey === searchText) {
+            handleNextSearchResult()
+        } else {
+            handleCycleSearchResult('reset', searchText)
+        }
     }
 
     const handleStageClose = (index: number) => {
@@ -453,6 +512,36 @@ const LogsRenderer = ({
                                 initialSearchText={searchKey}
                                 size={ComponentSizeType.large}
                             />
+                            {!!searchKey && (
+                                <div className="flexbox px-10 py-6 dc__gap-8 dc__align-items-center">
+                                    <span className="fs-13 fw-4 lh-20 cn-0">
+                                        {hasSearchResults ? currentSearchIndex + 1 : 0}/{searchResults.length}
+                                        &nbsp;results
+                                    </span>
+                                    <div className="flexbox dc__gap-4">
+                                        <button
+                                            type="button"
+                                            className={`dc__unset-button-styles flex p-6 br-4 dc__bg-n0--opacity-0_2 ${!hasSearchResults ? 'dc__disabled' : ''}`}
+                                            onClick={handlePrevSearchResult}
+                                            data-testid="logs-previous-search-match"
+                                            aria-label="Focus the previous search result match"
+                                            disabled={!hasSearchResults}
+                                        >
+                                            <ICArrow className="scn-0 dc__flip-180 icon-dim-14 dc__no-shrink" />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`dc__unset-button-styles flex p-6 br-4 dc__bg-n0--opacity-0_2 ${!hasSearchResults ? 'dc__disabled' : ''}`}
+                                            onClick={handleNextSearchResult}
+                                            data-testid="logs-next-search-match"
+                                            aria-label="Focus the next search result match"
+                                            disabled={!hasSearchResults}
+                                        >
+                                            <ICArrow className="scn-0 icon-dim-14 dc__no-shrink" />
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                             <Tooltip
                                 shortcutKeyCombo={{
                                     text: shortcutTippyText,
@@ -492,6 +581,7 @@ const LogsRenderer = ({
                                 stageIndex={index}
                                 isLoading={index === stageList.length - 1 && areEventsProgressing}
                                 fullScreenView={fullScreenView}
+                                searchIndex={searchResults[currentSearchIndex]}
                             />
                         ))}
                     </div>

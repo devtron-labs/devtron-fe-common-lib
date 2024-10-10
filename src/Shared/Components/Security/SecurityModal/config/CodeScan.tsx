@@ -32,6 +32,7 @@ import {
     TablePropsType,
 } from '../types'
 import { OpenDetailViewButton } from '../components'
+import { getCVEUrlFromCVEName } from '../../utils'
 
 export const getCodeScanVulnerabilities = (data: CodeScan['vulnerability'], hidePolicy: boolean) => ({
     headers: [
@@ -58,7 +59,7 @@ export const getCodeScanVulnerabilities = (data: CodeScan['vulnerability'], hide
                       /* FIXME: which ones should be linked and which ones should not? */
                       component: (
                           <a
-                              href={`https://cve.mitre.org/cgi-bin/cvename.cgi?name=${element.cveId}`}
+                              href={getCVEUrlFromCVEName(element.cveId)}
                               rel="noopener noreferrer"
                               target="_blank"
                               data-testid="security-vulnerability-detail--cve-id"

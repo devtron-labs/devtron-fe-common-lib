@@ -54,14 +54,6 @@ function useCodeEditorContext() {
     return context
 }
 
-/**
- * TODO: can be removed with this new merge into react-monaco-editor :)
- * see: https://github.com/react-monaco-editor/react-monaco-editor/pull/955
- * */
-const _onChange = {
-    onChange: null,
-}
-
 const INITIAL_HEIGHT_WHEN_DYNAMIC_HEIGHT = 100
 
 const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(
@@ -107,6 +99,12 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         const [contentHeight, setContentHeight] = useState(
             adjustEditorHeightToContent ? INITIAL_HEIGHT_WHEN_DYNAMIC_HEIGHT : height,
         )
+        /**
+         * TODO: can be removed with this new merge into react-monaco-editor :)
+         * see: https://github.com/react-monaco-editor/react-monaco-editor/pull/955
+         * */
+        const onChangeRef = useRef(onChange)
+        onChangeRef.current = onChange
         monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
             base: 'vs-dark',
             inherit: true,
@@ -257,14 +255,9 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             editorRef.current.layout()
         }, [width, windowHeight])
 
-        /**
-         * NOTE: Please see @_onChange variable
-         */
-        _onChange.onChange = onChange
-
         const setCode = (value: string) => {
             dispatch({ type: 'setCode', value })
-            _onChange.onChange?.(value)
+            onChangeRef.current?.(value)
         }
 
         useEffect(() => {
