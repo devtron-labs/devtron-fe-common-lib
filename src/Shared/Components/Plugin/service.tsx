@@ -68,13 +68,14 @@ export const getPluginStoreData = async ({
     appId,
     offset = 0,
     signal,
+    size = 20,
 }: GetPluginStoreDataServiceParamsType): Promise<GetPluginStoreDataReturnType> => {
     try {
         const payload: GetPluginListPayloadType = {
             searchKey,
             offset,
             appId,
-            size: 20,
+            size,
             tag: selectedTags,
         }
         const { result } = await get<PluginDetailDTO>(getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_V2, payload), {
