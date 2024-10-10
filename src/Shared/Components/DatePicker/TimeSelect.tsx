@@ -42,7 +42,7 @@ export const TimePickerSelect = ({
             onChange={onChange}
             data-testid={DATE_PICKER_IDS.TIME}
             size={ComponentSizeType.large}
-            menuPosition="absolute"
+            menuPosition="fixed"
         />
         {error && (
             <div className="form__error">
