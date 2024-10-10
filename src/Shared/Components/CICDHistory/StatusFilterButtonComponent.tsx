@@ -62,7 +62,7 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
             isSelected: NodeStatus.Progressing == selectedTab,
         },
         { status: NodeStatus.Healthy, count: healthyNodeCount, isSelected: NodeStatus.Healthy == selectedTab },
-        { status: NodeFilters.Drifted, count: driftedNodeCount, isSelected: selectedTab === NodeFilters.Drifted },
+        { status: NodeFilters.drifted, count: driftedNodeCount, isSelected: selectedTab === NodeFilters.drifted },
     ]
     const validFilterOptions = filterOptions.filter(({ count }) => count > 0)
     const displayedInlineFilters = validFilterOptions.slice(
@@ -78,7 +78,7 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
             (selectedTab === NodeStatus.Degraded && failedNodeCount === 0) ||
             (selectedTab === NodeStatus.Progressing && progressingNodeCount === 0) ||
             (selectedTab === NodeStatus.Missing && missingNodeCount === 0) ||
-            (selectedTab === NodeFilters.Drifted && driftedNodeCount === 0)
+            (selectedTab === NodeFilters.drifted && driftedNodeCount === 0)
         ) {
             setSelectedTab('all')
         } else if (handleFilterClick) {

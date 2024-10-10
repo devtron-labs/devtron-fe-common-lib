@@ -44,7 +44,7 @@ const publishFilteredNodes = () => {
             return true
         }
 
-        if (_nodeFilter.filterType.toLowerCase() === NodeFilters.Drifted && _node.hasDrift) {
+        if (_nodeFilter.filterType.toLowerCase() === NodeFilters.drifted && _node.hasDrift) {
             return true
         }
 

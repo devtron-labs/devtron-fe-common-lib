@@ -116,7 +116,7 @@ const AppStatusDetailsChart = ({
                             .filter(
                                 (nodeDetails) =>
                                     currentFilter === 'all' ||
-                                    (currentFilter === NodeFilters.Drifted && nodeDetails.hasDrift) ||
+                                    (currentFilter === NodeFilters.drifted && nodeDetails.hasDrift) ||
                                     nodeDetails.health.status?.toLowerCase() === currentFilter,
                             )
                             .map((nodeDetails) => (

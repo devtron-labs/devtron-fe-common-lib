@@ -536,7 +536,7 @@ export enum NodeStatus {
 }
 
 export enum NodeFilters {
-    Drifted = 'drifted',
+    drifted = 'drifted',
 }
 
 type NodesMap = {
