@@ -12,6 +12,7 @@ import {
     ResolvedDeploymentTemplateDTO,
     ValuesAndManifestFlagDTO,
 } from './types'
+import { GET_RESOLVED_DEPLOYMENT_TEMPLATE_EMPTY_RESPONSE } from './constants'
 
 export const getDeploymentManifest = async (
     params: GetDeploymentManifestProps,
@@ -34,6 +35,7 @@ export const getDeploymentManifest = async (
 
 export const getResolvedDeploymentTemplate = async (
     params: GetResolvedDeploymentTemplateProps,
+    signal?: AbortSignal,
 ): Promise<GetResolvedDeploymentTemplateReturnType> => {
     try {
         const payload: GetResolvedDeploymentTemplatePayloadType = {
@@ -41,7 +43,9 @@ export const getResolvedDeploymentTemplate = async (
             valuesAndManifestFlag: ValuesAndManifestFlagDTO.DEPLOYMENT_TEMPLATE,
         }
 
-        const { result } = await post<ResolvedDeploymentTemplateDTO>(ROUTES.APP_TEMPLATE_DATA, payload)
+        const { result } = await post<ResolvedDeploymentTemplateDTO>(ROUTES.APP_TEMPLATE_DATA, payload, {
+            signal,
+        })
         const areVariablesPresent = Object.keys(result.variableSnapshot || {}).length > 0
 
         const parsedData = YAML.parse(result.data)
@@ -53,7 +57,10 @@ export const getResolvedDeploymentTemplate = async (
             areVariablesPresent,
         }
     } catch (error) {
-        showError(error)
-        throw error
+        if (!getIsRequestAborted(error)) {
+            showError(error)
+            throw error
+        }
+        return GET_RESOLVED_DEPLOYMENT_TEMPLATE_EMPTY_RESPONSE
     }
 }

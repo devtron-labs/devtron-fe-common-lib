@@ -32,6 +32,15 @@ const Tab = ({
         alignActiveBorderWithContainer,
     })[size]
 
+    const handleNavLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        if (tabType === 'navLink') {
+            if (disabled) {
+                e.preventDefault()
+            }
+            props?.onClick?.(e)
+        }
+    }
+
     const getTabComponent = () => {
         const content = (
             <>
@@ -62,6 +71,7 @@ const Tab = ({
                         className={`${tabClassName} dc__no-decor flexbox-col tab-group__tab__nav-link ${disabled ? 'cursor-not-allowed' : ''}`}
                         aria-disabled={disabled}
                         {...props}
+                        onClick={handleNavLinkClick}
                     >
                         {content}
                     </NavLink>
@@ -91,7 +101,7 @@ const Tab = ({
 
     const renderTabContainer = () => (
         <li
-            className={`tab-group__tab lh-20 ${active ? 'tab-group__tab--active cb-5 fw-6' : 'cn-9 fw-4'} ${alignActiveBorderWithContainer ? 'tab-group__tab--align-active-border' : ''} ${tabType === 'block' ? 'tab-group__tab--block' : 'cursor'}`}
+            className={`tab-group__tab lh-20 ${active ? 'tab-group__tab--active cb-5 fw-6' : 'cn-9 fw-4'} ${alignActiveBorderWithContainer ? 'tab-group__tab--align-active-border' : ''} ${tabType === 'block' ? 'tab-group__tab--block' : ''} ${disabled ? 'dc__disabled' : 'cursor'}`}
         >
             {getTabComponent()}
         </li>
