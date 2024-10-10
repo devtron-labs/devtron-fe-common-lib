@@ -42,7 +42,7 @@ import {
 import { ReactComponent as ICPullRequest } from '../Assets/Icon/ic-pull-request.svg'
 import { ReactComponent as ICTag } from '../Assets/Icon/ic-tag.svg'
 import { ReactComponent as ICWebhook } from '../Assets/Icon/ic-webhook.svg'
-import { ComponentSizeType, DEPLOYMENT_STATUS, TIMELINE_STATUS } from './constants'
+import { DEPLOYMENT_STATUS, TIMELINE_STATUS } from './constants'
 import {
     AggregatedNodes,
     DeploymentStatusDetailsBreakdownDataType,
@@ -819,22 +819,5 @@ export const getDefaultValueFromType = (value: unknown) => {
             return noop
         default:
             return null
-    }
-}
-
-export const getComponentSizeMagnitude = (size: ComponentSizeType): number => {
-    switch (size) {
-        case ComponentSizeType.xs:
-            return 1
-        case ComponentSizeType.small:
-            return 2
-        case ComponentSizeType.medium:
-            return 3
-        case ComponentSizeType.large:
-            return 4
-        case ComponentSizeType.xl:
-            return 5
-        default:
-            return 0
     }
 }

@@ -17,8 +17,8 @@
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 import { GroupBase, MultiValue, OptionsOrGroups, StylesConfig } from 'react-select'
-import { getComponentSizeMagnitude } from '@Shared/Helpers'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
+import { SELECT_PICKER_CONTROL_SIZE_MAP, SELECT_PICKER_FONT_SIZE_MAP, SELECT_PICKER_ICON_SIZE_MAP } from './constants'
 
 const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
     menuSize: SelectPickerProps<OptionValue, IsMulti>['menuSize'],
@@ -78,24 +78,6 @@ const getOptionBgColor = <OptionValue>(
     return 'var(--N0)'
 }
 
-const getFontSize = (size: ComponentSizeType): string => {
-    switch (size) {
-        case ComponentSizeType.small:
-            return '12px'
-        default:
-            return '13px'
-    }
-}
-
-const getIconSize = (size: ComponentSizeType): { width: string; height: string } => {
-    switch (size) {
-        case ComponentSizeType.small:
-            return { width: '12px', height: '12px' }
-        default:
-            return { width: '16px', height: '16px' }
-    }
-}
-
 export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     error,
     size,
@@ -136,8 +118,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     }),
     control: (base, state) => ({
         ...base,
-        minHeight:
-            getComponentSizeMagnitude(size) <= getComponentSizeMagnitude(ComponentSizeType.medium) ? 'auto' : '36px',
+        minHeight: SELECT_PICKER_CONTROL_SIZE_MAP[size],
         minWidth: '56px',
         boxShadow: 'none',
         backgroundColor: 'var(--N50)',
@@ -185,7 +166,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     }),
     dropdownIndicator: (base, state) => ({
         ...base,
-        ...getIconSize(size),
+        ...SELECT_PICKER_ICON_SIZE_MAP[size],
         display: 'flex',
         alignItems: 'center',
         flexShrink: '0',
@@ -196,8 +177,8 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     }),
     clearIndicator: (base) => ({
         ...base,
+        ...SELECT_PICKER_ICON_SIZE_MAP[size],
         padding: 0,
-        ...getIconSize(size),
         display: 'flex',
         alignItems: 'center',
         flexShrink: '0',
@@ -302,7 +283,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         margin: 0,
         padding: 0,
         color: 'var(--N900)',
-        size: getFontSize(size),
+        size: '13px',
         fontWeight: 400,
         lineHeight: '20px',
         overflow: 'hidden',
@@ -312,7 +293,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     placeholder: (base) => ({
         ...base,
         color: 'var(--N500)',
-        fontSize: getFontSize(size),
+        fontSize: SELECT_PICKER_FONT_SIZE_MAP[size],
         lineHeight: '20px',
         fontWeight: 400,
         margin: 0,
@@ -329,7 +310,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         ...base,
         margin: 0,
         color: 'var(--N900)',
-        fontSize: getFontSize(size),
+        fontSize: SELECT_PICKER_FONT_SIZE_MAP[size],
         fontWeight: 400,
         lineHeight: '20px',
         ...(getVariantOverrides(variant)?.singleValue(base, state) || {}),
