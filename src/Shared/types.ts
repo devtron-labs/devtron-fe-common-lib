@@ -682,3 +682,9 @@ export enum RuntimeParamsHeadingType {
     KEY = 'key',
     VALUE = 'value',
 }
+
+export enum ACCESS_TYPE_MAP {
+    DEVTRON_APPS = 'devtron-app', // devtron app work flow
+    HELM_APPS = 'helm-app', // helm app work flow
+    JOBS = '', // Empty string is intentional since there is no bifurcation in jobs as of now
+}
