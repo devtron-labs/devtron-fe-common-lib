@@ -15,10 +15,10 @@
  */
 
 import { useEffect, useState } from 'react'
-import ReactSelect from 'react-select'
+import { SelectPicker, SelectPickerVariantType } from '@Shared/Components'
 import { fetchChartTemplateVersions } from './Common.service'
 import { ChartVersionAndTypeSelectorProps } from './Types'
-import { customStyles, getFilteredChartVersions, showError } from './Helper'
+import { getFilteredChartVersions, showError } from './Helper'
 
 interface DeploymentChartVersionType {
     chartRefId: number
@@ -78,20 +78,23 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
         <div className="flex">
             <div className="chart-type-options flex" data-testid="chart-type-options">
                 <span className="cn-7 mr-4">Chart Type</span>
-                <ReactSelect
+                <SelectPicker
+                    inputId='chart-type-select'
+                    label='Chart Type'
                     value={selectedChartType ?? chartTypeOptions[0]}
                     options={chartTypeOptions}
                     onChange={handleChartTypeChange}
-                    styles={customStyles}
+                    variant={SelectPickerVariantType.BORDER_LESS}
                 />
             </div>
             <div className="chart-version-options flex" data-testid="chart-version-options">
-                <span className="cn-7 mr-4">Chart Version</span>
-                <ReactSelect
+            <span className="cn-7 mr-4">Chart Version</span>
+                <SelectPicker
+                    inputId='chart-version-select'
                     value={selectedChartVersion ?? chartVersionOptions[0]}
                     options={chartVersionOptions}
                     onChange={handleChartVersionChange}
-                    styles={customStyles}
+                    variant={SelectPickerVariantType.BORDER_LESS}
                 />
             </div>
         </div>

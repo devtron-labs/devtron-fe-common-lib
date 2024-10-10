@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import ReactSelect from 'react-select'
-import { DEFAULT_TIME_OPTIONS, DropdownIndicatorTimePicker, getTimePickerStyles } from './utils'
+import { ReactComponent as ClockIcon } from '@Icons/ic-clock.svg'
+import { ComponentSizeType } from '@Shared/constants'
+import { DEFAULT_TIME_OPTIONS } from './utils'
 import { TimeSelectProps } from './types'
-import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
 import { DATE_PICKER_IDS } from './constants'
+import { SelectPicker } from '../SelectPicker'
 
 export const TimePickerSelect = ({
     disabled = false,
@@ -26,37 +27,19 @@ export const TimePickerSelect = ({
     timePickerProps,
     error,
     selectedTimeOption,
-}: TimeSelectProps) => {
-    const timeSelectStyles = getTimePickerStyles()
-
-    return (
-        <>
-            <div className="dc__no-shrink">
-                <ReactSelect
-                    placeholder="12:00 AM"
-                    options={DEFAULT_TIME_OPTIONS}
-                    menuPlacement="auto"
-                    menuPosition="fixed"
-                    components={{
-                        IndicatorSeparator: null,
-                        ClearIndicator: null,
-                        DropdownIndicator: DropdownIndicatorTimePicker,
-                    }}
-                    isSearchable={false}
-                    styles={timeSelectStyles}
-                    isDisabled={disabled}
-                    {...timePickerProps}
-                    value={selectedTimeOption}
-                    onChange={onChange}
-                    data-testid={DATE_PICKER_IDS.TIME}
-                />
-            </div>
-            {error && (
-                <div className="form__error">
-                    <ErrorIcon className="form__icon form__icon--error" />
-                    {error}
-                </div>
-            )}
-        </>
-    )
-}
+}: TimeSelectProps) => (
+    <SelectPicker
+        inputId={DATE_PICKER_IDS.TIME}
+        placeholder="12:00 AM"
+        options={DEFAULT_TIME_OPTIONS}
+        isSearchable={false}
+        isDisabled={disabled}
+        {...timePickerProps}
+        value={selectedTimeOption}
+        icon={<ClockIcon className="icon-dim-20 fcn-6" />}
+        onChange={onChange}
+        data-testid={DATE_PICKER_IDS.TIME}
+        size={ComponentSizeType.large}
+        error={error}
+    />
+)

@@ -35,7 +35,7 @@ const DropdownIndicator = (props) => (
     </components.DropdownIndicator>
 )
 
-export const Select = (props: WidgetProps) => {
+export const SelectWidget = (props: WidgetProps) => {
     const {
         id,
         multiple = false,
