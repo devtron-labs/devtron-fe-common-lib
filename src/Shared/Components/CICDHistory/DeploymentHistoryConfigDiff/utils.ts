@@ -10,7 +10,12 @@ import { DeploymentHistoryConfigDiffProps } from './types'
 
 export const getPipelineDeployments = (triggerHistory: DeploymentHistoryConfigDiffProps['triggerHistory']) =>
     Array.from(triggerHistory)
-        .filter(([, value]) => value?.stage === DeploymentStageType.DEPLOY)
+        .filter(
+            ([, value]) =>
+                // TODO: check with Prakash when API returns this erro
+                // (!value.message || value.message !== 'pg: no rows in result set') &&
+                value.stage === DeploymentStageType.DEPLOY,
+        )
         .map(([, value]) => value)
 
 export const getPipelineDeploymentsWfrIds = ({

@@ -44,7 +44,7 @@ export const DeploymentConfigDiffNavigation = ({
                 ? {
                       iconConfig: {
                           Icon: showDetailedDiffState ? diffStateIconMap[diffState] : diffStateIconMap.hasDiff,
-                          props: { className: 'icon-dim-16 dc__no-shrink' },
+                          props: { className: 'dc__no-shrink' },
                           tooltipProps: {
                               content: showDetailedDiffState
                                   ? diffStateTooltipTextMap[diffState]

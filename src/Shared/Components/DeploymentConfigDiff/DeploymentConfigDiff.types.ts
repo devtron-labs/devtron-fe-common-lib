@@ -65,6 +65,8 @@ export interface DeploymentConfigDiffProps {
     errorConfig?: {
         error: boolean
         code: number
+        message?: string
+        redirectURL?: string
         reload: () => void
     }
     configList: DeploymentConfigListItem[]

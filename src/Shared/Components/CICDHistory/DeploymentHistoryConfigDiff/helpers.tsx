@@ -29,7 +29,7 @@ export const renderDeploymentHistoryConfig = (
     heading: string,
     pathname: string,
 ) => (
-    <div className="dc__border br-4">
+    <div className="dc__border br-4 dc__overflow-hidden">
         {heading && (
             <div className="px-16 py-8 dc__border-bottom-n1">
                 <h4 className="m-0 cn-7 fs-12 lh-20 fw-6">{heading}</h4>
@@ -41,7 +41,7 @@ export const renderDeploymentHistoryConfig = (
             return (
                 <NavLink
                     key={id}
-                    className={`cursor dc__no-decor px-16 py-12 flex dc__content-space ${index !== config.length - 1 ? 'dc__border-bottom-n1' : ''}`}
+                    className={`cursor dc__no-decor px-16 py-12 flex dc__content-space dc__hover-n50 ${index !== config.length - 1 ? 'dc__border-bottom-n1' : ''}`}
                     to={href}
                 >
                     <p className="m-0 flex dc__gap-8">
@@ -73,7 +73,7 @@ export const renderPipelineDeploymentOptionDescription = ({
     runSource,
 }: Pick<History, 'triggeredBy' | 'triggeredByEmail' | 'artifact' | 'stage'> &
     Pick<DeploymentHistoryConfigDiffProps, 'renderRunSource' | 'resourceId' | 'runSource'>) => (
-    <div>
+    <div className="flexbox-col dc__gap-4">
         <p className="m-0 fs-12 lh-20 cn-7 flex dc__gap-4">
             <span className="dc__capitalize">{stage}</span>
             <span className="dc__bullet dc__bullet--d2" />

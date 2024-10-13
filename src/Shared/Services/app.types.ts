@@ -278,6 +278,7 @@ export interface TemplateListDTO {
     finishedOn?: string
     status?: string
     pipelineId?: number
+    wfrId?: number
 }
 
 export interface ManifestTemplateDTO {

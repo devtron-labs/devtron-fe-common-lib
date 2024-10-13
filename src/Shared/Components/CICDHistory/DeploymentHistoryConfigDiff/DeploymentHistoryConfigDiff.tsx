@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { generatePath, Route, Switch, useLocation, useRouteMatch } from 'react-router-dom'
 
 import { getAppEnvDeploymentConfigList } from '@Shared/Components/DeploymentConfigDiff'
-import { useAsync } from '@Common/Helper'
+import { capitalizeFirstLetter, useAsync } from '@Common/Helper'
 import { EnvResourceType, getAppEnvDeploymentConfig } from '@Shared/Services'
 import { groupArrayByObjectKey } from '@Shared/Helpers'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
@@ -114,17 +114,20 @@ export const DeploymentHistoryConfigDiff = ({
     )
 
     const isLoading = compareDeploymentConfigLoader || (!compareDeploymentConfigErr && !deploymentConfigList)
+    const errorConfig = {
+        code: compareDeploymentConfigErr?.code,
+        error: compareDeploymentConfigErr && !compareDeploymentConfigLoader,
+        message: capitalizeFirstLetter(compareDeploymentConfigErr?.errors[0]?.userMessage || ''),
+        reload: reloadCompareDeploymentConfig,
+    }
+
     return (
         <Switch>
             <Route path={`${path}/:resourceType(${Object.values(EnvResourceType).join('|')})/:resourceName?`}>
                 <DeploymentHistoryConfigDiffCompare
                     {...deploymentConfigList}
                     isLoading={isLoading}
-                    errorConfig={{
-                        code: compareDeploymentConfigErr?.code,
-                        error: compareDeploymentConfigErr && !compareDeploymentConfigLoader,
-                        reload: reloadCompareDeploymentConfig,
-                    }}
+                    errorConfig={errorConfig}
                     envName={envName}
                     wfrId={wfrId}
                     previousWfrId={previousWfrId}
@@ -140,8 +143,9 @@ export const DeploymentHistoryConfigDiff = ({
             <Route>
                 {compareDeploymentConfigErr && !compareDeploymentConfigLoader ? (
                     <ErrorScreenManager
-                        code={compareDeploymentConfigErr?.code}
-                        reload={reloadCompareDeploymentConfig}
+                        code={errorConfig.code}
+                        subtitle={errorConfig.message}
+                        reload={errorConfig.reload}
                     />
                 ) : (
                     <div className="p-16 flexbox-col dc__gap-16 bcn-0 h-100">
