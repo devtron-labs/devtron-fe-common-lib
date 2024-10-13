@@ -11,7 +11,11 @@ import {
 } from '@Shared/Components/SelectPicker'
 import { ComponentSizeType } from '@Shared/constants'
 
-import { DeploymentHistoryDiffDetailedProps, DeploymentHistoryConfigDiffQueryParams } from './types'
+import {
+    DeploymentHistoryDiffDetailedProps,
+    DeploymentHistoryConfigDiffQueryParams,
+    DeploymentHistoryConfigDiffRouteParams,
+} from './types'
 import { getPipelineDeploymentsOptions, parseDeploymentHistoryDiffSearchParams } from './utils'
 
 export const DeploymentHistoryConfigDiffCompare = ({
@@ -28,7 +32,8 @@ export const DeploymentHistoryConfigDiffCompare = ({
     ...props
 }: DeploymentHistoryDiffDetailedProps) => {
     // HOOKS
-    const { path, params } = useRouteMatch()
+    const { path, params } = useRouteMatch<DeploymentHistoryConfigDiffRouteParams>()
+    const { resourceType, resourceName } = params
 
     // URL FILTERS
     const { compareWfrId, updateSearchParams, sortBy, sortOrder, handleSorting } = useUrlFilters<
@@ -118,12 +123,13 @@ export const DeploymentHistoryConfigDiffCompare = ({
             showDetailedDiffState
             navHeading={`Comparing ${envName}`}
             headerText={!pipelineDeploymentsOptions.length ? '' : undefined} // using `undefined` to ensure component picks default value
+            scrollIntoViewId={`${resourceType}${resourceName ? `-${resourceName}` : ''}`}
             navHelpText={
                 compareWfrId
                     ? `Showing diff in configuration deployed on: ${pipelineDeploymentsOptions.find(({ value }) => value === compareWfrId).label} & ${currentDeployment}`
                     : null
             }
-            goBackURL={generatePath(path.split('/:resourceType')[0], params)}
+            goBackURL={generatePath(path.split('/:resourceType')[0], { ...params })}
             selectorsConfig={selectorsConfig}
             sortingConfig={sortingConfig}
             scopeVariablesConfig={scopeVariablesConfig}
