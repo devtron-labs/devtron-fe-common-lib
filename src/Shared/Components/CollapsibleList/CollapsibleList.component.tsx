@@ -45,7 +45,7 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                                 >
                                     <headerIconConfig.Icon
                                         {...headerIconConfig.props}
-                                        className={`icon-dim-20 ${headerIconConfig.props?.className || ''}`}
+                                        className={`icon-dim-20 p-2 ${headerIconConfig.props?.className || ''}`}
                                     />
                                 </button>
                             </ConditionalWrap>

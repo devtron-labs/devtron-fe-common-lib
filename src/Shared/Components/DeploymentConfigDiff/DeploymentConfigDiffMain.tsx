@@ -186,7 +186,7 @@ export const DeploymentConfigDiffMain = ({
                                 <div className="px-12 py-6">{secondaryHeading}</div>
                             </div>
                             <CodeEditor
-                                key={`${sortingConfig?.sortOrder}-${scopeVariablesConfig?.convertVariables}`}
+                                key={`${sortingConfig?.sortBy}-${sortingConfig?.sortOrder}-${scopeVariablesConfig?.convertVariables}`}
                                 diffView
                                 defaultValue={primaryList.codeEditorValue.value}
                                 value={secondaryList.codeEditorValue.value}
@@ -206,12 +206,12 @@ export const DeploymentConfigDiffMain = ({
                                 </div>
                             )}
                             <DeploymentHistoryDiffView
+                                codeEditorKey={`${sortingConfig?.sortBy}-${sortingConfig?.sortOrder}-${scopeVariablesConfig?.convertVariables}`}
                                 baseTemplateConfiguration={secondaryList}
                                 currentConfiguration={primaryList}
                                 previousConfigAvailable
                                 rootClassName={`${primaryHeading && secondaryHeading ? 'dc__no-top-radius dc__no-top-border' : ''}`}
-                                sortBy={sortingConfig?.sortBy}
-                                sortOrder={sortingConfig?.sortOrder}
+                                sortingConfig={sortingConfig}
                             />
                         </div>
                     )}
@@ -239,7 +239,14 @@ export const DeploymentConfigDiffMain = ({
                 </div>
             </div>
             <div className="deployment-config-diff__main-content dc__overflow-y-auto">
-                {errorConfig?.error && <ErrorScreenManager code={errorConfig.code} reload={errorConfig.reload} />}
+                {errorConfig?.error && (
+                    <ErrorScreenManager
+                        code={errorConfig.code}
+                        subtitle={errorConfig.message}
+                        redirectURL={errorConfig.redirectURL}
+                        reload={errorConfig.reload}
+                    />
+                )}
                 {!errorConfig?.error &&
                     (isLoading ? (
                         <Progressing fullHeight size={48} />

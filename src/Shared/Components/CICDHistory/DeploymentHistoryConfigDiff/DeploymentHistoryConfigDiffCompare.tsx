@@ -64,24 +64,32 @@ export const DeploymentHistoryConfigDiffCompare = ({
     }
 
     const selectorsConfig: DeploymentConfigDiffProps['selectorsConfig'] = {
-        primaryConfig: [
-            {
-                id: 'deployment-config-diff-deployment-selector',
-                type: 'selectPicker',
-                selectPickerProps: {
-                    name: 'deployment-config-diff-deployment-selector',
-                    inputId: 'deployment-config-diff-deployment-selector',
-                    classNamePrefix: 'deployment-config-diff-deployment-selector',
-                    variant: SelectPickerVariantType.BORDER_LESS,
-                    options: pipelineDeploymentsOptions,
-                    placeholder: 'Select Deployment',
-                    value: getSelectPickerOptionByValue(pipelineDeploymentsOptions, compareWfrId, null),
-                    onChange: deploymentSelectorOnChange,
-                    showSelectedOptionIcon: false,
-                    menuSize: ComponentSizeType.large,
-                },
-            },
-        ],
+        primaryConfig: pipelineDeploymentsOptions.length
+            ? [
+                  {
+                      id: 'deployment-config-diff-deployment-selector',
+                      type: 'selectPicker',
+                      selectPickerProps: {
+                          name: 'deployment-config-diff-deployment-selector',
+                          inputId: 'deployment-config-diff-deployment-selector',
+                          classNamePrefix: 'deployment-config-diff-deployment-selector',
+                          variant: SelectPickerVariantType.BORDER_LESS,
+                          options: pipelineDeploymentsOptions,
+                          placeholder: 'Select Deployment',
+                          value: getSelectPickerOptionByValue(pipelineDeploymentsOptions, compareWfrId, null),
+                          onChange: deploymentSelectorOnChange,
+                          showSelectedOptionIcon: false,
+                          menuSize: ComponentSizeType.large,
+                      },
+                  },
+              ]
+            : [
+                  {
+                      id: 'no-previous-deployment',
+                      type: 'string',
+                      text: 'No previous deployment',
+                  },
+              ],
         secondaryConfig: [
             {
                 id: 'base-configuration',
@@ -109,6 +117,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
             {...props}
             showDetailedDiffState
             navHeading={`Comparing ${envName}`}
+            headerText={!pipelineDeploymentsOptions.length ? '' : undefined} // using `undefined` to ensure component picks default value
             navHelpText={
                 compareWfrId
                     ? `Showing diff in configuration deployed on: ${pipelineDeploymentsOptions.find(({ value }) => value === compareWfrId).label} & ${currentDeployment}`
