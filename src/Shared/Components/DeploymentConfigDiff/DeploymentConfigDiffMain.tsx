@@ -1,4 +1,4 @@
-import { Fragment, TransitionEvent, useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
@@ -19,6 +19,7 @@ import {
     DeploymentConfigDiffMainProps,
     DeploymentConfigDiffSelectPickerProps,
     DeploymentConfigDiffState,
+    DeploymentConfigDiffAccordionProps,
 } from './DeploymentConfigDiff.types'
 
 export const DeploymentConfigDiffMain = ({
@@ -35,6 +36,10 @@ export const DeploymentConfigDiffMain = ({
     // STATES
     const [expandedView, setExpandedView] = useState<Record<string | number, boolean>>({})
 
+    // REFS
+    /** Ref to track if the element should scroll into view after expanding */
+    const scrollIntoViewAfterExpand = useRef(false)
+
     const handleAccordionClick = (id: string) => () => {
         setExpandedView({
             ...expandedView,
@@ -42,8 +47,9 @@ export const DeploymentConfigDiffMain = ({
         })
     }
 
-    const handleTransitionEnd = (id: string) => (e: TransitionEvent<HTMLDivElement>) => {
-        if (e.target === e.currentTarget && scrollIntoViewId === id) {
+    const onTransitionEnd: DeploymentConfigDiffAccordionProps['onTransitionEnd'] = (e) => {
+        if (scrollIntoViewAfterExpand.current && e.target === e.currentTarget) {
+            scrollIntoViewAfterExpand.current = false
             const element = document.querySelector(`#${scrollIntoViewId}`)
             element?.scrollIntoView({ block: 'start' })
         }
@@ -65,6 +71,7 @@ export const DeploymentConfigDiffMain = ({
 
     useEffect(() => {
         if (scrollIntoViewId) {
+            scrollIntoViewAfterExpand.current = true
             setExpandedView((prev) => ({ ...prev, [scrollIntoViewId]: true }))
         }
     }, [scrollIntoViewId])
@@ -176,7 +183,7 @@ export const DeploymentConfigDiffMain = ({
                     isExpanded={expandedView[id]}
                     diffState={diffState}
                     onClick={handleAccordionClick(id)}
-                    onTransitionEnd={handleTransitionEnd(id)}
+                    onTransitionEnd={onTransitionEnd}
                     showDetailedDiffState={showDetailedDiffState}
                 >
                     {singleView ? (
