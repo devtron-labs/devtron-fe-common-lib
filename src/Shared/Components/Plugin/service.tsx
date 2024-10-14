@@ -36,12 +36,14 @@ export const getPluginsDetail = async ({
     pluginIds,
     signal,
     shouldShowError = true,
+    parentPluginIdentifiers,
 }: PluginDetailServiceParamsType): Promise<Pick<GetPluginStoreDataReturnType, 'pluginStore'>> => {
     try {
         const payload: PluginDetailPayloadType = {
             appId,
             parentPluginId: parentPluginIds,
             pluginId: pluginIds,
+            parentPluginIdentifier: parentPluginIdentifiers ? `${parentPluginIdentifiers}` : null,
         }
 
         const { result } = await get<PluginDetailDTO>(

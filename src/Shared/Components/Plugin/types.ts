@@ -84,6 +84,7 @@ export interface PluginDetailServiceParamsType {
     appId: number
     pluginIds?: number[]
     parentPluginIds?: number[]
+    parentPluginIdentifiers?: string[]
     /**
      * @default true
      */
@@ -94,6 +95,7 @@ export interface PluginDetailServiceParamsType {
 export interface PluginDetailPayloadType extends Pick<PluginDetailServiceParamsType, 'appId'> {
     pluginId?: PluginDetailServiceParamsType['pluginIds']
     parentPluginId?: PluginDetailServiceParamsType['parentPluginIds']
+    parentPluginIdentifier?: PluginDetailServiceParamsType['parentPluginIdentifiers'][number]
 }
 
 export interface PluginListFiltersType extends Pick<BaseFilterQueryParams<unknown>, 'searchKey'> {
