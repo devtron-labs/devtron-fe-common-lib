@@ -32,6 +32,7 @@ export const DeploymentConfigDiffMain = ({
     scrollIntoViewId,
     scopeVariablesConfig,
     showDetailedDiffState,
+    hideDiffState,
 }: DeploymentConfigDiffMainProps) => {
     // STATES
     const [expandedView, setExpandedView] = useState<Record<string | number, boolean>>({})
@@ -49,9 +50,10 @@ export const DeploymentConfigDiffMain = ({
 
     const onTransitionEnd: DeploymentConfigDiffAccordionProps['onTransitionEnd'] = (e) => {
         if (scrollIntoViewAfterExpand.current && e.target === e.currentTarget) {
-            scrollIntoViewAfterExpand.current = false
             const element = document.querySelector(`#${scrollIntoViewId}`)
             element?.scrollIntoView({ block: 'start' })
+            // Reset ref after scrolling into view
+            scrollIntoViewAfterExpand.current = false
         }
     }
 
@@ -185,6 +187,7 @@ export const DeploymentConfigDiffMain = ({
                     onClick={handleAccordionClick(id)}
                     onTransitionEnd={onTransitionEnd}
                     showDetailedDiffState={showDetailedDiffState}
+                    hideDiffState={hideDiffState}
                 >
                     {singleView ? (
                         <>

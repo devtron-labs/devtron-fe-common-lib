@@ -26,6 +26,7 @@ export const DeploymentConfigDiffNavigation = ({
     navHelpText,
     tabConfig,
     showDetailedDiffState,
+    hideDiffState,
 }: DeploymentConfigDiffNavigationProps) => {
     // STATES
     const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({})
@@ -40,7 +41,7 @@ export const DeploymentConfigDiffNavigation = ({
         isExpanded: expandedIds[resListItem.id],
         items: items.map(({ diffState, ...resItem }) => ({
             ...resItem,
-            ...(diffState !== DeploymentConfigDiffState.NO_DIFF
+            ...(!hideDiffState && diffState !== DeploymentConfigDiffState.NO_DIFF
                 ? {
                       iconConfig: {
                           Icon: showDetailedDiffState ? diffStateIconMap[diffState] : diffStateIconMap.hasDiff,
@@ -121,7 +122,7 @@ export const DeploymentConfigDiffNavigation = ({
                         onClick={onClick}
                     >
                         <span className="dc__truncate">{title}</span>
-                        {diffState !== DeploymentConfigDiffState.NO_DIFF && (
+                        {!hideDiffState && diffState !== DeploymentConfigDiffState.NO_DIFF && (
                             <Tippy
                                 className="default-tt"
                                 content={

@@ -71,6 +71,7 @@ export interface DeploymentConfigDiffProps {
     }
     configList: DeploymentConfigListItem[]
     showDetailedDiffState?: boolean
+    hideDiffState?: boolean
     headerText?: string
     scrollIntoViewId?: string
     selectorsConfig: {
@@ -111,6 +112,7 @@ export interface DeploymentConfigDiffNavigationProps
         | 'navHelpText'
         | 'tabConfig'
         | 'showDetailedDiffState'
+        | 'hideDiffState'
     > {}
 
 export interface DeploymentConfigDiffMainProps
@@ -125,10 +127,11 @@ export interface DeploymentConfigDiffMainProps
         | 'sortingConfig'
         | 'scopeVariablesConfig'
         | 'showDetailedDiffState'
+        | 'hideDiffState'
     > {}
 
 export type DeploymentConfigDiffAccordionProps = Pick<CollapseProps, 'onTransitionEnd'> &
-    Pick<DeploymentConfigDiffProps, 'showDetailedDiffState'> & {
+    Pick<DeploymentConfigDiffProps, 'showDetailedDiffState' | 'hideDiffState'> & {
         id: string
         title: string
         children: React.ReactNode
