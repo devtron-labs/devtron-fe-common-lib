@@ -23,6 +23,8 @@ export enum ApplyPolicyToStage {
     PRE_CI = 'PRE_CI',
     POST_CI = 'POST_CI',
     PRE_OR_POST_CI = 'PRE_OR_POST_CI',
+    POST_CD = 'POST_CD',
+    PRE_CD = 'PRE_CD',
 }
 
 export enum PluginRequiredStage {
@@ -32,16 +34,10 @@ export enum PluginRequiredStage {
 }
 
 export interface DefinitionSourceType {
-    projectName: string
-    isDueToProductionEnvironment: boolean
-    isDueToLinkedPipeline: boolean
-    policyName: string
-    appName?: string
-    clusterName?: string
-    environmentName?: string
-    branchNames?: string[]
-    ciPipelineName?: string
+    policyNames: string[]
+    linkedCIPipelineNames?: string[]
 }
+
 export interface MandatoryPluginDetailType {
     id: number
     parentPluginId: number
@@ -52,7 +48,7 @@ export interface MandatoryPluginDetailType {
     applied?: boolean
     inputVariables?: VariableType[]
     outputVariables?: VariableType[]
-    definitionSources?: DefinitionSourceType[]
+    definitionSources?: DefinitionSourceType
 }
 export interface MandatoryPluginDataType {
     pluginData: MandatoryPluginDetailType[]
