@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { PluginDataStoreType } from '../Shared'
-import { VariableType } from './CIPipeline.Types'
+import { PluginDataStoreType, PluginDetailPayloadType } from '../Shared'
+import { FormType, VariableType } from './CIPipeline.Types'
 import { ServerErrors } from './ServerError'
 import { ResponseType } from './Types'
 
@@ -61,6 +61,36 @@ export interface ProcessPluginDataReturnType {
     pluginDataStore: PluginDataStoreType
     mandatoryPluginsError?: ServerErrors
 }
+
+export type ProcessPluginDataCIParamsType = {
+    ciPipelineId: number
+    /**
+     * Comma separated branch names used for v1 api
+     * For v2 format is [branchName1],[branchName2]
+     */
+    branchName?: string
+
+    cdPipelineId?: never
+    envName?: never
+}
+
+export type ProcessPluginDataCDParamsType = {
+    cdPipelineId: number
+    envName?: string
+
+    ciPipelineId?: never
+    branchName?: never
+}
+
+export type ProcessPluginDataParamsType = {
+    formData: FormType
+    pluginDataStoreState: PluginDataStoreType
+    appId: number
+    /**
+     * Would be sent in case we have to get data for steps
+     */
+    requiredPluginIds: PluginDetailPayloadType['pluginId']
+} & (ProcessPluginDataCIParamsType | ProcessPluginDataCDParamsType)
 
 export enum ConsequenceAction {
     BLOCK = 'BLOCK',
