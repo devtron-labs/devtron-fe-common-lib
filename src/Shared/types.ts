@@ -460,10 +460,9 @@ export interface SeverityCount {
     unknown: number
 }
 export enum PolicyKindType {
-    lockConfiguration = 'lock-configuration-dummy',
+    lockConfiguration = 'lock-configuration',
     imagePromotion = 'image-promotion',
-    // TODO: Update after BE is ready
-    plugins = 'lock-configuration',
+    plugins = 'plugin',
 }
 
 export interface LastExecutionResultType {
