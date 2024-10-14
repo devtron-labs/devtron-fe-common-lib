@@ -148,7 +148,8 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                     />
                 )}
                 <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
-                    {startIcon && (
+                    {/* startIcon is not to be shown in option in case of multi select */}
+                    {!isMulti && startIcon && (
                         <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
                     )}
                     <div className="flex-grow-1">
@@ -200,7 +201,7 @@ export const SelectPickerMultiValueLabel = <OptionValue, IsMulti extends boolean
     Pick<SelectPickerProps<OptionValue, IsMulti>['multiSelectProps'], 'getIsOptionValid'>) => {
     const { data, selectProps } = props
     const isOptionValid = getIsOptionValid(data)
-    const iconToDisplay = isOptionValid ? data.startIcon || data.endIcon : <ICErrorExclamation />
+    const iconToDisplay = isOptionValid ? (data.startIcon || data.endIcon) ?? null : <ICErrorExclamation />
 
     return (
         <div className="flex dc__gap-4 mw-0 dc__truncate">
