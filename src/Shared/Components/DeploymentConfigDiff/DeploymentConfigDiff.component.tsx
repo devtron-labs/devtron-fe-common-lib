@@ -13,6 +13,7 @@ export const DeploymentConfigDiff = ({
     navHelpText,
     tabConfig,
     showDetailedDiffState,
+    hideDiffState,
     renderedInDrawer,
     ...resProps
 }: DeploymentConfigDiffProps) => (
@@ -26,11 +27,13 @@ export const DeploymentConfigDiff = ({
             navHelpText={navHelpText}
             tabConfig={tabConfig}
             showDetailedDiffState={showDetailedDiffState}
+            hideDiffState={hideDiffState}
         />
         <DeploymentConfigDiffMain
             isLoading={isLoading}
             configList={configList}
             showDetailedDiffState={showDetailedDiffState}
+            hideDiffState={hideDiffState}
             {...resProps}
         />
     </div>

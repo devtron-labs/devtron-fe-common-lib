@@ -18,7 +18,7 @@ export interface DeploymentHistoryConfigDiffProps
 
 export type DeploymentHistoryDiffDetailedProps = Pick<
     DeploymentConfigDiffProps,
-    'collapsibleNavList' | 'configList' | 'errorConfig' | 'isLoading' | 'navList'
+    'collapsibleNavList' | 'configList' | 'errorConfig' | 'isLoading' | 'navList' | 'hideDiffState'
 > &
     Required<
         Pick<

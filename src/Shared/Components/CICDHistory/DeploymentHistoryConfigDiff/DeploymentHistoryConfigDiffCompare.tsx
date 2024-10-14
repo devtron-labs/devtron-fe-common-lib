@@ -63,6 +63,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
         renderRunSource,
         resourceId,
     })
+    const previousDeployment = pipelineDeploymentsOptions.find(({ value }) => value === compareWfrId)
 
     const deploymentSelectorOnChange = ({ value }: SelectPickerOptionType<number>) => {
         updateSearchParams({ compareWfrId: value })
@@ -126,7 +127,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
             scrollIntoViewId={`${resourceType}${resourceName ? `-${resourceName}` : ''}`}
             navHelpText={
                 compareWfrId
-                    ? `Showing diff in configuration deployed on: ${pipelineDeploymentsOptions.find(({ value }) => value === compareWfrId).label} & ${currentDeployment}`
+                    ? `Showing diff in configuration deployed on: ${previousDeployment?.label || 'N/A'} & ${currentDeployment}`
                     : null
             }
             goBackURL={generatePath(path.split('/:resourceType')[0], { ...params })}

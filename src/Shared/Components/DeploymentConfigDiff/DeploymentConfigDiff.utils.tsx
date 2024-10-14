@@ -529,7 +529,17 @@ const getDeploymentTemplateResolvedData = (deploymentTemplate: DeploymentTemplat
 const getConfigDataWithResolvedDeploymentTemplate = (
     data: AppEnvDeploymentConfigListParams<false>['compareList'],
     convertVariables: boolean,
-) => {
+): AppEnvDeploymentConfigListParams<false>['compareList'] => {
+    if (!data) {
+        return {
+            deploymentTemplate: null,
+            configMapData: null,
+            isAppAdmin: null,
+            secretsData: null,
+            pipelineConfigData: null,
+        }
+    }
+
     if (!data.deploymentTemplate) {
         return data
     }

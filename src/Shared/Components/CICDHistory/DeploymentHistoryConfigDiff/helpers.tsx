@@ -28,6 +28,7 @@ export const renderDeploymentHistoryConfig = (
     config: DeploymentConfigDiffProps['configList'],
     heading: string,
     pathname: string,
+    hideDiffState: boolean,
 ) => (
     <div className="dc__border br-4 dc__overflow-hidden">
         {heading && (
@@ -48,7 +49,7 @@ export const renderDeploymentHistoryConfig = (
                         <ICFileCode className="icon-dim-20 scn-6" />
                         <span className="cb-5 fs-13 lh-20">{name || title}</span>
                     </p>
-                    {renderState(diffState)}
+                    {!hideDiffState && renderState(diffState)}
                 </NavLink>
             )
         })}

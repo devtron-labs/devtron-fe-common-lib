@@ -7,6 +7,7 @@ import { diffStateTextColorMap, diffStateTextMap } from './DeploymentConfigDiff.
 export const DeploymentConfigDiffAccordion = ({
     diffState,
     showDetailedDiffState,
+    hideDiffState,
     children,
     title,
     id,
@@ -26,13 +27,15 @@ export const DeploymentConfigDiffAccordion = ({
                 style={{ ['--rotateBy' as string]: isExpanded ? '360deg' : '270deg' }}
             />
             <p className="m-0 cn-9 fs-13 lh-20">{title}</p>
-            <p
-                className={`m-0 fs-13 lh-20 fw-6 ${showDetailedDiffState ? diffStateTextColorMap[diffState] : (diffState !== DeploymentConfigDiffState.NO_DIFF && 'cy-7') || 'cg-7'}`}
-            >
-                {showDetailedDiffState
-                    ? diffStateTextMap[diffState]
-                    : `${diffState !== DeploymentConfigDiffState.NO_DIFF ? 'Has' : 'No'} difference`}
-            </p>
+            {!hideDiffState && (
+                <p
+                    className={`m-0 fs-13 lh-20 fw-6 ${showDetailedDiffState ? diffStateTextColorMap[diffState] : (diffState !== DeploymentConfigDiffState.NO_DIFF && 'cy-7') || 'cg-7'}`}
+                >
+                    {showDetailedDiffState
+                        ? diffStateTextMap[diffState]
+                        : `${diffState !== DeploymentConfigDiffState.NO_DIFF ? 'Has' : 'No'} difference`}
+                </p>
+            )}
         </button>
         <Collapse expand={isExpanded} onTransitionEnd={onTransitionEnd}>
             {children}

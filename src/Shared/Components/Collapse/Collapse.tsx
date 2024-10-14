@@ -1,40 +1,61 @@
-import { useEffect, useState, useRef, useMemo } from 'react'
-
+import { useEffect, useRef, useState } from 'react'
 import { CollapseProps } from './types'
 
 /**
- * Collapse component for expanding/collapsing content with smooth transitions.
- * Dynamically calculates and applies height based on the content, with support
- * for callback execution when the transition ends.
+ * Collapse component for smoothly expanding or collapsing its content.
+ * Dynamically calculates the content height and applies smooth transitions.
+ * It also supports a callback when the transition ends.
  */
 export const Collapse = ({ expand, onTransitionEnd, children }: CollapseProps) => {
-    // Ref to access the content container
+    // Reference to the content container to calculate its height
     const contentRef = useRef<HTMLDivElement>(null)
-    // State for dynamically calculated height
-    const [contentHeight, setContentHeight] = useState(0)
 
-    // Calculate and update content height when children change or initially on mount
+    // State to store the dynamic height of the content; initially set to 0 if collapsed
+    const [contentHeight, setContentHeight] = useState<number>(!expand ? 0 : null)
+
+    /**
+     * Effect to observe changes in the content size when expanded and recalculate the height.
+     * Uses a ResizeObserver to handle dynamic content size changes.
+     */
     useEffect(() => {
-        if (contentRef.current) {
-            const _contentHeight = contentRef.current.clientHeight || 0
-            setContentHeight(_contentHeight)
+        if (!contentHeight || !expand || !contentRef.current) {
+            return null
         }
-    }, [children])
 
-    const collapseStyle = useMemo(
-        () => ({
-            // Set height based on the 'expand' prop
-            height: expand ? contentHeight : 0,
-            transition: 'height 200ms ease-out',
-            // Hide content overflow during collapse
-            overflow: 'hidden',
-        }),
-        [expand, contentHeight],
-    )
+        const resizeObserver = new ResizeObserver((entries) => {
+            // Update the height when content size changes
+            setContentHeight(entries[0].contentRect.height)
+        })
+
+        // Observe the content container for resizing
+        resizeObserver.observe(contentRef.current)
+
+        // Clean up the observer when the component unmounts or content changes
+        return () => {
+            resizeObserver.disconnect()
+        }
+    }, [contentHeight, expand])
+
+    /**
+     * Effect to handle the initial setting of content height during expansion or collapse.
+     * Sets height to the content's full height when expanded, or 0 when collapsed.
+     */
+    useEffect(() => {
+        if (expand) {
+            // Set the content height when expanded
+            setContentHeight(contentRef.current?.getBoundingClientRect().height)
+        } else {
+            // Collapse content by setting the height to 0
+            setContentHeight(0)
+        }
+    }, [expand])
 
     return (
-        <div style={collapseStyle} onTransitionEnd={onTransitionEnd}>
-            {/* Content container with reference to calculate height */}
+        <div
+            style={{ height: contentHeight, overflow: 'hidden', transition: 'height 200ms ease-out' }}
+            onTransitionEnd={onTransitionEnd}
+        >
+            {/* The container that holds the collapsible content */}
             <div ref={contentRef}>{children}</div>
         </div>
     )
