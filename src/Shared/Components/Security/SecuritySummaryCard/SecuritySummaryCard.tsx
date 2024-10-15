@@ -13,6 +13,7 @@ const SecuritySummaryCard = ({
     SecurityModalSidebar,
     responseData,
     isSecurityScanV2Enabled,
+    hidePolicy = false,
 }: SecuritySummaryCardProps) => {
     const [showSecurityModal, setShowSecurityModal] = useState<boolean>(false)
     const { critical = 0, high = 0, medium = 0, low = 0, unknown = 0 } = severityCount
@@ -66,6 +67,7 @@ const SecuritySummaryCard = ({
                     isLoading={false} // Loading and error are handled on parent components
                     error={null}
                     responseData={responseData}
+                    hidePolicy={hidePolicy}
                 />
             )}
         </>
