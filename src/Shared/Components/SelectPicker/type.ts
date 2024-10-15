@@ -222,6 +222,14 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * @default false
          */
         isCreatable?: boolean
+        /**
+         * If false, the no options message is not shown
+         *
+         * Note: Handling for the menu distortion needs to be handled explicitly in this case
+         *
+         * @default true
+         */
+        shouldShowNoOptionsMessage?: boolean
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean
