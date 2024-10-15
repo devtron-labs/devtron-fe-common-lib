@@ -118,6 +118,6 @@ export const getAvailablePluginTags = async (appId: number): Promise<string[]> =
 }
 
 export const getParentPluginList = async (
-    params: Partial<GetParentPluginListPayloadType>,
+    params?: Partial<GetParentPluginListPayloadType>,
 ): Promise<ResponseType<MinParentPluginDTO[]>> =>
     get<MinParentPluginDTO[]>(getUrlWithSearchParams(ROUTES.PLUGIN_LIST_MIN, params))
