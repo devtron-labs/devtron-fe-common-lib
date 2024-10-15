@@ -200,7 +200,7 @@ export const prepareConfigMapAndSecretData = (
             if (rawData.mountPath || rawData.defaultMountPath) {
                 secretValues['mountPath'] = {
                     displayName: 'Volume mount path',
-                    value: rawData.mountPath ?? rawData.defaultMountPath,
+                    value: rawData.mountPath || rawData.defaultMountPath,
                 }
             }
             if (rawData.subPath) {
