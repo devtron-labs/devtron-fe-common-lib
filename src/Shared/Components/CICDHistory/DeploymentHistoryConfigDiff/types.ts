@@ -30,6 +30,7 @@ export type DeploymentHistoryDiffDetailedProps = Pick<
         previousWfrId: number
         convertVariables: boolean
         setConvertVariables: Dispatch<SetStateAction<boolean>>
+        isCompareDeploymentConfigNotAvailable?: boolean
     }
 
 export interface DeploymentHistoryConfigDiffQueryParams {

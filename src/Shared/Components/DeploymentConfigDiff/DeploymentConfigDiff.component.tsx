@@ -11,6 +11,7 @@ export const DeploymentConfigDiff = ({
     goBackURL,
     navHeading,
     navHelpText,
+    isNavHelpTextShowingError,
     tabConfig,
     showDetailedDiffState,
     hideDiffState,
@@ -25,6 +26,7 @@ export const DeploymentConfigDiff = ({
             goBackURL={goBackURL}
             navHeading={navHeading}
             navHelpText={navHelpText}
+            isNavHelpTextShowingError={isNavHelpTextShowingError}
             tabConfig={tabConfig}
             showDetailedDiffState={showDetailedDiffState}
             hideDiffState={hideDiffState}

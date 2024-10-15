@@ -47,7 +47,11 @@ export const renderDeploymentHistoryConfig = (
                 >
                     <p className="m-0 flex dc__gap-8">
                         <ICFileCode className="icon-dim-20 scn-6" />
-                        <span className="cb-5 fs-13 lh-20">{name || title}</span>
+                        <span
+                            className={`cb-5 fs-13 lh-20 ${diffState === DeploymentConfigDiffState.DELETED ? 'dc__strike-through' : ''}`}
+                        >
+                            {name || title}
+                        </span>
                     </p>
                     {!hideDiffState && renderState(diffState)}
                 </NavLink>

@@ -89,6 +89,7 @@ export interface DeploymentConfigDiffProps {
     goBackURL?: string
     navHeading: string
     navHelpText?: string
+    isNavHelpTextShowingError?: boolean
     tabConfig?: {
         tabs: string[]
         activeTab: string
@@ -110,6 +111,7 @@ export interface DeploymentConfigDiffNavigationProps
         | 'goBackURL'
         | 'navHeading'
         | 'navHelpText'
+        | 'isNavHelpTextShowingError'
         | 'tabConfig'
         | 'showDetailedDiffState'
         | 'hideDiffState'
