@@ -29,6 +29,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
     runSource,
     renderRunSource,
     resourceId,
+    isCompareDeploymentConfigNotAvailable,
     ...props
 }: DeploymentHistoryDiffDetailedProps) => {
     // HOOKS
@@ -64,13 +65,14 @@ export const DeploymentHistoryConfigDiffCompare = ({
         resourceId,
     })
     const previousDeployment = pipelineDeploymentsOptions.find(({ value }) => value === compareWfrId)
+    const isPreviousDeploymentConfigAvailable = !!pipelineDeploymentsOptions.length
 
     const deploymentSelectorOnChange = ({ value }: SelectPickerOptionType<number>) => {
         updateSearchParams({ compareWfrId: value })
     }
 
     const selectorsConfig: DeploymentConfigDiffProps['selectorsConfig'] = {
-        primaryConfig: pipelineDeploymentsOptions.length
+        primaryConfig: isPreviousDeploymentConfigAvailable
             ? [
                   {
                       id: 'deployment-config-diff-deployment-selector',
@@ -105,6 +107,16 @@ export const DeploymentHistoryConfigDiffCompare = ({
         ],
     }
 
+    const getNavHelpText = () => {
+        if (isPreviousDeploymentConfigAvailable) {
+            return isCompareDeploymentConfigNotAvailable
+                ? `Diff unavailable: Configurations for deployment execution ‘${previousDeployment?.label || 'N/A'}’ not found`
+                : `Showing diff in configuration deployed on: ${previousDeployment?.label || 'N/A'} & ${currentDeployment}`
+        }
+
+        return null
+    }
+
     const onSorting = () => handleSorting(sortOrder !== SortingOrder.DESC ? 'sort-config' : '')
 
     const sortingConfig: DeploymentConfigDiffProps['sortingConfig'] = {
@@ -123,13 +135,10 @@ export const DeploymentHistoryConfigDiffCompare = ({
             {...props}
             showDetailedDiffState
             navHeading={`Comparing ${envName}`}
-            headerText={!pipelineDeploymentsOptions.length ? '' : undefined} // using `undefined` to ensure component picks default value
+            headerText={!isPreviousDeploymentConfigAvailable ? '' : undefined} // using `undefined` to ensure component picks default value
             scrollIntoViewId={`${resourceType}${resourceName ? `-${resourceName}` : ''}`}
-            navHelpText={
-                compareWfrId
-                    ? `Showing diff in configuration deployed on: ${previousDeployment?.label || 'N/A'} & ${currentDeployment}`
-                    : null
-            }
+            navHelpText={getNavHelpText()}
+            isNavHelpTextShowingError={isCompareDeploymentConfigNotAvailable}
             goBackURL={generatePath(path.split('/:resourceType')[0], { ...params })}
             selectorsConfig={selectorsConfig}
             sortingConfig={sortingConfig}

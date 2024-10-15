@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { generatePath, Route, Switch, useLocation, useRouteMatch } from 'react-router-dom'
 
+import { ReactComponent as ICError } from '@Icons/ic-error.svg'
 import { getAppEnvDeploymentConfigList } from '@Shared/Components/DeploymentConfigDiff'
 import { useAsync } from '@Common/Helper'
 import { EnvResourceType, getAppEnvDeploymentConfig } from '@Shared/Services'
@@ -8,7 +9,7 @@ import { groupArrayByObjectKey } from '@Shared/Helpers'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { Progressing } from '@Common/Progressing'
 import { useUrlFilters } from '@Common/Hooks'
-import { GenericEmptyState } from '@Common/index'
+import { GenericEmptyState, InfoColourBar } from '@Common/index'
 
 import { DeploymentHistoryConfigDiffCompare } from './DeploymentHistoryConfigDiffCompare'
 import { DeploymentHistoryConfigDiffProps, DeploymentHistoryConfigDiffQueryParams } from './types'
@@ -127,10 +128,11 @@ export const DeploymentHistoryConfigDiff = ({
         [deploymentConfigList],
     )
 
+    /** Previous deployment config has 404 error. */
+    const hasPreviousDeploymentConfigNotFoundError =
+        compareDeploymentConfig && isDeploymentHistoryConfigDiffNotFoundError(compareDeploymentConfig[1])
     /** Hide diff state if the previous deployment config is unavailable or returns a 404 error. */
-    const hideDiffState =
-        !isPreviousDeploymentConfigAvailable ||
-        (compareDeploymentConfig && isDeploymentHistoryConfigDiffNotFoundError(compareDeploymentConfig[1]))
+    const hideDiffState = !isPreviousDeploymentConfigAvailable || hasPreviousDeploymentConfigNotFoundError
     // LOADING
     const isLoading = compareDeploymentConfigLoader || (!compareDeploymentConfigErr && !deploymentConfigList)
     // ERROR CONFIG
@@ -140,11 +142,13 @@ export const DeploymentHistoryConfigDiff = ({
         reload: reloadCompareDeploymentConfig,
     }
 
-    // TODO: get null state from Utkarsh
     if (compareDeploymentConfig && isDeploymentHistoryConfigDiffNotFoundError(compareDeploymentConfig[0])) {
         return (
             <div className="flex bcn-0 h-100">
-                <GenericEmptyState title="No Configuration Found" />
+                <GenericEmptyState
+                    title="Data not available"
+                    subTitle="Configurations used for this deployment execution is not available"
+                />
             </div>
         )
     }
@@ -167,6 +171,7 @@ export const DeploymentHistoryConfigDiff = ({
                     resourceId={resourceId}
                     renderRunSource={renderRunSource}
                     hideDiffState={hideDiffState}
+                    isCompareDeploymentConfigNotAvailable={hasPreviousDeploymentConfigNotFoundError}
                 />
             </Route>
             <Route>
@@ -179,16 +184,27 @@ export const DeploymentHistoryConfigDiff = ({
                         ) : (
                             <>
                                 <h3 className="fs-13 lh-20 fw-6 cn-9 m-0">
-                                    Showing configuration change with respect to previous deployment
+                                    {hideDiffState
+                                        ? 'Configurations used for this deployment trigger'
+                                        : 'Showing configuration change with respect to previous deployment'}
                                 </h3>
-                                <div className="flexbox-col dc__gap-12 dc__mxw-800">
-                                    {Object.keys(groupedDeploymentConfigList).map((groupHeader) =>
-                                        renderDeploymentHistoryConfig(
-                                            groupedDeploymentConfigList[groupHeader],
-                                            groupHeader !== 'UNGROUPED' ? groupHeader : null,
-                                            pathname,
-                                            hideDiffState,
-                                        ),
+                                <div className="flexbox-col dc__gap-16 dc__mxw-800">
+                                    <div className="flexbox-col dc__gap-12">
+                                        {Object.keys(groupedDeploymentConfigList).map((groupHeader) =>
+                                            renderDeploymentHistoryConfig(
+                                                groupedDeploymentConfigList[groupHeader],
+                                                groupHeader !== 'UNGROUPED' ? groupHeader : null,
+                                                pathname,
+                                                hideDiffState,
+                                            ),
+                                        )}
+                                    </div>
+                                    {hasPreviousDeploymentConfigNotFoundError && (
+                                        <InfoColourBar
+                                            classname="error_bar cn-9 fs-13 lh-20"
+                                            Icon={ICError}
+                                            message="Diff unavailable: Configurations for previous deployment not found."
+                                        />
                                     )}
                                 </div>
                             </>
