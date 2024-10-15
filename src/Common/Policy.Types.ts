@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { PluginDataStoreType, PluginDetailPayloadType } from '../Shared'
+import { PluginDataStoreType, PluginDetailPayloadType, ResourceKindType } from '../Shared'
 import { FormType, VariableType } from './CIPipeline.Types'
 import { ServerErrors } from './ServerError'
 import { ResponseType } from './Types'
@@ -27,10 +27,11 @@ export enum ApplyPolicyToStage {
     PRE_CD = 'PRE_CD',
 }
 
+// This enum is mapping values from BuildStageVariable
 export enum PluginRequiredStage {
-    PRE_CI = 'preBuildStage',
-    POST_CI = 'postBuildStage',
-    PRE_OR_POST_CI = 'PRE_OR_POST_CI',
+    PRE_STAGE = 'preBuildStage',
+    POST_STAGE = 'postBuildStage',
+    PRE_OR_POST_STAGE = 'PRE_OR_POST_CI',
 }
 
 export interface DefinitionSourceType {
@@ -63,6 +64,7 @@ export interface ProcessPluginDataReturnType {
 }
 
 export type ProcessPluginDataCIParamsType = {
+    resourceKind: ResourceKindType.ciPipeline
     ciPipelineId: number
     /**
      * Comma separated branch names used for v1 api
@@ -75,6 +77,7 @@ export type ProcessPluginDataCIParamsType = {
 }
 
 export type ProcessPluginDataCDParamsType = {
+    resourceKind: ResourceKindType.cdPipeline
     cdPipelineId: number
     envName?: string
 

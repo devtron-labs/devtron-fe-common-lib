@@ -30,9 +30,11 @@ const InfoIconTippy = ({
     placement = 'bottom',
     dataTestid = 'info-tippy-button',
     children,
+    headingInfo,
 }: InfoIconTippyProps) => (
     <TippyCustomized
         theme={TippyTheme.white}
+        headingInfo={headingInfo}
         className="w-300 h-100 dc__no-text-transform"
         placement={placement}
         Icon={HelpIcon}
