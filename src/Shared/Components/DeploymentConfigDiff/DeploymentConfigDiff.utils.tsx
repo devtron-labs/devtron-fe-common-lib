@@ -540,26 +540,24 @@ const getConfigDataWithResolvedDeploymentTemplate = (
         }
     }
 
-    if (!data.deploymentTemplate) {
-        return data
+    if (data.deploymentTemplate && convertVariables) {
+        const deploymentTemplateResolvedData = getDeploymentTemplateResolvedData(data.deploymentTemplate)
+
+        return {
+            ...data,
+            deploymentTemplate: {
+                ...data.deploymentTemplate,
+                ...(deploymentTemplateResolvedData
+                    ? {
+                          data: deploymentTemplateResolvedData,
+                          deploymentDraftData: null,
+                      }
+                    : {}),
+            },
+        }
     }
 
-    const deploymentTemplateResolvedData = getDeploymentTemplateResolvedData(data.deploymentTemplate)
-
-    return convertVariables
-        ? {
-              ...data,
-              deploymentTemplate: {
-                  ...data.deploymentTemplate,
-                  ...(deploymentTemplateResolvedData
-                      ? {
-                            data: deploymentTemplateResolvedData,
-                            deploymentDraftData: null,
-                        }
-                      : {}),
-              },
-          }
-        : data
+    return data
 }
 
 /**
