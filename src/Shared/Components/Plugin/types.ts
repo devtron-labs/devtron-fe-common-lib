@@ -250,3 +250,14 @@ export interface PluginTagsContainerProps {
 export interface PluginImageContainerProps extends Pick<ImageWithFallbackProps, 'imageProps'> {
     fallbackImageClassName?: string
 }
+
+export enum TaskActionModalType {
+    DELETE = 'DELETE',
+    MOVE_PLUGIN = 'MOVE_PLUGIN',
+}
+
+export interface TaskActionModalStateType {
+    type: TaskActionModalType
+    pluginId: PluginDetailType['id']
+    taskIndex: number
+}
