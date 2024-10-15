@@ -21,7 +21,7 @@ import { UseRegisterShortcutProviderType, ShortcutType, UseRegisterShortcutConte
 import { preprocessKeys, verifyCallbackStack } from './utils'
 
 const IGNORE_TAGS_FALLBACK = ['input', 'textarea', 'select']
-const DEFAULT_TIMEOUT = 1000
+const DEFAULT_TIMEOUT = 300
 
 const UseRegisterShortcutProvider = ({
     ignoreTags,
