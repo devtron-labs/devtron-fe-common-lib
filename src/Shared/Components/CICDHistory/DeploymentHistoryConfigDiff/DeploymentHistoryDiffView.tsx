@@ -34,10 +34,11 @@ const DeploymentHistoryDiffView = ({
     isUnpublished,
     isDeleteDraft,
     rootClassName,
-    sortBy = '',
-    sortOrder = null,
+    sortingConfig,
+    codeEditorKey,
 }: DeploymentTemplateHistoryType) => {
     const { historyComponent, historyComponentName } = useParams<DeploymentHistoryParamsType>()
+    const { sortBy, sortOrder } = sortingConfig ?? { sortBy: '', sortOrder: null }
 
     const [convertVariables, setConvertVariables] = useState(false)
 
@@ -86,7 +87,7 @@ const DeploymentHistoryDiffView = ({
 
     const renderDeploymentDiffViaCodeEditor = () => (
         <CodeEditor
-            key={`${sortBy}-${sortOrder}`}
+            key={codeEditorKey}
             value={editorValuesRHS}
             defaultValue={editorValuesLHS}
             adjustEditorHeightToContent
@@ -177,7 +178,7 @@ const DeploymentHistoryDiffView = ({
             {(currentConfiguration?.codeEditorValue?.value || baseTemplateConfiguration?.codeEditorValue?.value) && (
                 <div className="en-2 bw-1 br-4 mt-16">
                     <div
-                        className="code-editor-header-value pl-16 pr-16 pt-12 pb-12 fs-13 fw-6 cn-9 bcn-0 dc__top-radius-4 dc__border-bottom"
+                        className="code-editor-header-value px-12 py-8 fs-13 fw-6 cn-9 bcn-0 dc__top-radius-4 dc__border-bottom"
                         data-testid="configuration-link-comparison-body-heading"
                     >
                         <span>{baseTemplateConfiguration?.codeEditorValue?.displayName}</span>

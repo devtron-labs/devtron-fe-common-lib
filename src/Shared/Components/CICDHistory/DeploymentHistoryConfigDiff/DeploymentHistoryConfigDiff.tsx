@@ -1,18 +1,25 @@
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { generatePath, Route, Switch, useLocation, useRouteMatch } from 'react-router-dom'
 
-import { getAppEnvDeploymentConfigList, getDeploymentTemplateValues } from '@Shared/Components/DeploymentConfigDiff'
+import { ReactComponent as ICError } from '@Icons/ic-error.svg'
+import { getAppEnvDeploymentConfigList } from '@Shared/Components/DeploymentConfigDiff'
 import { useAsync } from '@Common/Helper'
 import { EnvResourceType, getAppEnvDeploymentConfig } from '@Shared/Services'
 import { groupArrayByObjectKey } from '@Shared/Helpers'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { Progressing } from '@Common/Progressing'
 import { useUrlFilters } from '@Common/Hooks'
+import { GenericEmptyState, InfoColourBar } from '@Common/index'
 
-import { abortPreviousRequests, getIsRequestAborted } from '@Common/Api'
 import { DeploymentHistoryConfigDiffCompare } from './DeploymentHistoryConfigDiffCompare'
 import { DeploymentHistoryConfigDiffProps, DeploymentHistoryConfigDiffQueryParams } from './types'
-import { getPipelineDeploymentsWfrIds, getPipelineDeployments, parseDeploymentHistoryDiffSearchParams } from './utils'
+import {
+    getPipelineDeploymentsWfrIds,
+    getPipelineDeployments,
+    parseDeploymentHistoryDiffSearchParams,
+    isDeploymentHistoryConfigDiffNotFoundError,
+    getDeploymentHistoryConfigDiffError,
+} from './utils'
 import { renderDeploymentHistoryConfig } from './helpers'
 
 export const DeploymentHistoryConfigDiff = ({
@@ -38,9 +45,6 @@ export const DeploymentHistoryConfigDiff = ({
     )
     const isPreviousDeploymentConfigAvailable = !!previousWfrId
 
-    // REFS
-    const deploymentTemplateResolvedDataAbortControllerRef = useRef(new AbortController())
-
     // URL FILTERS
     const { compareWfrId } = useUrlFilters<string, DeploymentHistoryConfigDiffQueryParams>({
         parseSearchParams: parseDeploymentHistoryDiffSearchParams(previousWfrId),
@@ -51,14 +55,9 @@ export const DeploymentHistoryConfigDiff = ({
 
     // ASYNC CALLS
     // Load comparison deployment data
-    const [
-        compareDeploymentConfigLoader,
-        compareDeploymentConfig,
-        compareDeploymentConfigErr,
-        reloadCompareDeploymentConfig,
-    ] = useAsync(
+    const [compareDeploymentConfigLoader, compareDeploymentConfig, , reloadCompareDeploymentConfig] = useAsync(
         () =>
-            Promise.all([
+            Promise.allSettled([
                 getAppEnvDeploymentConfig({
                     params: {
                         appName,
@@ -83,124 +82,84 @@ export const DeploymentHistoryConfigDiff = ({
         [currentWfrId, compareWfrId],
     )
 
-    const [
-        deploymentTemplateResolvedDataLoader,
-        deploymentTemplateResolvedData,
-        deploymentTemplateResolvedDataErr,
-        reloadDeploymentTemplateResolvedData,
-    ] = useAsync(
-        () =>
-            abortPreviousRequests(
-                () =>
-                    Promise.all([
-                        getAppEnvDeploymentConfig({
-                            params: {
-                                configArea: 'ResolveData',
-                                appName,
-                                envName,
-                            },
-                            payload: {
-                                values: getDeploymentTemplateValues(
-                                    compareDeploymentConfig[0].result?.deploymentTemplate,
-                                ),
-                            },
-                            signal: deploymentTemplateResolvedDataAbortControllerRef.current?.signal,
-                        }),
-                        getAppEnvDeploymentConfig({
-                            params: {
-                                configArea: 'ResolveData',
-                                appName,
-                                envName,
-                            },
-                            payload: {
-                                values: getDeploymentTemplateValues(
-                                    compareDeploymentConfig[1].result?.deploymentTemplate,
-                                ),
-                            },
-                            signal: deploymentTemplateResolvedDataAbortControllerRef.current?.signal,
-                        }),
-                    ]),
-                deploymentTemplateResolvedDataAbortControllerRef,
-            ),
-        [convertVariables, compareDeploymentConfig],
-        convertVariables && !!compareDeploymentConfig,
-    )
-
     // METHODS
-    const reload = () => {
-        reloadCompareDeploymentConfig()
-        reloadDeploymentTemplateResolvedData()
-    }
-
     const getNavItemHref = (resourceType: EnvResourceType, resourceName: string) =>
         `${generatePath(path, { ...params })}/${resourceType}${resourceName ? `/${resourceName}` : ''}${search}`
 
     // Generate the deployment history config list
     const deploymentConfigList = useMemo(() => {
-        const isDeploymentTemplateLoaded = !deploymentTemplateResolvedDataLoader && deploymentTemplateResolvedData
-        const isComparisonDataLoaded = !compareDeploymentConfigLoader && compareDeploymentConfig
+        if (!compareDeploymentConfigLoader && compareDeploymentConfig) {
+            const compareList =
+                isPreviousDeploymentConfigAvailable && compareDeploymentConfig[1].status === 'fulfilled'
+                    ? compareDeploymentConfig[1].value.result
+                    : {
+                          configMapData: null,
+                          deploymentTemplate: null,
+                          secretsData: null,
+                          isAppAdmin: false,
+                      }
 
-        const shouldLoadData = convertVariables
-            ? isComparisonDataLoaded && isDeploymentTemplateLoaded
-            : isComparisonDataLoaded
-
-        if (shouldLoadData) {
-            const compareList = isPreviousDeploymentConfigAvailable
-                ? compareDeploymentConfig[1].result
-                : {
-                      configMapData: null,
-                      deploymentTemplate: null,
-                      secretsData: null,
-                      isAppAdmin: false,
-                  }
-            const currentList = compareDeploymentConfig[0].result
+            const currentList =
+                compareDeploymentConfig[0].status === 'fulfilled' ? compareDeploymentConfig[0].value.result : null
 
             const configData = getAppEnvDeploymentConfigList({
                 currentList,
                 compareList,
                 getNavItemHref,
                 convertVariables,
-                ...(convertVariables
-                    ? {
-                          currentDeploymentTemplateResolvedData: deploymentTemplateResolvedData[0].result,
-                          compareDeploymentTemplateResolvedData: deploymentTemplateResolvedData[1].result,
-                      }
-                    : {}),
             })
             return configData
         }
 
         return null
-    }, [
-        isPreviousDeploymentConfigAvailable,
-        compareDeploymentConfigErr,
-        compareDeploymentConfig,
-        convertVariables,
-        deploymentTemplateResolvedDataLoader,
-        deploymentTemplateResolvedData,
-    ])
+    }, [isPreviousDeploymentConfigAvailable, compareDeploymentConfigLoader, compareDeploymentConfig, convertVariables])
+
+    const compareDeploymentConfigErr = useMemo(
+        () =>
+            !compareDeploymentConfigLoader && compareDeploymentConfig
+                ? getDeploymentHistoryConfigDiffError(compareDeploymentConfig[0]) ||
+                  getDeploymentHistoryConfigDiffError(compareDeploymentConfig[1])
+                : null,
+        [compareDeploymentConfigLoader, compareDeploymentConfig],
+    )
 
     const groupedDeploymentConfigList = useMemo(
         () => (deploymentConfigList ? groupArrayByObjectKey(deploymentConfigList.configList, 'groupHeader') : []),
         [deploymentConfigList],
     )
 
-    const isLoading = compareDeploymentConfigLoader || deploymentTemplateResolvedDataLoader
-    const isError =
-        compareDeploymentConfigErr ||
-        (deploymentTemplateResolvedDataErr && !getIsRequestAborted(deploymentTemplateResolvedDataErr))
+    /** Previous deployment config has 404 error. */
+    const hasPreviousDeploymentConfigNotFoundError =
+        compareDeploymentConfig && isDeploymentHistoryConfigDiffNotFoundError(compareDeploymentConfig[1])
+    /** Hide diff state if the previous deployment config is unavailable or returns a 404 error. */
+    const hideDiffState = !isPreviousDeploymentConfigAvailable || hasPreviousDeploymentConfigNotFoundError
+    // LOADING
+    const isLoading = compareDeploymentConfigLoader || (!compareDeploymentConfigErr && !deploymentConfigList)
+    // ERROR CONFIG
+    const errorConfig = {
+        code: compareDeploymentConfigErr?.code,
+        error: compareDeploymentConfigErr && !compareDeploymentConfigLoader,
+        reload: reloadCompareDeploymentConfig,
+    }
+
+    if (compareDeploymentConfig && isDeploymentHistoryConfigDiffNotFoundError(compareDeploymentConfig[0])) {
+        return (
+            <div className="flex bcn-0 h-100">
+                <GenericEmptyState
+                    title="Data not available"
+                    subTitle="Configurations used for this deployment execution is not available"
+                />
+            </div>
+        )
+    }
 
     return (
         <Switch>
             <Route path={`${path}/:resourceType(${Object.values(EnvResourceType).join('|')})/:resourceName?`}>
                 <DeploymentHistoryConfigDiffCompare
                     {...deploymentConfigList}
-                    isLoading={isLoading || (!isError && !deploymentConfigList)}
-                    errorConfig={{
-                        code: compareDeploymentConfigErr?.code || deploymentTemplateResolvedDataErr?.code,
-                        error: isError && !isLoading,
-                        reload,
-                    }}
+                    isLoading={isLoading}
+                    errorConfig={errorConfig}
                     envName={envName}
                     wfrId={wfrId}
                     previousWfrId={previousWfrId}
@@ -211,27 +170,41 @@ export const DeploymentHistoryConfigDiff = ({
                     runSource={runSource}
                     resourceId={resourceId}
                     renderRunSource={renderRunSource}
+                    hideDiffState={hideDiffState}
+                    isCompareDeploymentConfigNotAvailable={hasPreviousDeploymentConfigNotFoundError}
                 />
             </Route>
             <Route>
-                {isError && !isLoading ? (
-                    <ErrorScreenManager code={compareDeploymentConfigErr?.code} reload={reload} />
+                {compareDeploymentConfigErr && !compareDeploymentConfigLoader ? (
+                    <ErrorScreenManager code={errorConfig.code} reload={errorConfig.reload} />
                 ) : (
                     <div className="p-16 flexbox-col dc__gap-16 bcn-0 h-100">
-                        {isLoading || (!isError && !deploymentConfigList) ? (
+                        {isLoading ? (
                             <Progressing fullHeight size={48} />
                         ) : (
                             <>
                                 <h3 className="fs-13 lh-20 fw-6 cn-9 m-0">
-                                    Showing configuration change with respect to previous deployment
+                                    {hideDiffState
+                                        ? 'Configurations used for this deployment trigger'
+                                        : 'Showing configuration change with respect to previous deployment'}
                                 </h3>
-                                <div className="flexbox-col dc__gap-12 dc__mxw-800">
-                                    {Object.keys(groupedDeploymentConfigList).map((groupHeader) =>
-                                        renderDeploymentHistoryConfig(
-                                            groupedDeploymentConfigList[groupHeader],
-                                            groupHeader !== 'UNGROUPED' ? groupHeader : null,
-                                            pathname,
-                                        ),
+                                <div className="flexbox-col dc__gap-16 dc__mxw-800">
+                                    <div className="flexbox-col dc__gap-12">
+                                        {Object.keys(groupedDeploymentConfigList).map((groupHeader) =>
+                                            renderDeploymentHistoryConfig(
+                                                groupedDeploymentConfigList[groupHeader],
+                                                groupHeader !== 'UNGROUPED' ? groupHeader : null,
+                                                pathname,
+                                                hideDiffState,
+                                            ),
+                                        )}
+                                    </div>
+                                    {hasPreviousDeploymentConfigNotFoundError && (
+                                        <InfoColourBar
+                                            classname="error_bar cn-9 fs-13 lh-20"
+                                            Icon={ICError}
+                                            message="Diff unavailable: Configurations for previous deployment not found."
+                                        />
                                     )}
                                 </div>
                             </>

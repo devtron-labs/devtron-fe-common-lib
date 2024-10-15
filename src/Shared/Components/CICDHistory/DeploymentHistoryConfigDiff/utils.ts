@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-import { DATE_TIME_FORMATS } from '@Common/Constants'
+import { DATE_TIME_FORMATS, ERROR_STATUS_CODE } from '@Common/Constants'
 import { DeploymentStageType } from '@Shared/constants'
 import { SelectPickerOptionType } from '@Shared/Components/SelectPicker'
 
@@ -10,7 +10,7 @@ import { DeploymentHistoryConfigDiffProps } from './types'
 
 export const getPipelineDeployments = (triggerHistory: DeploymentHistoryConfigDiffProps['triggerHistory']) =>
     Array.from(triggerHistory)
-        .filter(([, value]) => value?.stage === DeploymentStageType.DEPLOY)
+        .filter(([, value]) => value.stage === DeploymentStageType.DEPLOY)
         .map(([, value]) => value)
 
 export const getPipelineDeploymentsWfrIds = ({
@@ -65,3 +65,9 @@ export const getPipelineDeploymentsOptions = ({
 export const parseDeploymentHistoryDiffSearchParams = (compareWfrId: number) => (searchParams: URLSearchParams) => ({
     compareWfrId: +(searchParams.get('compareWfrId') || compareWfrId),
 })
+
+export const isDeploymentHistoryConfigDiffNotFoundError = <T extends unknown>(res: PromiseSettledResult<T>) =>
+    res.status === 'rejected' && res.reason?.code === ERROR_STATUS_CODE.NOT_FOUND
+
+export const getDeploymentHistoryConfigDiffError = <T extends unknown>(res: PromiseSettledResult<T>) =>
+    res.status === 'rejected' && res.reason?.code !== ERROR_STATUS_CODE.NOT_FOUND ? res.reason : null

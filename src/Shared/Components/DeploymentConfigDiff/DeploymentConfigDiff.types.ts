@@ -65,10 +65,13 @@ export interface DeploymentConfigDiffProps {
     errorConfig?: {
         error: boolean
         code: number
+        message?: string
+        redirectURL?: string
         reload: () => void
     }
     configList: DeploymentConfigListItem[]
     showDetailedDiffState?: boolean
+    hideDiffState?: boolean
     headerText?: string
     scrollIntoViewId?: string
     selectorsConfig: {
@@ -86,6 +89,7 @@ export interface DeploymentConfigDiffProps {
     goBackURL?: string
     navHeading: string
     navHelpText?: string
+    isNavHelpTextShowingError?: boolean
     tabConfig?: {
         tabs: string[]
         activeTab: string
@@ -107,8 +111,10 @@ export interface DeploymentConfigDiffNavigationProps
         | 'goBackURL'
         | 'navHeading'
         | 'navHelpText'
+        | 'isNavHelpTextShowingError'
         | 'tabConfig'
         | 'showDetailedDiffState'
+        | 'hideDiffState'
     > {}
 
 export interface DeploymentConfigDiffMainProps
@@ -123,10 +129,11 @@ export interface DeploymentConfigDiffMainProps
         | 'sortingConfig'
         | 'scopeVariablesConfig'
         | 'showDetailedDiffState'
+        | 'hideDiffState'
     > {}
 
 export type DeploymentConfigDiffAccordionProps = Pick<CollapseProps, 'onTransitionEnd'> &
-    Pick<DeploymentConfigDiffProps, 'showDetailedDiffState'> & {
+    Pick<DeploymentConfigDiffProps, 'showDetailedDiffState' | 'hideDiffState'> & {
         id: string
         title: string
         children: React.ReactNode
@@ -151,6 +158,4 @@ export type AppEnvDeploymentConfigListParams<IsManifestView> = (IsManifestView e
     getNavItemHref: (resourceType: EnvResourceType, resourceName: string) => string
     isManifestView?: IsManifestView
     convertVariables?: boolean
-    currentDeploymentTemplateResolvedData?: AppEnvDeploymentConfigDTO
-    compareDeploymentTemplateResolvedData?: AppEnvDeploymentConfigDTO
 }

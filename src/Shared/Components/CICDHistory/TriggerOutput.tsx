@@ -297,7 +297,7 @@ const StartDetails = ({
 
     return (
         <div className="w-100 pr-20 flex column left dc__border-bottom-n1">
-            <div className="flexbox dc__gap-8 dc__align-items-center pb-12">
+            <div className="flexbox dc__gap-8 dc__align-items-center pb-12 flex-wrap">
                 <div className="flex left dc__gap-4 cn-9 fs-13 fw-6 lh-20">
                     <div className="flex left dc__no-shrink dc__gap-4" data-testid="deployment-history-start-heading">
                         <div>Start</div>

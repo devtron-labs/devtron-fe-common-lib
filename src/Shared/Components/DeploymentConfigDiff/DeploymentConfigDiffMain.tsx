@@ -1,4 +1,4 @@
-import { Fragment, TransitionEvent, useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
@@ -19,6 +19,7 @@ import {
     DeploymentConfigDiffMainProps,
     DeploymentConfigDiffSelectPickerProps,
     DeploymentConfigDiffState,
+    DeploymentConfigDiffAccordionProps,
 } from './DeploymentConfigDiff.types'
 
 export const DeploymentConfigDiffMain = ({
@@ -31,9 +32,14 @@ export const DeploymentConfigDiffMain = ({
     scrollIntoViewId,
     scopeVariablesConfig,
     showDetailedDiffState,
+    hideDiffState,
 }: DeploymentConfigDiffMainProps) => {
     // STATES
     const [expandedView, setExpandedView] = useState<Record<string | number, boolean>>({})
+
+    // REFS
+    /** Ref to track if the element should scroll into view after expanding */
+    const scrollIntoViewAfterExpand = useRef(false)
 
     const handleAccordionClick = (id: string) => () => {
         setExpandedView({
@@ -42,10 +48,12 @@ export const DeploymentConfigDiffMain = ({
         })
     }
 
-    const handleTransitionEnd = (id: string) => (e: TransitionEvent<HTMLDivElement>) => {
-        if (e.target === e.currentTarget && scrollIntoViewId === id) {
+    const onTransitionEnd: DeploymentConfigDiffAccordionProps['onTransitionEnd'] = (e) => {
+        if (scrollIntoViewAfterExpand.current && e.target === e.currentTarget) {
             const element = document.querySelector(`#${scrollIntoViewId}`)
             element?.scrollIntoView({ block: 'start' })
+            // Reset ref after scrolling into view
+            scrollIntoViewAfterExpand.current = false
         }
     }
 
@@ -65,6 +73,7 @@ export const DeploymentConfigDiffMain = ({
 
     useEffect(() => {
         if (scrollIntoViewId) {
+            scrollIntoViewAfterExpand.current = true
             setExpandedView((prev) => ({ ...prev, [scrollIntoViewId]: true }))
         }
     }, [scrollIntoViewId])
@@ -176,8 +185,9 @@ export const DeploymentConfigDiffMain = ({
                     isExpanded={expandedView[id]}
                     diffState={diffState}
                     onClick={handleAccordionClick(id)}
-                    onTransitionEnd={handleTransitionEnd(id)}
+                    onTransitionEnd={onTransitionEnd}
                     showDetailedDiffState={showDetailedDiffState}
+                    hideDiffState={hideDiffState}
                 >
                     {singleView ? (
                         <>
@@ -186,7 +196,7 @@ export const DeploymentConfigDiffMain = ({
                                 <div className="px-12 py-6">{secondaryHeading}</div>
                             </div>
                             <CodeEditor
-                                key={`${sortingConfig?.sortOrder}-${scopeVariablesConfig?.convertVariables}`}
+                                key={`${sortingConfig?.sortBy}-${sortingConfig?.sortOrder}-${scopeVariablesConfig?.convertVariables}`}
                                 diffView
                                 defaultValue={primaryList.codeEditorValue.value}
                                 value={secondaryList.codeEditorValue.value}
@@ -206,12 +216,12 @@ export const DeploymentConfigDiffMain = ({
                                 </div>
                             )}
                             <DeploymentHistoryDiffView
+                                codeEditorKey={`${sortingConfig?.sortBy}-${sortingConfig?.sortOrder}-${scopeVariablesConfig?.convertVariables}`}
                                 baseTemplateConfiguration={secondaryList}
                                 currentConfiguration={primaryList}
                                 previousConfigAvailable
                                 rootClassName={`${primaryHeading && secondaryHeading ? 'dc__no-top-radius dc__no-top-border' : ''}`}
-                                sortBy={sortingConfig?.sortBy}
-                                sortOrder={sortingConfig?.sortOrder}
+                                sortingConfig={sortingConfig}
                             />
                         </div>
                     )}
@@ -239,7 +249,14 @@ export const DeploymentConfigDiffMain = ({
                 </div>
             </div>
             <div className="deployment-config-diff__main-content dc__overflow-y-auto">
-                {errorConfig?.error && <ErrorScreenManager code={errorConfig.code} reload={errorConfig.reload} />}
+                {errorConfig?.error && (
+                    <ErrorScreenManager
+                        code={errorConfig.code}
+                        subtitle={errorConfig.message}
+                        redirectURL={errorConfig.redirectURL}
+                        reload={errorConfig.reload}
+                    />
+                )}
                 {!errorConfig?.error &&
                     (isLoading ? (
                         <Progressing fullHeight size={48} />

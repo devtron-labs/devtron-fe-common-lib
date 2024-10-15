@@ -18,7 +18,7 @@ export interface DeploymentHistoryConfigDiffProps
 
 export type DeploymentHistoryDiffDetailedProps = Pick<
     DeploymentConfigDiffProps,
-    'collapsibleNavList' | 'configList' | 'errorConfig' | 'isLoading' | 'navList'
+    'collapsibleNavList' | 'configList' | 'errorConfig' | 'isLoading' | 'navList' | 'hideDiffState'
 > &
     Required<
         Pick<
@@ -30,6 +30,7 @@ export type DeploymentHistoryDiffDetailedProps = Pick<
         previousWfrId: number
         convertVariables: boolean
         setConvertVariables: Dispatch<SetStateAction<boolean>>
+        isCompareDeploymentConfigNotAvailable?: boolean
     }
 
 export interface DeploymentHistoryConfigDiffQueryParams {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ROUTES, ResponseType, get, getUrlWithSearchParams, post, showError } from '../../Common'
+import { ROUTES, ResponseType, get, getUrlWithSearchParams, showError } from '../../Common'
 import {
     CIMaterialInfoDTO,
     CIMaterialInfoType,
@@ -57,11 +57,9 @@ export const getArtifactInfo = async (
 
 export const getAppEnvDeploymentConfig = ({
     params,
-    payload,
     signal,
 }: {
     params: AppEnvDeploymentConfigPayloadType
-    payload?: { values: string }
     signal?: AbortSignal
 }): Promise<ResponseType<AppEnvDeploymentConfigDTO>> =>
-    post(getUrlWithSearchParams(ROUTES.CONFIG_DATA, params), payload, { signal })
+    get(getUrlWithSearchParams(ROUTES.CONFIG_DATA, params), { signal })

@@ -488,8 +488,11 @@ export interface DeploymentTemplateHistoryType {
     isUnpublished?: boolean
     isDeleteDraft?: boolean
     rootClassName?: string
-    sortBy?: string
-    sortOrder?: SortingOrder
+    codeEditorKey?: React.Key
+    sortingConfig?: {
+        sortBy: string
+        sortOrder: SortingOrder
+    }
 }
 export interface DeploymentHistoryDetailRes extends ResponseType {
     result?: DeploymentHistoryDetail
