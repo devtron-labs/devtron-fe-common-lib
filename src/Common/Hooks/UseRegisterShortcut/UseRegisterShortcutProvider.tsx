@@ -29,10 +29,10 @@ const UseRegisterShortcutProvider = ({
     shortcutTimeout,
     children,
 }: UseRegisterShortcutProviderType) => {
-    const disableShortcuts = useRef<boolean>(false)
-    const shortcuts = useRef<Record<string, ShortcutType>>({})
-    const keysDown = useRef<Set<string>>(new Set())
-    const keyDownTimeout = useRef<ReturnType<typeof setTimeout>>(-1)
+    const disableShortcutsRef = useRef<boolean>(false)
+    const shortcutsRef = useRef<Record<string, ShortcutType>>({})
+    const keysDownRef = useRef<Set<string>>(new Set())
+    const keyDownTimeoutRef = useRef<ReturnType<typeof setTimeout>>(-1)
     const ignoredTags = ignoreTags ?? IGNORE_TAGS_FALLBACK
 
     const registerShortcut: UseRegisterShortcutContextType['registerShortcut'] = useCallback(
@@ -43,7 +43,9 @@ const UseRegisterShortcutProvider = ({
             }
 
             const match =
-                shortcuts.current[id] && deepEquals(shortcuts.current[id].keys, keys) ? shortcuts.current[id] : null
+                shortcutsRef.current[id] && deepEquals(shortcutsRef.current[id].keys, keys)
+                    ? shortcutsRef.current[id]
+                    : null
 
             if (match) {
                 verifyCallbackStack(match.callbackStack)
@@ -51,7 +53,7 @@ const UseRegisterShortcutProvider = ({
                 return
             }
 
-            shortcuts.current[id] = { keys: processedKeys, callbackStack: [callback], description }
+            shortcutsRef.current[id] = { keys: processedKeys, callbackStack: [callback], description }
         },
         [],
     )
@@ -59,33 +61,33 @@ const UseRegisterShortcutProvider = ({
     const unregisterShortcut: UseRegisterShortcutContextType['unregisterShortcut'] = useCallback((keys) => {
         const { id } = preprocessKeys(keys)
 
-        if (!shortcuts.current[id]) {
+        if (!shortcutsRef.current[id]) {
             return
         }
 
-        const { callbackStack } = shortcuts.current[id]
+        const { callbackStack } = shortcutsRef.current[id]
         verifyCallbackStack(callbackStack)
         callbackStack.pop()
 
         if (!callbackStack.length) {
             // NOTE: delete the shortcut only if all registered callbacks are unregistered
             // if 2 shortcuts are registered with the same keys then there needs to be 2 unregister calls
-            delete shortcuts.current[id]
+            delete shortcutsRef.current[id]
         }
     }, [])
 
     const setDisableShortcuts: UseRegisterShortcutContextType['setDisableShortcuts'] = useCallback((shouldDisable) => {
-        disableShortcuts.current = shouldDisable
+        disableShortcutsRef.current = shouldDisable
     }, [])
 
     const triggerShortcut: UseRegisterShortcutContextType['triggerShortcut'] = useCallback((keys) => {
         const { id } = preprocessKeys(keys)
 
-        if (!shortcuts.current[id]) {
+        if (!shortcutsRef.current[id]) {
             return
         }
 
-        const { callbackStack } = shortcuts.current[id]
+        const { callbackStack } = shortcutsRef.current[id]
         verifyCallbackStack(callbackStack)
 
         // NOTE: call the last callback in the callback stack
@@ -93,29 +95,29 @@ const UseRegisterShortcutProvider = ({
     }, [])
 
     const handleKeyupEvent = useCallback(() => {
-        if (!keysDown.current.size) {
+        if (!keysDownRef.current.size) {
             return
         }
 
-        const { id } = preprocessKeys(Array.from(keysDown.current.values()) as ShortcutType['keys'])
+        const { id } = preprocessKeys(Array.from(keysDownRef.current.values()) as ShortcutType['keys'])
 
-        if (shortcuts.current[id]) {
-            const { callbackStack } = shortcuts.current[id]
+        if (shortcutsRef.current[id]) {
+            const { callbackStack } = shortcutsRef.current[id]
             verifyCallbackStack(callbackStack)
             callbackStack[callbackStack.length - 1]()
         }
 
-        keysDown.current.clear()
+        keysDownRef.current.clear()
 
-        if (keyDownTimeout.current > -1) {
-            clearTimeout(keyDownTimeout.current)
-            keyDownTimeout.current = -1
+        if (keyDownTimeoutRef.current > -1) {
+            clearTimeout(keyDownTimeoutRef.current)
+            keyDownTimeoutRef.current = -1
         }
     }, [])
 
     const handleKeydownEvent = useCallback((event: KeyboardEvent) => {
-        if (keyDownTimeout.current === -1) {
-            keyDownTimeout.current = setTimeout(() => {
+        if (keyDownTimeoutRef.current === -1) {
+            keyDownTimeoutRef.current = setTimeout(() => {
                 handleKeyupEvent()
             }, shortcutTimeout ?? DEFAULT_TIMEOUT)
         }
@@ -131,26 +133,26 @@ const UseRegisterShortcutProvider = ({
             return
         }
 
-        if (!disableShortcuts.current) {
-            keysDown.current.add(event.key.toUpperCase())
+        if (!disableShortcutsRef.current) {
+            keysDownRef.current.add(event.key.toUpperCase())
 
             if (event.ctrlKey) {
-                keysDown.current.add('CONTROL')
+                keysDownRef.current.add('CONTROL')
             }
             if (event.metaKey) {
-                keysDown.current.add('META')
+                keysDownRef.current.add('META')
             }
             if (event.altKey) {
-                keysDown.current.add('ALT')
+                keysDownRef.current.add('ALT')
             }
             if (event.shiftKey) {
-                keysDown.current.add('SHIFT')
+                keysDownRef.current.add('SHIFT')
             }
         }
     }, [])
 
     const handleBlur = useCallback(() => {
-        keysDown.current.clear()
+        keysDownRef.current.clear()
     }, [])
 
     useEffect(() => {
@@ -162,6 +164,10 @@ const UseRegisterShortcutProvider = ({
             window.removeEventListener('keydown', handleKeydownEvent)
             window.removeEventListener('keyup', handleKeyupEvent)
             window.removeEventListener('blur', handleBlur)
+
+            if (keyDownTimeoutRef.current > -1) {
+                clearTimeout(keyDownTimeoutRef.current)
+            }
         }
     }, [handleKeyupEvent, handleKeydownEvent, handleBlur])
 
