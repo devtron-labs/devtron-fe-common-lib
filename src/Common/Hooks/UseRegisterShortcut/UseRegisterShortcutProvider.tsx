@@ -31,7 +31,7 @@ const UseRegisterShortcutProvider = ({
 }: UseRegisterShortcutProviderType) => {
     const disableShortcutsRef = useRef<boolean>(false)
     const shortcutsRef = useRef<Record<string, ShortcutType>>({})
-    const keysDownRef = useRef<Set<string>>(new Set())
+    const keysDownRef = useRef<Set<Uppercase<string>>>(new Set())
     const keyDownTimeoutRef = useRef<ReturnType<typeof setTimeout>>(-1)
     const ignoredTags = ignoreTags ?? IGNORE_TAGS_FALLBACK
 
@@ -116,38 +116,37 @@ const UseRegisterShortcutProvider = ({
     }, [])
 
     const handleKeydownEvent = useCallback((event: KeyboardEvent) => {
-        if (keyDownTimeoutRef.current === -1) {
-            keyDownTimeoutRef.current = setTimeout(() => {
-                handleKeyupEvent()
-            }, shortcutTimeout ?? DEFAULT_TIMEOUT)
-        }
-
         if (preventDefault) {
             event.preventDefault()
         }
 
         if (
             ignoredTags.map((tag) => tag.toUpperCase()).indexOf((event.target as HTMLElement).tagName.toUpperCase()) >
-            -1
+                -1 ||
+            disableShortcutsRef.current
         ) {
             return
         }
 
-        if (!disableShortcutsRef.current) {
-            keysDownRef.current.add(event.key.toUpperCase())
+        keysDownRef.current.add(event.key.toUpperCase() as Uppercase<string>)
 
-            if (event.ctrlKey) {
-                keysDownRef.current.add('CONTROL')
-            }
-            if (event.metaKey) {
-                keysDownRef.current.add('META')
-            }
-            if (event.altKey) {
-                keysDownRef.current.add('ALT')
-            }
-            if (event.shiftKey) {
-                keysDownRef.current.add('SHIFT')
-            }
+        if (event.ctrlKey) {
+            keysDownRef.current.add('CONTROL')
+        }
+        if (event.metaKey) {
+            keysDownRef.current.add('META')
+        }
+        if (event.altKey) {
+            keysDownRef.current.add('ALT')
+        }
+        if (event.shiftKey) {
+            keysDownRef.current.add('SHIFT')
+        }
+
+        if (keyDownTimeoutRef.current === -1) {
+            keyDownTimeoutRef.current = setTimeout(() => {
+                handleKeyupEvent()
+            }, shortcutTimeout ?? DEFAULT_TIMEOUT)
         }
     }, [])
 
