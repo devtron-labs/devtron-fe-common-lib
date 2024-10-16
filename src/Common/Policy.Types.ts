@@ -17,7 +17,6 @@
 import { PluginDataStoreType, PluginDetailPayloadType, ResourceKindType } from '../Shared'
 import { FormType, VariableType } from './CIPipeline.Types'
 import { ServerErrors } from './ServerError'
-import { ResponseType } from './Types'
 
 export enum ApplyPolicyToStage {
     PRE_CI = 'PRE_CI',
@@ -110,8 +109,4 @@ export interface BlockedStateData {
     isOffendingMandatoryPlugin: boolean
     isCITriggerBlocked: boolean
     ciBlockState: ConsequenceType
-}
-
-export interface GetBlockedStateResponse extends ResponseType {
-    result?: BlockedStateData
 }
