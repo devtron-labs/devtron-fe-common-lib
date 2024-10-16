@@ -271,7 +271,7 @@ export interface FilterSelectPickerProps
             | 'shouldMenuAlignRight'
             | 'optionListError'
             | 'reloadOptionList'
-            | 'getOptionLabel'
+            | 'getOptionValue'
         > {
     appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void

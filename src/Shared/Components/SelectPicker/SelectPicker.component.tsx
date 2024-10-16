@@ -209,7 +209,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     shouldShowNoOptionsMessage = true,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
-    const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options } = props
+    const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options, getOptionValue } = props
     const { isGroupHeadingSelectable = false, getIsOptionValid = () => true } = multiSelectProps
 
     // Only large variant is supported for multi select picker
@@ -246,8 +246,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                 value as SelectPickerOptionType<OptionValue>[],
                 trimmedInput as OptionValue,
                 null,
+                getOptionValue,
             ) &&
-            !getSelectPickerOptionByValue<OptionValue>(options, trimmedInput as OptionValue, null)
+            !getSelectPickerOptionByValue<OptionValue>(options, trimmedInput as OptionValue, null, getOptionValue)
         )
     }
 
