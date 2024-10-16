@@ -149,7 +149,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                         disabled={isDisabled}
                     />
                 )}
-                <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
+                <div className={`flex left w-100 ${showDescription ? 'top' : ''} dc__gap-8`}>
                     {startIcon && (
                         <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
                     )}
