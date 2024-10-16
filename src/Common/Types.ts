@@ -19,7 +19,7 @@ import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
-import { RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
+import { MandatoryPluginNodeType, RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -552,7 +552,7 @@ export interface DownstreamNodesEnvironmentsType {
     environmentName: string
 }
 
-export interface CommonNodeAttr {
+export interface CommonNodeAttr extends Pick<MandatoryPluginNodeType, 'isTriggerBlocked' | 'pluginBlockState'> {
     connectingCiPipelineId?: number
     parents: string | number[] | string[]
     x: number
@@ -602,15 +602,10 @@ export interface CommonNodeAttr {
     approvalUsers?: string[]
     userApprovalConfig?: UserApprovalConfigType
     requestedUserId?: number
-    showPluginWarning?: boolean
+    showPluginWarning: boolean
     helmPackageName?: string
     isVirtualEnvironment?: boolean
     deploymentAppType?: DeploymentAppTypes
-    isCITriggerBlocked?: boolean
-    ciBlockState?: {
-        action: any
-        metadataField: string
-    }
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
     isGitOpsRepoNotConfigured?: boolean
@@ -791,7 +786,7 @@ export interface CDStageConfigMapSecretNames {
     secrets: any[]
 }
 
-export interface PrePostDeployStageType {
+export interface PrePostDeployStageType extends MandatoryPluginNodeType {
     isValid: boolean
     steps: TaskErrorObj[]
     triggerType: string
@@ -829,6 +824,8 @@ export interface CdPipeline {
     preDeployStage?: PrePostDeployStageType
     postDeployStage?: PrePostDeployStageType
     isProdEnv?: boolean
+    isGitOpsRepoNotConfigured?: boolean
+    isDeploymentBlocked?: boolean
 }
 
 export interface ExternalCiConfig {

@@ -15,7 +15,7 @@
  */
 
 import { MutableRefObject } from 'react'
-import { VariableType } from '../../../Common'
+import { ConsequenceType, VariableType } from '../../../Common'
 import { BaseFilterQueryParams } from '../../types'
 import { ImageWithFallbackProps } from '../ImageWithFallback'
 import { getPluginStoreData } from './service'
@@ -260,4 +260,10 @@ export interface TaskActionModalStateType {
     type: TaskActionModalType
     pluginId: PluginDetailType['id']
     taskIndex: number
+}
+
+export interface MandatoryPluginNodeType {
+    isOffendingMandatoryPlugin: boolean
+    isTriggerBlocked: boolean
+    pluginBlockState: ConsequenceType
 }
