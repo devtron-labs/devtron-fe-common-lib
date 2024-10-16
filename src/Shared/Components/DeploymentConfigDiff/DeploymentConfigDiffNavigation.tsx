@@ -48,7 +48,6 @@ export const DeploymentConfigDiffNavigation = ({
                 ? {
                       iconConfig: {
                           Icon: showDetailedDiffState ? diffStateIconMap[diffState] : diffStateIconMap.hasDiff,
-                          props: { className: 'dc__no-shrink' },
                           tooltipProps: {
                               content: showDetailedDiffState
                                   ? diffStateTooltipTextMap[diffState]
@@ -137,7 +136,7 @@ export const DeploymentConfigDiffNavigation = ({
                                 placement="right"
                             >
                                 <div className="flex">
-                                    <Icon className="icon-dim-20 dc__no-shrink" />
+                                    <Icon className="icon-dim-20 p-2 dc__no-shrink" />
                                 </div>
                             </Tippy>
                         )}
