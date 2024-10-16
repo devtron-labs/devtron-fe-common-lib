@@ -12,6 +12,7 @@ export const DeploymentConfigDiff = ({
     navHeading,
     navHelpText,
     tabConfig,
+    errorConfig,
     ...resProps
 }: DeploymentConfigDiffProps) => (
     <div className="deployment-config-diff">
@@ -23,7 +24,13 @@ export const DeploymentConfigDiff = ({
             navHeading={navHeading}
             navHelpText={navHelpText}
             tabConfig={tabConfig}
+            errorConfig={errorConfig}
         />
-        <DeploymentConfigDiffMain isLoading={isLoading} configList={configList} {...resProps} />
+        <DeploymentConfigDiffMain
+            isLoading={isLoading}
+            configList={configList}
+            errorConfig={errorConfig}
+            {...resProps}
+        />
     </div>
 )
