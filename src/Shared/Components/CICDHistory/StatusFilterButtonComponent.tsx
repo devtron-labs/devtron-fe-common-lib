@@ -15,16 +15,12 @@
  */
 
 /* eslint-disable eqeqeq */
-import { useEffect, useState } from 'react'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { PopupMenu, StyledRadioGroup as RadioGroup } from '../../../Common'
 import { NodeFilters, NodeStatus, StatusFilterButtonType } from './types'
-import { IndexStore } from '../../Store'
 import './StatusFilterButtonComponent.scss'
 
-export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: StatusFilterButtonType) => {
-    const [selectedTab, setSelectedTab] = useState('all')
-
+export const StatusFilterButtonComponent = ({ nodes, selectedTab, handleFilterClick }: StatusFilterButtonType) => {
     const maxInlineFilterCount = 4
     let allNodeCount: number = 0
     let healthyNodeCount: number = 0
@@ -72,28 +68,6 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
     const overflowFilters =
         validFilterOptions.length > maxInlineFilterCount ? validFilterOptions.slice(maxInlineFilterCount) : null
 
-    useEffect(() => {
-        if (
-            (selectedTab === NodeStatus.Healthy && healthyNodeCount === 0) ||
-            (selectedTab === NodeStatus.Degraded && failedNodeCount === 0) ||
-            (selectedTab === NodeStatus.Progressing && progressingNodeCount === 0) ||
-            (selectedTab === NodeStatus.Missing && missingNodeCount === 0) ||
-            (selectedTab === NodeFilters.drifted && driftedNodeCount === 0)
-        ) {
-            setSelectedTab('all')
-        } else if (handleFilterClick) {
-            handleFilterClick(selectedTab)
-        } else {
-            IndexStore.updateFilterType(selectedTab.toUpperCase())
-        }
-    }, [nodes, selectedTab])
-
-    const handleTabSwitch = (event): void => {
-        setSelectedTab(event.target.value)
-    }
-
-    const handleMenuOptionClick = (status: string) => () => setSelectedTab(status)
-
     const renderOverflowFilters = () =>
         overflowFilters ? (
             <PopupMenu autoClose>
@@ -109,7 +83,7 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
                             key={filter.status}
                             type="button"
                             className={`dc__transparent w-100 py-6 px-8 flex left dc__gap-8 fs-13 lh-20 fw-4 cn-9 ${filter.isSelected ? 'bcb-1' : 'bcn-0 dc__hover-n50'}`}
-                            onClick={handleMenuOptionClick(filter.status)}
+                            onClick={() => handleFilterClick(filter.status)}
                         >
                             <span
                                 className={`dc__app-summary__icon icon-dim-16 ${filter.status} ${filter.status}--node`}
@@ -130,7 +104,7 @@ export const StatusFilterButtonComponent = ({ nodes, handleFilterClick }: Status
                 name="status-filter-button"
                 initialTab={selectedTab}
                 disabled={false}
-                onChange={handleTabSwitch}
+                onChange={(e) => handleFilterClick(e.target.value)}
             >
                 {displayedInlineFilters.map((filter, index) => (
                     <RadioGroup.Radio

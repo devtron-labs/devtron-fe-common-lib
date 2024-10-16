@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { useHistory } from 'react-router-dom'
 import { URLS } from '@Common/Constants'
@@ -35,7 +35,8 @@ const AppStatusDetailsChart = ({
 }: AppStatusDetailsChartType) => {
     const history = useHistory()
     const _appDetails = IndexStore.getAppDetails()
-    const [currentFilter, setCurrentFilter] = useState('')
+    const [currentFilter, setCurrentFilter] = useState<string>('all')
+    const [flattenedNodes, setFlattenedNodes] = useState([])
 
     const { appId, environmentId: envId } = _appDetails
 
@@ -48,30 +49,35 @@ const AppStatusDetailsChart = ({
         () => aggregateNodes(_appDetails.resourceTree?.nodes || [], _appDetails.resourceTree?.podMetadata || []),
         [_appDetails],
     )
-    const nodesKeyArray = Object.keys(nodes?.nodes || {})
-    let flattenedNodes = []
-    if (nodesKeyArray.length > 0) {
-        for (let index = 0; index < nodesKeyArray.length; index++) {
-            const element = nodes.nodes[nodesKeyArray[index]]
-            // eslint-disable-next-line no-loop-func
-            element.forEach((childElement) => {
-                if (childElement.health) {
-                    flattenedNodes.push(childElement)
-                }
-            })
-        }
-        flattenedNodes.sort(
-            (a, b) =>
-                STATUS_SORTING_ORDER[a.health.status?.toLowerCase()] -
-                STATUS_SORTING_ORDER[b.health.status?.toLowerCase()],
-        )
 
-        if (filterRemoveHealth) {
-            flattenedNodes = flattenedNodes.filter(
-                (node) => node.health.status?.toLowerCase() !== DEPLOYMENT_STATUS.HEALTHY,
+    useEffect(() => {
+        const nodesKeyArray = Object.keys(nodes?.nodes || {})
+        let newFlattenedNodes = []
+        if (nodesKeyArray.length > 0) {
+            for (let index = 0; index < nodesKeyArray.length; index++) {
+                const element = nodes.nodes[nodesKeyArray[index]]
+                // eslint-disable-next-line no-loop-func
+                element.forEach((childElement) => {
+                    if (childElement.health) {
+                        newFlattenedNodes.push(childElement)
+                    }
+                })
+            }
+            newFlattenedNodes.sort(
+                (a, b) =>
+                    STATUS_SORTING_ORDER[a.health.status?.toLowerCase()] -
+                    STATUS_SORTING_ORDER[b.health.status?.toLowerCase()],
             )
+
+            if (filterRemoveHealth) {
+                newFlattenedNodes = newFlattenedNodes.filter(
+                    (node) => node.health.status?.toLowerCase() !== DEPLOYMENT_STATUS.HEALTHY,
+                )
+            }
+
+            setFlattenedNodes(newFlattenedNodes)
         }
-    }
+    }, [`${nodes}`])
 
     function getNodeMessage(kind: string, name: string) {
         if (
@@ -96,7 +102,11 @@ const AppStatusDetailsChart = ({
                 <div className="pt-16 pl-20 pb-8">
                     <div className="flexbox pr-20 w-100">
                         <div>
-                            <StatusFilterButtonComponent nodes={flattenedNodes} handleFilterClick={onFilterClick} />
+                            <StatusFilterButtonComponent
+                                nodes={flattenedNodes}
+                                selectedTab={currentFilter}
+                                handleFilterClick={onFilterClick}
+                            />
                         </div>
                     </div>
                 </div>
