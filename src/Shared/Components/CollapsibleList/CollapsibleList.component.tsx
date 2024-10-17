@@ -22,11 +22,15 @@ export const CollapsibleList = <TabType extends TabOptions>({
     const { pathname } = useLocation()
 
     const getTabContent = (item: CollapsibleListItem<TabOptions>) => {
-        const { title, subtitle, iconConfig } = item
+        const { title, subtitle, strikeThrough, iconConfig } = item
         return (
             <>
-                <div className="flexbox-col flex-grow-1 mw-none dc__align-start">
-                    <span className="collapsible__item__title dc__truncate fs-13 lh-20">{title}</span>
+                <div className="flexbox-col flex-grow-1 mw-none">
+                    <span
+                        className={`collapsible__item__title dc__truncate fs-13 lh-20 ${strikeThrough ? 'dc__strike-through' : ''}`}
+                    >
+                        {title}
+                    </span>
                     {subtitle && <span className="dc__truncate fw-4 lh-1-5 cn-7">{subtitle}</span>}
                 </div>
                 {iconConfig && (
@@ -36,7 +40,7 @@ export const CollapsibleList = <TabType extends TabOptions>({
                     >
                         <iconConfig.Icon
                             {...iconConfig.props}
-                            className={`icon-dim-20 dc__no-shrink cursor ${iconConfig.props?.className || ''}`}
+                            className={`icon-dim-20 p-2 dc__no-shrink cursor ${iconConfig.props?.className || ''}`}
                         />
                     </ConditionalWrap>
                 )}

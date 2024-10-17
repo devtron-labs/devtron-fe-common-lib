@@ -39,6 +39,10 @@ export type CollapsibleListItem<TabType extends TabOptions> = ConditionalTabType
      */
     subtitle?: string
     /**
+     * If true, the title will be rendered with line-through.
+     */
+    strikeThrough?: boolean
+    /**
      * Configuration for the icon.
      */
     iconConfig?: {
