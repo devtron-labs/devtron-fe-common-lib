@@ -42,6 +42,7 @@ export type DeploymentConfigDiffSelectPickerProps =
       }
 
 export interface DeploymentConfigDiffNavigationItem extends Pick<CollapsibleListItem, 'href' | 'title' | 'onClick'> {
+    Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     hasDiff?: boolean
 }
 
@@ -84,7 +85,14 @@ export interface DeploymentConfigDiffProps {
 export interface DeploymentConfigDiffNavigationProps
     extends Pick<
         DeploymentConfigDiffProps,
-        'isLoading' | 'navList' | 'collapsibleNavList' | 'goBackURL' | 'navHeading' | 'navHelpText' | 'tabConfig'
+        | 'isLoading'
+        | 'navList'
+        | 'collapsibleNavList'
+        | 'goBackURL'
+        | 'navHeading'
+        | 'navHelpText'
+        | 'tabConfig'
+        | 'errorConfig'
     > {}
 
 export interface DeploymentConfigDiffMainProps
