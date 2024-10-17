@@ -348,7 +348,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                     <CodeEditorPlaceholder customLoader={customLoader} />
                 ) : (
                     <>
-                        {shebang && <div className="shebang">{shebang}</div>}
+                        {shebang && <div className="code-editor__shebang">{shebang}</div>}
                         {state.diffMode ? (
                             <MonacoDiffEditor
                                 original={
