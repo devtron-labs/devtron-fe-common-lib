@@ -438,6 +438,7 @@ export enum ResourceKindType {
     tenant = 'tenant',
     installation = 'installation',
     environment = 'environment',
+    ciPipeline = 'ci-pipeline',
     cdPipeline = 'cd-pipeline',
     project = 'project',
 }
@@ -461,6 +462,8 @@ export interface SeverityCount {
 }
 export enum PolicyKindType {
     lockConfiguration = 'lock-configuration',
+    imagePromotion = 'image-promotion',
+    plugins = 'plugin',
 }
 
 export interface LastExecutionResultType {
