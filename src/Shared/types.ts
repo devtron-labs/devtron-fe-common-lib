@@ -438,7 +438,6 @@ export enum ResourceKindType {
     tenant = 'tenant',
     installation = 'installation',
     environment = 'environment',
-    ciPipeline = 'ci-pipeline',
     cdPipeline = 'cd-pipeline',
     ciPipeline = 'ci-pipeline',
     project = 'project',

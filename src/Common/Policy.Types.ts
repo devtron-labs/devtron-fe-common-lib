@@ -21,14 +21,12 @@ import { ServerErrors } from './ServerError'
 export enum ApplyPolicyToStage {
     PRE_CI = 'PRE_CI',
     POST_CI = 'POST_CI',
-    PRE_CD = 'PRE_CD',
-    POST_CD = 'POST_CD',
     /**
      * @deprecated in mandatory plugin policy v2
      */
     PRE_OR_POST_CI = 'PRE_OR_POST_CI',
-    POST_CD = 'POST_CD',
     PRE_CD = 'PRE_CD',
+    POST_CD = 'POST_CD',
 }
 
 // This enum is mapping values from BuildStageVariable
@@ -76,13 +74,11 @@ export type ProcessPluginDataCIParamsType = {
      */
     branchName?: string
 
-    cdPipelineId?: never
     envName?: never
 }
 
 export type ProcessPluginDataCDParamsType = {
     resourceKind: ResourceKindType.cdPipeline
-    cdPipelineId: number
     envName?: string
 
     ciPipelineId?: never
@@ -93,6 +89,7 @@ export type ProcessPluginDataParamsType = {
     formData: FormType
     pluginDataStoreState: PluginDataStoreType
     appId: number
+    appName: string
     /**
      * Would be sent in case we have to get data for steps
      */
