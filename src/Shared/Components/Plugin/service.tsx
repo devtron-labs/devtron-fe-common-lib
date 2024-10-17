@@ -36,12 +36,14 @@ export const getPluginsDetail = async ({
     pluginIds,
     signal,
     shouldShowError = true,
+    parentPluginIdentifiers,
 }: PluginDetailServiceParamsType): Promise<Pick<GetPluginStoreDataReturnType, 'pluginStore'>> => {
     try {
         const payload: PluginDetailPayloadType = {
             appId,
             parentPluginId: parentPluginIds,
             pluginId: pluginIds,
+            parentPluginIdentifier: parentPluginIdentifiers ? `${parentPluginIdentifiers}` : null,
         }
 
         const { result } = await get<PluginDetailDTO>(
@@ -68,14 +70,13 @@ export const getPluginStoreData = async ({
     appId,
     offset = 0,
     signal,
-    size = 20,
 }: GetPluginStoreDataServiceParamsType): Promise<GetPluginStoreDataReturnType> => {
     try {
         const payload: GetPluginListPayloadType = {
             searchKey,
             offset,
             appId,
-            size,
+            size: 20,
             tag: selectedTags,
         }
         const { result } = await get<PluginDetailDTO>(getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_V2, payload), {
@@ -116,7 +117,7 @@ export const getAvailablePluginTags = async (appId: number): Promise<string[]> =
     }
 }
 
-export const getParentPluginList = async (appId?: number): Promise<ResponseType<MinParentPluginDTO[]>> => {
-    const queryParams: GetParentPluginListPayloadType = { appId }
-    return get<MinParentPluginDTO[]>(getUrlWithSearchParams(ROUTES.PLUGIN_LIST_MIN, queryParams))
-}
+export const getParentPluginList = async (
+    params?: Partial<GetParentPluginListPayloadType>,
+): Promise<ResponseType<MinParentPluginDTO[]>> =>
+    get<MinParentPluginDTO[]>(getUrlWithSearchParams(ROUTES.PLUGIN_LIST_MIN, params))

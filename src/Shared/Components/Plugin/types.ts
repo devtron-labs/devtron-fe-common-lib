@@ -30,7 +30,9 @@ export interface PluginAPIBaseQueryParamsType {
 }
 
 export interface GetPluginTagsPayloadType extends PluginAPIBaseQueryParamsType {}
-export interface GetParentPluginListPayloadType extends PluginAPIBaseQueryParamsType {}
+export interface GetParentPluginListPayloadType extends PluginAPIBaseQueryParamsType {
+    type?: 'ALL'
+}
 
 export interface PluginTagNamesDTO {
     tagNames: string[]
@@ -73,7 +75,7 @@ export interface ParentPluginDTO {
     pluginIdentifier: string
 }
 
-export interface MinParentPluginDTO extends Pick<ParentPluginDTO, 'id' | 'name' | 'icon'> {}
+export interface MinParentPluginDTO extends Pick<ParentPluginDTO, 'id' | 'name' | 'icon' | 'pluginIdentifier'> {}
 
 export interface PluginDetailDTO {
     parentPlugins: ParentPluginDTO[]
@@ -84,6 +86,7 @@ export interface PluginDetailServiceParamsType {
     appId: number
     pluginIds?: number[]
     parentPluginIds?: number[]
+    parentPluginIdentifiers?: string[]
     /**
      * @default true
      */
@@ -94,6 +97,7 @@ export interface PluginDetailServiceParamsType {
 export interface PluginDetailPayloadType extends Pick<PluginDetailServiceParamsType, 'appId'> {
     pluginId?: PluginDetailServiceParamsType['pluginIds']
     parentPluginId?: PluginDetailServiceParamsType['parentPluginIds']
+    parentPluginIdentifier?: PluginDetailServiceParamsType['parentPluginIdentifiers'][number]
 }
 
 export interface PluginListFiltersType extends Pick<BaseFilterQueryParams<unknown>, 'searchKey'> {
@@ -178,7 +182,6 @@ export interface GetPluginStoreDataServiceParamsType extends Pick<PluginListFilt
     signal: AbortSignal
     appId: number
     offset?: number
-    size?: number
 }
 
 export interface GetPluginListPayloadType

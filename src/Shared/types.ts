@@ -438,6 +438,7 @@ export enum ResourceKindType {
     tenant = 'tenant',
     installation = 'installation',
     environment = 'environment',
+    ciPipeline = 'ci-pipeline',
     cdPipeline = 'cd-pipeline',
     ciPipeline = 'ci-pipeline',
     project = 'project',
@@ -461,10 +462,9 @@ export interface SeverityCount {
     unknown: number
 }
 export enum PolicyKindType {
-    lockConfiguration = 'lock-configuration-dummy',
+    lockConfiguration = 'lock-configuration',
     imagePromotion = 'image-promotion',
-    // TODO: Update after BE is ready
-    plugins = 'lock-configuration',
+    plugins = 'plugin',
 }
 
 export interface LastExecutionResultType {
@@ -685,4 +685,45 @@ export interface RuntimeParamsListItemType extends KeyValueListType {
 export enum RuntimeParamsHeadingType {
     KEY = 'key',
     VALUE = 'value',
+}
+
+export enum ACCESS_TYPE_MAP {
+    DEVTRON_APPS = 'devtron-app', // devtron app work flow
+    HELM_APPS = 'helm-app', // helm app work flow
+    JOBS = '', // Empty string is intentional since there is no bifurcation in jobs as of now
+}
+
+export enum EntityTypes {
+    CHART_GROUP = 'chart-group',
+    DIRECT = 'apps',
+    JOB = 'jobs',
+    DOCKER = 'docker',
+    GIT = 'git',
+    CLUSTER = 'cluster',
+    NOTIFICATION = 'notification',
+}
+
+export interface CustomRoles {
+    id: number
+    roleName: string
+    roleDisplayName: string
+    roleDescription: string
+    entity: EntityTypes
+    accessType: ACCESS_TYPE_MAP.DEVTRON_APPS | ACCESS_TYPE_MAP.HELM_APPS
+}
+
+export type MetaPossibleRoles = Record<
+    CustomRoles['roleName'],
+    {
+        value: CustomRoles['roleDisplayName']
+        description: CustomRoles['roleDescription']
+    }
+>
+
+export interface CustomRoleAndMeta {
+    customRoles: CustomRoles[]
+    possibleRolesMeta: MetaPossibleRoles
+    possibleRolesMetaForHelm: MetaPossibleRoles
+    possibleRolesMetaForCluster: MetaPossibleRoles
+    possibleRolesMetaForJob: MetaPossibleRoles
 }
