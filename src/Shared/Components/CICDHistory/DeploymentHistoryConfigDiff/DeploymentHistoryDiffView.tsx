@@ -67,7 +67,7 @@ const DeploymentHistoryDiffView = ({
             : baseTemplateConfiguration?.codeEditorValue?.value
 
         return YAMLStringify(JSON.parse(editorValue), {
-            sortMapEntries: (a, b) => yamlComparatorBySortOrder(a, b, sortOrder),
+            sortMapEntries: sortBy ? (a, b) => yamlComparatorBySortOrder(a, b, sortOrder) : null,
         })
     }, [convertVariables, baseTemplateConfiguration, sortOrder, isDeleteDraft])
 

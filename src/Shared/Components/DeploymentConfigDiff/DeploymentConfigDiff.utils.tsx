@@ -1,6 +1,7 @@
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICStamp } from '@Icons/ic-stamp.svg'
 import { ReactComponent as ICEditFile } from '@Icons/ic-edit-file.svg'
+import { ReactComponent as ICFileCode } from '@Icons/ic-file-code.svg'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '@Shared/constants'
 import {
@@ -14,6 +15,7 @@ import {
 } from '@Shared/Components'
 import { deepEqual } from '@Common/Helper'
 
+import { ManifestTemplateDTO } from '@Pages/Applications'
 import {
     ConfigMapSecretDataConfigDatumDTO,
     ConfigMapSecretDataDTO,
@@ -21,7 +23,6 @@ import {
     DeploymentTemplateDTO,
     DraftState,
     EnvResourceType,
-    ManifestTemplateDTO,
     PipelineConfigDataDTO,
     TemplateListDTO,
     TemplateListType,
@@ -667,6 +668,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
                     const element = document.querySelector(`#${deploymentTemplateData.id}`)
                     element?.scrollIntoView({ block: 'start' })
                 },
+                Icon: ICFileCode,
             },
             ...(pipelineConfigData
                 ? [
@@ -678,6 +680,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
                               const element = document.querySelector(`#${pipelineConfigData.id}`)
                               element?.scrollIntoView({ block: 'start' })
                           },
+                          Icon: ICFileCode,
                       },
                   ]
                 : []),
