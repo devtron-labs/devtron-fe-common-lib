@@ -79,8 +79,7 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
             <div className="chart-type-options flex" data-testid="chart-type-options">
                 <span className="cn-7 mr-4">Chart Type</span>
                 <SelectPicker
-                    inputId='chart-type-select'
-                    label='Chart Type'
+                    inputId="chart-type-select"
                     value={selectedChartType ?? chartTypeOptions[0]}
                     options={chartTypeOptions}
                     onChange={handleChartTypeChange}
@@ -88,9 +87,9 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
                 />
             </div>
             <div className="chart-version-options flex" data-testid="chart-version-options">
-            <span className="cn-7 mr-4">Chart Version</span>
+                <span className="cn-7 mr-4">Chart Version</span>
                 <SelectPicker
-                    inputId='chart-version-select'
+                    inputId="chart-version-select"
                     value={selectedChartVersion ?? chartVersionOptions[0]}
                     options={chartVersionOptions}
                     onChange={handleChartVersionChange}
