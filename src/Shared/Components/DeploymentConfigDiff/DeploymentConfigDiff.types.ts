@@ -51,12 +51,13 @@ export type DeploymentConfigDiffSelectPickerProps =
           selectPickerProps: SelectPickerProps
       }
 
-export interface DeploymentConfigDiffNavigationItem extends Pick<CollapsibleListItem, 'href' | 'title' | 'onClick'> {
+export interface DeploymentConfigDiffNavigationItem
+    extends Pick<CollapsibleListItem<'navLink'>, 'href' | 'title' | 'onClick'> {
     diffState: DeploymentConfigListItem['diffState']
 }
 
 export interface DeploymentConfigDiffNavigationCollapsibleItem
-    extends Pick<CollapsibleListConfig, 'id' | 'header' | 'noItemsText'> {
+    extends Pick<CollapsibleListConfig<'navLink'>, 'id' | 'header' | 'noItemsText'> {
     items: DeploymentConfigDiffNavigationItem[]
 }
 
