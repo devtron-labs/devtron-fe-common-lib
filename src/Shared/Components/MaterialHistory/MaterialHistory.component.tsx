@@ -35,7 +35,7 @@ const MaterialHistory = ({
     const getMaterialHistoryMapWithTime = () => {
         const historyTimeMap = {}
 
-        material.history?.forEach((history) => {
+        material.history.forEach((history) => {
             const newDate = history.date.substring(0, 16)
 
             if (!historyTimeMap[newDate]) {
@@ -59,7 +59,7 @@ const MaterialHistory = ({
                 const historyList = materialHistoryMapWithTime[date]
                 return (
                     <>
-                        {!isCommitInfoModal && material.type !== SourceTypeMap.WEBHOOK && (
+                        {!isCommitInfoModal && (
                             <div className="flex left dc__gap-8">
                                 <span className="fs-12 lh-18 cn-7 fw-6 w-130">{date}</span>
                                 <div className="h-1 bcn-2 w-100" />

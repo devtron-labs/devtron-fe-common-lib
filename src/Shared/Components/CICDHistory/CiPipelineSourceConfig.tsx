@@ -169,11 +169,7 @@ export const CiPipelineSourceConfig = ({
                                         )}
                                     </>
                                 )}
-                                {baseText && (
-                                    <span className="cursor" style={{ borderBottom: '1px solid #3b444c' }}>
-                                        {baseText}
-                                    </span>
-                                )}
+                                {baseText && <span className="cursor dc__border-dashed--n3-bottom">{baseText}</span>}
                             </div>
                         </Tippy>
                     )}
