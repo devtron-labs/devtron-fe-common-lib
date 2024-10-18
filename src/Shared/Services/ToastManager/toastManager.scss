@@ -47,7 +47,7 @@
     &__content {
 
         // Override the style for the action button
-        button {
+        button.button, a.button {
             color: var(--N0);
 
             svg *[stroke^="#"] {

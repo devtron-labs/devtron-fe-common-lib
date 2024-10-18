@@ -22,6 +22,11 @@ import { ResponseType } from './Types'
 export enum ApplyPolicyToStage {
     PRE_CI = 'PRE_CI',
     POST_CI = 'POST_CI',
+    PRE_CD = 'PRE_CD',
+    POST_CD = 'POST_CD',
+    /**
+     * @deprecated in mandatory plugin policy v2
+     */
     PRE_OR_POST_CI = 'PRE_OR_POST_CI',
 }
 
@@ -67,8 +72,17 @@ export interface ProcessPluginDataReturnType {
 }
 
 export enum ConsequenceAction {
+    /**
+     * This is used if the policy is enforced immediately.
+     */
     BLOCK = 'BLOCK',
+    /**
+     * This is used if the policy will be enforced after a certain timestamp.
+     */
     ALLOW_UNTIL_TIME = 'ALLOW_UNTIL_TIME',
+    /**
+     * This is used if the policy is not enforced yet (just to show waring).
+     */
     ALLOW_FOREVER = 'ALLOW_FOREVER',
 }
 
