@@ -170,9 +170,8 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                         />
                     )}
                     <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
-                        {/* startIcon is not to be shown in option in case of multi select */}
-                        {!isMulti && startIcon && (
-                            <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
+                        {startIcon && (
+                            <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{startIcon}</div>
                         )}
                         <div className="flex-grow-1">
                             <h4 className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}>
@@ -191,7 +190,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                                 ))}
                         </div>
                         {endIcon && (
-                            <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>
+                            <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{endIcon}</div>
                         )}
                     </div>
                 </div>
