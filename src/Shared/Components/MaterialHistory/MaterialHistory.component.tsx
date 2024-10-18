@@ -87,7 +87,6 @@ const MaterialHistory = ({
                                         materialSourceType={material.type}
                                         selectedCommitInfo={selectCommit}
                                         materialSourceValue={material.value}
-                                        canTriggerBuild={!history.excluded}
                                         isExcluded={history.excluded}
                                     />
                                 </div>
