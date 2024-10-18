@@ -19,7 +19,9 @@ export const DeploymentConfigDiff = ({
     renderedInDrawer,
     ...resProps
 }: DeploymentConfigDiffProps) => (
-    <div className={`deployment-config-diff ${renderedInDrawer ? 'deployment-config-diff--drawer' : ''}`}>
+    <div
+        className={`deployment-config-diff dc__overflow-auto ${renderedInDrawer ? 'deployment-config-diff--drawer' : ''}`}
+    >
         <DeploymentConfigDiffNavigation
             isLoading={isLoading}
             collapsibleNavList={collapsibleNavList}

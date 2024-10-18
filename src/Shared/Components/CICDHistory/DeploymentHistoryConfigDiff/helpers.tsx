@@ -79,7 +79,7 @@ export const renderPipelineDeploymentOptionDescription = ({
 }: Pick<History, 'triggeredBy' | 'triggeredByEmail' | 'artifact' | 'stage'> &
     Pick<DeploymentHistoryConfigDiffProps, 'renderRunSource' | 'resourceId' | 'runSource'>) => (
     <div className="flexbox-col dc__gap-4">
-        <p className="m-0 fs-12 lh-20 cn-7 flex dc__gap-4">
+        <p className="m-0 fs-12 lh-20 cn-7 flex left dc__gap-4">
             <span className="dc__capitalize">{stage}</span>
             <span className="dc__bullet dc__bullet--d2" />
             {artifact && (
