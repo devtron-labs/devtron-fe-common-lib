@@ -254,18 +254,18 @@ export interface PluginImageContainerProps extends Pick<ImageWithFallbackProps, 
     fallbackImageClassName?: string
 }
 
-export enum TaskActionModalType {
+export enum PipelineStageTaskActionModalType {
     DELETE = 'DELETE',
     MOVE_PLUGIN = 'MOVE_PLUGIN',
 }
 
-export interface TaskActionModalStateType {
-    type: TaskActionModalType
+export interface PipelineStageTaskActionModalStateType {
+    type: PipelineStageTaskActionModalType
     pluginId: PluginDetailType['id']
     taskIndex: number
 }
 
-export interface MandatoryPluginNodeType {
+export interface MandatoryPluginBaseStateType {
     isOffendingMandatoryPlugin: boolean
     isTriggerBlocked: boolean
     pluginBlockState: ConsequenceType

@@ -19,7 +19,7 @@ import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
-import { MandatoryPluginNodeType, RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
+import { MandatoryPluginBaseStateType, RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -552,7 +552,7 @@ export interface DownstreamNodesEnvironmentsType {
     environmentName: string
 }
 
-export interface CommonNodeAttr extends Pick<MandatoryPluginNodeType, 'isTriggerBlocked' | 'pluginBlockState'> {
+export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTriggerBlocked' | 'pluginBlockState'> {
     connectingCiPipelineId?: number
     parents: string | number[] | string[]
     x: number
@@ -786,7 +786,7 @@ export interface CDStageConfigMapSecretNames {
     secrets: any[]
 }
 
-export interface PrePostDeployStageType extends MandatoryPluginNodeType {
+export interface PrePostDeployStageType extends MandatoryPluginBaseStateType {
     isValid: boolean
     steps: TaskErrorObj[]
     triggerType: string
