@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
+import { PipelineFormType } from '@Pages/CDPipeline'
 import { PluginDataStoreType, PluginDetailPayloadType, ResourceKindType } from '../Shared'
-import { FormType, VariableType } from './CIPipeline.Types'
+import { VariableType } from './CIPipeline.Types'
 import { ServerErrors } from './ServerError'
 
 export enum ApplyPolicyToStage {
@@ -86,14 +87,14 @@ export type ProcessPluginDataCDParamsType = {
 }
 
 export type ProcessPluginDataParamsType = {
-    formData: FormType
+    formData: PipelineFormType
     pluginDataStoreState: PluginDataStoreType
     appId: number
     appName: string
     /**
      * Would be sent in case we have to get data for steps
      */
-    requiredPluginIds: PluginDetailPayloadType['pluginId']
+    requiredPluginIds?: PluginDetailPayloadType['pluginId']
 } & (ProcessPluginDataCIParamsType | ProcessPluginDataCDParamsType)
 
 export enum ConsequenceAction {
