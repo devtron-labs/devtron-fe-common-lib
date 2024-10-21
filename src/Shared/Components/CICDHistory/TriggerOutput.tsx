@@ -601,7 +601,6 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                 setFullScreenView={setFullScreenView}
                                 resourceId={resourceId}
                                 renderRunSource={renderRunSource}
-                                runSource={triggerDetails.runSource}
                             />
                         </Route>
                     )}
