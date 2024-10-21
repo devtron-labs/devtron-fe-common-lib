@@ -18,7 +18,7 @@ import React, { ReactNode, CSSProperties, ReactElement } from 'react'
 import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
-import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
+import { ACTION_STATE, ConsequenceType, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
 import { RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
 
 /**
@@ -607,10 +607,7 @@ export interface CommonNodeAttr {
     isVirtualEnvironment?: boolean
     deploymentAppType?: DeploymentAppTypes
     isCITriggerBlocked?: boolean
-    ciBlockState?: {
-        action: any
-        metadataField: string
-    }
+    ciBlockState?: ConsequenceType
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
     isGitOpsRepoNotConfigured?: boolean
