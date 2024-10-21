@@ -13,6 +13,7 @@ export const DeploymentConfigDiff = ({
     navHelpText,
     isNavHelpTextShowingError,
     tabConfig,
+    errorConfig,
     showDetailedDiffState,
     hideDiffState,
     renderedInDrawer,
@@ -28,12 +29,14 @@ export const DeploymentConfigDiff = ({
             navHelpText={navHelpText}
             isNavHelpTextShowingError={isNavHelpTextShowingError}
             tabConfig={tabConfig}
+            errorConfig={errorConfig}
             showDetailedDiffState={showDetailedDiffState}
             hideDiffState={hideDiffState}
         />
         <DeploymentConfigDiffMain
             isLoading={isLoading}
             configList={configList}
+            errorConfig={errorConfig}
             showDetailedDiffState={showDetailedDiffState}
             hideDiffState={hideDiffState}
             {...resProps}

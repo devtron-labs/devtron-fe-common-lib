@@ -5,9 +5,9 @@ import {
     ConfigMapSecretDataConfigDatumDTO,
     DeploymentTemplateDTO,
     EnvResourceType,
-    ManifestTemplateDTO,
 } from '@Shared/Services'
 
+import { ManifestTemplateDTO } from '@Pages/Applications'
 import { DeploymentHistoryDetail } from '../CICDHistory'
 import { CollapsibleListConfig, CollapsibleListItem } from '../CollapsibleList'
 import { SelectPickerProps } from '../SelectPicker'
@@ -52,6 +52,7 @@ export type DeploymentConfigDiffSelectPickerProps =
       }
 
 export interface DeploymentConfigDiffNavigationItem extends Pick<CollapsibleListItem, 'href' | 'title' | 'onClick'> {
+    Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     diffState: DeploymentConfigListItem['diffState']
 }
 
@@ -111,8 +112,9 @@ export interface DeploymentConfigDiffNavigationProps
         | 'goBackURL'
         | 'navHeading'
         | 'navHelpText'
-        | 'isNavHelpTextShowingError'
         | 'tabConfig'
+        | 'errorConfig'
+        | 'isNavHelpTextShowingError'
         | 'showDetailedDiffState'
         | 'hideDiffState'
     > {}
