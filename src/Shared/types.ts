@@ -140,6 +140,7 @@ export interface Node {
     port: number
     canBeHibernated: boolean
     isHibernated: boolean
+    hasDrift?: boolean
 }
 
 // eslint-disable-next-line no-use-before-define
