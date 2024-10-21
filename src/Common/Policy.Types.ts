@@ -112,10 +112,18 @@ export enum ConsequenceAction {
     ALLOW_FOREVER = 'ALLOW_FOREVER',
 }
 
-export interface ConsequenceType {
-    action: ConsequenceAction
-    metadataField: string
-}
+export type ConsequenceType =
+    | {
+          action: Exclude<ConsequenceAction, ConsequenceAction.ALLOW_UNTIL_TIME>
+          metadataField?: never | null
+      }
+    | {
+          action: ConsequenceAction.ALLOW_UNTIL_TIME
+          /**
+           * Denotes the time till which the policy enforcement is relaxed
+           */
+          metadataField: string
+      }
 
 export interface BlockedStateData {
     isOffendingMandatoryPlugin: boolean

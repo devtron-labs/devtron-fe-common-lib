@@ -45,7 +45,7 @@ const FilterChip = ({
                         <span className="dc__divider h-24" />
                     </>
                 )}
-                <Tooltip content={valueToDisplay} showOnTruncate>
+                <Tooltip content={valueToDisplay}>
                     <span className="dc__ellipsis-right dc__word-break dc__mxw-150">{valueToDisplay}</span>
                 </Tooltip>
                 {showRemoveIcon && (

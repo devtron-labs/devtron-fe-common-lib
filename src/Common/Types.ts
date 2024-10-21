@@ -18,8 +18,15 @@ import React, { ReactNode, CSSProperties, ReactElement } from 'react'
 import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
-import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
 import { MandatoryPluginBaseStateType, RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
+import {
+    ACTION_STATE,
+    ConsequenceType,
+    DEPLOYMENT_WINDOW_TYPE,
+    DockerConfigOverrideType,
+    SortingOrder,
+    TaskErrorObj,
+} from '.'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -450,12 +457,12 @@ export interface ArtifactReleaseMappingType {
 }
 
 export interface CDMaterialListModalServiceUtilProps {
-    artifacts: any[],
-    offset: number,
-    artifactId?: number,
-    artifactStatus?: string,
-    disableDefaultSelection?: boolean,
-    userApprovalConfig?: UserApprovalConfigType,
+    artifacts: any[]
+    offset: number
+    artifactId?: number
+    artifactStatus?: string
+    disableDefaultSelection?: boolean
+    userApprovalConfig?: UserApprovalConfigType
 }
 
 export interface CDMaterialType {
