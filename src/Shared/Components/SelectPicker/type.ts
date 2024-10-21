@@ -156,11 +156,11 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          */
         customSelectedOptionsCount?: number
         /**
-         * Height of the dropdown
+         * Size of select
          *
          * @default 'ComponentSizeType.medium'
          */
-        size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large>
+        size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large | ComponentSizeType.small>
         /**
          * Content to be shown in a tippy when disabled
          */
