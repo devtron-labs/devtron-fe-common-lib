@@ -31,7 +31,7 @@ interface MaterialHistoryDTO {
     WebhookData: WebhookDataType
 }
 
-interface MaterialHistoryType {
+export interface MaterialHistoryType {
     commitURL: string
     commit: MaterialHistoryDTO['Commit']
     author: MaterialHistoryDTO['Author']

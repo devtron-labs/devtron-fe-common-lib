@@ -21,17 +21,17 @@ import Tippy from '@tippyjs/react'
 import ClipboardButton from '@Common/ClipboardButton/ClipboardButton'
 import { ReactComponent as Circle } from '@Icons/ic-circle.svg'
 import { ReactComponent as Commit } from '@Icons/ic-commit.svg'
-import { ReactComponent as CommitIcon } from '@Icons/ic-code-commit.svg'
 import { ReactComponent as PersonIcon } from '@Icons/ic-person.svg'
 import { ReactComponent as CalendarIcon } from '@Icons/ic-calendar.svg'
 import { ReactComponent as MessageIcon } from '@Icons/ic-message.svg'
-import { ReactComponent as BranchIcon } from '@Icons/ic-branch.svg'
-import { ReactComponent as BranchMain } from '@Icons/ic-branch-main.svg'
+import { ReactComponent as PullRequestIcon } from '@Icons/ic-pull-request.svg'
 import { ReactComponent as Check } from '@Icons/ic-check-circle.svg'
 import { ReactComponent as Abort } from '@Icons/ic-abort.svg'
 import { SourceTypeMap, createGitCommitUrl } from '@Common/Common.service'
 import { stopPropagation } from '@Common/Helper'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
+import { ReactComponent as Tag } from '@Icons/ic-tag.svg'
+import { getLowerCaseObject, getWebhookDate } from '@Shared/Helpers'
 import GitMaterialInfoHeader from './GitMaterialInfoHeader'
 import { MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../constants'
 import { WEBHOOK_EVENT_ACTION_TYPE } from './constants'
@@ -44,30 +44,12 @@ const GitCommitInfoGeneric = ({
     selectedCommitInfo,
     materialUrl,
     showMaterialInfoHeader,
-    canTriggerBuild = false,
     index,
     isExcluded = false,
 }: GitCommitInfoGenericProps) => {
     const [showSeeMore, setShowSeeMore] = useState(true)
 
-    function _lowerCaseObject(input): any {
-        const _output = {}
-        if (!input) {
-            return _output
-        }
-        Object.keys(input).forEach((_key) => {
-            const _modifiedKey = _key.toLowerCase()
-            const _value = input[_key]
-            if (_value && typeof _value === 'object') {
-                _output[_modifiedKey] = _lowerCaseObject(_value)
-            } else {
-                _output[_modifiedKey] = _value
-            }
-        })
-        return _output
-    }
-
-    const _lowerCaseCommitInfo = _lowerCaseObject(commitInfo)
+    const _lowerCaseCommitInfo = getLowerCaseObject(commitInfo)
     const _isWebhook =
         materialSourceType === SourceTypeMap.WEBHOOK ||
         (_lowerCaseCommitInfo && _lowerCaseCommitInfo.webhookdata && _lowerCaseCommitInfo.webhookdata.id !== 0)
@@ -80,11 +62,7 @@ const GitCommitInfoGeneric = ({
           : createGitCommitUrl(materialUrl, _lowerCaseCommitInfo.commit)
 
     function renderBasicGitCommitInfoForWebhook() {
-        let _date
-        if (_webhookData.data.date) {
-            const _moment = moment(_webhookData.data.date, 'YYYY-MM-DDTHH:mm:ssZ')
-            _date = _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : _webhookData.data.date
-        }
+        const _date = getWebhookDate(materialSourceType, commitInfo)
         return (
             <>
                 {_webhookData.data.author ? (
@@ -213,6 +191,116 @@ const GitCommitInfoGeneric = ({
         return matSelectionText()
     }
 
+    const renderWebhookTitle = () =>
+        _webhookData.data.title ? <span className="flex left cn-9 fs-13 fw-6">{_webhookData.data.title}</span> : null
+
+    const renderPullRequestId = (pullRequestUrl: string) => {
+        const pullRequestId = pullRequestUrl.split('/').pop()
+
+        return (
+            <a
+                href={pullRequestUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="commit-hash fs-14 px-6 mono dc__w-fit-content"
+                onClick={stopPropagation}
+            >
+                # {typeof pullRequestId === 'number' ? pullRequestId : 'PR'}
+            </a>
+        )
+    }
+
+    const renderTargetBranch = () => {
+        if (_webhookData.data['target branch name']) {
+            return (
+                <p className="flex left fs-13">
+                    into&nbsp;
+                    <a
+                        href={createGitCommitUrl(materialUrl, _webhookData.data['target checkout'])}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="commit-hash fs-14 px-6 mono"
+                        onClick={stopPropagation}
+                    >
+                        {_webhookData.data['target branch name']}
+                    </a>
+                </p>
+            )
+        }
+        return null
+    }
+
+    const renderSourceBranch = () => {
+        if (_webhookData.data['source branch name']) {
+            return (
+                <div className="flex left">
+                    from&nbsp;
+                    <a
+                        href={createGitCommitUrl(materialUrl, _webhookData.data['source checkout'])}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="commit-hash fs-14 px-6 mono"
+                        onClick={stopPropagation}
+                    >
+                        {_webhookData.data['source branch name']}
+                    </a>
+                </div>
+            )
+        }
+        return null
+    }
+
+    const renderPRInfoCard = () =>
+        _isWebhook &&
+        _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.MERGED && (
+            <>
+                {renderPullRequestId(_webhookData.data['git url'])}
+                <div className="flex dc__content-space pr-16 ">
+                    {renderWebhookTitle()}
+                    {selectedCommitInfo ? (
+                        <div className="flexbox dc__align-items-center dc__content-end fs-12">
+                            {_lowerCaseCommitInfo.isselected ? (
+                                <Check className="dc__align-right" />
+                            ) : (
+                                <Circle data-testid="valid-git-commit" />
+                            )}
+                        </div>
+                    ) : null}
+                </div>
+
+                <div className="flex left lh-20 dc__gap-8">
+                    <PullRequestIcon className="icon-dim-16" />
+                    <div className="flex left dc__gap-4">
+                        Merge commit
+                        {renderTargetBranch()}
+                        {renderSourceBranch()}
+                    </div>
+                </div>
+                {renderBasicGitCommitInfoForWebhook()}
+                {handleMoreDataForWebhook()}
+            </>
+        )
+
+    const renderTagInfoCard = () =>
+        _isWebhook &&
+        _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.NON_MERGED && (
+            <>
+                <div className="flex left dc__content-space">
+                    <div className="commit-hash px-6 dc__w-fit-content dc__gap-4">
+                        <Tag className="icon-dim-14 scb-5" />
+                        {_webhookData.data['target checkout']}
+                    </div>
+                    {selectedCommitInfo ? (
+                        <div className="material-history__select-text">
+                            {_lowerCaseCommitInfo.isselected ? <Check className="dc__align-right" /> : 'Select'}
+                        </div>
+                    ) : null}
+                </div>
+                {renderBasicGitCommitInfoForWebhook()}
+                {handleMoreDataForWebhook()}
+            </>
+        )
+
     return (
         <div className="git-commit-info-generic__wrapper cn-9 fs-12">
             {showMaterialInfoHeader && (_isWebhook || _lowerCaseCommitInfo.commit) && (
@@ -288,118 +376,8 @@ const GitCommitInfoGeneric = ({
                     </>
                 )}
 
-                {_isWebhook && _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.MERGED && (
-                    <>
-                        <div className="flex dc__content-space pr-16 ">
-                            <div className="ml-16 ">
-                                {_webhookData.data.title ? (
-                                    <div className="flex left cn-9  fs-13">{_webhookData.data.title}</div>
-                                ) : null}
-                                {_webhookData.data['git url'] ? (
-                                    <a
-                                        href={`${_webhookData.data['git url']}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="dc__no-decor cb-5"
-                                    >
-                                        View git url
-                                    </a>
-                                ) : null}
-                            </div>
-                            {selectedCommitInfo ? (
-                                <div className="flexbox dc__align-items-center dc__content-end fs-12">
-                                    {_lowerCaseCommitInfo.isselected ? (
-                                        <Check className="dc__align-right" />
-                                    ) : (
-                                        <Circle data-testid="valid-git-commit" />
-                                    )}
-                                </div>
-                            ) : null}
-                        </div>
-
-                        <div className="material-history__header ml-6 mt-12 mb-12">
-                            <div className="flex left">
-                                <BranchMain className="icon-dim-32" />
-                                <div>
-                                    <div className="flex left mb-8">
-                                        {_webhookData.data['source branch name'] ? (
-                                            <div className=" mono cn-7 fs-12 lh-1-5 br-4 bcn-1 pl-6 pr-6">
-                                                <BranchIcon className="icon-dim-12 dc__vertical-align-middle" />{' '}
-                                                {_webhookData.data['source branch name']}
-                                            </div>
-                                        ) : null}
-                                        {_webhookData.data['source checkout'] ? (
-                                            <div className="flex left cb-5 br-4 pl-8 pr-8">
-                                                <a
-                                                    href={createGitCommitUrl(
-                                                        materialUrl,
-                                                        _webhookData.data['source checkout'],
-                                                    )}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="commit-hash"
-                                                    onClick={stopPropagation}
-                                                >
-                                                    <Commit className="commit-hash__icon" />
-                                                    {_webhookData.data['source checkout']}
-                                                </a>
-                                            </div>
-                                        ) : null}
-                                    </div>
-                                    <div className="flex left">
-                                        <div className="mono cn-7 fs-12 lh-1-5 br-4 bcn-1 pl-6 pr-6">
-                                            {_webhookData.data['target branch name'] ? (
-                                                <>
-                                                    <BranchIcon className="icon-dim-12 dc__vertical-align-middle" />{' '}
-                                                    {_webhookData.data['target branch name']}{' '}
-                                                </>
-                                            ) : null}
-                                        </div>
-                                        <div className="flex left cb-5 br-4 pl-8 pr-8">
-                                            {canTriggerBuild && (
-                                                <div className="flex left bcn-1 br-4 cn-5 pl-8 pr-8">
-                                                    <CommitIcon className="commit-hash__icon " />
-                                                    HEAD
-                                                </div>
-                                            )}
-                                            {!canTriggerBuild && (
-                                                <a
-                                                    href={createGitCommitUrl(
-                                                        materialUrl,
-                                                        _webhookData.data['target checkout'],
-                                                    )}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="commit-hash"
-                                                    onClick={stopPropagation}
-                                                >
-                                                    <Commit className="commit-hash__icon" />
-                                                    {_webhookData.data['target checkout']}
-                                                </a>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {renderBasicGitCommitInfoForWebhook()}
-                        {handleMoreDataForWebhook()}
-                    </>
-                )}
-                {_isWebhook && _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.NON_MERGED && (
-                    <>
-                        <div className="flex left pr-16 pb-8 dc__content-space">
-                            <div className="flex left cn-9 fs-13 ml-16"> {_webhookData.data['target checkout']}</div>
-                            {selectedCommitInfo ? (
-                                <div className="material-history__select-text">
-                                    {_lowerCaseCommitInfo.isselected ? <Check className="dc__align-right" /> : 'Select'}
-                                </div>
-                            ) : null}
-                        </div>
-                        {renderBasicGitCommitInfoForWebhook()}
-                        {handleMoreDataForWebhook()}
-                    </>
-                )}
+                {renderPRInfoCard()}
+                {renderTagInfoCard()}
             </div>
         </div>
     )

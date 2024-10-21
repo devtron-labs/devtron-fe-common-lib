@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { getWebhookDate } from '@Shared/Helpers'
 import { SourceTypeMap } from '../../../Common'
 import { GitCommitInfoGeneric } from '../GitCommitInfoGeneric'
 import { MaterialHistoryProps } from './types'
@@ -35,8 +36,12 @@ const MaterialHistory = ({
     const getMaterialHistoryMapWithTime = () => {
         const historyTimeMap = {}
 
-        material.history?.forEach((history) => {
-            const newDate = history.date.substring(0, 16)
+        material.history.forEach((history) => {
+            const isWebhook = material.type === SourceTypeMap.WEBHOOK
+
+            const newDate = isWebhook
+                ? getWebhookDate(material.type, history).substring(0, 16)
+                : history.date.substring(0, 16)
 
             if (!historyTimeMap[newDate]) {
                 historyTimeMap[newDate] = []
@@ -59,7 +64,7 @@ const MaterialHistory = ({
                 const historyList = materialHistoryMapWithTime[date]
                 return (
                     <>
-                        {!isCommitInfoModal && material.type !== SourceTypeMap.WEBHOOK && (
+                        {!isCommitInfoModal && (
                             <div className="flex left dc__gap-8">
                                 <span className="fs-12 lh-18 cn-7 fw-6 w-130">{date}</span>
                                 <div className="h-1 bcn-2 w-100" />
@@ -87,7 +92,6 @@ const MaterialHistory = ({
                                         materialSourceType={material.type}
                                         selectedCommitInfo={selectCommit}
                                         materialSourceValue={material.value}
-                                        canTriggerBuild={!history.excluded}
                                         isExcluded={history.excluded}
                                     />
                                 </div>
