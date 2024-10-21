@@ -31,6 +31,7 @@ import { SourceTypeMap, createGitCommitUrl } from '@Common/Common.service'
 import { stopPropagation } from '@Common/Helper'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { ReactComponent as Tag } from '@Icons/ic-tag.svg'
+import { _lowerCaseObject, getWebhookDate } from '@Shared/Helpers'
 import GitMaterialInfoHeader from './GitMaterialInfoHeader'
 import { MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../constants'
 import { WEBHOOK_EVENT_ACTION_TYPE } from './constants'
@@ -48,23 +49,6 @@ const GitCommitInfoGeneric = ({
 }: GitCommitInfoGenericProps) => {
     const [showSeeMore, setShowSeeMore] = useState(true)
 
-    function _lowerCaseObject(input): any {
-        const _output = {}
-        if (!input) {
-            return _output
-        }
-        Object.keys(input).forEach((_key) => {
-            const _modifiedKey = _key.toLowerCase()
-            const _value = input[_key]
-            if (_value && typeof _value === 'object') {
-                _output[_modifiedKey] = _lowerCaseObject(_value)
-            } else {
-                _output[_modifiedKey] = _value
-            }
-        })
-        return _output
-    }
-
     const _lowerCaseCommitInfo = _lowerCaseObject(commitInfo)
     const _isWebhook =
         materialSourceType === SourceTypeMap.WEBHOOK ||
@@ -78,11 +62,7 @@ const GitCommitInfoGeneric = ({
           : createGitCommitUrl(materialUrl, _lowerCaseCommitInfo.commit)
 
     function renderBasicGitCommitInfoForWebhook() {
-        let _date
-        if (_webhookData.data.date) {
-            const _moment = moment(_webhookData.data.date, 'YYYY-MM-DDTHH:mm:ssZ')
-            _date = _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : _webhookData.data.date
-        }
+        const _date = getWebhookDate(materialSourceType, commitInfo)
         return (
             <>
                 {_webhookData.data.author ? (

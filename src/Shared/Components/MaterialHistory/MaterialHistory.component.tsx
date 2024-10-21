@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { getWebhookDate } from '@Shared/Helpers'
 import { SourceTypeMap } from '../../../Common'
 import { GitCommitInfoGeneric } from '../GitCommitInfoGeneric'
 import { MaterialHistoryProps } from './types'
@@ -36,7 +37,11 @@ const MaterialHistory = ({
         const historyTimeMap = {}
 
         material.history.forEach((history) => {
-            const newDate = history.date.substring(0, 16)
+            const isWebhook = material.type === SourceTypeMap.WEBHOOK
+
+            const newDate = isWebhook
+                ? getWebhookDate(material.type, history).substring(0, 16)
+                : history.date.substring(0, 16)
 
             if (!historyTimeMap[newDate]) {
                 historyTimeMap[newDate] = []

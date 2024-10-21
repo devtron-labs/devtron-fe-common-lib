@@ -19,6 +19,7 @@ import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
 import { Pair } from 'yaml'
 import moment from 'moment'
+import { MaterialHistoryType } from '@Shared/Services/app.types'
 import {
     handleUTCTime,
     ManualApprovalType,
@@ -30,6 +31,8 @@ import {
     PATTERNS,
     ZERO_TIME_STRING,
     noop,
+    SourceTypeMap,
+    DATE_TIME_FORMATS,
 } from '../Common'
 import {
     AggregationKeys,
@@ -852,3 +855,35 @@ export const groupArrayByObjectKey = <T extends Record<string, any>, K extends k
         },
         {} as Record<string, T[]>,
     )
+
+export const _lowerCaseObject = (input): any => {
+    const _output = {}
+    if (!input) {
+        return _output
+    }
+    Object.keys(input).forEach((_key) => {
+        const _modifiedKey = _key.toLowerCase()
+        const _value = input[_key]
+        if (_value && typeof _value === 'object') {
+            _output[_modifiedKey] = _lowerCaseObject(_value)
+        } else {
+            _output[_modifiedKey] = _value
+        }
+    })
+    return _output
+}
+
+export const getWebhookDate = (materialSourceType: string, history: MaterialHistoryType): string => {
+    const _lowerCaseCommitInfo = _lowerCaseObject(history)
+    const _isWebhook =
+        materialSourceType === SourceTypeMap.WEBHOOK ||
+        (_lowerCaseCommitInfo && _lowerCaseCommitInfo.webhookdata && _lowerCaseCommitInfo.webhookdata.id !== 0)
+    const _webhookData = _isWebhook ? _lowerCaseCommitInfo.webhookdata : {}
+
+    let _date
+    if (_webhookData.data.date) {
+        const _moment = moment(_webhookData.data.date, 'YYYY-MM-DDTHH:mm:ssZ')
+        _date = _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : _webhookData.data.date
+    }
+    return _date
+}
