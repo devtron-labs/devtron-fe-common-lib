@@ -642,7 +642,7 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
         return _keys
     })
 
-export const convertJSONPointerToJSONPath = (pointer: string) => pointer.replace(/\//g, '.').replace(/\./, '$.')
+export const convertJSONPointerToJSONPath = (pointer: string) => pointer.replace(/\/([\*0-9]+)\//g, '[$1].').replace(/\//g, '.').replace(/\./, '$.')
 
 export const flatMapOfJSONPaths = (
     paths: string[],
@@ -937,3 +937,19 @@ export function asyncWrap(promise): any[] {
 }
 
 export const prefixZeroIfSingleDigit = (value: number = 0) => (value > 0 && value < 10 ? `0${value}` : value)
+
+export const throttle = <T extends (...args: unknown[]) => unknown>(
+    func: T,
+    delay: number = 300,
+): ((...args: Parameters<T>) => void) => {
+    let lastCall = 0
+
+    return (...args: Parameters<T>) => {
+        const now = Date.now()
+
+        if (now - lastCall >= delay) {
+            lastCall = now
+            func(...args)
+        }
+    }
+}
