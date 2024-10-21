@@ -856,34 +856,39 @@ export const groupArrayByObjectKey = <T extends Record<string, any>, K extends k
         {} as Record<string, T[]>,
     )
 
-export const _lowerCaseObject = (input): any => {
-    const _output = {}
-    if (!input) {
-        return _output
+/**
+ * @description - Function to get the lower case object
+ * @param input - The input object
+ * @returns Record<string, any>
+ */
+export const getLowerCaseObject = (input): Record<string, any> => {
+    if (!input || typeof input !== 'object') {
+        return input
     }
-    Object.keys(input).forEach((_key) => {
-        const _modifiedKey = _key.toLowerCase()
-        const _value = input[_key]
-        if (_value && typeof _value === 'object') {
-            _output[_modifiedKey] = _lowerCaseObject(_value)
+    return Object.keys(input).reduce((acc, key) => {
+        const modifiedKey = key.toLowerCase()
+        const value = input[key]
+        if (value && typeof value === 'object') {
+            acc[modifiedKey] = getLowerCaseObject(value)
         } else {
-            _output[_modifiedKey] = _value
+            acc[modifiedKey] = value
         }
-    })
-    return _output
+        return acc
+    }, {})
 }
 
-export const getWebhookDate = (materialSourceType: string, history: MaterialHistoryType): string => {
-    const _lowerCaseCommitInfo = _lowerCaseObject(history)
-    const _isWebhook =
-        materialSourceType === SourceTypeMap.WEBHOOK ||
-        (_lowerCaseCommitInfo && _lowerCaseCommitInfo.webhookdata && _lowerCaseCommitInfo.webhookdata.id !== 0)
-    const _webhookData = _isWebhook ? _lowerCaseCommitInfo.webhookdata : {}
+/**
+ * @description - Function to get the webhook date
+ * @param materialSourceType - The type of material source (e.g., WEBHOOK)
+ * @param history - The history object containing commit information
+ * @returns - Formatted webhook date if available, otherwise an empty string
+ */
 
-    let _date
-    if (_webhookData.data.date) {
-        const _moment = moment(_webhookData.data.date, 'YYYY-MM-DDTHH:mm:ssZ')
-        _date = _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : _webhookData.data.date
-    }
-    return _date
+export const getWebhookDate = (materialSourceType: string, history: MaterialHistoryType): string => {
+    const lowerCaseCommitInfo = getLowerCaseObject(history)
+    const isWebhook = materialSourceType === SourceTypeMap.WEBHOOK || lowerCaseCommitInfo?.webhookdata?.id !== 0
+    const webhookData = isWebhook ? lowerCaseCommitInfo.webhookdata : {}
+
+    const _moment = moment(webhookData.data.date, 'YYYY-MM-DDTHH:mm:ssZ')
+    return _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : webhookData.data.date
 }

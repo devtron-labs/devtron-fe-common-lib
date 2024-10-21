@@ -31,7 +31,7 @@ import { SourceTypeMap, createGitCommitUrl } from '@Common/Common.service'
 import { stopPropagation } from '@Common/Helper'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { ReactComponent as Tag } from '@Icons/ic-tag.svg'
-import { _lowerCaseObject, getWebhookDate } from '@Shared/Helpers'
+import { getLowerCaseObject, getWebhookDate } from '@Shared/Helpers'
 import GitMaterialInfoHeader from './GitMaterialInfoHeader'
 import { MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../constants'
 import { WEBHOOK_EVENT_ACTION_TYPE } from './constants'
@@ -49,7 +49,7 @@ const GitCommitInfoGeneric = ({
 }: GitCommitInfoGenericProps) => {
     const [showSeeMore, setShowSeeMore] = useState(true)
 
-    const _lowerCaseCommitInfo = _lowerCaseObject(commitInfo)
+    const _lowerCaseCommitInfo = getLowerCaseObject(commitInfo)
     const _isWebhook =
         materialSourceType === SourceTypeMap.WEBHOOK ||
         (_lowerCaseCommitInfo && _lowerCaseCommitInfo.webhookdata && _lowerCaseCommitInfo.webhookdata.id !== 0)
@@ -196,26 +196,24 @@ const GitCommitInfoGeneric = ({
 
     const renderPullRequestId = (pullRequestUrl: string) => {
         const pullRequestId = pullRequestUrl.split('/').pop()
-        if (pullRequestId) {
-            return (
-                <a
-                    href={pullRequestUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="commit-hash fs-14 px-6 mono dc__w-fit-content"
-                    onClick={stopPropagation}
-                >
-                    # {pullRequestId}
-                </a>
-            )
-        }
-        return null
+
+        return (
+            <a
+                href={pullRequestUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="commit-hash fs-14 px-6 mono dc__w-fit-content"
+                onClick={stopPropagation}
+            >
+                # {typeof pullRequestId === 'number' ? pullRequestId : 'PR'}
+            </a>
+        )
     }
 
     const renderTargetBranch = () => {
         if (_webhookData.data['target branch name']) {
             return (
-                <div className="flex left">
+                <p className="flex left fs-13">
                     into&nbsp;
                     <a
                         href={createGitCommitUrl(materialUrl, _webhookData.data['target checkout'])}
@@ -226,7 +224,7 @@ const GitCommitInfoGeneric = ({
                     >
                         {_webhookData.data['target branch name']}
                     </a>
-                </div>
+                </p>
             )
         }
         return null
@@ -273,7 +271,7 @@ const GitCommitInfoGeneric = ({
                 <div className="flex left lh-20 dc__gap-8">
                     <PullRequestIcon className="icon-dim-16" />
                     <div className="flex left dc__gap-4">
-                        Merge 1 commit
+                        Merge commit
                         {renderTargetBranch()}
                         {renderSourceBranch()}
                     </div>
