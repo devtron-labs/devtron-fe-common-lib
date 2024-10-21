@@ -15,6 +15,7 @@
  */
 
 import { CSSProperties, ReactElement } from 'react'
+import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import {
     OptionType,
     UserApprovalMetadataType,
@@ -27,7 +28,6 @@ import {
     PaginationProps,
     useScrollable,
     SortingOrder,
-    SupportedKeyboardKeysType,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
 import { AggregationKeys, GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'

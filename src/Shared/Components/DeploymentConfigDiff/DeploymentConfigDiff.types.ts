@@ -5,9 +5,10 @@ import {
     ConfigMapSecretDataConfigDatumDTO,
     DeploymentTemplateDTO,
     EnvResourceType,
-    ManifestTemplateDTO,
+    TemplateListDTO,
 } from '@Shared/Services'
 
+import { ManifestTemplateDTO } from '@Pages/Applications'
 import { DeploymentHistoryDetail } from '../CICDHistory'
 import { CollapsibleListConfig, CollapsibleListItem } from '../CollapsibleList'
 import { SelectPickerProps } from '../SelectPicker'
@@ -53,6 +54,7 @@ export type DeploymentConfigDiffSelectPickerProps =
 
 export interface DeploymentConfigDiffNavigationItem
     extends Pick<CollapsibleListItem<'navLink'>, 'href' | 'title' | 'onClick'> {
+    Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     diffState: DeploymentConfigListItem['diffState']
 }
 
@@ -112,8 +114,9 @@ export interface DeploymentConfigDiffNavigationProps
         | 'goBackURL'
         | 'navHeading'
         | 'navHelpText'
-        | 'isNavHelpTextShowingError'
         | 'tabConfig'
+        | 'errorConfig'
+        | 'isNavHelpTextShowingError'
         | 'showDetailedDiffState'
         | 'hideDiffState'
     > {}
@@ -151,10 +154,14 @@ export type AppEnvDeploymentConfigListParams<IsManifestView> = (IsManifestView e
     ? {
           currentList: ManifestTemplateDTO
           compareList: ManifestTemplateDTO
+          compareToTemplateOptions?: never
+          compareWithTemplateOptions?: never
       }
     : {
           currentList: AppEnvDeploymentConfigDTO
           compareList: AppEnvDeploymentConfigDTO
+          compareToTemplateOptions?: TemplateListDTO[]
+          compareWithTemplateOptions?: TemplateListDTO[]
       }) & {
     getNavItemHref: (resourceType: EnvResourceType, resourceName: string) => string
     isManifestView?: IsManifestView
