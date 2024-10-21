@@ -15,7 +15,7 @@
  */
 
 import { MutableRefObject } from 'react'
-import { VariableType } from '../../../Common'
+import { ConsequenceType, VariableType } from '../../../Common'
 import { BaseFilterQueryParams } from '../../types'
 import { ImageWithFallbackProps } from '../ImageWithFallback'
 import { getPluginStoreData } from './service'
@@ -252,4 +252,21 @@ export interface PluginTagsContainerProps {
 
 export interface PluginImageContainerProps extends Pick<ImageWithFallbackProps, 'imageProps'> {
     fallbackImageClassName?: string
+}
+
+export enum PipelineStageTaskActionModalType {
+    DELETE = 'DELETE',
+    MOVE_PLUGIN = 'MOVE_PLUGIN',
+}
+
+export interface PipelineStageTaskActionModalStateType {
+    type: PipelineStageTaskActionModalType
+    pluginId: PluginDetailType['id']
+    taskIndex: number
+}
+
+export interface MandatoryPluginBaseStateType {
+    isOffendingMandatoryPlugin: boolean
+    isTriggerBlocked: boolean
+    pluginBlockState: ConsequenceType
 }
