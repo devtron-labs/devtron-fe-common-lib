@@ -5,6 +5,7 @@ import {
     ConfigMapSecretDataConfigDatumDTO,
     DeploymentTemplateDTO,
     EnvResourceType,
+    TemplateListDTO,
 } from '@Shared/Services'
 
 import { ManifestTemplateDTO } from '@Pages/Applications'
@@ -152,10 +153,14 @@ export type AppEnvDeploymentConfigListParams<IsManifestView> = (IsManifestView e
     ? {
           currentList: ManifestTemplateDTO
           compareList: ManifestTemplateDTO
+          compareToTemplateOptions?: never
+          compareWithTemplateOptions?: never
       }
     : {
           currentList: AppEnvDeploymentConfigDTO
           compareList: AppEnvDeploymentConfigDTO
+          compareToTemplateOptions?: TemplateListDTO[]
+          compareWithTemplateOptions?: TemplateListDTO[]
       }) & {
     getNavItemHref: (resourceType: EnvResourceType, resourceName: string) => string
     isManifestView?: IsManifestView
