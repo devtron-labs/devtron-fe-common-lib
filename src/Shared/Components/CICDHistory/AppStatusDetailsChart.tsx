@@ -16,17 +16,33 @@
 
 import { useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react'
+import { useHistory } from 'react-router-dom'
+import { URLS } from '@Common/Constants'
 import { ReactComponent as InfoIcon } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as Chat } from '../../../Assets/Icon/ic-chat-circle-dots.svg'
-import { AppStatusDetailsChartType, AggregatedNodes, STATUS_SORTING_ORDER } from './types'
+import { AppStatusDetailsChartType, AggregatedNodes, STATUS_SORTING_ORDER, NodeFilters } from './types'
 import { StatusFilterButtonComponent } from './StatusFilterButtonComponent'
-import { DEPLOYMENT_STATUS, APP_STATUS_HEADERS } from '../../constants'
+import { DEPLOYMENT_STATUS, APP_STATUS_HEADERS, ComponentSizeType } from '../../constants'
 import { IndexStore } from '../../Store'
 import { aggregateNodes } from '../../Helpers'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 
-const AppStatusDetailsChart = ({ filterRemoveHealth = false, showFooter }: AppStatusDetailsChartType) => {
+const AppStatusDetailsChart = ({
+    filterRemoveHealth = false,
+    showFooter,
+    showConfigDriftInfo = false,
+    onClose,
+}: AppStatusDetailsChartType) => {
+    const history = useHistory()
     const _appDetails = IndexStore.getAppDetails()
     const [currentFilter, setCurrentFilter] = useState('')
+
+    const { appId, environmentId: envId } = _appDetails
+
+    const handleCompareDesiredManifest = () => {
+        onClose()
+        history.push(`${URLS.APP}/${appId}${URLS.DETAILS}/${envId}/${URLS.APP_DETAILS_K8}/${URLS.CONFIG_DRIFT}`)
+    }
 
     const nodes: AggregatedNodes = useMemo(
         () => aggregateNodes(_appDetails.resourceTree?.nodes || [], _appDetails.resourceTree?.podMetadata || []),
@@ -100,6 +116,7 @@ const AppStatusDetailsChart = ({ filterRemoveHealth = false, showFooter }: AppSt
                             .filter(
                                 (nodeDetails) =>
                                     currentFilter === 'all' ||
+                                    (currentFilter === NodeFilters.drifted && nodeDetails.hasDrift) ||
                                     nodeDetails.health.status?.toLowerCase() === currentFilter,
                             )
                             .map((nodeDetails) => (
@@ -123,7 +140,24 @@ const AppStatusDetailsChart = ({ filterRemoveHealth = false, showFooter }: AppSt
                                     >
                                         {nodeDetails.status ? nodeDetails.status : nodeDetails.health.status}
                                     </div>
-                                    <div>{getNodeMessage(nodeDetails.kind, nodeDetails.name)}</div>
+                                    <div className="flexbox-col dc__gap-4">
+                                        {showConfigDriftInfo && nodeDetails.hasDrift && (
+                                            <div className="flexbox dc__gap-8 dc__align-items-center">
+                                                <span className="fs-13 fw-4 lh-20 cy-7">Config drift detected</span>
+                                                {onClose && appId && envId && (
+                                                    <Button
+                                                        dataTestId="show-config-drift"
+                                                        text="Compare with desired"
+                                                        variant={ButtonVariantType.text}
+                                                        style={ButtonStyleType.default}
+                                                        onClick={handleCompareDesiredManifest}
+                                                        size={ComponentSizeType.small}
+                                                    />
+                                                )}
+                                            </div>
+                                        )}
+                                        <div>{getNodeMessage(nodeDetails.kind, nodeDetails.name)}</div>
+                                    </div>
                                 </div>
                             ))
                     ) : (

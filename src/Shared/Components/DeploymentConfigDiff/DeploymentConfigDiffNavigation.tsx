@@ -39,28 +39,30 @@ export const DeploymentConfigDiffNavigation = ({
     }, [collapsibleNavList])
 
     /** Collapsible List Config. */
-    const collapsibleListConfig = collapsibleNavList.map<CollapsibleListConfig>(({ items, ...resListItem }) => ({
-        ...resListItem,
-        isExpanded: expandedIds[resListItem.id],
-        items: items.map<CollapsibleListConfig['items'][0]>(({ diffState, ...resItem }) => ({
-            ...resItem,
-            strikeThrough: showDetailedDiffState && diffState === DeploymentConfigDiffState.DELETED,
-            ...(!hideDiffState && diffState !== DeploymentConfigDiffState.NO_DIFF
-                ? {
-                      iconConfig: {
-                          Icon: showDetailedDiffState ? diffStateIconMap[diffState] : diffStateIconMap.hasDiff,
-                          tooltipProps: {
-                              content: showDetailedDiffState
-                                  ? diffStateTooltipTextMap[diffState]
-                                  : diffStateTooltipTextMap.hasDiff,
-                              arrow: false,
-                              placement: 'right' as const,
+    const collapsibleListConfig = collapsibleNavList.map<CollapsibleListConfig<'navLink'>>(
+        ({ items, ...resListItem }) => ({
+            ...resListItem,
+            isExpanded: expandedIds[resListItem.id],
+            items: items.map<CollapsibleListConfig<'navLink'>['items'][0]>(({ diffState, ...resItem }) => ({
+                ...resItem,
+                strikeThrough: showDetailedDiffState && diffState === DeploymentConfigDiffState.DELETED,
+                ...(!hideDiffState && diffState !== DeploymentConfigDiffState.NO_DIFF
+                    ? {
+                          iconConfig: {
+                              Icon: showDetailedDiffState ? diffStateIconMap[diffState] : diffStateIconMap.hasDiff,
+                              tooltipProps: {
+                                  content: showDetailedDiffState
+                                      ? diffStateTooltipTextMap[diffState]
+                                      : diffStateTooltipTextMap.hasDiff,
+                                  arrow: false,
+                                  placement: 'right' as const,
+                              },
                           },
-                      },
-                  }
-                : {}),
-        })),
-    }))
+                      }
+                    : {}),
+            })),
+        }),
+    )
 
     // METHODS
     /** Handles collapse button click. */
@@ -145,7 +147,7 @@ export const DeploymentConfigDiffNavigation = ({
                     </NavLink>
                 )
             })}
-            <CollapsibleList config={collapsibleListConfig} onCollapseBtnClick={onCollapseBtnClick} />
+            <CollapsibleList config={collapsibleListConfig} tabType="navLink" onCollapseBtnClick={onCollapseBtnClick} />
             {navHelpText && (
                 <div className="mt-8 py-6 px-8 flexbox dc__align-items-center dc__gap-8">
                     <span className="flex p-2 dc__align-self-start">
