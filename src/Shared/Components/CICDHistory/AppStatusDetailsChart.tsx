@@ -22,7 +22,7 @@ import { ReactComponent as InfoIcon } from '../../../Assets/Icon/ic-info-filled.
 import { ReactComponent as Chat } from '../../../Assets/Icon/ic-chat-circle-dots.svg'
 import { AppStatusDetailsChartType, AggregatedNodes, STATUS_SORTING_ORDER, NodeFilters } from './types'
 import { StatusFilterButtonComponent } from './StatusFilterButtonComponent'
-import { DEPLOYMENT_STATUS, APP_STATUS_HEADERS, ComponentSizeType } from '../../constants'
+import { DEPLOYMENT_STATUS, APP_STATUS_HEADERS, ComponentSizeType, ALL_RESOURCE_KIND_FILTER } from '../../constants'
 import { IndexStore } from '../../Store'
 import { aggregateNodes } from '../../Helpers'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
@@ -35,7 +35,7 @@ const AppStatusDetailsChart = ({
 }: AppStatusDetailsChartType) => {
     const history = useHistory()
     const _appDetails = IndexStore.getAppDetails()
-    const [currentFilter, setCurrentFilter] = useState<string>('all')
+    const [currentFilter, setCurrentFilter] = useState<string>(ALL_RESOURCE_KIND_FILTER)
     const [flattenedNodes, setFlattenedNodes] = useState([])
 
     const { appId, environmentId: envId } = _appDetails
@@ -125,7 +125,7 @@ const AppStatusDetailsChart = ({
                         flattenedNodes
                             .filter(
                                 (nodeDetails) =>
-                                    currentFilter === 'all' ||
+                                    currentFilter === ALL_RESOURCE_KIND_FILTER ||
                                     (currentFilter === NodeFilters.drifted && nodeDetails.hasDrift) ||
                                     nodeDetails.health.status?.toLowerCase() === currentFilter,
                             )

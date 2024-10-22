@@ -15,6 +15,7 @@
  */
 
 /* eslint-disable eqeqeq */
+import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { PopupMenu, StyledRadioGroup as RadioGroup } from '../../../Common'
 import { NodeFilters, NodeStatus, StatusFilterButtonType } from './types'
@@ -48,8 +49,12 @@ export const StatusFilterButtonComponent = ({ nodes, selectedTab, handleFilterCl
         allNodeCount += 1
     })
 
+    const handleInlineFilterClick = (e) => {
+        handleFilterClick(e.target.value)
+    }
+
     const filterOptions = [
-        { status: 'all', count: allNodeCount, isSelected: selectedTab == 'all' },
+        { status: ALL_RESOURCE_KIND_FILTER, count: allNodeCount, isSelected: selectedTab == ALL_RESOURCE_KIND_FILTER },
         { status: NodeStatus.Missing, count: missingNodeCount, isSelected: NodeStatus.Missing == selectedTab },
         { status: NodeStatus.Degraded, count: failedNodeCount, isSelected: NodeStatus.Degraded == selectedTab },
         {
@@ -108,7 +113,7 @@ export const StatusFilterButtonComponent = ({ nodes, selectedTab, handleFilterCl
                 name="status-filter-button"
                 initialTab={selectedTab}
                 disabled={false}
-                onChange={(e) => handleFilterClick(e.target.value)}
+                onChange={handleInlineFilterClick}
             >
                 {displayedInlineFilters.map((filter, index) => (
                     <RadioGroup.Radio
