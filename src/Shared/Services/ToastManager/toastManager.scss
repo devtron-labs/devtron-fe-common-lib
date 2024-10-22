@@ -49,6 +49,7 @@
         // Override the style for the action button
         button.button, a.button {
             color: var(--N0);
+            width: fit-content;
 
             svg *[stroke^="#"] {
                 stroke: var(--N0);
