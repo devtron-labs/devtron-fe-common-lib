@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { PipelineFormType } from '@Pages/CDPipeline'
+import { PipelineFormType } from '@Pages/Applications'
 import { PluginDataStoreType, PluginDetailPayloadType, ResourceKindType } from '../Shared'
 import { VariableType } from './CIPipeline.Types'
 import { ServerErrors } from './ServerError'

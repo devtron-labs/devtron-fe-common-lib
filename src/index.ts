@@ -77,6 +77,7 @@ export interface customEnv {
     FEATURE_STEP_WISE_LOGS_ENABLE?: boolean
     FEATURE_IMAGE_PROMOTION_ENABLE?: boolean
     FEATURE_CD_MANDATORY_PLUGINS_ENABLE?: boolean
+    FEATURE_CONFIG_DRIFT_ENABLE: boolean
 }
 declare global {
     interface Window {

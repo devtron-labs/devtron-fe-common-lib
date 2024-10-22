@@ -137,6 +137,7 @@ const Button = ({
     icon = null,
     ariaLabel = null,
     showAriaLabelInTippy = true,
+    fullWidth = false,
     ...props
 }: ButtonProps) => {
     const isDisabled = disabled || isLoading
@@ -171,7 +172,7 @@ const Button = ({
                 <ButtonElement
                     {...props}
                     disabled={isDisabled}
-                    className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${getButtonDerivedClass({ size, variant, style, isLoading, icon })} ${isDisabled ? 'dc__disabled' : ''} dc__w-fit-content`}
+                    className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${getButtonDerivedClass({ size, variant, style, isLoading, icon })} ${isDisabled ? 'dc__disabled' : ''} ${fullWidth ? 'w-100' : 'dc__w-fit-content'}`}
                     data-testid={dataTestId}
                     aria-label={ariaLabel}
                 >
