@@ -62,7 +62,7 @@ const MaterialHistory = ({
             {dateKeys.map((date) => {
                 const historyList = materialHistoryMapWithTime[date]
                 return (
-                    <>
+                    <div key={date} className="flexbox-col dc__gap-12 py-12 px-16">
                         {!isCommitInfoModal && (
                             <div className="flex left dc__gap-8">
                                 <span className="fs-12 lh-18 cn-7 fw-6 w-130">{date}</span>
@@ -96,7 +96,7 @@ const MaterialHistory = ({
                                 </div>
                             )
                         })}
-                    </>
+                    </div>
                 )
             })}
         </>
