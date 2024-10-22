@@ -36,8 +36,29 @@ import { CHECKBOX_VALUE } from '@Common/Types'
 import { Checkbox } from '@Common/Checkbox'
 import { ReactSelectInputAction } from '@Common/Constants'
 import { isNullOrUndefined } from '@Shared/Helpers'
+import { Tooltip } from '@Common/Tooltip'
+import { TooltipProps } from '@Common/Tooltip/types'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
+
+const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
+    if (tooltipProps) {
+        if (Object.hasOwn(tooltipProps, 'shortcutKeyCombo') && 'shortcutKeyCombo' in tooltipProps) {
+            return tooltipProps
+        }
+
+        return {
+            // TODO: using some typing somersaults here, clean it up later
+            alwaysShowTippyOnHover: !!(tooltipProps as Required<Pick<TooltipProps, 'content'>>)?.content,
+            ...(tooltipProps as Required<Pick<TooltipProps, 'content'>>),
+        }
+    }
+
+    return {
+        alwaysShowTippyOnHover: false,
+        content: null,
+    }
+}
 
 export const SelectPickerDropdownIndicator = <OptionValue,>(
     props: DropdownIndicatorProps<SelectPickerOptionType<OptionValue>>,
@@ -46,7 +67,7 @@ export const SelectPickerDropdownIndicator = <OptionValue,>(
 
     return (
         <components.DropdownIndicator {...props}>
-            <ICCaretDown className={`icon-dim-16 ${isDisabled ? 'scn-3' : 'scn-6'} dc__no-shrink`} />
+            <ICCaretDown className={isDisabled ? 'scn-3' : 'scn-6'} />
         </components.DropdownIndicator>
     )
 }
@@ -55,7 +76,7 @@ export const SelectPickerClearIndicator = <OptionValue,>(
     props: ClearIndicatorProps<SelectPickerOptionType<OptionValue>>,
 ) => (
     <components.ClearIndicator {...props}>
-        <ICClose className="icon-dim-16 icon-use-fill-n6 dc__no-shrink" />
+        <ICClose className="icon-use-fill-n6" />
     </components.ClearIndicator>
 )
 
@@ -100,6 +121,7 @@ export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>
             <div className="flex left">
                 <components.ValueContainer {...props} />
             </div>
+            {/* Size will not work here need to go in details later when prioritized */}
             {showSelectedOptionsCount && selectedOptionsLength > 0 && (
                 <div className="bcb-50 dc__border eb-2 dc__border-radius-4-imp pl-5 pr-5 cb-5 fs-12 fw-6 lh-18 dc__truncate dc__no-shrink">
                     {selectedOptionsLength}
@@ -124,7 +146,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
         isDisabled,
         isSelected,
     } = props
-    const { description, startIcon, endIcon } = data ?? {}
+    const { description, startIcon, endIcon, tooltipProps } = data ?? {}
     const showDescription = !!description
     // __isNew__ denotes the new option to be created
     const isCreatableOption = '__isNew__' in data && data.__isNew__
@@ -137,39 +159,44 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
 
     return (
         <components.Option {...props}>
-            <div className="flexbox dc__align-items-center dc__gap-8">
-                {isMulti && !isCreatableOption && (
-                    <Checkbox
-                        onChange={noop}
-                        onClick={handleChange}
-                        isChecked={isSelected || false}
-                        value={CHECKBOX_VALUE.CHECKED}
-                        rootClassName="mb-0 w-20 p-2 dc__align-self-start dc__no-shrink"
-                        disabled={isDisabled}
-                    />
-                )}
-                <div className={`flex left ${showDescription ? 'top' : ''} dc__gap-8`}>
-                    {startIcon && (
-                        <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
+            <Tooltip {...getTooltipProps(tooltipProps)}>
+                <div className="flexbox dc__align-items-center dc__gap-8">
+                    {isMulti && !isCreatableOption && (
+                        <Checkbox
+                            onChange={noop}
+                            onClick={handleChange}
+                            isChecked={isSelected || false}
+                            value={CHECKBOX_VALUE.CHECKED}
+                            rootClassName="mb-0 w-20 p-2 dc__align-self-start dc__no-shrink"
+                            disabled={isDisabled}
+                        />
                     )}
-                    <div className="flex-grow-1">
-                        <h4 className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}>
-                            {label}
-                        </h4>
-                        {/* Add support for custom ellipsis if required */}
-                        {showDescription && (
-                            <p
-                                className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__ellipsis-right__2nd-line' : ''}`}
-                            >
-                                {description}
-                            </p>
+                    <div className={`flex left w-100 ${showDescription ? 'top' : ''} dc__gap-8`}>
+                        {startIcon && (
+                            <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
+                        )}
+                        <div className="flex-grow-1">
+                            <h4 className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}>
+                                {label}
+                            </h4>
+                            {/* Add support for custom ellipsis if required */}
+                            {showDescription &&
+                                (typeof description === 'string' ? (
+                                    <p
+                                        className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__ellipsis-right__2nd-line' : ''}`}
+                                    >
+                                        {description}
+                                    </p>
+                                ) : (
+                                    <div className="fs-12 lh-18">{description}</div>
+                                ))}
+                        </div>
+                        {endIcon && (
+                            <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>
                         )}
                     </div>
-                    {endIcon && (
-                        <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>
-                    )}
                 </div>
-            </div>
+            </Tooltip>
         </components.Option>
     )
 }

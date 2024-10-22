@@ -58,7 +58,11 @@ export const StatusFilterButtonComponent = ({ nodes, selectedTab, handleFilterCl
             isSelected: NodeStatus.Progressing == selectedTab,
         },
         { status: NodeStatus.Healthy, count: healthyNodeCount, isSelected: NodeStatus.Healthy == selectedTab },
-        { status: NodeFilters.drifted, count: driftedNodeCount, isSelected: selectedTab === NodeFilters.drifted },
+        window._env_.FEATURE_CONFIG_DRIFT_ENABLE && {
+            status: NodeFilters.drifted,
+            count: driftedNodeCount,
+            isSelected: selectedTab === NodeFilters.drifted,
+        },
     ]
     const validFilterOptions = filterOptions.filter(({ count }) => count > 0)
     const displayedInlineFilters = validFilterOptions.slice(

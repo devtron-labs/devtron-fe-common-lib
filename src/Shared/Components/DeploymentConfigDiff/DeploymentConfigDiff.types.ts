@@ -5,13 +5,21 @@ import {
     ConfigMapSecretDataConfigDatumDTO,
     DeploymentTemplateDTO,
     EnvResourceType,
-    ManifestTemplateDTO,
+    TemplateListDTO,
 } from '@Shared/Services'
 
+import { ManifestTemplateDTO } from '@Pages/Applications'
 import { DeploymentHistoryDetail } from '../CICDHistory'
 import { CollapsibleListConfig, CollapsibleListItem } from '../CollapsibleList'
 import { SelectPickerProps } from '../SelectPicker'
 import { CollapseProps } from '../Collapse'
+
+export enum DeploymentConfigDiffState {
+    NO_DIFF = 'noDiff',
+    HAS_DIFF = 'hasDiff',
+    ADDED = 'added',
+    DELETED = 'deleted',
+}
 
 export interface DeploymentConfigType {
     list: DeploymentHistoryDetail
@@ -21,10 +29,13 @@ export interface DeploymentConfigType {
 export interface DeploymentConfigListItem {
     id: string
     title: string
+    name?: string
+    pathType: EnvResourceType
     primaryConfig: DeploymentConfigType
     secondaryConfig: DeploymentConfigType
-    hasDiff?: boolean
-    isDeploymentTemplate?: boolean
+    diffState: DeploymentConfigDiffState
+    singleView?: boolean
+    groupHeader?: string
 }
 
 export type DeploymentConfigDiffSelectPickerProps =
@@ -41,10 +52,10 @@ export type DeploymentConfigDiffSelectPickerProps =
           selectPickerProps: SelectPickerProps
       }
 
-export interface DeploymentConfigDiffNavigationItem extends Pick<CollapsibleListItem<'navLink'>, 'title'> {
-    hasDiff?: boolean
-    href: string
-    onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void
+export interface DeploymentConfigDiffNavigationItem
+    extends Pick<CollapsibleListItem<'navLink'>, 'href' | 'title' | 'onClick'> {
+    Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+    diffState: DeploymentConfigListItem['diffState']
 }
 
 export interface DeploymentConfigDiffNavigationCollapsibleItem
@@ -57,14 +68,19 @@ export interface DeploymentConfigDiffProps {
     errorConfig?: {
         error: boolean
         code: number
+        message?: string
+        redirectURL?: string
         reload: () => void
     }
     configList: DeploymentConfigListItem[]
+    showDetailedDiffState?: boolean
+    hideDiffState?: boolean
     headerText?: string
     scrollIntoViewId?: string
     selectorsConfig: {
         primaryConfig: DeploymentConfigDiffSelectPickerProps[]
         secondaryConfig: DeploymentConfigDiffSelectPickerProps[]
+        hideDivider?: boolean
     }
     sortingConfig?: {
         sortBy: string
@@ -76,17 +92,33 @@ export interface DeploymentConfigDiffProps {
     goBackURL?: string
     navHeading: string
     navHelpText?: string
+    isNavHelpTextShowingError?: boolean
     tabConfig?: {
         tabs: string[]
         activeTab: string
         onClick: (tab: string) => void
     }
+    scopeVariablesConfig?: {
+        convertVariables: boolean
+        onConvertVariablesClick: () => void
+    }
+    renderedInDrawer?: boolean
 }
 
 export interface DeploymentConfigDiffNavigationProps
     extends Pick<
         DeploymentConfigDiffProps,
-        'isLoading' | 'navList' | 'collapsibleNavList' | 'goBackURL' | 'navHeading' | 'navHelpText' | 'tabConfig'
+        | 'isLoading'
+        | 'navList'
+        | 'collapsibleNavList'
+        | 'goBackURL'
+        | 'navHeading'
+        | 'navHelpText'
+        | 'tabConfig'
+        | 'errorConfig'
+        | 'isNavHelpTextShowingError'
+        | 'showDetailedDiffState'
+        | 'hideDiffState'
     > {}
 
 export interface DeploymentConfigDiffMainProps
@@ -99,16 +131,20 @@ export interface DeploymentConfigDiffMainProps
         | 'scrollIntoViewId'
         | 'selectorsConfig'
         | 'sortingConfig'
+        | 'scopeVariablesConfig'
+        | 'showDetailedDiffState'
+        | 'hideDiffState'
     > {}
 
-export interface DeploymentConfigDiffAccordionProps extends Pick<CollapseProps, 'onTransitionEnd'> {
-    id: string
-    title: string
-    children: React.ReactNode
-    hasDiff?: boolean
-    isExpanded?: boolean
-    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
-}
+export type DeploymentConfigDiffAccordionProps = Pick<CollapseProps, 'onTransitionEnd'> &
+    Pick<DeploymentConfigDiffProps, 'showDetailedDiffState' | 'hideDiffState'> & {
+        id: string
+        title: string
+        children: React.ReactNode
+        diffState: DeploymentConfigDiffState
+        isExpanded?: boolean
+        onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+    }
 
 export type DiffHeadingDataType<DeploymentTemplate> = DeploymentTemplate extends true
     ? DeploymentTemplateDTO
@@ -118,13 +154,16 @@ export type AppEnvDeploymentConfigListParams<IsManifestView> = (IsManifestView e
     ? {
           currentList: ManifestTemplateDTO
           compareList: ManifestTemplateDTO
-          sortOrder?: never
+          compareToTemplateOptions?: never
+          compareWithTemplateOptions?: never
       }
     : {
           currentList: AppEnvDeploymentConfigDTO
           compareList: AppEnvDeploymentConfigDTO
-          sortOrder?: SortingOrder
+          compareToTemplateOptions?: TemplateListDTO[]
+          compareWithTemplateOptions?: TemplateListDTO[]
       }) & {
     getNavItemHref: (resourceType: EnvResourceType, resourceName: string) => string
     isManifestView?: IsManifestView
+    convertVariables?: boolean
 }

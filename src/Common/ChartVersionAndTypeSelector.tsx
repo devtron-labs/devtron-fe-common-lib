@@ -15,10 +15,17 @@
  */
 
 import { useEffect, useState } from 'react'
-import { fetchChartTemplateVersions } from './Common.service'
-import { ChartVersionAndTypeSelectorProps, DeploymentChartVersionType } from './Types'
-import { getFilteredChartVersions, showError } from './Helper'
 import { SelectPicker, SelectPickerVariantType } from '@Shared/Components'
+import { fetchChartTemplateVersions } from './Common.service'
+import { ChartVersionAndTypeSelectorProps } from './Types'
+import { getFilteredChartVersions, showError } from './Helper'
+
+interface DeploymentChartVersionType {
+    chartRefId: number
+    chartVersion: string
+    chartType: string
+    type: number
+}
 
 // @TODO: Generalize this component to be used in CodeEditor as Chart selector toolbar
 // when the Code Editor is moved to the fe-common-lib
@@ -72,8 +79,7 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
             <div className="chart-type-options flex" data-testid="chart-type-options">
                 <span className="cn-7 mr-4">Chart Type</span>
                 <SelectPicker
-                    inputId='chart-type-select'
-                    label='Chart Type'
+                    inputId="chart-type-select"
                     value={selectedChartType ?? chartTypeOptions[0]}
                     options={chartTypeOptions}
                     onChange={handleChartTypeChange}
@@ -81,9 +87,9 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
                 />
             </div>
             <div className="chart-version-options flex" data-testid="chart-version-options">
-            <span className="cn-7 mr-4">Chart Version</span>
+                <span className="cn-7 mr-4">Chart Version</span>
                 <SelectPicker
-                    inputId='chart-version-select'
+                    inputId="chart-version-select"
                     value={selectedChartVersion ?? chartVersionOptions[0]}
                     options={chartVersionOptions}
                     onChange={handleChartVersionChange}
