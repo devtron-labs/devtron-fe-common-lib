@@ -27,7 +27,7 @@ import { ReactComponent as MessageIcon } from '@Icons/ic-message.svg'
 import { ReactComponent as PullRequestIcon } from '@Icons/ic-pull-request.svg'
 import { ReactComponent as Check } from '@Icons/ic-check-circle.svg'
 import { ReactComponent as Abort } from '@Icons/ic-abort.svg'
-import { SourceTypeMap, createGitCommitUrl } from '@Common/Common.service'
+import { SourceTypeMap, createGitCommitUrl, getGitBranchUrl } from '@Common/Common.service'
 import { stopPropagation } from '@Common/Helper'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { ReactComponent as Tag } from '@Icons/ic-tag.svg'
@@ -49,17 +49,17 @@ const GitCommitInfoGeneric = ({
 }: GitCommitInfoGenericProps) => {
     const [showSeeMore, setShowSeeMore] = useState(true)
 
-    const _lowerCaseCommitInfo = getLowerCaseObject(commitInfo)
+    const lowerCaseCommitInfo = getLowerCaseObject(commitInfo)
     const _isWebhook =
         materialSourceType === SourceTypeMap.WEBHOOK ||
-        (_lowerCaseCommitInfo && _lowerCaseCommitInfo.webhookdata && _lowerCaseCommitInfo.webhookdata.id !== 0)
-    const _webhookData = _isWebhook ? _lowerCaseCommitInfo.webhookdata : {}
+        (lowerCaseCommitInfo && lowerCaseCommitInfo.webhookdata && lowerCaseCommitInfo.webhookdata.id !== 0)
+    const _webhookData = _isWebhook ? lowerCaseCommitInfo.webhookdata : {}
     // eslint-disable-next-line no-nested-ternary
     const _commitUrl = _isWebhook
         ? null
-        : _lowerCaseCommitInfo.commiturl
-          ? _lowerCaseCommitInfo.commiturl
-          : createGitCommitUrl(materialUrl, _lowerCaseCommitInfo.commit)
+        : lowerCaseCommitInfo.commiturl
+          ? lowerCaseCommitInfo.commiturl
+          : createGitCommitUrl(materialUrl, lowerCaseCommitInfo.commit)
 
     function renderBasicGitCommitInfoForWebhook() {
         const _date = getWebhookDate(materialSourceType, commitInfo)
@@ -185,7 +185,7 @@ const GitCommitInfoGeneric = ({
     }
 
     const renderCommitStatus = () => {
-        if (_lowerCaseCommitInfo.isselected) {
+        if (lowerCaseCommitInfo.isselected) {
             return <Check data-testid="selected-git-commit" className="dc__align-right icon-dim-20" />
         }
         return matSelectionText()
@@ -202,53 +202,26 @@ const GitCommitInfoGeneric = ({
                 href={pullRequestUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="commit-hash fs-14 px-6 mono dc__w-fit-content"
+                className="commit-hash fs-14 px-6 mono dc__w-fit-content cursor"
                 onClick={stopPropagation}
             >
-                # {typeof pullRequestId === 'number' ? pullRequestId : 'PR'}
+                # {Number.isNaN(pullRequestId) ? 'PR' : pullRequestId}
             </a>
         )
     }
 
-    const renderTargetBranch = () => {
-        if (_webhookData.data['target branch name']) {
-            return (
-                <p className="flex left fs-13">
-                    into&nbsp;
-                    <a
-                        href={createGitCommitUrl(materialUrl, _webhookData.data['target checkout'])}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="commit-hash fs-14 px-6 mono"
-                        onClick={stopPropagation}
-                    >
-                        {_webhookData.data['target branch name']}
-                    </a>
-                </p>
-            )
-        }
-        return null
-    }
-
-    const renderSourceBranch = () => {
-        if (_webhookData.data['source branch name']) {
-            return (
-                <div className="flex left">
-                    from&nbsp;
-                    <a
-                        href={createGitCommitUrl(materialUrl, _webhookData.data['source checkout'])}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="commit-hash fs-14 px-6 mono"
-                        onClick={stopPropagation}
-                    >
-                        {_webhookData.data['source branch name']}
-                    </a>
-                </div>
-            )
-        }
-        return null
-    }
+    const renderBranchName = (branchName: string) =>
+        branchName ? (
+            <a
+                href={getGitBranchUrl(materialUrl, branchName)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="commit-hash fs-14 px-6 mono"
+                onClick={stopPropagation}
+            >
+                {branchName}
+            </a>
+        ) : null
 
     const renderPRInfoCard = () =>
         _isWebhook &&
@@ -259,7 +232,7 @@ const GitCommitInfoGeneric = ({
                     {renderWebhookTitle()}
                     {selectedCommitInfo ? (
                         <div className="flexbox dc__align-items-center dc__content-end fs-12">
-                            {_lowerCaseCommitInfo.isselected ? (
+                            {lowerCaseCommitInfo.isselected ? (
                                 <Check className="dc__align-right" />
                             ) : (
                                 <Circle data-testid="valid-git-commit" />
@@ -271,9 +244,10 @@ const GitCommitInfoGeneric = ({
                 <div className="flex left lh-20 dc__gap-8">
                     <PullRequestIcon className="icon-dim-16" />
                     <div className="flex left dc__gap-4">
-                        Merge commit
-                        {renderTargetBranch()}
-                        {renderSourceBranch()}
+                        Merge commit into&nbsp;
+                        {renderBranchName(_webhookData.data['target branch name'])}
+                        &nbsp;from&nbsp;
+                        {renderBranchName(_webhookData.data['source branch name'])}
                     </div>
                 </div>
                 {renderBasicGitCommitInfoForWebhook()}
@@ -292,7 +266,7 @@ const GitCommitInfoGeneric = ({
                     </div>
                     {selectedCommitInfo ? (
                         <div className="material-history__select-text">
-                            {_lowerCaseCommitInfo.isselected ? <Check className="dc__align-right" /> : 'Select'}
+                            {lowerCaseCommitInfo.isselected ? <Check className="dc__align-right" /> : 'Select'}
                         </div>
                     ) : null}
                 </div>
@@ -303,7 +277,7 @@ const GitCommitInfoGeneric = ({
 
     return (
         <div className="git-commit-info-generic__wrapper cn-9 fs-12">
-            {showMaterialInfoHeader && (_isWebhook || _lowerCaseCommitInfo.commit) && (
+            {showMaterialInfoHeader && (_isWebhook || lowerCaseCommitInfo.commit) && (
                 <GitMaterialInfoHeader
                     index={index}
                     repoUrl={materialUrl}
@@ -314,7 +288,7 @@ const GitCommitInfoGeneric = ({
             <div className="flexbox-col left dc__gap-8 p-16">
                 {!_isWebhook && (
                     <>
-                        {_lowerCaseCommitInfo.commit && (
+                        {lowerCaseCommitInfo.commit && (
                             <div className="flex dc__content-space">
                                 {_commitUrl ? (
                                     <div className="flex dc__gap-8">
@@ -331,44 +305,42 @@ const GitCommitInfoGeneric = ({
                                                 data-testid={`git-commit-credential${index}`}
                                             >
                                                 <Commit className="commit-hash__icon mr-0" />
-                                                {_lowerCaseCommitInfo.commit.slice(0, 7)}
+                                                {lowerCaseCommitInfo.commit.slice(0, 7)}
                                             </div>
                                         </a>
                                         <span
                                             className="git-commit-info-generic__copy dc__visibility-hidden p-2"
                                             data-testid="git-commit-copy"
                                         >
-                                            <ClipboardButton content={_lowerCaseCommitInfo.commit} />
+                                            <ClipboardButton content={lowerCaseCommitInfo.commit} />
                                         </span>
                                     </div>
                                 ) : null}
                                 {selectedCommitInfo ? renderCommitStatus() : null}
                             </div>
                         )}
-                        {_lowerCaseCommitInfo.message ? (
+                        {lowerCaseCommitInfo.message ? (
                             <div
-                                data-testid={`${_lowerCaseCommitInfo.message.trim()}-${isExcluded ? 'excluded' : 'included'}`}
+                                data-testid={`${lowerCaseCommitInfo.message.trim()}-${isExcluded ? 'excluded' : 'included'}`}
                                 className="material-history__text lh-20 flex left dc__gap-8 top material-history-text--padded dc__word-break-all"
                             >
                                 <span className="fs-13 fw-6 lh-20 cn-9  dc__truncate--clamp-3">
-                                    {_lowerCaseCommitInfo.message}
+                                    {lowerCaseCommitInfo.message}
                                 </span>
                             </div>
                         ) : null}
                         <div className="flexbox-col dc__gap-4">
-                            {_lowerCaseCommitInfo.author ? (
+                            {lowerCaseCommitInfo.author ? (
                                 <div className="material-history__text lh-20 flex left dc__gap-8">
                                     <PersonIcon className="icon-dim-16" />
-                                    <span className="lh-20"> {_lowerCaseCommitInfo.author}</span>
+                                    <span className="lh-20"> {lowerCaseCommitInfo.author}</span>
                                 </div>
                             ) : null}
-                            {_lowerCaseCommitInfo.date ? (
+                            {lowerCaseCommitInfo.date ? (
                                 <div className="material-history__text lh-20 flex left dc__gap-8">
                                     <CalendarIcon className="icon-dim-16" />
                                     <span className="lh-20">
-                                        {moment(_lowerCaseCommitInfo.date).format(
-                                            DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
-                                        )}
+                                        {moment(lowerCaseCommitInfo.date).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
                                     </span>
                                 </div>
                             ) : null}

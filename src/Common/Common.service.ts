@@ -18,7 +18,7 @@ import moment from 'moment'
 import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
 import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
-import { ROUTES } from './Constants'
+import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
 import {
     TeamList,
@@ -510,4 +510,23 @@ export function getNamespaceListMin(clusterIdsCsv: string): Promise<EnvironmentL
 export function getWebhookEventsForEventId(eventId: string | number) {
     const URL = `${ROUTES.GIT_HOST_EVENT}/${eventId}`
     return get(URL)
+}
+
+export const getGitBranchUrl = (gitUrl: string, branchName: string): string | null => {
+    if (!gitUrl) return null
+
+    const trimmedGitUrl = gitUrl.trim().replace(/\/$/, '') // Remove any trailing slash
+
+    switch (true) {
+        case trimmedGitUrl.includes(GitProviderType.GITLAB):
+            return `${trimmedGitUrl}/-/tree/${branchName}`
+        case trimmedGitUrl.includes(GitProviderType.GITHUB):
+            return `${trimmedGitUrl}/tree/${branchName}`
+        case trimmedGitUrl.includes(GitProviderType.BITBUCKET):
+            return `${trimmedGitUrl}/branch/${branchName}`
+        case trimmedGitUrl.includes(GitProviderType.AZURE):
+            return `${trimmedGitUrl}/src/branch/${branchName}`
+        default:
+            return null
+    }
 }

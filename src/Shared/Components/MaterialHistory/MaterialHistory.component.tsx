@@ -15,6 +15,8 @@
  */
 
 import { getWebhookDate } from '@Shared/Helpers'
+import { MaterialHistoryType } from '@Shared/Services'
+import { useMemo } from 'react'
 import { SourceTypeMap } from '../../../Common'
 import { GitCommitInfoGeneric } from '../GitCommitInfoGeneric'
 import { MaterialHistoryProps } from './types'
@@ -33,26 +35,23 @@ const MaterialHistory = ({
         }
     }
 
-    const getMaterialHistoryMapWithTime = () => {
-        const historyTimeMap = {}
+    const materialHistoryMapWithTime = useMemo(
+        () =>
+            material.history.reduce<Record<string, MaterialHistoryType[]>>((acc, historyElem: MaterialHistoryType) => {
+                const isWebhook = material.type === SourceTypeMap.WEBHOOK
+                const newDate = isWebhook
+                    ? getWebhookDate(material.type, historyElem).substring(0, 16)
+                    : historyElem.date.substring(0, 16)
+                if (!acc[newDate]) {
+                    acc[newDate] = []
+                }
+                acc[newDate].push(historyElem)
+                return acc
+            }, {}),
+        [material.history, material.type],
+    )
 
-        material.history.forEach((history) => {
-            const isWebhook = material.type === SourceTypeMap.WEBHOOK
-
-            const newDate = isWebhook
-                ? getWebhookDate(material.type, history).substring(0, 16)
-                : history.date.substring(0, 16)
-
-            if (!historyTimeMap[newDate]) {
-                historyTimeMap[newDate] = []
-            }
-            historyTimeMap[newDate].push(history)
-        })
-
-        return historyTimeMap
-    }
     // Retrieve the history map
-    const materialHistoryMapWithTime = getMaterialHistoryMapWithTime()
     // Retrieve the keys of the history map
     const dateKeys = Object.keys(materialHistoryMapWithTime)
 

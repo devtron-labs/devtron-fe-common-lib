@@ -554,3 +554,11 @@ export const VULNERABILITIES_SORT_PRIORITY = {
 
 // TODO: might not work need to verify
 export const IS_PLATFORM_MAC_OS = window.navigator.userAgent.toUpperCase().includes('MAC')
+
+export enum GitProviderType {
+    GITHUB = 'github',
+    GITLAB = 'gitlab',
+    BITBUCKET = 'bitbucket',
+    AZURE = 'azure',
+    GITEA = 'gitea',
+}

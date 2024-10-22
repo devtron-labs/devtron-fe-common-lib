@@ -84,6 +84,7 @@ export interface CIMaterialType
     gitURL: CIMaterialDTO['url']
     history: MaterialHistoryType[]
     isSelected: boolean
+    gitMaterialUrl?: string
 }
 
 interface ImageCommentDTO {
