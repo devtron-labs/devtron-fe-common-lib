@@ -1,4 +1,4 @@
-import { VisibleModal } from '@Common/index'
+import { GenericEmptyState, VisibleModal } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 import { useState, useCallback } from 'react'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
@@ -45,7 +45,12 @@ export const IframePromoButton = () => {
                         referrerPolicy="no-referrer"
                     />
                 ) : (
-                    <div className="flex h-100">No data available.</div>
+                    <div className="flex h-100">
+                        <GenericEmptyState
+                            title="Nothing to show"
+                            subTitle="An iframe appears here in a parallel universe"
+                        />
+                    </div>
                 )}
             </div>
         </VisibleModal>
