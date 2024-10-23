@@ -64,8 +64,8 @@ const PageHeader = ({
         },
     )
     const [expiryDate, setExpiryDate] = useState(0)
-    const [showTryDevtronModal, setShowTryDevtronModal] = useState(false)
-    const tryDevtronButtonText = window._env_.FEATURE_HEADER_TRY_DEVTRON_BUTTON_TEXT
+    const [showEmbeddedIframeModal, setEmbeddedIframeModal] = useState(false)
+    const embedIframeButtonText = window._env_.FEATURE_PROMO_EMBEDDED_BUTTON_TEXT
 
     const getCurrentServerInfo = async () => {
         try {
@@ -161,15 +161,15 @@ const PageHeader = ({
         <span className="fs-12 fw-4 lh-18 pt-1 pb-1 pl-6 pr-6 ml-8 cn-9 bcy-5 br-4">Beta</span>
     )
 
-    const onClickShowTryDevtronModal = () => setShowTryDevtronModal(true)
-    const onClickCloseTryDevtronModal = () => setShowTryDevtronModal(false)
+    const onClickShowTryDevtronModal = () => setEmbeddedIframeModal(true)
+    const onClickCloseTryDevtronModal = () => setEmbeddedIframeModal(false)
 
     const renderIframeDrawer = () => (
         <VisibleModal close={onClickCloseTryDevtronModal}>
-            <div className="modal-body--ci-material h-100 dc__overflow-hidden dc__border-left">
-                <div className="trigger-modal__header">
+            <div className="modal-body--ci-material h-100 dc__overflow-hidden dc__border-left flex column dc__content-space w-100">
+                <div className="trigger-modal__header w-100">
                     <h1 className="modal__title flex left fs-16 fw-6-imp" data-testid="app-details-url-heading">
-                        {window._env_.FEATURE_HEADER_TRY_DEVTRON_TITLE || tryDevtronButtonText}
+                        {window._env_.FEATURE_PROMO_EMBEDDED_MODAL_TITLE || embedIframeButtonText}
                     </h1>
                     <Button
                         ariaLabel="Try Devtron"
@@ -183,8 +183,8 @@ const PageHeader = ({
                     />
                 </div>
                 <iframe
-                    title={window._env_.FEATURE_HEADER_TRY_DEVTRON_TITLE || tryDevtronButtonText}
-                    src={window._env_.FEATURE_HEADER_TRY_DEVTRON_URL}
+                    title={window._env_.FEATURE_PROMO_EMBEDDED_MODAL_TITLE || embedIframeButtonText}
+                    src={window._env_.FEATURE_PROMO_EMBEDDED_IFRAME_URL}
                     width="100%"
                     height="100%"
                     className="dc__no-border"
@@ -196,12 +196,12 @@ const PageHeader = ({
     )
 
     const renderIframeButton = () =>
-        tryDevtronButtonText && (
+        embedIframeButtonText && (
             <Button
                 dataTestId="iframe-header-button"
                 size={ComponentSizeType.small}
                 onClick={onClickShowTryDevtronModal}
-                text={tryDevtronButtonText}
+                text={embedIframeButtonText}
                 variant={ButtonVariantType.secondary}
             />
         )
@@ -314,7 +314,7 @@ const PageHeader = ({
                     {renderLogoutHelpSection()}
                 </div>
             )}
-            {showTryDevtronModal && renderIframeDrawer()}
+            {showEmbeddedIframeModal && renderIframeDrawer()}
             {showAnnouncementHeader && <AnnouncementBanner parentClassName="page-header-banner" />}
         </div>
     )
