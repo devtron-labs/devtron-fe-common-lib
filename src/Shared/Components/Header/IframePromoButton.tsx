@@ -51,20 +51,17 @@ export const IframePromoButton = () => {
         </VisibleModal>
     )
 
-    const renderIframeButton = () =>
-        FEATURE_PROMO_EMBEDDED_BUTTON_TEXT && (
-            <Button
-                dataTestId="iframe-header-button"
-                size={ComponentSizeType.small}
-                onClick={onClickShowIframeModal}
-                text={FEATURE_PROMO_EMBEDDED_BUTTON_TEXT}
-                variant={ButtonVariantType.secondary}
-            />
-        )
-
     return (
         <div>
-            {renderIframeButton()}
+            {FEATURE_PROMO_EMBEDDED_BUTTON_TEXT && (
+                <Button
+                    dataTestId="iframe-header-button"
+                    size={ComponentSizeType.small}
+                    onClick={onClickShowIframeModal}
+                    text={FEATURE_PROMO_EMBEDDED_BUTTON_TEXT}
+                    variant={ButtonVariantType.secondary}
+                />
+            )}
             {showEmbeddedIframeModal && renderIframeDrawer()}
         </div>
     )
