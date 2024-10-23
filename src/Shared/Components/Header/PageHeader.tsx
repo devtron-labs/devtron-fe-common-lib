@@ -18,8 +18,7 @@ import { useEffect, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import './pageHeader.css'
 import ReactGA from 'react-ga4'
-import { ComponentSizeType } from '@Shared/constants'
-import { getRandomColor, VisibleModal } from '../../../Common'
+import { getRandomColor } from '../../../Common'
 import LogoutCard from '../LogoutCard'
 import { setActionWithExpiry, handlePostHogEventUpdate } from './utils'
 import { InstallationType, ServerInfo, PageHeaderType } from './types'
@@ -33,8 +32,7 @@ import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-
 import AnnouncementBanner from '../AnnouncementBanner/AnnouncementBanner'
 import { useMainContext, useUserEmail } from '../../Providers'
 import { InfoIconTippy } from '../InfoIconTippy'
-import { ButtonStyleType, ButtonVariantType } from '../Button/types'
-import { Button } from '../Button'
+import { IframePromoButton } from './IframePromoButton'
 
 const PageHeader = ({
     headerName,
@@ -64,8 +62,6 @@ const PageHeader = ({
         },
     )
     const [expiryDate, setExpiryDate] = useState(0)
-    const [showEmbeddedIframeModal, setEmbeddedIframeModal] = useState(false)
-    const embedIframeButtonText = window._env_.FEATURE_PROMO_EMBEDDED_BUTTON_TEXT
 
     const getCurrentServerInfo = async () => {
         try {
@@ -161,50 +157,8 @@ const PageHeader = ({
         <span className="fs-12 fw-4 lh-18 pt-1 pb-1 pl-6 pr-6 ml-8 cn-9 bcy-5 br-4">Beta</span>
     )
 
-    const onClickShowTryDevtronModal = () => setEmbeddedIframeModal(true)
-    const onClickCloseTryDevtronModal = () => setEmbeddedIframeModal(false)
+    const renderIframeButton = () => <IframePromoButton />
 
-    const renderIframeDrawer = () => (
-        <VisibleModal close={onClickCloseTryDevtronModal}>
-            <div className="modal-body--ci-material h-100 dc__overflow-hidden dc__border-left flex column dc__content-space w-100">
-                <div className="trigger-modal__header w-100">
-                    <h1 className="modal__title flex left fs-16 fw-6-imp" data-testid="app-details-url-heading">
-                        {window._env_.FEATURE_PROMO_EMBEDDED_MODAL_TITLE || embedIframeButtonText}
-                    </h1>
-                    <Button
-                        ariaLabel="Try Devtron"
-                        dataTestId="iframe-modal-close-button"
-                        size={ComponentSizeType.small}
-                        onClick={onClickCloseTryDevtronModal}
-                        style={ButtonStyleType.negativeGrey}
-                        variant={ButtonVariantType.borderLess}
-                        icon={<Close />}
-                        showAriaLabelInTippy={false}
-                    />
-                </div>
-                <iframe
-                    title={window._env_.FEATURE_PROMO_EMBEDDED_MODAL_TITLE || embedIframeButtonText}
-                    src={window._env_.FEATURE_PROMO_EMBEDDED_IFRAME_URL}
-                    width="100%"
-                    height="100%"
-                    className="dc__no-border"
-                    sandbox="allow-same-origin allow-scripts"
-                    referrerPolicy="no-referrer"
-                />
-            </div>
-        </VisibleModal>
-    )
-
-    const renderIframeButton = () =>
-        embedIframeButtonText && (
-            <Button
-                dataTestId="iframe-header-button"
-                size={ComponentSizeType.small}
-                onClick={onClickShowTryDevtronModal}
-                text={embedIframeButtonText}
-                variant={ButtonVariantType.secondary}
-            />
-        )
     return (
         <div
             className={`dc__page-header dc__content-space cn-9 bcn-0 pl-20 pr-20 ${
@@ -314,7 +268,6 @@ const PageHeader = ({
                     {renderLogoutHelpSection()}
                 </div>
             )}
-            {showEmbeddedIframeModal && renderIframeDrawer()}
             {showAnnouncementHeader && <AnnouncementBanner parentClassName="page-header-banner" />}
         </div>
     )
