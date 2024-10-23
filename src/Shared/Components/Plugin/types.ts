@@ -104,7 +104,7 @@ export interface PluginListFiltersType extends Pick<BaseFilterQueryParams<unknow
     selectedTags: string[]
 }
 
-interface ParentPluginType
+export interface ParentPluginType
     extends Pick<ParentPluginDTO, 'id' | 'name' | 'description' | 'type' | 'icon' | 'pluginIdentifier'> {
     latestVersionId: MinimalPluginVersionDataDTO['id']
     pluginVersions: MinimalPluginVersionDataDTO[]
@@ -112,10 +112,7 @@ interface ParentPluginType
 
 interface DetailedPluginVersionType
     extends Pick<MinimalPluginVersionDataDTO, 'id' | 'description' | 'name' | 'pluginVersion'>,
-        Pick<
-            DetailedPluginVersionDTO,
-            'tags' | 'isLatest' | 'inputVariables' | 'outputVariables' | 'updatedBy' | 'docLink'
-        >,
+        Pick<DetailedPluginVersionDTO, 'tags' | 'inputVariables' | 'outputVariables' | 'updatedBy' | 'docLink'>,
         Pick<ParentPluginType, 'icon' | 'type' | 'pluginIdentifier'> {
     parentPluginId: ParentPluginType['id']
 }
