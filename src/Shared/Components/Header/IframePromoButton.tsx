@@ -34,15 +34,19 @@ export const IframePromoButton = () => {
                         showAriaLabelInTippy={false}
                     />
                 </div>
-                <iframe
-                    title={FEATURE_PROMO_EMBEDDED_MODAL_TITLE || FEATURE_PROMO_EMBEDDED_BUTTON_TEXT}
-                    src={FEATURE_PROMO_EMBEDDED_IFRAME_URL}
-                    width="100%"
-                    height="100%"
-                    className="dc__no-border"
-                    sandbox="allow-same-origin allow-scripts"
-                    referrerPolicy="no-referrer"
-                />
+                {FEATURE_PROMO_EMBEDDED_IFRAME_URL ? (
+                    <iframe
+                        title={FEATURE_PROMO_EMBEDDED_MODAL_TITLE || FEATURE_PROMO_EMBEDDED_BUTTON_TEXT}
+                        src={FEATURE_PROMO_EMBEDDED_IFRAME_URL}
+                        width="100%"
+                        height="100%"
+                        className="dc__no-border"
+                        sandbox="allow-same-origin allow-scripts"
+                        referrerPolicy="no-referrer"
+                    />
+                ) : (
+                    <div className="flex h-100">No data available.</div>
+                )}
             </div>
         </VisibleModal>
     )
