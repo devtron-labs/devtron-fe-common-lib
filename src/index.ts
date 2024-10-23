@@ -77,6 +77,7 @@ export interface customEnv {
     FEATURE_STEP_WISE_LOGS_ENABLE?: boolean
     FEATURE_IMAGE_PROMOTION_ENABLE?: boolean
     FEATURE_CONFIG_DRIFT_ENABLE: boolean
+    FEATURE_BULK_RESTART_WORKLOADS_FROM_RB: string
 }
 declare global {
     interface Window {
