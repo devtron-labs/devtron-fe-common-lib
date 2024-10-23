@@ -168,15 +168,15 @@ const PageHeader = ({
         <VisibleModal close={closeTryDevtronModal}>
             <div className="modal-body--ci-material h-100 dc__overflow-hidden dc__border-left">
                 <div className="trigger-modal__header">
-                    <h1 className="modal__title flex left fs-16" data-testid="app-details-url-heading">
+                    <h1 className="modal__title flex left fs-16 fw-6" data-testid="app-details-url-heading">
                         {window._env_.FEATURE_HEADER_TRY_DEVTRON_TITLE || tryDevtronButtonText}
                     </h1>
                     <Button
                         ariaLabel="Try Devtron"
                         dataTestId="iframe-modal-close-button"
-                        size={ComponentSizeType.medium}
+                        size={ComponentSizeType.small}
                         onClick={closeTryDevtronModal}
-                        style={ButtonStyleType.neutral}
+                        style={ButtonStyleType.negativeGrey}
                         variant={ButtonVariantType.borderLess}
                         icon={<Close />}
                         showAriaLabelInTippy={false}
