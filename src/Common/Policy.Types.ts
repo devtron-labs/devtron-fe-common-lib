@@ -14,39 +14,35 @@
  * limitations under the License.
  */
 
-import { PluginDataStoreType } from '../Shared'
+import { PipelineFormType } from '@Pages/Applications'
+import { PluginDataStoreType, PluginDetailPayloadType, ResourceKindType } from '../Shared'
 import { VariableType } from './CIPipeline.Types'
 import { ServerErrors } from './ServerError'
-import { ResponseType } from './Types'
 
 export enum ApplyPolicyToStage {
     PRE_CI = 'PRE_CI',
     POST_CI = 'POST_CI',
-    PRE_CD = 'PRE_CD',
-    POST_CD = 'POST_CD',
     /**
      * @deprecated in mandatory plugin policy v2
      */
     PRE_OR_POST_CI = 'PRE_OR_POST_CI',
+    PRE_CD = 'PRE_CD',
+    POST_CD = 'POST_CD',
 }
 
+// FIXME: The name build is getting is used in CDPipeline.
+// This enum is mapping values from BuildStageVariable
 export enum PluginRequiredStage {
-    PRE_CI = 'preBuildStage',
-    POST_CI = 'postBuildStage',
-    PRE_OR_POST_CI = 'PRE_OR_POST_CI',
+    PRE_STAGE = 'preBuildStage',
+    POST_STAGE = 'postBuildStage',
+    PRE_OR_POST_STAGE = 'PRE_OR_POST_CI',
 }
 
 export interface DefinitionSourceType {
-    projectName: string
-    isDueToProductionEnvironment: boolean
-    isDueToLinkedPipeline: boolean
-    policyName: string
-    appName?: string
-    clusterName?: string
-    environmentName?: string
-    branchNames?: string[]
-    ciPipelineName?: string
+    policyNames: string[]
+    linkedCIPipelineNames?: string[]
 }
+
 export interface MandatoryPluginDetailType {
     id: number
     parentPluginId: number
@@ -57,7 +53,7 @@ export interface MandatoryPluginDetailType {
     applied?: boolean
     inputVariables?: VariableType[]
     outputVariables?: VariableType[]
-    definitionSources?: DefinitionSourceType[]
+    definitionSources?: DefinitionSourceType
 }
 export interface MandatoryPluginDataType {
     pluginData: MandatoryPluginDetailType[]
@@ -70,6 +66,37 @@ export interface ProcessPluginDataReturnType {
     pluginDataStore: PluginDataStoreType
     mandatoryPluginsError?: ServerErrors
 }
+
+export type ProcessPluginDataCIParamsType = {
+    resourceKind: ResourceKindType.ciPipeline
+    ciPipelineId: number
+    /**
+     * Comma separated branch names used for v1 api
+     * For v2 format is [branchName1],[branchName2]
+     */
+    branchName?: string
+
+    envName?: never
+}
+
+export type ProcessPluginDataCDParamsType = {
+    resourceKind: ResourceKindType.cdPipeline
+    envName?: string
+
+    ciPipelineId?: never
+    branchName?: never
+}
+
+export type ProcessPluginDataParamsType = {
+    formData: PipelineFormType
+    pluginDataStoreState: PluginDataStoreType
+    appId: number
+    appName: string
+    /**
+     * Would be sent in case we have to get data for steps
+     */
+    requiredPluginIds?: PluginDetailPayloadType['pluginId']
+} & (ProcessPluginDataCIParamsType | ProcessPluginDataCDParamsType)
 
 export enum ConsequenceAction {
     /**
@@ -103,8 +130,4 @@ export interface BlockedStateData {
     isOffendingMandatoryPlugin: boolean
     isCITriggerBlocked: boolean
     ciBlockState: ConsequenceType
-}
-
-export interface GetBlockedStateResponse extends ResponseType {
-    result?: BlockedStateData
 }

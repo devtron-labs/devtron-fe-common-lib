@@ -15,7 +15,7 @@
  */
 
 import { MutableRefObject } from 'react'
-import { VariableType } from '../../../Common'
+import { ConsequenceType, VariableType } from '../../../Common'
 import { BaseFilterQueryParams } from '../../types'
 import { ImageWithFallbackProps } from '../ImageWithFallback'
 import { getPluginStoreData } from './service'
@@ -104,7 +104,7 @@ export interface PluginListFiltersType extends Pick<BaseFilterQueryParams<unknow
     selectedTags: string[]
 }
 
-interface ParentPluginType
+export interface ParentPluginType
     extends Pick<ParentPluginDTO, 'id' | 'name' | 'description' | 'type' | 'icon' | 'pluginIdentifier'> {
     latestVersionId: MinimalPluginVersionDataDTO['id']
     pluginVersions: MinimalPluginVersionDataDTO[]
@@ -112,10 +112,7 @@ interface ParentPluginType
 
 interface DetailedPluginVersionType
     extends Pick<MinimalPluginVersionDataDTO, 'id' | 'description' | 'name' | 'pluginVersion'>,
-        Pick<
-            DetailedPluginVersionDTO,
-            'tags' | 'isLatest' | 'inputVariables' | 'outputVariables' | 'updatedBy' | 'docLink'
-        >,
+        Pick<DetailedPluginVersionDTO, 'tags' | 'inputVariables' | 'outputVariables' | 'updatedBy' | 'docLink'>,
         Pick<ParentPluginType, 'icon' | 'type' | 'pluginIdentifier'> {
     parentPluginId: ParentPluginType['id']
 }
@@ -252,4 +249,21 @@ export interface PluginTagsContainerProps {
 
 export interface PluginImageContainerProps extends Pick<ImageWithFallbackProps, 'imageProps'> {
     fallbackImageClassName?: string
+}
+
+export enum PipelineStageTaskActionModalType {
+    DELETE = 'DELETE',
+    MOVE_PLUGIN = 'MOVE_PLUGIN',
+}
+
+export interface PipelineStageTaskActionModalStateType {
+    type: PipelineStageTaskActionModalType
+    pluginId: PluginDetailType['id']
+    taskIndex: number
+}
+
+export interface MandatoryPluginBaseStateType {
+    isOffendingMandatoryPlugin: boolean
+    isTriggerBlocked: boolean
+    pluginBlockState: ConsequenceType
 }
