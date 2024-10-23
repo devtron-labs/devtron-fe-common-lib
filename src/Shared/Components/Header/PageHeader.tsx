@@ -161,11 +161,11 @@ const PageHeader = ({
         <span className="fs-12 fw-4 lh-18 pt-1 pb-1 pl-6 pr-6 ml-8 cn-9 bcy-5 br-4">Beta</span>
     )
 
-    const toggleTryDevtronModal = () => setShowTryDevtronModal(true)
-    const closeTryDevtronModal = () => setShowTryDevtronModal(false)
+    const sonClickShowTryDevtronModal = () => setShowTryDevtronModal(true)
+    const onClickCloseTryDevtronModal = () => setShowTryDevtronModal(false)
 
     const renderIframeDrawer = () => (
-        <VisibleModal close={closeTryDevtronModal}>
+        <VisibleModal close={onClickCloseTryDevtronModal}>
             <div className="modal-body--ci-material h-100 dc__overflow-hidden dc__border-left">
                 <div className="trigger-modal__header">
                     <h1 className="modal__title flex left fs-16 fw-6-imp" data-testid="app-details-url-heading">
@@ -175,7 +175,7 @@ const PageHeader = ({
                         ariaLabel="Try Devtron"
                         dataTestId="iframe-modal-close-button"
                         size={ComponentSizeType.small}
-                        onClick={closeTryDevtronModal}
+                        onClick={onClickCloseTryDevtronModal}
                         style={ButtonStyleType.negativeGrey}
                         variant={ButtonVariantType.borderLess}
                         icon={<Close />}
@@ -200,7 +200,7 @@ const PageHeader = ({
             <Button
                 dataTestId="iframe-header-button"
                 size={ComponentSizeType.small}
-                onClick={toggleTryDevtronModal}
+                onClick={sonClickShowTryDevtronModal}
                 text={tryDevtronButtonText}
                 variant={ButtonVariantType.secondary}
             />
