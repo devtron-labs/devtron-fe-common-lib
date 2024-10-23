@@ -161,14 +161,14 @@ const PageHeader = ({
         <span className="fs-12 fw-4 lh-18 pt-1 pb-1 pl-6 pr-6 ml-8 cn-9 bcy-5 br-4">Beta</span>
     )
 
-    const toggleTryDevtronModal = () => setShowTryDevtronModal(!showTryDevtronModal)
+    const toggleTryDevtronModal = () => setShowTryDevtronModal(true)
     const closeTryDevtronModal = () => setShowTryDevtronModal(false)
 
     const renderIframeDrawer = () => (
         <VisibleModal close={closeTryDevtronModal}>
             <div className="modal-body--ci-material h-100 dc__overflow-hidden dc__border-left">
                 <div className="trigger-modal__header">
-                    <h1 className="modal__title flex left fs-16 fw-6" data-testid="app-details-url-heading">
+                    <h1 className="modal__title flex left fs-16 fw-6-imp" data-testid="app-details-url-heading">
                         {window._env_.FEATURE_HEADER_TRY_DEVTRON_TITLE || tryDevtronButtonText}
                     </h1>
                     <Button
