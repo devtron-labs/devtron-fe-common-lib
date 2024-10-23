@@ -76,6 +76,9 @@ export interface customEnv {
     SYSTEM_CONTROLLER_LISTING_TIMEOUT?: number
     FEATURE_STEP_WISE_LOGS_ENABLE?: boolean
     FEATURE_IMAGE_PROMOTION_ENABLE?: boolean
+    FEATURE_HEADER_TRY_DEVTRON_BUTTON_TEXT: string
+    FEATURE_HEADER_TRY_DEVTRON_TITLE: string
+    FEATURE_HEADER_TRY_DEVTRON_URL: string
 }
 declare global {
     interface Window {

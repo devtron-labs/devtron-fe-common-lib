@@ -18,7 +18,8 @@ import { useEffect, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import './pageHeader.css'
 import ReactGA from 'react-ga4'
-import { getRandomColor } from '../../../Common'
+import { ComponentSizeType } from '@Shared/constants'
+import { getRandomColor, VisibleModal } from '../../../Common'
 import LogoutCard from '../LogoutCard'
 import { setActionWithExpiry, handlePostHogEventUpdate } from './utils'
 import { InstallationType, ServerInfo, PageHeaderType } from './types'
@@ -32,6 +33,8 @@ import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-
 import AnnouncementBanner from '../AnnouncementBanner/AnnouncementBanner'
 import { useMainContext, useUserEmail } from '../../Providers'
 import { InfoIconTippy } from '../InfoIconTippy'
+import { ButtonStyleType, ButtonVariantType } from '../Button/types'
+import { Button } from '../Button'
 
 const PageHeader = ({
     headerName,
@@ -61,6 +64,8 @@ const PageHeader = ({
         },
     )
     const [expiryDate, setExpiryDate] = useState(0)
+    const [showTryDevtronModal, setShowTryDevtronModal] = useState(false)
+    const tryDevtronButtonText = window._env_.FEATURE_HEADER_TRY_DEVTRON_BUTTON_TEXT
 
     const getCurrentServerInfo = async () => {
         try {
@@ -121,8 +126,8 @@ const PageHeader = ({
 
     const renderLogoutHelpSection = () => (
         <>
-            <div className="flex left cursor mr-16" onClick={onClickHelp}>
-                <span className="icon-dim-24 fcn-9 mr-4 ml-16">
+            <div className="flex left cursor dc__gap-8" onClick={onClickHelp}>
+                <span className="icon-dim-24 fcn-9">
                     <Question />
                 </span>
                 <span className="fs-13 cn-9" data-testid="go-to-get-started">
@@ -156,6 +161,50 @@ const PageHeader = ({
         <span className="fs-12 fw-4 lh-18 pt-1 pb-1 pl-6 pr-6 ml-8 cn-9 bcy-5 br-4">Beta</span>
     )
 
+    const toggleTryDevtronModal = () => setShowTryDevtronModal(!showTryDevtronModal)
+    const closeTryDevtronModal = () => setShowTryDevtronModal(false)
+
+    const renderIframeDrawer = () => (
+        <VisibleModal close={closeTryDevtronModal}>
+            <div className="modal-body--ci-material h-100 dc__overflow-hidden dc__border-left">
+                <div className="trigger-modal__header">
+                    <h1 className="modal__title flex left fs-16" data-testid="app-details-url-heading">
+                        {window._env_.FEATURE_HEADER_TRY_DEVTRON_TITLE || tryDevtronButtonText}
+                    </h1>
+                    <Button
+                        ariaLabel="Try Devtron"
+                        dataTestId="iframe-modal-close-button"
+                        size={ComponentSizeType.medium}
+                        onClick={closeTryDevtronModal}
+                        style={ButtonStyleType.neutral}
+                        variant={ButtonVariantType.borderLess}
+                        icon={<Close />}
+                        showAriaLabelInTippy={false}
+                    />
+                </div>
+                <iframe
+                    title={window._env_.FEATURE_HEADER_TRY_DEVTRON_TITLE || tryDevtronButtonText}
+                    src={window._env_.FEATURE_HEADER_TRY_DEVTRON_URL}
+                    width="100%"
+                    height="100%"
+                    className="dc__no-border"
+                    sandbox="allow-same-origin allow-scripts"
+                    referrerPolicy="no-referrer"
+                />
+            </div>
+        </VisibleModal>
+    )
+
+    const renderIframeButton = () =>
+        tryDevtronButtonText && (
+            <Button
+                dataTestId="iframe-header-button"
+                size={ComponentSizeType.small}
+                onClick={toggleTryDevtronModal}
+                text={tryDevtronButtonText}
+                variant={ButtonVariantType.secondary}
+            />
+        )
     return (
         <div
             className={`dc__page-header dc__content-space cn-9 bcn-0 pl-20 pr-20 ${
@@ -220,7 +269,8 @@ const PageHeader = ({
                     {markAsBeta && renderBetaTag()}
                 </div>
                 {showTabs && (
-                    <div className="flex left">
+                    <div className="flex left dc__gap-12">
+                        {renderIframeButton()}
                         {typeof renderActionButtons === 'function' && renderActionButtons()}
                         {renderLogoutHelpSection()}
                     </div>
@@ -258,11 +308,13 @@ const PageHeader = ({
                 />
             )}
             {!showTabs && (
-                <div className="flex left">
+                <div className="flex left dc__gap-12">
                     {typeof renderActionButtons === 'function' && renderActionButtons()}
+                    {renderIframeButton()}
                     {renderLogoutHelpSection()}
                 </div>
             )}
+            {showTryDevtronModal && renderIframeDrawer()}
             {showAnnouncementHeader && <AnnouncementBanner parentClassName="page-header-banner" />}
         </div>
     )

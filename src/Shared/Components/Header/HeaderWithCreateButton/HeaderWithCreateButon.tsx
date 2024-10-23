@@ -16,13 +16,14 @@
 
 import { useState } from 'react'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
+import Button from '@Shared/Components/Button/Button.component'
 import { Modal, SERVER_MODE, URLS } from '../../../../Common'
 import PageHeader from '../PageHeader'
 import { ReactComponent as DropDown } from '../../../../Assets/Icon/ic-dropdown-filled.svg'
 import { ReactComponent as ChartIcon } from '../../../../Assets/Icon/ic-charts.svg'
 import { ReactComponent as AddIcon } from '../../../../Assets/Icon/ic-add.svg'
 import { ReactComponent as JobIcon } from '../../../../Assets/Icon/ic-k8s-job.svg'
-import { AppListConstants } from '../../../constants'
+import { AppListConstants, ComponentSizeType } from '../../../constants'
 import './HeaderWithCreateButton.scss'
 import { useMainContext } from '../../../Providers'
 
@@ -56,19 +57,20 @@ export const HeaderWithCreateButton = ({ headerName }: HeaderWithCreateButtonPro
 
     const renderActionButtons = () =>
         serverMode === SERVER_MODE.FULL ? (
-            <button
-                type="button"
-                className="flex cta h-32 lh-n"
+            <Button
+                text="Create"
                 onClick={handleCreateButton}
-                data-testid="create-app-button-on-header"
-            >
-                Create
-                <DropDown className="icon-dim-20" />
-            </button>
+                dataTestId="create-app-button-on-header"
+                endIcon={<DropDown className="icon-dim-20" />}
+                size={ComponentSizeType.medium}
+            />
         ) : (
-            <button type="button" className="flex cta h-32 lh-n" onClick={redirectToHelmAppDiscover}>
-                Deploy helm charts
-            </button>
+            <Button
+                text="Deploy helm charts"
+                onClick={redirectToHelmAppDiscover}
+                dataTestId="deploy-helm-chart-on-header"
+                size={ComponentSizeType.medium}
+            />
         )
 
     const renderCreateSelectionModal = () => (
