@@ -17,12 +17,12 @@
 import { useState } from 'react'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import Button from '@Shared/Components/Button/Button.component'
-import { Modal, SERVER_MODE, URLS } from '../../../../Common'
+import { ReactComponent as DropDown } from '@Icons/ic-caret-down-small.svg'
+import { ReactComponent as ChartIcon } from '@Icons/ic-charts.svg'
+import { ReactComponent as AddIcon } from '@Icons/ic-add.svg'
+import { ReactComponent as JobIcon } from '@Icons/ic-k8s-job.svg'
 import PageHeader from '../PageHeader'
-import { ReactComponent as DropDown } from '../../../../Assets/Icon/ic-dropdown-filled.svg'
-import { ReactComponent as ChartIcon } from '../../../../Assets/Icon/ic-charts.svg'
-import { ReactComponent as AddIcon } from '../../../../Assets/Icon/ic-add.svg'
-import { ReactComponent as JobIcon } from '../../../../Assets/Icon/ic-k8s-job.svg'
+import { Modal, SERVER_MODE, URLS } from '../../../../Common'
 import { AppListConstants, ComponentSizeType } from '../../../constants'
 import './HeaderWithCreateButton.scss'
 import { useMainContext } from '../../../Providers'
@@ -62,19 +62,23 @@ export const HeaderWithCreateButton = ({ headerName }: HeaderWithCreateButtonPro
                 onClick={handleCreateButton}
                 dataTestId="create-app-button-on-header"
                 endIcon={<DropDown className="icon-dim-20" />}
-                size={ComponentSizeType.medium}
+                size={ComponentSizeType.small}
             />
         ) : (
             <Button
                 text="Deploy helm charts"
                 onClick={redirectToHelmAppDiscover}
                 dataTestId="deploy-helm-chart-on-header"
-                size={ComponentSizeType.medium}
+                size={ComponentSizeType.small}
             />
         )
 
     const renderCreateSelectionModal = () => (
-        <Modal rootClassName="create-modal-wrapper" onClick={handleCreateButton}>
+        <Modal
+            rootClassName={`create-modal-wrapper
+                ${window._env_.FEATURE_HEADER_TRY_DEVTRON_BUTTON_TEXT ? 'create-modal-wrapper--try-devtron' : ''}`}
+            onClick={handleCreateButton}
+        >
             <div
                 className="create-modal-child cursor"
                 onClick={openCreateDevtronAppModel}
