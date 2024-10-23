@@ -161,7 +161,7 @@ const PageHeader = ({
         <span className="fs-12 fw-4 lh-18 pt-1 pb-1 pl-6 pr-6 ml-8 cn-9 bcy-5 br-4">Beta</span>
     )
 
-    const sonClickShowTryDevtronModal = () => setShowTryDevtronModal(true)
+    const onClickShowTryDevtronModal = () => setShowTryDevtronModal(true)
     const onClickCloseTryDevtronModal = () => setShowTryDevtronModal(false)
 
     const renderIframeDrawer = () => (
@@ -200,7 +200,7 @@ const PageHeader = ({
             <Button
                 dataTestId="iframe-header-button"
                 size={ComponentSizeType.small}
-                onClick={sonClickShowTryDevtronModal}
+                onClick={onClickShowTryDevtronModal}
                 text={tryDevtronButtonText}
                 variant={ButtonVariantType.secondary}
             />
