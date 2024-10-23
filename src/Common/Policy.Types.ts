@@ -30,6 +30,7 @@ export enum ApplyPolicyToStage {
     POST_CD = 'POST_CD',
 }
 
+// FIXME: The name build is getting is used in CDPipeline.
 // This enum is mapping values from BuildStageVariable
 export enum PluginRequiredStage {
     PRE_STAGE = 'preBuildStage',
