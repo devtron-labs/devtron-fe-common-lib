@@ -442,7 +442,7 @@ const getDiffHeading = <DeploymentTemplate extends boolean>(
     if (isApprovalPending) {
         return (
             <div className="flexbox dc__align-items-center dc__gap-8 ">
-                <ICStamp className="icon-dim-16" />
+                <ICStamp className="icon-dim-16 scv-5" />
                 <span className="fs-12 fw-6 cv-5">Approval pending</span>
             </div>
         )

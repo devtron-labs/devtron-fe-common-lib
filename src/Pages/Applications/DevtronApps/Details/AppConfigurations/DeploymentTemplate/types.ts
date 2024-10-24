@@ -125,18 +125,34 @@ interface BaseDeploymentTemplateConfigState {
     isOverridden?: never
     environmentConfig?: never
     mergeStrategy?: never
+    mergedTemplate?: never
+    mergedTemplateWithoutLockedKeys?: never
+    mergedTemplateObject?: never
 }
 
-interface EnvironmentOverrideDeploymentTemplateConfigState {
+type MergeStrategyStateType =
+    | {
+          mergeStrategy: OverrideMergeStrategyType.PATCH
+          mergedTemplate: string
+          mergedTemplateWithoutLockedKeys: string
+          mergedTemplateObject: Record<string, string>
+      }
+    | {
+          mergeStrategy: Exclude<OverrideMergeStrategyType, OverrideMergeStrategyType.PATCH>
+          mergedTemplate?: never
+          mergedTemplateWithoutLockedKeys?: never
+          mergedTemplateObject?: never
+      }
+
+type EnvironmentOverrideDeploymentTemplateConfigState = {
     chartConfig?: never
     isOverridden: boolean
     environmentConfig: EnvironmentConfigType
-    mergeStrategy: OverrideMergeStrategyType
-}
+} & MergeStrategyStateType
 
 export interface DeploymentTemplateConfigCommonState extends SelectedChartDetailsType {
     /**
-     * The first ever state of the deployment template
+     * The first ever state of the deployment template on editor
      */
     originalTemplate: Record<string, string>
     isAppMetricsEnabled: boolean
