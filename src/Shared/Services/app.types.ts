@@ -197,9 +197,11 @@ export enum CMSecretExternalType {
 
 export interface ConfigDatum {
     name: string
+    mergeStrategy: string
     type: string
     external: boolean
     data: Record<string, any>
+    patchData: Record<string, any>
     defaultData: Record<string, any>
     global: boolean
     externalType: CMSecretExternalType
