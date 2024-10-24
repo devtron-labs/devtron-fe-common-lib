@@ -76,7 +76,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         customLoader,
         focus,
         validatorSchema,
-        chartVersion,
+        schemaURI,
         isKubernetes = true,
         cleanData = false,
         onBlur,
@@ -230,7 +230,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 isKubernetes,
                 schemas: [
                     {
-                        uri: `https://github.com/devtron-labs/devtron/tree/main/scripts/devtron-reference-helm-charts/reference-chart_${chartVersion}/schema.json`, // id of the first schema
+                        uri: schemaURI,
                         fileMatch: ['*'], // associate with our model
                         schema: validatorSchema,
                     },
@@ -240,7 +240,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 config.dispose()
             }
             // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [validatorSchema, chartVersion])
+        }, [validatorSchema, schemaURI])
         useEffect(() => {
             if (!editorRef.current) {
                 return
