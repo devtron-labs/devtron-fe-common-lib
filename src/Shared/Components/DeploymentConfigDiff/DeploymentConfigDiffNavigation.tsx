@@ -4,11 +4,12 @@ import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICInfoOutlined } from '@Icons/ic-info-outlined.svg'
-import { ReactComponent as ICDiffFileUpdated } from '@Icons/ic-diff-file-updated.svg'
+import { ReactComponent as ICError } from '@Icons/ic-error.svg'
 import { StyledRadioGroup } from '@Common/index'
 
-import { CollapsibleList } from '../CollapsibleList'
-import { DeploymentConfigDiffNavigationProps } from './DeploymentConfigDiff.types'
+import { CollapsibleList, CollapsibleListConfig } from '../CollapsibleList'
+import { DeploymentConfigDiffNavigationProps, DeploymentConfigDiffState } from './DeploymentConfigDiff.types'
+import { diffStateIconMap, diffStateTooltipTextMap } from './DeploymentConfigDiff.constants'
 
 // LOADING SHIMMER
 const ShimmerText = ({ width }: { width: string }) => (
@@ -24,7 +25,11 @@ export const DeploymentConfigDiffNavigation = ({
     goBackURL,
     navHeading,
     navHelpText,
+    isNavHelpTextShowingError,
     tabConfig,
+    errorConfig,
+    showDetailedDiffState,
+    hideDiffState,
 }: DeploymentConfigDiffNavigationProps) => {
     // STATES
     const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({})
@@ -34,17 +39,23 @@ export const DeploymentConfigDiffNavigation = ({
     }, [collapsibleNavList])
 
     /** Collapsible List Config. */
-    const collapsibleListConfig = collapsibleNavList.map(({ items, ...resListItem }) => ({
+    const collapsibleListConfig = collapsibleNavList.map<CollapsibleListConfig>(({ items, ...resListItem }) => ({
         ...resListItem,
         isExpanded: expandedIds[resListItem.id],
-        items: items.map(({ hasDiff, ...resItem }) => ({
+        items: items.map<CollapsibleListConfig['items'][0]>(({ diffState, ...resItem }) => ({
             ...resItem,
-            ...(hasDiff
+            strikeThrough: showDetailedDiffState && diffState === DeploymentConfigDiffState.DELETED,
+            ...(!hideDiffState && diffState !== DeploymentConfigDiffState.NO_DIFF
                 ? {
                       iconConfig: {
-                          Icon: ICDiffFileUpdated,
-                          props: { className: 'icon-dim-16 dc__no-shrink' },
-                          tooltipProps: { content: 'File has difference', arrow: false, placement: 'right' as const },
+                          Icon: showDetailedDiffState ? diffStateIconMap[diffState] : diffStateIconMap.hasDiff,
+                          tooltipProps: {
+                              content: showDetailedDiffState
+                                  ? diffStateTooltipTextMap[diffState]
+                                  : diffStateTooltipTextMap.hasDiff,
+                              arrow: false,
+                              placement: 'right' as const,
+                          },
                       },
                   }
                 : {}),
@@ -101,45 +112,81 @@ export const DeploymentConfigDiffNavigation = ({
         )
     }
 
-    const renderContent = () => (
+    const renderNavigation = () => (
         <>
-            {navList.map(({ title, href, onClick, hasDiff }) => (
-                <NavLink
-                    key={title}
-                    data-testid="env-deployment-template"
-                    className="dc__nav-item cursor dc__gap-8 fs-13 lh-32 cn-7 w-100 br-4 px-8 flexbox dc__align-items-center dc__content-space dc__no-decor"
-                    to={href}
-                    onClick={onClick}
-                >
-                    <span className="dc__truncate">{title}</span>
-                    {hasDiff && (
-                        <Tippy className="default-tt" content="File has difference" arrow={false} placement="right">
-                            <div className="flex">
-                                <ICDiffFileUpdated className="icon-dim-20 dc__no-shrink" />
-                            </div>
-                        </Tippy>
-                    )}
-                </NavLink>
-            ))}
+            {navList.map(({ title, href, onClick, diffState, Icon }) => {
+                const DiffIcon = showDetailedDiffState ? diffStateIconMap[diffState] : diffStateIconMap.hasDiff
+                return (
+                    <NavLink
+                        key={title}
+                        data-testid="env-deployment-template"
+                        className="dc__nav-item cursor dc__gap-8 fs-13 lh-32 cn-7 w-100 br-4 px-8 flexbox dc__align-items-center dc__no-decor"
+                        to={href}
+                        onClick={onClick}
+                    >
+                        {Icon && <Icon className="icon-dim-16 dc__nav-item__start-icon dc__no-shrink" />}
+                        <span className="dc__truncate flex-grow-1">{title}</span>
+                        {!hideDiffState && diffState !== DeploymentConfigDiffState.NO_DIFF && (
+                            <Tippy
+                                className="default-tt"
+                                content={
+                                    showDetailedDiffState
+                                        ? diffStateTooltipTextMap[diffState]
+                                        : diffStateTooltipTextMap.hasDiff
+                                }
+                                arrow={false}
+                                placement="right"
+                            >
+                                <div className="flex">
+                                    <DiffIcon className="icon-dim-20 p-2 dc__no-shrink" />
+                                </div>
+                            </Tippy>
+                        )}
+                    </NavLink>
+                )
+            })}
             <CollapsibleList config={collapsibleListConfig} onCollapseBtnClick={onCollapseBtnClick} />
             {navHelpText && (
                 <div className="mt-8 py-6 px-8 flexbox dc__align-items-center dc__gap-8">
                     <span className="flex p-2 dc__align-self-start">
-                        <ICInfoOutlined className="icon-dim-16 fcn-6" />
+                        {isNavHelpTextShowingError ? (
+                            <ICError className="icon-dim-16 dc__no-shrink" />
+                        ) : (
+                            <ICInfoOutlined className="icon-dim-16 fcn-7 dc__no-shrink" />
+                        )}
                     </span>
-                    <p className="m-0 fs-12 lh-1-5 cn-9">{navHelpText}</p>
+                    <p className={`m-0 fs-12 lh-1-5 ${isNavHelpTextShowingError ? 'cr-5' : 'cn-9'}`}>{navHelpText}</p>
                 </div>
             )}
         </>
     )
 
-    const renderLoading = () => ['90', '70', '50'].map((item) => <ShimmerText key={item} width={item} />)
+    const renderContent = () => {
+        if (isLoading) {
+            return ['90', '70', '50'].map((item) => <ShimmerText key={item} width={item} />)
+        }
+
+        if (errorConfig?.error) {
+            return (
+                <div className="mt-8 py-6 px-8 flexbox dc__align-items-center dc__gap-8">
+                    <span className="flex p-2 dc__align-self-start">
+                        <ICInfoOutlined className="icon-dim-16 fcn-7" />
+                    </span>
+                    <p className="m-0 fs-12 lh-1-5 cn-9">
+                        Failed to load files. Please reload or select a different reference to compare with.
+                    </p>
+                </div>
+            )
+        }
+
+        return renderNavigation()
+    }
 
     return (
-        <div className="bcn-0 dc__border-right">
+        <div className="bcn-0 dc__border-right flexbox-col dc__overflow-hidden">
             {renderTopContent()}
             {!!tabConfig?.tabs.length && renderTabConfig()}
-            <div className="mw-none p-8">{isLoading ? renderLoading() : renderContent()}</div>
+            <div className="mw-none p-8 flex-grow-1 dc__overflow-auto">{renderContent()}</div>
         </div>
     )
 }
