@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { DEFAULT_BASE_PAGE_SIZE, EXCLUDED_FALSY_VALUES, SortingOrder } from '../../Constants'
 import { DEFAULT_PAGE_NUMBER, URL_FILTER_KEYS } from './constants'
@@ -42,6 +42,7 @@ const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_K
 const useUrlFilters = <T = string, K = unknown>({
     initialSortKey,
     parseSearchParams,
+    localStorageKey,
 }: UseUrlFiltersProps<T, K> = {}): UseUrlFiltersReturnType<T, K> => {
     const location = useLocation()
     const history = useHistory()
@@ -126,6 +127,7 @@ const useUrlFilters = <T = string, K = unknown>({
 
     const clearFilters = () => {
         history.replace({ search: '' })
+        localStorage.setItem(localStorageKey, '')
     }
 
     const updateSearchParams = (paramsToSerialize: Partial<K>) => {
@@ -143,9 +145,30 @@ const useUrlFilters = <T = string, K = unknown>({
                 searchParams.delete(key)
             }
         })
+        localStorage.setItem(localStorageKey, JSON.stringify(parseSearchParams(searchParams)))
         // Not replacing the params as it is being done by _resetPageNumber
         _resetPageNumber()
     }
+
+    useEffect(() => {
+        if (!localStorageKey) {
+            return
+        }
+        if (
+            Object.keys(parsedParams).some(
+                (key) =>
+                    (Array.isArray(parsedParams[key]) && parsedParams[key].length) ||
+                    (typeof parsedParams[key] === 'string' && !!parsedParams[key]),
+            )
+        ) {
+            localStorage.setItem(localStorageKey, JSON.stringify(parsedParams))
+        } else {
+            const localStorageValue = localStorage.getItem(localStorageKey)
+            if (localStorageValue) {
+                updateSearchParams(JSON.parse(localStorageValue))
+            }
+        }
+    }, [])
 
     return {
         pageSize,
