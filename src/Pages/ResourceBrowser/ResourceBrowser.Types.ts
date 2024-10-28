@@ -53,6 +53,7 @@ interface ResourceListPayloadK8sRequestType {
 
 export interface K8sResourceListPayloadType {
     clusterId: number
+    filter?: string
     k8sRequest: ResourceListPayloadK8sRequestType
 }
 
