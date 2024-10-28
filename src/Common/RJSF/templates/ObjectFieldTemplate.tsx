@@ -119,7 +119,7 @@ export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps<any, RJSFFor
         <fieldset id={idSchema.$id}>
             {showTitle && (
                 <TitleField
-                    id={titleId(idSchema)}
+                    id={titleId(idSchema as Parameters<typeof titleId>[0])}
                     title={title}
                     required={required}
                     schema={schema}
