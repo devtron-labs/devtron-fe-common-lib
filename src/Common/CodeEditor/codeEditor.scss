@@ -105,18 +105,6 @@
     min-height: 300px;
 }
 
-.code-editor__information {
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 1.33;
-    letter-spacing: normal;
-    color: var(--N900);
-    height: auto;
-    padding: 8px 16px;
-    border-bottom: 1px solid #d6dbdf;
-    background-color: var(--B100);
-}
-
 .code-editor__information-info-icon {
     width: 16px;
     height: 16px;
@@ -138,16 +126,6 @@
     width: 20px;
     margin-right: 4px;
     background: url('../../Assets/Icon/ic-compare.svg');
-}
-
-.code-editor__error {
-    background-color: #fde7e7;
-    color: #862020;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 1.33;
-    padding: 8px 16px;
-    border-bottom: 1px solid #d6dbdf;
 }
 
 .monaco-editor-hover {
