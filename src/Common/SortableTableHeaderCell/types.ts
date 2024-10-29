@@ -18,32 +18,9 @@ import { SortingOrder } from '../Constants'
 
 export type SortableTableHeaderCellProps = {
     /**
-     * If true, the cell is sorted
-     */
-    isSorted: boolean
-    /**
-     * Callback for handling the sorting of the cell
-     */
-    triggerSorting: () => void
-    /**
-     * Current sort order
-     *
-     * Note: On click, the sort order should be updated as required
-     */
-    sortOrder: SortingOrder
-    /**
      * Label for the cell
      */
     title: string
-    /**
-     * If true, the cell is disabled
-     */
-    disabled: boolean
-    /**
-     * If false, the cell acts like normal table header cell
-     * @default true
-     */
-    isSortable?: boolean
     /**
      * If true, the tippy is shown on Sortable header if text is truncated
      * @default false
@@ -64,7 +41,41 @@ export type SortableTableHeaderCellProps = {
           id?: never
           handleResize?: never
       }
-)
+) &
+    (
+        | {
+              /**
+               * If false, the cell acts like normal table header cell
+               * @default true
+               */
+              isSortable?: boolean | undefined
+              /**
+               * If true, the cell is disabled
+               */
+              disabled: boolean
+              /**
+               * If true, the cell is sorted
+               */
+              isSorted: boolean
+              /**
+               * Callback for handling the sorting of the cell
+               */
+              triggerSorting: () => void
+              /**
+               * Current sort order
+               *
+               * Note: On click, the sort order should be updated as required
+               */
+              sortOrder: SortingOrder
+          }
+        | {
+              isSortable: false
+              disabled?: never
+              isSorted?: never
+              triggerSorting?: never
+              sortOrder?: never
+          }
+    )
 
 export interface UseResizableTableConfigProps {
     headersConfig: (Pick<SortableTableHeaderCellProps, 'id'> & {

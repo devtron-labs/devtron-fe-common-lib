@@ -70,7 +70,7 @@ const SortableTableHeaderCell = ({
     }
 
     return (
-        <div className="flex dc__content-space dc__gap-4 dc__position-rel">
+        <div className="flex dc__content-space dc__gap-6 dc__position-rel">
             <button
                 type="button"
                 className={`dc__transparent p-0 cn-7 flex dc__content-start dc__gap-4 dc__select-text ${!isSortable ? 'cursor-default' : ''} dc__position-rel`}
@@ -96,7 +96,7 @@ const SortableTableHeaderCell = ({
                 }}
             >
                 <div
-                    className="table-header h-100"
+                    className="table-header h-100 dc__no-shrink"
                     style={{
                         paddingInline: '2px',
                         right: '-3px',
