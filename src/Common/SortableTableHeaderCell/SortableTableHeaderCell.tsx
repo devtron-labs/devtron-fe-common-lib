@@ -15,6 +15,7 @@
  */
 
 import { Tooltip } from '@Common/Tooltip'
+import Draggable, { DraggableProps } from 'react-draggable'
 import { ReactComponent as SortIcon } from '../../Assets/Icon/ic-arrow-up-down.svg'
 import { ReactComponent as SortArrowDown } from '../../Assets/Icon/ic-sort-arrow-down.svg'
 import { SortingOrder } from '../Constants'
@@ -43,6 +44,8 @@ const SortableTableHeaderCell = ({
     disabled,
     isSortable = true,
     showTippyOnTruncate = false,
+    id,
+    handleResize,
 }: SortableTableHeaderCellProps) => {
     const renderSortIcon = () => {
         if (!isSortable) {
@@ -60,17 +63,50 @@ const SortableTableHeaderCell = ({
         return <SortIcon className="icon-dim-12 mw-12 scn-7 dc__no-shrink" />
     }
 
+    const handleDrag: DraggableProps['onDrag'] = (_, data) => {
+        if (id && handleResize) {
+            handleResize(id, data.deltaX)
+        }
+    }
+
     return (
         <button
             type="button"
-            className={`dc__transparent p-0 cn-7 flex dc__content-start dc__gap-4 dc__select-text ${!isSortable ? 'cursor-default' : ''}`}
+            className={`dc__transparent p-0 cn-7 flex dc__content-space dc__gap-4 dc__select-text ${!isSortable ? 'cursor-default' : ''} dc__position-rel`}
             onClick={isSortable ? triggerSorting : noop}
             disabled={disabled}
         >
-            <Tooltip showOnTruncate={showTippyOnTruncate} content={title}>
-                <span className="dc__uppercase dc__ellipsis-right">{title}</span>
-            </Tooltip>
-            {renderSortIcon()}
+            <div className="flex dc__content-start dc__gap-4">
+                <Tooltip showOnTruncate={showTippyOnTruncate} content={title}>
+                    <span className="dc__uppercase dc__truncate">{title}</span>
+                </Tooltip>
+                {renderSortIcon()}
+            </div>
+            <Draggable
+                handle=".table-header"
+                position={{
+                    x: 0,
+                    y: 0,
+                }}
+                axis="x"
+                onDrag={handleDrag}
+                bounds={{
+                    top: 0,
+                    bottom: 0,
+                }}
+            >
+                <div
+                    className="table-header h-100"
+                    style={{
+                        paddingInline: '2px',
+                        right: '-3px',
+                        position: 'absolute',
+                        cursor: 'col-resize',
+                    }}
+                >
+                    <div className="dc__divider h-100" />
+                </div>
+            </Draggable>
         </button>
     )
 }

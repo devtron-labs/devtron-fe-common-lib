@@ -16,7 +16,7 @@
 
 import { SortingOrder } from '../Constants'
 
-export interface SortableTableHeaderCellProps {
+export type SortableTableHeaderCellProps = {
     /**
      * If true, the cell is sorted
      */
@@ -49,4 +49,27 @@ export interface SortableTableHeaderCellProps {
      * @default false
      */
     showTippyOnTruncate?: boolean
+} & (
+    | {
+          /**
+           * Unique identifier for the column
+           */
+          id: string | number
+          /**
+           * Resize handler for the table
+           */
+          handleResize: (id: string | number, deltaChange: number) => void
+      }
+    | {
+          id?: never
+          handleResize?: never
+      }
+)
+
+export interface UseResizableTableConfigProps {
+    headersConfig: (Pick<SortableTableHeaderCellProps, 'id'> & {
+        width: number | string
+        maxWidth?: number
+        minWidth?: number
+    })[]
 }
