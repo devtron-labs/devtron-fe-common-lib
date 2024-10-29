@@ -16,8 +16,8 @@
 
 import { Tooltip } from '@Common/Tooltip'
 import Draggable, { DraggableProps } from 'react-draggable'
-import { ReactComponent as SortIcon } from '../../Assets/Icon/ic-arrow-up-down.svg'
-import { ReactComponent as SortArrowDown } from '../../Assets/Icon/ic-sort-arrow-down.svg'
+import { ReactComponent as SortIcon } from '@Icons/ic-arrow-up-down.svg'
+import { ReactComponent as SortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { SortingOrder } from '../Constants'
 import { noop } from '../Helper'
 import { SortableTableHeaderCellProps } from './types'
@@ -70,18 +70,18 @@ const SortableTableHeaderCell = ({
     }
 
     return (
-        <button
-            type="button"
-            className={`dc__transparent p-0 cn-7 flex dc__content-space dc__gap-4 dc__select-text ${!isSortable ? 'cursor-default' : ''} dc__position-rel`}
-            onClick={isSortable ? triggerSorting : noop}
-            disabled={disabled}
-        >
-            <div className="flex dc__content-start dc__gap-4">
+        <div className="flex dc__content-space dc__gap-4 dc__position-rel">
+            <button
+                type="button"
+                className={`dc__transparent p-0 cn-7 flex dc__content-start dc__gap-4 dc__select-text ${!isSortable ? 'cursor-default' : ''} dc__position-rel`}
+                onClick={isSortable ? triggerSorting : noop}
+                disabled={disabled}
+            >
                 <Tooltip showOnTruncate={showTippyOnTruncate} content={title}>
                     <span className="dc__uppercase dc__truncate">{title}</span>
                 </Tooltip>
                 {renderSortIcon()}
-            </div>
+            </button>
             <Draggable
                 handle=".table-header"
                 position={{
@@ -107,7 +107,7 @@ const SortableTableHeaderCell = ({
                     <div className="dc__divider h-100" />
                 </div>
             </Draggable>
-        </button>
+        </div>
     )
 }
 
