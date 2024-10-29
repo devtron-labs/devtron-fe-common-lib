@@ -115,12 +115,12 @@ const getVulnerabilitiesDetailData = (
     return getGroupedVulnerabilitiesDetailData(element, setDetailViewData, hidePolicy)
 }
 
-const getImageScanProgressingState = (status: StatusType['status']) => {
+export const getProgressingStateForStatus = (status: StatusType['status']) => {
     switch (status) {
         case 'Completed':
-            return <ICSuccess className="icon-dim-16" />
+            return <ICSuccess className="icon-dim-16 dc__no-shrink" />
         case 'Failed':
-            return <ICError className="icon-dim-16 ic-error-cross-red" />
+            return <ICError className="icon-dim-16 ic-error-cross-red dc__no-shrink" />
         case 'Progressing':
             return (
                 <Progressing
@@ -182,7 +182,7 @@ const getVulnerabilitiesData = (
                   {
                       component: (
                           <div className="flexbox dc__align-items-center dc__gap-4">
-                              {getImageScanProgressingState(element.status)}
+                              {getProgressingStateForStatus(element.status)}
                               <span>{getTimeString(element.StartedOn, element.status)}</span>
                           </div>
                       ),
@@ -281,7 +281,7 @@ const getLicenseData = (
                   {
                       component: (
                           <div className="flexbox dc__align-items-center dc__gap-4">
-                              {getImageScanProgressingState(element.status)}
+                              {getProgressingStateForStatus(element.status)}
                               <span>{getTimeString(element.StartedOn, element.status)}</span>
                           </div>
                       ),
