@@ -1,0 +1,10 @@
+.sortable-table-header {
+    &__resize-btn {
+        &:hover, &--dragging {
+            > div {
+                height: 100% !important;
+                background-color: var(--B500);
+            }
+        }
+    }
+}

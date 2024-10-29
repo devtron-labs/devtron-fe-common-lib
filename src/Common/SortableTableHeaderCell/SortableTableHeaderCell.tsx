@@ -21,6 +21,7 @@ import { ReactComponent as SortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { SortingOrder } from '../Constants'
 import { noop } from '../Helper'
 import { SortableTableHeaderCellProps } from './types'
+import './sortableTableHeaderCell.scss'
 
 /**
  * Reusable component for the table header cell with support for sorting icons
@@ -103,7 +104,8 @@ const SortableTableHeaderCell = ({
             </button>
             {isCellResizable && (
                 <Draggable
-                    handle=".table-header"
+                    handle=".sortable-table-header__resize-btn"
+                    defaultClassNameDragging="sortable-table-header__resize-btn--dragging"
                     position={{
                         x: 0,
                         y: 0,
@@ -115,14 +117,8 @@ const SortableTableHeaderCell = ({
                         bottom: 0,
                     }}
                 >
-                    <div
-                        className="table-header h-100 dc__no-shrink px-2 dc__position-abs"
-                        style={{
-                            right: '-3px',
-                            cursor: 'col-resize',
-                        }}
-                    >
-                        <div className="dc__divider h-100" />
+                    <div className="sortable-table-header__resize-btn flex h-100 dc__no-shrink px-2 dc__position-abs dc__cursor-col-resize dc__right-3--neg">
+                        <div className="dc__divider h-16" />
                     </div>
                 </Draggable>
             )}
