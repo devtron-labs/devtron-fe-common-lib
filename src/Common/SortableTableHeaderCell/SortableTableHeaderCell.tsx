@@ -88,7 +88,7 @@ const SortableTableHeaderCell = ({
                     x: 0,
                     y: 0,
                 }}
-                axis="x"
+                axis="none"
                 onDrag={handleDrag}
                 bounds={{
                     top: 0,
