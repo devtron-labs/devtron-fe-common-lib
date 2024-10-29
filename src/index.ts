@@ -76,6 +76,12 @@ export interface customEnv {
     SYSTEM_CONTROLLER_LISTING_TIMEOUT?: number
     FEATURE_STEP_WISE_LOGS_ENABLE?: boolean
     FEATURE_IMAGE_PROMOTION_ENABLE?: boolean
+    /**
+     * If true, the direct permissions are hidden for non-super admins in user permissions
+     *
+     * @default false
+     */
+    FEATURE_HIDE_USER_DIRECT_PERMISSIONS_FOR_NON_SUPER_ADMINS?: boolean
 }
 declare global {
     interface Window {
