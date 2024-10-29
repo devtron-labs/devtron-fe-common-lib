@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { UseResizableTableConfigProps } from './types'
+import { DEFAULT_MAXIMUM_HEADER_WIDTH, DEFAULT_MINIMUM_HEADER_WIDTH } from './constants'
 
 const useResizableTableConfig = ({ headersConfig }: UseResizableTableConfigProps) => {
     const [headerDimensionsConfig, setHeaderDimensionsConfig] = useState<
@@ -31,8 +32,8 @@ const useResizableTableConfig = ({ headersConfig }: UseResizableTableConfigProps
             const currentHeaderCellConfig = headersConfig[headerCellIndexInConfig]
 
             if (
-                updatedCellDimension < (currentHeaderCellConfig.minWidth ?? 70) ||
-                updatedCellDimension > (currentHeaderCellConfig.maxWidth ?? 600)
+                updatedCellDimension < (currentHeaderCellConfig.minWidth ?? DEFAULT_MINIMUM_HEADER_WIDTH) ||
+                updatedCellDimension > (currentHeaderCellConfig.maxWidth ?? DEFAULT_MAXIMUM_HEADER_WIDTH)
             ) {
                 return prev
             }
@@ -42,24 +43,11 @@ const useResizableTableConfig = ({ headersConfig }: UseResizableTableConfigProps
         })
     }
 
-    const register = (headerCellId: UseResizableTableConfigProps['headersConfig'][number]['id']) => {
-        const sortableTableHeaderCellConfig = headersConfig.find((config) => config.id === headerCellId)
-
-        if (!sortableTableHeaderCellConfig) {
-            return null
-        }
-
-        return {
-            id: sortableTableHeaderCellConfig.id,
-        }
-    }
-
     return {
         gridTemplateColumns: headerDimensionsConfig
             .map((config) => (typeof config === 'number' ? `${config}px` : config))
             .join(' '),
         handleResize,
-        register,
     }
 }
 
