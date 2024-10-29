@@ -116,11 +116,9 @@ const SortableTableHeaderCell = ({
                     }}
                 >
                     <div
-                        className="table-header h-100 dc__no-shrink"
+                        className="table-header h-100 dc__no-shrink px-2 dc__position-abs"
                         style={{
-                            paddingInline: '2px',
                             right: '-3px',
-                            position: 'absolute',
                             cursor: 'col-resize',
                         }}
                     >
