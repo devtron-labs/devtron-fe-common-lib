@@ -19,6 +19,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { DEFAULT_BASE_PAGE_SIZE, EXCLUDED_FALSY_VALUES, SortingOrder } from '../../Constants'
 import { DEFAULT_PAGE_NUMBER, URL_FILTER_KEYS } from './constants'
 import { UseUrlFiltersProps, UseUrlFiltersReturnType } from './types'
+import { setItemInLocalStorageIfKeyExists } from './utils'
 
 const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_KEYS
 
@@ -127,7 +128,7 @@ const useUrlFilters = <T = string, K = unknown>({
 
     const clearFilters = () => {
         history.replace({ search: '' })
-        localStorage.setItem(localStorageKey, '')
+        setItemInLocalStorageIfKeyExists(localStorageKey, '')
     }
 
     const updateSearchParams = (paramsToSerialize: Partial<K>) => {
@@ -145,13 +146,26 @@ const useUrlFilters = <T = string, K = unknown>({
                 searchParams.delete(key)
             }
         })
-        localStorage.setItem(localStorageKey, JSON.stringify(parseSearchParams(searchParams)))
+        // Skipping primary params => pageSize, pageNumber, searchKey, sortBy, sortOrder
+        setItemInLocalStorageIfKeyExists(localStorageKey, JSON.stringify(parseSearchParams(searchParams)))
         // Not replacing the params as it is being done by _resetPageNumber
         _resetPageNumber()
     }
 
     useEffect(() => {
-        if (!localStorageKey) {
+        // If we have pageSize || pageNumber || searchKey || sortBy || sortOrder in params, no need to change other filters
+        const paramsSortByKey = searchParams.get(SORT_BY) || ''
+        const paramsSortByOrder = searchParams.get(SORT_ORDER) || ''
+        const paramsPageNumber = searchParams.get(PAGE_NUMBER) || 0
+        const paramsPageSize = searchParams.get(PAGE_SIZE) || 0
+        if (
+            !localStorageKey ||
+            !!paramsPageSize ||
+            !!paramsPageNumber ||
+            !!searchKey ||
+            !!paramsSortByKey ||
+            !!paramsSortByOrder
+        ) {
             return
         }
         if (

@@ -25,7 +25,7 @@ export interface UseUrlFiltersProps<T, K> {
      * Callback function for parsing the search params
      */
     parseSearchParams?: (searchParams: URLSearchParams) => K
-    localStorageKey?: string
+    localStorageKey?: `${string}__${string}`
 }
 
 export type UseUrlFiltersReturnType<T, K = unknown> = K & {
