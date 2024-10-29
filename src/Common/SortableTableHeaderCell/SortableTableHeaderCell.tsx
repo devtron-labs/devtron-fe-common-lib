@@ -62,8 +62,9 @@ const SortableTableHeaderCell = ({
     showTippyOnTruncate = false,
     id,
     handleResize,
+    isResizable,
 }: SortableTableHeaderCellProps) => {
-    const isCellResizable = !!(id && handleResize)
+    const isCellResizable = !!(isResizable && id && handleResize)
 
     const renderSortIcon = () => {
         if (!isSortable) {

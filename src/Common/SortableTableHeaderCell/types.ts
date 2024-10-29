@@ -33,12 +33,19 @@ export type SortableTableHeaderCellProps = {
            */
           id: string | number
           /**
+           * If true, the cell is resizable
+           *
+           * @default false
+           */
+          isResizable: true | boolean
+          /**
            * Resize handler for the table
            */
           handleResize: (id: string | number, deltaChange: number) => void
       }
     | {
           id?: never
+          isResizable?: false | undefined
           handleResize?: never
       }
 ) &
