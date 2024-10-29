@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "0.5.0-patch-2",
+    "version": "0.6.0-patch-1",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -35,7 +35,7 @@
     },
     "devDependencies": {
         "@esbuild-plugins/node-globals-polyfill": "0.2.3",
-        "@sentry/browser": "^7.31.1",
+        "@sentry/browser": "^7.119.1",
         "@testing-library/jest-dom": "^5.16.2",
         "@testing-library/react": "^12.1.4",
         "@tippyjs/react": "^4.2.0",
@@ -83,7 +83,6 @@
         "react-dom": "^17.0.2",
         "react-draggable": "^4.4.5",
         "react-ga4": "^1.4.1",
-        "react-keybind": "^0.9.4",
         "react-mde": "^11.5.0",
         "react-router": "^5.3.0",
         "react-router-dom": "^5.3.0",
@@ -96,7 +95,7 @@
         "ansi_up": "^5.2.1",
         "dayjs": "^1.11.13",
         "fast-json-patch": "^3.1.1",
-        "jsonpath-plus": "^9.0.0",
+        "jsonpath-plus": "^10.0.0",
         "react-dates": "^21.8.0",
         "react-monaco-editor": "^0.54.0",
         "sass": "^1.69.7",

@@ -20,7 +20,7 @@ import { errorId, FieldErrorProps } from '@rjsf/utils'
 import { ReactComponent as Error } from '../../../Assets/Icon/ic-warning.svg'
 
 export const FieldErrorTemplate = ({ errors = [], idSchema }: FieldErrorProps) => {
-    const id = errorId(idSchema)
+    const id = errorId(idSchema as Parameters<typeof errorId>[0])
 
     return (
         errors.length > 0 && (

@@ -148,19 +148,33 @@ export enum AppEnvDeploymentConfigType {
     DEFAULT_VERSION = 'DefaultVersion',
 }
 
+export enum DraftState {
+    Init = 1,
+    Discarded = 2,
+    Published = 3,
+    AwaitApproval = 4,
+}
+
+export enum DraftAction {
+    Add = 1,
+    Update = 2,
+    Delete = 3,
+}
+
 export interface DraftMetadataDTO {
     appId: number
     envId: number
     resource: number
     resourceName: string
-    action: number
+    action: DraftAction
     data: string
     userComment: string
     changeProposed: boolean
     protectNotificationConfig: { [key: string]: null }
     draftId: number
     draftVersionId: number
-    draftState: number
+    draftState: DraftState
+    draftResolvedValue: string
     approvers: string[]
     canApprove: boolean
     commentsCount: number
@@ -168,24 +182,38 @@ export interface DraftMetadataDTO {
     isAppAdmin: boolean
 }
 
+export enum CMSecretExternalType {
+    Internal = '',
+    KubernetesConfigMap = 'KubernetesConfigMap',
+    KubernetesSecret = 'KubernetesSecret',
+    AWSSecretsManager = 'AWSSecretsManager',
+    AWSSystemManager = 'AWSSystemManager',
+    HashiCorpVault = 'HashiCorpVault',
+    ESO_GoogleSecretsManager = 'ESO_GoogleSecretsManager',
+    ESO_AWSSecretsManager = 'ESO_AWSSecretsManager',
+    ESO_AzureSecretsManager = 'ESO_AzureSecretsManager',
+    ESO_HashiCorpVault = 'ESO_HashiCorpVault',
+}
+
 export interface ConfigDatum {
     name: string
     type: string
     external: boolean
-    data: Record<string, string>
-    defaultData: Record<string, string>
+    data: Record<string, any>
+    defaultData: Record<string, any>
     global: boolean
-    externalType: string
-    esoSecretData: {}
-    defaultESOSecretData: {}
-    secretData: Record<string, string>
-    defaultSecretData: Record<string, string>
+    externalType: CMSecretExternalType
+    esoSecretData: Record<string, any>
+    defaultESOSecretData: Record<string, any>
+    secretData: Record<string, any>[]
+    defaultSecretData: Record<string, any>[]
     roleARN: string
     subPath: boolean
     filePermission: string
     overridden: boolean
-    mountPath?: string
-    defaultMountPath?: string
+    mountPath: string
+    defaultMountPath: string
+    esoSubPath: string[]
 }
 
 export interface ConfigMapSecretDataConfigDatumDTO extends ConfigDatum {
@@ -202,36 +230,62 @@ export enum ConfigResourceType {
     ConfigMap = 'ConfigMap',
     Secret = 'Secret',
     DeploymentTemplate = 'Deployment Template',
+    PipelineStrategy = 'Pipeline Strategy',
 }
 
 export interface DeploymentTemplateDTO {
     resourceType: ConfigResourceType.DeploymentTemplate
-    data: { [key: string]: any }
+    data: Record<string, any>
     deploymentDraftData: ConfigMapSecretDataType | null
+    variableSnapshot: {
+        'Deployment Template': Record<string, string>
+    }
+    templateVersion: string
+    isAppMetricsEnabled?: true
+    resolvedValue: Record<string, any>
 }
 
 export interface ConfigMapSecretDataDTO {
     resourceType: Extract<ConfigResourceType, ConfigResourceType.ConfigMap | ConfigResourceType.Secret>
     data: ConfigMapSecretDataType
+    variableSnapshot: Record<string, Record<string, string>>
+    resolvedValue: string
+}
+
+export interface PipelineConfigDataDTO {
+    resourceType: ConfigResourceType.PipelineStrategy
+    data: Record<string, any>
+    pipelineTriggerType: string
+    Strategy: string
 }
 
 export interface AppEnvDeploymentConfigDTO {
     deploymentTemplate: DeploymentTemplateDTO | null
     configMapData: ConfigMapSecretDataDTO | null
     secretsData: ConfigMapSecretDataDTO | null
+    pipelineConfigData?: PipelineConfigDataDTO
     isAppAdmin: boolean
 }
 
-export interface AppEnvDeploymentConfigPayloadType {
-    appName: string
-    envName: string
-    configType: AppEnvDeploymentConfigType
-    identifierId?: number
-    pipelineId?: number
-    resourceType?: ConfigResourceType
-    resourceId?: number
-    resourceName?: string
-}
+export type AppEnvDeploymentConfigPayloadType =
+    | {
+          appName: string
+          envName: string
+          configType: AppEnvDeploymentConfigType
+          identifierId?: number
+          pipelineId?: number
+          resourceType?: ConfigResourceType
+          resourceId?: number
+          resourceName?: string
+          configArea?: 'AppConfiguration'
+      }
+    | {
+          appName: string
+          envName: string
+          pipelineId: number
+          configArea: 'CdRollback' | 'DeploymentHistory'
+          wfrId: number
+      }
 
 export enum TemplateListType {
     DefaultVersions = 1,
@@ -251,19 +305,7 @@ export interface TemplateListDTO {
     finishedOn?: string
     status?: string
     pipelineId?: number
-}
-
-export interface ManifestTemplateDTO {
-    data: string
-    resolvedData: string
-    variableSnapshot: null
-}
-
-export enum DraftState {
-    Init = 1,
-    Discarded = 2,
-    Published = 3,
-    AwaitApproval = 4,
+    wfrId?: number
 }
 
 export enum EnvResourceType {
@@ -271,4 +313,5 @@ export enum EnvResourceType {
     Secret = 'secrets',
     DeploymentTemplate = 'deployment-template',
     Manifest = 'manifest',
+    PipelineStrategy = 'pipeline-strategy',
 }
