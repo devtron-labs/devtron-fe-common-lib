@@ -35,6 +35,22 @@ import { SortableTableHeaderCellProps } from './types'
  *   disabled={isDisabled}
  * />
  * ```
+ *
+ * @example Non-sortable cell
+ * ```tsx
+ * <SortableTableHeaderCell
+ *   isSortable={false}
+ *   title="Header Cell"
+ * />
+ * ```
+ *
+ * * @example Resizable cell
+ * ```tsx
+ * <SortableTableHeaderCell
+ *   isSortable={false}
+ *   title="Header Cell"
+ * />
+ * ```
  */
 const SortableTableHeaderCell = ({
     isSorted,
@@ -47,6 +63,8 @@ const SortableTableHeaderCell = ({
     id,
     handleResize,
 }: SortableTableHeaderCellProps) => {
+    const isCellResizable = !!(id && handleResize)
+
     const renderSortIcon = () => {
         if (!isSortable) {
             return null
@@ -64,7 +82,7 @@ const SortableTableHeaderCell = ({
     }
 
     const handleDrag: DraggableProps['onDrag'] = (_, data) => {
-        if (id && handleResize) {
+        if (isCellResizable) {
             handleResize(id, data.deltaX)
         }
     }
@@ -82,31 +100,33 @@ const SortableTableHeaderCell = ({
                 </Tooltip>
                 {renderSortIcon()}
             </button>
-            <Draggable
-                handle=".table-header"
-                position={{
-                    x: 0,
-                    y: 0,
-                }}
-                axis="none"
-                onDrag={handleDrag}
-                bounds={{
-                    top: 0,
-                    bottom: 0,
-                }}
-            >
-                <div
-                    className="table-header h-100 dc__no-shrink"
-                    style={{
-                        paddingInline: '2px',
-                        right: '-3px',
-                        position: 'absolute',
-                        cursor: 'col-resize',
+            {isCellResizable && (
+                <Draggable
+                    handle=".table-header"
+                    position={{
+                        x: 0,
+                        y: 0,
+                    }}
+                    axis="none"
+                    onDrag={handleDrag}
+                    bounds={{
+                        top: 0,
+                        bottom: 0,
                     }}
                 >
-                    <div className="dc__divider h-100" />
-                </div>
-            </Draggable>
+                    <div
+                        className="table-header h-100 dc__no-shrink"
+                        style={{
+                            paddingInline: '2px',
+                            right: '-3px',
+                            position: 'absolute',
+                            cursor: 'col-resize',
+                        }}
+                    >
+                        <div className="dc__divider h-100" />
+                    </div>
+                </Draggable>
+            )}
         </div>
     )
 }
