@@ -153,34 +153,14 @@ const useUrlFilters = <T = string, K = unknown>({
     }
 
     useEffect(() => {
-        // If we have pageSize || pageNumber || searchKey || sortBy || sortOrder in params, no need to change other filters
-        const paramsSortByKey = searchParams.get(SORT_BY) || ''
-        const paramsSortByOrder = searchParams.get(SORT_ORDER) || ''
-        const paramsPageNumber = searchParams.get(PAGE_NUMBER) || 0
-        const paramsPageSize = searchParams.get(PAGE_SIZE) || 0
-        if (
-            !localStorageKey ||
-            !!paramsPageSize ||
-            !!paramsPageNumber ||
-            !!searchKey ||
-            !!paramsSortByKey ||
-            !!paramsSortByOrder
-        ) {
+        // if we have search string, set secondary params in local storage accordingly
+        if (location.search) {
+            localStorage.setItem(localStorageKey, JSON.stringify(parsedParams))
             return
         }
-        if (
-            Object.keys(parsedParams).some(
-                (key) =>
-                    (Array.isArray(parsedParams[key]) && parsedParams[key].length) ||
-                    (typeof parsedParams[key] === 'string' && !!parsedParams[key]),
-            )
-        ) {
-            localStorage.setItem(localStorageKey, JSON.stringify(parsedParams))
-        } else {
-            const localStorageValue = localStorage.getItem(localStorageKey)
-            if (localStorageValue) {
-                updateSearchParams(JSON.parse(localStorageValue))
-            }
+        const localStorageValue = localStorage.getItem(localStorageKey)
+        if (localStorageValue) {
+            updateSearchParams(JSON.parse(localStorageValue))
         }
     }, [])
 
