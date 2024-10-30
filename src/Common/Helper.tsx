@@ -959,8 +959,41 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
     }
 }
 
+// TODO: Might need to expose sandbox and referrer policy
 export const getSanitizedIframe = (iframeString: string) =>
     DOMPurify.sanitize(iframeString, {
         ADD_TAGS: ['iframe'],
         ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
     })
+
+/**
+ * This method adds default attributes to iframe - title, loading ="lazy", width="100%", height="100%"
+ */
+export const getIframeWithDefaultAttributes = (iframeString: string, defaultName?: string): string => {
+    const parentDiv = document.createElement('div')
+    parentDiv.innerHTML = getSanitizedIframe(iframeString)
+
+
+    const iframe = parentDiv.querySelector('iframe')
+    if (iframe) {
+        if (!iframe.hasAttribute('title') && !!defaultName) {
+            iframe.setAttribute('title', defaultName)
+        }
+
+        if (!iframe.hasAttribute('loading')) {
+            iframe.setAttribute('loading', 'lazy')
+        }
+
+        if (!iframe.hasAttribute('width')) {
+            iframe.setAttribute('width', '100%')
+        }
+
+        if (!iframe.hasAttribute('height')) {
+            iframe.setAttribute('height', '100%')
+        }
+
+        return parentDiv.innerHTML
+    }
+
+    return iframeString
+}
