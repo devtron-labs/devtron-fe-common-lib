@@ -15,6 +15,7 @@
  */
 
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import DOMPurify from 'dompurify'
 import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
 import { compare as compareJSON, applyPatch } from 'fast-json-patch'
 import { components } from 'react-select'
@@ -642,7 +643,11 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
         return _keys
     })
 
-export const convertJSONPointerToJSONPath = (pointer: string) => pointer.replace(/\/([\*0-9]+)\//g, '[$1].').replace(/\//g, '.').replace(/\./, '$.')
+export const convertJSONPointerToJSONPath = (pointer: string) =>
+    pointer
+        .replace(/\/([\*0-9]+)\//g, '[$1].')
+        .replace(/\//g, '.')
+        .replace(/\./, '$.')
 
 export const flatMapOfJSONPaths = (
     paths: string[],
@@ -953,3 +958,9 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
         }
     }
 }
+
+export const getSanitizedIframe = (iframeString: string) =>
+    DOMPurify.sanitize(iframeString, {
+        ADD_TAGS: ['iframe'],
+        ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+    })

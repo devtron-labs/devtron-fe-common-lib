@@ -682,6 +682,7 @@ export enum ConfigurationType {
 export interface BaseURLParams {
     appId: string
     envId: string
+    clusterId: string
 }
 
 export interface ConfigKeysWithLockType {
