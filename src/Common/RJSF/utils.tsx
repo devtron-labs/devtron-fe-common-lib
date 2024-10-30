@@ -15,7 +15,7 @@
  */
 
 import { TranslatableString, englishStringTranslator } from '@rjsf/utils'
-import Tippy from '@tippyjs/react'
+import { HiddenType, MetaHiddenType } from './types'
 
 /**
  * Override for the TranslatableString from RJSF
@@ -103,7 +103,7 @@ export const getRedirectionProps = (
             rel: isInternalUrl ? undefined : 'external noreferrer',
             url,
         }
-    } catch (err) {
+    } catch {
         return {
             href: url,
             target: '_blank',
@@ -137,9 +137,58 @@ export const getInferredTypeFromValueType = (value) => {
     }
 }
 
-export const getTippyWrapperWithContent =
-    (content, placement?: React.ComponentProps<typeof Tippy>['placement']) => (children) => (
-        <Tippy className="default-tt dc__word-break" arrow={false} placement={placement || 'right'} content={content}>
-            {children}
-        </Tippy>
-    )
+const conformPathToPointers = (path: string): string => {
+    if (!path) {
+        return ''
+    }
+    const trimmedPath = path.trim()
+    const isSlashSeparatedPathMissingBeginSlash = trimmedPath.match(/^\w+(\/\w+)*$/g)
+    if (isSlashSeparatedPathMissingBeginSlash) {
+        return `/${trimmedPath}`
+    }
+    const isDotSeparatedPath = trimmedPath.match(/^\w+(\.\w+)*$/g)
+    if (isDotSeparatedPath) {
+        // NOTE: replacing dots with forward slash (/)
+        return `/${trimmedPath.replaceAll(/\./g, '/')}`
+    }
+    return trimmedPath
+}
+
+const emptyMetaHiddenTypeInstance: MetaHiddenType = {
+    value: false,
+    path: '',
+}
+
+export const parseSchemaHiddenType = (hiddenSchema: HiddenType): MetaHiddenType => {
+    if (!hiddenSchema) {
+        return null
+    }
+    const clone = structuredClone(hiddenSchema)
+    if (typeof clone === 'string') {
+        return {
+            value: true,
+            path: conformPathToPointers(clone),
+        }
+    }
+    if (typeof clone !== 'object') {
+        return structuredClone(emptyMetaHiddenTypeInstance)
+    }
+    if (
+        Object.hasOwn(clone, 'condition') &&
+        'condition' in clone &&
+        Object.hasOwn(clone, 'value') &&
+        'value' in clone
+    ) {
+        return {
+            value: clone.condition,
+            path: conformPathToPointers(clone.value),
+        }
+    }
+    if (Object.hasOwn(clone, 'value') && 'value' in clone && Object.hasOwn(clone, 'path') && 'path' in clone) {
+        return {
+            value: clone.value,
+            path: conformPathToPointers(clone.path),
+        }
+    }
+    return structuredClone(emptyMetaHiddenTypeInstance)
+}

@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-import ReactSelect from 'react-select'
-import { MONTHLY_DATE_OPTIONS, getTimePickerStyles } from './utils'
-import { DropdownIndicator } from '../../../Common'
+import { MONTHLY_DATE_OPTIONS } from './utils'
 import { MonthlySelectProps } from './types'
 import { DATE_PICKER_IDS } from './constants'
-
-const timePickerStyles = getTimePickerStyles()
+import { SelectPicker } from '../SelectPicker'
 
 export const MonthlySelect = ({
     selectedMonthlyDate,
@@ -28,21 +25,14 @@ export const MonthlySelect = ({
     dataTestId = DATE_PICKER_IDS.MONTH,
 }: MonthlySelectProps) => (
     <div className="dc__no-shrink">
-        <ReactSelect
+        <SelectPicker
+            inputId={DATE_PICKER_IDS.MONTH}
             placeholder="Day 1"
             options={MONTHLY_DATE_OPTIONS}
-            menuPlacement="auto"
-            components={{
-                IndicatorSeparator: null,
-                ClearIndicator: null,
-                DropdownIndicator,
-            }}
             isSearchable={false}
-            styles={timePickerStyles}
             value={selectedMonthlyDate}
             onChange={onChange}
             data-testid={dataTestId}
-            menuPosition="fixed"
         />
     </div>
 )

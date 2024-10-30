@@ -22,7 +22,9 @@ import {
     VulnerabilityType,
     DeploymentAppTypes,
     ServerErrors,
+    SortingParams,
 } from '../Common'
+import { KeyValueListType } from './Components'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
@@ -138,6 +140,7 @@ export interface Node {
     port: number
     canBeHibernated: boolean
     isHibernated: boolean
+    hasDrift?: boolean
 }
 
 // eslint-disable-next-line no-use-before-define
@@ -162,6 +165,7 @@ export enum AppType {
     DEVTRON_HELM_CHART = 'devtron_helm_chart',
     EXTERNAL_HELM_CHART = 'external_helm_chart',
     EXTERNAL_ARGO_APP = 'external_argo_app',
+    EXTERNAL_FLUX_APP = 'external_flux_app',
 }
 
 export interface HelmReleaseStatus {
@@ -178,6 +182,11 @@ interface MaterialInfo {
     revision: string
     url: string
     webhookData: string
+}
+export interface FluxAppStatusDetail {
+    status: string
+    message: string
+    reason: string
 }
 export interface AppDetails {
     appId?: number
@@ -220,6 +229,8 @@ export interface AppDetails {
     helmPackageName?: string
     appStatus?: string
     chartAvatar?: string
+    fluxTemplateType?: string
+    FluxAppStatusDetail?: FluxAppStatusDetail
 }
 
 export enum RegistryType {
@@ -244,8 +255,10 @@ export enum DefaultUserKey {
 
 export enum Severity {
     CRITICAL = 'critical',
-    MODERATE = 'moderate',
+    HIGH = 'high',
+    MEDIUM = 'medium',
     LOW = 'low',
+    UNKNOWN = 'unknown',
 }
 
 export enum ImagePromotionTabs {
@@ -331,6 +344,11 @@ export enum CIMaterialSidebarType {
     PARAMETERS = 'Parameters',
 }
 
+export enum CDMaterialSidebarType {
+    IMAGE = 'Image',
+    PARAMETERS = 'Parameters',
+}
+
 /**
  * @example Usage with specific enum for path & `unknown` type for value
  * ```ts
@@ -393,6 +411,13 @@ export type PatchQueryType<T extends string, K = unknown> = {
           op: PatchOperationType.remove
           value?: never
       }
+    | {
+          /**
+           * Operation type for add
+           */
+          op: PatchOperationType.add
+          value?: K
+      }
 )
 
 export interface GroupedOptionsType {
@@ -410,27 +435,38 @@ export enum ResourceKindType {
     cluster = 'cluster',
     release = 'release',
     releaseTrack = 'release-track',
+    releaseChannel = 'release-channel',
     tenant = 'tenant',
     installation = 'installation',
     environment = 'environment',
     cdPipeline = 'cd-pipeline',
+    project = 'project',
 }
 
 /**
  * Versions support for the resources on BE
+ *
+ * TODO: Rename to ApiVersionType
  */
 export enum ResourceVersionType {
     v1 = 'v1',
     alpha1 = 'alpha1',
 }
 
+export interface SeverityCount {
+    critical: number
+    high: number
+    medium: number
+    low: number
+    unknown: number
+}
+export enum PolicyKindType {
+    lockConfiguration = 'lock-configuration',
+}
+
 export interface LastExecutionResultType {
     lastExecution: string
-    severityCount: {
-        critical: number
-        moderate: number
-        low: number
-    }
+    severityCount: SeverityCount
     vulnerabilities: VulnerabilityType[]
     scanExecutionId?: number
     appId?: number
@@ -444,6 +480,7 @@ export interface LastExecutionResultType {
     scanned?: boolean
     scanEnabled?: boolean
     scanToolId?: number
+    imageScanDeployInfoId?: number
 }
 
 export interface LastExecutionResponseType extends ResponseType<LastExecutionResultType> {}
@@ -607,4 +644,98 @@ export interface BatchConfigType {
 }
 export interface scrollableInterface {
     autoBottomScroll: boolean
+}
+
+export enum URLProtocolType {
+    HTTP = 'http:',
+    HTTPS = 'https:',
+    SSH = 'ssh:',
+    SMTP = 'smtp:',
+    S3 = 's3:',
+}
+
+export type BaseFilterQueryParams<T> = {
+    /**
+     * Offset for the list result
+     */
+    offset?: number
+    /**
+     * Number of items required in the list
+     */
+    size?: number
+    /**
+     * Search string (if any)
+     */
+    searchKey?: string
+    /**
+     * If true, all items are returned with any search / filtering applied without pagination
+     */
+    showAll?: boolean
+} & SortingParams<T>
+
+export enum ConfigurationType {
+    GUI = 'GUI',
+    YAML = 'YAML',
+}
+
+export interface BaseURLParams {
+    appId: string
+    envId: string
+}
+
+export interface ConfigKeysWithLockType {
+    config: string[]
+    allowed: boolean
+}
+
+export type DataAttributes = Record<`data-${string}`, unknown>
+
+export interface RuntimeParamsListItemType extends KeyValueListType {
+    id: number
+}
+
+export enum RuntimeParamsHeadingType {
+    KEY = 'key',
+    VALUE = 'value',
+}
+
+export enum ACCESS_TYPE_MAP {
+    DEVTRON_APPS = 'devtron-app', // devtron app work flow
+    HELM_APPS = 'helm-app', // helm app work flow
+    JOBS = '', // Empty string is intentional since there is no bifurcation in jobs as of now
+}
+
+export enum EntityTypes {
+    CHART_GROUP = 'chart-group',
+    DIRECT = 'apps',
+    JOB = 'jobs',
+    DOCKER = 'docker',
+    GIT = 'git',
+    CLUSTER = 'cluster',
+    NOTIFICATION = 'notification',
+}
+
+export interface CustomRoles {
+    id: number
+    roleName: string
+    roleDisplayName: string
+    roleDescription: string
+    entity: EntityTypes
+    accessType: ACCESS_TYPE_MAP.DEVTRON_APPS | ACCESS_TYPE_MAP.HELM_APPS
+}
+
+export type MetaPossibleRoles = Record<
+    CustomRoles['roleName'],
+    {
+        value: CustomRoles['roleDisplayName']
+        description: CustomRoles['roleDescription']
+    }
+>
+
+export interface CustomRoleAndMeta {
+    customRoles: CustomRoles[]
+    possibleRolesMeta: MetaPossibleRoles
+    possibleRolesMetaForHelm: MetaPossibleRoles
+    possibleRolesMetaForCluster: MetaPossibleRoles
+    possibleRolesMetaForJob: MetaPossibleRoles
 }

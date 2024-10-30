@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState, useRef } from 'react'
 import { IconButtonProps } from '@rjsf/utils'
 
-import { ConditionalWrap } from '../../../Helper'
-import { getTippyWrapperWithContent } from '../../utils'
-import { ADD_BUTTON_WIDTH } from '../../constants'
+import { Tooltip } from '@Common/Tooltip'
 import { ReactComponent as PlusIcon } from '../../../../Assets/Icon/ic-add.svg'
 
 export const AddButton = ({
@@ -30,26 +27,21 @@ export const AddButton = ({
     uiSchema,
     ...props
 }: IconButtonProps & Partial<Record<'label', string>>) => {
-    const [showTippy, setShowTippy] = useState(false)
-    const buttonRef = useRef<HTMLButtonElement>(null)
     const content = `Add ${label}`
-
-    useEffect(() => setShowTippy(buttonRef.current?.offsetWidth >= ADD_BUTTON_WIDTH.MAX_WIDTH_VALUE), [buttonRef.current])
 
     return (
         <div className="flexbox flex-justify-start">
-            <ConditionalWrap condition={showTippy} wrap={getTippyWrapperWithContent(content)}>
-                <button
-                    ref={buttonRef}
-                    {...props}
-                    type="button"
-                    className={`dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor ${ADD_BUTTON_WIDTH.MAX_WIDTH_CLASSNAME}`}
-                    title="Add"
-                >
-                    <PlusIcon className="icon-dim-16 fcb-5" />
-                    <span className="cb-5 fs-13 lh-20 dc__truncate">{content}</span>
-                </button>
-            </ConditionalWrap>
+            <button
+                {...props}
+                type="button"
+                className="dc__outline-none-imp p-0 dc__transparent flex dc__gap-4 cursor dc__mxw-250"
+                title="Add"
+            >
+                <PlusIcon className="icon-dim-16 fcb-5" />
+                <Tooltip placement="right" content={content}>
+                    <span className="cb-5 fs-13 lh-34 dc__truncate">{content}</span>
+                </Tooltip>
+            </button>
         </div>
     )
 }

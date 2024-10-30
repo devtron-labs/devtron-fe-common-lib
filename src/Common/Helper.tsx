@@ -15,30 +15,32 @@
  */
 
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
+import { compare as compareJSON, applyPatch } from 'fast-json-patch'
 import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import moment from 'moment'
 import { useLocation } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import YAML from 'yaml'
-import { ERROR_EMPTY_SCREEN, SortingOrder, EXCLUDED_FALSY_VALUES, DISCORD_LINK, ZERO_TIME_STRING } from './Constants'
+import { deepEquals } from '@rjsf/utils'
+import {
+    ERROR_EMPTY_SCREEN,
+    SortingOrder,
+    EXCLUDED_FALSY_VALUES,
+    DISCORD_LINK,
+    ZERO_TIME_STRING,
+    TOAST_ACCESS_DENIED,
+} from './Constants'
 import { ServerErrors } from './ServerError'
-import { toastAccessDenied } from './ToastBody'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
-import { scrollableInterface } from '../Shared'
-import { DATE_TIME_FORMAT_STRING } from '../Shared'
+import {
+    scrollableInterface,
+    DATE_TIME_FORMAT_STRING,
+    ToastManager,
+    ToastVariantType,
+    versionComparatorBySortOrder,
+} from '../Shared'
 import { ReactComponent as ArrowDown } from '../Assets/Icon/ic-chevron-down.svg'
-
-toast.configure({
-    autoClose: 3000,
-    hideProgressBar: true,
-    pauseOnHover: true,
-    pauseOnFocusLoss: true,
-    closeOnClick: false,
-    newestOnTop: true,
-    toastClassName: 'devtron-toast',
-    bodyClassName: 'devtron-toast__body',
-})
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
@@ -48,10 +50,16 @@ export function showError(serverError, showToastOnUnknownError = true, hideAcces
                 (userMessage === ERROR_EMPTY_SCREEN.UNAUTHORIZED || userMessage === ERROR_EMPTY_SCREEN.FORBIDDEN)
             ) {
                 if (!hideAccessError) {
-                    toastAccessDenied()
+                    ToastManager.showToast({
+                        variant: ToastVariantType.notAuthorized,
+                        description: TOAST_ACCESS_DENIED.SUBTITLE,
+                    })
                 }
             } else {
-                toast.error(userMessage || internalMessage)
+                ToastManager.showToast({
+                    variant: ToastVariantType.error,
+                    description: userMessage || internalMessage,
+                })
             }
         })
     } else {
@@ -61,9 +69,15 @@ export function showError(serverError, showToastOnUnknownError = true, hideAcces
 
         if (showToastOnUnknownError) {
             if (serverError.message) {
-                toast.error(serverError.message)
+                ToastManager.showToast({
+                    variant: ToastVariantType.error,
+                    description: serverError.message,
+                })
             } else {
-                toast.error('Some Error Occurred')
+                ToastManager.showToast({
+                    variant: ToastVariantType.error,
+                    description: 'Some Error Occurred',
+                })
             }
         }
     }
@@ -190,110 +204,6 @@ export function getCookie(sKey) {
             '$1',
         ) || null
     )
-}
-
-export function useForm(stateSchema, validationSchema = {}, callback) {
-    const [state, setState] = useState(stateSchema)
-    const [disable, setDisable] = useState(true)
-    const [isDirty, setIsDirty] = useState(false)
-
-    // Disable button in initial render.
-    useEffect(() => {
-        setDisable(true)
-    }, [])
-
-    // For every changed in our state this will be fired
-    // To be able to disable the button
-    useEffect(() => {
-        if (isDirty) {
-            setDisable(validateState(state))
-        }
-    }, [state, isDirty])
-
-    // Used to disable submit button if there's an error in state
-    // or the required field in state has no value.
-    // Wrapped in useCallback to cached the function to avoid intensive memory leaked
-    // in every re-render in component
-    const validateState = useCallback(
-        (state) => {
-            // check errors in all fields
-            const hasErrorInState = Object.keys(validationSchema).some((key) => {
-                const isInputFieldRequired = validationSchema[key].required
-                const stateValue = state[key].value // state value
-                const stateError = state[key].error // state error
-                return (isInputFieldRequired && !stateValue) || stateError
-            })
-            return hasErrorInState
-        },
-        [state, validationSchema],
-    )
-
-    function validateField(name, value): string | string[] {
-        if (validationSchema[name].required) {
-            if (!value) {
-                return 'This is a required field.'
-            }
-        }
-
-        function _validateSingleValidator(validator, value) {
-            if (value && !validator.regex.test(value)) {
-                return false
-            }
-            return true
-        }
-
-        // single validator
-        const _validator = validationSchema[name].validator
-        if (_validator && typeof _validator === 'object') {
-            if (!_validateSingleValidator(_validator, value)) {
-                return _validator.error
-            }
-        }
-
-        // multiple validators
-        const _validators = validationSchema[name].validators
-        if (_validators && typeof _validators === 'object' && Array.isArray(_validators)) {
-            const errors = []
-            _validators.forEach((_validator) => {
-                if (!_validateSingleValidator(_validator, value)) {
-                    errors.push(_validator.error)
-                }
-            })
-            if (errors.length > 0) {
-                return errors
-            }
-        }
-
-        return ''
-    }
-
-    const handleOnChange = useCallback(
-        (event) => {
-            setIsDirty(true)
-
-            const { name, value } = event.target
-            const error = validateField(name, value)
-            setState((prevState) => ({
-                ...prevState,
-                [name]: { value, error },
-            }))
-        },
-        [validationSchema],
-    )
-
-    const handleOnSubmit = (event) => {
-        event.preventDefault()
-        const newState = Object.keys(validationSchema).reduce((agg, curr) => {
-            agg[curr] = { ...state[curr], error: validateField(curr, state[curr].value) }
-            return agg
-        }, state)
-        if (!validateState(newState)) {
-            callback(state)
-        } else {
-            setState({ ...newState })
-        }
-    }
-    return { state, disable, handleOnChange, handleOnSubmit }
 }
 
 export function handleUTCTime(ts: string, isRelativeTime = false) {
@@ -464,7 +374,10 @@ export function copyToClipboard(str, callback = noop) {
                 callback()
             })
             .catch(() => {
-                toast.error('Failed to copy to clipboard')
+                ToastManager.showToast({
+                    variant: ToastVariantType.error,
+                    description: 'Failed to copy to clipboard',
+                })
             })
     } else {
         unsecureCopyToClipboard(str, callback)
@@ -560,7 +473,10 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
  * @param url URL to which the search params needs to be added
  * @param params Object for the search parameters
  */
-export const getUrlWithSearchParams = (url: string, params: Record<string | number, any> = {}) => {
+export const getUrlWithSearchParams = <T extends string | number = string | number>(
+    url: string,
+    params = {} as Partial<Record<T, any>>,
+) => {
     const searchParams = new URLSearchParams()
     Object.keys(params).forEach((key) => {
         if (!EXCLUDED_FALSY_VALUES.includes(params[key])) {
@@ -614,6 +530,7 @@ export const getFilteredChartVersions = (charts, selectedChartType) =>
     // Filter chart versions based on selected chart type
     charts
         .filter((item) => item?.chartType === selectedChartType.value)
+        .sort((a, b) => versionComparatorBySortOrder(a?.chartVersion, b?.chartVersion))
         .map((item) => ({
             value: item?.chartVersion,
             label: item?.chartVersion,
@@ -725,6 +642,19 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
         return _keys
     })
 
+export const convertJSONPointerToJSONPath = (pointer: string) => pointer.replace(/\/([\*0-9]+)\//g, '[$1].').replace(/\//g, '.').replace(/\./, '$.')
+
+export const flatMapOfJSONPaths = (
+    paths: string[],
+    json: object,
+    resultType: JSONPathOptions['resultType'] = 'path',
+): string[] => paths.flatMap((path) => JSONPath({ path, json, resultType }))
+
+export const applyCompareDiffOnUneditedDocument = (uneditedDocument: object, editedDocument: object) => {
+    const patch = compareJSON(uneditedDocument, editedDocument)
+    return applyPatch(uneditedDocument, patch).newDocument
+}
+
 /**
  * Returns a debounced variant of the function
  */
@@ -756,15 +686,16 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
 
     if (isNaN(dateA) && isNaN(dateB)) {
         return 0 // Both dates are invalid, consider them equal
-    } else if (isNaN(dateA)) {
+    }
+    if (isNaN(dateA)) {
         // dateA is invalid, move it to the end if sorting ASC, otherwise to the beginning
         return sortOrder === SortingOrder.ASC ? 1 : -1
-    } else if (isNaN(dateB)) {
+    }
+    if (isNaN(dateB)) {
         // dateB is invalid, move it to the end if sorting ASC, otherwise to the beginning
         return sortOrder === SortingOrder.ASC ? -1 : 1
-    } else {
-        return sortOrder === SortingOrder.ASC ? dateB - dateA : dateA - dateB
     }
+    return sortOrder === SortingOrder.ASC ? dateB - dateA : dateA - dateB
 }
 
 /**
@@ -798,28 +729,7 @@ export const compareObjectLength = (objA: any, objB: any): boolean => {
  * Return deep copy of the object
  */
 export function deepEqual(configA: any, configB: any): boolean {
-    try {
-        if (configA === configB) {
-            return true
-        }
-        if ((configA && !configB) || (!configA && configB) || !compareObjectLength(configA, configB)) {
-            return false
-        }
-        let isEqual = true
-        for (const idx in configA) {
-            if (!isEqual) {
-                break
-            } else if (typeof configA[idx] === 'object' && typeof configB[idx] === 'object') {
-                isEqual = deepEqual(configA[idx], configB[idx])
-            } else if (configA[idx] !== configB[idx]) {
-                isEqual = false
-            }
-        }
-        return isEqual
-    } catch (err) {
-        showError(err)
-        return true
-    }
+    return deepEquals(configA, configB)
 }
 
 export function shallowEqual(objA, objB) {
@@ -1008,13 +918,11 @@ export function useKeyDown() {
     return keys
 }
 
-export const DropdownIndicator = (props) => {
-    return (
-        <components.DropdownIndicator {...props}>
-            <ArrowDown className="icon-dim-20 icon-n6" />
-        </components.DropdownIndicator>
-    )
-}
+export const DropdownIndicator = (props) => (
+    <components.DropdownIndicator {...props}>
+        <ArrowDown className="icon-dim-20 icon-n6" />
+    </components.DropdownIndicator>
+)
 
 export function mapByKey<T = Map<any, any>>(arr: any[], id: string): T {
     if (!Array.isArray(arr)) {
@@ -1029,3 +937,19 @@ export function asyncWrap(promise): any[] {
 }
 
 export const prefixZeroIfSingleDigit = (value: number = 0) => (value > 0 && value < 10 ? `0${value}` : value)
+
+export const throttle = <T extends (...args: unknown[]) => unknown>(
+    func: T,
+    delay: number = 300,
+): ((...args: Parameters<T>) => void) => {
+    let lastCall = 0
+
+    return (...args: Parameters<T>) => {
+        const now = Date.now()
+
+        if (now - lastCall >= delay) {
+            lastCall = now
+            func(...args)
+        }
+    }
+}

@@ -14,33 +14,19 @@
  * limitations under the License.
  */
 
-import { SortingParams } from '@Common/Types'
+import { BaseFilterQueryParams } from '../../../Shared'
 import { UserListSortableKeys, UserStatus } from './constants'
-
-export type BaseFilterQueryParams<T> = {
-    /**
-     * Offset for the list result
-     */
-    offset?: number
-    /**
-     * Number of items required in the list
-     */
-    size?: number
-    /**
-     * Search string (if any)
-     */
-    searchKey?: string
-    /**
-     * If true, all items are returned with any search / filtering applied without pagination
-     */
-    showAll?: boolean
-} & SortingParams<T>
 
 export type UserListFilterParams = BaseFilterQueryParams<UserListSortableKeys> & {
     /**
      * Selected statuses (if any)
      */
     status: UserStatus[]
+}
+
+export interface UserMinType {
+    id: number
+    emailId: string
 }
 
 export interface UserRoleGroup {
@@ -66,4 +52,39 @@ export interface UserRoleGroup {
      * Timeout for the role group
      */
     timeToLive: string
+}
+
+export interface UserGroupDTO {
+    /**
+     * Unique display name of the user group
+     */
+    name: string
+    /**
+     * Unique id of the user group
+     *
+     * Follows the validation for app name
+     */
+    identifier: string
+    /**
+     * Associated description
+     *
+     * @default ''
+     */
+    description?: string
+    /**
+     * Number of users assigned to the group
+     *
+     * @default 0
+     */
+    usersCount?: number
+}
+
+export interface UserGroupType
+    extends Required<Pick<UserGroupDTO, 'description' | 'name' | 'usersCount' | 'identifier'>> {
+    /**
+     * Unique id of the user group
+     *
+     * Follows the validation for app name
+     */
+    userGroupId: string
 }

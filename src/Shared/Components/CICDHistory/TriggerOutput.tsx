@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-import { Redirect, Route, Switch, useLocation, useParams, useRouteMatch } from 'react-router'
+import { Redirect, Route, Switch, useLocation, useParams, useRouteMatch, Link, NavLink } from 'react-router-dom'
 import React, { useEffect, useMemo, useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
 import moment from 'moment'
-import { toast } from 'react-toastify'
-import Tippy from '@tippyjs/react'
+import { ShowMoreText } from '@Shared/Components/ShowMoreText'
+import { getHandleOpenURL } from '@Shared/Helpers'
+import { ImageChipCell } from '@Shared/Components/ImageChipCell'
+import { CommitChipCell } from '@Shared/Components/CommitChipCell'
+import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
+import { ReactComponent as ICPulsateStatus } from '@Icons/ic-pulsate-status.svg'
+import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
+import { ToastManager, ToastVariantType } from '@Shared/Services'
+import { getDeploymentStageTitle } from '@Pages/Applications'
 import {
     ConfirmationDialog,
     DATE_TIME_FORMATS,
@@ -30,19 +36,14 @@ import {
     createGitCommitUrl,
     useAsync,
     not,
-    TippyTheme,
     ZERO_TIME_STRING,
-    extractImage,
     useInterval,
-    UserApprovalMetadataType,
-    useScrollable,
     URLS,
     ServerError,
     mapByKey,
 } from '../../../Common'
 import {
     CurrentStatusType,
-    DeploymentTemplateList,
     FetchIdDataStatus,
     FinishedType,
     HistoryComponentType,
@@ -57,50 +58,42 @@ import {
     statusSet,
     terminalStatus,
     History,
-    DeploymentStatusDetailsType,
-    DeploymentStatusDetailsBreakdownDataType,
-    RenderCIListHeaderProps,
-    VirtualHistoryArtifactProps,
-    RunSourceType,
+    HistoryLogsProps,
 } from './types'
 import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger } from './service'
 import { DEFAULT_ENV, TIMEOUT_VALUE, WORKER_POD_BASE_URL } from './constants'
 import { GitTriggers } from '../../types'
 import warn from '../../../Assets/Icon/ic-warning.svg'
-import docker from '../../../Assets/Icon/ic-docker.svg'
-import { LogsRenderer } from './LogsRenderer'
+import LogsRenderer from './LogsRenderer'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
-import { DeploymentHistoryDetailedView, DeploymentHistoryConfigList } from './DeploymentHistoryDiff'
+import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
+import { statusColor as colorMap, EMPTY_STATE_STATUS, PULSATING_STATUS_MAP } from '../../constants'
 import './cicdHistory.scss'
-import { statusColor as colorMap, EMPTY_STATE_STATUS } from '../../constants'
 
 const Finished = React.memo(
     ({ status, finishedOn, artifact, type }: FinishedType): JSX.Element => (
-        <div className="flex column left dc__min-width-fit-content">
+        <div className="flexbox pt-12 dc__gap-8 left dc__min-width-fit-content dc__align-items-center">
             <div
-                className={`${status} fs-14 fw-6 ${TERMINAL_STATUS_COLOR_CLASS_MAP[status.toLowerCase()] || 'cn-5'}`}
+                className={`${status} fs-13 fw-6 ${TERMINAL_STATUS_COLOR_CLASS_MAP[status.toLowerCase()] || 'cn-5'}`}
                 data-testid="deployment-status-text"
             >
-                {status && status.toLowerCase() === 'cancelled' ? 'ABORTED' : status}
+                {status && status.toLowerCase() === 'cancelled' ? 'Aborted' : status}
             </div>
-            <div className="flex left">
-                {finishedOn && finishedOn !== ZERO_TIME_STRING && (
-                    <time className="dc__vertical-align-middle">
-                        {moment(finishedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
-                    </time>
-                )}
-                {type === HistoryComponentType.CI && artifact && (
-                    <>
-                        <div className="dc__bullet mr-6 ml-6" />
-                        <div className="dc__app-commit__hash ">
-                            <img src={docker} alt="docker" className="commit-hash__icon grayscale" />
-                            {extractImage(artifact)}
-                        </div>
-                    </>
-                )}
-            </div>
+
+            {finishedOn && finishedOn !== ZERO_TIME_STRING && (
+                <time className="dc__vertical-align-middle fs-13">
+                    {moment(finishedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
+                </time>
+            )}
+
+            {type === HistoryComponentType.CI && artifact && (
+                <>
+                    <div className="dc__bullet" />
+                    <ImageChipCell imagePath={artifact} placement="top" />
+                </>
+            )}
         </div>
     ),
 )
@@ -118,214 +111,171 @@ const WorkerStatus = React.memo(
         const getViewWorker = () =>
             showLink ? (
                 <NavLink to={`${WORKER_POD_BASE_URL}/${workerPodName}/logs`} target="_blank" className="anchor">
-                    <div className="mr-10">View worker pod</div>
+                    <span className="mr-10 fs-13">View worker pod</span>
                 </NavLink>
-            ) : (
-                <div className="mr-10">Worker</div>
-            )
+            ) : null
 
         return (
-            <>
-                <span style={{ height: '80%', borderRight: '1px solid var(--N100)', margin: '0 16px' }} />
-                <div className="flex left column">
-                    <div className="flex left fs-14">
-                        {stage === 'DEPLOY' ? <div className="mr-10">Message</div> : getViewWorker()}
-                        {podStatus && (
-                            <div className="fw-6" style={{ color: colorMap[podStatus.toLowerCase()] }}>
-                                {podStatus}
-                            </div>
-                        )}
-                    </div>
-                    {message && (
-                        <Tippy
-                            theme={TippyTheme.black}
-                            className="default-tt"
-                            arrow={false}
-                            placement="bottom-start"
-                            animation="shift-toward-subtle"
-                            content={message}
-                        >
-                            <div className="fs-12 cn-7 dc__ellipsis-right__2nd-line">{message}</div>
-                        </Tippy>
-                    )}
+            <div className="display-grid trigger-details__grid py-4">
+                <div className="flexbox dc__content-center">
+                    <ICLines className="icon-dim-20 dc__no-shrink scn-7" />
                 </div>
-            </>
-        )
-    },
-)
 
-const ProgressingStatus = React.memo(
-    ({ status, message, podStatus, stage, type, finishedOn, workerPodName }: ProgressingStatusType): JSX.Element => {
-        const [aborting, setAborting] = useState(false)
-        const [abortConfirmation, setAbortConfirmation] = useState(false)
-        const [abortError, setAbortError] = useState<{
-            status: boolean
-            message: string
-        }>({
-            status: false,
-            message: '',
-        })
-        const { buildId, triggerId, pipelineId } = useParams<{
-            buildId: string
-            triggerId: string
-            pipelineId: string
-        }>()
-        let abort = null
-        if (type === HistoryComponentType.CI) {
-            abort = (isForceAbort: boolean) => cancelCiTrigger({ pipelineId, workflowId: buildId }, isForceAbort)
-        } else if (stage !== 'DEPLOY') {
-            abort = () => cancelPrePostCdTrigger(pipelineId, triggerId)
-        }
-
-        async function abortRunning() {
-            setAborting(true)
-            try {
-                await abort(abortError.status)
-                toast.success('Build Aborted')
-                setAbortConfirmation(false)
-                setAbortError({
-                    status: false,
-                    message: '',
-                })
-            } catch (error) {
-                setAborting(false)
-                setAbortConfirmation(false)
-                if (error.code === 400) {
-                    // code 400 is for aborting a running build
-                    const { errors } = error
-                    setAbortError({
-                        status: true,
-                        message: errors[0].userMessage,
-                    })
-                }
-            }
-        }
-
-        const toggleAbortConfiguration = (): void => {
-            setAbortConfirmation(not)
-        }
-        const closeForceAbortModal = (): void => {
-            setAbortError({
-                status: false,
-                message: '',
-            })
-        }
-        return (
-            <>
-                <div className="flex left mb-24">
-                    <div className="dc__min-width-fit-content">
-                        <div className={`${status} fs-14 fw-6 flex left inprogress-status-color`}>In progress</div>
+                <div className="flexbox-col">
+                    <div className="flexbox dc__gap-8">
+                        <div className="flexbox cn-9 fs-13 fw-4 lh-20">
+                            <span>Worker</span>&nbsp;
+                            {podStatus && <span>{podStatus.toLowerCase()}&nbsp;</span>}
+                        </div>
+                        {stage !== 'DEPLOY' && getViewWorker()}
                     </div>
 
-                    {abort && (
-                        <button
-                            type="button"
-                            className="flex cta delete er-5 bw-1 fw-6 fs-13 h-28 ml-16"
-                            onClick={toggleAbortConfiguration}
-                        >
-                            Abort
-                        </button>
-                    )}
-                    <WorkerStatus
-                        message={message}
-                        podStatus={podStatus}
-                        stage={stage}
-                        finishedOn={finishedOn}
-                        workerPodName={workerPodName}
-                    />
+                    {/* Need key since using ref inside of this component as useEffect dependency, so there were issues while switching builds */}
+                    {message && <ShowMoreText text={message} key={message} textClass="cn-7" />}
                 </div>
-                {abortConfirmation && (
-                    <ConfirmationDialog>
-                        <ConfirmationDialog.Icon src={warn} />
-                        <ConfirmationDialog.Body
-                            title={
-                                type === HistoryComponentType.CD
-                                    ? `Abort ${stage.toLowerCase()}-deployment?`
-                                    : 'Abort build?'
-                            }
-                        />
-                        <p className="fs-13 cn-7 lh-1-54">
-                            {type === HistoryComponentType.CD
-                                ? 'Are you sure you want to abort this stage?'
-                                : 'Are you sure you want to abort this build?'}
-                        </p>
-                        <ConfirmationDialog.ButtonGroup>
-                            <button type="button" className="cta cancel" onClick={toggleAbortConfiguration}>
-                                Cancel
-                            </button>
-                            <button type="button" className="cta delete" onClick={abortRunning}>
-                                {aborting ? <Progressing /> : 'Yes, Abort'}
-                            </button>
-                        </ConfirmationDialog.ButtonGroup>
-                    </ConfirmationDialog>
-                )}
-                {abortError.status && (
-                    <ConfirmationDialog>
-                        <ConfirmationDialog.Icon src={warn} />
-                        <ConfirmationDialog.Body title="Could not abort build!" />
-                        <div className="w-100 bc-n50 h-36 flexbox dc__align-items-center">
-                            <span className="pl-12">Error: {abortError.message}</span>
-                        </div>
-                        <div className="fs-13 fw-6 pt-12 cn-7 lh-1-54">
-                            <span>Please try to force abort</span>
-                        </div>
-                        <div className="pt-4 fw-4 cn-7 lh-1-54">
-                            <span>Some resource might get orphaned which will be cleaned up with Job-lifecycle</span>
-                        </div>
-                        <ConfirmationDialog.ButtonGroup>
-                            <button type="button" className="cta cancel" onClick={closeForceAbortModal}>
-                                Cancel
-                            </button>
-                            <button type="button" className="cta delete" onClick={abortRunning}>
-                                {aborting ? <Progressing /> : 'Force Abort'}
-                            </button>
-                        </ConfirmationDialog.ButtonGroup>
-                    </ConfirmationDialog>
-                )}
-            </>
-        )
-    },
-)
-
-const CurrentStatus = React.memo(
-    ({
-        status,
-        finishedOn,
-        artifact,
-        message,
-        podStatus,
-        stage,
-        type,
-        isJobView,
-        workerPodName,
-    }: CurrentStatusType): JSX.Element => {
-        if (PROGRESSING_STATUS[status.toLowerCase()]) {
-            return (
-                <ProgressingStatus
-                    status={status}
-                    message={message}
-                    podStatus={podStatus}
-                    stage={stage}
-                    type={type}
-                    finishedOn={finishedOn}
-                    workerPodName={workerPodName}
-                />
-            )
-        }
-        return (
-            <div className={`flex left ${isJobView ? 'mb-24' : ''}`}>
-                <Finished status={status} finishedOn={finishedOn} artifact={artifact} type={type} />
-                <WorkerStatus
-                    message={message}
-                    podStatus={podStatus}
-                    stage={stage}
-                    finishedOn={finishedOn}
-                    workerPodName={workerPodName}
-                />
             </div>
         )
     },
 )
+
+const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatusType): JSX.Element => {
+    const [aborting, setAborting] = useState(false)
+    const [abortConfirmation, setAbortConfirmation] = useState(false)
+    const [abortError, setAbortError] = useState<{
+        status: boolean
+        message: string
+    }>({
+        status: false,
+        message: '',
+    })
+    const { buildId, triggerId, pipelineId } = useParams<{
+        buildId: string
+        triggerId: string
+        pipelineId: string
+    }>()
+    let abort = null
+    if (type === HistoryComponentType.CI) {
+        abort = (isForceAbort: boolean) => cancelCiTrigger({ pipelineId, workflowId: buildId }, isForceAbort)
+    } else if (stage !== 'DEPLOY') {
+        abort = () => cancelPrePostCdTrigger(pipelineId, triggerId)
+    }
+
+    async function abortRunning() {
+        setAborting(true)
+        try {
+            await abort(abortError.status)
+            ToastManager.showToast({
+                variant: ToastVariantType.success,
+                description: 'Build Aborted',
+            })
+            setAbortConfirmation(false)
+            setAbortError({
+                status: false,
+                message: '',
+            })
+        } catch (error) {
+            setAborting(false)
+            setAbortConfirmation(false)
+            if (error.code === 400) {
+                // code 400 is for aborting a running build
+                const { errors } = error
+                setAbortError({
+                    status: true,
+                    message: errors[0].userMessage,
+                })
+            }
+        }
+    }
+
+    const toggleAbortConfiguration = (): void => {
+        setAbortConfirmation(not)
+    }
+    const closeForceAbortModal = (): void => {
+        setAbortError({
+            status: false,
+            message: '',
+        })
+    }
+    return (
+        <>
+            <div className="flex dc__gap-8 left pt-12">
+                <div className="dc__min-width-fit-content">
+                    <div className={`${status} fs-14 fw-6 flex left inprogress-status-color`}>In progress</div>
+                </div>
+
+                {abort && (
+                    <>
+                        <span className="cn-5 fs-13 fw-4 lh-20">/</span>
+                        <button
+                            type="button"
+                            className="flex dc__transparent cr-5 fs-13 fw-6 lh-20"
+                            onClick={toggleAbortConfiguration}
+                        >
+                            Abort
+                        </button>
+                    </>
+                )}
+            </div>
+
+            {abortConfirmation && (
+                <ConfirmationDialog>
+                    <ConfirmationDialog.Icon src={warn} />
+                    <ConfirmationDialog.Body
+                        title={
+                            type === HistoryComponentType.CD
+                                ? `Abort ${stage.toLowerCase()}-deployment?`
+                                : 'Abort build?'
+                        }
+                    />
+                    <p className="fs-13 cn-7 lh-1-54">
+                        {type === HistoryComponentType.CD
+                            ? 'Are you sure you want to abort this stage?'
+                            : 'Are you sure you want to abort this build?'}
+                    </p>
+                    <ConfirmationDialog.ButtonGroup>
+                        <button type="button" className="cta cancel" onClick={toggleAbortConfiguration}>
+                            Cancel
+                        </button>
+                        <button type="button" className="cta delete" onClick={abortRunning}>
+                            {aborting ? <Progressing /> : 'Yes, Abort'}
+                        </button>
+                    </ConfirmationDialog.ButtonGroup>
+                </ConfirmationDialog>
+            )}
+
+            {abortError.status && (
+                <ConfirmationDialog>
+                    <ConfirmationDialog.Icon src={warn} />
+                    <ConfirmationDialog.Body title="Could not abort build!" />
+                    <div className="w-100 bc-n50 h-36 flexbox dc__align-items-center">
+                        <span className="pl-12">Error: {abortError.message}</span>
+                    </div>
+                    <div className="fs-13 fw-6 pt-12 cn-7 lh-1-54">
+                        <span>Please try to force abort</span>
+                    </div>
+                    <div className="pt-4 fw-4 cn-7 lh-1-54">
+                        <span>Some resource might get orphaned which will be cleaned up with Job-lifecycle</span>
+                    </div>
+                    <ConfirmationDialog.ButtonGroup>
+                        <button type="button" className="cta cancel" onClick={closeForceAbortModal}>
+                            Cancel
+                        </button>
+                        <button type="button" className="cta delete" onClick={abortRunning}>
+                            {aborting ? <Progressing /> : 'Force Abort'}
+                        </button>
+                    </ConfirmationDialog.ButtonGroup>
+                </ConfirmationDialog>
+            )}
+        </>
+    )
+})
+
+const CurrentStatus = React.memo(({ status, finishedOn, artifact, stage, type }: CurrentStatusType): JSX.Element => {
+    if (PROGRESSING_STATUS[status.toLowerCase()]) {
+        return <ProgressingStatus status={status} stage={stage} type={type} />
+    }
+    return <Finished status={status} finishedOn={finishedOn} artifact={artifact} type={type} />
+})
 
 const StartDetails = ({
     startedOn,
@@ -339,63 +289,83 @@ const StartDetails = ({
     isJobView,
     triggerMetadata,
     renderDeploymentHistoryTriggerMetaText,
+    renderTargetConfigInfo,
+    stage,
 }: StartDetailsType): JSX.Element => {
     const { url } = useRouteMatch()
     const { pathname } = useLocation()
+
     return (
-        <div className={`trigger-details__start flex column left ${isJobView ? 'mt-4' : ''}`}>
-            <div className="cn-9 fs-14 fw-6" data-testid="deployment-history-start-heading">
-                Start
-            </div>
-            <div className="flex left">
-                <time className="cn-7 fs-12">
+        <div className="w-100 pr-20 flex column left dc__border-bottom-n1">
+            <div className="flexbox dc__gap-8 dc__align-items-center pb-12 flex-wrap">
+                <div className="flex left dc__gap-4 cn-9 fs-13 fw-6 lh-20">
+                    <div className="flex left dc__no-shrink dc__gap-4" data-testid="deployment-history-start-heading">
+                        <div>Start</div>
+                        {stage && (
+                            <>
+                                <div className="dc__bullet" />
+                                <div className="dc__first-letter-capitalize">{getDeploymentStageTitle(stage)}</div>
+                            </>
+                        )}
+                    </div>
+                    {environmentName && (
+                        <>
+                            <ICArrowRight className="icon-dim-14 scn-9 dc__no-shrink" />
+                            <span className="dc__truncate">{environmentName}</span>
+                        </>
+                    )}
+                    {renderTargetConfigInfo?.()}
+                </div>
+
+                <time className="cn-7 fs-13">
                     {moment(startedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
                 </time>
-                <div className="dc__bullet mr-6 ml-6" />
-                <div className="trigger-details__trigger-by cn-7 fs-12 mr-12">
+
+                <div className="dc__bullet" />
+
+                <div className="trigger-details__trigger-by cn-7 fs-13">
                     {triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}
                 </div>
+
+                {/* Have to add a div, so add to convert the gap to 16 */}
+                <div />
+
                 {type === HistoryComponentType.CD ? (
                     // eslint-disable-next-line react/jsx-no-useless-fragment
-                    <>
-                        {artifact && (
-                            <div className="dc__app-commit__hash" data-testid="docker-image-hash">
-                                <img src={docker} alt="docker" className="commit-hash__icon grayscale" />
-                                {artifact.split(':')[1]}
-                            </div>
-                        )}
-                    </>
+                    <>{artifact && <ImageChipCell imagePath={artifact} placement="top" />}</>
                 ) : (
                     Object.keys(gitTriggers ?? {}).length > 0 &&
                     ciMaterials?.map((ciMaterial) => {
                         const gitDetail: GitTriggers = gitTriggers[ciMaterial.id]
                         return gitDetail ? (
                             <React.Fragment key={ciMaterial.id}>
-                                {ciMaterial.type !== 'WEBHOOK' && (
-                                    <a
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        href={createGitCommitUrl(ciMaterial.url, gitDetail.Commit)}
-                                        className="dc__app-commit__hash mr-12 bcn-1 cn-7"
-                                    >
-                                        {gitDetail.Commit?.substr(0, 8)}
-                                    </a>
+                                {ciMaterial.type !== 'WEBHOOK' && gitDetail.Commit && (
+                                    <CommitChipCell
+                                        commits={[gitDetail.Commit]}
+                                        handleClick={getHandleOpenURL(
+                                            createGitCommitUrl(ciMaterial.url, gitDetail.Commit),
+                                        )}
+                                    />
                                 )}
                                 {ciMaterial.type === 'WEBHOOK' &&
                                     gitDetail.WebhookData &&
-                                    gitDetail.WebhookData.Data && (
-                                        <span className="dc__app-commit__hash">
-                                            {gitDetail.WebhookData.EventActionType === 'merged'
-                                                ? gitDetail.WebhookData.Data['target checkout']?.substr(0, 8)
-                                                : gitDetail.WebhookData.Data['target checkout']}
-                                        </span>
+                                    gitDetail.WebhookData.Data &&
+                                    gitDetail.WebhookData.Data['target checkout'] && (
+                                        <CommitChipCell
+                                            commits={
+                                                gitDetail.WebhookData.EventActionType === 'merged'
+                                                    ? gitDetail.WebhookData.Data['target checkout'].substr(0, 7)
+                                                    : gitDetail.WebhookData.Data['target checkout']
+                                            }
+                                        />
                                     )}
                             </React.Fragment>
                         ) : null
                     })
                 )}
+
                 {!pathname.includes('source-code') && (
-                    <Link to={`${url}/source-code`} className="anchor ml-8" data-testid="commit-details-link">
+                    <Link to={`${url}/source-code`} className="anchor fs-13" data-testid="commit-details-link">
                         Commit details
                     </Link>
                 )}
@@ -404,11 +374,12 @@ const StartDetails = ({
             {triggerMetadata &&
                 renderDeploymentHistoryTriggerMetaText &&
                 renderDeploymentHistoryTriggerMetaText(triggerMetadata)}
+
             {isJobView && (
-                <div className="pt-4 pb-4 pr-0 pl-0">
-                    <span className="fw-6 fs-14">Env</span>
-                    <span className="fs-12 mb-4 ml-8">{environmentName !== '' ? environmentName : DEFAULT_ENV}</span>
-                    {environmentName === '' && <span className="fw-4 fs-11 ml-4 dc__italic-font-style">(Default)</span>}
+                <div className="flexbox dc__align-items-center dc__gap-8 pb-8">
+                    <span className="cn-9 fs-13 fw-6 lh-20">Env</span>
+                    <span className="fs-12 lh-20">{environmentName !== '' ? environmentName : DEFAULT_ENV}</span>
+                    {environmentName === '' && <i className="fw-4 fs-12 lh-20">(Default)</i>}
                 </div>
             )}
         </div>
@@ -416,33 +387,37 @@ const StartDetails = ({
 }
 
 const TriggerDetailsStatusIcon = React.memo(
-    ({ status, isDeploymentWindowInfo }: TriggerDetailsStatusIconType): JSX.Element => {
-        let viewBox = '0 0 25 87'
-        let height = '87'
-        let cyEndCircle = '74.5'
-        let y2Line = '69'
-        if (isDeploymentWindowInfo) {
-            viewBox = '0 0 25 118'
-            height = '118'
-            cyEndCircle = '105'
-            y2Line = '100'
-        }
-        return (
-            <svg width="25" height={height} viewBox={viewBox} fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12.5" cy="6.5" r="6" fill="white" stroke="#3B444C" />
-                <circle
-                    cx="12.5"
-                    cy={cyEndCircle}
-                    r="6"
-                    fill={colorMap[status]}
-                    stroke={colorMap[status]}
-                    strokeWidth="12"
-                    strokeOpacity="0.3"
-                />
-                <line x1="12.5" y1="11.9997" x2="12.5362" y2={y2Line} stroke="#3B444C" />
-            </svg>
-        )
-    },
+    ({ status }: TriggerDetailsStatusIconType): JSX.Element => (
+        <div className="flexbox-col">
+            <div className="flex">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10" cy="10" r="5" stroke="var(--N700)" />
+                    <path d="M10 15L10 20" stroke="var(--N700)" />
+                </svg>
+            </div>
+
+            <div className="flex flex-grow-1">
+                <div className="dc__border-left--n7 h-100" />
+            </div>
+
+            {PULSATING_STATUS_MAP[status] ? (
+                <ICPulsateStatus />
+            ) : (
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle
+                        cx="10"
+                        cy="10"
+                        r="5"
+                        fill={colorMap[status]}
+                        stroke={colorMap[status]}
+                        strokeOpacity="0.3"
+                        strokeWidth="10"
+                    />
+                    <path d="M10 0L10 5" stroke="var(--N700)" />
+                </svg>
+            )}
+        </div>
+    ),
 )
 
 export const TriggerDetails = React.memo(
@@ -464,71 +439,55 @@ export const TriggerDetails = React.memo(
         workerPodName,
         triggerMetadata,
         renderDeploymentHistoryTriggerMetaText,
+        renderTargetConfigInfo,
     }: TriggerDetailsType): JSX.Element => (
-        <div className="trigger-details">
-            <div className="flex">
-                <TriggerDetailsStatusIcon status={status?.toLowerCase()} isDeploymentWindowInfo={!!triggerMetadata} />
+        <div className="trigger-details flexbox-col pb-12">
+            <div className="display-grid trigger-details__grid py-12">
+                <div className="flexbox dc__content-center">
+                    <TriggerDetailsStatusIcon status={status?.toLowerCase()} />
+                </div>
+                <div className="trigger-details__summary flexbox-col flex-grow-1 lh-20">
+                    <StartDetails
+                        startedOn={startedOn}
+                        triggeredBy={triggeredBy}
+                        triggeredByEmail={triggeredByEmail}
+                        ciMaterials={ciMaterials}
+                        gitTriggers={gitTriggers}
+                        artifact={artifact}
+                        type={type}
+                        environmentName={environmentName}
+                        isJobView={isJobView}
+                        triggerMetadata={triggerMetadata}
+                        renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
+                        renderTargetConfigInfo={renderTargetConfigInfo}
+                        stage={stage}
+                    />
+
+                    <CurrentStatus
+                        status={status}
+                        finishedOn={finishedOn}
+                        artifact={artifact}
+                        stage={stage}
+                        type={type}
+                    />
+                </div>
             </div>
-            <div className="trigger-details__summary">
-                <StartDetails
-                    startedOn={startedOn}
-                    triggeredBy={triggeredBy}
-                    triggeredByEmail={triggeredByEmail}
-                    ciMaterials={ciMaterials}
-                    gitTriggers={gitTriggers}
-                    artifact={artifact}
-                    type={type}
-                    environmentName={environmentName}
-                    isJobView={isJobView}
-                    triggerMetadata={triggerMetadata}
-                    renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
-                />
-                <CurrentStatus
-                    status={status}
-                    finishedOn={finishedOn}
-                    artifact={artifact}
-                    message={message}
-                    podStatus={podStatus}
-                    stage={stage}
-                    type={type}
-                    isJobView={isJobView}
-                    workerPodName={workerPodName}
-                />
-            </div>
+
+            <WorkerStatus
+                message={message}
+                podStatus={podStatus}
+                stage={stage}
+                finishedOn={finishedOn}
+                workerPodName={workerPodName}
+            />
         </div>
     ),
 )
 
-const HistoryLogs: React.FC<{
-    triggerDetails: History
-    loading: boolean
-    setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
-    deploymentHistoryList: DeploymentTemplateList[]
-    setDeploymentHistoryList: React.Dispatch<React.SetStateAction<DeploymentTemplateList[]>>
-    deploymentAppType: DeploymentAppTypes
-    isBlobStorageConfigured: boolean
-    userApprovalMetadata: UserApprovalMetadataType
-    triggeredByEmail: string
-    artifactId: number
-    ciPipelineId: number
-    appReleaseTags: string[]
-    tagsEditable: boolean
-    hideImageTaggingHardDelete: boolean
-    selectedEnvironmentName?: string
-    resourceId?: number
-    renderRunSource: (runSource: RunSourceType, isDeployedInThisResource: boolean) => JSX.Element
-    processVirtualEnvironmentDeploymentData: (
-        data?: DeploymentStatusDetailsType,
-    ) => DeploymentStatusDetailsBreakdownDataType
-    renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
-    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
-    renderVirtualHistoryArtifacts: (virtualHistoryArtifactProps: VirtualHistoryArtifactProps) => JSX.Element
-}> = ({
+const HistoryLogs: React.FC<HistoryLogsProps> = ({
     triggerDetails,
     loading,
     setFullScreenView,
-    deploymentHistoryList,
-    setDeploymentHistoryList,
     deploymentAppType,
     isBlobStorageConfigured,
     userApprovalMetadata,
@@ -545,6 +504,11 @@ const HistoryLogs: React.FC<{
     renderDeploymentApprovalInfo,
     renderCIListHeader,
     renderVirtualHistoryArtifacts,
+    scrollToTop,
+    scrollToBottom,
+    fullScreenView,
+    appName,
+    triggerHistory,
 }) => {
     const { path } = useRouteMatch()
     const { appId, pipelineId, triggerId, envId } = useParams<{
@@ -563,138 +527,125 @@ const HistoryLogs: React.FC<{
 
     const CDBuildReportUrl = `app/cd-pipeline/workflow/download/${appId}/${envId}/${pipelineId}/${triggerId}`
 
-    const [ref, scrollToTop, scrollToBottom] = useScrollable({
-        autoBottomScroll: triggerDetails.status.toLowerCase() !== 'succeeded',
-    })
-
     return (
-        <>
-            <div className="trigger-outputs-container">
-                {loading ? (
-                    <Progressing pageLoader />
-                ) : (
-                    <Switch>
-                        {triggerDetails.stage !== 'DEPLOY' ? (
-                            !triggerDetails.IsVirtualEnvironment && (
-                                <Route path={`${path}/logs`}>
-                                    <div ref={ref} style={{ height: '100%', overflow: 'auto', background: '#0b0f22' }}>
-                                        <LogsRenderer
-                                            triggerDetails={triggerDetails}
-                                            isBlobStorageConfigured={isBlobStorageConfigured}
-                                            parentType={HistoryComponentType.CD}
-                                        />
-                                    </div>
-                                </Route>
-                            )
-                        ) : (
-                            <Route path={`${path}/deployment-steps`}>
-                                <DeploymentDetailSteps
-                                    deploymentStatus={triggerDetails.status}
-                                    deploymentAppType={deploymentAppType}
-                                    userApprovalMetadata={userApprovalMetadata}
-                                    isGitops={
-                                        deploymentAppType === DeploymentAppTypes.GITOPS ||
-                                        deploymentAppType === DeploymentAppTypes.MANIFEST_DOWNLOAD ||
-                                        deploymentAppType === DeploymentAppTypes.MANIFEST_PUSH
-                                    }
-                                    isHelmApps={false}
-                                    isVirtualEnvironment={triggerDetails.IsVirtualEnvironment}
-                                    processVirtualEnvironmentDeploymentData={processVirtualEnvironmentDeploymentData}
-                                    renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}
+        <div className="trigger-outputs-container flexbox-col flex-grow-1 h-100">
+            {loading ? (
+                <Progressing pageLoader />
+            ) : (
+                <Switch>
+                    {triggerDetails.stage !== 'DEPLOY' ? (
+                        !triggerDetails.IsVirtualEnvironment && (
+                            <Route path={`${path}/logs`}>
+                                <LogsRenderer
+                                    triggerDetails={triggerDetails}
+                                    isBlobStorageConfigured={isBlobStorageConfigured}
+                                    parentType={HistoryComponentType.CD}
+                                    fullScreenView={fullScreenView}
                                 />
-                            </Route>
-                        )}
-                        <Route path={`${path}/source-code`}>
-                            <GitChanges
-                                gitTriggers={triggerDetails.gitTriggers}
-                                ciMaterials={triggerDetails.ciMaterials}
-                                artifact={triggerDetails.artifact}
-                                userApprovalMetadata={userApprovalMetadata}
-                                triggeredByEmail={triggeredByEmail}
-                                artifactId={artifactId}
-                                ciPipelineId={ciPipelineId}
-                                imageComment={triggerDetails?.imageComment}
-                                imageReleaseTags={triggerDetails?.imageReleaseTags}
-                                appReleaseTagNames={appReleaseTags}
-                                tagsEditable={tagsEditable}
-                                hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                                appliedFilters={triggerDetails.appliedFilters ?? []}
-                                appliedFiltersTimestamp={triggerDetails.appliedFiltersTimestamp}
-                                selectedEnvironmentName={selectedEnvironmentName}
-                                promotionApprovalMetadata={triggerDetails?.promotionApprovalMetadata}
-                                renderCIListHeader={renderCIListHeader}
-                            />
-                        </Route>
-                        {triggerDetails.stage === 'DEPLOY' && (
-                            <Route path={`${path}/configuration`} exact>
-                                <DeploymentHistoryConfigList
-                                    setDeploymentHistoryList={setDeploymentHistoryList}
-                                    deploymentHistoryList={deploymentHistoryList}
-                                    setFullScreenView={setFullScreenView}
-                                />
-                            </Route>
-                        )}
-                        {triggerDetails.stage === 'DEPLOY' && (
-                            <Route
-                                path={`${path}${URLS.DEPLOYMENT_HISTORY_CONFIGURATIONS}/:historyComponent/:baseConfigurationId(\\d+)/:historyComponentName?`}
-                            >
-                                <DeploymentHistoryDetailedView
-                                    setDeploymentHistoryList={setDeploymentHistoryList}
-                                    deploymentHistoryList={deploymentHistoryList}
-                                    setFullScreenView={setFullScreenView}
-                                    renderRunSource={renderRunSource}
-                                    resourceId={resourceId}
-                                />
-                            </Route>
-                        )}
-                        {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
-                            <Route path={`${path}/artifacts`}>
-                                {triggerDetails.IsVirtualEnvironment && renderVirtualHistoryArtifacts ? (
-                                    renderVirtualHistoryArtifacts({
-                                        status: triggerDetails.status,
-                                        title: triggerDetails.helmPackageName,
-                                        params: { ...paramsData, appId: Number(appId), envId: Number(envId) },
-                                    })
-                                ) : (
-                                    <Artifacts
-                                        status={triggerDetails.status}
-                                        artifact={triggerDetails.artifact}
-                                        blobStorageEnabled={triggerDetails.blobStorageEnabled}
-                                        ciPipelineId={triggerDetails.ciPipelineId}
-                                        artifactId={triggerDetails.artifactId}
-                                        imageComment={triggerDetails?.imageComment}
-                                        imageReleaseTags={triggerDetails?.imageReleaseTags}
-                                        tagsEditable={tagsEditable}
-                                        appReleaseTagNames={appReleaseTags}
-                                        hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                                        downloadArtifactUrl={CDBuildReportUrl}
-                                        type={HistoryComponentType.CD}
-                                        renderCIListHeader={renderCIListHeader}
+
+                                {(scrollToTop || scrollToBottom) && (
+                                    <Scroller
+                                        style={{ position: 'fixed', bottom: '52px', right: '12px', zIndex: '4' }}
+                                        {...{ scrollToTop, scrollToBottom }}
                                     />
                                 )}
                             </Route>
-                        )}
-                        <Redirect
-                            to={`${path}/${
-                                // eslint-disable-next-line no-nested-ternary
-                                triggerDetails.stage === 'DEPLOY'
-                                    ? `deployment-steps`
-                                    : triggerDetails.status.toLowerCase() === 'succeeded' ||
-                                        triggerDetails.IsVirtualEnvironment
-                                      ? `artifacts`
-                                      : `logs`
-                            }`}
+                        )
+                    ) : (
+                        <Route path={`${path}/deployment-steps`}>
+                            <DeploymentDetailSteps
+                                deploymentStatus={triggerDetails.status}
+                                deploymentAppType={deploymentAppType}
+                                userApprovalMetadata={userApprovalMetadata}
+                                isGitops={
+                                    deploymentAppType === DeploymentAppTypes.GITOPS ||
+                                    deploymentAppType === DeploymentAppTypes.MANIFEST_DOWNLOAD ||
+                                    deploymentAppType === DeploymentAppTypes.MANIFEST_PUSH
+                                }
+                                isHelmApps={false}
+                                isVirtualEnvironment={triggerDetails.IsVirtualEnvironment}
+                                processVirtualEnvironmentDeploymentData={processVirtualEnvironmentDeploymentData}
+                                renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}
+                            />
+                        </Route>
+                    )}
+                    <Route path={`${path}/source-code`}>
+                        <GitChanges
+                            gitTriggers={triggerDetails.gitTriggers}
+                            ciMaterials={triggerDetails.ciMaterials}
+                            artifact={triggerDetails.artifact}
+                            userApprovalMetadata={userApprovalMetadata}
+                            triggeredByEmail={triggeredByEmail}
+                            artifactId={artifactId}
+                            ciPipelineId={ciPipelineId}
+                            imageComment={triggerDetails?.imageComment}
+                            imageReleaseTags={triggerDetails?.imageReleaseTags}
+                            appReleaseTagNames={appReleaseTags}
+                            tagsEditable={tagsEditable}
+                            hideImageTaggingHardDelete={hideImageTaggingHardDelete}
+                            appliedFilters={triggerDetails.appliedFilters ?? []}
+                            appliedFiltersTimestamp={triggerDetails.appliedFiltersTimestamp}
+                            selectedEnvironmentName={selectedEnvironmentName}
+                            promotionApprovalMetadata={triggerDetails?.promotionApprovalMetadata}
+                            renderCIListHeader={renderCIListHeader}
                         />
-                    </Switch>
-                )}
-            </div>
-            {(scrollToTop || scrollToBottom) && (
-                <Scroller
-                    style={{ position: 'fixed', bottom: '25px', right: '32px' }}
-                    {...{ scrollToTop, scrollToBottom }}
-                />
+                    </Route>
+                    {triggerDetails.stage === 'DEPLOY' && (
+                        <Route path={`${path}${URLS.DEPLOYMENT_HISTORY_CONFIGURATIONS}`}>
+                            <DeploymentHistoryConfigDiff
+                                appName={appName}
+                                envName={selectedEnvironmentName}
+                                pipelineId={+pipelineId}
+                                wfrId={+triggerId}
+                                triggerHistory={triggerHistory}
+                                setFullScreenView={setFullScreenView}
+                                resourceId={resourceId}
+                                renderRunSource={renderRunSource}
+                            />
+                        </Route>
+                    )}
+                    {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
+                        <Route path={`${path}/artifacts`}>
+                            {triggerDetails.IsVirtualEnvironment && renderVirtualHistoryArtifacts ? (
+                                renderVirtualHistoryArtifacts({
+                                    status: triggerDetails.status,
+                                    title: triggerDetails.helmPackageName,
+                                    params: { ...paramsData, appId: Number(appId), envId: Number(envId) },
+                                })
+                            ) : (
+                                <Artifacts
+                                    status={triggerDetails.status}
+                                    artifact={triggerDetails.artifact}
+                                    blobStorageEnabled={triggerDetails.blobStorageEnabled}
+                                    isArtifactUploaded={triggerDetails.isArtifactUploaded}
+                                    ciPipelineId={triggerDetails.ciPipelineId}
+                                    artifactId={triggerDetails.artifactId}
+                                    imageComment={triggerDetails?.imageComment}
+                                    imageReleaseTags={triggerDetails?.imageReleaseTags}
+                                    tagsEditable={tagsEditable}
+                                    appReleaseTagNames={appReleaseTags}
+                                    hideImageTaggingHardDelete={hideImageTaggingHardDelete}
+                                    downloadArtifactUrl={CDBuildReportUrl}
+                                    renderCIListHeader={renderCIListHeader}
+                                    rootClassName="p-16 flex-grow-1"
+                                />
+                            )}
+                        </Route>
+                    )}
+                    <Redirect
+                        to={`${path}/${
+                            // eslint-disable-next-line no-nested-ternary
+                            triggerDetails.stage === 'DEPLOY'
+                                ? `deployment-steps`
+                                : triggerDetails.status.toLowerCase() === 'succeeded' ||
+                                    triggerDetails.IsVirtualEnvironment
+                                  ? `artifacts`
+                                  : `logs`
+                        }`}
+                    />
+                </Switch>
             )}
-        </>
+        </div>
     )
 }
 
@@ -703,8 +654,6 @@ const TriggerOutput = ({
     triggerHistory,
     setTriggerHistory,
     setFullScreenView,
-    setDeploymentHistoryList,
-    deploymentHistoryList,
     deploymentAppType,
     isBlobStorageConfigured,
     appReleaseTags,
@@ -721,6 +670,10 @@ const TriggerOutput = ({
     renderVirtualHistoryArtifacts,
     renderDeploymentHistoryTriggerMetaText,
     resourceId,
+    scrollToTop,
+    scrollToBottom,
+    renderTargetConfigInfo,
+    appName,
 }: TriggerOutputProps) => {
     const { appId, triggerId, envId, pipelineId } = useParams<{
         appId: string
@@ -750,12 +703,15 @@ const TriggerOutput = ({
             const appliedFiltersTimestamp = triggerHistory.get(syncTriggerId)?.appliedFiltersTimestamp
             const promotionApprovalMetadata = triggerHistory.get(syncTriggerId)?.promotionApprovalMetadata
             const runSource = triggerHistory.get(syncTriggerId)?.runSource
+            const targetConfig = triggerHistory.get(syncTriggerId)?.targetConfig
+
             // These changes are not subject to change after refresh, add data which will not change
             const additionalDataObject = {
                 ...(appliedFilters.length ? { appliedFilters } : {}),
                 ...(appliedFiltersTimestamp ? { appliedFiltersTimestamp } : {}),
                 ...(promotionApprovalMetadata ? { promotionApprovalMetadata } : {}),
                 ...(runSource ? { runSource } : {}),
+                ...(targetConfig ? { targetConfig } : {}),
             }
             setTriggerHistory((newTriggerHistory) => {
                 newTriggerHistory.set(syncTriggerId, { ...syncTriggerDetail, ...additionalDataObject })
@@ -855,90 +811,88 @@ const TriggerOutput = ({
 
     return (
         <>
-            <div
-                className={`trigger-details-container ${triggerDetails.triggerMetadata ? 'with-trigger-metadata' : ''}`}
-            >
-                {!fullScreenView && (
-                    <>
-                        <TriggerDetails
-                            type={HistoryComponentType.CD}
-                            status={triggerDetails.status}
-                            startedOn={triggerDetails.startedOn}
-                            finishedOn={triggerDetails.finishedOn}
-                            triggeredBy={triggerDetails.triggeredBy}
-                            triggeredByEmail={triggerDetails.triggeredByEmail}
-                            ciMaterials={triggerDetails.ciMaterials}
-                            gitTriggers={triggerDetails.gitTriggers}
-                            message={triggerDetails.message}
-                            podStatus={triggerDetails.podStatus}
-                            stage={triggerDetails.stage}
-                            artifact={triggerDetails.artifact}
-                            triggerMetadata={triggerDetails.triggerMetadata}
-                            renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
-                        />
-                        <ul className="pl-20 tab-list tab-list--nodes dc__border-bottom">
-                            {triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM && (
-                                <li className="tab-list__tab" data-testid="deployment-history-steps-link">
-                                    <NavLink
-                                        replace
-                                        className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                        activeClassName="active"
-                                        to="deployment-steps"
-                                    >
-                                        Steps
-                                    </NavLink>
-                                </li>
-                            )}
-                            {!(triggerDetails.stage === 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
-                                <li className="tab-list__tab" data-testid="deployment-history-logs-link">
-                                    <NavLink
-                                        replace
-                                        className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                        activeClassName="active"
-                                        to="logs"
-                                    >
-                                        Logs
-                                    </NavLink>
-                                </li>
-                            )}
-                            <li className="tab-list__tab" data-testid="deployment-history-source-code-link">
+            {!fullScreenView && (
+                <>
+                    <TriggerDetails
+                        type={HistoryComponentType.CD}
+                        status={triggerDetails.status}
+                        startedOn={triggerDetails.startedOn}
+                        finishedOn={triggerDetails.finishedOn}
+                        triggeredBy={triggerDetails.triggeredBy}
+                        triggeredByEmail={triggerDetails.triggeredByEmail}
+                        ciMaterials={triggerDetails.ciMaterials}
+                        gitTriggers={triggerDetails.gitTriggers}
+                        message={triggerDetails.message}
+                        podStatus={triggerDetails.podStatus}
+                        stage={triggerDetails.stage}
+                        artifact={triggerDetails.artifact}
+                        triggerMetadata={triggerDetails.triggerMetadata}
+                        renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
+                        environmentName={selectedEnvironmentName}
+                        renderTargetConfigInfo={renderTargetConfigInfo}
+                    />
+                    <ul className="pl-50 pr-20 pt-8 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bcn-0 dc__zi-3">
+                        {triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM && (
+                            <li className="tab-list__tab" data-testid="deployment-history-steps-link">
                                 <NavLink
                                     replace
                                     className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
                                     activeClassName="active"
-                                    to="source-code"
+                                    to="deployment-steps"
                                 >
-                                    Source
+                                    Steps
                                 </NavLink>
                             </li>
-                            {triggerDetails.stage === 'DEPLOY' && (
-                                <li className="tab-list__tab" data-testid="deployment-history-configuration-link">
-                                    <NavLink
-                                        replace
-                                        className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                        activeClassName="active"
-                                        to="configuration"
-                                    >
-                                        Configuration
-                                    </NavLink>
-                                </li>
-                            )}
-                            {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
-                                <li className="tab-list__tab" data-testid="deployment-history-artifacts-link">
-                                    <NavLink
-                                        replace
-                                        className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                        activeClassName="active"
-                                        to="artifacts"
-                                    >
-                                        Artifacts
-                                    </NavLink>
-                                </li>
-                            )}
-                        </ul>
-                    </>
-                )}
-            </div>
+                        )}
+                        {!(triggerDetails.stage === 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
+                            <li className="tab-list__tab" data-testid="deployment-history-logs-link">
+                                <NavLink
+                                    replace
+                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
+                                    activeClassName="active"
+                                    to="logs"
+                                >
+                                    Logs
+                                </NavLink>
+                            </li>
+                        )}
+                        <li className="tab-list__tab" data-testid="deployment-history-source-code-link">
+                            <NavLink
+                                replace
+                                className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
+                                activeClassName="active"
+                                to="source-code"
+                            >
+                                Source
+                            </NavLink>
+                        </li>
+                        {triggerDetails.stage === 'DEPLOY' && (
+                            <li className="tab-list__tab" data-testid="deployment-history-configuration-link">
+                                <NavLink
+                                    replace
+                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
+                                    activeClassName="active"
+                                    to="configuration"
+                                >
+                                    Configuration
+                                </NavLink>
+                            </li>
+                        )}
+                        {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
+                            <li className="tab-list__tab" data-testid="deployment-history-artifacts-link">
+                                <NavLink
+                                    replace
+                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
+                                    activeClassName="active"
+                                    to="artifacts"
+                                >
+                                    Artifacts
+                                </NavLink>
+                            </li>
+                        )}
+                    </ul>
+                </>
+            )}
             <HistoryLogs
                 key={triggerDetails.id}
                 triggerDetails={triggerDetails}
@@ -950,8 +904,6 @@ const TriggerOutput = ({
                 userApprovalMetadata={triggerDetailsResult?.result?.userApprovalMetadata}
                 triggeredByEmail={triggerDetailsResult?.result?.triggeredByEmail}
                 setFullScreenView={setFullScreenView}
-                setDeploymentHistoryList={setDeploymentHistoryList}
-                deploymentHistoryList={deploymentHistoryList}
                 deploymentAppType={deploymentAppType}
                 isBlobStorageConfigured={isBlobStorageConfigured}
                 artifactId={triggerDetailsResult?.result?.artifactId}
@@ -966,6 +918,11 @@ const TriggerOutput = ({
                 renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}
                 renderCIListHeader={renderCIListHeader}
                 renderVirtualHistoryArtifacts={renderVirtualHistoryArtifacts}
+                scrollToTop={scrollToTop}
+                scrollToBottom={scrollToBottom}
+                fullScreenView={fullScreenView}
+                appName={appName}
+                triggerHistory={triggerHistory}
             />
         </>
     )

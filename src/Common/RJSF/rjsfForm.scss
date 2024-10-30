@@ -20,7 +20,8 @@
         margin-right: 28px;
     }
 
-    &__field, &__field--error {
+    &__field,
+    &__field--error {
         grid-template-columns: 250px 1fr;
 
         input.form__input {
@@ -39,6 +40,14 @@
             // This is added as the array field itself has a margin bottom
             margin: 0;
         }
+
+        & legend {
+            display: none;
+        }
+
+        &:has(+ div) {
+            margin-bottom: 8px;
+        }
     }
 
     &__additional-fields,
@@ -53,15 +62,15 @@
         &:has(> .remove-btn__container)::after {
             border-radius: 4px;
             transform: translate(-50%, -50%);
-            top: 50%; 
-            left: 50%; 
+            top: 50%;
+            left: 50%;
             background: transparent;
             z-index: -1;
             position: absolute;
             /* NOTE: this overlay is exactly 6px wider & taller on all sides
-             * therefore the 12px (6 + 6) on height & width */
-            height: calc(100% + 12px);
-            width: calc(100% + 12px);
+             * therefore the 8px (4 + 4) on height & width */
+            height: calc(100% + 8px);
+            width: calc(100% + 8px);
             content: '';
             transition: all 100ms ease-out;
         }

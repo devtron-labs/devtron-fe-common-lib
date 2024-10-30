@@ -15,7 +15,7 @@
  */
 
 import { DescriptorProps } from './types'
-import { BreadCrumb } from '../../../Common'
+import { BreadCrumb, DOCUMENTATION } from '../../../Common'
 import { BUILD_INFRA_TEXT } from './constants'
 import { InfoIconTippy } from '../../../Shared'
 
@@ -34,7 +34,9 @@ const Descriptor = ({
                 infoText={tippyInfoText ?? BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
                 additionalContent={tippyAdditionalContent}
                 heading={BUILD_INFRA_TEXT.HEADING}
-                iconClassName="icon-dim-20"
+                documentationLink={DOCUMENTATION.GLOBAL_CONFIG_BUILD_INFRA}
+                documentationLinkText="View Documentation"
+                iconClassName="icon-dim-20 fcn-6"
             />
         </div>
 

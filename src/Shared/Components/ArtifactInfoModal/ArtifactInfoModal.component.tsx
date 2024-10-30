@@ -19,7 +19,7 @@ import { getArtifactInfo, getCITriggerInfo } from '../../Services/app.service'
 import { APIResponseHandler } from '../APIResponseHandler'
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 import { ReactComponent as ICArrowDown } from '../../../Assets/Icon/ic-arrow-down.svg'
-import { Artifacts, HistoryComponentType } from '../CICDHistory'
+import { Artifacts } from '../CICDHistory'
 import MaterialHistory from '../MaterialHistory/MaterialHistory.component'
 import { ArtifactInfoModalProps } from './types'
 
@@ -97,9 +97,14 @@ const ArtifactInfoModal = ({
                         }}
                     >
                         {isArtifactInfoAvailable ? (
-                            <div className="select-material">
+                            <div className="select-material p-16 flexbox-col dc__gap-12">
                                 {artifactInfo.materials.map((material) => (
-                                    <MaterialHistory material={material} pipelineName="" key={material.id} />
+                                    <MaterialHistory
+                                        material={material}
+                                        pipelineName=""
+                                        key={material.id}
+                                        isCommitInfoModal
+                                    />
                                 ))}
                                 <div className="dc__dashed_icon_grid-container">
                                     <hr className="dc__dotted-line" />
@@ -113,8 +118,6 @@ const ArtifactInfoModal = ({
                                     artifact={artifactInfo.image}
                                     blobStorageEnabled
                                     isArtifactUploaded={false}
-                                    isJobView={false}
-                                    type={HistoryComponentType.CI}
                                     imageReleaseTags={artifactInfo.imageReleaseTags}
                                     imageComment={artifactInfo.imageComment}
                                     ciPipelineId={artifactInfo.ciPipelineId}

@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-import React from 'react'
-import {
-    ObjectFieldTemplatePropertyType,
-    ObjectFieldTemplateProps,
-    canExpand,
-    getUiOptions,
-    titleId,
-} from '@rjsf/utils'
+import { ObjectFieldTemplateProps, canExpand, titleId, deepEquals } from '@rjsf/utils'
+import { JSONPath } from 'jsonpath-plus'
+import { convertJSONPointerToJSONPath } from '@Common/Helper'
 import { FieldRowWithLabel } from '../common/FieldRow'
 import { TitleField } from './TitleField'
 import { AddButton } from './ButtonTemplates'
+import { RJSFFormSchema } from '../types'
+import { parseSchemaHiddenType } from '../utils'
 
 const Field = ({
     disabled,
@@ -38,7 +35,8 @@ const Field = ({
     schema,
     title,
     uiSchema,
-}: ObjectFieldTemplateProps) => {
+    formContext,
+}: ObjectFieldTemplateProps<any, RJSFFormSchema, any>) => {
     const hasAdditionalProperties = !!schema.additionalProperties
 
     const ActionButton = canExpand(schema, uiSchema, formData) && (
@@ -52,7 +50,34 @@ const Field = ({
         />
     )
 
-    const Properties = properties.map((prop: ObjectFieldTemplatePropertyType) => prop.content)
+    const Properties = properties
+        .filter((prop) => {
+            const hiddenSchemaProp = schema.properties?.[prop.name]?.hidden
+            if (!hiddenSchemaProp) {
+                return true
+            }
+            try {
+                const hiddenSchema = parseSchemaHiddenType(hiddenSchemaProp)
+                if (!hiddenSchema.path) {
+                    throw new Error('Empty path property of hidden descriptor field')
+                }
+                if (!hiddenSchema.path.match(/^\/\w+(\/\w+)*$/g)) {
+                    throw new Error('Provided path is not a valid JSON pointer')
+                }
+                // NOTE: formContext is the formData passed to RJSFForm
+                const value = JSONPath({
+                    path: convertJSONPointerToJSONPath(hiddenSchema.path),
+                    json: formContext,
+                })?.[0]
+                const isHidden = value === undefined || deepEquals(hiddenSchema.value, value)
+                return !isHidden
+            } catch {
+                return true
+            }
+        })
+        // NOTE: we probably should use uiSchema instead?
+        .sort((prop) => (schema.properties?.[prop.name]?.type === 'boolean' ? -1 : 1))
+        .map((prop) => prop.content)
 
     if (hasAdditionalProperties) {
         if (properties.length) {
@@ -85,9 +110,8 @@ const Field = ({
     )
 }
 
-export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps) => {
+export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps<any, RJSFFormSchema, any>) => {
     const { idSchema, registry, required, schema, title, uiSchema, description } = props
-    const options = getUiOptions(uiSchema)
     const hasAdditionalProperties = !!schema.additionalProperties
     const showTitle = title && !hasAdditionalProperties
 
@@ -95,7 +119,7 @@ export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps) => {
         <fieldset id={idSchema.$id}>
             {showTitle && (
                 <TitleField
-                    id={titleId(idSchema)}
+                    id={titleId(idSchema as Parameters<typeof titleId>[0])}
                     title={title}
                     required={required}
                     schema={schema}
@@ -106,11 +130,11 @@ export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps) => {
             )}
             {/* Not adding the border and padding for non-objects and root schema */}
             <div
-                className={
+                className={`${
                     schema.properties && !hasAdditionalProperties && idSchema.$id !== 'root'
                         ? 'dc__border-left pl-12'
                         : ''
-                }
+                } flexbox-col dc__gap-8`}
             >
                 <Field {...props} />
             </div>

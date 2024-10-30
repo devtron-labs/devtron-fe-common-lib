@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { URLProtocolType } from './types'
+
 export interface ValidationResponseType {
     isValid: boolean
     message?: string
@@ -29,12 +31,17 @@ export const MESSAGES = {
     VALID_POSITIVE_NUMBER: 'This field should be a valid positive number',
     VALID_POSITIVE_INTEGER: 'This field should be a valid positive integer',
     MAX_SAFE_INTEGER: `Maximum allowed value is ${Number.MAX_SAFE_INTEGER}`,
+    INVALID_SEMANTIC_VERSION: 'Please follow semantic versioning',
 }
 
 const MAX_DESCRIPTION_LENGTH = 350
+const DISPLAY_NAME_CONSTRAINTS = {
+    MAX_LIMIT: 50,
+    MIN_LIMIT: 3,
+}
 
 export const requiredField = (value: string): ValidationResponseType => {
-    if (!value) {
+    if (!value?.trim()) {
         return { message: 'This field is required', isValid: false }
     }
     return { isValid: true }
@@ -197,6 +204,35 @@ export const validateURL = (url: string, allowBase64Url: boolean = true): Valida
     }
 }
 
+export const validateProtocols = (
+    url: string,
+    protocols: URLProtocolType[],
+    isRequired?: boolean,
+): ValidationResponseType => {
+    if (isRequired && !url) {
+        return {
+            isValid: false,
+            message: 'This field is required',
+        }
+    }
+
+    try {
+        const { protocol } = new URL(url)
+        if (protocol && protocols.includes(protocol as URLProtocolType)) {
+            return {
+                isValid: true,
+            }
+        }
+    } catch {
+        // Do nothing
+    }
+
+    return {
+        isValid: false,
+        message: `Invalid URL/protocol. Supported protocols are: ${protocols.join(', ')}`,
+    }
+}
+
 export const validateIfImageExist = (url: string): Promise<ValidationResponseType> =>
     new Promise<ValidationResponseType>((resolve) => {
         const img = new Image()
@@ -246,5 +282,63 @@ export const validateUniqueKeys = (keys: string[]) => {
     return {
         isValid: false,
         message: `Duplicate variable name: ${duplicateKeys.join(', ')}`,
+    }
+}
+
+/**
+ * Rules for valid semantic version:
+ * 1. version.length < 128 and not empty
+ * 2. version should follow semantic versioning regex from https://semver.org/
+ */
+export const validateSemanticVersioning = (version: string): ValidationResponseType => {
+    if (!version) {
+        return {
+            isValid: false,
+            message: 'Please provide a version',
+        }
+    }
+
+    if (version.length > 128) {
+        return {
+            isValid: false,
+            message: MESSAGES.getMaxCharMessage(128),
+        }
+    }
+
+    if (
+        !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/.test(
+            version,
+        )
+    ) {
+        return {
+            isValid: false,
+            message: MESSAGES.INVALID_SEMANTIC_VERSION,
+        }
+    }
+
+    return {
+        isValid: true,
+    }
+}
+
+/**
+ * A valid display name should be between 3 and 50 characters
+ */
+export const validateDisplayName = (name: string): ValidationResponseType =>
+    validateStringLength(name, DISPLAY_NAME_CONSTRAINTS.MAX_LIMIT, DISPLAY_NAME_CONSTRAINTS.MIN_LIMIT)
+
+export const validateJSON = (json: string): ValidationResponseType => {
+    try {
+        if (json) {
+            JSON.parse(json)
+        }
+        return {
+            isValid: true,
+        }
+    } catch (err) {
+        return {
+            isValid: false,
+            message: err.message,
+        }
     }
 }

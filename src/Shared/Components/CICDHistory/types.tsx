@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { CSSProperties } from 'react'
+import { CSSProperties, ReactElement } from 'react'
+import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import {
     OptionType,
     UserApprovalMetadataType,
@@ -25,6 +26,8 @@ import {
     DeploymentAppTypes,
     ResponseType,
     PaginationProps,
+    useScrollable,
+    SortingOrder,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
 import { AggregationKeys, GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
@@ -44,6 +47,16 @@ export enum FetchIdDataStatus {
 }
 
 export interface LogResizeButtonType {
+    /**
+     * If given, that shortcut combo will be bound to the button
+     * @default null
+     */
+    shortcutCombo?: SupportedKeyboardKeysType[]
+    /**
+     * If true, only show the button when location.pathname contains '/logs'
+     * @default true
+     */
+    showOnlyWhenPathIncludesLogs?: boolean
     fullScreenView: boolean
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -80,6 +93,17 @@ export interface CICDSidebarFilterOptionType extends OptionType {
     deploymentAppDeleteRequest?: boolean
 }
 
+// The values can be undefined because of old data
+export interface TargetConfigType {
+    tenantIcon?: string
+    tenantId?: string
+    tenantName?: string
+    installationId?: string
+    installationName?: string
+    releaseChannelId?: string
+    releaseChannelName?: string
+}
+
 export interface History {
     id: number
     name: string
@@ -114,6 +138,7 @@ export interface History {
     promotionApprovalMetadata?: PromotionApprovalMetadataType
     triggerMetadata?: string
     runSource?: RunSourceType
+    targetConfig?: TargetConfigType
 }
 
 export interface DeploymentHistoryResultObject {
@@ -181,12 +206,8 @@ export interface CurrentStatusType {
     status: string
     finishedOn: string
     artifact: string
-    message: string
-    podStatus: string
     stage: DeploymentStageType
     type: HistoryComponentType
-    isJobView?: boolean
-    workerPodName?: string
 }
 
 export interface StartDetailsType {
@@ -201,9 +222,14 @@ export interface StartDetailsType {
     isJobView?: boolean
     triggerMetadata?: string
     renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string) => JSX.Element
+    /**
+     * Callback handler for showing the target config
+     */
+    renderTargetConfigInfo?: () => ReactElement
+    stage: DeploymentStageType
 }
 
-export interface TriggerDetailsType {
+export interface TriggerDetailsType extends Pick<StartDetailsType, 'renderTargetConfigInfo'> {
     status: string
     startedOn: string
     finishedOn: string
@@ -225,12 +251,8 @@ export interface TriggerDetailsType {
 
 export interface ProgressingStatusType {
     status: string
-    message: string
-    podStatus: string
     stage: DeploymentStageType
     type: HistoryComponentType
-    finishedOn?: string
-    workerPodName?: string
 }
 
 export interface WorkerStatusType {
@@ -250,14 +272,8 @@ export interface FinishedType {
 
 export interface TriggerDetailsStatusIconType {
     status: string
-    isDeploymentWindowInfo?: boolean
 }
 
-export interface LogsRendererType {
-    triggerDetails: History
-    isBlobStorageConfigured: boolean
-    parentType: HistoryComponentType
-}
 export interface SyncStageResourceDetail {
     id: number
     cdWorkflowRunnerId: number
@@ -295,6 +311,7 @@ export const TERMINAL_STATUS_COLOR_CLASS_MAP = {
     [TERMINAL_STATUS_MAP.SUCCEEDED]: 'cg-5',
     [TERMINAL_STATUS_MAP.HEALTHY]: 'cg-5',
     [TERMINAL_STATUS_MAP.FAILED]: 'cr-5',
+    [TERMINAL_STATUS_MAP.CANCELLED]: 'cr-5',
     [TERMINAL_STATUS_MAP.ERROR]: 'cr-5',
 }
 
@@ -367,18 +384,17 @@ export interface VirtualHistoryArtifactProps {
         workflowId: number
     }
 }
-export interface TriggerOutputProps extends RenderRunSourceType {
+export interface TriggerOutputProps extends RenderRunSourceType, Pick<TriggerDetailsType, 'renderTargetConfigInfo'> {
     fullScreenView: boolean
     triggerHistory: Map<number, History>
     setFullScreenView: React.Dispatch<React.SetStateAction<boolean>>
-    deploymentHistoryList: DeploymentTemplateList[]
-    setDeploymentHistoryList: React.Dispatch<React.SetStateAction<DeploymentTemplateList[]>>
     deploymentAppType: DeploymentAppTypes
     isBlobStorageConfigured: boolean
     appReleaseTags: string[]
     tagsEditable: boolean
     hideImageTaggingHardDelete: boolean
     fetchIdData: FetchIdDataStatus
+    appName: string
     selectedEnvironmentName?: string
     renderCIListHeader?: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
     renderDeploymentApprovalInfo?: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
@@ -391,6 +407,43 @@ export interface TriggerOutputProps extends RenderRunSourceType {
     deploymentHistoryResult: Pick<DeploymentHistoryResult, 'result'>
     setFetchTriggerIdData: React.Dispatch<React.SetStateAction<FetchIdDataStatus>>
     setTriggerHistory: React.Dispatch<React.SetStateAction<Map<Number, History>>>
+    scrollToTop: ReturnType<typeof useScrollable>[1]
+    scrollToBottom: ReturnType<typeof useScrollable>[2]
+}
+
+export interface HistoryLogsProps
+    extends Pick<
+        TriggerOutputProps,
+        | 'scrollToTop'
+        | 'scrollToBottom'
+        | 'setFullScreenView'
+        | 'deploymentAppType'
+        | 'isBlobStorageConfigured'
+        | 'appReleaseTags'
+        | 'tagsEditable'
+        | 'hideImageTaggingHardDelete'
+        | 'selectedEnvironmentName'
+        | 'processVirtualEnvironmentDeploymentData'
+        | 'renderDeploymentApprovalInfo'
+        | 'renderCIListHeader'
+        | 'renderVirtualHistoryArtifacts'
+        | 'fullScreenView'
+        | 'appName'
+        | 'triggerHistory'
+    > {
+    triggerDetails: History
+    loading: boolean
+    userApprovalMetadata: UserApprovalMetadataType
+    triggeredByEmail: string
+    artifactId: number
+    ciPipelineId: number
+    resourceId?: number
+    renderRunSource: (runSource: RunSourceType, isDeployedInThisResource: boolean) => JSX.Element
+}
+
+export interface LogsRendererType
+    extends Pick<HistoryLogsProps, 'fullScreenView' | 'triggerDetails' | 'isBlobStorageConfigured'> {
+    parentType: HistoryComponentType
 }
 
 export interface DeploymentStatusDetailBreakdownType {
@@ -435,6 +488,11 @@ export interface DeploymentTemplateHistoryType {
     isUnpublished?: boolean
     isDeleteDraft?: boolean
     rootClassName?: string
+    codeEditorKey?: React.Key
+    sortingConfig?: {
+        sortBy: string
+        sortOrder: SortingOrder
+    }
 }
 export interface DeploymentHistoryDetailRes extends ResponseType {
     result?: DeploymentHistoryDetail
@@ -461,6 +519,8 @@ export interface DeploymentHistorySidebarType {
 export interface AppStatusDetailsChartType {
     filterRemoveHealth?: boolean
     showFooter: boolean
+    showConfigDriftInfo?: boolean
+    onClose?: () => void
 }
 
 export interface StatusFilterButtonType {
@@ -475,6 +535,10 @@ export enum NodeStatus {
     Missing = 'missing',
     Suspended = 'suspended',
     Unknown = 'unknown',
+}
+
+export enum NodeFilters {
+    drifted = 'drifted',
 }
 
 type NodesMap = {
@@ -552,9 +616,7 @@ export interface ArtifactType {
     blobStorageEnabled: boolean
     isArtifactUploaded?: boolean
     downloadArtifactUrl?: string
-    isJobView?: boolean
     isJobCI?: boolean
-    type: HistoryComponentType
     ciPipelineId?: number
     artifactId?: number
     imageComment?: ImageComment
@@ -562,7 +624,7 @@ export interface ArtifactType {
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
     hideImageTaggingHardDelete?: boolean
-    jobCIClass?: string
+    rootClassName?: string
     renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
 }
 
@@ -608,7 +670,7 @@ export interface DeploymentHistory {
 
 type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE_GREEN'
 
-interface DeploymentStrategy {
+export interface DeploymentStrategy {
     deploymentTemplate: DeploymentStrategyType
     config: any
     default: boolean
@@ -671,6 +733,59 @@ export interface TriggerHistoryFilterCriteriaProps {
     releaseId: number
     showCurrentReleaseDeployments: boolean
 }
+
+export enum StageStatusType {
+    SUCCESS = 'Success',
+    FAILURE = 'Failure',
+    /**
+     * Not given in API response
+     */
+    PROGRESSING = 'Progressing',
+}
+
+export interface StageInfoDTO {
+    stage: string
+    startTime: string
+    endTime?: string
+    status?: StageStatusType
+}
+
+export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime' | 'endTime' | 'status'> {
+    logs: string[]
+    isOpen: boolean
+}
+
+export interface LogStageAccordionProps extends StageDetailType, Pick<LogsRendererType, 'fullScreenView'> {
+    handleStageClose: (index: number) => void
+    handleStageOpen: (index: number) => void
+    stageIndex: number
+    /**
+     * A stage is loading if it is last in current stage list and event is not closed
+     */
+    isLoading: boolean
+    searchIndex: string
+}
+
+export interface CreateMarkupReturnType {
+    __html: string
+    isSearchKeyPresent: boolean
+}
+
+export type CreateMarkupPropsType =
+    | {
+          log: string
+          currentIndex?: never
+          targetSearchKey?: never
+          searchMatchResults?: never
+          searchIndex?: never
+      }
+    | {
+          log: string
+          currentIndex: number
+          targetSearchKey: string
+          searchMatchResults: string[]
+          searchIndex: string
+      }
 
 export type TriggerHistoryFilterCriteriaType = `${string}|${string}|${string}`[]
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])

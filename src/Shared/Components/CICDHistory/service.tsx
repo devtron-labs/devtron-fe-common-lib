@@ -197,11 +197,28 @@ export const prepareConfigMapAndSecretData = (
         let typeValue = 'Environment Variable'
         if (rawData.type === 'volume') {
             typeValue = 'Data Volume'
-            if (rawData.mountPath) {
-                secretValues['mountPath'] = { displayName: 'Volume mount path', value: rawData.mountPath }
+            if (rawData.mountPath || rawData.defaultMountPath) {
+                secretValues['mountPath'] = {
+                    displayName: 'Volume mount path',
+                    value: rawData.mountPath || rawData.defaultMountPath,
+                }
             }
             if (rawData.subPath) {
                 secretValues['subPath'] = { displayName: 'Set SubPath', value: 'Yes' }
+
+                if (rawData.esoSubPath) {
+                    secretValues['subPathValues'] = { displayName: 'SubPath', value: rawData.esoSubPath.join(', ') }
+                } else if (
+                    rawData.external &&
+                    rawData.externalType === 'KubernetesSecret' &&
+                    historyData.codeEditorValue?.resolvedValue
+                ) {
+                    const resolvedSecretData = JSON.parse(historyData.codeEditorValue.resolvedValue)
+                    secretValues['subPathValues'] = {
+                        displayName: 'SubPath',
+                        value: Object.keys(resolvedSecretData).join(', '),
+                    }
+                }
             }
             if (rawData.filePermission) {
                 secretValues['filePermission'] = {

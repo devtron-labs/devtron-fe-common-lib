@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-import Tippy from '@tippyjs/react'
-import { useEffect } from 'react'
-import { useLocation } from 'react-router'
-import { ClipboardButton, GenericEmptyState, extractImage, useKeyDown, useSuperAdmin } from '../../../Common'
+import { useCallback, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import {
+    ClipboardButton,
+    GenericEmptyState,
+    Tooltip,
+    extractImage,
+    useSuperAdmin,
+    useRegisterShortcut,
+} from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { GitChangesType, LogResizeButtonType, ScrollerType } from './types'
@@ -25,54 +31,62 @@ import GitCommitInfoGeneric from '../GitCommitInfoGeneric/GitCommitInfoGeneric'
 import { CIListItem } from './Artifacts'
 import { ReactComponent as ZoomIn } from '../../../Assets/Icon/ic-fullscreen.svg'
 import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscreen.svg'
+import './cicdHistory.scss'
 
-export const LogResizeButton = ({ fullScreenView, setFullScreenView }: LogResizeButtonType): JSX.Element => {
+export const LogResizeButton = ({
+    shortcutCombo = ['F'],
+    showOnlyWhenPathIncludesLogs = true,
+    fullScreenView,
+    setFullScreenView,
+}: LogResizeButtonType): JSX.Element => {
     const { pathname } = useLocation()
+    const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
-    const keys = useKeyDown()
-
-    const toggleFullScreen = (): void => {
+    const toggleFullScreen = useCallback((): void => {
         setFullScreenView(!fullScreenView)
-    }
+    }, [fullScreenView])
+
+    const showButton = !showOnlyWhenPathIncludesLogs || pathname.includes('/logs')
 
     useEffect(() => {
-        if (!pathname.includes('/logs')) {
-            return
+        if (showButton && shortcutCombo.length) {
+            registerShortcut({ callback: toggleFullScreen, keys: shortcutCombo })
         }
-        // eslint-disable-next-line default-case
-        switch (keys.join('')) {
-            case 'f':
-                toggleFullScreen()
-                break
-            case 'Escape':
-                setFullScreenView(false)
-                break
+
+        return () => {
+            unregisterShortcut(shortcutCombo)
         }
-    }, [keys])
+    }, [showButton, toggleFullScreen])
 
     return (
-        pathname.includes('/logs') && (
-            <Tippy
-                placement="top"
-                arrow={false}
-                className="default-tt"
-                content={fullScreenView ? 'Exit fullscreen (f)' : 'Enter fullscreen (f)'}
+        showButton && (
+            <Tooltip
+                placement="left"
+                shortcutKeyCombo={{
+                    text: fullScreenView ? 'Exit fullscreen' : 'Enter fullscreen',
+                    combo: shortcutCombo,
+                }}
             >
-                <div>
+                <button
+                    type="button"
+                    aria-label="Enter/Exit fullscreen view"
+                    className="zoom dc__zi-4 flex dc__no-border log-resize-button"
+                    onClick={toggleFullScreen}
+                >
                     {fullScreenView ? (
-                        <ZoomOut className="zoom zoom--out pointer" onClick={toggleFullScreen} />
+                        <ZoomOut className="icon-dim-16 dc__no-shrink" />
                     ) : (
-                        <ZoomIn className="zoom zoom--in pointer" onClick={toggleFullScreen} />
+                        <ZoomIn className="icon-dim-16 dc__no-shrink" />
                     )}
-                </div>
-            </Tippy>
+                </button>
+            </Tooltip>
         )
     )
 }
 
 export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): JSX.Element => (
-    <div style={style} className="dc__element-scroller flex column top">
-        <Tippy className="default-tt" arrow={false} content="Scroll to Top">
+    <div style={style} className="dc__element-scroller flex column top br-4">
+        <Tooltip alwaysShowTippyOnHover content="Scroll to Top" placement="left">
             <button
                 className="flex"
                 disabled={!scrollToTop}
@@ -82,8 +96,8 @@ export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): 
             >
                 <DropDownIcon className="rotate" style={{ ['--rotateBy' as any]: '180deg' }} />
             </button>
-        </Tippy>
-        <Tippy className="default-tt" arrow={false} content="Scroll to Bottom">
+        </Tooltip>
+        <Tooltip alwaysShowTippyOnHover content="Scroll to Bottom" placement="left">
             <button
                 className="flex"
                 disabled={!scrollToBottom}
@@ -93,7 +107,7 @@ export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): 
             >
                 <DropDownIcon className="rotate" />
             </button>
-        </Tippy>
+        </Tooltip>
     </div>
 )
 
@@ -130,14 +144,14 @@ export const GitChanges = ({
     const extractImageArtifact = extractImage(artifact)
 
     return (
-        <div className="flex column left w-100 ">
+        <div className="history-component__wrapper flex column left w-100 p-16 dc__gap-12">
             {ciMaterials?.map((ciMaterial, index) => {
                 const gitTrigger = gitTriggers[ciMaterial.id]
                 return gitTrigger && (gitTrigger.Commit || gitTrigger.WebhookData?.data) ? (
                     <div
                         // eslint-disable-next-line react/no-array-index-key
                         key={`mat-${gitTrigger?.Commit}-${index}`}
-                        className="bcn-0 pt-12 br-4 en-2 bw-1 pb-12 mt-16 ml-16"
+                        className="bcn-0 br-4 en-2 bw-1"
                         data-testid="source-code-git-hash"
                         style={{ width: 'min( 100%, 800px )' }}
                     >
@@ -160,7 +174,7 @@ export const GitChanges = ({
                 ) : null
             })}
             {artifact && (
-                <div className="flex left column mt-16 mb-16 ml-16" style={{ width: 'min( 100%, 800px )' }}>
+                <div className="history-component__artifact flex left column">
                     <CIListItem
                         type="deployed-artifact"
                         userApprovalMetadata={userApprovalMetadata}

@@ -27,6 +27,11 @@
         max-height: 200px;
         width: auto;
     }
+    .button svg {
+        height: 100%;
+        max-height: none;
+        width: 100%;
+    }
     h1,
     h2,
     h3,

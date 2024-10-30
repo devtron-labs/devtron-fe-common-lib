@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { ComponentSizeType } from '@Shared/constants'
+
 export interface SearchBarProps {
     /**
      * Initial search text
@@ -32,7 +34,8 @@ export interface SearchBarProps {
     /**
      * Input props for the search input
      */
-    inputProps?: React.InputHTMLAttributes<HTMLInputElement>
+    inputProps?: React.InputHTMLAttributes<HTMLInputElement> &
+        Partial<Record<'ref', React.MutableRefObject<HTMLInputElement>>>
     /**
      * Class name for the container; can be used for handling width
      */
@@ -55,4 +58,10 @@ export interface SearchBarProps {
      * Hide the background and border of the search
      */
     noBackgroundAndBorder?: boolean
+    /**
+     * Height of the searchbar
+     *
+     * @default 'ComponentSizeType.medium'
+     */
+    size?: ComponentSizeType.medium | ComponentSizeType.large
 }

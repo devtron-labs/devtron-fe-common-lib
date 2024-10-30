@@ -1,10 +1,25 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { showError } from '@Common/Helper'
-import { ToastBody } from '@Common/ToastBody'
 import { useState } from 'react'
-import { toast } from 'react-toastify'
 import { API_STATUS_CODES } from '@Common/Constants'
 import { ServerErrors } from '@Common/ServerError'
 import { getFileNameFromHeaders } from '@Shared/Helpers'
+import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { getDownloadResponse } from './service'
 import { HandleDownloadProps } from './types'
 
@@ -50,17 +65,17 @@ const useDownload = () => {
         showProgress = false,
     }: HandleDownloadProps): Promise<Error | ServerErrors> => {
         setIsDownloading(true)
-        if (showFilePreparingToast) {
-            toast.info(
-                <ToastBody
-                    title="Preparing file for download"
-                    subtitle="File will be downloaded when it is available."
-                />,
-            )
-        }
         try {
             const response = await getDownloadResponse(downloadUrl)
             if (response.status === API_STATUS_CODES.OK) {
+                if (showFilePreparingToast) {
+                    ToastManager.showToast({
+                        variant: ToastVariantType.info,
+                        title: 'Preparing file for download',
+                        description: 'File will be downloaded when it is available.',
+                    })
+                }
+
                 const data = showProgress ? getChunksDataFromResponse(response) : await (response as any).blob()
 
                 const blob = showProgress ? new Blob(data) : data
@@ -87,7 +102,10 @@ const useDownload = () => {
                 }, 0)
 
                 if (showSuccessfulToast) {
-                    toast.success(downloadSuccessToastContent)
+                    ToastManager.showToast({
+                        variant: ToastVariantType.success,
+                        description: downloadSuccessToastContent,
+                    })
                 }
             } else if (response.status === API_STATUS_CODES.NO_CONTENT) {
                 throw new Error('No content to download')

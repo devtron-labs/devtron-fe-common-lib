@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react'
-import ReactSelect from 'react-select'
+import { useEffect, useState } from 'react'
+import { SelectPicker, SelectPickerVariantType } from '@Shared/Components'
 import { fetchChartTemplateVersions } from './Common.service'
-import { ChartVersionAndTypeSelectorProps, DeploymentChartVersionType } from './Types'
-import { customStyles, getFilteredChartVersions, showError } from './Helper'
+import { ChartVersionAndTypeSelectorProps } from './Types'
+import { getFilteredChartVersions, showError } from './Helper'
+
+interface DeploymentChartVersionType {
+    chartRefId: number
+    chartVersion: string
+    chartType: string
+    type: number
+}
 
 // @TODO: Generalize this component to be used in CodeEditor as Chart selector toolbar
 // when the Code Editor is moved to the fe-common-lib
@@ -70,21 +77,23 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
     return (
         <div className="flex">
             <div className="chart-type-options flex" data-testid="chart-type-options">
-                <span className="chart-type-options-label mr-4">Chart Type</span>
-                <ReactSelect
+                <span className="cn-7 mr-4">Chart Type</span>
+                <SelectPicker
+                    inputId="chart-type-select"
                     value={selectedChartType ?? chartTypeOptions[0]}
                     options={chartTypeOptions}
                     onChange={handleChartTypeChange}
-                    styles={customStyles}
+                    variant={SelectPickerVariantType.BORDER_LESS}
                 />
             </div>
             <div className="chart-version-options flex" data-testid="chart-version-options">
-                <span className="chart-version-options-label mr-4">Chart Version</span>
-                <ReactSelect
+                <span className="cn-7 mr-4">Chart Version</span>
+                <SelectPicker
+                    inputId="chart-version-select"
                     value={selectedChartVersion ?? chartVersionOptions[0]}
                     options={chartVersionOptions}
                     onChange={handleChartVersionChange}
-                    styles={customStyles}
+                    variant={SelectPickerVariantType.BORDER_LESS}
                 />
             </div>
         </div>

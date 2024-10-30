@@ -15,6 +15,7 @@
  */
 
 import { RegistryTypeDetailType } from './Types'
+import { getContainerRegistryIcon } from './utils'
 
 export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
@@ -23,9 +24,11 @@ export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
 export const DOCUMENTATION_VERSION = '/v/v0.7'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DOCUMENTATION = {
+    APP_METRICS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/app-details/app-metrics`,
     APP_TAGS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/create-application#tags`,
     APP_OVERVIEW_TAGS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/overview#manage-tags`,
     BLOB_STORAGE: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/getting-started/install/installation-configuration#configuration-of-blob-storage`,
+    GLOBAL_CONFIG_BUILD_INFRA: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/global-configurations/build-infra`,
 }
 
 export const PATTERNS = {
@@ -33,6 +36,7 @@ export const PATTERNS = {
     KUBERNETES_KEY_NAME: /^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$/,
     START_END_ALPHANUMERIC: /^([Az09].*[A-Za-z0-9])$|[A-Za-z0-9]$/,
     ALPHANUMERIC_WITH_SPECIAL_CHAR: /^[A-Za-z0-9._-]+$/, // allow alphanumeric,(.) ,(-),(_)
+    ESCAPED_CHARACTERS: /[.*+?^${}()|[\]\\]/g,
 }
 
 export const URLS = {
@@ -60,11 +64,15 @@ export const URLS = {
     GLOBAL_CONFIG_DOCKER: '/global-config/docker',
     DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
     GLOBAL_CONFIG_SCOPED_VARIABLES: '/global-config/scoped-variables',
+    GLOBAL_CONFIG_DEPLOYMENT_CHARTS_LIST: '/global-config/deployment-charts',
+    NETWORK_STATUS_INTERFACE: '/network-status-interface',
+    CONFIG_DRIFT: 'config-drift',
 }
 
 export const ROUTES = {
     APP: 'app',
     APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
+    APP_TEMPLATE_DATA: 'app/template/data',
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',
@@ -94,6 +102,18 @@ export const ROUTES = {
     CONFIG_CD_PIPELINE: 'config/cd-pipeline',
     MODULE_CONFIGURED: 'module/config',
     RESOURCE_HISTORY_DEPLOYMENT: 'resource/history/deployment',
+    ATTRIBUTES: 'attributes',
+    ATTRIBUTES_CREATE: 'attributes/create',
+    ATTRIBUTES_UPDATE: 'attributes/update',
+    APP_LIST_MIN: 'app/min',
+    CLUSTER_LIST_MIN: 'cluster/autocomplete',
+    PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
+    PLUGIN_GLOBAL_LIST_V2: 'plugin/global/list/v2',
+    PLUGIN_GLOBAL_LIST_TAGS: 'plugin/global/list/tags',
+    PLUGIN_LIST_MIN: 'plugin/global/list/v2/min',
+    DEPLOYMENT_CHARTS_LIST: 'deployment/template/fetch',
+    USER_LIST_MIN: 'user/list/min',
+    CONFIG_DATA: 'config/data',
 }
 
 export enum KEY_VALUE {
@@ -191,6 +211,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
+        startIcon: getContainerRegistryIcon('ecr'),
     },
     'docker-hub': {
         value: 'docker-hub',
@@ -214,6 +235,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
+        startIcon: getContainerRegistryIcon('docker-hub'),
     },
     acr: {
         value: 'acr',
@@ -238,6 +260,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
+        startIcon: getContainerRegistryIcon('acr'),
     },
     'artifact-registry': {
         value: 'artifact-registry',
@@ -261,6 +284,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: 'Paste json file content here',
         },
+        startIcon: getContainerRegistryIcon('artifact-registry'),
     },
     gcr: {
         value: 'gcr',
@@ -284,6 +308,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: 'Paste json file content here',
         },
+        startIcon: getContainerRegistryIcon('gcr'),
     },
     quay: {
         value: 'quay',
@@ -307,6 +332,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
+        startIcon: getContainerRegistryIcon('quay'),
     },
     other: {
         value: 'other',
@@ -330,6 +356,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
+        startIcon: getContainerRegistryIcon('other'),
     },
 }
 
@@ -483,6 +510,7 @@ export const API_STATUS_CODES = {
     PERMISSION_DENIED: 403,
     NOT_FOUND: 404,
     EXPECTATION_FAILED: 417,
+    LOCKED: 423,
 }
 
 export enum SERVER_MODE {
@@ -514,3 +542,16 @@ export const DATE_TIME_FORMATS = {
     DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
     DD_MMM_YYYY: 'DD MMM YYYY',
 }
+
+export const SEMANTIC_VERSION_DOCUMENTATION_LINK = 'https://semver.org/'
+
+export const VULNERABILITIES_SORT_PRIORITY = {
+    critical: 1,
+    high: 2,
+    medium: 3,
+    low: 4,
+    unknown: 5,
+}
+
+// TODO: might not work need to verify
+export const IS_PLATFORM_MAC_OS = window.navigator.userAgent.toUpperCase().includes('MAC')

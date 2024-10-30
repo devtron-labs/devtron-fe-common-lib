@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import RJSF from '@rjsf/core'
 import RJSFValidator from '@rjsf/validator-ajv8'
 
@@ -40,6 +39,7 @@ export const RJSFForm = (props: FormProps) => (
             ...templates,
             ...props.templates,
         }}
+        formContext={props.formData}
         widgets={{ ...widgets, ...props.widgets }}
         translateString={translateString}
     />

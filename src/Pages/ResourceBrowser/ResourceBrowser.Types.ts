@@ -26,6 +26,7 @@ export interface ApiResourceGroupType {
     gvk: GVKType
     namespaced: boolean
     isGrouped?: boolean
+    shortNames?: string[] | null
 }
 
 export interface ApiResourceType {

@@ -17,7 +17,20 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
-import { handleUTCTime, mapByKey, MaterialInfo, shallowEqual, SortingOrder } from '../Common'
+import { Pair } from 'yaml'
+import moment from 'moment'
+import {
+    handleUTCTime,
+    ManualApprovalType,
+    mapByKey,
+    MaterialInfo,
+    shallowEqual,
+    SortingOrder,
+    UserApprovalConfigType,
+    PATTERNS,
+    ZERO_TIME_STRING,
+    noop,
+} from '../Common'
 import {
     AggregationKeys,
     GitTriggers,
@@ -53,7 +66,8 @@ interface HighlightSearchTextProps {
     highlightClasses?: string
 }
 
-// Disabling default export since this is a helper function and we would have to export a lot of functions in future.
+export const escapeRegExp = (text: string): string => text.replace(PATTERNS.ESCAPED_CHARACTERS, '\\$&')
+
 export const highlightSearchText = ({ searchText, text, highlightClasses }: HighlightSearchTextProps): string => {
     if (!searchText) {
         return text
@@ -62,7 +76,7 @@ export const highlightSearchText = ({ searchText, text, highlightClasses }: High
     try {
         const regex = new RegExp(searchText, 'gi')
         return text.replace(regex, (match) => `<span class="${highlightClasses}">${match}</span>`)
-    } catch (error) {
+    } catch {
         return text
     }
 }
@@ -125,6 +139,14 @@ export const numberComparatorBySortOrder = (
     sortOrder: SortingOrder = SortingOrder.ASC,
 ): number => (sortOrder === SortingOrder.ASC ? a - b : b - a)
 
+export function versionComparatorBySortOrder(a: string, b: string, orderBy = SortingOrder.ASC) {
+    if (orderBy === SortingOrder.DESC) {
+        return a?.localeCompare(b, undefined, { numeric: true }) ?? 1
+    }
+
+    return b?.localeCompare(a, undefined, { numeric: true }) ?? 1
+}
+
 export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
     switch (eventName) {
         case WebhookEventNameType.PULL_REQUEST:
@@ -134,6 +156,22 @@ export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
         default:
             return <ICWebhook className="icon-dim-12" />
     }
+}
+
+export const yamlComparatorBySortOrder = (a: Pair, b: Pair, sortOrder: SortingOrder = SortingOrder.ASC) => {
+    let orderMultiplier = 0
+    if (sortOrder === SortingOrder.DESC) {
+        orderMultiplier = -1
+    } else if (sortOrder === SortingOrder.ASC) {
+        orderMultiplier = 1
+    }
+    if (a.key < b.key) {
+        return -1 * orderMultiplier
+    }
+    if (a.key > b.key) {
+        return 1 * orderMultiplier
+    }
+    return 0
 }
 
 export const useIntersection = (
@@ -708,6 +746,28 @@ export const decode = (data, isEncoded: boolean = false) =>
             return agg
         }, {})
 
+export const isTimeStringAvailable = (time: string): boolean => !!time && time !== ZERO_TIME_STRING
+
+export const getTimeDifference = (startTime: string, endTime: string): string => {
+    if (!isTimeStringAvailable(startTime) || !isTimeStringAvailable(endTime)) {
+        return '-'
+    }
+
+    const seconds = moment(endTime).diff(moment(startTime), 'seconds')
+    const minutes = moment(endTime).diff(moment(startTime), 'minutes')
+    const hours = moment(endTime).diff(moment(startTime), 'hours')
+
+    if (seconds < 60) {
+        return `${seconds}s`
+    }
+    if (minutes < 60) {
+        return `${minutes}m ${seconds % 60}s`
+    }
+    const leftOverMinutes = minutes - hours * 60
+    const leftOverSeconds = seconds - minutes * 60
+    return `${hours}h ${leftOverMinutes}m ${leftOverSeconds}s`
+}
+
 export const getFileNameFromHeaders = (headers: Headers) =>
     headers
         ?.get('content-disposition')
@@ -715,3 +775,80 @@ export const getFileNameFromHeaders = (headers: Headers) =>
         ?.find((n) => n.includes('filename='))
         ?.replace('filename=', '')
         .trim()
+
+export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfigType): UserApprovalConfigType => ({
+    requiredCount: userApprovalConfig?.requiredCount ?? 0,
+    type: userApprovalConfig?.type ?? ManualApprovalType.notConfigured,
+    specificUsers: {
+        identifiers: userApprovalConfig?.specificUsers?.identifiers ?? [],
+        requiredCount: userApprovalConfig?.specificUsers?.identifiers?.length ?? 0,
+    },
+    userGroups: userApprovalConfig?.userGroups ?? [],
+})
+
+/**
+ * Manual approval is considered configured only if the type is not notConfigured
+ */
+export const getIsManualApprovalConfigured = (userApprovalConfig?: Pick<UserApprovalConfigType, 'type'>) =>
+    // Added null check for backward compatibility
+    !!userApprovalConfig?.type && userApprovalConfig.type !== ManualApprovalType.notConfigured
+
+export const getIsManualApprovalSpecific = (userApprovalConfig?: Pick<UserApprovalConfigType, 'type'>) =>
+    getIsManualApprovalConfigured(userApprovalConfig) && userApprovalConfig.type === ManualApprovalType.specific
+
+/**
+ * @description - Function to open a new tab with the given url
+ * @param url - url to be opened in new tab
+ */
+export const getHandleOpenURL = (url: string) => () => {
+    window.open(url, '_blank', 'noreferrer')
+}
+
+export const getDefaultValueFromType = (value: unknown) => {
+    switch (typeof value) {
+        case 'number':
+            return 0
+        case 'string':
+            return ''
+        case 'object':
+            if (value === null) {
+                return null
+            }
+            return Array.isArray(value) ? [] : {}
+        case 'function':
+            return noop
+        default:
+            return null
+    }
+}
+
+/**
+ * Groups an array of objects by a specified key.
+ *
+ * This function takes an array of objects and a key, and groups the objects in the array
+ * based on the value of the specified key. If an object does not have the specified key,
+ * it will be grouped under the `'UNGROUPED'` key.
+ *
+ * @param array - The array of objects to be grouped.
+ * @param key - The key of the object used to group the array.
+ * @returns An object where the keys are the unique values of the specified key in the array,
+ * and the values are arrays of objects that share the same key value.
+ */
+export const groupArrayByObjectKey = <T extends Record<string, any>, K extends keyof T>(
+    array: T[],
+    key: K,
+): Record<string, T[]> =>
+    array.reduce(
+        (result, currentValue) => {
+            const groupKey = currentValue[key] ?? 'UNGROUPED'
+
+            if (!result[groupKey]) {
+                Object.assign(result, { [groupKey]: [] })
+            }
+
+            result[groupKey].push(currentValue)
+
+            return result
+        },
+        {} as Record<string, T[]>,
+    )
