@@ -78,6 +78,9 @@ export interface customEnv {
     FEATURE_IMAGE_PROMOTION_ENABLE?: boolean
     FEATURE_CD_MANDATORY_PLUGINS_ENABLE?: boolean
     FEATURE_CONFIG_DRIFT_ENABLE: boolean
+    FEATURE_PROMO_EMBEDDED_BUTTON_TEXT?: string
+    FEATURE_PROMO_EMBEDDED_MODAL_TITLE?: string
+    FEATURE_PROMO_EMBEDDED_IFRAME_URL?: string
 }
 declare global {
     interface Window {
