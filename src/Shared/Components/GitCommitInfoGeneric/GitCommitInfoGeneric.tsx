@@ -32,6 +32,7 @@ import { stopPropagation } from '@Common/Helper'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { ReactComponent as Tag } from '@Icons/ic-tag.svg'
 import { getLowerCaseObject, getWebhookDate } from '@Shared/Helpers'
+import { ReactComponent as Hash } from '@Icons/ic-hash.svg'
 import GitMaterialInfoHeader from './GitMaterialInfoHeader'
 import { MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../constants'
 import { WEBHOOK_EVENT_ACTION_TYPE } from './constants'
@@ -64,25 +65,25 @@ const GitCommitInfoGeneric = ({
     function renderBasicGitCommitInfoForWebhook() {
         const _date = getWebhookDate(materialSourceType, commitInfo)
         return (
-            <>
+            <div className="flex column dc__gap-4 w-100">
                 {_webhookData.data.author ? (
-                    <div className="material-history__text lh-20 flex left dc__gap-8">
+                    <div className="material-history__text lh-20 flex left dc__gap-8 w-100">
                         <PersonIcon className="icon-dim-16" /> {_webhookData.data.author}
                     </div>
                 ) : null}
                 {_date ? (
-                    <div className="material-history__text lh-20 flex left dc__gap-8">
+                    <div className="material-history__text lh-20 flex left dc__gap-8 w-100">
                         <CalendarIcon className="icon-dim-16" />
                         <time className="cn-7 fs-12">{_date}</time>
                     </div>
                 ) : null}
                 {_webhookData.data.message ? (
-                    <div className="material-history__text lh-20 flex left dc__gap-8 top material-history-text--padded">
+                    <div className="material-history__text lh-20 flex left dc__gap-8 top material-history-text--padded w-100">
                         <MessageIcon className="icon-dim-16 mw-16 mr-8 mt-2" />
                         {_webhookData.data.message}
                     </div>
                 ) : null}
-            </>
+            </div>
         )
     }
 
@@ -198,15 +199,17 @@ const GitCommitInfoGeneric = ({
         const pullRequestId = pullRequestUrl.split('/').pop()
 
         return (
-            <a
-                href={pullRequestUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="commit-hash fs-14 px-6 mono dc__w-fit-content cursor"
-                onClick={stopPropagation}
-            >
-                # {Number.isNaN(pullRequestId) ? 'PR' : pullRequestId}
-            </a>
+            <div className="w-100">
+                <a
+                    href={pullRequestUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="commit-hash fs-13 px-6 dc__w-fit-content cursor flex left dc__gap-4"
+                    onClick={stopPropagation}
+                >
+                    <Hash /> <span>{Number.isNaN(pullRequestId) ? 'PR' : pullRequestId}</span>
+                </a>
+            </div>
         )
     }
 
@@ -226,9 +229,9 @@ const GitCommitInfoGeneric = ({
     const renderPRInfoCard = () =>
         _isWebhook &&
         _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.MERGED && (
-            <>
+            <div className="flex column dc__gap-8">
                 {renderPullRequestId(_webhookData.data['git url'])}
-                <div className="flex dc__content-space">
+                <div className="flex dc__content-space w-100">
                     {renderWebhookTitle()}
                     {selectedCommitInfo ? (
                         <div className="flexbox dc__align-items-center dc__content-end fs-12">
@@ -241,7 +244,7 @@ const GitCommitInfoGeneric = ({
                     ) : null}
                 </div>
 
-                <div className="flex left lh-20 dc__gap-8">
+                <div className="flex left lh-20 dc__gap-8 w-100">
                     <PullRequestIcon className="icon-dim-16" />
                     <div className="flex left dc__gap-4">
                         Merge commit into&nbsp;
@@ -252,7 +255,7 @@ const GitCommitInfoGeneric = ({
                 </div>
                 {renderBasicGitCommitInfoForWebhook()}
                 {handleMoreDataForWebhook()}
-            </>
+            </div>
         )
 
     const renderTagInfoCard = () =>
@@ -260,7 +263,7 @@ const GitCommitInfoGeneric = ({
         _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.NON_MERGED && (
             <>
                 <div className="flex left dc__content-space">
-                    <div className="commit-hash px-6 dc__w-fit-content dc__gap-4">
+                    <div className="commit-hash px-6 dc__w-fit-content dc__gap-4 fs-13">
                         <Tag className="icon-dim-14 scb-5" />
                         {_webhookData.data['target checkout']}
                     </div>
