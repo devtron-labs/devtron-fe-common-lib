@@ -16,7 +16,7 @@
 
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
-import { compare as compareJSON, applyPatch } from 'fast-json-patch'
+import { compare as compareJSON, applyPatch, unescapePathComponent } from 'fast-json-patch'
 import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import moment from 'moment'
@@ -594,7 +594,7 @@ const buildObjectFromPathTokens = (index: number, tokens: string[], value: any) 
     const isKeyNumber = !Number.isNaN(numberKey)
     return isKeyNumber
         ? [...Array(numberKey).fill(null), buildObjectFromPathTokens(index + 1, tokens, value)]
-        : { [key]: buildObjectFromPathTokens(index + 1, tokens, value) }
+        : { [unescapePathComponent(key)]: buildObjectFromPathTokens(index + 1, tokens, value) }
 }
 
 /**
