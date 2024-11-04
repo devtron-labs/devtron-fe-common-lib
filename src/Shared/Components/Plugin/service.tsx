@@ -119,5 +119,11 @@ export const getAvailablePluginTags = async (appId: number): Promise<string[]> =
 
 export const getParentPluginList = async (
     params?: Partial<GetParentPluginListPayloadType>,
-): Promise<ResponseType<MinParentPluginDTO[]>> =>
-    get<MinParentPluginDTO[]>(getUrlWithSearchParams(ROUTES.PLUGIN_LIST_MIN, params))
+): Promise<ResponseType<MinParentPluginDTO[]>> => {
+    const response = await get<MinParentPluginDTO[]>(getUrlWithSearchParams(ROUTES.PLUGIN_LIST_MIN, params))
+
+    return {
+        ...response,
+        result: (response?.result ?? []).sort((a, b) => stringComparatorBySortOrder(a.name, b.name)),
+    }
+}

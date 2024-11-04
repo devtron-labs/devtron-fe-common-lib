@@ -77,23 +77,25 @@ export const getEnvironmentOptionsGroupedByClusters = async (): Promise<Environm
         return []
     }
 
-    const sortedEnvList = result.map(
-        ({
-            id,
-            environment_name: name,
-            isVirtualEnvironment,
-            cluster_name: cluster,
-            default: isDefault,
-            namespace,
-        }) => ({
-            id,
-            name,
-            isVirtual: isVirtualEnvironment ?? false,
-            cluster,
-            environmentType: isDefault ? EnvironmentTypeEnum.production : EnvironmentTypeEnum.nonProduction,
-            namespace,
-        }),
-    )
+    const sortedEnvList = result
+        .map(
+            ({
+                id,
+                environment_name: name,
+                isVirtualEnvironment,
+                cluster_name: cluster,
+                default: isDefault,
+                namespace,
+            }) => ({
+                id,
+                name,
+                isVirtual: isVirtualEnvironment ?? false,
+                cluster,
+                environmentType: isDefault ? EnvironmentTypeEnum.production : EnvironmentTypeEnum.nonProduction,
+                namespace,
+            }),
+        )
+        .sort((a, b) => stringComparatorBySortOrder(a.name, b.name))
 
     const envGroupedByCluster = Object.values(
         sortedEnvList.reduce<
