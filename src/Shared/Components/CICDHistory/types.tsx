@@ -525,6 +525,7 @@ export interface AppStatusDetailsChartType {
 
 export interface StatusFilterButtonType {
     nodes: Array<Node>
+    selectedTab: string
     handleFilterClick?: (selectedFilter: string) => void
 }
 
