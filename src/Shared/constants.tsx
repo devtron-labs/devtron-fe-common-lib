@@ -497,3 +497,5 @@ export const DEFAULT_LOCKED_KEYS_CONFIG: Readonly<ConfigKeysWithLockType> = {
     config: [],
     allowed: false,
 }
+
+export const ALL_RESOURCE_KIND_FILTER = 'all'
