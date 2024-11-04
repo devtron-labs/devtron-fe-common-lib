@@ -45,10 +45,11 @@ import './sortableTableHeaderCell.scss'
  * />
  * ```
  *
- * * @example Resizable cell
+ * * @example Resizable cell (Layout to be controlled externally using useResizableTableConfig)
  * ```tsx
  * <SortableTableHeaderCell
  *   isSortable={false}
+ *   isResizable
  *   title="Header Cell"
  * />
  * ```
