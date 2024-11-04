@@ -227,7 +227,7 @@ export const SelectPickerMultiValueLabel = <OptionValue, IsMulti extends boolean
     Pick<SelectPickerProps<OptionValue, IsMulti>['multiSelectProps'], 'getIsOptionValid'>) => {
     const { data, selectProps } = props
     const isOptionValid = getIsOptionValid(data)
-    const iconToDisplay = isOptionValid ? (data.startIcon || data.endIcon) ?? null : <ICErrorExclamation />
+    const iconToDisplay = isOptionValid ? ((data.startIcon || data.endIcon) ?? null) : <ICErrorExclamation />
 
     return (
         <div className="flex dc__gap-4 mw-0 dc__truncate">
