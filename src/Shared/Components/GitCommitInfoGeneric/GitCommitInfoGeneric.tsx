@@ -62,10 +62,32 @@ const GitCommitInfoGeneric = ({
           ? lowerCaseCommitInfo.commiturl
           : createGitCommitUrl(materialUrl, lowerCaseCommitInfo.commit)
 
+    const renderBranchName = (branchName: string) =>
+        branchName ? (
+            <a
+                href={getGitBranchUrl(materialUrl, branchName)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="commit-hash fs-14 px-6 mono"
+                onClick={stopPropagation}
+            >
+                {branchName}
+            </a>
+        ) : null
+
     function renderBasicGitCommitInfoForWebhook() {
         const _date = getWebhookDate(materialSourceType, commitInfo)
         return (
             <div className="flex column dc__gap-4 w-100">
+                <div className="flex left lh-20 dc__gap-8 w-100">
+                    <PullRequestIcon className="icon-dim-16" />
+                    <div className="flex left dc__gap-4">
+                        Merge commit into&nbsp;
+                        {renderBranchName(_webhookData.data['target branch name'])}
+                        &nbsp;from&nbsp;
+                        {renderBranchName(_webhookData.data['source branch name'])}
+                    </div>
+                </div>
                 {_webhookData.data.author ? (
                     <div className="material-history__text lh-20 flex left dc__gap-8 w-100">
                         <PersonIcon className="icon-dim-16" /> {_webhookData.data.author}
@@ -213,26 +235,12 @@ const GitCommitInfoGeneric = ({
         )
     }
 
-    const renderBranchName = (branchName: string) =>
-        branchName ? (
-            <a
-                href={getGitBranchUrl(materialUrl, branchName)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="commit-hash fs-14 px-6 mono"
-                onClick={stopPropagation}
-            >
-                {branchName}
-            </a>
-        ) : null
-
     const renderPRInfoCard = () =>
         _isWebhook &&
         _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.MERGED && (
-            <div className="flex column dc__gap-8">
-                {renderPullRequestId(_webhookData.data['git url'])}
+            <div className="flex column left dc__gap-8">
                 <div className="flex dc__content-space w-100">
-                    {renderWebhookTitle()}
+                    {renderPullRequestId(_webhookData.data['git url'])}
                     {selectedCommitInfo ? (
                         <div className="flexbox dc__align-items-center dc__content-end fs-12">
                             {lowerCaseCommitInfo.isselected ? (
@@ -243,16 +251,7 @@ const GitCommitInfoGeneric = ({
                         </div>
                     ) : null}
                 </div>
-
-                <div className="flex left lh-20 dc__gap-8 w-100">
-                    <PullRequestIcon className="icon-dim-16" />
-                    <div className="flex left dc__gap-4">
-                        Merge commit into&nbsp;
-                        {renderBranchName(_webhookData.data['target branch name'])}
-                        &nbsp;from&nbsp;
-                        {renderBranchName(_webhookData.data['source branch name'])}
-                    </div>
-                </div>
+                {renderWebhookTitle()}
                 {renderBasicGitCommitInfoForWebhook()}
                 {handleMoreDataForWebhook()}
             </div>
