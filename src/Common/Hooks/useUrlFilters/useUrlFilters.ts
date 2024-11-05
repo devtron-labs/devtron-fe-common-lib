@@ -49,6 +49,14 @@ const useUrlFilters = <T = string, K = unknown>({
     const history = useHistory()
     const searchParams = new URLSearchParams(location.search)
 
+    const getParsedSearchParams: UseUrlFiltersProps<T, K>['parseSearchParams'] = (searchParamsToParse) => {
+        if (parseSearchParams) {
+            return parseSearchParams(searchParamsToParse)
+        }
+
+        return {} as K
+    }
+
     const { pageSize, pageNumber, searchKey, sortBy, sortOrder, parsedParams } = useMemo(() => {
         const _pageSize = searchParams.get(PAGE_SIZE)
         const _pageNumber = searchParams.get(PAGE_NUMBER)
@@ -60,7 +68,7 @@ const useUrlFilters = <T = string, K = unknown>({
         // Fallback to ascending order
         const sortByOrder = Object.values(SortingOrder).includes(_sortOrder) ? _sortOrder : SortingOrder.ASC
 
-        const _parsedParams = parseSearchParams ? parseSearchParams(searchParams) : ({} as K)
+        const _parsedParams = getParsedSearchParams(searchParams)
 
         return {
             pageSize: Number(_pageSize) || DEFAULT_BASE_PAGE_SIZE,
@@ -147,7 +155,7 @@ const useUrlFilters = <T = string, K = unknown>({
             }
         })
         // Skipping primary params => pageSize, pageNumber, searchKey, sortBy, sortOrder
-        setItemInLocalStorageIfKeyExists(localStorageKey, JSON.stringify(parseSearchParams(searchParams)))
+        setItemInLocalStorageIfKeyExists(localStorageKey, JSON.stringify(getParsedSearchParams(searchParams)))
         // Not replacing the params as it is being done by _resetPageNumber
         _resetPageNumber()
     }
