@@ -51,11 +51,10 @@ export interface BulkSelectionActionWidgetProps {
 
 export interface BulkOperation {
     name: string
-    namespace: string
     operation: (signal: AbortSignal, data?: unknown) => Promise<void>
 }
 
-export interface BulkOperationModalProps {
+export type BulkOperationModalProps = {
     operationType: 'restart' | 'delete'
     clusterName: string
     operations: NonNullable<BulkOperation[]>
@@ -63,7 +62,7 @@ export interface BulkOperationModalProps {
     resourceKind: string
     handleReloadDataAfterBulkOperation?: () => void
     hideResultsDrawer?: boolean
-    removeTabByIdentifier?: (id: string) => Promise<string>
+    shouldAllowForceOperation?: true
 }
 
 export type BulkOperationModalState = BulkOperationModalProps['operationType'] | 'closed'
