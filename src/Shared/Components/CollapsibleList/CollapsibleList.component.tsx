@@ -60,7 +60,7 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                                     </span>
                                 </div>
                             ) : (
-                                items.map(({ title, strikeThrough, href, iconConfig, subtitle, onClick }) => (
+                                items.map(({ title, strikeThrough, href, iconConfig, subtitle, onClick, isActive }) => (
                                     <NavLink
                                         key={title}
                                         to={href}
@@ -72,6 +72,7 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                                             }
                                             onClick?.(e)
                                         }}
+                                        isActive={isActive}
                                     >
                                         <div className="flexbox-col flex-grow-1 mw-none">
                                             <span

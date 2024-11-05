@@ -1,7 +1,8 @@
 import React from 'react'
 import { TippyProps } from '@tippyjs/react'
+import { NavLinkProps } from 'react-router-dom'
 
-export interface CollapsibleListItem {
+export interface CollapsibleListItem extends Pick<NavLinkProps, 'isActive'> {
     /**
      * The title of the list item.
      */
