@@ -791,3 +791,15 @@ export type CreateMarkupPropsType =
 export type TriggerHistoryFilterCriteriaType = `${string}|${string}|${string}`[]
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])
 export const statusSet = new Set(['starting', 'running', 'pending'])
+
+export interface CIPipelineSourceConfigInterface {
+    sourceType
+    sourceValue
+    showTooltip?: boolean
+    showIcons?: boolean
+    baseText?: string
+    regex?: any
+    isRegex?: boolean
+    primaryBranchAfterRegex?: string
+    rootClassName?: string
+}

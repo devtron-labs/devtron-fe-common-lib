@@ -215,7 +215,7 @@ const GitCommitInfoGeneric = ({
     }
 
     const renderWebhookTitle = () =>
-        _webhookData.data.title ? <span className="flex left cn-9 fs-14 fw-6">{_webhookData.data.title}</span> : null
+        _webhookData.data.title ? <span className="flex left cn-9 fw-6 fs-13">{_webhookData.data.title}</span> : null
 
     const renderPullRequestId = (pullRequestUrl: string) => {
         const pullRequestId = pullRequestUrl.split('/').pop()
@@ -244,9 +244,9 @@ const GitCommitInfoGeneric = ({
                     {selectedCommitInfo ? (
                         <div className="flexbox dc__align-items-center dc__content-end fs-12">
                             {lowerCaseCommitInfo.isselected ? (
-                                <Check className="dc__align-right" />
+                                <Check className="dc__align-right icon-dim-20" />
                             ) : (
-                                <Circle data-testid="valid-git-commit" />
+                                <Circle data-testid="valid-git-commit icon-dim-20" />
                             )}
                         </div>
                     ) : null}

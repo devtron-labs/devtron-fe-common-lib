@@ -23,17 +23,7 @@ import branchIcon from '../../../Assets/Icon/ic-branch.svg'
 import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-outlined.svg'
 import regexIcon from '../../../Assets/Icon/ic-regex.svg'
 import { buildHoverHtmlForWebhook } from './utils'
-
-export interface CIPipelineSourceConfigInterface {
-    sourceType
-    sourceValue
-    showTooltip?: boolean
-    showIcons?: boolean
-    baseText?: string
-    regex?: any
-    isRegex?: boolean
-    primaryBranchAfterRegex?: string
-}
+import { CIPipelineSourceConfigInterface } from './types'
 
 export const CiPipelineSourceConfig = ({
     sourceType,
@@ -44,6 +34,7 @@ export const CiPipelineSourceConfig = ({
     regex,
     isRegex,
     primaryBranchAfterRegex,
+    rootClassName = '',
 }: CIPipelineSourceConfigInterface) => {
     const _isWebhook = sourceType === SourceTypeMap.WEBHOOK
     const _isRegex = sourceType === SourceTypeMap.BranchRegex || !!regex || isRegex
@@ -133,7 +124,7 @@ export const CiPipelineSourceConfig = ({
     const isRegexOrBranchIcon = _isRegex ? regexIcon : branchIcon
 
     return (
-        <div className={`flex left ${showTooltip ? 'branch-name' : ''}`}>
+        <div className={`flex left ${showTooltip ? 'branch-name' : ''}  ${rootClassName}`}>
             {loading && showIcons && <span className="dc__loading-dots">loading</span>}
             {!loading && (
                 <div className="flex dc__gap-4">
