@@ -15,6 +15,7 @@
  */
 
 import { NodeType, Nodes } from '@Shared/types'
+import { RefObject } from 'react'
 
 export interface GVKType {
     Group: string
@@ -38,3 +39,30 @@ export interface K8SObjectBaseType {
     name: string
     isExpanded: boolean
 }
+
+export interface BulkSelectionActionWidgetProps {
+    count: number
+    handleOpenBulkDeleteModal: () => void
+    handleClearBulkSelection: () => void
+    handleOpenRestartWorkloadModal: () => void
+    parentRef: RefObject<HTMLDivElement>
+    showBulkRestartOption: boolean
+}
+
+export interface BulkOperation {
+    name: string
+    operation: (signal: AbortSignal, data?: unknown) => Promise<void>
+}
+
+export type BulkOperationModalProps = {
+    operationType: 'restart' | 'delete'
+    clusterName: string
+    operations: NonNullable<BulkOperation[]>
+    handleModalClose: () => void
+    resourceKind: string
+    handleReloadDataAfterBulkOperation?: () => void
+    hideResultsDrawer?: boolean
+    shouldAllowForceOperation?: true
+}
+
+export type BulkOperationModalState = BulkOperationModalProps['operationType'] | 'closed'

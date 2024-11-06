@@ -44,6 +44,7 @@ export interface UseBulkSelectionReturnType<T> extends GetBulkSelectionCheckboxV
     handleBulkSelection: ({ action, data }: HandleBulkSelectionType<T>) => void
     isBulkSelectionApplied: boolean
     getSelectedIdentifiersCount: () => number
+    setIdentifiers: React.Dispatch<React.SetStateAction<T>>
 }
 
 export interface BulkSelectionProps {
@@ -73,13 +74,15 @@ export type BulkSelectionIdentifiersType<T> = Record<string | number, T>
 
 export interface UseBulkSelectionProps<T> {
     /**
-     * Response from API, assuming structure to be array of objects with key and values
-     * This will the given ids on current page
-     */
-    identifiers: T
-    /**
      * Act as buffer between select all across pages and select all on page state
      */
     getSelectAllDialogStatus: () => SelectAllDialogStatus
+    /**
+     * Response from API, assuming structure to be array of objects with key and values
+     * This will the given ids on current page.
+     *
+     * NOTE!: Please wrap this value with a useMemo since it goes into useEffect dependency
+     */
+    identifiers?: T
     children?: React.ReactNode
 }
