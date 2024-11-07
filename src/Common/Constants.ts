@@ -114,6 +114,7 @@ export const ROUTES = {
     DEPLOYMENT_CHARTS_LIST: 'deployment/template/fetch',
     USER_LIST_MIN: 'user/list/min',
     CONFIG_DATA: 'config/data',
+    K8S_RESOURCE_LIST: 'k8s/resource/list',
 }
 
 export enum KEY_VALUE {

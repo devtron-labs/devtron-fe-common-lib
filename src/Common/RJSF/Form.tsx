@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { forwardRef } from 'react'
 import RJSF from '@rjsf/core'
 import RJSFValidator from '@rjsf/validator-ajv8'
 
@@ -27,7 +28,7 @@ import './rjsfForm.scss'
 const Form = RJSF
 const validator = RJSFValidator
 
-export const RJSFForm = (props: FormProps) => (
+export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => (
     <Form
         noHtml5Validate
         showErrorList={false}
@@ -42,5 +43,6 @@ export const RJSFForm = (props: FormProps) => (
         formContext={props.formData}
         widgets={{ ...widgets, ...props.widgets }}
         translateString={translateString}
+        ref={ref}
     />
-)
+))
