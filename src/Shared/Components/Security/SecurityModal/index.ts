@@ -19,6 +19,6 @@ export type {
     GetResourceScanDetailsPayloadType,
     GetResourceScanDetailsResponseType,
 } from './types'
-export { SIDEBAR_DATA } from './config'
+export { SIDEBAR_DATA, getProgressingStateForStatus } from './config'
 export { CATEGORY_LABELS } from './constants'
 export { getExecutionDetails } from './service'
