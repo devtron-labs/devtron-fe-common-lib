@@ -40,6 +40,33 @@ export interface K8SObjectBaseType {
     isExpanded: boolean
 }
 
+interface K8sRequestResourceIdentifierType {
+    groupVersionKind: GVKType
+    namespace?: string
+    name?: string
+}
+
+interface ResourceListPayloadK8sRequestType {
+    resourceIdentifier: K8sRequestResourceIdentifierType
+    patch?: string
+    forceDelete?: boolean
+}
+
+export interface K8sResourceListPayloadType {
+    clusterId: number
+    filter?: string
+    k8sRequest: ResourceListPayloadK8sRequestType
+}
+
+export type K8sResourceDetailDataType = {
+    [key: string]: string | number | object
+}
+
+export interface K8sResourceDetailType {
+    headers: string[]
+    data: K8sResourceDetailDataType[]
+}
+
 export interface BulkSelectionActionWidgetProps {
     count: number
     handleOpenBulkDeleteModal: () => void
