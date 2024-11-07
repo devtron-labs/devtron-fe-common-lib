@@ -15,6 +15,7 @@
  */
 
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import DOMPurify from 'dompurify'
 import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
 import { compare as compareJSON, applyPatch } from 'fast-json-patch'
 import { components } from 'react-select'
@@ -642,7 +643,11 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
         return _keys
     })
 
-export const convertJSONPointerToJSONPath = (pointer: string) => pointer.replace(/\/([\*0-9]+)\//g, '[$1].').replace(/\//g, '.').replace(/\./, '$.')
+export const convertJSONPointerToJSONPath = (pointer: string) =>
+    pointer
+        .replace(/\/([\*0-9]+)\//g, '[$1].')
+        .replace(/\//g, '.')
+        .replace(/\./, '$.')
 
 export const flatMapOfJSONPaths = (
     paths: string[],
@@ -952,4 +957,43 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
             func(...args)
         }
     }
+}
+
+// TODO: Might need to expose sandbox and referrer policy
+export const getSanitizedIframe = (iframeString: string) =>
+    DOMPurify.sanitize(iframeString, {
+        ADD_TAGS: ['iframe'],
+        ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+    })
+
+/**
+ * This method adds default attributes to iframe - title, loading ="lazy", width="100%", height="100%"
+ */
+export const getIframeWithDefaultAttributes = (iframeString: string, defaultName?: string): string => {
+    const parentDiv = document.createElement('div')
+    parentDiv.innerHTML = getSanitizedIframe(iframeString)
+
+
+    const iframe = parentDiv.querySelector('iframe')
+    if (iframe) {
+        if (!iframe.hasAttribute('title') && !!defaultName) {
+            iframe.setAttribute('title', defaultName)
+        }
+
+        if (!iframe.hasAttribute('loading')) {
+            iframe.setAttribute('loading', 'lazy')
+        }
+
+        if (!iframe.hasAttribute('width')) {
+            iframe.setAttribute('width', '100%')
+        }
+
+        if (!iframe.hasAttribute('height')) {
+            iframe.setAttribute('height', '100%')
+        }
+
+        return parentDiv.innerHTML
+    }
+
+    return iframeString
 }
