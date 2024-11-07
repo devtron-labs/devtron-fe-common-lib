@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Dayjs } from 'dayjs'
 import {
     OptionType,
     CommonNodeAttr,
@@ -118,6 +119,7 @@ export enum Nodes {
     Event = 'Event',
     Namespace = 'Namespace',
     Overview = 'Overview',
+    MonitoringDashboard = 'MonitoringDashboard',
 }
 
 // FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
@@ -680,6 +682,7 @@ export enum ConfigurationType {
 export interface BaseURLParams {
     appId: string
     envId: string
+    clusterId: string
 }
 
 export interface ConfigKeysWithLockType {
@@ -737,4 +740,32 @@ export interface CustomRoleAndMeta {
     possibleRolesMetaForHelm: MetaPossibleRoles
     possibleRolesMetaForCluster: MetaPossibleRoles
     possibleRolesMetaForJob: MetaPossibleRoles
+}
+
+interface CommonTabArgsType {
+    name: string
+    kind?: string
+    url: string
+    isSelected: boolean
+    title?: string
+    isDeleted?: boolean
+    position: number
+    iconPath?: string
+    dynamicTitle?: string
+    showNameOnSelect?: boolean
+    /**
+     * @default false
+     */
+    hideName?: boolean
+    isAlive?: boolean
+    lastSyncMoment?: Dayjs
+    componentKey?: string
+}
+
+export interface InitTabType extends CommonTabArgsType {
+    idPrefix: string
+}
+
+export interface DynamicTabType extends CommonTabArgsType {
+    id: string
 }
