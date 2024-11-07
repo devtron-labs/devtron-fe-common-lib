@@ -86,6 +86,7 @@ export interface customEnv {
     FEATURE_PROMO_EMBEDDED_MODAL_TITLE?: string
     FEATURE_PROMO_EMBEDDED_IFRAME_URL?: string
     FEATURE_BULK_RESTART_WORKLOADS_FROM_RB: string
+    FEATURE_RB_SYNC_CLUSTER_ENABLE?: boolean
 }
 declare global {
     interface Window {
