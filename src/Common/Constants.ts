@@ -67,6 +67,7 @@ export const URLS = {
     GLOBAL_CONFIG_DEPLOYMENT_CHARTS_LIST: '/global-config/deployment-charts',
     NETWORK_STATUS_INTERFACE: '/network-status-interface',
     RESOURCE_BROWSER: '/resource-browser',
+    COMPARE_CLUSTERS: '/compare-clusters',
 }
 
 export const ROUTES = {
