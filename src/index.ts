@@ -82,6 +82,7 @@ export interface customEnv {
      * @default false
      */
     FEATURE_HIDE_USER_DIRECT_PERMISSIONS_FOR_NON_SUPER_ADMINS?: boolean
+    FEATURE_CONFIG_DRIFT_ENABLE: boolean
     FEATURE_PROMO_EMBEDDED_BUTTON_TEXT?: string
     FEATURE_PROMO_EMBEDDED_MODAL_TITLE?: string
     FEATURE_PROMO_EMBEDDED_IFRAME_URL?: string
