@@ -39,8 +39,15 @@ import {
     ToastManager,
     ToastVariantType,
     versionComparatorBySortOrder,
+    WebhookEventNameType,
 } from '../Shared'
-import { ReactComponent as ArrowDown } from '../Assets/Icon/ic-chevron-down.svg'
+import { ReactComponent as ArrowDown } from '@Icons/ic-chevron-down.svg'
+import webhookIcon from '@Icons/ic-webhook.svg'
+import branchIcon from '@Icons/ic-branch.svg'
+import regexIcon from '@Icons/ic-regex.svg'
+import pullRequest from '@Icons/ic-pull-request.svg'
+import tagIcon from '@Icons/ic-tag.svg'
+import { SourceTypeMap } from '@Common/Common.service'
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
@@ -952,4 +959,28 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
             func(...args)
         }
     }
+}
+
+
+/**
+ *
+ * @param sourceType - SourceTypeMap
+ * @param _isRegex - boolean
+ * @param webhookEventName - WebhookEventNameType
+ * @returns - Icon
+ */
+export const getBranchIcon = (sourceType, _isRegex?: boolean, webhookEventName?: string) => {
+    if (sourceType === SourceTypeMap.WEBHOOK && webhookEventName === WebhookEventNameType.PULL_REQUEST) {
+        return pullRequest
+    }
+    if (sourceType === SourceTypeMap.WEBHOOK && webhookEventName === WebhookEventNameType.TAG_CREATION) {
+        return tagIcon
+    }
+    if (sourceType === SourceTypeMap.WEBHOOK) {
+        return webhookIcon
+    }
+    if (sourceType === SourceTypeMap.BranchRegex || _isRegex) {
+        return regexIcon
+    }
+    return branchIcon
 }

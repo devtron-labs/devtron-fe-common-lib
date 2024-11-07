@@ -58,7 +58,7 @@ const MaterialHistory = ({
     return (
         // added for consistent typing
         // eslint-disable-next-line react/jsx-no-useless-fragment
-        <>
+        <div className="h-100 flex-grow-1 dc__overflow-scroll">
             {dateKeys.map((date) => {
                 const historyList = materialHistoryMapWithTime[date]
                 return (
@@ -99,7 +99,7 @@ const MaterialHistory = ({
                     </div>
                 )
             })}
-        </>
+        </div>
     )
 }
 export default MaterialHistory

@@ -16,12 +16,9 @@
 
 import { useState, useEffect, ReactNode } from 'react'
 import Tippy from '@tippyjs/react'
-import { getWebhookEventsForEventId, SourceTypeMap } from '../../../Common'
+import { ReactComponent as Info } from '@Icons/ic-info-outlined.svg'
+import { getBranchIcon, getWebhookEventsForEventId, SourceTypeMap } from '../../../Common'
 import { GIT_BRANCH_NOT_CONFIGURED, DEFAULT_GIT_BRANCH_VALUE } from './constants'
-import webhookIcon from '../../../Assets/Icon/ic-webhook.svg'
-import branchIcon from '../../../Assets/Icon/ic-branch.svg'
-import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-outlined.svg'
-import regexIcon from '../../../Assets/Icon/ic-regex.svg'
 import { buildHoverHtmlForWebhook } from './utils'
 import { CIPipelineSourceConfigInterface } from './types'
 
@@ -39,7 +36,7 @@ export const CiPipelineSourceConfig = ({
     const _isWebhook = sourceType === SourceTypeMap.WEBHOOK
     const _isRegex = sourceType === SourceTypeMap.BranchRegex || !!regex || isRegex
 
-    const [sourceValueBase, setSourceValueBase] = useState<ReactNode>('')
+    const [sourceValueBase, setSourceValueBase] = useState('')
     const [sourceValueAdv, setSourceValueAdv] = useState<ReactNode>('')
     const [loading, setLoading] = useState(!!_isWebhook)
 
@@ -88,7 +85,7 @@ export const CiPipelineSourceConfig = ({
             )}
         </>
     )
-    // for non webhook case, data is already set in use state initialisation
+    // for non webhook case, data is already set in use state initialization
     function _init() {
         if (!_isWebhook) {
             return
@@ -121,8 +118,6 @@ export const CiPipelineSourceConfig = ({
         regexTippyContent()
     }, [])
 
-    const isRegexOrBranchIcon = _isRegex ? regexIcon : branchIcon
-
     return (
         <div className={`flex left ${showTooltip ? 'branch-name' : ''}  ${rootClassName}`}>
             {loading && showIcons && <span className="dc__loading-dots">loading</span>}
@@ -130,7 +125,7 @@ export const CiPipelineSourceConfig = ({
                 <div className="flex dc__gap-4">
                     {showIcons && (
                         <img
-                            src={_isWebhook ? webhookIcon : isRegexOrBranchIcon}
+                            src={getBranchIcon(sourceType, _isRegex, sourceValueBase)}
                             alt="branch"
                             className="icon-dim-12"
                         />
