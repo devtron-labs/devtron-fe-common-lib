@@ -649,7 +649,11 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
         return _keys
     })
 
-export const convertJSONPointerToJSONPath = (pointer: string) => pointer.replace(/\/([\*0-9]+)\//g, '[$1].').replace(/\//g, '.').replace(/\./, '$.')
+export const convertJSONPointerToJSONPath = (pointer: string) =>
+    pointer
+        .replace(/\/([\*0-9]+)\//g, '[$1].')
+        .replace(/\//g, '.')
+        .replace(/\./, '$.')
 
 export const flatMapOfJSONPaths = (
     paths: string[],
@@ -961,7 +965,6 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
     }
 }
 
-
 /**
  *
  * @param sourceType - SourceTypeMap
@@ -970,13 +973,13 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
  * @returns - Icon
  */
 export const getBranchIcon = (sourceType, _isRegex?: boolean, webhookEventName?: string) => {
-    if (sourceType === SourceTypeMap.WEBHOOK && webhookEventName === WebhookEventNameType.PULL_REQUEST) {
-        return pullRequest
-    }
-    if (sourceType === SourceTypeMap.WEBHOOK && webhookEventName === WebhookEventNameType.TAG_CREATION) {
-        return tagIcon
-    }
     if (sourceType === SourceTypeMap.WEBHOOK) {
+        if (webhookEventName === WebhookEventNameType.PULL_REQUEST) {
+            return pullRequest
+        }
+        if (webhookEventName === WebhookEventNameType.TAG_CREATION) {
+            return tagIcon
+        }
         return webhookIcon
     }
     if (sourceType === SourceTypeMap.BranchRegex || _isRegex) {

@@ -235,7 +235,7 @@ const GitCommitInfoGeneric = ({
         )
     }
 
-    const renderTagCreationId = (
+    const renderTagCreationId = () => (
         <div className="commit-hash px-6 dc__w-fit-content dc__gap-4 fs-13">
             <Tag className="icon-dim-14 scb-5" />
             {_webhookData.data['target checkout']}
@@ -271,7 +271,7 @@ const GitCommitInfoGeneric = ({
         _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.NON_MERGED && (
             <>
                 <div className="flex left dc__content-space">
-                    {renderTagCreationId}
+                    {renderTagCreationId()}
                     {getCheckUncheckIcon()}
                 </div>
                 {renderBasicGitCommitInfoForWebhook()}
