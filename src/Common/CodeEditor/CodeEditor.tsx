@@ -27,7 +27,7 @@ import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-error-exclamat
 import './codeEditor.scss'
 import 'monaco-editor'
 
-import { YAMLStringify, cleanKubeManifest, useJsonYaml } from '../Helper'
+import { YAMLStringify, cleanKubeManifest, useEffectAfterMount, useJsonYaml } from '../Helper'
 import { useWindowSize } from '../Hooks'
 import Select from '../Select/Select'
 import RadioGroup from '../RadioGroup/RadioGroup'
@@ -41,7 +41,7 @@ import {
     CodeEditorThemesKeys,
     InformationBarProps,
 } from './types'
-import { CodeEditorReducer, initialState } from './CodeEditor.reducer'
+import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { MODES } from '../Constants'
 
 const CodeEditorContext = React.createContext(null)
@@ -93,16 +93,13 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         const monacoRef = useRef(null)
         const { width, height: windowHeight } = useWindowSize()
         const memoisedReducer = React.useCallback(CodeEditorReducer, [])
-        const [state, dispatch] = useReducer(memoisedReducer, initialState({ mode, theme, value, diffView, noParsing }))
+        const [state, dispatch] = useReducer(memoisedReducer, initialState({ mode, theme, value, diffView, noParsing, tabSize }))
         const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
         const [, originalJson, originlaYaml] = useJsonYaml(defaultValue, tabSize, state.mode, !state.noParsing)
         const [contentHeight, setContentHeight] = useState(
             adjustEditorHeightToContent ? INITIAL_HEIGHT_WHEN_DYNAMIC_HEIGHT : height,
         )
-        /**
-         * TODO: can be removed with this new merge into react-monaco-editor :)
-         * see: https://github.com/react-monaco-editor/react-monaco-editor/pull/955
-         * */
+        // TODO: upgrade to 0.56.2 to remove this
         const onChangeRef = useRef(onChange)
         onChangeRef.current = onChange
         monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
@@ -260,28 +257,18 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             onChangeRef.current?.(value)
         }
 
-        useEffect(() => {
+        useEffectAfterMount(() => {
             if (noParsing) {
                 setCode(value)
 
                 return
             }
-            let obj
+
             if (value === state.code) {
                 return
             }
-            try {
-                obj = JSON.parse(value)
-            } catch (err) {
-                try {
-                    obj = YAML.parse(value)
-                } catch (err) {}
-            }
-            let final = value
-            if (obj) {
-                final = state.mode === 'json' ? JSON.stringify(obj, null, tabSize) : YAMLStringify(obj)
-            }
-            setCode(final)
+
+            setCode(parseValueToCode(value, state.mode, tabSize))
         }, [value, noParsing])
 
         useEffect(() => {

@@ -109,6 +109,7 @@ export interface CodeEditorInitialValueType {
     theme?: string
     value: string
     noParsing?: boolean
+    tabSize: number
 }
 
 export interface CodeEditorState {
