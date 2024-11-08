@@ -235,21 +235,30 @@ const GitCommitInfoGeneric = ({
         )
     }
 
+    const renderTagCreationId = (
+        <div className="commit-hash px-6 dc__w-fit-content dc__gap-4 fs-13">
+            <Tag className="icon-dim-14 scb-5" />
+            {_webhookData.data['target checkout']}
+        </div>
+    )
+
+    const getCheckUncheckIcon = () => {
+        if (selectedCommitInfo) {
+            if (lowerCaseCommitInfo.isselected) {
+                return <Check className="dc__align-right icon-dim-20" />
+            }
+            return <Circle data-testid="valid-git-commit icon-dim-20" />
+        }
+        return null
+    }
+
     const renderPRInfoCard = () =>
         _isWebhook &&
         _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.MERGED && (
             <div className="flex column left dc__gap-8">
                 <div className="flex dc__content-space w-100">
                     {renderPullRequestId(_webhookData.data['git url'])}
-                    {selectedCommitInfo ? (
-                        <div className="flexbox dc__align-items-center dc__content-end fs-12">
-                            {lowerCaseCommitInfo.isselected ? (
-                                <Check className="dc__align-right icon-dim-20" />
-                            ) : (
-                                <Circle data-testid="valid-git-commit icon-dim-20" />
-                            )}
-                        </div>
-                    ) : null}
+                    {getCheckUncheckIcon()}
                 </div>
                 {renderWebhookTitle()}
                 {renderBasicGitCommitInfoForWebhook()}
@@ -262,15 +271,8 @@ const GitCommitInfoGeneric = ({
         _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.NON_MERGED && (
             <>
                 <div className="flex left dc__content-space">
-                    <div className="commit-hash px-6 dc__w-fit-content dc__gap-4 fs-13">
-                        <Tag className="icon-dim-14 scb-5" />
-                        {_webhookData.data['target checkout']}
-                    </div>
-                    {selectedCommitInfo ? (
-                        <div className="material-history__select-text">
-                            {lowerCaseCommitInfo.isselected ? <Check className="dc__align-right" /> : 'Select'}
-                        </div>
-                    ) : null}
+                    {renderTagCreationId}
+                    {getCheckUncheckIcon()}
                 </div>
                 {renderBasicGitCommitInfoForWebhook()}
                 {handleMoreDataForWebhook()}
