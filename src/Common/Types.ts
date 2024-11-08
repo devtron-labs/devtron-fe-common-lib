@@ -993,3 +993,13 @@ export interface EnvironmentHelmResult {
 }
 
 export type EnvironmentListHelmResponse = ResponseType<EnvironmentListHelmResult[]>
+
+export interface WidgetEventDetails {
+    message: string
+    namespace: string
+    object: string
+    source: string
+    count: number
+    age: string
+    lastSeen: string
+}
