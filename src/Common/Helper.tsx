@@ -17,7 +17,7 @@
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DOMPurify from 'dompurify'
 import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
-import { compare as compareJSON, applyPatch } from 'fast-json-patch'
+import { compare as compareJSON, applyPatch, unescapePathComponent } from 'fast-json-patch'
 import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import moment from 'moment'
@@ -595,7 +595,7 @@ const buildObjectFromPathTokens = (index: number, tokens: string[], value: any) 
     const isKeyNumber = !Number.isNaN(numberKey)
     return isKeyNumber
         ? [...Array(numberKey).fill(null), buildObjectFromPathTokens(index + 1, tokens, value)]
-        : { [key]: buildObjectFromPathTokens(index + 1, tokens, value) }
+        : { [unescapePathComponent(key)]: buildObjectFromPathTokens(index + 1, tokens, value) }
 }
 
 /**
@@ -644,10 +644,7 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
     })
 
 export const convertJSONPointerToJSONPath = (pointer: string) =>
-    pointer
-        .replace(/\/([\*0-9]+)\//g, '[$1].')
-        .replace(/\//g, '.')
-        .replace(/\./, '$.')
+    unescapePathComponent(pointer.replace(/\/([\*0-9]+)\//g, '[$1].').replace(/\//g, '.').replace(/\./, '$.'))
 
 export const flatMapOfJSONPaths = (
     paths: string[],

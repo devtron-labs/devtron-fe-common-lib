@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import Tippy, { TippyProps } from '@tippyjs/react'
 import { ConditionalWrap } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
 import { ReactComponent as ICExpand } from '@Icons/ic-expand.svg'
 
 import { Collapse } from '../Collapse'
@@ -31,7 +32,9 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                                 className="icon-dim-20 fcn-6 dc__no-shrink cursor rotate"
                                 style={{ ['--rotateBy' as string]: isExpanded ? '0deg' : '-90deg' }}
                             />
-                            <span className="flex-grow-1 dc__align-left dc__truncate">{header}</span>
+                            <Tooltip content={header} placement="right">
+                                <span className="flex-grow-1 dc__align-left dc__truncate">{header}</span>
+                            </Tooltip>
                         </button>
                         {headerIconConfig && (
                             <ConditionalWrap
@@ -60,7 +63,7 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                                     </span>
                                 </div>
                             ) : (
-                                items.map(({ title, strikeThrough, href, iconConfig, subtitle, onClick }) => (
+                                items.map(({ title, strikeThrough, href, iconConfig, subtitle, onClick, isActive }) => (
                                     <NavLink
                                         key={title}
                                         to={href}
@@ -72,15 +75,20 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                                             }
                                             onClick?.(e)
                                         }}
+                                        isActive={isActive}
                                     >
                                         <div className="flexbox-col flex-grow-1 mw-none">
-                                            <span
-                                                className={`collapsible__item__title dc__truncate fs-13 lh-20 ${strikeThrough ? 'dc__strike-through' : ''}`}
-                                            >
-                                                {title}
-                                            </span>
+                                            <Tooltip content={title} placement="right">
+                                                <span
+                                                    className={`collapsible__item__title dc__truncate fs-13 lh-20 ${strikeThrough ? 'dc__strike-through' : ''}`}
+                                                >
+                                                    {title}
+                                                </span>
+                                            </Tooltip>
                                             {subtitle && (
-                                                <span className="dc__truncate fw-4 lh-1-5 cn-7">{subtitle}</span>
+                                                <Tooltip content={subtitle} placement="right">
+                                                    <span className="dc__truncate fw-4 lh-1-5 cn-7">{subtitle}</span>
+                                                </Tooltip>
                                             )}
                                         </div>
                                         {iconConfig && (
