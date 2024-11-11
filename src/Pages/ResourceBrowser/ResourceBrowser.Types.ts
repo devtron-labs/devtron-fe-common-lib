@@ -76,8 +76,22 @@ export interface BulkSelectionActionWidgetProps {
     showBulkRestartOption: boolean
 }
 
+interface BulkOperationAdditionalKeysType {
+    label: string
+    value: string
+    isSortable: boolean
+    /**
+     * width to be given in gridTemplateColumns
+     */
+    width: string
+}
+
 export interface BulkOperation {
     name: string
+    /**
+     * Would these keys beside the name
+     */
+    additionalKeys?: BulkOperationAdditionalKeysType[]
     operation: (signal: AbortSignal, data?: unknown) => Promise<void>
 }
 
