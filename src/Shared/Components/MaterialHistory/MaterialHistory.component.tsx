@@ -58,11 +58,11 @@ const MaterialHistory = ({
     return (
         // added for consistent typing
         // eslint-disable-next-line react/jsx-no-useless-fragment
-        <div className="h-100 flex-grow-1 dc__overflow-scroll">
+        <div className="flexbox-col dc__gap-12 py-12 px-16">
             {dateKeys.map((date) => {
                 const historyList = materialHistoryMapWithTime[date]
                 return (
-                    <div key={date} className="flexbox-col dc__gap-12 py-12 px-16">
+                    <>
                         {!isCommitInfoModal && (
                             <div className="flex left dc__gap-8">
                                 <span className="fs-12 lh-18 cn-7 fw-6 w-130">{date}</span>
@@ -96,7 +96,7 @@ const MaterialHistory = ({
                                 </div>
                             )
                         })}
-                    </div>
+                    </>
                 )
             })}
         </div>

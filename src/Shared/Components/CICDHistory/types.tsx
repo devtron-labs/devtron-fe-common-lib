@@ -793,8 +793,8 @@ export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancell
 export const statusSet = new Set(['starting', 'running', 'pending'])
 
 export interface CIPipelineSourceConfigInterface {
-    sourceType
-    sourceValue
+    sourceType: string
+    sourceValue: any // TODO: need to make source value consistent
     showTooltip?: boolean
     showIcons?: boolean
     baseText?: string

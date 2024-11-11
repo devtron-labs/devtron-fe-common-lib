@@ -513,7 +513,7 @@ export function getWebhookEventsForEventId(eventId: string | number) {
 }
 
 /**
- * 
+ *
  * @param gitUrl Git URL of the repository
  * @param branchName Branch name
  * @returns URL to the branch in the Git repository
