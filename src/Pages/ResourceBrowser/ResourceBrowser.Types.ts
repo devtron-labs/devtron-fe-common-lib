@@ -82,7 +82,7 @@ export interface BulkOperation {
 }
 
 export type BulkOperationModalProps = {
-    operationType: 'restart' | 'delete'
+    operationType: 'restart' | 'delete' | 'creation'
     clusterName: string
     operations: NonNullable<BulkOperation[]>
     handleModalClose: () => void
@@ -93,3 +93,40 @@ export type BulkOperationModalProps = {
 }
 
 export type BulkOperationModalState = BulkOperationModalProps['operationType'] | 'closed'
+
+export interface CreateResourceRequestBodyType {
+    appId: string
+    clusterId: number
+    k8sRequest: {
+        resourceIdentifier: Required<K8sRequestResourceIdentifierType>
+        patch?: string
+    }
+}
+
+export interface ResourceManifestDTO {
+    manifestResponse: {
+        manifest: Record<string, unknown>
+    }
+    secretViewAccess: boolean
+}
+
+export interface CreateResourceRequestBodyParamsType
+    extends Pick<CreateResourceRequestBodyType, 'clusterId'>,
+        Required<Pick<K8sRequestResourceIdentifierType, 'name' | 'namespace'>> {
+    updatedManifest?: string
+    group: GVKType['Group']
+    version: GVKType['Version']
+    kind: GVKType['Kind']
+}
+
+export interface CreateResourcePayload {
+    clusterId: number
+    manifest: string
+}
+
+export interface CreateResourceDTO {
+    kind: string
+    name: string
+    isUpdate: boolean
+    error: string
+}

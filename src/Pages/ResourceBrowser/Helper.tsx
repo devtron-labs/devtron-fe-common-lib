@@ -16,7 +16,11 @@
 
 import { AggregationKeys, NodeType, Nodes } from '../../Shared'
 import { ALL_NAMESPACE_OPTION } from './constants'
-import { ApiResourceGroupType } from './ResourceBrowser.Types'
+import {
+    ApiResourceGroupType,
+    CreateResourceRequestBodyParamsType,
+    CreateResourceRequestBodyType,
+} from './ResourceBrowser.Types'
 
 export function getAggregator(nodeType: NodeType, defaultAsOtherResources?: boolean): AggregationKeys {
     switch (nodeType) {
@@ -84,4 +88,29 @@ export const getK8sResourceListPayload = (
         },
     },
     ...filters,
+})
+
+export const createResourceRequestBody = ({
+    clusterId,
+    group,
+    version,
+    kind,
+    name,
+    namespace,
+    updatedManifest,
+}: CreateResourceRequestBodyParamsType): CreateResourceRequestBodyType => ({
+    appId: '',
+    clusterId,
+    k8sRequest: {
+        resourceIdentifier: {
+            groupVersionKind: {
+                Group: group || '',
+                Version: version || 'v1',
+                Kind: kind,
+            },
+            namespace,
+            name,
+        },
+        ...(updatedManifest && { patch: updatedManifest }),
+    },
 })
