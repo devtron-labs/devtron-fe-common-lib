@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Draggable, { ControlPosition, DraggableData } from 'react-draggable'
 import { DraggableWrapperProps, DraggablePositionVariant } from './types'
 import { useWindowSize } from '../Hooks'
@@ -69,6 +69,12 @@ export default function DraggableWrapper({
                 const baseY =
                     parentRect.height > windowSize.height ? windowSize.height - parentRectTop : parentRect.height
                 const y = baseY - nodeRefHeight - boundaryGap
+                return { x, y }
+            }
+            case DraggablePositionVariant.SCREEN_BOTTOM_RIGHT: {
+                const x = windowSize.width - parentRect.left - nodeRefWidth - boundaryGap
+                const y = windowSize.height - parentRect.top - nodeRefHeight - boundaryGap
+
                 return { x, y }
             }
             // Add more cases for other variants if needed

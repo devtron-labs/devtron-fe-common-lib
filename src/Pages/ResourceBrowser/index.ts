@@ -16,3 +16,5 @@
 
 export * from './ResourceBrowser.Types'
 export * from './Helper'
+export * from './types'
+export * from './service'
