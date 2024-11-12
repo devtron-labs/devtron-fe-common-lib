@@ -34,7 +34,7 @@ import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscre
 import './cicdHistory.scss'
 
 export const LogResizeButton = ({
-    shortcutCombo = ['F'],
+    shortcutCombo = ['Shift', 'F'],
     showOnlyWhenPathIncludesLogs = true,
     fullScreenView,
     setFullScreenView,
