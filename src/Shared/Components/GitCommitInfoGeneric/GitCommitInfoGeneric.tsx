@@ -221,7 +221,7 @@ const GitCommitInfoGeneric = ({
         const pullRequestId = pullRequestUrl.split('/').pop()
 
         return (
-            <div className="w-100">
+            <div className="w-100 flex left dc__gap-4">
                 <a
                     href={pullRequestUrl}
                     target="_blank"
@@ -231,6 +231,9 @@ const GitCommitInfoGeneric = ({
                 >
                     <Hash /> <span>{Number.isNaN(pullRequestId) ? 'PR' : pullRequestId}</span>
                 </a>
+                <span className="git-commit-info-generic__copy dc__visibility-hidden p-2" data-testid="git-commit-copy">
+                    <ClipboardButton content={pullRequestUrl} />
+                </span>
             </div>
         )
     }

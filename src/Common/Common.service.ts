@@ -520,7 +520,7 @@ export function getWebhookEventsForEventId(eventId: string | number) {
  */
 export const getGitBranchUrl = (gitUrl: string, branchName: string): string | null => {
     if (!gitUrl) return null
-    const trimmedGitUrl = gitUrl.trim().replace(/\/$/, '') // Remove any trailing slash
+    const trimmedGitUrl = gitUrl.trim().replace('.git', '').replace(/\/$/, '') // Remove any trailing slash
     if (trimmedGitUrl.includes(GitProviderType.GITLAB)) return `${trimmedGitUrl}/-/tree/${branchName}`
     else if (trimmedGitUrl.includes(GitProviderType.GITHUB)) return `${trimmedGitUrl}/tree/${branchName}`
     else if (trimmedGitUrl.includes(GitProviderType.BITBUCKET)) return `${trimmedGitUrl}/branch/${branchName}`
