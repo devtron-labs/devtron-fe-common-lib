@@ -280,6 +280,7 @@ export interface FilterSelectPickerProps
             | 'optionListError'
             | 'reloadOptionList'
             | 'getOptionValue'
+            | 'isOptionDisabled'
         > {
     appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
