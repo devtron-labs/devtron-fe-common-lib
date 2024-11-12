@@ -1,5 +1,6 @@
 import React from 'react'
 import { TippyProps } from '@tippyjs/react'
+import { NavLinkProps } from 'react-router-dom'
 
 interface ButtonTab {
     /**
@@ -29,37 +30,38 @@ export type TabOptions = 'button' | 'navLink'
 
 type ConditionalTabType<TabType extends TabOptions> = TabType extends 'button' ? ButtonTab : NavLinkTab
 
-export type CollapsibleListItem<TabType extends TabOptions> = ConditionalTabType<TabType> & {
-    /**
-     * The title of the list item.
-     */
-    title: string
-    /**
-     * The subtitle of the list item.
-     */
-    subtitle?: string
-    /**
-     * If true, the title will be rendered with line-through.
-     */
-    strikeThrough?: boolean
-    /**
-     * Configuration for the icon.
-     */
-    iconConfig?: {
+export type CollapsibleListItem<TabType extends TabOptions> = Pick<NavLinkProps, 'isActive'> &
+    ConditionalTabType<TabType> & {
         /**
-         * A React component representing an icon to be displayed with the list item.
+         * The title of the list item.
          */
-        Icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+        title: string
         /**
-         * Properties for the icon component.
+         * The subtitle of the list item.
          */
-        props?: React.SVGProps<SVGSVGElement>
+        subtitle?: string
         /**
-         * Properties for the tooltip component of the icon.
+         * If true, the title will be rendered with line-through.
          */
-        tooltipProps?: TippyProps
+        strikeThrough?: boolean
+        /**
+         * Configuration for the icon.
+         */
+        iconConfig?: {
+            /**
+             * A React component representing an icon to be displayed with the list item.
+             */
+            Icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+            /**
+             * Properties for the icon component.
+             */
+            props?: React.SVGProps<SVGSVGElement>
+            /**
+             * Properties for the tooltip component of the icon.
+             */
+            tooltipProps?: TippyProps
+        }
     }
-}
 
 export interface CollapsibleListConfig<TabType extends 'button' | 'navLink'> {
     /**
