@@ -91,7 +91,8 @@ const SortableTableHeaderCell = ({
     }
 
     return (
-        <div className="flex dc__content-space dc__gap-6 dc__position-rel">
+        // Added w-100, h-100 when isResizable is true to ensure the cell takes full dimensions in wrapper flex layout (if any)
+        <div className={`flex dc__content-space dc__gap-6 dc__position-rel ${isResizable ? 'w-100 h-100' : ''}`}>
             <button
                 type="button"
                 className={`dc__transparent p-0 cn-7 flex dc__content-start dc__gap-4 dc__select-text ${!isSortable ? 'cursor-default' : ''} dc__position-rel`}
