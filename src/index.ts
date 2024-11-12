@@ -86,6 +86,7 @@ export interface customEnv {
     FEATURE_PROMO_EMBEDDED_BUTTON_TEXT?: string
     FEATURE_PROMO_EMBEDDED_MODAL_TITLE?: string
     FEATURE_PROMO_EMBEDDED_IFRAME_URL?: string
+    FEATURE_SWAP_TRAFFIC_ENABLE?: string
 }
 declare global {
     interface Window {
