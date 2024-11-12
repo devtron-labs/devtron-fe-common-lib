@@ -61,7 +61,7 @@ export type CollapsibleListItem<TabType extends TabOptions = 'navLink'> = Condit
     }
 }
 
-export interface CollapsibleListConfig<TabType extends 'button' | 'navLink' = 'navLink'> {
+export interface CollapsibleListConfig<TabType extends TabOptions = 'navLink'> {
     /**
      * The unique identifier for the collapsible list.
      */
