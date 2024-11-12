@@ -761,6 +761,13 @@ interface CommonTabArgsType {
     isAlive?: boolean
     lastSyncMoment?: Dayjs
     componentKey?: string
+    tippyConfig?: {
+        title: string
+        descriptions: {
+            info: string
+            value: string
+        }[]
+    }
 }
 
 export interface InitTabType extends CommonTabArgsType {
