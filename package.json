@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.0.3-beta-4",
+    "version": "1.0.3-beta-5",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -75,7 +75,6 @@
     },
     "peerDependencies": {
         "@rjsf/core": "^5.13.3",
-        "@rjsf/utils": "^5.13.3",
         "@rjsf/validator-ajv8": "^5.13.3",
         "@typeform/embed-react": "2.20.0",
         "dompurify": "^3.0.2",
@@ -91,6 +90,7 @@
         "yaml": "^2.4.1"
     },
     "dependencies": {
+        "@rjsf/utils": "^5.13.3",
         "@types/react-dates": "^21.8.6",
         "ansi_up": "^5.2.1",
         "dayjs": "^1.11.13",
