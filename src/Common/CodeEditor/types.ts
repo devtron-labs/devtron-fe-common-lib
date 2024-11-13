@@ -46,7 +46,7 @@ interface CodeEditorBaseInterface {
     validatorSchema?: any
     isKubernetes?: boolean
     cleanData?: boolean
-    chartVersion?: any
+    schemaURI?: string
     /**
      * If true, disable the in-built search of monaco editor
      * @default false

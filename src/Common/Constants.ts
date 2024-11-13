@@ -67,6 +67,7 @@ export const URLS = {
     GLOBAL_CONFIG_DEPLOYMENT_CHARTS_LIST: '/global-config/deployment-charts',
     NETWORK_STATUS_INTERFACE: '/network-status-interface',
     CONFIG_DRIFT: 'config-drift',
+    RESOURCE_BROWSER: '/resource-browser',
 }
 
 export const ROUTES = {
@@ -114,6 +115,7 @@ export const ROUTES = {
     DEPLOYMENT_CHARTS_LIST: 'deployment/template/fetch',
     USER_LIST_MIN: 'user/list/min',
     CONFIG_DATA: 'config/data',
+    K8S_RESOURCE_LIST: 'k8s/resource/list',
 }
 
 export enum KEY_VALUE {
@@ -511,6 +513,7 @@ export const API_STATUS_CODES = {
     NOT_FOUND: 404,
     EXPECTATION_FAILED: 417,
     LOCKED: 423,
+    UNPROCESSABLE_CONTENT: 422,
 }
 
 export enum SERVER_MODE {
