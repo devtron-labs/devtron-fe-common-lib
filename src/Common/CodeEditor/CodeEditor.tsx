@@ -42,7 +42,7 @@ import {
     InformationBarProps,
 } from './types'
 import { CodeEditorReducer, initialState } from './CodeEditor.reducer'
-import { MODES } from '../Constants'
+import { DEFAULT_JSON_SCHEMA_URI, MODES } from '../Constants'
 
 const CodeEditorContext = React.createContext(null)
 
@@ -76,7 +76,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         customLoader,
         focus,
         validatorSchema,
-        schemaURI,
+        schemaURI = DEFAULT_JSON_SCHEMA_URI,
         isKubernetes = true,
         cleanData = false,
         onBlur,
