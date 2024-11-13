@@ -119,7 +119,7 @@ export const CiPipelineSourceConfig = ({
     }, [])
 
     return (
-        <div className={`flex left ${showTooltip ? 'branch-name' : ''}  ${rootClassName}`}>
+        <div className={`flex left ${showTooltip ? 'fw-5' : ''}  ${rootClassName}`}>
             {loading && showIcons && <span className="dc__loading-dots">loading</span>}
             {!loading && (
                 <div className="flex dc__gap-4">
@@ -156,7 +156,9 @@ export const CiPipelineSourceConfig = ({
                                     </>
                                 )}
                                 {baseText && (
-                                    <span className="dc__border-dashed--n3-bottom fw-6 lh-20 fs-13">{baseText}</span>
+                                    <span className="dc__border-dashed--n3-bottom fw-6 fs-13 lh-19-imp">
+                                        {baseText}
+                                    </span>
                                 )}
                             </div>
                         </Tippy>
