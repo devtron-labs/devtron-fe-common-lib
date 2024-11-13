@@ -232,8 +232,8 @@ const getCodeEditorData = (
         const { compareToObfuscatedData, compareWithObfuscatedData } = getObfuscatedData(
             compareToConfigData ?? {},
             compareWithConfigData ?? {},
-            compareToIsAdmin,
-            compareWithIsAdmin,
+            compareToIsAdmin || compareToValue?.external,
+            compareWithIsAdmin || compareWithValue?.external,
         )
 
         compareToCodeEditorData = {
