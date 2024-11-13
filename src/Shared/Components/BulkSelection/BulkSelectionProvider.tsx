@@ -30,7 +30,7 @@ import {
     UseBulkSelectionProps,
     UseBulkSelectionReturnType,
 } from './types'
-import { CHECKBOX_VALUE, noop } from '../../../Common'
+import { CHECKBOX_VALUE, noop, useEffectAfterMount } from '../../../Common'
 
 // giving type any here since not exporting this context, rather using it through useBulkSelection hook which is typed
 const BulkSelectionContext = createContext<UseBulkSelectionReturnType<any>>({
@@ -39,6 +39,7 @@ const BulkSelectionContext = createContext<UseBulkSelectionReturnType<any>>({
     isChecked: false,
     checkboxValue: CHECKBOX_VALUE.CHECKED,
     isBulkSelectionApplied: false,
+    setIdentifiers: noop,
     getSelectedIdentifiersCount: noop,
 })
 
@@ -52,10 +53,17 @@ export const useBulkSelection = <T,>() => {
 
 export const BulkSelectionProvider = <T,>({
     children,
-    identifiers,
+    identifiers = null,
     getSelectAllDialogStatus,
 }: UseBulkSelectionProps<T>) => {
     const [selectedIdentifiers, setSelectedIdentifiers] = useState<T>({} as T)
+    const [identifiersOnCurrentPage, setIdentifiersOnCurrentPage] = useState(identifiers ?? ({} as T))
+
+    useEffectAfterMount(() => {
+        if (identifiers) {
+            setIdentifiersOnCurrentPage(identifiers)
+        }
+    }, [identifiers])
 
     const isBulkSelectionApplied = selectedIdentifiers[SELECT_ALL_ACROSS_PAGES_LOCATOR]
 
@@ -96,7 +104,7 @@ export const BulkSelectionProvider = <T,>({
                     variant: ToastVariantType.info,
                     description: CLEAR_SELECTIONS_WARNING,
                 })
-                setIdentifiersAfterClear(identifiers, selectedIds)
+                setIdentifiersAfterClear(identifiersOnCurrentPage, selectedIds)
                 break
             }
 
@@ -137,7 +145,7 @@ export const BulkSelectionProvider = <T,>({
                     })
                 }
 
-                setIdentifiersAfterPageSelection(identifiers)
+                setIdentifiersAfterPageSelection(identifiersOnCurrentPage)
                 break
             }
 
@@ -169,7 +177,7 @@ export const BulkSelectionProvider = <T,>({
         }
 
         // if all the identifiers are selected then CHECKED else intermediate
-        const areAllPresentIdentifiersSelected = Object.keys(identifiers).every(
+        const areAllPresentIdentifiersSelected = Object.keys(identifiersOnCurrentPage).every(
             (identifierId) => selectedIdentifiers[identifierId],
         )
 
@@ -196,8 +204,17 @@ export const BulkSelectionProvider = <T,>({
             checkboxValue,
             isBulkSelectionApplied,
             getSelectedIdentifiersCount,
+            setIdentifiers: setIdentifiersOnCurrentPage,
         }),
-        [selectedIdentifiers, handleBulkSelection, isChecked, checkboxValue, getSelectedIdentifiersCount],
+        [
+            selectedIdentifiers,
+            handleBulkSelection,
+            isChecked,
+            checkboxValue,
+            getSelectedIdentifiersCount,
+            identifiersOnCurrentPage,
+            isBulkSelectionApplied,
+        ],
     )
 
     return <BulkSelectionContext.Provider value={value}>{children}</BulkSelectionContext.Provider>
