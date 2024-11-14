@@ -780,4 +780,8 @@ export interface InitTabType extends CommonTabArgsType {
 
 export interface DynamicTabType extends CommonTabArgsType {
     id: string
+    /**
+     * Id of the tab from which the current tab is opened
+     */
+    switchedFromTabId: string | null
 }
