@@ -75,19 +75,21 @@ const GitCommitInfoGeneric = ({
             </a>
         ) : null
 
-    function renderBasicGitCommitInfoForWebhook() {
+    function renderBasicGitCommitInfoForWebhook(isPRWebhook?: boolean) {
         const _date = getWebhookDate(materialSourceType, commitInfo)
         return (
             <div className="flex column dc__gap-4 w-100">
-                <div className="flex left lh-20 dc__gap-8 w-100">
-                    <PullRequestIcon className="icon-dim-16" />
-                    <div className="flex left dc__gap-4">
-                        Merge commit into&nbsp;
-                        {renderBranchName(_webhookData.data['target branch name'])}
-                        &nbsp;from&nbsp;
-                        {renderBranchName(_webhookData.data['source branch name'])}
+                {isPRWebhook ? (
+                    <div className="flex left lh-20 dc__gap-8 w-100">
+                        <PullRequestIcon className="icon-dim-16" />
+                        <div className="flex left dc__gap-4">
+                            Merge commit into&nbsp;
+                            {renderBranchName(_webhookData.data['target branch name'])}
+                            &nbsp;from&nbsp;
+                            {renderBranchName(_webhookData.data['source branch name'])}
+                        </div>
                     </div>
-                </div>
+                ) : null}
                 {_webhookData.data.author ? (
                     <div className="material-history__text lh-20 flex left dc__gap-8 w-100">
                         <PersonIcon className="icon-dim-16" /> {_webhookData.data.author}
@@ -264,7 +266,7 @@ const GitCommitInfoGeneric = ({
                     {getCheckUncheckIcon()}
                 </div>
                 {renderWebhookTitle()}
-                {renderBasicGitCommitInfoForWebhook()}
+                {renderBasicGitCommitInfoForWebhook(true)}
                 {handleMoreDataForWebhook()}
             </div>
         )
