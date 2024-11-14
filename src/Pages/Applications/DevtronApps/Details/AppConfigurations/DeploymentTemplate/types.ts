@@ -127,7 +127,7 @@ interface BaseDeploymentTemplateConfigState {
     mergeStrategy?: never
 }
 
-interface EnvironmentOverrideDeploymentTemplateConfigState {
+type EnvironmentOverrideDeploymentTemplateConfigState = {
     chartConfig?: never
     isOverridden: boolean
     environmentConfig: EnvironmentConfigType
@@ -136,7 +136,7 @@ interface EnvironmentOverrideDeploymentTemplateConfigState {
 
 export interface DeploymentTemplateConfigCommonState extends SelectedChartDetailsType {
     /**
-     * The first ever state of the deployment template
+     * The first ever state of the deployment template on editor
      */
     originalTemplate: Record<string, string>
     isAppMetricsEnabled: boolean
@@ -146,6 +146,22 @@ export interface DeploymentTemplateConfigCommonState extends SelectedChartDetail
     latestDraft?: DraftMetadataDTO
     editorTemplate: string
     editorTemplateWithoutLockedKeys: string
+    // Have added the mergedTemplate states in base as well so as to have a single source of truth to get the final template
+    /**
+     * This final template to be applied on the deployment in string format
+     * In current editor, this may be null initially
+     */
+    mergedTemplate: string
+    /**
+     * This final template to be applied on the deployment without locked keys in string format
+     * In current editor, this may be null initially
+     */
+    mergedTemplateWithoutLockedKeys: string | null
+    /**
+     * This final template to be applied on the deployment in object format
+     * In current editor, this may be null initially
+     */
+    mergedTemplateObject: Record<string, string> | null
 }
 
 export type DeploymentTemplateConfigState = DeploymentTemplateConfigCommonState &
