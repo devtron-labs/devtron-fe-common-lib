@@ -16,7 +16,6 @@
 
 import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import MonacoEditor, { MonacoDiffEditor } from 'react-monaco-editor'
-import YAML from 'yaml'
 import ReactGA from 'react-ga4'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { configureMonacoYaml } from 'monaco-yaml'
@@ -27,7 +26,7 @@ import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-error-exclamat
 import './codeEditor.scss'
 import 'monaco-editor'
 
-import { YAMLStringify, cleanKubeManifest, useEffectAfterMount, useJsonYaml } from '../Helper'
+import { cleanKubeManifest, useEffectAfterMount, useJsonYaml } from '../Helper'
 import { useWindowSize } from '../Hooks'
 import Select from '../Select/Select'
 import RadioGroup from '../RadioGroup/RadioGroup'
