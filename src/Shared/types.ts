@@ -772,6 +772,14 @@ interface CommonTabArgsType {
             value: string
         }[]
     }
+    /**
+     * If true, the fixed tab remains mounted on initial load of the component
+     *
+     * Note: Not for dynamic tabs atm
+     *
+     * @default false
+     */
+    shouldRemainMounted?: boolean
 }
 
 export interface InitTabType extends CommonTabArgsType {
