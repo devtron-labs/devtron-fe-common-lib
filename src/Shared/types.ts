@@ -754,7 +754,7 @@ interface CommonTabArgsType {
     isSelected: boolean
     title?: string
     isDeleted?: boolean
-    position: number
+    type: 'fixed' | 'dynamic'
     iconPath?: string
     dynamicTitle?: string
     showNameOnSelect?: boolean
@@ -782,9 +782,19 @@ interface CommonTabArgsType {
     shouldRemainMounted?: boolean
 }
 
-export interface InitTabType extends CommonTabArgsType {
-    idPrefix: string
-}
+export type InitTabType = Omit<CommonTabArgsType, 'type'> &
+    (
+        | {
+              type: 'fixed'
+              id: string
+              idPrefix?: never
+          }
+        | {
+              type: 'dynamic'
+              id?: never
+              idPrefix: string
+          }
+    )
 
 export interface DynamicTabType extends CommonTabArgsType {
     id: string
