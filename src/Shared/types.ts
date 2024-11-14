@@ -791,5 +791,5 @@ export interface DynamicTabType extends CommonTabArgsType {
     /**
      * Id of the tab from which the current tab is opened
      */
-    switchedFromTabId: string | null
+    lastActiveTabId: string | null
 }
