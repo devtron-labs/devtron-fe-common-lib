@@ -151,7 +151,7 @@ export interface DeploymentTemplateConfigCommonState extends SelectedChartDetail
      * This final template to be applied on the deployment in string format
      * In current editor, this may be null initially
      */
-    mergedTemplate: string
+    mergedTemplate: string | null
     /**
      * This final template to be applied on the deployment without locked keys in string format
      * In current editor, this may be null initially
