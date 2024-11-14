@@ -88,7 +88,7 @@ export default function ClipboardButton({
                 className={`dc__outline-none-imp p-0 flex dc__transparent--unstyled dc__no-border ${rootClassName}`}
                 onMouseEnter={handleEnableTippy}
                 onMouseLeave={handleDisableTippy}
-                onClick={isTriggerUndefined && handleCopyContent}
+                onClick={isTriggerUndefined ? handleCopyContent : noop}
             >
                 {copied ? <Check className={iconClassName} /> : <ICCopy className={iconClassName} />}
             </button>
