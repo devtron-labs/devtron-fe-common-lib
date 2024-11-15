@@ -786,6 +786,11 @@ export type InitTabType = Omit<CommonTabArgsType, 'type'> &
     (
         | {
               type: 'fixed'
+              /**
+               * Unique identifier for the fixed tab
+               *
+               * Note: Shouldn't contain '-'
+               */
               id: string
               idPrefix?: never
           }
@@ -799,7 +804,7 @@ export type InitTabType = Omit<CommonTabArgsType, 'type'> &
 export interface DynamicTabType extends CommonTabArgsType {
     id: string
     /**
-     * Id of the tab from which the current tab is opened
+     * Id of the last active tab before switching to current tab
      */
     lastActiveTabId: string | null
 }
