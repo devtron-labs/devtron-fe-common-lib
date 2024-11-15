@@ -276,16 +276,31 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             keepTouched?: boolean
             /** A boolean indicating whether to retain the current error state of the form fields. */
             keepErrors?: boolean
+
+            triggerDirty?: boolean
         },
     ) => {
-        const { keepDirty = false, keepTouched = false, keepErrors = false } = resetOptions ?? {} // Destructure reset options with defaults.
+        const { keepDirty = false, keepTouched = false, keepErrors = false, triggerDirty = false } = resetOptions ?? {} // Destructure reset options with defaults.
         setData(formData)
+
         if (!keepErrors) {
             setErrors({})
         }
-        if (!keepDirty) {
+
+        if (triggerDirty) {
+            const initialValues = options?.initialValues ?? {}
+            const _dirtyFields = Object.keys(formData).reduce(
+                (acc, key) => ({
+                    ...acc,
+                    [key]: !deepEqual(formData[key], initialValues[key]),
+                }),
+                {},
+            )
+            setDirtyFields(_dirtyFields)
+        } else if (!keepDirty) {
             setDirtyFields({})
         }
+
         if (!keepTouched) {
             setTouchedFields({})
         }
