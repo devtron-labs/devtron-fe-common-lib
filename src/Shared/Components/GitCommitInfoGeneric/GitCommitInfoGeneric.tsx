@@ -15,7 +15,6 @@
  */
 
 /* eslint-disable eqeqeq */
-import { useState } from 'react'
 import moment from 'moment'
 import Tippy from '@tippyjs/react'
 import ClipboardButton from '@Common/ClipboardButton/ClipboardButton'
@@ -48,8 +47,6 @@ const GitCommitInfoGeneric = ({
     index,
     isExcluded = false,
 }: GitCommitInfoGenericProps) => {
-    const [showSeeMore, setShowSeeMore] = useState(true)
-
     const lowerCaseCommitInfo = getLowerCaseObject(commitInfo)
     const _isWebhook =
         materialSourceType === SourceTypeMap.WEBHOOK ||
@@ -111,80 +108,6 @@ const GitCommitInfoGeneric = ({
         )
     }
 
-    function renderMoreDataForWebhook(_moreData) {
-        return !showSeeMore ? (
-            <div className="material-history__all-changes">
-                <div className="material-history__body mt-4">
-                    {Object.keys(_moreData).map((_key, idx) => {
-                        let classes
-                        if (idx % 2 == 0) {
-                            classes = 'bcn-1'
-                        }
-                        return (
-                            <div
-                                key={_key}
-                                className={`material-history__text material-history__grid left pt-4 pb-4 ${classes}`}
-                            >
-                                <div>{_key}</div>
-                                <div>{_moreData[_key]}</div>
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
-        ) : null
-    }
-
-    function renderSeeMoreButtonForWebhook() {
-        return (
-            <button
-                type="button"
-                className="fs-12 fw-6 pt-12 mt-12 pl-12 pr-12 w-100 bcn-0 flex left br-4 dc__box-shadow-top cb-5 dc__no-border"
-                onClick={(event) => {
-                    event.stopPropagation()
-                    setShowSeeMore(!showSeeMore)
-                }}
-            >
-                {showSeeMore ? 'See More' : 'See Less'}
-            </button>
-        )
-    }
-
-    function handleMoreDataForWebhook() {
-        const _moreData = {}
-        if (_webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.MERGED) {
-            Object.keys(_webhookData.data).forEach((_key) => {
-                if (
-                    _key != 'author' &&
-                    _key != 'date' &&
-                    _key != 'git url' &&
-                    _key != 'source branch name' &&
-                    _key != 'source checkout' &&
-                    _key != 'target branch name' &&
-                    _key != 'target checkout' &&
-                    _key != 'title'
-                ) {
-                    _moreData[_key] = _webhookData.data[_key]
-                }
-            })
-        } else if (_webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.NON_MERGED) {
-            Object.keys(_webhookData.data).forEach((_key) => {
-                if (_key !== 'author' && _key !== 'date' && _key !== 'target checkout') {
-                    _moreData[_key] = _webhookData.data[_key]
-                }
-            })
-        }
-
-        const _hasMoreData = Object.keys(_moreData).length > 0
-
-        return (
-            <>
-                {_hasMoreData && renderMoreDataForWebhook(_moreData)}
-                {_hasMoreData && renderSeeMoreButtonForWebhook()}
-            </>
-        )
-    }
-
     const matSelectionText = (): JSX.Element => {
         if (isExcluded) {
             return (
@@ -220,7 +143,7 @@ const GitCommitInfoGeneric = ({
         _webhookData.data.title ? <span className="flex left cn-9 fw-6 fs-13">{_webhookData.data.title}</span> : null
 
     const renderPullRequestId = (pullRequestUrl: string) => {
-        const pullRequestId = pullRequestUrl.split('/').pop()
+        const pullRequestId = pullRequestUrl?.split('/').pop()
 
         return (
             <div className="w-100 flex left dc__gap-4">
@@ -240,10 +163,10 @@ const GitCommitInfoGeneric = ({
         )
     }
 
-    const renderTagCreationId = () => (
+    const renderTagCreationId = (tagRequestUrl: string) => (
         <div className="commit-hash px-6 dc__w-fit-content dc__gap-4 fs-13">
             <Tag className="icon-dim-14 scb-5" />
-            {_webhookData.data['target checkout']}
+            {tagRequestUrl}
         </div>
     )
 
@@ -267,7 +190,6 @@ const GitCommitInfoGeneric = ({
                 </div>
                 {renderWebhookTitle()}
                 {renderBasicGitCommitInfoForWebhook(true)}
-                {handleMoreDataForWebhook()}
             </div>
         )
 
@@ -276,11 +198,10 @@ const GitCommitInfoGeneric = ({
         _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.NON_MERGED && (
             <>
                 <div className="flex left dc__content-space">
-                    {renderTagCreationId()}
+                    {renderTagCreationId(_webhookData.data['target checkout'])}
                     {getCheckUncheckIcon()}
                 </div>
                 {renderBasicGitCommitInfoForWebhook()}
-                {handleMoreDataForWebhook()}
             </>
         )
 
