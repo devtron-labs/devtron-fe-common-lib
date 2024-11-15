@@ -748,23 +748,68 @@ export interface CustomRoleAndMeta {
 }
 
 interface CommonTabArgsType {
+    /**
+     * Name for the tab.
+     *
+     * Note: Used for the title
+     */
     name: string
     kind?: string
+    /**
+     * URL for the tab
+     */
     url: string
+    /**
+     * If true, the tab is selected
+     */
     isSelected: boolean
+    /**
+     * Title for the tab
+     */
     title?: string
     isDeleted?: boolean
+    /**
+     * Type for the tab
+     *
+     * Note: Fixed tabs are always places before dynamic tabs
+     */
     type: 'fixed' | 'dynamic'
+    /**
+     * Path of the icon for the tab
+     *
+     * @default ''
+     */
     iconPath?: string
+    /**
+     * Dynamic title for the tab
+     *
+     * @default ''
+     */
     dynamicTitle?: string
+    /**
+     * Whether to show the tab name when selected
+     *
+     * @default false
+     */
     showNameOnSelect?: boolean
     /**
+     * Would remove the title/name from tab heading, but that does not mean name is not required, since it is used in other calculations
      * @default false
      */
     hideName?: boolean
+    /**
+     * Indicates if showNameOnSelect tabs have been selected once
+     *
+     * @default false
+     */
     isAlive?: boolean
     lastSyncMoment?: Dayjs
     componentKey?: string
+    /**
+     * Custom tippy config for the tab
+     *
+     * This overrides the tippy being computed from tab title
+     */
     tippyConfig?: {
         title: string
         descriptions: {
