@@ -28,7 +28,7 @@ import { ReactComponent as Check } from '@Icons/ic-check-circle.svg'
 import { ReactComponent as Abort } from '@Icons/ic-abort.svg'
 import { SourceTypeMap, createGitCommitUrl, getGitBranchUrl } from '@Common/Common.service'
 import { stopPropagation } from '@Common/Helper'
-import { DATE_TIME_FORMATS } from '@Common/Constants'
+import { DATE_TIME_FORMATS, GitProviderType } from '@Common/Constants'
 import { ReactComponent as Tag } from '@Icons/ic-tag.svg'
 import { getLowerCaseObject, getWebhookDate } from '@Shared/Helpers'
 import { ReactComponent as Hash } from '@Icons/ic-hash.svg'
@@ -180,30 +180,38 @@ const GitCommitInfoGeneric = ({
         return null
     }
 
-    const renderPRInfoCard = () =>
-        _isWebhook &&
-        _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.MERGED && (
-            <div className="flex column left dc__gap-8">
-                <div className="flex dc__content-space w-100">
-                    {renderPullRequestId(_webhookData.data['git url'])}
-                    {getCheckUncheckIcon()}
-                </div>
-                {renderWebhookTitle()}
-                {renderBasicGitCommitInfoForWebhook(true)}
+    const renderPRInfoCard = () => (
+        <div className="flex column left dc__gap-8">
+            <div className="flex dc__content-space w-100">
+                {renderPullRequestId(_webhookData.data['git url'])}
+                {getCheckUncheckIcon()}
             </div>
-        )
+            {renderWebhookTitle()}
+            {renderBasicGitCommitInfoForWebhook(true)}
+        </div>
+    )
 
-    const renderTagInfoCard = () =>
-        _isWebhook &&
-        _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.NON_MERGED && (
-            <>
-                <div className="flex left dc__content-space">
-                    {renderTagCreationId(_webhookData.data['target checkout'])}
-                    {getCheckUncheckIcon()}
-                </div>
-                {renderBasicGitCommitInfoForWebhook()}
-            </>
-        )
+    const renderTagInfoCard = () => (
+        <>
+            <div className="flex left dc__content-space">
+                {renderTagCreationId(_webhookData.data['target checkout'])}
+                {getCheckUncheckIcon()}
+            </div>
+            {renderBasicGitCommitInfoForWebhook()}
+        </>
+    )
+
+    const renderWebhookGitInfoCard = () => {
+        if (!_isWebhook) return null
+
+        const isMerged = _webhookData.eventactiontype === WEBHOOK_EVENT_ACTION_TYPE.MERGED
+
+        if (materialUrl.includes(GitProviderType.GITLAB)) {
+            // TODO: This is a temporary fix for the issue where the eventActionType data incorrect
+            return isMerged ? renderTagInfoCard() : renderPRInfoCard()
+        }
+        return isMerged ? renderPRInfoCard() : renderTagInfoCard()
+    }
 
     return (
         <div className="git-commit-info-generic__wrapper cn-9 fs-12">
@@ -277,9 +285,7 @@ const GitCommitInfoGeneric = ({
                         </div>
                     </>
                 )}
-
-                {renderPRInfoCard()}
-                {renderTagInfoCard()}
+                {renderWebhookGitInfoCard()}
             </div>
         </div>
     )
