@@ -173,6 +173,7 @@ export interface ErrorPageType
 
 export interface ErrorScreenManagerProps {
     code?: number
+    imageType?: ImageType
     reload?: (...args) => any
     subtitle?: React.ReactChild
     reloadClass?: string
@@ -997,3 +998,13 @@ export interface EnvironmentHelmResult {
 }
 
 export type EnvironmentListHelmResponse = ResponseType<EnvironmentListHelmResult[]>
+
+export interface WidgetEventDetails {
+    message: string
+    namespace: string
+    object: string
+    source: string
+    count: number
+    age: string
+    lastSeen: string
+}

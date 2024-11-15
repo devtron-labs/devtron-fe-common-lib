@@ -1,5 +1,6 @@
 import React from 'react'
 import { TippyProps } from '@tippyjs/react'
+import { NavLinkProps } from 'react-router-dom'
 
 interface ButtonTab {
     /**
@@ -13,7 +14,7 @@ interface ButtonTab {
     href?: never
 }
 
-interface NavLinkTab {
+interface NavLinkTab extends Pick<NavLinkProps, 'isActive'> {
     /**
      * The URL of the nav link.
      */
@@ -22,14 +23,13 @@ interface NavLinkTab {
      * The callback function to handle click events on the nav link.
      */
     onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void
-    isActive?: never
 }
 
 export type TabOptions = 'button' | 'navLink'
 
 type ConditionalTabType<TabType extends TabOptions> = TabType extends 'button' ? ButtonTab : NavLinkTab
 
-export type CollapsibleListItem<TabType extends TabOptions> = ConditionalTabType<TabType> & {
+export type CollapsibleListItem<TabType extends TabOptions = 'navLink'> = ConditionalTabType<TabType> & {
     /**
      * The title of the list item.
      */
@@ -61,7 +61,7 @@ export type CollapsibleListItem<TabType extends TabOptions> = ConditionalTabType
     }
 }
 
-export interface CollapsibleListConfig<TabType extends 'button' | 'navLink'> {
+export interface CollapsibleListConfig<TabType extends TabOptions = 'navLink'> {
     /**
      * The unique identifier for the collapsible list.
      */
@@ -106,7 +106,7 @@ export interface CollapsibleListConfig<TabType extends 'button' | 'navLink'> {
     isExpanded?: boolean
 }
 
-export interface CollapsibleListProps<TabType extends TabOptions> {
+export interface CollapsibleListProps<TabType extends TabOptions = 'navLink'> {
     /**
      * An array of collapsible list configurations.
      */
