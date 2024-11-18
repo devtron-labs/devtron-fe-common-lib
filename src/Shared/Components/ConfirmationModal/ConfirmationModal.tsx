@@ -4,8 +4,7 @@ import { ComponentSizeType } from '@Shared/constants'
 import { ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
-
-// Todo outside click and escape
+import './confirmationModal.scss'
 
 const ConfirmationModal = ({
     title,
@@ -15,6 +14,7 @@ const ConfirmationModal = ({
     buttonConfig,
     customInputConfig,
     children,
+    handleClose,
 }: ConfirmationModalProps) => {
     const customInputIdentifier = customInputConfig?.identifier
     const confirmationKeyword = customInputConfig?.confirmationKeyword
@@ -29,8 +29,8 @@ const ConfirmationModal = ({
     const disablePrimaryButton: boolean = confirmationKeyword && confirmationText.trim() !== confirmationKeyword
 
     return (
-        <VisibleModal>
-            <div className="flexbox-col br-8 bcn-0 dc__m-auto mt-40 w-400">
+        <VisibleModal onEscape={handleClose}>
+            <div className="confirmation-modal flexbox-col br-8 bcn-0 dc__m-auto mt-40 w-400 ">
                 <div className="flexbox-col dc__gap-12 p-20">
                     <RenderIcon className=" icon-dim-48 dc__no-shrink" />
                     {typeof title === 'string' ? (

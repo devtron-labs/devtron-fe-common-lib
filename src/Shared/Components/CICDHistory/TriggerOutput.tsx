@@ -241,6 +241,7 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
                             text: 'Yes, Abort',
                         },
                     }}
+                    handleClose={toggleAbortConfiguration}
                 />
             )}
             {abortError.status && (
@@ -262,6 +263,7 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
                             text: 'Force Abort',
                         },
                     }}
+                    handleClose={closeForceAbortModal}
                 >
                     <div className="fs-13 fw-6 pt-12 cn-7 lh-1-54">
                         <span>Please try to force abort</span>

@@ -48,6 +48,7 @@ type CustomInputConfigOrChildrenType =
 export type ConfirmationModalProps = {
     title: ReactNode
     subtitle: ReactNode
+    handleClose: (e?: any) => void
 } & (
     | {
           variant: Exclude<ConfirmationModalVariantType, ConfirmationModalVariantType.custom>
@@ -66,13 +67,3 @@ export type ConfirmationModalProps = {
       }
 ) &
     CustomInputConfigOrChildrenType
-// | {
-//       variant: ConfirmationModalVariantType.custom
-//       Icon: FunctionComponent<SVGProps<SVGSVGElement>>
-//       customInputConfig: CustomInputConfig
-//       children?: never
-//       buttonConfig: ButtonConfig<
-//           Pick<ButtonProps, 'dataTestId' | 'onClick' | 'text' | 'isLoading' | 'style'>,
-//           Pick<ButtonProps, 'dataTestId' | 'onClick' | 'text' | 'disabled' | 'style'>
-//       >
-//   }
