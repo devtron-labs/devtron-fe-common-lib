@@ -353,7 +353,7 @@ export function cleanKubeManifest(manifestJsonString: string): string {
         return manifestJsonString
     }
 }
-const unsecureCopyToClipboard = (str, callback = noop) => {
+const unsecureCopyToClipboard = (str: string) => {
     const listener = function (ev) {
         ev.preventDefault()
         ev.clipboardData.setData('text/plain', str)
@@ -361,35 +361,41 @@ const unsecureCopyToClipboard = (str, callback = noop) => {
     document.addEventListener('copy', listener)
     document.execCommand('copy')
     document.removeEventListener('copy', listener)
-    callback()
 }
 
 /**
- * It will copy the passed content to clipboard and invoke the callback function, in case of error it will show the toast message.
- * On HTTP system clipboard is not supported, so it will use the unsecureCopyToClipboard function
+ * This is a promise<void> that will resolve if str is successfully copied
+ * On HTTP (other than localhost) system clipboard is not supported, so it will use the unsecureCopyToClipboard function
  * @param str
- * @param callback
  */
-export function copyToClipboard(str, callback = noop) {
-    if (!str) {
-        return
-    }
+export function copyToClipboard(str: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        if (!str) {
+            resolve()
 
-    if (window.isSecureContext && navigator.clipboard) {
-        navigator.clipboard
-            .writeText(str)
-            .then(() => {
-                callback()
-            })
-            .catch(() => {
-                ToastManager.showToast({
-                    variant: ToastVariantType.error,
-                    description: 'Failed to copy to clipboard',
+            return
+        }
+
+        if (window.isSecureContext && navigator.clipboard) {
+            navigator.clipboard
+                .writeText(str)
+                .then(() => {
+                    resolve()
                 })
-            })
-    } else {
-        unsecureCopyToClipboard(str, callback)
-    }
+                .catch(() => {
+                    ToastManager.showToast({
+                        variant: ToastVariantType.error,
+                        description: 'Failed to copy to clipboard',
+                    })
+
+                    reject()
+                })
+        } else {
+            unsecureCopyToClipboard(str)
+
+            resolve()
+        }
+    })
 }
 
 export function useAsync<T>(
