@@ -18,7 +18,7 @@
 import { useState } from 'react'
 import moment from 'moment'
 import Tippy from '@tippyjs/react'
-import ClipboardButton from '@Common/ClipboardButton/ClipboardButton'
+import { ClipboardButton } from '@Common/ClipboardButton/ClipboardButton'
 import { ReactComponent as Circle } from '@Icons/ic-circle.svg'
 import { ReactComponent as Commit } from '@Icons/ic-commit.svg'
 import { ReactComponent as CommitIcon } from '@Icons/ic-code-commit.svg'

@@ -15,8 +15,8 @@
  */
 
 import { useState, useEffect, useRef } from 'react'
-import { copyToClipboard, noop, stopPropagation } from '../Helper'
 import Tooltip from '@Common/Tooltip/Tooltip'
+import { copyToClipboard, noop, stopPropagation } from '../Helper'
 import ClipboardProps from './types'
 import { ReactComponent as ICCopy } from '../../Assets/Icon/ic-copy.svg'
 import { ReactComponent as Check } from '../../Assets/Icon/ic-check.svg'
@@ -29,14 +29,14 @@ import { ReactComponent as Check } from '../../Assets/Icon/ic-check.svg'
  * @param rootClassName - additional classes to add to button
  * @param iconSize - size of svg icon to be shown, default 16 (icon-dim-16)
  */
-export default function ClipboardButton({
+export const ClipboardButton = ({
     content,
     copiedTippyText = 'Copied!',
     duration = 1000,
     copyToClipboardPromise,
     rootClassName = '',
     iconSize = 16,
-}: ClipboardProps) {
+}: ClipboardProps) => {
     const [copied, setCopied] = useState<boolean>(false)
     const setCopiedFalseTimeoutRef = useRef<ReturnType<typeof setTimeout>>(-1)
 
@@ -80,21 +80,20 @@ export default function ClipboardButton({
         handleAwaitCopyToClipboardPromise().catch(noop)
     }, [copyToClipboardPromise])
 
-    useEffect(() => {
-        return () => {
+    useEffect(
+        () => () => {
             if (setCopiedFalseTimeoutRef.current > -1) {
                 clearTimeout(setCopiedFalseTimeoutRef.current)
             }
-        }
-    }, [])
+        },
+        [],
+    )
 
     const iconClassName = `icon-dim-${iconSize} dc__no-shrink`
 
     return (
-        <Tooltip
-            content={'Copy'}
-            alwaysShowTippyOnHover={!copied}
-        >
+        <Tooltip content="Copy" alwaysShowTippyOnHover={!copied}>
+            {/* TODO: semantically buttons should not be nested; fix later */}
             <button
                 type="button"
                 className={`dc__outline-none-imp p-0 flex dc__transparent--unstyled dc__no-border ${rootClassName}`}
