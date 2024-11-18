@@ -19,11 +19,11 @@
     gap: 1px;
 
     &.two-columns-top-row {
-        grid-template-columns: 20% 1fr;
+        grid-template-columns: 30% 1fr;
     }
 
     &.two-columns {
-        grid-template-columns: 20% 1fr;
+        grid-template-columns: 30% 1fr;
 
         .key-value-table__row:last-of-type {
             .key-value-table__cell:first-child,
@@ -41,7 +41,7 @@
     }
 
     &.three-columns {
-        grid-template-columns: 20% 1fr 32px;
+        grid-template-columns: 30% 1fr 32px;
 
         .key-value-table__row:last-of-type {
             .key-value-table__cell:first-child,
