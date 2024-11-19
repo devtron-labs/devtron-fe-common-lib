@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ROUTES, ResponseType, get, post, put, showError } from '../../../Common'
+import { ROUTES, get, post, put, showError } from '../../../Common'
 import { CREATE_PROFILE_BASE_VALUE, CREATE_VIEW_CHECKED_CONFIGS } from './constants'
 import {
     BuildInfraConfigTypes,
@@ -126,10 +126,9 @@ export const getBuildInfraProfileByName = async ({
     fromCreateView,
 }: GetBuildInfraProfileType): Promise<BuildInfraProfileResponseType> => {
     try {
-        const response = await get(`${ROUTES.INFRA_CONFIG_PROFILE}/${name}`)
         const {
             result: { configurationUnits, defaultConfigurations, profile },
-        } = response as ResponseType<BuildInfraProfileAPIResponseType>
+        } = await get<BuildInfraProfileAPIResponseType>(`${ROUTES.INFRA_CONFIG_PROFILE}/${name}`)
 
         return getTransformedBuildInfraProfileResponse({
             configurationUnits,
