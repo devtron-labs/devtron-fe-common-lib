@@ -32,12 +32,12 @@ export const diffViewerStyles: ReactDiffViewerProps['styles'] = {
         },
     },
     diffContainer: {
-        fontSize: '13px',
+        fontSize: '14px',
         fontWeight: 400,
         lineHeight: '20px',
 
         pre: {
-            fontSize: '13px',
+            fontSize: '14px',
             lineHeight: '20px',
             fontFamily: 'Inconsolata, monospace',
             wordBreak: 'break-word',
@@ -76,7 +76,7 @@ export const diffViewerStyles: ReactDiffViewerProps['styles'] = {
         lineHeight: '16px',
     },
     codeFold: {
-        fontSize: '13px',
+        fontSize: '14px',
         fontWeight: 400,
         lineHeight: '20px',
         height: '32px',
