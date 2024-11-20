@@ -196,7 +196,10 @@ export const DeploymentConfigDiffMain = ({
                             newValue={secondaryList.codeEditorValue.value}
                             leftTitle={primaryHeading}
                             rightTitle={secondaryHeading}
-                            codeFoldMessageRenderer={renderDiffViewNoDifferenceState(diffState)}
+                            codeFoldMessageRenderer={renderDiffViewNoDifferenceState(
+                                primaryList.codeEditorValue.value,
+                                secondaryList.codeEditorValue.value,
+                            )}
                         />
                     ) : (
                         <div className="p-16">
@@ -213,7 +216,6 @@ export const DeploymentConfigDiffMain = ({
                                 previousConfigAvailable
                                 rootClassName={`${primaryHeading && secondaryHeading ? 'dc__no-top-radius dc__no-top-border' : ''}`}
                                 sortingConfig={sortingConfig}
-                                diffState={diffState}
                             />
                         </div>
                     )}

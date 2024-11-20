@@ -38,7 +38,6 @@ const DeploymentHistoryDiffView = ({
     rootClassName,
     sortingConfig,
     codeEditorKey,
-    diffState,
 }: DeploymentTemplateHistoryType) => {
     const { historyComponent, historyComponentName } = useParams<DeploymentHistoryParamsType>()
     const { sortBy, sortOrder } = sortingConfig ?? { sortBy: '', sortOrder: null }
@@ -93,7 +92,7 @@ const DeploymentHistoryDiffView = ({
             <DiffViewer
                 oldValue={editorValuesLHS}
                 newValue={editorValuesRHS}
-                codeFoldMessageRenderer={renderDiffViewNoDifferenceState(diffState)}
+                codeFoldMessageRenderer={renderDiffViewNoDifferenceState(editorValuesLHS, editorValuesRHS)}
             />
         ) : (
             <CodeEditor

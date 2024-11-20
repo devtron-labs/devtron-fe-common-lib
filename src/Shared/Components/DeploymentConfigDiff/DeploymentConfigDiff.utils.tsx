@@ -14,7 +14,7 @@ import {
     prepareHistoryData,
     GenericSectionErrorState,
 } from '@Shared/Components'
-import { deepEqual } from '@Common/Helper'
+import { deepEqual, noop } from '@Common/Helper'
 
 import { ManifestTemplateDTO } from '@Pages/Applications'
 import {
@@ -831,15 +831,19 @@ export const getDefaultVersionAndPreviousDeploymentOptions = (data: TemplateList
     )
 
 export const renderDiffViewNoDifferenceState = (
-    diffState: DeploymentConfigDiffState | null,
+    lhsValue: string,
+    rhsValue: string,
 ): DiffViewerProps['codeFoldMessageRenderer'] =>
-    diffState !== DeploymentConfigDiffState.NO_DIFF
+    lhsValue === rhsValue
         ? () => (
               <GenericSectionErrorState
                   useInfoIcon
-                  title="There seems no difference in the compared values"
-                  subTitle="Click here to view the values"
+                  title="No diff in configurations"
+                  subTitle=""
                   description=""
+                  buttonText="View values"
+                  // Click event is handled at the parent level
+                  reload={noop}
               />
           )
         : null
