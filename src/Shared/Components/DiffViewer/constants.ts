@@ -37,8 +37,10 @@ export const diffViewerStyles: ReactDiffViewerProps['styles'] = {
         lineHeight: '20px',
 
         pre: {
+            fontSize: '13px',
             lineHeight: '20px',
             fontFamily: 'Inconsolata, monospace',
+            wordBreak: 'break-word',
         },
     },
     marker: {
@@ -49,6 +51,8 @@ export const diffViewerStyles: ReactDiffViewerProps['styles'] = {
     gutter: {
         padding: `0 6px`,
         minWidth: '36px',
+        // Cursor would be default for all cases in gutter till we don't support highlighting
+        cursor: 'default',
 
         pre: {
             opacity: 1,
@@ -59,9 +63,11 @@ export const diffViewerStyles: ReactDiffViewerProps['styles'] = {
     },
     wordAdded: {
         paddingInline: '2px',
+        lineHeight: '16px',
     },
     wordRemoved: {
         paddingInline: '2px',
+        lineHeight: '16px',
     },
     codeFold: {
         fontSize: '13px',
@@ -71,6 +77,11 @@ export const diffViewerStyles: ReactDiffViewerProps['styles'] = {
 
         a: {
             textDecoration: 'none !important',
+        },
+    },
+    codeFoldGutter: {
+        '+ td': {
+            width: '12px',
         },
     },
     titleBlock: {

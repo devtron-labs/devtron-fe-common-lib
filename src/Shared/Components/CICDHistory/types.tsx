@@ -32,6 +32,7 @@ import {
 import { DeploymentStageType } from '../../constants'
 import { AggregationKeys, GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
 import { TERMINAL_STATUS_MAP } from './constants'
+import { DeploymentConfigDiffState } from '../DeploymentConfigDiff'
 
 export enum HistoryComponentType {
     CI = 'CI',
@@ -493,6 +494,7 @@ export interface DeploymentTemplateHistoryType {
         sortBy: string
         sortOrder: SortingOrder
     }
+    diffState: DeploymentConfigDiffState
 }
 export interface DeploymentHistoryDetailRes extends ResponseType {
     result?: DeploymentHistoryDetail

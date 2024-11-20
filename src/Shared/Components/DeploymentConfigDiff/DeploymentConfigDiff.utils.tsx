@@ -12,6 +12,7 @@ import {
     AppEnvDeploymentConfigListParams,
     DiffHeadingDataType,
     prepareHistoryData,
+    GenericSectionErrorState,
 } from '@Shared/Components'
 import { deepEqual } from '@Common/Helper'
 
@@ -27,6 +28,7 @@ import {
     TemplateListDTO,
     TemplateListType,
 } from '../../Services/app.types'
+import { DiffViewerProps } from '../DiffViewer/types'
 
 export const getDeploymentTemplateData = (data: DeploymentTemplateDTO) => {
     const parsedDraftData = JSON.parse(data?.deploymentDraftData?.configData[0].draftMetadata.data || null)
@@ -827,3 +829,17 @@ export const getDefaultVersionAndPreviousDeploymentOptions = (data: TemplateList
             previousDeployments: [],
         },
     )
+
+export const renderDiffViewNoDifferenceState = (
+    diffState: DeploymentConfigDiffState | null,
+): DiffViewerProps['codeFoldMessageRenderer'] =>
+    diffState !== DeploymentConfigDiffState.NO_DIFF
+        ? () => (
+              <GenericSectionErrorState
+                  useInfoIcon
+                  title="There seems no difference in the compared values"
+                  subTitle="Click here to view the values"
+                  description=""
+              />
+          )
+        : null

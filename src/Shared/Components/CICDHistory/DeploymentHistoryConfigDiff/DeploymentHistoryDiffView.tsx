@@ -18,6 +18,8 @@ import { useParams } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { yamlComparatorBySortOrder } from '@Shared/Helpers'
+import { DiffViewer } from '@Shared/Components/DiffViewer'
+import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
 import { MODES, Toggle, YAMLStringify } from '../../../../Common'
 import { DeploymentHistoryParamsType } from './types'
 import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../types'
@@ -36,6 +38,7 @@ const DeploymentHistoryDiffView = ({
     rootClassName,
     sortingConfig,
     codeEditorKey,
+    diffState,
 }: DeploymentTemplateHistoryType) => {
     const { historyComponent, historyComponentName } = useParams<DeploymentHistoryParamsType>()
     const { sortBy, sortOrder } = sortingConfig ?? { sortBy: '', sortOrder: null }
@@ -85,20 +88,26 @@ const DeploymentHistoryDiffView = ({
         })
     }, [convertVariables, currentConfiguration, sortOrder, isUnpublished])
 
-    const renderDeploymentDiffViaCodeEditor = () => (
-        <CodeEditor
-            key={codeEditorKey}
-            value={editorValuesRHS}
-            defaultValue={editorValuesLHS}
-            adjustEditorHeightToContent
-            disableSearch
-            diffView={previousConfigAvailable && true}
-            readOnly
-            noParsing
-            mode={MODES.YAML}
-            theme={getTheme()}
-        />
-    )
+    const renderDeploymentDiffViaCodeEditor = () =>
+        previousConfigAvailable ? (
+            <DiffViewer
+                oldValue={editorValuesLHS}
+                newValue={editorValuesRHS}
+                codeFoldMessageRenderer={renderDiffViewNoDifferenceState(diffState)}
+            />
+        ) : (
+            <CodeEditor
+                key={codeEditorKey}
+                value={editorValuesRHS}
+                defaultValue={editorValuesLHS}
+                adjustEditorHeightToContent
+                disableSearch
+                readOnly
+                noParsing
+                mode={MODES.YAML}
+                theme={getTheme()}
+            />
+        )
 
     const handleShowVariablesClick = () => {
         setConvertVariables(!convertVariables)
@@ -176,7 +185,7 @@ const DeploymentHistoryDiffView = ({
             </div>
 
             {(currentConfiguration?.codeEditorValue?.value || baseTemplateConfiguration?.codeEditorValue?.value) && (
-                <div className="en-2 bw-1 br-4 mt-16">
+                <div className="en-2 bw-1 br-4 mt-16 dc__overflow-auto">
                     <div
                         className="code-editor-header-value px-12 py-8 fs-13 fw-6 cn-9 bcn-0 dc__top-radius-4 dc__border-bottom"
                         data-testid="configuration-link-comparison-body-heading"
