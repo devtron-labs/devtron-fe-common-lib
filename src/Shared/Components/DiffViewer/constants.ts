@@ -41,6 +41,12 @@ export const diffViewerStyles: ReactDiffViewerProps['styles'] = {
             lineHeight: '20px',
             fontFamily: 'Inconsolata, monospace',
             wordBreak: 'break-word',
+            // Reset for styling from patternfly
+            padding: 0,
+            margin: 0,
+            backgroundColor: 'transparent',
+            border: 'none',
+            borderRadius: 0,
         },
     },
     marker: {
