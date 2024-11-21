@@ -468,6 +468,7 @@ export enum PolicyKindType {
     lockConfiguration = 'lock-configuration',
     imagePromotion = 'image-promotion',
     plugins = 'plugin',
+    approval = 'approval',
 }
 
 export interface LastExecutionResultType {
