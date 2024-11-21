@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Dayjs } from 'dayjs'
 import {
     OptionType,
     CommonNodeAttr,
@@ -118,6 +119,8 @@ export enum Nodes {
     Event = 'Event',
     Namespace = 'Namespace',
     Overview = 'Overview',
+    MonitoringDashboard = 'MonitoringDashboard',
+    UpgradeCluster = 'UpgradeCluster',
 }
 
 // FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
@@ -440,6 +443,7 @@ export enum ResourceKindType {
     installation = 'installation',
     environment = 'environment',
     cdPipeline = 'cd-pipeline',
+    ciPipeline = 'ci-pipeline',
     project = 'project',
 }
 
@@ -462,6 +466,8 @@ export interface SeverityCount {
 }
 export enum PolicyKindType {
     lockConfiguration = 'lock-configuration',
+    imagePromotion = 'image-promotion',
+    plugins = 'plugin',
 }
 
 export interface LastExecutionResultType {
@@ -681,6 +687,7 @@ export enum ConfigurationType {
 export interface BaseURLParams {
     appId: string
     envId: string
+    clusterId: string
 }
 
 export interface ConfigKeysWithLockType {
@@ -738,4 +745,111 @@ export interface CustomRoleAndMeta {
     possibleRolesMetaForHelm: MetaPossibleRoles
     possibleRolesMetaForCluster: MetaPossibleRoles
     possibleRolesMetaForJob: MetaPossibleRoles
+}
+
+interface CommonTabArgsType {
+    /**
+     * Name for the tab.
+     *
+     * Note: Used for the title
+     */
+    name: string
+    kind?: string
+    /**
+     * URL for the tab
+     */
+    url: string
+    /**
+     * If true, the tab is selected
+     */
+    isSelected: boolean
+    /**
+     * Title for the tab
+     */
+    title?: string
+    isDeleted?: boolean
+    /**
+     * Type for the tab
+     *
+     * Note: Fixed tabs are always places before dynamic tabs
+     */
+    type: 'fixed' | 'dynamic'
+    /**
+     * Path of the icon for the tab
+     *
+     * @default ''
+     */
+    iconPath?: string
+    /**
+     * Dynamic title for the tab
+     *
+     * @default ''
+     */
+    dynamicTitle?: string
+    /**
+     * Whether to show the tab name when selected
+     *
+     * @default false
+     */
+    showNameOnSelect?: boolean
+    /**
+     * Would remove the title/name from tab heading, but that does not mean name is not required, since it is used in other calculations
+     * @default false
+     */
+    hideName?: boolean
+    /**
+     * Indicates if showNameOnSelect tabs have been selected once
+     *
+     * @default false
+     */
+    isAlive?: boolean
+    lastSyncMoment?: Dayjs
+    componentKey?: string
+    /**
+     * Custom tippy config for the tab
+     *
+     * This overrides the tippy being computed from tab title
+     */
+    tippyConfig?: {
+        title: string
+        descriptions: {
+            info: string
+            value: string
+        }[]
+    }
+    /**
+     * If true, the fixed tab remains mounted on initial load of the component
+     *
+     * Note: Not for dynamic tabs atm
+     *
+     * @default false
+     */
+    shouldRemainMounted?: boolean
+}
+
+export type InitTabType = Omit<CommonTabArgsType, 'type'> &
+    (
+        | {
+              type: 'fixed'
+              /**
+               * Unique identifier for the fixed tab
+               *
+               * Note: Shouldn't contain '-'
+               */
+              id: string
+              idPrefix?: never
+          }
+        | {
+              type: 'dynamic'
+              id?: never
+              idPrefix: string
+          }
+    )
+
+export interface DynamicTabType extends CommonTabArgsType {
+    id: string
+    /**
+     * Id of the last active tab before switching to current tab
+     */
+    lastActiveTabId: string | null
 }

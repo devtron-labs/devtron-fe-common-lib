@@ -161,9 +161,12 @@ const useUrlFilters = <T = string, K = unknown>({
     }
 
     useEffect(() => {
+        if (!localStorageKey) {
+            return
+        }
         // if we have search string, set secondary params in local storage accordingly
         if (location.search) {
-            localStorage.setItem(localStorageKey, JSON.stringify(parsedParams))
+            setItemInLocalStorageIfKeyExists(localStorageKey, JSON.stringify(parsedParams))
             return
         }
         const localStorageValue = localStorage.getItem(localStorageKey)

@@ -29,6 +29,7 @@ const ErrorScreenManager = ({
     reloadClass,
     heightToDeduct,
     redirectURL,
+    imageType = ImageType.Large,
 }: ErrorScreenManagerProps) => {
     const getMessage = () => {
         switch (code) {
@@ -39,7 +40,7 @@ const ErrorScreenManager = ({
                         title={ERROR_EMPTY_SCREEN.BAD_REQUEST}
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.BAD_REQUEST_MESSAGE}
                         image={badRequest}
-                        imageType={ImageType.Large}
+                        imageType={imageType}
                         heightToDeduct={heightToDeduct}
                         reload={reload}
                     />
@@ -51,7 +52,7 @@ const ErrorScreenManager = ({
                         title={ERROR_EMPTY_SCREEN.UNAUTHORIZED}
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.UNAUTHORIZED_MESSAGE}
                         image={unauthorized}
-                        imageType={ImageType.Large}
+                        imageType={imageType}
                         heightToDeduct={heightToDeduct}
                     />
                 )
@@ -62,7 +63,7 @@ const ErrorScreenManager = ({
                         title={ERROR_EMPTY_SCREEN.FORBIDDEN}
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.FORBIDDEN_MESSAGE}
                         image={unauthorized}
-                        imageType={ImageType.Large}
+                        imageType={imageType}
                         heightToDeduct={heightToDeduct}
                     />
                 )
@@ -73,7 +74,7 @@ const ErrorScreenManager = ({
                         title={ERROR_EMPTY_SCREEN.PAGE_NOT_FOUND}
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.PAGE_NOT_EXIST}
                         image={notFound}
-                        imageType={ImageType.Large}
+                        imageType={imageType}
                         heightToDeduct={heightToDeduct}
                         redirectURL={redirectURL}
                     />
@@ -85,7 +86,7 @@ const ErrorScreenManager = ({
                         title={ERROR_EMPTY_SCREEN.INTERNAL_SERVER_ERROR}
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.INTERNAL_SERVER_ERROR_MESSAGE}
                         image={badRequest}
-                        imageType={ImageType.Large}
+                        imageType={imageType}
                         heightToDeduct={heightToDeduct}
                         reload={reload}
                     />
@@ -97,7 +98,7 @@ const ErrorScreenManager = ({
                         title={ERROR_EMPTY_SCREEN.BAD_GATEWAY}
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.BAD_GATEWAY_MESSAGE}
                         image={badRequest}
-                        imageType={ImageType.Large}
+                        imageType={imageType}
                         heightToDeduct={heightToDeduct}
                         reload={reload}
                     />
@@ -109,7 +110,7 @@ const ErrorScreenManager = ({
                         title={ERROR_EMPTY_SCREEN.SERVICE_TEMPORARY_UNAVAILABLE}
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.SERVICE_TEMPORARY_UNAVAILABLE_MESSAGE}
                         image={badRequest}
-                        imageType={ImageType.Large}
+                        imageType={imageType}
                         heightToDeduct={heightToDeduct}
                         reload={reload}
                     />

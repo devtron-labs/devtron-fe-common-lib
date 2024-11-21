@@ -18,7 +18,7 @@ import moment from 'moment'
 import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
 import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
-import { ROUTES } from './Constants'
+import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
 import {
     TeamList,
@@ -250,7 +250,7 @@ const getImageApprovalPolicyDetailsFromMaterialResult = (cdMaterialsResult): Ima
     const validGroups = userApprovalConfig.userGroups.map((group) => group.identifier)
 
     // Have moved from Object.keys(imageApprovalUsersInfo) to approvalUsers since backend is not filtering out the users without approval
-    // TODO: This check should be on BE. Need to remove this once BE is updated 
+    // TODO: This check should be on BE. Need to remove this once BE is updated
     const usersList = approvalUsers.filter((user) => user !== DefaultUserKey.system)
     const groupIdentifierToUsersMap = usersList.reduce(
         (acc, user) => {
@@ -510,4 +510,20 @@ export function getNamespaceListMin(clusterIdsCsv: string): Promise<EnvironmentL
 export function getWebhookEventsForEventId(eventId: string | number) {
     const URL = `${ROUTES.GIT_HOST_EVENT}/${eventId}`
     return get(URL)
+}
+
+/**
+ *
+ * @param gitUrl Git URL of the repository
+ * @param branchName Branch name
+ * @returns URL to the branch in the Git repository
+ */
+export const getGitBranchUrl = (gitUrl: string, branchName: string): string | null => {
+    if (!gitUrl) return null
+    const trimmedGitUrl = gitUrl.trim().replace(/\.git$/, '').replace(/\/$/, '') // Remove any trailing slash
+    if (trimmedGitUrl.includes(GitProviderType.GITLAB)) return `${trimmedGitUrl}/-/tree/${branchName}`
+    else if (trimmedGitUrl.includes(GitProviderType.GITHUB)) return `${trimmedGitUrl}/tree/${branchName}`
+    else if (trimmedGitUrl.includes(GitProviderType.BITBUCKET)) return `${trimmedGitUrl}/branch/${branchName}`
+    else if (trimmedGitUrl.includes(GitProviderType.AZURE)) return `${trimmedGitUrl}/src/branch/${branchName}`
+    return null
 }

@@ -54,10 +54,14 @@ const eachCall = (batchConfig, functionCalls, resolve, reject, shouldRejectOnErr
  */
 const ApiQueuingWithBatch = <T>(
     functionCalls,
-    httpProtocol: string,
     shouldRejectOnError: boolean = false,
     batchSize: number = window._env_.API_BATCH_SIZE,
 ): Promise<ApiQueuingWithBatchResponseItem<T>[]> => {
+    const httpProtocol = (window.performance.getEntriesByType('resource') as PerformanceResourceTiming[]).reduce(
+        (fallbackProtocol, entry) => entry.nextHopProtocol ?? fallbackProtocol,
+        'http/1.0',
+    )
+
     if (!batchSize || batchSize <= 0) {
         // eslint-disable-next-line no-param-reassign
         batchSize = ['http/0.9', 'http/1.0', 'http/1.1'].indexOf(httpProtocol) !== -1 ? 5 : 30
