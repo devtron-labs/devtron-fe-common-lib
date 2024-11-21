@@ -467,8 +467,9 @@ export interface SeverityCount {
 export enum PolicyKindType {
     lockConfiguration = 'lock-configuration',
     imagePromotion = 'image-promotion',
-    plugins = 'plugin',
-    approval = 'approval',
+    // TODO: revert once BE is ready
+    plugins = 'plugin-1',
+    approval = 'plugin',
 }
 
 export interface LastExecutionResultType {
