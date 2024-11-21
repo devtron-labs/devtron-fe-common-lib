@@ -865,9 +865,6 @@ export const getNullValueFromType = (type: StrictRJSFSchema['type']) => {
     }
 
     switch (type) {
-        case 'number':
-        case 'integer':
-            return null
         case 'string':
             return ''
         case 'boolean':
@@ -876,6 +873,8 @@ export const getNullValueFromType = (type: StrictRJSFSchema['type']) => {
             return {}
         case 'array':
             return []
+        case 'number':
+        case 'integer':
         case 'null':
         default:
             return null
