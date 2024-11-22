@@ -16,6 +16,17 @@
 import { TIMELINE_STATUS } from '@Shared/constants'
 import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
 import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
+import { ReactComponent as Close } from '@Icons/ic-close.svg'
+import { ReactComponent as Check } from '@Icons/ic-check-grey.svg'
+import { ReactComponent as ICHelpOutline } from '@Icons/ic-help-outline.svg'
+import { ReactComponent as Error } from '@Icons/ic-error-exclamation.svg'
+import { ReactComponent as Timer } from '@Icons/ic-timer.svg'
+import { ReactComponent as Disconnect } from '@Icons/ic-disconnected.svg'
+import { ReactComponent as TimeOut } from '@Icons/ic-timeout-red.svg'
+import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
+import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
+import { TERMINAL_STATUS_MAP } from './constants'
+import { ResourceKindType } from '../../types'
 import {
     TriggerHistoryFilterCriteriaProps,
     DeploymentHistoryResultObject,
@@ -23,17 +34,6 @@ import {
     TriggerHistoryFilterCriteriaType,
     StageStatusType,
 } from './types'
-import { ResourceKindType } from '../../types'
-import { ReactComponent as Close } from '../../../Assets/Icon/ic-close.svg'
-import { ReactComponent as Check } from '../../../Assets/Icon/ic-check-grey.svg'
-import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
-import { ReactComponent as Error } from '../../../Assets/Icon/ic-error-exclamation.svg'
-import { ReactComponent as Timer } from '../../../Assets/Icon/ic-timer.svg'
-import { ReactComponent as Disconnect } from '../../../Assets/Icon/ic-disconnected.svg'
-import { ReactComponent as TimeOut } from '../../../Assets/Icon/ic-timeout-red.svg'
-import { ReactComponent as ICCheck } from '../../../Assets/Icon/ic-check.svg'
-import { ReactComponent as ICInProgress } from '../../../Assets/Icon/ic-in-progress.svg'
-import { TERMINAL_STATUS_MAP } from './constants'
 
 export const getTriggerHistoryFilterCriteria = ({
     appId,

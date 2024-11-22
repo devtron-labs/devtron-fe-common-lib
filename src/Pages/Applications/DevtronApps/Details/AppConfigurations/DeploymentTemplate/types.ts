@@ -1,4 +1,5 @@
 import { DraftMetadataDTO, TemplateListType } from '@Shared/Services'
+import { ServerErrors } from '@Common/ServerError'
 import { OverrideMergeStrategyType } from '../types'
 
 export type DeploymentChartOptionkind = 'base' | 'env' | 'chartVersion' | 'deployment'
@@ -162,6 +163,9 @@ export interface DeploymentTemplateConfigCommonState extends SelectedChartDetail
      * In current editor, this may be null initially
      */
     mergedTemplateObject: Record<string, string> | null
+
+    isLoadingMergedTemplate: boolean
+    mergedTemplateError: ServerErrors | null
 }
 
 export type DeploymentTemplateConfigState = DeploymentTemplateConfigCommonState &

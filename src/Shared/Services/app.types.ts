@@ -32,7 +32,7 @@ interface MaterialHistoryDTO {
     WebhookData: WebhookDataType
 }
 
-interface MaterialHistoryType {
+export interface MaterialHistoryType {
     commitURL: string
     commit: MaterialHistoryDTO['Commit']
     author: MaterialHistoryDTO['Author']
@@ -85,6 +85,7 @@ export interface CIMaterialType
     gitURL: CIMaterialDTO['url']
     history: MaterialHistoryType[]
     isSelected: boolean
+    gitMaterialUrl?: string
 }
 
 interface ImageCommentDTO {

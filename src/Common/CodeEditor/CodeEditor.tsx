@@ -30,7 +30,7 @@ import { cleanKubeManifest, useEffectAfterMount, useJsonYaml } from '../Helper'
 import { useWindowSize } from '../Hooks'
 import Select from '../Select/Select'
 import RadioGroup from '../RadioGroup/RadioGroup'
-import ClipboardButton from '../ClipboardButton/ClipboardButton'
+import { ClipboardButton } from '../ClipboardButton/ClipboardButton'
 import { Progressing } from '../Progressing'
 import {
     CodeEditorComposition,

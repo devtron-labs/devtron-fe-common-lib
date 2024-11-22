@@ -192,14 +192,18 @@ function fetchInTime<T = object>(
     options?: APIOptions,
     isMultipartRequest?: boolean,
 ): Promise<ResponseType> {
-    const controller = new AbortController()
-    const { signal } = controller
+    const controller = options?.abortControllerRef?.current ?? new AbortController()
+    const signal = options?.abortControllerRef?.current?.signal || options?.signal || controller.signal
     const timeoutPromise: Promise<ResponseType> = new Promise((resolve, reject) => {
         const requestTimeout = (window as any)?._env_?.GLOBAL_API_TIMEOUT || FALLBACK_REQUEST_TIMEOUT
         const timeout = options?.timeout ? options.timeout : requestTimeout
 
         setTimeout(() => {
             controller.abort()
+            if (options?.abortControllerRef?.current) {
+                options.abortControllerRef.current = new AbortController()
+            }
+
             reject({
                 code: 408,
                 errors: [{ code: 408, internalMessage: 'Request cancelled', userMessage: 'Request Cancelled' }],
@@ -207,7 +211,14 @@ function fetchInTime<T = object>(
         }, timeout)
     })
     return Promise.race([
-        fetchAPI(url, type, data, options?.signal || signal, options?.preventAutoLogout || false, isMultipartRequest),
+        fetchAPI(
+            url,
+            type,
+            data,
+            signal,
+            options?.preventAutoLogout || false,
+            isMultipartRequest,
+        ),
         timeoutPromise,
     ]).catch((err) => {
         if (err instanceof ServerErrors) {

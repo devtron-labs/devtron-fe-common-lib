@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-import { get, getIsRequestAborted, getUrlWithSearchParams, ResponseType, ROUTES, showError } from '../../../Common'
+import {
+    get,
+    getIsRequestAborted,
+    getUrlWithSearchParams,
+    post,
+    ResponseType,
+    ROUTES,
+    showError,
+} from '../../../Common'
 import { stringComparatorBySortOrder } from '../../Helpers'
 import {
     GetParentPluginListPayloadType,
@@ -41,13 +49,14 @@ export const getPluginsDetail = async ({
     try {
         const payload: PluginDetailPayloadType = {
             appId,
-            parentPluginId: parentPluginIds,
-            pluginId: pluginIds,
-            parentPluginIdentifier: parentPluginIdentifiers ? `${parentPluginIdentifiers}` : null,
+            parentPluginIds,
+            pluginIds,
+            parentPluginIdentifiers,
         }
 
-        const { result } = await get<PluginDetailDTO>(
-            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_DETAIL_V2, payload),
+        const { result } = await post<PluginDetailDTO, PluginDetailPayloadType>(
+            ROUTES.PLUGIN_GLOBAL_LIST_DETAIL_V2,
+            payload,
             { signal },
         )
 
