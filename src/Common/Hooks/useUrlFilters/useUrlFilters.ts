@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
+import { getUrlWithSearchParams } from '@Common/Helper'
 import { DEFAULT_BASE_PAGE_SIZE, EXCLUDED_FALSY_VALUES, SortingOrder } from '../../Constants'
 import { DEFAULT_PAGE_NUMBER, URL_FILTER_KEYS } from './constants'
 import { UseUrlFiltersProps, UseUrlFiltersReturnType } from './types'
@@ -47,7 +48,30 @@ const useUrlFilters = <T = string, K = unknown>({
 }: UseUrlFiltersProps<T, K> = {}): UseUrlFiltersReturnType<T, K> => {
     const location = useLocation()
     const history = useHistory()
-    const searchParams = new URLSearchParams(location.search)
+
+    const isAlreadyReadFromLocalStorage = useRef<boolean>(false)
+
+    const getSearchParams = () => {
+        if (!isAlreadyReadFromLocalStorage.current && !location.search && localStorageKey) {
+            isAlreadyReadFromLocalStorage.current = true
+            const localStorageValue = localStorage.getItem(localStorageKey)
+            if (localStorageValue) {
+                try {
+                    const localSearchString = getUrlWithSearchParams('', JSON.parse(localStorageValue))
+                    const localSearchParams = new URLSearchParams(localSearchString.split('?')[1] ?? '')
+
+                    history.replace({ search: localSearchParams.toString() })
+                    return localSearchParams
+                } catch {
+                    localStorage.removeItem(localStorageKey)
+                }
+            }
+        }
+
+        return new URLSearchParams(location.search)
+    }
+
+    const searchParams = getSearchParams()
 
     const getParsedSearchParams: UseUrlFiltersProps<T, K>['parseSearchParams'] = (searchParamsToParse) => {
         if (parseSearchParams) {
@@ -136,7 +160,9 @@ const useUrlFilters = <T = string, K = unknown>({
 
     const clearFilters = () => {
         history.replace({ search: '' })
-        setItemInLocalStorageIfKeyExists(localStorageKey, '')
+        if (localStorageKey) {
+            localStorage.removeItem(localStorageKey)
+        }
     }
 
     const updateSearchParams = (paramsToSerialize: Partial<K>) => {
