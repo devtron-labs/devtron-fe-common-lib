@@ -52,23 +52,31 @@ const useUrlFilters = <T = string, K = unknown>({
     const isAlreadyReadFromLocalStorage = useRef<boolean>(false)
 
     const getSearchParams = () => {
-        if (!isAlreadyReadFromLocalStorage.current && !location.search && localStorageKey) {
-            isAlreadyReadFromLocalStorage.current = true
-            const localStorageValue = localStorage.getItem(localStorageKey)
-            if (localStorageValue) {
-                try {
-                    const localSearchString = getUrlWithSearchParams('', JSON.parse(localStorageValue))
-                    const localSearchParams = new URLSearchParams(localSearchString.split('?')[1] ?? '')
+        const locationSearchParams = new URLSearchParams(location.search)
+        if (!isAlreadyReadFromLocalStorage.current && localStorageKey) {
+            if (!location.search) {
+                isAlreadyReadFromLocalStorage.current = true
+                const localStorageValue = localStorage.getItem(localStorageKey)
+                if (localStorageValue) {
+                    try {
+                        const localSearchString = getUrlWithSearchParams('', JSON.parse(localStorageValue))
+                        const localSearchParams = new URLSearchParams(localSearchString.split('?')[1] ?? '')
 
-                    history.replace({ search: localSearchParams.toString() })
-                    return localSearchParams
-                } catch {
-                    localStorage.removeItem(localStorageKey)
+                        history.replace({ search: localSearchParams.toString() })
+                        return localSearchParams
+                    } catch {
+                        localStorage.removeItem(localStorageKey)
+                    }
                 }
+            } else {
+                setItemInLocalStorageIfKeyExists(
+                    localStorageKey,
+                    JSON.stringify(parseSearchParams(locationSearchParams)),
+                )
             }
         }
 
-        return new URLSearchParams(location.search)
+        return locationSearchParams
     }
 
     const searchParams = getSearchParams()
