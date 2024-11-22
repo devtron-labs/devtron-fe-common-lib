@@ -513,6 +513,7 @@ export const API_STATUS_CODES = {
     PERMISSION_DENIED: 403,
     NOT_FOUND: 404,
     EXPECTATION_FAILED: 417,
+    UNPROCESSABLE_ENTITY: 422,
     LOCKED: 423,
     UNPROCESSABLE_CONTENT: 422,
 }
@@ -559,3 +560,20 @@ export const VULNERABILITIES_SORT_PRIORITY = {
 
 // TODO: might not work need to verify
 export const IS_PLATFORM_MAC_OS = window.navigator.userAgent.toUpperCase().includes('MAC')
+
+/**
+ * Git provider types
+ */
+
+export enum GitProviderType {
+    GITHUB = 'github',
+    GITLAB = 'gitlab',
+    BITBUCKET = 'bitbucket',
+    AZURE = 'azure',
+    GITEA = 'gitea',
+}
+
+/**
+ * Formats the schema removing any irregularity in the existing schema
+ */
+export const getFormattedSchema = (schema?: string) => JSON.stringify(JSON.parse(schema ?? '{}'), null, 2)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { ReactNode, CSSProperties, ReactElement } from 'react'
+import React, { ReactNode, CSSProperties, ReactElement, MutableRefObject } from 'react'
 import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
@@ -50,7 +50,11 @@ export interface ResponseType<T = any> {
 
 export interface APIOptions {
     timeout?: number
+    /**
+     * @deprecated Use abortController instead
+     */
     signal?: AbortSignal
+    abortControllerRef?: MutableRefObject<AbortController>
     preventAutoLogout?: boolean
 }
 
@@ -173,6 +177,7 @@ export interface ErrorPageType
 
 export interface ErrorScreenManagerProps {
     code?: number
+    imageType?: ImageType
     reload?: (...args) => any
     subtitle?: React.ReactChild
     reloadClass?: string

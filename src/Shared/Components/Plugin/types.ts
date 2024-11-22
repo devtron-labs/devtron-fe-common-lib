@@ -94,11 +94,11 @@ export interface PluginDetailServiceParamsType {
     signal?: AbortSignal
 }
 
-export interface PluginDetailPayloadType extends Pick<PluginDetailServiceParamsType, 'appId'> {
-    pluginId?: PluginDetailServiceParamsType['pluginIds']
-    parentPluginId?: PluginDetailServiceParamsType['parentPluginIds']
-    parentPluginIdentifier?: PluginDetailServiceParamsType['parentPluginIdentifiers'][number]
-}
+export interface PluginDetailPayloadType
+    extends Pick<
+        PluginDetailServiceParamsType,
+        'appId' | 'parentPluginIds' | 'pluginIds' | 'parentPluginIdentifiers'
+    > {}
 
 export interface PluginListFiltersType extends Pick<BaseFilterQueryParams<unknown>, 'searchKey'> {
     selectedTags: string[]

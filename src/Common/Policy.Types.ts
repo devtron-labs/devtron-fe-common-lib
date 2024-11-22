@@ -95,7 +95,7 @@ export type ProcessPluginDataParamsType = {
     /**
      * Would be sent in case we have to get data for steps
      */
-    requiredPluginIds?: PluginDetailPayloadType['pluginId']
+    requiredPluginIds?: PluginDetailPayloadType['pluginIds']
 } & (ProcessPluginDataCIParamsType | ProcessPluginDataCDParamsType)
 
 export enum ConsequenceAction {
