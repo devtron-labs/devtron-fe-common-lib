@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { getUrlWithSearchParams } from '@Common/Helper'
 import { DEFAULT_BASE_PAGE_SIZE, EXCLUDED_FALSY_VALUES, SortingOrder } from '../../Constants'
@@ -185,18 +185,6 @@ const useUrlFilters = <T = string, K = unknown>({
         // Not replacing the params as it is being done by _resetPageNumber
         _resetPageNumber()
     }
-
-    useEffect(() => {
-        // if we have search string, set secondary params in local storage accordingly
-        if (location.search) {
-            localStorage.setItem(localStorageKey, JSON.stringify(parsedParams))
-            return
-        }
-        const localStorageValue = localStorage.getItem(localStorageKey)
-        if (localStorageValue) {
-            updateSearchParams(JSON.parse(localStorageValue))
-        }
-    }, [])
 
     return {
         pageSize,
