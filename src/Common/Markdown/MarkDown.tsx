@@ -37,6 +37,12 @@ const MarkDown = ({ setExpandableIcon, markdown, className, breaks, disableEscap
         getHeight()
     }, [markdown])
 
+    const renderTableRow = (row: Tokens.TableCell[]) => `
+            <tr>
+                ${row.map((rowCell) => `<td align="${rowCell.align}">${marked(rowCell.text)}</td>`).join('')}
+            </tr>
+        `
+
     renderer.listitem = ({ text, task, checked }: Tokens.ListItem) => {
         if (task) {
             if (checked) {
@@ -56,14 +62,7 @@ const MarkDown = ({ setExpandableIcon, markdown, className, breaks, disableEscap
     renderer.image = ({ href, title, text }: Tokens.Image) =>
         `<img src="${href}" alt="${text}" title="${title}" class="max-w-100">`
 
-    renderer.table = ({ header, rows }: Tokens.Table) => {
-        const renderTableRow = (row: Tokens.TableCell[]) => `
-            <tr>
-                ${row.map((rowCell) => `<td align="${rowCell.align}">${marked(rowCell.text)}</td>`).join('')}
-            </tr>
-        `
-
-        return `
+    renderer.table = ({ header, rows }: Tokens.Table) => `
         <div class="table-container">
             <table>
                 <thead>
@@ -75,7 +74,6 @@ const MarkDown = ({ setExpandableIcon, markdown, className, breaks, disableEscap
             </table>
         </div>
         `
-    }
 
     renderer.heading = ({ text, depth }: Tokens.Heading) => {
         const escapedText = disableEscapedText ? '' : text.toLowerCase().replace(/[^\w]+/g, '-')
