@@ -45,14 +45,8 @@ const MarkDown = ({ setExpandableIcon, markdown, className, breaks, disableEscap
 
     renderer.listitem = ({ text, task, checked }: Tokens.ListItem) => {
         if (task) {
-            if (checked) {
-                return `<li style="list-style: none">
-                            <input disabled type="checkbox" checked class="dc__vertical-align-middle" style="margin: 0 0.2em 0.25em -1.4em">
-                            ${text}
-                        </li>`
-            }
             return `<li style="list-style: none">
-                        <input disabled type="checkbox" class="dc__vertical-align-middle" style="margin: 0 0.2em 0.25em -1.4em">
+                        <input disabled type="checkbox" ${checked ? 'checked' : ''} class="dc__vertical-align-middle" style="margin: 0 0.2em 0.25em -1.4em">
                         ${text}
                     </li>`
         }
