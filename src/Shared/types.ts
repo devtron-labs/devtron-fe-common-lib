@@ -853,3 +853,13 @@ export interface DynamicTabType extends CommonTabArgsType {
      */
     lastActiveTabId: string | null
 }
+
+export enum ToggleFocusType {
+    Enable = 'Enable',
+    Disable = 'Disable',
+}
+
+export interface ToggleOutsideFocus {
+    identifier: string
+    toggleFocus: ToggleFocusType
+}

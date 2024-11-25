@@ -8,9 +8,9 @@ export enum ConfirmationModalVariantType {
     custom = 'custom',
 }
 
-interface CommonButtonProps
-    extends Pick<ButtonProps, 'dataTestId' | 'onClick' | 'text'>,
-        Partial<Pick<ButtonProps, 'startIcon' | 'endIcon'>> {}
+interface CommonButtonProps extends Pick<ButtonProps, 'text'>, Partial<Pick<ButtonProps, 'startIcon' | 'endIcon'>> {
+    onClick: (e?: any) => void
+}
 
 interface CustomInputConfig {
     identifier: string
@@ -49,6 +49,7 @@ export type ConfirmationModalProps = {
     title: ReactNode
     subtitle: ReactNode
     handleClose: (e?: any) => void
+    showConfirmationModal: boolean
 } & (
     | {
           variant: Exclude<ConfirmationModalVariantType, ConfirmationModalVariantType.custom>

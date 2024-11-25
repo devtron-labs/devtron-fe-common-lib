@@ -40,6 +40,8 @@ import {
     IntersectionChangeHandler,
     IntersectionOptions,
     Nodes,
+    ToggleFocusType,
+    ToggleOutsideFocus,
     WebhookEventNameType,
 } from './types'
 import { ReactComponent as ICPullRequest } from '../Assets/Icon/ic-pull-request.svg'
@@ -93,6 +95,14 @@ export const preventBodyScroll = (lock: boolean): void => {
         document.body.style.overflowY = null
         document.body.style.height = null
         document.documentElement.style.overflow = null
+    }
+}
+
+export const toggleOutsideFocus = ({ identifier, toggleFocus }: ToggleOutsideFocus) => {
+    if (toggleFocus === ToggleFocusType.Disable) {
+        document.getElementById(identifier).setAttribute('inert', 'true')
+    } else {
+        document.getElementById(identifier).removeAttribute('inert')
     }
 }
 

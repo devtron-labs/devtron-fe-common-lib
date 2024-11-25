@@ -1,0 +1,5 @@
+.backdrop {
+  background: #000000bf;
+  z-index: var(--modal-index);
+  backdrop-filter: blur(1px);
+}
