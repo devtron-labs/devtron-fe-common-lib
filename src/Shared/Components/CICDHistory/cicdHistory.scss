@@ -190,7 +190,6 @@
 
 .deployment-history-card-container {
     text-decoration: unset;
-    padding: 0 16px;
 
     &:hover {
         text-decoration: unset;
@@ -204,8 +203,7 @@
     .deployment-history-card {
         display: grid;
         grid-template-columns: 20px 1fr;
-        padding: 12px 0;
-        column-gap: 12px;
+        column-gap: 8px;
     }
 
     .app-status__icon {
