@@ -40,7 +40,6 @@ import {
     IntersectionChangeHandler,
     IntersectionOptions,
     Nodes,
-    ToggleFocusType,
     ToggleOutsideFocus,
     WebhookEventNameType,
 } from './types'
@@ -98,11 +97,12 @@ export const preventBodyScroll = (lock: boolean): void => {
     }
 }
 
-export const toggleOutsideFocus = ({ identifier, toggleFocus }: ToggleOutsideFocus) => {
-    if (toggleFocus === ToggleFocusType.Disable) {
-        document.getElementById(identifier).setAttribute('inert', 'true')
+export const preventOutsideFocus = ({ identifier, preventFocus }: ToggleOutsideFocus) => {
+    const identifierElement = document.getElementById(identifier)
+    if (preventFocus) {
+        identifierElement.setAttribute('inert', 'true')
     } else {
-        document.getElementById(identifier).removeAttribute('inert')
+        identifierElement.removeAttribute('inert')
     }
 }
 

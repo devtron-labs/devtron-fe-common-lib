@@ -1,13 +1,13 @@
-import { ReactNode, useEffect } from 'react'
+import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
 import { useRegisterShortcut } from '@Common/Hooks'
-import { preventBodyScroll, toggleOutsideFocus } from '@Shared/Helpers'
-import './backdrop.scss'
-import { createPortal } from 'react-dom'
-import { ToggleFocusType } from '@Shared/types'
+import { preventBodyScroll, preventOutsideFocus } from '@Shared/Helpers'
 import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
+import './backdrop.scss'
+import { BackdropProps } from './types'
 
-const Backdrop = ({ children, onEscape }: { children: ReactNode; onEscape: () => void }) => {
+const Backdrop = ({ children, onEscape }: BackdropProps) => {
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
     // useEffect on onEscape since onEscape might change based on conditions
@@ -22,11 +22,11 @@ const Backdrop = ({ children, onEscape }: { children: ReactNode; onEscape: () =>
     useEffect(() => {
         preventBodyScroll(true)
         // Setting main as inert to that focus is trapped inside the new portal
-        toggleOutsideFocus({ identifier: DEVTRON_BASE_MAIN_ID, toggleFocus: ToggleFocusType.Disable })
+        preventOutsideFocus({ identifier: DEVTRON_BASE_MAIN_ID, preventFocus: true })
 
         return () => {
             preventBodyScroll(false)
-            toggleOutsideFocus({ identifier: DEVTRON_BASE_MAIN_ID, toggleFocus: ToggleFocusType.Enable })
+            preventOutsideFocus({ identifier: DEVTRON_BASE_MAIN_ID, preventFocus: false })
         }
     }, [])
 
