@@ -40,7 +40,7 @@ import {
     IntersectionChangeHandler,
     IntersectionOptions,
     Nodes,
-    ToggleOutsideFocus,
+    PreventOutsideFocusProps,
     WebhookEventNameType,
 } from './types'
 import { ReactComponent as ICPullRequest } from '../Assets/Icon/ic-pull-request.svg'
@@ -97,7 +97,7 @@ export const preventBodyScroll = (lock: boolean): void => {
     }
 }
 
-export const preventOutsideFocus = ({ identifier, preventFocus }: ToggleOutsideFocus) => {
+export const preventOutsideFocus = ({ identifier, preventFocus }: PreventOutsideFocusProps) => {
     const identifierElement = document.getElementById(identifier)
     if (preventFocus) {
         identifierElement.setAttribute('inert', 'true')

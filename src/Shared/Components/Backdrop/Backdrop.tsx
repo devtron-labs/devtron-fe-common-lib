@@ -4,8 +4,8 @@ import { motion } from 'framer-motion'
 import { useRegisterShortcut } from '@Common/Hooks'
 import { preventBodyScroll, preventOutsideFocus } from '@Shared/Helpers'
 import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
-import './backdrop.scss'
 import { BackdropProps } from './types'
+import './backdrop.scss'
 
 const Backdrop = ({ children, onEscape }: BackdropProps) => {
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
@@ -39,7 +39,7 @@ const Backdrop = ({ children, onEscape }: BackdropProps) => {
         >
             {children}
         </motion.div>,
-        document.getElementById('backdrop'),
+        document.getElementById('animated-dialog-backdrop'),
     )
 }
 

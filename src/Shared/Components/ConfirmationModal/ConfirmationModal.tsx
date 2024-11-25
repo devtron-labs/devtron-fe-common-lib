@@ -20,23 +20,27 @@ const ConfirmationModal = ({
     handleClose,
 }: ConfirmationModalProps) => {
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
+
+    const [confirmationText, setConfirmationText] = useState<string>('')
+
     const customInputIdentifier = customInputConfig?.identifier
     const confirmationKeyword = customInputConfig?.confirmationKeyword
+
     const { primaryButtonConfig, secondaryButtonConfig } = buttonConfig
-    const [confirmationText, setConfirmationText] = useState<string>('')
+
     const RenderIcon = Icon ?? getIconFromVariant(variant)
 
     const disablePrimaryButton: boolean = confirmationKeyword && confirmationText.trim() !== confirmationKeyword
 
-    const handleEnterKeyPress = () => {
+    const handleTriggerPrimaryActionButton = () => {
         if (primaryButtonConfig && !disablePrimaryButton) {
             primaryButtonConfig.onClick()
         }
     }
 
-    const handleCustomInputKeyDown = (e) => {
+    const handleEnterKeyPress = (e: KeyboardEvent) => {
         if (e.key === 'Enter') {
-            handleEnterKeyPress()
+            handleTriggerPrimaryActionButton()
         }
     }
 
@@ -50,7 +54,7 @@ const ConfirmationModal = ({
         if (showConfirmationModal) {
             // Timeout so that if modal is opened on enter press, it does not trigger onClick
             setTimeout(() => {
-                registerShortcut({ keys: ['Enter'], callback: handleEnterKeyPress })
+                registerShortcut({ keys: ['Enter'], callback: handleTriggerPrimaryActionButton })
             }, 100)
         }
 
@@ -98,7 +102,7 @@ const ConfirmationModal = ({
                                     label={getConfirmationLabel(confirmationKeyword)}
                                     inputWrapClassName="w-100"
                                     placeholder="Type to confirm"
-                                    onKeyDown={handleCustomInputKeyDown}
+                                    onKeyDown={handleEnterKeyPress}
                                     isRequiredField
                                     autoFocus
                                 />
