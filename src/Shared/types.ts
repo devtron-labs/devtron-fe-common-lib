@@ -528,6 +528,7 @@ export enum AggregationKeys {
     'Other Resources' = 'Other Resources',
     Events = 'Events',
     Namespaces = 'Namespaces',
+    'Nodes' = 'Nodes',
 }
 
 export type AggregationKeysType = keyof typeof AggregationKeys
