@@ -3,11 +3,11 @@ import { createRef, Fragment, RefObject, useEffect, useRef } from 'react'
 import { followCursor } from 'tippy.js'
 
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
-import { ComponentSizeType, DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
+import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 import { Tooltip } from '@Common/Tooltip'
+import { TippyCustomized } from '@Common/TippyCustomized'
 
-import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { SelectTextArea } from '../SelectTextArea'
 import {
     getSelectPickerOptionByValue,
     SelectPicker,
@@ -15,8 +15,8 @@ import {
     SelectPickerVariantType,
 } from '../SelectPicker'
 import { MultipleResizableTextArea } from '../MultipleResizableTextArea'
-import { getRowGridTemplateColumn } from './utils'
-import { DynamicDataTableRowType, DynamicDataTableRowProps } from './types'
+import { getActionButtonPosition, getRowGridTemplateColumn } from './utils'
+import { DynamicDataTableRowType, DynamicDataTableRowProps, DynamicDataTableRowDataType } from './types'
 
 export const DynamicDataTableRow = <K extends string>({
     rows,
@@ -24,11 +24,10 @@ export const DynamicDataTableRow = <K extends string>({
     maskValue,
     readOnly,
     isAdditionNotAllowed,
-    validationSchema,
+    validationSchema = () => true,
     showError,
     errorMessages = [],
-    actionButton = null,
-    actionButtonWidth = '',
+    actionButtonConfig = null,
     onRowEdit,
     onRowDelete,
     leadingCellIcon,
@@ -40,7 +39,7 @@ export const DynamicDataTableRow = <K extends string>({
     const hasRows = (!readOnly && !isAdditionNotAllowed) || !!rows.length
     const disableDeleteRow = rows.length === 1 && isFirstRowEmpty
     /** style: grid-template-columns */
-    const rowGridTemplateColumn = getRowGridTemplateColumn(headers, actionButtonWidth, readOnly)
+    const rowGridTemplateColumn = getRowGridTemplateColumn(headers, actionButtonConfig, readOnly)
 
     const cellRef = useRef<Record<string | number, Record<K, RefObject<HTMLTextAreaElement>>>>()
     if (!cellRef.current) {
@@ -73,11 +72,14 @@ export const DynamicDataTableRow = <K extends string>({
     // METHODS
     const onChange =
         (row: DynamicDataTableRowType<K>, key: K) =>
-        (e: React.ChangeEvent<HTMLTextAreaElement> | SelectPickerOptionType<string>) => {
+        (e: string | number | React.ChangeEvent<HTMLTextAreaElement> | SelectPickerOptionType<string>) => {
             let value = ''
             switch (row.data[key].type) {
-                case 'dropdown':
+                case DynamicDataTableRowDataType.DROPDOWN:
                     value = (e as SelectPickerOptionType<string>).value
+                    break
+                case DynamicDataTableRowDataType.SELECT_TEXT:
+                    value = e as string
                     break
                 default:
                     value = (e as React.ChangeEvent<HTMLTextAreaElement>).target.value
@@ -93,9 +95,9 @@ export const DynamicDataTableRow = <K extends string>({
     // RENDERERS
     const renderCellContent = (row: DynamicDataTableRowType<K>, key: K) => {
         switch (row.data[key].type) {
-            case 'dropdown':
+            case DynamicDataTableRowDataType.DROPDOWN:
                 return (
-                    <div className="p-8 w-100 h-100 flex top dc__align-self-start">
+                    <div className="w-100 h-100 flex top dc__align-self-start">
                         <SelectPicker<string, false>
                             {...row.data[key].props}
                             inputId={`data-table-${row.id}-${key}-cell`}
@@ -105,6 +107,33 @@ export const DynamicDataTableRow = <K extends string>({
                             isDisabled={readOnly || row.data[key].disabled}
                             fullWidth
                         />
+                    </div>
+                )
+            case DynamicDataTableRowDataType.SELECT_TEXT:
+                return (
+                    <div className="w-100 h-100 flex top dc__align-self-start select-text-area-container">
+                        <SelectTextArea
+                            {...row.data[key].props}
+                            value={row.data[key].value}
+                            onChange={onChange(row, key)}
+                            inputId={`data-table-${row.id}-${key}-cell`}
+                            disabled={readOnly || row.data[key].disabled}
+                            refVar={cellRef?.current?.[row.id]?.[key]}
+                            dependentRefs={cellRef?.current?.[row.id]}
+                            textAreaProps={{
+                                ...row.data[key].props?.textAreaProps,
+                                className: 'dynamic-data-table__cell-input placeholder-cn5 py-8 cn-9 fs-13 lh-20',
+                                disableOnBlurResizeToMinHeight: true,
+                                minHeight: 20,
+                                maxHeight: 160,
+                            }}
+                        />
+                    </div>
+                )
+            case DynamicDataTableRowDataType.TIPPY_CUSTOMIZED:
+                return (
+                    <div className="w-100 h-100 flex top p-8">
+                        <TippyCustomized {...row.data[key].props} />
                     </div>
                 )
             default:
@@ -136,7 +165,7 @@ export const DynamicDataTableRow = <K extends string>({
 
         return (
             <div
-                className={`flex dc__align-self-start ${row.data[key].type !== 'text' ? `py-8 ${isLeadingIcon ? 'pl-8' : 'pr-8'}` : ''}`}
+                className={`flex dc__align-self-start ${row.data[key].type !== DynamicDataTableRowDataType.TEXT ? `py-8 ${isLeadingIcon ? 'pl-8' : 'pr-8'}` : ''}`}
             >
                 {iconConfig[key](row.id)}
             </div>
@@ -167,6 +196,53 @@ export const DynamicDataTableRow = <K extends string>({
         )
     }
 
+    const renderCell = (row: DynamicDataTableRowType<K>, key: K, index: number) => {
+        const cellNode = (
+            <Tooltip
+                alwaysShowTippyOnHover={readOnly || row.data[key].disabled || false}
+                content="Cannot edit in read-only mode"
+                followCursor="horizontal"
+                plugins={[followCursor]}
+            >
+                <div
+                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key, row.id) ? 'dynamic-data-table__cell--error no-hover' : ''}`}
+                >
+                    {maskValue?.[key] && row.data[key].value ? (
+                        <div className="py-8 px-12 h-36 flex">{DEFAULT_SECRET_PLACEHOLDER}</div>
+                    ) : (
+                        <>
+                            {renderCellIcon(row, key, true)}
+                            {renderCellContent(row, key)}
+                            {renderAsterisk(row, key)}
+                            {renderCellIcon(row, key)}
+                            {renderErrorMessages(row.data[key].value, key, row.id)}
+                        </>
+                    )}
+                </div>
+            </Tooltip>
+        )
+
+        const actionButtonIndex = getActionButtonPosition({ headers, actionButtonConfig })
+        if (actionButtonIndex === index) {
+            const { renderer, position = 'start' } = actionButtonConfig
+            const actionButtonNode = <div className="dynamic-data-table__cell flex top p-8 bcn-0">{renderer(row)}</div>
+
+            return position === 'start' ? (
+                <>
+                    {actionButtonNode}
+                    {cellNode}
+                </>
+            ) : (
+                <>
+                    {cellNode}
+                    {actionButtonNode}
+                </>
+            )
+        }
+
+        return cellNode
+    }
+
     return hasRows ? (
         <div className="bcn-2 px-1 pb-1 dc__bottom-radius-4">
             {!!rows.length && (
@@ -178,50 +254,21 @@ export const DynamicDataTableRow = <K extends string>({
                 >
                     {rows.map((row) => (
                         <div key={row.id} className="dynamic-data-table__row">
-                            {headers.map(({ key }) => (
-                                <Fragment key={key}>
-                                    <Tooltip
-                                        alwaysShowTippyOnHover={readOnly || false}
-                                        content="Cannot edit in read-only mode"
-                                        followCursor="horizontal"
-                                        plugins={[followCursor]}
-                                    >
-                                        <div
-                                            className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key, row.id) ? 'dynamic-data-table__cell--error no-hover' : ''}`}
-                                        >
-                                            {maskValue?.[key] && row.data[key].value ? (
-                                                <div className="py-8 px-12 h-36 flex">{DEFAULT_SECRET_PLACEHOLDER}</div>
-                                            ) : (
-                                                <>
-                                                    {renderCellIcon(row, key, true)}
-                                                    {renderCellContent(row, key)}
-                                                    {renderAsterisk(row, key)}
-                                                    {renderCellIcon(row, key)}
-                                                    {renderErrorMessages(row.data[key].value, key, row.id)}
-                                                </>
-                                            )}
-                                        </div>
-                                    </Tooltip>
-                                </Fragment>
+                            {headers.map(({ key }, index) => (
+                                <Fragment key={key}>{renderCell(row, key, index)}</Fragment>
                             ))}
-                            {actionButton && (
-                                <div className="dynamic-data-table__cell flex top p-8 bcn-0">
-                                    {actionButton(row.id)}
-                                </div>
-                            )}
                             {!readOnly && (
-                                <div className="dynamic-data-table__row-delete-btn flex top bcn-0 dc__no-shrink py-6 px-8">
-                                    <Button
-                                        dataTestId="data-table-delete-row-button"
-                                        ariaLabel="Delete"
-                                        onClick={onDelete(row)}
-                                        disabled={disableDeleteRow}
-                                        icon={<ICCross className="dc__align-self-start" />}
-                                        size={ComponentSizeType.xs}
-                                        variant={ButtonVariantType.borderLess}
-                                        style={ButtonStyleType.negative}
+                                <button
+                                    type="button"
+                                    className={`dynamic-data-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 dc__hover-n50 dc__tab-focus ${disableDeleteRow ? 'dc__disabled' : ''}`}
+                                    onClick={onDelete(row)}
+                                    disabled={disableDeleteRow}
+                                >
+                                    <ICClose
+                                        aria-label="delete-row"
+                                        className="icon-dim-16 fcn-4 dc__align-self-start"
                                     />
-                                </div>
+                                </button>
                             )}
                         </div>
                     ))}

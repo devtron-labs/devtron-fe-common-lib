@@ -70,6 +70,14 @@
     }
 
     &__cell {
+        .select-picker-borderless-control {
+            padding: 8px;
+        }
+
+        &:not(:has(.select-picker-borderless-control)) .select-text-area-container {
+            padding-inline: 8px;
+        }
+
         &:hover:not(:focus-within):not(.no-hover) {
             outline: 1px solid var(--N200);
         }

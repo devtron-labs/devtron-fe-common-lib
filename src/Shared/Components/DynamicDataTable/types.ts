@@ -18,8 +18,10 @@ import { ReactNode } from 'react'
 
 import { SortingOrder } from '@Common/Constants'
 
+import { TippyCustomizedProps } from '@Common/Types'
 import { SelectPickerProps } from '../SelectPicker'
 import { MultipleResizableTextAreaProps } from '../MultipleResizableTextArea'
+import { SelectTextAreaProps } from '../SelectTextArea'
 
 /**
  * Interface representing a key-value header.
@@ -36,6 +38,13 @@ export type DynamicDataTableHeaderType<K extends string> = {
     isSortable?: boolean
 }
 
+export enum DynamicDataTableRowDataType {
+    TEXT = 'text',
+    DROPDOWN = 'dropdown',
+    SELECT_TEXT = 'select-text',
+    TIPPY_CUSTOMIZED = 'tippy-customized',
+}
+
 /**
  * Type representing a key-value row.
  * @template K - A string representing the key type.
@@ -49,7 +58,7 @@ export type DynamicDataTableRowType<K extends string> = {
             required?: boolean
         } & (
             | {
-                  type?: 'text'
+                  type?: DynamicDataTableRowDataType.TEXT
                   props?: Omit<
                       MultipleResizableTextAreaProps,
                       | 'className'
@@ -64,11 +73,27 @@ export type DynamicDataTableRowType<K extends string> = {
                   >
               }
             | {
-                  type?: 'dropdown'
+                  type?: DynamicDataTableRowDataType.DROPDOWN
                   props?: Omit<
                       SelectPickerProps<string, false>,
                       'inputId' | 'value' | 'onChange' | 'fullWidth' | 'isDisabled'
                   >
+              }
+            | {
+                  type?: DynamicDataTableRowDataType.SELECT_TEXT
+                  props?: Omit<
+                      SelectTextAreaProps,
+                      'value' | 'onChange' | 'inputId' | 'isDisabled' | 'dependentRefs' | 'refVar' | 'textAreaProps'
+                  > & {
+                      textAreaProps?: Omit<
+                          SelectTextAreaProps['textAreaProps'],
+                          'className' | 'disableOnBlurResizeToMinHeight' | 'minHeight' | 'maxHeight'
+                      >
+                  }
+              }
+            | {
+                  type?: DynamicDataTableRowDataType.TIPPY_CUSTOMIZED
+                  props: TippyCustomizedProps
               }
         )
     }
@@ -129,9 +154,18 @@ export type DynamicDataTableProps<K extends string> = {
      */
     onRowDelete: (row: DynamicDataTableRowType<K>) => void
     /** */
-    actionButton?: (rowId: string | number) => ReactNode
-    /** */
-    actionButtonWidth?: string
+    actionButtonConfig?: {
+        renderer: (row: DynamicDataTableRowType<K>) => ReactNode
+        key?: K
+        /**
+         * @default '32px'
+         */
+        width?: string
+        /**
+         * @default 'start'
+         */
+        position?: 'start' | 'end'
+    }
     /**
      * Indicates whether to show errors.
      */
@@ -154,7 +188,14 @@ export type DynamicDataTableProps<K extends string> = {
 export interface DynamicDataTableHeaderProps<K extends string>
     extends Pick<
         DynamicDataTableProps<K>,
-        'headers' | 'rows' | 'headerComponent' | 'sortingConfig' | 'onRowAdd' | 'readOnly' | 'isAdditionNotAllowed'
+        | 'headers'
+        | 'rows'
+        | 'headerComponent'
+        | 'sortingConfig'
+        | 'onRowAdd'
+        | 'readOnly'
+        | 'isAdditionNotAllowed'
+        | 'actionButtonConfig'
     > {}
 
 export interface DynamicDataTableRowProps<K extends string>
@@ -167,8 +208,7 @@ export interface DynamicDataTableRowProps<K extends string>
         | 'readOnly'
         | 'onRowEdit'
         | 'onRowDelete'
-        | 'actionButton'
-        | 'actionButtonWidth'
+        | 'actionButtonConfig'
         | 'showError'
         | 'errorMessages'
         | 'validationSchema'

@@ -4,7 +4,7 @@ import { ComponentSizeType } from '@Shared/constants'
 import { SortingOrder } from '@Common/Constants'
 
 import { Button, ButtonVariantType } from '../Button'
-import { getHeaderGridTemplateColumn } from './utils'
+import { getActionButtonPosition, getHeaderGridTemplateColumn } from './utils'
 import { DynamicDataTableHeaderType, DynamicDataTableHeaderProps } from './types'
 
 export const DynamicDataTableHeader = <K extends string>({
@@ -15,6 +15,7 @@ export const DynamicDataTableHeader = <K extends string>({
     readOnly,
     isAdditionNotAllowed,
     headerComponent = null,
+    actionButtonConfig = null,
 }: DynamicDataTableHeaderProps<K>) => {
     // CONSTANTS
     const firstHeaderKey = headers[0].key
@@ -24,13 +25,15 @@ export const DynamicDataTableHeader = <K extends string>({
     /** Boolean determining if table has rows. */
     const hasRows = (!readOnly && !isAdditionNotAllowed) || !!rows.length
     /** style: grid-template-columns */
-    const headerGridTemplateColumn = getHeaderGridTemplateColumn(headers)
+    const headerGridTemplateColumn = getHeaderGridTemplateColumn(headers, actionButtonConfig)
+    const isActionButtonAtTheStart =
+        getActionButtonPosition({ headers, actionButtonConfig }) === 0 && actionButtonConfig.position !== 'end'
 
     // RENDERERS
     const renderHeaderCell = ({ key, label, isSortable }: DynamicDataTableHeaderType<K>) => (
         <div
             key={`${key}-header`}
-            className={`bcn-50 py-6 px-8 flexbox dc__content-space dc__align-items-center ${key === firstHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : ''} ${key === lastHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}` : ''}`}
+            className={`bcn-50 py-6 px-8 flexbox dc__content-space dc__align-items-center ${(!isActionButtonAtTheStart && (key === firstHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : '')) || ''} ${key === lastHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}` : ''}`}
         >
             {isSortable ? (
                 <button
@@ -74,7 +77,14 @@ export const DynamicDataTableHeader = <K extends string>({
                 className="dynamic-data-table two-columns w-100 bcn-1 br-4"
                 style={{ gridTemplateColumns: headerGridTemplateColumn }}
             >
-                <div className="dynamic-data-table__row">{headers.map((header) => renderHeaderCell(header))}</div>
+                <div className="dynamic-data-table__row">
+                    {isActionButtonAtTheStart && (
+                        <div
+                            className={`bcn-50 ${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
+                        />
+                    )}
+                    {headers.map((header) => renderHeaderCell(header))}
+                </div>
             </div>
         </div>
     )
