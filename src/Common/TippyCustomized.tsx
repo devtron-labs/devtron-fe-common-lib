@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-cross.svg'
 import { ReactComponent as Help } from '../Assets/Icon/ic-help.svg'
@@ -33,7 +33,6 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
 
     const onTippyMount = (tippyInstance) => {
         tippyRef.current = tippyInstance
-        document.addEventListener('keydown', closeOnEsc)
     }
 
     const closeTippy = (e) => {
@@ -49,11 +48,21 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
         setShowHeadingInfo(false)
     }
 
-    const closeOnEsc = (e) => {
-        if (e.keyCode === 27) {
-            closeTippy(e)
+    useEffect(() => {
+        const closeOnEsc = (e) => {
+            if (e.keyCode === 27) {
+                closeTippy(e)
+            }
         }
-    }
+        
+        document.addEventListener('keydown', closeOnEsc)
+
+        return () => {
+            document.removeEventListener('keydown', closeOnEsc)
+        }
+    }, [])
+
+
 
     const toggleHeadingInfo = (e) => {
         setShowHeadingInfo(not)
