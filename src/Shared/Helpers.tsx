@@ -99,6 +99,9 @@ export const preventBodyScroll = (lock: boolean): void => {
 
 export const preventOutsideFocus = ({ identifier, preventFocus }: PreventOutsideFocusProps) => {
     const identifierElement = document.getElementById(identifier)
+    if (!identifierElement) {
+        return
+    }
     if (preventFocus) {
         identifierElement.setAttribute('inert', 'true')
     } else {

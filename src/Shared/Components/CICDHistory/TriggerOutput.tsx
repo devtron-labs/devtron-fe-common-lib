@@ -188,12 +188,14 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
     const toggleAbortConfiguration = (): void => {
         setAbortConfirmation(!abortConfirmation)
     }
+
     const closeForceAbortModal = (): void => {
         setAbortError({
             status: false,
             message: '',
         })
     }
+
     return (
         <>
             <div className="flex dc__gap-8 left pt-12">

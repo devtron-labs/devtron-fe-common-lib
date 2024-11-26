@@ -5,7 +5,6 @@ import { useRegisterShortcut } from '@Common/Hooks'
 import { preventBodyScroll, preventOutsideFocus } from '@Shared/Helpers'
 import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
 import { BackdropProps } from './types'
-import './backdrop.scss'
 
 const Backdrop = ({ children, onEscape }: BackdropProps) => {
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()

@@ -8,6 +8,8 @@ import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import './confirmationModal.scss'
 import { Backdrop } from '../Backdrop'
 
+let timeoutId: number
+
 const ConfirmationModal = ({
     title,
     subtitle,
@@ -53,7 +55,7 @@ const ConfirmationModal = ({
     useEffect(() => {
         if (showConfirmationModal) {
             // Timeout so that if modal is opened on enter press, it does not trigger onClick
-            setTimeout(() => {
+            timeoutId = setTimeout(() => {
                 registerShortcut({ keys: ['Enter'], callback: handleTriggerPrimaryActionButton })
             }, 100)
         }
@@ -61,6 +63,7 @@ const ConfirmationModal = ({
         return () => {
             if (showConfirmationModal) {
                 unregisterShortcut(['Enter'])
+                clearTimeout(timeoutId)
             }
         }
     }, [showConfirmationModal, primaryButtonConfig, disablePrimaryButton])
@@ -81,12 +84,7 @@ const ConfirmationModal = ({
                     >
                         <div className="flexbox-col dc__gap-12 p-20">
                             <RenderIcon className="icon-dim-48 dc__no-shrink" />
-
-                            {typeof title === 'string' ? (
-                                <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
-                            ) : (
-                                title
-                            )}
+                            <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
 
                             {typeof subtitle === 'string' ? (
                                 <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
