@@ -210,7 +210,7 @@ const HistorySummaryCard = React.memo(
             >
                 <NavLink
                     to={getPath}
-                    className="w-100 deployment-history-card-container"
+                    className="w-100 deployment-history-card-container p-8 br-4"
                     data-testid={dataTestId}
                     activeClassName="active"
                     ref={assignTargetCardRef}
@@ -218,22 +218,21 @@ const HistorySummaryCard = React.memo(
                     <div className="w-100 deployment-history-card">
                         {getTriggerStatusIcon(status)}
                         <div className="flexbox-col dc__gap-8">
-                            <div className="flex column left dc__ellipsis-right">
-                                <div className="cn-9 fs-14">
+                            <div className="flex column left">
+                                <div className="cn-9 fs-13 lh-20">
                                     {moment(startedOn).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
                                 </div>
                                 <div className="flex left cn-7 fs-12">
                                     {isCDType && (
                                         <>
-                                            <div className="dc__capitalize">
+                                            <div className="dc__first-letter-capitalize dc__no-shrink">
                                                 {['pre', 'post'].includes(stage?.toLowerCase())
                                                     ? `${stage}-deploy`
                                                     : stage}
                                             </div>
                                             <span className="dc__bullet dc__bullet--d2 ml-4 mr-4" />
-
                                             {artifact && (
-                                                <div className="dc__app-commit__hash dc__app-commit__hash--no-bg">
+                                                <div className="dc__app-commit__hash dc__app-commit__hash--no-bg dc__no-shrink">
                                                     <ICDocker className="commit-hash__icon grayscale" />
                                                     {artifact.split(':')[1].slice(-12)}
                                                 </div>
@@ -241,7 +240,7 @@ const HistorySummaryCard = React.memo(
                                             <span className="dc__bullet dc__bullet--d2 ml-4 mr-4" />
                                         </>
                                     )}
-                                    <div className="cn-7 fs-12">
+                                    <div className="cn-7 fs-12 dc__ellipsis-right">
                                         {triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}
                                     </div>
                                 </div>
@@ -377,11 +376,10 @@ const Sidebar = React.memo(
                     </div>
                 )}
 
-                <div className="flex column top left flex-grow-1 dc__hide-hscroll" style={{ overflowY: 'auto' }}>
+                <div className="flex column top left flex-grow-1 dc__hide-hscroll p-8" style={{ overflowY: 'auto' }}>
                     {fetchIdData === FetchIdDataStatus.SUCCESS && (
                         <ViewAllCardsTile handleViewAllHistory={handleViewAllHistory} />
                     )}
-
                     {Array.from(triggerHistory)
                         .sort(([a], [b]) => b - a)
                         .map(([triggerId, triggerDetails], index) => (
