@@ -806,8 +806,6 @@ export const sanitizeApprovalConfigData = (
     approvalConfigData
         ? {
               kind: approvalConfigData?.kind,
-              hasCurrentUserApproved: approvalConfigData?.hasCurrentUserApproved ?? false,
-              canCurrentUserApprove: approvalConfigData?.canCurrentUserApprove ?? false,
               requiredCount: approvalConfigData?.requiredCount ?? 0,
               currentCount: approvalConfigData?.currentCount ?? 0,
               anyUserApprovedInfo: sanitizeUserApprovalInfo(approvalConfigData?.anyUserApprovedInfo),
@@ -826,8 +824,6 @@ export const sanitizeApprovalConfigData = (
           }
         : {
               kind: 'DEPLOYMENT_TRIGGER',
-              hasCurrentUserApproved: false,
-              canCurrentUserApprove: false,
               requiredCount: 6,
               currentCount: 3,
               anyUserApprovedInfo: {

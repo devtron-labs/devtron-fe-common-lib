@@ -406,8 +406,6 @@ export interface UserApprovalInfo {
 
 export interface ApprovalConfigDataType extends Pick<UserApprovalInfo, 'currentCount' | 'requiredCount'> {
     kind: 'DEPLOYMENT_TRIGGER' | 'CM' | 'CS' | 'DEPLOYMENT_TEMPLATE'
-    hasCurrentUserApproved: boolean
-    canCurrentUserApprove: boolean
     anyUserApprovedInfo: UserApprovalInfo
     specificUsersApprovedInfo: UserApprovalInfo
     userGroupsApprovedInfo: Pick<UserApprovalInfo, 'currentCount' | 'requiredCount'> & {
@@ -431,7 +429,9 @@ export interface UserApprovalMetadataType {
      * @deprecated
      */
     approvalConfig?: UserApprovalConfigType
-    approvedConfigData?: ApprovalConfigDataType
+    hasCurrentUserApproved: boolean
+    canCurrentUserApprove: boolean
+    approvedConfigData: ApprovalConfigDataType
 }
 
 export enum FilterStates {
@@ -497,7 +497,16 @@ export interface CDMaterialListModalServiceUtilProps {
     artifactId?: number
     artifactStatus?: string
     disableDefaultSelection?: boolean
-    userApprovalConfig?: UserApprovalConfigType
+    // userApprovalConfig?: UserApprovalConfigType
+    // deploymentApprovalInfo: {
+    //     eligibleApprovers: {
+    //         specificUsers: string[]
+    //         anyUsers: string[]
+    //         userGroups: (Pick<ApprovalConfigDataType['userGroupsApprovedInfo']['userGroups'][number], 'groupIdentifier' | 'groupName'> & {
+    //             identifiers: string[]
+    //         })[]
+    //     }
+    // }
 }
 
 export interface CDMaterialType {
@@ -722,6 +731,19 @@ export interface CDMaterialsApprovalInfo {
      * Only available incase of approvals do'nt use in cd materials or any other flow since approvalUsers are not present there
      */
     imageApprovalPolicyDetails: ImageApprovalPolicyType
+    deploymentApprovalInfo: {
+        eligibleApprovers: {
+            specificUsers: string[]
+            anyUsers: string[]
+            userGroups: (Pick<
+                ApprovalConfigDataType['userGroupsApprovedInfo']['userGroups'][number],
+                'groupIdentifier' | 'groupName'
+            > & {
+                identifiers: string[]
+            })[]
+        }
+        approvalConfigData: ApprovalConfigDataType
+    }
 }
 
 export interface CDMaterialsMetaInfo {

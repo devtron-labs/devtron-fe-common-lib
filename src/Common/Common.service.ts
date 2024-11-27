@@ -92,20 +92,20 @@ export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
 }
 
-const sanitizeApprovalConfigFromApprovalMetadata = (
+const sanitizeApprovalConfig = (
     approvalMetadata: UserApprovalMetadataType,
-    userApprovalConfig: UserApprovalConfigType,
 ): UserApprovalMetadataType => {
     const approvedUsersData = approvalMetadata?.approvedUsersData || []
-    const unsanitizedApprovalConfig = approvalMetadata?.approvalConfig || userApprovalConfig
 
     return {
         ...approvalMetadata,
+        hasCurrentUserApproved: approvalMetadata?.hasCurrentUserApproved ?? false,
+        canCurrentUserApprove: approvalMetadata?.canCurrentUserApprove ?? false,
         approvedUsersData: approvedUsersData.map((userData) => ({
             ...userData,
             userGroups: userData.userGroups?.filter((group) => !!group?.identifier && !!group?.name) ?? [],
         })),
-        approvalConfig: sanitizeUserApprovalConfig(unsanitizedApprovalConfig),
+        // approvalConfig: sanitizeUserApprovalConfig(approvalMetadata?.approvalConfig),
         approvedConfigData: sanitizeApprovalConfigData(approvalMetadata?.approvedConfigData),
     }
 }
@@ -116,7 +116,6 @@ const cdMaterialListModal = ({
     artifactId,
     artifactStatus,
     disableDefaultSelection,
-    userApprovalConfig,
 }: CDMaterialListModalServiceUtilProps) => {
     if (!artifacts || !artifacts.length) return []
 
@@ -161,9 +160,8 @@ const cdMaterialListModal = ({
             vulnerable: material.vulnerable,
             runningOnParentCd: material.runningOnParentCd,
             artifactStatus: artifactStatusValue,
-            userApprovalMetadata: sanitizeApprovalConfigFromApprovalMetadata(
+            userApprovalMetadata: sanitizeApprovalConfig(
                 material.userApprovalMetadata,
-                userApprovalConfig,
             ),
             triggeredBy: material.triggeredBy,
             isVirtualEnvironment: material.isVirtualEnvironment,
@@ -306,14 +304,32 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
             userApprovalConfig: null,
             canApproverDeploy: cdMaterialsResult?.canApproverDeploy ?? false,
             imageApprovalPolicyDetails: null,
+            deploymentApprovalInfo: null,
         }
     }
+
+    const deploymentApprovalInfo: CDMaterialsApprovalInfo['deploymentApprovalInfo'] =
+        cdMaterialsResult.deploymentApprovalInfo
 
     return {
         approvalUsers: cdMaterialsResult.approvalUsers,
         userApprovalConfig: sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig),
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
         imageApprovalPolicyDetails: getImageApprovalPolicyDetailsFromMaterialResult(cdMaterialsResult),
+        deploymentApprovalInfo: {
+            eligibleApprovers: {
+                anyUsers: deploymentApprovalInfo?.eligibleApprovers?.anyUsers ?? [],
+                specificUsers: deploymentApprovalInfo?.eligibleApprovers?.specificUsers ?? [],
+                userGroups: (deploymentApprovalInfo?.eligibleApprovers?.userGroups ?? []).map(
+                    ({ groupName, groupIdentifier, identifiers }) => ({
+                        groupIdentifier,
+                        groupName,
+                        identifiers: identifiers ?? [],
+                    }),
+                ),
+            },
+            approvalConfigData: sanitizeApprovalConfigData(deploymentApprovalInfo?.approvalConfigData)
+        },
     }
 }
 
@@ -382,7 +398,6 @@ export const processCDMaterialServiceResponse = (
         artifactId: cdMaterialsResult.latest_wf_artifact_id,
         artifactStatus: cdMaterialsResult.latest_wf_artifact_status,
         disableDefaultSelection,
-        userApprovalConfig: cdMaterialsResult.userApprovalConfig,
     })
     const approvalInfo = processCDMaterialsApprovalInfo(
         stage === DeploymentNodeType.CD || stage === DeploymentNodeType.APPROVAL,
