@@ -132,7 +132,7 @@ export const DynamicDataTableRow = <K extends string>({
                 )
             case DynamicDataTableRowDataType.TIPPY_CUSTOMIZED:
                 return (
-                    <div className="w-100 h-100 flex top p-8">
+                    <div className="w-100 h-100 flex top">
                         <TippyCustomized {...row.data[key].props} />
                     </div>
                 )
@@ -225,7 +225,7 @@ export const DynamicDataTableRow = <K extends string>({
         const actionButtonIndex = getActionButtonPosition({ headers, actionButtonConfig })
         if (actionButtonIndex === index) {
             const { renderer, position = 'start' } = actionButtonConfig
-            const actionButtonNode = <div className="dynamic-data-table__cell flex top p-8 bcn-0">{renderer(row)}</div>
+            const actionButtonNode = <div className="dynamic-data-table__cell flex top bcn-0">{renderer(row)}</div>
 
             return position === 'start' ? (
                 <>
