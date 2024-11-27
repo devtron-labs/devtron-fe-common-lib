@@ -6,7 +6,9 @@ import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 import { Tooltip } from '@Common/Tooltip'
 import { TippyCustomized } from '@Common/TippyCustomized'
+import { TippyCustomizedProps } from '@Common/Types'
 
+import { ConditionalWrap } from '@Common/Helper'
 import { SelectTextArea } from '../SelectTextArea'
 import {
     getSelectPickerOptionByValue,
@@ -15,8 +17,12 @@ import {
     SelectPickerVariantType,
 } from '../SelectPicker'
 import { MultipleResizableTextArea } from '../MultipleResizableTextArea'
-import { getActionButtonPosition, getRowGridTemplateColumn } from './utils'
+import { getActionButtonPosition, getRowGridTemplateColumn, rowTypeHasInputField } from './utils'
 import { DynamicDataTableRowType, DynamicDataTableRowProps, DynamicDataTableRowDataType } from './types'
+
+const renderWithTippyCustomized = (props: Omit<TippyCustomizedProps, 'children'>) => (children) => (
+    <TippyCustomized {...props}>{children}</TippyCustomized>
+)
 
 export const DynamicDataTableRow = <K extends string>({
     rows,
@@ -24,6 +30,7 @@ export const DynamicDataTableRow = <K extends string>({
     maskValue,
     readOnly,
     isAdditionNotAllowed,
+    isDeletionNotAllowed,
     validationSchema = () => true,
     showError,
     errorMessages = [],
@@ -39,7 +46,11 @@ export const DynamicDataTableRow = <K extends string>({
     const hasRows = (!readOnly && !isAdditionNotAllowed) || !!rows.length
     const disableDeleteRow = rows.length === 1 && isFirstRowEmpty
     /** style: grid-template-columns */
-    const rowGridTemplateColumn = getRowGridTemplateColumn(headers, actionButtonConfig, readOnly)
+    const rowGridTemplateColumn = getRowGridTemplateColumn(
+        headers,
+        actionButtonConfig,
+        isDeletionNotAllowed || readOnly,
+    )
 
     const cellRef = useRef<Record<string | number, Record<K, RefObject<HTMLTextAreaElement>>>>()
     if (!cellRef.current) {
@@ -122,7 +133,7 @@ export const DynamicDataTableRow = <K extends string>({
                             dependentRefs={cellRef?.current?.[row.id]}
                             textAreaProps={{
                                 ...row.data[key].props?.textAreaProps,
-                                className: 'dynamic-data-table__cell-input placeholder-cn5 py-8 cn-9 fs-13 lh-20',
+                                className: 'dynamic-data-table__cell-input placeholder-cn5 p-8 cn-9 fs-13 lh-20',
                                 disableOnBlurResizeToMinHeight: true,
                                 minHeight: 20,
                                 maxHeight: 160,
@@ -130,10 +141,21 @@ export const DynamicDataTableRow = <K extends string>({
                         />
                     </div>
                 )
-            case DynamicDataTableRowDataType.TIPPY_CUSTOMIZED:
+            case DynamicDataTableRowDataType.BUTTON:
                 return (
-                    <div className="w-100 h-100 flex top p-8">
-                        <TippyCustomized {...row.data[key].props} />
+                    <div className="w-100 h-100 flex top">
+                        <ConditionalWrap
+                            condition={row.data[key].props?.showTippyCustomized}
+                            wrap={renderWithTippyCustomized(row.data[key].props?.tippyCustomizedProps)}
+                        >
+                            <button
+                                type="button"
+                                className={`dc__transparent w-100 p-8 flex left dc__gap-8 dc__hover-n50 cn-9 fs-13 lh-20 ${row.data[key].disabled ? 'dc__disabled' : ''}`}
+                            >
+                                {row.data[key].props?.icon || null}
+                                {row.data[key].props.text}
+                            </button>
+                        </ConditionalWrap>
                     </div>
                 )
             default:
@@ -205,7 +227,7 @@ export const DynamicDataTableRow = <K extends string>({
                 plugins={[followCursor]}
             >
                 <div
-                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key, row.id) ? 'dynamic-data-table__cell--error no-hover' : ''}`}
+                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key, row.id) ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
                 >
                     {maskValue?.[key] && row.data[key].value ? (
                         <div className="py-8 px-12 h-36 flex">{DEFAULT_SECRET_PLACEHOLDER}</div>
@@ -225,7 +247,7 @@ export const DynamicDataTableRow = <K extends string>({
         const actionButtonIndex = getActionButtonPosition({ headers, actionButtonConfig })
         if (actionButtonIndex === index) {
             const { renderer, position = 'start' } = actionButtonConfig
-            const actionButtonNode = <div className="dynamic-data-table__cell flex top p-8 bcn-0">{renderer(row)}</div>
+            const actionButtonNode = <div className="dc__overflow-hidden flex top bcn-0">{renderer(row)}</div>
 
             return position === 'start' ? (
                 <>
@@ -257,7 +279,7 @@ export const DynamicDataTableRow = <K extends string>({
                             {headers.map(({ key }, index) => (
                                 <Fragment key={key}>{renderCell(row, key, index)}</Fragment>
                             ))}
-                            {!readOnly && (
+                            {!isDeletionNotAllowed && !readOnly && (
                                 <button
                                     type="button"
                                     className={`dynamic-data-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 dc__hover-n50 dc__tab-focus ${disableDeleteRow ? 'dc__disabled' : ''}`}

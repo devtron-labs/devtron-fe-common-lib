@@ -74,22 +74,18 @@
             padding: 8px;
         }
 
-        &:not(:has(.select-picker-borderless-control)) .select-text-area-container {
-            padding-inline: 8px;
-        }
-
         &:hover:not(:focus-within):not(.no-hover) {
             outline: 1px solid var(--N200);
         }
 
-        &:focus-within {
+        &:focus-within:not(.no-focus) {
             position: relative;
             z-index: 1;
             outline: 1px solid var(--B500);
         }
 
         &--error,
-        &--error:focus-within,
+        &--error:focus-within:not(.no-focus),
         &--error:hover {
             outline: 1px solid var(--R500);
         }
