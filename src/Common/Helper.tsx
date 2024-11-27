@@ -169,7 +169,7 @@ export const getAlphabetIcon = (str: string, rootClassName: string = '') => {
     if (!str) return null
     return (
         <span
-            className={`${rootClassName} alphabet-icon__initial fs-13 icon-dim-20 flex cn-0 mr-8`}
+            className={`${rootClassName} alphabet-icon__initial fs-13 icon-dim-20 flex cn-0 mr-8 dc__no-shrink`}
             style={{ backgroundColor: getRandomColor(str) }}
         >
             {str[0]}
