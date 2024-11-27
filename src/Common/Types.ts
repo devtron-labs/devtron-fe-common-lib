@@ -339,26 +339,6 @@ export enum ManualApprovalType {
     notConfigured = 'NOT_CONFIGURED',
 }
 
-export interface UserGroupApproverType {
-    email: string
-    hasAccess: boolean
-}
-
-export interface ImageApprovalPolicyUserGroupDataType {
-    // Mapping email to data
-    dataStore: Record<string, UserGroupApproverType>
-    requiredCount: number
-    emails: string[]
-}
-
-export interface ImageApprovalPolicyType {
-    isPolicyConfigured: boolean
-    specificUsersData: ImageApprovalPolicyUserGroupDataType
-    userGroupData: Record<string, ImageApprovalPolicyUserGroupDataType>
-    // Assuming name of groups are unique
-    validGroups: string[]
-}
-
 export type ImageApprovalUsersInfoDTO = Record<string, Pick<UserGroupDTO, 'identifier' | 'name'>[]>
 
 export interface UserApprovalConfigType {
@@ -725,12 +705,6 @@ export interface CDMaterialsApprovalInfo {
      */
     userApprovalConfig: UserApprovalConfigType
     canApproverDeploy: boolean
-    /**
-     * @deprecated
-     *
-     * Only available incase of approvals do'nt use in cd materials or any other flow since approvalUsers are not present there
-     */
-    imageApprovalPolicyDetails: ImageApprovalPolicyType
     deploymentApprovalInfo: {
         eligibleApprovers: {
             specificUsers: string[]

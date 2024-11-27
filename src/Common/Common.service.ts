@@ -16,7 +16,7 @@
 
 import moment from 'moment'
 import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
-import { getIsManualApprovalSpecific, sanitizeApprovalConfigData, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
+import { sanitizeApprovalConfigData, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
@@ -34,18 +34,11 @@ import {
     CDMaterialFilterQuery,
     ImagePromotionMaterialInfo,
     EnvironmentListHelmResponse,
-    UserGroupApproverType,
-    ImageApprovalPolicyUserGroupDataType,
-    ImageApprovalPolicyType,
-    ImageApprovalUsersInfoDTO,
     UserApprovalMetadataType,
-    UserApprovalConfigType,
     CDMaterialListModalServiceUtilProps,
     CDMaterialType,
 } from './Types'
 import { ApiResourceType } from '../Pages'
-import { API_TOKEN_PREFIX } from '@Shared/constants'
-import { DefaultUserKey } from '@Shared/types'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -207,103 +200,12 @@ const cdMaterialListModal = ({
     return materials
 }
 
-// TODO: update or remove
-const getImageApprovalPolicyDetailsFromMaterialResult = (cdMaterialsResult): ImageApprovalPolicyType => {
-    const approvalUsers: string[] = cdMaterialsResult.approvalUsers || []
-    const userApprovalConfig = sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig)
-    const isPolicyConfigured = getIsManualApprovalSpecific(userApprovalConfig)
-    const imageApprovalUsersInfo: ImageApprovalUsersInfoDTO = cdMaterialsResult.imageApprovalUsersInfo || {}
-
-    const approvalUsersMap = approvalUsers.reduce(
-        (acc, user) => {
-            acc[user] = true
-            return acc
-        },
-        {} as Record<string, true>,
-    )
-
-    const specificUsersAPIToken = userApprovalConfig.specificUsers.identifiers
-        .filter((user) => user.startsWith(API_TOKEN_PREFIX))
-        .sort(stringComparatorBySortOrder)
-    const specificUsersEmails = userApprovalConfig.specificUsers.identifiers
-        .filter((user) => !user.startsWith(API_TOKEN_PREFIX) && user !== DefaultUserKey.system)
-        .sort(stringComparatorBySortOrder)
-
-    const specificUsersData: ImageApprovalPolicyType['specificUsersData'] = {
-        dataStore: userApprovalConfig.specificUsers.identifiers.reduce(
-            (acc, email) => {
-                acc[email] = {
-                    email,
-                    hasAccess: approvalUsersMap[email] ?? false,
-                }
-                return acc
-            },
-            {} as Record<string, UserGroupApproverType>,
-        ),
-        requiredCount: userApprovalConfig.specificUsers.requiredCount,
-        emails: specificUsersEmails.concat(specificUsersAPIToken),
-    }
-
-    const validGroups = userApprovalConfig.userGroups.map((group) => group.identifier)
-
-    // Have moved from Object.keys(imageApprovalUsersInfo) to approvalUsers since backend is not filtering out the users without approval
-    // TODO: This check should be on BE. Need to remove this once BE is updated
-    const usersList = approvalUsers.filter((user) => user !== DefaultUserKey.system)
-    const groupIdentifierToUsersMap = usersList.reduce(
-        (acc, user) => {
-            const userGroups = imageApprovalUsersInfo[user] || []
-            userGroups.forEach((group) => {
-                if (!acc[group.identifier]) {
-                    acc[group.identifier] = {}
-                }
-                acc[group.identifier][user] = true
-            })
-            return acc
-        },
-        {} as Record<string, Record<string, true>>,
-    )
-
-    return {
-        isPolicyConfigured,
-        specificUsersData,
-        userGroupData: userApprovalConfig.userGroups.reduce(
-            (acc, group) => {
-                const identifier = group.identifier
-                // No need of handling api tokens here since they are not part of user groups
-                const users = Object.keys(groupIdentifierToUsersMap[identifier] || {}).sort(stringComparatorBySortOrder)
-
-                acc[identifier] = {
-                    dataStore: users.reduce(
-                        (acc, user) => {
-                            acc[user] = {
-                                email: user,
-                                // As of now it will always be true, but UI has handled it in a way that can support false as well
-                                hasAccess: approvalUsersMap[user] ?? false,
-                            }
-                            return acc
-                        },
-                        {} as Record<string, UserGroupApproverType>,
-                    ),
-                    requiredCount: group.requiredCount,
-                    emails: users,
-                }
-
-                return acc
-            },
-            {} as Record<string, ImageApprovalPolicyUserGroupDataType>,
-        ),
-        // Not sorting since would change them in approval info modal to name
-        validGroups,
-    }
-}
-
 const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResult): CDMaterialsApprovalInfo => {
     if (!enableApproval || !cdMaterialsResult) {
         return {
             approvalUsers: [],
             userApprovalConfig: null,
             canApproverDeploy: cdMaterialsResult?.canApproverDeploy ?? false,
-            imageApprovalPolicyDetails: null,
             deploymentApprovalInfo: null,
         }
     }
@@ -315,7 +217,6 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
         approvalUsers: cdMaterialsResult.approvalUsers,
         userApprovalConfig: sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig),
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
-        imageApprovalPolicyDetails: getImageApprovalPolicyDetailsFromMaterialResult(cdMaterialsResult),
         deploymentApprovalInfo: {
             eligibleApprovers: {
                 anyUsers: deploymentApprovalInfo?.eligibleApprovers?.anyUsers ?? [],

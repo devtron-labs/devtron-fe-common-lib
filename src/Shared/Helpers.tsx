@@ -905,9 +905,6 @@ export const getIsManualApprovalConfigured = (userApprovalConfig?: Pick<UserAppr
     // Added null check for backward compatibility
     !!userApprovalConfig?.type && userApprovalConfig.type !== ManualApprovalType.notConfigured
 
-export const getIsManualApprovalSpecific = (userApprovalConfig?: Pick<UserApprovalConfigType, 'type'>) =>
-    getIsManualApprovalConfigured(userApprovalConfig) && userApprovalConfig.type === ManualApprovalType.specific
-
 /**
  * @description - Function to open a new tab with the given url
  * @param url - url to be opened in new tab
