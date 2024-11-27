@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
+import { ButtonHTMLAttributes, ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CustomInput, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
@@ -19,8 +19,6 @@ const ConfirmationModal = ({
     showConfirmationModal,
     handleClose,
 }: ConfirmationModalProps) => {
-    const timeoutRef = useRef<number>(null)
-
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
     const [confirmationText, setConfirmationText] = useState<string>('')
@@ -54,18 +52,12 @@ const ConfirmationModal = ({
 
     useEffect(() => {
         if (showConfirmationModal) {
-            // Timeout so that if modal is opened on enter press, it does not trigger onClick
-            timeoutRef.current = setTimeout(() => {
-                registerShortcut({ keys: ['Enter'], callback: handleTriggerPrimaryActionButton })
-            }, 100)
+            registerShortcut({ keys: ['Enter'], callback: handleTriggerPrimaryActionButton })
         }
 
         return () => {
             if (showConfirmationModal) {
                 unregisterShortcut(['Enter'])
-            }
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current)
             }
         }
     }, [showConfirmationModal, primaryButtonConfig, disablePrimaryButton])
