@@ -89,7 +89,11 @@ export const SelectTextArea = ({
                     fullWidth
                 />
             ) : (
-                <button type="button" className="flex dc__transparent" onClick={onClear}>
+                <button
+                    type="button"
+                    className="flex dc__transparent dc__position-abs dc__top-8 dc__right-8"
+                    onClick={onClear}
+                >
                     <ICClearSquare className="icon-dim-16" />
                 </button>
             )}

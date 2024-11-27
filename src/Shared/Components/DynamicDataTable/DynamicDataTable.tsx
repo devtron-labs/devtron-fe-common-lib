@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
+import { useMemo } from 'react'
+
 import { DynamicDataTableHeader } from './DynamicDataTableHeader'
 import { DynamicDataTableRow } from './DynamicDataTableRow'
 import { DynamicDataTableProps } from './types'
 import './styles.scss'
 
-export const DynamicDataTable = <K extends string>(props: DynamicDataTableProps<K>) => (
-    <div className="w-100">
-        <DynamicDataTableHeader {...props} />
-        <DynamicDataTableRow {...props} />
-    </div>
-)
+export const DynamicDataTable = <K extends string>({ headers, ...props }: DynamicDataTableProps<K>) => {
+    const filteredHeaders = useMemo(() => headers.filter(({ isHidden }) => !isHidden), [headers])
+
+    return (
+        <div className="w-100 dc__overflow-auto">
+            <DynamicDataTableHeader headers={filteredHeaders} {...props} />
+            <DynamicDataTableRow headers={filteredHeaders} {...props} />
+        </div>
+    )
+}

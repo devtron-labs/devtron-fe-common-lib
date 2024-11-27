@@ -56,11 +56,10 @@ export const DynamicDataTableHeader = <K extends string>({
                     {label}
                 </div>
             )}
-            {key === firstHeaderKey && (
+            {!isActionDisabled && key === firstHeaderKey && (
                 <Button
                     dataTestId="data-table-add-row-button"
                     ariaLabel="Add"
-                    disabled={isActionDisabled}
                     onClick={onRowAdd}
                     icon={<ICAdd />}
                     variant={ButtonVariantType.borderLess}

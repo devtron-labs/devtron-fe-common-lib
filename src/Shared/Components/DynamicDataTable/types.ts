@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactNode } from 'react'
+import { DetailedHTMLProps, ReactNode } from 'react'
 
 import { SortingOrder } from '@Common/Constants'
 
@@ -36,13 +36,15 @@ export type DynamicDataTableHeaderType<K extends string> = {
     width: string
     /** An optional boolean indicating if the column is sortable. */
     isSortable?: boolean
+    /** An optional boolean to hide the column */
+    isHidden?: boolean
 }
 
 export enum DynamicDataTableRowDataType {
     TEXT = 'text',
     DROPDOWN = 'dropdown',
     SELECT_TEXT = 'select-text',
-    TIPPY_CUSTOMIZED = 'tippy-customized',
+    BUTTON = 'button',
 }
 
 /**
@@ -92,12 +94,30 @@ export type DynamicDataTableRowType<K extends string> = {
                   }
               }
             | {
-                  type?: DynamicDataTableRowDataType.TIPPY_CUSTOMIZED
-                  props: TippyCustomizedProps
+                  type?: DynamicDataTableRowDataType.BUTTON
+                  props: (Pick<
+                      DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
+                      'onClick'
+                  > & {
+                      icon?: ReactNode
+                      text: ReactNode
+                  }) &
+                      (
+                          | {
+                                showTippyCustomized: true
+                                tippyCustomizedProps: Omit<TippyCustomizedProps, 'children'>
+                            }
+                          | {
+                                showTippyCustomized?: false
+                                tippyCustomizedProps?: never
+                            }
+                      )
               }
         )
     }
     id: string | number
+    /** */
+    customState?: Record<string, any>
 }
 
 /**
@@ -137,6 +157,8 @@ export type DynamicDataTableProps<K extends string> = {
     headerComponent?: ReactNode
     /** When true, data addition field will not be shown. */
     isAdditionNotAllowed?: boolean
+    /** When true, data addition field will not be shown. */
+    isDeletionNotAllowed?: boolean
     /** When true, data add or update is disabled. */
     readOnly?: boolean
     /** */
@@ -205,6 +227,7 @@ export interface DynamicDataTableRowProps<K extends string>
         | 'headers'
         | 'maskValue'
         | 'isAdditionNotAllowed'
+        | 'isDeletionNotAllowed'
         | 'readOnly'
         | 'onRowEdit'
         | 'onRowDelete'
