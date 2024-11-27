@@ -361,7 +361,6 @@ export interface ImageApprovalPolicyType {
 
 export type ImageApprovalUsersInfoDTO = Record<string, Pick<UserGroupDTO, 'identifier' | 'name'>[]>
 
-// TODO: Need to verify this change for all impacting areas
 export interface UserApprovalConfigType {
     type: ManualApprovalType
     requiredCount: number
@@ -396,12 +395,43 @@ interface ApprovalUserDataType {
     userGroups?: Pick<UserGroupDTO, 'identifier' | 'name'>[]
 }
 
+export interface UserApprovalInfo {
+    requiredCount: number
+    currentCount: number
+    approverList: {
+        hasApproved: boolean
+        identifier: string
+    }[]
+}
+
+export interface ApprovalConfigDataType extends Pick<UserApprovalInfo, 'currentCount' | 'requiredCount'> {
+    kind: 'DEPLOYMENT_TRIGGER' | 'CM' | 'CS' | 'DEPLOYMENT_TEMPLATE'
+    hasCurrentUserApproved: boolean
+    canCurrentUserApprove: boolean
+    anyUserApprovedInfo: UserApprovalInfo
+    specificUsersApprovedInfo: UserApprovalInfo
+    userGroupsApprovedInfo: Pick<UserApprovalInfo, 'currentCount' | 'requiredCount'> & {
+        userGroups: (UserApprovalInfo & {
+            groupIdentifier: UserGroupDTO['identifier']
+            groupName: UserGroupDTO['name']
+        })[]
+    }
+}
+
+
 export interface UserApprovalMetadataType {
     approvalRequestId: number
     approvalRuntimeState: number
+    /**
+     * @deprecated
+     */
     approvedUsersData: ApprovalUserDataType[]
     requestedUserData: ApprovalUserDataType
+    /**
+     * @deprecated
+     */
     approvalConfig?: UserApprovalConfigType
+    approvedConfigData?: ApprovalConfigDataType
 }
 
 export enum FilterStates {
@@ -677,10 +707,18 @@ export interface FilterConditionsListType {
 }
 
 export interface CDMaterialsApprovalInfo {
+    /**
+     * @deprecated ?
+     */
     approvalUsers: string[]
+    /**
+     * @deprecated
+     */
     userApprovalConfig: UserApprovalConfigType
     canApproverDeploy: boolean
     /**
+     * @deprecated
+     *
      * Only available incase of approvals do'nt use in cd materials or any other flow since approvalUsers are not present there
      */
     imageApprovalPolicyDetails: ImageApprovalPolicyType

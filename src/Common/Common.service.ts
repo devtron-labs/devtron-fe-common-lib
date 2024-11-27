@@ -16,7 +16,7 @@
 
 import moment from 'moment'
 import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
-import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
+import { getIsManualApprovalSpecific, sanitizeApprovalConfigData, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
@@ -41,6 +41,7 @@ import {
     UserApprovalMetadataType,
     UserApprovalConfigType,
     CDMaterialListModalServiceUtilProps,
+    CDMaterialType,
 } from './Types'
 import { ApiResourceType } from '../Pages'
 import { API_TOKEN_PREFIX } from '@Shared/constants'
@@ -95,12 +96,8 @@ const sanitizeApprovalConfigFromApprovalMetadata = (
     approvalMetadata: UserApprovalMetadataType,
     userApprovalConfig: UserApprovalConfigType,
 ): UserApprovalMetadataType => {
-    if (!approvalMetadata) {
-        return null
-    }
-
-    const approvedUsersData = approvalMetadata.approvedUsersData || []
-    const unsanitizedApprovalConfig = approvalMetadata.approvalConfig || userApprovalConfig
+    const approvedUsersData = approvalMetadata?.approvedUsersData || []
+    const unsanitizedApprovalConfig = approvalMetadata?.approvalConfig || userApprovalConfig
 
     return {
         ...approvalMetadata,
@@ -109,6 +106,7 @@ const sanitizeApprovalConfigFromApprovalMetadata = (
             userGroups: userData.userGroups?.filter((group) => !!group?.identifier && !!group?.name) ?? [],
         })),
         approvalConfig: sanitizeUserApprovalConfig(unsanitizedApprovalConfig),
+        approvedConfigData: sanitizeApprovalConfigData(approvalMetadata?.approvedConfigData),
     }
 }
 
@@ -126,7 +124,7 @@ const cdMaterialListModal = ({
     const startIndex = offset
     let isImageMarked = disableDefaultSelection
 
-    const materials = artifacts.map((material, index) => {
+    const materials = artifacts.map<CDMaterialType>((material, index) => {
         let artifactStatusValue = ''
         const filterState = material.filterState ?? FilterStates.ALLOWED
 
@@ -211,6 +209,7 @@ const cdMaterialListModal = ({
     return materials
 }
 
+// TODO: update or remove
 const getImageApprovalPolicyDetailsFromMaterialResult = (cdMaterialsResult): ImageApprovalPolicyType => {
     const approvalUsers: string[] = cdMaterialsResult.approvalUsers || []
     const userApprovalConfig = sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig)

@@ -33,6 +33,8 @@ import {
     noop,
     SourceTypeMap,
     DATE_TIME_FORMATS,
+    ApprovalConfigDataType,
+    UserApprovalInfo,
 } from '../Common'
 import {
     AggregationKeys,
@@ -788,6 +790,117 @@ export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfi
     },
     userGroups: userApprovalConfig?.userGroups ?? [],
 })
+
+const sanitizeUserApprovalInfo = (userApprovalInfo: UserApprovalInfo | null): UserApprovalInfo => ({
+    currentCount: userApprovalInfo?.currentCount ?? 0,
+    requiredCount: userApprovalInfo?.requiredCount ?? 0,
+    approverList: (userApprovalInfo?.approverList ?? []).map(({ hasApproved, identifier }) => ({
+        hasApproved: hasApproved ?? false,
+        identifier,
+    })),
+})
+
+export const sanitizeApprovalConfigData = (
+    approvalConfigData: ApprovalConfigDataType | null,
+): ApprovalConfigDataType =>
+    approvalConfigData
+        ? {
+              kind: approvalConfigData?.kind,
+              hasCurrentUserApproved: approvalConfigData?.hasCurrentUserApproved ?? false,
+              canCurrentUserApprove: approvalConfigData?.canCurrentUserApprove ?? false,
+              requiredCount: approvalConfigData?.requiredCount ?? 0,
+              currentCount: approvalConfigData?.currentCount ?? 0,
+              anyUserApprovedInfo: sanitizeUserApprovalInfo(approvalConfigData?.anyUserApprovedInfo),
+              specificUsersApprovedInfo: sanitizeUserApprovalInfo(approvalConfigData?.specificUsersApprovedInfo),
+              userGroupsApprovedInfo: {
+                  currentCount: approvalConfigData?.userGroupsApprovedInfo?.currentCount ?? 0,
+                  requiredCount: approvalConfigData?.userGroupsApprovedInfo?.requiredCount ?? 0,
+                  userGroups: (approvalConfigData?.userGroupsApprovedInfo?.userGroups ?? []).map(
+                      ({ groupName, groupIdentifier, ...userApprovalInfo }) => ({
+                          ...sanitizeUserApprovalInfo(userApprovalInfo),
+                          groupName,
+                          groupIdentifier,
+                      }),
+                  ),
+              },
+          }
+        : {
+              kind: 'DEPLOYMENT_TRIGGER',
+              hasCurrentUserApproved: false,
+              canCurrentUserApprove: false,
+              requiredCount: 6,
+              currentCount: 3,
+              anyUserApprovedInfo: {
+                  requiredCount: 2,
+                  currentCount: 2,
+                  approverList: [
+                      {
+                          hasApproved: true,
+                          identifier: 'test-1@devtron.ai',
+                      },
+                      {
+                          hasApproved: true,
+                          identifier: 'test-2@devtron.ai',
+                      },
+                      {
+                          hasApproved: false,
+                          identifier: 'test-8@devtron.ai',
+                      },
+                  ],
+              },
+              specificUsersApprovedInfo: {
+                  requiredCount: 2,
+                  currentCount: 1,
+                  approverList: [
+                      {
+                          hasApproved: true,
+                          identifier: 'test-3@devtron.ai',
+                      },
+                      {
+                          hasApproved: false,
+                          identifier: 'test-1@devtron.ai',
+                      },
+                      {
+                          hasApproved: false,
+                          identifier: 'test-7@devtron.ai',
+                      },
+                  ],
+              },
+              userGroupsApprovedInfo: {
+                  requiredCount: 2,
+                  currentCount: 0,
+                  userGroups: [
+                      {
+                          requiredCount: 2,
+                          currentCount: 1,
+                          approverList: [
+                              {
+                                  hasApproved: true,
+                                  identifier: 'test-2@devtron.ai',
+                              },
+                          ],
+                          groupName: 'Admins',
+                          groupIdentifier: 'admins',
+                      },
+                      {
+                          requiredCount: 2,
+                          currentCount: 1,
+                          approverList: [
+                              {
+                                  hasApproved: true,
+                                  identifier: 'test-5@devtron.ai',
+                              },
+                              {
+                                  hasApproved: false,
+                                  identifier: 'test-6@devtron.ai',
+                              },
+                          ],
+                          groupName: 'Managers',
+                          groupIdentifier: 'managers',
+                      },
+                  ],
+              },
+          }
 
 /**
  * Manual approval is considered configured only if the type is not notConfigured
