@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { ButtonHTMLAttributes, ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CustomInput, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
@@ -7,8 +7,6 @@ import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVari
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import './confirmationModal.scss'
 import { Backdrop } from '../Backdrop'
-
-let timeoutId: number
 
 const ConfirmationModal = ({
     title,
@@ -21,6 +19,8 @@ const ConfirmationModal = ({
     showConfirmationModal,
     handleClose,
 }: ConfirmationModalProps) => {
+    const timeoutRef = useRef<number>(null)
+
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
     const [confirmationText, setConfirmationText] = useState<string>('')
@@ -55,7 +55,7 @@ const ConfirmationModal = ({
     useEffect(() => {
         if (showConfirmationModal) {
             // Timeout so that if modal is opened on enter press, it does not trigger onClick
-            timeoutId = setTimeout(() => {
+            timeoutRef.current = setTimeout(() => {
                 registerShortcut({ keys: ['Enter'], callback: handleTriggerPrimaryActionButton })
             }, 100)
         }
@@ -63,7 +63,9 @@ const ConfirmationModal = ({
         return () => {
             if (showConfirmationModal) {
                 unregisterShortcut(['Enter'])
-                clearTimeout(timeoutId)
+            }
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current)
             }
         }
     }, [showConfirmationModal, primaryButtonConfig, disablePrimaryButton])
