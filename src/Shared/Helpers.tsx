@@ -791,13 +791,19 @@ export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfi
     userGroups: userApprovalConfig?.userGroups ?? [],
 })
 
+export const sanitizeUserApprovalList = (
+    approverList: UserApprovalInfo['approverList'],
+): UserApprovalInfo['approverList'] =>
+    (approverList ?? []).map(({ hasApproved, identifier, canApprove }) => ({
+        canApprove: canApprove ?? false,
+        hasApproved: hasApproved ?? false,
+        identifier,
+    }))
+
 const sanitizeUserApprovalInfo = (userApprovalInfo: UserApprovalInfo | null): UserApprovalInfo => ({
     currentCount: userApprovalInfo?.currentCount ?? 0,
     requiredCount: userApprovalInfo?.requiredCount ?? 0,
-    approverList: (userApprovalInfo?.approverList ?? []).map(({ hasApproved, identifier }) => ({
-        hasApproved: hasApproved ?? false,
-        identifier,
-    })),
+    approverList: sanitizeUserApprovalList(userApprovalInfo?.approverList),
 })
 
 export const sanitizeApprovalConfigData = (
@@ -832,14 +838,17 @@ export const sanitizeApprovalConfigData = (
                   approverList: [
                       {
                           hasApproved: true,
+                          canApprove: true,
                           identifier: 'test-1@devtron.ai',
                       },
                       {
                           hasApproved: true,
+                          canApprove: true,
                           identifier: 'test-2@devtron.ai',
                       },
                       {
                           hasApproved: false,
+                          canApprove: false,
                           identifier: 'test-8@devtron.ai',
                       },
                   ],
@@ -850,14 +859,17 @@ export const sanitizeApprovalConfigData = (
                   approverList: [
                       {
                           hasApproved: true,
+                          canApprove: true,
                           identifier: 'test-3@devtron.ai',
                       },
                       {
                           hasApproved: false,
+                          canApprove: true,
                           identifier: 'test-1@devtron.ai',
                       },
                       {
                           hasApproved: false,
+                          canApprove: false,
                           identifier: 'test-7@devtron.ai',
                       },
                   ],
@@ -872,6 +884,7 @@ export const sanitizeApprovalConfigData = (
                           approverList: [
                               {
                                   hasApproved: true,
+                                  canApprove: true,
                                   identifier: 'test-2@devtron.ai',
                               },
                           ],
@@ -884,10 +897,12 @@ export const sanitizeApprovalConfigData = (
                           approverList: [
                               {
                                   hasApproved: true,
+                                  canApprove: true,
                                   identifier: 'test-5@devtron.ai',
                               },
                               {
                                   hasApproved: false,
+                                  canApprove: false,
                                   identifier: 'test-6@devtron.ai',
                               },
                           ],

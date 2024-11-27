@@ -16,7 +16,7 @@
 
 import moment from 'moment'
 import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
-import { sanitizeApprovalConfigData, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
+import { sanitizeApprovalConfigData, sanitizeUserApprovalConfig, sanitizeUserApprovalList, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
@@ -219,17 +219,24 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
         deploymentApprovalInfo: {
             eligibleApprovers: {
-                anyUsers: deploymentApprovalInfo?.eligibleApprovers?.anyUsers ?? [],
-                specificUsers: deploymentApprovalInfo?.eligibleApprovers?.specificUsers ?? [],
+                anyUsers: {
+                    approverList:
+                        sanitizeUserApprovalList(deploymentApprovalInfo?.eligibleApprovers?.anyUsers?.approverList),
+                },
+                specificUsers: {
+                    approverList: sanitizeUserApprovalList(
+                        deploymentApprovalInfo?.eligibleApprovers?.anyUsers?.approverList,
+                    ),
+                },
                 userGroups: (deploymentApprovalInfo?.eligibleApprovers?.userGroups ?? []).map(
-                    ({ groupName, groupIdentifier, identifiers }) => ({
+                    ({ groupName, groupIdentifier, approverList }) => ({
                         groupIdentifier,
                         groupName,
-                        identifiers: identifiers ?? [],
+                        approverList: sanitizeUserApprovalList(approverList),
                     }),
                 ),
             },
-            approvalConfigData: sanitizeApprovalConfigData(deploymentApprovalInfo?.approvalConfigData)
+            approvalConfigData: sanitizeApprovalConfigData(deploymentApprovalInfo?.approvalConfigData),
         },
     }
 }

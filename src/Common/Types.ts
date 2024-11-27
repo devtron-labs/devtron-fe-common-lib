@@ -380,6 +380,7 @@ export interface UserApprovalInfo {
     currentCount: number
     approverList: {
         hasApproved: boolean
+        canApprove: boolean
         identifier: string
     }[]
 }
@@ -477,16 +478,6 @@ export interface CDMaterialListModalServiceUtilProps {
     artifactId?: number
     artifactStatus?: string
     disableDefaultSelection?: boolean
-    // userApprovalConfig?: UserApprovalConfigType
-    // deploymentApprovalInfo: {
-    //     eligibleApprovers: {
-    //         specificUsers: string[]
-    //         anyUsers: string[]
-    //         userGroups: (Pick<ApprovalConfigDataType['userGroupsApprovedInfo']['userGroups'][number], 'groupIdentifier' | 'groupName'> & {
-    //             identifiers: string[]
-    //         })[]
-    //     }
-    // }
 }
 
 export interface CDMaterialType {
@@ -707,14 +698,13 @@ export interface CDMaterialsApprovalInfo {
     canApproverDeploy: boolean
     deploymentApprovalInfo: {
         eligibleApprovers: {
-            specificUsers: string[]
-            anyUsers: string[]
+            specificUsers: Pick<UserApprovalInfo, 'approverList'>
+            anyUsers: Pick<UserApprovalInfo, 'approverList'>
             userGroups: (Pick<
                 ApprovalConfigDataType['userGroupsApprovedInfo']['userGroups'][number],
                 'groupIdentifier' | 'groupName'
-            > & {
-                identifiers: string[]
-            })[]
+            > &
+                Pick<UserApprovalInfo, 'approverList'>)[]
         }
         approvalConfigData: ApprovalConfigDataType
     }
