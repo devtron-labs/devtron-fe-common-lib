@@ -15,13 +15,12 @@
  */
 
 import React, { ReactNode, CSSProperties, ReactElement, MutableRefObject } from 'react'
-import { Placement } from 'tippy.js'
+import { TippyProps } from '@tippyjs/react'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { MandatoryPluginBaseStateType, RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
 import {
     ACTION_STATE,
-    ConsequenceType,
     DEPLOYMENT_WINDOW_TYPE,
     DockerConfigOverrideType,
     SortingOrder,
@@ -96,7 +95,7 @@ export interface CheckboxProps {
     dataTestId?: string
 }
 
-export interface TippyCustomizedProps {
+export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
     theme: TippyTheme
     visible?: boolean
     heading?: ReactNode | string
@@ -104,7 +103,7 @@ export interface TippyCustomizedProps {
     noHeadingBorder?: boolean
     infoTextHeading?: string
     hideHeading?: boolean
-    placement?: Placement
+    placement?: TippyProps['placement']
     className?: string
     Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     iconPath?: string

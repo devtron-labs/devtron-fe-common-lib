@@ -503,3 +503,7 @@ export const ALL_RESOURCE_KIND_FILTER = 'all'
 export const OPEN_NEW_TICKET = 'https://enterprise.devtron.ai/portal/en/newticket'
 export const VIEW_ALL_TICKETS = 'https://enterprise.devtron.ai/portal/en/myarea'
 export const RAISE_ISSUE = 'https://github.com/devtron-labs/devtron/issues/new/choose'
+
+export const TARGET_IDS = {
+    WORKFLOW_EDITOR_CONTAINER: 'workflow-editor-container',
+}
