@@ -794,7 +794,20 @@ export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfi
 export const sanitizeUserApprovalList = (
     approverList: UserApprovalInfo['approverList'],
 ): UserApprovalInfo['approverList'] =>
-    (approverList ?? []).map(({ hasApproved, identifier, canApprove }) => ({
+    (
+        approverList ?? [
+            {
+                canApprove: false,
+                identifier: 'test-1@devtron.ai',
+                hasApproved: true,
+            },
+            {
+                canApprove: true,
+                identifier: 'test-2@devtron.ai',
+                hasApproved: false,
+            },
+        ]
+    ).map(({ hasApproved, identifier, canApprove }) => ({
         canApprove: canApprove ?? false,
         hasApproved: hasApproved ?? false,
         identifier,
