@@ -791,10 +791,6 @@ export interface AppEnvironment {
     appStatus?: string
     deploymentAppDeleteRequest?: boolean
     isVirtualEnvironment?: boolean
-    // /**
-    //  * @deprecated
-    //  */
-    // isProtected?: boolean
     pipelineId?: number
     latestCdWorkflowRunnerId?: number
     commits?: string[]

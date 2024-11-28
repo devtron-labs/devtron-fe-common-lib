@@ -863,7 +863,7 @@ export interface ResourceProtectDTO {
 }
 
 export interface ResourceProtectType extends Omit<ResourceProtectDTO, 'state' | 'approvalConfigurations'> {
-    isProtected: boolean
+    isApprovalApplicable: boolean
     approvalConfigurationMap: Record<ApprovalConfigDataType['kind'], ApprovalConfigDataType>
 }
 
