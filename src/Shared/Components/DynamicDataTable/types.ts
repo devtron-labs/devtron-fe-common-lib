@@ -18,8 +18,7 @@ import { DetailedHTMLProps, ReactNode } from 'react'
 
 import { SortingOrder } from '@Common/Constants'
 
-import { TippyCustomizedProps } from '@Common/Types'
-import { SelectPickerProps } from '../SelectPicker'
+import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 import { MultipleResizableTextAreaProps } from '../MultipleResizableTextArea'
 import { SelectTextAreaProps } from '../SelectTextArea'
 
@@ -93,26 +92,28 @@ export type DynamicDataTableRowType<K extends string> = {
                       >
                   }
               }
-            | {
+            | ({
                   type?: DynamicDataTableRowDataType.BUTTON
-                  props: (Pick<
+                  props: Pick<
                       DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
                       'onClick'
                   > & {
                       icon?: ReactNode
                       text: ReactNode
-                  }) &
-                      (
-                          | {
-                                showTippyCustomized: true
-                                tippyCustomizedProps: Omit<TippyCustomizedProps, 'children'>
-                            }
-                          | {
-                                showTippyCustomized?: false
-                                tippyCustomizedProps?: never
-                            }
-                      )
-              }
+                  }
+              } & (
+                  | {
+                        wrap: true
+                        wrapRenderer: (props: {
+                            children: JSX.Element
+                            customState?: Record<string, any>
+                        }) => JSX.Element
+                    }
+                  | {
+                        wrap?: false
+                        wrapRenderer?: never
+                    }
+              ))
         )
     }
     id: string | number
@@ -169,7 +170,14 @@ export type DynamicDataTableProps<K extends string> = {
      * @param headerKey - The key of the header that changed.
      * @param value - The value of the cell.
      */
-    onRowEdit: (row: DynamicDataTableRowType<K>, headerKey: K, value: string) => void
+    onRowEdit: (
+        row: DynamicDataTableRowType<K>,
+        headerKey: K,
+        value: string,
+        extraData: {
+            selectedValue?: SelectPickerOptionType<string>
+        },
+    ) => void
     /**
      * Function to handle row deletions.
      * @param row - The row that was deleted.
@@ -217,6 +225,7 @@ export interface DynamicDataTableHeaderProps<K extends string>
         | 'onRowAdd'
         | 'readOnly'
         | 'isAdditionNotAllowed'
+        | 'isDeletionNotAllowed'
         | 'actionButtonConfig'
     > {}
 

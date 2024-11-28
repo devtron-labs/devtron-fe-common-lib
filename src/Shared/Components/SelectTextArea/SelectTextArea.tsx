@@ -45,19 +45,20 @@ export const SelectTextArea = ({
 
     // METHODS
     const onTextAreaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        onChange(e.target.value)
+        const inputValue = e.target.value
+        onChange({ label: inputValue, value: inputValue })
     }
 
     const onSelectPickerChange = (selectedOption: SelectPickerOptionType<string>) => {
-        onChange(selectedOption.value)
+        onChange(selectedOption)
     }
 
     const onSelectPickerCreateOption = (inputValue: string) => {
-        onChange(inputValue)
+        onChange({ label: inputValue, value: inputValue })
     }
 
     const onClear = () => {
-        onChange('')
+        onChange({ label: '', value: '' })
     }
 
     return (

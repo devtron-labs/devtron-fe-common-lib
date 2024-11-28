@@ -9,6 +9,7 @@ export const getActionButtonPosition = <K extends string>({
 export const getHeaderGridTemplateColumn = <K extends string>(
     headers: DynamicDataTableHeaderType<K>[],
     actionButtonConfig: DynamicDataTableProps<K>['actionButtonConfig'],
+    noDeleteBtn: boolean,
 ) => {
     const actionButtonIndex = getActionButtonPosition({ headers, actionButtonConfig })
     const actionButtonWidth = actionButtonConfig?.width || '33px'
@@ -19,7 +20,7 @@ export const getHeaderGridTemplateColumn = <K extends string>(
         if (!isActionButtonAtTheStart && index === actionButtonIndex && !gridWidthRegex.test(width)) {
             return `calc(${width} + ${actionButtonWidth})`
         }
-        if (index === headers.length - 1 && !gridWidthRegex.test(width)) {
+        if (!noDeleteBtn && index === headers.length - 1 && !gridWidthRegex.test(width)) {
             return `calc(${width} + 33px)`
         }
         return width

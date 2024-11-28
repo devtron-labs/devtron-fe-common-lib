@@ -5,8 +5,6 @@ import { followCursor } from 'tippy.js'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 import { Tooltip } from '@Common/Tooltip'
-import { TippyCustomized } from '@Common/TippyCustomized'
-import { TippyCustomizedProps } from '@Common/Types'
 
 import { ConditionalWrap } from '@Common/Helper'
 import { SelectTextArea } from '../SelectTextArea'
@@ -20,9 +18,13 @@ import { MultipleResizableTextArea } from '../MultipleResizableTextArea'
 import { getActionButtonPosition, getRowGridTemplateColumn, rowTypeHasInputField } from './utils'
 import { DynamicDataTableRowType, DynamicDataTableRowProps, DynamicDataTableRowDataType } from './types'
 
-const renderWithTippyCustomized = (props: Omit<TippyCustomizedProps, 'children'>) => (children) => (
-    <TippyCustomized {...props}>{children}</TippyCustomized>
-)
+const conditionalWrap =
+    (
+        renderer: (props: { customState?: Record<string, any>; children: JSX.Element }) => JSX.Element,
+        customState: Record<string, any>,
+    ) =>
+    (children: JSX.Element) =>
+        renderer({ children, customState })
 
 export const DynamicDataTableRow = <K extends string>({
     rows,
@@ -83,20 +85,23 @@ export const DynamicDataTableRow = <K extends string>({
     // METHODS
     const onChange =
         (row: DynamicDataTableRowType<K>, key: K) =>
-        (e: string | number | React.ChangeEvent<HTMLTextAreaElement> | SelectPickerOptionType<string>) => {
+        (e: React.ChangeEvent<HTMLTextAreaElement> | SelectPickerOptionType<string>) => {
             let value = ''
+            const extraData = { selectedValue: null }
             switch (row.data[key].type) {
                 case DynamicDataTableRowDataType.DROPDOWN:
                     value = (e as SelectPickerOptionType<string>).value
+                    extraData.selectedValue = e
                     break
                 case DynamicDataTableRowDataType.SELECT_TEXT:
-                    value = e as string
+                    value = (e as SelectPickerOptionType<string>).value
+                    extraData.selectedValue = e
                     break
                 default:
                     value = (e as React.ChangeEvent<HTMLTextAreaElement>).target.value
             }
 
-            onRowEdit(row, key, value)
+            onRowEdit(row, key, value, extraData)
         }
 
     const onDelete = (row: DynamicDataTableRowType<K>) => () => {
@@ -122,7 +127,7 @@ export const DynamicDataTableRow = <K extends string>({
                 )
             case DynamicDataTableRowDataType.SELECT_TEXT:
                 return (
-                    <div className="w-100 h-100 flex top dc__align-self-start select-text-area-container">
+                    <div className="dynamic-data-table__select-text-area w-100 h-100 flex top dc__align-self-start">
                         <SelectTextArea
                             {...row.data[key].props}
                             value={row.data[key].value}
@@ -133,7 +138,7 @@ export const DynamicDataTableRow = <K extends string>({
                             dependentRefs={cellRef?.current?.[row.id]}
                             textAreaProps={{
                                 ...row.data[key].props?.textAreaProps,
-                                className: 'dynamic-data-table__cell-input placeholder-cn5 p-8 cn-9 fs-13 lh-20',
+                                className: 'dynamic-data-table__cell-input placeholder-cn5 py-8 pr-8 cn-9 fs-13 lh-20',
                                 disableOnBlurResizeToMinHeight: true,
                                 minHeight: 20,
                                 maxHeight: 160,
@@ -145,16 +150,18 @@ export const DynamicDataTableRow = <K extends string>({
                 return (
                     <div className="w-100 h-100 flex top">
                         <ConditionalWrap
-                            condition={row.data[key].props?.showTippyCustomized}
-                            wrap={renderWithTippyCustomized(row.data[key].props?.tippyCustomizedProps)}
+                            condition={row.data[key].wrap}
+                            wrap={conditionalWrap(row.data[key].wrapRenderer, row.customState)}
                         >
-                            <button
-                                type="button"
-                                className={`dc__transparent w-100 p-8 flex left dc__gap-8 dc__hover-n50 cn-9 fs-13 lh-20 ${row.data[key].disabled ? 'dc__disabled' : ''}`}
-                            >
-                                {row.data[key].props?.icon || null}
-                                {row.data[key].props.text}
-                            </button>
+                            <div>
+                                <button
+                                    type="button"
+                                    className={`dc__transparent w-100 p-8 flex left dc__gap-8 dc__hover-n50 cn-9 fs-13 lh-20 ${row.data[key].disabled ? 'dc__disabled' : ''}`}
+                                >
+                                    {row.data[key].props?.icon || null}
+                                    {row.data[key].props.text}
+                                </button>
+                            </div>
                         </ConditionalWrap>
                     </div>
                 )

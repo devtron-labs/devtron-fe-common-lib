@@ -14,6 +14,7 @@ export const DynamicDataTableHeader = <K extends string>({
     onRowAdd,
     readOnly,
     isAdditionNotAllowed,
+    isDeletionNotAllowed,
     headerComponent = null,
     actionButtonConfig = null,
 }: DynamicDataTableHeaderProps<K>) => {
@@ -25,7 +26,11 @@ export const DynamicDataTableHeader = <K extends string>({
     /** Boolean determining if table has rows. */
     const hasRows = (!readOnly && !isAdditionNotAllowed) || !!rows.length
     /** style: grid-template-columns */
-    const headerGridTemplateColumn = getHeaderGridTemplateColumn(headers, actionButtonConfig)
+    const headerGridTemplateColumn = getHeaderGridTemplateColumn(
+        headers,
+        actionButtonConfig,
+        isDeletionNotAllowed || readOnly,
+    )
     const isActionButtonAtTheStart =
         getActionButtonPosition({ headers, actionButtonConfig }) === 0 && actionButtonConfig.position !== 'end'
 
