@@ -673,7 +673,7 @@ export interface FilterConditionsListType {
     conditions: FilterConditionsInfo[]
 }
 
-interface DeploymentApprovalInfoType {
+export interface DeploymentApprovalInfoType {
     eligibleApprovers: {
         specificUsers: Pick<UserApprovalInfo, 'approverList'>
         anyUsers: Pick<UserApprovalInfo, 'approverList'>
