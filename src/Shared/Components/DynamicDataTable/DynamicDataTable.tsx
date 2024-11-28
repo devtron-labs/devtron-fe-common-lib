@@ -25,7 +25,7 @@ export const DynamicDataTable = <K extends string>({ headers, ...props }: Dynami
     const filteredHeaders = useMemo(() => headers.filter(({ isHidden }) => !isHidden), [headers])
 
     return (
-        <div className="w-100 dc__overflow-auto">
+        <div className="w-100">
             <DynamicDataTableHeader headers={filteredHeaders} {...props} />
             <DynamicDataTableRow headers={filteredHeaders} {...props} />
         </div>

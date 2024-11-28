@@ -45,7 +45,7 @@ export interface TagType {
     isSuggested?: boolean
     isPropagateDisabled?: boolean
     deploymentPolicy?: DeploymentPolicy
-    variableValueConstraint?: VariableValueConstraintTypes
+    valueConstraint?: VariableValueConstraintTypes
 }
 
 export interface TagErrorType {
