@@ -74,6 +74,10 @@
             padding: 8px;
         }
 
+        &:not(:has(.select-picker-borderless-control)) .dynamic-data-table__select-text-area {
+            padding-left: 8px;
+        }
+
         &:hover:not(:focus-within):not(.no-hover) {
             outline: 1px solid var(--N200);
         }

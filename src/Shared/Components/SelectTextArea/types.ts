@@ -1,13 +1,13 @@
 import { ReactElement } from 'react'
 
-import { SelectPickerProps } from '../SelectPicker'
+import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 import { MultipleResizableTextAreaProps } from '../MultipleResizableTextArea'
 
 export type SelectTextAreaProps = Pick<SelectPickerProps<string, false>, 'inputId' | 'options'> &
     Pick<MultipleResizableTextAreaProps, 'refVar' | 'dependentRefs'> & {
         value: string
         selectedOptionIcon?: ReactElement
-        onChange?: (value: string) => void
+        onChange?: (selectedValue: SelectPickerOptionType<string>) => void
         disabled?: boolean
         placeholder?: string
         textAreaProps?: Omit<
