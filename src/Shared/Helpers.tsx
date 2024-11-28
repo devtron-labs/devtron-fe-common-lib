@@ -35,6 +35,7 @@ import {
     DATE_TIME_FORMATS,
     ApprovalConfigDataType,
     UserApprovalInfo,
+    ApprovalConfigDataKindType,
 } from '../Common'
 import {
     AggregationKeys,
@@ -843,7 +844,7 @@ export const sanitizeApprovalConfigData = (
               },
           }
         : {
-              kind: 'DEPLOYMENT_TRIGGER',
+              kind: ApprovalConfigDataKindType.deploymentTemplate,
               requiredCount: 2,
               currentCount: 3,
               anyUserApprovedInfo: {

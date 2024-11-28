@@ -373,8 +373,15 @@ export interface UserApprovalInfo {
     }[]
 }
 
+export enum ApprovalConfigDataKindType {
+    deploymentApproval = 'DEPLOYMENT_TRIGGER',
+    configMap = 'CM',
+    configSecret = 'CS',
+    deploymentTemplate = 'DEPLOYMENT_TEMPLATE',
+}
+
 export interface ApprovalConfigDataType extends Pick<UserApprovalInfo, 'currentCount' | 'requiredCount'> {
-    kind: 'DEPLOYMENT_TRIGGER' | 'CM' | 'CS' | 'DEPLOYMENT_TEMPLATE'
+    kind: ApprovalConfigDataKindType
     anyUserApprovedInfo: UserApprovalInfo
     specificUsersApprovedInfo: UserApprovalInfo
     userGroupsApprovedInfo: Pick<UserApprovalInfo, 'currentCount' | 'requiredCount'> & {
@@ -784,7 +791,10 @@ export interface AppEnvironment {
     appStatus?: string
     deploymentAppDeleteRequest?: boolean
     isVirtualEnvironment?: boolean
-    isProtected?: boolean
+    // /**
+    //  * @deprecated
+    //  */
+    // isProtected?: boolean
     pipelineId?: number
     latestCdWorkflowRunnerId?: number
     commits?: string[]

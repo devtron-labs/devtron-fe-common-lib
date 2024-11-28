@@ -15,6 +15,7 @@
  */
 
 import { Dayjs } from 'dayjs'
+import { ApprovalConfigDataType } from '@Common/Types'
 import {
     OptionType,
     CommonNodeAttr,
@@ -23,10 +24,9 @@ import {
     DeploymentAppTypes,
     ServerErrors,
     SortingParams,
-    ApprovalConfigDataType,
 } from '../Common'
 import { KeyValueListType } from './Components'
-import { EnvironmentTypeEnum, PatchOperationType } from './constants'
+import { BASE_CONFIGURATION_ENV_ID, EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
     CHART = 'helm_charts',
@@ -855,3 +855,18 @@ export interface DynamicTabType extends CommonTabArgsType {
      */
     lastActiveTabId: string | null
 }
+
+export interface ResourceProtectDTO {
+    appId: number
+    envId: number
+    approvalConfigurations: ApprovalConfigDataType[]
+}
+
+export interface ResourceProtectType extends Omit<ResourceProtectDTO, 'state' | 'approvalConfigurations'> {
+    isProtected: boolean
+    approvalConfigurationMap: Record<ApprovalConfigDataType['kind'], ApprovalConfigDataType>
+}
+
+export type ResourceProtectConfigType = {
+    [key in typeof BASE_CONFIGURATION_ENV_ID]: ResourceProtectType
+} & Record<ResourceProtectType['envId'], ResourceProtectType>

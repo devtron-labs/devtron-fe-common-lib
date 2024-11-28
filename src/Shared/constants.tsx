@@ -507,3 +507,5 @@ export const RAISE_ISSUE = 'https://github.com/devtron-labs/devtron/issues/new/c
 export const TARGET_IDS = {
     WORKFLOW_EDITOR_CONTAINER: 'workflow-editor-container',
 }
+
+export const BASE_CONFIGURATION_ENV_ID = -1
