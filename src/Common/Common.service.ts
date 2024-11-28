@@ -200,6 +200,27 @@ const cdMaterialListModal = ({
     return materials
 }
 
+const sanitizeDeploymentApprovalInfo = (
+    deploymentApprovalInfo: CDMaterialsApprovalInfo['deploymentApprovalInfo'],
+): CDMaterialsApprovalInfo['deploymentApprovalInfo'] => ({
+    eligibleApprovers: {
+        anyUsers: {
+            approverList: sanitizeUserApprovalList(deploymentApprovalInfo?.eligibleApprovers?.anyUsers?.approverList),
+        },
+        specificUsers: {
+            approverList: sanitizeUserApprovalList(deploymentApprovalInfo?.eligibleApprovers?.anyUsers?.approverList),
+        },
+        userGroups: (deploymentApprovalInfo?.eligibleApprovers?.userGroups ?? []).map(
+            ({ groupName, groupIdentifier, approverList }) => ({
+                groupIdentifier,
+                groupName,
+                approverList: sanitizeUserApprovalList(approverList),
+            }),
+        ),
+    },
+    approvalConfigData: sanitizeApprovalConfigData(deploymentApprovalInfo?.approvalConfigData),
+})
+
 const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResult): CDMaterialsApprovalInfo => {
     if (!enableApproval || !cdMaterialsResult) {
         return {
@@ -210,34 +231,11 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
         }
     }
 
-    const deploymentApprovalInfo: CDMaterialsApprovalInfo['deploymentApprovalInfo'] =
-        cdMaterialsResult.deploymentApprovalInfo
-
     return {
         approvalUsers: cdMaterialsResult.approvalUsers,
         userApprovalConfig: sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig),
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
-        deploymentApprovalInfo: {
-            eligibleApprovers: {
-                anyUsers: {
-                    approverList:
-                        sanitizeUserApprovalList(deploymentApprovalInfo?.eligibleApprovers?.anyUsers?.approverList),
-                },
-                specificUsers: {
-                    approverList: sanitizeUserApprovalList(
-                        deploymentApprovalInfo?.eligibleApprovers?.anyUsers?.approverList,
-                    ),
-                },
-                userGroups: (deploymentApprovalInfo?.eligibleApprovers?.userGroups ?? []).map(
-                    ({ groupName, groupIdentifier, approverList }) => ({
-                        groupIdentifier,
-                        groupName,
-                        approverList: sanitizeUserApprovalList(approverList),
-                    }),
-                ),
-            },
-            approvalConfigData: sanitizeApprovalConfigData(deploymentApprovalInfo?.approvalConfigData),
-        },
+        deploymentApprovalInfo: sanitizeDeploymentApprovalInfo(cdMaterialsResult.deploymentApprovalInfo),
     }
 }
 

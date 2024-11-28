@@ -781,6 +781,7 @@ export const getFileNameFromHeaders = (headers: Headers) =>
         ?.replace('filename=', '')
         .trim()
 
+// Maybe migrate to FE Lib
 export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfigType): UserApprovalConfigType => ({
     requiredCount: userApprovalConfig?.requiredCount ?? 0,
     type: userApprovalConfig?.type ?? ManualApprovalType.notConfigured,
@@ -843,7 +844,7 @@ export const sanitizeApprovalConfigData = (
           }
         : {
               kind: 'DEPLOYMENT_TRIGGER',
-              requiredCount: 6,
+              requiredCount: 2,
               currentCount: 3,
               anyUserApprovedInfo: {
                   requiredCount: 2,
@@ -928,10 +929,15 @@ export const sanitizeApprovalConfigData = (
 
 /**
  * Manual approval is considered configured only if the type is not notConfigured
+ *
+ * @deprecated ?
  */
 export const getIsManualApprovalConfigured = (userApprovalConfig?: Pick<UserApprovalConfigType, 'type'>) =>
     // Added null check for backward compatibility
     !!userApprovalConfig?.type && userApprovalConfig.type !== ManualApprovalType.notConfigured
+
+export const getIsApprovalPolicyConfigured = (approvalConfigData: ApprovalConfigDataType): boolean =>
+    approvalConfigData?.requiredCount > 0
 
 /**
  * @description - Function to open a new tab with the given url

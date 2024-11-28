@@ -19,11 +19,11 @@ import {
     OptionType,
     CommonNodeAttr,
     ResponseType,
-    UserApprovalConfigType,
     VulnerabilityType,
     DeploymentAppTypes,
     ServerErrors,
     SortingParams,
+    ApprovalConfigDataType,
 } from '../Common'
 import { KeyValueListType } from './Components'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
@@ -293,7 +293,7 @@ export interface WorkflowType {
     showTippy?: boolean
     appId?: number
     isSelected?: boolean
-    approvalConfiguredIdsMap?: Record<number, UserApprovalConfigType>
+    approvalConfiguredIdsMap?: Record<number, ApprovalConfigDataType>
     imageReleaseTags: string[]
     appReleaseTags?: string[]
     tagsEditable?: boolean

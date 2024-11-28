@@ -621,8 +621,15 @@ export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTr
     primaryBranchAfterRegex?: string
     storageConfigured?: boolean
     deploymentAppDeleteRequest?: boolean
+    /**
+     * @deprecated
+     */
     approvalUsers?: string[]
+    /**
+     * @deprecated
+     */
     userApprovalConfig?: UserApprovalConfigType
+    approvalConfigData: ApprovalConfigDataType
     requestedUserId?: number
     showPluginWarning: boolean
     helmPackageName?: string
@@ -686,6 +693,19 @@ export interface FilterConditionsListType {
     conditions: FilterConditionsInfo[]
 }
 
+interface DeploymentApprovalInfoType {
+    eligibleApprovers: {
+        specificUsers: Pick<UserApprovalInfo, 'approverList'>
+        anyUsers: Pick<UserApprovalInfo, 'approverList'>
+        userGroups: (Pick<
+            ApprovalConfigDataType['userGroupsApprovedInfo']['userGroups'][number],
+            'groupIdentifier' | 'groupName'
+        > &
+            Pick<UserApprovalInfo, 'approverList'>)[]
+    }
+    approvalConfigData: ApprovalConfigDataType
+}
+
 export interface CDMaterialsApprovalInfo {
     /**
      * @deprecated ?
@@ -696,18 +716,7 @@ export interface CDMaterialsApprovalInfo {
      */
     userApprovalConfig: UserApprovalConfigType
     canApproverDeploy: boolean
-    deploymentApprovalInfo: {
-        eligibleApprovers: {
-            specificUsers: Pick<UserApprovalInfo, 'approverList'>
-            anyUsers: Pick<UserApprovalInfo, 'approverList'>
-            userGroups: (Pick<
-                ApprovalConfigDataType['userGroupsApprovedInfo']['userGroups'][number],
-                'groupIdentifier' | 'groupName'
-            > &
-                Pick<UserApprovalInfo, 'approverList'>)[]
-        }
-        approvalConfigData: ApprovalConfigDataType
-    }
+    deploymentApprovalInfo: DeploymentApprovalInfoType
 }
 
 export interface CDMaterialsMetaInfo {
@@ -864,6 +873,7 @@ export interface CdPipeline {
     isProdEnv?: boolean
     isGitOpsRepoNotConfigured?: boolean
     isDeploymentBlocked?: boolean
+    approvalConfigData: ApprovalConfigDataType
 }
 
 export interface ExternalCiConfig {
@@ -985,7 +995,7 @@ export interface EdgeNodeType {
 }
 
 export interface EdgeEndNodeType extends EdgeNodeType {
-    userApprovalConfig?: UserApprovalConfigType
+    approvalConfigData: ApprovalConfigDataType
 }
 
 /**
