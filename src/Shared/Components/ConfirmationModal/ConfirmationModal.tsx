@@ -38,12 +38,6 @@ const ConfirmationModal = ({
         }
     }
 
-    const handleEnterKeyPress = (e: KeyboardEvent) => {
-        if (e.key === 'Enter') {
-            handleTriggerPrimaryActionButton()
-        }
-    }
-
     const handleCloseWrapper = useCallback(() => {
         if (!primaryButtonConfig?.isLoading && !secondaryButtonConfig?.disabled) {
             handleClose()
@@ -94,7 +88,6 @@ const ConfirmationModal = ({
                                     label={getConfirmationLabel(confirmationKeyword)}
                                     inputWrapClassName="w-100"
                                     placeholder="Type to confirm"
-                                    onKeyDown={handleEnterKeyPress}
                                     isRequiredField
                                     autoFocus
                                 />
