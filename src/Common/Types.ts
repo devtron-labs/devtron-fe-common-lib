@@ -353,17 +353,6 @@ export interface UserApprovalConfigType {
     })[]
 }
 
-export type UserApprovalConfigPayloadType =
-    | ({
-          type: ManualApprovalType.any
-      } & Pick<UserApprovalConfigType, 'requiredCount'>)
-    | ({
-          type: ManualApprovalType.specific
-      } & Pick<UserApprovalConfigType, 'userGroups' | 'specificUsers'>)
-    | {
-          type: ManualApprovalType.notConfigured
-      }
-
 interface ApprovalUserDataType {
     dataId: number
     userActionTime: string
@@ -405,10 +394,6 @@ export interface UserApprovalMetadataType {
      */
     approvedUsersData: ApprovalUserDataType[]
     requestedUserData: ApprovalUserDataType
-    /**
-     * @deprecated
-     */
-    approvalConfig?: UserApprovalConfigType
     hasCurrentUserApproved: boolean
     canCurrentUserApprove: boolean
     approvedConfigData: ApprovalConfigDataType
@@ -624,10 +609,6 @@ export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTr
      * @deprecated
      */
     approvalUsers?: string[]
-    /**
-     * @deprecated
-     */
-    userApprovalConfig?: UserApprovalConfigType
     approvalConfigData: ApprovalConfigDataType
     requestedUserId?: number
     showPluginWarning: boolean
@@ -710,10 +691,6 @@ export interface CDMaterialsApprovalInfo {
      * @deprecated ?
      */
     approvalUsers: string[]
-    /**
-     * @deprecated
-     */
-    userApprovalConfig: UserApprovalConfigType
     canApproverDeploy: boolean
     deploymentApprovalInfo: DeploymentApprovalInfoType
 }
@@ -863,7 +840,6 @@ export interface CdPipeline {
     parentPipelineType?: string
     deploymentAppDeleteRequest?: boolean
     deploymentAppCreated?: boolean
-    userApprovalConfig?: UserApprovalConfigType
     isVirtualEnvironment?: boolean
     deploymentAppType: DeploymentAppTypes
     helmPackageName?: string
@@ -988,7 +964,6 @@ export interface Point {
 export interface EdgeNodeType {
     height: number
     width: number
-    userApprovalConfig?: UserApprovalConfigType
     type?: any
     id?: number | string
 }

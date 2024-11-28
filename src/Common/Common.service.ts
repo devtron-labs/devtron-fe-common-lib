@@ -16,7 +16,7 @@
 
 import moment from 'moment'
 import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
-import { sanitizeApprovalConfigData, sanitizeUserApprovalConfig, sanitizeUserApprovalList, stringComparatorBySortOrder } from '@Shared/Helpers'
+import { sanitizeApprovalConfigData, sanitizeUserApprovalList, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
@@ -94,11 +94,11 @@ const sanitizeApprovalConfig = (
         ...approvalMetadata,
         hasCurrentUserApproved: approvalMetadata?.hasCurrentUserApproved ?? false,
         canCurrentUserApprove: approvalMetadata?.canCurrentUserApprove ?? false,
+        // TODO: Remove
         approvedUsersData: approvedUsersData.map((userData) => ({
             ...userData,
             userGroups: userData.userGroups?.filter((group) => !!group?.identifier && !!group?.name) ?? [],
         })),
-        // approvalConfig: sanitizeUserApprovalConfig(approvalMetadata?.approvalConfig),
         approvedConfigData: sanitizeApprovalConfigData(approvalMetadata?.approvedConfigData),
     }
 }
@@ -225,7 +225,6 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
     if (!enableApproval || !cdMaterialsResult) {
         return {
             approvalUsers: [],
-            userApprovalConfig: null,
             canApproverDeploy: cdMaterialsResult?.canApproverDeploy ?? false,
             deploymentApprovalInfo: null,
         }
@@ -233,7 +232,6 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
 
     return {
         approvalUsers: cdMaterialsResult.approvalUsers,
-        userApprovalConfig: sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig),
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
         deploymentApprovalInfo: sanitizeDeploymentApprovalInfo(cdMaterialsResult.deploymentApprovalInfo),
     }

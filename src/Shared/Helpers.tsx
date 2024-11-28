@@ -781,7 +781,7 @@ export const getFileNameFromHeaders = (headers: Headers) =>
         ?.replace('filename=', '')
         .trim()
 
-// Maybe migrate to FE Lib
+// TODO: Maybe migrate to FE Lib
 export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfigType): UserApprovalConfigType => ({
     requiredCount: userApprovalConfig?.requiredCount ?? 0,
     type: userApprovalConfig?.type ?? ManualApprovalType.notConfigured,

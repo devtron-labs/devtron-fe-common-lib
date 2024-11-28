@@ -226,6 +226,7 @@ export interface AppDetails {
     clusterName?: string
     dockerRegistryId?: string
     deploymentAppDeleteRequest?: boolean
+    // TODO: Check/remove/update
     userApprovalConfig?: string
     isVirtualEnvironment?: boolean
     imageTag?: string
