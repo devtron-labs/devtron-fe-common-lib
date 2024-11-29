@@ -403,7 +403,7 @@ export interface UserApprovalMetadataType {
     requestedUserData: ApprovalUserDataType
     hasCurrentUserApproved: boolean
     canCurrentUserApprove: boolean
-    approvedConfigData: ApprovalConfigDataType
+    approvalConfigData: ApprovalConfigDataType
 }
 
 export enum FilterStates {

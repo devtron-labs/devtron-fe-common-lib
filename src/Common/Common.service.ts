@@ -99,7 +99,7 @@ const sanitizeApprovalConfig = (
             ...userData,
             userGroups: userData.userGroups?.filter((group) => !!group?.identifier && !!group?.name) ?? [],
         })),
-        approvedConfigData: sanitizeApprovalConfigData(approvalMetadata?.approvedConfigData),
+        approvalConfigData: sanitizeApprovalConfigData(approvalMetadata?.approvalConfigData),
     }
 }
 
