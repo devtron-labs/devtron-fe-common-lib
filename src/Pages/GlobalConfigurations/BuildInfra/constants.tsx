@@ -27,6 +27,7 @@ import {
     BuildInfraProfileBase,
     BuildInfraProfileVariants,
     HandleProfileInputChangeType,
+    BuildInfraProfileAdditionalErrorKeysType,
 } from './types'
 
 export const BUILD_INFRA_INPUT_CONSTRAINTS = {
@@ -128,13 +129,17 @@ export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
 ]
 
 export const PROFILE_INPUT_ERROR_FIELDS = Object.fromEntries(
-    Object.values({ ...BuildInfraConfigTypes, ...BuildInfraMetaConfigTypes }).map((value) => [value, null]),
+    Object.values({
+        ...BuildInfraConfigTypes,
+        ...BuildInfraMetaConfigTypes,
+        ...BuildInfraProfileAdditionalErrorKeysType,
+    }).map((value) => [value, null]),
 ) as ProfileInputErrorType
 
 // fields required to be filled before submitting the form in create view, since we pre-populate the form with default values so no need in configs
 export const CREATE_MODE_REQUIRED_INPUT_FIELDS = [BuildInfraMetaConfigTypes.NAME]
 
-export const DEFAULT_PROFILE_NAME = 'default' as const
+export const DEFAULT_PROFILE_NAME = 'global' as const
 
 export const CREATE_PROFILE_BASE_VALUE: BuildInfraProfileBase = {
     name: '',
@@ -143,12 +148,9 @@ export const CREATE_PROFILE_BASE_VALUE: BuildInfraProfileBase = {
     appCount: 0,
 }
 
-export const CREATE_VIEW_CHECKED_CONFIGS = {
-    [BuildInfraConfigTypes.CPU_REQUEST]: true,
-    [BuildInfraConfigTypes.CPU_LIMIT]: true,
-} as const
-
 export const BUILD_INFRA_TEST_IDS = {
     SUBMIT_BUTTON: 'build-infra-submit-button',
     CANCEL_BUTTON: 'build-infra-cancel-button',
 } as const
+
+export const BUILD_INFRA_DEFAULT_PLATFORM_NAME = 'default' as const

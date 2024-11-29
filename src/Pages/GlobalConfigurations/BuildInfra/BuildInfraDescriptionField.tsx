@@ -16,18 +16,19 @@
 
 import { FormEvent, FunctionComponent } from 'react'
 import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
-import { BuildInfraInputFieldComponentProps, BuildInfraMetaConfigTypes } from './types'
-import { BUILD_INFRA_TEXT } from './constants'
+import { BuildInfraMetaConfigTypes, BuildInfraProfileMetaFieldProps } from './types'
+import { BUILD_INFRA_TEXT, DEFAULT_PROFILE_NAME } from './constants'
 
-const BuildInfraProfileDescriptionField: FunctionComponent<BuildInfraInputFieldComponentProps> = ({
+const BuildInfraProfileDescriptionField: FunctionComponent<BuildInfraProfileMetaFieldProps> = ({
     handleProfileInputChange,
     currentValue,
     error,
+    targetPlatform = DEFAULT_PROFILE_NAME,
 }) => {
     const handleChange = (e: FormEvent<HTMLTextAreaElement>) => {
         handleProfileInputChange({
             action: BuildInfraMetaConfigTypes.DESCRIPTION,
-            data: { value: e.currentTarget.value },
+            data: { targetPlatform, value: e.currentTarget.value },
         })
     }
 

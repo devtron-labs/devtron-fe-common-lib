@@ -15,17 +15,21 @@
  */
 
 import { FormEvent, FunctionComponent } from 'react'
-import { BuildInfraMetaConfigTypes, BuildInfraInputFieldComponentProps } from './types'
+import { BuildInfraMetaConfigTypes, BuildInfraProfileMetaFieldProps } from './types'
 import { CustomInput } from '../../../Common'
-import { BUILD_INFRA_TEXT } from './constants'
+import { BUILD_INFRA_TEXT, DEFAULT_PROFILE_NAME } from './constants'
 
-const BuildInfraProfileNameField: FunctionComponent<BuildInfraInputFieldComponentProps> = ({
+const BuildInfraProfileNameField: FunctionComponent<BuildInfraProfileMetaFieldProps> = ({
     handleProfileInputChange,
     currentValue,
     error,
+    targetPlatform = DEFAULT_PROFILE_NAME,
 }) => {
     const handleChange = (e: FormEvent<HTMLInputElement>) => {
-        handleProfileInputChange({ action: BuildInfraMetaConfigTypes.NAME, data: { value: e.currentTarget.value } })
+        handleProfileInputChange({
+            action: BuildInfraMetaConfigTypes.NAME,
+            data: { targetPlatform, value: e.currentTarget.value },
+        })
     }
 
     return (
