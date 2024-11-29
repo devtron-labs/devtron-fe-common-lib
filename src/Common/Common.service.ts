@@ -85,21 +85,21 @@ export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
 }
 
-const sanitizeApprovalConfig = (
-    approvalMetadata: UserApprovalMetadataType,
+export const sanitizeUserApprovalMetadata = (
+    userApprovalMetadata: UserApprovalMetadataType,
 ): UserApprovalMetadataType => {
-    const approvedUsersData = approvalMetadata?.approvedUsersData || []
+    const approvedUsersData = userApprovalMetadata?.approvedUsersData || []
 
     return {
-        ...approvalMetadata,
-        hasCurrentUserApproved: approvalMetadata?.hasCurrentUserApproved ?? false,
-        canCurrentUserApprove: approvalMetadata?.canCurrentUserApprove ?? false,
+        ...userApprovalMetadata,
+        hasCurrentUserApproved: userApprovalMetadata?.hasCurrentUserApproved ?? false,
+        canCurrentUserApprove: userApprovalMetadata?.canCurrentUserApprove ?? false,
         // TODO: Remove
         approvedUsersData: approvedUsersData.map((userData) => ({
             ...userData,
             userGroups: userData.userGroups?.filter((group) => !!group?.identifier && !!group?.name) ?? [],
         })),
-        approvalConfigData: sanitizeApprovalConfigData(approvalMetadata?.approvalConfigData),
+        approvalConfigData: sanitizeApprovalConfigData(userApprovalMetadata?.approvalConfigData),
     }
 }
 
@@ -153,7 +153,7 @@ const cdMaterialListModal = ({
             vulnerable: material.vulnerable,
             runningOnParentCd: material.runningOnParentCd,
             artifactStatus: artifactStatusValue,
-            userApprovalMetadata: sanitizeApprovalConfig(
+            userApprovalMetadata: sanitizeUserApprovalMetadata(
                 material.userApprovalMetadata,
             ),
             triggeredBy: material.triggeredBy,
