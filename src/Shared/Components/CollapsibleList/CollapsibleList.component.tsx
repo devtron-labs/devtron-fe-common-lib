@@ -6,7 +6,7 @@ import { Tooltip } from '@Common/Tooltip'
 import { ReactComponent as ICExpand } from '@Icons/ic-expand.svg'
 
 import { Collapse } from '../Collapse'
-import { CollapsibleListProps } from './CollapsibleList.types'
+import { CollapsibleListItem, CollapsibleListProps, TabOptions } from './CollapsibleList.types'
 import './CollapsibleList.scss'
 
 const renderWithTippy = (tippyProps: TippyProps) => (children: React.ReactElement) => (
@@ -15,8 +15,86 @@ const renderWithTippy = (tippyProps: TippyProps) => (children: React.ReactElemen
     </Tippy>
 )
 
-export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListProps) => {
+export const CollapsibleList = <TabType extends TabOptions>({
+    config,
+    tabType,
+    onCollapseBtnClick,
+}: CollapsibleListProps<TabType>) => {
     const { pathname } = useLocation()
+
+    const getTabContent = (item: CollapsibleListItem<TabOptions>) => {
+        const { title, subtitle, strikeThrough, iconConfig } = item
+        return (
+            <>
+                <div className="flexbox-col flex-grow-1 mw-none">
+                    <Tooltip content={title} placement="right">
+                        <span
+                            className={`collapsible__item__title dc__truncate fs-13 lh-20 ${strikeThrough ? 'dc__strike-through' : ''}`}
+                        >
+                            {title}
+                        </span>
+                    </Tooltip>
+                    {subtitle && (
+                        <Tooltip content={subtitle} placement="right">
+                            <span className="dc__truncate fw-4 lh-1-5 cn-7">{subtitle}</span>
+                        </Tooltip>
+                    )}
+                </div>
+                {iconConfig && (
+                    <ConditionalWrap
+                        condition={!!iconConfig.tooltipProps}
+                        wrap={renderWithTippy(iconConfig.tooltipProps)}
+                    >
+                        <iconConfig.Icon
+                            {...iconConfig.props}
+                            className={`icon-dim-20 p-2 dc__no-shrink cursor ${iconConfig.props?.className || ''}`}
+                        />
+                    </ConditionalWrap>
+                )}
+            </>
+        )
+    }
+
+    const getButtonTabItem = (item: CollapsibleListItem<'button'>) => {
+        const { title, isActive, onClick } = item
+        return (
+            <button
+                key={title}
+                className={`collapsible__item flexbox dc__align-items-center dc__gap-8 dc__no-decor br-4 py-6 px-8 cursor ${isActive ? 'active' : ''} dc__unset-button-styles w-100`}
+                onClick={(e) => {
+                    // Prevent navigation to the same page
+                    if (isActive) {
+                        e.preventDefault()
+                    }
+                    onClick?.(e)
+                }}
+                type="button"
+            >
+                {getTabContent(item)}
+            </button>
+        )
+    }
+
+    const getNavLinkTabItem = (item: CollapsibleListItem<'navLink'>) => {
+        const { title, href, onClick, isActive } = item
+        return (
+            <NavLink
+                key={title}
+                to={href}
+                className="collapsible__item flexbox dc__align-items-center dc__gap-8 dc__no-decor br-4 py-6 px-8 cursor"
+                onClick={(e) => {
+                    // Prevent navigation to the same page
+                    if (href === pathname) {
+                        e.preventDefault()
+                    }
+                    onClick?.(e)
+                }}
+                isActive={isActive}
+            >
+                {getTabContent(item)}
+            </NavLink>
+        )
+    }
 
     return (
         <div className="mw-none bcn-0">
@@ -63,47 +141,11 @@ export const CollapsibleList = ({ config, onCollapseBtnClick }: CollapsibleListP
                                     </span>
                                 </div>
                             ) : (
-                                items.map(({ title, strikeThrough, href, iconConfig, subtitle, onClick, isActive }) => (
-                                    <NavLink
-                                        key={title}
-                                        to={href}
-                                        className="collapsible__item flexbox dc__align-items-center dc__gap-8 dc__no-decor br-4 py-6 px-8 cursor"
-                                        onClick={(e) => {
-                                            // Prevent navigation to the same page
-                                            if (href === pathname) {
-                                                e.preventDefault()
-                                            }
-                                            onClick?.(e)
-                                        }}
-                                        isActive={isActive}
-                                    >
-                                        <div className="flexbox-col flex-grow-1 mw-none">
-                                            <Tooltip content={title} placement="right">
-                                                <span
-                                                    className={`collapsible__item__title dc__truncate fs-13 lh-20 ${strikeThrough ? 'dc__strike-through' : ''}`}
-                                                >
-                                                    {title}
-                                                </span>
-                                            </Tooltip>
-                                            {subtitle && (
-                                                <Tooltip content={subtitle} placement="right">
-                                                    <span className="dc__truncate fw-4 lh-1-5 cn-7">{subtitle}</span>
-                                                </Tooltip>
-                                            )}
-                                        </div>
-                                        {iconConfig && (
-                                            <ConditionalWrap
-                                                condition={!!iconConfig.tooltipProps}
-                                                wrap={renderWithTippy(iconConfig.tooltipProps)}
-                                            >
-                                                <iconConfig.Icon
-                                                    {...iconConfig.props}
-                                                    className={`icon-dim-20 p-2 dc__no-shrink cursor ${iconConfig.props?.className || ''}`}
-                                                />
-                                            </ConditionalWrap>
-                                        )}
-                                    </NavLink>
-                                ))
+                                items.map((item) =>
+                                    tabType === 'button'
+                                        ? getButtonTabItem(item as CollapsibleListItem<'button'>)
+                                        : getNavLinkTabItem(item as CollapsibleListItem<'navLink'>),
+                                )
                             )}
                         </div>
                     </Collapse>

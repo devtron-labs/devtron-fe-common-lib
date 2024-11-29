@@ -519,10 +519,13 @@ export interface DeploymentHistorySidebarType {
 export interface AppStatusDetailsChartType {
     filterRemoveHealth?: boolean
     showFooter: boolean
+    showConfigDriftInfo?: boolean
+    onClose?: () => void
 }
 
 export interface StatusFilterButtonType {
     nodes: Array<Node>
+    selectedTab: string
     handleFilterClick?: (selectedFilter: string) => void
 }
 
@@ -533,6 +536,10 @@ export enum NodeStatus {
     Missing = 'missing',
     Suspended = 'suspended',
     Unknown = 'unknown',
+}
+
+export enum NodeFilters {
+    drifted = 'drifted',
 }
 
 type NodesMap = {
@@ -784,3 +791,15 @@ export type CreateMarkupPropsType =
 export type TriggerHistoryFilterCriteriaType = `${string}|${string}|${string}`[]
 export const terminalStatus = new Set(['error', 'healthy', 'succeeded', 'cancelled', 'failed', 'aborted'])
 export const statusSet = new Set(['starting', 'running', 'pending'])
+
+export interface CIPipelineSourceConfigInterface {
+    sourceType: string
+    sourceValue: any // TODO: need to make source value consistent
+    showTooltip?: boolean
+    showIcons?: boolean
+    baseText?: string
+    regex?: any
+    isRegex?: boolean
+    primaryBranchAfterRegex?: string
+    rootClassName?: string
+}

@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
+import { getUrlWithSearchParams } from '@Common/Helper'
 import { DEFAULT_BASE_PAGE_SIZE, EXCLUDED_FALSY_VALUES, SortingOrder } from '../../Constants'
 import { DEFAULT_PAGE_NUMBER, URL_FILTER_KEYS } from './constants'
 import { UseUrlFiltersProps, UseUrlFiltersReturnType } from './types'
+import { setItemInLocalStorageIfKeyExists } from './utils'
 
 const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_KEYS
 
@@ -42,10 +44,50 @@ const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_K
 const useUrlFilters = <T = string, K = unknown>({
     initialSortKey,
     parseSearchParams,
+    localStorageKey,
 }: UseUrlFiltersProps<T, K> = {}): UseUrlFiltersReturnType<T, K> => {
     const location = useLocation()
     const history = useHistory()
-    const searchParams = new URLSearchParams(location.search)
+
+    const isAlreadyReadFromLocalStorage = useRef<boolean>(false)
+
+    const getSearchParams = () => {
+        const locationSearchParams = new URLSearchParams(location.search)
+        if (!isAlreadyReadFromLocalStorage.current && localStorageKey) {
+            if (!location.search) {
+                isAlreadyReadFromLocalStorage.current = true
+                const localStorageValue = localStorage.getItem(localStorageKey)
+                if (localStorageValue) {
+                    try {
+                        const localSearchString = getUrlWithSearchParams('', JSON.parse(localStorageValue))
+                        const localSearchParams = new URLSearchParams(localSearchString.split('?')[1] ?? '')
+
+                        history.replace({ search: localSearchParams.toString() })
+                        return localSearchParams
+                    } catch {
+                        localStorage.removeItem(localStorageKey)
+                    }
+                }
+            } else {
+                setItemInLocalStorageIfKeyExists(
+                    localStorageKey,
+                    JSON.stringify(parseSearchParams(locationSearchParams)),
+                )
+            }
+        }
+
+        return locationSearchParams
+    }
+
+    const searchParams = getSearchParams()
+
+    const getParsedSearchParams: UseUrlFiltersProps<T, K>['parseSearchParams'] = (searchParamsToParse) => {
+        if (parseSearchParams) {
+            return parseSearchParams(searchParamsToParse)
+        }
+
+        return {} as K
+    }
 
     const { pageSize, pageNumber, searchKey, sortBy, sortOrder, parsedParams } = useMemo(() => {
         const _pageSize = searchParams.get(PAGE_SIZE)
@@ -58,7 +100,7 @@ const useUrlFilters = <T = string, K = unknown>({
         // Fallback to ascending order
         const sortByOrder = Object.values(SortingOrder).includes(_sortOrder) ? _sortOrder : SortingOrder.ASC
 
-        const _parsedParams = parseSearchParams ? parseSearchParams(searchParams) : ({} as K)
+        const _parsedParams = getParsedSearchParams(searchParams)
 
         return {
             pageSize: Number(_pageSize) || DEFAULT_BASE_PAGE_SIZE,
@@ -126,6 +168,9 @@ const useUrlFilters = <T = string, K = unknown>({
 
     const clearFilters = () => {
         history.replace({ search: '' })
+        if (localStorageKey) {
+            localStorage.removeItem(localStorageKey)
+        }
     }
 
     const updateSearchParams = (paramsToSerialize: Partial<K>) => {
@@ -143,6 +188,8 @@ const useUrlFilters = <T = string, K = unknown>({
                 searchParams.delete(key)
             }
         })
+        // Skipping primary params => pageSize, pageNumber, searchKey, sortBy, sortOrder
+        setItemInLocalStorageIfKeyExists(localStorageKey, JSON.stringify(getParsedSearchParams(searchParams)))
         // Not replacing the params as it is being done by _resetPageNumber
         _resetPageNumber()
     }

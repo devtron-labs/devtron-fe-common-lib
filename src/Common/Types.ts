@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-import React, { ReactNode, CSSProperties, ReactElement } from 'react'
+import React, { ReactNode, CSSProperties, ReactElement, MutableRefObject } from 'react'
 import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
-import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
-import { RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
+import { MandatoryPluginBaseStateType, RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
+import {
+    ACTION_STATE,
+    ConsequenceType,
+    DEPLOYMENT_WINDOW_TYPE,
+    DockerConfigOverrideType,
+    SortingOrder,
+    TaskErrorObj,
+} from '.'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -43,7 +50,11 @@ export interface ResponseType<T = any> {
 
 export interface APIOptions {
     timeout?: number
+    /**
+     * @deprecated Use abortController instead
+     */
     signal?: AbortSignal
+    abortControllerRef?: MutableRefObject<AbortController>
     preventAutoLogout?: boolean
 }
 
@@ -166,6 +177,7 @@ export interface ErrorPageType
 
 export interface ErrorScreenManagerProps {
     code?: number
+    imageType?: ImageType
     reload?: (...args) => any
     subtitle?: React.ReactChild
     reloadClass?: string
@@ -450,12 +462,12 @@ export interface ArtifactReleaseMappingType {
 }
 
 export interface CDMaterialListModalServiceUtilProps {
-    artifacts: any[],
-    offset: number,
-    artifactId?: number,
-    artifactStatus?: string,
-    disableDefaultSelection?: boolean,
-    userApprovalConfig?: UserApprovalConfigType,
+    artifacts: any[]
+    offset: number
+    artifactId?: number
+    artifactStatus?: string
+    disableDefaultSelection?: boolean
+    userApprovalConfig?: UserApprovalConfigType
 }
 
 export interface CDMaterialType {
@@ -552,7 +564,7 @@ export interface DownstreamNodesEnvironmentsType {
     environmentName: string
 }
 
-export interface CommonNodeAttr {
+export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTriggerBlocked' | 'pluginBlockState'> {
     connectingCiPipelineId?: number
     parents: string | number[] | string[]
     x: number
@@ -602,15 +614,10 @@ export interface CommonNodeAttr {
     approvalUsers?: string[]
     userApprovalConfig?: UserApprovalConfigType
     requestedUserId?: number
-    showPluginWarning?: boolean
+    showPluginWarning: boolean
     helmPackageName?: string
     isVirtualEnvironment?: boolean
     deploymentAppType?: DeploymentAppTypes
-    isCITriggerBlocked?: boolean
-    ciBlockState?: {
-        action: any
-        metadataField: string
-    }
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
     isGitOpsRepoNotConfigured?: boolean
@@ -793,7 +800,7 @@ export interface CDStageConfigMapSecretNames {
     secrets: any[]
 }
 
-export interface PrePostDeployStageType {
+export interface PrePostDeployStageType extends MandatoryPluginBaseStateType {
     isValid: boolean
     steps: TaskErrorObj[]
     triggerType: string
@@ -831,6 +838,8 @@ export interface CdPipeline {
     preDeployStage?: PrePostDeployStageType
     postDeployStage?: PrePostDeployStageType
     isProdEnv?: boolean
+    isGitOpsRepoNotConfigured?: boolean
+    isDeploymentBlocked?: boolean
 }
 
 export interface ExternalCiConfig {
