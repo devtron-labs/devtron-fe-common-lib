@@ -15,6 +15,12 @@
  */
 
 import { AggregationKeys, NodeType, Nodes } from '../../Shared'
+import { ALL_NAMESPACE_OPTION } from './constants'
+import {
+    ApiResourceGroupType,
+    CreateResourceRequestBodyParamsType,
+    CreateResourceRequestBodyType,
+} from './ResourceBrowser.Types'
 
 export function getAggregator(nodeType: NodeType, defaultAsOtherResources?: boolean): AggregationKeys {
     switch (nodeType) {
@@ -65,3 +71,46 @@ export function getAggregator(nodeType: NodeType, defaultAsOtherResources?: bool
             return defaultAsOtherResources ? AggregationKeys['Other Resources'] : AggregationKeys['Custom Resource']
     }
 }
+
+export const getK8sResourceListPayload = (
+    clusterId: string,
+    namespace: string,
+    selectedResource: ApiResourceGroupType,
+    filters: object,
+) => ({
+    clusterId: +clusterId,
+    k8sRequest: {
+        resourceIdentifier: {
+            groupVersionKind: selectedResource.gvk,
+            ...(selectedResource.namespaced && {
+                namespace: namespace === ALL_NAMESPACE_OPTION.value ? '' : namespace,
+            }),
+        },
+    },
+    ...filters,
+})
+
+export const createResourceRequestBody = ({
+    clusterId,
+    group,
+    version,
+    kind,
+    name,
+    namespace,
+    updatedManifest,
+}: CreateResourceRequestBodyParamsType): CreateResourceRequestBodyType => ({
+    appId: '',
+    clusterId,
+    k8sRequest: {
+        resourceIdentifier: {
+            groupVersionKind: {
+                Group: group || '',
+                Version: version || 'v1',
+                Kind: kind,
+            },
+            namespace,
+            name,
+        },
+        ...(updatedManifest && { patch: updatedManifest }),
+    },
+})

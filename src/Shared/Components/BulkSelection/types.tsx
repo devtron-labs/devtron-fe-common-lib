@@ -49,6 +49,10 @@ export interface UseBulkSelectionReturnType<T> extends GetBulkSelectionCheckboxV
 
 export interface BulkSelectionProps {
     showPagination: boolean
+    /**
+     * @default true
+     */
+    showChevronDownIcon?: boolean
     disabled?: boolean
 }
 
