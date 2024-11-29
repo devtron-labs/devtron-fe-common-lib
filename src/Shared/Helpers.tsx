@@ -826,7 +826,7 @@ export const sanitizeApprovalConfigData = (
 ): ApprovalConfigDataType =>
     approvalConfigData
         ? {
-              kind: approvalConfigData?.kind,
+              kind: approvalConfigData?.kind ?? null,
               requiredCount: approvalConfigData?.requiredCount ?? 0,
               currentCount: approvalConfigData?.currentCount ?? 0,
               anyUserApprovedInfo: sanitizeUserApprovalInfo(approvalConfigData?.anyUserApprovedInfo),
