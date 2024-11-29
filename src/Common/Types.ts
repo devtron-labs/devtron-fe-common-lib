@@ -402,10 +402,6 @@ export enum ApprovalRuntimeStateType {
 export interface UserApprovalMetadataType {
     approvalRequestId: number
     approvalRuntimeState: ApprovalRuntimeStateType
-    /**
-     * @deprecated
-     */
-    approvedUsersData: ApprovalUserDataType[]
     requestedUserData: ApprovalUserDataType
     hasCurrentUserApproved: boolean
     canCurrentUserApprove: boolean
@@ -704,6 +700,9 @@ export interface CDMaterialsApprovalInfo {
      * @deprecated ?
      */
     approvalUsers: string[]
+    /**
+     * @deprecated ?
+     */
     canApproverDeploy: boolean
     deploymentApprovalInfo: DeploymentApprovalInfoType
 }

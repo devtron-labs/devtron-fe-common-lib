@@ -85,23 +85,12 @@ export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
 }
 
-export const sanitizeUserApprovalMetadata = (
-    userApprovalMetadata: UserApprovalMetadataType,
-): UserApprovalMetadataType => {
-    const approvedUsersData = userApprovalMetadata?.approvedUsersData || []
-
-    return {
-        ...userApprovalMetadata,
-        hasCurrentUserApproved: userApprovalMetadata?.hasCurrentUserApproved ?? false,
-        canCurrentUserApprove: userApprovalMetadata?.canCurrentUserApprove ?? false,
-        // TODO: Remove
-        approvedUsersData: approvedUsersData.map((userData) => ({
-            ...userData,
-            userGroups: userData.userGroups?.filter((group) => !!group?.identifier && !!group?.name) ?? [],
-        })),
-        approvalConfigData: sanitizeApprovalConfigData(userApprovalMetadata?.approvalConfigData),
-    }
-}
+export const sanitizeUserApprovalMetadata = (userApprovalMetadata: UserApprovalMetadataType): UserApprovalMetadataType => ({
+    ...userApprovalMetadata,
+    hasCurrentUserApproved: userApprovalMetadata?.hasCurrentUserApproved ?? false,
+    canCurrentUserApprove: userApprovalMetadata?.canCurrentUserApprove ?? false,
+    approvalConfigData: sanitizeApprovalConfigData(userApprovalMetadata?.approvalConfigData),
+})
 
 const cdMaterialListModal = ({
     artifacts,
