@@ -392,10 +392,16 @@ export interface ApprovalConfigDataType extends Pick<UserApprovalInfo, 'currentC
     }
 }
 
+export enum ApprovalRuntimeStateType {
+    init = 0,
+    requested = 1,
+    approved = 2,
+    consumed = 3,
+}
 
 export interface UserApprovalMetadataType {
     approvalRequestId: number
-    approvalRuntimeState: number
+    approvalRuntimeState: ApprovalRuntimeStateType
     /**
      * @deprecated
      */
