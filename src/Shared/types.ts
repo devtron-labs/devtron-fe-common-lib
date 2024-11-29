@@ -856,17 +856,19 @@ export interface DynamicTabType extends CommonTabArgsType {
     lastActiveTabId: string | null
 }
 
-export interface ResourceProtectDTO {
+export interface ResourceApprovalPolicyConfigDTO {
     appId: number
     envId: number
     approvalConfigurations: ApprovalConfigDataType[]
 }
 
-export interface ResourceProtectType extends Omit<ResourceProtectDTO, 'state' | 'approvalConfigurations'> {
+export interface ResourceApprovalPolicyConfigType
+    extends Omit<ResourceApprovalPolicyConfigDTO, 'state' | 'approvalConfigurations'> {
     isApprovalApplicable: boolean
     approvalConfigurationMap: Record<ApprovalConfigDataType['kind'], ApprovalConfigDataType>
 }
 
-export type ResourceProtectConfigType = {
-    [key in typeof BASE_CONFIGURATION_ENV_ID]: ResourceProtectType
-} & Record<ResourceProtectType['envId'], ResourceProtectType>
+export type ResourceIdToResourceApprovalPolicyConfigMapType = Record<
+    ResourceApprovalPolicyConfigType['envId'] | typeof BASE_CONFIGURATION_ENV_ID,
+    Pick<ResourceApprovalPolicyConfigType, 'isApprovalApplicable' | 'approvalConfigurationMap'>
+>
