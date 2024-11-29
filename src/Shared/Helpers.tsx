@@ -782,17 +782,6 @@ export const getFileNameFromHeaders = (headers: Headers) =>
         ?.replace('filename=', '')
         .trim()
 
-// TODO: Maybe migrate to FE Lib
-export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfigType): UserApprovalConfigType => ({
-    requiredCount: userApprovalConfig?.requiredCount ?? 0,
-    type: userApprovalConfig?.type ?? ManualApprovalType.notConfigured,
-    specificUsers: {
-        identifiers: userApprovalConfig?.specificUsers?.identifiers ?? [],
-        requiredCount: userApprovalConfig?.specificUsers?.identifiers?.length ?? 0,
-    },
-    userGroups: userApprovalConfig?.userGroups ?? [],
-})
-
 export const sanitizeUserApprovalList = (
     approverList: UserApprovalInfo['approverList'],
 ): UserApprovalInfo['approverList'] =>
@@ -930,8 +919,6 @@ export const sanitizeApprovalConfigData = (
 
 /**
  * Manual approval is considered configured only if the type is not notConfigured
- *
- * @deprecated ?
  */
 export const getIsManualApprovalConfigured = (userApprovalConfig?: Pick<UserApprovalConfigType, 'type'>) =>
     // Added null check for backward compatibility
