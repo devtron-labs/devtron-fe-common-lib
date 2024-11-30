@@ -613,10 +613,6 @@ export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTr
     primaryBranchAfterRegex?: string
     storageConfigured?: boolean
     deploymentAppDeleteRequest?: boolean
-    /**
-     * @deprecated
-     */
-    approvalUsers?: string[]
     approvalConfigData: ApprovalConfigDataType
     requestedUserId?: number
     showPluginWarning: boolean
@@ -695,10 +691,6 @@ export interface DeploymentApprovalInfoType {
 }
 
 export interface CDMaterialsApprovalInfo {
-    /**
-     * @deprecated ?
-     */
-    approvalUsers: string[]
     /**
      * @deprecated ?
      */

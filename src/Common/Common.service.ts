@@ -213,14 +213,12 @@ const sanitizeDeploymentApprovalInfo = (
 const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResult): CDMaterialsApprovalInfo => {
     if (!enableApproval || !cdMaterialsResult) {
         return {
-            approvalUsers: [],
             canApproverDeploy: cdMaterialsResult?.canApproverDeploy ?? false,
             deploymentApprovalInfo: null,
         }
     }
 
     return {
-        approvalUsers: cdMaterialsResult.approvalUsers,
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
         deploymentApprovalInfo: sanitizeDeploymentApprovalInfo(cdMaterialsResult.deploymentApprovalInfo),
     }
