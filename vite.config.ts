@@ -51,6 +51,50 @@ export default defineConfig({
             output: {
                 assetFileNames: 'assets/[name][extname]',
                 entryFileNames: '[name].js',
+                manualChunks(id: string) {
+                    if (
+                        id.includes('/node_modules/monaco-editor') ||
+                        id.includes('/node_modules/react-monaco-editor')
+                    ) {
+                        return '@monaco-editor'
+                    }
+
+                    if (id.includes('/node_modules/react-dates')) {
+                        return '@react-dates'
+                    }
+
+                    if (id.includes('/node_modules/framer-motion')) {
+                        return '@framer-motion'
+                    }
+
+                    if (id.includes('/node_modules/moment')) {
+                        return '@moment'
+                    }
+
+                    if (id.includes('/node_modules/react-select')) {
+                        return '@react-select'
+                    }
+
+                    if (id.includes('/node_modules/')) {
+                        return '@vendor'
+                    }
+
+                    if (id.includes('src/Common/CodeEditor')) {
+                        return '@code-editor'
+                    }
+
+                    if (id.includes('src/Common/RJSF')) {
+                        return '@common-rjsf'
+                    }
+
+                    if (id.includes('src/Assets/Icons')) {
+                        return '@src-assets-icons'
+                    }
+
+                    if (id.includes('src/Assets/Img')) {
+                        return '@src-assets-images'
+                    }
+                }
             },
         },
     },
