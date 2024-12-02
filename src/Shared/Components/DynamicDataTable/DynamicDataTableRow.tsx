@@ -7,6 +7,7 @@ import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 import { Tooltip } from '@Common/Tooltip'
 
 import { ConditionalWrap } from '@Common/Helper'
+import { ResizableTagTextArea } from '@Common/CustomTagSelector'
 import { SelectTextArea } from '../SelectTextArea'
 import {
     getSelectPickerOptionByValue,
@@ -14,7 +15,6 @@ import {
     SelectPickerOptionType,
     SelectPickerVariantType,
 } from '../SelectPicker'
-import { MultipleResizableTextArea } from '../MultipleResizableTextArea'
 import { getActionButtonPosition, getRowGridTemplateColumn, rowTypeHasInputField } from './utils'
 import { DynamicDataTableRowType, DynamicDataTableRowProps, DynamicDataTableRowDataType } from './types'
 
@@ -134,7 +134,7 @@ export const DynamicDataTableRow = <K extends string>({
                             inputId={`data-table-${row.id}-${key}-cell`}
                             disabled={readOnly || row.data[key].disabled}
                             refVar={cellRef?.current?.[row.id]?.[key]}
-                            dependentRefs={cellRef?.current?.[row.id]}
+                            dependentRef={cellRef?.current?.[row.id]}
                             textAreaProps={{
                                 ...row.data[key].props?.textAreaProps,
                                 className: 'dynamic-data-table__cell-input placeholder-cn5 py-8 pr-8 cn-9 fs-13 lh-20',
@@ -166,7 +166,7 @@ export const DynamicDataTableRow = <K extends string>({
                 )
             default:
                 return (
-                    <MultipleResizableTextArea
+                    <ResizableTagTextArea
                         {...row.data[key].props}
                         className={`dynamic-data-table__cell-input placeholder-cn5 p-8 cn-9 fs-13 lh-20 dc__no-border-radius ${readOnly || row.data[key].disabled ? 'cursor-not-allowed' : ''}`}
                         minHeight={20}
@@ -175,7 +175,7 @@ export const DynamicDataTableRow = <K extends string>({
                         onChange={onChange(row, key)}
                         disabled={readOnly || row.data[key].disabled}
                         refVar={cellRef?.current?.[row.id]?.[key]}
-                        dependentRefs={cellRef?.current?.[row.id]}
+                        dependentRef={cellRef?.current?.[row.id]}
                         disableOnBlurResizeToMinHeight
                     />
                 )

@@ -18,8 +18,8 @@ import { DetailedHTMLProps, ReactNode } from 'react'
 
 import { SortingOrder } from '@Common/Constants'
 
+import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
-import { MultipleResizableTextAreaProps } from '../MultipleResizableTextArea'
 import { SelectTextAreaProps } from '../SelectTextArea'
 
 /**
@@ -48,7 +48,7 @@ export enum DynamicDataTableRowDataType {
 
 export type DynamicDataTableCellPropsMap = {
     [DynamicDataTableRowDataType.TEXT]: Omit<
-        MultipleResizableTextAreaProps,
+        ResizableTagTextAreaProps,
         | 'className'
         | 'minHeight'
         | 'maxHeight'
@@ -57,7 +57,7 @@ export type DynamicDataTableCellPropsMap = {
         | 'disabled'
         | 'disableOnBlurResizeToMinHeight'
         | 'refVar'
-        | 'dependentRefs'
+        | 'dependentRef'
     >
     [DynamicDataTableRowDataType.DROPDOWN]: Omit<
         SelectPickerProps<string, false>,
@@ -65,7 +65,7 @@ export type DynamicDataTableCellPropsMap = {
     >
     [DynamicDataTableRowDataType.SELECT_TEXT]: Omit<
         SelectTextAreaProps,
-        'value' | 'onChange' | 'inputId' | 'isDisabled' | 'dependentRefs' | 'refVar' | 'textAreaProps'
+        'value' | 'onChange' | 'inputId' | 'isDisabled' | 'dependentRef' | 'refVar' | 'textAreaProps'
     > & {
         textAreaProps?: Omit<
             SelectTextAreaProps['textAreaProps'],

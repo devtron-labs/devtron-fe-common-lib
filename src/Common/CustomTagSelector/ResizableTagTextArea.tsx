@@ -14,26 +14,25 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react'
-import { useThrottledEffect } from '../Helper'
+import { useEffect, useState } from 'react'
+
+import { useThrottledEffect } from '@Common/Helper'
+
 import { ResizableTagTextAreaProps } from './Types'
 
 export const ResizableTagTextArea = ({
-    className,
+    value,
     minHeight,
     maxHeight,
-    value,
+    dataTestId,
     onChange,
     onBlur,
     onFocus,
-    placeholder,
-    tabIndex,
     refVar,
     dependentRef,
-    dataTestId,
-    handleKeyDown,
-    disabled,
+    className = '',
     disableOnBlurResizeToMinHeight,
+    ...resProps
 }: ResizableTagTextAreaProps) => {
     const [text, setText] = useState(value ?? '')
 
@@ -46,14 +45,36 @@ export const ResizableTagTextArea = ({
         onChange?.(event)
     }
 
-    const reInitHeight = () => {
-        refVar.current.style.height = `${minHeight}px`
-        if (dependentRef) {
-            dependentRef.current.style.height = `${minHeight}px`
+    const updateRefHeight = (height: number) => {
+        const refElement = refVar?.current
+        if (refElement) {
+            refElement.style.height = `${height}px`
         }
-        let nextHeight = refVar.current.scrollHeight
-        if (dependentRef && nextHeight < dependentRef.current.scrollHeight) {
-            nextHeight = dependentRef.current.scrollHeight
+    }
+
+    const updateDependentRefsHeight = (height: number) => {
+        if (dependentRef) {
+            Object.values(Array.isArray(dependentRef) ? dependentRef : [dependentRef]).forEach((ref) => {
+                const refElement = ref.current
+                if (refElement) {
+                    refElement.style.height = `${height}px`
+                }
+            })
+        }
+    }
+
+    const reInitHeight = () => {
+        updateRefHeight(minHeight || 0)
+        updateDependentRefsHeight(minHeight || 0)
+
+        let nextHeight = refVar?.current?.scrollHeight || 0
+        if (dependentRef) {
+            Object.values(Array.isArray(dependentRef) ? dependentRef : [dependentRef]).forEach((ref) => {
+                const refElement = ref.current
+                if (refElement && refElement.scrollHeight > nextHeight) {
+                    nextHeight = refElement.scrollHeight
+                }
+            })
         }
         if (minHeight && nextHeight < minHeight) {
             nextHeight = minHeight
@@ -61,10 +82,8 @@ export const ResizableTagTextArea = ({
         if (maxHeight && nextHeight > maxHeight) {
             nextHeight = maxHeight
         }
-        refVar.current.style.height = `${nextHeight}px`
-        if (dependentRef) {
-            dependentRef.current.style.height = `${nextHeight}px`
-        }
+        updateRefHeight(nextHeight)
+        updateDependentRefsHeight(nextHeight)
     }
 
     useEffect(() => {
@@ -75,34 +94,29 @@ export const ResizableTagTextArea = ({
 
     const handleOnBlur = (event) => {
         if (!disableOnBlurResizeToMinHeight) {
-            refVar.current.style.height = `${minHeight}px`
-            if (dependentRef) {
-                dependentRef.current.style.height = `${minHeight}px`
-            }
+            updateRefHeight(minHeight)
+            updateDependentRefsHeight(minHeight)
         }
-        onBlur && onBlur(event)
+        onBlur?.(event)
     }
 
     const handleOnFocus = (event) => {
         reInitHeight()
-        onFocus && onFocus(event)
+        onFocus?.(event)
     }
 
     return (
         <textarea
+            {...resProps}
             rows={1}
             ref={refVar}
             value={text}
-            placeholder={placeholder}
             className={`${className || ''} lh-20`}
             style={{ resize: 'none' }}
             onChange={handleChange}
             onBlur={handleOnBlur}
             onFocus={handleOnFocus}
-            tabIndex={tabIndex}
             data-testid={dataTestId}
-            onKeyDown={handleKeyDown}
-            disabled={disabled}
         />
     )
 }

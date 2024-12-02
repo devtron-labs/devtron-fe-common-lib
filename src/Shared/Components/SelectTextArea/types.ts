@@ -1,18 +1,19 @@
 import { ReactElement } from 'react'
 
+import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
+
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
-import { MultipleResizableTextAreaProps } from '../MultipleResizableTextArea'
 
 export type SelectTextAreaProps = Pick<SelectPickerProps<string, false>, 'inputId' | 'options'> &
-    Pick<MultipleResizableTextAreaProps, 'refVar' | 'dependentRefs'> & {
+    Pick<ResizableTagTextAreaProps, 'refVar' | 'dependentRef'> & {
         value: string
         Icon?: ReactElement
         onChange?: (selectedValue: SelectPickerOptionType<string>) => void
         disabled?: boolean
         placeholder?: string
         textAreaProps?: Omit<
-            MultipleResizableTextAreaProps,
-            'refVar' | 'dependentRefs' | 'id' | 'value' | 'onChange' | 'placeholder' | 'disabled'
+            ResizableTagTextAreaProps,
+            'refVar' | 'dependentRef' | 'id' | 'value' | 'onChange' | 'placeholder' | 'disabled'
         >
         selectPickerProps?: Omit<
             SelectPickerProps<string, false>,
