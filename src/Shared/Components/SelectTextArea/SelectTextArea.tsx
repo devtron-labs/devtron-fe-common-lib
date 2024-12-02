@@ -3,6 +3,7 @@ import { SelectInstance } from 'react-select'
 
 import { ReactComponent as ICClearSquare } from '@Icons/ic-clear-square.svg'
 import { useEffectAfterMount } from '@Common/Helper'
+import { ResizableTagTextArea } from '@Common/CustomTagSelector'
 
 import {
     getSelectPickerOptionByValue,
@@ -10,18 +11,17 @@ import {
     SelectPickerOptionType,
     SelectPickerVariantType,
 } from '../SelectPicker'
-import { MultipleResizableTextArea } from '../MultipleResizableTextArea'
 import { SelectTextAreaProps } from './types'
 
 export const SelectTextArea = ({
     value,
-    selectedOptionIcon: Icon,
+    Icon,
     onChange,
     options,
     inputId,
     placeholder,
     refVar,
-    dependentRefs,
+    dependentRef,
     disabled,
     selectPickerProps,
     textAreaProps,
@@ -63,12 +63,12 @@ export const SelectTextArea = ({
 
     return (
         <div className="select-text-area flexbox dc__align-items-center dc__gap-4 w-100 dc__position-rel">
-            {!!(Icon && selectedValue) && Icon}
-            <MultipleResizableTextArea
+            {!!Icon && Icon}
+            <ResizableTagTextArea
                 {...textAreaProps}
                 id={inputId}
                 refVar={refVar}
-                dependentRefs={dependentRefs}
+                dependentRef={dependentRef}
                 className={`${textAreaProps?.className || ''} ${disabled ? 'cursor-not-allowed' : ''} ${!value ? 'dc__hide-section' : ''}`}
                 value={value}
                 onChange={onTextAreaChange}

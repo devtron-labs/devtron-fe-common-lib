@@ -18,24 +18,24 @@ import { DetailedHTMLProps, ReactNode } from 'react'
 
 import { SortingOrder } from '@Common/Constants'
 
+import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
-import { MultipleResizableTextAreaProps } from '../MultipleResizableTextArea'
 import { SelectTextAreaProps } from '../SelectTextArea'
 
 /**
- * Interface representing a key-value header.
+ * Interface representing header for a dynamic data table.
  * @template K - A string representing the key type.
  */
 export type DynamicDataTableHeaderType<K extends string> = {
-    /** The label of the header. */
+    /** The display label of the header, shown in the table's column header. */
     label: string
-    /** The key associated with the header. */
+    /** The unique key associated with the header, used to map the column to data fields. */
     key: K
-    /** */
+    /** The width of the column, defined as a CSS string (e.g., "100px", "10%", "1fr", or "auto"). */
     width: string
-    /** An optional boolean indicating if the column is sortable. */
+    /** An optional boolean indicating whether the column is sortable. */
     isSortable?: boolean
-    /** An optional boolean to hide the column */
+    /** An optional boolean to control the visibility of the column. */
     isHidden?: boolean
 }
 
@@ -46,85 +46,79 @@ export enum DynamicDataTableRowDataType {
     BUTTON = 'button',
 }
 
+export type DynamicDataTableCellPropsMap = {
+    [DynamicDataTableRowDataType.TEXT]: Omit<
+        ResizableTagTextAreaProps,
+        | 'className'
+        | 'minHeight'
+        | 'maxHeight'
+        | 'value'
+        | 'onChange'
+        | 'disabled'
+        | 'disableOnBlurResizeToMinHeight'
+        | 'refVar'
+        | 'dependentRef'
+    >
+    [DynamicDataTableRowDataType.DROPDOWN]: Omit<
+        SelectPickerProps<string, false>,
+        'inputId' | 'value' | 'onChange' | 'fullWidth' | 'isDisabled'
+    >
+    [DynamicDataTableRowDataType.SELECT_TEXT]: Omit<
+        SelectTextAreaProps,
+        'value' | 'onChange' | 'inputId' | 'isDisabled' | 'dependentRef' | 'refVar' | 'textAreaProps'
+    > & {
+        textAreaProps?: Omit<
+            SelectTextAreaProps['textAreaProps'],
+            'className' | 'disableOnBlurResizeToMinHeight' | 'minHeight' | 'maxHeight'
+        >
+    }
+    [DynamicDataTableRowDataType.BUTTON]: Pick<
+        DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
+        'onClick'
+    > & {
+        icon?: ReactNode
+        text: string
+    }
+}
+
+type DynamicDataTableCellExtendedPropsMap = {
+    [DynamicDataTableRowDataType.TEXT]: {}
+    [DynamicDataTableRowDataType.DROPDOWN]: {}
+    [DynamicDataTableRowDataType.SELECT_TEXT]: {}
+    [DynamicDataTableRowDataType.BUTTON]:
+        | {
+              wrap: true
+              wrapRenderer: (props: { children: JSX.Element; customState?: Record<string, any> }) => JSX.Element
+          }
+        | {
+              wrap?: false
+              wrapRenderer?: never
+          }
+}
+
+type DynamicDataTableCellData<T extends keyof DynamicDataTableCellPropsMap = keyof DynamicDataTableCellPropsMap> =
+    T extends keyof DynamicDataTableCellPropsMap
+        ? { type: T; props: DynamicDataTableCellPropsMap[T] } & DynamicDataTableCellExtendedPropsMap[T]
+        : never
+
 /**
  * Type representing a key-value row.
  * @template K - A string representing the key type.
  */
-export type DynamicDataTableRowType<K extends string> = {
+export type DynamicDataTableRowType<K extends string, CustomStateType = Record<string, unknown>> = {
     data: {
         [key in K]: {
             value: string
             disabled?: boolean
             /** An optional boolean indicating if an asterisk should be shown. */
             required?: boolean
-        } & (
-            | {
-                  type?: DynamicDataTableRowDataType.TEXT
-                  props?: Omit<
-                      MultipleResizableTextAreaProps,
-                      | 'className'
-                      | 'minHeight'
-                      | 'maxHeight'
-                      | 'value'
-                      | 'onChange'
-                      | 'disabled'
-                      | 'disableOnBlurResizeToMinHeight'
-                      | 'refVar'
-                      | 'dependentRefs'
-                  >
-              }
-            | {
-                  type?: DynamicDataTableRowDataType.DROPDOWN
-                  props?: Omit<
-                      SelectPickerProps<string, false>,
-                      'inputId' | 'value' | 'onChange' | 'fullWidth' | 'isDisabled'
-                  >
-              }
-            | {
-                  type?: DynamicDataTableRowDataType.SELECT_TEXT
-                  props?: Omit<
-                      SelectTextAreaProps,
-                      'value' | 'onChange' | 'inputId' | 'isDisabled' | 'dependentRefs' | 'refVar' | 'textAreaProps'
-                  > & {
-                      textAreaProps?: Omit<
-                          SelectTextAreaProps['textAreaProps'],
-                          'className' | 'disableOnBlurResizeToMinHeight' | 'minHeight' | 'maxHeight'
-                      >
-                  }
-              }
-            | ({
-                  type?: DynamicDataTableRowDataType.BUTTON
-                  props: Pick<
-                      DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
-                      'onClick'
-                  > & {
-                      icon?: ReactNode
-                      text: ReactNode
-                  }
-              } & (
-                  | {
-                        wrap: true
-                        wrapRenderer: (props: {
-                            children: JSX.Element
-                            customState?: Record<string, any>
-                        }) => JSX.Element
-                    }
-                  | {
-                        wrap?: false
-                        wrapRenderer?: never
-                    }
-              ))
-        )
+        } & DynamicDataTableCellData
     }
     id: string | number
     /** */
-    customState?: Record<string, any>
+    customState?: CustomStateType
 }
 
-/**
- * Type representing a mask for key-value pairs.
- * @template K - A string representing the key type.
- */
 type DynamicDataTableMask<K extends string> = {
     [key in K]?: boolean
 }
@@ -134,25 +128,30 @@ type DynamicDataTableCellIcon<K extends string> = {
 }
 
 /**
- * Interface representing the properties for a key-value table component.
+ * Interface representing the properties for the dynamic data table component.
  * @template K - A string representing the key type.
  */
 export type DynamicDataTableProps<K extends string> = {
-    /** An array containing two key-value headers. */
+    /**
+     * An array containing the headers for the data table. \
+     * Each header defines a column with its label, key, width, and optional settings.
+     */
     headers: DynamicDataTableHeaderType<K>[]
-    /** An array of key-value rows. */
+    /**
+     * An array of rows where each row contains data corresponding to the table headers.
+     */
     rows: DynamicDataTableRowType<K>[]
-    /** */
+    /** Optional configuration for sorting the table. */
     sortingConfig?: {
         sortBy: K
         sortOrder: SortingOrder
         handleSorting: () => void
     }
-    /** An optional mask for the key-value pairs. */
+    /** An optional mask to hide the values of the cell. */
     maskValue?: DynamicDataTableMask<K>
-    /** */
+    /** Optional configuration for displaying an icon in the leading position of a cell. */
     leadingCellIcon?: DynamicDataTableCellIcon<K>
-    /** */
+    /** Optional configuration for displaying an icon in the trailing position of a cell. */
     trailingCellIcon?: DynamicDataTableCellIcon<K>
     /** An optional React node for a custom header component. */
     headerComponent?: ReactNode
@@ -162,13 +161,14 @@ export type DynamicDataTableProps<K extends string> = {
     isDeletionNotAllowed?: boolean
     /** When true, data add or update is disabled. */
     readOnly?: boolean
-    /** */
+    /** Function to handle the addition of a new row to the table. */
     onRowAdd: () => void
     /**
      * Function to handle changes in the table rows.
      * @param row - The row that changed.
      * @param headerKey - The key of the header that changed.
      * @param value - The value of the cell.
+     * @param extraData - Additional data, such as a selected value for dropdowns.
      */
     onRowEdit: (
         row: DynamicDataTableRowType<K>,
@@ -183,15 +183,25 @@ export type DynamicDataTableProps<K extends string> = {
      * @param row - The row that was deleted.
      */
     onRowDelete: (row: DynamicDataTableRowType<K>) => void
-    /** */
+    /** Optional configuration for rendering a custom action button in a row. */
     actionButtonConfig?: {
-        renderer: (row: DynamicDataTableRowType<K>) => ReactNode
-        key?: K
         /**
+         * Function to render the action button.
+         * @param row - The current row being rendered.
+         * @returns A React node representing the action button.
+         */
+        renderer: (row: DynamicDataTableRowType<K>) => ReactNode
+        /**
+         * This represents under which header key the action button will be rendered.
+         */
+        key: K
+        /**
+         * The width of the action button.
          * @default '32px'
          */
         width?: string
         /**
+         * The position of the action button under the header key.
          * @default 'start'
          */
         position?: 'start' | 'end'
@@ -201,18 +211,20 @@ export type DynamicDataTableProps<K extends string> = {
      */
     showError?: boolean
     /**
-     * An array of error messages to be displayed in the cell error tooltip.
-     */
-    errorMessages?: string[]
-    /**
-     * The function to use to validate the value of the cell.
+     * Function to validate the value of a table cell.
      * @param value - The value to validate.
-     * @param key - The row key of the value.
-     * @param rowId - The id of the row.
-     * @returns Return true if the value is valid, otherwise false
-     * and set `showError` to `true` and provide errorMessages array to show error message.
+     * @param key - The column key of the cell.
+     * @param row - The row containing the cell.
+     * @returns An object with a boolean indicating validity and an array of error messages.
      */
-    validationSchema?: (value: string, key: K, rowId: string | number) => boolean
+    validationSchema?: (
+        value: string,
+        key: K,
+        row: DynamicDataTableRowType<K>,
+    ) => {
+        isValid: boolean
+        errorMessages: string[]
+    }
 }
 
 export interface DynamicDataTableHeaderProps<K extends string>
@@ -242,7 +254,6 @@ export interface DynamicDataTableRowProps<K extends string>
         | 'onRowDelete'
         | 'actionButtonConfig'
         | 'showError'
-        | 'errorMessages'
         | 'validationSchema'
         | 'leadingCellIcon'
         | 'trailingCellIcon'
