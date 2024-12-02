@@ -19,7 +19,13 @@ import { TippyProps } from '@tippyjs/react'
 import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
-import { MandatoryPluginBaseStateType, RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
+import {
+    MandatoryPluginBaseStateType,
+    PolicyBlockInfo,
+    RegistryType,
+    RuntimeParamsListItemType,
+    Severity,
+} from '../Shared'
 import {
     ACTION_STATE,
     ConsequenceType,
@@ -523,6 +529,8 @@ export interface CDMaterialType {
      * Would currently only be received in case of release
      */
     appWorkflowId: number
+    // Denotes trigger blocking due to mandatory tags, (might be used for plugins and other features in future)
+    deploymentBlockedState?: PolicyBlockInfo
 }
 
 export enum CDMaterialServiceEnum {
@@ -563,6 +571,16 @@ export interface CDMaterialServiceQueryParams {
 export interface DownstreamNodesEnvironmentsType {
     environmentId: number
     environmentName: string
+}
+
+export enum TriggerBlockType {
+    MANDATORY_TAG = 'mandatory-tags',
+    MANDATORY_PLUGIN = 'mandatory-plugins',
+}
+
+export interface TriggerBlockedInfo {
+    blockedBy: TriggerBlockType
+    blockedReason?: string
 }
 
 export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTriggerBlocked' | 'pluginBlockState'> {
@@ -627,6 +645,7 @@ export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTr
     downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
     cipipelineId?: number
     isDeploymentBlocked?: boolean
+    triggerBlockedInfo?: TriggerBlockedInfo
 }
 
 export enum DeploymentAppTypes {
@@ -698,6 +717,7 @@ export interface CDMaterialsMetaInfo {
      */
     requestedUserId: number
     runtimeParams: RuntimeParamsListItemType[]
+    deploymentBlockedState?: PolicyBlockInfo
 }
 
 export interface ImagePromotionMaterialInfo {
@@ -807,6 +827,7 @@ export interface PrePostDeployStageType extends MandatoryPluginBaseStateType {
     triggerType: string
     name: string
     status: string
+    triggerBlockedInfo?: TriggerBlockedInfo
 }
 
 export interface CdPipeline {
@@ -841,6 +862,8 @@ export interface CdPipeline {
     isProdEnv?: boolean
     isGitOpsRepoNotConfigured?: boolean
     isDeploymentBlocked?: boolean
+    isTriggerBlocked?: boolean
+    triggerBlockedInfo?: TriggerBlockedInfo
 }
 
 export interface ExternalCiConfig {
