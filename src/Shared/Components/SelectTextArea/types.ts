@@ -6,7 +6,7 @@ import { MultipleResizableTextAreaProps } from '../MultipleResizableTextArea'
 export type SelectTextAreaProps = Pick<SelectPickerProps<string, false>, 'inputId' | 'options'> &
     Pick<MultipleResizableTextAreaProps, 'refVar' | 'dependentRefs'> & {
         value: string
-        selectedOptionIcon?: ReactElement
+        Icon?: ReactElement
         onChange?: (selectedValue: SelectPickerOptionType<string>) => void
         disabled?: boolean
         placeholder?: string

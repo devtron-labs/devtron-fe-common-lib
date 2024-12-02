@@ -33,9 +33,8 @@ export const DynamicDataTableRow = <K extends string>({
     readOnly,
     isAdditionNotAllowed,
     isDeletionNotAllowed,
-    validationSchema = () => true,
+    validationSchema = () => ({ isValid: true, errorMessages: [] }),
     showError,
-    errorMessages = [],
     actionButtonConfig = null,
     onRowEdit,
     onRowDelete,
@@ -208,12 +207,9 @@ export const DynamicDataTableRow = <K extends string>({
         </div>
     )
 
-    const renderErrorMessages = (
-        value: Parameters<typeof validationSchema>[0],
-        key: Parameters<typeof validationSchema>[1],
-        rowId: DynamicDataTableRowType<K>['id'],
-    ) => {
-        const showErrorMessages = showError && !validationSchema(value, key, rowId)
+    const renderErrorMessages = (row: DynamicDataTableRowType<K>, key: K) => {
+        const { isValid, errorMessages } = validationSchema(row.data[key].value, key, row)
+        const showErrorMessages = showError && !isValid
         if (!showErrorMessages) {
             return null
         }
@@ -234,7 +230,7 @@ export const DynamicDataTableRow = <K extends string>({
                 plugins={[followCursor]}
             >
                 <div
-                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key, row.id) ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
+                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key, row).isValid ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
                 >
                     {maskValue?.[key] && row.data[key].value ? (
                         <div className="py-8 px-12 h-36 flex">{DEFAULT_SECRET_PLACEHOLDER}</div>
@@ -244,7 +240,7 @@ export const DynamicDataTableRow = <K extends string>({
                             {renderCellContent(row, key)}
                             {renderAsterisk(row, key)}
                             {renderCellIcon(row, key)}
-                            {renderErrorMessages(row.data[key].value, key, row.id)}
+                            {renderErrorMessages(row, key)}
                         </>
                     )}
                 </div>

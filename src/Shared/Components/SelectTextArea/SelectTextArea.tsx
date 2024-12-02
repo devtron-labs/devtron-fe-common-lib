@@ -15,7 +15,7 @@ import { SelectTextAreaProps } from './types'
 
 export const SelectTextArea = ({
     value,
-    selectedOptionIcon: Icon,
+    Icon,
     onChange,
     options,
     inputId,
@@ -63,7 +63,7 @@ export const SelectTextArea = ({
 
     return (
         <div className="select-text-area flexbox dc__align-items-center dc__gap-4 w-100 dc__position-rel">
-            {!!(Icon && selectedValue) && Icon}
+            {!!Icon && Icon}
             <MultipleResizableTextArea
                 {...textAreaProps}
                 id={inputId}
