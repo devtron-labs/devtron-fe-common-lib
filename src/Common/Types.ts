@@ -691,9 +691,6 @@ export interface DeploymentApprovalInfoType {
 }
 
 export interface CDMaterialsApprovalInfo {
-    /**
-     * @deprecated ?
-     */
     canApproverDeploy: boolean
     deploymentApprovalInfo: DeploymentApprovalInfoType
 }
