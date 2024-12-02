@@ -855,3 +855,8 @@ export interface DynamicTabType extends CommonTabArgsType {
      */
     lastActiveTabId: string | null
 }
+
+export interface PreventOutsideFocusProps {
+    identifier: string
+    preventFocus: boolean
+}

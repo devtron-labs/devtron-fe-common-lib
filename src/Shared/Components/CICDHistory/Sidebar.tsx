@@ -240,7 +240,7 @@ const HistorySummaryCard = React.memo(
                                             <span className="dc__bullet dc__bullet--d2 ml-4 mr-4" />
                                         </>
                                     )}
-                                    <div className="cn-7 fs-12 dc__ellipsis-right">
+                                    <div className="cn-7 fs-12 dc__truncate">
                                         {triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}
                                     </div>
                                 </div>
