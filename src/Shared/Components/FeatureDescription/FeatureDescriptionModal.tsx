@@ -22,7 +22,7 @@ import { FeatureDescriptionModalProps } from './types'
 import './featureDescription.scss'
 import { ReactComponent as ArrowOutSquare } from '../../../Assets/Icon/ic-arrow-square-out.svg'
 import { getImageSize } from './utils'
-import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
+import { Button } from '../Button'
 
 const FeatureDescriptionModalContent = ({
     renderDescriptionContent,
@@ -61,19 +61,15 @@ const FeatureDescriptionModalContent = ({
             className={`flex right w-100 dc__align-right dc__border-top-n1 px-20 py-16 ${docLink ? 'dc__content-space' : 'right'}`}
         >
             {docLink.length > 0 && (
-                <Button
-                    text={BUTTON_TEXT.VIEW_DOCUMENTATION}
-                    endIcon={<ArrowOutSquare />}
-                    component={ButtonComponentType.link}
-                    linkProps={{
-                        to: docLink,
-                        target: '_blank',
-                        rel: 'noreferrer',
-                    }}
-                    dataTestId="feature-desc__doc-link"
-                    variant={ButtonVariantType.secondary}
-                    size={ComponentSizeType.medium}
-                />
+                <a
+                    className="flex dc__link en-2 bw-1 dc__gap-6 br-4 fw-6 lh-20 px-8 py-6 h-32 anchor dc__hover-n50"
+                    href={docLink}
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    {BUTTON_TEXT.VIEW_DOCUMENTATION}
+                    <ArrowOutSquare className="icon-dim-16 scb-5" />
+                </a>
             )}
             <Button
                 text={closeModalText}
