@@ -118,6 +118,7 @@ export enum Nodes {
     PodDisruptionBudget = 'PodDisruptionBudget',
     Event = 'Event',
     Namespace = 'Namespace',
+    Node = 'Node',
     Overview = 'Overview',
     MonitoringDashboard = 'MonitoringDashboard',
     UpgradeCluster = 'UpgradeCluster',
@@ -529,6 +530,7 @@ export enum AggregationKeys {
     'Other Resources' = 'Other Resources',
     Events = 'Events',
     Namespaces = 'Namespaces',
+    'Nodes' = 'Nodes',
 }
 
 export type AggregationKeysType = keyof typeof AggregationKeys
@@ -872,3 +874,8 @@ export type ResourceIdToResourceApprovalPolicyConfigMapType = Record<
     ResourceApprovalPolicyConfigType['envId'] | typeof BASE_CONFIGURATION_ENV_ID,
     Pick<ResourceApprovalPolicyConfigType, 'isApprovalApplicable' | 'approvalConfigurationMap'>
 >
+
+export interface PreventOutsideFocusProps {
+    identifier: string
+    preventFocus: boolean
+}
