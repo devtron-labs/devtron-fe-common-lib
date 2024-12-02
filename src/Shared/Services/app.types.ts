@@ -228,6 +228,7 @@ export interface ConfigMapSecretDataType {
     id: number
     appId: number
     configData: ConfigMapSecretDataConfigDatumDTO[]
+    isDeletable: boolean
 }
 
 export enum ConfigResourceType {
