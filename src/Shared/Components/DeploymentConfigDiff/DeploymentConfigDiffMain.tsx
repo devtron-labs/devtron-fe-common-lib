@@ -194,8 +194,11 @@ export const DeploymentConfigDiffMain = ({
                         <DiffViewer
                             oldValue={primaryList.codeEditorValue.value}
                             newValue={secondaryList.codeEditorValue.value}
-                            leftTitle={primaryHeading}
-                            rightTitle={secondaryHeading}
+                            // Need to hide the title since the null state is controlled explicitly
+                            {...(primaryList.codeEditorValue.value !== secondaryList.codeEditorValue.value && {
+                                leftTitle: primaryHeading,
+                                rightTitle: secondaryHeading,
+                            })}
                             codeFoldMessageRenderer={renderDiffViewNoDifferenceState(
                                 primaryList.codeEditorValue.value,
                                 secondaryList.codeEditorValue.value,
