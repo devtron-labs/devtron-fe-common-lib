@@ -34,8 +34,8 @@ export class VisibleModal extends React.Component<{
     }
 
     escFunction(event) {
-        stopPropagation(event)
         if (event.keyCode === 27 || event.key === 'Escape') {
+            stopPropagation(event)
             if (this.props.onEscape) {
                 this.props.onEscape(event)
             } else if (this.props.close) {
