@@ -22,7 +22,15 @@ import './markdown.scss'
 
 const renderer = new marked.Renderer()
 
-const MarkDown = ({ setExpandableIcon, markdown, className, breaks, disableEscapedText, ...props }: MarkDownProps) => {
+const MarkDown = ({
+    setExpandableIcon,
+    markdown: markdownProp,
+    className,
+    breaks,
+    disableEscapedText,
+    ...props
+}: MarkDownProps) => {
+    const markdown = markdownProp || ''
     const mdeRef = useRef(null)
 
     const getHeight = () => {
