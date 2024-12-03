@@ -15,7 +15,7 @@
  */
 
 import { FormEvent, useEffect, useState } from 'react'
-import { showError, useAsync } from '../../../Common'
+import { ROUTES, showError, useAsync } from '../../../Common'
 import { getBuildInfraProfileByName, createBuildInfraProfile, updateBuildInfraProfile } from './services'
 import {
     BuildInfraConfigInfoType,
@@ -51,6 +51,7 @@ import {
     CREATE_MODE_REQUIRED_INPUT_FIELDS,
     CREATE_PROFILE_BASE_VALUE,
     BUILD_INFRA_DEFAULT_PLATFORM_NAME,
+    BUILD_INFRA_LATEST_API_VERSION,
 } from './constants'
 import {
     validateDescription,
@@ -744,6 +745,9 @@ export const getBuildInfraProfilePayload = (
     }
     return payload
 }
+
+export const getBuildInfraProfileEndpoint = (): string =>
+    `${ROUTES.INFRA_CONFIG_PROFILE}/${BUILD_INFRA_LATEST_API_VERSION}`
 
 export const unitSelectorStyles = () =>
     getCommonSelectStyle({

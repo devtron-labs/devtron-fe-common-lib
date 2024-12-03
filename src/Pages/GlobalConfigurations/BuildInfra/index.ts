@@ -17,6 +17,8 @@
 export { default as BuildInfraDescriptor } from './Descriptor'
 export { default as BuildInfraFooter } from './Footer'
 export { default as BuildInfraConfigForm } from './BuildInfraConfigForm'
+export { default as BuildInfraProfileNameField } from './BuildInfraProfileNameField'
+export { default as BuildInfraProfileDescriptionField } from './BuildInfraDescriptionField'
 export * from './services'
 export * from './utils'
 export * from './types'

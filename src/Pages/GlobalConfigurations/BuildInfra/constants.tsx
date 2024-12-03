@@ -30,6 +30,7 @@ import {
     BuildInfraProfileVariants,
     HandleProfileInputChangeType,
     BuildInfraProfileAdditionalErrorKeysType,
+    BuildInfraAPIVersionType,
 } from './types'
 
 export const BUILD_INFRA_INPUT_CONSTRAINTS = {
@@ -164,3 +165,4 @@ export const BUILD_INFRA_TEST_IDS = {
 } as const
 
 export const BUILD_INFRA_DEFAULT_PLATFORM_NAME = 'default' as const
+export const BUILD_INFRA_LATEST_API_VERSION: BuildInfraAPIVersionType = BuildInfraAPIVersionType.ALPHA1

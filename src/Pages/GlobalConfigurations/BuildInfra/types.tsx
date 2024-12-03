@@ -443,3 +443,7 @@ export interface GetPlatformConfigurationsWithDefaultValuesParamsType {
     defaultConfigurationsMap: BuildInfraConfigurationMapTypeWithoutDefaultFallback
     platformName: string
 }
+
+export enum BuildInfraAPIVersionType {
+    ALPHA1 = 'alpha1',
+}

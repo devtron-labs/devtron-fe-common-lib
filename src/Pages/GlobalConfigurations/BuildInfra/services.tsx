@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-import { getBuildInfraProfilePayload, getTransformedBuildInfraProfileResponse } from '@Pages/index'
-import { ROUTES, get, post, put, showError } from '../../../Common'
+import {
+    getBuildInfraProfileEndpoint,
+    getBuildInfraProfilePayload,
+    getTransformedBuildInfraProfileResponse,
+} from '@Pages/index'
+import { get, getUrlWithSearchParams, post, put, showError } from '../../../Common'
 import {
     BuildInfraProfileDTO,
     BuildInfraProfileInfoDTO,
@@ -30,12 +34,11 @@ export const getBuildInfraProfileByName = async ({
     fromCreateView,
 }: GetBuildInfraProfileType): Promise<BuildInfraProfileResponseType> => {
     try {
+        const getProfilePayload: Pick<BuildInfraProfileDTO['profile'], 'name'> = { name }
+
         const {
             result: { configurationUnits, defaultConfigurations, profile },
-        } = await get<BuildInfraProfileDTO>(`${ROUTES.INFRA_CONFIG_PROFILE}/${name}`)
-        // const {
-        //     result: { configurationUnits, defaultConfigurations, profile },
-        // } = GLOBAL_PROFILE_MOCK
+        } = await get<BuildInfraProfileDTO>(getUrlWithSearchParams(getBuildInfraProfileEndpoint(), getProfilePayload))
 
         return getTransformedBuildInfraProfileResponse({
             configurationUnits,
@@ -49,14 +52,18 @@ export const getBuildInfraProfileByName = async ({
     }
 }
 
-export const updateBuildInfraProfile = ({ name, profileInput }: UpdateBuildInfraProfileType) =>
-    put<ReturnType<typeof put>, BuildInfraProfileInfoDTO>(
-        `${ROUTES.INFRA_CONFIG_PROFILE}/${name}`,
+export const updateBuildInfraProfile = async ({ name, profileInput }: UpdateBuildInfraProfileType) => {
+    const updateProfilePayload: Pick<BuildInfraProfileDTO['profile'], 'name'> = { name }
+    const response = await put<ReturnType<typeof put>, BuildInfraProfileInfoDTO>(
+        getUrlWithSearchParams(getBuildInfraProfileEndpoint(), updateProfilePayload),
         getBuildInfraProfilePayload(profileInput),
     )
 
+    return response
+}
+
 export const createBuildInfraProfile = async ({ profileInput }: CreateBuildInfraProfileType) =>
     post<ReturnType<typeof post>, BuildInfraProfileInfoDTO>(
-        ROUTES.INFRA_CONFIG_PROFILE,
+        getBuildInfraProfileEndpoint(),
         getBuildInfraProfilePayload(profileInput),
     )
