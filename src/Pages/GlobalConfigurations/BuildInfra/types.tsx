@@ -64,16 +64,6 @@ export enum BuildInfraInheritActions {
     DE_ACTIVATE_BUILD_TIMEOUT = 'de_activate_timeout',
 }
 
-export const BuildInfraConfigActionMap = {
-    [BuildInfraConfigTypes.BUILD_TIMEOUT]: BuildInfraLocators.BUILD_TIMEOUT,
-    [BuildInfraConfigTypes.CPU_LIMIT]: BuildInfraLocators.CPU,
-    [BuildInfraConfigTypes.CPU_REQUEST]: BuildInfraLocators.CPU,
-    [BuildInfraConfigTypes.MEMORY_LIMIT]: BuildInfraLocators.MEMORY,
-    [BuildInfraConfigTypes.MEMORY_REQUEST]: BuildInfraLocators.MEMORY,
-    [BuildInfraConfigTypes.NODE_SELECTOR]: BuildInfraLocators.NODE_SELECTOR,
-    [BuildInfraConfigTypes.TOLERANCE]: BuildInfraLocators.TOLERANCE,
-}
-
 export enum BuildInfraProfileVariants {
     // TODO: Can look to change name to GLOBAL as well
     DEFAULT = 'GLOBAL',
@@ -317,7 +307,8 @@ export type HandleProfileInputChangeType =
       }
     | {
           action: BuildInfraMetaConfigTypes
-          data?: ProfileInputDispatchDataType & {
+          //   Added targetPlatform partially even though not required, to keep the type consistent and remove duplication in case of handleChange
+          data: Partial<ProfileInputDispatchDataType> & {
               value: string
           }
       }
@@ -414,8 +405,7 @@ export interface BuildInfraInputFieldComponentProps {
 }
 
 export interface BuildInfraProfileMetaFieldProps
-    extends Pick<BuildInfraInputFieldComponentProps, 'error' | 'handleProfileInputChange'>,
-        Partial<Pick<BuildInfraProfileConfigBase, 'targetPlatform'>> {
+    extends Pick<BuildInfraInputFieldComponentProps, 'error' | 'handleProfileInputChange'> {
     currentValue: string
 }
 

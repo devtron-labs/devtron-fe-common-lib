@@ -58,6 +58,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
     profileInput,
     profileInputErrors,
     handleProfileInputChange,
+    // TODO: Change name
     isDefaultProfile,
     unitsMap,
     configurationContainerLabel,

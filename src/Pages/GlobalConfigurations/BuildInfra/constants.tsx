@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICCpu } from '../../../Assets/Icon/ic-cpu.svg'
-import { ReactComponent as ICMemory } from '../../../Assets/Icon/ic-memory.svg'
-import { ReactComponent as ICTimer } from '../../../Assets/Icon/ic-timer.svg'
-import { UseBreadcrumbProps } from '../../../Common/BreadCrumb/Types'
+import { ReactComponent as ICCpu } from '@Icons/ic-cpu.svg'
+import { ReactComponent as ICMemory } from '@Icons/ic-memory.svg'
+import { ReactComponent as ICTimer } from '@Icons/ic-timer.svg'
+import { ReactComponent as ICSprayCan } from '@Icons/ic-spray-can.svg'
+import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
+import { UseBreadcrumbProps } from '@Common/BreadCrumb/Types'
 import {
     BuildInfraConfigTypes,
     BuildInfraFormFieldType,
@@ -79,10 +81,18 @@ export const BUILD_INFRA_BREADCRUMB: UseBreadcrumbProps = {
     },
 }
 
-export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
+export const BUILD_INFRA_LOCATOR_MARKER_MAP: Readonly<Record<BuildInfraLocators, BuildInfraFormFieldType['marker']>> = {
+    [BuildInfraLocators.CPU]: ICCpu,
+    [BuildInfraLocators.MEMORY]: ICMemory,
+    [BuildInfraLocators.BUILD_TIMEOUT]: ICTimer,
+    [BuildInfraLocators.NODE_SELECTOR]: ICSprayCan,
+    [BuildInfraLocators.TOLERANCE]: ICTag,
+}
+
+export const BUILD_INFRA_FORM_FIELDS: Readonly<BuildInfraFormFieldType[]> = [
     {
         heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20 w-240 dc__no-shrink">CPU (Request - Limit)</h3>,
-        marker: ICCpu,
+        marker: BUILD_INFRA_LOCATOR_MARKER_MAP[BuildInfraLocators.CPU],
         actions: [
             {
                 actionType: BuildInfraConfigTypes.CPU_REQUEST,
@@ -99,7 +109,7 @@ export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
     },
     {
         heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20 w-240 dc__no-shrink">Memory (Request - Limit)</h3>,
-        marker: ICMemory,
+        marker: BUILD_INFRA_LOCATOR_MARKER_MAP[BuildInfraLocators.MEMORY],
         actions: [
             {
                 actionType: BuildInfraConfigTypes.MEMORY_REQUEST,
@@ -116,7 +126,7 @@ export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
     },
     {
         heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20 w-240 dc__no-shrink">Build timeout</h3>,
-        marker: ICTimer,
+        marker: BUILD_INFRA_LOCATOR_MARKER_MAP[BuildInfraLocators.BUILD_TIMEOUT],
         actions: [
             {
                 actionType: BuildInfraConfigTypes.BUILD_TIMEOUT,

@@ -26,7 +26,6 @@ import {
     BuildInfraConfigurationType,
     BuildInfraConfigValuesType,
     BuildInfraInheritActions,
-    BuildInfraLocators,
     BuildInfraMetaConfigTypes,
     BuildInfraPlatformConfigurationMapDTO,
     BuildInfraProfileBase,
@@ -556,12 +555,12 @@ const getConfigurationMapWithoutDefaultFallback = (
         return acc
     }, {})
 
-const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfoType): BuildInfraConfigValuesType => {
+export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfoType): BuildInfraConfigValuesType => {
     switch (configuration.key) {
         case BuildInfraConfigTypes.NODE_SELECTOR:
             return {
                 key: BuildInfraConfigTypes.NODE_SELECTOR,
-                value: configuration.value
+                value: (configuration.value || [])
                     .map((nodeSelector) => ({
                         key: nodeSelector?.key,
                         value: nodeSelector?.value,
@@ -572,7 +571,7 @@ const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfoType): 
         case BuildInfraConfigTypes.TOLERANCE:
             return {
                 key: BuildInfraConfigTypes.TOLERANCE,
-                value: configuration.value.map((toleranceItem) => {
+                value: (configuration.value || []).map((toleranceItem) => {
                     const { key, effect, operator, value } = toleranceItem || {}
 
                     const baseObject = {
@@ -616,10 +615,10 @@ const getPlatformConfigurationsWithDefaultValues = ({
     defaultConfigurationsMap,
     platformName,
 }: GetPlatformConfigurationsWithDefaultValuesParamsType): BuildInfraConfigurationMapType =>
-    Object.keys(BuildInfraLocators).reduce<BuildInfraConfigurationMapType>((acc, locator: BuildInfraConfigTypes) => {
-        const defaultConfiguration = defaultConfigurationsMap[locator]
-        const profileConfiguration = profileConfigurationsMap[locator]?.active
-            ? profileConfigurationsMap[locator]
+    Object.values(BuildInfraConfigTypes).reduce<BuildInfraConfigurationMapType>((acc, configType) => {
+        const defaultConfiguration = defaultConfigurationsMap[configType]
+        const profileConfiguration = profileConfigurationsMap[configType]?.active
+            ? profileConfigurationsMap[configType]
             : null
 
         if (!defaultConfiguration) {
@@ -639,7 +638,7 @@ const getPlatformConfigurationsWithDefaultValues = ({
                   defaultValue,
               }
 
-        acc[locator] = finalConfiguration
+        acc[configType] = finalConfiguration
 
         return acc
     }, {} as BuildInfraConfigurationMapType)
