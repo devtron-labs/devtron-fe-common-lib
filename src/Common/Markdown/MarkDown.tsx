@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-import { marked } from 'marked'
+import { marked, Tokens } from 'marked'
 import DOMPurify from 'dompurify'
 import { useEffect, useRef } from 'react'
 import { MarkDownProps } from './Types'
 import './markdown.scss'
 
-const uncheckedCheckboxInputElement = `<input checked="" disabled="" type="checkbox">`
-const checkedCheckboxInputElement = `<input disabled="" type="checkbox">`
 const renderer = new marked.Renderer()
 
 const MarkDown = ({ setExpandableIcon, markdown, className, breaks, disableEscapedText, ...props }: MarkDownProps) => {
@@ -39,62 +37,59 @@ const MarkDown = ({ setExpandableIcon, markdown, className, breaks, disableEscap
         getHeight()
     }, [markdown])
 
-    const isReadmeInputCheckbox = (text: string) => {
-        if (text.includes(uncheckedCheckboxInputElement) || text.includes(checkedCheckboxInputElement)) {
-            return true
-        }
-        return false
-    }
+    const renderTableRow = (row: Tokens.TableCell[]) => `
+            <tr>
+                ${row.map((rowCell) => `<td align="${rowCell.align}">${marked(rowCell.text)}</td>`).join('')}
+            </tr>
+        `
 
-    renderer.listitem = (text: string) => {
-        if (isReadmeInputCheckbox(text)) {
-            // eslint-disable-next-line no-param-reassign
-            text = text
-                .replace(
-                    uncheckedCheckboxInputElement,
-                    '<input type="checkbox" style="margin: 0 0.2em 0.25em -1.4em;" class="dc__vertical-align-middle" checked disabled>',
-                )
-                .replace(
-                    checkedCheckboxInputElement,
-                    '<input type="checkbox" style="margin: 0 0.2em 0.25em -1.4em;" class="dc__vertical-align-middle" disabled>',
-                )
-            return `<li style="list-style: none">${text}</li>`
+    renderer.listitem = ({ text, task, checked }: Tokens.ListItem) => {
+        if (task) {
+            return `<li style="list-style: none">
+                        <input disabled type="checkbox" ${checked ? 'checked' : ''} class="dc__vertical-align-middle" style="margin: 0 0.2em 0.25em -1.4em">
+                        ${text}
+                    </li>`
         }
         return `<li>${text}</li>`
     }
 
-    renderer.image = (href: string, title: string, text: string) =>
+    renderer.image = ({ href, title, text }: Tokens.Image) =>
         `<img src="${href}" alt="${text}" title="${title}" class="max-w-100">`
 
-    renderer.table = (header, body) => `
+    renderer.table = ({ header, rows }: Tokens.Table) => `
         <div class="table-container">
             <table>
-                ${header}
-                ${body}
+                <thead>
+                    <tr>${header.map((headerCell) => `<th align="${headerCell.align}">${headerCell.text}</th>`).join('')}</tr>
+                </thead>
+                <tbody>
+                    ${rows.map((row) => renderTableRow(row)).join('')}
+                </tbody>
             </table>
         </div>
         `
 
-    renderer.heading = (text, level) => {
+    renderer.heading = ({ text, depth }: Tokens.Heading) => {
         const escapedText = disableEscapedText ? '' : text.toLowerCase().replace(/[^\w]+/g, '-')
 
         return `
           <a name="${escapedText}" rel="noreferrer noopener" class="anchor" href="#${escapedText}">
-                <h${level} data-testid="deployment-template-readme-version">
+                <h${depth} data-testid="deployment-template-readme-version">
               <span class="header-link"></span>
               ${text}
-              </h${level}>
+              </h${depth}>
             </a>`
     }
 
     marked.setOptions({
         renderer,
         gfm: true,
-        smartLists: true,
         ...(breaks && { breaks: true }),
     })
 
-    const createMarkup = () => ({ __html: DOMPurify.sanitize(marked(markdown), { USE_PROFILES: { html: true } }) })
+    const createMarkup = () => ({
+        __html: DOMPurify.sanitize(marked(markdown) as string, { USE_PROFILES: { html: true } }),
+    })
 
     return (
         <article
