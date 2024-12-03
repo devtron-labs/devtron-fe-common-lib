@@ -15,6 +15,7 @@
  */
 
 import { FormEvent, FunctionComponent } from 'react'
+import { DEFAULT_PROFILE_NAME } from '@Pages/index'
 import { BuildInfraFormItemProps, BuildInfraInheritActions } from './types'
 import { CHECKBOX_VALUE, Checkbox } from '../../../Common'
 
@@ -27,11 +28,12 @@ const BuildInfraFormItem: FunctionComponent<BuildInfraFormItemProps> = ({
     handleProfileInputChange,
     locator,
     isDefaultProfile,
+    targetPlatform = DEFAULT_PROFILE_NAME,
 }) => {
     const handleActivationChange = (e: FormEvent<HTMLInputElement>) => {
         const { checked } = e.currentTarget
         const action = (checked ? `activate_${locator}` : `de_activate_${locator}`) as BuildInfraInheritActions
-        handleProfileInputChange({ action })
+        handleProfileInputChange({ action, data: { targetPlatform } })
     }
 
     const renderMarker = () => {
