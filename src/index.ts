@@ -91,6 +91,7 @@ export interface customEnv {
     FEATURE_PROMO_EMBEDDED_IFRAME_URL?: string
     FEATURE_BULK_RESTART_WORKLOADS_FROM_RB: string
     FEATURE_DEFAULT_MERGE_STRATEGY?: OverrideMergeStrategyType
+    FEATURE_DEFAULT_LANDING_RB_ENABLE?: boolean
 }
 declare global {
     interface Window {

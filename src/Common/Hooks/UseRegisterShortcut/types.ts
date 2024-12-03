@@ -21,11 +21,12 @@ export const KEYBOARD_KEYS_MAP = {
     Shift: '⇧',
     Meta: IS_PLATFORM_MAC_OS ? '⌘' : 'Win',
     Alt: IS_PLATFORM_MAC_OS ? '⌥' : 'Alt',
-    Escape: 'Escape',
     F: 'F',
     E: 'E',
     R: 'R',
     K: 'K',
+    Escape: 'Escape',
+    Enter: 'Enter',
 } as const
 
 export type SupportedKeyboardKeysType = keyof typeof KEYBOARD_KEYS_MAP
