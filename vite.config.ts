@@ -19,14 +19,19 @@ import { resolve } from 'path'
 import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
 import { libInjectCss } from 'vite-plugin-lib-inject-css'
+import libAssetsPlugin from '@laynezh/vite-plugin-lib-assets'
 import svgr from 'vite-plugin-svgr'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import * as packageJson from './package.json'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
+        libAssetsPlugin({
+            name: '[name].[contenthash:8].[ext]',
+        }),
         tsconfigPaths(),
         react(),
         libInjectCss(),
@@ -36,6 +41,9 @@ export default defineConfig({
         dts(),
         NodeGlobalsPolyfillPlugin({
             process: true,
+        }),
+        ViteImageOptimizer({
+            logStats: false,
         }),
     ],
     build: {
@@ -94,7 +102,7 @@ export default defineConfig({
                     if (id.includes('src/Assets/Img')) {
                         return '@src-assets-images'
                     }
-                }
+                },
             },
         },
     },
