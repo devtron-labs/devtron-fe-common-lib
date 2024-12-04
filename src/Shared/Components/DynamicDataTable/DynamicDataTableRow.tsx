@@ -147,20 +147,18 @@ export const DynamicDataTableRow = <K extends string>({
                 )
             case DynamicDataTableRowDataType.BUTTON:
                 return (
-                    <div className="w-100 h-100 flex top">
+                    <div className="w-100 h-100 flex top left">
                         <ConditionalWrap
                             condition={row.data[key].wrap}
                             wrap={conditionalWrap(row.data[key].wrapRenderer, row.customState)}
                         >
-                            <div>
-                                <button
-                                    type="button"
-                                    className={`dc__transparent w-100 p-8 flex left dc__gap-8 dc__hover-n50 cn-9 fs-13 lh-20 ${row.data[key].disabled ? 'dc__disabled' : ''}`}
-                                >
-                                    {row.data[key].props?.icon || null}
-                                    {row.data[key].props.text}
-                                </button>
-                            </div>
+                            <button
+                                type="button"
+                                className={`dc__transparent w-100 p-8 flex left dc__gap-8 dc__hover-n50 cn-9 fs-13 lh-20 ${row.data[key].disabled ? 'dc__disabled' : ''}`}
+                            >
+                                {row.data[key].props?.icon || null}
+                                {row.data[key].props.text}
+                            </button>
                         </ConditionalWrap>
                     </div>
                 )
