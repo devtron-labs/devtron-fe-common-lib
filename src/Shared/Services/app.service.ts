@@ -84,8 +84,7 @@ export const getCompareSecretsData = async (
     >)
 
     comparisonItemResponse.forEach((resp) => {
-        // FIXME: prakash said he will fix this
-        results[resp.index ?? 0] = resp
+        results[resp.index] = resp
     })
 
     return results

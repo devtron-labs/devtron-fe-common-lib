@@ -87,7 +87,11 @@ export const DeploymentHistoryConfigDiff = ({
             }
 
             secretsData.value.forEach((data, index) => {
-                if (configDatas[index].status !== 'fulfilled' || !configDatas[index].value) {
+                if (
+                    configDatas[index].status !== 'fulfilled' ||
+                    !configDatas[index].value ||
+                    configDatas[index].value.result.isAppAdmin
+                ) {
                     return
                 }
                 configDatas[index].value.result.secretsData = data.secretsData
