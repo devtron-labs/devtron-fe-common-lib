@@ -24,18 +24,9 @@ import './styles.scss'
 export const DynamicDataTable = <K extends string>({ headers, ...props }: DynamicDataTableProps<K>) => {
     const filteredHeaders = useMemo(() => headers.filter(({ isHidden }) => !isHidden), [headers])
 
-    const getHelpTextForHeader = useMemo(
-        () => headers.find(({ renderHelpTextForHeader }) => renderHelpTextForHeader)?.renderHelpTextForHeader,
-        [headers],
-    )
-
     return (
         <div className="w-100">
-            <DynamicDataTableHeader
-                headers={filteredHeaders}
-                renderHelpTextForHeader={getHelpTextForHeader}
-                {...props}
-            />
+            <DynamicDataTableHeader headers={filteredHeaders} {...props} />
             <DynamicDataTableRow headers={filteredHeaders} {...props} />
         </div>
     )

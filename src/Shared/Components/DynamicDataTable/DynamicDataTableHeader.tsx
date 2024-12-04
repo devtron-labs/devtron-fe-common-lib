@@ -17,7 +17,6 @@ export const DynamicDataTableHeader = <K extends string>({
     isDeletionNotAllowed,
     headerComponent = null,
     actionButtonConfig = null,
-    renderHelpTextForHeader,
 }: DynamicDataTableHeaderProps<K>) => {
     // CONSTANTS
     const firstHeaderKey = headers[0].key
@@ -36,7 +35,7 @@ export const DynamicDataTableHeader = <K extends string>({
         getActionButtonPosition({ headers, actionButtonConfig }) === 0 && actionButtonConfig.position !== 'end'
 
     // RENDERERS
-    const renderHeaderCell = ({ key, label, isSortable }: DynamicDataTableHeaderType<K>) => (
+    const renderHeaderCell = ({ key, label, isSortable, renderHelpTextForHeader }: DynamicDataTableHeaderType<K>) => (
         <div
             key={`${key}-header`}
             className={`bcn-50 py-6 px-8 flexbox dc__content-space dc__align-items-center ${(!isActionButtonAtTheStart && (key === firstHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : '')) || ''} ${key === lastHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}` : ''}`}

@@ -228,10 +228,6 @@ export type DynamicDataTableProps<K extends string> = {
         isValid: boolean
         errorMessages: string[]
     }
-    /**
-     * Indicates whether to show the info icon.
-     */
-    renderHelpTextForHeader?: () => ReactNode
 }
 
 export interface DynamicDataTableHeaderProps<K extends string>
@@ -246,7 +242,6 @@ export interface DynamicDataTableHeaderProps<K extends string>
             | 'isAdditionNotAllowed'
             | 'isDeletionNotAllowed'
             | 'actionButtonConfig'
-            | 'renderHelpTextForHeader'
         >,
         Pick<InfoIconTippyProps, 'heading' | 'additionalContent'> {}
 
