@@ -127,7 +127,7 @@ type DynamicDataTableMask<K extends string> = {
 }
 
 type DynamicDataTableCellIcon<K extends string> = {
-    [key in K]?: (rowId: string | number) => ReactNode
+    [key in K]?: (row: DynamicDataTableRowType<K>) => ReactNode
 }
 
 /**

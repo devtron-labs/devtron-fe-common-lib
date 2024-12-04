@@ -27,7 +27,7 @@ const conditionalWrap =
         renderer({ children, customState })
 
 export const DynamicDataTableRow = <K extends string>({
-    rows,
+    rows = [],
     headers,
     maskValue,
     readOnly,
@@ -96,8 +96,10 @@ export const DynamicDataTableRow = <K extends string>({
                     value = (e as SelectPickerOptionType<string>).value
                     extraData.selectedValue = e
                     break
+                case DynamicDataTableRowDataType.TEXT:
                 default:
                     value = (e as React.ChangeEvent<HTMLTextAreaElement>).target.value
+                    break
             }
 
             onRowEdit(row, key, value, extraData)
@@ -166,7 +168,7 @@ export const DynamicDataTableRow = <K extends string>({
                 return (
                     <ResizableTagTextArea
                         {...row.data[key].props}
-                        className={`dynamic-data-table__cell-input placeholder-cn5 p-8 cn-9 fs-13 lh-20 dc__no-border-radius ${readOnly || row.data[key].disabled ? 'cursor-not-allowed' : ''}`}
+                        className={`dynamic-data-table__cell-input placeholder-cn5 p-8 cn-9 fs-13 lh-20 dc__align-self-start dc__no-border-radius ${readOnly || row.data[key].disabled ? 'cursor-not-allowed' : ''}`}
                         minHeight={20}
                         maxHeight={160}
                         value={row.data[key].value}
@@ -191,9 +193,9 @@ export const DynamicDataTableRow = <K extends string>({
 
         return (
             <div
-                className={`flex dc__align-self-start ${row.data[key].type !== DynamicDataTableRowDataType.TEXT ? `py-8 ${isLeadingIcon ? 'pl-8' : 'pr-8'}` : ''}`}
+                className={`flex h-100 dc__align-self-start ${row.data[key].type !== DynamicDataTableRowDataType.TEXT ? `py-8 ${isLeadingIcon ? 'pl-8' : 'pr-8'}` : ''}`}
             >
-                {iconConfig[key](row.id)}
+                {iconConfig[key](row)}
             </div>
         )
     }

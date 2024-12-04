@@ -22,7 +22,6 @@ export type SelectTextAreaProps = Pick<SelectPickerProps<string, false>, 'inputI
             | 'isDisabled'
             | 'onChange'
             | 'variant'
-            | 'isCreatable'
             | 'value'
             | 'placeholder'
             | 'fullWidth'
