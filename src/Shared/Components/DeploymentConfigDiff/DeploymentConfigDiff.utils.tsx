@@ -12,8 +12,9 @@ import {
     AppEnvDeploymentConfigListParams,
     DiffHeadingDataType,
     prepareHistoryData,
+    GenericSectionErrorState,
 } from '@Shared/Components'
-import { deepEqual } from '@Common/Helper'
+import { deepEqual, noop } from '@Common/Helper'
 
 import { ManifestTemplateDTO } from '@Pages/Applications'
 import {
@@ -27,6 +28,7 @@ import {
     TemplateListDTO,
     TemplateListType,
 } from '../../Services/app.types'
+import { DiffViewerProps } from '../DiffViewer/types'
 
 export const getDeploymentTemplateData = (data: DeploymentTemplateDTO) => {
     const parsedDraftData = JSON.parse(data?.deploymentDraftData?.configData[0].draftMetadata.data || null)
@@ -827,3 +829,21 @@ export const getDefaultVersionAndPreviousDeploymentOptions = (data: TemplateList
             previousDeployments: [],
         },
     )
+
+export const renderDiffViewNoDifferenceState = (
+    lhsValue: string,
+    rhsValue: string,
+): DiffViewerProps['codeFoldMessageRenderer'] =>
+    lhsValue === rhsValue
+        ? () => (
+              <GenericSectionErrorState
+                  useInfoIcon
+                  title="No diff in configurations"
+                  subTitle=""
+                  description=""
+                  buttonText="View values"
+                  // Click event is handled at the parent level
+                  reload={noop}
+              />
+          )
+        : null

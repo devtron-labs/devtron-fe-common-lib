@@ -5,11 +5,11 @@ import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg
 import { ReactComponent as ICSort } from '@Icons/ic-arrow-up-down.svg'
 import { ReactComponent as ICViewVariableToggle } from '@Icons/ic-view-variable-toggle.svg'
 import { Progressing } from '@Common/Progressing'
-import { CodeEditor } from '@Common/CodeEditor'
-import { MODES, SortingOrder } from '@Common/Constants'
+import { SortingOrder } from '@Common/Constants'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import Toggle from '@Common/Toggle/Toggle'
 import { ComponentSizeType } from '@Shared/constants'
+import { DiffViewer } from '@Shared/Components/DiffViewer'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { SelectPicker } from '../SelectPicker'
@@ -21,6 +21,7 @@ import {
     DeploymentConfigDiffState,
     DeploymentConfigDiffAccordionProps,
 } from './DeploymentConfigDiff.types'
+import { renderDiffViewNoDifferenceState } from './DeploymentConfigDiff.utils'
 
 export const DeploymentConfigDiffMain = ({
     isLoading,
@@ -190,23 +191,19 @@ export const DeploymentConfigDiffMain = ({
                     hideDiffState={hideDiffState}
                 >
                     {singleView ? (
-                        <>
-                            <div className="bcn-1 deployment-config-diff__main-content__heading dc__border-top">
-                                <div className="px-12 py-6 dc__border-right">{primaryHeading}</div>
-                                <div className="px-12 py-6">{secondaryHeading}</div>
-                            </div>
-                            <CodeEditor
-                                key={`${sortingConfig?.sortBy}-${sortingConfig?.sortOrder}-${scopeVariablesConfig?.convertVariables}`}
-                                diffView
-                                defaultValue={primaryList.codeEditorValue.value}
-                                value={secondaryList.codeEditorValue.value}
-                                mode={MODES.YAML}
-                                disableSearch
-                                adjustEditorHeightToContent
-                                noParsing
-                                readOnly
-                            />
-                        </>
+                        <DiffViewer
+                            oldValue={primaryList.codeEditorValue.value}
+                            newValue={secondaryList.codeEditorValue.value}
+                            // Need to hide the title since the null state is controlled explicitly
+                            {...(primaryList.codeEditorValue.value !== secondaryList.codeEditorValue.value && {
+                                leftTitle: primaryHeading,
+                                rightTitle: secondaryHeading,
+                            })}
+                            codeFoldMessageRenderer={renderDiffViewNoDifferenceState(
+                                primaryList.codeEditorValue.value,
+                                secondaryList.codeEditorValue.value,
+                            )}
+                        />
                     ) : (
                         <div className="p-16">
                             {primaryHeading && secondaryHeading && (
