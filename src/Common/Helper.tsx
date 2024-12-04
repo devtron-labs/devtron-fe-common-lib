@@ -17,7 +17,7 @@
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DOMPurify from 'dompurify'
 import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
-import { compare as compareJSON, applyPatch, unescapePathComponent } from 'fast-json-patch'
+import { compare as compareJSON, applyPatch, unescapePathComponent,deepClone } from 'fast-json-patch'
 import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import moment from 'moment'
@@ -667,7 +667,7 @@ export const flatMapOfJSONPaths = (
 
 export const applyCompareDiffOnUneditedDocument = (uneditedDocument: object, editedDocument: object) => {
     const patch = compareJSON(uneditedDocument, editedDocument)
-    return applyPatch(uneditedDocument, patch).newDocument
+    return applyPatch(deepClone(uneditedDocument), patch).newDocument
 }
 
 /**
