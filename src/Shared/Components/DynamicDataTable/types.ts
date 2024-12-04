@@ -19,6 +19,7 @@ import { DetailedHTMLProps, ReactNode } from 'react'
 import { SortingOrder } from '@Common/Constants'
 
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
+import { InfoIconTippyProps } from '@Common/Types'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 import { SelectTextAreaProps } from '../SelectTextArea'
 
@@ -37,6 +38,8 @@ export type DynamicDataTableHeaderType<K extends string> = {
     isSortable?: boolean
     /** An optional boolean to control the visibility of the column. */
     isHidden?: boolean
+    /** An optional boolean to show the column */
+    renderHelpTextForHeader?: () => ReactNode
 }
 
 export enum DynamicDataTableRowDataType {
@@ -229,17 +232,18 @@ export type DynamicDataTableProps<K extends string> = {
 
 export interface DynamicDataTableHeaderProps<K extends string>
     extends Pick<
-        DynamicDataTableProps<K>,
-        | 'headers'
-        | 'rows'
-        | 'headerComponent'
-        | 'sortingConfig'
-        | 'onRowAdd'
-        | 'readOnly'
-        | 'isAdditionNotAllowed'
-        | 'isDeletionNotAllowed'
-        | 'actionButtonConfig'
-    > {}
+            DynamicDataTableProps<K>,
+            | 'headers'
+            | 'rows'
+            | 'headerComponent'
+            | 'sortingConfig'
+            | 'onRowAdd'
+            | 'readOnly'
+            | 'isAdditionNotAllowed'
+            | 'isDeletionNotAllowed'
+            | 'actionButtonConfig'
+        >,
+        Pick<InfoIconTippyProps, 'heading' | 'additionalContent'> {}
 
 export interface DynamicDataTableRowProps<K extends string>
     extends Pick<
