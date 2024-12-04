@@ -289,7 +289,7 @@ export const DynamicDataTableRow = <K extends string>({
                                 >
                                     <ICClose
                                         aria-label="delete-row"
-                                        className="icon-dim-16 fcn-4 dc__align-self-start dc__align-self-start icon-use-fill-n6"
+                                        className="icon-dim-16 fcn-4 dc__align-self-start icon-use-fill-n6"
                                     />
                                 </button>
                             )}
