@@ -17,6 +17,7 @@ export const DynamicDataTableHeader = <K extends string>({
     isDeletionNotAllowed,
     headerComponent = null,
     actionButtonConfig = null,
+    renderHelpTextForHeader,
 }: DynamicDataTableHeaderProps<K>) => {
     // CONSTANTS
     const firstHeaderKey = headers[0].key
@@ -53,12 +54,14 @@ export const DynamicDataTableHeader = <K extends string>({
                             ['--rotateBy' as string]: sortingConfig?.sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
                         }}
                     />
+                    {typeof renderHelpTextForHeader === 'function' && renderHelpTextForHeader()}
                 </button>
             ) : (
                 <div
                     className={`cn-7 fs-12 lh-20 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
                 >
                     {label}
+                    {typeof renderHelpTextForHeader === 'function' && renderHelpTextForHeader()}
                 </div>
             )}
             {!isActionDisabled && key === firstHeaderKey && (
