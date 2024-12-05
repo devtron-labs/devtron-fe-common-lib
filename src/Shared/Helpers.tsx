@@ -797,7 +797,7 @@ export const getFileNameFromHeaders = (headers: Headers) =>
 export const sanitizeUserApprovalList = (
     approverList: UserApprovalInfo['approverList'],
 ): UserApprovalInfo['approverList'] =>
-    approverList.map(({ hasApproved, identifier, canApprove }) => ({
+    (approverList ?? []).map(({ hasApproved, identifier, canApprove }) => ({
         canApprove: canApprove ?? false,
         hasApproved: hasApproved ?? false,
         identifier,
