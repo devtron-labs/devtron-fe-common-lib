@@ -24,7 +24,11 @@ export const getDeploymentManifest = async (
             valuesAndManifestFlag: ValuesAndManifestFlagDTO.MANIFEST,
         }
 
-        return post<ResolvedDeploymentTemplateDTO>(ROUTES.APP_TEMPLATE_DATA, payload, { signal: abortSignal })
+        const response = await post<ResolvedDeploymentTemplateDTO>(ROUTES.APP_TEMPLATE_DATA, payload, {
+            signal: abortSignal,
+        })
+
+        return response
     } catch (error) {
         if (!getIsRequestAborted(error)) {
             showError(error)

@@ -48,11 +48,11 @@ export const ResizableTagTextArea = ({
 
     const reInitHeight = () => {
         refVar.current.style.height = `${minHeight}px`
-        if (dependentRef) {
+        if (dependentRef?.current) {
             dependentRef.current.style.height = `${minHeight}px`
         }
         let nextHeight = refVar.current.scrollHeight
-        if (dependentRef && nextHeight < dependentRef.current.scrollHeight) {
+        if (dependentRef?.current && nextHeight < dependentRef.current.scrollHeight) {
             nextHeight = dependentRef.current.scrollHeight
         }
         if (minHeight && nextHeight < minHeight) {
@@ -62,7 +62,7 @@ export const ResizableTagTextArea = ({
             nextHeight = maxHeight
         }
         refVar.current.style.height = `${nextHeight}px`
-        if (dependentRef) {
+        if (dependentRef?.current) {
             dependentRef.current.style.height = `${nextHeight}px`
         }
     }

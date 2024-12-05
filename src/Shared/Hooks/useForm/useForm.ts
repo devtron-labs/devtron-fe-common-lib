@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, ChangeEvent, useState } from 'react'
+import { BaseSyntheticEvent, ChangeEvent, useRef, useState } from 'react'
 
 import { deepEqual } from '@Common/Helper'
 
@@ -31,7 +31,11 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
      */
     validationMode?: 'onChange' | 'onBlur' | 'onSubmit'
 }) => {
-    const [data, setData] = useState<T>((options?.initialValues || {}) as T)
+    // REFS
+    const initialValuesRef = useRef<Partial<T>>(options?.initialValues || {})
+
+    // STATES
+    const [data, setData] = useState<T>(initialValuesRef.current as T)
     const [dirtyFields, setDirtyFields] = useState<DirtyFields<T>>({})
     const [touchedFields, setTouchedFields] = useState<TouchedFields<T>>({})
     const [errors, setErrors] = useState<UseFormErrors<T>>({})
@@ -102,7 +106,7 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             })
 
             // Check if the field is dirty (i.e., if its value has changed from the initial one).
-            const initialValues: Partial<T> = options?.initialValues ?? {}
+            const initialValues = initialValuesRef.current
             // Set dirty field state.
             setDirtyFields((prev) => ({ ...prev, [key]: !deepEqual(initialValues[key], value) }))
         }
@@ -251,7 +255,7 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
         // Update the form data with the new value.
         setData((prev) => ({ ...prev, [name]: value }))
         if (valueOptions?.shouldDirty) {
-            const initialValues: Partial<T> = options?.initialValues ?? {}
+            const initialValues = initialValuesRef.current
             // Mark the field as dirty if the new value differs from the initial value.
             setDirtyFields((prev) => ({ ...prev, [name]: !deepEqual(initialValues[name], value) }))
         }
@@ -276,16 +280,44 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             keepTouched?: boolean
             /** A boolean indicating whether to retain the current error state of the form fields. */
             keepErrors?: boolean
+            /** A boolean indicating whether the form should check for dirty state upon reset. */
+            triggerDirty?: boolean
+            /** A boolean indicating whether the initial values of the form should be retained after reset. If false, provided formData will become initial data. */
+            keepInitialValues?: boolean
         },
     ) => {
-        const { keepDirty = false, keepTouched = false, keepErrors = false } = resetOptions ?? {} // Destructure reset options with defaults.
+        const {
+            keepDirty = false,
+            keepTouched = false,
+            keepErrors = false,
+            triggerDirty = false,
+            keepInitialValues = false,
+        } = resetOptions ?? {} // Destructure reset options with defaults.
+
         setData(formData)
+
+        if (!keepInitialValues) {
+            initialValuesRef.current = formData
+        }
+
         if (!keepErrors) {
             setErrors({})
         }
-        if (!keepDirty) {
+
+        if (triggerDirty) {
+            const initialValues = initialValuesRef.current
+            const _dirtyFields = Object.keys(formData).reduce(
+                (acc, key) => ({
+                    ...acc,
+                    [key]: !deepEqual(formData[key], initialValues[key]),
+                }),
+                {},
+            )
+            setDirtyFields(_dirtyFields)
+        } else if (!keepDirty) {
             setDirtyFields({})
         }
+
         if (!keepTouched) {
             setTouchedFields({})
         }

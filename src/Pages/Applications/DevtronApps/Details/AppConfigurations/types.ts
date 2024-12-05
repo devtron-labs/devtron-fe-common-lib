@@ -24,9 +24,17 @@ export interface ConfigToolbarPopupMenuConfigType {
     disabled?: boolean
     icon?: ReactNode | null
     variant?: 'default' | 'negative'
+    tooltipText?: string
 }
 
 export enum ConfigToolbarPopupNodeType {
     DISCARD_DRAFT = 'discardDraft',
     EDIT_HISTORY = 'editHistory',
+}
+
+export interface OverrideStrategyTippyContentProps {
+    /**
+     * Would be rendered as li conveying the information about the merge strategy
+     */
+    children?: ReactNode
 }

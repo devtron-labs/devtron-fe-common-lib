@@ -76,11 +76,11 @@ export const CollapsibleList = <TabType extends TabOptions>({
     }
 
     const getNavLinkTabItem = (item: CollapsibleListItem<'navLink'>) => {
-        const { title, href, onClick, isActive } = item
+        const { title, href, onClick, isActive, clearQueryParamsOnNavigation = false } = item
         return (
             <NavLink
                 key={title}
-                to={href}
+                to={clearQueryParamsOnNavigation ? { pathname: href, search: '' } : href}
                 className="collapsible__item flexbox dc__align-items-center dc__gap-8 dc__no-decor br-4 py-6 px-8 cursor"
                 onClick={(e) => {
                     // Prevent navigation to the same page
