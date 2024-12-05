@@ -21,6 +21,12 @@ export interface customEnv {
     SENTRY_ERROR_ENABLED?: boolean
     SENTRY_PERFORMANCE_ENABLED?: boolean
     SENTRY_DSN?: string
+    /**
+     * Release version for sentry
+     *
+     * @default 'dashboard@${SHORT_GIT_HASH}'
+     */
+    SENTRY_RELEASE_VERSION?: string
     SENTRY_TRACES_SAMPLE_RATE?: number
     HOTJAR_ENABLED?: boolean
     CLUSTER_NAME?: boolean
