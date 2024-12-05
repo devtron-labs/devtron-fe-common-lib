@@ -35,7 +35,6 @@ import {
     DATE_TIME_FORMATS,
     ApprovalConfigDataType,
     UserApprovalInfo,
-    ApprovalConfigDataKindType,
 } from '../Common'
 import {
     AggregationKeys,
@@ -798,20 +797,7 @@ export const getFileNameFromHeaders = (headers: Headers) =>
 export const sanitizeUserApprovalList = (
     approverList: UserApprovalInfo['approverList'],
 ): UserApprovalInfo['approverList'] =>
-    (
-        approverList ?? [
-            {
-                canApprove: false,
-                identifier: 'test-1@devtron.ai',
-                hasApproved: true,
-            },
-            {
-                canApprove: true,
-                identifier: 'test-2@devtron.ai',
-                hasApproved: false,
-            },
-        ]
-    ).map(({ hasApproved, identifier, canApprove }) => ({
+    approverList.map(({ hasApproved, identifier, canApprove }) => ({
         canApprove: canApprove ?? false,
         hasApproved: hasApproved ?? false,
         identifier,
@@ -825,110 +811,24 @@ const sanitizeUserApprovalInfo = (userApprovalInfo: UserApprovalInfo | null): Us
 
 export const sanitizeApprovalConfigData = (
     approvalConfigData: ApprovalConfigDataType | null,
-): ApprovalConfigDataType =>
-    approvalConfigData
-        ? {
-              kind: approvalConfigData?.kind ?? null,
-              requiredCount: approvalConfigData?.requiredCount ?? 0,
-              currentCount: approvalConfigData?.currentCount ?? 0,
-              anyUserApprovedInfo: sanitizeUserApprovalInfo(approvalConfigData?.anyUserApprovedInfo),
-              specificUsersApprovedInfo: sanitizeUserApprovalInfo(approvalConfigData?.specificUsersApprovedInfo),
-              userGroupsApprovedInfo: {
-                  currentCount: approvalConfigData?.userGroupsApprovedInfo?.currentCount ?? 0,
-                  requiredCount: approvalConfigData?.userGroupsApprovedInfo?.requiredCount ?? 0,
-                  userGroups: (approvalConfigData?.userGroupsApprovedInfo?.userGroups ?? []).map(
-                      ({ groupName, groupIdentifier, ...userApprovalInfo }) => ({
-                          ...sanitizeUserApprovalInfo(userApprovalInfo),
-                          groupName,
-                          groupIdentifier,
-                      }),
-                  ),
-              },
-          }
-        : {
-              kind: ApprovalConfigDataKindType.deploymentTemplate,
-              requiredCount: 2,
-              currentCount: 3,
-              anyUserApprovedInfo: {
-                  requiredCount: 2,
-                  currentCount: 2,
-                  approverList: [
-                      {
-                          hasApproved: true,
-                          canApprove: true,
-                          identifier: 'test-1@devtron.ai',
-                      },
-                      {
-                          hasApproved: true,
-                          canApprove: true,
-                          identifier: 'test-2@devtron.ai',
-                      },
-                      {
-                          hasApproved: false,
-                          canApprove: false,
-                          identifier: 'test-8@devtron.ai',
-                      },
-                  ],
-              },
-              specificUsersApprovedInfo: {
-                  requiredCount: 2,
-                  currentCount: 1,
-                  approverList: [
-                      {
-                          hasApproved: true,
-                          canApprove: true,
-                          identifier: 'test-3@devtron.ai',
-                      },
-                      {
-                          hasApproved: false,
-                          canApprove: true,
-                          identifier: 'test-1@devtron.ai',
-                      },
-                      {
-                          hasApproved: false,
-                          canApprove: false,
-                          identifier: 'test-7@devtron.ai',
-                      },
-                  ],
-              },
-              userGroupsApprovedInfo: {
-                  requiredCount: 2,
-                  currentCount: 0,
-                  userGroups: [
-                      {
-                          requiredCount: 2,
-                          currentCount: 1,
-                          approverList: [
-                              {
-                                  hasApproved: true,
-                                  canApprove: true,
-                                  identifier: 'test-2@devtron.ai',
-                              },
-                          ],
-                          groupName: 'Admins',
-                          groupIdentifier: 'admins',
-                      },
-                      {
-                          requiredCount: 2,
-                          currentCount: 1,
-                          approverList: [
-                              {
-                                  hasApproved: true,
-                                  canApprove: true,
-                                  identifier: 'test-5@devtron.ai',
-                              },
-                              {
-                                  hasApproved: false,
-                                  canApprove: false,
-                                  identifier: 'test-6@devtron.ai',
-                              },
-                          ],
-                          groupName: 'Managers',
-                          groupIdentifier: 'managers',
-                      },
-                  ],
-              },
-          }
+): ApprovalConfigDataType => ({
+    kind: approvalConfigData?.kind ?? null,
+    requiredCount: approvalConfigData?.requiredCount ?? 0,
+    currentCount: approvalConfigData?.currentCount ?? 0,
+    anyUserApprovedInfo: sanitizeUserApprovalInfo(approvalConfigData?.anyUserApprovedInfo),
+    specificUsersApprovedInfo: sanitizeUserApprovalInfo(approvalConfigData?.specificUsersApprovedInfo),
+    userGroupsApprovedInfo: {
+        currentCount: approvalConfigData?.userGroupsApprovedInfo?.currentCount ?? 0,
+        requiredCount: approvalConfigData?.userGroupsApprovedInfo?.requiredCount ?? 0,
+        userGroups: (approvalConfigData?.userGroupsApprovedInfo?.userGroups ?? []).map(
+            ({ groupName, groupIdentifier, ...userApprovalInfo }) => ({
+                ...sanitizeUserApprovalInfo(userApprovalInfo),
+                groupName,
+                groupIdentifier,
+            }),
+        ),
+    },
+})
 
 /**
  * Manual approval is considered configured only if the type is not notConfigured
