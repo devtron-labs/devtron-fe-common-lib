@@ -21,7 +21,10 @@ import { DynamicDataTableRow } from './DynamicDataTableRow'
 import { DynamicDataTableProps } from './types'
 import './styles.scss'
 
-export const DynamicDataTable = <K extends string>({ headers, ...props }: DynamicDataTableProps<K>) => {
+export const DynamicDataTable = <K extends string, CustomStateType = Record<string, unknown>>({
+    headers,
+    ...props
+}: DynamicDataTableProps<K, CustomStateType>) => {
     const filteredHeaders = useMemo(() => headers.filter(({ isHidden }) => !isHidden), [headers])
 
     return (

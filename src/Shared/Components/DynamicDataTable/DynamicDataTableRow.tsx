@@ -17,9 +17,13 @@ import {
 } from '../SelectPicker'
 import { getActionButtonPosition, getRowGridTemplateColumn, rowTypeHasInputField } from './utils'
 import { DynamicDataTableRowType, DynamicDataTableRowProps, DynamicDataTableRowDataType } from './types'
+import { FileUpload } from '../FileUpload'
 
 const conditionalWrap =
-    <K extends string>(renderer: (row: DynamicDataTableRowType<K>) => ReactElement, row: DynamicDataTableRowType<K>) =>
+    <K extends string, CustomStateType = Record<string, unknown>>(
+        renderer: (row: DynamicDataTableRowType<K, CustomStateType>) => ReactElement,
+        row: DynamicDataTableRowType<K, CustomStateType>,
+    ) =>
     (children: JSX.Element) => {
         if (renderer) {
             const { props, type } = renderer(row)
@@ -29,7 +33,7 @@ const conditionalWrap =
         return null
     }
 
-export const DynamicDataTableRow = <K extends string>({
+export const DynamicDataTableRow = <K extends string, CustomStateType = Record<string, unknown>>({
     rows = [],
     headers,
     maskValue,
@@ -44,7 +48,7 @@ export const DynamicDataTableRow = <K extends string>({
     leadingCellIcon,
     trailingCellIcon,
     buttonCellWrapComponent,
-}: DynamicDataTableRowProps<K>) => {
+}: DynamicDataTableRowProps<K, CustomStateType>) => {
     // CONSTANTS
     const isFirstRowEmpty = headers.every(({ key }) => !rows[0]?.data[key].value)
     /** Boolean determining if table has rows. */
@@ -87,10 +91,10 @@ export const DynamicDataTableRow = <K extends string>({
 
     // METHODS
     const onChange =
-        (row: DynamicDataTableRowType<K>, key: K) =>
-        (e: React.ChangeEvent<HTMLTextAreaElement> | SelectPickerOptionType<string>) => {
+        (row: DynamicDataTableRowType<K, CustomStateType>, key: K) =>
+        (e: React.ChangeEvent<HTMLTextAreaElement> | SelectPickerOptionType<string> | File[]) => {
             let value = ''
-            const extraData = { selectedValue: null }
+            const extraData = { selectedValue: null, files: [] }
             switch (row.data[key].type) {
                 case DynamicDataTableRowDataType.DROPDOWN:
                     value = (e as SelectPickerOptionType<string>).value
@@ -99,6 +103,10 @@ export const DynamicDataTableRow = <K extends string>({
                 case DynamicDataTableRowDataType.SELECT_TEXT:
                     value = (e as SelectPickerOptionType<string>).value
                     extraData.selectedValue = e
+                    break
+                case DynamicDataTableRowDataType.FILE_UPLOAD:
+                    value = (e as File[])[0]?.name || ''
+                    extraData.files = e as File[]
                     break
                 case DynamicDataTableRowDataType.TEXT:
                 default:
@@ -109,12 +117,12 @@ export const DynamicDataTableRow = <K extends string>({
             onRowEdit(row, key, value, extraData)
         }
 
-    const onDelete = (row: DynamicDataTableRowType<K>) => () => {
+    const onDelete = (row: DynamicDataTableRowType<K, CustomStateType>) => () => {
         onRowDelete(row)
     }
 
     // RENDERERS
-    const renderCellContent = (row: DynamicDataTableRowType<K>, key: K) => {
+    const renderCellContent = (row: DynamicDataTableRowType<K, CustomStateType>, key: K) => {
         switch (row.data[key].type) {
             case DynamicDataTableRowDataType.DROPDOWN:
                 return (
@@ -168,6 +176,17 @@ export const DynamicDataTableRow = <K extends string>({
                         </ConditionalWrap>
                     </div>
                 )
+            case DynamicDataTableRowDataType.FILE_UPLOAD:
+                return (
+                    <div className="w-100 h-100 flex top left">
+                        <FileUpload
+                            {...row.data[key].props}
+                            className={`px-8 min-w-0 ${row.data[key].value ? 'py-3' : 'py-8'}`}
+                            fileName={row.data[key].value}
+                            onUpload={onChange(row, key)}
+                        />
+                    </div>
+                )
             default:
                 return (
                     <ResizableTagTextArea
@@ -186,10 +205,10 @@ export const DynamicDataTableRow = <K extends string>({
         }
     }
 
-    const renderAsterisk = (row: DynamicDataTableRowType<K>, key: K) =>
+    const renderAsterisk = (row: DynamicDataTableRowType<K, CustomStateType>, key: K) =>
         row.data[key].required && <span className="mt-10 px-6 w-20 cr-5 fs-16 lh-20 dc__align-self-start">*</span>
 
-    const renderCellIcon = (row: DynamicDataTableRowType<K>, key: K, isLeadingIcon?: boolean) => {
+    const renderCellIcon = (row: DynamicDataTableRowType<K, CustomStateType>, key: K, isLeadingIcon?: boolean) => {
         const iconConfig = isLeadingIcon ? leadingCellIcon : trailingCellIcon
         if (!iconConfig?.[key]) {
             return null
@@ -211,7 +230,7 @@ export const DynamicDataTableRow = <K extends string>({
         </div>
     )
 
-    const renderErrorMessages = (row: DynamicDataTableRowType<K>, key: K) => {
+    const renderErrorMessages = (row: DynamicDataTableRowType<K, CustomStateType>, key: K) => {
         const { isValid, errorMessages } = validationSchema(row.data[key].value, key, row)
         const showErrorMessages = showError && !isValid
         if (!showErrorMessages) {
@@ -225,7 +244,7 @@ export const DynamicDataTableRow = <K extends string>({
         )
     }
 
-    const renderCell = (row: DynamicDataTableRowType<K>, key: K, index: number) => {
+    const renderCell = (row: DynamicDataTableRowType<K, CustomStateType>, key: K, index: number) => {
         const cellNode = (
             <Tooltip
                 alwaysShowTippyOnHover={readOnly || row.data[key].disabled || false}

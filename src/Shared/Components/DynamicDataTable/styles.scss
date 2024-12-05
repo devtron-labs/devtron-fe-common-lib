@@ -70,6 +70,8 @@
     }
 
     &__cell {
+        min-width: 0;
+
         .select-picker-borderless-control {
             padding: 8px;
         }
