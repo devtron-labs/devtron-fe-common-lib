@@ -35,7 +35,7 @@ export const DynamicDataTableHeader = <K extends string>({
         getActionButtonPosition({ headers, actionButtonConfig }) === 0 && actionButtonConfig.position !== 'end'
 
     // RENDERERS
-    const renderHeaderCell = ({ key, label, isSortable }: DynamicDataTableHeaderType<K>) => (
+    const renderHeaderCell = ({ key, label, isSortable, renderHelpTextForHeader }: DynamicDataTableHeaderType<K>) => (
         <div
             key={`${key}-header`}
             className={`bcn-50 py-6 px-8 flexbox dc__content-space dc__align-items-center ${(!isActionButtonAtTheStart && (key === firstHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : '')) || ''} ${key === lastHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}` : ''}`}
@@ -53,12 +53,14 @@ export const DynamicDataTableHeader = <K extends string>({
                             ['--rotateBy' as string]: sortingConfig?.sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
                         }}
                     />
+                    {typeof renderHelpTextForHeader === 'function' && renderHelpTextForHeader()}
                 </button>
             ) : (
                 <div
                     className={`cn-7 fs-12 lh-20 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
                 >
                     {label}
+                    {typeof renderHelpTextForHeader === 'function' && renderHelpTextForHeader()}
                 </div>
             )}
             {!isActionDisabled && key === firstHeaderKey && (

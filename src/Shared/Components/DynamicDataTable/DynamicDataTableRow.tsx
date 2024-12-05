@@ -1,4 +1,4 @@
-import { createRef, Fragment, RefObject, useEffect, useRef } from 'react'
+import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect, useRef } from 'react'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
@@ -19,12 +19,15 @@ import { getActionButtonPosition, getRowGridTemplateColumn, rowTypeHasInputField
 import { DynamicDataTableRowType, DynamicDataTableRowProps, DynamicDataTableRowDataType } from './types'
 
 const conditionalWrap =
-    (
-        renderer: (props: { customState?: Record<string, any>; children: JSX.Element }) => JSX.Element,
-        customState: Record<string, any>,
-    ) =>
-    (children: JSX.Element) =>
-        renderer({ children, customState })
+    <K extends string>(renderer: (row: DynamicDataTableRowType<K>) => ReactElement, row: DynamicDataTableRowType<K>) =>
+    (children: JSX.Element) => {
+        if (renderer) {
+            const { props, type } = renderer(row)
+            return createElement(type, props, children)
+        }
+
+        return null
+    }
 
 export const DynamicDataTableRow = <K extends string>({
     rows = [],
@@ -40,6 +43,7 @@ export const DynamicDataTableRow = <K extends string>({
     onRowDelete,
     leadingCellIcon,
     trailingCellIcon,
+    buttonCellWrapComponent,
 }: DynamicDataTableRowProps<K>) => {
     // CONSTANTS
     const isFirstRowEmpty = headers.every(({ key }) => !rows[0]?.data[key].value)
@@ -96,8 +100,10 @@ export const DynamicDataTableRow = <K extends string>({
                     value = (e as SelectPickerOptionType<string>).value
                     extraData.selectedValue = e
                     break
+                case DynamicDataTableRowDataType.TEXT:
                 default:
                     value = (e as React.ChangeEvent<HTMLTextAreaElement>).target.value
+                    break
             }
 
             onRowEdit(row, key, value, extraData)
@@ -149,8 +155,8 @@ export const DynamicDataTableRow = <K extends string>({
                 return (
                     <div className="w-100 h-100 flex top left">
                         <ConditionalWrap
-                            condition={row.data[key].wrap}
-                            wrap={conditionalWrap(row.data[key].wrapRenderer, row.customState)}
+                            condition={!!buttonCellWrapComponent}
+                            wrap={conditionalWrap(buttonCellWrapComponent, row)}
                         >
                             <button
                                 type="button"
@@ -166,7 +172,7 @@ export const DynamicDataTableRow = <K extends string>({
                 return (
                     <ResizableTagTextArea
                         {...row.data[key].props}
-                        className={`dynamic-data-table__cell-input placeholder-cn5 p-8 cn-9 fs-13 lh-20 dc__no-border-radius ${readOnly || row.data[key].disabled ? 'cursor-not-allowed' : ''}`}
+                        className={`dynamic-data-table__cell-input placeholder-cn5 p-8 cn-9 fs-13 lh-20 dc__align-self-start dc__no-border-radius ${readOnly || row.data[key].disabled ? 'cursor-not-allowed' : ''}`}
                         minHeight={20}
                         maxHeight={160}
                         value={row.data[key].value}
@@ -191,9 +197,9 @@ export const DynamicDataTableRow = <K extends string>({
 
         return (
             <div
-                className={`flex dc__align-self-start ${row.data[key].type !== DynamicDataTableRowDataType.TEXT ? `py-8 ${isLeadingIcon ? 'pl-8' : 'pr-8'}` : ''}`}
+                className={`flex h-100 dc__align-self-start ${row.data[key].type !== DynamicDataTableRowDataType.TEXT ? `py-8 ${isLeadingIcon ? 'pl-8' : 'pr-8'}` : ''}`}
             >
-                {iconConfig[key](row.id)}
+                {iconConfig[key](row)}
             </div>
         )
     }
@@ -289,7 +295,7 @@ export const DynamicDataTableRow = <K extends string>({
                                 >
                                     <ICClose
                                         aria-label="delete-row"
-                                        className="icon-dim-16 fcn-4 dc__align-self-start"
+                                        className="icon-dim-16 dc__align-self-start icon-use-fill-n6"
                                     />
                                 </button>
                             )}

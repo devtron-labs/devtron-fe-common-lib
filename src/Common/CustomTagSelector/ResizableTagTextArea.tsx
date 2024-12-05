@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import { useThrottledEffect } from '@Common/Helper'
 
@@ -25,7 +25,6 @@ export const ResizableTagTextArea = ({
     minHeight,
     maxHeight,
     dataTestId,
-    onChange,
     onBlur,
     onFocus,
     refVar,
@@ -34,17 +33,6 @@ export const ResizableTagTextArea = ({
     disableOnBlurResizeToMinHeight,
     ...resProps
 }: ResizableTagTextAreaProps) => {
-    const [text, setText] = useState(value ?? '')
-
-    useEffect(() => {
-        setText(value)
-    }, [value])
-
-    const handleChange = (event) => {
-        setText(event.target.value)
-        onChange?.(event)
-    }
-
     const updateRefHeight = (height: number) => {
         const refElement = refVar?.current
         if (refElement) {
@@ -90,7 +78,7 @@ export const ResizableTagTextArea = ({
         reInitHeight()
     }, [])
 
-    useThrottledEffect(reInitHeight, 500, [text])
+    useThrottledEffect(reInitHeight, 500, [value])
 
     const handleOnBlur = (event) => {
         if (!disableOnBlurResizeToMinHeight) {
@@ -110,10 +98,9 @@ export const ResizableTagTextArea = ({
             {...resProps}
             rows={1}
             ref={refVar}
-            value={text}
+            value={value}
             className={`${className || ''} lh-20`}
             style={{ resize: 'none' }}
-            onChange={handleChange}
             onBlur={handleOnBlur}
             onFocus={handleOnFocus}
             data-testid={dataTestId}

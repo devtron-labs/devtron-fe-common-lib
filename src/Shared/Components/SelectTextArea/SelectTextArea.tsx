@@ -76,10 +76,10 @@ export const SelectTextArea = ({
             />
             {!value ? (
                 <SelectPicker<string, false>
+                    isCreatable
                     {...selectPickerProps}
                     inputId={inputId}
                     selectRef={selectRef}
-                    isCreatable
                     variant={SelectPickerVariantType.BORDER_LESS}
                     onCreateOption={onSelectPickerCreateOption}
                     options={options}

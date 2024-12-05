@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import { DetailedHTMLProps, ReactNode } from 'react'
+import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
 
 import { SortingOrder } from '@Common/Constants'
 
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
+import { InfoIconTippyProps } from '@Common/Types'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 import { SelectTextAreaProps } from '../SelectTextArea'
 
@@ -37,6 +38,8 @@ export type DynamicDataTableHeaderType<K extends string> = {
     isSortable?: boolean
     /** An optional boolean to control the visibility of the column. */
     isHidden?: boolean
+    /** An optional boolean to show the column */
+    renderHelpTextForHeader?: () => ReactNode
 }
 
 export enum DynamicDataTableRowDataType {
@@ -81,25 +84,8 @@ export type DynamicDataTableCellPropsMap = {
     }
 }
 
-type DynamicDataTableCellExtendedPropsMap = {
-    [DynamicDataTableRowDataType.TEXT]: {}
-    [DynamicDataTableRowDataType.DROPDOWN]: {}
-    [DynamicDataTableRowDataType.SELECT_TEXT]: {}
-    [DynamicDataTableRowDataType.BUTTON]:
-        | {
-              wrap: true
-              wrapRenderer: (props: { children: JSX.Element; customState?: Record<string, any> }) => JSX.Element
-          }
-        | {
-              wrap?: false
-              wrapRenderer?: never
-          }
-}
-
 type DynamicDataTableCellData<T extends keyof DynamicDataTableCellPropsMap = keyof DynamicDataTableCellPropsMap> =
-    T extends keyof DynamicDataTableCellPropsMap
-        ? { type: T; props: DynamicDataTableCellPropsMap[T] } & DynamicDataTableCellExtendedPropsMap[T]
-        : never
+    T extends keyof DynamicDataTableCellPropsMap ? { type: T; props: DynamicDataTableCellPropsMap[T] } : never
 
 /**
  * Type representing a key-value row.
@@ -124,7 +110,7 @@ type DynamicDataTableMask<K extends string> = {
 }
 
 type DynamicDataTableCellIcon<K extends string> = {
-    [key in K]?: (rowId: string | number) => ReactNode
+    [key in K]?: (row: DynamicDataTableRowType<K>) => ReactNode
 }
 
 /**
@@ -153,6 +139,8 @@ export type DynamicDataTableProps<K extends string> = {
     leadingCellIcon?: DynamicDataTableCellIcon<K>
     /** Optional configuration for displaying an icon in the trailing position of a cell. */
     trailingCellIcon?: DynamicDataTableCellIcon<K>
+    /** An optional function to render a custom wrapper component for the type `DynamicDataTableRowDataType.BUTTON`. */
+    buttonCellWrapComponent?: (row: DynamicDataTableRowType<K>) => ReactElement
     /** An optional React node for a custom header component. */
     headerComponent?: ReactNode
     /** When true, data addition field will not be shown. */
@@ -229,17 +217,18 @@ export type DynamicDataTableProps<K extends string> = {
 
 export interface DynamicDataTableHeaderProps<K extends string>
     extends Pick<
-        DynamicDataTableProps<K>,
-        | 'headers'
-        | 'rows'
-        | 'headerComponent'
-        | 'sortingConfig'
-        | 'onRowAdd'
-        | 'readOnly'
-        | 'isAdditionNotAllowed'
-        | 'isDeletionNotAllowed'
-        | 'actionButtonConfig'
-    > {}
+            DynamicDataTableProps<K>,
+            | 'headers'
+            | 'rows'
+            | 'headerComponent'
+            | 'sortingConfig'
+            | 'onRowAdd'
+            | 'readOnly'
+            | 'isAdditionNotAllowed'
+            | 'isDeletionNotAllowed'
+            | 'actionButtonConfig'
+        >,
+        Pick<InfoIconTippyProps, 'heading' | 'additionalContent'> {}
 
 export interface DynamicDataTableRowProps<K extends string>
     extends Pick<
@@ -257,4 +246,5 @@ export interface DynamicDataTableRowProps<K extends string>
         | 'validationSchema'
         | 'leadingCellIcon'
         | 'trailingCellIcon'
+        | 'buttonCellWrapComponent'
     > {}
