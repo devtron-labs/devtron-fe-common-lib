@@ -27,7 +27,7 @@ const conditionalWrap =
         renderer({ children, customState })
 
 export const DynamicDataTableRow = <K extends string>({
-    rows,
+    rows = [],
     headers,
     maskValue,
     readOnly,
