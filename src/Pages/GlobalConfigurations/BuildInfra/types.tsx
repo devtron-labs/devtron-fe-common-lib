@@ -30,7 +30,7 @@ export enum BuildInfraConfigTypes {
     MEMORY_REQUEST = 'memory_request',
     BUILD_TIMEOUT = 'timeout',
     NODE_SELECTOR = 'node_selector',
-    TOLERANCE = 'tolerance',
+    TOLERANCE = 'tolerations',
 }
 
 /**
