@@ -1,6 +1,7 @@
+import { useState, useCallback } from 'react'
 import { GenericEmptyState, VisibleModal } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
-import { useState, useCallback } from 'react'
+import ReactGA from 'react-ga4'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 
@@ -13,7 +14,13 @@ export const IframePromoButton = () => {
         FEATURE_PROMO_EMBEDDED_IFRAME_URL,
     } = window._env_
 
-    const onClickShowIframeModal = useCallback(() => setEmbeddedIframeModal(true), [])
+    const onClickShowIframeModal = useCallback(() => {
+        setEmbeddedIframeModal(true)
+        ReactGA.event({
+            category: 'PRIMARY_HEADER',
+            action: 'HEADER_IFRAME_BUTTON_CLICKED',
+        })
+    }, [])
     const onClickCloseIframeModal = useCallback(() => setEmbeddedIframeModal(false), [])
 
     const renderIframeDrawer = () => (
