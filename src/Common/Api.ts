@@ -204,6 +204,9 @@ function fetchInTime<T = object>(
                 options.abortControllerRef.current = new AbortController()
             }
 
+            // Note: This is not catered in case abortControllerRef is passed since
+            // the API is rejected with abort signal from line 202
+            // FIXME: Remove once signal is removed
             reject({
                 code: 408,
                 errors: [{ code: 408, internalMessage: 'Request cancelled', userMessage: 'Request Cancelled' }],
@@ -224,6 +227,7 @@ function fetchInTime<T = object>(
         if (err instanceof ServerErrors) {
             throw err
         } else {
+            // FIXME: Can be removed once signal is removed
             throw new ServerErrors({
                 code: 408,
                 errors: [
