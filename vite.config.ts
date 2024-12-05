@@ -19,14 +19,19 @@ import { resolve } from 'path'
 import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
 import { libInjectCss } from 'vite-plugin-lib-inject-css'
+import libAssetsPlugin from '@laynezh/vite-plugin-lib-assets'
 import svgr from 'vite-plugin-svgr'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import * as packageJson from './package.json'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
+        libAssetsPlugin({
+            name: '[name].[contenthash:8].[ext]',
+        }),
         tsconfigPaths(),
         react(),
         libInjectCss(),
@@ -36,6 +41,9 @@ export default defineConfig({
         dts(),
         NodeGlobalsPolyfillPlugin({
             process: true,
+        }),
+        ViteImageOptimizer({
+            logStats: false,
         }),
     ],
     build: {
@@ -51,6 +59,50 @@ export default defineConfig({
             output: {
                 assetFileNames: 'assets/[name][extname]',
                 entryFileNames: '[name].js',
+                manualChunks(id: string) {
+                    if (
+                        id.includes('/node_modules/monaco-editor') ||
+                        id.includes('/node_modules/react-monaco-editor')
+                    ) {
+                        return '@monaco-editor'
+                    }
+
+                    if (id.includes('/node_modules/react-dates')) {
+                        return '@react-dates'
+                    }
+
+                    if (id.includes('/node_modules/framer-motion')) {
+                        return '@framer-motion'
+                    }
+
+                    if (id.includes('/node_modules/moment')) {
+                        return '@moment'
+                    }
+
+                    if (id.includes('/node_modules/react-select')) {
+                        return '@react-select'
+                    }
+
+                    if (id.includes('/node_modules/')) {
+                        return '@vendor'
+                    }
+
+                    if (id.includes('src/Common/CodeEditor')) {
+                        return '@code-editor'
+                    }
+
+                    if (id.includes('src/Common/RJSF')) {
+                        return '@common-rjsf'
+                    }
+
+                    if (id.includes('src/Assets/Icons')) {
+                        return '@src-assets-icons'
+                    }
+
+                    if (id.includes('src/Assets/Img')) {
+                        return '@src-assets-images'
+                    }
+                },
             },
         },
     },
