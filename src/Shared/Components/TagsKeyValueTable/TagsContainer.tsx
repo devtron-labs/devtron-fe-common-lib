@@ -2,7 +2,7 @@ import { ReactComponent as ICPropagate } from '@Icons/inject-tag.svg'
 import { PATTERNS } from '@Common/Constants'
 import { PropagateTagInfo } from '@Common/CustomTagSelector'
 import { TagsContainerProps, TagsTableColumnsType } from './types'
-import { TAGS_TABLE_HEADERS } from './constants'
+import { DEVTRON_AI_URL, TAGS_TABLE_HEADERS } from './constants'
 import { DynamicDataTable, DynamicDataTableRowType } from '../DynamicDataTable'
 import { getEmptyTagTableRow } from './utils'
 
@@ -33,7 +33,7 @@ const TagsKeyValueTable = ({
         return (
             <div
                 className={`pointer flex h-100 w-100 ${propagateTag ? 'bcn-7' : ''} ${
-                    row.data.tagKey.value.startsWith('devtron.ai/') ? 'cursor-not-allowed bcn-1' : ''
+                    row.data.tagKey.value.startsWith(DEVTRON_AI_URL) ? 'cursor-not-allowed bcn-1' : ''
                 }`}
             >
                 <ICPropagate

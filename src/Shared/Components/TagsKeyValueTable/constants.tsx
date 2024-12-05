@@ -13,3 +13,5 @@ export const TAGS_TABLE_HEADERS: DynamicDataTableHeaderType<TagsTableColumnsType
         width: '1fr',
     },
 ]
+
+export const DEVTRON_AI_URL: string = 'devtron.ai/'
