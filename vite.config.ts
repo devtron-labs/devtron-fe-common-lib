@@ -44,6 +44,8 @@ export default defineConfig({
         }),
         ViteImageOptimizer({
             logStats: false,
+            cache: true,
+            cacheLocation: '.build-cache/vite-image-optimizer',
         }),
     ],
     build: {
