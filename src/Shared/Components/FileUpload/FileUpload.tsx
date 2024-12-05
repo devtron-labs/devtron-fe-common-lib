@@ -20,6 +20,9 @@ export const FileUpload = ({
             const filesArray = Array.from(event.target.files)
             onUpload(filesArray)
         }
+        // Clearing value otherwise we can't upload the same file again.
+        const e = event
+        e.target.value = ''
     }
 
     return (

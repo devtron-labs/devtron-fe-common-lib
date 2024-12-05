@@ -123,6 +123,8 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
 
     // RENDERERS
     const renderCellContent = (row: DynamicDataTableRowType<K, CustomStateType>, key: K) => {
+        const isDisabled = readOnly || row.data[key].disabled
+
         switch (row.data[key].type) {
             case DynamicDataTableRowDataType.DROPDOWN:
                 return (
@@ -133,7 +135,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             variant={SelectPickerVariantType.BORDER_LESS}
                             value={getSelectPickerOptionByValue(row.data[key].props?.options, row.data[key].value)}
                             onChange={onChange(row, key)}
-                            isDisabled={readOnly || row.data[key].disabled}
+                            isDisabled={isDisabled}
                             fullWidth
                         />
                     </div>
@@ -146,7 +148,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             value={row.data[key].value}
                             onChange={onChange(row, key)}
                             inputId={`data-table-${row.id}-${key}-cell`}
-                            disabled={readOnly || row.data[key].disabled}
+                            disabled={isDisabled}
                             refVar={cellRef?.current?.[row.id]?.[key]}
                             dependentRef={cellRef?.current?.[row.id]}
                             textAreaProps={{
@@ -191,12 +193,12 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 return (
                     <ResizableTagTextArea
                         {...row.data[key].props}
-                        className={`dynamic-data-table__cell-input placeholder-cn5 p-8 cn-9 fs-13 lh-20 dc__align-self-start dc__no-border-radius ${readOnly || row.data[key].disabled ? 'cursor-not-allowed' : ''}`}
+                        className={`dynamic-data-table__cell-input placeholder-cn5 p-8 cn-9 fs-13 lh-20 dc__align-self-start dc__no-border-radius ${isDisabled ? 'cursor-not-allowed' : ''}`}
                         minHeight={20}
                         maxHeight={160}
                         value={row.data[key].value}
                         onChange={onChange(row, key)}
-                        disabled={readOnly || row.data[key].disabled}
+                        disabled={isDisabled}
                         refVar={cellRef?.current?.[row.id]?.[key]}
                         dependentRef={cellRef?.current?.[row.id]}
                         disableOnBlurResizeToMinHeight
@@ -231,8 +233,11 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     )
 
     const renderErrorMessages = (row: DynamicDataTableRowType<K, CustomStateType>, key: K) => {
-        const { isValid, errorMessages } = validationSchema(row.data[key].value, key, row)
+        const { isValid, errorMessages } = !row.data[key].disabled
+            ? validationSchema(row.data[key].value, key, row)
+            : { isValid: true, errorMessages: [] }
         const showErrorMessages = showError && !isValid
+
         if (!showErrorMessages) {
             return null
         }
@@ -245,15 +250,17 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     }
 
     const renderCell = (row: DynamicDataTableRowType<K, CustomStateType>, key: K, index: number) => {
+        const isDisabled = readOnly || row.data[key].disabled || false
+
         const cellNode = (
             <Tooltip
-                alwaysShowTippyOnHover={readOnly || row.data[key].disabled || false}
-                content="Cannot edit in read-only mode"
+                alwaysShowTippyOnHover={!!row.data[key].tooltipText || isDisabled}
+                content={row.data[key].tooltipText || (isDisabled ? 'Cannot edit in read-only mode' : '')}
                 followCursor="horizontal"
                 plugins={[followCursor]}
             >
                 <div
-                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key, row).isValid ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
+                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !isDisabled && !validationSchema(row.data[key].value, key, row).isValid ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
                 >
                     {maskValue?.[key] && row.data[key].value ? (
                         <div className="py-8 px-12 h-36 flex">{DEFAULT_SECRET_PLACEHOLDER}</div>
@@ -308,9 +315,9 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             {!isDeletionNotAllowed && !readOnly && (
                                 <button
                                     type="button"
-                                    className={`dynamic-data-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 dc__hover-n50 dc__tab-focus ${disableDeleteRow ? 'dc__disabled' : ''}`}
+                                    className={`dynamic-data-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 ${disableDeleteRow || row.disableDelete ? 'dc__disabled' : 'dc__hover-n50 dc__tab-focus'}`}
                                     onClick={onDelete(row)}
-                                    disabled={disableDeleteRow}
+                                    disabled={disableDeleteRow || row.disableDelete}
                                 >
                                     <ICClose
                                         aria-label="delete-row"

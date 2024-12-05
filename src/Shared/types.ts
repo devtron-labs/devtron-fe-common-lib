@@ -24,6 +24,10 @@ import {
     DeploymentAppTypes,
     ServerErrors,
     SortingParams,
+    ValueConstraint,
+    VariableType,
+    RefVariableType,
+    PluginType,
 } from '../Common'
 import { KeyValueListType } from './Components'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
@@ -335,12 +339,34 @@ export interface GitTriggers {
     CiConfigureSourceValue: string
 }
 
+export interface RuntimePluginVariables
+    extends Pick<VariableType, 'name' | 'value' | 'format' | 'fileReferenceId' | 'fileMountDir'> {
+    variableStepScope: string
+    valueConstraint: ValueConstraint & { id: number }
+    stepVariableId: number
+    valueType: RefVariableType
+    refPluginId?: number
+    stepName: string
+    stepType: PluginType
+    isRequired: boolean
+}
+
 export interface RuntimeParamsAPIResponseType {
     envVariables: Record<string, string>
+    runtimePluginVariables: RuntimePluginVariables[]
 }
 
 export interface RuntimeParamsTriggerPayloadType {
-    runtimeParams: RuntimeParamsAPIResponseType
+    runtimeParams: Pick<RuntimeParamsAPIResponseType, 'envVariables'>
+}
+
+export interface RuntimeParamsV2TriggerPayloadType {
+    runtimeParams: {
+        runtimePluginVariables: Pick<
+            RuntimePluginVariables,
+            'name' | 'fileMountDir' | 'fileReferenceId' | 'value' | 'format' | 'variableStepScope'
+        >[]
+    }
 }
 
 export enum CIMaterialSidebarType {
@@ -859,4 +885,18 @@ export interface DynamicTabType extends CommonTabArgsType {
 export interface PreventOutsideFocusProps {
     identifier: string
     preventFocus: boolean
+}
+
+export interface UploadFileDTO {
+    id: number
+    name: string
+    size: number
+    mimeType: string
+    extension: string
+}
+
+export interface UploadFileProps {
+    file: File[]
+    allowedExtensions?: string[]
+    maxUploadSize?: number
 }

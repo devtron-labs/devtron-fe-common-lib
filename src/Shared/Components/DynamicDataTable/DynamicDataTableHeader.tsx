@@ -69,6 +69,7 @@ export const DynamicDataTableHeader = <K extends string, CustomStateType = Recor
                     icon={<ICAdd />}
                     variant={ButtonVariantType.borderLess}
                     size={ComponentSizeType.xs}
+                    showAriaLabelInTippy={false}
                 />
             )}
             {key === lastHeaderKey && headerComponent}

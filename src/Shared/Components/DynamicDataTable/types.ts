@@ -98,11 +98,15 @@ export type DynamicDataTableRowType<K extends string, CustomStateType = Record<s
             disabled?: boolean
             /** An optional boolean indicating if an asterisk should be shown. */
             required?: boolean
+            /** An optional tooltip text to show when hovering over cell. */
+            tooltipText?: string
         } & DynamicDataTableCellData
     }
     id: string | number
     /** */
     customState?: CustomStateType
+    /** An optional boolean indicating if row deletion is disabled. */
+    disableDelete?: boolean
 }
 
 type DynamicDataTableMask<K extends string> = {
