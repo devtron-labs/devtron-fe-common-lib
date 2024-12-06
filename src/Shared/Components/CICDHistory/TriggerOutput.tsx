@@ -166,11 +166,14 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
                 variant: ToastVariantType.success,
                 description: 'Build Aborted',
             })
+            setAbortConfirmation(false)
             setAbortError({
                 status: false,
                 message: '',
             })
         } catch (error) {
+            setAborting(false)
+            setAbortConfirmation(false)
             if (error.code === 400) {
                 // code 400 is for aborting a running build
                 const { errors } = error
@@ -179,9 +182,6 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
                     message: errors[0].userMessage,
                 })
             }
-        } finally {
-            setAborting(false)
-            setAbortConfirmation(false)
         }
     }
 
