@@ -197,7 +197,7 @@ const sanitizeDeploymentApprovalInfo = (
             approverList: sanitizeUserApprovalList(deploymentApprovalInfo?.eligibleApprovers?.anyUsers?.approverList),
         },
         specificUsers: {
-            approverList: sanitizeUserApprovalList(deploymentApprovalInfo?.eligibleApprovers?.anyUsers?.approverList),
+            approverList: sanitizeUserApprovalList(deploymentApprovalInfo?.eligibleApprovers?.specificUsers?.approverList),
         },
         userGroups: (deploymentApprovalInfo?.eligibleApprovers?.userGroups ?? []).map(
             ({ groupName, groupIdentifier, approverList }) => ({
