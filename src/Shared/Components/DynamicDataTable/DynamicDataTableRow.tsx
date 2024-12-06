@@ -1,4 +1,4 @@
-import { createRef, Fragment, RefObject, useEffect, useRef } from 'react'
+import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect, useRef } from 'react'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
@@ -19,12 +19,15 @@ import { getActionButtonPosition, getRowGridTemplateColumn, rowTypeHasInputField
 import { DynamicDataTableRowType, DynamicDataTableRowProps, DynamicDataTableRowDataType } from './types'
 
 const conditionalWrap =
-    (
-        renderer: (props: { customState?: Record<string, any>; children: JSX.Element }) => JSX.Element,
-        customState: Record<string, any>,
-    ) =>
-    (children: JSX.Element) =>
-        renderer({ children, customState })
+    <K extends string>(renderer: (row: DynamicDataTableRowType<K>) => ReactElement, row: DynamicDataTableRowType<K>) =>
+    (children: JSX.Element) => {
+        if (renderer) {
+            const { props, type } = renderer(row)
+            return createElement(type, props, children)
+        }
+
+        return null
+    }
 
 export const DynamicDataTableRow = <K extends string>({
     rows = [],
@@ -40,6 +43,7 @@ export const DynamicDataTableRow = <K extends string>({
     onRowDelete,
     leadingCellIcon,
     trailingCellIcon,
+    buttonCellWrapComponent,
 }: DynamicDataTableRowProps<K>) => {
     // CONSTANTS
     const isFirstRowEmpty = headers.every(({ key }) => !rows[0]?.data[key].value)
@@ -151,8 +155,8 @@ export const DynamicDataTableRow = <K extends string>({
                 return (
                     <div className="w-100 h-100 flex top left">
                         <ConditionalWrap
-                            condition={row.data[key].wrap}
-                            wrap={conditionalWrap(row.data[key].wrapRenderer, row.customState)}
+                            condition={!!buttonCellWrapComponent}
+                            wrap={conditionalWrap(buttonCellWrapComponent, row)}
                         >
                             <button
                                 type="button"

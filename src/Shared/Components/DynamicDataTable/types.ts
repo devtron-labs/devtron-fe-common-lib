@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { DetailedHTMLProps, ReactNode } from 'react'
+import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
 
 import { SortingOrder } from '@Common/Constants'
 
@@ -84,25 +84,8 @@ export type DynamicDataTableCellPropsMap = {
     }
 }
 
-type DynamicDataTableCellExtendedPropsMap = {
-    [DynamicDataTableRowDataType.TEXT]: {}
-    [DynamicDataTableRowDataType.DROPDOWN]: {}
-    [DynamicDataTableRowDataType.SELECT_TEXT]: {}
-    [DynamicDataTableRowDataType.BUTTON]:
-        | {
-              wrap: true
-              wrapRenderer: (props: { children: JSX.Element; customState?: Record<string, any> }) => JSX.Element
-          }
-        | {
-              wrap?: false
-              wrapRenderer?: never
-          }
-}
-
 type DynamicDataTableCellData<T extends keyof DynamicDataTableCellPropsMap = keyof DynamicDataTableCellPropsMap> =
-    T extends keyof DynamicDataTableCellPropsMap
-        ? { type: T; props: DynamicDataTableCellPropsMap[T] } & DynamicDataTableCellExtendedPropsMap[T]
-        : never
+    T extends keyof DynamicDataTableCellPropsMap ? { type: T; props: DynamicDataTableCellPropsMap[T] } : never
 
 /**
  * Type representing a key-value row.
@@ -156,6 +139,8 @@ export type DynamicDataTableProps<K extends string> = {
     leadingCellIcon?: DynamicDataTableCellIcon<K>
     /** Optional configuration for displaying an icon in the trailing position of a cell. */
     trailingCellIcon?: DynamicDataTableCellIcon<K>
+    /** An optional function to render a custom wrapper component for the type `DynamicDataTableRowDataType.BUTTON`. */
+    buttonCellWrapComponent?: (row: DynamicDataTableRowType<K>) => ReactElement
     /** An optional React node for a custom header component. */
     headerComponent?: ReactNode
     /** When true, data addition field will not be shown. */
@@ -261,4 +246,5 @@ export interface DynamicDataTableRowProps<K extends string>
         | 'validationSchema'
         | 'leadingCellIcon'
         | 'trailingCellIcon'
+        | 'buttonCellWrapComponent'
     > {}
