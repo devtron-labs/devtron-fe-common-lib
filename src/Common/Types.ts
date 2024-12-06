@@ -809,6 +809,7 @@ export interface CDStage {
     name: string
     triggerType: 'AUTOMATIC' | 'MANUAL'
     config: string
+    triggerBlockedInfo?: TriggerBlockedInfo
 }
 
 export interface CDStageConfigMapSecretNames {
