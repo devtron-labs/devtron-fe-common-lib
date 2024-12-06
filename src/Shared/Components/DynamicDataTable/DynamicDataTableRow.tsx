@@ -2,7 +2,7 @@ import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect,
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 import { Tooltip } from '@Common/Tooltip'
 
@@ -38,7 +38,6 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     headers,
     maskValue,
     readOnly,
-    isAdditionNotAllowed,
     isDeletionNotAllowed,
     validationSchema = () => ({ isValid: true, errorMessages: [] }),
     showError,
@@ -52,7 +51,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     // CONSTANTS
     const isFirstRowEmpty = headers.every(({ key }) => !rows[0]?.data[key].value)
     /** Boolean determining if table has rows. */
-    const hasRows = (!readOnly && !isAdditionNotAllowed) || !!rows.length
+    const hasRows = !!rows.length
     const disableDeleteRow = rows.length === 1 && isFirstRowEmpty
     /** style: grid-template-columns */
     const rowGridTemplateColumn = getRowGridTemplateColumn(
@@ -227,7 +226,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
 
     const renderErrorMessage = (errorMessage: string) => (
         <div key={errorMessage} className="flexbox align-items-center dc__gap-4">
-            <ICClose className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
+            <ICCross className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
             <p className="fs-12 lh-16 cn-7 m-0">{errorMessage}</p>
         </div>
     )
@@ -300,35 +299,30 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
 
     return hasRows ? (
         <div className="bcn-2 px-1 pb-1 dc__bottom-radius-4">
-            {!!rows.length && (
-                <div
-                    className={`dynamic-data-table w-100 bcn-1 dc__bottom-radius-4 ${!readOnly ? 'three-columns' : 'two-columns'}`}
-                    style={{
-                        gridTemplateColumns: rowGridTemplateColumn,
-                    }}
-                >
-                    {rows.map((row) => (
-                        <div key={row.id} className="dynamic-data-table__row">
-                            {headers.map(({ key }, index) => (
-                                <Fragment key={key}>{renderCell(row, key, index)}</Fragment>
-                            ))}
-                            {!isDeletionNotAllowed && !readOnly && (
-                                <button
-                                    type="button"
-                                    className={`dynamic-data-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 ${disableDeleteRow || row.disableDelete ? 'dc__disabled' : 'dc__hover-n50 dc__tab-focus'}`}
-                                    onClick={onDelete(row)}
-                                    disabled={disableDeleteRow || row.disableDelete}
-                                >
-                                    <ICClose
-                                        aria-label="delete-row"
-                                        className="icon-dim-16 fcn-4 dc__align-self-start"
-                                    />
-                                </button>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            )}
+            <div
+                className={`dynamic-data-table w-100 bcn-1 dc__bottom-radius-4 ${!readOnly ? 'three-columns' : 'two-columns'}`}
+                style={{
+                    gridTemplateColumns: rowGridTemplateColumn,
+                }}
+            >
+                {rows.map((row) => (
+                    <div key={row.id} className="dynamic-data-table__row">
+                        {headers.map(({ key }, index) => (
+                            <Fragment key={key}>{renderCell(row, key, index)}</Fragment>
+                        ))}
+                        {!isDeletionNotAllowed && !readOnly && (
+                            <button
+                                type="button"
+                                className={`dynamic-data-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 ${disableDeleteRow || row.disableDelete ? 'dc__disabled' : 'dc__hover-n50 dc__tab-focus'}`}
+                                onClick={onDelete(row)}
+                                disabled={disableDeleteRow || row.disableDelete}
+                            >
+                                <ICCross aria-label="delete-row" className="icon-dim-16 fcn-4 dc__align-self-start" />
+                            </button>
+                        )}
+                    </div>
+                ))}
+            </div>
         </div>
     ) : null
 }

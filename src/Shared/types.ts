@@ -345,10 +345,10 @@ export interface RuntimePluginVariables
     valueConstraint: ValueConstraint & { id: number }
     stepVariableId: number
     valueType: RefVariableType
-    refPluginId?: number
     stepName: string
     stepType: PluginType
     isRequired: boolean
+    pluginIcon?: string
 }
 
 export interface RuntimeParamsAPIResponseType {
