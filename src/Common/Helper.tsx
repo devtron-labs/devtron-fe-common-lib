@@ -33,7 +33,7 @@ import {
     TOAST_ACCESS_DENIED,
 } from './Constants'
 import { ServerErrors } from './ServerError'
-import { AsyncOptions, AsyncState, UseSearchString } from './Types'
+import { AsyncOptions, AsyncState, DeploymentNodeType, UseSearchString } from './Types'
 import {
     scrollableInterface,
     DATE_TIME_FORMAT_STRING,
@@ -1030,4 +1030,15 @@ export const getIframeWithDefaultAttributes = (iframeString: string, defaultName
     }
 
     return iframeString
+}
+
+export const getStageTitle = (stageType: DeploymentNodeType): string => {
+    switch (stageType) {
+        case DeploymentNodeType.PRECD:
+            return 'Pre-deployment'
+        case DeploymentNodeType.POSTCD:
+            return 'Post-deployment'
+        default:
+            return 'Deployment'
+    }
 }

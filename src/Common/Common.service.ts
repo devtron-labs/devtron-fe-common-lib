@@ -206,6 +206,7 @@ const cdMaterialListModal = ({
             deploymentWindowArtifactMetadata: material.deploymentWindowArtifactMetadata ?? null,
             configuredInReleases: material.configuredInReleases ?? [],
             appWorkflowId: material.appWorkflowId ?? null,
+            deploymentBlockedState: material.deploymentBlockedState ?? null,
         }
     })
     return materials

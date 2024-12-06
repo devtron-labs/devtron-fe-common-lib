@@ -24,6 +24,7 @@ import {
     DeploymentAppTypes,
     ServerErrors,
     SortingParams,
+    TriggerBlockType,
 } from '../Common'
 import { KeyValueListType } from './Components'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
@@ -859,4 +860,26 @@ export interface DynamicTabType extends CommonTabArgsType {
 export interface PreventOutsideFocusProps {
     identifier: string
     preventFocus: boolean
+}
+
+export interface PolicyBlockInfo {
+    isBlocked: boolean
+    blockedBy: TriggerBlockType
+    reason: string
+}
+
+export interface PipelineStageBlockInfo {
+    node: PolicyBlockInfo
+    pre: PolicyBlockInfo
+    post: PolicyBlockInfo
+}
+
+export interface PolicyConsequencesDTO {
+    cd: PipelineStageBlockInfo
+    ci: PipelineStageBlockInfo
+}
+
+export interface GetPolicyConsequencesProps {
+    appId: number
+    envId: number
 }
