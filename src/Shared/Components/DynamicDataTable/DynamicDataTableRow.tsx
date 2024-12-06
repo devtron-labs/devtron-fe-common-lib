@@ -153,7 +153,7 @@ export const DynamicDataTableRow = <K extends string>({
                 )
             case DynamicDataTableRowDataType.BUTTON:
                 return (
-                    <div className="w-100 h-100 flex top">
+                    <div className="w-100 h-100 flex top left">
                         <ConditionalWrap
                             condition={!!buttonCellWrapComponent}
                             wrap={conditionalWrap(buttonCellWrapComponent, row)}
@@ -254,7 +254,13 @@ export const DynamicDataTableRow = <K extends string>({
         const actionButtonIndex = getActionButtonPosition({ headers, actionButtonConfig })
         if (actionButtonIndex === index) {
             const { renderer, position = 'start' } = actionButtonConfig
-            const actionButtonNode = <div className="dc__overflow-hidden flex top bcn-0">{renderer(row)}</div>
+            const actionButtonNode = (
+                <div
+                    className={`dc__overflow-hidden flex top bcn-0 ${position === 'start' ? 'dc__bottom-left-radius' : 'dc__bottom-right-radius'}`}
+                >
+                    {renderer(row)}
+                </div>
+            )
 
             return position === 'start' ? (
                 <>
@@ -295,7 +301,7 @@ export const DynamicDataTableRow = <K extends string>({
                                 >
                                     <ICClose
                                         aria-label="delete-row"
-                                        className="icon-dim-16 fcn-4 dc__align-self-start"
+                                        className="icon-dim-16 fcn-4 dc__align-self-start icon-use-fill-n6"
                                     />
                                 </button>
                             )}

@@ -72,6 +72,7 @@
     &__cell {
         .select-picker-borderless-control {
             padding: 8px;
+            gap: 4px
         }
 
         &:not(:has(.select-picker-borderless-control)) .dynamic-data-table__select-text-area {
