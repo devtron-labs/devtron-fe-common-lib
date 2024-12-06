@@ -490,6 +490,7 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
  */
 export const getUrlWithSearchParams = <T extends string | number = string | number>(
     url: string,
+    // FIXME: Need to fix this as the generic typing is incorrect
     params = {} as Partial<Record<T, any>>,
 ) => {
     const searchParams = new URLSearchParams()

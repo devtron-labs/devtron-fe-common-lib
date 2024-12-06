@@ -374,9 +374,10 @@ export interface UserApprovalInfo {
 }
 
 export enum ApprovalConfigDataKindType {
-    configMap = 'CM',
-    configSecret = 'CS',
-    deploymentTemplate = 'DEPLOYMENT_TEMPLATE',
+    configMap = 'configuration/config-map',
+    configSecret = 'configuration/config-secret',
+    deploymentTemplate = 'configuration/deployment-template',
+    deploymentTrigger = 'approval/deployment',
 }
 
 export interface ApprovalConfigDataType extends Pick<UserApprovalInfo, 'currentCount' | 'requiredCount'> {
