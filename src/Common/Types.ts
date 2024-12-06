@@ -19,7 +19,7 @@ import { TippyProps } from '@tippyjs/react'
 import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
-import { MandatoryPluginBaseStateType, RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
+import { MandatoryPluginBaseStateType, RegistryType, RuntimePluginVariables, Severity } from '../Shared'
 import {
     ACTION_STATE,
     ConsequenceType,
@@ -697,7 +697,7 @@ export interface CDMaterialsMetaInfo {
      * This is the ID of user that has request the material
      */
     requestedUserId: number
-    runtimeParams: RuntimeParamsListItemType[]
+    runtimeParams: RuntimePluginVariables[]
 }
 
 export interface ImagePromotionMaterialInfo {
