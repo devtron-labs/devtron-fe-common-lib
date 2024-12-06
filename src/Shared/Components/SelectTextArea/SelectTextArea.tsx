@@ -33,11 +33,7 @@ export const SelectTextArea = ({
     const selectedValue = getSelectPickerOptionByValue<string>(options, value, null)
 
     useEffectAfterMount(() => {
-        if (value && refVar?.current) {
-            refVar.current.focus()
-            const refElement = refVar.current
-            refElement.selectionStart = refElement.value.length
-        } else if (!value && selectRef.current) {
+        if (!value && selectRef.current) {
             selectRef.current.focus()
             selectRef.current.openMenu('first')
         }
@@ -74,7 +70,7 @@ export const SelectTextArea = ({
                 onChange={onTextAreaChange}
                 placeholder={placeholder}
             />
-            {!value ? (
+            <div className={`w-100 ${value ? 'select-picker-hidden dc__hide-section' : ''}`}>
                 <SelectPicker<string, false>
                     isCreatable
                     {...selectPickerProps}
@@ -89,7 +85,8 @@ export const SelectTextArea = ({
                     isDisabled={disabled}
                     fullWidth
                 />
-            ) : (
+            </div>
+            {value && (
                 <button
                     type="button"
                     className="flex dc__transparent dc__position-abs dc__top-8 dc__right-8"

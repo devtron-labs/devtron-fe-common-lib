@@ -70,11 +70,13 @@
     }
 
     &__cell {
+        min-width: 0;
+
         .select-picker-borderless-control {
             padding: 8px;
         }
 
-        &:not(:has(.select-picker-borderless-control)) .dynamic-data-table__select-text-area {
+        &:has(.select-picker-hidden) .dynamic-data-table__select-text-area {
             padding-left: 8px;
         }
 

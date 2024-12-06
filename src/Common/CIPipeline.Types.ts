@@ -97,11 +97,34 @@ export enum RefVariableStageType {
     POST_CI = 'POST_CI',
 }
 
+export interface FileProperty {
+    allowedExtensions: string[]
+    maxUploadSize: number
+}
+
+export interface Constraint {
+    fileProperty: FileProperty
+}
+
+export interface ValueConstraint {
+    choices: string[]
+    blockCustomValue: boolean
+    constraint: Constraint
+}
+
+export enum VariableTypeFormat {
+    STRING = 'STRING',
+    NUMBER = 'NUMBER',
+    BOOL = 'BOOL',
+    DATE = 'DATE',
+    FILE = 'FILE',
+}
+
 export interface VariableType {
     id: number
     name: string
     value: string
-    format: string
+    format: VariableTypeFormat
     description: string
     defaultValue: string
     allowEmptyValue: boolean
@@ -110,6 +133,12 @@ export interface VariableType {
     refVariableName: string
     refVariableStage?: RefVariableStageType
     variableStepIndexInPlugin?: number
+    fileMountDir: string
+    fileReferenceId: number
+    valueConstraintId: number
+    valueConstraint: ValueConstraint
+    isRuntimeArg: boolean
+    refVariableUsed: boolean
 }
 
 interface CommandArgsMap {
