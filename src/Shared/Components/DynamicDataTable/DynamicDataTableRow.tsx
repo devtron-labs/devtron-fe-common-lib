@@ -254,7 +254,13 @@ export const DynamicDataTableRow = <K extends string>({
         const actionButtonIndex = getActionButtonPosition({ headers, actionButtonConfig })
         if (actionButtonIndex === index) {
             const { renderer, position = 'start' } = actionButtonConfig
-            const actionButtonNode = <div className="dc__overflow-hidden flex top bcn-0">{renderer(row)}</div>
+            const actionButtonNode = (
+                <div
+                    className={`dc__overflow-hidden flex top bcn-0 ${position === 'start' ? 'dc__bottom-left-radius' : 'dc__bottom-right-radius'}`}
+                >
+                    {renderer(row)}
+                </div>
+            )
 
             return position === 'start' ? (
                 <>
