@@ -15,13 +15,12 @@
  */
 
 import React, { ReactNode, CSSProperties, ReactElement, MutableRefObject } from 'react'
-import { Placement } from 'tippy.js'
+import { TippyProps } from '@tippyjs/react'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import { MandatoryPluginBaseStateType, RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
 import {
     ACTION_STATE,
-    ConsequenceType,
     DEPLOYMENT_WINDOW_TYPE,
     DockerConfigOverrideType,
     SortingOrder,
@@ -96,7 +95,7 @@ export interface CheckboxProps {
     dataTestId?: string
 }
 
-export interface TippyCustomizedProps {
+export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
     theme: TippyTheme
     visible?: boolean
     heading?: ReactNode | string
@@ -104,7 +103,7 @@ export interface TippyCustomizedProps {
     noHeadingBorder?: boolean
     infoTextHeading?: string
     hideHeading?: boolean
-    placement?: Placement
+    placement?: TippyProps['placement']
     className?: string
     Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     iconPath?: string
@@ -339,29 +338,8 @@ export enum ManualApprovalType {
     notConfigured = 'NOT_CONFIGURED',
 }
 
-export interface UserGroupApproverType {
-    email: string
-    hasAccess: boolean
-}
-
-export interface ImageApprovalPolicyUserGroupDataType {
-    // Mapping email to data
-    dataStore: Record<string, UserGroupApproverType>
-    requiredCount: number
-    emails: string[]
-}
-
-export interface ImageApprovalPolicyType {
-    isPolicyConfigured: boolean
-    specificUsersData: ImageApprovalPolicyUserGroupDataType
-    userGroupData: Record<string, ImageApprovalPolicyUserGroupDataType>
-    // Assuming name of groups are unique
-    validGroups: string[]
-}
-
 export type ImageApprovalUsersInfoDTO = Record<string, Pick<UserGroupDTO, 'identifier' | 'name'>[]>
 
-// TODO: Need to verify this change for all impacting areas
 export interface UserApprovalConfigType {
     type: ManualApprovalType
     requiredCount: number
@@ -375,17 +353,6 @@ export interface UserApprovalConfigType {
     })[]
 }
 
-export type UserApprovalConfigPayloadType =
-    | ({
-          type: ManualApprovalType.any
-      } & Pick<UserApprovalConfigType, 'requiredCount'>)
-    | ({
-          type: ManualApprovalType.specific
-      } & Pick<UserApprovalConfigType, 'userGroups' | 'specificUsers'>)
-    | {
-          type: ManualApprovalType.notConfigured
-      }
-
 interface ApprovalUserDataType {
     dataId: number
     userActionTime: string
@@ -396,12 +363,49 @@ interface ApprovalUserDataType {
     userGroups?: Pick<UserGroupDTO, 'identifier' | 'name'>[]
 }
 
+export interface UserApprovalInfo {
+    requiredCount: number
+    currentCount: number
+    approverList: {
+        hasApproved: boolean
+        canApprove: boolean
+        identifier: string
+    }[]
+}
+
+export enum ApprovalConfigDataKindType {
+    configMap = 'configuration/config-map',
+    configSecret = 'configuration/config-secret',
+    deploymentTemplate = 'configuration/deployment-template',
+    deploymentTrigger = 'approval/deployment',
+}
+
+export interface ApprovalConfigDataType extends Pick<UserApprovalInfo, 'currentCount' | 'requiredCount'> {
+    kind: ApprovalConfigDataKindType | null
+    anyUserApprovedInfo: UserApprovalInfo
+    specificUsersApprovedInfo: UserApprovalInfo
+    userGroupsApprovedInfo: Pick<UserApprovalInfo, 'currentCount' | 'requiredCount'> & {
+        userGroups: (UserApprovalInfo & {
+            groupIdentifier: UserGroupDTO['identifier']
+            groupName: UserGroupDTO['name']
+        })[]
+    }
+}
+
+export enum ApprovalRuntimeStateType {
+    init = 0,
+    requested = 1,
+    approved = 2,
+    consumed = 3,
+}
+
 export interface UserApprovalMetadataType {
     approvalRequestId: number
-    approvalRuntimeState: number
-    approvedUsersData: ApprovalUserDataType[]
+    approvalRuntimeState: ApprovalRuntimeStateType
     requestedUserData: ApprovalUserDataType
-    approvalConfig?: UserApprovalConfigType
+    hasCurrentUserApproved: boolean
+    canCurrentUserApprove: boolean
+    approvalConfigData: ApprovalConfigDataType
 }
 
 export enum FilterStates {
@@ -467,7 +471,6 @@ export interface CDMaterialListModalServiceUtilProps {
     artifactId?: number
     artifactStatus?: string
     disableDefaultSelection?: boolean
-    userApprovalConfig?: UserApprovalConfigType
 }
 
 export interface CDMaterialType {
@@ -611,8 +614,7 @@ export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTr
     primaryBranchAfterRegex?: string
     storageConfigured?: boolean
     deploymentAppDeleteRequest?: boolean
-    approvalUsers?: string[]
-    userApprovalConfig?: UserApprovalConfigType
+    approvalConfigData: ApprovalConfigDataType
     requestedUserId?: number
     showPluginWarning: boolean
     helmPackageName?: string
@@ -676,14 +678,22 @@ export interface FilterConditionsListType {
     conditions: FilterConditionsInfo[]
 }
 
+export interface DeploymentApprovalInfoType {
+    eligibleApprovers: {
+        specificUsers: Pick<UserApprovalInfo, 'approverList'>
+        anyUsers: Pick<UserApprovalInfo, 'approverList'>
+        userGroups: (Pick<
+            ApprovalConfigDataType['userGroupsApprovedInfo']['userGroups'][number],
+            'groupIdentifier' | 'groupName'
+        > &
+            Pick<UserApprovalInfo, 'approverList'>)[]
+    }
+    approvalConfigData: ApprovalConfigDataType
+}
+
 export interface CDMaterialsApprovalInfo {
-    approvalUsers: string[]
-    userApprovalConfig: UserApprovalConfigType
     canApproverDeploy: boolean
-    /**
-     * Only available incase of approvals do'nt use in cd materials or any other flow since approvalUsers are not present there
-     */
-    imageApprovalPolicyDetails: ImageApprovalPolicyType
+    deploymentApprovalInfo: DeploymentApprovalInfoType
 }
 
 export interface CDMaterialsMetaInfo {
@@ -775,7 +785,6 @@ export interface AppEnvironment {
     appStatus?: string
     deploymentAppDeleteRequest?: boolean
     isVirtualEnvironment?: boolean
-    isProtected?: boolean
     pipelineId?: number
     latestCdWorkflowRunnerId?: number
     commits?: string[]
@@ -831,7 +840,6 @@ export interface CdPipeline {
     parentPipelineType?: string
     deploymentAppDeleteRequest?: boolean
     deploymentAppCreated?: boolean
-    userApprovalConfig?: UserApprovalConfigType
     isVirtualEnvironment?: boolean
     deploymentAppType: DeploymentAppTypes
     helmPackageName?: string
@@ -840,6 +848,7 @@ export interface CdPipeline {
     isProdEnv?: boolean
     isGitOpsRepoNotConfigured?: boolean
     isDeploymentBlocked?: boolean
+    approvalConfigData: ApprovalConfigDataType
 }
 
 export interface ExternalCiConfig {
@@ -955,13 +964,12 @@ export interface Point {
 export interface EdgeNodeType {
     height: number
     width: number
-    userApprovalConfig?: UserApprovalConfigType
     type?: any
     id?: number | string
 }
 
 export interface EdgeEndNodeType extends EdgeNodeType {
-    userApprovalConfig?: UserApprovalConfigType
+    approvalConfigData: ApprovalConfigDataType
 }
 
 /**

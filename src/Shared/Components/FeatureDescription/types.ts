@@ -18,18 +18,54 @@ import React, { ReactNode } from 'react'
 import { ImageType } from '../../../Common'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
 
-export interface FeatureDescriptionModalProps {
-    title: string
+interface BaseFeatureDescriptionModalProps {
     renderDescriptionContent?: () => ReactNode
-    closeModalText?: string
     docLink?: string
-    closeModal?: () => void
     imageVariant?: ImageType
     SVGImage?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     imageStyles?: React.CSSProperties
 }
 
-export interface DescriptorProps extends FeatureDescriptionModalProps {
+type FeatureDescriptionModalWithTabsConfig = {
+    /**
+     * If provided, tabs are shown and have higher precedence over normal modal
+     */
+    tabsConfig: ({
+        /**
+         * Unique id of the tab
+         */
+        id: string
+        /**
+         * Title for the tab
+         */
+        title: string
+    } & BaseFeatureDescriptionModalProps)[]
+} & {
+    renderDescriptionContent?: never
+    docLink?: never
+    imageVariant?: never
+    SVGImage?: never
+    imageStyles?: never
+}
+
+export type FeatureDescriptionModalProps = {
+    title: string
+    closeModalText?: string
+    closeModal?: () => void
+} & (
+    | (BaseFeatureDescriptionModalProps & {
+          tabsConfig?: never
+      })
+    | FeatureDescriptionModalWithTabsConfig
+)
+
+export type DescriptorProps = (
+    | (Omit<FeatureDescriptionModalProps, 'tabsConfig'> & {
+          tabsConfig?: never
+      })
+    | (Pick<FeatureDescriptionModalProps, 'title' | 'closeModalText' | 'closeModal'> &
+          FeatureDescriptionModalWithTabsConfig)
+) & {
     breadCrumbs?: Breadcrumb[]
     additionalContainerClasses?: string
     iconClassName?: string
