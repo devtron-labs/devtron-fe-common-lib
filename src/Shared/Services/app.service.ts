@@ -63,3 +63,29 @@ export const getAppEnvDeploymentConfig = ({
     signal?: AbortSignal
 }): Promise<ResponseType<AppEnvDeploymentConfigDTO>> =>
     get(getUrlWithSearchParams(ROUTES.CONFIG_DATA, params), { signal })
+
+export const getCompareSecretsData = async (
+    params: AppEnvDeploymentConfigPayloadType[],
+): Promise<AppEnvDeploymentConfigDTO[]> => {
+    const payload = {
+        comparisonItems: params.filter((param) => !!param).map((param, index) => ({ index, ...param })),
+    }
+
+    const results = Array(params.length).fill(null)
+
+    const {
+        result: { comparisonItemResponse },
+    } = await (get(
+        getUrlWithSearchParams(ROUTES.CONFIG_COMPARE_SECRET, {
+            compareConfig: JSON.stringify(payload),
+        }),
+    ) as Promise<
+        ResponseType<Record<'comparisonItemResponse', (AppEnvDeploymentConfigDTO & Record<'index', number>)[]>>
+    >)
+
+    comparisonItemResponse.forEach((resp) => {
+        results[resp.index] = resp
+    })
+
+    return results
+}
