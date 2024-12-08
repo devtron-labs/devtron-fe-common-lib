@@ -2,8 +2,7 @@ import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect,
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
+import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
 import { Tooltip } from '@Common/Tooltip'
 
 import { ConditionalWrap } from '@Common/Helper'
@@ -32,7 +31,6 @@ const conditionalWrap =
 export const DynamicDataTableRow = <K extends string>({
     rows = [],
     headers,
-    maskValue,
     readOnly,
     isAdditionNotAllowed,
     isDeletionNotAllowed,
@@ -122,6 +120,7 @@ export const DynamicDataTableRow = <K extends string>({
                         <SelectPicker<string, false>
                             {...row.data[key].props}
                             inputId={`data-table-${row.id}-${key}-cell`}
+                            classNamePrefix="dynamic-data-table__cell__select-picker"
                             variant={SelectPickerVariantType.BORDER_LESS}
                             value={getSelectPickerOptionByValue(row.data[key].props?.options, row.data[key].value)}
                             onChange={onChange(row, key)}
@@ -140,7 +139,10 @@ export const DynamicDataTableRow = <K extends string>({
                             inputId={`data-table-${row.id}-${key}-cell`}
                             disabled={readOnly || row.data[key].disabled}
                             refVar={cellRef?.current?.[row.id]?.[key]}
-                            dependentRef={cellRef?.current?.[row.id]}
+                            dependentRefs={cellRef?.current?.[row.id]}
+                            selectPickerProps={{
+                                classNamePrefix: 'dynamic-data-table__cell__select-picker',
+                            }}
                             textAreaProps={{
                                 ...row.data[key].props?.textAreaProps,
                                 className: 'dynamic-data-table__cell-input placeholder-cn5 py-8 pr-8 cn-9 fs-13 lh-20',
@@ -172,6 +174,7 @@ export const DynamicDataTableRow = <K extends string>({
                 return (
                     <ResizableTagTextArea
                         {...row.data[key].props}
+                        id={`data-table-${row.id}-${key}-cell`}
                         className={`dynamic-data-table__cell-input placeholder-cn5 p-8 cn-9 fs-13 lh-20 dc__align-self-start dc__no-border-radius ${readOnly || row.data[key].disabled ? 'cursor-not-allowed' : ''}`}
                         minHeight={20}
                         maxHeight={160}
@@ -179,7 +182,7 @@ export const DynamicDataTableRow = <K extends string>({
                         onChange={onChange(row, key)}
                         disabled={readOnly || row.data[key].disabled}
                         refVar={cellRef?.current?.[row.id]?.[key]}
-                        dependentRef={cellRef?.current?.[row.id]}
+                        dependentRefs={cellRef?.current?.[row.id]}
                         disableOnBlurResizeToMinHeight
                     />
                 )
@@ -206,7 +209,7 @@ export const DynamicDataTableRow = <K extends string>({
 
     const renderErrorMessage = (errorMessage: string) => (
         <div key={errorMessage} className="flexbox align-items-center dc__gap-4">
-            <ICClose className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
+            <ICCross className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
             <p className="fs-12 lh-16 cn-7 m-0">{errorMessage}</p>
         </div>
     )
@@ -236,17 +239,11 @@ export const DynamicDataTableRow = <K extends string>({
                 <div
                     className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key, row).isValid ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
                 >
-                    {maskValue?.[key] && row.data[key].value ? (
-                        <div className="py-8 px-12 h-36 flex">{DEFAULT_SECRET_PLACEHOLDER}</div>
-                    ) : (
-                        <>
-                            {renderCellIcon(row, key, true)}
-                            {renderCellContent(row, key)}
-                            {renderAsterisk(row, key)}
-                            {renderCellIcon(row, key)}
-                            {renderErrorMessages(row, key)}
-                        </>
-                    )}
+                    {renderCellIcon(row, key, true)}
+                    {renderCellContent(row, key)}
+                    {renderAsterisk(row, key)}
+                    {renderCellIcon(row, key)}
+                    {renderErrorMessages(row, key)}
                 </div>
             </Tooltip>
         )
@@ -274,35 +271,30 @@ export const DynamicDataTableRow = <K extends string>({
 
     return hasRows ? (
         <div className="bcn-2 px-1 pb-1 dc__bottom-radius-4">
-            {!!rows.length && (
-                <div
-                    className={`dynamic-data-table w-100 bcn-1 dc__bottom-radius-4 ${!readOnly ? 'three-columns' : 'two-columns'}`}
-                    style={{
-                        gridTemplateColumns: rowGridTemplateColumn,
-                    }}
-                >
-                    {rows.map((row) => (
-                        <div key={row.id} className="dynamic-data-table__row">
-                            {headers.map(({ key }, index) => (
-                                <Fragment key={key}>{renderCell(row, key, index)}</Fragment>
-                            ))}
-                            {!isDeletionNotAllowed && !readOnly && (
-                                <button
-                                    type="button"
-                                    className={`dynamic-data-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 dc__hover-n50 dc__tab-focus ${disableDeleteRow ? 'dc__disabled' : ''}`}
-                                    onClick={onDelete(row)}
-                                    disabled={disableDeleteRow}
-                                >
-                                    <ICClose
-                                        aria-label="delete-row"
-                                        className="icon-dim-16 fcn-4 dc__align-self-start"
-                                    />
-                                </button>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            )}
+            <div
+                className={`dynamic-data-table w-100 bcn-1 dc__bottom-radius-4 ${!readOnly ? 'row-column' : 'header-column'}`}
+                style={{
+                    gridTemplateColumns: rowGridTemplateColumn,
+                }}
+            >
+                {rows.map((row) => (
+                    <div key={row.id} className="dynamic-data-table__row">
+                        {headers.map(({ key }, index) => (
+                            <Fragment key={key}>{renderCell(row, key, index)}</Fragment>
+                        ))}
+                        {!isDeletionNotAllowed && !readOnly && (
+                            <button
+                                type="button"
+                                className={`dynamic-data-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 ${disableDeleteRow ? 'dc__disabled' : 'dc__hover-n50 dc__tab-focus'}`}
+                                onClick={onDelete(row)}
+                                disabled={disableDeleteRow}
+                            >
+                                <ICCross aria-label="delete-row" className="icon-dim-16 fcn-4 dc__align-self-start" />
+                            </button>
+                        )}
+                    </div>
+                ))}
+            </div>
         </div>
     ) : null
 }

@@ -80,9 +80,7 @@ export interface ResizableTagTextAreaProps
     maxHeight?: number
     value: string
     refVar?: MutableRefObject<HTMLTextAreaElement>
-    dependentRef?:
-        | MutableRefObject<HTMLTextAreaElement>
-        | Record<string | number, MutableRefObject<HTMLTextAreaElement>>
-    dataTestId?: string
+    dependentRef?: MutableRefObject<HTMLTextAreaElement>
+    dependentRefs?: Record<string | number, MutableRefObject<HTMLTextAreaElement>>
     disableOnBlurResizeToMinHeight?: boolean
 }

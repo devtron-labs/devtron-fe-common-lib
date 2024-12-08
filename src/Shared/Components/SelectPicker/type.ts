@@ -89,7 +89,6 @@ declare module 'react-select/base' {
          * @default 'true'
          */
         showSelectedOptionIcon?: boolean
-        variant?: SelectPickerVariantType
     }
 }
 

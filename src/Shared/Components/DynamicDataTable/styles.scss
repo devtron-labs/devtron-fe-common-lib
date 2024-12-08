@@ -18,14 +18,14 @@
     display: grid;
     gap: 1px;
 
-    &.two-columns {
-        .dynamic-data-table__row:last-of-type {
-            .dynamic-data-table__cell:first-child,
-            .dynamic-data-table__cell-input:first-child {
-                border-bottom-left-radius: 4px !important;
-            }
+    &__row:last-of-type {
+        .dynamic-data-table__cell:first-child,
+        .dynamic-data-table__cell-input:first-child {
+            border-bottom-left-radius: 4px !important;
         }
+    }
 
+    &.header-column {
         .dynamic-data-table__row:last-of-type {
             .dynamic-data-table__cell:last-child,
             .dynamic-data-table__cell-input:last-child {
@@ -34,14 +34,7 @@
         }
     }
 
-    &.three-columns {
-        .dynamic-data-table__row:last-of-type {
-            .dynamic-data-table__cell:first-child,
-            .dynamic-data-table__cell-input:first-child {
-                border-bottom-left-radius: 4px !important;
-            }
-        }
-
+    &.row-column {
         .dynamic-data-table__row:last-of-type {
             .dynamic-data-table__cell:last-child,
             .dynamic-data-table__row-delete-btn {
@@ -70,8 +63,11 @@
     }
 
     &__cell {
-        .select-picker-borderless-control {
-            padding: 8px;
+        min-width: 0;
+
+        &__select-picker__control {
+            gap: 6px !important;
+            padding: 8px !important;
         }
 
         &:not(:has(.select-picker-borderless-control)) .dynamic-data-table__select-text-area {

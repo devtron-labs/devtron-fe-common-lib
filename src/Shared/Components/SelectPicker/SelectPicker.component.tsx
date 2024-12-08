@@ -393,7 +393,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             onInputChange={onInputChange}
                             icon={icon}
                             showSelectedOptionIcon={shouldShowSelectedOptionIcon}
-                            variant={variant}
                         />
                     </div>
                 </ConditionalWrap>
