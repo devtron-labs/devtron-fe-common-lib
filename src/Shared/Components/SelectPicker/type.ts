@@ -52,11 +52,6 @@ type SelectProps<OptionValue, IsMulti extends boolean> = ReactSelectProps<
     GroupBase<SelectPickerOptionType<OptionValue>>
 >
 
-export enum SelectPickerVariantType {
-    DEFAULT = 'default',
-    BORDER_LESS = 'border-less',
-}
-
 declare module 'react-select/base' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     export interface Props<Option, IsMulti extends boolean, Group extends GroupBase<Option>> {
@@ -90,6 +85,11 @@ declare module 'react-select/base' {
          */
         showSelectedOptionIcon?: boolean
     }
+}
+
+export enum SelectPickerVariantType {
+    DEFAULT = 'default',
+    BORDER_LESS = 'border-less',
 }
 
 export type SelectPickerProps<OptionValue = number | string, IsMulti extends boolean = false> = Pick<

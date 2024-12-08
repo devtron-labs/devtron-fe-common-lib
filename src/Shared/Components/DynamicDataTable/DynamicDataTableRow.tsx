@@ -297,7 +297,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     return hasRows ? (
         <div className="bcn-2 px-1 pb-1 dc__bottom-radius-4">
             <div
-                className={`dynamic-data-table w-100 bcn-1 dc__bottom-radius-4 ${!readOnly ? 'row-colun' : 'header-column'}`}
+                className={`dynamic-data-table w-100 bcn-1 dc__bottom-radius-4 ${!readOnly ? 'row-column' : 'header-column'}`}
                 style={{
                     gridTemplateColumns: rowGridTemplateColumn,
                 }}
