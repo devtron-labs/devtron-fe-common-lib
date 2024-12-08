@@ -16,9 +16,9 @@
 
 import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
 
-import { SortingOrder } from '@Common/Constants'
-
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
+import { UseStateFiltersReturnType } from '@Common/Hooks'
+
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 import { SelectTextAreaProps } from '../SelectTextArea'
 import { FileUploadProps } from '../FileUpload'
@@ -51,6 +51,7 @@ export enum DynamicDataTableRowDataType {
 export type DynamicDataTableCellPropsMap = {
     [DynamicDataTableRowDataType.TEXT]: Omit<
         ResizableTagTextAreaProps,
+        | 'id'
         | 'className'
         | 'minHeight'
         | 'maxHeight'
@@ -109,10 +110,6 @@ export type DynamicDataTableRowType<K extends string, CustomStateType = Record<s
     disableDelete?: boolean
 }
 
-type DynamicDataTableMask<K extends string> = {
-    [key in K]?: boolean
-}
-
 type DynamicDataTableCellIcon<K extends string, CustomStateType = Record<string, unknown>> = {
     [key in K]?: (row: DynamicDataTableRowType<K, CustomStateType>) => ReactNode
 }
@@ -132,13 +129,7 @@ export type DynamicDataTableProps<K extends string, CustomStateType = Record<str
      */
     rows: DynamicDataTableRowType<K, CustomStateType>[]
     /** Optional configuration for sorting the table. */
-    sortingConfig?: {
-        sortBy: K
-        sortOrder: SortingOrder
-        handleSorting: () => void
-    }
-    /** An optional mask to hide the values of the cell. */
-    maskValue?: DynamicDataTableMask<K>
+    sortingConfig?: Pick<UseStateFiltersReturnType<K>, 'sortBy' | 'sortOrder' | 'handleSorting'>
     /** Optional configuration for displaying an icon in the leading position of a cell. */
     leadingCellIcon?: DynamicDataTableCellIcon<K, CustomStateType>
     /** Optional configuration for displaying an icon in the trailing position of a cell. */
@@ -190,7 +181,7 @@ export type DynamicDataTableProps<K extends string, CustomStateType = Record<str
         key: K
         /**
          * The width of the action button.
-         * @default '32px'
+         * @default '33px'
          */
         width?: string
         /**
@@ -239,7 +230,6 @@ export interface DynamicDataTableRowProps<K extends string, CustomStateType = Re
         DynamicDataTableProps<K, CustomStateType>,
         | 'rows'
         | 'headers'
-        | 'maskValue'
         | 'isAdditionNotAllowed'
         | 'isDeletionNotAllowed'
         | 'readOnly'
