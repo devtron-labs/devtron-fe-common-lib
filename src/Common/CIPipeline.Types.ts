@@ -97,19 +97,19 @@ export enum RefVariableStageType {
     POST_CI = 'POST_CI',
 }
 
-export interface FileProperty {
+export interface FilePropertyType {
     allowedExtensions: string[]
     maxUploadSize: number
 }
 
-export interface Constraint {
-    fileProperty: FileProperty
+export interface ConstraintType {
+    fileProperty: FilePropertyType
 }
 
-export interface ValueConstraint {
+export interface ValueConstraintType {
     choices: string[]
     blockCustomValue: boolean
-    constraint: Constraint
+    constraint: ConstraintType
 }
 
 export enum VariableTypeFormat {
@@ -136,7 +136,7 @@ export interface VariableType {
     fileMountDir: string
     fileReferenceId: number
     valueConstraintId: number
-    valueConstraint: ValueConstraint
+    valueConstraint: ValueConstraintType
     isRuntimeArg: boolean
     refVariableUsed: boolean
 }

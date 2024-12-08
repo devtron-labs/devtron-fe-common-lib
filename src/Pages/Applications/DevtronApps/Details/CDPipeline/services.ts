@@ -3,7 +3,7 @@ import { MutableRefObject } from 'react'
 import { getIsRequestAborted, post } from '@Common/Api'
 import { ROUTES } from '@Common/Constants'
 import { getUrlWithSearchParams, showError } from '@Common/Helper'
-import { UploadFileDTO } from '@Shared/types'
+import { UploadFileDTO, UploadFileProps } from '@Shared/types'
 
 export const uploadCDPipelineFile = async ({
     file,
@@ -12,12 +12,9 @@ export const uploadCDPipelineFile = async ({
     allowedExtensions,
     maxUploadSize,
     abortControllerRef,
-}: {
-    file: File[]
+}: UploadFileProps & {
     appId: number
     envId: number
-    allowedExtensions?: string[]
-    maxUploadSize?: number
     abortControllerRef?: MutableRefObject<AbortController>
 }): Promise<UploadFileDTO> => {
     const formData = new FormData()
@@ -36,10 +33,9 @@ export const uploadCDPipelineFile = async ({
 
         return result
     } catch (err) {
-        if (getIsRequestAborted(err)) {
-            return null
+        if (!getIsRequestAborted(err)) {
+            showError(err)
         }
-        showError(err)
         throw err
     }
 }

@@ -39,10 +39,9 @@ export const uploadCIPipelineFile = async ({
 
         return result
     } catch (err) {
-        if (getIsRequestAborted(err)) {
-            return null
+        if (!getIsRequestAborted(err)) {
+            showError(err)
         }
-        showError(err)
         throw err
     }
 }

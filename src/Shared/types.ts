@@ -24,7 +24,7 @@ import {
     DeploymentAppTypes,
     ServerErrors,
     SortingParams,
-    ValueConstraint,
+    ValueConstraintType,
     VariableType,
     RefVariableType,
     PluginType,
@@ -342,7 +342,7 @@ export interface GitTriggers {
 export interface RuntimePluginVariables
     extends Pick<VariableType, 'name' | 'value' | 'format' | 'fileReferenceId' | 'fileMountDir'> {
     variableStepScope: string
-    valueConstraint: ValueConstraint & { id: number }
+    valueConstraint: ValueConstraintType & { id: number }
     stepVariableId: number
     valueType: RefVariableType
     stepName: string

@@ -3,7 +3,6 @@ export interface FileUploadProps {
     onUpload: (files: File[]) => void
     multiple?: boolean
     label?: string
-    className?: string
     // Array of allowed MIME types (e.g., ["image/png", "image/jpeg"])
     fileTypes?: string[]
 }

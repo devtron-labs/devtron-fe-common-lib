@@ -1,19 +1,12 @@
 import { ChangeEvent } from 'react'
 
 import { ReactComponent as ICCloudUpload } from '@Icons/ic-cloud-upload.svg'
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
 import { Tooltip } from '@Common/Tooltip'
 
 import { FileUploadProps } from './types'
 
-export const FileUpload = ({
-    label,
-    fileName = '',
-    multiple = false,
-    fileTypes = [],
-    className,
-    onUpload,
-}: FileUploadProps) => {
+export const FileUpload = ({ label, fileName = '', multiple = false, fileTypes = [], onUpload }: FileUploadProps) => {
     // METHODS
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -25,8 +18,12 @@ export const FileUpload = ({
         e.target.value = ''
     }
 
+    const onClearUpload = () => {
+        onUpload([])
+    }
+
     return (
-        <div className={className || ''}>
+        <div>
             {fileName ? (
                 <div className="dc__border br-4 dc__overflow-hidden flexbox">
                     <div className="flexbox dc__align-items-center dc__gap-8 px-8 py-4 min-w-0">
@@ -35,12 +32,8 @@ export const FileUpload = ({
                             <span className="fs-12 lh-20 dc__ellipsis-right">{fileName}</span>
                         </Tooltip>
                     </div>
-                    <button
-                        type="button"
-                        className="dc__transparent flex p-6 dc__hover-n50"
-                        onClick={() => onUpload([])}
-                    >
-                        <ICClose className="icon-dim-16 fcn-6" />
+                    <button type="button" className="dc__transparent flex p-6 dc__hover-n50" onClick={onClearUpload}>
+                        <ICCross className="icon-dim-16 fcn-6" />
                     </button>
                 </div>
             ) : (
