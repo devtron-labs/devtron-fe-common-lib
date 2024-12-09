@@ -49,6 +49,7 @@ import regexIcon from '@Icons/ic-regex.svg'
 import pullRequest from '@Icons/ic-pull-request.svg'
 import tagIcon from '@Icons/ic-tag.svg'
 import { SourceTypeMap } from '@Common/Common.service'
+import { getIsRequestAborted } from './Api'
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
@@ -71,7 +72,7 @@ export function showError(serverError, showToastOnUnknownError = true, hideAcces
             }
         })
     } else {
-        if (serverError.code !== 403 && serverError.code !== 408) {
+        if (serverError.code !== 403 && serverError.code !== 408 && !getIsRequestAborted(serverError)) {
             Sentry.captureException(serverError)
         }
 
