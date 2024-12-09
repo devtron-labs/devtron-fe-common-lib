@@ -1,0 +1,8 @@
+<!--
+  - Copyright (c) 2024. Devtron Inc.
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+  <rect x="1.33301" y="1.33331" width="13.3333" height="13.3333" rx="4" fill="#596168"/>
+  <path d="M10 6L6 10M10 10L6 6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
