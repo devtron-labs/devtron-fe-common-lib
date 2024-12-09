@@ -150,6 +150,9 @@ async function fetchAPI<K = object>(
                     })
                 } else {
                     handleLogout()
+                    // Using this way to ensure that the user is redirected to the login page
+                    // and the component has enough time to get unmounted otherwise the component re-renders
+                    // and try to access some property of a variable and log exception to sentry
                     return await new Promise((resolve) => {
                         setTimeout(() => {
                             resolve({ code: 401, status: 'Unauthorized', result: [] })
