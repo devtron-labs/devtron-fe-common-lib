@@ -686,6 +686,11 @@ export enum ConfigurationType {
     YAML = 'YAML',
 }
 
+export const CONFIGURATION_TYPE_OPTIONS: OptionType<ConfigurationType, ConfigurationType>[] = [
+    { label: ConfigurationType.GUI, value: ConfigurationType.GUI },
+    { label: ConfigurationType.YAML, value: ConfigurationType.YAML },
+] as const
+
 export interface BaseURLParams {
     appId: string
     envId: string
