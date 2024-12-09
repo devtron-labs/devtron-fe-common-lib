@@ -181,7 +181,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 )
             case DynamicDataTableRowDataType.FILE_UPLOAD:
                 return (
-                    <div className={`w-100 h-100 flex top left px-8 min-w-0 ${row.data[key].value ? 'py-3' : 'py-8'}`}>
+                    <div className={`w-100 h-100 flex top left px-8 ${row.data[key].value ? 'py-3' : 'py-8'}`}>
                         <FileUpload
                             {...row.data[key].props}
                             fileName={row.data[key].value}

@@ -107,9 +107,9 @@ export interface ConstraintType {
 }
 
 export interface ValueConstraintType {
-    choices: string[]
-    blockCustomValue: boolean
-    constraint: ConstraintType
+    choices?: string[]
+    blockCustomValue?: boolean
+    constraint?: ConstraintType
 }
 
 export enum VariableTypeFormat {
@@ -134,9 +134,9 @@ export interface VariableType {
     refVariableStage?: RefVariableStageType
     variableStepIndexInPlugin?: number
     fileMountDir: string
-    fileReferenceId: number
-    valueConstraintId: number
-    valueConstraint: ValueConstraintType
+    fileReferenceId?: number
+    valueConstraintId?: number
+    valueConstraint?: ValueConstraintType
     isRuntimeArg: boolean
     refVariableUsed: boolean
 }
