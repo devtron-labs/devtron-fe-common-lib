@@ -91,6 +91,12 @@ export type ButtonProps = (
      * @default false
      */
     fullWidth?: boolean
+    /**
+     * If true, the opacity is turned as 1 on hover of class with dc__opacity-hover--parent
+     *
+     * @default false
+     */
+    isOpacityHoverChild?: boolean
 } & (
         | {
               /**

@@ -20,7 +20,7 @@ import BuildInfraFormAction from './BuildInfraFormAction'
 import BuildInfraFormItem from './BuildInfraFormItem'
 import BuildInfraProfileDescriptionField from './BuildInfraDescriptionField'
 import BuildInfraProfileNameField from './BuildInfraProfileNameField'
-import { BUILD_INFRA_FORM_FIELDS, BUILD_INFRA_TEXT } from './constants'
+import { BUILD_INFRA_FORM_FIELDS, BUILD_INFRA_TEXT, DEFAULT_PROFILE_NAME } from './constants'
 import { BuildInfraActionType, BuildInfraConfigFormProps, InheritingHeaderProps } from './types'
 
 const InheritingHeader = ({
@@ -58,11 +58,12 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
     profileInput,
     profileInputErrors,
     handleProfileInputChange,
+    // TODO: Change name
     isDefaultProfile,
     unitsMap,
     configurationContainerLabel,
 }) => {
-    const currentConfigurations = profileInput?.configurations
+    const currentConfigurations = profileInput?.configurations?.[DEFAULT_PROFILE_NAME]
 
     // will get the desired configuration from the currentConfigurations and then check if it is active or not
     const isInheritingProfileValues = (actions: BuildInfraActionType[]) =>
@@ -128,7 +129,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
                                         profileUnitsMap={unitsMap[action.actionType]}
                                         handleProfileInputChange={handleProfileInputChange}
                                         currentUnitName={currentConfigurations[action.actionType].unit}
-                                        currentValue={currentConfigurations[action.actionType].value}
+                                        currentValue={currentConfigurations[action.actionType].value as number}
                                     />
                                 ))}
                             </div>
