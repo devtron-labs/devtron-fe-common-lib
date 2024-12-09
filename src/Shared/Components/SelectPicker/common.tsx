@@ -38,12 +38,7 @@ import { ReactSelectInputAction } from '@Common/Constants'
 import { isNullOrUndefined } from '@Shared/Helpers'
 import { Tooltip } from '@Common/Tooltip'
 import { TooltipProps } from '@Common/Tooltip/types'
-import {
-    SelectPickerGroupHeadingProps,
-    SelectPickerOptionType,
-    SelectPickerProps,
-    SelectPickerVariantType,
-} from './type'
+import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
 
 const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
@@ -89,8 +84,7 @@ export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPick
     const {
         children,
         getValue,
-        selectProps: { icon, showSelectedOptionIcon, variant },
-        className,
+        selectProps: { icon, showSelectedOptionIcon },
     } = props
     const { startIcon, endIcon } = getValue()?.[0] ?? {}
 
@@ -101,10 +95,7 @@ export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPick
     }
 
     return (
-        <components.Control
-            {...props}
-            className={`${variant === SelectPickerVariantType.BORDER_LESS ? 'select-picker-borderless-control' : ''} ${className || ''}`}
-        >
+        <components.Control {...props}>
             {iconToDisplay && (
                 <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{iconToDisplay}</div>
             )}
