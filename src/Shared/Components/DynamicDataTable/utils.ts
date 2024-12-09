@@ -1,15 +1,15 @@
 import { ACTION_BUTTON_DEFAULT_WIDTH, DELETE_BUTTON_WIDTH } from './constants'
 import { DynamicDataTableHeaderType, DynamicDataTableProps, DynamicDataTableRowDataType } from './types'
 
-export const getActionButtonPosition = <K extends string>({
+export const getActionButtonPosition = <K extends string, CustomStateType = Record<string, unknown>>({
     headers,
     actionButtonConfig,
-}: Pick<DynamicDataTableProps<K>, 'headers' | 'actionButtonConfig'>) =>
+}: Pick<DynamicDataTableProps<K, CustomStateType>, 'headers' | 'actionButtonConfig'>) =>
     headers.findIndex(({ key }) => actionButtonConfig?.key === key)
 
-export const getHeaderGridTemplateColumn = <K extends string>(
+export const getHeaderGridTemplateColumn = <K extends string, CustomStateType = Record<string, unknown>>(
     headers: DynamicDataTableHeaderType<K>[],
-    actionButtonConfig: DynamicDataTableProps<K>['actionButtonConfig'],
+    actionButtonConfig: DynamicDataTableProps<K, CustomStateType>['actionButtonConfig'],
     noDeleteBtn: boolean,
 ) => {
     const actionButtonIndex = getActionButtonPosition({ headers, actionButtonConfig })
@@ -34,9 +34,9 @@ export const getHeaderGridTemplateColumn = <K extends string>(
     return gridTemplateColumns.join(' ').trim()
 }
 
-export const getRowGridTemplateColumn = <K extends string>(
+export const getRowGridTemplateColumn = <K extends string, CustomStateType = Record<string, unknown>>(
     headers: DynamicDataTableHeaderType<K>[],
-    actionButtonConfig: DynamicDataTableProps<K>['actionButtonConfig'],
+    actionButtonConfig: DynamicDataTableProps<K, CustomStateType>['actionButtonConfig'],
     noDeleteBtn: boolean,
 ) => {
     const actionButtonIndex = getActionButtonPosition({ headers, actionButtonConfig })

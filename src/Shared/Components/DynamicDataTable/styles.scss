@@ -70,7 +70,7 @@
             padding: 8px !important;
         }
 
-        &:not(:has(.select-picker-borderless-control)) .dynamic-data-table__select-text-area {
+        &:has(.select-picker-hidden) .dynamic-data-table__select-text-area {
             padding-left: 8px;
         }
 

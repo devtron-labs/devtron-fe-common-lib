@@ -7,7 +7,7 @@ import { Button, ButtonVariantType } from '../Button'
 import { getActionButtonPosition, getHeaderGridTemplateColumn } from './utils'
 import { DynamicDataTableHeaderType, DynamicDataTableHeaderProps } from './types'
 
-export const DynamicDataTableHeader = <K extends string>({
+export const DynamicDataTableHeader = <K extends string, CustomStateType = Record<string, unknown>>({
     headers,
     rows,
     sortingConfig,
@@ -17,7 +17,7 @@ export const DynamicDataTableHeader = <K extends string>({
     isDeletionNotAllowed,
     headerComponent = null,
     actionButtonConfig = null,
-}: DynamicDataTableHeaderProps<K>) => {
+}: DynamicDataTableHeaderProps<K, CustomStateType>) => {
     // CONSTANTS
     const firstHeaderKey = headers[0].key
     const lastHeaderKey = headers[headers.length - 1].key
@@ -71,6 +71,7 @@ export const DynamicDataTableHeader = <K extends string>({
                     icon={<ICAdd />}
                     variant={ButtonVariantType.borderLess}
                     size={ComponentSizeType.xs}
+                    showAriaLabelInTippy={false}
                 />
             )}
             {key === lastHeaderKey && headerComponent}
