@@ -36,7 +36,7 @@ export interface KeyValueHeader<K extends string> {
  */
 export type KeyValueRow<K extends string> = {
     data: {
-        [key in K]: Pick<ResizableTagTextAreaProps, 'value' | 'dataTestId' | 'disabled' | 'tabIndex'> & {
+        [key in K]: Pick<ResizableTagTextAreaProps, 'value' | 'disabled' | 'tabIndex'> & {
             /** An optional boolean indicating if an asterisk should be shown. */
             required?: boolean
         }

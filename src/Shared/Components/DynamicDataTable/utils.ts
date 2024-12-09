@@ -1,3 +1,4 @@
+import { ACTION_BUTTON_DEFAULT_WIDTH, DELETE_BUTTON_WIDTH } from './constants'
 import { DynamicDataTableHeaderType, DynamicDataTableProps, DynamicDataTableRowDataType } from './types'
 
 export const getActionButtonPosition = <K extends string>({
@@ -12,25 +13,25 @@ export const getHeaderGridTemplateColumn = <K extends string>(
     noDeleteBtn: boolean,
 ) => {
     const actionButtonIndex = getActionButtonPosition({ headers, actionButtonConfig })
-    const actionButtonWidth = actionButtonConfig?.width || '33px'
+    const actionButtonWidth = actionButtonConfig?.width || ACTION_BUTTON_DEFAULT_WIDTH
     const isActionButtonAtTheStart = actionButtonIndex === 0 && actionButtonConfig.position !== 'end'
     const gridWidthRegex = /^\d+fr$/
 
-    const columns = headers.map(({ width }, index) => {
+    const gridTemplateColumns = headers.map(({ width }, index) => {
         if (!isActionButtonAtTheStart && index === actionButtonIndex && !gridWidthRegex.test(width)) {
             return `calc(${width} + ${actionButtonWidth})`
         }
         if (!noDeleteBtn && index === headers.length - 1 && !gridWidthRegex.test(width)) {
-            return `calc(${width} + 33px)`
+            return `calc(${width} + ${DELETE_BUTTON_WIDTH})`
         }
         return width
     })
 
     if (isActionButtonAtTheStart) {
-        columns.unshift(actionButtonWidth)
+        gridTemplateColumns.unshift(actionButtonWidth)
     }
 
-    return columns.join(' ').trim()
+    return gridTemplateColumns.join(' ').trim()
 }
 
 export const getRowGridTemplateColumn = <K extends string>(
