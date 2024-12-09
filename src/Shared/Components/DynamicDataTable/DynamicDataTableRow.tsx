@@ -285,9 +285,9 @@ export const DynamicDataTableRow = <K extends string>({
                         {!isDeletionNotAllowed && !readOnly && (
                             <button
                                 type="button"
-                                className={`dynamic-data-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 ${disableDeleteRow ? 'dc__disabled' : 'dc__hover-n50 dc__tab-focus'}`}
+                                className={`dynamic-data-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 ${disableDeleteRow || row.disableDelete ? 'dc__disabled' : 'dc__hover-n50 dc__tab-focus'}`}
                                 onClick={onDelete(row)}
-                                disabled={disableDeleteRow}
+                                disabled={disableDeleteRow || row.disableDelete}
                             >
                                 <ICCross aria-label="delete-row" className="icon-dim-16 fcn-4 dc__align-self-start" />
                             </button>

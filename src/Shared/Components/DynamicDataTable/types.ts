@@ -101,6 +101,8 @@ export type DynamicDataTableRowType<K extends string, CustomStateType = Record<s
     id: string | number
     /** */
     customState?: CustomStateType
+    /** An optional boolean indicating if row deletion is disabled. */
+    disableDelete?: boolean
 }
 
 type DynamicDataTableCellIcon<K extends string> = {
