@@ -57,7 +57,7 @@ export const DynamicDataTableHeader = <K extends string>({
                 </button>
             ) : (
                 <div
-                    className={`cn-7 fs-12 lh-20 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
+                    className={`cn-7 fs-12 lh-20 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-4 ${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
                 >
                     {label}
                     {typeof renderHelpTextForHeader === 'function' && renderHelpTextForHeader()}
