@@ -16,7 +16,7 @@
 
 import { OptionType } from '@Common/Types'
 import StyledRadioGroup from '../RadioGroup/RadioGroup'
-import { SegmentedControlProps } from './types'
+import { SegmentedControlProps, SegmentedControlVariant } from './types'
 
 const SegmentedControl = ({
     tabs,
@@ -25,9 +25,10 @@ const SegmentedControl = ({
     tooltips,
     disabled = false,
     rootClassName = '',
+    variant = SegmentedControlVariant.WHITE_ON_GRAY,
 }: SegmentedControlProps) => (
     <StyledRadioGroup
-        className={`gui-yaml-switch-window-bg ${rootClassName}`}
+        className={`${variant} ${rootClassName}`}
         onChange={onChange}
         initialTab={initialTab}
         name="segmented-control"

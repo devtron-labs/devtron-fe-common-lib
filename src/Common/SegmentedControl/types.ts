@@ -16,6 +16,12 @@
 
 import { OptionType } from '@Common/Types'
 
+export enum SegmentedControlVariant {
+    // NOTE: values are css class names
+    GRAY_ON_WHITE = 'gui-yaml-switch',
+    WHITE_ON_GRAY = 'gui-yaml-switch-window-bg',
+}
+
 export interface SegmentedControlProps {
     tabs: OptionType[]
     initialTab: string
@@ -23,4 +29,5 @@ export interface SegmentedControlProps {
     tooltips?: string[]
     disabled?: boolean
     rootClassName?: string
+    variant?: SegmentedControlVariant
 }
