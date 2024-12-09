@@ -511,7 +511,7 @@ export const getUrlWithSearchParams = <T extends string | number = string | numb
 /**
  * Custom exception logger function for logging errors to sentry
  */
-export const logExceptionToSentry = Sentry.captureException.bind(window)
+export const logExceptionToSentry: typeof Sentry.captureException  = Sentry.captureException.bind(window)
 
 export const customStyles = {
     control: (base, state) => ({

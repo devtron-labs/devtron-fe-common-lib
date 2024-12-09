@@ -150,7 +150,11 @@ async function fetchAPI<K = object>(
                     })
                 } else {
                     handleLogout()
-                    return { code: 401, status: 'Unauthorized', result: [] }
+                    return await new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve({ code: 401, status: 'Unauthorized', result: [] })
+                        }, 1000)
+                    })
                 }
             } else if (response.status >= 300 && response.status <= 599) {
                 return await handleServerError(contentType, response)
