@@ -318,7 +318,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             menuPlacement: 'auto' as MenuPlacement,
             menuPosition,
             menuShouldScrollIntoView: true,
-            backspaceRemovesValue: isMulti,
+            backspaceRemovesValue: false,
             'aria-errormessage': errorElementId,
             'aria-invalid': !!error,
             'aria-labelledby': labelId,
@@ -336,7 +336,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             errorElementId,
             error,
             labelId,
-            isMulti,
             shouldRenderCustomOptions,
         ],
     )
