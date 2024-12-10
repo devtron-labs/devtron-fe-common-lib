@@ -804,12 +804,11 @@ export interface Strategy {
     default?: boolean
 }
 
-export interface CDStage {
+export interface CDStage extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     status: string
     name: string
     triggerType: 'AUTOMATIC' | 'MANUAL'
     config: string
-    triggerBlockedInfo?: TriggerBlockedInfo
 }
 
 export interface CDStageConfigMapSecretNames {
@@ -817,16 +816,15 @@ export interface CDStageConfigMapSecretNames {
     secrets: any[]
 }
 
-export interface PrePostDeployStageType extends MandatoryPluginBaseStateType {
+export interface PrePostDeployStageType extends MandatoryPluginBaseStateType, Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     isValid: boolean
     steps: TaskErrorObj[]
     triggerType: string
     name: string
     status: string
-    triggerBlockedInfo?: TriggerBlockedInfo
 }
 
-export interface CdPipeline {
+export interface CdPipeline extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     id: number
     environmentId: number
     environmentName?: string
@@ -859,7 +857,6 @@ export interface CdPipeline {
     isGitOpsRepoNotConfigured?: boolean
     isDeploymentBlocked?: boolean
     isTriggerBlocked?: boolean
-    triggerBlockedInfo?: TriggerBlockedInfo
 }
 
 export interface ExternalCiConfig {

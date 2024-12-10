@@ -31,17 +31,16 @@ const TagsKeyValueTable = ({
     const propagateTagButton = (row: DynamicDataTableRowType<TagsTableColumnsType>) => {
         const propagateTag: boolean = (row.customState?.propagateTag as boolean) || false
         return (
-            <div
+            <button
+                onClick={() => handlePropagateTag(row.id)}
                 className={`pointer flex h-100 w-100 ${propagateTag ? 'bcn-7' : ''} ${
                     row.data.tagKey.value.startsWith(DEVTRON_AI_URL) ? 'cursor-not-allowed bcn-1' : ''
-                }`}
+                } dc__transparent dc__tab-focus`}
+                data-index={row.id}
+                type="button"
             >
-                <ICPropagate
-                    className={`icon-dim-20 ${propagateTag ? 'scn-0' : ''}`}
-                    data-index={row.id}
-                    onClick={() => handlePropagateTag(row.id)}
-                />
-            </div>
+                <ICPropagate className={`icon-dim-20 ${propagateTag ? 'scn-0' : ''}`} />
+            </button>
         )
     }
 

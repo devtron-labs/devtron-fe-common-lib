@@ -15,7 +15,7 @@
  */
 
 import moment from 'moment'
-import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
+import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
 import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
@@ -109,6 +109,21 @@ const sanitizeApprovalConfigFromApprovalMetadata = (
             userGroups: userData.userGroups?.filter((group) => !!group?.identifier && !!group?.name) ?? [],
         })),
         approvalConfig: sanitizeUserApprovalConfig(unsanitizedApprovalConfig),
+    }
+}
+
+const sanitizeDeploymentBlockedState = (deploymentBlockedState: PolicyBlockInfo) => {
+    if (!deploymentBlockedState) {
+        return {
+            isBlocked: false,
+            blockedBy: null,
+            reason: '',
+        }
+    }
+    return {
+        isBlocked: deploymentBlockedState.isBlocked || false,
+        blockedBy: deploymentBlockedState.blockedBy || null,
+        reason: deploymentBlockedState.reason || '',
     }
 }
 
@@ -206,7 +221,7 @@ const cdMaterialListModal = ({
             deploymentWindowArtifactMetadata: material.deploymentWindowArtifactMetadata ?? null,
             configuredInReleases: material.configuredInReleases ?? [],
             appWorkflowId: material.appWorkflowId ?? null,
-            deploymentBlockedState: material.deploymentBlockedState ?? null,
+            deploymentBlockedState: sanitizeDeploymentBlockedState(material.deploymentBlockedState)
         }
     })
     return materials
@@ -521,7 +536,10 @@ export function getWebhookEventsForEventId(eventId: string | number) {
  */
 export const getGitBranchUrl = (gitUrl: string, branchName: string): string | null => {
     if (!gitUrl) return null
-    const trimmedGitUrl = gitUrl.trim().replace(/\.git$/, '').replace(/\/$/, '') // Remove any trailing slash
+    const trimmedGitUrl = gitUrl
+        .trim()
+        .replace(/\.git$/, '')
+        .replace(/\/$/, '') // Remove any trailing slash
     if (trimmedGitUrl.includes(GitProviderType.GITLAB)) return `${trimmedGitUrl}/-/tree/${branchName}`
     else if (trimmedGitUrl.includes(GitProviderType.GITHUB)) return `${trimmedGitUrl}/tree/${branchName}`
     else if (trimmedGitUrl.includes(GitProviderType.BITBUCKET)) return `${trimmedGitUrl}/branch/${branchName}`
