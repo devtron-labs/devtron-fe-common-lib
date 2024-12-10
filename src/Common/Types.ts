@@ -4,30 +4,29 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import React, { ReactNode, CSSProperties, ReactElement, MutableRefObject } from 'react'
 import { TippyProps } from '@tippyjs/react'
 import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
-import { MandatoryPluginBaseStateType, RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
 import {
-    ACTION_STATE,
-    ConsequenceType,
-    DEPLOYMENT_WINDOW_TYPE,
-    DockerConfigOverrideType,
-    SortingOrder,
-    TaskErrorObj,
-} from '.'
+    MandatoryPluginBaseStateType,
+    PolicyBlockInfo,
+    RegistryType,
+    RuntimeParamsListItemType,
+    Severity,
+} from '../Shared'
+import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -523,6 +522,10 @@ export interface CDMaterialType {
      * Would currently only be received in case of release
      */
     appWorkflowId: number
+    /**
+     * Denotes trigger blocking due to mandatory tags, (might be used for plugins and other features in future)
+     */
+    deploymentBlockedState?: PolicyBlockInfo
 }
 
 export enum CDMaterialServiceEnum {
@@ -563,6 +566,16 @@ export interface CDMaterialServiceQueryParams {
 export interface DownstreamNodesEnvironmentsType {
     environmentId: number
     environmentName: string
+}
+
+export enum TriggerBlockType {
+    MANDATORY_TAG = 'mandatory-tags',
+    MANDATORY_PLUGIN = 'mandatory-plugins',
+}
+
+export interface TriggerBlockedInfo {
+    blockedBy: TriggerBlockType
+    blockedReason?: string
 }
 
 export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTriggerBlocked' | 'pluginBlockState'> {
@@ -627,6 +640,7 @@ export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTr
     downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
     cipipelineId?: number
     isDeploymentBlocked?: boolean
+    triggerBlockedInfo?: TriggerBlockedInfo
 }
 
 export enum DeploymentAppTypes {
@@ -698,6 +712,7 @@ export interface CDMaterialsMetaInfo {
      */
     requestedUserId: number
     runtimeParams: RuntimeParamsListItemType[]
+    deploymentBlockedState?: PolicyBlockInfo
 }
 
 export interface ImagePromotionMaterialInfo {
@@ -789,7 +804,7 @@ export interface Strategy {
     default?: boolean
 }
 
-export interface CDStage {
+export interface CDStage extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     status: string
     name: string
     triggerType: 'AUTOMATIC' | 'MANUAL'
@@ -801,7 +816,7 @@ export interface CDStageConfigMapSecretNames {
     secrets: any[]
 }
 
-export interface PrePostDeployStageType extends MandatoryPluginBaseStateType {
+export interface PrePostDeployStageType extends MandatoryPluginBaseStateType, Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     isValid: boolean
     steps: TaskErrorObj[]
     triggerType: string
@@ -809,7 +824,7 @@ export interface PrePostDeployStageType extends MandatoryPluginBaseStateType {
     status: string
 }
 
-export interface CdPipeline {
+export interface CdPipeline extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     id: number
     environmentId: number
     environmentName?: string
@@ -841,6 +856,7 @@ export interface CdPipeline {
     isProdEnv?: boolean
     isGitOpsRepoNotConfigured?: boolean
     isDeploymentBlocked?: boolean
+    isTriggerBlocked?: boolean
 }
 
 export interface ExternalCiConfig {
