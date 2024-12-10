@@ -5,7 +5,7 @@ import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 
 export type SelectTextAreaProps = Pick<SelectPickerProps<string, false>, 'inputId' | 'options'> &
-    Pick<ResizableTagTextAreaProps, 'refVar' | 'dependentRef'> & {
+    Pick<ResizableTagTextAreaProps, 'refVar' | 'dependentRefs'> & {
         value: string
         Icon?: ReactElement
         onChange?: (selectedValue: SelectPickerOptionType<string>) => void

@@ -21,7 +21,7 @@ export const SelectTextArea = ({
     inputId,
     placeholder,
     refVar,
-    dependentRef,
+    dependentRefs,
     disabled,
     selectPickerProps,
     textAreaProps,
@@ -68,7 +68,7 @@ export const SelectTextArea = ({
                 {...textAreaProps}
                 id={inputId}
                 refVar={refVar}
-                dependentRef={dependentRef}
+                dependentRefs={dependentRefs}
                 className={`${textAreaProps?.className || ''} ${disabled ? 'cursor-not-allowed' : ''} ${!value ? 'dc__hide-section' : ''}`}
                 value={value}
                 onChange={onTextAreaChange}

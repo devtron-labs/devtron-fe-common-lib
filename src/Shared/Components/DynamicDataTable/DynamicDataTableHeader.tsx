@@ -34,6 +34,8 @@ export const DynamicDataTableHeader = <K extends string>({
     const isActionButtonAtTheStart =
         getActionButtonPosition({ headers, actionButtonConfig }) === 0 && actionButtonConfig.position !== 'end'
 
+    const handleSorting = (key: K) => () => sortingConfig?.handleSorting(key)
+
     // RENDERERS
     const renderHeaderCell = ({ key, label, isSortable, renderHelpTextForHeader }: DynamicDataTableHeaderType<K>) => (
         <div
@@ -44,7 +46,7 @@ export const DynamicDataTableHeader = <K extends string>({
                 <button
                     type="button"
                     className="cn-7 fs-12 lh-20-imp fw-6 flexbox dc__align-items-center dc__gap-2 dc__transparent"
-                    onClick={sortingConfig?.handleSorting}
+                    onClick={handleSorting(key)}
                 >
                     {label}
                     <ICArrowDown
@@ -80,7 +82,7 @@ export const DynamicDataTableHeader = <K extends string>({
     return (
         <div className={`bcn-2 p-1 ${hasRows ? 'dc__top-radius-4' : 'br-4'}`}>
             <div
-                className="dynamic-data-table two-columns w-100 bcn-1 br-4"
+                className="dynamic-data-table header-column w-100 bcn-1 br-4"
                 style={{ gridTemplateColumns: headerGridTemplateColumn }}
             >
                 <div className="dynamic-data-table__row">
