@@ -125,6 +125,7 @@ export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
     documentationLink?: string
     documentationLinkText?: string
     children: React.ReactElement<any>
+    disableClose?: boolean
 }
 
 export interface InfoIconTippyProps
@@ -288,7 +289,6 @@ export interface PopupMenuType {
     autoClose?: boolean
     autoPosition?: boolean
     shouldPreventDefault?: boolean
-    disableClose?: boolean
 }
 
 export interface PopupMenuButtonType {

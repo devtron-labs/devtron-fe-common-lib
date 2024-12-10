@@ -34,7 +34,6 @@ const PopupMenu = ({
     autoClose = false,
     autoPosition = false,
     shouldPreventDefault = false,
-    disableClose,
 }: PopupMenuType) => {
     const [popupPosition, setPopupPosition] = React.useState(null)
     const [opacity, setOpacity] = React.useState(0)
@@ -115,7 +114,7 @@ const PopupMenu = ({
     }
 
     const handleClose = (e, inOrOut) => {
-        if (!disableClose && (autoClose || inOrOut === 'out')) {
+        if (autoClose || inOrOut === 'out') {
             if (observer && observer.current && observer.current.disconnect) observer.current.disconnect()
             setOpacity(0)
             setPopupPosition(null)
