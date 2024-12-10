@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { DetailedHTMLProps, MutableRefObject, TextareaHTMLAttributes } from 'react'
 import { KEY_VALUE } from '../Constants'
 import { OptionType } from '../Types'
 
@@ -68,25 +69,18 @@ export interface TagLabelValueSelectorType {
     tagInputType?: KEY_VALUE
     placeholder?: string
     tabIndex?: number
-    refVar?: React.MutableRefObject<HTMLTextAreaElement>
-    dependentRef?: React.MutableRefObject<HTMLTextAreaElement>
+    refVar?: MutableRefObject<HTMLTextAreaElement>
+    dependentRef?: MutableRefObject<HTMLTextAreaElement>
     noBackDrop?: boolean
 }
 
-export interface ResizableTagTextAreaProps {
-    className?: string
+export interface ResizableTagTextAreaProps
+    extends Omit<DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>, 'value'> {
     minHeight?: number
     maxHeight?: number
-    value?: string
-    onChange?: (e) => void
-    onBlur?: (e) => void
-    onFocus?: (e) => void
-    placeholder?: string
-    tabIndex?: number
-    refVar?: React.MutableRefObject<HTMLTextAreaElement>
-    dependentRef?: React.MutableRefObject<HTMLTextAreaElement>
-    dataTestId?: string
-    handleKeyDown?: any
-    disabled?: boolean
+    value: string
+    refVar?: MutableRefObject<HTMLTextAreaElement>
+    dependentRef?: MutableRefObject<HTMLTextAreaElement>
+    dependentRefs?: Record<string | number, MutableRefObject<HTMLTextAreaElement>>
     disableOnBlurResizeToMinHeight?: boolean
 }

@@ -188,6 +188,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
             animation={animation || 'fade'}
             duration={duration || 300}
             visible={props.visible}
+            appendTo={props.appendTo}
         >
             {children}
         </Tippy>
