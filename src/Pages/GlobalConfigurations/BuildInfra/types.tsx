@@ -21,7 +21,7 @@ import { ServerErrors } from '../../../Common'
 
 /**
  * Unique actions that will be dispatched and,
- * Keeping some values (cpu_limit, etc) in sync with backend
+ * Keeping values (cpu_limit, etc) in sync with backend
  */
 export enum BuildInfraConfigTypes {
     CPU_LIMIT = 'cpu_limit',
@@ -29,6 +29,8 @@ export enum BuildInfraConfigTypes {
     MEMORY_LIMIT = 'memory_limit',
     MEMORY_REQUEST = 'memory_request',
     BUILD_TIMEOUT = 'timeout',
+    NODE_SELECTOR = 'node_selector',
+    TOLERANCE = 'tolerations',
 }
 
 /**
@@ -47,6 +49,8 @@ export enum BuildInfraLocators {
     MEMORY = 'memory',
     // This name can be also different from BuildInfraConfigTypes[BUILD_TIMEOUT] in case we want to show different label
     BUILD_TIMEOUT = 'timeout',
+    NODE_SELECTOR = 'node selector',
+    TOLERANCE = 'tolerance',
 }
 
 // FIXME: Derive this from BuildInfraLocators
@@ -60,16 +64,9 @@ export enum BuildInfraInheritActions {
     DE_ACTIVATE_BUILD_TIMEOUT = 'de_activate_timeout',
 }
 
-export const BuildInfraConfigActionMap = {
-    [BuildInfraConfigTypes.BUILD_TIMEOUT]: BuildInfraLocators.BUILD_TIMEOUT,
-    [BuildInfraConfigTypes.CPU_LIMIT]: BuildInfraLocators.CPU,
-    [BuildInfraConfigTypes.CPU_REQUEST]: BuildInfraLocators.CPU,
-    [BuildInfraConfigTypes.MEMORY_LIMIT]: BuildInfraLocators.MEMORY,
-    [BuildInfraConfigTypes.MEMORY_REQUEST]: BuildInfraLocators.MEMORY,
-}
-
 export enum BuildInfraProfileVariants {
-    DEFAULT = 'DEFAULT',
+    // TODO: Can look to change name to GLOBAL as well
+    DEFAULT = 'GLOBAL',
     NORMAL = 'NORMAL',
     CUSTOM = 'CUSTOM',
 }
@@ -88,11 +85,20 @@ export interface BuildInfraDescriptorProps {
     tippyAdditionalContent?: ReactNode
 }
 
+export type NumericBuildInfraConfigTypes = Extract<
+    BuildInfraConfigTypes,
+    | BuildInfraConfigTypes.BUILD_TIMEOUT
+    | BuildInfraConfigTypes.CPU_LIMIT
+    | BuildInfraConfigTypes.CPU_REQUEST
+    | BuildInfraConfigTypes.MEMORY_LIMIT
+    | BuildInfraConfigTypes.MEMORY_REQUEST
+>
+
 export interface BuildInfraActionType {
     /**
      * Type of action to be dispatched, would be suffixed with type of change
      */
-    actionType: BuildInfraConfigTypes
+    actionType: NumericBuildInfraConfigTypes
     /**
      * Label to be shown above input
      */
@@ -137,52 +143,108 @@ export type ConfigurationUnitMapType = {
     [key: ConfigurationUnitType['name']]: ConfigurationUnitType
 }
 
-export type BuildInfraUnitsMapType = {
-    [key in BuildInfraConfigTypes]: ConfigurationUnitMapType
+export type BuildInfraUnitsMapType = Record<NumericBuildInfraConfigTypes, ConfigurationUnitMapType>
+
+export interface BuildInfraNodeSelectorValueType {
+    key: string
+    value: string
 }
 
-export interface BuildInfraConfigValuesType {
-    value: string
-    unit?: ConfigurationUnitType['name']
+export enum BuildInfraToleranceOperatorType {
+    EXISTS = 'Exists',
+    EQUALS = 'Equals',
 }
+
+export enum BuildInfraToleranceEffectType {
+    NO_EXECUTE = 'NoExecute',
+    NO_SCHEDULE = 'NoSchedule',
+    PREFER_NO_SCHEDULE = 'PreferNoSchedule',
+}
+
+export type BuildInfraToleranceValueType = {
+    key: string
+    effect: BuildInfraToleranceEffectType
+} & (
+    | {
+          operator: BuildInfraToleranceOperatorType.EQUALS
+          value: string
+      }
+    | {
+          operator: BuildInfraToleranceOperatorType.EXISTS
+          value?: never
+      }
+)
+
+export type BuildInfraConfigValuesType =
+    | {
+          key: NumericBuildInfraConfigTypes
+          value: number
+          unit: ConfigurationUnitType['name']
+      }
+    | {
+          key: BuildInfraConfigTypes.NODE_SELECTOR
+          value: BuildInfraNodeSelectorValueType[]
+          unit?: never
+      }
+    | {
+          key: BuildInfraConfigTypes.TOLERANCE
+          value: BuildInfraToleranceValueType[]
+          unit?: never
+      }
 
 interface BuildInfraProfileConfigBase {
     id?: number
-    key: BuildInfraConfigTypes
-    profileName: string
+    /**
+     * This key holds value when we are inheriting values from other profiles in case of listing
+     */
+    profileName?: string
     active: boolean
+    targetPlatform: string
 }
 
-export interface BuildInfraProfileConfigResponseDataType
-    extends BuildInfraConfigValuesType,
-        BuildInfraProfileConfigBase {}
+export type BuildInfraConfigInfoType = BuildInfraConfigValuesType & BuildInfraProfileConfigBase
 
-export interface BuildInfraConfigurationType extends BuildInfraConfigValuesType, BuildInfraProfileConfigBase {
+export type BuildInfraConfigurationDTO = BuildInfraConfigValuesType &
+    Omit<BuildInfraProfileConfigBase, 'targetPlatform'>
+
+/**
+ * Maps target platform to its configuration values
+ */
+export type BuildInfraPlatformConfigurationMapDTO = Record<string, BuildInfraConfigurationDTO[]>
+
+export type BuildInfraConfigurationType = BuildInfraConfigInfoType & {
+    /**
+     * Used to display values in case of inheriting data
+     */
     defaultValue: BuildInfraConfigValuesType
 }
 
-export type BuildInfraConfigurationMapWithoutDefaultType = {
-    [key in BuildInfraConfigTypes]: BuildInfraConfigValuesType & BuildInfraProfileConfigBase
+export type BuildInfraConfigurationMapTypeWithoutDefaultFallback = {
+    [key in BuildInfraConfigTypes]?: BuildInfraConfigInfoType
 }
 
-export type BuildInfraConfigurationMapType = {
-    [key in BuildInfraConfigTypes]: BuildInfraConfigurationType
-}
+export type BuildInfraConfigurationMapType = Record<BuildInfraConfigTypes, BuildInfraConfigurationType>
 
-export interface BuildInfraProfileBase {
+interface BuildInfraProfileBaseDTO {
     id?: number
-    name: string
+    name?: string
     description: string
     type: BuildInfraProfileVariants
-    appCount: number
+    appCount?: number
+    active?: boolean
 }
 
-export interface BuildInfraProfileResponseDataType extends BuildInfraProfileBase {
-    configurations: BuildInfraProfileConfigResponseDataType[]
+export interface BuildInfraProfileBase extends BuildInfraProfileBaseDTO {}
+
+export interface BuildInfraProfileInfoDTO extends BuildInfraProfileBaseDTO {
+    configurations: BuildInfraPlatformConfigurationMapDTO
 }
 
 export interface BuildInfraProfileData extends BuildInfraProfileBase {
-    configurations: BuildInfraConfigurationMapType
+    /**
+     * Maps platformName to its configuration values
+     */
+    configurations: Record<string, BuildInfraConfigurationMapType>
 }
 
 export interface GetBuildInfraProfileType {
@@ -193,6 +255,10 @@ export interface GetBuildInfraProfileType {
 export interface BuildInfraProfileResponseType {
     configurationUnits: BuildInfraUnitsMapType | null
     profile: BuildInfraProfileData | null
+    /**
+     * To be used in case user is creating configuration for new platform
+     */
+    fallbackPlatformConfigurationMap: BuildInfraProfileData['configurations']
 }
 
 export interface UseBuildInfraFormProps {
@@ -210,19 +276,46 @@ export interface UseBuildInfraFormProps {
     handleSuccessRedirection?: () => void
 }
 
+export enum BuildInfraProfileAdditionalErrorKeysType {
+    NODE_SELECTOR_KEY = 'node_selector_key',
+    NODE_SELECTOR_VALUE = 'node_selector_value',
+    TOLERANCE_KEY = 'tolerance_key',
+    TOLERANCE_VALUE = 'tolerance_value',
+}
+
+/**
+ * Would be maintaining error state for name and description irrespective of platform
+ * For error states related to platform, we would not be letting user to switch platform if there are errors
+ */
 export type ProfileInputErrorType = {
-    [key in BuildInfraConfigTypes | BuildInfraMetaConfigTypes]: string
+    [key in NumericBuildInfraConfigTypes | BuildInfraMetaConfigTypes | BuildInfraProfileAdditionalErrorKeysType]: string
 }
 
 export interface ProfileInputDispatchDataType {
-    value: string
-    unit?: string
+    targetPlatform: string
 }
 
-export interface HandleProfileInputChangeType {
-    action: BuildInfraConfigTypes | BuildInfraInheritActions | BuildInfraMetaConfigTypes
-    data?: ProfileInputDispatchDataType
+interface NumericBuildInfraConfigPayloadType {
+    value: number
+    unit: string
 }
+
+export type HandleProfileInputChangeType =
+    | {
+          action: NumericBuildInfraConfigTypes
+          data: ProfileInputDispatchDataType & NumericBuildInfraConfigPayloadType
+      }
+    | {
+          action: BuildInfraMetaConfigTypes
+          //   Added targetPlatform partially even though not required, to keep the type consistent and remove duplication in case of handleChange
+          data: Partial<ProfileInputDispatchDataType> & {
+              value: string
+          }
+      }
+    | {
+          action: BuildInfraInheritActions
+          data: ProfileInputDispatchDataType
+      }
 
 export interface UseBuildInfraFormResponseType {
     isLoading: boolean
@@ -236,7 +329,9 @@ export interface UseBuildInfraFormResponseType {
     handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>
 }
 
-export interface BuildInfraFormItemProps extends Pick<BuildInfraFormFieldType, 'marker' | 'heading'> {
+export interface BuildInfraFormItemProps
+    extends Pick<BuildInfraFormFieldType, 'marker' | 'heading'>,
+        Partial<Pick<BuildInfraProfileConfigBase, 'targetPlatform'>> {
     children?: ReactNode
     /**
      * If true, means profile is inheriting values from other profile (e.g, default)
@@ -256,8 +351,8 @@ export interface BuildInfraFormItemProps extends Pick<BuildInfraFormFieldType, '
 }
 
 export interface ValidateRequestLimitType {
-    request: BuildInfraConfigValuesType
-    limit: BuildInfraConfigValuesType
+    request: NumericBuildInfraConfigPayloadType
+    limit: NumericBuildInfraConfigPayloadType
     unitsMap: ConfigurationUnitMapType
 }
 
@@ -273,9 +368,11 @@ export interface BuildInfraConfigFormProps
     configurationContainerLabel?: ReactNode
 }
 
-export interface BuildInfraFormActionProps extends BuildInfraActionType {
+export interface BuildInfraFormActionProps
+    extends BuildInfraActionType,
+        Pick<BuildInfraFormItemProps, 'targetPlatform'> {
     handleProfileInputChange: UseBuildInfraFormResponseType['handleProfileInputChange']
-    currentValue: BuildInfraConfigValuesType['value']
+    currentValue: number
     error?: string
     isRequired?: boolean
     profileUnitsMap?: ConfigurationUnitMapType
@@ -301,28 +398,15 @@ export interface UpdateBuildInfraProfileType extends Pick<UseBuildInfraFormRespo
 
 export interface CreateBuildInfraProfileType extends Pick<UseBuildInfraFormResponseType, 'profileInput'> {}
 
-export interface CreateBuildInfraServiceConfigurationType {
-    key: BuildInfraConfigTypes
-    value: string | number
-    active: boolean
-    unit?: string
-    /**
-     * Would send for those that are available in profileInput
-     */
-    id?: number
-}
-
-export interface CreateBuildInfraServicePayloadType {
-    name: string
-    description: string
-    type: BuildInfraProfileVariants
-    configurations: CreateBuildInfraServiceConfigurationType[]
-}
-
 export interface BuildInfraInputFieldComponentProps {
     handleProfileInputChange: UseBuildInfraFormResponseType['handleProfileInputChange']
     currentValue: BuildInfraConfigValuesType['value']
     error?: string
+}
+
+export interface BuildInfraProfileMetaFieldProps
+    extends Pick<BuildInfraInputFieldComponentProps, 'error' | 'handleProfileInputChange'> {
+    currentValue: string
 }
 
 export interface InheritingHeaderProps {
@@ -337,19 +421,29 @@ export interface BuildInfraConfigResponseDataType {
     units: ConfigurationUnitType[]
 }
 
-interface BaseBuildInfraProfileResponseType {
-    defaultConfigurations: BuildInfraProfileConfigResponseDataType[]
+interface BaseBuildInfraProfileDTO {
+    defaultConfigurations: BuildInfraPlatformConfigurationMapDTO
     configurationUnits: BuildInfraUnitsMapType
 }
 
-export interface BuildInfraListResponseType extends BaseBuildInfraProfileResponseType {
-    profiles: BuildInfraProfileResponseDataType[]
+export interface BuildInfraListResponseType extends BaseBuildInfraProfileDTO {
+    profiles: BuildInfraProfileInfoDTO[]
 }
 
-export interface BuildInfraProfileAPIResponseType extends BaseBuildInfraProfileResponseType {
-    profile: BuildInfraProfileResponseDataType
+export interface BuildInfraProfileDTO extends BaseBuildInfraProfileDTO {
+    profile: BuildInfraProfileInfoDTO
 }
 
-export interface BuildInfraProfileTransformerType
-    extends BuildInfraProfileAPIResponseType,
+export interface BuildInfraProfileTransformerParamsType
+    extends BuildInfraProfileDTO,
         Pick<GetBuildInfraProfileType, 'fromCreateView'> {}
+
+export interface GetPlatformConfigurationsWithDefaultValuesParamsType {
+    profileConfigurationsMap: BuildInfraConfigurationMapTypeWithoutDefaultFallback
+    defaultConfigurationsMap: BuildInfraConfigurationMapTypeWithoutDefaultFallback
+    platformName: string
+}
+
+export enum BuildInfraAPIVersionType {
+    ALPHA1 = 'alpha1',
+}

@@ -19,7 +19,7 @@ import { SelectPicker } from '@Shared/Components/SelectPicker'
 import { ComponentSizeType } from '@Shared/constants'
 import { BuildInfraFormActionProps } from './types'
 import { OptionType } from '../../../Common'
-import { BUILD_INFRA_INPUT_CONSTRAINTS } from './constants'
+import { BUILD_INFRA_INPUT_CONSTRAINTS, DEFAULT_PROFILE_NAME } from './constants'
 import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
 
 /**
@@ -35,21 +35,34 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
     handleProfileInputChange,
     currentUnitName,
     currentValue,
+    targetPlatform = DEFAULT_PROFILE_NAME,
 }) => {
     const handleUnitChange = (selectedUnit: OptionType) => {
         const data = {
             unit: selectedUnit.label,
-            value: currentValue,
+            value: +currentValue,
         }
-        handleProfileInputChange({ action: actionType, data })
+        handleProfileInputChange({
+            action: actionType,
+            data: {
+                targetPlatform,
+                ...data,
+            },
+        })
     }
 
     const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
         const data = {
             unit: currentUnitName,
-            value: e.currentTarget.value,
+            value: +e.currentTarget.value,
         }
-        handleProfileInputChange({ action: actionType, data })
+        handleProfileInputChange({
+            action: actionType,
+            data: {
+                targetPlatform,
+                ...data,
+            },
+        })
     }
 
     const unitOptions = useMemo(() => {
@@ -102,6 +115,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         onChange={handleUnitChange}
                         isSearchable={false}
                         size={ComponentSizeType.large}
+                        menuSize={ComponentSizeType.small}
                         shouldMenuAlignRight
                     />
                 )}

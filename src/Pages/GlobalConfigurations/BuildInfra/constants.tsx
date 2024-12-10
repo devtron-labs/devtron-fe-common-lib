@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICCpu } from '../../../Assets/Icon/ic-cpu.svg'
-import { ReactComponent as ICMemory } from '../../../Assets/Icon/ic-memory.svg'
-import { ReactComponent as ICTimer } from '../../../Assets/Icon/ic-timer.svg'
-import { UseBreadcrumbProps } from '../../../Common/BreadCrumb/Types'
+import { ReactComponent as ICCpu } from '@Icons/ic-cpu.svg'
+import { ReactComponent as ICMemory } from '@Icons/ic-memory.svg'
+import { ReactComponent as ICTimer } from '@Icons/ic-timer.svg'
+import { ReactComponent as ICSprayCan } from '@Icons/ic-spray-can.svg'
+import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
+import { UseBreadcrumbProps } from '@Common/BreadCrumb/Types'
 import {
     BuildInfraConfigTypes,
     BuildInfraFormFieldType,
@@ -27,6 +29,8 @@ import {
     BuildInfraProfileBase,
     BuildInfraProfileVariants,
     HandleProfileInputChangeType,
+    BuildInfraProfileAdditionalErrorKeysType,
+    BuildInfraAPIVersionType,
 } from './types'
 
 export const BUILD_INFRA_INPUT_CONSTRAINTS = {
@@ -78,10 +82,18 @@ export const BUILD_INFRA_BREADCRUMB: UseBreadcrumbProps = {
     },
 }
 
-export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
+export const BUILD_INFRA_LOCATOR_MARKER_MAP: Readonly<Record<BuildInfraLocators, BuildInfraFormFieldType['marker']>> = {
+    [BuildInfraLocators.CPU]: ICCpu,
+    [BuildInfraLocators.MEMORY]: ICMemory,
+    [BuildInfraLocators.BUILD_TIMEOUT]: ICTimer,
+    [BuildInfraLocators.NODE_SELECTOR]: ICSprayCan,
+    [BuildInfraLocators.TOLERANCE]: ICTag,
+}
+
+export const BUILD_INFRA_FORM_FIELDS: Readonly<BuildInfraFormFieldType[]> = [
     {
         heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20 w-240 dc__no-shrink">CPU (Request - Limit)</h3>,
-        marker: ICCpu,
+        marker: BUILD_INFRA_LOCATOR_MARKER_MAP[BuildInfraLocators.CPU],
         actions: [
             {
                 actionType: BuildInfraConfigTypes.CPU_REQUEST,
@@ -98,7 +110,7 @@ export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
     },
     {
         heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20 w-240 dc__no-shrink">Memory (Request - Limit)</h3>,
-        marker: ICMemory,
+        marker: BUILD_INFRA_LOCATOR_MARKER_MAP[BuildInfraLocators.MEMORY],
         actions: [
             {
                 actionType: BuildInfraConfigTypes.MEMORY_REQUEST,
@@ -115,7 +127,7 @@ export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
     },
     {
         heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20 w-240 dc__no-shrink">Build timeout</h3>,
-        marker: ICTimer,
+        marker: BUILD_INFRA_LOCATOR_MARKER_MAP[BuildInfraLocators.BUILD_TIMEOUT],
         actions: [
             {
                 actionType: BuildInfraConfigTypes.BUILD_TIMEOUT,
@@ -128,13 +140,17 @@ export const BUILD_INFRA_FORM_FIELDS: BuildInfraFormFieldType[] = [
 ]
 
 export const PROFILE_INPUT_ERROR_FIELDS = Object.fromEntries(
-    Object.values({ ...BuildInfraConfigTypes, ...BuildInfraMetaConfigTypes }).map((value) => [value, null]),
+    Object.values({
+        ...BuildInfraConfigTypes,
+        ...BuildInfraMetaConfigTypes,
+        ...BuildInfraProfileAdditionalErrorKeysType,
+    }).map((value) => [value, null]),
 ) as ProfileInputErrorType
 
 // fields required to be filled before submitting the form in create view, since we pre-populate the form with default values so no need in configs
 export const CREATE_MODE_REQUIRED_INPUT_FIELDS = [BuildInfraMetaConfigTypes.NAME]
 
-export const DEFAULT_PROFILE_NAME = 'default' as const
+export const DEFAULT_PROFILE_NAME = 'global' as const
 
 export const CREATE_PROFILE_BASE_VALUE: BuildInfraProfileBase = {
     name: '',
@@ -143,12 +159,10 @@ export const CREATE_PROFILE_BASE_VALUE: BuildInfraProfileBase = {
     appCount: 0,
 }
 
-export const CREATE_VIEW_CHECKED_CONFIGS = {
-    [BuildInfraConfigTypes.CPU_REQUEST]: true,
-    [BuildInfraConfigTypes.CPU_LIMIT]: true,
-} as const
-
 export const BUILD_INFRA_TEST_IDS = {
     SUBMIT_BUTTON: 'build-infra-submit-button',
     CANCEL_BUTTON: 'build-infra-cancel-button',
 } as const
+
+export const BUILD_INFRA_DEFAULT_PLATFORM_NAME = 'default' as const
+export const BUILD_INFRA_LATEST_API_VERSION: BuildInfraAPIVersionType = BuildInfraAPIVersionType.ALPHA1
