@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReleaseTag } from '../../Common'
+import { ReleaseTag, UserApprovalMetadataType } from '../../Common'
 
 interface WebhookDataType {
     id: number
@@ -181,6 +181,7 @@ export interface DraftMetadataDTO {
     commentsCount: number
     dataEncrypted: boolean
     isAppAdmin: boolean
+    userApprovalMetadata: UserApprovalMetadataType
 }
 
 export enum CMSecretExternalType {

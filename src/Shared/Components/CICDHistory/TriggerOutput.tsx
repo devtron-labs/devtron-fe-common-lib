@@ -703,6 +703,7 @@ const TriggerOutput = ({
             const promotionApprovalMetadata = triggerHistory.get(syncTriggerId)?.promotionApprovalMetadata
             const runSource = triggerHistory.get(syncTriggerId)?.runSource
             const targetConfig = triggerHistory.get(syncTriggerId)?.targetConfig
+            const userApprovalMetadata = triggerHistory.get(syncTriggerId)?.userApprovalMetadata
 
             // These changes are not subject to change after refresh, add data which will not change
             const additionalDataObject = {
@@ -711,6 +712,7 @@ const TriggerOutput = ({
                 ...(promotionApprovalMetadata ? { promotionApprovalMetadata } : {}),
                 ...(runSource ? { runSource } : {}),
                 ...(targetConfig ? { targetConfig } : {}),
+                ...(userApprovalMetadata ? { userApprovalMetadata } : {}),
             }
             setTriggerHistory((newTriggerHistory) => {
                 newTriggerHistory.set(syncTriggerId, { ...syncTriggerDetail, ...additionalDataObject })
