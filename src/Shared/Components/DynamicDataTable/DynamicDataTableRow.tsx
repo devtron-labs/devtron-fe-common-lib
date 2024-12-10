@@ -2,7 +2,7 @@ import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect,
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { ReactComponent as ICClose } from '@Icons/ic-cross.svg'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 import { Tooltip } from '@Common/Tooltip'
 

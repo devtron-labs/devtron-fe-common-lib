@@ -39,7 +39,7 @@ export type DynamicDataTableHeaderType<K extends string> = {
     /** An optional boolean to control the visibility of the column. */
     isHidden?: boolean
     /** An optional boolean to show the column */
-    renderHelpTextForHeader?: () => ReactNode
+    renderAdditionalContent?: () => ReactNode
 }
 
 export enum DynamicDataTableRowDataType {
