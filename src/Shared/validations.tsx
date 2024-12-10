@@ -15,6 +15,7 @@
  */
 
 import { getSanitizedIframe } from '@Common/Helper'
+import SchemaValidator from 'ajv'
 import { URLProtocolType } from './types'
 
 export interface ValidationResponseType {
@@ -333,7 +334,12 @@ export const validateDisplayName = (name: string): ValidationResponseType =>
 export const validateJSON = (json: string): ValidationResponseType => {
     try {
         if (json) {
-            JSON.parse(json)
+            const parsedJson = JSON.parse(json)
+
+            // NOTE: Ajv uses json schema draft 07 by default
+            // if compile step doesn't throw any errors we can safely say the
+            // json schema is correct
+            new SchemaValidator({ strict: true }).compile(parsedJson)
         }
         return {
             isValid: true,
