@@ -116,6 +116,7 @@ export const ROUTES = {
     USER_LIST_MIN: 'user/list/min',
     CONFIG_DATA: 'config/data',
     K8S_RESOURCE_LIST: 'k8s/resource/list',
+    CONFIG_COMPARE_SECRET: 'config/compare/secret',
 }
 
 export enum KEY_VALUE {
@@ -511,6 +512,7 @@ export const API_STATUS_CODES = {
     UNAUTHORIZED: 401,
     PERMISSION_DENIED: 403,
     NOT_FOUND: 404,
+    REQUEST_TIMEOUT: 408,
     EXPECTATION_FAILED: 417,
     UNPROCESSABLE_ENTITY: 422,
     LOCKED: 423,
