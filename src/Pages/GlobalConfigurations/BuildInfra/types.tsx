@@ -62,6 +62,10 @@ export enum BuildInfraInheritActions {
     DE_ACTIVATE_MEMORY = 'de_activate_memory',
     ACTIVATE_BUILD_TIMEOUT = 'activate_timeout',
     DE_ACTIVATE_BUILD_TIMEOUT = 'de_activate_timeout',
+    ACTIVATE_NODE_SELECTOR = 'activate_node selector',
+    DE_ACTIVATE_NODE_SELECTOR = 'de_activate_node selector',
+    ACTIVATE_TOLERANCE = 'activate_tolerance',
+    DE_ACTIVATE_TOLERANCE = 'de_activate_tolerance',
 }
 
 export enum BuildInfraProfileVariants {
@@ -287,9 +291,13 @@ export enum BuildInfraProfileAdditionalErrorKeysType {
  * Would be maintaining error state for name and description irrespective of platform
  * For error states related to platform, we would not be letting user to switch platform if there are errors
  */
-export type ProfileInputErrorType = {
-    [key in NumericBuildInfraConfigTypes | BuildInfraMetaConfigTypes | BuildInfraProfileAdditionalErrorKeysType]: string
-}
+export type ProfileInputErrorType =
+    | {
+          [key in NumericBuildInfraConfigTypes | BuildInfraMetaConfigTypes]: string
+      }
+    | {
+          [key in BuildInfraProfileAdditionalErrorKeysType]: Record<string, string>
+      }
 
 export interface ProfileInputDispatchDataType {
     targetPlatform: string
@@ -298,6 +306,13 @@ export interface ProfileInputDispatchDataType {
 interface NumericBuildInfraConfigPayloadType {
     value: number
     unit: string
+}
+
+export enum BuildInfraProfileInputActionType {
+    ADD_TARGET_PLATFORM = 'add_target_platform',
+    REMOVE_TARGET_PLATFORM = 'remove_target_platform',
+    RENAME_TARGET_PLATFORM = 'rename_target_platform',
+    RESTORE_PROFILE_CONFIG_SNAPSHOT = 'restore_profile_config_snapshot',
 }
 
 export type HandleProfileInputChangeType =
@@ -313,8 +328,24 @@ export type HandleProfileInputChangeType =
           }
       }
     | {
-          action: BuildInfraInheritActions
+          action:
+              | BuildInfraInheritActions
+              | BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM
+              | BuildInfraProfileInputActionType.REMOVE_TARGET_PLATFORM
           data: ProfileInputDispatchDataType
+      }
+    | {
+          action: BuildInfraProfileInputActionType.RENAME_TARGET_PLATFORM
+          data: {
+              originalPlatformName: string
+              newPlatformName: string
+          } & Partial<ProfileInputDispatchDataType>
+      }
+    | {
+          action: BuildInfraProfileInputActionType.RESTORE_PROFILE_CONFIG_SNAPSHOT
+          data: {
+              configSnapshot: BuildInfraProfileData['configurations']
+          } & Partial<ProfileInputDispatchDataType>
       }
 
 export interface UseBuildInfraFormResponseType {

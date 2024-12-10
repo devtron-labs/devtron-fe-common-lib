@@ -28,15 +28,18 @@ import {
     BuildInfraInheritActions,
     BuildInfraMetaConfigTypes,
     BuildInfraPlatformConfigurationMapDTO,
+    BuildInfraProfileAdditionalErrorKeysType,
     BuildInfraProfileBase,
     BuildInfraProfileData,
     BuildInfraProfileInfoDTO,
+    BuildInfraProfileInputActionType,
     BuildInfraProfileResponseType,
     BuildInfraProfileTransformerParamsType,
     BuildInfraToleranceOperatorType,
     CreateBuildInfraProfileType,
     GetPlatformConfigurationsWithDefaultValuesParamsType,
     HandleProfileInputChangeType,
+    NumericBuildInfraConfigTypes,
     ProfileInputErrorType,
     UseBuildInfraFormProps,
     UseBuildInfraFormResponseType,
@@ -207,7 +210,8 @@ export const useBuildInfraForm = ({
     const handleProfileInputChange = ({ action, data }: HandleProfileInputChangeType) => {
         const currentInput = { ...profileInput }
         const currentInputErrors = { ...profileInputErrors }
-        const { targetPlatform } = data
+        const { targetPlatform: targetPlatformFromData } = data
+        const targetPlatform = targetPlatformFromData || ''
         const currentConfiguration = currentInput.configurations[targetPlatform]
         const lastSavedConfiguration = profileResponse.profile.configurations[targetPlatform]
 
@@ -215,14 +219,14 @@ export const useBuildInfraForm = ({
             case BuildInfraMetaConfigTypes.DESCRIPTION: {
                 const { value } = data
                 currentInput.description = value
-                currentInputErrors.description = validateDescription(value).message
+                currentInputErrors[BuildInfraMetaConfigTypes.DESCRIPTION] = validateDescription(value).message
                 break
             }
 
             case BuildInfraMetaConfigTypes.NAME: {
                 const { value } = data
                 currentInput.name = value
-                currentInputErrors.name = validateName(value).message
+                currentInputErrors[BuildInfraMetaConfigTypes.NAME] = validateName(value).message
                 break
             }
 
@@ -453,6 +457,77 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = null
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = null
                 break
+            case BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM: {
+                if (currentInput.configurations[targetPlatform]) {
+                    ToastManager.showToast({
+                        variant: ToastVariantType.error,
+                        description: 'Platform already exists',
+                    })
+                    return
+                }
+
+                currentInput.configurations[targetPlatform] =
+                    profileResponse.fallbackPlatformConfigurationMap[targetPlatform] ||
+                    profileResponse.fallbackPlatformConfigurationMap[BUILD_INFRA_DEFAULT_PLATFORM_NAME]
+                break
+            }
+
+            case BuildInfraProfileInputActionType.REMOVE_TARGET_PLATFORM: {
+                if (!currentInput.configurations[targetPlatform]) {
+                    ToastManager.showToast({
+                        variant: ToastVariantType.error,
+                        description: 'Platform does not exist',
+                    })
+                    return
+                }
+
+                delete currentInput.configurations[targetPlatform]
+                break
+            }
+
+            case BuildInfraProfileInputActionType.RENAME_TARGET_PLATFORM: {
+                const { originalPlatformName, newPlatformName } = data
+                if (!currentInput.configurations[originalPlatformName]) {
+                    ToastManager.showToast({
+                        variant: ToastVariantType.error,
+                        description: 'Platform does not exist',
+                    })
+                    return
+                }
+
+                currentInput.configurations[newPlatformName] = currentInput.configurations[originalPlatformName]
+                delete currentInput.configurations[originalPlatformName]
+                break
+            }
+
+            case BuildInfraProfileInputActionType.RESTORE_PROFILE_CONFIG_SNAPSHOT: {
+                const { configSnapshot } = data
+                currentInput.configurations = configSnapshot
+                // TODO: Can write a complete handleValidation function to validate all fields
+                // TODO: Constant
+                const clearErrorFields: Record<
+                    NumericBuildInfraConfigTypes | BuildInfraProfileAdditionalErrorKeysType,
+                    true
+                > = {
+                    [BuildInfraConfigTypes.BUILD_TIMEOUT]: true,
+                    [BuildInfraConfigTypes.CPU_LIMIT]: true,
+                    [BuildInfraConfigTypes.CPU_REQUEST]: true,
+                    [BuildInfraConfigTypes.MEMORY_LIMIT]: true,
+                    [BuildInfraConfigTypes.MEMORY_REQUEST]: true,
+                    [BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY]: true,
+                    [BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_VALUE]: true,
+                    [BuildInfraProfileAdditionalErrorKeysType.TOLERANCE_KEY]: true,
+                    [BuildInfraProfileAdditionalErrorKeysType.TOLERANCE_VALUE]: true,
+                }
+
+                Object.keys(currentInputErrors).forEach((key) => {
+                    if (clearErrorFields[key]) {
+                        currentInputErrors[key] = null
+                    }
+                })
+
+                break
+            }
 
             default:
                 break

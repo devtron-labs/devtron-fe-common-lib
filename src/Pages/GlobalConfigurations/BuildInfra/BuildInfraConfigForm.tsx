@@ -21,7 +21,12 @@ import BuildInfraFormItem from './BuildInfraFormItem'
 import BuildInfraProfileDescriptionField from './BuildInfraDescriptionField'
 import BuildInfraProfileNameField from './BuildInfraProfileNameField'
 import { BUILD_INFRA_FORM_FIELDS, BUILD_INFRA_TEXT, DEFAULT_PROFILE_NAME } from './constants'
-import { BuildInfraActionType, BuildInfraConfigFormProps, InheritingHeaderProps } from './types'
+import {
+    BuildInfraActionType,
+    BuildInfraConfigFormProps,
+    BuildInfraMetaConfigTypes,
+    InheritingHeaderProps,
+} from './types'
 
 const InheritingHeader = ({
     defaultHeading,
@@ -81,13 +86,13 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
                     <BuildInfraProfileNameField
                         handleProfileInputChange={handleProfileInputChange}
                         currentValue={profileInput.name}
-                        error={profileInputErrors.name}
+                        error={profileInputErrors[BuildInfraMetaConfigTypes.NAME]}
                     />
 
                     <BuildInfraProfileDescriptionField
                         handleProfileInputChange={handleProfileInputChange}
                         currentValue={profileInput.description}
-                        error={profileInputErrors.description}
+                        error={profileInputErrors[BuildInfraMetaConfigTypes.DESCRIPTION]}
                     />
                 </div>
             )}

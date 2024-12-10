@@ -17,10 +17,10 @@
 import { FormEvent, FunctionComponent, useMemo } from 'react'
 import { SelectPicker } from '@Shared/Components/SelectPicker'
 import { ComponentSizeType } from '@Shared/constants'
+import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { BuildInfraFormActionProps } from './types'
 import { OptionType } from '../../../Common'
 import { BUILD_INFRA_INPUT_CONSTRAINTS, DEFAULT_PROFILE_NAME } from './constants'
-import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
 
 /**
  * In case need arise for variants break this CustomInput and Select as a separate component
