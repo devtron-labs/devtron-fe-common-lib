@@ -39,8 +39,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     headers,
     readOnly,
     isDeletionNotAllowed,
-    validationSchema = () => ({ isValid: true, errorMessages: [] }),
-    showError,
+    cellError = {},
     actionButtonConfig = null,
     onRowEdit,
     onRowDelete,
@@ -86,7 +85,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
 
             cellRef.current = updatedCellRef
         }
-    }, [rows])
+    }, [rows.length])
 
     // METHODS
     const onChange =
@@ -237,12 +236,12 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     )
 
     const renderErrorMessages = (row: DynamicDataTableRowType<K, CustomStateType>, key: K) => {
-        const { isValid, errorMessages } = !row.data[key].disabled
-            ? validationSchema(row.data[key].value, key, row)
-            : { isValid: true, errorMessages: [] }
-        const showErrorMessages = showError && !isValid
+        const { isValid, errorMessages } =
+            !row.data[key].disabled && cellError[row.id]?.[key]
+                ? cellError[row.id][key]
+                : { isValid: true, errorMessages: [] }
 
-        if (!showErrorMessages) {
+        if (isValid) {
             return null
         }
 
@@ -265,7 +264,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 plugins={[followCursor]}
             >
                 <div
-                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !isDisabled && !validationSchema(row.data[key].value, key, row).isValid ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
+                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${!isDisabled && !cellError[row.id]?.[key]?.isValid ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
                 >
                     {renderCellIcon(row, key, true)}
                     {renderCellContent(row, key)}
@@ -279,7 +278,13 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
         const actionButtonIndex = getActionButtonPosition({ headers, actionButtonConfig })
         if (actionButtonIndex === index) {
             const { renderer, position = 'start' } = actionButtonConfig
-            const actionButtonNode = <div className="dc__overflow-hidden flex top bcn-0">{renderer(row)}</div>
+            const actionButtonNode = (
+                <div
+                    className={`dc__overflow-hidden flex top bcn-0 ${(position === 'start' && key === headers[0].key) || (isDeletionNotAllowed && position === 'end' && key === headers[headers.length - 1].key) ? 'dynamic-data-table__cell' : ''}`}
+                >
+                    {renderer(row)}
+                </div>
+            )
 
             return position === 'start' ? (
                 <>

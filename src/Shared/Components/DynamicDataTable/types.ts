@@ -111,6 +111,23 @@ export type DynamicDataTableRowType<K extends string, CustomStateType = Record<s
     disableDelete?: boolean
 }
 
+/**
+ * Represents the validation state of a cell in a dynamic data table.
+ */
+export type DynamicDataTableCellValidationState = {
+    isValid: boolean
+    errorMessages: string[]
+}
+
+/**
+ * Defines the structure of validation errors for a cell.
+ *
+ * `K` represents the column `key` of the cell (i.e., the column identifiers).
+ */
+export type DynamicDataTableCellErrorType<K extends string> = {
+    [rowId: string | number]: Partial<Record<K, DynamicDataTableCellValidationState>>
+}
+
 type DynamicDataTableCellIcon<K extends string, CustomStateType = Record<string, unknown>> = {
     [key in K]?: (row: DynamicDataTableRowType<K, CustomStateType>) => ReactNode
 }
@@ -192,24 +209,9 @@ export type DynamicDataTableProps<K extends string, CustomStateType = Record<str
         position?: 'start' | 'end'
     }
     /**
-     * Indicates whether to show errors.
+     * Validation state for a specific cell in a dynamic data table.
      */
-    showError?: boolean
-    /**
-     * Function to validate the value of a table cell.
-     * @param value - The value to validate.
-     * @param key - The column key of the cell.
-     * @param row - The row containing the cell.
-     * @returns An object with a boolean indicating validity and an array of error messages.
-     */
-    validationSchema?: (
-        value: string,
-        key: K,
-        row: DynamicDataTableRowType<K, CustomStateType>,
-    ) => {
-        isValid: boolean
-        errorMessages: string[]
-    }
+    cellError?: DynamicDataTableCellErrorType<K>
 }
 
 export interface DynamicDataTableHeaderProps<K extends string, CustomStateType = Record<string, unknown>>
@@ -237,8 +239,7 @@ export interface DynamicDataTableRowProps<K extends string, CustomStateType = Re
         | 'onRowEdit'
         | 'onRowDelete'
         | 'actionButtonConfig'
-        | 'showError'
-        | 'validationSchema'
+        | 'cellError'
         | 'leadingCellIcon'
         | 'trailingCellIcon'
         | 'buttonCellWrapComponent'
