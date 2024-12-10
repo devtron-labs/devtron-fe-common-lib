@@ -19,6 +19,7 @@ import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { UseStateFiltersReturnType } from '@Common/Hooks'
 
+import { TooltipProps } from '@Common/Tooltip/types'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 import { SelectTextAreaProps } from '../SelectTextArea'
 import { FileUploadProps } from '../FileUpload'
@@ -99,8 +100,8 @@ export type DynamicDataTableRowType<K extends string, CustomStateType = Record<s
             disabled?: boolean
             /** An optional boolean indicating if an asterisk should be shown. */
             required?: boolean
-            /** An optional tooltip text to show when hovering over cell. */
-            tooltipText?: string
+            /** An optional tooltip to show when hovering over cell. */
+            tooltip?: Partial<Pick<TooltipProps, 'content' | 'className'>>
         } & DynamicDataTableCellData
     }
     id: string | number

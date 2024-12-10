@@ -349,6 +349,7 @@ export interface RuntimePluginVariables
     stepType: PluginType
     isRequired: boolean
     pluginIcon?: string
+    description?: string
 }
 
 export interface RuntimeParamsAPIResponseType {
