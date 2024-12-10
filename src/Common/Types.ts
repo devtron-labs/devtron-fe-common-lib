@@ -19,14 +19,19 @@ import { TippyProps } from '@tippyjs/react'
 import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
-import { MandatoryPluginBaseStateType, RegistryType, RuntimePluginVariables, Severity } from '../Shared'
+import {
+    MandatoryPluginBaseStateType,
+    RegistryType,
+    RuntimePluginVariables,
+    Severity,
+} from '../Shared'
 import {
     ACTION_STATE,
-    ConsequenceType,
     DEPLOYMENT_WINDOW_TYPE,
     DockerConfigOverrideType,
     SortingOrder,
     TaskErrorObj,
+    VariableTypeFormat,
 } from '.'
 
 /**
@@ -1013,4 +1018,16 @@ export interface WidgetEventDetails {
     count: number
     age: string
     lastSeen: string
+}
+
+export interface GlobalVariableDTO {
+    name: string
+    format: VariableTypeFormat
+    description: string
+    stageType: 'cd' | 'post-cd' | 'ci'
+}
+
+export type GlobalVariableOptionType = Omit<GlobalVariableDTO, 'name'> & {
+    label: string
+    value: string
 }

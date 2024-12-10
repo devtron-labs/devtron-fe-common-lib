@@ -150,6 +150,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             refVar={cellRef?.current?.[row.id]?.[key]}
                             dependentRefs={cellRef?.current?.[row.id]}
                             selectPickerProps={{
+                                ...row.data[key].props?.selectPickerProps,
                                 classNamePrefix: 'dynamic-data-table__cell__select-picker',
                             }}
                             textAreaProps={{
