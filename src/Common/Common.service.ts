@@ -112,6 +112,21 @@ const sanitizeApprovalConfigFromApprovalMetadata = (
     }
 }
 
+const sanitizeDeploymentBlockedState = (deploymentBlockedState) => {
+    if (!deploymentBlockedState) {
+        return {
+            isBlocked: false,
+            blockedBy: null,
+            reason: '',
+        }
+    }
+    return {
+        isBlocked: deploymentBlockedState.isBlocked || false,
+        blockedBy: deploymentBlockedState.blockedBy || null,
+        reason: deploymentBlockedState.reason || '',
+    }
+}
+
 const cdMaterialListModal = ({
     artifacts,
     offset,
@@ -206,7 +221,7 @@ const cdMaterialListModal = ({
             deploymentWindowArtifactMetadata: material.deploymentWindowArtifactMetadata ?? null,
             configuredInReleases: material.configuredInReleases ?? [],
             appWorkflowId: material.appWorkflowId ?? null,
-            deploymentBlockedState: material.deploymentBlockedState ?? null,
+            deploymentBlockedState: sanitizeDeploymentBlockedState(material.deploymentBlockedState)
         }
     })
     return materials
@@ -521,7 +536,10 @@ export function getWebhookEventsForEventId(eventId: string | number) {
  */
 export const getGitBranchUrl = (gitUrl: string, branchName: string): string | null => {
     if (!gitUrl) return null
-    const trimmedGitUrl = gitUrl.trim().replace(/\.git$/, '').replace(/\/$/, '') // Remove any trailing slash
+    const trimmedGitUrl = gitUrl
+        .trim()
+        .replace(/\.git$/, '')
+        .replace(/\/$/, '') // Remove any trailing slash
     if (trimmedGitUrl.includes(GitProviderType.GITLAB)) return `${trimmedGitUrl}/-/tree/${branchName}`
     else if (trimmedGitUrl.includes(GitProviderType.GITHUB)) return `${trimmedGitUrl}/tree/${branchName}`
     else if (trimmedGitUrl.includes(GitProviderType.BITBUCKET)) return `${trimmedGitUrl}/branch/${branchName}`
