@@ -15,7 +15,7 @@
  */
 
 import moment from 'moment'
-import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
+import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
 import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
@@ -112,7 +112,7 @@ const sanitizeApprovalConfigFromApprovalMetadata = (
     }
 }
 
-const sanitizeDeploymentBlockedState = (deploymentBlockedState) => {
+const sanitizeDeploymentBlockedState = (deploymentBlockedState: PolicyBlockInfo) => {
     if (!deploymentBlockedState) {
         return {
             isBlocked: false,
