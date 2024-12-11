@@ -19,6 +19,7 @@ import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { UseStateFiltersReturnType } from '@Common/Hooks'
 
+import { TooltipProps } from '@Common/Tooltip/types'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 import { SelectTextAreaProps } from '../SelectTextArea'
 
@@ -96,6 +97,8 @@ export type DynamicDataTableRowType<K extends string, CustomStateType = Record<s
             disabled?: boolean
             /** An optional boolean indicating if an asterisk should be shown. */
             required?: boolean
+            /** An optional tooltip to show when hovering over cell. */
+            tooltip?: Partial<Pick<TooltipProps, 'content' | 'className'>>
         } & DynamicDataTableCellData
     }
     id: string | number
@@ -122,15 +125,15 @@ export type DynamicDataTableCellErrorType<K extends string> = {
     [rowId: string | number]: Partial<Record<K, DynamicDataTableCellValidationState>>
 }
 
-type DynamicDataTableCellIcon<K extends string> = {
-    [key in K]?: (row: DynamicDataTableRowType<K>) => ReactNode
+type DynamicDataTableCellIcon<K extends string, CustomStateType = Record<string, unknown>> = {
+    [key in K]?: (row: DynamicDataTableRowType<K, CustomStateType>) => ReactNode
 }
 
 /**
  * Interface representing the properties for the dynamic data table component.
  * @template K - A string representing the key type.
  */
-export type DynamicDataTableProps<K extends string> = {
+export type DynamicDataTableProps<K extends string, CustomStateType = Record<string, unknown>> = {
     /**
      * An array containing the headers for the data table. \
      * Each header defines a column with its label, key, width, and optional settings.
@@ -139,15 +142,15 @@ export type DynamicDataTableProps<K extends string> = {
     /**
      * An array of rows where each row contains data corresponding to the table headers.
      */
-    rows: DynamicDataTableRowType<K>[]
+    rows: DynamicDataTableRowType<K, CustomStateType>[]
     /** Optional configuration for sorting the table. */
     sortingConfig?: Pick<UseStateFiltersReturnType<K>, 'sortBy' | 'sortOrder' | 'handleSorting'>
     /** Optional configuration for displaying an icon in the leading position of a cell. */
-    leadingCellIcon?: DynamicDataTableCellIcon<K>
+    leadingCellIcon?: DynamicDataTableCellIcon<K, CustomStateType>
     /** Optional configuration for displaying an icon in the trailing position of a cell. */
-    trailingCellIcon?: DynamicDataTableCellIcon<K>
+    trailingCellIcon?: DynamicDataTableCellIcon<K, CustomStateType>
     /** An optional function to render a custom wrapper component for the type `DynamicDataTableRowDataType.BUTTON`. */
-    buttonCellWrapComponent?: (row: DynamicDataTableRowType<K>) => ReactElement
+    buttonCellWrapComponent?: (row: DynamicDataTableRowType<K, CustomStateType>) => ReactElement
     /** An optional React node for a custom header component. */
     headerComponent?: ReactNode
     /** When true, data addition field will not be shown. */
@@ -166,7 +169,7 @@ export type DynamicDataTableProps<K extends string> = {
      * @param extraData - Additional data, such as a selected value for dropdowns.
      */
     onRowEdit: (
-        row: DynamicDataTableRowType<K>,
+        row: DynamicDataTableRowType<K, CustomStateType>,
         headerKey: K,
         value: string,
         extraData: {
@@ -177,7 +180,7 @@ export type DynamicDataTableProps<K extends string> = {
      * Function to handle row deletions.
      * @param row - The row that was deleted.
      */
-    onRowDelete: (row: DynamicDataTableRowType<K>) => void
+    onRowDelete: (row: DynamicDataTableRowType<K, CustomStateType>) => void
     /** Optional configuration for rendering a custom action button in a row. */
     actionButtonConfig?: {
         /**
@@ -185,7 +188,7 @@ export type DynamicDataTableProps<K extends string> = {
          * @param row - The current row being rendered.
          * @returns A React node representing the action button.
          */
-        renderer: (row: DynamicDataTableRowType<K>) => ReactNode
+        renderer: (row: DynamicDataTableRowType<K, CustomStateType>) => ReactNode
         /**
          * This represents under which header key the action button will be rendered.
          */
@@ -207,9 +210,9 @@ export type DynamicDataTableProps<K extends string> = {
     cellError?: DynamicDataTableCellErrorType<K>
 }
 
-export interface DynamicDataTableHeaderProps<K extends string>
+export interface DynamicDataTableHeaderProps<K extends string, CustomStateType = Record<string, unknown>>
     extends Pick<
-        DynamicDataTableProps<K>,
+        DynamicDataTableProps<K, CustomStateType>,
         | 'headers'
         | 'rows'
         | 'headerComponent'
@@ -221,9 +224,9 @@ export interface DynamicDataTableHeaderProps<K extends string>
         | 'actionButtonConfig'
     > {}
 
-export interface DynamicDataTableRowProps<K extends string>
+export interface DynamicDataTableRowProps<K extends string, CustomStateType = Record<string, unknown>>
     extends Pick<
-        DynamicDataTableProps<K>,
+        DynamicDataTableProps<K, CustomStateType>,
         | 'rows'
         | 'headers'
         | 'isAdditionNotAllowed'
