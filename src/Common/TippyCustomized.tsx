@@ -43,8 +43,8 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
     }
 
     const closeTippy = (e) => {
-        stopPropagation(e)
         if (!props.disableClose) {
+            stopPropagation(e)
             if (tippyRef.current?.hide) {
                 tippyRef.current.hide()
                 tippyRef.current = null

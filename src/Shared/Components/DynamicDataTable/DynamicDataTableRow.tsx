@@ -254,6 +254,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
 
     const renderCell = (row: DynamicDataTableRowType<K, CustomStateType>, key: K, index: number) => {
         const isDisabled = readOnly || row.data[key].disabled || false
+        const hasError = !(cellError[row.id]?.[key]?.isValid ?? true)
 
         const cellNode = (
             <Tooltip
@@ -264,7 +265,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 plugins={[followCursor]}
             >
                 <div
-                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${!isDisabled && !cellError[row.id]?.[key]?.isValid ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
+                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${!isDisabled && hasError ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
                 >
                     {renderCellIcon(row, key, true)}
                     {renderCellContent(row, key)}

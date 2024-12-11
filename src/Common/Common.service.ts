@@ -19,7 +19,7 @@ import moment from 'moment'
 import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
 import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, getIsRequestAborted, post } from './Api'
-import { GitProviderType, ROUTES } from './Constants'
+import { API_STATUS_CODES, GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, showError, sortCallback } from './Helper'
 import {
     TeamList,
@@ -547,13 +547,16 @@ export const getGlobalVariables = async ({
     abortControllerRef?: MutableRefObject<AbortController>
 }): Promise<GlobalVariableOptionType[]> => {
     try {
-        const { result } = await get<GlobalVariableDTO[]>(`${ROUTES.PLUGIN_GLOBAL_VARIABLES}?appId=${appId}`, {
-            abortControllerRef,
-        })
+        const { result } = await get<GlobalVariableDTO[]>(
+            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_VARIABLES, { appId }),
+            {
+                abortControllerRef,
+            },
+        )
         const variableList = (result ?? [])
             .filter((item) => (isCD ? item.stageType !== 'ci' : item.stageType === 'ci'))
             .map((variable) => {
-                const { name, ...updatedVariable } = { ...variable }
+                const { name, ...updatedVariable } = variable
 
                 return {
                     ...updatedVariable,
@@ -567,7 +570,7 @@ export const getGlobalVariables = async ({
         return variableList
     } catch (err) {
         if (!getIsRequestAborted(err)) {
-            if (err instanceof ServerErrors && err.code === 403) {
+            if (err instanceof ServerErrors && err.code === API_STATUS_CODES.PERMISSION_DENIED) {
                 ToastManager.showToast({
                     variant: ToastVariantType.notAuthorized,
                     description: 'You are not authorized to access global variables',
