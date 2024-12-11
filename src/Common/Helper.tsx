@@ -31,6 +31,7 @@ import {
     DISCORD_LINK,
     ZERO_TIME_STRING,
     TOAST_ACCESS_DENIED,
+    UNCHANGED_ARRAY_ELEMENT_SYMBOL,
 } from './Constants'
 import { ServerErrors } from './ServerError'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
@@ -557,19 +558,19 @@ export const getFilteredChartVersions = (charts, selectedChartType) =>
  * @param {object} object from which we need to delete nulls in its arrays
  * @returns object after removing (in-place) the null items in arrays
  */
-export const recursivelyRemoveNullsFromArraysInObject = (object: object) => {
+export const recursivelyRemoveSymbolFromArraysInObject = (object: object, symbol: symbol) => {
     // NOTE: typeof null === 'object'
     if (typeof object !== 'object' || !object) {
         return object
     }
     if (Array.isArray(object)) {
         return object.filter((item) => {
-            recursivelyRemoveNullsFromArraysInObject(item)
-            return !!item
+            recursivelyRemoveSymbolFromArraysInObject(item, symbol)
+            return item !== symbol
         })
     }
     Object.keys(object).forEach((key) => {
-        object[key] = recursivelyRemoveNullsFromArraysInObject(object[key])
+        object[key] = recursivelyRemoveSymbolFromArraysInObject(object[key], symbol)
     })
     return object
 }
@@ -579,8 +580,8 @@ const _joinObjects = (A: object, B: object) => {
         return
     }
     Object.keys(B).forEach((key) => {
-        if (!A[key]) {
-            A[key] = structuredClone(B[key])
+        if (A[key] === undefined || A[key] === UNCHANGED_ARRAY_ELEMENT_SYMBOL) {
+            A[key] = B[key]
             return
         }
         _joinObjects(A[key], B[key])
@@ -589,6 +590,7 @@ const _joinObjects = (A: object, B: object) => {
 
 /**
  * Merges the objects into one object
+ * Works more like Object.assign; that doesn't deep copy
  * @param {object[]} objects list of js objects
  * @returns object after the merge
  */
@@ -608,7 +610,7 @@ const buildObjectFromPathTokens = (index: number, tokens: string[], value: any) 
     const numberKey = Number(key)
     const isKeyNumber = !Number.isNaN(numberKey)
     return isKeyNumber
-        ? [...Array(numberKey).fill(null), buildObjectFromPathTokens(index + 1, tokens, value)]
+        ? [...Array(numberKey).fill(UNCHANGED_ARRAY_ELEMENT_SYMBOL), buildObjectFromPathTokens(index + 1, tokens, value)]
         : { [unescapePathComponent(key)]: buildObjectFromPathTokens(index + 1, tokens, value) }
 }
 

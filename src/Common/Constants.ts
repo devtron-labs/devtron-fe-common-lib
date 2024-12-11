@@ -578,3 +578,8 @@ export enum GitProviderType {
  * Formats the schema removing any irregularity in the existing schema
  */
 export const getFormattedSchema = (schema?: string) => JSON.stringify(JSON.parse(schema ?? '{}'), null, 2)
+
+export const UNCHANGED_ARRAY_ELEMENT_SYMBOL = Symbol(
+    `The element at this index remains unchanged from the original object.
+     This symbol is used by @buildObjectFromPath & later consumed by @recursivelyRemoveSymbolFromArraysInObject`,
+)
