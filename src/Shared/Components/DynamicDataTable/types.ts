@@ -16,10 +16,10 @@
 
 import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
 
-import { SortingOrder } from '@Common/Constants'
-
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { InfoIconTippyProps } from '@Common/Types'
+import { UseStateFiltersReturnType } from '@Common/Hooks'
+
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 import { SelectTextAreaProps } from '../SelectTextArea'
 
@@ -52,6 +52,7 @@ export enum DynamicDataTableRowDataType {
 export type DynamicDataTableCellPropsMap = {
     [DynamicDataTableRowDataType.TEXT]: Omit<
         ResizableTagTextAreaProps,
+        | 'id'
         | 'className'
         | 'minHeight'
         | 'maxHeight'
@@ -103,10 +104,25 @@ export type DynamicDataTableRowType<K extends string, CustomStateType = Record<s
     id: string | number
     /** */
     customState?: CustomStateType
+    /** An optional boolean indicating if row deletion is disabled. */
+    disableDelete?: boolean
 }
 
-type DynamicDataTableMask<K extends string> = {
-    [key in K]?: boolean
+/**
+ * Represents the validation state of a cell in a dynamic data table.
+ */
+export type DynamicDataTableCellValidationState = {
+    isValid: boolean
+    errorMessages: string[]
+}
+
+/**
+ * Defines the structure of validation errors for a cell.
+ *
+ * `K` represents the column `key` of the cell (i.e., the column identifiers).
+ */
+export type DynamicDataTableCellErrorType<K extends string> = {
+    [rowId: string | number]: Partial<Record<K, DynamicDataTableCellValidationState>>
 }
 
 type DynamicDataTableCellIcon<K extends string> = {
@@ -128,13 +144,7 @@ export type DynamicDataTableProps<K extends string> = {
      */
     rows: DynamicDataTableRowType<K>[]
     /** Optional configuration for sorting the table. */
-    sortingConfig?: {
-        sortBy: K
-        sortOrder: SortingOrder
-        handleSorting: () => void
-    }
-    /** An optional mask to hide the values of the cell. */
-    maskValue?: DynamicDataTableMask<K>
+    sortingConfig?: Pick<UseStateFiltersReturnType<K>, 'sortBy' | 'sortOrder' | 'handleSorting'>
     /** Optional configuration for displaying an icon in the leading position of a cell. */
     leadingCellIcon?: DynamicDataTableCellIcon<K>
     /** Optional configuration for displaying an icon in the trailing position of a cell. */
@@ -185,7 +195,7 @@ export type DynamicDataTableProps<K extends string> = {
         key: K
         /**
          * The width of the action button.
-         * @default '32px'
+         * @default '33px'
          */
         width?: string
         /**
@@ -195,24 +205,9 @@ export type DynamicDataTableProps<K extends string> = {
         position?: 'start' | 'end'
     }
     /**
-     * Indicates whether to show errors.
+     * Validation state for a specific cell in a dynamic data table.
      */
-    showError?: boolean
-    /**
-     * Function to validate the value of a table cell.
-     * @param value - The value to validate.
-     * @param key - The column key of the cell.
-     * @param row - The row containing the cell.
-     * @returns An object with a boolean indicating validity and an array of error messages.
-     */
-    validationSchema?: (
-        value: string,
-        key: K,
-        row: DynamicDataTableRowType<K>,
-    ) => {
-        isValid: boolean
-        errorMessages: string[]
-    }
+    cellError?: DynamicDataTableCellErrorType<K>
 }
 
 export interface DynamicDataTableHeaderProps<K extends string>
@@ -235,15 +230,13 @@ export interface DynamicDataTableRowProps<K extends string>
         DynamicDataTableProps<K>,
         | 'rows'
         | 'headers'
-        | 'maskValue'
         | 'isAdditionNotAllowed'
         | 'isDeletionNotAllowed'
         | 'readOnly'
         | 'onRowEdit'
         | 'onRowDelete'
         | 'actionButtonConfig'
-        | 'showError'
-        | 'validationSchema'
+        | 'cellError'
         | 'leadingCellIcon'
         | 'trailingCellIcon'
         | 'buttonCellWrapComponent'
