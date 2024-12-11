@@ -285,6 +285,7 @@ export enum BuildInfraProfileAdditionalErrorKeysType {
     NODE_SELECTOR_VALUE = 'node_selector_value',
     TOLERANCE_KEY = 'tolerance_key',
     TOLERANCE_VALUE = 'tolerance_value',
+    TARGET_PLATFORM = 'target_platform',
 }
 
 /**
@@ -298,6 +299,8 @@ export type ProfileInputErrorType =
     | {
           [key in BuildInfraProfileAdditionalErrorKeysType]: Record<string, string>
       }
+
+export type TargetPlatformErrorFields = NumericBuildInfraConfigTypes | BuildInfraProfileAdditionalErrorKeysType
 
 export interface ProfileInputDispatchDataType {
     targetPlatform: string

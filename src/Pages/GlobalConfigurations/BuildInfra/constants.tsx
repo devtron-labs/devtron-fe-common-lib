@@ -31,6 +31,7 @@ import {
     HandleProfileInputChangeType,
     BuildInfraProfileAdditionalErrorKeysType,
     BuildInfraAPIVersionType,
+    TargetPlatformErrorFields,
 } from './types'
 
 export const BUILD_INFRA_INPUT_CONSTRAINTS = {
@@ -166,3 +167,15 @@ export const BUILD_INFRA_TEST_IDS = {
 
 export const BUILD_INFRA_DEFAULT_PLATFORM_NAME = 'default' as const
 export const BUILD_INFRA_LATEST_API_VERSION: BuildInfraAPIVersionType = BuildInfraAPIVersionType.ALPHA1
+export const TARGET_PLATFORM_ERROR_FIELDS_MAP: Record<TargetPlatformErrorFields, true> = {
+    [BuildInfraConfigTypes.BUILD_TIMEOUT]: true,
+    [BuildInfraConfigTypes.CPU_LIMIT]: true,
+    [BuildInfraConfigTypes.CPU_REQUEST]: true,
+    [BuildInfraConfigTypes.MEMORY_LIMIT]: true,
+    [BuildInfraConfigTypes.MEMORY_REQUEST]: true,
+    [BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY]: true,
+    [BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_VALUE]: true,
+    [BuildInfraProfileAdditionalErrorKeysType.TOLERANCE_KEY]: true,
+    [BuildInfraProfileAdditionalErrorKeysType.TOLERANCE_VALUE]: true,
+    [BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM]: true,
+}

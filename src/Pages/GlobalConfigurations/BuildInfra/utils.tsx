@@ -39,7 +39,6 @@ import {
     CreateBuildInfraProfileType,
     GetPlatformConfigurationsWithDefaultValuesParamsType,
     HandleProfileInputChangeType,
-    NumericBuildInfraConfigTypes,
     ProfileInputErrorType,
     UseBuildInfraFormProps,
     UseBuildInfraFormResponseType,
@@ -55,6 +54,7 @@ import {
     CREATE_PROFILE_BASE_VALUE,
     BUILD_INFRA_DEFAULT_PLATFORM_NAME,
     BUILD_INFRA_LATEST_API_VERSION,
+    TARGET_PLATFORM_ERROR_FIELDS_MAP,
 } from './constants'
 import {
     validateDescription,
@@ -64,6 +64,9 @@ import {
     validateRequiredPositiveInteger,
     ToastVariantType,
     ToastManager,
+    ValidationResponseType,
+    validateStringLength,
+    requiredField,
 } from '../../../Shared'
 
 export const validateRequestLimit = ({
@@ -160,6 +163,32 @@ export const validateRequestLimit = ({
     return requestLimitValidationResponse
 }
 
+/**
+ * @description A valid platform name should not be empty and be less than 128 characters. Plus profile can not have duplicate platform names
+ */
+const validateTargetPlatformName = (name: string, profilePlatformList: string[]): ValidationResponseType => {
+    const requiredValidation = requiredField(name)
+    if (!requiredValidation.isValid) {
+        return requiredValidation
+    }
+
+    const lengthValidation = validateStringLength(name, 128, 1)
+    if (!lengthValidation.isValid) {
+        return lengthValidation
+    }
+
+    if (profilePlatformList.includes(name)) {
+        return {
+            isValid: false,
+            message: 'Configuration is already defined for this platform. Try different platform.',
+        }
+    }
+
+    return {
+        isValid: true,
+    }
+}
+
 const getInitialProfileInputErrors = (fromCreateView: boolean): ProfileInputErrorType => {
     if (fromCreateView) {
         const initialProfileInputErrors = { ...PROFILE_INPUT_ERROR_FIELDS }
@@ -171,6 +200,61 @@ const getInitialProfileInputErrors = (fromCreateView: boolean): ProfileInputErro
 
     return {
         ...PROFILE_INPUT_ERROR_FIELDS,
+    }
+}
+
+export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfoType): BuildInfraConfigValuesType => {
+    switch (configuration.key) {
+        case BuildInfraConfigTypes.NODE_SELECTOR:
+            return {
+                key: BuildInfraConfigTypes.NODE_SELECTOR,
+                value: (configuration.value || [])
+                    .map((nodeSelector) => ({
+                        key: nodeSelector?.key,
+                        value: nodeSelector?.value,
+                    }))
+                    .filter((nodeSelector) => nodeSelector.key),
+            }
+
+        case BuildInfraConfigTypes.TOLERANCE:
+            return {
+                key: BuildInfraConfigTypes.TOLERANCE,
+                value: (configuration.value || []).map((toleranceItem) => {
+                    const { key, effect, operator, value } = toleranceItem || {}
+
+                    const baseObject = {
+                        key,
+                        effect,
+                    }
+
+                    if (operator === BuildInfraToleranceOperatorType.EQUALS) {
+                        return {
+                            ...baseObject,
+                            operator: BuildInfraToleranceOperatorType.EQUALS,
+                            value,
+                        }
+                    }
+
+                    return {
+                        ...baseObject,
+                        operator: BuildInfraToleranceOperatorType.EXISTS,
+                    }
+                }),
+            }
+
+        case BuildInfraConfigTypes.BUILD_TIMEOUT:
+        case BuildInfraConfigTypes.CPU_LIMIT:
+        case BuildInfraConfigTypes.CPU_REQUEST:
+        case BuildInfraConfigTypes.MEMORY_LIMIT:
+        case BuildInfraConfigTypes.MEMORY_REQUEST:
+            return {
+                key: configuration.key,
+                value: configuration.value,
+                unit: configuration.unit,
+            }
+
+        default:
+            return null
     }
 }
 
@@ -468,7 +552,20 @@ export const useBuildInfraForm = ({
 
                 currentInput.configurations[targetPlatform] =
                     profileResponse.fallbackPlatformConfigurationMap[targetPlatform] ||
-                    profileResponse.fallbackPlatformConfigurationMap[BUILD_INFRA_DEFAULT_PLATFORM_NAME]
+                    // Here need to update target platform name for each configuration
+                    Object.entries(
+                        profileResponse.fallbackPlatformConfigurationMap[BUILD_INFRA_DEFAULT_PLATFORM_NAME],
+                    ).reduce<BuildInfraConfigurationMapType>((acc, [configKey, configValue]) => {
+                        acc[configKey as BuildInfraConfigTypes] = {
+                            ...configValue,
+                            targetPlatform,
+                        }
+
+                        return acc
+                    }, {} as BuildInfraConfigurationMapType)
+
+                // Since target platform must have some length and we are adding a new platform
+                currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM] = ''
                 break
             }
 
@@ -482,12 +579,24 @@ export const useBuildInfraForm = ({
                 }
 
                 delete currentInput.configurations[targetPlatform]
+
+                Object.keys(currentInputErrors).forEach((key) => {
+                    if (TARGET_PLATFORM_ERROR_FIELDS_MAP[key]) {
+                        currentInputErrors[key] = null
+                    }
+                })
                 break
             }
 
             case BuildInfraProfileInputActionType.RENAME_TARGET_PLATFORM: {
                 const { originalPlatformName, newPlatformName } = data
-                if (!currentInput.configurations[originalPlatformName]) {
+                const originalPlatformConfig = currentInput.configurations[originalPlatformName]
+
+                if (originalPlatformName === newPlatformName) {
+                    return
+                }
+
+                if (!originalPlatformConfig) {
                     ToastManager.showToast({
                         variant: ToastVariantType.error,
                         description: 'Platform does not exist',
@@ -495,33 +604,42 @@ export const useBuildInfraForm = ({
                     return
                 }
 
-                currentInput.configurations[newPlatformName] = currentInput.configurations[originalPlatformName]
+                currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM] =
+                    validateTargetPlatformName(newPlatformName, Object.keys(currentInput.configurations)).message
+
+                const newPlatformFallbackConfig =
+                    profileResponse.fallbackPlatformConfigurationMap[newPlatformName] ||
+                    // Ideally should update targetPlatform for each configuration here itself but since we iterating over it again, we will do it there
+                    profileResponse.fallbackPlatformConfigurationMap[BUILD_INFRA_DEFAULT_PLATFORM_NAME]
+
+                // Will replace targetPlatform, defaultValue along with current value if active is false
+                currentInput.configurations[newPlatformName] = Object.entries(
+                    originalPlatformConfig,
+                ).reduce<BuildInfraConfigurationMapType>((acc, [configKey, configValue]) => {
+                    // TODO: Check why need to do 'as'
+                    const newDefaultValue = newPlatformFallbackConfig[configKey as BuildInfraConfigTypes].defaultValue
+                    const newConfigValues = configValue.active ? {} : newDefaultValue
+
+                    acc[configKey as BuildInfraConfigTypes] = {
+                        ...configValue,
+                        ...newConfigValues,
+                        targetPlatform: newPlatformName,
+                        defaultValue: newDefaultValue,
+                    }
+
+                    return acc
+                }, {} as BuildInfraConfigurationMapType)
                 delete currentInput.configurations[originalPlatformName]
+
                 break
             }
 
             case BuildInfraProfileInputActionType.RESTORE_PROFILE_CONFIG_SNAPSHOT: {
                 const { configSnapshot } = data
                 currentInput.configurations = configSnapshot
-                // TODO: Can write a complete handleValidation function to validate all fields
-                // TODO: Constant
-                const clearErrorFields: Record<
-                    NumericBuildInfraConfigTypes | BuildInfraProfileAdditionalErrorKeysType,
-                    true
-                > = {
-                    [BuildInfraConfigTypes.BUILD_TIMEOUT]: true,
-                    [BuildInfraConfigTypes.CPU_LIMIT]: true,
-                    [BuildInfraConfigTypes.CPU_REQUEST]: true,
-                    [BuildInfraConfigTypes.MEMORY_LIMIT]: true,
-                    [BuildInfraConfigTypes.MEMORY_REQUEST]: true,
-                    [BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY]: true,
-                    [BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_VALUE]: true,
-                    [BuildInfraProfileAdditionalErrorKeysType.TOLERANCE_KEY]: true,
-                    [BuildInfraProfileAdditionalErrorKeysType.TOLERANCE_VALUE]: true,
-                }
 
                 Object.keys(currentInputErrors).forEach((key) => {
-                    if (clearErrorFields[key]) {
+                    if (TARGET_PLATFORM_ERROR_FIELDS_MAP[key]) {
                         currentInputErrors[key] = null
                     }
                 })
@@ -631,61 +749,6 @@ const getConfigurationMapWithoutDefaultFallback = (
         return acc
     }, {})
 
-export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfoType): BuildInfraConfigValuesType => {
-    switch (configuration.key) {
-        case BuildInfraConfigTypes.NODE_SELECTOR:
-            return {
-                key: BuildInfraConfigTypes.NODE_SELECTOR,
-                value: (configuration.value || [])
-                    .map((nodeSelector) => ({
-                        key: nodeSelector?.key,
-                        value: nodeSelector?.value,
-                    }))
-                    .filter((nodeSelector) => nodeSelector.key),
-            }
-
-        case BuildInfraConfigTypes.TOLERANCE:
-            return {
-                key: BuildInfraConfigTypes.TOLERANCE,
-                value: (configuration.value || []).map((toleranceItem) => {
-                    const { key, effect, operator, value } = toleranceItem || {}
-
-                    const baseObject = {
-                        key,
-                        effect,
-                    }
-
-                    if (operator === BuildInfraToleranceOperatorType.EQUALS) {
-                        return {
-                            ...baseObject,
-                            operator: BuildInfraToleranceOperatorType.EQUALS,
-                            value,
-                        }
-                    }
-
-                    return {
-                        ...baseObject,
-                        operator: BuildInfraToleranceOperatorType.EXISTS,
-                    }
-                }),
-            }
-
-        case BuildInfraConfigTypes.BUILD_TIMEOUT:
-        case BuildInfraConfigTypes.CPU_LIMIT:
-        case BuildInfraConfigTypes.CPU_REQUEST:
-        case BuildInfraConfigTypes.MEMORY_LIMIT:
-        case BuildInfraConfigTypes.MEMORY_REQUEST:
-            return {
-                key: configuration.key,
-                value: configuration.value,
-                unit: configuration.unit,
-            }
-
-        default:
-            return null
-    }
-}
-
 const getPlatformConfigurationsWithDefaultValues = ({
     profileConfigurationsMap,
     defaultConfigurationsMap,
@@ -702,6 +765,7 @@ const getPlatformConfigurationsWithDefaultValues = ({
         }
 
         const defaultValue = parsePlatformConfigIntoValue(defaultConfiguration)
+        // If value is not present in profile that means we are inheriting the value
         const finalConfiguration: BuildInfraConfigurationType = profileConfiguration
             ? {
                   ...profileConfiguration,
@@ -757,16 +821,28 @@ export const getTransformedBuildInfraProfileResponse = ({
     const fallbackPlatformConfigurationMap = Object.entries(globalProfilePlatformConfigMap).reduce<
         BuildInfraProfileResponseType['fallbackPlatformConfigurationMap']
     >((acc, [platformName, globalPlatformConfig]) => {
-        acc[platformName] = getPlatformConfigurationsWithDefaultValues({
-            profileConfigurationsMap: {},
-            defaultConfigurationsMap: globalPlatformConfig,
-            platformName,
-        })
+        // Logic is, if we will pre-fill profile with default platform of current profile, and set active to true, with default values from global profile
+        const baseConfigurations = configurations[BUILD_INFRA_DEFAULT_PLATFORM_NAME]
+        acc[platformName] = Object.values(BuildInfraConfigTypes).reduce<BuildInfraConfigurationMapType>(
+            (fallbackAcc, configType) => {
+                const baseValue = parsePlatformConfigIntoValue(baseConfigurations[configType])
+                const defaultValue = parsePlatformConfigIntoValue(globalPlatformConfig[configType])
+
+                // eslint-disable-next-line no-param-reassign
+                fallbackAcc[configType] = {
+                    ...baseValue,
+                    defaultValue,
+                    active: true,
+                    targetPlatform: platformName,
+                }
+
+                return fallbackAcc
+            },
+            {} as BuildInfraConfigurationMapType,
+        )
 
         return acc
     }, {})
-
-    // Now will handle the configurations of platforms that can be created
 
     return {
         configurationUnits,
