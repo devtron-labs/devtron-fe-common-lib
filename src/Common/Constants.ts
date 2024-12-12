@@ -117,6 +117,7 @@ export const ROUTES = {
     USER_LIST_MIN: 'user/list/min',
     CONFIG_DATA: 'config/data',
     K8S_RESOURCE_LIST: 'k8s/resource/list',
+    CONFIG_COMPARE_SECRET: 'config/compare/secret',
 }
 
 export enum KEY_VALUE {

@@ -4,13 +4,14 @@ import { generatePath, Route, Switch, useLocation, useRouteMatch } from 'react-r
 import { ReactComponent as ICError } from '@Icons/ic-error.svg'
 import { getAppEnvDeploymentConfigList } from '@Shared/Components/DeploymentConfigDiff'
 import { useAsync } from '@Common/Helper'
-import { EnvResourceType, getAppEnvDeploymentConfig } from '@Shared/Services'
+import { EnvResourceType, getAppEnvDeploymentConfig, getCompareSecretsData } from '@Shared/Services'
 import { groupArrayByObjectKey } from '@Shared/Helpers'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { Progressing } from '@Common/Progressing'
 import { useUrlFilters } from '@Common/Hooks'
 import { GenericEmptyState, InfoColourBar } from '@Common/index'
 
+import { useMainContext } from '@Shared/Providers'
 import { DeploymentHistoryConfigDiffCompare } from './DeploymentHistoryConfigDiffCompare'
 import { DeploymentHistoryConfigDiffProps, DeploymentHistoryConfigDiffQueryParams } from './types'
 import {
@@ -35,6 +36,7 @@ export const DeploymentHistoryConfigDiff = ({
     // HOOKS
     const { path, params } = useRouteMatch()
     const { pathname, search } = useLocation()
+    const { isSuperAdmin } = useMainContext()
 
     // CONSTANTS
     const pipelineDeployments = useMemo(() => getPipelineDeployments(triggerHistory), [triggerHistory])
@@ -54,32 +56,49 @@ export const DeploymentHistoryConfigDiff = ({
 
     // ASYNC CALLS
     // Load comparison deployment data
-    const [compareDeploymentConfigLoader, compareDeploymentConfig, , reloadCompareDeploymentConfig] = useAsync(
-        () =>
-            Promise.allSettled([
-                getAppEnvDeploymentConfig({
-                    params: {
-                        appName,
-                        envName,
-                        configArea: 'DeploymentHistory',
-                        pipelineId,
-                        wfrId: currentWfrId,
-                    },
-                }),
+    const [compareDeploymentConfigLoader, compareDeploymentConfig, , reloadCompareDeploymentConfig] =
+        useAsync(async () => {
+            const payloads = [
+                {
+                    appName,
+                    envName,
+                    configArea: 'DeploymentHistory',
+                    pipelineId,
+                    wfrId: currentWfrId,
+                } as const,
                 isPreviousDeploymentConfigAvailable
-                    ? getAppEnvDeploymentConfig({
-                          params: {
-                              appName,
-                              envName,
-                              configArea: 'DeploymentHistory',
-                              pipelineId,
-                              wfrId: compareWfrId,
-                          },
-                      })
+                    ? ({
+                          appName,
+                          envName,
+                          configArea: 'DeploymentHistory',
+                          pipelineId,
+                          wfrId: compareWfrId,
+                      } as const)
                     : null,
-            ]),
-        [currentWfrId, compareWfrId],
-    )
+            ] as const
+
+            const [secretsData, ...configDatas] = await Promise.allSettled([
+                !isSuperAdmin ? getCompareSecretsData([...payloads]) : null,
+                ...payloads.map((payload) => payload && getAppEnvDeploymentConfig({ params: payload })),
+            ])
+
+            if (secretsData.status !== 'fulfilled' || !secretsData.value) {
+                return configDatas
+            }
+
+            secretsData.value.forEach((data, index) => {
+                if (
+                    configDatas[index].status !== 'fulfilled' ||
+                    !configDatas[index].value ||
+                    configDatas[index].value.result.isAppAdmin
+                ) {
+                    return
+                }
+                configDatas[index].value.result.secretsData = data.secretsData
+            })
+
+            return configDatas
+        }, [currentWfrId, compareWfrId])
 
     // METHODS
     const getNavItemHref = (resourceType: EnvResourceType, resourceName: string) =>
