@@ -302,7 +302,7 @@ export const useBuildInfraForm = ({
         const { targetPlatform: targetPlatformFromData } = data
         const targetPlatform = targetPlatformFromData || ''
         const currentConfiguration = currentInput.configurations[targetPlatform]
-        const lastSavedConfiguration = profileResponse.profile.configurations[targetPlatform]
+        const lastSavedConfiguration = profileResponse.profile.configurations[targetPlatform] || currentConfiguration
 
         switch (action) {
             case BuildInfraMetaConfigTypes.DESCRIPTION: {
@@ -701,6 +701,8 @@ export const useBuildInfraForm = ({
 
                     return acc
                 }, {} as BuildInfraConfigurationMapType)
+
+                // If original platform is present in snapshot we will restore it
                 delete currentInput.configurations[originalPlatformName]
 
                 break
@@ -719,7 +721,6 @@ export const useBuildInfraForm = ({
                 break
             }
 
-            // TODO: Add validations for these as well, not adding them for be testing
             case BuildInfraProfileInputActionType.ADD_NODE_SELECTOR_ITEM: {
                 if (
                     currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].key !==
@@ -736,6 +737,13 @@ export const useBuildInfraForm = ({
                 }
 
                 currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.unshift(newSelector)
+
+                if (!currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY]) {
+                    currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY] = {}
+                }
+
+                // Since key is required but we would want to show it if user clears it
+                currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY][id] = ''
                 break
             }
 
@@ -751,6 +759,23 @@ export const useBuildInfraForm = ({
                 currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value = currentConfiguration[
                     BuildInfraConfigTypes.NODE_SELECTOR
                 ].value.filter((nodeSelector) => nodeSelector.id !== id)
+
+                delete currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY][id]
+                delete currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_VALUE][id]
+
+                if (
+                    Object.keys(currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY])
+                        .length === 0
+                ) {
+                    delete currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY]
+                }
+
+                if (
+                    Object.keys(currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_VALUE])
+                        .length === 0
+                ) {
+                    delete currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_VALUE]
+                }
                 break
             }
 
@@ -785,7 +810,7 @@ export const useBuildInfraForm = ({
                 const newToleranceItem: BuildInfraToleranceValueType = {
                     id,
                     key: '',
-                    // TODO: Ask for equals
+                    // TODO: Ask for constants
                     effect: BuildInfraToleranceEffectType.NO_SCHEDULE,
                     operator: BuildInfraToleranceOperatorType.EQUALS,
                     value: '',

@@ -302,10 +302,19 @@ export enum BuildInfraProfileAdditionalErrorKeysType {
  */
 export type ProfileInputErrorType =
     | {
-          [key in NumericBuildInfraConfigTypes | BuildInfraMetaConfigTypes]: string
+          [key in
+              | NumericBuildInfraConfigTypes
+              | BuildInfraMetaConfigTypes
+              | BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM]: string
       }
     | {
-          [key in BuildInfraProfileAdditionalErrorKeysType]: Record<string, string>
+          [key in Extract<
+              BuildInfraProfileAdditionalErrorKeysType,
+              | BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY
+              | BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_VALUE
+              | BuildInfraProfileAdditionalErrorKeysType.TOLERANCE_KEY
+              | BuildInfraProfileAdditionalErrorKeysType.TOLERANCE_VALUE
+          >]: Record<number, string>
       }
 
 export type TargetPlatformErrorFields = NumericBuildInfraConfigTypes | BuildInfraProfileAdditionalErrorKeysType
