@@ -160,7 +160,7 @@ export interface BuildInfraNodeSelectorValueType {
 
 export enum BuildInfraToleranceOperatorType {
     EXISTS = 'Exists',
-    EQUALS = 'Equals',
+    EQUALS = 'Equal',
 }
 
 export enum BuildInfraToleranceEffectType {

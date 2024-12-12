@@ -477,6 +477,38 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = null
                 break
 
+            case BuildInfraInheritActions.ACTIVATE_NODE_SELECTOR:
+                if (
+                    lastSavedConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].defaultValue.key !==
+                    BuildInfraConfigTypes.NODE_SELECTOR
+                ) {
+                    break
+                }
+
+                currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR] = {
+                    ...lastSavedConfiguration[BuildInfraConfigTypes.NODE_SELECTOR],
+                    active: true,
+                }
+
+                currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
+                break
+
+            case BuildInfraInheritActions.ACTIVATE_TOLERANCE:
+                if (
+                    lastSavedConfiguration[BuildInfraConfigTypes.TOLERANCE].defaultValue.key !==
+                    BuildInfraConfigTypes.TOLERANCE
+                ) {
+                    break
+                }
+
+                currentConfiguration[BuildInfraConfigTypes.TOLERANCE] = {
+                    ...lastSavedConfiguration[BuildInfraConfigTypes.TOLERANCE],
+                    active: true,
+                }
+
+                currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = null
+                break
+
             case BuildInfraInheritActions.DE_ACTIVATE_BUILD_TIMEOUT:
                 if (
                     lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].defaultValue.key !==
@@ -546,6 +578,41 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = null
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = null
                 break
+
+            case BuildInfraInheritActions.DE_ACTIVATE_NODE_SELECTOR:
+                if (
+                    lastSavedConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].defaultValue.key !==
+                    BuildInfraConfigTypes.NODE_SELECTOR
+                ) {
+                    break
+                }
+
+                currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR] = {
+                    ...currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR],
+                    ...lastSavedConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].defaultValue,
+                    active: false,
+                } as BuildInfraConfigurationType
+
+                currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
+                break
+
+            case BuildInfraInheritActions.DE_ACTIVATE_TOLERANCE:
+                if (
+                    lastSavedConfiguration[BuildInfraConfigTypes.TOLERANCE].defaultValue.key !==
+                    BuildInfraConfigTypes.TOLERANCE
+                ) {
+                    break
+                }
+
+                currentConfiguration[BuildInfraConfigTypes.TOLERANCE] = {
+                    ...currentConfiguration[BuildInfraConfigTypes.TOLERANCE],
+                    ...lastSavedConfiguration[BuildInfraConfigTypes.TOLERANCE].defaultValue,
+                    active: false,
+                } as BuildInfraConfigurationType
+
+                currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = null
+                break
+
             case BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM: {
                 if (currentInput.configurations[targetPlatform]) {
                     ToastManager.showToast({
