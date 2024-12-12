@@ -68,6 +68,4 @@ export type ConfirmationModalProps = {
 } & ButtonConfigAndVariantType &
     CustomInputConfigOrChildrenType
 
-export type ConfirmationModalBodyProps = ButtonConfigAndVariantType &
-    CustomInputConfigOrChildrenType &
-    Pick<ConfirmationModalProps, 'title' | 'subtitle'>
+export type ConfirmationModalBodyProps = Omit<ConfirmationModalProps, 'showConfirmationModal'>
