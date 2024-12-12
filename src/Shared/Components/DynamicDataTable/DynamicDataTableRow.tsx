@@ -4,9 +4,11 @@ import { followCursor } from 'tippy.js'
 
 import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
 import { Tooltip } from '@Common/Tooltip'
-
 import { ConditionalWrap } from '@Common/Helper'
 import { ResizableTagTextArea } from '@Common/CustomTagSelector'
+import { ComponentSizeType } from '@Shared/constants'
+
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { SelectTextArea } from '../SelectTextArea'
 import {
     getSelectPickerOptionByValue,
@@ -14,9 +16,9 @@ import {
     SelectPickerOptionType,
     SelectPickerVariantType,
 } from '../SelectPicker'
+import { FileUpload } from '../FileUpload'
 import { getActionButtonPosition, getRowGridTemplateColumn, rowTypeHasInputField } from './utils'
 import { DynamicDataTableRowType, DynamicDataTableRowProps, DynamicDataTableRowDataType } from './types'
-import { FileUpload } from '../FileUpload'
 
 const conditionalWrap =
     <K extends string, CustomStateType = Record<string, unknown>>(
@@ -37,8 +39,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     headers,
     readOnly,
     isDeletionNotAllowed,
-    validationSchema = () => ({ isValid: true, errorMessages: [] }),
-    showError,
+    cellError = {},
     actionButtonConfig = null,
     onRowEdit,
     onRowDelete,
@@ -84,7 +85,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
 
             cellRef.current = updatedCellRef
         }
-    }, [rows])
+    }, [rows.length])
 
     // METHODS
     const onChange =
@@ -150,6 +151,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             refVar={cellRef?.current?.[row.id]?.[key]}
                             dependentRefs={cellRef?.current?.[row.id]}
                             selectPickerProps={{
+                                ...row.data[key].props?.selectPickerProps,
                                 classNamePrefix: 'dynamic-data-table__cell__select-picker',
                             }}
                             textAreaProps={{
@@ -213,7 +215,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
 
     const renderCellIcon = (row: DynamicDataTableRowType<K, CustomStateType>, key: K, isLeadingIcon?: boolean) => {
         const iconConfig = isLeadingIcon ? leadingCellIcon : trailingCellIcon
-        if (!iconConfig?.[key]) {
+        if (!iconConfig?.[key]?.(row)) {
             return null
         }
 
@@ -234,12 +236,12 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     )
 
     const renderErrorMessages = (row: DynamicDataTableRowType<K, CustomStateType>, key: K) => {
-        const { isValid, errorMessages } = !row.data[key].disabled
-            ? validationSchema(row.data[key].value, key, row)
-            : { isValid: true, errorMessages: [] }
-        const showErrorMessages = showError && !isValid
+        const { isValid, errorMessages } =
+            !row.data[key].disabled && cellError[row.id]?.[key]
+                ? cellError[row.id][key]
+                : { isValid: true, errorMessages: [] }
 
-        if (!showErrorMessages) {
+        if (isValid) {
             return null
         }
 
@@ -252,16 +254,18 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
 
     const renderCell = (row: DynamicDataTableRowType<K, CustomStateType>, key: K, index: number) => {
         const isDisabled = readOnly || row.data[key].disabled || false
+        const hasError = !(cellError[row.id]?.[key]?.isValid ?? true)
 
         const cellNode = (
             <Tooltip
-                alwaysShowTippyOnHover={!!row.data[key].tooltipText || isDisabled}
-                content={row.data[key].tooltipText || (isDisabled ? 'Cannot edit in read-only mode' : '')}
+                alwaysShowTippyOnHover={!!row.data[key].tooltip?.content || isDisabled}
+                className={row.data[key].tooltip?.className}
+                content={row.data[key].tooltip?.content || (isDisabled ? 'Cannot edit in read-only mode' : '')}
                 followCursor="horizontal"
                 plugins={[followCursor]}
             >
                 <div
-                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !isDisabled && !validationSchema(row.data[key].value, key, row).isValid ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
+                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${!isDisabled && hasError ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
                 >
                     {renderCellIcon(row, key, true)}
                     {renderCellContent(row, key)}
@@ -275,7 +279,13 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
         const actionButtonIndex = getActionButtonPosition({ headers, actionButtonConfig })
         if (actionButtonIndex === index) {
             const { renderer, position = 'start' } = actionButtonConfig
-            const actionButtonNode = <div className="dc__overflow-hidden flex top bcn-0">{renderer(row)}</div>
+            const actionButtonNode = (
+                <div
+                    className={`dc__overflow-hidden flex top bcn-0 ${(position === 'start' && key === headers[0].key) || (isDeletionNotAllowed && position === 'end' && key === headers[headers.length - 1].key) ? 'dynamic-data-table__cell' : ''}`}
+                >
+                    {renderer(row)}
+                </div>
+            )
 
             return position === 'start' ? (
                 <>
@@ -307,14 +317,19 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             <Fragment key={key}>{renderCell(row, key, index)}</Fragment>
                         ))}
                         {!isDeletionNotAllowed && !readOnly && (
-                            <button
-                                type="button"
-                                className={`dynamic-data-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 ${disableDeleteRow || row.disableDelete ? 'dc__disabled' : 'dc__hover-n50 dc__tab-focus'}`}
-                                onClick={onDelete(row)}
-                                disabled={disableDeleteRow || row.disableDelete}
-                            >
-                                <ICCross aria-label="delete-row" className="icon-dim-16 fcn-4 dc__align-self-start" />
-                            </button>
+                            <div className="dynamic-data-table__row-delete-btn bcn-0">
+                                <Button
+                                    dataTestId="dynamic-data-table-row-delete-btn"
+                                    ariaLabel="Delete Row"
+                                    showAriaLabelInTippy={false}
+                                    icon={<ICCross />}
+                                    disabled={disableDeleteRow || row.disableDelete}
+                                    onClick={onDelete(row)}
+                                    variant={ButtonVariantType.borderLess}
+                                    style={ButtonStyleType.negativeGrey}
+                                    size={ComponentSizeType.small}
+                                />
+                            </div>
                         )}
                     </div>
                 ))}

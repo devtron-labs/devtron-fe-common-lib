@@ -1031,3 +1031,10 @@ export const getIframeWithDefaultAttributes = (iframeString: string, defaultName
 
     return iframeString
 }
+
+export const getGoLangFormattedDateWithTimezone = (dateFormat: string) => {
+    const now = moment()
+    const formattedDate = now.format(dateFormat)
+    const timezone = now.format('Z').replace(/([+/-])(\d{2})[:.](\d{2})/, '$1$2$3')
+    return formattedDate.replace('Z', timezone)
+}

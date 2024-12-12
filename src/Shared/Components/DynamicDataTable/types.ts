@@ -19,6 +19,7 @@ import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { UseStateFiltersReturnType } from '@Common/Hooks'
 
+import { TooltipProps } from '@Common/Tooltip/types'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 import { SelectTextAreaProps } from '../SelectTextArea'
 import { FileUploadProps } from '../FileUpload'
@@ -99,8 +100,8 @@ export type DynamicDataTableRowType<K extends string, CustomStateType = Record<s
             disabled?: boolean
             /** An optional boolean indicating if an asterisk should be shown. */
             required?: boolean
-            /** An optional tooltip text to show when hovering over cell. */
-            tooltipText?: string
+            /** An optional tooltip to show when hovering over cell. */
+            tooltip?: Partial<Pick<TooltipProps, 'content' | 'className'>>
         } & DynamicDataTableCellData
     }
     id: string | number
@@ -108,6 +109,23 @@ export type DynamicDataTableRowType<K extends string, CustomStateType = Record<s
     customState?: CustomStateType
     /** An optional boolean indicating if row deletion is disabled. */
     disableDelete?: boolean
+}
+
+/**
+ * Represents the validation state of a cell in a dynamic data table.
+ */
+export type DynamicDataTableCellValidationState = {
+    isValid: boolean
+    errorMessages: string[]
+}
+
+/**
+ * Defines the structure of validation errors for a cell.
+ *
+ * `K` represents the column `key` of the cell (i.e., the column identifiers).
+ */
+export type DynamicDataTableCellErrorType<K extends string> = {
+    [rowId: string | number]: Partial<Record<K, DynamicDataTableCellValidationState>>
 }
 
 type DynamicDataTableCellIcon<K extends string, CustomStateType = Record<string, unknown>> = {
@@ -191,24 +209,9 @@ export type DynamicDataTableProps<K extends string, CustomStateType = Record<str
         position?: 'start' | 'end'
     }
     /**
-     * Indicates whether to show errors.
+     * Validation state for a specific cell in a dynamic data table.
      */
-    showError?: boolean
-    /**
-     * Function to validate the value of a table cell.
-     * @param value - The value to validate.
-     * @param key - The column key of the cell.
-     * @param row - The row containing the cell.
-     * @returns An object with a boolean indicating validity and an array of error messages.
-     */
-    validationSchema?: (
-        value: string,
-        key: K,
-        row: DynamicDataTableRowType<K, CustomStateType>,
-    ) => {
-        isValid: boolean
-        errorMessages: string[]
-    }
+    cellError?: DynamicDataTableCellErrorType<K>
 }
 
 export interface DynamicDataTableHeaderProps<K extends string, CustomStateType = Record<string, unknown>>
@@ -236,8 +239,7 @@ export interface DynamicDataTableRowProps<K extends string, CustomStateType = Re
         | 'onRowEdit'
         | 'onRowDelete'
         | 'actionButtonConfig'
-        | 'showError'
-        | 'validationSchema'
+        | 'cellError'
         | 'leadingCellIcon'
         | 'trailingCellIcon'
         | 'buttonCellWrapComponent'

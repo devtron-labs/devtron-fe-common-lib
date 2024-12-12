@@ -4,9 +4,17 @@ import { ReactComponent as ICCloudUpload } from '@Icons/ic-cloud-upload.svg'
 import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
 import { Tooltip } from '@Common/Tooltip'
 
+import { Progressing } from '@Common/Progressing'
 import { FileUploadProps } from './types'
 
-export const FileUpload = ({ label, fileName = '', multiple = false, fileTypes = [], onUpload }: FileUploadProps) => {
+export const FileUpload = ({
+    isLoading,
+    label,
+    fileName = '',
+    multiple = false,
+    fileTypes = [],
+    onUpload,
+}: FileUploadProps) => {
     // METHODS
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -24,17 +32,32 @@ export const FileUpload = ({ label, fileName = '', multiple = false, fileTypes =
 
     return (
         <div className="mw-none">
-            {fileName ? (
+            {isLoading || fileName ? (
                 <div className="dc__border br-4 dc__overflow-hidden flexbox">
                     <div className="flexbox dc__align-items-center dc__gap-8 px-8 py-4 mw-none">
-                        <ICCloudUpload className="icon-dim-16 dc__no-shrink" />
-                        <Tooltip content={fileName}>
-                            <span className="fs-12 lh-20 dc__ellipsis-right">{fileName}</span>
-                        </Tooltip>
+                        {isLoading ? (
+                            <>
+                                <Progressing size={16} />
+                                <span className="fs-12 lh-20">Uploading...</span>
+                            </>
+                        ) : (
+                            <>
+                                <ICCloudUpload className="icon-dim-16 dc__no-shrink" />
+                                <Tooltip content={fileName}>
+                                    <span className="fs-12 lh-20 dc__ellipsis-right">{fileName}</span>
+                                </Tooltip>
+                            </>
+                        )}
                     </div>
-                    <button type="button" className="dc__transparent flex p-6 dc__hover-n50" onClick={onClearUpload}>
-                        <ICCross className="icon-dim-16 fcn-6" />
-                    </button>
+                    {!isLoading && (
+                        <button
+                            type="button"
+                            className="dc__transparent flex p-6 dc__hover-n50"
+                            onClick={onClearUpload}
+                        >
+                            <ICCross className="icon-dim-16 fcn-6" />
+                        </button>
+                    )}
                 </div>
             ) : (
                 <div className="dc__position-rel flex">
