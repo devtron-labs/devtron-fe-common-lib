@@ -555,7 +555,7 @@ export const getGlobalVariables = async ({
         )
         const variableList = (result ?? [])
             .filter((item) => (isCD ? item.stageType !== 'ci' : item.stageType === 'ci'))
-            .map((variable) => {
+            .map<GlobalVariableOptionType>((variable) => {
                 const { name, ...updatedVariable } = variable
 
                 return {

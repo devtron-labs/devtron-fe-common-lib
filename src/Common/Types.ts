@@ -29,6 +29,7 @@ import {
     ACTION_STATE,
     DEPLOYMENT_WINDOW_TYPE,
     DockerConfigOverrideType,
+    RefVariableType,
     SortingOrder,
     TaskErrorObj,
     VariableTypeFormat,
@@ -1030,4 +1031,5 @@ export interface GlobalVariableDTO {
 export type GlobalVariableOptionType = Omit<GlobalVariableDTO, 'name'> & {
     label: string
     value: string
+    variableType: Extract<RefVariableType, RefVariableType.GLOBAL>
 }
