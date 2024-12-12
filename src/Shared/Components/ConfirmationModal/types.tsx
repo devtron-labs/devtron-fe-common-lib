@@ -45,12 +45,7 @@ type CustomInputConfigOrChildrenType =
           children?: never
       }
 
-export type ConfirmationModalProps = {
-    title: string
-    subtitle: ReactNode
-    handleClose: (e?: SyntheticEvent) => void
-    showConfirmationModal: boolean
-} & (
+type ButtonConfigAndVariantType =
     | {
           variant: Exclude<ConfirmationModalVariantType, ConfirmationModalVariantType.custom>
           Icon?: never
@@ -64,5 +59,15 @@ export type ConfirmationModalProps = {
               Pick<ButtonProps, 'disabled' | 'style'>
           >
       }
-) &
+
+export type ConfirmationModalProps = {
+    title: string
+    subtitle: ReactNode
+    handleClose: (e?: SyntheticEvent) => void
+    showConfirmationModal: boolean
+} & ButtonConfigAndVariantType &
     CustomInputConfigOrChildrenType
+
+export type ConfirmationModalBodyProps = ButtonConfigAndVariantType &
+    CustomInputConfigOrChildrenType &
+    Pick<ConfirmationModalProps, 'title' | 'subtitle'>
