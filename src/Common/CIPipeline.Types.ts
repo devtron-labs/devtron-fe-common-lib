@@ -292,8 +292,8 @@ export interface ErrorObj {
 export interface TaskErrorObj {
     isValid: boolean
     name: ErrorObj
-    inlineStepDetail?: { inputVariables?: ErrorObj[]; outputVariables?: ErrorObj[] }
-    pluginRefStepDetail?: { inputVariables?: ErrorObj[]; outputVariables?: ErrorObj[] }
+    inlineStepDetail?: { inputVariables?: ErrorObj[]; outputVariables?: ErrorObj[]; isValid?: boolean }
+    pluginRefStepDetail?: { inputVariables?: ErrorObj[]; outputVariables?: ErrorObj[]; isValid?: boolean }
 }
 export interface FormErrorObjectType {
     name: ErrorObj
