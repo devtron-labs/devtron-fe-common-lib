@@ -36,6 +36,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
     currentUnitName,
     currentValue,
     targetPlatform = DEFAULT_PROFILE_NAME,
+    isDisabled = false,
 }) => {
     const handleUnitChange = (selectedUnit: OptionType) => {
         const data = {
@@ -101,6 +102,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         onChange={handleInputChange}
                         required={isRequired}
                         autoComplete="off"
+                        disabled={isDisabled}
                         id={`${actionType}-input`}
                     />
                 </div>
@@ -117,6 +119,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         size={ComponentSizeType.large}
                         menuSize={ComponentSizeType.small}
                         shouldMenuAlignRight
+                        isDisabled={isDisabled}
                     />
                 )}
             </div>

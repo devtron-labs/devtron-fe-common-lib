@@ -152,6 +152,10 @@ export type BuildInfraUnitsMapType = Record<NumericBuildInfraConfigTypes, Config
 export interface BuildInfraNodeSelectorValueType {
     key: string
     value: string
+    /**
+     * Generated at UI, TODO: Can separate this struct from DTO
+     */
+    id: number
 }
 
 export enum BuildInfraToleranceOperatorType {
@@ -168,6 +172,10 @@ export enum BuildInfraToleranceEffectType {
 export type BuildInfraToleranceValueType = {
     key: string
     effect: BuildInfraToleranceEffectType
+    /**
+     * Generated at UI, TODO: Can separate this struct from DTO
+     */
+    id: number
 } & (
     | {
           operator: BuildInfraToleranceOperatorType.EQUALS
@@ -316,6 +324,9 @@ export enum BuildInfraProfileInputActionType {
     REMOVE_TARGET_PLATFORM = 'remove_target_platform',
     RENAME_TARGET_PLATFORM = 'rename_target_platform',
     RESTORE_PROFILE_CONFIG_SNAPSHOT = 'restore_profile_config_snapshot',
+    DELETE_NODE_SELECTOR_ITEM = 'delete_node_selector',
+    ADD_NODE_SELECTOR_ITEM = 'add_node_selector',
+    EDIT_NODE_SELECTOR_ITEM = 'edit_node_selector',
 }
 
 export type HandleProfileInputChangeType =
@@ -349,6 +360,18 @@ export type HandleProfileInputChangeType =
           data: {
               configSnapshot: BuildInfraProfileData['configurations']
           } & Partial<ProfileInputDispatchDataType>
+      }
+    | {
+          action: BuildInfraProfileInputActionType.DELETE_NODE_SELECTOR_ITEM
+          data: ProfileInputDispatchDataType & Pick<BuildInfraNodeSelectorValueType, 'id'>
+      }
+    | {
+          action: BuildInfraProfileInputActionType.ADD_NODE_SELECTOR_ITEM
+          data: ProfileInputDispatchDataType & Pick<BuildInfraNodeSelectorValueType, 'id'>
+      }
+    | {
+          action: BuildInfraProfileInputActionType.EDIT_NODE_SELECTOR_ITEM
+          data: ProfileInputDispatchDataType & Pick<BuildInfraNodeSelectorValueType, 'id' | 'key' | 'value'>
       }
 
 export interface UseBuildInfraFormResponseType {
@@ -411,6 +434,10 @@ export interface BuildInfraFormActionProps
     isRequired?: boolean
     profileUnitsMap?: ConfigurationUnitMapType
     currentUnitName?: BuildInfraConfigValuesType['unit']
+    /**
+     * @default false
+     */
+    isDisabled?: boolean
 }
 
 export interface FooterProps {

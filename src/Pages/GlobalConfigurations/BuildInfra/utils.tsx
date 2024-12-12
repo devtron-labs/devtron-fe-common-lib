@@ -27,6 +27,7 @@ import {
     BuildInfraConfigValuesType,
     BuildInfraInheritActions,
     BuildInfraMetaConfigTypes,
+    BuildInfraNodeSelectorValueType,
     BuildInfraPlatformConfigurationMapDTO,
     BuildInfraProfileAdditionalErrorKeysType,
     BuildInfraProfileBase,
@@ -209,9 +210,10 @@ export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfo
             return {
                 key: BuildInfraConfigTypes.NODE_SELECTOR,
                 value: (configuration.value || [])
-                    .map((nodeSelector) => ({
+                    .map((nodeSelector, index) => ({
                         key: nodeSelector?.key,
                         value: nodeSelector?.value,
+                        id: index,
                     }))
                     .filter((nodeSelector) => nodeSelector.key),
             }
@@ -219,12 +221,13 @@ export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfo
         case BuildInfraConfigTypes.TOLERANCE:
             return {
                 key: BuildInfraConfigTypes.TOLERANCE,
-                value: (configuration.value || []).map((toleranceItem) => {
+                value: (configuration.value || []).map((toleranceItem, index) => {
                     const { key, effect, operator, value } = toleranceItem || {}
 
                     const baseObject = {
                         key,
                         effect,
+                        id: index,
                     }
 
                     if (operator === BuildInfraToleranceOperatorType.EQUALS) {
@@ -647,6 +650,63 @@ export const useBuildInfraForm = ({
                 break
             }
 
+            // TODO: Add validations for these as well, not adding them for be testing
+            case BuildInfraProfileInputActionType.ADD_NODE_SELECTOR_ITEM: {
+                if (
+                    currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].key !==
+                    BuildInfraConfigTypes.NODE_SELECTOR
+                ) {
+                    break
+                }
+
+                const { id } = data
+                const newSelector: BuildInfraNodeSelectorValueType = {
+                    id,
+                    key: '',
+                    value: '',
+                }
+
+                currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.unshift(newSelector)
+                break
+            }
+
+            case BuildInfraProfileInputActionType.DELETE_NODE_SELECTOR_ITEM: {
+                if (
+                    currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].key !==
+                    BuildInfraConfigTypes.NODE_SELECTOR
+                ) {
+                    break
+                }
+
+                const { id } = data
+                currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value = currentConfiguration[
+                    BuildInfraConfigTypes.NODE_SELECTOR
+                ].value.filter((nodeSelector) => nodeSelector.id !== id)
+                break
+            }
+
+            case BuildInfraProfileInputActionType.EDIT_NODE_SELECTOR_ITEM: {
+                if (
+                    currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].key !==
+                    BuildInfraConfigTypes.NODE_SELECTOR
+                ) {
+                    break
+                }
+
+                const { id, key, value } = data
+                const nodeSelector = currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.find(
+                    (selector) => selector.id === id,
+                )
+
+                if (!nodeSelector) {
+                    break
+                }
+
+                nodeSelector.key = key
+                nodeSelector.value = value
+                break
+            }
+
             default:
                 break
         }
@@ -737,7 +797,10 @@ const getConfigurationMapWithoutDefaultFallback = (
                     }
 
                     // eslint-disable-next-line no-param-reassign
-                    configurationMap[configuration.key] = currentConfigValue
+                    configurationMap[configuration.key] = {
+                        ...currentConfigValue,
+                        ...parsePlatformConfigIntoValue(currentConfigValue),
+                    } as BuildInfraConfigInfoType
 
                     return configurationMap
                 },
