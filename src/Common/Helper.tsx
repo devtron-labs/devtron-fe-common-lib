@@ -54,9 +54,12 @@ import { getIsRequestAborted } from './Api'
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
         serverError.errors.map(({ userMessage, internalMessage }) => {
+            const userMessageInLowercase = userMessage?.toLowerCase()
+
             if (
                 serverError.code === 403 &&
-                (userMessage === ERROR_EMPTY_SCREEN.UNAUTHORIZED || userMessage === ERROR_EMPTY_SCREEN.FORBIDDEN)
+                (userMessageInLowercase === ERROR_EMPTY_SCREEN.UNAUTHORIZED.toLowerCase() ||
+                    userMessageInLowercase === ERROR_EMPTY_SCREEN.FORBIDDEN.toLowerCase())
             ) {
                 if (!hideAccessError) {
                     ToastManager.showToast({
