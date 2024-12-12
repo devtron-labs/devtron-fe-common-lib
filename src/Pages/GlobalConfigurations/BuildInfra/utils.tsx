@@ -36,7 +36,9 @@ import {
     BuildInfraProfileInputActionType,
     BuildInfraProfileResponseType,
     BuildInfraProfileTransformerParamsType,
+    BuildInfraToleranceEffectType,
     BuildInfraToleranceOperatorType,
+    BuildInfraToleranceValueType,
     CreateBuildInfraProfileType,
     GetPlatformConfigurationsWithDefaultValuesParamsType,
     HandleProfileInputChangeType,
@@ -704,6 +706,63 @@ export const useBuildInfraForm = ({
 
                 nodeSelector.key = key
                 nodeSelector.value = value
+                break
+            }
+
+            case BuildInfraProfileInputActionType.ADD_TOLERANCE_ITEM: {
+                if (currentConfiguration[BuildInfraConfigTypes.TOLERANCE].key !== BuildInfraConfigTypes.TOLERANCE) {
+                    break
+                }
+
+                const { id } = data
+                const newToleranceItem: BuildInfraToleranceValueType = {
+                    id,
+                    key: '',
+                    // TODO: Ask for equals
+                    effect: BuildInfraToleranceEffectType.NO_SCHEDULE,
+                    operator: BuildInfraToleranceOperatorType.EQUALS,
+                    value: '',
+                }
+
+                currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value.unshift(newToleranceItem)
+                break
+            }
+
+            case BuildInfraProfileInputActionType.DELETE_TOLERANCE_ITEM: {
+                if (currentConfiguration[BuildInfraConfigTypes.TOLERANCE].key !== BuildInfraConfigTypes.TOLERANCE) {
+                    break
+                }
+
+                const { id } = data
+                currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value = currentConfiguration[
+                    BuildInfraConfigTypes.TOLERANCE
+                ].value.filter((toleranceItem) => toleranceItem.id !== id)
+                break
+            }
+
+            case BuildInfraProfileInputActionType.EDIT_TOLERANCE_ITEM: {
+                if (currentConfiguration[BuildInfraConfigTypes.TOLERANCE].key !== BuildInfraConfigTypes.TOLERANCE) {
+                    break
+                }
+
+                const { id, key, effect, operator, value } = data
+                const toleranceItem = currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value.find(
+                    (tolerance) => tolerance.id === id,
+                )
+
+                if (!toleranceItem) {
+                    break
+                }
+
+                toleranceItem.key = key
+                toleranceItem.effect = effect
+                toleranceItem.operator = operator
+                toleranceItem.value = value
+
+                if (operator === BuildInfraToleranceOperatorType.EXISTS) {
+                    delete toleranceItem.value
+                }
+
                 break
             }
 

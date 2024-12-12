@@ -324,9 +324,14 @@ export enum BuildInfraProfileInputActionType {
     REMOVE_TARGET_PLATFORM = 'remove_target_platform',
     RENAME_TARGET_PLATFORM = 'rename_target_platform',
     RESTORE_PROFILE_CONFIG_SNAPSHOT = 'restore_profile_config_snapshot',
-    DELETE_NODE_SELECTOR_ITEM = 'delete_node_selector',
-    ADD_NODE_SELECTOR_ITEM = 'add_node_selector',
-    EDIT_NODE_SELECTOR_ITEM = 'edit_node_selector',
+
+    DELETE_NODE_SELECTOR_ITEM = 'delete_node_selector_item',
+    ADD_NODE_SELECTOR_ITEM = 'add_node_selector_item',
+    EDIT_NODE_SELECTOR_ITEM = 'edit_node_selector_item',
+
+    DELETE_TOLERANCE_ITEM = 'delete_tolerance_item',
+    ADD_TOLERANCE_ITEM = 'add_tolerance_item',
+    EDIT_TOLERANCE_ITEM = 'edit_tolerance_item',
 }
 
 export type HandleProfileInputChangeType =
@@ -372,6 +377,19 @@ export type HandleProfileInputChangeType =
     | {
           action: BuildInfraProfileInputActionType.EDIT_NODE_SELECTOR_ITEM
           data: ProfileInputDispatchDataType & Pick<BuildInfraNodeSelectorValueType, 'id' | 'key' | 'value'>
+      }
+    | {
+          action: BuildInfraProfileInputActionType.DELETE_TOLERANCE_ITEM
+          data: ProfileInputDispatchDataType & Pick<BuildInfraToleranceValueType, 'id'>
+      }
+    | {
+          action: BuildInfraProfileInputActionType.ADD_TOLERANCE_ITEM
+          data: ProfileInputDispatchDataType & Pick<BuildInfraToleranceValueType, 'id'>
+      }
+    | {
+          action: BuildInfraProfileInputActionType.EDIT_TOLERANCE_ITEM
+          data: ProfileInputDispatchDataType &
+              Pick<BuildInfraToleranceValueType, 'id' | 'key' | 'value' | 'effect' | 'operator'>
       }
 
 export interface UseBuildInfraFormResponseType {
