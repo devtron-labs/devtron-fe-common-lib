@@ -31,17 +31,17 @@ const ConfirmationModalBody = ({
 
     const disablePrimaryButton: boolean = confirmationKeyword && confirmationText.trim() !== confirmationKeyword
 
-    const handleCloseWrapper = useCallback(() => {
-        if (!primaryButtonConfig?.isLoading && !secondaryButtonConfig?.disabled) {
-            handleClose()
-        }
-    }, [primaryButtonConfig, secondaryButtonConfig])
-
     const handleTriggerPrimaryActionButton = () => {
         if (primaryButtonConfig && !disablePrimaryButton) {
             primaryButtonConfig.onClick()
         }
     }
+
+    const handleCloseWrapper = useCallback(() => {
+        if (!primaryButtonConfig?.isLoading && !secondaryButtonConfig?.disabled) {
+            handleClose()
+        }
+    }, [primaryButtonConfig, secondaryButtonConfig])
 
     useEffect(() => {
         registerShortcut({ keys: ['Enter'], callback: handleTriggerPrimaryActionButton })
