@@ -1,5 +1,5 @@
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
-import { ReactComponent as ICStamp } from '@Icons/ic-stamp.svg'
+import { ReactComponent as ICCheckCircleDots } from '@Icons/ic-check-circle-dots.svg'
 import { ReactComponent as ICEditFile } from '@Icons/ic-edit-file.svg'
 import { ReactComponent as ICFileCode } from '@Icons/ic-file-code.svg'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
@@ -444,7 +444,7 @@ const getDiffHeading = <DeploymentTemplate extends boolean>(
     if (isApprovalPending) {
         return (
             <div className="flexbox dc__align-items-center dc__gap-8 ">
-                <ICStamp className="icon-dim-16" />
+                <ICCheckCircleDots className="icon-dim-16" />
                 <span className="fs-12 fw-6 cv-5">Approval pending</span>
             </div>
         )
