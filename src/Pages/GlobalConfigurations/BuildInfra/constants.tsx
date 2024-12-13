@@ -39,6 +39,7 @@ export const BUILD_INFRA_INPUT_CONSTRAINTS = {
     STEP: 'any',
     MIN: 0,
     DECIMAL_PLACES: 2,
+    MAX_LABEL_VALUE_LENGTH: 63,
 } as const
 
 export const BUILD_INFRA_TEXT = {
@@ -173,9 +174,7 @@ export const TARGET_PLATFORM_ERROR_FIELDS_MAP: Record<TargetPlatformErrorFields,
     [BuildInfraConfigTypes.CPU_REQUEST]: true,
     [BuildInfraConfigTypes.MEMORY_LIMIT]: true,
     [BuildInfraConfigTypes.MEMORY_REQUEST]: true,
-    [BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY]: true,
-    [BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_VALUE]: true,
-    [BuildInfraProfileAdditionalErrorKeysType.TOLERANCE_KEY]: true,
-    [BuildInfraProfileAdditionalErrorKeysType.TOLERANCE_VALUE]: true,
+    [BuildInfraConfigTypes.NODE_SELECTOR]: true,
+    [BuildInfraConfigTypes.TOLERANCE]: true,
     [BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM]: true,
 }

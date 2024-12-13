@@ -289,35 +289,34 @@ export interface UseBuildInfraFormProps {
 }
 
 export enum BuildInfraProfileAdditionalErrorKeysType {
-    NODE_SELECTOR_KEY = 'node_selector_key',
-    NODE_SELECTOR_VALUE = 'node_selector_value',
-    TOLERANCE_KEY = 'tolerance_key',
-    TOLERANCE_VALUE = 'tolerance_value',
     TARGET_PLATFORM = 'target_platform',
+}
+
+export enum NodeSelectorHeaderType {
+    KEY = 'KEY',
+    VALUE = 'VALUE',
+}
+
+export enum ToleranceHeaderType {
+    KEY = 'KEY',
+    OPERATOR = 'OPERATOR',
+    VALUE = 'VALUE',
+    EFFECT = 'EFFECT',
 }
 
 /**
  * Would be maintaining error state for name and description irrespective of platform
  * For error states related to platform, we would not be letting user to switch platform if there are errors
  */
-export type ProfileInputErrorType =
-    | {
-          [key in
-              | NumericBuildInfraConfigTypes
-              | BuildInfraMetaConfigTypes
-              | BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM]: string
-      }
-    | {
-          [key in Extract<
-              BuildInfraProfileAdditionalErrorKeysType,
-              | BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY
-              | BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_VALUE
-              | BuildInfraProfileAdditionalErrorKeysType.TOLERANCE_KEY
-              | BuildInfraProfileAdditionalErrorKeysType.TOLERANCE_VALUE
-          >]: Record<number, string>
-      }
+export type ProfileInputErrorType = Record<
+    NumericBuildInfraConfigTypes | BuildInfraMetaConfigTypes | BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM,
+    string
+> &
+    // Map of id to error
+    Record<BuildInfraConfigTypes.NODE_SELECTOR, Record<number, Partial<Record<NodeSelectorHeaderType, string[]>>>> &
+    Record<BuildInfraConfigTypes.TOLERANCE, Record<number, Partial<Record<ToleranceHeaderType, string[]>>>>
 
-export type TargetPlatformErrorFields = NumericBuildInfraConfigTypes | BuildInfraProfileAdditionalErrorKeysType
+export type TargetPlatformErrorFields = BuildInfraConfigTypes | BuildInfraProfileAdditionalErrorKeysType
 
 export interface ProfileInputDispatchDataType {
     targetPlatform: string

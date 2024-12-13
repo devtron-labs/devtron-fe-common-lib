@@ -15,7 +15,7 @@
  */
 
 import { FormEvent, useEffect, useState } from 'react'
-import { ROUTES, showError, useAsync } from '../../../Common'
+import { PATTERNS, ROUTES, showError, useAsync } from '../../../Common'
 import { getBuildInfraProfileByName, createBuildInfraProfile, updateBuildInfraProfile } from './services'
 import {
     BuildInfraConfigInfoType,
@@ -42,7 +42,9 @@ import {
     CreateBuildInfraProfileType,
     GetPlatformConfigurationsWithDefaultValuesParamsType,
     HandleProfileInputChangeType,
+    NodeSelectorHeaderType,
     ProfileInputErrorType,
+    ToleranceHeaderType,
     UseBuildInfraFormProps,
     UseBuildInfraFormResponseType,
     ValidateRequestLimitResponseType,
@@ -70,6 +72,7 @@ import {
     ValidationResponseType,
     validateStringLength,
     requiredField,
+    validateLabelKey,
 } from '../../../Shared'
 
 export const validateRequestLimit = ({
@@ -263,6 +266,43 @@ export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfo
     }
 }
 
+const validateLabelValue = (value?: string): Pick<ValidationResponseType, 'isValid'> & { messages: string[] } => {
+    if (!value) {
+        return {
+            isValid: true,
+            messages: [],
+        }
+    }
+
+    const messages: string[] = []
+
+    if (value.length > BUILD_INFRA_INPUT_CONSTRAINTS.MAX_LABEL_VALUE_LENGTH) {
+        messages.push(`Value should be less than ${BUILD_INFRA_INPUT_CONSTRAINTS.MAX_LABEL_VALUE_LENGTH} characters`)
+    }
+
+    const firstLastAlphanumeric = PATTERNS.START_END_ALPHANUMERIC.test(value)
+    if (!firstLastAlphanumeric) {
+        messages.push('Value should start and end with alphanumeric characters')
+    }
+
+    const validValue = PATTERNS.ALPHANUMERIC_WITH_SPECIAL_CHAR.test(value)
+    if (!validValue) {
+        messages.push('Value should contain only alphanumeric characters and special characters')
+    }
+
+    if (messages.length > 0) {
+        return {
+            isValid: false,
+            messages,
+        }
+    }
+
+    return {
+        isValid: true,
+        messages: [],
+    }
+}
+
 export const useBuildInfraForm = ({
     name,
     editProfile,
@@ -297,8 +337,8 @@ export const useBuildInfraForm = ({
 
     // NOTE: Currently sending and receiving values as string, but will parse it to number for payload
     const handleProfileInputChange = ({ action, data }: HandleProfileInputChangeType) => {
-        const currentInput = { ...profileInput }
-        const currentInputErrors = { ...profileInputErrors }
+        const currentInput = structuredClone(profileInput)
+        const currentInputErrors = structuredClone(profileInputErrors)
         const { targetPlatform: targetPlatformFromData } = data
         const targetPlatform = targetPlatformFromData || ''
         const currentConfiguration = currentInput.configurations[targetPlatform]
@@ -742,12 +782,14 @@ export const useBuildInfraForm = ({
 
                 currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.unshift(newSelector)
 
-                if (!currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY]) {
-                    currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY] = {}
+                if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]) {
+                    currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {}
                 }
 
                 // Since key is required but we would want to show it if user clears it
-                currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY][id] = ''
+                currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {
+                    [NodeSelectorHeaderType.KEY]: [],
+                }
                 break
             }
 
@@ -764,21 +806,10 @@ export const useBuildInfraForm = ({
                     BuildInfraConfigTypes.NODE_SELECTOR
                 ].value.filter((nodeSelector) => nodeSelector.id !== id)
 
-                delete currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY][id]
-                delete currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_VALUE][id]
+                delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]
 
-                if (
-                    Object.keys(currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY])
-                        .length === 0
-                ) {
-                    delete currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_KEY]
-                }
-
-                if (
-                    Object.keys(currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_VALUE])
-                        .length === 0
-                ) {
-                    delete currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.NODE_SELECTOR_VALUE]
+                if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]).length === 0) {
+                    delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]
                 }
                 break
             }
@@ -802,6 +833,28 @@ export const useBuildInfraForm = ({
 
                 nodeSelector.key = key
                 nodeSelector.value = value
+
+                const keyErrorMessages = validateLabelKey(key).messages
+                const valueErrorMessages = validateLabelValue(value).messages
+
+                const hasAnyError = keyErrorMessages.length > 0 || valueErrorMessages.length > 0
+                if (!hasAnyError) {
+                    // Would delete id, and if not key left then delete key
+                    delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]
+                    if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]).length === 0) {
+                        delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]
+                    }
+                }
+
+                if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]) {
+                    currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {}
+                }
+
+                currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {
+                    [NodeSelectorHeaderType.KEY]: keyErrorMessages,
+                    [NodeSelectorHeaderType.VALUE]: valueErrorMessages,
+                }
+
                 break
             }
 
@@ -821,6 +874,15 @@ export const useBuildInfraForm = ({
                 }
 
                 currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value.unshift(newToleranceItem)
+
+                if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id]) {
+                    currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {}
+                }
+
+                // Since key is required but we would want to show it if user clears it
+                currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {
+                    [ToleranceHeaderType.KEY]: [],
+                }
                 break
             }
 
@@ -833,6 +895,12 @@ export const useBuildInfraForm = ({
                 currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value = currentConfiguration[
                     BuildInfraConfigTypes.TOLERANCE
                 ].value.filter((toleranceItem) => toleranceItem.id !== id)
+
+                delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id]
+
+                if (Object.keys(currentInputErrors[BuildInfraConfigTypes.TOLERANCE]).length === 0) {
+                    delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE]
+                }
                 break
             }
 
@@ -857,6 +925,28 @@ export const useBuildInfraForm = ({
 
                 if (operator === BuildInfraToleranceOperatorType.EXISTS) {
                     delete toleranceItem.value
+                }
+
+                const keyErrorMessages = validateLabelKey(key).messages
+                const valueErrorMessages = validateLabelValue(value).messages
+
+                const hasAnyError = keyErrorMessages.length > 0 || valueErrorMessages.length > 0
+
+                if (!hasAnyError) {
+                    // Would delete id, and if not key left then delete key
+                    delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id]
+                    if (Object.keys(currentInputErrors[BuildInfraConfigTypes.TOLERANCE]).length === 0) {
+                        delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE]
+                    }
+                }
+
+                if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id]) {
+                    currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {}
+                }
+
+                currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {
+                    [ToleranceHeaderType.KEY]: keyErrorMessages,
+                    [ToleranceHeaderType.VALUE]: valueErrorMessages,
                 }
 
                 break
