@@ -29,7 +29,6 @@ import {
     RefVariableType,
     PluginType,
 } from '../Common'
-import { KeyValueListType } from './Components'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
@@ -358,10 +357,6 @@ export interface RuntimeParamsAPIResponseType {
 }
 
 export interface RuntimeParamsTriggerPayloadType {
-    runtimeParams: Pick<RuntimeParamsAPIResponseType, 'envVariables'>
-}
-
-export interface RuntimeParamsV2TriggerPayloadType {
     runtimeParams: {
         runtimePluginVariables: Pick<
             RuntimePluginVariables,
@@ -725,10 +720,6 @@ export interface ConfigKeysWithLockType {
 }
 
 export type DataAttributes = Record<`data-${string}`, unknown>
-
-export interface RuntimeParamsListItemType extends KeyValueListType {
-    id: number
-}
 
 export enum RuntimeParamsHeadingType {
     KEY = 'key',

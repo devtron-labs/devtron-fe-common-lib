@@ -16,7 +16,7 @@
 
 import { MutableRefObject } from 'react'
 import moment from 'moment'
-import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
+import { RuntimeParamsAPIResponseType } from '@Shared/types'
 import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, getIsRequestAborted, post } from './Api'
 import { API_STATUS_CODES, GitProviderType, ROUTES } from './Constants'
@@ -324,10 +324,7 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
     }
 }
 
-export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): RuntimeParamsListItemType[] =>
-    Object.entries(response?.envVariables || {})
-        .map(([key, value], index) => ({ key, value, id: index }))
-        .sort((a, b) => stringComparatorBySortOrder(a.key, b.key))
+
 
 const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
     if (!cdMaterialsResult) {
