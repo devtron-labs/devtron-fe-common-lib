@@ -182,6 +182,12 @@ export interface DraftMetadataDTO {
     dataEncrypted: boolean
     isAppAdmin: boolean
     userApprovalMetadata: UserApprovalMetadataType
+    /**
+     * User id of the user who has requested the data
+     *
+     * This would be the id of the user whose token is sent in the cookie
+     */
+    requestedUserId: number
 }
 
 export enum CMSecretExternalType {
