@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { DynamicDataTableCellValidationState } from '@Shared/Components'
+
 export interface MaterialType {
     name: string
     type: string
@@ -289,11 +291,30 @@ export interface ErrorObj {
     isValid: boolean
     message: string | null
 }
+
+export enum InputOutputVariablesHeaderKeys {
+    VARIABLE = 'variable',
+    FORMAT = 'format',
+    VALUE = 'val',
+}
+
+export type InputOutputVariablesErrorObj = Record<InputOutputVariablesHeaderKeys, DynamicDataTableCellValidationState>
+
 export interface TaskErrorObj {
     isValid: boolean
     name: ErrorObj
-    inlineStepDetail?: { inputVariables?: ErrorObj[]; outputVariables?: ErrorObj[]; isValid?: boolean }
-    pluginRefStepDetail?: { inputVariables?: ErrorObj[]; outputVariables?: ErrorObj[]; isValid?: boolean }
+    inlineStepDetail?: {
+        inputVariables?: Record<number, InputOutputVariablesErrorObj>
+        outputVariables?: Record<number, InputOutputVariablesErrorObj>
+        isInputVariablesValid?: boolean
+        isOutputVariablesValid?: boolean
+    }
+    pluginRefStepDetail?: {
+        inputVariables?: Record<number, InputOutputVariablesErrorObj>
+        outputVariables?: Record<number, InputOutputVariablesErrorObj>
+        isInputVariablesValid?: boolean
+        isOutputVariablesValid?: boolean
+    }
 }
 export interface FormErrorObjectType {
     name: ErrorObj
