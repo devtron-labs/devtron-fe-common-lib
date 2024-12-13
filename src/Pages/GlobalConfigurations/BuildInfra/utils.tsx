@@ -661,7 +661,7 @@ export const useBuildInfraForm = ({
             }
 
             case BuildInfraProfileInputActionType.RENAME_TARGET_PLATFORM: {
-                const { originalPlatformName, newPlatformName } = data
+                const { originalPlatformName, newPlatformName, configSnapshot } = data
                 const originalPlatformConfig = currentInput.configurations[originalPlatformName]
 
                 if (originalPlatformName === newPlatformName) {
@@ -703,8 +703,12 @@ export const useBuildInfraForm = ({
                 }, {} as BuildInfraConfigurationMapType)
 
                 // If original platform is present in snapshot we will restore it
-                delete currentInput.configurations[originalPlatformName]
+                if (configSnapshot[originalPlatformName]) {
+                    currentInput.configurations[originalPlatformName] = configSnapshot[originalPlatformName]
+                    break
+                }
 
+                delete currentInput.configurations[originalPlatformName]
                 break
             }
 

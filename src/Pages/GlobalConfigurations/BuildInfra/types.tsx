@@ -367,6 +367,7 @@ export type HandleProfileInputChangeType =
           data: {
               originalPlatformName: string
               newPlatformName: string
+              configSnapshot: BuildInfraProfileData['configurations']
           } & Partial<ProfileInputDispatchDataType>
       }
     | {
