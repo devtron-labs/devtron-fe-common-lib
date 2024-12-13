@@ -26,6 +26,7 @@ export interface SegmentedControlProps {
     tabs: OptionType[]
     initialTab: string
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    name: string
     tooltips?: string[]
     disabled?: boolean
     rootClassName?: string

@@ -25,13 +25,14 @@ const SegmentedControl = ({
     tooltips,
     disabled = false,
     rootClassName = '',
+    name,
     variant = SegmentedControlVariant.WHITE_ON_GRAY,
 }: SegmentedControlProps) => (
     <StyledRadioGroup
         className={`${variant} ${rootClassName}`}
         onChange={onChange}
         initialTab={initialTab}
-        name="segmented-control"
+        name={name}
         disabled={disabled}
     >
         {tabs.map((tab: OptionType, index) => (
@@ -41,6 +42,7 @@ const SegmentedControl = ({
                 className="fs-12 cn-7 fw-6 lh-20"
                 showTippy={!!tooltips?.[index]}
                 tippyContent={tooltips?.[index] ?? ''}
+                dataTestId={`${name}-${tab.value}`}
             >
                 {tab.label}
             </StyledRadioGroup.Radio>
