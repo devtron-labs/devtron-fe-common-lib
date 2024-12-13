@@ -55,10 +55,10 @@ const MarkDown = ({
         if (task) {
             return `<li style="list-style: none">
                         <input disabled type="checkbox" ${checked ? 'checked' : ''} class="dc__vertical-align-middle" style="margin: 0 0.2em 0.25em -1.4em">
-                        ${text}
+                        ${marked(text)}
                     </li>`
         }
-        return `<li>${text}</li>`
+        return `<li>${marked(text)}</li>`
     }
 
     renderer.image = ({ href, title, text }: Tokens.Image) =>
@@ -68,7 +68,7 @@ const MarkDown = ({
         <div class="table-container">
             <table>
                 <thead>
-                    <tr>${header.map((headerCell) => `<th align="${headerCell.align}">${headerCell.text}</th>`).join('')}</tr>
+                    <tr>${header.map((headerCell) => `<th align="${headerCell.align}">${marked(headerCell.text)}</th>`).join('')}</tr>
                 </thead>
                 <tbody>
                     ${rows.map((row) => renderTableRow(row)).join('')}
