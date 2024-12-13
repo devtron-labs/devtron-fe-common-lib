@@ -1,12 +1,12 @@
 import { ReactComponent as ICArrowCounterClockwise } from '@Icons/ic-arrow-counter-clockwise.svg'
 import { DEFAULT_INVALID_YAML_ERROR } from './constants'
-import { InvalidYAMLTippyWrapperProps } from './types'
+import { InvalidTippyProps, InvalidTippyTypeEnum } from './types'
 
 export const getInvalidTippyContent = ({
-    type = 'yaml',
+    type = InvalidTippyTypeEnum.YAML,
     parsingError,
     restoreLastSavedYAML,
-}: Pick<InvalidYAMLTippyWrapperProps, 'parsingError' | 'restoreLastSavedYAML'> & { type?: 'yaml' | 'json' }) => {
+}: InvalidTippyProps) => {
     const text = type.toUpperCase()
 
     return (
