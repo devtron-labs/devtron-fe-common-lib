@@ -339,7 +339,7 @@ export interface GitTriggers {
 }
 
 export interface RuntimePluginVariables
-    extends Pick<VariableType, 'name' | 'value' | 'format' | 'fileReferenceId' | 'fileMountDir'> {
+    extends Pick<VariableType, 'name' | 'value' | 'defaultValue' | 'format' | 'fileReferenceId' | 'fileMountDir'> {
     variableStepScope: string
     valueConstraint: ValueConstraintType & { id: number }
     stepVariableId: number
