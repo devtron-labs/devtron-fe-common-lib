@@ -87,6 +87,7 @@ export interface BuildInfraDescriptorProps {
     children?: ReactNode
     tippyInfoText?: string
     tippyAdditionalContent?: ReactNode
+    tooltipNode?: ReactNode
 }
 
 export type NumericBuildInfraConfigTypes = Extract<
