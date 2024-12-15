@@ -17,6 +17,7 @@
 import { FormEvent, FunctionComponent, useMemo } from 'react'
 import { SelectPicker } from '@Shared/Components/SelectPicker'
 import { ComponentSizeType } from '@Shared/constants'
+import { isNullOrUndefined } from '@Shared/Helpers'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { BuildInfraFormActionProps } from './types'
 import { OptionType } from '../../../Common'
@@ -42,7 +43,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
     const handleUnitChange = (selectedUnit: OptionType) => {
         const data = {
             unit: selectedUnit.label,
-            value: +currentValue,
+            value: isNullOrUndefined(currentValue) ? currentValue : +currentValue,
         }
         handleProfileInputChange({
             action: actionType,
@@ -56,8 +57,9 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
     const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
         const data = {
             unit: currentUnitName,
-            value: +e.currentTarget.value,
+            value: e.currentTarget.value === '' ? null : +e.currentTarget.value,
         }
+
         handleProfileInputChange({
             action: actionType,
             data: {
@@ -102,7 +104,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         min={BUILD_INFRA_INPUT_CONSTRAINTS.MIN}
                         className="form__input dc__no-right-border dc__no-right-radius"
                         placeholder={placeholder}
-                        value={currentValue}
+                        value={isNullOrUndefined(currentValue) ? '' : currentValue}
                         onChange={handleInputChange}
                         required={isRequired}
                         autoComplete="off"
@@ -122,8 +124,8 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         isSearchable={false}
                         size={ComponentSizeType.large}
                         menuSize={ComponentSizeType.small}
-                        shouldMenuAlignRight
                         isDisabled={isDisabled}
+                        shouldMenuAlignRight
                     />
                 )}
             </div>
