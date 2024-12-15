@@ -867,8 +867,8 @@ export const useBuildInfraForm = ({
                 }
 
                 currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {
-                    [NodeSelectorHeaderType.KEY]: keyErrorMessages,
-                    [NodeSelectorHeaderType.VALUE]: valueErrorMessages,
+                    ...(keyErrorMessages.length > 0 && { [NodeSelectorHeaderType.KEY]: keyErrorMessages }),
+                    ...(valueErrorMessages.length > 0 && { [NodeSelectorHeaderType.VALUE]: valueErrorMessages }),
                 }
 
                 if (!hasAnyError) {
@@ -982,8 +982,8 @@ export const useBuildInfraForm = ({
                 }
 
                 currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {
-                    [ToleranceHeaderType.KEY]: keyErrorMessages,
-                    [ToleranceHeaderType.VALUE]: valueErrorMessages,
+                    ...(keyErrorMessages.length > 0 && { [ToleranceHeaderType.KEY]: keyErrorMessages }),
+                    ...(valueErrorMessages.length > 0 && { [ToleranceHeaderType.VALUE]: valueErrorMessages }),
                 }
 
                 if (!hasAnyError) {
