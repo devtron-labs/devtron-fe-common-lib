@@ -314,8 +314,14 @@ export type ProfileInputErrorType = Record<
     string
 > &
     // Map of id to error
-    Record<BuildInfraConfigTypes.NODE_SELECTOR, Record<number, Partial<Record<NodeSelectorHeaderType, string[]>>>> &
-    Record<BuildInfraConfigTypes.TOLERANCE, Record<number, Partial<Record<ToleranceHeaderType, string[]>>>>
+    Record<
+        BuildInfraConfigTypes.NODE_SELECTOR,
+        Record<BuildInfraNodeSelectorValueType['id'], Partial<Record<NodeSelectorHeaderType, string[]>>>
+    > &
+    Record<
+        BuildInfraConfigTypes.TOLERANCE,
+        Record<BuildInfraNodeSelectorValueType['id'], Partial<Record<ToleranceHeaderType, string[]>>>
+    >
 
 export type TargetPlatformErrorFields = BuildInfraConfigTypes | BuildInfraProfileAdditionalErrorKeysType
 
