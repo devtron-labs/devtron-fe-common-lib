@@ -107,7 +107,7 @@ export interface BuildInfraActionType {
     /**
      * Label to be shown above input
      */
-    label: string
+    label?: string
     /**
      * Placeholder for input, can be optional
      */

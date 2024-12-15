@@ -83,12 +83,15 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
 
     return (
         <div className="flexbox-col dc__gap-4 dc__mxw-420 w-100 dc__align-start">
-            <label
-                htmlFor={`${actionType}-input`}
-                className={`fs-13 fw-4 lh-20 cn-7 ${isRequired ? 'dc__required-field' : ''}`}
-            >
-                {label}
-            </label>
+            {label && (
+                <label
+                    htmlFor={`${actionType}-input`}
+                    className={`fs-13 fw-4 lh-20 cn-7 ${isRequired ? 'dc__required-field' : ''}`}
+                >
+                    {label}
+                </label>
+            )}
+
             <div className="w-100 flexbox dc__align-items-center">
                 <div className="flex-grow-1">
                     <input
