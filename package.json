@@ -104,7 +104,8 @@
         "react-dates": "^21.8.0",
         "react-diff-viewer-continued": "^3.4.0",
         "sass": "^1.69.7",
-        "tslib": "2.7.0"
+        "tslib": "2.7.0",
+        "uuid": "^11.0.3"
     },
     "overrides": {
         "cross-spawn": "^7.0.5",

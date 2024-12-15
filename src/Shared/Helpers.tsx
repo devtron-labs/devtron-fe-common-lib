@@ -20,6 +20,10 @@ import Tippy from '@tippyjs/react'
 import { Pair } from 'yaml'
 import moment from 'moment'
 import { MaterialHistoryType } from '@Shared/Services/app.types'
+import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
+import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
+import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
+import { v4 as uuidv4 } from 'uuid'
 import {
     handleUTCTime,
     ManualApprovalType,
@@ -43,9 +47,6 @@ import {
     PreventOutsideFocusProps,
     WebhookEventNameType,
 } from './types'
-import { ReactComponent as ICPullRequest } from '../Assets/Icon/ic-pull-request.svg'
-import { ReactComponent as ICTag } from '../Assets/Icon/ic-tag.svg'
-import { ReactComponent as ICWebhook } from '../Assets/Icon/ic-webhook.svg'
 import { DEPLOYMENT_STATUS, TIMELINE_STATUS } from './constants'
 import {
     AggregatedNodes,
@@ -905,3 +906,5 @@ export const getWebhookDate = (materialSourceType: string, history: MaterialHist
     const _moment = moment(webhookData.data.date, 'YYYY-MM-DDTHH:mm:ssZ')
     return _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : webhookData.data.date
 }
+
+export const getUUID = (): string => uuidv4()
