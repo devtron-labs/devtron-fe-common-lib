@@ -810,9 +810,9 @@ export const useBuildInfraForm = ({
                     BuildInfraConfigTypes.NODE_SELECTOR
                 ].value.filter((nodeSelector) => nodeSelector.id !== id)
 
-                delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]
+                delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]?.[id]
 
-                if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]).length === 0) {
+                if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] || {}).length === 0) {
                     currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
                 }
                 break
@@ -832,11 +832,15 @@ export const useBuildInfraForm = ({
                 )
 
                 if (!nodeSelector) {
-                    break
+                    currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.unshift({
+                        id,
+                        key,
+                        value,
+                    })
+                } else {
+                    nodeSelector.key = key
+                    nodeSelector.value = value
                 }
-
-                nodeSelector.key = key
-                nodeSelector.value = value
 
                 const keyErrorMessages = validateLabelKey(key).messages
                 const valueErrorMessages = validateLabelValue(value).messages
@@ -908,9 +912,9 @@ export const useBuildInfraForm = ({
                     BuildInfraConfigTypes.TOLERANCE
                 ].value.filter((toleranceItem) => toleranceItem.id !== id)
 
-                delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id]
+                delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE]?.[id]
 
-                if (Object.keys(currentInputErrors[BuildInfraConfigTypes.TOLERANCE]).length === 0) {
+                if (Object.keys(currentInputErrors[BuildInfraConfigTypes.TOLERANCE] || {}).length === 0) {
                     currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = null
                 }
                 break
@@ -927,16 +931,23 @@ export const useBuildInfraForm = ({
                 )
 
                 if (!toleranceItem) {
-                    break
-                }
+                    // Question: Should we parse it as per type or as would suffice?
+                    currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value.unshift({
+                        id,
+                        key,
+                        effect,
+                        operator,
+                        value,
+                    } as BuildInfraToleranceValueType)
+                } else {
+                    toleranceItem.key = key
+                    toleranceItem.effect = effect
+                    toleranceItem.operator = operator
+                    toleranceItem.value = value
 
-                toleranceItem.key = key
-                toleranceItem.effect = effect
-                toleranceItem.operator = operator
-                toleranceItem.value = value
-
-                if (operator === BuildInfraToleranceOperatorType.EXISTS) {
-                    delete toleranceItem.value
+                    if (operator === BuildInfraToleranceOperatorType.EXISTS) {
+                        delete toleranceItem.value
+                    }
                 }
 
                 const keyErrorMessages = validateLabelKey(key).messages
