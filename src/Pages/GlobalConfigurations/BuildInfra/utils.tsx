@@ -782,7 +782,11 @@ export const useBuildInfraForm = ({
 
                 currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.unshift(newSelector)
 
-                if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]) {
+                if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]?.[id]) {
+                    if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]) {
+                        currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = {}
+                    }
+
                     currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {}
                 }
 
@@ -809,7 +813,7 @@ export const useBuildInfraForm = ({
                 delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]
 
                 if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]).length === 0) {
-                    delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]
+                    currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
                 }
                 break
             }
@@ -838,21 +842,25 @@ export const useBuildInfraForm = ({
                 const valueErrorMessages = validateLabelValue(value).messages
 
                 const hasAnyError = keyErrorMessages.length > 0 || valueErrorMessages.length > 0
-                if (!hasAnyError) {
-                    // Would delete id, and if not key left then delete key
-                    delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]
-                    if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]).length === 0) {
-                        delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]
-                    }
-                }
 
-                if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]) {
+                if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]?.[id]) {
+                    if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]) {
+                        currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = {}
+                    }
                     currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {}
                 }
 
                 currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {
                     [NodeSelectorHeaderType.KEY]: keyErrorMessages,
                     [NodeSelectorHeaderType.VALUE]: valueErrorMessages,
+                }
+
+                if (!hasAnyError) {
+                    // Would delete id, and if not key left then delete key
+                    delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]
+                    if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]).length === 0) {
+                        currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
+                    }
                 }
 
                 break
@@ -875,7 +883,11 @@ export const useBuildInfraForm = ({
 
                 currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value.unshift(newToleranceItem)
 
-                if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id]) {
+                if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]?.[id]) {
+                    if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]) {
+                        currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = {}
+                    }
+
                     currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {}
                 }
 
@@ -899,7 +911,7 @@ export const useBuildInfraForm = ({
                 delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id]
 
                 if (Object.keys(currentInputErrors[BuildInfraConfigTypes.TOLERANCE]).length === 0) {
-                    delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE]
+                    currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = null
                 }
                 break
             }
@@ -932,21 +944,25 @@ export const useBuildInfraForm = ({
 
                 const hasAnyError = keyErrorMessages.length > 0 || valueErrorMessages.length > 0
 
-                if (!hasAnyError) {
-                    // Would delete id, and if not key left then delete key
-                    delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id]
-                    if (Object.keys(currentInputErrors[BuildInfraConfigTypes.TOLERANCE]).length === 0) {
-                        delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE]
+                if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]?.[id]) {
+                    if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]) {
+                        currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = {}
                     }
-                }
 
-                if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id]) {
                     currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {}
                 }
 
                 currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {
                     [ToleranceHeaderType.KEY]: keyErrorMessages,
                     [ToleranceHeaderType.VALUE]: valueErrorMessages,
+                }
+
+                if (!hasAnyError) {
+                    // Would delete id, and if not key left then delete key
+                    delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id]
+                    if (Object.keys(currentInputErrors[BuildInfraConfigTypes.TOLERANCE]).length === 0) {
+                        currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = null
+                    }
                 }
 
                 break
