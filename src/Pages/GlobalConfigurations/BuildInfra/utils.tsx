@@ -65,7 +65,6 @@ import {
     validateDescription,
     validateName,
     validateRequiredPositiveNumber,
-    getCommonSelectStyle,
     validateRequiredPositiveInteger,
     ToastVariantType,
     ToastManager,
@@ -1234,67 +1233,3 @@ export const getBuildInfraProfilePayload = (
 
 export const getBuildInfraProfileEndpoint = (): string =>
     `${ROUTES.INFRA_CONFIG_PROFILE}/${BUILD_INFRA_LATEST_API_VERSION}`
-
-export const unitSelectorStyles = () =>
-    getCommonSelectStyle({
-        control: (base, state) => ({
-            ...base,
-            borderRadius: 0,
-            backgroundColor: 'var(--N0)',
-            border: state.isFocused ? '1px solid var(--B500) !important' : '1px solid var(--N200)',
-            alignItems: 'center',
-            cursor: 'pointer',
-            borderTopRightRadius: '4px',
-            borderBottomRightRadius: '4px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            outline: 'none',
-            boxShadow: 'none',
-            '&:hover': {
-                border: '1px solid var(--N400)',
-            },
-        }),
-        indicatorContainer: (base) => ({
-            ...base,
-            padding: '0px',
-        }),
-        dropdownIndicator: (base, state) => ({
-            ...base,
-            color: 'var(--N600)',
-            transition: 'all .2s ease',
-            transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-        }),
-        option: (base, state) => ({
-            ...base,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            cursor: 'pointer',
-            ...(state.isFocused
-                ? {
-                      backgroundColor: 'var(--N50)',
-                  }
-                : {}),
-            ...(state.isSelected && {
-                backgroundColor: 'var(--B100)',
-                fontWeight: 600,
-                color: 'var(--B500)',
-            }),
-            '&:active': {
-                backgroundColor: 'var(--N50)',
-            },
-        }),
-        valueContainer: (base) => ({
-            ...base,
-            color: 'var(--N900)',
-            fontSize: '13px',
-            fontWeight: '400',
-            lineHeight: '20px',
-        }),
-        menuList: (base) => ({
-            ...base,
-            maxHeight: '164px',
-            height: '100%',
-        }),
-    })
