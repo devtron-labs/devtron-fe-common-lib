@@ -773,27 +773,39 @@ export const useBuildInfraForm = ({
                     break
                 }
 
-                const { id } = data
-                const newSelector: BuildInfraNodeSelectorValueType = {
-                    id,
-                    key: '',
-                    value: '',
-                }
+                const ids = (
+                    currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value as BuildInfraNodeSelectorValueType[]
+                )?.length
+                    ? [getUUID()]
+                    : [getUUID(), getUUID()]
 
-                currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.unshift(newSelector)
+                ids.forEach((id) => {
+                    if (
+                        currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].key ===
+                        BuildInfraConfigTypes.NODE_SELECTOR
+                    ) {
+                        const newSelector: BuildInfraNodeSelectorValueType = {
+                            id,
+                            key: '',
+                            value: '',
+                        }
 
-                if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]?.[id]) {
-                    if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]) {
-                        currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = {}
+                        currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.unshift(newSelector)
+
+                        if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]?.[id]) {
+                            if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]) {
+                                currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = {}
+                            }
+
+                            currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {}
+                        }
+
+                        // Since key is required but we would want to show it if user clears it
+                        currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {
+                            [NodeSelectorHeaderType.KEY]: [],
+                        }
                     }
-
-                    currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {}
-                }
-
-                // Since key is required but we would want to show it if user clears it
-                currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {
-                    [NodeSelectorHeaderType.KEY]: [],
-                }
+                })
                 break
             }
 
@@ -871,34 +883,40 @@ export const useBuildInfraForm = ({
             }
 
             case BuildInfraProfileInputActionType.ADD_TOLERANCE_ITEM: {
-                if (currentConfiguration[BuildInfraConfigTypes.TOLERANCE].key !== BuildInfraConfigTypes.TOLERANCE) {
-                    break
-                }
+                const ids = (
+                    currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value as BuildInfraToleranceValueType[]
+                )?.length
+                    ? [getUUID()]
+                    : [getUUID(), getUUID()]
 
-                const { id } = data
-                const newToleranceItem: BuildInfraToleranceValueType = {
-                    id,
-                    key: '',
-                    // TODO: Ask for constants
-                    effect: BuildInfraToleranceEffectType.NO_SCHEDULE,
-                    operator: BuildInfraToleranceOperatorType.EQUALS,
-                    value: '',
-                }
+                ids.forEach((id) => {
+                    if (currentConfiguration[BuildInfraConfigTypes.TOLERANCE].key === BuildInfraConfigTypes.TOLERANCE) {
+                        const newToleranceItem: BuildInfraToleranceValueType = {
+                            id,
+                            key: '',
+                            // TODO: Ask for constants
+                            effect: BuildInfraToleranceEffectType.NO_SCHEDULE,
+                            operator: BuildInfraToleranceOperatorType.EQUALS,
+                            value: '',
+                        }
 
-                currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value.unshift(newToleranceItem)
+                        currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value.unshift(newToleranceItem)
 
-                if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]?.[id]) {
-                    if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]) {
-                        currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = {}
+                        if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]?.[id]) {
+                            if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]) {
+                                currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = {}
+                            }
+
+                            currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {}
+                        }
+
+                        // Since key is required but we would want to show it if user clears it
+                        currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {
+                            [ToleranceHeaderType.KEY]: [],
+                        }
                     }
+                })
 
-                    currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {}
-                }
-
-                // Since key is required but we would want to show it if user clears it
-                currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {
-                    [ToleranceHeaderType.KEY]: [],
-                }
                 break
             }
 

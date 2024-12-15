@@ -388,7 +388,7 @@ export type HandleProfileInputChangeType =
       }
     | {
           action: BuildInfraProfileInputActionType.ADD_NODE_SELECTOR_ITEM
-          data: ProfileInputDispatchDataType & Pick<BuildInfraNodeSelectorValueType, 'id'>
+          data: ProfileInputDispatchDataType
       }
     | {
           action: BuildInfraProfileInputActionType.EDIT_NODE_SELECTOR_ITEM
@@ -400,7 +400,7 @@ export type HandleProfileInputChangeType =
       }
     | {
           action: BuildInfraProfileInputActionType.ADD_TOLERANCE_ITEM
-          data: ProfileInputDispatchDataType & Pick<BuildInfraToleranceValueType, 'id'>
+          data: ProfileInputDispatchDataType
       }
     | {
           action: BuildInfraProfileInputActionType.EDIT_TOLERANCE_ITEM
