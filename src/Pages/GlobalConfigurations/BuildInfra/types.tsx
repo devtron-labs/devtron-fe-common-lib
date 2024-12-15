@@ -156,7 +156,7 @@ export interface BuildInfraNodeSelectorValueType {
     /**
      * Generated at UI, TODO: Can separate this struct from DTO
      */
-    id: number
+    id: string
 }
 
 export enum BuildInfraToleranceOperatorType {
@@ -176,7 +176,7 @@ export type BuildInfraToleranceValueType = {
     /**
      * Generated at UI, TODO: Can separate this struct from DTO
      */
-    id: number
+    id: string
 } & (
     | {
           operator: BuildInfraToleranceOperatorType.EQUALS

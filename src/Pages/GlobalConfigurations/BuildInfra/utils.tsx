@@ -72,6 +72,7 @@ import {
     validateStringLength,
     requiredField,
     validateLabelKey,
+    getUUID,
 } from '../../../Shared'
 
 export const validateRequestLimit = ({
@@ -214,10 +215,10 @@ export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfo
             return {
                 key: BuildInfraConfigTypes.NODE_SELECTOR,
                 value: (configuration.value || [])
-                    .map((nodeSelector, index) => ({
+                    .map((nodeSelector) => ({
                         key: nodeSelector?.key,
                         value: nodeSelector?.value,
-                        id: index,
+                        id: getUUID(),
                     }))
                     .filter((nodeSelector) => nodeSelector.key),
             }
@@ -225,13 +226,13 @@ export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfo
         case BuildInfraConfigTypes.TOLERANCE:
             return {
                 key: BuildInfraConfigTypes.TOLERANCE,
-                value: (configuration.value || []).map((toleranceItem, index) => {
+                value: (configuration.value || []).map((toleranceItem) => {
                     const { key, effect, operator, value } = toleranceItem || {}
 
                     const baseObject = {
                         key,
                         effect,
-                        id: index,
+                        id: getUUID(),
                     }
 
                     if (operator === BuildInfraToleranceOperatorType.EQUALS) {
