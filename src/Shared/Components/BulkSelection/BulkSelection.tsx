@@ -24,7 +24,7 @@ import { ReactComponent as ICCheckSquare } from '../../../Assets/Icon/ic-check-s
 import { ReactComponent as ICCheckAll } from '../../../Assets/Icon/ic-check-all.svg'
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 
-const BulkSelection = <T,>({ showPagination, disabled = false }: BulkSelectionProps) => {
+const BulkSelection = <T,>({ showPagination, disabled = false, showChevronDownIcon = true }: BulkSelectionProps) => {
     const { handleBulkSelection, isChecked, checkboxValue, getSelectedIdentifiersCount } = useBulkSelection<T>()
     const areOptionsSelected = getSelectedIdentifiersCount() > 0
     const BulkSelectionItems: BulkSelectionDropdownItemsType[] = [
@@ -74,7 +74,7 @@ const BulkSelection = <T,>({ showPagination, disabled = false }: BulkSelectionPr
                     // Ideally should be disabled but was giving issue with cursor
                 />
 
-                <ICChevronDown className="icon-dim-20 fcn-6 dc__no-shrink" />
+                {showChevronDownIcon && <ICChevronDown className="icon-dim-20 fcn-6 dc__no-shrink" />}
             </PopupMenu.Button>
 
             <PopupMenu.Body rootClassName="dc__top-22 w-150 dc__right-0 pt-4 pb-4 pl-0 pr-0 bcn-0 flex column dc__content-start dc__align-start dc__position-abs bcn-0 dc__border dc__border-radius-4-imp">

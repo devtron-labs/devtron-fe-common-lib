@@ -19,6 +19,7 @@ import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
 import { Pair } from 'yaml'
 import moment from 'moment'
+import { StrictRJSFSchema } from '@rjsf/utils'
 import { MaterialHistoryType } from '@Shared/Services/app.types'
 import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
 import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
@@ -871,6 +872,33 @@ export const groupArrayByObjectKey = <T extends Record<string, any>, K extends k
     )
 
 /**
+ * This function returns a null/zero value corresponding to @type
+ *
+ * @param type - a RJSF supported type
+ */
+export const getNullValueFromType = (type: StrictRJSFSchema['type']) => {
+    if (type && Array.isArray(type) && type.length > 0) {
+        return getNullValueFromType(type[0])
+    }
+
+    switch (type) {
+        case 'string':
+            return ''
+        case 'boolean':
+            return false
+        case 'object':
+            return {}
+        case 'array':
+            return []
+        case 'number':
+        case 'integer':
+        case 'null':
+        default:
+            return null
+    }
+}
+
+/*
  * @description - Function to get the lower case object
  * @param input - The input object
  * @returns Record<string, any>
@@ -897,7 +925,6 @@ export const getLowerCaseObject = (input): Record<string, any> => {
  * @param history - The history object containing commit information
  * @returns - Formatted webhook date if available, otherwise an empty string
  */
-
 export const getWebhookDate = (materialSourceType: string, history: MaterialHistoryType): string => {
     const lowerCaseCommitInfo = getLowerCaseObject(history)
     const isWebhook = materialSourceType === SourceTypeMap.WEBHOOK || lowerCaseCommitInfo?.webhookdata?.id !== 0

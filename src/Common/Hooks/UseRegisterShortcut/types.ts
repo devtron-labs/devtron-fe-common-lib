@@ -26,7 +26,7 @@ export const KEYBOARD_KEYS_MAP = {
     R: 'R',
     K: 'K',
     Escape: 'Escape',
-    Enter: 'Enter',
+    Enter: '↩',
 } as const
 
 export type SupportedKeyboardKeysType = keyof typeof KEYBOARD_KEYS_MAP
