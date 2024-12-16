@@ -98,6 +98,7 @@ export interface customEnv {
     FEATURE_BULK_RESTART_WORKLOADS_FROM_RB: string
     FEATURE_DEFAULT_MERGE_STRATEGY?: OverrideMergeStrategyType
     FEATURE_DEFAULT_LANDING_RB_ENABLE?: boolean
+    FEATURE_CLUSTER_MAP_ENABLE?: boolean
 }
 declare global {
     interface Window {

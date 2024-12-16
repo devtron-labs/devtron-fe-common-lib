@@ -12,8 +12,10 @@ import {
     stopPropagation,
     VisibleModal2,
 } from '@Common/index'
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { ReactComponent as ICClose } from '@Icons/ic-cross.svg'
 import { ReactComponent as ICBack } from '@Icons/ic-caret-left-small.svg'
+import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components/Button'
+import { ComponentSizeType } from '@Shared/constants'
 import { Table, InfoCard } from './components'
 import { DEFAULT_SECURITY_MODAL_STATE } from './constants'
 import { getTableData, getInfoCardData } from './config'
@@ -64,16 +66,16 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     const renderHeader = () => (
         <div className="flexbox dc__content-space dc__align-items-center pl-20 pr-20 pt-12 pb-12 dc__border-bottom">
             <span className="fs-16 fw-6 lh-24 cn-9">Security</span>
-            <button
-                type="button"
-                className="dc__unset-button-styles"
+            <Button
+                dataTestId="close-security-modal"
+                ariaLabel="close-security-modal"
+                icon={<ICClose />}
                 onClick={handleModalClose}
-                aria-label="Close Modal"
-            >
-                <div className="flex p-4">
-                    <ICClose className="icon-dim-16" />
-                </div>
-            </button>
+                showAriaLabelInTippy={false}
+                size={ComponentSizeType.xs}
+                style={ButtonStyleType.neutral}
+                variant={ButtonVariantType.borderLess}
+            />
         </div>
     )
 
