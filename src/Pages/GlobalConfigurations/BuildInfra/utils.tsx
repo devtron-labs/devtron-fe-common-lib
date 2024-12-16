@@ -72,7 +72,7 @@ import {
     validateStringLength,
     requiredField,
     validateLabelKey,
-    getUUID,
+    getUniqueId,
 } from '../../../Shared'
 
 export const validateRequestLimit = ({
@@ -218,7 +218,7 @@ export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfo
                     .map((nodeSelector) => ({
                         key: nodeSelector?.key,
                         value: nodeSelector?.value,
-                        id: getUUID(),
+                        id: getUniqueId(),
                     }))
                     .filter((nodeSelector) => nodeSelector.key),
             }
@@ -232,7 +232,7 @@ export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfo
                     const baseObject = {
                         key,
                         effect,
-                        id: getUUID(),
+                        id: getUniqueId(),
                     }
 
                     if (operator === BuildInfraToleranceOperatorType.EQUALS) {
@@ -799,8 +799,8 @@ export const useBuildInfraForm = ({
                 const ids = (
                     currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value as BuildInfraNodeSelectorValueType[]
                 )?.length
-                    ? [getUUID()]
-                    : [getUUID(), getUUID()]
+                    ? [getUniqueId()]
+                    : [getUniqueId(), getUniqueId()]
 
                 ids.forEach((id) => {
                     if (
@@ -914,8 +914,8 @@ export const useBuildInfraForm = ({
                 const ids = (
                     currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value as BuildInfraToleranceValueType[]
                 )?.length
-                    ? [getUUID()]
-                    : [getUUID(), getUUID()]
+                    ? [getUniqueId()]
+                    : [getUniqueId(), getUniqueId()]
 
                 ids.forEach((id) => {
                     if (currentConfiguration[BuildInfraConfigTypes.TOLERANCE].key === BuildInfraConfigTypes.TOLERANCE) {

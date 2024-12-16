@@ -19,12 +19,12 @@ import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
 import { Pair } from 'yaml'
 import moment from 'moment'
+import { nanoid } from 'nanoid'
 import { StrictRJSFSchema } from '@rjsf/utils'
 import { MaterialHistoryType } from '@Shared/Services/app.types'
 import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
 import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
-import { v4 as uuidv4 } from 'uuid'
 import {
     handleUTCTime,
     ManualApprovalType,
@@ -934,4 +934,4 @@ export const getWebhookDate = (materialSourceType: string, history: MaterialHist
     return _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : webhookData.data.date
 }
 
-export const getUUID = (): string => uuidv4()
+export const getUniqueId = (size?: number): string => nanoid(size)
