@@ -269,8 +269,8 @@ export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfo
 const validateLabelValue = (value?: string): Pick<ValidationResponseType, 'isValid'> & { messages: string[] } => {
     if (!value) {
         return {
-            isValid: true,
-            messages: [],
+            isValid: false,
+            messages: ['Value is required'],
         }
     }
 
@@ -294,6 +294,29 @@ const validateLabelValue = (value?: string): Pick<ValidationResponseType, 'isVal
         return {
             isValid: false,
             messages,
+        }
+    }
+
+    return {
+        isValid: true,
+        messages: [],
+    }
+}
+
+const validateLabelKeyWithNoDuplicates = (
+    key: string,
+    existingKeys: string[],
+): Pick<ValidationResponseType, 'isValid'> & { messages: string[] } => {
+    const existingValidations = validateLabelKey(key)
+    if (!existingValidations.isValid) {
+        return existingValidations
+    }
+
+    const isDuplicate = existingKeys.includes(key)
+    if (isDuplicate) {
+        return {
+            isValid: false,
+            messages: ['Key should be unique'],
         }
     }
 
@@ -839,6 +862,14 @@ export const useBuildInfraForm = ({
                 }
 
                 const { id, key, value } = data
+
+                const existingKeys = currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value
+                    .filter((selector) => selector.key && selector.id !== id)
+                    .map((selector) => selector.key)
+
+                const keyErrorMessages = validateLabelKeyWithNoDuplicates(key, existingKeys).messages
+                const valueErrorMessages = validateLabelValue(value).messages
+
                 const nodeSelector = currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.find(
                     (selector) => selector.id === id,
                 )
@@ -853,9 +884,6 @@ export const useBuildInfraForm = ({
                     nodeSelector.key = key
                     nodeSelector.value = value
                 }
-
-                const keyErrorMessages = validateLabelKey(key).messages
-                const valueErrorMessages = validateLabelValue(value).messages
 
                 const hasAnyError = keyErrorMessages.length > 0 || valueErrorMessages.length > 0
 
@@ -968,8 +996,13 @@ export const useBuildInfraForm = ({
                     }
                 }
 
-                const keyErrorMessages = validateLabelKey(key).messages
-                const valueErrorMessages = validateLabelValue(value).messages
+                const existingKeys = currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value
+                    .filter((tolerance) => tolerance.key && tolerance.id !== id)
+                    .map((tolerance) => tolerance.key)
+
+                const keyErrorMessages = validateLabelKeyWithNoDuplicates(key, existingKeys).messages
+                const valueErrorMessages =
+                    operator !== BuildInfraToleranceOperatorType.EXISTS ? validateLabelValue(value).messages : []
 
                 const hasAnyError = keyErrorMessages.length > 0 || valueErrorMessages.length > 0
 
