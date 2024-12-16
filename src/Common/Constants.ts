@@ -23,6 +23,7 @@ export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
 export const DOCUMENTATION_VERSION = '/v/v0.7'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
+export const DEFAULT_JSON_SCHEMA_URI = 'https://json-schema.org/draft/2020-12/schema'
 export const DOCUMENTATION = {
     APP_METRICS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/app-details/app-metrics`,
     APP_TAGS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/create-application#tags`,
@@ -516,6 +517,7 @@ export const API_STATUS_CODES = {
     EXPECTATION_FAILED: 417,
     UNPROCESSABLE_ENTITY: 422,
     LOCKED: 423,
+    UNPROCESSABLE_CONTENT: 422,
 }
 
 export enum SERVER_MODE {
@@ -577,3 +579,8 @@ export enum GitProviderType {
  * Formats the schema removing any irregularity in the existing schema
  */
 export const getFormattedSchema = (schema?: string) => JSON.stringify(JSON.parse(schema ?? '{}'), null, 2)
+
+export const UNCHANGED_ARRAY_ELEMENT_SYMBOL = Symbol(
+    `The element at this index remains unchanged from the original object.
+     This symbol is used by @buildObjectFromPath & later consumed by @recursivelyRemoveSymbolFromArraysInObject`,
+)

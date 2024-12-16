@@ -49,14 +49,16 @@ export const DeploymentConfigDiffMain = ({
         })
     }
 
-    const onTransitionEnd: DeploymentConfigDiffAccordionProps['onTransitionEnd'] = (e) => {
-        if (scrollIntoViewAfterExpand.current && e.target === e.currentTarget) {
-            const element = document.querySelector(`#${scrollIntoViewId}`)
-            element?.scrollIntoView({ block: 'start' })
-            // Reset ref after scrolling into view
-            scrollIntoViewAfterExpand.current = false
+    const onTransitionEnd =
+        (id: string): DeploymentConfigDiffAccordionProps['onTransitionEnd'] =>
+        (e) => {
+            if (scrollIntoViewAfterExpand.current && scrollIntoViewId === id && e.target === e.currentTarget) {
+                const element = document.querySelector(`#${scrollIntoViewId}`)
+                element?.scrollIntoView({ block: 'start' })
+                // Reset ref after scrolling into view
+                scrollIntoViewAfterExpand.current = false
+            }
         }
-    }
 
     useEffect(() => {
         if (!isLoading) {
@@ -70,7 +72,7 @@ export const DeploymentConfigDiffMain = ({
                 ),
             )
         }
-    }, [isLoading])
+    }, [isLoading, configList])
 
     useEffect(() => {
         if (scrollIntoViewId) {
@@ -186,7 +188,7 @@ export const DeploymentConfigDiffMain = ({
                     isExpanded={expandedView[id]}
                     diffState={diffState}
                     onClick={handleAccordionClick(id)}
-                    onTransitionEnd={onTransitionEnd}
+                    onTransitionEnd={onTransitionEnd(id)}
                     showDetailedDiffState={showDetailedDiffState}
                     hideDiffState={hideDiffState}
                 >
