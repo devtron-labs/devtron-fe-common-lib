@@ -1,4 +1,4 @@
-import { DynamicDataTableProps, DynamicDataTableRowType } from '../DynamicDataTable'
+import { DynamicDataTableCellErrorType, DynamicDataTableProps, DynamicDataTableRowType } from '../DynamicDataTable'
 
 export type TagsTableColumnsType = 'tagKey' | 'tagValue'
 
@@ -8,4 +8,6 @@ export interface TagsContainerProps extends Partial<Pick<DynamicDataTableProps<T
     setRows: (updatedRows: DynamicDataTableRowType<TagsTableColumnsType>[]) => void
     hidePropagateTags?: boolean
     getEmptyRow?: (keyChoices?: string[]) => DynamicDataTableRowType<TagsTableColumnsType>
+    tagsError: DynamicDataTableCellErrorType<TagsTableColumnsType>
+    setTagErrors: (updatedTagsError: DynamicDataTableCellErrorType<TagsTableColumnsType>) => void
 }

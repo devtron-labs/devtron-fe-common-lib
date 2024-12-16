@@ -156,7 +156,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 )
             case DynamicDataTableRowDataType.BUTTON:
                 return (
-                    <div className="w-100 h-100 flex top left">
+                    <div className="w-100 h-100 flex top">
                         <ConditionalWrap
                             condition={!!buttonCellWrapComponent}
                             wrap={getWrapperForButtonCell(buttonCellWrapComponent, row)}

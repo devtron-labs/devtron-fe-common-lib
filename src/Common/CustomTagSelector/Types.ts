@@ -49,21 +49,6 @@ export interface TagType {
     valueConstraint?: VariableValueConstraintTypes
 }
 
-export interface TagErrorType {
-    isValid: boolean
-    messages: string[]
-}
-export interface TagLabelSelectType {
-    isCreateApp?: boolean
-    labelTags: TagType[]
-    setLabelTags: (tagList: TagType[]) => void
-    tabIndex?: number
-    selectedProjectId?: number
-    suggestedTagsOptions?: SuggestedTagOptionType[]
-    reloadProjectTags?: boolean
-    hidePropagateTag?: boolean
-}
-
 export interface TagDetailType {
     index: number
     tagData: TagType
