@@ -2,13 +2,13 @@ import { ButtonHTMLAttributes, ChangeEvent, useCallback, useEffect, useState } f
 import { AnimatePresence, motion } from 'framer-motion'
 import { CustomInput, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
-import { ConfirmationModalProps } from './types'
+import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import './confirmationModal.scss'
 import { Backdrop } from '../Backdrop'
 
-const ConfirmationModal = ({
+const ConfirmationModalBody = ({
     title,
     subtitle,
     Icon,
@@ -16,9 +16,8 @@ const ConfirmationModal = ({
     buttonConfig,
     customInputConfig,
     children,
-    showConfirmationModal,
     handleClose,
-}: ConfirmationModalProps) => {
+}: ConfirmationModalBodyProps) => {
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
     const [confirmationText, setConfirmationText] = useState<string>('')
@@ -45,107 +44,99 @@ const ConfirmationModal = ({
     }, [primaryButtonConfig, secondaryButtonConfig])
 
     useEffect(() => {
-        if (showConfirmationModal) {
-            registerShortcut({ keys: ['Enter'], callback: handleTriggerPrimaryActionButton })
-        }
+        registerShortcut({ keys: ['Enter'], callback: handleTriggerPrimaryActionButton })
 
         return () => {
-            if (showConfirmationModal) {
-                unregisterShortcut(['Enter'])
-            }
+            unregisterShortcut(['Enter'])
         }
-    }, [showConfirmationModal, primaryButtonConfig, disablePrimaryButton])
+    }, [primaryButtonConfig, disablePrimaryButton])
 
     const handleCustomInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setConfirmationText(e.target.value)
     }
 
     return (
-        <AnimatePresence>
-            {showConfirmationModal ? (
-                <Backdrop onEscape={handleCloseWrapper}>
-                    <motion.div
-                        className="confirmation-modal flexbox-col br-8 bcn-0 dc__m-auto mt-40 w-400"
-                        exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}
-                        initial={{ y: 100, opacity: 0, scale: 0.75 }}
-                        animate={{ y: 0, opacity: 1, scale: 1 }}
-                    >
-                        <div className="flexbox-col dc__gap-12 p-20">
-                            <RenderIcon className="icon-dim-48 dc__no-shrink" />
-                            <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
+        <Backdrop onEscape={handleCloseWrapper}>
+            <motion.div
+                className="confirmation-modal flexbox-col br-8 bcn-0 dc__m-auto mt-40 w-400"
+                exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}
+                initial={{ y: 100, opacity: 0, scale: 0.75 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+            >
+                <div className="flexbox-col dc__gap-12 p-20">
+                    <RenderIcon className="icon-dim-48 dc__no-shrink" />
+                    <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
 
-                            {typeof subtitle === 'string' ? (
-                                <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
-                            ) : (
-                                subtitle
-                            )}
+                    {typeof subtitle === 'string' ? (
+                        <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
+                    ) : (
+                        subtitle
+                    )}
 
-                            {customInputConfig && (
-                                <CustomInput
-                                    name={customInputIdentifier}
-                                    value={confirmationText}
-                                    onChange={handleCustomInputChange}
-                                    label={getConfirmationLabel(confirmationKeyword)}
-                                    inputWrapClassName="w-100"
-                                    placeholder="Type to confirm"
-                                    isRequiredField
-                                    autoFocus
-                                />
-                            )}
+                    {customInputConfig && (
+                        <CustomInput
+                            name={customInputIdentifier}
+                            value={confirmationText}
+                            onChange={handleCustomInputChange}
+                            label={getConfirmationLabel(confirmationKeyword)}
+                            inputWrapClassName="w-100"
+                            placeholder="Type to confirm"
+                            isRequiredField
+                            autoFocus
+                        />
+                    )}
 
-                            {children}
-                        </div>
-                        <div className="p-16 dc__gap-12 flexbox dc__content-end">
-                            {secondaryButtonConfig && (
-                                <Button
-                                    dataTestId="confirmation-modal-secondary-button"
-                                    size={ComponentSizeType.large}
-                                    variant={ButtonVariantType.secondary}
-                                    style={
-                                        'style' in secondaryButtonConfig
-                                            ? secondaryButtonConfig.style
-                                            : ButtonStyleType.neutral
-                                    }
-                                    disabled={secondaryButtonConfig.disabled}
-                                    text={secondaryButtonConfig.text}
-                                    onClick={
-                                        secondaryButtonConfig.onClick as ButtonHTMLAttributes<HTMLButtonElement>['onClick']
-                                    }
-                                    startIcon={secondaryButtonConfig.startIcon}
-                                    endIcon={secondaryButtonConfig.endIcon}
-                                />
-                            )}
+                    {children}
+                </div>
+                <div className="p-16 dc__gap-12 flexbox dc__content-end">
+                    {secondaryButtonConfig && (
+                        <Button
+                            dataTestId="confirmation-modal-secondary-button"
+                            size={ComponentSizeType.large}
+                            variant={ButtonVariantType.secondary}
+                            style={
+                                'style' in secondaryButtonConfig ? secondaryButtonConfig.style : ButtonStyleType.neutral
+                            }
+                            disabled={secondaryButtonConfig.disabled}
+                            text={secondaryButtonConfig.text}
+                            onClick={
+                                secondaryButtonConfig.onClick as ButtonHTMLAttributes<HTMLButtonElement>['onClick']
+                            }
+                            startIcon={secondaryButtonConfig.startIcon}
+                            endIcon={secondaryButtonConfig.endIcon}
+                        />
+                    )}
 
-                            {primaryButtonConfig && (
-                                <Button
-                                    dataTestId="confirmation-modal-primary-button"
-                                    size={ComponentSizeType.large}
-                                    variant={ButtonVariantType.primary}
-                                    style={
-                                        'style' in primaryButtonConfig
-                                            ? primaryButtonConfig.style
-                                            : getPrimaryButtonStyleFromVariant(variant)
-                                    }
-                                    disabled={
-                                        ('disabled' in primaryButtonConfig && primaryButtonConfig.disabled) ||
-                                        disablePrimaryButton
-                                    }
-                                    isLoading={primaryButtonConfig.isLoading}
-                                    text={primaryButtonConfig.text}
-                                    onClick={
-                                        primaryButtonConfig.onClick as ButtonHTMLAttributes<HTMLButtonElement>['onClick']
-                                    }
-                                    startIcon={primaryButtonConfig.startIcon}
-                                    endIcon={primaryButtonConfig.endIcon}
-                                />
-                            )}
-                        </div>
-                    </motion.div>
-                </Backdrop>
-            ) : null}
-        </AnimatePresence>
+                    {primaryButtonConfig && (
+                        <Button
+                            dataTestId="confirmation-modal-primary-button"
+                            size={ComponentSizeType.large}
+                            variant={ButtonVariantType.primary}
+                            style={
+                                'style' in primaryButtonConfig
+                                    ? primaryButtonConfig.style
+                                    : getPrimaryButtonStyleFromVariant(variant)
+                            }
+                            disabled={
+                                ('disabled' in primaryButtonConfig && primaryButtonConfig.disabled) ||
+                                disablePrimaryButton
+                            }
+                            isLoading={primaryButtonConfig.isLoading}
+                            text={primaryButtonConfig.text}
+                            onClick={primaryButtonConfig.onClick as ButtonHTMLAttributes<HTMLButtonElement>['onClick']}
+                            startIcon={primaryButtonConfig.startIcon}
+                            endIcon={primaryButtonConfig.endIcon}
+                        />
+                    )}
+                </div>
+            </motion.div>
+        </Backdrop>
     )
 }
+
+const ConfirmationModal = ({ showConfirmationModal, ...props }: ConfirmationModalProps) => (
+    <AnimatePresence>{showConfirmationModal ? <ConfirmationModalBody {...props} /> : null}</AnimatePresence>
+)
 
 const WrapWithShortcutProvider = (props: ConfirmationModalProps) => (
     <UseRegisterShortcutProvider ignoreTags={['button']}>

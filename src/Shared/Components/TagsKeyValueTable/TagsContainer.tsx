@@ -1,10 +1,10 @@
 import { ReactComponent as ICPropagate } from '@Icons/inject-tag.svg'
-import { PATTERNS } from '@Common/Constants'
 import { PropagateTagInfo } from '@Common/CustomTagSelector'
+import { Tooltip } from '@Common/Tooltip'
 import { TagsContainerProps, TagsTableColumnsType } from './types'
 import { DEVTRON_AI_URL, TAGS_TABLE_HEADERS } from './constants'
 import { DynamicDataTable, DynamicDataTableRowType } from '../DynamicDataTable'
-import { getEmptyTagTableRow } from './utils'
+import { getEmptyTagTableRow, validateTagKeyValues } from './utils'
 
 const TagsKeyValueTable = ({
     rows,
@@ -12,6 +12,8 @@ const TagsKeyValueTable = ({
     hidePropagateTags,
     getEmptyRow = getEmptyTagTableRow,
     onRowEdit,
+    tagsError,
+    setTagErrors,
 }: TagsContainerProps) => {
     const handlePropagateTag = (rowId: string | number) => {
         const updatedRows = rows.map<DynamicDataTableRowType<TagsTableColumnsType>>((row) => {
@@ -30,17 +32,23 @@ const TagsKeyValueTable = ({
 
     const propagateTagButton = (row: DynamicDataTableRowType<TagsTableColumnsType>) => {
         const propagateTag: boolean = (row.customState?.propagateTag as boolean) || false
+        const isPropagationDisabled: boolean = (row.customState?.disablePropagateButton as boolean) || false
         return (
-            <button
-                onClick={() => handlePropagateTag(row.id)}
-                className={`pointer flex h-100 w-100 ${propagateTag ? 'bcn-7' : ''} ${
-                    row.data.tagKey.value.startsWith(DEVTRON_AI_URL) ? 'cursor-not-allowed bcn-1' : ''
-                } dc__transparent dc__tab-focus`}
-                data-index={row.id}
-                type="button"
-            >
-                <ICPropagate className={`icon-dim-20 ${propagateTag ? 'scn-0' : ''}`} />
-            </button>
+            <Tooltip content="Propagate tags to K8s resources" alwaysShowTippyOnHover>
+                <button
+                    onClick={() => handlePropagateTag(row.id)}
+                    className={`pointer flexbox dc__content-center dc__align-start pt-8 h-100 w-100 ${propagateTag ? 'bcn-7' : ''} ${
+                        row.data.tagKey.value.startsWith(DEVTRON_AI_URL) || isPropagationDisabled
+                            ? 'cursor-not-allowed bcn-1'
+                            : ''
+                    } dc__transparent dc__tab-focus`}
+                    data-index={row.id}
+                    type="button"
+                    disabled={isPropagationDisabled}
+                >
+                    <ICPropagate className={`icon-dim-20 ${propagateTag ? 'scn-0' : ''}`} />
+                </button>
+            </Tooltip>
         )
     }
 
@@ -55,6 +63,16 @@ const TagsKeyValueTable = ({
         headerKey: string,
         value: string,
     ) => {
+        const updatedTagsError = structuredClone(tagsError)
+
+        if (!updatedTagsError[updatedRow.id]) {
+            updatedTagsError[updatedRow.id] = {
+                tagKey: { isValid: true, errorMessages: [] },
+                tagValue: { isValid: true, errorMessages: [] },
+            }
+        }
+        updatedTagsError[updatedRow.id][headerKey] = validateTagKeyValues(value, headerKey)
+
         const updatedRows = rows.map<DynamicDataTableRowType<TagsTableColumnsType>>((row) => {
             if (row.id === updatedRow.id) {
                 return {
@@ -66,6 +84,9 @@ const TagsKeyValueTable = ({
                             value,
                         },
                     },
+                    customState: {
+                        ...row.customState,
+                    },
                 }
             }
 
@@ -73,6 +94,7 @@ const TagsKeyValueTable = ({
         })
 
         setRows(updatedRows)
+        setTagErrors(updatedTagsError)
     }
 
     const dataTableHandleDelete = (row: DynamicDataTableRowType<TagsTableColumnsType>) => {
@@ -85,17 +107,6 @@ const TagsKeyValueTable = ({
         setRows(remainingRows)
     }
 
-    const validateTagKeyValues = (value: string, key: TagsTableColumnsType) => {
-        if ((key === 'tagKey' || value === 'tagValue') && value) {
-            const isValid = new RegExp(PATTERNS.ALPHANUMERIC_WITH_SPECIAL_CHAR).test(value)
-            return {
-                isValid,
-                errorMessages: ['Can only contain alphanumeric chars and ( - ), ( _ ), ( . )', 'Spaces not allowed'],
-            }
-        }
-        return { isValid: true, errorMessages: [] }
-    }
-
     return (
         <DynamicDataTable
             headers={TAGS_TABLE_HEADERS}
@@ -103,8 +114,6 @@ const TagsKeyValueTable = ({
             onRowEdit={onRowEdit ?? dataTableHandleChange}
             onRowDelete={dataTableHandleDelete}
             onRowAdd={dataTableHandleAddition}
-            showError
-            validationSchema={validateTagKeyValues}
             {...(!hidePropagateTags
                 ? {
                       actionButtonConfig: {
@@ -115,6 +124,7 @@ const TagsKeyValueTable = ({
                       },
                   }
                 : {})}
+            cellError={tagsError}
         />
     )
 }

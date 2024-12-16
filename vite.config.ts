@@ -23,7 +23,7 @@ import libAssetsPlugin from '@laynezh/vite-plugin-lib-assets'
 import svgr from 'vite-plugin-svgr'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import tsconfigPaths from 'vite-tsconfig-paths'
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
+// import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import * as packageJson from './package.json'
 
 // https://vitejs.dev/config/
@@ -42,9 +42,13 @@ export default defineConfig({
         NodeGlobalsPolyfillPlugin({
             process: true,
         }),
-        ViteImageOptimizer({
-            logStats: false,
-        }),
+        // Commented since it merges the attributes of svg there by messing up with
+        // the styles
+        // ViteImageOptimizer({
+        //     logStats: false,
+        //     cache: true,
+        //     cacheLocation: '.build-cache/vite-image-optimizer',
+        // }),
     ],
     build: {
         target: 'ES2021',

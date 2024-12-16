@@ -571,6 +571,7 @@ export interface DownstreamNodesEnvironmentsType {
 export enum TriggerBlockType {
     MANDATORY_TAG = 'mandatory-tags',
     MANDATORY_PLUGIN = 'mandatory-plugins',
+    SECURITY_SCAN = 'security-scan',
 }
 
 export interface TriggerBlockedInfo {
