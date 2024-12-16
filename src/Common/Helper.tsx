@@ -17,7 +17,7 @@
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DOMPurify from 'dompurify'
 import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
-import { compare as compareJSON, applyPatch, unescapePathComponent } from 'fast-json-patch'
+import { compare as compareJSON, applyPatch, unescapePathComponent,deepClone } from 'fast-json-patch'
 import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import moment from 'moment'
@@ -31,6 +31,7 @@ import {
     DISCORD_LINK,
     ZERO_TIME_STRING,
     TOAST_ACCESS_DENIED,
+    UNCHANGED_ARRAY_ELEMENT_SYMBOL,
 } from './Constants'
 import { ServerErrors } from './ServerError'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
@@ -49,6 +50,7 @@ import regexIcon from '@Icons/ic-regex.svg'
 import pullRequest from '@Icons/ic-pull-request.svg'
 import tagIcon from '@Icons/ic-tag.svg'
 import { SourceTypeMap } from '@Common/Common.service'
+import { getIsRequestAborted } from './Api'
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
@@ -71,7 +73,7 @@ export function showError(serverError, showToastOnUnknownError = true, hideAcces
             }
         })
     } else {
-        if (serverError.code !== 403 && serverError.code !== 408) {
+        if (serverError.code !== 403 && serverError.code !== 408 && !getIsRequestAborted(serverError)) {
             Sentry.captureException(serverError)
         }
 
@@ -510,7 +512,7 @@ export const getUrlWithSearchParams = <T extends string | number = string | numb
 /**
  * Custom exception logger function for logging errors to sentry
  */
-export const logExceptionToSentry = Sentry.captureException.bind(window)
+export const logExceptionToSentry: typeof Sentry.captureException  = Sentry.captureException.bind(window)
 
 export const customStyles = {
     control: (base, state) => ({
@@ -556,19 +558,19 @@ export const getFilteredChartVersions = (charts, selectedChartType) =>
  * @param {object} object from which we need to delete nulls in its arrays
  * @returns object after removing (in-place) the null items in arrays
  */
-export const recursivelyRemoveNullsFromArraysInObject = (object: object) => {
+export const recursivelyRemoveSymbolFromArraysInObject = (object: object, symbol: symbol) => {
     // NOTE: typeof null === 'object'
     if (typeof object !== 'object' || !object) {
         return object
     }
     if (Array.isArray(object)) {
         return object.filter((item) => {
-            recursivelyRemoveNullsFromArraysInObject(item)
-            return !!item
+            recursivelyRemoveSymbolFromArraysInObject(item, symbol)
+            return item !== symbol
         })
     }
     Object.keys(object).forEach((key) => {
-        object[key] = recursivelyRemoveNullsFromArraysInObject(object[key])
+        object[key] = recursivelyRemoveSymbolFromArraysInObject(object[key], symbol)
     })
     return object
 }
@@ -578,8 +580,8 @@ const _joinObjects = (A: object, B: object) => {
         return
     }
     Object.keys(B).forEach((key) => {
-        if (!A[key]) {
-            A[key] = structuredClone(B[key])
+        if (A[key] === undefined || A[key] === UNCHANGED_ARRAY_ELEMENT_SYMBOL) {
+            A[key] = B[key]
             return
         }
         _joinObjects(A[key], B[key])
@@ -588,6 +590,7 @@ const _joinObjects = (A: object, B: object) => {
 
 /**
  * Merges the objects into one object
+ * Works more like Object.assign; that doesn't deep copy
  * @param {object[]} objects list of js objects
  * @returns object after the merge
  */
@@ -607,7 +610,7 @@ const buildObjectFromPathTokens = (index: number, tokens: string[], value: any) 
     const numberKey = Number(key)
     const isKeyNumber = !Number.isNaN(numberKey)
     return isKeyNumber
-        ? [...Array(numberKey).fill(null), buildObjectFromPathTokens(index + 1, tokens, value)]
+        ? [...Array(numberKey).fill(UNCHANGED_ARRAY_ELEMENT_SYMBOL), buildObjectFromPathTokens(index + 1, tokens, value)]
         : { [unescapePathComponent(key)]: buildObjectFromPathTokens(index + 1, tokens, value) }
 }
 
@@ -667,7 +670,7 @@ export const flatMapOfJSONPaths = (
 
 export const applyCompareDiffOnUneditedDocument = (uneditedDocument: object, editedDocument: object) => {
     const patch = compareJSON(uneditedDocument, editedDocument)
-    return applyPatch(uneditedDocument, patch).newDocument
+    return applyPatch(deepClone(uneditedDocument), patch).newDocument
 }
 
 /**

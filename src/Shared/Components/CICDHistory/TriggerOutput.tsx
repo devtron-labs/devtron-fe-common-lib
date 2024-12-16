@@ -27,7 +27,6 @@ import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { getDeploymentStageTitle } from '@Pages/Applications'
 import {
-    ConfirmationDialog,
     DATE_TIME_FORMATS,
     DeploymentAppTypes,
     GenericEmptyState,
@@ -35,7 +34,6 @@ import {
     Reload,
     createGitCommitUrl,
     useAsync,
-    not,
     ZERO_TIME_STRING,
     useInterval,
     URLS,
@@ -63,7 +61,6 @@ import {
 import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger } from './service'
 import { DEFAULT_ENV, TIMEOUT_VALUE, WORKER_POD_BASE_URL } from './constants'
 import { GitTriggers } from '../../types'
-import warn from '../../../Assets/Icon/ic-warning.svg'
 import LogsRenderer from './LogsRenderer'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
@@ -71,6 +68,7 @@ import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
 import { statusColor as colorMap, EMPTY_STATE_STATUS, PULSATING_STATUS_MAP } from '../../constants'
 import './cicdHistory.scss'
+import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
 
 const Finished = React.memo(
     ({ status, finishedOn, artifact, type }: FinishedType): JSX.Element => (
@@ -168,14 +166,11 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
                 variant: ToastVariantType.success,
                 description: 'Build Aborted',
             })
-            setAbortConfirmation(false)
             setAbortError({
                 status: false,
                 message: '',
             })
         } catch (error) {
-            setAborting(false)
-            setAbortConfirmation(false)
             if (error.code === 400) {
                 // code 400 is for aborting a running build
                 const { errors } = error
@@ -184,18 +179,23 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
                     message: errors[0].userMessage,
                 })
             }
+        } finally {
+            setAborting(false)
+            setAbortConfirmation(false)
         }
     }
 
     const toggleAbortConfiguration = (): void => {
-        setAbortConfirmation(not)
+        setAbortConfirmation(!abortConfirmation)
     }
+
     const closeForceAbortModal = (): void => {
         setAbortError({
             status: false,
             message: '',
         })
     }
+
     return (
         <>
             <div className="flex dc__gap-8 left pt-12">
@@ -216,56 +216,55 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
                     </>
                 )}
             </div>
-
-            {abortConfirmation && (
-                <ConfirmationDialog>
-                    <ConfirmationDialog.Icon src={warn} />
-                    <ConfirmationDialog.Body
-                        title={
-                            type === HistoryComponentType.CD
-                                ? `Abort ${stage.toLowerCase()}-deployment?`
-                                : 'Abort build?'
-                        }
-                    />
-                    <p className="fs-13 cn-7 lh-1-54">
-                        {type === HistoryComponentType.CD
-                            ? 'Are you sure you want to abort this stage?'
-                            : 'Are you sure you want to abort this build?'}
-                    </p>
-                    <ConfirmationDialog.ButtonGroup>
-                        <button type="button" className="cta cancel" onClick={toggleAbortConfiguration}>
-                            Cancel
-                        </button>
-                        <button type="button" className="cta delete" onClick={abortRunning}>
-                            {aborting ? <Progressing /> : 'Yes, Abort'}
-                        </button>
-                    </ConfirmationDialog.ButtonGroup>
-                </ConfirmationDialog>
-            )}
-
-            {abortError.status && (
-                <ConfirmationDialog>
-                    <ConfirmationDialog.Icon src={warn} />
-                    <ConfirmationDialog.Body title="Could not abort build!" />
-                    <div className="w-100 bc-n50 h-36 flexbox dc__align-items-center">
-                        <span className="pl-12">Error: {abortError.message}</span>
-                    </div>
-                    <div className="fs-13 fw-6 pt-12 cn-7 lh-1-54">
-                        <span>Please try to force abort</span>
-                    </div>
-                    <div className="pt-4 fw-4 cn-7 lh-1-54">
-                        <span>Some resource might get orphaned which will be cleaned up with Job-lifecycle</span>
-                    </div>
-                    <ConfirmationDialog.ButtonGroup>
-                        <button type="button" className="cta cancel" onClick={closeForceAbortModal}>
-                            Cancel
-                        </button>
-                        <button type="button" className="cta delete" onClick={abortRunning}>
-                            {aborting ? <Progressing /> : 'Force Abort'}
-                        </button>
-                    </ConfirmationDialog.ButtonGroup>
-                </ConfirmationDialog>
-            )}
+            <ConfirmationModal
+                variant={ConfirmationModalVariantType.warning}
+                title={type === HistoryComponentType.CD ? `Abort ${stage.toLowerCase()}-deployment?` : 'Abort build?'}
+                subtitle={
+                    type === HistoryComponentType.CD
+                        ? 'Are you sure you want to abort this stage?'
+                        : 'Are you sure you want to abort this build?'
+                }
+                buttonConfig={{
+                    secondaryButtonConfig: {
+                        disabled: aborting,
+                        onClick: toggleAbortConfiguration,
+                        text: 'Cancel',
+                    },
+                    primaryButtonConfig: {
+                        isLoading: aborting,
+                        onClick: abortRunning,
+                        text: 'Yes, Abort',
+                    },
+                }}
+                showConfirmationModal={abortConfirmation}
+                handleClose={toggleAbortConfiguration}
+            />
+            <ConfirmationModal
+                variant={ConfirmationModalVariantType.warning}
+                title="Could not abort build!"
+                subtitle={`Error: ${abortError.message}`}
+                buttonConfig={{
+                    secondaryButtonConfig: {
+                        disabled: aborting,
+                        onClick: closeForceAbortModal,
+                        text: 'Cancel',
+                    },
+                    primaryButtonConfig: {
+                        isLoading: aborting,
+                        onClick: abortRunning,
+                        text: 'Force Abort',
+                    },
+                }}
+                showConfirmationModal={abortError.status}
+                handleClose={closeForceAbortModal}
+            >
+                <div className="fs-13 fw-6 pt-12 cn-7 lh-1-54">
+                    <span>Please try to force abort</span>
+                </div>
+                <div className="pt-4 fw-4 cn-7 lh-1-54">
+                    <span>Some resource might get orphaned which will be cleaned up with Job-lifecycle</span>
+                </div>
+            </ConfirmationModal>
         </>
     )
 })

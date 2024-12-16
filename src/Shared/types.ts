@@ -118,6 +118,7 @@ export enum Nodes {
     PodDisruptionBudget = 'PodDisruptionBudget',
     Event = 'Event',
     Namespace = 'Namespace',
+    Node = 'Node',
     Overview = 'Overview',
     MonitoringDashboard = 'MonitoringDashboard',
     UpgradeCluster = 'UpgradeCluster',
@@ -527,6 +528,7 @@ export enum AggregationKeys {
     'Other Resources' = 'Other Resources',
     Events = 'Events',
     Namespaces = 'Namespaces',
+    'Nodes' = 'Nodes',
 }
 
 export type AggregationKeysType = keyof typeof AggregationKeys
@@ -683,6 +685,11 @@ export enum ConfigurationType {
     GUI = 'GUI',
     YAML = 'YAML',
 }
+
+export const CONFIGURATION_TYPE_OPTIONS: OptionType<ConfigurationType, ConfigurationType>[] = [
+    { label: ConfigurationType.GUI, value: ConfigurationType.GUI },
+    { label: ConfigurationType.YAML, value: ConfigurationType.YAML },
+] as const
 
 export interface BaseURLParams {
     appId: string
@@ -852,4 +859,9 @@ export interface DynamicTabType extends CommonTabArgsType {
      * Id of the last active tab before switching to current tab
      */
     lastActiveTabId: string | null
+}
+
+export interface PreventOutsideFocusProps {
+    identifier: string
+    preventFocus: boolean
 }

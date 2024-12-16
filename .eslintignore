@@ -15,7 +15,6 @@ src/Common/CodeEditor/CodeEditor.tsx
 src/Common/Common.service.ts
 src/Common/CustomInput/CustomInput.tsx
 src/Common/CustomTagSelector/PropagateTagInfo.tsx
-src/Common/CustomTagSelector/ResizableTagTextArea.tsx
 src/Common/CustomTagSelector/TagDetails.tsx
 src/Common/CustomTagSelector/TagLabelSelect.tsx
 src/Common/CustomTagSelector/TagLabelValueSelector.tsx
