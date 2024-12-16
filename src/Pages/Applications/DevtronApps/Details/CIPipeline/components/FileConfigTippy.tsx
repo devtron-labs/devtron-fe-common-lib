@@ -20,8 +20,8 @@ export const FileConfigTippy = ({ fileMountDir }: Pick<VariableType, 'fileMountD
             </div>
         }
     >
-        <div className="cursor flex">
-            <ICInfoOutline className="icon-dim-18 scn-6" />
+        <div className="cursor flex dc__no-shrink">
+            <ICInfoOutline className="icon-dim-18" />
         </div>
     </Tippy>
 )
