@@ -5,7 +5,12 @@ import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
 import { Tooltip } from '@Common/Tooltip'
 
 import { Progressing } from '@Common/Progressing'
+import { ComponentSizeType } from '@Shared/constants'
+
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { FileUploadProps } from './types'
+
+import './styles.scss'
 
 export const FileUpload = ({
     isLoading,
@@ -31,7 +36,7 @@ export const FileUpload = ({
     }
 
     return (
-        <div className="mw-none">
+        <div className="file-upload mw-none">
             {isLoading || fileName ? (
                 <div className="dc__border br-4 dc__overflow-hidden flexbox">
                     <div className="flexbox dc__align-items-center dc__gap-8 px-8 py-4 mw-none">
@@ -50,13 +55,18 @@ export const FileUpload = ({
                         )}
                     </div>
                     {!isLoading && (
-                        <button
-                            type="button"
-                            className="dc__transparent flex p-6 dc__hover-n50"
-                            onClick={onClearUpload}
-                        >
-                            <ICCross className="icon-dim-16 fcn-6" />
-                        </button>
+                        <div className="file-upload__remove-file">
+                            <Button
+                                dataTestId="file-upload-remove-file-button"
+                                ariaLabel="Remove File"
+                                showAriaLabelInTippy={false}
+                                icon={<ICCross />}
+                                onClick={onClearUpload}
+                                variant={ButtonVariantType.borderLess}
+                                style={ButtonStyleType.negativeGrey}
+                                size={ComponentSizeType.small}
+                            />
+                        </div>
                     )}
                 </div>
             ) : (

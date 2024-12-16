@@ -141,7 +141,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
                 IsMulti,
                 GroupBase<SelectPickerOptionType<OptionValue>>
             >,
-            'onCreateOption'
+            'onCreateOption' | 'formatCreateLabel'
         >
     > & {
         /**
@@ -238,11 +238,6 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * @default true
          */
         shouldShowNoOptionsMessage?: boolean
-        /**
-         * Gets the label for the "create new ..." option in the menu.
-         * @param inputValue the current input value.
-         */
-        formatCreateLabel?: (inputValue: string) => ReactNode
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean
