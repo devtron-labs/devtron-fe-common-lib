@@ -16,7 +16,7 @@
 
 import { MutableRefObject } from 'react'
 import moment from 'moment'
-import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
+import { RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
 import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, getIsRequestAborted, post } from './Api'
 import { API_STATUS_CODES, GitProviderType, ROUTES } from './Constants'
@@ -324,10 +324,8 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
     }
 }
 
-export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): RuntimeParamsListItemType[] =>
-    Object.entries(response?.envVariables || {})
-        .map(([key, value], index) => ({ key, value, id: index }))
-        .sort((a, b) => stringComparatorBySortOrder(a.key, b.key))
+export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): RuntimePluginVariables[] =>
+    (response?.runtimePluginVariables ?? []).map((variable) => ({ ...variable, defaultValue: variable.value }))
 
 const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
     if (!cdMaterialsResult) {
@@ -349,7 +347,7 @@ const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
         resourceFilters: cdMaterialsResult.resourceFilters ?? [],
         totalCount: cdMaterialsResult.totalCount ?? 0,
         requestedUserId: cdMaterialsResult.requestedUserId,
-        runtimeParams: cdMaterialsResult.runtimeParams.runtimePluginVariables ?? [],
+        runtimeParams: parseRuntimeParams(cdMaterialsResult.runtimeParams),
     }
 }
 

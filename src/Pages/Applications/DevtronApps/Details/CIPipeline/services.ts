@@ -1,9 +1,8 @@
-import { MutableRefObject } from 'react'
-
 import { ROUTES } from '@Common/Constants'
 import { getIsRequestAborted, post } from '@Common/Api'
 import { getUrlWithSearchParams, showError } from '@Common/Helper'
-import { UploadFileDTO } from '@Shared/types'
+import { UploadFileDTO, UploadFileProps } from '@Shared/types'
+import { APIOptions } from '@Common/Types'
 
 export const uploadCIPipelineFile = async ({
     file,
@@ -14,14 +13,11 @@ export const uploadCIPipelineFile = async ({
     maxUploadSize,
     abortControllerRef,
 }: {
-    file: File[]
     appId: number
     ciPipelineId: number
     envId?: number
-    allowedExtensions?: string[]
-    maxUploadSize?: number
-    abortControllerRef?: MutableRefObject<AbortController>
-}): Promise<UploadFileDTO> => {
+} & UploadFileProps &
+    Pick<APIOptions, 'abortControllerRef'>): Promise<UploadFileDTO> => {
     const formData = new FormData()
     formData.append('file', file[0])
 

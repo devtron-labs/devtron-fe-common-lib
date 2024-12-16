@@ -151,7 +151,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             }}
                             textAreaProps={{
                                 ...row.data[key].props?.textAreaProps,
-                                className: 'dynamic-data-table__cell-input placeholder-cn5 py-8 pr-8 cn-9 fs-13 lh-20',
+                                className: 'dynamic-data-table__cell-input placeholder-cn5 py-8 pr-32 cn-9 fs-13 lh-20',
                                 disableOnBlurResizeToMinHeight: true,
                                 minHeight: 20,
                                 maxHeight: 160,
@@ -178,7 +178,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 )
             case DynamicDataTableRowDataType.FILE_UPLOAD:
                 return (
-                    <div className={`w-100 h-100 flex top left px-8 ${row.data[key].value ? 'py-3' : 'py-8'}`}>
+                    <div className={`mw-none w-100 h-100 flex top left px-8 ${row.data[key].value ? 'py-3' : 'py-8'}`}>
                         <FileUpload
                             {...row.data[key].props}
                             fileName={row.data[key].value}
