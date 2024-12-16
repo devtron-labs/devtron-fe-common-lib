@@ -118,6 +118,7 @@ export const ROUTES = {
     K8S_RESOURCE_LIST: 'k8s/resource/list',
     FILE_UPLOAD: 'file/upload',
     PLUGIN_GLOBAL_VARIABLES: 'plugin/global/list/global-variable',
+    CONFIG_COMPARE_SECRET: 'config/compare/secret',
 }
 
 export enum KEY_VALUE {

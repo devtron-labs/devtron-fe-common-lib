@@ -20,7 +20,7 @@ import { FileUpload } from '../FileUpload'
 import { getActionButtonPosition, getRowGridTemplateColumn, rowTypeHasInputField } from './utils'
 import { DynamicDataTableRowType, DynamicDataTableRowProps, DynamicDataTableRowDataType } from './types'
 
-const conditionalWrap =
+const getWrapperForButtonCell =
     <K extends string, CustomStateType = Record<string, unknown>>(
         renderer: (row: DynamicDataTableRowType<K, CustomStateType>) => ReactElement,
         row: DynamicDataTableRowType<K, CustomStateType>,
@@ -71,20 +71,18 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     }
 
     useEffect(() => {
-        if (rows) {
-            const rowIds = rows.map(({ id }) => id)
+        const rowIds = rows.map(({ id }) => id)
 
-            const updatedCellRef = rowIds.reduce((acc, curr) => {
-                if (cellRef.current[curr]) {
-                    acc[curr] = cellRef.current[curr]
-                } else {
-                    acc[curr] = headers.reduce((headerAcc, { key }) => ({ ...headerAcc, [key]: createRef() }), {})
-                }
-                return acc
-            }, {})
+        const updatedCellRef = rowIds.reduce((acc, curr) => {
+            if (cellRef.current[curr]) {
+                acc[curr] = cellRef.current[curr]
+            } else {
+                acc[curr] = headers.reduce((headerAcc, { key }) => ({ ...headerAcc, [key]: createRef() }), {})
+            }
+            return acc
+        }, {})
 
-            cellRef.current = updatedCellRef
-        }
+        cellRef.current = updatedCellRef
     }, [rows.length])
 
     // METHODS
@@ -95,9 +93,6 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
             const extraData = { selectedValue: null, files: [] }
             switch (row.data[key].type) {
                 case DynamicDataTableRowDataType.DROPDOWN:
-                    value = (e as SelectPickerOptionType<string>).value
-                    extraData.selectedValue = e
-                    break
                 case DynamicDataTableRowDataType.SELECT_TEXT:
                     value = (e as SelectPickerOptionType<string>).value
                     extraData.selectedValue = e
@@ -169,7 +164,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                     <div className="w-100 h-100 flex top">
                         <ConditionalWrap
                             condition={!!buttonCellWrapComponent}
-                            wrap={conditionalWrap(buttonCellWrapComponent, row)}
+                            wrap={getWrapperForButtonCell(buttonCellWrapComponent, row)}
                         >
                             <button
                                 type="button"

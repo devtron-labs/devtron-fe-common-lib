@@ -273,7 +273,7 @@ export type AppEnvDeploymentConfigPayloadType =
           appName: string
           envName: string
           configType: AppEnvDeploymentConfigType
-          identifierId?: number
+          wfrId?: number
           pipelineId?: number
           resourceType?: ConfigResourceType
           resourceId?: number
