@@ -207,16 +207,18 @@ export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPi
     } = props
 
     return (
-        // added key here to explicitly re-render the list on input change so that the top option is rendered
-        <components.MenuList {...props} key={inputValue}>
-            <div className="py-4 cursor">{shouldRenderCustomOptions ? renderCustomOptions() : children}</div>
-            {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
+        <>
+            {/* added key here to explicitly re-render the list on input change so that the top option is rendered */}
+            <components.MenuList {...props} key={inputValue}>
+                <div className="py-4 cursor">{shouldRenderCustomOptions ? renderCustomOptions() : children}</div>
+                {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
+            </components.MenuList>
             {!shouldRenderCustomOptions && renderMenuListFooter && (
                 <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bcn-0 dc__zi-2">
                     {renderMenuListFooter()}
                 </div>
             )}
-        </components.MenuList>
+        </>
     )
 }
 
