@@ -63,8 +63,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
     profileInput,
     profileInputErrors,
     handleProfileInputChange,
-    // TODO: Change name
-    isDefaultProfile,
+    isGlobalProfile,
     unitsMap,
     configurationContainerLabel,
 }) => {
@@ -81,7 +80,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
 
     return (
         <div className="flexbox-col dc__mxw-920 dc__gap-16">
-            {!isDefaultProfile && (
+            {!isGlobalProfile && (
                 <div className="flexbox-col dc__gap-12">
                     <BuildInfraProfileNameField
                         handleProfileInputChange={handleProfileInputChange}
@@ -112,14 +111,14 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
                                         (action) => currentConfigurations[action.actionType],
                                     )}
                                     isInheriting={isInheritingProfileValues(field.actions)}
-                                    isDefaultProfile={isDefaultProfile}
+                                    isDefaultProfile={isGlobalProfile}
                                 />
                             }
                             showDivider={index !== BUILD_INFRA_FORM_FIELDS.length - 1}
                             isInheriting={isInheritingProfileValues(field.actions)}
                             handleProfileInputChange={handleProfileInputChange}
                             locator={field.locator}
-                            isDefaultProfile={isDefaultProfile}
+                            isDefaultProfile={isGlobalProfile}
                         >
                             <div className="w-50 flexbox dc__gap-12 w-100 dc__align-start">
                                 {field.actions.map((action) => (

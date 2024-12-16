@@ -454,7 +454,7 @@ export interface ValidateRequestLimitResponseType {
 
 export interface BuildInfraConfigFormProps
     extends Pick<UseBuildInfraFormResponseType, 'profileInput' | 'profileInputErrors' | 'handleProfileInputChange'> {
-    isDefaultProfile?: boolean
+    isGlobalProfile?: boolean
     unitsMap?: BuildInfraProfileResponseType['configurationUnits']
     configurationContainerLabel?: ReactNode
 }

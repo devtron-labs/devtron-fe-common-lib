@@ -796,39 +796,14 @@ export const useBuildInfraForm = ({
                     break
                 }
 
-                const ids = (
-                    currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value as BuildInfraNodeSelectorValueType[]
-                )?.length
-                    ? [getUniqueId()]
-                    : [getUniqueId(), getUniqueId()]
+                const id = getUniqueId()
+                const newSelector: BuildInfraNodeSelectorValueType = {
+                    id,
+                    key: '',
+                    value: '',
+                }
 
-                ids.forEach((id) => {
-                    if (
-                        currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].key ===
-                        BuildInfraConfigTypes.NODE_SELECTOR
-                    ) {
-                        const newSelector: BuildInfraNodeSelectorValueType = {
-                            id,
-                            key: '',
-                            value: '',
-                        }
-
-                        currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.unshift(newSelector)
-
-                        if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]?.[id]) {
-                            if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]) {
-                                currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = {}
-                            }
-
-                            currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {}
-                        }
-
-                        // Since key is required but we would want to show it if user clears it
-                        currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {
-                            [NodeSelectorHeaderType.KEY]: [],
-                        }
-                    }
-                })
+                currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.unshift(newSelector)
                 break
             }
 
@@ -885,7 +860,9 @@ export const useBuildInfraForm = ({
                     nodeSelector.value = value
                 }
 
-                const hasAnyError = keyErrorMessages.length > 0 || valueErrorMessages.length > 0
+                const isEmptyRow = !key && !value
+
+                const hasError = !isEmptyRow && (keyErrorMessages.length > 0 || valueErrorMessages.length > 0)
 
                 if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]?.[id]) {
                     if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]) {
@@ -899,7 +876,7 @@ export const useBuildInfraForm = ({
                     ...(valueErrorMessages.length > 0 && { [NodeSelectorHeaderType.VALUE]: valueErrorMessages }),
                 }
 
-                if (!hasAnyError) {
+                if (!hasError) {
                     // Would delete id, and if not key left then delete key
                     delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]
                     if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]).length === 0) {
@@ -911,40 +888,22 @@ export const useBuildInfraForm = ({
             }
 
             case BuildInfraProfileInputActionType.ADD_TOLERANCE_ITEM: {
-                const ids = (
-                    currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value as BuildInfraToleranceValueType[]
-                )?.length
-                    ? [getUniqueId()]
-                    : [getUniqueId(), getUniqueId()]
+                if (currentConfiguration[BuildInfraConfigTypes.TOLERANCE].key !== BuildInfraConfigTypes.TOLERANCE) {
+                    break
+                }
 
-                ids.forEach((id) => {
-                    if (currentConfiguration[BuildInfraConfigTypes.TOLERANCE].key === BuildInfraConfigTypes.TOLERANCE) {
-                        const newToleranceItem: BuildInfraToleranceValueType = {
-                            id,
-                            key: '',
-                            // TODO: Ask for constants
-                            effect: BuildInfraToleranceEffectType.NO_SCHEDULE,
-                            operator: BuildInfraToleranceOperatorType.EQUALS,
-                            value: '',
-                        }
+                const id = getUniqueId()
 
-                        currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value.unshift(newToleranceItem)
+                const newToleranceItem: BuildInfraToleranceValueType = {
+                    id,
+                    key: '',
+                    // TODO: Ask for constants
+                    effect: BuildInfraToleranceEffectType.NO_SCHEDULE,
+                    operator: BuildInfraToleranceOperatorType.EQUALS,
+                    value: '',
+                }
 
-                        if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]?.[id]) {
-                            if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]) {
-                                currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = {}
-                            }
-
-                            currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {}
-                        }
-
-                        // Since key is required but we would want to show it if user clears it
-                        currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id] = {
-                            [ToleranceHeaderType.KEY]: [],
-                        }
-                    }
-                })
-
+                currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value.unshift(newToleranceItem)
                 break
             }
 
@@ -996,15 +955,12 @@ export const useBuildInfraForm = ({
                     }
                 }
 
-                const existingKeys = currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value
-                    .filter((tolerance) => tolerance.key && tolerance.id !== id)
-                    .map((tolerance) => tolerance.key)
-
-                const keyErrorMessages = validateLabelKeyWithNoDuplicates(key, existingKeys).messages
+                const keyErrorMessages = validateLabelKey(key).messages
                 const valueErrorMessages =
                     operator !== BuildInfraToleranceOperatorType.EXISTS ? validateLabelValue(value).messages : []
 
-                const hasAnyError = keyErrorMessages.length > 0 || valueErrorMessages.length > 0
+                const isEmptyRow = !key && !value
+                const hasError = !isEmptyRow && (keyErrorMessages.length > 0 || valueErrorMessages.length > 0)
 
                 if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]?.[id]) {
                     if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]) {
@@ -1019,7 +975,7 @@ export const useBuildInfraForm = ({
                     ...(valueErrorMessages.length > 0 && { [ToleranceHeaderType.VALUE]: valueErrorMessages }),
                 }
 
-                if (!hasAnyError) {
+                if (!hasError) {
                     // Would delete id, and if not key left then delete key
                     delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id]
                     if (Object.keys(currentInputErrors[BuildInfraConfigTypes.TOLERANCE]).length === 0) {
