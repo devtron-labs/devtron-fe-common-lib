@@ -1211,6 +1211,10 @@ export const getTransformedBuildInfraProfileResponse = ({
         const baseConfigurations = configurations[BUILD_INFRA_DEFAULT_PLATFORM_NAME]
         acc[platformName] = Object.values(BuildInfraConfigTypes).reduce<BuildInfraConfigurationMapType>(
             (fallbackAcc, configType) => {
+                if (!globalPlatformConfig[configType]) {
+                    return fallbackAcc
+                }
+
                 const baseValue = parsePlatformConfigIntoValue(baseConfigurations[configType])
                 const defaultValue = parsePlatformConfigIntoValue(globalPlatformConfig[configType])
 

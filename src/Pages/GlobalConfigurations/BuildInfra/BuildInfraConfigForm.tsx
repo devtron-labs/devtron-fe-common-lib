@@ -20,7 +20,7 @@ import BuildInfraFormAction from './BuildInfraFormAction'
 import BuildInfraFormItem from './BuildInfraFormItem'
 import BuildInfraProfileDescriptionField from './BuildInfraDescriptionField'
 import BuildInfraProfileNameField from './BuildInfraProfileNameField'
-import { BUILD_INFRA_FORM_FIELDS, BUILD_INFRA_TEXT, DEFAULT_PROFILE_NAME } from './constants'
+import { BUILD_INFRA_DEFAULT_PLATFORM_NAME, BUILD_INFRA_FORM_FIELDS, BUILD_INFRA_TEXT } from './constants'
 import {
     BuildInfraActionType,
     BuildInfraConfigFormProps,
@@ -68,7 +68,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
     unitsMap,
     configurationContainerLabel,
 }) => {
-    const currentConfigurations = profileInput?.configurations?.[DEFAULT_PROFILE_NAME]
+    const currentConfigurations = profileInput?.configurations?.[BUILD_INFRA_DEFAULT_PLATFORM_NAME]
 
     // will get the desired configuration from the currentConfigurations and then check if it is active or not
     const isInheritingProfileValues = (actions: BuildInfraActionType[]) =>
