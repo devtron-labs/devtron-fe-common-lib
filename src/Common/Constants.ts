@@ -69,6 +69,7 @@ export const URLS = {
     NETWORK_STATUS_INTERFACE: '/network-status-interface',
     CONFIG_DRIFT: 'config-drift',
     RESOURCE_BROWSER: '/resource-browser',
+    COMPARE_CLUSTERS: '/compare-clusters',
 }
 
 export const ROUTES = {
@@ -78,6 +79,8 @@ export const ROUTES = {
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',
+    CREATE_RESOURCE: 'k8s/resource/create',
+    K8S_RESOURCE_CREATE: 'k8s/resources/apply',
     CI_CONFIG_GET: 'app/ci-pipeline',
     CD_MATERIAL_GET: 'app/cd-pipeline',
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
@@ -116,6 +119,7 @@ export const ROUTES = {
     DEPLOYMENT_CHARTS_LIST: 'deployment/template/fetch',
     USER_LIST_MIN: 'user/list/min',
     CONFIG_DATA: 'config/data',
+    K8S_RESOURCE: 'k8s/resource',
     K8S_RESOURCE_LIST: 'k8s/resource/list',
     CONFIG_COMPARE_SECRET: 'config/compare/secret',
 }
