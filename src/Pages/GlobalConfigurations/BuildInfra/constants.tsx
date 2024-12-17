@@ -92,6 +92,14 @@ export const BUILD_INFRA_LOCATOR_MARKER_MAP: Readonly<Record<BuildInfraLocators,
     [BuildInfraLocators.TOLERANCE]: ICTag,
 }
 
+export const BUILD_INFRA_LOCATOR_LABEL_MAP: Readonly<Record<BuildInfraLocators, string>> = {
+    [BuildInfraLocators.CPU]: 'CPU',
+    [BuildInfraLocators.MEMORY]: 'Memory',
+    [BuildInfraLocators.BUILD_TIMEOUT]: 'Build timeout',
+    [BuildInfraLocators.NODE_SELECTOR]: 'Node selector',
+    [BuildInfraLocators.TOLERANCE]: 'Tolerance',
+}
+
 export const BUILD_INFRA_FORM_FIELDS: Readonly<BuildInfraFormFieldType[]> = [
     {
         heading: <h3 className="m-0 cn-9 fs-13 fw-6 lh-20 w-240 dc__no-shrink">CPU (Request - Limit)</h3>,
@@ -140,6 +148,9 @@ export const BUILD_INFRA_FORM_FIELDS: Readonly<BuildInfraFormFieldType[]> = [
         locator: BuildInfraLocators.BUILD_TIMEOUT,
     },
 ]
+
+export const NUMERIC_BUILD_INFRA_FORM_FIELD_CONFIGURATION_MAP: Readonly<Record<number, BuildInfraFormFieldType[]>> =
+    BUILD_INFRA_FORM_FIELDS.reduce((acc, field, index) => ({ ...acc, [index]: field }), {})
 
 export const PROFILE_INPUT_ERROR_FIELDS = Object.fromEntries(
     Object.values({

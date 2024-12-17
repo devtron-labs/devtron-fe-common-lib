@@ -17,6 +17,7 @@
 import { getSanitizedIframe } from '@Common/Helper'
 import { PATTERNS } from '@Common/Constants'
 import { URLProtocolType } from './types'
+import { SKIP_LABEL_KEY_VALIDATION_PREFIX } from './constants'
 
 export interface ValidationResponseType {
     isValid: boolean
@@ -64,7 +65,7 @@ export const validateLabelKey = (key: string): { isValid: boolean; messages: str
     const errorList = []
     if (!key) {
         errorList.push('Key is required')
-    } else if (!key.startsWith('devtron.ai/')) {
+    } else if (!key.startsWith(SKIP_LABEL_KEY_VALIDATION_PREFIX)) {
         // eslint-disable-next-line prefer-regex-literals
         const re = new RegExp('/', 'g')
         const noOfSlashInKey = key.match(re)?.length

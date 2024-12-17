@@ -210,14 +210,14 @@ const getInitialProfileInputErrors = (fromCreateView: boolean): ProfileInputErro
 }
 
 export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfoType): BuildInfraConfigValuesType => {
-    switch (configuration.key) {
+    switch (configuration?.key) {
         case BuildInfraConfigTypes.NODE_SELECTOR:
             return {
                 key: BuildInfraConfigTypes.NODE_SELECTOR,
                 value: (configuration.value || [])
                     .map((nodeSelector) => ({
                         key: nodeSelector?.key,
-                        value: nodeSelector?.value,
+                        value: nodeSelector?.value || '',
                         id: getUniqueId(),
                     }))
                     .filter((nodeSelector) => nodeSelector.key),
@@ -229,7 +229,7 @@ export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfo
                 value: (configuration.value || []).map((toleranceItem) => {
                     const { key, effect, operator, value } = toleranceItem || {}
 
-                    const baseObject = {
+                    const baseObject: Pick<BuildInfraToleranceValueType, 'key' | 'effect' | 'id'> = {
                         key,
                         effect,
                         id: getUniqueId(),
@@ -1207,6 +1207,7 @@ export const getBuildInfraProfilePayload = (
     const configurations: BuildInfraProfileInfoDTO['configurations'] = Object.entries(platformConfigurationMap).reduce<
         BuildInfraProfileInfoDTO['configurations']
     >((acc, [platformName, configurationLocatorMap]) => {
+        // This converts the map of config types mapped to values into an array of values if user has activated the configuration or is editing it
         const configurationList = Object.values(configurationLocatorMap).reduce<BuildInfraConfigurationDTO[]>(
             (configurationListAcc, configuration) => {
                 if (configuration.id || configuration.active) {

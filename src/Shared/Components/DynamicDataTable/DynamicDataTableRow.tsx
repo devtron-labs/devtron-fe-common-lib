@@ -221,7 +221,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 ? cellError[row.id][key]
                 : { isValid: true, errorMessages: [] }
 
-        if (isValid || !errorMessages?.length) {
+        if (isValid) {
             return null
         }
 

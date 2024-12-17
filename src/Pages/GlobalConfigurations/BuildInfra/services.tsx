@@ -34,11 +34,11 @@ export const getBuildInfraProfileByName = async ({
     fromCreateView,
 }: GetBuildInfraProfileType): Promise<BuildInfraProfileResponseType> => {
     try {
-        const getProfilePayload: Pick<BuildInfraProfileDTO['profile'], 'name'> = { name }
+        const profilePayload: Pick<BuildInfraProfileDTO['profile'], 'name'> = { name }
 
         const {
             result: { configurationUnits, defaultConfigurations, profile },
-        } = await get<BuildInfraProfileDTO>(getUrlWithSearchParams(getBuildInfraProfileEndpoint(), getProfilePayload))
+        } = await get<BuildInfraProfileDTO>(getUrlWithSearchParams(getBuildInfraProfileEndpoint(), profilePayload))
 
         return getTransformedBuildInfraProfileResponse({
             configurationUnits,
