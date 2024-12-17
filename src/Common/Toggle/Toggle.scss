@@ -120,3 +120,31 @@ input:focus + .toggle__slider {
         }
     }
 }
+
+.dc__toggle-square-toggle--h20 {
+    .toggle__slider {
+        border-color: var(--color);
+        background-color: var(--color) !important;
+
+        &:before {
+            background-color: transparent;
+        }
+
+        &.with-icon svg {
+            height: 18px;
+            width: 18px;
+            margin-top: 1px;
+            background-color: var(--N0);
+            left: 0;
+            padding: 2px;
+            border-radius: 3px;
+        }
+    }
+
+    input:checked + .toggle__slider {
+        &.with-icon svg {
+            left: -10px;
+            background-color: var(--N0);
+        }
+    }
+}
