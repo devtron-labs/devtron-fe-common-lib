@@ -1,4 +1,3 @@
-import { PATTERNS } from '@Common/Constants'
 import { DynamicDataTableRowDataType, DynamicDataTableRowType } from '../DynamicDataTable'
 import { TagsTableColumnsType } from './types'
 
@@ -24,14 +23,3 @@ export const getEmptyTagTableRow = (): DynamicDataTableRowType<TagsTableColumnsT
         propagateTag: false,
     },
 })
-
-export const validateTagKeyValues = (value: string, key: string) => {
-    if ((key === 'tagKey' || key === 'tagValue') && value) {
-        const isValid = new RegExp(PATTERNS.ALPHANUMERIC_WITH_SPECIAL_CHAR).test(value)
-        return {
-            isValid,
-            errorMessages: ['Can only contain alphanumeric chars and ( - ), ( _ ), ( . )', 'Spaces not allowed'],
-        }
-    }
-    return { isValid: true, errorMessages: [] }
-}

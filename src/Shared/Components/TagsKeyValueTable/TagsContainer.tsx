@@ -1,10 +1,12 @@
+import ReactGA from 'react-ga4'
 import { ReactComponent as ICPropagate } from '@Icons/inject-tag.svg'
-import { PropagateTagInfo } from '@Common/CustomTagSelector'
+import { PropagateTagInfo, validateTagKeyValue } from '@Common/CustomTagSelector'
 import { Tooltip } from '@Common/Tooltip'
+import { validateTagValue } from '@Common/CustomTagSelector/tags.utils'
 import { TagsContainerProps, TagsTableColumnsType } from './types'
 import { DEVTRON_AI_URL, TAGS_TABLE_HEADERS } from './constants'
 import { DynamicDataTable, DynamicDataTableRowType } from '../DynamicDataTable'
-import { getEmptyTagTableRow, validateTagKeyValues } from './utils'
+import { getEmptyTagTableRow } from './utils'
 
 const TagsKeyValueTable = ({
     rows,
@@ -16,6 +18,10 @@ const TagsKeyValueTable = ({
     setTagErrors,
 }: TagsContainerProps) => {
     const handlePropagateTag = (rowId: string | number) => {
+        ReactGA.event({
+            category: 'Tags',
+            action: 'PROPAGATE_TAG_BUTTON_CLICKED',
+        })
         const updatedRows = rows.map<DynamicDataTableRowType<TagsTableColumnsType>>((row) => {
             if (row.id === rowId) {
                 return {
@@ -53,6 +59,10 @@ const TagsKeyValueTable = ({
     }
 
     const dataTableHandleAddition = () => {
+        ReactGA.event({
+            category: 'Tags',
+            action: 'ADD_TAG_BUTTON_CLICKED',
+        })
         const newEmptyRow = getEmptyRow()
         const editedRows = [...rows, newEmptyRow]
         setRows(editedRows)
@@ -71,7 +81,11 @@ const TagsKeyValueTable = ({
                 tagValue: { isValid: true, errorMessages: [] },
             }
         }
-        updatedTagsError[updatedRow.id][headerKey] = validateTagKeyValues(value, headerKey)
+        if (headerKey === 'tagKey') {
+            updatedTagsError[updatedRow.id].tagKey = validateTagKeyValue(value)
+        } else {
+            updatedTagsError[updatedRow.id].tagValue = validateTagValue(value, updatedRow.data.tagKey.value)
+        }
 
         const updatedRows = rows.map<DynamicDataTableRowType<TagsTableColumnsType>>((row) => {
             if (row.id === updatedRow.id) {
