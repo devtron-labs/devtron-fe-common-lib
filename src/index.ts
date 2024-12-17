@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { OverrideMergeStrategyType } from '@Pages/Applications'
+
 export interface customEnv {
     SENTRY_ENV?: string
     SENTRY_ERROR_ENABLED?: boolean
@@ -94,7 +96,10 @@ export interface customEnv {
     FEATURE_PROMO_EMBEDDED_MODAL_TITLE?: string
     FEATURE_PROMO_EMBEDDED_IFRAME_URL?: string
     FEATURE_BULK_RESTART_WORKLOADS_FROM_RB: string
+    FEATURE_RB_SYNC_CLUSTER_ENABLE?: boolean
+    FEATURE_DEFAULT_MERGE_STRATEGY?: OverrideMergeStrategyType
     FEATURE_DEFAULT_LANDING_RB_ENABLE?: boolean
+    FEATURE_CLUSTER_MAP_ENABLE?: boolean
 }
 declare global {
     interface Window {

@@ -14,7 +14,14 @@
  * limitations under the License.
  */
 
-import { GroupHeadingProps, MultiValueProps, OptionProps, ValueContainerProps, MenuPlacement } from 'react-select'
+import {
+    GroupHeadingProps,
+    MultiValueProps,
+    OptionProps,
+    ValueContainerProps,
+    MenuPlacement,
+    Props as ReactSelectProps,
+} from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { ReactElement, useCallback, useMemo } from 'react'
 
@@ -207,6 +214,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     onCreateOption,
     closeMenuOnSelect = false,
     shouldShowNoOptionsMessage = true,
+    formatCreateLabel,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options, getOptionValue } = props
@@ -308,6 +316,13 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         }
     }
 
+    const handleKeyDown: ReactSelectProps['onKeyDown'] = (e) => {
+        // Prevent the option from being selected if meta or control key is pressed
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+            e.preventDefault()
+        }
+    }
+
     const commonProps = useMemo(
         () => ({
             name: name || inputId,
@@ -318,7 +333,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             menuPlacement: 'auto' as MenuPlacement,
             menuPosition,
             menuShouldScrollIntoView: true,
-            backspaceRemovesValue: isMulti,
+            backspaceRemovesValue: isMulti && controlShouldRenderValue,
             'aria-errormessage': errorElementId,
             'aria-invalid': !!error,
             'aria-labelledby': labelId,
@@ -336,8 +351,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             errorElementId,
             error,
             labelId,
-            isMulti,
             shouldRenderCustomOptions,
+            controlShouldRenderValue,
         ],
     )
 
@@ -393,6 +408,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             onInputChange={onInputChange}
                             icon={icon}
                             showSelectedOptionIcon={shouldShowSelectedOptionIcon}
+                            formatCreateLabel={formatCreateLabel}
+                            onKeyDown={handleKeyDown}
                         />
                     </div>
                 </ConditionalWrap>

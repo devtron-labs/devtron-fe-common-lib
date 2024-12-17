@@ -76,13 +76,27 @@ export interface BulkSelectionActionWidgetProps {
     showBulkRestartOption: boolean
 }
 
+interface BulkOperationAdditionalKeysType {
+    label: string
+    value: string
+    isSortable: boolean
+    /**
+     * width to be given in gridTemplateColumns
+     */
+    width: string
+}
+
 export interface BulkOperation {
     name: string
+    /**
+     * Would these keys beside the name
+     */
+    additionalKeys?: BulkOperationAdditionalKeysType[]
     operation: (signal: AbortSignal, data?: unknown) => Promise<void>
 }
 
 export type BulkOperationModalProps = {
-    operationType: 'restart' | 'delete'
+    operationType: 'restart' | 'delete' | 'creation'
     clusterName: string
     operations: NonNullable<BulkOperation[]>
     handleModalClose: () => void
@@ -93,3 +107,40 @@ export type BulkOperationModalProps = {
 }
 
 export type BulkOperationModalState = BulkOperationModalProps['operationType'] | 'closed'
+
+export interface CreateResourceRequestBodyType {
+    appId: string
+    clusterId: number
+    k8sRequest: {
+        resourceIdentifier: Required<K8sRequestResourceIdentifierType>
+        patch?: string
+    }
+}
+
+export interface ResourceManifestDTO {
+    manifestResponse: {
+        manifest: Record<string, unknown>
+    }
+    secretViewAccess: boolean
+}
+
+export interface CreateResourceRequestBodyParamsType
+    extends Pick<CreateResourceRequestBodyType, 'clusterId'>,
+        Required<Pick<K8sRequestResourceIdentifierType, 'name' | 'namespace'>> {
+    updatedManifest?: string
+    group: GVKType['Group']
+    version: GVKType['Version']
+    kind: GVKType['Kind']
+}
+
+export interface CreateResourcePayload {
+    clusterId: number
+    manifest: string
+}
+
+export interface CreateResourceDTO {
+    kind: string
+    name: string
+    isUpdate: boolean
+    error: string
+}

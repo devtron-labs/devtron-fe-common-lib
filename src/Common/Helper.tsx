@@ -17,7 +17,7 @@
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DOMPurify from 'dompurify'
 import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
-import { compare as compareJSON, applyPatch, unescapePathComponent } from 'fast-json-patch'
+import { compare as compareJSON, applyPatch, unescapePathComponent,deepClone } from 'fast-json-patch'
 import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import moment from 'moment'
@@ -31,6 +31,7 @@ import {
     DISCORD_LINK,
     ZERO_TIME_STRING,
     TOAST_ACCESS_DENIED,
+    UNCHANGED_ARRAY_ELEMENT_SYMBOL,
 } from './Constants'
 import { ServerErrors } from './ServerError'
 import { AsyncOptions, AsyncState, UseSearchString } from './Types'
@@ -561,19 +562,19 @@ export const getFilteredChartVersions = (charts, selectedChartType) =>
  * @param {object} object from which we need to delete nulls in its arrays
  * @returns object after removing (in-place) the null items in arrays
  */
-export const recursivelyRemoveNullsFromArraysInObject = (object: object) => {
+export const recursivelyRemoveSymbolFromArraysInObject = (object: object, symbol: symbol) => {
     // NOTE: typeof null === 'object'
     if (typeof object !== 'object' || !object) {
         return object
     }
     if (Array.isArray(object)) {
         return object.filter((item) => {
-            recursivelyRemoveNullsFromArraysInObject(item)
-            return !!item
+            recursivelyRemoveSymbolFromArraysInObject(item, symbol)
+            return item !== symbol
         })
     }
     Object.keys(object).forEach((key) => {
-        object[key] = recursivelyRemoveNullsFromArraysInObject(object[key])
+        object[key] = recursivelyRemoveSymbolFromArraysInObject(object[key], symbol)
     })
     return object
 }
@@ -583,8 +584,8 @@ const _joinObjects = (A: object, B: object) => {
         return
     }
     Object.keys(B).forEach((key) => {
-        if (!A[key]) {
-            A[key] = structuredClone(B[key])
+        if (A[key] === undefined || A[key] === UNCHANGED_ARRAY_ELEMENT_SYMBOL) {
+            A[key] = B[key]
             return
         }
         _joinObjects(A[key], B[key])
@@ -593,6 +594,7 @@ const _joinObjects = (A: object, B: object) => {
 
 /**
  * Merges the objects into one object
+ * Works more like Object.assign; that doesn't deep copy
  * @param {object[]} objects list of js objects
  * @returns object after the merge
  */
@@ -612,7 +614,7 @@ const buildObjectFromPathTokens = (index: number, tokens: string[], value: any) 
     const numberKey = Number(key)
     const isKeyNumber = !Number.isNaN(numberKey)
     return isKeyNumber
-        ? [...Array(numberKey).fill(null), buildObjectFromPathTokens(index + 1, tokens, value)]
+        ? [...Array(numberKey).fill(UNCHANGED_ARRAY_ELEMENT_SYMBOL), buildObjectFromPathTokens(index + 1, tokens, value)]
         : { [unescapePathComponent(key)]: buildObjectFromPathTokens(index + 1, tokens, value) }
 }
 
@@ -672,7 +674,7 @@ export const flatMapOfJSONPaths = (
 
 export const applyCompareDiffOnUneditedDocument = (uneditedDocument: object, editedDocument: object) => {
     const patch = compareJSON(uneditedDocument, editedDocument)
-    return applyPatch(uneditedDocument, patch).newDocument
+    return applyPatch(deepClone(uneditedDocument), patch).newDocument
 }
 
 /**
@@ -1034,4 +1036,11 @@ export const getIframeWithDefaultAttributes = (iframeString: string, defaultName
     }
 
     return iframeString
+}
+
+export const getGoLangFormattedDateWithTimezone = (dateFormat: string) => {
+    const now = moment()
+    const formattedDate = now.format(dateFormat)
+    const timezone = now.format('Z').replace(/([+/-])(\d{2})[:.](\d{2})/, '$1$2$3')
+    return formattedDate.replace('Z', timezone)
 }

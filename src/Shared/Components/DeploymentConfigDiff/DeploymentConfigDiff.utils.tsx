@@ -444,7 +444,7 @@ const getDiffHeading = <DeploymentTemplate extends boolean>(
     if (isApprovalPending) {
         return (
             <div className="flexbox dc__align-items-center dc__gap-8 ">
-                <ICCheckCircleDots className="icon-dim-16" />
+                <ICCheckCircleDots className="icon-dim-16 dc__no-shrink" />
                 <span className="fs-12 fw-6 cv-5">Approval pending</span>
             </div>
         )

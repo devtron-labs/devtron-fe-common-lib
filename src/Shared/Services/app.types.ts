@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { OverrideMergeStrategyType } from '@Pages/Applications'
 import { ReleaseTag, UserApprovalMetadataType } from '../../Common'
 
 interface WebhookDataType {
@@ -205,9 +206,11 @@ export enum CMSecretExternalType {
 
 export interface ConfigDatum {
     name: string
+    mergeStrategy: OverrideMergeStrategyType
     type: string
     external: boolean
     data: Record<string, any>
+    patchData: Record<string, any>
     defaultData: Record<string, any>
     global: boolean
     externalType: CMSecretExternalType
@@ -232,6 +235,7 @@ export interface ConfigMapSecretDataType {
     id: number
     appId: number
     configData: ConfigMapSecretDataConfigDatumDTO[]
+    isDeletable: boolean
 }
 
 export enum ConfigResourceType {
