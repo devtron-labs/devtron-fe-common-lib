@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-export { default as PropagateTagInfo } from './PropagateTagInfo'
-export * from './TagDetails'
-export * from './TagLabelValueSelector'
-export * from './ResizableTagTextArea'
-export * from './Types'
-export { validateTagKeyValue } from './tags.utils'
+import { ValidationRules } from './ValidationRules'
+
+/**
+ *
+ * @param value tag key value to validate
+ * @returns isValid: boolean, errorMessages: string[]
+ */
+export const validateTagKeyValue = (value: string): { isValid: boolean; errorMessages: string[] } => {
+    const { propagateTagKey } = new ValidationRules()
+
+    const { isValid, messages } = propagateTagKey(value)
+    return { isValid, errorMessages: messages }
+}
