@@ -34,6 +34,12 @@ const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
                 width: '150%',
                 minWidth: '300px',
             }
+        case ComponentSizeType.xs: {
+            return {
+                width: '100%',
+                minWidth: '100%',
+            }
+        }
         case ComponentSizeType.small:
         default:
             return {
