@@ -32,7 +32,7 @@ const BuildInfraFormItem: FunctionComponent<BuildInfraFormItemProps> = ({
 }) => {
     const handleActivationChange = (e: FormEvent<HTMLInputElement>) => {
         const { checked } = e.currentTarget
-        const action = (checked ? `activate_${locator}` : `de_activate_${locator}`) as BuildInfraInheritActions
+        const action = (checked ? `activate_${locator}` : `de_activate_${locator}`) satisfies BuildInfraInheritActions
         handleProfileInputChange({ action, data: { targetPlatform } })
     }
 

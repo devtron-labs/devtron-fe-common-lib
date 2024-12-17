@@ -15,6 +15,7 @@
  */
 
 import { FormEvent, FunctionComponent, ReactNode } from 'react'
+import { BUILD_INFRA_INHERIT_ACTIONS } from '@Pages/index'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
 import { ValidationResponseType } from '../../../Shared'
 import { ServerErrors } from '../../../Common'
@@ -53,20 +54,7 @@ export enum BuildInfraLocators {
     TOLERANCE = 'tolerance',
 }
 
-// FIXME: Derive this from BuildInfraLocators
-// Appending the locators from above
-export enum BuildInfraInheritActions {
-    ACTIVATE_CPU = 'activate_cpu',
-    DE_ACTIVATE_CPU = 'de_activate_cpu',
-    ACTIVATE_MEMORY = 'activate_memory',
-    DE_ACTIVATE_MEMORY = 'de_activate_memory',
-    ACTIVATE_BUILD_TIMEOUT = 'activate_timeout',
-    DE_ACTIVATE_BUILD_TIMEOUT = 'de_activate_timeout',
-    ACTIVATE_NODE_SELECTOR = 'activate_node selector',
-    DE_ACTIVATE_NODE_SELECTOR = 'de_activate_node selector',
-    ACTIVATE_TOLERANCE = 'activate_tolerance',
-    DE_ACTIVATE_TOLERANCE = 'de_activate_tolerance',
-}
+export type BuildInfraInheritActions = keyof typeof BUILD_INFRA_INHERIT_ACTIONS
 
 export enum BuildInfraProfileVariants {
     // TODO: Can look to change name to GLOBAL as well

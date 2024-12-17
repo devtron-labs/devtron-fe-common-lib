@@ -192,3 +192,17 @@ export const TARGET_PLATFORM_ERROR_FIELDS_MAP: Record<TargetPlatformErrorFields,
     [BuildInfraConfigTypes.TOLERANCE]: true,
     [BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM]: true,
 }
+
+export const BUILD_INFRA_INHERIT_ACTIONS: Record<
+    `activate_${BuildInfraLocators}` | `de_activate_${BuildInfraLocators}`,
+    true
+> = Object.values(BuildInfraLocators).reduce<
+    Record<`activate_${BuildInfraLocators}` | `de_activate_${BuildInfraLocators}`, true>
+>(
+    (acc, locator) => {
+        acc[`activate_${locator}`] = true
+        acc[`de_activate_${locator}`] = true
+        return acc
+    },
+    {} as Record<`activate_${BuildInfraLocators}` | `de_activate_${BuildInfraLocators}`, true>,
+)

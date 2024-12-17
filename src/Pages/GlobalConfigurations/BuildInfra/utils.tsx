@@ -25,7 +25,6 @@ import {
     BuildInfraConfigurationMapTypeWithoutDefaultFallback,
     BuildInfraConfigurationType,
     BuildInfraConfigValuesType,
-    BuildInfraInheritActions,
     BuildInfraMetaConfigTypes,
     BuildInfraNodeSelectorValueType,
     BuildInfraPlatformConfigurationMapDTO,
@@ -501,7 +500,7 @@ export const useBuildInfraForm = ({
                 break
             }
 
-            case BuildInfraInheritActions.ACTIVATE_CPU:
+            case 'activate_cpu':
                 currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT] = {
                     ...lastSavedConfiguration[BuildInfraConfigTypes.CPU_LIMIT],
                     active: true,
@@ -516,7 +515,7 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = null
                 break
 
-            case BuildInfraInheritActions.ACTIVATE_MEMORY:
+            case 'activate_memory':
                 currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT] = {
                     ...lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT],
                     active: true,
@@ -531,7 +530,7 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = null
                 break
 
-            case BuildInfraInheritActions.ACTIVATE_BUILD_TIMEOUT:
+            case 'activate_timeout':
                 currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT] = {
                     ...lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT],
                     active: true,
@@ -540,7 +539,7 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = null
                 break
 
-            case BuildInfraInheritActions.ACTIVATE_NODE_SELECTOR:
+            case 'activate_node selector':
                 if (
                     lastSavedConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].defaultValue.key !==
                     BuildInfraConfigTypes.NODE_SELECTOR
@@ -556,7 +555,7 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
                 break
 
-            case BuildInfraInheritActions.ACTIVATE_TOLERANCE:
+            case 'activate_tolerance':
                 if (
                     lastSavedConfiguration[BuildInfraConfigTypes.TOLERANCE].defaultValue.key !==
                     BuildInfraConfigTypes.TOLERANCE
@@ -572,7 +571,7 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = null
                 break
 
-            case BuildInfraInheritActions.DE_ACTIVATE_BUILD_TIMEOUT:
+            case 'de_activate_timeout':
                 if (
                     lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].defaultValue.key !==
                     BuildInfraConfigTypes.BUILD_TIMEOUT
@@ -590,7 +589,7 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = null
                 break
 
-            case BuildInfraInheritActions.DE_ACTIVATE_CPU:
+            case 'de_activate_cpu':
                 if (
                     lastSavedConfiguration[BuildInfraConfigTypes.CPU_LIMIT].defaultValue.key !==
                         BuildInfraConfigTypes.CPU_LIMIT ||
@@ -616,7 +615,7 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = null
                 break
 
-            case BuildInfraInheritActions.DE_ACTIVATE_MEMORY:
+            case 'de_activate_memory':
                 if (
                     lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT].defaultValue.key !==
                         BuildInfraConfigTypes.MEMORY_LIMIT ||
@@ -642,7 +641,7 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = null
                 break
 
-            case BuildInfraInheritActions.DE_ACTIVATE_NODE_SELECTOR:
+            case 'de_activate_node selector':
                 if (
                     lastSavedConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].defaultValue.key !==
                     BuildInfraConfigTypes.NODE_SELECTOR
@@ -659,7 +658,7 @@ export const useBuildInfraForm = ({
                 currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
                 break
 
-            case BuildInfraInheritActions.DE_ACTIVATE_TOLERANCE:
+            case 'de_activate_tolerance':
                 if (
                     lastSavedConfiguration[BuildInfraConfigTypes.TOLERANCE].defaultValue.key !==
                     BuildInfraConfigTypes.TOLERANCE
