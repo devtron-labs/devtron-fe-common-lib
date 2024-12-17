@@ -420,9 +420,17 @@ export interface UseBuildInfraFormResponseType {
     handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>
 }
 
+export interface BuildInfraConfigFormProps
+    extends Pick<UseBuildInfraFormResponseType, 'profileInput' | 'profileInputErrors' | 'handleProfileInputChange'> {
+    isGlobalProfile?: boolean
+    unitsMap?: BuildInfraProfileResponseType['configurationUnits']
+    configurationContainerLabel?: ReactNode
+}
+
 export interface BuildInfraFormItemProps
     extends Pick<BuildInfraFormFieldType, 'marker' | 'heading'>,
-        Partial<Pick<BuildInfraProfileConfigBase, 'targetPlatform'>> {
+        Partial<Pick<BuildInfraProfileConfigBase, 'targetPlatform'>>,
+        Pick<BuildInfraConfigFormProps, 'isGlobalProfile'> {
     children?: ReactNode
     /**
      * If true, means profile is inheriting values from other profile (e.g, default)
@@ -438,7 +446,6 @@ export interface BuildInfraFormItemProps
      */
     handleProfileInputChange: UseBuildInfraFormResponseType['handleProfileInputChange']
     locator: BuildInfraFormFieldType['locator']
-    isDefaultProfile: boolean
 }
 
 export interface ValidateRequestLimitType {
@@ -450,13 +457,6 @@ export interface ValidateRequestLimitType {
 export interface ValidateRequestLimitResponseType {
     request: ValidationResponseType
     limit: ValidationResponseType
-}
-
-export interface BuildInfraConfigFormProps
-    extends Pick<UseBuildInfraFormResponseType, 'profileInput' | 'profileInputErrors' | 'handleProfileInputChange'> {
-    isGlobalProfile?: boolean
-    unitsMap?: BuildInfraProfileResponseType['configurationUnits']
-    configurationContainerLabel?: ReactNode
 }
 
 export interface BuildInfraFormActionProps

@@ -149,8 +149,11 @@ export const BUILD_INFRA_FORM_FIELDS: Readonly<BuildInfraFormFieldType[]> = [
     },
 ]
 
-export const NUMERIC_BUILD_INFRA_FORM_FIELD_CONFIGURATION_MAP: Readonly<Record<number, BuildInfraFormFieldType[]>> =
-    BUILD_INFRA_FORM_FIELDS.reduce((acc, field, index) => ({ ...acc, [index]: field }), {})
+export const NUMERIC_BUILD_INFRA_FORM_FIELD_CONFIGURATION_MAP: Readonly<Record<number, BuildInfraFormFieldType>> =
+    BUILD_INFRA_FORM_FIELDS.reduce<Record<number, BuildInfraFormFieldType>>(
+        (acc, field, index) => ({ ...acc, [index]: field }),
+        {},
+    )
 
 export const PROFILE_INPUT_ERROR_FIELDS = Object.fromEntries(
     Object.values({

@@ -27,7 +27,7 @@ const BuildInfraFormItem: FunctionComponent<BuildInfraFormItemProps> = ({
     showDivider,
     handleProfileInputChange,
     locator,
-    isDefaultProfile,
+    isGlobalProfile,
     targetPlatform = BUILD_INFRA_DEFAULT_PLATFORM_NAME,
 }) => {
     const handleActivationChange = (e: FormEvent<HTMLInputElement>) => {
@@ -37,7 +37,7 @@ const BuildInfraFormItem: FunctionComponent<BuildInfraFormItemProps> = ({
     }
 
     const renderMarker = () => {
-        if (isDefaultProfile) {
+        if (isGlobalProfile) {
             return <Marker className="icon-dim-20 dc__no-shrink" />
         }
 

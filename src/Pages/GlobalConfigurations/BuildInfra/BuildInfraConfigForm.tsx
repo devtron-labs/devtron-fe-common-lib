@@ -118,7 +118,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
                             isInheriting={isInheritingProfileValues(field.actions)}
                             handleProfileInputChange={handleProfileInputChange}
                             locator={field.locator}
-                            isDefaultProfile={isGlobalProfile}
+                            isGlobalProfile={isGlobalProfile}
                         >
                             <div className="w-50 flexbox dc__gap-12 w-100 dc__align-start">
                                 {field.actions.map((action) => (
