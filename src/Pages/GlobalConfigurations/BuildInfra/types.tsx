@@ -342,8 +342,7 @@ export type HandleProfileInputChangeType =
       }
     | {
           action: BuildInfraMetaConfigTypes
-          // Added targetPlatform partially even though not required, to keep the type consistent and remove duplication in case of handleChange
-          data: Partial<ProfileInputDispatchDataType> & {
+          data: {
               value: string
           }
       }
@@ -356,7 +355,7 @@ export type HandleProfileInputChangeType =
       }
     | {
           action: BuildInfraProfileInputActionType.RENAME_TARGET_PLATFORM
-          data: Partial<ProfileInputDispatchDataType> & {
+          data: {
               originalPlatformName: string
               newPlatformName: string
               configSnapshot: BuildInfraProfileData['configurations']
@@ -364,7 +363,7 @@ export type HandleProfileInputChangeType =
       }
     | {
           action: BuildInfraProfileInputActionType.RESTORE_PROFILE_CONFIG_SNAPSHOT
-          data: Partial<ProfileInputDispatchDataType> & {
+          data: {
               configSnapshot: BuildInfraProfileData['configurations']
           }
       }

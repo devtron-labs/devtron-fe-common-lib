@@ -345,9 +345,9 @@ export const useBuildInfraForm = ({
     )
     // If configuration is existing and is active then use it else use default from profileResponse
     const [profileInput, setProfileInput] = useState<BuildInfraProfileData>(null)
-    const [profileInputErrors, setProfileInputErrors] = useState<ProfileInputErrorType>({
-        ...structuredClone(PROFILE_INPUT_ERROR_FIELDS),
-    })
+    const [profileInputErrors, setProfileInputErrors] = useState<ProfileInputErrorType>(
+        structuredClone(PROFILE_INPUT_ERROR_FIELDS),
+    )
     const [loadingActionRequest, setLoadingActionRequest] = useState<boolean>(false)
 
     useEffect(() => {
@@ -364,8 +364,8 @@ export const useBuildInfraForm = ({
     const handleProfileInputChange = ({ action, data }: HandleProfileInputChangeType) => {
         const currentInput = structuredClone(profileInput)
         const currentInputErrors = structuredClone(profileInputErrors)
-        const { targetPlatform: targetPlatformFromData } = data
-        const targetPlatform = targetPlatformFromData || ''
+        const targetPlatform =
+            'targetPlatform' in data && Object.hasOwn(data, 'targetPlatform') ? data.targetPlatform : ''
         const currentConfiguration = currentInput.configurations[targetPlatform]
         const lastSavedConfiguration = profileResponse.profile.configurations[targetPlatform] || currentConfiguration
 
