@@ -208,7 +208,10 @@ const getInitialProfileInputErrors = (fromCreateView: boolean): ProfileInputErro
     }
 }
 
-export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfoType): BuildInfraConfigValuesType => {
+export const parsePlatformConfigIntoValue = (
+    configuration: BuildInfraConfigInfoType,
+    addUniqueId: boolean = true,
+): BuildInfraConfigValuesType => {
     switch (configuration?.key) {
         case BuildInfraConfigTypes.NODE_SELECTOR:
             return {
@@ -217,7 +220,7 @@ export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfo
                     .map((nodeSelector) => ({
                         key: nodeSelector?.key,
                         value: nodeSelector?.value || '',
-                        id: getUniqueId(),
+                        id: addUniqueId ? getUniqueId() : null,
                     }))
                     .filter((nodeSelector) => nodeSelector.key),
             }
@@ -231,7 +234,7 @@ export const parsePlatformConfigIntoValue = (configuration: BuildInfraConfigInfo
                     const baseObject: Pick<BuildInfraToleranceValueType, 'key' | 'effect' | 'id'> = {
                         key,
                         effect,
-                        id: getUniqueId(),
+                        id: addUniqueId ? getUniqueId() : null,
                     }
 
                     if (operator === BuildInfraToleranceOperatorType.EQUALS) {
@@ -1210,7 +1213,10 @@ export const getBuildInfraProfilePayload = (
         const configurationList = Object.values(configurationLocatorMap).reduce<BuildInfraConfigurationDTO[]>(
             (configurationListAcc, configuration) => {
                 if (configuration.id || configuration.active) {
-                    const infraConfigValues: BuildInfraConfigValuesType = parsePlatformConfigIntoValue(configuration)
+                    const infraConfigValues: BuildInfraConfigValuesType = parsePlatformConfigIntoValue(
+                        configuration,
+                        false,
+                    )
                     if (!infraConfigValues) {
                         return configurationListAcc
                     }

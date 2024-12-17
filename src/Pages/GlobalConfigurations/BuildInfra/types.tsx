@@ -57,8 +57,7 @@ export enum BuildInfraLocators {
 export type BuildInfraInheritActions = keyof typeof BUILD_INFRA_INHERIT_ACTIONS
 
 export enum BuildInfraProfileVariants {
-    // TODO: Can look to change name to GLOBAL as well
-    DEFAULT = 'GLOBAL',
+    GLOBAL = 'GLOBAL',
     NORMAL = 'NORMAL',
     CUSTOM = 'CUSTOM',
 }
@@ -142,7 +141,7 @@ export interface BuildInfraNodeSelectorValueType {
     key: string
     value: string
     /**
-     * Generated at UI, TODO: Can separate this struct from DTO
+     * Generated at UI, if consuming in service please ensure to add this in response
      */
     id: string
 }
@@ -162,7 +161,7 @@ export type BuildInfraToleranceValueType = {
     key: string
     effect: BuildInfraToleranceEffectType
     /**
-     * Generated at UI, TODO: Can separate this struct from DTO
+     * Generated at UI
      */
     id: string
 } & (
@@ -301,7 +300,6 @@ export type ProfileInputErrorType = Record<
     NumericBuildInfraConfigTypes | BuildInfraMetaConfigTypes | BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM,
     string
 > &
-    // Map of id to error
     Record<
         BuildInfraConfigTypes.NODE_SELECTOR,
         Record<BuildInfraNodeSelectorValueType['id'], Partial<Record<NodeSelectorHeaderType, string[]>>>
@@ -344,7 +342,7 @@ export type HandleProfileInputChangeType =
       }
     | {
           action: BuildInfraMetaConfigTypes
-          //   Added targetPlatform partially even though not required, to keep the type consistent and remove duplication in case of handleChange
+          // Added targetPlatform partially even though not required, to keep the type consistent and remove duplication in case of handleChange
           data: Partial<ProfileInputDispatchDataType> & {
               value: string
           }
@@ -358,17 +356,17 @@ export type HandleProfileInputChangeType =
       }
     | {
           action: BuildInfraProfileInputActionType.RENAME_TARGET_PLATFORM
-          data: {
+          data: Partial<ProfileInputDispatchDataType> & {
               originalPlatformName: string
               newPlatformName: string
               configSnapshot: BuildInfraProfileData['configurations']
-          } & Partial<ProfileInputDispatchDataType>
+          }
       }
     | {
           action: BuildInfraProfileInputActionType.RESTORE_PROFILE_CONFIG_SNAPSHOT
-          data: {
+          data: Partial<ProfileInputDispatchDataType> & {
               configSnapshot: BuildInfraProfileData['configurations']
-          } & Partial<ProfileInputDispatchDataType>
+          }
       }
     | {
           action: BuildInfraProfileInputActionType.DELETE_NODE_SELECTOR_ITEM
