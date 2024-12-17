@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
+import { MutableRefObject } from 'react'
 import moment from 'moment'
-import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
+import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
 import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
-import { get, post } from './Api'
-import { GitProviderType, ROUTES } from './Constants'
-import { getUrlWithSearchParams, sortCallback } from './Helper'
+import { get, getIsRequestAborted, post } from './Api'
+import { API_STATUS_CODES, GitProviderType, ROUTES } from './Constants'
+import { getUrlWithSearchParams, showError, sortCallback } from './Helper'
 import {
     TeamList,
     ResponseType,
@@ -41,10 +42,15 @@ import {
     UserApprovalMetadataType,
     UserApprovalConfigType,
     CDMaterialListModalServiceUtilProps,
+    GlobalVariableDTO,
+    GlobalVariableOptionType,
 } from './Types'
 import { ApiResourceType } from '../Pages'
 import { API_TOKEN_PREFIX } from '@Shared/constants'
 import { DefaultUserKey } from '@Shared/types'
+import { RefVariableType } from './CIPipeline.Types'
+import { ServerErrors } from './ServerError'
+import { ToastManager, ToastVariantType } from '@Shared/Services'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -334,10 +340,8 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
     }
 }
 
-export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): RuntimeParamsListItemType[] =>
-    Object.entries(response?.envVariables || {})
-        .map(([key, value], index) => ({ key, value, id: index }))
-        .sort((a, b) => stringComparatorBySortOrder(a.key, b.key))
+export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): RuntimePluginVariables[] =>
+    (response?.runtimePluginVariables ?? []).map((variable) => ({ ...variable, defaultValue: variable.value }))
 
 const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
     if (!cdMaterialsResult) {
@@ -545,4 +549,50 @@ export const getGitBranchUrl = (gitUrl: string, branchName: string): string | nu
     else if (trimmedGitUrl.includes(GitProviderType.BITBUCKET)) return `${trimmedGitUrl}/branch/${branchName}`
     else if (trimmedGitUrl.includes(GitProviderType.AZURE)) return `${trimmedGitUrl}/src/branch/${branchName}`
     return null
+}
+
+export const getGlobalVariables = async ({
+    appId,
+    isCD = false,
+    abortControllerRef,
+}: {
+    appId: number
+    isCD?: boolean
+    abortControllerRef?: MutableRefObject<AbortController>
+}): Promise<GlobalVariableOptionType[]> => {
+    try {
+        const { result } = await get<GlobalVariableDTO[]>(
+            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_VARIABLES, { appId }),
+            {
+                abortControllerRef,
+            },
+        )
+        const variableList = (result ?? [])
+            .filter((item) => (isCD ? item.stageType !== 'ci' : item.stageType === 'ci'))
+            .map<GlobalVariableOptionType>((variable) => {
+                const { name, ...updatedVariable } = variable
+
+                return {
+                    ...updatedVariable,
+                    label: name,
+                    value: name,
+                    description: updatedVariable.description || '',
+                    variableType: RefVariableType.GLOBAL,
+                }
+            })
+
+        return variableList
+    } catch (err) {
+        if (!getIsRequestAborted(err)) {
+            if (err instanceof ServerErrors && err.code === API_STATUS_CODES.PERMISSION_DENIED) {
+                ToastManager.showToast({
+                    variant: ToastVariantType.notAuthorized,
+                    description: 'You are not authorized to access global variables',
+                })
+            } else {
+                showError(err)
+            }
+        }
+        throw err
+    }
 }

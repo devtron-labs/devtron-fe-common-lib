@@ -25,8 +25,11 @@ import {
     ServerErrors,
     SortingParams,
     TriggerBlockType,
+    ValueConstraintType,
+    VariableType,
+    RefVariableType,
+    PluginType,
 } from '../Common'
-import { KeyValueListType } from './Components'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
@@ -336,12 +339,31 @@ export interface GitTriggers {
     CiConfigureSourceValue: string
 }
 
+export interface RuntimePluginVariables
+    extends Pick<VariableType, 'name' | 'value' | 'defaultValue' | 'format' | 'fileReferenceId' | 'fileMountDir'> {
+    variableStepScope: string
+    valueConstraint: ValueConstraintType & { id: number }
+    stepVariableId: number
+    valueType: RefVariableType
+    stepName: string
+    stepType: PluginType
+    isRequired: boolean
+    pluginIcon?: string
+    description?: string
+}
+
 export interface RuntimeParamsAPIResponseType {
     envVariables: Record<string, string>
+    runtimePluginVariables: RuntimePluginVariables[]
 }
 
 export interface RuntimeParamsTriggerPayloadType {
-    runtimeParams: RuntimeParamsAPIResponseType
+    runtimeParams: {
+        runtimePluginVariables: Pick<
+            RuntimePluginVariables,
+            'name' | 'fileMountDir' | 'fileReferenceId' | 'value' | 'format' | 'variableStepScope'
+        >[]
+    }
 }
 
 export enum CIMaterialSidebarType {
@@ -705,10 +727,6 @@ export interface ConfigKeysWithLockType {
 
 export type DataAttributes = Record<`data-${string}`, unknown>
 
-export interface RuntimeParamsListItemType extends KeyValueListType {
-    id: number
-}
-
 export enum RuntimeParamsHeadingType {
     KEY = 'key',
     VALUE = 'value',
@@ -887,4 +905,17 @@ export interface PolicyConsequencesDTO {
 export interface GetPolicyConsequencesProps {
     appId: number
     envId: number
+}
+export interface UploadFileDTO {
+    id: number
+    name: string
+    size: number
+    mimeType: string
+    extension: string
+}
+
+export interface UploadFileProps {
+    file: File[]
+    allowedExtensions?: string[]
+    maxUploadSize?: number
 }

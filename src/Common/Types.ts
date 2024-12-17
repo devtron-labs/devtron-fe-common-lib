@@ -21,12 +21,20 @@ import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import {
     MandatoryPluginBaseStateType,
-    PolicyBlockInfo,
     RegistryType,
-    RuntimeParamsListItemType,
+    RuntimePluginVariables,
     Severity,
+    PolicyBlockInfo,
 } from '../Shared'
-import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
+import {
+    ACTION_STATE,
+    DEPLOYMENT_WINDOW_TYPE,
+    DockerConfigOverrideType,
+    RefVariableType,
+    SortingOrder,
+    TaskErrorObj,
+    VariableTypeFormat,
+} from '.'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -124,6 +132,7 @@ export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
     documentationLink?: string
     documentationLinkText?: string
     children: React.ReactElement<any>
+    disableClose?: boolean
 }
 
 export interface InfoIconTippyProps
@@ -712,8 +721,8 @@ export interface CDMaterialsMetaInfo {
      * This is the ID of user that has request the material
      */
     requestedUserId: number
-    runtimeParams: RuntimeParamsListItemType[]
     deploymentBlockedState?: PolicyBlockInfo
+    runtimeParams: RuntimePluginVariables[]
 }
 
 export interface ImagePromotionMaterialInfo {
@@ -1029,4 +1038,17 @@ export interface WidgetEventDetails {
     count: number
     age: string
     lastSeen: string
+}
+
+export interface GlobalVariableDTO {
+    name: string
+    format: VariableTypeFormat
+    description: string
+    stageType: 'cd' | 'post-cd' | 'ci'
+}
+
+export type GlobalVariableOptionType = Omit<GlobalVariableDTO, 'name'> & {
+    label: string
+    value: string
+    variableType: Extract<RefVariableType, RefVariableType.GLOBAL>
 }
