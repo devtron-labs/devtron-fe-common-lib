@@ -92,7 +92,10 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         const monacoRef = useRef(null)
         const { width, height: windowHeight } = useWindowSize()
         const memoisedReducer = React.useCallback(CodeEditorReducer, [])
-        const [state, dispatch] = useReducer(memoisedReducer, initialState({ mode, theme, value, diffView, noParsing, tabSize }))
+        const [state, dispatch] = useReducer(
+            memoisedReducer,
+            initialState({ mode, theme, value, diffView, noParsing, tabSize }),
+        )
         const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
         const [, originalJson, originlaYaml] = useJsonYaml(defaultValue, tabSize, state.mode, !state.noParsing)
         const [contentHeight, setContentHeight] = useState(
