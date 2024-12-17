@@ -23,6 +23,7 @@ export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
 export const DOCUMENTATION_VERSION = '/v/v0.7'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
+export const DEFAULT_JSON_SCHEMA_URI = 'https://json-schema.org/draft/2020-12/schema'
 export const DOCUMENTATION = {
     APP_METRICS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/app-details/app-metrics`,
     APP_TAGS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/create-application#tags`,
@@ -33,11 +34,13 @@ export const DOCUMENTATION = {
 
 export const PATTERNS = {
     STRING: /^[a-zA-Z0-9_]+$/,
+    NATURAL_NUMBERS: /^\d*\.?\d*$/,
     KUBERNETES_KEY_PREFIX: /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/,
     KUBERNETES_KEY_NAME: /^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$/,
     START_END_ALPHANUMERIC: /^([Az09].*[A-Za-z0-9])$|[A-Za-z0-9]$/,
     ALPHANUMERIC_WITH_SPECIAL_CHAR: /^[A-Za-z0-9._-]+$/, // allow alphanumeric,(.) ,(-),(_)
     ESCAPED_CHARACTERS: /[.*+?^${}()|[\]\\]/g,
+    NUMBERS_WITH_SCOPE_VARIABLES: /^(\d+(\.\d+)?|@{{[a-zA-Z0-9-]+}})$/,
 }
 
 export const URLS = {
@@ -69,6 +72,7 @@ export const URLS = {
     NETWORK_STATUS_INTERFACE: '/network-status-interface',
     CONFIG_DRIFT: 'config-drift',
     RESOURCE_BROWSER: '/resource-browser',
+    COMPARE_CLUSTERS: '/compare-clusters',
 }
 
 export const ROUTES = {
@@ -78,6 +82,8 @@ export const ROUTES = {
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',
+    CREATE_RESOURCE: 'k8s/resource/create',
+    K8S_RESOURCE_CREATE: 'k8s/resources/apply',
     CI_CONFIG_GET: 'app/ci-pipeline',
     CD_MATERIAL_GET: 'app/cd-pipeline',
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
@@ -116,7 +122,10 @@ export const ROUTES = {
     DEPLOYMENT_CHARTS_LIST: 'deployment/template/fetch',
     USER_LIST_MIN: 'user/list/min',
     CONFIG_DATA: 'config/data',
+    K8S_RESOURCE: 'k8s/resource',
     K8S_RESOURCE_LIST: 'k8s/resource/list',
+    FILE_UPLOAD: 'file/upload',
+    PLUGIN_GLOBAL_VARIABLES: 'plugin/global/list/global-variable',
     CONFIG_COMPARE_SECRET: 'config/compare/secret',
 }
 
@@ -517,6 +526,7 @@ export const API_STATUS_CODES = {
     EXPECTATION_FAILED: 417,
     UNPROCESSABLE_ENTITY: 422,
     LOCKED: 423,
+    UNPROCESSABLE_CONTENT: 422,
 }
 
 export enum SERVER_MODE {
@@ -578,3 +588,8 @@ export enum GitProviderType {
  * Formats the schema removing any irregularity in the existing schema
  */
 export const getFormattedSchema = (schema?: string) => JSON.stringify(JSON.parse(schema ?? '{}'), null, 2)
+
+export const UNCHANGED_ARRAY_ELEMENT_SYMBOL = Symbol(
+    `The element at this index remains unchanged from the original object.
+     This symbol is used by @buildObjectFromPath & later consumed by @recursivelyRemoveSymbolFromArraysInObject`,
+)
