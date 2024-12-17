@@ -102,6 +102,7 @@ export enum RefVariableStageType {
 export interface FilePropertyType {
     allowedExtensions: string[]
     maxUploadSize: number
+    sizeUnit: 'KB' | 'MB'
 }
 
 export interface ConstraintType {
