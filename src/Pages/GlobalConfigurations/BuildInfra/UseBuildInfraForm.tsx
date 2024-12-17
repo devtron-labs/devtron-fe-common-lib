@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { showError, useAsync } from '@Common/Helper'
 import {
+    ACTION_TO_PERSISTED_VALUE_MAP,
     BUILD_INFRA_DEFAULT_PLATFORM_NAME,
     BUILD_INFRA_INPUT_CONSTRAINTS,
     BUILD_INFRA_TEXT,
@@ -267,108 +268,45 @@ const useBuildInfraForm = ({
                 break
             }
 
-            case BuildInfraConfigTypes.CPU_LIMIT: {
-                const { value, unit } = data
-
-                currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT],
-                    key: BuildInfraConfigTypes.CPU_LIMIT,
-                    value,
-                    unit,
-                }
-                const { request, limit } = validateRequestLimit({
-                    request: {
-                        value: currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST].value as number,
-                        unit: currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST].unit,
-                    },
-                    limit: {
-                        value,
-                        unit,
-                    },
-                    unitsMap: profileResponse.configurationUnits[BuildInfraConfigTypes.CPU_LIMIT],
-                })
-
-                currentInputErrors[BuildInfraConfigTypes.CPU_LIMIT] = limit.message
-                currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = request.message
-                break
-            }
-
-            case BuildInfraConfigTypes.CPU_REQUEST: {
-                const { value, unit } = data
-
-                currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST],
-                    key: BuildInfraConfigTypes.CPU_REQUEST,
-                    value,
-                    unit,
-                }
-
-                const { request, limit } = validateRequestLimit({
-                    request: {
-                        value,
-                        unit,
-                    },
-                    limit: {
-                        value: currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT].value as number,
-                        unit: currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT].unit,
-                    },
-                    unitsMap: profileResponse.configurationUnits[BuildInfraConfigTypes.CPU_LIMIT],
-                })
-
-                currentInputErrors[BuildInfraConfigTypes.CPU_LIMIT] = limit.message
-                currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = request.message
-                break
-            }
-
-            case BuildInfraConfigTypes.MEMORY_LIMIT: {
-                const { value, unit } = data
-
-                currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT],
-                    key: BuildInfraConfigTypes.MEMORY_LIMIT,
-                    value,
-                    unit,
-                }
-                const { request, limit } = validateRequestLimit({
-                    request: {
-                        value: currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST].value as number,
-                        unit: currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST].unit,
-                    },
-                    limit: {
-                        value,
-                        unit,
-                    },
-                    unitsMap: profileResponse.configurationUnits[BuildInfraConfigTypes.MEMORY_LIMIT],
-                })
-
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = limit.message
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = request.message
-                break
-            }
-
+            case BuildInfraConfigTypes.CPU_LIMIT:
+            case BuildInfraConfigTypes.CPU_REQUEST:
+            case BuildInfraConfigTypes.MEMORY_LIMIT:
             case BuildInfraConfigTypes.MEMORY_REQUEST: {
                 const { value, unit } = data
 
-                currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST],
-                    key: BuildInfraConfigTypes.MEMORY_REQUEST,
+                currentConfiguration[action] = {
+                    ...currentConfiguration[action],
+                    key: action,
                     value,
                     unit,
                 }
+
+                const { keyToPersist, keyToPersistConfigType } = ACTION_TO_PERSISTED_VALUE_MAP[action]
+
                 const { request, limit } = validateRequestLimit({
                     request: {
                         value,
                         unit,
                     },
                     limit: {
-                        value: currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT].value as number,
-                        unit: currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT].unit,
+                        value,
+                        unit,
                     },
-                    unitsMap: profileResponse.configurationUnits[BuildInfraConfigTypes.MEMORY_LIMIT],
+                    [keyToPersist]: {
+                        value: currentConfiguration[keyToPersistConfigType].value,
+                        unit: currentConfiguration[keyToPersistConfigType].unit,
+                    },
+                    unitsMap: profileResponse.configurationUnits[action],
                 })
 
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = limit.message
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = request.message
+                if (keyToPersist === 'limit') {
+                    currentInputErrors[keyToPersistConfigType] = limit.message
+                    currentInputErrors[action] = request.message
+                    break
+                }
+
+                currentInputErrors[action] = limit.message
+                currentInputErrors[keyToPersistConfigType] = request.message
                 break
             }
 

@@ -527,3 +527,11 @@ export interface GetPlatformConfigurationsWithDefaultValuesParamsType {
 export enum BuildInfraAPIVersionType {
     ALPHA1 = 'alpha1',
 }
+
+export type RequestLimitConfigType = Extract<
+    BuildInfraConfigTypes,
+    | BuildInfraConfigTypes.CPU_LIMIT
+    | BuildInfraConfigTypes.CPU_REQUEST
+    | BuildInfraConfigTypes.MEMORY_LIMIT
+    | BuildInfraConfigTypes.MEMORY_REQUEST
+>

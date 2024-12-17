@@ -32,6 +32,8 @@ import {
     BuildInfraProfileAdditionalErrorKeysType,
     BuildInfraAPIVersionType,
     TargetPlatformErrorFields,
+    ValidateRequestLimitType,
+    RequestLimitConfigType,
 } from './types'
 
 export const BUILD_INFRA_INPUT_CONSTRAINTS = {
@@ -206,3 +208,30 @@ export const BUILD_INFRA_INHERIT_ACTIONS: Record<
     },
     {} as Record<`activate_${BuildInfraLocators}` | `de_activate_${BuildInfraLocators}`, true>,
 )
+
+export const ACTION_TO_PERSISTED_VALUE_MAP: Readonly<
+    Record<
+        RequestLimitConfigType,
+        {
+            keyToPersist: keyof Pick<ValidateRequestLimitType, 'limit' | 'request'>
+            keyToPersistConfigType: RequestLimitConfigType
+        }
+    >
+> = {
+    [BuildInfraConfigTypes.CPU_LIMIT]: {
+        keyToPersist: 'request',
+        keyToPersistConfigType: BuildInfraConfigTypes.CPU_REQUEST,
+    },
+    [BuildInfraConfigTypes.CPU_REQUEST]: {
+        keyToPersist: 'limit',
+        keyToPersistConfigType: BuildInfraConfigTypes.CPU_LIMIT,
+    },
+    [BuildInfraConfigTypes.MEMORY_LIMIT]: {
+        keyToPersist: 'request',
+        keyToPersistConfigType: BuildInfraConfigTypes.MEMORY_REQUEST,
+    },
+    [BuildInfraConfigTypes.MEMORY_REQUEST]: {
+        keyToPersist: 'limit',
+        keyToPersistConfigType: BuildInfraConfigTypes.MEMORY_LIMIT,
+    },
+}
