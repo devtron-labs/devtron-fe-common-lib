@@ -3,6 +3,7 @@ import { DynamicDataTableCellErrorType, DynamicDataTableProps, DynamicDataTableR
 export type TagsTableColumnsType = 'tagKey' | 'tagValue'
 
 export interface TagsContainerProps extends Partial<Pick<DynamicDataTableProps<TagsTableColumnsType>, 'onRowEdit'>> {
+    appType: string
     isCreateApp?: boolean
     rows: DynamicDataTableRowType<TagsTableColumnsType>[]
     setRows: (updatedRows: DynamicDataTableRowType<TagsTableColumnsType>[]) => void

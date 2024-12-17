@@ -9,6 +9,7 @@ import { DynamicDataTable, DynamicDataTableRowType } from '../DynamicDataTable'
 import { getEmptyTagTableRow } from './utils'
 
 const TagsKeyValueTable = ({
+    appType,
     rows,
     setRows,
     hidePropagateTags,
@@ -20,7 +21,7 @@ const TagsKeyValueTable = ({
     const handlePropagateTag = (rowId: string | number) => {
         ReactGA.event({
             category: 'Tags',
-            action: 'PROPAGATE_TAG_BUTTON_CLICKED',
+            action: `${appType.toUpperCase()}_PROPAGATE_TAG_BUTTON_CLICKED`,
         })
         const updatedRows = rows.map<DynamicDataTableRowType<TagsTableColumnsType>>((row) => {
             if (row.id === rowId) {
@@ -61,7 +62,7 @@ const TagsKeyValueTable = ({
     const dataTableHandleAddition = () => {
         ReactGA.event({
             category: 'Tags',
-            action: 'ADD_TAG_BUTTON_CLICKED',
+            action: `${appType.toUpperCase()}_ADD_TAG_BUTTON_CLICKED`,
         })
         const newEmptyRow = getEmptyRow()
         const editedRows = [...rows, newEmptyRow]
