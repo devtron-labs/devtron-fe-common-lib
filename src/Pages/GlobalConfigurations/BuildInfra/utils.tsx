@@ -171,7 +171,7 @@ export const validateRequestLimit = ({
 /**
  * @description A valid platform name should not be empty and be less than 128 characters. Plus profile can not have duplicate platform names
  */
-const validateTargetPlatformName = (name: string, profilePlatformList: string[]): ValidationResponseType => {
+const validateTargetPlatformName = (name: string, platformMap: Record<string, unknown>): ValidationResponseType => {
     const requiredValidation = requiredField(name)
     if (!requiredValidation.isValid) {
         return requiredValidation
@@ -182,7 +182,7 @@ const validateTargetPlatformName = (name: string, profilePlatformList: string[])
         return lengthValidation
     }
 
-    if (profilePlatformList.includes(name)) {
+    if (platformMap[name]) {
         return {
             isValid: false,
             message: 'Configuration is already defined for this platform. Try different platform.',
@@ -278,7 +278,7 @@ const validateLabelValue = (value?: string): Pick<ValidationResponseType, 'isVal
 
     const messages: string[] = []
 
-    if (value.length > BUILD_INFRA_INPUT_CONSTRAINTS.MAX_LABEL_VALUE_LENGTH) {
+    if (value.length >= BUILD_INFRA_INPUT_CONSTRAINTS.MAX_LABEL_VALUE_LENGTH) {
         messages.push(`Value should be less than ${BUILD_INFRA_INPUT_CONSTRAINTS.MAX_LABEL_VALUE_LENGTH} characters`)
     }
 
@@ -742,7 +742,7 @@ export const useBuildInfraForm = ({
                 }
 
                 currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM] =
-                    validateTargetPlatformName(newPlatformName, Object.keys(currentInput.configurations)).message
+                    validateTargetPlatformName(newPlatformName, currentInput.configurations).message
 
                 const newPlatformFallbackConfig =
                     profileResponse.fallbackPlatformConfigurationMap[newPlatformName] ||
