@@ -1,31 +1,39 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { InputActionMeta, SelectInstance, SingleValue } from 'react-select'
 
 import SelectPicker from './SelectPicker.component'
 import { SelectPickerOptionType, SelectPickerProps } from './type'
 
-export const SelectPickerTextArea = ({ value, options, onChange, ...props }: SelectPickerProps<string, false>) => {
-    // INPUT VALUE
-    const inputValue = (value as SingleValue<SelectPickerOptionType<string>>)?.value || ''
+export const SelectPickerTextArea = ({
+    value,
+    options,
+    isCreatable,
+    onChange,
+    ...props
+}: SelectPickerProps<string, false>) => {
+    // STATES
+    const [inputValue, setInputValue] = useState((value as SingleValue<SelectPickerOptionType<string>>)?.value || '')
 
     // REFS
     const selectRef = useRef<SelectInstance<SelectPickerOptionType<string>>>(null)
 
+    useEffect(() => {
+        const selectValue = value as SingleValue<SelectPickerOptionType<string>>
+        setInputValue(selectValue?.value || '')
+    }, [value])
+
     // METHODS
     const onInputChange = (newValue: string, { action }: InputActionMeta) => {
         if (action === 'input-change') {
+            setInputValue(newValue)
             if (!newValue) {
                 onChange?.(null, {
                     action: 'remove-value',
-                    option: null,
                     removedValue: value as SingleValue<SelectPickerOptionType<string>>,
                 })
-            } else {
-                onChange?.(
-                    { label: newValue, value: newValue },
-                    { action: 'create-option', option: { label: newValue, value: newValue } },
-                )
             }
+        } else if (action === 'input-blur' && !value) {
+            setInputValue('')
         }
     }
 
@@ -41,12 +49,12 @@ export const SelectPickerTextArea = ({ value, options, onChange, ...props }: Sel
         if (event.key === 'Enter' && event.shiftKey) {
             // Prevent the default Enter key behavior
             event.preventDefault()
+
             // Add a new line at the current cursor position
             const { selectionStart, selectionEnd } = selectRef.current.inputRef
             const updatedText = `${inputValue.slice(0, selectionStart)}\n${inputValue.slice(selectionEnd)}`
 
-            const newValue = { label: updatedText, value: updatedText }
-            onChange?.(newValue, { action: 'create-option', option: newValue })
+            setInputValue(updatedText)
 
             // Move the cursor to the next line
             setTimeout(() => {
@@ -59,7 +67,7 @@ export const SelectPickerTextArea = ({ value, options, onChange, ...props }: Sel
             return
         }
 
-        if (event.key === 'Enter') {
+        if (isCreatable && event.key === 'Enter') {
             handleCreateOption(inputValue)
         }
     }
@@ -67,6 +75,7 @@ export const SelectPickerTextArea = ({ value, options, onChange, ...props }: Sel
     return (
         <SelectPicker<string, false>
             {...props}
+            isCreatable={isCreatable}
             options={options}
             selectRef={selectRef}
             inputValue={inputValue}
