@@ -16,6 +16,7 @@ import {
     SelectPickerOptionType,
     SelectPickerVariantType,
 } from '../SelectPicker'
+import { FileUpload } from '../FileUpload'
 import { getActionButtonPosition, getRowGridTemplateColumn, rowTypeHasInputField } from './utils'
 import { DynamicDataTableRowType, DynamicDataTableRowProps, DynamicDataTableRowDataType } from './types'
 
@@ -89,12 +90,16 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
         (row: DynamicDataTableRowType<K, CustomStateType>, key: K) =>
         (e: React.ChangeEvent<HTMLTextAreaElement> | SelectPickerOptionType<string> | File[]) => {
             let value = ''
-            const extraData = { selectedValue: null }
+            const extraData = { selectedValue: null, files: [] }
             switch (row.data[key].type) {
                 case DynamicDataTableRowDataType.DROPDOWN:
                 case DynamicDataTableRowDataType.SELECT_TEXT:
                     value = (e as SelectPickerOptionType<string>).value
                     extraData.selectedValue = e
+                    break
+                case DynamicDataTableRowDataType.FILE_UPLOAD:
+                    value = (e as File[])[0]?.name || ''
+                    extraData.files = e as File[]
                     break
                 case DynamicDataTableRowDataType.TEXT:
                 default:
@@ -146,7 +151,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             }}
                             textAreaProps={{
                                 ...row.data[key].props?.textAreaProps,
-                                className: 'dynamic-data-table__cell-input placeholder-cn5 py-8 pr-8 cn-9 fs-13 lh-20',
+                                className: 'dynamic-data-table__cell-input placeholder-cn5 py-8 pr-32 cn-9 fs-13 lh-20',
                                 disableOnBlurResizeToMinHeight: true,
                                 minHeight: 20,
                                 maxHeight: 160,
@@ -169,6 +174,16 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                                 {row.data[key].props.text}
                             </button>
                         </ConditionalWrap>
+                    </div>
+                )
+            case DynamicDataTableRowDataType.FILE_UPLOAD:
+                return (
+                    <div className={`mw-none w-100 h-100 flex top left px-8 ${row.data[key].value ? 'py-3' : 'py-8'}`}>
+                        <FileUpload
+                            {...row.data[key].props}
+                            fileName={row.data[key].value}
+                            onUpload={onChange(row, key)}
+                        />
                     </div>
                 )
             default:

@@ -33,11 +33,13 @@ export const DOCUMENTATION = {
 }
 
 export const PATTERNS = {
+    NATURAL_NUMBERS: /^\d*\.?\d*$/,
     KUBERNETES_KEY_PREFIX: /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/,
     KUBERNETES_KEY_NAME: /^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$/,
     START_END_ALPHANUMERIC: /^([Az09].*[A-Za-z0-9])$|[A-Za-z0-9]$/,
     ALPHANUMERIC_WITH_SPECIAL_CHAR: /^[A-Za-z0-9._-]+$/, // allow alphanumeric,(.) ,(-),(_)
     ESCAPED_CHARACTERS: /[.*+?^${}()|[\]\\]/g,
+    NUMBERS_WITH_SCOPE_VARIABLES: /^(\d+(\.\d+)?|@{{[a-zA-Z0-9-]+}})$/,
 }
 
 export const URLS = {
@@ -121,6 +123,8 @@ export const ROUTES = {
     CONFIG_DATA: 'config/data',
     K8S_RESOURCE: 'k8s/resource',
     K8S_RESOURCE_LIST: 'k8s/resource/list',
+    FILE_UPLOAD: 'file/upload',
+    PLUGIN_GLOBAL_VARIABLES: 'plugin/global/list/global-variable',
     CONFIG_COMPARE_SECRET: 'config/compare/secret',
 }
 

@@ -22,6 +22,7 @@ import { UseStateFiltersReturnType } from '@Common/Hooks'
 import { TooltipProps } from '@Common/Tooltip/types'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 import { SelectTextAreaProps } from '../SelectTextArea'
+import { FileUploadProps } from '../FileUpload'
 
 /**
  * Interface representing header for a dynamic data table.
@@ -45,6 +46,7 @@ export enum DynamicDataTableRowDataType {
     DROPDOWN = 'dropdown',
     SELECT_TEXT = 'select-text',
     BUTTON = 'button',
+    FILE_UPLOAD = 'file-upload',
 }
 
 export type DynamicDataTableCellPropsMap = {
@@ -81,6 +83,7 @@ export type DynamicDataTableCellPropsMap = {
         icon?: ReactNode
         text: string
     }
+    [DynamicDataTableRowDataType.FILE_UPLOAD]: Omit<FileUploadProps, 'className' | 'fileName' | 'onUpload' | 'multiple'>
 }
 
 type DynamicDataTableCellData<T extends keyof DynamicDataTableCellPropsMap = keyof DynamicDataTableCellPropsMap> =
@@ -173,6 +176,7 @@ export type DynamicDataTableProps<K extends string, CustomStateType = Record<str
         headerKey: K,
         value: string,
         extraData: {
+            files?: File[]
             selectedValue?: SelectPickerOptionType<string>
         },
     ) => void

@@ -4,29 +4,35 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import React, { ReactNode, CSSProperties, ReactElement, MutableRefObject } from 'react'
 import { TippyProps } from '@tippyjs/react'
 import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
-import { MandatoryPluginBaseStateType, RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
+import {
+    MandatoryPluginBaseStateType,
+    RegistryType,
+    RuntimePluginVariables,
+    Severity,
+} from '../Shared'
 import {
     ACTION_STATE,
-    ConsequenceType,
     DEPLOYMENT_WINDOW_TYPE,
     DockerConfigOverrideType,
+    RefVariableType,
     SortingOrder,
     TaskErrorObj,
+    VariableTypeFormat,
 } from '.'
 
 /**
@@ -125,6 +131,7 @@ export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
     documentationLink?: string
     documentationLinkText?: string
     children: React.ReactElement<any>
+    disableClose?: boolean
 }
 
 export interface InfoIconTippyProps
@@ -697,7 +704,7 @@ export interface CDMaterialsMetaInfo {
      * This is the ID of user that has request the material
      */
     requestedUserId: number
-    runtimeParams: RuntimeParamsListItemType[]
+    runtimeParams: RuntimePluginVariables[]
 }
 
 export interface ImagePromotionMaterialInfo {
@@ -1012,4 +1019,17 @@ export interface WidgetEventDetails {
     count: number
     age: string
     lastSeen: string
+}
+
+export interface GlobalVariableDTO {
+    name: string
+    format: VariableTypeFormat
+    description: string
+    stageType: 'cd' | 'post-cd' | 'ci'
+}
+
+export type GlobalVariableOptionType = Omit<GlobalVariableDTO, 'name'> & {
+    label: string
+    value: string
+    variableType: Extract<RefVariableType, RefVariableType.GLOBAL>
 }
