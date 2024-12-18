@@ -23,6 +23,8 @@ import {
     BuildInfraConfigurationMapTypeWithoutDefaultFallback,
     BuildInfraConfigurationType,
     BuildInfraConfigValuesType,
+    BuildInfraInheritActions,
+    BuildInfraLocators,
     BuildInfraPlatformConfigurationMapDTO,
     BuildInfraProfileBase,
     BuildInfraProfileData,
@@ -304,3 +306,9 @@ export const getBuildInfraProfilePayload = (
 
 export const getBuildInfraProfileEndpoint = (): string =>
     `${ROUTES.INFRA_CONFIG_PROFILE}/${BUILD_INFRA_LATEST_API_VERSION}`
+
+export const getBuildInfraInheritActionFromLocator = (
+    locator: BuildInfraLocators,
+    activateLocator: boolean,
+): BuildInfraInheritActions =>
+    (activateLocator ? `activate_${locator}` : `de_activate_${locator}`) satisfies BuildInfraInheritActions

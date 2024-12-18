@@ -121,7 +121,6 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         value={currentUnit}
                         onChange={handleUnitChange}
                         isSearchable={false}
-                        size={ComponentSizeType.large}
                         menuSize={ComponentSizeType.small}
                         isDisabled={isDisabled}
                         shouldMenuAlignRight
