@@ -15,12 +15,13 @@ import {
     BuildInfraProfileAdditionalErrorKeysType,
     BuildInfraProfileData,
     BuildInfraProfileInputActionType,
-    BuildInfraToleranceEffectType,
     BuildInfraToleranceOperatorType,
     BuildInfraToleranceValueType,
     CREATE_MODE_REQUIRED_INPUT_FIELDS,
     createBuildInfraProfile,
     DEFAULT_PROFILE_NAME,
+    DEFAULT_TOLERANCE_EFFECT,
+    DEFAULT_TOLERANCE_OPERATOR,
     getBuildInfraProfileByName,
     HandleProfileInputChangeType,
     NodeSelectorHeaderType,
@@ -128,7 +129,7 @@ const validateLabelKeyWithNoDuplicates = (
     key: string,
     existingKeys: string[],
 ): Pick<ValidationResponseType, 'isValid'> & { messages: string[] } => {
-    const existingValidations = validateLabelKey(key)
+    const existingValidations = validateLabelKey(key, false)
     if (!existingValidations.isValid) {
         return existingValidations
     }
@@ -451,7 +452,7 @@ const useBuildInfraForm = ({
                 if (!originalPlatformConfig) {
                     ToastManager.showToast({
                         variant: ToastVariantType.error,
-                        description: 'Platform does not exist',
+                        description: 'Original platform does not exist',
                     })
                     return
                 }
@@ -467,20 +468,22 @@ const useBuildInfraForm = ({
                 // Will replace targetPlatform, defaultValue along with current value if active is false
                 currentInput.configurations[newPlatformName] = Object.entries(
                     originalPlatformConfig,
-                ).reduce<BuildInfraConfigurationMapType>((acc, [configKey, configValue]) => {
-                    // TODO: Check why need to do 'as'
-                    const newDefaultValue = newPlatformFallbackConfig[configKey as BuildInfraConfigTypes].defaultValue
-                    const newConfigValues = configValue.active ? {} : newDefaultValue
+                ).reduce<BuildInfraConfigurationMapType>(
+                    (acc, [configKey, configValue]: [BuildInfraConfigTypes, BuildInfraConfigurationType]) => {
+                        const newDefaultValue = newPlatformFallbackConfig[configKey].defaultValue
+                        const newConfigValues = configValue.active ? {} : newDefaultValue
 
-                    acc[configKey as BuildInfraConfigTypes] = {
-                        ...configValue,
-                        ...newConfigValues,
-                        targetPlatform: newPlatformName,
-                        defaultValue: newDefaultValue,
-                    }
+                        acc[configKey] = {
+                            ...configValue,
+                            ...newConfigValues,
+                            targetPlatform: newPlatformName,
+                            defaultValue: newDefaultValue,
+                        }
 
-                    return acc
-                }, {} as BuildInfraConfigurationMapType)
+                        return acc
+                    },
+                    {} as BuildInfraConfigurationMapType,
+                )
 
                 // If original platform is present in snapshot we will restore it
                 if (configSnapshot[originalPlatformName]) {
@@ -614,9 +617,8 @@ const useBuildInfraForm = ({
                 const newToleranceItem: BuildInfraToleranceValueType = {
                     id,
                     key: '',
-                    // TODO: Ask for constants
-                    effect: BuildInfraToleranceEffectType.NO_SCHEDULE,
-                    operator: BuildInfraToleranceOperatorType.EQUALS,
+                    effect: DEFAULT_TOLERANCE_EFFECT,
+                    operator: DEFAULT_TOLERANCE_OPERATOR,
                     value: '',
                 }
 

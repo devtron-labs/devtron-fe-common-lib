@@ -61,11 +61,15 @@ export const validateTagValue = (value: string): string[] => {
     return errorList
 }
 
-export const validateLabelKey = (key: string): { isValid: boolean; messages: string[] } => {
+export const validateLabelKey = (
+    key: string,
+    skipWithSpecialPrefix: boolean = true,
+): { isValid: boolean; messages: string[] } => {
     const errorList = []
+    const skipValidation = skipWithSpecialPrefix && !key.startsWith(SKIP_LABEL_KEY_VALIDATION_PREFIX)
     if (!key) {
         errorList.push('Key is required')
-    } else if (!key.startsWith(SKIP_LABEL_KEY_VALIDATION_PREFIX)) {
+    } else if (!skipValidation) {
         // eslint-disable-next-line prefer-regex-literals
         const re = new RegExp('/', 'g')
         const noOfSlashInKey = key.match(re)?.length

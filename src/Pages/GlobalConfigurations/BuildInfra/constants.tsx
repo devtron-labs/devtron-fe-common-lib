@@ -34,6 +34,8 @@ import {
     TargetPlatformErrorFields,
     ValidateRequestLimitType,
     RequestLimitConfigType,
+    BuildInfraToleranceEffectType,
+    BuildInfraToleranceOperatorType,
 } from './types'
 
 export const BUILD_INFRA_INPUT_CONSTRAINTS = {
@@ -243,3 +245,6 @@ export const ACTION_TO_PERSISTED_VALUE_MAP: Readonly<
         keyToPersistConfigType: BuildInfraConfigTypes.MEMORY_LIMIT,
     },
 }
+
+export const DEFAULT_TOLERANCE_EFFECT = BuildInfraToleranceEffectType.NO_SCHEDULE
+export const DEFAULT_TOLERANCE_OPERATOR = BuildInfraToleranceOperatorType.EQUALS
