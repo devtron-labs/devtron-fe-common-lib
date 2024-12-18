@@ -393,6 +393,11 @@ const useBuildInfraForm = ({
             }
 
             case BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM: {
+                // If no target platform is given error will be '' so that we won;t show error but capture it
+                currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM] = !targetPlatform
+                    ? ''
+                    : validateTargetPlatformName(targetPlatform, currentInput.configurations).message
+
                 currentInput.configurations[targetPlatform] =
                     profileResponse.fallbackPlatformConfigurationMap[targetPlatform] ||
                     // Here need to update target platform name for each configuration
@@ -406,9 +411,6 @@ const useBuildInfraForm = ({
 
                         return acc
                     }, {} as BuildInfraConfigurationMapType)
-
-                // Since target platform must have some length and we are adding a new platform
-                currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM] = ''
                 break
             }
 
