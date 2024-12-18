@@ -101,7 +101,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         type="number"
                         step={BUILD_INFRA_INPUT_CONSTRAINTS.STEP}
                         min={BUILD_INFRA_INPUT_CONSTRAINTS.MIN}
-                        className="form__input dc__no-right-border dc__no-right-radius"
+                        className={`form__input dc__no-right-border dc__no-right-radius ${isDisabled ? 'dc__disabled' : ''}`}
                         placeholder={placeholder}
                         value={isNullOrUndefined(currentValue) ? '' : currentValue}
                         onChange={handleInputChange}
@@ -121,6 +121,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         value={currentUnit}
                         onChange={handleUnitChange}
                         isSearchable={false}
+                        size={ComponentSizeType.large}
                         menuSize={ComponentSizeType.small}
                         isDisabled={isDisabled}
                         shouldMenuAlignRight
