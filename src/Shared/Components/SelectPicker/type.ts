@@ -84,6 +84,10 @@ declare module 'react-select/base' {
          * @default 'true'
          */
         showSelectedOptionIcon?: boolean
+        /**
+         *
+         */
+        shouldRenderTextArea?: boolean
     }
 }
 
@@ -131,6 +135,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
             | 'renderCustomOptions'
             | 'icon'
             | 'showSelectedOptionIcon'
+            | 'shouldRenderTextArea'
         >
     > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> &

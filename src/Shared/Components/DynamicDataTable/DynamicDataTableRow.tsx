@@ -9,10 +9,10 @@ import { ResizableTagTextArea } from '@Common/CustomTagSelector'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
-import { SelectTextArea } from '../SelectTextArea'
 import {
     getSelectPickerOptionByValue,
     SelectPicker,
+    SelectPickerTextArea,
     SelectPickerOptionType,
     SelectPickerVariantType,
 } from '../SelectPicker'
@@ -94,7 +94,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
             switch (row.data[key].type) {
                 case DynamicDataTableRowDataType.DROPDOWN:
                 case DynamicDataTableRowDataType.SELECT_TEXT:
-                    value = (e as SelectPickerOptionType<string>).value
+                    value = (e as SelectPickerOptionType<string>)?.value || ''
                     extraData.selectedValue = e
                     break
                 case DynamicDataTableRowDataType.FILE_UPLOAD:
@@ -134,31 +134,34 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                         />
                     </div>
                 )
-            case DynamicDataTableRowDataType.SELECT_TEXT:
+            case DynamicDataTableRowDataType.SELECT_TEXT: {
+                const { value, props } = row.data[key]
+                const hasError = cellError[row.id]?.[key] && !cellError[row.id][key].isValid
+                const disableMenuOpen = !isDisabled && value && !hasError
+
                 return (
-                    <div className="dynamic-data-table__select-text-area w-100 h-100 flex top dc__align-self-start">
-                        <SelectTextArea
-                            {...row.data[key].props}
-                            value={row.data[key].value}
-                            onChange={onChange(row, key)}
+                    <div className="w-100 h-100 flex top dc__align-self-start">
+                        <SelectPickerTextArea
+                            isCreatable
+                            isClearable
+                            {...props}
+                            variant={SelectPickerVariantType.BORDER_LESS}
+                            classNamePrefix="dynamic-data-table__cell__select-picker"
                             inputId={`data-table-${row.id}-${key}-cell`}
-                            disabled={isDisabled}
-                            refVar={cellRef?.current?.[row.id]?.[key]}
-                            dependentRefs={cellRef?.current?.[row.id]}
-                            selectPickerProps={{
-                                ...row.data[key].props?.selectPickerProps,
-                                classNamePrefix: 'dynamic-data-table__cell__select-picker',
-                            }}
-                            textAreaProps={{
-                                ...row.data[key].props?.textAreaProps,
-                                className: 'dynamic-data-table__cell-input placeholder-cn5 py-8 pr-32 cn-9 fs-13 lh-20',
-                                disableOnBlurResizeToMinHeight: true,
-                                minHeight: 20,
-                                maxHeight: 160,
-                            }}
+                            value={getSelectPickerOptionByValue(
+                                props?.options,
+                                value,
+                                value ? { label: value, value } : null,
+                            )}
+                            onChange={onChange(row, key)}
+                            isDisabled={isDisabled}
+                            {...(disableMenuOpen ? { menuIsOpen: false } : {})}
+                            formatCreateLabel={(input) => `Use ${input}`}
+                            fullWidth
                         />
                     </div>
                 )
+            }
             case DynamicDataTableRowDataType.BUTTON:
                 return (
                     <div className="w-100 h-100 flex top">
@@ -236,7 +239,10 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 ? cellError[row.id][key]
                 : { isValid: true, errorMessages: [] }
 
-        if (isValid) {
+        const isSelectTextWithEmptyValue =
+            row.data[key].type === DynamicDataTableRowDataType.SELECT_TEXT && !row.data[key].value
+
+        if (isValid || isSelectTextWithEmptyValue) {
             return null
         }
 

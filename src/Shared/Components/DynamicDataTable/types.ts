@@ -21,7 +21,6 @@ import { UseStateFiltersReturnType } from '@Common/Hooks'
 
 import { TooltipProps } from '@Common/Tooltip/types'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
-import { SelectTextAreaProps } from '../SelectTextArea'
 import { FileUploadProps } from '../FileUpload'
 
 /**
@@ -68,14 +67,9 @@ export type DynamicDataTableCellPropsMap = {
         'inputId' | 'value' | 'onChange' | 'fullWidth' | 'isDisabled'
     >
     [DynamicDataTableRowDataType.SELECT_TEXT]: Omit<
-        SelectTextAreaProps,
-        'value' | 'onChange' | 'inputId' | 'isDisabled' | 'dependentRef' | 'refVar' | 'textAreaProps'
-    > & {
-        textAreaProps?: Omit<
-            SelectTextAreaProps['textAreaProps'],
-            'className' | 'disableOnBlurResizeToMinHeight' | 'minHeight' | 'maxHeight'
-        >
-    }
+        SelectPickerProps<string, false>,
+        'inputId' | 'value' | 'onChange' | 'fullWidth' | 'isDisabled'
+    >
     [DynamicDataTableRowDataType.BUTTON]: Pick<
         DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
         'onClick'

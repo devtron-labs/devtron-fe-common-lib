@@ -42,6 +42,8 @@ import {
     SelectPickerMenuList,
     SelectPickerOption,
     SelectPickerValueContainer,
+    SelectPickerInput,
+    SelectPickerIndicatorsContainer,
 } from './common'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
@@ -215,6 +217,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     closeMenuOnSelect = false,
     shouldShowNoOptionsMessage = true,
     formatCreateLabel,
+    shouldRenderTextArea = false,
+    onKeyDown,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options, getOptionValue } = props
@@ -312,11 +316,12 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     ): void => {
         const trimmedInputValue = _inputValue?.trim()
         if (trimmedInputValue) {
-            onCreateOption(trimmedInputValue)
+            onCreateOption?.(trimmedInputValue)
         }
     }
 
     const handleKeyDown: ReactSelectProps['onKeyDown'] = (e) => {
+        onKeyDown?.(e)
         // Prevent the option from being selected if meta or control key is pressed
         if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
             e.preventDefault()
@@ -391,12 +396,14 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 Control: SelectPickerControl,
                                 Option: renderOption,
                                 MenuList: SelectPickerMenuList,
+                                IndicatorsContainer: SelectPickerIndicatorsContainer,
                                 ClearIndicator: SelectPickerClearIndicator,
                                 ValueContainer: renderValueContainer,
                                 MultiValueLabel: renderMultiValueLabel,
                                 MultiValueRemove: SelectPickerMultiValueRemove,
                                 GroupHeading: renderGroupHeading,
                                 NoOptionsMessage: renderNoOptionsMessage,
+                                Input: SelectPickerInput,
                             }}
                             closeMenuOnSelect={!isMulti || closeMenuOnSelect}
                             allowCreateWhileLoading={false}
@@ -410,6 +417,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             showSelectedOptionIcon={shouldShowSelectedOptionIcon}
                             formatCreateLabel={formatCreateLabel}
                             onKeyDown={handleKeyDown}
+                            shouldRenderTextArea={shouldRenderTextArea}
                         />
                     </div>
                 </ConditionalWrap>
