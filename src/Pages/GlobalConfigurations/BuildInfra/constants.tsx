@@ -197,17 +197,25 @@ export const TARGET_PLATFORM_ERROR_FIELDS_MAP: Record<TargetPlatformErrorFields,
 
 export const BUILD_INFRA_INHERIT_ACTIONS: Record<
     `activate_${BuildInfraLocators}` | `de_activate_${BuildInfraLocators}`,
-    true
+    BuildInfraLocators
 > = Object.values(BuildInfraLocators).reduce<
-    Record<`activate_${BuildInfraLocators}` | `de_activate_${BuildInfraLocators}`, true>
+    Record<`activate_${BuildInfraLocators}` | `de_activate_${BuildInfraLocators}`, BuildInfraLocators>
 >(
     (acc, locator) => {
-        acc[`activate_${locator}`] = true
-        acc[`de_activate_${locator}`] = true
+        acc[`activate_${locator}`] = locator
+        acc[`de_activate_${locator}`] = locator
         return acc
     },
-    {} as Record<`activate_${BuildInfraLocators}` | `de_activate_${BuildInfraLocators}`, true>,
+    {} as Record<`activate_${BuildInfraLocators}` | `de_activate_${BuildInfraLocators}`, BuildInfraLocators>,
 )
+
+export const BUILD_INFRA_LOCATOR_CONFIG_TYPES_MAP: Record<BuildInfraLocators, BuildInfraConfigTypes[]> = {
+    [BuildInfraLocators.CPU]: [BuildInfraConfigTypes.CPU_REQUEST, BuildInfraConfigTypes.CPU_LIMIT],
+    [BuildInfraLocators.MEMORY]: [BuildInfraConfigTypes.MEMORY_REQUEST, BuildInfraConfigTypes.MEMORY_LIMIT],
+    [BuildInfraLocators.BUILD_TIMEOUT]: [BuildInfraConfigTypes.BUILD_TIMEOUT],
+    [BuildInfraLocators.NODE_SELECTOR]: [BuildInfraConfigTypes.NODE_SELECTOR],
+    [BuildInfraLocators.TOLERANCE]: [BuildInfraConfigTypes.TOLERANCE],
+}
 
 export const ACTION_TO_PERSISTED_VALUE_MAP: Readonly<
     Record<

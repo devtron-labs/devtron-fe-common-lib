@@ -39,36 +39,7 @@ import {
     BUILD_INFRA_DEFAULT_PLATFORM_NAME,
     BUILD_INFRA_LATEST_API_VERSION,
 } from './constants'
-import { ValidationResponseType, validateStringLength, requiredField, getUniqueId } from '../../../Shared'
-
-/**
- * @description A valid platform name should not be empty and be less than 128 characters. Plus profile can not have duplicate platform names
- */
-export const validateTargetPlatformName = (
-    name: string,
-    platformMap: Record<string, unknown>,
-): ValidationResponseType => {
-    const requiredValidation = requiredField(name)
-    if (!requiredValidation.isValid) {
-        return requiredValidation
-    }
-
-    const lengthValidation = validateStringLength(name, 128, 1)
-    if (!lengthValidation.isValid) {
-        return lengthValidation
-    }
-
-    if (platformMap[name]) {
-        return {
-            isValid: false,
-            message: 'Configuration is already defined for this platform. Try different platform.',
-        }
-    }
-
-    return {
-        isValid: true,
-    }
-}
+import { getUniqueId } from '../../../Shared'
 
 export const parsePlatformConfigIntoValue = (
     configuration: BuildInfraConfigInfoType,

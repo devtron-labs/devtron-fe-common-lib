@@ -3,7 +3,9 @@ import { showError, useAsync } from '@Common/Helper'
 import {
     ACTION_TO_PERSISTED_VALUE_MAP,
     BUILD_INFRA_DEFAULT_PLATFORM_NAME,
+    BUILD_INFRA_INHERIT_ACTIONS,
     BUILD_INFRA_INPUT_CONSTRAINTS,
+    BUILD_INFRA_LOCATOR_CONFIG_TYPES_MAP,
     BUILD_INFRA_TEXT,
     BuildInfraConfigTypes,
     BuildInfraConfigurationMapType,
@@ -31,14 +33,15 @@ import {
     UseBuildInfraFormResponseType,
     ValidateRequestLimitResponseType,
     ValidateRequestLimitType,
-    validateTargetPlatformName,
 } from '@Pages/GlobalConfigurations/BuildInfra'
 import {
+    requiredField,
     validateDescription,
     validateLabelKey,
     validateName,
     validateRequiredPositiveInteger,
     validateRequiredPositiveNumber,
+    validateStringLength,
     ValidationResponseType,
 } from '@Shared/validations'
 import { getUniqueId, ToastManager, ToastVariantType } from '@Shared/index'
@@ -55,6 +58,32 @@ const getInitialProfileInputErrors = (fromCreateView: boolean): ProfileInputErro
 
     return {
         ...PROFILE_INPUT_ERROR_FIELDS,
+    }
+}
+
+/**
+ * @description A valid platform name should not be empty and be less than 128 characters. Plus profile can not have duplicate platform names
+ */
+const validateTargetPlatformName = (name: string, platformMap: Record<string, unknown>): ValidationResponseType => {
+    const requiredValidation = requiredField(name)
+    if (!requiredValidation.isValid) {
+        return requiredValidation
+    }
+
+    const lengthValidation = validateStringLength(name, 128, 1)
+    if (!lengthValidation.isValid) {
+        return lengthValidation
+    }
+
+    if (platformMap[name]) {
+        return {
+            isValid: false,
+            message: 'Configuration is already defined for this platform. Try different platform.',
+        }
+    }
+
+    return {
+        isValid: true,
     }
 }
 
@@ -313,191 +342,56 @@ const useBuildInfraForm = ({
             case BuildInfraConfigTypes.BUILD_TIMEOUT: {
                 const { value, unit } = data
 
-                currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT],
-                    key: BuildInfraConfigTypes.BUILD_TIMEOUT,
+                currentConfiguration[action] = {
+                    ...currentConfiguration[action],
+                    key: action,
                     value,
                     unit,
                 }
 
-                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = validateRequiredPositiveInteger(value).message
+                currentInputErrors[action] = validateRequiredPositiveInteger(value).message
                 break
             }
 
-            case 'activate_cpu':
-                currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT] = {
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.CPU_LIMIT],
-                    active: true,
-                }
-
-                currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST] = {
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.CPU_REQUEST],
-                    active: true,
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.CPU_LIMIT] = null
-                currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = null
-                break
-
-            case 'activate_memory':
-                currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT] = {
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT],
-                    active: true,
-                }
-
-                currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST] = {
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST],
-                    active: true,
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = null
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = null
-                break
-
-            case 'activate_timeout':
-                currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT] = {
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT],
-                    active: true,
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = null
-                break
-
-            case 'activate_node selector':
-                if (
-                    lastSavedConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].defaultValue.key !==
-                    BuildInfraConfigTypes.NODE_SELECTOR
-                ) {
-                    break
-                }
-
-                currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR] = {
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.NODE_SELECTOR],
-                    active: true,
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
-                break
-
             case 'activate_tolerance':
-                if (
-                    lastSavedConfiguration[BuildInfraConfigTypes.TOLERANCE].defaultValue.key !==
-                    BuildInfraConfigTypes.TOLERANCE
-                ) {
-                    break
-                }
+            case 'activate_node selector':
+            case 'activate_timeout':
+            case 'activate_memory':
+            case 'activate_cpu': {
+                const locator = BUILD_INFRA_INHERIT_ACTIONS[action]
+                const infraConfigTypes = BUILD_INFRA_LOCATOR_CONFIG_TYPES_MAP[locator]
 
-                currentConfiguration[BuildInfraConfigTypes.TOLERANCE] = {
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.TOLERANCE],
-                    active: true,
-                }
+                infraConfigTypes?.forEach((infraConfigType) => {
+                    currentConfiguration[infraConfigType] = {
+                        ...lastSavedConfiguration[infraConfigType],
+                        active: true,
+                    }
 
-                currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = null
+                    currentInputErrors[infraConfigType] = null
+                })
                 break
-
-            case 'de_activate_timeout':
-                if (
-                    lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].defaultValue.key !==
-                    BuildInfraConfigTypes.BUILD_TIMEOUT
-                ) {
-                    break
-                }
-
-                // Reverting the value and unit to defaultValues
-                currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT],
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].defaultValue,
-                    active: false,
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = null
-                break
-
-            case 'de_activate_cpu':
-                if (
-                    lastSavedConfiguration[BuildInfraConfigTypes.CPU_LIMIT].defaultValue.key !==
-                        BuildInfraConfigTypes.CPU_LIMIT ||
-                    lastSavedConfiguration[BuildInfraConfigTypes.CPU_REQUEST].defaultValue.key !==
-                        BuildInfraConfigTypes.CPU_REQUEST
-                ) {
-                    break
-                }
-
-                currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT],
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.CPU_LIMIT].defaultValue,
-                    active: false,
-                }
-
-                currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST],
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.CPU_REQUEST].defaultValue,
-                    active: false,
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.CPU_LIMIT] = null
-                currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = null
-                break
-
-            case 'de_activate_memory':
-                if (
-                    lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT].defaultValue.key !==
-                        BuildInfraConfigTypes.MEMORY_LIMIT ||
-                    lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST].defaultValue.key !==
-                        BuildInfraConfigTypes.MEMORY_REQUEST
-                ) {
-                    break
-                }
-
-                currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT],
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT].defaultValue,
-                    active: false,
-                }
-
-                currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST],
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST].defaultValue,
-                    active: false,
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = null
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = null
-                break
-
-            case 'de_activate_node selector':
-                if (
-                    lastSavedConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].defaultValue.key !==
-                    BuildInfraConfigTypes.NODE_SELECTOR
-                ) {
-                    break
-                }
-
-                currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR],
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].defaultValue,
-                    active: false,
-                } as BuildInfraConfigurationType
-
-                currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
-                break
+            }
 
             case 'de_activate_tolerance':
-                if (
-                    lastSavedConfiguration[BuildInfraConfigTypes.TOLERANCE].defaultValue.key !==
-                    BuildInfraConfigTypes.TOLERANCE
-                ) {
-                    break
-                }
+            case 'de_activate_node selector':
+            case 'de_activate_memory':
+            case 'de_activate_timeout':
+            case 'de_activate_cpu': {
+                const locator = BUILD_INFRA_INHERIT_ACTIONS[action]
+                const infraConfigTypes = BUILD_INFRA_LOCATOR_CONFIG_TYPES_MAP[locator]
 
-                currentConfiguration[BuildInfraConfigTypes.TOLERANCE] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.TOLERANCE],
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.TOLERANCE].defaultValue,
-                    active: false,
-                } as BuildInfraConfigurationType
+                infraConfigTypes?.forEach((infraConfigType) => {
+                    currentConfiguration[infraConfigType] = {
+                        ...currentConfiguration[infraConfigType],
+                        ...lastSavedConfiguration[infraConfigType].defaultValue,
+                        active: false,
+                    } as BuildInfraConfigurationType
 
-                currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = null
+                    currentInputErrors[infraConfigType] = null
+                })
+
                 break
+            }
 
             case BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM: {
                 if (currentInput.configurations[targetPlatform]) {
