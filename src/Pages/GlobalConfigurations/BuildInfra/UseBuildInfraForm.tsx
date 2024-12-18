@@ -670,7 +670,7 @@ const useBuildInfraForm = ({
                 const valueErrorMessages =
                     operator !== BuildInfraToleranceOperatorType.EXISTS ? validateLabelValue(value).messages : []
 
-                const isEmptyRow = !key && !value
+                const isEmptyRow = operator === BuildInfraToleranceOperatorType.EXISTS ? !key : !key && !value
                 const hasError = !isEmptyRow && (keyErrorMessages.length > 0 || valueErrorMessages.length > 0)
 
                 if (!currentInputErrors[BuildInfraConfigTypes.TOLERANCE]?.[id]) {
