@@ -457,6 +457,10 @@ export interface BuildInfraFormActionProps
      * @default false
      */
     isDisabled?: boolean
+    /**
+     * @default false
+     */
+    autoFocus?: boolean
 }
 
 export interface FooterProps {

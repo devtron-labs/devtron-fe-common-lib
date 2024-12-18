@@ -39,6 +39,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
     currentValue,
     targetPlatform = BUILD_INFRA_DEFAULT_PLATFORM_NAME,
     isDisabled = false,
+    autoFocus = false,
 }) => {
     const handleProfileChangeWrapper = (data: { unit: string; value: number }) => {
         handleProfileInputChange({
@@ -109,6 +110,8 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         autoComplete="off"
                         disabled={isDisabled}
                         id={`${actionType}-input`}
+                        // eslint-disable-next-line jsx-a11y/no-autofocus
+                        autoFocus={autoFocus}
                     />
                 </div>
 
