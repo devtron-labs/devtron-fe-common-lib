@@ -39,16 +39,15 @@ const TagsKeyValueTable = ({
 
     const propagateTagButton = (row: DynamicDataTableRowType<TagsTableColumnsType>) => {
         const propagateTag: boolean = (row.customState?.propagateTag as boolean) || false
-        const isPropagationDisabled: boolean = (row.customState?.disablePropagateButton as boolean) || false
+        const isPropagationDisabled: boolean =
+            (row.customState?.disablePropagateButton as boolean) ||
+            row.data.tagKey.value.startsWith(DEVTRON_AI_URL) ||
+            false
         return (
             <Tooltip content="Propagate tags to K8s resources" alwaysShowTippyOnHover>
                 <button
                     onClick={() => handlePropagateTag(row.id)}
-                    className={`pointer flexbox dc__content-center dc__align-start pt-8 h-100 w-100 ${propagateTag ? 'bcn-7' : ''} ${
-                        row.data.tagKey.value.startsWith(DEVTRON_AI_URL) || isPropagationDisabled
-                            ? 'cursor-not-allowed bcn-1'
-                            : ''
-                    } dc__transparent dc__tab-focus`}
+                    className={`pointer flexbox dc__content-center dc__align-start pt-8 h-100 w-100 ${propagateTag ? 'bcn-7' : ''} ${isPropagationDisabled ? 'cursor-not-allowed' : ''} dc__transparent dc__tab-focus`}
                     data-index={row.id}
                     type="button"
                     disabled={isPropagationDisabled}
@@ -101,6 +100,8 @@ const TagsKeyValueTable = ({
                     },
                     customState: {
                         ...row.customState,
+                        propagateTag:
+                            headerKey === 'tagKey' && value === DEVTRON_AI_URL ? false : row.customState.propagateTag,
                     },
                 }
             }
