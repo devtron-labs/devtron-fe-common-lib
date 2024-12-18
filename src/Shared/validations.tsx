@@ -15,6 +15,7 @@
  */
 
 import { getSanitizedIframe } from '@Common/Helper'
+import { customizeValidator } from '@rjsf/validator-ajv8'
 import { URLProtocolType } from './types'
 
 export interface ValidationResponseType {
@@ -330,10 +331,15 @@ export const validateSemanticVersioning = (version: string): ValidationResponseT
 export const validateDisplayName = (name: string): ValidationResponseType =>
     validateStringLength(name, DISPLAY_NAME_CONSTRAINTS.MAX_LIMIT, DISPLAY_NAME_CONSTRAINTS.MIN_LIMIT)
 
+const SCHEMA_07_VALIDATOR = customizeValidator({ ajvOptionsOverrides: { strict: true } })
+
 export const validateJSON = (json: string): ValidationResponseType => {
     try {
         if (json) {
-            JSON.parse(json)
+            // NOTE: if json is not parsable JSON.parse will through error
+            // if validators can't be compiled from the parsed json schema then
+            // provided json schema does not conform to json schema draft 07; again can throw error
+            SCHEMA_07_VALIDATOR.ajv.compile(JSON.parse(json))
         }
         return {
             isValid: true,
