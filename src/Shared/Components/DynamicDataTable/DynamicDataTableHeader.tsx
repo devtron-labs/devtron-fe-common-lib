@@ -37,46 +37,51 @@ export const DynamicDataTableHeader = <K extends string, CustomStateType = Recor
     const handleSorting = (key: K) => () => sortingConfig?.handleSorting(key)
 
     // RENDERERS
-    const renderHeaderCell = ({ key, label, isSortable }: DynamicDataTableHeaderType<K>) => (
-        <div
-            key={`${key}-header`}
-            className={`bcn-50 py-6 px-8 flexbox dc__content-space dc__align-items-center ${(!isActionButtonAtTheStart && (key === firstHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : '')) || ''} ${key === lastHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}` : ''}`}
-        >
-            {isSortable ? (
-                <button
-                    type="button"
-                    className="cn-7 fs-12 lh-20-imp fw-6 flexbox dc__align-items-center dc__gap-2 dc__transparent"
-                    onClick={handleSorting(key)}
-                >
-                    {label}
-                    <ICArrowDown
-                        className="icon-dim-16 dc__no-shrink scn-7 rotate cursor"
-                        style={{
-                            ['--rotateBy' as string]: sortingConfig?.sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
-                        }}
+    const renderHeaderCell = ({ key, label, isSortable }: DynamicDataTableHeaderType<K>) => {
+        const shouldRenderAddRowButton = !isActionDisabled && key === firstHeaderKey
+
+        return (
+            <div
+                key={`${key}-header`}
+                className={`bcn-50 ${shouldRenderAddRowButton ? 'py-6' : 'py-8'} px-8 flexbox dc__content-space dc__align-items-center ${(!isActionButtonAtTheStart && (key === firstHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : '')) || ''} ${key === lastHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}` : ''}`}
+            >
+                {isSortable ? (
+                    <button
+                        type="button"
+                        className="cn-7 fs-12 lh-20-imp fw-6 flexbox dc__align-items-center dc__gap-2 dc__transparent"
+                        onClick={handleSorting(key)}
+                    >
+                        {label}
+                        <ICArrowDown
+                            className="icon-dim-16 dc__no-shrink scn-7 rotate cursor"
+                            style={{
+                                ['--rotateBy' as string]:
+                                    sortingConfig?.sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
+                            }}
+                        />
+                    </button>
+                ) : (
+                    <div
+                        className={`cn-7 fs-12 lh-20 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
+                    >
+                        {label}
+                    </div>
+                )}
+                {shouldRenderAddRowButton && (
+                    <Button
+                        dataTestId="data-table-add-row-button"
+                        ariaLabel="Add"
+                        onClick={onRowAdd}
+                        icon={<ICAdd />}
+                        variant={ButtonVariantType.borderLess}
+                        size={ComponentSizeType.xs}
+                        showAriaLabelInTippy={false}
                     />
-                </button>
-            ) : (
-                <div
-                    className={`cn-7 fs-12 lh-20 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
-                >
-                    {label}
-                </div>
-            )}
-            {!isActionDisabled && key === firstHeaderKey && (
-                <Button
-                    dataTestId="data-table-add-row-button"
-                    ariaLabel="Add"
-                    onClick={onRowAdd}
-                    icon={<ICAdd />}
-                    variant={ButtonVariantType.borderLess}
-                    size={ComponentSizeType.xs}
-                    showAriaLabelInTippy={false}
-                />
-            )}
-            {key === lastHeaderKey && headerComponent}
-        </div>
-    )
+                )}
+                {key === lastHeaderKey && headerComponent}
+            </div>
+        )
+    }
 
     return (
         <div className={`bcn-2 p-1 ${hasRows ? 'dc__top-radius-4' : 'br-4'}`}>
