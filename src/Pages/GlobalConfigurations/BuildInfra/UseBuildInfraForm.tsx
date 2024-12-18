@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react'
-import { showError, useAsync } from '@Common/Helper'
+import { logExceptionToSentry, showError, useAsync } from '@Common/Helper'
 import {
     ACTION_TO_PERSISTED_VALUE_MAP,
     BUILD_INFRA_DEFAULT_PLATFORM_NAME,
@@ -34,7 +34,7 @@ import {
     UseBuildInfraFormResponseType,
     ValidateRequestLimitResponseType,
     ValidateRequestLimitType,
-} from '@Pages/GlobalConfigurations/BuildInfra'
+} from '@Pages/index'
 import {
     requiredField,
     validateDescription,
@@ -49,17 +49,15 @@ import { getUniqueId, ToastManager, ToastVariantType } from '@Shared/index'
 import { PATTERNS } from '@Common/Constants'
 
 const getInitialProfileInputErrors = (fromCreateView: boolean): ProfileInputErrorType => {
+    const initialProfileInputErrors = structuredClone(PROFILE_INPUT_ERROR_FIELDS)
     if (fromCreateView) {
-        const initialProfileInputErrors = { ...PROFILE_INPUT_ERROR_FIELDS }
         CREATE_MODE_REQUIRED_INPUT_FIELDS.forEach((field) => {
             initialProfileInputErrors[field] = ''
         })
         return initialProfileInputErrors
     }
 
-    return {
-        ...PROFILE_INPUT_ERROR_FIELDS,
-    }
+    return initialProfileInputErrors
 }
 
 /**
@@ -219,9 +217,9 @@ const validateRequestLimit = ({
     const limitRequestUnitFactor = limitUnit / requestUnit
     const limitRequestFactor = limitNumber / requestNumber
 
-    const isDifferenceBigNumber = limitRequestUnitFactor * limitRequestFactor <= Number.MAX_SAFE_INTEGER
+    const isDifferenceComputable = limitRequestUnitFactor * limitRequestFactor <= Number.MAX_SAFE_INTEGER
 
-    if (!isDifferenceBigNumber) {
+    if (!isDifferenceComputable) {
         requestLimitValidationResponse.request = {
             message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.CAN_NOT_COMPUTE,
             isValid: false,
@@ -395,14 +393,6 @@ const useBuildInfraForm = ({
             }
 
             case BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM: {
-                if (currentInput.configurations[targetPlatform]) {
-                    ToastManager.showToast({
-                        variant: ToastVariantType.error,
-                        description: 'Platform already exists',
-                    })
-                    return
-                }
-
                 currentInput.configurations[targetPlatform] =
                     profileResponse.fallbackPlatformConfigurationMap[targetPlatform] ||
                     // Here need to update target platform name for each configuration
@@ -428,6 +418,8 @@ const useBuildInfraForm = ({
                         variant: ToastVariantType.error,
                         description: 'Platform does not exist',
                     })
+
+                    logExceptionToSentry(new Error('Platform does not exist'))
                     return
                 }
 

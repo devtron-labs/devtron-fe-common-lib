@@ -153,11 +153,15 @@ export const BUILD_INFRA_FORM_FIELDS: Readonly<BuildInfraFormFieldType[]> = [
     },
 ]
 
-export const NUMERIC_BUILD_INFRA_FORM_FIELD_CONFIGURATION_MAP: Readonly<Record<number, BuildInfraFormFieldType>> =
-    BUILD_INFRA_FORM_FIELDS.reduce<Record<number, BuildInfraFormFieldType>>(
-        (acc, field, index) => ({ ...acc, [index]: field }),
-        {},
-    )
+export const NUMERIC_BUILD_INFRA_FORM_FIELD_CONFIGURATION_MAP: Readonly<
+    Record<BuildInfraLocators, BuildInfraFormFieldType>
+> = BUILD_INFRA_FORM_FIELDS.reduce<Record<BuildInfraLocators, BuildInfraFormFieldType>>(
+    (acc, field) => {
+        acc[field.locator] = field
+        return acc
+    },
+    {} as Record<BuildInfraLocators, BuildInfraFormFieldType>,
+)
 
 export const PROFILE_INPUT_ERROR_FIELDS = Object.fromEntries(
     Object.values({
@@ -184,7 +188,7 @@ export const BUILD_INFRA_TEST_IDS = {
     CANCEL_BUTTON: 'build-infra-cancel-button',
 } as const
 
-export const BUILD_INFRA_DEFAULT_PLATFORM_NAME = 'default' as const
+export const BUILD_INFRA_DEFAULT_PLATFORM_NAME = 'default'
 export const BUILD_INFRA_LATEST_API_VERSION: BuildInfraAPIVersionType = BuildInfraAPIVersionType.ALPHA1
 export const TARGET_PLATFORM_ERROR_FIELDS_MAP: Record<TargetPlatformErrorFields, true> = {
     [BuildInfraConfigTypes.BUILD_TIMEOUT]: true,

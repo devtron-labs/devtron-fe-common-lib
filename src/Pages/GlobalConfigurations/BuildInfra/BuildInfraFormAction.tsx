@@ -40,11 +40,7 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
     targetPlatform = BUILD_INFRA_DEFAULT_PLATFORM_NAME,
     isDisabled = false,
 }) => {
-    const handleUnitChange = (selectedUnit: OptionType) => {
-        const data = {
-            unit: selectedUnit.label,
-            value: isNullOrUndefined(currentValue) ? currentValue : +currentValue,
-        }
+    const handleProfileChangeWrapper = (data: { unit: string; value: number }) => {
         handleProfileInputChange({
             action: actionType,
             data: {
@@ -54,19 +50,22 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
         })
     }
 
+    const handleUnitChange = (selectedUnit: OptionType) => {
+        const data = {
+            unit: selectedUnit.label,
+            value: isNullOrUndefined(currentValue) ? currentValue : +currentValue,
+        }
+
+        handleProfileChangeWrapper(data)
+    }
+
     const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
         const data = {
             unit: currentUnitName,
             value: e.currentTarget.value === '' ? null : +e.currentTarget.value,
         }
 
-        handleProfileInputChange({
-            action: actionType,
-            data: {
-                targetPlatform,
-                ...data,
-            },
-        })
+        handleProfileChangeWrapper(data)
     }
 
     const unitOptions = useMemo(() => {

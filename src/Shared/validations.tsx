@@ -71,9 +71,7 @@ export const validateLabelKey = (
     if (!key) {
         errorList.push('Key is required')
     } else if (!skipValidation) {
-        // eslint-disable-next-line prefer-regex-literals
-        const re = new RegExp('/', 'g')
-        const noOfSlashInKey = key.match(re)?.length
+        const noOfSlashInKey = key.split('/').length - 1
         if (noOfSlashInKey > 1) {
             errorList.push('Key: Max 1 ( / ) allowed')
         } else if (noOfSlashInKey === 1) {

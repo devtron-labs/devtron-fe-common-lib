@@ -489,11 +489,10 @@ export interface BuildInfraProfileMetaFieldProps
     currentValue: string
 }
 
-export interface InheritingHeaderProps {
+export interface InheritingHeaderProps extends Pick<BuildInfraConfigFormProps, 'isGlobalProfile'> {
     defaultHeading: BuildInfraFormFieldType['heading']
     inheritingData: BuildInfraConfigValuesType[]
     isInheriting: boolean
-    isDefaultProfile: boolean
 }
 
 export interface BuildInfraConfigResponseDataType {

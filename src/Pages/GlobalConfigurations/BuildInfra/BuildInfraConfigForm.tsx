@@ -28,15 +28,10 @@ import {
     InheritingHeaderProps,
 } from './types'
 
-const InheritingHeader = ({
-    defaultHeading,
-    inheritingData,
-    isInheriting,
-    isDefaultProfile,
-}: InheritingHeaderProps) => {
+const InheritingHeader = ({ defaultHeading, inheritingData, isInheriting, isGlobalProfile }: InheritingHeaderProps) => {
     const inheritingDataString = inheritingData.map((data) => `${data.value} ${data.unit ?? ''}`).join(' - ')
 
-    if (isDefaultProfile || !isInheriting) {
+    if (isGlobalProfile || !isInheriting) {
         // For typing issues
         // eslint-disable-next-line react/jsx-no-useless-fragment
         return <>{defaultHeading}</>
@@ -111,7 +106,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
                                         (action) => currentConfigurations[action.actionType],
                                     )}
                                     isInheriting={isInheritingProfileValues(field.actions)}
-                                    isDefaultProfile={isGlobalProfile}
+                                    isGlobalProfile={isGlobalProfile}
                                 />
                             }
                             showDivider={index !== BUILD_INFRA_FORM_FIELDS.length - 1}
