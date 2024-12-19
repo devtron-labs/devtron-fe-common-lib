@@ -238,6 +238,12 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * @default true
          */
         shouldShowNoOptionsMessage?: boolean
+        /**
+         * If true, the menu list and the dropdown indicator are hidden. Suitable for use cases like multi-inputs
+         *
+         * @default false
+         */
+        shouldHideMenu?: boolean
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean

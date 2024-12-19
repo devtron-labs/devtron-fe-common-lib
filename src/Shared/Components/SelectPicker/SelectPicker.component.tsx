@@ -215,6 +215,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     closeMenuOnSelect = false,
     shouldShowNoOptionsMessage = true,
     formatCreateLabel,
+    shouldHideMenu = false,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options, getOptionValue } = props
@@ -398,6 +399,10 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 MultiValueRemove: SelectPickerMultiValueRemove,
                                 GroupHeading: renderGroupHeading,
                                 NoOptionsMessage: renderNoOptionsMessage,
+                                ...(shouldHideMenu && {
+                                    Menu: () => null,
+                                    DropdownIndicator: () => null,
+                                }),
                             }}
                             closeMenuOnSelect={!isMulti || closeMenuOnSelect}
                             allowCreateWhileLoading={false}
