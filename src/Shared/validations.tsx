@@ -333,7 +333,7 @@ export const validateDisplayName = (name: string): ValidationResponseType =>
 
 const SCHEMA_07_VALIDATOR = customizeValidator({ ajvOptionsOverrides: { strict: true } })
 
-export const validateJSON = (json: string): ValidationResponseType => {
+export const doesJSONConformToSchema07 = (json: string): ValidationResponseType => {
     try {
         if (json) {
             // NOTE: if json is not parsable JSON.parse will through error
