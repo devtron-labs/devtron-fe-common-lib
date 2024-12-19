@@ -24,24 +24,58 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     rootClassName,
     countClassName,
     labelClassName,
+    isProportional,
 }) => {
     const total = entities.reduce((sum, entity) => entity.value + sum, 0)
     const filteredEntities = entities.filter((entity) => entity.value)
 
     const calcSegmentWidth = (entity: Entity) => `${(entity.value / total) * 100}%`
 
+    const renderLabel = (label: string) => (
+        <span className={labelClassName} data-testid={`segmented-bar-chart-${label}-label`}>
+            {label}
+        </span>
+    )
+
+    const renderValue = (value: string | number, label: string) => (
+        <span className={countClassName} data-testid={`segmented-bar-chart-${label}-value`}>
+            {value}
+        </span>
+    )
+
+    const renderContent = (entity: Entity) => {
+        if (entity.proportionalValue) {
+            if (entity.value === 0) {
+                return null
+            }
+            // render proportional value only if value count is present
+            return (
+                <>
+                    {renderValue(entity.proportionalValue, entity.label)}
+                    <div className="flex left dc__gap-6">
+                        <span style={{ backgroundColor: entity.color }} className="h-12 dc__border-radius-2 w-4" />
+                        {renderLabel(entity.label)}
+                    </div>
+                </>
+            )
+        }
+        return (
+            <>
+                <div className="dot" style={{ backgroundColor: entity.color, width: '10px', height: '10px' }} />
+                {renderValue(entity.value, entity.label)}
+                {renderLabel(entity.label)}
+            </>
+        )
+    }
+
     return (
         <div className={`flexbox-col w-100 dc__gap-12 ${rootClassName}`}>
-            <div className="flexbox dc__gap-16">
+            <div className={`flexbox ${isProportional ? 'dc__gap-24' : 'dc__gap-16'}`}>
                 {entities?.map((entity) => (
-                    <div className="flexbox dc__gap-4 dc__align-items-center">
-                        <div className="dot" style={{ backgroundColor: entity.color, width: '10px', height: '10px' }} />
-                        <span className={countClassName} data-testid={`segmented-bar-chart-${entity.label}-value`}>
-                            {entity.value}
-                        </span>
-                        <span className={labelClassName} data-testid={`segmented-bar-chart-${entity.label}-label`}>
-                            {entity.label}
-                        </span>
+                    <div
+                        className={`${entity.proportionalValue ? 'flexbox-col' : 'flexbox  dc__gap-4 dc__align-items-center'}`}
+                    >
+                        {renderContent(entity)}
                     </div>
                 ))}
             </div>

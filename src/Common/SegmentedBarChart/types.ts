@@ -18,6 +18,7 @@ export type Entity = {
     color: string
     label: string
     value: number
+    proportionalValue?: string
 }
 
 export interface SegmentedBarChartProps {
@@ -25,4 +26,5 @@ export interface SegmentedBarChartProps {
     rootClassName?: string
     countClassName?: string
     labelClassName?: string
+    isProportional?: boolean
 }
