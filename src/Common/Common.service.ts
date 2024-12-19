@@ -18,8 +18,8 @@ import { MutableRefObject } from 'react'
 import moment from 'moment'
 import { sanitizeApprovalConfigData, sanitizeUserApprovalList } from '@Shared/Helpers'
 import { RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
-import { get, getIsRequestAborted, post } from './Api'
-import { API_STATUS_CODES, GitProviderType, ROUTES } from './Constants'
+import { get, post } from './Api'
+import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, showError, sortCallback } from './Helper'
 import {
     TeamList,
@@ -43,8 +43,6 @@ import {
 } from './Types'
 import { ApiResourceType } from '../Pages'
 import { RefVariableType } from './CIPipeline.Types'
-import { ServerErrors } from './ServerError'
-import { ToastManager, ToastVariantType } from '@Shared/Services'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -472,16 +470,6 @@ export const getGlobalVariables = async ({
 
         return variableList
     } catch (err) {
-        if (!getIsRequestAborted(err)) {
-            if (err instanceof ServerErrors && err.code === API_STATUS_CODES.PERMISSION_DENIED) {
-                ToastManager.showToast({
-                    variant: ToastVariantType.notAuthorized,
-                    description: 'You are not authorized to access global variables',
-                })
-            } else {
-                showError(err)
-            }
-        }
         throw err
     }
 }
