@@ -33,6 +33,7 @@ export const DOCUMENTATION = {
 }
 
 export const PATTERNS = {
+    DECIMAL_NUMBERS: /^-?\d*\.?\d*$/,
     NATURAL_NUMBERS: /^\d*\.?\d*$/,
     KUBERNETES_KEY_PREFIX: /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/,
     KUBERNETES_KEY_NAME: /^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$/,
