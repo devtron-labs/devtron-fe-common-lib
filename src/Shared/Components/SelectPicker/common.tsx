@@ -117,7 +117,7 @@ export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>
 
     return (
         <div className="flex left dc__gap-8 flex-grow-1">
-            <div className="flex left">
+            <div className="flex left flex-grow-1">
                 <components.ValueContainer {...props} />
             </div>
             {/* Size will not work here need to go in details later when prioritized */}
