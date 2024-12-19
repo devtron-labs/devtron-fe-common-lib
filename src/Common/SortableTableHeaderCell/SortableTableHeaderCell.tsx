@@ -98,6 +98,7 @@ const SortableTableHeaderCell = ({
                 className={`dc__transparent p-0 cn-7 flex dc__content-start dc__gap-4 dc__select-text ${!isSortable ? 'cursor-default' : ''} dc__position-rel`}
                 onClick={isSortable ? triggerSorting : noop}
                 disabled={disabled}
+                tabIndex={disabled || !isSortable ? -1 : 0}
             >
                 <Tooltip showOnTruncate={showTippyOnTruncate} content={title}>
                     <span className="dc__uppercase dc__truncate">{title}</span>

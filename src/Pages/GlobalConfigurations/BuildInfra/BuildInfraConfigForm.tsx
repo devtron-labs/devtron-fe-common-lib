@@ -20,18 +20,18 @@ import BuildInfraFormAction from './BuildInfraFormAction'
 import BuildInfraFormItem from './BuildInfraFormItem'
 import BuildInfraProfileDescriptionField from './BuildInfraDescriptionField'
 import BuildInfraProfileNameField from './BuildInfraProfileNameField'
-import { BUILD_INFRA_FORM_FIELDS, BUILD_INFRA_TEXT } from './constants'
-import { BuildInfraActionType, BuildInfraConfigFormProps, InheritingHeaderProps } from './types'
+import { BUILD_INFRA_DEFAULT_PLATFORM_NAME, BUILD_INFRA_FORM_FIELDS, BUILD_INFRA_TEXT } from './constants'
+import {
+    BuildInfraActionType,
+    BuildInfraConfigFormProps,
+    BuildInfraMetaConfigTypes,
+    InheritingHeaderProps,
+} from './types'
 
-const InheritingHeader = ({
-    defaultHeading,
-    inheritingData,
-    isInheriting,
-    isDefaultProfile,
-}: InheritingHeaderProps) => {
+const InheritingHeader = ({ defaultHeading, inheritingData, isInheriting, isGlobalProfile }: InheritingHeaderProps) => {
     const inheritingDataString = inheritingData.map((data) => `${data.value} ${data.unit ?? ''}`).join(' - ')
 
-    if (isDefaultProfile || !isInheriting) {
+    if (isGlobalProfile || !isInheriting) {
         // For typing issues
         // eslint-disable-next-line react/jsx-no-useless-fragment
         return <>{defaultHeading}</>
@@ -58,11 +58,11 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
     profileInput,
     profileInputErrors,
     handleProfileInputChange,
-    isDefaultProfile,
+    isGlobalProfile,
     unitsMap,
     configurationContainerLabel,
 }) => {
-    const currentConfigurations = profileInput?.configurations
+    const currentConfigurations = profileInput?.configurations?.[BUILD_INFRA_DEFAULT_PLATFORM_NAME]
 
     // will get the desired configuration from the currentConfigurations and then check if it is active or not
     const isInheritingProfileValues = (actions: BuildInfraActionType[]) =>
@@ -75,18 +75,18 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
 
     return (
         <div className="flexbox-col dc__mxw-920 dc__gap-16">
-            {!isDefaultProfile && (
+            {!isGlobalProfile && (
                 <div className="flexbox-col dc__gap-12">
                     <BuildInfraProfileNameField
                         handleProfileInputChange={handleProfileInputChange}
                         currentValue={profileInput.name}
-                        error={profileInputErrors.name}
+                        error={profileInputErrors[BuildInfraMetaConfigTypes.NAME]}
                     />
 
                     <BuildInfraProfileDescriptionField
                         handleProfileInputChange={handleProfileInputChange}
                         currentValue={profileInput.description}
-                        error={profileInputErrors.description}
+                        error={profileInputErrors[BuildInfraMetaConfigTypes.DESCRIPTION]}
                     />
                 </div>
             )}
@@ -106,14 +106,14 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
                                         (action) => currentConfigurations[action.actionType],
                                     )}
                                     isInheriting={isInheritingProfileValues(field.actions)}
-                                    isDefaultProfile={isDefaultProfile}
+                                    isGlobalProfile={isGlobalProfile}
                                 />
                             }
                             showDivider={index !== BUILD_INFRA_FORM_FIELDS.length - 1}
                             isInheriting={isInheritingProfileValues(field.actions)}
                             handleProfileInputChange={handleProfileInputChange}
                             locator={field.locator}
-                            isDefaultProfile={isDefaultProfile}
+                            isGlobalProfile={isGlobalProfile}
                         >
                             <div className="w-50 flexbox dc__gap-12 w-100 dc__align-start">
                                 {field.actions.map((action) => (
@@ -128,7 +128,7 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
                                         profileUnitsMap={unitsMap[action.actionType]}
                                         handleProfileInputChange={handleProfileInputChange}
                                         currentUnitName={currentConfigurations[action.actionType].unit}
-                                        currentValue={currentConfigurations[action.actionType].value}
+                                        currentValue={currentConfigurations[action.actionType].value as number}
                                     />
                                 ))}
                             </div>

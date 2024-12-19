@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
+import { InfoIconTippy } from '@Shared/Components/InfoIconTippy'
 import { BuildInfraDescriptorProps } from './types'
 import { BreadCrumb, DOCUMENTATION } from '../../../Common'
 import { BUILD_INFRA_TEXT } from './constants'
-import { InfoIconTippy } from '../../../Shared'
 
 const Descriptor = ({
     additionalContainerClasses,
@@ -25,19 +25,23 @@ const Descriptor = ({
     children,
     tippyInfoText,
     tippyAdditionalContent,
+    tooltipNode,
 }: BuildInfraDescriptorProps) => (
     <div className={`flexbox dc__content-space dc__align-items-center w-100 ${additionalContainerClasses ?? ''}`}>
         <div className="flexbox dc__align-items-center dc__gap-4">
-            <BreadCrumb breadcrumbs={breadCrumbs} />
-
-            <InfoIconTippy
-                infoText={tippyInfoText ?? BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
-                additionalContent={tippyAdditionalContent}
-                heading={BUILD_INFRA_TEXT.HEADING}
-                documentationLink={DOCUMENTATION.GLOBAL_CONFIG_BUILD_INFRA}
-                documentationLinkText="View Documentation"
-                iconClassName="icon-dim-20 fcn-6"
-            />
+            {tooltipNode || (
+                <>
+                    <BreadCrumb breadcrumbs={breadCrumbs} />
+                    <InfoIconTippy
+                        infoText={tippyInfoText ?? BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
+                        additionalContent={tippyAdditionalContent}
+                        heading={BUILD_INFRA_TEXT.HEADING}
+                        documentationLink={DOCUMENTATION.GLOBAL_CONFIG_BUILD_INFRA}
+                        documentationLinkText="View Documentation"
+                        iconClassName="icon-dim-20 fcn-6"
+                    />
+                </>
+            )}
         </div>
 
         {children}
