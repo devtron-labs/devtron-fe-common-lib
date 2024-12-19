@@ -69,7 +69,7 @@ const validateTargetPlatformName = (name: string, platformMap: Record<string, un
         return requiredValidation
     }
 
-    const lengthValidation = validateStringLength(name, 128, 1)
+    const lengthValidation = validateStringLength(name, 50, 1)
     if (!lengthValidation.isValid) {
         return lengthValidation
     }
