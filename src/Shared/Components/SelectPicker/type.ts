@@ -23,6 +23,7 @@ import { CreatableProps } from 'react-select/creatable'
 // This import allows to extend the base interface in react-select module via module augmentation
 import type {} from 'react-select/base'
 import { TooltipProps } from '@Common/Tooltip/types'
+import { ButtonProps } from '../Button'
 
 export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
     /**
@@ -84,6 +85,11 @@ declare module 'react-select/base' {
          * @default 'true'
          */
         showSelectedOptionIcon?: boolean
+        /** Renders "Load more" button at the end of the menu list. */
+        loadMoreButtonConfig?: Pick<ButtonProps, 'isLoading' | 'disabled'> & {
+            show?: boolean
+            onClick?: () => void
+        }
     }
 }
 
@@ -131,6 +137,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
             | 'renderCustomOptions'
             | 'icon'
             | 'showSelectedOptionIcon'
+            | 'loadMoreButtonConfig'
         >
     > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> &
