@@ -23,6 +23,8 @@ import {
     BuildInfraConfigurationMapTypeWithoutDefaultFallback,
     BuildInfraConfigurationType,
     BuildInfraConfigValuesType,
+    BuildInfraInheritActions,
+    BuildInfraLocators,
     BuildInfraPlatformConfigurationMapDTO,
     BuildInfraProfileBase,
     BuildInfraProfileData,
@@ -61,28 +63,30 @@ export const parsePlatformConfigIntoValue = (
         case BuildInfraConfigTypes.TOLERANCE:
             return {
                 key: BuildInfraConfigTypes.TOLERANCE,
-                value: (configuration.value || []).map((toleranceItem) => {
-                    const { key, effect, operator, value } = toleranceItem || {}
+                value: (configuration.value || [])
+                    .map<BuildInfraToleranceValueType>((toleranceItem) => {
+                        const { key, effect, operator, value } = toleranceItem || {}
 
-                    const baseObject: Pick<BuildInfraToleranceValueType, 'key' | 'effect' | 'id'> = {
-                        key,
-                        effect,
-                        id: addUniqueId ? getUniqueId() : null,
-                    }
+                        const baseObject: Pick<BuildInfraToleranceValueType, 'key' | 'effect' | 'id'> = {
+                            key,
+                            effect,
+                            id: addUniqueId ? getUniqueId() : null,
+                        }
 
-                    if (operator === BuildInfraToleranceOperatorType.EQUALS) {
+                        if (operator === BuildInfraToleranceOperatorType.EQUALS) {
+                            return {
+                                ...baseObject,
+                                operator: BuildInfraToleranceOperatorType.EQUALS,
+                                value,
+                            }
+                        }
+
                         return {
                             ...baseObject,
-                            operator: BuildInfraToleranceOperatorType.EQUALS,
-                            value,
+                            operator: BuildInfraToleranceOperatorType.EXISTS,
                         }
-                    }
-
-                    return {
-                        ...baseObject,
-                        operator: BuildInfraToleranceOperatorType.EXISTS,
-                    }
-                }),
+                    })
+                    .filter((toleranceItem) => toleranceItem.key),
             }
 
         case BuildInfraConfigTypes.BUILD_TIMEOUT:
@@ -304,3 +308,9 @@ export const getBuildInfraProfilePayload = (
 
 export const getBuildInfraProfileEndpoint = (): string =>
     `${ROUTES.INFRA_CONFIG_PROFILE}/${BUILD_INFRA_LATEST_API_VERSION}`
+
+export const getBuildInfraInheritActionFromLocator = (
+    locator: BuildInfraLocators,
+    activateLocator: boolean,
+): BuildInfraInheritActions =>
+    (activateLocator ? `activate_${locator}` : `de_activate_${locator}`) satisfies BuildInfraInheritActions

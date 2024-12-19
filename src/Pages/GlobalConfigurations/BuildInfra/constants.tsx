@@ -46,6 +46,8 @@ export const BUILD_INFRA_INPUT_CONSTRAINTS = {
     MAX_LABEL_VALUE_LENGTH: 63,
 } as const
 
+export const DEFAULT_PROFILE_NAME = 'global'
+
 export const BUILD_INFRA_TEXT = {
     HEADING: 'Build Infra Configuration',
     EDIT_SUBMIT: 'Save changes',
@@ -57,7 +59,7 @@ export const BUILD_INFRA_TEXT = {
     DESCRIPTION_PLACEHOLDER: 'Enter a description here',
     PROFILE_LABEL: 'Profile name',
     PROFILE_PLACEHOLDER: 'Enter a name eg. java/node/small/medium/large',
-    INHERITING_HEADING_DESCRIPTION: 'Inheriting from default',
+    INHERITING_HEADING_DESCRIPTION: `Inheriting from ${DEFAULT_PROFILE_NAME}`,
     SUBMIT_BUTTON_TIPPY: {
         INVALID_INPUT: 'Valid input is required for all mandatory fields.',
         REQUEST_IN_PROGRESS: 'Request in progress.',
@@ -173,8 +175,6 @@ export const PROFILE_INPUT_ERROR_FIELDS = Object.fromEntries(
 
 // fields required to be filled before submitting the form in create view, since we pre-populate the form with default values so no need in configs
 export const CREATE_MODE_REQUIRED_INPUT_FIELDS = [BuildInfraMetaConfigTypes.NAME]
-
-export const DEFAULT_PROFILE_NAME = 'global' as const
 
 export const CREATE_PROFILE_BASE_VALUE: BuildInfraProfileBase = {
     name: '',
