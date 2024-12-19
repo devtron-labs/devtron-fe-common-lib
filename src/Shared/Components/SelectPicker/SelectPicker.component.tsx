@@ -321,6 +321,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
             e.preventDefault()
         }
+        props.onKeyDown?.(e)
     }
 
     const commonProps = useMemo(
