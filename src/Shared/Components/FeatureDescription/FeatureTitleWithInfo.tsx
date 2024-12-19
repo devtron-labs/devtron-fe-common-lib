@@ -36,6 +36,7 @@ const FeatureTitleWithInfo = ({
     dataTestId = 'feature-title-with-info',
     additionalContent,
     showInfoIcon = false,
+    tabsConfig,
 }: DescriptorProps) => {
     const [showFeatureDescriptionModal, setShowFeatureDescriptionModal] = useState(false)
     const onClickInfoIcon = () => {
@@ -92,11 +93,17 @@ const FeatureTitleWithInfo = ({
             {showFeatureDescriptionModal && (
                 <FeatureDescriptionModal
                     title={title}
-                    renderDescriptionContent={renderDescriptionContent}
-                    closeModalText={closeModalText}
-                    docLink={docLink}
                     closeModal={closeModal}
-                    SVGImage={SVGImage}
+                    closeModalText={closeModalText}
+                    {...(Array.isArray(tabsConfig)
+                        ? {
+                              tabsConfig,
+                          }
+                        : {
+                              renderDescriptionContent,
+                              docLink,
+                              SVGImage,
+                          })}
                 />
             )}
         </>
