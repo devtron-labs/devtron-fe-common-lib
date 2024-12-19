@@ -24,6 +24,7 @@ import {
     DeploymentAppTypes,
     ServerErrors,
     SortingParams,
+    TriggerBlockType,
     ValueConstraintType,
     VariableType,
     RefVariableType,
@@ -884,6 +885,27 @@ export interface PreventOutsideFocusProps {
     preventFocus: boolean
 }
 
+export interface PolicyBlockInfo {
+    isBlocked: boolean
+    blockedBy: TriggerBlockType
+    reason: string
+}
+
+export interface PipelineStageBlockInfo {
+    node: PolicyBlockInfo
+    pre: PolicyBlockInfo
+    post: PolicyBlockInfo
+}
+
+export interface PolicyConsequencesDTO {
+    cd: PipelineStageBlockInfo
+    ci: PipelineStageBlockInfo
+}
+
+export interface GetPolicyConsequencesProps {
+    appId: number
+    envId: number
+}
 export interface UploadFileDTO {
     id: number
     name: string
