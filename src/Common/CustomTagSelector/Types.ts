@@ -22,6 +22,18 @@ export interface SuggestedTagOptionType extends OptionType {
     description: string
     propagate: boolean
 }
+
+export enum DeploymentPolicy {
+    ALLOW = 'allow',
+    BLOCK = 'block',
+    BLOCK_PROD = 'block-prod',
+    BLOCK_NON_PROD = 'block-non-prod',
+}
+
+export interface VariableValueConstraintTypes {
+    choices?: string[]
+    blockCustomValue?: boolean
+}
 export interface TagType {
     id?: number
     key: string
@@ -33,6 +45,8 @@ export interface TagType {
     isInvalidValue?: boolean
     isSuggested?: boolean
     isPropagateDisabled?: boolean
+    deploymentPolicy?: DeploymentPolicy
+    valueConstraint?: VariableValueConstraintTypes
 }
 
 export interface TagErrorType {

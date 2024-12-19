@@ -39,7 +39,7 @@ export default function PropagateTagInfo({ isCreateApp }: { isCreateApp: boolean
         <TippyCustomized
             theme={TippyTheme.white}
             className="w-300"
-            placement="top"
+            placement="left"
             Icon={InjectTag}
             heading="Propagate tags to K8s resources"
             infoText=""
