@@ -59,6 +59,12 @@ export type CollapsibleListItem<TabType extends TabOptions = 'navLink'> = Condit
          */
         tooltipProps?: TippyProps
     }
+    /**
+     * If `true`, clears query parameters during navigation.
+     *
+     * @default false
+     */
+    clearQueryParamsOnNavigation?: boolean
 }
 
 export interface CollapsibleListConfig<TabType extends TabOptions = 'navLink'> {

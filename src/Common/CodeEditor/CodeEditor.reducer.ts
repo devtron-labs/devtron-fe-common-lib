@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import YAML from 'yaml'
+import { noop, YAMLStringify } from '@Common/Helper'
 import { MODES } from '../Constants'
 import { Action, CodeEditorInitialValueType, CodeEditorState, CodeEditorThemesKeys } from './types'
 
@@ -34,16 +36,48 @@ export const CodeEditorReducer = (state: CodeEditorState, action: Action) => {
     }
 }
 
+export const parseValueToCode = (value: string, mode: string, tabSize: number) => {
+    let obj = null
+
+    try {
+        obj = JSON.parse(value)
+    } catch {
+        try {
+            obj = YAML.parse(value)
+        } catch {
+            noop()
+        }
+    }
+
+    let final = value
+
+    if (obj) {
+        switch (mode) {
+            case MODES.JSON:
+                final = JSON.stringify(obj, null, tabSize)
+                break
+            case MODES.YAML:
+                final = YAMLStringify(obj)
+                break
+            default:
+                break
+        }
+    }
+
+    return final
+}
+
 export const initialState = ({
     mode,
     theme,
     value,
     diffView,
     noParsing,
+    tabSize,
 }: CodeEditorInitialValueType): CodeEditorState => ({
     mode: mode as MODES,
     theme: (theme || CodeEditorThemesKeys.vs) as CodeEditorThemesKeys,
-    code: value,
+    code: noParsing ? value : parseValueToCode(value, mode, tabSize),
     diffMode: diffView,
     noParsing: [MODES.JSON, MODES.YAML].includes(mode as MODES) ? noParsing : true,
 })

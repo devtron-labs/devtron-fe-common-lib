@@ -43,17 +43,19 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
     }
 
     const closeTippy = (e) => {
-        stopPropagation(e)
-        if (tippyRef.current?.hide) {
-            tippyRef.current.hide()
-            tippyRef.current = null
+        if (!props.disableClose) {
+            stopPropagation(e)
+            if (tippyRef.current?.hide) {
+                tippyRef.current.hide()
+                tippyRef.current = null
 
-            if (props.onClose) {
-                props.onClose()
+                if (props.onClose) {
+                    props.onClose()
+                }
             }
+            setShowHeadingInfo(false)
+            document.removeEventListener('keydown', closeOnEsc)
         }
-        setShowHeadingInfo(false)
-        document.removeEventListener('keydown', closeOnEsc)
     }
 
     const toggleHeadingInfo = (e) => {
@@ -188,6 +190,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
             animation={animation || 'fade'}
             duration={duration || 300}
             visible={props.visible}
+            appendTo={props.appendTo}
         >
             {children}
         </Tippy>

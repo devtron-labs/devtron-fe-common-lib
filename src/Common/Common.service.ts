@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
+import { MutableRefObject } from 'react'
 import moment from 'moment'
-import { RuntimeParamsAPIResponseType, RuntimeParamsListItemType } from '@Shared/types'
+import { RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
 import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
-import { getUrlWithSearchParams, sortCallback } from './Helper'
+import { getUrlWithSearchParams, showError, sortCallback } from './Helper'
 import {
     TeamList,
     ResponseType,
@@ -41,10 +42,13 @@ import {
     UserApprovalMetadataType,
     UserApprovalConfigType,
     CDMaterialListModalServiceUtilProps,
+    GlobalVariableDTO,
+    GlobalVariableOptionType,
 } from './Types'
 import { ApiResourceType } from '../Pages'
 import { API_TOKEN_PREFIX } from '@Shared/constants'
 import { DefaultUserKey } from '@Shared/types'
+import { RefVariableType } from './CIPipeline.Types'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -318,10 +322,8 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
     }
 }
 
-export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): RuntimeParamsListItemType[] =>
-    Object.entries(response?.envVariables || {})
-        .map(([key, value], index) => ({ key, value, id: index }))
-        .sort((a, b) => stringComparatorBySortOrder(a.key, b.key))
+export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): RuntimePluginVariables[] =>
+    (response?.runtimePluginVariables ?? []).map((variable) => ({ ...variable, defaultValue: variable.value }))
 
 const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
     if (!cdMaterialsResult) {
@@ -520,10 +522,49 @@ export function getWebhookEventsForEventId(eventId: string | number) {
  */
 export const getGitBranchUrl = (gitUrl: string, branchName: string): string | null => {
     if (!gitUrl) return null
-    const trimmedGitUrl = gitUrl.trim().replace(/\.git$/, '').replace(/\/$/, '') // Remove any trailing slash
+    const trimmedGitUrl = gitUrl
+        .trim()
+        .replace(/\.git$/, '')
+        .replace(/\/$/, '') // Remove any trailing slash
     if (trimmedGitUrl.includes(GitProviderType.GITLAB)) return `${trimmedGitUrl}/-/tree/${branchName}`
     else if (trimmedGitUrl.includes(GitProviderType.GITHUB)) return `${trimmedGitUrl}/tree/${branchName}`
     else if (trimmedGitUrl.includes(GitProviderType.BITBUCKET)) return `${trimmedGitUrl}/branch/${branchName}`
     else if (trimmedGitUrl.includes(GitProviderType.AZURE)) return `${trimmedGitUrl}/src/branch/${branchName}`
     return null
+}
+
+export const getGlobalVariables = async ({
+    appId,
+    isCD = false,
+    abortControllerRef,
+}: {
+    appId: number
+    isCD?: boolean
+    abortControllerRef?: MutableRefObject<AbortController>
+}): Promise<GlobalVariableOptionType[]> => {
+    try {
+        const { result } = await get<GlobalVariableDTO[]>(
+            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_VARIABLES, { appId }),
+            {
+                abortControllerRef,
+            },
+        )
+        const variableList = (result ?? [])
+            .filter((item) => (isCD ? item.stageType !== 'ci' : item.stageType === 'ci'))
+            .map<GlobalVariableOptionType>((variable) => {
+                const { name, ...updatedVariable } = variable
+
+                return {
+                    ...updatedVariable,
+                    label: name,
+                    value: name,
+                    description: updatedVariable.description || '',
+                    variableType: RefVariableType.GLOBAL,
+                }
+            })
+
+        return variableList
+    } catch (err) {
+        throw err
+    }
 }

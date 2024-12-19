@@ -257,6 +257,10 @@ export const IndexStore = {
         _nodesFilteredSubject.next([..._nodes])
     },
 
+    clearAppDetails() {
+        this.publishAppDetails({}, null)
+    },
+
     getAppDetails: (): AppDetails => _appDetailsSubject.getValue(),
 
     getAppDetailsObservable: () => _appDetailsSubject.asObservable(),

@@ -150,7 +150,14 @@ async function fetchAPI<K = object>(
                     })
                 } else {
                     handleLogout()
-                    return { code: 401, status: 'Unauthorized', result: [] }
+                    // Using this way to ensure that the user is redirected to the login page
+                    // and the component has enough time to get unmounted otherwise the component re-renders
+                    // and try to access some property of a variable and log exception to sentry
+                    return await new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve({ code: 401, status: 'Unauthorized', result: [] })
+                        }, 1000)
+                    })
                 }
             } else if (response.status >= 300 && response.status <= 599) {
                 return await handleServerError(contentType, response)
@@ -204,6 +211,9 @@ function fetchInTime<T = object>(
                 options.abortControllerRef.current = new AbortController()
             }
 
+            // Note: This is not catered in case abortControllerRef is passed since
+            // the API is rejected with abort signal from line 202
+            // FIXME: Remove once signal is removed
             reject({
                 code: 408,
                 errors: [{ code: 408, internalMessage: 'Request cancelled', userMessage: 'Request Cancelled' }],
@@ -224,6 +234,7 @@ function fetchInTime<T = object>(
         if (err instanceof ServerErrors) {
             throw err
         } else {
+            // FIXME: Can be removed once signal is removed
             throw new ServerErrors({
                 code: 408,
                 errors: [

@@ -16,7 +16,6 @@
 
 import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import MonacoEditor, { MonacoDiffEditor } from 'react-monaco-editor'
-import YAML from 'yaml'
 import ReactGA from 'react-ga4'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { configureMonacoYaml } from 'monaco-yaml'
@@ -27,7 +26,7 @@ import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-error-exclamat
 import './codeEditor.scss'
 import 'monaco-editor'
 
-import { YAMLStringify, cleanKubeManifest, useJsonYaml } from '../Helper'
+import { cleanKubeManifest, useEffectAfterMount, useJsonYaml } from '../Helper'
 import { useWindowSize } from '../Hooks'
 import Select from '../Select/Select'
 import RadioGroup from '../RadioGroup/RadioGroup'
@@ -41,8 +40,8 @@ import {
     CodeEditorThemesKeys,
     InformationBarProps,
 } from './types'
-import { CodeEditorReducer, initialState } from './CodeEditor.reducer'
-import { MODES } from '../Constants'
+import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
+import { DEFAULT_JSON_SCHEMA_URI, MODES } from '../Constants'
 
 const CodeEditorContext = React.createContext(null)
 
@@ -76,7 +75,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         customLoader,
         focus,
         validatorSchema,
-        chartVersion,
+        schemaURI = DEFAULT_JSON_SCHEMA_URI,
         isKubernetes = true,
         cleanData = false,
         onBlur,
@@ -93,16 +92,16 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         const monacoRef = useRef(null)
         const { width, height: windowHeight } = useWindowSize()
         const memoisedReducer = React.useCallback(CodeEditorReducer, [])
-        const [state, dispatch] = useReducer(memoisedReducer, initialState({ mode, theme, value, diffView, noParsing }))
+        const [state, dispatch] = useReducer(
+            memoisedReducer,
+            initialState({ mode, theme, value, diffView, noParsing, tabSize }),
+        )
         const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
         const [, originalJson, originlaYaml] = useJsonYaml(defaultValue, tabSize, state.mode, !state.noParsing)
         const [contentHeight, setContentHeight] = useState(
             adjustEditorHeightToContent ? INITIAL_HEIGHT_WHEN_DYNAMIC_HEIGHT : height,
         )
-        /**
-         * TODO: can be removed with this new merge into react-monaco-editor :)
-         * see: https://github.com/react-monaco-editor/react-monaco-editor/pull/955
-         * */
+        // TODO: upgrade to 0.56.2 to remove this
         const onChangeRef = useRef(onChange)
         onChangeRef.current = onChange
         monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
@@ -230,7 +229,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 isKubernetes,
                 schemas: [
                     {
-                        uri: `https://github.com/devtron-labs/devtron/tree/main/scripts/devtron-reference-helm-charts/reference-chart_${chartVersion}/schema.json`, // id of the first schema
+                        uri: schemaURI,
                         fileMatch: ['*'], // associate with our model
                         schema: validatorSchema,
                     },
@@ -240,7 +239,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 config.dispose()
             }
             // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [validatorSchema, chartVersion])
+        }, [validatorSchema, schemaURI])
         useEffect(() => {
             if (!editorRef.current) {
                 return
@@ -260,28 +259,18 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             onChangeRef.current?.(value)
         }
 
-        useEffect(() => {
+        useEffectAfterMount(() => {
             if (noParsing) {
                 setCode(value)
 
                 return
             }
-            let obj
+
             if (value === state.code) {
                 return
             }
-            try {
-                obj = JSON.parse(value)
-            } catch (err) {
-                try {
-                    obj = YAML.parse(value)
-                } catch (err) {}
-            }
-            let final = value
-            if (obj) {
-                final = state.mode === 'json' ? JSON.stringify(obj, null, tabSize) : YAMLStringify(obj)
-            }
-            setCode(final)
+
+            setCode(parseValueToCode(value, state.mode, tabSize))
         }, [value, noParsing])
 
         useEffect(() => {
