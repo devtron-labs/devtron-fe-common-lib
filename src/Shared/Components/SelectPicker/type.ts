@@ -141,7 +141,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
                 IsMulti,
                 GroupBase<SelectPickerOptionType<OptionValue>>
             >,
-            'onCreateOption' | 'formatCreateLabel'
+            'onCreateOption' | 'formatCreateLabel' | 'menuPortalTarget'
         >
     > & {
         /**
