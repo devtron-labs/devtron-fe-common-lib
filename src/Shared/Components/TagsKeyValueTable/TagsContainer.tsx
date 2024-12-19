@@ -64,7 +64,7 @@ const TagsKeyValueTable = ({
             action: `${appType.toUpperCase()}_ADD_TAG_BUTTON_CLICKED`,
         })
         const newEmptyRow = getEmptyRow()
-        const editedRows = [...rows, newEmptyRow]
+        const editedRows = [newEmptyRow, ...rows]
         setRows(editedRows)
     }
 
