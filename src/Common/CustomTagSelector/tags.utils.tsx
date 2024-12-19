@@ -27,3 +27,10 @@ export const validateTagKeyValue = (value: string): { isValid: boolean; errorMes
     const { isValid, messages } = propagateTagKey(value)
     return { isValid, errorMessages: messages }
 }
+
+export const validateTagValue = (value: string, key: string): { isValid: boolean; errorMessages: string[] } => {
+    const { propagateTagValue } = new ValidationRules()
+
+    const { isValid, messages } = propagateTagValue(value, key)
+    return { isValid, errorMessages: messages }
+}
