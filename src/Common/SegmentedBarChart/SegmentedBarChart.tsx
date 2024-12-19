@@ -45,10 +45,6 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
 
     const renderContent = (entity: Entity) => {
         if (entity.proportionalValue) {
-            if (entity.value === 0) {
-                return null
-            }
-            // render proportional value only if value count is present
             return (
                 <>
                     {renderValue(entity.proportionalValue, entity.label)}
