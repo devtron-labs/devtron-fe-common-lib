@@ -814,7 +814,7 @@ export interface Strategy {
     default?: boolean
 }
 
-export interface CDStage extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
+export interface CDStage extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo' | 'isTriggerBlocked' >> {
     status: string
     name: string
     triggerType: 'AUTOMATIC' | 'MANUAL'
