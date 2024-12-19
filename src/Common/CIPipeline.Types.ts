@@ -99,9 +99,15 @@ export enum RefVariableStageType {
     POST_CI = 'POST_CI',
 }
 
+export enum FilePropertyTypeSizeUnit {
+    KB = 'KB',
+    MB = 'MB',
+}
+
 export interface FilePropertyType {
     allowedExtensions: string[]
     maxUploadSize: number
+    sizeUnit: FilePropertyTypeSizeUnit
 }
 
 export interface ConstraintType {
