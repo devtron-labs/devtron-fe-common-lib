@@ -52,7 +52,16 @@ export const parseValueToCode = (value: string, mode: string, tabSize: number) =
     let final = value
 
     if (obj) {
-        final = mode === MODES.JSON ? JSON.stringify(obj, null, tabSize) : YAMLStringify(obj)
+        switch (mode) {
+            case MODES.JSON:
+                final = JSON.stringify(obj, null, tabSize)
+                break
+            case MODES.YAML:
+                final = YAMLStringify(obj)
+                break
+            default:
+                break
+        }
     }
 
     return final
@@ -68,7 +77,7 @@ export const initialState = ({
 }: CodeEditorInitialValueType): CodeEditorState => ({
     mode: mode as MODES,
     theme: (theme || CodeEditorThemesKeys.vs) as CodeEditorThemesKeys,
-    code: parseValueToCode(value, mode, tabSize),
+    code: noParsing ? value : parseValueToCode(value, mode, tabSize),
     diffMode: diffView,
     noParsing: [MODES.JSON, MODES.YAML].includes(mode as MODES) ? noParsing : true,
 })
