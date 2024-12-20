@@ -37,6 +37,8 @@ export interface DeploymentHistoryConfigDiffQueryParams {
 }
 
 export interface DeploymentHistoryConfigDiffRouteParams {
+    appId: string
+    envId: string
     resourceType: EnvResourceType
     resourceName: string
 }

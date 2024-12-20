@@ -214,7 +214,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     onCreateOption,
     closeMenuOnSelect = false,
     shouldShowNoOptionsMessage = true,
-    formatCreateLabel,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options, getOptionValue } = props
@@ -408,7 +407,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             onInputChange={onInputChange}
                             icon={icon}
                             showSelectedOptionIcon={shouldShowSelectedOptionIcon}
-                            formatCreateLabel={formatCreateLabel}
                             onKeyDown={handleKeyDown}
                         />
                     </div>
