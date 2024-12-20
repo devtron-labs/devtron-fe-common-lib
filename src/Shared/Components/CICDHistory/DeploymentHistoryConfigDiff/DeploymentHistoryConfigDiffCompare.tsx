@@ -51,7 +51,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
     const [triggerHistory, setTriggerHistory] = useState({
         isLoading: false,
         data: initialTriggerHistory,
-        hasMore: initialTriggerHistory.size === paginationSize,
+        hasMore: initialTriggerHistory.size >= paginationSize,
     })
     const [pipelineDeployments, setPipelineDeployments] = useState(initialPipelineDeployments)
 
