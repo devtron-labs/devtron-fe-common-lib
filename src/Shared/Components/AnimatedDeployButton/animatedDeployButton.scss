@@ -1,0 +1,7 @@
+.hide-button-text {
+    .button {
+        :nth-child(2) {
+            visibility: hidden;
+        }
+    }
+}
