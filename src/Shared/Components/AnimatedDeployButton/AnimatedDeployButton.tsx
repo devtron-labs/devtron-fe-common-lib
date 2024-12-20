@@ -20,7 +20,11 @@ const AnimatedDeployButton = ({ onButtonClick }: AnimatedDeployButtonProps) => {
 
     const handleButtonClick = async (e: SyntheticEvent) => {
         if (isAudioEnabled && audioRef.current) {
-            await audioRef.current.play()
+            try {
+                await audioRef.current.play()
+            } catch {
+                // do nothing
+            }
         }
         setClicked(true)
         timeoutRef.current = setTimeout(() => {
@@ -29,9 +33,12 @@ const AnimatedDeployButton = ({ onButtonClick }: AnimatedDeployButtonProps) => {
         }, 700)
     }
 
-    useEffect(() => {
-        clearTimeout(timeoutRef.current)
-    }, [])
+    useEffect(
+        () => () => {
+            clearTimeout(timeoutRef.current)
+        },
+        [],
+    )
 
     return (
         <motion.div whileHover="hover" className={`${clicked ? 'hide-button-text' : ''}`}>
