@@ -1,13 +1,15 @@
 import { motion } from 'framer-motion'
 import { ReactComponent as ICDeploy } from '@Icons/ic-nav-rocket.svg'
 import { ComponentSizeType } from '@Shared/constants'
-import { useEffect, useRef, useState } from 'react'
+import { SyntheticEvent, useEffect, useRef, useState } from 'react'
+import DeployAudio from '@Sounds/DeployAudio.mp3'
 import { Button } from '../Button'
-import DeployAudio from '../../../Assets/Sounds/DeployAudio.mp3'
 import './animatedDeployButton.scss'
+import { AnimatedDeployButtonProps } from './types'
 
-const AnimatedDeployButton = ({ onButtonClick }: { onButtonClick: (e, disableDeployButton: boolean) => void }) => {
-    const audioRef = useRef<HTMLAudioElement>()
+const AnimatedDeployButton = ({ onButtonClick }: AnimatedDeployButtonProps) => {
+    const audioRef = useRef<HTMLAudioElement>(null)
+    const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null)
     const isAudioEnabled: boolean = window._env_.FEATURE_ACTION_AUDIOS_ENABLE
     const [clicked, setClicked] = useState<boolean>(false)
     const svgMotionVariants = {
@@ -16,25 +18,20 @@ const AnimatedDeployButton = ({ onButtonClick }: { onButtonClick: (e, disableDep
         },
     }
 
-    const handleButtonClick = async (e) => {
+    const handleButtonClick = async (e: SyntheticEvent) => {
         if (isAudioEnabled && audioRef.current) {
             await audioRef.current.play()
         }
         setClicked(true)
-        setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
             setClicked(false)
             onButtonClick(e, false)
         }, 700)
     }
 
-    useEffect(
-        () => () => {
-            if (audioRef.current) {
-                audioRef.current.pause()
-            }
-        },
-        [],
-    )
+    useEffect(() => {
+        clearTimeout(timeoutRef.current)
+    }, [])
 
     return (
         <motion.div whileHover="hover" className={`${clicked ? 'hide-button-text' : ''}`}>
@@ -63,6 +60,7 @@ const AnimatedDeployButton = ({ onButtonClick }: { onButtonClick: (e, disableDep
                 size={ComponentSizeType.large}
                 onClick={handleButtonClick}
             />
+            {/* Disabling es-lint as captions are not required */}
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
             <audio hidden ref={audioRef} src={DeployAudio} />
         </motion.div>
