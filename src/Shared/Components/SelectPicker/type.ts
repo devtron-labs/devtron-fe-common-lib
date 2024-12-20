@@ -84,6 +84,12 @@ declare module 'react-select/base' {
          * @default 'true'
          */
         showSelectedOptionIcon?: boolean
+        /**
+         * If provided, the custom display text is shown in the value container
+         *
+         * @default null
+         */
+        customDisplayText?: string
     }
 }
 
@@ -247,7 +253,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean
-              multiSelectProps?: {
+              multiSelectProps?: Pick<SelectProps<OptionValue, IsMulti>, 'customDisplayText'> & {
                   /**
                    * If true, the group heading can be selected
                    *

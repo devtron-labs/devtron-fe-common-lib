@@ -218,8 +218,21 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     shouldHideMenu = false,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
-    const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options, getOptionValue } = props
-    const { isGroupHeadingSelectable = false, getIsOptionValid = () => true } = multiSelectProps
+    const {
+        inputId,
+        required,
+        isDisabled,
+        controlShouldRenderValue: _controlShouldRenderValue = true,
+        value,
+        options,
+        getOptionValue,
+    } = props
+    const {
+        isGroupHeadingSelectable = false,
+        getIsOptionValid = () => true,
+        customDisplayText = null,
+    } = multiSelectProps
+    const controlShouldRenderValue = _controlShouldRenderValue && !customDisplayText
 
     // Only large variant is supported for multi select picker
     const selectSize = isMulti && controlShouldRenderValue ? ComponentSizeType.large : size
@@ -355,6 +368,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             labelId,
             shouldRenderCustomOptions,
             controlShouldRenderValue,
+            customDisplayText,
         ],
     )
 
@@ -416,6 +430,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             showSelectedOptionIcon={shouldShowSelectedOptionIcon}
                             formatCreateLabel={formatCreateLabel}
                             onKeyDown={handleKeyDown}
+                            customDisplayText={customDisplayText}
                         />
                     </div>
                 </ConditionalWrap>

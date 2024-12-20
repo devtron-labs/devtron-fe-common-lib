@@ -40,6 +40,10 @@ import { Tooltip } from '@Common/Tooltip'
 import { TooltipProps } from '@Common/Tooltip/types'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
+import {
+    SELECT_PICKER_VALUE_CONTAINER_CUSTOM_PLACEHOLDER_CLASS,
+    SELECT_PICKER_VALUE_CONTAINER_CUSTOM_TEXT_CLASS,
+} from './constants'
 
 const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
     if (tooltipProps) {
@@ -110,7 +114,11 @@ export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>
     ...props
 }: ValueContainerProps<SelectPickerOptionType<OptionValue>> &
     Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount' | 'customSelectedOptionsCount'>) => {
-    const { getValue } = props
+    const {
+        getValue,
+        selectProps: { customDisplayText, placeholder },
+        children,
+    } = props
     const selectedOptionsLength = isNullOrUndefined(customSelectedOptionsCount)
         ? (getValue() ?? []).length
         : customSelectedOptionsCount
@@ -118,7 +126,24 @@ export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>
     return (
         <div className="flex left dc__gap-8 flex-grow-1">
             <div className="flex left flex-grow-1">
-                <components.ValueContainer {...props} />
+                <components.ValueContainer {...props}>
+                    {customDisplayText && selectedOptionsLength > 0 ? (
+                        <>
+                            <p
+                                className={`m-0 fs-13 fw-4 lh-20 cn-9 dc__truncate ${SELECT_PICKER_VALUE_CONTAINER_CUSTOM_TEXT_CLASS}`}
+                            >
+                                {customDisplayText}
+                            </p>
+                            <p className={`m-0 ${SELECT_PICKER_VALUE_CONTAINER_CUSTOM_PLACEHOLDER_CLASS}`}>
+                                {placeholder}
+                            </p>
+                            {/* @ts-ignore */}
+                            {children?.at(-1)}
+                        </>
+                    ) : (
+                        children
+                    )}
+                </components.ValueContainer>
             </div>
             {/* Size will not work here need to go in details later when prioritized */}
             {showSelectedOptionsCount && selectedOptionsLength > 0 && (

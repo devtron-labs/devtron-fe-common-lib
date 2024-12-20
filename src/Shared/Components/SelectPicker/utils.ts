@@ -18,7 +18,13 @@ import { CHECKBOX_VALUE } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 import { GroupBase, MultiValue, OptionsOrGroups, StylesConfig } from 'react-select'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
-import { SELECT_PICKER_CONTROL_SIZE_MAP, SELECT_PICKER_FONT_SIZE_MAP, SELECT_PICKER_ICON_SIZE_MAP } from './constants'
+import {
+    SELECT_PICKER_CONTROL_SIZE_MAP,
+    SELECT_PICKER_FONT_SIZE_MAP,
+    SELECT_PICKER_ICON_SIZE_MAP,
+    SELECT_PICKER_VALUE_CONTAINER_CUSTOM_PLACEHOLDER_CLASS,
+    SELECT_PICKER_VALUE_CONTAINER_CUSTOM_TEXT_CLASS,
+} from './constants'
 
 const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
     menuSize: SelectPickerProps<OptionValue, IsMulti>['menuSize'],
@@ -84,6 +90,17 @@ const getOptionBgColor = <OptionValue>(
     return 'var(--N0)'
 }
 
+export const getPlaceholderStyles = (size: SelectPickerProps['size']) => ({
+    color: 'var(--N500)',
+    fontSize: SELECT_PICKER_FONT_SIZE_MAP[size],
+    lineHeight: '20px',
+    fontWeight: 400,
+    margin: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+})
+
 export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     error,
     size,
@@ -96,232 +113,245 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
     Pick<
         SelectPickerProps<OptionValue, IsMulti>['multiSelectProps'],
         'getIsOptionValid' | 'isGroupHeadingSelectable'
-    >): StylesConfig<SelectPickerOptionType<OptionValue>> => ({
-    container: (base, state) => ({
-        ...base,
-        ...(state.isDisabled && {
-            cursor: 'not-allowed',
-            pointerEvents: 'auto',
-        }),
-    }),
-    menu: (base) => ({
-        ...base,
-        overflow: 'hidden',
-        marginBlock: '4px',
-        backgroundColor: 'var(--N0)',
-        border: '1px solid var(--N200)',
-        boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.20)',
-        width: getMenuWidthFromSize(menuSize).width,
-        minWidth: getMenuWidthFromSize(menuSize).minWidth,
-        zIndex: 'var(--select-picker-menu-index)',
-        ...(shouldMenuAlignRight && {
-            right: 0,
-        }),
-    }),
-    menuList: (base) => ({
-        ...base,
-        padding: 0,
-    }),
-    control: (base, state) => ({
-        ...base,
-        minHeight: SELECT_PICKER_CONTROL_SIZE_MAP[size],
-        minWidth: '56px',
-        boxShadow: 'none',
-        backgroundColor: 'var(--N50)',
-        border: `1px solid ${error ? 'var(--R500)' : 'var(--N200)'}`,
-        cursor: state.isDisabled ? 'not-allowed' : 'pointer',
-        padding: '5px 8px',
-        gap: '6px',
-        opacity: state.isDisabled ? 0.5 : 1,
-        flexWrap: 'nowrap',
-        maxHeight: '120px',
-        overflow: 'auto',
-        alignItems: 'safe center',
-        ...(getVariantOverrides(variant)?.control(base, state) || {}),
+    >): StylesConfig<SelectPickerOptionType<OptionValue>> => {
+    const placeholderStyles = getPlaceholderStyles(size)
 
-        '&:hover': {
-            borderColor: state.isDisabled ? 'var(--N200)' : 'var(--N300)',
-        },
-        '&:focus, &:focus-within': {
-            borderColor: state.isDisabled ? 'var(--N200)' : 'var(--B500)',
-            outline: 'none',
-        },
-    }),
-    option: (base, state) => ({
-        ...base,
-        color: 'var(--N900)',
-        backgroundColor: getOptionBgColor(state),
-        padding: '6px 8px',
-        cursor: 'pointer',
-        fontSize: '13px',
-        lineHeight: '20px',
-        fontWeight: 400,
-
-        ':active': {
-            backgroundColor: 'var(--N100)',
-        },
-
-        ':hover': {
-            backgroundColor: 'var(--N50)',
-        },
-
-        ...(state.isDisabled && {
-            cursor: 'not-allowed',
-            opacity: 0.5,
-        }),
-    }),
-    dropdownIndicator: (base, state) => ({
-        ...base,
-        ...SELECT_PICKER_ICON_SIZE_MAP[size],
-        display: 'flex',
-        alignItems: 'center',
-        flexShrink: '0',
-        color: 'var(--N600)',
-        padding: '0',
-        transition: 'all .2s ease',
-        transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-    }),
-    clearIndicator: (base) => ({
-        ...base,
-        ...SELECT_PICKER_ICON_SIZE_MAP[size],
-        padding: 0,
-        display: 'flex',
-        alignItems: 'center',
-        flexShrink: '0',
-
-        '&:hover': {
-            backgroundColor: 'transparent',
-            color: 'inherit',
-
-            'svg use': {
-                fill: 'var(--R500)',
-            },
-        },
-    }),
-    valueContainer: (base, state) => ({
-        ...base,
-        padding: '0',
-        fontWeight: '400',
-        ...(state.selectProps.isMulti && {
-            gap: '6px',
-        }),
-    }),
-    multiValue: (base, state) => {
-        const isOptionValid = getIsOptionValid(state.data)
-
-        return {
+    return {
+        container: (base, state) => ({
             ...base,
-            background: isOptionValid ? 'var(--N0)' : 'var(--R100)',
-            border: isOptionValid ? '1px solid var(--N200)' : '1px solid var(--R200)',
-            borderRadius: '4px',
-            padding: '1px 5px',
-            maxWidth: '250px',
-            margin: 0,
+            ...(state.isDisabled && {
+                cursor: 'not-allowed',
+                pointerEvents: 'auto',
+            }),
+        }),
+        menu: (base) => ({
+            ...base,
+            overflow: 'hidden',
+            marginBlock: '4px',
+            backgroundColor: 'var(--N0)',
+            border: '1px solid var(--N200)',
+            boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.20)',
+            width: getMenuWidthFromSize(menuSize).width,
+            minWidth: getMenuWidthFromSize(menuSize).minWidth,
+            zIndex: 'var(--select-picker-menu-index)',
+            ...(shouldMenuAlignRight && {
+                right: 0,
+            }),
+        }),
+        menuList: (base) => ({
+            ...base,
+            padding: 0,
+        }),
+        control: (base, state) => ({
+            ...base,
+            minHeight: SELECT_PICKER_CONTROL_SIZE_MAP[size],
+            minWidth: '56px',
+            boxShadow: 'none',
+            backgroundColor: 'var(--N50)',
+            border: `1px solid ${error ? 'var(--R500)' : 'var(--N200)'}`,
+            cursor: state.isDisabled ? 'not-allowed' : 'pointer',
+            padding: '5px 8px',
+            gap: '6px',
+            opacity: state.isDisabled ? 0.5 : 1,
+            flexWrap: 'nowrap',
+            maxHeight: '120px',
+            overflow: 'auto',
+            alignItems: 'safe center',
+            ...(getVariantOverrides(variant)?.control(base, state) || {}),
+
+            [`& .${SELECT_PICKER_VALUE_CONTAINER_CUSTOM_PLACEHOLDER_CLASS}`]: {
+                ...placeholderStyles,
+                display: 'none',
+            },
+
+            '&:hover': {
+                borderColor: state.isDisabled ? 'var(--N200)' : 'var(--N300)',
+            },
+            '&:focus, &:focus-within': {
+                borderColor: state.isDisabled ? 'var(--N200)' : 'var(--B500)',
+                outline: 'none',
+
+                [`& .${SELECT_PICKER_VALUE_CONTAINER_CUSTOM_TEXT_CLASS}`]: {
+                    display: 'none',
+                },
+
+                [`& .${SELECT_PICKER_VALUE_CONTAINER_CUSTOM_PLACEHOLDER_CLASS}`]: state.selectProps.inputValue
+                    ? {}
+                    : {
+                          display: 'block',
+                          position: 'absolute',
+                      },
+            },
+        }),
+        option: (base, state) => ({
+            ...base,
+            color: 'var(--N900)',
+            backgroundColor: getOptionBgColor(state),
+            padding: '6px 8px',
+            cursor: 'pointer',
+            fontSize: '13px',
+            lineHeight: '20px',
+            fontWeight: 400,
+
+            ':active': {
+                backgroundColor: 'var(--N100)',
+            },
+
+            ':hover': {
+                backgroundColor: 'var(--N50)',
+            },
+
+            ...(state.isDisabled && {
+                cursor: 'not-allowed',
+                opacity: 0.5,
+            }),
+        }),
+        dropdownIndicator: (base, state) => ({
+            ...base,
+            ...SELECT_PICKER_ICON_SIZE_MAP[size],
             display: 'flex',
             alignItems: 'center',
-            gap: '4px',
-        }
-    },
-    multiValueLabel: (base) => ({
-        ...base,
-        borderRadius: 0,
-        color: 'var(--N900)',
-        fontSize: '12px',
-        fontWeight: 400,
-        lineHeight: '20px',
-        padding: 0,
-        paddingLeft: 0,
-    }),
-    multiValueRemove: (base) => ({
-        ...base,
-        padding: 0,
-        borderRadius: 0,
-
-        '&:hover': {
-            backgroundColor: 'var(--R100)',
-            color: 'inherit',
-            borderRadius: '2px',
-
-            'svg use': {
-                fill: 'var(--R500)',
-            },
-        },
-    }),
-    loadingMessage: (base) => ({
-        ...base,
-        color: 'var(--N600)',
-    }),
-    noOptionsMessage: (base) => ({
-        ...base,
-        color: 'var(--N600)',
-    }),
-    group: (base) => ({
-        ...base,
-        paddingTop: '4px',
-        paddingBottom: 0,
-
-        '&:first-child': {
-            paddingTop: 0,
-        },
-    }),
-    groupHeading: (base) => ({
-        ...base,
-        fontWeight: 600,
-        fontSize: '12px',
-        color: 'var(--N900)',
-        backgroundColor: 'var(--N100)',
-        marginBottom: 0,
-        padding: '4px 8px',
-        textTransform: 'none',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        position: 'sticky',
-        top: 0,
-        zIndex: 1,
-
-        ...(isGroupHeadingSelectable && {
-            cursor: 'pointer',
+            flexShrink: '0',
+            color: 'var(--N600)',
+            padding: '0',
+            transition: 'all .2s ease',
+            transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
         }),
-    }),
-    input: (base) => ({
-        ...base,
-        margin: 0,
-        padding: 0,
-        color: 'var(--N900)',
-        size: '13px',
-        fontWeight: 400,
-        lineHeight: '20px',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'clip',
-    }),
-    placeholder: (base) => ({
-        ...base,
-        color: 'var(--N500)',
-        fontSize: SELECT_PICKER_FONT_SIZE_MAP[size],
-        lineHeight: '20px',
-        fontWeight: 400,
-        margin: 0,
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-    }),
-    indicatorsContainer: (base) => ({
-        ...base,
-        gap: '4px',
-        flexShrink: 0,
-    }),
-    singleValue: (base, state) => ({
-        ...base,
-        margin: 0,
-        color: 'var(--N900)',
-        fontSize: SELECT_PICKER_FONT_SIZE_MAP[size],
-        fontWeight: 400,
-        lineHeight: '20px',
-        ...(getVariantOverrides(variant)?.singleValue(base, state) || {}),
-    }),
-})
+        clearIndicator: (base) => ({
+            ...base,
+            ...SELECT_PICKER_ICON_SIZE_MAP[size],
+            padding: 0,
+            display: 'flex',
+            alignItems: 'center',
+            flexShrink: '0',
+
+            '&:hover': {
+                backgroundColor: 'transparent',
+                color: 'inherit',
+
+                'svg use': {
+                    fill: 'var(--R500)',
+                },
+            },
+        }),
+        valueContainer: (base, state) => ({
+            ...base,
+            padding: '0',
+            fontWeight: '400',
+            ...(state.selectProps.isMulti && {
+                gap: '6px',
+            }),
+        }),
+        multiValue: (base, state) => {
+            const isOptionValid = getIsOptionValid(state.data)
+
+            return {
+                ...base,
+                background: isOptionValid ? 'var(--N0)' : 'var(--R100)',
+                border: isOptionValid ? '1px solid var(--N200)' : '1px solid var(--R200)',
+                borderRadius: '4px',
+                padding: '1px 5px',
+                maxWidth: '250px',
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+            }
+        },
+        multiValueLabel: (base) => ({
+            ...base,
+            borderRadius: 0,
+            color: 'var(--N900)',
+            fontSize: '12px',
+            fontWeight: 400,
+            lineHeight: '20px',
+            padding: 0,
+            paddingLeft: 0,
+        }),
+        multiValueRemove: (base) => ({
+            ...base,
+            padding: 0,
+            borderRadius: 0,
+
+            '&:hover': {
+                backgroundColor: 'var(--R100)',
+                color: 'inherit',
+                borderRadius: '2px',
+
+                'svg use': {
+                    fill: 'var(--R500)',
+                },
+            },
+        }),
+        loadingMessage: (base) => ({
+            ...base,
+            color: 'var(--N600)',
+        }),
+        noOptionsMessage: (base) => ({
+            ...base,
+            color: 'var(--N600)',
+        }),
+        group: (base) => ({
+            ...base,
+            paddingTop: '4px',
+            paddingBottom: 0,
+
+            '&:first-child': {
+                paddingTop: 0,
+            },
+        }),
+        groupHeading: (base) => ({
+            ...base,
+            fontWeight: 600,
+            fontSize: '12px',
+            color: 'var(--N900)',
+            backgroundColor: 'var(--N100)',
+            marginBottom: 0,
+            padding: '4px 8px',
+            textTransform: 'none',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            position: 'sticky',
+            top: 0,
+            zIndex: 1,
+
+            ...(isGroupHeadingSelectable && {
+                cursor: 'pointer',
+            }),
+        }),
+        input: (base) => ({
+            ...base,
+            margin: 0,
+            padding: 0,
+            color: 'var(--N900)',
+            size: '13px',
+            fontWeight: 400,
+            lineHeight: '20px',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'clip',
+        }),
+        placeholder: (base) => ({
+            ...base,
+            ...placeholderStyles,
+        }),
+        indicatorsContainer: (base) => ({
+            ...base,
+            gap: '4px',
+            flexShrink: 0,
+        }),
+        singleValue: (base, state) => ({
+            ...base,
+            margin: 0,
+            color: 'var(--N900)',
+            fontSize: SELECT_PICKER_FONT_SIZE_MAP[size],
+            fontWeight: 400,
+            lineHeight: '20px',
+            ...(getVariantOverrides(variant)?.singleValue(base, state) || {}),
+        }),
+    }
+}
 
 export const getGroupCheckboxValue = <OptionValue>(
     groupHeadingOptions: readonly SelectPickerOptionType<OptionValue>[],
