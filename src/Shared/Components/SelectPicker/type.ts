@@ -253,7 +253,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean
-              multiSelectProps?: Pick<SelectProps<OptionValue, IsMulti>, 'customDisplayText'> & {
+              multiSelectProps?: Partial<Pick<SelectProps<OptionValue, IsMulti>, 'customDisplayText'>> & {
                   /**
                    * If true, the group heading can be selected
                    *
