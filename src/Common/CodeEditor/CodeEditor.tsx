@@ -55,13 +55,11 @@ function useCodeEditorContext() {
 
 const INITIAL_HEIGHT_WHEN_DYNAMIC_HEIGHT = 100
 
-const yamlConfig = configureMonacoYaml(monaco, { validate: true, isKubernetes: true, completion: false })
-
 monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
     enableSchemaRequest: true,
     schemas: [
         {
-            uri: DEFAULT_JSON_SCHEMA_URI,
+            uri: 'https://json-schema.org/draft-07/schema#',
             fileMatch: ['*'],
             schema: jsonSchema,
         },
@@ -238,21 +236,23 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         }, [height, contentHeight, adjustEditorHeightToContent])
 
         useEffect(() => {
-            yamlConfig.update({
+            if (!validatorSchema) {
+                return
+            }
+            const config = configureMonacoYaml(monaco, {
                 enableSchemaRequest: true,
-                validate: true,
                 isKubernetes,
-                completion: false,
-                schemas: validatorSchema
-                    ? [
-                          {
-                              uri: schemaURI,
-                              fileMatch: ['*'],
-                              schema: validatorSchema,
-                          },
-                      ]
-                    : [],
+                schemas: [
+                    {
+                        uri: schemaURI,
+                        fileMatch: ['*'], // associate with our model
+                        schema: validatorSchema,
+                    },
+                ],
             })
+            return () => {
+                config.dispose()
+            }
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [validatorSchema, schemaURI])
         useEffect(() => {
