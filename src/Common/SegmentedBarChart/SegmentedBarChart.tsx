@@ -45,11 +45,9 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
 
     const renderContent = () => {
         if (isProportional) {
-            return entities?.map((entity) => {
-                if (entity.value === 0) {
-                    return null
-                }
-                return (
+            return entities
+                .filter((entity) => !!entity.value)
+                .map((entity) => (
                     <div className="flexbox-col">
                         {renderValue(entity.value, entity.label)}
                         <div className="flex left dc__gap-6">
@@ -57,10 +55,9 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
                             {renderLabel(entity.label)}
                         </div>
                     </div>
-                )
-            })
+                ))
         }
-        return entities?.map((entity) => (
+        return entities.map((entity) => (
             <div className={`${isProportional ? 'flexbox-col' : 'flexbox  dc__gap-4 dc__align-items-center'}`}>
                 <div className="dot" style={{ backgroundColor: entity.color, width: '10px', height: '10px' }} />
                 {renderValue(entity.value, entity.label)}
