@@ -100,6 +100,7 @@ export interface customEnv {
     FEATURE_DEFAULT_MERGE_STRATEGY?: OverrideMergeStrategyType
     FEATURE_DEFAULT_LANDING_RB_ENABLE?: boolean
     FEATURE_CLUSTER_MAP_ENABLE?: boolean
+    FEATURE_ACTION_AUDIOS_ENABLE?: boolean
 }
 declare global {
     interface Window {
