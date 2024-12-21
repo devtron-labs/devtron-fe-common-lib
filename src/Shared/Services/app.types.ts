@@ -15,7 +15,7 @@
  */
 
 import { OverrideMergeStrategyType } from '@Pages/Applications'
-import { ReleaseTag } from '../../Common'
+import { ReleaseTag, ResponseType } from '../../Common'
 
 interface WebhookDataType {
     id: number
@@ -256,6 +256,8 @@ export interface ConfigMapSecretDataDTO {
     variableSnapshot: Record<string, Record<string, string>>
     resolvedValue: string
 }
+
+export type JobCMSecretDataDTO = ResponseType<Omit<ConfigMapSecretDataDTO['data'], 'isDeletable'>>
 
 export interface PipelineConfigDataDTO {
     resourceType: ConfigResourceType.PipelineStrategy
