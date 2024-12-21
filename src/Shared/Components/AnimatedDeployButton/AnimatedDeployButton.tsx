@@ -7,7 +7,7 @@ import { Button } from '../Button'
 import './animatedDeployButton.scss'
 import { AnimatedDeployButtonProps } from './types'
 
-const AnimatedDeployButton = ({ onButtonClick }: AnimatedDeployButtonProps) => {
+const AnimatedDeployButton = ({ isVirtualEnvironment, onButtonClick }: AnimatedDeployButtonProps) => {
     const audioRef = useRef<HTMLAudioElement>(null)
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null)
     const isAudioEnabled: boolean = window._env_.FEATURE_ACTION_AUDIOS_ENABLE
@@ -44,14 +44,14 @@ const AnimatedDeployButton = ({ onButtonClick }: AnimatedDeployButtonProps) => {
         <motion.div whileHover="hover" className={`${clicked ? 'hide-button-text' : ''}`}>
             <Button
                 dataTestId="cd-trigger-deploy-button"
-                text="Deploy"
+                text={`Deploy${isVirtualEnvironment ? ' to isolated env' : ''}`}
                 startIcon={
                     <motion.div
                         variants={svgMotionVariants}
                         animate={
                             clicked
                                 ? {
-                                      x: 100,
+                                      x: 200,
                                       rotate: 45,
                                       transition: {
                                           duration: 0.5,
