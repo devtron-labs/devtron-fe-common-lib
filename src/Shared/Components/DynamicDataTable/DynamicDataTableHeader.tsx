@@ -37,7 +37,7 @@ export const DynamicDataTableHeader = <K extends string, CustomStateType = Recor
     const handleSorting = (key: K) => () => sortingConfig?.handleSorting(key)
 
     // RENDERERS
-    const renderHeaderCell = ({ key, label, isSortable }: DynamicDataTableHeaderType<K>) => (
+    const renderHeaderCell = ({ key, label, isSortable, renderAdditionalContent }: DynamicDataTableHeaderType<K>) => (
         <div
             key={`${key}-header`}
             className={`bcn-50 py-6 px-8 flexbox dc__content-space dc__align-items-center ${(!isActionButtonAtTheStart && (key === firstHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : '')) || ''} ${key === lastHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}` : ''}`}
@@ -55,12 +55,14 @@ export const DynamicDataTableHeader = <K extends string, CustomStateType = Recor
                             ['--rotateBy' as string]: sortingConfig?.sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
                         }}
                     />
+                    {typeof renderAdditionalContent === 'function' && renderAdditionalContent()}
                 </button>
             ) : (
                 <div
-                    className={`cn-7 fs-12 lh-20 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
+                    className={`cn-7 fs-12 lh-20 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-4 ${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
                 >
                     {label}
+                    {typeof renderAdditionalContent === 'function' && renderAdditionalContent()}
                 </div>
             )}
             {!isActionDisabled && key === firstHeaderKey && (

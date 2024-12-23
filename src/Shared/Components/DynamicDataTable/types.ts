@@ -39,6 +39,8 @@ export type DynamicDataTableHeaderType<K extends string> = {
     isSortable?: boolean
     /** An optional boolean to control the visibility of the column. */
     isHidden?: boolean
+    /** An optional boolean to show the column */
+    renderAdditionalContent?: () => ReactNode
 }
 
 export enum DynamicDataTableRowDataType {
