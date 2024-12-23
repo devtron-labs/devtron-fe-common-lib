@@ -40,7 +40,7 @@ import {
     CREATE_PROFILE_BASE_VALUE,
     BUILD_INFRA_DEFAULT_PLATFORM_NAME,
     BUILD_INFRA_LATEST_API_VERSION,
-    INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X_LIST,
+    INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X,
 } from './constants'
 import { getUniqueId } from '../../../Shared'
 
@@ -301,9 +301,9 @@ export const getBuildInfraProfilePayload = (
     // Deleting un-supported locators in case target platform is not default platform
     Object.entries(configurations).forEach(([platformName, platformConfigurations]) => {
         if (platformName !== BUILD_INFRA_DEFAULT_PLATFORM_NAME) {
-            INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X_LIST.forEach((locator) => {
-                configurations[platformName] = platformConfigurations.filter((config) => config.key !== locator)
-            })
+            configurations[platformName] = platformConfigurations.filter(
+                (config) => !INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X[config.key],
+            )
         }
     })
 
