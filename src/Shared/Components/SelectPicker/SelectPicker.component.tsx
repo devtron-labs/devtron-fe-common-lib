@@ -23,7 +23,7 @@ import {
     Props as ReactSelectProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { ReactElement, useCallback, useMemo } from 'react'
+import { ReactElement, useCallback, useMemo, useState } from 'react'
 
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
@@ -218,6 +218,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     shouldHideMenu = false,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
+    const [isFocussed, setIsFocussed] = useState(false)
     const {
         inputId,
         required,
@@ -280,9 +281,10 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                 {...valueContainerProps}
                 showSelectedOptionsCount={showSelectedOptionsCount}
                 customSelectedOptionsCount={customSelectedOptionsCount}
+                isFocussed={isFocussed}
             />
         ),
-        [showSelectedOptionsCount, customSelectedOptionsCount],
+        [showSelectedOptionsCount, customSelectedOptionsCount, isFocussed],
     )
 
     const renderOption = useCallback(
@@ -336,6 +338,16 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             e.preventDefault()
         }
         props.onKeyDown?.(e)
+    }
+
+    const handleFocus: ReactSelectProps['onFocus'] = () => {
+        setIsFocussed(true)
+    }
+
+    const handleBlur: ReactSelectProps['onFocus'] = (e) => {
+        setIsFocussed(false)
+
+        props.onBlur?.(e)
     }
 
     const commonProps = useMemo(
@@ -431,6 +443,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             formatCreateLabel={formatCreateLabel}
                             onKeyDown={handleKeyDown}
                             customDisplayText={customDisplayText}
+                            onFocus={handleFocus}
+                            onBlur={handleBlur}
+                            controlShouldRenderValue={controlShouldRenderValue}
                         />
                     </div>
                 </ConditionalWrap>

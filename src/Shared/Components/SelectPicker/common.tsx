@@ -30,7 +30,7 @@ import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, Children } from 'react'
 import { noop } from '@Common/Helper'
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { Checkbox } from '@Common/Checkbox'
@@ -111,34 +111,42 @@ export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPick
 export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>({
     showSelectedOptionsCount,
     customSelectedOptionsCount,
+    isFocussed,
     ...props
 }: ValueContainerProps<SelectPickerOptionType<OptionValue>> &
-    Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount' | 'customSelectedOptionsCount'>) => {
+    Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount' | 'customSelectedOptionsCount'> & {
+        isFocussed: boolean
+    }) => {
     const {
         getValue,
-        selectProps: { customDisplayText, placeholder },
+        selectProps: { customDisplayText },
         children,
     } = props
     const selectedOptionsLength = isNullOrUndefined(customSelectedOptionsCount)
         ? (getValue() ?? []).length
         : customSelectedOptionsCount
+    const childrenLength = Children.count(children)
 
     return (
         <div className="flex left dc__gap-8 flex-grow-1">
             <div className="flex left flex-grow-1">
                 <components.ValueContainer {...props}>
-                    {customDisplayText && selectedOptionsLength > 0 ? (
+                    {customDisplayText && selectedOptionsLength > 0 && !isFocussed ? (
                         <>
                             <p
                                 className={`m-0 fs-13 fw-4 lh-20 cn-9 dc__truncate ${SELECT_PICKER_VALUE_CONTAINER_CUSTOM_TEXT_CLASS}`}
                             >
                                 {customDisplayText}
                             </p>
-                            <p className={`m-0 ${SELECT_PICKER_VALUE_CONTAINER_CUSTOM_PLACEHOLDER_CLASS}`}>
-                                {placeholder}
-                            </p>
-                            {/* @ts-ignore */}
-                            {children?.at(-1)}
+                            <div className="dc__position-abs">
+                                {Children.map(children, (child, index) => {
+                                    if (index === childrenLength - 1) {
+                                        return child
+                                    }
+
+                                    return null
+                                })}
+                            </div>
                         </>
                     ) : (
                         children
