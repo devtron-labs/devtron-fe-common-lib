@@ -85,7 +85,7 @@ const InfoColourBar = ({
             const { heading, description } = textConfig
 
             return (
-                <div className="flexbox-col dc__gap-4">
+                <div className="flexbox-col">
                     {heading && <h6 className="m-0 cn-9 fs-13 fw-6 lh-20 dc__truncate">{heading}</h6>}
 
                     <Tooltip content={description}>
