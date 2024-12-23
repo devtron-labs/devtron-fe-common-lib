@@ -85,6 +85,10 @@
             padding: 8px !important;
         }
 
+        &__select-picker__menu-portal {
+            z-index: 3 !important;
+        }
+
         &:has(.select-picker-hidden) .dynamic-data-table__select-text-area {
             padding-left: 8px;
         }
