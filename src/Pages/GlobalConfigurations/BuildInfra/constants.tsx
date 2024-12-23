@@ -252,3 +252,11 @@ export const ACTION_TO_PERSISTED_VALUE_MAP: Readonly<
 
 export const DEFAULT_TOLERANCE_EFFECT = BuildInfraToleranceEffectType.NO_SCHEDULE
 export const DEFAULT_TOLERANCE_OPERATOR = BuildInfraToleranceOperatorType.EQUALS
+
+export const INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X: Partial<Record<BuildInfraConfigTypes, true>> = {
+    [BuildInfraConfigTypes.BUILD_TIMEOUT]: true,
+}
+
+export const INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X_LIST: Readonly<BuildInfraConfigTypes[]> = Object.keys(
+    INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X,
+) as BuildInfraConfigTypes[]
