@@ -19,6 +19,9 @@ const AnimatedDeployButton = ({ isVirtualEnvironment, onButtonClick }: AnimatedD
     }
 
     const handleButtonClick = async (e: SyntheticEvent) => {
+        if (clicked) {
+            return
+        }
         if (isAudioEnabled && audioRef.current) {
             try {
                 await audioRef.current.play()
