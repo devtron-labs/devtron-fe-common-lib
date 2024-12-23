@@ -45,7 +45,7 @@ import {
 import { getUniqueId } from '../../../Shared'
 
 export const parsePlatformConfigIntoValue = (
-    configuration: BuildInfraConfigInfoType,
+    configuration: BuildInfraConfigValuesType,
     addUniqueId: boolean = true,
 ): BuildInfraConfigValuesType => {
     switch (configuration?.key) {
