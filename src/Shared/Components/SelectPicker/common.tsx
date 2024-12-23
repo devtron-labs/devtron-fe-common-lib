@@ -40,10 +40,6 @@ import { Tooltip } from '@Common/Tooltip'
 import { TooltipProps } from '@Common/Tooltip/types'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
-import {
-    SELECT_PICKER_VALUE_CONTAINER_CUSTOM_PLACEHOLDER_CLASS,
-    SELECT_PICKER_VALUE_CONTAINER_CUSTOM_TEXT_CLASS,
-} from './constants'
 
 const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
     if (tooltipProps) {
@@ -133,11 +129,7 @@ export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>
                 <components.ValueContainer {...props}>
                     {customDisplayText && selectedOptionsLength > 0 && !isFocussed ? (
                         <>
-                            <p
-                                className={`m-0 fs-13 fw-4 lh-20 cn-9 dc__truncate ${SELECT_PICKER_VALUE_CONTAINER_CUSTOM_TEXT_CLASS}`}
-                            >
-                                {customDisplayText}
-                            </p>
+                            <p className="m-0 fs-13 fw-4 lh-20 cn-9 dc__truncate">{customDisplayText}</p>
                             <div className="dc__position-abs">
                                 {Children.map(children, (child, index) => {
                                     if (index === childrenLength - 1) {

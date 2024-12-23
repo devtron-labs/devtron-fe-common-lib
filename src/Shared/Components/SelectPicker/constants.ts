@@ -19,7 +19,3 @@ export const SELECT_PICKER_CONTROL_SIZE_MAP: Record<SelectPickerProps['size'], C
     [ComponentSizeType.medium]: 'auto',
     [ComponentSizeType.large]: '36px',
 }
-
-export const SELECT_PICKER_VALUE_CONTAINER_CUSTOM_TEXT_CLASS = 'select-picker__value-container-custom-text'
-export const SELECT_PICKER_VALUE_CONTAINER_CUSTOM_PLACEHOLDER_CLASS =
-    'select-picker__value-container-custom-placeholder'
