@@ -423,7 +423,7 @@ const useBuildInfraForm = ({
                 infraConfigTypes?.forEach((infraConfigType) => {
                     currentConfiguration[infraConfigType] = {
                         ...currentConfiguration[infraConfigType],
-                        ...lastSavedConfiguration[infraConfigType].defaultValue,
+                        ...lastSavedConfiguration[infraConfigType]?.defaultValue,
                         active: false,
                     } as BuildInfraConfigurationType
 
@@ -505,8 +505,9 @@ const useBuildInfraForm = ({
                     originalPlatformConfig,
                 ).reduce<BuildInfraConfigurationMapType>(
                     (acc, [configKey, configValue]: [BuildInfraConfigTypes, BuildInfraConfigurationType]) => {
-                        const newDefaultValue = newPlatformFallbackConfig[configKey].defaultValue
-                        const newConfigValues = configValue.active ? {} : newDefaultValue
+                        // Would be null incase of not supported by buildX
+                        const newDefaultValue = newPlatformFallbackConfig[configKey]?.defaultValue
+                        const newConfigValues = configValue?.active ? {} : newDefaultValue
 
                         acc[configKey] = {
                             ...configValue,
