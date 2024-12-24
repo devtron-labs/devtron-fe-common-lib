@@ -1,8 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { generatePath, useRouteMatch } from 'react-router-dom'
 
 import { DeploymentConfigDiff, DeploymentConfigDiffProps } from '@Shared/Components/DeploymentConfigDiff'
-import { SortingOrder } from '@Common/Constants'
+import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '@Common/Constants'
 import { useUrlFilters } from '@Common/Hooks'
 import {
     getSelectPickerOptionByValue,
@@ -10,23 +10,25 @@ import {
     SelectPickerVariantType,
 } from '@Shared/Components/SelectPicker'
 import { ComponentSizeType } from '@Shared/constants'
+import { Button, ButtonVariantType } from '@Shared/Components/Button'
 
 import {
     DeploymentHistoryDiffDetailedProps,
     DeploymentHistoryConfigDiffQueryParams,
     DeploymentHistoryConfigDiffRouteParams,
 } from './types'
-import { getPipelineDeploymentsOptions, parseDeploymentHistoryDiffSearchParams } from './utils'
+import { getPipelineDeployments, getPipelineDeploymentsOptions, parseDeploymentHistoryDiffSearchParams } from './utils'
+import { getTriggerHistory } from '../service'
 
 export const DeploymentHistoryConfigDiffCompare = ({
     envName,
     setFullScreenView,
-    pipelineDeployments,
+    pipelineDeployments: initialPipelineDeployments,
     wfrId,
     previousWfrId,
     convertVariables,
     setConvertVariables,
-    triggerHistory,
+    triggerHistory: initialTriggerHistory,
     renderRunSource,
     resourceId,
     isCompareDeploymentConfigNotAvailable,
@@ -34,7 +36,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
 }: DeploymentHistoryDiffDetailedProps) => {
     // HOOKS
     const { path, params } = useRouteMatch<DeploymentHistoryConfigDiffRouteParams>()
-    const { resourceType, resourceName } = params
+    const { resourceType, resourceName, appId, envId } = params
 
     // URL FILTERS
     const { compareWfrId, updateSearchParams, sortBy, sortOrder, handleSorting } = useUrlFilters<
@@ -43,6 +45,14 @@ export const DeploymentHistoryConfigDiffCompare = ({
     >({
         parseSearchParams: parseDeploymentHistoryDiffSearchParams(previousWfrId),
     })
+
+    // STATES
+    const [triggerHistory, setTriggerHistory] = useState({
+        isLoading: false,
+        data: initialTriggerHistory,
+        hasMore: initialTriggerHistory.size >= DEFAULT_BASE_PAGE_SIZE,
+    })
+    const [pipelineDeployments, setPipelineDeployments] = useState(initialPipelineDeployments)
 
     useEffect(() => {
         // Default Search Params Update
@@ -56,11 +66,53 @@ export const DeploymentHistoryConfigDiffCompare = ({
         }
     }, [])
 
+    // METHODS
+    const fetchDeploymentHistory = async (paginationOffset: number) => {
+        setTriggerHistory({ ...triggerHistory, isLoading: true })
+
+        try {
+            const { result } = await getTriggerHistory({
+                appId: +appId,
+                envId: +envId,
+                pagination: { offset: paginationOffset, size: DEFAULT_BASE_PAGE_SIZE },
+            })
+            const nextTriggerHistory = new Map((result.cdWorkflows || []).map((item) => [item.id, item]))
+            const updatedTriggerHistory = new Map([...triggerHistory.data, ...nextTriggerHistory])
+
+            setTriggerHistory({
+                isLoading: false,
+                data: updatedTriggerHistory,
+                hasMore: result.cdWorkflows?.length === DEFAULT_BASE_PAGE_SIZE,
+            })
+            setPipelineDeployments(getPipelineDeployments(updatedTriggerHistory))
+        } catch {
+            setTriggerHistory({ ...triggerHistory, isLoading: false })
+        }
+    }
+
+    const handleLoadMore = () => fetchDeploymentHistory(triggerHistory.data.size)
+
+    // RENDERERS
+    const renderOptionsFooter = () =>
+        triggerHistory.hasMore ? (
+            <div className="px-4">
+                <Button
+                    isLoading={triggerHistory.isLoading}
+                    onClick={handleLoadMore}
+                    dataTestId="load-more-previous-deployments"
+                    variant={ButtonVariantType.borderLess}
+                    text="Load more"
+                    size={ComponentSizeType.small}
+                    fullWidth
+                />
+            </div>
+        ) : null
+
     // DEPLOYMENT_CONFIG_DIFF_PROPS
     const { currentDeployment, pipelineDeploymentsOptions } = getPipelineDeploymentsOptions({
         pipelineDeployments,
         wfrId,
-        triggerHistory,
+        triggerHistory: triggerHistory.data,
         renderRunSource,
         resourceId,
     })
@@ -88,6 +140,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
                           onChange: deploymentSelectorOnChange,
                           showSelectedOptionIcon: false,
                           menuSize: ComponentSizeType.large,
+                          renderOptionsFooter,
                       },
                   },
               ]
