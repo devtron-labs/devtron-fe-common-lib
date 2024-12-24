@@ -15,7 +15,7 @@
  */
 
 import { FormEvent, FunctionComponent, ReactNode } from 'react'
-import { BUILD_INFRA_INHERIT_ACTIONS } from '@Pages/index'
+import { BUILD_INFRA_INHERIT_ACTIONS, useBuildInfraForm } from '@Pages/index'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
 import { ValidationResponseType } from '../../../Shared'
 import { ServerErrors } from '../../../Common'
@@ -538,3 +538,9 @@ export type RequestLimitConfigType = Extract<
     | BuildInfraConfigTypes.MEMORY_LIMIT
     | BuildInfraConfigTypes.MEMORY_REQUEST
 >
+
+export interface ValidateNodeSelectorParamsType
+    extends Pick<ReturnType<typeof useBuildInfraForm>, 'profileInputErrors'> {
+    selector: BuildInfraNodeSelectorValueType
+    existingKeys: string[]
+}

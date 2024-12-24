@@ -32,6 +32,7 @@ import {
     updateBuildInfraProfile,
     UseBuildInfraFormProps,
     UseBuildInfraFormResponseType,
+    ValidateNodeSelectorParamsType,
     ValidateRequestLimitResponseType,
     ValidateRequestLimitType,
 } from '@Pages/index'
@@ -132,8 +133,10 @@ const validateLabelKeyWithNoDuplicates = (
         return existingValidations
     }
 
-    const isDuplicate = existingKeys.includes(key)
-    if (isDuplicate) {
+    // existing keys would include the key itself
+    const keyCount = existingKeys.filter((existingKey) => existingKey === key).length
+
+    if (keyCount > 1) {
         return {
             isValid: false,
             messages: ['Key should be unique'],
@@ -238,6 +241,44 @@ const validateRequestLimit = ({
     }
 
     return requestLimitValidationResponse
+}
+
+const validateNodeSelector = ({
+    selector: { key, value, id },
+    existingKeys,
+    profileInputErrors: currentInputErrors,
+}: ValidateNodeSelectorParamsType) => {
+    const keyErrorMessages = validateLabelKeyWithNoDuplicates(key, existingKeys).messages
+    const valueErrorMessages = validateLabelValue(value).messages
+
+    const isEmptyRow = !key && !value
+    const hasError = !isEmptyRow && (keyErrorMessages.length > 0 || valueErrorMessages.length > 0)
+
+    if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]?.[id]) {
+        if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]) {
+            // eslint-disable-next-line no-param-reassign
+            currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = {}
+        }
+        // eslint-disable-next-line no-param-reassign
+        currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {}
+    }
+
+    // eslint-disable-next-line no-param-reassign
+    currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {
+        ...(keyErrorMessages.length > 0 && { [NodeSelectorHeaderType.KEY]: keyErrorMessages }),
+        ...(valueErrorMessages.length > 0 && { [NodeSelectorHeaderType.VALUE]: valueErrorMessages }),
+    }
+
+    if (!hasError) {
+        // Would delete id, and if not key left then delete key
+        // eslint-disable-next-line no-param-reassign
+        delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]
+
+        if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]).length === 0) {
+            // eslint-disable-next-line no-param-reassign
+            currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
+        }
+    }
 }
 
 const useBuildInfraForm = ({
@@ -552,13 +593,6 @@ const useBuildInfraForm = ({
 
                 const { id, key, value } = data
 
-                const existingKeys = currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value
-                    .filter((selector) => selector.key && selector.id !== id)
-                    .map((selector) => selector.key)
-
-                const keyErrorMessages = validateLabelKeyWithNoDuplicates(key, existingKeys).messages
-                const valueErrorMessages = validateLabelValue(value).messages
-
                 const nodeSelector = currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.find(
                     (selector) => selector.id === id,
                 )
@@ -574,30 +608,18 @@ const useBuildInfraForm = ({
                     nodeSelector.value = value
                 }
 
-                const isEmptyRow = !key && !value
+                // Will validate all the keys since checking duplicates
+                const existingKeys = currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.map(
+                    (selector) => selector.key,
+                )
 
-                const hasError = !isEmptyRow && (keyErrorMessages.length > 0 || valueErrorMessages.length > 0)
-
-                if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]?.[id]) {
-                    if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]) {
-                        currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = {}
-                    }
-                    currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {}
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {
-                    ...(keyErrorMessages.length > 0 && { [NodeSelectorHeaderType.KEY]: keyErrorMessages }),
-                    ...(valueErrorMessages.length > 0 && { [NodeSelectorHeaderType.VALUE]: valueErrorMessages }),
-                }
-
-                if (!hasError) {
-                    // Would delete id, and if not key left then delete key
-                    delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]
-                    if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]).length === 0) {
-                        currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
-                    }
-                }
-
+                currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.forEach((selector) => {
+                    validateNodeSelector({
+                        selector,
+                        existingKeys,
+                        profileInputErrors: currentInputErrors,
+                    })
+                })
                 break
             }
 

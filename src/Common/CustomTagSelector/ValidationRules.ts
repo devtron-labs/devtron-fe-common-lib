@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { validateLabelKey, validateTagValue } from '@Shared/validations'
+import { validateLabelKey, validateLabelValue } from '@Shared/validations'
 
 export class ValidationRules {
     propagateTagKey: typeof validateLabelKey = (key) => {
@@ -26,7 +26,7 @@ export class ValidationRules {
         if (!value) {
             errorList.push('Value is required')
         } else if (!key.startsWith('devtron.ai/')) {
-            errorList.push(...validateTagValue(value))
+            errorList.push(...validateLabelValue(value))
         }
         return { isValid: errorList.length === 0, messages: errorList }
     }

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
@@ -38,10 +38,6 @@ export const DeploymentConfigDiffMain = ({
     // STATES
     const [expandedView, setExpandedView] = useState<Record<string | number, boolean>>({})
 
-    // REFS
-    /** Ref to track if the element should scroll into view after expanding */
-    const scrollIntoViewAfterExpand = useRef(false)
-
     const handleAccordionClick = (id: string) => () => {
         setExpandedView({
             ...expandedView,
@@ -52,11 +48,12 @@ export const DeploymentConfigDiffMain = ({
     const onTransitionEnd =
         (id: string): DeploymentConfigDiffAccordionProps['onTransitionEnd'] =>
         (e) => {
-            if (scrollIntoViewAfterExpand.current && scrollIntoViewId === id && e.target === e.currentTarget) {
-                const element = document.querySelector(`#${scrollIntoViewId}`)
-                element?.scrollIntoView({ block: 'start' })
-                // Reset ref after scrolling into view
-                scrollIntoViewAfterExpand.current = false
+            if (scrollIntoViewId === id && e.target === e.currentTarget) {
+                // Using setTimeout to ensure React state updates and DOM rendering are complete before scrolling to element.
+                setTimeout(() => {
+                    const element = document.querySelector(`#${scrollIntoViewId}`)
+                    element?.scrollIntoView({ block: 'start' })
+                })
             }
         }
 
@@ -76,7 +73,6 @@ export const DeploymentConfigDiffMain = ({
 
     useEffect(() => {
         if (scrollIntoViewId) {
-            scrollIntoViewAfterExpand.current = true
             setExpandedView((prev) => ({ ...prev, [scrollIntoViewId]: true }))
         }
     }, [scrollIntoViewId])
