@@ -15,4 +15,5 @@
  */
 
 export { default as CodeEditor } from './CodeEditor'
+export { default as JSON_SCHEMA_07 } from './jsonSchema.json' assert { type: 'json' }
 export * from './types'

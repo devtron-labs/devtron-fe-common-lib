@@ -41,7 +41,6 @@ import {
 } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '../Constants'
-import jsonSchema from './jsonSchema.json' assert { type: 'json' }
 
 const CodeEditorContext = React.createContext(null)
 
@@ -54,20 +53,6 @@ function useCodeEditorContext() {
 }
 
 const INITIAL_HEIGHT_WHEN_DYNAMIC_HEIGHT = 100
-
-monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-    enableSchemaRequest: true,
-    schemas: [
-        {
-            uri: 'https://json-schema.org/draft-07/schema#',
-            fileMatch: ['*'],
-            schema: jsonSchema,
-        },
-    ],
-    validate: true,
-    trailingCommas: 'error',
-    schemaValidation: 'error',
-})
 
 monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
     base: 'vs-dark',
@@ -236,6 +221,25 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         }, [height, contentHeight, adjustEditorHeightToContent])
 
         useEffect(() => {
+            if (mode === MODES.JSON) {
+                monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+                    enableSchemaRequest: true,
+                    schemas: validatorSchema ? [
+                        {
+                            uri: 'https://json-schema.org/draft-07/schema#',
+                            fileMatch: ['*'],
+                            schema: validatorSchema,
+                        },
+                    ] : [],
+                    validate: true,
+                    trailingCommas: 'error',
+                    schemaValidation: 'error',
+                })
+
+                return
+            }
+
+            // TODO: maybe enable basic yaml validation when schema is not available
             if (!validatorSchema) {
                 return
             }
@@ -254,7 +258,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 config.dispose()
             }
             // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [validatorSchema, schemaURI])
+        }, [validatorSchema, schemaURI, mode])
         useEffect(() => {
             if (!editorRef.current) {
                 return
