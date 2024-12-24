@@ -24,6 +24,7 @@ import {
     RegistryType,
     RuntimePluginVariables,
     Severity,
+    PolicyBlockInfo,
 } from '../Shared'
 import {
     ACTION_STATE,
@@ -555,6 +556,10 @@ export interface CDMaterialType {
      * Would currently only be received in case of release
      */
     appWorkflowId: number
+    /**
+     * Denotes trigger blocking due to mandatory tags, (might be used for plugins and other features in future)
+     */
+    deploymentBlockedState?: PolicyBlockInfo
 }
 
 export enum CDMaterialServiceEnum {
@@ -595,6 +600,17 @@ export interface CDMaterialServiceQueryParams {
 export interface DownstreamNodesEnvironmentsType {
     environmentId: number
     environmentName: string
+}
+
+export enum TriggerBlockType {
+    MANDATORY_TAG = 'mandatory-tags',
+    MANDATORY_PLUGIN = 'mandatory-plugins',
+    SECURITY_SCAN = 'security-scan',
+}
+
+export interface TriggerBlockedInfo {
+    blockedBy: TriggerBlockType
+    blockedReason?: string
 }
 
 export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTriggerBlocked' | 'pluginBlockState'> {
@@ -659,6 +675,7 @@ export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTr
     downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
     cipipelineId?: number
     isDeploymentBlocked?: boolean
+    triggerBlockedInfo?: TriggerBlockedInfo
 }
 
 export enum DeploymentAppTypes {
@@ -729,6 +746,7 @@ export interface CDMaterialsMetaInfo {
      * This is the ID of user that has request the material
      */
     requestedUserId: number
+    deploymentBlockedState?: PolicyBlockInfo
     runtimeParams: RuntimePluginVariables[]
 }
 
@@ -821,7 +839,7 @@ export interface Strategy {
     default?: boolean
 }
 
-export interface CDStage {
+export interface CDStage extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo' | 'isTriggerBlocked' >> {
     status: string
     name: string
     triggerType: 'AUTOMATIC' | 'MANUAL'
@@ -833,7 +851,7 @@ export interface CDStageConfigMapSecretNames {
     secrets: any[]
 }
 
-export interface PrePostDeployStageType extends MandatoryPluginBaseStateType {
+export interface PrePostDeployStageType extends MandatoryPluginBaseStateType, Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     isValid: boolean
     steps: TaskErrorObj[]
     triggerType: string
@@ -841,7 +859,7 @@ export interface PrePostDeployStageType extends MandatoryPluginBaseStateType {
     status: string
 }
 
-export interface CdPipeline {
+export interface CdPipeline extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     id: number
     environmentId: number
     environmentName?: string
@@ -873,6 +891,7 @@ export interface CdPipeline {
     isProdEnv?: boolean
     isGitOpsRepoNotConfigured?: boolean
     isDeploymentBlocked?: boolean
+    isTriggerBlocked?: boolean
 }
 
 export interface ExternalCiConfig {

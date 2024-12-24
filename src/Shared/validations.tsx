@@ -45,7 +45,7 @@ const DISPLAY_NAME_CONSTRAINTS = {
     MIN_LIMIT: 3,
 }
 
-export const validateTagValue = (value: string): string[] => {
+export const validateLabelValue = (value: string): string[] => {
     const errorList = []
     if (value.length > 63) {
         errorList.push('Can be max 63 characters')
@@ -76,7 +76,7 @@ export const validateLabelKey = (
             errorList.push('Key: Max 1 ( / ) allowed')
         } else if (noOfSlashInKey === 1) {
             const [prefix, name] = key.split('/')
-            errorList.push(...validateTagValue(name).map((error) => `Name: ${error}`))
+            errorList.push(...validateLabelValue(name).map((error) => `Name: ${error}`))
             if (prefix.length > 253) {
                 errorList.push('Prefix: Can be max 253 characters')
             }
@@ -85,7 +85,7 @@ export const validateLabelKey = (
                 errorList.push('Prefix: Must be a DNS subdomain (a series of DNS labels separated by dots (.)')
             }
         } else {
-            errorList.push(...validateTagValue(key).map((error) => `Name: ${error}`))
+            errorList.push(...validateLabelValue(key).map((error) => `Name: ${error}`))
         }
     }
     return { isValid: errorList.length === 0, messages: errorList }
