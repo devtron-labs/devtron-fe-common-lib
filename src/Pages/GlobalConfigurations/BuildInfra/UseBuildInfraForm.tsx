@@ -313,6 +313,18 @@ const useBuildInfraForm = ({
         }
     }, [profileResponse, isLoading])
 
+    const getReservedPlatformNameMap = (currentInputConfigurations: Record<string, unknown>): Record<string, true> => {
+        const currentConfigPlatforms = Object.keys(currentInputConfigurations || {})
+        const originalConfigPlatforms = Object.keys(profileResponse?.profile?.configurations || {})
+
+        return currentConfigPlatforms
+            .concat(originalConfigPlatforms)
+            .reduce<Record<string, true>>((acc, platformName) => {
+                acc[platformName] = true
+                return acc
+            }, {})
+    }
+
     // NOTE: Currently sending and receiving values as string, but will parse it to number for payload
     const handleProfileInputChange = ({ action, data }: HandleProfileInputChangeType) => {
         const currentInput = structuredClone(profileInput)
@@ -437,7 +449,10 @@ const useBuildInfraForm = ({
                 // If no target platform is given error will be '' so that we won;t show error but capture it
                 currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM] = !targetPlatform
                     ? ''
-                    : validateTargetPlatformName(targetPlatform, currentInput.configurations).message
+                    : validateTargetPlatformName(
+                          targetPlatform,
+                          getReservedPlatformNameMap(currentInput.configurations),
+                      ).message
 
                 currentInput.configurations[targetPlatform] =
                     profileResponse.fallbackPlatformConfigurationMap[targetPlatform] ||
@@ -493,7 +508,10 @@ const useBuildInfraForm = ({
                 }
 
                 currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM] =
-                    validateTargetPlatformName(newPlatformName, currentInput.configurations).message
+                    validateTargetPlatformName(
+                        newPlatformName,
+                        getReservedPlatformNameMap(currentInput.configurations),
+                    ).message
 
                 const newPlatformFallbackConfig =
                     profileResponse.fallbackPlatformConfigurationMap[newPlatformName] ||
