@@ -15,16 +15,15 @@
  */
 
 import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import * as monaco from 'monaco-editor'
+import { configureMonacoYaml } from 'monaco-yaml'
 import MonacoEditor, { MonacoDiffEditor } from 'react-monaco-editor'
 import ReactGA from 'react-ga4'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import { configureMonacoYaml } from 'monaco-yaml'
 
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-error-exclamation.svg'
 import './codeEditor.scss'
-import 'monaco-editor'
 
 import { cleanKubeManifest, useEffectAfterMount, useJsonYaml } from '../Helper'
 import { useWindowSize } from '../Hooks'
@@ -54,6 +53,50 @@ function useCodeEditorContext() {
 }
 
 const INITIAL_HEIGHT_WHEN_DYNAMIC_HEIGHT = 100
+
+monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [
+        // @ts-ignore
+        { background: '#0B0F22' },
+    ],
+    colors: {
+        'editor.background': '#0B0F22',
+    },
+})
+
+monaco.editor.defineTheme(CodeEditorThemesKeys.networkStatusInterface, {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [
+        // @ts-ignore
+        { background: '#1A1A1A' },
+    ],
+    colors: {
+        'editor.background': '#1A1A1A',
+    },
+})
+
+monaco.editor.defineTheme(CodeEditorThemesKeys.deleteDraft, {
+    base: 'vs',
+    inherit: true,
+    rules: [],
+    colors: {
+        'diffEditor.insertedTextBackground': '#ffd4d1',
+        'diffEditor.removedTextBackground': '#ffffff33',
+    },
+})
+
+monaco.editor.defineTheme(CodeEditorThemesKeys.unpublished, {
+    base: 'vs',
+    inherit: true,
+    rules: [],
+    colors: {
+        'diffEditor.insertedTextBackground': '#eaf1dd',
+        'diffEditor.removedTextBackground': '#ffffff33',
+    },
+})
 
 const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(
     ({
@@ -104,49 +147,6 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         // TODO: upgrade to 0.56.2 to remove this
         const onChangeRef = useRef(onChange)
         onChangeRef.current = onChange
-        monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
-            base: 'vs-dark',
-            inherit: true,
-            rules: [
-                // @ts-ignore
-                { background: '#0B0F22' },
-            ],
-            colors: {
-                'editor.background': '#0B0F22',
-            },
-        })
-
-        monaco.editor.defineTheme(CodeEditorThemesKeys.networkStatusInterface, {
-            base: 'vs-dark',
-            inherit: true,
-            rules: [
-                // @ts-ignore
-                { background: '#1A1A1A' },
-            ],
-            colors: {
-                'editor.background': '#1A1A1A',
-            },
-        })
-
-        monaco.editor.defineTheme(CodeEditorThemesKeys.deleteDraft, {
-            base: 'vs',
-            inherit: true,
-            rules: [],
-            colors: {
-                'diffEditor.insertedTextBackground': '#ffd4d1',
-                'diffEditor.removedTextBackground': '#ffffff33',
-            },
-        })
-
-        monaco.editor.defineTheme(CodeEditorThemesKeys.unpublished, {
-            base: 'vs',
-            inherit: true,
-            rules: [],
-            colors: {
-                'diffEditor.insertedTextBackground': '#eaf1dd',
-                'diffEditor.removedTextBackground': '#ffffff33',
-            },
-        })
 
         useEffect(() => {
             const rule = !disableSearch
@@ -221,6 +221,25 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         }, [height, contentHeight, adjustEditorHeightToContent])
 
         useEffect(() => {
+            if (mode === MODES.JSON) {
+                monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+                    enableSchemaRequest: true,
+                    schemas: validatorSchema ? [
+                        {
+                            uri: 'https://json-schema.org/draft-07/schema#',
+                            fileMatch: ['*'],
+                            schema: validatorSchema,
+                        },
+                    ] : [],
+                    validate: true,
+                    trailingCommas: 'error',
+                    schemaValidation: 'error',
+                })
+
+                return
+            }
+
+            // TODO: maybe enable basic yaml validation when schema is not available
             if (!validatorSchema) {
                 return
             }
@@ -239,7 +258,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 config.dispose()
             }
             // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [validatorSchema, schemaURI])
+        }, [validatorSchema, schemaURI, mode])
         useEffect(() => {
             if (!editorRef.current) {
                 return
