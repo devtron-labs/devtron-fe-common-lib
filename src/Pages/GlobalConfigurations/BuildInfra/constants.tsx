@@ -188,7 +188,7 @@ export const BUILD_INFRA_TEST_IDS = {
     CANCEL_BUTTON: 'build-infra-cancel-button',
 } as const
 
-export const BUILD_INFRA_DEFAULT_PLATFORM_NAME = 'default'
+export const BUILD_INFRA_DEFAULT_PLATFORM_NAME = 'runner'
 export const BUILD_INFRA_LATEST_API_VERSION: BuildInfraAPIVersionType = BuildInfraAPIVersionType.ALPHA1
 export const TARGET_PLATFORM_ERROR_FIELDS_MAP: Record<TargetPlatformErrorFields, true> = {
     [BuildInfraConfigTypes.BUILD_TIMEOUT]: true,
@@ -252,3 +252,7 @@ export const ACTION_TO_PERSISTED_VALUE_MAP: Readonly<
 
 export const DEFAULT_TOLERANCE_EFFECT = BuildInfraToleranceEffectType.NO_SCHEDULE
 export const DEFAULT_TOLERANCE_OPERATOR = BuildInfraToleranceOperatorType.EQUALS
+
+export const INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X: Partial<Record<BuildInfraConfigTypes, true>> = {
+    [BuildInfraConfigTypes.BUILD_TIMEOUT]: true,
+}
