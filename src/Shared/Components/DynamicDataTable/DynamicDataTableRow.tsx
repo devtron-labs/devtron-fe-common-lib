@@ -127,7 +127,11 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             inputId={`data-table-${row.id}-${key}-cell`}
                             classNamePrefix="dynamic-data-table__cell__select-picker"
                             variant={SelectPickerVariantType.BORDER_LESS}
-                            value={getSelectPickerOptionByValue(row.data[key].props?.options, row.data[key].value)}
+                            value={getSelectPickerOptionByValue(
+                                row.data[key].props?.options,
+                                row.data[key].value,
+                                null,
+                            )}
                             onChange={onChange(row, key)}
                             isDisabled={isDisabled}
                             fullWidth
