@@ -286,11 +286,11 @@ export const SelectPickerMultiValueLabel = <OptionValue, IsMulti extends boolean
 }
 
 export const SelectPickerMultiValueRemove = (props: MultiValueRemoveProps) => (
-    <components.MultiValueLabel {...props}>
+    <components.MultiValueRemove {...props}>
         <span className="flex dc__no-shrink">
             <ICClose className="icon-dim-12 icon-use-fill-n6" />
         </span>
-    </components.MultiValueLabel>
+    </components.MultiValueRemove>
 )
 
 export const SelectPickerGroupHeading = <OptionValue,>({

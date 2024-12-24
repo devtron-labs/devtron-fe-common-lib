@@ -30,6 +30,7 @@ import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-ov
 import { ComponentSizeType } from '@Shared/constants'
 import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
+import { isNullOrUndefined } from '@Shared/Helpers'
 import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
 import {
     SelectPickerMultiValueLabel,
@@ -208,8 +209,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     fullWidth = false,
     customSelectedOptionsCount = null,
     renderMenuListFooter,
-    inputValue,
-    onInputChange,
     isCreatable = false,
     onCreateOption,
     closeMenuOnSelect = false,
@@ -218,6 +217,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const [isFocussed, setIsFocussed] = useState(false)
+    const [inputValue, setInputValue] = useState('')
+
     const {
         inputId,
         required,
@@ -331,6 +332,15 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         }
     }
 
+    const handleInputChange: ReactSelectProps['onInputChange'] = (updatedInputValue, actionMeta) => {
+        // If onInputChange is provided, then the input state should be controlled externally
+        if (props.onInputChange) {
+            props.onInputChange(updatedInputValue, actionMeta)
+            return
+        }
+        setInputValue(updatedInputValue)
+    }
+
     const handleKeyDown: ReactSelectProps['onKeyDown'] = (e) => {
         // Prevent the option from being selected if meta or control key is pressed
         if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
@@ -347,6 +357,15 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         setIsFocussed(false)
 
         props.onBlur?.(e)
+    }
+
+    const handleChange: ReactSelectProps<SelectPickerOptionType<OptionValue>, IsMulti>['onChange'] = (...params) => {
+        // Retain the input value on selection change
+        if (isMulti && isNullOrUndefined(props.inputValue)) {
+            setInputValue(inputValue)
+        }
+
+        props.onChange?.(...params)
     }
 
     const commonProps = useMemo(
@@ -435,14 +454,15 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             createOptionPosition="first"
                             onCreateOption={handleCreateOption}
                             renderMenuListFooter={!optionListError && renderMenuListFooter}
-                            inputValue={inputValue}
-                            onInputChange={onInputChange}
+                            inputValue={props.inputValue ?? inputValue}
+                            onInputChange={handleInputChange}
                             icon={icon}
                             showSelectedOptionIcon={shouldShowSelectedOptionIcon}
                             onKeyDown={handleKeyDown}
                             customDisplayText={customDisplayText}
                             onFocus={handleFocus}
                             onBlur={handleBlur}
+                            onChange={handleChange}
                             controlShouldRenderValue={controlShouldRenderValue}
                         />
                     </div>
