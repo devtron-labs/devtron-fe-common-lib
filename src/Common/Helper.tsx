@@ -32,6 +32,7 @@ import {
     ZERO_TIME_STRING,
     TOAST_ACCESS_DENIED,
     UNCHANGED_ARRAY_ELEMENT_SYMBOL,
+    DATE_TIME_FORMATS,
 } from './Constants'
 import { ServerErrors } from './ServerError'
 import { AsyncOptions, AsyncState, DeploymentNodeType, UseSearchString } from './Types'
@@ -232,6 +233,9 @@ export function handleUTCTime(ts: string, isRelativeTime = false) {
     }
     return timestamp
 }
+
+export const getFormattedUTCTimeForExport = (timeToConvert: string, fallback = '-') =>
+    timeToConvert ? `${moment(timeToConvert).utc().format(DATE_TIME_FORMATS.TWELVE_HOURS_EXPORT_FORMAT)} (UTC)` : '-'
 
 export function useSearchString(): UseSearchString {
     const location = useLocation()
