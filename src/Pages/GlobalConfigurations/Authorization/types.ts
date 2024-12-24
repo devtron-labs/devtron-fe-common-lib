@@ -17,11 +17,18 @@
 import { BaseFilterQueryParams } from '../../../Shared'
 import { UserListSortableKeys, UserStatus } from './constants'
 
+export enum UserTypeToFetchType {
+    includeDeleted = 'includeDeleted',
+    excludeDelete = 'excludeDelete',
+    onlyDeleted = 'onlyDeleted',
+}
+
 export type UserListFilterParams = BaseFilterQueryParams<UserListSortableKeys> & {
     /**
      * Selected statuses (if any)
      */
     status: UserStatus[]
+    typeToFetch?: UserTypeToFetchType
 }
 
 export interface UserMinType {
