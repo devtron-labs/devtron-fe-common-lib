@@ -83,14 +83,7 @@
         &__select-picker__control {
             gap: 6px !important;
             padding: 8px !important;
-        }
-
-        &__select-picker__menu-portal {
-            z-index: 3 !important;
-        }
-
-        &:has(.select-picker-hidden) .dynamic-data-table__select-text-area {
-            padding-left: 8px;
+            max-height: 160px !important;
         }
 
         &:hover:not(:focus-within):not(.no-hover) {
@@ -111,6 +104,10 @@
     }
 
     &__cell:not(:focus-within):not(:hover) > &__error {
+        display: none;
+    }
+
+    &__cell:focus-within > &__error.no-error {
         display: none;
     }
 

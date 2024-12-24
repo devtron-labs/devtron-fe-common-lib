@@ -1,4 +1,4 @@
-import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect, useRef } from 'react'
+import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
@@ -9,10 +9,10 @@ import { ResizableTagTextArea } from '@Common/CustomTagSelector'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
-import { SelectTextArea } from '../SelectTextArea'
 import {
     getSelectPickerOptionByValue,
     SelectPicker,
+    SelectPickerTextArea,
     SelectPickerOptionType,
     SelectPickerVariantType,
 } from '../SelectPicker'
@@ -46,6 +46,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     leadingCellIcon,
     trailingCellIcon,
     buttonCellWrapComponent,
+    focusableFieldKey,
 }: DynamicDataTableRowProps<K, CustomStateType>) => {
     // CONSTANTS
     const isFirstRowEmpty = headers.every(({ key }) => !rows[0]?.data[key].value)
@@ -59,6 +60,10 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
         isDeletionNotAllowed || readOnly,
     )
 
+    // STATES
+    const [isRowAdded, setIsRowAdded] = useState(false)
+
+    // CELL REFS
     const cellRef = useRef<Record<string | number, Record<K, RefObject<HTMLTextAreaElement>>>>()
     if (!cellRef.current) {
         cellRef.current = rows.reduce(
@@ -71,6 +76,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     }
 
     useEffect(() => {
+        setIsRowAdded(rows.length && Object.keys(cellRef.current).length < rows.length)
         const rowIds = rows.map(({ id }) => id)
 
         const updatedCellRef = rowIds.reduce((acc, curr) => {
@@ -85,6 +91,15 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
         cellRef.current = updatedCellRef
     }, [rows.length])
 
+    useEffect(() => {
+        // Using the below logic to ensure the cell is focused after row addition.
+        const cell = cellRef.current[rows[0].id][focusableFieldKey || headers[0].key].current
+        if (isRowAdded && cell) {
+            cell.focus()
+            setIsRowAdded(false)
+        }
+    }, [isRowAdded])
+
     // METHODS
     const onChange =
         (row: DynamicDataTableRowType<K, CustomStateType>, key: K) =>
@@ -94,7 +109,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
             switch (row.data[key].type) {
                 case DynamicDataTableRowDataType.DROPDOWN:
                 case DynamicDataTableRowDataType.SELECT_TEXT:
-                    value = (e as SelectPickerOptionType<string>).value
+                    value = (e as SelectPickerOptionType<string>)?.value || ''
                     extraData.selectedValue = e
                     break
                 case DynamicDataTableRowDataType.FILE_UPLOAD:
@@ -138,31 +153,32 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                         />
                     </div>
                 )
-            case DynamicDataTableRowDataType.SELECT_TEXT:
+            case DynamicDataTableRowDataType.SELECT_TEXT: {
+                const { value, props } = row.data[key]
+                const { isCreatable = true } = props
+
                 return (
-                    <div className="dynamic-data-table__select-text-area w-100 h-100 flex top dc__align-self-start">
-                        <SelectTextArea
-                            {...row.data[key].props}
-                            value={row.data[key].value}
-                            onChange={onChange(row, key)}
+                    <div className="w-100 h-100 flex top dc__align-self-start">
+                        <SelectPickerTextArea
+                            isCreatable={isCreatable}
+                            isClearable
+                            {...props}
+                            variant={SelectPickerVariantType.BORDER_LESS}
+                            classNamePrefix="dynamic-data-table__cell__select-picker"
                             inputId={`data-table-${row.id}-${key}-cell`}
-                            disabled={isDisabled}
-                            refVar={cellRef?.current?.[row.id]?.[key]}
-                            dependentRefs={cellRef?.current?.[row.id]}
-                            selectPickerProps={{
-                                ...row.data[key].props?.selectPickerProps,
-                                classNamePrefix: 'dynamic-data-table__cell__select-picker',
-                            }}
-                            textAreaProps={{
-                                ...row.data[key].props?.textAreaProps,
-                                className: 'dynamic-data-table__cell-input placeholder-cn5 py-8 pr-32 cn-9 fs-13 lh-20',
-                                disableOnBlurResizeToMinHeight: true,
-                                minHeight: 20,
-                                maxHeight: 160,
-                            }}
+                            value={getSelectPickerOptionByValue(
+                                props?.options,
+                                value,
+                                isCreatable && value ? { label: value, value } : null,
+                            )}
+                            onChange={onChange(row, key)}
+                            isDisabled={isDisabled}
+                            formatCreateLabel={(input) => `Use ${input}`}
+                            fullWidth
                         />
                     </div>
                 )
+            }
             case DynamicDataTableRowDataType.BUTTON:
                 return (
                     <div className="w-100 h-100 flex top">
@@ -240,12 +256,17 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 ? cellError[row.id][key]
                 : { isValid: true, errorMessages: [] }
 
+        const isSelectText = row.data[key].type === DynamicDataTableRowDataType.SELECT_TEXT
+
         if (isValid) {
             return null
         }
 
+        // Adding 'no-error' class to hide error when SelectPickerTextArea is focused.
         return (
-            <div className="dynamic-data-table__error bcn-0 dc__border br-4 py-7 px-8 flexbox-col dc__gap-4">
+            <div
+                className={`dynamic-data-table__error bcn-0 dc__border br-4 py-7 px-8 flexbox-col dc__gap-4 ${isSelectText ? 'no-error' : ''}`}
+            >
                 {errorMessages.map((error) => renderErrorMessage(error))}
             </div>
         )
@@ -264,7 +285,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 plugins={[followCursor]}
             >
                 <div
-                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${!isDisabled && hasError ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
+                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'dc__disabled no-hover' : ''} ${!isDisabled && hasError ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
                 >
                     {renderCellIcon(row, key, true)}
                     {renderCellContent(row, key)}

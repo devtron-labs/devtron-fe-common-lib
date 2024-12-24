@@ -84,6 +84,11 @@ declare module 'react-select/base' {
          * @default 'true'
          */
         showSelectedOptionIcon?: boolean
+        /**
+         * If true, the select picker will render textarea instead of input.
+         * @default false
+         */
+        shouldRenderTextArea?: boolean
     }
 }
 
@@ -131,6 +136,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
             | 'renderCustomOptions'
             | 'icon'
             | 'showSelectedOptionIcon'
+            | 'shouldRenderTextArea'
         >
     > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> &
@@ -285,3 +291,15 @@ export interface FilterSelectPickerProps
     appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
 }
+
+export interface SelectPickerTextAreaProps
+    extends Omit<
+        SelectPickerProps<string, false>,
+        | 'selectRef'
+        | 'inputValue'
+        | 'onInputChange'
+        | 'controlShouldRenderValue'
+        | 'onKeyDown'
+        | 'onCreateOption'
+        | 'shouldRenderTextArea'
+    > {}
