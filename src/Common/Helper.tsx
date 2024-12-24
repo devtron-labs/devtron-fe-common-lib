@@ -32,9 +32,10 @@ import {
     ZERO_TIME_STRING,
     TOAST_ACCESS_DENIED,
     UNCHANGED_ARRAY_ELEMENT_SYMBOL,
+    DATE_TIME_FORMATS,
 } from './Constants'
 import { ServerErrors } from './ServerError'
-import { AsyncOptions, AsyncState, UseSearchString } from './Types'
+import { AsyncOptions, AsyncState, DeploymentNodeType, UseSearchString } from './Types'
 import {
     scrollableInterface,
     DATE_TIME_FORMAT_STRING,
@@ -235,6 +236,9 @@ export function handleUTCTime(ts: string, isRelativeTime = false) {
     }
     return timestamp
 }
+
+export const getFormattedUTCTimeForExport = (timeToConvert: string, fallback = '-') =>
+    timeToConvert ? `${moment(timeToConvert).utc().format(DATE_TIME_FORMATS.TWELVE_HOURS_EXPORT_FORMAT)} (UTC)` : '-'
 
 export function useSearchString(): UseSearchString {
     const location = useLocation()
@@ -1038,6 +1042,16 @@ export const getIframeWithDefaultAttributes = (iframeString: string, defaultName
     return iframeString
 }
 
+export const getStageTitle = (stageType: DeploymentNodeType): string => {
+    switch (stageType) {
+        case DeploymentNodeType.PRECD:
+            return 'Pre-deployment'
+        case DeploymentNodeType.POSTCD:
+            return 'Post-deployment'
+        default:
+            return 'Deployment'
+    }
+}
 export const getGoLangFormattedDateWithTimezone = (dateFormat: string) => {
     const now = moment()
     const formattedDate = now.format(dateFormat)

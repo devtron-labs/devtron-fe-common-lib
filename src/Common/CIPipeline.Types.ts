@@ -259,6 +259,11 @@ export interface DockerConfigOverrideType {
     ciBuildConfig: CIBuildConfigType
 }
 
+export enum WORKFLOW_CACHE_CONFIG_ENUM {
+    INHERIT = 'INHERIT',
+    OVERRIDE = 'OVERRIDE',
+}
+
 export interface FormType {
     name: string
     args: { key: string; value: string }[]
@@ -291,6 +296,11 @@ export interface FormType {
     isDockerConfigOverridden?: boolean
     dockerConfigOverride?: DockerConfigOverrideType
     isOffendingMandatoryPlugin?: boolean
+    workflowCacheConfig?: {
+        type: WORKFLOW_CACHE_CONFIG_ENUM
+        value: boolean
+        globalValue: boolean
+    }
 }
 
 export interface ErrorObj {

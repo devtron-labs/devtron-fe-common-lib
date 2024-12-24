@@ -84,6 +84,8 @@ declare module 'react-select/base' {
          * @default 'true'
          */
         showSelectedOptionIcon?: boolean
+        /** Render function for the footer at the end of the options list. */
+        renderOptionsFooter?: () => ReactNode
     }
 }
 
@@ -131,6 +133,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
             | 'renderCustomOptions'
             | 'icon'
             | 'showSelectedOptionIcon'
+            | 'renderOptionsFooter'
         >
     > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> &

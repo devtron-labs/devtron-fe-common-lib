@@ -17,7 +17,7 @@
 import { MutableRefObject } from 'react'
 import moment from 'moment'
 import { sanitizeApprovalConfigData, sanitizeUserApprovalList } from '@Shared/Helpers'
-import { RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
+import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
 import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, showError, sortCallback } from './Helper'
@@ -95,6 +95,21 @@ export const sanitizeUserApprovalMetadata = (userApprovalMetadata: UserApprovalM
     canCurrentUserApprove: userApprovalMetadata?.canCurrentUserApprove ?? false,
     approvalConfigData: sanitizeApprovalConfigData(userApprovalMetadata?.approvalConfigData),
 })
+
+const sanitizeDeploymentBlockedState = (deploymentBlockedState: PolicyBlockInfo) => {
+    if (!deploymentBlockedState) {
+        return {
+            isBlocked: false,
+            blockedBy: null,
+            reason: '',
+        }
+    }
+    return {
+        isBlocked: deploymentBlockedState.isBlocked || false,
+        blockedBy: deploymentBlockedState.blockedBy || null,
+        reason: deploymentBlockedState.reason || '',
+    }
+}
 
 const cdMaterialListModal = ({
     artifacts,
@@ -188,6 +203,7 @@ const cdMaterialListModal = ({
             deploymentWindowArtifactMetadata: material.deploymentWindowArtifactMetadata ?? null,
             configuredInReleases: material.configuredInReleases ?? [],
             appWorkflowId: material.appWorkflowId ?? null,
+            deploymentBlockedState: sanitizeDeploymentBlockedState(material.deploymentBlockedState)
         }
     })
     return materials
