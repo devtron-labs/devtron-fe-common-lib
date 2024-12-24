@@ -228,14 +228,29 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
 export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPickerOptionType<OptionValue>>) => {
     const {
         children,
-        selectProps: { inputValue, renderMenuListFooter, shouldRenderCustomOptions, renderCustomOptions },
+        selectProps: {
+            inputValue,
+            renderMenuListFooter,
+            shouldRenderCustomOptions,
+            renderCustomOptions,
+            renderOptionsFooter,
+        },
     } = props
 
     return (
         <>
             {/* added key here to explicitly re-render the list on input change so that the top option is rendered */}
             <components.MenuList {...props} key={inputValue}>
-                <div className="py-4 cursor">{shouldRenderCustomOptions ? renderCustomOptions() : children}</div>
+                <div className="py-4 cursor">
+                    {shouldRenderCustomOptions ? (
+                        renderCustomOptions()
+                    ) : (
+                        <>
+                            {children}
+                            {renderOptionsFooter?.()}
+                        </>
+                    )}
+                </div>
                 {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
             </components.MenuList>
             {!shouldRenderCustomOptions && renderMenuListFooter && (
