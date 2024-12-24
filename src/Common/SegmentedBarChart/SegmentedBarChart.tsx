@@ -24,27 +24,55 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     rootClassName,
     countClassName,
     labelClassName,
+    isProportional,
 }) => {
     const total = entities.reduce((sum, entity) => entity.value + sum, 0)
     const filteredEntities = entities.filter((entity) => entity.value)
 
     const calcSegmentWidth = (entity: Entity) => `${(entity.value / total) * 100}%`
 
+    const renderLabel = (label: string) => (
+        <span className={labelClassName} data-testid={`segmented-bar-chart-${label}-label`}>
+            {label}
+        </span>
+    )
+
+    const renderValue = (value: string | number, label: string) => (
+        <span className={countClassName} data-testid={`segmented-bar-chart-${label}-value`}>
+            {isProportional ? `${value}/${total}` : value}
+        </span>
+    )
+
+    const renderContent = () => {
+        if (isProportional) {
+            return entities
+                .filter((entity) => !!entity.value)
+                .map((entity) => (
+                    <div className="flexbox-col">
+                        {renderValue(entity.value, entity.label)}
+                        <div className="flex left dc__gap-6">
+                            <span style={{ backgroundColor: entity.color }} className="h-12 dc__border-radius-2 w-4" />
+                            {renderLabel(entity.label)}
+                        </div>
+                    </div>
+                ))
+        }
+        return entities.map((entity) => (
+            <div className={`${isProportional ? 'flexbox-col' : 'flexbox  dc__gap-4 dc__align-items-center'}`}>
+                <div className="dot" style={{ backgroundColor: entity.color, width: '10px', height: '10px' }} />
+                {renderValue(entity.value, entity.label)}
+                {renderLabel(entity.label)}
+            </div>
+        ))
+    }
+
+    if (!entities.length) {
+        return null
+    }
+
     return (
         <div className={`flexbox-col w-100 dc__gap-12 ${rootClassName}`}>
-            <div className="flexbox dc__gap-16">
-                {entities?.map((entity) => (
-                    <div className="flexbox dc__gap-4 dc__align-items-center">
-                        <div className="dot" style={{ backgroundColor: entity.color, width: '10px', height: '10px' }} />
-                        <span className={countClassName} data-testid={`segmented-bar-chart-${entity.label}-value`}>
-                            {entity.value}
-                        </span>
-                        <span className={labelClassName} data-testid={`segmented-bar-chart-${entity.label}-label`}>
-                            {entity.label}
-                        </span>
-                    </div>
-                ))}
-            </div>
+            <div className={`flexbox ${isProportional ? 'dc__gap-24' : 'dc__gap-16'}`}>{renderContent()}</div>
             <div className="flexbox dc__gap-2">
                 {filteredEntities?.map((entity, index, map) => (
                     <div
