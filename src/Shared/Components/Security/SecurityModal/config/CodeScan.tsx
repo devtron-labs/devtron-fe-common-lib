@@ -17,7 +17,7 @@ import {
     SEVERITY_DEFAULT_SORT_ORDER,
 } from '../constants'
 import {
-    ApiResponseResultType,
+    ScanResultDTO,
     CATEGORIES,
     CodeScan,
     CodeScanExposedSecretsListType,
@@ -489,7 +489,7 @@ const getCompletedEmptyState = (
 }
 
 export const getCodeScanEmptyState = (
-    data: ApiResponseResultType,
+    data: ScanResultDTO,
     subCategory: SecurityModalStateType['subCategory'],
     detailViewData: DetailViewDataType,
 ): EmptyStateType => {

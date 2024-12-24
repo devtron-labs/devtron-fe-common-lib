@@ -75,7 +75,6 @@ export interface customEnv {
     HIDE_RELEASES?: boolean
     ENABLE_RESOURCE_SCAN?: boolean
     FEATURE_USER_DEFINED_GITOPS_REPO_ENABLE: boolean
-    ENABLE_RESOURCE_SCAN_V2?: boolean
     HIDE_RESOURCE_WATCHER?: boolean
     ORGANIZATION_NAME: string
     FEATURE_EXTERNAL_FLUX_CD_ENABLE: boolean

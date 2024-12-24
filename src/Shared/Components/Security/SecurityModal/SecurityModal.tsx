@@ -39,10 +39,6 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     isLoading,
     error,
     responseData,
-    isResourceScan = false,
-    isHelmApp = false,
-    isSecurityScanV2Enabled = false,
-    isExternalCI = false,
     hidePolicy = false,
 }) => {
     const [state, setState] = useState<SecurityModalStateType>(DEFAULT_SECURITY_MODAL_STATE)
@@ -156,12 +152,15 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
             /* NOTE: the height is restricted to (viewport - header) height since we need overflow-scroll */
             <div className="flexbox" style={{ height: 'calc(100vh - 49px)' }}>
                 {/* NOTE: only show sidebar in AppDetails */}
-                {isSecurityScanV2Enabled && !isResourceScan && Sidebar && (
+                {Sidebar && (
                     <Sidebar
-                        isHelmApp={isHelmApp}
                         modalState={state}
                         setModalState={setState}
-                        isExternalCI={isExternalCI}
+                        categoriesConfig={{
+                            imageScan: !!data.imageScan,
+                            codeScan: !!data.codeScan,
+                            kubernetesManifest: !!data.kubernetesManifest,
+                        }}
                     />
                 )}
                 <div className="dc__border-right-n1 h-100" />
@@ -176,7 +175,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     return (
         <VisibleModal2 className="dc__position-rel" close={handleModalClose}>
             <div
-                className={`${isResourceScan ? 'w-800' : 'w-1024'} h-100vh bcn-0 flexbox-col dc__right-0 dc__top-0 dc__position-abs`}
+                className={`${Sidebar ? 'w-1024' : 'w-800'} h-100vh bcn-0 flexbox-col dc__right-0 dc__top-0 dc__position-abs`}
                 onClick={stopPropagation}
             >
                 {renderHeader()}

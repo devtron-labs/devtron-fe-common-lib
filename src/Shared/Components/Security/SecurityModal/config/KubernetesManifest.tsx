@@ -4,7 +4,7 @@
 
 import { getScanCompletedEmptyState, mapSeveritiesToSegmentedBarChartEntities } from '../utils'
 import {
-    ApiResponseResultType,
+    ScanResultDTO,
     CATEGORIES,
     DetailViewDataType,
     EmptyStateType,
@@ -106,7 +106,7 @@ const getCompletedEmptyState = (
 }
 
 export const getKubernetesManifestEmptyState = (
-    data: ApiResponseResultType,
+    data: ScanResultDTO,
     subCategory: SecurityModalStateType['subCategory'],
     detailViewData: DetailViewDataType,
 ): EmptyStateType => {

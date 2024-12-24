@@ -18,7 +18,6 @@ import { Dayjs } from 'dayjs'
 import {
     OptionType,
     CommonNodeAttr,
-    ResponseType,
     UserApprovalConfigType,
     VulnerabilityType,
     DeploymentAppTypes,
@@ -512,8 +511,6 @@ export interface LastExecutionResultType {
     scanToolId?: number
     imageScanDeployInfoId?: number
 }
-
-export interface LastExecutionResponseType extends ResponseType<LastExecutionResultType> {}
 
 export interface MaterialSecurityInfoType {
     isScanned: boolean

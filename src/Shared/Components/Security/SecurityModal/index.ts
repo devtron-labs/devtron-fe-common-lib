@@ -7,18 +7,16 @@ export {
     getSecurityScanSeveritiesCount,
     getTotalVulnerabilityCount,
     parseGetResourceScanDetailsResponse,
-    parseExecutionDetailResponse,
 } from './utils'
 export type {
     AppDetailsPayload,
-    ExecutionDetailsPayload,
-    ApiResponseResultType,
+    ScanResultDTO,
     SidebarPropsType,
     SidebarDataChildType,
     SidebarDataType,
     GetResourceScanDetailsPayloadType,
     GetResourceScanDetailsResponseType,
 } from './types'
-export { SIDEBAR_DATA, getProgressingStateForStatus } from './config'
+export { getSidebarData, getProgressingStateForStatus } from './config'
 export { CATEGORY_LABELS } from './constants'
-export { getExecutionDetails } from './service'
+export { getSecurityScan } from './service'

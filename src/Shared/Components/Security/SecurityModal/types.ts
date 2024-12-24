@@ -29,11 +29,6 @@ export interface AppDetailsPayload {
     installedAppVersionHistoryId?: number | string
 }
 
-export interface ExecutionDetailsPayload extends Partial<Pick<AppDetailsPayload, 'appId' | 'envId'>> {
-    imageScanDeployInfoId?: number | string
-    artifactId?: number | string
-}
-
 export const CATEGORIES = {
     IMAGE_SCAN: 'imageScan',
     CODE_SCAN: 'codeScan',
@@ -111,18 +106,17 @@ export type SecurityModalStateType = {
 }
 
 export interface SidebarPropsType {
-    isHelmApp: boolean
     modalState: SecurityModalStateType
     setModalState: React.Dispatch<React.SetStateAction<SecurityModalStateType>>
-    isExternalCI: boolean
+    categoriesConfig: Record<(typeof CATEGORIES)[keyof typeof CATEGORIES], boolean>
 }
 
 export enum SeveritiesDTO {
-    CRITICAL = 'CRITICAL',
-    HIGH = 'HIGH',
-    MEDIUM = 'MEDIUM',
-    LOW = 'LOW',
-    UNKNOWN = 'UNKNOWN',
+    CRITICAL = 'critical',
+    HIGH = 'high',
+    MEDIUM = 'medium',
+    LOW = 'low',
+    UNKNOWN = 'unknown',
     FAILURES = 'fail',
     SUCCESSES = 'success',
     EXCEPTIONS = 'exceptions',
@@ -241,22 +235,20 @@ export type KubernetesManifest = {
     [SUB_CATEGORIES.EXPOSED_SECRETS]: GenericGroupTypeWithSummary<CodeScanExposedSecretsListType>
 } & StatusType
 
-export type ApiResponseResultType = {
+export type ScanResultDTO = {
     scanned: boolean
+    isImageScanEnabled: boolean
     [CATEGORIES.IMAGE_SCAN]: ImageScan
     [CATEGORIES.CODE_SCAN]: CodeScan
     [CATEGORIES.KUBERNETES_MANIFEST]: KubernetesManifest
 }
 
-interface SecurityModalBaseProps extends Partial<Pick<SidebarPropsType, 'isExternalCI'>> {
+interface SecurityModalBaseProps {
     isLoading: boolean
     error: ServerErrors
-    responseData: ApiResponseResultType
+    responseData: ScanResultDTO
     handleModalClose: (event?: React.MouseEvent<HTMLElement>) => void
-    Sidebar: React.FC<SidebarPropsType>
-    isHelmApp?: boolean
-    isResourceScan?: boolean
-    isSecurityScanV2Enabled: boolean
+    Sidebar?: React.FC<SidebarPropsType>
     hidePolicy?: boolean
 }
 
