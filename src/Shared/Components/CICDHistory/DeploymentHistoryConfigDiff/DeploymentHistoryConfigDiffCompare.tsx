@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { generatePath, useRouteMatch } from 'react-router-dom'
 
 import { DeploymentConfigDiff, DeploymentConfigDiffProps } from '@Shared/Components/DeploymentConfigDiff'
-import { SortingOrder } from '@Common/Constants'
+import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '@Common/Constants'
 import { useUrlFilters } from '@Common/Hooks'
 import {
     getSelectPickerOptionByValue,
@@ -10,6 +10,7 @@ import {
     SelectPickerVariantType,
 } from '@Shared/Components/SelectPicker'
 import { ComponentSizeType } from '@Shared/constants'
+import { Button, ButtonVariantType } from '@Shared/Components/Button'
 
 import {
     DeploymentHistoryDiffDetailedProps,
@@ -18,8 +19,6 @@ import {
 } from './types'
 import { getPipelineDeployments, getPipelineDeploymentsOptions, parseDeploymentHistoryDiffSearchParams } from './utils'
 import { getTriggerHistory } from '../service'
-
-const paginationSize = 20
 
 export const DeploymentHistoryConfigDiffCompare = ({
     envName,
@@ -51,7 +50,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
     const [triggerHistory, setTriggerHistory] = useState({
         isLoading: false,
         data: initialTriggerHistory,
-        hasMore: initialTriggerHistory.size >= paginationSize,
+        hasMore: initialTriggerHistory.size >= DEFAULT_BASE_PAGE_SIZE,
     })
     const [pipelineDeployments, setPipelineDeployments] = useState(initialPipelineDeployments)
 
@@ -75,7 +74,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
             const { result } = await getTriggerHistory({
                 appId: +appId,
                 envId: +envId,
-                pagination: { offset: paginationOffset, size: paginationSize },
+                pagination: { offset: paginationOffset, size: DEFAULT_BASE_PAGE_SIZE },
             })
             const nextTriggerHistory = new Map((result.cdWorkflows || []).map((item) => [item.id, item]))
             const updatedTriggerHistory = new Map([...triggerHistory.data, ...nextTriggerHistory])
@@ -83,7 +82,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
             setTriggerHistory({
                 isLoading: false,
                 data: updatedTriggerHistory,
-                hasMore: result.cdWorkflows?.length === paginationSize,
+                hasMore: result.cdWorkflows?.length === DEFAULT_BASE_PAGE_SIZE,
             })
             setPipelineDeployments(getPipelineDeployments(updatedTriggerHistory))
         } catch {
@@ -92,6 +91,22 @@ export const DeploymentHistoryConfigDiffCompare = ({
     }
 
     const handleLoadMore = () => fetchDeploymentHistory(triggerHistory.data.size)
+
+    // RENDERERS
+    const renderOptionsFooter = () =>
+        triggerHistory.hasMore ? (
+            <div className="px-4">
+                <Button
+                    isLoading={triggerHistory.isLoading}
+                    onClick={handleLoadMore}
+                    dataTestId="load-more-previous-deployments"
+                    variant={ButtonVariantType.borderLess}
+                    text="Load more"
+                    size={ComponentSizeType.small}
+                    fullWidth
+                />
+            </div>
+        ) : null
 
     // DEPLOYMENT_CONFIG_DIFF_PROPS
     const { currentDeployment, pipelineDeploymentsOptions } = getPipelineDeploymentsOptions({
@@ -125,11 +140,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
                           onChange: deploymentSelectorOnChange,
                           showSelectedOptionIcon: false,
                           menuSize: ComponentSizeType.large,
-                          loadMoreButtonConfig: {
-                              show: triggerHistory.hasMore,
-                              isLoading: triggerHistory.isLoading,
-                              onClick: handleLoadMore,
-                          },
+                          renderOptionsFooter,
                       },
                   },
               ]

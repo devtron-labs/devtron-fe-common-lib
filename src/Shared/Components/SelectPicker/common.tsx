@@ -38,8 +38,6 @@ import { ReactSelectInputAction } from '@Common/Constants'
 import { isNullOrUndefined } from '@Shared/Helpers'
 import { Tooltip } from '@Common/Tooltip'
 import { TooltipProps } from '@Common/Tooltip/types'
-import { ComponentSizeType } from '@Shared/constants'
-import { Button, ButtonVariantType } from '../Button'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
 
@@ -210,7 +208,7 @@ export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPi
             renderMenuListFooter,
             shouldRenderCustomOptions,
             renderCustomOptions,
-            loadMoreButtonConfig,
+            renderOptionsFooter,
         },
     } = props
 
@@ -224,18 +222,7 @@ export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPi
                     ) : (
                         <>
                             {children}
-                            {loadMoreButtonConfig?.show && (
-                                <div className="px-4">
-                                    <Button
-                                        {...loadMoreButtonConfig}
-                                        dataTestId="load-more-previous-deployments"
-                                        variant={ButtonVariantType.borderLess}
-                                        text="Load more"
-                                        size={ComponentSizeType.small}
-                                        fullWidth
-                                    />
-                                </div>
-                            )}
+                            {renderOptionsFooter?.()}
                         </>
                     )}
                 </div>
