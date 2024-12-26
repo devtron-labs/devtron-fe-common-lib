@@ -509,6 +509,7 @@ export enum ReactSelectInputAction {
     selectOption = 'select-option',
     deselectOption = 'deselect-option',
     removeValue = 'remove-value',
+    inputBlur = 'input-blur',
 }
 
 export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'

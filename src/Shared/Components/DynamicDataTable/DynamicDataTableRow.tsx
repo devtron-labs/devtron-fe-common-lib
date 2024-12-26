@@ -76,7 +76,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     }
 
     useEffect(() => {
-        setIsRowAdded(rows.length && Object.keys(cellRef.current).length < rows.length)
+        setIsRowAdded(rows.length > 0 && Object.keys(cellRef.current).length < rows.length)
         const rowIds = rows.map(({ id }) => id)
 
         const updatedCellRef = rowIds.reduce((acc, curr) => {

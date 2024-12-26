@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { InputActionMeta, SelectInstance, SingleValue } from 'react-select'
 
+import { ReactSelectInputAction } from '@Common/Constants'
+
 import SelectPicker from './SelectPicker.component'
 import { SelectPickerOptionType, SelectPickerTextAreaProps } from './type'
 
@@ -24,7 +26,7 @@ export const SelectPickerTextArea = ({
 
     // METHODS
     const onInputChange = (newValue: string, { action }: InputActionMeta) => {
-        if (action === 'input-change') {
+        if (action === ReactSelectInputAction.inputChange) {
             setInputValue(newValue)
             if (!newValue) {
                 onChange?.(null, {
@@ -32,7 +34,7 @@ export const SelectPickerTextArea = ({
                     removedValue: value as SingleValue<SelectPickerOptionType<string>>,
                 })
             }
-        } else if (action === 'input-blur') {
+        } else if (action === ReactSelectInputAction.inputBlur) {
             // Reverting input to previously selected value in case of blur event. (no-selection)
             const selectValue = value as SingleValue<SelectPickerOptionType<string>>
             setInputValue(selectValue?.value || '')
