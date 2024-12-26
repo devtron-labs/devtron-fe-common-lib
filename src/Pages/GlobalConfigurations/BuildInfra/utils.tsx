@@ -14,516 +14,313 @@
  * limitations under the License.
  */
 
-import { FormEvent, useEffect, useState } from 'react'
-import { showError, useAsync } from '../../../Common'
-import { getBuildInfraProfileByName, createBuildInfraProfile, updateBuildInfraProfile } from './services'
+import { ROUTES } from '../../../Common'
 import {
+    BuildInfraConfigInfoType,
     BuildInfraConfigTypes,
+    BuildInfraConfigurationDTO,
+    BuildInfraConfigurationMapType,
+    BuildInfraConfigurationMapTypeWithoutDefaultFallback,
+    BuildInfraConfigurationType,
+    BuildInfraConfigValuesType,
     BuildInfraInheritActions,
-    BuildInfraMetaConfigTypes,
+    BuildInfraLocators,
+    BuildInfraPlatformConfigurationMapDTO,
+    BuildInfraProfileBase,
     BuildInfraProfileData,
-    HandleProfileInputChangeType,
-    ProfileInputErrorType,
-    UseBuildInfraFormProps,
-    UseBuildInfraFormResponseType,
-    ValidateRequestLimitResponseType,
-    ValidateRequestLimitType,
+    BuildInfraProfileInfoDTO,
+    BuildInfraProfileResponseType,
+    BuildInfraProfileTransformerParamsType,
+    BuildInfraToleranceOperatorType,
+    BuildInfraToleranceValueType,
+    CreateBuildInfraProfileType,
+    GetPlatformConfigurationsWithDefaultValuesParamsType,
 } from './types'
 import {
-    BUILD_INFRA_INPUT_CONSTRAINTS,
-    BUILD_INFRA_TEXT,
-    DEFAULT_PROFILE_NAME,
-    PROFILE_INPUT_ERROR_FIELDS,
-    CREATE_MODE_REQUIRED_INPUT_FIELDS,
+    CREATE_PROFILE_BASE_VALUE,
+    BUILD_INFRA_DEFAULT_PLATFORM_NAME,
+    BUILD_INFRA_LATEST_API_VERSION,
+    INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X,
 } from './constants'
-import {
-    validateDescription,
-    validateName,
-    validateRequiredPositiveNumber,
-    getCommonSelectStyle,
-    validateRequiredPositiveInteger,
-    ToastVariantType,
-    ToastManager,
-} from '../../../Shared'
+import { getUniqueId } from '../../../Shared'
 
-export const validateRequestLimit = ({
-    request,
-    limit,
-    unitsMap,
-}: ValidateRequestLimitType): ValidateRequestLimitResponseType => {
-    // Request <= Limit
-    // Request and Limit should be numbers can be decimals
-    // Request and Limit should be positive numbers
-    // Request and Limit should be less than Number.MAX_SAFE_INTEGER
-    // Request and Limit should can have at most BUILD_INFRA_INPUT_CONSTRAINTS.DECIMAL_PLACES
-    // Both request and limit should be there
-    const requestNumber = Number(request.value)
-    const limitNumber = Number(limit.value)
-    const requestUnit = Number(unitsMap[request.unit]?.conversionFactor)
-    const limitUnit = Number(unitsMap[limit.unit]?.conversionFactor)
+export const parsePlatformConfigIntoValue = (
+    configuration: BuildInfraConfigValuesType,
+    addUniqueId: boolean = true,
+): BuildInfraConfigValuesType => {
+    switch (configuration?.key) {
+        case BuildInfraConfigTypes.NODE_SELECTOR:
+            return {
+                key: BuildInfraConfigTypes.NODE_SELECTOR,
+                value: (configuration.value || [])
+                    .map((nodeSelector) => ({
+                        key: nodeSelector?.key,
+                        value: nodeSelector?.value || '',
+                        id: addUniqueId ? getUniqueId() : null,
+                    }))
+                    .filter((nodeSelector) => nodeSelector.key),
+            }
 
-    const requestLimitValidationResponse: ValidateRequestLimitResponseType = {
-        request: {
-            isValid: true,
-        },
-        limit: {
-            isValid: true,
-        },
+        case BuildInfraConfigTypes.TOLERANCE:
+            return {
+                key: BuildInfraConfigTypes.TOLERANCE,
+                value: (configuration.value || [])
+                    .map<BuildInfraToleranceValueType>((toleranceItem) => {
+                        const { key, effect, operator, value } = toleranceItem || {}
+
+                        const baseObject: Pick<BuildInfraToleranceValueType, 'key' | 'effect' | 'id'> = {
+                            key,
+                            effect,
+                            id: addUniqueId ? getUniqueId() : null,
+                        }
+
+                        if (operator === BuildInfraToleranceOperatorType.EQUALS) {
+                            return {
+                                ...baseObject,
+                                operator: BuildInfraToleranceOperatorType.EQUALS,
+                                value,
+                            }
+                        }
+
+                        return {
+                            ...baseObject,
+                            operator: BuildInfraToleranceOperatorType.EXISTS,
+                        }
+                    })
+                    .filter((toleranceItem) => toleranceItem.key),
+            }
+
+        case BuildInfraConfigTypes.BUILD_TIMEOUT:
+        case BuildInfraConfigTypes.CPU_LIMIT:
+        case BuildInfraConfigTypes.CPU_REQUEST:
+        case BuildInfraConfigTypes.MEMORY_LIMIT:
+        case BuildInfraConfigTypes.MEMORY_REQUEST:
+            return {
+                key: configuration.key,
+                value: configuration.value,
+                unit: configuration.unit,
+            }
+
+        default:
+            return null
     }
-
-    const requestValidationMessage = validateRequiredPositiveNumber(request.value).message
-    const limitValidationMessage = validateRequiredPositiveNumber(limit.value).message
-
-    if (requestValidationMessage) {
-        requestLimitValidationResponse.request = {
-            message: requestValidationMessage,
-            isValid: false,
-        }
-    }
-
-    if (limitValidationMessage) {
-        requestLimitValidationResponse.limit = {
-            message: limitValidationMessage,
-            isValid: false,
-        }
-    }
-
-    if (limitValidationMessage || requestValidationMessage) {
-        return requestLimitValidationResponse
-    }
-
-    // only two decimal places are allowed
-    const requestDecimalPlaces = String(request.value).split('.')[1]?.length ?? 0
-    const limitDecimalPlaces = String(limit.value).split('.')[1]?.length ?? 0
-
-    if (requestDecimalPlaces > BUILD_INFRA_INPUT_CONSTRAINTS.DECIMAL_PLACES) {
-        requestLimitValidationResponse.request = {
-            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.REQUEST_DECIMAL_PLACES,
-            isValid: false,
-        }
-
-        return requestLimitValidationResponse
-    }
-    if (limitDecimalPlaces > BUILD_INFRA_INPUT_CONSTRAINTS.DECIMAL_PLACES) {
-        requestLimitValidationResponse.limit = {
-            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.LIMIT_DECIMAL_PLACES,
-            isValid: false,
-        }
-
-        return requestLimitValidationResponse
-    }
-
-    // Assuming requestUnit and requestNumber are not 0
-    const limitRequestUnitFactor = limitUnit / requestUnit
-    const limitRequestFactor = limitNumber / requestNumber
-
-    const isDifferenceBigNumber = limitRequestUnitFactor * limitRequestFactor <= Number.MAX_SAFE_INTEGER
-
-    if (!isDifferenceBigNumber) {
-        requestLimitValidationResponse.request = {
-            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.CAN_NOT_COMPUTE,
-            isValid: false,
-        }
-
-        return requestLimitValidationResponse
-    }
-
-    if (limitRequestUnitFactor * limitRequestFactor < 1) {
-        requestLimitValidationResponse.request = {
-            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.REQUEST_LESS_THAN_LIMIT,
-            isValid: false,
-        }
-
-        return requestLimitValidationResponse
-    }
-
-    return requestLimitValidationResponse
 }
 
-const getInitialProfileInputErrors = (fromCreateView: boolean): ProfileInputErrorType => {
+const getBaseProfileObject = (fromCreateView: boolean, profile: BuildInfraProfileInfoDTO): BuildInfraProfileBase => {
     if (fromCreateView) {
-        const initialProfileInputErrors = { ...PROFILE_INPUT_ERROR_FIELDS }
-        CREATE_MODE_REQUIRED_INPUT_FIELDS.forEach((field) => {
-            initialProfileInputErrors[field] = ''
-        })
-        return initialProfileInputErrors
+        return structuredClone(CREATE_PROFILE_BASE_VALUE)
     }
 
     return {
-        ...PROFILE_INPUT_ERROR_FIELDS,
+        id: profile.id,
+        name: profile.name,
+        description: profile.description,
+        type: profile.type,
+        appCount: profile.appCount,
     }
 }
 
-export const useBuildInfraForm = ({
-    name,
-    editProfile,
-    handleSuccessRedirection,
-}: UseBuildInfraFormProps): UseBuildInfraFormResponseType => {
-    const fromCreateView = !name
+const getConfigurationMapWithoutDefaultFallback = (
+    platformConfigurationMap: BuildInfraPlatformConfigurationMapDTO,
+): Record<string, BuildInfraConfigurationMapTypeWithoutDefaultFallback> =>
+    Object.entries(platformConfigurationMap || {}).reduce<
+        Record<string, BuildInfraConfigurationMapTypeWithoutDefaultFallback>
+    >((acc, [platformName, configurations]) => {
+        const platformConfigValuesMap: BuildInfraConfigurationMapTypeWithoutDefaultFallback =
+            configurations?.reduce<BuildInfraConfigurationMapTypeWithoutDefaultFallback>(
+                (configurationMap, configuration) => {
+                    const currentConfigValue: BuildInfraConfigInfoType = {
+                        ...configuration,
+                        targetPlatform: platformName,
+                    }
 
-    const [isLoading, profileResponse, responseError, reloadRequest] = useAsync(
-        () =>
-            getBuildInfraProfileByName({
-                name: name ?? DEFAULT_PROFILE_NAME,
-                fromCreateView,
-            }),
-        [name],
+                    // eslint-disable-next-line no-param-reassign
+                    configurationMap[configuration.key] = {
+                        ...currentConfigValue,
+                        ...parsePlatformConfigIntoValue(currentConfigValue),
+                    } as BuildInfraConfigInfoType
+
+                    return configurationMap
+                },
+                {} as BuildInfraConfigurationMapTypeWithoutDefaultFallback,
+            ) ?? ({} as BuildInfraConfigurationMapTypeWithoutDefaultFallback)
+
+        acc[platformName] = platformConfigValuesMap
+
+        return acc
+    }, {})
+
+const getPlatformConfigurationsWithDefaultValues = ({
+    profileConfigurationsMap,
+    defaultConfigurationsMap,
+    platformName,
+}: GetPlatformConfigurationsWithDefaultValuesParamsType): BuildInfraConfigurationMapType =>
+    Object.values(BuildInfraConfigTypes).reduce<BuildInfraConfigurationMapType>((acc, configType) => {
+        const defaultConfiguration = defaultConfigurationsMap[configType]
+        const profileConfiguration = profileConfigurationsMap[configType]?.active
+            ? profileConfigurationsMap[configType]
+            : null
+
+        if (!defaultConfiguration) {
+            return acc
+        }
+
+        const defaultValue = parsePlatformConfigIntoValue(defaultConfiguration)
+        // If value is not present in profile that means we are inheriting the value
+        const finalConfiguration: BuildInfraConfigurationType = profileConfiguration
+            ? {
+                  ...profileConfiguration,
+                  defaultValue,
+              }
+            : {
+                  ...defaultValue,
+                  active: false,
+                  targetPlatform: platformName,
+                  defaultValue,
+              }
+
+        acc[configType] = finalConfiguration
+
+        return acc
+    }, {} as BuildInfraConfigurationMapType)
+
+// Would receive a single profile and return transformed response
+export const getTransformedBuildInfraProfileResponse = ({
+    configurationUnits,
+    defaultConfigurations,
+    profile,
+    fromCreateView,
+}: BuildInfraProfileTransformerParamsType): BuildInfraProfileResponseType => {
+    // Ideal assumption is defaultConfigurations would contain all the required keys
+    const globalProfilePlatformConfigMap = getConfigurationMapWithoutDefaultFallback(defaultConfigurations)
+    const profileConfigurations = getConfigurationMapWithoutDefaultFallback(
+        fromCreateView
+            ? {
+                  [BUILD_INFRA_DEFAULT_PLATFORM_NAME]: [],
+              }
+            : profile?.configurations,
     )
-    // If configuration is existing and is active then use it else use default from profileResponse
-    const [profileInput, setProfileInput] = useState<BuildInfraProfileData>(null)
-    const [profileInputErrors, setProfileInputErrors] = useState<ProfileInputErrorType>({
-        ...PROFILE_INPUT_ERROR_FIELDS,
-    })
-    const [loadingActionRequest, setLoadingActionRequest] = useState<boolean>(false)
 
-    useEffect(() => {
-        if (!isLoading && profileResponse?.configurationUnits && profileResponse?.profile) {
-            setProfileInput({
-                ...profileResponse.profile,
+    // Would depict state of target platforms in current profile with their fallback/default value (we will display in case we inheriting) attached to them
+    const configurations = Object.entries(profileConfigurations).reduce<BuildInfraProfileData['configurations']>(
+        (acc, [platformName, profilePlatformConfigurationMap]) => {
+            const globalProfilePlatformConfigurationMap =
+                globalProfilePlatformConfigMap[platformName] ||
+                globalProfilePlatformConfigMap[BUILD_INFRA_DEFAULT_PLATFORM_NAME]
+
+            acc[platformName] = getPlatformConfigurationsWithDefaultValues({
+                profileConfigurationsMap: profilePlatformConfigurationMap,
+                defaultConfigurationsMap: globalProfilePlatformConfigurationMap,
+                platformName,
             })
 
-            setProfileInputErrors(getInitialProfileInputErrors(fromCreateView))
-        }
-    }, [profileResponse, isLoading])
+            return acc
+        },
+        {},
+    )
 
-    // NOTE: Currently sending and receiving values as string, but will parse it to number for payload
-    const handleProfileInputChange = ({ action, data }: HandleProfileInputChangeType) => {
-        const currentInput = { ...profileInput }
-        const currentInputErrors = { ...profileInputErrors }
-        const lastSavedConfiguration = profileResponse.profile.configurations
-        const currentConfiguration = currentInput.configurations
-        const { value, unit } = data ?? { value: null, unit: null }
-
-        switch (action) {
-            case BuildInfraMetaConfigTypes.DESCRIPTION:
-                currentInput.description = value
-                currentInputErrors.description = validateDescription(value).message
-                break
-
-            case BuildInfraMetaConfigTypes.NAME:
-                currentInput.name = value
-                currentInputErrors.name = validateName(value).message
-                break
-
-            case BuildInfraConfigTypes.CPU_LIMIT: {
-                currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT],
-                    value,
-                    unit,
-                }
-                const { request, limit } = validateRequestLimit({
-                    request: {
-                        value: currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST].value,
-                        unit: currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST].unit,
-                    },
-                    limit: {
-                        value,
-                        unit,
-                    },
-                    unitsMap: profileResponse.configurationUnits[BuildInfraConfigTypes.CPU_LIMIT],
-                })
-
-                currentInputErrors[BuildInfraConfigTypes.CPU_LIMIT] = limit.message
-                currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = request.message
-                break
-            }
-
-            case BuildInfraConfigTypes.CPU_REQUEST: {
-                currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST],
-                    value,
-                    unit,
-                }
-                const { request, limit } = validateRequestLimit({
-                    request: {
-                        value,
-                        unit,
-                    },
-                    limit: {
-                        value: currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT].value,
-                        unit: currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT].unit,
-                    },
-                    unitsMap: profileResponse.configurationUnits[BuildInfraConfigTypes.CPU_LIMIT],
-                })
-
-                currentInputErrors[BuildInfraConfigTypes.CPU_LIMIT] = limit.message
-                currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = request.message
-                break
-            }
-
-            case BuildInfraConfigTypes.MEMORY_LIMIT: {
-                currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT],
-                    value,
-                    unit,
-                }
-                const { request, limit } = validateRequestLimit({
-                    request: {
-                        value: currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST].value,
-                        unit: currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST].unit,
-                    },
-                    limit: {
-                        value,
-                        unit,
-                    },
-                    unitsMap: profileResponse.configurationUnits[BuildInfraConfigTypes.MEMORY_LIMIT],
-                })
-
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = limit.message
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = request.message
-                break
-            }
-
-            case BuildInfraConfigTypes.MEMORY_REQUEST: {
-                currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST],
-                    value,
-                    unit,
-                }
-                const { request, limit } = validateRequestLimit({
-                    request: {
-                        value,
-                        unit,
-                    },
-                    limit: {
-                        value: currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT].value,
-                        unit: currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT].unit,
-                    },
-                    unitsMap: profileResponse.configurationUnits[BuildInfraConfigTypes.MEMORY_LIMIT],
-                })
-
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = limit.message
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = request.message
-                break
-            }
-
-            case BuildInfraConfigTypes.BUILD_TIMEOUT: {
-                currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT],
-                    value,
-                    unit,
+    // Would be used in case we are going to create a new platform, to get the default values from global profile
+    const fallbackPlatformConfigurationMap = Object.entries(globalProfilePlatformConfigMap).reduce<
+        BuildInfraProfileResponseType['fallbackPlatformConfigurationMap']
+    >((acc, [platformName, globalPlatformConfig]) => {
+        // Logic is, if we will pre-fill profile with default platform of current profile, and set active to true, i.e, overridden, with default values from global profile
+        const baseConfigurations = configurations[BUILD_INFRA_DEFAULT_PLATFORM_NAME]
+        acc[platformName] = Object.values(BuildInfraConfigTypes).reduce<BuildInfraConfigurationMapType>(
+            (fallbackAcc, configType) => {
+                if (!globalPlatformConfig[configType]) {
+                    return fallbackAcc
                 }
 
-                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = validateRequiredPositiveInteger(value).message
-                break
-            }
+                const baseValue = parsePlatformConfigIntoValue(baseConfigurations[configType])
+                const defaultValue = parsePlatformConfigIntoValue(globalPlatformConfig[configType])
 
-            case BuildInfraInheritActions.ACTIVATE_CPU:
-                currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT] = {
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.CPU_LIMIT],
-                    value: lastSavedConfiguration[BuildInfraConfigTypes.CPU_LIMIT].value,
-                    unit: lastSavedConfiguration[BuildInfraConfigTypes.CPU_LIMIT].unit,
+                // eslint-disable-next-line no-param-reassign
+                fallbackAcc[configType] = {
+                    ...baseValue,
+                    defaultValue,
                     active: true,
-                }
-                currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST] = {
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.CPU_REQUEST],
-                    value: lastSavedConfiguration[BuildInfraConfigTypes.CPU_REQUEST].value,
-                    unit: lastSavedConfiguration[BuildInfraConfigTypes.CPU_REQUEST].unit,
-                    active: true,
+                    targetPlatform: platformName,
                 }
 
-                currentInputErrors[BuildInfraConfigTypes.CPU_LIMIT] = null
-                currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = null
-                break
+                return fallbackAcc
+            },
+            {} as BuildInfraConfigurationMapType,
+        )
 
-            case BuildInfraInheritActions.ACTIVATE_MEMORY:
-                currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT] = {
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT],
-                    value: lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT].value,
-                    unit: lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT].unit,
-                    active: true,
-                }
-                currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST] = {
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST],
-                    value: lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST].value,
-                    unit: lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST].unit,
-                    active: true,
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = null
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = null
-                break
-
-            case BuildInfraInheritActions.ACTIVATE_BUILD_TIMEOUT:
-                currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT] = {
-                    ...lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT],
-                    value: lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].value,
-                    unit: lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].unit,
-                    active: true,
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = null
-                break
-
-            case BuildInfraInheritActions.DE_ACTIVATE_BUILD_TIMEOUT:
-                // Reverting the value and unit to defaultValues
-                currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT],
-                    value: lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].defaultValue.value,
-                    unit: lastSavedConfiguration[BuildInfraConfigTypes.BUILD_TIMEOUT].defaultValue.unit,
-                    active: false,
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.BUILD_TIMEOUT] = null
-                break
-
-            case BuildInfraInheritActions.DE_ACTIVATE_CPU:
-                currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.CPU_LIMIT],
-                    value: lastSavedConfiguration[BuildInfraConfigTypes.CPU_LIMIT].defaultValue.value,
-                    unit: lastSavedConfiguration[BuildInfraConfigTypes.CPU_LIMIT].defaultValue.unit,
-                    active: false,
-                }
-                currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.CPU_REQUEST],
-                    value: lastSavedConfiguration[BuildInfraConfigTypes.CPU_REQUEST].defaultValue.value,
-                    unit: lastSavedConfiguration[BuildInfraConfigTypes.CPU_REQUEST].defaultValue.unit,
-                    active: false,
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.CPU_LIMIT] = null
-                currentInputErrors[BuildInfraConfigTypes.CPU_REQUEST] = null
-                break
-
-            case BuildInfraInheritActions.DE_ACTIVATE_MEMORY:
-                currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT],
-                    value: lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT].defaultValue.value,
-                    unit: lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_LIMIT].defaultValue.unit,
-                    active: false,
-                }
-                currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST] = {
-                    ...currentConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST],
-                    value: lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST].defaultValue.value,
-                    unit: lastSavedConfiguration[BuildInfraConfigTypes.MEMORY_REQUEST].defaultValue.unit,
-                    active: false,
-                }
-
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_LIMIT] = null
-                currentInputErrors[BuildInfraConfigTypes.MEMORY_REQUEST] = null
-                break
-
-            default:
-                throw new Error(BUILD_INFRA_TEXT.getInvalidActionMessage(action))
-        }
-
-        setProfileInput(currentInput)
-        setProfileInputErrors(currentInputErrors)
-    }
-
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        // Since considering '' as a valid error message
-        const hasErrors =
-            Object.keys(profileInputErrors).filter(
-                (item) => profileInputErrors[item] !== null && profileInputErrors[item] !== undefined,
-            ).length > 0
-
-        if (hasErrors) {
-            ToastManager.showToast({
-                variant: ToastVariantType.error,
-                description: BUILD_INFRA_TEXT.INVALID_FORM_MESSAGE,
-            })
-            return
-        }
-
-        setLoadingActionRequest(true)
-        try {
-            if (editProfile) {
-                await updateBuildInfraProfile({ name, profileInput })
-            } else {
-                await createBuildInfraProfile({ profileInput })
-            }
-            setLoadingActionRequest(false)
-            ToastManager.showToast({
-                variant: ToastVariantType.success,
-                description: BUILD_INFRA_TEXT.getSubmitSuccessMessage(profileInput.name, editProfile),
-            })
-
-            if (handleSuccessRedirection) {
-                handleSuccessRedirection()
-            } else {
-                reloadRequest()
-            }
-        } catch (err) {
-            showError(err)
-            setLoadingActionRequest(false)
-        }
-    }
+        return acc
+    }, {})
 
     return {
-        isLoading,
-        profileResponse,
-        responseError,
-        reloadRequest,
-        profileInput,
-        profileInputErrors,
-        handleProfileInputChange,
-        loadingActionRequest,
-        handleSubmit,
+        configurationUnits,
+        fallbackPlatformConfigurationMap,
+        profile: {
+            ...(profile && getBaseProfileObject(fromCreateView, profile)),
+            configurations,
+        },
     }
 }
 
-export const unitSelectorStyles = () =>
-    getCommonSelectStyle({
-        control: (base, state) => ({
-            ...base,
-            borderRadius: 0,
-            backgroundColor: 'var(--N0)',
-            border: state.isFocused ? '1px solid var(--B500) !important' : '1px solid var(--N200)',
-            alignItems: 'center',
-            cursor: 'pointer',
-            borderTopRightRadius: '4px',
-            borderBottomRightRadius: '4px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            outline: 'none',
-            boxShadow: 'none',
-            '&:hover': {
-                border: '1px solid var(--N400)',
+export const getBuildInfraProfilePayload = (
+    profileInput: CreateBuildInfraProfileType['profileInput'],
+): BuildInfraProfileInfoDTO => {
+    const platformConfigurationMap = profileInput.configurations || {}
+    const configurations: BuildInfraProfileInfoDTO['configurations'] = Object.entries(platformConfigurationMap).reduce<
+        BuildInfraProfileInfoDTO['configurations']
+    >((acc, [platformName, configurationLocatorMap]) => {
+        // This converts the map of config types mapped to values into an array of values if user has activated the configuration or is editing it
+        const configurationList = Object.values(configurationLocatorMap).reduce<BuildInfraConfigurationDTO[]>(
+            (configurationListAcc, configuration) => {
+                if (configuration.id || configuration.active) {
+                    const infraConfigValues: BuildInfraConfigValuesType = parsePlatformConfigIntoValue(
+                        configuration,
+                        false,
+                    )
+                    if (!infraConfigValues) {
+                        return configurationListAcc
+                    }
+
+                    const response: BuildInfraConfigurationDTO = {
+                        ...infraConfigValues,
+                        id: configuration.id,
+                        active: configuration.active,
+                    }
+
+                    configurationListAcc.push(response)
+                    return configurationListAcc
+                }
+
+                return configurationListAcc
             },
-        }),
-        indicatorContainer: (base) => ({
-            ...base,
-            padding: '0px',
-        }),
-        dropdownIndicator: (base, state) => ({
-            ...base,
-            color: 'var(--N600)',
-            transition: 'all .2s ease',
-            transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-        }),
-        option: (base, state) => ({
-            ...base,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            cursor: 'pointer',
-            ...(state.isFocused
-                ? {
-                      backgroundColor: 'var(--N50)',
-                  }
-                : {}),
-            ...(state.isSelected && {
-                backgroundColor: 'var(--B100)',
-                fontWeight: 600,
-                color: 'var(--B500)',
-            }),
-            '&:active': {
-                backgroundColor: 'var(--N50)',
-            },
-        }),
-        valueContainer: (base) => ({
-            ...base,
-            color: 'var(--N900)',
-            fontSize: '13px',
-            fontWeight: '400',
-            lineHeight: '20px',
-        }),
-        menuList: (base) => ({
-            ...base,
-            maxHeight: '164px',
-            height: '100%',
-        }),
+            [],
+        )
+
+        acc[platformName] = configurationList
+        return acc
+    }, {})
+
+    // Deleting un-supported locators in case target platform is not default platform
+    Object.entries(configurations).forEach(([platformName, platformConfigurations]) => {
+        if (platformName !== BUILD_INFRA_DEFAULT_PLATFORM_NAME) {
+            configurations[platformName] = platformConfigurations.filter(
+                (config) => !INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X[config.key],
+            )
+        }
     })
+
+    const payload: BuildInfraProfileInfoDTO = {
+        name: profileInput.name,
+        description: profileInput.description,
+        type: profileInput.type,
+        configurations,
+    }
+    return payload
+}
+
+export const getBuildInfraProfileEndpoint = (): string =>
+    `${ROUTES.INFRA_CONFIG_PROFILE}/${BUILD_INFRA_LATEST_API_VERSION}`
+
+export const getBuildInfraInheritActionFromLocator = (
+    locator: BuildInfraLocators,
+    activateLocator: boolean,
+): BuildInfraInheritActions =>
+    (activateLocator ? `activate_${locator}` : `de_activate_${locator}`) satisfies BuildInfraInheritActions
