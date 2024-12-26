@@ -9,11 +9,11 @@ export const getScanToolAndSeverityCount = (
     scanResult: ScanResultDTO,
 ): { scanToolId: number; severityCount: SeverityCount; totalCount: number } => {
     const scanToolId =
-        scanResult.imageScan?.vulnerability?.list?.[0].scanToolName === 'TRIVY'
+        scanResult?.imageScan?.vulnerability?.list?.[0].scanToolName === 'TRIVY'
             ? SCAN_TOOL_ID_TRIVY
             : SCAN_TOOL_ID_CLAIR
 
-    const severities = scanResult.imageScan?.vulnerability?.summary?.severities
+    const severities = scanResult?.imageScan?.vulnerability?.summary?.severities
 
     const severityCount: SeverityCount = {
         critical: severities?.[SeveritiesDTO.CRITICAL] || 0,
