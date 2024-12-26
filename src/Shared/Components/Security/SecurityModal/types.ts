@@ -108,7 +108,7 @@ export type SecurityModalStateType = {
 export interface SidebarPropsType {
     modalState: SecurityModalStateType
     setModalState: React.Dispatch<React.SetStateAction<SecurityModalStateType>>
-    categoriesConfig: Record<(typeof CATEGORIES)[keyof typeof CATEGORIES], boolean>
+    categoriesConfig: Record<(typeof CATEGORIES)[keyof typeof CATEGORIES] | 'imageScanLicenseRisks', boolean>
 }
 
 export enum SeveritiesDTO {

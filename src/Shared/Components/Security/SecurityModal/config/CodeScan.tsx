@@ -454,7 +454,7 @@ const getCompletedEmptyState = (
     detailViewData: DetailViewDataType,
 ) => {
     /* NOTE: show empty state only when we don't have any data to show */
-    if ((data[subCategory]?.list && !detailViewData) || detailViewData?.rows) {
+    if ((data[subCategory]?.list?.length && !detailViewData) || detailViewData?.rows) {
         return null
     }
 

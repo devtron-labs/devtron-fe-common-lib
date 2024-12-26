@@ -157,9 +157,10 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
                         modalState={state}
                         setModalState={setState}
                         categoriesConfig={{
-                            imageScan: !!data.imageScan,
-                            codeScan: !!data.codeScan,
-                            kubernetesManifest: !!data.kubernetesManifest,
+                            imageScan: !!data?.imageScan,
+                            imageScanLicenseRisks: !!data?.imageScan?.license,
+                            codeScan: !!data?.codeScan,
+                            kubernetesManifest: !!data?.kubernetesManifest,
                         }}
                     />
                 )}
