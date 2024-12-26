@@ -105,7 +105,7 @@ const getVulnerabilitiesDetailData = (
     setDetailViewData: OpenDetailViewButtonProps['setDetailViewData'],
     hidePolicy: boolean,
 ) => {
-    const shouldGroupByTarget = element.list.every((item) => !!item.target)
+    const shouldGroupByTarget = element.list?.every((item) => !!item.target)
     if (!shouldGroupByTarget) {
         return {
             ...getVulnerabilitiesDetailBaseData(element),
