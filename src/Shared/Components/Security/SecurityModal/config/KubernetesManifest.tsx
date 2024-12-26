@@ -78,7 +78,7 @@ const getCompletedEmptyState = (
     }
 
     /* NOTE: if we are in detailView & it has data, no need for EmptyState */
-    if ((data[subCategory]?.list && !detailViewData) || detailViewData?.rows) {
+    if ((data[subCategory]?.list?.length && !detailViewData) || detailViewData?.rows) {
         return null
     }
 
