@@ -208,18 +208,43 @@ export enum ImageType {
     SMALL = 'small',
 }
 
-export interface InfoColourBarType {
-    message: React.ReactNode
+interface InfoColourBarTextConfigType {
+    /**
+     * If given would be shown above the description, in bold
+     */
+    heading?: string
+    /**
+     * If given would be shown below the heading (if given)
+     */
+    description: string
+}
+
+type InfoColourBarMessageProp = {
+    message: ReactNode
+    linkText?: ReactNode
+    redirectLink?: string
+    linkOnClick?: () => void
+    linkClass?: string
+    internalLink?: boolean
+
+    textConfig?: never
+} | {
+    textConfig: InfoColourBarTextConfigType
+
+    message?: never
+    linkText?: never
+    redirectLink?: never
+    linkOnClick?: () => never
+    linkClass?: never
+    internalLink?: never
+}
+
+export type InfoColourBarType = InfoColourBarMessageProp & {
     classname: string
     Icon
     iconClass?: string
     iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
     renderActionButton?: () => JSX.Element
-    linkText?: React.ReactNode
-    redirectLink?: string
-    linkOnClick?: () => void
-    linkClass?: string
-    internalLink?: boolean
     styles?: CSSProperties
     /**
      * If true, the icon is not shown
