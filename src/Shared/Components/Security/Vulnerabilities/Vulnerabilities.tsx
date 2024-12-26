@@ -15,13 +15,12 @@
  */
 
 import { useEffect } from 'react'
-import { EMPTY_STATE_STATUS, SCAN_TOOL_ID_CLAIR, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
-import { SeverityCount } from '@Shared/types'
+import { EMPTY_STATE_STATUS } from '@Shared/constants'
 import { Progressing, useAsync } from '../../../../Common'
 import { ScannedByToolModal } from '../../ScannedByToolModal'
 import { VulnerabilitiesProps } from './types'
 import { SecuritySummaryCard } from '../SecuritySummaryCard'
-import { getSeverityCountFromSummary, getTotalSeverityCount } from '../utils'
+import { getScanToolAndSeverityCount } from '../utils'
 import { getSecurityScan } from '../SecurityModal/service'
 
 const Vulnerabilities = ({
@@ -83,14 +82,7 @@ const Vulnerabilities = ({
         )
     }
 
-    const scanToolId =
-        scanResultResponse?.result.imageScan.vulnerability?.list[0].scanToolName === 'TRIVY'
-            ? SCAN_TOOL_ID_TRIVY
-            : SCAN_TOOL_ID_CLAIR
-    const scanResultSeverities = scanResultResponse?.result.imageScan.vulnerability?.summary.severities
-    const severityCount: SeverityCount = getSeverityCountFromSummary(scanResultSeverities)
-
-    const totalCount = getTotalSeverityCount(severityCount)
+    const { scanToolId, severityCount, totalCount } = getScanToolAndSeverityCount(scanResultResponse?.result)
 
     if (!totalCount) {
         return (
