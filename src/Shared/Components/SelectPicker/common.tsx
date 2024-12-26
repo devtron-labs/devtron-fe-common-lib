@@ -200,9 +200,13 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                             <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{startIcon}</div>
                         )}
                         <div className="flex-grow-1">
-                            <h4 className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}>
-                                {label}
-                            </h4>
+                            <Tooltip content={label} placement="right">
+                                <h4
+                                    className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}
+                                >
+                                    {label}
+                                </h4>
+                            </Tooltip>
                             {/* Add support for custom ellipsis if required */}
                             {showDescription &&
                                 (typeof description === 'string' ? (
