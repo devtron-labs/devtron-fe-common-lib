@@ -216,7 +216,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     onCreateOption,
     closeMenuOnSelect = false,
     shouldShowNoOptionsMessage = true,
-    formatCreateLabel,
     shouldRenderTextArea = false,
     onKeyDown,
     ...props
@@ -415,7 +414,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             onInputChange={onInputChange}
                             icon={icon}
                             showSelectedOptionIcon={shouldShowSelectedOptionIcon}
-                            formatCreateLabel={formatCreateLabel}
                             onKeyDown={handleKeyDown}
                             shouldRenderTextArea={shouldRenderTextArea}
                         />

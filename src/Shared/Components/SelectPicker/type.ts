@@ -84,6 +84,8 @@ declare module 'react-select/base' {
          * @default 'true'
          */
         showSelectedOptionIcon?: boolean
+        /** Render function for the footer at the end of the options list. */
+        renderOptionsFooter?: () => ReactNode
         /**
          * If true, the select picker will render textarea instead of input.
          * @default false
@@ -136,6 +138,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
             | 'renderCustomOptions'
             | 'icon'
             | 'showSelectedOptionIcon'
+            | 'renderOptionsFooter'
             | 'shouldRenderTextArea'
         >
     > &

@@ -119,4 +119,20 @@ input:focus + .toggle__slider {
             background-color: var(--N0);
         }
     }
+
+    &--h20 {
+        .toggle__slider {
+            &.with-icon svg {
+                height: 18px;
+                width: 18px;
+                padding: 2px;
+            }
+        }
+    
+        input:checked + .toggle__slider {
+            &.with-icon svg {
+                left: -10px;
+            }
+        }
+    }
 }
