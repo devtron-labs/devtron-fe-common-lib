@@ -49,7 +49,6 @@ const FilterSelectPicker = ({
     }
 
     const handleSelectOnChange: SelectPickerProps<number | string, true>['onChange'] = (selectedOptionsToUpdate) => {
-        // setInputValue(inputValue)
         setSelectedOptions(structuredClone(selectedOptionsToUpdate) as SelectPickerOptionType[])
     }
 
