@@ -17,6 +17,7 @@
 import React, { ChangeEvent } from 'react'
 import { WidgetProps } from '@rjsf/utils'
 import Toggle from '../../Toggle/Toggle'
+import { isNullOrUndefined } from '@Shared/Helpers'
 
 export const Checkbox = ({
     id,
@@ -38,7 +39,7 @@ export const Checkbox = ({
         }
     }
 
-    const isSelected: boolean = typeof value === 'undefined' ? false : value
+    const isSelected: boolean = isNullOrUndefined(value) ? false : value
 
     return (
         <div>
