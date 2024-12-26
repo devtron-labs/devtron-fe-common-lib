@@ -16,10 +16,10 @@
 
 import { FormEvent, FunctionComponent } from 'react'
 import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
-import { BuildInfraInputFieldComponentProps, BuildInfraMetaConfigTypes } from './types'
+import { BuildInfraMetaConfigTypes, BuildInfraProfileMetaFieldProps } from './types'
 import { BUILD_INFRA_TEXT } from './constants'
 
-const BuildInfraProfileDescriptionField: FunctionComponent<BuildInfraInputFieldComponentProps> = ({
+const BuildInfraProfileDescriptionField: FunctionComponent<BuildInfraProfileMetaFieldProps> = ({
     handleProfileInputChange,
     currentValue,
     error,

@@ -47,4 +47,8 @@ export type UseBreadcrumbOptionalProps = UseBreadcrumbProps | null
 export interface BreadcrumbTextProps {
     heading: string
     isActive?: boolean
+    /**
+     * @default false
+     */
+    shouldTruncate?: boolean
 }

@@ -514,3 +514,5 @@ export const TARGET_IDS = {
 export const BASE_CONFIGURATION_ENV_ID = -1
 
 export const DEVTRON_BASE_MAIN_ID = 'devtron-base-main-identifier'
+export const SKIP_LABEL_KEY_VALIDATION_PREFIX = 'devtron.ai/'
+export const UNSAVED_CHANGES_PROMPT_MESSAGE = 'You have unsaved changes. Are you sure you want to leave?'

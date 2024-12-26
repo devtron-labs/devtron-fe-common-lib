@@ -19,8 +19,13 @@ import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
 import { Pair } from 'yaml'
 import moment from 'moment'
+import { nanoid } from 'nanoid'
 import { StrictRJSFSchema } from '@rjsf/utils'
 import { MaterialHistoryType } from '@Shared/Services/app.types'
+import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
+import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
+import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
+import { PromptProps } from 'react-router-dom'
 import {
     handleUTCTime,
     ManualApprovalType,
@@ -46,10 +51,7 @@ import {
     PreventOutsideFocusProps,
     WebhookEventNameType,
 } from './types'
-import { ReactComponent as ICPullRequest } from '../Assets/Icon/ic-pull-request.svg'
-import { ReactComponent as ICTag } from '../Assets/Icon/ic-tag.svg'
-import { ReactComponent as ICWebhook } from '../Assets/Icon/ic-webhook.svg'
-import { DEPLOYMENT_STATUS, TIMELINE_STATUS } from './constants'
+import { DEPLOYMENT_STATUS, TIMELINE_STATUS, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
 import {
     AggregatedNodes,
     DeploymentStatusDetailsBreakdownDataType,
@@ -960,3 +962,18 @@ export const getWebhookDate = (materialSourceType: string, history: MaterialHist
     const _moment = moment(webhookData.data.date, 'YYYY-MM-DDTHH:mm:ssZ')
     return _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : webhookData.data.date
 }
+
+export const getUniqueId = (size?: number): string => nanoid(size)
+
+/**
+ * Checks if the provided pathname matches the current path.
+ * If the paths do not match, returns a custom message or a default unsaved changes prompt.
+ *
+ * @param currentPathName - The current path to compare against.
+ * @param customMessage - Optional custom message to display when the path does not match.
+ * @returns A function that takes an object with a `pathname` property and performs the path match check.
+ */
+export const checkIfPathIsMatching =
+    (currentPathName: string, customMessage = ''): PromptProps['message'] =>
+    ({ pathname }: { pathname: string }) =>
+        currentPathName === pathname || customMessage || UNSAVED_CHANGES_PROMPT_MESSAGE

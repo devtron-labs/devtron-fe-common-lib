@@ -30,7 +30,7 @@ import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, Children } from 'react'
 import { noop } from '@Common/Helper'
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { Checkbox } from '@Common/Checkbox'
@@ -107,18 +107,43 @@ export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPick
 export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>({
     showSelectedOptionsCount,
     customSelectedOptionsCount,
+    isFocussed,
     ...props
 }: ValueContainerProps<SelectPickerOptionType<OptionValue>> &
-    Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount' | 'customSelectedOptionsCount'>) => {
-    const { getValue } = props
+    Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount' | 'customSelectedOptionsCount'> & {
+        isFocussed: boolean
+    }) => {
+    const {
+        getValue,
+        selectProps: { customDisplayText },
+        children,
+    } = props
     const selectedOptionsLength = isNullOrUndefined(customSelectedOptionsCount)
         ? (getValue() ?? []).length
         : customSelectedOptionsCount
+    const childrenLength = Children.count(children)
 
     return (
         <div className="flex left dc__gap-8 flex-grow-1">
-            <div className="flex left">
-                <components.ValueContainer {...props} />
+            <div className="flex left flex-grow-1">
+                <components.ValueContainer {...props}>
+                    {customDisplayText && selectedOptionsLength > 0 && !isFocussed ? (
+                        <>
+                            <p className="m-0 fs-13 fw-4 lh-20 cn-9 dc__truncate">{customDisplayText}</p>
+                            <div className="dc__position-abs">
+                                {Children.map(children, (child, index) => {
+                                    if (index === childrenLength - 1) {
+                                        return child
+                                    }
+
+                                    return null
+                                })}
+                            </div>
+                        </>
+                    ) : (
+                        children
+                    )}
+                </components.ValueContainer>
             </div>
             {/* Size will not work here need to go in details later when prioritized */}
             {showSelectedOptionsCount && selectedOptionsLength > 0 && (
@@ -175,9 +200,13 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                             <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{startIcon}</div>
                         )}
                         <div className="flex-grow-1">
-                            <h4 className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}>
-                                {label}
-                            </h4>
+                            <Tooltip content={label} placement="right">
+                                <h4
+                                    className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}
+                                >
+                                    {label}
+                                </h4>
+                            </Tooltip>
                             {/* Add support for custom ellipsis if required */}
                             {showDescription &&
                                 (typeof description === 'string' ? (
@@ -261,11 +290,11 @@ export const SelectPickerMultiValueLabel = <OptionValue, IsMulti extends boolean
 }
 
 export const SelectPickerMultiValueRemove = (props: MultiValueRemoveProps) => (
-    <components.MultiValueLabel {...props}>
+    <components.MultiValueRemove {...props}>
         <span className="flex dc__no-shrink">
             <ICClose className="icon-dim-12 icon-use-fill-n6" />
         </span>
-    </components.MultiValueLabel>
+    </components.MultiValueRemove>
 )
 
 export const SelectPickerGroupHeading = <OptionValue,>({
