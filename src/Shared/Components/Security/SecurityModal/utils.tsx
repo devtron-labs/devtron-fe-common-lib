@@ -63,11 +63,13 @@ export const getSecurityScanSeveritiesCount = (data: ScanResultDTO) => {
     const imageScanSeverities = data[CATEGORIES.IMAGE_SCAN].vulnerability?.summary?.severities
     const codeScanSeverities = data[CATEGORIES.CODE_SCAN].vulnerability?.summary?.severities
     return {
-        critical: (imageScanSeverities?.critical || 0) + (codeScanSeverities?.critical || 0),
-        high: (imageScanSeverities?.high || 0) + (codeScanSeverities?.high || 0),
-        medium: (imageScanSeverities?.medium || 0) + (codeScanSeverities?.medium || 0),
-        low: (imageScanSeverities?.low || 0) + (codeScanSeverities?.low || 0),
-        unknown: (imageScanSeverities?.unknown || 0) + (codeScanSeverities?.unknown || 0),
+        critical:
+            (imageScanSeverities?.[SeveritiesDTO.CRITICAL] || 0) + (codeScanSeverities?.[SeveritiesDTO.CRITICAL] || 0),
+        high: (imageScanSeverities?.[SeveritiesDTO.HIGH] || 0) + (codeScanSeverities?.[SeveritiesDTO.HIGH] || 0),
+        medium: (imageScanSeverities?.[SeveritiesDTO.MEDIUM] || 0) + (codeScanSeverities?.[SeveritiesDTO.MEDIUM] || 0),
+        low: (imageScanSeverities?.[SeveritiesDTO.LOW] || 0) + (codeScanSeverities?.[SeveritiesDTO.LOW] || 0),
+        unknown:
+            (imageScanSeverities?.[SeveritiesDTO.UNKNOWN] || 0) + (codeScanSeverities?.[SeveritiesDTO.UNKNOWN] || 0),
     }
 }
 

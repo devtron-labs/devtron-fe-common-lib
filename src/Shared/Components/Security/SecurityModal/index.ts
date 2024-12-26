@@ -9,7 +9,6 @@ export {
     parseGetResourceScanDetailsResponse,
 } from './utils'
 export type {
-    AppDetailsPayload,
     ScanResultDTO,
     SidebarPropsType,
     SidebarDataChildType,

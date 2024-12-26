@@ -21,7 +21,7 @@ export interface GetResourceScanDetailsPayloadType {
     isAppDetailView?: boolean
 }
 
-export interface AppDetailsPayload {
+export interface ScanResultParamsType {
     appId?: number | string
     envId?: number | string
     installedAppId?: number | string
