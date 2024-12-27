@@ -15,10 +15,11 @@
  */
 
 import { Link } from 'react-router-dom'
-import Tippy from '@tippyjs/react'
 
 import { URLS } from '@Common/Constants'
 import { getRandomColor } from '@Common/Helper'
+import { ComponentSizeType } from '@Shared/constants'
+import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
 import { UserRoleGroupsTableProps } from './types'
 import { ReactComponent as TrashIcon } from '../../../../../../Assets/Icon/ic-delete-interactive.svg'
 import { UserRoleGroup } from '../../../types'
@@ -77,20 +78,19 @@ const UserRoleGroupTableRow = ({
                     showDropdownBorder={false}
                     breakLinesForTemporaryAccess
                     showTooltipWhenDisabled
+                    size={ComponentSizeType.medium}
                 />
             )}
             {showDelete && (
-                <Tippy className="default-tt" arrow={false} placement="top" content="Delete">
-                    <button
-                        type="button"
-                        className="dc__transparent flex p-4"
-                        data-testid="user-role-groups__delete-button icon-delete"
-                        onClick={_handleDelete}
-                        aria-label="Delete row"
-                    >
-                        <TrashIcon className="scn-6 icon-dim-16 icon-delete" />
-                    </button>
-                </Tippy>
+                <Button
+                    icon={<TrashIcon />}
+                    ariaLabel="Delete"
+                    dataTestId="user-role-groups__delete-button"
+                    onClick={_handleDelete}
+                    size={ComponentSizeType.xs}
+                    variant={ButtonVariantType.borderLess}
+                    style={ButtonStyleType.negativeGrey}
+                />
             )}
         </div>
     )
