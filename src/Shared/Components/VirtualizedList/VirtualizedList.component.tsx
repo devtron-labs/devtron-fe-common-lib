@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { AutoSizedStickyTree, StickyTreeGetChildren, StickyTreeRowRenderer } from 'react-virtualized-sticky-tree'
 
-import { VIRTUALIZED_LIST_ROOT_Z_INDEX } from './VirtualizedList.constants'
+import { VIRTUALIZED_LIST_ROOT_ID, VIRTUALIZED_LIST_ROOT_Z_INDEX } from './VirtualizedList.constants'
 import { VirtualizedListItem, VirtualizedListProps } from './VirtualizedList.types'
 
 export const VirtualizedList = <ListKeys extends string | number, ExtendedType extends object>({
@@ -13,7 +13,7 @@ export const VirtualizedList = <ListKeys extends string | number, ExtendedType e
     const root = useMemo(
         () => ({
             node: {
-                id: 'root',
+                id: VIRTUALIZED_LIST_ROOT_ID,
                 children: Object.keys(items).filter((item) => !!items[item].children),
             } as VirtualizedListItem<ListKeys, ExtendedType>,
             isSticky: true,
@@ -25,14 +25,14 @@ export const VirtualizedList = <ListKeys extends string | number, ExtendedType e
     )
 
     // METHODS
-    const getChildren: StickyTreeGetChildren<VirtualizedListItem<ListKeys, ExtendedType>> = ({ children }) => {
+    const getChildren: StickyTreeGetChildren<VirtualizedListItem<ListKeys, ExtendedType>> = ({ children, id }) => {
         if (Array.isArray(children)) {
             return children.map((childrenId) => ({
                 node: items[childrenId],
-                isSticky: true,
-                stickyTop: 0,
                 height: items[childrenId].height,
-                zIndex: VIRTUALIZED_LIST_ROOT_Z_INDEX - items[childrenId].depth,
+                ...(id === VIRTUALIZED_LIST_ROOT_ID
+                    ? { isSticky: true, stickyTop: 0, zIndex: VIRTUALIZED_LIST_ROOT_Z_INDEX - items[childrenId].depth }
+                    : {}),
             }))
         }
 
