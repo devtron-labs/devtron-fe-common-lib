@@ -33,7 +33,7 @@ const Vulnerabilities = ({
     SecurityModalSidebar,
 }: VulnerabilitiesProps) => {
     const [scanResultLoading, scanResultResponse, scanResultError, reloadScanResult] = useAsync(
-        () => getSecurityScan({ artifactId, appId: applicationId }),
+        () => getSecurityScan({ artifactId, appId: applicationId, envId: environmentId }),
         [],
         isScanned && isScanEnabled,
         {
@@ -43,7 +43,7 @@ const Vulnerabilities = ({
 
     useEffect(() => {
         if (scanResultResponse) {
-            setVulnerabilityCount(scanResultResponse.result.imageScan.vulnerability?.list?.[0].list?.length)
+            setVulnerabilityCount(scanResultResponse.result.imageScan?.vulnerability?.list?.[0].list?.length)
         }
     }, [scanResultResponse])
 
