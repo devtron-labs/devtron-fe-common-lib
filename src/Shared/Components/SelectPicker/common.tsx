@@ -336,7 +336,7 @@ export const SelectPickerGroupHeading = <OptionValue,>({
         }
 
         // Select all options
-        selectProps?.onChange?.([...selectedOptionsWithoutGroupOptions, ...structuredClone(groupHeadingOptions)], {
+        selectProps?.onChange?.([...selectedOptionsWithoutGroupOptions, ...groupHeadingOptions], {
             action: ReactSelectInputAction.selectOption,
             option: null,
         })
