@@ -39,6 +39,8 @@ import {
     noop,
     SourceTypeMap,
     DATE_TIME_FORMATS,
+    ApprovalConfigDataType,
+    UserApprovalInfo,
 } from '../Common'
 import {
     AggregationKeys,
@@ -795,14 +797,40 @@ export const getFileNameFromHeaders = (headers: Headers) =>
         ?.replace('filename=', '')
         .trim()
 
-export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfigType): UserApprovalConfigType => ({
-    requiredCount: userApprovalConfig?.requiredCount ?? 0,
-    type: userApprovalConfig?.type ?? ManualApprovalType.notConfigured,
-    specificUsers: {
-        identifiers: userApprovalConfig?.specificUsers?.identifiers ?? [],
-        requiredCount: userApprovalConfig?.specificUsers?.identifiers?.length ?? 0,
+export const sanitizeUserApprovalList = (
+    approverList: UserApprovalInfo['approverList'],
+): UserApprovalInfo['approverList'] =>
+    (approverList ?? []).map(({ hasApproved, identifier, canApprove }) => ({
+        canApprove: canApprove ?? false,
+        hasApproved: hasApproved ?? false,
+        identifier,
+    }))
+
+const sanitizeUserApprovalInfo = (userApprovalInfo: UserApprovalInfo | null): UserApprovalInfo => ({
+    currentCount: userApprovalInfo?.currentCount ?? 0,
+    requiredCount: userApprovalInfo?.requiredCount ?? 0,
+    approverList: sanitizeUserApprovalList(userApprovalInfo?.approverList),
+})
+
+export const sanitizeApprovalConfigData = (
+    approvalConfigData: ApprovalConfigDataType | null,
+): ApprovalConfigDataType => ({
+    kind: approvalConfigData?.kind ?? null,
+    requiredCount: approvalConfigData?.requiredCount ?? 0,
+    currentCount: approvalConfigData?.currentCount ?? 0,
+    anyUserApprovedInfo: sanitizeUserApprovalInfo(approvalConfigData?.anyUserApprovedInfo),
+    specificUsersApprovedInfo: sanitizeUserApprovalInfo(approvalConfigData?.specificUsersApprovedInfo),
+    userGroupsApprovedInfo: {
+        currentCount: approvalConfigData?.userGroupsApprovedInfo?.currentCount ?? 0,
+        requiredCount: approvalConfigData?.userGroupsApprovedInfo?.requiredCount ?? 0,
+        userGroups: (approvalConfigData?.userGroupsApprovedInfo?.userGroups ?? []).map(
+            ({ groupName, groupIdentifier, ...userApprovalInfo }) => ({
+                ...sanitizeUserApprovalInfo(userApprovalInfo),
+                groupName,
+                groupIdentifier,
+            }),
+        ),
     },
-    userGroups: userApprovalConfig?.userGroups ?? [],
 })
 
 /**
@@ -812,8 +840,8 @@ export const getIsManualApprovalConfigured = (userApprovalConfig?: Pick<UserAppr
     // Added null check for backward compatibility
     !!userApprovalConfig?.type && userApprovalConfig.type !== ManualApprovalType.notConfigured
 
-export const getIsManualApprovalSpecific = (userApprovalConfig?: Pick<UserApprovalConfigType, 'type'>) =>
-    getIsManualApprovalConfigured(userApprovalConfig) && userApprovalConfig.type === ManualApprovalType.specific
+export const getIsApprovalPolicyConfigured = (approvalConfigData: ApprovalConfigDataType): boolean =>
+    approvalConfigData?.requiredCount > 0
 
 /**
  * @description - Function to open a new tab with the given url
