@@ -17,9 +17,9 @@ import { ReactComponent as ICBack } from '@Icons/ic-caret-left-small.svg'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components/Button'
 import { ComponentSizeType } from '@Shared/constants'
 import { Table, InfoCard } from './components'
-import { DEFAULT_SECURITY_MODAL_STATE } from './constants'
+import { getDefaultSecurityModalState } from './constants'
 import { getTableData, getInfoCardData } from './config'
-import { SecurityModalPropsType, SecurityModalStateType, DetailViewDataType } from './types'
+import { SecurityModalPropsType, SecurityModalStateType, DetailViewDataType, SidebarPropsType } from './types'
 import { getEmptyStateValues } from './config/EmptyState'
 import './styles.scss'
 
@@ -41,9 +41,16 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     responseData,
     hidePolicy = false,
 }) => {
-    const [state, setState] = useState<SecurityModalStateType>(DEFAULT_SECURITY_MODAL_STATE)
-
     const data = responseData ?? null
+
+    const categoriesConfig: SidebarPropsType['categoriesConfig'] = {
+        imageScan: !!data?.imageScan,
+        imageScanLicenseRisks: !!data?.imageScan?.license,
+        codeScan: !!data?.codeScan,
+        kubernetesManifest: !!data?.kubernetesManifest,
+    }
+
+    const [state, setState] = useState<SecurityModalStateType>(getDefaultSecurityModalState(categoriesConfig))
 
     const setDetailViewData = (detailViewData: DetailViewDataType) => {
         setState((prevState) => ({
@@ -152,18 +159,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
             /* NOTE: the height is restricted to (viewport - header) height since we need overflow-scroll */
             <div className="flexbox" style={{ height: 'calc(100vh - 49px)' }}>
                 {/* NOTE: only show sidebar in AppDetails */}
-                {Sidebar && (
-                    <Sidebar
-                        modalState={state}
-                        setModalState={setState}
-                        categoriesConfig={{
-                            imageScan: !!data?.imageScan,
-                            imageScanLicenseRisks: !!data?.imageScan?.license,
-                            codeScan: !!data?.codeScan,
-                            kubernetesManifest: !!data?.kubernetesManifest,
-                        }}
-                    />
-                )}
+                {Sidebar && <Sidebar modalState={state} setModalState={setState} categoriesConfig={categoriesConfig} />}
                 <div className="dc__border-right-n1 h-100" />
                 <div className="dc__overflow-scroll flex-grow-1" style={{ width: '744px' }}>
                     {selectedDetailViewData && renderDetailViewSubHeader()}
