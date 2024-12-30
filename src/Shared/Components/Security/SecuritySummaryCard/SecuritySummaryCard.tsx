@@ -9,21 +9,19 @@ const SecuritySummaryCard = ({
     severityCount,
     scanToolId,
     rootClassName,
-    isHelmApp = false,
     SecurityModalSidebar,
     responseData,
-    isSecurityScanV2Enabled,
     hidePolicy = false,
 }: SecuritySummaryCardProps) => {
     const [showSecurityModal, setShowSecurityModal] = useState<boolean>(false)
     const { critical = 0, high = 0, medium = 0, low = 0, unknown = 0 } = severityCount
     const totalCount = critical + high + medium + low + unknown
     const entities = [
-        { label: SEVERITIES.CRITICAL.label, color: SEVERITIES.CRITICAL.color, value: critical },
-        { label: SEVERITIES.HIGH.label, color: SEVERITIES.HIGH.color, value: high },
-        { label: SEVERITIES.MEDIUM.label, color: SEVERITIES.MEDIUM.color, value: medium },
-        { label: SEVERITIES.LOW.label, color: SEVERITIES.LOW.color, value: low },
-        { label: SEVERITIES.UNKNOWN.label, color: SEVERITIES.UNKNOWN.color, value: unknown },
+        { label: SEVERITIES.critical.label, color: SEVERITIES.critical.color, value: critical },
+        { label: SEVERITIES.high.label, color: SEVERITIES.high.color, value: high },
+        { label: SEVERITIES.medium.label, color: SEVERITIES.medium.color, value: medium },
+        { label: SEVERITIES.low.label, color: SEVERITIES.low.color, value: low },
+        { label: SEVERITIES.unknown.label, color: SEVERITIES.unknown.color, value: unknown },
     ]
 
     const handleOpenSecurityModal = () => {
@@ -61,8 +59,6 @@ const SecuritySummaryCard = ({
             {showSecurityModal && (
                 <SecurityModal
                     handleModalClose={handleCloseSecurityModal}
-                    isHelmApp={isHelmApp}
-                    isSecurityScanV2Enabled={isSecurityScanV2Enabled}
                     Sidebar={SecurityModalSidebar}
                     isLoading={false} // Loading and error are handled on parent components
                     error={null}
