@@ -20,8 +20,7 @@ import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { UseStateFiltersReturnType } from '@Common/Hooks'
 
 import { TooltipProps } from '@Common/Tooltip/types'
-import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
-import { SelectTextAreaProps } from '../SelectTextArea'
+import { SelectPickerOptionType, SelectPickerProps, SelectPickerTextAreaProps } from '../SelectPicker'
 import { FileUploadProps } from '../FileUpload'
 
 /**
@@ -70,14 +69,9 @@ export type DynamicDataTableCellPropsMap = {
         'inputId' | 'value' | 'onChange' | 'fullWidth' | 'isDisabled'
     >
     [DynamicDataTableRowDataType.SELECT_TEXT]: Omit<
-        SelectTextAreaProps,
-        'value' | 'onChange' | 'inputId' | 'isDisabled' | 'dependentRef' | 'refVar' | 'textAreaProps'
-    > & {
-        textAreaProps?: Omit<
-            SelectTextAreaProps['textAreaProps'],
-            'className' | 'disableOnBlurResizeToMinHeight' | 'minHeight' | 'maxHeight'
-        >
-    }
+        SelectPickerTextAreaProps,
+        'inputId' | 'value' | 'onChange' | 'fullWidth' | 'isDisabled' | 'variant' | 'formatCreateLabel'
+    >
     [DynamicDataTableRowDataType.BUTTON]: Pick<
         DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
         'onClick'
@@ -214,6 +208,11 @@ export type DynamicDataTableProps<K extends string, CustomStateType = Record<str
      * Validation state for a specific cell in a dynamic data table.
      */
     cellError?: DynamicDataTableCellErrorType<K>
+    /**
+     * Header key to determine which cell should be focused after row addition.
+     * @default 'first column key'
+     */
+    focusableFieldKey?: K
 }
 
 export interface DynamicDataTableHeaderProps<K extends string, CustomStateType = Record<string, unknown>>
@@ -245,4 +244,5 @@ export interface DynamicDataTableRowProps<K extends string, CustomStateType = Re
         | 'leadingCellIcon'
         | 'trailingCellIcon'
         | 'buttonCellWrapComponent'
+        | 'focusableFieldKey'
     > {}

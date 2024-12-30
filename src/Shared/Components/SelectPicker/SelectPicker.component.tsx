@@ -43,6 +43,8 @@ import {
     SelectPickerMenuList,
     SelectPickerOption,
     SelectPickerValueContainer,
+    SelectPickerInput,
+    SelectPickerIndicatorsContainer,
 } from './common'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
@@ -213,6 +215,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     onCreateOption,
     closeMenuOnSelect = false,
     shouldShowNoOptionsMessage = true,
+    shouldRenderTextArea = false,
+    onKeyDown,
     shouldHideMenu = false,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
@@ -328,7 +332,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     ): void => {
         const trimmedInputValue = _inputValue?.trim()
         if (trimmedInputValue) {
-            onCreateOption(trimmedInputValue)
+            onCreateOption?.(trimmedInputValue)
         }
     }
 
@@ -346,7 +350,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
             e.preventDefault()
         }
-        props.onKeyDown?.(e)
+        onKeyDown?.(e)
     }
 
     const handleFocus: ReactSelectProps['onFocus'] = () => {
@@ -437,12 +441,14 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 Control: SelectPickerControl,
                                 Option: renderOption,
                                 MenuList: SelectPickerMenuList,
+                                IndicatorsContainer: SelectPickerIndicatorsContainer,
                                 ClearIndicator: SelectPickerClearIndicator,
                                 ValueContainer: renderValueContainer,
                                 MultiValueLabel: renderMultiValueLabel,
                                 MultiValueRemove: SelectPickerMultiValueRemove,
                                 GroupHeading: renderGroupHeading,
                                 NoOptionsMessage: renderNoOptionsMessage,
+                                Input: SelectPickerInput,
                                 ...(shouldHideMenu && {
                                     Menu: () => null,
                                     DropdownIndicator: () => null,
@@ -459,6 +465,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             icon={icon}
                             showSelectedOptionIcon={shouldShowSelectedOptionIcon}
                             onKeyDown={handleKeyDown}
+                            shouldRenderTextArea={shouldRenderTextArea}
                             customDisplayText={customDisplayText}
                             onFocus={handleFocus}
                             onBlur={handleBlur}
