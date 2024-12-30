@@ -15,14 +15,13 @@
  */
 
 import { useEffect } from 'react'
-import { EMPTY_STATE_STATUS, SCAN_TOOL_ID_CLAIR, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
-import { SeverityCount } from '@Shared/types'
-import { Progressing } from '../../../../Common'
+import { EMPTY_STATE_STATUS } from '@Shared/constants'
+import { Progressing, useAsync } from '../../../../Common'
 import { ScannedByToolModal } from '../../ScannedByToolModal'
 import { VulnerabilitiesProps } from './types'
 import { SecuritySummaryCard } from '../SecuritySummaryCard'
-import { getSeverityCountFromSummary, getTotalSeverityCount } from '../utils'
-import { useGetSecurityVulnerabilities } from './utils'
+import { getScanToolAndSeverityCount } from '../utils'
+import { getSecurityScan } from '../SecurityModal/service'
 
 const Vulnerabilities = ({
     isScanned,
@@ -32,23 +31,19 @@ const Vulnerabilities = ({
     environmentId,
     setVulnerabilityCount,
     SecurityModalSidebar,
-    getSecurityScan,
 }: VulnerabilitiesProps) => {
-    const isScanV2Enabled = window._env_.ENABLE_RESOURCE_SCAN_V2
-    const { scanDetailsLoading, scanResultResponse, scanDetailsError, reloadScanDetails } =
-        useGetSecurityVulnerabilities({
-            appId: String(applicationId),
-            artifactId: String(artifactId),
-            envId: environmentId,
-            isScanEnabled,
-            isScanned,
-            isScanV2Enabled,
-            getSecurityScan,
-        })
+    const [scanResultLoading, scanResultResponse, scanResultError, reloadScanResult] = useAsync(
+        () => getSecurityScan({ artifactId, appId: applicationId, envId: environmentId }),
+        [],
+        isScanned && isScanEnabled,
+        {
+            resetOnChange: false,
+        },
+    )
 
     useEffect(() => {
         if (scanResultResponse) {
-            setVulnerabilityCount(scanResultResponse.result.imageScan.vulnerability?.list?.[0].list?.length)
+            setVulnerabilityCount(scanResultResponse.result.imageScan?.vulnerability?.list?.[0].list?.length)
         }
     }, [scanResultResponse])
 
@@ -60,7 +55,7 @@ const Vulnerabilities = ({
         )
     }
 
-    if (scanDetailsLoading) {
+    if (scanResultLoading) {
         return (
             <div className="security-tab-empty">
                 <Progressing />
@@ -68,7 +63,7 @@ const Vulnerabilities = ({
         )
     }
 
-    if (!isScanned || (scanResultResponse && !scanResultResponse?.result.scanned)) {
+    if (!isScanned || (scanResultResponse && !scanResultResponse.result.scanned)) {
         return (
             <div className="security-tab-empty">
                 <p className="security-tab-empty__title">Image was not scanned</p>
@@ -76,25 +71,18 @@ const Vulnerabilities = ({
         )
     }
 
-    if (scanDetailsError) {
+    if (scanResultError) {
         return (
             <div className="security-tab-empty">
                 <p className="security-tab-empty__title">Failed to fetch vulnerabilities</p>
-                <button className="cta secondary" type="button" onClick={reloadScanDetails}>
+                <button className="cta secondary" type="button" onClick={reloadScanResult}>
                     Reload
                 </button>
             </div>
         )
     }
 
-    const scanToolId =
-        scanResultResponse?.result.imageScan.vulnerability?.list[0].scanToolName === 'TRIVY'
-            ? SCAN_TOOL_ID_TRIVY
-            : SCAN_TOOL_ID_CLAIR
-    const scanResultSeverities = scanResultResponse?.result.imageScan.vulnerability?.summary.severities
-    const severityCount: SeverityCount = getSeverityCountFromSummary(scanResultSeverities)
-
-    const totalCount = getTotalSeverityCount(severityCount)
+    const { scanToolId, severityCount, totalCount } = getScanToolAndSeverityCount(scanResultResponse?.result)
 
     if (!totalCount) {
         return (
@@ -119,8 +107,6 @@ const Vulnerabilities = ({
                 severityCount={severityCount}
                 scanToolId={scanToolId}
                 responseData={scanResultResponse?.result}
-                isHelmApp={false} // Image card is not visible for helm app
-                isSecurityScanV2Enabled={isScanV2Enabled}
                 SecurityModalSidebar={SecurityModalSidebar}
                 hidePolicy={!environmentId}
             />

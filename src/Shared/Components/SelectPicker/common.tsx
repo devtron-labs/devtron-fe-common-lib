@@ -25,6 +25,8 @@ import {
     MultiValueRemoveProps,
     MultiValueProps,
     MultiValue,
+    InputProps,
+    IndicatorsContainerProps,
 } from 'react-select'
 import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
@@ -60,22 +62,30 @@ const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = 
     }
 }
 
+export const SelectPickerIndicatorsContainer = <OptionValue,>({
+    className = '',
+    ...props
+}: IndicatorsContainerProps<SelectPickerOptionType<OptionValue>>) => (
+    <components.IndicatorsContainer {...props} className={`${className} dc__position-sticky dc__top-0 pt-2`} />
+)
+
 export const SelectPickerDropdownIndicator = <OptionValue,>(
     props: DropdownIndicatorProps<SelectPickerOptionType<OptionValue>>,
 ) => {
-    const { isDisabled } = props
+    const { isDisabled, className = '' } = props
 
     return (
-        <components.DropdownIndicator {...props}>
+        <components.DropdownIndicator {...props} className={`${className} dc__align-self-start`}>
             <ICCaretDown className={isDisabled ? 'scn-3' : 'scn-6'} />
         </components.DropdownIndicator>
     )
 }
 
-export const SelectPickerClearIndicator = <OptionValue,>(
-    props: ClearIndicatorProps<SelectPickerOptionType<OptionValue>>,
-) => (
-    <components.ClearIndicator {...props}>
+export const SelectPickerClearIndicator = <OptionValue,>({
+    className = '',
+    ...props
+}: ClearIndicatorProps<SelectPickerOptionType<OptionValue>>) => (
+    <components.ClearIndicator {...props} className={`${className} dc__align-self-start`}>
         <ICClose className="icon-use-fill-n6" />
     </components.ClearIndicator>
 )
@@ -101,6 +111,17 @@ export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPick
             )}
             {children}
         </components.Control>
+    )
+}
+
+export const SelectPickerInput = <OptionValue,>(props: InputProps<SelectPickerOptionType<OptionValue>>) => {
+    const {
+        isHidden,
+        selectProps: { shouldRenderTextArea },
+    } = props
+
+    return (
+        <components.Input {...props} isTextArea={shouldRenderTextArea} isHidden={!shouldRenderTextArea && isHidden} />
     )
 }
 

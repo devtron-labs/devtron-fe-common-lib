@@ -1,33 +1,24 @@
-/*
- * Copyright (c) 2024. Devtron Inc.
- */
-
+import { ROUTES } from '@Common/Constants'
+import { getUrlWithSearchParams } from '@Common/Helper'
 import { get } from '@Common/Api'
 import { ResponseType } from '@Common/Types'
-import { getUrlWithSearchParams } from '@Common/Helper'
-import { ROUTES } from '@Common/Constants'
-import { ApiResponseResultType, ExecutionDetailsPayload } from './types'
-import { parseExecutionDetailResponse } from './utils'
+import { ScanResultDTO, ScanResultParamsType } from './types'
 
-export const getExecutionDetails = async (
-    executionDetailPayload: ExecutionDetailsPayload,
-): Promise<ResponseType<ApiResponseResultType>> => {
-    const url = getUrlWithSearchParams(ROUTES.SECURITY_SCAN_EXECUTION_DETAILS, executionDetailPayload)
-    const response = await get(url)
-    const parsedResult = {
-        ...(response.result || {}),
-        scanExecutionId: response.result?.ScanExecutionId,
-        lastExecution: response.result?.executionTime,
-        objectType: response.result?.objectType,
-        vulnerabilities:
-            response.result?.vulnerabilities?.map((cve) => ({
-                name: cve.cveName,
-                severity: cve.severity,
-                package: cve.package,
-                version: cve.currentVersion,
-                fixedVersion: cve.fixedVersion,
-                permission: cve.permission,
-            })) || [],
+export const getSecurityScan = async ({
+    appId,
+    envId,
+    installedAppId,
+    artifactId,
+    installedAppVersionHistoryId,
+}: ScanResultParamsType): Promise<ResponseType<ScanResultDTO>> => {
+    const params: ScanResultParamsType = {
+        appId,
+        envId,
+        installedAppId,
+        artifactId,
+        installedAppVersionHistoryId,
     }
-    return { ...response, result: parseExecutionDetailResponse(parsedResult) }
+    const url = getUrlWithSearchParams(ROUTES.SCAN_RESULT, params)
+    const response = await get<ScanResultDTO>(url)
+    return response
 }

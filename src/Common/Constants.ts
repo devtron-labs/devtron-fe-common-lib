@@ -89,7 +89,7 @@ export const ROUTES = {
     CD_MATERIAL_GET: 'app/cd-pipeline',
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
-    SECURITY_SCAN_EXECUTION_DETAILS: 'security/scan/executionDetail',
+    SCAN_RESULT: 'scan-result',
     NOTIFIER: 'notification',
     APP_LIST: 'app/list',
     TELEMETRY_EVENT: 'telemetry/event',
@@ -509,6 +509,7 @@ export enum ReactSelectInputAction {
     selectOption = 'select-option',
     deselectOption = 'deselect-option',
     removeValue = 'remove-value',
+    inputBlur = 'input-blur',
 }
 
 export const ZERO_TIME_STRING = '0001-01-01T00:00:00Z'

@@ -92,6 +92,11 @@ declare module 'react-select/base' {
         customDisplayText?: string
         /** Render function for the footer at the end of the options list. */
         renderOptionsFooter?: () => ReactNode
+        /**
+         * If true, the select picker will render textarea instead of input.
+         * @default false
+         */
+        shouldRenderTextArea?: boolean
     }
 }
 
@@ -140,6 +145,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
             | 'icon'
             | 'showSelectedOptionIcon'
             | 'renderOptionsFooter'
+            | 'shouldRenderTextArea'
         >
     > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> &
@@ -300,3 +306,15 @@ export interface FilterSelectPickerProps
     appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
 }
+
+export interface SelectPickerTextAreaProps
+    extends Omit<
+        SelectPickerProps<string, false>,
+        | 'selectRef'
+        | 'inputValue'
+        | 'onInputChange'
+        | 'controlShouldRenderValue'
+        | 'onKeyDown'
+        | 'onCreateOption'
+        | 'shouldRenderTextArea'
+    > {}

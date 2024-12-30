@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import React, { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react'
 import { WidgetProps } from '@rjsf/utils'
-import Toggle from '../../Toggle/Toggle'
 import { isNullOrUndefined } from '@Shared/Helpers'
+import Toggle from '../../Toggle/Toggle'
 
 export const Checkbox = ({
     id,

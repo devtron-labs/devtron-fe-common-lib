@@ -15,6 +15,7 @@
  */
 
 export { default as SelectPicker } from './SelectPicker.component'
+export * from './SelectPickerTextArea.component'
 export { default as FilterSelectPicker } from './FilterSelectPicker'
 export * from './type'
 export { getSelectPickerOptionByValue } from './utils'

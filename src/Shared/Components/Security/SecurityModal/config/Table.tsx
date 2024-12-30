@@ -2,19 +2,13 @@
  * Copyright (c) 2024. Devtron Inc.
  */
 
-import {
-    ApiResponseResultType,
-    CATEGORIES,
-    OpenDetailViewButtonProps,
-    SecurityModalStateType,
-    TablePropsType,
-} from '../types'
+import { ScanResultDTO, CATEGORIES, OpenDetailViewButtonProps, SecurityModalStateType, TablePropsType } from '../types'
 import { getImageScanTableData } from './ImageScan'
 import { getCodeScanTableData } from './CodeScan'
 import { getKubernetesManifestTableData } from './KubernetesManifest'
 
 export const getTableData = (
-    data: ApiResponseResultType,
+    data: ScanResultDTO,
     category: SecurityModalStateType['category'],
     subCategory: SecurityModalStateType['subCategory'],
     setDetailViewData: OpenDetailViewButtonProps['setDetailViewData'],
