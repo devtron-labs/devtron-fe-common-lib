@@ -14,11 +14,19 @@
  * limitations under the License.
  */
 
+import { OverrideMergeStrategyType } from '@Pages/Applications'
+
 export interface customEnv {
     SENTRY_ENV?: string
     SENTRY_ERROR_ENABLED?: boolean
     SENTRY_PERFORMANCE_ENABLED?: boolean
     SENTRY_DSN?: string
+    /**
+     * Release version for sentry
+     *
+     * @default 'dashboard@${SHORT_GIT_HASH}'
+     */
+    SENTRY_RELEASE_VERSION?: string
     SENTRY_TRACES_SAMPLE_RATE?: number
     HOTJAR_ENABLED?: boolean
     CLUSTER_NAME?: boolean
@@ -76,6 +84,7 @@ export interface customEnv {
     SYSTEM_CONTROLLER_LISTING_TIMEOUT?: number
     FEATURE_STEP_WISE_LOGS_ENABLE?: boolean
     FEATURE_IMAGE_PROMOTION_ENABLE?: boolean
+    FEATURE_CD_MANDATORY_PLUGINS_ENABLE?: boolean
     /**
      * If true, the direct permissions are hidden for non-super admins in user permissions
      *
@@ -87,6 +96,11 @@ export interface customEnv {
     FEATURE_PROMO_EMBEDDED_MODAL_TITLE?: string
     FEATURE_PROMO_EMBEDDED_IFRAME_URL?: string
     FEATURE_SWAP_TRAFFIC_ENABLE?: boolean
+    FEATURE_BULK_RESTART_WORKLOADS_FROM_RB: string
+    FEATURE_RB_SYNC_CLUSTER_ENABLE?: boolean
+    FEATURE_DEFAULT_MERGE_STRATEGY?: OverrideMergeStrategyType
+    FEATURE_DEFAULT_LANDING_RB_ENABLE?: boolean
+    FEATURE_CLUSTER_MAP_ENABLE?: boolean
 }
 declare global {
     interface Window {

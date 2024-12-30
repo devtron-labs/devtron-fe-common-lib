@@ -150,7 +150,14 @@ async function fetchAPI<K = object>(
                     })
                 } else {
                     handleLogout()
-                    return { code: 401, status: 'Unauthorized', result: [] }
+                    // Using this way to ensure that the user is redirected to the login page
+                    // and the component has enough time to get unmounted otherwise the component re-renders
+                    // and try to access some property of a variable and log exception to sentry
+                    return await new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve({ code: 401, status: 'Unauthorized', result: [] })
+                        }, 1000)
+                    })
                 }
             } else if (response.status >= 300 && response.status <= 599) {
                 return await handleServerError(contentType, response)
@@ -192,14 +199,21 @@ function fetchInTime<T = object>(
     options?: APIOptions,
     isMultipartRequest?: boolean,
 ): Promise<ResponseType> {
-    const controller = new AbortController()
-    const { signal } = controller
+    const controller = options?.abortControllerRef?.current ?? new AbortController()
+    const signal = options?.abortControllerRef?.current?.signal || options?.signal || controller.signal
     const timeoutPromise: Promise<ResponseType> = new Promise((resolve, reject) => {
         const requestTimeout = (window as any)?._env_?.GLOBAL_API_TIMEOUT || FALLBACK_REQUEST_TIMEOUT
         const timeout = options?.timeout ? options.timeout : requestTimeout
 
         setTimeout(() => {
             controller.abort()
+            if (options?.abortControllerRef?.current) {
+                options.abortControllerRef.current = new AbortController()
+            }
+
+            // Note: This is not catered in case abortControllerRef is passed since
+            // the API is rejected with abort signal from line 202
+            // FIXME: Remove once signal is removed
             reject({
                 code: 408,
                 errors: [{ code: 408, internalMessage: 'Request cancelled', userMessage: 'Request Cancelled' }],
@@ -207,12 +221,20 @@ function fetchInTime<T = object>(
         }, timeout)
     })
     return Promise.race([
-        fetchAPI(url, type, data, options?.signal || signal, options?.preventAutoLogout || false, isMultipartRequest),
+        fetchAPI(
+            url,
+            type,
+            data,
+            signal,
+            options?.preventAutoLogout || false,
+            isMultipartRequest,
+        ),
         timeoutPromise,
     ]).catch((err) => {
         if (err instanceof ServerErrors) {
             throw err
         } else {
+            // FIXME: Can be removed once signal is removed
             throw new ServerErrors({
                 code: 408,
                 errors: [
@@ -264,4 +286,4 @@ export const abortPreviousRequests = <T>(
  */
 export const getIsRequestAborted = (error) =>
     // The 0 code is common for aborted and blocked requests
-    error && error.code === 0 && error.message.search('abort|aborted')
+    error && error.code === 0 && error.message.search('abort|aborted') > -1

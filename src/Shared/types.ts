@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Dayjs } from 'dayjs'
 import {
     OptionType,
     CommonNodeAttr,
@@ -23,8 +24,12 @@ import {
     DeploymentAppTypes,
     ServerErrors,
     SortingParams,
+    TriggerBlockType,
+    ValueConstraintType,
+    VariableType,
+    RefVariableType,
+    PluginType,
 } from '../Common'
-import { KeyValueListType } from './Components'
 import { EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
@@ -117,7 +122,10 @@ export enum Nodes {
     PodDisruptionBudget = 'PodDisruptionBudget',
     Event = 'Event',
     Namespace = 'Namespace',
+    Node = 'Node',
     Overview = 'Overview',
+    MonitoringDashboard = 'MonitoringDashboard',
+    UpgradeCluster = 'UpgradeCluster',
 }
 
 // FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
@@ -331,12 +339,31 @@ export interface GitTriggers {
     CiConfigureSourceValue: string
 }
 
+export interface RuntimePluginVariables
+    extends Pick<VariableType, 'name' | 'value' | 'defaultValue' | 'format' | 'fileReferenceId' | 'fileMountDir'> {
+    variableStepScope: string
+    valueConstraint: ValueConstraintType & { id: number }
+    stepVariableId: number
+    valueType: RefVariableType
+    stepName: string
+    stepType: PluginType
+    isRequired: boolean
+    pluginIcon?: string
+    description?: string
+}
+
 export interface RuntimeParamsAPIResponseType {
     envVariables: Record<string, string>
+    runtimePluginVariables: RuntimePluginVariables[]
 }
 
 export interface RuntimeParamsTriggerPayloadType {
-    runtimeParams: RuntimeParamsAPIResponseType
+    runtimeParams: {
+        runtimePluginVariables: Pick<
+            RuntimePluginVariables,
+            'name' | 'fileMountDir' | 'fileReferenceId' | 'value' | 'format' | 'variableStepScope'
+        >[]
+    }
 }
 
 export enum CIMaterialSidebarType {
@@ -440,6 +467,7 @@ export enum ResourceKindType {
     installation = 'installation',
     environment = 'environment',
     cdPipeline = 'cd-pipeline',
+    ciPipeline = 'ci-pipeline',
     project = 'project',
 }
 
@@ -462,6 +490,8 @@ export interface SeverityCount {
 }
 export enum PolicyKindType {
     lockConfiguration = 'lock-configuration',
+    imagePromotion = 'image-promotion',
+    plugins = 'plugin',
 }
 
 export interface LastExecutionResultType {
@@ -521,6 +551,7 @@ export enum AggregationKeys {
     'Other Resources' = 'Other Resources',
     Events = 'Events',
     Namespaces = 'Namespaces',
+    'Nodes' = 'Nodes',
 }
 
 export type AggregationKeysType = keyof typeof AggregationKeys
@@ -678,9 +709,15 @@ export enum ConfigurationType {
     YAML = 'YAML',
 }
 
+export const CONFIGURATION_TYPE_OPTIONS: OptionType<ConfigurationType, ConfigurationType>[] = [
+    { label: ConfigurationType.GUI, value: ConfigurationType.GUI },
+    { label: ConfigurationType.YAML, value: ConfigurationType.YAML },
+] as const
+
 export interface BaseURLParams {
     appId: string
     envId: string
+    clusterId: string
 }
 
 export interface ConfigKeysWithLockType {
@@ -689,10 +726,6 @@ export interface ConfigKeysWithLockType {
 }
 
 export type DataAttributes = Record<`data-${string}`, unknown>
-
-export interface RuntimeParamsListItemType extends KeyValueListType {
-    id: number
-}
 
 export enum RuntimeParamsHeadingType {
     KEY = 'key',
@@ -738,4 +771,151 @@ export interface CustomRoleAndMeta {
     possibleRolesMetaForHelm: MetaPossibleRoles
     possibleRolesMetaForCluster: MetaPossibleRoles
     possibleRolesMetaForJob: MetaPossibleRoles
+}
+
+interface CommonTabArgsType {
+    /**
+     * Name for the tab.
+     *
+     * Note: Used for the title
+     */
+    name: string
+    kind?: string
+    /**
+     * URL for the tab
+     */
+    url: string
+    /**
+     * If true, the tab is selected
+     */
+    isSelected: boolean
+    /**
+     * Title for the tab
+     */
+    title?: string
+    isDeleted?: boolean
+    /**
+     * Type for the tab
+     *
+     * Note: Fixed tabs are always places before dynamic tabs
+     */
+    type: 'fixed' | 'dynamic'
+    /**
+     * Path of the icon for the tab
+     *
+     * @default ''
+     */
+    iconPath?: string
+    /**
+     * Dynamic title for the tab
+     *
+     * @default ''
+     */
+    dynamicTitle?: string
+    /**
+     * Whether to show the tab name when selected
+     *
+     * @default false
+     */
+    showNameOnSelect?: boolean
+    /**
+     * Would remove the title/name from tab heading, but that does not mean name is not required, since it is used in other calculations
+     * @default false
+     */
+    hideName?: boolean
+    /**
+     * Indicates if showNameOnSelect tabs have been selected once
+     *
+     * @default false
+     */
+    isAlive?: boolean
+    lastSyncMoment?: Dayjs
+    componentKey?: string
+    /**
+     * Custom tippy config for the tab
+     *
+     * This overrides the tippy being computed from tab title
+     */
+    tippyConfig?: {
+        title: string
+        descriptions: {
+            info: string
+            value: string
+        }[]
+    }
+    /**
+     * If true, the fixed tab remains mounted on initial load of the component
+     *
+     * Note: Not for dynamic tabs atm
+     *
+     * @default false
+     */
+    shouldRemainMounted?: boolean
+}
+
+export type InitTabType = Omit<CommonTabArgsType, 'type'> &
+    (
+        | {
+              type: 'fixed'
+              /**
+               * Unique identifier for the fixed tab
+               *
+               * Note: Shouldn't contain '-'
+               */
+              id: string
+              idPrefix?: never
+          }
+        | {
+              type: 'dynamic'
+              id?: never
+              idPrefix: string
+          }
+    )
+
+export interface DynamicTabType extends CommonTabArgsType {
+    id: string
+    /**
+     * Id of the last active tab before switching to current tab
+     */
+    lastActiveTabId: string | null
+}
+
+export interface PreventOutsideFocusProps {
+    identifier: string
+    preventFocus: boolean
+}
+
+export interface PolicyBlockInfo {
+    isBlocked: boolean
+    blockedBy: TriggerBlockType
+    reason: string
+}
+
+export interface PipelineStageBlockInfo {
+    node: PolicyBlockInfo
+    pre: PolicyBlockInfo
+    post: PolicyBlockInfo
+}
+
+export interface PolicyConsequencesDTO {
+    cd: PipelineStageBlockInfo
+    ci: PipelineStageBlockInfo
+}
+
+export interface GetPolicyConsequencesProps {
+    appId: number
+    envId: number
+}
+export interface UploadFileDTO {
+    id: number
+    name: string
+    size: number
+    mimeType: string
+    extension: string
+}
+
+export interface UploadFileProps {
+    file: File[]
+    allowedExtensions?: string[]
+    maxUploadSize?: number
 }

@@ -34,6 +34,12 @@ const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
                 width: '150%',
                 minWidth: '300px',
             }
+        case ComponentSizeType.xs: {
+            return {
+                width: '100%',
+                minWidth: '100%',
+            }
+        }
         case ComponentSizeType.small:
         default:
             return {
@@ -349,36 +355,28 @@ export const getGroupCheckboxValue = <OptionValue>(
  * @param optionsList - The list of options or groups of options.
  * @param value - The value to compare against the options' values.
  * @param defaultOption - The default option to return if no match is found.
+ * @param getOptionValue - Override the default value for the option
  * @returns The matched option or the default option if no match is found.
  */
 export const getSelectPickerOptionByValue = <OptionValue>(
     optionsList: OptionsOrGroups<SelectPickerOptionType<OptionValue>, GroupBase<SelectPickerOptionType<OptionValue>>>,
     value: OptionValue,
     defaultOption: SelectPickerOptionType<OptionValue> = { label: '', value: '' as unknown as OptionValue },
+    getOptionValue: SelectPickerProps<OptionValue>['getOptionValue'] = null,
 ): SelectPickerOptionType<OptionValue> => {
     if (!Array.isArray(optionsList)) {
         return defaultOption
     }
 
-    const foundOption = optionsList.reduce(
-        (acc, curr) => {
-            if (!acc.notFound) return acc
+    const flatOptionsList = optionsList.flatMap<SelectPickerOptionType<OptionValue>>((groupOrBaseOption) =>
+        'options' in groupOrBaseOption ? groupOrBaseOption.options : [groupOrBaseOption],
+    )
 
-            if ('value' in curr && curr.value === value) {
-                return { data: curr, notFound: false }
-            }
+    return (
+        flatOptionsList.find((option) => {
+            const optionValue = getOptionValue ? getOptionValue(option) : option.value
 
-            if ('options' in curr && curr.options) {
-                const nestedOption = curr.options.find(({ value: _value }) => _value === value)
-                if (nestedOption) {
-                    return { data: nestedOption, notFound: false }
-                }
-            }
-
-            return acc
-        },
-        { notFound: true, data: defaultOption },
-    ).data
-
-    return foundOption
+            return optionValue === value
+        }) ?? defaultOption
+    )
 }

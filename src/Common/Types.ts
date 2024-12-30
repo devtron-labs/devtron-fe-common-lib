@@ -14,12 +14,27 @@
  * limitations under the License.
  */
 
-import React, { ReactNode, CSSProperties, ReactElement } from 'react'
+import React, { ReactNode, CSSProperties, ReactElement, MutableRefObject } from 'react'
+import { TippyProps } from '@tippyjs/react'
 import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
-import { ACTION_STATE, DEPLOYMENT_WINDOW_TYPE, DockerConfigOverrideType, SortingOrder, TaskErrorObj } from '.'
-import { RegistryType, RuntimeParamsListItemType, Severity } from '../Shared'
+import {
+    MandatoryPluginBaseStateType,
+    RegistryType,
+    RuntimePluginVariables,
+    Severity,
+    PolicyBlockInfo,
+} from '../Shared'
+import {
+    ACTION_STATE,
+    DEPLOYMENT_WINDOW_TYPE,
+    DockerConfigOverrideType,
+    RefVariableType,
+    SortingOrder,
+    TaskErrorObj,
+    VariableTypeFormat,
+} from '.'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -43,7 +58,11 @@ export interface ResponseType<T = any> {
 
 export interface APIOptions {
     timeout?: number
+    /**
+     * @deprecated Use abortController instead
+     */
     signal?: AbortSignal
+    abortControllerRef?: MutableRefObject<AbortController>
     preventAutoLogout?: boolean
 }
 
@@ -85,7 +104,7 @@ export interface CheckboxProps {
     dataTestId?: string
 }
 
-export interface TippyCustomizedProps {
+export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
     theme: TippyTheme
     visible?: boolean
     heading?: ReactNode | string
@@ -113,6 +132,7 @@ export interface TippyCustomizedProps {
     documentationLink?: string
     documentationLinkText?: string
     children: React.ReactElement<any>
+    disableClose?: boolean
 }
 
 export interface InfoIconTippyProps
@@ -166,6 +186,7 @@ export interface ErrorPageType
 
 export interface ErrorScreenManagerProps {
     code?: number
+    imageType?: ImageType
     reload?: (...args) => any
     subtitle?: React.ReactChild
     reloadClass?: string
@@ -450,12 +471,12 @@ export interface ArtifactReleaseMappingType {
 }
 
 export interface CDMaterialListModalServiceUtilProps {
-    artifacts: any[],
-    offset: number,
-    artifactId?: number,
-    artifactStatus?: string,
-    disableDefaultSelection?: boolean,
-    userApprovalConfig?: UserApprovalConfigType,
+    artifacts: any[]
+    offset: number
+    artifactId?: number
+    artifactStatus?: string
+    disableDefaultSelection?: boolean
+    userApprovalConfig?: UserApprovalConfigType
 }
 
 export interface CDMaterialType {
@@ -510,6 +531,10 @@ export interface CDMaterialType {
      * Would currently only be received in case of release
      */
     appWorkflowId: number
+    /**
+     * Denotes trigger blocking due to mandatory tags, (might be used for plugins and other features in future)
+     */
+    deploymentBlockedState?: PolicyBlockInfo
 }
 
 export enum CDMaterialServiceEnum {
@@ -552,7 +577,18 @@ export interface DownstreamNodesEnvironmentsType {
     environmentName: string
 }
 
-export interface CommonNodeAttr {
+export enum TriggerBlockType {
+    MANDATORY_TAG = 'mandatory-tags',
+    MANDATORY_PLUGIN = 'mandatory-plugins',
+    SECURITY_SCAN = 'security-scan',
+}
+
+export interface TriggerBlockedInfo {
+    blockedBy: TriggerBlockType
+    blockedReason?: string
+}
+
+export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTriggerBlocked' | 'pluginBlockState'> {
     connectingCiPipelineId?: number
     parents: string | number[] | string[]
     x: number
@@ -602,15 +638,10 @@ export interface CommonNodeAttr {
     approvalUsers?: string[]
     userApprovalConfig?: UserApprovalConfigType
     requestedUserId?: number
-    showPluginWarning?: boolean
+    showPluginWarning: boolean
     helmPackageName?: string
     isVirtualEnvironment?: boolean
     deploymentAppType?: DeploymentAppTypes
-    isCITriggerBlocked?: boolean
-    ciBlockState?: {
-        action: any
-        metadataField: string
-    }
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
     isGitOpsRepoNotConfigured?: boolean
@@ -619,6 +650,7 @@ export interface CommonNodeAttr {
     downstreamEnvironments?: DownstreamNodesEnvironmentsType[]
     cipipelineId?: number
     isDeploymentBlocked?: boolean
+    triggerBlockedInfo?: TriggerBlockedInfo
 }
 
 export enum DeploymentAppTypes {
@@ -689,7 +721,8 @@ export interface CDMaterialsMetaInfo {
      * This is the ID of user that has request the material
      */
     requestedUserId: number
-    runtimeParams: RuntimeParamsListItemType[]
+    deploymentBlockedState?: PolicyBlockInfo
+    runtimeParams: RuntimePluginVariables[]
 }
 
 export interface ImagePromotionMaterialInfo {
@@ -781,7 +814,7 @@ export interface Strategy {
     default?: boolean
 }
 
-export interface CDStage {
+export interface CDStage extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo' | 'isTriggerBlocked' >> {
     status: string
     name: string
     triggerType: 'AUTOMATIC' | 'MANUAL'
@@ -793,7 +826,7 @@ export interface CDStageConfigMapSecretNames {
     secrets: any[]
 }
 
-export interface PrePostDeployStageType {
+export interface PrePostDeployStageType extends MandatoryPluginBaseStateType, Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     isValid: boolean
     steps: TaskErrorObj[]
     triggerType: string
@@ -801,7 +834,7 @@ export interface PrePostDeployStageType {
     status: string
 }
 
-export interface CdPipeline {
+export interface CdPipeline extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     id: number
     environmentId: number
     environmentName?: string
@@ -831,6 +864,9 @@ export interface CdPipeline {
     preDeployStage?: PrePostDeployStageType
     postDeployStage?: PrePostDeployStageType
     isProdEnv?: boolean
+    isGitOpsRepoNotConfigured?: boolean
+    isDeploymentBlocked?: boolean
+    isTriggerBlocked?: boolean
 }
 
 export interface ExternalCiConfig {
@@ -993,3 +1029,26 @@ export interface EnvironmentHelmResult {
 }
 
 export type EnvironmentListHelmResponse = ResponseType<EnvironmentListHelmResult[]>
+
+export interface WidgetEventDetails {
+    message: string
+    namespace: string
+    object: string
+    source: string
+    count: number
+    age: string
+    lastSeen: string
+}
+
+export interface GlobalVariableDTO {
+    name: string
+    format: VariableTypeFormat
+    description: string
+    stageType: 'cd' | 'post-cd' | 'ci'
+}
+
+export type GlobalVariableOptionType = Omit<GlobalVariableDTO, 'name'> & {
+    label: string
+    value: string
+    variableType: Extract<RefVariableType, RefVariableType.GLOBAL>
+}

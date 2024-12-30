@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-cross.svg'
 import { ReactComponent as Help } from '../Assets/Icon/ic-help.svg'
@@ -31,27 +31,30 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
     const [showHeadingInfo, setShowHeadingInfo] = useState(false)
     const isWhiteTheme = props.theme === TippyTheme.white
 
+    const closeOnEsc = (e) => {
+        if (e.keyCode === 27) {
+            closeTippy(e)
+        }
+    }
+
     const onTippyMount = (tippyInstance) => {
         tippyRef.current = tippyInstance
         document.addEventListener('keydown', closeOnEsc)
     }
 
     const closeTippy = (e) => {
-        stopPropagation(e)
-        if (tippyRef.current?.hide) {
-            tippyRef.current.hide()
-            tippyRef.current = null
+        if (!props.disableClose) {
+            stopPropagation(e)
+            if (tippyRef.current?.hide) {
+                tippyRef.current.hide()
+                tippyRef.current = null
 
-            if (props.onClose) {
-                props.onClose()
+                if (props.onClose) {
+                    props.onClose()
+                }
             }
-        }
-        setShowHeadingInfo(false)
-    }
-
-    const closeOnEsc = (e) => {
-        if (e.keyCode === 27) {
-            closeTippy(e)
+            setShowHeadingInfo(false)
+            document.removeEventListener('keydown', closeOnEsc)
         }
     }
 
@@ -187,6 +190,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
             animation={animation || 'fade'}
             duration={duration || 300}
             visible={props.visible}
+            appendTo={props.appendTo}
         >
             {children}
         </Tippy>

@@ -80,13 +80,12 @@ export const SelectPickerClearIndicator = <OptionValue,>(
     </components.ClearIndicator>
 )
 
-export const SelectPickerControl = <OptionValue, IsMulti extends boolean>({
-    icon,
-    showSelectedOptionIcon,
-    ...props
-}: ControlProps<SelectPickerOptionType<OptionValue>> &
-    Pick<SelectPickerProps<OptionValue, IsMulti>, 'icon' | 'showSelectedOptionIcon'>) => {
-    const { children, getValue } = props
+export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPickerOptionType<OptionValue>>) => {
+    const {
+        children,
+        getValue,
+        selectProps: { icon, showSelectedOptionIcon },
+    } = props
     const { startIcon, endIcon } = getValue()?.[0] ?? {}
 
     let iconToDisplay: SelectPickerOptionType<OptionValue>['startIcon'] = icon
@@ -173,7 +172,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                     )}
                     <div className={`flex left w-100 ${showDescription ? 'top' : ''} dc__gap-8`}>
                         {startIcon && (
-                            <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{startIcon}</div>
+                            <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{startIcon}</div>
                         )}
                         <div className="flex-grow-1">
                             <h4 className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}>
@@ -192,7 +191,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                                 ))}
                         </div>
                         {endIcon && (
-                            <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{endIcon}</div>
+                            <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{endIcon}</div>
                         )}
                     </div>
                 </div>
@@ -208,16 +207,18 @@ export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPi
     } = props
 
     return (
-        // added key here to explicitly re-render the list on input change so that the top option is rendered
-        <components.MenuList {...props} key={inputValue}>
-            <div className="py-4 cursor">{shouldRenderCustomOptions ? renderCustomOptions() : children}</div>
-            {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
+        <>
+            {/* added key here to explicitly re-render the list on input change so that the top option is rendered */}
+            <components.MenuList {...props} key={inputValue}>
+                <div className="py-4 cursor">{shouldRenderCustomOptions ? renderCustomOptions() : children}</div>
+                {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
+            </components.MenuList>
             {!shouldRenderCustomOptions && renderMenuListFooter && (
                 <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bcn-0 dc__zi-2">
                     {renderMenuListFooter()}
                 </div>
             )}
-        </components.MenuList>
+        </>
     )
 }
 
@@ -228,7 +229,7 @@ export const SelectPickerMultiValueLabel = <OptionValue, IsMulti extends boolean
     Pick<SelectPickerProps<OptionValue, IsMulti>['multiSelectProps'], 'getIsOptionValid'>) => {
     const { data, selectProps } = props
     const isOptionValid = getIsOptionValid(data)
-    const iconToDisplay = isOptionValid ? data.startIcon || data.endIcon : <ICErrorExclamation />
+    const iconToDisplay = isOptionValid ? ((data.startIcon || data.endIcon) ?? null) : <ICErrorExclamation />
 
     return (
         <div className="flex dc__gap-4 mw-0 dc__truncate">

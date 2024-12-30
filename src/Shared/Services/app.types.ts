@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { OverrideMergeStrategyType } from '@Pages/Applications'
 import { ReleaseTag } from '../../Common'
 
 interface WebhookDataType {
@@ -31,7 +32,7 @@ interface MaterialHistoryDTO {
     WebhookData: WebhookDataType
 }
 
-interface MaterialHistoryType {
+export interface MaterialHistoryType {
     commitURL: string
     commit: MaterialHistoryDTO['Commit']
     author: MaterialHistoryDTO['Author']
@@ -84,6 +85,7 @@ export interface CIMaterialType
     gitURL: CIMaterialDTO['url']
     history: MaterialHistoryType[]
     isSelected: boolean
+    gitMaterialUrl?: string
 }
 
 interface ImageCommentDTO {
@@ -197,9 +199,11 @@ export enum CMSecretExternalType {
 
 export interface ConfigDatum {
     name: string
+    mergeStrategy: OverrideMergeStrategyType
     type: string
     external: boolean
     data: Record<string, any>
+    patchData: Record<string, any>
     defaultData: Record<string, any>
     global: boolean
     externalType: CMSecretExternalType
@@ -224,6 +228,7 @@ export interface ConfigMapSecretDataType {
     id: number
     appId: number
     configData: ConfigMapSecretDataConfigDatumDTO[]
+    isDeletable: boolean
 }
 
 export enum ConfigResourceType {
@@ -272,7 +277,7 @@ export type AppEnvDeploymentConfigPayloadType =
           appName: string
           envName: string
           configType: AppEnvDeploymentConfigType
-          identifierId?: number
+          wfrId?: number
           pipelineId?: number
           resourceType?: ConfigResourceType
           resourceId?: number

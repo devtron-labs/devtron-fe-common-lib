@@ -14,92 +14,110 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react'
-import { useThrottledEffect } from '../Helper'
+import { useEffect } from 'react'
+
+import { useThrottledEffect } from '@Common/Helper'
+
 import { ResizableTagTextAreaProps } from './Types'
 
 export const ResizableTagTextArea = ({
-    className,
+    value,
     minHeight,
     maxHeight,
-    value,
-    onChange,
     onBlur,
     onFocus,
-    placeholder,
-    tabIndex,
     refVar,
     dependentRef,
-    dataTestId,
-    handleKeyDown,
-    disabled,
+    dependentRefs,
+    className = '',
     disableOnBlurResizeToMinHeight,
+    id,
+    ...restProps
 }: ResizableTagTextAreaProps) => {
-    const [text, setText] = useState('')
+    const updateDependentRefsHeight = (height: number) => {
+        const refElement = dependentRef?.current
+        if (refElement) {
+            refElement.style.height = `${height}px`
+        }
 
-    useEffect(() => {
-        setText(value)
-    }, [value])
+        Object.values(dependentRefs || {}).forEach((ref) => {
+            const dependentRefElement = ref?.current
+            if (dependentRefElement) {
+                dependentRefElement.style.height = `${height}px`
+            }
+        })
+    }
 
-    const handleChange = (event) => {
-        setText(event.target.value)
-        onChange?.(event)
+    const updateRefsHeight = (height: number) => {
+        const refElement = refVar?.current
+        if (refElement) {
+            refElement.style.height = `${height}px`
+        }
+        updateDependentRefsHeight(height)
     }
 
     const reInitHeight = () => {
-        if (document.activeElement !== refVar.current) return
-        refVar.current.style.height = `${minHeight}px`
+        updateRefsHeight(minHeight || 0)
+
+        let nextHeight = refVar?.current?.scrollHeight || 0
+
         if (dependentRef) {
-            dependentRef.current.style.height = `${minHeight}px`
+            const refElement = dependentRef.current
+            if (refElement && refElement.scrollHeight > nextHeight) {
+                nextHeight = refElement.scrollHeight
+            }
         }
-        let nextHeight = refVar.current.scrollHeight
-        if (dependentRef && nextHeight < dependentRef.current.scrollHeight) {
-            nextHeight = dependentRef.current.scrollHeight
+
+        if (dependentRefs) {
+            Object.values(dependentRefs).forEach((ref) => {
+                const refElement = ref.current
+                if (refElement && refElement.scrollHeight > nextHeight) {
+                    nextHeight = refElement.scrollHeight
+                }
+            })
         }
+
         if (minHeight && nextHeight < minHeight) {
             nextHeight = minHeight
         }
+
         if (maxHeight && nextHeight > maxHeight) {
             nextHeight = maxHeight
         }
-        refVar.current.style.height = `${nextHeight}px`
-        if (dependentRef) {
-            dependentRef.current.style.height = `${nextHeight}px`
-        }
+
+        updateRefsHeight(nextHeight)
     }
 
-    useThrottledEffect(reInitHeight, 500, [text])
+    useEffect(() => {
+        reInitHeight()
+    }, [])
+
+    useThrottledEffect(reInitHeight, 500, [value])
 
     const handleOnBlur = (event) => {
         if (!disableOnBlurResizeToMinHeight) {
-            refVar.current.style.height = `${minHeight}px`
-            if (dependentRef) {
-                dependentRef.current.style.height = `${minHeight}px`
-            }
+            updateRefsHeight(minHeight)
         }
-        onBlur && onBlur(event)
+        onBlur?.(event)
     }
 
     const handleOnFocus = (event) => {
         reInitHeight()
-        onFocus && onFocus(event)
+        onFocus?.(event)
     }
 
     return (
         <textarea
+            {...restProps}
+            id={id}
+            data-testid={id}
             rows={1}
             ref={refVar}
-            value={text}
-            placeholder={placeholder}
+            value={value}
             className={`${className || ''} lh-20`}
             style={{ resize: 'none' }}
-            onChange={handleChange}
             onBlur={handleOnBlur}
             onFocus={handleOnFocus}
-            tabIndex={tabIndex}
-            data-testid={dataTestId}
-            onKeyDown={handleKeyDown}
-            disabled={disabled}
         />
     )
 }

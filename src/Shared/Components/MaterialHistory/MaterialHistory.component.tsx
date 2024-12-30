@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+import { getWebhookDate } from '@Shared/Helpers'
+import { MaterialHistoryType } from '@Shared/Services'
+import { useMemo } from 'react'
 import { SourceTypeMap } from '../../../Common'
 import { GitCommitInfoGeneric } from '../GitCommitInfoGeneric'
 import { MaterialHistoryProps } from './types'
@@ -32,34 +35,35 @@ const MaterialHistory = ({
         }
     }
 
-    const getMaterialHistoryMapWithTime = () => {
-        const historyTimeMap = {}
+    const materialHistoryMapWithTime = useMemo(
+        () =>
+            material.history.reduce<Record<string, MaterialHistoryType[]>>((acc, historyElem: MaterialHistoryType) => {
+                const isWebhook = material.type === SourceTypeMap.WEBHOOK
+                const newDate = isWebhook
+                    ? getWebhookDate(material.type, historyElem).substring(0, 16)
+                    : historyElem.date.substring(0, 16)
+                if (!acc[newDate]) {
+                    acc[newDate] = []
+                }
+                acc[newDate].push(historyElem)
+                return acc
+            }, {}),
+        [material.history, material.type],
+    )
 
-        material.history?.forEach((history) => {
-            const newDate = history.date.substring(0, 16)
-
-            if (!historyTimeMap[newDate]) {
-                historyTimeMap[newDate] = []
-            }
-            historyTimeMap[newDate].push(history)
-        })
-
-        return historyTimeMap
-    }
     // Retrieve the history map
-    const materialHistoryMapWithTime = getMaterialHistoryMapWithTime()
     // Retrieve the keys of the history map
     const dateKeys = Object.keys(materialHistoryMapWithTime)
 
     return (
         // added for consistent typing
         // eslint-disable-next-line react/jsx-no-useless-fragment
-        <>
+        <div className="flexbox-col dc__gap-12 py-12 px-16">
             {dateKeys.map((date) => {
                 const historyList = materialHistoryMapWithTime[date]
                 return (
                     <>
-                        {!isCommitInfoModal && material.type !== SourceTypeMap.WEBHOOK && (
+                        {!isCommitInfoModal && (
                             <div className="flex left dc__gap-8">
                                 <span className="fs-12 lh-18 cn-7 fw-6 w-130">{date}</span>
                                 <div className="h-1 bcn-2 w-100" />
@@ -87,7 +91,6 @@ const MaterialHistory = ({
                                         materialSourceType={material.type}
                                         selectedCommitInfo={selectCommit}
                                         materialSourceValue={material.value}
-                                        canTriggerBuild={!history.excluded}
                                         isExcluded={history.excluded}
                                     />
                                 </div>
@@ -96,7 +99,7 @@ const MaterialHistory = ({
                     </>
                 )
             })}
-        </>
+        </div>
     )
 }
 export default MaterialHistory

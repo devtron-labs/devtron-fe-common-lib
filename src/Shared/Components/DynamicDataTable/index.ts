@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 
-import 'monaco-yaml/yaml.worker'
+export * from './DynamicDataTable'
+export * from './types'

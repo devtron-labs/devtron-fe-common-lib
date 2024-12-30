@@ -15,8 +15,9 @@
  */
 
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import DOMPurify from 'dompurify'
 import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
-import { compare as compareJSON, applyPatch } from 'fast-json-patch'
+import { compare as compareJSON, applyPatch, unescapePathComponent,deepClone } from 'fast-json-patch'
 import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import moment from 'moment'
@@ -30,17 +31,26 @@ import {
     DISCORD_LINK,
     ZERO_TIME_STRING,
     TOAST_ACCESS_DENIED,
+    UNCHANGED_ARRAY_ELEMENT_SYMBOL,
 } from './Constants'
 import { ServerErrors } from './ServerError'
-import { AsyncOptions, AsyncState, UseSearchString } from './Types'
+import { AsyncOptions, AsyncState, DeploymentNodeType, UseSearchString } from './Types'
 import {
     scrollableInterface,
     DATE_TIME_FORMAT_STRING,
     ToastManager,
     ToastVariantType,
     versionComparatorBySortOrder,
+    WebhookEventNameType,
 } from '../Shared'
-import { ReactComponent as ArrowDown } from '../Assets/Icon/ic-chevron-down.svg'
+import { ReactComponent as ArrowDown } from '@Icons/ic-chevron-down.svg'
+import webhookIcon from '@Icons/ic-webhook.svg'
+import branchIcon from '@Icons/ic-branch.svg'
+import regexIcon from '@Icons/ic-regex.svg'
+import pullRequest from '@Icons/ic-pull-request.svg'
+import tagIcon from '@Icons/ic-tag.svg'
+import { SourceTypeMap } from '@Common/Common.service'
+import { getIsRequestAborted } from './Api'
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
@@ -63,7 +73,7 @@ export function showError(serverError, showToastOnUnknownError = true, hideAcces
             }
         })
     } else {
-        if (serverError.code !== 403 && serverError.code !== 408) {
+        if (serverError.code !== 403 && serverError.code !== 408 && !getIsRequestAborted(serverError)) {
             Sentry.captureException(serverError)
         }
 
@@ -345,7 +355,7 @@ export function cleanKubeManifest(manifestJsonString: string): string {
         return manifestJsonString
     }
 }
-const unsecureCopyToClipboard = (str, callback = noop) => {
+const unsecureCopyToClipboard = (str: string) => {
     const listener = function (ev) {
         ev.preventDefault()
         ev.clipboardData.setData('text/plain', str)
@@ -353,35 +363,41 @@ const unsecureCopyToClipboard = (str, callback = noop) => {
     document.addEventListener('copy', listener)
     document.execCommand('copy')
     document.removeEventListener('copy', listener)
-    callback()
 }
 
 /**
- * It will copy the passed content to clipboard and invoke the callback function, in case of error it will show the toast message.
- * On HTTP system clipboard is not supported, so it will use the unsecureCopyToClipboard function
+ * This is a promise<void> that will resolve if str is successfully copied
+ * On HTTP (other than localhost) system clipboard is not supported, so it will use the unsecureCopyToClipboard function
  * @param str
- * @param callback
  */
-export function copyToClipboard(str, callback = noop) {
-    if (!str) {
-        return
-    }
+export function copyToClipboard(str: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        if (!str) {
+            resolve()
 
-    if (window.isSecureContext && navigator.clipboard) {
-        navigator.clipboard
-            .writeText(str)
-            .then(() => {
-                callback()
-            })
-            .catch(() => {
-                ToastManager.showToast({
-                    variant: ToastVariantType.error,
-                    description: 'Failed to copy to clipboard',
+            return
+        }
+
+        if (window.isSecureContext && navigator.clipboard) {
+            navigator.clipboard
+                .writeText(str)
+                .then(() => {
+                    resolve()
                 })
-            })
-    } else {
-        unsecureCopyToClipboard(str, callback)
-    }
+                .catch(() => {
+                    ToastManager.showToast({
+                        variant: ToastVariantType.error,
+                        description: 'Failed to copy to clipboard',
+                    })
+
+                    reject()
+                })
+        } else {
+            unsecureCopyToClipboard(str)
+
+            resolve()
+        }
+    })
 }
 
 export function useAsync<T>(
@@ -496,7 +512,7 @@ export const getUrlWithSearchParams = <T extends string | number = string | numb
 /**
  * Custom exception logger function for logging errors to sentry
  */
-export const logExceptionToSentry = Sentry.captureException.bind(window)
+export const logExceptionToSentry: typeof Sentry.captureException  = Sentry.captureException.bind(window)
 
 export const customStyles = {
     control: (base, state) => ({
@@ -542,19 +558,19 @@ export const getFilteredChartVersions = (charts, selectedChartType) =>
  * @param {object} object from which we need to delete nulls in its arrays
  * @returns object after removing (in-place) the null items in arrays
  */
-export const recursivelyRemoveNullsFromArraysInObject = (object: object) => {
+export const recursivelyRemoveSymbolFromArraysInObject = (object: object, symbol: symbol) => {
     // NOTE: typeof null === 'object'
     if (typeof object !== 'object' || !object) {
         return object
     }
     if (Array.isArray(object)) {
         return object.filter((item) => {
-            recursivelyRemoveNullsFromArraysInObject(item)
-            return !!item
+            recursivelyRemoveSymbolFromArraysInObject(item, symbol)
+            return item !== symbol
         })
     }
     Object.keys(object).forEach((key) => {
-        object[key] = recursivelyRemoveNullsFromArraysInObject(object[key])
+        object[key] = recursivelyRemoveSymbolFromArraysInObject(object[key], symbol)
     })
     return object
 }
@@ -564,8 +580,8 @@ const _joinObjects = (A: object, B: object) => {
         return
     }
     Object.keys(B).forEach((key) => {
-        if (!A[key]) {
-            A[key] = structuredClone(B[key])
+        if (A[key] === undefined || A[key] === UNCHANGED_ARRAY_ELEMENT_SYMBOL) {
+            A[key] = B[key]
             return
         }
         _joinObjects(A[key], B[key])
@@ -574,6 +590,7 @@ const _joinObjects = (A: object, B: object) => {
 
 /**
  * Merges the objects into one object
+ * Works more like Object.assign; that doesn't deep copy
  * @param {object[]} objects list of js objects
  * @returns object after the merge
  */
@@ -593,8 +610,8 @@ const buildObjectFromPathTokens = (index: number, tokens: string[], value: any) 
     const numberKey = Number(key)
     const isKeyNumber = !Number.isNaN(numberKey)
     return isKeyNumber
-        ? [...Array(numberKey).fill(null), buildObjectFromPathTokens(index + 1, tokens, value)]
-        : { [key]: buildObjectFromPathTokens(index + 1, tokens, value) }
+        ? [...Array(numberKey).fill(UNCHANGED_ARRAY_ELEMENT_SYMBOL), buildObjectFromPathTokens(index + 1, tokens, value)]
+        : { [unescapePathComponent(key)]: buildObjectFromPathTokens(index + 1, tokens, value) }
 }
 
 /**
@@ -642,7 +659,8 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
         return _keys
     })
 
-export const convertJSONPointerToJSONPath = (pointer: string) => pointer.replace(/\/([\*0-9]+)\//g, '[$1].').replace(/\//g, '.').replace(/\./, '$.')
+export const convertJSONPointerToJSONPath = (pointer: string) =>
+    unescapePathComponent(pointer.replace(/\/([\*0-9]+)\//g, '[$1].').replace(/\//g, '.').replace(/\./, '$.'))
 
 export const flatMapOfJSONPaths = (
     paths: string[],
@@ -652,7 +670,7 @@ export const flatMapOfJSONPaths = (
 
 export const applyCompareDiffOnUneditedDocument = (uneditedDocument: object, editedDocument: object) => {
     const patch = compareJSON(uneditedDocument, editedDocument)
-    return applyPatch(uneditedDocument, patch).newDocument
+    return applyPatch(deepClone(uneditedDocument), patch).newDocument
 }
 
 /**
@@ -952,4 +970,83 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
             func(...args)
         }
     }
+}
+
+/**
+ *
+ * @param sourceType - SourceTypeMap
+ * @param _isRegex - boolean
+ * @param webhookEventName - WebhookEventNameType
+ * @returns - Icon
+ */
+export const getBranchIcon = (sourceType, _isRegex?: boolean, webhookEventName?: string) => {
+    if (sourceType === SourceTypeMap.WEBHOOK) {
+        if (webhookEventName === WebhookEventNameType.PULL_REQUEST) {
+            return pullRequest
+        }
+        if (webhookEventName === WebhookEventNameType.TAG_CREATION) {
+            return tagIcon
+        }
+        return webhookIcon
+    }
+    if (sourceType === SourceTypeMap.BranchRegex || _isRegex) {
+        return regexIcon
+    }
+    return branchIcon
+}
+
+// TODO: Might need to expose sandbox and referrer policy
+export const getSanitizedIframe = (iframeString: string) =>
+    DOMPurify.sanitize(iframeString, {
+        ADD_TAGS: ['iframe'],
+        ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+    })
+
+/**
+ * This method adds default attributes to iframe - title, loading ="lazy", width="100%", height="100%"
+ */
+export const getIframeWithDefaultAttributes = (iframeString: string, defaultName?: string): string => {
+    const parentDiv = document.createElement('div')
+    parentDiv.innerHTML = getSanitizedIframe(iframeString)
+
+
+    const iframe = parentDiv.querySelector('iframe')
+    if (iframe) {
+        if (!iframe.hasAttribute('title') && !!defaultName) {
+            iframe.setAttribute('title', defaultName)
+        }
+
+        if (!iframe.hasAttribute('loading')) {
+            iframe.setAttribute('loading', 'lazy')
+        }
+
+        if (!iframe.hasAttribute('width')) {
+            iframe.setAttribute('width', '100%')
+        }
+
+        if (!iframe.hasAttribute('height')) {
+            iframe.setAttribute('height', '100%')
+        }
+
+        return parentDiv.innerHTML
+    }
+
+    return iframeString
+}
+
+export const getStageTitle = (stageType: DeploymentNodeType): string => {
+    switch (stageType) {
+        case DeploymentNodeType.PRECD:
+            return 'Pre-deployment'
+        case DeploymentNodeType.POSTCD:
+            return 'Post-deployment'
+        default:
+            return 'Deployment'
+    }
+}
+export const getGoLangFormattedDateWithTimezone = (dateFormat: string) => {
+    const now = moment()
+    const formattedDate = now.format(dateFormat)
+    const timezone = now.format('Z').replace(/([+/-])(\d{2})[:.](\d{2})/, '$1$2$3')
+    return formattedDate.replace('Z', timezone)
 }

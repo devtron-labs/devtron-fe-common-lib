@@ -19,6 +19,8 @@ import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
 import { Pair } from 'yaml'
 import moment from 'moment'
+import { StrictRJSFSchema } from '@rjsf/utils'
+import { MaterialHistoryType } from '@Shared/Services/app.types'
 import {
     handleUTCTime,
     ManualApprovalType,
@@ -30,6 +32,8 @@ import {
     PATTERNS,
     ZERO_TIME_STRING,
     noop,
+    SourceTypeMap,
+    DATE_TIME_FORMATS,
 } from '../Common'
 import {
     AggregationKeys,
@@ -37,6 +41,7 @@ import {
     IntersectionChangeHandler,
     IntersectionOptions,
     Nodes,
+    PreventOutsideFocusProps,
     WebhookEventNameType,
 } from './types'
 import { ReactComponent as ICPullRequest } from '../Assets/Icon/ic-pull-request.svg'
@@ -90,6 +95,18 @@ export const preventBodyScroll = (lock: boolean): void => {
         document.body.style.overflowY = null
         document.body.style.height = null
         document.documentElement.style.overflow = null
+    }
+}
+
+export const preventOutsideFocus = ({ identifier, preventFocus }: PreventOutsideFocusProps) => {
+    const identifierElement = document.getElementById(identifier)
+    if (!identifierElement) {
+        return
+    }
+    if (preventFocus) {
+        identifierElement.setAttribute('inert', 'true')
+    } else {
+        identifierElement.removeAttribute('inert')
     }
 }
 
@@ -852,3 +869,66 @@ export const groupArrayByObjectKey = <T extends Record<string, any>, K extends k
         },
         {} as Record<string, T[]>,
     )
+
+/**
+ * This function returns a null/zero value corresponding to @type
+ *
+ * @param type - a RJSF supported type
+ */
+export const getNullValueFromType = (type: StrictRJSFSchema['type']) => {
+    if (type && Array.isArray(type) && type.length > 0) {
+        return getNullValueFromType(type[0])
+    }
+
+    switch (type) {
+        case 'string':
+            return ''
+        case 'boolean':
+            return false
+        case 'object':
+            return {}
+        case 'array':
+            return []
+        case 'number':
+        case 'integer':
+        case 'null':
+        default:
+            return null
+    }
+}
+
+/*
+ * @description - Function to get the lower case object
+ * @param input - The input object
+ * @returns Record<string, any>
+ */
+export const getLowerCaseObject = (input): Record<string, any> => {
+    if (!input || typeof input !== 'object') {
+        return input
+    }
+    return Object.keys(input).reduce((acc, key) => {
+        const modifiedKey = key.toLowerCase()
+        const value = input[key]
+        if (value && typeof value === 'object') {
+            acc[modifiedKey] = getLowerCaseObject(value)
+        } else {
+            acc[modifiedKey] = value
+        }
+        return acc
+    }, {})
+}
+
+/**
+ * @description - Function to get the webhook date
+ * @param materialSourceType - The type of material source (e.g., WEBHOOK)
+ * @param history - The history object containing commit information
+ * @returns - Formatted webhook date if available, otherwise an empty string
+ */
+export const getWebhookDate = (materialSourceType: string, history: MaterialHistoryType): string => {
+    const lowerCaseCommitInfo = getLowerCaseObject(history)
+    const isWebhook = materialSourceType === SourceTypeMap.WEBHOOK || lowerCaseCommitInfo?.webhookdata?.id !== 0
+    const webhookData = isWebhook ? lowerCaseCommitInfo.webhookdata : {}
+
+    const _moment = moment(webhookData.data.date, 'YYYY-MM-DDTHH:mm:ssZ')
+    return _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : webhookData.data.date
+}

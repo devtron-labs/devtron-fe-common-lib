@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { DynamicDataTableCellValidationState } from '@Shared/Components'
+
 export interface MaterialType {
     name: string
     type: string
@@ -97,11 +99,40 @@ export enum RefVariableStageType {
     POST_CI = 'POST_CI',
 }
 
+export enum FilePropertyTypeSizeUnit {
+    KB = 'KB',
+    MB = 'MB',
+}
+
+export interface FilePropertyType {
+    allowedExtensions: string[]
+    maxUploadSize: number
+    sizeUnit: FilePropertyTypeSizeUnit
+}
+
+export interface ConstraintType {
+    fileProperty: FilePropertyType
+}
+
+export interface ValueConstraintType {
+    choices?: string[]
+    blockCustomValue?: boolean
+    constraint?: ConstraintType
+}
+
+export enum VariableTypeFormat {
+    STRING = 'STRING',
+    NUMBER = 'NUMBER',
+    BOOL = 'BOOL',
+    DATE = 'DATE',
+    FILE = 'FILE',
+}
+
 export interface VariableType {
     id: number
     name: string
     value: string
-    format: string
+    format: VariableTypeFormat
     description: string
     defaultValue: string
     allowEmptyValue: boolean
@@ -110,6 +141,12 @@ export interface VariableType {
     refVariableName: string
     refVariableStage?: RefVariableStageType
     variableStepIndexInPlugin?: number
+    fileMountDir: string
+    fileReferenceId?: number
+    valueConstraintId?: number
+    valueConstraint?: ValueConstraintType
+    isRuntimeArg: boolean
+    refVariableUsed: boolean
 }
 
 interface CommandArgsMap {
@@ -170,7 +207,6 @@ export interface StepType {
     inlineStepDetail?: InlineStepDetailType
     pluginRefStepDetail?: PluginRefStepDetailType
     triggerIfParentStageFail: boolean
-    isMandatory?: boolean
 }
 
 export interface BuildStageType {
@@ -261,11 +297,30 @@ export interface ErrorObj {
     isValid: boolean
     message: string | null
 }
+
+export enum InputOutputVariablesHeaderKeys {
+    VARIABLE = 'variable',
+    FORMAT = 'format',
+    VALUE = 'val',
+}
+
+export type InputOutputVariablesErrorObj = Record<InputOutputVariablesHeaderKeys, DynamicDataTableCellValidationState>
+
 export interface TaskErrorObj {
     isValid: boolean
     name: ErrorObj
-    inlineStepDetail?: { inputVariables?: ErrorObj[]; outputVariables?: ErrorObj[] }
-    pluginRefStepDetail?: { inputVariables?: ErrorObj[]; outputVariables?: ErrorObj[] }
+    inlineStepDetail?: {
+        inputVariables?: Record<number, InputOutputVariablesErrorObj>
+        outputVariables?: Record<number, InputOutputVariablesErrorObj>
+        isInputVariablesValid?: boolean
+        isOutputVariablesValid?: boolean
+    }
+    pluginRefStepDetail?: {
+        inputVariables?: Record<number, InputOutputVariablesErrorObj>
+        outputVariables?: Record<number, InputOutputVariablesErrorObj>
+        isInputVariablesValid?: boolean
+        isOutputVariablesValid?: boolean
+    }
 }
 export interface FormErrorObjectType {
     name: ErrorObj

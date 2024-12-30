@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import Tippy, { TippyProps } from '@tippyjs/react'
 import { ConditionalWrap } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
 import { ReactComponent as ICExpand } from '@Icons/ic-expand.svg'
 
 import { Collapse } from '../Collapse'
@@ -26,12 +27,18 @@ export const CollapsibleList = <TabType extends TabOptions>({
         return (
             <>
                 <div className="flexbox-col flex-grow-1 mw-none">
-                    <span
-                        className={`collapsible__item__title dc__truncate fs-13 lh-20 ${strikeThrough ? 'dc__strike-through' : ''}`}
-                    >
-                        {title}
-                    </span>
-                    {subtitle && <span className="dc__truncate fw-4 lh-1-5 cn-7">{subtitle}</span>}
+                    <Tooltip content={title} placement="right">
+                        <span
+                            className={`collapsible__item__title dc__truncate fs-13 lh-20 ${strikeThrough ? 'dc__strike-through' : ''}`}
+                        >
+                            {title}
+                        </span>
+                    </Tooltip>
+                    {subtitle && (
+                        <Tooltip content={subtitle} placement="right">
+                            <span className="dc__truncate fw-4 lh-1-5 cn-7">{subtitle}</span>
+                        </Tooltip>
+                    )}
                 </div>
                 {iconConfig && (
                     <ConditionalWrap
@@ -69,11 +76,11 @@ export const CollapsibleList = <TabType extends TabOptions>({
     }
 
     const getNavLinkTabItem = (item: CollapsibleListItem<'navLink'>) => {
-        const { title, href, onClick } = item
+        const { title, href, onClick, isActive, clearQueryParamsOnNavigation = false } = item
         return (
             <NavLink
                 key={title}
-                to={href}
+                to={clearQueryParamsOnNavigation ? { pathname: href, search: '' } : href}
                 className="collapsible__item flexbox dc__align-items-center dc__gap-8 dc__no-decor br-4 py-6 px-8 cursor"
                 onClick={(e) => {
                     // Prevent navigation to the same page
@@ -82,6 +89,7 @@ export const CollapsibleList = <TabType extends TabOptions>({
                     }
                     onClick?.(e)
                 }}
+                isActive={isActive}
             >
                 {getTabContent(item)}
             </NavLink>
@@ -102,7 +110,9 @@ export const CollapsibleList = <TabType extends TabOptions>({
                                 className="icon-dim-20 fcn-6 dc__no-shrink cursor rotate"
                                 style={{ ['--rotateBy' as string]: isExpanded ? '0deg' : '-90deg' }}
                             />
-                            <span className="flex-grow-1 dc__align-left dc__truncate">{header}</span>
+                            <Tooltip content={header} placement="right">
+                                <span className="flex-grow-1 dc__align-left dc__truncate">{header}</span>
+                            </Tooltip>
                         </button>
                         {headerIconConfig && (
                             <ConditionalWrap

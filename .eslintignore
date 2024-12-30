@@ -10,17 +10,13 @@ src/Common/BreadCrumb/BreadcrumbStore.tsx
 src/Common/CIPipeline.Types.ts
 src/Common/ChartVersionAndTypeSelector.tsx
 src/Common/Checkbox.tsx
-src/Common/ClipboardButton/ClipboardButton.tsx
 src/Common/ClipboardButton/__tests__/ClipboardButton.test.tsx
 src/Common/CodeEditor/CodeEditor.tsx
 src/Common/Common.service.ts
 src/Common/CustomInput/CustomInput.tsx
 src/Common/CustomTagSelector/PropagateTagInfo.tsx
-src/Common/CustomTagSelector/ResizableTagTextArea.tsx
 src/Common/CustomTagSelector/TagDetails.tsx
-src/Common/CustomTagSelector/TagLabelSelect.tsx
 src/Common/CustomTagSelector/TagLabelValueSelector.tsx
-src/Common/CustomTagSelector/TagSelector.utils.ts
 src/Common/CustomTagSelector/ValidationRules.ts
 src/Common/DebouncedSearch/DebouncedSearch.tsx
 src/Common/DebouncedSearch/Utils.ts

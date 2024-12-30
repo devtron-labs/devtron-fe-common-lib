@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-import { get, getIsRequestAborted, getUrlWithSearchParams, ResponseType, ROUTES, showError } from '../../../Common'
+import {
+    get,
+    getIsRequestAborted,
+    getUrlWithSearchParams,
+    post,
+    ResponseType,
+    ROUTES,
+    showError,
+} from '../../../Common'
 import { stringComparatorBySortOrder } from '../../Helpers'
 import {
     GetParentPluginListPayloadType,
@@ -36,16 +44,19 @@ export const getPluginsDetail = async ({
     pluginIds,
     signal,
     shouldShowError = true,
+    parentPluginIdentifiers,
 }: PluginDetailServiceParamsType): Promise<Pick<GetPluginStoreDataReturnType, 'pluginStore'>> => {
     try {
         const payload: PluginDetailPayloadType = {
             appId,
-            parentPluginId: parentPluginIds,
-            pluginId: pluginIds,
+            parentPluginIds,
+            pluginIds,
+            parentPluginIdentifiers,
         }
 
-        const { result } = await get<PluginDetailDTO>(
-            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_LIST_DETAIL_V2, payload),
+        const { result } = await post<PluginDetailDTO, PluginDetailPayloadType>(
+            ROUTES.PLUGIN_GLOBAL_LIST_DETAIL_V2,
+            payload,
             { signal },
         )
 
@@ -115,7 +126,13 @@ export const getAvailablePluginTags = async (appId: number): Promise<string[]> =
     }
 }
 
-export const getParentPluginList = async (appId?: number): Promise<ResponseType<MinParentPluginDTO[]>> => {
-    const queryParams: GetParentPluginListPayloadType = { appId }
-    return get<MinParentPluginDTO[]>(getUrlWithSearchParams(ROUTES.PLUGIN_LIST_MIN, queryParams))
+export const getParentPluginList = async (
+    params?: Partial<GetParentPluginListPayloadType>,
+): Promise<ResponseType<MinParentPluginDTO[]>> => {
+    const response = await get<MinParentPluginDTO[]>(getUrlWithSearchParams(ROUTES.PLUGIN_LIST_MIN, params))
+
+    return {
+        ...response,
+        result: (response?.result ?? []).sort((a, b) => stringComparatorBySortOrder(a.name, b.name)),
+    }
 }

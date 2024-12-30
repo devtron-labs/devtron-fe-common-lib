@@ -14,12 +14,25 @@
  * limitations under the License.
  */
 
+import { DetailedHTMLProps, MutableRefObject, TextareaHTMLAttributes } from 'react'
 import { KEY_VALUE } from '../Constants'
 import { OptionType } from '../Types'
 
 export interface SuggestedTagOptionType extends OptionType {
     description: string
     propagate: boolean
+}
+
+export enum DeploymentPolicy {
+    ALLOW = 'allow',
+    BLOCK = 'block',
+    BLOCK_PROD = 'block-prod',
+    BLOCK_NON_PROD = 'block-non-prod',
+}
+
+export interface VariableValueConstraintTypes {
+    choices?: string[]
+    blockCustomValue?: boolean
 }
 export interface TagType {
     id?: number
@@ -32,21 +45,8 @@ export interface TagType {
     isInvalidValue?: boolean
     isSuggested?: boolean
     isPropagateDisabled?: boolean
-}
-
-export interface TagErrorType {
-    isValid: boolean
-    messages: string[]
-}
-export interface TagLabelSelectType {
-    isCreateApp?: boolean
-    labelTags: TagType[]
-    setLabelTags: (tagList: TagType[]) => void
-    tabIndex?: number
-    selectedProjectId?: number
-    suggestedTagsOptions?: SuggestedTagOptionType[]
-    reloadProjectTags?: boolean
-    hidePropagateTag?: boolean
+    deploymentPolicy?: DeploymentPolicy
+    valueConstraint?: VariableValueConstraintTypes
 }
 
 export interface TagDetailType {
@@ -68,25 +68,18 @@ export interface TagLabelValueSelectorType {
     tagInputType?: KEY_VALUE
     placeholder?: string
     tabIndex?: number
-    refVar?: React.MutableRefObject<HTMLTextAreaElement>
-    dependentRef?: React.MutableRefObject<HTMLTextAreaElement>
+    refVar?: MutableRefObject<HTMLTextAreaElement>
+    dependentRef?: MutableRefObject<HTMLTextAreaElement>
     noBackDrop?: boolean
 }
 
-export interface ResizableTagTextAreaProps {
-    className?: string
+export interface ResizableTagTextAreaProps
+    extends Omit<DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>, 'value'> {
     minHeight?: number
     maxHeight?: number
-    value?: string
-    onChange?: (e) => void
-    onBlur?: (e) => void
-    onFocus?: (e) => void
-    placeholder?: string
-    tabIndex?: number
-    refVar?: React.MutableRefObject<HTMLTextAreaElement>
-    dependentRef?: React.MutableRefObject<HTMLTextAreaElement>
-    dataTestId?: string
-    handleKeyDown?: any
-    disabled?: boolean
+    value: string
+    refVar?: MutableRefObject<HTMLTextAreaElement>
+    dependentRef?: MutableRefObject<HTMLTextAreaElement>
+    dependentRefs?: Record<string | number, MutableRefObject<HTMLTextAreaElement>>
     disableOnBlurResizeToMinHeight?: boolean
 }

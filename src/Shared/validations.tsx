@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { getSanitizedIframe } from '@Common/Helper'
 import { URLProtocolType } from './types'
 
 export interface ValidationResponseType {
@@ -32,6 +33,8 @@ export const MESSAGES = {
     VALID_POSITIVE_INTEGER: 'This field should be a valid positive integer',
     MAX_SAFE_INTEGER: `Maximum allowed value is ${Number.MAX_SAFE_INTEGER}`,
     INVALID_SEMANTIC_VERSION: 'Please follow semantic versioning',
+    INVALID_DATE: 'Please enter a valid date',
+    DATE_BEFORE_CURRENT_TIME: 'The date & time cannot be before the current time',
 }
 
 const MAX_DESCRIPTION_LENGTH = 350
@@ -341,4 +344,51 @@ export const validateJSON = (json: string): ValidationResponseType => {
             message: err.message,
         }
     }
+}
+
+export const validateDateAndTime = (date: Date): ValidationResponseType => {
+    if (date) {
+        const currentDate = new Date()
+        if (currentDate.getTime() > date.getTime()) {
+            return {
+                isValid: false,
+                message: MESSAGES.DATE_BEFORE_CURRENT_TIME,
+            }
+        }
+    } else {
+        return {
+            isValid: false,
+            message: MESSAGES.INVALID_DATE,
+        }
+    }
+
+    return {
+        isValid: true,
+    }
+}
+
+export const validateIframe = (input: string): ValidationResponseType => {
+    const sanitizedInput = getSanitizedIframe(input)
+    const parentDiv = document.createElement('div')
+    parentDiv.innerHTML = sanitizedInput
+
+    const iframe = parentDiv.querySelector('iframe')
+
+    // TODO: Can also check for accessability and security tags like sandbox, title, lazy, etc
+    if (!iframe || parentDiv.children.length !== 1) {
+        return { isValid: false, message: 'Input must contain a single iframe tag.' }
+    }
+
+    const src = iframe.getAttribute('src')
+    if (!src) {
+        return { isValid: false, message: 'Iframe must have a valid src attribute.' }
+    }
+
+    const urlValidationResponse = validateURL(src)
+
+    if (!urlValidationResponse.isValid) {
+        return urlValidationResponse
+    }
+
+    return { isValid: true }
 }
