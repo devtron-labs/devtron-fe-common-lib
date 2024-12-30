@@ -1,4 +1,14 @@
-import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
+import {
+    createElement,
+    createRef,
+    Fragment,
+    ReactElement,
+    RefObject,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
@@ -74,10 +84,10 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
             {},
         )
     }
+    const rowIds = useMemo(() => rows.map(({ id }) => id), [rows])
 
     useEffect(() => {
         setIsRowAdded(rows.length > 0 && Object.keys(cellRef.current).length < rows.length)
-        const rowIds = rows.map(({ id }) => id)
 
         const updatedCellRef = rowIds.reduce((acc, curr) => {
             if (cellRef.current[curr]) {
@@ -89,14 +99,16 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
         }, {})
 
         cellRef.current = updatedCellRef
-    }, [rows.length])
+    }, [JSON.stringify(rowIds)])
 
     useEffect(() => {
-        // Using the below logic to ensure the cell is focused after row addition.
-        const cell = cellRef.current[rows[0].id][focusableFieldKey || headers[0].key].current
-        if (isRowAdded && cell) {
-            cell.focus()
-            setIsRowAdded(false)
+        if (isRowAdded) {
+            // Using the below logic to ensure the cell is focused after row addition.
+            const cell = cellRef.current[rows[0].id][focusableFieldKey || headers[0].key].current
+            if (cell) {
+                cell.focus()
+                setIsRowAdded(false)
+            }
         }
     }, [isRowAdded])
 
