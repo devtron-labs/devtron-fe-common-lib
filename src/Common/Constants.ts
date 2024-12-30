@@ -89,7 +89,7 @@ export const ROUTES = {
     CD_MATERIAL_GET: 'app/cd-pipeline',
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
-    SECURITY_SCAN_EXECUTION_DETAILS: 'security/scan/executionDetail',
+    SCAN_RESULT: 'scan-result',
     NOTIFIER: 'notification',
     APP_LIST: 'app/list',
     TELEMETRY_EVENT: 'telemetry/event',

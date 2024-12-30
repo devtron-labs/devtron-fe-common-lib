@@ -84,6 +84,12 @@ declare module 'react-select/base' {
          * @default 'true'
          */
         showSelectedOptionIcon?: boolean
+        /**
+         * If provided, the custom display text is shown in the value container
+         *
+         * @default null
+         */
+        customDisplayText?: string
         /** Render function for the footer at the end of the options list. */
         renderOptionsFooter?: () => ReactNode
         /**
@@ -247,10 +253,16 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * @default true
          */
         shouldShowNoOptionsMessage?: boolean
+        /**
+         * If true, the menu list and the dropdown indicator are hidden. Suitable for use cases like multi-inputs
+         *
+         * @default false
+         */
+        shouldHideMenu?: boolean
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean
-              multiSelectProps?: {
+              multiSelectProps?: Partial<Pick<SelectProps<OptionValue, IsMulti>, 'customDisplayText'>> & {
                   /**
                    * If true, the group heading can be selected
                    *

@@ -5,12 +5,48 @@
 import { SCAN_TOOL_ID_CLAIR, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
 import PageNotFound from '@Images/ic-page-not-found.svg'
 import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
-import { CATEGORIES, SUB_CATEGORIES, SeveritiesDTO, SortOrderEnum, EmptyStateType, StatusType } from './types'
+import {
+    CATEGORIES,
+    SUB_CATEGORIES,
+    SeveritiesDTO,
+    SortOrderEnum,
+    EmptyStateType,
+    StatusType,
+    SidebarPropsType,
+    SecurityModalStateType,
+} from './types'
 
-export const DEFAULT_SECURITY_MODAL_STATE = {
+const DEFAULT_SECURITY_MODAL_IMAGE_STATE = {
     category: CATEGORIES.IMAGE_SCAN,
     subCategory: SUB_CATEGORIES.VULNERABILITIES,
     detailViewData: null,
+}
+
+const DEFAULT_SECURITY_MODAL_CODE_STATE = {
+    category: CATEGORIES.CODE_SCAN,
+    subCategory: SUB_CATEGORIES.VULNERABILITIES,
+    detailViewData: null,
+}
+
+const DEFAULT_SECURITY_MODAL_MANIFEST_STATE = {
+    category: CATEGORIES.KUBERNETES_MANIFEST,
+    subCategory: SUB_CATEGORIES.MISCONFIGURATIONS,
+    detailViewData: null,
+}
+
+export const getDefaultSecurityModalState = (
+    categoriesConfig: SidebarPropsType['categoriesConfig'],
+): SecurityModalStateType => {
+    if (categoriesConfig.imageScan) {
+        return DEFAULT_SECURITY_MODAL_IMAGE_STATE
+    }
+    if (categoriesConfig.codeScan) {
+        return DEFAULT_SECURITY_MODAL_CODE_STATE
+    }
+    if (categoriesConfig.kubernetesManifest) {
+        return DEFAULT_SECURITY_MODAL_MANIFEST_STATE
+    }
+    return DEFAULT_SECURITY_MODAL_IMAGE_STATE
 }
 
 export const CATEGORY_LABELS = {

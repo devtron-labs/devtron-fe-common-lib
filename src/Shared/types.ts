@@ -15,11 +15,10 @@
  */
 
 import { Dayjs } from 'dayjs'
+import { ApprovalConfigDataType } from '@Common/Types'
 import {
     OptionType,
     CommonNodeAttr,
-    ResponseType,
-    UserApprovalConfigType,
     VulnerabilityType,
     DeploymentAppTypes,
     ServerErrors,
@@ -30,7 +29,7 @@ import {
     RefVariableType,
     PluginType,
 } from '../Common'
-import { EnvironmentTypeEnum, PatchOperationType } from './constants'
+import { BASE_CONFIGURATION_ENV_ID, EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
     CHART = 'helm_charts',
@@ -231,7 +230,7 @@ export interface AppDetails {
     clusterName?: string
     dockerRegistryId?: string
     deploymentAppDeleteRequest?: boolean
-    userApprovalConfig?: string
+    isApprovalPolicyApplicable?: boolean
     isVirtualEnvironment?: boolean
     imageTag?: string
     helmPackageName?: string
@@ -298,7 +297,7 @@ export interface WorkflowType {
     showTippy?: boolean
     appId?: number
     isSelected?: boolean
-    approvalConfiguredIdsMap?: Record<number, UserApprovalConfigType>
+    approvalConfiguredIdsMap?: Record<number, ApprovalConfigDataType>
     imageReleaseTags: string[]
     appReleaseTags?: string[]
     tagsEditable?: boolean
@@ -492,6 +491,7 @@ export enum PolicyKindType {
     lockConfiguration = 'lock-configuration',
     imagePromotion = 'image-promotion',
     plugins = 'plugin',
+    approval = 'approval',
 }
 
 export interface LastExecutionResultType {
@@ -512,8 +512,6 @@ export interface LastExecutionResultType {
     scanToolId?: number
     imageScanDeployInfoId?: number
 }
-
-export interface LastExecutionResponseType extends ResponseType<LastExecutionResultType> {}
 
 export interface MaterialSecurityInfoType {
     isScanned: boolean
@@ -879,6 +877,23 @@ export interface DynamicTabType extends CommonTabArgsType {
      */
     lastActiveTabId: string | null
 }
+
+export interface ResourceApprovalPolicyConfigDTO {
+    appId: number
+    envId: number
+    approvalConfigurations: ApprovalConfigDataType[]
+}
+
+export interface ResourceApprovalPolicyConfigType
+    extends Omit<ResourceApprovalPolicyConfigDTO, 'state' | 'approvalConfigurations'> {
+    isApprovalApplicable: boolean
+    approvalConfigurationMap: Record<ApprovalConfigDataType['kind'], ApprovalConfigDataType>
+}
+
+export type ResourceIdToResourceApprovalPolicyConfigMapType = Record<
+    ResourceApprovalPolicyConfigType['envId'] | typeof BASE_CONFIGURATION_ENV_ID,
+    Pick<ResourceApprovalPolicyConfigType, 'isApprovalApplicable' | 'approvalConfigurationMap'>
+>
 
 export interface PreventOutsideFocusProps {
     identifier: string

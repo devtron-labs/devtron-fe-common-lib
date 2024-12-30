@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { InfoColourBarType } from '../Types'
+import { Tooltip } from '@Common/Tooltip'
 import './infoColourBar.scss'
 
 const InfoColourBar = ({
@@ -33,6 +33,7 @@ const InfoColourBar = ({
     internalLink,
     styles,
     hideIcon = false,
+    textConfig,
 }: InfoColourBarType) => {
     const renderLink = () => {
         if (!linkText) {
@@ -79,6 +80,29 @@ const InfoColourBar = ({
         )
     }
 
+    const renderMessageWrapper = () => {
+        if (textConfig) {
+            const { heading, description } = textConfig
+
+            return (
+                <div className="flexbox-col">
+                    {heading && <h6 className="m-0 cn-9 fs-13 fw-6 lh-20 dc__truncate">{heading}</h6>}
+
+                    <Tooltip content={description}>
+                        <p className="dc__truncate--clamp-3 m-0 cn-9 fs-13 fw-4 lh-20">{description}</p>
+                    </Tooltip>
+                </div>
+            )
+        }
+
+        return (
+            <div className={`info-bar-message-wrapper ${linkClass || ''}`}>
+                <span className={linkText && redirectLink ? 'mr-5' : ''}>{message}</span>
+                {renderLink()}
+            </div>
+        )
+    }
+
     return (
         <div className="info-bar-container">
             <div
@@ -91,10 +115,7 @@ const InfoColourBar = ({
                             <Icon className={`icon-dim-${iconSize ?? '20'} ${iconClass || ''} mr-8`} />
                         </div>
                     )}
-                    <div className={`info-bar-message-wrapper ${linkClass || ''}`}>
-                        <span className={linkText && redirectLink ? 'mr-5' : ''}>{message}</span>
-                        {renderLink()}
-                    </div>
+                    {renderMessageWrapper()}
                 </div>
                 {typeof renderActionButton === 'function' && renderActionButton()}
             </div>

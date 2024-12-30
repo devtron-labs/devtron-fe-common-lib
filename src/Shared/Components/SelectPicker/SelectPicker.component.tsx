@@ -23,13 +23,14 @@ import {
     Props as ReactSelectProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { ReactElement, useCallback, useMemo } from 'react'
+import { ReactElement, useCallback, useMemo, useState } from 'react'
 
 import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
+import { isNullOrUndefined } from '@Shared/Helpers'
 import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
 import {
     SelectPickerMultiValueLabel,
@@ -210,18 +211,33 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     fullWidth = false,
     customSelectedOptionsCount = null,
     renderMenuListFooter,
-    inputValue,
-    onInputChange,
     isCreatable = false,
     onCreateOption,
     closeMenuOnSelect = false,
     shouldShowNoOptionsMessage = true,
     shouldRenderTextArea = false,
     onKeyDown,
+    shouldHideMenu = false,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
-    const { inputId, required, isDisabled, controlShouldRenderValue = true, value, options, getOptionValue } = props
-    const { isGroupHeadingSelectable = false, getIsOptionValid = () => true } = multiSelectProps
+    const [isFocussed, setIsFocussed] = useState(false)
+    const [inputValue, setInputValue] = useState('')
+
+    const {
+        inputId,
+        required,
+        isDisabled,
+        controlShouldRenderValue: _controlShouldRenderValue = true,
+        value,
+        options,
+        getOptionValue,
+    } = props
+    const {
+        isGroupHeadingSelectable = false,
+        getIsOptionValid = () => true,
+        customDisplayText = null,
+    } = multiSelectProps
+    const controlShouldRenderValue = _controlShouldRenderValue && !customDisplayText
 
     // Only large variant is supported for multi select picker
     const selectSize = isMulti && controlShouldRenderValue ? ComponentSizeType.large : size
@@ -269,9 +285,10 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                 {...valueContainerProps}
                 showSelectedOptionsCount={showSelectedOptionsCount}
                 customSelectedOptionsCount={customSelectedOptionsCount}
+                isFocussed={isFocussed}
             />
         ),
-        [showSelectedOptionsCount, customSelectedOptionsCount],
+        [showSelectedOptionsCount, customSelectedOptionsCount, isFocussed],
     )
 
     const renderOption = useCallback(
@@ -319,12 +336,40 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         }
     }
 
+    const handleInputChange: ReactSelectProps['onInputChange'] = (updatedInputValue, actionMeta) => {
+        // If onInputChange is provided, then the input state should be controlled externally
+        if (props.onInputChange) {
+            props.onInputChange(updatedInputValue, actionMeta)
+            return
+        }
+        setInputValue(updatedInputValue)
+    }
+
     const handleKeyDown: ReactSelectProps['onKeyDown'] = (e) => {
-        onKeyDown?.(e)
         // Prevent the option from being selected if meta or control key is pressed
         if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
             e.preventDefault()
         }
+        onKeyDown?.(e)
+    }
+
+    const handleFocus: ReactSelectProps['onFocus'] = () => {
+        setIsFocussed(true)
+    }
+
+    const handleBlur: ReactSelectProps['onFocus'] = (e) => {
+        setIsFocussed(false)
+
+        props.onBlur?.(e)
+    }
+
+    const handleChange: ReactSelectProps<SelectPickerOptionType<OptionValue>, IsMulti>['onChange'] = (...params) => {
+        // Retain the input value on selection change
+        if (isMulti && isNullOrUndefined(props.inputValue)) {
+            setInputValue(inputValue)
+        }
+
+        props.onChange?.(...params)
     }
 
     const commonProps = useMemo(
@@ -357,6 +402,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             labelId,
             shouldRenderCustomOptions,
             controlShouldRenderValue,
+            customDisplayText,
         ],
     )
 
@@ -403,6 +449,10 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 GroupHeading: renderGroupHeading,
                                 NoOptionsMessage: renderNoOptionsMessage,
                                 Input: SelectPickerInput,
+                                ...(shouldHideMenu && {
+                                    Menu: () => null,
+                                    DropdownIndicator: () => null,
+                                }),
                             }}
                             closeMenuOnSelect={!isMulti || closeMenuOnSelect}
                             allowCreateWhileLoading={false}
@@ -410,12 +460,16 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             createOptionPosition="first"
                             onCreateOption={handleCreateOption}
                             renderMenuListFooter={!optionListError && renderMenuListFooter}
-                            inputValue={inputValue}
-                            onInputChange={onInputChange}
+                            inputValue={props.inputValue ?? inputValue}
+                            onInputChange={handleInputChange}
                             icon={icon}
                             showSelectedOptionIcon={shouldShowSelectedOptionIcon}
                             onKeyDown={handleKeyDown}
                             shouldRenderTextArea={shouldRenderTextArea}
+                            customDisplayText={customDisplayText}
+                            onFocus={handleFocus}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
                             controlShouldRenderValue={controlShouldRenderValue}
                         />
                     </div>

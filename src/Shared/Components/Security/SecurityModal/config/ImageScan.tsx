@@ -18,7 +18,7 @@ import {
     InfoCardPropsType,
     ImageScanLicenseListType,
     EmptyStateType,
-    ApiResponseResultType,
+    ScanResultDTO,
     CATEGORIES,
     OpenDetailViewButtonProps,
 } from '../types'
@@ -105,7 +105,7 @@ const getVulnerabilitiesDetailData = (
     setDetailViewData: OpenDetailViewButtonProps['setDetailViewData'],
     hidePolicy: boolean,
 ) => {
-    const shouldGroupByTarget = element.list.every((item) => !!item.target)
+    const shouldGroupByTarget = element.list?.every((item) => !!item.target)
     if (!shouldGroupByTarget) {
         return {
             ...getVulnerabilitiesDetailBaseData(element),
@@ -355,14 +355,14 @@ const getCompletedEmptyState = (
 }
 
 export const getImageScanEmptyState = (
-    data: ApiResponseResultType,
+    data: ScanResultDTO,
     subCategory: SecurityModalStateType['subCategory'],
     detailViewData: DetailViewDataType,
 ): EmptyStateType => {
     /**
      * NOTE: handling for resourceScan in ResourceBrowser
      * TODO: handle properly */
-    if (!data[CATEGORIES.IMAGE_SCAN][subCategory]?.list?.length) {
+    if (!data[CATEGORIES.IMAGE_SCAN]?.[subCategory]?.list?.length) {
         return SCAN_IN_PROGRESS_EMPTY_STATE
     }
 

@@ -56,9 +56,12 @@ import { getIsRequestAborted } from './Api'
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
         serverError.errors.map(({ userMessage, internalMessage }) => {
+            const userMessageInLowercase = userMessage?.toLowerCase()
+
             if (
                 serverError.code === 403 &&
-                (userMessage === ERROR_EMPTY_SCREEN.UNAUTHORIZED || userMessage === ERROR_EMPTY_SCREEN.FORBIDDEN)
+                (userMessageInLowercase === ERROR_EMPTY_SCREEN.UNAUTHORIZED.toLowerCase() ||
+                    userMessageInLowercase === ERROR_EMPTY_SCREEN.FORBIDDEN.toLowerCase())
             ) {
                 if (!hideAccessError) {
                     ToastManager.showToast({
@@ -172,7 +175,7 @@ export const getAlphabetIcon = (str: string, rootClassName: string = '') => {
     if (!str) return null
     return (
         <span
-            className={`${rootClassName} alphabet-icon__initial fs-13 icon-dim-20 flex cn-0 mr-8`}
+            className={`${rootClassName} alphabet-icon__initial fs-13 icon-dim-20 flex cn-0 mr-8 dc__no-shrink`}
             style={{ backgroundColor: getRandomColor(str) }}
         >
             {str[0]}
@@ -495,6 +498,7 @@ export const processDeployedTime = (lastDeployed, isArgoInstalled) => {
  */
 export const getUrlWithSearchParams = <T extends string | number = string | number>(
     url: string,
+    // FIXME: Need to fix this as the generic typing is incorrect
     params = {} as Partial<Record<T, any>>,
 ) => {
     const searchParams = new URLSearchParams()
