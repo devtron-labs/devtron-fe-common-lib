@@ -416,6 +416,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             showSelectedOptionIcon={shouldShowSelectedOptionIcon}
                             onKeyDown={handleKeyDown}
                             shouldRenderTextArea={shouldRenderTextArea}
+                            controlShouldRenderValue={controlShouldRenderValue}
                         />
                     </div>
                 </ConditionalWrap>

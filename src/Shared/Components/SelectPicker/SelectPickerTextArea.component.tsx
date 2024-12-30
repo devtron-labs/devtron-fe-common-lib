@@ -28,6 +28,7 @@ export const SelectPickerTextArea = ({
     const onInputChange = (newValue: string, { action }: InputActionMeta) => {
         if (action === ReactSelectInputAction.inputChange) {
             setInputValue(newValue)
+
             if (!newValue) {
                 onChange?.(null, {
                     action: 'remove-value',
@@ -60,14 +61,33 @@ export const SelectPickerTextArea = ({
 
             setInputValue(updatedText)
 
+            const textarea = selectRef.current.inputRef
+            const wrapper = selectRef.current.controlRef
+
+            // Get the caret position relative to the scrollable area
+            const lineHeight = parseInt(getComputedStyle(textarea).lineHeight, 10)
+            const caretPosition = textarea.selectionStart
+            const linesAboveCaret = textarea.value.substring(0, caretPosition).split('\n').length
+
+            // Estimate caret position by line height
+            const caretY = linesAboveCaret * lineHeight
+            const scrollOffset = caretY - wrapper.scrollTop
+
+            // Adjust scroll to ensure caret is visible
+            if (scrollOffset < 0) {
+                // Scroll up
+                wrapper.scrollTop += scrollOffset
+            } else if (scrollOffset > wrapper.offsetHeight - lineHeight) {
+                // Scroll down
+                wrapper.scrollTop += scrollOffset - wrapper.offsetHeight + lineHeight
+            }
+
             // Move the cursor to the next line
             // Using setTimeout so that the cursor adjustment happens after React completes its update,
             // ensuring the desired cursor position remains intact.
             setTimeout(() => {
-                selectRef.current.inputRef.selectionStart = selectRef.current.inputRef.selectionEnd
-                selectRef.current.controlRef.scrollTo({ top: selectRef.current.controlRef.scrollHeight })
-                selectRef.current.focus()
-                selectRef.current.openMenu('first')
+                selectRef.current.inputRef.selectionStart = selectionStart + 1
+                selectRef.current.inputRef.selectionEnd = selectionStart + 1
             })
 
             return

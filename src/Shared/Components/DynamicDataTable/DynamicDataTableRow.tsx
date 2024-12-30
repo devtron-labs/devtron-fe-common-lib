@@ -2,7 +2,7 @@ import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect,
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
-import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
+import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { Tooltip } from '@Common/Tooltip'
 import { ConditionalWrap } from '@Common/Helper'
 import { ResizableTagTextArea } from '@Common/CustomTagSelector'
@@ -247,7 +247,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
 
     const renderErrorMessage = (errorMessage: string) => (
         <div key={errorMessage} className="flexbox align-items-center dc__gap-4">
-            <ICCross className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
+            <ICClose className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
             <p className="fs-12 lh-16 cn-7 m-0">{errorMessage}</p>
         </div>
     )
@@ -344,7 +344,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                                     dataTestId="dynamic-data-table-row-delete-btn"
                                     ariaLabel="Delete Row"
                                     showAriaLabelInTippy={false}
-                                    icon={<ICCross />}
+                                    icon={<ICClose />}
                                     disabled={disableDeleteRow || row.disableDelete}
                                     onClick={onDelete(row)}
                                     variant={ButtonVariantType.borderLess}
