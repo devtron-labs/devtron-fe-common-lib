@@ -96,6 +96,7 @@ export const BUILD_INFRA_LOCATOR_MARKER_MAP: Readonly<Record<BuildInfraLocators,
     [BuildInfraLocators.BUILD_TIMEOUT]: ICTimer,
     [BuildInfraLocators.NODE_SELECTOR]: ICSprayCan,
     [BuildInfraLocators.TOLERANCE]: ICTag,
+    [BuildInfraLocators.CONFIG_MAP]: null,
 }
 
 export const BUILD_INFRA_LOCATOR_LABEL_MAP: Readonly<Record<BuildInfraLocators, string>> = {
@@ -104,6 +105,7 @@ export const BUILD_INFRA_LOCATOR_LABEL_MAP: Readonly<Record<BuildInfraLocators, 
     [BuildInfraLocators.BUILD_TIMEOUT]: 'Build timeout',
     [BuildInfraLocators.NODE_SELECTOR]: 'Node selector',
     [BuildInfraLocators.TOLERANCE]: 'Tolerance',
+    [BuildInfraLocators.CONFIG_MAP]: 'ConfigMaps',
 }
 
 export const BUILD_INFRA_FORM_FIELDS: Readonly<BuildInfraFormFieldType[]> = [
@@ -198,6 +200,7 @@ export const TARGET_PLATFORM_ERROR_FIELDS_MAP: Record<TargetPlatformErrorFields,
     [BuildInfraConfigTypes.MEMORY_REQUEST]: true,
     [BuildInfraConfigTypes.NODE_SELECTOR]: true,
     [BuildInfraConfigTypes.TOLERANCE]: true,
+    [BuildInfraConfigTypes.CONFIG_MAP]: true,
     [BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM]: true,
 }
 
@@ -221,6 +224,7 @@ export const BUILD_INFRA_LOCATOR_CONFIG_TYPES_MAP: Record<BuildInfraLocators, Bu
     [BuildInfraLocators.BUILD_TIMEOUT]: [BuildInfraConfigTypes.BUILD_TIMEOUT],
     [BuildInfraLocators.NODE_SELECTOR]: [BuildInfraConfigTypes.NODE_SELECTOR],
     [BuildInfraLocators.TOLERANCE]: [BuildInfraConfigTypes.TOLERANCE],
+    [BuildInfraLocators.CONFIG_MAP]: [BuildInfraConfigTypes.CONFIG_MAP],
 }
 
 export const ACTION_TO_PERSISTED_VALUE_MAP: Readonly<
@@ -255,4 +259,5 @@ export const DEFAULT_TOLERANCE_OPERATOR = BuildInfraToleranceOperatorType.EQUALS
 
 export const INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X: Partial<Record<BuildInfraConfigTypes, true>> = {
     [BuildInfraConfigTypes.BUILD_TIMEOUT]: true,
+    [BuildInfraConfigTypes.CONFIG_MAP]: true,
 }

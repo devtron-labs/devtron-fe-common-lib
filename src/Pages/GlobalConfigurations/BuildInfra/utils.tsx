@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
+import {
+    BuildInfraCMCSConfigType,
+    BuildInfraConfigPayloadType,
+    BuildInfraConfigurationItemPayloadType,
+    BuildInfraPayloadType,
+    BuildInfraProfileConfigBase,
+    OverrideMergeStrategyType,
+} from '@Pages/index'
 import { ROUTES } from '../../../Common'
 import {
     BuildInfraConfigInfoType,
@@ -42,7 +50,13 @@ import {
     BUILD_INFRA_LATEST_API_VERSION,
     INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X,
 } from './constants'
-import { getUniqueId } from '../../../Shared'
+import {
+    CM_SECRET_STATE,
+    CMSecretComponentType,
+    getConfigMapSecretFormInitialValues,
+    getConfigMapSecretPayload,
+    getUniqueId,
+} from '../../../Shared'
 
 export const parsePlatformConfigIntoValue = (
     configuration: BuildInfraConfigValuesType,
@@ -90,6 +104,12 @@ export const parsePlatformConfigIntoValue = (
                     .filter((toleranceItem) => toleranceItem.key),
             }
 
+        case BuildInfraConfigTypes.CONFIG_MAP:
+            return {
+                key: BuildInfraConfigTypes.CONFIG_MAP,
+                value: configuration.value || [],
+            }
+
         case BuildInfraConfigTypes.BUILD_TIMEOUT:
         case BuildInfraConfigTypes.CPU_LIMIT:
         case BuildInfraConfigTypes.CPU_REQUEST:
@@ -120,6 +140,51 @@ const getBaseProfileObject = (fromCreateView: boolean, profile: BuildInfraProfil
     }
 }
 
+const parsePlatformServerConfigIntoUIConfig = (
+    serverConfig: BuildInfraConfigurationDTO,
+): BuildInfraConfigValuesType => {
+    if (serverConfig.key !== BuildInfraConfigTypes.CONFIG_MAP) {
+        return parsePlatformConfigIntoValue(serverConfig)
+    }
+
+    const parsedCMCSFormValues: BuildInfraCMCSConfigType['value'] = serverConfig.value?.map((configMapSecretData) => ({
+        ...getConfigMapSecretFormInitialValues({
+            configMapSecretData,
+            componentType:
+                serverConfig.key === BuildInfraConfigTypes.CONFIG_MAP
+                    ? CMSecretComponentType.ConfigMap
+                    : CMSecretComponentType.Secret,
+            // TODO: Check if for target platforms need to change
+            cmSecretStateLabel: CM_SECRET_STATE.BASE,
+            isJob: true,
+            // FIXME: Can delete as well
+            fallbackMergeStrategy: OverrideMergeStrategyType.REPLACE,
+        }),
+        id: getUniqueId(),
+    }))
+
+    return {
+        key: BuildInfraConfigTypes.CONFIG_MAP,
+        value: parsedCMCSFormValues,
+    }
+}
+
+const parseUIConfigToPayload = (uiConfig: BuildInfraConfigValuesType): BuildInfraConfigPayloadType => {
+    const parsedConfig = parsePlatformConfigIntoValue(uiConfig, false)
+    if (parsedConfig.key !== BuildInfraConfigTypes.CONFIG_MAP) {
+        return parsedConfig
+    }
+
+    const parsedCMCSValues = parsedConfig.value?.map((configMapSecretFormData) =>
+        getConfigMapSecretPayload(configMapSecretFormData),
+    )
+
+    return {
+        key: BuildInfraConfigTypes.CONFIG_MAP,
+        value: parsedCMCSValues,
+    }
+}
+
 const getConfigurationMapWithoutDefaultFallback = (
     platformConfigurationMap: BuildInfraPlatformConfigurationMapDTO,
 ): Record<string, BuildInfraConfigurationMapTypeWithoutDefaultFallback> =>
@@ -129,9 +194,17 @@ const getConfigurationMapWithoutDefaultFallback = (
         const platformConfigValuesMap: BuildInfraConfigurationMapTypeWithoutDefaultFallback =
             configurations?.reduce<BuildInfraConfigurationMapTypeWithoutDefaultFallback>(
                 (configurationMap, configuration) => {
-                    const currentConfigValue: BuildInfraConfigInfoType = {
-                        ...configuration,
+                    const configValues = parsePlatformServerConfigIntoUIConfig(configuration)
+                    const baseValue: BuildInfraProfileConfigBase = {
+                        id: configuration.id,
+                        profileName: configuration.profileName,
+                        active: configuration.active,
                         targetPlatform: platformName,
+                    }
+
+                    const currentConfigValue: BuildInfraConfigInfoType = {
+                        ...configValues,
+                        ...baseValue,
                     }
 
                     // eslint-disable-next-line no-param-reassign
@@ -191,7 +264,6 @@ export const getTransformedBuildInfraProfileResponse = ({
     profile,
     fromCreateView,
 }: BuildInfraProfileTransformerParamsType): BuildInfraProfileResponseType => {
-    // Ideal assumption is defaultConfigurations would contain all the required keys
     const globalProfilePlatformConfigMap = getConfigurationMapWithoutDefaultFallback(defaultConfigurations)
     const profileConfigurations = getConfigurationMapWithoutDefaultFallback(
         fromCreateView
@@ -262,37 +334,33 @@ export const getTransformedBuildInfraProfileResponse = ({
 
 export const getBuildInfraProfilePayload = (
     profileInput: CreateBuildInfraProfileType['profileInput'],
-): BuildInfraProfileInfoDTO => {
+): BuildInfraPayloadType => {
     const platformConfigurationMap = profileInput.configurations || {}
-    const configurations: BuildInfraProfileInfoDTO['configurations'] = Object.entries(platformConfigurationMap).reduce<
-        BuildInfraProfileInfoDTO['configurations']
+    const configurations: BuildInfraPayloadType['configurations'] = Object.entries(platformConfigurationMap).reduce<
+        BuildInfraPayloadType['configurations']
     >((acc, [platformName, configurationLocatorMap]) => {
         // This converts the map of config types mapped to values into an array of values if user has activated the configuration or is editing it
-        const configurationList = Object.values(configurationLocatorMap).reduce<BuildInfraConfigurationDTO[]>(
-            (configurationListAcc, configuration) => {
-                if (configuration.id || configuration.active) {
-                    const infraConfigValues: BuildInfraConfigValuesType = parsePlatformConfigIntoValue(
-                        configuration,
-                        false,
-                    )
-                    if (!infraConfigValues) {
-                        return configurationListAcc
-                    }
-
-                    const response: BuildInfraConfigurationDTO = {
-                        ...infraConfigValues,
-                        id: configuration.id,
-                        active: configuration.active,
-                    }
-
-                    configurationListAcc.push(response)
+        const configurationList = Object.values(configurationLocatorMap).reduce<
+            BuildInfraConfigurationItemPayloadType[]
+        >((configurationListAcc, configuration) => {
+            if (configuration.id || configuration.active) {
+                const infraConfigValues = parseUIConfigToPayload(configuration)
+                if (!infraConfigValues) {
                     return configurationListAcc
                 }
 
+                const response: BuildInfraConfigurationItemPayloadType = {
+                    ...infraConfigValues,
+                    id: configuration.id,
+                    active: configuration.active,
+                }
+
+                configurationListAcc.push(response)
                 return configurationListAcc
-            },
-            [],
-        )
+            }
+
+            return configurationListAcc
+        }, [])
 
         acc[platformName] = configurationList
         return acc
@@ -307,7 +375,7 @@ export const getBuildInfraProfilePayload = (
         }
     })
 
-    const payload: BuildInfraProfileInfoDTO = {
+    const payload: BuildInfraPayloadType = {
         name: profileInput.name,
         description: profileInput.description,
         type: profileInput.type,

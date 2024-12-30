@@ -17,7 +17,14 @@
 import { FormEvent, FunctionComponent, ReactNode } from 'react'
 import { BUILD_INFRA_INHERIT_ACTIONS, useBuildInfraForm } from '@Pages/index'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
-import { ValidationResponseType } from '../../../Shared'
+import {
+    CMSecretConfigData,
+    CMSecretPayloadType,
+    ConfigMapSecretUseFormProps,
+    getUniqueId,
+    UseFormErrors,
+    ValidationResponseType,
+} from '../../../Shared'
 import { ServerErrors } from '../../../Common'
 
 /**
@@ -32,6 +39,7 @@ export enum BuildInfraConfigTypes {
     BUILD_TIMEOUT = 'timeout',
     NODE_SELECTOR = 'node_selector',
     TOLERANCE = 'tolerations',
+    CONFIG_MAP = 'cm',
 }
 
 /**
@@ -52,6 +60,7 @@ export enum BuildInfraLocators {
     BUILD_TIMEOUT = 'timeout',
     NODE_SELECTOR = 'node selector',
     TOLERANCE = 'tolerance',
+    CONFIG_MAP = 'cm',
 }
 
 export type BuildInfraInheritActions = keyof typeof BUILD_INFRA_INHERIT_ACTIONS
@@ -175,24 +184,63 @@ export type BuildInfraToleranceValueType = {
       }
 )
 
-export type BuildInfraConfigValuesType =
-    | {
-          key: NumericBuildInfraConfigTypes
-          value: number
-          unit: ConfigurationUnitType['name']
-      }
-    | {
-          key: BuildInfraConfigTypes.NODE_SELECTOR
-          value: BuildInfraNodeSelectorValueType[]
-          unit?: never
-      }
-    | {
-          key: BuildInfraConfigTypes.TOLERANCE
-          value: BuildInfraToleranceValueType[]
-          unit?: never
-      }
+interface NumericBuildInfraConfigValueDTO {
+    key: NumericBuildInfraConfigTypes
+    value: number
+    unit: ConfigurationUnitType['name']
+}
 
-interface BuildInfraProfileConfigBase {
+interface NodeSelectorConfigDTO {
+    key: BuildInfraConfigTypes.NODE_SELECTOR
+    value: BuildInfraNodeSelectorValueType[]
+    unit?: never
+}
+
+interface ToleranceConfigDTO {
+    key: BuildInfraConfigTypes.TOLERANCE
+    value: BuildInfraToleranceValueType[]
+    unit?: never
+}
+
+interface BuildInfraCMCSConfigDTO {
+    key: BuildInfraConfigTypes.CONFIG_MAP
+    value: CMSecretConfigData[]
+    unit?: never
+}
+
+type BuildInfraCMCSValueType = ConfigMapSecretUseFormProps & { id: ReturnType<typeof getUniqueId> }
+
+export interface BuildInfraCMCSConfigType {
+    key: BuildInfraConfigTypes.CONFIG_MAP
+    value: BuildInfraCMCSValueType[]
+    unit?: never
+}
+
+interface BuildInfraCMCSPayloadConfigType {
+    key: BuildInfraConfigTypes.CONFIG_MAP
+    value: CMSecretPayloadType[]
+    unit?: never
+}
+
+export type BuildInfraConfigDTO =
+    | NumericBuildInfraConfigValueDTO
+    | NodeSelectorConfigDTO
+    | ToleranceConfigDTO
+    | BuildInfraCMCSConfigDTO
+
+export type BuildInfraConfigValuesType =
+    | NumericBuildInfraConfigValueDTO
+    | NodeSelectorConfigDTO
+    | ToleranceConfigDTO
+    | BuildInfraCMCSConfigType
+
+export type BuildInfraConfigPayloadType =
+    | NumericBuildInfraConfigValueDTO
+    | NodeSelectorConfigDTO
+    | ToleranceConfigDTO
+    | BuildInfraCMCSPayloadConfigType
+
+export interface BuildInfraProfileConfigBase {
     id?: number
     /**
      * This key holds value when we are inheriting values from other profiles in case of listing
@@ -202,10 +250,23 @@ interface BuildInfraProfileConfigBase {
     targetPlatform: string
 }
 
-export type BuildInfraConfigInfoType = BuildInfraConfigValuesType & BuildInfraProfileConfigBase
+interface BuildInfraProfileBaseDTO {
+    id?: number
+    name?: string
+    description: string
+    type: BuildInfraProfileVariants
+    appCount?: number
+    active?: boolean
+}
 
-export type BuildInfraConfigurationDTO = BuildInfraConfigValuesType &
-    Omit<BuildInfraProfileConfigBase, 'targetPlatform'>
+export type BuildInfraConfigInfoType = BuildInfraConfigValuesType & BuildInfraProfileConfigBase
+export type BuildInfraConfigurationDTO = BuildInfraConfigDTO & Omit<BuildInfraProfileConfigBase, 'targetPlatform'>
+export type BuildInfraConfigurationItemPayloadType = Omit<BuildInfraProfileConfigBase, 'targetPlatform'> &
+    BuildInfraConfigPayloadType
+
+export interface BuildInfraPayloadType extends BuildInfraProfileBaseDTO {
+    configurations: Record<string, BuildInfraConfigurationItemPayloadType[]>
+}
 
 /**
  * Maps target platform to its configuration values
@@ -224,15 +285,6 @@ export type BuildInfraConfigurationMapTypeWithoutDefaultFallback = {
 }
 
 export type BuildInfraConfigurationMapType = Record<BuildInfraConfigTypes, BuildInfraConfigurationType>
-
-interface BuildInfraProfileBaseDTO {
-    id?: number
-    name?: string
-    description: string
-    type: BuildInfraProfileVariants
-    appCount?: number
-    active?: boolean
-}
 
 export interface BuildInfraProfileBase extends BuildInfraProfileBaseDTO {}
 
@@ -307,6 +359,10 @@ export type ProfileInputErrorType = Record<
     Record<
         BuildInfraConfigTypes.TOLERANCE,
         Record<BuildInfraNodeSelectorValueType['id'], Partial<Record<ToleranceHeaderType, string[]>>>
+    > &
+    Record<
+        BuildInfraConfigTypes.CONFIG_MAP,
+        Record<BuildInfraCMCSValueType['id'], UseFormErrors<BuildInfraCMCSValueType>>
     >
 
 export type TargetPlatformErrorFields = BuildInfraConfigTypes | BuildInfraProfileAdditionalErrorKeysType

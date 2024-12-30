@@ -15,6 +15,7 @@
  */
 
 import {
+    BuildInfraPayloadType,
     getBuildInfraProfileEndpoint,
     getBuildInfraProfilePayload,
     getTransformedBuildInfraProfileResponse,
@@ -22,7 +23,6 @@ import {
 import { get, getUrlWithSearchParams, post, put, showError } from '../../../Common'
 import {
     BuildInfraProfileDTO,
-    BuildInfraProfileInfoDTO,
     BuildInfraProfileResponseType,
     CreateBuildInfraProfileType,
     GetBuildInfraProfileType,
@@ -54,7 +54,7 @@ export const getBuildInfraProfileByName = async ({
 
 export const updateBuildInfraProfile = async ({ name, profileInput }: UpdateBuildInfraProfileType) => {
     const updateProfilePayload: Pick<BuildInfraProfileDTO['profile'], 'name'> = { name }
-    const response = await put<ReturnType<typeof put>, BuildInfraProfileInfoDTO>(
+    const response = await put<ReturnType<typeof put>, BuildInfraPayloadType>(
         getUrlWithSearchParams(getBuildInfraProfileEndpoint(), updateProfilePayload),
         getBuildInfraProfilePayload(profileInput),
     )
@@ -63,7 +63,7 @@ export const updateBuildInfraProfile = async ({ name, profileInput }: UpdateBuil
 }
 
 export const createBuildInfraProfile = async ({ profileInput }: CreateBuildInfraProfileType) =>
-    post<ReturnType<typeof post>, BuildInfraProfileInfoDTO>(
+    post<ReturnType<typeof post>, BuildInfraPayloadType>(
         getBuildInfraProfileEndpoint(),
         getBuildInfraProfilePayload(profileInput),
     )
