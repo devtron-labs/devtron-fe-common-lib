@@ -63,6 +63,7 @@ export type DynamicDataTableCellPropsMap = {
         | 'disableOnBlurResizeToMinHeight'
         | 'refVar'
         | 'dependentRef'
+        | 'dependentRefs'
     >
     [DynamicDataTableRowDataType.DROPDOWN]: Omit<
         SelectPickerProps<string, false>,
@@ -70,7 +71,17 @@ export type DynamicDataTableCellPropsMap = {
     >
     [DynamicDataTableRowDataType.SELECT_TEXT]: Omit<
         SelectPickerTextAreaProps,
-        'inputId' | 'value' | 'onChange' | 'fullWidth' | 'isDisabled' | 'variant' | 'formatCreateLabel'
+        | 'inputId'
+        | 'value'
+        | 'onChange'
+        | 'fullWidth'
+        | 'isDisabled'
+        | 'variant'
+        | 'formatCreateLabel'
+        | 'minHeight'
+        | 'maxHeight'
+        | 'refVar'
+        | 'dependentRefs'
     >
     [DynamicDataTableRowDataType.BUTTON]: Pick<
         DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>,
