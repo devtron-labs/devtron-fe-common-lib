@@ -24,6 +24,10 @@ export interface ClusterType {
      * If true, denotes virtual cluster
      */
     isVirtual: boolean
+    /**
+     * If true, denotes prod labelled cluster
+     */
+    isProd: boolean
 }
 
 /**
