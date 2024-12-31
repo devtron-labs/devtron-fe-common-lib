@@ -176,8 +176,10 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             isClearable
                             {...props}
                             variant={SelectPickerVariantType.BORDER_LESS}
-                            classNamePrefix="dynamic-data-table__cell__select-picker"
+                            classNamePrefix="dynamic-data-table__cell__select-picker-text-area"
                             inputId={`data-table-${row.id}-${key}-cell`}
+                            minHeight={20}
+                            maxHeight={160}
                             value={getSelectPickerOptionByValue(
                                 props?.options,
                                 value,
@@ -186,6 +188,8 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             onChange={onChange(row, key)}
                             isDisabled={isDisabled}
                             formatCreateLabel={(input) => `Use ${input}`}
+                            refVar={cellRef?.current?.[row.id]?.[key]}
+                            dependentRefs={cellRef?.current?.[row.id]}
                             fullWidth
                         />
                     </div>
@@ -299,7 +303,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 plugins={[followCursor]}
             >
                 <div
-                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'dc__disabled no-hover' : ''} ${!isDisabled && hasError ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
+                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${!isDisabled && hasError ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
                 >
                     {renderCellIcon(row, key, true)}
                     {renderCellContent(row, key)}

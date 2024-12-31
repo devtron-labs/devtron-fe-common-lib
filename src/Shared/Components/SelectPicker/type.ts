@@ -23,6 +23,7 @@ import { CreatableProps } from 'react-select/creatable'
 // This import allows to extend the base interface in react-select module via module augmentation
 import type {} from 'react-select/base'
 import { TooltipProps } from '@Common/Tooltip/types'
+import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 
 export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
     /**
@@ -307,14 +308,14 @@ export interface FilterSelectPickerProps
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
 }
 
-export interface SelectPickerTextAreaProps
-    extends Omit<
-        SelectPickerProps<string, false>,
-        | 'selectRef'
-        | 'inputValue'
-        | 'onInputChange'
-        | 'controlShouldRenderValue'
-        | 'onKeyDown'
-        | 'onCreateOption'
-        | 'shouldRenderTextArea'
-    > {}
+export type SelectPickerTextAreaProps = Omit<
+    SelectPickerProps<string, false>,
+    | 'selectRef'
+    | 'inputValue'
+    | 'onInputChange'
+    | 'controlShouldRenderValue'
+    | 'onKeyDown'
+    | 'onCreateOption'
+    | 'shouldRenderTextArea'
+> &
+    Pick<ResizableTagTextAreaProps, 'maxHeight' | 'minHeight' | 'refVar' | 'dependentRef' | 'dependentRefs'>
