@@ -923,6 +923,7 @@ export interface PolicyConsequencesDTO {
 export interface GetPolicyConsequencesProps {
     appId: number
     envId: number
+    signal?: AbortSignal
 }
 export interface UploadFileDTO {
     id: number

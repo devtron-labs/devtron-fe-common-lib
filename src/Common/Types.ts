@@ -744,6 +744,7 @@ export interface DeploymentApprovalInfoType {
 export interface CDMaterialsApprovalInfo {
     canApproverDeploy: boolean
     deploymentApprovalInfo: DeploymentApprovalInfoType
+    userApprovalConfig: UserApprovalConfigType | null
 }
 
 export interface CDMaterialsMetaInfo {

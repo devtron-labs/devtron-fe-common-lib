@@ -235,12 +235,14 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
         return {
             canApproverDeploy: cdMaterialsResult?.canApproverDeploy ?? false,
             deploymentApprovalInfo: null,
+            userApprovalConfig: null,
         }
     }
 
     return {
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
         deploymentApprovalInfo: sanitizeDeploymentApprovalInfo(cdMaterialsResult.deploymentApprovalInfo),
+        userApprovalConfig: cdMaterialsResult.userApprovalConfig ?? null
     }
 }
 
