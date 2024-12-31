@@ -36,7 +36,7 @@ export const PATTERNS = {
     STRING: /^[a-zA-Z0-9_]+$/,
     DECIMAL_NUMBERS: /^-?\d*\.?\d*$/,
     POSITIVE_DECIMAL_NUMBERS: /^\d*\.?\d*$/,
-    NATURAL_NUMBERS: /^\d*\.?\d*$/,
+    NATURAL_NUMBERS: /^[1-9]\d*$/,
     KUBERNETES_KEY_PREFIX: /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/,
     KUBERNETES_KEY_NAME: /^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$/,
     START_END_ALPHANUMERIC: /^(([A-Za-z0-9].*[A-Za-z0-9])|[A-Za-z0-9])$/,
