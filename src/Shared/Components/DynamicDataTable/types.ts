@@ -63,6 +63,7 @@ export type DynamicDataTableCellPropsMap = {
         | 'disableOnBlurResizeToMinHeight'
         | 'refVar'
         | 'dependentRef'
+        | 'dependentRefs'
     >
     [DynamicDataTableRowDataType.DROPDOWN]: Omit<
         SelectPickerProps<string, false>,
@@ -80,7 +81,6 @@ export type DynamicDataTableCellPropsMap = {
         | 'minHeight'
         | 'maxHeight'
         | 'refVar'
-        | 'dependentRef'
         | 'dependentRefs'
     >
     [DynamicDataTableRowDataType.BUTTON]: Pick<

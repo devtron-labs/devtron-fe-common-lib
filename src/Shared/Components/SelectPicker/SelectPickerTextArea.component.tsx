@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { InputActionMeta, SelectInstance, SingleValue } from 'react-select'
 
 import { ReactSelectInputAction } from '@Common/Constants'
+import { useThrottledEffect } from '@Common/Helper'
 
 import SelectPicker from './SelectPicker.component'
 import { SelectPickerOptionType, SelectPickerTextAreaProps } from './type'
@@ -14,7 +15,6 @@ export const SelectPickerTextArea = ({
     minHeight,
     maxHeight,
     refVar,
-    dependentRef,
     dependentRefs,
     ...props
 }: SelectPickerTextAreaProps) => {
@@ -38,11 +38,6 @@ export const SelectPickerTextArea = ({
 
     // METHODS
     const updateDependentRefsHeight = (height: number) => {
-        const refElement = dependentRef?.current
-        if (refElement) {
-            refElement.style.height = `${height}px`
-        }
-
         Object.values(dependentRefs || {}).forEach((ref) => {
             const dependentRefElement = ref?.current
             if (dependentRefElement) {
@@ -64,13 +59,6 @@ export const SelectPickerTextArea = ({
 
         let nextHeight = refVar?.current?.scrollHeight || 0
 
-        if (dependentRef) {
-            const refElement = dependentRef.current
-            if (refElement && refElement.scrollHeight > nextHeight) {
-                nextHeight = refElement.scrollHeight
-            }
-        }
-
         if (dependentRefs) {
             Object.values(dependentRefs).forEach((ref) => {
                 const refElement = ref.current
@@ -91,10 +79,11 @@ export const SelectPickerTextArea = ({
         updateRefsHeight(nextHeight)
     }
 
+    useThrottledEffect(reInitHeight, 500, [inputValue])
+
     const onInputChange = (newValue: string, { action }: InputActionMeta) => {
         if (action === ReactSelectInputAction.inputChange) {
             setInputValue(newValue)
-            reInitHeight()
 
             if (!newValue) {
                 onChange?.(null, {
