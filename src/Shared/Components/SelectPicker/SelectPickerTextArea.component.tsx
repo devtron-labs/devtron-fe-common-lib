@@ -29,7 +29,7 @@ export const SelectPickerTextArea = ({
         if (inputRef) {
             inputRef.current = selectRef.current.inputRef as unknown as HTMLTextAreaElement
         }
-    }, [])
+    }, [refVar])
 
     useEffect(() => {
         const selectValue = value as SingleValue<SelectPickerOptionType<string>>
