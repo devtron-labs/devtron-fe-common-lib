@@ -19,7 +19,6 @@ import { ApprovalConfigDataType } from '@Common/Types'
 import {
     OptionType,
     CommonNodeAttr,
-    ResponseType,
     VulnerabilityType,
     DeploymentAppTypes,
     ServerErrors,
@@ -513,8 +512,6 @@ export interface LastExecutionResultType {
     scanToolId?: number
     imageScanDeployInfoId?: number
 }
-
-export interface LastExecutionResponseType extends ResponseType<LastExecutionResultType> {}
 
 export interface MaterialSecurityInfoType {
     isScanned: boolean
