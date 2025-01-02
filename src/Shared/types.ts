@@ -16,6 +16,7 @@
 
 import { Dayjs } from 'dayjs'
 import { ApprovalConfigDataType } from '@Common/Types'
+import { MutableRefObject } from 'react'
 import {
     OptionType,
     CommonNodeAttr,
@@ -920,7 +921,7 @@ export interface PolicyConsequencesDTO {
 export interface GetPolicyConsequencesProps {
     appId: number
     envId: number
-    signal?: AbortSignal
+    abortControllerRef?: MutableRefObject<AbortController>
 }
 export interface UploadFileDTO {
     id: number
