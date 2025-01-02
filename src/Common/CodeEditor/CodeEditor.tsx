@@ -15,7 +15,7 @@
  */
 
 import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import MonacoEditor, { MonacoDiffEditor } from 'react-monaco-editor'
+import MonacoEditor, { ChangeHandler, DiffEditorDidMount, EditorDidMount, MonacoDiffEditor } from 'react-monaco-editor'
 import ReactGA from 'react-ga4'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { configureMonacoYaml } from 'monaco-yaml'
@@ -94,10 +94,10 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         const memoisedReducer = React.useCallback(CodeEditorReducer, [])
         const [state, dispatch] = useReducer(
             memoisedReducer,
-            initialState({ mode, theme, value, diffView, noParsing, tabSize }),
+            initialState({ mode, theme, value, defaultValue, diffView, noParsing, tabSize }),
         )
         const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
-        const [, originalJson, originlaYaml] = useJsonYaml(defaultValue, tabSize, state.mode, !state.noParsing)
+        const [, originalJson, originalYaml] = useJsonYaml(state.defaultCode, tabSize, state.mode, !state.noParsing)
         const [contentHeight, setContentHeight] = useState(
             adjustEditorHeightToContent ? INITIAL_HEIGHT_WHEN_DYNAMIC_HEIGHT : height,
         )
@@ -160,7 +160,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             }
         }, [disableSearch])
 
-        const editorDidMount = (editor, monaco) => {
+        const editorDidMount: EditorDidMount = (editor) => {
             if (
                 mode === MODES.YAML &&
                 editor &&
@@ -181,33 +181,40 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             }
 
             if (adjustEditorHeightToContent && editor) {
-                if (!('getModifiedEditor' in editor)) {
-                    editor.onDidContentSizeChange(() => {
-                        setContentHeight(editor.getContentHeight())
-                    })
+                editor.onDidContentSizeChange(() => {
                     setContentHeight(editor.getContentHeight())
-                    return
-                }
-                const modifiedEditor = editor.getModifiedEditor()
-                const originalEditor = editor.getOriginalEditor()
-                originalEditor.onDidContentSizeChange(() => {
-                    setContentHeight(
-                        Math.max(
-                            typeof contentHeight === 'number' ? contentHeight : Number.MIN_SAFE_INTEGER,
-                            originalEditor.getContentHeight(),
-                        ),
-                    )
                 })
-                modifiedEditor.onDidContentSizeChange(() => {
-                    setContentHeight(
-                        Math.max(
-                            typeof contentHeight === 'number' ? contentHeight : Number.MIN_SAFE_INTEGER,
-                            modifiedEditor.getContentHeight(),
-                        ),
-                    )
-                })
-                setContentHeight(Math.max(modifiedEditor.getContentHeight(), modifiedEditor.getContentHeight()))
+                setContentHeight(editor.getContentHeight())
             }
+        }
+
+        const diffEditorDidMount: DiffEditorDidMount = (editor, monaco) => {
+            const originalEditor = editor.getOriginalEditor()
+            const modifiedEditor = editor.getModifiedEditor()
+
+            originalEditor.onDidContentSizeChange(() => {
+                setContentHeight(
+                    Math.max(
+                        typeof contentHeight === 'number' ? contentHeight : Number.MIN_SAFE_INTEGER,
+                        originalEditor.getContentHeight(),
+                    ),
+                )
+            })
+
+            modifiedEditor.onDidContentSizeChange(() => {
+                setContentHeight(
+                    Math.max(
+                        typeof contentHeight === 'number' ? contentHeight : Number.MIN_SAFE_INTEGER,
+                        modifiedEditor.getContentHeight(),
+                    ),
+                )
+            })
+
+            setContentHeight(Math.max(originalEditor.getContentHeight(), modifiedEditor.getContentHeight()))
+
+            originalEditor.onDidChangeModelContent(() => {
+                codeEditorOnChange(modifiedEditor.getValue(), originalEditor.getValue())
+            })
 
             editorRef.current = editor
             monacoRef.current = monaco
@@ -254,14 +261,15 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             editorRef.current.layout()
         }, [width, windowHeight])
 
-        const setCode = (value: string) => {
+        const setCode = (value: string, originalValue: string) => {
             dispatch({ type: 'setCode', value })
-            onChangeRef.current?.(value)
+            dispatch({ type: 'setDefaultCode', value: originalValue })
+            onChangeRef.current?.(value, originalValue)
         }
 
         useEffectAfterMount(() => {
             if (noParsing) {
-                setCode(value)
+                setCode(value, defaultValue)
 
                 return
             }
@@ -270,8 +278,8 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 return
             }
 
-            setCode(parseValueToCode(value, state.mode, tabSize))
-        }, [value, noParsing])
+            setCode(parseValueToCode(value, state.mode, tabSize), parseValueToCode(defaultValue, state.mode, tabSize))
+        }, [value, defaultValue, noParsing])
 
         useEffect(() => {
             dispatch({ type: 'setDiff', value: diffView })
@@ -283,13 +291,17 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             }
         }, [focus])
 
-        function handleOnChange(newValue, e) {
-            setCode(newValue)
+        const codeEditorOnChange = (newValue: string, newOriginalValue: string) => {
+            setCode(newValue, newOriginalValue)
+        }
+
+        const handleOnChange: ChangeHandler = (newValue) => {
+            codeEditorOnChange(newValue, editorRef.current?.getOriginalEditor?.().getValue?.() ?? '')
         }
 
         function handleLanguageChange(mode: 'json' | 'yaml') {
             dispatch({ type: 'changeLanguage', value: mode })
-            setCode(mode === 'json' ? json : yamlCode)
+            setCode(mode === 'json' ? json : yamlCode, mode === 'json' ? originalJson : originalYaml)
         }
 
         const options: monaco.editor.IEditorConstructionOptions = {
@@ -325,6 +337,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
 
         const diffViewOptions: monaco.editor.IDiffEditorConstructionOptions = {
             ...options,
+            originalEditable: !readOnly,
             useInlineViewWhenSpaceIsLimited: false,
         }
 
@@ -340,15 +353,13 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                         {shebang && <div className="code-editor__shebang">{shebang}</div>}
                         {state.diffMode ? (
                             <MonacoDiffEditor
-                                original={
-                                    noParsing ? defaultValue : state.mode === 'json' ? originalJson : originlaYaml
-                                }
+                                original={state.defaultCode}
                                 value={state.code}
                                 language={state.mode}
                                 onChange={handleOnChange}
                                 options={diffViewOptions}
                                 theme={state.theme.toLowerCase().split(' ').join('-')}
-                                editorDidMount={editorDidMount}
+                                editorDidMount={diffEditorDidMount}
                                 height={editorHeight}
                                 width="100%"
                             />
