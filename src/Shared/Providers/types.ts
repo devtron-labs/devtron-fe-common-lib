@@ -39,6 +39,7 @@ export interface MainContext {
     }
     isAirgapped: boolean
     isSuperAdmin: boolean
+    isManifestScanningEnabled: boolean
 }
 
 export interface MainContextProviderProps {

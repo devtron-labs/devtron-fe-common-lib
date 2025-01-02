@@ -49,7 +49,6 @@ const ImageCardAccordion = ({
     isScanned,
     isScanEnabled,
     SecurityModalSidebar,
-    getSecurityScan,
 }: ImageCardAccordionProps) => {
     const [isOpened, setIsOpened] = useState<boolean>(false)
     const [activeTab, setActiveTab] = useState<CDModalTabType>(CDModalTab.Changes)
@@ -77,7 +76,6 @@ const ImageCardAccordion = ({
                 environmentId={environmentId}
                 setVulnerabilityCount={setVulnerabilityCount}
                 SecurityModalSidebar={SecurityModalSidebar}
-                getSecurityScan={getSecurityScan}
             />
         )
     }
@@ -114,7 +112,7 @@ const ImageCardAccordion = ({
                         {isOpened ? 'Hide info' : 'Show more info'}
 
                         <ICChevronDown
-                            className="icon-dim-24 rotate"
+                            className="icon-dim-24 rotate fcn-6"
                             style={{ ['--rotateBy' as any]: isOpened ? '-180deg' : '0deg' }}
                         />
                     </button>

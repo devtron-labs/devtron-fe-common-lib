@@ -16,8 +16,8 @@
 
 import { MutableRefObject } from 'react'
 import moment from 'moment'
+import { sanitizeApprovalConfigData, sanitizeUserApprovalList } from '@Shared/Helpers'
 import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
-import { getIsManualApprovalSpecific, sanitizeUserApprovalConfig, stringComparatorBySortOrder } from '@Shared/Helpers'
 import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, showError, sortCallback } from './Helper'
@@ -35,19 +35,13 @@ import {
     CDMaterialFilterQuery,
     ImagePromotionMaterialInfo,
     EnvironmentListHelmResponse,
-    UserGroupApproverType,
-    ImageApprovalPolicyUserGroupDataType,
-    ImageApprovalPolicyType,
-    ImageApprovalUsersInfoDTO,
     UserApprovalMetadataType,
-    UserApprovalConfigType,
     CDMaterialListModalServiceUtilProps,
+    CDMaterialType,
     GlobalVariableDTO,
     GlobalVariableOptionType,
 } from './Types'
 import { ApiResourceType } from '../Pages'
-import { API_TOKEN_PREFIX } from '@Shared/constants'
-import { DefaultUserKey } from '@Shared/types'
 import { RefVariableType } from './CIPipeline.Types'
 
 export const getTeamListMin = (): Promise<TeamList> => {
@@ -95,26 +89,12 @@ export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
 }
 
-const sanitizeApprovalConfigFromApprovalMetadata = (
-    approvalMetadata: UserApprovalMetadataType,
-    userApprovalConfig: UserApprovalConfigType,
-): UserApprovalMetadataType => {
-    if (!approvalMetadata) {
-        return null
-    }
-
-    const approvedUsersData = approvalMetadata.approvedUsersData || []
-    const unsanitizedApprovalConfig = approvalMetadata.approvalConfig || userApprovalConfig
-
-    return {
-        ...approvalMetadata,
-        approvedUsersData: approvedUsersData.map((userData) => ({
-            ...userData,
-            userGroups: userData.userGroups?.filter((group) => !!group?.identifier && !!group?.name) ?? [],
-        })),
-        approvalConfig: sanitizeUserApprovalConfig(unsanitizedApprovalConfig),
-    }
-}
+export const sanitizeUserApprovalMetadata = (userApprovalMetadata: UserApprovalMetadataType): UserApprovalMetadataType => ({
+    ...userApprovalMetadata,
+    hasCurrentUserApproved: userApprovalMetadata?.hasCurrentUserApproved ?? false,
+    canCurrentUserApprove: userApprovalMetadata?.canCurrentUserApprove ?? false,
+    approvalConfigData: sanitizeApprovalConfigData(userApprovalMetadata?.approvalConfigData),
+})
 
 const sanitizeDeploymentBlockedState = (deploymentBlockedState: PolicyBlockInfo) => {
     if (!deploymentBlockedState) {
@@ -137,7 +117,6 @@ const cdMaterialListModal = ({
     artifactId,
     artifactStatus,
     disableDefaultSelection,
-    userApprovalConfig,
 }: CDMaterialListModalServiceUtilProps) => {
     if (!artifacts || !artifacts.length) return []
 
@@ -145,7 +124,7 @@ const cdMaterialListModal = ({
     const startIndex = offset
     let isImageMarked = disableDefaultSelection
 
-    const materials = artifacts.map((material, index) => {
+    const materials = artifacts.map<CDMaterialType>((material, index) => {
         let artifactStatusValue = ''
         const filterState = material.filterState ?? FilterStates.ALLOWED
 
@@ -182,9 +161,8 @@ const cdMaterialListModal = ({
             vulnerable: material.vulnerable,
             runningOnParentCd: material.runningOnParentCd,
             artifactStatus: artifactStatusValue,
-            userApprovalMetadata: sanitizeApprovalConfigFromApprovalMetadata(
+            userApprovalMetadata: sanitizeUserApprovalMetadata(
                 material.userApprovalMetadata,
-                userApprovalConfig,
             ),
             triggeredBy: material.triggeredBy,
             isVirtualEnvironment: material.isVirtualEnvironment,
@@ -231,110 +209,38 @@ const cdMaterialListModal = ({
     return materials
 }
 
-const getImageApprovalPolicyDetailsFromMaterialResult = (cdMaterialsResult): ImageApprovalPolicyType => {
-    const approvalUsers: string[] = cdMaterialsResult.approvalUsers || []
-    const userApprovalConfig = sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig)
-    const isPolicyConfigured = getIsManualApprovalSpecific(userApprovalConfig)
-    const imageApprovalUsersInfo: ImageApprovalUsersInfoDTO = cdMaterialsResult.imageApprovalUsersInfo || {}
-
-    const approvalUsersMap = approvalUsers.reduce(
-        (acc, user) => {
-            acc[user] = true
-            return acc
+const sanitizeDeploymentApprovalInfo = (
+    deploymentApprovalInfo: CDMaterialsApprovalInfo['deploymentApprovalInfo'],
+): CDMaterialsApprovalInfo['deploymentApprovalInfo'] => ({
+    eligibleApprovers: {
+        anyUsers: {
+            approverList: sanitizeUserApprovalList(deploymentApprovalInfo?.eligibleApprovers?.anyUsers?.approverList),
         },
-        {} as Record<string, true>,
-    )
-
-    const specificUsersAPIToken = userApprovalConfig.specificUsers.identifiers
-        .filter((user) => user.startsWith(API_TOKEN_PREFIX))
-        .sort(stringComparatorBySortOrder)
-    const specificUsersEmails = userApprovalConfig.specificUsers.identifiers
-        .filter((user) => !user.startsWith(API_TOKEN_PREFIX) && user !== DefaultUserKey.system)
-        .sort(stringComparatorBySortOrder)
-
-    const specificUsersData: ImageApprovalPolicyType['specificUsersData'] = {
-        dataStore: userApprovalConfig.specificUsers.identifiers.reduce(
-            (acc, email) => {
-                acc[email] = {
-                    email,
-                    hasAccess: approvalUsersMap[email] ?? false,
-                }
-                return acc
-            },
-            {} as Record<string, UserGroupApproverType>,
-        ),
-        requiredCount: userApprovalConfig.specificUsers.requiredCount,
-        emails: specificUsersEmails.concat(specificUsersAPIToken),
-    }
-
-    const validGroups = userApprovalConfig.userGroups.map((group) => group.identifier)
-
-    // Have moved from Object.keys(imageApprovalUsersInfo) to approvalUsers since backend is not filtering out the users without approval
-    // TODO: This check should be on BE. Need to remove this once BE is updated
-    const usersList = approvalUsers.filter((user) => user !== DefaultUserKey.system)
-    const groupIdentifierToUsersMap = usersList.reduce(
-        (acc, user) => {
-            const userGroups = imageApprovalUsersInfo[user] || []
-            userGroups.forEach((group) => {
-                if (!acc[group.identifier]) {
-                    acc[group.identifier] = {}
-                }
-                acc[group.identifier][user] = true
-            })
-            return acc
+        specificUsers: {
+            approverList: sanitizeUserApprovalList(deploymentApprovalInfo?.eligibleApprovers?.specificUsers?.approverList),
         },
-        {} as Record<string, Record<string, true>>,
-    )
-
-    return {
-        isPolicyConfigured,
-        specificUsersData,
-        userGroupData: userApprovalConfig.userGroups.reduce(
-            (acc, group) => {
-                const identifier = group.identifier
-                // No need of handling api tokens here since they are not part of user groups
-                const users = Object.keys(groupIdentifierToUsersMap[identifier] || {}).sort(stringComparatorBySortOrder)
-
-                acc[identifier] = {
-                    dataStore: users.reduce(
-                        (acc, user) => {
-                            acc[user] = {
-                                email: user,
-                                // As of now it will always be true, but UI has handled it in a way that can support false as well
-                                hasAccess: approvalUsersMap[user] ?? false,
-                            }
-                            return acc
-                        },
-                        {} as Record<string, UserGroupApproverType>,
-                    ),
-                    requiredCount: group.requiredCount,
-                    emails: users,
-                }
-
-                return acc
-            },
-            {} as Record<string, ImageApprovalPolicyUserGroupDataType>,
+        userGroups: (deploymentApprovalInfo?.eligibleApprovers?.userGroups ?? []).map(
+            ({ groupName, groupIdentifier, approverList }) => ({
+                groupIdentifier,
+                groupName,
+                approverList: sanitizeUserApprovalList(approverList),
+            }),
         ),
-        // Not sorting since would change them in approval info modal to name
-        validGroups,
-    }
-}
+    },
+    approvalConfigData: sanitizeApprovalConfigData(deploymentApprovalInfo?.approvalConfigData),
+})
 
 const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResult): CDMaterialsApprovalInfo => {
     if (!enableApproval || !cdMaterialsResult) {
         return {
-            approvalUsers: [],
-            userApprovalConfig: null,
             canApproverDeploy: cdMaterialsResult?.canApproverDeploy ?? false,
-            imageApprovalPolicyDetails: null,
+            deploymentApprovalInfo: null,
         }
     }
 
     return {
-        approvalUsers: cdMaterialsResult.approvalUsers,
-        userApprovalConfig: sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig),
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
-        imageApprovalPolicyDetails: getImageApprovalPolicyDetailsFromMaterialResult(cdMaterialsResult),
+        deploymentApprovalInfo: sanitizeDeploymentApprovalInfo(cdMaterialsResult.deploymentApprovalInfo),
     }
 }
 
@@ -401,7 +307,6 @@ export const processCDMaterialServiceResponse = (
         artifactId: cdMaterialsResult.latest_wf_artifact_id,
         artifactStatus: cdMaterialsResult.latest_wf_artifact_status,
         disableDefaultSelection,
-        userApprovalConfig: cdMaterialsResult.userApprovalConfig,
     })
     const approvalInfo = processCDMaterialsApprovalInfo(
         stage === DeploymentNodeType.CD || stage === DeploymentNodeType.APPROVAL,

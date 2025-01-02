@@ -19,8 +19,13 @@ import { useEffect, useRef, useState, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
 import { Pair } from 'yaml'
 import moment from 'moment'
+import { nanoid } from 'nanoid'
 import { StrictRJSFSchema } from '@rjsf/utils'
 import { MaterialHistoryType } from '@Shared/Services/app.types'
+import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
+import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
+import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
+import { PromptProps } from 'react-router-dom'
 import {
     handleUTCTime,
     ManualApprovalType,
@@ -34,6 +39,8 @@ import {
     noop,
     SourceTypeMap,
     DATE_TIME_FORMATS,
+    ApprovalConfigDataType,
+    UserApprovalInfo,
 } from '../Common'
 import {
     AggregationKeys,
@@ -44,10 +51,7 @@ import {
     PreventOutsideFocusProps,
     WebhookEventNameType,
 } from './types'
-import { ReactComponent as ICPullRequest } from '../Assets/Icon/ic-pull-request.svg'
-import { ReactComponent as ICTag } from '../Assets/Icon/ic-tag.svg'
-import { ReactComponent as ICWebhook } from '../Assets/Icon/ic-webhook.svg'
-import { DEPLOYMENT_STATUS, TIMELINE_STATUS } from './constants'
+import { DEPLOYMENT_STATUS, TIMELINE_STATUS, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
 import {
     AggregatedNodes,
     DeploymentStatusDetailsBreakdownDataType,
@@ -793,14 +797,40 @@ export const getFileNameFromHeaders = (headers: Headers) =>
         ?.replace('filename=', '')
         .trim()
 
-export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfigType): UserApprovalConfigType => ({
-    requiredCount: userApprovalConfig?.requiredCount ?? 0,
-    type: userApprovalConfig?.type ?? ManualApprovalType.notConfigured,
-    specificUsers: {
-        identifiers: userApprovalConfig?.specificUsers?.identifiers ?? [],
-        requiredCount: userApprovalConfig?.specificUsers?.identifiers?.length ?? 0,
+export const sanitizeUserApprovalList = (
+    approverList: UserApprovalInfo['approverList'],
+): UserApprovalInfo['approverList'] =>
+    (approverList ?? []).map(({ hasApproved, identifier, canApprove }) => ({
+        canApprove: canApprove ?? false,
+        hasApproved: hasApproved ?? false,
+        identifier,
+    }))
+
+const sanitizeUserApprovalInfo = (userApprovalInfo: UserApprovalInfo | null): UserApprovalInfo => ({
+    currentCount: userApprovalInfo?.currentCount ?? 0,
+    requiredCount: userApprovalInfo?.requiredCount ?? 0,
+    approverList: sanitizeUserApprovalList(userApprovalInfo?.approverList),
+})
+
+export const sanitizeApprovalConfigData = (
+    approvalConfigData: ApprovalConfigDataType | null,
+): ApprovalConfigDataType => ({
+    kind: approvalConfigData?.kind ?? null,
+    requiredCount: approvalConfigData?.requiredCount ?? 0,
+    currentCount: approvalConfigData?.currentCount ?? 0,
+    anyUserApprovedInfo: sanitizeUserApprovalInfo(approvalConfigData?.anyUserApprovedInfo),
+    specificUsersApprovedInfo: sanitizeUserApprovalInfo(approvalConfigData?.specificUsersApprovedInfo),
+    userGroupsApprovedInfo: {
+        currentCount: approvalConfigData?.userGroupsApprovedInfo?.currentCount ?? 0,
+        requiredCount: approvalConfigData?.userGroupsApprovedInfo?.requiredCount ?? 0,
+        userGroups: (approvalConfigData?.userGroupsApprovedInfo?.userGroups ?? []).map(
+            ({ groupName, groupIdentifier, ...userApprovalInfo }) => ({
+                ...sanitizeUserApprovalInfo(userApprovalInfo),
+                groupName,
+                groupIdentifier,
+            }),
+        ),
     },
-    userGroups: userApprovalConfig?.userGroups ?? [],
 })
 
 /**
@@ -810,8 +840,8 @@ export const getIsManualApprovalConfigured = (userApprovalConfig?: Pick<UserAppr
     // Added null check for backward compatibility
     !!userApprovalConfig?.type && userApprovalConfig.type !== ManualApprovalType.notConfigured
 
-export const getIsManualApprovalSpecific = (userApprovalConfig?: Pick<UserApprovalConfigType, 'type'>) =>
-    getIsManualApprovalConfigured(userApprovalConfig) && userApprovalConfig.type === ManualApprovalType.specific
+export const getIsApprovalPolicyConfigured = (approvalConfigData: ApprovalConfigDataType): boolean =>
+    approvalConfigData?.requiredCount > 0
 
 /**
  * @description - Function to open a new tab with the given url
@@ -932,3 +962,18 @@ export const getWebhookDate = (materialSourceType: string, history: MaterialHist
     const _moment = moment(webhookData.data.date, 'YYYY-MM-DDTHH:mm:ssZ')
     return _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : webhookData.data.date
 }
+
+export const getUniqueId = (size?: number): string => nanoid(size)
+
+/**
+ * Checks if the provided pathname matches the current path.
+ * If the paths do not match, returns a custom message or a default unsaved changes prompt.
+ *
+ * @param currentPathName - The current path to compare against.
+ * @param customMessage - Optional custom message to display when the path does not match.
+ * @returns A function that takes an object with a `pathname` property and performs the path match check.
+ */
+export const checkIfPathIsMatching =
+    (currentPathName: string, customMessage = ''): PromptProps['message'] =>
+    ({ pathname }: { pathname: string }) =>
+        currentPathName === pathname || customMessage || UNSAVED_CHANGES_PROMPT_MESSAGE

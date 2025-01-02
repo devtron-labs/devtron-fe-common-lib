@@ -5,10 +5,10 @@
 import { getCodeScanEmptyState } from './CodeScan'
 import { getImageScanEmptyState } from './ImageScan'
 import { getKubernetesManifestEmptyState } from './KubernetesManifest'
-import { ApiResponseResultType, CATEGORIES, DetailViewDataType, SecurityModalStateType } from '../types'
+import { ScanResultDTO, CATEGORIES, DetailViewDataType, SecurityModalStateType } from '../types'
 
 export const getEmptyStateValues = (
-    data: ApiResponseResultType,
+    data: ScanResultDTO,
     category: SecurityModalStateType['category'],
     subCategory: SecurityModalStateType['subCategory'],
     detailViewData: DetailViewDataType,

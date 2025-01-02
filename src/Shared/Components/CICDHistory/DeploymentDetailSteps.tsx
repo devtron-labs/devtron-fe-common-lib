@@ -29,7 +29,7 @@ import { ReactComponent as Arrow } from '../../../Assets/Icon/ic-arrow-forward.s
 import mechanicalOperation from '../../../Assets/Icon/ic-mechanical-operation.svg'
 import CDEmptyState from './CDEmptyState'
 import DeploymentStatusDetailBreakdown from './DeploymentStatusBreakdown'
-import { processDeploymentStatusDetailsData } from '../../Helpers'
+import { getIsApprovalPolicyConfigured, processDeploymentStatusDetailsData } from '../../Helpers'
 
 let deploymentStatusTimer = null
 const DeploymentDetailSteps = ({
@@ -150,7 +150,7 @@ const DeploymentDetailSteps = ({
         ) : (
             <div className="dc__mxw-1000 min-w-800">
                 {renderDeploymentApprovalInfo &&
-                    userApprovalMetadata &&
+                    getIsApprovalPolicyConfigured(userApprovalMetadata?.approvalConfigData) &&
                     renderDeploymentApprovalInfo(userApprovalMetadata)}
                 <DeploymentStatusDetailBreakdown
                     deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}

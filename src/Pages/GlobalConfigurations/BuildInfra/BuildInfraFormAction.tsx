@@ -17,10 +17,12 @@
 import { FormEvent, FunctionComponent, useMemo } from 'react'
 import { SelectPicker } from '@Shared/Components/SelectPicker'
 import { ComponentSizeType } from '@Shared/constants'
+import { isNullOrUndefined } from '@Shared/Helpers'
+import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { BuildInfraFormActionProps } from './types'
 import { OptionType } from '../../../Common'
-import { BUILD_INFRA_INPUT_CONSTRAINTS } from './constants'
-import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
+import { BUILD_INFRA_DEFAULT_PLATFORM_NAME, BUILD_INFRA_INPUT_CONSTRAINTS } from './constants'
+import './BuildInfraUnitSelect.scss'
 
 /**
  * In case need arise for variants break this CustomInput and Select as a separate component
@@ -35,21 +37,36 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
     handleProfileInputChange,
     currentUnitName,
     currentValue,
+    targetPlatform = BUILD_INFRA_DEFAULT_PLATFORM_NAME,
+    isDisabled = false,
+    autoFocus = false,
 }) => {
+    const handleProfileChangeWrapper = (data: { unit: string; value: number }) => {
+        handleProfileInputChange({
+            action: actionType,
+            data: {
+                targetPlatform,
+                ...data,
+            },
+        })
+    }
+
     const handleUnitChange = (selectedUnit: OptionType) => {
         const data = {
             unit: selectedUnit.label,
-            value: currentValue,
+            value: isNullOrUndefined(currentValue) ? currentValue : +currentValue,
         }
-        handleProfileInputChange({ action: actionType, data })
+
+        handleProfileChangeWrapper(data)
     }
 
     const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
         const data = {
             unit: currentUnitName,
-            value: e.currentTarget.value,
+            value: e.currentTarget.value === '' ? null : +e.currentTarget.value,
         }
-        handleProfileInputChange({ action: actionType, data })
+
+        handleProfileChangeWrapper(data)
     }
 
     const unitOptions = useMemo(() => {
@@ -68,12 +85,15 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
 
     return (
         <div className="flexbox-col dc__gap-4 dc__mxw-420 w-100 dc__align-start">
-            <label
-                htmlFor={`${actionType}-input`}
-                className={`fs-13 fw-4 lh-20 cn-7 ${isRequired ? 'dc__required-field' : ''}`}
-            >
-                {label}
-            </label>
+            {label && (
+                <label
+                    htmlFor={`${actionType}-input`}
+                    className={`fs-13 fw-4 lh-20 cn-7 ${isRequired ? 'dc__required-field' : ''}`}
+                >
+                    {label}
+                </label>
+            )}
+
             <div className="w-100 flexbox dc__align-items-center">
                 <div className="flex-grow-1">
                     <input
@@ -82,26 +102,31 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         type="number"
                         step={BUILD_INFRA_INPUT_CONSTRAINTS.STEP}
                         min={BUILD_INFRA_INPUT_CONSTRAINTS.MIN}
-                        className="form__input dc__no-right-border dc__no-right-radius"
+                        className={`form__input dc__no-right-border dc__no-right-radius ${isDisabled ? 'dc__disabled' : ''}`}
                         placeholder={placeholder}
-                        value={currentValue}
+                        value={isNullOrUndefined(currentValue) ? '' : currentValue}
                         onChange={handleInputChange}
                         required={isRequired}
                         autoComplete="off"
+                        disabled={isDisabled}
                         id={`${actionType}-input`}
+                        // eslint-disable-next-line jsx-a11y/no-autofocus
+                        autoFocus={autoFocus}
                     />
                 </div>
 
                 {profileUnitsMap && (
                     <SelectPicker
                         inputId={`${actionType}-unit`}
-                        classNamePrefix="unit-dropdown"
+                        classNamePrefix="build-infra-unit-select"
                         name={`${actionType}-unit`}
                         options={unitOptions}
                         value={currentUnit}
                         onChange={handleUnitChange}
                         isSearchable={false}
                         size={ComponentSizeType.large}
+                        menuSize={ComponentSizeType.small}
+                        isDisabled={isDisabled}
                         shouldMenuAlignRight
                     />
                 )}

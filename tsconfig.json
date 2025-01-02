@@ -5,6 +5,9 @@
       "@Icons/*": [
         "./src/Assets/Icon/*"
       ],
+      "@Sounds/*": [
+        "./src/Assets/Sounds/*"
+      ],
       "@Images/*": [
         "./src/Assets/Img/*"
       ],

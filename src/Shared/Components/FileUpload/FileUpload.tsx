@@ -1,10 +1,10 @@
 import { ChangeEvent } from 'react'
 
-import { ReactComponent as ICCloudUpload } from '@Icons/ic-cloud-upload.svg'
+import { ReactComponent as ICUploadArrowAnimated } from '@Icons/ic-upload-arrow-animated.svg'
+import { ReactComponent as ICFileText } from '@Icons/ic-file-text.svg'
 import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
 import { Tooltip } from '@Common/Tooltip'
 
-import { Progressing } from '@Common/Progressing'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
@@ -42,12 +42,12 @@ export const FileUpload = ({
                     <div className="flexbox dc__align-items-center dc__gap-8 px-8 py-4 mw-none">
                         {isLoading ? (
                             <>
-                                <Progressing size={16} />
+                                <ICUploadArrowAnimated className="icon-dim-16 dc__no-shrink scb-5" />
                                 <span className="fs-12 lh-20">Uploading...</span>
                             </>
                         ) : (
                             <>
-                                <ICCloudUpload className="icon-dim-16 dc__no-shrink" />
+                                <ICFileText className="icon-dim-16 dc__no-shrink scb-5" />
                                 <Tooltip content={fileName}>
                                     <span className="fs-12 lh-20 dc__ellipsis-right">{fileName}</span>
                                 </Tooltip>

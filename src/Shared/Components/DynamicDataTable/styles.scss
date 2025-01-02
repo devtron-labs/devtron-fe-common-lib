@@ -83,14 +83,39 @@
         &__select-picker__control {
             gap: 6px !important;
             padding: 8px !important;
+            max-height: 160px !important;
         }
 
-        &__select-picker__menu-portal {
-            z-index: 3 !important;
-        }
+        &__select-picker-text-area {
+            &__control {
+                padding: 0 !important;
+                max-height: 160px !important;
+            }
 
-        &:has(.select-picker-hidden) .dynamic-data-table__select-text-area {
-            padding-left: 8px;
+            &__placeholder {
+                align-self: start;
+                padding: 8px 50px 8px 8px;
+            }
+
+            &__indicators {
+                position: absolute;
+                top: 10px;
+                right: 8px;
+            }
+
+            &__input-container {
+                display: flex !important;
+                width: 100%;
+
+                &::after {
+                    content: none !important;
+                }
+            }
+
+            &__input {
+                flex-grow: 1;
+                padding: 8px 50px 8px 8px !important;
+            }
         }
 
         &:hover:not(:focus-within):not(.no-hover) {
@@ -111,6 +136,10 @@
     }
 
     &__cell:not(:focus-within):not(:hover) > &__error {
+        display: none;
+    }
+
+    &__cell:focus-within > &__error.no-error {
         display: none;
     }
 

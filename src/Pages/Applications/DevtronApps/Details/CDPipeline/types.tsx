@@ -1,5 +1,5 @@
 import { BuildStageType, FormType } from '@Common/CIPipeline.Types'
-import { DeploymentAppTypes, UserApprovalConfigType } from '@Common/Types'
+import { DeploymentAppTypes } from '@Common/Types'
 import { DeploymentStrategy } from '@Shared/Components'
 import { EnvListMinDTO } from '@Shared/types'
 
@@ -61,7 +61,6 @@ export interface CDFormType {
     preStageConfigMapSecretNames: { configMaps: ConfigSecretType[]; secrets: ConfigSecretType[] }
     postStageConfigMapSecretNames: { configMaps: ConfigSecretType[]; secrets: ConfigSecretType[] }
     requiredApprovals: string
-    userApprovalConfig?: UserApprovalConfigType
     isClusterCdActive: boolean
     deploymentAppCreated: boolean
     clusterId: string

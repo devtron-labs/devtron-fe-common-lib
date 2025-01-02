@@ -16,7 +16,6 @@
 
 import React, { ReactNode, CSSProperties, ReactElement, MutableRefObject } from 'react'
 import { TippyProps } from '@tippyjs/react'
-import { Placement } from 'tippy.js'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import {
@@ -112,7 +111,7 @@ export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
     noHeadingBorder?: boolean
     infoTextHeading?: string
     hideHeading?: boolean
-    placement?: Placement
+    placement?: TippyProps['placement']
     className?: string
     Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     iconPath?: string
@@ -208,18 +207,43 @@ export enum ImageType {
     SMALL = 'small',
 }
 
-export interface InfoColourBarType {
-    message: React.ReactNode
+interface InfoColourBarTextConfigType {
+    /**
+     * If given would be shown above the description, in bold
+     */
+    heading?: string
+    /**
+     * If given would be shown below the heading (if given)
+     */
+    description: string
+}
+
+type InfoColourBarMessageProp = {
+    message: ReactNode
+    linkText?: ReactNode
+    redirectLink?: string
+    linkOnClick?: () => void
+    linkClass?: string
+    internalLink?: boolean
+
+    textConfig?: never
+} | {
+    textConfig: InfoColourBarTextConfigType
+
+    message?: never
+    linkText?: never
+    redirectLink?: never
+    linkOnClick?: () => never
+    linkClass?: never
+    internalLink?: never
+}
+
+export type InfoColourBarType = InfoColourBarMessageProp & {
     classname: string
     Icon
     iconClass?: string
     iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
     renderActionButton?: () => JSX.Element
-    linkText?: React.ReactNode
-    redirectLink?: string
-    linkOnClick?: () => void
-    linkClass?: string
-    internalLink?: boolean
     styles?: CSSProperties
     /**
      * If true, the icon is not shown
@@ -348,29 +372,8 @@ export enum ManualApprovalType {
     notConfigured = 'NOT_CONFIGURED',
 }
 
-export interface UserGroupApproverType {
-    email: string
-    hasAccess: boolean
-}
-
-export interface ImageApprovalPolicyUserGroupDataType {
-    // Mapping email to data
-    dataStore: Record<string, UserGroupApproverType>
-    requiredCount: number
-    emails: string[]
-}
-
-export interface ImageApprovalPolicyType {
-    isPolicyConfigured: boolean
-    specificUsersData: ImageApprovalPolicyUserGroupDataType
-    userGroupData: Record<string, ImageApprovalPolicyUserGroupDataType>
-    // Assuming name of groups are unique
-    validGroups: string[]
-}
-
 export type ImageApprovalUsersInfoDTO = Record<string, Pick<UserGroupDTO, 'identifier' | 'name'>[]>
 
-// TODO: Need to verify this change for all impacting areas
 export interface UserApprovalConfigType {
     type: ManualApprovalType
     requiredCount: number
@@ -384,17 +387,6 @@ export interface UserApprovalConfigType {
     })[]
 }
 
-export type UserApprovalConfigPayloadType =
-    | ({
-          type: ManualApprovalType.any
-      } & Pick<UserApprovalConfigType, 'requiredCount'>)
-    | ({
-          type: ManualApprovalType.specific
-      } & Pick<UserApprovalConfigType, 'userGroups' | 'specificUsers'>)
-    | {
-          type: ManualApprovalType.notConfigured
-      }
-
 interface ApprovalUserDataType {
     dataId: number
     userActionTime: string
@@ -405,12 +397,49 @@ interface ApprovalUserDataType {
     userGroups?: Pick<UserGroupDTO, 'identifier' | 'name'>[]
 }
 
+export interface UserApprovalInfo {
+    requiredCount: number
+    currentCount: number
+    approverList: {
+        hasApproved: boolean
+        canApprove: boolean
+        identifier: string
+    }[]
+}
+
+export enum ApprovalConfigDataKindType {
+    configMap = 'configuration/config-map',
+    configSecret = 'configuration/config-secret',
+    deploymentTemplate = 'configuration/deployment-template',
+    deploymentTrigger = 'approval/deployment',
+}
+
+export interface ApprovalConfigDataType extends Pick<UserApprovalInfo, 'currentCount' | 'requiredCount'> {
+    kind: ApprovalConfigDataKindType | null
+    anyUserApprovedInfo: UserApprovalInfo
+    specificUsersApprovedInfo: UserApprovalInfo
+    userGroupsApprovedInfo: Pick<UserApprovalInfo, 'currentCount' | 'requiredCount'> & {
+        userGroups: (UserApprovalInfo & {
+            groupIdentifier: UserGroupDTO['identifier']
+            groupName: UserGroupDTO['name']
+        })[]
+    }
+}
+
+export enum ApprovalRuntimeStateType {
+    init = 0,
+    requested = 1,
+    approved = 2,
+    consumed = 3,
+}
+
 export interface UserApprovalMetadataType {
     approvalRequestId: number
-    approvalRuntimeState: number
-    approvedUsersData: ApprovalUserDataType[]
+    approvalRuntimeState: ApprovalRuntimeStateType
     requestedUserData: ApprovalUserDataType
-    approvalConfig?: UserApprovalConfigType
+    hasCurrentUserApproved: boolean
+    canCurrentUserApprove: boolean
+    approvalConfigData: ApprovalConfigDataType
 }
 
 export enum FilterStates {
@@ -476,7 +505,6 @@ export interface CDMaterialListModalServiceUtilProps {
     artifactId?: number
     artifactStatus?: string
     disableDefaultSelection?: boolean
-    userApprovalConfig?: UserApprovalConfigType
 }
 
 export interface CDMaterialType {
@@ -635,8 +663,7 @@ export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTr
     primaryBranchAfterRegex?: string
     storageConfigured?: boolean
     deploymentAppDeleteRequest?: boolean
-    approvalUsers?: string[]
-    userApprovalConfig?: UserApprovalConfigType
+    approvalConfigData: ApprovalConfigDataType
     requestedUserId?: number
     showPluginWarning: boolean
     helmPackageName?: string
@@ -701,14 +728,22 @@ export interface FilterConditionsListType {
     conditions: FilterConditionsInfo[]
 }
 
+export interface DeploymentApprovalInfoType {
+    eligibleApprovers: {
+        specificUsers: Pick<UserApprovalInfo, 'approverList'>
+        anyUsers: Pick<UserApprovalInfo, 'approverList'>
+        userGroups: (Pick<
+            ApprovalConfigDataType['userGroupsApprovedInfo']['userGroups'][number],
+            'groupIdentifier' | 'groupName'
+        > &
+            Pick<UserApprovalInfo, 'approverList'>)[]
+    }
+    approvalConfigData: ApprovalConfigDataType
+}
+
 export interface CDMaterialsApprovalInfo {
-    approvalUsers: string[]
-    userApprovalConfig: UserApprovalConfigType
     canApproverDeploy: boolean
-    /**
-     * Only available incase of approvals do'nt use in cd materials or any other flow since approvalUsers are not present there
-     */
-    imageApprovalPolicyDetails: ImageApprovalPolicyType
+    deploymentApprovalInfo: DeploymentApprovalInfoType
 }
 
 export interface CDMaterialsMetaInfo {
@@ -801,7 +836,6 @@ export interface AppEnvironment {
     appStatus?: string
     deploymentAppDeleteRequest?: boolean
     isVirtualEnvironment?: boolean
-    isProtected?: boolean
     pipelineId?: number
     latestCdWorkflowRunnerId?: number
     commits?: string[]
@@ -857,7 +891,6 @@ export interface CdPipeline extends Partial<Pick<CommonNodeAttr, 'triggerBlocked
     parentPipelineType?: string
     deploymentAppDeleteRequest?: boolean
     deploymentAppCreated?: boolean
-    userApprovalConfig?: UserApprovalConfigType
     isVirtualEnvironment?: boolean
     deploymentAppType: DeploymentAppTypes
     helmPackageName?: string
@@ -866,6 +899,7 @@ export interface CdPipeline extends Partial<Pick<CommonNodeAttr, 'triggerBlocked
     isProdEnv?: boolean
     isGitOpsRepoNotConfigured?: boolean
     isDeploymentBlocked?: boolean
+    approvalConfigData: ApprovalConfigDataType
     isTriggerBlocked?: boolean
 }
 
@@ -982,13 +1016,12 @@ export interface Point {
 export interface EdgeNodeType {
     height: number
     width: number
-    userApprovalConfig?: UserApprovalConfigType
     type?: any
     id?: number | string
 }
 
 export interface EdgeEndNodeType extends EdgeNodeType {
-    userApprovalConfig?: UserApprovalConfigType
+    approvalConfigData: ApprovalConfigDataType
 }
 
 /**
