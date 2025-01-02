@@ -98,6 +98,10 @@ declare module 'react-select/base' {
          * @default false
          */
         shouldRenderTextArea?: boolean
+        /**
+         * Custom prop for the value container for focussed state
+         */
+        isFocussed?: boolean
     }
 }
 

@@ -119,15 +119,12 @@ export const SelectPickerInput = <OptionValue,>(props: InputProps<SelectPickerOp
 export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>({
     showSelectedOptionsCount,
     customSelectedOptionsCount,
-    isFocussed,
     ...props
 }: ValueContainerProps<SelectPickerOptionType<OptionValue>> &
-    Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount' | 'customSelectedOptionsCount'> & {
-        isFocussed: boolean
-    }) => {
+    Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount' | 'customSelectedOptionsCount'>) => {
     const {
         getValue,
-        selectProps: { customDisplayText, shouldRenderTextArea },
+        selectProps: { customDisplayText, shouldRenderTextArea, isFocussed },
         children,
     } = props
 
