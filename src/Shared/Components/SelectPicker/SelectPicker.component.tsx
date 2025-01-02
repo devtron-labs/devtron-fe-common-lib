@@ -284,10 +284,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                 {...valueContainerProps}
                 showSelectedOptionsCount={showSelectedOptionsCount}
                 customSelectedOptionsCount={customSelectedOptionsCount}
-                isFocussed={isFocussed}
             />
         ),
-        [showSelectedOptionsCount, customSelectedOptionsCount, isFocussed],
+        [showSelectedOptionsCount, customSelectedOptionsCount],
     )
 
     const renderOption = useCallback(
@@ -469,6 +468,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             onBlur={handleBlur}
                             onChange={handleChange}
                             controlShouldRenderValue={controlShouldRenderValue}
+                            isFocussed={isFocussed}
                         />
                     </div>
                 </ConditionalWrap>
