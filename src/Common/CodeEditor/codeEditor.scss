@@ -28,7 +28,7 @@
     .radio-group input[type='checkbox']:checked + .radio__item-label {
         background: var(--N700);
         border-radius: 0;
-        color: var(--white);
+        color: var(--N0);
     }
 
     .radio__item-label {
@@ -74,7 +74,7 @@
                 width: 90%;
 
                 path {
-                    fill: green;
+                    fill: var(--G500);
                 }
             }
         }
@@ -118,7 +118,7 @@
         margin: 0 12px;
     }
 
-    color: var(--white);
+    color: var(--N0);
 }
 
 .diff-icon {
