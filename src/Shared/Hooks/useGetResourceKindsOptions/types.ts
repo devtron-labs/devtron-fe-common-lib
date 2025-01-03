@@ -39,6 +39,7 @@ export interface ClusterDTO {
     id: number
     cluster_name: string
     isVirtualCluster: boolean
+    isProd: boolean
 }
 
 // ====== Service Types: End ====== //

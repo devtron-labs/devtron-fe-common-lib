@@ -29,6 +29,8 @@ export const CodeEditorReducer = (state: CodeEditorState, action: Action) => {
             return { ...state, theme: action.value }
         case 'setCode':
             return { ...state, code: action.value }
+        case 'setDefaultCode':
+            return { ...state, defaultCode: action.value }
         case 'setHeight':
             return { ...state, height: action.value.toString() }
         default:
@@ -71,6 +73,7 @@ export const initialState = ({
     mode,
     theme,
     value,
+    defaultValue,
     diffView,
     noParsing,
     tabSize,
@@ -78,6 +81,7 @@ export const initialState = ({
     mode: mode as MODES,
     theme: (theme || CodeEditorThemesKeys.vs) as CodeEditorThemesKeys,
     code: noParsing ? value : parseValueToCode(value, mode, tabSize),
+    defaultCode: noParsing ? defaultValue : parseValueToCode(defaultValue, mode, tabSize),
     diffMode: diffView,
     noParsing: [MODES.JSON, MODES.YAML].includes(mode as MODES) ? noParsing : true,
 })
