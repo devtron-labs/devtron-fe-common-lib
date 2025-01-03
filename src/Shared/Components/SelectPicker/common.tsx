@@ -26,7 +26,6 @@ import {
     MultiValueProps,
     MultiValue,
     InputProps,
-    IndicatorsContainerProps,
 } from 'react-select'
 import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
@@ -62,30 +61,22 @@ const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = 
     }
 }
 
-export const SelectPickerIndicatorsContainer = <OptionValue,>({
-    className = '',
-    ...props
-}: IndicatorsContainerProps<SelectPickerOptionType<OptionValue>>) => (
-    <components.IndicatorsContainer {...props} className={`${className} dc__position-sticky dc__top-0 pt-2`} />
-)
-
 export const SelectPickerDropdownIndicator = <OptionValue,>(
     props: DropdownIndicatorProps<SelectPickerOptionType<OptionValue>>,
 ) => {
-    const { isDisabled, className = '' } = props
+    const { isDisabled } = props
 
     return (
-        <components.DropdownIndicator {...props} className={`${className} dc__align-self-start`}>
+        <components.DropdownIndicator {...props}>
             <ICCaretDown className={isDisabled ? 'scn-3' : 'scn-6'} />
         </components.DropdownIndicator>
     )
 }
 
-export const SelectPickerClearIndicator = <OptionValue,>({
-    className = '',
-    ...props
-}: ClearIndicatorProps<SelectPickerOptionType<OptionValue>>) => (
-    <components.ClearIndicator {...props} className={`${className} dc__align-self-start`}>
+export const SelectPickerClearIndicator = <OptionValue,>(
+    props: ClearIndicatorProps<SelectPickerOptionType<OptionValue>>,
+) => (
+    <components.ClearIndicator {...props}>
         <ICClose className="icon-use-fill-n6" />
     </components.ClearIndicator>
 )
@@ -128,17 +119,19 @@ export const SelectPickerInput = <OptionValue,>(props: InputProps<SelectPickerOp
 export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>({
     showSelectedOptionsCount,
     customSelectedOptionsCount,
-    isFocussed,
     ...props
 }: ValueContainerProps<SelectPickerOptionType<OptionValue>> &
-    Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount' | 'customSelectedOptionsCount'> & {
-        isFocussed: boolean
-    }) => {
+    Pick<SelectPickerProps<OptionValue, IsMulti>, 'showSelectedOptionsCount' | 'customSelectedOptionsCount'>) => {
     const {
         getValue,
-        selectProps: { customDisplayText },
+        selectProps: { customDisplayText, shouldRenderTextArea, isFocussed },
         children,
     } = props
+
+    if (shouldRenderTextArea) {
+        return <components.ValueContainer {...props} />
+    }
+
     const selectedOptionsLength = isNullOrUndefined(customSelectedOptionsCount)
         ? (getValue() ?? []).length
         : customSelectedOptionsCount

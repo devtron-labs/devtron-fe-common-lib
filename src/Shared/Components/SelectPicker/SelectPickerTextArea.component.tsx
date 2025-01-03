@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { InputActionMeta, SelectInstance, SingleValue } from 'react-select'
 
 import { ReactSelectInputAction } from '@Common/Constants'
+import { useThrottledEffect } from '@Common/Helper'
 
 import SelectPicker from './SelectPicker.component'
 import { SelectPickerOptionType, SelectPickerTextAreaProps } from './type'
@@ -11,6 +12,10 @@ export const SelectPickerTextArea = ({
     options,
     isCreatable,
     onChange,
+    minHeight,
+    maxHeight,
+    refVar,
+    dependentRefs,
     ...props
 }: SelectPickerTextAreaProps) => {
     // STATES
@@ -20,11 +25,62 @@ export const SelectPickerTextArea = ({
     const selectRef = useRef<SelectInstance<SelectPickerOptionType<string>>>(null)
 
     useEffect(() => {
+        const inputRef = refVar
+        if (inputRef) {
+            inputRef.current = selectRef.current.inputRef as unknown as HTMLTextAreaElement
+        }
+    }, [refVar])
+
+    useEffect(() => {
         const selectValue = value as SingleValue<SelectPickerOptionType<string>>
         setInputValue(selectValue?.value || '')
     }, [value])
 
     // METHODS
+    const updateDependentRefsHeight = (height: number) => {
+        Object.values(dependentRefs || {}).forEach((ref) => {
+            const dependentRefElement = ref?.current
+            if (dependentRefElement) {
+                dependentRefElement.style.height = `${height}px`
+            }
+        })
+    }
+
+    const updateRefsHeight = (height: number) => {
+        const refElement = refVar?.current
+        if (refElement) {
+            refElement.style.height = `${height}px`
+        }
+        updateDependentRefsHeight(height)
+    }
+
+    const reInitHeight = () => {
+        updateRefsHeight(minHeight || 0)
+
+        let nextHeight = refVar?.current?.scrollHeight || 0
+
+        if (dependentRefs) {
+            Object.values(dependentRefs).forEach((ref) => {
+                const refElement = ref.current
+                if (refElement && refElement.scrollHeight > nextHeight) {
+                    nextHeight = refElement.scrollHeight
+                }
+            })
+        }
+
+        if (minHeight && nextHeight < minHeight) {
+            nextHeight = minHeight
+        }
+
+        if (maxHeight && nextHeight > maxHeight) {
+            nextHeight = maxHeight
+        }
+
+        updateRefsHeight(nextHeight)
+    }
+
+    useThrottledEffect(reInitHeight, 500, [inputValue])
+
     const onInputChange = (newValue: string, { action }: InputActionMeta) => {
         if (action === ReactSelectInputAction.inputChange) {
             setInputValue(newValue)
@@ -62,24 +118,27 @@ export const SelectPickerTextArea = ({
             setInputValue(updatedText)
 
             const textarea = selectRef.current.inputRef
-            const wrapper = selectRef.current.controlRef
 
-            // Get the caret position relative to the scrollable area
-            const lineHeight = parseInt(getComputedStyle(textarea).lineHeight, 10)
+            // Get the caret position
             const caretPosition = textarea.selectionStart
-            const linesAboveCaret = textarea.value.substring(0, caretPosition).split('\n').length
 
-            // Estimate caret position by line height
-            const caretY = linesAboveCaret * lineHeight
-            const scrollOffset = caretY - wrapper.scrollTop
+            // Split the text up to the caret position into lines
+            const textBeforeCaret = textarea.value.substring(0, caretPosition)
+            const lines = textBeforeCaret.split('\n')
 
-            // Adjust scroll to ensure caret is visible
+            // Calculate the caret position in pixels
+            const lineHeight = parseInt(getComputedStyle(textarea).lineHeight, 10)
+            const caretY = lines.length * lineHeight
+
+            // Check if caret is outside of the visible area
+            const scrollOffset = caretY - textarea.scrollTop
+
             if (scrollOffset < 0) {
-                // Scroll up
-                wrapper.scrollTop += scrollOffset
-            } else if (scrollOffset > wrapper.offsetHeight - lineHeight) {
-                // Scroll down
-                wrapper.scrollTop += scrollOffset - wrapper.offsetHeight + lineHeight
+                // Scroll up if the caret is above the visible area
+                textarea.scrollTop += scrollOffset
+            } else if (scrollOffset > textarea.offsetHeight - lineHeight) {
+                // Scroll down if the caret is below the visible area
+                textarea.scrollTop += scrollOffset - textarea.offsetHeight + lineHeight
             }
 
             // Move the cursor to the next line
