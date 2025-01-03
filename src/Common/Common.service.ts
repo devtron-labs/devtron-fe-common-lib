@@ -48,7 +48,7 @@ import {
 import { ApiResourceType } from '../Pages'
 import { API_TOKEN_PREFIX } from '@Shared/constants'
 import { DefaultUserKey } from '@Shared/types'
-import { RefVariableType } from './CIPipeline.Types'
+import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -225,7 +225,7 @@ const cdMaterialListModal = ({
             deploymentWindowArtifactMetadata: material.deploymentWindowArtifactMetadata ?? null,
             configuredInReleases: material.configuredInReleases ?? [],
             appWorkflowId: material.appWorkflowId ?? null,
-            deploymentBlockedState: sanitizeDeploymentBlockedState(material.deploymentBlockedState)
+            deploymentBlockedState: sanitizeDeploymentBlockedState(material.deploymentBlockedState),
         }
     })
     return materials
@@ -338,8 +338,37 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
     }
 }
 
-export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): RuntimePluginVariables[] =>
-    (response?.runtimePluginVariables ?? []).map((variable) => ({ ...variable, defaultValue: variable.value }))
+export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): RuntimePluginVariables[] => {
+    const envVariables = Object.entries(response?.envVariables || {}).map<RuntimePluginVariables>(
+        ([key, value]) => ({
+            name: key,
+            value,
+            defaultValue: '',
+            format: VariableTypeFormat.STRING,
+            isRequired: false,
+            valueType: RefVariableType.NEW,
+            variableStepScope: RefVariableType.GLOBAL,
+            stepName: null,
+            stepType: null,
+            // TODO: (Rohit/Eshank) Replace this with getUniqueId (nanoId method)
+            stepVariableId: Math.floor(new Date().valueOf() * Math.random()),
+            valueConstraint: null,
+            description: null,
+            fileReferenceId: null,
+            fileMountDir: null,
+        }),
+    )
+
+    const runtimeParams = (response?.runtimePluginVariables ?? []).map<RuntimePluginVariables>((variable) => ({
+        ...variable,
+        defaultValue: variable.value,
+    }))
+
+    runtimeParams.push(...envVariables)
+    runtimeParams.sort((a, b) => stringComparatorBySortOrder(a.name, b.name))
+
+    return runtimeParams
+}
 
 const processCDMaterialsMetaInfo = (cdMaterialsResult): CDMaterialsMetaInfo => {
     if (!cdMaterialsResult) {
