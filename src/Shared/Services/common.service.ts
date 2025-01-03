@@ -23,7 +23,4 @@ export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryPara
 export const getPolicyApiUrl = <T>({ kind, version, queryParams, suffix }: GetPolicyApiUrlProps<T>) =>
     getUrlWithSearchParams(`global/policy/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
 
-export function saveCDPipeline(request) {
-    const URL = `${ROUTES.CD_CONFIG}`
-    return post(URL, request)
-}
+export const saveCDPipeline = (request) => post(ROUTES.CD_CONFIG, request)
