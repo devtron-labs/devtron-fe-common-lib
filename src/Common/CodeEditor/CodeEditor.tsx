@@ -42,6 +42,7 @@ import {
 } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '../Constants'
+import { useTheme } from '@Shared/Providers'
 
 const CodeEditorContext = React.createContext(null)
 
@@ -70,7 +71,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         onChange,
         readOnly,
         diffView,
-        theme = '',
+        theme = CodeEditorThemesKeys.vs,
         loading,
         customLoader,
         focus,
@@ -83,6 +84,8 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         adjustEditorHeightToContent = false,
         disableSearch = false,
     }) => {
+        const { currentTheme: appTheme } = useTheme()
+
         if (cleanData) {
             value = cleanKubeManifest(value)
             defaultValue = cleanKubeManifest(defaultValue)
@@ -94,7 +97,15 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         const memoisedReducer = React.useCallback(CodeEditorReducer, [])
         const [state, dispatch] = useReducer(
             memoisedReducer,
-            initialState({ mode, theme, value, diffView, noParsing, tabSize }),
+            initialState({
+                mode,
+                theme,
+                value,
+                diffView,
+                noParsing,
+                tabSize,
+                appTheme,
+            }),
         )
         const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
         const [, originalJson, originlaYaml] = useJsonYaml(defaultValue, tabSize, state.mode, !state.noParsing)

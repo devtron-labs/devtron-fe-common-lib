@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
+import { ThemeType } from '@Shared/Providers'
 import { MODES } from '../Constants'
 
 export interface InformationBarProps {
     text: string
     className?: string
     children?: React.ReactNode
+}
+
+export enum CodeEditorThemesKeys {
+    vsDarkDT = 'vs-dark--dt',
+    deleteDraft = 'delete-draft',
+    unpublished = 'unpublished',
+    vs = 'vs',
+    networkStatusInterface = 'network-status-interface',
 }
 
 interface CodeEditorBaseInterface {
@@ -40,7 +49,7 @@ interface CodeEditorBaseInterface {
     diffView?: boolean
     loading?: boolean
     customLoader?: JSX.Element
-    theme?: string
+    theme?: CodeEditorThemesKeys
     original?: string
     focus?: boolean
     validatorSchema?: any
@@ -95,21 +104,14 @@ export interface Action {
     value: any
 }
 
-export enum CodeEditorThemesKeys {
-    vsDarkDT = 'vs-dark--dt',
-    deleteDraft = 'delete-draft',
-    unpublished = 'unpublished',
-    vs = 'vs',
-    networkStatusInterface = 'network-status-interface',
-}
-
 export interface CodeEditorInitialValueType {
     mode: string
     diffView: boolean
-    theme?: string
+    theme?: CodeEditorThemesKeys
     value: string
     noParsing?: boolean
     tabSize: number
+    appTheme: ThemeType
 }
 
 export interface CodeEditorState {

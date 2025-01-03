@@ -20,7 +20,7 @@ import Tippy from '@tippyjs/react'
 import { yamlComparatorBySortOrder } from '@Shared/Helpers'
 import { DiffViewer } from '@Shared/Components/DiffViewer'
 import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
-import { MODES, Toggle, YAMLStringify } from '../../../../Common'
+import { CodeEditorThemesKeys, MODES, Toggle, YAMLStringify } from '../../../../Common'
 import { DeploymentHistoryParamsType } from './types'
 import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../types'
 import CodeEditor from '../../../../Common/CodeEditor/CodeEditor'
@@ -46,10 +46,10 @@ const DeploymentHistoryDiffView = ({
 
     const getTheme = () => {
         if (isDeleteDraft) {
-            return 'delete-draft'
+            return CodeEditorThemesKeys.deleteDraft
         }
         if (isUnpublished) {
-            return 'unpublished'
+            return CodeEditorThemesKeys.unpublished
         }
         return null
     }

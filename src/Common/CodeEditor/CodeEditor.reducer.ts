@@ -17,7 +17,8 @@
 import YAML from 'yaml'
 import { noop, YAMLStringify } from '@Common/Helper'
 import { MODES } from '../Constants'
-import { Action, CodeEditorInitialValueType, CodeEditorState, CodeEditorThemesKeys } from './types'
+import { Action, CodeEditorInitialValueType, CodeEditorState } from './types'
+import { getCodeEditorThemeFromAppTheme } from './utils'
 
 export const CodeEditorReducer = (state: CodeEditorState, action: Action) => {
     switch (action.type) {
@@ -74,9 +75,10 @@ export const initialState = ({
     diffView,
     noParsing,
     tabSize,
+    appTheme,
 }: CodeEditorInitialValueType): CodeEditorState => ({
     mode: mode as MODES,
-    theme: (theme || CodeEditorThemesKeys.vs) as CodeEditorThemesKeys,
+    theme: getCodeEditorThemeFromAppTheme(theme, appTheme),
     code: noParsing ? value : parseValueToCode(value, mode, tabSize),
     diffMode: diffView,
     noParsing: [MODES.JSON, MODES.YAML].includes(mode as MODES) ? noParsing : true,
