@@ -1,16 +1,5 @@
 import { ChangeCIPayloadType, CIPipelineNodeType, WorkflowType } from '@Shared/types'
 
-export interface SourceTypeCardProps {
-    title: string
-    subtitle: string
-    image: string
-    alt: string
-    handleCardAction: (e: React.MouseEvent | React.KeyboardEvent) => void
-    dataTestId: string
-    type: string
-    disableInfo: string
-}
-
 interface LinkedCDSourceVariant {
     title: string
     subtitle: string
@@ -18,6 +7,11 @@ interface LinkedCDSourceVariant {
     alt: string
     dataTestId: string
     type: string
+}
+
+export interface SourceTypeCardProps extends LinkedCDSourceVariant {
+    handleCardAction: (e: React.MouseEvent | React.KeyboardEvent) => void
+    disableInfo: string
 }
 
 export interface WorkflowOptionsModalProps {
