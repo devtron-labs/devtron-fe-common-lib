@@ -96,14 +96,15 @@ export interface BulkOperation {
 }
 
 export type BulkOperationModalProps = {
-    operationType: 'restart' | 'delete' | 'creation'
-    clusterName: string
+    operationType: 'restart' | 'delete' | 'creation' | 'deploy'
+    clusterName?: string
     operations: NonNullable<BulkOperation[]>
     handleModalClose: () => void
     resourceKind: string
     handleReloadDataAfterBulkOperation?: () => void
     hideResultsDrawer?: boolean
     shouldAllowForceOperation?: true
+    shouldSkipConfirmation?: true
 }
 
 export type BulkOperationModalState = BulkOperationModalProps['operationType'] | 'closed'
