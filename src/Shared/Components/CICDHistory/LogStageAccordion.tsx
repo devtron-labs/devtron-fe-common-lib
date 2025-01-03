@@ -95,13 +95,13 @@ const LogStageAccordion = ({
                             >
                                 <span
                                     ref={scrollIntoView}
-                                    className="cn-4 col-2 lh-20 dc__text-align-end dc__word-break mono fs-14"
+                                    className="cn-4 col-2 lh-20 dc__text-align-end dc__word-break mono fs-14 dc__user-select-none"
                                     data-contains-match={doesLineContainSearchMatch}
                                 >
                                     {logsIndex + 1}
                                 </span>
-                                <p
-                                    className="mono fs-14 mb-0-imp cn-0 dc__word-break lh-20"
+                                <pre
+                                    className="mono fs-14 mb-0-imp cn-0 dc__word-break lh-20 dc__unset-pre"
                                     // eslint-disable-next-line react/no-danger
                                     dangerouslySetInnerHTML={{
                                         __html: DOMPurify.sanitize(log),
