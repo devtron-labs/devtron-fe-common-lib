@@ -65,35 +65,35 @@ export const SUB_CATEGORY_LABELS = {
 export const SEVERITIES = {
     [SeveritiesDTO.CRITICAL]: {
         label: 'Critical',
-        color: '#B21212',
+        color: 'var(--R700)',
     },
     [SeveritiesDTO.HIGH]: {
         label: 'High',
-        color: '#F33E3E',
+        color: 'var(--R500)',
     },
     [SeveritiesDTO.MEDIUM]: {
         label: 'Medium',
-        color: '#FF7E5B',
+        color: 'var(--O500)',
     },
     [SeveritiesDTO.LOW]: {
         label: 'Low',
-        color: '#FFB549',
+        color: 'var(--Y500)',
     },
     [SeveritiesDTO.UNKNOWN]: {
         label: 'Unknown',
-        color: '#B1B7BC',
+        color: 'var(--N300)',
     },
     [SeveritiesDTO.FAILURES]: {
         label: 'Failures',
-        color: '#F33E3E',
+        color: 'var(--R500)',
     },
     [SeveritiesDTO.SUCCESSES]: {
         label: 'Successes',
-        color: '#1DAD70',
+        color: 'var(--G500)',
     },
     [SeveritiesDTO.EXCEPTIONS]: {
         label: 'Exceptions',
-        color: '#B1B7BC',
+        color: 'var(--N300)',
     },
 } as const
 
