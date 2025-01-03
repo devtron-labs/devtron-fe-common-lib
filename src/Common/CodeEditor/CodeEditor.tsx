@@ -186,6 +186,9 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                 })
                 setContentHeight(editor.getContentHeight())
             }
+
+            editorRef.current = editor
+            monacoRef.current = monaco
         }
 
         const diffEditorDidMount: DiffEditorDidMount = (editor, monaco) => {
