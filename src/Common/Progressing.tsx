@@ -33,7 +33,7 @@ export const Progressing = ({ pageLoader, size, theme, styles, fillColor }: Prog
                             type="rotate"
                         />
                         <path
-                            fill={fillColor || '#06C'}
+                            fill={fillColor || 'var(--B500)'}
                             fillRule="nonzero"
                             d="M12 2.5A9.5 9.5 0 1 1 2.5 12a1.5 1.5 0 0 1 3 0A6.5 6.5 0 1 0 12 5.5a1.5 1.5 0 0 1 0-3z"
                         />

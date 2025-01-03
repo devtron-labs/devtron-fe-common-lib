@@ -36,7 +36,7 @@
         }
 
         &__stage-accordion {
-            background-color: #0c1021;
+            background-color: var(--N900);
 
             &:not(&--open-stage):hover {
                 background-color: rgba(44, 51, 84, 0.5);

@@ -151,16 +151,16 @@ export function useThrottledEffect(callback, delay, deps = []) {
 }
 
 const colors = [
-    '#FFB900',
-    '#D83B01',
-    '#B50E0E',
-    '#E81123',
+    'var(--Y500)',
+    'var(--R600)',
+    'var(--R700)',
+    'var(--R500)',
     '#B4009E',
-    '#5C2D91',
-    '#0078D7',
-    '#00B4FF',
-    '#008272',
-    '#107C10',
+    'var(--V700)',
+    'var(--B500)',
+    'var(--B400)',
+    'var(--G500)',
+    'var(--G700)',
 ]
 
 export function getRandomColor(email: string): string {

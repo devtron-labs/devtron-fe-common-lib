@@ -483,13 +483,13 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                     className="flexbox-col pb-20 logs-renderer-container flex-grow-1"
                     data-testid="check-logs-detail"
                     style={{
-                        backgroundColor: '#0C1021',
+                        backgroundColor: 'var(--N900)',
                     }}
                 >
                     <div
                         className={`flexbox-col pb-7 dc__position-sticky dc__zi-2 ${fullScreenView ? 'dc__top-0' : 'dc__top-36'}`}
                         style={{
-                            backgroundColor: '#0C1021',
+                            backgroundColor: 'var(--N900)',
                         }}
                     >
                         <div className="flexbox logs-renderer__search-bar logs-renderer__filters-border-bottom pl-12">
