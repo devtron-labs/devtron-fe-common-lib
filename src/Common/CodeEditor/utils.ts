@@ -1,10 +1,10 @@
 import { ThemeType } from '@Shared/Providers'
-import { CodeEditorThemesKeys } from './types'
+import { CodeEditorInterface, CodeEditorThemesKeys } from './types'
 
 export const getCodeEditorThemeFromAppTheme = (
-    editorTheme: CodeEditorThemesKeys,
+    editorTheme: CodeEditorInterface['theme'],
     appTheme: ThemeType,
-): CodeEditorThemesKeys => {
+): CodeEditorInterface['theme'] => {
     const editorThemeBasedOnAppTheme =
         appTheme === ThemeType.dark ? CodeEditorThemesKeys.vsDarkDT : CodeEditorThemesKeys.vs
 

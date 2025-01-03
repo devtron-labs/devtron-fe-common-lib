@@ -49,7 +49,7 @@ interface CodeEditorBaseInterface {
     diffView?: boolean
     loading?: boolean
     customLoader?: JSX.Element
-    theme?: CodeEditorThemesKeys
+    theme?: CodeEditorThemesKeys | string
     original?: string
     focus?: boolean
     validatorSchema?: any
@@ -104,10 +104,9 @@ export interface Action {
     value: any
 }
 
-export interface CodeEditorInitialValueType {
+export interface CodeEditorInitialValueType extends Pick<CodeEditorBaseInterface, 'theme'> {
     mode: string
     diffView: boolean
-    theme?: CodeEditorThemesKeys
     value: string
     noParsing?: boolean
     tabSize: number
