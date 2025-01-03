@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-import moment from 'moment'
 import { numberComparatorBySortOrder } from '@Shared/Helpers'
-import { DATE_TIME_FORMAT_STRING } from '../../../constants'
-import { SortingOrder, useAsync, VULNERABILITIES_SORT_PRIORITY, ZERO_TIME_STRING } from '../../../../Common'
-import { LastExecutionResponseType, LastExecutionResultType } from '../../../types'
-import { UseGetSecurityVulnerabilitiesProps, UseGetSecurityVulnerabilitiesReturnType } from './types'
-import { getExecutionDetails } from '../SecurityModal'
+import { SortingOrder, VULNERABILITIES_SORT_PRIORITY } from '../../../../Common'
 
 export const getSortedVulnerabilities = (vulnerabilities) =>
     vulnerabilities.sort((a, b) =>
@@ -30,71 +25,3 @@ export const getSortedVulnerabilities = (vulnerabilities) =>
             SortingOrder.ASC,
         ),
     )
-
-export const getParsedScanResult = (scanResult): LastExecutionResultType => {
-    const vulnerabilities = scanResult?.vulnerabilities || []
-    const sortedVulnerabilities = getSortedVulnerabilities(vulnerabilities)
-
-    return {
-        ...(scanResult || {}),
-        lastExecution:
-            scanResult?.executionTime && scanResult.executionTime !== ZERO_TIME_STRING
-                ? moment(scanResult.executionTime).format(DATE_TIME_FORMAT_STRING)
-                : '',
-        severityCount: {
-            critical: scanResult?.severityCount?.critical ?? 0,
-            high: scanResult?.severityCount?.high ?? 0,
-            medium: scanResult?.severityCount?.medium ?? 0,
-            low: scanResult?.severityCount?.low ?? 0,
-            unknown: scanResult?.severityCount?.unknown ?? 0,
-        },
-        vulnerabilities: sortedVulnerabilities.map((cve) => ({
-            name: cve.cveName,
-            severity: cve.severity,
-            package: cve.package,
-            version: cve.currentVersion,
-            fixedVersion: cve.fixedVersion,
-            policy: cve.permission,
-        })),
-    }
-}
-
-export const parseLastExecutionResponse = (response): LastExecutionResponseType => ({
-    ...response,
-    result: getParsedScanResult(response.result),
-})
-
-export const useGetSecurityVulnerabilities = ({
-    artifactId,
-    appId,
-    envId,
-    isScanned,
-    isScanEnabled,
-    isScanV2Enabled,
-    getSecurityScan,
-}: UseGetSecurityVulnerabilitiesProps): UseGetSecurityVulnerabilitiesReturnType => {
-    const [executionDetailsLoading, executionDetailsResponse, executionDetailsError, reloadExecutionDetails] = useAsync(
-        () => getExecutionDetails({ artifactId, appId, envId }),
-        [],
-        isScanned && isScanEnabled && !isScanV2Enabled,
-        {
-            resetOnChange: false,
-        },
-    )
-
-    const [scanResultLoading, scanResultResponse, scanResultError, reloadScanResult] = useAsync(
-        () => getSecurityScan({ artifactId, appId }),
-        [],
-        isScanned && isScanEnabled && isScanV2Enabled && !!getSecurityScan,
-        {
-            resetOnChange: false,
-        },
-    )
-
-    return {
-        scanDetailsLoading: scanResultLoading || executionDetailsLoading,
-        scanResultResponse: isScanV2Enabled ? scanResultResponse : executionDetailsResponse,
-        scanDetailsError: scanResultError || executionDetailsError,
-        reloadScanDetails: isScanV2Enabled ? reloadScanResult : reloadExecutionDetails,
-    }
-}

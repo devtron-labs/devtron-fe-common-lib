@@ -23,6 +23,7 @@ import { CreatableProps } from 'react-select/creatable'
 // This import allows to extend the base interface in react-select module via module augmentation
 import type {} from 'react-select/base'
 import { TooltipProps } from '@Common/Tooltip/types'
+import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 
 export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
     /**
@@ -84,6 +85,23 @@ declare module 'react-select/base' {
          * @default 'true'
          */
         showSelectedOptionIcon?: boolean
+        /**
+         * If provided, the custom display text is shown in the value container
+         *
+         * @default null
+         */
+        customDisplayText?: string
+        /** Render function for the footer at the end of the options list. */
+        renderOptionsFooter?: () => ReactNode
+        /**
+         * If true, the select picker will render textarea instead of input.
+         * @default false
+         */
+        shouldRenderTextArea?: boolean
+        /**
+         * Custom prop for the value container for focussed state
+         */
+        isFocussed?: boolean
     }
 }
 
@@ -131,6 +149,8 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
             | 'renderCustomOptions'
             | 'icon'
             | 'showSelectedOptionIcon'
+            | 'renderOptionsFooter'
+            | 'shouldRenderTextArea'
         >
     > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> &
@@ -238,10 +258,16 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          * @default true
          */
         shouldShowNoOptionsMessage?: boolean
+        /**
+         * If true, the menu list and the dropdown indicator are hidden. Suitable for use cases like multi-inputs
+         *
+         * @default false
+         */
+        shouldHideMenu?: boolean
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean
-              multiSelectProps?: {
+              multiSelectProps?: Partial<Pick<SelectProps<OptionValue, IsMulti>, 'customDisplayText'>> & {
                   /**
                    * If true, the group heading can be selected
                    *
@@ -285,3 +311,15 @@ export interface FilterSelectPickerProps
     appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
 }
+
+export type SelectPickerTextAreaProps = Omit<
+    SelectPickerProps<string, false>,
+    | 'selectRef'
+    | 'inputValue'
+    | 'onInputChange'
+    | 'controlShouldRenderValue'
+    | 'onKeyDown'
+    | 'onCreateOption'
+    | 'shouldRenderTextArea'
+> &
+    Pick<ResizableTagTextAreaProps, 'maxHeight' | 'minHeight' | 'refVar' | 'dependentRefs'>

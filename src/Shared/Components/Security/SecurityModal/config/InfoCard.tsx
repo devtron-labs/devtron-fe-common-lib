@@ -2,13 +2,13 @@
  * Copyright (c) 2024. Devtron Inc.
  */
 
-import { InfoCardPropsType, ApiResponseResultType, CATEGORIES, SecurityModalStateType } from '../types'
+import { InfoCardPropsType, ScanResultDTO, CATEGORIES, SecurityModalStateType } from '../types'
 import { getImageScanInfoCardData } from './ImageScan'
 import { getCodeScanInfoCardData } from './CodeScan'
 import { getKubernetesManifestInfoCardData } from './KubernetesManifest'
 
 export const getInfoCardData = (
-    data: ApiResponseResultType,
+    data: ScanResultDTO,
     category: SecurityModalStateType['category'],
     subCategory: SecurityModalStateType['subCategory'],
 ): InfoCardPropsType => {

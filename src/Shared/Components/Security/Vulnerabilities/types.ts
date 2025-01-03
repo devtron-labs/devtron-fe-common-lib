@@ -14,32 +14,14 @@
  * limitations under the License.
  */
 
-import { ResponseType } from '@Common/Types'
 import { ImageCardAccordionProps } from '@Shared/Components/ImageCardAccordion/types'
 import { MaterialSecurityInfoType } from '../../../types'
-import { ApiResponseResultType } from '../SecurityModal'
 
 export interface VulnerabilitiesProps
     extends MaterialSecurityInfoType,
-        Pick<ImageCardAccordionProps, 'SecurityModalSidebar' | 'getSecurityScan'> {
+        Pick<ImageCardAccordionProps, 'SecurityModalSidebar'> {
     artifactId: number
     applicationId: number
     environmentId: number
     setVulnerabilityCount: React.Dispatch<React.SetStateAction<number>>
-}
-
-export interface UseGetSecurityVulnerabilitiesProps extends Pick<ImageCardAccordionProps, 'getSecurityScan'> {
-    artifactId: string
-    appId: string
-    envId: number
-    isScanned: boolean
-    isScanEnabled: boolean
-    isScanV2Enabled: boolean
-}
-
-export interface UseGetSecurityVulnerabilitiesReturnType {
-    scanDetailsLoading: boolean
-    scanResultResponse: ResponseType<ApiResponseResultType>
-    scanDetailsError: any
-    reloadScanDetails: () => void
 }

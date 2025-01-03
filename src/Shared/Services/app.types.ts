@@ -15,7 +15,7 @@
  */
 
 import { OverrideMergeStrategyType } from '@Pages/Applications'
-import { ReleaseTag, ResponseType } from '../../Common'
+import { ReleaseTag, UserApprovalMetadataType, ResponseType } from '../../Common'
 
 interface WebhookDataType {
     id: number
@@ -182,6 +182,13 @@ export interface DraftMetadataDTO {
     commentsCount: number
     dataEncrypted: boolean
     isAppAdmin: boolean
+    userApprovalMetadata: UserApprovalMetadataType
+    /**
+     * User id of the user who has requested the data
+     *
+     * This would be the id of the user whose token is sent in the cookie
+     */
+    requestedUserId: number
 }
 
 export enum CMSecretExternalType {

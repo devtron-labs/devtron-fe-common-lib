@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import React, { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react'
 import { WidgetProps } from '@rjsf/utils'
+import { isNullOrUndefined } from '@Shared/Helpers'
 import Toggle from '../../Toggle/Toggle'
 
 export const Checkbox = ({
@@ -38,7 +39,7 @@ export const Checkbox = ({
         }
     }
 
-    const isSelected: boolean = typeof value === 'undefined' ? false : value
+    const isSelected: boolean = isNullOrUndefined(value) ? false : value
 
     return (
         <div>

@@ -15,7 +15,7 @@
  */
 
 /* eslint-disable dot-notation */
-import { ROUTES, ResponseType, get, getUrlWithSearchParams, trash } from '../../../Common'
+import { ROUTES, ResponseType, get, getUrlWithSearchParams, sanitizeUserApprovalMetadata, trash } from '../../../Common'
 import { ResourceKindType, ResourceVersionType } from '../../types'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from '../../constants'
 import {
@@ -42,21 +42,26 @@ const getTriggerDetailsQuery = (fetchIdData) => {
     return ''
 }
 
-export function getTriggerDetails({
+export async function getTriggerDetails({
     appId,
     envId,
     pipelineId,
     triggerId,
     fetchIdData,
 }): Promise<TriggerDetailsResponseType> {
-    if (triggerId) {
-        return get(
-            `${ROUTES.APP}/cd-pipeline/workflow/trigger-info/${appId}/${envId}/${pipelineId}/${triggerId}${getTriggerDetailsQuery(fetchIdData)}`,
-        )
-    }
-    return get(
-        `${ROUTES.APP}/cd-pipeline/workflow/trigger-info/${appId}/${envId}/${pipelineId}/last${getTriggerDetailsQuery(fetchIdData)}`,
+    const response = await get<TriggerDetailsResponseType['result']>(
+        triggerId
+            ? `${ROUTES.APP}/cd-pipeline/workflow/trigger-info/${appId}/${envId}/${pipelineId}/${triggerId}${getTriggerDetailsQuery(fetchIdData)}`
+            : `${ROUTES.APP}/cd-pipeline/workflow/trigger-info/${appId}/${envId}/${pipelineId}/last${getTriggerDetailsQuery(fetchIdData)}`,
     )
+
+    return {
+        ...response,
+        result: {
+            ...response?.result,
+            userApprovalMetadata: sanitizeUserApprovalMetadata(response?.result?.userApprovalMetadata),
+        },
+    }
 }
 
 export const getTagDetails = (params) => {

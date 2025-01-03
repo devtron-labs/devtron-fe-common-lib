@@ -15,9 +15,9 @@
  */
 
 import React, { ReactNode } from 'react'
-import { CDModalTabType, ResponseType, VulnerabilityType } from '../../../Common'
+import { CDModalTabType, VulnerabilityType } from '../../../Common'
 import { MaterialSecurityInfoType } from '../../types'
-import { ApiResponseResultType, AppDetailsPayload, SidebarPropsType } from '../Security'
+import { SidebarPropsType } from '../Security'
 
 export interface ImageCardAccordionProps extends MaterialSecurityInfoType {
     isSecurityModuleInstalled: boolean
@@ -28,9 +28,6 @@ export interface ImageCardAccordionProps extends MaterialSecurityInfoType {
     isScanned: boolean
     isScanEnabled: boolean
     SecurityModalSidebar: React.FC<SidebarPropsType>
-    getSecurityScan: (
-        props: Pick<AppDetailsPayload, 'appId' | 'artifactId'>,
-    ) => Promise<ResponseType<ApiResponseResultType>>
 }
 
 export interface SecurityDetailsType {

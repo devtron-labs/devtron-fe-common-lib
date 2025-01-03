@@ -4,5 +4,5 @@
 
 export { getTableData } from './Table'
 export { getInfoCardData } from './InfoCard'
-export { SIDEBAR_DATA } from './Sidebar'
+export { getSidebarData } from './Sidebar'
 export { getProgressingStateForStatus } from './ImageScan'
