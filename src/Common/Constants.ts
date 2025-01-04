@@ -128,6 +128,7 @@ export const ROUTES = {
     FILE_UPLOAD: 'file/upload',
     PLUGIN_GLOBAL_VARIABLES: 'plugin/global/list/global-variable',
     CONFIG_COMPARE_SECRET: 'config/compare/secret',
+    CD_TRIGGER_POST: 'app/cd-pipeline/trigger',
 }
 
 export enum KEY_VALUE {

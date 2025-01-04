@@ -15,7 +15,7 @@
  */
 
 import { NodeType, Nodes } from '@Shared/types'
-import { RefObject } from 'react'
+import { MutableRefObject, RefObject } from 'react'
 
 export interface GVKType {
     Group: string
@@ -92,7 +92,7 @@ export interface BulkOperation {
      * Would these keys beside the name
      */
     additionalKeys?: BulkOperationAdditionalKeysType[]
-    operation: (signal: AbortSignal, data?: unknown) => Promise<void>
+    operation: (abortControllerRef: MutableRefObject<AbortController>, data?: unknown) => Promise<void>
 }
 
 export type BulkOperationModalProps = {

@@ -43,6 +43,7 @@ import {
 } from './Types'
 import { ApiResourceType } from '../Pages'
 import { RefVariableType } from './CIPipeline.Types'
+import { STAGE_MAP } from '@Pages/App/Trigger/constants'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -66,13 +67,6 @@ interface UserRole extends ResponseType {
         roles: string[]
         superAdmin: boolean
     }
-}
-
-const stageMap = {
-    PRECD: 'PRE',
-    CD: 'DEPLOY',
-    POSTCD: 'POST',
-    APPROVAL: 'APPROVAL',
 }
 
 export const SourceTypeMap = {
@@ -369,7 +363,7 @@ export const genericCDMaterialsService = (
         default:
             URL = getUrlWithSearchParams(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material`, {
                 ...manipulatedParams,
-                stage: stageMap[stage],
+                stage: STAGE_MAP[stage],
             })
             break
     }
