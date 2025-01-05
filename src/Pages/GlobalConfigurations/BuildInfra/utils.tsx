@@ -23,7 +23,7 @@ import {
     BuildInfraProfileConfigBase,
     DEFAULT_PROFILE_NAME,
     INFRA_CONFIG_CONTAINING_SUB_VALUES,
-    INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE,
+    INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP,
     OverrideMergeStrategyType,
 } from '@Pages/index'
 import { ROUTES } from '../../../Common'
@@ -159,7 +159,7 @@ const parsePlatformServerConfigIntoUIConfig = (
         (configMapSecretData) => {
             const baseCMCSValue = getConfigMapSecretFormInitialValues({
                 configMapSecretData,
-                componentType: INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE[serverConfig.key],
+                componentType: INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP[serverConfig.key],
                 // TODO: Check if for target platforms need to change
                 cmSecretStateLabel: CM_SECRET_STATE.BASE,
                 isJob: true,

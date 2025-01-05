@@ -273,12 +273,14 @@ export const INFRA_CONFIG_CONTAINING_SUB_VALUES: Partial<Record<BuildInfraConfig
     [BuildInfraConfigTypes.SECRET]: true,
 }
 
-export const INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE: Partial<Record<BuildInfraConfigTypes, CMSecretComponentType>> = {
+export const INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP: Partial<
+    Record<BuildInfraConfigTypes, CMSecretComponentType>
+> = {
     [BuildInfraConfigTypes.CONFIG_MAP]: CMSecretComponentType.ConfigMap,
     [BuildInfraConfigTypes.SECRET]: CMSecretComponentType.Secret,
 }
 
-export const CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG: Partial<
+export const CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP: Partial<
     Record<
         CMSecretComponentType,
         Extract<BuildInfraConfigTypes, BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET>

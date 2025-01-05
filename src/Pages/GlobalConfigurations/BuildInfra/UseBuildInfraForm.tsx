@@ -18,7 +18,7 @@ import {
     BuildInfraProfileInputActionType,
     BuildInfraToleranceOperatorType,
     BuildInfraToleranceValueType,
-    CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG,
+    CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP,
     CREATE_MODE_REQUIRED_INPUT_FIELDS,
     createBuildInfraProfile,
     DEFAULT_PROFILE_NAME,
@@ -774,7 +774,7 @@ const useBuildInfraForm = ({
                 }
 
                 ;(
-                    currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]]
+                    currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
                         .value as BuildInfraCMCSValueType[]
                 ).push(finalValue)
                 break
@@ -784,7 +784,7 @@ const useBuildInfraForm = ({
                 const { id, value, errors, componentType } = data
 
                 const selectedCMCSIndex = (
-                    currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]]
+                    currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
                         .value as BuildInfraCMCSValueType[]
                 ).findIndex((configMapItem) => configMapItem.id === id)
 
@@ -800,32 +800,33 @@ const useBuildInfraForm = ({
 
                 const finalCMValue: BuildInfraCMCSValueType = {
                     ...(
-                        currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]]
+                        currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
                             .value as BuildInfraCMCSValueType[]
                     )[selectedCMCSIndex],
                     ...value,
                 }
 
-                currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]].value[selectedCMCSIndex] =
-                    finalCMValue
+                currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]].value[
+                    selectedCMCSIndex
+                ] = finalCMValue
                 // TODO: Confirm once if its correct does useForm handle nested objects?
                 const isAnyErrorPresent = errors && Object.keys(errors).some((key) => errors[key])
 
-                if (!currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]]) {
-                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]] = {}
+                if (!currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = {}
                 }
 
                 if (isAnyErrorPresent) {
-                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]][id] = errors
-                } else if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]][id]) {
-                    delete currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]][id]
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id] = errors
+                } else if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id]) {
+                    delete currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id]
                 }
 
                 const errorKeys = Object.keys(
-                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]],
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]],
                 )
                 if (errorKeys.length === 0) {
-                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]] = null
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = null
                 }
 
                 break
