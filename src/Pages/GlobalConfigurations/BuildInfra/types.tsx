@@ -398,6 +398,8 @@ export enum BuildInfraProfileInputActionType {
     DELETE_TOLERANCE_ITEM = 'delete_tolerance_item',
     ADD_TOLERANCE_ITEM = 'add_tolerance_item',
     EDIT_TOLERANCE_ITEM = 'edit_tolerance_item',
+
+    ADD_CONFIG_MAP_ITEM = 'add_config_map_item',
 }
 
 export type HandleProfileInputChangeType =
@@ -456,6 +458,10 @@ export type HandleProfileInputChangeType =
           action: BuildInfraProfileInputActionType.EDIT_TOLERANCE_ITEM
           data: ProfileInputDispatchDataType &
               Pick<BuildInfraToleranceValueType, 'id' | 'key' | 'value' | 'effect' | 'operator'>
+      }
+    | {
+          action: BuildInfraProfileInputActionType.ADD_CONFIG_MAP_ITEM
+          data: ProfileInputDispatchDataType & Pick<BuildInfraCMCSValueType, 'id'>
       }
 
 export interface UseBuildInfraFormResponseType {

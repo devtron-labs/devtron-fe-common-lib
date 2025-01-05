@@ -171,6 +171,7 @@ const parsePlatformServerConfigIntoUIConfig = (
             initialResponse: configMapSecretData,
             id: getUniqueId(),
             isOverridden: true,
+            // FIXME: Ideally should have named canInherit
             canOverride: !isDefaultProfile,
             defaultValue: baseCMCSValue,
         }

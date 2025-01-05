@@ -7,6 +7,7 @@ import {
     BUILD_INFRA_INPUT_CONSTRAINTS,
     BUILD_INFRA_LOCATOR_CONFIG_TYPES_MAP,
     BUILD_INFRA_TEXT,
+    BuildInfraCMCSValueType,
     BuildInfraConfigTypes,
     BuildInfraConfigurationMapType,
     BuildInfraConfigurationType,
@@ -25,6 +26,7 @@ import {
     getBuildInfraProfileByName,
     HandleProfileInputChangeType,
     NodeSelectorHeaderType,
+    OverrideMergeStrategyType,
     PROFILE_INPUT_ERROR_FIELDS,
     ProfileInputErrorType,
     TARGET_PLATFORM_ERROR_FIELDS_MAP,
@@ -46,7 +48,14 @@ import {
     validateStringLength,
     ValidationResponseType,
 } from '@Shared/validations'
-import { getUniqueId, ToastManager, ToastVariantType } from '@Shared/index'
+import {
+    CM_SECRET_STATE,
+    CMSecretComponentType,
+    getConfigMapSecretFormInitialValues,
+    getUniqueId,
+    ToastManager,
+    ToastVariantType,
+} from '@Shared/index'
 import { PATTERNS } from '@Common/Constants'
 
 // TODO: Move validators out of this file
@@ -739,6 +748,33 @@ const useBuildInfraForm = ({
                     }
                 }
 
+                break
+            }
+
+            case BuildInfraProfileInputActionType.ADD_CONFIG_MAP_ITEM: {
+                const { id } = data
+                const configMap = getConfigMapSecretFormInitialValues({
+                    configMapSecretData: null,
+                    componentType: CMSecretComponentType.ConfigMap,
+                    // TODO: Check something related to decode in secureValues
+                    cmSecretStateLabel: CM_SECRET_STATE.BASE,
+                    isJob: true,
+                    // FIXME: Can delete as well
+                    fallbackMergeStrategy: OverrideMergeStrategyType.REPLACE,
+                })
+
+                const finalConfigMapValue: BuildInfraCMCSValueType = {
+                    ...configMap,
+                    id,
+                    isOverridden: true,
+                    canOverride: false,
+                    initialResponse: null,
+                    defaultValue: null,
+                }
+
+                ;(currentConfiguration[BuildInfraConfigTypes.CONFIG_MAP].value as BuildInfraCMCSValueType[]).push(
+                    finalConfigMapValue,
+                )
                 break
             }
 
