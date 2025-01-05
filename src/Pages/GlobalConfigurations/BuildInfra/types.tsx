@@ -18,10 +18,12 @@ import { FormEvent, FunctionComponent, ReactNode } from 'react'
 import { BUILD_INFRA_INHERIT_ACTIONS, useBuildInfraForm } from '@Pages/index'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
 import {
+    CMSecretComponentType,
     CMSecretConfigData,
     CMSecretPayloadType,
     ConfigMapSecretUseFormProps,
     getUniqueId,
+    useForm,
     UseFormErrors,
     ValidationResponseType,
 } from '../../../Shared'
@@ -213,6 +215,7 @@ export type BuildInfraCMCSValueType = ConfigMapSecretUseFormProps & {
     isOverridden: boolean
     canOverride: boolean
     defaultValue: ConfigMapSecretUseFormProps | null
+    initialResponse: CMSecretConfigData
 }
 
 export interface BuildInfraCMCSConfigType {
@@ -605,4 +608,14 @@ export interface ValidateNodeSelectorParamsType
     extends Pick<ReturnType<typeof useBuildInfraForm>, 'profileInputErrors'> {
     selector: BuildInfraNodeSelectorValueType
     existingKeys: string[]
+}
+
+export interface BuildInfraCMCSFormProps {
+    parsedData: BuildInfraCMCSValueType
+    useFormProps: ReturnType<typeof useForm<ConfigMapSecretUseFormProps>>
+    componentType: CMSecretComponentType
+}
+
+export interface BuildInfraUtilityContextType {
+    BuildInfraCMCSForm: FunctionComponent<BuildInfraCMCSFormProps>
 }

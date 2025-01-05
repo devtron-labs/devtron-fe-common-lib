@@ -168,6 +168,7 @@ const parsePlatformServerConfigIntoUIConfig = (
 
         return {
             ...baseCMCSValue,
+            initialResponse: configMapSecretData,
             id: getUniqueId(),
             isOverridden: true,
             canOverride: !isDefaultProfile,
