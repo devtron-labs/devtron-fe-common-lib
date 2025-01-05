@@ -63,6 +63,7 @@ export const getConfigMapSecretReadOnlyValues = ({
     componentType,
     isJob,
     fallbackMergeStrategy,
+    displayKeys,
 }: GetConfigMapSecretReadOnlyValuesParamsType) => {
     if (!configMapSecretData) {
         return {
@@ -149,6 +150,15 @@ export const getConfigMapSecretReadOnlyValues = ({
                 value: roleARN,
                 key: 'roleArn',
             },
+            ...(displayKeys
+                ? [
+                      {
+                          displayName: 'Keys',
+                          value: currentData?.length > 0 ? currentData.map((d) => d.k).join(', ') : 'No keys available',
+                          key: 'keys',
+                      },
+                  ]
+                : []),
         ],
         data: !mountExistingExternal ? (currentData?.[0]?.k && yaml) || esoSecretYaml || secretDataYaml : null,
     }

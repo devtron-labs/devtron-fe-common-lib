@@ -10,12 +10,22 @@ export interface ConfigMapSecretReadyOnlyProps {
     areScopeVariablesResolving: boolean
     fallbackMergeStrategy: OverrideMergeStrategyType
     hideCodeEditor?: boolean
+    containerClassName?: string
+    /**
+     * @default false
+     */
+    displayKeys?: boolean
 }
 
 export interface GetConfigMapSecretReadOnlyValuesParamsType
     extends Pick<
         ConfigMapSecretReadyOnlyProps,
-        'componentType' | 'configMapSecretData' | 'cmSecretStateLabel' | 'isJob' | 'fallbackMergeStrategy'
+        | 'componentType'
+        | 'configMapSecretData'
+        | 'cmSecretStateLabel'
+        | 'isJob'
+        | 'fallbackMergeStrategy'
+        | 'displayKeys'
     > {}
 
 export type ConfigMapSecretDataTypeOptionType = SelectPickerOptionType<string>
