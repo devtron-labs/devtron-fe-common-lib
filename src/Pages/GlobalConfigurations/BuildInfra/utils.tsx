@@ -23,6 +23,7 @@ import {
     BuildInfraProfileConfigBase,
     DEFAULT_PROFILE_NAME,
     INFRA_CONFIG_CONTAINING_SUB_VALUES,
+    INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE,
     OverrideMergeStrategyType,
 } from '@Pages/index'
 import { ROUTES } from '../../../Common'
@@ -55,7 +56,7 @@ import {
 } from './constants'
 import {
     CM_SECRET_STATE,
-    CMSecretComponentType,
+    CMSecretConfigData,
     CMSecretPayloadType,
     getConfigMapSecretFormInitialValues,
     getConfigMapSecretPayload,
@@ -109,8 +110,9 @@ export const parsePlatformConfigIntoValue = (
             }
 
         case BuildInfraConfigTypes.CONFIG_MAP:
+        case BuildInfraConfigTypes.SECRET:
             return {
-                key: BuildInfraConfigTypes.CONFIG_MAP,
+                key: configuration.key,
                 value: configuration.value || [],
             }
 
@@ -148,55 +150,58 @@ const parsePlatformServerConfigIntoUIConfig = (
     serverConfig: BuildInfraConfigurationDTO,
     isDefaultProfile: boolean,
 ): BuildInfraConfigValuesType => {
-    if (serverConfig.key !== BuildInfraConfigTypes.CONFIG_MAP) {
-        return parsePlatformConfigIntoValue(serverConfig)
+    if (!INFRA_CONFIG_CONTAINING_SUB_VALUES[serverConfig.key]) {
+        // TODO: Can look for a better way to handle this
+        return parsePlatformConfigIntoValue(serverConfig as BuildInfraConfigValuesType)
     }
 
-    const parsedCMCSFormValues: BuildInfraCMCSConfigType['value'] = serverConfig.value?.map((configMapSecretData) => {
-        const baseCMCSValue = getConfigMapSecretFormInitialValues({
-            configMapSecretData,
-            componentType:
-                serverConfig.key === BuildInfraConfigTypes.CONFIG_MAP
-                    ? CMSecretComponentType.ConfigMap
-                    : CMSecretComponentType.Secret,
-            // TODO: Check if for target platforms need to change
-            cmSecretStateLabel: CM_SECRET_STATE.BASE,
-            isJob: true,
-            // FIXME: Can delete as well
-            fallbackMergeStrategy: OverrideMergeStrategyType.REPLACE,
-        })
+    const parsedCMCSFormValues: BuildInfraCMCSConfigType['value'] = (serverConfig.value as CMSecretConfigData[])?.map(
+        (configMapSecretData) => {
+            const baseCMCSValue = getConfigMapSecretFormInitialValues({
+                configMapSecretData,
+                componentType: INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE[serverConfig.key],
+                // TODO: Check if for target platforms need to change
+                cmSecretStateLabel: CM_SECRET_STATE.BASE,
+                isJob: true,
+                // FIXME: Can delete as well
+                fallbackMergeStrategy: OverrideMergeStrategyType.REPLACE,
+            })
 
-        return {
-            ...baseCMCSValue,
-            initialResponse: configMapSecretData,
-            id: getUniqueId(),
-            isOverridden: true,
-            // FIXME: Ideally should have named canInherit
-            canOverride: !isDefaultProfile,
-            defaultValue: baseCMCSValue,
-        }
-    })
+            return {
+                ...baseCMCSValue,
+                initialResponse: configMapSecretData,
+                id: getUniqueId(),
+                isOverridden: true,
+                // FIXME: Ideally should have named canInherit
+                canOverride: !isDefaultProfile,
+                defaultValue: baseCMCSValue,
+            }
+        },
+    )
 
     return {
-        key: BuildInfraConfigTypes.CONFIG_MAP,
+        key: serverConfig.key as BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET,
         value: parsedCMCSFormValues,
     }
 }
 
 const parseUIConfigToPayload = (uiConfig: BuildInfraConfigValuesType): BuildInfraConfigPayloadType => {
     const parsedConfig = parsePlatformConfigIntoValue(uiConfig, false)
-    if (parsedConfig.key !== BuildInfraConfigTypes.CONFIG_MAP) {
-        return parsedConfig
+    if (!INFRA_CONFIG_CONTAINING_SUB_VALUES[parsedConfig.key]) {
+        // TODO: Can look for a better way to handle this
+        return parsedConfig as BuildInfraConfigPayloadType
     }
 
     // Only overridden values are needed in payload
-    const overriddenConfigs = parsedConfig.value?.filter((configMapSecretData) => configMapSecretData.isOverridden)
+    const overriddenConfigs = (parsedConfig.value as BuildInfraCMCSValueType[])?.filter(
+        (configMapSecretData) => configMapSecretData.isOverridden,
+    )
     const parsedCMCSValues = overriddenConfigs?.map((configMapSecretFormData) =>
         getConfigMapSecretPayload(configMapSecretFormData),
     )
 
     return {
-        key: BuildInfraConfigTypes.CONFIG_MAP,
+        key: parsedConfig.key as BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET,
         value: parsedCMCSValues,
     }
 }
@@ -258,7 +263,7 @@ const getPlatformConfigurationsWithDefaultValues = ({
 
         const defaultValue = parsePlatformConfigIntoValue(defaultConfiguration)
 
-        const isSpecialParsingRequired = configType === BuildInfraConfigTypes.CONFIG_MAP && !isDefaultProfile
+        const isSpecialParsingRequired = INFRA_CONFIG_CONTAINING_SUB_VALUES[configType] && !isDefaultProfile
         // If value is not present in profile that means we are inheriting the value
         let finalConfiguration: BuildInfraConfigurationType = profileConfiguration
             ? {
@@ -313,7 +318,7 @@ const getPlatformConfigurationsWithDefaultValues = ({
                 profileName: profileConfiguration?.profileName,
                 active: profileConfiguration?.active,
                 targetPlatform: platformName,
-                key: configType,
+                key: configType as BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET,
                 value: finalValues,
                 defaultValue: null,
             }

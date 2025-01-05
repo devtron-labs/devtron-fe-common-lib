@@ -42,6 +42,7 @@ export enum BuildInfraConfigTypes {
     NODE_SELECTOR = 'node_selector',
     TOLERANCE = 'tolerations',
     CONFIG_MAP = 'cm',
+    SECRET = 'cs',
 }
 
 /**
@@ -63,6 +64,7 @@ export enum BuildInfraLocators {
     NODE_SELECTOR = 'node selector',
     TOLERANCE = 'tolerance',
     CONFIG_MAP = 'cm',
+    SECRET = 'cs',
 }
 
 export type BuildInfraInheritActions = keyof typeof BUILD_INFRA_INHERIT_ACTIONS
@@ -205,7 +207,7 @@ interface ToleranceConfigDTO {
 }
 
 interface BuildInfraCMCSConfigDTO {
-    key: BuildInfraConfigTypes.CONFIG_MAP
+    key: BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET
     value: CMSecretConfigData[]
     unit?: never
 }
@@ -219,13 +221,13 @@ export type BuildInfraCMCSValueType = ConfigMapSecretUseFormProps & {
 }
 
 export interface BuildInfraCMCSConfigType {
-    key: BuildInfraConfigTypes.CONFIG_MAP
+    key: BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET
     value: BuildInfraCMCSValueType[]
     unit?: never
 }
 
 interface BuildInfraCMCSPayloadConfigType {
-    key: BuildInfraConfigTypes.CONFIG_MAP
+    key: BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET
     value: CMSecretPayloadType[]
     unit?: never
 }
@@ -370,7 +372,7 @@ export type ProfileInputErrorType = Record<
         Record<BuildInfraNodeSelectorValueType['id'], Partial<Record<ToleranceHeaderType, string[]>>>
     > &
     Record<
-        BuildInfraConfigTypes.CONFIG_MAP,
+        Extract<BuildInfraConfigTypes, BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET>,
         Record<BuildInfraCMCSValueType['id'], UseFormErrors<BuildInfraCMCSValueType>>
     >
 
@@ -399,7 +401,7 @@ export enum BuildInfraProfileInputActionType {
     ADD_TOLERANCE_ITEM = 'add_tolerance_item',
     EDIT_TOLERANCE_ITEM = 'edit_tolerance_item',
 
-    ADD_CONFIG_MAP_ITEM = 'add_config_map_item',
+    ADD_CM_CS_ITEM = 'add_cm_cs_item',
     SYNC_CM_CS_ITEM = 'sync_cm_cs_item',
 }
 
@@ -461,8 +463,11 @@ export type HandleProfileInputChangeType =
               Pick<BuildInfraToleranceValueType, 'id' | 'key' | 'value' | 'effect' | 'operator'>
       }
     | {
-          action: BuildInfraProfileInputActionType.ADD_CONFIG_MAP_ITEM
-          data: ProfileInputDispatchDataType & Pick<BuildInfraCMCSValueType, 'id'>
+          action: BuildInfraProfileInputActionType.ADD_CM_CS_ITEM
+          data: ProfileInputDispatchDataType &
+              Pick<BuildInfraCMCSValueType, 'id'> & {
+                  componentType: CMSecretComponentType
+              }
       }
     | {
           action: BuildInfraProfileInputActionType.SYNC_CM_CS_ITEM

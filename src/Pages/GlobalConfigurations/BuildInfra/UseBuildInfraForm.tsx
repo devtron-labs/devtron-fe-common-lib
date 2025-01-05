@@ -18,6 +18,7 @@ import {
     BuildInfraProfileInputActionType,
     BuildInfraToleranceOperatorType,
     BuildInfraToleranceValueType,
+    CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG,
     CREATE_MODE_REQUIRED_INPUT_FIELDS,
     createBuildInfraProfile,
     DEFAULT_PROFILE_NAME,
@@ -50,7 +51,6 @@ import {
 } from '@Shared/validations'
 import {
     CM_SECRET_STATE,
-    CMSecretComponentType,
     getConfigMapSecretFormInitialValues,
     getUniqueId,
     ToastManager,
@@ -751,11 +751,12 @@ const useBuildInfraForm = ({
             }
 
             // TODO: Check error scenario here
-            case BuildInfraProfileInputActionType.ADD_CONFIG_MAP_ITEM: {
-                const { id } = data
-                const configMap = getConfigMapSecretFormInitialValues({
+            case BuildInfraProfileInputActionType.ADD_CM_CS_ITEM: {
+                const { id, componentType } = data
+
+                const cmSecretData = getConfigMapSecretFormInitialValues({
                     configMapSecretData: null,
-                    componentType: CMSecretComponentType.ConfigMap,
+                    componentType,
                     // TODO: Check something related to decode in secureValues
                     cmSecretStateLabel: CM_SECRET_STATE.BASE,
                     isJob: true,
@@ -763,8 +764,8 @@ const useBuildInfraForm = ({
                     fallbackMergeStrategy: OverrideMergeStrategyType.REPLACE,
                 })
 
-                const finalConfigMapValue: BuildInfraCMCSValueType = {
-                    ...configMap,
+                const finalValue: BuildInfraCMCSValueType = {
+                    ...cmSecretData,
                     id,
                     isOverridden: true,
                     canOverride: false,
@@ -772,18 +773,19 @@ const useBuildInfraForm = ({
                     defaultValue: null,
                 }
 
-                ;(currentConfiguration[BuildInfraConfigTypes.CONFIG_MAP].value as BuildInfraCMCSValueType[]).push(
-                    finalConfigMapValue,
-                )
+                ;(
+                    currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]]
+                        .value as BuildInfraCMCSValueType[]
+                ).push(finalValue)
                 break
             }
 
             case BuildInfraProfileInputActionType.SYNC_CM_CS_ITEM: {
-                // TODO: Based on componentType change BuildInfraConfigTypes
-                const { id, value, errors } = data
+                const { id, value, errors, componentType } = data
 
                 const selectedCMCSIndex = (
-                    currentConfiguration[BuildInfraConfigTypes.CONFIG_MAP].value as BuildInfraCMCSValueType[]
+                    currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]]
+                        .value as BuildInfraCMCSValueType[]
                 ).findIndex((configMapItem) => configMapItem.id === id)
 
                 if (selectedCMCSIndex === -1) {
@@ -797,29 +799,33 @@ const useBuildInfraForm = ({
                 }
 
                 const finalCMValue: BuildInfraCMCSValueType = {
-                    ...(currentConfiguration[BuildInfraConfigTypes.CONFIG_MAP].value as BuildInfraCMCSValueType[])[
-                        selectedCMCSIndex
-                    ],
+                    ...(
+                        currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]]
+                            .value as BuildInfraCMCSValueType[]
+                    )[selectedCMCSIndex],
                     ...value,
                 }
 
-                currentConfiguration[BuildInfraConfigTypes.CONFIG_MAP].value[selectedCMCSIndex] = finalCMValue
+                currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]].value[selectedCMCSIndex] =
+                    finalCMValue
                 // TODO: Confirm once if its correct does useForm handle nested objects?
                 const isAnyErrorPresent = errors && Object.keys(errors).some((key) => errors[key])
 
-                if (!currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP]) {
-                    currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP] = {}
+                if (!currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]]) {
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]] = {}
                 }
 
                 if (isAnyErrorPresent) {
-                    currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP][id] = errors
-                } else if (currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP][id]) {
-                    delete currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP][id]
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]][id] = errors
+                } else if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]][id]) {
+                    delete currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]][id]
                 }
 
-                const errorKeys = Object.keys(currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP])
+                const errorKeys = Object.keys(
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]],
+                )
                 if (errorKeys.length === 0) {
-                    currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP] = null
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG[componentType]] = null
                 }
 
                 break

@@ -20,6 +20,7 @@ import { ReactComponent as ICTimer } from '@Icons/ic-timer.svg'
 import { ReactComponent as ICSprayCan } from '@Icons/ic-spray-can.svg'
 import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { UseBreadcrumbProps } from '@Common/BreadCrumb/Types'
+import { CMSecretComponentType } from '@Shared/index'
 import {
     BuildInfraConfigTypes,
     BuildInfraFormFieldType,
@@ -97,6 +98,7 @@ export const BUILD_INFRA_LOCATOR_MARKER_MAP: Readonly<Record<BuildInfraLocators,
     [BuildInfraLocators.NODE_SELECTOR]: ICSprayCan,
     [BuildInfraLocators.TOLERANCE]: ICTag,
     [BuildInfraLocators.CONFIG_MAP]: null,
+    [BuildInfraLocators.SECRET]: null,
 }
 
 export const BUILD_INFRA_LOCATOR_LABEL_MAP: Readonly<Record<BuildInfraLocators, string>> = {
@@ -106,6 +108,7 @@ export const BUILD_INFRA_LOCATOR_LABEL_MAP: Readonly<Record<BuildInfraLocators, 
     [BuildInfraLocators.NODE_SELECTOR]: 'Node selector',
     [BuildInfraLocators.TOLERANCE]: 'Tolerance',
     [BuildInfraLocators.CONFIG_MAP]: 'ConfigMaps',
+    [BuildInfraLocators.SECRET]: 'Secret',
 }
 
 export const BUILD_INFRA_FORM_FIELDS: Readonly<BuildInfraFormFieldType[]> = [
@@ -201,6 +204,7 @@ export const TARGET_PLATFORM_ERROR_FIELDS_MAP: Record<TargetPlatformErrorFields,
     [BuildInfraConfigTypes.NODE_SELECTOR]: true,
     [BuildInfraConfigTypes.TOLERANCE]: true,
     [BuildInfraConfigTypes.CONFIG_MAP]: true,
+    [BuildInfraConfigTypes.SECRET]: true,
     [BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM]: true,
 }
 
@@ -225,6 +229,7 @@ export const BUILD_INFRA_LOCATOR_CONFIG_TYPES_MAP: Record<BuildInfraLocators, Bu
     [BuildInfraLocators.NODE_SELECTOR]: [BuildInfraConfigTypes.NODE_SELECTOR],
     [BuildInfraLocators.TOLERANCE]: [BuildInfraConfigTypes.TOLERANCE],
     [BuildInfraLocators.CONFIG_MAP]: [BuildInfraConfigTypes.CONFIG_MAP],
+    [BuildInfraLocators.SECRET]: [BuildInfraConfigTypes.SECRET],
 }
 
 export const ACTION_TO_PERSISTED_VALUE_MAP: Readonly<
@@ -260,8 +265,25 @@ export const DEFAULT_TOLERANCE_OPERATOR = BuildInfraToleranceOperatorType.EQUALS
 export const INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X: Partial<Record<BuildInfraConfigTypes, true>> = {
     [BuildInfraConfigTypes.BUILD_TIMEOUT]: true,
     [BuildInfraConfigTypes.CONFIG_MAP]: true,
+    [BuildInfraConfigTypes.SECRET]: true,
 }
 
 export const INFRA_CONFIG_CONTAINING_SUB_VALUES: Partial<Record<BuildInfraConfigTypes, true>> = {
     [BuildInfraConfigTypes.CONFIG_MAP]: true,
+    [BuildInfraConfigTypes.SECRET]: true,
+}
+
+export const INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE: Partial<Record<BuildInfraConfigTypes, CMSecretComponentType>> = {
+    [BuildInfraConfigTypes.CONFIG_MAP]: CMSecretComponentType.ConfigMap,
+    [BuildInfraConfigTypes.SECRET]: CMSecretComponentType.Secret,
+}
+
+export const CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG: Partial<
+    Record<
+        CMSecretComponentType,
+        Extract<BuildInfraConfigTypes, BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET>
+    >
+> = {
+    [CMSecretComponentType.ConfigMap]: BuildInfraConfigTypes.CONFIG_MAP,
+    [CMSecretComponentType.Secret]: BuildInfraConfigTypes.SECRET,
 }
