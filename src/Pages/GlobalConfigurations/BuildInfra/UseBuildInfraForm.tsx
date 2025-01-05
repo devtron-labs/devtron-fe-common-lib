@@ -701,7 +701,6 @@ const useBuildInfraForm = ({
                 )
 
                 if (!toleranceItem) {
-                    // Question: Should we parse it as per type or as would suffice?
                     currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value.unshift({
                         id,
                         key,
@@ -751,6 +750,7 @@ const useBuildInfraForm = ({
                 break
             }
 
+            // TODO: Check error scenario here
             case BuildInfraProfileInputActionType.ADD_CONFIG_MAP_ITEM: {
                 const { id } = data
                 const configMap = getConfigMapSecretFormInitialValues({
@@ -775,6 +775,53 @@ const useBuildInfraForm = ({
                 ;(currentConfiguration[BuildInfraConfigTypes.CONFIG_MAP].value as BuildInfraCMCSValueType[]).push(
                     finalConfigMapValue,
                 )
+                break
+            }
+
+            case BuildInfraProfileInputActionType.SYNC_CM_CS_ITEM: {
+                // TODO: Based on componentType change BuildInfraConfigTypes
+                const { id, value, errors } = data
+
+                const selectedCMCSIndex = (
+                    currentConfiguration[BuildInfraConfigTypes.CONFIG_MAP].value as BuildInfraCMCSValueType[]
+                ).findIndex((configMapItem) => configMapItem.id === id)
+
+                if (selectedCMCSIndex === -1) {
+                    ToastManager.showToast({
+                        variant: ToastVariantType.error,
+                        description: 'ConfigMap does not exist',
+                    })
+
+                    logExceptionToSentry(new Error('ConfigMap does not exist'))
+                    return
+                }
+
+                const finalCMValue: BuildInfraCMCSValueType = {
+                    ...(currentConfiguration[BuildInfraConfigTypes.CONFIG_MAP].value as BuildInfraCMCSValueType[])[
+                        selectedCMCSIndex
+                    ],
+                    ...value,
+                }
+
+                currentConfiguration[BuildInfraConfigTypes.CONFIG_MAP].value[selectedCMCSIndex] = finalCMValue
+                // TODO: Confirm once if its correct does useForm handle nested objects?
+                const isAnyErrorPresent = errors && Object.keys(errors).some((key) => errors[key])
+
+                if (!currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP]) {
+                    currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP] = {}
+                }
+
+                if (isAnyErrorPresent) {
+                    currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP][id] = errors
+                } else if (currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP][id]) {
+                    delete currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP][id]
+                }
+
+                const errorKeys = Object.keys(currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP])
+                if (errorKeys.length === 0) {
+                    currentInputErrors[BuildInfraConfigTypes.CONFIG_MAP] = null
+                }
+
                 break
             }
 

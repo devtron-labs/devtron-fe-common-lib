@@ -400,6 +400,7 @@ export enum BuildInfraProfileInputActionType {
     EDIT_TOLERANCE_ITEM = 'edit_tolerance_item',
 
     ADD_CONFIG_MAP_ITEM = 'add_config_map_item',
+    SYNC_CM_CS_ITEM = 'sync_cm_cs_item',
 }
 
 export type HandleProfileInputChangeType =
@@ -462,6 +463,15 @@ export type HandleProfileInputChangeType =
     | {
           action: BuildInfraProfileInputActionType.ADD_CONFIG_MAP_ITEM
           data: ProfileInputDispatchDataType & Pick<BuildInfraCMCSValueType, 'id'>
+      }
+    | {
+          action: BuildInfraProfileInputActionType.SYNC_CM_CS_ITEM
+          data: ProfileInputDispatchDataType & {
+              id: BuildInfraCMCSValueType['id']
+              value: ConfigMapSecretUseFormProps
+              errors: UseFormErrors<BuildInfraCMCSValueType>
+              componentType: CMSecretComponentType
+          }
       }
 
 export interface UseBuildInfraFormResponseType {
