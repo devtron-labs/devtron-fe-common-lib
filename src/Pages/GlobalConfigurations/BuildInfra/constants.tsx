@@ -261,3 +261,7 @@ export const INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X: Partial<Record<BuildInfraCon
     [BuildInfraConfigTypes.BUILD_TIMEOUT]: true,
     [BuildInfraConfigTypes.CONFIG_MAP]: true,
 }
+
+export const INFRA_CONFIG_CONTAINING_SUB_VALUES: Partial<Record<BuildInfraConfigTypes, true>> = {
+    [BuildInfraConfigTypes.CONFIG_MAP]: true,
+}

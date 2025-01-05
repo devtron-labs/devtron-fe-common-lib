@@ -49,6 +49,8 @@ import {
 import { getUniqueId, ToastManager, ToastVariantType } from '@Shared/index'
 import { PATTERNS } from '@Common/Constants'
 
+// TODO: Move validators out of this file
+
 const getInitialProfileInputErrors = (fromCreateView: boolean): ProfileInputErrorType => {
     const initialProfileInputErrors = structuredClone(PROFILE_INPUT_ERROR_FIELDS)
     if (fromCreateView) {

@@ -208,7 +208,12 @@ interface BuildInfraCMCSConfigDTO {
     unit?: never
 }
 
-type BuildInfraCMCSValueType = ConfigMapSecretUseFormProps & { id: ReturnType<typeof getUniqueId> }
+export type BuildInfraCMCSValueType = ConfigMapSecretUseFormProps & {
+    id: ReturnType<typeof getUniqueId>
+    isOverridden: boolean
+    canOverride: boolean
+    defaultValue: ConfigMapSecretUseFormProps | null
+}
 
 export interface BuildInfraCMCSConfigType {
     key: BuildInfraConfigTypes.CONFIG_MAP
@@ -276,6 +281,7 @@ export type BuildInfraPlatformConfigurationMapDTO = Record<string, BuildInfraCon
 export type BuildInfraConfigurationType = BuildInfraConfigInfoType & {
     /**
      * Used to display values in case of inheriting data
+     * This will be null in case of CM/CS
      */
     defaultValue: BuildInfraConfigValuesType
 }
@@ -565,10 +571,6 @@ interface BaseBuildInfraProfileDTO {
     configurationUnits: BuildInfraUnitsMapType
 }
 
-export interface BuildInfraListResponseType extends BaseBuildInfraProfileDTO {
-    profiles: BuildInfraProfileInfoDTO[]
-}
-
 export interface BuildInfraProfileDTO extends BaseBuildInfraProfileDTO {
     profile: BuildInfraProfileInfoDTO
 }
@@ -581,6 +583,10 @@ export interface GetPlatformConfigurationsWithDefaultValuesParamsType {
     profileConfigurationsMap: BuildInfraConfigurationMapTypeWithoutDefaultFallback
     defaultConfigurationsMap: BuildInfraConfigurationMapTypeWithoutDefaultFallback
     platformName: string
+    /**
+     * @default false
+     */
+    isDefaultProfile?: boolean
 }
 
 export enum BuildInfraAPIVersionType {

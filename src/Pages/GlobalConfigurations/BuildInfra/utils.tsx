@@ -16,10 +16,13 @@
 
 import {
     BuildInfraCMCSConfigType,
+    BuildInfraCMCSValueType,
     BuildInfraConfigPayloadType,
     BuildInfraConfigurationItemPayloadType,
     BuildInfraPayloadType,
     BuildInfraProfileConfigBase,
+    DEFAULT_PROFILE_NAME,
+    INFRA_CONFIG_CONTAINING_SUB_VALUES,
     OverrideMergeStrategyType,
 } from '@Pages/index'
 import { ROUTES } from '../../../Common'
@@ -53,6 +56,7 @@ import {
 import {
     CM_SECRET_STATE,
     CMSecretComponentType,
+    CMSecretPayloadType,
     getConfigMapSecretFormInitialValues,
     getConfigMapSecretPayload,
     getUniqueId,
@@ -142,13 +146,14 @@ const getBaseProfileObject = (fromCreateView: boolean, profile: BuildInfraProfil
 
 const parsePlatformServerConfigIntoUIConfig = (
     serverConfig: BuildInfraConfigurationDTO,
+    isDefaultProfile: boolean,
 ): BuildInfraConfigValuesType => {
     if (serverConfig.key !== BuildInfraConfigTypes.CONFIG_MAP) {
         return parsePlatformConfigIntoValue(serverConfig)
     }
 
-    const parsedCMCSFormValues: BuildInfraCMCSConfigType['value'] = serverConfig.value?.map((configMapSecretData) => ({
-        ...getConfigMapSecretFormInitialValues({
+    const parsedCMCSFormValues: BuildInfraCMCSConfigType['value'] = serverConfig.value?.map((configMapSecretData) => {
+        const baseCMCSValue = getConfigMapSecretFormInitialValues({
             configMapSecretData,
             componentType:
                 serverConfig.key === BuildInfraConfigTypes.CONFIG_MAP
@@ -159,9 +164,16 @@ const parsePlatformServerConfigIntoUIConfig = (
             isJob: true,
             // FIXME: Can delete as well
             fallbackMergeStrategy: OverrideMergeStrategyType.REPLACE,
-        }),
-        id: getUniqueId(),
-    }))
+        })
+
+        return {
+            ...baseCMCSValue,
+            id: getUniqueId(),
+            isOverridden: true,
+            canOverride: !isDefaultProfile,
+            defaultValue: baseCMCSValue,
+        }
+    })
 
     return {
         key: BuildInfraConfigTypes.CONFIG_MAP,
@@ -175,7 +187,9 @@ const parseUIConfigToPayload = (uiConfig: BuildInfraConfigValuesType): BuildInfr
         return parsedConfig
     }
 
-    const parsedCMCSValues = parsedConfig.value?.map((configMapSecretFormData) =>
+    // Only overridden values are needed in payload
+    const overriddenConfigs = parsedConfig.value?.filter((configMapSecretData) => configMapSecretData.isOverridden)
+    const parsedCMCSValues = overriddenConfigs?.map((configMapSecretFormData) =>
         getConfigMapSecretPayload(configMapSecretFormData),
     )
 
@@ -187,6 +201,7 @@ const parseUIConfigToPayload = (uiConfig: BuildInfraConfigValuesType): BuildInfr
 
 const getConfigurationMapWithoutDefaultFallback = (
     platformConfigurationMap: BuildInfraPlatformConfigurationMapDTO,
+    isDefaultProfile: boolean,
 ): Record<string, BuildInfraConfigurationMapTypeWithoutDefaultFallback> =>
     Object.entries(platformConfigurationMap || {}).reduce<
         Record<string, BuildInfraConfigurationMapTypeWithoutDefaultFallback>
@@ -194,7 +209,7 @@ const getConfigurationMapWithoutDefaultFallback = (
         const platformConfigValuesMap: BuildInfraConfigurationMapTypeWithoutDefaultFallback =
             configurations?.reduce<BuildInfraConfigurationMapTypeWithoutDefaultFallback>(
                 (configurationMap, configuration) => {
-                    const configValues = parsePlatformServerConfigIntoUIConfig(configuration)
+                    const configValues = parsePlatformServerConfigIntoUIConfig(configuration, isDefaultProfile)
                     const baseValue: BuildInfraProfileConfigBase = {
                         id: configuration.id,
                         profileName: configuration.profileName,
@@ -227,6 +242,7 @@ const getPlatformConfigurationsWithDefaultValues = ({
     profileConfigurationsMap,
     defaultConfigurationsMap,
     platformName,
+    isDefaultProfile = false,
 }: GetPlatformConfigurationsWithDefaultValuesParamsType): BuildInfraConfigurationMapType =>
     Object.values(BuildInfraConfigTypes).reduce<BuildInfraConfigurationMapType>((acc, configType) => {
         const defaultConfiguration = defaultConfigurationsMap[configType]
@@ -239,18 +255,74 @@ const getPlatformConfigurationsWithDefaultValues = ({
         }
 
         const defaultValue = parsePlatformConfigIntoValue(defaultConfiguration)
+
+        const isSpecialParsingRequired = configType === BuildInfraConfigTypes.CONFIG_MAP && !isDefaultProfile
         // If value is not present in profile that means we are inheriting the value
-        const finalConfiguration: BuildInfraConfigurationType = profileConfiguration
+        let finalConfiguration: BuildInfraConfigurationType = profileConfiguration
             ? {
                   ...profileConfiguration,
-                  defaultValue,
+                  defaultValue: isSpecialParsingRequired ? defaultValue : null,
               }
-            : {
-                  ...defaultValue,
-                  active: false,
-                  targetPlatform: platformName,
-                  defaultValue,
-              }
+            : null
+
+        if (isSpecialParsingRequired) {
+            /**
+             * Logic is, all the values inside profileConfiguration are overridden values, and canOverride will be true, if name is present in defaultConfiguration and we will put that defaultConfiguration value in defaultValue
+             * Then we will traverse all the values in defaultConfiguration, and if they are not overridden by user, we will add them to finalCMCSValues
+             */
+
+            const defaultConfigurationValueMap = (defaultConfiguration.value as BuildInfraCMCSValueType[])?.reduce<
+                Record<string, BuildInfraCMCSValueType>
+            >((defaultCMCSMap, configMapSecretData) => {
+                // eslint-disable-next-line no-param-reassign
+                defaultCMCSMap[configMapSecretData.name] = configMapSecretData
+                return defaultCMCSMap
+            }, {})
+
+            const finalValues: BuildInfraCMCSValueType[] =
+                (profileConfiguration?.value as BuildInfraCMCSValueType[])?.map((configMapSecretData) => ({
+                    ...configMapSecretData,
+                    defaultValue: defaultConfigurationValueMap[configMapSecretData.name],
+                    isOverridden: true,
+                    canOverride: !!defaultConfigurationValueMap[configMapSecretData.name],
+                })) || []
+
+            const overriddenValuesMap = finalValues.reduce<Record<string, BuildInfraCMCSValueType>>(
+                (overriddenValuesAcc, overriddenValue) => {
+                    // eslint-disable-next-line no-param-reassign
+                    overriddenValuesAcc[overriddenValue.name] = overriddenValue
+                    return overriddenValuesAcc
+                },
+                {} as Record<string, BuildInfraCMCSValueType>,
+            )
+
+            Object.values(defaultConfigurationValueMap).forEach((defaultCMCSValue) => {
+                if (!overriddenValuesMap[defaultCMCSValue.name]) {
+                    finalValues.push({
+                        ...defaultCMCSValue,
+                        isOverridden: false,
+                        canOverride: true,
+                    })
+                }
+            })
+
+            finalConfiguration = {
+                id: profileConfiguration?.id,
+                profileName: profileConfiguration?.profileName,
+                active: profileConfiguration?.active,
+                targetPlatform: platformName,
+                key: configType,
+                value: finalValues,
+                defaultValue: null,
+            }
+        } else {
+            finalConfiguration = finalConfiguration || {
+                ...defaultValue,
+                active: false,
+                targetPlatform: platformName,
+                defaultValue,
+            }
+        }
 
         acc[configType] = finalConfiguration
 
@@ -264,13 +336,18 @@ export const getTransformedBuildInfraProfileResponse = ({
     profile,
     fromCreateView,
 }: BuildInfraProfileTransformerParamsType): BuildInfraProfileResponseType => {
-    const globalProfilePlatformConfigMap = getConfigurationMapWithoutDefaultFallback(defaultConfigurations)
+    // For cm/cs this will return the values with default as null and isOverridden as true
+    const globalProfilePlatformConfigMap = getConfigurationMapWithoutDefaultFallback(
+        defaultConfigurations,
+        profile?.name === DEFAULT_PROFILE_NAME,
+    )
     const profileConfigurations = getConfigurationMapWithoutDefaultFallback(
         fromCreateView
             ? {
                   [BUILD_INFRA_DEFAULT_PLATFORM_NAME]: [],
               }
             : profile?.configurations,
+        profile?.name === DEFAULT_PROFILE_NAME,
     )
 
     // Would depict state of target platforms in current profile with their fallback/default value (we will display in case we inheriting) attached to them
@@ -284,6 +361,7 @@ export const getTransformedBuildInfraProfileResponse = ({
                 profileConfigurationsMap: profilePlatformConfigurationMap,
                 defaultConfigurationsMap: globalProfilePlatformConfigurationMap,
                 platformName,
+                isDefaultProfile: !fromCreateView && profile.name === DEFAULT_PROFILE_NAME,
             })
 
             return acc
@@ -344,6 +422,7 @@ export const getBuildInfraProfilePayload = (
             BuildInfraConfigurationItemPayloadType[]
         >((configurationListAcc, configuration) => {
             if (configuration.id || configuration.active) {
+                const locatorContainsSubValues = !!INFRA_CONFIG_CONTAINING_SUB_VALUES[configuration.key]
                 const infraConfigValues = parseUIConfigToPayload(configuration)
                 if (!infraConfigValues) {
                     return configurationListAcc
@@ -352,7 +431,9 @@ export const getBuildInfraProfilePayload = (
                 const response: BuildInfraConfigurationItemPayloadType = {
                     ...infraConfigValues,
                     id: configuration.id,
-                    active: configuration.active,
+                    active: locatorContainsSubValues
+                        ? (infraConfigValues.value as CMSecretPayloadType[])?.length > 0
+                        : configuration.active,
                 }
 
                 configurationListAcc.push(response)
