@@ -20,7 +20,7 @@ import Tippy from '@tippyjs/react'
 import { yamlComparatorBySortOrder } from '@Shared/Helpers'
 import { DiffViewer } from '@Shared/Components/DiffViewer'
 import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
-import { CodeEditorThemesKeys, MODES, Toggle, YAMLStringify } from '../../../../Common'
+import { MODES, Toggle, YAMLStringify } from '../../../../Common'
 import { DeploymentHistoryParamsType } from './types'
 import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../types'
 import CodeEditor from '../../../../Common/CodeEditor/CodeEditor'
@@ -33,8 +33,6 @@ const DeploymentHistoryDiffView = ({
     currentConfiguration,
     baseTemplateConfiguration,
     previousConfigAvailable,
-    isUnpublished,
-    isDeleteDraft,
     rootClassName,
     sortingConfig,
     codeEditorKey,
@@ -44,23 +42,13 @@ const DeploymentHistoryDiffView = ({
 
     const [convertVariables, setConvertVariables] = useState(false)
 
-    const getTheme = () => {
-        if (isDeleteDraft) {
-            return CodeEditorThemesKeys.deleteDraft
-        }
-        if (isUnpublished) {
-            return CodeEditorThemesKeys.unpublished
-        }
-        return null
-    }
-
     // check if variable snapshot is {} or not
     const isVariablesAvailable: boolean =
         Object.keys(baseTemplateConfiguration?.codeEditorValue?.variableSnapshot || {}).length !== 0 ||
         Object.keys(currentConfiguration?.codeEditorValue?.variableSnapshot || {}).length !== 0
 
     const editorValuesRHS = useMemo(() => {
-        if (!baseTemplateConfiguration?.codeEditorValue?.value || isDeleteDraft) {
+        if (!baseTemplateConfiguration?.codeEditorValue?.value) {
             return ''
         }
 
@@ -71,10 +59,10 @@ const DeploymentHistoryDiffView = ({
         return YAMLStringify(JSON.parse(editorValue), {
             sortMapEntries: sortBy ? (a, b) => yamlComparatorBySortOrder(a, b, sortOrder) : null,
         })
-    }, [convertVariables, baseTemplateConfiguration, sortOrder, isDeleteDraft])
+    }, [convertVariables, baseTemplateConfiguration, sortOrder])
 
     const editorValuesLHS = useMemo(() => {
-        if (!currentConfiguration?.codeEditorValue?.value || isUnpublished) {
+        if (!currentConfiguration?.codeEditorValue?.value) {
             return ''
         }
 
@@ -85,7 +73,7 @@ const DeploymentHistoryDiffView = ({
         return YAMLStringify(JSON.parse(editorValue), {
             sortMapEntries: sortBy ? (a, b) => yamlComparatorBySortOrder(a, b, sortOrder) : null,
         })
-    }, [convertVariables, currentConfiguration, sortOrder, isUnpublished])
+    }, [convertVariables, currentConfiguration, sortOrder])
 
     const renderDeploymentDiffViaCodeEditor = () =>
         previousConfigAvailable ? (
@@ -104,7 +92,6 @@ const DeploymentHistoryDiffView = ({
                 readOnly
                 noParsing
                 mode={MODES.YAML}
-                theme={getTheme()}
             />
         )
 
@@ -159,23 +146,23 @@ const DeploymentHistoryDiffView = ({
                             return (
                                 // eslint-disable-next-line react/no-array-index-key
                                 <div key={`deployment-history-diff-view-${index}`} className="dc__contents">
-                                    {!isUnpublished && currentValue?.value ? (
+                                    {currentValue?.value ? (
                                         renderDetailedValue(
-                                            !isDeleteDraft && changeBGColor ? 'code-editor-red-diff' : '',
+                                            changeBGColor ? 'code-editor-red-diff' : '',
                                             currentValue,
                                             `configuration-deployment-template-heading-${index}`,
                                         )
                                     ) : (
                                         <div />
                                     )}
-                                    {!isDeleteDraft && baseValue?.value ? (
+                                    {baseValue?.value ? (
                                         renderDetailedValue(
                                             changeBGColor ? 'code-editor-green-diff' : '',
                                             baseValue,
                                             `configuration-deployment-template-heading-${index}`,
                                         )
                                     ) : (
-                                        <div className={isDeleteDraft ? 'code-editor-red-diff' : ''} />
+                                        <div />
                                     )}
                                 </div>
                             )

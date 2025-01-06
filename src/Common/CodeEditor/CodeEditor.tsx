@@ -140,26 +140,6 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             },
         })
 
-        monaco.editor.defineTheme(CodeEditorThemesKeys.deleteDraft, {
-            base: 'vs',
-            inherit: true,
-            rules: [],
-            colors: {
-                'diffEditor.insertedTextBackground': '#ffd4d1',
-                'diffEditor.removedTextBackground': '#ffffff33',
-            },
-        })
-
-        monaco.editor.defineTheme(CodeEditorThemesKeys.unpublished, {
-            base: 'vs',
-            inherit: true,
-            rules: [],
-            colors: {
-                'diffEditor.insertedTextBackground': '#eaf1dd',
-                'diffEditor.removedTextBackground': '#ffffff33',
-            },
-        })
-
         useEffect(() => {
             dispatch({ type: 'setTheme', value: getCodeEditorThemeFromAppTheme(theme, appTheme) })
         }, [appTheme])

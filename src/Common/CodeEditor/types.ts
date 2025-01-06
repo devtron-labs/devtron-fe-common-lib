@@ -25,8 +25,6 @@ export interface InformationBarProps {
 
 export enum CodeEditorThemesKeys {
     vsDarkDT = 'vs-dark--dt',
-    deleteDraft = 'delete-draft',
-    unpublished = 'unpublished',
     vs = 'vs',
     networkStatusInterface = 'network-status-interface',
 }
