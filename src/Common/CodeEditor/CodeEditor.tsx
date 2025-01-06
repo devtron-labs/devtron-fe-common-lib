@@ -121,10 +121,10 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             inherit: true,
             rules: [
                 // @ts-ignore
-                { background: 'var(--terminal-bg)' },
+                { background: '#0B0F22' },
             ],
             colors: {
-                'editor.background': 'var(--terminal-bg)',
+                'editor.background': '#0B0F22',
             },
         })
 

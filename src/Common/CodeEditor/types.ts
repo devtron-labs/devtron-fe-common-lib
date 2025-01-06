@@ -49,7 +49,7 @@ interface CodeEditorBaseInterface {
     diffView?: boolean
     loading?: boolean
     customLoader?: JSX.Element
-    theme?: CodeEditorThemesKeys | string
+    theme?: CodeEditorThemesKeys
     original?: string
     focus?: boolean
     validatorSchema?: any
