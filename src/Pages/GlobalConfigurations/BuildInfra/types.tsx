@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { FormEvent, FunctionComponent, ReactNode } from 'react'
+import { FormEvent, FunctionComponent, ReactNode, SyntheticEvent } from 'react'
 import { BUILD_INFRA_INHERIT_ACTIONS, useBuildInfraForm } from '@Pages/index'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
 import {
@@ -574,10 +574,18 @@ export interface BuildInfraInputFieldComponentProps {
     error?: string
 }
 
-export interface BuildInfraProfileMetaFieldProps
-    extends Pick<BuildInfraInputFieldComponentProps, 'error' | 'handleProfileInputChange'> {
+export type BuildInfraProfileMetaFieldProps = Pick<BuildInfraInputFieldComponentProps, 'error'> & {
     currentValue: string
-}
+} & (
+        | {
+              handleProfileInputChange: BuildInfraInputFieldComponentProps['handleProfileInputChange']
+              onChange?: never
+          }
+        | {
+              onChange: (e: SyntheticEvent) => void
+              handleProfileInputChange?: never
+          }
+    )
 
 export interface InheritingHeaderProps extends Pick<BuildInfraConfigFormProps, 'isGlobalProfile'> {
     defaultHeading: BuildInfraFormFieldType['heading']

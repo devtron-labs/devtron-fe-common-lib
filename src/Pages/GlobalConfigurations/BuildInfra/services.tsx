@@ -62,8 +62,8 @@ export const updateBuildInfraProfile = async ({ name, profileInput }: UpdateBuil
     return response
 }
 
+export const createBuildInfraProfileService = async (payload: BuildInfraPayloadType) =>
+    post<ReturnType<typeof post>, BuildInfraPayloadType>(getBuildInfraProfileEndpoint(), payload)
+
 export const createBuildInfraProfile = async ({ profileInput }: CreateBuildInfraProfileType) =>
-    post<ReturnType<typeof post>, BuildInfraPayloadType>(
-        getBuildInfraProfileEndpoint(),
-        getBuildInfraProfilePayload(profileInput),
-    )
+    createBuildInfraProfileService(getBuildInfraProfilePayload(profileInput))
