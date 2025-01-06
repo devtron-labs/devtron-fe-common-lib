@@ -196,8 +196,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
 
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
-    const areStagesAvailable =
-        (window._env_.FEATURE_STEP_WISE_LOGS_ENABLE && streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER)) || false
+    const areStagesAvailable = streamDataList[0]?.startsWith(LOGS_STAGE_IDENTIFIER) || false
 
     function createMarkup({
         log,

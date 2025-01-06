@@ -44,7 +44,6 @@ import {
     SelectPickerOption,
     SelectPickerValueContainer,
     SelectPickerInput,
-    SelectPickerIndicatorsContainer,
 } from './common'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
@@ -285,10 +284,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                 {...valueContainerProps}
                 showSelectedOptionsCount={showSelectedOptionsCount}
                 customSelectedOptionsCount={customSelectedOptionsCount}
-                isFocussed={isFocussed}
             />
         ),
-        [showSelectedOptionsCount, customSelectedOptionsCount, isFocussed],
+        [showSelectedOptionsCount, customSelectedOptionsCount],
     )
 
     const renderOption = useCallback(
@@ -441,7 +439,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 Control: SelectPickerControl,
                                 Option: renderOption,
                                 MenuList: SelectPickerMenuList,
-                                IndicatorsContainer: SelectPickerIndicatorsContainer,
                                 ClearIndicator: SelectPickerClearIndicator,
                                 ValueContainer: renderValueContainer,
                                 MultiValueLabel: renderMultiValueLabel,
@@ -467,10 +464,11 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             onKeyDown={handleKeyDown}
                             shouldRenderTextArea={shouldRenderTextArea}
                             customDisplayText={customDisplayText}
-                            onFocus={handleFocus}
+                            {...(!shouldRenderTextArea ? { onFocus: handleFocus } : {})}
                             onBlur={handleBlur}
                             onChange={handleChange}
                             controlShouldRenderValue={controlShouldRenderValue}
+                            isFocussed={isFocussed}
                         />
                     </div>
                 </ConditionalWrap>
