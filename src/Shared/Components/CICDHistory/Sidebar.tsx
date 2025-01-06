@@ -342,12 +342,7 @@ const Sidebar = React.memo(
         return (
             <>
                 {children || (
-                    <div
-                        className="select-pipeline-wrapper w-100 pl-16 pr-16 dc__overflow-hidden"
-                        style={{
-                            borderBottom: '1px solid var(--n-100, #EDF1F5)',
-                        }}
-                    >
+                    <div className="select-pipeline-wrapper w-100 pl-16 pr-16 dc__overflow-hidden dc__border-bottom-n1">
                         <label
                             htmlFor="history-pipeline-selector"
                             className="form__label"

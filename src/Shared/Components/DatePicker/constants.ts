@@ -20,7 +20,7 @@ const selectedStyles = {
 
     hover: {
         background: 'var(--B500)',
-        color: '#fff',
+        color: 'var(--N0)',
     },
 }
 
@@ -29,7 +29,7 @@ const selectedSpanStyles = {
     color: 'var(--B500)',
     hover: {
         background: 'var(--B500)',
-        color: '#fff',
+        color: 'var(--N0)',
     },
 }
 
