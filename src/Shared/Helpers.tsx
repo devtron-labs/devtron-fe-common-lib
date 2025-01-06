@@ -833,6 +833,19 @@ export const sanitizeApprovalConfigData = (
     },
 })
 
+export const sanitizeUserApprovalConfig = (userApprovalConfig: UserApprovalConfigType): UserApprovalConfigType => ({
+    requiredCount: userApprovalConfig?.requiredCount ?? 0,
+    type: userApprovalConfig?.type ?? ManualApprovalType.notConfigured,
+    specificUsers: {
+        identifiers: userApprovalConfig?.specificUsers?.identifiers ?? [],
+        requiredCount: userApprovalConfig?.specificUsers?.identifiers?.length ?? 0,
+    },
+    userGroups: (userApprovalConfig?.userGroups ?? []).map((userGroup) => ({
+        identifier: userGroup.identifier,
+        requiredCount: userGroup.requiredCount ?? 0,
+    })),
+})
+
 /**
  * Manual approval is considered configured only if the type is not notConfigured
  */

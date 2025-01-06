@@ -16,7 +16,7 @@
 
 import { MutableRefObject } from 'react'
 import moment from 'moment'
-import { sanitizeApprovalConfigData, sanitizeUserApprovalList } from '@Shared/Helpers'
+import { sanitizeApprovalConfigData, sanitizeUserApprovalConfig, sanitizeUserApprovalList } from '@Shared/Helpers'
 import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
 import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
@@ -235,7 +235,7 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
     return {
         canApproverDeploy: cdMaterialsResult.canApproverDeploy ?? false,
         deploymentApprovalInfo: sanitizeDeploymentApprovalInfo(cdMaterialsResult.deploymentApprovalInfo),
-        userApprovalConfig: cdMaterialsResult.userApprovalConfig ?? null
+        userApprovalConfig: sanitizeUserApprovalConfig(cdMaterialsResult.userApprovalConfig)
     }
 }
 
