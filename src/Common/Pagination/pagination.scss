@@ -46,7 +46,7 @@
     width: 64px;
     position: absolute;
     bottom: 31px;
-    background-color: var(--white);
+    background-color: var(--N0);
 }
 
 .select__button {
@@ -87,21 +87,21 @@
     height: 24px;
     border-radius: 8px;
     color: var(--B500);
-    background-color: var(--white);
+    background-color: var(--N0);
     padding: 0px;
     user-select: none;
     border: none;
 }
 
 .page__button--icon {
-    background-color: var(--white);
+    background-color: var(--N0);
     color: var(--B500);
 }
 
 /* MODIFIERS */
 
 .page__button--selected {
-    color: var(--white);
+    color: var(--N0);
     background-color: var(--B500);
 }
 
@@ -120,7 +120,7 @@
 }
 
 .page__button--selected:hover {
-    color: var(--white);
+    color: var(--N0);
     background-color: var(--B500);
 }
 

@@ -99,19 +99,6 @@
     }
 }
 
-.historical-diff {
-    display: grid;
-    grid-template-rows: 60px auto;
-    height: 100%;
-    background-color: var(--white);
-}
-
-.historical-diff__container {
-    display: grid;
-    grid-template-columns: 280px auto;
-    height: calc(100vh - 147px);
-}
-
 .deployment-diff__upper {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -125,12 +112,6 @@
         left: calc(50% - 1px);
         background: var(--N200);
     }
-}
-
-.historical-diff__left {
-    padding: 16px 12px;
-    overflow: hidden;
-    min-width: 280px;
 }
 
 .history_diff__wrapper {
