@@ -391,7 +391,6 @@ export enum BuildInfraProfileInputActionType {
     ADD_TARGET_PLATFORM = 'add_target_platform',
     REMOVE_TARGET_PLATFORM = 'remove_target_platform',
     RENAME_TARGET_PLATFORM = 'rename_target_platform',
-    RESTORE_PROFILE_CONFIG_SNAPSHOT = 'restore_profile_config_snapshot',
 
     DELETE_NODE_SELECTOR_ITEM = 'delete_node_selector_item',
     ADD_NODE_SELECTOR_ITEM = 'add_node_selector_item',
@@ -403,7 +402,16 @@ export enum BuildInfraProfileInputActionType {
 
     ADD_CM_CS_ITEM = 'add_cm_cs_item',
     SYNC_CM_CS_ITEM = 'sync_cm_cs_item',
+    DELETE_CM_CS_ITEM = 'delete_cm_cs_item',
 }
+
+type BuildInfraInheritActionsOnSubValues = Extract<
+    BuildInfraInheritActions,
+    | `activate_${BuildInfraLocators.CONFIG_MAP}`
+    | `de_activate_${BuildInfraLocators.CONFIG_MAP}`
+    | `activate_${BuildInfraLocators.SECRET}`
+    | `de_activate_${BuildInfraLocators.SECRET}`
+>
 
 export type HandleProfileInputChangeType =
     | {
@@ -418,22 +426,23 @@ export type HandleProfileInputChangeType =
       }
     | {
           action:
-              | BuildInfraInheritActions
+              | Exclude<BuildInfraInheritActions, BuildInfraInheritActionsOnSubValues>
               | BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM
               | BuildInfraProfileInputActionType.REMOVE_TARGET_PLATFORM
           data: ProfileInputDispatchDataType
+      }
+    | {
+          action: BuildInfraInheritActionsOnSubValues
+          data: ProfileInputDispatchDataType & {
+              componentType: CMSecretComponentType
+              id: string
+          }
       }
     | {
           action: BuildInfraProfileInputActionType.RENAME_TARGET_PLATFORM
           data: {
               originalPlatformName: string
               newPlatformName: string
-              configSnapshot: BuildInfraProfileData['configurations']
-          }
-      }
-    | {
-          action: BuildInfraProfileInputActionType.RESTORE_PROFILE_CONFIG_SNAPSHOT
-          data: {
               configSnapshot: BuildInfraProfileData['configurations']
           }
       }
@@ -466,6 +475,7 @@ export type HandleProfileInputChangeType =
           action: BuildInfraProfileInputActionType.ADD_CM_CS_ITEM
           data: ProfileInputDispatchDataType &
               Pick<BuildInfraCMCSValueType, 'id'> & {
+                  // TODO: Can we do infraType instead of componentType
                   componentType: CMSecretComponentType
               }
       }
@@ -477,6 +487,13 @@ export type HandleProfileInputChangeType =
               errors: UseFormErrors<BuildInfraCMCSValueType>
               componentType: CMSecretComponentType
           }
+      }
+    | {
+          action: BuildInfraProfileInputActionType.DELETE_CM_CS_ITEM
+          data: ProfileInputDispatchDataType &
+              Pick<BuildInfraCMCSValueType, 'id'> & {
+                  componentType: CMSecretComponentType
+              }
       }
 
 export interface UseBuildInfraFormResponseType {
@@ -498,10 +515,7 @@ export interface BuildInfraConfigFormProps
     configurationContainerLabel?: ReactNode
 }
 
-export interface BuildInfraFormItemProps
-    extends Pick<BuildInfraFormFieldType, 'marker' | 'heading'>,
-        Partial<Pick<BuildInfraProfileConfigBase, 'targetPlatform'>>,
-        Pick<BuildInfraConfigFormProps, 'isGlobalProfile'> {
+export interface BuildInfraFormItemProps extends Pick<BuildInfraFormFieldType, 'marker' | 'heading'> {
     children?: ReactNode
     /**
      * If true, means profile is inheriting values from other profile (e.g, default)
@@ -511,12 +525,6 @@ export interface BuildInfraFormItemProps
      * Would be false for last item
      */
     showDivider?: boolean
-
-    /**
-     * Would be used to dispatch inherit actions (activate_cpu, de_activate_cpu, etc)
-     */
-    handleProfileInputChange: UseBuildInfraFormResponseType['handleProfileInputChange']
-    locator: BuildInfraFormFieldType['locator']
 }
 
 export interface ValidateRequestLimitType {
@@ -530,9 +538,7 @@ export interface ValidateRequestLimitResponseType {
     limit: ValidationResponseType
 }
 
-export interface BuildInfraFormActionProps
-    extends BuildInfraActionType,
-        Pick<BuildInfraFormItemProps, 'targetPlatform'> {
+export interface BuildInfraFormActionProps extends BuildInfraActionType {
     handleProfileInputChange: UseBuildInfraFormResponseType['handleProfileInputChange']
     currentValue: number
     error?: string
@@ -547,6 +553,7 @@ export interface BuildInfraFormActionProps
      * @default false
      */
     autoFocus?: boolean
+    targetPlatform?: string
 }
 
 export interface FooterProps {

@@ -46,6 +46,7 @@ const BuildInfraProfileNameField: FunctionComponent<BuildInfraProfileMetaFieldPr
                 error={error}
                 required
                 inputWrapClassName="w-100"
+                autoFocus
             />
         </div>
     )

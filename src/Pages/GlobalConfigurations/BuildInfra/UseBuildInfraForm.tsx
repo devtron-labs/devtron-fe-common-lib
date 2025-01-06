@@ -456,6 +456,85 @@ const useBuildInfraForm = ({
                 break
             }
 
+            case 'activate_cm':
+            case 'activate_cs': {
+                const { id, componentType } = data
+                // Would just convert isOverridden to true and replace value with default value
+                const cmSecretValue = currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
+                    .value as BuildInfraCMCSValueType[]
+                const selectedCMCSIndex = cmSecretValue.findIndex((configMapItem) => configMapItem.id === id)
+
+                if (selectedCMCSIndex === -1 || !cmSecretValue[selectedCMCSIndex].canOverride) {
+                    ToastManager.showToast({
+                        variant: ToastVariantType.error,
+                        description: 'Unable to customize this CM/CS',
+                    })
+
+                    logExceptionToSentry(new Error('Unable to customize this CM/CS'))
+                    return
+                }
+
+                cmSecretValue[selectedCMCSIndex].isOverridden = true
+                cmSecretValue[selectedCMCSIndex] = {
+                    ...cmSecretValue[selectedCMCSIndex],
+                    ...cmSecretValue[selectedCMCSIndex].defaultValue,
+                }
+
+                // Will remove error if present
+                if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
+                    delete currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id]
+
+                    if (
+                        Object.keys(currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]])
+                            .length === 0
+                    ) {
+                        currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = null
+                    }
+                }
+
+                break
+            }
+
+            case 'de_activate_cm':
+            case 'de_activate_cs': {
+                const { id, componentType } = data
+                // Would just convert isOverridden to true and replace value with default value
+                const cmSecretValue = currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
+                    .value as BuildInfraCMCSValueType[]
+                const selectedCMCSIndex = cmSecretValue.findIndex((configMapItem) => configMapItem.id === id)
+
+                if (selectedCMCSIndex === -1 || !cmSecretValue[selectedCMCSIndex].canOverride) {
+                    ToastManager.showToast({
+                        variant: ToastVariantType.error,
+                        description: 'Unable to customize this CM/CS',
+                    })
+
+                    logExceptionToSentry(new Error('Unable to customize this CM/CS'))
+                    return
+                }
+
+                // TODO: Only this is diff should combine
+                cmSecretValue[selectedCMCSIndex].isOverridden = false
+                cmSecretValue[selectedCMCSIndex] = {
+                    ...cmSecretValue[selectedCMCSIndex],
+                    ...cmSecretValue[selectedCMCSIndex].defaultValue,
+                }
+
+                // Will remove error if present
+                if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
+                    delete currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id]
+
+                    if (
+                        Object.keys(currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]])
+                            .length === 0
+                    ) {
+                        currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = null
+                    }
+                }
+
+                break
+            }
+
             case BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM: {
                 // If no target platform is given error will be '' so that we won;t show error but capture it
                 currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM] = !targetPlatform
@@ -557,19 +636,6 @@ const useBuildInfraForm = ({
                 }
 
                 delete currentInput.configurations[originalPlatformName]
-                break
-            }
-
-            case BuildInfraProfileInputActionType.RESTORE_PROFILE_CONFIG_SNAPSHOT: {
-                const { configSnapshot } = data
-                currentInput.configurations = configSnapshot
-
-                Object.keys(currentInputErrors).forEach((key) => {
-                    if (TARGET_PLATFORM_ERROR_FIELDS_MAP[key]) {
-                        currentInputErrors[key] = null
-                    }
-                })
-
                 break
             }
 
@@ -827,6 +893,31 @@ const useBuildInfraForm = ({
                 )
                 if (errorKeys.length === 0) {
                     currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = null
+                }
+
+                break
+            }
+
+            case BuildInfraProfileInputActionType.DELETE_CM_CS_ITEM: {
+                const { id, componentType } = data
+
+                const finalCMCSValueList = (
+                    currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
+                        .value as BuildInfraCMCSValueType[]
+                ).filter((configMapItem) => configMapItem.id !== id)
+
+                currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]].value =
+                    finalCMCSValueList
+
+                if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
+                    delete currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id]
+
+                    if (
+                        Object.keys(currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]])
+                            .length === 0
+                    ) {
+                        currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = null
+                    }
                 }
 
                 break
