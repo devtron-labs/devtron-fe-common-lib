@@ -87,6 +87,10 @@ export default defineConfig({
                         return '@react-select'
                     }
 
+                    if (id.includes('/node_modules/react-virtualized-sticky-tree')) {
+                        return '@react-virtualized-sticky-tree'
+                    }
+
                     if (id.includes('/node_modules/')) {
                         return '@vendor'
                     }
