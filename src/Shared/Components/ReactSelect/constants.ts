@@ -41,7 +41,7 @@ export const CommonGroupedDropdownStyles = {
     option: (base, state) => ({
         ...base,
         padding: '6px 8px 6px 0',
-        backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
+        backgroundColor: state.isFocused ? 'var(--N100)' : 'var(--N0)',
         color: 'var(--N900)',
         cursor: 'pointer',
         overflow: 'hidden',
@@ -89,7 +89,7 @@ export const CommonGroupedDropdownStyles = {
         ...base,
         border: `1px solid var(--N200)`,
         borderRadius: `4px`,
-        background: 'white',
+        background: 'var(--N0)',
         height: '28px',
         margin: '0px',
         padding: '2px',
