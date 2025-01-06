@@ -159,7 +159,11 @@ const BulkOperationsResultModal = ({
                             {sortedList.map((result, index, arr) => (
                                 <div
                                     className={`dc__grid py-10 fs-13 dc__gap-16 dc__align-items-start ${index === arr.length - 1 ? 'mb-20' : ''}`}
-                                    style={{ gridTemplateColumns }}
+                                    style={{
+                                        gridTemplateColumns: result.renderContentAtResultRowEnd
+                                            ? `${gridTemplateColumns} min-content`
+                                            : gridTemplateColumns,
+                                    }}
                                     key={result.id}
                                 >
                                     <Tooltip content={result.name}>
@@ -179,6 +183,8 @@ const BulkOperationsResultModal = ({
                                     </div>
 
                                     <span className="dc__word-break">{result.message}</span>
+
+                                    {result.renderContentAtResultRowEnd?.()}
                                 </div>
                             ))}
                         </div>

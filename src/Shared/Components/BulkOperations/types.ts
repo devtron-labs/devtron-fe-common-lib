@@ -17,10 +17,11 @@ interface BulkOperationAdditionalKeysType {
 export interface BulkOperation {
     name: string
     /**
-     * Would these keys beside the name
+     * Would show these keys beside the name
      */
     additionalKeys?: BulkOperationAdditionalKeysType[]
-    operation: (abortControllerRef: MutableRefObject<AbortController>, data?: unknown) => Promise<void>
+    operation: (abortControllerRef: MutableRefObject<AbortController>, data?: unknown) => Promise<unknown | void>
+    renderContentAtResultRowEnd?: (data: Awaited<ReturnType<BulkOperation['operation']>>) => ReactNode
 }
 
 export type FailedOperationType = {
@@ -34,6 +35,7 @@ export type OtherStatusOperationType = {
 
 export type BulkOperationResultType = {
     message?: string
+    renderContentAtResultRowEnd?: () => void
 } & (FailedOperationType | OtherStatusOperationType) &
     Pick<BulkOperation, 'name' | 'additionalKeys'>
 
@@ -49,7 +51,8 @@ export interface OperationResultStoreType {
     getSize: () => number
     updateResultStatus: (
         id: number,
-        result: Partial<Pick<BulkOperationResultType, 'message'>> & (FailedOperationType | OtherStatusOperationType),
+        result: Partial<Pick<BulkOperationResultType, 'message' | 'renderContentAtResultRowEnd'>> &
+            (FailedOperationType | OtherStatusOperationType),
     ) => void
     getRetryOperations: () => FailedOperationType['retryOperation'][]
     hasAnyOperationFailed: () => boolean

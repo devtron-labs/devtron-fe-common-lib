@@ -65,7 +65,7 @@ const BulkOperations = ({
             }
 
             const calls = operationsRef.current.map((op) => async () => {
-                const { operation, name, additionalKeys } = op
+                const { operation, name, additionalKeys, renderContentAtResultRowEnd = null } = op
 
                 if (abortControllerRef.current.signal.aborted) {
                     throw new Error('bulk operations aborted')
@@ -83,9 +83,16 @@ const BulkOperations = ({
 
                     triggerUpdate()
 
-                    await operation(abortControllerRef, data)
+                    const result = await operation(abortControllerRef, data)
 
-                    resultsStoreRef.current.updateResultStatus(id, { status: 'Completed' })
+                    resultsStoreRef.current.updateResultStatus(id, {
+                        status: 'Completed',
+                        ...(renderContentAtResultRowEnd
+                            ? {
+                                  renderContentAtResultRowEnd: () => renderContentAtResultRowEnd(result),
+                              }
+                            : {}),
+                    })
 
                     triggerUpdate()
                 } catch (err) {
