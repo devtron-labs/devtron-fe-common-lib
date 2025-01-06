@@ -1,7 +1,8 @@
 import { BuildStageType, FormType } from '@Common/CIPipeline.Types'
-import { DeploymentAppTypes } from '@Common/Types'
+import { DeploymentAppTypes, DeploymentNodeType } from '@Common/Types'
 import { DeploymentStrategy } from '@Shared/Components'
-import { EnvListMinDTO } from '@Shared/types'
+import { EnvListMinDTO, RuntimeParamsTriggerPayloadType } from '@Shared/types'
+import { MutableRefObject } from 'react'
 
 interface ConfigSecretType {
     label: string
@@ -85,4 +86,46 @@ export interface PipelineFormType extends Partial<FormType>, Partial<CDFormType>
     customTagStage?: string
     isDigestEnforcedForPipeline?: boolean
     isDigestEnforcedForEnv?: boolean
+}
+
+export interface OptionsBase {
+    name: string
+    isInitContainer?: boolean
+    isEphemeralContainer?: boolean
+    isExternal?: boolean
+}
+
+export interface SelectedResourceType {
+    clusterId: number
+    group: string
+    version: string
+    kind: string
+    namespace: string
+    name: string
+    containers: OptionsBase[]
+    selectedContainer?: string
+    clusterName?: string
+}
+
+export interface TriggerCDNodeServiceProps {
+    pipelineId: number
+    ciArtifactId: number
+    appId: number
+    stageType: DeploymentNodeType
+    deploymentWithConfig?: string
+    wfrId?: number
+    abortControllerRef?: MutableRefObject<AbortController>
+    /**
+     * Would be available only case of PRE/POST CD
+     */
+    runtimeParamsPayload?: RuntimeParamsTriggerPayloadType
+}
+
+export interface TriggerCDPipelinePayloadType
+    extends Pick<
+        TriggerCDNodeServiceProps,
+        'pipelineId' | 'appId' | 'ciArtifactId' | 'runtimeParamsPayload' | 'deploymentWithConfig'
+    > {
+    cdWorkflowType: string
+    wfrIdForDeploymentWithSpecificTrigger?: number
 }

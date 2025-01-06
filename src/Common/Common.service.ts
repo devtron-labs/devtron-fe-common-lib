@@ -41,9 +41,8 @@ import {
     GlobalVariableDTO,
     GlobalVariableOptionType,
 } from './Types'
-import { ApiResourceType } from '../Pages'
+import { ApiResourceType, STAGE_MAP } from '../Pages'
 import { RefVariableType } from './CIPipeline.Types'
-import { STAGE_MAP } from '@Pages/App/Trigger/constants'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field

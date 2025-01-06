@@ -1,5 +1,6 @@
 import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
 import { MutableRefObject, ReactNode } from 'react'
+import { DrawerProps } from '@Common/index'
 import { getProgressingStateForStatus } from '../Security'
 import { ConfirmationModalProps } from '../ConfirmationModal/types'
 
@@ -72,10 +73,11 @@ export type BulkOperationModalProps = {
           shouldSkipConfirmation: true
           confirmationModalConfig?: never
       }
-)
+) &
+    Pick<DrawerProps, 'disableTransition'>
 
 export interface BulkOperationsResultModalProps
-    extends Pick<BulkOperationModalProps, 'handleModalClose' | 'getResultsChartSummaryText'>,
+    extends Pick<BulkOperationModalProps, 'handleModalClose' | 'getResultsChartSummaryText' | 'disableTransition'>,
         Pick<BulkOperationModalProps['textConfig'], 'resultsHeader'> {
     resultsStore: OperationResultStoreType
     apiCallInProgress: boolean

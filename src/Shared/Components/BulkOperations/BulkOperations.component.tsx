@@ -22,6 +22,7 @@ const BulkOperations = ({
     shouldSkipConfirmation,
     confirmationModalConfig,
     data,
+    disableTransition,
 }: BulkOperationModalProps) => {
     const [apiCallInProgress, setApiCallInProgress] = useState(!!shouldSkipConfirmation)
     const [, setLastUpdateTimeStamp] = useState(new Date().toISOString())
@@ -193,6 +194,7 @@ const BulkOperations = ({
             handleRetryFailedOperations={handleRetryFailedOperations}
             getResultsChartSummaryText={getResultsChartSummaryText}
             resultsHeader={textConfig.resultsHeader}
+            disableTransition={disableTransition}
         />
     )
 

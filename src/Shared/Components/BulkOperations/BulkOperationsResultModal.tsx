@@ -26,6 +26,7 @@ const BulkOperationsResultModal = ({
     handleRetryFailedOperations,
     resultsHeader: headerText,
     getResultsChartSummaryText,
+    disableTransition,
 }: BulkOperationsResultModalProps) => {
     const { handleSorting, sortBy, sortOrder, clearFilters } = useStateFilters<string>({
         initialSortKey: RESULTS_MODAL_HEADERS[1].label,
@@ -91,6 +92,7 @@ const BulkOperationsResultModal = ({
         <Drawer
             onClose={handleModalClose}
             onEscape={handleModalClose}
+            disableTransition={disableTransition}
             position="right"
             width="1024px"
             parentClassName="h-100"
@@ -107,6 +109,7 @@ const BulkOperationsResultModal = ({
                         dataTestId="rb-bulk-action__cross"
                         component={ButtonComponentType.button}
                         style={ButtonStyleType.negativeGrey}
+                        size={ComponentSizeType.xs}
                         variant={ButtonVariantType.borderLess}
                         ariaLabel={`Close ${headerText} drawer`}
                         disabled={apiCallInProgress}
@@ -181,7 +184,7 @@ const BulkOperationsResultModal = ({
                         </div>
                     </div>
                 </div>
-                <footer className="flexbox dc__content-space py-16 px-20 dc__border-top">
+                <footer className="flexbox dc__content-space pt-15 pb-16 px-20 dc__border-top">
                     {apiCallInProgress ? (
                         <>
                             <div className="flex-grow-1" />

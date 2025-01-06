@@ -17,4 +17,3 @@
 export * from './GlobalConfigurations'
 export * from './ResourceBrowser'
 export * from './Applications'
-export * from './App'

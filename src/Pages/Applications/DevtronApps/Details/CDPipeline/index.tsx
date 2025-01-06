@@ -1,2 +1,5 @@
 export * from './types'
 export * from './services'
+export { getAPIOptionsWithTriggerTimeout } from './utils'
+export { STAGE_MAP } from './constants'
+export { isImageActiveOnEnvironment } from './utils'
