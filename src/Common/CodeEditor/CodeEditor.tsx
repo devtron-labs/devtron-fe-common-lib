@@ -195,25 +195,27 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             const originalEditor = editor.getOriginalEditor()
             const modifiedEditor = editor.getModifiedEditor()
 
-            originalEditor.onDidContentSizeChange(() => {
-                setContentHeight(
-                    Math.max(
-                        typeof contentHeight === 'number' ? contentHeight : Number.MIN_SAFE_INTEGER,
-                        originalEditor.getContentHeight(),
-                    ),
-                )
-            })
+            if (adjustEditorHeightToContent) {
+                originalEditor.onDidContentSizeChange(() => {
+                    setContentHeight(
+                        Math.max(
+                            typeof contentHeight === 'number' ? contentHeight : Number.MIN_SAFE_INTEGER,
+                            originalEditor.getContentHeight(),
+                        ),
+                    )
+                })
 
-            modifiedEditor.onDidContentSizeChange(() => {
-                setContentHeight(
-                    Math.max(
-                        typeof contentHeight === 'number' ? contentHeight : Number.MIN_SAFE_INTEGER,
-                        modifiedEditor.getContentHeight(),
-                    ),
-                )
-            })
+                modifiedEditor.onDidContentSizeChange(() => {
+                    setContentHeight(
+                        Math.max(
+                            typeof contentHeight === 'number' ? contentHeight : Number.MIN_SAFE_INTEGER,
+                            modifiedEditor.getContentHeight(),
+                        ),
+                    )
+                })
 
-            setContentHeight(Math.max(originalEditor.getContentHeight(), modifiedEditor.getContentHeight()))
+                setContentHeight(Math.max(originalEditor.getContentHeight(), modifiedEditor.getContentHeight()))
+            }
 
             originalEditor.onDidChangeModelContent(() => {
                 codeEditorOnChange(modifiedEditor.getValue(), originalEditor.getValue())

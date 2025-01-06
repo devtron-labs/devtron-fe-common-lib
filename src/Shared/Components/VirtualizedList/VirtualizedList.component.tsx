@@ -14,7 +14,7 @@ export const VirtualizedList = <ListKeys extends string | number, ExtendedType e
         () => ({
             node: {
                 id: VIRTUALIZED_LIST_ROOT_ID,
-                children: Object.keys(items).filter((item) => !!items[item].children),
+                children: Object.keys(items).filter((item) => items[item].depth === 0),
             } as VirtualizedListItem<ListKeys, ExtendedType>,
             isSticky: true,
             stickyTop: 0,
@@ -31,7 +31,11 @@ export const VirtualizedList = <ListKeys extends string | number, ExtendedType e
                 node: items[childrenId],
                 height: items[childrenId].height,
                 ...(id === VIRTUALIZED_LIST_ROOT_ID
-                    ? { isSticky: true, stickyTop: 0, zIndex: VIRTUALIZED_LIST_ROOT_Z_INDEX - items[childrenId].depth }
+                    ? {
+                          isSticky: true,
+                          stickyTop: 0,
+                          zIndex: VIRTUALIZED_LIST_ROOT_Z_INDEX - items[childrenId].depth,
+                      }
                     : {}),
             }))
         }
