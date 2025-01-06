@@ -20,15 +20,18 @@ import { CustomInput } from '../../../Common'
 import { BUILD_INFRA_TEXT } from './constants'
 
 const BuildInfraProfileNameField: FunctionComponent<BuildInfraProfileMetaFieldProps> = ({
+    onChange,
     handleProfileInputChange,
     currentValue,
     error,
 }) => {
     const handleChange = (e: FormEvent<HTMLInputElement>) => {
-        handleProfileInputChange({
+        handleProfileInputChange?.({
             action: BuildInfraMetaConfigTypes.NAME,
             data: { value: e.currentTarget.value },
         })
+
+        onChange?.(e)
     }
 
     return (
