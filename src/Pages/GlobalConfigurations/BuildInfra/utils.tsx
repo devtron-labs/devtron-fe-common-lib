@@ -31,13 +31,14 @@ import {
     BuildInfraProfileInfoDTO,
     BuildInfraProfileResponseType,
     BuildInfraProfileTransformerParamsType,
+    BuildInfraProfileVariants,
     BuildInfraToleranceOperatorType,
     BuildInfraToleranceValueType,
     CreateBuildInfraProfileType,
+    GetBaseProfileObjectParamsType,
     GetPlatformConfigurationsWithDefaultValuesParamsType,
 } from './types'
 import {
-    CREATE_PROFILE_BASE_VALUE,
     BUILD_INFRA_DEFAULT_PLATFORM_NAME,
     BUILD_INFRA_LATEST_API_VERSION,
     INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X,
@@ -106,9 +107,22 @@ export const parsePlatformConfigIntoValue = (
     }
 }
 
-const getBaseProfileObject = (fromCreateView: boolean, profile: BuildInfraProfileInfoDTO): BuildInfraProfileBase => {
+const getBaseProfileObject = ({
+    fromCreateView,
+    profile,
+    canConfigureUseK8sDriver,
+}: GetBaseProfileObjectParamsType): BuildInfraProfileBase => {
+    const parsedUseK8sDriverValue = profile?.useK8sDriver || true
+    const useK8sDriver = canConfigureUseK8sDriver ? parsedUseK8sDriverValue : null
+
     if (fromCreateView) {
-        return structuredClone(CREATE_PROFILE_BASE_VALUE)
+        return {
+            name: '',
+            description: '',
+            type: BuildInfraProfileVariants.NORMAL,
+            appCount: 0,
+            useK8sDriver,
+        }
     }
 
     return {
@@ -117,6 +131,7 @@ const getBaseProfileObject = (fromCreateView: boolean, profile: BuildInfraProfil
         description: profile.description,
         type: profile.type,
         appCount: profile.appCount,
+        useK8sDriver,
     }
 }
 
@@ -190,6 +205,7 @@ export const getTransformedBuildInfraProfileResponse = ({
     defaultConfigurations,
     profile,
     fromCreateView,
+    canConfigureUseK8sDriver,
 }: BuildInfraProfileTransformerParamsType): BuildInfraProfileResponseType => {
     // Ideal assumption is defaultConfigurations would contain all the required keys
     const globalProfilePlatformConfigMap = getConfigurationMapWithoutDefaultFallback(defaultConfigurations)
@@ -254,7 +270,12 @@ export const getTransformedBuildInfraProfileResponse = ({
         configurationUnits,
         fallbackPlatformConfigurationMap,
         profile: {
-            ...(profile && getBaseProfileObject(fromCreateView, profile)),
+            ...(profile &&
+                getBaseProfileObject({
+                    fromCreateView,
+                    profile,
+                    canConfigureUseK8sDriver,
+                })),
             configurations,
         },
     }
@@ -262,6 +283,7 @@ export const getTransformedBuildInfraProfileResponse = ({
 
 export const getBuildInfraProfilePayload = (
     profileInput: CreateBuildInfraProfileType['profileInput'],
+    canConfigureUseK8sDriver: boolean,
 ): BuildInfraProfileInfoDTO => {
     const platformConfigurationMap = profileInput.configurations || {}
     const configurations: BuildInfraProfileInfoDTO['configurations'] = Object.entries(platformConfigurationMap).reduce<
@@ -312,6 +334,9 @@ export const getBuildInfraProfilePayload = (
         description: profileInput.description,
         type: profileInput.type,
         configurations,
+        ...(canConfigureUseK8sDriver && {
+            useK8sDriver: profileInput.useK8sDriver,
+        }),
     }
     return payload
 }

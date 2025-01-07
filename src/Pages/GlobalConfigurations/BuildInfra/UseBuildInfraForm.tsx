@@ -18,7 +18,6 @@ import {
     BuildInfraToleranceOperatorType,
     BuildInfraToleranceValueType,
     CREATE_MODE_REQUIRED_INPUT_FIELDS,
-    createBuildInfraProfile,
     DEFAULT_PROFILE_NAME,
     DEFAULT_TOLERANCE_EFFECT,
     DEFAULT_TOLERANCE_OPERATOR,
@@ -29,7 +28,7 @@ import {
     ProfileInputErrorType,
     TARGET_PLATFORM_ERROR_FIELDS_MAP,
     ToleranceHeaderType,
-    updateBuildInfraProfile,
+    upsertBuildInfraProfile,
     UseBuildInfraFormProps,
     UseBuildInfraFormResponseType,
     ValidateNodeSelectorParamsType,
@@ -285,6 +284,7 @@ const useBuildInfraForm = ({
     name,
     editProfile,
     handleSuccessRedirection,
+    canConfigureUseK8sDriver,
 }: UseBuildInfraFormProps): UseBuildInfraFormResponseType => {
     const fromCreateView = !name
 
@@ -293,6 +293,7 @@ const useBuildInfraForm = ({
             getBuildInfraProfileByName({
                 name: name ?? DEFAULT_PROFILE_NAME,
                 fromCreateView,
+                canConfigureUseK8sDriver,
             }),
         [name],
     )
@@ -766,11 +767,11 @@ const useBuildInfraForm = ({
 
         setLoadingActionRequest(true)
         try {
-            if (editProfile) {
-                await updateBuildInfraProfile({ name, profileInput })
-            } else {
-                await createBuildInfraProfile({ profileInput })
-            }
+            await upsertBuildInfraProfile({
+                name,
+                profileInput,
+                canConfigureUseK8sDriver,
+            })
             setLoadingActionRequest(false)
             ToastManager.showToast({
                 variant: ToastVariantType.success,

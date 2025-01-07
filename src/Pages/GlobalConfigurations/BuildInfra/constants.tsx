@@ -26,8 +26,6 @@ import {
     BuildInfraLocators,
     BuildInfraMetaConfigTypes,
     ProfileInputErrorType,
-    BuildInfraProfileBase,
-    BuildInfraProfileVariants,
     HandleProfileInputChangeType,
     BuildInfraProfileAdditionalErrorKeysType,
     BuildInfraAPIVersionType,
@@ -175,13 +173,6 @@ export const PROFILE_INPUT_ERROR_FIELDS = Object.fromEntries(
 
 // fields required to be filled before submitting the form in create view, since we pre-populate the form with default values so no need in configs
 export const CREATE_MODE_REQUIRED_INPUT_FIELDS = [BuildInfraMetaConfigTypes.NAME]
-
-export const CREATE_PROFILE_BASE_VALUE: BuildInfraProfileBase = {
-    name: '',
-    description: '',
-    type: BuildInfraProfileVariants.NORMAL,
-    appCount: 0,
-}
 
 export const BUILD_INFRA_TEST_IDS = {
     SUBMIT_BUTTON: 'build-infra-submit-button',
