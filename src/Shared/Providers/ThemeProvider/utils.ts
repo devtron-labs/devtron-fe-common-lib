@@ -6,9 +6,13 @@ export const getCurrentTheme = (): ThemeType => {
         return ThemeType.light
     }
 
+    const fallbackTheme =
+        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? ThemeType.dark
+            : ThemeType.light
     const theme = localStorage.getItem(THEME_STORAGE_KEY) as ThemeType
 
-    return Object.values(ThemeType).includes(theme as ThemeType) ? theme : ThemeType.light
+    return Object.values(ThemeType).includes(theme as ThemeType) ? theme : fallbackTheme
 }
 
 export const updateTheme = (theme: ThemeType) => {

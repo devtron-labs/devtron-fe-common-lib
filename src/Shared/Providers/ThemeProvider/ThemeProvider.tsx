@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { getCurrentTheme, updateTheme } from './utils'
 import { ThemeType } from './constants'
 import { ThemeContextType, ThemeProviderProps } from './types'
@@ -8,7 +8,7 @@ const themeContext = createContext<ThemeContextType>(null)
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     const [currentTheme, setCurrentTheme] = useState<ThemeType>(getCurrentTheme)
 
-    const handleThemeChange = () => {
+    const handleThemeChange: ThemeContextType['handleThemeChange'] = () => {
         setCurrentTheme((prevTheme) => {
             const updatedTheme = prevTheme === ThemeType.light ? ThemeType.dark : ThemeType.light
             updateTheme(updatedTheme)
@@ -16,6 +16,14 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
             return updatedTheme
         })
     }
+
+    useEffect(() => {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleThemeChange)
+
+        return () => {
+            window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', handleThemeChange)
+        }
+    }, [])
 
     const value = useMemo(
         () => ({
