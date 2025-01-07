@@ -78,10 +78,10 @@ const getOptionBgColor = <OptionValue>(
     }
 
     if (state.isFocused) {
-        return 'var(--N50)'
+        return 'var(--bg-secondary)'
     }
 
-    return 'var(--N0)'
+    return 'var(--bg-primary)'
 }
 
 export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
@@ -211,7 +211,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
 
         return {
             ...base,
-            background: isOptionValid ? 'var(--N0)' : 'var(--R100)',
+            background: isOptionValid ? 'var(--bg-primary)' : 'var(--R100)',
             border: isOptionValid ? '1px solid var(--N200)' : '1px solid var(--R200)',
             borderRadius: '4px',
             padding: '1px 5px',

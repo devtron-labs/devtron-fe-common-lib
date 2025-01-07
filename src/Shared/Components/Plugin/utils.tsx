@@ -105,7 +105,7 @@ export const pluginTagSelectStyles = {
         ...base,
         height: '36px',
         padding: '8px 0px',
-        backgroundColor: state.isFocused ? 'var(--N100)' : 'var(--N0)',
+        backgroundColor: state.isFocused ? 'var(--N100)' : 'var(--bg-primary)',
         color: 'var(--N900)',
         cursor: 'pointer',
         overflow: 'hidden',

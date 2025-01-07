@@ -40,7 +40,7 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
         ...base,
         minHeight: '32px',
         boxShadow: 'none',
-        backgroundColor: state.isDisabled ? 'var(--N100)' : 'var(--N50)',
+        backgroundColor: state.isDisabled ? 'var(--N100)' : 'var(--bg-secondary)',
         border: '1px solid var(--N200)',
         cursor: state.isDisabled ? 'not-allowed' : 'pointer',
 
@@ -56,7 +56,7 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
         ...base,
         color: 'var(--N900)',
         // eslint-disable-next-line no-nested-ternary
-        backgroundColor: state.isSelected ? 'var(--B100)' : state.isFocused ? 'var(--N100)' : 'var(--N0)',
+        backgroundColor: state.isSelected ? 'var(--B100)' : state.isFocused ? 'var(--N100)' : 'var(--bg-primary)',
         padding: '10px 12px',
         cursor: 'pointer',
         fontSize: '13px',
@@ -125,10 +125,10 @@ const getCustomOptionBackgroundColor = (isSelected: boolean, isFocused: boolean)
     }
 
     if (isFocused) {
-        return 'var(--N50)'
+        return 'var(--bg-secondary)'
     }
 
-    return 'var(--N0)'
+    return 'var(--bg-primary)'
 }
 
 export const getCustomOptionSelectionStyle =

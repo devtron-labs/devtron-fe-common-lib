@@ -48,7 +48,7 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
     option: (base, state) => ({
         ...base,
         color: 'var(--N900)',
-        backgroundColor: state.isFocused ? 'var(--N100)' : 'var(--N0)',
+        backgroundColor: state.isFocused ? 'var(--N100)' : 'var(--bg-primary)',
         padding: '10px 12px',
         cursor: 'pointer',
     }),
