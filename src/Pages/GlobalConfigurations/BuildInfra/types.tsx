@@ -264,7 +264,7 @@ export interface UseBuildInfraFormProps {
     /**
      * @default - false
      */
-    canConfigureUseK8sDriver: boolean
+    canConfigureUseK8sDriver?: boolean
 }
 
 export interface GetBuildInfraProfileType extends Pick<UseBuildInfraFormProps, 'canConfigureUseK8sDriver'> {
@@ -327,6 +327,7 @@ interface NumericBuildInfraConfigPayloadType {
 
 export enum BuildInfraProfileInputActionType {
     ADD_TARGET_PLATFORM = 'add_target_platform',
+    TOGGLE_USE_K8S_DRIVER = 'toggle_use_k8s_driver',
     REMOVE_TARGET_PLATFORM = 'remove_target_platform',
     RENAME_TARGET_PLATFORM = 'rename_target_platform',
     RESTORE_PROFILE_CONFIG_SNAPSHOT = 'restore_profile_config_snapshot',
@@ -341,6 +342,10 @@ export enum BuildInfraProfileInputActionType {
 }
 
 export type HandleProfileInputChangeType =
+    | {
+          action: BuildInfraProfileInputActionType.TOGGLE_USE_K8S_DRIVER
+          data?: never
+      }
     | {
           action: NumericBuildInfraConfigTypes
           data: ProfileInputDispatchDataType & NumericBuildInfraConfigPayloadType
