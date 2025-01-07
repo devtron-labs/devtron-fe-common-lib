@@ -36,10 +36,6 @@ export const FILTER_STYLE = {
         padding: '0 8px',
     }),
     menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-    menu: (base) => ({
-        ...base,
-        backgroundColor: 'var(--bg-primary)',
-    }),
 }
 
 export const GIT_BRANCH_NOT_CONFIGURED = 'Not Configured'
