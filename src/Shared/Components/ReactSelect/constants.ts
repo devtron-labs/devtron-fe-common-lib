@@ -104,4 +104,8 @@ export const CommonGroupedDropdownStyles = {
         ...base,
         position: 'absolute',
     }),
+    menu: (base) => ({
+        ...base,
+        backgroundColor: 'var(--N0)',
+    }),
 }
