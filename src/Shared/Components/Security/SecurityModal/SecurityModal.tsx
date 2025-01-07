@@ -40,6 +40,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     error,
     responseData,
     hidePolicy = false,
+    defaultState,
 }) => {
     const data = responseData ?? null
 
@@ -50,7 +51,9 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
         kubernetesManifest: !!data?.kubernetesManifest,
     }
 
-    const [state, setState] = useState<SecurityModalStateType>(getDefaultSecurityModalState(categoriesConfig))
+    const [state, setState] = useState<SecurityModalStateType>(
+        defaultState ?? getDefaultSecurityModalState(categoriesConfig),
+    )
 
     const setDetailViewData = (detailViewData: DetailViewDataType) => {
         setState((prevState) => ({
@@ -76,7 +79,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
                 onClick={handleModalClose}
                 showAriaLabelInTippy={false}
                 size={ComponentSizeType.xs}
-                style={ButtonStyleType.neutral}
+                style={ButtonStyleType.negativeGrey}
                 variant={ButtonVariantType.borderLess}
             />
         </div>

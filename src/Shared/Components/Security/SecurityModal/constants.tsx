@@ -16,7 +16,7 @@ import {
     SecurityModalStateType,
 } from './types'
 
-const DEFAULT_SECURITY_MODAL_IMAGE_STATE = {
+export const DEFAULT_SECURITY_MODAL_IMAGE_STATE = {
     category: CATEGORIES.IMAGE_SCAN,
     subCategory: SUB_CATEGORIES.VULNERABILITIES,
     detailViewData: null,
