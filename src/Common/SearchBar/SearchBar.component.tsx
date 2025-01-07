@@ -128,7 +128,7 @@ const SearchBar = ({
     return (
         <div className={`search-bar-container ${containerClassName || ''}`}>
             <div
-                className={`search-bar ${noBackgroundAndBorder ? 'dc__no-border dc__no-background dc__hover-n50' : 'bc-n50 en-2 dc__hover-border-n300'} focus-within-border-b5 dc__block w-100 min-w-200 dc__position-rel br-4 bw-1 ${getSearchBarHeightFromSize(size)}`}
+                className={`search-bar ${noBackgroundAndBorder ? 'dc__no-border dc__no-background dc__hover-n50' : 'bg__secondary en-2 dc__hover-border-n300'} focus-within-border-b5 dc__block w-100 min-w-200 dc__position-rel br-4 bw-1 ${getSearchBarHeightFromSize(size)}`}
             >
                 <Search className="search-bar__icon dc__position-abs icon-color-n6 icon-dim-16" />
                 <input
@@ -139,7 +139,7 @@ const SearchBar = ({
                     defaultValue={initialSearchText}
                     className={`search-bar__input  dc__position-abs w-100 h-100 br-4 dc__no-border pt-6 pr-10 pb-6 pl-30 fs-13 lh-20 fw-4 cn-9 placeholder-cn5 dc__left-0 ${
                         showClearButton ? 'pr-30' : 'pr-10'
-                    } ${noBackgroundAndBorder ? 'dc__no-background' : 'bc-n50'}`}
+                    } ${noBackgroundAndBorder ? 'dc__no-background' : 'bg__secondary'}`}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     ref={inputCallbackRef}

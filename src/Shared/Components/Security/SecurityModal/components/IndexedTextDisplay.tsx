@@ -23,7 +23,7 @@ const EmptyState: React.FC<{ href: string }> = ({ href }) => (
 
 const IndexedTextDisplay: React.FC<IndexedTextDisplayPropsType> = ({ title, lines, link }) => (
     <div className="flexbox-col dc__align-self-stretch bg__primary dc__outline dc__border-radius-4-imp">
-        <div className="flexbox pt-8 pb-8 pl-12 pr-12 dc__align-items-center dc__align-self-stretch dc__gap-4 dc__border-bottom-n1 bc-n50 dc__ff-monospace">
+        <div className="flexbox pt-8 pb-8 pl-12 pr-12 dc__align-items-center dc__align-self-stretch dc__gap-4 dc__border-bottom-n1 bg__secondary dc__ff-monospace">
             {link ? (
                 <a className="dc__ff-monospace" href={link} target="_blank" rel="noreferrer">
                     {title}

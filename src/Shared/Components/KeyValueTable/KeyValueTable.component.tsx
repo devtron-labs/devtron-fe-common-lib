@@ -315,7 +315,7 @@ export const KeyValueTable = <K extends string>({
     const renderFirstHeader = (key: K, label: string, className: string) => (
         <div
             key={`${key}-header`}
-            className={`bcn-50 py-8 px-12 flexbox dc__content-space dc__align-items-center ${updatedRows.length || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'} ${className || ''}`}
+            className={`bg__secondary py-8 px-12 flexbox dc__content-space dc__align-items-center ${updatedRows.length || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'} ${className || ''}`}
         >
             {isSortable ? (
                 <button
@@ -390,7 +390,7 @@ export const KeyValueTable = <K extends string>({
                             ) : (
                                 <div
                                     key={key}
-                                    className={`bcn-50 cn-9 fs-13 lh-20 py-8 px-12 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${key === firstHeaderKey ? `${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : `${hasRows ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}`}  ${className || ''}`}
+                                    className={`bg__secondary cn-9 fs-13 lh-20 py-8 px-12 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${key === firstHeaderKey ? `${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : `${hasRows ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}`}  ${className || ''}`}
                                 >
                                     {label}
                                     {!!headerComponent && headerComponent}
