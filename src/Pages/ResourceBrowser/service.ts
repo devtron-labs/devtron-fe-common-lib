@@ -1,7 +1,6 @@
 import { post, trash } from '@Common/Api'
 import { ROUTES } from '@Common/Constants'
-import { ResponseType } from '@Common/Types'
-import { MutableRefObject } from 'react'
+import { APIOptions, ResponseType } from '@Common/Types'
 import {
     CreateResourceDTO,
     CreateResourcePayload,
@@ -26,10 +25,10 @@ export const createNewResource = (
 
 export const deleteResource = (
     resourceListPayload: ResourceListPayloadType,
-    abortControllerRef?: MutableRefObject<AbortController>,
+    abortControllerRef?: APIOptions['abortControllerRef'],
 ): Promise<ResponseType<ResourceType[]>> => post(ROUTES.DELETE_RESOURCE, resourceListPayload, { abortControllerRef })
 
 export const deleteNodeCapacity = (
     requestPayload: NodeActionRequest,
-    abortControllerRef?: MutableRefObject<AbortController>,
+    abortControllerRef?: APIOptions['abortControllerRef'],
 ): Promise<ResponseType> => trash(ROUTES.NODE_CAPACITY, requestPayload, { abortControllerRef })

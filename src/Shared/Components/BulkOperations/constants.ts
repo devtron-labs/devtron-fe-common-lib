@@ -1,9 +1,9 @@
 import { BulkOperationResultType } from './types'
 
 export const COLOR_MAPPING = {
-    Completed: '#1DAD70',
-    Pending: '#B1B7BC',
-    Failed: '#F33E3E',
+    Completed: 'var(--G500)',
+    Pending: 'var(--N300)',
+    Failed: 'var(--R500)',
 }
 
 export const RESULTS_MODAL_HEADERS: { label: string; isSortable: boolean; width: string }[] = [

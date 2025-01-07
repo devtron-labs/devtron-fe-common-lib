@@ -1,8 +1,8 @@
 import { BuildStageType, FormType } from '@Common/CIPipeline.Types'
-import { DeploymentAppTypes, DeploymentNodeType } from '@Common/Types'
+import { APIOptions, DeploymentAppTypes, DeploymentNodeType } from '@Common/Types'
+import { STAGE_MAP } from '@Pages/index'
 import { DeploymentStrategy } from '@Shared/Components'
 import { EnvListMinDTO, RuntimeParamsTriggerPayloadType } from '@Shared/types'
-import { MutableRefObject } from 'react'
 
 interface ConfigSecretType {
     label: string
@@ -107,14 +107,13 @@ export interface SelectedResourceType {
     clusterName?: string
 }
 
-export interface TriggerCDNodeServiceProps {
+export interface TriggerCDNodeServiceProps extends Pick<APIOptions, 'abortControllerRef'> {
     pipelineId: number
     ciArtifactId: number
     appId: number
     stageType: DeploymentNodeType
     deploymentWithConfig?: string
     wfrId?: number
-    abortControllerRef?: MutableRefObject<AbortController>
     /**
      * Would be available only case of PRE/POST CD
      */
@@ -126,6 +125,6 @@ export interface TriggerCDPipelinePayloadType
         TriggerCDNodeServiceProps,
         'pipelineId' | 'appId' | 'ciArtifactId' | 'runtimeParamsPayload' | 'deploymentWithConfig'
     > {
-    cdWorkflowType: string
+    cdWorkflowType: (typeof STAGE_MAP)[keyof typeof STAGE_MAP]
     wfrIdForDeploymentWithSpecificTrigger?: number
 }

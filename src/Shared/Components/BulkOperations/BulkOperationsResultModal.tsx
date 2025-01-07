@@ -118,7 +118,7 @@ const BulkOperationsResultModal = ({
                     />
                 </header>
                 <div className="flexbox-col dc__gap-16 dc__overflow-hidden pt-20 flex-grow-1 bulk-operations__results-modal__content">
-                    <div className="bulk-operations__results-modal__bar-chart ml-20 mr-20 flexbox-col">
+                    <div className="bulk-operations__results-modal__bar-chart br-8 flexbox-col dc__align-start dc__align-self-stretch dc__border bcn-0 ml-20 mr-20">
                         <SegmentedBarChart
                             entities={resultsStore.getBarChartEntities()}
                             rootClassName="p-16 fs-13 dc__border-bottom-n1"
@@ -137,7 +137,7 @@ const BulkOperationsResultModal = ({
                     </div>
                     <div className="flexbox-col lh-20 dc__overflow-hidden">
                         <div
-                            className="dc__grid dc__border-bottom-n1 py-10 fs-12 fw-6 cn-7 ml-20 mr-20 dc__gap-16"
+                            className="dc__grid dc__border-bottom-n1 py-8 fs-12 fw-6 cn-7 ml-20 mr-20 dc__gap-16"
                             style={{ gridTemplateColumns }}
                         >
                             {modalHeaders.map((header) => (

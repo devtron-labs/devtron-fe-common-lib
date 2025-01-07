@@ -170,22 +170,20 @@ const BulkOperations = ({
 
     const renderConfirmationDialog = () => (
         <ConfirmationModal
-            {...{
-                ...confirmationModalConfig,
-                handleClose: handleModalClose,
-                showConfirmationModal: true,
-                buttonConfig: {
-                    primaryButtonConfig: {
-                        ...confirmationModalConfig.buttonConfig.primaryButtonConfig,
-                        onClick: handleBulkOperations,
-                        disabled: apiCallInProgress,
-                        isLoading: apiCallInProgress,
-                    },
-                    secondaryButtonConfig: {
-                        ...confirmationModalConfig.buttonConfig.secondaryButtonConfig,
-                        onClick: handleModalClose,
-                        disabled: apiCallInProgress,
-                    },
+            {...confirmationModalConfig}
+            handleClose={handleModalClose}
+            showConfirmationModal
+            buttonConfig={{
+                primaryButtonConfig: {
+                    ...confirmationModalConfig.buttonConfig.primaryButtonConfig,
+                    onClick: handleBulkOperations,
+                    disabled: apiCallInProgress,
+                    isLoading: apiCallInProgress,
+                },
+                secondaryButtonConfig: {
+                    ...confirmationModalConfig.buttonConfig.secondaryButtonConfig,
+                    onClick: handleModalClose,
+                    disabled: apiCallInProgress,
                 },
             }}
         />

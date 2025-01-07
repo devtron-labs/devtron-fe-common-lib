@@ -1,6 +1,6 @@
 import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
-import { MutableRefObject, ReactNode } from 'react'
-import { DrawerProps } from '@Common/index'
+import { ReactNode } from 'react'
+import { APIOptions, DrawerProps } from '@Common/index'
 import { getProgressingStateForStatus } from '../Security'
 import { ConfirmationModalProps } from '../ConfirmationModal/types'
 
@@ -20,7 +20,7 @@ export interface BulkOperation {
      * Would show these keys beside the name
      */
     additionalKeys?: BulkOperationAdditionalKeysType[]
-    operation: (abortControllerRef: MutableRefObject<AbortController>, data?: unknown) => Promise<unknown | void>
+    operation: (abortControllerRef: APIOptions['abortControllerRef'], data?: unknown) => Promise<unknown | void>
     renderContentAtResultRowEnd?: (data: Awaited<ReturnType<BulkOperation['operation']>>) => ReactNode
 }
 
