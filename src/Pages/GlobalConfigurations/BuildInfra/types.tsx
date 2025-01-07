@@ -240,7 +240,7 @@ interface BuildInfraProfileBaseDTO {
     /**
      * @default `BuildXDriverType.KUBERNETES`
      */
-    buildxDriverType: BuildXDriverType
+    buildxDriverType?: BuildXDriverType
 }
 
 export interface BuildInfraProfileBase extends Omit<BuildInfraProfileBaseDTO, 'buildxDriverType'> {

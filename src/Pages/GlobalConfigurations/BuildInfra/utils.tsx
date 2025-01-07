@@ -113,12 +113,12 @@ const getBaseProfileObject = ({
     profile,
     canConfigureUseK8sDriver,
 }: GetBaseProfileObjectParamsType): BuildInfraProfileBase => {
-    const parsedUseK8sDriverValue = profile.buildxDriverType
+    const parsedUseK8sDriverValue = profile?.buildxDriverType
         ? profile.buildxDriverType === BuildXDriverType.KUBERNETES
         : true
     const useK8sDriver = canConfigureUseK8sDriver ? parsedUseK8sDriverValue : null
 
-    if (fromCreateView) {
+    if (fromCreateView || !profile) {
         return {
             name: '',
             description: '',
@@ -131,7 +131,7 @@ const getBaseProfileObject = ({
     return {
         id: profile.id,
         name: profile.name,
-        description: profile.description,
+        description: profile.description?.trim(),
         type: profile.type,
         appCount: profile.appCount,
         useK8sDriver,
@@ -273,12 +273,11 @@ export const getTransformedBuildInfraProfileResponse = ({
         configurationUnits,
         fallbackPlatformConfigurationMap,
         profile: {
-            ...(profile &&
-                getBaseProfileObject({
-                    fromCreateView,
-                    profile,
-                    canConfigureUseK8sDriver,
-                })),
+            ...getBaseProfileObject({
+                fromCreateView,
+                profile,
+                canConfigureUseK8sDriver,
+            }),
             configurations,
         },
     }
@@ -334,7 +333,7 @@ export const getBuildInfraProfilePayload = (
 
     const payload: BuildInfraProfileInfoDTO = {
         name: profileInput.name,
-        description: profileInput.description,
+        description: profileInput.description?.trim(),
         type: profileInput.type,
         configurations,
         ...(canConfigureUseK8sDriver && {
