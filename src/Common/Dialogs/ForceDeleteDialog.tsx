@@ -33,7 +33,7 @@ export default function ForceDeleteDialog({
                 deletePrefix="Force "
             >
                 <DeleteDialog.Description>
-                    <p className="mt-12 mb-12 p-8 dc__break-word dc__window-bg">Error: {forceDeleteDialogMessage}</p>
+                    <p className="mt-12 mb-12 p-8 dc__break-word bg__tertiary">Error: {forceDeleteDialogMessage}</p>
                     <p>Do you want to force delete?</p>
                 </DeleteDialog.Description>
             </DeleteDialog>
