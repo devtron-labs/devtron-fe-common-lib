@@ -225,6 +225,11 @@ export type BuildInfraConfigurationMapTypeWithoutDefaultFallback = {
 
 export type BuildInfraConfigurationMapType = Record<BuildInfraConfigTypes, BuildInfraConfigurationType>
 
+export enum BuildXDriverType {
+    KUBERNETES = 'kubernetes',
+    DOCKER_CONTAINER = 'docker-container',
+}
+
 interface BuildInfraProfileBaseDTO {
     id?: number
     name?: string
@@ -232,10 +237,15 @@ interface BuildInfraProfileBaseDTO {
     type: BuildInfraProfileVariants
     appCount?: number
     active?: boolean
-    useK8sDriver?: boolean
+    /**
+     * @default `BuildXDriverType.KUBERNETES`
+     */
+    buildxDriverType: BuildXDriverType
 }
 
-export interface BuildInfraProfileBase extends BuildInfraProfileBaseDTO {}
+export interface BuildInfraProfileBase extends Omit<BuildInfraProfileBaseDTO, 'buildxDriverType'> {
+    useK8sDriver?: boolean
+}
 
 export interface BuildInfraProfileInfoDTO extends BuildInfraProfileBaseDTO {
     configurations: BuildInfraPlatformConfigurationMapDTO
@@ -412,7 +422,7 @@ export interface UseBuildInfraFormResponseType {
     profileInputErrors: ProfileInputErrorType
     handleProfileInputChange: ({ action, data }: HandleProfileInputChangeType) => void
     loadingActionRequest: boolean
-    handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>
+    handleSubmit: (e?: FormEvent<HTMLFormElement>) => Promise<void>
 }
 
 export interface BuildInfraConfigFormProps

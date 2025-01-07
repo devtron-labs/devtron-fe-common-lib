@@ -34,6 +34,7 @@ import {
     BuildInfraProfileVariants,
     BuildInfraToleranceOperatorType,
     BuildInfraToleranceValueType,
+    BuildXDriverType,
     CreateBuildInfraProfileType,
     GetBaseProfileObjectParamsType,
     GetPlatformConfigurationsWithDefaultValuesParamsType,
@@ -112,7 +113,9 @@ const getBaseProfileObject = ({
     profile,
     canConfigureUseK8sDriver,
 }: GetBaseProfileObjectParamsType): BuildInfraProfileBase => {
-    const parsedUseK8sDriverValue = profile?.useK8sDriver || true
+    const parsedUseK8sDriverValue = profile.buildxDriverType
+        ? profile.buildxDriverType === BuildXDriverType.KUBERNETES
+        : true
     const useK8sDriver = canConfigureUseK8sDriver ? parsedUseK8sDriverValue : null
 
     if (fromCreateView) {
@@ -335,7 +338,9 @@ export const getBuildInfraProfilePayload = (
         type: profileInput.type,
         configurations,
         ...(canConfigureUseK8sDriver && {
-            useK8sDriver: profileInput.useK8sDriver,
+            buildxDriverType: profileInput.useK8sDriver
+                ? BuildXDriverType.KUBERNETES
+                : BuildXDriverType.DOCKER_CONTAINER,
         }),
     }
     return payload

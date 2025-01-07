@@ -331,7 +331,7 @@ const useBuildInfraForm = ({
         const currentInput = structuredClone(profileInput)
         const currentInputErrors = structuredClone(profileInputErrors)
         const targetPlatform =
-            'targetPlatform' in data && Object.hasOwn(data, 'targetPlatform') ? data.targetPlatform : ''
+            data && 'targetPlatform' in data && Object.hasOwn(data, 'targetPlatform') ? data.targetPlatform : ''
         const currentConfiguration = currentInput.configurations[targetPlatform]
         const lastSavedConfiguration = profileResponse.profile.configurations[targetPlatform] || currentConfiguration
 
@@ -754,8 +754,8 @@ const useBuildInfraForm = ({
         setProfileInputErrors(currentInputErrors)
     }
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+    const handleSubmit = async (event?: FormEvent<HTMLFormElement>) => {
+        event?.preventDefault()
         // Since considering '' as a valid error message
         const hasErrors =
             Object.keys(profileInputErrors).filter(
