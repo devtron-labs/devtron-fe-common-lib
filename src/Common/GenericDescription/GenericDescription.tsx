@@ -268,7 +268,7 @@ const GenericDescription = ({
         <div className="cluster__body-details">
             <div data-testid="generic-description-wrapper" className="dc__overflow-hidden">
                 {isEditDescriptionView ? (
-                    <div className="min-w-500 bcn-0 br-4 dc__border-top dc__border-left dc__border-right w-100 dc__border-bottom">
+                    <div className="min-w-500 bg__primary br-4 dc__border-top dc__border-left dc__border-right w-100 dc__border-bottom">
                         <div className="pt-8 pb-8 pl-16 pr-16 dc__top-radius-4 flex bc-n50 dc__border-bottom h-36">
                             <div className="flexbox dc__gap-6 dc__align-items-center">
                                 <UnorderedListIcon className="icon-dim-16" />

@@ -130,7 +130,7 @@ const DeploymentHistoryDiffView = ({
                 </div>
             )}
             <div
-                className={`en-2 bw-1 br-4 bcn-0 py-4 ${
+                className={`en-2 bw-1 br-4 bg__primary py-4 ${
                     previousConfigAvailable ? 'deployment-diff__upper' : ''
                 } ${rootClassName ?? ''}`}
                 data-testid={`configuration-link-${
@@ -173,7 +173,7 @@ const DeploymentHistoryDiffView = ({
             {(currentConfiguration?.codeEditorValue?.value || baseTemplateConfiguration?.codeEditorValue?.value) && (
                 <div className="en-2 bw-1 br-4 mt-16 dc__overflow-auto">
                     <div
-                        className="code-editor-header-value px-12 py-8 fs-13 fw-6 cn-9 bcn-0 dc__top-radius-4 dc__border-bottom"
+                        className="code-editor-header-value px-12 py-8 fs-13 fw-6 cn-9 bg__primary dc__top-radius-4 dc__border-bottom"
                         data-testid="configuration-link-comparison-body-heading"
                     >
                         <span>{baseTemplateConfiguration?.codeEditorValue?.displayName}</span>

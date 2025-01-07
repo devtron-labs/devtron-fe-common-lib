@@ -54,7 +54,7 @@ const SummaryTooltipCard = React.memo(
         ciMaterials,
         gitTriggers,
     }: SummaryTooltipCardType): JSX.Element => (
-        <div className="build-card-popup p-16 br-4 w-400 bcn-0 mxh-300 dc__overflow-scroll">
+        <div className="build-card-popup p-16 br-4 w-400 bg__primary mxh-300 dc__overflow-scroll">
             <span className="fw-6 fs-16 mb-4" style={{ color: colorMap[status.toLowerCase()] }}>
                 {status.toLowerCase() === 'cancelled' ? 'Aborted' : status}
             </span>

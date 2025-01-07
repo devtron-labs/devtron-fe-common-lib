@@ -58,7 +58,7 @@ const ConfirmationModalBody = ({
     return (
         <Backdrop onEscape={handleCloseWrapper}>
             <motion.div
-                className="confirmation-modal flexbox-col br-8 bcn-0 dc__m-auto mt-40 w-400"
+                className="confirmation-modal flexbox-col br-8 bg__primary dc__m-auto mt-40 w-400"
                 exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}
                 initial={{ y: 100, opacity: 0, scale: 0.75 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}

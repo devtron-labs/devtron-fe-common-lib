@@ -832,7 +832,7 @@ const TriggerOutput = ({
                         environmentName={selectedEnvironmentName}
                         renderTargetConfigInfo={renderTargetConfigInfo}
                     />
-                    <ul className="pl-50 pr-20 pt-8 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bcn-0 dc__zi-3">
+                    <ul className="pl-50 pr-20 pt-8 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bg__primary dc__zi-3">
                         {triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM && (
                             <li className="tab-list__tab" data-testid="deployment-history-steps-link">
                                 <NavLink

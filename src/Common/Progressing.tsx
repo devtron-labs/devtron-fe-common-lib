@@ -53,7 +53,7 @@ export const DetailsProgressing = ({
     children,
 }: ProgressingProps): JSX.Element => (
     <div
-        className={`details-loader bcn-0 flex column fs-14 fw-6 ${fullHeight ? 'h-100' : 'details-loader-height'}`}
+        className={`details-loader bg__primary flex column fs-14 fw-6 ${fullHeight ? 'h-100' : 'details-loader-height'}`}
         style={styles}
         data-testid="details-progressing"
     >

@@ -35,7 +35,7 @@ const SecuritySummaryCard = ({
     return (
         <>
             <div
-                className={`flexbox-col bcn-0 dc__border br-8 dc__tab-focus ${rootClassName}`}
+                className={`flexbox-col bg__primary dc__border br-8 dc__tab-focus ${rootClassName}`}
                 role="button"
                 tabIndex={0}
                 onClick={handleOpenSecurityModal}
