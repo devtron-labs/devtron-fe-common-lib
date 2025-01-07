@@ -12,8 +12,10 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
     const [modalState, setModalState] = useState<SecurityModalStateType>(DEFAULT_SECURITY_MODAL_IMAGE_STATE)
     const { imageScan, codeScan, kubernetesManifest } = scanResult
 
-    const scanToolId =
+    const imageScanToolId =
         imageScan?.vulnerability?.list?.[0].scanToolName === 'TRIVY' ? SCAN_TOOL_ID_TRIVY : SCAN_TOOL_ID_CLAIR
+    const codeScanToolId = codeScan?.scanToolName === 'TRIVY' ? SCAN_TOOL_ID_TRIVY : SCAN_TOOL_ID_CLAIR
+    const manifestScanToolId = kubernetesManifest?.scanToolName === 'TRIVY' ? SCAN_TOOL_ID_TRIVY : SCAN_TOOL_ID_CLAIR
 
     const handleCardClick = (
         category: SecurityCardProps['category'],
@@ -38,7 +40,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
                     <div className="flexbox-col dc__gap-12">
                         <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
                             <span className="fs-13 fw-6 lh-1-5 cn-9">Image Scan</span>
-                            <ScannedByToolModal scanToolId={scanToolId} />
+                            <ScannedByToolModal scanToolId={imageScanToolId} />
                         </div>
                         <div className="flexbox dc__gap-12">
                             <SecurityCard
@@ -62,7 +64,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
                     <div className="flexbox-col dc__gap-12">
                         <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
                             <span className="fs-13 fw-6 lh-1-5 cn-9">Code Scan</span>
-                            <ScannedByToolModal scanToolId={scanToolId} />
+                            <ScannedByToolModal scanToolId={codeScanToolId} />
                         </div>
                         <div className="flexbox dc__gap-12">
                             <SecurityCard
@@ -104,7 +106,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
                     <div className="flexbox-col dc__gap-12">
                         <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
                             <span className="fs-13 fw-6 lh-1-5 cn-9">Manifest Scan</span>
-                            <ScannedByToolModal scanToolId={scanToolId} />
+                            <ScannedByToolModal scanToolId={manifestScanToolId} />
                         </div>
                         <div className="flexbox dc__gap-12">
                             <SecurityCard
