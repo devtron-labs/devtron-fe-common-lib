@@ -15,7 +15,7 @@
  */
 
 .ci-details {
-    background-color: var(--N0);
+    background-color: var(--bg-primary);
     overflow: hidden;
     height: 100%;
     width: 100%;
@@ -174,7 +174,7 @@
 
     &:hover {
         text-decoration: unset;
-        background: var(--N50);
+        background: var(--bg-secondary);
     }
 
     &.active {
@@ -240,7 +240,7 @@
     .resource-list {
         .app-status-row {
             &:hover {
-                background-color: var(--N50);
+                background-color: var(--bg-secondary);
             }
         }
     }

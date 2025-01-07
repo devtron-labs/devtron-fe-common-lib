@@ -60,11 +60,11 @@
         width: calc(50% - 4px);
         left: 4px;
         bottom: 4px;
-        background-color: var(--N0);
+        background-color: var(--bg-primary);
         transition: all 0.4s ease;
     }
     &.with-icon {
-        background-color: var(--N0) !important;
+        background-color: var(--bg-primary) !important;
         svg {
             position: absolute;
             content: '';
@@ -106,7 +106,7 @@ input:focus + .toggle__slider {
             height: 16px;
             width: 16px;
             margin-top: 1px;
-            background-color: var(--N0);
+            background-color: var(--bg-primary);
             left: 0;
             padding: 0;
             border-radius: 3px;
@@ -116,7 +116,7 @@ input:focus + .toggle__slider {
     input:checked + .toggle__slider {
         &.with-icon svg {
             left: -6px;
-            background-color: var(--N0);
+            background-color: var(--bg-primary);
         }
     }
 

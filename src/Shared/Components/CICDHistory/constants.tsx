@@ -28,7 +28,7 @@ export const FILTER_STYLE = {
         ...base,
         minHeight: '36px',
         fontWeight: '400',
-        backgroundColor: 'var(--N50)',
+        backgroundColor: 'var(--bg-secondary)',
         cursor: 'pointer',
     }),
     dropdownIndicator: (base) => ({
@@ -38,7 +38,7 @@ export const FILTER_STYLE = {
     menuPortal: (base) => ({ ...base, zIndex: 9999 }),
     menu: (base) => ({
         ...base,
-        backgroundColor: 'var(--N0)',
+        backgroundColor: 'var(--bg-primary)',
     }),
 }
 

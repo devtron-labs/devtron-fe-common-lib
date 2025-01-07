@@ -157,7 +157,7 @@ export const reactSelectStyles = {
         minHeight: '36px',
         cursor: 'pointer',
         borderColor: 'var(--N200)',
-        backgroundColor: 'var(--N50)',
+        backgroundColor: 'var(--bg-secondary)',
 
         ...(state.isDisabled
             ? {

@@ -38,7 +38,7 @@
             }
 
             tr:nth-child(2n + 3) {
-                background: var(--N50);
+                background: var(--bg-secondary);
             }
 
             tr:first-child {
@@ -59,7 +59,7 @@
         overflow: auto;
         font-size: 85%;
         line-height: 1.45;
-        background-color: var(--N50);
+        background-color: var(--bg-secondary);
         border-radius: 3px;
 
         code {
