@@ -64,8 +64,8 @@ const renderLogsNotAvailable = (subtitle?: string): JSX.Element => (
             <div className="text-center">
                 <Info className="icon-dim-20" />
             </div>
-            <div className="text-center cn-0 fs-14 fw-6">Logs not available</div>
-            <div className="text-center cn-0 fs-13 fw-4">
+            <div className="text-center text__white fs-14 fw-6">Logs not available</div>
+            <div className="text-center text__white fs-13 fw-4">
                 {subtitle || 'Blob storage was not configured at pipeline run.'}
             </div>
         </div>

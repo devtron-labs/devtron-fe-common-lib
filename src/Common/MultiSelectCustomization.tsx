@@ -196,6 +196,14 @@ export const multiSelectStyles = {
         ...base,
         color: state.selectProps.menuIsOpen ? 'var(--N500)' : base.color,
     }),
+    singleValue: (base) => ({
+        ...base,
+        color: 'var(--N900)',
+    }),
+    input: (base) => ({
+        ...base,
+        color: 'var(--N900)',
+    }),
 }
 
 export interface CustomSelect {
