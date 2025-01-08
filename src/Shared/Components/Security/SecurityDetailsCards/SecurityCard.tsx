@@ -86,7 +86,7 @@ const SecurityCard = ({
                     </div>
                 </div>
                 {hasThreats ? (
-                    <ICShieldWarning className="icon-dim-24" />
+                    <ICShieldWarning className="icon-dim-24 scr-5" />
                 ) : (
                     <ICShieldSecure className="icon-dim-24 scg-5" />
                 )}
