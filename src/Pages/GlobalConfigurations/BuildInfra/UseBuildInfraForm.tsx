@@ -605,6 +605,20 @@ const useBuildInfraForm = ({
                 if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] || {}).length === 0) {
                     currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
                 }
+
+                // Will validate all the keys since checking duplicates
+                const existingKeys = currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.map(
+                    (selector) => selector.key,
+                )
+
+                currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.forEach((selector) => {
+                    validateNodeSelector({
+                        selector,
+                        existingKeys,
+                        profileInputErrors: currentInputErrors,
+                    })
+                })
+
                 break
             }
 
