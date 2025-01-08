@@ -3,10 +3,11 @@ import { ReactComponent as ICShieldWarning } from '@Icons/ic-shield-warning-outl
 import { ReactComponent as ICShieldSecure } from '@Icons/ic-shield-check.svg'
 import { ReactComponent as ICArrowRight } from '@Icons/ic-caret-down-small.svg'
 import { SecurityCardProps } from './types'
-import { CATEGORIES, SUB_CATEGORIES } from '../SecurityModal/types'
-import { CATEGORY_LABELS, SEVERITIES } from '../SecurityModal/constants'
+import { SUB_CATEGORIES } from '../SecurityModal/types'
+import { SEVERITIES } from '../SecurityModal/constants'
 import './securityCard.scss'
 import { getTotalSeverities } from '../utils'
+import { SECURITY_CONFIG } from '../constants'
 
 const SecurityCard = ({
     category,
@@ -25,17 +26,6 @@ const SecurityCard = ({
             value: severityCount[key],
         }))
         .filter((entity) => !!entity.value)
-
-    const getScanType = () => {
-        switch (category) {
-            case CATEGORIES.KUBERNETES_MANIFEST:
-                return CATEGORY_LABELS.KUBERNETES_MANIFEST
-            case CATEGORIES.CODE_SCAN:
-                return CATEGORY_LABELS.CODE_SCAN
-            default:
-                return CATEGORY_LABELS.IMAGE_SCAN
-        }
-    }
 
     const getTitleSubtitle = (): { title: string; subtitle?: string } => {
         switch (subCategory) {
@@ -79,7 +69,7 @@ const SecurityCard = ({
         >
             <div className="flexbox dc__content-space">
                 <div className="flexbox-col">
-                    <span className="fs-12 fw-4 lh-1-5 cn-7">{getScanType()}</span>
+                    <span className="fs-12 fw-4 lh-1-5 cn-7">{SECURITY_CONFIG[category].label}</span>
                     <div className="fs-15 fw-6 lh-1-5 cn-9 flex">
                         <span className="security-card-title">{title}</span>
                         <ICArrowRight className="icon-dim-20 dc__flip-270 scb-5 arrow-right" />

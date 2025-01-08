@@ -17,13 +17,13 @@ export const getSecurityConfig = ({
     kubernetesManifest,
 }: CategoriesConfig): SecurityConfigType => ({
     ...(imageScan && {
-        [CATEGORIES.IMAGE_SCAN]: SECURITY_CONFIG.imageScan,
+        [CATEGORIES.IMAGE_SCAN]: SECURITY_CONFIG[CATEGORIES.IMAGE_SCAN],
     }),
     ...(codeScan && {
-        [CATEGORIES.CODE_SCAN]: SECURITY_CONFIG.codeScan,
+        [CATEGORIES.CODE_SCAN]: SECURITY_CONFIG[CATEGORIES.CODE_SCAN],
     }),
     ...(kubernetesManifest && {
-        [CATEGORIES.KUBERNETES_MANIFEST]: SECURITY_CONFIG.kubernetesManifest,
+        [CATEGORIES.KUBERNETES_MANIFEST]: SECURITY_CONFIG[CATEGORIES.KUBERNETES_MANIFEST],
     }),
 })
 

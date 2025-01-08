@@ -59,34 +59,31 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
     return (
         <>
             <div className="flexbox-col dc__gap-20">
-                {Object.keys(SECURITY_CONFIG).map((category: ScanCategories) => {
-                    const scanToolId = getScanToolId(category)
-                    return (
-                        <div className="flexbox-col dc__gap-12" key={category}>
-                            <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
-                                <span className="fs-13 fw-6 lh-1-5 cn-9">{SECURITY_CONFIG[category].label}</span>
-                                <ScannedByToolModal scanToolId={scanToolId} />
-                            </div>
-                            <div className="dc__grid security-cards">
-                                {SECURITY_CONFIG[category].subCategories.map((subCategory: ScanSubCategories) => {
-                                    const severityCount =
-                                        subCategory === SUB_CATEGORIES.MISCONFIGURATIONS
-                                            ? scanResult[category][subCategory]?.misConfSummary?.status
-                                            : scanResult[category][subCategory]?.summary?.severities
-
-                                    return (
-                                        <SecurityCard
-                                            category={category}
-                                            subCategory={subCategory}
-                                            severityCount={severityCount}
-                                            handleCardClick={handleCardClick(category, subCategory)}
-                                        />
-                                    )
-                                })}
-                            </div>
+                {Object.keys(SECURITY_CONFIG).map((category: ScanCategories) => (
+                    <div className="flexbox-col dc__gap-12" key={category}>
+                        <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
+                            <span className="fs-13 fw-6 lh-1-5 cn-9">{SECURITY_CONFIG[category].label}</span>
+                            <ScannedByToolModal scanToolId={getScanToolId(category)} />
                         </div>
-                    )
-                })}
+                        <div className="dc__grid security-cards">
+                            {SECURITY_CONFIG[category].subCategories.map((subCategory: ScanSubCategories) => {
+                                const severityCount =
+                                    subCategory === SUB_CATEGORIES.MISCONFIGURATIONS
+                                        ? scanResult[category][subCategory]?.misConfSummary?.status
+                                        : scanResult[category][subCategory]?.summary?.severities
+
+                                return (
+                                    <SecurityCard
+                                        category={category}
+                                        subCategory={subCategory}
+                                        severityCount={severityCount}
+                                        handleCardClick={handleCardClick(category, subCategory)}
+                                    />
+                                )
+                            })}
+                        </div>
+                    </div>
+                ))}
             </div>
             {showSecurityModal && (
                 <SecurityModal
