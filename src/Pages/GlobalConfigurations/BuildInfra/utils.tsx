@@ -43,6 +43,7 @@ import {
     BUILD_INFRA_DEFAULT_PLATFORM_NAME,
     BUILD_INFRA_LATEST_API_VERSION,
     INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X,
+    USE_BUILD_X_DRIVER_FALLBACK,
 } from './constants'
 import { getUniqueId } from '../../../Shared'
 
@@ -108,14 +109,20 @@ export const parsePlatformConfigIntoValue = (
     }
 }
 
+export const getParsedValueForUseK8sDriver = (buildxDriverType: BuildXDriverType): boolean => {
+    if (!buildxDriverType) {
+        return USE_BUILD_X_DRIVER_FALLBACK
+    }
+
+    return buildxDriverType === BuildXDriverType.KUBERNETES
+}
+
 const getBaseProfileObject = ({
     fromCreateView,
     profile,
     canConfigureUseK8sDriver,
 }: GetBaseProfileObjectParamsType): BuildInfraProfileBase => {
-    const parsedUseK8sDriverValue = profile?.buildxDriverType
-        ? profile.buildxDriverType === BuildXDriverType.KUBERNETES
-        : true
+    const parsedUseK8sDriverValue = getParsedValueForUseK8sDriver(profile?.buildxDriverType)
     const useK8sDriver = canConfigureUseK8sDriver ? parsedUseK8sDriverValue : null
 
     if (fromCreateView || !profile) {

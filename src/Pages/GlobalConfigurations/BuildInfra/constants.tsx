@@ -247,3 +247,5 @@ export const DEFAULT_TOLERANCE_OPERATOR = BuildInfraToleranceOperatorType.EQUALS
 export const INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X: Partial<Record<BuildInfraConfigTypes, true>> = {
     [BuildInfraConfigTypes.BUILD_TIMEOUT]: true,
 }
+
+export const USE_BUILD_X_DRIVER_FALLBACK = true
