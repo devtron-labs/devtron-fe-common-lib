@@ -5,6 +5,7 @@ import { VIRTUALIZED_LIST_ROOT_ID, VIRTUALIZED_LIST_ROOT_Z_INDEX } from './Virtu
 import { VirtualizedListItem, VirtualizedListProps } from './VirtualizedList.types'
 
 export const VirtualizedList = <ListKeys extends string | number, ExtendedType extends object>({
+    className,
     items,
     renderItem,
     ...restProps
@@ -56,6 +57,7 @@ export const VirtualizedList = <ListKeys extends string | number, ExtendedType e
     return (
         <AutoSizedStickyTree
             {...restProps}
+            className={`mh-0 ${className || ''}`}
             renderRoot={false}
             root={root}
             getChildren={getChildren}
