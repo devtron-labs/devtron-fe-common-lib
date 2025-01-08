@@ -3,7 +3,7 @@ import { TooltipProps } from './types'
 
 const ShortcutKeyComboTooltipContent = ({ text, combo }: TooltipProps['shortcutKeyCombo']) => (
     <div className="flexbox dc__gap-8 px-8 py-4 flex-wrap">
-        <span className="lh-18 fs-12 fw-4 text-white">{text}</span>
+        <span className="lh-18 fs-12 fw-4 text__white">{text}</span>
         {!!combo?.length && (
             <div className="flexbox dc__gap-4 dc__align-items-center flex-wrap">
                 {combo.map((key) => (
