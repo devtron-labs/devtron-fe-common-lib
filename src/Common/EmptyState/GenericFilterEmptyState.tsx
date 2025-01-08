@@ -15,6 +15,8 @@
  */
 
 import noResult from '@Images/empty-noresult@2x.png'
+import { Button, ButtonVariantType } from '@Shared/Components'
+import { ComponentSizeType } from '@Shared/constants'
 import GenericEmptyState from './GenericEmptyState'
 import { GenericFilterEmptyStateProps } from './types'
 
@@ -30,9 +32,13 @@ const GenericFilterEmptyState = ({
     const isClearFilterButtonAvailable = !!handleClearFilters
 
     const renderClearFilterButton = () => (
-        <button type="button" onClick={handleClearFilters} className="cta secondary flex h-32 lh-20-imp">
-            Clear Filters
-        </button>
+        <Button
+            dataTestId="clear-filters"
+            onClick={handleClearFilters}
+            variant={ButtonVariantType.secondary}
+            size={ComponentSizeType.medium}
+            text="Clear Filters"
+        />
     )
 
     return (
