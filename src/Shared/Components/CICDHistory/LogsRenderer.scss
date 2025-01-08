@@ -7,7 +7,7 @@
                 border: none !important;
 
                 input {
-                    color: var(--N0);
+                    color: var(--white);
 
                     &::placeholder {
                         color: var(--N500);
@@ -36,7 +36,7 @@
         }
 
         &__stage-accordion {
-            background-color: var(--N900);
+            background-color: #0c1021;
 
             &:not(&--open-stage):hover {
                 background-color: rgba(44, 51, 84, 0.5);
