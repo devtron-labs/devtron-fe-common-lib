@@ -1,4 +1,14 @@
-import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
+import {
+    createElement,
+    createRef,
+    Fragment,
+    ReactElement,
+    RefObject,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
@@ -74,10 +84,10 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
             {},
         )
     }
+    const rowIds = useMemo(() => rows.map(({ id }) => id), [rows])
 
     useEffect(() => {
         setIsRowAdded(rows.length > 0 && Object.keys(cellRef.current).length < rows.length)
-        const rowIds = rows.map(({ id }) => id)
 
         const updatedCellRef = rowIds.reduce((acc, curr) => {
             if (cellRef.current[curr]) {
@@ -89,14 +99,16 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
         }, {})
 
         cellRef.current = updatedCellRef
-    }, [rows.length])
+    }, [JSON.stringify(rowIds)])
 
     useEffect(() => {
-        // Using the below logic to ensure the cell is focused after row addition.
-        const cell = cellRef.current[rows[0].id][focusableFieldKey || headers[0].key].current
-        if (isRowAdded && cell) {
-            cell.focus()
-            setIsRowAdded(false)
+        if (isRowAdded) {
+            // Using the below logic to ensure the cell is focused after row addition.
+            const cell = cellRef.current[rows[0].id][focusableFieldKey || headers[0].key].current
+            if (cell) {
+                cell.focus()
+                setIsRowAdded(false)
+            }
         }
     }, [isRowAdded])
 
@@ -164,8 +176,10 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             isClearable
                             {...props}
                             variant={SelectPickerVariantType.BORDER_LESS}
-                            classNamePrefix="dynamic-data-table__cell__select-picker"
+                            classNamePrefix="dynamic-data-table__cell__select-picker-text-area"
                             inputId={`data-table-${row.id}-${key}-cell`}
+                            minHeight={20}
+                            maxHeight={160}
                             value={getSelectPickerOptionByValue(
                                 props?.options,
                                 value,
@@ -174,6 +188,8 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             onChange={onChange(row, key)}
                             isDisabled={isDisabled}
                             formatCreateLabel={(input) => `Use ${input}`}
+                            refVar={cellRef?.current?.[row.id]?.[key]}
+                            dependentRefs={cellRef?.current?.[row.id]}
                             fullWidth
                         />
                     </div>
@@ -287,7 +303,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 plugins={[followCursor]}
             >
                 <div
-                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'dc__disabled no-hover' : ''} ${!isDisabled && hasError ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
+                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${!isDisabled && hasError ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
                 >
                     {renderCellIcon(row, key, true)}
                     {renderCellContent(row, key)}
