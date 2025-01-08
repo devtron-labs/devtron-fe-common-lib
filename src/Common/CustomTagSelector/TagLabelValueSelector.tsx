@@ -171,7 +171,7 @@ export const TagLabelValueSelector = ({
     const popupMenuBody = activeElement === `tag-${tagInputType}-${selectedTagIndex}` ? renderSuggestions() : null
     return (
         <PopupMenu autoClose autoPosition>
-            <PopupMenu.Button rootClassName="dc__bg-n50 flex top dc__no-border-imp">
+            <PopupMenu.Button rootClassName="bg__secondary flex top dc__no-border-imp">
                 <ResizableTagTextArea
                     minHeight={30}
                     maxHeight={80}
