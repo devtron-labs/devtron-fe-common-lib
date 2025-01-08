@@ -1,9 +1,9 @@
 .security-card {
     &--threat {
-        background: radial-gradient(25.91% 100% at 100% 0%, #FDE7E7 0%, #FFF 100%);
+        background: radial-gradient(25.91% 100% at 100% 0%, var(--R100) 0%, var(--N0) 100%);
     }
     &--secure {
-        background: radial-gradient(25.91% 100% at 100% 0%, #E9FBF4 0%, #FFF 100%);
+        background: radial-gradient(25.91% 100% at 100% 0%, var(--G100) 0%, var(--N0) 100%);
     }
 
     .arrow-right {
@@ -19,4 +19,10 @@
             color: var(--B500);
         }
     }
+}
+
+.security-cards {
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: 12px;
+    grid-column-gap: 12px;
 }

@@ -3,9 +3,10 @@ import { ReactComponent as ICShieldWarning } from '@Icons/ic-shield-warning-outl
 import { ReactComponent as ICShieldSecure } from '@Icons/ic-shield-check.svg'
 import { ReactComponent as ICArrowRight } from '@Icons/ic-caret-down-small.svg'
 import { SecurityCardProps } from './types'
-import { CATEGORIES, SeveritiesDTO, SUB_CATEGORIES } from '../SecurityModal/types'
+import { CATEGORIES, SUB_CATEGORIES } from '../SecurityModal/types'
+import { CATEGORY_LABELS, SEVERITIES } from '../SecurityModal/constants'
 import './securityCard.scss'
-import { SEVERITIES } from '../SecurityModal/constants'
+import { getTotalSeverities } from '../utils'
 
 const SecurityCard = ({
     category,
@@ -14,9 +15,7 @@ const SecurityCard = ({
     handleCardClick,
     rootClassName = '',
 }: SecurityCardProps) => {
-    const totalCount = Object.entries(severityCount)
-        .filter(([key]) => key !== SeveritiesDTO.SUCCESSES)
-        .reduce((acc, [, value]) => acc + value, 0)
+    const totalCount = getTotalSeverities(severityCount)
 
     const hasThreats: boolean = !!totalCount
 
@@ -30,11 +29,11 @@ const SecurityCard = ({
     const getScanType = () => {
         switch (category) {
             case CATEGORIES.KUBERNETES_MANIFEST:
-                return 'Manifest Scan'
+                return CATEGORY_LABELS.KUBERNETES_MANIFEST
             case CATEGORIES.CODE_SCAN:
-                return 'Code Scan'
+                return CATEGORY_LABELS.CODE_SCAN
             default:
-                return 'Image Scan'
+                return CATEGORY_LABELS.IMAGE_SCAN
         }
     }
 
@@ -64,12 +63,19 @@ const SecurityCard = ({
 
     const { title, subtitle } = getTitleSubtitle()
 
+    const onKeyDown = (event) => {
+        if (event.key === 'Enter' || event.key === 'Space') {
+            handleCardClick()
+        }
+    }
+
     return (
         <div
-            className={`${rootClassName} min-w-500 w-50 bcn-0 p-20 flexbox-col dc__gap-16 br-8 dc__border security-card security-card${hasThreats ? '--threat' : '--secure'}`}
+            className={`${rootClassName} w-100 bcn-0 p-20 flexbox-col dc__gap-16 br-8 dc__border security-card security-card${hasThreats ? '--threat' : '--secure'}`}
             role="button"
             tabIndex={0}
             onClick={handleCardClick}
+            onKeyDown={onKeyDown}
         >
             <div className="flexbox dc__content-space">
                 <div className="flexbox-col">
@@ -79,7 +85,11 @@ const SecurityCard = ({
                         <ICArrowRight className="icon-dim-20 dc__flip-270 scb-5 arrow-right" />
                     </div>
                 </div>
-                {hasThreats ? <ICShieldWarning className="icon-dim-24" /> : <ICShieldSecure className="icon-dim-24" />}
+                {hasThreats ? (
+                    <ICShieldWarning className="icon-dim-24" />
+                ) : (
+                    <ICShieldSecure className="icon-dim-24 scg-5" />
+                )}
             </div>
             <div className="flexbox-col dc__gap-12">
                 {hasThreats || severityCount.success ? (

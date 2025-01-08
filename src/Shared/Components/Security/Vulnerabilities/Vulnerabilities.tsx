@@ -47,18 +47,18 @@ const Vulnerabilities = ({
         }
     }, [scanResultResponse])
 
-    if (!isScanEnabled || !scanResultResponse?.result.isImageScanEnabled) {
-        return (
-            <div className="security-tab-empty">
-                <p className="security-tab-empty__title">Scan is Disabled</p>
-            </div>
-        )
-    }
-
     if (scanResultLoading) {
         return (
             <div className="security-tab-empty">
                 <Progressing />
+            </div>
+        )
+    }
+
+    if (!isScanEnabled || !scanResultResponse?.result?.isImageScanEnabled) {
+        return (
+            <div className="security-tab-empty">
+                <p className="security-tab-empty__title">Scan is Disabled</p>
             </div>
         )
     }

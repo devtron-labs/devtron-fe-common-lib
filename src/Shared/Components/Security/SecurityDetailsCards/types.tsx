@@ -1,17 +1,9 @@
-import {
-    CATEGORIES,
-    ScanResultDTO,
-    SecurityModalPropsType,
-    SeveritiesDTO,
-    SUB_CATEGORIES,
-} from '../SecurityModal/types'
-
-type Categories = keyof typeof CATEGORIES
-type SubCategories = keyof typeof SUB_CATEGORIES
+import { ScanResultDTO, SecurityModalPropsType, SeveritiesDTO } from '../SecurityModal/types'
+import { ScanCategories, ScanSubCategories } from '../types'
 
 export interface SecurityCardProps {
-    category: (typeof CATEGORIES)[Categories]
-    subCategory: (typeof SUB_CATEGORIES)[SubCategories]
+    category: ScanCategories
+    subCategory: ScanSubCategories
     severityCount: Partial<Record<SeveritiesDTO, number>>
     handleCardClick: () => void
     rootClassName?: string
