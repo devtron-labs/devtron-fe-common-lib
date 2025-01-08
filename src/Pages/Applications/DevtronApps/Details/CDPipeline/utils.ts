@@ -1,7 +1,7 @@
 import { APIOptions, CDMaterialType } from '@Common/Types'
 
 export const getAPIOptionsWithTriggerTimeout = (options?: APIOptions): APIOptions => {
-    const _options: APIOptions = options ? JSON.parse(JSON.stringify(options)) : {}
+    const _options: APIOptions = options ? structuredClone(options) : {}
 
     if (window._env_.TRIGGER_API_TIMEOUT) {
         _options.timeout = window._env_.TRIGGER_API_TIMEOUT

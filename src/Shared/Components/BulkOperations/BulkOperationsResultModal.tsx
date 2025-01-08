@@ -112,6 +112,11 @@ const BulkOperationsResultModal = ({
                         size={ComponentSizeType.xs}
                         variant={ButtonVariantType.borderLess}
                         ariaLabel={`Close ${headerText} drawer`}
+                        showTooltip={apiCallInProgress}
+                        tooltipProps={{
+                            content:
+                                'Bulk action in progress. Please wait for it to complete. Leaving will disrupt the ongoing process.',
+                        }}
                         disabled={apiCallInProgress}
                         onClick={handleModalClose}
                         showAriaLabelInTippy={false}
