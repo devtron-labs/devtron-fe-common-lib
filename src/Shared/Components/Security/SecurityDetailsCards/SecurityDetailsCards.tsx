@@ -6,18 +6,35 @@ import { CATEGORIES, SecurityModalStateType, SUB_CATEGORIES } from '../SecurityM
 import { SecurityCardProps, SecurityDetailsCardsProps } from './types'
 import { SecurityModal } from '../SecurityModal'
 import { DEFAULT_SECURITY_MODAL_IMAGE_STATE } from '../SecurityModal/constants'
-import { ScanSubCategories } from '../types'
+import { ScanCategories, ScanSubCategories } from '../types'
 import './securityCard.scss'
+import { getSecurityConfig } from '../utils'
 
 const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps) => {
     const [showSecurityModal, setShowSecurityModal] = useState<boolean>(false)
     const [modalState, setModalState] = useState<SecurityModalStateType>(DEFAULT_SECURITY_MODAL_IMAGE_STATE)
     const { imageScan, codeScan, kubernetesManifest } = scanResult
 
-    const imageScanToolId =
-        imageScan?.vulnerability?.list?.[0].scanToolName === 'TRIVY' ? SCAN_TOOL_ID_TRIVY : SCAN_TOOL_ID_CLAIR
-    const codeScanToolId = codeScan?.scanToolName === 'TRIVY' ? SCAN_TOOL_ID_TRIVY : SCAN_TOOL_ID_CLAIR
-    const manifestScanToolId = kubernetesManifest?.scanToolName === 'TRIVY' ? SCAN_TOOL_ID_TRIVY : SCAN_TOOL_ID_CLAIR
+    const SECURITY_CONFIG = getSecurityConfig({
+        imageScan: !!imageScan,
+        codeScan: !!codeScan,
+        kubernetesManifest: !!kubernetesManifest,
+    })
+
+    const getScanToolId = (category: string) => {
+        switch (category) {
+            case CATEGORIES.CODE_SCAN:
+                return codeScan?.scanToolName === 'TRIVY' ? SCAN_TOOL_ID_TRIVY : SCAN_TOOL_ID_CLAIR
+            case CATEGORIES.KUBERNETES_MANIFEST:
+                return kubernetesManifest?.scanToolName === 'TRIVY' ? SCAN_TOOL_ID_TRIVY : SCAN_TOOL_ID_CLAIR
+            case CATEGORIES.IMAGE_SCAN:
+                return imageScan?.vulnerability?.list?.[0].scanToolName === 'TRIVY'
+                    ? SCAN_TOOL_ID_TRIVY
+                    : SCAN_TOOL_ID_CLAIR
+            default:
+                return SCAN_TOOL_ID_TRIVY
+        }
+    }
 
     const handleCardClick = (
         category: SecurityCardProps['category'],
@@ -35,91 +52,40 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
         setShowSecurityModal(false)
     }
 
-    const isValidSubCategory = (subCategory: ScanSubCategories): boolean =>
-        Object.values(SUB_CATEGORIES).includes(subCategory)
-
     return (
         <>
             <div className="flexbox-col dc__gap-20">
-                {imageScan ? (
-                    <div className="flexbox-col dc__gap-12">
-                        <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
-                            <span className="fs-13 fw-6 lh-1-5 cn-9">Image Scan</span>
-                            <ScannedByToolModal scanToolId={imageScanToolId} />
+                {Object.values(CATEGORIES).map((category: ScanCategories) => {
+                    if (!SECURITY_CONFIG[category]) {
+                        return null
+                    }
+                    const scanToolId = getScanToolId(category)
+                    return (
+                        <div className="flexbox-col dc__gap-12" key={category}>
+                            <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
+                                <span className="fs-13 fw-6 lh-1-5 cn-9">{SECURITY_CONFIG[category].label}</span>
+                                <ScannedByToolModal scanToolId={scanToolId} />
+                            </div>
+                            <div className="dc__grid security-cards">
+                                {SECURITY_CONFIG[category].subCategories.map((subCategory: ScanSubCategories) => {
+                                    const severityCount =
+                                        subCategory === SUB_CATEGORIES.MISCONFIGURATIONS
+                                            ? scanResult[category][subCategory]?.misConfSummary?.status
+                                            : scanResult[category][subCategory]?.summary?.severities
+
+                                    return (
+                                        <SecurityCard
+                                            category={category}
+                                            subCategory={subCategory}
+                                            severityCount={severityCount}
+                                            handleCardClick={() => handleCardClick(category, subCategory)}
+                                        />
+                                    )
+                                })}
+                            </div>
                         </div>
-                        <div className="dc__grid security-cards">
-                            {Object.keys(imageScan).map((subCategory: SecurityCardProps['subCategory']) => {
-                                if (!isValidSubCategory(subCategory)) {
-                                    return null
-                                }
-                                return (
-                                    <SecurityCard
-                                        category={CATEGORIES.IMAGE_SCAN}
-                                        subCategory={subCategory}
-                                        severityCount={imageScan[subCategory]?.summary.severities}
-                                        handleCardClick={() => handleCardClick(CATEGORIES.IMAGE_SCAN, subCategory)}
-                                    />
-                                )
-                            })}
-                        </div>
-                    </div>
-                ) : null}
-                {codeScan ? (
-                    <div className="flexbox-col dc__gap-12">
-                        <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
-                            <span className="fs-13 fw-6 lh-1-5 cn-9">Code Scan</span>
-                            <ScannedByToolModal scanToolId={codeScanToolId} />
-                        </div>
-                        <div className="dc__grid security-cards">
-                            {Object.keys(codeScan).map((subCategory: SecurityCardProps['subCategory']) => {
-                                if (!isValidSubCategory(subCategory)) {
-                                    return null
-                                }
-                                const severityCount =
-                                    subCategory === 'misConfigurations'
-                                        ? codeScan.misConfigurations?.misConfSummary?.status
-                                        : codeScan[subCategory]?.summary?.severities
-                                return (
-                                    <SecurityCard
-                                        category={CATEGORIES.CODE_SCAN}
-                                        subCategory={subCategory}
-                                        severityCount={severityCount}
-                                        handleCardClick={() => handleCardClick(CATEGORIES.CODE_SCAN, subCategory)}
-                                    />
-                                )
-                            })}
-                        </div>
-                    </div>
-                ) : null}
-                {kubernetesManifest ? (
-                    <div className="flexbox-col dc__gap-12">
-                        <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
-                            <span className="fs-13 fw-6 lh-1-5 cn-9">Manifest Scan</span>
-                            <ScannedByToolModal scanToolId={manifestScanToolId} />
-                        </div>
-                        <div className="dc__grid security-cards">
-                            {Object.keys(kubernetesManifest).map((subCategory: SecurityCardProps['subCategory']) => {
-                                if (!isValidSubCategory(subCategory)) {
-                                    return null
-                                }
-                                const severityCount =
-                                    subCategory === 'misConfigurations'
-                                        ? kubernetesManifest.misConfigurations?.misConfSummary?.status
-                                        : kubernetesManifest[subCategory]?.summary?.severities
-                                return (
-                                    <SecurityCard
-                                        category={CATEGORIES.KUBERNETES_MANIFEST}
-                                        subCategory={subCategory}
-                                        severityCount={severityCount}
-                                        handleCardClick={() =>
-                                            handleCardClick(CATEGORIES.KUBERNETES_MANIFEST, subCategory)
-                                        }
-                                    />
-                                )
-                            })}
-                        </div>
-                    </div>
-                ) : null}
+                    )
+                })}
             </div>
             {showSecurityModal && (
                 <SecurityModal

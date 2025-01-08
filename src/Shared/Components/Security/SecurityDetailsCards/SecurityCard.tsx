@@ -64,7 +64,7 @@ const SecurityCard = ({
     const { title, subtitle } = getTitleSubtitle()
 
     const onKeyDown = (event) => {
-        if (event.key === 'Enter' || event.key === 'Space') {
+        if (event.key === 'Enter') {
             handleCardClick()
         }
     }
@@ -86,9 +86,9 @@ const SecurityCard = ({
                     </div>
                 </div>
                 {hasThreats ? (
-                    <ICShieldWarning className="icon-dim-24 scr-5" />
+                    <ICShieldWarning className="icon-dim-24 scr-5 dc__no-shrink" />
                 ) : (
-                    <ICShieldSecure className="icon-dim-24 scg-5" />
+                    <ICShieldSecure className="icon-dim-24 scg-5 dc__no-shrink" />
                 )}
             </div>
             <div className="flexbox-col dc__gap-12">
