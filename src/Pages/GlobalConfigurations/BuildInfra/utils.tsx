@@ -138,7 +138,7 @@ const getBaseProfileObject = ({
     return {
         id: profile.id,
         name: profile.name,
-        description: profile.description?.trim(),
+        description: profile.description?.trim() || '',
         type: profile.type,
         appCount: profile.appCount,
         useK8sDriver,

@@ -272,7 +272,7 @@ export interface UseBuildInfraFormProps {
      */
     handleSuccessRedirection?: () => void
     /**
-     * @default - false
+     * @default false
      */
     canConfigureUseK8sDriver?: boolean
 }
