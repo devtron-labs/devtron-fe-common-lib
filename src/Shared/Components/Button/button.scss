@@ -94,7 +94,7 @@
         }
 
         &--warning {
-            @include button-variant-styles(var(--Y500), var(--N900), $border-color);
+            @include button-variant-styles(var(--Y500), var(--black), $border-color);
             @include pseudo-states(var(--Y600), var(--Y700));
         }
 
