@@ -322,7 +322,7 @@ export const getBuildInfraProfilePayload = (
         return acc
     }, {})
 
-    // Deleting un-supported locators in case target platform is not default platform
+    // Deleting un-supported locators in case locators are not supported by buildX
     Object.entries(configurations).forEach(([platformName, platformConfigurations]) => {
         if (platformName !== BUILD_INFRA_DEFAULT_PLATFORM_NAME) {
             configurations[platformName] = platformConfigurations.filter(
@@ -330,6 +330,15 @@ export const getBuildInfraProfilePayload = (
             )
         }
     })
+
+    // Filtering out platforms if not using K8sDriver
+    if (canConfigureUseK8sDriver && !profileInput.useK8sDriver) {
+        Object.keys(configurations).forEach((platformName) => {
+            if (platformName !== BUILD_INFRA_DEFAULT_PLATFORM_NAME) {
+                delete configurations[platformName]
+            }
+        })
+    }
 
     const payload: BuildInfraProfileInfoDTO = {
         name: profileInput.name,
