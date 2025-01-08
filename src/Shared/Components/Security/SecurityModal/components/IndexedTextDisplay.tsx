@@ -23,20 +23,20 @@ const EmptyState: React.FC<{ href: string }> = ({ href }) => (
 
 const IndexedTextDisplay: React.FC<IndexedTextDisplayPropsType> = ({ title, lines, link }) => (
     <div className="flexbox-col dc__align-self-stretch bg__primary dc__outline dc__border-radius-4-imp">
-        <div className="flexbox pt-8 pb-8 pl-12 pr-12 dc__align-items-center dc__align-self-stretch dc__gap-4 dc__border-bottom-n1 bg__secondary dc__ff-monospace">
+        <div className="flexbox pt-8 pb-8 pl-12 pr-12 dc__align-items-center dc__align-self-stretch dc__gap-4 dc__border-bottom-n1 bg__secondary mono">
             {link ? (
-                <a className="dc__ff-monospace" href={link} target="_blank" rel="noreferrer">
+                <a className="mono" href={link} target="_blank" rel="noreferrer">
                     {title}
                 </a>
             ) : (
-                <span className="dc__ff-monospace">{title}</span>
+                <span className="mono">{title}</span>
             )}
             <ClipboardButton content={title} />
         </div>
 
         <pre className="flexbox-col p-6 m-0 mh-150 bg__primary dc__no-border">
             {lines?.map((line) => (
-                <div className="flexbox dc__gap-12 dc__ff-monospace">
+                <div className="flexbox dc__gap-12 mono">
                     <span className={line.isCause ? 'cr-5' : ''}>{line.number}</span>
                     <span key={line.number}>{line.content}</span>
                 </div>
