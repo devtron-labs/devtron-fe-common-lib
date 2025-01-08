@@ -18,6 +18,14 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     }
 
     useEffect(() => {
+        // Need to update the html element since there are elements outside of the #root div as well
+        const html = document.querySelector('html')
+        if (html) {
+            html.setAttribute('class', `theme__${currentTheme}`)
+        }
+    }, [currentTheme])
+
+    useEffect(() => {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleThemeChange)
 
         return () => {
