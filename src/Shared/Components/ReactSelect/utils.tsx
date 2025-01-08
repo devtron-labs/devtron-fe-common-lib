@@ -116,6 +116,18 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
     }),
+    singleValue: (base) => ({
+        ...base,
+        color: 'var(--N900)',
+    }),
+    input: (base) => ({
+        ...base,
+        color: 'var(--N900)',
+    }),
+    menu: (base) => ({
+        ...base,
+        backgroundColor: 'var(--bg-menu)',
+    }),
     ...styleOverrides,
 })
 
