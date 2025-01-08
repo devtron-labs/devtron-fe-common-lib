@@ -49,7 +49,7 @@ const Vulnerabilities = ({
 
     if (scanResultLoading) {
         return (
-            <div className="security-tab-empty">
+            <div className="security-tab-empty bcn-1">
                 <Progressing />
             </div>
         )
@@ -97,7 +97,6 @@ const Vulnerabilities = ({
                 subCategory={SUB_CATEGORIES.VULNERABILITIES}
                 severityCount={scanResultResponse?.result?.imageScan?.vulnerability?.summary?.severities}
                 handleCardClick={handleCardClick}
-                rootClassName="w-100-imp"
             />
             {showSecurityModal && (
                 <SecurityModal

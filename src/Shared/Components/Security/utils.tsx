@@ -27,7 +27,7 @@ export const getSecurityConfig = ({
     }),
 })
 
-export const getSecurityThreatsArray = (scanResult: ScanResultDTO): Partial<Record<SeveritiesDTO, number>>[] => {
+export const getCompiledSecurityThreats = (scanResult: ScanResultDTO): Partial<Record<SeveritiesDTO, number>> => {
     const { imageScan, codeScan, kubernetesManifest } = scanResult
     const DYNAMIC_SECURITY_CONFIG = getSecurityConfig({
         imageScan: !!imageScan,
@@ -47,5 +47,16 @@ export const getSecurityThreatsArray = (scanResult: ScanResultDTO): Partial<Reco
         })
     })
 
-    return threatsArray
+    const scanThreats: Partial<Record<SeveritiesDTO, number>> = threatsArray.reduce((acc, curr) => {
+        Object.keys(curr).forEach((key) => {
+            if (acc[key]) {
+                acc[key] += curr[key]
+            } else {
+                acc[key] = curr[key]
+            }
+        })
+        return acc
+    }, {})
+
+    return scanThreats
 }

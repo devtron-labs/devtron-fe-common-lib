@@ -1,19 +1,34 @@
 import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
-import { SCAN_TOOL_ID_CLAIR, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
+import { EMPTY_STATE_STATUS, SCAN_TOOL_ID_CLAIR, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
 import { useState } from 'react'
+import { GenericEmptyState } from '@Common/index'
+import { ReactComponent as NoVulnerability } from '@Icons/ic-vulnerability-not-found.svg'
 import SecurityCard from './SecurityCard'
 import { CATEGORIES, SecurityModalStateType, SUB_CATEGORIES } from '../SecurityModal/types'
 import { SecurityCardProps, SecurityDetailsCardsProps } from './types'
 import { SecurityModal } from '../SecurityModal'
 import { DEFAULT_SECURITY_MODAL_IMAGE_STATE } from '../SecurityModal/constants'
 import { ScanCategories, ScanSubCategories } from '../types'
+import { getSecurityConfig, getCompiledSecurityThreats, getTotalSeverities } from '../utils'
 import './securityCard.scss'
-import { getSecurityConfig } from '../utils'
 
 const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps) => {
     const [showSecurityModal, setShowSecurityModal] = useState<boolean>(false)
     const [modalState, setModalState] = useState<SecurityModalStateType>(DEFAULT_SECURITY_MODAL_IMAGE_STATE)
     const { imageScan, codeScan, kubernetesManifest } = scanResult
+
+    const scanThreats = getCompiledSecurityThreats(scanResult)
+    const threatCount = getTotalSeverities(scanThreats)
+
+    if (!threatCount) {
+        return (
+            <GenericEmptyState
+                SvgImage={NoVulnerability}
+                title={EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.TITLE}
+                subTitle={EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.SUBTITLE}
+            />
+        )
+    }
 
     const SECURITY_CONFIG = getSecurityConfig({
         imageScan: !!imageScan,
@@ -58,7 +73,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
 
     return (
         <>
-            <div className="flexbox-col dc__gap-20">
+            <div className="flexbox-col dc__gap-20 mw-600 dc__mxw-1200">
                 {Object.keys(SECURITY_CONFIG).map((category: ScanCategories) => (
                     <div className="flexbox-col dc__gap-12" key={category}>
                         <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">

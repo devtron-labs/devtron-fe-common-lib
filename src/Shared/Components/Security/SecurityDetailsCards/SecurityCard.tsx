@@ -9,13 +9,7 @@ import './securityCard.scss'
 import { getTotalSeverities } from '../utils'
 import { SECURITY_CONFIG } from '../constants'
 
-const SecurityCard = ({
-    category,
-    subCategory,
-    severityCount = {},
-    handleCardClick,
-    rootClassName = '',
-}: SecurityCardProps) => {
+const SecurityCard = ({ category, subCategory, severityCount = {}, handleCardClick }: SecurityCardProps) => {
     const totalCount = getTotalSeverities(severityCount)
 
     const hasThreats: boolean = !!totalCount
@@ -61,7 +55,7 @@ const SecurityCard = ({
 
     return (
         <div
-            className={`${rootClassName} w-100 bcn-0 p-20 flexbox-col dc__gap-16 br-8 dc__border security-card security-card${hasThreats ? '--threat' : '--secure'}`}
+            className={`w-100 bcn-0 p-20 flexbox-col dc__gap-16 br-8 dc__border security-card security-card${hasThreats ? '--threat' : '--secure'}`}
             role="button"
             tabIndex={0}
             onClick={handleCardClick}
@@ -87,11 +81,12 @@ const SecurityCard = ({
                         entities={entities}
                         labelClassName="fs-13 fw-4 lh-20 cn-9"
                         countClassName="fs-13 fw-6 lh-20 cn-7"
+                        swapLegendAndBar
                     />
                 ) : (
                     <div className="bcn-1 br-4 h-8" />
                 )}
-                {subtitle && <span>{subtitle}</span>}
+                {subtitle && <span className="cn-9 fs-13">{subtitle}</span>}
             </div>
         </div>
     )

@@ -25,6 +25,7 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     countClassName,
     labelClassName,
     isProportional,
+    swapLegendAndBar = false,
 }) => {
     const total = entities.reduce((sum, entity) => entity.value + sum, 0)
     const filteredEntities = entities.filter((entity) => entity.value)
@@ -70,20 +71,39 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
         return null
     }
 
+    const renderLegend = () => (
+        <div className={`flexbox flex-wrap dc__row-gap-2 ${isProportional ? 'dc__gap-24' : 'dc__gap-16'}`}>
+            {renderContent()}
+        </div>
+    )
+
+    const renderBar = () => (
+        <div className="flexbox dc__gap-2">
+            {filteredEntities?.map((entity, index, map) => (
+                <div
+                    key={entity.label}
+                    className={`h-8 ${index === 0 ? 'dc__left-radius-4' : ''} ${
+                        index === map.length - 1 ? 'dc__right-radius-4' : ''
+                    }`}
+                    style={{ backgroundColor: entity.color, width: calcSegmentWidth(entity) }}
+                />
+            ))}
+        </div>
+    )
+
     return (
         <div className={`flexbox-col w-100 dc__gap-12 ${rootClassName}`}>
-            <div className={`flexbox ${isProportional ? 'dc__gap-24' : 'dc__gap-16'}`}>{renderContent()}</div>
-            <div className="flexbox dc__gap-2">
-                {filteredEntities?.map((entity, index, map) => (
-                    <div
-                        key={entity.label}
-                        className={`h-8 ${index === 0 ? 'dc__left-radius-4' : ''} ${
-                            index === map.length - 1 ? 'dc__right-radius-4' : ''
-                        }`}
-                        style={{ backgroundColor: entity.color, width: calcSegmentWidth(entity) }}
-                    />
-                ))}
-            </div>
+            {swapLegendAndBar ? (
+                <>
+                    {renderBar()}
+                    {renderLegend()}
+                </>
+            ) : (
+                <>
+                    {renderLegend()}
+                    {renderBar()}
+                </>
+            )}
         </div>
     )
 }

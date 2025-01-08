@@ -12,7 +12,7 @@ import {
     stopPropagation,
     VisibleModal2,
 } from '@Common/index'
-import { ReactComponent as ICClose } from '@Icons/ic-cross.svg'
+import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICBack } from '@Icons/ic-caret-left-small.svg'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components/Button'
 import { ComponentSizeType } from '@Shared/constants'

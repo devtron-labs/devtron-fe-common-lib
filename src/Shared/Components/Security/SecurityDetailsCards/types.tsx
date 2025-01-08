@@ -6,7 +6,6 @@ export interface SecurityCardProps {
     subCategory: ScanSubCategories
     severityCount: Partial<Record<SeveritiesDTO, number>>
     handleCardClick: () => void
-    rootClassName?: string
 }
 
 export interface SecurityDetailsCardsProps extends Pick<SecurityModalPropsType, 'Sidebar'> {
