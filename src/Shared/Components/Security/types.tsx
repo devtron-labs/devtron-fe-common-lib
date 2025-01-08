@@ -14,7 +14,7 @@ interface SecurityConfigCategoryType {
     subCategories: ScanSubCategories[]
 }
 
-export interface GetSecurityConfigReturnType {
+export interface SecurityConfigType {
     imageScan?: SecurityConfigCategoryType
     codeScan?: SecurityConfigCategoryType
     kubernetesManifest?: SecurityConfigCategoryType

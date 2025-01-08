@@ -55,22 +55,6 @@ const Vulnerabilities = ({
         )
     }
 
-    if (!isScanEnabled || !scanResultResponse?.result?.isImageScanEnabled) {
-        return (
-            <div className="security-tab-empty">
-                <p className="security-tab-empty__title">Scan is Disabled</p>
-            </div>
-        )
-    }
-
-    if (!isScanned || (scanResultResponse && !scanResultResponse.result.scanned)) {
-        return (
-            <div className="security-tab-empty">
-                <p className="security-tab-empty__title">Image was not scanned</p>
-            </div>
-        )
-    }
-
     if (scanResultError) {
         return (
             <div className="security-tab-empty">
@@ -78,6 +62,22 @@ const Vulnerabilities = ({
                 <button className="cta secondary" type="button" onClick={reloadScanResult}>
                     Reload
                 </button>
+            </div>
+        )
+    }
+
+    if (!isScanEnabled || !scanResultResponse.result?.isImageScanEnabled) {
+        return (
+            <div className="security-tab-empty">
+                <p className="security-tab-empty__title">Scan is Disabled</p>
+            </div>
+        )
+    }
+
+    if (!isScanned || !scanResultResponse.result?.scanned) {
+        return (
+            <div className="security-tab-empty">
+                <p className="security-tab-empty__title">Image was not scanned</p>
             </div>
         )
     }

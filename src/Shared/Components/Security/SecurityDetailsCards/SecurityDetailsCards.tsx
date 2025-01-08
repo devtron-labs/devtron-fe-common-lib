@@ -36,7 +36,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
         }
     }
 
-    const handleCardClick = (
+    const handleOpenModal = (
         category: SecurityCardProps['category'],
         subCategory: SecurityCardProps['subCategory'],
     ) => {
@@ -48,6 +48,10 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
         })
     }
 
+    const handleCardClick =
+        (category: SecurityCardProps['category'], subCategory: SecurityCardProps['subCategory']) => () =>
+            handleOpenModal(category, subCategory)
+
     const handleModalClose = () => {
         setShowSecurityModal(false)
     }
@@ -55,10 +59,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
     return (
         <>
             <div className="flexbox-col dc__gap-20">
-                {Object.values(CATEGORIES).map((category: ScanCategories) => {
-                    if (!SECURITY_CONFIG[category]) {
-                        return null
-                    }
+                {Object.keys(SECURITY_CONFIG).map((category: ScanCategories) => {
                     const scanToolId = getScanToolId(category)
                     return (
                         <div className="flexbox-col dc__gap-12" key={category}>
@@ -78,7 +79,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
                                             category={category}
                                             subCategory={subCategory}
                                             severityCount={severityCount}
-                                            handleCardClick={() => handleCardClick(category, subCategory)}
+                                            handleCardClick={handleCardClick(category, subCategory)}
                                         />
                                     )
                                 })}
