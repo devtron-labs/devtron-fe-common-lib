@@ -143,8 +143,8 @@ export const TagLabelValueSelector = ({
             placement="right"
             content={
                 <div>
-                    <div className="mb-10 fs-12 fw-6 cn-0 dc__break-word">{tag.label}</div>
-                    <div className="fs-12 fw-4 cn-0 dc__break-word">{tag.description}</div>
+                    <div className="mb-10 fs-12 fw-6 dc__break-word">{tag.label}</div>
+                    <div className="fs-12 fw-4 dc__break-word">{tag.description}</div>
                 </div>
             }
         >
