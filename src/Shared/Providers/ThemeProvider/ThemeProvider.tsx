@@ -8,7 +8,7 @@ const themeContext = createContext<ThemeContextType>(null)
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     const [themeConfig, setThemeConfig] = useState<ThemeConfigType>(getThemeConfigFromLocalStorage)
 
-    const handleSelectedThemeChange: ThemeContextType['handleSelectedThemeChange'] = (updatedThemePreference) => {
+    const handleThemePreferenceChange: ThemeContextType['handleSelectedThemeChange'] = (updatedThemePreference) => {
         setThemeConfig({
             appTheme:
                 updatedThemePreference === THEME_PREFERENCE_MAP.auto
@@ -20,7 +20,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     }
 
     const handleSystemPreferenceChange = () => {
-        handleSelectedThemeChange(THEME_PREFERENCE_MAP.auto)
+        handleThemePreferenceChange(THEME_PREFERENCE_MAP.auto)
     }
 
     useEffect(() => {
@@ -44,7 +44,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     const value = useMemo<ThemeContextType>(
         () => ({
             ...themeConfig,
-            handleSelectedThemeChange,
+            handleSelectedThemeChange: handleThemePreferenceChange,
         }),
         [themeConfig],
     )
