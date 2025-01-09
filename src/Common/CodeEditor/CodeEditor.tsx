@@ -72,7 +72,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         onChange,
         readOnly,
         diffView,
-        theme = CodeEditorThemesKeys.vs,
+        theme,
         loading,
         customLoader,
         focus,
