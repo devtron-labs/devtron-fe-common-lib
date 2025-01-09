@@ -219,7 +219,7 @@ const PluginListContainer = ({
                     handleUpdateSelectedTags={handleUpdateSelectedTags}
                     selectedTags={selectedTags}
                     isLoading={areTagsLoading}
-                    hasError={!!tagsError}
+                    tagsError={tagsError}
                     reloadTags={reloadTags}
                 />
             </div>
