@@ -20,7 +20,6 @@ import {
     BuildInfraToleranceValueType,
     CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP,
     CREATE_MODE_REQUIRED_INPUT_FIELDS,
-    createBuildInfraProfile,
     DEFAULT_PROFILE_NAME,
     DEFAULT_TOLERANCE_EFFECT,
     DEFAULT_TOLERANCE_OPERATOR,
@@ -32,7 +31,7 @@ import {
     ProfileInputErrorType,
     TARGET_PLATFORM_ERROR_FIELDS_MAP,
     ToleranceHeaderType,
-    updateBuildInfraProfile,
+    upsertBuildInfraProfile,
     UseBuildInfraFormProps,
     UseBuildInfraFormResponseType,
     ValidateNodeSelectorParamsType,
@@ -296,6 +295,7 @@ const useBuildInfraForm = ({
     name,
     editProfile,
     handleSuccessRedirection,
+    canConfigureUseK8sDriver = false,
 }: UseBuildInfraFormProps): UseBuildInfraFormResponseType => {
     const fromCreateView = !name
 
@@ -304,6 +304,7 @@ const useBuildInfraForm = ({
             getBuildInfraProfileByName({
                 name: name ?? DEFAULT_PROFILE_NAME,
                 fromCreateView,
+                canConfigureUseK8sDriver,
             }),
         [name],
     )
@@ -341,11 +342,16 @@ const useBuildInfraForm = ({
         const currentInput = structuredClone(profileInput)
         const currentInputErrors = structuredClone(profileInputErrors)
         const targetPlatform =
-            'targetPlatform' in data && Object.hasOwn(data, 'targetPlatform') ? data.targetPlatform : ''
+            data && 'targetPlatform' in data && Object.hasOwn(data, 'targetPlatform') ? data.targetPlatform : ''
         const currentConfiguration = currentInput.configurations[targetPlatform]
         const lastSavedConfiguration = profileResponse.profile.configurations[targetPlatform] || currentConfiguration
 
         switch (action) {
+            case BuildInfraProfileInputActionType.TOGGLE_USE_K8S_DRIVER: {
+                currentInput.useK8sDriver = !currentInput.useK8sDriver
+                break
+            }
+
             case BuildInfraMetaConfigTypes.DESCRIPTION: {
                 const { value } = data
                 currentInput.description = value
@@ -676,6 +682,20 @@ const useBuildInfraForm = ({
                 if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] || {}).length === 0) {
                     currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
                 }
+
+                // Will validate all the keys since checking duplicates
+                const existingKeys = currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.map(
+                    (selector) => selector.key,
+                )
+
+                currentConfiguration[BuildInfraConfigTypes.NODE_SELECTOR].value.forEach((selector) => {
+                    validateNodeSelector({
+                        selector,
+                        existingKeys,
+                        profileInputErrors: currentInputErrors,
+                    })
+                })
+
                 break
             }
 
@@ -931,8 +951,8 @@ const useBuildInfraForm = ({
         setProfileInputErrors(currentInputErrors)
     }
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+    const handleSubmit = async (event?: FormEvent<HTMLFormElement>) => {
+        event?.preventDefault()
         // Since considering '' as a valid error message
         const hasErrors =
             Object.keys(profileInputErrors).filter(
@@ -949,11 +969,11 @@ const useBuildInfraForm = ({
 
         setLoadingActionRequest(true)
         try {
-            if (editProfile) {
-                await updateBuildInfraProfile({ name, profileInput })
-            } else {
-                await createBuildInfraProfile({ profileInput })
-            }
+            await upsertBuildInfraProfile({
+                name,
+                profileInput,
+                canConfigureUseK8sDriver,
+            })
             setLoadingActionRequest(false)
             ToastManager.showToast({
                 variant: ToastVariantType.success,

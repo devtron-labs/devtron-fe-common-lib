@@ -24,14 +24,14 @@ import { get, getUrlWithSearchParams, post, put, showError } from '../../../Comm
 import {
     BuildInfraProfileDTO,
     BuildInfraProfileResponseType,
-    CreateBuildInfraProfileType,
     GetBuildInfraProfileType,
-    UpdateBuildInfraProfileType,
+    UpsertBuildInfraProfileServiceParamsType,
 } from './types'
 
 export const getBuildInfraProfileByName = async ({
     name,
     fromCreateView,
+    canConfigureUseK8sDriver,
 }: GetBuildInfraProfileType): Promise<BuildInfraProfileResponseType> => {
     try {
         const profilePayload: Pick<BuildInfraProfileDTO['profile'], 'name'> = { name }
@@ -45,6 +45,7 @@ export const getBuildInfraProfileByName = async ({
             defaultConfigurations,
             profile,
             fromCreateView,
+            canConfigureUseK8sDriver,
         })
     } catch (error) {
         showError(error)
@@ -52,18 +53,25 @@ export const getBuildInfraProfileByName = async ({
     }
 }
 
-export const updateBuildInfraProfile = async ({ name, profileInput }: UpdateBuildInfraProfileType) => {
-    const updateProfilePayload: Pick<BuildInfraProfileDTO['profile'], 'name'> = { name }
-    const response = await put<ReturnType<typeof put>, BuildInfraPayloadType>(
-        getUrlWithSearchParams(getBuildInfraProfileEndpoint(), updateProfilePayload),
-        getBuildInfraProfilePayload(profileInput),
-    )
+export const upsertBuildInfraProfile = async ({
+    name,
+    profileInput,
+    canConfigureUseK8sDriver,
+}: UpsertBuildInfraProfileServiceParamsType) => {
+    const isEditView = !!name
+    const baseEndpoint = getBuildInfraProfileEndpoint()
+    const payload = getBuildInfraProfilePayload(profileInput, canConfigureUseK8sDriver)
 
+    if (isEditView) {
+        const updateProfileQueryPayload: Pick<BuildInfraProfileDTO['profile'], 'name'> = { name }
+        const response = await put<ReturnType<typeof put>, BuildInfraPayloadType>(
+            getUrlWithSearchParams(baseEndpoint, updateProfileQueryPayload),
+            payload,
+        )
+
+        return response
+    }
+
+    const response = await post<ReturnType<typeof post>, BuildInfraPayloadType>(baseEndpoint, payload)
     return response
 }
-
-export const createBuildInfraProfileService = async (payload: BuildInfraPayloadType) =>
-    post<ReturnType<typeof post>, BuildInfraPayloadType>(getBuildInfraProfileEndpoint(), payload)
-
-export const createBuildInfraProfile = async ({ profileInput }: CreateBuildInfraProfileType) =>
-    createBuildInfraProfileService(getBuildInfraProfilePayload(profileInput))
