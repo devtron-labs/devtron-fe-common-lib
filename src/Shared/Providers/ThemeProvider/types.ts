@@ -13,7 +13,19 @@ export const THEME_PREFERENCE_MAP = {
 export type ThemePreferenceType = (typeof THEME_PREFERENCE_MAP)[keyof typeof THEME_PREFERENCE_MAP]
 
 export interface ThemeConfigType {
+    /**
+     * Current application theme
+     *
+     * @default AppThemeType.light
+     */
     appTheme: AppThemeType
+    /**
+     * Preferred theme for the user (if any)
+     *
+     * @default THEME_PREFERENCE_MAP.auto
+     *
+     * Note: This shouldn't be consumed other than in ThemeSwitcher component
+     */
     themePreference: ThemePreferenceType
 }
 

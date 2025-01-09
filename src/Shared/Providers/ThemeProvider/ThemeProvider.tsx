@@ -19,7 +19,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
         setThemePreferenceInLocalStorage(updatedThemePreference)
     }
 
-    const handleSystemPreferenceChange = () => {
+    const handleColorSchemeChange = () => {
         handleThemePreferenceChange(THEME_PREFERENCE_MAP.auto)
     }
 
@@ -32,12 +32,16 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     }, [themeConfig.appTheme])
 
     useEffect(() => {
+        // It is important to create the matchQuery inside the useEffect
+        // to ensure the removeEventListener is called on the same instance
+        const matchQuery = window.matchMedia(DARK_COLOR_SCHEME_MATCH_QUERY)
+
         if (themeConfig.themePreference === THEME_PREFERENCE_MAP.auto) {
-            window.matchMedia(DARK_COLOR_SCHEME_MATCH_QUERY).addEventListener('change', handleSystemPreferenceChange)
+            matchQuery.addEventListener('change', handleColorSchemeChange)
         }
 
         return () => {
-            window.matchMedia(DARK_COLOR_SCHEME_MATCH_QUERY).removeEventListener('change', handleSystemPreferenceChange)
+            matchQuery.removeEventListener('change', handleColorSchemeChange)
         }
     }, [themeConfig.themePreference])
 
