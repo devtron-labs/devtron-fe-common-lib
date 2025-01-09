@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ThemeType } from '@Shared/Providers'
+import { AppThemeType } from '@Shared/Providers'
 import { MODES } from '../Constants'
 
 export interface InformationBarProps {
@@ -108,7 +108,7 @@ export interface CodeEditorInitialValueType extends Pick<CodeEditorBaseInterface
     value: string
     noParsing?: boolean
     tabSize: number
-    appTheme: ThemeType
+    appTheme: AppThemeType
 }
 
 export interface CodeEditorState {

@@ -1,2 +1,2 @@
 export * from './ThemeProvider'
-export { ThemeType } from './constants'
+export { AppThemeType } from './types'

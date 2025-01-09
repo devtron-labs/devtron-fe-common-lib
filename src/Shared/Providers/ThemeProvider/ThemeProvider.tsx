@@ -1,44 +1,53 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { getCurrentTheme, updateTheme } from './utils'
-import { ThemeType } from './constants'
-import { ThemeContextType, ThemeProviderProps } from './types'
+import { getAppThemeForAutoPreference, getThemeConfig, updateSelectedTheme } from './utils'
+import { THEME_PREFERENCE_MAP, ThemeConfigType, ThemeContextType, ThemeProviderProps } from './types'
 
 const themeContext = createContext<ThemeContextType>(null)
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-    const [currentTheme, setCurrentTheme] = useState<ThemeType>(getCurrentTheme)
+    const [themeConfig, setThemeConfig] = useState<ThemeConfigType>(getThemeConfig)
 
-    const handleThemeChange: ThemeContextType['handleThemeChange'] = () => {
-        setCurrentTheme((prevTheme) => {
-            const updatedTheme = prevTheme === ThemeType.light ? ThemeType.dark : ThemeType.light
-            updateTheme(updatedTheme)
-
-            return updatedTheme
+    const handleSelectedThemeChange: ThemeContextType['handleSelectedThemeChange'] = (updatedThemePreference) => {
+        setThemeConfig({
+            appTheme:
+                updatedThemePreference === THEME_PREFERENCE_MAP.auto
+                    ? getAppThemeForAutoPreference()
+                    : updatedThemePreference,
+            themePreference: updatedThemePreference,
         })
+        updateSelectedTheme(updatedThemePreference)
+    }
+
+    const handleSystemPreferenceChange = () => {
+        handleSelectedThemeChange(THEME_PREFERENCE_MAP.auto)
     }
 
     useEffect(() => {
         // Need to update the html element since there are elements outside of the #root div as well
         const html = document.querySelector('html')
         if (html) {
-            html.setAttribute('class', `theme__${currentTheme}`)
+            html.setAttribute('class', `theme__${themeConfig.appTheme}`)
         }
-    }, [currentTheme])
+    }, [themeConfig.appTheme])
 
     useEffect(() => {
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleThemeChange)
+        if (themeConfig.themePreference === THEME_PREFERENCE_MAP.auto) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleSystemPreferenceChange)
+        }
 
         return () => {
-            window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', handleThemeChange)
+            window
+                .matchMedia('(prefers-color-scheme: dark)')
+                .removeEventListener('change', handleSystemPreferenceChange)
         }
-    }, [])
+    }, [themeConfig.themePreference])
 
-    const value = useMemo(
+    const value = useMemo<ThemeContextType>(
         () => ({
-            currentTheme,
-            handleThemeChange,
+            ...themeConfig,
+            handleSelectedThemeChange,
         }),
-        [currentTheme],
+        [themeConfig],
     )
 
     return <themeContext.Provider value={value}>{children}</themeContext.Provider>

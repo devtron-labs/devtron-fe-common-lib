@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { OptionType } from '@Common/Types'
 import StyledRadioGroup from '../RadioGroup/RadioGroup'
 import { SegmentedControlProps, SegmentedControlVariant } from './types'
 
@@ -35,7 +34,7 @@ const SegmentedControl = ({
         name={name}
         disabled={disabled}
     >
-        {tabs.map((tab: OptionType, index) => (
+        {tabs.map((tab, index) => (
             <StyledRadioGroup.Radio
                 value={tab.value}
                 key={tab.value}

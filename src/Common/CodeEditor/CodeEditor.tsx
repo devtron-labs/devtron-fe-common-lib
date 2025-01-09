@@ -85,7 +85,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         adjustEditorHeightToContent = false,
         disableSearch = false,
     }) => {
-        const { currentTheme: appTheme } = useTheme()
+        const { appTheme } = useTheme()
 
         if (cleanData) {
             value = cleanKubeManifest(value)

@@ -1,6 +1,1 @@
-export enum ThemeType {
-    light = 'light',
-    dark = 'dark',
-}
-
-export const THEME_STORAGE_KEY = 'theme'
+export const SELECTED_THEME_STORAGE_KEY = 'selected-theme'
