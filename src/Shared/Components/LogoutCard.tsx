@@ -16,7 +16,9 @@
 
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { getRandomColor } from '../../Common'
+import { useTheme } from '@Shared/Providers'
+import { THEME_PREFERENCE_MAP, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
+import { getRandomColor, SegmentedControl, stopPropagation } from '../../Common'
 
 interface LogoutCardType {
     className: string
@@ -27,10 +29,15 @@ interface LogoutCardType {
 
 const LogoutCard = ({ className, userFirstLetter, setShowLogOutCard, showLogOutCard }: LogoutCardType) => {
     const history = useHistory()
+    const { themePreference, handleSelectedThemeChange } = useTheme()
 
     const onLogout = () => {
         document.cookie = `argocd.token=; expires=Thu, 01-Jan-1970 00:00:01 GMT;path=/`
         history.push('/login')
+    }
+
+    const handleThemeSwitch = (e) => {
+        handleSelectedThemeChange(e.target.value as ThemePreferenceType)
     }
 
     return (
@@ -48,6 +55,19 @@ const LogoutCard = ({ className, userFirstLetter, setShowLogOutCard, showLogOutC
                         {userFirstLetter[0]}
                     </p>
                 </div>
+                {window._env_.FEATURE_EXPERIMENTAL_THEMING_ENABLE && (
+                    <div className="dc__border-top-n1" onClick={stopPropagation}>
+                        <SegmentedControl
+                            initialTab={themePreference}
+                            name="theme-preference-selector"
+                            onChange={handleThemeSwitch}
+                            tabs={Object.values(THEME_PREFERENCE_MAP).map((value) => ({
+                                label: value,
+                                value,
+                            }))}
+                        />
+                    </div>
+                )}
                 <div className="logout-card__logout cursor" data-testid="logout-button" onClick={onLogout}>
                     Logout
                 </div>

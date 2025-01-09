@@ -15,6 +15,7 @@
  */
 
 import { OptionType } from '@Common/Types'
+import { ReactNode } from 'react'
 
 export enum SegmentedControlVariant {
     // NOTE: values are css class names
@@ -23,7 +24,7 @@ export enum SegmentedControlVariant {
 }
 
 export interface SegmentedControlProps {
-    tabs: OptionType[]
+    tabs: OptionType<string, ReactNode>[]
     initialTab: string
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     name: string
