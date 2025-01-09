@@ -56,17 +56,18 @@
     border: solid 1px var(--N200);
     padding: 5px 10px;
     text-align: left;
-    color: var(--N0);
+    color: var(--N700);
 }
 
 .select__item {
     padding: 5px 10px;
     cursor: pointer;
-    color: var(--N0);
+    color: var(--N700);
 }
 
 .select__icon {
     margin-left: 18px;
+    color: var(--N500);
 }
 
 .page {
