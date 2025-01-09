@@ -382,6 +382,7 @@ export const getTransformedBuildInfraProfileResponse = ({
     >((acc, [platformName, globalPlatformConfig]) => {
         // Logic is, if we will pre-fill profile with default platform of current profile, and set active to true, i.e, overridden, with default values from global profile
         const baseConfigurations = configurations[BUILD_INFRA_DEFAULT_PLATFORM_NAME]
+
         acc[platformName] = Object.values(BuildInfraConfigTypes).reduce<BuildInfraConfigurationMapType>(
             (fallbackAcc, configType) => {
                 if (!globalPlatformConfig[configType]) {
@@ -391,6 +392,7 @@ export const getTransformedBuildInfraProfileResponse = ({
                 const baseValue = parsePlatformConfigIntoValue(baseConfigurations[configType])
                 const defaultValue = parsePlatformConfigIntoValue(globalPlatformConfig[configType])
 
+                // It does not matter what value we have in case its inheriting runner, since we show the values of runner
                 // eslint-disable-next-line no-param-reassign
                 fallbackAcc[configType] = {
                     ...baseValue,
@@ -428,8 +430,14 @@ export const getBuildInfraProfilePayload = (
         const configurationList = Object.values(configurationLocatorMap).reduce<
             BuildInfraConfigurationItemPayloadType[]
         >((configurationListAcc, configuration) => {
-            if (configuration.id || configuration.active) {
-                const locatorContainsSubValues = !!INFRA_CONFIG_CONTAINING_SUB_VALUES[configuration.key]
+            const locatorContainsSubValues = !!INFRA_CONFIG_CONTAINING_SUB_VALUES[configuration.key]
+            const doesCMCSContainsOverriddenValues =
+                locatorContainsSubValues &&
+                (configuration.value as BuildInfraCMCSValueType[])?.some(
+                    (configMapSecretData) => configMapSecretData.isOverridden,
+                )
+
+            if (configuration.id || configuration.active || doesCMCSContainsOverriddenValues) {
                 const infraConfigValues = parseUIConfigToPayload(configuration)
                 if (!infraConfigValues) {
                     return configurationListAcc
