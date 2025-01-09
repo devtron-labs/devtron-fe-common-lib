@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { getAppThemeForAutoPreference, getThemeConfig, updateSelectedTheme } from './utils'
+import { getAppThemeForAutoPreference, getThemeConfigFromLocalStorage, setThemePreferenceInLocalStorage } from './utils'
 import { THEME_PREFERENCE_MAP, ThemeConfigType, ThemeContextType, ThemeProviderProps } from './types'
+import { DARK_COLOR_SCHEME_MATCH_QUERY } from './constants'
 
 const themeContext = createContext<ThemeContextType>(null)
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-    const [themeConfig, setThemeConfig] = useState<ThemeConfigType>(getThemeConfig)
+    const [themeConfig, setThemeConfig] = useState<ThemeConfigType>(getThemeConfigFromLocalStorage)
 
     const handleSelectedThemeChange: ThemeContextType['handleSelectedThemeChange'] = (updatedThemePreference) => {
         setThemeConfig({
@@ -15,7 +16,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
                     : updatedThemePreference,
             themePreference: updatedThemePreference,
         })
-        updateSelectedTheme(updatedThemePreference)
+        setThemePreferenceInLocalStorage(updatedThemePreference)
     }
 
     const handleSystemPreferenceChange = () => {
@@ -32,13 +33,11 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
 
     useEffect(() => {
         if (themeConfig.themePreference === THEME_PREFERENCE_MAP.auto) {
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleSystemPreferenceChange)
+            window.matchMedia(DARK_COLOR_SCHEME_MATCH_QUERY).addEventListener('change', handleSystemPreferenceChange)
         }
 
         return () => {
-            window
-                .matchMedia('(prefers-color-scheme: dark)')
-                .removeEventListener('change', handleSystemPreferenceChange)
+            window.matchMedia(DARK_COLOR_SCHEME_MATCH_QUERY).removeEventListener('change', handleSystemPreferenceChange)
         }
     }, [themeConfig.themePreference])
 

@@ -1,12 +1,12 @@
-import { SELECTED_THEME_STORAGE_KEY } from './constants'
+import { DARK_COLOR_SCHEME_MATCH_QUERY, THEME_PREFERENCE_STORAGE_KEY } from './constants'
 import { AppThemeType, THEME_PREFERENCE_MAP, ThemePreferenceType, ThemeConfigType } from './types'
 
 export const getAppThemeForAutoPreference = (): AppThemeType =>
-    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    window.matchMedia && window.matchMedia(DARK_COLOR_SCHEME_MATCH_QUERY).matches
         ? AppThemeType.dark
         : AppThemeType.light
 
-export const getThemeConfig = (): ThemeConfigType => {
+export const getThemeConfigFromLocalStorage = (): ThemeConfigType => {
     // Handling the case if the theming is turned off at a later stage
     if (!window._env_.FEATURE_EXPERIMENTAL_THEMING_ENABLE) {
         return {
@@ -15,7 +15,7 @@ export const getThemeConfig = (): ThemeConfigType => {
         }
     }
 
-    const selectedTheme = localStorage.getItem(SELECTED_THEME_STORAGE_KEY) as ThemePreferenceType
+    const selectedTheme = localStorage.getItem(THEME_PREFERENCE_STORAGE_KEY) as ThemePreferenceType
 
     if (!selectedTheme || selectedTheme === THEME_PREFERENCE_MAP.auto) {
         const fallbackAppTheme = getAppThemeForAutoPreference()
@@ -32,6 +32,6 @@ export const getThemeConfig = (): ThemeConfigType => {
     }
 }
 
-export const updateSelectedTheme = (selectedTheme: ThemePreferenceType) => {
-    localStorage.setItem(SELECTED_THEME_STORAGE_KEY, selectedTheme)
+export const setThemePreferenceInLocalStorage = (themePreference: ThemePreferenceType) => {
+    localStorage.setItem(THEME_PREFERENCE_STORAGE_KEY, themePreference)
 }
