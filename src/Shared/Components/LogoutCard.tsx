@@ -16,9 +16,8 @@
 
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { useTheme } from '@Shared/Providers'
-import { THEME_PREFERENCE_MAP, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
-import { getRandomColor, SegmentedControl, stopPropagation } from '../../Common'
+import { getRandomColor } from '../../Common'
+import { ThemeSwitcher } from './ThemeSwitcher'
 
 interface LogoutCardType {
     className: string
@@ -29,19 +28,18 @@ interface LogoutCardType {
 
 const LogoutCard = ({ className, userFirstLetter, setShowLogOutCard, showLogOutCard }: LogoutCardType) => {
     const history = useHistory()
-    const { themePreference, handleSelectedThemeChange } = useTheme()
 
     const onLogout = () => {
         document.cookie = `argocd.token=; expires=Thu, 01-Jan-1970 00:00:01 GMT;path=/`
         history.push('/login')
     }
 
-    const handleThemeSwitch = (e) => {
-        handleSelectedThemeChange(e.target.value as ThemePreferenceType)
+    const toggleLogoutCard = () => {
+        setShowLogOutCard(!showLogOutCard)
     }
 
     return (
-        <div className="dc__transparent-div" onClick={() => setShowLogOutCard(!showLogOutCard)}>
+        <div className="dc__transparent-div" onClick={toggleLogoutCard}>
             <div className={`logout-card ${className}`}>
                 <div className="flexbox flex-justify p-16">
                     <div className="logout-card-user ">
@@ -55,21 +53,16 @@ const LogoutCard = ({ className, userFirstLetter, setShowLogOutCard, showLogOutC
                         {userFirstLetter[0]}
                     </p>
                 </div>
-                {window._env_.FEATURE_EXPERIMENTAL_THEMING_ENABLE && (
-                    <div className="dc__border-top-n1" onClick={stopPropagation}>
-                        <SegmentedControl
-                            initialTab={themePreference}
-                            name="theme-preference-selector"
-                            onChange={handleThemeSwitch}
-                            tabs={Object.values(THEME_PREFERENCE_MAP).map((value) => ({
-                                label: value,
-                                value,
-                            }))}
-                        />
-                    </div>
-                )}
-                <div className="logout-card__logout cursor" data-testid="logout-button" onClick={onLogout}>
-                    Logout
+                <div className="dc__border-top-n1 py-4">
+                    <ThemeSwitcher onChange={toggleLogoutCard} />
+                    <button
+                        className="dc__unset-button-styles px-8 py-6 fs-13 fw-4 lh-20 cr-5 dc__hover-n50 cursor w-100 flex left"
+                        data-testid="logout-button"
+                        onClick={onLogout}
+                        type="button"
+                    >
+                        Logout
+                    </button>
                 </div>
             </div>
         </div>

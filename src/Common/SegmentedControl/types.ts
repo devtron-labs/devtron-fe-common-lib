@@ -15,6 +15,7 @@
  */
 
 import { OptionType } from '@Common/Types'
+import { ComponentSizeType } from '@Shared/constants'
 import { ReactNode } from 'react'
 
 export enum SegmentedControlVariant {
@@ -32,4 +33,8 @@ export interface SegmentedControlProps {
     disabled?: boolean
     rootClassName?: string
     variant?: SegmentedControlVariant
+    /**
+     * @default ComponentSizeType.medium
+     */
+    size?: ComponentSizeType.medium | ComponentSizeType.large
 }
