@@ -1,3 +1,4 @@
+import ReactGA from 'react-ga4'
 import { useTheme } from '@Shared/Providers'
 import { THEME_PREFERENCE_MAP, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
 import { SegmentedControl, SegmentedControlVariant } from '@Common/SegmentedControl'
@@ -24,7 +25,14 @@ const ThemeSwitcher = ({ onChange }: ThemeSwitcherProps) => {
     }))
 
     const handleThemeSwitch = (e: ChangeEvent<HTMLInputElement>) => {
-        handleSelectedThemeChange(e.target.value as ThemePreferenceType)
+        const updatedThemePreference = e.target.value as ThemePreferenceType
+
+        ReactGA.event({
+            category: 'user-card',
+            action: `theme-changed-to-${updatedThemePreference}`,
+        })
+
+        handleSelectedThemeChange(updatedThemePreference)
         onChange()
     }
 
