@@ -81,7 +81,7 @@ const getOptionBgColor = <OptionValue>(
         return 'var(--bg-secondary)'
     }
 
-    return 'var(--bg-primary)'
+    return 'var(--transparent)'
 }
 
 export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
