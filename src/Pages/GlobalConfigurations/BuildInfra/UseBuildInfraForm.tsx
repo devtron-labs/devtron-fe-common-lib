@@ -347,11 +347,6 @@ const useBuildInfraForm = ({
         const lastSavedConfiguration = profileResponse.profile.configurations[targetPlatform] || currentConfiguration
 
         switch (action) {
-            case BuildInfraProfileInputActionType.TOGGLE_USE_K8S_DRIVER: {
-                currentInput.useK8sDriver = !currentInput.useK8sDriver
-                break
-            }
-
             case BuildInfraMetaConfigTypes.DESCRIPTION: {
                 const { value } = data
                 currentInput.description = value

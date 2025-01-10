@@ -53,25 +53,29 @@ export const getBuildInfraProfileByName = async ({
     }
 }
 
+export const createBuildInfraProfileService = async (payload: BuildInfraPayloadType) => {
+    const response = await post<ReturnType<typeof post>, BuildInfraPayloadType>(getBuildInfraProfileEndpoint(), payload)
+    return response
+}
+
 export const upsertBuildInfraProfile = async ({
     name,
     profileInput,
     canConfigureUseK8sDriver,
 }: UpsertBuildInfraProfileServiceParamsType) => {
     const isEditView = !!name
-    const baseEndpoint = getBuildInfraProfileEndpoint()
     const payload = getBuildInfraProfilePayload(profileInput, canConfigureUseK8sDriver)
 
     if (isEditView) {
         const updateProfileQueryPayload: Pick<BuildInfraProfileDTO['profile'], 'name'> = { name }
         const response = await put<ReturnType<typeof put>, BuildInfraPayloadType>(
-            getUrlWithSearchParams(baseEndpoint, updateProfileQueryPayload),
+            getUrlWithSearchParams(getBuildInfraProfileEndpoint(), updateProfileQueryPayload),
             payload,
         )
 
         return response
     }
 
-    const response = await post<ReturnType<typeof post>, BuildInfraPayloadType>(baseEndpoint, payload)
+    const response = await createBuildInfraProfileService(payload)
     return response
 }

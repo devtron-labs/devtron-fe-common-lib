@@ -404,7 +404,6 @@ interface NumericBuildInfraConfigPayloadType {
 
 export enum BuildInfraProfileInputActionType {
     ADD_TARGET_PLATFORM = 'add_target_platform',
-    TOGGLE_USE_K8S_DRIVER = 'toggle_use_k8s_driver',
     REMOVE_TARGET_PLATFORM = 'remove_target_platform',
     RENAME_TARGET_PLATFORM = 'rename_target_platform',
 
@@ -430,10 +429,6 @@ type BuildInfraInheritActionsOnSubValues = Extract<
 >
 
 export type HandleProfileInputChangeType =
-    | {
-          action: BuildInfraProfileInputActionType.TOGGLE_USE_K8S_DRIVER
-          data?: never
-      }
     | {
           action: NumericBuildInfraConfigTypes
           data: ProfileInputDispatchDataType & NumericBuildInfraConfigPayloadType

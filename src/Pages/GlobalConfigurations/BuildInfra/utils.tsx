@@ -448,6 +448,9 @@ export const getTransformedBuildInfraProfileResponse = ({
     }
 }
 
+export const getBuildxDriverTypeFromUseK8sDriver = (useK8sDriver: boolean): BuildXDriverType =>
+    useK8sDriver ? BuildXDriverType.KUBERNETES : BuildXDriverType.DOCKER_CONTAINER
+
 export const getBuildInfraProfilePayload = (
     profileInput: CreateBuildInfraProfileType['profileInput'],
     canConfigureUseK8sDriver: boolean,
@@ -516,9 +519,7 @@ export const getBuildInfraProfilePayload = (
         type: profileInput.type,
         configurations,
         ...(canConfigureUseK8sDriver && {
-            buildxDriverType: profileInput.useK8sDriver
-                ? BuildXDriverType.KUBERNETES
-                : BuildXDriverType.DOCKER_CONTAINER,
+            buildxDriverType: getBuildxDriverTypeFromUseK8sDriver(profileInput.useK8sDriver),
         }),
     }
     return payload
