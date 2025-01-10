@@ -72,7 +72,7 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     }
 
     const renderLegend = () => (
-        <div className={`flexbox flex-wrap dc__row-gap-2 ${isProportional ? 'dc__gap-24' : 'dc__gap-16'}`}>
+        <div className={`flexbox flex-wrap dc__row-gap-4 ${isProportional ? 'dc__gap-24' : 'dc__gap-16'}`}>
             {renderContent()}
         </div>
     )

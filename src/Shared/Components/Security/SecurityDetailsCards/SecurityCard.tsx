@@ -37,11 +37,11 @@ const SecurityCard = ({ category, subCategory, severityCount = {}, handleCardCli
             case SUB_CATEGORIES.MISCONFIGURATIONS:
                 return hasThreats
                     ? { title: `${totalCount} misconfigurations` }
-                    : { title: 'No misconfiguration', subtitle: 'No misconfigurations found' }
+                    : { title: 'No misconfiguration', subtitle: 'No configuration issues detected in scanned files' }
             default:
                 return hasThreats
                     ? { title: `${totalCount} vulnerabilities` }
-                    : { title: 'No vulnerabilities', subtitle: 'No security vulnerability found' }
+                    : { title: 'No vulnerabilities', subtitle: 'No vulnerabilities or potential threats found' }
         }
     }
 
@@ -86,7 +86,7 @@ const SecurityCard = ({ category, subCategory, severityCount = {}, handleCardCli
                 ) : (
                     <div className="bcn-1 br-4 h-8" />
                 )}
-                {subtitle && <span className="cn-9 fs-13">{subtitle}</span>}
+                {subtitle && <span className="cn-9 fs-13 lh-20">{subtitle}</span>}
             </div>
         </div>
     )
