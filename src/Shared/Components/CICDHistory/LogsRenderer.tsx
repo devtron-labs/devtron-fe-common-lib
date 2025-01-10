@@ -504,7 +504,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                             />
                             {!!searchKey && (
                                 <div className="flexbox px-10 py-6 dc__gap-8 dc__align-items-center">
-                                    <span className="fs-13 fw-4 lh-20 cn-0">
+                                    <span className="fs-13 fw-4 lh-20 text__white">
                                         {hasSearchResults ? currentSearchIndex + 1 : 0}/{searchResults.length}
                                         &nbsp;results
                                     </span>
@@ -517,7 +517,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                                             aria-label="Focus the previous search result match"
                                             disabled={!hasSearchResults}
                                         >
-                                            <ICArrow className="scn-0 dc__flip-180 icon-dim-14 dc__no-shrink" />
+                                            <ICArrow className="icon-stroke__white dc__flip-180 icon-dim-14 dc__no-shrink" />
                                         </button>
                                         <button
                                             type="button"
@@ -527,7 +527,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                                             aria-label="Focus the next search result match"
                                             disabled={!hasSearchResults}
                                         >
-                                            <ICArrow className="scn-0 icon-dim-14 dc__no-shrink" />
+                                            <ICArrow className="icon-stroke__white icon-dim-14 dc__no-shrink" />
                                         </button>
                                     </div>
                                 </div>
@@ -547,9 +547,9 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                                     aria-label={shortcutTippyText}
                                 >
                                     {areAllStagesExpanded ? (
-                                        <ICCollapseAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
+                                        <ICCollapseAll className="icon-dim-16 dc__no-shrink dc__transition--transform icon-stroke__white" />
                                     ) : (
-                                        <ICExpandAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
+                                        <ICExpandAll className="icon-dim-16 dc__no-shrink dc__transition--transform icon-stroke__white" />
                                     )}
                                 </button>
                             </Tooltip>
