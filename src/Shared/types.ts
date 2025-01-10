@@ -15,7 +15,7 @@
  */
 
 import { Dayjs } from 'dayjs'
-import { ApprovalConfigDataType } from '@Common/Types'
+import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
 import {
     OptionType,
     CommonNodeAttr,
@@ -266,11 +266,6 @@ export enum Severity {
     MEDIUM = 'medium',
     LOW = 'low',
     UNKNOWN = 'unknown',
-}
-
-export enum ImagePromotionTabs {
-    REQUEST = 'request',
-    PENDING = 'pending',
 }
 
 export interface ArtifactPromotionMetadata {
@@ -917,7 +912,7 @@ export interface PolicyConsequencesDTO {
     ci: PipelineStageBlockInfo
 }
 
-export interface GetPolicyConsequencesProps {
+export interface GetPolicyConsequencesProps extends Pick<APIOptions, 'abortControllerRef'> {
     appId: number
     envId: number
 }

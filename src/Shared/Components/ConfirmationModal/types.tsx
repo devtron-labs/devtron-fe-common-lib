@@ -8,27 +8,30 @@ export enum ConfirmationModalVariantType {
     custom = 'custom',
 }
 
-interface CommonButtonProps extends Pick<ButtonProps, 'text'>, Partial<Pick<ButtonProps, 'startIcon' | 'endIcon'>> {
-    onClick: (e?: SyntheticEvent) => void
-}
+type CommonButtonProps<isConfig extends boolean, isCustomVariant extends boolean> = Pick<ButtonProps, 'text'> &
+    Partial<Pick<ButtonProps, 'startIcon' | 'endIcon'>> &
+    (isConfig extends false
+        ? Pick<ButtonProps, 'disabled'> & { onClick: (...args: Partial<Parameters<ButtonProps['onClick']>>) => void }
+        : {}) &
+    (isCustomVariant extends true ? Pick<ButtonProps, 'style'> : {})
 
 interface CustomInputConfig {
     identifier: string
     confirmationKeyword: string
 }
 
-type ButtonConfig<PrimaryButtonConfig, SecondaryButtonConfig> =
+type ButtonConfig<isConfig extends boolean, isCustomVariant extends boolean> =
     | {
-          primaryButtonConfig: PrimaryButtonConfig & CommonButtonProps
-          secondaryButtonConfig: SecondaryButtonConfig & CommonButtonProps
+          primaryButtonConfig: Pick<ButtonProps, 'isLoading'> & CommonButtonProps<isConfig, isCustomVariant>
+          secondaryButtonConfig: CommonButtonProps<isConfig, isCustomVariant>
       }
     | {
-          primaryButtonConfig: PrimaryButtonConfig & CommonButtonProps
+          primaryButtonConfig: Pick<ButtonProps, 'isLoading'> & CommonButtonProps<isConfig, isCustomVariant>
           secondaryButtonConfig?: never
       }
     | {
           primaryButtonConfig?: never
-          secondaryButtonConfig?: SecondaryButtonConfig & CommonButtonProps
+          secondaryButtonConfig?: CommonButtonProps<isConfig, isCustomVariant>
       }
 
 type CustomInputConfigOrChildrenType =
@@ -45,27 +48,28 @@ type CustomInputConfigOrChildrenType =
           children?: never
       }
 
-type ButtonConfigAndVariantType =
+type ButtonConfigAndVariantType<isConfig extends boolean> =
     | {
           variant: Exclude<ConfirmationModalVariantType, ConfirmationModalVariantType.custom>
           Icon?: never
-          buttonConfig: ButtonConfig<Pick<ButtonProps, 'isLoading' | 'disabled'>, Pick<ButtonProps, 'disabled'>>
+          buttonConfig: ButtonConfig<isConfig, false>
       }
     | {
           variant: ConfirmationModalVariantType.custom
           Icon: FunctionComponent<SVGProps<SVGSVGElement>>
-          buttonConfig: ButtonConfig<
-              Pick<ButtonProps, 'isLoading' | 'disabled' | 'style'>,
-              Pick<ButtonProps, 'disabled' | 'style'>
-          >
+          buttonConfig: ButtonConfig<isConfig, true>
       }
 
-export type ConfirmationModalProps = {
+export type ConfirmationModalProps<isConfig extends boolean = false> = {
     title: string
     subtitle: ReactNode
-    handleClose: (e?: SyntheticEvent) => void
-    showConfirmationModal: boolean
-} & ButtonConfigAndVariantType &
-    CustomInputConfigOrChildrenType
+} & ButtonConfigAndVariantType<isConfig> &
+    CustomInputConfigOrChildrenType &
+    (isConfig extends false
+        ? {
+              handleClose: (e?: SyntheticEvent) => void
+              showConfirmationModal: boolean
+          }
+        : {})
 
 export type ConfirmationModalBodyProps = Omit<ConfirmationModalProps, 'showConfirmationModal'>

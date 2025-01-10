@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
+import { ServerErrors } from '@Common/ServerError'
+
 export interface HandleDownloadProps {
     downloadUrl: string
     showFilePreparingToast?: boolean
     fileName?: string
     showSuccessfulToast?: boolean
     downloadSuccessToastContent?: string
+}
+
+export interface UseDownloadReturnType {
+    handleDownload: (props: HandleDownloadProps) => Promise<Error | ServerErrors>
+    isDownloading: boolean
 }

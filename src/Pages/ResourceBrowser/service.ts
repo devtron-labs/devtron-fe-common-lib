@@ -1,11 +1,14 @@
-import { post } from '@Common/Api'
+import { post, trash } from '@Common/Api'
 import { ROUTES } from '@Common/Constants'
-import { ResponseType } from '@Common/Types'
+import { APIOptions, ResponseType } from '@Common/Types'
 import {
     CreateResourceDTO,
     CreateResourcePayload,
     K8sResourceDetailType,
     K8sResourceListPayloadType,
+    NodeActionRequest,
+    ResourceListPayloadType,
+    ResourceType,
 } from './ResourceBrowser.Types'
 
 export const getK8sResourceList = (
@@ -19,3 +22,13 @@ export const getK8sResourceList = (
 export const createNewResource = (
     resourceListPayload: CreateResourcePayload,
 ): Promise<ResponseType<CreateResourceDTO[]>> => post(ROUTES.K8S_RESOURCE_CREATE, resourceListPayload)
+
+export const deleteResource = (
+    resourceListPayload: ResourceListPayloadType,
+    abortControllerRef?: APIOptions['abortControllerRef'],
+): Promise<ResponseType<ResourceType[]>> => post(ROUTES.DELETE_RESOURCE, resourceListPayload, { abortControllerRef })
+
+export const deleteNodeCapacity = (
+    requestPayload: NodeActionRequest,
+    abortControllerRef?: APIOptions['abortControllerRef'],
+): Promise<ResponseType> => trash(ROUTES.NODE_CAPACITY, requestPayload, { abortControllerRef })

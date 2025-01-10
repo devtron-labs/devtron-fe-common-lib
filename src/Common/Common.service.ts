@@ -41,7 +41,7 @@ import {
     GlobalVariableDTO,
     GlobalVariableOptionType,
 } from './Types'
-import { ApiResourceType } from '../Pages'
+import { ApiResourceType, STAGE_MAP } from '../Pages'
 import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
 
 export const getTeamListMin = (): Promise<TeamList> => {
@@ -66,13 +66,6 @@ interface UserRole extends ResponseType {
         roles: string[]
         superAdmin: boolean
     }
-}
-
-const stageMap = {
-    PRECD: 'PRE',
-    CD: 'DEPLOY',
-    POSTCD: 'POST',
-    APPROVAL: 'APPROVAL',
 }
 
 export const SourceTypeMap = {
@@ -396,7 +389,7 @@ export const genericCDMaterialsService = (
         default:
             URL = getUrlWithSearchParams(`${ROUTES.CD_MATERIAL_GET}/${cdMaterialID}/material`, {
                 ...manipulatedParams,
-                stage: stageMap[stage],
+                stage: STAGE_MAP[stage],
             })
             break
     }
