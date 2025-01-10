@@ -135,6 +135,7 @@ export const ROUTES = {
     FILE_UPLOAD: 'file/upload',
     PLUGIN_GLOBAL_VARIABLES: 'plugin/global/list/global-variable',
     CONFIG_COMPARE_SECRET: 'config/compare/secret',
+    SCOPED_GLOBAL_VARIABLES: 'global/variables',
 }
 
 export enum KEY_VALUE {
