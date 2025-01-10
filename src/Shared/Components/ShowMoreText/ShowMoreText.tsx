@@ -40,17 +40,13 @@ const ShowMoreText = ({ text, textClass }: ShowMoreTextProps) => {
     const toggleShowText = () => {
         setShowAllText(!showAllText)
     }
-    const getTextClassName = () => {
-        if (showAllText) {
-            return textClass || ''
-        }
-
-        return `${textClass || ''} dc__truncate`
-    }
 
     return (
         <div className="min-w-385 pr-20">
-            <span ref={ellipsisText} className={getTextClassName()}>
+            <span
+                ref={ellipsisText}
+                className={`${textClass || ''} ${!showAllText ? 'dc__truncate' : ''} dc__word-break`}
+            >
                 {text}
             </span>
             {showToggle && (
