@@ -59,6 +59,7 @@ const PluginTagSelect = ({
                 isLoading={isLoading}
                 inputId="plugin-tag-select"
                 isDisabled={isLoading}
+                shouldMenuAlignRight
             />
         </div>
     )
