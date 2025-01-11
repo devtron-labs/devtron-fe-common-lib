@@ -33,6 +33,7 @@ import {
     WORKFLOW_OPTIONS_MODAL_TYPES,
 } from './constants'
 import { getSwitchToWebhookPayload } from './utils'
+import './workflowOptions.scss'
 
 const WorkflowOptionsModal = ({
     handleCloseWorkflowOptionsModal,
@@ -45,6 +46,7 @@ const WorkflowOptionsModal = ({
     getWorkflows,
     resetChangeCIPayload,
     linkedCDSourceVariant,
+    isAppGroup = false,
 }: Readonly<WorkflowOptionsModalProps>) => {
     const [currentCIPipelineType, setCurrentCIPipelineType] = useState<CIPipelineNodeType | WorkflowNodeType.WEBHOOK>(
         null,
@@ -235,6 +237,7 @@ const WorkflowOptionsModal = ({
                             type={SOURCE_TYPE_CARD_VARIANTS.LINKED_PIPELINE.type}
                             handleCardAction={handleCardAction}
                             disableInfo={getDisabledInfo(CIPipelineNodeType.LINKED_CI)}
+                            isDisabled={isAppGroup}
                         />
                     </section>
 
@@ -252,6 +255,7 @@ const WorkflowOptionsModal = ({
                             type={SOURCE_TYPE_CARD_VARIANTS.EXTERNAL_SERVICE.type}
                             handleCardAction={handleCardAction}
                             disableInfo={getDisabledInfo(WorkflowNodeType.WEBHOOK)}
+                            isDisabled={isAppGroup}
                         />
 
                         {!!linkedCDSourceVariant && (
@@ -283,6 +287,7 @@ const WorkflowOptionsModal = ({
                                 type={SOURCE_TYPE_CARD_VARIANTS.JOB.type}
                                 handleCardAction={handleCardAction}
                                 disableInfo={getDisabledInfo(CIPipelineNodeType.JOB_CI)}
+                                isDisabled={isAppGroup}
                             />
                         </section>
                     )}

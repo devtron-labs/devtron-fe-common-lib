@@ -27,7 +27,9 @@ const SourceTypeCard = ({
     type,
     handleCardAction,
     disableInfo,
+    isDisabled = false,
 }: Readonly<SourceTypeCardProps>) => {
+    const disableCard = !!disableInfo || isDisabled
     const renderTippy = (children) => (
         <Tippy className="default-tt w-200" placement="top" content={disableInfo} arrow={false}>
             {/* Since in disabled state Tippy does'nt work */}
@@ -37,18 +39,18 @@ const SourceTypeCard = ({
 
     return (
         <ConditionalWrap wrap={renderTippy} condition={!!disableInfo}>
-            <div className={disableInfo ? 'cursor-not-allowed dc__position-rel' : ''}>
+            <div className={disableCard ? 'cursor-not-allowed dc__position-rel' : ''}>
                 <div
                     className={`flexbox p-12 dc__gap-12 dc__align-self-stretch br-4 dc__border-n1 bcn-0 dc__hover-n50  ${
-                        disableInfo ? 'dc__disable-click dc__opacity-0_5' : ''
+                        disableCard ? 'dc__disable-click dc__opacity-0_5' : ''
                     }`}
                     role="button"
                     data-testid={dataTestId}
                     data-pipeline-type={type}
                     onClick={handleCardAction}
                     onKeyDown={handleCardAction}
-                    tabIndex={disableInfo ? -1 : 0}
-                    aria-disabled={!!disableInfo}
+                    tabIndex={disableCard ? -1 : 0}
+                    aria-disabled={disableCard}
                 >
                     <div>
                         <img src={image} className="flex br-8" alt={alt} width={40} height={40} />
