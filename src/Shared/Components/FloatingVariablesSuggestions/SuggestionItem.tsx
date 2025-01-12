@@ -15,9 +15,8 @@
  */
 
 import { useState } from 'react'
-import Tippy from '@tippyjs/react'
 import DOMPurify from 'dompurify'
-import { ClipboardButton, copyToClipboard, YAMLStringify } from '@Common/index'
+import { ClipboardButton, ConditionalWrap, copyToClipboard, Tooltip, YAMLStringify } from '@Common/index'
 import { SuggestionsItemProps } from './types'
 import { NO_DEFINED_DESCRIPTION } from './constants'
 
@@ -27,6 +26,7 @@ const SuggestionItem = ({
     variableValue,
     isRedacted,
     highlightText,
+    showValueOnHover,
 }: SuggestionsItemProps) => {
     const [copyToClipboardPromise, setCopyToClipboardPromise] = useState<ReturnType<typeof copyToClipboard>>(null)
 
@@ -87,8 +87,8 @@ const SuggestionItem = ({
         />
     )
 
-    return (
-        <Tippy
+    const renderTooltip = (children) => (
+        <Tooltip
             className="default-tt dc__word-break-all"
             content={
                 <div className="mw-200 flex column dc__content-start dc__align-start mxh-140 dc__overflow-scroll">
@@ -103,6 +103,12 @@ const SuggestionItem = ({
             // Have to append to body because the parent is draggable
             appendTo={document.body}
         >
+            {children}
+        </Tooltip>
+    )
+
+    return (
+        <ConditionalWrap condition={showValueOnHover} wrap={renderTooltip}>
             <div
                 className="flexbox-col pt-8 pb-8 pl-12 pr-12 dc__align-self-stretch bcn-0 dc__border-bottom-n1 dc__hover-n50"
                 onClick={handleCopyTrigger}
@@ -120,7 +126,7 @@ const SuggestionItem = ({
 
                 <div className="flexbox dc__align-items-center">{renderDescription()}</div>
             </div>
-        </Tippy>
+        </ConditionalWrap>
     )
 }
 

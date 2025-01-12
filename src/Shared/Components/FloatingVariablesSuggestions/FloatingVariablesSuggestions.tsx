@@ -43,6 +43,7 @@ const FloatingVariablesSuggestions = ({
     clusterId,
     bounds,
     hideObjectVariables = true,
+    showValueOnHover = true,
 }: FloatingVariablesSuggestionsProps) => {
     const [isActive, setIsActive] = useState<boolean>(false)
     const [collapsedPosition, setCollapsedPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
@@ -223,6 +224,7 @@ const FloatingVariablesSuggestions = ({
                     variables={variablesData ?? []}
                     reloadVariables={reloadScopedVariables}
                     error={error}
+                    showValueOnHover={showValueOnHover}
                 />
             </div>
         </Draggable>

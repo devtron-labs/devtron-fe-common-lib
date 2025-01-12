@@ -16,21 +16,24 @@
 
 import { get } from '@Common/Api'
 import { ROUTES } from '@Common/Constants'
-import { ScopedVariableType } from './types'
+import { FloatingVariablesSuggestionsProps, ScopedVariableType } from './types'
 
-const generateScope = (key, value) => {
+const generateScope = (key: string | number, value: string | number) => {
     if (key && value) {
         return `"${key}":${value},`
     }
     return ''
 }
 
-export const getScopedVariables = async (
+const getScopedVariablesQuery = ({
     appId,
     envId,
     clusterId,
-    hideObjectVariables: boolean = true,
-): Promise<ScopedVariableType[]> => {
+}: Pick<FloatingVariablesSuggestionsProps, 'appId' | 'envId' | 'clusterId'>) => {
+    if (!appId) {
+        return ''
+    }
+
     let query = `?appId=${appId}&scope={`
 
     query += generateScope('appId', appId)
@@ -43,7 +46,22 @@ export const getScopedVariables = async (
 
     query += '}'
 
-    const { result } = await get<ScopedVariableType[]>(`${ROUTES.SCOPED_GLOBAL_VARIABLES}${query}`)
+    return query
+}
+
+export const getScopedVariables = async (
+    appId: FloatingVariablesSuggestionsProps['appId'],
+    envId: FloatingVariablesSuggestionsProps['envId'],
+    clusterId: FloatingVariablesSuggestionsProps['clusterId'],
+    hideObjectVariables: boolean = true,
+): Promise<ScopedVariableType[]> => {
+    const { result } = await get<ScopedVariableType[]>(
+        `${ROUTES.SCOPED_GLOBAL_VARIABLES}${getScopedVariablesQuery({
+            appId,
+            envId,
+            clusterId,
+        })}`,
+    )
     if (!result) {
         return []
     }

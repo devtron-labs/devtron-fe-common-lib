@@ -27,29 +27,33 @@ export interface ScopedVariableType {
 
 export interface FloatingVariablesSuggestionsProps {
     zIndex: number
-    appId: string
+    appId?: string
     envId?: string
     clusterId?: string
     bounds?: DraggableBounds | string | false
     /**
      * This will hide the variables with object/array values if set to true
-     * @default - true
+     * @default true
      */
     hideObjectVariables?: boolean
+    /**
+     * @default true
+     */
+    showValueOnHover?: boolean
 }
 
-export interface SuggestionsItemProps {
-    variableName: string
-    description: string
-    variableValue: Required<ScopedVariableType['variableValue']['value']>
-    isRedacted: boolean
-    highlightText: string
-}
-
-export interface SuggestionsProps {
+export interface SuggestionsProps extends Required<Pick<FloatingVariablesSuggestionsProps, 'showValueOnHover'>> {
     handleDeActivation: (e: React.MouseEvent<HTMLOrSVGElement>) => void
     loading: boolean
     variables: ScopedVariableType[]
     reloadVariables: () => void
     error: boolean
+}
+
+export interface SuggestionsItemProps extends Pick<SuggestionsProps, 'showValueOnHover'> {
+    variableName: string
+    description: string
+    variableValue: Required<ScopedVariableType['variableValue']['value']>
+    isRedacted: boolean
+    highlightText: string
 }

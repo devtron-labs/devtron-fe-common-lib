@@ -25,7 +25,14 @@ import { SuggestionsProps, ScopedVariableType } from './types'
 import SuggestionsInfo from './SuggestionsInfo'
 import { NO_DEFINED_DESCRIPTION, NO_DEFINED_VALUE } from './constants'
 
-const Suggestions = ({ handleDeActivation, loading, variables, reloadVariables, error }: SuggestionsProps) => {
+const Suggestions = ({
+    handleDeActivation,
+    loading,
+    variables,
+    reloadVariables,
+    error,
+    showValueOnHover,
+}: SuggestionsProps) => {
     const [suggestions, setSuggestions] = useState<ScopedVariableType[]>(variables)
     const [clearSearch, setClearSearch] = useState<boolean>(false)
     const [highlightText, setHighlightText] = useState<string>('')
@@ -124,6 +131,7 @@ const Suggestions = ({ handleDeActivation, loading, variables, reloadVariables, 
                             variableValue={variable.variableValue?.value ?? NO_DEFINED_VALUE}
                             isRedacted={variable.isRedacted}
                             highlightText={highlightText}
+                            showValueOnHover={showValueOnHover}
                         />
                     ))
                 ) : (
