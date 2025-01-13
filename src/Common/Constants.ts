@@ -117,6 +117,7 @@ export const ROUTES = {
     ATTRIBUTES_UPDATE: 'attributes/update',
     APP_LIST_MIN: 'app/min',
     CLUSTER_LIST_MIN: 'cluster/autocomplete',
+    CLUSTER_LIST_RAW: 'k8s/capacity/cluster/list/raw',
     PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
     PLUGIN_GLOBAL_LIST_V2: 'plugin/global/list/v2',
     PLUGIN_GLOBAL_LIST_TAGS: 'plugin/global/list/tags',
