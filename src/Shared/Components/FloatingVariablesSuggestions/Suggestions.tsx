@@ -20,10 +20,12 @@ import NoVariables from '@Images/no-artifact@2x.png'
 import { ReactComponent as ICClose } from '@Icons/ic-cross.svg'
 import { ReactComponent as ICSearch } from '@Icons/ic-search.svg'
 import { ReactComponent as ICVariable } from '@Icons/ic-view-variable-toggle.svg'
+import { ComponentSizeType } from '@Shared/constants'
 import SuggestionItem from './SuggestionItem'
 import { SuggestionsProps, ScopedVariableType } from './types'
 import SuggestionsInfo from './SuggestionsInfo'
 import { NO_DEFINED_DESCRIPTION, NO_DEFINED_VALUE } from './constants'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 
 const Suggestions = ({
     handleDeActivation,
@@ -71,26 +73,27 @@ const Suggestions = ({
 
     const renderHeader = (): JSX.Element => (
         <div className="flexbox-col dc__align-self-stretch">
-            <div className="handle-drag flexbox pt-8 pl-12 pr-12 dc__gap-16 dc__align-start dc__align-self-stretch bcn-7 dc__grabbable">
+            <div className="handle-drag flexbox pt-8 pl-12 pr-12 dc__gap-16 dc__align-start dc__align-self-stretch dc__grabbable dc__border-bottom">
                 <div className="flexbox-col dc__content-center dc__align-start flex-grow-1 dc__no-shrink">
                     <div className="flex center dc__gap-4">
-                        <p className="m-0 cn-0 fs-13 fw-6 lh-20 dc__align-self-stretch">Scoped variables</p>
-
-                        <ICVariable className="icon-dim-16 scn-0" />
+                        <p className="m-0 cn-7 fs-13 fw-6 lh-20 dc__align-self-stretch">Scoped variables</p>
+                        <ICVariable className="icon-dim-16 scn-7" />
                     </div>
 
-                    <p className="dc__align-self-stretch c-n50 fs-12 fw-1 lh-20">Use variable to set dynamic value</p>
+                    <p className="dc__align-self-stretch cn-7 fs-12 fw-1 lh-20">Use variable to set dynamic value</p>
                 </div>
 
                 <div className="h-100">
-                    <button
-                        type="button"
-                        className="dc__outline-none-imp dc__no-border p-0 bcn-7 h-20"
+                    <Button
+                        icon={<ICClose />}
+                        ariaLabel="Close suggestions"
+                        showAriaLabelInTippy={false}
+                        dataTestId="deactivate-suggestions"
                         onClick={handleDeActivation}
-                        data-testid="deactivate-suggestions"
-                    >
-                        <ICClose className="fcn-0 icon-dim-20 cursor" />
-                    </button>
+                        size={ComponentSizeType.xs}
+                        variant={ButtonVariantType.borderLess}
+                        style={ButtonStyleType.negativeGrey}
+                    />
                 </div>
             </div>
 
@@ -161,7 +164,7 @@ const Suggestions = ({
         if (variables?.length === 0) {
             return (
                 <>
-                    <div className="flexbox-col dc__align-self-stretch dc__overflow-scroll bg__primary flex-grow-1 h-200 bg__primary">
+                    <div className="flexbox-col dc__align-self-stretch dc__overflow-scroll flex-grow-1 h-200">
                         <GenericEmptyState title="No variables found" image={NoVariables} />
                     </div>
 
