@@ -53,6 +53,7 @@ export const triggerCDNode = ({
     wfrId,
     runtimeParamsPayload,
     abortControllerRef,
+    isRollbackTrigger = false,
 }: TriggerCDNodeServiceProps) => {
     const areRuntimeParamsConfigured =
         runtimeParamsPayload && (stageType === DeploymentNodeType.POSTCD || stageType === DeploymentNodeType.PRECD)
@@ -62,6 +63,7 @@ export const triggerCDNode = ({
         appId,
         ciArtifactId,
         cdWorkflowType: STAGE_MAP[stageType],
+        isRollbackDeployment: isRollbackTrigger,
         ...(areRuntimeParamsConfigured && runtimeParamsPayload),
     }
 
