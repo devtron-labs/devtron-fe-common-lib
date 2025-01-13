@@ -118,6 +118,7 @@ export interface TriggerCDNodeServiceProps extends Pick<APIOptions, 'abortContro
      * Would be available only case of PRE/POST CD
      */
     runtimeParamsPayload?: RuntimeParamsTriggerPayloadType
+    isRollbackTrigger?: boolean
 }
 
 export interface TriggerCDPipelinePayloadType
@@ -126,5 +127,6 @@ export interface TriggerCDPipelinePayloadType
         'pipelineId' | 'appId' | 'ciArtifactId' | 'runtimeParamsPayload' | 'deploymentWithConfig'
     > {
     cdWorkflowType: (typeof STAGE_MAP)[keyof typeof STAGE_MAP]
+    isRollbackDeployment: boolean
     wfrIdForDeploymentWithSpecificTrigger?: number
 }
