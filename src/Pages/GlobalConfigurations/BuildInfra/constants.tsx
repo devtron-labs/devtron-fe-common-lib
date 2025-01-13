@@ -104,7 +104,7 @@ export const BUILD_INFRA_LOCATOR_LABEL_MAP: Readonly<Record<BuildInfraLocators, 
     [BuildInfraLocators.MEMORY]: 'Memory',
     [BuildInfraLocators.BUILD_TIMEOUT]: 'Build timeout',
     [BuildInfraLocators.NODE_SELECTOR]: 'Node selector',
-    [BuildInfraLocators.TOLERANCE]: 'Tolerance',
+    [BuildInfraLocators.TOLERANCE]: 'Toleration',
     [BuildInfraLocators.CONFIG_MAP]: 'ConfigMaps',
     [BuildInfraLocators.SECRET]: 'Secret',
 }
