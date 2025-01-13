@@ -80,7 +80,7 @@ export const getScanCompletedEmptyState = (scanToolId: number) => ({
     SvgImage: NoVulnerability,
     title: "You're secure!",
     children: (
-        <span className="flex dc__border-radius-24 bcn-0 pl-16 pr-16 pt-8 pb-8 en-1 bw-1">
+        <span className="flex dc__border-radius-24 bg__primary pl-16 pr-16 pt-8 pb-8 en-1 bw-1">
             <ScannedByToolModal scanToolId={scanToolId} />
         </span>
     ),

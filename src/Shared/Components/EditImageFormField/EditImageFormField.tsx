@@ -176,7 +176,7 @@ const EditImageFormField = ({
             >
                 {renderImage(true, BASE_IMAGE_CLASS)}
 
-                <div className="flex p-4 br-4 bcn-0 dc__border edit-image-form-field__figure-container--edit-image-icon dc__zi-1 bcn-0 dc__hover-n50 icon-dim-24">
+                <div className="flex p-4 br-4 bg__primary dc__border edit-image-form-field__figure-container--edit-image-icon dc__zi-1 bg__primary dc__hover-n50 icon-dim-24">
                     <ICPencil className="dc__no-shrink icon-dim-16" />
                 </div>
             </button>

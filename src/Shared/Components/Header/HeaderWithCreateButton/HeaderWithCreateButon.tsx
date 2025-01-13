@@ -97,7 +97,7 @@ export const HeaderWithCreateButton = ({ headerName }: HeaderWithCreateButtonPro
                 onClick={redirectToHelmAppDiscover}
                 data-testid="create-from-chart-store-button"
             >
-                <ChartIcon className="icon-dim-20" />
+                <ChartIcon className="icon-dim-20 fcn-9" />
                 <div className="ml-8">
                     <strong>From Chart store</strong>
                     <div>
@@ -110,7 +110,7 @@ export const HeaderWithCreateButton = ({ headerName }: HeaderWithCreateButtonPro
                 onClick={openCreateJobModel}
                 data-testid="create-job-button-in-dropdown"
             >
-                <JobIcon className="icon-dim-20 scn-7" />
+                <JobIcon className="icon-dim-20 scn-9" />
                 <div className="ml-8">
                     <strong>Job</strong>
                     <div>
@@ -121,7 +121,7 @@ export const HeaderWithCreateButton = ({ headerName }: HeaderWithCreateButtonPro
         </Modal>
     )
     return (
-        <div className="create-button-container dc__position-sticky dc__top-0 bcn-0 dc__zi-4">
+        <div className="create-button-container dc__position-sticky dc__top-0 bg__primary dc__zi-4">
             <PageHeader headerName={headerName} renderActionButtons={renderActionButtons} />
             {showCreateSelectionModal && renderCreateSelectionModal()}
         </div>

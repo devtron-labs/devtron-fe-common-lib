@@ -9,7 +9,7 @@ export const ToastContent = ({
 }: Pick<ToastProps, 'title' | 'description' | 'buttonProps'>) => (
     <div className="flexbox-col dc__gap-8 custom-toast__content">
         <div className="flexbox-col dc__gap-4">
-            <h3 className="m-0 fs-13 fw-6 lh-20 cn-0 dc__ellipsis-right__2nd-line">{title}</h3>
+            <h3 className="m-0 fs-13 fw-6 lh-20 text__white dc__ellipsis-right__2nd-line">{title}</h3>
             <p className="fs-12 fw-4 lh-18 m-0 dc__truncate--clamp-6">{description}</p>
         </div>
         {buttonProps && (

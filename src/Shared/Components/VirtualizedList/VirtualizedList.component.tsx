@@ -49,7 +49,7 @@ export const VirtualizedList = <ListKeys extends string | number, ExtendedType e
         nodeInfo,
         style,
     }) => (
-        <div key={node.id} className="bcn-0" style={style}>
+        <div key={node.id} className="bg__primary" style={style}>
             {renderItem({ node, nodeInfo })}
         </div>
     )

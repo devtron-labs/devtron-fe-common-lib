@@ -180,7 +180,7 @@ const AppStatusDetailsChart = ({
                     )}
                 </div>
                 {showFooter && (
-                    <div className="dc__position-fixed bcn-0 flexbox dc__content-space dc__border-top p-16 fs-13 fw-6 footer">
+                    <div className="dc__position-fixed bg__primary flexbox dc__content-space dc__border-top p-16 fs-13 fw-6 footer">
                         <span className="fs-13 fw-6">Facing issues in installing integration?</span>
                         <a
                             className="help-chat cb-5 flex left"

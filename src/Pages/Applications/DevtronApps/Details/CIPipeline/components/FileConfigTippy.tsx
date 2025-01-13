@@ -10,8 +10,8 @@ export const FileConfigTippy = ({ fileMountDir }: Pick<VariableType, 'fileMountD
         className="default-tt w-200"
         content={
             <div className="fs-12 lh-18 flexbox-col dc__gap-2 mw-none">
-                <p className="m-0 fw-6 cn-0">File mount path</p>
-                <p className="m-0 cn-50 flexbox-col flex-nowrap dc__word-break">
+                <p className="m-0 fw-6">File mount path</p>
+                <p className="m-0 flexbox-col flex-nowrap dc__word-break">
                     {fileMountDir}
                     <br />
                     <br />

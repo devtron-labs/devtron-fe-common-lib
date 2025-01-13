@@ -103,7 +103,7 @@ const ErrorBar = ({ appDetails }: ErrorBarType) => {
                             {appDetails.dockerRegistryId}’ registry. <br />
                             2. Provided credentials may be invalid.
                         </div>
-                        <div className="pl-12 pr-12 pt-8 pb-8" style={{ background: 'var(--N50)' }}>
+                        <div className="pl-12 pr-12 pt-8 pb-8" style={{ background: 'var(--bg-secondary)' }}>
                             <div className="flex left">
                                 <span className="mr-8 fw-6">Already provided permission?</span>
                                 Redeploy the application.

@@ -94,7 +94,7 @@
         }
 
         &--warning {
-            @include button-variant-styles(var(--Y500), var(--N900), $border-color);
+            @include button-variant-styles(var(--Y500), var(--black), $border-color);
             @include pseudo-states(var(--Y600), var(--Y700));
         }
 
@@ -105,37 +105,37 @@
     }
 
     &__secondary {
-        $background: var(--N0);
+        $background: var(--transparent);
         $border-color: var(--N200);
 
         &--default {
             @include button-variant-styles($background, var(--B500), $border-color);
-            @include pseudo-states(var(--B100), var(--B200), var(--B500));
+            @include pseudo-states(var(--B100), var(--B200), var(--B300));
         }
 
         &--negative {
             @include button-variant-styles($background, var(--R600), $border-color);
-            @include pseudo-states(var(--R100), var(--R200), var(--R600), var(--R600));
+            @include pseudo-states(var(--R100), var(--R200), var(--R300), var(--R600));
         }
 
         &--negative-grey {
             @include button-variant-styles($background, var(--N700), $border-color);
-            @include pseudo-states(var(--R100), var(--R200), var(--R600), var(--R600));
+            @include pseudo-states(var(--R100), var(--R200), var(--R300), var(--R600));
         }
 
         &--positive {
             @include button-variant-styles($background, var(--G600), $border-color);
-            @include pseudo-states(var(--G100), var(--G200), var(--G600));
+            @include pseudo-states(var(--G100), var(--G200), var(--G300));
         }
 
         &--warning {
             @include button-variant-styles($background, var(--Y700), $border-color);
-            @include pseudo-states(var(--Y100), var(--Y200), var(--Y700));
+            @include pseudo-states(var(--Y100), var(--Y200), var(--Y300));
         }
 
         &--neutral {
             @include button-variant-styles($background, var(--N700), $border-color);
-            @include pseudo-states(var(--N100), var(--N200), var(--N700));
+            @include pseudo-states(var(--N100), var(--N200), var(--N300));
         }
     }
 

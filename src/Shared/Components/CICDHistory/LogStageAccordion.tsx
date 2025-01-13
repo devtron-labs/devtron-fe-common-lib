@@ -69,17 +69,17 @@ const LogStageAccordion = ({
             >
                 <div className="flexbox dc__gap-8 dc__transparent dc__align-items-center">
                     <ICCaretDown
-                        className={`icon-dim-16 dc__no-shrink dc__transition--transform scn-0 ${!isOpen ? 'dc__flip-n90 dc__opacity-0_5' : ''}`}
+                        className={`icon-dim-16 dc__no-shrink dc__transition--transform icon-stroke__white ${!isOpen ? 'dc__flip-n90 dc__opacity-0_5' : ''}`}
                     />
 
                     <div className="flexbox dc__gap-12 dc__align-items-center">
                         {getStageStatusIcon(status)}
 
-                        <h3 className="m-0 cn-0 fs-13 fw-4 lh-20 dc__word-break">{stage}</h3>
+                        <h3 className="m-0 text__white fs-13 fw-4 lh-20 dc__word-break">{stage}</h3>
                     </div>
                 </div>
 
-                {!!endTime && <span className="cn-0 fs-13 fw-4 lh-20">{getFormattedTimeDifference()}</span>}
+                {!!endTime && <span className="text__white fs-13 fw-4 lh-20">{getFormattedTimeDifference()}</span>}
             </button>
 
             {isOpen && (
@@ -101,7 +101,7 @@ const LogStageAccordion = ({
                                     {logsIndex + 1}
                                 </span>
                                 <pre
-                                    className="mono fs-14 mb-0-imp cn-0 dc__word-break lh-20 dc__unset-pre"
+                                    className="mono fs-14 mb-0-imp text__white dc__word-break lh-20 dc__unset-pre"
                                     // eslint-disable-next-line react/no-danger
                                     dangerouslySetInnerHTML={{
                                         __html: DOMPurify.sanitize(log),
@@ -114,7 +114,7 @@ const LogStageAccordion = ({
                     {isLoading && (
                         <LogsItemContainer>
                             <span />
-                            <div className="dc__loading-dots cn-0" />
+                            <div className="dc__loading-dots text__white" />
                         </LogsItemContainer>
                     )}
                 </div>

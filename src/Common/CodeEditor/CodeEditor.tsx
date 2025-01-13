@@ -42,6 +42,8 @@ import {
 } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '../Constants'
+import { useTheme } from '@Shared/Providers'
+import { getCodeEditorThemeFromAppTheme } from './utils'
 
 const CodeEditorContext = React.createContext(null)
 
@@ -70,7 +72,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         onChange,
         readOnly,
         diffView,
-        theme = '',
+        theme,
         loading,
         customLoader,
         focus,
@@ -83,6 +85,8 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         adjustEditorHeightToContent = false,
         disableSearch = false,
     }) => {
+        const { appTheme } = useTheme()
+
         if (cleanData) {
             value = cleanKubeManifest(value)
             defaultValue = cleanKubeManifest(defaultValue)
@@ -94,7 +98,16 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         const memoisedReducer = React.useCallback(CodeEditorReducer, [])
         const [state, dispatch] = useReducer(
             memoisedReducer,
-            initialState({ mode, theme, value, defaultValue, diffView, noParsing, tabSize }),
+            initialState({
+                mode,
+                theme,
+                value,
+                defaultValue,
+                diffView,
+                noParsing,
+                tabSize,
+                appTheme,
+            }),
         )
         const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
         const [, originalJson, originalYaml] = useJsonYaml(state.defaultCode, tabSize, state.mode, !state.noParsing)
@@ -128,25 +141,9 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             },
         })
 
-        monaco.editor.defineTheme(CodeEditorThemesKeys.deleteDraft, {
-            base: 'vs',
-            inherit: true,
-            rules: [],
-            colors: {
-                'diffEditor.insertedTextBackground': '#ffd4d1',
-                'diffEditor.removedTextBackground': '#ffffff33',
-            },
-        })
-
-        monaco.editor.defineTheme(CodeEditorThemesKeys.unpublished, {
-            base: 'vs',
-            inherit: true,
-            rules: [],
-            colors: {
-                'diffEditor.insertedTextBackground': '#eaf1dd',
-                'diffEditor.removedTextBackground': '#ffffff33',
-            },
-        })
+        useEffect(() => {
+            dispatch({ type: 'setTheme', value: getCodeEditorThemeFromAppTheme(theme, appTheme) })
+        }, [appTheme])
 
         useEffect(() => {
             const rule = !disableSearch

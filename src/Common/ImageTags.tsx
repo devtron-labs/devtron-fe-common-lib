@@ -297,7 +297,7 @@ export const ImageTagsContainer = ({
 
     if (newDescription === '' && displayedTags.length === 0 && !isEditing) {
         return tagsEditable ? (
-            <div className="bcn-0 mt-8 add-image-button">
+            <div className="bg__primary mt-8 add-image-button">
                 <AddImageButton handleEditClick={handleEditClick} />
             </div>
         ) : (
@@ -334,7 +334,7 @@ export const ImageTagsContainer = ({
     return (
         <div className="mt-8">
             {isEditing && tagsEditable ? (
-                <div className="bcn-0 dc__border-top-n1 ">
+                <div className="bg__primary dc__border-top-n1 ">
                     <div className="cn-7 mt-12 flex left">
                         <div>Image labels (eg. v1.0)</div>
                         {renderInfoCard()}
@@ -352,7 +352,7 @@ export const ImageTagsContainer = ({
                         {textInput.length > 0 && (
                             <div
                                 onClick={enterTagCreate}
-                                className="dc__position-abs bcn-0 flex cursor pt-2 pb-2 pr-4 pl-4 br-2 cn-7 dc__border dc__border-bottom-2"
+                                className="dc__position-abs bg__primary flex cursor pt-2 pb-2 pr-4 pl-4 br-2 cn-7 dc__border dc__border-bottom-2"
                                 style={{
                                     top: '50%',
                                     fontFamily: 'monospace',
@@ -446,7 +446,7 @@ export const ImageTagsContainer = ({
                     </div>
                 </div>
             ) : (
-                <div className="top br-4 bcn-0 image-tags-container flexbox">
+                <div className="top br-4 bg__primary image-tags-container flexbox">
                     <div
                         className="flex left image-tag-left-border w-100 mt-8 mb-8 pr-10 pl-10"
                         data-testid="image-tags-container-hover"
@@ -526,7 +526,7 @@ export const ImageTagButton = ({
 
     return (
         <div
-            className={`br-4 en-2 bw-1 mr-8 bcn-0 pt-2 pr-8 pb-2 pl-8 tag-class dc__word-break-all flex ${
+            className={`br-4 en-2 bw-1 mr-8 bg__primary pt-2 pr-8 pb-2 pl-8 tag-class dc__word-break-all flex ${
                 isEditing ? 'icon-hover' : ''
             } ${tabColor()}`}
         >
