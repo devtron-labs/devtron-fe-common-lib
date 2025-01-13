@@ -33,7 +33,7 @@ interface CodeEditorBaseInterface {
     value?: string
     lineDecorationsWidth?: number
     responseType?: string
-    onChange?: (string) => void
+    onChange?: (value: string, defaultValue: string) => void
     onBlur?: () => void
     onFocus?: () => void
     children?: any
@@ -95,7 +95,7 @@ export interface CodeEditorHeaderComposition {
     Clipboard?: React.FC<any>
 }
 
-export type ActionTypes = 'changeLanguage' | 'setDiff' | 'setTheme' | 'setCode' | 'setHeight'
+export type ActionTypes = 'changeLanguage' | 'setDiff' | 'setTheme' | 'setCode' | 'setDefaultCode' | 'setHeight'
 
 export interface Action {
     type: ActionTypes
@@ -106,6 +106,7 @@ export interface CodeEditorInitialValueType extends Pick<CodeEditorBaseInterface
     mode: string
     diffView: boolean
     value: string
+    defaultValue: string
     noParsing?: boolean
     tabSize: number
     appTheme: AppThemeType
@@ -116,6 +117,7 @@ export interface CodeEditorState {
     diffMode: boolean
     theme: CodeEditorThemesKeys
     code: string
+    defaultCode: string
     noParsing: boolean
 }
 

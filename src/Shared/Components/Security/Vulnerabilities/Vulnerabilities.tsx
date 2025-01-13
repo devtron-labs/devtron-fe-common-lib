@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-import { useEffect } from 'react'
-import { EMPTY_STATE_STATUS } from '@Shared/constants'
+import { useEffect, useState } from 'react'
 import { Progressing, useAsync } from '../../../../Common'
-import { ScannedByToolModal } from '../../ScannedByToolModal'
 import { VulnerabilitiesProps } from './types'
-import { SecuritySummaryCard } from '../SecuritySummaryCard'
-import { getScanToolAndSeverityCount } from '../utils'
 import { getSecurityScan } from '../SecurityModal/service'
+import { SecurityCard } from '../SecurityDetailsCards'
+import { CATEGORIES, SUB_CATEGORIES } from '../SecurityModal/types'
+import { SecurityModal } from '../SecurityModal'
 
 const Vulnerabilities = ({
     isScanned,
@@ -32,6 +31,7 @@ const Vulnerabilities = ({
     setVulnerabilityCount,
     SecurityModalSidebar,
 }: VulnerabilitiesProps) => {
+    const [showSecurityModal, setShowSecurityModal] = useState<boolean>(false)
     const [scanResultLoading, scanResultResponse, scanResultError, reloadScanResult] = useAsync(
         () => getSecurityScan({ artifactId, appId: applicationId, envId: environmentId }),
         [],
@@ -47,26 +47,10 @@ const Vulnerabilities = ({
         }
     }, [scanResultResponse])
 
-    if (!isScanEnabled) {
-        return (
-            <div className="security-tab-empty">
-                <p className="security-tab-empty__title">Scan is Disabled</p>
-            </div>
-        )
-    }
-
     if (scanResultLoading) {
         return (
-            <div className="security-tab-empty">
+            <div className="security-tab-empty bcn-1">
                 <Progressing />
-            </div>
-        )
-    }
-
-    if (!isScanned || (scanResultResponse && !scanResultResponse.result.scanned)) {
-        return (
-            <div className="security-tab-empty">
-                <p className="security-tab-empty__title">Image was not scanned</p>
             </div>
         )
     }
@@ -82,34 +66,47 @@ const Vulnerabilities = ({
         )
     }
 
-    const { scanToolId, severityCount, totalCount } = getScanToolAndSeverityCount(scanResultResponse?.result)
-
-    if (!totalCount) {
+    if (!isScanEnabled || !scanResultResponse.result?.isImageScanEnabled) {
         return (
             <div className="security-tab-empty">
-                <p className="security-tab-empty__title">
-                    {EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.TITLE}
-                </p>
-                <p>{EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.SUBTITLE}</p>
-                <p className="security-tab-empty__subtitle">
-                    {scanResultResponse?.result.imageScan.vulnerability?.list[0].StartedOn}
-                </p>
-                <div className="pt-8 pb-8 pl-16 pr-16 flexbox dc__align-items-center">
-                    <ScannedByToolModal scanToolId={scanToolId} />
-                </div>
+                <p className="security-tab-empty__title">Scan is Disabled</p>
             </div>
         )
     }
 
+    if (!isScanned || !scanResultResponse.result?.scanned) {
+        return (
+            <div className="security-tab-empty">
+                <p className="security-tab-empty__title">Image was not scanned</p>
+            </div>
+        )
+    }
+
+    const handleCardClick = () => {
+        setShowSecurityModal(true)
+    }
+
+    const handleModalClose = () => {
+        setShowSecurityModal(false)
+    }
+
     return (
         <div className="p-12">
-            <SecuritySummaryCard
-                severityCount={severityCount}
-                scanToolId={scanToolId}
-                responseData={scanResultResponse?.result}
-                SecurityModalSidebar={SecurityModalSidebar}
-                hidePolicy={!environmentId}
+            <SecurityCard
+                category={CATEGORIES.IMAGE_SCAN}
+                subCategory={SUB_CATEGORIES.VULNERABILITIES}
+                severityCount={scanResultResponse?.result?.imageScan?.vulnerability?.summary?.severities}
+                handleCardClick={handleCardClick}
             />
+            {showSecurityModal && (
+                <SecurityModal
+                    isLoading={scanResultLoading}
+                    error={scanResultError}
+                    responseData={scanResultResponse?.result}
+                    handleModalClose={handleModalClose}
+                    Sidebar={SecurityModalSidebar}
+                />
+            )}
         </div>
     )
 }

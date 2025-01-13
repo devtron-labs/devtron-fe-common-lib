@@ -76,38 +76,6 @@ export interface BulkSelectionActionWidgetProps {
     showBulkRestartOption: boolean
 }
 
-interface BulkOperationAdditionalKeysType {
-    label: string
-    value: string
-    isSortable: boolean
-    /**
-     * width to be given in gridTemplateColumns
-     */
-    width: string
-}
-
-export interface BulkOperation {
-    name: string
-    /**
-     * Would these keys beside the name
-     */
-    additionalKeys?: BulkOperationAdditionalKeysType[]
-    operation: (signal: AbortSignal, data?: unknown) => Promise<void>
-}
-
-export type BulkOperationModalProps = {
-    operationType: 'restart' | 'delete' | 'creation'
-    clusterName: string
-    operations: NonNullable<BulkOperation[]>
-    handleModalClose: () => void
-    resourceKind: string
-    handleReloadDataAfterBulkOperation?: () => void
-    hideResultsDrawer?: boolean
-    shouldAllowForceOperation?: true
-}
-
-export type BulkOperationModalState = BulkOperationModalProps['operationType'] | 'closed'
-
 export interface CreateResourceRequestBodyType {
     appId: string
     clusterId: number
@@ -143,4 +111,31 @@ export interface CreateResourceDTO {
     name: string
     isUpdate: boolean
     error: string
+}
+
+export interface ResourceListPayloadType {
+    clusterId: number
+    k8sRequest: {
+        resourceIdentifier: {
+            groupVersionKind: GVKType
+            namespace?: string
+            name?: string
+        }
+        patch?: string
+        forceDelete?: boolean
+    }
+}
+
+export interface ResourceType {
+    kind: string
+    name: string
+    isUpdate: boolean
+    error: string
+}
+
+export interface NodeActionRequest {
+    clusterId?: number
+    name: string
+    version: string
+    kind: string
 }
