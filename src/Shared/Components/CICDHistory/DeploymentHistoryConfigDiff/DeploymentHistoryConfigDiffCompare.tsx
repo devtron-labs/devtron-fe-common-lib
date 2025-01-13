@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react'
 import { generatePath, useRouteMatch } from 'react-router-dom'
 
-import { DeploymentConfigDiff, DeploymentConfigDiffProps } from '@Shared/Components/DeploymentConfigDiff'
-import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '@Common/Constants'
+import {
+    DEPLOYMENT_CONFIG_DIFF_SORT_KEY,
+    DeploymentConfigDiff,
+    DeploymentConfigDiffProps,
+} from '@Shared/Components/DeploymentConfigDiff'
+import { DEFAULT_BASE_PAGE_SIZE } from '@Common/Constants'
 import { useUrlFilters } from '@Common/Hooks'
 import {
     getSelectPickerOptionByValue,
@@ -43,6 +47,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
         string,
         DeploymentHistoryConfigDiffQueryParams
     >({
+        initialSortKey: DEPLOYMENT_CONFIG_DIFF_SORT_KEY,
         parseSearchParams: parseDeploymentHistoryDiffSearchParams(previousWfrId),
     })
 
@@ -170,7 +175,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
         return null
     }
 
-    const onSorting = () => handleSorting(sortOrder !== SortingOrder.DESC ? 'sort-config' : '')
+    const onSorting = () => handleSorting(DEPLOYMENT_CONFIG_DIFF_SORT_KEY)
 
     const sortingConfig: DeploymentConfigDiffProps['sortingConfig'] = {
         handleSorting: onSorting,
