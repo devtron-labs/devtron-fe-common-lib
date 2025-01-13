@@ -1,13 +1,10 @@
 import { Fragment, useEffect, useState } from 'react'
-import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { ReactComponent as ICSort } from '@Icons/ic-arrow-up-down.svg'
-import { ReactComponent as ICViewVariableToggle } from '@Icons/ic-view-variable-toggle.svg'
 import { Progressing } from '@Common/Progressing'
 import { SortingOrder } from '@Common/Constants'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
-import Toggle from '@Common/Toggle/Toggle'
 import { ComponentSizeType } from '@Shared/constants'
 import { DiffViewer } from '@Shared/Components/DiffViewer'
 
@@ -22,6 +19,7 @@ import {
     DeploymentConfigDiffAccordionProps,
 } from './DeploymentConfigDiff.types'
 import { renderDiffViewNoDifferenceState } from './DeploymentConfigDiff.utils'
+import { ToggleResolveScopedVariables } from '../ToggleResolveScopedVariables'
 
 export const DeploymentConfigDiffMain = ({
     isLoading,
@@ -145,26 +143,14 @@ export const DeploymentConfigDiffMain = ({
 
     const renderScopeVariablesButton = () => {
         if (scopeVariablesConfig) {
-            const { convertVariables } = scopeVariablesConfig
+            const { convertVariables, onConvertVariablesClick } = scopeVariablesConfig
 
             return (
-                <Tippy
-                    content={convertVariables ? 'Hide variables values' : 'Show variables values'}
-                    placement="bottom-start"
-                    animation="shift-away"
-                    className="default-tt"
-                    arrow={false}
-                >
-                    <div className="w-40 h-20">
-                        <Toggle
-                            selected={scopeVariablesConfig.convertVariables}
-                            color="var(--V500)"
-                            onSelect={scopeVariablesConfig.onConvertVariablesClick}
-                            Icon={ICViewVariableToggle}
-                            throttleOnChange
-                        />
-                    </div>
-                </Tippy>
+                <ToggleResolveScopedVariables
+                    resolveScopedVariables={convertVariables}
+                    handleToggleScopedVariablesView={onConvertVariablesClick}
+                    throttleOnChange
+                />
             )
         }
 
