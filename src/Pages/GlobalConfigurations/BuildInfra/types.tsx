@@ -370,6 +370,11 @@ export enum ToleranceHeaderType {
     EFFECT = 'EFFECT',
 }
 
+export type BuildInfraCMCSErrorType = Record<
+    Extract<BuildInfraConfigTypes, BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET>,
+    Record<BuildInfraCMCSValueType['id'], UseFormErrors<BuildInfraCMCSValueType>>
+>
+
 /**
  * Would be maintaining error state for name and description irrespective of platform
  * For error states related to platform, we would not be letting user to switch platform if there are errors
@@ -386,10 +391,7 @@ export type ProfileInputErrorType = Record<
         BuildInfraConfigTypes.TOLERANCE,
         Record<BuildInfraNodeSelectorValueType['id'], Partial<Record<ToleranceHeaderType, string[]>>>
     > &
-    Record<
-        Extract<BuildInfraConfigTypes, BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET>,
-        Record<BuildInfraCMCSValueType['id'], UseFormErrors<BuildInfraCMCSValueType>>
-    >
+    BuildInfraCMCSErrorType
 
 export type TargetPlatformErrorFields = BuildInfraConfigTypes | BuildInfraProfileAdditionalErrorKeysType
 

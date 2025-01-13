@@ -890,7 +890,7 @@ const useBuildInfraForm = ({
                 currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]].value[
                     selectedCMCSIndex
                 ] = finalCMValue
-                // TODO: Confirm once if its correct does useForm handle nested objects?
+
                 const isAnyErrorPresent = errors && Object.keys(errors).some((key) => errors[key])
 
                 if (!currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
