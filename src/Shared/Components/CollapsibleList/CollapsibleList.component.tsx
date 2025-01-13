@@ -97,7 +97,7 @@ export const CollapsibleList = <TabType extends TabOptions>({
     }
 
     return (
-        <div className="mw-none bcn-0">
+        <div className="mw-none bg__primary">
             {config.map(({ id, header, headerIconConfig, items, noItemsText, isExpanded }) => (
                 <Fragment key={id}>
                     <div className="flexbox dc__align-items-center dc__gap-4 py-6 px-8 br-4 dc__hover-n50">
@@ -122,7 +122,7 @@ export const CollapsibleList = <TabType extends TabOptions>({
                                 <button
                                     {...headerIconConfig.btnProps}
                                     type="button"
-                                    className={`dc__unset-button-styles dc__no-shrink cursor br-4 bcn-0 flex ${headerIconConfig.btnProps?.className || ''}`}
+                                    className={`dc__unset-button-styles dc__no-shrink cursor br-4 bg__primary flex ${headerIconConfig.btnProps?.className || ''}`}
                                 >
                                     <headerIconConfig.Icon
                                         {...headerIconConfig.props}

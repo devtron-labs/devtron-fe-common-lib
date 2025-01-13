@@ -15,7 +15,7 @@
  */
 
 import { MutableRefObject } from 'react'
-import { ConsequenceType, VariableType } from '../../../Common'
+import { ConsequenceType, ServerErrors, VariableType } from '../../../Common'
 import { BaseFilterQueryParams } from '../../types'
 import { ImageWithFallbackProps } from '../ImageWithFallback'
 import { getPluginStoreData } from './service'
@@ -203,7 +203,7 @@ export interface PluginListParamsType {
 export interface PluginTagSelectProps extends Pick<BasePluginListContainerProps, 'availableTags'> {
     selectedTags: PluginListContainerProps['parentFilters']['selectedTags']
     isLoading: boolean
-    hasError: boolean
+    tagsError: ServerErrors
     reloadTags: () => void
     handleUpdateSelectedTags: (tags: string[]) => void
 }

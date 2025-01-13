@@ -21,7 +21,7 @@ import './Toggle.scss'
 const Toggle = ({
     selected = false,
     onSelect = null,
-    color = '#36b37e',
+    color = 'var(--G500)',
     rootClassName = '',
     disabled = false,
     dataTestId = 'handle-toggle-button',

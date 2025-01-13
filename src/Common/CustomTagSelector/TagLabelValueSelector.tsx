@@ -143,8 +143,8 @@ export const TagLabelValueSelector = ({
             placement="right"
             content={
                 <div>
-                    <div className="mb-10 fs-12 fw-6 cn-0 dc__break-word">{tag.label}</div>
-                    <div className="fs-12 fw-4 cn-0 dc__break-word">{tag.description}</div>
+                    <div className="mb-10 fs-12 fw-6 dc__break-word">{tag.label}</div>
+                    <div className="fs-12 fw-4 dc__break-word">{tag.description}</div>
                 </div>
             }
         >
@@ -171,7 +171,7 @@ export const TagLabelValueSelector = ({
     const popupMenuBody = activeElement === `tag-${tagInputType}-${selectedTagIndex}` ? renderSuggestions() : null
     return (
         <PopupMenu autoClose autoPosition>
-            <PopupMenu.Button rootClassName="dc__bg-n50 flex top dc__no-border-imp">
+            <PopupMenu.Button rootClassName="bg__secondary flex top dc__no-border-imp">
                 <ResizableTagTextArea
                     minHeight={30}
                     maxHeight={80}

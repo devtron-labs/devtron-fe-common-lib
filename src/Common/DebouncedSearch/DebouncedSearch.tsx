@@ -79,7 +79,7 @@ export default function DebouncedSearch({
             {showClearIcon && !!searchText && (
                 <button
                     type="button"
-                    className="dc__outline-none-imp dc__no-border p-0 bc-n50 flex"
+                    className="dc__outline-none-imp dc__no-border p-0 bg__secondary flex"
                     onClick={handleClearSearch}
                     data-testid="clear-search"
                 >

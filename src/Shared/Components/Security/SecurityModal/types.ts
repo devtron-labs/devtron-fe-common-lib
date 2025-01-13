@@ -250,6 +250,7 @@ interface SecurityModalBaseProps {
     handleModalClose: (event?: React.MouseEvent<HTMLElement>) => void
     Sidebar?: React.FC<SidebarPropsType>
     hidePolicy?: boolean
+    defaultState?: SecurityModalStateType
 }
 
 export type SecurityModalPropsType = SecurityModalBaseProps

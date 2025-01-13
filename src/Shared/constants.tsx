@@ -142,7 +142,7 @@ export const EMPTY_STATE_STATUS = {
     },
     CI_DEATILS_NO_VULNERABILITY_FOUND: {
         TITLE: 'You’re secure!',
-        SUBTITLE: 'No security vulnerability found for this image.',
+        SUBTITLE: 'No security vulnerability found.',
     },
     CI_DETAILS_IMAGE_SCANNED_DISABLED: 'Go to build pipeline configurations and enable ’Scan for vulnerabilities’',
     CI_DETAILS_IMAGE_NOT_SCANNED: {
@@ -516,3 +516,5 @@ export const BASE_CONFIGURATION_ENV_ID = -1
 export const DEVTRON_BASE_MAIN_ID = 'devtron-base-main-identifier'
 export const SKIP_LABEL_KEY_VALIDATION_PREFIX = 'devtron.ai/'
 export const UNSAVED_CHANGES_PROMPT_MESSAGE = 'You have unsaved changes. Are you sure you want to leave?'
+export const DEFAULT_ROUTE_PROMPT_MESSAGE =
+    "Please don't wander off! Reloading or going back might disrupt the ongoing operation."

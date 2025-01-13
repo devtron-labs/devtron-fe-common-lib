@@ -79,7 +79,7 @@ const TextArea = (
                     rows={rows}
                     placeholder={placeholder}
                     value={text}
-                    className="form__textarea bcn-0 fs-13 lh-20 cn-9 dc__resizable-textarea--vertical"
+                    className="form__textarea bg__primary fs-13 lh-20 cn-9 dc__resizable-textarea--vertical"
                     onChange={handleChange}
                 />
                 {!error.isValid && (

@@ -203,7 +203,7 @@ const PluginListContainer = ({
     return (
         <div className={`flexbox-col w-100 ${rootClassName}`}>
             {/* Filters section */}
-            <div className="w-100 flexbox dc__gap-12 py-12 dc__position-sticky dc__top-0 bcn-0 dc__zi-1 flex-wrap">
+            <div className="w-100 flexbox dc__gap-12 py-12 dc__position-sticky dc__top-0 bg__primary dc__zi-1 flex-wrap">
                 <SearchBar
                     initialSearchText={searchKey}
                     containerClassName="flex-grow-1"
@@ -219,7 +219,7 @@ const PluginListContainer = ({
                     handleUpdateSelectedTags={handleUpdateSelectedTags}
                     selectedTags={selectedTags}
                     isLoading={areTagsLoading}
-                    hasError={!!tagsError}
+                    tagsError={tagsError}
                     reloadTags={reloadTags}
                 />
             </div>

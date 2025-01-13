@@ -40,7 +40,7 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
         ...base,
         minHeight: '32px',
         boxShadow: 'none',
-        backgroundColor: state.isDisabled ? 'var(--N100)' : 'var(--N50)',
+        backgroundColor: state.isDisabled ? 'var(--N100)' : 'var(--bg-secondary)',
         border: '1px solid var(--N200)',
         cursor: state.isDisabled ? 'not-allowed' : 'pointer',
 
@@ -56,7 +56,7 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
         ...base,
         color: 'var(--N900)',
         // eslint-disable-next-line no-nested-ternary
-        backgroundColor: state.isSelected ? 'var(--B100)' : state.isFocused ? 'var(--N100)' : 'white',
+        backgroundColor: state.isSelected ? 'var(--B100)' : state.isFocused ? 'var(--N100)' : 'var(--bg-primary)',
         padding: '10px 12px',
         cursor: 'pointer',
         fontSize: '13px',
@@ -116,6 +116,18 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
     }),
+    singleValue: (base) => ({
+        ...base,
+        color: 'var(--N900)',
+    }),
+    input: (base) => ({
+        ...base,
+        color: 'var(--N900)',
+    }),
+    menu: (base) => ({
+        ...base,
+        backgroundColor: 'var(--bg-menu)',
+    }),
     ...styleOverrides,
 })
 
@@ -125,10 +137,10 @@ const getCustomOptionBackgroundColor = (isSelected: boolean, isFocused: boolean)
     }
 
     if (isFocused) {
-        return 'var(--N50)'
+        return 'var(--bg-secondary)'
     }
 
-    return 'var(--white)'
+    return 'var(--bg-primary)'
 }
 
 export const getCustomOptionSelectionStyle =
@@ -205,7 +217,7 @@ export const MenuListWithApplyButton = ({
         <>
             <components.MenuList {...props} />
             {props.selectProps.options.length > 0 && (
-                <div className="p-8 dc__position-sticky dc__bottom-0 dc__border-top-n1 bcn-0 dc__bottom-radius-4">
+                <div className="p-8 dc__position-sticky dc__bottom-0 dc__border-top-n1 bg__primary dc__bottom-radius-4">
                     <button
                         type="button"
                         className="dc__unset-button-styles w-100 br-4 h-28 flex bcb-5 cn-0 fw-6 lh-28 fs-12 h-28 br-4 pt-5 pr-12 pb-5 pl-12"

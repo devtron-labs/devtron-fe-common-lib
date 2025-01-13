@@ -67,7 +67,7 @@ const SequentialCDCardTitle = ({
     if (stageType !== STAGE_TYPE.CD) {
         if (isLatest || additionalInfo) {
             return (
-                <div className="bcn-0 pb-8 br-4 flex left dc__gap-8">
+                <div className="bg__primary pb-8 br-4 flex left dc__gap-8">
                     {isLatest && <span className="last-deployed-status">Last Run</span>}
 
                     {additionalInfo}
@@ -87,7 +87,7 @@ const SequentialCDCardTitle = ({
         additionalInfo
     ) {
         return (
-            <div className="bcn-0 pb-8 br-4 flex left">
+            <div className="bg__primary pb-8 br-4 flex left">
                 {renderDeployedEnvironmentName()}
                 {artifactStatus === ARTIFACT_STATUS.PROGRESSING && (
                     <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.DEPLOYING} title={environmentName} />

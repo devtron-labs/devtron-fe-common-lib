@@ -161,7 +161,7 @@ const PageHeader = ({
 
     return (
         <div
-            className={`dc__page-header dc__content-space cn-9 bcn-0 pl-20 pr-20 ${
+            className={`dc__page-header dc__content-space cn-9 bg__primary pl-20 pr-20 ${
                 showTabs ? 'dc__page-header-tabs__height' : 'dc__page-header__height flex'
             }`}
         >

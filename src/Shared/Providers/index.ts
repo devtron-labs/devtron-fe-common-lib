@@ -16,5 +16,6 @@
 
 export * from './MainContextProvider'
 export * from './ImageSelectionUtility'
+export * from './ThemeProvider'
 export * from './UserEmailProvider'
 export type { MainContext } from './types'

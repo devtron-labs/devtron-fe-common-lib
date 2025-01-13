@@ -17,7 +17,8 @@
 import YAML from 'yaml'
 import { noop, YAMLStringify } from '@Common/Helper'
 import { MODES } from '../Constants'
-import { Action, CodeEditorInitialValueType, CodeEditorState, CodeEditorThemesKeys } from './types'
+import { Action, CodeEditorInitialValueType, CodeEditorState } from './types'
+import { getCodeEditorThemeFromAppTheme } from './utils'
 
 export const CodeEditorReducer = (state: CodeEditorState, action: Action) => {
     switch (action.type) {
@@ -29,6 +30,8 @@ export const CodeEditorReducer = (state: CodeEditorState, action: Action) => {
             return { ...state, theme: action.value }
         case 'setCode':
             return { ...state, code: action.value }
+        case 'setDefaultCode':
+            return { ...state, defaultCode: action.value }
         case 'setHeight':
             return { ...state, height: action.value.toString() }
         default:
@@ -71,13 +74,16 @@ export const initialState = ({
     mode,
     theme,
     value,
+    defaultValue,
     diffView,
     noParsing,
     tabSize,
+    appTheme,
 }: CodeEditorInitialValueType): CodeEditorState => ({
     mode: mode as MODES,
-    theme: (theme || CodeEditorThemesKeys.vs) as CodeEditorThemesKeys,
+    theme: getCodeEditorThemeFromAppTheme(theme, appTheme),
     code: noParsing ? value : parseValueToCode(value, mode, tabSize),
+    defaultCode: noParsing ? defaultValue : parseValueToCode(defaultValue, mode, tabSize),
     diffMode: diffView,
     noParsing: [MODES.JSON, MODES.YAML].includes(mode as MODES) ? noParsing : true,
 })

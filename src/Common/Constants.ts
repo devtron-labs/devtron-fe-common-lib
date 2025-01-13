@@ -123,6 +123,7 @@ export const ROUTES = {
     ATTRIBUTES_UPDATE: 'attributes/update',
     APP_LIST_MIN: 'app/min',
     CLUSTER_LIST_MIN: 'cluster/autocomplete',
+    CLUSTER_LIST_RAW: 'k8s/capacity/cluster/list/raw',
     PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
     PLUGIN_GLOBAL_LIST_V2: 'plugin/global/list/v2',
     PLUGIN_GLOBAL_LIST_TAGS: 'plugin/global/list/tags',
@@ -136,6 +137,9 @@ export const ROUTES = {
     PLUGIN_GLOBAL_VARIABLES: 'plugin/global/list/global-variable',
     CONFIG_COMPARE_SECRET: 'config/compare/secret',
     SCOPED_GLOBAL_VARIABLES: 'global/variables',
+    CD_TRIGGER_POST: 'app/cd-pipeline/trigger',
+    DELETE_RESOURCE: 'k8s/resource/delete',
+    NODE_CAPACITY: 'k8s/capacity/node',
 }
 
 export enum KEY_VALUE {

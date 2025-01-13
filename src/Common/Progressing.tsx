@@ -33,7 +33,7 @@ export const Progressing = ({ pageLoader, size, theme, styles, fillColor }: Prog
                             type="rotate"
                         />
                         <path
-                            fill={fillColor || '#06C'}
+                            fill={fillColor || 'var(--B500)'}
                             fillRule="nonzero"
                             d="M12 2.5A9.5 9.5 0 1 1 2.5 12a1.5 1.5 0 0 1 3 0A6.5 6.5 0 1 0 12 5.5a1.5 1.5 0 0 1 0-3z"
                         />
@@ -53,7 +53,7 @@ export const DetailsProgressing = ({
     children,
 }: ProgressingProps): JSX.Element => (
     <div
-        className={`details-loader bcn-0 flex column fs-14 fw-6 ${fullHeight ? 'h-100' : 'details-loader-height'}`}
+        className={`details-loader bg__primary flex column fs-14 fw-6 ${fullHeight ? 'h-100' : 'details-loader-height'}`}
         style={styles}
         data-testid="details-progressing"
     >

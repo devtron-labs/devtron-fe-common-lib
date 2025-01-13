@@ -315,7 +315,7 @@ export const KeyValueTable = <K extends string>({
     const renderFirstHeader = (key: K, label: string, className: string) => (
         <div
             key={`${key}-header`}
-            className={`bcn-50 py-8 px-12 flexbox dc__content-space dc__align-items-center ${updatedRows.length || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'} ${className || ''}`}
+            className={`bg__secondary py-8 px-12 flexbox dc__content-space dc__align-items-center ${updatedRows.length || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'} ${className || ''}`}
         >
             {isSortable ? (
                 <button
@@ -370,7 +370,7 @@ export const KeyValueTable = <K extends string>({
         }
 
         return (
-            <div className="key-value-table__error bcn-0 dc__border br-4 py-7 px-8 flexbox-col dc__gap-4">
+            <div className="key-value-table__error bg__primary dc__border br-4 py-7 px-8 flexbox-col dc__gap-4">
                 {validateDuplicateKeys && renderErrorMessage(DUPLICATE_KEYS_VALIDATION_MESSAGE)}
                 {validateEmptyKeys && renderErrorMessage(EMPTY_KEY_VALIDATION_MESSAGE)}
                 {parentErrorMessages.map((error) => renderErrorMessage(error))}
@@ -390,7 +390,7 @@ export const KeyValueTable = <K extends string>({
                             ) : (
                                 <div
                                     key={key}
-                                    className={`bcn-50 cn-9 fs-13 lh-20 py-8 px-12 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${key === firstHeaderKey ? `${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : `${hasRows ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}`}  ${className || ''}`}
+                                    className={`bg__secondary cn-9 fs-13 lh-20 py-8 px-12 fw-6 flexbox dc__align-items-center dc__content-space dc__gap-2 ${key === firstHeaderKey ? `${hasRows ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : `${hasRows ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}`}  ${className || ''}`}
                                 >
                                     {label}
                                     {!!headerComponent && headerComponent}
@@ -413,7 +413,7 @@ export const KeyValueTable = <K extends string>({
                                         <Fragment key={key}>
                                             <ConditionalWrap wrap={renderWithReadOnlyTippy} condition={readOnly}>
                                                 <div
-                                                    className={`key-value-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key, row.id) ? 'key-value-table__cell--error no-hover' : ''}`}
+                                                    className={`key-value-table__cell bg__primary flexbox dc__align-items-center dc__gap-4 dc__position-rel ${readOnly || row.data[key].disabled ? 'cursor-not-allowed no-hover' : ''} ${showError && !validationSchema(row.data[key].value, key, row.id) ? 'key-value-table__cell--error no-hover' : ''}`}
                                                 >
                                                     {maskValue?.[key] && row.data[key].value ? (
                                                         <div className="py-8 px-12 h-36 flex">
@@ -458,7 +458,7 @@ export const KeyValueTable = <K extends string>({
                                     {!readOnly && (
                                         <button
                                             type="button"
-                                            className={`key-value-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bcn-0 dc__hover-n50 dc__tab-focus ${disableDeleteRow ? 'dc__disabled' : ''}`}
+                                            className={`key-value-table__row-delete-btn dc__unset-button-styles dc__align-self-stretch dc__no-shrink flex py-10 px-8 bg__primary dc__hover-n50 dc__tab-focus ${disableDeleteRow ? 'dc__disabled' : ''}`}
                                             onClick={onRowDelete(row)}
                                             disabled={disableDeleteRow}
                                         >

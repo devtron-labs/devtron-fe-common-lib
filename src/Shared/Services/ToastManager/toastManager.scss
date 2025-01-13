@@ -26,8 +26,8 @@
     border-radius: 4px;
     margin-bottom: 16px;
     min-height: 0;
-    color: var(--N0);
-    background: #1B1C1E;
+    color: var(--white);
+    background: var(--bg-toast);
     font-family: inherit;
 
     &__body {
@@ -48,20 +48,20 @@
 
         // Override the style for the action button
         button.button, a.button {
-            color: var(--N0);
+            color: var(--white);
             width: fit-content;
 
             svg *[stroke^="#"] {
-                stroke: var(--N0);
+                stroke: var(--white);
             }
 
             svg *[fill^="#"] {
-                fill: var(--N0);
+                fill: var(--white);
             }
 
             &:hover,
             &:active {
-                color: var(--N0);
+                color: var(--white);
             }
         }
     }
@@ -71,13 +71,13 @@
         button {
             svg {
                 path {
-                    fill: var(--N0) !important;
+                    fill: var(--white) !important;
                 }
             }
 
             &:hover,
             &:active {
-                background: #fff3 !important;
+                background: var(--white-20) !important;
             }
         }
     }

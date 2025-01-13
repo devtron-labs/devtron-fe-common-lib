@@ -185,7 +185,7 @@ export const DeploymentConfigDiffNavigation = ({
     }
 
     return (
-        <div className="bcn-0 dc__border-right flexbox-col dc__overflow-hidden">
+        <div className="bg__primary dc__border-right flexbox-col dc__overflow-hidden">
             {renderTopContent()}
             {!!tabConfig?.tabs.length && renderTabConfig()}
             <div className="mw-none p-8 flex-grow-1 dc__overflow-auto">{renderContent()}</div>
