@@ -408,6 +408,8 @@ export enum BuildInfraProfileInputActionType {
     REMOVE_TARGET_PLATFORM = 'remove_target_platform',
     RENAME_TARGET_PLATFORM = 'rename_target_platform',
 
+    RESTORE_PROFILE_CONFIG_SNAPSHOT = 'restore_profile_config_snapshot',
+
     DELETE_NODE_SELECTOR_ITEM = 'delete_node_selector_item',
     ADD_NODE_SELECTOR_ITEM = 'add_node_selector_item',
     EDIT_NODE_SELECTOR_ITEM = 'edit_node_selector_item',
@@ -459,6 +461,12 @@ export type HandleProfileInputChangeType =
           data: {
               originalPlatformName: string
               newPlatformName: string
+              configSnapshot: BuildInfraProfileData['configurations']
+          }
+      }
+    | {
+          action: BuildInfraProfileInputActionType.RESTORE_PROFILE_CONFIG_SNAPSHOT
+          data: {
               configSnapshot: BuildInfraProfileData['configurations']
           }
       }

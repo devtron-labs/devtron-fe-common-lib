@@ -475,11 +475,11 @@ const useBuildInfraForm = ({
                     return
                 }
 
-                cmSecretValue[selectedCMCSIndex].isOverridden = true
                 cmSecretValue[selectedCMCSIndex] = {
                     ...cmSecretValue[selectedCMCSIndex],
                     ...cmSecretValue[selectedCMCSIndex].defaultValue,
                 }
+                cmSecretValue[selectedCMCSIndex].isOverridden = true
 
                 // Will remove error if present
                 if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
@@ -514,12 +514,11 @@ const useBuildInfraForm = ({
                     return
                 }
 
-                // TODO: Only this is diff should combine
-                cmSecretValue[selectedCMCSIndex].isOverridden = false
                 cmSecretValue[selectedCMCSIndex] = {
                     ...cmSecretValue[selectedCMCSIndex],
                     ...cmSecretValue[selectedCMCSIndex].defaultValue,
                 }
+                cmSecretValue[selectedCMCSIndex].isOverridden = false
 
                 // Will remove error if present
                 if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
@@ -637,6 +636,19 @@ const useBuildInfraForm = ({
                 }
 
                 delete currentInput.configurations[originalPlatformName]
+                break
+            }
+
+            case BuildInfraProfileInputActionType.RESTORE_PROFILE_CONFIG_SNAPSHOT: {
+                const { configSnapshot } = data
+                currentInput.configurations = configSnapshot
+
+                Object.keys(currentInputErrors).forEach((key) => {
+                    if (TARGET_PLATFORM_ERROR_FIELDS_MAP[key]) {
+                        currentInputErrors[key] = null
+                    }
+                })
+
                 break
             }
 
