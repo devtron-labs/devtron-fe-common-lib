@@ -225,6 +225,11 @@ export type BuildInfraConfigurationMapTypeWithoutDefaultFallback = {
 
 export type BuildInfraConfigurationMapType = Record<BuildInfraConfigTypes, BuildInfraConfigurationType>
 
+export enum BuildXDriverType {
+    KUBERNETES = 'kubernetes',
+    DOCKER_CONTAINER = 'docker-container',
+}
+
 interface BuildInfraProfileBaseDTO {
     id?: number
     name?: string
@@ -232,9 +237,15 @@ interface BuildInfraProfileBaseDTO {
     type: BuildInfraProfileVariants
     appCount?: number
     active?: boolean
+    /**
+     * @default `BuildXDriverType.KUBERNETES`
+     */
+    buildxDriverType?: BuildXDriverType
 }
 
-export interface BuildInfraProfileBase extends BuildInfraProfileBaseDTO {}
+export interface BuildInfraProfileBase extends Omit<BuildInfraProfileBaseDTO, 'buildxDriverType'> {
+    useK8sDriver?: boolean
+}
 
 export interface BuildInfraProfileInfoDTO extends BuildInfraProfileBaseDTO {
     configurations: BuildInfraPlatformConfigurationMapDTO
@@ -245,20 +256,6 @@ export interface BuildInfraProfileData extends BuildInfraProfileBase {
      * Maps platformName to its configuration values
      */
     configurations: Record<string, BuildInfraConfigurationMapType>
-}
-
-export interface GetBuildInfraProfileType {
-    name: string
-    fromCreateView?: boolean
-}
-
-export interface BuildInfraProfileResponseType {
-    configurationUnits: BuildInfraUnitsMapType | null
-    profile: BuildInfraProfileData | null
-    /**
-     * To be used in case user is creating configuration for new platform
-     */
-    fallbackPlatformConfigurationMap: BuildInfraProfileData['configurations']
 }
 
 export interface UseBuildInfraFormProps {
@@ -274,6 +271,24 @@ export interface UseBuildInfraFormProps {
      * If true, call this on form submission success
      */
     handleSuccessRedirection?: () => void
+    /**
+     * @default false
+     */
+    canConfigureUseK8sDriver?: boolean
+}
+
+export interface GetBuildInfraProfileType extends Pick<UseBuildInfraFormProps, 'canConfigureUseK8sDriver'> {
+    name: string
+    fromCreateView?: boolean
+}
+
+export interface BuildInfraProfileResponseType {
+    configurationUnits: BuildInfraUnitsMapType | null
+    profile: BuildInfraProfileData | null
+    /**
+     * To be used in case user is creating configuration for new platform
+     */
+    fallbackPlatformConfigurationMap: BuildInfraProfileData['configurations']
 }
 
 export enum BuildInfraProfileAdditionalErrorKeysType {
@@ -322,6 +337,7 @@ interface NumericBuildInfraConfigPayloadType {
 
 export enum BuildInfraProfileInputActionType {
     ADD_TARGET_PLATFORM = 'add_target_platform',
+    TOGGLE_USE_K8S_DRIVER = 'toggle_use_k8s_driver',
     REMOVE_TARGET_PLATFORM = 'remove_target_platform',
     RENAME_TARGET_PLATFORM = 'rename_target_platform',
     RESTORE_PROFILE_CONFIG_SNAPSHOT = 'restore_profile_config_snapshot',
@@ -336,6 +352,10 @@ export enum BuildInfraProfileInputActionType {
 }
 
 export type HandleProfileInputChangeType =
+    | {
+          action: BuildInfraProfileInputActionType.TOGGLE_USE_K8S_DRIVER
+          data?: never
+      }
     | {
           action: NumericBuildInfraConfigTypes
           data: ProfileInputDispatchDataType & NumericBuildInfraConfigPayloadType
@@ -402,7 +422,7 @@ export interface UseBuildInfraFormResponseType {
     profileInputErrors: ProfileInputErrorType
     handleProfileInputChange: ({ action, data }: HandleProfileInputChangeType) => void
     loadingActionRequest: boolean
-    handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>
+    handleSubmit: (e?: FormEvent<HTMLFormElement>) => Promise<void>
 }
 
 export interface BuildInfraConfigFormProps
@@ -476,8 +496,13 @@ export interface FooterProps {
     loading?: boolean
 }
 
-export interface UpdateBuildInfraProfileType extends Pick<UseBuildInfraFormResponseType, 'profileInput'> {
-    name: string
+export interface UpsertBuildInfraProfileServiceParamsType
+    extends Pick<UseBuildInfraFormResponseType, 'profileInput'>,
+        Pick<UseBuildInfraFormProps, 'canConfigureUseK8sDriver'> {
+    /**
+     * If not given would consider as create view
+     */
+    name?: string
 }
 
 export interface CreateBuildInfraProfileType extends Pick<UseBuildInfraFormResponseType, 'profileInput'> {}
@@ -519,7 +544,8 @@ export interface BuildInfraProfileDTO extends BaseBuildInfraProfileDTO {
 
 export interface BuildInfraProfileTransformerParamsType
     extends BuildInfraProfileDTO,
-        Pick<GetBuildInfraProfileType, 'fromCreateView'> {}
+        Pick<GetBuildInfraProfileType, 'fromCreateView'>,
+        Pick<GetBuildInfraProfileType, 'canConfigureUseK8sDriver'> {}
 
 export interface GetPlatformConfigurationsWithDefaultValuesParamsType {
     profileConfigurationsMap: BuildInfraConfigurationMapTypeWithoutDefaultFallback
@@ -544,3 +570,6 @@ export interface ValidateNodeSelectorParamsType
     selector: BuildInfraNodeSelectorValueType
     existingKeys: string[]
 }
+
+export interface GetBaseProfileObjectParamsType
+    extends Pick<BuildInfraProfileTransformerParamsType, 'canConfigureUseK8sDriver' | 'fromCreateView' | 'profile'> {}
