@@ -32,7 +32,7 @@ const ConfigMapSecretReadyOnly = ({
         <div
             className={
                 containerClassName ||
-                `bcn-0 h-100 flexbox-col dc__gap-12 dc__overflow-auto ${!hideCodeEditor ? 'p-16' : ''}`
+                `bg__primary h-100 flexbox-col dc__gap-12 dc__overflow-auto ${!hideCodeEditor ? 'p-16' : ''}`
             }
         >
             {hasHashiOrAWS(configMapSecretData?.externalType) && renderHashiOrAwsDeprecatedInfo()}

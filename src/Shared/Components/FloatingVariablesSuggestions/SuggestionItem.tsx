@@ -110,7 +110,7 @@ const SuggestionItem = ({
     return (
         <ConditionalWrap condition={showValueOnHover} wrap={renderTooltip}>
             <div
-                className="flexbox-col pt-8 pb-8 pl-12 pr-12 dc__align-self-stretch bcn-0 dc__border-bottom-n1 dc__hover-n50"
+                className="flexbox-col pt-8 pb-8 pl-12 pr-12 dc__align-self-stretch bg__primary dc__border-bottom-n1 dc__hover-n50"
                 onClick={handleCopyTrigger}
                 data-testid="suggestion-item"
             >
