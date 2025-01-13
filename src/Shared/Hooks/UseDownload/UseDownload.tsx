@@ -21,9 +21,9 @@ import { ServerErrors } from '@Common/ServerError'
 import { getFileNameFromHeaders } from '@Shared/Helpers'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { getDownloadResponse } from './service'
-import { HandleDownloadProps } from './types'
+import { UseDownloadReturnType } from './types'
 
-const useDownload = () => {
+const useDownload = (): UseDownloadReturnType => {
     const [isDownloading, setIsDownloading] = useState<boolean>(false)
 
     /**
@@ -33,13 +33,13 @@ const useDownload = () => {
      * @param showSuccessfulToast - show toast on successful download
      * @param downloadSuccessToastContent - Content to show in toast on successful download
      */
-    const handleDownload = async ({
+    const handleDownload: UseDownloadReturnType['handleDownload'] = async ({
         downloadUrl,
         showFilePreparingToast = false,
         fileName,
         showSuccessfulToast = true,
         downloadSuccessToastContent = 'Downloaded Successfully',
-    }: HandleDownloadProps): Promise<Error | ServerErrors> => {
+    }) => {
         setIsDownloading(true)
         try {
             const response = await getDownloadResponse(downloadUrl)

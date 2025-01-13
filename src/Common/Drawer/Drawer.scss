@@ -54,3 +54,9 @@
         bottom: 0;
     }
 }
+
+.drawer.disable-transition {
+    &.left, &.right, &.top, &.bottom {
+        transition: none;
+    }
+}
