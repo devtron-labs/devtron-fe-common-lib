@@ -25,6 +25,7 @@ import { MaterialHistoryType } from '@Shared/Services/app.types'
 import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
 import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
+import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { PromptProps } from 'react-router-dom'
 import {
     handleUTCTime,
@@ -977,3 +978,10 @@ export const checkIfPathIsMatching =
     (currentPathName: string, customMessage = ''): PromptProps['message'] =>
     ({ pathname }: { pathname: string }) =>
         currentPathName === pathname || customMessage || UNSAVED_CHANGES_PROMPT_MESSAGE
+
+export const renderUnsavedChangesPresent = () => (
+    <div className="flexbox dc__align-item-center dc__gap-6">
+        <ICWarningY5 className="icon-dim-20 dc__no-shrink" />
+        <span className="cn-9 fs-13 fw-4 lh-20">Unsaved changes</span>
+    </div>
+)
