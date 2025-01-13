@@ -62,10 +62,11 @@ export const getClusterOptions = async (): Promise<ClusterType[]> => {
     }
 
     return result
-        .map(({ id, cluster_name: name, isVirtualCluster }) => ({
+        .map(({ id, cluster_name: name, isVirtualCluster, isProd }) => ({
             id,
             name,
             isVirtual: isVirtualCluster ?? false,
+            isProd: isProd ?? false,
         }))
         .sort((a, b) => stringComparatorBySortOrder(a.name, b.name))
 }

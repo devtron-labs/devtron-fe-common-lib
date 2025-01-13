@@ -31,16 +31,19 @@ import {
     BuildInfraProfileInfoDTO,
     BuildInfraProfileResponseType,
     BuildInfraProfileTransformerParamsType,
+    BuildInfraProfileVariants,
     BuildInfraToleranceOperatorType,
     BuildInfraToleranceValueType,
+    BuildXDriverType,
     CreateBuildInfraProfileType,
+    GetBaseProfileObjectParamsType,
     GetPlatformConfigurationsWithDefaultValuesParamsType,
 } from './types'
 import {
-    CREATE_PROFILE_BASE_VALUE,
     BUILD_INFRA_DEFAULT_PLATFORM_NAME,
     BUILD_INFRA_LATEST_API_VERSION,
     INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X,
+    USE_BUILD_X_DRIVER_FALLBACK,
 } from './constants'
 import { getUniqueId } from '../../../Shared'
 
@@ -106,17 +109,39 @@ export const parsePlatformConfigIntoValue = (
     }
 }
 
-const getBaseProfileObject = (fromCreateView: boolean, profile: BuildInfraProfileInfoDTO): BuildInfraProfileBase => {
-    if (fromCreateView) {
-        return structuredClone(CREATE_PROFILE_BASE_VALUE)
+export const getParsedValueForUseK8sDriver = (buildxDriverType: BuildXDriverType): boolean => {
+    if (!buildxDriverType) {
+        return USE_BUILD_X_DRIVER_FALLBACK
+    }
+
+    return buildxDriverType === BuildXDriverType.KUBERNETES
+}
+
+const getBaseProfileObject = ({
+    fromCreateView,
+    profile,
+    canConfigureUseK8sDriver,
+}: GetBaseProfileObjectParamsType): BuildInfraProfileBase => {
+    const parsedUseK8sDriverValue = getParsedValueForUseK8sDriver(profile?.buildxDriverType)
+    const useK8sDriver = canConfigureUseK8sDriver ? parsedUseK8sDriverValue : null
+
+    if (fromCreateView || !profile) {
+        return {
+            name: '',
+            description: '',
+            type: BuildInfraProfileVariants.NORMAL,
+            appCount: 0,
+            useK8sDriver,
+        }
     }
 
     return {
         id: profile.id,
         name: profile.name,
-        description: profile.description,
+        description: profile.description?.trim() || '',
         type: profile.type,
         appCount: profile.appCount,
+        useK8sDriver,
     }
 }
 
@@ -190,6 +215,7 @@ export const getTransformedBuildInfraProfileResponse = ({
     defaultConfigurations,
     profile,
     fromCreateView,
+    canConfigureUseK8sDriver,
 }: BuildInfraProfileTransformerParamsType): BuildInfraProfileResponseType => {
     // Ideal assumption is defaultConfigurations would contain all the required keys
     const globalProfilePlatformConfigMap = getConfigurationMapWithoutDefaultFallback(defaultConfigurations)
@@ -254,7 +280,11 @@ export const getTransformedBuildInfraProfileResponse = ({
         configurationUnits,
         fallbackPlatformConfigurationMap,
         profile: {
-            ...(profile && getBaseProfileObject(fromCreateView, profile)),
+            ...getBaseProfileObject({
+                fromCreateView,
+                profile,
+                canConfigureUseK8sDriver,
+            }),
             configurations,
         },
     }
@@ -262,6 +292,7 @@ export const getTransformedBuildInfraProfileResponse = ({
 
 export const getBuildInfraProfilePayload = (
     profileInput: CreateBuildInfraProfileType['profileInput'],
+    canConfigureUseK8sDriver: boolean,
 ): BuildInfraProfileInfoDTO => {
     const platformConfigurationMap = profileInput.configurations || {}
     const configurations: BuildInfraProfileInfoDTO['configurations'] = Object.entries(platformConfigurationMap).reduce<
@@ -298,7 +329,7 @@ export const getBuildInfraProfilePayload = (
         return acc
     }, {})
 
-    // Deleting un-supported locators in case target platform is not default platform
+    // Deleting un-supported locators in case locators are not supported by buildX
     Object.entries(configurations).forEach(([platformName, platformConfigurations]) => {
         if (platformName !== BUILD_INFRA_DEFAULT_PLATFORM_NAME) {
             configurations[platformName] = platformConfigurations.filter(
@@ -307,11 +338,25 @@ export const getBuildInfraProfilePayload = (
         }
     })
 
+    // Filtering out platforms if not using K8sDriver
+    if (canConfigureUseK8sDriver && !profileInput.useK8sDriver) {
+        Object.keys(configurations).forEach((platformName) => {
+            if (platformName !== BUILD_INFRA_DEFAULT_PLATFORM_NAME) {
+                delete configurations[platformName]
+            }
+        })
+    }
+
     const payload: BuildInfraProfileInfoDTO = {
         name: profileInput.name,
-        description: profileInput.description,
+        description: profileInput.description?.trim(),
         type: profileInput.type,
         configurations,
+        ...(canConfigureUseK8sDriver && {
+            buildxDriverType: profileInput.useK8sDriver
+                ? BuildXDriverType.KUBERNETES
+                : BuildXDriverType.DOCKER_CONTAINER,
+        }),
     }
     return payload
 }

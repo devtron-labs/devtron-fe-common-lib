@@ -71,7 +71,7 @@ export default function AppStatus({
                 className="default-tt w-200"
                 arrow={false}
                 placement="top"
-                content="To fetch app status for GitOps based deployments open the app detail page"
+                content="To fetch app status for Helm based deployments open the app detail page"
             >
                 <div className="flex">
                     <InfoIcon className="icon-dim-16 fcn-6" />
