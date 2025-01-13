@@ -831,7 +831,6 @@ const useBuildInfraForm = ({
                 break
             }
 
-            // TODO: Check error scenario here
             case BuildInfraProfileInputActionType.ADD_CM_CS_ITEM: {
                 const { id, componentType } = data
 
@@ -862,7 +861,7 @@ const useBuildInfraForm = ({
             }
 
             case BuildInfraProfileInputActionType.SYNC_CM_CS_ITEM: {
-                const { id, value, errors, componentType } = data
+                const { id, value, hasError, componentType } = data
 
                 const selectedCMCSIndex = (
                     currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
@@ -891,14 +890,12 @@ const useBuildInfraForm = ({
                     selectedCMCSIndex
                 ] = finalCMValue
 
-                const isAnyErrorPresent = errors && Object.keys(errors).some((key) => errors[key])
-
                 if (!currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
                     currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = {}
                 }
 
-                if (isAnyErrorPresent) {
-                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id] = errors
+                if (hasError) {
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id] = true
                 } else if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id]) {
                     delete currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id]
                 }

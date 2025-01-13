@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, ChangeEvent, useRef, useState } from 'react'
+import { BaseSyntheticEvent, ChangeEvent, useEffect, useRef, useState } from 'react'
 
 import { deepEqual } from '@Common/Helper'
 
@@ -27,9 +27,13 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
     /** Defines when validation should occur:
      * - 'onChange': Validation occurs when the user modifies the input
      * - 'onBlur': Validation occurs when the input loses focus.
-     *  @default 'onChange'
+     *  @default ['onChange']
      */
-    validationMode?: 'onChange' | 'onBlur' | 'onSubmit'
+    validationModes?: ('onChange' | 'onBlur' | 'onSubmit')[]
+    /**
+     * @default false - A boolean indicating whether to trigger validation on mount.
+     */
+    shouldValidateOnMount?: boolean
 }) => {
     // REFS
     const initialValuesRef = useRef<Partial<T>>(options?.initialValues || {})
@@ -56,6 +60,28 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
         }
         return {}
     }
+
+    const getErrorsFromFormData = (formData: T): Partial<Record<keyof T, string[]>> => {
+        const validations = getValidations(formData)
+        const newErrors: UseFormErrors<T> = {}
+
+        Object.keys(validations).forEach((key) => {
+            const validation = validations[key]
+            const error = checkValidation<T>(formData[key], validation)
+            if (error) {
+                newErrors[key] = error
+            }
+        })
+
+        return newErrors
+    }
+
+    useEffect(() => {
+        // Do i need to set enableValidationOnChange here?
+        if (options?.shouldValidateOnMount) {
+            setErrors(getErrorsFromFormData(data))
+        }
+    }, [])
 
     /**
      * Handles change events for form fields, updates the form data, and triggers validation.
@@ -94,10 +120,10 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             // Update the form data and trigger validation if necessary.
             setData((prev) => {
                 const updatedData = { ...prev, [key]: value }
-                const validationMode = options?.validationMode ?? 'onChange'
+                const validationModes = options?.validationModes ?? ['onChange']
 
                 // If validation should occur (based on mode or field state), check validation for the field.
-                if (validationMode === 'onChange' || enableValidationOnChange[key] || errors[key]) {
+                if (validationModes.includes('onChange') || enableValidationOnChange[key] || errors[key]) {
                     const validations = getValidations(updatedData)
                     const error = checkValidation<T>(value as T[keyof T], validations[key as string])
                     setErrors({ ...errors, [key]: error })
@@ -122,7 +148,7 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             setData({ ...data, [key]: data[key]?.trim() })
         }
 
-        if (options?.validationMode === 'onBlur') {
+        if (options?.validationModes?.includes('onBlur')) {
             const validations = getValidations()
             const error = checkValidation<T>(data[key], validations[key as string])
             if (error && !enableValidationOnChange[key]) {
@@ -381,5 +407,6 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             /** A boolean indicating if any field has been modified. */
             isDirty: Object.values(dirtyFields).some((value) => value),
         },
+        getErrorsFromFormData,
     }
 }

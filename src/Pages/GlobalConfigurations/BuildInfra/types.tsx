@@ -24,7 +24,6 @@ import {
     ConfigMapSecretUseFormProps,
     getUniqueId,
     useForm,
-    UseFormErrors,
     ValidationResponseType,
 } from '../../../Shared'
 import { ServerErrors } from '../../../Common'
@@ -372,7 +371,7 @@ export enum ToleranceHeaderType {
 
 export type BuildInfraCMCSErrorType = Record<
     Extract<BuildInfraConfigTypes, BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET>,
-    Record<BuildInfraCMCSValueType['id'], UseFormErrors<BuildInfraCMCSValueType>>
+    Record<BuildInfraCMCSValueType['id'], boolean>
 >
 
 /**
@@ -501,7 +500,7 @@ export type HandleProfileInputChangeType =
           data: ProfileInputDispatchDataType & {
               id: BuildInfraCMCSValueType['id']
               value: ConfigMapSecretUseFormProps
-              errors: UseFormErrors<BuildInfraCMCSValueType>
+              hasError: boolean
               componentType: CMSecretComponentType
           }
       }
