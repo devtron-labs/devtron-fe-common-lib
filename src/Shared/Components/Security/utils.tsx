@@ -1,30 +1,62 @@
-import { SeverityCount } from '@Shared/types'
-import { SCAN_TOOL_ID_CLAIR, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
-import { ScanResultDTO, SeveritiesDTO } from './SecurityModal/types'
+import { SECURITY_CONFIG } from './constants'
+import { ScanResultDTO, SeveritiesDTO } from './SecurityModal'
+import { CATEGORIES, SUB_CATEGORIES } from './SecurityModal/types'
+import { CategoriesConfig, SecurityConfigType, ScanCategories, ScanSubCategories } from './types'
 
 export const getCVEUrlFromCVEName = (cveName: string): string =>
     `https://cve.mitre.org/cgi-bin/cvename.cgi?name=${cveName}`
 
-export const getScanToolAndSeverityCount = (
-    scanResult: ScanResultDTO,
-): { scanToolId: number; severityCount: SeverityCount; totalCount: number } => {
-    const scanToolId =
-        scanResult?.imageScan?.vulnerability?.list?.[0].scanToolName === 'TRIVY'
-            ? SCAN_TOOL_ID_TRIVY
-            : SCAN_TOOL_ID_CLAIR
+export const getTotalSeverities = (severityCount: Partial<Record<SeveritiesDTO, number>>) =>
+    Object.entries(severityCount)
+        .filter(([key]) => key !== SeveritiesDTO.SUCCESSES)
+        .reduce((acc, [, value]) => acc + value, 0)
 
-    const severities = scanResult?.imageScan?.vulnerability?.summary?.severities
+export const getSecurityConfig = ({
+    imageScan,
+    codeScan,
+    kubernetesManifest,
+}: CategoriesConfig): SecurityConfigType => ({
+    ...(imageScan && {
+        [CATEGORIES.IMAGE_SCAN]: SECURITY_CONFIG[CATEGORIES.IMAGE_SCAN],
+    }),
+    ...(codeScan && {
+        [CATEGORIES.CODE_SCAN]: SECURITY_CONFIG[CATEGORIES.CODE_SCAN],
+    }),
+    ...(kubernetesManifest && {
+        [CATEGORIES.KUBERNETES_MANIFEST]: SECURITY_CONFIG[CATEGORIES.KUBERNETES_MANIFEST],
+    }),
+})
 
-    const severityCount: SeverityCount = {
-        critical: severities?.[SeveritiesDTO.CRITICAL] || 0,
-        high: severities?.[SeveritiesDTO.HIGH] || 0,
-        medium: severities?.[SeveritiesDTO.MEDIUM] || 0,
-        low: severities?.[SeveritiesDTO.LOW] || 0,
-        unknown: severities?.[SeveritiesDTO.UNKNOWN] || 0,
-    }
+export const getCompiledSecurityThreats = (scanResult: ScanResultDTO): Partial<Record<SeveritiesDTO, number>> => {
+    const { imageScan, codeScan, kubernetesManifest } = scanResult
+    const DYNAMIC_SECURITY_CONFIG = getSecurityConfig({
+        imageScan: !!imageScan,
+        codeScan: !!codeScan,
+        kubernetesManifest: !!kubernetesManifest,
+    })
 
-    const totalCount =
-        severityCount.critical + severityCount.high + severityCount.medium + severityCount.low + severityCount.unknown
+    const threatsArray: Partial<Record<SeveritiesDTO, number>>[] = []
 
-    return { scanToolId, severityCount, totalCount }
+    Object.keys(DYNAMIC_SECURITY_CONFIG).forEach((category: ScanCategories) => {
+        DYNAMIC_SECURITY_CONFIG[category].subCategories.forEach((subCategory: ScanSubCategories) => {
+            const severity =
+                subCategory === SUB_CATEGORIES.MISCONFIGURATIONS
+                    ? scanResult[category][subCategory]?.misConfSummary?.status
+                    : scanResult[category][subCategory]?.summary?.severities
+            threatsArray.push(severity)
+        })
+    })
+
+    const scanThreats: Partial<Record<SeveritiesDTO, number>> = threatsArray.reduce((acc, curr) => {
+        Object.keys(curr).forEach((key) => {
+            if (acc[key]) {
+                acc[key] += curr[key]
+            } else {
+                acc[key] = curr[key]
+            }
+        })
+        return acc
+    }, {})
+
+    return scanThreats
 }
