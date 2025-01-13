@@ -7,7 +7,7 @@
                 border: none !important;
 
                 input {
-                    color: var(--N0);
+                    color: var(--white);
 
                     &::placeholder {
                         color: var(--N500);
@@ -50,7 +50,7 @@
         &__log-item {
             grid-template-columns: 34px auto;
             &:hover {
-                background-color: rgba(255, 255, 255, 0.1);
+                background-color: var(--white-20);
             }
         }
 

@@ -128,7 +128,7 @@ const BulkOperations = ({
 
             ToastManager.showToast({
                 variant: ToastVariantType.info,
-                description: 'Bulk action completed',
+                description: 'Action completed',
             })
 
             if (hideResultsDrawer) {

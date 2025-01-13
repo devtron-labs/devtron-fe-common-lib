@@ -20,7 +20,7 @@ const selectedStyles = {
 
     hover: {
         background: 'var(--B500)',
-        color: '#fff',
+        color: 'var(--N0)',
     },
 }
 
@@ -29,7 +29,7 @@ const selectedSpanStyles = {
     color: 'var(--B500)',
     hover: {
         background: 'var(--B500)',
-        color: '#fff',
+        color: 'var(--N0)',
     },
 }
 
@@ -157,7 +157,7 @@ export const reactSelectStyles = {
         minHeight: '36px',
         cursor: 'pointer',
         borderColor: 'var(--N200)',
-        backgroundColor: 'var(--N50)',
+        backgroundColor: 'var(--bg-secondary)',
 
         ...(state.isDisabled
             ? {

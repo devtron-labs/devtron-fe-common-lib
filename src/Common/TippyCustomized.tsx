@@ -164,7 +164,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                             onClick={closeTippy}
                         >
                             {documentationLinkText || 'Learn more'}
-                            <ICOpenInNew className="icon-dim-14 ml-4" />
+                            <ICOpenInNew className="icon-dim-14 ml-4 scb-5" />
                         </a>
                     </div>
                 )}

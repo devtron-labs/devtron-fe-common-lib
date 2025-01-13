@@ -16,6 +16,7 @@ export type {
     GetResourceScanDetailsPayloadType,
     GetResourceScanDetailsResponseType,
 } from './types'
+export { SeveritiesDTO } from './types'
 export { getSidebarData, getProgressingStateForStatus } from './config'
 export { CATEGORY_LABELS } from './constants'
 export { getSecurityScan } from './service'

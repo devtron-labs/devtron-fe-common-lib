@@ -44,7 +44,7 @@ const Table: React.FC<TablePropsType> = ({ headers, rows, defaultSortIndex, hasE
     return (
         <div className="flexbox-col">
             <div
-                className="flexbox dc__gap-8 dc__position-sticky dc__border-bottom-n1 pt-8 pb-8 bcn-0 dc__zi-10"
+                className="flexbox dc__gap-8 dc__position-sticky dc__border-bottom-n1 pt-8 pb-8 bg__primary dc__zi-10"
                 style={{ top: `${headerTopPosition}px` }}
             >
                 {hasExpandableRows && (

@@ -78,10 +78,10 @@ const getOptionBgColor = <OptionValue>(
     }
 
     if (state.isFocused) {
-        return 'var(--N50)'
+        return 'var(--bg-secondary)'
     }
 
-    return 'var(--N0)'
+    return 'var(--transparent)'
 }
 
 export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
@@ -108,7 +108,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         ...base,
         overflow: 'hidden',
         marginBlock: '4px',
-        backgroundColor: 'var(--N0)',
+        backgroundColor: 'var(--bg-menu)',
         border: '1px solid var(--N200)',
         boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.20)',
         width: getMenuWidthFromSize(menuSize).width,
@@ -127,7 +127,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         minHeight: SELECT_PICKER_CONTROL_SIZE_MAP[size],
         minWidth: '56px',
         boxShadow: 'none',
-        backgroundColor: 'var(--N50)',
+        backgroundColor: 'var(--bg-secondary)',
         border: `1px solid ${error ? 'var(--R500)' : 'var(--N200)'}`,
         cursor: state.isDisabled ? 'not-allowed' : 'pointer',
         padding: '5px 8px',
@@ -162,7 +162,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         },
 
         ':hover': {
-            backgroundColor: 'var(--N50)',
+            backgroundColor: 'var(--bg-secondary)',
         },
 
         ...(state.isDisabled && {
@@ -211,7 +211,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
 
         return {
             ...base,
-            background: isOptionValid ? 'var(--N0)' : 'var(--R100)',
+            background: isOptionValid ? 'var(--bg-primary)' : 'var(--R100)',
             border: isOptionValid ? '1px solid var(--N200)' : '1px solid var(--R200)',
             borderRadius: '4px',
             padding: '1px 5px',

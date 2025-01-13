@@ -79,7 +79,7 @@ export const SelectWidget = (props: WidgetProps) => {
                 control: (base) => ({
                     ...base,
                     ...commonStyles.control,
-                    backgroundColor: 'var(--N50)',
+                    backgroundColor: 'var(--bg-secondary)',
                 }),
             }}
             components={{

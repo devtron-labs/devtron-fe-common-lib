@@ -1,0 +1,28 @@
+.security-card {
+    &--threat {
+        background: radial-gradient(25.91% 100% at 100% 0%, var(--R100) 0%, var(--N0) 100%);
+    }
+    &--secure {
+        background: radial-gradient(25.91% 100% at 100% 0%, var(--G100) 0%, var(--N0) 100%);
+    }
+
+    .arrow-right {
+        visibility: hidden;
+    }
+
+    &:hover {
+        .arrow-right {
+            visibility: visible;
+        }
+
+        .security-card-title {
+            color: var(--B500);
+        }
+    }
+}
+
+.security-cards {
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: 12px;
+    grid-column-gap: 12px;
+}

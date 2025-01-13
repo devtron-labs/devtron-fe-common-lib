@@ -485,8 +485,6 @@ export interface DeploymentTemplateHistoryType {
     currentConfiguration: DeploymentHistoryDetail
     baseTemplateConfiguration: DeploymentHistoryDetail
     previousConfigAvailable: boolean
-    isUnpublished?: boolean
-    isDeleteDraft?: boolean
     rootClassName?: string
     codeEditorKey?: React.Key
     sortingConfig?: {
