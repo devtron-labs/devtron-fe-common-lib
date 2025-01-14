@@ -1,4 +1,4 @@
-import { CMSecretExternalType } from '@Shared/Services'
+import { CMSecretExternalType, CMSecretYamlData } from '@Shared/Services'
 import { ConfigMapSecretDataTypeOptionType } from './types'
 
 export const CONFIG_MAP_SECRET_YAML_PARSE_ERROR = 'Could not parse to valid YAML'
@@ -15,3 +15,10 @@ export const configMapDataTypeOptions: ConfigMapSecretDataTypeOptionType[] = [
     { value: '', label: 'Kubernetes ConfigMap' },
     { value: CMSecretExternalType.KubernetesConfigMap, label: 'Kubernetes External ConfigMap' },
 ]
+
+export const CONFIG_MAP_SECRET_DEFAULT_CURRENT_DATA: CMSecretYamlData[] = [{ k: '', v: '', id: 0 }]
+
+export const configMapSecretMountDataMap = {
+    environment: { title: 'Environment Variable', value: 'environment' },
+    volume: { title: 'Data Volume', value: 'volume' },
+}

@@ -1,16 +1,12 @@
 import YAML from 'yaml'
 import { hasESO } from '@Pages/index'
-import {
-    CMSecretExternalType,
-    CMSecretYamlData,
-    ConfigMapSecretUseFormProps,
-    getESOSecretDataFromYAML,
-} from '@Shared/Services'
+import { CMSecretExternalType, CMSecretYamlData, ConfigMapSecretUseFormProps } from '@Shared/Services'
 import { UseFormValidation, UseFormValidations } from '@Shared/Hooks'
 import { YAMLStringify } from '@Common/Helper'
 import { PATTERNS } from '@Common/Constants'
 import { validateCMVolumeMountPath } from '@Shared/validations'
 import { CONFIG_MAP_SECRET_YAML_PARSE_ERROR, SECRET_TOAST_INFO } from './constants'
+import { getESOSecretDataFromYAML } from './utils'
 
 /**
  * Validates a YAML string for proper structure and specific key/value constraints.
