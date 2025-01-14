@@ -20,6 +20,7 @@ import { deepEqual, noop, YAMLStringify } from '@Common/Helper'
 
 import { ManifestTemplateDTO } from '@Pages/Applications'
 import {
+    CMSecretExternalType,
     ConfigMapSecretDataConfigDatumDTO,
     ConfigMapSecretDataDTO,
     ConfigResourceType,
@@ -326,6 +327,25 @@ const getDiffState = (compareToValue: DeploymentHistoryDetail, compareWithValue:
     return DeploymentConfigDiffState.NO_DIFF
 }
 
+const getCMSecretHistoryDataForDiffState = (
+    configMapSecretData: ConfigMapSecretDataConfigDatumDTO,
+    historyData: DeploymentHistoryDetail,
+) => {
+    // CHECKING FOR EXTERNAL CM/CS
+    if (
+        configMapSecretData &&
+        configMapSecretData.external &&
+        (configMapSecretData.externalType === '' ||
+            configMapSecretData.externalType === CMSecretExternalType.KubernetesSecret)
+    ) {
+        const historyDataWhenExternal = structuredClone(historyData)
+        historyDataWhenExternal.codeEditorValue.value = 'external'
+        return historyDataWhenExternal
+    }
+
+    return historyData
+}
+
 /**
  * Prepares the data for displaying the diff view between two configuration items.
  *
@@ -378,7 +398,10 @@ const getDiffViewData = (
     return {
         compareToDiff,
         compareWithDiff,
-        diffState: getDiffState(compareToDiff, compareWithDiff),
+        diffState: getDiffState(
+            getCMSecretHistoryDataForDiffState(compareTo, compareToDiff),
+            getCMSecretHistoryDataForDiffState(compareWith, compareWithDiff),
+        ),
     }
 }
 
