@@ -193,11 +193,12 @@ const parsePlatformServerConfigIntoUIConfig = (
 
             return {
                 useFormProps: cmSecretFormProps,
+                defaultValue: cmSecretFormProps,
                 initialResponse: configMapSecretData,
+                defaultValueInitialResponse: configMapSecretData,
                 id: getUniqueId(),
                 isOverridden: true,
                 canOverride: !isDefaultProfile,
-                defaultValue: cmSecretFormProps,
             }
         },
     )
@@ -307,12 +308,17 @@ const getPlatformConfigurationsWithDefaultValues = ({
             }, {})
 
             const finalValues: BuildInfraCMCSValueType[] =
-                (profileConfiguration?.value as BuildInfraCMCSValueType[])?.map((configMapSecretData) => ({
-                    ...configMapSecretData,
-                    defaultValue: defaultConfigurationValueMap[configMapSecretData.useFormProps.name].useFormProps,
-                    isOverridden: true,
-                    canOverride: !!defaultConfigurationValueMap[configMapSecretData.useFormProps.name],
-                })) || []
+                (profileConfiguration?.value as BuildInfraCMCSValueType[])?.map((configMapSecretData) => {
+                    const defaultConfigInfo = defaultConfigurationValueMap[configMapSecretData.useFormProps.name]
+
+                    return {
+                        ...configMapSecretData,
+                        defaultValueInitialResponse: defaultConfigInfo?.defaultValueInitialResponse,
+                        defaultValue: defaultConfigInfo?.useFormProps,
+                        isOverridden: true,
+                        canOverride: !!defaultConfigInfo,
+                    }
+                }) || []
 
             const overriddenValuesMap = finalValues.reduce<Record<string, BuildInfraCMCSValueType>>(
                 (overriddenValuesAcc, overriddenValue) => {

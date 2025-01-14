@@ -217,6 +217,7 @@ export type BuildInfraCMCSValueType = {
     isOverridden: boolean
     canOverride: boolean
     defaultValue: ConfigMapSecretUseFormProps | null
+    defaultValueInitialResponse: CMSecretConfigData
     initialResponse: CMSecretConfigData
 }
 

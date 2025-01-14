@@ -251,9 +251,11 @@ const useBuildInfraForm = ({
                     return
                 }
 
-                cmSecretValue[selectedCMCSIndex].useFormProps = cmSecretValue[selectedCMCSIndex].defaultValue
                 const isActivation = action === 'activate_cm' || action === 'activate_cs'
-                cmSecretValue[selectedCMCSIndex].canOverride = isActivation
+                cmSecretValue[selectedCMCSIndex].useFormProps = cmSecretValue[selectedCMCSIndex].defaultValue
+                cmSecretValue[selectedCMCSIndex].isOverridden = isActivation
+                cmSecretValue[selectedCMCSIndex].initialResponse =
+                    cmSecretValue[selectedCMCSIndex].defaultValueInitialResponse
 
                 // Will remove error if present
                 if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
@@ -596,6 +598,7 @@ const useBuildInfraForm = ({
                     canOverride: false,
                     initialResponse: null,
                     defaultValue: null,
+                    defaultValueInitialResponse: null,
                 }
 
                 ;(currentConfiguration[infraConfigType].value as BuildInfraCMCSValueType[]).push(finalValue)
