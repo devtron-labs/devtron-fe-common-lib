@@ -22,7 +22,7 @@ const ToggleResolveScopedVariables = ({
                 disabled={isDisabled}
                 rootClassName="dc__toggle-square-toggle"
                 throttleOnChange={throttleOnChange}
-                iconClass={resolveScopedVariables ? 'scb-5 p-2-imp' : 'scn-6 p-2-imp'}
+                iconClass={`p-2-imp ${resolveScopedVariables ? 'scb-5' : 'scn-6'}`}
             />
         </div>
     </Tooltip>

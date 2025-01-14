@@ -386,6 +386,9 @@ export interface GetConfigMapSecretFormInitialValuesParamsType {
     cmSecretStateLabel: CM_SECRET_STATE
     configMapSecretData: CMSecretConfigData
     fallbackMergeStrategy: OverrideMergeStrategyType
+    /**
+     * Leveraging the same in build infra as well
+     */
     isJob?: boolean
     componentType?: CMSecretComponentType
     skipValidation?: boolean
