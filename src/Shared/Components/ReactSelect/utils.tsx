@@ -16,13 +16,13 @@
 
 import { cloneElement } from 'react'
 import Tippy from '@tippyjs/react'
-import { components, MenuListProps, ValueContainerProps } from 'react-select'
+import { components, MenuListProps, StylesConfig, ValueContainerProps } from 'react-select'
 import { OptionType, Progressing, stopPropagation } from '../../../Common'
 import { ReactComponent as ICSearch } from '../../../Assets/Icon/ic-search.svg'
 import { ReactComponent as ICFilter } from '../../../Assets/Icon/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '../../../Assets/Icon/ic-filter-applied.svg'
 
-export const getCommonSelectStyle = (styleOverrides = {}) => ({
+export const getCommonSelectStyle = (styleOverrides = {}): StylesConfig => ({
     container: (base, state) => ({
         ...base,
         ...(state.isDisabled && {
@@ -127,6 +127,28 @@ export const getCommonSelectStyle = (styleOverrides = {}) => ({
     menu: (base) => ({
         ...base,
         backgroundColor: 'var(--bg-menu)',
+    }),
+    multiValue: (base) => ({
+        ...base,
+        background: 'var(--bg-primary)',
+        border: '1px solid var(--N200)',
+        borderRadius: '4px',
+        padding: '1px 5px',
+        maxWidth: '250px',
+        margin: 0,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+    }),
+    multiValueLabel: (base) => ({
+        ...base,
+        borderRadius: 0,
+        color: 'var(--N900)',
+        fontSize: '12px',
+        fontWeight: 400,
+        lineHeight: '20px',
+        padding: 0,
+        paddingLeft: 0,
     }),
     ...styleOverrides,
 })
