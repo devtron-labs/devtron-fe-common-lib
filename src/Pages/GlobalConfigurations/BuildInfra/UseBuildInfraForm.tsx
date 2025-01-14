@@ -623,17 +623,10 @@ const useBuildInfraForm = ({
                     return
                 }
 
-                const finalCMValue: BuildInfraCMCSValueType = {
-                    ...(
-                        currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
-                            .value as BuildInfraCMCSValueType[]
-                    )[selectedCMCSIndex],
-                    ...value,
-                }
-
-                currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]].value[
-                    selectedCMCSIndex
-                ] = finalCMValue
+                ;(
+                    currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
+                        .value as BuildInfraCMCSValueType[]
+                )[selectedCMCSIndex].useFormProps = value
 
                 if (!currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
                     currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = {}
