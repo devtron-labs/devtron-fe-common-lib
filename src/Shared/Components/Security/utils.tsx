@@ -43,7 +43,10 @@ export const getCompiledSecurityThreats = (scanResult: ScanResultDTO): Partial<R
                 subCategory === SUB_CATEGORIES.MISCONFIGURATIONS
                     ? scanResult[category][subCategory]?.misConfSummary?.status
                     : scanResult[category][subCategory]?.summary?.severities
-            threatsArray.push(severity)
+
+            if (severity && Object.keys(severity).length) {
+                threatsArray.push(severity)
+            }
         })
     })
 
