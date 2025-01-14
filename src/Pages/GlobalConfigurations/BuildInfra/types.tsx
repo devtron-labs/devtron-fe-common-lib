@@ -500,8 +500,7 @@ export type HandleProfileInputChangeType =
           action: BuildInfraProfileInputActionType.ADD_CM_CS_ITEM
           data: ProfileInputDispatchDataType &
               Pick<BuildInfraCMCSValueType, 'id'> & {
-                  // TODO: Can we do infraType instead of componentType
-                  componentType: CMSecretComponentType
+                  infraConfigType: BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET
               }
       }
     | {

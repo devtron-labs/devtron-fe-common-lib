@@ -25,6 +25,7 @@ import {
     DEFAULT_TOLERANCE_OPERATOR,
     getBuildInfraProfileByName,
     HandleProfileInputChangeType,
+    INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP,
     NodeSelectorHeaderType,
     OverrideMergeStrategyType,
     PROFILE_INPUT_ERROR_FIELDS,
@@ -844,11 +845,11 @@ const useBuildInfraForm = ({
             }
 
             case BuildInfraProfileInputActionType.ADD_CM_CS_ITEM: {
-                const { id, componentType } = data
+                const { id, infraConfigType } = data
 
                 const useFormProps = getConfigMapSecretFormInitialValues({
                     configMapSecretData: null,
-                    componentType,
+                    componentType: INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP[infraConfigType],
                     // TODO: Check something related to decode in secureValues
                     cmSecretStateLabel: CM_SECRET_STATE.BASE,
                     isJob: true,
@@ -865,10 +866,7 @@ const useBuildInfraForm = ({
                     defaultValue: null,
                 }
 
-                ;(
-                    currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
-                        .value as BuildInfraCMCSValueType[]
-                ).push(finalValue)
+                ;(currentConfiguration[infraConfigType].value as BuildInfraCMCSValueType[]).push(finalValue)
                 break
             }
 
