@@ -170,12 +170,16 @@ const getBaseProfileObject = ({
     }
 }
 
+/**
+ * In case of locators other than cm/cs, we just pass data to parsePlatformConfigIntoValue
+ * In case of cm/cs we convert the DTO into intermediatory UI form with defaultValue as it itself
+ */
 const parsePlatformServerConfigIntoUIConfig = (
     serverConfig: BuildInfraConfigurationDTO,
     isDefaultProfile: boolean,
 ): BuildInfraConfigValuesType => {
     if (!INFRA_CONFIG_CONTAINING_SUB_VALUES[serverConfig.key]) {
-        // TODO: Can look for a better way to handle this
+        // TODO: Can look for a better way to handle this typing?
         return parsePlatformConfigIntoValue(serverConfig as BuildInfraConfigValuesType)
     }
 
@@ -311,12 +315,17 @@ const getPlatformConfigurationsWithDefaultValues = ({
             }, {})
 
             const finalValues: BuildInfraCMCSValueType[] =
-                (profileConfiguration?.value as BuildInfraCMCSValueType[])?.map((configMapSecretData) => ({
-                    ...configMapSecretData,
-                    defaultValue: defaultConfigurationValueMap[configMapSecretData.name],
-                    isOverridden: true,
-                    canOverride: !!defaultConfigurationValueMap[configMapSecretData.name],
-                })) || []
+                (profileConfiguration?.value as BuildInfraCMCSValueType[])?.map((configMapSecretData) => {
+                    const cmSecretDefaultValue = structuredClone(defaultConfigurationValueMap[configMapSecretData.name])
+                    delete cmSecretDefaultValue.id
+
+                    return {
+                        ...configMapSecretData,
+                        defaultValue: cmSecretDefaultValue,
+                        isOverridden: true,
+                        canOverride: !!cmSecretDefaultValue,
+                    }
+                }) || []
 
             const overriddenValuesMap = finalValues.reduce<Record<string, BuildInfraCMCSValueType>>(
                 (overriddenValuesAcc, overriddenValue) => {
