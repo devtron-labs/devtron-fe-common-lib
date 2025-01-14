@@ -1,6 +1,12 @@
 import { SECURITY_CONFIG } from './constants'
 import { ScanResultDTO, SeveritiesDTO } from './SecurityModal'
-import { CATEGORIES, SUB_CATEGORIES } from './SecurityModal/types'
+import {
+    CATEGORIES,
+    ImageScanLicenseListType,
+    ImageScanVulnerabilityListType,
+    StatusType,
+    SUB_CATEGORIES,
+} from './SecurityModal/types'
 import { CategoriesConfig, SecurityConfigType, ScanCategories, ScanSubCategories } from './types'
 
 export const getCVEUrlFromCVEName = (cveName: string): string =>
@@ -62,4 +68,51 @@ export const getCompiledSecurityThreats = (scanResult: ScanResultDTO): Partial<R
     }, {})
 
     return scanThreats
+}
+
+const getIsStatusProgressing = (status: StatusType['status']): boolean =>
+    status === 'Progressing' || status === 'Running'
+
+export const getStatusForScanList = (
+    scanList: ImageScanVulnerabilityListType[] | ImageScanLicenseListType[],
+): StatusType['status'] => {
+    const scanProgressing = scanList.some((scan) => getIsStatusProgressing(scan.status))
+    if (scanProgressing) {
+        return 'Progressing'
+    }
+    const scanFailed = scanList.some((scan) => scan.status === 'Failed')
+    if (scanFailed) {
+        return 'Failed'
+    }
+    return 'Completed'
+}
+
+export const getSecurityScanStatus = (scanResult: ScanResultDTO): StatusType['status'] => {
+    const imageScanList = scanResult.imageScan?.vulnerability?.list ?? []
+    const licenseScanList = scanResult.imageScan?.license?.list ?? []
+    const codeScanStatus = scanResult.codeScan?.status
+    const manifestScanStatus = scanResult.kubernetesManifest?.status
+
+    const imageScanStatus = getStatusForScanList(imageScanList)
+    const licenseScanStatus = getStatusForScanList(licenseScanList)
+
+    if (
+        imageScanStatus === 'Progressing' ||
+        licenseScanStatus === 'Progressing' ||
+        getIsStatusProgressing(codeScanStatus) ||
+        getIsStatusProgressing(manifestScanStatus)
+    ) {
+        return 'Progressing'
+    }
+
+    if (
+        imageScanStatus === 'Failed' ||
+        licenseScanStatus === 'Failed' ||
+        codeScanStatus === 'Failed' ||
+        manifestScanStatus === 'Failed'
+    ) {
+        return 'Failed'
+    }
+
+    return 'Completed'
 }
