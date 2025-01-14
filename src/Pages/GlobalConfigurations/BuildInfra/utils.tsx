@@ -177,7 +177,6 @@ const parsePlatformServerConfigIntoUIConfig = (
     isDefaultProfile: boolean,
 ): BuildInfraConfigValuesType => {
     if (!INFRA_CONFIG_CONTAINING_SUB_VALUES[serverConfig.key]) {
-        // TODO: Can look for a better way to handle this typing?
         return parsePlatformConfigIntoValue(serverConfig as BuildInfraConfigValuesType)
     }
 
@@ -246,8 +245,8 @@ const getConfigurationMapWithoutDefaultFallback = (
                     }
 
                     const currentConfigValue: BuildInfraConfigInfoType = {
-                        ...configValues,
                         ...baseValue,
+                        ...configValues,
                     }
 
                     // eslint-disable-next-line no-param-reassign

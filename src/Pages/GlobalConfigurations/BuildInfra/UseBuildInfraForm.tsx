@@ -242,12 +242,14 @@ const useBuildInfraForm = ({
                 const selectedCMCSIndex = cmSecretValue.findIndex((configMapItem) => configMapItem.id === id)
 
                 if (selectedCMCSIndex === -1 || !cmSecretValue[selectedCMCSIndex].canOverride) {
+                    const errorMessage = 'Unable to customize this CM/CS'
+
                     ToastManager.showToast({
                         variant: ToastVariantType.error,
-                        description: 'Unable to customize this CM/CS',
+                        description: errorMessage,
                     })
 
-                    logExceptionToSentry(new Error('Unable to customize this CM/CS'))
+                    logExceptionToSentry(new Error(errorMessage))
                     return
                 }
 

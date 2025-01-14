@@ -187,29 +187,35 @@ export type BuildInfraToleranceValueType = {
       }
 )
 
-interface NumericBuildInfraConfigValueDTO {
-    key: NumericBuildInfraConfigTypes
-    value: number
-    unit: ConfigurationUnitType['name']
+type BuildInfraConfigTypeFormat<Key, Value, Unit> = {
+    key: Key
+    value: Value
+    unit?: Unit
 }
 
-interface NodeSelectorConfigDTO {
-    key: BuildInfraConfigTypes.NODE_SELECTOR
-    value: BuildInfraNodeSelectorValueType[]
-    unit?: never
-}
+type NumericBuildInfraConfigValueDTO = BuildInfraConfigTypeFormat<
+    NumericBuildInfraConfigTypes,
+    number,
+    ConfigurationUnitType['name']
+>
 
-interface ToleranceConfigDTO {
-    key: BuildInfraConfigTypes.TOLERANCE
-    value: BuildInfraToleranceValueType[]
-    unit?: never
-}
+type NodeSelectorConfigDTO = BuildInfraConfigTypeFormat<
+    BuildInfraConfigTypes.NODE_SELECTOR,
+    BuildInfraNodeSelectorValueType[],
+    never
+>
 
-interface BuildInfraCMCSConfigDTO {
-    key: BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET
-    value: CMSecretConfigData[]
-    unit?: never
-}
+type ToleranceConfigDTO = BuildInfraConfigTypeFormat<
+    BuildInfraConfigTypes.TOLERANCE,
+    BuildInfraToleranceValueType[],
+    never
+>
+
+type BuildInfraCMCSConfigDTO = BuildInfraConfigTypeFormat<
+    BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET,
+    CMSecretConfigData[],
+    never
+>
 
 export type BuildInfraCMCSValueType = {
     useFormProps: ConfigMapSecretUseFormProps
@@ -221,16 +227,12 @@ export type BuildInfraCMCSValueType = {
     initialResponse: CMSecretConfigData
 }
 
-export interface BuildInfraCMCSConfigType {
-    key: BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET
+export interface BuildInfraCMCSConfigType extends Pick<BuildInfraCMCSConfigDTO, 'key' | 'unit'> {
     value: BuildInfraCMCSValueType[]
-    unit?: never
 }
 
-interface BuildInfraCMCSPayloadConfigType {
-    key: BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET
+interface BuildInfraCMCSPayloadConfigType extends Pick<BuildInfraCMCSConfigDTO, 'key' | 'unit'> {
     value: CMSecretPayloadType[]
-    unit?: never
 }
 
 export type BuildInfraConfigDTO =
