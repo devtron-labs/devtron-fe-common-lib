@@ -17,7 +17,6 @@
 import { useParams } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react'
-import { yamlComparatorBySortOrder } from '@Shared/Helpers'
 import { DiffViewer } from '@Shared/Components/DiffViewer'
 import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
 import { MODES, Toggle, YAMLStringify } from '../../../../Common'
@@ -36,11 +35,9 @@ const DeploymentHistoryDiffView = ({
     isUnpublished,
     isDeleteDraft,
     rootClassName,
-    sortingConfig,
     codeEditorKey,
 }: DeploymentTemplateHistoryType) => {
     const { historyComponent, historyComponentName } = useParams<DeploymentHistoryParamsType>()
-    const { sortBy, sortOrder } = sortingConfig ?? { sortBy: '', sortOrder: null }
 
     const [convertVariables, setConvertVariables] = useState(false)
 
@@ -68,10 +65,8 @@ const DeploymentHistoryDiffView = ({
             ? baseTemplateConfiguration?.codeEditorValue?.resolvedValue
             : baseTemplateConfiguration?.codeEditorValue?.value
 
-        return YAMLStringify(JSON.parse(editorValue), {
-            sortMapEntries: sortBy ? (a, b) => yamlComparatorBySortOrder(a, b, sortOrder) : null,
-        })
-    }, [convertVariables, baseTemplateConfiguration, sortOrder, isDeleteDraft])
+        return YAMLStringify(JSON.parse(editorValue))
+    }, [convertVariables, baseTemplateConfiguration, isDeleteDraft])
 
     const editorValuesLHS = useMemo(() => {
         if (!currentConfiguration?.codeEditorValue?.value || isUnpublished) {
@@ -82,10 +77,8 @@ const DeploymentHistoryDiffView = ({
             ? currentConfiguration?.codeEditorValue?.resolvedValue
             : currentConfiguration?.codeEditorValue?.value
 
-        return YAMLStringify(JSON.parse(editorValue), {
-            sortMapEntries: sortBy ? (a, b) => yamlComparatorBySortOrder(a, b, sortOrder) : null,
-        })
-    }, [convertVariables, currentConfiguration, sortOrder, isUnpublished])
+        return YAMLStringify(JSON.parse(editorValue))
+    }, [convertVariables, currentConfiguration, isUnpublished])
 
     const renderDeploymentDiffViaCodeEditor = () =>
         previousConfigAvailable ? (
