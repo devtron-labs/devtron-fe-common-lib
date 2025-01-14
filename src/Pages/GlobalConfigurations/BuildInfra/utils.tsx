@@ -185,7 +185,7 @@ const parsePlatformServerConfigIntoUIConfig = (
 
     const parsedCMCSFormValues: BuildInfraCMCSConfigType['value'] = (serverConfig.value as CMSecretConfigData[])?.map(
         (configMapSecretData) => {
-            const baseCMCSValue = getConfigMapSecretFormInitialValues({
+            const cmSecretFormProps = getConfigMapSecretFormInitialValues({
                 configMapSecretData,
                 componentType: INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP[serverConfig.key],
                 // TODO: Check if for target platforms need to change
@@ -196,13 +196,13 @@ const parsePlatformServerConfigIntoUIConfig = (
             })
 
             return {
-                ...baseCMCSValue,
+                useFormProps: cmSecretFormProps,
                 initialResponse: configMapSecretData,
                 id: getUniqueId(),
                 isOverridden: true,
                 // FIXME: Ideally should have named canInherit
                 canOverride: !isDefaultProfile,
-                defaultValue: baseCMCSValue,
+                defaultValue: cmSecretFormProps,
             }
         },
     )
@@ -224,9 +224,7 @@ const parseUIConfigToPayload = (uiConfig: BuildInfraConfigValuesType): BuildInfr
     const overriddenConfigs = (parsedConfig.value as BuildInfraCMCSValueType[])?.filter(
         (configMapSecretData) => configMapSecretData.isOverridden,
     )
-    const parsedCMCSValues = overriddenConfigs?.map((configMapSecretFormData) =>
-        getConfigMapSecretPayload(configMapSecretFormData),
-    )
+    const parsedCMCSValues = overriddenConfigs?.map(({ useFormProps }) => getConfigMapSecretPayload(useFormProps))
 
     return {
         key: parsedConfig.key as BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET,
@@ -310,34 +308,29 @@ const getPlatformConfigurationsWithDefaultValues = ({
                 Record<string, BuildInfraCMCSValueType>
             >((defaultCMCSMap, configMapSecretData) => {
                 // eslint-disable-next-line no-param-reassign
-                defaultCMCSMap[configMapSecretData.name] = configMapSecretData
+                defaultCMCSMap[configMapSecretData.useFormProps.name] = configMapSecretData
                 return defaultCMCSMap
             }, {})
 
             const finalValues: BuildInfraCMCSValueType[] =
-                (profileConfiguration?.value as BuildInfraCMCSValueType[])?.map((configMapSecretData) => {
-                    const cmSecretDefaultValue = structuredClone(defaultConfigurationValueMap[configMapSecretData.name])
-                    delete cmSecretDefaultValue.id
-
-                    return {
-                        ...configMapSecretData,
-                        defaultValue: cmSecretDefaultValue,
-                        isOverridden: true,
-                        canOverride: !!cmSecretDefaultValue,
-                    }
-                }) || []
+                (profileConfiguration?.value as BuildInfraCMCSValueType[])?.map((configMapSecretData) => ({
+                    ...configMapSecretData,
+                    defaultValue: defaultConfigurationValueMap[configMapSecretData.useFormProps.name].useFormProps,
+                    isOverridden: true,
+                    canOverride: !!defaultConfigurationValueMap[configMapSecretData.useFormProps.name],
+                })) || []
 
             const overriddenValuesMap = finalValues.reduce<Record<string, BuildInfraCMCSValueType>>(
                 (overriddenValuesAcc, overriddenValue) => {
                     // eslint-disable-next-line no-param-reassign
-                    overriddenValuesAcc[overriddenValue.name] = overriddenValue
+                    overriddenValuesAcc[overriddenValue.useFormProps.name] = overriddenValue
                     return overriddenValuesAcc
                 },
                 {} as Record<string, BuildInfraCMCSValueType>,
             )
 
             Object.values(defaultConfigurationValueMap).forEach((defaultCMCSValue) => {
-                if (!overriddenValuesMap[defaultCMCSValue.name]) {
+                if (!overriddenValuesMap[defaultCMCSValue.useFormProps.name]) {
                     finalValues.push({
                         ...defaultCMCSValue,
                         isOverridden: false,

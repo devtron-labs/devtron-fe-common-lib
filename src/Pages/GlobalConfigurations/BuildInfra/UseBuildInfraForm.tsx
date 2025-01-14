@@ -846,7 +846,7 @@ const useBuildInfraForm = ({
             case BuildInfraProfileInputActionType.ADD_CM_CS_ITEM: {
                 const { id, componentType } = data
 
-                const cmSecretData = getConfigMapSecretFormInitialValues({
+                const useFormProps = getConfigMapSecretFormInitialValues({
                     configMapSecretData: null,
                     componentType,
                     // TODO: Check something related to decode in secureValues
@@ -857,7 +857,7 @@ const useBuildInfraForm = ({
                 })
 
                 const finalValue: BuildInfraCMCSValueType = {
-                    ...cmSecretData,
+                    useFormProps,
                     id,
                     isOverridden: true,
                     canOverride: false,

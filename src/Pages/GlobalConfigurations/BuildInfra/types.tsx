@@ -211,7 +211,8 @@ interface BuildInfraCMCSConfigDTO {
     unit?: never
 }
 
-export type BuildInfraCMCSValueType = ConfigMapSecretUseFormProps & {
+export type BuildInfraCMCSValueType = {
+    useFormProps: ConfigMapSecretUseFormProps
     id: ReturnType<typeof getUniqueId>
     isOverridden: boolean
     canOverride: boolean
@@ -423,7 +424,7 @@ export enum BuildInfraProfileInputActionType {
     DELETE_CM_CS_ITEM = 'delete_cm_cs_item',
 }
 
-type BuildInfraInheritActionsOnSubValues = Extract<
+export type BuildInfraInheritActionsOnSubValues = Extract<
     BuildInfraInheritActions,
     | `activate_${BuildInfraLocators.CONFIG_MAP}`
     | `de_activate_${BuildInfraLocators.CONFIG_MAP}`
