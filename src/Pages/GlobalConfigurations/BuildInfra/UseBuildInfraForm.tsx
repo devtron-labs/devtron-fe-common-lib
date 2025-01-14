@@ -25,7 +25,6 @@ import {
     getBuildInfraProfileByName,
     HandleProfileInputChangeType,
     INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP,
-    OverrideMergeStrategyType,
     PROFILE_INPUT_ERROR_FIELDS,
     ProfileInputErrorType,
     TARGET_PLATFORM_ERROR_FIELDS_MAP,
@@ -233,44 +232,7 @@ const useBuildInfraForm = ({
             }
 
             case 'activate_cm':
-            case 'activate_cs': {
-                const { id, componentType } = data
-                // Would just convert isOverridden to true and replace value with default value
-                const cmSecretValue = currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
-                    .value as BuildInfraCMCSValueType[]
-                const selectedCMCSIndex = cmSecretValue.findIndex((configMapItem) => configMapItem.id === id)
-
-                if (selectedCMCSIndex === -1 || !cmSecretValue[selectedCMCSIndex].canOverride) {
-                    ToastManager.showToast({
-                        variant: ToastVariantType.error,
-                        description: 'Unable to customize this CM/CS',
-                    })
-
-                    logExceptionToSentry(new Error('Unable to customize this CM/CS'))
-                    return
-                }
-
-                cmSecretValue[selectedCMCSIndex] = {
-                    ...cmSecretValue[selectedCMCSIndex],
-                    ...cmSecretValue[selectedCMCSIndex].defaultValue,
-                }
-                cmSecretValue[selectedCMCSIndex].isOverridden = true
-
-                // Will remove error if present
-                if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
-                    delete currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id]
-
-                    if (
-                        Object.keys(currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]])
-                            .length === 0
-                    ) {
-                        currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = null
-                    }
-                }
-
-                break
-            }
-
+            case 'activate_cs':
             case 'de_activate_cm':
             case 'de_activate_cs': {
                 const { id, componentType } = data
@@ -289,11 +251,9 @@ const useBuildInfraForm = ({
                     return
                 }
 
-                cmSecretValue[selectedCMCSIndex] = {
-                    ...cmSecretValue[selectedCMCSIndex],
-                    ...cmSecretValue[selectedCMCSIndex].defaultValue,
-                }
-                cmSecretValue[selectedCMCSIndex].isOverridden = false
+                cmSecretValue[selectedCMCSIndex].useFormProps = cmSecretValue[selectedCMCSIndex].defaultValue
+                const isActivation = action === 'activate_cm' || action === 'activate_cs'
+                cmSecretValue[selectedCMCSIndex].canOverride = isActivation
 
                 // Will remove error if present
                 if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
@@ -624,11 +584,9 @@ const useBuildInfraForm = ({
                 const useFormProps = getConfigMapSecretFormInitialValues({
                     configMapSecretData: null,
                     componentType: INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP[infraConfigType],
-                    // TODO: Check something related to decode in secureValues
                     cmSecretStateLabel: CM_SECRET_STATE.BASE,
                     isJob: true,
-                    // FIXME: Can delete as well
-                    fallbackMergeStrategy: OverrideMergeStrategyType.REPLACE,
+                    fallbackMergeStrategy: null,
                 })
 
                 const finalValue: BuildInfraCMCSValueType = {
