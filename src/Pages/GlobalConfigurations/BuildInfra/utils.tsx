@@ -24,7 +24,6 @@ import {
     DEFAULT_PROFILE_NAME,
     INFRA_CONFIG_CONTAINING_SUB_VALUES,
     INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP,
-    OverrideMergeStrategyType,
 } from '@Pages/index'
 import { ROUTES } from '../../../Common'
 import {
@@ -57,7 +56,6 @@ import {
     USE_BUILD_X_DRIVER_FALLBACK,
 } from './constants'
 import {
-    CM_SECRET_STATE,
     CMSecretConfigData,
     CMSecretPayloadType,
     getConfigMapSecretFormInitialValues,
@@ -188,11 +186,9 @@ const parsePlatformServerConfigIntoUIConfig = (
             const cmSecretFormProps = getConfigMapSecretFormInitialValues({
                 configMapSecretData,
                 componentType: INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP[serverConfig.key],
-                // TODO: Check if for target platforms need to change
-                cmSecretStateLabel: CM_SECRET_STATE.BASE,
+                cmSecretStateLabel: null,
                 isJob: true,
-                // FIXME: Can delete as well
-                fallbackMergeStrategy: OverrideMergeStrategyType.REPLACE,
+                fallbackMergeStrategy: null,
             })
 
             return {
@@ -200,7 +196,6 @@ const parsePlatformServerConfigIntoUIConfig = (
                 initialResponse: configMapSecretData,
                 id: getUniqueId(),
                 isOverridden: true,
-                // FIXME: Ideally should have named canInherit
                 canOverride: !isDefaultProfile,
                 defaultValue: cmSecretFormProps,
             }
@@ -216,7 +211,6 @@ const parsePlatformServerConfigIntoUIConfig = (
 const parseUIConfigToPayload = (uiConfig: BuildInfraConfigValuesType): BuildInfraConfigPayloadType => {
     const parsedConfig = parsePlatformConfigIntoValue(uiConfig, false)
     if (!INFRA_CONFIG_CONTAINING_SUB_VALUES[parsedConfig.key]) {
-        // TODO: Can look for a better way to handle this
         return parsedConfig as BuildInfraConfigPayloadType
     }
 
@@ -289,16 +283,16 @@ const getPlatformConfigurationsWithDefaultValues = ({
 
         const defaultValue = parsePlatformConfigIntoValue(defaultConfiguration)
 
-        const isSpecialParsingRequired = INFRA_CONFIG_CONTAINING_SUB_VALUES[configType] && !isDefaultProfile
+        const configContainsSubValue = INFRA_CONFIG_CONTAINING_SUB_VALUES[configType] && !isDefaultProfile
         // If value is not present in profile that means we are inheriting the value
         let finalConfiguration: BuildInfraConfigurationType = profileConfiguration
             ? {
                   ...profileConfiguration,
-                  defaultValue: isSpecialParsingRequired ? defaultValue : null,
+                  defaultValue: !configContainsSubValue ? defaultValue : null,
               }
             : null
 
-        if (isSpecialParsingRequired) {
+        if (configContainsSubValue) {
             /**
              * Logic is, all the values inside profileConfiguration are overridden values, and canOverride will be true, if name is present in defaultConfiguration and we will put that defaultConfiguration value in defaultValue
              * Then we will traverse all the values in defaultConfiguration, and if they are not overridden by user, we will add them to finalCMCSValues
@@ -370,10 +364,12 @@ export const getTransformedBuildInfraProfileResponse = ({
     fromCreateView,
     canConfigureUseK8sDriver,
 }: BuildInfraProfileTransformerParamsType): BuildInfraProfileResponseType => {
+    const isDefaultProfile = !fromCreateView && profile?.name === DEFAULT_PROFILE_NAME
+
     // For cm/cs this will return the values with default as null and isOverridden as true
     const globalProfilePlatformConfigMap = getConfigurationMapWithoutDefaultFallback(
         defaultConfigurations,
-        profile?.name === DEFAULT_PROFILE_NAME,
+        isDefaultProfile,
     )
     const profileConfigurations = getConfigurationMapWithoutDefaultFallback(
         fromCreateView
@@ -381,7 +377,7 @@ export const getTransformedBuildInfraProfileResponse = ({
                   [BUILD_INFRA_DEFAULT_PLATFORM_NAME]: [],
               }
             : profile?.configurations,
-        profile?.name === DEFAULT_PROFILE_NAME,
+        isDefaultProfile,
     )
 
     // Would depict state of target platforms in current profile with their fallback/default value (we will display in case we inheriting) attached to them
@@ -395,7 +391,7 @@ export const getTransformedBuildInfraProfileResponse = ({
                 profileConfigurationsMap: profilePlatformConfigurationMap,
                 defaultConfigurationsMap: globalProfilePlatformConfigurationMap,
                 platformName,
-                isDefaultProfile: !fromCreateView && profile.name === DEFAULT_PROFILE_NAME,
+                isDefaultProfile,
             })
 
             return acc
