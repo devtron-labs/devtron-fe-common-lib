@@ -134,7 +134,7 @@ export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps<any, RJSFFor
                     schema.properties && !hasAdditionalProperties && idSchema.$id !== 'root'
                         ? 'dc__border-left pl-12'
                         : ''
-                } flexbox-col dc__gap-8`}
+                } ${idSchema.$id === 'root' ? 'dc__separated-flexbox dc__separated-flexbox--vertical' : 'flexbox-col dc__gap-8'}`}
             >
                 <Field {...props} />
             </div>
