@@ -76,10 +76,9 @@ export const SelectWidget = (props: WidgetProps) => {
             isDisabled={disabled || readonly}
             styles={{
                 ...commonStyles,
-                control: (base) => ({
-                    ...base,
-                    ...commonStyles.control,
-                    backgroundColor: 'var(--bg-secondary)',
+                control: (base, state) => ({
+                    ...commonStyles.control(base, state),
+                    height: '36px'
                 }),
             }}
             components={{
