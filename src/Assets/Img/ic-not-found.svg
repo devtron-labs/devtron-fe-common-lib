@@ -14,7 +14,7 @@
   - limitations under the License.
   -->
 
-<svg width="250" height="200" viewBox="0 0 250 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg class="svg__no-override" width="250" height="200" viewBox="0 0 250 200" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="10" y="80" width="200" height="13" fill="url(#paint0_linear_1869_837)"/>
 <rect x="18" y="93" width="184" height="4" fill="url(#paint1_linear_1869_837)"/>
 <path d="M36 97H41L23 197H18L36 97Z" fill="url(#paint2_linear_1869_837)"/>

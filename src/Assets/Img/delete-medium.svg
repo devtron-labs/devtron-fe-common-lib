@@ -14,7 +14,7 @@
   - limitations under the License.
   -->
 
-<svg xmlns="http://www.w3.org/2000/svg" width="44" height="46" viewBox="0 0 44 46" fill="none">
+<svg class="svg__no-override" xmlns="http://www.w3.org/2000/svg" width="44" height="46" viewBox="0 0 44 46" fill="none">
   <path fill-rule="evenodd" clip-rule="evenodd" d="M5 24H29V41C29 43.2091 27.2091 45 25 45H9C6.79086 45 5 43.2091 5 41V24Z" fill="#F33E3E" fill-opacity="0.12" stroke="#F33E3E" stroke-width="2" stroke-linejoin="round"/>
   <path d="M17 29.5V39.5" stroke="#F33E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M22 29.5V39.5" stroke="#F33E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
