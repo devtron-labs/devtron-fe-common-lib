@@ -82,6 +82,10 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
                         </div>
                         <div className="dc__grid security-cards">
                             {SECURITY_CONFIG[category].subCategories.map((subCategory: ScanSubCategories) => {
+                                // Explicit handling if subcategory is null
+                                if (!scanResult[category][subCategory]) {
+                                    return null
+                                }
                                 const severityCount =
                                     subCategory === SUB_CATEGORIES.MISCONFIGURATIONS
                                         ? scanResult[category][subCategory]?.misConfSummary?.status

@@ -55,7 +55,7 @@ const SecurityCard = ({ category, subCategory, severityCount = {}, handleCardCli
 
     return (
         <div
-            className={`w-100 bcn-0 p-20 flexbox-col dc__gap-16 br-8 dc__border security-card security-card${hasThreats ? '--threat' : '--secure'}`}
+            className={`w-100 p-20 flexbox-col dc__gap-16 br-8 dc__border security-card security-card${hasThreats ? '--threat' : '--secure'}`}
             role="button"
             tabIndex={0}
             onClick={handleCardClick}
