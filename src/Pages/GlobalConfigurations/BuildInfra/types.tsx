@@ -187,6 +187,11 @@ export type BuildInfraToleranceValueType = {
       }
 )
 
+export type InfraConfigWithSubValues = Extract<
+    BuildInfraConfigTypes,
+    BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET
+>
+
 type BuildInfraConfigTypeFormat<Key, Value, Unit> = {
     key: Key
     value: Value
@@ -216,11 +221,7 @@ type ToleranceConfigDTO = BuildInfraConfigTypeFormat<
     never
 >
 
-type BuildInfraCMCSConfigDTO = BuildInfraConfigTypeFormat<
-    BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET,
-    CMSecretConfigData[],
-    never
->
+type BuildInfraCMCSConfigDTO = BuildInfraConfigTypeFormat<InfraConfigWithSubValues, CMSecretConfigData[], never>
 
 export type BuildInfraCMCSValueType = {
     useFormProps: ConfigMapSecretUseFormProps
@@ -378,10 +379,7 @@ export enum ToleranceHeaderType {
     EFFECT = 'EFFECT',
 }
 
-export type BuildInfraCMCSErrorType = Record<
-    Extract<BuildInfraConfigTypes, BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET>,
-    Record<BuildInfraCMCSValueType['id'], boolean>
->
+export type BuildInfraCMCSErrorType = Record<InfraConfigWithSubValues, Record<BuildInfraCMCSValueType['id'], boolean>>
 
 /**
  * Would be maintaining error state for name and description irrespective of platform
@@ -508,7 +506,7 @@ export type HandleProfileInputChangeType =
           action: BuildInfraProfileInputActionType.ADD_CM_CS_ITEM
           data: ProfileInputDispatchDataType &
               Pick<BuildInfraCMCSValueType, 'id'> & {
-                  infraConfigType: BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET
+                  infraConfigType: InfraConfigWithSubValues
               }
       }
     | {

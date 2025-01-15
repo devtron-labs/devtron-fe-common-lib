@@ -36,6 +36,7 @@ import {
     BuildInfraToleranceEffectType,
     BuildInfraToleranceOperatorType,
     BuildInfraInheritActionsOnSubValues,
+    InfraConfigWithSubValues,
 } from './types'
 
 export const BUILD_INFRA_INPUT_CONSTRAINTS = {
@@ -260,7 +261,7 @@ export const INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X: Partial<Record<BuildInfraCon
     [BuildInfraConfigTypes.SECRET]: true,
 }
 
-export const INFRA_CONFIG_CONTAINING_SUB_VALUES: Partial<Record<BuildInfraConfigTypes, true>> = {
+export const INFRA_CONFIG_CONTAINING_SUB_VALUES: Record<InfraConfigWithSubValues, true> = {
     [BuildInfraConfigTypes.CONFIG_MAP]: true,
     [BuildInfraConfigTypes.SECRET]: true,
 }
@@ -273,13 +274,17 @@ export const INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP: Partial<
 }
 
 export const CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP: Partial<
-    Record<
-        CMSecretComponentType,
-        Extract<BuildInfraConfigTypes, BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET>
-    >
+    Record<CMSecretComponentType, InfraConfigWithSubValues>
 > = {
     [CMSecretComponentType.ConfigMap]: BuildInfraConfigTypes.CONFIG_MAP,
     [CMSecretComponentType.Secret]: BuildInfraConfigTypes.SECRET,
+}
+
+export const CM_SECRET_COMPONENT_TYPE_TO_LOCATOR_MAP: Partial<
+    Record<CMSecretComponentType, BuildInfraLocators.CONFIG_MAP | BuildInfraLocators.SECRET>
+> = {
+    [CMSecretComponentType.ConfigMap]: BuildInfraLocators.CONFIG_MAP,
+    [CMSecretComponentType.Secret]: BuildInfraLocators.SECRET,
 }
 
 export const USE_BUILD_X_DRIVER_FALLBACK = true

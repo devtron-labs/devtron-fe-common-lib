@@ -24,6 +24,7 @@ import {
     DEFAULT_PROFILE_NAME,
     INFRA_CONFIG_CONTAINING_SUB_VALUES,
     INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP,
+    InfraConfigWithSubValues,
 } from '@Pages/index'
 import { ROUTES } from '../../../Common'
 import {
@@ -168,6 +169,10 @@ const getBaseProfileObject = ({
     }
 }
 
+export const getDoesInfraConfigContainsSubValue = (
+    infraConfig: BuildInfraConfigTypes,
+): infraConfig is InfraConfigWithSubValues => !!INFRA_CONFIG_CONTAINING_SUB_VALUES[infraConfig]
+
 /**
  * In case of locators other than cm/cs, we just pass data to parsePlatformConfigIntoValue
  * In case of cm/cs we convert the DTO into intermediatory UI form with defaultValue as it itself
@@ -203,7 +208,7 @@ const parsePlatformServerConfigIntoUIConfig = (
     )
 
     return {
-        key: serverConfig.key as BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET,
+        key: serverConfig.key as InfraConfigWithSubValues,
         value: parsedCMCSFormValues,
     }
 }
@@ -221,7 +226,7 @@ const parseUIConfigToPayload = (uiConfig: BuildInfraConfigValuesType): BuildInfr
     const parsedCMCSValues = overriddenConfigs?.map(({ useFormProps }) => getConfigMapSecretPayload(useFormProps))
 
     return {
-        key: parsedConfig.key as BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET,
+        key: parsedConfig.key as InfraConfigWithSubValues,
         value: parsedCMCSValues,
     }
 }
@@ -343,7 +348,7 @@ const getPlatformConfigurationsWithDefaultValues = ({
                 profileName: profileConfiguration?.profileName,
                 active: profileConfiguration?.active,
                 targetPlatform: platformName,
-                key: configType as BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET,
+                key: configType as InfraConfigWithSubValues,
                 value: finalValues,
                 defaultValue: null,
             }
