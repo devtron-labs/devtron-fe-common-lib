@@ -1,6 +1,7 @@
 import { SegmentedBarChart } from '@Common/SegmentedBarChart'
 import { ReactComponent as ICShieldWarning } from '@Icons/ic-shield-warning-outline.svg'
 import { ReactComponent as ICShieldSecure } from '@Icons/ic-shield-check.svg'
+import { ReactComponent as ICError } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICArrowRight } from '@Icons/ic-caret-down-small.svg'
 import { SecurityCardProps } from './types'
 import { SUB_CATEGORIES } from '../SecurityModal/types'
@@ -9,19 +10,41 @@ import './securityCard.scss'
 import { getTotalSeverities } from '../utils'
 import { SECURITY_CONFIG } from '../constants'
 
-const SecurityCard = ({ category, subCategory, severityCount = {}, handleCardClick }: SecurityCardProps) => {
-    const totalCount = getTotalSeverities(severityCount)
+const SecurityCard = ({
+    category,
+    subCategory,
+    severities = {},
+    handleCardClick,
+    scanFailed = false,
+}: SecurityCardProps) => {
+    const totalCount = getTotalSeverities(severities)
 
     const hasThreats: boolean = !!totalCount
 
     const entities = Object.entries(SEVERITIES)
         .map(([key, severity]) => ({
             ...severity,
-            value: severityCount[key],
+            value: severities[key],
         }))
         .filter((entity) => !!entity.value)
 
+    const getInfoIcon = () => {
+        if (scanFailed) {
+            return <ICError className="icon-dim-24 dc__no-shrink" />
+        }
+        return hasThreats ? (
+            <ICShieldWarning className="icon-dim-24 scr-5 dc__no-shrink" />
+        ) : (
+            <ICShieldSecure className="icon-dim-24 scg-5 dc__no-shrink" />
+        )
+    }
+
     const getTitleSubtitle = (): { title: string; subtitle?: string } => {
+        if (scanFailed) {
+            return subCategory === SUB_CATEGORIES.VULNERABILITIES
+                ? { title: 'Vulnerability scan failed', subtitle: 'Failed' }
+                : { title: 'License scan failed', subtitle: 'Failed' }
+        }
         switch (subCategory) {
             case SUB_CATEGORIES.EXPOSED_SECRETS:
                 return hasThreats
@@ -55,7 +78,7 @@ const SecurityCard = ({ category, subCategory, severityCount = {}, handleCardCli
 
     return (
         <div
-            className={`w-100 bcn-0 p-20 flexbox-col dc__gap-16 br-8 dc__border security-card security-card${hasThreats ? '--threat' : '--secure'}`}
+            className={`w-100 p-20 flexbox-col dc__gap-16 br-8 dc__border security-card security-card${hasThreats || scanFailed ? '--threat' : '--secure'}`}
             role="button"
             tabIndex={0}
             onClick={handleCardClick}
@@ -69,22 +92,18 @@ const SecurityCard = ({ category, subCategory, severityCount = {}, handleCardCli
                         <ICArrowRight className="icon-dim-20 dc__flip-270 scb-5 arrow-right" />
                     </div>
                 </div>
-                {hasThreats ? (
-                    <ICShieldWarning className="icon-dim-24 scr-5 dc__no-shrink" />
-                ) : (
-                    <ICShieldSecure className="icon-dim-24 scg-5 dc__no-shrink" />
-                )}
+                {getInfoIcon()}
             </div>
             <div className="flexbox-col dc__gap-12">
-                {hasThreats || severityCount.success ? (
+                {scanFailed || !(hasThreats || severities.success) ? (
+                    <div className="bcn-1 br-4 h-8" />
+                ) : (
                     <SegmentedBarChart
                         entities={entities}
                         labelClassName="fs-13 fw-4 lh-20 cn-9"
                         countClassName="fs-13 fw-6 lh-20 cn-7"
                         swapLegendAndBar
                     />
-                ) : (
-                    <div className="bcn-1 br-4 h-8" />
                 )}
                 {subtitle && <span className="cn-9 fs-13 lh-20">{subtitle}</span>}
             </div>
