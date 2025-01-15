@@ -50,7 +50,7 @@ export const getCompiledSecurityThreats = (scanResult: ScanResultDTO): Partial<R
                     ? scanResult[category][subCategory]?.misConfSummary?.status
                     : scanResult[category][subCategory]?.summary?.severities
 
-            if (severity && Object.keys(severity).length) {
+            if (Object.keys(severity || {}).length) {
                 threatsArray.push(severity)
             }
         })
