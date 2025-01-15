@@ -180,11 +180,13 @@ const WorkflowOptionsModal = ({
 
     return (
         <VisibleModal
-            className=""
             onEscape={loadingWebhook ? null : handleFlowCompletion}
             close={loadingWebhook ? null : handleFlowCompletion}
         >
-            <div className="workflow-options-modal br-8 flexbox h-500 dc__overflow-scroll" onClick={stopPropagation}>
+            <div
+                className="workflow-options-modal bg__overlay br-8 flexbox h-500 dc__overflow-scroll"
+                onClick={stopPropagation}
+            >
                 {/* Sidebar */}
                 <div className="flexbox-col w-250 pt-32 bg__tertiary dc__content-space">
                     {/* Info */}
