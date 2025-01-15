@@ -47,9 +47,10 @@ export const DeploymentHistoryConfigDiff = ({
     const isPreviousDeploymentConfigAvailable = !!previousWfrId
 
     // URL FILTERS
-    const { compareWfrId } = useUrlFilters<string, DeploymentHistoryConfigDiffQueryParams>({
+    const urlFilters = useUrlFilters<string, DeploymentHistoryConfigDiffQueryParams>({
         parseSearchParams: parseDeploymentHistoryDiffSearchParams(previousWfrId),
     })
+    const { compareWfrId, sortBy, sortOrder } = urlFilters
 
     // STATES
     const [convertVariables, setConvertVariables] = useState(false)
@@ -125,12 +126,20 @@ export const DeploymentHistoryConfigDiff = ({
                 compareList,
                 getNavItemHref,
                 convertVariables,
+                sortingConfig: { sortBy, sortOrder },
             })
             return configData
         }
 
         return null
-    }, [isPreviousDeploymentConfigAvailable, compareDeploymentConfigLoader, compareDeploymentConfig, convertVariables])
+    }, [
+        isPreviousDeploymentConfigAvailable,
+        compareDeploymentConfigLoader,
+        compareDeploymentConfig,
+        convertVariables,
+        sortBy,
+        sortOrder,
+    ])
 
     const compareDeploymentConfigErr = useMemo(
         () =>
@@ -180,7 +189,7 @@ export const DeploymentHistoryConfigDiff = ({
                     errorConfig={errorConfig}
                     envName={envName}
                     wfrId={wfrId}
-                    previousWfrId={previousWfrId}
+                    urlFilters={urlFilters}
                     pipelineDeployments={pipelineDeployments}
                     setFullScreenView={setFullScreenView}
                     convertVariables={convertVariables}
