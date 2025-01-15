@@ -1,6 +1,6 @@
 import { BaseSyntheticEvent, ChangeEvent, useEffect, useRef, useState } from 'react'
 
-import { deepEqual } from '@Common/Helper'
+import { deepEqual, noop } from '@Common/Helper'
 
 import { checkValidation } from './useForm.utils'
 import {
@@ -76,10 +76,59 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
         return newErrors
     }
 
+    /**
+     * Handles form submission, validates all form fields, and calls the provided `onValid` function if the form data is valid.
+     * If validation errors are found, it will call the optional `onError` function.
+     *
+     * @param onValid - A function to handle valid form data on submission. Called when all fields pass validation.
+     * @param onError - (Optional) A function to handle validation errors if the form submission fails validation.
+     *                  Receives the validation errors and the form event.
+     * @returns The event handler for form submission, which prevents the default form submission,
+     *          performs validation, and triggers either `onValid` or `onError` based on the result.
+     */
+    const handleSubmit =
+        (onValid: UseFormSubmitHandler<T>, onError?: UseFormErrorHandler<T>) =>
+        (e?: BaseSyntheticEvent): Promise<void> => {
+            e?.preventDefault()
+
+            // Enables validation for all form fields if not enabled yet after form submission.
+            if (Object.keys(enableValidationOnChange).length !== Object.keys(data).length) {
+                setEnableValidationOnChange(Object.keys(data).reduce((acc, key) => ({ ...acc, [key]: true }), {}))
+            }
+
+            const validations = getValidations()
+            if (validations) {
+                const newErrors: UseFormErrors<T> = {}
+
+                // Validates each form field based on its corresponding validation rule.
+                Object.keys(validations).forEach((key) => {
+                    const validation: UseFormValidation = validations[key]
+                    const error = checkValidation<T>(data[key], validation)
+                    if (error) {
+                        newErrors[key] = error
+                    }
+                })
+
+                // If validation errors exist, set the error state and call the `onError` function if provided.
+                if (Object.keys(newErrors).length) {
+                    setErrors(newErrors)
+                    onError?.(newErrors, e)
+                    // Stops execution if there are errors.
+                    return
+                }
+            }
+
+            // Clears any previous errors if no validation errors were found.
+            setErrors({})
+            // Calls the valid handler with the current form data and event.
+            onValid(data, e)
+        }
+
     useEffect(() => {
         // Do i need to set enableValidationOnChange here?
         if (options?.shouldValidateOnMount) {
-            setErrors(getErrorsFromFormData(data))
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            handleSubmit(noop)()
         }
     }, [])
 
@@ -167,54 +216,6 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
     const onFocus = (key: keyof T) => () => {
         setTouchedFields((prev) => ({ ...prev, [key]: true }))
     }
-
-    /**
-     * Handles form submission, validates all form fields, and calls the provided `onValid` function if the form data is valid.
-     * If validation errors are found, it will call the optional `onError` function.
-     *
-     * @param onValid - A function to handle valid form data on submission. Called when all fields pass validation.
-     * @param onError - (Optional) A function to handle validation errors if the form submission fails validation.
-     *                  Receives the validation errors and the form event.
-     * @returns The event handler for form submission, which prevents the default form submission,
-     *          performs validation, and triggers either `onValid` or `onError` based on the result.
-     */
-    const handleSubmit =
-        (onValid: UseFormSubmitHandler<T>, onError?: UseFormErrorHandler<T>) =>
-        (e?: BaseSyntheticEvent): Promise<void> => {
-            e?.preventDefault()
-
-            // Enables validation for all form fields if not enabled yet after form submission.
-            if (Object.keys(enableValidationOnChange).length !== Object.keys(data).length) {
-                setEnableValidationOnChange(Object.keys(data).reduce((acc, key) => ({ ...acc, [key]: true }), {}))
-            }
-
-            const validations = getValidations()
-            if (validations) {
-                const newErrors: UseFormErrors<T> = {}
-
-                // Validates each form field based on its corresponding validation rule.
-                Object.keys(validations).forEach((key) => {
-                    const validation: UseFormValidation = validations[key]
-                    const error = checkValidation<T>(data[key], validation)
-                    if (error) {
-                        newErrors[key] = error
-                    }
-                })
-
-                // If validation errors exist, set the error state and call the `onError` function if provided.
-                if (Object.keys(newErrors).length) {
-                    setErrors(newErrors)
-                    onError?.(newErrors, e)
-                    // Stops execution if there are errors.
-                    return
-                }
-            }
-
-            // Clears any previous errors if no validation errors were found.
-            setErrors({})
-            // Calls the valid handler with the current form data and event.
-            onValid(data, e)
-        }
 
     /**
      * Manually triggers validation for specific form fields.

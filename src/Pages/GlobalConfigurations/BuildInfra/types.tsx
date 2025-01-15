@@ -190,8 +190,13 @@ export type BuildInfraToleranceValueType = {
 type BuildInfraConfigTypeFormat<Key, Value, Unit> = {
     key: Key
     value: Value
-    unit?: Unit
-}
+} & ([Unit] extends [never]
+    ? {
+          unit?: Unit
+      }
+    : {
+          unit: Unit
+      })
 
 type NumericBuildInfraConfigValueDTO = BuildInfraConfigTypeFormat<
     NumericBuildInfraConfigTypes,
