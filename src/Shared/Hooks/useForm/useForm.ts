@@ -65,8 +65,8 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
         const validations = getValidations(formData)
         const newErrors: UseFormErrors<T> = {}
 
-        Object.keys(validations).forEach((key) => {
-            const validation = validations[key]
+        Object.keys(validations || {}).forEach((key) => {
+            const validation: UseFormValidation = validations[key]
             const error = checkValidation<T>(formData[key], validation)
             if (error) {
                 newErrors[key] = error
@@ -96,26 +96,14 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
                 setEnableValidationOnChange(Object.keys(data).reduce((acc, key) => ({ ...acc, [key]: true }), {}))
             }
 
-            const validations = getValidations()
-            if (validations) {
-                const newErrors: UseFormErrors<T> = {}
+            const newErrors = getErrorsFromFormData(data)
 
-                // Validates each form field based on its corresponding validation rule.
-                Object.keys(validations).forEach((key) => {
-                    const validation: UseFormValidation = validations[key]
-                    const error = checkValidation<T>(data[key], validation)
-                    if (error) {
-                        newErrors[key] = error
-                    }
-                })
-
-                // If validation errors exist, set the error state and call the `onError` function if provided.
-                if (Object.keys(newErrors).length) {
-                    setErrors(newErrors)
-                    onError?.(newErrors, e)
-                    // Stops execution if there are errors.
-                    return
-                }
+            // If validation errors exist, set the error state and call the `onError` function if provided.
+            if (Object.keys(newErrors).length) {
+                setErrors(newErrors)
+                onError?.(newErrors, e)
+                // Stops execution if there are errors.
+                return
             }
 
             // Clears any previous errors if no validation errors were found.
