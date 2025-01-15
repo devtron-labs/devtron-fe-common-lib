@@ -3,9 +3,11 @@
  */
 
 import { CATEGORY_LABELS, SUB_CATEGORY_LABELS } from '../constants'
-import { CATEGORIES, SUB_CATEGORIES, SidebarDataType, SidebarPropsType } from '../types'
+import { CATEGORIES, SUB_CATEGORIES, SidebarDataType } from '../types'
 
-export const getSidebarData = (categoriesConfig: SidebarPropsType['categoriesConfig']): SidebarDataType[] => {
+export const getSidebarData = (
+    categoriesConfig: Record<(typeof CATEGORIES)[keyof typeof CATEGORIES] | 'imageScanLicenseRisks', boolean>,
+): SidebarDataType[] => {
     const { imageScan, codeScan, kubernetesManifest, imageScanLicenseRisks } = categoriesConfig
 
     return [

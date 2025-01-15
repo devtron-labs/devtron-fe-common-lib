@@ -105,12 +105,6 @@ export type SecurityModalStateType = {
     detailViewData: DetailViewDataType[]
 }
 
-export interface SidebarPropsType {
-    modalState: SecurityModalStateType
-    setModalState: React.Dispatch<React.SetStateAction<SecurityModalStateType>>
-    categoriesConfig: Record<(typeof CATEGORIES)[keyof typeof CATEGORIES] | 'imageScanLicenseRisks', boolean>
-}
-
 export enum SeveritiesDTO {
     CRITICAL = 'critical',
     HIGH = 'high',
@@ -241,6 +235,12 @@ export type ScanResultDTO = {
     [CATEGORIES.IMAGE_SCAN]: ImageScan
     [CATEGORIES.CODE_SCAN]: CodeScan
     [CATEGORIES.KUBERNETES_MANIFEST]: KubernetesManifest
+}
+
+export interface SidebarPropsType {
+    modalState: SecurityModalStateType
+    setModalState: React.Dispatch<React.SetStateAction<SecurityModalStateType>>
+    scanResult: ScanResultDTO
 }
 
 interface SecurityModalBaseProps {

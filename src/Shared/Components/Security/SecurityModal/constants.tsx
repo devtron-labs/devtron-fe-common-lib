@@ -12,7 +12,6 @@ import {
     SortOrderEnum,
     EmptyStateType,
     StatusType,
-    SidebarPropsType,
     SecurityModalStateType,
 } from './types'
 
@@ -35,7 +34,7 @@ const DEFAULT_SECURITY_MODAL_MANIFEST_STATE = {
 }
 
 export const getDefaultSecurityModalState = (
-    categoriesConfig: SidebarPropsType['categoriesConfig'],
+    categoriesConfig: Record<(typeof CATEGORIES)[keyof typeof CATEGORIES] | 'imageScanLicenseRisks', boolean>,
 ): SecurityModalStateType => {
     if (categoriesConfig.imageScan) {
         return DEFAULT_SECURITY_MODAL_IMAGE_STATE
