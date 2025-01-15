@@ -29,7 +29,7 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
      * - 'onBlur': Validation occurs when the input loses focus.
      *  @default ['onChange']
      */
-    validationModes?: ('onChange' | 'onBlur' | 'onSubmit')[]
+    validationMode?: 'onChange' | 'onBlur' | 'onSubmit' | 'all'
     /**
      * @default false - A boolean indicating whether to trigger validation on mount.
      */
@@ -169,10 +169,15 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             // Update the form data and trigger validation if necessary.
             setData((prev) => {
                 const updatedData = { ...prev, [key]: value }
-                const validationModes = options?.validationModes ?? ['onChange']
+                const validationMode = options?.validationMode ?? 'onChange'
 
                 // If validation should occur (based on mode or field state), check validation for the field.
-                if (validationModes.includes('onChange') || enableValidationOnChange[key] || errors[key]) {
+                if (
+                    validationMode === 'onChange' ||
+                    validationMode === 'all' ||
+                    enableValidationOnChange[key] ||
+                    errors[key]
+                ) {
                     const validations = getValidations(updatedData)
                     const error = checkValidation<T>(value as T[keyof T], validations[key as string])
                     setErrors({ ...errors, [key]: error })
@@ -197,7 +202,9 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             setData({ ...data, [key]: data[key]?.trim() })
         }
 
-        if (options?.validationModes?.includes('onBlur')) {
+        const shouldTriggerValidation = options?.validationMode === 'onBlur' || options?.validationMode === 'all'
+
+        if (shouldTriggerValidation) {
             const validations = getValidations()
             const error = checkValidation<T>(data[key], validations[key as string])
             if (error && !enableValidationOnChange[key]) {

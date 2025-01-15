@@ -35,6 +35,7 @@ import {
     RequestLimitConfigType,
     BuildInfraToleranceEffectType,
     BuildInfraToleranceOperatorType,
+    BuildInfraInheritActionsOnSubValues,
 } from './types'
 
 export const BUILD_INFRA_INPUT_CONSTRAINTS = {
@@ -282,3 +283,10 @@ export const CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP: Partial<
 }
 
 export const USE_BUILD_X_DRIVER_FALLBACK = true
+
+export const BUILD_INFRA_SUB_VALUES_INHERIT_ACTIONS: Record<BuildInfraInheritActionsOnSubValues, true> = {
+    activate_cm: true,
+    activate_cs: true,
+    de_activate_cm: true,
+    de_activate_cs: true,
+}
