@@ -14,7 +14,7 @@
   - limitations under the License.
   -->
 
-<svg class="svg__no-override" width="250" height="200" viewBox="0 0 250 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg data-style-override="false" width="250" height="200" viewBox="0 0 250 200" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_1869_550)">
 <rect x="92" y="127.163" width="77" height="77" transform="rotate(-42 92 127.163)" fill="#EEEEEE"/>
 <path d="M234.287 102.782C253.504 124.125 251.781 157.004 230.438 176.221C209.096 195.437 176.217 193.714 157 172.372C166.569 163.756 211.469 123.328 234.287 102.782Z" fill="#1F2463"/>
