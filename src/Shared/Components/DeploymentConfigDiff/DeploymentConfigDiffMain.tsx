@@ -262,7 +262,7 @@ export const DeploymentConfigDiffMain = ({
                     )}
                 </div>
             </div>
-            <div className="deployment-config-diff__main-content dc__overflow-y-auto">{renderContent()}</div>
+            <div className="deployment-config-diff__main-content dc__overflow-auto">{renderContent()}</div>
         </div>
     )
 }
