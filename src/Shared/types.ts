@@ -157,6 +157,7 @@ export interface iNode extends Node {
     childNodes: iNodes
     type: NodeType
     status: string
+    pNode?: iNode
 }
 export interface ResourceTree {
     conditions: any
