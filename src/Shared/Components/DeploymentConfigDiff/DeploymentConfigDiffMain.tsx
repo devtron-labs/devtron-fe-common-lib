@@ -67,7 +67,7 @@ export const DeploymentConfigDiffMain = ({
                 ),
             )
         }
-    }, [isLoading, configList])
+    }, [isLoading])
 
     useEffect(() => {
         if (scrollIntoViewId) {
@@ -202,7 +202,6 @@ export const DeploymentConfigDiffMain = ({
                                 currentConfiguration={primaryList}
                                 previousConfigAvailable
                                 rootClassName={`${primaryHeading && secondaryHeading ? 'dc__no-top-radius dc__no-top-border' : ''}`}
-                                sortingConfig={sortingConfig}
                             />
                         </div>
                     )}

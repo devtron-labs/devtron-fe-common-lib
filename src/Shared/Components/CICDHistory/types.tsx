@@ -27,7 +27,6 @@ import {
     ResponseType,
     PaginationProps,
     useScrollable,
-    SortingOrder,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
 import { AggregationKeys, GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
@@ -487,10 +486,6 @@ export interface DeploymentTemplateHistoryType {
     previousConfigAvailable: boolean
     rootClassName?: string
     codeEditorKey?: React.Key
-    sortingConfig?: {
-        sortBy: string
-        sortOrder: SortingOrder
-    }
 }
 export interface DeploymentHistoryDetailRes extends ResponseType {
     result?: DeploymentHistoryDetail
