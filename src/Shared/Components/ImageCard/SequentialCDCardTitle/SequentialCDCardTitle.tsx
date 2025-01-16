@@ -68,54 +68,52 @@ const SequentialCDCardTitle = ({
     }
 
     const addFlexGap = stageType !== STAGE_TYPE.CD
+    const noContent =
+        (stageType !== STAGE_TYPE.CD && !isLatest && !additionalInfo) ||
+        (stageType === STAGE_TYPE.CD &&
+            !isLatest &&
+            !isRunningOnParentCD &&
+            !Object.values(ARTIFACT_STATUS).includes(artifactStatus) &&
+            !showLatestTag &&
+            !deployedOn?.length &&
+            !additionalInfo)
+
+    if (noContent) {
+        return null
+    }
 
     const renderContent = () => {
         if (stageType !== STAGE_TYPE.CD) {
-            if (isLatest || additionalInfo) {
-                return (
-                    <>
-                        {isLatest && <span className="last-deployed-status">Last Run</span>}
-                        {additionalInfo}
-                    </>
-                )
-            }
-
-            return null
-        }
-
-        if (
-            isLatest ||
-            isRunningOnParentCD ||
-            Object.values(ARTIFACT_STATUS).includes(artifactStatus) ||
-            showLatestTag ||
-            deployedOn?.length ||
-            additionalInfo
-        ) {
             return (
                 <>
-                    {renderDeployedEnvironmentName()}
-                    {artifactStatus === ARTIFACT_STATUS.PROGRESSING && (
-                        <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.DEPLOYING} title={environmentName} />
-                    )}
-                    {(artifactStatus === ARTIFACT_STATUS.DEGRADED || artifactStatus === ARTIFACT_STATUS.FAILED) && (
-                        <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.FAILED} title={environmentName} />
-                    )}
-                    {showLatestTag && (
-                        <ImageTagButton
-                            text="Latest"
-                            isSoftDeleted={false}
-                            isEditing={false}
-                            tagId={0}
-                            softDeleteTags={[]}
-                            isSuperAdmin
-                        />
-                    )}
+                    {isLatest && <span className="last-deployed-status">Last Run</span>}
                     {additionalInfo}
                 </>
             )
         }
 
-        return null
+        return (
+            <>
+                {renderDeployedEnvironmentName()}
+                {artifactStatus === ARTIFACT_STATUS.PROGRESSING && (
+                    <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.DEPLOYING} title={environmentName} />
+                )}
+                {(artifactStatus === ARTIFACT_STATUS.DEGRADED || artifactStatus === ARTIFACT_STATUS.FAILED) && (
+                    <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.FAILED} title={environmentName} />
+                )}
+                {showLatestTag && (
+                    <ImageTagButton
+                        text="Latest"
+                        isSoftDeleted={false}
+                        isEditing={false}
+                        tagId={0}
+                        softDeleteTags={[]}
+                        isSuperAdmin
+                    />
+                )}
+                {additionalInfo}
+            </>
+        )
     }
 
     return (
