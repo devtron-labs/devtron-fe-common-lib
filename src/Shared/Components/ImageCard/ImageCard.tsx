@@ -15,9 +15,9 @@
  */
 
 import { ImageTagsContainer } from '../../../Common'
+import TargetPlatformBadgeList from '../TargetPlatformBadgeList/TargetPlatformBadgeList.component'
 import { ArtifactInfo } from './ArtifactInfo'
 import { SequentialCDCardTitle } from './SequentialCDCardTitle'
-import TargetPlatformBadgeList from './TargetPlatformBadgeList'
 import { ImageCardProps } from './types'
 
 const ImageCard = ({

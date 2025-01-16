@@ -58,5 +58,3 @@ export interface ImageCardProps {
     rootClassName?: string
     materialInfoRootClassName?: string
 }
-
-export interface TargetPlatformBadgeListProps extends Pick<ImageCardProps, 'targetPlatforms'> {}
