@@ -26,6 +26,7 @@ const Descriptor = ({
     tippyInfoText,
     tippyAdditionalContent,
     tooltipNode,
+    tooltipHeading,
 }: BuildInfraDescriptorProps) => (
     <div className={`flexbox dc__content-space dc__align-items-center w-100 ${additionalContainerClasses ?? ''}`}>
         <div className="flexbox dc__align-items-center dc__gap-4">
@@ -35,7 +36,7 @@ const Descriptor = ({
                     <InfoIconTippy
                         infoText={tippyInfoText ?? BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
                         additionalContent={tippyAdditionalContent}
-                        heading={BUILD_INFRA_TEXT.HEADING}
+                        heading={tooltipHeading || BUILD_INFRA_TEXT.HEADING}
                         documentationLink={DOCUMENTATION.GLOBAL_CONFIG_BUILD_INFRA}
                         documentationLinkText="View Documentation"
                         iconClassName="icon-dim-20 fcn-6"

@@ -16,6 +16,7 @@ const ConfigMapSecretReadyOnly = ({
     hideCodeEditor = false,
     containerClassName,
     displayKeys = false,
+    isBorderLess = false,
 }: ConfigMapSecretReadyOnlyProps) => {
     const displayValues = getConfigMapSecretReadOnlyValues({
         configMapSecretData,
@@ -36,7 +37,9 @@ const ConfigMapSecretReadyOnly = ({
             }
         >
             {hasHashiOrAWS(configMapSecretData?.externalType) && renderHashiOrAwsDeprecatedInfo()}
-            <div className="configmap-secret-container__display-values-container dc__border br-4 px-16 py-10 dc__grid">
+            <div
+                className={`configmap-secret-container__display-values-container ${isBorderLess ? 'pl-22' : 'dc__border br-4 px-16 py-10'} dc__grid`}
+            >
                 {displayValues.configData.map(({ displayName, value }) =>
                     value ? (
                         <div key={displayName} className="dc__contents fs-13 lh-20 ">

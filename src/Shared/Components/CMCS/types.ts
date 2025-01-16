@@ -15,6 +15,10 @@ export interface ConfigMapSecretReadyOnlyProps {
      * @default false
      */
     displayKeys?: boolean
+    /**
+     * @default false
+     */
+    isBorderLess?: boolean
 }
 
 export interface GetConfigMapSecretReadOnlyValuesParamsType
