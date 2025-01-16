@@ -35,6 +35,7 @@ import noartifact from '../../../Assets/Img/no-artifact@2x.png'
 import { ArtifactType, CIListItemType } from './types'
 import { TERMINAL_STATUS_MAP } from './constants'
 import { EMPTY_STATE_STATUS } from '../../constants'
+import { TargetPlatformBadgeList } from '../TargetPlatforms'
 
 const CIProgressView = (): JSX.Element => (
     <GenericEmptyState
@@ -62,6 +63,7 @@ export const CIListItem = ({
     appliedFiltersTimestamp,
     selectedEnvironmentName,
     renderCIListHeader,
+    targetPlatforms,
 }: CIListItemType) => {
     const headerMetaDataPresent =
         !!userApprovalMetadata || !!appliedFilters?.length || !!promotionApprovalMetadata?.promotedFromType
@@ -99,6 +101,13 @@ export const CIListItem = ({
                     </div>
                     {children}
                 </div>
+
+                {targetPlatforms?.length && (
+                    <div className="mt-8 flexbox-col dc__gap-8">
+                        <TargetPlatformBadgeList targetPlatforms={targetPlatforms} />
+                    </div>
+                )}
+
                 {type !== 'report' && (
                     <ImageTagsContainer
                         ciPipelineId={ciPipelineId}
@@ -132,6 +141,7 @@ const Artifacts = ({
     hideImageTaggingHardDelete,
     rootClassName,
     renderCIListHeader,
+    targetPlatforms,
 }: ArtifactType) => {
     const { isSuperAdmin } = useSuperAdmin()
     const { handleDownload } = useDownload()
@@ -204,6 +214,7 @@ const Artifacts = ({
                         hideImageTaggingHardDelete={hideImageTaggingHardDelete}
                         isSuperAdmin={isSuperAdmin}
                         renderCIListHeader={renderCIListHeader}
+                        targetPlatforms={targetPlatforms}
                     >
                         <div className="flex column left hover-trigger">
                             <div className="cn-9 fs-14 flex left" data-testid="artifact-text-visibility">
@@ -227,6 +238,8 @@ const Artifacts = ({
                         hideImageTaggingHardDelete={hideImageTaggingHardDelete}
                         isSuperAdmin={isSuperAdmin}
                         renderCIListHeader={renderCIListHeader}
+                        // FIXME: Remove
+                        targetPlatforms={[]}
                     >
                         <div className="flex column left">
                             <div className="cn-9 fs-14">Reports.zip</div>

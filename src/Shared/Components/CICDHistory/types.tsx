@@ -40,6 +40,7 @@ import {
     TargetPlatformsDTO,
 } from '../../types'
 import { TERMINAL_STATUS_MAP } from './constants'
+import { TargetPlatformBadgeListProps } from '../TargetPlatforms'
 
 export enum HistoryComponentType {
     CI = 'CI',
@@ -112,7 +113,7 @@ export interface TargetConfigType {
     releaseChannelName?: string
 }
 
-export interface History {
+export interface History extends Pick<TargetPlatformsDTO, 'targetPlatforms'> {
     id: number
     name: string
     status: string
@@ -392,6 +393,28 @@ export interface VirtualHistoryArtifactProps {
         workflowId: number
     }
 }
+
+export interface CIListItemType
+    extends Pick<History, 'promotionApprovalMetadata'>,
+        Required<Pick<TargetPlatformBadgeListProps, 'targetPlatforms'>> {
+    type: 'report' | 'artifact' | 'deployed-artifact'
+    userApprovalMetadata?: UserApprovalMetadataType
+    triggeredBy?: string
+    children: any
+    ciPipelineId?: number
+    artifactId?: number
+    imageComment?: ImageComment
+    imageReleaseTags?: ReleaseTag[]
+    appReleaseTagNames?: string[]
+    tagsEditable?: boolean
+    hideImageTaggingHardDelete?: boolean
+    appliedFilters?: FilterConditionsListType[]
+    appliedFiltersTimestamp?: string
+    isSuperAdmin?: boolean
+    selectedEnvironmentName?: string
+    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+}
+
 export interface TriggerOutputProps extends RenderRunSourceType, Pick<TriggerDetailsType, 'renderTargetConfigInfo'> {
     fullScreenView: boolean
     triggerHistory: Map<number, History>
@@ -421,24 +444,25 @@ export interface TriggerOutputProps extends RenderRunSourceType, Pick<TriggerDet
 
 export interface HistoryLogsProps
     extends Pick<
-        TriggerOutputProps,
-        | 'scrollToTop'
-        | 'scrollToBottom'
-        | 'setFullScreenView'
-        | 'deploymentAppType'
-        | 'isBlobStorageConfigured'
-        | 'appReleaseTags'
-        | 'tagsEditable'
-        | 'hideImageTaggingHardDelete'
-        | 'selectedEnvironmentName'
-        | 'processVirtualEnvironmentDeploymentData'
-        | 'renderDeploymentApprovalInfo'
-        | 'renderCIListHeader'
-        | 'renderVirtualHistoryArtifacts'
-        | 'fullScreenView'
-        | 'appName'
-        | 'triggerHistory'
-    > {
+            TriggerOutputProps,
+            | 'scrollToTop'
+            | 'scrollToBottom'
+            | 'setFullScreenView'
+            | 'deploymentAppType'
+            | 'isBlobStorageConfigured'
+            | 'appReleaseTags'
+            | 'tagsEditable'
+            | 'hideImageTaggingHardDelete'
+            | 'selectedEnvironmentName'
+            | 'processVirtualEnvironmentDeploymentData'
+            | 'renderDeploymentApprovalInfo'
+            | 'renderCIListHeader'
+            | 'renderVirtualHistoryArtifacts'
+            | 'fullScreenView'
+            | 'appName'
+            | 'triggerHistory'
+        >,
+        Pick<CIListItemType, 'targetPlatforms'> {
     triggerDetails: History
     loading: boolean
     userApprovalMetadata: UserApprovalMetadataType
@@ -598,7 +622,9 @@ export interface ScrollerType {
     style: CSSProperties
 }
 
-export interface GitChangesType extends Pick<History, 'promotionApprovalMetadata'> {
+export interface GitChangesType
+    extends Pick<History, 'promotionApprovalMetadata'>,
+        Pick<CIListItemType, 'targetPlatforms' | 'selectedEnvironmentName'> {
     gitTriggers: Map<number, GitTriggers>
     ciMaterials: CiMaterial[]
     artifact?: string
@@ -613,11 +639,10 @@ export interface GitChangesType extends Pick<History, 'promotionApprovalMetadata
     hideImageTaggingHardDelete?: boolean
     appliedFilters?: FilterConditionsListType[]
     appliedFiltersTimestamp?: string
-    selectedEnvironmentName?: string
     renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
 }
 
-export interface ArtifactType {
+export interface ArtifactType extends Pick<CIListItemType, 'targetPlatforms'> {
     status: string
     artifact: string
     blobStorageEnabled: boolean
@@ -632,24 +657,6 @@ export interface ArtifactType {
     tagsEditable?: boolean
     hideImageTaggingHardDelete?: boolean
     rootClassName?: string
-    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
-}
-
-export interface CIListItemType extends Pick<GitChangesType, 'promotionApprovalMetadata' | 'selectedEnvironmentName'> {
-    type: 'report' | 'artifact' | 'deployed-artifact'
-    userApprovalMetadata?: UserApprovalMetadataType
-    triggeredBy?: string
-    children: any
-    ciPipelineId?: number
-    artifactId?: number
-    imageComment?: ImageComment
-    imageReleaseTags?: ReleaseTag[]
-    appReleaseTagNames?: string[]
-    tagsEditable?: boolean
-    hideImageTaggingHardDelete?: boolean
-    appliedFilters?: FilterConditionsListType[]
-    appliedFiltersTimestamp?: string
-    isSuperAdmin?: boolean
     renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
 }
 

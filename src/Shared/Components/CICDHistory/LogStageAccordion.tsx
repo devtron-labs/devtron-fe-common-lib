@@ -99,7 +99,7 @@ const LogStageAccordion = ({
                                 </div>
                             </Tooltip>
 
-                            <div className="dc__bullet--white dc__bullet" />
+                            {!!endTime && <div className="dc__bullet--white dc__bullet" />}
                         </>
                     )}
 
