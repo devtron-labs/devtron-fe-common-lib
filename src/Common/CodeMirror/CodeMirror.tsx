@@ -23,8 +23,6 @@ import CodeMirror, {
     BasicSetupOptions,
     EditorState,
     Compartment,
-    // EditorView,
-    // ViewUpdate,
 } from '@uiw/react-codemirror'
 import CodeMirrorMerge from 'react-codemirror-merge'
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -94,7 +92,7 @@ export const CodeEditor = ({
     const lhsValue = cleanData ? cleanKubeManifest(originalValue) : originalValue
 
     // STATES
-    const [codeMirrorKey, setCodeMirrorKey] = useState<string>()
+    const [codemirrorMergeKey, setCodemirrorMergeKey] = useState<string>()
 
     // REDUCER
     const [state, dispatch] = useReducer(
@@ -128,9 +126,15 @@ export const CodeEditor = ({
         dispatch({ type: 'setDiff', value: diffView })
     }, [diffView])
 
-    useEffect(() => {
-        setCodeMirrorKey(getUniqueId())
-    }, [readOnly, tabSize])
+    // Re-mounting codemirror-merge is necessary because its extensions don't automatically update after being changed.
+    // Bug reference: https://github.com/uiwjs/react-codemirror/issues/681#issuecomment-2341521112
+    useEffect(
+        () => {
+            setCodemirrorMergeKey(getUniqueId())
+        },
+        // Include any props that modify codemirror-merge extensions directly, as a workaround for the unresolved bug.
+        [readOnly, tabSize],
+    )
 
     // METHODS
     const setCode = (codeValue: string) => {
@@ -153,7 +157,6 @@ export const CodeEditor = ({
         }
 
         setCode(noParsing ? value : parseValueToCode(value, mode, tabSize))
-        setCodeMirrorKey(getUniqueId())
     }, [value, noParsing])
 
     useEffectAfterMount(() => {
@@ -162,7 +165,6 @@ export const CodeEditor = ({
         }
 
         setLhsCode(noParsing ? lhsValue : parseValueToCode(lhsValue, mode, tabSize))
-        setCodeMirrorKey(getUniqueId())
     }, [lhsValue, noParsing])
 
     // CODEMIRROR PROPS
@@ -275,7 +277,7 @@ export const CodeEditor = ({
 
         return state.diffMode ? (
             <CodeMirrorMerge
-                key={codeMirrorKey}
+                key={codemirrorMergeKey}
                 className={`vertical-divider ${height === '100%' ? 'h-100 dc__overflow-auto' : ''}`}
                 style={{ height: typeof height === 'number' ? `${height}px` : undefined }}
                 gutter
