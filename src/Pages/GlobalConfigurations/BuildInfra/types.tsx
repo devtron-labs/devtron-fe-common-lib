@@ -451,13 +451,16 @@ export type HandleProfileInputChangeType =
           }
       }
     | {
-          action:
-              | Exclude<BuildInfraInheritActions, BuildInfraInheritActionsOnSubValues>
-              | BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM
-              | BuildInfraProfileInputActionType.REMOVE_TARGET_PLATFORM
+          action: BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM
           data: ProfileInputDispatchDataType & {
               handleCaptureSnapshot: (data: BuildInfraProfileData) => void
           }
+      }
+    | {
+          action:
+              | Exclude<BuildInfraInheritActions, BuildInfraInheritActionsOnSubValues>
+              | BuildInfraProfileInputActionType.REMOVE_TARGET_PLATFORM
+          data: ProfileInputDispatchDataType
       }
     | {
           action: BuildInfraInheritActionsOnSubValues
