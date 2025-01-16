@@ -54,7 +54,7 @@ const CDEmptyState = ({
             </button>
         ) : null
     return (
-        <div className="dc__position-rel" style={{ backgroundColor: 'var(--window-bg)' }}>
+        <div className="dc__position-rel" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
             <GenericEmptyState
                 image={imgSource || AppNotDeployed}
                 classname="fs-16"

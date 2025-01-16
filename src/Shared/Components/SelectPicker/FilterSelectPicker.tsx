@@ -36,7 +36,7 @@ const FilterSelectPicker = ({
     }, [appliedFilterOptions])
 
     const filterIcon = useMemo(
-        () => (appliedFiltersCount ? <ICFilterApplied className="p-2" /> : <ICFilter className="p-2" />),
+        () => (appliedFiltersCount ? <ICFilterApplied className="p-2" /> : <ICFilter className="p-2 scn-6" />),
         [appliedFiltersCount],
     )
 

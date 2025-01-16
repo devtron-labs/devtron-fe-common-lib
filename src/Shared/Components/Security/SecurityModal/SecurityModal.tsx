@@ -86,7 +86,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     )
 
     const renderDetailViewSubHeader = () => (
-        <div className="pt-10 pb-10 pl-12 pr-12 flexbox dc__align-items-center dc__gap-12 dc__position-sticky dc__border-bottom-n1 dc__top-0 bcn-0 dc__zi-20">
+        <div className="pt-10 pb-10 pl-12 pr-12 flexbox dc__align-items-center dc__gap-12 dc__position-sticky dc__border-bottom-n1 dc__top-0 bg__primary dc__zi-20">
             <button
                 type="button"
                 className="dc__unset-button-styles"
@@ -99,7 +99,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
             </button>
             <div className="flexbox dc__gap-4" data-testid="security-detail-view-strip">
                 <span className="fs-13 fw-6 lh-20 cn-900">{selectedDetailViewData.titlePrefix}:</span>
-                <span className="fs-13 fw-4 lh-20 cn-900 dc__ff-monospace dc__truncate dc__mxw-600">
+                <span className="fs-13 fw-4 lh-20 cn-900 mono dc__truncate dc__mxw-600">
                     {selectedDetailViewData.title}
                 </span>
                 <ClipboardButton content={selectedDetailViewData.title} />
@@ -175,7 +175,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     return (
         <VisibleModal2 className="dc__position-rel" close={handleModalClose}>
             <div
-                className={`${Sidebar ? 'w-1024' : 'w-800'} h-100vh bcn-0 flexbox-col dc__right-0 dc__top-0 dc__position-abs`}
+                className={`${Sidebar ? 'w-1024' : 'w-800'} h-100vh bg__primary flexbox-col dc__right-0 dc__top-0 dc__position-abs`}
                 onClick={stopPropagation}
             >
                 {renderHeader()}

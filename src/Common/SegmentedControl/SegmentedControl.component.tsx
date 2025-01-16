@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import { OptionType } from '@Common/Types'
+import { ComponentSizeType } from '@Shared/constants'
 import StyledRadioGroup from '../RadioGroup/RadioGroup'
 import { SegmentedControlProps, SegmentedControlVariant } from './types'
+import { SEGMENTED_CONTROL_SIZE_TO_CLASS_MAP } from './constants'
 
 const SegmentedControl = ({
     tabs,
@@ -27,15 +28,16 @@ const SegmentedControl = ({
     rootClassName = '',
     name,
     variant = SegmentedControlVariant.WHITE_ON_GRAY,
+    size = ComponentSizeType.medium,
 }: SegmentedControlProps) => (
     <StyledRadioGroup
-        className={`${variant} ${rootClassName}`}
+        className={`${variant} ${SEGMENTED_CONTROL_SIZE_TO_CLASS_MAP[size]} ${rootClassName}`}
         onChange={onChange}
         initialTab={initialTab}
         name={name}
         disabled={disabled}
     >
-        {tabs.map((tab: OptionType, index) => (
+        {tabs.map((tab, index) => (
             <StyledRadioGroup.Radio
                 value={tab.value}
                 key={tab.value}

@@ -92,7 +92,7 @@ import { GenericSectionErrorState } from '../GenericSectionErrorState'
  * <SelectPicker
  *      ...
  *      renderMenuListFooter={() => (
- *          <div className="px-8 py-6 dc__border-top bcn-50 cn-6">
+ *          <div className="px-8 py-6 dc__border-top bg__secondary cn-6">
  *              <div>Foot note</div>
  *          </div>
  *      )}

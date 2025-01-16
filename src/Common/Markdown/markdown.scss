@@ -30,7 +30,7 @@
             td,
             th {
                 padding: 6px 13px;
-                border: 1px solid #dfe2e5;
+                border: 1px solid var(--N200);
             }
 
             tr {
@@ -38,7 +38,7 @@
             }
 
             tr:nth-child(2n + 3) {
-                background: #f6f8fa;
+                background: var(--bg-secondary);
             }
 
             tr:first-child {
@@ -49,7 +49,7 @@
         }
 
         code {
-            background-color: rgba(27, 31, 35, 0.05);
+            background-color: var(--N100);
         }
     }
 
@@ -59,7 +59,7 @@
         overflow: auto;
         font-size: 85%;
         line-height: 1.45;
-        background-color: #f7f7f7;
+        background-color: var(--bg-secondary);
         border-radius: 3px;
 
         code {

@@ -44,7 +44,7 @@ export const DynamicDataTableHeader = <K extends string, CustomStateType = Recor
         return (
             <div
                 key={`${key}-header`}
-                className={`bcn-50 ${shouldRenderAddRowButton ? 'py-6' : 'py-8'} px-8 flexbox dc__content-space dc__align-items-center ${(!isActionButtonAtTheStart && (key === firstHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : '')) || ''} ${key === lastHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}` : ''}`}
+                className={`bg__secondary ${shouldRenderAddRowButton ? 'py-6' : 'py-8'} px-8 flexbox dc__content-space dc__align-items-center ${(!isActionButtonAtTheStart && (key === firstHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : '')) || ''} ${key === lastHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}` : ''}`}
             >
                 {isSortable ? (
                     <button
@@ -95,7 +95,7 @@ export const DynamicDataTableHeader = <K extends string, CustomStateType = Recor
                 <div className="dynamic-data-table__row">
                     {isActionButtonAtTheStart && (
                         <div
-                            className={`bcn-50 ${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
+                            className={`bg__secondary ${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
                         />
                     )}
                     {headers.map((header) => renderHeaderCell(header))}

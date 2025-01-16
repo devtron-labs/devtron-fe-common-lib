@@ -18,7 +18,7 @@ export const DeploymentConfigDiffAccordion = ({
     <div id={id} className="dc__border br-4 deployment-config-diff__accordion">
         <button
             type="button"
-            className="dc__unset-button-styles px-16 py-10 flexbox dc__align-items-center dc__gap-8 w-100 br-4 bcn-50 dc__position-sticky dc__top-0 dc__zi-10"
+            className="dc__unset-button-styles px-16 py-10 flexbox dc__align-items-center dc__gap-8 w-100 br-4 bg__secondary dc__position-sticky dc__top-0 dc__zi-10"
             aria-label="expand-collapse-btn"
             onClick={onClick}
         >

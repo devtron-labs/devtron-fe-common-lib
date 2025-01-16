@@ -5,7 +5,7 @@ import { ReactDiffViewerProps } from 'react-diff-viewer-continued'
 export const diffViewerStyles: ReactDiffViewerProps['styles'] = {
     variables: {
         light: {
-            diffViewerBackground: 'var(--N0)',
+            diffViewerBackground: 'var(--bg-primary)',
             diffViewerColor: 'var(--N900)',
             addedBackground: 'var(--G50)',
             addedColor: 'var(--N900)',
@@ -15,13 +15,13 @@ export const diffViewerStyles: ReactDiffViewerProps['styles'] = {
             wordRemovedBackground: 'var(--R200)',
             addedGutterBackground: 'var(--G100)',
             removedGutterBackground: 'var(--R100)',
-            gutterBackground: 'var(--N50)',
-            gutterBackgroundDark: 'var(--N50)',
+            gutterBackground: 'var(--bg-secondary)',
+            gutterBackgroundDark: 'var(--bg-secondary)',
             highlightBackground: 'var(--N100)',
             highlightGutterBackground: 'var(--N100)',
             codeFoldGutterBackground: 'var(--B100)',
             codeFoldBackground: 'var(--B50)',
-            emptyLineBackground: 'var(--N0)',
+            emptyLineBackground: 'var(--bg-primary)',
             gutterColor: 'var(--N500)',
             addedGutterColor: 'var(--N700)',
             removedGutterColor: 'var(--N700)',

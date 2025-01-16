@@ -88,7 +88,7 @@ export const CIListItem = ({
                 })}
 
             <div
-                className={`dc__h-fit-content ci-artifact image-tag-parent-card bcn-0 br-4 dc__border p-12 w-100 dc__mxw-800 ci-artifact--${type} ${
+                className={`dc__h-fit-content ci-artifact image-tag-parent-card bg__primary br-4 dc__border p-12 w-100 dc__mxw-800 ci-artifact--${type} ${
                     headerMetaDataPresent && renderCIListHeader ? 'dc__no-top-radius dc__no-top-border' : ''
                 }`}
                 data-testid="hover-on-report-artifact"

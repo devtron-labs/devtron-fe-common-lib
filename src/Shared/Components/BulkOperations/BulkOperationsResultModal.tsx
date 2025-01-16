@@ -98,7 +98,7 @@ const BulkOperationsResultModal = ({
             parentClassName="h-100"
         >
             <dialog
-                className="bcn-0 h-100 cn-9 w-100 flexbox-col dc__overflow-hidden p-0 bulk-operation__results-modal"
+                className="bg__primary h-100 cn-9 w-100 flexbox-col dc__overflow-hidden p-0 bulk-operation__results-modal"
                 onClick={stopPropagation}
             >
                 <header className="px-20 py-12 lh-24 flexbox dc__content-space dc__align-items-center dc__border-bottom">
@@ -123,7 +123,7 @@ const BulkOperationsResultModal = ({
                     />
                 </header>
                 <div className="flexbox-col dc__gap-16 dc__overflow-hidden pt-20 flex-grow-1 bulk-operations__results-modal__content">
-                    <div className="bulk-operations__results-modal__bar-chart br-8 flexbox-col dc__align-start dc__align-self-stretch dc__border bcn-0 ml-20 mr-20">
+                    <div className="bulk-operations__results-modal__bar-chart br-8 flexbox-col dc__align-start dc__align-self-stretch dc__border bg__primary ml-20 mr-20">
                         <SegmentedBarChart
                             entities={resultsStore.getBarChartEntities()}
                             rootClassName="p-16 fs-13 dc__border-bottom-n1"

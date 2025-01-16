@@ -32,8 +32,6 @@ const DeploymentHistoryDiffView = ({
     currentConfiguration,
     baseTemplateConfiguration,
     previousConfigAvailable,
-    isUnpublished,
-    isDeleteDraft,
     rootClassName,
     codeEditorKey,
 }: DeploymentTemplateHistoryType) => {
@@ -41,23 +39,13 @@ const DeploymentHistoryDiffView = ({
 
     const [convertVariables, setConvertVariables] = useState(false)
 
-    const getTheme = () => {
-        if (isDeleteDraft) {
-            return 'delete-draft'
-        }
-        if (isUnpublished) {
-            return 'unpublished'
-        }
-        return null
-    }
-
     // check if variable snapshot is {} or not
     const isVariablesAvailable: boolean =
         Object.keys(baseTemplateConfiguration?.codeEditorValue?.variableSnapshot || {}).length !== 0 ||
         Object.keys(currentConfiguration?.codeEditorValue?.variableSnapshot || {}).length !== 0
 
     const editorValuesRHS = useMemo(() => {
-        if (!baseTemplateConfiguration?.codeEditorValue?.value || isDeleteDraft) {
+        if (!baseTemplateConfiguration?.codeEditorValue?.value) {
             return ''
         }
 
@@ -66,10 +54,10 @@ const DeploymentHistoryDiffView = ({
             : baseTemplateConfiguration?.codeEditorValue?.value
 
         return YAMLStringify(JSON.parse(editorValue))
-    }, [convertVariables, baseTemplateConfiguration, isDeleteDraft])
+    }, [convertVariables, baseTemplateConfiguration])
 
     const editorValuesLHS = useMemo(() => {
-        if (!currentConfiguration?.codeEditorValue?.value || isUnpublished) {
+        if (!currentConfiguration?.codeEditorValue?.value) {
             return ''
         }
 
@@ -78,7 +66,7 @@ const DeploymentHistoryDiffView = ({
             : currentConfiguration?.codeEditorValue?.value
 
         return YAMLStringify(JSON.parse(editorValue))
-    }, [convertVariables, currentConfiguration, isUnpublished])
+    }, [convertVariables, currentConfiguration])
 
     const renderDeploymentDiffViaCodeEditor = () =>
         previousConfigAvailable ? (
@@ -97,7 +85,6 @@ const DeploymentHistoryDiffView = ({
                 readOnly
                 noParsing
                 mode={MODES.YAML}
-                theme={getTheme()}
             />
         )
 
@@ -136,7 +123,7 @@ const DeploymentHistoryDiffView = ({
                 </div>
             )}
             <div
-                className={`en-2 bw-1 br-4 bcn-0 py-4 ${
+                className={`en-2 bw-1 br-4 bg__primary py-4 ${
                     previousConfigAvailable ? 'deployment-diff__upper' : ''
                 } ${rootClassName ?? ''}`}
                 data-testid={`configuration-link-${
@@ -152,23 +139,23 @@ const DeploymentHistoryDiffView = ({
                             return (
                                 // eslint-disable-next-line react/no-array-index-key
                                 <div key={`deployment-history-diff-view-${index}`} className="dc__contents">
-                                    {!isUnpublished && currentValue?.value ? (
+                                    {currentValue?.value ? (
                                         renderDetailedValue(
-                                            !isDeleteDraft && changeBGColor ? 'code-editor-red-diff' : '',
+                                            changeBGColor ? 'code-editor-red-diff' : '',
                                             currentValue,
                                             `configuration-deployment-template-heading-${index}`,
                                         )
                                     ) : (
                                         <div />
                                     )}
-                                    {!isDeleteDraft && baseValue?.value ? (
+                                    {baseValue?.value ? (
                                         renderDetailedValue(
                                             changeBGColor ? 'code-editor-green-diff' : '',
                                             baseValue,
                                             `configuration-deployment-template-heading-${index}`,
                                         )
                                     ) : (
-                                        <div className={isDeleteDraft ? 'code-editor-red-diff' : ''} />
+                                        <div />
                                     )}
                                 </div>
                             )
@@ -179,7 +166,7 @@ const DeploymentHistoryDiffView = ({
             {(currentConfiguration?.codeEditorValue?.value || baseTemplateConfiguration?.codeEditorValue?.value) && (
                 <div className="en-2 bw-1 br-4 mt-16 dc__overflow-auto">
                     <div
-                        className="code-editor-header-value px-12 py-8 fs-13 fw-6 cn-9 bcn-0 dc__top-radius-4 dc__border-bottom"
+                        className="code-editor-header-value px-12 py-8 fs-13 fw-6 cn-9 bg__primary dc__top-radius-4 dc__border-bottom"
                         data-testid="configuration-link-comparison-body-heading"
                     >
                         <span>{baseTemplateConfiguration?.codeEditorValue?.displayName}</span>

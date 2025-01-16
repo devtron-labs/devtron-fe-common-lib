@@ -60,7 +60,7 @@ export const DeploymentStatusDetailRow = ({
 
     const renderDetailedData = () =>
         !collapsed ? (
-            <div className="bcn-0 en-2 detail-tab_border bw-1">
+            <div className="bg__primary en-2 detail-tab_border bw-1">
                 {statusBreakDownType.timelineStatus && (
                     <div
                         className={`flex left pt-8 pl-12 pb-8 lh-20 ${
@@ -132,7 +132,7 @@ export const DeploymentStatusDetailRow = ({
 
     const renderDetailChart = () =>
         !collapsed && (
-            <div className="bcn-0 en-2 detail-tab_border bw-1">
+            <div className="bg__primary en-2 detail-tab_border bw-1">
                 {statusBreakDownType.timelineStatus && (
                     <div
                         className={`flex left pt-8 pl-12 pb-8 lh-20 ${
@@ -168,7 +168,7 @@ export const DeploymentStatusDetailRow = ({
         <>
             <div className="bw-1 en-2">
                 <div
-                    className={`deployment-status-breakdown-row pt-8 pb-8 pl-8 pr-8 bcn-0  ${
+                    className={`deployment-status-breakdown-row pt-8 pb-8 pl-8 pr-8 bg__primary  ${
                         collapsed ? (!isHelmManifestPushFailed ? 'br-4' : '') : 'border-collapse'
                     }`}
                 >

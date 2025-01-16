@@ -171,7 +171,7 @@ export const DeploymentHistoryConfigDiff = ({
 
     if (compareDeploymentConfig && isDeploymentHistoryConfigDiffNotFoundError(compareDeploymentConfig[0])) {
         return (
-            <div className="flex bcn-0 h-100">
+            <div className="flex bg__primary h-100">
                 <GenericEmptyState
                     title="Data not available"
                     subTitle="Configurations used for this deployment execution is not available"
@@ -205,7 +205,7 @@ export const DeploymentHistoryConfigDiff = ({
                 {compareDeploymentConfigErr && !compareDeploymentConfigLoader ? (
                     <ErrorScreenManager code={errorConfig.code} reload={errorConfig.reload} />
                 ) : (
-                    <div className="p-16 flexbox-col dc__gap-16 bcn-0 h-100">
+                    <div className="p-16 flexbox-col dc__gap-16 bg__primary h-100">
                         {isLoading ? (
                             <Progressing fullHeight size={48} />
                         ) : (

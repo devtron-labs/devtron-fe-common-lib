@@ -77,7 +77,7 @@ const BulkSelection = <T,>({ showPagination, disabled = false, showChevronDownIc
                 {showChevronDownIcon && <ICChevronDown className="icon-dim-20 fcn-6 dc__no-shrink" />}
             </PopupMenu.Button>
 
-            <PopupMenu.Body rootClassName="dc__top-22 w-150 dc__right-0 pt-4 pb-4 pl-0 pr-0 bcn-0 flex column dc__content-start dc__align-start dc__position-abs bcn-0 dc__border dc__border-radius-4-imp">
+            <PopupMenu.Body rootClassName="dc__top-22 w-150 dc__right-0 pt-4 pb-4 pl-0 pr-0 bg__primary flex column dc__content-start dc__align-start dc__position-abs bg__primary dc__border dc__border-radius-4-imp">
                 {BulkSelectionItems.map((item) => (
                     <BulkSelectionDropdownItems<T>
                         key={item.locator}

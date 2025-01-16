@@ -54,7 +54,7 @@ const SummaryTooltipCard = React.memo(
         ciMaterials,
         gitTriggers,
     }: SummaryTooltipCardType): JSX.Element => (
-        <div className="build-card-popup p-16 br-4 w-400 bcn-0 mxh-300 dc__overflow-scroll">
+        <div className="build-card-popup p-16 br-4 w-400 bg__primary mxh-300 dc__overflow-scroll">
             <span className="fw-6 fs-16 mb-4" style={{ color: colorMap[status.toLowerCase()] }}>
                 {status.toLowerCase() === 'cancelled' ? 'Aborted' : status}
             </span>
@@ -342,12 +342,7 @@ const Sidebar = React.memo(
         return (
             <>
                 {children || (
-                    <div
-                        className="select-pipeline-wrapper w-100 pl-16 pr-16 dc__overflow-hidden"
-                        style={{
-                            borderBottom: '1px solid var(--n-100, #EDF1F5)',
-                        }}
-                    >
+                    <div className="select-pipeline-wrapper w-100 pl-16 pr-16 dc__overflow-hidden dc__border-bottom-n1">
                         <label
                             htmlFor="history-pipeline-selector"
                             className="form__label"

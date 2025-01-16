@@ -243,8 +243,8 @@ export const DeploymentConfigDiffMain = ({
     }
 
     return (
-        <div className="bcn-0 deployment-config-diff__main-top flexbox-col min-h-100">
-            <div className="dc__border-bottom-n1 flexbox dc__align-items-center dc__position-sticky dc__top-0 bcn-0 w-100 dc__zi-11">
+        <div className="bg__primary deployment-config-diff__main-top flexbox-col min-h-100">
+            <div className="dc__border-bottom-n1 flexbox dc__align-items-center dc__position-sticky dc__top-0 bg__primary w-100 dc__zi-11">
                 <div className="flexbox dc__align-items-center p-12 dc__gap-8 deployment-config-diff__main-top__header">
                     {!!headerText && <p className="m-0 cn-9 fs-13 lh-20">{headerText}</p>}
                     {renderHeaderSelectors(selectorsConfig.primaryConfig)}
