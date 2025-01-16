@@ -484,12 +484,15 @@ export const getBuildInfraProfilePayload = (
                     return configurationListAcc
                 }
 
+                const isActiveComputedValue = locatorContainsSubValues
+                    ? (infraConfigValues.value as CMSecretPayloadType[])?.length > 0
+                    : configuration.active
+                const isActive = profileInput.name === DEFAULT_PROFILE_NAME ? true : isActiveComputedValue
+
                 const response: BuildInfraConfigurationItemPayloadType = {
                     ...infraConfigValues,
                     id: configuration.id,
-                    active: locatorContainsSubValues
-                        ? (infraConfigValues.value as CMSecretPayloadType[])?.length > 0
-                        : configuration.active,
+                    active: isActive,
                 }
 
                 configurationListAcc.push(response)
