@@ -2,27 +2,9 @@ import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { ReactComponent as Info } from '@Icons/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
 import { ClipboardButton } from '@Common/ClipboardButton'
-import { Progressing } from '@Common/Progressing'
 
 import { useCodeEditorContext } from './CodeEditor.context'
 import { CodeEditorHeaderProps, CodeEditorStatusBarProps } from './types'
-
-// TODO: Check use-case of this
-export const CodeEditorPlaceholder = ({ className = '', style = {}, customLoader }: any) => {
-    const { height } = useCodeEditorContext()
-
-    if (customLoader) {
-        return customLoader
-    }
-
-    return (
-        <div className={`code-editor code-editor--placeholder disabled ${className}`} style={{ ...style, height }}>
-            <div className="flex">
-                <Progressing pageLoader />
-            </div>
-        </div>
-    )
-}
 
 const SplitPane = () => {
     const { state, dispatch, readOnly } = useCodeEditorContext()
@@ -48,7 +30,7 @@ export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEdit
     return (
         <div className={className || 'code-editor__header flex right'}>
             {children}
-            {!hideDefaultSplitHeader && state.defaultCode && <SplitPane />}
+            {!hideDefaultSplitHeader && state.lhsCode && <SplitPane />}
         </div>
     )
 }

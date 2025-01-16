@@ -20,6 +20,7 @@ import { ReactCodeMirrorProps } from '@uiw/react-codemirror'
 
 import { MODES } from '@Common/Constants'
 import { AppThemeType } from '@Shared/Providers'
+import { Never } from '@Shared/types'
 
 // TODO: Remove this after theming is done for code-mirror
 export enum CodeEditorThemesKeys {
@@ -41,24 +42,20 @@ export interface CodeEditorHeaderProps {
     children?: ReactNode
 }
 
-export interface CodeEditorProps extends Pick<ReactCodeMirrorProps, 'value' | 'onBlur' | 'onFocus' | 'autoFocus'> {
+export type CodeEditorProps = {
     /**
      * @default 450
      */
     height?: 'auto' | '100%' | number
-    onChange?: (value: string) => void
     children?: ReactNode
-    defaultValue?: string
     mode?: MODES
     tabSize?: number
     readOnly?: boolean
+    placeholder?: string
     noParsing?: boolean
-    shebang?: string | JSX.Element
-    diffView?: boolean
     loading?: boolean
     customLoader?: JSX.Element
     theme?: CodeEditorThemesKeys
-    original?: string
     validatorSchema?: JSONSchema7
     cleanData?: boolean
     schemaURI?: string
@@ -67,7 +64,28 @@ export interface CodeEditorProps extends Pick<ReactCodeMirrorProps, 'value' | 'o
      * @default false
      */
     disableSearch?: boolean
-}
+} & (
+    | ({
+          diffView?: true
+          onOriginalValueChange?: (originalValue: string) => void
+          onModifiedValueChange?: (modifiedValue: string) => void
+          originalValue?: ReactCodeMirrorProps['value']
+          modifiedValue?: ReactCodeMirrorProps['value']
+          value?: never
+          onChange?: never
+          shebang?: never
+      } & Never<Pick<ReactCodeMirrorProps, 'onBlur' | 'onFocus' | 'autoFocus'>>)
+    | ({
+          diffView?: false
+          value?: ReactCodeMirrorProps['value']
+          onChange?: (value: string) => void
+          shebang?: string | JSX.Element
+          originalValue?: never
+          modifiedValue?: never
+          onOriginalValueChange?: never
+          onModifiedValueChange?: never
+      } & Pick<ReactCodeMirrorProps, 'onBlur' | 'onFocus' | 'autoFocus'>)
+)
 
 // CODE-MIRROR TYPES
 export type HoverTexts = {
@@ -76,7 +94,7 @@ export type HoverTexts = {
 }
 
 // REDUCER TYPES
-export type CodeEditorActionTypes = 'setDiff' | 'setTheme' | 'setCode' | 'setDefaultCode'
+export type CodeEditorActionTypes = 'setDiff' | 'setTheme' | 'setCode' | 'setLhsCode'
 
 export interface CodeEditorAction {
     type: CodeEditorActionTypes
@@ -85,7 +103,7 @@ export interface CodeEditorAction {
 
 export interface CodeEditorInitialValueType
     extends Pick<CodeEditorProps, 'theme' | 'value' | 'noParsing' | 'tabSize' | 'mode'> {
-    defaultValue: string
+    lhsValue: string
     appTheme: AppThemeType
     diffView: boolean
 }
@@ -93,7 +111,7 @@ export interface CodeEditorInitialValueType
 export interface CodeEditorState extends Pick<CodeEditorProps, 'noParsing'> {
     theme: CodeEditorThemesKeys
     code: string
-    defaultCode: string
+    lhsCode: string
     diffMode: boolean
 }
 

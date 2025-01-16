@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo, useReducer, useRef } from 'react'
+import { useEffect, useMemo, useReducer, useState } from 'react'
 import CodeMirror, {
     Extension,
     hoverTooltip,
     ReactCodeMirrorProps,
-    ReactCodeMirrorRef,
     basicSetup,
     BasicSetupOptions,
+    EditorState,
+    Compartment,
+    // EditorView,
+    // ViewUpdate,
 } from '@uiw/react-codemirror'
+import CodeMirrorMerge from 'react-codemirror-merge'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { StreamLanguage } from '@codemirror/language'
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -41,36 +45,34 @@ import {
 import { yamlSchemaHover, yamlSchemaLinter, yamlCompletion } from 'codemirror-json-schema/yaml'
 
 import { useTheme } from '@Shared/Providers'
+import { getUniqueId } from '@Shared/Helpers'
 import { cleanKubeManifest, noop, useEffectAfterMount, useJsonYaml } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
+import { Progressing } from '@Common/Progressing'
 
 import { CodeEditorContextProps, CodeEditorProps, HoverTexts } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { getCodeEditorThemeFromAppTheme } from './utils'
 import { CodeEditorContext } from './CodeEditor.context'
-import {
-    Clipboard,
-    CodeEditorPlaceholder,
-    ErrorBar,
-    Header,
-    Information,
-    ValidationError,
-    Warning,
-} from './CodeEditor.components'
+import { Clipboard, ErrorBar, Header, Information, ValidationError, Warning } from './CodeEditor.components'
 
 import './codeEditor.scss'
 
 export const CodeEditor = ({
     value: propValue,
+    originalValue,
+    modifiedValue,
     mode = MODES.JSON,
     noParsing = false,
-    defaultValue: propDefaultValue = '',
     children,
     tabSize = 2,
     height = 450,
     shebang = '',
     onChange,
+    onOriginalValueChange,
+    onModifiedValueChange,
     readOnly,
+    placeholder,
     diffView,
     theme,
     loading,
@@ -86,12 +88,13 @@ export const CodeEditor = ({
     // HOOKS
     const { appTheme } = useTheme()
 
-    // REFS
-    const codemirrorRef = useRef<ReactCodeMirrorRef>()
-
     // Cleaning KubeManifest
-    const value = cleanData ? cleanKubeManifest(propValue) : propValue
-    const defaultValue = cleanData ? cleanKubeManifest(propDefaultValue) : propDefaultValue
+    const _value = diffView ? modifiedValue : propValue
+    const value = cleanData ? cleanKubeManifest(_value) : _value
+    const lhsValue = cleanData ? cleanKubeManifest(originalValue) : originalValue
+
+    // STATES
+    const [codeMirrorKey, setCodeMirrorKey] = useState<string>()
 
     // REDUCER
     const [state, dispatch] = useReducer(
@@ -100,7 +103,7 @@ export const CodeEditor = ({
             mode,
             theme,
             value,
-            defaultValue,
+            lhsValue,
             noParsing,
             tabSize,
             appTheme,
@@ -111,60 +114,70 @@ export const CodeEditor = ({
     // ERROR
     const [, , , error] = useJsonYaml(state.code, tabSize, mode, !state.noParsing)
 
-    const contextValue = useMemo<CodeEditorContextProps>(
-        () => ({ dispatch, state, error, height }),
-        [state, error, defaultValue],
-    )
+    // CONTEXT VALUE
+    const contextValue = useMemo<CodeEditorContextProps>(() => ({ dispatch, state, error, height }), [state, error])
 
+    // USE-EFFECTS
     useEffect(() => {
         // Change theme whenever `appTheme` changes
         dispatch({ type: 'setTheme', value: getCodeEditorThemeFromAppTheme(theme, appTheme) })
     }, [appTheme])
-
-    // Setting codeEditor height to take '100%'
-    useEffect(() => {
-        if (codemirrorRef.current && height === '100%') {
-            codemirrorRef.current.editor.parentElement.classList.add('h-100')
-            codemirrorRef.current.editor.classList.add('h-100')
-        }
-
-        return () => {
-            codemirrorRef.current.editor.parentElement.classList.remove('h-100')
-            codemirrorRef.current.editor.classList.remove('h-100')
-        }
-    }, [height])
 
     // Toggle `state.diffMode` based on `diffView`
     useEffect(() => {
         dispatch({ type: 'setDiff', value: diffView })
     }, [diffView])
 
-    const setCode = (newValue: string) => {
-        dispatch({ type: 'setCode', value: newValue })
-        // dispatch({ type: 'setDefaultCode', value: originalValue })
-        onChange?.(newValue)
+    useEffect(() => {
+        setCodeMirrorKey(getUniqueId())
+    }, [readOnly, tabSize])
+
+    // METHODS
+    const setCode = (codeValue: string) => {
+        dispatch({ type: 'setCode', value: codeValue })
+        if (state.diffMode) {
+            onModifiedValueChange?.(codeValue)
+        } else {
+            onChange?.(codeValue)
+        }
+    }
+
+    const setLhsCode = (codeValue: string) => {
+        dispatch({ type: 'setLhsCode', value: codeValue })
+        onOriginalValueChange?.(codeValue)
     }
 
     useEffectAfterMount(() => {
-        if (noParsing) {
-            setCode(value)
-            return
-        }
-
         if (value === state.code) {
             return
         }
 
-        setCode(parseValueToCode(value, mode, tabSize))
-    }, [value, defaultValue, noParsing])
+        setCode(noParsing ? value : parseValueToCode(value, mode, tabSize))
+        setCodeMirrorKey(getUniqueId())
+    }, [value, noParsing])
+
+    useEffectAfterMount(() => {
+        if (lhsValue === state.lhsCode) {
+            return
+        }
+
+        setLhsCode(noParsing ? lhsValue : parseValueToCode(lhsValue, mode, tabSize))
+        setCodeMirrorKey(getUniqueId())
+    }, [lhsValue, noParsing])
 
     // CODEMIRROR PROPS
+    const compartment = new Compartment()
+
     const basicSetupOptions: BasicSetupOptions = {
         searchKeymap: !disableSearch,
     }
 
     const handleOnChange: ReactCodeMirrorProps['onChange'] = (newValue) => {
         setCode(newValue)
+    }
+
+    const handleLhsOnChange: ReactCodeMirrorProps['onChange'] = (newLhsValue) => {
+        setLhsCode(newLhsValue)
     }
 
     const getLanguageExtension = () => {
@@ -230,37 +243,83 @@ export const CodeEditor = ({
         }
     }
 
+    const extensions: Extension[] = [
+        basicSetup(basicSetupOptions),
+        getLanguageExtension(),
+        ...(!state.diffMode ? [lintGutter(), getValidationSchema()] : []),
+        compartment.of(EditorState.tabSize.of(tabSize)),
+    ]
+
+    const originalViewExtensions: Extension[] = [
+        basicSetup(basicSetupOptions),
+        getLanguageExtension(),
+        compartment.of(EditorState.tabSize.of(tabSize)),
+    ]
+
+    const modifiedViewExtensions: Extension[] = [
+        basicSetup(basicSetupOptions),
+        getLanguageExtension(),
+        compartment.of(EditorState.tabSize.of(tabSize)),
+    ]
+
+    const renderCodeEditor = () => {
+        if (loading) {
+            return (
+                customLoader || (
+                    <div className="flex" style={{ height: typeof height === 'number' ? `${height}px` : height }}>
+                        <Progressing pageLoader />
+                    </div>
+                )
+            )
+        }
+
+        return state.diffMode ? (
+            <CodeMirrorMerge
+                key={codeMirrorKey}
+                className={`vertical-divider ${height === '100%' ? 'h-100 dc__overflow-auto' : ''}`}
+                style={{ height: typeof height === 'number' ? `${height}px` : undefined }}
+                gutter
+                destroyRerender={false}
+            >
+                <CodeMirrorMerge.Original
+                    basicSetup={false}
+                    value={state.lhsCode}
+                    readOnly={readOnly}
+                    onChange={handleLhsOnChange}
+                    extensions={originalViewExtensions}
+                />
+                <CodeMirrorMerge.Modified
+                    basicSetup={false}
+                    value={state.code}
+                    readOnly={readOnly}
+                    onChange={handleOnChange}
+                    extensions={modifiedViewExtensions}
+                />
+            </CodeMirrorMerge>
+        ) : (
+            <div className={height === '100%' ? 'h-100' : ''}>
+                {shebang && <div className="code-editor__shebang">{shebang}</div>}
+                <CodeMirror
+                    className={height === '100%' ? 'h-100' : ''}
+                    basicSetup={false}
+                    value={state.code}
+                    placeholder={placeholder}
+                    readOnly={readOnly}
+                    height={typeof height === 'number' ? `${height}px` : height}
+                    autoFocus={autoFocus}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                    onChange={handleOnChange}
+                    extensions={extensions}
+                />
+            </div>
+        )
+    }
+
     return (
         <CodeEditorContext.Provider value={contextValue}>
             {children}
-            {loading ? (
-                <CodeEditorPlaceholder customLoader={customLoader} />
-            ) : (
-                <div>
-                    {shebang && <div className="code-editor__shebang">{shebang}</div>}
-                    {state.diffMode ? (
-                        <div>DiffEditor Here</div>
-                    ) : (
-                        <CodeMirror
-                            ref={codemirrorRef}
-                            basicSetup={false}
-                            value={value}
-                            height={typeof height === 'number' ? `${height}px` : height}
-                            readOnly={readOnly}
-                            autoFocus={autoFocus}
-                            onFocus={onFocus}
-                            onBlur={onBlur}
-                            onChange={handleOnChange}
-                            extensions={[
-                                basicSetup(basicSetupOptions),
-                                getLanguageExtension(),
-                                lintGutter(),
-                                getValidationSchema(),
-                            ]}
-                        />
-                    )}
-                </div>
-            )}
+            {renderCodeEditor()}
         </CodeEditorContext.Provider>
     )
 }

@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-
 // CODE MIRROR OVERRIDES
 .cm-editor.cm-focused {
-    outline: none
+    outline: none;
+}
+
+.cm-mergeViewEditor:last-child {
+    border-left: 1px solid var(--N200);
 }
 
 // CODE EDITOR STYLES

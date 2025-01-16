@@ -30,8 +30,8 @@ export const CodeEditorReducer = (state: CodeEditorState, action: CodeEditorActi
             return { ...state, theme: action.value }
         case 'setCode':
             return { ...state, code: action.value }
-        case 'setDefaultCode':
-            return { ...state, defaultCode: action.value }
+        case 'setLhsCode':
+            return { ...state, lhsCode: action.value }
         default:
             return state
     }
@@ -72,7 +72,7 @@ export const initialState = ({
     mode,
     theme,
     value,
-    defaultValue,
+    lhsValue,
     diffView,
     noParsing,
     tabSize,
@@ -80,7 +80,7 @@ export const initialState = ({
 }: CodeEditorInitialValueType): CodeEditorState => ({
     theme: getCodeEditorThemeFromAppTheme(theme, appTheme),
     code: noParsing ? value : parseValueToCode(value, mode, tabSize),
-    defaultCode: noParsing ? defaultValue : parseValueToCode(defaultValue, mode, tabSize),
+    lhsCode: noParsing ? lhsValue : parseValueToCode(lhsValue, mode, tabSize),
     diffMode: diffView,
     noParsing: [MODES.JSON, MODES.YAML].includes(mode) ? noParsing : true,
 })
