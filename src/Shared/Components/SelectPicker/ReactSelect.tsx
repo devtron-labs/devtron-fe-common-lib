@@ -1,9 +1,9 @@
-import Select, { Props as SelectProps } from 'react-select'
+import Select, { Props as BaseSelectProps } from 'react-select'
 import { commonSelectStyles } from '../ReactSelect'
 
-export interface ReactSelectProps extends Omit<SelectProps, 'styles'> {
+export interface ReactSelectProps extends Omit<BaseSelectProps, 'styles'> {
     styleOverrides?: Pick<
-        SelectProps['styles'],
+        BaseSelectProps['styles'],
         'control' | 'option' | 'valueContainer' | 'dropdownIndicator' | 'menuList' | 'menu' | 'singleValue'
     >
 }
@@ -46,5 +46,15 @@ const ReactSelect = ({ styleOverrides, ...props }: ReactSelectProps) => (
 )
 
 export { ReactSelect }
+export type { BaseSelectProps }
 export { components } from 'react-select'
-export type { GroupBase, OptionsOrGroups, SelectInstance, StylesConfig } from 'react-select'
+export type {
+    GroupBase,
+    OptionsOrGroups,
+    SelectInstance,
+    StylesConfig,
+    MultiValue,
+    SingleValue,
+    InputActionMeta,
+    GroupHeadingProps,
+} from 'react-select'

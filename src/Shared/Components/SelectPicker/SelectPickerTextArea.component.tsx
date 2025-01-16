@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { InputActionMeta, SelectInstance, SingleValue } from 'react-select'
 
 import { ReactSelectInputAction } from '@Common/Constants'
 import { useThrottledEffect } from '@Common/Helper'
+import { InputActionMeta, SelectInstance, SingleValue } from './ReactSelect'
 
 import SelectPicker from './SelectPicker.component'
 import { SelectPickerOptionType, SelectPickerTextAreaProps } from './type'
