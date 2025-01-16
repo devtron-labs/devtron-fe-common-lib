@@ -795,12 +795,6 @@ interface CommonTabArgsType {
      */
     type: 'fixed' | 'dynamic'
     /**
-     * Path of the icon for the tab
-     *
-     * @default ''
-     */
-    iconPath?: string
-    /**
      * Dynamic title for the tab
      *
      * @default ''
