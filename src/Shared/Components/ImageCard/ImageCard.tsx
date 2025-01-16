@@ -15,7 +15,6 @@
  */
 
 import { ImageTagsContainer } from '../../../Common'
-import TargetPlatformBadgeList from '../TargetPlatformBadgeList/TargetPlatformBadgeList.component'
 import { ArtifactInfo } from './ArtifactInfo'
 import { SequentialCDCardTitle } from './SequentialCDCardTitle'
 import { ImageCardProps } from './types'
@@ -26,7 +25,6 @@ const ImageCard = ({
     sequentialCDCardTitleProps,
     artifactInfoProps,
     imageTagContainerProps,
-    targetPlatforms,
     children,
     rootClassName = '',
     materialInfoRootClassName = '',
@@ -49,8 +47,6 @@ const ImageCard = ({
                     {cta}
                 </div>
             </div>
-
-            <TargetPlatformBadgeList targetPlatforms={targetPlatforms} />
 
             <div data-testid={`image-tags-container-${testIdLocator}`}>
                 <ImageTagsContainer {...imageTagContainerProps} />

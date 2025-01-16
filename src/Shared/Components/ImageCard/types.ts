@@ -42,6 +42,7 @@ export interface SequentialCDCardTitleProps {
     environmentName?: string
     parentEnvironmentName?: string
     additionalInfo?: ReactNode
+    targetPlatforms: CDMaterialType['targetPlatforms']
 }
 
 export interface ImageCardProps {
@@ -50,7 +51,6 @@ export interface ImageCardProps {
     cta: ReactNode
     artifactInfoProps: ArtifactInfoProps
     imageTagContainerProps: ImageTaggingContainerType
-    targetPlatforms: CDMaterialType['targetPlatforms']
     /**
      * Meant for ImageCardAccordion
      */
