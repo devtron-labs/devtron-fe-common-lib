@@ -275,6 +275,7 @@ const useBuildInfraForm = ({
             }
 
             case BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM: {
+                const { handleCaptureSnapshot } = data
                 // If no target platform is given error will be '' so that we won;t show error but capture it
                 currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM] = !targetPlatform
                     ? ''
@@ -296,6 +297,8 @@ const useBuildInfraForm = ({
 
                         return acc
                     }, {} as BuildInfraConfigurationMapType)
+
+                handleCaptureSnapshot(currentInput)
                 break
             }
 

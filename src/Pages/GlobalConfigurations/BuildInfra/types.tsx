@@ -455,7 +455,9 @@ export type HandleProfileInputChangeType =
               | Exclude<BuildInfraInheritActions, BuildInfraInheritActionsOnSubValues>
               | BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM
               | BuildInfraProfileInputActionType.REMOVE_TARGET_PLATFORM
-          data: ProfileInputDispatchDataType
+          data: ProfileInputDispatchDataType & {
+              handleCaptureSnapshot: (data: BuildInfraProfileData) => void
+          }
       }
     | {
           action: BuildInfraInheritActionsOnSubValues
