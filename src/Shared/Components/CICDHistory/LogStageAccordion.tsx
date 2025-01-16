@@ -1,9 +1,12 @@
+import { RefCallback } from 'react'
 import DOMPurify from 'dompurify'
 import { getTimeDifference } from '@Shared/Helpers'
-import { RefCallback } from 'react'
+import { Tooltip } from '@Common/Tooltip'
+import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
+import { ReactComponent as ICStack } from '@Icons/ic-stack.svg'
 import { LogStageAccordionProps } from './types'
 import { getLogSearchIndex, getStageStatusIcon } from './utils'
-import { ReactComponent as ICCaretDown } from '../../../Assets/Icon/ic-caret-down.svg'
+import { TargetPlatformListTooltip } from '../TargetPlatforms'
 
 const LogsItemContainer = ({ children }: { children: React.ReactNode }) => (
     <div className="display-grid dc__column-gap-10 dc__align-start logs-renderer__log-item">{children}</div>
@@ -22,6 +25,7 @@ const LogStageAccordion = ({
     isLoading,
     fullScreenView,
     searchIndex,
+    targetPlatforms,
 }: LogStageAccordionProps) => {
     const handleAccordionToggle = () => {
         if (isOpen) {
@@ -79,7 +83,28 @@ const LogStageAccordion = ({
                     </div>
                 </div>
 
-                {!!endTime && <span className="text__white fs-13 fw-4 lh-20">{getFormattedTimeDifference()}</span>}
+                <div className="flexbox dc__gap-8">
+                    {!!targetPlatforms?.length && (
+                        <>
+                            <Tooltip
+                                content={<TargetPlatformListTooltip targetPlatforms={targetPlatforms} />}
+                                alwaysShowTippyOnHover
+                            >
+                                <div className="flexbox dc__gap-4 dc__align-items-center">
+                                    <ICStack className="scn-0 dc__no-shrink icon-stroke__white icon-dim-12" />
+                                    <span className="text__white fs-13 fw-4 lh-20">
+                                        {targetPlatforms.length}&nbsp;target platform
+                                        {targetPlatforms.length > 1 ? 's' : ''}
+                                    </span>
+                                </div>
+                            </Tooltip>
+
+                            <div className="dc__bullet--white dc__bullet" />
+                        </>
+                    )}
+
+                    {!!endTime && <span className="text__white fs-13 fw-4 lh-20">{getFormattedTimeDifference()}</span>}
+                </div>
             </button>
 
             {isOpen && (

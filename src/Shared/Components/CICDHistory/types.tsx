@@ -30,7 +30,15 @@ import {
     SortingOrder,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
-import { AggregationKeys, GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
+import {
+    AggregationKeys,
+    GitTriggers,
+    Node,
+    NodeType,
+    ResourceKindType,
+    ResourceVersionType,
+    TargetPlatformsDTO,
+} from '../../types'
 import { TERMINAL_STATUS_MAP } from './constants'
 
 export enum HistoryComponentType {
@@ -747,11 +755,13 @@ export interface StageInfoDTO {
     startTime: string
     endTime?: string
     status?: StageStatusType
+    metadata: Partial<Pick<TargetPlatformsDTO, 'targetPlatforms'>>
 }
 
 export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime' | 'endTime' | 'status'> {
     logs: string[]
     isOpen: boolean
+    targetPlatforms?: StageInfoDTO['metadata']['targetPlatforms']
 }
 
 export interface LogStageAccordionProps extends StageDetailType, Pick<LogsRendererType, 'fullScreenView'> {
