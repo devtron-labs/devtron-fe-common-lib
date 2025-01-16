@@ -929,3 +929,11 @@ export interface UploadFileProps {
     allowedExtensions?: string[]
     maxUploadSize?: number
 }
+
+export interface TargetPlatformItemDTO {
+    name: string
+}
+
+export interface TargetPlatformsDTO {
+    targetPlatforms: TargetPlatformItemDTO[]
+}

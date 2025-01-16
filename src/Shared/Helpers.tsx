@@ -49,6 +49,8 @@ import {
     IntersectionOptions,
     Nodes,
     PreventOutsideFocusProps,
+    TargetPlatformItemDTO,
+    TargetPlatformsDTO,
     WebhookEventNameType,
 } from './types'
 import { DEPLOYMENT_STATUS, TIMELINE_STATUS, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
@@ -977,3 +979,27 @@ export const checkIfPathIsMatching =
     (currentPathName: string, customMessage = ''): PromptProps['message'] =>
     ({ pathname }: { pathname: string }) =>
         currentPathName === pathname || customMessage || UNSAVED_CHANGES_PROMPT_MESSAGE
+
+export const sanitizeTargetPlatforms = (
+    targetPlatforms: TargetPlatformsDTO['targetPlatforms'],
+): TargetPlatformItemDTO[] => {
+    if (!targetPlatforms?.length) {
+        return []
+    }
+
+    const filteredPlatforms = targetPlatforms
+        .filter(({ name }) => !!name)
+        .sort((platformA, platformB) => stringComparatorBySortOrder(platformA.name, platformB.name))
+
+    // They should be unique
+    const uniquePlatforms: TargetPlatformItemDTO[] = []
+    const platformExistenceMap: Record<string, true> = {}
+    filteredPlatforms.forEach(({ name }) => {
+        if (!platformExistenceMap[name]) {
+            platformExistenceMap[name] = true
+            uniquePlatforms.push({ name })
+        }
+    })
+
+    return uniquePlatforms
+}

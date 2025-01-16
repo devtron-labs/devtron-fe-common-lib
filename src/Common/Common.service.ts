@@ -16,8 +16,8 @@
 
 import { MutableRefObject } from 'react'
 import moment from 'moment'
-import { sanitizeApprovalConfigData, sanitizeUserApprovalList, stringComparatorBySortOrder } from '@Shared/Helpers'
-import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
+import { sanitizeApprovalConfigData, sanitizeTargetPlatforms, sanitizeUserApprovalList, stringComparatorBySortOrder } from '@Shared/Helpers'
+import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables, TargetPlatformItemDTO } from '@Shared/types'
 import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, showError, sortCallback } from './Helper'
@@ -197,6 +197,7 @@ const cdMaterialListModal = ({
             configuredInReleases: material.configuredInReleases ?? [],
             appWorkflowId: material.appWorkflowId ?? null,
             deploymentBlockedState: sanitizeDeploymentBlockedState(material.deploymentBlockedState),
+            targetPlatforms: sanitizeTargetPlatforms(material.targetPlatforms)
         }
     })
     return materials

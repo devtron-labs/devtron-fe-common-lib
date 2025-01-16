@@ -15,7 +15,7 @@
  */
 
 import { ReactNode } from 'react'
-import { ImageTaggingContainerType } from '../../../Common'
+import { CDMaterialType, ImageTaggingContainerType } from '../../../Common'
 import { RegistryType } from '../..'
 
 export interface ArtifactInfoProps {
@@ -50,6 +50,7 @@ export interface ImageCardProps {
     cta: ReactNode
     artifactInfoProps: ArtifactInfoProps
     imageTagContainerProps: ImageTaggingContainerType
+    targetPlatforms: CDMaterialType['targetPlatforms']
     /**
      * Meant for ImageCardAccordion
      */
@@ -57,3 +58,5 @@ export interface ImageCardProps {
     rootClassName?: string
     materialInfoRootClassName?: string
 }
+
+export interface TargetPlatformBadgeListProps extends Pick<ImageCardProps, 'targetPlatforms'> {}
