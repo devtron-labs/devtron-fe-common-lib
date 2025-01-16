@@ -1,5 +1,5 @@
 import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
-import { EMPTY_STATE_STATUS, SCAN_TOOL_ID_CLAIR, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
+import { EMPTY_STATE_STATUS } from '@Shared/constants'
 import { useState } from 'react'
 import { GenericEmptyState } from '@Common/index'
 import { ReactComponent as NoVulnerability } from '@Icons/ic-vulnerability-not-found.svg'
@@ -37,18 +37,16 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
         kubernetesManifest: !!kubernetesManifest,
     })
 
-    const getScanToolId = (category: string) => {
+    const getScanToolName = (category: string) => {
         switch (category) {
             case CATEGORIES.CODE_SCAN:
-                return codeScan?.scanToolName === 'TRIVY' ? SCAN_TOOL_ID_TRIVY : SCAN_TOOL_ID_CLAIR
+                return codeScan?.scanToolName
             case CATEGORIES.KUBERNETES_MANIFEST:
-                return kubernetesManifest?.scanToolName === 'TRIVY' ? SCAN_TOOL_ID_TRIVY : SCAN_TOOL_ID_CLAIR
+                return kubernetesManifest?.scanToolName
             case CATEGORIES.IMAGE_SCAN:
-                return imageScan?.vulnerability?.list?.[0].scanToolName === 'TRIVY'
-                    ? SCAN_TOOL_ID_TRIVY
-                    : SCAN_TOOL_ID_CLAIR
+                return imageScan?.vulnerability?.list?.[0].scanToolName
             default:
-                return SCAN_TOOL_ID_TRIVY
+                return 'TRIVY'
         }
     }
 
@@ -84,7 +82,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
                         <div className="flexbox-col dc__gap-12" key={category}>
                             <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
                                 <span className="fs-13 fw-6 lh-1-5 cn-9">{SECURITY_CONFIG[category].label}</span>
-                                <ScannedByToolModal scanToolId={getScanToolId(category)} />
+                                <ScannedByToolModal scanToolName={getScanToolName(category)} />
                             </div>
                             {categoryFailed ? (
                                 <div className="dc__border br-8">

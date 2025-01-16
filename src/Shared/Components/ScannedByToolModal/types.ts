@@ -15,7 +15,7 @@
  */
 
 export interface ScannedByToolModalProps {
-    scanToolId?: number
+    scanToolName: string
     fontSize?: number
     spacingBetweenTextAndIcon?: number
 }

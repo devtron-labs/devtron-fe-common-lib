@@ -120,13 +120,13 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
             selectedDetailViewData ||
             getTableData(data, state.category, state.subCategory, setDetailViewData, hidePolicy)
 
-        const { entities, lastScanTimeString, scanToolId } =
+        const { entities, lastScanTimeString, scanToolName } =
             selectedDetailViewData || getInfoCardData(data, state.category, state.subCategory)
 
         return (
             <div className="flexbox-col p-20 dc__gap-16">
                 {!entities?.length ? null : (
-                    <InfoCard entities={entities} lastScanTimeString={lastScanTimeString} scanToolId={scanToolId} />
+                    <InfoCard entities={entities} lastScanTimeString={lastScanTimeString} scanToolName={scanToolName} />
                 )}
                 <Table
                     // NOTE: this key is important. Whenever data changes the table should be remounted

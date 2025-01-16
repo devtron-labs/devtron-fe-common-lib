@@ -76,12 +76,12 @@ export const getSecurityScanSeveritiesCount = (data: ScanResultDTO) => {
 export const compareSeverities = (a: Record<SeveritiesDTO, number>, b: Record<SeveritiesDTO, number>) =>
     ORDERED_SEVERITY_KEYS.reduce((result, currentKey) => result || a[currentKey] - b[currentKey], 0)
 
-export const getScanCompletedEmptyState = (scanToolId: number) => ({
+export const getScanCompletedEmptyState = (scanToolName: string) => ({
     SvgImage: NoVulnerability,
     title: "You're secure!",
     children: (
         <span className="flex dc__border-radius-24 bg__primary pl-16 pr-16 pt-8 pb-8 en-1 bw-1">
-            <ScannedByToolModal scanToolId={scanToolId} />
+            <ScannedByToolModal scanToolName={scanToolName} />
         </span>
     ),
 })

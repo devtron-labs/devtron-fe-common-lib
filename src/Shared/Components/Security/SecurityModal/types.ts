@@ -83,7 +83,7 @@ export type TableSortStateType = {
 export interface InfoCardPropsType {
     entities: SegmentedBarChartProps['entities']
     lastScanTimeString?: string
-    scanToolId?: number
+    scanToolName?: string
 }
 
 export interface StatusType {

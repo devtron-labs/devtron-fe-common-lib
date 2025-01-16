@@ -423,25 +423,25 @@ export const getCodeScanInfoCardData = (
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
                 lastScanTimeString: data.StartedOn,
-                scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName],
+                scanToolName: data.scanToolName,
             }
         case SUB_CATEGORIES.LICENSE:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
                 lastScanTimeString: data.StartedOn,
-                scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName],
+                scanToolName: data.scanToolName,
             }
         case SUB_CATEGORIES.MISCONFIGURATIONS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.misConfSummary.status),
                 lastScanTimeString: data.StartedOn,
-                scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName],
+                scanToolName: data.scanToolName,
             }
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
                 lastScanTimeString: data.StartedOn,
-                scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName],
+                scanToolName: data.scanToolName,
             }
         default:
             return null
@@ -460,27 +460,27 @@ const getCompletedEmptyState = (
 
     const detailViewTitleText = detailViewData ? `${detailViewData.titlePrefix}: ${detailViewData.title}` : ''
     const subTitleText = detailViewTitleText || 'code scan'
-    const scanToolId = MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName]
+    const { scanToolName } = data
 
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
             return {
-                ...getScanCompletedEmptyState(scanToolId),
+                ...getScanCompletedEmptyState(scanToolName),
                 subTitle: `No security vulnerability found in ${subTitleText}`,
             }
         case SUB_CATEGORIES.LICENSE:
             return {
-                ...getScanCompletedEmptyState(scanToolId),
+                ...getScanCompletedEmptyState(scanToolName),
                 subTitle: `No license risks found in ${subTitleText}`,
             }
         case SUB_CATEGORIES.MISCONFIGURATIONS:
             return {
-                ...getScanCompletedEmptyState(scanToolId),
+                ...getScanCompletedEmptyState(scanToolName),
                 subTitle: `No misconfigurations found in ${subTitleText}`,
             }
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
-                ...getScanCompletedEmptyState(scanToolId),
+                ...getScanCompletedEmptyState(scanToolName),
                 subTitle: `No exposed secrets found in ${subTitleText}`,
             }
         default:

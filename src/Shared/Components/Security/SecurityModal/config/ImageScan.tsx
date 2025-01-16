@@ -341,12 +341,12 @@ const getCompletedEmptyState = (
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
             return {
-                ...getScanCompletedEmptyState(detailViewData.scanToolId),
+                ...getScanCompletedEmptyState(detailViewData.scanToolName),
                 subTitle: `No security vulnerability found in ${detailViewTitleText}`,
             }
         case SUB_CATEGORIES.LICENSE:
             return {
-                ...getScanCompletedEmptyState(detailViewData.scanToolId),
+                ...getScanCompletedEmptyState(detailViewData.scanToolName),
                 subTitle: `No license risk found in ${detailViewTitleText}`,
             }
         default:

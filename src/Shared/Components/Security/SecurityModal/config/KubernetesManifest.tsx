@@ -15,7 +15,7 @@ import {
     SecurityModalStateType,
     TablePropsType,
 } from '../types'
-import { MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID, SCAN_FAILED_EMPTY_STATE, SCAN_IN_PROGRESS_EMPTY_STATE } from '../constants'
+import { SCAN_FAILED_EMPTY_STATE, SCAN_IN_PROGRESS_EMPTY_STATE } from '../constants'
 import { getCodeScanExposedSecrets, getCodeScanMisconfigurations } from './CodeScan'
 
 export const getKubernetesManifestTableData = (
@@ -54,13 +54,13 @@ export const getKubernetesManifestInfoCardData = (
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.misConfSummary.status),
                 lastScanTimeString: data.StartedOn,
-                scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName],
+                scanToolName: data.scanToolName,
             }
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
                 lastScanTimeString: data.StartedOn,
-                scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName],
+                scanToolName: data.scanToolName,
             }
         default:
             return null
@@ -84,7 +84,7 @@ const getCompletedEmptyState = (
 
     const detailViewTitleText = detailViewData ? `${detailViewData.titlePrefix}: ${detailViewData.title}` : ''
     const subTitleText = detailViewTitleText || 'Kubernetes manifests'
-    const scanToolId = MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName]
+    const { scanToolName } = data
 
     switch (subCategory) {
         case SUB_CATEGORIES.MISCONFIGURATIONS:
@@ -92,12 +92,12 @@ const getCompletedEmptyState = (
              * NOTE: if we are not in detail view then check for empty list in the subCategory;
              * otherwise the check for emptiness is done at start of the func  */
             return {
-                ...getScanCompletedEmptyState(scanToolId),
+                ...getScanCompletedEmptyState(scanToolName),
                 subTitle: `No misconfigurations found in ${subTitleText}`,
             }
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
-                ...getScanCompletedEmptyState(scanToolId),
+                ...getScanCompletedEmptyState(scanToolName),
                 subTitle: `No exposed secrets found in ${subTitleText}`,
             }
         default:

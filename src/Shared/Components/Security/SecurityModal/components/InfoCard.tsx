@@ -10,11 +10,11 @@ import { ReactComponent as ICClock } from '@Icons/ic-clock.svg'
 import { ZERO_TIME_STRING, DATE_TIME_FORMATS } from '../../../../../Common/Constants'
 import { InfoCardPropsType } from '../types'
 
-const InfoCard: React.FC<InfoCardPropsType> = ({ entities, lastScanTimeString, scanToolId }) => (
+const InfoCard: React.FC<InfoCardPropsType> = ({ entities, lastScanTimeString, scanToolName }) => (
     <div className="info-card">
         <SegmentedBarChart entities={entities} rootClassName="p-16 fs-13" countClassName="fw-6" />
 
-        {(lastScanTimeString || scanToolId) && (
+        {(lastScanTimeString || scanToolName) && (
             <>
                 <div className="dc__border-bottom-n1 w-100 h-1" />
 
@@ -28,8 +28,8 @@ const InfoCard: React.FC<InfoCardPropsType> = ({ entities, lastScanTimeString, s
                             >{`Scanned on ${dayjs(lastScanTimeString).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}`}</span>
                         </div>
                     )}
-                    {scanToolId && (
-                        <ScannedByToolModal scanToolId={scanToolId} fontSize={12} spacingBetweenTextAndIcon={8} />
+                    {scanToolName && (
+                        <ScannedByToolModal scanToolName={scanToolName} fontSize={12} spacingBetweenTextAndIcon={8} />
                     )}
                 </div>
             </>
