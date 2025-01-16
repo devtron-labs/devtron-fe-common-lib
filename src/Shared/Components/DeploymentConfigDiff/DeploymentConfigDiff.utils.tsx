@@ -1,8 +1,10 @@
+import YAML from 'yaml'
+
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICCheckCircleDots } from '@Icons/ic-check-circle-dots.svg'
 import { ReactComponent as ICEditFile } from '@Icons/ic-edit-file.svg'
 import { ReactComponent as ICFileCode } from '@Icons/ic-file-code.svg'
-import { stringComparatorBySortOrder } from '@Shared/Helpers'
+import { stringComparatorBySortOrder, yamlComparatorBySortOrder } from '@Shared/Helpers'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '@Shared/constants'
 import {
     DeploymentConfigDiffProps,
@@ -14,10 +16,11 @@ import {
     prepareHistoryData,
     GenericSectionErrorState,
 } from '@Shared/Components'
-import { deepEqual, noop } from '@Common/Helper'
+import { deepEqual, noop, YAMLStringify } from '@Common/Helper'
 
 import { ManifestTemplateDTO } from '@Pages/Applications'
 import {
+    CMSecretExternalType,
     ConfigMapSecretDataConfigDatumDTO,
     ConfigMapSecretDataDTO,
     ConfigResourceType,
@@ -207,6 +210,27 @@ const getObfuscatedData = (
     }
 }
 
+const getSortedYAMLStringifiedValue = (
+    value: Record<string, unknown>,
+    sortingConfig: AppEnvDeploymentConfigListParams<false>['sortingConfig'],
+) => {
+    const { sortBy, sortOrder } = sortingConfig ?? { sortBy: '', sortOrder: null }
+
+    try {
+        return (
+            JSON.stringify(
+                YAML.parse(
+                    YAMLStringify(value, {
+                        sortMapEntries: sortBy ? (a, b) => yamlComparatorBySortOrder(a, b, sortOrder) : null,
+                    }),
+                ),
+            ) || ''
+        )
+    } catch {
+        return ''
+    }
+}
+
 /**
  * Retrieves code editor data, potentially obfuscating it based on user roles and resource type.
  *
@@ -223,6 +247,7 @@ const getCodeEditorData = (
     type: ConfigResourceType,
     compareToIsAdmin: boolean,
     compareWithIsAdmin: boolean,
+    sortingConfig: AppEnvDeploymentConfigListParams<false>['sortingConfig'],
 ) => {
     const compareToConfigData = getConfigData(compareToValue, type)
     const compareWithConfigData = getConfigData(compareWithValue, type)
@@ -243,10 +268,10 @@ const getCodeEditorData = (
             ...(isExternalKubernetesSecret(compareToValue)
                 ? {
                       value: null,
-                      resolvedValue: JSON.stringify(compareToObfuscatedData) || '',
+                      resolvedValue: getSortedYAMLStringifiedValue(compareToObfuscatedData, sortingConfig),
                   }
                 : {
-                      value: JSON.stringify(compareToObfuscatedData) || '',
+                      value: getSortedYAMLStringifiedValue(compareToObfuscatedData, sortingConfig),
                   }),
         }
 
@@ -255,21 +280,21 @@ const getCodeEditorData = (
             ...(isExternalKubernetesSecret(compareWithValue)
                 ? {
                       value: null,
-                      resolvedValue: JSON.stringify(compareWithObfuscatedData) || '',
+                      resolvedValue: getSortedYAMLStringifiedValue(compareWithObfuscatedData, sortingConfig),
                   }
                 : {
-                      value: JSON.stringify(compareWithObfuscatedData) || '',
+                      value: getSortedYAMLStringifiedValue(compareWithObfuscatedData, sortingConfig),
                   }),
         }
     } else {
         compareToCodeEditorData = {
             displayName: 'data',
-            value: JSON.stringify(compareToConfigData) || '',
+            value: getSortedYAMLStringifiedValue(compareToConfigData, sortingConfig),
         }
 
         compareWithCodeEditorData = {
             displayName: 'data',
-            value: JSON.stringify(compareWithConfigData) || '',
+            value: getSortedYAMLStringifiedValue(compareWithConfigData, sortingConfig),
         }
     }
 
@@ -302,6 +327,25 @@ const getDiffState = (compareToValue: DeploymentHistoryDetail, compareWithValue:
     return DeploymentConfigDiffState.NO_DIFF
 }
 
+const getCMSecretHistoryDataForDiffState = (
+    configMapSecretData: ConfigMapSecretDataConfigDatumDTO,
+    historyData: DeploymentHistoryDetail,
+) => {
+    // CHECKING FOR EXTERNAL CM/CS
+    if (
+        configMapSecretData &&
+        configMapSecretData.external &&
+        (configMapSecretData.externalType === '' ||
+            configMapSecretData.externalType === CMSecretExternalType.KubernetesSecret)
+    ) {
+        const historyDataWhenExternal = structuredClone(historyData)
+        historyDataWhenExternal.codeEditorValue.value = 'external'
+        return historyDataWhenExternal
+    }
+
+    return historyData
+}
+
 /**
  * Prepares the data for displaying the diff view between two configuration items.
  *
@@ -318,6 +362,7 @@ const getDiffViewData = (
     type: ConfigResourceType,
     compareToIsAdmin: boolean,
     compareWithIsAdmin: boolean,
+    sortingConfig: AppEnvDeploymentConfigListParams<false>['sortingConfig'],
 ) => {
     // Prepare the code editor data for compareTo and compareWith items
     const { compareToCodeEditorData, compareWithCodeEditorData } = getCodeEditorData(
@@ -326,6 +371,7 @@ const getDiffViewData = (
         type,
         compareToIsAdmin,
         compareWithIsAdmin,
+        sortingConfig,
     )
 
     // Determine the history data map based on the type of resource
@@ -352,15 +398,22 @@ const getDiffViewData = (
     return {
         compareToDiff,
         compareWithDiff,
-        diffState: getDiffState(compareToDiff, compareWithDiff),
+        diffState: getDiffState(
+            getCMSecretHistoryDataForDiffState(compareTo, compareToDiff),
+            getCMSecretHistoryDataForDiffState(compareWith, compareWithDiff),
+        ),
     }
 }
 
-const getDeploymentTemplateDiffViewData = (data: DeploymentTemplateDTO | null, templateOptions: TemplateListDTO[]) => {
+const getDeploymentTemplateDiffViewData = (
+    data: DeploymentTemplateDTO | null,
+    templateOptions: TemplateListDTO[],
+    sortingConfig: AppEnvDeploymentConfigListParams<false>['sortingConfig'],
+) => {
     const _data = getDeploymentTemplateData(data)
     const codeEditorValue = {
         displayName: 'data',
-        value: _data ? JSON.stringify(_data) : '',
+        value: _data ? getSortedYAMLStringifiedValue(_data, sortingConfig) : '',
     }
 
     const diffViewData = prepareHistoryData(
@@ -388,10 +441,13 @@ const getManifestDiffViewData = (data: ManifestTemplateDTO) => {
     return diffViewData
 }
 
-const getPipelineConfigDiffViewData = (data: PipelineConfigDataDTO) => {
+const getPipelineConfigDiffViewData = (
+    data: PipelineConfigDataDTO,
+    sortingConfig: AppEnvDeploymentConfigListParams<false>['sortingConfig'],
+) => {
     const codeEditorValue = {
         displayName: 'data',
-        value: data?.data ? JSON.stringify(data.data) : '',
+        value: data?.data ? getSortedYAMLStringifiedValue(data.data, sortingConfig) : '',
     }
 
     const diffViewData = prepareHistoryData(
@@ -494,6 +550,7 @@ const getConfigMapSecretData = (
     compareToIsAdmin: boolean,
     compareWithIsAdmin: boolean,
     convertVariables: boolean,
+    sortingConfig: AppEnvDeploymentConfigListParams<false>['sortingConfig'],
 ) => {
     const combinedList = mergeConfigDataArraysByName(
         getConfigMapSecretResolvedValues(compareToList, convertVariables),
@@ -507,6 +564,7 @@ const getConfigMapSecretData = (
             resourceType,
             compareToIsAdmin,
             compareWithIsAdmin,
+            sortingConfig,
         )
 
         const pathType =
@@ -615,6 +673,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
     convertVariables = false,
     compareToTemplateOptions,
     compareWithTemplateOptions,
+    sortingConfig,
 }: AppEnvDeploymentConfigListParams<ManifestView>): {
     configList: DeploymentConfigDiffProps['configList']
     navList: DeploymentConfigDiffProps['navList']
@@ -632,10 +691,12 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
         const currentDeploymentData = getDeploymentTemplateDiffViewData(
             compareToObject.deploymentTemplate,
             compareToTemplateOptions,
+            sortingConfig,
         )
         const compareDeploymentData = getDeploymentTemplateDiffViewData(
             compareWithObject.deploymentTemplate,
             compareWithTemplateOptions,
+            sortingConfig,
         )
 
         const deploymentTemplateData = {
@@ -658,8 +719,11 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
         let pipelineConfigData: DeploymentConfigDiffProps['configList'][0]
 
         if (compareToObject.pipelineConfigData || compareWithObject.pipelineConfigData) {
-            currentPipelineConfigData = getPipelineConfigDiffViewData(compareToObject.pipelineConfigData)
-            comparePipelineConfigData = getPipelineConfigDiffViewData(compareWithObject.pipelineConfigData)
+            currentPipelineConfigData = getPipelineConfigDiffViewData(compareToObject.pipelineConfigData, sortingConfig)
+            comparePipelineConfigData = getPipelineConfigDiffViewData(
+                compareWithObject.pipelineConfigData,
+                sortingConfig,
+            )
             pipelineConfigData = {
                 id: EnvResourceType.PipelineStrategy,
                 pathType: EnvResourceType.PipelineStrategy,
@@ -683,6 +747,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
             compareToObject.isAppAdmin,
             compareWithObject.isAppAdmin,
             convertVariables,
+            sortingConfig,
         )
 
         const secretData = getConfigMapSecretData(
@@ -692,6 +757,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
             compareToObject.isAppAdmin,
             compareWithObject.isAppAdmin,
             convertVariables,
+            sortingConfig,
         )
 
         const configList: DeploymentConfigDiffProps['configList'] = [

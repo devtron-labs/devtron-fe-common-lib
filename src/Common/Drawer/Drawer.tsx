@@ -19,7 +19,7 @@ import { preventBodyScroll } from '../../Shared'
 import { VisibleModal } from '../Modals/VisibleModal'
 import './Drawer.scss'
 
-interface drawerInterface {
+export interface DrawerProps {
     position: 'left' | 'right' | 'bottom' | 'top'
     children?: any
     backdrop?: boolean
@@ -30,6 +30,7 @@ interface drawerInterface {
     height?: string
     parentClassName?: string
     onEscape?: (e?: any) => void
+    disableTransition?: boolean
 }
 
 export const Drawer = ({
@@ -42,7 +43,8 @@ export const Drawer = ({
     parentClassName,
     onEscape,
     onClose,
-}: drawerInterface) => {
+    disableTransition,
+}: DrawerProps) => {
     const drawerRef = useRef(null)
     useEffect(() => {
         setTimeout(() => drawerRef.current?.classList?.add('show'), 1)
@@ -63,7 +65,7 @@ export const Drawer = ({
     }
     return (
         <VisibleModal className="drawer--container" parentClassName={parentClassName || ''} onEscape={onEscape} close={onClose}>
-            <aside style={style} ref={drawerRef} className={`drawer ${position}`}>
+            <aside style={style} ref={drawerRef} className={`drawer ${disableTransition ? 'disable-transition' : ''} ${position}`}>
                 {children}
             </aside>
         </VisibleModal>

@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.4.0-patch-3",
+    "version": "1.5.0",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -106,6 +106,7 @@
         "react-dates": "^21.8.0",
         "react-diff-viewer-continued": "^3.4.0",
         "react-monaco-editor": "^0.54.0",
+        "react-virtualized-sticky-tree": "^3.0.0-beta18",
         "sass": "^1.69.7",
         "tslib": "2.7.0"
     },
@@ -120,6 +121,10 @@
         },
         "vite-plugin-svgr": {
             "vite": "5.4.11"
+        },
+        "react-virtualized-sticky-tree": {
+            "react": "^17.0.2",
+            "react-dom": "^17.0.2"
         }
     }
 }

@@ -26,4 +26,5 @@ export interface SegmentedBarChartProps {
     countClassName?: string
     labelClassName?: string
     isProportional?: boolean
+    swapLegendAndBar?: boolean
 }
