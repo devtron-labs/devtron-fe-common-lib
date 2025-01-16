@@ -3,7 +3,12 @@ import { Dispatch, SetStateAction } from 'react'
 import { DeploymentConfigDiffProps } from '@Shared/Components/DeploymentConfigDiff'
 import { EnvResourceType } from '@Shared/Services'
 
+import { UseUrlFiltersReturnType } from '@Common/Hooks'
 import { History, HistoryLogsProps } from '../types'
+
+export interface DeploymentHistoryConfigDiffQueryParams {
+    compareWfrId: number
+}
 
 export interface DeploymentHistoryConfigDiffProps
     extends Required<Pick<HistoryLogsProps, 'renderRunSource' | 'resourceId'>> {
@@ -26,15 +31,11 @@ export type DeploymentHistoryDiffDetailedProps = Pick<
         >
     > & {
         pipelineDeployments: History[]
-        previousWfrId: number
         convertVariables: boolean
         setConvertVariables: Dispatch<SetStateAction<boolean>>
         isCompareDeploymentConfigNotAvailable?: boolean
+        urlFilters: UseUrlFiltersReturnType<string, DeploymentHistoryConfigDiffQueryParams>
     }
-
-export interface DeploymentHistoryConfigDiffQueryParams {
-    compareWfrId: number
-}
 
 export interface DeploymentHistoryConfigDiffRouteParams {
     appId: string
