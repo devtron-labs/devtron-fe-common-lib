@@ -1,7 +1,10 @@
-import Select, { Props as BaseSelectProps } from 'react-select'
+import Select, { Props as BaseSelectProps, SelectInstance } from 'react-select'
+import { MutableRefObject } from 'react'
+import { OptionType } from '@Common/Types'
 import { commonSelectStyles } from '../ReactSelect'
 
 export interface ReactSelectProps extends Omit<BaseSelectProps, 'styles'> {
+    ref?: MutableRefObject<SelectInstance<OptionType>>
     styleOverrides?: Pick<
         BaseSelectProps['styles'],
         'control' | 'option' | 'valueContainer' | 'dropdownIndicator' | 'menuList' | 'menu' | 'singleValue'
@@ -46,12 +49,11 @@ const ReactSelect = ({ styleOverrides, ...props }: ReactSelectProps) => (
 )
 
 export { ReactSelect }
-export type { BaseSelectProps }
+export type { BaseSelectProps, SelectInstance }
 export { components } from 'react-select'
 export type {
     GroupBase,
     OptionsOrGroups,
-    SelectInstance,
     StylesConfig,
     MultiValue,
     SingleValue,

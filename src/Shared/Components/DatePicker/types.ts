@@ -15,9 +15,8 @@
  */
 
 import { Moment } from 'moment'
-import { SelectInstance } from 'react-select'
 import { SingleDatePickerShape } from 'react-dates'
-import { SelectPickerOptionType } from '../SelectPicker'
+import { SelectInstance, SelectPickerOptionType } from '../SelectPicker'
 
 export interface SingleDatePickerProps {
     /**
