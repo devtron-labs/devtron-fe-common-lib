@@ -116,11 +116,17 @@
             .mde-preview-content {
                 padding: 0px !important;
 
-                a.anchor {
-                    color: var(--N900);
+                a {
+                    color: var(--B500);
 
-                    h1, h2, h3 {
-                        border-bottom: 1px solid var(--N200);
+                    &.anchor {
+                        color: var(--N900);
+
+                        h1,
+                        h2,
+                        h3 {
+                            border-bottom: 1px solid var(--N200);
+                        }
                     }
                 }
 
