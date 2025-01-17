@@ -289,7 +289,7 @@ const Sidebar = React.memo(
         const reloadNextAfterBottom = () => {
             ReactGA.event({
                 category: 'pagination',
-                action: 'scroll',
+                action: 'auto',
                 label: `${type.toLowerCase()}-history`,
                 value: triggerHistory.size,
             })
@@ -371,7 +371,7 @@ const Sidebar = React.memo(
                     </div>
                 )}
 
-                <div className="flex column top left flex-grow-1 dc__hide-hscroll p-8" style={{ overflowY: 'auto' }}>
+                <div className="flex column top left flex-grow-1 dc__overflow-auto p-8">
                     {fetchIdData === FetchIdDataStatus.SUCCESS && (
                         <ViewAllCardsTile handleViewAllHistory={handleViewAllHistory} />
                     )}
