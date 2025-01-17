@@ -7,7 +7,7 @@ export interface ReactSelectProps extends Omit<BaseSelectProps, 'styles'> {
     ref?: MutableRefObject<SelectInstance<OptionType>>
     styleOverrides?: Pick<
         BaseSelectProps['styles'],
-        'control' | 'option' | 'valueContainer' | 'dropdownIndicator' | 'menuList' | 'menu' | 'singleValue'
+        'control' | 'option' | 'valueContainer' | 'dropdownIndicator' | 'menuList' | 'menu' | 'singleValue' | 'input'
     >
 }
 
@@ -43,6 +43,10 @@ const ReactSelect = ({ styleOverrides, ...props }: ReactSelectProps) => (
             singleValue: (base, state) => ({
                 ...commonSelectStyles.singleValue(base, state),
                 ...styleOverrides?.singleValue?.({}, state),
+            }),
+            input: (base, state) => ({
+                ...commonSelectStyles.input(base, state),
+                ...styleOverrides?.input?.({}, state),
             }),
         }}
     />
