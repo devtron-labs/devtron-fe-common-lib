@@ -1,7 +1,7 @@
 import { CMSecretExternalType, CMSecretYamlData } from '@Shared/Services'
 import { ConfigMapSecretDataTypeOptionType } from './types'
 
-export const CONFIG_MAP_SECRET_YAML_PARSE_ERROR = 'Could not parse to valid YAML'
+export const CONFIG_MAP_SECRET_YAML_PARSE_ERROR = 'Please provide valid YAML'
 export const SECRET_TOAST_INFO = {
     BOTH_STORE_AVAILABLE: 'Please use either secretStore or secretStoreRef',
     CHECK_KEY_SECRET_KEY: 'Please check key and secretKey',
