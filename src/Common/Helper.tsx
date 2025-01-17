@@ -45,11 +45,11 @@ import {
     WebhookEventNameType,
 } from '../Shared'
 import { ReactComponent as ArrowDown } from '@Icons/ic-chevron-down.svg'
-import webhookIcon from '@Icons/ic-webhook.svg'
-import branchIcon from '@Icons/ic-branch.svg'
-import regexIcon from '@Icons/ic-regex.svg'
-import pullRequest from '@Icons/ic-pull-request.svg'
-import tagIcon from '@Icons/ic-tag.svg'
+import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
+import { ReactComponent as ICBranch } from '@Icons/ic-branch.svg'
+import { ReactComponent as ICRegex } from '@Icons/ic-regex.svg'
+import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
+import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { SourceTypeMap } from '@Common/Common.service'
 import { getIsRequestAborted } from './Api'
 
@@ -990,17 +990,17 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
 export const getBranchIcon = (sourceType, _isRegex?: boolean, webhookEventName?: string) => {
     if (sourceType === SourceTypeMap.WEBHOOK) {
         if (webhookEventName === WebhookEventNameType.PULL_REQUEST) {
-            return pullRequest
+            return <ICPullRequest className="scn-6" />
         }
         if (webhookEventName === WebhookEventNameType.TAG_CREATION) {
-            return tagIcon
+        return <ICTag className="scn-6" />
         }
-        return webhookIcon
+        return <ICWebhook />
     }
     if (sourceType === SourceTypeMap.BranchRegex || _isRegex) {
-        return regexIcon
+        return <ICRegex className="fcn-6" />
     }
-    return branchIcon
+    return <ICBranch className="fcn-6" />
 }
 
 // TODO: Might need to expose sandbox and referrer policy
