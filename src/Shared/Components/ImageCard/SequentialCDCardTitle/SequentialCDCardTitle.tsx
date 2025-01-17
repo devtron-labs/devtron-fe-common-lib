@@ -20,7 +20,7 @@ import { ARTIFACT_STATUS, STAGE_TYPE } from '../../../constants'
 import { DeploymentEnvState } from './DeploymentEnvState'
 import { DEPLOYMENT_ENV_TEXT } from './DeploymentEnvState/constants'
 import { SequentialCDCardTitleProps } from '../types'
-import { ImageTagButton, Tooltip } from '../../../../Common'
+import { ImageTagButton } from '../../../../Common'
 
 const SequentialCDCardTitle = ({
     isLatest,
@@ -118,11 +118,10 @@ const SequentialCDCardTitle = ({
 
     return (
         <div className={`bg__primary pb-8 br-4 flex left ${addFlexGap ? 'dc__gap-8' : ''}`}>
+            {renderContent()}
+
             {!!targetPlatforms?.length && (
-                <Tooltip
-                    content={<TargetPlatformListTooltip targetPlatforms={targetPlatforms} />}
-                    alwaysShowTippyOnHover
-                >
+                <TargetPlatformListTooltip targetPlatforms={targetPlatforms}>
                     <div>
                         <ImageTagButton
                             text="Multi-arch image"
@@ -134,10 +133,8 @@ const SequentialCDCardTitle = ({
                             isSuperAdmin
                         />
                     </div>
-                </Tooltip>
+                </TargetPlatformListTooltip>
             )}
-
-            {renderContent()}
         </div>
     )
 }

@@ -1,7 +1,6 @@
 import { RefCallback } from 'react'
 import DOMPurify from 'dompurify'
 import { getTimeDifference } from '@Shared/Helpers'
-import { Tooltip } from '@Common/Tooltip'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICStack } from '@Icons/ic-stack.svg'
 import { LogStageAccordionProps } from './types'
@@ -83,13 +82,10 @@ const LogStageAccordion = ({
                     </div>
                 </div>
 
-                <div className="flexbox dc__gap-8">
+                <div className="flexbox dc__gap-8 dc__align-items-center">
                     {!!targetPlatforms?.length && (
                         <>
-                            <Tooltip
-                                content={<TargetPlatformListTooltip targetPlatforms={targetPlatforms} />}
-                                alwaysShowTippyOnHover
-                            >
+                            <TargetPlatformListTooltip targetPlatforms={targetPlatforms}>
                                 <div className="flexbox dc__gap-4 dc__align-items-center">
                                     <ICStack className="scn-0 dc__no-shrink icon-stroke__white icon-dim-12" />
                                     <span className="text__white fs-13 fw-4 lh-20">
@@ -97,7 +93,7 @@ const LogStageAccordion = ({
                                         {targetPlatforms.length > 1 ? 's' : ''}
                                     </span>
                                 </div>
-                            </Tooltip>
+                            </TargetPlatformListTooltip>
 
                             {!!endTime && <div className="dc__bullet--white dc__bullet" />}
                         </>
