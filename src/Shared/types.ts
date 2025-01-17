@@ -787,7 +787,6 @@ interface CommonTabArgsType {
      * Title for the tab
      */
     title?: string
-    isDeleted?: boolean
     /**
      * Type for the tab
      *
