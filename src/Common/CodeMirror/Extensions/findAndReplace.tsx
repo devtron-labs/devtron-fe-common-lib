@@ -33,7 +33,7 @@ import { ReactComponent as ICRegex } from '@Icons/ic-regex.svg'
 import { Button, ButtonStyleType, ButtonVariantType, Collapse } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 
-import { FindReplaceProps, FindReplaceQuery } from './types'
+import { FindReplaceProps, FindReplaceQuery } from '../types'
 
 const FindReplaceToggleButton = ({
     isChecked,
@@ -345,7 +345,7 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
     )
 }
 
-export const CodeEditorFindReplace = ({ view }: { view: EditorView }): Panel => {
+export const codeEditorFindReplace = (view: EditorView): Panel => {
     const dom = document.createElement('div')
 
     const keydown = (e: KeyboardEvent) => {

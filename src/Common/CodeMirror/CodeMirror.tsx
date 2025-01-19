@@ -49,14 +49,13 @@ import { cleanKubeManifest, noop, useEffectAfterMount } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
 import { Progressing } from '@Common/Progressing'
 
+import { codeEditorFindReplace, readOnlyTooltip, yamlParseErrorLint } from './Extensions'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { getFoldGutterElement, getHoverElement } from './utils'
 import { CodeEditorContext } from './CodeEditor.context'
 import { Clipboard, ErrorBar, Header, Information, Warning } from './CodeEditor.components'
-import { CodeEditorFindReplace } from './CodeEditorFindReplace'
 import { codeEditorTheme } from './CodeEditor.theme'
-import { yamlParseErrorLint } from './CodeEditor.extensions'
 
 import './codeEditor.scss'
 
@@ -242,8 +241,9 @@ export const CodeEditor = ({
         getLanguageExtension(),
         foldingCompartment.of(foldConfig),
         search({
-            createPanel: (view) => CodeEditorFindReplace({ view }),
+            createPanel: codeEditorFindReplace,
         }),
+        readOnlyTooltip,
     ]
 
     const extensions: Extension[] = [
