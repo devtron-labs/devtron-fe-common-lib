@@ -989,11 +989,12 @@ export const sanitizeTargetPlatforms = (
 
     const filteredPlatforms = targetPlatforms
         .filter(({ name }) => !!name)
-        .sort((platformA, platformB) => stringComparatorBySortOrder(platformA.name, platformB.name))
+        .sort(({ name: nameA }, { name: nameB }) => stringComparatorBySortOrder(nameA, nameB))
 
     // They should be unique
     const uniquePlatforms: TargetPlatformItemDTO[] = []
     const platformExistenceMap: Record<string, true> = {}
+
     filteredPlatforms.forEach(({ name }) => {
         if (!platformExistenceMap[name]) {
             platformExistenceMap[name] = true

@@ -399,13 +399,8 @@ export type CIListItemType = Pick<History, 'promotionApprovalMetadata'> & {
     triggeredBy?: string
     children: any
 
-    imageReleaseTags?: ReleaseTag[]
-    appReleaseTagNames?: string[]
-    tagsEditable?: boolean
-    hideImageTaggingHardDelete?: boolean
     appliedFilters?: FilterConditionsListType[]
     appliedFiltersTimestamp?: string
-    isSuperAdmin?: boolean
     selectedEnvironmentName?: string
     renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
 } & (

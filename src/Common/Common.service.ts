@@ -16,8 +16,17 @@
 
 import { MutableRefObject } from 'react'
 import moment from 'moment'
-import { sanitizeApprovalConfigData, sanitizeTargetPlatforms, sanitizeUserApprovalList, stringComparatorBySortOrder } from '@Shared/Helpers'
-import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables, TargetPlatformItemDTO } from '@Shared/types'
+import {
+    sanitizeApprovalConfigData,
+    sanitizeTargetPlatforms,
+    sanitizeUserApprovalList,
+    stringComparatorBySortOrder,
+} from '@Shared/Helpers'
+import {
+    PolicyBlockInfo,
+    RuntimeParamsAPIResponseType,
+    RuntimePluginVariables,
+} from '@Shared/types'
 import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, showError, sortCallback } from './Helper'
@@ -82,7 +91,9 @@ export function setImageTags(request, pipelineId: number, artifactId: number) {
     return post(`${ROUTES.IMAGE_TAGGING}/${pipelineId}/${artifactId}`, request)
 }
 
-export const sanitizeUserApprovalMetadata = (userApprovalMetadata: UserApprovalMetadataType): UserApprovalMetadataType => ({
+export const sanitizeUserApprovalMetadata = (
+    userApprovalMetadata: UserApprovalMetadataType,
+): UserApprovalMetadataType => ({
     ...userApprovalMetadata,
     hasCurrentUserApproved: userApprovalMetadata?.hasCurrentUserApproved ?? false,
     canCurrentUserApprove: userApprovalMetadata?.canCurrentUserApprove ?? false,
@@ -154,9 +165,7 @@ const cdMaterialListModal = ({
             vulnerable: material.vulnerable,
             runningOnParentCd: material.runningOnParentCd,
             artifactStatus: artifactStatusValue,
-            userApprovalMetadata: sanitizeUserApprovalMetadata(
-                material.userApprovalMetadata,
-            ),
+            userApprovalMetadata: sanitizeUserApprovalMetadata(material.userApprovalMetadata),
             triggeredBy: material.triggeredBy,
             isVirtualEnvironment: material.isVirtualEnvironment,
             imageComment: material.imageComment,
@@ -197,7 +206,7 @@ const cdMaterialListModal = ({
             configuredInReleases: material.configuredInReleases ?? [],
             appWorkflowId: material.appWorkflowId ?? null,
             deploymentBlockedState: sanitizeDeploymentBlockedState(material.deploymentBlockedState),
-            targetPlatforms: sanitizeTargetPlatforms(material.targetPlatforms)
+            targetPlatforms: sanitizeTargetPlatforms(material.targetPlatforms),
         }
     })
     return materials
@@ -211,7 +220,9 @@ const sanitizeDeploymentApprovalInfo = (
             approverList: sanitizeUserApprovalList(deploymentApprovalInfo?.eligibleApprovers?.anyUsers?.approverList),
         },
         specificUsers: {
-            approverList: sanitizeUserApprovalList(deploymentApprovalInfo?.eligibleApprovers?.specificUsers?.approverList),
+            approverList: sanitizeUserApprovalList(
+                deploymentApprovalInfo?.eligibleApprovers?.specificUsers?.approverList,
+            ),
         },
         userGroups: (deploymentApprovalInfo?.eligibleApprovers?.userGroups ?? []).map(
             ({ groupName, groupIdentifier, approverList }) => ({
@@ -239,25 +250,22 @@ const processCDMaterialsApprovalInfo = (enableApproval: boolean, cdMaterialsResu
 }
 
 export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): RuntimePluginVariables[] => {
-    const envVariables = Object.entries(response?.envVariables || {}).map<RuntimePluginVariables>(
-        ([key, value]) => ({
-            name: key,
-            value,
-            defaultValue: '',
-            format: VariableTypeFormat.STRING,
-            isRequired: false,
-            valueType: RefVariableType.NEW,
-            variableStepScope: RefVariableType.GLOBAL,
-            stepName: null,
-            stepType: null,
-            // TODO: (Rohit/Eshank) Replace this with getUniqueId (nanoId method)
-            stepVariableId: Math.floor(new Date().valueOf() * Math.random()),
-            valueConstraint: null,
-            description: null,
-            fileReferenceId: null,
-            fileMountDir: null,
-        }),
-    )
+    const envVariables = Object.entries(response?.envVariables || {}).map<RuntimePluginVariables>(([key, value]) => ({
+        name: key,
+        value,
+        defaultValue: '',
+        format: VariableTypeFormat.STRING,
+        isRequired: false,
+        valueType: RefVariableType.NEW,
+        variableStepScope: RefVariableType.GLOBAL,
+        stepName: null,
+        stepType: null,
+        stepVariableId: Math.floor(new Date().valueOf() * Math.random()),
+        valueConstraint: null,
+        description: null,
+        fileReferenceId: null,
+        fileMountDir: null,
+    }))
 
     const runtimeParams = (response?.runtimePluginVariables ?? []).map<RuntimePluginVariables>((variable) => ({
         ...variable,

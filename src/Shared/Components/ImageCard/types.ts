@@ -31,7 +31,7 @@ export interface ArtifactInfoProps {
     approvalInfoTippy?: ReactNode
 }
 
-export interface SequentialCDCardTitleProps {
+export interface SequentialCDCardTitleProps extends Pick<CDMaterialType, 'targetPlatforms'> {
     isLatest: boolean
     isRunningOnParentCD: boolean
     artifactStatus: string
@@ -42,7 +42,6 @@ export interface SequentialCDCardTitleProps {
     environmentName?: string
     parentEnvironmentName?: string
     additionalInfo?: ReactNode
-    targetPlatforms: CDMaterialType['targetPlatforms']
 }
 
 export interface ImageCardProps {

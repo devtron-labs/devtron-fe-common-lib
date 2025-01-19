@@ -16,6 +16,15 @@
 
 import { useParams } from 'react-router-dom'
 import { useDownload } from '@Shared/Hooks'
+import { ReactComponent as Download } from '@Icons/ic-download.svg'
+import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
+import { ReactComponent as OpenInNew } from '@Icons/ic-arrow-out.svg'
+import { ReactComponent as Down } from '@Icons/ic-arrow-forward.svg'
+import { ReactComponent as ICHelpOutline } from '@Icons/ic-help.svg'
+import noartifact from '@Images/no-artifact@2x.png'
+import folder from '@Icons/ic-folder.svg'
+import docker from '@Icons/ic-docker.svg'
+import { TargetPlatformBadgeList } from '../TargetPlatforms'
 import {
     GenericEmptyState,
     ImageTagsContainer,
@@ -24,18 +33,9 @@ import {
     DOCUMENTATION,
     useSuperAdmin,
 } from '../../../Common'
-import { ReactComponent as Download } from '../../../Assets/Icon/ic-download.svg'
-import { ReactComponent as MechanicalOperation } from '../../../Assets/Icon/ic-mechanical-operation.svg'
-import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
-import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help.svg'
-import { ReactComponent as Down } from '../../../Assets/Icon/ic-arrow-forward.svg'
-import docker from '../../../Assets/Icon/ic-docker.svg'
-import folder from '../../../Assets/Icon/ic-folder.svg'
-import noartifact from '../../../Assets/Img/no-artifact@2x.png'
 import { ArtifactType, CIListItemType } from './types'
 import { TERMINAL_STATUS_MAP } from './constants'
 import { EMPTY_STATE_STATUS } from '../../constants'
-import { TargetPlatformBadgeList } from '../TargetPlatforms'
 
 const CIProgressView = (): JSX.Element => (
     <GenericEmptyState
