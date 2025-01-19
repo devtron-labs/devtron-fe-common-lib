@@ -21,12 +21,13 @@ import CodeMirror, {
     ReactCodeMirrorProps,
     basicSetup,
     BasicSetupOptions,
-    EditorState,
     Compartment,
 } from '@uiw/react-codemirror'
 import CodeMirrorMerge from 'react-codemirror-merge'
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { StreamLanguage } from '@codemirror/language'
+import { StreamLanguage, foldGutter } from '@codemirror/language'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { search } from '@codemirror/search'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { linter, lintGutter } from '@codemirror/lint'
 import { json as langJson, jsonLanguage } from '@codemirror/lang-json'
@@ -48,11 +49,13 @@ import { cleanKubeManifest, noop, useEffectAfterMount, useJsonYaml } from '@Comm
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
 import { Progressing } from '@Common/Progressing'
 
-import { CodeEditorContextProps, CodeEditorProps, HoverTexts } from './types'
+import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
-import { getCodeEditorThemeFromAppTheme } from './utils'
+import { getFoldGutterElement, getHoverElement } from './utils'
 import { CodeEditorContext } from './CodeEditor.context'
 import { Clipboard, ErrorBar, Header, Information, ValidationError, Warning } from './CodeEditor.components'
+import { CodeEditorFindReplace } from './CodeEditorFindReplace'
+import { codeEditorTheme } from './CodeEditor.theme'
 
 import './codeEditor.scss'
 
@@ -72,7 +75,6 @@ export const CodeEditor = ({
     readOnly,
     placeholder,
     diffView,
-    theme,
     loading,
     customLoader,
     validatorSchema,
@@ -99,12 +101,10 @@ export const CodeEditor = ({
         CodeEditorReducer,
         initialState({
             mode,
-            theme,
             value,
             lhsValue,
             noParsing,
             tabSize,
-            appTheme,
             diffView,
         }),
     )
@@ -117,12 +117,7 @@ export const CodeEditor = ({
 
     // USE-EFFECTS
     useEffect(() => {
-        // Change theme whenever `appTheme` changes
-        dispatch({ type: 'setTheme', value: getCodeEditorThemeFromAppTheme(theme, appTheme) })
-    }, [appTheme])
-
-    // Toggle `state.diffMode` based on `diffView`
-    useEffect(() => {
+        // Toggle `state.diffMode` based on `diffView`
         dispatch({ type: 'setDiff', value: diffView })
     }, [diffView])
 
@@ -133,7 +128,7 @@ export const CodeEditor = ({
             setCodemirrorMergeKey(getUniqueId())
         },
         // Include any props that modify codemirror-merge extensions directly, as a workaround for the unresolved bug.
-        [readOnly, tabSize],
+        [readOnly, tabSize, disableSearch],
     )
 
     // METHODS
@@ -168,10 +163,13 @@ export const CodeEditor = ({
     }, [lhsValue, noParsing])
 
     // CODEMIRROR PROPS
-    const compartment = new Compartment()
+    const foldingCompartment = new Compartment()
 
     const basicSetupOptions: BasicSetupOptions = {
         searchKeymap: !disableSearch,
+        foldGutter: false,
+        drawSelection: false,
+        tabSize,
     }
 
     const handleOnChange: ReactCodeMirrorProps['onChange'] = (newValue) => {
@@ -197,20 +195,6 @@ export const CodeEditor = ({
         }
     }
 
-    const formatHover = (data: HoverTexts) => {
-        const div = document.createElement('div')
-        const node = `<div class="flexbox-col dc__gap-8 p-12">
-                        <p class="m-0">${data.message}</p>
-                        <div class="flexbox-col dc__gap-6">
-                            <p class="m-0">${data.typeInfo}</p>
-                            <a class="m-0" href="${schemaURI}" target="_blank">Source</a>
-                        </div>
-                    </div>`
-
-        div.innerHTML = node
-        return div
-    }
-
     const getValidationSchema = (): Extension[] => {
         switch (mode) {
             case MODES.JSON:
@@ -221,20 +205,27 @@ export const CodeEditor = ({
                     jsonLanguage.data.of({
                         autocomplete: jsonCompletion(),
                     }),
-                    hoverTooltip(jsonSchemaHover()),
+                    hoverTooltip(
+                        jsonSchemaHover({
+                            formatHover: getHoverElement(schemaURI),
+                        }),
+                    ),
                     stateExtensions(validatorSchema),
                 ]
             case MODES.YAML:
                 return [
+                    // TODO: replace this
                     linter(yamlSchemaLinter(), {
                         needsRefresh: handleRefresh,
+                        markerFilter: (diagnostics) =>
+                            diagnostics.map((diagnostic) => ({ ...diagnostic, severity: 'warning' })),
                     }),
                     yamlLanguage.data.of({
                         autocomplete: yamlCompletion(),
                     }),
                     hoverTooltip(
                         yamlSchemaHover({
-                            formatHover,
+                            formatHover: getHoverElement(schemaURI),
                         }),
                     ),
                     stateExtensions(validatorSchema),
@@ -245,24 +236,28 @@ export const CodeEditor = ({
         }
     }
 
+    // EXTENSIONS
+    const foldConfig = foldGutter({
+        markerDOM: getFoldGutterElement,
+    })
+
+    const baseExtensions: Extension[] = [
+        basicSetup(basicSetupOptions),
+        getLanguageExtension(),
+        foldingCompartment.of(foldConfig),
+        search({
+            createPanel: (view) => CodeEditorFindReplace({ view }),
+        }),
+    ]
+
     const extensions: Extension[] = [
-        basicSetup(basicSetupOptions),
-        getLanguageExtension(),
-        ...(!state.diffMode ? [lintGutter(), getValidationSchema()] : []),
-        compartment.of(EditorState.tabSize.of(tabSize)),
+        ...baseExtensions,
+        ...(!state.diffMode ? [lintGutter(), ...getValidationSchema()] : []),
     ]
 
-    const originalViewExtensions: Extension[] = [
-        basicSetup(basicSetupOptions),
-        getLanguageExtension(),
-        compartment.of(EditorState.tabSize.of(tabSize)),
-    ]
+    const originalViewExtensions: Extension[] = [...baseExtensions]
 
-    const modifiedViewExtensions: Extension[] = [
-        basicSetup(basicSetupOptions),
-        getLanguageExtension(),
-        compartment.of(EditorState.tabSize.of(tabSize)),
-    ]
+    const modifiedViewExtensions: Extension[] = [...baseExtensions]
 
     const renderCodeEditor = () => {
         if (loading) {
@@ -277,6 +272,7 @@ export const CodeEditor = ({
 
         return state.diffMode ? (
             <CodeMirrorMerge
+                theme={codeEditorTheme(appTheme)}
                 key={codemirrorMergeKey}
                 className={`vertical-divider ${height === '100%' ? 'h-100 dc__overflow-auto' : ''}`}
                 style={{ height: typeof height === 'number' ? `${height}px` : undefined }}
@@ -302,6 +298,7 @@ export const CodeEditor = ({
             <div className={height === '100%' ? 'h-100' : ''}>
                 {shebang && <div className="code-editor__shebang">{shebang}</div>}
                 <CodeMirror
+                    theme={codeEditorTheme(appTheme)}
                     className={height === '100%' ? 'h-100' : ''}
                     basicSetup={false}
                     value={state.code}

@@ -20,14 +20,11 @@ import { noop, YAMLStringify } from '@Common/Helper'
 import { MODES } from '@Common/Constants'
 
 import { CodeEditorAction, CodeEditorInitialValueType, CodeEditorState } from './types'
-import { getCodeEditorThemeFromAppTheme } from './utils'
 
 export const CodeEditorReducer = (state: CodeEditorState, action: CodeEditorAction): CodeEditorState => {
     switch (action.type) {
         case 'setDiff':
             return { ...state, diffMode: action.value }
-        case 'setTheme':
-            return { ...state, theme: action.value }
         case 'setCode':
             return { ...state, code: action.value }
         case 'setLhsCode':
@@ -70,15 +67,12 @@ export const parseValueToCode = (value: string, mode: string, tabSize: number) =
 
 export const initialState = ({
     mode,
-    theme,
     value,
     lhsValue,
     diffView,
     noParsing,
     tabSize,
-    appTheme,
 }: CodeEditorInitialValueType): CodeEditorState => ({
-    theme: getCodeEditorThemeFromAppTheme(theme, appTheme),
     code: noParsing ? value : parseValueToCode(value, mode, tabSize),
     lhsCode: noParsing ? lhsValue : parseValueToCode(lhsValue, mode, tabSize),
     diffMode: diffView,

@@ -460,6 +460,7 @@ export const ANSI_UP_REGEX = /\x1B\[.*?m/g
  * Size variants for components
  */
 export enum ComponentSizeType {
+    xxs = 'xxs',
     xs = 'xs',
     small = 'small',
     medium = 'medium',

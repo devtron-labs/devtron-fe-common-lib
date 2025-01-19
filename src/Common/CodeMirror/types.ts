@@ -16,18 +16,12 @@
 
 import { Dispatch, ReactNode } from 'react'
 import { JSONSchema7 } from 'json-schema'
-import { ReactCodeMirrorProps } from '@uiw/react-codemirror'
+import { EditorView, ReactCodeMirrorProps } from '@uiw/react-codemirror'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { SearchQuery } from '@codemirror/search'
 
 import { MODES } from '@Common/Constants'
-import { AppThemeType } from '@Shared/Providers'
 import { Never } from '@Shared/types'
-
-// TODO: Remove this after theming is done for code-mirror
-export enum CodeEditorThemesKeys {
-    vsDarkDT = 'vs-dark--dt',
-    vs = 'vs',
-    networkStatusInterface = 'network-status-interface',
-}
 
 // COMPONENT PROPS
 export interface CodeEditorStatusBarProps {
@@ -55,10 +49,8 @@ export type CodeEditorProps = {
     noParsing?: boolean
     loading?: boolean
     customLoader?: JSX.Element
-    theme?: CodeEditorThemesKeys
-    validatorSchema?: JSONSchema7
     cleanData?: boolean
-    schemaURI?: string
+
     /**
      * If true, disable the in-built search of monaco editor
      * @default false
@@ -74,12 +66,16 @@ export type CodeEditorProps = {
           value?: never
           onChange?: never
           shebang?: never
+          validatorSchema?: never
+          schemaURI?: never
       } & Never<Pick<ReactCodeMirrorProps, 'onBlur' | 'onFocus' | 'autoFocus'>>)
     | ({
           diffView?: false
           value?: ReactCodeMirrorProps['value']
           onChange?: (value: string) => void
           shebang?: string | JSX.Element
+          validatorSchema?: JSONSchema7
+          schemaURI?: string
           originalValue?: never
           modifiedValue?: never
           onOriginalValueChange?: never
@@ -93,23 +89,29 @@ export type HoverTexts = {
     typeInfo: string
 }
 
+export type FindReplaceQuery = Partial<
+    Pick<SearchQuery, 'search' | 'wholeWord' | 'regexp' | 'replace' | 'caseSensitive'>
+>
+
+export interface FindReplaceProps {
+    view: EditorView
+    defaultQuery: SearchQuery
+}
+
 // REDUCER TYPES
-export type CodeEditorActionTypes = 'setDiff' | 'setTheme' | 'setCode' | 'setLhsCode'
+export type CodeEditorActionTypes = 'setDiff' | 'setCode' | 'setLhsCode'
 
 export interface CodeEditorAction {
     type: CodeEditorActionTypes
     value: any
 }
 
-export interface CodeEditorInitialValueType
-    extends Pick<CodeEditorProps, 'theme' | 'value' | 'noParsing' | 'tabSize' | 'mode'> {
+export interface CodeEditorInitialValueType extends Pick<CodeEditorProps, 'value' | 'noParsing' | 'tabSize' | 'mode'> {
     lhsValue: string
-    appTheme: AppThemeType
     diffView: boolean
 }
 
 export interface CodeEditorState extends Pick<CodeEditorProps, 'noParsing'> {
-    theme: CodeEditorThemesKeys
     code: string
     lhsCode: string
     diffMode: boolean
