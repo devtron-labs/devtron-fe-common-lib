@@ -120,5 +120,4 @@ export interface CodeEditorState extends Pick<CodeEditorProps, 'noParsing'> {
 export interface CodeEditorContextProps extends Pick<CodeEditorProps, 'readOnly' | 'height'> {
     state: CodeEditorState
     dispatch: Dispatch<CodeEditorAction>
-    error: boolean
 }

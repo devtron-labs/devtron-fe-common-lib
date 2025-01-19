@@ -35,12 +35,6 @@ export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEdit
     )
 }
 
-export const ValidationError = () => {
-    const { error } = useCodeEditorContext()
-
-    return error ? <div className="form__error">{error}</div> : null
-}
-
 export const Warning = ({ className, text, children }: CodeEditorStatusBarProps) => (
     <div className={`code-editor__warning ${className || ''}`}>
         <ICWarningY5 className="code-editor__status-info-icon" />

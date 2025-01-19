@@ -12,7 +12,7 @@ const CodeEditorWrapperContext = createContext({ isCodeMirror: false })
 const Validation = (props: any) => {
     const { isCodeMirror } = useContext(CodeEditorWrapperContext)
 
-    return isCodeMirror ? <CodeMirror.ValidationError {...props} /> : <CodeEditor.ValidationError {...props} />
+    return isCodeMirror ? null : <CodeEditor.ValidationError {...props} />
 }
 const Clipboard = (props: any) => {
     const { isCodeMirror } = useContext(CodeEditorWrapperContext)

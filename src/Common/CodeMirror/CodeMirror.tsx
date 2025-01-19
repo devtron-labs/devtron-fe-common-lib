@@ -41,11 +41,11 @@ import {
     handleRefresh,
     stateExtensions,
 } from 'codemirror-json-schema'
-import { yamlSchemaHover, yamlSchemaLinter, yamlCompletion } from 'codemirror-json-schema/yaml'
+import { yamlSchemaHover, yamlCompletion, yamlSchemaLinter } from 'codemirror-json-schema/yaml'
 
 import { useTheme } from '@Shared/Providers'
 import { getUniqueId } from '@Shared/Helpers'
-import { cleanKubeManifest, noop, useEffectAfterMount, useJsonYaml } from '@Common/Helper'
+import { cleanKubeManifest, noop, useEffectAfterMount } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
 import { Progressing } from '@Common/Progressing'
 
@@ -53,9 +53,10 @@ import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { getFoldGutterElement, getHoverElement } from './utils'
 import { CodeEditorContext } from './CodeEditor.context'
-import { Clipboard, ErrorBar, Header, Information, ValidationError, Warning } from './CodeEditor.components'
+import { Clipboard, ErrorBar, Header, Information, Warning } from './CodeEditor.components'
 import { CodeEditorFindReplace } from './CodeEditorFindReplace'
 import { codeEditorTheme } from './CodeEditor.theme'
+import { yamlParseErrorLint } from './CodeEditor.extensions'
 
 import './codeEditor.scss'
 
@@ -109,11 +110,8 @@ export const CodeEditor = ({
         }),
     )
 
-    // ERROR
-    const [, , , error] = useJsonYaml(state.code, tabSize, mode, !state.noParsing)
-
     // CONTEXT VALUE
-    const contextValue = useMemo<CodeEditorContextProps>(() => ({ dispatch, state, error, height }), [state, error])
+    const contextValue = useMemo<CodeEditorContextProps>(() => ({ dispatch, state, height }), [state])
 
     // USE-EFFECTS
     useEffect(() => {
@@ -214,11 +212,9 @@ export const CodeEditor = ({
                 ]
             case MODES.YAML:
                 return [
-                    // TODO: replace this
+                    yamlParseErrorLint(),
                     linter(yamlSchemaLinter(), {
                         needsRefresh: handleRefresh,
-                        markerFilter: (diagnostics) =>
-                            diagnostics.map((diagnostic) => ({ ...diagnostic, severity: 'warning' })),
                     }),
                     yamlLanguage.data.of({
                         autocomplete: yamlCompletion(),
@@ -323,7 +319,6 @@ export const CodeEditor = ({
     )
 }
 
-CodeEditor.ValidationError = ValidationError
 CodeEditor.Clipboard = Clipboard
 CodeEditor.Header = Header
 CodeEditor.Warning = Warning

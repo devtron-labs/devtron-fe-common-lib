@@ -1,4 +1,5 @@
 import { renderToString } from 'react-dom/server'
+import DOMPurify from 'dompurify'
 
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 
@@ -23,8 +24,14 @@ export const getHoverElement = (schemaURI: CodeEditorProps['schemaURI']) => (dat
     const node = (
         <div className="tippy-box default-tt flexbox-col px-10 py-6 br-4 lh-18">
             <p className="m-0">{data.message}</p>
-            <p className="m-0">{data.typeInfo}</p>
-            <a className="m-0" href={schemaURI} target="_blank" rel="noreferrer">
+            <p
+                className="m-0"
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(data.typeInfo.replace(/`([^`]+)`/g, '<code>$1</code>')),
+                }}
+            />
+            <a className="m-0 dc__w-fit-content" href={schemaURI} target="_blank" rel="noreferrer">
                 Source
             </a>
         </div>
