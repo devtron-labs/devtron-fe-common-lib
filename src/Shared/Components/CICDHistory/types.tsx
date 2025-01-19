@@ -394,16 +394,11 @@ export interface VirtualHistoryArtifactProps {
     }
 }
 
-export interface CIListItemType
-    extends Pick<History, 'promotionApprovalMetadata'>,
-        Required<Pick<TargetPlatformBadgeListProps, 'targetPlatforms'>> {
-    type: 'report' | 'artifact' | 'deployed-artifact'
+export type CIListItemType = Pick<History, 'promotionApprovalMetadata'> & {
     userApprovalMetadata?: UserApprovalMetadataType
     triggeredBy?: string
     children: any
-    ciPipelineId?: number
-    artifactId?: number
-    imageComment?: ImageComment
+
     imageReleaseTags?: ReleaseTag[]
     appReleaseTagNames?: string[]
     tagsEditable?: boolean
@@ -413,7 +408,34 @@ export interface CIListItemType
     isSuperAdmin?: boolean
     selectedEnvironmentName?: string
     renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
-}
+} & (
+        | {
+              type: 'artifact' | 'deployed-artifact'
+              targetPlatforms: TargetPlatformBadgeListProps['targetPlatforms']
+
+              ciPipelineId: number
+              artifactId: number
+              imageComment: ImageComment
+              imageReleaseTags: ReleaseTag[]
+              appReleaseTagNames: string[]
+              tagsEditable: boolean
+              hideImageTaggingHardDelete: boolean
+              isSuperAdmin: boolean
+          }
+        | {
+              type: 'report'
+              targetPlatforms?: never
+
+              ciPipelineId?: never
+              artifactId?: never
+              imageComment?: never
+              imageReleaseTags?: never
+              appReleaseTagNames?: never
+              tagsEditable?: never
+              hideImageTaggingHardDelete?: never
+              isSuperAdmin?: never
+          }
+    )
 
 export interface TriggerOutputProps extends RenderRunSourceType, Pick<TriggerDetailsType, 'renderTargetConfigInfo'> {
     fullScreenView: boolean
@@ -462,7 +484,7 @@ export interface HistoryLogsProps
             | 'appName'
             | 'triggerHistory'
         >,
-        Pick<CIListItemType, 'targetPlatforms'> {
+        Pick<TargetPlatformBadgeListProps, 'targetPlatforms'> {
     triggerDetails: History
     loading: boolean
     userApprovalMetadata: UserApprovalMetadataType
@@ -622,27 +644,49 @@ export interface ScrollerType {
     style: CSSProperties
 }
 
-export interface GitChangesType
-    extends Pick<History, 'promotionApprovalMetadata'>,
-        Pick<CIListItemType, 'targetPlatforms' | 'selectedEnvironmentName'> {
+export type GitChangesType = {
     gitTriggers: Map<number, GitTriggers>
     ciMaterials: CiMaterial[]
-    artifact?: string
-    userApprovalMetadata?: UserApprovalMetadataType
-    triggeredByEmail?: string
-    imageComment?: ImageComment
-    imageReleaseTags?: ReleaseTag[]
-    artifactId?: number
-    ciPipelineId?: number
-    appReleaseTagNames?: string[]
-    tagsEditable?: boolean
-    hideImageTaggingHardDelete?: boolean
-    appliedFilters?: FilterConditionsListType[]
-    appliedFiltersTimestamp?: string
-    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
-}
+} & (
+    | {
+          artifact?: never
+          promotionApprovalMetadata?: never
+          targetPlatforms?: never
+          selectedEnvironmentName?: never
+          userApprovalMetadata?: never
+          triggeredByEmail?: never
+          imageComment?: never
+          imageReleaseTags?: never
+          artifactId?: never
+          ciPipelineId?: never
+          appReleaseTagNames?: never
+          tagsEditable?: never
+          hideImageTaggingHardDelete?: never
+          appliedFilters?: never
+          appliedFiltersTimestamp?: never
+          renderCIListHeader?: never
+      }
+    | {
+          artifact: string
+          promotionApprovalMetadata: History['promotionApprovalMetadata']
+          targetPlatforms: TargetPlatformBadgeListProps['targetPlatforms']
+          selectedEnvironmentName: CIListItemType['selectedEnvironmentName']
+          userApprovalMetadata?: UserApprovalMetadataType
+          triggeredByEmail?: string
+          imageComment?: ImageComment
+          imageReleaseTags?: ReleaseTag[]
+          artifactId?: number
+          ciPipelineId?: number
+          appReleaseTagNames?: string[]
+          tagsEditable?: boolean
+          hideImageTaggingHardDelete?: boolean
+          appliedFilters?: FilterConditionsListType[]
+          appliedFiltersTimestamp?: string
+          renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+      }
+)
 
-export interface ArtifactType extends Pick<CIListItemType, 'targetPlatforms'> {
+export interface ArtifactType extends Pick<TargetPlatformBadgeListProps, 'targetPlatforms'> {
     status: string
     artifact: string
     blobStorageEnabled: boolean

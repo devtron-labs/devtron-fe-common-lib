@@ -102,23 +102,25 @@ export const CIListItem = ({
                     {children}
                 </div>
 
-                {targetPlatforms?.length && (
-                    <div className="mt-8 flexbox-col dc__gap-8">
-                        <TargetPlatformBadgeList targetPlatforms={targetPlatforms} />
-                    </div>
-                )}
-
                 {type !== 'report' && (
-                    <ImageTagsContainer
-                        ciPipelineId={ciPipelineId}
-                        artifactId={artifactId}
-                        imageComment={imageComment}
-                        imageReleaseTags={imageReleaseTags}
-                        appReleaseTagNames={appReleaseTagNames}
-                        tagsEditable={tagsEditable}
-                        hideHardDelete={hideImageTaggingHardDelete}
-                        isSuperAdmin={isSuperAdmin}
-                    />
+                    <>
+                        {targetPlatforms?.length && (
+                            <div className="mt-8 flexbox-col dc__gap-8">
+                                <TargetPlatformBadgeList targetPlatforms={targetPlatforms} />
+                            </div>
+                        )}
+
+                        <ImageTagsContainer
+                            ciPipelineId={ciPipelineId}
+                            artifactId={artifactId}
+                            imageComment={imageComment}
+                            imageReleaseTags={imageReleaseTags}
+                            appReleaseTagNames={appReleaseTagNames}
+                            tagsEditable={tagsEditable}
+                            hideHardDelete={hideImageTaggingHardDelete}
+                            isSuperAdmin={isSuperAdmin}
+                        />
+                    </>
                 )}
             </div>
         </>
@@ -233,14 +235,7 @@ const Artifacts = ({
                     </CIListItem>
                 )}
                 {blobStorageEnabled && downloadArtifactUrl && isArtifactUploaded && (
-                    <CIListItem
-                        type="report"
-                        hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                        isSuperAdmin={isSuperAdmin}
-                        renderCIListHeader={renderCIListHeader}
-                        // FIXME: Remove
-                        targetPlatforms={[]}
-                    >
+                    <CIListItem type="report" renderCIListHeader={renderCIListHeader}>
                         <div className="flex column left">
                             <div className="cn-9 fs-14">Reports.zip</div>
                             <button
