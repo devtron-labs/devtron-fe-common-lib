@@ -80,16 +80,16 @@ export type TableSortStateType = {
     order: SortOrderEnum
 }
 
-export interface InfoCardPropsType {
-    entities: SegmentedBarChartProps['entities']
-    lastScanTimeString?: string
-    scanToolId?: number
-}
-
 export interface StatusType {
     status: 'Completed' | 'Running' | 'Failed' | 'Progressing'
     StartedOn: string
-    scanToolName: 'TRIVY' | 'CLAIR'
+    scanToolName: string
+    scanToolUrl: string
+}
+
+export interface InfoCardPropsType extends Pick<StatusType, 'scanToolName' | 'scanToolUrl'> {
+    entities: SegmentedBarChartProps['entities']
+    lastScanTimeString?: string
 }
 
 export type DetailViewDataType = {
