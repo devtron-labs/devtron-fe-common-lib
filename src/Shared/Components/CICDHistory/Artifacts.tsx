@@ -31,7 +31,7 @@ import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help.sv
 import { ReactComponent as Down } from '../../../Assets/Icon/ic-arrow-forward.svg'
 import docker from '../../../Assets/Icon/ic-docker.svg'
 import folder from '../../../Assets/Icon/ic-folder.svg'
-import noartifact from '../../../Assets/Img/no-artifact@2x.png'
+import noartifact from '../../../Assets/Img/no-artifact.webp'
 import { ArtifactType, CIListItemType } from './types'
 import { TERMINAL_STATUS_MAP } from './constants'
 import { EMPTY_STATE_STATUS } from '../../constants'
