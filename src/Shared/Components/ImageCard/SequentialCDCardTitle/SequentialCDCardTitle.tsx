@@ -117,7 +117,7 @@ const SequentialCDCardTitle = ({
     }
 
     return (
-        <div className={`bg__primary pb-8 br-4 flex left ${addFlexGap ? 'dc__gap-8' : ''}`}>
+        <div className={`bg__primary pb-8 br-4 flex left flex-wrap ${addFlexGap ? 'dc__gap-8' : ''}`}>
             {renderContent()}
 
             {!!targetPlatforms?.length && (
