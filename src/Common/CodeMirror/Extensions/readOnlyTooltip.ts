@@ -36,7 +36,6 @@ const createTooltip = (view: EditorView): Tooltip => {
     return {
         pos: cursorPos,
         above: true,
-        strictSide: false,
         create: () => ({ dom: getReadOnlyElement() }),
     }
 }

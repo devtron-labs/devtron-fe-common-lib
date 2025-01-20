@@ -243,17 +243,17 @@ export const CodeEditor = ({
         search({
             createPanel: codeEditorFindReplace,
         }),
-        readOnlyTooltip,
     ]
 
     const extensions: Extension[] = [
         ...baseExtensions,
         ...(!state.diffMode ? [lintGutter(), ...getValidationSchema()] : []),
+        readOnlyTooltip,
     ]
 
-    const originalViewExtensions: Extension[] = [...baseExtensions]
+    const originalViewExtensions: Extension[] = [...baseExtensions, readOnlyTooltip]
 
-    const modifiedViewExtensions: Extension[] = [...baseExtensions]
+    const modifiedViewExtensions: Extension[] = [...baseExtensions, readOnlyTooltip]
 
     const renderCodeEditor = () => {
         if (loading) {

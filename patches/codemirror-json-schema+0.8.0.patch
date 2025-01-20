@@ -1,5 +1,18 @@
+diff --git a/node_modules/codemirror-json-schema/cjs/features/hover.js b/node_modules/codemirror-json-schema/cjs/features/hover.js
+index 1fd6249..5943497 100644
+--- a/node_modules/codemirror-json-schema/cjs/features/hover.js
++++ b/node_modules/codemirror-json-schema/cjs/features/hover.js
+@@ -166,7 +166,7 @@ class JSONHover {
+             return {
+                 pos: start,
+                 end,
+-                arrow: true,
++                arrow: false,
+                 // to mimic similar modes for other editors
+                 // otherwise, it gets into a z-index battle with completion/etc
+                 above: true,
 diff --git a/node_modules/codemirror-json-schema/cjs/features/validation.js b/node_modules/codemirror-json-schema/cjs/features/validation.js
-index b7b1073..683f101 100644
+index b7b1073..0365f3e 100644
 --- a/node_modules/codemirror-json-schema/cjs/features/validation.js
 +++ b/node_modules/codemirror-json-schema/cjs/features/validation.js
 @@ -61,9 +61,9 @@ class JSONValidation {
@@ -14,15 +27,6 @@ index b7b1073..683f101 100644
              }
              const message = error.message
                  // don't mention root object
-@@ -115,7 +115,7 @@ class JSONValidation {
-                     from: 0,
-                     to: 0,
-                     message: errorString,
--                    severity: "error",
-+                    severity: "warning",
-                     source: this.schemaTitle,
-                     renderMessage: () => {
-                         const dom = (0, dom_1.el)("div", {});
 diff --git a/node_modules/codemirror-json-schema/dist/features/completion.js-e b/node_modules/codemirror-json-schema/dist/features/completion.js-e
 new file mode 100644
 index 0000000..f10aafb
@@ -927,9 +931,22 @@ index 0000000..f10aafb
 +function extendJsonPointer(pointer, key) {
 +    return pointer === undefined ? `/${key}` : `${pointer}/${key}`;
 +}
+diff --git a/node_modules/codemirror-json-schema/dist/features/hover.js b/node_modules/codemirror-json-schema/dist/features/hover.js
+index 7634362..72338ff 100644
+--- a/node_modules/codemirror-json-schema/dist/features/hover.js
++++ b/node_modules/codemirror-json-schema/dist/features/hover.js
+@@ -162,7 +162,7 @@ export class JSONHover {
+             return {
+                 pos: start,
+                 end,
+-                arrow: true,
++                arrow: false,
+                 // to mimic similar modes for other editors
+                 // otherwise, it gets into a z-index battle with completion/etc
+                 above: true,
 diff --git a/node_modules/codemirror-json-schema/dist/features/hover.js-e b/node_modules/codemirror-json-schema/dist/features/hover.js-e
 new file mode 100644
-index 0000000..7634362
+index 0000000..72338ff
 --- /dev/null
 +++ b/node_modules/codemirror-json-schema/dist/features/hover.js-e
 @@ -0,0 +1,181 @@
@@ -1097,7 +1114,7 @@ index 0000000..7634362
 +            return {
 +                pos: start,
 +                end,
-+                arrow: true,
++                arrow: false,
 +                // to mimic similar modes for other editors
 +                // otherwise, it gets into a z-index battle with completion/etc
 +                above: true,
@@ -1145,7 +1162,7 @@ index 0000000..431fe3c
 +    schemaStateField.init(() => schema),
 +];
 diff --git a/node_modules/codemirror-json-schema/dist/features/validation.js b/node_modules/codemirror-json-schema/dist/features/validation.js
-index 2afa0a5..88b8764 100644
+index 2afa0a5..52ea6cd 100644
 --- a/node_modules/codemirror-json-schema/dist/features/validation.js
 +++ b/node_modules/codemirror-json-schema/dist/features/validation.js
 @@ -56,9 +56,9 @@ export class JSONValidation {
@@ -1160,18 +1177,9 @@ index 2afa0a5..88b8764 100644
              }
              const message = error.message
                  // don't mention root object
-@@ -110,7 +110,7 @@ export class JSONValidation {
-                     from: 0,
-                     to: 0,
-                     message: errorString,
--                    severity: "error",
-+                    severity: "warning",
-                     source: this.schemaTitle,
-                     renderMessage: () => {
-                         const dom = el("div", {});
 diff --git a/node_modules/codemirror-json-schema/dist/features/validation.js-e b/node_modules/codemirror-json-schema/dist/features/validation.js-e
 new file mode 100644
-index 0000000..88b8764
+index 0000000..52ea6cd
 --- /dev/null
 +++ b/node_modules/codemirror-json-schema/dist/features/validation.js-e
 @@ -0,0 +1,156 @@
@@ -1287,7 +1295,7 @@ index 0000000..88b8764
 +                    from: 0,
 +                    to: 0,
 +                    message: errorString,
-+                    severity: "warning",
++                    severity: "error",
 +                    source: this.schemaTitle,
 +                    renderMessage: () => {
 +                        const dom = el("div", {});

@@ -43,9 +43,12 @@ export const getHoverElement = (schemaURI: CodeEditorProps['schemaURI']) => (dat
 
 export const getReadOnlyElement = () => {
     const dom = document.createElement('div')
-    const node = <p className="m-0 fs-12 lh-18">Cannot edit in read-only editor</p>
+    const node = (
+        <div className="py-6 px-10 br-4">
+            <p className="m-0 fs-12 lh-18">Cannot edit in read-only editor</p>
+        </div>
+    )
 
-    dom.className = 'py-6 px-10 br-4'
     dom.innerHTML = renderToString(node)
 
     return dom
