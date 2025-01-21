@@ -14,116 +14,112 @@
  * limitations under the License.
  */
 
-import { AppThemeType } from '@Shared/Providers'
-import { MODES } from '../Constants'
+import { Dispatch, ReactNode } from 'react'
+import { JSONSchema7 } from 'json-schema'
+import { EditorView, ReactCodeMirrorProps } from '@uiw/react-codemirror'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { SearchQuery } from '@codemirror/search'
 
-export interface InformationBarProps {
+import { MODES } from '@Common/Constants'
+import { Never } from '@Shared/types'
+
+// COMPONENT PROPS
+export interface CodeEditorStatusBarProps {
     text: string
     className?: string
-    children?: React.ReactNode
+    children?: ReactNode
 }
 
-export enum CodeEditorThemesKeys {
-    vsDarkDT = 'vs-dark--dt',
-    vs = 'vs',
-    networkStatusInterface = 'network-status-interface',
+export interface CodeEditorHeaderProps {
+    className?: string
+    hideDefaultSplitHeader?: boolean
+    children?: ReactNode
 }
 
-interface CodeEditorBaseInterface {
-    value?: string
-    lineDecorationsWidth?: number
-    responseType?: string
-    onChange?: (value: string, defaultValue: string) => void
-    onBlur?: () => void
-    onFocus?: () => void
-    children?: any
-    defaultValue?: string
-    mode?: MODES | string
+// TODO: (rohit) add documentation
+type CodeEditorPropsBasedOnDiffView<DiffView extends boolean> = DiffView extends true
+    ? {
+          onOriginalValueChange?: (originalValue: string) => void
+          onModifiedValueChange?: (modifiedValue: string) => void
+          originalValue?: ReactCodeMirrorProps['value']
+          modifiedValue?: ReactCodeMirrorProps['value']
+          isOriginalModifiable?: boolean
+          value?: never
+          onChange?: never
+          shebang?: never
+          validatorSchema?: never
+          schemaURI?: never
+      } & Never<Pick<ReactCodeMirrorProps, 'onBlur' | 'onFocus' | 'autoFocus'>>
+    : {
+          value?: ReactCodeMirrorProps['value']
+          onChange?: (value: string) => void
+          shebang?: string | JSX.Element
+          validatorSchema?: JSONSchema7
+          schemaURI?: string
+          originalValue?: never
+          modifiedValue?: never
+          onOriginalValueChange?: never
+          onModifiedValueChange?: never
+          isOriginalModifiable?: never
+      } & Pick<ReactCodeMirrorProps, 'onBlur' | 'onFocus' | 'autoFocus'>
+
+export type CodeEditorProps<DiffView extends boolean = false> = {
+    /**
+     * @default 450
+     */
+    height?: 'auto' | '100%' | 'fitToParent' | number
+    children?: ReactNode
+    mode?: MODES
     tabSize?: number
     readOnly?: boolean
+    placeholder?: string
     noParsing?: boolean
-    inline?: boolean
-    shebang?: string | JSX.Element
-    diffView?: boolean
     loading?: boolean
     customLoader?: JSX.Element
-    theme?: CodeEditorThemesKeys
-    original?: string
-    focus?: boolean
-    validatorSchema?: any
-    isKubernetes?: boolean
     cleanData?: boolean
-    schemaURI?: string
     /**
-     * If true, disable the in-built search of monaco editor
+     * If true, disables the in-built search
      * @default false
      */
     disableSearch?: boolean
+    diffView?: DiffView
+} & CodeEditorPropsBasedOnDiffView<DiffView>
+
+// CODE-MIRROR TYPES
+export type HoverTexts = {
+    message: string
+    typeInfo: string
 }
 
-export type CodeEditorInterface = CodeEditorBaseInterface &
-    (
-        | {
-              adjustEditorHeightToContent?: boolean
-              height?: never
-          }
-        | {
-              adjustEditorHeightToContent?: never
-              height?: number | string
-          }
-    )
+export type FindReplaceQuery = Partial<
+    Pick<SearchQuery, 'search' | 'wholeWord' | 'regexp' | 'replace' | 'caseSensitive'>
+>
 
-export interface CodeEditorHeaderInterface {
-    children?: any
-    className?: string
-    hideDefaultSplitHeader?: boolean
-}
-export interface CodeEditorComposition {
-    Header?: React.FC<any>
-    LanguageChanger?: React.FC<any>
-    ThemeChanger?: React.FC<any>
-    ValidationError?: React.FC<any>
-    Clipboard?: React.FC<any>
-    Warning?: React.FC<InformationBarProps>
-    ErrorBar?: React.FC<InformationBarProps>
-    Information?: React.FC<InformationBarProps>
-}
-export interface CodeEditorHeaderComposition {
-    LanguageChanger?: React.FC<any>
-    ThemeChanger?: React.FC<any>
-    ValidationError?: React.FC<any>
-    Clipboard?: React.FC<any>
+export interface FindReplaceProps {
+    view: EditorView
+    defaultQuery: SearchQuery
 }
 
-export type ActionTypes = 'changeLanguage' | 'setDiff' | 'setTheme' | 'setCode' | 'setDefaultCode' | 'setHeight'
+// REDUCER TYPES
+export type CodeEditorActionTypes = 'setDiff' | 'setCode' | 'setLhsCode'
 
-export interface Action {
-    type: ActionTypes
+export interface CodeEditorAction {
+    type: CodeEditorActionTypes
     value: any
 }
 
-export interface CodeEditorInitialValueType extends Pick<CodeEditorBaseInterface, 'theme'> {
-    mode: string
+export interface CodeEditorInitialValueType extends Pick<CodeEditorProps, 'value' | 'noParsing' | 'tabSize' | 'mode'> {
+    lhsValue: string
     diffView: boolean
-    value: string
-    defaultValue: string
-    noParsing?: boolean
-    tabSize: number
-    appTheme: AppThemeType
 }
 
-export interface CodeEditorState {
-    mode: MODES
-    diffMode: boolean
-    theme: CodeEditorThemesKeys
+export interface CodeEditorState extends Pick<CodeEditorProps, 'noParsing'> {
     code: string
-    defaultCode: string
-    noParsing: boolean
+    lhsCode: string
+    diffMode: boolean
 }
 
-export enum CodeEditorActionTypes {
-    reInit = 'reInit',
-    submitLoading = 'submitLoading',
-    overrideLoading = 'overrideLoading',
-    success = 'success',
+export interface CodeEditorContextProps extends Pick<CodeEditorProps, 'readOnly' | 'height'> {
+    state: CodeEditorState
+    dispatch: Dispatch<CodeEditorAction>
 }

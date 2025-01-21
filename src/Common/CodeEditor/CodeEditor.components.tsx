@@ -1,6 +1,7 @@
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { ReactComponent as Info } from '@Icons/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
+import { ReactComponent as ICCompare } from '@Icons/ic-compare.svg'
 import { ClipboardButton } from '@Common/ClipboardButton'
 
 import { useCodeEditorContext } from './CodeEditor.context'
@@ -18,7 +19,7 @@ const SplitPane = () => {
 
     return (
         <div className="code-editor__split-pane flex pointer" onClick={handleToggle}>
-            <div className="diff-icon" />
+            <ICCompare className="icon-dim-20 mr-4" />
             {state.diffMode ? 'Hide comparison' : 'Compare with default'}
         </div>
     )

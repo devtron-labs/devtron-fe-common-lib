@@ -19,10 +19,9 @@ import { useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { DiffViewer } from '@Shared/Components/DiffViewer'
 import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
-import { MODES, Toggle, YAMLStringify } from '../../../../Common'
+import { CodeEditor, MODES, Toggle, YAMLStringify } from '../../../../Common'
 import { DeploymentHistoryParamsType } from './types'
 import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../types'
-import CodeEditor from '../../../../Common/CodeEditor/CodeEditor'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
 import { ReactComponent as Info } from '../../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ViewVariablesIcon } from '../../../../Assets/Icon/ic-view-variable-toggle.svg'
@@ -79,8 +78,7 @@ const DeploymentHistoryDiffView = ({
             <CodeEditor
                 key={codeEditorKey}
                 value={editorValuesRHS}
-                defaultValue={editorValuesLHS}
-                adjustEditorHeightToContent
+                height="auto"
                 disableSearch
                 readOnly
                 noParsing

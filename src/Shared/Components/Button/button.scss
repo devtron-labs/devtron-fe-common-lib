@@ -1,9 +1,9 @@
 @mixin svg-styles($color) {
-    svg *[stroke^="#"] {
+    svg *[stroke^="#"]:not([data-style-override="false"]) {
         stroke: $color;
     }
 
-    svg *[fill^="#"] {
+    svg *[fill^="#"]:not([data-style-override="false"]) {
         fill: $color;
     }
 }

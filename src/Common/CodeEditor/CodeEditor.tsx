@@ -14,511 +14,314 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import MonacoEditor, { ChangeHandler, DiffEditorDidMount, EditorDidMount, MonacoDiffEditor } from 'react-monaco-editor'
-import ReactGA from 'react-ga4'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import { configureMonacoYaml } from 'monaco-yaml'
-
-import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
-import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
-import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-error-exclamation.svg'
-import { ReactComponent as ICCompare } from '@Icons/ic-compare.svg'
-import './codeEditor.scss'
-import 'monaco-editor'
-
-import { cleanKubeManifest, useEffectAfterMount, useJsonYaml } from '../Helper'
-import { useWindowSize } from '../Hooks'
-import Select from '../Select/Select'
-import RadioGroup from '../RadioGroup/RadioGroup'
-import { ClipboardButton } from '../ClipboardButton/ClipboardButton'
-import { Progressing } from '../Progressing'
+import { useEffect, useMemo, useReducer, useState } from 'react'
+import CodeMirror, {
+    Extension,
+    hoverTooltip,
+    ReactCodeMirrorProps,
+    basicSetup,
+    BasicSetupOptions,
+    Compartment,
+} from '@uiw/react-codemirror'
+import CodeMirrorMerge from 'react-codemirror-merge'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { StreamLanguage, foldGutter } from '@codemirror/language'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { search } from '@codemirror/search'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { linter, lintGutter } from '@codemirror/lint'
+import { json as langJson, jsonLanguage } from '@codemirror/lang-json'
+import { yaml as langYaml, yamlLanguage } from '@codemirror/lang-yaml'
+import { shell } from '@codemirror/legacy-modes/mode/shell'
+import { dockerFile } from '@codemirror/legacy-modes/mode/dockerfile'
 import {
-    CodeEditorComposition,
-    CodeEditorHeaderComposition,
-    CodeEditorHeaderInterface,
-    CodeEditorInterface,
-    CodeEditorThemesKeys,
-    InformationBarProps,
-} from './types'
-import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
-import { DEFAULT_JSON_SCHEMA_URI, MODES } from '../Constants'
+    jsonSchemaHover,
+    jsonSchemaLinter,
+    jsonCompletion,
+    handleRefresh,
+    stateExtensions,
+} from 'codemirror-json-schema'
+import { yamlSchemaHover, yamlCompletion, yamlSchemaLinter } from 'codemirror-json-schema/yaml'
+
 import { useTheme } from '@Shared/Providers'
-import { getCodeEditorThemeFromAppTheme } from './utils'
+import { getUniqueId } from '@Shared/Helpers'
+import { cleanKubeManifest, useEffectAfterMount } from '@Common/Helper'
+import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
+import { Progressing } from '@Common/Progressing'
 
-const CodeEditorContext = React.createContext(null)
+import { codeEditorFindReplace, readOnlyTooltip, yamlParseErrorLint } from './Extensions'
+import { CodeEditorContextProps, CodeEditorProps } from './types'
+import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
+import { getCodeEditorHeight, getFoldGutterElement, getHoverElement } from './utils'
+import { CodeEditorContext } from './CodeEditor.context'
+import { Clipboard, ErrorBar, Header, Information, Warning } from './CodeEditor.components'
+import { codeEditorTheme } from './CodeEditor.theme'
 
-function useCodeEditorContext() {
-    const context = React.useContext(CodeEditorContext)
-    if (!context) {
-        throw new Error(`cannot be rendered outside the component`)
-    }
-    return context
-}
+import './codeEditor.scss'
 
-const INITIAL_HEIGHT_WHEN_DYNAMIC_HEIGHT = 100
-
-const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.memo(
-    ({
-        value,
-        mode = MODES.JSON,
-        noParsing = false,
-        defaultValue = '',
-        children,
-        tabSize = 2,
-        lineDecorationsWidth = 0,
-        height = 450,
-        inline = false,
-        shebang = '',
-        onChange,
-        readOnly,
-        diffView,
-        theme,
-        loading,
-        customLoader,
-        focus,
-        validatorSchema,
-        schemaURI = DEFAULT_JSON_SCHEMA_URI,
-        isKubernetes = true,
-        cleanData = false,
-        onBlur,
-        onFocus,
-        adjustEditorHeightToContent = false,
-        disableSearch = false,
-    }) => {
-        const { appTheme } = useTheme()
-
-        if (cleanData) {
-            value = cleanKubeManifest(value)
-            defaultValue = cleanKubeManifest(defaultValue)
-        }
-
-        const editorRef = useRef(null)
-        const monacoRef = useRef(null)
-        const { width, height: windowHeight } = useWindowSize()
-        const memoisedReducer = React.useCallback(CodeEditorReducer, [])
-        const [state, dispatch] = useReducer(
-            memoisedReducer,
-            initialState({
-                mode,
-                theme,
-                value,
-                defaultValue,
-                diffView,
-                noParsing,
-                tabSize,
-                appTheme,
-            }),
-        )
-        const [, json, yamlCode, error] = useJsonYaml(state.code, tabSize, state.mode, !state.noParsing)
-        const [, originalJson, originalYaml] = useJsonYaml(state.defaultCode, tabSize, state.mode, !state.noParsing)
-        const [contentHeight, setContentHeight] = useState(
-            adjustEditorHeightToContent ? INITIAL_HEIGHT_WHEN_DYNAMIC_HEIGHT : height,
-        )
-        // TODO: upgrade to 0.56.2 to remove this
-        const onChangeRef = useRef(onChange)
-        onChangeRef.current = onChange
-        monaco.editor.defineTheme(CodeEditorThemesKeys.vsDarkDT, {
-            base: 'vs-dark',
-            inherit: true,
-            rules: [
-                // @ts-ignore
-                { background: '#0B0F22' },
-            ],
-            colors: {
-                'editor.background': '#0B0F22',
-            },
-        })
-
-        monaco.editor.defineTheme(CodeEditorThemesKeys.networkStatusInterface, {
-            base: 'vs-dark',
-            inherit: true,
-            rules: [
-                // @ts-ignore
-                { background: '#1A1A1A' },
-            ],
-            colors: {
-                'editor.background': '#1A1A1A',
-            },
-        })
-
-        useEffect(() => {
-            dispatch({ type: 'setTheme', value: getCodeEditorThemeFromAppTheme(theme, appTheme) })
-        }, [appTheme])
-
-        useEffect(() => {
-            const rule = !disableSearch
-                ? null
-                : monaco.editor.addKeybindingRule({
-                      command: null,
-                      keybinding: monaco.KeyCode.KeyF | monaco.KeyMod.CtrlCmd,
-                  })
-            return () => {
-                rule?.dispose()
-            }
-        }, [disableSearch])
-
-        const editorDidMount: EditorDidMount = (editor) => {
-            if (
-                mode === MODES.YAML &&
-                editor &&
-                typeof editor.getModel === 'function' &&
-                typeof editor.getModel().updateOptions === 'function'
-            ) {
-                editor.getModel().updateOptions({ tabSize: 2 })
-            }
-
-            if (editor) {
-                if (typeof editor.onDidFocusEditorWidget === 'function' && typeof onFocus === 'function') {
-                    editor.onDidFocusEditorWidget(onFocus)
-                }
-
-                if (typeof editor.onDidBlurEditorWidget === 'function' && typeof onBlur === 'function') {
-                    editor.onDidBlurEditorWidget(onBlur)
-                }
-            }
-
-            if (adjustEditorHeightToContent && editor) {
-                editor.onDidContentSizeChange(() => {
-                    setContentHeight(editor.getContentHeight())
-                })
-                setContentHeight(editor.getContentHeight())
-            }
-
-            editorRef.current = editor
-            monacoRef.current = monaco
-        }
-
-        const diffEditorDidMount: DiffEditorDidMount = (editor, monaco) => {
-            const originalEditor = editor.getOriginalEditor()
-            const modifiedEditor = editor.getModifiedEditor()
-
-            if (adjustEditorHeightToContent) {
-                originalEditor.onDidContentSizeChange(() => {
-                    setContentHeight(
-                        Math.max(
-                            typeof contentHeight === 'number' ? contentHeight : Number.MIN_SAFE_INTEGER,
-                            originalEditor.getContentHeight(),
-                        ),
-                    )
-                })
-
-                modifiedEditor.onDidContentSizeChange(() => {
-                    setContentHeight(
-                        Math.max(
-                            typeof contentHeight === 'number' ? contentHeight : Number.MIN_SAFE_INTEGER,
-                            modifiedEditor.getContentHeight(),
-                        ),
-                    )
-                })
-
-                setContentHeight(Math.max(originalEditor.getContentHeight(), modifiedEditor.getContentHeight()))
-            }
-
-            originalEditor.onDidChangeModelContent(() => {
-                codeEditorOnChange(modifiedEditor.getValue(), originalEditor.getValue())
-            })
-
-            editorRef.current = editor
-            monacoRef.current = monaco
-        }
-
-        const editorHeight = useMemo(() => {
-            if (!adjustEditorHeightToContent) {
-                return height
-            }
-            return contentHeight
-        }, [height, contentHeight, adjustEditorHeightToContent])
-
-        useEffect(() => {
-            if (!validatorSchema) {
-                return
-            }
-            const config = configureMonacoYaml(monaco, {
-                enableSchemaRequest: true,
-                isKubernetes,
-                schemas: [
-                    {
-                        uri: schemaURI,
-                        fileMatch: ['*'], // associate with our model
-                        schema: validatorSchema,
-                    },
-                ],
-            })
-            return () => {
-                config.dispose()
-            }
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [validatorSchema, schemaURI])
-        useEffect(() => {
-            if (!editorRef.current) {
-                return
-            }
-            editorRef.current.updateOptions({ readOnly })
-        }, [readOnly])
-
-        useEffect(() => {
-            if (!editorRef.current) {
-                return
-            }
-            editorRef.current.layout()
-        }, [width, windowHeight])
-
-        const setCode = (value: string, originalValue: string) => {
-            dispatch({ type: 'setCode', value })
-            dispatch({ type: 'setDefaultCode', value: originalValue })
-            onChangeRef.current?.(value, originalValue)
-        }
-
-        useEffectAfterMount(() => {
-            if (noParsing) {
-                setCode(value, defaultValue)
-
-                return
-            }
-
-            if (value === state.code) {
-                return
-            }
-
-            setCode(parseValueToCode(value, state.mode, tabSize), parseValueToCode(defaultValue, state.mode, tabSize))
-        }, [value, defaultValue, noParsing])
-
-        useEffect(() => {
-            dispatch({ type: 'setDiff', value: diffView })
-        }, [diffView])
-
-        useEffect(() => {
-            if (focus) {
-                editorRef.current.focus()
-            }
-        }, [focus])
-
-        const codeEditorOnChange = (newValue: string, newOriginalValue: string) => {
-            setCode(newValue, newOriginalValue)
-        }
-
-        const handleOnChange: ChangeHandler = (newValue) => {
-            codeEditorOnChange(newValue, editorRef.current?.getOriginalEditor?.().getValue?.() ?? '')
-        }
-
-        function handleLanguageChange(mode: 'json' | 'yaml') {
-            dispatch({ type: 'changeLanguage', value: mode })
-            setCode(mode === 'json' ? json : yamlCode, mode === 'json' ? originalJson : originalYaml)
-        }
-
-        const options: monaco.editor.IEditorConstructionOptions = {
-            selectOnLineNumbers: true,
-            roundedSelection: false,
-            readOnly,
-            lineDecorationsWidth,
-            automaticLayout: true,
-            scrollBeyondLastLine: false,
-            ...(adjustEditorHeightToContent
-                ? {
-                      overviewRulerLanes: adjustEditorHeightToContent ? 0 : 1,
-                  }
-                : {}),
-            minimap: {
-                enabled: false,
-            },
-            scrollbar: {
-                alwaysConsumeMouseWheel: false,
-                vertical: inline ? 'hidden' : 'auto',
-                ...(adjustEditorHeightToContent
-                    ? {
-                          vertical: 'hidden',
-                          verticalScrollbarSize: 0,
-                          verticalSliderSize: 0,
-                      }
-                    : {}),
-            },
-            lineNumbers(lineNumber) {
-                return `<span style="padding-right:6px">${lineNumber}</span>`
-            },
-        }
-
-        const diffViewOptions: monaco.editor.IDiffEditorConstructionOptions = {
-            ...options,
-            originalEditable: !readOnly,
-            useInlineViewWhenSpaceIsLimited: false,
-        }
-
-        return (
-            <CodeEditorContext.Provider
-                value={{ dispatch, state, handleLanguageChange, error, defaultValue, height: editorHeight }}
-            >
-                {children}
-                {loading ? (
-                    <CodeEditorPlaceholder customLoader={customLoader} />
-                ) : (
-                    <>
-                        {shebang && <div className="code-editor__shebang">{shebang}</div>}
-                        {state.diffMode ? (
-                            <MonacoDiffEditor
-                                original={state.defaultCode}
-                                value={state.code}
-                                language={state.mode}
-                                onChange={handleOnChange}
-                                options={diffViewOptions}
-                                theme={state.theme.toLowerCase().split(' ').join('-')}
-                                editorDidMount={diffEditorDidMount}
-                                height={editorHeight}
-                                width="100%"
-                            />
-                        ) : (
-                            <MonacoEditor
-                                language={state.mode}
-                                value={state.code}
-                                theme={state.theme.toLowerCase().split(' ').join('-')}
-                                options={options}
-                                onChange={handleOnChange}
-                                editorDidMount={editorDidMount}
-                                height={editorHeight}
-                                width="100%"
-                            />
-                        )}
-                    </>
-                )}
-            </CodeEditorContext.Provider>
-        )
-    },
-)
-
-const Header: React.FC<CodeEditorHeaderInterface> & CodeEditorHeaderComposition = ({
+const CodeEditor = <DiffView extends boolean = false>({
+    value: propValue,
+    originalValue,
+    modifiedValue,
+    isOriginalModifiable = false,
+    mode = MODES.JSON,
+    noParsing = false,
     children,
-    className,
-    hideDefaultSplitHeader,
-}) => {
-    const { defaultValue } = useCodeEditorContext()
-    return (
-        <div className={className || 'code-editor__header flex right'}>
-            {children}
-            {!hideDefaultSplitHeader && defaultValue && <SplitPane />}
-        </div>
-    )
-}
+    tabSize = 2,
+    height = 450,
+    shebang = '',
+    onChange,
+    onOriginalValueChange,
+    onModifiedValueChange,
+    readOnly,
+    placeholder,
+    diffView,
+    loading,
+    customLoader,
+    validatorSchema,
+    schemaURI = DEFAULT_JSON_SCHEMA_URI,
+    cleanData = false,
+    onBlur,
+    onFocus,
+    autoFocus,
+    disableSearch = false,
+}: CodeEditorProps<DiffView>) => {
+    // HOOKS
+    const { appTheme } = useTheme()
 
-const ThemeChanger = ({}) => {
-    const { readOnly, state, dispatch } = useCodeEditorContext()
-    function handleChangeTheme(e) {
-        dispatch({ type: 'setTheme', value: e.target.value })
+    // Cleaning KubeManifest
+    const _value = diffView ? modifiedValue : propValue
+    const value = cleanData ? cleanKubeManifest(_value) : _value
+    const lhsValue = cleanData ? cleanKubeManifest(originalValue) : originalValue
+
+    // STATES
+    const [codemirrorMergeKey, setCodemirrorMergeKey] = useState<string>()
+
+    // REDUCER
+    const [state, dispatch] = useReducer(
+        CodeEditorReducer,
+        initialState({
+            mode,
+            value,
+            lhsValue,
+            noParsing,
+            tabSize,
+            diffView,
+        }),
+    )
+
+    // CONTEXT VALUE
+    const contextValue = useMemo<CodeEditorContextProps>(() => ({ dispatch, state, height }), [state])
+
+    // USE-EFFECTS
+    useEffect(() => {
+        // Toggle `state.diffMode` based on `diffView`
+        dispatch({ type: 'setDiff', value: diffView })
+    }, [diffView])
+
+    // Re-mounting codemirror-merge is necessary because its extensions don't automatically update after being changed.
+    // Bug reference: https://github.com/uiwjs/react-codemirror/issues/681#issuecomment-2341521112
+    useEffect(
+        () => {
+            setCodemirrorMergeKey(getUniqueId())
+        },
+        // Include any props that modify codemirror-merge extensions directly, as a workaround for the unresolved bug.
+        [readOnly, tabSize, disableSearch],
+    )
+
+    // METHODS
+    const setCode = (codeValue: string) => {
+        dispatch({ type: 'setCode', value: codeValue })
+        if (state.diffMode) {
+            onModifiedValueChange?.(codeValue)
+        } else {
+            onChange?.(codeValue)
+        }
     }
 
-    const themes = ['vs', 'vs-dark']
-    return (
-        <Select onChange={handleChangeTheme} rootClassName="select-theme" value={state.theme} disabled={readOnly}>
-            <Select.Button>
-                <span className="dc__ellipsis-right">{state.theme}</span>
-            </Select.Button>
-            <Select.Search placeholder="select theme" />
-            {themes.map((theme) => (
-                <Select.Option name={theme} key={theme} value={theme}>
-                    <span className="dc__ellipsis-right">{theme}</span>
-                </Select.Option>
-            ))}
-        </Select>
-    )
-}
-
-const LanguageChanger = ({}) => {
-    const { readOnly, handleLanguageChange, state } = useCodeEditorContext()
-    if (state.noParsing) {
-        return null
+    const setLhsCode = (codeValue: string) => {
+        dispatch({ type: 'setLhsCode', value: codeValue })
+        onOriginalValueChange?.(codeValue)
     }
-    return (
-        <div className="code-editor__toggle flex left">
-            <RadioGroup
-                name="selectedTab"
-                disabled={readOnly}
-                initialTab={state.mode}
-                className="flex left"
-                onChange={(event) => {
-                    ReactGA.event({
-                        category: 'JSON-YAML Switch',
-                        action: `${event.target.value} view`,
-                    })
-                    handleLanguageChange(event.target.value)
-                }}
-            >
-                <RadioGroup.Radio value="json">JSON</RadioGroup.Radio>
-                <RadioGroup.Radio value="yaml">YAML</RadioGroup.Radio>
-            </RadioGroup>
-        </div>
-    )
-}
 
-const ValidationError = () => {
-    const { error } = useCodeEditorContext()
-    return error ? <div className="form__error">{error}</div> : null
-}
-
-const Warning: React.FC<InformationBarProps> = (props) => (
-    <div className={`code-editor__warning ${props.className || ''}`}>
-        <ICWarningY5 className="code-editor__information-info-icon" />
-        {props.text}
-        {props.children}
-    </div>
-)
-
-const ErrorBar: React.FC<InformationBarProps> = (props) => (
-    <div className={`code-editor__error ${props.className || ''}`}>
-        <ErrorIcon className="code-editor__information-info-icon" />
-        {props.text}
-        {props.children}
-    </div>
-)
-
-const Information: React.FC<InformationBarProps> = (props) => (
-    <div className={`code-editor__information ${props.className || ''}`}>
-        <Info className="code-editor__information-info-icon" />
-        {props.text}
-        {props.children}
-    </div>
-)
-
-const Clipboard = () => {
-    const { state } = useCodeEditorContext()
-    return <ClipboardButton content={state.code} iconSize={16} />
-}
-
-const SplitPane = ({}) => {
-    const { state, dispatch, readOnly } = useCodeEditorContext()
-    function handleToggle(e) {
-        if (readOnly) {
+    useEffectAfterMount(() => {
+        if (value === state.code) {
             return
         }
-        dispatch({ type: 'setDiff', value: !state.diffMode })
-    }
-    return (
-        <div className="code-editor__split-pane flex pointer" onClick={handleToggle}>
-            <ICCompare className="icon-dim-20 mr-4" />
-            {state.diffMode ? 'Hide comparison' : 'Compare with default'}
-        </div>
-    )
-}
-// TODO: CodeEditor should be composed of CodeEditorPlaceholder
-const CodeEditorPlaceholder = ({ className = '', style = {}, customLoader }): JSX.Element => {
-    const { height } = useCodeEditorContext()
 
-    if (customLoader) {
-        return customLoader
+        setCode(noParsing ? value : parseValueToCode(value, mode, tabSize))
+    }, [value, noParsing])
+
+    useEffectAfterMount(() => {
+        if (lhsValue === state.lhsCode) {
+            return
+        }
+
+        setLhsCode(noParsing ? lhsValue : parseValueToCode(lhsValue, mode, tabSize))
+    }, [lhsValue, noParsing])
+
+    // CODEMIRROR PROPS
+    const foldingCompartment = new Compartment()
+
+    const basicSetupOptions: BasicSetupOptions = {
+        searchKeymap: !disableSearch,
+        foldGutter: false,
+        drawSelection: false,
+        tabSize,
     }
 
-    return (
-        <div className={`code-editor code-editor--placeholder disabled ${className}`} style={{ ...style }}>
-            <div className="flex" style={{ height: height || '100%' }}>
-                <div className="flex">
-                    <Progressing pageLoader />
-                </div>
+    const handleOnChange: ReactCodeMirrorProps['onChange'] = (newValue) => {
+        setCode(newValue)
+    }
+
+    const handleLhsOnChange: ReactCodeMirrorProps['onChange'] = (newLhsValue) => {
+        setLhsCode(newLhsValue)
+    }
+
+    const getLanguageExtension = () => {
+        switch (mode) {
+            case MODES.JSON:
+                return langJson()
+            case MODES.YAML:
+                return langYaml()
+            case MODES.SHELL:
+                return StreamLanguage.define(shell)
+            case MODES.DOCKERFILE:
+                return StreamLanguage.define(dockerFile)
+            default:
+                return []
+        }
+    }
+
+    const getValidationSchema = (): Extension[] => {
+        switch (mode) {
+            case MODES.JSON:
+                return [
+                    linter(jsonSchemaLinter(), {
+                        needsRefresh: handleRefresh,
+                    }),
+                    jsonLanguage.data.of({
+                        autocomplete: jsonCompletion(),
+                    }),
+                    hoverTooltip(
+                        jsonSchemaHover({
+                            formatHover: getHoverElement(schemaURI),
+                        }),
+                    ),
+                    stateExtensions(validatorSchema),
+                ]
+            case MODES.YAML:
+                return [
+                    yamlParseErrorLint(),
+                    linter(yamlSchemaLinter(), {
+                        needsRefresh: handleRefresh,
+                    }),
+                    yamlLanguage.data.of({
+                        autocomplete: yamlCompletion(),
+                    }),
+                    hoverTooltip(
+                        yamlSchemaHover({
+                            formatHover: getHoverElement(schemaURI),
+                        }),
+                    ),
+                    stateExtensions(validatorSchema),
+                ]
+            default: {
+                return []
+            }
+        }
+    }
+
+    // EXTENSIONS
+    const foldConfig = foldGutter({
+        markerDOM: getFoldGutterElement,
+    })
+
+    const baseExtensions: Extension[] = [
+        basicSetup(basicSetupOptions),
+        getLanguageExtension(),
+        foldingCompartment.of(foldConfig),
+        search({
+            createPanel: codeEditorFindReplace,
+        }),
+    ]
+
+    const extensions: Extension[] = [
+        ...baseExtensions,
+        ...(!state.diffMode ? [lintGutter(), ...getValidationSchema()] : []),
+        readOnlyTooltip,
+    ]
+
+    const originalViewExtensions: Extension[] = [...baseExtensions, readOnlyTooltip]
+
+    const modifiedViewExtensions: Extension[] = [...baseExtensions, readOnlyTooltip]
+
+    const renderCodeEditor = () => {
+        if (loading) {
+            return (
+                customLoader || (
+                    <div className="flex" style={{ height: typeof height === 'number' ? `${height}px` : height }}>
+                        <Progressing pageLoader />
+                    </div>
+                )
+            )
+        }
+
+        const { codeEditorClassName, codeEditorHeight, codeEditorParentClassName } = getCodeEditorHeight(height)
+
+        return state.diffMode ? (
+            <CodeMirrorMerge
+                theme={codeEditorTheme(appTheme)}
+                key={codemirrorMergeKey}
+                className={`w-100 vertical-divider ${codeEditorParentClassName}`}
+                style={{ height: codeEditorHeight }}
+                gutter
+                destroyRerender={false}
+            >
+                <CodeMirrorMerge.Original
+                    basicSetup={false}
+                    value={state.lhsCode}
+                    readOnly={readOnly || !isOriginalModifiable}
+                    onChange={handleLhsOnChange}
+                    extensions={originalViewExtensions}
+                />
+                <CodeMirrorMerge.Modified
+                    basicSetup={false}
+                    value={state.code}
+                    readOnly={readOnly}
+                    onChange={handleOnChange}
+                    extensions={modifiedViewExtensions}
+                />
+            </CodeMirrorMerge>
+        ) : (
+            <div className={`w-100 ${codeEditorParentClassName}`}>
+                {shebang && <div className="code-editor__shebang">{shebang}</div>}
+                <CodeMirror
+                    theme={codeEditorTheme(appTheme)}
+                    className={codeEditorClassName}
+                    basicSetup={false}
+                    value={state.code}
+                    placeholder={placeholder}
+                    readOnly={readOnly}
+                    height={codeEditorHeight}
+                    autoFocus={autoFocus}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                    onChange={handleOnChange}
+                    extensions={extensions}
+                />
             </div>
-        </div>
+        )
+    }
+
+    return (
+        <CodeEditorContext.Provider value={contextValue}>
+            {children}
+            {renderCodeEditor()}
+        </CodeEditorContext.Provider>
     )
 }
 
-CodeEditor.LanguageChanger = LanguageChanger
-CodeEditor.ThemeChanger = ThemeChanger
-CodeEditor.ValidationError = ValidationError
 CodeEditor.Clipboard = Clipboard
 CodeEditor.Header = Header
 CodeEditor.Warning = Warning

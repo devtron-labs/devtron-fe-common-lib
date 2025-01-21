@@ -15,25 +15,20 @@
  */
 
 import YAML from 'yaml'
-import { noop, YAMLStringify } from '@Common/Helper'
-import { MODES } from '../Constants'
-import { Action, CodeEditorInitialValueType, CodeEditorState } from './types'
-import { getCodeEditorThemeFromAppTheme } from './utils'
 
-export const CodeEditorReducer = (state: CodeEditorState, action: Action) => {
+import { noop, YAMLStringify } from '@Common/Helper'
+import { MODES } from '@Common/Constants'
+
+import { CodeEditorAction, CodeEditorInitialValueType, CodeEditorState } from './types'
+
+export const CodeEditorReducer = (state: CodeEditorState, action: CodeEditorAction): CodeEditorState => {
     switch (action.type) {
-        case 'changeLanguage':
-            return { ...state, mode: action.value }
         case 'setDiff':
             return { ...state, diffMode: action.value }
-        case 'setTheme':
-            return { ...state, theme: action.value }
         case 'setCode':
             return { ...state, code: action.value }
-        case 'setDefaultCode':
-            return { ...state, defaultCode: action.value }
-        case 'setHeight':
-            return { ...state, height: action.value.toString() }
+        case 'setLhsCode':
+            return { ...state, lhsCode: action.value }
         default:
             return state
     }
@@ -72,18 +67,14 @@ export const parseValueToCode = (value: string, mode: string, tabSize: number) =
 
 export const initialState = ({
     mode,
-    theme,
     value,
-    defaultValue,
+    lhsValue,
     diffView,
     noParsing,
     tabSize,
-    appTheme,
 }: CodeEditorInitialValueType): CodeEditorState => ({
-    mode: mode as MODES,
-    theme: getCodeEditorThemeFromAppTheme(theme, appTheme),
     code: noParsing ? value : parseValueToCode(value, mode, tabSize),
-    defaultCode: noParsing ? defaultValue : parseValueToCode(defaultValue, mode, tabSize),
+    lhsCode: noParsing ? lhsValue : parseValueToCode(lhsValue, mode, tabSize),
     diffMode: diffView,
-    noParsing: [MODES.JSON, MODES.YAML].includes(mode as MODES) ? noParsing : true,
+    noParsing: [MODES.JSON, MODES.YAML].includes(mode) ? noParsing : true,
 })

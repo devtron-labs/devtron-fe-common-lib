@@ -7,6 +7,8 @@ export const codeEditorTheme = (appTheme: AppThemeType) => {
 
     return themeInit({
         settings: {
+            fontSize: '14px',
+            fontFamily: 'Inconsolata, monospace',
             background: 'var(--bg-code-editor)',
             foreground: 'var(--N900)',
             caret: 'var(--N900)',
