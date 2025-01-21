@@ -26,12 +26,15 @@ const BuildInfraProfileNameField: FunctionComponent<BuildInfraProfileMetaFieldPr
     error,
 }) => {
     const handleChange = (e: FormEvent<HTMLInputElement>) => {
-        handleProfileInputChange?.({
-            action: BuildInfraMetaConfigTypes.NAME,
-            data: { value: e.currentTarget.value },
-        })
+        if (handleProfileInputChange) {
+            handleProfileInputChange({
+                action: BuildInfraMetaConfigTypes.NAME,
+                data: { value: e.currentTarget.value },
+            })
+            return
+        }
 
-        onChange?.(e)
+        onChange(e)
     }
 
     return (
