@@ -467,6 +467,22 @@ export enum ComponentSizeType {
     xl = 'xl',
 }
 
+export const COMPONENT_SIZE_TYPE_TO_CLASS_NAME_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xs]: 'px-9 py-1 fs-12 lh-20 fw-6',
+    [ComponentSizeType.small]: 'px-9 py-3 fs-12 lh-20 fw-6',
+    [ComponentSizeType.medium]: 'px-11 py-5 fs-13 lh-20 fw-6',
+    [ComponentSizeType.large]: 'px-13 py-7 fs-13 lh-20 fw-6',
+    [ComponentSizeType.xl]: 'px-15 py-9 fs-14 lh-20 fw-6',
+} as const
+
+export const COMPONENT_SIZE_TYPE_TO_ICON_SIZE_MAP: Record<ComponentSizeType, number> = {
+    [ComponentSizeType.xs]: 14,
+    [ComponentSizeType.small]: 16,
+    [ComponentSizeType.medium]: 16,
+    [ComponentSizeType.large]: 16,
+    [ComponentSizeType.xl]: 20,
+} as const
+
 export const POP_UP_MENU_MODAL_ID = 'popup'
 
 /**
