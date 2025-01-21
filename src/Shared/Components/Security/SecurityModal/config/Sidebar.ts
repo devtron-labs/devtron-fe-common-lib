@@ -2,12 +2,11 @@
  * Copyright (c) 2024. Devtron Inc.
  */
 
+import { ScanCategoriesWithLicense } from '../../types'
 import { CATEGORY_LABELS, SUB_CATEGORY_LABELS } from '../constants'
 import { CATEGORIES, SUB_CATEGORIES, SidebarDataType } from '../types'
 
-export const getSidebarData = (
-    categoriesConfig: Record<(typeof CATEGORIES)[keyof typeof CATEGORIES] | 'imageScanLicenseRisks', boolean>,
-): SidebarDataType[] => {
+export const getSidebarData = (categoriesConfig: Record<ScanCategoriesWithLicense, boolean>): SidebarDataType[] => {
     const { imageScan, codeScan, kubernetesManifest, imageScanLicenseRisks } = categoriesConfig
 
     return [

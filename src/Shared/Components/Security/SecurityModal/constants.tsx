@@ -14,6 +14,7 @@ import {
     StatusType,
     SecurityModalStateType,
 } from './types'
+import { ScanCategoriesWithLicense } from '../types'
 
 export const DEFAULT_SECURITY_MODAL_IMAGE_STATE = {
     category: CATEGORIES.IMAGE_SCAN,
@@ -34,7 +35,7 @@ const DEFAULT_SECURITY_MODAL_MANIFEST_STATE = {
 }
 
 export const getDefaultSecurityModalState = (
-    categoriesConfig: Record<(typeof CATEGORIES)[keyof typeof CATEGORIES] | 'imageScanLicenseRisks', boolean>,
+    categoriesConfig: Record<ScanCategoriesWithLicense, boolean>,
 ): SecurityModalStateType => {
     if (categoriesConfig.imageScan) {
         return DEFAULT_SECURITY_MODAL_IMAGE_STATE

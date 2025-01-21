@@ -7,6 +7,7 @@ import { GenericEmptyStateType } from '@Common/Types'
 import { LastExecutionResultType, NodeType, Nodes } from '@Shared/types'
 import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
 import { ServerErrors } from '@Common/ServerError'
+import { ScanCategories, ScanSubCategories } from '../types'
 
 export interface GetResourceScanDetailsPayloadType {
     name: string
@@ -100,8 +101,8 @@ export type DetailViewDataType = {
     InfoCardPropsType
 
 export type SecurityModalStateType = {
-    category: (typeof CATEGORIES)[keyof typeof CATEGORIES]
-    subCategory: (typeof SUB_CATEGORIES)[keyof typeof SUB_CATEGORIES]
+    category: ScanCategories
+    subCategory: ScanSubCategories
     detailViewData: DetailViewDataType[]
 }
 
@@ -264,8 +265,8 @@ export interface IndexedTextDisplayPropsType {
 export type SidebarDataChildType = {
     label: string
     value: {
-        category: (typeof CATEGORIES)[keyof typeof CATEGORIES]
-        subCategory: (typeof SUB_CATEGORIES)[keyof typeof SUB_CATEGORIES]
+        category: ScanCategories
+        subCategory: ScanSubCategories
     }
 }
 
