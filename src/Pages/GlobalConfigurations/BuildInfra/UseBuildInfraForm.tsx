@@ -118,7 +118,9 @@ const useBuildInfraForm = ({
         const targetPlatform =
             data && 'targetPlatform' in data && Object.hasOwn(data, 'targetPlatform') ? data.targetPlatform : ''
         const currentConfiguration = currentInput.configurations[targetPlatform]
-        const lastSavedConfiguration = profileResponse.profile.configurations[targetPlatform] || currentConfiguration
+        const lastSavedConfiguration = structuredClone(
+            profileResponse.profile.configurations[targetPlatform] || currentConfiguration,
+        )
 
         switch (action) {
             case BuildInfraMetaConfigTypes.DESCRIPTION: {
@@ -236,9 +238,9 @@ const useBuildInfraForm = ({
             case 'de_activate_cm':
             case 'de_activate_cs': {
                 const { id, componentType } = data
+                const currentInfraConfigType = CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]
                 // Would just convert isOverridden to true and replace value with default value
-                const cmSecretValue = currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
-                    .value as BuildInfraCMCSValueType[]
+                const cmSecretValue = currentConfiguration[currentInfraConfigType].value as BuildInfraCMCSValueType[]
                 const selectedCMCSIndex = cmSecretValue.findIndex((configMapItem) => configMapItem.id === id)
 
                 if (selectedCMCSIndex === -1 || !cmSecretValue[selectedCMCSIndex].canOverride) {
@@ -254,10 +256,22 @@ const useBuildInfraForm = ({
                 }
 
                 const isActivation = action === 'activate_cm' || action === 'activate_cs'
-                cmSecretValue[selectedCMCSIndex].useFormProps = cmSecretValue[selectedCMCSIndex].defaultValue
                 cmSecretValue[selectedCMCSIndex].isOverridden = isActivation
-                cmSecretValue[selectedCMCSIndex].initialResponse =
-                    cmSecretValue[selectedCMCSIndex].defaultValueInitialResponse
+
+                if (isActivation) {
+                    const lastSavedCMSecretArray = (lastSavedConfiguration[currentInfraConfigType]?.value ||
+                        []) as BuildInfraCMCSValueType[]
+                    const lastSavedCMSecret =
+                        lastSavedCMSecretArray.find((configMapItem) => configMapItem.id === id) ||
+                        cmSecretValue[selectedCMCSIndex]
+
+                    cmSecretValue[selectedCMCSIndex].useFormProps = lastSavedCMSecret?.useFormProps
+                    cmSecretValue[selectedCMCSIndex].initialResponse = lastSavedCMSecret?.initialResponse
+                } else {
+                    cmSecretValue[selectedCMCSIndex].useFormProps = cmSecretValue[selectedCMCSIndex].defaultValue
+                    cmSecretValue[selectedCMCSIndex].initialResponse =
+                        cmSecretValue[selectedCMCSIndex].defaultValueInitialResponse
+                }
 
                 // Will remove error if present
                 if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
