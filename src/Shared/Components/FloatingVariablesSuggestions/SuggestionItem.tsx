@@ -94,7 +94,7 @@ const SuggestionItem = ({
         <Tooltip
             className="default-tt dc__word-break-all"
             content={
-                <div className="mw-200 flex column dc__content-start dc__align-start mxh-140 dc__overflow-scroll">
+                <div className="mw-200 flex column dc__content-start dc__align-start mxh-140 dc__overflow-auto">
                     <div className="flex column dc__content-start dc__align-start">Value</div>
                     <div className="flex column dc__content-start dc__align-start">
                         {sanitiseVariableValue(variableValue)}
