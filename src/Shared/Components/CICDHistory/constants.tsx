@@ -69,7 +69,7 @@ export const POD_STATUS = {
 
 export const TIMEOUT_VALUE = '1' // in hours
 
-export const WORKER_POD_BASE_URL = '/resource-browser/1/devtron-ci/pod/k8sEmptyGroup'
+export const DEFAULT_CLUSTER_ID = '1'
 
 export const DEFAULT_ENV = 'devtron-ci'
 

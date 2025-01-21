@@ -25,7 +25,8 @@ import { ReactComponent as Disconnect } from '@Icons/ic-disconnected.svg'
 import { ReactComponent as TimeOut } from '@Icons/ic-timeout-red.svg'
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
-import { TERMINAL_STATUS_MAP } from './constants'
+import { isTimeStringAvailable } from '@Shared/Helpers'
+import { DEFAULT_CLUSTER_ID, TERMINAL_STATUS_MAP } from './constants'
 import { ResourceKindType } from '../../types'
 import {
     TriggerHistoryFilterCriteriaProps,
@@ -33,6 +34,12 @@ import {
     DeploymentHistory,
     TriggerHistoryFilterCriteriaType,
     StageStatusType,
+    WorkflowExecutionStagesMapDTO,
+    ExecutionInfoType,
+    WorkflowExecutionStageType,
+    PodExecutionStageDTO,
+    WorkflowStageStatusType,
+    WorkflowExecutionStageNameType,
 } from './types'
 
 export const getTriggerHistoryFilterCriteria = ({
@@ -203,3 +210,56 @@ export const getLogSearchIndex = ({
     stageIndex,
     lineNumberInsideStage,
 }: Record<'stageIndex' | 'lineNumberInsideStage', number>) => `${stageIndex}-${lineNumberInsideStage}`
+
+const getWorkerInfoFromExecutionStages = (
+    workflowExecutionStages: WorkflowExecutionStagesMapDTO['workflowExecutionStages'],
+): ExecutionInfoType['workerDetails'] => {
+    const workerInfo: PodExecutionStageDTO = workflowExecutionStages?.[WorkflowExecutionStageType.POD]?.[0]
+
+    if (!workerInfo) {
+        return null
+    }
+
+    const { status, message, endTime, metadata } = workerInfo
+
+    return {
+        status,
+        message: message || '',
+        clusterId: metadata?.clusterId || +DEFAULT_CLUSTER_ID,
+        podName: metadata?.podName || '',
+        endTime: isTimeStringAvailable(endTime) ? endTime : '',
+    }
+}
+
+export const sanitizeWorkflowExecutionStages = (
+    workflowExecutionStages: WorkflowExecutionStagesMapDTO['workflowExecutionStages'],
+): ExecutionInfoType | null => {
+    if (!workflowExecutionStages) {
+        return null
+    }
+
+    const workflowExecutionSteps = workflowExecutionStages[WorkflowExecutionStageType.WORKFLOW] || []
+
+    const preparationStage = workflowExecutionSteps.find(
+        (stage) => stage?.stageName === WorkflowExecutionStageNameType.PREPARATION,
+    )
+    const executionStage = workflowExecutionSteps.find(
+        (stage) => stage?.stageName === WorkflowExecutionStageNameType.EXECUTION,
+    )
+
+    const isOldData = !!preparationStage
+    const computedTriggedOn = isOldData ? executionStage?.startTime : preparationStage?.startTime
+    const finishedOn = workflowExecutionSteps[workflowExecutionSteps.length - 1]?.endTime
+    const lastStatus = workflowExecutionSteps[workflowExecutionSteps.length - 1]?.status
+
+    return {
+        triggeredOn: isTimeStringAvailable(computedTriggedOn) ? computedTriggedOn : '',
+        executionStartedOn: isOldData ? null : executionStage?.startTime,
+        finishedOn: isTimeStringAvailable(finishedOn) ? finishedOn : '',
+        currentStatus: lastStatus || WorkflowStageStatusType.UNKNOWN,
+        workerDetails: getWorkerInfoFromExecutionStages(workflowExecutionStages),
+    }
+}
+
+export const getWorkerPodBaseUrl = (clusterId: number = +DEFAULT_CLUSTER_ID, podNamespace: string = 'devtron-ci') =>
+    `/resource-browser/${clusterId}/${podNamespace}/pod/k8sEmptyGroup`

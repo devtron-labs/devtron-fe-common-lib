@@ -21,6 +21,7 @@ import { ShowMoreText } from '@Shared/Components/ShowMoreText'
 import { getHandleOpenURL, sanitizeTargetPlatforms } from '@Shared/Helpers'
 import { ImageChipCell } from '@Shared/Components/ImageChipCell'
 import { CommitChipCell } from '@Shared/Components/CommitChipCell'
+import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
 import { ReactComponent as ICPulsateStatus } from '@Icons/ic-pulsate-status.svg'
 import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
@@ -59,16 +60,17 @@ import {
     HistoryLogsProps,
 } from './types'
 import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger } from './service'
-import { DEFAULT_ENV, TIMEOUT_VALUE, WORKER_POD_BASE_URL } from './constants'
+import { DEFAULT_CLUSTER_ID, DEFAULT_ENV, TIMEOUT_VALUE } from './constants'
 import { GitTriggers } from '../../types'
 import LogsRenderer from './LogsRenderer'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
-import { statusColor as colorMap, EMPTY_STATE_STATUS, PULSATING_STATUS_MAP } from '../../constants'
-import './cicdHistory.scss'
+import { statusColor as colorMap, DeploymentStageType, EMPTY_STATE_STATUS, PULSATING_STATUS_MAP } from '../../constants'
 import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
+import { getWorkerPodBaseUrl, sanitizeWorkflowExecutionStages } from './utils'
+import './cicdHistory.scss'
 
 const Finished = React.memo(
     ({ status, finishedOn, artifact, type }: FinishedType): JSX.Element => (
@@ -97,7 +99,7 @@ const Finished = React.memo(
 )
 
 const WorkerStatus = React.memo(
-    ({ message, podStatus, stage, workerPodName, finishedOn }: WorkerStatusType): JSX.Element | null => {
+    ({ message, podStatus, stage, workerPodName, finishedOn, clusterId }: WorkerStatusType): JSX.Element | null => {
         if (!message && !podStatus) {
             return null
         }
@@ -108,7 +110,12 @@ const WorkerStatus = React.memo(
 
         const getViewWorker = () =>
             showLink ? (
-                <NavLink to={`${WORKER_POD_BASE_URL}/${workerPodName}/logs`} target="_blank" className="anchor">
+                <NavLink
+                    // TODO: Ask for namespace as well
+                    to={`${getWorkerPodBaseUrl(clusterId)}/${workerPodName}/logs`}
+                    target="_blank"
+                    className="anchor"
+                >
                     <span className="mr-10 fs-13">View worker pod</span>
                 </NavLink>
             ) : null
@@ -122,10 +129,12 @@ const WorkerStatus = React.memo(
                 <div className="flexbox-col">
                     <div className="flexbox dc__gap-8">
                         <div className="flexbox cn-9 fs-13 fw-4 lh-20">
-                            <span>Worker</span>&nbsp;
+                            <span>{stage === DeploymentStageType.DEPLOY && !podStatus ? 'Message' : 'Worker'}</span>
+                            &nbsp;
                             {podStatus && <span>{podStatus.toLowerCase()}&nbsp;</span>}
                         </div>
-                        {stage !== 'DEPLOY' && getViewWorker()}
+
+                        {stage !== DeploymentStageType.DEPLOY && getViewWorker()}
                     </div>
 
                     {/* Need key since using ref inside of this component as useEffect dependency, so there were issues while switching builds */}
@@ -389,10 +398,7 @@ const TriggerDetailsStatusIcon = React.memo(
     ({ status }: TriggerDetailsStatusIconType): JSX.Element => (
         <div className="flexbox-col">
             <div className="flex">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="10" cy="10" r="5" stroke="var(--N700)" />
-                    <path d="M10 15L10 20" stroke="var(--N700)" />
-                </svg>
+                <ICSuccess className="icon-dim-20" />
             </div>
 
             <div className="flex flex-grow-1">
@@ -439,48 +445,63 @@ export const TriggerDetails = React.memo(
         triggerMetadata,
         renderDeploymentHistoryTriggerMetaText,
         renderTargetConfigInfo,
-    }: TriggerDetailsType): JSX.Element => (
-        <div className="trigger-details flexbox-col pb-12">
-            <div className="display-grid trigger-details__grid py-12">
-                <div className="flexbox dc__content-center">
-                    <TriggerDetailsStatusIcon status={status?.toLowerCase()} />
-                </div>
-                <div className="trigger-details__summary flexbox-col flex-grow-1 lh-20">
-                    <StartDetails
-                        startedOn={startedOn}
-                        triggeredBy={triggeredBy}
-                        triggeredByEmail={triggeredByEmail}
-                        ciMaterials={ciMaterials}
-                        gitTriggers={gitTriggers}
-                        artifact={artifact}
-                        type={type}
-                        environmentName={environmentName}
-                        isJobView={isJobView}
-                        triggerMetadata={triggerMetadata}
-                        renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
-                        renderTargetConfigInfo={renderTargetConfigInfo}
-                        stage={stage}
-                    />
+        workflowExecutionStages,
+    }: TriggerDetailsType) => {
+        const executionInfo = useMemo(
+            () => sanitizeWorkflowExecutionStages(workflowExecutionStages),
+            [workflowExecutionStages],
+        )
 
-                    <CurrentStatus
-                        status={status}
-                        finishedOn={finishedOn}
-                        artifact={artifact}
-                        stage={stage}
-                        type={type}
-                    />
+        return (
+            <div className="trigger-details flexbox-col pb-12">
+                <div className="display-grid trigger-details__grid py-12">
+                    {stage === DeploymentStageType.DEPLOY ? (
+                        <>
+                            <div className="flexbox dc__content-center">
+                                <TriggerDetailsStatusIcon status={status?.toLowerCase()} />
+                            </div>
+                            <div className="trigger-details__summary flexbox-col flex-grow-1 lh-20">
+                                <StartDetails
+                                    startedOn={startedOn}
+                                    triggeredBy={triggeredBy}
+                                    triggeredByEmail={triggeredByEmail}
+                                    ciMaterials={ciMaterials}
+                                    gitTriggers={gitTriggers}
+                                    artifact={artifact}
+                                    type={type}
+                                    environmentName={environmentName}
+                                    isJobView={isJobView}
+                                    triggerMetadata={triggerMetadata}
+                                    renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
+                                    renderTargetConfigInfo={renderTargetConfigInfo}
+                                    stage={stage}
+                                />
+
+                                <CurrentStatus
+                                    status={status}
+                                    finishedOn={finishedOn}
+                                    artifact={artifact}
+                                    stage={stage}
+                                    type={type}
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <div />
+                    )}
                 </div>
+
+                <WorkerStatus
+                    message={executionInfo?.workerDetails?.message ?? message}
+                    podStatus={executionInfo?.workerDetails?.status ?? podStatus}
+                    stage={stage}
+                    finishedOn={executionInfo?.workerDetails?.endTime ?? finishedOn}
+                    clusterId={executionInfo?.workerDetails?.clusterId || +DEFAULT_CLUSTER_ID}
+                    workerPodName={workerPodName}
+                />
             </div>
-
-            <WorkerStatus
-                message={message}
-                podStatus={podStatus}
-                stage={stage}
-                finishedOn={finishedOn}
-                workerPodName={workerPodName}
-            />
-        </div>
-    ),
+        )
+    },
 )
 
 const HistoryLogs: React.FC<HistoryLogsProps> = ({
@@ -836,6 +857,7 @@ const TriggerOutput = ({
                         renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
                         environmentName={selectedEnvironmentName}
                         renderTargetConfigInfo={renderTargetConfigInfo}
+                        workflowExecutionStages={triggerDetails.workflowExecutionStages}
                     />
                     <ul className="pl-50 pr-20 pt-8 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bg__primary dc__zi-3">
                         {triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM && (

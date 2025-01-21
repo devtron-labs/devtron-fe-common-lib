@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CSSProperties, ReactElement } from 'react'
+import { CSSProperties, ReactElement, ReactNode } from 'react'
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import {
     OptionType,
@@ -113,7 +113,50 @@ export interface TargetConfigType {
     releaseChannelName?: string
 }
 
-export interface History extends Pick<TargetPlatformsDTO, 'targetPlatforms'> {
+export enum WorkflowExecutionStageType {
+    WORKFLOW = 'workflow',
+    POD = 'pod',
+}
+
+export enum WorkflowStageStatusType {
+    NOT_STARTED = 'NOT_STARTED',
+    RUNNING = 'RUNNING',
+    SUCCEEDED = 'SUCCEEDED',
+    FAILED = 'FAILED',
+    ABORTED = 'ABORTED',
+    TIMEOUT = 'TIMEOUT',
+    /**
+     * UI Enum
+     */
+    UNKNOWN = 'UNKNOWN',
+}
+
+export enum WorkflowExecutionStageNameType {
+    PREPARATION = 'Preparation',
+    EXECUTION = 'Execution',
+}
+
+interface WorkflowExecutionStageCommonDTO {
+    status: WorkflowStageStatusType
+    stageName: WorkflowExecutionStageNameType
+    startTime: string
+    endTime: string
+    message: string
+}
+
+export interface PodExecutionStageDTO extends WorkflowExecutionStageCommonDTO {
+    metadata: {
+        clusterId: number
+        podName: string
+    }
+}
+
+export interface WorkflowExecutionStagesMapDTO {
+    workflowExecutionStages: Record<WorkflowExecutionStageType.WORKFLOW, WorkflowExecutionStageCommonDTO[]> &
+        Record<WorkflowExecutionStageType.POD, PodExecutionStageDTO[]>
+}
+
+export interface History extends Pick<TargetPlatformsDTO, 'targetPlatforms'>, WorkflowExecutionStagesMapDTO {
     id: number
     name: string
     status: string
@@ -148,6 +191,32 @@ export interface History extends Pick<TargetPlatformsDTO, 'targetPlatforms'> {
     triggerMetadata?: string
     runSource?: RunSourceType
     targetConfig?: TargetConfigType
+}
+
+export interface ExecutionInfoType {
+    /**
+     * Triggered is assumed to be true always, so status will be Succeeded
+     * Extracted from Preparation start time, if there, in case of old data this will be execution start time
+     * If triggeredOn is not there will not show startTime next to Triggered label but will show other details if possible like commit info, etc.
+     * and capture error on sentry
+     */
+    triggeredOn: string
+    /**
+     * Extracted from startTime from Execution stage (since will work in both old and new format)
+     * If this is not given then, we won't be showing this field
+     * If preparation field has failed, then we will be using finishedOn field to show the status
+     */
+    executionStartedOn: string
+    /**
+     * Will be the endTime of Execution stage.
+     */
+    finishedOn?: string
+    /**
+     * Will never be NOT_STARTED
+     */
+    currentStatus: WorkflowStageStatusType
+    workerDetails: Pick<PodExecutionStageDTO, 'message' | 'status' | 'endTime'> &
+        Pick<PodExecutionStageDTO['metadata'], 'clusterId' | 'podName'>
 }
 
 export interface DeploymentHistoryResultObject {
@@ -238,7 +307,9 @@ export interface StartDetailsType {
     stage: DeploymentStageType
 }
 
-export interface TriggerDetailsType extends Pick<StartDetailsType, 'renderTargetConfigInfo'> {
+export interface TriggerDetailsType
+    extends Pick<StartDetailsType, 'renderTargetConfigInfo'>,
+        Pick<History, 'workflowExecutionStages'> {
     status: string
     startedOn: string
     finishedOn: string
@@ -264,7 +335,7 @@ export interface ProgressingStatusType {
     type: HistoryComponentType
 }
 
-export interface WorkerStatusType {
+export interface WorkerStatusType extends Pick<ExecutionInfoType['workerDetails'], 'clusterId'> {
     message: string
     podStatus: string
     stage: DeploymentStageType
@@ -397,7 +468,7 @@ export interface VirtualHistoryArtifactProps {
 export type CIListItemType = Pick<History, 'promotionApprovalMetadata'> & {
     userApprovalMetadata?: UserApprovalMetadataType
     triggeredBy?: string
-    children: any
+    children: ReactNode
 
     appliedFilters?: FilterConditionsListType[]
     appliedFiltersTimestamp?: string
