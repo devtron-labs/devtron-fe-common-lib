@@ -2,7 +2,8 @@ import { ComponentSizeType } from '@Shared/constants'
 import { ProgressingProps } from '@Common/Types'
 import { ButtonProps } from './types'
 
-export const BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<Exclude<ButtonProps['size'], ComponentSizeType.xxs>, string> = {
+export const BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> = {
+    [ComponentSizeType.xxs]: 'px-9 py-1 fs-12 lh-20 fw-6 dc__gap-6 mw-48',
     [ComponentSizeType.xs]: 'px-9 py-1 fs-12 lh-20 fw-6 dc__gap-6 mw-48',
     [ComponentSizeType.small]: 'px-9 py-3 fs-12 lh-20 fw-6 dc__gap-8 mw-48',
     [ComponentSizeType.medium]: 'px-11 py-5 fs-13 lh-20 fw-6 dc__gap-8 mw-48',

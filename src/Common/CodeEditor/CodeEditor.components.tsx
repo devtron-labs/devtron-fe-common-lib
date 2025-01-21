@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { ReactComponent as Info } from '@Icons/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
@@ -26,10 +28,12 @@ const SplitPane = () => {
 }
 
 export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEditorHeaderProps) => {
-    const { state } = useCodeEditorContext()
+    const { state, hasCodeEditorContainer } = useCodeEditorContext()
 
     return (
-        <div className={className || 'code-editor__header flex right'}>
+        <div
+            className={`${hasCodeEditorContainer ? 'dc__top-radius-4' : ''} ${className || 'code-editor__header flex right'}`}
+        >
             {children}
             {!hideDefaultSplitHeader && state.lhsCode && <SplitPane />}
         </div>
@@ -65,3 +69,7 @@ export const Clipboard = () => {
 
     return <ClipboardButton content={state.code} iconSize={16} />
 }
+
+export const Container = ({ children, flexExpand }: { children: ReactNode; flexExpand?: boolean }) => (
+    <div className={`code-editor__container ${flexExpand ? 'flex-grow-1 flexbox-col' : ''}`}>{children}</div>
+)

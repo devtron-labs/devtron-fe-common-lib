@@ -103,11 +103,18 @@
 }
 
 // CODE EDITOR STYLES
-.code-editor-container {
+.code-editor__container {
     width: 100%;
     border: 1px solid var(--N200);
     border-radius: 4px;
-    overflow: hidden;
+
+    .cm-editor {
+        border-radius: 4px;
+
+        .cm-scroller {
+            border-radius: 4px;
+        }
+    }
 }
 
 .code-editor__header {

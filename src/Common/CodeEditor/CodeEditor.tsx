@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo, useReducer, useState } from 'react'
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import CodeMirror, {
     Extension,
     hoverTooltip,
@@ -54,7 +54,7 @@ import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { getCodeEditorHeight, getFoldGutterElement, getHoverElement } from './utils'
 import { CodeEditorContext } from './CodeEditor.context'
-import { Clipboard, ErrorBar, Header, Information, Warning } from './CodeEditor.components'
+import { Clipboard, Container, ErrorBar, Header, Information, Warning } from './CodeEditor.components'
 import { codeEditorTheme } from './CodeEditor.theme'
 
 import './codeEditor.scss'
@@ -89,6 +89,9 @@ const CodeEditor = <DiffView extends boolean = false>({
     // HOOKS
     const { appTheme } = useTheme()
 
+    // REFS
+    const codeMirrorParentDivRef = useRef<HTMLDivElement>()
+
     // Cleaning KubeManifest
     const _value = diffView ? modifiedValue : propValue
     const value = cleanData ? cleanKubeManifest(_value) : _value
@@ -96,6 +99,7 @@ const CodeEditor = <DiffView extends boolean = false>({
 
     // STATES
     const [codemirrorMergeKey, setCodemirrorMergeKey] = useState<string>()
+    const [hasCodeEditorContainer, setHasCodeEditorContainer] = useState(false)
 
     // REDUCER
     const [state, dispatch] = useReducer(
@@ -111,7 +115,10 @@ const CodeEditor = <DiffView extends boolean = false>({
     )
 
     // CONTEXT VALUE
-    const contextValue = useMemo<CodeEditorContextProps>(() => ({ dispatch, state, height }), [state])
+    const contextValue = useMemo<CodeEditorContextProps>(
+        () => ({ dispatch, state, height, hasCodeEditorContainer }),
+        [state, hasCodeEditorContainer],
+    )
 
     // USE-EFFECTS
     useEffect(() => {
@@ -128,6 +135,14 @@ const CodeEditor = <DiffView extends boolean = false>({
         // Include any props that modify codemirror-merge extensions directly, as a workaround for the unresolved bug.
         [readOnly, tabSize, disableSearch],
     )
+
+    useEffect(() => {
+        if (codeMirrorParentDivRef.current) {
+            setHasCodeEditorContainer(
+                codeMirrorParentDivRef.current.parentElement.classList.contains('code-editor__container'),
+            )
+        }
+    }, [])
 
     // METHODS
     const setCode = (codeValue: string) => {
@@ -274,7 +289,6 @@ const CodeEditor = <DiffView extends boolean = false>({
                 theme={codeEditorTheme(appTheme)}
                 key={codemirrorMergeKey}
                 className={`w-100 vertical-divider ${codeEditorParentClassName}`}
-                style={{ height: codeEditorHeight }}
                 gutter
                 destroyRerender={false}
             >
@@ -294,7 +308,7 @@ const CodeEditor = <DiffView extends boolean = false>({
                 />
             </CodeMirrorMerge>
         ) : (
-            <div className={`w-100 ${codeEditorParentClassName}`}>
+            <div ref={codeMirrorParentDivRef} className={`w-100 ${codeEditorParentClassName}`}>
                 {shebang && <div className="code-editor__shebang">{shebang}</div>}
                 <CodeMirror
                     theme={codeEditorTheme(appTheme)}
@@ -304,6 +318,7 @@ const CodeEditor = <DiffView extends boolean = false>({
                     placeholder={placeholder}
                     readOnly={readOnly}
                     height={codeEditorHeight}
+                    minHeight="250px"
                     autoFocus={autoFocus}
                     onFocus={onFocus}
                     onBlur={onBlur}
@@ -327,5 +342,6 @@ CodeEditor.Header = Header
 CodeEditor.Warning = Warning
 CodeEditor.ErrorBar = ErrorBar
 CodeEditor.Information = Information
+CodeEditor.Container = Container
 
 export default CodeEditor
