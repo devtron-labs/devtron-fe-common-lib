@@ -467,12 +467,20 @@ export enum ComponentSizeType {
     xl = 'xl',
 }
 
-export const COMPONENT_SIZE_TYPE_TO_CLASS_NAME_MAP: Record<ComponentSizeType, string> = {
-    [ComponentSizeType.xs]: 'px-9 py-1 fs-12 lh-20 fw-6',
-    [ComponentSizeType.small]: 'px-9 py-3 fs-12 lh-20 fw-6',
-    [ComponentSizeType.medium]: 'px-11 py-5 fs-13 lh-20 fw-6',
-    [ComponentSizeType.large]: 'px-13 py-7 fs-13 lh-20 fw-6',
-    [ComponentSizeType.xl]: 'px-15 py-9 fs-14 lh-20 fw-6',
+export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xs]: 'py-1 fs-12 lh-20',
+    [ComponentSizeType.small]: 'py-3 fs-12 lh-20',
+    [ComponentSizeType.medium]: 'py-5 fs-13 lh-20',
+    [ComponentSizeType.large]: 'py-7 fs-13 lh-20',
+    [ComponentSizeType.xl]: 'py-9 fs-14 lh-20',
+} as const
+
+export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xs]: 'px-5',
+    [ComponentSizeType.small]: 'px-5',
+    [ComponentSizeType.medium]: 'px-7',
+    [ComponentSizeType.large]: 'px-7',
+    [ComponentSizeType.xl]: 'px-9',
 } as const
 
 export const COMPONENT_SIZE_TYPE_TO_ICON_SIZE_MAP: Record<ComponentSizeType, number> = {

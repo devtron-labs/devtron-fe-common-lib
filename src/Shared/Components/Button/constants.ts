@@ -1,13 +1,13 @@
-import { COMPONENT_SIZE_TYPE_TO_CLASS_NAME_MAP, ComponentSizeType } from '@Shared/constants'
+import { COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP, ComponentSizeType } from '@Shared/constants'
 import { ProgressingProps } from '@Common/Types'
 import { ButtonProps } from './types'
 
 export const BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> = {
-    [ComponentSizeType.xs]: `${COMPONENT_SIZE_TYPE_TO_CLASS_NAME_MAP[ComponentSizeType.xs]} dc__gap-6 mw-48`,
-    [ComponentSizeType.small]: `${COMPONENT_SIZE_TYPE_TO_CLASS_NAME_MAP[ComponentSizeType.small]} dc__gap-8 mw-48`,
-    [ComponentSizeType.medium]: `${COMPONENT_SIZE_TYPE_TO_CLASS_NAME_MAP[ComponentSizeType.medium]} dc__gap-8 mw-48`,
-    [ComponentSizeType.large]: `${COMPONENT_SIZE_TYPE_TO_CLASS_NAME_MAP[ComponentSizeType.large]} dc__gap-8 mw-64`,
-    [ComponentSizeType.xl]: `${COMPONENT_SIZE_TYPE_TO_CLASS_NAME_MAP[ComponentSizeType.xl]} dc__gap-12 mw-64`,
+    [ComponentSizeType.xs]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.xs]} px-9 fw-6 dc__gap-6 mw-48`,
+    [ComponentSizeType.small]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.small]} px-9 fw-6 dc__gap-8 mw-48`,
+    [ComponentSizeType.medium]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.medium]} px-11 fw-6 dc__gap-8 mw-48`,
+    [ComponentSizeType.large]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.large]} px-13 fw-6 dc__gap-8 mw-64`,
+    [ComponentSizeType.xl]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.xl]} px-15 fw-6 dc__gap-12 mw-64`,
 } as const
 
 export const ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> = {
