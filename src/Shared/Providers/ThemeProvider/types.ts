@@ -30,7 +30,7 @@ export interface ThemeConfigType {
 }
 
 export interface ThemeContextType extends ThemeConfigType {
-    handleSelectedThemeChange: (updatedThemePreference: ThemePreferenceType) => void
+    handleThemePreferenceChange: (updatedThemePreference: ThemePreferenceType) => void
 }
 
 export interface ThemeProviderProps {
