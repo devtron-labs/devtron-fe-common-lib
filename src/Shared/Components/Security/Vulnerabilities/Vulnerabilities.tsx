@@ -21,6 +21,7 @@ import { getSecurityScan } from '../SecurityModal/service'
 import { SecurityCard } from '../SecurityDetailsCards'
 import { CATEGORIES, SUB_CATEGORIES } from '../SecurityModal/types'
 import { SecurityModal } from '../SecurityModal'
+import { getStatusForScanList } from '../utils'
 
 const Vulnerabilities = ({
     isScanned,
@@ -90,13 +91,19 @@ const Vulnerabilities = ({
         setShowSecurityModal(false)
     }
 
+    const imageScanVulnerabilities = scanResultResponse.result?.imageScan?.vulnerability
+    const imageScanList = imageScanVulnerabilities?.list || []
+
+    const scanFailed: boolean = getStatusForScanList(imageScanList) === 'Failed'
+
     return (
         <div className="p-12">
             <SecurityCard
                 category={CATEGORIES.IMAGE_SCAN}
                 subCategory={SUB_CATEGORIES.VULNERABILITIES}
-                severityCount={scanResultResponse?.result?.imageScan?.vulnerability?.summary?.severities}
+                severities={imageScanVulnerabilities?.summary?.severities}
                 handleCardClick={handleCardClick}
+                scanFailed={scanFailed}
             />
             {showSecurityModal && (
                 <SecurityModal

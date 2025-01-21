@@ -69,7 +69,7 @@ export const DeploymentConfigDiffMain = ({
                 ),
             )
         }
-    }, [isLoading, configList])
+    }, [isLoading])
 
     useEffect(() => {
         if (scrollIntoViewId) {
@@ -216,7 +216,6 @@ export const DeploymentConfigDiffMain = ({
                                 currentConfiguration={primaryList}
                                 previousConfigAvailable
                                 rootClassName={`${primaryHeading && secondaryHeading ? 'dc__no-top-radius dc__no-top-border' : ''}`}
-                                sortingConfig={sortingConfig}
                             />
                         </div>
                     )}
@@ -262,7 +261,7 @@ export const DeploymentConfigDiffMain = ({
                     )}
                 </div>
             </div>
-            <div className="deployment-config-diff__main-content dc__overflow-y-auto">{renderContent()}</div>
+            <div className="deployment-config-diff__main-content dc__overflow-auto">{renderContent()}</div>
         </div>
     )
 }

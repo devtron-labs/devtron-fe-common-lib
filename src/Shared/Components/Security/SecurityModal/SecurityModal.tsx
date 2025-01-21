@@ -163,7 +163,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
                 {/* NOTE: only show sidebar in AppDetails */}
                 {Sidebar && <Sidebar modalState={state} setModalState={setState} scanResult={responseData} />}
                 <div className="dc__border-right-n1 h-100" />
-                <div className="dc__overflow-scroll flex-grow-1" style={{ width: '744px' }}>
+                <div className="dc__overflow-auto flex-grow-1" style={{ width: '744px' }}>
                     {selectedDetailViewData && renderDetailViewSubHeader()}
                     {data && renderInfoCardAndTable()}
                 </div>
