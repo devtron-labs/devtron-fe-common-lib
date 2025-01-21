@@ -66,7 +66,7 @@ export default defineConfig({
                 manualChunks(id: string) {
                     if (
                         id.includes('codemirror') ||
-                        id.includes('src/Common/CodeMirror')
+                        id.includes('src/Common/CodeEditor')
                     ) {
                         return '@code-editor'
                     }
