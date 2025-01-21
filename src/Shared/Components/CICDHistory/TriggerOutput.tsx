@@ -564,7 +564,7 @@ export const TriggerDetails = React.memo(
                         />
 
                         {executionInfo?.executionStartedOn && (
-                            <div className="w-100 pr-20 flexbox dc__gap-8">
+                            <div className="w-100 pr-20 flexbox dc__gap-8 pt-12">
                                 <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Execution started</h3>
 
                                 <time className="cn-7 fs-13">
