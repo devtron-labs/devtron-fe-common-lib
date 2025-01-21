@@ -38,6 +38,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
     })
 
     const getScanToolInfo = (category: string): { scanToolName: string; scanToolUrl: string } => {
+        const image = imageScan?.vulnerability?.list?.[0]
         switch (category) {
             case CATEGORIES.CODE_SCAN:
                 return { scanToolName: codeScan?.scanToolName, scanToolUrl: codeScan?.scanToolUrl }
@@ -45,8 +46,8 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
                 return { scanToolName: kubernetesManifest?.scanToolName, scanToolUrl: kubernetesManifest?.scanToolUrl }
             default:
                 return {
-                    scanToolName: imageScan?.vulnerability?.list?.[0].scanToolName,
-                    scanToolUrl: imageScan?.vulnerability?.list?.[0].scanToolUrl,
+                    scanToolName: image?.scanToolName,
+                    scanToolUrl: image?.scanToolUrl,
                 }
         }
     }

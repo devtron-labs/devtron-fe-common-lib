@@ -18,7 +18,7 @@ import {
     VulnerabilityCountType,
     VulnerabilityState,
 } from './types'
-import { SEVERITIES, ORDERED_SEVERITY_KEYS } from './constants'
+import { SEVERITIES, ORDERED_SEVERITY_KEYS, TRIVY_ICON_URL } from './constants'
 
 export const mapSeveritiesToSegmentedBarChartEntities = (
     severities: Partial<Record<keyof typeof SEVERITIES, number>>,
@@ -147,7 +147,7 @@ export const parseGetResourceScanDetailsResponse = (data: GetResourceScanDetails
                     severity: getSeverityFromVulnerabilitySeverity(vulnerability.severity),
                 })),
                 scanToolName: 'TRIVY' /* TODO: need to create a mapping */,
-                scanToolUrl: 'https://cdn.devtron.ai/images/ic-trivy.webp',
+                scanToolUrl: TRIVY_ICON_URL,
                 StartedOn: value.scanResult.lastExecution,
                 status: VulnerabilityState[value.state],
             })),

@@ -308,18 +308,22 @@ export const getImageScanInfoCardData = (
     data: ImageScan,
     subCategory: SecurityModalStateType['subCategory'],
 ): InfoCardPropsType => {
+    const image = data[subCategory]?.list?.[0]
+    const scanInfo: Pick<InfoCardPropsType, 'scanToolName' | 'scanToolUrl'> = {
+        scanToolName: image?.scanToolName,
+        scanToolUrl: image?.scanToolUrl,
+    }
+
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                scanToolName: data[subCategory]?.list?.[0]?.scanToolName,
-                scanToolUrl: data[subCategory]?.list?.[0]?.scanToolUrl,
+                ...scanInfo,
             }
         case SUB_CATEGORIES.LICENSE:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                scanToolName: data[subCategory]?.list?.[0]?.scanToolName,
-                scanToolUrl: data[subCategory]?.list?.[0]?.scanToolUrl,
+                ...scanInfo,
             }
         default:
             return null
@@ -339,15 +343,17 @@ const getCompletedEmptyState = (
 
     const detailViewTitleText = `${detailViewData.titlePrefix}: ${detailViewData.title}`
 
+    const scanCompletedState = getScanCompletedEmptyState(detailViewData.scanToolName, detailViewData.scanToolUrl)
+
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
             return {
-                ...getScanCompletedEmptyState(detailViewData.scanToolName, detailViewData.scanToolUrl),
+                ...scanCompletedState,
                 subTitle: `No security vulnerability found in ${detailViewTitleText}`,
             }
         case SUB_CATEGORIES.LICENSE:
             return {
-                ...getScanCompletedEmptyState(detailViewData.scanToolName, detailViewData.scanToolUrl),
+                ...scanCompletedState,
                 subTitle: `No license risk found in ${detailViewTitleText}`,
             }
         default:

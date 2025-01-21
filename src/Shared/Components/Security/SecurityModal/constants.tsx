@@ -119,3 +119,5 @@ export const SCAN_IN_PROGRESS_EMPTY_STATE: EmptyStateType = {
     title: 'Scan in progress',
     subTitle: 'Scan result will be available once complete. Please check again later',
 }
+
+export const TRIVY_ICON_URL = 'https://cdn.devtron.ai/images/ic-trivy.webp'

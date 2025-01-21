@@ -51,20 +51,22 @@ export const getKubernetesManifestInfoCardData = (
     data: KubernetesManifest,
     subCategory: SecurityModalStateType['subCategory'],
 ): InfoCardPropsType => {
+    const scanInfo: Omit<InfoCardPropsType, 'entities'> = {
+        lastScanTimeString: data.StartedOn,
+        scanToolName: data.scanToolName,
+        scanToolUrl: data.scanToolUrl,
+    }
+
     switch (subCategory) {
         case SUB_CATEGORIES.MISCONFIGURATIONS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.misConfSummary.status),
-                lastScanTimeString: data.StartedOn,
-                scanToolName: data.scanToolName,
-                scanToolUrl: data.scanToolUrl,
+                ...scanInfo,
             }
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                lastScanTimeString: data.StartedOn,
-                scanToolName: data.scanToolName,
-                scanToolUrl: data.scanToolUrl,
+                ...scanInfo,
             }
         default:
             return null
@@ -90,18 +92,20 @@ const getCompletedEmptyState = (
     const subTitleText = detailViewTitleText || 'Kubernetes manifests'
     const { scanToolName, scanToolUrl } = data
 
+    const scanCompletedState = getScanCompletedEmptyState(scanToolName, scanToolUrl)
+
     switch (subCategory) {
         case SUB_CATEGORIES.MISCONFIGURATIONS:
             /**
              * NOTE: if we are not in detail view then check for empty list in the subCategory;
              * otherwise the check for emptiness is done at start of the func  */
             return {
-                ...getScanCompletedEmptyState(scanToolName, scanToolUrl),
+                ...scanCompletedState,
                 subTitle: `No misconfigurations found in ${subTitleText}`,
             }
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
-                ...getScanCompletedEmptyState(scanToolName, scanToolUrl),
+                ...scanCompletedState,
                 subTitle: `No exposed secrets found in ${subTitleText}`,
             }
         default:

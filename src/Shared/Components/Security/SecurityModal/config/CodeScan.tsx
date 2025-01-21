@@ -423,34 +423,32 @@ export const getCodeScanInfoCardData = (
     data: CodeScan,
     subCategory: SecurityModalStateType['subCategory'],
 ): InfoCardPropsType => {
+    const { StartedOn, scanToolName, scanToolUrl } = data
+    const scanInfo: Omit<InfoCardPropsType, 'entities'> = {
+        lastScanTimeString: StartedOn,
+        scanToolName,
+        scanToolUrl,
+    }
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                lastScanTimeString: data.StartedOn,
-                scanToolName: data.scanToolName,
-                scanToolUrl: data.scanToolUrl,
+                ...scanInfo,
             }
         case SUB_CATEGORIES.LICENSE:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                lastScanTimeString: data.StartedOn,
-                scanToolName: data.scanToolName,
-                scanToolUrl: data.scanToolUrl,
+                ...scanInfo,
             }
         case SUB_CATEGORIES.MISCONFIGURATIONS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.misConfSummary.status),
-                lastScanTimeString: data.StartedOn,
-                scanToolName: data.scanToolName,
-                scanToolUrl: data.scanToolUrl,
+                ...scanInfo,
             }
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                lastScanTimeString: data.StartedOn,
-                scanToolName: data.scanToolName,
-                scanToolUrl: data.scanToolUrl,
+                ...scanInfo,
             }
         default:
             return null
@@ -470,26 +468,27 @@ const getCompletedEmptyState = (
     const detailViewTitleText = detailViewData ? `${detailViewData.titlePrefix}: ${detailViewData.title}` : ''
     const subTitleText = detailViewTitleText || 'code scan'
     const { scanToolName, scanToolUrl } = data
+    const scanCompletedState = getScanCompletedEmptyState(scanToolName, scanToolUrl)
 
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
             return {
-                ...getScanCompletedEmptyState(scanToolName, scanToolUrl),
+                ...scanCompletedState,
                 subTitle: `No security vulnerability found in ${subTitleText}`,
             }
         case SUB_CATEGORIES.LICENSE:
             return {
-                ...getScanCompletedEmptyState(scanToolName, scanToolUrl),
+                ...scanCompletedState,
                 subTitle: `No license risks found in ${subTitleText}`,
             }
         case SUB_CATEGORIES.MISCONFIGURATIONS:
             return {
-                ...getScanCompletedEmptyState(scanToolName, scanToolUrl),
+                ...scanCompletedState,
                 subTitle: `No misconfigurations found in ${subTitleText}`,
             }
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
-                ...getScanCompletedEmptyState(scanToolName, scanToolUrl),
+                ...scanCompletedState,
                 subTitle: `No exposed secrets found in ${subTitleText}`,
             }
         default:
