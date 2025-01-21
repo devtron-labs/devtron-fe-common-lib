@@ -258,7 +258,7 @@ export const sanitizeWorkflowExecutionStages = (
         (stage) => stage?.stageName === WorkflowExecutionStageNameType.EXECUTION,
     )
 
-    const isOldData = !!preparationStage
+    const isOldData = !preparationStage
     const computedTriggedOn = isOldData ? executionStage?.startTime : preparationStage?.startTime
 
     let lastStatus: WorkflowStageStatusType = WorkflowStageStatusType.UNKNOWN
