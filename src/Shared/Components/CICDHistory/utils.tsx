@@ -42,6 +42,18 @@ import {
     WorkflowExecutionStageNameType,
 } from './types'
 
+const FAILED_WORKFLOW_STAGE_STATUS_MAP: Record<
+    Extract<
+        WorkflowStageStatusType,
+        WorkflowStageStatusType.ABORTED | WorkflowStageStatusType.FAILED | WorkflowStageStatusType.TIMEOUT
+    >,
+    true
+> = {
+    [WorkflowStageStatusType.ABORTED]: true,
+    [WorkflowStageStatusType.FAILED]: true,
+    [WorkflowStageStatusType.TIMEOUT]: true,
+}
+
 export const getTriggerHistoryFilterCriteria = ({
     appId,
     envId,
@@ -225,8 +237,7 @@ const getWorkerInfoFromExecutionStages = (
     return {
         status,
         message: message || '',
-        clusterId: metadata?.clusterId || +DEFAULT_CLUSTER_ID,
-        podName: metadata?.podName || '',
+        clusterId: metadata?.clusterId || DEFAULT_CLUSTER_ID,
         endTime: isTimeStringAvailable(endTime) ? endTime : '',
     }
 }
@@ -249,17 +260,31 @@ export const sanitizeWorkflowExecutionStages = (
 
     const isOldData = !!preparationStage
     const computedTriggedOn = isOldData ? executionStage?.startTime : preparationStage?.startTime
-    const finishedOn = workflowExecutionSteps[workflowExecutionSteps.length - 1]?.endTime
-    const lastStatus = workflowExecutionSteps[workflowExecutionSteps.length - 1]?.status
+
+    let lastStatus: WorkflowStageStatusType = WorkflowStageStatusType.UNKNOWN
+    workflowExecutionSteps.forEach(({ status }) => {
+        if (status !== WorkflowStageStatusType.NOT_STARTED) {
+            lastStatus = status
+        }
+    })
+
+    let finishedOn: string = ''
+    workflowExecutionSteps.forEach(({ status, endTime }, index) => {
+        if (FAILED_WORKFLOW_STAGE_STATUS_MAP[status]) {
+            finishedOn = endTime
+        } else if (index === workflowExecutionSteps.length - 1 && status === WorkflowStageStatusType.SUCCEEDED) {
+            finishedOn = endTime
+        }
+    })
 
     return {
         triggeredOn: isTimeStringAvailable(computedTriggedOn) ? computedTriggedOn : '',
         executionStartedOn: isOldData ? null : executionStage?.startTime,
         finishedOn: isTimeStringAvailable(finishedOn) ? finishedOn : '',
-        currentStatus: lastStatus || WorkflowStageStatusType.UNKNOWN,
+        currentStatus: lastStatus,
         workerDetails: getWorkerInfoFromExecutionStages(workflowExecutionStages),
     }
 }
 
-export const getWorkerPodBaseUrl = (clusterId: number = +DEFAULT_CLUSTER_ID, podNamespace: string = 'devtron-ci') =>
+export const getWorkerPodBaseUrl = (clusterId: number = DEFAULT_CLUSTER_ID, podNamespace: string = 'devtron-ci') =>
     `/resource-browser/${clusterId}/${podNamespace}/pod/k8sEmptyGroup`

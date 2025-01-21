@@ -125,9 +125,6 @@ export enum WorkflowStageStatusType {
     FAILED = 'FAILED',
     ABORTED = 'ABORTED',
     TIMEOUT = 'TIMEOUT',
-    /**
-     * UI Enum
-     */
     UNKNOWN = 'UNKNOWN',
 }
 
@@ -216,7 +213,7 @@ export interface ExecutionInfoType {
      */
     currentStatus: WorkflowStageStatusType
     workerDetails: Pick<PodExecutionStageDTO, 'message' | 'status' | 'endTime'> &
-        Pick<PodExecutionStageDTO['metadata'], 'clusterId' | 'podName'>
+        Pick<PodExecutionStageDTO['metadata'], 'clusterId'>
 }
 
 export interface DeploymentHistoryResultObject {
@@ -286,6 +283,7 @@ export interface CurrentStatusType {
     artifact: string
     stage: DeploymentStageType
     type: HistoryComponentType
+    executionInfo: ExecutionInfoType
 }
 
 export interface StartDetailsType {
@@ -309,7 +307,7 @@ export interface StartDetailsType {
 
 export interface TriggerDetailsType
     extends Pick<StartDetailsType, 'renderTargetConfigInfo'>,
-        Pick<History, 'workflowExecutionStages'> {
+        Pick<History, 'workflowExecutionStages' | 'namespace'> {
     status: string
     startedOn: string
     finishedOn: string
@@ -326,16 +324,17 @@ export interface TriggerDetailsType
     isJobView?: boolean
     workerPodName?: string
     triggerMetadata?: string
-    renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string) => JSX.Element
+    renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string, onlyRenderIcon?: boolean) => JSX.Element
 }
 
-export interface ProgressingStatusType {
-    status: string
+export type ProgressingStatusType = {
     stage: DeploymentStageType
     type: HistoryComponentType
 }
 
-export interface WorkerStatusType extends Pick<ExecutionInfoType['workerDetails'], 'clusterId'> {
+export interface WorkerStatusType
+    extends Pick<ExecutionInfoType['workerDetails'], 'clusterId'>,
+        Pick<TriggerDetailsType, 'namespace'> {
     message: string
     podStatus: string
     stage: DeploymentStageType
@@ -343,14 +342,22 @@ export interface WorkerStatusType extends Pick<ExecutionInfoType['workerDetails'
     workerPodName?: string
 }
 
-export interface FinishedType {
-    status: string
-    finishedOn: string
-    artifact: string
-    type: HistoryComponentType
-}
+export type FinishedType = { artifact: string; type: HistoryComponentType } & (
+    | {
+          status: string
+          finishedOn: string
+          executionInfo?: never
+      }
+    | {
+          executionInfo: ExecutionInfoType
+          status?: never
+          finishedOn?: never
+      }
+)
 
-export interface TriggerDetailsStatusIconType {
+export interface TriggerDetailsStatusIconType
+    extends Pick<TriggerDetailsType, 'renderDeploymentHistoryTriggerMetaText' | 'triggerMetadata'>,
+        Pick<ExecutionInfoType, 'executionStartedOn'> {
     status: string
 }
 

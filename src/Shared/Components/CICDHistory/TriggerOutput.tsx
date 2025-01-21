@@ -58,6 +58,7 @@ import {
     terminalStatus,
     History,
     HistoryLogsProps,
+    WorkflowStageStatusType,
 } from './types'
 import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger } from './service'
 import { DEFAULT_CLUSTER_ID, DEFAULT_ENV, TIMEOUT_VALUE } from './constants'
@@ -72,19 +73,22 @@ import { ConfirmationModal, ConfirmationModalVariantType } from '../Confirmation
 import { getWorkerPodBaseUrl, sanitizeWorkflowExecutionStages } from './utils'
 import './cicdHistory.scss'
 
-const Finished = React.memo(
-    ({ status, finishedOn, artifact, type }: FinishedType): JSX.Element => (
+const Finished = React.memo(({ status, finishedOn, artifact, type, executionInfo }: FinishedType): JSX.Element => {
+    const finishedOnTime = executionInfo?.finishedOn || finishedOn
+    const computedStatus = executionInfo?.currentStatus || status
+
+    return (
         <div className="flexbox pt-12 dc__gap-8 left dc__min-width-fit-content dc__align-items-center">
             <div
-                className={`${status} fs-13 fw-6 ${TERMINAL_STATUS_COLOR_CLASS_MAP[status.toLowerCase()] || 'cn-5'}`}
+                className={`${computedStatus} fs-13 fw-6 ${TERMINAL_STATUS_COLOR_CLASS_MAP[computedStatus.toLowerCase()] || 'cn-5'}`}
                 data-testid="deployment-status-text"
             >
-                {status && status.toLowerCase() === 'cancelled' ? 'Aborted' : status}
+                {computedStatus && computedStatus.toLowerCase() === 'cancelled' ? 'Aborted' : computedStatus}
             </div>
 
-            {finishedOn && finishedOn !== ZERO_TIME_STRING && (
+            {finishedOnTime && finishedOnTime !== ZERO_TIME_STRING && (
                 <time className="dc__vertical-align-middle fs-13">
-                    {moment(finishedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
+                    {moment(finishedOnTime, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
                 </time>
             )}
 
@@ -95,11 +99,19 @@ const Finished = React.memo(
                 </>
             )}
         </div>
-    ),
-)
+    )
+})
 
 const WorkerStatus = React.memo(
-    ({ message, podStatus, stage, workerPodName, finishedOn, clusterId }: WorkerStatusType): JSX.Element | null => {
+    ({
+        message,
+        podStatus,
+        stage,
+        workerPodName,
+        finishedOn,
+        clusterId,
+        namespace,
+    }: WorkerStatusType): JSX.Element | null => {
         if (!message && !podStatus) {
             return null
         }
@@ -111,8 +123,7 @@ const WorkerStatus = React.memo(
         const getViewWorker = () =>
             showLink ? (
                 <NavLink
-                    // TODO: Ask for namespace as well
-                    to={`${getWorkerPodBaseUrl(clusterId)}/${workerPodName}/logs`}
+                    to={`${getWorkerPodBaseUrl(clusterId, namespace)}/${workerPodName}/logs`}
                     target="_blank"
                     className="anchor"
                 >
@@ -145,7 +156,7 @@ const WorkerStatus = React.memo(
     },
 )
 
-const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatusType): JSX.Element => {
+const ProgressingStatus = React.memo(({ stage, type }: ProgressingStatusType): JSX.Element => {
     const [aborting, setAborting] = useState(false)
     const [abortConfirmation, setAbortConfirmation] = useState(false)
     const [abortError, setAbortError] = useState<{
@@ -209,7 +220,7 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
         <>
             <div className="flex dc__gap-8 left pt-12">
                 <div className="dc__min-width-fit-content">
-                    <div className={`${status} fs-14 fw-6 flex left inprogress-status-color`}>In progress</div>
+                    <div className="fs-14 fw-6 flex left inprogress-status-color">In progress</div>
                 </div>
 
                 {abort && (
@@ -278,12 +289,34 @@ const ProgressingStatus = React.memo(({ status, stage, type }: ProgressingStatus
     )
 })
 
-const CurrentStatus = React.memo(({ status, finishedOn, artifact, stage, type }: CurrentStatusType): JSX.Element => {
-    if (PROGRESSING_STATUS[status.toLowerCase()]) {
-        return <ProgressingStatus status={status} stage={stage} type={type} />
-    }
-    return <Finished status={status} finishedOn={finishedOn} artifact={artifact} type={type} />
-})
+const CurrentStatus = React.memo(
+    ({ status, finishedOn, artifact, stage, type, executionInfo }: CurrentStatusType): JSX.Element => {
+        if (executionInfo) {
+            if (executionInfo.finishedOn) {
+                return <Finished executionInfo={executionInfo} artifact={artifact} type={type} />
+            }
+
+            if (executionInfo.currentStatus === WorkflowStageStatusType.RUNNING) {
+                return <ProgressingStatus stage={stage} type={type} />
+            }
+
+            if (executionInfo.currentStatus === WorkflowStageStatusType.UNKNOWN) {
+                return (
+                    <div className="flex dc__gap-8 left pt-12">
+                        <span>Unknown status</span>
+                    </div>
+                )
+            }
+
+            return null
+        }
+
+        if (PROGRESSING_STATUS[status.toLowerCase()]) {
+            return <ProgressingStatus stage={stage} type={type} />
+        }
+        return <Finished status={status} finishedOn={finishedOn} artifact={artifact} type={type} />
+    },
+)
 
 const StartDetails = ({
     startedOn,
@@ -308,7 +341,7 @@ const StartDetails = ({
             <div className="flexbox dc__gap-8 dc__align-items-center pb-12 flex-wrap">
                 <div className="flex left dc__gap-4 cn-9 fs-13 fw-6 lh-20">
                     <div className="flex left dc__no-shrink dc__gap-4" data-testid="deployment-history-start-heading">
-                        <div>Start</div>
+                        <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Triggered</h3>
                         {stage && (
                             <>
                                 <div className="dc__bullet" />
@@ -394,16 +427,39 @@ const StartDetails = ({
     )
 }
 
-const TriggerDetailsStatusIcon = React.memo(
-    ({ status }: TriggerDetailsStatusIconType): JSX.Element => (
-        <div className="flexbox-col">
-            <div className="flex">
-                <ICSuccess className="icon-dim-20" />
-            </div>
+const renderDetailsSuccessIconBlock = () => (
+    <>
+        <div className="flex">
+            <ICSuccess className="icon-dim-20" />
+        </div>
 
-            <div className="flex flex-grow-1">
-                <div className="dc__border-left--n7 h-100" />
-            </div>
+        <div className="flex flex-grow-1">
+            <div className="dc__border-left--n7 h-100" />
+        </div>
+    </>
+)
+
+const TriggerDetailsStatusIcon = React.memo(
+    ({
+        status,
+        renderDeploymentHistoryTriggerMetaText,
+        triggerMetadata,
+        executionStartedOn,
+    }: TriggerDetailsStatusIconType): JSX.Element => (
+        <div className="flexbox-col">
+            {renderDetailsSuccessIconBlock()}
+
+            {!!triggerMetadata && (
+                <>
+                    {renderDeploymentHistoryTriggerMetaText?.(triggerMetadata, true)}
+
+                    <div className="flex flex-grow-1">
+                        <div className="dc__border-left--n7 h-100" />
+                    </div>
+                </>
+            )}
+
+            {executionStartedOn && renderDetailsSuccessIconBlock()}
 
             {PULSATING_STATUS_MAP[status] ? (
                 <ICPulsateStatus />
@@ -446,6 +502,7 @@ export const TriggerDetails = React.memo(
         renderDeploymentHistoryTriggerMetaText,
         renderTargetConfigInfo,
         workflowExecutionStages,
+        namespace,
     }: TriggerDetailsType) => {
         const executionInfo = useMemo(
             () => sanitizeWorkflowExecutionStages(workflowExecutionStages),
@@ -455,40 +512,52 @@ export const TriggerDetails = React.memo(
         return (
             <div className="trigger-details flexbox-col pb-12">
                 <div className="display-grid trigger-details__grid py-12">
-                    {stage === DeploymentStageType.DEPLOY ? (
-                        <>
-                            <div className="flexbox dc__content-center">
-                                <TriggerDetailsStatusIcon status={status?.toLowerCase()} />
-                            </div>
-                            <div className="trigger-details__summary flexbox-col flex-grow-1 lh-20">
-                                <StartDetails
-                                    startedOn={startedOn}
-                                    triggeredBy={triggeredBy}
-                                    triggeredByEmail={triggeredByEmail}
-                                    ciMaterials={ciMaterials}
-                                    gitTriggers={gitTriggers}
-                                    artifact={artifact}
-                                    type={type}
-                                    environmentName={environmentName}
-                                    isJobView={isJobView}
-                                    triggerMetadata={triggerMetadata}
-                                    renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
-                                    renderTargetConfigInfo={renderTargetConfigInfo}
-                                    stage={stage}
-                                />
+                    <div className="flexbox dc__content-center">
+                        <TriggerDetailsStatusIcon
+                            status={status?.toLowerCase()}
+                            renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
+                            triggerMetadata={triggerMetadata}
+                            executionStartedOn={executionInfo?.executionStartedOn}
+                        />
+                    </div>
+                    <div className="trigger-details__summary flexbox-col flex-grow-1 lh-20">
+                        <StartDetails
+                            startedOn={executionInfo?.triggeredOn ?? startedOn}
+                            triggeredBy={triggeredBy}
+                            triggeredByEmail={triggeredByEmail}
+                            ciMaterials={ciMaterials}
+                            gitTriggers={gitTriggers}
+                            artifact={artifact}
+                            type={type}
+                            environmentName={environmentName}
+                            isJobView={isJobView}
+                            triggerMetadata={triggerMetadata}
+                            renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
+                            renderTargetConfigInfo={renderTargetConfigInfo}
+                            stage={stage}
+                        />
 
-                                <CurrentStatus
-                                    status={status}
-                                    finishedOn={finishedOn}
-                                    artifact={artifact}
-                                    stage={stage}
-                                    type={type}
-                                />
+                        {executionInfo?.executionStartedOn && (
+                            <div className="w-100 pr-20 flexbox dc__gap-8">
+                                <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Execution started</h3>
+
+                                <time className="cn-7 fs-13">
+                                    {moment(startedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(
+                                        DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
+                                    )}
+                                </time>
                             </div>
-                        </>
-                    ) : (
-                        <div />
-                    )}
+                        )}
+
+                        <CurrentStatus
+                            executionInfo={executionInfo}
+                            status={status}
+                            finishedOn={finishedOn}
+                            artifact={artifact}
+                            stage={stage}
+                            type={type}
+                        />
+                    </div>
                 </div>
 
                 <WorkerStatus
@@ -496,8 +565,9 @@ export const TriggerDetails = React.memo(
                     podStatus={executionInfo?.workerDetails?.status ?? podStatus}
                     stage={stage}
                     finishedOn={executionInfo?.workerDetails?.endTime ?? finishedOn}
-                    clusterId={executionInfo?.workerDetails?.clusterId || +DEFAULT_CLUSTER_ID}
+                    clusterId={executionInfo?.workerDetails?.clusterId || DEFAULT_CLUSTER_ID}
                     workerPodName={workerPodName}
+                    namespace={namespace}
                 />
             </div>
         )
@@ -858,6 +928,7 @@ const TriggerOutput = ({
                         environmentName={selectedEnvironmentName}
                         renderTargetConfigInfo={renderTargetConfigInfo}
                         workflowExecutionStages={triggerDetails.workflowExecutionStages}
+                        namespace={triggerDetails.namespace}
                     />
                     <ul className="pl-50 pr-20 pt-8 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bg__primary dc__zi-3">
                         {triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM && (
