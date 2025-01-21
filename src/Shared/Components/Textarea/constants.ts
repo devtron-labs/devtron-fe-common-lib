@@ -1,0 +1,4 @@
+export const TEXTAREA_CONSTRAINTS = {
+    MIN_HEIGHT: 56,
+    MAX_HEIGHT: 140,
+}
