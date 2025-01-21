@@ -98,6 +98,7 @@
         "@codemirror/lang-json": "6.0.1",
         "@codemirror/lang-yaml": "6.1.2",
         "@codemirror/legacy-modes": "6.4.2",
+        "@replit/codemirror-vscode-keymap": "^6.0.2",
         "@types/react-dates": "^21.8.6",
         "@uiw/codemirror-theme-github": "^4.23.7",
         "@uiw/react-codemirror": "4.23.7",

@@ -222,7 +222,7 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
         <div className="code-editor__search__field-container">
             <input
                 data-code-editor-find="true"
-                className="dc__no-border dc__outline-none-imp p-0 flex-grow-1"
+                className="dc__no-border dc__outline-none-imp p-0 w-100"
                 type="text"
                 value={query.search}
                 placeholder="Find"
@@ -294,7 +294,7 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
             <div className="code-editor__search__field-container">
                 <input
                     data-code-editor-replace="true"
-                    className="dc__no-border dc__outline-none-imp p-0 flex-grow-1"
+                    className="dc__no-border dc__outline-none-imp p-0 w-100"
                     type="text"
                     value={query.replace}
                     placeholder="Replace with..."

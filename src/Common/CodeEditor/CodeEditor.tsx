@@ -22,6 +22,8 @@ import CodeMirror, {
     basicSetup,
     BasicSetupOptions,
     Compartment,
+    ReactCodeMirrorRef,
+    keymap,
 } from '@uiw/react-codemirror'
 import CodeMirrorMerge from 'react-codemirror-merge'
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -42,6 +44,7 @@ import {
     stateExtensions,
 } from 'codemirror-json-schema'
 import { yamlSchemaHover, yamlCompletion, yamlSchemaLinter } from 'codemirror-json-schema/yaml'
+import { vscodeKeymap } from '@replit/codemirror-vscode-keymap'
 
 import { useTheme } from '@Shared/Providers'
 import { getUniqueId } from '@Shared/Helpers'
@@ -90,6 +93,7 @@ const CodeEditor = <DiffView extends boolean = false>({
     const { appTheme } = useTheme()
 
     // REFS
+    const codeMirrorRef = useRef<ReactCodeMirrorRef>()
     const codeMirrorParentDivRef = useRef<HTMLDivElement>()
 
     // Cleaning KubeManifest
@@ -122,6 +126,14 @@ const CodeEditor = <DiffView extends boolean = false>({
 
     // USE-EFFECTS
     useEffect(() => {
+        if (codeMirrorParentDivRef.current) {
+            setHasCodeEditorContainer(
+                codeMirrorParentDivRef.current.parentElement.classList.contains('code-editor__container'),
+            )
+        }
+    }, [])
+
+    useEffect(() => {
         // Toggle `state.diffMode` based on `diffView`
         dispatch({ type: 'setDiff', value: diffView })
     }, [diffView])
@@ -133,16 +145,17 @@ const CodeEditor = <DiffView extends boolean = false>({
             setCodemirrorMergeKey(getUniqueId())
         },
         // Include any props that modify codemirror-merge extensions directly, as a workaround for the unresolved bug.
-        [readOnly, tabSize, disableSearch],
+        [readOnly, tabSize, disableSearch, appTheme, mode],
     )
 
     useEffect(() => {
-        if (codeMirrorParentDivRef.current) {
-            setHasCodeEditorContainer(
-                codeMirrorParentDivRef.current.parentElement.classList.contains('code-editor__container'),
-            )
-        }
-    }, [])
+        // Added timeout to ensure the autofocus code is executed post the re-renders
+        setTimeout(() => {
+            if (autoFocus && codeMirrorRef.current?.view) {
+                codeMirrorRef.current.view.focus()
+            }
+        }, 100)
+    }, [autoFocus])
 
     // METHODS
     const setCode = (codeValue: string) => {
@@ -179,8 +192,10 @@ const CodeEditor = <DiffView extends boolean = false>({
     const foldingCompartment = new Compartment()
 
     const basicSetupOptions: BasicSetupOptions = {
-        searchKeymap: !disableSearch,
+        defaultKeymap: false,
+        searchKeymap: false,
         foldGutter: false,
+        // TODO: need to remove this after getting proper colors from design
         drawSelection: false,
         tabSize,
     }
@@ -193,12 +208,12 @@ const CodeEditor = <DiffView extends boolean = false>({
         setLhsCode(newLhsValue)
     }
 
-    const getLanguageExtension = () => {
+    const getLanguageExtension = (): Extension => {
         switch (mode) {
             case MODES.JSON:
                 return langJson()
             case MODES.YAML:
-                return langYaml()
+                return [langYaml(), yamlParseErrorLint()]
             case MODES.SHELL:
                 return StreamLanguage.define(shell)
             case MODES.DOCKERFILE:
@@ -209,6 +224,10 @@ const CodeEditor = <DiffView extends boolean = false>({
     }
 
     const getValidationSchema = (): Extension[] => {
+        if (!Object.keys(validatorSchema).length) {
+            return []
+        }
+
         switch (mode) {
             case MODES.JSON:
                 return [
@@ -227,7 +246,6 @@ const CodeEditor = <DiffView extends boolean = false>({
                 ]
             case MODES.YAML:
                 return [
-                    yamlParseErrorLint(),
                     linter(yamlSchemaLinter(), {
                         needsRefresh: handleRefresh,
                     }),
@@ -254,6 +272,7 @@ const CodeEditor = <DiffView extends boolean = false>({
 
     const baseExtensions: Extension[] = [
         basicSetup(basicSetupOptions),
+        keymap.of(vscodeKeymap.filter(({ key }) => !disableSearch || key !== 'Mod-f')),
         getLanguageExtension(),
         foldingCompartment.of(foldConfig),
         search({
@@ -314,6 +333,7 @@ const CodeEditor = <DiffView extends boolean = false>({
             <div ref={codeMirrorParentDivRef} className={`w-100 ${codeEditorParentClassName}`}>
                 {shebang && <div className="code-editor__shebang">{shebang}</div>}
                 <CodeMirror
+                    ref={codeMirrorRef}
                     theme={codeEditorTheme(appTheme)}
                     className={codeEditorClassName}
                     basicSetup={false}
@@ -322,7 +342,6 @@ const CodeEditor = <DiffView extends boolean = false>({
                     readOnly={readOnly}
                     height={codeEditorHeight}
                     minHeight="250px"
-                    autoFocus={autoFocus}
                     onFocus={onFocus}
                     onBlur={onBlur}
                     onChange={handleOnChange}
