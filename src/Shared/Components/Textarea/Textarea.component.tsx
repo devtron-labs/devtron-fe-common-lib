@@ -1,9 +1,9 @@
+import { useEffect, useRef } from 'react'
 import {
     COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP,
     COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP,
     ComponentSizeType,
 } from '@Shared/constants'
-import { useEffect, useRef } from 'react'
 import { useThrottledEffect } from '@Common/Helper'
 import { FormFieldWrapper } from '../FormFieldWrapper'
 import { TextareaProps } from './types'
@@ -37,9 +37,11 @@ const Textarea = ({
     }
 
     const reInitHeight = () => {
-        updateRefsHeight(MIN_HEIGHT)
-
         let nextHeight = textareaRef?.current?.scrollHeight || 0
+
+        if (nextHeight < parseInt(textareaRef?.current?.style.height, 10)) {
+            return
+        }
 
         if (nextHeight < MIN_HEIGHT) {
             nextHeight = MIN_HEIGHT
@@ -56,7 +58,7 @@ const Textarea = ({
         reInitHeight()
     }, [])
 
-    useThrottledEffect(reInitHeight, 500, [props.value])
+    useThrottledEffect(reInitHeight, 300, [props.value])
 
     const handleBlur: TextareaProps['onBlur'] = (event) => {
         // NOTE: This is to prevent the input from being trimmed when the user do not want to trim the input
