@@ -39,7 +39,6 @@ import {
     ResourceVersionType,
     TargetPlatformsDTO,
 } from '../../types'
-import { TERMINAL_STATUS_MAP } from './constants'
 import { TargetPlatformBadgeListProps } from '../TargetPlatforms'
 
 export enum HistoryComponentType {
@@ -356,9 +355,9 @@ export type FinishedType = { artifact: string; type: HistoryComponentType } & (
 )
 
 export interface TriggerDetailsStatusIconType
-    extends Pick<TriggerDetailsType, 'renderDeploymentHistoryTriggerMetaText' | 'triggerMetadata'>,
-        Pick<ExecutionInfoType, 'executionStartedOn'> {
+    extends Pick<TriggerDetailsType, 'renderDeploymentHistoryTriggerMetaText' | 'triggerMetadata'> {
     status: string
+    executionInfo: ExecutionInfoType
 }
 
 export interface SyncStageResourceDetail {
@@ -392,22 +391,6 @@ export interface DeploymentStatusDetailsType {
 
 export interface DeploymentStatusDetailsResponse extends ResponseType {
     result?: DeploymentStatusDetailsType
-}
-
-export const TERMINAL_STATUS_COLOR_CLASS_MAP = {
-    [TERMINAL_STATUS_MAP.SUCCEEDED]: 'cg-5',
-    [TERMINAL_STATUS_MAP.HEALTHY]: 'cg-5',
-    [TERMINAL_STATUS_MAP.FAILED]: 'cr-5',
-    [TERMINAL_STATUS_MAP.CANCELLED]: 'cr-5',
-    [TERMINAL_STATUS_MAP.ERROR]: 'cr-5',
-}
-
-export const PROGRESSING_STATUS = {
-    [TERMINAL_STATUS_MAP.RUNNING]: 'running',
-    [TERMINAL_STATUS_MAP.PROGRESSING]: 'progressing',
-    [TERMINAL_STATUS_MAP.STARTING]: 'starting',
-    [TERMINAL_STATUS_MAP.INITIATING]: 'initiating',
-    [TERMINAL_STATUS_MAP.QUEUED]: 'queued',
 }
 
 interface DeploymentStatusDetailRow {

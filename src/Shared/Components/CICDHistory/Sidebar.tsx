@@ -41,8 +41,7 @@ import { ReactComponent as ICArrowBackward } from '../../../Assets/Icon/ic-arrow
 import { ReactComponent as ICDocker } from '../../../Assets/Icon/ic-docker.svg'
 import { GitTriggers } from '../../types'
 import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
-import { HISTORY_LABEL, FILTER_STYLE } from './constants'
-import { statusColor as colorMap } from '../../constants'
+import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
 import { getTriggerStatusIcon } from './utils'
 
 const SummaryTooltipCard = React.memo(

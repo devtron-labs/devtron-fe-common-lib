@@ -42,7 +42,7 @@ import {
     WorkflowExecutionStageNameType,
 } from './types'
 
-const FAILED_WORKFLOW_STAGE_STATUS_MAP: Record<
+export const FAILED_WORKFLOW_STAGE_STATUS_MAP: Record<
     Extract<
         WorkflowStageStatusType,
         WorkflowStageStatusType.ABORTED | WorkflowStageStatusType.FAILED | WorkflowStageStatusType.TIMEOUT
@@ -245,7 +245,7 @@ const getWorkerInfoFromExecutionStages = (
 export const sanitizeWorkflowExecutionStages = (
     workflowExecutionStages: WorkflowExecutionStagesMapDTO['workflowExecutionStages'],
 ): ExecutionInfoType | null => {
-    if (!workflowExecutionStages) {
+    if (!Object.keys(workflowExecutionStages || {}).length) {
         return null
     }
 

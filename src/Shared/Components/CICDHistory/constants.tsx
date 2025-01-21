@@ -15,6 +15,7 @@
  */
 
 import { multiSelectStyles } from '../../../Common/MultiSelectCustomization'
+import { WorkflowStageStatusType } from './types'
 
 export const HISTORY_LABEL = {
     APPLICATION: 'Application',
@@ -82,3 +83,51 @@ export const MANIFEST_STATUS_HEADERS = ['KIND', 'NAME', 'SYNC STATUS', 'MESSAGE'
 export const LOGS_STAGE_IDENTIFIER = 'STAGE_INFO'
 
 export const LOGS_STAGE_STREAM_SEPARATOR = '|'
+
+export const statusColor = {
+    suspended: 'var(--Y500)',
+    unknown: 'var(--N700)',
+    queued: 'var(--N700)',
+    degraded: 'var(--R500)',
+    healthy: 'var(--G500)',
+    notdeployed: 'var(--N500)',
+    missing: 'var(--N700)',
+    progressing: 'var(--O500)',
+    initiating: 'var(--O500)',
+    starting: 'var(--O500)',
+    succeeded: 'var(--G500)',
+    running: 'var(--O500)',
+    failed: 'var(--R500)',
+    error: 'var(--R500)',
+    cancelled: 'var(--R500)',
+    aborted: 'var(--R500)',
+    timedout: 'var(--R500)',
+    unabletofetch: 'var(--R500)',
+    hibernating: 'var(--N700)',
+    [WorkflowStageStatusType.NOT_STARTED.toLowerCase()]: 'var(--N500)',
+    [WorkflowStageStatusType.TIMEOUT.toLowerCase()]: 'var(--R500)',
+}
+
+export const PULSATING_STATUS_MAP: { [key in keyof typeof statusColor | WorkflowStageStatusType.RUNNING]?: boolean } = {
+    progressing: true,
+    initiating: true,
+    starting: true,
+    running: true,
+    [WorkflowStageStatusType.RUNNING.toLowerCase()]: true,
+}
+
+export const TERMINAL_STATUS_COLOR_CLASS_MAP = {
+    [TERMINAL_STATUS_MAP.SUCCEEDED]: 'cg-5',
+    [TERMINAL_STATUS_MAP.HEALTHY]: 'cg-5',
+    [TERMINAL_STATUS_MAP.FAILED]: 'cr-5',
+    [TERMINAL_STATUS_MAP.CANCELLED]: 'cr-5',
+    [TERMINAL_STATUS_MAP.ERROR]: 'cr-5',
+}
+
+export const PROGRESSING_STATUS = {
+    [TERMINAL_STATUS_MAP.RUNNING]: 'running',
+    [TERMINAL_STATUS_MAP.PROGRESSING]: 'progressing',
+    [TERMINAL_STATUS_MAP.STARTING]: 'starting',
+    [TERMINAL_STATUS_MAP.INITIATING]: 'initiating',
+    [TERMINAL_STATUS_MAP.QUEUED]: 'queued',
+}

@@ -24,6 +24,7 @@ import { CommitChipCell } from '@Shared/Components/CommitChipCell'
 import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
 import { ReactComponent as ICPulsateStatus } from '@Icons/ic-pulsate-status.svg'
+import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { getDeploymentStageTitle } from '@Pages/Applications'
@@ -46,10 +47,8 @@ import {
     FetchIdDataStatus,
     FinishedType,
     HistoryComponentType,
-    PROGRESSING_STATUS,
     ProgressingStatusType,
     StartDetailsType,
-    TERMINAL_STATUS_COLOR_CLASS_MAP,
     TriggerDetailsStatusIconType,
     TriggerDetailsType,
     TriggerOutputProps,
@@ -61,16 +60,24 @@ import {
     WorkflowStageStatusType,
 } from './types'
 import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger } from './service'
-import { DEFAULT_CLUSTER_ID, DEFAULT_ENV, TIMEOUT_VALUE } from './constants'
+import {
+    DEFAULT_CLUSTER_ID,
+    DEFAULT_ENV,
+    TIMEOUT_VALUE,
+    statusColor as colorMap,
+    PULSATING_STATUS_MAP,
+    TERMINAL_STATUS_COLOR_CLASS_MAP,
+    PROGRESSING_STATUS,
+} from './constants'
 import { GitTriggers } from '../../types'
 import LogsRenderer from './LogsRenderer'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
-import { statusColor as colorMap, DeploymentStageType, EMPTY_STATE_STATUS, PULSATING_STATUS_MAP } from '../../constants'
+import { DeploymentStageType, EMPTY_STATE_STATUS } from '../../constants'
 import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
-import { getWorkerPodBaseUrl, sanitizeWorkflowExecutionStages } from './utils'
+import { FAILED_WORKFLOW_STAGE_STATUS_MAP, getWorkerPodBaseUrl, sanitizeWorkflowExecutionStages } from './utils'
 import './cicdHistory.scss'
 
 const Finished = React.memo(({ status, finishedOn, artifact, type, executionInfo }: FinishedType): JSX.Element => {
@@ -134,7 +141,12 @@ const WorkerStatus = React.memo(
         return (
             <div className="display-grid trigger-details__grid py-4">
                 <div className="flexbox dc__content-center">
-                    <ICLines className="icon-dim-20 dc__no-shrink scn-7" />
+                    {/* TODO: Ask if not started needs to be catered */}
+                    {FAILED_WORKFLOW_STAGE_STATUS_MAP[podStatus] ? (
+                        <ICWarningY5 className="icon-dim-20 dc__no-shrink" />
+                    ) : (
+                        <ICLines className="icon-dim-20 dc__no-shrink scn-7" />
+                    )}
                 </div>
 
                 <div className="flexbox-col">
@@ -439,12 +451,37 @@ const renderDetailsSuccessIconBlock = () => (
     </>
 )
 
+const NonProgressingStatus = React.memo(
+    ({ status }: { status: string }): JSX.Element => (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle
+                cx="10"
+                cy="10"
+                r="5"
+                fill={colorMap[status] || 'var(--N500'}
+                stroke={colorMap[status] || 'var(--N500'}
+                strokeOpacity="0.3"
+                strokeWidth="10"
+            />
+            <path d="M10 0L10 5" stroke="var(--N700)" />
+        </svg>
+    ),
+)
+
+const CurrentStatusIcon = React.memo(({ status }: { status: string }): JSX.Element => {
+    if (status === WorkflowStageStatusType.RUNNING || PULSATING_STATUS_MAP[status]) {
+        return <ICPulsateStatus />
+    }
+
+    return <NonProgressingStatus status={status.toLowerCase()} />
+})
+
 const TriggerDetailsStatusIcon = React.memo(
     ({
         status,
         renderDeploymentHistoryTriggerMetaText,
         triggerMetadata,
-        executionStartedOn,
+        executionInfo,
     }: TriggerDetailsStatusIconType): JSX.Element => (
         <div className="flexbox-col">
             {renderDetailsSuccessIconBlock()}
@@ -459,23 +496,12 @@ const TriggerDetailsStatusIcon = React.memo(
                 </>
             )}
 
-            {executionStartedOn && renderDetailsSuccessIconBlock()}
+            {executionInfo?.executionStartedOn && renderDetailsSuccessIconBlock()}
 
-            {PULSATING_STATUS_MAP[status] ? (
-                <ICPulsateStatus />
+            {executionInfo ? (
+                <CurrentStatusIcon status={executionInfo.currentStatus} />
             ) : (
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle
-                        cx="10"
-                        cy="10"
-                        r="5"
-                        fill={colorMap[status]}
-                        stroke={colorMap[status]}
-                        strokeOpacity="0.3"
-                        strokeWidth="10"
-                    />
-                    <path d="M10 0L10 5" stroke="var(--N700)" />
-                </svg>
+                <CurrentStatusIcon status={status} />
             )}
         </div>
     ),
@@ -517,7 +543,7 @@ export const TriggerDetails = React.memo(
                             status={status?.toLowerCase()}
                             renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
                             triggerMetadata={triggerMetadata}
-                            executionStartedOn={executionInfo?.executionStartedOn}
+                            executionInfo={executionInfo}
                         />
                     </div>
                     <div className="trigger-details__summary flexbox-col flex-grow-1 lh-20">
