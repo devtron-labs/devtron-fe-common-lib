@@ -104,7 +104,7 @@ export const CIListItem = ({
 
                 {type !== 'report' && (
                     <>
-                        {targetPlatforms?.length && (
+                        {!!targetPlatforms?.length && (
                             <div className="mt-8 flexbox-col dc__gap-8">
                                 <TargetPlatformBadgeList targetPlatforms={targetPlatforms} />
                             </div>

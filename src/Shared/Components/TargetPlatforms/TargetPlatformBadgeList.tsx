@@ -3,7 +3,7 @@ import { Tooltip } from '@Common/Tooltip'
 import { TargetPlatformBadgeListProps } from './types'
 
 const TargetPlatformBadge = ({ name }: TargetPlatformBadgeListProps['targetPlatforms'][number]) => (
-    <div className="bg__secondary py-2 px-6 dc__mxw-200">
+    <div className="bg__secondary py-2 px-6 dc__mxw-200 br-4">
         <Tooltip content={name}>
             <span className="dc__truncate cn-7 fs-12 fw-5 lh-16">{name}</span>
         </Tooltip>
