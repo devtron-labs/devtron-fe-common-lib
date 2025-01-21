@@ -196,10 +196,10 @@ const parsePlatformServerConfigIntoUIConfig = (
             })
 
             return {
-                useFormProps: cmSecretFormProps,
-                defaultValue: cmSecretFormProps,
-                initialResponse: configMapSecretData,
-                defaultValueInitialResponse: configMapSecretData,
+                useFormProps: structuredClone(cmSecretFormProps),
+                defaultValue: structuredClone(cmSecretFormProps),
+                initialResponse: structuredClone(configMapSecretData),
+                defaultValueInitialResponse: structuredClone(configMapSecretData),
                 id: getUniqueId(),
                 isOverridden: true,
                 canOverride: !isDefaultProfile,
@@ -265,18 +265,21 @@ const getConfigurationMapWithoutDefaultFallback = (
                 {} as BuildInfraConfigurationMapTypeWithoutDefaultFallback,
             ) ?? ({} as BuildInfraConfigurationMapTypeWithoutDefaultFallback)
 
-        acc[platformName] = platformConfigValuesMap
+        acc[platformName] = structuredClone(platformConfigValuesMap)
 
         return acc
     }, {})
 
 const getPlatformConfigurationsWithDefaultValues = ({
-    profileConfigurationsMap,
-    defaultConfigurationsMap,
+    profileConfigurationsMap: profileConfigurationsMapProp,
+    defaultConfigurationsMap: defaultConfigurationsMapProp,
     platformName,
     isDefaultProfile = false,
-}: GetPlatformConfigurationsWithDefaultValuesParamsType): BuildInfraConfigurationMapType =>
-    Object.values(BuildInfraConfigTypes).reduce<BuildInfraConfigurationMapType>((acc, configType) => {
+}: GetPlatformConfigurationsWithDefaultValuesParamsType): BuildInfraConfigurationMapType => {
+    const profileConfigurationsMap = structuredClone(profileConfigurationsMapProp)
+    const defaultConfigurationsMap = structuredClone(defaultConfigurationsMapProp)
+
+    return Object.values(BuildInfraConfigTypes).reduce<BuildInfraConfigurationMapType>((acc, configType) => {
         const defaultConfiguration = defaultConfigurationsMap[configType]
         const profileConfiguration = profileConfigurationsMap[configType]?.active
             ? profileConfigurationsMap[configType]
@@ -313,7 +316,9 @@ const getPlatformConfigurationsWithDefaultValues = ({
 
             const finalValues: BuildInfraCMCSValueType[] =
                 (profileConfiguration?.value as BuildInfraCMCSValueType[])?.map((configMapSecretData) => {
-                    const defaultConfigInfo = defaultConfigurationValueMap[configMapSecretData.useFormProps.name]
+                    const defaultConfigInfo = structuredClone(
+                        defaultConfigurationValueMap[configMapSecretData.useFormProps.name],
+                    )
 
                     return {
                         ...configMapSecretData,
@@ -365,6 +370,7 @@ const getPlatformConfigurationsWithDefaultValues = ({
 
         return acc
     }, {} as BuildInfraConfigurationMapType)
+}
 
 // Would receive a single profile and return transformed response
 export const getTransformedBuildInfraProfileResponse = ({
