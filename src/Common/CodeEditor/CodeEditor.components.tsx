@@ -32,6 +32,7 @@ export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEdit
 
     return (
         <div
+            data-code-editor__header
             className={`${hasCodeEditorContainer ? 'dc__top-radius-4' : ''} ${className || 'code-editor__header flex right'}`}
         >
             {children}

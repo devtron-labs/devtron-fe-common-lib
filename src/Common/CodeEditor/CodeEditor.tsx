@@ -78,7 +78,7 @@ const CodeEditor = <DiffView extends boolean = false>({
     diffView,
     loading,
     customLoader,
-    validatorSchema,
+    validatorSchema = {},
     schemaURI = DEFAULT_JSON_SCHEMA_URI,
     cleanData = false,
     onBlur,
@@ -275,7 +275,10 @@ const CodeEditor = <DiffView extends boolean = false>({
         if (loading) {
             return (
                 customLoader || (
-                    <div className="flex" style={{ height: typeof height === 'number' ? `${height}px` : height }}>
+                    <div
+                        className="flex mh-250"
+                        style={{ height: typeof height === 'number' ? `${height}px` : height }}
+                    >
                         <Progressing pageLoader />
                     </div>
                 )

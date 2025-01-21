@@ -52,7 +52,7 @@ export const getFoldGutterElement = (open) => {
 export const getHoverElement = (schemaURI: CodeEditorProps['schemaURI']) => (data: HoverTexts) => {
     const hoverContainer = document.createElement('div')
     const node = (
-        <div className="tippy-box default-tt dc__mxw-300 flexbox-col px-10 py-6 br-4 lh-18">
+        <div className="tippy-box default-white dc__mxw-300 flexbox-col px-10 py-6 br-4 lh-18">
             {data.message && <p className="m-0">{data.message}</p>}
             {data.typeInfo && (
                 <p

@@ -48,6 +48,10 @@
         border-radius: 4px;
     }
 
+    .cm-panels-top {
+        border-bottom: none;
+    }
+
     .cm-diagnostic-error {
         border-top-left-radius: 2px;
         border-bottom-left-radius: 2px;
@@ -63,6 +67,10 @@
         font-size: 10px;
         line-height: 15px;
         opacity: 0.8;
+    }
+
+    .cm-tooltip {
+        border: none;
     }
 
     .cm-gutter-lint .cm-gutterElement {
@@ -113,6 +121,18 @@
 
         .cm-scroller {
             border-radius: 4px;
+        }
+    }
+
+    &:has(> [data-code-editor__header]) {
+        .cm-editor {
+            border-top-right-radius: 0;
+            border-top-left-radius: 0;
+
+            .cm-scroller {
+                border-top-right-radius: 0;
+                border-top-left-radius: 0;
+            }
         }
     }
 }
