@@ -156,12 +156,14 @@ export type AppEnvDeploymentConfigListParams<IsManifestView> = (IsManifestView e
           compareList: ManifestTemplateDTO
           compareToTemplateOptions?: never
           compareWithTemplateOptions?: never
+          sortingConfig?: never
       }
     : {
           currentList: AppEnvDeploymentConfigDTO
           compareList: AppEnvDeploymentConfigDTO
           compareToTemplateOptions?: TemplateListDTO[]
           compareWithTemplateOptions?: TemplateListDTO[]
+          sortingConfig?: Pick<DeploymentConfigDiffProps['sortingConfig'], 'sortBy' | 'sortOrder'>
       }) & {
     getNavItemHref: (resourceType: EnvResourceType, resourceName: string) => string
     isManifestView?: IsManifestView
