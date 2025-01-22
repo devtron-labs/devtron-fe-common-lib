@@ -81,7 +81,6 @@ export type DeleteDialogProps = {
     onDelete: () => void
     deletePrefix?: string
     deletePostfix?: string
-    isLoading?: boolean
     dataTestId?: string
     buttonPrimaryText?: string
     shouldStopPropagation?: boolean
@@ -94,4 +93,26 @@ export type DeleteDialogProps = {
     reload?: () => void
     closeConfirmationModal: () => void
     renderCannotDeleteConfirmationSubTitle?: ReactNode
+}
+
+export type DeleteComponentModalProps = {
+    // Required Props
+    title: string
+    component: string
+    showConfirmationModal: boolean
+    closeConfirmationModal: () => void
+    onDelete: () => void
+    reload: () => void
+
+    // Optional Customization
+    description?: ReactNode
+    renderCannotDeleteConfirmationSubTitle?: ReactNode
+    errorCodeToShowCannotDeleteDialog?: number
+
+    // Additional Configuration
+    shouldStopPropagation?: boolean
+    disabled?: boolean
+    url?: string
+    dataTestId?: string
+    children?: ReactNode
 }

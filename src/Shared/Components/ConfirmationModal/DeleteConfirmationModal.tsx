@@ -19,56 +19,53 @@ import { ToastManager, ToastVariantType } from '@Shared/Services/ToastManager'
 import { useHistory } from 'react-router-dom'
 import { ServerErrors } from '@Common/ServerError'
 import { showError } from '@Common/Helper'
-import { ConfirmationModalVariantType, DeleteDialogProps } from './types'
+import { ConfirmationModalVariantType, DeleteComponentModalProps } from './types'
 import ConfirmationModal from './ConfirmationModal'
 
-export const DeleteConfirmationModal: React.FC<DeleteDialogProps> & { Description?: React.FC<any> } = ({
+export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     title,
     description,
     showConfirmationModal,
-    isLoading,
     disabled,
     onDelete,
     dataTestId,
     component,
-    redirectTo,
     url,
     reload,
     closeConfirmationModal,
     renderCannotDeleteConfirmationSubTitle,
-}: DeleteDialogProps) => {
+    errorCodeToShowCannotDeleteDialog,
+}: DeleteComponentModalProps) => {
     const history = useHistory()
     const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(false)
+    const [isLoading, setLoading] = useState(false)
 
     const handleDelete = async () => {
+        setLoading(true)
         try {
             await onDelete()
             ToastManager.showToast({
                 variant: ToastVariantType.success,
                 description: 'Successfully deleted',
             })
-            if (redirectTo) {
+            if (url) {
                 history.push(url)
-            } else {
-                reload()
             }
+            reload()
             closeConfirmationModal()
-            // if (typeof closeCustomComponent === 'function') {
-            //     closeCustomComponent()
-            // }
         } catch (serverError) {
-            if (serverError instanceof ServerErrors && serverError.code === 500) {
+            if (serverError instanceof ServerErrors && serverError.code === errorCodeToShowCannotDeleteDialog) {
                 setCannotDeleteDialogModal(true)
                 closeConfirmationModal()
             } else {
                 showError(serverError)
             }
+        } finally {
+            setLoading(false)
         }
     }
 
-    const handleConfirmation = () => {
-        setCannotDeleteDialogModal(false)
-    }
+    const handleConfirmation = () => setCannotDeleteDialogModal(false)
 
     const renderCannotDeleteDialogModal = () => (
         <ConfirmationModal
@@ -89,7 +86,7 @@ export const DeleteConfirmationModal: React.FC<DeleteDialogProps> & { Descriptio
     const renderDeleteModal = () => (
         <ConfirmationModal
             variant={ConfirmationModalVariantType.delete}
-            title={`Delete ${title}`}
+            title={`Delete ${component} '${title}'`}
             subtitle={description ?? `Are you sure you want to delete this ${component}?`}
             buttonConfig={{
                 secondaryButtonConfig: {
