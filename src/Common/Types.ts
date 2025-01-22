@@ -798,20 +798,6 @@ export interface UseSearchString {
     }
 }
 
-export interface ResizableTextareaProps {
-    minHeight?: number
-    maxHeight?: number
-    value?: string
-    onChange?: (e) => void
-    onBlur?: (e) => void
-    onFocus?: (e) => void
-    className?: string
-    placeholder?: string
-    disabled?: boolean
-    name?: string
-    dataTestId?: string
-}
-
 export interface AsyncState<T> {
     loading: boolean
     result: T
