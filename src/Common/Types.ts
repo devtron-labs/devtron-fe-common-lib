@@ -24,6 +24,7 @@ import {
     RuntimePluginVariables,
     Severity,
     PolicyBlockInfo,
+    TargetPlatformItemDTO,
 } from '../Shared'
 import {
     ACTION_STATE,
@@ -563,6 +564,7 @@ export interface CDMaterialType {
      * Denotes trigger blocking due to mandatory tags, (might be used for plugins and other features in future)
      */
     deploymentBlockedState?: PolicyBlockInfo
+    targetPlatforms: TargetPlatformItemDTO[]
 }
 
 export enum CDMaterialServiceEnum {

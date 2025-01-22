@@ -501,6 +501,7 @@ export const ImageTagButton = ({
     isSuperAdmin,
     duplicateTag,
     hideHardDelete,
+    startIcon,
 }: ImageButtonType) => {
     const IconComponent = isSoftDeleted ? Redo : Minus
     const isInSoftDeleteTags = isSoftDeleted && softDeleteTags.some((tag) => tag.tagName === text)
@@ -522,6 +523,8 @@ export const ImageTagButton = ({
                 isEditing ? 'icon-hover' : ''
             } ${tabColor()}`}
         >
+            {startIcon}
+
             {duplicateTag ? (
                 <Warning className="icon-dim-12 mr-4" />
             ) : (
