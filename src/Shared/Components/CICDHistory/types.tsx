@@ -242,7 +242,9 @@ export interface SidebarType extends RenderRunSourceType {
     resourceId?: number
 }
 
-export interface HistorySummaryCardType extends RenderRunSourceType, Pick<History, 'workflowExecutionStages'> {
+export interface HistorySummaryCardType
+    extends RenderRunSourceType,
+        Pick<History, 'workflowExecutionStages' | 'podName' | 'namespace'> {
     id: number
     status: string
     startedOn: string
@@ -261,7 +263,7 @@ export interface HistorySummaryCardType extends RenderRunSourceType, Pick<Histor
     resourceId?: number
 }
 
-export interface SummaryTooltipCardType {
+export interface DeploymentSummaryTooltipCardType {
     status: string
     startedOn: string
     triggeredBy: number
@@ -269,6 +271,10 @@ export interface SummaryTooltipCardType {
     ciMaterials: CiMaterial[]
     gitTriggers: Map<number, GitTriggers>
 }
+
+export interface BuildAndTaskSummaryTooltipCardProps
+    extends Pick<History, 'workflowExecutionStages' | 'triggeredByEmail' | 'namespace' | 'podName' | 'stage'>,
+        Pick<HistorySummaryCardType, 'gitTriggers' | 'ciMaterials'> {}
 
 export interface DeploymentTemplateList {
     id: number

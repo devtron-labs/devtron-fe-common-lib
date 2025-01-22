@@ -29,7 +29,6 @@ import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { getDeploymentStageTitle } from '@Pages/Applications'
 import {
-    DATE_TIME_FORMATS,
     DeploymentAppTypes,
     GenericEmptyState,
     Progressing,
@@ -77,7 +76,12 @@ import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
 import { DeploymentStageType, EMPTY_STATE_STATUS } from '../../constants'
 import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
-import { FAILED_WORKFLOW_STAGE_STATUS_MAP, getWorkerPodBaseUrl, sanitizeWorkflowExecutionStages } from './utils'
+import {
+    FAILED_WORKFLOW_STAGE_STATUS_MAP,
+    getFormattedTriggerTime,
+    getWorkerPodBaseUrl,
+    sanitizeWorkflowExecutionStages,
+} from './utils'
 import './cicdHistory.scss'
 
 const Finished = React.memo(({ status, finishedOn, artifact, type, executionInfo }: FinishedType): JSX.Element => {
@@ -94,9 +98,7 @@ const Finished = React.memo(({ status, finishedOn, artifact, type, executionInfo
             </div>
 
             {finishedOnTime && finishedOnTime !== ZERO_TIME_STRING && (
-                <time className="dc__vertical-align-middle fs-13">
-                    {moment(finishedOnTime, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
-                </time>
+                <time className="dc__vertical-align-middle fs-13">{getFormattedTriggerTime(finishedOnTime)}</time>
             )}
 
             {type === HistoryComponentType.CI && artifact && (
@@ -109,7 +111,7 @@ const Finished = React.memo(({ status, finishedOn, artifact, type, executionInfo
     )
 })
 
-const WorkerStatus = React.memo(
+export const WorkerStatus = React.memo(
     ({
         message,
         podStatus,
@@ -139,7 +141,7 @@ const WorkerStatus = React.memo(
             ) : null
 
         return (
-            <div className="display-grid trigger-details__grid py-4">
+            <>
                 <div className="flexbox dc__content-center">
                     {FAILED_WORKFLOW_STAGE_STATUS_MAP[podStatus] ? (
                         <ICWarningY5 className="icon-dim-20 dc__no-shrink" />
@@ -167,7 +169,7 @@ const WorkerStatus = React.memo(
                     {/* Need key since using ref inside of this component as useEffect dependency, so there were issues while switching builds */}
                     {message && <ShowMoreText text={message} key={message} textClass="cn-7" />}
                 </div>
-            </div>
+            </>
         )
     },
 )
@@ -376,9 +378,7 @@ const StartDetails = ({
                     {renderTargetConfigInfo?.()}
                 </div>
 
-                <time className="cn-7 fs-13">
-                    {moment(startedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
-                </time>
+                <time className="cn-7 fs-13">{getFormattedTriggerTime(startedOn)}</time>
 
                 <div className="dc__bullet" />
 
@@ -565,11 +565,7 @@ export const TriggerDetails = React.memo(
                                 <div className="w-100 pr-20 flexbox dc__gap-8 py-12">
                                     <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Execution started</h3>
 
-                                    <time className="cn-7 fs-13">
-                                        {moment(startedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(
-                                            DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
-                                        )}
-                                    </time>
+                                    <time className="cn-7 fs-13">{getFormattedTriggerTime(startedOn)}</time>
                                 </div>
                             </div>
                         )}
@@ -597,15 +593,17 @@ export const TriggerDetails = React.memo(
                     </div>
                 </div>
 
-                <WorkerStatus
-                    message={executionInfo?.workerDetails?.message ?? message}
-                    podStatus={executionInfo?.workerDetails?.status ?? podStatus}
-                    stage={stage}
-                    finishedOn={executionInfo?.workerDetails?.endTime ?? finishedOn}
-                    clusterId={executionInfo?.workerDetails?.clusterId || DEFAULT_CLUSTER_ID}
-                    workerPodName={workerPodName}
-                    namespace={namespace}
-                />
+                <div className="display-grid trigger-details__grid py-4">
+                    <WorkerStatus
+                        message={executionInfo?.workerDetails?.message ?? message}
+                        podStatus={executionInfo?.workerDetails?.status ?? podStatus}
+                        stage={stage}
+                        finishedOn={executionInfo?.workerDetails?.endTime ?? finishedOn}
+                        clusterId={executionInfo?.workerDetails?.clusterId || DEFAULT_CLUSTER_ID}
+                        workerPodName={workerPodName}
+                        namespace={namespace}
+                    />
+                </div>
             </div>
         )
     },

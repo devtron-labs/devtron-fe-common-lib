@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import { ReactElement } from 'react'
+import moment from 'moment'
 import { TIMELINE_STATUS } from '@Shared/constants'
 import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
 import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
@@ -29,6 +30,7 @@ import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
 import { ReactComponent as ICHelpFilled } from '@Icons/ic-help-filled.svg'
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { isTimeStringAvailable } from '@Shared/Helpers'
+import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { DEFAULT_CLUSTER_ID, TERMINAL_STATUS_MAP } from './constants'
 import { ResourceKindType, WorkflowStatusEnum } from '../../types'
 import {
@@ -346,3 +348,6 @@ export const getWorkflowNodeStatusTitle = (status: string) => {
 
     return status
 }
+
+export const getFormattedTriggerTime = (time: string) =>
+    moment(time, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)
