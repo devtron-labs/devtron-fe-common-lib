@@ -16,7 +16,7 @@
 
 import { useState, memo, useEffect } from 'react'
 import { DebouncedSearch, GenericEmptyState, Progressing, Reload } from '@Common/index'
-import NoVariables from '@Images/no-artifact@2x.png'
+import NoVariables from '@Images/no-artifact.webp'
 import { ReactComponent as ICClose } from '@Icons/ic-cross.svg'
 import { ReactComponent as ICSearch } from '@Icons/ic-search.svg'
 import { ReactComponent as ICVariable } from '@Icons/ic-view-variable-toggle.svg'
