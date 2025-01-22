@@ -440,3 +440,16 @@ export const validateIframe = (input: string): ValidationResponseType => {
 
     return { isValid: true }
 }
+
+export const validateCMVolumeMountPath = (value: string): { isValid: boolean; message: string } => {
+    const re = PATTERNS.ALPHANUMERIC_WITH_SPECIAL_CHAR_AND_SLASH
+    const regExp = new RegExp(re)
+    const test = regExp.test(value)
+    if (!test) {
+        return {
+            isValid: false,
+            message: 'Use only alphanumeric, (/), (-), (_); Do not use "spaces"',
+        }
+    }
+    return { isValid: true, message: '' }
+}

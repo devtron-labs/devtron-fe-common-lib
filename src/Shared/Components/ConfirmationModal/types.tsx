@@ -63,6 +63,10 @@ type ButtonConfigAndVariantType<isConfig extends boolean> =
 export type ConfirmationModalProps<isConfig extends boolean = false> = {
     title: string
     subtitle: ReactNode
+    /**
+     * @default true
+     */
+    shouldCloseOnEscape?: boolean
 } & ButtonConfigAndVariantType<isConfig> &
     CustomInputConfigOrChildrenType &
     (isConfig extends false

@@ -21,14 +21,21 @@ import { BUILD_INFRA_TEXT } from './constants'
 
 const BuildInfraProfileDescriptionField: FunctionComponent<BuildInfraProfileMetaFieldProps> = ({
     handleProfileInputChange,
+    onChange,
     currentValue,
     error,
 }) => {
     const handleChange = (e: FormEvent<HTMLTextAreaElement>) => {
-        handleProfileInputChange({
-            action: BuildInfraMetaConfigTypes.DESCRIPTION,
-            data: { value: e.currentTarget.value },
-        })
+        if (handleProfileInputChange) {
+            handleProfileInputChange({
+                action: BuildInfraMetaConfigTypes.DESCRIPTION,
+                data: { value: e.currentTarget.value },
+            })
+
+            return
+        }
+
+        onChange(e)
     }
 
     return (
