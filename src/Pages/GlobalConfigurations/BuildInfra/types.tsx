@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
-import { FormEvent, FunctionComponent, ReactNode } from 'react'
+import { FormEvent, FunctionComponent, ReactNode, SyntheticEvent } from 'react'
 import { BUILD_INFRA_INHERIT_ACTIONS, useBuildInfraForm } from '@Pages/index'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
-import { ValidationResponseType } from '../../../Shared'
+import {
+    CMSecretComponentType,
+    CMSecretConfigData,
+    CMSecretPayloadType,
+    ConfigMapSecretUseFormProps,
+    getUniqueId,
+    useForm,
+    ValidationResponseType,
+} from '../../../Shared'
 import { ServerErrors } from '../../../Common'
 
 /**
@@ -32,6 +40,8 @@ export enum BuildInfraConfigTypes {
     BUILD_TIMEOUT = 'timeout',
     NODE_SELECTOR = 'node_selector',
     TOLERANCE = 'tolerations',
+    CONFIG_MAP = 'cm',
+    SECRET = 'cs',
 }
 
 /**
@@ -52,6 +62,8 @@ export enum BuildInfraLocators {
     BUILD_TIMEOUT = 'timeout',
     NODE_SELECTOR = 'node selector',
     TOLERANCE = 'tolerance',
+    CONFIG_MAP = 'cm',
+    SECRET = 'cs',
 }
 
 export type BuildInfraInheritActions = keyof typeof BUILD_INFRA_INHERIT_ACTIONS
@@ -75,6 +87,7 @@ export interface BuildInfraDescriptorProps {
     tippyInfoText?: string
     tippyAdditionalContent?: ReactNode
     tooltipNode?: ReactNode
+    tooltipHeading?: string
 }
 
 export type NumericBuildInfraConfigTypes = Extract<
@@ -175,24 +188,79 @@ export type BuildInfraToleranceValueType = {
       }
 )
 
-export type BuildInfraConfigValuesType =
-    | {
-          key: NumericBuildInfraConfigTypes
-          value: number
-          unit: ConfigurationUnitType['name']
-      }
-    | {
-          key: BuildInfraConfigTypes.NODE_SELECTOR
-          value: BuildInfraNodeSelectorValueType[]
-          unit?: never
-      }
-    | {
-          key: BuildInfraConfigTypes.TOLERANCE
-          value: BuildInfraToleranceValueType[]
-          unit?: never
-      }
+export type InfraConfigWithSubValues = Extract<
+    BuildInfraConfigTypes,
+    BuildInfraConfigTypes.CONFIG_MAP | BuildInfraConfigTypes.SECRET
+>
 
-interface BuildInfraProfileConfigBase {
+type BuildInfraConfigTypeFormat<Key, Value, Unit> = {
+    key: Key
+    value: Value
+} & ([Unit] extends [never]
+    ? {
+          unit?: Unit
+      }
+    : {
+          unit: Unit
+      })
+
+type NumericBuildInfraConfigValueDTO = BuildInfraConfigTypeFormat<
+    NumericBuildInfraConfigTypes,
+    number,
+    ConfigurationUnitType['name']
+>
+
+type NodeSelectorConfigDTO = BuildInfraConfigTypeFormat<
+    BuildInfraConfigTypes.NODE_SELECTOR,
+    BuildInfraNodeSelectorValueType[],
+    never
+>
+
+type ToleranceConfigDTO = BuildInfraConfigTypeFormat<
+    BuildInfraConfigTypes.TOLERANCE,
+    BuildInfraToleranceValueType[],
+    never
+>
+
+type BuildInfraCMCSConfigDTO = BuildInfraConfigTypeFormat<InfraConfigWithSubValues, CMSecretConfigData[], never>
+
+export type BuildInfraCMCSValueType = {
+    useFormProps: ConfigMapSecretUseFormProps
+    id: ReturnType<typeof getUniqueId>
+    isOverridden: boolean
+    canOverride: boolean
+    defaultValue: ConfigMapSecretUseFormProps | null
+    defaultValueInitialResponse: CMSecretConfigData
+    initialResponse: CMSecretConfigData
+}
+
+export interface BuildInfraCMCSConfigType extends Pick<BuildInfraCMCSConfigDTO, 'key' | 'unit'> {
+    value: BuildInfraCMCSValueType[]
+}
+
+interface BuildInfraCMCSPayloadConfigType extends Pick<BuildInfraCMCSConfigDTO, 'key' | 'unit'> {
+    value: CMSecretPayloadType[]
+}
+
+export type BuildInfraConfigDTO =
+    | NumericBuildInfraConfigValueDTO
+    | NodeSelectorConfigDTO
+    | ToleranceConfigDTO
+    | BuildInfraCMCSConfigDTO
+
+export type BuildInfraConfigValuesType =
+    | NumericBuildInfraConfigValueDTO
+    | NodeSelectorConfigDTO
+    | ToleranceConfigDTO
+    | BuildInfraCMCSConfigType
+
+export type BuildInfraConfigPayloadType =
+    | NumericBuildInfraConfigValueDTO
+    | NodeSelectorConfigDTO
+    | ToleranceConfigDTO
+    | BuildInfraCMCSPayloadConfigType
+
+export interface BuildInfraProfileConfigBase {
     id?: number
     /**
      * This key holds value when we are inheriting values from other profiles in case of listing
@@ -203,27 +271,9 @@ interface BuildInfraProfileConfigBase {
 }
 
 export type BuildInfraConfigInfoType = BuildInfraConfigValuesType & BuildInfraProfileConfigBase
-
-export type BuildInfraConfigurationDTO = BuildInfraConfigValuesType &
-    Omit<BuildInfraProfileConfigBase, 'targetPlatform'>
-
-/**
- * Maps target platform to its configuration values
- */
-export type BuildInfraPlatformConfigurationMapDTO = Record<string, BuildInfraConfigurationDTO[]>
-
-export type BuildInfraConfigurationType = BuildInfraConfigInfoType & {
-    /**
-     * Used to display values in case of inheriting data
-     */
-    defaultValue: BuildInfraConfigValuesType
-}
-
-export type BuildInfraConfigurationMapTypeWithoutDefaultFallback = {
-    [key in BuildInfraConfigTypes]?: BuildInfraConfigInfoType
-}
-
-export type BuildInfraConfigurationMapType = Record<BuildInfraConfigTypes, BuildInfraConfigurationType>
+export type BuildInfraConfigurationDTO = BuildInfraConfigDTO & Omit<BuildInfraProfileConfigBase, 'targetPlatform'>
+export type BuildInfraConfigurationItemPayloadType = Omit<BuildInfraProfileConfigBase, 'targetPlatform'> &
+    BuildInfraConfigPayloadType
 
 export enum BuildXDriverType {
     KUBERNETES = 'kubernetes',
@@ -242,6 +292,29 @@ interface BuildInfraProfileBaseDTO {
      */
     buildxDriverType?: BuildXDriverType
 }
+
+export interface BuildInfraPayloadType extends BuildInfraProfileBaseDTO {
+    configurations: Record<string, BuildInfraConfigurationItemPayloadType[]>
+}
+
+/**
+ * Maps target platform to its configuration values
+ */
+export type BuildInfraPlatformConfigurationMapDTO = Record<string, BuildInfraConfigurationDTO[]>
+
+export type BuildInfraConfigurationType = BuildInfraConfigInfoType & {
+    /**
+     * Used to display values in case of inheriting data
+     * This will be null in case of CM/CS
+     */
+    defaultValue: BuildInfraConfigValuesType
+}
+
+export type BuildInfraConfigurationMapTypeWithoutDefaultFallback = {
+    [key in BuildInfraConfigTypes]?: BuildInfraConfigInfoType
+}
+
+export type BuildInfraConfigurationMapType = Record<BuildInfraConfigTypes, BuildInfraConfigurationType>
 
 export interface BuildInfraProfileBase extends Omit<BuildInfraProfileBaseDTO, 'buildxDriverType'> {
     useK8sDriver?: boolean
@@ -307,6 +380,8 @@ export enum ToleranceHeaderType {
     EFFECT = 'EFFECT',
 }
 
+export type BuildInfraCMCSErrorType = Record<InfraConfigWithSubValues, Record<BuildInfraCMCSValueType['id'], boolean>>
+
 /**
  * Would be maintaining error state for name and description irrespective of platform
  * For error states related to platform, we would not be letting user to switch platform if there are errors
@@ -322,7 +397,8 @@ export type ProfileInputErrorType = Record<
     Record<
         BuildInfraConfigTypes.TOLERANCE,
         Record<BuildInfraNodeSelectorValueType['id'], Partial<Record<ToleranceHeaderType, string[]>>>
-    >
+    > &
+    BuildInfraCMCSErrorType
 
 export type TargetPlatformErrorFields = BuildInfraConfigTypes | BuildInfraProfileAdditionalErrorKeysType
 
@@ -337,9 +413,9 @@ interface NumericBuildInfraConfigPayloadType {
 
 export enum BuildInfraProfileInputActionType {
     ADD_TARGET_PLATFORM = 'add_target_platform',
-    TOGGLE_USE_K8S_DRIVER = 'toggle_use_k8s_driver',
     REMOVE_TARGET_PLATFORM = 'remove_target_platform',
     RENAME_TARGET_PLATFORM = 'rename_target_platform',
+
     RESTORE_PROFILE_CONFIG_SNAPSHOT = 'restore_profile_config_snapshot',
 
     DELETE_NODE_SELECTOR_ITEM = 'delete_node_selector_item',
@@ -349,13 +425,21 @@ export enum BuildInfraProfileInputActionType {
     DELETE_TOLERANCE_ITEM = 'delete_tolerance_item',
     ADD_TOLERANCE_ITEM = 'add_tolerance_item',
     EDIT_TOLERANCE_ITEM = 'edit_tolerance_item',
+
+    ADD_CM_CS_ITEM = 'add_cm_cs_item',
+    SYNC_CM_CS_ITEM = 'sync_cm_cs_item',
+    DELETE_CM_CS_ITEM = 'delete_cm_cs_item',
 }
 
+export type BuildInfraInheritActionsOnSubValues = Extract<
+    BuildInfraInheritActions,
+    | `activate_${BuildInfraLocators.CONFIG_MAP}`
+    | `de_activate_${BuildInfraLocators.CONFIG_MAP}`
+    | `activate_${BuildInfraLocators.SECRET}`
+    | `de_activate_${BuildInfraLocators.SECRET}`
+>
+
 export type HandleProfileInputChangeType =
-    | {
-          action: BuildInfraProfileInputActionType.TOGGLE_USE_K8S_DRIVER
-          data?: never
-      }
     | {
           action: NumericBuildInfraConfigTypes
           data: ProfileInputDispatchDataType & NumericBuildInfraConfigPayloadType
@@ -367,11 +451,23 @@ export type HandleProfileInputChangeType =
           }
       }
     | {
+          action: BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM
+          data: ProfileInputDispatchDataType & {
+              handleCaptureSnapshot: (data: BuildInfraProfileData) => void
+          }
+      }
+    | {
           action:
-              | BuildInfraInheritActions
-              | BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM
+              | Exclude<BuildInfraInheritActions, BuildInfraInheritActionsOnSubValues>
               | BuildInfraProfileInputActionType.REMOVE_TARGET_PLATFORM
           data: ProfileInputDispatchDataType
+      }
+    | {
+          action: BuildInfraInheritActionsOnSubValues
+          data: ProfileInputDispatchDataType & {
+              componentType: CMSecretComponentType
+              id: string
+          }
       }
     | {
           action: BuildInfraProfileInputActionType.RENAME_TARGET_PLATFORM
@@ -412,6 +508,29 @@ export type HandleProfileInputChangeType =
           data: ProfileInputDispatchDataType &
               Pick<BuildInfraToleranceValueType, 'id' | 'key' | 'value' | 'effect' | 'operator'>
       }
+    | {
+          action: BuildInfraProfileInputActionType.ADD_CM_CS_ITEM
+          data: ProfileInputDispatchDataType &
+              Pick<BuildInfraCMCSValueType, 'id'> & {
+                  infraConfigType: InfraConfigWithSubValues
+              }
+      }
+    | {
+          action: BuildInfraProfileInputActionType.SYNC_CM_CS_ITEM
+          data: ProfileInputDispatchDataType & {
+              id: BuildInfraCMCSValueType['id']
+              value: ConfigMapSecretUseFormProps
+              hasError: boolean
+              componentType: CMSecretComponentType
+          }
+      }
+    | {
+          action: BuildInfraProfileInputActionType.DELETE_CM_CS_ITEM
+          data: ProfileInputDispatchDataType &
+              Pick<BuildInfraCMCSValueType, 'id'> & {
+                  componentType: CMSecretComponentType
+              }
+      }
 
 export interface UseBuildInfraFormResponseType {
     isLoading: boolean
@@ -432,10 +551,7 @@ export interface BuildInfraConfigFormProps
     configurationContainerLabel?: ReactNode
 }
 
-export interface BuildInfraFormItemProps
-    extends Pick<BuildInfraFormFieldType, 'marker' | 'heading'>,
-        Partial<Pick<BuildInfraProfileConfigBase, 'targetPlatform'>>,
-        Pick<BuildInfraConfigFormProps, 'isGlobalProfile'> {
+export interface BuildInfraFormItemProps extends Pick<BuildInfraFormFieldType, 'marker' | 'heading'> {
     children?: ReactNode
     /**
      * If true, means profile is inheriting values from other profile (e.g, default)
@@ -445,12 +561,6 @@ export interface BuildInfraFormItemProps
      * Would be false for last item
      */
     showDivider?: boolean
-
-    /**
-     * Would be used to dispatch inherit actions (activate_cpu, de_activate_cpu, etc)
-     */
-    handleProfileInputChange: UseBuildInfraFormResponseType['handleProfileInputChange']
-    locator: BuildInfraFormFieldType['locator']
 }
 
 export interface ValidateRequestLimitType {
@@ -464,9 +574,7 @@ export interface ValidateRequestLimitResponseType {
     limit: ValidationResponseType
 }
 
-export interface BuildInfraFormActionProps
-    extends BuildInfraActionType,
-        Pick<BuildInfraFormItemProps, 'targetPlatform'> {
+export interface BuildInfraFormActionProps extends BuildInfraActionType {
     handleProfileInputChange: UseBuildInfraFormResponseType['handleProfileInputChange']
     currentValue: number
     error?: string
@@ -481,6 +589,7 @@ export interface BuildInfraFormActionProps
      * @default false
      */
     autoFocus?: boolean
+    targetPlatform?: string
 }
 
 export interface FooterProps {
@@ -513,10 +622,18 @@ export interface BuildInfraInputFieldComponentProps {
     error?: string
 }
 
-export interface BuildInfraProfileMetaFieldProps
-    extends Pick<BuildInfraInputFieldComponentProps, 'error' | 'handleProfileInputChange'> {
+export type BuildInfraProfileMetaFieldProps = Pick<BuildInfraInputFieldComponentProps, 'error'> & {
     currentValue: string
-}
+} & (
+        | {
+              handleProfileInputChange: BuildInfraInputFieldComponentProps['handleProfileInputChange']
+              onChange?: never
+          }
+        | {
+              onChange: (e: SyntheticEvent) => void
+              handleProfileInputChange?: never
+          }
+    )
 
 export interface InheritingHeaderProps extends Pick<BuildInfraConfigFormProps, 'isGlobalProfile'> {
     defaultHeading: BuildInfraFormFieldType['heading']
@@ -534,10 +651,6 @@ interface BaseBuildInfraProfileDTO {
     configurationUnits: BuildInfraUnitsMapType
 }
 
-export interface BuildInfraListResponseType extends BaseBuildInfraProfileDTO {
-    profiles: BuildInfraProfileInfoDTO[]
-}
-
 export interface BuildInfraProfileDTO extends BaseBuildInfraProfileDTO {
     profile: BuildInfraProfileInfoDTO
 }
@@ -551,6 +664,10 @@ export interface GetPlatformConfigurationsWithDefaultValuesParamsType {
     profileConfigurationsMap: BuildInfraConfigurationMapTypeWithoutDefaultFallback
     defaultConfigurationsMap: BuildInfraConfigurationMapTypeWithoutDefaultFallback
     platformName: string
+    /**
+     * @default false
+     */
+    isDefaultProfile?: boolean
 }
 
 export enum BuildInfraAPIVersionType {
@@ -571,5 +688,14 @@ export interface ValidateNodeSelectorParamsType
     existingKeys: string[]
 }
 
+export interface BuildInfraCMCSFormProps {
+    parsedData: BuildInfraCMCSValueType
+    useFormProps: ReturnType<typeof useForm<ConfigMapSecretUseFormProps>>
+    componentType: CMSecretComponentType
+}
+
+export interface BuildInfraUtilityContextType {
+    BuildInfraCMCSForm: FunctionComponent<BuildInfraCMCSFormProps>
+}
 export interface GetBaseProfileObjectParamsType
     extends Pick<BuildInfraProfileTransformerParamsType, 'canConfigureUseK8sDriver' | 'fromCreateView' | 'profile'> {}

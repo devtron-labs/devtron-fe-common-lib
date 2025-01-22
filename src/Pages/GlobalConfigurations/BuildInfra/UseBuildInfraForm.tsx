@@ -4,9 +4,9 @@ import {
     ACTION_TO_PERSISTED_VALUE_MAP,
     BUILD_INFRA_DEFAULT_PLATFORM_NAME,
     BUILD_INFRA_INHERIT_ACTIONS,
-    BUILD_INFRA_INPUT_CONSTRAINTS,
     BUILD_INFRA_LOCATOR_CONFIG_TYPES_MAP,
     BUILD_INFRA_TEXT,
+    BuildInfraCMCSValueType,
     BuildInfraConfigTypes,
     BuildInfraConfigurationMapType,
     BuildInfraConfigurationType,
@@ -17,13 +17,14 @@ import {
     BuildInfraProfileInputActionType,
     BuildInfraToleranceOperatorType,
     BuildInfraToleranceValueType,
+    CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP,
     CREATE_MODE_REQUIRED_INPUT_FIELDS,
     DEFAULT_PROFILE_NAME,
     DEFAULT_TOLERANCE_EFFECT,
     DEFAULT_TOLERANCE_OPERATOR,
     getBuildInfraProfileByName,
     HandleProfileInputChangeType,
-    NodeSelectorHeaderType,
+    INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP,
     PROFILE_INPUT_ERROR_FIELDS,
     ProfileInputErrorType,
     TARGET_PLATFORM_ERROR_FIELDS_MAP,
@@ -31,22 +32,26 @@ import {
     upsertBuildInfraProfile,
     UseBuildInfraFormProps,
     UseBuildInfraFormResponseType,
-    ValidateNodeSelectorParamsType,
-    ValidateRequestLimitResponseType,
-    ValidateRequestLimitType,
 } from '@Pages/index'
 import {
-    requiredField,
     validateDescription,
     validateLabelKey,
     validateName,
     validateRequiredPositiveInteger,
-    validateRequiredPositiveNumber,
-    validateStringLength,
-    ValidationResponseType,
 } from '@Shared/validations'
-import { getUniqueId, ToastManager, ToastVariantType } from '@Shared/index'
-import { PATTERNS } from '@Common/Constants'
+import {
+    CM_SECRET_STATE,
+    getConfigMapSecretFormInitialValues,
+    getUniqueId,
+    ToastManager,
+    ToastVariantType,
+} from '@Shared/index'
+import {
+    validateLabelValue,
+    validateNodeSelector,
+    validateRequestLimit,
+    validateTargetPlatformName,
+} from './validations'
 
 const getInitialProfileInputErrors = (fromCreateView: boolean): ProfileInputErrorType => {
     const initialProfileInputErrors = structuredClone(PROFILE_INPUT_ERROR_FIELDS)
@@ -58,226 +63,6 @@ const getInitialProfileInputErrors = (fromCreateView: boolean): ProfileInputErro
     }
 
     return initialProfileInputErrors
-}
-
-/**
- * @description A valid platform name should not be empty and be less than 128 characters. Plus profile can not have duplicate platform names
- */
-const validateTargetPlatformName = (name: string, platformMap: Record<string, unknown>): ValidationResponseType => {
-    const requiredValidation = requiredField(name)
-    if (!requiredValidation.isValid) {
-        return requiredValidation
-    }
-
-    const lengthValidation = validateStringLength(name, 50, 1)
-    if (!lengthValidation.isValid) {
-        return lengthValidation
-    }
-
-    if (platformMap[name]) {
-        return {
-            isValid: false,
-            message: 'Configuration is already defined for this platform. Try different platform.',
-        }
-    }
-
-    return {
-        isValid: true,
-    }
-}
-
-const validateLabelValue = (value?: string): Pick<ValidationResponseType, 'isValid'> & { messages: string[] } => {
-    if (!value) {
-        return {
-            isValid: false,
-            messages: ['Value is required'],
-        }
-    }
-
-    const messages: string[] = []
-
-    if (value.length >= BUILD_INFRA_INPUT_CONSTRAINTS.MAX_LABEL_VALUE_LENGTH) {
-        messages.push(`Value should be less than ${BUILD_INFRA_INPUT_CONSTRAINTS.MAX_LABEL_VALUE_LENGTH} characters`)
-    }
-
-    const firstLastAlphanumeric = PATTERNS.START_END_ALPHANUMERIC.test(value)
-    if (!firstLastAlphanumeric) {
-        messages.push('Value should start and end with alphanumeric characters')
-    }
-
-    const validValue = PATTERNS.ALPHANUMERIC_WITH_SPECIAL_CHAR.test(value)
-    if (!validValue) {
-        messages.push('Value should contain only alphanumeric characters and special characters')
-    }
-
-    if (messages.length > 0) {
-        return {
-            isValid: false,
-            messages,
-        }
-    }
-
-    return {
-        isValid: true,
-        messages: [],
-    }
-}
-
-const validateLabelKeyWithNoDuplicates = (
-    key: string,
-    existingKeys: string[],
-): Pick<ValidationResponseType, 'isValid'> & { messages: string[] } => {
-    const existingValidations = validateLabelKey(key, false)
-    if (!existingValidations.isValid) {
-        return existingValidations
-    }
-
-    // existing keys would include the key itself
-    const keyCount = existingKeys.filter((existingKey) => existingKey === key).length
-
-    if (keyCount > 1) {
-        return {
-            isValid: false,
-            messages: ['Key should be unique'],
-        }
-    }
-
-    return {
-        isValid: true,
-        messages: [],
-    }
-}
-
-const validateRequestLimit = ({
-    request,
-    limit,
-    unitsMap,
-}: ValidateRequestLimitType): ValidateRequestLimitResponseType => {
-    // Request <= Limit
-    // Request and Limit should be numbers can be decimals
-    // Request and Limit should be positive numbers
-    // Request and Limit should be less than Number.MAX_SAFE_INTEGER
-    // Request and Limit should can have at most BUILD_INFRA_INPUT_CONSTRAINTS.DECIMAL_PLACES
-    // Both request and limit should be there
-    const requestNumber = Number(request.value)
-    const limitNumber = Number(limit.value)
-    const requestUnit = Number(unitsMap[request.unit]?.conversionFactor)
-    const limitUnit = Number(unitsMap[limit.unit]?.conversionFactor)
-
-    const requestLimitValidationResponse: ValidateRequestLimitResponseType = {
-        request: {
-            isValid: true,
-        },
-        limit: {
-            isValid: true,
-        },
-    }
-
-    const requestValidationMessage = validateRequiredPositiveNumber(request.value).message
-    const limitValidationMessage = validateRequiredPositiveNumber(limit.value).message
-
-    if (requestValidationMessage) {
-        requestLimitValidationResponse.request = {
-            message: requestValidationMessage,
-            isValid: false,
-        }
-    }
-
-    if (limitValidationMessage) {
-        requestLimitValidationResponse.limit = {
-            message: limitValidationMessage,
-            isValid: false,
-        }
-    }
-
-    if (limitValidationMessage || requestValidationMessage) {
-        return requestLimitValidationResponse
-    }
-
-    // only two decimal places are allowed
-    const requestDecimalPlaces = String(request.value).split('.')[1]?.length ?? 0
-    const limitDecimalPlaces = String(limit.value).split('.')[1]?.length ?? 0
-
-    if (requestDecimalPlaces > BUILD_INFRA_INPUT_CONSTRAINTS.DECIMAL_PLACES) {
-        requestLimitValidationResponse.request = {
-            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.REQUEST_DECIMAL_PLACES,
-            isValid: false,
-        }
-
-        return requestLimitValidationResponse
-    }
-    if (limitDecimalPlaces > BUILD_INFRA_INPUT_CONSTRAINTS.DECIMAL_PLACES) {
-        requestLimitValidationResponse.limit = {
-            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.LIMIT_DECIMAL_PLACES,
-            isValid: false,
-        }
-
-        return requestLimitValidationResponse
-    }
-
-    // Assuming requestUnit and requestNumber are not 0
-    const limitRequestUnitFactor = limitUnit / requestUnit
-    const limitRequestFactor = limitNumber / requestNumber
-
-    const isDifferenceComputable = limitRequestUnitFactor * limitRequestFactor <= Number.MAX_SAFE_INTEGER
-
-    if (!isDifferenceComputable) {
-        requestLimitValidationResponse.request = {
-            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.CAN_NOT_COMPUTE,
-            isValid: false,
-        }
-
-        return requestLimitValidationResponse
-    }
-
-    if (limitRequestUnitFactor * limitRequestFactor < 1) {
-        requestLimitValidationResponse.request = {
-            message: BUILD_INFRA_TEXT.VALIDATE_REQUEST_LIMIT.REQUEST_LESS_THAN_LIMIT,
-            isValid: false,
-        }
-
-        return requestLimitValidationResponse
-    }
-
-    return requestLimitValidationResponse
-}
-
-const validateNodeSelector = ({
-    selector: { key, value, id },
-    existingKeys,
-    profileInputErrors: currentInputErrors,
-}: ValidateNodeSelectorParamsType) => {
-    const keyErrorMessages = validateLabelKeyWithNoDuplicates(key, existingKeys).messages
-    const valueErrorMessages = validateLabelValue(value).messages
-
-    const isEmptyRow = !key && !value
-    const hasError = !isEmptyRow && (keyErrorMessages.length > 0 || valueErrorMessages.length > 0)
-
-    if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]?.[id]) {
-        if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]) {
-            // eslint-disable-next-line no-param-reassign
-            currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = {}
-        }
-        // eslint-disable-next-line no-param-reassign
-        currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {}
-    }
-
-    // eslint-disable-next-line no-param-reassign
-    currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {
-        ...(keyErrorMessages.length > 0 && { [NodeSelectorHeaderType.KEY]: keyErrorMessages }),
-        ...(valueErrorMessages.length > 0 && { [NodeSelectorHeaderType.VALUE]: valueErrorMessages }),
-    }
-
-    if (!hasError) {
-        // Would delete id, and if not key left then delete key
-        // eslint-disable-next-line no-param-reassign
-        delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]
-
-        if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]).length === 0) {
-            // eslint-disable-next-line no-param-reassign
-            currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
-        }
-    }
 }
 
 const useBuildInfraForm = ({
@@ -333,14 +118,11 @@ const useBuildInfraForm = ({
         const targetPlatform =
             data && 'targetPlatform' in data && Object.hasOwn(data, 'targetPlatform') ? data.targetPlatform : ''
         const currentConfiguration = currentInput.configurations[targetPlatform]
-        const lastSavedConfiguration = profileResponse.profile.configurations[targetPlatform] || currentConfiguration
+        const lastSavedConfiguration = structuredClone(
+            profileResponse.profile.configurations[targetPlatform] || currentConfiguration,
+        )
 
         switch (action) {
-            case BuildInfraProfileInputActionType.TOGGLE_USE_K8S_DRIVER: {
-                currentInput.useK8sDriver = !currentInput.useK8sDriver
-                break
-            }
-
             case BuildInfraMetaConfigTypes.DESCRIPTION: {
                 const { value } = data
                 currentInput.description = value
@@ -451,7 +233,63 @@ const useBuildInfraForm = ({
                 break
             }
 
+            case 'activate_cm':
+            case 'activate_cs':
+            case 'de_activate_cm':
+            case 'de_activate_cs': {
+                const { id, componentType } = data
+                const currentInfraConfigType = CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]
+                // Would just convert isOverridden to true and replace value with default value
+                const cmSecretValue = currentConfiguration[currentInfraConfigType].value as BuildInfraCMCSValueType[]
+                const selectedCMCSIndex = cmSecretValue.findIndex((configMapItem) => configMapItem.id === id)
+
+                if (selectedCMCSIndex === -1 || !cmSecretValue[selectedCMCSIndex].canOverride) {
+                    const errorMessage = 'Unable to customize this CM/CS'
+
+                    ToastManager.showToast({
+                        variant: ToastVariantType.error,
+                        description: errorMessage,
+                    })
+
+                    logExceptionToSentry(new Error(errorMessage))
+                    return
+                }
+
+                const isActivation = action === 'activate_cm' || action === 'activate_cs'
+                cmSecretValue[selectedCMCSIndex].isOverridden = isActivation
+
+                if (isActivation) {
+                    const lastSavedCMSecretArray = (lastSavedConfiguration[currentInfraConfigType]?.value ||
+                        []) as BuildInfraCMCSValueType[]
+                    const lastSavedCMSecret =
+                        lastSavedCMSecretArray.find((configMapItem) => configMapItem.id === id) ||
+                        cmSecretValue[selectedCMCSIndex]
+
+                    cmSecretValue[selectedCMCSIndex].useFormProps = lastSavedCMSecret?.useFormProps
+                    cmSecretValue[selectedCMCSIndex].initialResponse = lastSavedCMSecret?.initialResponse
+                } else {
+                    cmSecretValue[selectedCMCSIndex].useFormProps = cmSecretValue[selectedCMCSIndex].defaultValue
+                    cmSecretValue[selectedCMCSIndex].initialResponse =
+                        cmSecretValue[selectedCMCSIndex].defaultValueInitialResponse
+                }
+
+                // Will remove error if present
+                if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
+                    delete currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id]
+
+                    if (
+                        Object.keys(currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]])
+                            .length === 0
+                    ) {
+                        currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = null
+                    }
+                }
+
+                break
+            }
+
             case BuildInfraProfileInputActionType.ADD_TARGET_PLATFORM: {
+                const { handleCaptureSnapshot } = data
                 // If no target platform is given error will be '' so that we won;t show error but capture it
                 currentInputErrors[BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM] = !targetPlatform
                     ? ''
@@ -473,6 +311,8 @@ const useBuildInfraForm = ({
 
                         return acc
                     }, {} as BuildInfraConfigurationMapType)
+
+                handleCaptureSnapshot(currentInput)
                 break
             }
 
@@ -710,7 +550,6 @@ const useBuildInfraForm = ({
                 )
 
                 if (!toleranceItem) {
-                    // Question: Should we parse it as per type or as would suffice?
                     currentConfiguration[BuildInfraConfigTypes.TOLERANCE].value.unshift({
                         id,
                         key,
@@ -754,6 +593,99 @@ const useBuildInfraForm = ({
                     delete currentInputErrors[BuildInfraConfigTypes.TOLERANCE][id]
                     if (Object.keys(currentInputErrors[BuildInfraConfigTypes.TOLERANCE]).length === 0) {
                         currentInputErrors[BuildInfraConfigTypes.TOLERANCE] = null
+                    }
+                }
+
+                break
+            }
+
+            case BuildInfraProfileInputActionType.ADD_CM_CS_ITEM: {
+                const { id, infraConfigType } = data
+
+                const useFormProps = getConfigMapSecretFormInitialValues({
+                    configMapSecretData: null,
+                    componentType: INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP[infraConfigType],
+                    cmSecretStateLabel: CM_SECRET_STATE.BASE,
+                    isJob: true,
+                    fallbackMergeStrategy: null,
+                })
+
+                const finalValue: BuildInfraCMCSValueType = {
+                    useFormProps,
+                    id,
+                    isOverridden: true,
+                    canOverride: false,
+                    initialResponse: null,
+                    defaultValue: null,
+                    defaultValueInitialResponse: null,
+                }
+
+                ;(currentConfiguration[infraConfigType].value as BuildInfraCMCSValueType[]).push(finalValue)
+                break
+            }
+
+            case BuildInfraProfileInputActionType.SYNC_CM_CS_ITEM: {
+                const { id, value, hasError, componentType } = data
+
+                const selectedCMCSIndex = (
+                    currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
+                        .value as BuildInfraCMCSValueType[]
+                ).findIndex((configMapItem) => configMapItem.id === id)
+
+                if (selectedCMCSIndex === -1) {
+                    ToastManager.showToast({
+                        variant: ToastVariantType.error,
+                        description: 'ConfigMap does not exist',
+                    })
+
+                    logExceptionToSentry(new Error('ConfigMap does not exist'))
+                    return
+                }
+
+                ;(
+                    currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
+                        .value as BuildInfraCMCSValueType[]
+                )[selectedCMCSIndex].useFormProps = value
+
+                if (!currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = {}
+                }
+
+                if (hasError) {
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id] = true
+                } else if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id]) {
+                    delete currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id]
+                }
+
+                const errorKeys = Object.keys(
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]],
+                )
+                if (errorKeys.length === 0) {
+                    currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = null
+                }
+
+                break
+            }
+
+            case BuildInfraProfileInputActionType.DELETE_CM_CS_ITEM: {
+                const { id, componentType } = data
+
+                const finalCMCSValueList = (
+                    currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]
+                        .value as BuildInfraCMCSValueType[]
+                ).filter((configMapItem) => configMapItem.id !== id)
+
+                currentConfiguration[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]].value =
+                    finalCMCSValueList
+
+                if (currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]]) {
+                    delete currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]][id]
+
+                    if (
+                        Object.keys(currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]])
+                            .length === 0
+                    ) {
+                        currentInputErrors[CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP[componentType]] = null
                     }
                 }
 

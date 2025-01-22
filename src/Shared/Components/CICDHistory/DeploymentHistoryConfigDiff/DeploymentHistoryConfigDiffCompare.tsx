@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import { generatePath, useRouteMatch } from 'react-router-dom'
 
-import { DeploymentConfigDiff, DeploymentConfigDiffProps } from '@Shared/Components/DeploymentConfigDiff'
+import {
+    DEPLOYMENT_CONFIG_DIFF_SORT_KEY,
+    DeploymentConfigDiff,
+    DeploymentConfigDiffProps,
+} from '@Shared/Components/DeploymentConfigDiff'
 import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '@Common/Constants'
-import { useUrlFilters } from '@Common/Hooks'
 import {
     getSelectPickerOptionByValue,
     SelectPickerOptionType,
@@ -12,12 +15,8 @@ import {
 import { ComponentSizeType } from '@Shared/constants'
 import { Button, ButtonVariantType } from '@Shared/Components/Button'
 
-import {
-    DeploymentHistoryDiffDetailedProps,
-    DeploymentHistoryConfigDiffQueryParams,
-    DeploymentHistoryConfigDiffRouteParams,
-} from './types'
-import { getPipelineDeployments, getPipelineDeploymentsOptions, parseDeploymentHistoryDiffSearchParams } from './utils'
+import { DeploymentHistoryDiffDetailedProps, DeploymentHistoryConfigDiffRouteParams } from './types'
+import { getPipelineDeployments, getPipelineDeploymentsOptions } from './utils'
 import { getTriggerHistory } from '../service'
 
 export const DeploymentHistoryConfigDiffCompare = ({
@@ -25,7 +24,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
     setFullScreenView,
     pipelineDeployments: initialPipelineDeployments,
     wfrId,
-    previousWfrId,
+    urlFilters,
     convertVariables,
     setConvertVariables,
     triggerHistory: initialTriggerHistory,
@@ -39,12 +38,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
     const { resourceType, resourceName, appId, envId } = params
 
     // URL FILTERS
-    const { compareWfrId, updateSearchParams, sortBy, sortOrder, handleSorting } = useUrlFilters<
-        string,
-        DeploymentHistoryConfigDiffQueryParams
-    >({
-        parseSearchParams: parseDeploymentHistoryDiffSearchParams(previousWfrId),
-    })
+    const { compareWfrId, updateSearchParams, sortBy, sortOrder, handleSorting } = urlFilters
 
     // STATES
     const [triggerHistory, setTriggerHistory] = useState({
@@ -59,6 +53,8 @@ export const DeploymentHistoryConfigDiffCompare = ({
         updateSearchParams({ compareWfrId })
         // Set fullscreen for comparing deployment history config
         setFullScreenView(true)
+        // Set default initial sorting
+        handleSorting(DEPLOYMENT_CONFIG_DIFF_SORT_KEY)
 
         return () => {
             setConvertVariables(false)
@@ -170,7 +166,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
         return null
     }
 
-    const onSorting = () => handleSorting(sortOrder !== SortingOrder.DESC ? 'sort-config' : '')
+    const onSorting = () => handleSorting(sortOrder !== SortingOrder.DESC ? DEPLOYMENT_CONFIG_DIFF_SORT_KEY : '')
 
     const sortingConfig: DeploymentConfigDiffProps['sortingConfig'] = {
         handleSorting: onSorting,

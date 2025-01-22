@@ -16,7 +16,7 @@
 
 import { OverrideMergeStrategyType } from '@Pages/Applications'
 import { TargetPlatformsDTO } from '@Shared/types'
-import { ReleaseTag, UserApprovalMetadataType } from '../../Common'
+import { ReleaseTag, UserApprovalMetadataType, ResponseType } from '../../Common'
 
 interface WebhookDataType {
     id: number
@@ -240,6 +240,35 @@ export interface ConfigMapSecretDataType {
     isDeletable: boolean
 }
 
+export interface CMSecretYamlData {
+    k: string
+    v: string
+    id: string | number
+}
+
+export interface ConfigMapSecretUseFormProps {
+    name: string
+    isSecret: boolean
+    external: boolean
+    externalType: CMSecretExternalType
+    selectedType: string
+    isFilePermissionChecked: boolean
+    isSubPathChecked: boolean
+    externalSubpathValues: string
+    filePermission: string
+    volumeMountPath: string
+    roleARN: string
+    yamlMode: boolean
+    yaml: string
+    currentData: CMSecretYamlData[]
+    secretDataYaml: string
+    esoSecretYaml: string
+    hasCurrentDataErr: boolean
+    isResolvedData: boolean
+    mergeStrategy: OverrideMergeStrategyType
+    skipValidation: boolean
+}
+
 export enum ConfigResourceType {
     ConfigMap = 'ConfigMap',
     Secret = 'Secret',
@@ -265,6 +294,8 @@ export interface ConfigMapSecretDataDTO {
     variableSnapshot: Record<string, Record<string, string>>
     resolvedValue: string
 }
+
+export type JobCMSecretDataDTO = ResponseType<Omit<ConfigMapSecretDataDTO['data'], 'isDeletable'>>
 
 export interface PipelineConfigDataDTO {
     resourceType: ConfigResourceType.PipelineStrategy
@@ -329,3 +360,68 @@ export enum EnvResourceType {
     Manifest = 'manifest',
     PipelineStrategy = 'pipeline-strategy',
 }
+
+export enum CMSecretComponentType {
+    ConfigMap = 1,
+    Secret = 2,
+}
+
+export enum CM_SECRET_STATE {
+    BASE = '',
+    INHERITED = 'INHERITING',
+    OVERRIDDEN = 'OVERRIDDEN',
+    ENV = 'ENV',
+    UNPUBLISHED = 'UNPUBLISHED',
+}
+
+export interface CMSecretConfigData extends ConfigDatum {
+    unAuthorized: boolean
+}
+
+export interface ProcessCMCSCurrentDataParamsType {
+    configMapSecretData: CMSecretConfigData
+    cmSecretStateLabel: CM_SECRET_STATE
+    isSecret: boolean
+}
+
+export interface GetConfigMapSecretFormInitialValuesParamsType {
+    cmSecretStateLabel: CM_SECRET_STATE
+    configMapSecretData: CMSecretConfigData
+    fallbackMergeStrategy: OverrideMergeStrategyType
+    /**
+     * Leveraging the same in build infra as well
+     */
+    isJob?: boolean
+    componentType?: CMSecretComponentType
+    skipValidation?: boolean
+}
+
+export interface ESOSecretData {
+    secretStore: Record<string, any>
+    secretStoreRef: Record<string, any>
+    refreshInterval: string
+    esoData: Record<string, any>[]
+    esoDataFrom: Record<string, any>[]
+    template: Record<string, any>
+}
+
+export enum CODE_EDITOR_RADIO_STATE {
+    DATA = 'data',
+    SAMPLE = 'sample',
+}
+
+export type CMSecretPayloadType = Pick<
+    CMSecretConfigData,
+    | 'data'
+    | 'name'
+    | 'type'
+    | 'externalType'
+    | 'external'
+    | 'roleARN'
+    | 'mountPath'
+    | 'subPath'
+    | 'esoSecretData'
+    | 'filePermission'
+    | 'esoSubPath'
+    | 'mergeStrategy'
+>

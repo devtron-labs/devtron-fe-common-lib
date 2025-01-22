@@ -937,3 +937,23 @@ export interface TargetPlatformItemDTO {
 export interface TargetPlatformsDTO {
     targetPlatforms: TargetPlatformItemDTO[]
 }
+
+export enum CIPipelineNodeType {
+    EXTERNAL_CI = 'EXTERNAL-CI',
+    CI = 'CI',
+    LINKED_CI = 'LINKED-CI',
+    JOB_CI = 'JOB-CI',
+    LINKED_CD = 'LINKED_CD',
+}
+
+export interface ChangeCIPayloadType {
+    appWorkflowId: number
+    switchFromCiPipelineId?: number
+    appId: number
+    switchFromExternalCiPipelineId?: number
+}
+
+export const TriggerType = {
+    Auto: 'AUTOMATIC',
+    Manual: 'MANUAL',
+} as const

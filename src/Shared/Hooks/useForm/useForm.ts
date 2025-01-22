@@ -1,6 +1,6 @@
-import { BaseSyntheticEvent, ChangeEvent, useRef, useState } from 'react'
+import { BaseSyntheticEvent, ChangeEvent, useEffect, useRef, useState } from 'react'
 
-import { deepEqual } from '@Common/Helper'
+import { deepEqual, noop } from '@Common/Helper'
 
 import { checkValidation } from './useForm.utils'
 import {
@@ -27,9 +27,13 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
     /** Defines when validation should occur:
      * - 'onChange': Validation occurs when the user modifies the input
      * - 'onBlur': Validation occurs when the input loses focus.
-     *  @default 'onChange'
+     *  @default ['onChange']
      */
-    validationMode?: 'onChange' | 'onBlur' | 'onSubmit'
+    validationMode?: 'onChange' | 'onBlur' | 'onSubmit' | 'all'
+    /**
+     * @default false - A boolean indicating whether to trigger validation on mount.
+     */
+    shouldValidateOnMount?: boolean
 }) => {
     // REFS
     const initialValuesRef = useRef<Partial<T>>(options?.initialValues || {})
@@ -56,6 +60,65 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
         }
         return {}
     }
+
+    const getErrorsFromFormData = (formData: T): Partial<Record<keyof T, string[]>> => {
+        const validations = getValidations(formData)
+        const newErrors: UseFormErrors<T> = {}
+
+        Object.keys(validations || {}).forEach((key) => {
+            const validation: UseFormValidation = validations[key]
+            const error = checkValidation<T>(formData[key], validation)
+            if (error) {
+                newErrors[key] = error
+            }
+        })
+
+        return newErrors
+    }
+
+    /**
+     * Handles form submission, validates all form fields, and calls the provided `onValid` function if the form data is valid.
+     * If validation errors are found, it will call the optional `onError` function.
+     *
+     * @param onValid - A function to handle valid form data on submission. Called when all fields pass validation.
+     * @param onError - (Optional) A function to handle validation errors if the form submission fails validation.
+     *                  Receives the validation errors and the form event.
+     * @returns The event handler for form submission, which prevents the default form submission,
+     *          performs validation, and triggers either `onValid` or `onError` based on the result.
+     */
+    const handleSubmit =
+        (onValid: UseFormSubmitHandler<T>, onError?: UseFormErrorHandler<T>) =>
+        (e?: BaseSyntheticEvent): Promise<void> => {
+            e?.preventDefault()
+
+            // Enables validation for all form fields if not enabled yet after form submission.
+            if (Object.keys(enableValidationOnChange).length !== Object.keys(data).length) {
+                setEnableValidationOnChange(Object.keys(data).reduce((acc, key) => ({ ...acc, [key]: true }), {}))
+            }
+
+            const newErrors = getErrorsFromFormData(data)
+
+            // If validation errors exist, set the error state and call the `onError` function if provided.
+            if (Object.keys(newErrors).length) {
+                setErrors(newErrors)
+                onError?.(newErrors, e)
+                // Stops execution if there are errors.
+                return
+            }
+
+            // Clears any previous errors if no validation errors were found.
+            setErrors({})
+            // Calls the valid handler with the current form data and event.
+            onValid(data, e)
+        }
+
+    useEffect(() => {
+        // Do i need to set enableValidationOnChange here?
+        if (options?.shouldValidateOnMount) {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            handleSubmit(noop)()
+        }
+    }, [])
 
     /**
      * Handles change events for form fields, updates the form data, and triggers validation.
@@ -97,7 +160,12 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
                 const validationMode = options?.validationMode ?? 'onChange'
 
                 // If validation should occur (based on mode or field state), check validation for the field.
-                if (validationMode === 'onChange' || enableValidationOnChange[key] || errors[key]) {
+                if (
+                    validationMode === 'onChange' ||
+                    validationMode === 'all' ||
+                    enableValidationOnChange[key] ||
+                    errors[key]
+                ) {
                     const validations = getValidations(updatedData)
                     const error = checkValidation<T>(value as T[keyof T], validations[key as string])
                     setErrors({ ...errors, [key]: error })
@@ -122,7 +190,9 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             setData({ ...data, [key]: data[key]?.trim() })
         }
 
-        if (options?.validationMode === 'onBlur') {
+        const shouldTriggerValidation = options?.validationMode === 'onBlur' || options?.validationMode === 'all'
+
+        if (shouldTriggerValidation) {
             const validations = getValidations()
             const error = checkValidation<T>(data[key], validations[key as string])
             if (error && !enableValidationOnChange[key]) {
@@ -141,54 +211,6 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
     const onFocus = (key: keyof T) => () => {
         setTouchedFields((prev) => ({ ...prev, [key]: true }))
     }
-
-    /**
-     * Handles form submission, validates all form fields, and calls the provided `onValid` function if the form data is valid.
-     * If validation errors are found, it will call the optional `onError` function.
-     *
-     * @param onValid - A function to handle valid form data on submission. Called when all fields pass validation.
-     * @param onError - (Optional) A function to handle validation errors if the form submission fails validation.
-     *                  Receives the validation errors and the form event.
-     * @returns The event handler for form submission, which prevents the default form submission,
-     *          performs validation, and triggers either `onValid` or `onError` based on the result.
-     */
-    const handleSubmit =
-        (onValid: UseFormSubmitHandler<T>, onError?: UseFormErrorHandler<T>) =>
-        (e?: BaseSyntheticEvent): Promise<void> => {
-            e?.preventDefault()
-
-            // Enables validation for all form fields if not enabled yet after form submission.
-            if (Object.keys(enableValidationOnChange).length !== Object.keys(data).length) {
-                setEnableValidationOnChange(Object.keys(data).reduce((acc, key) => ({ ...acc, [key]: true }), {}))
-            }
-
-            const validations = getValidations()
-            if (validations) {
-                const newErrors: UseFormErrors<T> = {}
-
-                // Validates each form field based on its corresponding validation rule.
-                Object.keys(validations).forEach((key) => {
-                    const validation: UseFormValidation = validations[key]
-                    const error = checkValidation<T>(data[key], validation)
-                    if (error) {
-                        newErrors[key] = error
-                    }
-                })
-
-                // If validation errors exist, set the error state and call the `onError` function if provided.
-                if (Object.keys(newErrors).length) {
-                    setErrors(newErrors)
-                    onError?.(newErrors, e)
-                    // Stops execution if there are errors.
-                    return
-                }
-            }
-
-            // Clears any previous errors if no validation errors were found.
-            setErrors({})
-            // Calls the valid handler with the current form data and event.
-            onValid(data, e)
-        }
 
     /**
      * Manually triggers validation for specific form fields.
@@ -381,5 +403,6 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             /** A boolean indicating if any field has been modified. */
             isDirty: Object.values(dirtyFields).some((value) => value),
         },
+        getErrorsFromFormData,
     }
 }
