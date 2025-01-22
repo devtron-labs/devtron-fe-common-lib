@@ -27,7 +27,7 @@ import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 import { DEFAULT_CLUSTER_ID, TERMINAL_STATUS_MAP } from './constants'
-import { ResourceKindType } from '../../types'
+import { ResourceKindType, WorkflowStatusEnum } from '../../types'
 import {
     TriggerHistoryFilterCriteriaProps,
     DeploymentHistoryResultObject,
@@ -201,6 +201,7 @@ export const getTriggerStatusIcon = (triggerDetailStatus: string): JSX.Element =
         case TERMINAL_STATUS_MAP.PROGRESSING:
         case TERMINAL_STATUS_MAP.STARTING:
         case TERMINAL_STATUS_MAP.INITIATING:
+        case WorkflowStatusEnum.WAITING_TO_START.toLowerCase():
             return renderProgressingTriggerIcon()
 
         case TERMINAL_STATUS_MAP.SUCCEEDED:
@@ -288,3 +289,19 @@ export const sanitizeWorkflowExecutionStages = (
 
 export const getWorkerPodBaseUrl = (clusterId: number = DEFAULT_CLUSTER_ID, podNamespace: string = 'devtron-ci') =>
     `/resource-browser/${clusterId}/${podNamespace}/pod/k8sEmptyGroup`
+
+export const getWorkflowNodeStatusTitle = (status: string) => {
+    if (!status) {
+        return null
+    }
+
+    if (status.toLowerCase() === 'cancelled') {
+        return 'ABORTED'
+    }
+
+    if (status === WorkflowStatusEnum.WAITING_TO_START) {
+        return 'Waiting to start'
+    }
+
+    return status
+}

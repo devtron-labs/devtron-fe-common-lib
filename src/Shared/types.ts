@@ -937,3 +937,11 @@ export interface TargetPlatformItemDTO {
 export interface TargetPlatformsDTO {
     targetPlatforms: TargetPlatformItemDTO[]
 }
+
+export enum WorkflowStatusEnum {
+    STARTING = 'Starting',
+    RUNNING = 'Running',
+    PROGRESSING = 'Progressing',
+    WAITING_TO_START = 'WaitingToStart',
+    CANCELLED = 'CANCELLED',
+}

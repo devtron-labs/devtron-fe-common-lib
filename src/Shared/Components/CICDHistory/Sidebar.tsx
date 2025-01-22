@@ -42,7 +42,7 @@ import { ReactComponent as ICDocker } from '../../../Assets/Icon/ic-docker.svg'
 import { GitTriggers } from '../../types'
 import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
 import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
-import { getTriggerStatusIcon } from './utils'
+import { getTriggerStatusIcon, getWorkflowNodeStatusTitle } from './utils'
 
 const SummaryTooltipCard = React.memo(
     ({
@@ -55,7 +55,7 @@ const SummaryTooltipCard = React.memo(
     }: SummaryTooltipCardType): JSX.Element => (
         <div className="build-card-popup p-16 br-4 w-400 bg__primary mxh-300 dc__overflow-scroll">
             <span className="fw-6 fs-16 mb-4" style={{ color: colorMap[status.toLowerCase()] }}>
-                {status.toLowerCase() === 'cancelled' ? 'Aborted' : status}
+                {getWorkflowNodeStatusTitle(status)}
             </span>
             <div className="flex column left">
                 <div className="flex left fs-12 cn-7">
