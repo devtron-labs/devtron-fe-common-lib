@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { getUrlWithSearchParams, post, ROUTES } from '../../Common'
+import { getUrlWithSearchParams } from '../../Common'
 import { GetPolicyApiUrlProps, GetResourceApiUrlProps } from './types'
 
 export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryParams }: GetResourceApiUrlProps<T>) =>
@@ -22,5 +22,3 @@ export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryPara
 
 export const getPolicyApiUrl = <T>({ kind, version, queryParams, suffix }: GetPolicyApiUrlProps<T>) =>
     getUrlWithSearchParams(`global/policy/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
-
-export const saveCDPipeline = (request) => post(ROUTES.CD_CONFIG, request)
