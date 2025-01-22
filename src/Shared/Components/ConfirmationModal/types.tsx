@@ -79,26 +79,6 @@ export type ConfirmationModalProps<isConfig extends boolean = false> = {
 
 export type ConfirmationModalBodyProps = Omit<ConfirmationModalProps, 'showConfirmationModal'>
 
-export type DeleteDialogProps = {
-    title: string
-    description?: string
-    onDelete: () => void
-    deletePrefix?: string
-    deletePostfix?: string
-    dataTestId?: string
-    buttonPrimaryText?: string
-    shouldStopPropagation?: boolean
-    disabled?: boolean
-    children?: ReactNode
-    showConfirmationModal: boolean
-    component?: string
-    redirectTo?: string
-    url?: string
-    reload?: () => void
-    closeConfirmationModal: () => void
-    renderCannotDeleteConfirmationSubTitle?: ReactNode
-}
-
 export type DeleteComponentModalProps = {
     // Required Props
     title: string
