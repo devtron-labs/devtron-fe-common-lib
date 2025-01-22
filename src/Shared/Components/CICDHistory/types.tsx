@@ -354,12 +354,6 @@ export type FinishedType = { artifact: string; type: HistoryComponentType } & (
       }
 )
 
-export interface TriggerDetailsStatusIconType
-    extends Pick<TriggerDetailsType, 'renderDeploymentHistoryTriggerMetaText' | 'triggerMetadata'> {
-    status: string
-    executionInfo: ExecutionInfoType
-}
-
 export interface SyncStageResourceDetail {
     id: number
     cdWorkflowRunnerId: number

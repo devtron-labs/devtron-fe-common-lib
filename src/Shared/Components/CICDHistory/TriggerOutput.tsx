@@ -49,7 +49,6 @@ import {
     HistoryComponentType,
     ProgressingStatusType,
     StartDetailsType,
-    TriggerDetailsStatusIconType,
     TriggerDetailsType,
     TriggerOutputProps,
     WorkerStatusType,
@@ -476,37 +475,6 @@ const CurrentStatusIcon = React.memo(({ status }: { status: string }): JSX.Eleme
     return <NonProgressingStatus status={status.toLowerCase()} />
 })
 
-const TriggerDetailsStatusIcon = React.memo(
-    ({
-        status,
-        renderDeploymentHistoryTriggerMetaText,
-        triggerMetadata,
-        executionInfo,
-    }: TriggerDetailsStatusIconType): JSX.Element => (
-        <div className="flexbox-col">
-            {renderDetailsSuccessIconBlock()}
-
-            {!!triggerMetadata && (
-                <>
-                    {renderDeploymentHistoryTriggerMetaText?.(triggerMetadata, true)}
-
-                    <div className="flex flex-grow-1">
-                        <div className="dc__border-left--n7 h-100" />
-                    </div>
-                </>
-            )}
-
-            {executionInfo?.executionStartedOn && renderDetailsSuccessIconBlock()}
-
-            {executionInfo ? (
-                <CurrentStatusIcon status={executionInfo.currentStatus} />
-            ) : (
-                <CurrentStatusIcon status={status} />
-            )}
-        </div>
-    ),
-)
-
 export const TriggerDetails = React.memo(
     ({
         status,
@@ -537,52 +505,89 @@ export const TriggerDetails = React.memo(
 
         return (
             <div className="trigger-details flexbox-col pb-12">
-                <div className="display-grid trigger-details__grid py-12">
-                    <div className="flexbox dc__content-center">
-                        <TriggerDetailsStatusIcon
-                            status={status?.toLowerCase()}
-                            renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
-                            triggerMetadata={triggerMetadata}
-                            executionInfo={executionInfo}
-                        />
-                    </div>
-                    <div className="trigger-details__summary flexbox-col flex-grow-1 lh-20">
-                        <StartDetails
-                            startedOn={executionInfo?.triggeredOn ?? startedOn}
-                            triggeredBy={triggeredBy}
-                            triggeredByEmail={triggeredByEmail}
-                            ciMaterials={ciMaterials}
-                            gitTriggers={gitTriggers}
-                            artifact={artifact}
-                            type={type}
-                            environmentName={environmentName}
-                            isJobView={isJobView}
-                            triggerMetadata={triggerMetadata}
-                            renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
-                            renderTargetConfigInfo={renderTargetConfigInfo}
-                            stage={stage}
-                        />
+                {/* */}
+                <div className="flexbox-col py-12">
+                    <div className="trigger-details__summary lh-20">
+                        <div className="display-grid trigger-details__grid">
+                            <div className="flexbox dc__content-center">
+                                <div className="flexbox-col">
+                                    {renderDetailsSuccessIconBlock()}
+
+                                    {!!triggerMetadata && renderDeploymentHistoryTriggerMetaText && (
+                                        <>
+                                            {renderDeploymentHistoryTriggerMetaText(triggerMetadata, true)}
+
+                                            <div className="flex flex-grow-1">
+                                                <div className="dc__border-left--n7 h-100" />
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="flexbox-col flex-grow-1">
+                                <StartDetails
+                                    startedOn={executionInfo?.triggeredOn ?? startedOn}
+                                    triggeredBy={triggeredBy}
+                                    triggeredByEmail={triggeredByEmail}
+                                    ciMaterials={ciMaterials}
+                                    gitTriggers={gitTriggers}
+                                    artifact={artifact}
+                                    type={type}
+                                    environmentName={environmentName}
+                                    isJobView={isJobView}
+                                    triggerMetadata={triggerMetadata}
+                                    renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
+                                    renderTargetConfigInfo={renderTargetConfigInfo}
+                                    stage={stage}
+                                />
+                            </div>
+                        </div>
 
                         {executionInfo?.executionStartedOn && (
-                            <div className="w-100 pr-20 flexbox dc__gap-8 pt-12">
-                                <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Execution started</h3>
+                            <div className="display-grid trigger-details__grid">
+                                <div className="flexbox dc__content-center">
+                                    <div className="flexbox-col">
+                                        <div className="flex flex-grow-1">
+                                            <div className="dc__border-left--n7 h-100" />
+                                        </div>
 
-                                <time className="cn-7 fs-13">
-                                    {moment(startedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(
-                                        DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
-                                    )}
-                                </time>
+                                        {renderDetailsSuccessIconBlock()}
+                                    </div>
+                                </div>
+
+                                <div className="w-100 pr-20 flexbox dc__gap-8 py-12">
+                                    <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Execution started</h3>
+
+                                    <time className="cn-7 fs-13">
+                                        {moment(startedOn, 'YYYY-MM-DDTHH:mm:ssZ').format(
+                                            DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
+                                        )}
+                                    </time>
+                                </div>
                             </div>
                         )}
 
-                        <CurrentStatus
-                            executionInfo={executionInfo}
-                            status={status}
-                            finishedOn={finishedOn}
-                            artifact={artifact}
-                            stage={stage}
-                            type={type}
-                        />
+                        <div className="display-grid trigger-details__grid">
+                            <div className="flexbox dc__content-center">
+                                <div className="flexbox-col">
+                                    <div className="flex flex-grow-1">
+                                        <div className="dc__border-left--n7 h-100" />
+                                    </div>
+
+                                    <CurrentStatusIcon status={executionInfo ? executionInfo.currentStatus : status} />
+                                </div>
+                            </div>
+
+                            <CurrentStatus
+                                executionInfo={executionInfo}
+                                status={status}
+                                finishedOn={finishedOn}
+                                artifact={artifact}
+                                stage={stage}
+                                type={type}
+                            />
+                        </div>
                     </div>
                 </div>
 
