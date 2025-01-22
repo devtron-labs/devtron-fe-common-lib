@@ -62,7 +62,7 @@ const Textarea = ({
 
     const handleBlur: TextareaProps['onBlur'] = (event) => {
         // NOTE: This is to prevent the input from being trimmed when the user do not want to trim the input
-        if (!shouldTrim) {
+        if (shouldTrim) {
             const trimmedValue = event.target.value?.trim()
 
             if (event.target.value !== trimmedValue) {
