@@ -58,7 +58,7 @@ export const ErrorBar = ({ className, text, children }: CodeEditorStatusBarProps
 )
 
 export const Information = ({ className, children, text }: CodeEditorStatusBarProps) => (
-    <div className={`code-editor__status ${className || ''}`}>
+    <div className={`code-editor__information ${className || ''}`}>
         <Info className="code-editor__status-info-icon" />
         {text}
         {children}

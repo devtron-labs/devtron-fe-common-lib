@@ -1,9 +1,10 @@
-import { githubDarkInit, githubLightInit } from '@uiw/codemirror-theme-github'
+import { githubDarkInit, githubLightStyle, githubDarkStyle, githubLightInit } from '@uiw/codemirror-theme-github'
 
 import { AppThemeType } from '@Shared/Providers'
 
 export const codeEditorTheme = (appTheme: AppThemeType) => {
     const themeInit = appTheme === AppThemeType.light ? githubLightInit : githubDarkInit
+    const styles = appTheme === AppThemeType.light ? githubLightStyle : githubDarkStyle
 
     return themeInit({
         settings: {
@@ -16,5 +17,6 @@ export const codeEditorTheme = (appTheme: AppThemeType) => {
             gutterForeground: 'var(--N500)',
             gutterBorder: 'transparent',
         },
+        styles,
     })
 }

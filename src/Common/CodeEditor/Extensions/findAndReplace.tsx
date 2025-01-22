@@ -1,6 +1,7 @@
 import {
     ChangeEvent,
     FunctionComponent,
+    MouseEvent,
     KeyboardEvent as ReactKeyboardEvent,
     SVGProps,
     useEffect,
@@ -32,21 +33,36 @@ import { ReactComponent as ICMatchWord } from '@Icons/ic-match-word.svg'
 import { ReactComponent as ICRegex } from '@Icons/ic-regex.svg'
 import { Button, ButtonStyleType, ButtonVariantType, Collapse } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
+import { Tooltip } from '@Common/Tooltip'
 
 import { FindReplaceProps, FindReplaceQuery } from '../types'
+import {
+    CLOSE_SEARCH_SHORTCUT_KEYS,
+    NEXT_MATCH_SHORTCUT_KEYS,
+    PREVIOUS_MATCH_SHORTCUT_KEYS,
+    REPLACE_ALL_SHORTCUT_KEYS,
+    REPLACE_SHORTCUT_KEYS,
+    SELECT_ALL_SHORTCUT_KEYS,
+} from '../CodeEditor.constants'
 
 const FindReplaceToggleButton = ({
     isChecked,
     onChange,
     Icon,
     iconType = 'stroke',
+    tooltipText,
 }: {
     isChecked: boolean
     Icon: FunctionComponent<SVGProps<SVGSVGElement>>
     onChange: (isChecked: boolean) => void
     iconType?: 'stroke' | 'fill'
+    tooltipText: string
 }) => {
-    const onClick = () => onChange(!isChecked)
+    const onClick = (e: MouseEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        onChange(!isChecked)
+    }
 
     const getIconClass = () => {
         if (iconType === 'stroke') {
@@ -56,15 +72,17 @@ const FindReplaceToggleButton = ({
     }
 
     return (
-        <div
-            aria-checked={isChecked}
-            role="checkbox"
-            tabIndex={0}
-            className={`flex p-1 dc__border-transparent br-2 cursor ${isChecked ? 'eb-2 bcb-1' : ''}`}
-            onClick={onClick}
-        >
-            <Icon className={`icon-dim-12 ${getIconClass()}`} />
-        </div>
+        <Tooltip alwaysShowTippyOnHover content={tooltipText} placement="bottom">
+            <div
+                aria-checked={isChecked}
+                role="checkbox"
+                tabIndex={0}
+                className={`flex p-1 dc__border-transparent br-2 cursor ${isChecked ? 'eb-2 bcb-1' : ''}`}
+                onClick={onClick}
+            >
+                <Icon className={`icon-dim-12 ${getIconClass()}`} />
+            </div>
+        </Tooltip>
     )
 }
 
@@ -73,6 +91,9 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
     const [query, setQuery] = useState<SearchQuery>(new SearchQuery({ search: '' }))
     const [matchesCount, setMatchesCount] = useState({ count: 0, current: 0 })
     const [showReplace, setShowReplace] = useState(!!query.replace)
+
+    // CONSTANTS
+    const isPreviousNextButtonDisabled = !matchesCount.count
 
     // METHODS
     const updateSearchMatchesCount = (newQuery: SearchQuery = query) => {
@@ -126,13 +147,16 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
         updateSearchMatchesCount(defaultQuery)
     }, [view.state.doc.length])
 
-    const onNext = () => {
+    const onNext = (e?: MouseEvent<HTMLButtonElement>) => {
+        e?.preventDefault()
+        e?.stopPropagation()
         findNext(view)
-        // TODO: can optimise this - check if count and then update current
         updateSearchMatchesCount()
     }
 
-    const onPrevious = () => {
+    const onPrevious = (e?: MouseEvent<HTMLButtonElement>) => {
+        e?.preventDefault()
+        e?.stopPropagation()
         findPrevious(view)
         updateSearchMatchesCount()
     }
@@ -191,7 +215,9 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
         setShowReplace(!showReplace)
     }
 
-    const handleClose = () => {
+    const handleClose = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
         closeSearchPanel(view)
     }
 
@@ -214,6 +240,11 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
                 style={ButtonStyleType.neutral}
                 size={ComponentSizeType.xxs}
                 onClick={handleReplaceVisibility}
+                showTooltip
+                tooltipProps={{
+                    content: 'Toggle Replace',
+                    placement: 'bottom',
+                }}
             />
         </div>
     )
@@ -230,13 +261,24 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
                 onKeyDown={onFindKeyDown}
                 {...{ 'main-field': 'true' }}
             />
-            <FindReplaceToggleButton Icon={ICMatchCase} isChecked={query.caseSensitive} onChange={onMatchCaseToggle} />
-            <FindReplaceToggleButton Icon={ICMatchWord} isChecked={query.wholeWord} onChange={onMatchWordToggle} />
+            <FindReplaceToggleButton
+                Icon={ICMatchCase}
+                isChecked={query.caseSensitive}
+                onChange={onMatchCaseToggle}
+                tooltipText="Match Case"
+            />
+            <FindReplaceToggleButton
+                Icon={ICMatchWord}
+                isChecked={query.wholeWord}
+                onChange={onMatchWordToggle}
+                tooltipText="Match Whole Word"
+            />
             <FindReplaceToggleButton
                 Icon={ICRegex}
                 isChecked={query.regexp}
                 onChange={onRegExpToggle}
                 iconType="fill"
+                tooltipText="Use Regular Expression"
             />
         </div>
     )
@@ -252,6 +294,15 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
                 style={ButtonStyleType.neutral}
                 size={ComponentSizeType.xxs}
                 onClick={onPrevious}
+                disabled={isPreviousNextButtonDisabled}
+                showTooltip
+                tooltipProps={{
+                    shortcutKeyCombo: {
+                        text: 'Previous Match',
+                        combo: PREVIOUS_MATCH_SHORTCUT_KEYS,
+                    },
+                    placement: 'bottom',
+                }}
             />
             <Button
                 dataTestId="find-next-button"
@@ -262,6 +313,15 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
                 style={ButtonStyleType.neutral}
                 size={ComponentSizeType.xxs}
                 onClick={onNext}
+                disabled={isPreviousNextButtonDisabled}
+                showTooltip
+                tooltipProps={{
+                    shortcutKeyCombo: {
+                        text: 'Next Match',
+                        combo: NEXT_MATCH_SHORTCUT_KEYS,
+                    },
+                    placement: 'bottom',
+                }}
             />
             <Button
                 dataTestId="find-replace-select-all-button"
@@ -272,6 +332,14 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
                 style={ButtonStyleType.neutral}
                 size={ComponentSizeType.xxs}
                 onClick={onSelectAllClick}
+                showTooltip
+                tooltipProps={{
+                    shortcutKeyCombo: {
+                        text: 'Select All',
+                        combo: SELECT_ALL_SHORTCUT_KEYS,
+                    },
+                    placement: 'bottom',
+                }}
             />
         </div>
     )
@@ -286,6 +354,14 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
             style={ButtonStyleType.neutral}
             size={ComponentSizeType.xxs}
             onClick={handleClose}
+            showTooltip
+            tooltipProps={{
+                shortcutKeyCombo: {
+                    text: 'Close',
+                    combo: CLOSE_SEARCH_SHORTCUT_KEYS,
+                },
+                placement: 'bottom',
+            }}
         />
     )
 
@@ -312,6 +388,14 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
                     style={ButtonStyleType.neutral}
                     size={ComponentSizeType.xxs}
                     onClick={onReplaceTextClick}
+                    showTooltip
+                    tooltipProps={{
+                        shortcutKeyCombo: {
+                            text: 'Replace',
+                            combo: REPLACE_SHORTCUT_KEYS,
+                        },
+                        placement: 'bottom',
+                    }}
                 />
                 <Button
                     dataTestId="replace-all-text-button"
@@ -322,6 +406,14 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
                     style={ButtonStyleType.neutral}
                     size={ComponentSizeType.xxs}
                     onClick={onReplaceTextAllClick}
+                    showTooltip
+                    tooltipProps={{
+                        shortcutKeyCombo: {
+                            text: 'Replace All',
+                            combo: REPLACE_ALL_SHORTCUT_KEYS,
+                        },
+                        placement: 'bottom',
+                    }}
                 />
             </div>
         </div>
@@ -351,10 +443,11 @@ export const codeEditorFindReplace = (view: EditorView): Panel => {
     const keydown = (e: KeyboardEvent) => {
         if (runScopeHandlers(view, e, 'search-panel')) {
             e.preventDefault()
+            e.stopPropagation()
         }
     }
 
-    dom.className = 'code-editor__search bg__secondary dc__border br-4 p-5 dc__position-abs dc__top-8 dc__right-8'
+    dom.className = 'code-editor__search mt-8 mb-4 mr-8 ml-auto p-5 bg__secondary dc__border br-4 dc__w-fit-content'
     dom.onkeydown = keydown
 
     const renderFindReplace = () => {
