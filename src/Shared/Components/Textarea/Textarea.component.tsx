@@ -13,17 +13,17 @@ import './textarea.scss'
 const { MIN_HEIGHT, MAX_HEIGHT } = TEXTAREA_CONSTRAINTS
 
 const Textarea = ({
-    error,
-    fullWidth,
-    helperText,
-    label,
-    layout,
-    required,
-    warningText,
     name,
     dataTestId,
-    shouldTrim,
+    label,
+    fullWidth,
+    error,
+    helperText,
+    warningText,
+    layout,
+    required,
     onBlur,
+    shouldTrim = true,
     size = ComponentSizeType.large,
     ...props
 }: TextareaProps) => {
