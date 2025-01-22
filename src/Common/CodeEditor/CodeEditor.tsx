@@ -32,7 +32,7 @@ import { StreamLanguage, foldGutter } from '@codemirror/language'
 import { search } from '@codemirror/search'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { linter, lintGutter } from '@codemirror/lint'
-import { json as langJson, jsonLanguage } from '@codemirror/lang-json'
+import { json as langJson, jsonLanguage, jsonParseLinter } from '@codemirror/lang-json'
 import { yaml as langYaml, yamlLanguage } from '@codemirror/lang-yaml'
 import { shell } from '@codemirror/legacy-modes/mode/shell'
 import { dockerFile } from '@codemirror/legacy-modes/mode/dockerfile'
@@ -52,7 +52,7 @@ import { cleanKubeManifest, useEffectAfterMount } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
 import { Progressing } from '@Common/Progressing'
 
-import { codeEditorFindReplace, readOnlyTooltip, yamlParseErrorLint } from './Extensions'
+import { codeEditorFindReplace, readOnlyTooltip, yamlParseLinter } from './Extensions'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { getCodeEditorHeight, getFoldGutterElement, getHoverElement } from './utils'
@@ -211,9 +211,9 @@ const CodeEditor = <DiffView extends boolean = false>({
     const getLanguageExtension = (): Extension => {
         switch (mode) {
             case MODES.JSON:
-                return langJson()
+                return [langJson(), linter(jsonParseLinter())]
             case MODES.YAML:
-                return [langYaml(), yamlParseErrorLint()]
+                return [langYaml(), linter(yamlParseLinter())]
             case MODES.SHELL:
                 return StreamLanguage.define(shell)
             case MODES.DOCKERFILE:

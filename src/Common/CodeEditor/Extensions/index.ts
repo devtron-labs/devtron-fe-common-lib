@@ -1,3 +1,3 @@
-export * from './yamlParseErrorLint'
+export * from './yamlParseLinter'
 export * from './readOnlyTooltip'
 export * from './findAndReplace'
