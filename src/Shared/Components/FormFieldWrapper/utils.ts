@@ -4,33 +4,36 @@ export const getFormErrorElementId = (inputId: FormFieldLabelProps['inputId']) =
 
 export const getFormLabelElementId = (inputId: FormFieldLabelProps['inputId']) => `${inputId}-label`
 
+export const getFormHelperTextElementId = (inputId: FormFieldLabelProps['inputId']) => `${inputId}-helper-text`
+
 export const getFormFieldAriaAttributes = ({
     inputId,
     label,
     ariaLabel,
     required,
     error,
+    helperText,
 }: Required<
-    Pick<FormFieldLabelProps, 'label' | 'ariaLabel' | 'required' | 'inputId'> & Pick<FormFieldInfoProps, 'error'>
->) => {
-    const labelId = getFormLabelElementId(inputId)
-    const errorElementId = getFormErrorElementId(inputId)
-
-    return {
-        'aria-describedby': errorElementId,
-        'aria-required': required,
-        ...(error
-            ? {
-                  'aria-errormessage': errorElementId,
-                  'aria-invalid': !!error,
-              }
-            : {}),
-        ...(label
-            ? {
-                  'aria-labelledby': labelId,
-              }
-            : {
-                  'aria-label': ariaLabel,
-              }),
-    }
-}
+    Pick<FormFieldLabelProps, 'label' | 'ariaLabel' | 'required' | 'inputId'> &
+        Pick<FormFieldInfoProps, 'error' | 'helperText'>
+>) => ({
+    'aria-required': required,
+    ...(helperText
+        ? {
+              'aria-describedby': getFormHelperTextElementId(inputId),
+          }
+        : {}),
+    ...(error
+        ? {
+              'aria-errormessage': getFormErrorElementId(inputId),
+              'aria-invalid': !!error,
+          }
+        : {}),
+    ...(label
+        ? {
+              'aria-labelledby': getFormLabelElementId(inputId),
+          }
+        : {
+              'aria-label': ariaLabel,
+          }),
+})

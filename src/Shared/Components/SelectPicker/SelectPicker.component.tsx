@@ -389,6 +389,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         label,
                         ariaLabel,
                         error,
+                        helperText,
                     })}
                     name={name || inputId}
                     classNamePrefix={classNamePrefix || inputId}

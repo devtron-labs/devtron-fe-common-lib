@@ -97,6 +97,7 @@ const Textarea = ({
                     label,
                     ariaLabel,
                     error,
+                    helperText,
                 })}
                 autoComplete="off"
                 name={name}
