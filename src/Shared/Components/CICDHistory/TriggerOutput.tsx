@@ -155,7 +155,8 @@ const WorkerStatus = React.memo(
                             &nbsp;
                             {podStatus && (
                                 <span>
-                                    {WORKFLOW_STAGE_STATUS_TO_TEXT_MAP[podStatus] || podStatus.toLowerCase()}&nbsp;
+                                    :&nbsp;{WORKFLOW_STAGE_STATUS_TO_TEXT_MAP[podStatus] || podStatus.toLowerCase()}
+                                    &nbsp;
                                 </span>
                             )}
                         </div>
@@ -352,7 +353,9 @@ const StartDetails = ({
     const { pathname } = useLocation()
 
     return (
-        <div className="w-100 pr-20 flex column left dc__border-bottom-n1">
+        <div
+            className={`w-100 pr-20 flex column left ${stage === DeploymentStageType.DEPLOY ? 'dc__border-bottom-n1' : ''}`}
+        >
             <div className="flexbox dc__gap-8 dc__align-items-center pb-12 flex-wrap">
                 <div className="flex left dc__gap-4 cn-9 fs-13 fw-6 lh-20">
                     <div className="flex left dc__no-shrink dc__gap-4" data-testid="deployment-history-start-heading">
@@ -509,7 +512,6 @@ export const TriggerDetails = React.memo(
 
         return (
             <div className="trigger-details flexbox-col pb-12">
-                {/* */}
                 <div className="flexbox-col py-12">
                     <div className="trigger-details__summary lh-20">
                         <div className="display-grid trigger-details__grid">

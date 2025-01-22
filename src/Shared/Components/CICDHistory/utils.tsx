@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { ReactElement } from 'react'
 import { TIMELINE_STATUS } from '@Shared/constants'
 import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
 import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
@@ -25,6 +26,8 @@ import { ReactComponent as Disconnect } from '@Icons/ic-disconnected.svg'
 import { ReactComponent as TimeOut } from '@Icons/ic-timeout-red.svg'
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
+import { ReactComponent as ICHelpFilled } from '@Icons/ic-help-filled.svg'
+import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 import { DEFAULT_CLUSTER_ID, TERMINAL_STATUS_MAP } from './constants'
 import { ResourceKindType, WorkflowStatusEnum } from '../../types'
@@ -284,6 +287,44 @@ export const sanitizeWorkflowExecutionStages = (
         finishedOn: isTimeStringAvailable(finishedOn) ? finishedOn : '',
         currentStatus: lastStatus,
         workerDetails: getWorkerInfoFromExecutionStages(workflowExecutionStages),
+    }
+}
+
+export const getHistoryItemStatusIconFromWorkflowStages = (
+    workflowExecutionStages: WorkflowExecutionStagesMapDTO['workflowExecutionStages'],
+): ReactElement => {
+    const executionInfo = sanitizeWorkflowExecutionStages(workflowExecutionStages)
+    const baseClass = 'icon-dim-20 dc__no-shrink'
+
+    if (!executionInfo) {
+        return <ICHelpFilled className={baseClass} />
+    }
+
+    if (!executionInfo.finishedOn) {
+        return renderProgressingTriggerIcon()
+    }
+
+    if (FAILED_WORKFLOW_STAGE_STATUS_MAP[executionInfo.workerDetails?.status]) {
+        return <ICWarningY5 className={baseClass} />
+    }
+
+    const status = executionInfo.currentStatus
+
+    switch (status) {
+        case WorkflowStageStatusType.TIMEOUT:
+            return <TimeOut className={baseClass} />
+
+        case WorkflowStageStatusType.ABORTED:
+            return <ICAborted className={baseClass} />
+
+        case WorkflowStageStatusType.FAILED:
+            return renderFailedTriggerIcon()
+
+        case WorkflowStageStatusType.SUCCEEDED:
+            return <ICCheck className={baseClass} />
+
+        default:
+            return <ICHelpFilled className={baseClass} />
     }
 }
 

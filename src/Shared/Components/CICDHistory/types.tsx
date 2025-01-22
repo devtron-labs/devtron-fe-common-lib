@@ -242,7 +242,7 @@ export interface SidebarType extends RenderRunSourceType {
     resourceId?: number
 }
 
-export interface HistorySummaryCardType extends RenderRunSourceType {
+export interface HistorySummaryCardType extends RenderRunSourceType, Pick<History, 'workflowExecutionStages'> {
     id: number
     status: string
     startedOn: string

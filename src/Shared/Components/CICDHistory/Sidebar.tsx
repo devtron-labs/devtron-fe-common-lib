@@ -42,7 +42,7 @@ import { ReactComponent as ICDocker } from '../../../Assets/Icon/ic-docker.svg'
 import { GitTriggers } from '../../types'
 import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
 import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
-import { getTriggerStatusIcon, getWorkflowNodeStatusTitle } from './utils'
+import { getHistoryItemStatusIconFromWorkflowStages, getTriggerStatusIcon, getWorkflowNodeStatusTitle } from './utils'
 
 const SummaryTooltipCard = React.memo(
     ({
@@ -145,6 +145,7 @@ const HistorySummaryCard = React.memo(
         renderRunSource,
         runSource,
         resourceId,
+        workflowExecutionStages,
     }: HistorySummaryCardType): JSX.Element => {
         const { path, params } = useRouteMatch()
         const { pathname } = useLocation()
@@ -215,7 +216,9 @@ const HistorySummaryCard = React.memo(
                     ref={assignTargetCardRef}
                 >
                     <div className="w-100 deployment-history-card">
-                        {getTriggerStatusIcon(status)}
+                        {workflowExecutionStages
+                            ? getHistoryItemStatusIconFromWorkflowStages(workflowExecutionStages)
+                            : getTriggerStatusIcon(status)}
                         <div className="flexbox-col dc__gap-8">
                             <div className="flex column left">
                                 <div className="cn-9 fs-13 lh-20">
@@ -393,6 +396,7 @@ const Sidebar = React.memo(
                                 runSource={triggerDetails.runSource}
                                 renderRunSource={renderRunSource}
                                 resourceId={resourceId}
+                                workflowExecutionStages={triggerDetails.workflowExecutionStages}
                             />
                         ))}
                     {hasMore && (fetchIdData === FetchIdDataStatus.SUSPEND || !fetchIdData) && (
