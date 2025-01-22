@@ -184,7 +184,7 @@ const WorkflowOptionsModal = ({
             close={loadingWebhook ? null : handleFlowCompletion}
         >
             <div
-                className="workflow-options-modal bg__overlay br-8 flexbox h-500 dc__overflow-scroll"
+                className="workflow-options-modal bg__overlay br-8 flexbox h-500 dc__overflow-auto"
                 onClick={stopPropagation}
             >
                 {/* Sidebar */}
@@ -213,7 +213,7 @@ const WorkflowOptionsModal = ({
                 </div>
 
                 {/* Content */}
-                <div className="flexbox-col p-20 dc__gap-12 dc__overflow-scroll">
+                <div className="flexbox-col p-20 dc__gap-12 dc__overflow-auto">
                     <section className="flexbox-col dc__gap-8 dc__align-self-stretch">
                         <h3 className="m-0 cn-7 fs-11 fw-6 lh-16 dc__uppercase">
                             {WORKFLOW_OPTIONS_MODAL_TYPES.DEFAULT}
