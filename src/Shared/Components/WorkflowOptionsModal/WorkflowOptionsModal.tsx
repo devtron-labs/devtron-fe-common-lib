@@ -33,7 +33,6 @@ import {
     WORKFLOW_OPTIONS_MODAL_TYPES,
 } from './constants'
 import { getSwitchToWebhookPayload } from './utils'
-import './workflowOptions.scss'
 
 const WorkflowOptionsModal = ({
     handleCloseWorkflowOptionsModal,
@@ -184,7 +183,7 @@ const WorkflowOptionsModal = ({
             close={loadingWebhook ? null : handleFlowCompletion}
         >
             <div
-                className="workflow-options-modal bg__overlay br-8 flexbox h-500 dc__overflow-auto"
+                className="mt-40 dc__m-auto w-650 dc__box-shadow--modal bg__modal br-8 flexbox h-500 dc__overflow-auto"
                 onClick={stopPropagation}
             >
                 {/* Sidebar */}
