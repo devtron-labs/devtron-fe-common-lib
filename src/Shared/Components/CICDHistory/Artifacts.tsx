@@ -16,6 +16,15 @@
 
 import { useParams } from 'react-router-dom'
 import { useDownload } from '@Shared/Hooks'
+import { ReactComponent as Download } from '@Icons/ic-download.svg'
+import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
+import { ReactComponent as OpenInNew } from '@Icons/ic-arrow-out.svg'
+import { ReactComponent as Down } from '@Icons/ic-arrow-forward.svg'
+import { ReactComponent as ICHelpOutline } from '@Icons/ic-help.svg'
+import folder from '@Icons/ic-folder.svg'
+import docker from '@Icons/ic-docker.svg'
+import noartifact from '@Images/no-artifact.webp'
+import { TargetPlatformBadgeList } from '../TargetPlatforms'
 import {
     GenericEmptyState,
     ImageTagsContainer,
@@ -24,14 +33,6 @@ import {
     DOCUMENTATION,
     useSuperAdmin,
 } from '../../../Common'
-import { ReactComponent as Download } from '../../../Assets/Icon/ic-download.svg'
-import { ReactComponent as MechanicalOperation } from '../../../Assets/Icon/ic-mechanical-operation.svg'
-import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
-import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help.svg'
-import { ReactComponent as Down } from '../../../Assets/Icon/ic-arrow-forward.svg'
-import docker from '../../../Assets/Icon/ic-docker.svg'
-import folder from '../../../Assets/Icon/ic-folder.svg'
-import noartifact from '../../../Assets/Img/no-artifact.webp'
 import { ArtifactType, CIListItemType } from './types'
 import { TERMINAL_STATUS_MAP } from './constants'
 import { EMPTY_STATE_STATUS } from '../../constants'
@@ -62,6 +63,7 @@ export const CIListItem = ({
     appliedFiltersTimestamp,
     selectedEnvironmentName,
     renderCIListHeader,
+    targetPlatforms,
 }: CIListItemType) => {
     const headerMetaDataPresent =
         !!userApprovalMetadata || !!appliedFilters?.length || !!promotionApprovalMetadata?.promotedFromType
@@ -99,17 +101,26 @@ export const CIListItem = ({
                     </div>
                     {children}
                 </div>
+
                 {type !== 'report' && (
-                    <ImageTagsContainer
-                        ciPipelineId={ciPipelineId}
-                        artifactId={artifactId}
-                        imageComment={imageComment}
-                        imageReleaseTags={imageReleaseTags}
-                        appReleaseTagNames={appReleaseTagNames}
-                        tagsEditable={tagsEditable}
-                        hideHardDelete={hideImageTaggingHardDelete}
-                        isSuperAdmin={isSuperAdmin}
-                    />
+                    <>
+                        {!!targetPlatforms?.length && (
+                            <div className="mt-8 flexbox-col dc__gap-8">
+                                <TargetPlatformBadgeList targetPlatforms={targetPlatforms} />
+                            </div>
+                        )}
+
+                        <ImageTagsContainer
+                            ciPipelineId={ciPipelineId}
+                            artifactId={artifactId}
+                            imageComment={imageComment}
+                            imageReleaseTags={imageReleaseTags}
+                            appReleaseTagNames={appReleaseTagNames}
+                            tagsEditable={tagsEditable}
+                            hideHardDelete={hideImageTaggingHardDelete}
+                            isSuperAdmin={isSuperAdmin}
+                        />
+                    </>
                 )}
             </div>
         </>
@@ -132,6 +143,7 @@ const Artifacts = ({
     hideImageTaggingHardDelete,
     rootClassName,
     renderCIListHeader,
+    targetPlatforms,
 }: ArtifactType) => {
     const { isSuperAdmin } = useSuperAdmin()
     const { handleDownload } = useDownload()
@@ -204,6 +216,7 @@ const Artifacts = ({
                         hideImageTaggingHardDelete={hideImageTaggingHardDelete}
                         isSuperAdmin={isSuperAdmin}
                         renderCIListHeader={renderCIListHeader}
+                        targetPlatforms={targetPlatforms}
                     >
                         <div className="flex column left hover-trigger">
                             <div className="cn-9 fs-14 flex left" data-testid="artifact-text-visibility">
@@ -222,12 +235,7 @@ const Artifacts = ({
                     </CIListItem>
                 )}
                 {blobStorageEnabled && downloadArtifactUrl && isArtifactUploaded && (
-                    <CIListItem
-                        type="report"
-                        hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                        isSuperAdmin={isSuperAdmin}
-                        renderCIListHeader={renderCIListHeader}
-                    >
+                    <CIListItem type="report" renderCIListHeader={renderCIListHeader}>
                         <div className="flex column left">
                             <div className="cn-9 fs-14">Reports.zip</div>
                             <button

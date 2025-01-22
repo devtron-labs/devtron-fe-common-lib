@@ -930,6 +930,14 @@ export interface UploadFileProps {
     maxUploadSize?: number
 }
 
+export interface TargetPlatformItemDTO {
+    name: string
+}
+
+export interface TargetPlatformsDTO {
+    targetPlatforms: TargetPlatformItemDTO[]
+}
+
 export enum CIPipelineNodeType {
     EXTERNAL_CI = 'EXTERNAL-CI',
     CI = 'CI',

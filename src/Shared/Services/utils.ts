@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { sanitizeTargetPlatforms } from '@Shared/Helpers'
 import { createGitCommitUrl, handleUTCTime } from '../../Common'
 import { CIMaterialInfoDTO, CIMaterialInfoType } from './app.types'
 
@@ -55,5 +56,6 @@ export const getParsedCIMaterialInfo = (ciMaterialData: CIMaterialInfoDTO): CIMa
         imageReleaseTags: ciMaterialData?.imageTaggingData?.imageReleaseTags,
         image: ciMaterialData?.image,
         tagsEditable: ciMaterialData?.imageTaggingData?.tagsEditable,
+        targetPlatforms: sanitizeTargetPlatforms(ciMaterialData?.targetPlatforms),
     }
 }

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { ReactComponent as ICStack } from '@Icons/ic-stack.svg'
+import { TargetPlatformListTooltip } from '@Shared/Components/TargetPlatforms'
 import { ARTIFACT_STATUS, STAGE_TYPE } from '../../../constants'
 import { DeploymentEnvState } from './DeploymentEnvState'
 import { DEPLOYMENT_ENV_TEXT } from './DeploymentEnvState/constants'
@@ -31,6 +33,7 @@ const SequentialCDCardTitle = ({
     isVirtualEnvironment,
     deployedOn,
     additionalInfo,
+    targetPlatforms,
 }: SequentialCDCardTitleProps) => {
     const getDeployedStateText = () => {
         if (isVirtualEnvironment) {
@@ -64,30 +67,33 @@ const SequentialCDCardTitle = ({
         )
     }
 
-    if (stageType !== STAGE_TYPE.CD) {
-        if (isLatest || additionalInfo) {
-            return (
-                <div className="bg__primary pb-8 br-4 flex left dc__gap-8">
-                    {isLatest && <span className="last-deployed-status">Last Run</span>}
+    const addFlexGap = stageType !== STAGE_TYPE.CD
+    const noContent =
+        (stageType !== STAGE_TYPE.CD && !isLatest && !additionalInfo) ||
+        (stageType === STAGE_TYPE.CD &&
+            !isLatest &&
+            !isRunningOnParentCD &&
+            !Object.values(ARTIFACT_STATUS).includes(artifactStatus) &&
+            !showLatestTag &&
+            !deployedOn?.length &&
+            !additionalInfo)
 
-                    {additionalInfo}
-                </div>
-            )
-        }
-
+    if (noContent) {
         return null
     }
 
-    if (
-        isLatest ||
-        isRunningOnParentCD ||
-        Object.values(ARTIFACT_STATUS).includes(artifactStatus) ||
-        showLatestTag ||
-        deployedOn?.length ||
-        additionalInfo
-    ) {
+    const renderContent = () => {
+        if (stageType !== STAGE_TYPE.CD) {
+            return (
+                <>
+                    {isLatest && <span className="last-deployed-status">Last Run</span>}
+                    {additionalInfo}
+                </>
+            )
+        }
+
         return (
-            <div className="bg__primary pb-8 br-4 flex left">
+            <>
                 {renderDeployedEnvironmentName()}
                 {artifactStatus === ARTIFACT_STATUS.PROGRESSING && (
                     <DeploymentEnvState envStateText={DEPLOYMENT_ENV_TEXT.DEPLOYING} title={environmentName} />
@@ -106,11 +112,31 @@ const SequentialCDCardTitle = ({
                     />
                 )}
                 {additionalInfo}
-            </div>
+            </>
         )
     }
 
-    return null
+    return (
+        <div className={`bg__primary pb-8 br-4 flex left flex-wrap ${addFlexGap ? 'dc__gap-8' : ''}`}>
+            {renderContent()}
+
+            {!!targetPlatforms?.length && (
+                <TargetPlatformListTooltip targetPlatforms={targetPlatforms}>
+                    <div>
+                        <ImageTagButton
+                            text="Multi-arch image"
+                            startIcon={<ICStack className="dc__no-shrink scn-6 icon-dim-16 mr-6" />}
+                            isSoftDeleted={false}
+                            isEditing={false}
+                            tagId={0}
+                            softDeleteTags={[]}
+                            isSuperAdmin
+                        />
+                    </div>
+                </TargetPlatformListTooltip>
+            )}
+        </div>
+    )
 }
 
 export default SequentialCDCardTitle
