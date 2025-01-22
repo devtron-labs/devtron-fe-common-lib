@@ -29,7 +29,7 @@ import { ImageButtonType, ImageTaggingContainerType, ReleaseTag } from './ImageT
 import { showError, stopPropagation } from './Helper'
 import { setImageTags } from './Common.service'
 import { Progressing } from './Progressing'
-import { InfoIconTippy, ToastManager, ToastVariantType } from '../Shared'
+import { InfoIconTippy, Textarea, ToastManager, ToastVariantType } from '../Shared'
 
 export const ImageTagsContainer = ({
     // Setting it to zero in case of external pipeline
@@ -401,24 +401,16 @@ export const ImageTagsContainer = ({
                             Tags cannot be edited/removed later
                         </div>
                     )}
-                    <div className="cn-7 mt-12">Comment</div>
-                    <div
-                        className="flex left flex-wrap dc__gap-8 w-100 mt-6 mb-12"
-                        data-testid="add-image-comment-text-area"
-                    >
-                        <textarea
+                    <div className="cn-7 mt-12">
+                        <Textarea
+                            label="Comment"
                             value={newDescription}
                             onChange={handleDescriptionChange}
-                            className="flex left flex-wrap dc__gap-8 dc__description-textarea fs-13"
-                            style={{ height: '90px !important' }}
+                            placeholder="Enter comment"
+                            name="add-image-comment-text-area"
+                            error={descriptionValidationMessage}
                         />
                     </div>
-                    {descriptionValidationMessage !== '' && (
-                        <div className="flex left">
-                            <Error className="form__icon form__icon--error" />
-                            <div className="form__error">{descriptionValidationMessage}</div>
-                        </div>
-                    )}
                     <div className="w-100 flex right mt-12">
                         <button
                             className="cta flex cancel h-32 lh-32-imp"
