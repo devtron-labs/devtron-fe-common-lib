@@ -67,6 +67,7 @@ import {
     PULSATING_STATUS_MAP,
     TERMINAL_STATUS_COLOR_CLASS_MAP,
     PROGRESSING_STATUS,
+    WORKFLOW_STAGE_STATUS_TO_TEXT_MAP,
 } from './constants'
 import { GitTriggers } from '../../types'
 import LogsRenderer from './LogsRenderer'
@@ -140,7 +141,6 @@ const WorkerStatus = React.memo(
         return (
             <div className="display-grid trigger-details__grid py-4">
                 <div className="flexbox dc__content-center">
-                    {/* TODO: Ask if not started needs to be catered */}
                     {FAILED_WORKFLOW_STAGE_STATUS_MAP[podStatus] ? (
                         <ICWarningY5 className="icon-dim-20 dc__no-shrink" />
                     ) : (
@@ -153,7 +153,11 @@ const WorkerStatus = React.memo(
                         <div className="flexbox cn-9 fs-13 fw-4 lh-20">
                             <span>{stage === DeploymentStageType.DEPLOY && !podStatus ? 'Message' : 'Worker'}</span>
                             &nbsp;
-                            {podStatus && <span>{podStatus.toLowerCase()}&nbsp;</span>}
+                            {podStatus && (
+                                <span>
+                                    {WORKFLOW_STAGE_STATUS_TO_TEXT_MAP[podStatus] || podStatus.toLowerCase()}&nbsp;
+                                </span>
+                            )}
                         </div>
 
                         {stage !== DeploymentStageType.DEPLOY && getViewWorker()}

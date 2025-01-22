@@ -116,6 +116,16 @@ export const PULSATING_STATUS_MAP: { [key in keyof typeof statusColor | Workflow
     [WorkflowStageStatusType.RUNNING.toLowerCase()]: true,
 }
 
+export const WORKFLOW_STAGE_STATUS_TO_TEXT_MAP: Record<WorkflowStageStatusType, string> = {
+    [WorkflowStageStatusType.NOT_STARTED]: 'Waiting to start',
+    [WorkflowStageStatusType.RUNNING]: 'Running',
+    [WorkflowStageStatusType.SUCCEEDED]: 'Succeeded',
+    [WorkflowStageStatusType.FAILED]: 'Failed',
+    [WorkflowStageStatusType.ABORTED]: 'Aborted',
+    [WorkflowStageStatusType.TIMEOUT]: 'Timed out',
+    [WorkflowStageStatusType.UNKNOWN]: 'Unknown',
+}
+
 export const TERMINAL_STATUS_COLOR_CLASS_MAP = {
     [TERMINAL_STATUS_MAP.SUCCEEDED]: 'cg-5',
     [TERMINAL_STATUS_MAP.HEALTHY]: 'cg-5',
