@@ -7,10 +7,6 @@ export interface TextareaProps
         Pick<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onBlur' | 'disabled' | 'autoFocus' | 'onFocus'>,
         Required<Pick<TextareaHTMLAttributes<HTMLTextAreaElement>, 'placeholder' | 'onChange' | 'value' | 'name'>> {
     /**
-     * Test id for the textarea
-     */
-    dataTestId: string
-    /**
      * If false, the input is not trimmed on blur
      *
      * @default true

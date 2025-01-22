@@ -14,7 +14,6 @@ const { MIN_HEIGHT, MAX_HEIGHT } = TEXTAREA_CONSTRAINTS
 
 const Textarea = ({
     name,
-    dataTestId,
     label,
     fullWidth,
     error,
@@ -94,7 +93,7 @@ const Textarea = ({
                 name={name}
                 id={name}
                 spellCheck={false}
-                data-testid={dataTestId}
+                data-testid={name}
                 required={required}
                 onBlur={handleBlur}
                 className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} w-100 dc__overflow-auto textarea`}
