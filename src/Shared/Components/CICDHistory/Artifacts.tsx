@@ -21,9 +21,9 @@ import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-oper
 import { ReactComponent as OpenInNew } from '@Icons/ic-arrow-out.svg'
 import { ReactComponent as Down } from '@Icons/ic-arrow-forward.svg'
 import { ReactComponent as ICHelpOutline } from '@Icons/ic-help.svg'
-import noartifact from '@Images/no-artifact@2x.png'
 import folder from '@Icons/ic-folder.svg'
 import docker from '@Icons/ic-docker.svg'
+import noartifact from '@Images/no-artifact.webp'
 import { TargetPlatformBadgeList } from '../TargetPlatforms'
 import {
     GenericEmptyState,

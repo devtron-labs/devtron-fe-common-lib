@@ -1,5 +1,10 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { getAppThemeForAutoPreference, getThemeConfigFromLocalStorage, setThemePreferenceInLocalStorage } from './utils'
+import {
+    getAppThemeForAutoPreference,
+    getThemeConfigFromLocalStorage,
+    logThemeToAnalytics,
+    setThemePreferenceInLocalStorage,
+} from './utils'
 import { THEME_PREFERENCE_MAP, ThemeConfigType, ThemeContextType, ThemeProviderProps } from './types'
 import { DARK_COLOR_SCHEME_MATCH_QUERY } from './constants'
 
@@ -8,15 +13,17 @@ const themeContext = createContext<ThemeContextType>(null)
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     const [themeConfig, setThemeConfig] = useState<ThemeConfigType>(getThemeConfigFromLocalStorage)
 
-    const handleThemePreferenceChange: ThemeContextType['handleSelectedThemeChange'] = (updatedThemePreference) => {
-        setThemeConfig({
+    const handleThemePreferenceChange: ThemeContextType['handleThemePreferenceChange'] = (updatedThemePreference) => {
+        const updatedThemeConfig: ThemeConfigType = {
             appTheme:
                 updatedThemePreference === THEME_PREFERENCE_MAP.auto
                     ? getAppThemeForAutoPreference()
                     : updatedThemePreference,
             themePreference: updatedThemePreference,
-        })
+        }
+        setThemeConfig(updatedThemeConfig)
         setThemePreferenceInLocalStorage(updatedThemePreference)
+        logThemeToAnalytics(updatedThemeConfig)
     }
 
     const handleColorSchemeChange = () => {
@@ -48,7 +55,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     const value = useMemo<ThemeContextType>(
         () => ({
             ...themeConfig,
-            handleSelectedThemeChange: handleThemePreferenceChange,
+            handleThemePreferenceChange,
         }),
         [themeConfig],
     )

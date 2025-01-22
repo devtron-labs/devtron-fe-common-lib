@@ -143,7 +143,7 @@ const DeploymentSummaryTooltipCard = memo(
         ciMaterials,
         gitTriggers,
     }: DeploymentSummaryTooltipCardType): JSX.Element => (
-        <div className="build-card-popup p-16 br-4 w-400 bg__primary mxh-300 dc__overflow-scroll">
+        <div className="build-card-popup p-16 br-4 w-400 bg__primary mxh-300 dc__overflow-auto">
             <span className="fw-6 fs-16 mb-4" style={{ color: colorMap[status.toLowerCase()] }}>
                 {getWorkflowNodeStatusTitle(status)}
             </span>
@@ -398,7 +398,7 @@ const Sidebar = React.memo(
         const reloadNextAfterBottom = () => {
             ReactGA.event({
                 category: 'pagination',
-                action: 'scroll',
+                action: 'auto',
                 label: `${type.toLowerCase()}-history`,
                 value: triggerHistory.size,
             })
@@ -480,7 +480,7 @@ const Sidebar = React.memo(
                     </div>
                 )}
 
-                <div className="flex column top left flex-grow-1 dc__hide-hscroll p-8" style={{ overflowY: 'auto' }}>
+                <div className="flex column top left flex-grow-1 dc__overflow-auto p-8">
                     {fetchIdData === FetchIdDataStatus.SUCCESS && (
                         <ViewAllCardsTile handleViewAllHistory={handleViewAllHistory} />
                     )}

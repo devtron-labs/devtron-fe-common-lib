@@ -33,3 +33,5 @@ export const diffStateTextColorMap: Record<DeploymentConfigDiffState, `c${string
     deleted: 'cr-5',
     noDiff: 'cn-7',
 }
+
+export const DEPLOYMENT_CONFIG_DIFF_SORT_KEY = 'sort-config'

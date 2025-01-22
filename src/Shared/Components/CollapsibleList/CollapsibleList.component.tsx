@@ -56,11 +56,11 @@ export const CollapsibleList = <TabType extends TabOptions>({
     }
 
     const getButtonTabItem = (item: CollapsibleListItem<'button'>) => {
-        const { title, isActive, onClick } = item
+        const { title, isActive, onClick, id } = item
         return (
             <button
-                key={title}
-                className={`collapsible__item flexbox dc__align-items-center dc__gap-8 dc__no-decor br-4 py-6 px-8 cursor ${isActive ? 'active' : ''} dc__unset-button-styles w-100`}
+                key={id || title}
+                className={`collapsible__item flexbox dc__align-start dc__gap-8 dc__no-decor br-4 py-6 px-8 cursor ${isActive ? 'active' : ''} dc__unset-button-styles w-100 dc__align-left`}
                 onClick={(e) => {
                     // Prevent navigation to the same page
                     if (isActive) {

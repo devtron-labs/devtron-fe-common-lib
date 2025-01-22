@@ -945,3 +945,23 @@ export enum WorkflowStatusEnum {
     WAITING_TO_START = 'WaitingToStart',
     CANCELLED = 'CANCELLED',
 }
+
+export enum CIPipelineNodeType {
+    EXTERNAL_CI = 'EXTERNAL-CI',
+    CI = 'CI',
+    LINKED_CI = 'LINKED-CI',
+    JOB_CI = 'JOB-CI',
+    LINKED_CD = 'LINKED_CD',
+}
+
+export interface ChangeCIPayloadType {
+    appWorkflowId: number
+    switchFromCiPipelineId?: number
+    appId: number
+    switchFromExternalCiPipelineId?: number
+}
+
+export const TriggerType = {
+    Auto: 'AUTOMATIC',
+    Manual: 'MANUAL',
+} as const

@@ -43,6 +43,11 @@ export type CollapsibleListItem<TabType extends TabOptions = 'navLink'> = Condit
      */
     strikeThrough?: boolean
     /**
+     * To be used as key for the list item.
+     * If not given title will be used as key.
+     */
+    id?: string | number
+    /**
      * Configuration for the icon.
      */
     iconConfig?: {

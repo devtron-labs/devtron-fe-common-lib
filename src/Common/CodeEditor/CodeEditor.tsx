@@ -23,6 +23,7 @@ import { configureMonacoYaml } from 'monaco-yaml'
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-error-exclamation.svg'
+import { ReactComponent as ICCompare } from '@Icons/ic-compare.svg'
 import './codeEditor.scss'
 import 'monaco-editor'
 
@@ -491,7 +492,7 @@ const SplitPane = ({}) => {
     }
     return (
         <div className="code-editor__split-pane flex pointer" onClick={handleToggle}>
-            <div className="diff-icon" />
+            <ICCompare className="icon-dim-20 mr-4" />
             {state.diffMode ? 'Hide comparison' : 'Compare with default'}
         </div>
     )

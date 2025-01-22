@@ -124,11 +124,9 @@ export const CiPipelineSourceConfig = ({
             {!loading && (
                 <div className="flex dc__gap-4">
                     {showIcons && (
-                        <img
-                            src={getBranchIcon(sourceType, _isRegex, sourceValueBase)}
-                            alt="branch"
-                            className="icon-dim-12"
-                        />
+                        <span className="icon-dim-12 flex dc__no-shrink dc__fill-available-space">
+                            {getBranchIcon(sourceType, _isRegex, sourceValueBase)}
+                        </span>
                     )}
                     {showTooltip && (
                         <Tippy
