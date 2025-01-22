@@ -92,14 +92,17 @@ const CodeEditor = <DiffView extends boolean = false>({
     // HOOKS
     const { appTheme } = useTheme()
 
+    // MEMOISED VALUES
+    // Cleaning KubeManifest
+    const value = useMemo(() => {
+        const _value = diffView ? modifiedValue : propValue
+        return cleanData ? cleanKubeManifest(_value) : _value
+    }, [propValue, modifiedValue, diffView])
+    const lhsValue = useMemo(() => (cleanData ? cleanKubeManifest(originalValue) : originalValue), [originalValue])
+
     // REFS
     const codeMirrorRef = useRef<ReactCodeMirrorRef>()
     const codeMirrorParentDivRef = useRef<HTMLDivElement>()
-
-    // Cleaning KubeManifest
-    const _value = diffView ? modifiedValue : propValue
-    const value = cleanData ? cleanKubeManifest(_value) : _value
-    const lhsValue = cleanData ? cleanKubeManifest(originalValue) : originalValue
 
     // STATES
     const [codemirrorMergeKey, setCodemirrorMergeKey] = useState<string>()
@@ -331,7 +334,12 @@ const CodeEditor = <DiffView extends boolean = false>({
             </CodeMirrorMerge>
         ) : (
             <div ref={codeMirrorParentDivRef} className={`w-100 ${codeEditorParentClassName}`}>
-                {shebang && <div className="code-editor__shebang">{shebang}</div>}
+                {shebang && (
+                    <div className="code-editor__shebang">
+                        <div className="code-editor__shebang__gutter" />
+                        {shebang}
+                    </div>
+                )}
                 <CodeMirror
                     ref={codeMirrorRef}
                     theme={codeEditorTheme(appTheme)}

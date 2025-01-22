@@ -48,7 +48,6 @@
         border-radius: 4px;
     }
 
-
     .cm-panels {
         background-color: var(--bg-code-editor);
     }
@@ -113,6 +112,14 @@
     }
 
     // GUTTERS
+    .cm-gutters {
+        border: none;
+    }
+
+    .cm-gutter-lint {
+        width: 20px;
+    }
+
     .cm-gutter-lint .cm-gutterElement {
         display: flex;
         align-items: center;
@@ -277,9 +284,15 @@
 }
 
 .code-editor__shebang {
-    padding: 0 58px;
+    display: flex;
+    background-color: var(--bg-code-editor);
     color: var(--N900);
-    opacity: 0.6;
+
+    &__gutter {
+        flex: 0 0 58px;
+        align-self: stretch;
+        background-color: var(--bg-tertiary);
+    }
 }
 
 .code-editor__search {
