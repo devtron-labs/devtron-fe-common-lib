@@ -279,7 +279,7 @@ export const ImageTagsContainer = ({
     )
 
     const getBuildContextAdditionalContent = () => (
-        <div className="h-250 fs-13 dc__overflow-scroll p-12">
+        <div className="h-250 fs-13 dc__overflow-auto p-12">
             <div>Image labels allow you to tag container images with readable and relatable labels eg. v1.0.</div>
             <ul className="pl-20 mt-8">
                 <li>A label can only be added if a workflow has CD pipelines deploying to Production environments.</li>

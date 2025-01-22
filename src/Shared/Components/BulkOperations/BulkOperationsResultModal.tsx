@@ -160,7 +160,7 @@ const BulkOperationsResultModal = ({
                             ))}
                         </div>
 
-                        <div className="dc__overflow-scroll px-20">
+                        <div className="dc__overflow-auto px-20">
                             {sortedList.map((result, index, arr) => (
                                 <div
                                     className={`dc__grid py-10 fs-13 dc__gap-16 dc__align-items-start ${index === arr.length - 1 ? 'mb-20' : ''}`}

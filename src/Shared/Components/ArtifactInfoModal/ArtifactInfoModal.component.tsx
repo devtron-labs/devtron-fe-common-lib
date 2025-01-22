@@ -84,7 +84,7 @@ const ArtifactInfoModal = ({
                         <ICClose className="icon-dim-24 icon-use-fill-n6" />
                     </button>
                 </div>
-                <div className="flexbox-col flex-grow-1 dc__overflow-scroll bg__tertiary h-100">
+                <div className="flexbox-col flex-grow-1 dc__overflow-auto bg__tertiary h-100">
                     <APIResponseHandler
                         isLoading={isInfoLoading}
                         progressingProps={{
