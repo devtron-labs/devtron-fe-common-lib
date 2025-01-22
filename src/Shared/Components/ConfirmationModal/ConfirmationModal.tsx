@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { CustomInput, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
+import { CustomInput, noop, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
@@ -18,6 +18,7 @@ const ConfirmationModalBody = ({
     children,
     handleClose,
     dataTestId,
+    shouldCloseOnEscape = true,
 }: ConfirmationModalBodyProps) => {
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
@@ -57,7 +58,7 @@ const ConfirmationModalBody = ({
     }
 
     return (
-        <Backdrop onEscape={handleCloseWrapper}>
+        <Backdrop onEscape={shouldCloseOnEscape ? handleCloseWrapper : noop}>
             <motion.div
                 className="confirmation-modal flexbox-col br-8 bg__primary dc__m-auto mt-40 w-400"
                 exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}
