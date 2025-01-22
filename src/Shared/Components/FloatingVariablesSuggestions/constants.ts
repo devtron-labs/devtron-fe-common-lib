@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-export * from './types'
-export * from './app.types'
-export * from './app.service'
-export * from './common.service'
-export * from './ToastManager'
-export * from './utils'
+export const SUGGESTIONS_SIZE = {
+    width: 356,
+    height: 504,
+}
+
+export const NO_DEFINED_DESCRIPTION = 'No Defined Description'
+export const NO_DEFINED_VALUE = 'No Defined Value'
+export const SUGGESTIONS_INFO_TITLE = 'What is scoped variable?'

@@ -111,9 +111,6 @@ const BuildInfraConfigForm: FunctionComponent<BuildInfraConfigFormProps> = ({
                             }
                             showDivider={index !== BUILD_INFRA_FORM_FIELDS.length - 1}
                             isInheriting={isInheritingProfileValues(field.actions)}
-                            handleProfileInputChange={handleProfileInputChange}
-                            locator={field.locator}
-                            isGlobalProfile={isGlobalProfile}
                         >
                             <div className="w-50 flexbox dc__gap-12 w-100 dc__align-start">
                                 {field.actions.map((action) => (
