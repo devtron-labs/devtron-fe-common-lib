@@ -19,7 +19,6 @@ import {
     MultiValueProps,
     OptionProps,
     ValueContainerProps,
-    MenuPlacement,
     Props as ReactSelectProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
@@ -45,6 +44,7 @@ import {
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
+import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
 
 /**
  * Generic component for select picker
@@ -217,6 +217,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     shouldHideMenu = false,
     warningText,
     layout,
+    ariaLabel,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const [isFocussed, setIsFocussed] = useState(false)
@@ -242,9 +243,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     const selectSize = isMulti && controlShouldRenderValue ? ComponentSizeType.large : size
     const shouldShowSelectedOptionIcon = !isMulti && showSelectedOptionIcon
     const isSelectSearchable = !shouldRenderCustomOptions && isSearchable
-
-    const labelId = `${inputId}-label`
-    const errorElementId = `${inputId}-error-msg`
 
     // Option disabled, group null state, checkbox hover, create option visibility (scroll reset on search)
     const selectStyles = useMemo(
@@ -370,40 +368,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         props.onChange?.(...params)
     }
 
-    const commonProps = useMemo(
-        () => ({
-            name: name || inputId,
-            classNamePrefix: classNamePrefix || inputId,
-            isSearchable: isSelectSearchable,
-            placeholder,
-            styles: selectStyles,
-            menuPlacement: 'auto' as MenuPlacement,
-            menuPosition,
-            menuShouldScrollIntoView: true,
-            backspaceRemovesValue: isMulti && controlShouldRenderValue,
-            'aria-errormessage': errorElementId,
-            'aria-invalid': !!error,
-            'aria-labelledby': labelId,
-            hideSelectedOptions: false,
-            shouldRenderCustomOptions: shouldRenderCustomOptions || false,
-        }),
-        [
-            name,
-            inputId,
-            classNamePrefix,
-            isSelectSearchable,
-            placeholder,
-            selectStyles,
-            menuPosition,
-            errorElementId,
-            error,
-            labelId,
-            shouldRenderCustomOptions,
-            controlShouldRenderValue,
-            customDisplayText,
-        ],
-    )
-
     return (
         <FormFieldWrapper
             inputId={inputId}
@@ -414,11 +378,29 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             warningText={warningText}
             required={required}
             fullWidth={fullWidth}
+            ariaLabel={ariaLabel}
         >
             <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
                 <CreatableSelect
                     {...props}
-                    {...commonProps}
+                    {...getFormFieldAriaAttributes({
+                        inputId,
+                        required,
+                        label,
+                        ariaLabel,
+                        error,
+                    })}
+                    name={name || inputId}
+                    classNamePrefix={classNamePrefix || inputId}
+                    isSearchable={isSelectSearchable}
+                    placeholder={placeholder}
+                    styles={selectStyles}
+                    menuPlacement="auto"
+                    menuPosition={menuPosition}
+                    menuShouldScrollIntoView
+                    backspaceRemovesValue={isMulti && controlShouldRenderValue}
+                    hideSelectedOptions={false}
+                    shouldRenderCustomOptions={shouldRenderCustomOptions || false}
                     isMulti={isMulti}
                     ref={selectRef}
                     components={{

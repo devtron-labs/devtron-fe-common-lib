@@ -5,7 +5,7 @@ import {
     ComponentSizeType,
 } from '@Shared/constants'
 import { useThrottledEffect } from '@Common/Helper'
-import { FormFieldWrapper } from '../FormFieldWrapper'
+import { FormFieldWrapper, getFormFieldAriaAttributes } from '../FormFieldWrapper'
 import { TextareaProps } from './types'
 import { TEXTAREA_CONSTRAINTS } from './constants'
 import './textarea.scss'
@@ -24,6 +24,7 @@ const Textarea = ({
     onBlur,
     shouldTrim = true,
     size = ComponentSizeType.large,
+    ariaLabel,
     ...props
 }: TextareaProps) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -86,9 +87,17 @@ const Textarea = ({
             warningText={warningText}
             required={required}
             fullWidth={fullWidth}
+            ariaLabel={ariaLabel}
         >
             <textarea
                 {...props}
+                {...getFormFieldAriaAttributes({
+                    inputId: name,
+                    required,
+                    label,
+                    ariaLabel,
+                    error,
+                })}
                 autoComplete="off"
                 name={name}
                 id={name}
@@ -97,8 +106,6 @@ const Textarea = ({
                 required={required}
                 onBlur={handleBlur}
                 className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} w-100 dc__overflow-auto textarea`}
-                aria-invalid={!!error}
-                aria-disabled={!!props.disabled}
                 ref={textareaRef}
                 style={{
                     maxHeight: MAX_HEIGHT,
