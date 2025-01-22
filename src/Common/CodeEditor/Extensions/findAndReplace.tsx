@@ -329,7 +329,7 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
 
     return (
         <div className="flexbox dc__align-items-center dc__gap-6">
-            {renderReplaceShowButton()}
+            {!view.state.readOnly && renderReplaceShowButton()}
             <div className="flexbox-col dc__gap-4">
                 <div className="flexbox dc__align-items-center dc__gap-8">
                     {renderFindField()}
