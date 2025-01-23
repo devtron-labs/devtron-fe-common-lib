@@ -11,19 +11,34 @@ export type LabelOrAriaLabelType =
       }
 
 export type FormFieldLabelProps = LabelOrAriaLabelType & {
+    /**
+     * If true, the field is required and * is shown with the label
+     */
     required?: boolean
+    /**
+     * Id of the input element
+     */
     inputId: string
 }
 
 export interface FormFieldInfoProps extends Pick<FormFieldLabelProps, 'inputId'> {
+    /**
+     * Error message for the field
+     */
     error?: ReactNode
+    /**
+     * Helper text for the field
+     */
     helperText?: ReactNode
+    /**
+     * Warning message for the field
+     */
     warningText?: ReactNode
 }
 
 export interface FormInfoItemProps {
-    id: string
-    text: ReactNode
+    id: FormFieldLabelProps['inputId']
+    text: FormFieldInfoProps['error']
     textClass: string
     icon: ReactElement
 }
@@ -31,7 +46,13 @@ export interface FormInfoItemProps {
 export interface FormFieldWrapperProps
     extends Pick<FormFieldLabelProps, 'label' | 'required' | 'ariaLabel'>,
         FormFieldInfoProps {
+    /**
+     * Layout of the field
+     */
     layout?: 'row' | 'column'
+    /**
+     * If true, the field takes the full width of the parent
+     */
     fullWidth?: boolean
     children: ReactElement
 }
