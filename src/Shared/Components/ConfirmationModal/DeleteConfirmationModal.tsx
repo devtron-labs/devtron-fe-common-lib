@@ -21,6 +21,7 @@ import { ServerErrors } from '@Common/ServerError'
 import { showError } from '@Common/Helper'
 import { ConfirmationModalVariantType, DeleteComponentModalProps } from './types'
 import ConfirmationModal from './ConfirmationModal'
+import { CannotDeleteModal } from './CannotDeleteModal'
 
 export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     title,
@@ -37,13 +38,16 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     errorCodeToShowCannotDeleteDialog,
     successToastMessage,
     isLoading,
-    isForceDelete = false,
+    shouldStopPropagation = false,
 }: DeleteComponentModalProps) => {
     const history = useHistory()
     const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(false)
     const [isDeleting, setDeleting] = useState(isLoading)
 
-    const handleDelete = async () => {
+    const handleDelete = async (e) => {
+        if (shouldStopPropagation) {
+            e.stopPropagation()
+        }
         setDeleting(true)
         try {
             await onDelete()
@@ -71,44 +75,26 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     const handleConfirmation = () => setCannotDeleteDialogModal(false)
 
     const renderCannotDeleteDialogModal = () => (
-        <ConfirmationModal
-            variant={ConfirmationModalVariantType.info}
+        <CannotDeleteModal
             title={`Cannot delete ${component} '${title}'`}
-            subtitle={renderCannotDeleteConfirmationSubTitle}
-            buttonConfig={{
-                primaryButtonConfig: {
-                    text: 'Okay',
-                    onClick: handleConfirmation,
-                },
-            }}
-            showConfirmationModal={showCannotDeleteDialogModal}
-            handleClose={handleConfirmation}
+            description={renderCannotDeleteConfirmationSubTitle}
+            showCannotDeleteDialogModal={showCannotDeleteDialogModal}
+            onClickOkay={handleConfirmation}
         />
     )
-
-    const renderSubtitle = () => {
-        if (isForceDelete)
-            return (
-                <>
-                    <p className="mt-12 mb-12 p-8 dc__break-word bg__tertiary">Error: {description}</p>
-                    <p>Do you want to force delete?</p>
-                </>
-            )
-        return description ?? `Are you sure you want to delete this ${component}?`
-    }
 
     const renderDeleteModal = () => (
         <ConfirmationModal
             variant={ConfirmationModalVariantType.delete}
-            title={isForceDelete ? title : `Delete ${component} '${title}'`}
-            subtitle={renderSubtitle()}
+            title={`Delete ${component} '${title}'`}
+            subtitle={description ?? `Are you sure you want to delete this ${component}?`}
             buttonConfig={{
                 secondaryButtonConfig: {
                     text: 'Cancel',
                     onClick: closeConfirmationModal,
                 },
                 primaryButtonConfig: {
-                    text: `${isForceDelete ? 'Force Delete' : 'Delete'}`,
+                    text: 'Delete',
                     onClick: handleDelete,
                     isLoading: isDeleting,
                     disabled: isLoading || disabled,

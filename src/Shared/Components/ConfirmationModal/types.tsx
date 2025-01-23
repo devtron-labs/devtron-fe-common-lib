@@ -91,7 +91,6 @@ export type DeleteComponentModalProps = {
     description?: ReactNode
     successToastMessage?: string
     isLoading?: boolean
-    isForceDelete?: boolean
     renderCannotDeleteConfirmationSubTitle?: ReactNode
     errorCodeToShowCannotDeleteDialog?: number
     reload?: () => void
@@ -103,3 +102,17 @@ export type DeleteComponentModalProps = {
     dataTestId?: string
     children?: ReactNode
 }
+
+export interface CannotDeleteModalProps
+    extends Partial<Pick<DeleteComponentModalProps, 'title' | 'description' | 'component'>> {
+    onClickOkay: () => void
+    showCannotDeleteDialogModal: boolean
+}
+
+export interface ForceDeleteConfirmationProps
+    extends Partial<
+        Pick<
+            DeleteComponentModalProps,
+            'title' | 'description' | 'onDelete' | 'showConfirmationModal' | 'closeConfirmationModal'
+        >
+    > {}
