@@ -291,7 +291,7 @@ const StartDetails = ({
 
                 <div className="dc__bullet" />
 
-                <div className="trigger-details__trigger-by cn-7 fs-13">
+                <div className="trigger-details__trigger-by cn-7 fs-13 dc__word-break">
                     {triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}
                 </div>
 
