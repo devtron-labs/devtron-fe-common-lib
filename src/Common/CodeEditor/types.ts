@@ -22,6 +22,7 @@ import { SearchQuery } from '@codemirror/search'
 
 import { MODES } from '@Common/Constants'
 import { Never } from '@Shared/types'
+import { AppThemeType } from '@Shared/Providers'
 
 // COMPONENT PROPS
 export interface CodeEditorStatusBarProps {
@@ -83,6 +84,7 @@ export type CodeEditorProps<DiffView extends boolean = false> = {
      */
     disableSearch?: boolean
     diffView?: DiffView
+    theme?: AppThemeType
 } & CodeEditorPropsBasedOnDiffView<DiffView>
 
 // CODE-MIRROR TYPES

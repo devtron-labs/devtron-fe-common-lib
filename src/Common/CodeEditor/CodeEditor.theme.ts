@@ -1,21 +1,20 @@
 import { githubDarkInit, githubLightStyle, githubDarkStyle, githubLightInit } from '@uiw/codemirror-theme-github'
 
-import { AppThemeType } from '@Shared/Providers'
-
-export const codeEditorTheme = (appTheme: AppThemeType) => {
-    const themeInit = appTheme === AppThemeType.light ? githubLightInit : githubDarkInit
-    const styles = appTheme === AppThemeType.light ? githubLightStyle : githubDarkStyle
+export const getCodeEditorTheme = (isDark: boolean) => {
+    const themeInit = isDark ? githubDarkInit : githubLightInit
+    const styles = isDark ? githubDarkStyle : githubLightStyle
 
     return themeInit({
         settings: {
             fontSize: '14px',
             fontFamily: 'Inconsolata, monospace',
-            background: 'var(--bg-code-editor)',
-            foreground: 'var(--N900)',
-            caret: 'var(--N900)',
-            gutterBackground: 'var(--bg-tertiary)',
-            gutterForeground: 'var(--N500)',
+            background: 'var(--bg-code-editor-base)',
+            foreground: isDark ? 'var(--white)' : 'var(--black)',
+            caret: isDark ? 'var(--white)' : 'var(--black)',
+            gutterBackground: 'var(--bg-code-editor-base-gutter)',
+            gutterForeground: isDark ? 'var(--white)' : 'var(--black)',
             gutterBorder: 'transparent',
+            lineHighlight: 'var(--active-line)',
         },
         styles,
     })

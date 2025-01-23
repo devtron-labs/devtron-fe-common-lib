@@ -33,10 +33,16 @@ const createTooltip = (view: EditorView): Tooltip => {
         return null
     }
 
+    const dom = getReadOnlyElement()
+    dom.classList.add('dc__w-fit-content')
+    document.body.appendChild(dom)
+    const offset = -(dom.getBoundingClientRect().width / 2)
+    document.body.removeChild(dom)
+
     return {
         pos: cursorPos,
         above: true,
-        create: () => ({ dom: getReadOnlyElement() }),
+        create: () => ({ dom, offset: { x: offset, y: 4 }, overlap: true }),
     }
 }
 

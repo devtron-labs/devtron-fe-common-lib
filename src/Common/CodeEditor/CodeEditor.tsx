@@ -46,7 +46,7 @@ import {
 import { yamlSchemaHover, yamlCompletion, yamlSchemaLinter } from 'codemirror-json-schema/yaml'
 import { vscodeKeymap } from '@replit/codemirror-vscode-keymap'
 
-import { useTheme } from '@Shared/Providers'
+import { AppThemeType, useTheme } from '@Shared/Providers'
 import { getUniqueId } from '@Shared/Helpers'
 import { cleanKubeManifest, useEffectAfterMount } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
@@ -58,11 +58,12 @@ import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.
 import { getCodeEditorHeight, getFoldGutterElement, getHoverElement } from './utils'
 import { CodeEditorContext } from './CodeEditor.context'
 import { Clipboard, Container, ErrorBar, Header, Information, Warning } from './CodeEditor.components'
-import { codeEditorTheme } from './CodeEditor.theme'
+import { getCodeEditorTheme } from './CodeEditor.theme'
 
 import './codeEditor.scss'
 
 const CodeEditor = <DiffView extends boolean = false>({
+    theme,
     value: propValue,
     originalValue,
     modifiedValue,
@@ -103,6 +104,10 @@ const CodeEditor = <DiffView extends boolean = false>({
     // REFS
     const codeMirrorRef = useRef<ReactCodeMirrorRef>()
     const codeMirrorParentDivRef = useRef<HTMLDivElement>()
+
+    // CONSTANTS
+    const isDarkTheme = (theme ?? appTheme) === AppThemeType.dark
+    const codeEditorTheme = getCodeEditorTheme(isDarkTheme)
 
     // STATES
     const [codemirrorMergeKey, setCodemirrorMergeKey] = useState<string>()
@@ -200,6 +205,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         foldGutter: false,
         // TODO: need to remove this after getting proper colors from design
         drawSelection: false,
+        highlightActiveLineGutter: false,
         tabSize,
     }
 
@@ -278,6 +284,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         keymap.of(vscodeKeymap.filter(({ key }) => !disableSearch || key !== 'Mod-f')),
         getLanguageExtension(),
         foldingCompartment.of(foldConfig),
+        lintGutter(),
         search({
             createPanel: codeEditorFindReplace,
         }),
@@ -285,7 +292,7 @@ const CodeEditor = <DiffView extends boolean = false>({
 
     const extensions: Extension[] = [
         ...baseExtensions,
-        ...(!state.diffMode ? [lintGutter(), ...getValidationSchema()] : []),
+        ...(!state.diffMode ? getValidationSchema() : []),
         readOnlyTooltip,
     ]
 
@@ -311,9 +318,9 @@ const CodeEditor = <DiffView extends boolean = false>({
 
         return state.diffMode ? (
             <CodeMirrorMerge
-                theme={codeEditorTheme(appTheme)}
+                theme={codeEditorTheme}
                 key={codemirrorMergeKey}
-                className={`w-100 vertical-divider ${codeEditorParentClassName}`}
+                className={`w-100 vertical-divider ${isDarkTheme ? 'cm-merge-theme__dark' : 'cm-merge-theme__light'} ${codeEditorParentClassName}`}
                 gutter
                 destroyRerender={false}
             >
@@ -342,8 +349,8 @@ const CodeEditor = <DiffView extends boolean = false>({
                 )}
                 <CodeMirror
                     ref={codeMirrorRef}
-                    theme={codeEditorTheme(appTheme)}
-                    className={codeEditorClassName}
+                    theme={codeEditorTheme}
+                    className={`${isDarkTheme ? 'cm-theme__dark' : 'cm-theme__light'} ${codeEditorClassName}`}
                     basicSetup={false}
                     value={state.code}
                     placeholder={placeholder}

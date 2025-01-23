@@ -38,9 +38,10 @@ export const getCodeEditorHeight = (height: CodeEditorProps['height']) => {
 // DOM HELPERS
 export const getFoldGutterElement = (open) => {
     const icon = document.createElement('span')
+    icon.className = `flex h-100 ${!open ? 'is-closed' : ''}`
     const caretIcon = (
         <ICCaretDown
-            className="icon-dim-16 scn-6 rotate"
+            className="icon-dim-12 scn-6 rotate"
             style={{ ['--rotateBy' as string]: !open ? '-90deg' : '0deg' }}
         />
     )
@@ -71,6 +72,7 @@ export const getHoverElement = (schemaURI: CodeEditorProps['schemaURI']) => (dat
         </div>
     )
 
+    hoverContainer.classList.add('dc__w-fit-content')
     hoverContainer.innerHTML = renderToString(node)
     return hoverContainer
 }
@@ -78,7 +80,7 @@ export const getHoverElement = (schemaURI: CodeEditorProps['schemaURI']) => (dat
 export const getReadOnlyElement = () => {
     const dom = document.createElement('div')
     const node = (
-        <div className="py-6 px-10 br-4 bg__overlay">
+        <div className="code-editor__read-only-tooltip py-6 px-10 br-4">
             <p className="m-0 fs-12 lh-18">Cannot edit in read-only editor</p>
         </div>
     )

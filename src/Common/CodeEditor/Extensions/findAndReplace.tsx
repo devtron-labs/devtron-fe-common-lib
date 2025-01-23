@@ -89,7 +89,7 @@ const FindReplaceToggleButton = ({
 const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
     // STATES
     const [query, setQuery] = useState<SearchQuery>(new SearchQuery({ search: '' }))
-    const [matchesCount, setMatchesCount] = useState({ count: 0, current: 0 })
+    const [matchesCount, setMatchesCount] = useState({ count: 0, current: 1 })
     const [showReplace, setShowReplace] = useState(!!query.replace)
 
     // CONSTANTS
@@ -98,7 +98,7 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
     // METHODS
     const updateSearchMatchesCount = (newQuery: SearchQuery = query) => {
         const cursor = newQuery.getCursor(view.state)
-        const updatedMatchesCount = { count: 0, current: 0 }
+        const updatedMatchesCount = { count: 0, current: 1 }
         const { from, to } = view.state.selection.main
 
         let item = cursor.next()

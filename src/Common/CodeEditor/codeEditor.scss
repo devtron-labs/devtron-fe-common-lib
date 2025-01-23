@@ -14,6 +14,34 @@
  * limitations under the License.
  */
 
+// CODE MIRROR THEME
+.cm-theme,
+.cm-merge-theme {
+    &__light {
+        --bg-code-editor-base: #ffffff;
+        --bg-code-editor-base-gutter: #f7fafc;
+        --bg-code-editor-red: #fdf0f0;
+        --bg-code-editor-red-gutter: #fde7e7;
+        --bg-code-editor-red-highlight: #fcbcbc;
+        --bg-code-editor-green: #f2fffa;
+        --bg-code-editor-green-gutter: #e9fbf4;
+        --bg-code-editor-green-highlight: #b6e9d3;
+        --active-line: #f0f7ff;
+    }
+
+    &__dark {
+        --bg-code-editor-base: #181920;
+        --bg-code-editor-base-gutter: #15161f;
+        --bg-code-editor-red: #311f27;
+        --bg-code-editor-red-gutter: #44242c;
+        --bg-code-editor-red-highlight: #733239;
+        --bg-code-editor-green: #212b2b;
+        --bg-code-editor-green-gutter: #293932;
+        --bg-code-editor-green-highlight: #3d5c46;
+        --active-line: #28364c;
+    }
+}
+
 // CODE MIRROR OVERRIDES
 .cm-editor.cm-focused {
     outline: none;
@@ -28,24 +56,41 @@
 }
 
 .cm-editor {
+
     &.cm-merge-a .cm-changedLine,
     .cm-deletedChunk {
-        background-color: var(--R50);
+        background-color: var(--bg-code-editor-red);
     }
 
     &.cm-merge-a .cm-changedText,
     .cm-deletedChunk .cm-deletedText {
-        background: var(--R200);
+        background: var(--bg-code-editor-red-highlight);
         border-radius: 4px;
+    }
+
+    &.cm-merge-a .cm-gutters:has(.cm-changedLineGutter) {
+        background-color: var(--bg-code-editor-red-gutter);
+    }
+
+    &.cm-merge-a .cm-changedLineGutter {
+        background-color: var(--bg-code-editor-red-gutter);
     }
 
     &.cm-merge-b .cm-changedLine {
-        background: var(--G50);
+        background: var(--bg-code-editor-green);
     }
 
     &.cm-merge-b .cm-changedText {
-        background: var(--G200);
+        background: var(--bg-code-editor-green-highlight);
         border-radius: 4px;
+    }
+
+    &.cm-merge-b .cm-gutters:has(.cm-changedLineGutter) {
+        background-color: var(--bg-code-editor-green-gutter);
+    }
+
+    &.cm-merge-b .cm-changedLineGutter {
+        background-color: var(--bg-code-editor-green-gutter);
     }
 
     .cm-panels {
@@ -88,7 +133,8 @@
     }
 
     .cm-tooltip-lint {
-        background-color: var(--bg-overlay);
+        color: var(--white);
+        background-color: var(--bg-tooltip-black);
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
         max-width: 300px;
@@ -114,10 +160,19 @@
     // GUTTERS
     .cm-gutters {
         border: none;
+
+        // omitting first child since it is internally used by codemirror
+        &:hover .cm-foldGutter .cm-gutterElement:not(:first-child) span {
+            visibility: visible;
+        }
+    }
+
+    .cm-foldGutter .cm-gutterElement:not(:first-child) span:not(.is-closed) {
+        visibility: hidden;
     }
 
     .cm-gutter-lint {
-        width: 20px;
+        width: 16px;
     }
 
     .cm-gutter-lint .cm-gutterElement {
@@ -128,9 +183,8 @@
     }
 
     .cm-lint-marker {
-        width: 20px;
-        height: 20px;
-        padding: 3px;
+        width: 12px;
+        height: 12px;
     }
 
     .cm-lint-marker-error {
@@ -146,8 +200,8 @@
 .code-editor__schema-tooltip {
     font-size: 12px;
     line-height: 18px;
-    color: var(--N900);
-    background-color: var(--bg-overlay);
+    color: var(--white);
+    background-color: var(--bg-tooltip-black);
 }
 
 .code-editor__container {
@@ -186,7 +240,7 @@
         overflow: hidden;
     }
 
-    .radio-group input[type='checkbox']:checked + .radio__item-label {
+    .radio-group input[type='checkbox']:checked+.radio__item-label {
         background: var(--N700);
         border-radius: 0;
         color: var(--N0);
@@ -286,12 +340,12 @@
 .code-editor__shebang {
     display: flex;
     background-color: var(--bg-code-editor);
-    color: var(--N900);
+    color: var(--white);
 
     &__gutter {
-        flex: 0 0 58px;
+        flex: 0 0 52px;
         align-self: stretch;
-        background-color: var(--bg-tertiary);
+        background-color: var(--bg-code-editor-base-gutter);
     }
 }
 
@@ -312,8 +366,13 @@
     }
 
     &__replace-expand-button {
-        > div {
+        >div {
             display: flex;
         }
     }
+}
+
+.code-editor__read-only-tooltip {
+    background-color: var(--bg-tooltip-black);
+    color: var(--white);
 }
