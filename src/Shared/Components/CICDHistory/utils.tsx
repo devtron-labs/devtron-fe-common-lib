@@ -292,6 +292,33 @@ export const sanitizeWorkflowExecutionStages = (
     }
 }
 
+export const getIconFromWorkflowStageStatusType = (
+    status: WorkflowStageStatusType,
+    baseClass: string = 'icon-dim-20 dc__no-shrink',
+): ReactElement => {
+    switch (status) {
+        case WorkflowStageStatusType.TIMEOUT:
+            return <TimeOut className={baseClass} />
+
+        case WorkflowStageStatusType.ABORTED:
+            return <ICAborted className={baseClass} />
+
+        case WorkflowStageStatusType.FAILED:
+            return renderFailedTriggerIcon()
+
+        case WorkflowStageStatusType.SUCCEEDED:
+            return renderSuccessTriggerIcon()
+
+        // NOT_STARTED case is not expected
+        case WorkflowStageStatusType.NOT_STARTED:
+        case WorkflowStageStatusType.RUNNING:
+            return renderProgressingTriggerIcon()
+
+        default:
+            return <ICHelpFilled className={baseClass} />
+    }
+}
+
 export const getHistoryItemStatusIconFromWorkflowStages = (
     workflowExecutionStages: WorkflowExecutionStagesMapDTO['workflowExecutionStages'],
 ): ReactElement => {
@@ -310,24 +337,7 @@ export const getHistoryItemStatusIconFromWorkflowStages = (
         return <ICWarningY5 className={baseClass} />
     }
 
-    const status = executionInfo.currentStatus
-
-    switch (status) {
-        case WorkflowStageStatusType.TIMEOUT:
-            return <TimeOut className={baseClass} />
-
-        case WorkflowStageStatusType.ABORTED:
-            return <ICAborted className={baseClass} />
-
-        case WorkflowStageStatusType.FAILED:
-            return renderFailedTriggerIcon()
-
-        case WorkflowStageStatusType.SUCCEEDED:
-            return renderSuccessTriggerIcon()
-
-        default:
-            return <ICHelpFilled className={baseClass} />
-    }
+    return getIconFromWorkflowStageStatusType(executionInfo.currentStatus, baseClass)
 }
 
 export const getWorkerPodBaseUrl = (clusterId: number = DEFAULT_CLUSTER_ID, podNamespace: string = 'devtron-ci') =>

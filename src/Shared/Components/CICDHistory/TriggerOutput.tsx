@@ -56,6 +56,7 @@ import {
     History,
     HistoryLogsProps,
     WorkflowStageStatusType,
+    CurrentStatusIconProps,
 } from './types'
 import { getTagDetails, getTriggerDetails, cancelCiTrigger, cancelPrePostCdTrigger } from './service'
 import {
@@ -67,6 +68,7 @@ import {
     TERMINAL_STATUS_COLOR_CLASS_MAP,
     PROGRESSING_STATUS,
     WORKFLOW_STAGE_STATUS_TO_TEXT_MAP,
+    EXECUTION_FINISHED_TEXT_MAP,
 } from './constants'
 import { GitTriggers } from '../../types'
 import LogsRenderer from './LogsRenderer'
@@ -79,6 +81,7 @@ import { ConfirmationModal, ConfirmationModalVariantType } from '../Confirmation
 import {
     FAILED_WORKFLOW_STAGE_STATUS_MAP,
     getFormattedTriggerTime,
+    getIconFromWorkflowStageStatusType,
     getWorkerPodBaseUrl,
     sanitizeWorkflowExecutionStages,
 } from './utils'
@@ -86,16 +89,29 @@ import './cicdHistory.scss'
 
 const Finished = React.memo(({ status, finishedOn, artifact, type, executionInfo }: FinishedType): JSX.Element => {
     const finishedOnTime = executionInfo?.finishedOn || finishedOn
-    const computedStatus = executionInfo?.currentStatus || status
+
+    const renderTitle = () => {
+        if (executionInfo) {
+            return (
+                <span className="cn-9 fs-13 fw-6 lh-20">
+                    {EXECUTION_FINISHED_TEXT_MAP[executionInfo.currentStatus] || 'Execution finished'}
+                </span>
+            )
+        }
+
+        return (
+            <div
+                className={`${status} fs-13 fw-6 ${TERMINAL_STATUS_COLOR_CLASS_MAP[status.toLowerCase()] || 'cn-5'}`}
+                data-testid="deployment-status-text"
+            >
+                {status?.toLowerCase() === 'cancelled' ? 'Aborted' : status}
+            </div>
+        )
+    }
 
     return (
         <div className="flexbox pt-12 dc__gap-8 left dc__min-width-fit-content dc__align-items-center">
-            <div
-                className={`${computedStatus} fs-13 fw-6 ${TERMINAL_STATUS_COLOR_CLASS_MAP[computedStatus.toLowerCase()] || 'cn-5'}`}
-                data-testid="deployment-status-text"
-            >
-                {computedStatus && computedStatus.toLowerCase() === 'cancelled' ? 'Aborted' : computedStatus}
-            </div>
+            {renderTitle()}
 
             {finishedOnTime && finishedOnTime !== ZERO_TIME_STRING && (
                 <time className="dc__vertical-align-middle fs-13">{getFormattedTriggerTime(finishedOnTime)}</time>
@@ -483,8 +499,12 @@ const NonProgressingStatus = React.memo(
     ),
 )
 
-const CurrentStatusIcon = React.memo(({ status }: { status: string }): JSX.Element => {
-    if (status === WorkflowStageStatusType.RUNNING || PULSATING_STATUS_MAP[status]) {
+const CurrentStatusIcon = React.memo(({ status, executionInfoCurrentStatus }: CurrentStatusIconProps): JSX.Element => {
+    if (executionInfoCurrentStatus) {
+        return getIconFromWorkflowStageStatusType(executionInfoCurrentStatus, 'icon-dim-20 dc__no-shirnk')
+    }
+
+    if (PULSATING_STATUS_MAP[status]) {
         return <ICPulsateStatus />
     }
 
@@ -586,7 +606,10 @@ export const TriggerDetails = React.memo(
                                         <div className="dc__border-left--n7 h-100" />
                                     </div>
 
-                                    <CurrentStatusIcon status={executionInfo ? executionInfo.currentStatus : status} />
+                                    <CurrentStatusIcon
+                                        status={status}
+                                        executionInfoCurrentStatus={executionInfo?.currentStatus}
+                                    />
                                 </div>
                             </div>
 

@@ -336,6 +336,11 @@ export type ProgressingStatusType = {
     type: HistoryComponentType
 }
 
+export interface CurrentStatusIconProps {
+    status: string
+    executionInfoCurrentStatus: WorkflowStageStatusType
+}
+
 export interface WorkerStatusType
     extends Pick<ExecutionInfoType['workerDetails'], 'clusterId'>,
         Pick<TriggerDetailsType, 'namespace'> {

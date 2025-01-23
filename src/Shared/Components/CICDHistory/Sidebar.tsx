@@ -96,7 +96,7 @@ const GitTriggerList = memo(
                             ) : (
                                 <div className="flexbox-col dc__gap-8">
                                     <div className="flexbox dc__gap-4 dc__align-start">
-                                        {renderMaterialIcon(gitDetail?.GitRepoName)}
+                                        {renderMaterialIcon(gitMaterialUrl)}
 
                                         {gitDetail?.GitRepoName && (
                                             <>
@@ -308,7 +308,7 @@ const HistorySummaryCard = memo(
                         placement="right"
                         interactive
                         render={() =>
-                            isCDType ? (
+                            stage === DeploymentStageType.DEPLOY ? (
                                 <DeploymentSummaryTooltipCard
                                     status={status}
                                     startedOn={startedOn}

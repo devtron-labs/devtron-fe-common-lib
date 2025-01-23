@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { WorkflowStatusEnum } from '@Shared/types'
 import { multiSelectStyles } from '../../../Common/MultiSelectCustomization'
 import { WorkflowStageStatusType } from './types'
 
@@ -91,10 +92,12 @@ export const statusColor = {
     degraded: 'var(--R500)',
     healthy: 'var(--G500)',
     notdeployed: 'var(--N500)',
+    [WorkflowStageStatusType.NOT_STARTED.toLowerCase()]: 'var(--N500)',
     missing: 'var(--N700)',
     progressing: 'var(--O500)',
     initiating: 'var(--O500)',
     starting: 'var(--O500)',
+    [WorkflowStatusEnum.WAITING_TO_START.toLowerCase()]: 'var(--O500)',
     succeeded: 'var(--G500)',
     running: 'var(--O500)',
     failed: 'var(--R500)',
@@ -102,18 +105,16 @@ export const statusColor = {
     cancelled: 'var(--R500)',
     aborted: 'var(--R500)',
     timedout: 'var(--R500)',
+    [WorkflowStageStatusType.TIMEOUT.toLowerCase()]: 'var(--R500)',
     unabletofetch: 'var(--R500)',
     hibernating: 'var(--N700)',
-    [WorkflowStageStatusType.NOT_STARTED.toLowerCase()]: 'var(--N500)',
-    [WorkflowStageStatusType.TIMEOUT.toLowerCase()]: 'var(--R500)',
 }
 
-export const PULSATING_STATUS_MAP: { [key in keyof typeof statusColor | WorkflowStageStatusType.RUNNING]?: boolean } = {
+export const PULSATING_STATUS_MAP: { [key in keyof typeof statusColor]?: boolean } = {
     progressing: true,
     initiating: true,
     starting: true,
     running: true,
-    [WorkflowStageStatusType.RUNNING.toLowerCase()]: true,
 }
 
 export const WORKFLOW_STAGE_STATUS_TO_TEXT_MAP: Record<WorkflowStageStatusType, string> = {
@@ -124,6 +125,13 @@ export const WORKFLOW_STAGE_STATUS_TO_TEXT_MAP: Record<WorkflowStageStatusType, 
     [WorkflowStageStatusType.ABORTED]: 'Aborted',
     [WorkflowStageStatusType.TIMEOUT]: 'Timed out',
     [WorkflowStageStatusType.UNKNOWN]: 'Unknown',
+}
+
+export const EXECUTION_FINISHED_TEXT_MAP: Partial<Record<WorkflowStageStatusType, string>> = {
+    [WorkflowStageStatusType.SUCCEEDED]: 'succeeded',
+    [WorkflowStageStatusType.FAILED]: 'failed',
+    [WorkflowStageStatusType.ABORTED]: 'aborted',
+    [WorkflowStageStatusType.TIMEOUT]: 'timed out',
 }
 
 export const TERMINAL_STATUS_COLOR_CLASS_MAP = {
