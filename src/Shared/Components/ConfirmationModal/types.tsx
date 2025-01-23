@@ -82,16 +82,19 @@ export type ConfirmationModalBodyProps = Omit<ConfirmationModalProps, 'showConfi
 export type DeleteComponentModalProps = {
     // Required Props
     title: string
-    component: string
     showConfirmationModal: boolean
     closeConfirmationModal: () => void
     onDelete: () => void
-    reload: () => void
 
     // Optional Customization
+    component?: string
     description?: ReactNode
+    successToastMessage?: string
+    isLoading?: boolean
+    isForceDelete?: boolean
     renderCannotDeleteConfirmationSubTitle?: ReactNode
     errorCodeToShowCannotDeleteDialog?: number
+    reload?: () => void
 
     // Additional Configuration
     shouldStopPropagation?: boolean

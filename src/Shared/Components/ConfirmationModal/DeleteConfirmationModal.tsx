@@ -29,24 +29,27 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     disabled,
     onDelete,
     dataTestId,
-    component,
-    url,
+    component = '',
+    url = '',
     reload,
     closeConfirmationModal,
     renderCannotDeleteConfirmationSubTitle,
     errorCodeToShowCannotDeleteDialog,
+    successToastMessage,
+    isLoading,
+    isForceDelete = false,
 }: DeleteComponentModalProps) => {
     const history = useHistory()
     const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(false)
-    const [isLoading, setLoading] = useState(false)
+    const [isDeleting, setDeleting] = useState(isLoading)
 
     const handleDelete = async () => {
-        setLoading(true)
+        setDeleting(true)
         try {
             await onDelete()
             ToastManager.showToast({
                 variant: ToastVariantType.success,
-                description: 'Successfully deleted',
+                description: successToastMessage ?? 'Successfully deleted',
             })
             if (url) {
                 history.push(url)
@@ -61,7 +64,7 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
                 showError(serverError)
             }
         } finally {
-            setLoading(false)
+            setDeleting(false)
         }
     }
 
@@ -83,20 +86,31 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
         />
     )
 
+    const renderSubtitle = () => {
+        if (isForceDelete)
+            return (
+                <>
+                    <p className="mt-12 mb-12 p-8 dc__break-word bg__tertiary">Error: {description}</p>
+                    <p>Do you want to force delete?</p>
+                </>
+            )
+        return description ?? `Are you sure you want to delete this ${component}?`
+    }
+
     const renderDeleteModal = () => (
         <ConfirmationModal
             variant={ConfirmationModalVariantType.delete}
-            title={`Delete ${component} '${title}'`}
-            subtitle={description ?? `Are you sure you want to delete this ${component}?`}
+            title={isForceDelete ? title : `Delete ${component} '${title}'`}
+            subtitle={renderSubtitle()}
             buttonConfig={{
                 secondaryButtonConfig: {
                     text: 'Cancel',
                     onClick: closeConfirmationModal,
                 },
                 primaryButtonConfig: {
-                    text: 'Delete',
+                    text: `${isForceDelete ? 'Force Delete' : 'Delete'}`,
                     onClick: handleDelete,
-                    isLoading,
+                    isLoading: isDeleting,
                     disabled: isLoading || disabled,
                 },
             }}
