@@ -19,6 +19,10 @@ export type FormFieldLabelProps = LabelOrAriaLabelType & {
      * Id of the input element
      */
     inputId: string
+    /**
+     * Layout of the field
+     */
+    layout?: 'row' | 'column'
 }
 
 export interface FormFieldInfoProps extends Pick<FormFieldLabelProps, 'inputId'> {
@@ -44,12 +48,8 @@ export interface FormInfoItemProps {
 }
 
 export interface FormFieldWrapperProps
-    extends Pick<FormFieldLabelProps, 'label' | 'required' | 'ariaLabel'>,
+    extends Pick<FormFieldLabelProps, 'label' | 'required' | 'ariaLabel' | 'layout'>,
         FormFieldInfoProps {
-    /**
-     * Layout of the field
-     */
-    layout?: 'row' | 'column'
     /**
      * If true, the field takes the full width of the parent
      */

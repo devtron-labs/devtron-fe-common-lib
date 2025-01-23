@@ -21,7 +21,7 @@ const FormFieldWrapper = ({
             <div className={`flex left top dc__gap-6 ${!isRowLayout ? 'column' : ''} w-100`}>
                 {label && (
                     <div className={`${itemContainerClassName} flex left`}>
-                        <FormFieldLabel inputId={inputId} label={label} required={required} />
+                        <FormFieldLabel inputId={inputId} label={label} required={required} layout={layout} />
                     </div>
                 )}
                 <div className="w-100">{children}</div>
