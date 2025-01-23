@@ -141,8 +141,7 @@ interface WorkflowExecutionStageCommonDTO {
 
 export interface PodExecutionStageDTO extends WorkflowExecutionStageCommonDTO {
     metadata: {
-        clusterId: number
-        podName: string
+        clusterId?: number
     }
 }
 
@@ -198,7 +197,7 @@ export interface ExecutionInfoType {
     triggeredOn: string
     /**
      * Extracted from startTime from Execution stage (since will work in both old and new format)
-     * If this is not given then, we won't be showing this field
+     * If this is not given then, we won't be showing Execution started field
      * If preparation field has failed, then we will be using finishedOn field to show the status
      */
     executionStartedOn: string
@@ -206,10 +205,7 @@ export interface ExecutionInfoType {
      * Will be the endTime of Execution stage.
      */
     finishedOn?: string
-    /**
-     * Will never be NOT_STARTED
-     */
-    currentStatus: WorkflowStageStatusType
+    currentStatus: Exclude<WorkflowStageStatusType, WorkflowStageStatusType.NOT_STARTED>
     workerDetails: Pick<PodExecutionStageDTO, 'message' | 'status' | 'endTime'> &
         Pick<PodExecutionStageDTO['metadata'], 'clusterId'>
 }

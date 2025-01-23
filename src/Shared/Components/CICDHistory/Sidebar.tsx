@@ -22,11 +22,7 @@ import ReactSelect, { components } from 'react-select'
 import moment from 'moment'
 import { ReactComponent as ICArrowBackward } from '@Icons/ic-arrow-backward.svg'
 import { ReactComponent as ICDocker } from '@Icons/ic-docker.svg'
-import { ReactComponent as ICCalendar } from '@Icons/ic-calendar.svg'
-import { ReactComponent as ICUserCircle } from '@Icons/ic-user-circle.svg'
-import { ReactComponent as ICBranch } from '@Icons/ic-branch.svg'
 import { DeploymentStageType } from '@Shared/constants'
-import { getHandleOpenURL, renderMaterialIcon } from '@Shared/Helpers'
 import {
     SidebarType,
     CICDSidebarFilterOptionType,
@@ -34,117 +30,14 @@ import {
     HistorySummaryCardType,
     DeploymentSummaryTooltipCardType,
     FetchIdDataStatus,
-    BuildAndTaskSummaryTooltipCardProps,
 } from './types'
+import BuildAndTaskSummaryTooltipCard from './BuildAndTaskSummaryTooltipCard'
 import { getCustomOptionSelectionStyle } from '../ReactSelect'
 import { DetectBottom } from '../DetectBottom'
-import {
-    ConditionalWrap,
-    DATE_TIME_FORMATS,
-    SourceTypeMap,
-    createGitCommitUrl,
-    DropdownIndicator,
-    Tooltip,
-} from '../../../Common'
-import { GitTriggers } from '../../types'
-import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
-import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap, DEFAULT_CLUSTER_ID } from './constants'
-import {
-    getFormattedTriggerTime,
-    getHistoryItemStatusIconFromWorkflowStages,
-    getTriggerStatusIcon,
-    getWorkflowNodeStatusTitle,
-    sanitizeWorkflowExecutionStages,
-} from './utils'
-import { WorkerStatus } from './TriggerOutput'
-import { CommitChipCell } from '../CommitChipCell'
-
-const GitTriggerList = memo(
-    ({
-        ciMaterials,
-        gitTriggers,
-        addMarginTop,
-    }: Pick<DeploymentSummaryTooltipCardType, 'ciMaterials' | 'gitTriggers'> & {
-        addMarginTop?: boolean
-    }): JSX.Element => (
-        // eslint-disable-next-line react/jsx-no-useless-fragment
-        <>
-            {Object.keys(gitTriggers ?? {}).length > 0 &&
-                ciMaterials?.map((ciMaterial) => {
-                    const gitDetail: GitTriggers = gitTriggers[ciMaterial.id]
-                    const sourceType = gitDetail?.CiConfigureSourceType
-                        ? gitDetail.CiConfigureSourceType
-                        : ciMaterial?.type
-                    const sourceValue = gitDetail?.CiConfigureSourceValue
-                        ? gitDetail.CiConfigureSourceValue
-                        : ciMaterial?.value
-                    const gitMaterialUrl = gitDetail?.GitRepoUrl ? gitDetail.GitRepoUrl : ciMaterial?.url
-                    if (sourceType !== SourceTypeMap.WEBHOOK && !gitDetail) {
-                        return null
-                    }
-
-                    return (
-                        <div className={`${addMarginTop ? 'mt-22' : ''} ci-material-detail"`} key={ciMaterial.id}>
-                            {sourceType === SourceTypeMap.WEBHOOK ? (
-                                <div className="flex left column">
-                                    <CiPipelineSourceConfig
-                                        sourceType={sourceType}
-                                        sourceValue={sourceValue}
-                                        showTooltip={false}
-                                    />
-                                </div>
-                            ) : (
-                                <div className="flexbox-col dc__gap-8">
-                                    <div className="flexbox dc__gap-4 dc__align-start">
-                                        {renderMaterialIcon(gitMaterialUrl)}
-
-                                        {gitDetail?.GitRepoName && (
-                                            <>
-                                                <Tooltip content={gitDetail.GitRepoName}>
-                                                    <span className="cn-9 fs-13 fw-6 lh-20">
-                                                        {gitDetail.GitRepoName}
-                                                    </span>
-                                                </Tooltip>
-
-                                                <span className="cn-5 fs-13 fw-4 lh-20 dc__no-shrink">/</span>
-                                            </>
-                                        )}
-
-                                        <a
-                                            href={createGitCommitUrl(gitMaterialUrl, gitDetail?.Commit)}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="anchor flexbox dc__gap-2 dc__align-items-center"
-                                        >
-                                            <ICBranch className="icon-dim-12 dc__no-shrink fcn-7" />
-                                            {sourceValue}
-                                        </a>
-                                    </div>
-
-                                    {gitDetail?.Commit && (
-                                        <CommitChipCell
-                                            commits={[gitDetail.Commit]}
-                                            handleClick={getHandleOpenURL(
-                                                createGitCommitUrl(ciMaterial.url, gitDetail.Commit),
-                                            )}
-                                        />
-                                    )}
-
-                                    {gitDetail?.Message && (
-                                        <Tooltip content={gitDetail.Message}>
-                                            <p className="m-0 cn-9 fs-13 fw-4 lh-20 dc__truncate--clamp-3">
-                                                {gitDetail.Message}
-                                            </p>
-                                        </Tooltip>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    )
-                })}
-        </>
-    ),
-)
+import { ConditionalWrap, DATE_TIME_FORMATS, DropdownIndicator } from '../../../Common'
+import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
+import { getHistoryItemStatusIconFromWorkflowStages, getTriggerStatusIcon, getWorkflowNodeStatusTitle } from './utils'
+import GitTriggerList from './GitTriggerList'
 
 const DeploymentSummaryTooltipCard = memo(
     ({
@@ -170,56 +63,6 @@ const DeploymentSummaryTooltipCard = memo(
             </div>
         </div>
     ),
-)
-
-const BuildAndTaskSummaryTooltipCard = memo(
-    ({
-        workflowExecutionStages,
-        triggeredByEmail,
-        namespace,
-        podName,
-        stage,
-        gitTriggers,
-        ciMaterials,
-    }: BuildAndTaskSummaryTooltipCardProps): JSX.Element => {
-        const executionInfo = sanitizeWorkflowExecutionStages(workflowExecutionStages)
-
-        return (
-            <div className="shadow__overlay p-16 br-4 w-350 bg__primary mxh-300 dc__overflow-auto flexbox-col dc__gap-16">
-                {/* Info section */}
-                <div className="dc__icon-text-layout">
-                    <ICCalendar className="fcn-7 icon-dim-20 dc__no-shrink" />
-                    <time className="cn-9 fs-12 cn-9 fw-4 lh-20">
-                        {executionInfo?.triggeredOn ? getFormattedTriggerTime(executionInfo.triggeredOn) : '--'}
-                    </time>
-
-                    <ICUserCircle className="fcn-7 icon-dim-20 dc__no-shrink" />
-                    <Tooltip content={triggeredByEmail}>
-                        <span className="cn-9 fs-12 fw-4 lh-20 dc__truncate">{triggeredByEmail}</span>
-                    </Tooltip>
-
-                    <WorkerStatus
-                        message={executionInfo?.workerDetails?.message}
-                        podStatus={executionInfo?.workerDetails?.status}
-                        stage={stage}
-                        finishedOn={executionInfo?.workerDetails?.endTime}
-                        clusterId={executionInfo?.workerDetails?.clusterId || DEFAULT_CLUSTER_ID}
-                        workerPodName={podName}
-                        namespace={namespace}
-                        workerMessageContainerClassName="cn-7 fs-12 fw-4 lh-18"
-                        titleClassName="cn-9 fs-12 fw-4 lh-20"
-                        viewWorkerPodClassName="fs-12"
-                    />
-                </div>
-
-                {Object.keys(gitTriggers ?? {}).length > 0 && ciMaterials?.length > 0 && (
-                    <div className="dc__border-bottom-n1" />
-                )}
-
-                <GitTriggerList gitTriggers={gitTriggers} ciMaterials={ciMaterials} />
-            </div>
-        )
-    },
 )
 
 const ViewAllCardsTile = memo(
