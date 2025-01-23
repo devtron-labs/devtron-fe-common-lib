@@ -15,6 +15,7 @@
  */
 
 import { OverrideMergeStrategyType } from '@Pages/Applications'
+import { TargetPlatformsDTO } from '@Shared/types'
 import { ReleaseTag, UserApprovalMetadataType, ResponseType } from '../../Common'
 
 interface WebhookDataType {
@@ -108,7 +109,7 @@ interface ImageTaggingDataType
     imageComment: ImageCommentType
 }
 
-export interface CIMaterialInfoDTO {
+export interface CIMaterialInfoDTO extends Pick<TargetPlatformsDTO, 'targetPlatforms'> {
     ciPipelineId: number
     ciMaterials: CIMaterialDTO[]
     triggeredByEmail: string
@@ -133,7 +134,8 @@ export interface CIMaterialInfoType
             | 'image'
             | 'ciPipelineId'
         >,
-        ImageTaggingDataType {
+        ImageTaggingDataType,
+        Pick<TargetPlatformsDTO, 'targetPlatforms'> {
     materials: CIMaterialType[]
 }
 
