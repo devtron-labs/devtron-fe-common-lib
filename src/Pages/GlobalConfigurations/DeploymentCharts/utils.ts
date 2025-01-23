@@ -17,14 +17,21 @@ export const convertDeploymentChartListToChartType = (data: DeploymentChartListD
                     id,
                     version,
                     description,
-                    uploadedBy,
+                    uploadedBy: isUserUploaded ? uploadedBy : 'Devtron',
                     isUserUploaded,
                 })
             } else {
                 acc[name] = {
                     name,
-                    isUserUploaded,
-                    versions: [{ id, version, description, uploadedBy, isUserUploaded }],
+                    versions: [
+                        {
+                            id,
+                            version,
+                            description,
+                            uploadedBy: isUserUploaded ? uploadedBy : 'Devtron',
+                            isUserUploaded,
+                        },
+                    ],
                 }
             }
             return acc

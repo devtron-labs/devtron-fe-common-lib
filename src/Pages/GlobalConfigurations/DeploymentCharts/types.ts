@@ -14,7 +14,7 @@ interface DeploymentChartVersionsType
     description: string
 }
 
-export interface DeploymentChartType extends Pick<DeploymentChartInfo, 'name' | 'isUserUploaded'> {
+export interface DeploymentChartType extends Pick<DeploymentChartInfo, 'name'> {
     versions: DeploymentChartVersionsType[]
 }
 
