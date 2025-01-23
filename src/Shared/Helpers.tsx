@@ -1015,21 +1015,23 @@ export const isAWSCodeCommitURL = (url: string = ''): boolean =>
     url.includes('git-codecommit.') && url.includes('.amazonaws.com')
 
 export const renderMaterialIcon = (url: string = '') => {
+    const baseClass = 'dc__vertical-align-middle icon-dim-20 dc__no-shrink'
+
     if (url.includes('gitlab')) {
-        return <ICGitlab className="dc__vertical-align-middle icon-dim-20" />
+        return <ICGitlab className={baseClass} />
     }
 
     if (url.includes('github')) {
-        return <ICGithub className="dc__vertical-align-middle icon-dim-20 fcn-8" />
+        return <ICGithub className={`${baseClass} fcn-8`} />
     }
 
     if (url.includes('bitbucket')) {
-        return <ICBitbucket className="dc__vertical-align-middle icon-dim-20" />
+        return <ICBitbucket className={baseClass} />
     }
 
     if (isAWSCodeCommitURL(url)) {
         return <ICAWSCodeCommit className="dc__vertical-align-middle icon-dim-18" />
     }
 
-    return <ICGit className="dc__vertical-align-middle icon-dim-20" />
+    return <ICGit className={baseClass} />
 }

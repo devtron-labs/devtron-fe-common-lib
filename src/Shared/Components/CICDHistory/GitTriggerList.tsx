@@ -3,7 +3,6 @@ import { ReactComponent as ICBranch } from '@Icons/ic-branch.svg'
 import { GitTriggers } from '@Shared/types'
 import { createGitCommitUrl, SourceTypeMap } from '@Common/Common.service'
 import { getHandleOpenURL, renderMaterialIcon } from '@Shared/Helpers'
-import { Tooltip } from '@Common/Tooltip'
 import { DeploymentSummaryTooltipCardType } from './types'
 import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
 import { CommitChipCell } from '../CommitChipCell'
@@ -42,16 +41,14 @@ const GitTriggerList = memo(
                                 </div>
                             ) : (
                                 <div className="flexbox-col dc__gap-8">
-                                    <div className="flexbox dc__gap-4 dc__align-start">
+                                    <div className="flexbox dc__gap-4 dc__align-start flex-wrap">
                                         {renderMaterialIcon(gitMaterialUrl)}
 
                                         {gitDetail?.GitRepoName && (
                                             <>
-                                                <Tooltip content={gitDetail.GitRepoName}>
-                                                    <span className="cn-9 fs-13 fw-6 lh-20">
-                                                        {gitDetail.GitRepoName}
-                                                    </span>
-                                                </Tooltip>
+                                                <span className="cn-9 fs-13 fw-6 lh-20 dc__word-break">
+                                                    {gitDetail.GitRepoName}
+                                                </span>
 
                                                 <span className="cn-5 fs-13 fw-4 lh-20 dc__no-shrink">/</span>
                                             </>
@@ -61,7 +58,7 @@ const GitTriggerList = memo(
                                             href={createGitCommitUrl(gitMaterialUrl, gitDetail?.Commit)}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="anchor flexbox dc__gap-2 dc__align-items-center"
+                                            className="anchor flexbox dc__gap-2 dc__align-items-center dc__word-break"
                                         >
                                             <ICBranch className="icon-dim-12 dc__no-shrink fcn-7" />
                                             {sourceValue}
@@ -78,11 +75,9 @@ const GitTriggerList = memo(
                                     )}
 
                                     {gitDetail?.Message && (
-                                        <Tooltip content={gitDetail.Message}>
-                                            <p className="m-0 cn-9 fs-13 fw-4 lh-20 dc__truncate--clamp-3">
-                                                {gitDetail.Message}
-                                            </p>
-                                        </Tooltip>
+                                        <p className="m-0 cn-9 fs-13 fw-4 lh-20 dc__truncate--clamp-3">
+                                            {gitDetail.Message}
+                                        </p>
                                     )}
                                 </div>
                             )}
