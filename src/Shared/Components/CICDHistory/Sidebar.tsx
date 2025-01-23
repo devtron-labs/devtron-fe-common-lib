@@ -48,7 +48,7 @@ const DeploymentSummaryTooltipCard = memo(
         ciMaterials,
         gitTriggers,
     }: DeploymentSummaryTooltipCardType): JSX.Element => (
-        <div className="build-card-popup p-16 br-4 w-400 bg__primary mxh-300 dc__overflow-auto">
+        <div className="shadow__overlay p-16 br-4 w-400 bg__primary mxh-300 dc__overflow-auto">
             <span className="fw-6 fs-16 mb-4" style={{ color: colorMap[status.toLowerCase()] }}>
                 {getWorkflowNodeStatusTitle(status)}
             </span>

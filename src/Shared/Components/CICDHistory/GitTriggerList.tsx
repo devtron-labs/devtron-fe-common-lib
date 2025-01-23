@@ -21,19 +21,17 @@ const GitTriggerList = memo(
             {Object.keys(gitTriggers ?? {}).length > 0 &&
                 ciMaterials?.map((ciMaterial) => {
                     const gitDetail: GitTriggers = gitTriggers[ciMaterial.id]
-                    const sourceType = gitDetail?.CiConfigureSourceType
-                        ? gitDetail.CiConfigureSourceType
-                        : ciMaterial?.type
-                    const sourceValue = gitDetail?.CiConfigureSourceValue
-                        ? gitDetail.CiConfigureSourceValue
-                        : ciMaterial?.value
-                    const gitMaterialUrl = gitDetail?.GitRepoUrl ? gitDetail.GitRepoUrl : ciMaterial?.url
+
+                    const sourceType = gitDetail?.CiConfigureSourceType || ciMaterial?.type
+                    const sourceValue = gitDetail?.CiConfigureSourceValue || ciMaterial?.value
+                    const gitMaterialUrl = gitDetail?.GitRepoUrl || ciMaterial?.url
+
                     if (sourceType !== SourceTypeMap.WEBHOOK && !gitDetail) {
                         return null
                     }
 
                     return (
-                        <div className={`${addMarginTop ? 'mt-22' : ''} ci-material-detail"`} key={ciMaterial.id}>
+                        <div className={`${addMarginTop ? 'mt-22' : ''}`} key={ciMaterial.id}>
                             {sourceType === SourceTypeMap.WEBHOOK ? (
                                 <div className="flex left column">
                                     <CiPipelineSourceConfig

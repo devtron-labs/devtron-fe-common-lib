@@ -35,11 +35,11 @@ const BuildAndTaskSummaryTooltipCard = memo(
                     </Tooltip>
 
                     <WorkerStatus
-                        message={executionInfo?.workerDetails?.message}
-                        podStatus={executionInfo?.workerDetails?.status}
+                        message={executionInfo?.workerDetails.message}
+                        podStatus={executionInfo?.workerDetails.status}
                         stage={stage}
-                        finishedOn={executionInfo?.workerDetails?.endTime}
-                        clusterId={executionInfo?.workerDetails?.clusterId || DEFAULT_CLUSTER_ID}
+                        finishedOn={executionInfo?.workerDetails.endTime}
+                        clusterId={executionInfo?.workerDetails.clusterId || DEFAULT_CLUSTER_ID}
                         workerPodName={podName}
                         namespace={namespace}
                         workerMessageContainerClassName="cn-7 fs-12 fw-4 lh-18"
