@@ -297,7 +297,6 @@ export const getIconFromWorkflowStageStatusType = (
         case WorkflowStageStatusType.SUCCEEDED:
             return renderSuccessTriggerIcon(baseClass)
 
-        // NOT_STARTED case is not expected
         case WorkflowStageStatusType.NOT_STARTED:
         case WorkflowStageStatusType.RUNNING:
             return renderProgressingTriggerIcon(baseClass)
@@ -321,11 +320,14 @@ export const getHistoryItemStatusIconFromWorkflowStages = (
         return renderProgressingTriggerIcon(baseClass)
     }
 
-    if (FAILED_WORKFLOW_STAGE_STATUS_MAP[executionInfo.workerDetails?.status]) {
+    if (
+        !FAILED_WORKFLOW_STAGE_STATUS_MAP[executionInfo.currentStatus] &&
+        FAILED_WORKFLOW_STAGE_STATUS_MAP[executionInfo.workerDetails.status]
+    ) {
         return <ICWarningY5 className={baseClass} />
     }
 
-    return getIconFromWorkflowStageStatusType(executionInfo.currentStatus, baseClass)
+    return getIconFromWorkflowStageStatusType(executionInfo.workerDetails.status, baseClass)
 }
 
 export const getWorkerPodBaseUrl = (clusterId: number = DEFAULT_CLUSTER_ID, podNamespace: string = DEFAULT_NAMESPACE) =>

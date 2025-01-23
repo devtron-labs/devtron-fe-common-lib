@@ -23,7 +23,7 @@ const BuildAndTaskSummaryTooltipCard = memo(
         const executionInfo = sanitizeWorkflowExecutionStages(workflowExecutionStages)
 
         return (
-            <div className="shadow__overlay p-16 br-4 w-350 bg__primary mxh-300 dc__overflow-auto flexbox-col dc__gap-16">
+            <div className="shadow__overlay p-16 br-4 w-350 bg__overlay border__primary mxh-300 dc__overflow-auto flexbox-col dc__gap-16">
                 {/* Info section */}
                 <div className="dc__icon-text-layout">
                     <ICCalendar className={`scn-7 ${BASE_ICON_CLASS}`} />
