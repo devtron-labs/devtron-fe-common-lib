@@ -1,6 +1,5 @@
 import YAML, { YAMLParseError } from 'yaml'
 import { EditorView } from '@uiw/react-codemirror'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { Diagnostic } from '@codemirror/lint'
 
 export const yamlParseLinter =

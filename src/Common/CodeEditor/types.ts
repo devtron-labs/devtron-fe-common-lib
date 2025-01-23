@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { Dispatch, ReactNode } from 'react'
+import { Dispatch, FunctionComponent, ReactNode, SVGProps } from 'react'
 import { JSONSchema7 } from 'json-schema'
 import { EditorView, ReactCodeMirrorProps } from '@uiw/react-codemirror'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { SearchQuery } from '@codemirror/search'
 
 import { MODES } from '@Common/Constants'
@@ -37,32 +36,25 @@ export interface CodeEditorHeaderProps {
     children?: ReactNode
 }
 
-// TODO: (rohit) add documentation
+type CodeEditorBaseProps = Pick<ReactCodeMirrorProps, 'onBlur' | 'onFocus' | 'autoFocus'> & {
+    value?: ReactCodeMirrorProps['value']
+    onChange?: (value: string) => void
+    shebang?: string | JSX.Element
+    validatorSchema?: JSONSchema7
+    schemaURI?: string
+}
+
+type CodeEditorDiffBaseProps = {
+    onOriginalValueChange?: (originalValue: string) => void
+    onModifiedValueChange?: (modifiedValue: string) => void
+    originalValue?: ReactCodeMirrorProps['value']
+    modifiedValue?: ReactCodeMirrorProps['value']
+    isOriginalModifiable?: boolean
+}
+
 type CodeEditorPropsBasedOnDiffView<DiffView extends boolean> = DiffView extends true
-    ? {
-          onOriginalValueChange?: (originalValue: string) => void
-          onModifiedValueChange?: (modifiedValue: string) => void
-          originalValue?: ReactCodeMirrorProps['value']
-          modifiedValue?: ReactCodeMirrorProps['value']
-          isOriginalModifiable?: boolean
-          value?: never
-          onChange?: never
-          shebang?: never
-          validatorSchema?: never
-          schemaURI?: never
-      } & Never<Pick<ReactCodeMirrorProps, 'onBlur' | 'onFocus' | 'autoFocus'>>
-    : {
-          value?: ReactCodeMirrorProps['value']
-          onChange?: (value: string) => void
-          shebang?: string | JSX.Element
-          validatorSchema?: JSONSchema7
-          schemaURI?: string
-          originalValue?: never
-          modifiedValue?: never
-          onOriginalValueChange?: never
-          onModifiedValueChange?: never
-          isOriginalModifiable?: never
-      } & Pick<ReactCodeMirrorProps, 'onBlur' | 'onFocus' | 'autoFocus'>
+    ? CodeEditorDiffBaseProps & Never<CodeEditorBaseProps>
+    : CodeEditorBaseProps & Never<CodeEditorDiffBaseProps>
 
 export type CodeEditorProps<DiffView extends boolean = false> = {
     /**
@@ -87,6 +79,12 @@ export type CodeEditorProps<DiffView extends boolean = false> = {
     theme?: AppThemeType
 } & CodeEditorPropsBasedOnDiffView<DiffView>
 
+export interface GetCodeEditorHeightReturnType {
+    codeEditorParentClassName: string
+    codeEditorClassName: string
+    codeEditorHeight: string
+}
+
 // CODE-MIRROR TYPES
 export type HoverTexts = {
     message: string
@@ -105,24 +103,33 @@ export interface FindReplaceProps {
 // REDUCER TYPES
 export type CodeEditorActionTypes = 'setDiff' | 'setCode' | 'setLhsCode'
 
-export interface CodeEditorAction {
+export interface CodeEditorPayloadType {
     type: CodeEditorActionTypes
     value: any
 }
 
 export interface CodeEditorInitialValueType extends Pick<CodeEditorProps, 'value' | 'noParsing' | 'tabSize' | 'mode'> {
-    lhsValue: string
+    lhsValue: ReactCodeMirrorProps['value']
     diffView: boolean
 }
 
 export interface CodeEditorState extends Pick<CodeEditorProps, 'noParsing'> {
-    code: string
-    lhsCode: string
-    diffMode: boolean
+    code: CodeEditorProps['value']
+    lhsCode: CodeEditorProps<true>['originalValue']
+    diffMode: CodeEditorProps<boolean>['diffView']
 }
 
 export interface CodeEditorContextProps extends Pick<CodeEditorProps, 'readOnly' | 'height'> {
     state: CodeEditorState
     hasCodeEditorContainer: boolean
-    dispatch: Dispatch<CodeEditorAction>
+    dispatch: Dispatch<CodeEditorPayloadType>
+}
+
+// EXTENSION PROPS
+export interface FindReplaceToggleButtonProps {
+    isChecked: boolean
+    Icon: FunctionComponent<SVGProps<SVGSVGElement>>
+    onChange: (isChecked: boolean) => void
+    iconType?: 'stroke' | 'fill'
+    tooltipText: string
 }

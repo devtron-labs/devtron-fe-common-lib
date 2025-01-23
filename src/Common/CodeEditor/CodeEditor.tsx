@@ -17,7 +17,6 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import CodeMirror, {
     Extension,
-    hoverTooltip,
     ReactCodeMirrorProps,
     basicSetup,
     BasicSetupOptions,
@@ -26,24 +25,9 @@ import CodeMirror, {
     keymap,
 } from '@uiw/react-codemirror'
 import CodeMirrorMerge from 'react-codemirror-merge'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { StreamLanguage, foldGutter } from '@codemirror/language'
-// eslint-disable-next-line import/no-extraneous-dependencies
+import { foldGutter } from '@codemirror/language'
 import { search } from '@codemirror/search'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { linter, lintGutter } from '@codemirror/lint'
-import { json as langJson, jsonLanguage, jsonParseLinter } from '@codemirror/lang-json'
-import { yaml as langYaml, yamlLanguage } from '@codemirror/lang-yaml'
-import { shell } from '@codemirror/legacy-modes/mode/shell'
-import { dockerFile } from '@codemirror/legacy-modes/mode/dockerfile'
-import {
-    jsonSchemaHover,
-    jsonSchemaLinter,
-    jsonCompletion,
-    handleRefresh,
-    stateExtensions,
-} from 'codemirror-json-schema'
-import { yamlSchemaHover, yamlCompletion, yamlSchemaLinter } from 'codemirror-json-schema/yaml'
+import { lintGutter } from '@codemirror/lint'
 import { vscodeKeymap } from '@replit/codemirror-vscode-keymap'
 
 import { AppThemeType, useTheme } from '@Shared/Providers'
@@ -52,10 +36,10 @@ import { cleanKubeManifest, useEffectAfterMount } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
 import { Progressing } from '@Common/Progressing'
 
-import { codeEditorFindReplace, readOnlyTooltip, yamlParseLinter } from './Extensions'
+import { codeEditorFindReplace, readOnlyTooltip } from './Extensions'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
-import { getCodeEditorHeight, getFoldGutterElement, getHoverElement } from './utils'
+import { getCodeEditorHeight, getFoldGutterElement, getLanguageExtension, getValidationSchema } from './utils'
 import { CodeEditorContext } from './CodeEditor.context'
 import { Clipboard, Container, ErrorBar, Header, Information, Warning } from './CodeEditor.components'
 import { getCodeEditorTheme } from './CodeEditor.theme'
@@ -136,7 +120,7 @@ const CodeEditor = <DiffView extends boolean = false>({
     useEffect(() => {
         if (codeMirrorParentDivRef.current) {
             setHasCodeEditorContainer(
-                codeMirrorParentDivRef.current.parentElement.classList.contains('code-editor__container'),
+                !!codeMirrorParentDivRef.current.parentElement.getAttribute('data-code-editor-container'),
             )
         }
     }, [])
@@ -217,63 +201,6 @@ const CodeEditor = <DiffView extends boolean = false>({
         setLhsCode(newLhsValue)
     }
 
-    const getLanguageExtension = (): Extension => {
-        switch (mode) {
-            case MODES.JSON:
-                return [langJson(), linter(jsonParseLinter())]
-            case MODES.YAML:
-                return [langYaml(), linter(yamlParseLinter())]
-            case MODES.SHELL:
-                return StreamLanguage.define(shell)
-            case MODES.DOCKERFILE:
-                return StreamLanguage.define(dockerFile)
-            default:
-                return []
-        }
-    }
-
-    const getValidationSchema = (): Extension[] => {
-        if (!Object.keys(validatorSchema).length) {
-            return []
-        }
-
-        switch (mode) {
-            case MODES.JSON:
-                return [
-                    linter(jsonSchemaLinter(), {
-                        needsRefresh: handleRefresh,
-                    }),
-                    jsonLanguage.data.of({
-                        autocomplete: jsonCompletion(),
-                    }),
-                    hoverTooltip(
-                        jsonSchemaHover({
-                            formatHover: getHoverElement(schemaURI),
-                        }),
-                    ),
-                    stateExtensions(validatorSchema),
-                ]
-            case MODES.YAML:
-                return [
-                    linter(yamlSchemaLinter(), {
-                        needsRefresh: handleRefresh,
-                    }),
-                    yamlLanguage.data.of({
-                        autocomplete: yamlCompletion(),
-                    }),
-                    hoverTooltip(
-                        yamlSchemaHover({
-                            formatHover: getHoverElement(schemaURI),
-                        }),
-                    ),
-                    stateExtensions(validatorSchema),
-                ]
-            default: {
-                return []
-            }
-        }
-    }
-
     // EXTENSIONS
     const foldConfig = foldGutter({
         markerDOM: getFoldGutterElement,
@@ -282,7 +209,7 @@ const CodeEditor = <DiffView extends boolean = false>({
     const baseExtensions: Extension[] = [
         basicSetup(basicSetupOptions),
         keymap.of(vscodeKeymap.filter(({ key }) => !disableSearch || key !== 'Mod-f')),
-        getLanguageExtension(),
+        getLanguageExtension(mode),
         foldingCompartment.of(foldConfig),
         lintGutter(),
         search({
@@ -292,7 +219,7 @@ const CodeEditor = <DiffView extends boolean = false>({
 
     const extensions: Extension[] = [
         ...baseExtensions,
-        ...(!state.diffMode ? getValidationSchema() : []),
+        ...(!state.diffMode ? getValidationSchema({ mode, schemaURI, validatorSchema }) : []),
         readOnlyTooltip,
     ]
 
@@ -301,20 +228,17 @@ const CodeEditor = <DiffView extends boolean = false>({
     const modifiedViewExtensions: Extension[] = [...baseExtensions, readOnlyTooltip]
 
     const renderCodeEditor = () => {
+        const { codeEditorClassName, codeEditorHeight, codeEditorParentClassName } = getCodeEditorHeight(height)
+
         if (loading) {
             return (
                 customLoader || (
-                    <div
-                        className="flex mh-250"
-                        style={{ height: typeof height === 'number' ? `${height}px` : height }}
-                    >
+                    <div className="flex mh-250" style={{ height: codeEditorHeight }}>
                         <Progressing pageLoader />
                     </div>
                 )
             )
         }
-
-        const { codeEditorClassName, codeEditorHeight, codeEditorParentClassName } = getCodeEditorHeight(height)
 
         return state.diffMode ? (
             <CodeMirrorMerge

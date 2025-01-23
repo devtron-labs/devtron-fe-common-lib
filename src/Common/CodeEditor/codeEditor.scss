@@ -56,7 +56,6 @@
 }
 
 .cm-editor {
-
     &.cm-merge-a .cm-changedLine,
     .cm-deletedChunk {
         background-color: var(--bg-code-editor-red);
@@ -66,10 +65,6 @@
     .cm-deletedChunk .cm-deletedText {
         background: var(--bg-code-editor-red-highlight);
         border-radius: 4px;
-    }
-
-    &.cm-merge-a .cm-gutters:has(.cm-changedLineGutter) {
-        background-color: var(--bg-code-editor-red-gutter);
     }
 
     &.cm-merge-a .cm-changedLineGutter {
@@ -83,10 +78,6 @@
     &.cm-merge-b .cm-changedText {
         background: var(--bg-code-editor-green-highlight);
         border-radius: 4px;
-    }
-
-    &.cm-merge-b .cm-gutters:has(.cm-changedLineGutter) {
-        background-color: var(--bg-code-editor-green-gutter);
     }
 
     &.cm-merge-b .cm-changedLineGutter {
@@ -217,7 +208,7 @@
         }
     }
 
-    &:has(> [data-code-editor__header]) {
+    &:has(> [data-code-editor-header]) {
         .cm-editor {
             border-top-right-radius: 0;
             border-top-left-radius: 0;
@@ -240,7 +231,7 @@
         overflow: hidden;
     }
 
-    .radio-group input[type='checkbox']:checked+.radio__item-label {
+    .radio-group input[type='checkbox']:checked + .radio__item-label {
         background: var(--N700);
         border-radius: 0;
         color: var(--N0);
@@ -366,7 +357,7 @@
     }
 
     &__replace-expand-button {
-        >div {
+        > div {
             display: flex;
         }
     }

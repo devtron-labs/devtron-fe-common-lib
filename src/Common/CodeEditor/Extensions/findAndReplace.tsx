@@ -1,15 +1,6 @@
-import {
-    ChangeEvent,
-    FunctionComponent,
-    MouseEvent,
-    KeyboardEvent as ReactKeyboardEvent,
-    SVGProps,
-    useEffect,
-    useState,
-} from 'react'
+import { ChangeEvent, MouseEvent, KeyboardEvent as ReactKeyboardEvent, useEffect, useState } from 'react'
 import { render } from 'react-dom'
 import { EditorView, Panel, runScopeHandlers, ViewUpdate } from '@uiw/react-codemirror'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {
     findNext,
     findPrevious,
@@ -35,7 +26,7 @@ import { Button, ButtonStyleType, ButtonVariantType, Collapse } from '@Shared/Co
 import { ComponentSizeType } from '@Shared/constants'
 import { Tooltip } from '@Common/Tooltip'
 
-import { FindReplaceProps, FindReplaceQuery } from '../types'
+import { FindReplaceProps, FindReplaceQuery, FindReplaceToggleButtonProps } from '../types'
 import {
     CLOSE_SEARCH_SHORTCUT_KEYS,
     NEXT_MATCH_SHORTCUT_KEYS,
@@ -44,6 +35,7 @@ import {
     REPLACE_SHORTCUT_KEYS,
     SELECT_ALL_SHORTCUT_KEYS,
 } from '../CodeEditor.constants'
+import { getFindReplaceToggleButtonIconClass, getUpdatedSearchMatchesCount } from '../utils'
 
 const FindReplaceToggleButton = ({
     isChecked,
@@ -51,37 +43,28 @@ const FindReplaceToggleButton = ({
     Icon,
     iconType = 'stroke',
     tooltipText,
-}: {
-    isChecked: boolean
-    Icon: FunctionComponent<SVGProps<SVGSVGElement>>
-    onChange: (isChecked: boolean) => void
-    iconType?: 'stroke' | 'fill'
-    tooltipText: string
-}) => {
-    const onClick = (e: MouseEvent<HTMLDivElement>) => {
-        e.preventDefault()
+}: FindReplaceToggleButtonProps) => {
+    const onClick = (e: ChangeEvent<HTMLLabelElement>) => {
         e.stopPropagation()
         onChange(!isChecked)
     }
 
-    const getIconClass = () => {
-        if (iconType === 'stroke') {
-            return isChecked ? 'scb-5' : 'scn-7'
-        }
-        return isChecked ? 'fcb-5' : 'fcn-7'
-    }
-
     return (
         <Tooltip alwaysShowTippyOnHover content={tooltipText} placement="bottom">
-            <div
-                aria-checked={isChecked}
-                role="checkbox"
-                tabIndex={0}
-                className={`flex p-1 dc__border-transparent br-2 cursor ${isChecked ? 'eb-2 bcb-1' : ''}`}
-                onClick={onClick}
+            <label
+                htmlFor={`find-replace-${tooltipText}-toggle-button`}
+                className={`m-0 flex p-1 dc__border-transparent br-2 cursor dc__position-rel ${isChecked ? 'eb-2 bcb-1' : ''}`}
+                onChange={onClick}
             >
-                <Icon className={`icon-dim-12 ${getIconClass()}`} />
-            </div>
+                <input
+                    id={`find-replace-${tooltipText}-toggle-button`}
+                    name={`find-replace-${tooltipText}-toggle-button`}
+                    className="dc__position-abs dc__visibility-hidden dc__top-0 dc__right-0 dc__bottom-0 dc__left-0 m-0-imp"
+                    type="checkbox"
+                    aria-checked={isChecked}
+                />
+                <Icon className={`icon-dim-12 ${getFindReplaceToggleButtonIconClass({ isChecked, iconType })}`} />
+            </label>
         </Tooltip>
     )
 }
@@ -96,24 +79,6 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
     const isPreviousNextButtonDisabled = !matchesCount.count
 
     // METHODS
-    const updateSearchMatchesCount = (newQuery: SearchQuery = query) => {
-        const cursor = newQuery.getCursor(view.state)
-        const updatedMatchesCount = { count: 0, current: 1 }
-        const { from, to } = view.state.selection.main
-
-        let item = cursor.next()
-        while (newQuery.search !== '' && !item.done) {
-            if ((item.value.from === from && item.value.to === to) || item.value.from < from) {
-                updatedMatchesCount.current = updatedMatchesCount.count + 1
-            }
-
-            item = cursor.next()
-            updatedMatchesCount.count += 1
-        }
-
-        setMatchesCount(updatedMatchesCount)
-    }
-
     const sendQuery = ({
         caseSensitive = query.caseSensitive,
         regexp = query.regexp,
@@ -132,33 +97,33 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
         if (!newQuery.eq(query)) {
             setQuery(newQuery)
             view.dispatch({ effects: setSearchQuery.of(newQuery) })
-            updateSearchMatchesCount(newQuery)
+            setMatchesCount(getUpdatedSearchMatchesCount(newQuery, view))
         }
     }
 
     useEffect(() => {
         if (!defaultQuery.eq(query)) {
-            updateSearchMatchesCount(defaultQuery)
+            setMatchesCount(getUpdatedSearchMatchesCount(defaultQuery, view))
             setQuery(defaultQuery)
         }
     }, [defaultQuery])
 
     useEffect(() => {
-        updateSearchMatchesCount(defaultQuery)
+        setMatchesCount(getUpdatedSearchMatchesCount(defaultQuery, view))
     }, [view.state.doc.length])
 
     const onNext = (e?: MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
         e?.stopPropagation()
         findNext(view)
-        updateSearchMatchesCount()
+        setMatchesCount(getUpdatedSearchMatchesCount(query, view))
     }
 
     const onPrevious = (e?: MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
         e?.stopPropagation()
         findPrevious(view)
-        updateSearchMatchesCount()
+        setMatchesCount(getUpdatedSearchMatchesCount(query, view))
     }
 
     const onFindChange = (e: ChangeEvent<HTMLInputElement>) => {

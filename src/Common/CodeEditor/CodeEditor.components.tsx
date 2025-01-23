@@ -32,7 +32,7 @@ export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEdit
 
     return (
         <div
-            data-code-editor__header
+            data-code-editor-header
             className={`${hasCodeEditorContainer ? 'dc__top-radius-4' : ''} ${className || 'code-editor__header flex right'}`}
         >
             {children}
@@ -72,5 +72,7 @@ export const Clipboard = () => {
 }
 
 export const Container = ({ children, flexExpand }: { children: ReactNode; flexExpand?: boolean }) => (
-    <div className={`code-editor__container ${flexExpand ? 'flex-grow-1 flexbox-col' : ''}`}>{children}</div>
+    <div data-code-editor-container className={`code-editor__container ${flexExpand ? 'flex-grow-1 flexbox-col' : ''}`}>
+        {children}
+    </div>
 )

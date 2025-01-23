@@ -19,9 +19,9 @@ import YAML from 'yaml'
 import { noop, YAMLStringify } from '@Common/Helper'
 import { MODES } from '@Common/Constants'
 
-import { CodeEditorAction, CodeEditorInitialValueType, CodeEditorState } from './types'
+import { CodeEditorPayloadType, CodeEditorInitialValueType, CodeEditorState } from './types'
 
-export const CodeEditorReducer = (state: CodeEditorState, action: CodeEditorAction): CodeEditorState => {
+export const CodeEditorReducer = (state: CodeEditorState, action: CodeEditorPayloadType): CodeEditorState => {
     switch (action.type) {
         case 'setDiff':
             return { ...state, diffMode: action.value }

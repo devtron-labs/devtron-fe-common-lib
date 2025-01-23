@@ -20,10 +20,8 @@ export const ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], str
     [ComponentSizeType.xl]: 'p-7',
 } as const
 
-export const BUTTON_SIZE_TO_ICON_SIZE_MAP: Record<
-    Exclude<ButtonProps['size'], ComponentSizeType.xxs>,
-    ProgressingProps['size']
-> = {
+export const BUTTON_SIZE_TO_ICON_SIZE_MAP: Record<ButtonProps['size'], ProgressingProps['size']> = {
+    [ComponentSizeType.xxs]: 14,
     [ComponentSizeType.xs]: 14,
     [ComponentSizeType.small]: 16,
     [ComponentSizeType.medium]: 16,
