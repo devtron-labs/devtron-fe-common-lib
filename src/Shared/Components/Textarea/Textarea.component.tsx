@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { TextareaHTMLAttributes, useRef } from 'react'
 import {
     COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP,
     COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP,
@@ -54,10 +54,6 @@ const Textarea = ({
         updateRefsHeight(nextHeight)
     }
 
-    useEffect(() => {
-        reInitHeight()
-    }, [])
-
     useThrottledEffect(reInitHeight, 300, [props.value])
 
     const handleBlur: TextareaProps['onBlur'] = (event) => {
@@ -74,6 +70,14 @@ const Textarea = ({
         }
         if (typeof onBlur === 'function') {
             onBlur(event)
+        }
+    }
+
+    const handleKeyDown: TextareaHTMLAttributes<HTMLTextAreaElement>['onKeyDown'] = (
+        event: React.KeyboardEvent<HTMLTextAreaElement>,
+    ) => {
+        if (event.key === 'Enter' || event.key === 'Escape') {
+            event.stopPropagation()
         }
     }
 
@@ -106,6 +110,7 @@ const Textarea = ({
                 data-testid={name}
                 required={required}
                 onBlur={handleBlur}
+                onKeyDown={handleKeyDown}
                 className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} w-100 dc__overflow-auto textarea`}
                 ref={textareaRef}
                 style={{
