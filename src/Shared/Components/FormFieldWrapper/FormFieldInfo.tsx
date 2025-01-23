@@ -11,29 +11,26 @@ const FormInfoItem = ({ id, text, icon, textClass }: FormInfoItemProps) => (
     </div>
 )
 
-const FormFieldInfo = ({ error, helperText, warningText, inputId }: FormFieldInfoProps) =>
-    error || helperText || warningText ? (
-        <div className="flex left column dc__gap-4">
-            {error && (
-                <FormInfoItem text={error} icon={<ICError />} textClass="cr-5" id={getFormErrorElementId(inputId)} />
-            )}
-            {helperText && (
-                <FormInfoItem
-                    text={helperText}
-                    icon={<ICInfoFilledOverride className="info-icon-n7" />}
-                    textClass="cn-7"
-                    id={`${inputId}-helper-text`}
-                />
-            )}
-            {warningText && (
-                <FormInfoItem
-                    text={warningText}
-                    icon={<ICWarning className="warning-icon-y7" />}
-                    textClass="cy-7"
-                    id={`${inputId}-warning-msg`}
-                />
-            )}
-        </div>
-    ) : null
+const FormFieldInfo = ({ error, helperText, warningText, inputId }: FormFieldInfoProps) => (
+    <div className="flex left column dc__gap-4">
+        {error && <FormInfoItem text={error} icon={<ICError />} textClass="cr-5" id={getFormErrorElementId(inputId)} />}
+        {helperText && (
+            <FormInfoItem
+                text={helperText}
+                icon={<ICInfoFilledOverride className="info-icon-n7" />}
+                textClass="cn-7"
+                id={`${inputId}-helper-text`}
+            />
+        )}
+        {warningText && (
+            <FormInfoItem
+                text={warningText}
+                icon={<ICWarning className="warning-icon-y7" />}
+                textClass="cy-7"
+                id={`${inputId}-warning-msg`}
+            />
+        )}
+    </div>
+)
 
 export default FormFieldInfo

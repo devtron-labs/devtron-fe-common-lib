@@ -26,11 +26,13 @@ const FormFieldWrapper = ({
                 )}
                 <div className="w-100">{children}</div>
             </div>
-            <div className="flex left dc__gap-6 w-100">
-                {/* Added a hidden div for layout sync */}
-                {isRowLayout && <div className={`${itemContainerClassName} dc__visibility-hidden`} />}
-                <FormFieldInfo inputId={inputId} error={error} helperText={helperText} warningText={warningText} />
-            </div>
+            {(error || helperText || warningText) && (
+                <div className="flex left dc__gap-6 w-100">
+                    {/* Added a hidden div for layout sync */}
+                    {isRowLayout && <div className={`${itemContainerClassName} dc__visibility-hidden`} />}
+                    <FormFieldInfo inputId={inputId} error={error} helperText={helperText} warningText={warningText} />
+                </div>
+            )}
         </div>
     )
 }
