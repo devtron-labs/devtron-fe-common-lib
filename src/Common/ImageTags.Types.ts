@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { ReactElement } from 'react'
+
 export interface ReleaseTag {
     id: number
     tagName: string
@@ -56,4 +58,5 @@ export interface ImageButtonType {
     isSuperAdmin: boolean
     duplicateTag?: boolean
     hideHardDelete?: boolean
+    startIcon?: ReactElement
 }
