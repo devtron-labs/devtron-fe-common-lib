@@ -24,10 +24,9 @@ import { ReactComponent as ICArrowBackward } from '@Icons/ic-arrow-backward.svg'
 import { ReactComponent as ICDocker } from '@Icons/ic-docker.svg'
 import { ReactComponent as ICCalendar } from '@Icons/ic-calendar.svg'
 import { ReactComponent as ICUserCircle } from '@Icons/ic-user-circle.svg'
-import { ReactComponent as ICGithub } from '@Icons/ic-github.svg'
 import { ReactComponent as ICBranch } from '@Icons/ic-branch.svg'
 import { DeploymentStageType } from '@Shared/constants'
-import { getHandleOpenURL } from '@Shared/Helpers'
+import { getHandleOpenURL, renderMaterialIcon } from '@Shared/Helpers'
 import {
     SidebarType,
     CICDSidebarFilterOptionType,
@@ -83,6 +82,7 @@ const GitTriggerList = memo(
                     if (sourceType !== SourceTypeMap.WEBHOOK && !gitDetail) {
                         return null
                     }
+
                     return (
                         <div className={`${addMarginTop ? 'mt-22' : ''} ci-material-detail"`} key={ciMaterial.id}>
                             {sourceType === SourceTypeMap.WEBHOOK ? (
@@ -96,7 +96,7 @@ const GitTriggerList = memo(
                             ) : (
                                 <div className="flexbox-col dc__gap-8">
                                     <div className="flexbox dc__gap-4 dc__align-start">
-                                        <ICGithub className="icon-dim-20 dc__no-shrink" />
+                                        {renderMaterialIcon(gitDetail?.GitRepoName)}
 
                                         {gitDetail?.GitRepoName && (
                                             <>
@@ -111,7 +111,7 @@ const GitTriggerList = memo(
                                         )}
 
                                         <a
-                                            href={createGitCommitUrl(gitMaterialUrl, gitDetail.Commit)}
+                                            href={createGitCommitUrl(gitMaterialUrl, gitDetail?.Commit)}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="anchor flexbox dc__gap-2 dc__align-items-center"

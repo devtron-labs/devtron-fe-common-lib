@@ -157,7 +157,6 @@ export const WorkerStatus = React.memo(
                     <div className="flexbox dc__gap-8">
                         <div className={`flexbox cn-9 ${titleClassName}`}>
                             <span>{stage === DeploymentStageType.DEPLOY && !podStatus ? 'Message' : 'Worker'}</span>
-                            &nbsp;
                             {podStatus && (
                                 <span>
                                     :&nbsp;{WORKFLOW_STAGE_STATUS_TO_TEXT_MAP[podStatus] || podStatus.toLowerCase()}
