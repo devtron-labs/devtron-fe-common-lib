@@ -129,6 +129,7 @@ export const GitChanges = ({
     promotionApprovalMetadata,
     selectedEnvironmentName,
     renderCIListHeader,
+    targetPlatforms,
 }: GitChangesType) => {
     const { isSuperAdmin } = useSuperAdmin()
 
@@ -192,6 +193,7 @@ export const GitChanges = ({
                         promotionApprovalMetadata={promotionApprovalMetadata}
                         selectedEnvironmentName={selectedEnvironmentName}
                         renderCIListHeader={renderCIListHeader}
+                        targetPlatforms={targetPlatforms}
                     >
                         <div className="flex column left hover-trigger">
                             <div className="cn-9 fs-14 flex left">

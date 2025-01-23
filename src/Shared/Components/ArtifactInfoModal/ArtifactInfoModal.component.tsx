@@ -126,6 +126,7 @@ const ArtifactInfoModal = ({
                                     tagsEditable={artifactInfo.tagsEditable}
                                     hideImageTaggingHardDelete={false}
                                     renderCIListHeader={renderCIListHeader}
+                                    targetPlatforms={artifactInfo.targetPlatforms}
                                 />
                             </div>
                         ) : (
