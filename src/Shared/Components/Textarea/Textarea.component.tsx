@@ -10,7 +10,7 @@ import { TextareaProps } from './types'
 import { TEXTAREA_CONSTRAINTS } from './constants'
 import './textarea.scss'
 
-const { MIN_HEIGHT, MAX_HEIGHT } = TEXTAREA_CONSTRAINTS
+const { MIN_HEIGHT, AUTO_EXPANSION_MAX_HEIGHT } = TEXTAREA_CONSTRAINTS
 
 const Textarea = ({
     name,
@@ -37,9 +37,10 @@ const Textarea = ({
     }
 
     const reInitHeight = () => {
+        const currentHeight = parseInt(textareaRef?.current?.style.height, 10)
         let nextHeight = textareaRef?.current?.scrollHeight || 0
 
-        if (nextHeight < parseInt(textareaRef?.current?.style.height, 10)) {
+        if (nextHeight < currentHeight || currentHeight > AUTO_EXPANSION_MAX_HEIGHT) {
             return
         }
 
@@ -47,8 +48,8 @@ const Textarea = ({
             nextHeight = MIN_HEIGHT
         }
 
-        if (nextHeight > MAX_HEIGHT) {
-            nextHeight = MAX_HEIGHT
+        if (nextHeight > AUTO_EXPANSION_MAX_HEIGHT) {
+            nextHeight = AUTO_EXPANSION_MAX_HEIGHT
         }
 
         updateRefsHeight(nextHeight)
@@ -114,7 +115,8 @@ const Textarea = ({
                 className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} w-100 dc__overflow-auto textarea`}
                 ref={textareaRef}
                 style={{
-                    maxHeight: MAX_HEIGHT,
+                    // No max height when user is expanding
+                    maxHeight: 'none',
                     minHeight: MIN_HEIGHT,
                 }}
             />
