@@ -381,67 +381,69 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             ariaLabel={ariaLabel}
         >
             <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
-                <CreatableSelect
-                    {...props}
-                    {...getFormFieldAriaAttributes({
-                        inputId,
-                        required,
-                        label,
-                        ariaLabel,
-                        error,
-                        helperText,
-                    })}
-                    name={name || inputId}
-                    classNamePrefix={classNamePrefix || inputId}
-                    isSearchable={isSelectSearchable}
-                    placeholder={placeholder}
-                    styles={selectStyles}
-                    menuPlacement="auto"
-                    menuPosition={menuPosition}
-                    menuShouldScrollIntoView
-                    backspaceRemovesValue={isMulti && controlShouldRenderValue}
-                    hideSelectedOptions={false}
-                    shouldRenderCustomOptions={shouldRenderCustomOptions || false}
-                    isMulti={isMulti}
-                    ref={selectRef}
-                    components={{
-                        IndicatorSeparator: null,
-                        LoadingIndicator: SelectPickerLoadingIndicator,
-                        DropdownIndicator: SelectPickerDropdownIndicator,
-                        Control: SelectPickerControl,
-                        Option: renderOption,
-                        MenuList: SelectPickerMenuList,
-                        ClearIndicator: SelectPickerClearIndicator,
-                        ValueContainer: renderValueContainer,
-                        MultiValueLabel: renderMultiValueLabel,
-                        MultiValueRemove: SelectPickerMultiValueRemove,
-                        GroupHeading: renderGroupHeading,
-                        NoOptionsMessage: renderNoOptionsMessage,
-                        Input: SelectPickerInput,
-                        ...(shouldHideMenu && {
-                            Menu: () => null,
-                            DropdownIndicator: () => null,
-                        }),
-                    }}
-                    closeMenuOnSelect={!isMulti || closeMenuOnSelect}
-                    allowCreateWhileLoading={false}
-                    isValidNewOption={isValidNewOption}
-                    createOptionPosition="first"
-                    onCreateOption={handleCreateOption}
-                    renderMenuListFooter={!optionListError && renderMenuListFooter}
-                    inputValue={props.inputValue ?? inputValue}
-                    onInputChange={handleInputChange}
-                    icon={icon}
-                    showSelectedOptionIcon={shouldShowSelectedOptionIcon}
-                    onKeyDown={handleKeyDown}
-                    shouldRenderTextArea={shouldRenderTextArea}
-                    customDisplayText={customDisplayText}
-                    {...(!shouldRenderTextArea ? { onFocus: handleFocus } : {})}
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    controlShouldRenderValue={controlShouldRenderValue}
-                    isFocussed={isFocussed}
-                />
+                <div className="w-100">
+                    <CreatableSelect
+                        {...props}
+                        {...getFormFieldAriaAttributes({
+                            inputId,
+                            required,
+                            label,
+                            ariaLabel,
+                            error,
+                            helperText,
+                        })}
+                        name={name || inputId}
+                        classNamePrefix={classNamePrefix || inputId}
+                        isSearchable={isSelectSearchable}
+                        placeholder={placeholder}
+                        styles={selectStyles}
+                        menuPlacement="auto"
+                        menuPosition={menuPosition}
+                        menuShouldScrollIntoView
+                        backspaceRemovesValue={isMulti && controlShouldRenderValue}
+                        hideSelectedOptions={false}
+                        shouldRenderCustomOptions={shouldRenderCustomOptions || false}
+                        isMulti={isMulti}
+                        ref={selectRef}
+                        components={{
+                            IndicatorSeparator: null,
+                            LoadingIndicator: SelectPickerLoadingIndicator,
+                            DropdownIndicator: SelectPickerDropdownIndicator,
+                            Control: SelectPickerControl,
+                            Option: renderOption,
+                            MenuList: SelectPickerMenuList,
+                            ClearIndicator: SelectPickerClearIndicator,
+                            ValueContainer: renderValueContainer,
+                            MultiValueLabel: renderMultiValueLabel,
+                            MultiValueRemove: SelectPickerMultiValueRemove,
+                            GroupHeading: renderGroupHeading,
+                            NoOptionsMessage: renderNoOptionsMessage,
+                            Input: SelectPickerInput,
+                            ...(shouldHideMenu && {
+                                Menu: () => null,
+                                DropdownIndicator: () => null,
+                            }),
+                        }}
+                        closeMenuOnSelect={!isMulti || closeMenuOnSelect}
+                        allowCreateWhileLoading={false}
+                        isValidNewOption={isValidNewOption}
+                        createOptionPosition="first"
+                        onCreateOption={handleCreateOption}
+                        renderMenuListFooter={!optionListError && renderMenuListFooter}
+                        inputValue={props.inputValue ?? inputValue}
+                        onInputChange={handleInputChange}
+                        icon={icon}
+                        showSelectedOptionIcon={shouldShowSelectedOptionIcon}
+                        onKeyDown={handleKeyDown}
+                        shouldRenderTextArea={shouldRenderTextArea}
+                        customDisplayText={customDisplayText}
+                        {...(!shouldRenderTextArea ? { onFocus: handleFocus } : {})}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        controlShouldRenderValue={controlShouldRenderValue}
+                        isFocussed={isFocussed}
+                    />
+                </div>
             </ConditionalWrap>
         </FormFieldWrapper>
     )
