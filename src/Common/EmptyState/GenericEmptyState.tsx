@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import AppNotDeployed from '../../Assets/Img/app-not-deployed.png'
+import AppNotDeployed from '../../Assets/Img/app-not-deployed.svg'
 import { GenericEmptyStateType, ImageType } from '../Types'
 
 import './emptyState.scss'

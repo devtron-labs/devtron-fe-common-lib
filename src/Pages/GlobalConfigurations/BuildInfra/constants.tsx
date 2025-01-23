@@ -20,6 +20,7 @@ import { ReactComponent as ICTimer } from '@Icons/ic-timer.svg'
 import { ReactComponent as ICSprayCan } from '@Icons/ic-spray-can.svg'
 import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { UseBreadcrumbProps } from '@Common/BreadCrumb/Types'
+import { CMSecretComponentType } from '@Shared/index'
 import {
     BuildInfraConfigTypes,
     BuildInfraFormFieldType,
@@ -34,6 +35,8 @@ import {
     RequestLimitConfigType,
     BuildInfraToleranceEffectType,
     BuildInfraToleranceOperatorType,
+    BuildInfraInheritActionsOnSubValues,
+    InfraConfigWithSubValues,
 } from './types'
 
 export const BUILD_INFRA_INPUT_CONSTRAINTS = {
@@ -94,6 +97,8 @@ export const BUILD_INFRA_LOCATOR_MARKER_MAP: Readonly<Record<BuildInfraLocators,
     [BuildInfraLocators.BUILD_TIMEOUT]: ICTimer,
     [BuildInfraLocators.NODE_SELECTOR]: ICSprayCan,
     [BuildInfraLocators.TOLERANCE]: ICTag,
+    [BuildInfraLocators.CONFIG_MAP]: null,
+    [BuildInfraLocators.SECRET]: null,
 }
 
 export const BUILD_INFRA_LOCATOR_LABEL_MAP: Readonly<Record<BuildInfraLocators, string>> = {
@@ -101,7 +106,9 @@ export const BUILD_INFRA_LOCATOR_LABEL_MAP: Readonly<Record<BuildInfraLocators, 
     [BuildInfraLocators.MEMORY]: 'Memory',
     [BuildInfraLocators.BUILD_TIMEOUT]: 'Build timeout',
     [BuildInfraLocators.NODE_SELECTOR]: 'Node selector',
-    [BuildInfraLocators.TOLERANCE]: 'Tolerance',
+    [BuildInfraLocators.TOLERANCE]: 'Toleration',
+    [BuildInfraLocators.CONFIG_MAP]: 'ConfigMaps',
+    [BuildInfraLocators.SECRET]: 'Secret',
 }
 
 export const BUILD_INFRA_FORM_FIELDS: Readonly<BuildInfraFormFieldType[]> = [
@@ -189,6 +196,8 @@ export const TARGET_PLATFORM_ERROR_FIELDS_MAP: Record<TargetPlatformErrorFields,
     [BuildInfraConfigTypes.MEMORY_REQUEST]: true,
     [BuildInfraConfigTypes.NODE_SELECTOR]: true,
     [BuildInfraConfigTypes.TOLERANCE]: true,
+    [BuildInfraConfigTypes.CONFIG_MAP]: true,
+    [BuildInfraConfigTypes.SECRET]: true,
     [BuildInfraProfileAdditionalErrorKeysType.TARGET_PLATFORM]: true,
 }
 
@@ -212,6 +221,8 @@ export const BUILD_INFRA_LOCATOR_CONFIG_TYPES_MAP: Record<BuildInfraLocators, Bu
     [BuildInfraLocators.BUILD_TIMEOUT]: [BuildInfraConfigTypes.BUILD_TIMEOUT],
     [BuildInfraLocators.NODE_SELECTOR]: [BuildInfraConfigTypes.NODE_SELECTOR],
     [BuildInfraLocators.TOLERANCE]: [BuildInfraConfigTypes.TOLERANCE],
+    [BuildInfraLocators.CONFIG_MAP]: [BuildInfraConfigTypes.CONFIG_MAP],
+    [BuildInfraLocators.SECRET]: [BuildInfraConfigTypes.SECRET],
 }
 
 export const ACTION_TO_PERSISTED_VALUE_MAP: Readonly<
@@ -246,6 +257,41 @@ export const DEFAULT_TOLERANCE_OPERATOR = BuildInfraToleranceOperatorType.EQUALS
 
 export const INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X: Partial<Record<BuildInfraConfigTypes, true>> = {
     [BuildInfraConfigTypes.BUILD_TIMEOUT]: true,
+    [BuildInfraConfigTypes.CONFIG_MAP]: true,
+    [BuildInfraConfigTypes.SECRET]: true,
+}
+
+export const INFRA_CONFIG_CONTAINING_SUB_VALUES: Record<InfraConfigWithSubValues, true> = {
+    [BuildInfraConfigTypes.CONFIG_MAP]: true,
+    [BuildInfraConfigTypes.SECRET]: true,
+}
+
+export const INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP: Partial<
+    Record<BuildInfraConfigTypes, CMSecretComponentType>
+> = {
+    [BuildInfraConfigTypes.CONFIG_MAP]: CMSecretComponentType.ConfigMap,
+    [BuildInfraConfigTypes.SECRET]: CMSecretComponentType.Secret,
+}
+
+export const CM_SECRET_COMPONENT_TYPE_TO_INFRA_CONFIG_MAP: Partial<
+    Record<CMSecretComponentType, InfraConfigWithSubValues>
+> = {
+    [CMSecretComponentType.ConfigMap]: BuildInfraConfigTypes.CONFIG_MAP,
+    [CMSecretComponentType.Secret]: BuildInfraConfigTypes.SECRET,
+}
+
+export const CM_SECRET_COMPONENT_TYPE_TO_LOCATOR_MAP: Partial<
+    Record<CMSecretComponentType, BuildInfraLocators.CONFIG_MAP | BuildInfraLocators.SECRET>
+> = {
+    [CMSecretComponentType.ConfigMap]: BuildInfraLocators.CONFIG_MAP,
+    [CMSecretComponentType.Secret]: BuildInfraLocators.SECRET,
 }
 
 export const USE_BUILD_X_DRIVER_FALLBACK = true
+
+export const BUILD_INFRA_SUB_VALUES_INHERIT_ACTIONS: Record<BuildInfraInheritActionsOnSubValues, true> = {
+    activate_cm: true,
+    activate_cs: true,
+    de_activate_cm: true,
+    de_activate_cs: true,
+}

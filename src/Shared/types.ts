@@ -157,6 +157,7 @@ export interface iNode extends Node {
     childNodes: iNodes
     type: NodeType
     status: string
+    pNode?: iNode
 }
 export interface ResourceTree {
     conditions: any
@@ -786,19 +787,12 @@ interface CommonTabArgsType {
      * Title for the tab
      */
     title?: string
-    isDeleted?: boolean
     /**
      * Type for the tab
      *
      * Note: Fixed tabs are always places before dynamic tabs
      */
     type: 'fixed' | 'dynamic'
-    /**
-     * Path of the icon for the tab
-     *
-     * @default ''
-     */
-    iconPath?: string
     /**
      * Dynamic title for the tab
      *
@@ -938,3 +932,31 @@ export interface UploadFileProps {
 export type Never<T> = {
     [K in keyof T]?: never
 }
+
+export interface TargetPlatformItemDTO {
+    name: string
+}
+
+export interface TargetPlatformsDTO {
+    targetPlatforms: TargetPlatformItemDTO[]
+}
+
+export enum CIPipelineNodeType {
+    EXTERNAL_CI = 'EXTERNAL-CI',
+    CI = 'CI',
+    LINKED_CI = 'LINKED-CI',
+    JOB_CI = 'JOB-CI',
+    LINKED_CD = 'LINKED_CD',
+}
+
+export interface ChangeCIPayloadType {
+    appWorkflowId: number
+    switchFromCiPipelineId?: number
+    appId: number
+    switchFromExternalCiPipelineId?: number
+}
+
+export const TriggerType = {
+    Auto: 'AUTOMATIC',
+    Manual: 'MANUAL',
+} as const
