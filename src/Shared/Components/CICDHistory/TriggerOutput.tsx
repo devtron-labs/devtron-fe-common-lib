@@ -43,9 +43,9 @@ import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
+import TriggerDetails from './TriggerDetails'
 import { EMPTY_STATE_STATUS } from '../../constants'
 import './cicdHistory.scss'
-import TriggerDetails from './TriggerDetails'
 
 const HistoryLogs: React.FC<HistoryLogsProps> = ({
     triggerDetails,

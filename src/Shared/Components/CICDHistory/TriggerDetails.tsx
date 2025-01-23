@@ -510,11 +510,11 @@ const TriggerDetails = memo(
 
                 <div className="display-grid trigger-details__grid py-4">
                     <WorkerStatus
-                        message={executionInfo?.workerDetails?.message ?? message}
-                        podStatus={executionInfo?.workerDetails?.status ?? podStatus}
+                        message={executionInfo?.workerDetails.message ?? message}
+                        podStatus={executionInfo?.workerDetails.status ?? podStatus}
                         stage={stage}
-                        finishedOn={executionInfo?.workerDetails?.endTime ?? finishedOn}
-                        clusterId={executionInfo?.workerDetails?.clusterId || DEFAULT_CLUSTER_ID}
+                        finishedOn={executionInfo?.workerDetails.endTime ?? finishedOn}
+                        clusterId={executionInfo?.workerDetails.clusterId || DEFAULT_CLUSTER_ID}
                         workerPodName={workerPodName}
                         namespace={namespace}
                     />
