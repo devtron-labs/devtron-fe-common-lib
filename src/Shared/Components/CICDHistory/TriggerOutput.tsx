@@ -120,6 +120,9 @@ export const WorkerStatus = React.memo(
         finishedOn,
         clusterId,
         namespace,
+        workerMessageContainerClassName,
+        titleClassName = 'cn-9 fs-13 fw-4 lh-20',
+        viewWorkerPodClassName = 'fs-13',
     }: WorkerStatusType): JSX.Element | null => {
         if (!message && !podStatus) {
             return null
@@ -136,7 +139,7 @@ export const WorkerStatus = React.memo(
                     target="_blank"
                     className="anchor"
                 >
-                    <span className="mr-10 fs-13">View worker pod</span>
+                    <span className={`mr-10 ${viewWorkerPodClassName}`}>View worker pod</span>
                 </NavLink>
             ) : null
 
@@ -152,7 +155,7 @@ export const WorkerStatus = React.memo(
 
                 <div className="flexbox-col">
                     <div className="flexbox dc__gap-8">
-                        <div className="flexbox cn-9 fs-13 fw-4 lh-20">
+                        <div className={`flexbox cn-9 ${titleClassName}`}>
                             <span>{stage === DeploymentStageType.DEPLOY && !podStatus ? 'Message' : 'Worker'}</span>
                             &nbsp;
                             {podStatus && (
@@ -167,7 +170,14 @@ export const WorkerStatus = React.memo(
                     </div>
 
                     {/* Need key since using ref inside of this component as useEffect dependency, so there were issues while switching builds */}
-                    {message && <ShowMoreText text={message} key={message} textClass="cn-7" />}
+                    {message && (
+                        <ShowMoreText
+                            text={message}
+                            key={message}
+                            textClass="cn-7"
+                            containerClass={workerMessageContainerClassName}
+                        />
+                    )}
                 </div>
             </>
         )
@@ -192,7 +202,7 @@ const ProgressingStatus = React.memo(({ stage, type }: ProgressingStatusType): J
     let abort = null
     if (type === HistoryComponentType.CI) {
         abort = (isForceAbort: boolean) => cancelCiTrigger({ pipelineId, workflowId: buildId }, isForceAbort)
-    } else if (stage !== 'DEPLOY') {
+    } else if (stage !== DeploymentStageType.DEPLOY) {
         abort = () => cancelPrePostCdTrigger(pipelineId, triggerId)
     }
 

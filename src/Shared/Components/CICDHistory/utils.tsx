@@ -323,7 +323,7 @@ export const getHistoryItemStatusIconFromWorkflowStages = (
             return renderFailedTriggerIcon()
 
         case WorkflowStageStatusType.SUCCEEDED:
-            return <ICCheck className={baseClass} />
+            return renderSuccessTriggerIcon()
 
         default:
             return <ICHelpFilled className={baseClass} />

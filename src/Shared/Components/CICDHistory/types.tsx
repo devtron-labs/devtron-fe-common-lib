@@ -344,6 +344,9 @@ export interface WorkerStatusType
     stage: DeploymentStageType
     finishedOn?: string
     workerPodName?: string
+    workerMessageContainerClassName?: string
+    titleClassName?: string
+    viewWorkerPodClassName?: string
 }
 
 export type FinishedType = { artifact: string; type: HistoryComponentType } & (

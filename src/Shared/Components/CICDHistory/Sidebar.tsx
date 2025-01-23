@@ -26,6 +26,8 @@ import { ReactComponent as ICCalendar } from '@Icons/ic-calendar.svg'
 import { ReactComponent as ICUserCircle } from '@Icons/ic-user-circle.svg'
 import { ReactComponent as ICGithub } from '@Icons/ic-github.svg'
 import { ReactComponent as ICBranch } from '@Icons/ic-branch.svg'
+import { DeploymentStageType } from '@Shared/constants'
+import { getHandleOpenURL } from '@Shared/Helpers'
 import {
     SidebarType,
     CICDSidebarFilterOptionType,
@@ -56,6 +58,7 @@ import {
     sanitizeWorkflowExecutionStages,
 } from './utils'
 import { WorkerStatus } from './TriggerOutput'
+import { CommitChipCell } from '../CommitChipCell'
 
 const GitTriggerList = memo(
     ({
@@ -92,7 +95,7 @@ const GitTriggerList = memo(
                                 </div>
                             ) : (
                                 <div className="flexbox-col dc__gap-8">
-                                    <div className="flexbox dc__gap-4">
+                                    <div className="flexbox dc__gap-4 dc__align-start">
                                         <ICGithub className="icon-dim-20 dc__no-shrink" />
 
                                         {gitDetail?.GitRepoName && (
@@ -111,12 +114,21 @@ const GitTriggerList = memo(
                                             href={createGitCommitUrl(gitMaterialUrl, gitDetail.Commit)}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="anchor flexbox dc__gap-2"
+                                            className="anchor flexbox dc__gap-2 dc__align-items-center"
                                         >
                                             <ICBranch className="icon-dim-12 dc__no-shrink fcn-7" />
                                             {sourceValue}
                                         </a>
                                     </div>
+
+                                    {gitDetail?.Commit && (
+                                        <CommitChipCell
+                                            commits={[gitDetail.Commit]}
+                                            handleClick={getHandleOpenURL(
+                                                createGitCommitUrl(ciMaterial.url, gitDetail.Commit),
+                                            )}
+                                        />
+                                    )}
 
                                     {gitDetail?.Message && (
                                         <Tooltip content={gitDetail.Message}>
@@ -194,8 +206,15 @@ const BuildAndTaskSummaryTooltipCard = memo(
                         clusterId={executionInfo?.workerDetails?.clusterId || DEFAULT_CLUSTER_ID}
                         workerPodName={podName}
                         namespace={namespace}
+                        workerMessageContainerClassName="cn-7 fs-12 fw-4 lh-18"
+                        titleClassName="cn-9 fs-12 fw-4 lh-20"
+                        viewWorkerPodClassName="fs-12"
                     />
                 </div>
+
+                {Object.keys(gitTriggers ?? {}).length > 0 && ciMaterials?.length > 0 && (
+                    <div className="dc__border-bottom-n1" />
+                )}
 
                 <GitTriggerList gitTriggers={gitTriggers} ciMaterials={ciMaterials} />
             </div>
@@ -323,7 +342,7 @@ const HistorySummaryCard = memo(
                     ref={assignTargetCardRef}
                 >
                     <div className="w-100 deployment-history-card">
-                        {workflowExecutionStages
+                        {stage !== DeploymentStageType.DEPLOY && !!workflowExecutionStages
                             ? getHistoryItemStatusIconFromWorkflowStages(workflowExecutionStages)
                             : getTriggerStatusIcon(status)}
                         <div className="flexbox-col dc__gap-8">

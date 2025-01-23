@@ -119,12 +119,12 @@ export const CiPipelineSourceConfig = ({
     }, [])
 
     return (
-        <div className={`flex left ${showTooltip ? 'fw-5' : ''}  ${rootClassName}`}>
+        <div className={`flex left dc__align-start ${showTooltip ? 'fw-5' : ''}  ${rootClassName}`}>
             {loading && showIcons && <span className="dc__loading-dots">loading</span>}
             {!loading && (
                 <div className="flex dc__gap-4">
                     {showIcons && (
-                        <span className="icon-dim-12 flex dc__no-shrink dc__fill-available-space">
+                        <span className="icon-dim-12 flex dc__no-shrink dc__fill-available-space mt-4">
                             {getBranchIcon(sourceType, _isRegex, sourceValueBase)}
                         </span>
                     )}
