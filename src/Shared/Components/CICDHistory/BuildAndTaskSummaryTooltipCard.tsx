@@ -3,10 +3,10 @@ import { Tooltip } from '@Common/Tooltip'
 import { ReactComponent as ICCalendar } from '@Icons/ic-calendar.svg'
 import { ReactComponent as ICUserCircle } from '@Icons/ic-user-circle.svg'
 import GitTriggerList from './GitTriggerList'
-import { WorkerStatus } from './TriggerOutput'
 import { DEFAULT_CLUSTER_ID } from './constants'
 import { getFormattedTriggerTime, sanitizeWorkflowExecutionStages } from './utils'
 import { BuildAndTaskSummaryTooltipCardProps } from './types'
+import WorkerStatus from './WorkerStatus'
 
 const BuildAndTaskSummaryTooltipCard = memo(
     ({
