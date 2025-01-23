@@ -139,6 +139,7 @@ export const WorkerStatus = React.memo(
         workerMessageContainerClassName,
         titleClassName = 'cn-9 fs-13 fw-4 lh-20',
         viewWorkerPodClassName = 'fs-13',
+        hideShowMoreMessageButton = false,
     }: WorkerStatusType): JSX.Element | null => {
         if (!message && !podStatus) {
             return null
@@ -191,6 +192,7 @@ export const WorkerStatus = React.memo(
                             key={message}
                             textClass="cn-7"
                             containerClass={workerMessageContainerClassName}
+                            hideShowMore={hideShowMoreMessageButton}
                         />
                     )}
                 </div>

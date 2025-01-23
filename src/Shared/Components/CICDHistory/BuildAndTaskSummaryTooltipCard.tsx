@@ -45,6 +45,7 @@ const BuildAndTaskSummaryTooltipCard = memo(
                         workerMessageContainerClassName="cn-7 fs-12 fw-4 lh-18"
                         titleClassName="cn-9 fs-12 fw-4 lh-20"
                         viewWorkerPodClassName="fs-12"
+                        hideShowMoreMessageButton
                     />
                 </div>
 

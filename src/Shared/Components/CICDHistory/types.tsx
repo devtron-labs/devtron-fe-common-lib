@@ -348,6 +348,10 @@ export interface WorkerStatusType
     workerMessageContainerClassName?: string
     titleClassName?: string
     viewWorkerPodClassName?: string
+    /**
+     * @default false
+     */
+    hideShowMoreMessageButton?: boolean
 }
 
 export type FinishedType = { artifact: string; type: HistoryComponentType } & (
