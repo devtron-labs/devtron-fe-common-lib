@@ -31,7 +31,12 @@ import { ReactComponent as ICHelpFilled } from '@Icons/ic-help-filled.svg'
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
-import { DEFAULT_CLUSTER_ID, FAILED_WORKFLOW_STAGE_STATUS_MAP, TERMINAL_STATUS_MAP } from './constants'
+import {
+    DEFAULT_CLUSTER_ID,
+    DEFAULT_NAMESPACE,
+    FAILED_WORKFLOW_STAGE_STATUS_MAP,
+    TERMINAL_STATUS_MAP,
+} from './constants'
 import { ResourceKindType, WorkflowStatusEnum } from '../../types'
 import {
     TriggerHistoryFilterCriteriaProps,
@@ -154,14 +159,14 @@ export const getStageStatusIcon = (status: StageStatusType): JSX.Element => {
 }
 
 const renderAbortedTriggerIcon = (): JSX.Element => <ICAborted className="icon-dim-20 dc__no-shrink" />
-const renderFailedTriggerIcon = (): JSX.Element => (
-    <ICErrorCross className="icon-dim-20 dc__no-shrink ic-error-cross-red" />
+const renderFailedTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
+    <ICErrorCross className={`${baseClass} dc__no-shrink ic-error-cross-red`} />
 )
-const renderProgressingTriggerIcon = (): JSX.Element => (
-    <ICInProgress className="dc__no-shrink icon-dim-20 ic-in-progress-orange" />
+const renderProgressingTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
+    <ICInProgress className={`${baseClass} dc__no-shrink ic-in-progress-orange`} />
 )
-const renderSuccessTriggerIcon = (): JSX.Element => (
-    <div className="dc__app-summary__icon dc__no-shrink icon-dim-20 succeeded" />
+const renderSuccessTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
+    <div className={`${baseClass} dc__app-summary__icon dc__no-shrink succeeded`} />
 )
 
 export const getTriggerStatusIcon = (triggerDetailStatus: string): JSX.Element => {
@@ -221,15 +226,10 @@ const getWorkerInfoFromExecutionStages = (
     workflowExecutionStages: WorkflowExecutionStagesMapDTO['workflowExecutionStages'],
 ): ExecutionInfoType['workerDetails'] => {
     const workerInfo: PodExecutionStageDTO = workflowExecutionStages?.[WorkflowExecutionStageType.POD]?.[0]
-
-    if (!workerInfo) {
-        return null
-    }
-
-    const { status, message, endTime, metadata } = workerInfo
+    const { status, message, endTime, metadata } = workerInfo || {}
 
     return {
-        status,
+        status: status || WorkflowStageStatusType.UNKNOWN,
         message: message || '',
         clusterId: metadata?.clusterId || DEFAULT_CLUSTER_ID,
         endTime: isTimeStringAvailable(endTime) ? endTime : '',
@@ -253,7 +253,7 @@ export const sanitizeWorkflowExecutionStages = (
     )
 
     const isOldData = !preparationStage
-    const computedTriggedOn = isOldData ? executionStage?.startTime : preparationStage?.startTime
+    const computedTriggeredOn = isOldData ? executionStage?.startTime : preparationStage?.startTime
 
     let lastStatus: WorkflowStageStatusType = WorkflowStageStatusType.UNKNOWN
     workflowExecutionSteps.forEach(({ status }) => {
@@ -272,7 +272,7 @@ export const sanitizeWorkflowExecutionStages = (
     })
 
     return {
-        triggeredOn: isTimeStringAvailable(computedTriggedOn) ? computedTriggedOn : '',
+        triggeredOn: isTimeStringAvailable(computedTriggeredOn) ? computedTriggeredOn : '',
         executionStartedOn: isOldData ? null : executionStage?.startTime,
         finishedOn: isTimeStringAvailable(finishedOn) ? finishedOn : '',
         currentStatus: lastStatus,
@@ -292,15 +292,15 @@ export const getIconFromWorkflowStageStatusType = (
             return <ICAborted className={baseClass} />
 
         case WorkflowStageStatusType.FAILED:
-            return renderFailedTriggerIcon()
+            return renderFailedTriggerIcon(baseClass)
 
         case WorkflowStageStatusType.SUCCEEDED:
-            return renderSuccessTriggerIcon()
+            return renderSuccessTriggerIcon(baseClass)
 
         // NOT_STARTED case is not expected
         case WorkflowStageStatusType.NOT_STARTED:
         case WorkflowStageStatusType.RUNNING:
-            return renderProgressingTriggerIcon()
+            return renderProgressingTriggerIcon(baseClass)
 
         default:
             return <ICHelpFilled className={baseClass} />
@@ -318,7 +318,7 @@ export const getHistoryItemStatusIconFromWorkflowStages = (
     }
 
     if (!executionInfo.finishedOn) {
-        return renderProgressingTriggerIcon()
+        return renderProgressingTriggerIcon(baseClass)
     }
 
     if (FAILED_WORKFLOW_STAGE_STATUS_MAP[executionInfo.workerDetails?.status]) {
@@ -328,7 +328,7 @@ export const getHistoryItemStatusIconFromWorkflowStages = (
     return getIconFromWorkflowStageStatusType(executionInfo.currentStatus, baseClass)
 }
 
-export const getWorkerPodBaseUrl = (clusterId: number = DEFAULT_CLUSTER_ID, podNamespace: string = 'devtron-ci') =>
+export const getWorkerPodBaseUrl = (clusterId: number = DEFAULT_CLUSTER_ID, podNamespace: string = DEFAULT_NAMESPACE) =>
     `/resource-browser/${clusterId}/${podNamespace}/pod/k8sEmptyGroup`
 
 export const getWorkflowNodeStatusTitle = (status: string) => {

@@ -72,6 +72,7 @@ export const POD_STATUS = {
 export const TIMEOUT_VALUE = '1' // in hours
 
 export const DEFAULT_CLUSTER_ID = 1
+export const DEFAULT_NAMESPACE = 'devtron-ci'
 
 export const DEFAULT_ENV = 'devtron-ci'
 
