@@ -89,12 +89,12 @@ const GitCommitInfoGeneric = ({
                 ) : null}
                 {_webhookData.data.author ? (
                     <div className="material-history__text lh-20 flex left dc__gap-8 w-100">
-                        <PersonIcon className="icon-dim-16" /> {_webhookData.data.author}
+                        <PersonIcon className="icon-dim-16 scn-7" /> {_webhookData.data.author}
                     </div>
                 ) : null}
                 {_date ? (
                     <div className="material-history__text lh-20 flex left dc__gap-8 w-100">
-                        <CalendarIcon className="icon-dim-16" />
+                        <CalendarIcon className="icon-dim-16 scn-7" />
                         <time className="cn-7 fs-12">{_date}</time>
                     </div>
                 ) : null}
@@ -270,13 +270,13 @@ const GitCommitInfoGeneric = ({
                         <div className="flexbox-col dc__gap-4">
                             {lowerCaseCommitInfo.author ? (
                                 <div className="material-history__text lh-20 flex left dc__gap-8">
-                                    <PersonIcon className="icon-dim-16" />
+                                    <PersonIcon className="icon-dim-16 scn-7" />
                                     <span className="lh-20"> {lowerCaseCommitInfo.author}</span>
                                 </div>
                             ) : null}
                             {lowerCaseCommitInfo.date ? (
                                 <div className="material-history__text lh-20 flex left dc__gap-8">
-                                    <CalendarIcon className="icon-dim-16" />
+                                    <CalendarIcon className="icon-dim-16 scn-7" />
                                     <span className="lh-20">
                                         {moment(lowerCaseCommitInfo.date).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
                                     </span>
