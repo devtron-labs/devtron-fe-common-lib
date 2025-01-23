@@ -94,7 +94,7 @@ const Finished = React.memo(({ status, finishedOn, artifact, type, executionInfo
         if (executionInfo) {
             return (
                 <span className="cn-9 fs-13 fw-6 lh-20">
-                    {EXECUTION_FINISHED_TEXT_MAP[executionInfo.currentStatus] || 'Execution finished'}
+                    Execution&nbsp;{EXECUTION_FINISHED_TEXT_MAP[executionInfo.currentStatus] || 'finished'}
                 </span>
             )
         }
@@ -346,7 +346,14 @@ const CurrentStatus = React.memo(
             if (executionInfo.currentStatus === WorkflowStageStatusType.UNKNOWN) {
                 return (
                     <div className="flex dc__gap-8 left pt-12">
-                        <span>Unknown status</span>
+                        <span className="cn-9 fs-13 fw-6 lh-20">Unknown status</span>
+
+                        {type === HistoryComponentType.CI && artifact && (
+                            <>
+                                <div className="dc__bullet" />
+                                <ImageChipCell imagePath={artifact} placement="top" />
+                            </>
+                        )}
                     </div>
                 )
             }
