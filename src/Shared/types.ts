@@ -938,6 +938,9 @@ export interface TargetPlatformsDTO {
     targetPlatforms: TargetPlatformItemDTO[]
 }
 
+/**
+ * These status are expected to be present in workflow nodes like ci node, linked ci node, job overview, etc.
+ */
 export enum WorkflowStatusEnum {
     STARTING = 'Starting',
     RUNNING = 'Running',

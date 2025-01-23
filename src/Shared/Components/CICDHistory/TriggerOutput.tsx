@@ -69,6 +69,7 @@ import {
     PROGRESSING_STATUS,
     WORKFLOW_STAGE_STATUS_TO_TEXT_MAP,
     EXECUTION_FINISHED_TEXT_MAP,
+    FAILED_WORKFLOW_STAGE_STATUS_MAP,
 } from './constants'
 import { GitTriggers } from '../../types'
 import LogsRenderer from './LogsRenderer'
@@ -79,7 +80,6 @@ import Artifacts from './Artifacts'
 import { DeploymentStageType, EMPTY_STATE_STATUS } from '../../constants'
 import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
 import {
-    FAILED_WORKFLOW_STAGE_STATUS_MAP,
     getFormattedTriggerTime,
     getIconFromWorkflowStageStatusType,
     getWorkerPodBaseUrl,

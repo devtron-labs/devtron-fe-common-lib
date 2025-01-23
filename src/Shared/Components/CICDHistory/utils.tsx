@@ -31,7 +31,7 @@ import { ReactComponent as ICHelpFilled } from '@Icons/ic-help-filled.svg'
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
-import { DEFAULT_CLUSTER_ID, TERMINAL_STATUS_MAP } from './constants'
+import { DEFAULT_CLUSTER_ID, FAILED_WORKFLOW_STAGE_STATUS_MAP, TERMINAL_STATUS_MAP } from './constants'
 import { ResourceKindType, WorkflowStatusEnum } from '../../types'
 import {
     TriggerHistoryFilterCriteriaProps,
@@ -46,18 +46,6 @@ import {
     WorkflowStageStatusType,
     WorkflowExecutionStageNameType,
 } from './types'
-
-export const FAILED_WORKFLOW_STAGE_STATUS_MAP: Record<
-    Extract<
-        WorkflowStageStatusType,
-        WorkflowStageStatusType.ABORTED | WorkflowStageStatusType.FAILED | WorkflowStageStatusType.TIMEOUT
-    >,
-    true
-> = {
-    [WorkflowStageStatusType.ABORTED]: true,
-    [WorkflowStageStatusType.FAILED]: true,
-    [WorkflowStageStatusType.TIMEOUT]: true,
-}
 
 export const getTriggerHistoryFilterCriteria = ({
     appId,

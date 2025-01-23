@@ -149,3 +149,15 @@ export const PROGRESSING_STATUS = {
     [TERMINAL_STATUS_MAP.INITIATING]: 'initiating',
     [TERMINAL_STATUS_MAP.QUEUED]: 'queued',
 }
+
+export const FAILED_WORKFLOW_STAGE_STATUS_MAP: Record<
+    Extract<
+        WorkflowStageStatusType,
+        WorkflowStageStatusType.ABORTED | WorkflowStageStatusType.FAILED | WorkflowStageStatusType.TIMEOUT
+    >,
+    true
+> = {
+    [WorkflowStageStatusType.ABORTED]: true,
+    [WorkflowStageStatusType.FAILED]: true,
+    [WorkflowStageStatusType.TIMEOUT]: true,
+}
