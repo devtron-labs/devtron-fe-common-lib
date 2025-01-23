@@ -15,9 +15,8 @@
  */
 
 import { useState, useEffect, ReactNode } from 'react'
-import Tippy from '@tippyjs/react'
 import { ReactComponent as Info } from '@Icons/ic-info-outlined.svg'
-import { getBranchIcon, getWebhookEventsForEventId, SourceTypeMap } from '../../../Common'
+import { getBranchIcon, getWebhookEventsForEventId, SourceTypeMap, Tooltip } from '../../../Common'
 import { GIT_BRANCH_NOT_CONFIGURED, DEFAULT_GIT_BRANCH_VALUE } from './constants'
 import { buildHoverHtmlForWebhook } from './utils'
 import { CIPipelineSourceConfigInterface } from './types'
@@ -119,18 +118,19 @@ export const CiPipelineSourceConfig = ({
     }, [])
 
     return (
-        <div className={`flex left dc__align-start ${showTooltip ? 'fw-5' : ''}  ${rootClassName}`}>
+        <div className={`flex left ${showTooltip ? 'fw-5' : ''}  ${rootClassName}`}>
             {loading && showIcons && <span className="dc__loading-dots">loading</span>}
             {!loading && (
-                <div className="flex dc__gap-4">
+                <div className="flexbox dc__gap-4 dc__align-start">
                     {showIcons && (
                         <span className="icon-dim-12 flex dc__no-shrink dc__fill-available-space mt-4">
                             {getBranchIcon(sourceType, _isRegex, sourceValueBase)}
                         </span>
                     )}
-                    {showTooltip && (
-                        <Tippy
-                            className="default-tt dc__word-break-all"
+                    {showTooltip ? (
+                        <Tooltip
+                            wordBreak
+                            alwaysShowTippyOnHover
                             arrow={false}
                             placement="bottom"
                             content={sourceValueAdv}
@@ -159,9 +159,10 @@ export const CiPipelineSourceConfig = ({
                                     </span>
                                 )}
                             </div>
-                        </Tippy>
+                        </Tooltip>
+                    ) : (
+                        <span className="dc__ellipsis-right">{sourceValueAdv}</span>
                     )}
-                    {!showTooltip && <span className="dc__ellipsis-right">{sourceValueAdv}</span>}
                 </div>
             )}
         </div>
