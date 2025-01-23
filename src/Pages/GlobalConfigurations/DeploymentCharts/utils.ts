@@ -7,7 +7,7 @@ export const convertDeploymentChartListToChartType = (data: DeploymentChartListD
         return []
     }
     const chartMap = data.reduce(
-        (acc, { id, version, chartDescription: description = '', name, isUserUploaded = true }) => {
+        (acc, { id, version, chartDescription: description = '', name, isUserUploaded = true, uploadedBy = '' }) => {
             if (!name || !id || !version) {
                 return acc
             }
@@ -17,12 +17,14 @@ export const convertDeploymentChartListToChartType = (data: DeploymentChartListD
                     id,
                     version,
                     description,
+                    uploadedBy,
+                    isUserUploaded,
                 })
             } else {
                 acc[name] = {
                     name,
                     isUserUploaded,
-                    versions: [{ id, version, description }],
+                    versions: [{ id, version, description, uploadedBy, isUserUploaded }],
                 }
             }
             return acc
