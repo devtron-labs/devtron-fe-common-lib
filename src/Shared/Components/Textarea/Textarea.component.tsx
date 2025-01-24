@@ -9,6 +9,7 @@ import { FormFieldWrapper, getFormFieldAriaAttributes } from '../FormFieldWrappe
 import { TextareaProps } from './types'
 import { TEXTAREA_CONSTRAINTS } from './constants'
 import './textarea.scss'
+import { getFormFieldBorderClassName } from '../FormFieldWrapper/utils'
 
 const { MIN_HEIGHT, AUTO_EXPANSION_MAX_HEIGHT } = TEXTAREA_CONSTRAINTS
 
@@ -25,6 +26,7 @@ const Textarea = ({
     shouldTrim = true,
     size = ComponentSizeType.large,
     ariaLabel,
+    borderRadiusConfig,
     ...props
 }: TextareaProps) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -93,6 +95,7 @@ const Textarea = ({
             required={required}
             fullWidth={fullWidth}
             ariaLabel={ariaLabel}
+            borderRadiusConfig={borderRadiusConfig}
         >
             <textarea
                 {...props}
@@ -112,7 +115,7 @@ const Textarea = ({
                 required={required}
                 onBlur={handleBlur}
                 onKeyDown={handleKeyDown}
-                className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} w-100 dc__overflow-auto textarea`}
+                className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${getFormFieldBorderClassName(borderRadiusConfig)} w-100 dc__overflow-auto textarea`}
                 ref={textareaRef}
                 style={{
                     // No max height when user is expanding

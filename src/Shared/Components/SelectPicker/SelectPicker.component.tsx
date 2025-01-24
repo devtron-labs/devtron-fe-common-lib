@@ -218,6 +218,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     warningText,
     layout,
     ariaLabel,
+    borderRadiusConfig,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const [isFocussed, setIsFocussed] = useState(false)
@@ -379,6 +380,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             required={required}
             fullWidth={fullWidth}
             ariaLabel={ariaLabel}
+            // TODO: Add support for custom border radius with CustomInput refactoring
+            borderRadiusConfig={borderRadiusConfig}
         >
             <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
                 <div className="w-100">
