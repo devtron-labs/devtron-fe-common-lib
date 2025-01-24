@@ -401,7 +401,7 @@ export const ImageTagsContainer = ({
                             Tags cannot be edited/removed later
                         </div>
                     )}
-                    <div className="cn-7 mt-12">
+                    <div className="mt-12">
                         <Textarea
                             label="Comment"
                             value={newDescription}

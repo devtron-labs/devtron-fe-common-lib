@@ -32,15 +32,15 @@ const Textarea = ({
     const textareaRef = useRef<HTMLTextAreaElement>(null)
 
     const updateRefsHeight = (height: number) => {
-        const refElement = textareaRef?.current
+        const refElement = textareaRef.current
         if (refElement) {
             refElement.style.height = `${height}px`
         }
     }
 
     const reInitHeight = () => {
-        const currentHeight = parseInt(textareaRef?.current?.style.height, 10)
-        let nextHeight = textareaRef?.current?.scrollHeight || 0
+        const currentHeight = parseInt(textareaRef.current.style.height, 10)
+        let nextHeight = textareaRef.current.scrollHeight || 0
 
         if (nextHeight < currentHeight || currentHeight > AUTO_EXPANSION_MAX_HEIGHT) {
             return
