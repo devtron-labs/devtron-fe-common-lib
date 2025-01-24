@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Dispatch, FunctionComponent, ReactNode, SVGProps } from 'react'
+import { Dispatch, FunctionComponent, Key, MutableRefObject, ReactNode, SVGProps } from 'react'
 import { JSONSchema7 } from 'json-schema'
 import { EditorView, ReactCodeMirrorProps } from '@uiw/react-codemirror'
 import { SearchQuery } from '@codemirror/search'
@@ -133,3 +133,21 @@ export interface FindReplaceToggleButtonProps {
     iconType?: 'stroke' | 'fill'
     tooltipText: string
 }
+
+// CODE-EDITOR RENDERER PROPS
+export type CodeEditorRendererProps = Pick<
+    CodeEditorProps,
+    'loading' | 'customLoader' | 'height' | 'readOnly' | 'shebang' | 'placeholder' | 'onBlur' | 'onFocus' | 'autoFocus'
+> &
+    Pick<CodeEditorDiffBaseProps, 'isOriginalModifiable'> & {
+        codemirrorMergeKey: Key
+        codeMirrorParentDivRef: MutableRefObject<HTMLDivElement>
+        codeEditorTheme: ReactCodeMirrorProps['theme']
+        isDarkTheme: boolean
+        state: CodeEditorState
+        handleOnChange: ReactCodeMirrorProps['onChange']
+        handleLhsOnChange: ReactCodeMirrorProps['onChange']
+        originalViewExtensions: ReactCodeMirrorProps['extensions']
+        modifiedViewExtensions: ReactCodeMirrorProps['extensions']
+        extensions: ReactCodeMirrorProps['extensions']
+    }

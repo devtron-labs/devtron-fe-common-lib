@@ -15,16 +15,14 @@
  */
 
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import CodeMirror, {
+import {
     Extension,
     ReactCodeMirrorProps,
     basicSetup,
     BasicSetupOptions,
     Compartment,
-    ReactCodeMirrorRef,
     keymap,
 } from '@uiw/react-codemirror'
-import CodeMirrorMerge from 'react-codemirror-merge'
 import { foldGutter } from '@codemirror/language'
 import { search } from '@codemirror/search'
 import { lintGutter } from '@codemirror/lint'
@@ -34,15 +32,15 @@ import { AppThemeType, useTheme } from '@Shared/Providers'
 import { getUniqueId } from '@Shared/Helpers'
 import { cleanKubeManifest, useEffectAfterMount } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
-import { Progressing } from '@Common/Progressing'
 
 import { codeEditorFindReplace, readOnlyTooltip } from './Extensions'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
-import { getCodeEditorHeight, getFoldGutterElement, getLanguageExtension, getValidationSchema } from './utils'
+import { getFoldGutterElement, getLanguageExtension, getValidationSchema } from './utils'
 import { CodeEditorContext } from './CodeEditor.context'
 import { Clipboard, Container, ErrorBar, Header, Information, Warning } from './CodeEditor.components'
 import { getCodeEditorTheme } from './CodeEditor.theme'
+import { CodeEditorRenderer } from './CodeEditorRenderer'
 
 import './codeEditor.scss'
 
@@ -86,7 +84,6 @@ const CodeEditor = <DiffView extends boolean = false>({
     const lhsValue = useMemo(() => (cleanData ? cleanKubeManifest(originalValue) : originalValue), [originalValue])
 
     // REFS
-    const codeMirrorRef = useRef<ReactCodeMirrorRef>()
     const codeMirrorParentDivRef = useRef<HTMLDivElement>()
 
     // CONSTANTS
@@ -139,15 +136,6 @@ const CodeEditor = <DiffView extends boolean = false>({
         // Include any props that modify codemirror-merge extensions directly, as a workaround for the unresolved bug.
         [readOnly, tabSize, disableSearch, appTheme, mode],
     )
-
-    useEffect(() => {
-        // Added timeout to ensure the autofocus code is executed post the re-renders
-        setTimeout(() => {
-            if (autoFocus && codeMirrorRef.current?.view) {
-                codeMirrorRef.current.view.focus()
-            }
-        }, 100)
-    }, [autoFocus])
 
     // METHODS
     const setCode = (codeValue: string) => {
@@ -227,73 +215,31 @@ const CodeEditor = <DiffView extends boolean = false>({
 
     const modifiedViewExtensions: Extension[] = [...baseExtensions, readOnlyTooltip]
 
-    const renderCodeEditor = () => {
-        const { codeEditorClassName, codeEditorHeight, codeEditorParentClassName } = getCodeEditorHeight(height)
-
-        if (loading) {
-            return (
-                customLoader || (
-                    <div className="flex mh-250" style={{ height: codeEditorHeight }}>
-                        <Progressing pageLoader />
-                    </div>
-                )
-            )
-        }
-
-        return state.diffMode ? (
-            <CodeMirrorMerge
-                theme={codeEditorTheme}
-                key={codemirrorMergeKey}
-                className={`w-100 vertical-divider ${isDarkTheme ? 'cm-merge-theme__dark' : 'cm-merge-theme__light'} ${codeEditorParentClassName}`}
-                gutter
-                destroyRerender={false}
-            >
-                <CodeMirrorMerge.Original
-                    basicSetup={false}
-                    value={state.lhsCode}
-                    readOnly={readOnly || !isOriginalModifiable}
-                    onChange={handleLhsOnChange}
-                    extensions={originalViewExtensions}
-                />
-                <CodeMirrorMerge.Modified
-                    basicSetup={false}
-                    value={state.code}
-                    readOnly={readOnly}
-                    onChange={handleOnChange}
-                    extensions={modifiedViewExtensions}
-                />
-            </CodeMirrorMerge>
-        ) : (
-            <div ref={codeMirrorParentDivRef} className={`w-100 ${codeEditorParentClassName}`}>
-                {shebang && (
-                    <div className="code-editor__shebang flexbox text-white">
-                        <div className="code-editor__shebang__gutter dc__align-self-stretch" />
-                        {shebang}
-                    </div>
-                )}
-                <CodeMirror
-                    ref={codeMirrorRef}
-                    theme={codeEditorTheme}
-                    className={`${isDarkTheme ? 'cm-theme__dark' : 'cm-theme__light'} ${codeEditorClassName}`}
-                    basicSetup={false}
-                    value={state.code}
-                    placeholder={placeholder}
-                    readOnly={readOnly}
-                    height={codeEditorHeight}
-                    minHeight="250px"
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                    onChange={handleOnChange}
-                    extensions={extensions}
-                />
-            </div>
-        )
-    }
-
     return (
         <CodeEditorContext.Provider value={contextValue}>
             {children}
-            {renderCodeEditor()}
+            <CodeEditorRenderer
+                codemirrorMergeKey={codemirrorMergeKey}
+                codeMirrorParentDivRef={codeMirrorParentDivRef}
+                codeEditorTheme={codeEditorTheme}
+                isDarkTheme={isDarkTheme}
+                state={state}
+                loading={loading}
+                customLoader={customLoader}
+                height={height}
+                shebang={shebang}
+                readOnly={readOnly}
+                placeholder={placeholder}
+                handleOnChange={handleOnChange}
+                handleLhsOnChange={handleLhsOnChange}
+                isOriginalModifiable={isOriginalModifiable}
+                onBlur={onBlur}
+                onFocus={onFocus}
+                autoFocus={autoFocus}
+                originalViewExtensions={originalViewExtensions}
+                modifiedViewExtensions={modifiedViewExtensions}
+                extensions={extensions}
+            />
         </CodeEditorContext.Provider>
     )
 }
