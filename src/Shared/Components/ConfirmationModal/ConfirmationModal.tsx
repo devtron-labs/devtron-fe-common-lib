@@ -2,8 +2,8 @@ import { ButtonHTMLAttributes, ChangeEvent, useCallback, useEffect, useState } f
 import { AnimatePresence, motion } from 'framer-motion'
 import { CustomInput, noop, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
-import { ConfirmationModalBodyProps, ConfirmationModalProps, ConfirmationActionType } from './types'
-import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant, getDataTestId } from './utils'
+import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
+import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import './confirmationModal.scss'
 import { Backdrop } from '../Backdrop'
@@ -93,7 +93,7 @@ const ConfirmationModalBody = ({
                 <div className="p-16 dc__gap-12 flexbox dc__content-end">
                     {secondaryButtonConfig && (
                         <Button
-                            dataTestId={getDataTestId(ConfirmationActionType.CANCEL, dataTestId)}
+                            dataTestId={dataTestId ? `${dataTestId}-cancel` : 'confirmation-modal-secondary-button'}
                             size={ComponentSizeType.large}
                             variant={ButtonVariantType.secondary}
                             style={
@@ -111,7 +111,7 @@ const ConfirmationModalBody = ({
 
                     {primaryButtonConfig && (
                         <Button
-                            dataTestId={getDataTestId(ConfirmationActionType.DELETE, dataTestId)}
+                            dataTestId={dataTestId ? `${dataTestId}-delete` : 'confirmation-modal-primary-button'}
                             size={ComponentSizeType.large}
                             variant={ButtonVariantType.primary}
                             style={

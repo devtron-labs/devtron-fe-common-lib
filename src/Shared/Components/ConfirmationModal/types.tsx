@@ -116,8 +116,3 @@ export interface ForceDeleteConfirmationProps
             'title' | 'description' | 'onDelete' | 'showConfirmationModal' | 'closeConfirmationModal'
         >
     > {}
-
-export enum ConfirmationActionType {
-    DELETE = 'delete',
-    CANCEL = 'cancel',
-}
