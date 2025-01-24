@@ -58,7 +58,7 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
                 description: successToastMessage || 'Successfully deleted',
             })
             if (url) history.push(url)
-            reload()
+            if (typeof reload === 'function') reload()
             closeConfirmationModal()
         } catch (serverError) {
             if (serverError instanceof ServerErrors && serverError.code === errorCodeToShowCannotDeleteDialog) {
