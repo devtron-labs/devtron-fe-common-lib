@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { CustomInput, noop, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
-import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
+import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant, getDataTestId } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import './confirmationModal.scss'
 import { Backdrop } from '../Backdrop'
@@ -58,18 +58,6 @@ const ConfirmationModalBody = ({
         setConfirmationText(e.target.value)
     }
 
-    const getDataTestId = (action: ConfirmationActionType) => {
-        if (dataTestId === 'dialog') {
-            return `${dataTestId}-${action}`
-        }
-
-        if (action === ConfirmationActionType.CANCEL) {
-            return dataTestId || 'confirmation-modal-secondary-button'
-        }
-
-        return dataTestId || 'confirmation-modal-primary-button'
-    }
-
     return (
         <Backdrop onEscape={shouldCloseOnEscape ? handleCloseWrapper : noop}>
             <motion.div
@@ -106,7 +94,7 @@ const ConfirmationModalBody = ({
                 <div className="p-16 dc__gap-12 flexbox dc__content-end">
                     {secondaryButtonConfig && (
                         <Button
-                            dataTestId={getDataTestId(ConfirmationActionType.CANCEL)}
+                            dataTestId={getDataTestId(ConfirmationActionType.CANCEL, dataTestId)}
                             size={ComponentSizeType.large}
                             variant={ButtonVariantType.secondary}
                             style={
@@ -124,7 +112,7 @@ const ConfirmationModalBody = ({
 
                     {primaryButtonConfig && (
                         <Button
-                            dataTestId={getDataTestId(ConfirmationActionType.DELETE)}
+                            dataTestId={getDataTestId(ConfirmationActionType.DELETE, dataTestId)}
                             size={ComponentSizeType.large}
                             variant={ButtonVariantType.primary}
                             style={

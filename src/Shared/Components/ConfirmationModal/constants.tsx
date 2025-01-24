@@ -1,4 +1,4 @@
 export enum ConfirmationActionType {
-    DELETE = 'DELETE',
-    CANCEL = 'CANCEL',
+    DELETE = 'delete',
+    CANCEL = 'cancel',
 }

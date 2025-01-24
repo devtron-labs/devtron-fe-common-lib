@@ -4,6 +4,7 @@ import { FunctionComponent, ReactNode, SVGProps } from 'react'
 import { ReactComponent as ICDelete } from '@Images/delete-medium.svg'
 import { ConfirmationModalVariantType } from './types'
 import { ButtonStyleType } from '../Button'
+import { ConfirmationActionType } from './constants'
 
 export const getIconFromVariant = (
     variant: ConfirmationModalVariantType,
@@ -29,4 +30,16 @@ export const getPrimaryButtonStyleFromVariant = (variant: ConfirmationModalVaria
         return ButtonStyleType.negative
     }
     return ButtonStyleType.default
+}
+
+export const getDataTestId = (action: ConfirmationActionType, dataTestId: string): string => {
+    if (dataTestId === 'dialog') {
+        return `${dataTestId}-${action}`
+    }
+
+    if (action === ConfirmationActionType.CANCEL) {
+        return dataTestId || 'confirmation-modal-secondary-button'
+    }
+
+    return dataTestId || 'confirmation-modal-primary-button'
 }

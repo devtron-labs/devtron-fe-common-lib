@@ -21,6 +21,10 @@ import ConfirmationDialog from './ConfirmationDialog'
 import { DeleteDialogProps } from './Types'
 import { CustomInput } from '../CustomInput'
 
+/**
+ *
+ * @deprecated Use DeleteConfirmationDialog instead
+ */
 export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.FC<any> } = ({
     showDeleteConfirmation: _showDeleteConfirmation,
     deleteConfirmationText = null,
