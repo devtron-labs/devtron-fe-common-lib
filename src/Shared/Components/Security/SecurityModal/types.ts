@@ -7,6 +7,7 @@ import { GenericEmptyStateType } from '@Common/Types'
 import { LastExecutionResultType, NodeType, Nodes } from '@Shared/types'
 import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
 import { ServerErrors } from '@Common/ServerError'
+import { ScanCategories, ScanSubCategories } from '../types'
 
 export interface GetResourceScanDetailsPayloadType {
     name: string
@@ -100,15 +101,9 @@ export type DetailViewDataType = {
     InfoCardPropsType
 
 export type SecurityModalStateType = {
-    category: (typeof CATEGORIES)[keyof typeof CATEGORIES]
-    subCategory: (typeof SUB_CATEGORIES)[keyof typeof SUB_CATEGORIES]
+    category: ScanCategories
+    subCategory: ScanSubCategories
     detailViewData: DetailViewDataType[]
-}
-
-export interface SidebarPropsType {
-    modalState: SecurityModalStateType
-    setModalState: React.Dispatch<React.SetStateAction<SecurityModalStateType>>
-    categoriesConfig: Record<(typeof CATEGORIES)[keyof typeof CATEGORIES] | 'imageScanLicenseRisks', boolean>
 }
 
 export enum SeveritiesDTO {
@@ -243,6 +238,12 @@ export type ScanResultDTO = {
     [CATEGORIES.KUBERNETES_MANIFEST]: KubernetesManifest
 }
 
+export interface SidebarPropsType {
+    modalState: SecurityModalStateType
+    setModalState: React.Dispatch<React.SetStateAction<SecurityModalStateType>>
+    scanResult: ScanResultDTO
+}
+
 interface SecurityModalBaseProps {
     isLoading: boolean
     error: ServerErrors
@@ -264,8 +265,8 @@ export interface IndexedTextDisplayPropsType {
 export type SidebarDataChildType = {
     label: string
     value: {
-        category: (typeof CATEGORIES)[keyof typeof CATEGORIES]
-        subCategory: (typeof SUB_CATEGORIES)[keyof typeof SUB_CATEGORIES]
+        category: ScanCategories
+        subCategory: ScanSubCategories
     }
 }
 
