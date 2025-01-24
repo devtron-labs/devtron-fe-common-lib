@@ -63,6 +63,7 @@ type ButtonConfigAndVariantType<isConfig extends boolean> =
 export type ConfirmationModalProps<isConfig extends boolean = false> = {
     title: string
     subtitle: ReactNode
+    dataTestId?: string
     /**
      * @default true
      */
@@ -77,3 +78,28 @@ export type ConfirmationModalProps<isConfig extends boolean = false> = {
         : {})
 
 export type ConfirmationModalBodyProps = Omit<ConfirmationModalProps, 'showConfirmationModal'>
+
+export type DeleteComponentModalProps = {
+    // Required Props
+    title: string
+    showConfirmationModal: boolean
+    closeConfirmationModal: () => void
+    onDelete: () => void
+
+    // Optional Customization
+    component?: string
+    description?: ReactNode
+    successToastMessage?: string
+    isLoading?: boolean
+    isForceDelete?: boolean
+    renderCannotDeleteConfirmationSubTitle?: ReactNode
+    errorCodeToShowCannotDeleteDialog?: number
+    reload?: () => void
+
+    // Additional Configuration
+    shouldStopPropagation?: boolean
+    disabled?: boolean
+    url?: string
+    dataTestId?: string
+    children?: ReactNode
+}
