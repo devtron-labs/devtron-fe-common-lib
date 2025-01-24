@@ -40,14 +40,12 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     successToastMessage,
     isLoading,
     shouldStopPropagation = false,
-    isCannotDeleteModal = false,
-    isForceDeleteModal = false,
     primaryButtonText = 'Delete',
 }: DeleteComponentModalProps) => {
     const history = useHistory()
     const [isDeleting, setDeleting] = useState(isLoading)
-    const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(isCannotDeleteModal)
-    const [showForceDeleteModal, setForceDeleteModal] = useState(isForceDeleteModal)
+    const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(false)
+    const [showForceDeleteModal, setForceDeleteModal] = useState(false)
 
     const handleDelete = async (e) => {
         if (shouldStopPropagation) e.stopPropagation()
