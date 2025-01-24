@@ -99,7 +99,7 @@ export const getFoldGutterElement = (open: boolean) => {
 const getHoverElement = (schemaURI: CodeEditorProps['schemaURI']) => (data: HoverTexts) => {
     const hoverContainer = document.createElement('div')
     const node = (
-        <div className="code-editor__schema-tooltip dc__mxw-300 flexbox-col px-10 py-6 br-4 lh-18">
+        <div className="code-editor__schema-tooltip dc__mxw-300 flexbox-col px-10 py-6 br-4 fs-12 lh-18 text-white">
             {data.message && <p className="m-0">{data.message}</p>}
             {data.typeInfo && (
                 <p
@@ -126,7 +126,7 @@ const getHoverElement = (schemaURI: CodeEditorProps['schemaURI']) => (data: Hove
 export const getReadOnlyElement = () => {
     const dom = document.createElement('div')
     const node = (
-        <div className="code-editor__read-only-tooltip py-6 px-10 br-4">
+        <div className="code-editor__read-only-tooltip py-6 px-10 br-4 text-white">
             <p className="m-0 fs-12 lh-18">Cannot edit in read-only editor</p>
         </div>
     )

@@ -20,7 +20,7 @@ const SplitPane = () => {
     }
 
     return (
-        <div className="code-editor__split-pane flex pointer" onClick={handleToggle}>
+        <div className="code-editor__split-pane flex pointer cn-7 fcn-7 ml-auto" onClick={handleToggle}>
             <ICCompare className="icon-dim-20 mr-4" />
             {state.diffMode ? 'Hide comparison' : 'Compare with default'}
         </div>
@@ -33,7 +33,7 @@ export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEdit
     return (
         <div
             data-code-editor-header
-            className={`${hasCodeEditorContainer ? 'dc__top-radius-4' : ''} ${className || 'code-editor__header flex right'}`}
+            className={`${hasCodeEditorContainer ? 'dc__top-radius-4' : ''} ${className || 'code-editor__header flex right bcn-1 pt-10 pb-9 px-16 dc__border-bottom'}`}
         >
             {children}
             {!hideDefaultSplitHeader && state.lhsCode && <SplitPane />}
@@ -42,7 +42,9 @@ export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEdit
 }
 
 export const Warning = ({ className, text, children }: CodeEditorStatusBarProps) => (
-    <div className={`code-editor__warning ${className || ''}`}>
+    <div
+        className={`code-editor__warning fs-12 fw-4 lh-16 cn-9 py-8 px-16 bcy-1 bw-1 ey-2 dc__height-auto ${className || ''}`}
+    >
         <ICWarningY5 className="code-editor__status-info-icon" />
         {text}
         {children}
@@ -50,7 +52,7 @@ export const Warning = ({ className, text, children }: CodeEditorStatusBarProps)
 )
 
 export const ErrorBar = ({ className, text, children }: CodeEditorStatusBarProps) => (
-    <div className={`code-editor__error ${className || ''}`}>
+    <div className={`code-editor__error fs-12 fw-4 lh-16 py-8 px-16 dc__border-bottom bco-1 co-5 ${className || ''}`}>
         <ErrorIcon className="code-editor__status-info-icon" />
         {text}
         {children}
@@ -58,7 +60,9 @@ export const ErrorBar = ({ className, text, children }: CodeEditorStatusBarProps
 )
 
 export const Information = ({ className, children, text }: CodeEditorStatusBarProps) => (
-    <div className={`code-editor__information ${className || ''}`}>
+    <div
+        className={`code-editor__information fs-12 fw-4 lh-16 cn-9 dc__height-auto py-8 px-16 dc__border-bottom bcb-1 ${className || ''}`}
+    >
         <Info className="code-editor__status-info-icon" />
         {text}
         {children}
@@ -72,7 +76,11 @@ export const Clipboard = () => {
 }
 
 export const Container = ({ children, flexExpand }: { children: ReactNode; flexExpand?: boolean }) => (
-    <div data-code-editor-container className={`code-editor__container ${flexExpand ? 'flex-grow-1 flexbox-col' : ''}`}>
+    <div
+        data-code-editor-container
+        className={`code-editor__container w-100 dc__border br-4
+        ${flexExpand ? 'flex-grow-1 flexbox-col' : ''}`}
+    >
         {children}
     </div>
 )
