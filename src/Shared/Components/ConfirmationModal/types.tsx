@@ -85,8 +85,11 @@ export type DeleteComponentModalProps = {
     showConfirmationModal: boolean
     closeConfirmationModal: () => void
     onDelete: () => void
+    isCannotDeleteModal?: boolean
+    isForceDeleteModal?: boolean
 
     // Optional Customization
+    primaryButtonText?: string
     component?: string
     description?: ReactNode
     successToastMessage?: string

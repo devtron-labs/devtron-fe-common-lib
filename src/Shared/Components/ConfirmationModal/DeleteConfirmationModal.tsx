@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { ToastManager, ToastVariantType } from '@Shared/Services/ToastManager'
 import { useHistory } from 'react-router-dom'
 import { ServerErrors } from '@Common/ServerError'
@@ -22,6 +22,7 @@ import { showError } from '@Common/Helper'
 import { ConfirmationModalVariantType, DeleteComponentModalProps } from './types'
 import ConfirmationModal from './ConfirmationModal'
 import { CannotDeleteModal } from './CannotDeleteModal'
+import { ForceDeleteConfirmationModal } from './ForceDeleteConfirmationModal'
 
 export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     title,
@@ -39,25 +40,26 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     successToastMessage,
     isLoading,
     shouldStopPropagation = false,
+    isCannotDeleteModal = false,
+    isForceDeleteModal = false,
+    primaryButtonText = 'Delete',
 }: DeleteComponentModalProps) => {
     const history = useHistory()
-    const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(false)
     const [isDeleting, setDeleting] = useState(isLoading)
+    const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(isCannotDeleteModal)
+    const [showForceDeleteModal, setForceDeleteModal] = useState(isForceDeleteModal)
 
     const handleDelete = async (e) => {
-        if (shouldStopPropagation) {
-            e.stopPropagation()
-        }
+        if (shouldStopPropagation) e.stopPropagation()
+
         setDeleting(true)
         try {
             await onDelete()
             ToastManager.showToast({
                 variant: ToastVariantType.success,
-                description: successToastMessage ?? 'Successfully deleted',
+                description: successToastMessage || 'Successfully deleted',
             })
-            if (url) {
-                history.push(url)
-            }
+            if (url) history.push(url)
             reload()
             closeConfirmationModal()
         } catch (serverError) {
@@ -72,14 +74,31 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
         }
     }
 
-    const handleConfirmation = () => setCannotDeleteDialogModal(false)
+    const handleCloseCannotDeleteModal = useCallback(() => {
+        setCannotDeleteDialogModal(false)
+    }, [])
+
+    const handleCloseForceDeleteModal = useCallback(() => {
+        setForceDeleteModal(false)
+    }, [])
 
     const renderCannotDeleteDialogModal = () => (
         <CannotDeleteModal
-            title={`Cannot delete ${component} '${title}'`}
+            title={title}
             description={renderCannotDeleteConfirmationSubTitle}
             showCannotDeleteDialogModal={showCannotDeleteDialogModal}
-            onClickOkay={handleConfirmation}
+            onClickOkay={handleCloseCannotDeleteModal}
+            component={component}
+        />
+    )
+
+    const renderForceDeleteModal = () => (
+        <ForceDeleteConfirmationModal
+            title={title}
+            description={description}
+            onDelete={onDelete}
+            closeConfirmationModal={handleCloseForceDeleteModal}
+            showConfirmationModal={showForceDeleteModal}
         />
     )
 
@@ -94,7 +113,7 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
                     onClick: closeConfirmationModal,
                 },
                 primaryButtonConfig: {
-                    text: 'Delete',
+                    text: primaryButtonText,
                     onClick: handleDelete,
                     isLoading: isDeleting,
                     disabled: isLoading || disabled,
@@ -109,7 +128,8 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     return (
         <>
             {renderDeleteModal()}
-            {renderCannotDeleteDialogModal()}
+            {showCannotDeleteDialogModal && renderCannotDeleteDialogModal()}
+            {showForceDeleteModal && renderForceDeleteModal()}
         </>
     )
 }
