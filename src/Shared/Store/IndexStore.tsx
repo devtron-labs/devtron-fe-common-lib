@@ -124,7 +124,6 @@ export function getiNodesByRootNodeWithChildNodes(
                     ?.containers?.map((_c) => {
                         const childNode = {} as iNode
                         childNode.kind = Nodes.Containers
-                        // @ts-ignore -- pNode does not exist on iNode
                         childNode.pNode = _pn
                         childNode.name = _c
                         return childNode
