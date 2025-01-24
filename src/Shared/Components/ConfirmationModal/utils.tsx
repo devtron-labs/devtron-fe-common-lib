@@ -2,9 +2,8 @@ import { ReactComponent as ICInfo } from '@Icons/ic-medium-info.svg'
 import { ReactComponent as ICWarning } from '@Icons/ic-warning-y5.svg'
 import { FunctionComponent, ReactNode, SVGProps } from 'react'
 import { ReactComponent as ICDelete } from '@Images/delete-medium.svg'
-import { ConfirmationModalVariantType } from './types'
+import { ConfirmationActionType, ConfirmationModalVariantType } from './types'
 import { ButtonStyleType } from '../Button'
-import { ConfirmationActionType } from './constants'
 
 export const getIconFromVariant = (
     variant: ConfirmationModalVariantType,
@@ -33,13 +32,9 @@ export const getPrimaryButtonStyleFromVariant = (variant: ConfirmationModalVaria
 }
 
 export const getDataTestId = (action: ConfirmationActionType, dataTestId: string): string => {
-    if (dataTestId === 'dialog') {
-        return `${dataTestId}-${action}`
-    }
-
     if (action === ConfirmationActionType.CANCEL) {
-        return dataTestId || 'confirmation-modal-secondary-button'
+        return `${dataTestId}-${action}` || 'confirmation-modal-secondary-button'
     }
 
-    return dataTestId || 'confirmation-modal-primary-button'
+    return `${dataTestId}-${action}` || 'confirmation-modal-primary-button'
 }

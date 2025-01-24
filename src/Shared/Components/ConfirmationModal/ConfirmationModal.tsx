@@ -2,12 +2,11 @@ import { ButtonHTMLAttributes, ChangeEvent, useCallback, useEffect, useState } f
 import { AnimatePresence, motion } from 'framer-motion'
 import { CustomInput, noop, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
-import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
+import { ConfirmationModalBodyProps, ConfirmationModalProps, ConfirmationActionType } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant, getDataTestId } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import './confirmationModal.scss'
 import { Backdrop } from '../Backdrop'
-import { ConfirmationActionType } from './constants'
 
 const ConfirmationModalBody = ({
     title,

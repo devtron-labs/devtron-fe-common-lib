@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { ToastManager, ToastVariantType } from '@Shared/Services/ToastManager'
 import { useHistory } from 'react-router-dom'
 import { ServerErrors } from '@Common/ServerError'
@@ -74,20 +74,16 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
         }
     }
 
-    const handleCloseCannotDeleteModal = useCallback(() => {
-        setCannotDeleteDialogModal(false)
-    }, [])
+    const handleCloseCannotDeleteModal = () => setCannotDeleteDialogModal(false)
 
-    const handleCloseForceDeleteModal = useCallback(() => {
-        setForceDeleteModal(false)
-    }, [])
+    const handleCloseForceDeleteModal = () => setForceDeleteModal(false)
 
     const renderCannotDeleteDialogModal = () => (
         <CannotDeleteModal
             title={title}
             description={renderCannotDeleteConfirmationSubTitle}
             showCannotDeleteDialogModal={showCannotDeleteDialogModal}
-            onClickOkay={handleCloseCannotDeleteModal}
+            closeConfirmationModal={handleCloseCannotDeleteModal}
             component={component}
         />
     )

@@ -5,7 +5,7 @@ export const CannotDeleteModal = ({
     title,
     component,
     description,
-    onClickOkay,
+    closeConfirmationModal,
     showCannotDeleteDialogModal,
 }: CannotDeleteModalProps) => (
     <ConfirmationModal
@@ -15,10 +15,10 @@ export const CannotDeleteModal = ({
         buttonConfig={{
             primaryButtonConfig: {
                 text: 'Okay',
-                onClick: onClickOkay,
+                onClick: closeConfirmationModal,
             },
         }}
         showConfirmationModal={showCannotDeleteDialogModal}
-        handleClose={onClickOkay}
+        handleClose={closeConfirmationModal}
     />
 )

@@ -107,8 +107,7 @@ export type DeleteComponentModalProps = {
 }
 
 export interface CannotDeleteModalProps
-    extends Partial<Pick<DeleteComponentModalProps, 'title' | 'description' | 'component'>> {
-    onClickOkay: () => void
+    extends Partial<Pick<DeleteComponentModalProps, 'title' | 'description' | 'component' | 'closeConfirmationModal'>> {
     showCannotDeleteDialogModal: boolean
 }
 
@@ -119,3 +118,8 @@ export interface ForceDeleteConfirmationProps
             'title' | 'description' | 'onDelete' | 'showConfirmationModal' | 'closeConfirmationModal'
         >
     > {}
+
+export enum ConfirmationActionType {
+    DELETE = 'delete',
+    CANCEL = 'cancel',
+}
