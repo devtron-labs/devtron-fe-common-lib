@@ -1058,3 +1058,22 @@ export const getGoLangFormattedDateWithTimezone = (dateFormat: string) => {
     const timezone = now.format('Z').replace(/([+/-])(\d{2})[:.](\d{2})/, '$1$2$3')
     return formattedDate.replace('Z', timezone)
 }
+
+/**
+ *
+ * @returns SHA-256 hashed value
+ */
+export const getHashedValue = async (value: string): Promise<string | null> => {
+    try {
+        const encoder = new TextEncoder()
+        const data = encoder.encode(value)
+        const hashBuffer = await window.crypto.subtle.digest('SHA-256', data)
+
+        return Array.from(new Uint8Array(hashBuffer))
+            .map((byte) => byte.toString(16).padStart(2, '0'))
+            .join('')
+    } catch (err) {
+        logExceptionToSentry(err)
+        return null
+    }
+}
