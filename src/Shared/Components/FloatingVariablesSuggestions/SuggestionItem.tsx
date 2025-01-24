@@ -103,6 +103,7 @@ const SuggestionItem = ({
             }
             placement="left"
             interactive
+            alwaysShowTippyOnHover
             // Have to append to body because the parent is draggable
             appendTo={document.body}
         >
@@ -111,6 +112,7 @@ const SuggestionItem = ({
     )
 
     return (
+        // TODO: conditional wrap is not required since handled through alwaysShowTippyOnHover in tooltip
         <ConditionalWrap condition={showValueOnHover} wrap={renderTooltip}>
             <div
                 className="flexbox-col pt-8 pb-8 pl-12 pr-12 dc__align-self-stretch bg__primary dc__border-bottom-n1 dc__hover-n50"

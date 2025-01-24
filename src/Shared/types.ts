@@ -157,6 +157,7 @@ export interface iNode extends Node {
     childNodes: iNodes
     type: NodeType
     status: string
+    pNode?: iNode
 }
 export interface ResourceTree {
     conditions: any
@@ -786,19 +787,12 @@ interface CommonTabArgsType {
      * Title for the tab
      */
     title?: string
-    isDeleted?: boolean
     /**
      * Type for the tab
      *
      * Note: Fixed tabs are always places before dynamic tabs
      */
     type: 'fixed' | 'dynamic'
-    /**
-     * Path of the icon for the tab
-     *
-     * @default ''
-     */
-    iconPath?: string
     /**
      * Dynamic title for the tab
      *
