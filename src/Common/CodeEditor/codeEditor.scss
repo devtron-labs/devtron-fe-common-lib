@@ -14,34 +14,6 @@
  * limitations under the License.
  */
 
-// CODE MIRROR THEME
-.cm-theme,
-.cm-merge-theme {
-    &__light {
-        --bg-code-editor-base: #ffffff;
-        --bg-code-editor-base-gutter: #f7fafc;
-        --bg-code-editor-red: #fdf0f0;
-        --bg-code-editor-red-gutter: #fde7e7;
-        --bg-code-editor-red-highlight: #fcbcbc;
-        --bg-code-editor-green: #f2fffa;
-        --bg-code-editor-green-gutter: #e9fbf4;
-        --bg-code-editor-green-highlight: #b6e9d3;
-        --active-line: #f0f7ff;
-    }
-
-    &__dark {
-        --bg-code-editor-base: #181920;
-        --bg-code-editor-base-gutter: #15161f;
-        --bg-code-editor-red: #311f27;
-        --bg-code-editor-red-gutter: #44242c;
-        --bg-code-editor-red-highlight: #733239;
-        --bg-code-editor-green: #212b2b;
-        --bg-code-editor-green-gutter: #293932;
-        --bg-code-editor-green-highlight: #3d5c46;
-        --active-line: #28364c;
-    }
-}
-
 // CODE MIRROR OVERRIDES
 .cm-mergeView {
     height: 100%;
@@ -94,6 +66,7 @@
 
     .cm-panels {
         background-color: var(--bg-code-editor);
+        z-index: 0;
     }
 
     .cm-panels-top {
@@ -125,10 +98,13 @@
         }
 
         &:has(.cm-tooltip-lint) .code-editor__schema-tooltip {
-            border-top: 1px solid var(--N100);
             border-top-left-radius: 0;
             border-top-right-radius: 0;
         }
+    }
+
+    .cm-tooltip-section:not(:first-child) {
+        border-top: 1px solid var(--N100);
     }
 
     .cm-tooltip-lint {
@@ -199,6 +175,10 @@
 .code-editor {
     &__schema-tooltip {
         background-color: var(--bg-tooltip-black);
+
+        &__source {
+            color: var(--button-text-on-dark);
+        }
     }
 
     &__container {

@@ -79,7 +79,7 @@ export const CodeEditorRenderer = ({
     ) : (
         <div ref={codeMirrorParentDivRef} className={`w-100 ${codeEditorParentClassName}`}>
             {shebang && (
-                <div className="code-editor__shebang flexbox text-white">
+                <div className="code-editor__shebang flexbox text__white">
                     <div className="code-editor__shebang__gutter dc__align-self-stretch" />
                     {shebang}
                 </div>
