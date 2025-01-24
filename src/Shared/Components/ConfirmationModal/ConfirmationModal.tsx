@@ -7,6 +7,7 @@ import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVari
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import './confirmationModal.scss'
 import { Backdrop } from '../Backdrop'
+import { ConfirmationActionType } from './constants'
 
 const ConfirmationModalBody = ({
     title,
@@ -57,6 +58,18 @@ const ConfirmationModalBody = ({
         setConfirmationText(e.target.value)
     }
 
+    const getDataTestId = (action: ConfirmationActionType) => {
+        if (dataTestId === 'dialog') {
+            return `${dataTestId}-${action}`
+        }
+
+        if (action === ConfirmationActionType.CANCEL) {
+            return dataTestId || 'confirmation-modal-secondary-button'
+        }
+
+        return dataTestId || 'confirmation-modal-primary-button'
+    }
+
     return (
         <Backdrop onEscape={shouldCloseOnEscape ? handleCloseWrapper : noop}>
             <motion.div
@@ -93,7 +106,7 @@ const ConfirmationModalBody = ({
                 <div className="p-16 dc__gap-12 flexbox dc__content-end">
                     {secondaryButtonConfig && (
                         <Button
-                            dataTestId={dataTestId ? `${dataTestId}-cancel` : 'confirmation-modal-secondary-button'}
+                            dataTestId={getDataTestId(ConfirmationActionType.CANCEL)}
                             size={ComponentSizeType.large}
                             variant={ButtonVariantType.secondary}
                             style={
@@ -111,7 +124,7 @@ const ConfirmationModalBody = ({
 
                     {primaryButtonConfig && (
                         <Button
-                            dataTestId={dataTestId ? `${dataTestId}-delete` : 'confirmation-modal-primary-button'}
+                            dataTestId={getDataTestId(ConfirmationActionType.DELETE)}
                             size={ComponentSizeType.large}
                             variant={ButtonVariantType.primary}
                             style={
