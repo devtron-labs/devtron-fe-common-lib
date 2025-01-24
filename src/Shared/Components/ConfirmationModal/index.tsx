@@ -1,3 +1,5 @@
 export { default as ConfirmationModal } from './ConfirmationModal'
 export { DeleteConfirmationModal } from './DeleteConfirmationModal'
+export { ForceDeleteConfirmationModal } from './ForceDeleteConfirmationModal'
+export { CannotDeleteModal } from './CannotDeleteModal'
 export { ConfirmationModalVariantType } from './types'

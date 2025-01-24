@@ -23,6 +23,10 @@ import { DeleteComponentProps } from './types'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { showError } from '@Common/Helper'
 
+/**
+ *
+ * @deprecated Use DeleteConfirmationDialog instead
+ */
 const DeleteComponent = ({
     setDeleting,
     toggleConfirmation,
