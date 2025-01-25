@@ -1,20 +1,18 @@
 import { ReactComponent as ICInfo } from '@Icons/ic-medium-info.svg'
 import { ReactComponent as ICWarning } from '@Icons/ic-warning-y5.svg'
-import { FunctionComponent, ReactNode, SVGProps } from 'react'
+import { ReactElement, ReactNode } from 'react'
 import { ReactComponent as ICDelete } from '@Images/delete-medium.svg'
 import { ConfirmationModalVariantType } from './types'
 import { ButtonStyleType } from '../Button'
 
-export const getIconFromVariant = (
-    variant: ConfirmationModalVariantType,
-): FunctionComponent<SVGProps<SVGSVGElement>> => {
+export const getIconFromVariant = (variant: ConfirmationModalVariantType): ReactElement => {
     switch (variant) {
         case ConfirmationModalVariantType.delete:
-            return ICDelete
+            return <ICDelete />
         case ConfirmationModalVariantType.warning:
-            return ICWarning
+            return <ICWarning />
         default:
-            return ICInfo
+            return <ICInfo />
     }
 }
 

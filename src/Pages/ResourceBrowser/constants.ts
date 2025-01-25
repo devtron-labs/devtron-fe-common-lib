@@ -1,4 +1,8 @@
 import { SelectPickerOptionType } from '@Shared/Components'
+import { ReactComponent as ICMediumPlay } from '@Icons/ic-medium-play.svg'
+import { ReactComponent as ICMediumPause } from '@Icons/ic-medium-pause.svg'
+import { ReactComponent as ICCleanBrush } from '@Icons/ic-medium-clean-brush.svg'
+import { NodeDrainRequest } from './types'
 
 export const ALL_NAMESPACE_OPTION: Readonly<Pick<SelectPickerOptionType<string>, 'value' | 'label'>> = {
     value: 'all',
@@ -6,6 +10,7 @@ export const ALL_NAMESPACE_OPTION: Readonly<Pick<SelectPickerOptionType<string>,
 }
 
 export const DRAIN_NODE_MODAL_MESSAGING = {
+    DrainIcon: ICCleanBrush,
     GracePeriod: {
         heading: 'Grace period',
         infoText:
@@ -31,8 +36,49 @@ export const DRAIN_NODE_MODAL_MESSAGING = {
     },
     Actions: {
         infoText: 'Drain will cordon off the node and evict all pods of the node.',
-        drain: 'Drain node',
+        drain: 'Drain',
         draining: 'Draining node',
         cancel: 'Cancel',
     },
 }
+
+export const CORDON_NODE_MODAL_MESSAGING = {
+    UncordonIcon: ICMediumPlay,
+    CordonIcon: ICMediumPause,
+    cordonInfoText:
+        'Cordoning a node will mark it as unschedulable. By cordoning a node, you can be sure that no new pods will be scheduled on the node.',
+    uncordonInfoText:
+        'Uncordoning this node will mark this node as schedulable. By uncordoning a node, you will allow pods to be scheduled on this node.',
+    cordon: 'Cordon',
+    uncordon: 'Uncordon',
+    cordoning: 'Cordoning node',
+    uncordoning: 'Uncordoning node',
+    cancel: 'Cancel',
+}
+
+export const NODE_DRAIN_OPTIONS_CHECKBOX_CONFIG: {
+    key: Exclude<keyof NodeDrainRequest['nodeDrainOptions'], 'gracePeriodSeconds'>
+    infoText: string
+    label: string
+}[] = [
+    {
+        key: 'deleteEmptyDirData',
+        infoText: DRAIN_NODE_MODAL_MESSAGING.DeleteEmptyDirectoryData.infoText,
+        label: DRAIN_NODE_MODAL_MESSAGING.DeleteEmptyDirectoryData.heading,
+    },
+    {
+        key: 'disableEviction',
+        infoText: DRAIN_NODE_MODAL_MESSAGING.DisableEviction.infoText,
+        label: DRAIN_NODE_MODAL_MESSAGING.DisableEviction.heading,
+    },
+    {
+        key: 'force',
+        infoText: DRAIN_NODE_MODAL_MESSAGING.ForceDrain.infoText,
+        label: DRAIN_NODE_MODAL_MESSAGING.ForceDrain.heading,
+    },
+    {
+        key: 'ignoreAllDaemonSets',
+        infoText: DRAIN_NODE_MODAL_MESSAGING.IgnoreDaemonSets.infoText,
+        label: DRAIN_NODE_MODAL_MESSAGING.IgnoreDaemonSets.heading,
+    },
+] as const

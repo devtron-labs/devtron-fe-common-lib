@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CustomInput, noop, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
@@ -66,7 +66,9 @@ const ConfirmationModalBody = ({
                 animate={{ y: 0, opacity: 1, scale: 1 }}
             >
                 <div className="flexbox-col dc__gap-12 p-20">
-                    <RenderIcon className="icon-dim-48 dc__no-shrink" />
+                    {cloneElement(RenderIcon, {
+                        className: `${RenderIcon.props?.className ?? ''} icon-dim-48 dc__no-shrink`,
+                    })}
                     <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
 
                     {typeof subtitle === 'string' ? (

@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactNode, SVGProps, SyntheticEvent } from 'react'
+import { ReactElement, ReactNode, SyntheticEvent } from 'react'
 import { ButtonProps } from '../Button'
 
 export enum ConfirmationModalVariantType {
@@ -9,10 +9,8 @@ export enum ConfirmationModalVariantType {
 }
 
 type CommonButtonProps<isConfig extends boolean, isCustomVariant extends boolean> = Pick<ButtonProps, 'text'> &
-    Partial<Pick<ButtonProps, 'startIcon' | 'endIcon'>> &
-    (isConfig extends false
-        ? Pick<ButtonProps, 'disabled'> & { onClick: (...args: Partial<Parameters<ButtonProps['onClick']>>) => void }
-        : {}) &
+    Partial<Pick<ButtonProps, 'startIcon' | 'endIcon' | 'disabled'>> &
+    (isConfig extends false ? { onClick: (...args: Partial<Parameters<ButtonProps['onClick']>>) => void } : {}) &
     (isCustomVariant extends true ? Pick<ButtonProps, 'style'> : {})
 
 interface CustomInputConfig {
@@ -56,7 +54,7 @@ type ButtonConfigAndVariantType<isConfig extends boolean> =
       }
     | {
           variant: ConfirmationModalVariantType.custom
-          Icon: FunctionComponent<SVGProps<SVGSVGElement>>
+          Icon: ReactElement
           buttonConfig: ButtonConfig<isConfig, true>
       }
 
