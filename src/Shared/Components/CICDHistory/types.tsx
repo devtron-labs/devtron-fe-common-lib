@@ -569,6 +569,7 @@ export interface StatusFilterButtonType {
     nodes: Array<Node>
     selectedTab: string
     handleFilterClick?: (selectedFilter: string) => void
+    maxInlineFiltersCount?: number
 }
 
 export enum NodeStatus {

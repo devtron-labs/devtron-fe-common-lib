@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { TIMELINE_STATUS } from '@Shared/constants'
+import { ALL_RESOURCE_KIND_FILTER, TIMELINE_STATUS } from '@Shared/constants'
 import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
 import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
@@ -26,13 +26,15 @@ import { ReactComponent as TimeOut } from '@Icons/ic-timeout-red.svg'
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
 import { TERMINAL_STATUS_MAP } from './constants'
-import { ResourceKindType } from '../../types'
+import { Node, ResourceKindType } from '../../types'
 import {
     TriggerHistoryFilterCriteriaProps,
     DeploymentHistoryResultObject,
     DeploymentHistory,
     TriggerHistoryFilterCriteriaType,
     StageStatusType,
+    NodeStatus,
+    NodeFilters,
 } from './types'
 
 export const getTriggerHistoryFilterCriteria = ({
@@ -203,3 +205,72 @@ export const getLogSearchIndex = ({
     stageIndex,
     lineNumberInsideStage,
 }: Record<'stageIndex' | 'lineNumberInsideStage', number>) => `${stageIndex}-${lineNumberInsideStage}`
+
+export const getNodesCount = (nodes: Node[]) =>
+    (nodes || []).reduce(
+        (acc, node) => {
+            const nodeHealthStatus = node.health?.status?.toLowerCase() ?? ''
+
+            if (node.hasDrift) {
+                acc.driftedNodeCount += 1
+            }
+
+            switch (nodeHealthStatus) {
+                case NodeStatus.Healthy:
+                    acc.healthyNodeCount += 1
+                    break
+                case NodeStatus.Degraded:
+                    acc.failedNodeCount += 1
+                    break
+                case NodeStatus.Progressing:
+                    acc.progressingNodeCount += 1
+                    break
+                case NodeStatus.Missing:
+                    acc.missingNodeCount += 1
+                    break
+                default:
+            }
+
+            acc.allNodeCount += 1
+
+            return acc
+        },
+        {
+            allNodeCount: 0,
+            healthyNodeCount: 0,
+            progressingNodeCount: 0,
+            failedNodeCount: 0,
+            missingNodeCount: 0,
+            driftedNodeCount: 0,
+        },
+    )
+
+export const getStatusFilters = ({
+    allNodeCount,
+    missingNodeCount,
+    failedNodeCount,
+    progressingNodeCount,
+    healthyNodeCount,
+    driftedNodeCount,
+}: ReturnType<typeof getNodesCount>) => {
+    const allResourceKindFilter = { status: ALL_RESOURCE_KIND_FILTER, count: allNodeCount }
+    const statusFilters = [
+        { status: NodeStatus.Missing, count: missingNodeCount },
+        { status: NodeStatus.Degraded, count: failedNodeCount },
+        {
+            status: NodeStatus.Progressing,
+            count: progressingNodeCount,
+        },
+        { status: NodeStatus.Healthy, count: healthyNodeCount },
+        ...(window._env_.FEATURE_CONFIG_DRIFT_ENABLE
+            ? [
+                  {
+                      status: NodeFilters.drifted,
+                      count: driftedNodeCount,
+                  },
+              ]
+            : []),
+    ]
+
+    return { allResourceKindFilter, statusFilters: statusFilters.filter(({ count }) => count > 0) }
+}
