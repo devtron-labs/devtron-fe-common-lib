@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactNode, SVGProps, SyntheticEvent } from 'react'
+import { ReactElement, ReactNode, SyntheticEvent } from 'react'
 import { ButtonProps } from '../Button'
 
 export enum ConfirmationModalVariantType {
@@ -54,7 +54,7 @@ type ButtonConfigAndVariantType<isConfig extends boolean> =
       }
     | {
           variant: ConfirmationModalVariantType.custom
-          Icon: FunctionComponent<SVGProps<SVGSVGElement>>
+          Icon: ReactElement
           buttonConfig: ButtonConfig<isConfig, true>
       }
 

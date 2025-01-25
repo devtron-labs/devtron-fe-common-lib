@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction, ReactElement } from 'react'
 import { NodeActionRequest } from './ResourceBrowser.Types'
 
 export enum ClusterFiltersType {
@@ -74,4 +75,10 @@ interface NodeDrainOptions {
 
 export interface NodeDrainRequest extends NodeActionRequest {
     nodeDrainOptions: NodeDrainOptions
+}
+
+export interface AdditionalConfirmationModalOptionsProps<T = unknown> {
+    optionsData: T
+    setOptionsData: Dispatch<SetStateAction<T>>
+    children?: ReactElement
 }
