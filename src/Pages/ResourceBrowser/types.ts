@@ -1,3 +1,6 @@
+import { Dispatch, SetStateAction, ReactElement } from 'react'
+import { NodeActionRequest } from './ResourceBrowser.Types'
+
 export enum ClusterFiltersType {
     ALL_CLUSTERS = 'all',
     HEALTHY = 'healthy',
@@ -52,4 +55,30 @@ export interface ClusterDetail extends ClusterCapacityType {
     errorInNodeListing: string
     nodeNames?: string[]
     isVirtualCluster?: boolean
+}
+
+interface NodeCordonOptions {
+    unschedulableDesired: boolean
+}
+
+export interface NodeCordonRequest extends NodeActionRequest {
+    nodeCordonOptions: NodeCordonOptions
+}
+
+interface NodeDrainOptions {
+    gracePeriodSeconds: number
+    deleteEmptyDirData: boolean
+    disableEviction: boolean
+    force: boolean
+    ignoreAllDaemonSets: boolean
+}
+
+export interface NodeDrainRequest extends NodeActionRequest {
+    nodeDrainOptions: NodeDrainOptions
+}
+
+export interface AdditionalConfirmationModalOptionsProps<T = unknown> {
+    optionsData: T
+    setOptionsData: Dispatch<SetStateAction<T>>
+    children?: ReactElement
 }

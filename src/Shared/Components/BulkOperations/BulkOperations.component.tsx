@@ -177,13 +177,13 @@ const BulkOperations = ({
                 primaryButtonConfig: {
                     ...confirmationModalConfig.buttonConfig.primaryButtonConfig,
                     onClick: handleBulkOperations,
-                    disabled: apiCallInProgress,
+                    disabled: apiCallInProgress || confirmationModalConfig.buttonConfig.primaryButtonConfig.disabled,
                     isLoading: apiCallInProgress,
                 },
                 secondaryButtonConfig: {
                     ...confirmationModalConfig.buttonConfig.secondaryButtonConfig,
                     onClick: handleModalClose,
-                    disabled: apiCallInProgress,
+                    disabled: apiCallInProgress || confirmationModalConfig.buttonConfig.secondaryButtonConfig.disabled,
                 },
             }}
         />
