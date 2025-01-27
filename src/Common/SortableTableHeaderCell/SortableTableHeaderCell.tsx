@@ -76,7 +76,7 @@ const SortableTableHeaderCell = ({
         if (isSorted) {
             return (
                 <SortArrowDown
-                    className={`icon-dim-12 mw-12 scn-7 dc__no-shrink dc__transition--transform ${sortOrder === SortingOrder.DESC ? 'dc__flip-180' : ''}`}
+                    className={`icon-dim-12 mw-12 scn-7 dc__no-shrink dc__transition--transform ${sortOrder !== SortingOrder.DESC ? 'dc__flip-180' : ''}`}
                 />
             )
         }
