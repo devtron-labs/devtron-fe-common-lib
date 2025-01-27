@@ -30,12 +30,7 @@ import {
     mapSeveritiesToSegmentedBarChartEntities,
     stringifySeverities,
 } from '../utils'
-import {
-    MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID,
-    SCAN_FAILED_EMPTY_STATE,
-    SCAN_IN_PROGRESS_EMPTY_STATE,
-    SEVERITY_DEFAULT_SORT_ORDER,
-} from '../constants'
+import { SCAN_FAILED_EMPTY_STATE, SCAN_IN_PROGRESS_EMPTY_STATE, SEVERITY_DEFAULT_SORT_ORDER } from '../constants'
 import { getCodeScanVulnerabilities } from './CodeScan'
 import { OpenDetailViewButton } from '../components'
 
@@ -44,7 +39,8 @@ const getVulnerabilitiesDetailBaseData = (element: ImageScanVulnerabilityListTyp
     title: element.image,
     entities: mapSeveritiesToSegmentedBarChartEntities(element.summary.severities),
     lastScanTimeString: element.StartedOn,
-    scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[element.scanToolName],
+    scanToolName: element.scanToolName,
+    scanToolUrl: element.scanToolUrl,
     status: element.status,
 })
 
@@ -242,7 +238,8 @@ const getLicenseDetailData = (element: ImageScanLicenseListType) => ({
     defaultSortIndex: 1,
     entities: mapSeveritiesToSegmentedBarChartEntities(element.summary.severities),
     lastScanTimeString: element.StartedOn,
-    scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[element.scanToolName],
+    scanToolName: element.scanToolName,
+    scanToolUrl: element.scanToolUrl,
     status: element.status,
 })
 
@@ -311,14 +308,22 @@ export const getImageScanInfoCardData = (
     data: ImageScan,
     subCategory: SecurityModalStateType['subCategory'],
 ): InfoCardPropsType => {
+    const image = data[subCategory]?.list?.[0]
+    const scanInfo: Pick<InfoCardPropsType, 'scanToolName' | 'scanToolUrl'> = {
+        scanToolName: image?.scanToolName,
+        scanToolUrl: image?.scanToolUrl,
+    }
+
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
+                ...scanInfo,
             }
         case SUB_CATEGORIES.LICENSE:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
+                ...scanInfo,
             }
         default:
             return null
@@ -338,15 +343,17 @@ const getCompletedEmptyState = (
 
     const detailViewTitleText = `${detailViewData.titlePrefix}: ${detailViewData.title}`
 
+    const scanCompletedState = getScanCompletedEmptyState(detailViewData.scanToolName, detailViewData.scanToolUrl)
+
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
             return {
-                ...getScanCompletedEmptyState(detailViewData.scanToolId),
+                ...scanCompletedState,
                 subTitle: `No security vulnerability found in ${detailViewTitleText}`,
             }
         case SUB_CATEGORIES.LICENSE:
             return {
-                ...getScanCompletedEmptyState(detailViewData.scanToolId),
+                ...scanCompletedState,
                 subTitle: `No license risk found in ${detailViewTitleText}`,
             }
         default:
