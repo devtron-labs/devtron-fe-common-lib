@@ -3,7 +3,7 @@ import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror'
 
 import { Progressing } from '@Common/Progressing'
 
-import { useEffect, useRef } from 'react'
+import { FocusEventHandler, useEffect, useRef, useState } from 'react'
 import { CodeEditorRendererProps } from './types'
 import { getCodeEditorHeight } from './utils'
 
@@ -29,6 +29,9 @@ export const CodeEditorRenderer = ({
     extensions,
     autoFocus,
 }: CodeEditorRendererProps) => {
+    // STATES
+    const [isFocused, setIsFocused] = useState(false)
+
     // REFS
     const codeMirrorRef = useRef<ReactCodeMirrorRef>()
 
@@ -40,6 +43,29 @@ export const CodeEditorRenderer = ({
             }
         }, 100)
     }, [autoFocus])
+
+    // STOPPING OVERSCROLL BROWSER BACK/FORWARD BEHAVIOR WHEN CODE EDITOR IS FOCUSED
+    useEffect(() => {
+        const html = document.querySelector('html')
+        if (html) {
+            const { scrollWidth, clientWidth } = codeMirrorRef.current?.view?.scrollDOM ?? {}
+            if (isFocused && scrollWidth > clientWidth) {
+                html.classList.add('dc__overscroll-none')
+            } else {
+                html.classList.remove('dc__overscroll-none')
+            }
+        }
+    }, [state.lhsCode, state.code, isFocused])
+
+    const handleOnFocus: FocusEventHandler<HTMLDivElement> = (e) => {
+        setIsFocused(true)
+        onFocus?.(e)
+    }
+
+    const handleOnBlur: FocusEventHandler<HTMLDivElement> = (e) => {
+        setIsFocused(false)
+        onBlur?.(e)
+    }
 
     const { codeEditorClassName, codeEditorHeight, codeEditorParentClassName } = getCodeEditorHeight(height)
 
@@ -79,7 +105,9 @@ export const CodeEditorRenderer = ({
     ) : (
         <div ref={codeMirrorParentDivRef} className={`w-100 ${codeEditorParentClassName}`}>
             {shebang && (
-                <div className="code-editor__shebang flexbox text__white">
+                <div
+                    className={`flexbox text__white code-editor__shebang ${isDarkTheme ? 'code-editor__shebang__dark' : 'code-editor__shebang__light'}`}
+                >
                     <div className="code-editor__shebang__gutter dc__align-self-stretch" />
                     {shebang}
                 </div>
@@ -94,8 +122,8 @@ export const CodeEditorRenderer = ({
                 readOnly={readOnly}
                 height={codeEditorHeight}
                 minHeight="250px"
-                onFocus={onFocus}
-                onBlur={onBlur}
+                onFocus={handleOnFocus}
+                onBlur={handleOnBlur}
                 onChange={handleOnChange}
                 extensions={extensions}
             />

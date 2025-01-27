@@ -21,7 +21,7 @@ export const yamlParseLinter =
                     diagnostics.push({
                         from,
                         to: from + (linePos[0]?.col || 0),
-                        message,
+                        message: message.replace(/\n+/g, '\n'),
                         severity: 'error',
                         source: err.name,
                     })

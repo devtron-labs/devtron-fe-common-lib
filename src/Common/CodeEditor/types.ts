@@ -36,7 +36,7 @@ export interface CodeEditorHeaderProps {
     children?: ReactNode
 }
 
-type CodeEditorBaseProps = Pick<ReactCodeMirrorProps, 'onBlur' | 'onFocus' | 'autoFocus'> & {
+type CodeEditorBaseProps = Partial<Pick<ReactCodeMirrorProps, 'onBlur' | 'onFocus' | 'autoFocus'>> & {
     value?: ReactCodeMirrorProps['value']
     onChange?: (value: string) => void
     shebang?: string | JSX.Element
@@ -135,11 +135,21 @@ export interface FindReplaceToggleButtonProps {
 }
 
 // CODE-EDITOR RENDERER PROPS
-export type CodeEditorRendererProps = Pick<
-    CodeEditorProps,
-    'loading' | 'customLoader' | 'height' | 'readOnly' | 'shebang' | 'placeholder' | 'onBlur' | 'onFocus' | 'autoFocus'
+export type CodeEditorRendererProps = Required<
+    Pick<
+        CodeEditorProps,
+        | 'loading'
+        | 'customLoader'
+        | 'height'
+        | 'readOnly'
+        | 'shebang'
+        | 'placeholder'
+        | 'onBlur'
+        | 'onFocus'
+        | 'autoFocus'
+    >
 > &
-    Pick<CodeEditorDiffBaseProps, 'isOriginalModifiable'> & {
+    Required<Pick<CodeEditorDiffBaseProps, 'isOriginalModifiable'>> & {
         codemirrorMergeKey: Key
         codeMirrorParentDivRef: MutableRefObject<HTMLDivElement>
         codeEditorTheme: ReactCodeMirrorProps['theme']
