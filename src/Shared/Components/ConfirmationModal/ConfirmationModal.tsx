@@ -30,7 +30,9 @@ const ConfirmationModalBody = ({
 
     const RenderIcon = Icon ?? getIconFromVariant(variant)
 
-    const disablePrimaryButton: boolean = confirmationKeyword && confirmationText.trim() !== confirmationKeyword
+    const disablePrimaryButton: boolean =
+        ('disabled' in primaryButtonConfig && primaryButtonConfig.disabled) ||
+        (confirmationKeyword && confirmationText.trim() !== confirmationKeyword)
 
     const handleTriggerPrimaryActionButton = () => {
         if (primaryButtonConfig && !disablePrimaryButton) {
@@ -120,10 +122,7 @@ const ConfirmationModalBody = ({
                                     ? primaryButtonConfig.style
                                     : getPrimaryButtonStyleFromVariant(variant)
                             }
-                            disabled={
-                                ('disabled' in primaryButtonConfig && primaryButtonConfig.disabled) ||
-                                disablePrimaryButton
-                            }
+                            disabled={disablePrimaryButton}
                             isLoading={primaryButtonConfig.isLoading}
                             text={primaryButtonConfig.text}
                             onClick={primaryButtonConfig.onClick as ButtonHTMLAttributes<HTMLButtonElement>['onClick']}
