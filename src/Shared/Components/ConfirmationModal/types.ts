@@ -9,7 +9,7 @@ export enum ConfirmationModalVariantType {
 }
 
 type CommonButtonProps<isConfig extends boolean, isCustomVariant extends boolean> = Pick<ButtonProps, 'text'> &
-    Partial<Pick<ButtonProps, 'startIcon' | 'endIcon' | 'disabled'>> &
+    Partial<Pick<ButtonProps, 'startIcon' | 'endIcon' | 'disabled' | 'dataTestId'>> &
     (isConfig extends false ? { onClick: (...args: Partial<Parameters<ButtonProps['onClick']>>) => void } : {}) &
     (isCustomVariant extends true ? Pick<ButtonProps, 'style'> : {})
 

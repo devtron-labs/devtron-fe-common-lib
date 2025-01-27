@@ -30,7 +30,9 @@ const ConfirmationModalBody = ({
 
     const RenderIcon = Icon ?? getIconFromVariant(variant)
 
-    const disablePrimaryButton: boolean = confirmationKeyword && confirmationText.trim() !== confirmationKeyword
+    const disablePrimaryButton: boolean =
+        ('disabled' in primaryButtonConfig && primaryButtonConfig.disabled) ||
+        (confirmationKeyword && confirmationText.trim() !== confirmationKeyword)
 
     const handleTriggerPrimaryActionButton = () => {
         if (primaryButtonConfig && !disablePrimaryButton) {
@@ -94,7 +96,7 @@ const ConfirmationModalBody = ({
                 <div className="p-16 dc__gap-12 flexbox dc__content-end">
                     {secondaryButtonConfig && (
                         <Button
-                            dataTestId="confirmation-modal-secondary-button"
+                            dataTestId={secondaryButtonConfig.dataTestId ?? 'confirmation-modal-secondary-button'}
                             size={ComponentSizeType.large}
                             variant={ButtonVariantType.secondary}
                             style={
@@ -112,7 +114,7 @@ const ConfirmationModalBody = ({
 
                     {primaryButtonConfig && (
                         <Button
-                            dataTestId="confirmation-modal-primary-button"
+                            dataTestId={primaryButtonConfig.dataTestId ?? 'confirmation-modal-primary-button'}
                             size={ComponentSizeType.large}
                             variant={ButtonVariantType.primary}
                             style={
@@ -120,10 +122,7 @@ const ConfirmationModalBody = ({
                                     ? primaryButtonConfig.style
                                     : getPrimaryButtonStyleFromVariant(variant)
                             }
-                            disabled={
-                                ('disabled' in primaryButtonConfig && primaryButtonConfig.disabled) ||
-                                disablePrimaryButton
-                            }
+                            disabled={disablePrimaryButton}
                             isLoading={primaryButtonConfig.isLoading}
                             text={primaryButtonConfig.text}
                             onClick={primaryButtonConfig.onClick as ButtonHTMLAttributes<HTMLButtonElement>['onClick']}
