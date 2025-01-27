@@ -45,6 +45,7 @@ const useUrlFilters = <T = string, K = unknown>({
     initialSortKey,
     parseSearchParams,
     localStorageKey,
+    redirectionMethod = 'replace',
 }: UseUrlFiltersProps<T, K> = {}): UseUrlFiltersReturnType<T, K> => {
     const location = useLocation()
     const history = useHistory()
@@ -62,6 +63,7 @@ const useUrlFilters = <T = string, K = unknown>({
                         const localSearchString = getUrlWithSearchParams('', JSON.parse(localStorageValue))
                         const localSearchParams = new URLSearchParams(localSearchString.split('?')[1] ?? '')
 
+                        // This would remain replace since the initial value is being set from local storage
                         history.replace({ search: localSearchParams.toString() })
                         return localSearchParams
                     } catch {
@@ -118,6 +120,16 @@ const useUrlFilters = <T = string, K = unknown>({
      */
     const offset = pageSize * (pageNumber - 1)
 
+    const updateFiltersInUrl = (updatedSearchString: string) => {
+        const params = { search: updatedSearchString }
+
+        if (redirectionMethod === 'push') {
+            history.push(params)
+        } else {
+            history.replace(params)
+        }
+    }
+
     /**
      * Update and replace the search params in the URL.
      *
@@ -125,7 +137,7 @@ const useUrlFilters = <T = string, K = unknown>({
      */
     const _updateSearchParam = (key: string, value) => {
         searchParams.set(key, String(value))
-        history.replace({ search: searchParams.toString() })
+        updateFiltersInUrl(searchParams.toString())
     }
 
     const _resetPageNumber = () => {
@@ -134,7 +146,7 @@ const useUrlFilters = <T = string, K = unknown>({
             return
         }
 
-        history.replace({ search: searchParams.toString() })
+        updateFiltersInUrl(searchParams.toString())
     }
 
     const changePage = (page: number) => {
@@ -167,7 +179,7 @@ const useUrlFilters = <T = string, K = unknown>({
     }
 
     const clearFilters = () => {
-        history.replace({ search: '' })
+        updateFiltersInUrl('')
         if (localStorageKey) {
             localStorage.removeItem(localStorageKey)
         }

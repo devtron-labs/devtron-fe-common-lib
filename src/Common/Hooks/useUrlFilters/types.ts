@@ -25,7 +25,16 @@ export interface UseUrlFiltersProps<T, K> {
      * Callback function for parsing the search params
      */
     parseSearchParams?: (searchParams: URLSearchParams) => K
+    /**
+     * Local storage key to store the filters
+     */
     localStorageKey?: `${string}__${string}`
+    /**
+     * Method to be used for redirection in case of filter update
+     *
+     * @default 'replace'
+     */
+    redirectionMethod?: 'replace' | 'push'
 }
 
 export type UseUrlFiltersReturnType<T, K = unknown> = K & {
