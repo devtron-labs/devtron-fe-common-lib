@@ -30,7 +30,6 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     showConfirmationModal,
     disabled,
     onDelete,
-    dataTestId,
     component = '',
     url = '',
     reload,
@@ -115,7 +114,6 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
             }}
             showConfirmationModal={showConfirmationModal}
             handleClose={closeConfirmationModal}
-            dataTestId={dataTestId}
         />
     )
 

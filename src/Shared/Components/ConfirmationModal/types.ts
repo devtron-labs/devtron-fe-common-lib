@@ -98,7 +98,6 @@ export type DeleteComponentModalProps = {
     shouldStopPropagation?: boolean
     disabled?: boolean
     url?: string
-    dataTestId?: string
     children?: ReactNode
 }
 

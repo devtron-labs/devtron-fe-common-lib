@@ -17,7 +17,6 @@ const ConfirmationModalBody = ({
     customInputConfig,
     children,
     handleClose,
-    dataTestId,
     shouldCloseOnEscape = true,
 }: ConfirmationModalBodyProps) => {
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
@@ -95,7 +94,7 @@ const ConfirmationModalBody = ({
                 <div className="p-16 dc__gap-12 flexbox dc__content-end">
                     {secondaryButtonConfig && (
                         <Button
-                            dataTestId={dataTestId ? `${dataTestId}-cancel` : 'confirmation-modal-secondary-button'}
+                            dataTestId="confirmation-modal-secondary-button"
                             size={ComponentSizeType.large}
                             variant={ButtonVariantType.secondary}
                             style={
@@ -113,7 +112,7 @@ const ConfirmationModalBody = ({
 
                     {primaryButtonConfig && (
                         <Button
-                            dataTestId={dataTestId ? `${dataTestId}-delete` : 'confirmation-modal-primary-button'}
+                            dataTestId="confirmation-modal-primary-button"
                             size={ComponentSizeType.large}
                             variant={ButtonVariantType.primary}
                             style={
