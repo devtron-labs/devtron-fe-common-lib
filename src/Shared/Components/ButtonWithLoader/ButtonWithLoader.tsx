@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 /*
  * Copyright (c) 2024. Devtron Inc.
  *
@@ -15,6 +14,7 @@
  * limitations under the License.
  */
 
+/* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react'
 import { Progressing } from '../../../Common'
