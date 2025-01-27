@@ -14,7 +14,7 @@ const ConfirmationModalBody = ({
     Icon,
     variant,
     buttonConfig,
-    customInputConfig,
+    confirmationConfig,
     children,
     handleClose,
     shouldCloseOnEscape = true,
@@ -23,8 +23,8 @@ const ConfirmationModalBody = ({
 
     const [confirmationText, setConfirmationText] = useState<string>('')
 
-    const customInputIdentifier = customInputConfig?.identifier
-    const confirmationKeyword = customInputConfig?.confirmationKeyword
+    const customInputIdentifier = confirmationConfig?.identifier
+    const confirmationKeyword = confirmationConfig?.confirmationKeyword
 
     const { primaryButtonConfig, secondaryButtonConfig } = buttonConfig
 
@@ -76,7 +76,9 @@ const ConfirmationModalBody = ({
                         subtitle
                     )}
 
-                    {customInputConfig && (
+                    {children}
+
+                    {confirmationConfig && (
                         <CustomInput
                             name={customInputIdentifier}
                             value={confirmationText}
@@ -88,8 +90,6 @@ const ConfirmationModalBody = ({
                             autoFocus
                         />
                     )}
-
-                    {children}
                 </div>
                 <div className="p-16 dc__gap-12 flexbox dc__content-end">
                     {secondaryButtonConfig && (

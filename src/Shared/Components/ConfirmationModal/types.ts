@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, SyntheticEvent } from 'react'
+import { PropsWithChildren, ReactElement, ReactNode, SyntheticEvent } from 'react'
 import { ButtonProps } from '../Button'
 
 export enum ConfirmationModalVariantType {
@@ -13,7 +13,7 @@ type CommonButtonProps<isConfig extends boolean, isCustomVariant extends boolean
     (isConfig extends false ? { onClick: (...args: Partial<Parameters<ButtonProps['onClick']>>) => void } : {}) &
     (isCustomVariant extends true ? Pick<ButtonProps, 'style'> : {})
 
-interface CustomInputConfig {
+interface ConfirmationConfigType {
     identifier: string
     confirmationKeyword: string
 }
@@ -32,20 +32,6 @@ type ButtonConfig<isConfig extends boolean, isCustomVariant extends boolean> =
           secondaryButtonConfig?: CommonButtonProps<isConfig, isCustomVariant>
       }
 
-type CustomInputConfigOrChildrenType =
-    | {
-          customInputConfig: CustomInputConfig
-          children?: never
-      }
-    | {
-          customInputConfig?: never
-          children: ReactNode
-      }
-    | {
-          customInputConfig?: never
-          children?: never
-      }
-
 type ButtonConfigAndVariantType<isConfig extends boolean> =
     | {
           variant: Exclude<ConfirmationModalVariantType, ConfirmationModalVariantType.custom>
@@ -58,15 +44,16 @@ type ButtonConfigAndVariantType<isConfig extends boolean> =
           buttonConfig: ButtonConfig<isConfig, true>
       }
 
-export type ConfirmationModalProps<isConfig extends boolean = false> = {
+export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWithChildren<{
     title: string
     subtitle: ReactNode
     /**
      * @default true
      */
     shouldCloseOnEscape?: boolean
-} & ButtonConfigAndVariantType<isConfig> &
-    CustomInputConfigOrChildrenType &
+    confirmationConfig?: ConfirmationConfigType
+}> &
+    ButtonConfigAndVariantType<isConfig> &
     (isConfig extends false
         ? {
               handleClose: (e?: SyntheticEvent) => void

@@ -1,2 +1,2 @@
 export { default as ConfirmationModal } from './ConfirmationModal'
-export { ConfirmationModalVariantType } from './types'
+export { ConfirmationModalVariantType, type ConfirmationModalProps } from './types'
