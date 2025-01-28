@@ -19,7 +19,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { getUrlWithSearchParams } from '@Common/Helper'
 import { DEFAULT_BASE_PAGE_SIZE, EXCLUDED_FALSY_VALUES, SortingOrder } from '../../Constants'
 import { DEFAULT_PAGE_NUMBER, URL_FILTER_KEYS } from './constants'
-import { UseUrlFiltersProps, UseUrlFiltersReturnType } from './types'
+import { UpdateSearchParamsOptionsType, UseUrlFiltersProps, UseUrlFiltersReturnType } from './types'
 import { setItemInLocalStorageIfKeyExists } from './utils'
 
 const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_KEYS
@@ -120,10 +120,11 @@ const useUrlFilters = <T = string, K = unknown>({
      */
     const offset = pageSize * (pageNumber - 1)
 
-    const updateFiltersInUrl = (updatedSearchString: string) => {
+    const updateFiltersInUrl = (updatedSearchString: string, options: UpdateSearchParamsOptionsType<T, K>) => {
         const params = { search: updatedSearchString }
+        const methodForRedirection = options.redirectionMethod ?? redirectionMethod
 
-        if (redirectionMethod === 'push') {
+        if (methodForRedirection === 'push') {
             history.push(params)
         } else {
             history.replace(params)
@@ -135,18 +136,18 @@ const useUrlFilters = <T = string, K = unknown>({
      *
      * Note: Currently only primitive data types are supported
      */
-    const _updateSearchParam = (key: string, value) => {
+    const _updateSearchParam = (key: string, value: unknown, options: UpdateSearchParamsOptionsType<T, K> = {}) => {
         searchParams.set(key, String(value))
-        updateFiltersInUrl(searchParams.toString())
+        updateFiltersInUrl(searchParams.toString(), options)
     }
 
-    const _resetPageNumber = () => {
+    const _resetPageNumber = (options: UpdateSearchParamsOptionsType<T, K> = {}) => {
         if (pageNumber !== DEFAULT_PAGE_NUMBER) {
-            _updateSearchParam(PAGE_NUMBER, DEFAULT_PAGE_NUMBER)
+            _updateSearchParam(PAGE_NUMBER, DEFAULT_PAGE_NUMBER, options)
             return
         }
 
-        updateFiltersInUrl(searchParams.toString())
+        updateFiltersInUrl(searchParams.toString(), options)
     }
 
     const changePage = (page: number) => {
@@ -179,13 +180,13 @@ const useUrlFilters = <T = string, K = unknown>({
     }
 
     const clearFilters = () => {
-        updateFiltersInUrl('')
+        updateFiltersInUrl('', {})
         if (localStorageKey) {
             localStorage.removeItem(localStorageKey)
         }
     }
 
-    const updateSearchParams = (paramsToSerialize: Partial<K>) => {
+    const updateSearchParams = (paramsToSerialize: Partial<K>, options: UpdateSearchParamsOptionsType<T, K> = {}) => {
         Object.keys(paramsToSerialize).forEach((key) => {
             if (!EXCLUDED_FALSY_VALUES.includes(paramsToSerialize[key])) {
                 if (Array.isArray(paramsToSerialize[key])) {
@@ -203,7 +204,7 @@ const useUrlFilters = <T = string, K = unknown>({
         // Skipping primary params => pageSize, pageNumber, searchKey, sortBy, sortOrder
         setItemInLocalStorageIfKeyExists(localStorageKey, JSON.stringify(getParsedSearchParams(searchParams)))
         // Not replacing the params as it is being done by _resetPageNumber
-        _resetPageNumber()
+        _resetPageNumber(options)
     }
 
     return {
