@@ -138,6 +138,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
             <div className="flexbox-col p-20 dc__gap-16">
                 {!entities?.length ? null : (
                     <InfoCard
+                        key={`${state.category}-${state.subCategory}`}
                         entities={entities}
                         lastScanTimeString={lastScanTimeString}
                         scanToolName={scanToolName}

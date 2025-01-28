@@ -27,6 +27,7 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     labelClassName,
     isProportional,
     swapLegendAndBar = false,
+    showAnimationOnBar = false,
 }) => {
     const total = entities.reduce((sum, entity) => entity.value + sum, 0)
     const filteredEntities = entities.filter((entity) => !!entity.value)
@@ -78,9 +79,13 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
 
     const renderBar = () => (
         <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: '100%' }}
-            transition={{ duration: 1 }}
+            {...(showAnimationOnBar
+                ? {
+                      initial: { width: 0 },
+                      animate: { width: '100%' },
+                      transition: { duration: 0.6 },
+                  }
+                : {})}
             className="flexbox dc__gap-2"
         >
             {filteredEntities.map((entity, index, map) => (
