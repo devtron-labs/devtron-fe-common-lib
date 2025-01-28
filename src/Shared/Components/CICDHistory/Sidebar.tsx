@@ -34,7 +34,7 @@ import {
 import BuildAndTaskSummaryTooltipCard from './BuildAndTaskSummaryTooltipCard'
 import { getCustomOptionSelectionStyle } from '../ReactSelect'
 import { DetectBottom } from '../DetectBottom'
-import { ConditionalWrap, DATE_TIME_FORMATS, DropdownIndicator } from '../../../Common'
+import { ConditionalWrap, DATE_TIME_FORMATS, DropdownIndicator, Tooltip } from '../../../Common'
 import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
 import { getHistoryItemStatusIconFromWorkflowStages, getTriggerStatusIcon, getWorkflowNodeStatusTitle } from './utils'
 import GitTriggerList from './GitTriggerList'
@@ -50,22 +50,32 @@ const DeploymentSummaryTooltipCard = memo(
         triggeredByEmail,
         ciMaterials,
         gitTriggers,
-    }: DeploymentSummaryTooltipCardType): JSX.Element => (
-        <div className="shadow__overlay p-16 br-4 w-400 bg__overlay border__primary mxh-300 dc__overflow-auto">
-            <span className="fw-6 fs-16 mb-4" style={{ color: colorMap[status.toLowerCase()] }}>
-                {getWorkflowNodeStatusTitle(status)}
-            </span>
-            <div className="flex column left">
-                <div className="flex left fs-12 cn-7">
-                    <div>{moment(startedOn).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}</div>
-                    <div className="dc__bullet ml-6 mr-6" />
-                    <div>{triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}</div>
-                </div>
+    }: DeploymentSummaryTooltipCardType): JSX.Element => {
+        const triggeredByText = triggeredBy === 1 ? 'auto trigger' : triggeredByEmail
 
-                <GitTriggerList addMarginTop ciMaterials={ciMaterials} gitTriggers={gitTriggers} />
+        return (
+            <div className="shadow__overlay p-16 br-4 w-400 bg__overlay border__primary mxh-300 dc__overflow-auto">
+                <span className="fw-6 fs-16 mb-4" style={{ color: colorMap[status.toLowerCase()] }}>
+                    {getWorkflowNodeStatusTitle(status)}
+                </span>
+                <div className="flex column left">
+                    <div className="flex left fs-12 cn-7">
+                        <div className="dc__no-shrink">
+                            {moment(startedOn).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
+                        </div>
+
+                        <div className="dc__bullet ml-6 mr-6 dc__no-shrink" />
+
+                        <Tooltip content={triggeredByText}>
+                            <span className="dc__truncate">{triggeredByText}</span>
+                        </Tooltip>
+                    </div>
+
+                    <GitTriggerList addMarginTop ciMaterials={ciMaterials} gitTriggers={gitTriggers} />
+                </div>
             </div>
-        </div>
-    ),
+        )
+    },
 )
 
 const ViewAllCardsTile = memo(

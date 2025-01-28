@@ -141,15 +141,16 @@ export const TERMINAL_STATUS_COLOR_CLASS_MAP = {
     [TERMINAL_STATUS_MAP.FAILED]: 'cr-5',
     [TERMINAL_STATUS_MAP.CANCELLED]: 'cr-5',
     [TERMINAL_STATUS_MAP.ERROR]: 'cr-5',
-}
+} as const
 
 export const PROGRESSING_STATUS = {
+    [WorkflowStatusEnum.WAITING_TO_START.toLowerCase()]: 'running',
     [TERMINAL_STATUS_MAP.RUNNING]: 'running',
     [TERMINAL_STATUS_MAP.PROGRESSING]: 'progressing',
     [TERMINAL_STATUS_MAP.STARTING]: 'starting',
     [TERMINAL_STATUS_MAP.INITIATING]: 'initiating',
     [TERMINAL_STATUS_MAP.QUEUED]: 'queued',
-}
+} as const
 
 export const FAILED_WORKFLOW_STAGE_STATUS_MAP: Record<
     Extract<

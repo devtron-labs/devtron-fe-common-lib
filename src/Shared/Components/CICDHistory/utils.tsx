@@ -338,7 +338,7 @@ export const getWorkflowNodeStatusTitle = (status: string) => {
     }
 
     if (status.toLowerCase() === 'cancelled') {
-        return 'ABORTED'
+        return 'Aborted'
     }
 
     if (status === WorkflowStatusEnum.WAITING_TO_START) {

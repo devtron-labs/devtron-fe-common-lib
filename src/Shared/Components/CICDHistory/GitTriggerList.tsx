@@ -30,7 +30,7 @@ const GitTriggerList = memo(
                     }
 
                     return (
-                        <div className={`${addMarginTop ? 'mt-22' : ''}`} key={ciMaterial.id}>
+                        <div className={`${addMarginTop ? 'mt-16' : ''}`} key={ciMaterial.id}>
                             {sourceType === SourceTypeMap.WEBHOOK ? (
                                 <div className="flex left column">
                                     <CiPipelineSourceConfig
@@ -40,29 +40,20 @@ const GitTriggerList = memo(
                                     />
                                 </div>
                             ) : (
-                                <div className="flexbox-col dc__gap-8">
-                                    <div className="flexbox dc__gap-4 dc__align-start flex-wrap">
+                                <div className="flexbox-col dc__gap-4">
+                                    <div className="flexbox dc__gap-6 dc__align-start">
                                         {renderMaterialIcon(gitMaterialUrl)}
 
                                         {gitDetail?.GitRepoName && (
-                                            <>
-                                                <span className="cn-9 fs-13 fw-6 lh-20 dc__word-break">
-                                                    {gitDetail.GitRepoName}
-                                                </span>
-
-                                                <span className="cn-5 fs-13 fw-4 lh-20 dc__no-shrink">/</span>
-                                            </>
+                                            <span className="cn-9 fs-13 fw-6 lh-20 dc__word-break">
+                                                {gitDetail.GitRepoName}
+                                            </span>
                                         )}
+                                    </div>
 
-                                        <a
-                                            href={createGitCommitUrl(gitMaterialUrl, gitDetail?.Commit)}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="anchor flexbox dc__gap-2 dc__align-items-center dc__word-break"
-                                        >
-                                            <ICBranch className="icon-dim-12 dc__no-shrink fcn-7" />
-                                            {sourceValue}
-                                        </a>
+                                    <div className="flexbox dc__gap-6 dc__align-start">
+                                        <ICBranch className="icon-dim-20 p-2 dc__no-shrink fcn-7" />
+                                        <span className="cn-7 dc__word-break fs-13 fw-4 lh-16">{sourceValue}</span>
                                     </div>
 
                                     {gitDetail?.Commit && (
