@@ -77,6 +77,7 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
 
     // CONSTANTS
     const isPreviousNextButtonDisabled = !matchesCount.count
+    const isReadOnly = view.state.readOnly
 
     // METHODS
     const sendQuery = ({
@@ -111,6 +112,12 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
     useEffect(() => {
         setMatchesCount(getUpdatedSearchMatchesCount(defaultQuery, view))
     }, [view.state.doc.length])
+
+    useEffect(() => {
+        if (isReadOnly && showReplace) {
+            setShowReplace(false)
+        }
+    }, [isReadOnly])
 
     const onNext = (e?: MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
@@ -386,7 +393,7 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
 
     return (
         <div className="flexbox dc__align-items-center dc__gap-6">
-            {!view.state.readOnly && renderReplaceShowButton()}
+            {!isReadOnly && renderReplaceShowButton()}
             <div className="flexbox-col dc__gap-4">
                 <div className="flexbox dc__align-items-center dc__gap-8">
                     {renderFindField()}
@@ -425,7 +432,7 @@ export const codeEditorFindReplace = (view: EditorView): Panel => {
         findField?.select()
     }
 
-    const update = ({ transactions, docChanged }: ViewUpdate) => {
+    const update = ({ transactions, changes }: ViewUpdate) => {
         transactions.forEach((tr) => {
             tr.effects.forEach((effect) => {
                 if (effect.is(setSearchQuery)) {
@@ -434,7 +441,7 @@ export const codeEditorFindReplace = (view: EditorView): Panel => {
             })
         })
 
-        if (docChanged) {
+        if (changes) {
             renderFindReplace()
         }
     }
