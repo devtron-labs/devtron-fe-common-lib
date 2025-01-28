@@ -26,7 +26,7 @@ import { ForceDeleteConfirmationModal } from './ForceDeleteConfirmationModal'
 
 export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     title,
-    description,
+    subtitle,
     showConfirmationModal,
     disabled,
     onDelete,
@@ -78,7 +78,7 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     const renderCannotDeleteDialogModal = () => (
         <CannotDeleteModal
             title={title}
-            description={renderCannotDeleteConfirmationSubTitle}
+            subtitle={renderCannotDeleteConfirmationSubTitle}
             showCannotDeleteDialogModal={showCannotDeleteDialogModal}
             closeConfirmationModal={handleCloseCannotDeleteModal}
             component={component}
@@ -88,7 +88,7 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     const renderForceDeleteModal = () => (
         <ForceDeleteConfirmationModal
             title={title}
-            description={description}
+            subtitle={subtitle}
             onDelete={onDelete}
             closeConfirmationModal={handleCloseForceDeleteModal}
             showConfirmationModal={showForceDeleteModal}
@@ -99,7 +99,7 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
         <ConfirmationModal
             variant={ConfirmationModalVariantType.delete}
             title={`Delete ${component} '${title}'`}
-            subtitle={description ?? `Are you sure you want to delete this ${component}?`}
+            subtitle={subtitle ?? `Are you sure you want to delete this ${component}?`}
             buttonConfig={{
                 secondaryButtonConfig: {
                     text: 'Cancel',

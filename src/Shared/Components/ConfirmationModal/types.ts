@@ -62,8 +62,7 @@ type ButtonConfigAndVariantType<isConfig extends boolean> =
 
 export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWithChildren<{
     title: string
-    subtitle: ReactNode
-    dataTestId?: string
+    subtitle?: ReactNode
     /**
      * @default true
      */
@@ -80,17 +79,15 @@ export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWith
 
 export type ConfirmationModalBodyProps = Omit<ConfirmationModalProps, 'showConfirmationModal'>
 
-export type DeleteComponentModalProps = {
+export interface DeleteComponentModalProps
+    extends Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle' | 'showConfirmationModal' | 'children'>> {
     // Required Props
-    title: string
-    showConfirmationModal: boolean
     closeConfirmationModal: () => void
     onDelete: () => void
 
     // Optional Customization
     primaryButtonText?: string
     component?: string
-    description?: ReactNode
     successToastMessage?: string
     isLoading?: boolean
     renderCannotDeleteConfirmationSubTitle?: ReactNode
@@ -101,18 +98,14 @@ export type DeleteComponentModalProps = {
     shouldStopPropagation?: boolean
     disabled?: boolean
     url?: string
-    children?: ReactNode
 }
 
 export interface CannotDeleteModalProps
-    extends Partial<Pick<DeleteComponentModalProps, 'title' | 'description' | 'component' | 'closeConfirmationModal'>> {
+    extends Partial<Pick<DeleteComponentModalProps, 'component' | 'closeConfirmationModal'>>,
+        Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle'>> {
     showCannotDeleteDialogModal: boolean
 }
 
 export interface ForceDeleteConfirmationProps
-    extends Partial<
-        Pick<
-            DeleteComponentModalProps,
-            'title' | 'description' | 'onDelete' | 'showConfirmationModal' | 'closeConfirmationModal'
-        >
-    > {}
+    extends Partial<Pick<DeleteComponentModalProps, 'onDelete' | 'showConfirmationModal' | 'closeConfirmationModal'>>,
+        Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle'>> {}

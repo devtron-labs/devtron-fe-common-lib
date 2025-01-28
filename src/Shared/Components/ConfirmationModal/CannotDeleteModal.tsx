@@ -4,14 +4,14 @@ import { ConfirmationModalVariantType, CannotDeleteModalProps } from './types'
 export const CannotDeleteModal = ({
     title,
     component,
-    description,
+    subtitle,
     closeConfirmationModal,
     showCannotDeleteDialogModal,
 }: CannotDeleteModalProps) => (
     <ConfirmationModal
         variant={ConfirmationModalVariantType.info}
         title={`Cannot delete ${component} '${title}'`}
-        subtitle={description}
+        subtitle={subtitle}
         buttonConfig={{
             primaryButtonConfig: {
                 text: 'Okay',
