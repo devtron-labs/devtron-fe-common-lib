@@ -99,6 +99,7 @@ const SortableTableHeaderCell = ({
                 onClick={isSortable ? triggerSorting : noop}
                 disabled={disabled}
                 tabIndex={disabled || !isSortable ? -1 : 0}
+                data-testid={title}
             >
                 <Tooltip showOnTruncate={showTippyOnTruncate} content={title}>
                     <span className="dc__uppercase dc__truncate">{title}</span>
