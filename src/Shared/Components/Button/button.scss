@@ -24,13 +24,23 @@
     }
 }
 
-@mixin button-variant-styles($background, $text-color, $border-color) {
+@mixin button-variant-styles($background, $text-color, $border-color, $auto-click-bg-color: null) {
     background: $background;
+    background-position: right;
     color: $text-color;
     border: 1px solid $border-color;
 
     &.button__link {
         color: $text-color;
+    }
+
+    @if $auto-click-bg-color {
+        &.button--auto-click {
+            background: linear-gradient(to left, $background 50%, $auto-click-bg-color 50%) left;
+            background-size: 200% 100%;
+            // Make sure to change the transition in Button.component.tsx as well if changed
+            transition: background-position 2.5s linear;
+        }
     }
 
     @include svg-styles($text-color);
@@ -90,33 +100,45 @@
         $text-color: var(--N0);
 
         &--default {
-            @include button-variant-styles(var(--B500), $text-color, $border-color);
-            @include pseudo-states(var(--B600), var(--B700));
+            $active-bg-color: var(--B700);
+
+            @include button-variant-styles(var(--B500), $text-color, $border-color, $active-bg-color);
+            @include pseudo-states(var(--B600), $active-bg-color);
         }
 
         &--negative {
-            @include button-variant-styles(var(--R500), $text-color, $border-color);
-            @include pseudo-states(var(--R600), var(--R700));
+            $active-bg-color: var(--R700);
+
+            @include button-variant-styles(var(--R500), $text-color, $border-color, $active-bg-color);
+            @include pseudo-states(var(--R600), $active-bg-color);
         }
 
         &--negative-grey {
-            @include button-variant-styles(var(--N600), $text-color, $border-color);
-            @include pseudo-states(var(--R600), var(--R700), null, $text-color);
+            $active-bg-color: var(--R700);
+
+            @include button-variant-styles(var(--N600), $text-color, $border-color, $active-bg-color);
+            @include pseudo-states(var(--R600), $active-bg-color, null, $text-color);
         }
 
         &--positive {
-            @include button-variant-styles(var(--G500), $text-color, $border-color);
-            @include pseudo-states(var(--G600), var(--G700));
+            $active-bg-color: var(--G700);
+
+            @include button-variant-styles(var(--G500), $text-color, $border-color, $active-bg-color);
+            @include pseudo-states(var(--G600), $active-bg-color);
         }
 
         &--warning {
-            @include button-variant-styles(var(--Y500), var(--black), $border-color);
-            @include pseudo-states(var(--Y600), var(--Y700));
+            $active-bg-color: var(--Y700);
+
+            @include button-variant-styles(var(--Y500), var(--black), $border-color, $active-bg-color);
+            @include pseudo-states(var(--Y600), $active-bg-color);
         }
 
         &--neutral {
-            @include button-variant-styles(var(--N600), $text-color, $border-color);
-            @include pseudo-states(var(--N700), var(--N800));
+            $active-bg-color: var(--N800);
+
+            @include button-variant-styles(var(--N600), $text-color, $border-color, $active-bg-color);
+            @include pseudo-states(var(--N700), $active-bg-color);
         }
     }
 
@@ -125,32 +147,44 @@
         $border-color: var(--N200);
 
         &--default {
-            @include button-variant-styles($background, var(--B500), $border-color);
+            $active-bg-color: var(--B200);
+
+            @include button-variant-styles($background, var(--B500), $border-color, $active-bg-color);
             @include pseudo-states(var(--B100), var(--B200), var(--B300));
         }
 
         &--negative {
-            @include button-variant-styles($background, var(--R600), $border-color);
+            $active-bg-color: var(--R200);
+
+            @include button-variant-styles($background, var(--R600), $border-color, $active-bg-color);
             @include pseudo-states(var(--R100), var(--R200), var(--R300), var(--R600));
         }
 
         &--negative-grey {
-            @include button-variant-styles($background, var(--N700), $border-color);
+            $active-bg-color: var(--R200);
+
+            @include button-variant-styles($background, var(--N700), $border-color, $active-bg-color);
             @include pseudo-states(var(--R100), var(--R200), var(--R300), var(--R600));
         }
 
         &--positive {
-            @include button-variant-styles($background, var(--G600), $border-color);
+            $active-bg-color: var(--G200);
+
+            @include button-variant-styles($background, var(--G600), $border-color, $active-bg-color);
             @include pseudo-states(var(--G100), var(--G200), var(--G300));
         }
 
         &--warning {
-            @include button-variant-styles($background, var(--Y700), $border-color);
+            $active-bg-color: var(--Y200);
+
+            @include button-variant-styles($background, var(--Y700), $border-color, $active-bg-color);
             @include pseudo-states(var(--Y100), var(--Y200), var(--Y300));
         }
 
         &--neutral {
-            @include button-variant-styles($background, var(--N700), $border-color);
+            $active-bg-color: var(--N200);
+
+            @include button-variant-styles($background, var(--N700), $border-color, $active-bg-color);
             @include pseudo-states(var(--N100), var(--N200), var(--N300));
         }
     }

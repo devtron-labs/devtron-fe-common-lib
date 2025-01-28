@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ButtonHTMLAttributes, PropsWithChildren } from 'react'
+import { ButtonHTMLAttributes, MutableRefObject, PropsWithChildren, useEffect, useRef, useState } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 import { Progressing } from '@Common/Progressing'
 import { Tooltip } from '@Common/Tooltip'
@@ -29,6 +29,7 @@ const ButtonElement = ({
     linkProps,
     buttonProps,
     onClick,
+    elementRef,
     ...props
 }: PropsWithChildren<
     Omit<
@@ -49,6 +50,7 @@ const ButtonElement = ({
         className: string
         'data-testid': ButtonProps['dataTestId']
         'aria-label': ButtonProps['ariaLabel']
+        elementRef: MutableRefObject<HTMLButtonElement | HTMLAnchorElement>
     }
 >) => {
     if (component === ButtonComponentType.link) {
@@ -59,6 +61,7 @@ const ButtonElement = ({
                 // Added the specific class to ensure that the link override is applied
                 className={`${props.className} button__link ${props.disabled ? 'dc__disable-click' : ''}`}
                 onClick={onClick as LinkProps['onClick']}
+                ref={elementRef as MutableRefObject<HTMLAnchorElement>}
             />
         )
     }
@@ -70,6 +73,7 @@ const ButtonElement = ({
             // eslint-disable-next-line react/button-has-type
             type={buttonProps?.type || 'button'}
             onClick={onClick as ButtonHTMLAttributes<HTMLButtonElement>['onClick']}
+            ref={elementRef as MutableRefObject<HTMLButtonElement>}
         />
     )
 }
@@ -155,13 +159,45 @@ const Button = ({
     showAriaLabelInTippy = true,
     fullWidth = false,
     isOpacityHoverChild = false,
+    triggerAutoClickTimestamp,
     ...props
 }: ButtonProps) => {
+    const [isAutoClickActive, setIsAutoClickActive] = useState(false)
+    const autoClickTimeoutRef = useRef<number>()
+    const elementRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null)
+
     const isDisabled = disabled || isLoading
     const iconClass = `dc__no-shrink flex dc__fill-available-space ${getButtonIconClassName({
         size,
         icon,
     })}`
+
+    useEffect(() => {
+        if (triggerAutoClickTimestamp) {
+            // Adding after timeout to ensure the transition is triggered after the button is rendered
+            setTimeout(() => {
+                setIsAutoClickActive(true)
+
+                autoClickTimeoutRef.current = setTimeout(() => {
+                    elementRef.current.click()
+                    // This is 100ms less than the duration of the transition in CSS
+                    // Make sure to update the same in CSS if this is changed
+                }, 2400)
+            }, 100)
+        }
+
+        return () => {
+            setIsAutoClickActive(false)
+            clearTimeout(autoClickTimeoutRef.current)
+        }
+    }, [triggerAutoClickTimestamp])
+
+    const handleClick: ButtonProps['onClick'] = (e) => {
+        setIsAutoClickActive(false)
+        clearTimeout(autoClickTimeoutRef.current)
+
+        props.onClick?.(e)
+    }
 
     const getTooltipProps = (): TooltipProps => {
         // Show the aria label as tippy only if the action based tippy is not to be shown
@@ -189,9 +225,11 @@ const Button = ({
                 <ButtonElement
                     {...props}
                     disabled={isDisabled}
-                    className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${isOpacityHoverChild ? 'dc__opacity-hover--child' : ''} ${getButtonDerivedClass({ size, variant, style, isLoading, icon })} ${isDisabled ? 'dc__disabled' : ''} ${fullWidth ? 'w-100' : ''}`}
+                    className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${isOpacityHoverChild ? 'dc__opacity-hover--child' : ''} ${getButtonDerivedClass({ size, variant, style, isLoading, icon, isAutoTriggerActive: isAutoClickActive })} ${isDisabled ? 'dc__disabled' : ''} ${fullWidth ? 'w-100' : ''}`}
                     data-testid={dataTestId}
                     aria-label={ariaLabel}
+                    elementRef={elementRef}
+                    onClick={handleClick}
                 >
                     {icon ? (
                         <span className={iconClass}>{icon}</span>

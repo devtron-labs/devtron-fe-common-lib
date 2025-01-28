@@ -113,6 +113,10 @@ export type ButtonProps = (
      * @default false
      */
     isOpacityHoverChild?: boolean
+    /**
+     * If provided, the button is clicked automatically after the pre-defined time
+     */
+    triggerAutoClickTimestamp?: number | null
 } & (
         | {
               /**
