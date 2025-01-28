@@ -273,7 +273,7 @@ export const sanitizeWorkflowExecutionStages = (
 
     return {
         triggeredOn: isTimeStringAvailable(computedTriggeredOn) ? computedTriggeredOn : '',
-        executionStartedOn: isOldData ? null : executionStage?.startTime,
+        executionStartedOn: isOldData ? '' : executionStage?.startTime,
         finishedOn: isTimeStringAvailable(finishedOn) ? finishedOn : '',
         currentStatus: lastStatus,
         workerDetails: getWorkerInfoFromExecutionStages(workflowExecutionStages),
@@ -349,5 +349,7 @@ export const getWorkflowNodeStatusTitle = (status: string) => {
     return status
 }
 
-export const getFormattedTriggerTime = (time: string) =>
-    moment(time, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)
+export const getFormattedTriggerTime = (time: string): string =>
+    isTimeStringAvailable(time)
+        ? moment(time, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)
+        : ''

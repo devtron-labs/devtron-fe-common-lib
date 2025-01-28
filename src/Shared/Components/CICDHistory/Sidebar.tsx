@@ -39,6 +39,9 @@ import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constant
 import { getHistoryItemStatusIconFromWorkflowStages, getTriggerStatusIcon, getWorkflowNodeStatusTitle } from './utils'
 import GitTriggerList from './GitTriggerList'
 
+/**
+ * @description To be shown on deployment history or when we don't have workflowExecutionStages
+ */
 const DeploymentSummaryTooltipCard = memo(
     ({
         status,
@@ -142,6 +145,9 @@ const HistorySummaryCard = memo(
             }
         }
 
+        const areWorkerStatusSeparated =
+            stage !== DeploymentStageType.DEPLOY && Object.keys(workflowExecutionStages || {}).length > 0
+
         return (
             <ConditionalWrap
                 condition={Array.isArray(ciMaterials)}
@@ -151,16 +157,8 @@ const HistorySummaryCard = memo(
                         placement="right"
                         interactive
                         render={() =>
-                            stage === DeploymentStageType.DEPLOY ? (
-                                <DeploymentSummaryTooltipCard
-                                    status={status}
-                                    startedOn={startedOn}
-                                    triggeredBy={triggeredBy}
-                                    triggeredByEmail={triggeredByEmail}
-                                    ciMaterials={ciMaterials}
-                                    gitTriggers={gitTriggers}
-                                />
-                            ) : (
+                            // Adding check for workflowExecutionStages to cater backward compatibility
+                            areWorkerStatusSeparated ? (
                                 <BuildAndTaskSummaryTooltipCard
                                     workflowExecutionStages={workflowExecutionStages}
                                     triggeredByEmail={triggeredByEmail}
@@ -169,6 +167,15 @@ const HistorySummaryCard = memo(
                                     stage={stage}
                                     gitTriggers={gitTriggers}
                                     ciMaterials={ciMaterials}
+                                />
+                            ) : (
+                                <DeploymentSummaryTooltipCard
+                                    status={status}
+                                    startedOn={startedOn}
+                                    triggeredBy={triggeredBy}
+                                    triggeredByEmail={triggeredByEmail}
+                                    ciMaterials={ciMaterials}
+                                    gitTriggers={gitTriggers}
                                 />
                             )
                         }
@@ -185,7 +192,7 @@ const HistorySummaryCard = memo(
                     ref={assignTargetCardRef}
                 >
                     <div className="w-100 deployment-history-card">
-                        {stage !== DeploymentStageType.DEPLOY && !!workflowExecutionStages
+                        {areWorkerStatusSeparated
                             ? getHistoryItemStatusIconFromWorkflowStages(workflowExecutionStages)
                             : getTriggerStatusIcon(status)}
                         <div className="flexbox-col dc__gap-8">

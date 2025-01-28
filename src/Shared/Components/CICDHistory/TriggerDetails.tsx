@@ -76,7 +76,7 @@ const Finished = memo(({ status, finishedOn, artifact, type, executionInfo }: Fi
     )
 })
 
-const ProgressingStatus = memo(({ stage, type }: ProgressingStatusType): JSX.Element => {
+const ProgressingStatus = memo(({ stage, type, label = 'In progress' }: ProgressingStatusType): JSX.Element => {
     const [aborting, setAborting] = useState(false)
     const [abortConfirmation, setAbortConfirmation] = useState(false)
     const [abortError, setAbortError] = useState<{
@@ -140,7 +140,7 @@ const ProgressingStatus = memo(({ stage, type }: ProgressingStatusType): JSX.Ele
         <>
             <div className="flex dc__gap-8 left pt-12">
                 <div className="dc__min-width-fit-content">
-                    <div className="fs-14 fw-6 flex left inprogress-status-color">In progress</div>
+                    <div className="fs-14 fw-6 flex left inprogress-status-color">{label}</div>
                 </div>
 
                 {abort && (
@@ -217,7 +217,17 @@ const CurrentStatus = memo(
             }
 
             if (executionInfo.currentStatus === WorkflowStageStatusType.RUNNING) {
-                return <ProgressingStatus stage={stage} type={type} />
+                return (
+                    <ProgressingStatus
+                        stage={stage}
+                        type={type}
+                        {...(!executionInfo.executionStartedOn
+                            ? {
+                                  label: 'Waiting To Start',
+                              }
+                            : {})}
+                    />
+                )
             }
 
             if (executionInfo.currentStatus === WorkflowStageStatusType.UNKNOWN) {
@@ -446,7 +456,7 @@ const TriggerDetails = memo(
 
                             <div className="flexbox-col flex-grow-1">
                                 <StartDetails
-                                    startedOn={executionInfo?.triggeredOn ?? startedOn}
+                                    startedOn={executionInfo?.triggeredOn || startedOn}
                                     triggeredBy={triggeredBy}
                                     triggeredByEmail={triggeredByEmail}
                                     ciMaterials={ciMaterials}
@@ -463,7 +473,7 @@ const TriggerDetails = memo(
                             </div>
                         </div>
 
-                        {executionInfo?.executionStartedOn && (
+                        {!!executionInfo?.executionStartedOn && (
                             <div className="display-grid trigger-details__grid">
                                 <div className="flexbox dc__content-center">
                                     <div className="flexbox-col">
@@ -472,12 +482,18 @@ const TriggerDetails = memo(
                                         </div>
 
                                         {renderDetailsSuccessIconBlock()}
+
+                                        <div className="flex flex-grow-1">
+                                            <div className="dc__border-left--n7 h-100" />
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div className="w-100 pr-20 flexbox dc__gap-8 py-12">
                                     <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Execution started</h3>
-                                    <time className="cn-7 fs-13">{getFormattedTriggerTime(startedOn)}</time>
+                                    <time className="cn-7 fs-13">
+                                        {getFormattedTriggerTime(executionInfo.executionStartedOn)}
+                                    </time>
                                 </div>
                             </div>
                         )}
@@ -510,10 +526,10 @@ const TriggerDetails = memo(
 
                 <div className="display-grid trigger-details__grid py-4">
                     <WorkerStatus
-                        message={executionInfo?.workerDetails.message ?? message}
-                        podStatus={executionInfo?.workerDetails.status ?? podStatus}
+                        message={executionInfo?.workerDetails.message || message}
+                        podStatus={executionInfo?.workerDetails.status || podStatus}
                         stage={stage}
-                        finishedOn={executionInfo?.workerDetails.endTime ?? finishedOn}
+                        finishedOn={executionInfo?.workerDetails.endTime || finishedOn}
                         clusterId={executionInfo?.workerDetails.clusterId || DEFAULT_CLUSTER_ID}
                         workerPodName={workerPodName}
                         namespace={namespace}

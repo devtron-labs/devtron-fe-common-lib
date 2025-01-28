@@ -330,6 +330,10 @@ export interface TriggerDetailsType
 export type ProgressingStatusType = {
     stage: DeploymentStageType
     type: HistoryComponentType
+    /**
+     * @default 'In progress''
+     */
+    label?: string
 }
 
 export interface CurrentStatusIconProps {
