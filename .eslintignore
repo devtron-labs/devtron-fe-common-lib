@@ -1,4 +1,5 @@
 .eslintrc.cjs
+scripts/*.cjs
 
 # Files with ESLint errors/warnings
 src/Common/AddCDButton/AddCDButton.tsx

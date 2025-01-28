@@ -32,7 +32,8 @@
         "build-lib": "vite build",
         "preview": "vite preview",
         "lint-staged": "lint-staged",
-        "postinstall": "patch-package"
+        "postinstall": "patch-package",
+        "generate-icon": "node ./scripts/generate-icon.cjs"
     },
     "devDependencies": {
         "@esbuild-plugins/node-globals-polyfill": "0.2.3",
