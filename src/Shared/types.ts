@@ -940,6 +940,7 @@ export enum WorkflowStatusEnum {
     RUNNING = 'Running',
     PROGRESSING = 'Progressing',
     WAITING_TO_START = 'WaitingToStart',
+    TIMED_OUT = 'TimedOut',
     CANCELLED = 'CANCELLED',
 }
 

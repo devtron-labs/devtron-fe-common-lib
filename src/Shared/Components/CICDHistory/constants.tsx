@@ -55,7 +55,8 @@ export const TERMINAL_STATUS_MAP = {
     ERROR: 'error',
     CANCELLED: 'cancelled',
     UNABLE_TO_FETCH: 'unabletofetch',
-    TIMED_OUT: 'timedout',
+    TIMED_OUT: WorkflowStatusEnum.TIMED_OUT.toLowerCase(),
+    WAITING_TO_START: WorkflowStatusEnum.WAITING_TO_START.toLowerCase(),
 }
 
 export const EVENT_STREAM_EVENTS_MAP = {
@@ -99,6 +100,7 @@ export const statusColor = {
     initiating: 'var(--O500)',
     starting: 'var(--O500)',
     [WorkflowStatusEnum.WAITING_TO_START.toLowerCase()]: 'var(--O500)',
+    [WorkflowStatusEnum.TIMED_OUT.toLowerCase()]: 'var(--R500)',
     succeeded: 'var(--G500)',
     running: 'var(--O500)',
     failed: 'var(--R500)',
@@ -141,10 +143,12 @@ export const TERMINAL_STATUS_COLOR_CLASS_MAP = {
     [TERMINAL_STATUS_MAP.FAILED]: 'cr-5',
     [TERMINAL_STATUS_MAP.CANCELLED]: 'cr-5',
     [TERMINAL_STATUS_MAP.ERROR]: 'cr-5',
+    [TERMINAL_STATUS_MAP.TIMED_OUT]: 'cr-5',
+    [TERMINAL_STATUS_MAP.WAITING_TO_START]: 'co-5',
 } as const
 
 export const PROGRESSING_STATUS = {
-    [WorkflowStatusEnum.WAITING_TO_START.toLowerCase()]: 'running',
+    [TERMINAL_STATUS_MAP.WAITING_TO_START]: 'running',
     [TERMINAL_STATUS_MAP.RUNNING]: 'running',
     [TERMINAL_STATUS_MAP.PROGRESSING]: 'progressing',
     [TERMINAL_STATUS_MAP.STARTING]: 'starting',

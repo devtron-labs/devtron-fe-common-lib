@@ -162,7 +162,7 @@ const renderAbortedTriggerIcon = (): JSX.Element => <ICAborted className="icon-d
 const renderFailedTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
     <ICErrorCross className={`${baseClass} dc__no-shrink ic-error-cross-red`} />
 )
-const renderProgressingTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
+export const renderProgressingTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
     <ICInProgress className={`${baseClass} dc__no-shrink ic-in-progress-orange`} />
 )
 const renderSuccessTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
@@ -193,13 +193,14 @@ export const getTriggerStatusIcon = (triggerDetailStatus: string): JSX.Element =
 
         case TERMINAL_STATUS_MAP.FAILED:
         case TERMINAL_STATUS_MAP.ERROR:
+        case TERMINAL_STATUS_MAP.TIMED_OUT:
             return renderFailedTriggerIcon()
 
         case TERMINAL_STATUS_MAP.RUNNING:
         case TERMINAL_STATUS_MAP.PROGRESSING:
         case TERMINAL_STATUS_MAP.STARTING:
         case TERMINAL_STATUS_MAP.INITIATING:
-        case WorkflowStatusEnum.WAITING_TO_START.toLowerCase():
+        case TERMINAL_STATUS_MAP.WAITING_TO_START:
             return renderProgressingTriggerIcon()
 
         case TERMINAL_STATUS_MAP.SUCCEEDED:

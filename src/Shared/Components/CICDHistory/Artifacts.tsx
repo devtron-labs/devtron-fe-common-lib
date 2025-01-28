@@ -153,6 +153,8 @@ const Artifacts = ({
         buildId: string
     }>()
 
+    const lowerCaseStatus = status.toLowerCase()
+
     async function handleArtifact() {
         await handleDownload({
             downloadUrl: downloadArtifactUrl,
@@ -160,7 +162,11 @@ const Artifacts = ({
         })
     }
 
-    if (status.toLowerCase() === TERMINAL_STATUS_MAP.RUNNING || status.toLowerCase() === TERMINAL_STATUS_MAP.STARTING) {
+    if (
+        lowerCaseStatus === TERMINAL_STATUS_MAP.RUNNING ||
+        lowerCaseStatus === TERMINAL_STATUS_MAP.STARTING ||
+        lowerCaseStatus === TERMINAL_STATUS_MAP.WAITING_TO_START
+    ) {
         return <CIProgressView />
     }
     // If artifactId is not 0 image info is shown, if isArtifactUploaded is true reports are shown
@@ -170,9 +176,10 @@ const Artifacts = ({
     // NOTE: This means there are no reports and no image artifacts i.e. empty state
     if (!isArtifactUploaded && !artifactId) {
         if (
-            status.toLowerCase() === TERMINAL_STATUS_MAP.FAILED ||
-            status.toLowerCase() === TERMINAL_STATUS_MAP.CANCELLED ||
-            status.toLowerCase() === TERMINAL_STATUS_MAP.ERROR
+            lowerCaseStatus === TERMINAL_STATUS_MAP.FAILED ||
+            lowerCaseStatus === TERMINAL_STATUS_MAP.CANCELLED ||
+            lowerCaseStatus === TERMINAL_STATUS_MAP.ERROR ||
+            lowerCaseStatus === TERMINAL_STATUS_MAP.TIMED_OUT
         ) {
             return (
                 <GenericEmptyState
@@ -190,7 +197,7 @@ const Artifacts = ({
             )
         }
 
-        if (status.toLowerCase() === TERMINAL_STATUS_MAP.SUCCEEDED) {
+        if (lowerCaseStatus === TERMINAL_STATUS_MAP.SUCCEEDED) {
             return (
                 <GenericEmptyState
                     title={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.NoArtifactsFound}
