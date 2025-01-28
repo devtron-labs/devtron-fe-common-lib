@@ -150,42 +150,42 @@
             $active-bg-color: var(--B200);
 
             @include button-variant-styles($background, var(--B500), $border-color, $active-bg-color);
-            @include pseudo-states(var(--B100), var(--B200), var(--B300));
+            @include pseudo-states(var(--B100), $active-bg-color, var(--B300));
         }
 
         &--negative {
             $active-bg-color: var(--R200);
 
             @include button-variant-styles($background, var(--R600), $border-color, $active-bg-color);
-            @include pseudo-states(var(--R100), var(--R200), var(--R300), var(--R600));
+            @include pseudo-states(var(--R100), $active-bg-color, var(--R300), var(--R600));
         }
 
         &--negative-grey {
             $active-bg-color: var(--R200);
 
             @include button-variant-styles($background, var(--N700), $border-color, $active-bg-color);
-            @include pseudo-states(var(--R100), var(--R200), var(--R300), var(--R600));
+            @include pseudo-states(var(--R100), $active-bg-color, var(--R300), var(--R600));
         }
 
         &--positive {
             $active-bg-color: var(--G200);
 
             @include button-variant-styles($background, var(--G600), $border-color, $active-bg-color);
-            @include pseudo-states(var(--G100), var(--G200), var(--G300));
+            @include pseudo-states(var(--G100), $active-bg-color, var(--G300));
         }
 
         &--warning {
             $active-bg-color: var(--Y200);
 
             @include button-variant-styles($background, var(--Y700), $border-color, $active-bg-color);
-            @include pseudo-states(var(--Y100), var(--Y200), var(--Y300));
+            @include pseudo-states(var(--Y100), $active-bg-color, var(--Y300));
         }
 
         &--neutral {
             $active-bg-color: var(--N200);
 
             @include button-variant-styles($background, var(--N700), $border-color, $active-bg-color);
-            @include pseudo-states(var(--N100), var(--N200), var(--N300));
+            @include pseudo-states(var(--N100), $active-bg-color, var(--N300));
         }
     }
 
