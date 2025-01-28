@@ -32,13 +32,6 @@ export const STAGE_TYPE = {
     ROLLBACK: 'ROLLBACK',
 }
 
-export const SCAN_TOOL_ID_TRIVY = 3
-
-/**
- * @description This is only used to show mapping for clair, scan tool id for clair can be either 1 or 2
- *   */
-export const SCAN_TOOL_ID_CLAIR = 2
-
 export const IMAGE_SCAN_TOOL = {
     Clair: 'Clair',
     Trivy: 'Trivy',
@@ -466,6 +459,30 @@ export enum ComponentSizeType {
     large = 'large',
     xl = 'xl',
 }
+
+export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xs]: 'py-1 fs-12 lh-20',
+    [ComponentSizeType.small]: 'py-3 fs-12 lh-20',
+    [ComponentSizeType.medium]: 'py-5 fs-13 lh-20',
+    [ComponentSizeType.large]: 'py-7 fs-13 lh-20',
+    [ComponentSizeType.xl]: 'py-9 fs-14 lh-20',
+} as const
+
+export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xs]: 'px-5',
+    [ComponentSizeType.small]: 'px-5',
+    [ComponentSizeType.medium]: 'px-7',
+    [ComponentSizeType.large]: 'px-7',
+    [ComponentSizeType.xl]: 'px-9',
+} as const
+
+export const COMPONENT_SIZE_TYPE_TO_ICON_SIZE_MAP: Record<ComponentSizeType, number> = {
+    [ComponentSizeType.xs]: 14,
+    [ComponentSizeType.small]: 16,
+    [ComponentSizeType.medium]: 16,
+    [ComponentSizeType.large]: 16,
+    [ComponentSizeType.xl]: 20,
+} as const
 
 export const POP_UP_MENU_MODAL_ID = 'popup'
 

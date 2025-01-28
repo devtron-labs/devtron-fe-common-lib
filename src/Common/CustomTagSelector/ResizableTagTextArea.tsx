@@ -106,6 +106,7 @@ export const ResizableTagTextArea = ({
         onFocus?.(event)
     }
 
+    // Textarea component can't be used here
     return (
         <textarea
             {...restProps}

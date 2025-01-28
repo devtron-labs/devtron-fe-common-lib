@@ -1,5 +1,17 @@
 /*
  * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 import { getScanCompletedEmptyState, mapSeveritiesToSegmentedBarChartEntities } from '../utils'
@@ -15,7 +27,7 @@ import {
     SecurityModalStateType,
     TablePropsType,
 } from '../types'
-import { MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID, SCAN_FAILED_EMPTY_STATE, SCAN_IN_PROGRESS_EMPTY_STATE } from '../constants'
+import { SCAN_FAILED_EMPTY_STATE, SCAN_IN_PROGRESS_EMPTY_STATE } from '../constants'
 import { getCodeScanExposedSecrets, getCodeScanMisconfigurations } from './CodeScan'
 
 export const getKubernetesManifestTableData = (
@@ -31,6 +43,7 @@ export const getKubernetesManifestTableData = (
                 data.StartedOn,
                 data.status,
                 data.scanToolName,
+                data.scanToolUrl,
             )
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return getCodeScanExposedSecrets(
@@ -39,6 +52,7 @@ export const getKubernetesManifestTableData = (
                 data.StartedOn,
                 data.status,
                 data.scanToolName,
+                data.scanToolUrl,
             )
         default:
             return null
@@ -49,18 +63,22 @@ export const getKubernetesManifestInfoCardData = (
     data: KubernetesManifest,
     subCategory: SecurityModalStateType['subCategory'],
 ): InfoCardPropsType => {
+    const scanInfo: Omit<InfoCardPropsType, 'entities'> = {
+        lastScanTimeString: data.StartedOn,
+        scanToolName: data.scanToolName,
+        scanToolUrl: data.scanToolUrl,
+    }
+
     switch (subCategory) {
         case SUB_CATEGORIES.MISCONFIGURATIONS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.misConfSummary.status),
-                lastScanTimeString: data.StartedOn,
-                scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName],
+                ...scanInfo,
             }
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                lastScanTimeString: data.StartedOn,
-                scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName],
+                ...scanInfo,
             }
         default:
             return null
@@ -84,7 +102,9 @@ const getCompletedEmptyState = (
 
     const detailViewTitleText = detailViewData ? `${detailViewData.titlePrefix}: ${detailViewData.title}` : ''
     const subTitleText = detailViewTitleText || 'Kubernetes manifests'
-    const scanToolId = MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName]
+    const { scanToolName, scanToolUrl } = data
+
+    const scanCompletedState = getScanCompletedEmptyState(scanToolName, scanToolUrl)
 
     switch (subCategory) {
         case SUB_CATEGORIES.MISCONFIGURATIONS:
@@ -92,12 +112,12 @@ const getCompletedEmptyState = (
              * NOTE: if we are not in detail view then check for empty list in the subCategory;
              * otherwise the check for emptiness is done at start of the func  */
             return {
-                ...getScanCompletedEmptyState(scanToolId),
+                ...scanCompletedState,
                 subTitle: `No misconfigurations found in ${subTitleText}`,
             }
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
-                ...getScanCompletedEmptyState(scanToolId),
+                ...scanCompletedState,
                 subTitle: `No exposed secrets found in ${subTitleText}`,
             }
         default:
