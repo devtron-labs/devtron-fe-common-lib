@@ -252,8 +252,7 @@ export const sanitizeWorkflowExecutionStages = (
         (stage) => stage?.stageName === WorkflowExecutionStageNameType.EXECUTION,
     )
 
-    const isOldData = !preparationStage
-    const computedTriggeredOn = isOldData ? executionStage?.startTime : preparationStage?.startTime
+    const computedTriggeredOn = preparationStage?.startTime
 
     let lastStatus: WorkflowStageStatusType = WorkflowStageStatusType.UNKNOWN
     workflowExecutionSteps.forEach(({ status }) => {
@@ -273,7 +272,7 @@ export const sanitizeWorkflowExecutionStages = (
 
     return {
         triggeredOn: isTimeStringAvailable(computedTriggeredOn) ? computedTriggeredOn : '',
-        executionStartedOn: isOldData ? '' : executionStage?.startTime,
+        executionStartedOn: isTimeStringAvailable(executionStage?.startTime) ? executionStage?.startTime : '',
         finishedOn: isTimeStringAvailable(finishedOn) ? finishedOn : '',
         currentStatus: lastStatus,
         workerDetails: getWorkerInfoFromExecutionStages(workflowExecutionStages),

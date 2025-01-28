@@ -5,6 +5,7 @@ import { ImageChipCell } from '@Shared/Components/ImageChipCell'
 import { CommitChipCell } from '@Shared/Components/CommitChipCell'
 import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { ReactComponent as ICPulsateStatus } from '@Icons/ic-pulsate-status.svg'
+import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
 import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { getDeploymentStageTitle } from '@Pages/Applications'
@@ -31,10 +32,11 @@ import {
     PROGRESSING_STATUS,
     EXECUTION_FINISHED_TEXT_MAP,
 } from './constants'
-import { DeploymentStageType } from '../../constants'
+import { ComponentSizeType, DeploymentStageType } from '../../constants'
 import { GitTriggers } from '../../types'
 import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
 import WorkerStatus from './WorkerStatus'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 
 const Finished = memo(({ status, finishedOn, artifact, type, executionInfo }: FinishedType): JSX.Element => {
     const finishedOnTime = executionInfo?.finishedOn || finishedOn
@@ -146,13 +148,15 @@ const ProgressingStatus = memo(({ stage, type, label = 'In progress' }: Progress
                 {abort && (
                     <>
                         <span className="cn-5 fs-13 fw-4 lh-20">/</span>
-                        <button
-                            type="button"
-                            className="flex dc__transparent cr-5 fs-13 fw-6 lh-20"
+                        <Button
+                            dataTestId="abort-execution-button"
                             onClick={toggleAbortConfiguration}
-                        >
-                            Abort
-                        </button>
+                            startIcon={<ICAborted />}
+                            text="Abort"
+                            variant={ButtonVariantType.text}
+                            style={ButtonStyleType.negative}
+                            size={ComponentSizeType.small}
+                        />
                     </>
                 )}
             </div>
@@ -223,7 +227,7 @@ const CurrentStatus = memo(
                         type={type}
                         {...(!executionInfo.executionStartedOn
                             ? {
-                                  label: 'Waiting To Start',
+                                  label: 'Waiting to start',
                               }
                             : {})}
                     />
