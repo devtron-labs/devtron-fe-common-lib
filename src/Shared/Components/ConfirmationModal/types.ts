@@ -1,4 +1,20 @@
-import { FunctionComponent, ReactNode, SVGProps, SyntheticEvent } from 'react'
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { PropsWithChildren, ReactElement, ReactNode, SyntheticEvent } from 'react'
 import { ButtonProps } from '../Button'
 
 export enum ConfirmationModalVariantType {
@@ -9,13 +25,11 @@ export enum ConfirmationModalVariantType {
 }
 
 type CommonButtonProps<isConfig extends boolean, isCustomVariant extends boolean> = Pick<ButtonProps, 'text'> &
-    Partial<Pick<ButtonProps, 'startIcon' | 'endIcon'>> &
-    (isConfig extends false
-        ? Pick<ButtonProps, 'disabled'> & { onClick: (...args: Partial<Parameters<ButtonProps['onClick']>>) => void }
-        : {}) &
+    Partial<Pick<ButtonProps, 'startIcon' | 'endIcon' | 'disabled'>> &
+    (isConfig extends false ? { onClick: (...args: Partial<Parameters<ButtonProps['onClick']>>) => void } : {}) &
     (isCustomVariant extends true ? Pick<ButtonProps, 'style'> : {})
 
-interface CustomInputConfig {
+interface ConfirmationConfigType {
     identifier: string
     confirmationKeyword: string
 }
@@ -34,20 +48,6 @@ type ButtonConfig<isConfig extends boolean, isCustomVariant extends boolean> =
           secondaryButtonConfig?: CommonButtonProps<isConfig, isCustomVariant>
       }
 
-type CustomInputConfigOrChildrenType =
-    | {
-          customInputConfig: CustomInputConfig
-          children?: never
-      }
-    | {
-          customInputConfig?: never
-          children: ReactNode
-      }
-    | {
-          customInputConfig?: never
-          children?: never
-      }
-
 type ButtonConfigAndVariantType<isConfig extends boolean> =
     | {
           variant: Exclude<ConfirmationModalVariantType, ConfirmationModalVariantType.custom>
@@ -56,11 +56,11 @@ type ButtonConfigAndVariantType<isConfig extends boolean> =
       }
     | {
           variant: ConfirmationModalVariantType.custom
-          Icon: FunctionComponent<SVGProps<SVGSVGElement>>
+          Icon: ReactElement
           buttonConfig: ButtonConfig<isConfig, true>
       }
 
-export type ConfirmationModalProps<isConfig extends boolean = false> = {
+export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWithChildren<{
     title: string
     subtitle: ReactNode
     dataTestId?: string
@@ -68,8 +68,9 @@ export type ConfirmationModalProps<isConfig extends boolean = false> = {
      * @default true
      */
     shouldCloseOnEscape?: boolean
-} & ButtonConfigAndVariantType<isConfig> &
-    CustomInputConfigOrChildrenType &
+    confirmationConfig?: ConfirmationConfigType
+}> &
+    ButtonConfigAndVariantType<isConfig> &
     (isConfig extends false
         ? {
               handleClose: (e?: SyntheticEvent) => void
