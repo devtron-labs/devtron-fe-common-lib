@@ -24,6 +24,7 @@ import { ReactComponent as ICHelpOutline } from '@Icons/ic-help.svg'
 import folder from '@Icons/ic-folder.svg'
 import docker from '@Icons/ic-docker.svg'
 import noartifact from '@Images/no-artifact.webp'
+import { getIsApprovalPolicyConfigured } from '@Shared/Helpers'
 import { TargetPlatformBadgeList } from '../TargetPlatforms'
 import {
     GenericEmptyState,
@@ -66,7 +67,9 @@ export const CIListItem = ({
     targetPlatforms,
 }: CIListItemType) => {
     const headerMetaDataPresent =
-        !!userApprovalMetadata || !!appliedFilters?.length || !!promotionApprovalMetadata?.promotedFromType
+        !!getIsApprovalPolicyConfigured(userApprovalMetadata?.approvalConfigData) ||
+        !!appliedFilters?.length ||
+        !!promotionApprovalMetadata?.promotedFromType
 
     return (
         <>
