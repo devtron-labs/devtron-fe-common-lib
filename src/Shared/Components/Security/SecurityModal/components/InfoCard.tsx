@@ -1,5 +1,17 @@
 /*
  * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 import React from 'react'
@@ -10,11 +22,11 @@ import { ReactComponent as ICClock } from '@Icons/ic-clock.svg'
 import { ZERO_TIME_STRING, DATE_TIME_FORMATS } from '../../../../../Common/Constants'
 import { InfoCardPropsType } from '../types'
 
-const InfoCard: React.FC<InfoCardPropsType> = ({ entities, lastScanTimeString, scanToolId }) => (
+const InfoCard: React.FC<InfoCardPropsType> = ({ entities, lastScanTimeString, scanToolName, scanToolUrl }) => (
     <div className="info-card">
         <SegmentedBarChart entities={entities} rootClassName="p-16 fs-13" countClassName="fw-6" />
 
-        {(lastScanTimeString || scanToolId) && (
+        {(lastScanTimeString || scanToolName) && (
             <>
                 <div className="dc__border-bottom-n1 w-100 h-1" />
 
@@ -28,8 +40,13 @@ const InfoCard: React.FC<InfoCardPropsType> = ({ entities, lastScanTimeString, s
                             >{`Scanned on ${dayjs(lastScanTimeString).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}`}</span>
                         </div>
                     )}
-                    {scanToolId && (
-                        <ScannedByToolModal scanToolId={scanToolId} fontSize={12} spacingBetweenTextAndIcon={8} />
+                    {scanToolName && (
+                        <ScannedByToolModal
+                            scanToolName={scanToolName}
+                            scanToolUrl={scanToolUrl}
+                            fontSize={12}
+                            spacingBetweenTextAndIcon={8}
+                        />
                     )}
                 </div>
             </>
