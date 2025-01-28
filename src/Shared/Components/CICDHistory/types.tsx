@@ -295,9 +295,6 @@ export interface StartDetailsType {
     artifact: string
     type: HistoryComponentType
     environmentName?: string
-    isJobView?: boolean
-    triggerMetadata?: string
-    renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string) => JSX.Element
     /**
      * Callback handler for showing the target config
      */

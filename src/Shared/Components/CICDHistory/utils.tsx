@@ -29,6 +29,7 @@ import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
 import { ReactComponent as ICHelpFilled } from '@Icons/ic-help-filled.svg'
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
+import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import {
@@ -295,7 +296,7 @@ export const getIconFromWorkflowStageStatusType = (
             return renderFailedTriggerIcon(baseClass)
 
         case WorkflowStageStatusType.SUCCEEDED:
-            return renderSuccessTriggerIcon(baseClass)
+            return <ICSuccess className={baseClass} />
 
         case WorkflowStageStatusType.NOT_STARTED:
         case WorkflowStageStatusType.RUNNING:
