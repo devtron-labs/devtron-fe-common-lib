@@ -1,8 +1,19 @@
 /*
  * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-import { SCAN_TOOL_ID_CLAIR, SCAN_TOOL_ID_TRIVY } from '@Shared/constants'
 import PageNotFound from '@Images/ic-page-not-found.svg'
 import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
 import {
@@ -11,10 +22,9 @@ import {
     SeveritiesDTO,
     SortOrderEnum,
     EmptyStateType,
-    StatusType,
-    SidebarPropsType,
     SecurityModalStateType,
 } from './types'
+import { ScanCategoriesWithLicense } from '../types'
 
 export const DEFAULT_SECURITY_MODAL_IMAGE_STATE = {
     category: CATEGORIES.IMAGE_SCAN,
@@ -35,7 +45,7 @@ const DEFAULT_SECURITY_MODAL_MANIFEST_STATE = {
 }
 
 export const getDefaultSecurityModalState = (
-    categoriesConfig: SidebarPropsType['categoriesConfig'],
+    categoriesConfig: Record<ScanCategoriesWithLicense, boolean>,
 ): SecurityModalStateType => {
     if (categoriesConfig.imageScan) {
         return DEFAULT_SECURITY_MODAL_IMAGE_STATE
@@ -122,7 +132,4 @@ export const SCAN_IN_PROGRESS_EMPTY_STATE: EmptyStateType = {
     subTitle: 'Scan result will be available once complete. Please check again later',
 }
 
-export const MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID: Record<StatusType['scanToolName'], number> = {
-    TRIVY: SCAN_TOOL_ID_TRIVY,
-    CLAIR: SCAN_TOOL_ID_CLAIR,
-}
+export const TRIVY_ICON_URL = 'https://cdn.devtron.ai/images/ic-trivy.webp'
