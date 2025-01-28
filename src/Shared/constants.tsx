@@ -32,13 +32,6 @@ export const STAGE_TYPE = {
     ROLLBACK: 'ROLLBACK',
 }
 
-export const SCAN_TOOL_ID_TRIVY = 3
-
-/**
- * @description This is only used to show mapping for clair, scan tool id for clair can be either 1 or 2
- *   */
-export const SCAN_TOOL_ID_CLAIR = 2
-
 export const IMAGE_SCAN_TOOL = {
     Clair: 'Clair',
     Trivy: 'Trivy',
