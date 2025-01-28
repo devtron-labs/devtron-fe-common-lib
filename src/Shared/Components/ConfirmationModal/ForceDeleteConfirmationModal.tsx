@@ -17,10 +17,6 @@
 import { ConfirmationModal, ConfirmationModalVariantType } from '@Shared/Components'
 import { ForceDeleteConfirmationProps } from './types'
 
-/**
- *
- * @deprecated Use ForceConfirmationModal instead
- */
 export const ForceDeleteConfirmationModal = ({
     title,
     description,

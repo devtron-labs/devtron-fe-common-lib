@@ -18,6 +18,10 @@ import React from 'react'
 import { ForceDeleteDialogType } from './Types'
 import { DeleteDialog } from './DeleteDialog'
 
+/**
+ *
+ * @deprecated Use ForceConfirmationModal instead
+ */
 export default function ForceDeleteDialog({
     onClickDelete,
     closeDeleteModal,
