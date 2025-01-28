@@ -50,7 +50,7 @@ export const StatusFilterButtonComponent = ({
         }
 
         return statusFilters
-    }, [statusFilters.length, overflowFilterIndex])
+    }, [statusFilters.length, overflowFilterIndex, maxInlineFiltersCount])
 
     const handleInlineFilterClick = (e: ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target
