@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export { CustomInput } from './CustomInput'
-export type { CustomInputProps } from './Types'
+export { default as CustomInput } from './CustomInput'
+export type { CustomInputProps } from './types'

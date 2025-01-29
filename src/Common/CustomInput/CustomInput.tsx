@@ -22,9 +22,9 @@ import {
     ComponentSizeType,
 } from '@Shared/constants'
 import { getFormFieldBorderClassName } from '@Shared/Components/FormFieldWrapper/utils'
-import { CustomInputProps } from './Types'
+import { CustomInputProps } from './types'
 
-export const CustomInput = ({
+const CustomInput = ({
     name,
     label,
     fullWidth,
@@ -115,3 +115,5 @@ export const CustomInput = ({
         </FormFieldWrapper>
     )
 }
+
+export default CustomInput
