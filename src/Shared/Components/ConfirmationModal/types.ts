@@ -149,10 +149,10 @@ export interface DeleteComponentModalProps
      */
     errorCodeToShowCannotDeleteDialog?: number
     /**
-     * Function to trigger a reload after deletion.
+     *
+     * Function to handle error
      */
-    reload?: () => void
-
+    handleError?: (error) => void
     // Additional Configuration
     /**
      * Boolean to determine if event propagation should be stopped.
@@ -162,10 +162,6 @@ export interface DeleteComponentModalProps
      * Boolean to disable the delete action.
      */
     disabled?: boolean
-    /**
-     * URL associated with the component being deleted.
-     */
-    url?: string
 }
 
 /**

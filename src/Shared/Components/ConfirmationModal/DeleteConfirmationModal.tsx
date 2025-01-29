@@ -16,7 +16,6 @@
 
 import React, { useState } from 'react'
 import { ToastManager, ToastVariantType } from '@Shared/Services/ToastManager'
-import { useHistory } from 'react-router-dom'
 import { ServerErrors } from '@Common/ServerError'
 import { showError } from '@Common/Helper'
 import { ConfirmationModalVariantType, DeleteComponentModalProps } from './types'
@@ -26,13 +25,11 @@ import { ForceDeleteConfirmationModal } from './ForceDeleteConfirmationModal'
 
 export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     title,
-    subtitle,
-    showConfirmationModal,
+    subtitle = '',
+    component = '',
     disabled,
     onDelete,
-    component = '',
-    url = '',
-    reload,
+    showConfirmationModal,
     closeConfirmationModal,
     renderCannotDeleteConfirmationSubTitle,
     errorCodeToShowCannotDeleteDialog,
@@ -41,9 +38,9 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     shouldStopPropagation = false,
     primaryButtonText = 'Delete',
     confirmationConfig,
+    handleError,
     children,
 }: DeleteComponentModalProps) => {
-    const history = useHistory()
     const [isDeleting, setDeleting] = useState(isLoading)
     const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(false)
     const [showForceDeleteModal, setForceDeleteModal] = useState(false)
@@ -58,13 +55,13 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
                 variant: ToastVariantType.success,
                 description: successToastMessage || 'Successfully deleted',
             })
-            if (url) history.push(url)
-            if (typeof reload === 'function') reload()
             closeConfirmationModal()
         } catch (serverError) {
             if (serverError instanceof ServerErrors && serverError.code === errorCodeToShowCannotDeleteDialog) {
                 setCannotDeleteDialogModal(true)
                 closeConfirmationModal()
+            } else if (typeof handleError === 'function') {
+                handleError(serverError)
             } else {
                 showError(serverError)
             }
@@ -101,7 +98,7 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
         <ConfirmationModal
             variant={ConfirmationModalVariantType.delete}
             title={`Delete ${component} '${title}'`}
-            subtitle={subtitle ?? `Are you sure you want to delete this ${component}?`}
+            subtitle={subtitle ?? `Are you sure you want to delete this ${component} ?`}
             buttonConfig={{
                 secondaryButtonConfig: {
                     text: 'Cancel',
