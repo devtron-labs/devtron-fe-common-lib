@@ -40,6 +40,8 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     isLoading,
     shouldStopPropagation = false,
     primaryButtonText = 'Delete',
+    confirmationConfig,
+    children,
 }: DeleteComponentModalProps) => {
     const history = useHistory()
     const [isDeleting, setDeleting] = useState(isLoading)
@@ -114,7 +116,10 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
             }}
             showConfirmationModal={showConfirmationModal}
             handleClose={closeConfirmationModal}
-        />
+            confirmationConfig={confirmationConfig}
+        >
+            {children}
+        </ConfirmationModal>
     )
 
     return (

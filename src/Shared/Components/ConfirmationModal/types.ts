@@ -80,7 +80,9 @@ export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWith
 export type ConfirmationModalBodyProps = Omit<ConfirmationModalProps, 'showConfirmationModal'>
 
 export interface DeleteComponentModalProps
-    extends Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle' | 'showConfirmationModal' | 'children'>> {
+    extends Partial<
+        Pick<ConfirmationModalProps, 'title' | 'subtitle' | 'showConfirmationModal' | 'children' | 'confirmationConfig'>
+    > {
     // Required Props
     closeConfirmationModal: () => void
     onDelete: () => void
