@@ -20,6 +20,7 @@ import { ConditionalWrap, CustomInput } from '../../../Common'
 import { TEXT_MESSAGES } from './constants'
 import { KeyValueItemProps, KeyValueListActionType, KeyValueListProps } from './types'
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
+import { Textarea } from '../Textarea'
 
 const KeyValueItem = ({
     itemKey,
@@ -71,10 +72,8 @@ const KeyValueItem = ({
                     disabled={isDisabled}
                     onChange={handleKeyUpdate}
                 />
-                <textarea
-                    className={`w-100 dc__bottom-radius-4 dc__no-top-border pl-10 pr-10 pt-6 pb-6 en-2 bw-1 mxh-140 form__textarea ${
-                        isDisabled ? 'cursor-not-allowed bcn-1' : 'build__value'
-                    }`}
+                <Textarea
+                    name={`item-value-${index}`}
                     value={itemValue}
                     placeholder={valuePlaceholder}
                     onChange={handleValueUpdate}
