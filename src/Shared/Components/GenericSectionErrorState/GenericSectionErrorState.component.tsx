@@ -15,6 +15,7 @@
  */
 
 import { ComponentSizeType } from '@Shared/constants'
+import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-error-exclamation.svg'
 import { ReactComponent as ICInfoOutline } from '../../../Assets/Icon/ic-info-outline.svg'
 import { Button, ButtonVariantType } from '../Button'
@@ -29,33 +30,45 @@ const GenericSectionErrorState = ({
     buttonText = 'Reload',
     rootClassName,
     useInfoIcon = false,
-}: GenericSectionErrorStateProps) => (
-    <div className={`flex column dc__gap-8 p-16 ${withBorder ? 'dc__border br-4' : ''} ${rootClassName || ''}`}>
-        {useInfoIcon ? (
-            <ICInfoOutline className="icon-dim-24" />
-        ) : (
-            <ErrorIcon className="icon-dim-24 alert-icon-r5-imp" />
-        )}
-        <div className="flex column dc__gap-4 dc__align-center">
-            <h3 className="fs-13 lh-20 fw-6 cn-9 m-0">{title}</h3>
-            {(subTitle || description) && (
-                <div className="flex column fs-13 lh-20 fw-4 cn-7">
-                    {subTitle && <p className="m-0">{subTitle}</p>}
-                    {description && <p className="m-0">{description}</p>}
-                </div>
+    progressingProps,
+}: GenericSectionErrorStateProps) => {
+    const renderMarker = () => {
+        if (progressingProps) {
+            return <Progressing {...progressingProps} />
+        }
+
+        if (useInfoIcon) {
+            return <ICInfoOutline className="icon-dim-24" />
+        }
+
+        return <ErrorIcon className="icon-dim-24 alert-icon-r5-imp" />
+    }
+
+    return (
+        <div className={`flex column dc__gap-8 p-16 ${withBorder ? 'dc__border br-4' : ''} ${rootClassName || ''}`}>
+            {renderMarker()}
+
+            <div className="flex column dc__gap-4 dc__align-center">
+                <h3 className="fs-13 lh-20 fw-6 cn-9 m-0">{title}</h3>
+                {(subTitle || description) && (
+                    <div className="flex column fs-13 lh-20 fw-4 cn-7">
+                        {subTitle && <p className="m-0">{subTitle}</p>}
+                        {description && <p className="m-0">{description}</p>}
+                    </div>
+                )}
+            </div>
+
+            {reload && (
+                <Button
+                    text={buttonText}
+                    onClick={reload}
+                    variant={ButtonVariantType.text}
+                    size={ComponentSizeType.small}
+                    dataTestId="generic-section-reload-button"
+                />
             )}
         </div>
-
-        {reload && (
-            <Button
-                text={buttonText}
-                onClick={reload}
-                variant={ButtonVariantType.text}
-                size={ComponentSizeType.small}
-                dataTestId="generic-section-reload-button"
-            />
-        )}
-    </div>
-)
+    )
+}
 
 export default GenericSectionErrorState

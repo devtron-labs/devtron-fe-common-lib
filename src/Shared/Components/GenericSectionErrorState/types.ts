@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { ProgressingProps } from '@Common/Types'
+
 export interface GenericSectionErrorStateProps {
     /**
      * Handler for reloading the section
@@ -45,6 +47,10 @@ export interface GenericSectionErrorStateProps {
      * to be applied on parent div
      */
     rootClassName?: string
+    /**
+     * If provided, would render the Progressing component with given props instead of error icon
+     */
+    progressingProps?: ProgressingProps
     /**
      * If true, info icon would be used instead of error
      *
