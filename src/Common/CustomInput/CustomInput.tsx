@@ -74,6 +74,8 @@ export const CustomInput = ({
         if (event.key === 'Enter' || event.key === 'Escape') {
             event.stopPropagation()
         }
+
+        props.onKeyDown?.(event)
     }
 
     return (

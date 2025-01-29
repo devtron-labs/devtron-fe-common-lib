@@ -62,10 +62,6 @@ const KeyValueItem = ({
             <div className="pt-8 w-100">
                 <CustomInput
                     name="item-key"
-                    rootClassName={`w-100 dc__top-radius-4 pl-10 pr-10 pt-6 pb-6 en-2 bw-1 ${
-                        isDisabled ? 'cursor-not-allowed' : ''
-                    }`}
-                    autoComplete="off"
                     placeholder={keyPlaceholder}
                     type="text"
                     value={itemKey}

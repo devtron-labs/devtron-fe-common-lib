@@ -19,7 +19,7 @@ import warn from '../../Assets/Img/delete-medium.svg'
 import { Progressing } from '../Progressing'
 import ConfirmationDialog from './ConfirmationDialog'
 import { DeleteDialogProps } from './Types'
-import { CustomInput } from '../CustomInput'
+import { CustomInput, CustomInputProps } from '../CustomInput'
 
 export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.FC<any> } = ({
     showDeleteConfirmation: _showDeleteConfirmation,
@@ -46,7 +46,7 @@ export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.F
         props.delete()
     }
 
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown: CustomInputProps['onKeyDown'] = (event) => {
         if (event.key === 'Enter' && !isDeleteDisabled) {
             event.preventDefault()
 
@@ -82,17 +82,18 @@ export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.F
                     {props.description ? props.description : null}
                     {props.children}
                     {showDeleteConfirmation && (
-                        <CustomInput
-                            name="delete-confirmation"
-                            value={confirmationText}
-                            onChange={handleConfirmationTextChange}
-                            label={getLabel()}
-                            inputWrapClassName="mt-12 w-100"
-                            placeholder="Type to confirm"
-                            isRequiredField
-                            onKeyDown={handleKeyDown}
-                            autoFocus
-                        />
+                        <div className="mt-12 w-100">
+                            <CustomInput
+                                name="delete-confirmation"
+                                value={confirmationText}
+                                onChange={handleConfirmationTextChange}
+                                label={getLabel()}
+                                placeholder="Type to confirm"
+                                required
+                                onKeyDown={handleKeyDown}
+                                autoFocus
+                            />
+                        </div>
                     )}
                 </div>
             </ConfirmationDialog.Body>

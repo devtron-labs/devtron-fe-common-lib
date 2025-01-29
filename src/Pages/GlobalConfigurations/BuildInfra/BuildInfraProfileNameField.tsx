@@ -42,13 +42,12 @@ const BuildInfraProfileNameField: FunctionComponent<BuildInfraProfileMetaFieldPr
             <CustomInput
                 name="profile-name"
                 label={BUILD_INFRA_TEXT.PROFILE_LABEL}
-                labelClassName="m-0 dc__required-field fs-13 fw-4 lh-20 cn-7"
                 placeholder={BUILD_INFRA_TEXT.PROFILE_PLACEHOLDER}
                 value={currentValue}
                 onChange={handleChange}
                 error={error}
                 required
-                inputWrapClassName="w-100"
+                fullWidth
                 autoFocus
             />
         </div>

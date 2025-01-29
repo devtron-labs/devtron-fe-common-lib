@@ -208,13 +208,11 @@ const EditImageFormField = ({
                     <CustomInput
                         name={`${ariaLabelPrefix}-url-input`}
                         label="Image URL"
-                        labelClassName="m-0 fs-13 fw-4 lh-20 cn-7"
                         placeholder="Enter image url"
                         value={url}
                         onChange={handleChange}
                         error={errorMessage || emptyPreviewURLErrorMessage}
-                        inputWrapClassName="w-100"
-                        dataTestid={`${dataTestIdPrefix}-input`}
+                        fullWidth
                         onKeyDown={handleKeyDown}
                         autoFocus
                     />

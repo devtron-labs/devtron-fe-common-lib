@@ -102,9 +102,9 @@ const ConfirmationModalBody = ({
                             value={confirmationText}
                             onChange={handleCustomInputChange}
                             label={getConfirmationLabel(confirmationKeyword)}
-                            inputWrapClassName="w-100"
+                            fullWidth
                             placeholder="Type to confirm"
-                            isRequiredField
+                            required
                             autoFocus
                         />
                     )}
