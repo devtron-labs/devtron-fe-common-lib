@@ -295,9 +295,6 @@ export interface StartDetailsType {
     artifact: string
     type: HistoryComponentType
     environmentName?: string
-    isJobView?: boolean
-    triggerMetadata?: string
-    renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string) => JSX.Element
     /**
      * Callback handler for showing the target config
      */
@@ -330,6 +327,10 @@ export interface TriggerDetailsType
 export type ProgressingStatusType = {
     stage: DeploymentStageType
     type: HistoryComponentType
+    /**
+     * @default 'In progress''
+     */
+    label?: string
 }
 
 export interface CurrentStatusIconProps {

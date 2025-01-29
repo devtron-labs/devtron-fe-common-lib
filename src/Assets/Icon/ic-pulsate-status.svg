@@ -33,5 +33,4 @@
             }
     </style>
     <circle class="pulsate__history-status" cx="10" cy="10" r="5" fill="#FF7E5B" stroke="#FF7E5B" stroke-opacity="0.3" stroke-width="10"/>
-    <path d="M10 0L10 5" stroke="#3B444C"/>
 </svg>

@@ -29,6 +29,7 @@ import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
 import { ReactComponent as ICHelpFilled } from '@Icons/ic-help-filled.svg'
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
+import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import {
@@ -162,7 +163,7 @@ const renderAbortedTriggerIcon = (): JSX.Element => <ICAborted className="icon-d
 const renderFailedTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
     <ICErrorCross className={`${baseClass} dc__no-shrink ic-error-cross-red`} />
 )
-const renderProgressingTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
+export const renderProgressingTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
     <ICInProgress className={`${baseClass} dc__no-shrink ic-in-progress-orange`} />
 )
 const renderSuccessTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
@@ -193,13 +194,14 @@ export const getTriggerStatusIcon = (triggerDetailStatus: string): JSX.Element =
 
         case TERMINAL_STATUS_MAP.FAILED:
         case TERMINAL_STATUS_MAP.ERROR:
+        case TERMINAL_STATUS_MAP.TIMED_OUT:
             return renderFailedTriggerIcon()
 
         case TERMINAL_STATUS_MAP.RUNNING:
         case TERMINAL_STATUS_MAP.PROGRESSING:
         case TERMINAL_STATUS_MAP.STARTING:
         case TERMINAL_STATUS_MAP.INITIATING:
-        case WorkflowStatusEnum.WAITING_TO_START.toLowerCase():
+        case TERMINAL_STATUS_MAP.WAITING_TO_START:
             return renderProgressingTriggerIcon()
 
         case TERMINAL_STATUS_MAP.SUCCEEDED:
@@ -252,8 +254,7 @@ export const sanitizeWorkflowExecutionStages = (
         (stage) => stage?.stageName === WorkflowExecutionStageNameType.EXECUTION,
     )
 
-    const isOldData = !preparationStage
-    const computedTriggeredOn = isOldData ? executionStage?.startTime : preparationStage?.startTime
+    const computedTriggeredOn = preparationStage?.startTime
 
     let lastStatus: WorkflowStageStatusType = WorkflowStageStatusType.UNKNOWN
     workflowExecutionSteps.forEach(({ status }) => {
@@ -273,7 +274,7 @@ export const sanitizeWorkflowExecutionStages = (
 
     return {
         triggeredOn: isTimeStringAvailable(computedTriggeredOn) ? computedTriggeredOn : '',
-        executionStartedOn: isOldData ? null : executionStage?.startTime,
+        executionStartedOn: isTimeStringAvailable(executionStage?.startTime) ? executionStage?.startTime : '',
         finishedOn: isTimeStringAvailable(finishedOn) ? finishedOn : '',
         currentStatus: lastStatus,
         workerDetails: getWorkerInfoFromExecutionStages(workflowExecutionStages),
@@ -295,7 +296,7 @@ export const getIconFromWorkflowStageStatusType = (
             return renderFailedTriggerIcon(baseClass)
 
         case WorkflowStageStatusType.SUCCEEDED:
-            return renderSuccessTriggerIcon(baseClass)
+            return <ICSuccess className={baseClass} />
 
         case WorkflowStageStatusType.NOT_STARTED:
         case WorkflowStageStatusType.RUNNING:
@@ -339,7 +340,7 @@ export const getWorkflowNodeStatusTitle = (status: string) => {
     }
 
     if (status.toLowerCase() === 'cancelled') {
-        return 'ABORTED'
+        return 'Aborted'
     }
 
     if (status === WorkflowStatusEnum.WAITING_TO_START) {
@@ -349,5 +350,7 @@ export const getWorkflowNodeStatusTitle = (status: string) => {
     return status
 }
 
-export const getFormattedTriggerTime = (time: string) =>
-    moment(time, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)
+export const getFormattedTriggerTime = (time: string): string =>
+    isTimeStringAvailable(time)
+        ? moment(time, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)
+        : ''

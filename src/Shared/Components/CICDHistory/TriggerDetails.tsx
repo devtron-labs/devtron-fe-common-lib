@@ -5,7 +5,9 @@ import { ImageChipCell } from '@Shared/Components/ImageChipCell'
 import { CommitChipCell } from '@Shared/Components/CommitChipCell'
 import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { ReactComponent as ICPulsateStatus } from '@Icons/ic-pulsate-status.svg'
+import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
 import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
+import { ReactComponent as ICEnvironment } from '@Icons/ic-environment.svg'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { getDeploymentStageTitle } from '@Pages/Applications'
 import { ZERO_TIME_STRING } from '@Common/Constants'
@@ -31,10 +33,11 @@ import {
     PROGRESSING_STATUS,
     EXECUTION_FINISHED_TEXT_MAP,
 } from './constants'
-import { DeploymentStageType } from '../../constants'
+import { ComponentSizeType, DeploymentStageType } from '../../constants'
 import { GitTriggers } from '../../types'
 import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
 import WorkerStatus from './WorkerStatus'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 
 const Finished = memo(({ status, finishedOn, artifact, type, executionInfo }: FinishedType): JSX.Element => {
     const finishedOnTime = executionInfo?.finishedOn || finishedOn
@@ -59,7 +62,7 @@ const Finished = memo(({ status, finishedOn, artifact, type, executionInfo }: Fi
     }
 
     return (
-        <div className="flexbox pt-12 dc__gap-8 left dc__min-width-fit-content dc__align-items-center">
+        <div className="flexbox py-8 dc__gap-8 left dc__min-width-fit-content dc__align-items-center">
             {renderTitle()}
 
             {finishedOnTime && finishedOnTime !== ZERO_TIME_STRING && (
@@ -76,7 +79,7 @@ const Finished = memo(({ status, finishedOn, artifact, type, executionInfo }: Fi
     )
 })
 
-const ProgressingStatus = memo(({ stage, type }: ProgressingStatusType): JSX.Element => {
+const ProgressingStatus = memo(({ stage, type, label = 'In progress' }: ProgressingStatusType): JSX.Element => {
     const [aborting, setAborting] = useState(false)
     const [abortConfirmation, setAbortConfirmation] = useState(false)
     const [abortError, setAbortError] = useState<{
@@ -138,21 +141,23 @@ const ProgressingStatus = memo(({ stage, type }: ProgressingStatusType): JSX.Ele
 
     return (
         <>
-            <div className="flex dc__gap-8 left pt-12">
+            <div className="flex dc__gap-8 left">
                 <div className="dc__min-width-fit-content">
-                    <div className="fs-14 fw-6 flex left inprogress-status-color">In progress</div>
+                    <div className="fs-13 fw-6 flex left inprogress-status-color">{label}</div>
                 </div>
 
                 {abort && (
                     <>
                         <span className="cn-5 fs-13 fw-4 lh-20">/</span>
-                        <button
-                            type="button"
-                            className="flex dc__transparent cr-5 fs-13 fw-6 lh-20"
+                        <Button
+                            dataTestId="abort-execution-button"
                             onClick={toggleAbortConfiguration}
-                        >
-                            Abort
-                        </button>
+                            startIcon={<ICAborted />}
+                            text="Abort"
+                            variant={ButtonVariantType.text}
+                            style={ButtonStyleType.negative}
+                            size={ComponentSizeType.small}
+                        />
                     </>
                 )}
             </div>
@@ -217,7 +222,17 @@ const CurrentStatus = memo(
             }
 
             if (executionInfo.currentStatus === WorkflowStageStatusType.RUNNING) {
-                return <ProgressingStatus stage={stage} type={type} />
+                return (
+                    <ProgressingStatus
+                        stage={stage}
+                        type={type}
+                        {...(!executionInfo.executionStartedOn
+                            ? {
+                                  label: 'Waiting to start',
+                              }
+                            : {})}
+                    />
+                )
             }
 
             if (executionInfo.currentStatus === WorkflowStageStatusType.UNKNOWN) {
@@ -254,9 +269,6 @@ const StartDetails = ({
     artifact,
     type,
     environmentName,
-    isJobView,
-    triggerMetadata,
-    renderDeploymentHistoryTriggerMetaText,
     renderTargetConfigInfo,
     stage,
 }: StartDetailsType): JSX.Element => {
@@ -264,10 +276,8 @@ const StartDetails = ({
     const { pathname } = useLocation()
 
     return (
-        <div
-            className={`w-100 pr-20 flex column left ${stage === DeploymentStageType.DEPLOY ? 'dc__border-bottom-n1' : ''}`}
-        >
-            <div className="flexbox dc__gap-8 dc__align-items-center pb-12 flex-wrap">
+        <div className="w-100 pr-20 flex column left">
+            <div className="flexbox dc__gap-8 dc__align-items-center py-8 flex-wrap">
                 <div className="flex left dc__gap-4 cn-9 fs-13 fw-6 lh-20">
                     <div className="flex left dc__no-shrink dc__gap-4" data-testid="deployment-history-start-heading">
                         <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Triggered</h3>
@@ -338,21 +348,15 @@ const StartDetails = ({
                     </Link>
                 )}
             </div>
-
-            {triggerMetadata &&
-                renderDeploymentHistoryTriggerMetaText &&
-                renderDeploymentHistoryTriggerMetaText(triggerMetadata)}
-
-            {isJobView && (
-                <div className="flexbox dc__align-items-center dc__gap-8 pb-8">
-                    <span className="cn-9 fs-13 fw-6 lh-20">Env</span>
-                    <span className="fs-12 lh-20">{environmentName !== '' ? environmentName : DEFAULT_ENV}</span>
-                    {environmentName === '' && <i className="fw-4 fs-12 lh-20">(Default)</i>}
-                </div>
-            )}
         </div>
     )
 }
+
+const renderBlockWithBorder = () => (
+    <div className="flex flex-grow-1">
+        <div className="dc__border-left--n3 h-100" />
+    </div>
+)
 
 const renderDetailsSuccessIconBlock = () => (
     <>
@@ -360,9 +364,7 @@ const renderDetailsSuccessIconBlock = () => (
             <ICSuccess className="icon-dim-20" />
         </div>
 
-        <div className="flex flex-grow-1">
-            <div className="dc__border-left--n7 h-100" />
-        </div>
+        {renderBlockWithBorder()}
     </>
 )
 
@@ -378,7 +380,6 @@ const NonProgressingStatus = memo(
                 strokeOpacity="0.3"
                 strokeWidth="10"
             />
-            <path d="M10 0L10 5" stroke="var(--N700)" />
         </svg>
     ),
 )
@@ -424,100 +425,119 @@ const TriggerDetails = memo(
         )
 
         return (
-            <div className="trigger-details flexbox-col pb-12">
-                <div className="flexbox-col py-12">
-                    <div className="trigger-details__summary lh-20">
-                        <div className="display-grid trigger-details__grid">
-                            <div className="flexbox dc__content-center">
-                                <div className="flexbox-col">
-                                    {renderDetailsSuccessIconBlock()}
-
-                                    {!!triggerMetadata && renderDeploymentHistoryTriggerMetaText && (
-                                        <>
-                                            {renderDeploymentHistoryTriggerMetaText(triggerMetadata, true)}
-
-                                            <div className="flex flex-grow-1">
-                                                <div className="dc__border-left--n7 h-100" />
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="flexbox-col flex-grow-1">
-                                <StartDetails
-                                    startedOn={executionInfo?.triggeredOn ?? startedOn}
-                                    triggeredBy={triggeredBy}
-                                    triggeredByEmail={triggeredByEmail}
-                                    ciMaterials={ciMaterials}
-                                    gitTriggers={gitTriggers}
-                                    artifact={artifact}
-                                    type={type}
-                                    environmentName={environmentName}
-                                    isJobView={isJobView}
-                                    triggerMetadata={triggerMetadata}
-                                    renderDeploymentHistoryTriggerMetaText={renderDeploymentHistoryTriggerMetaText}
-                                    renderTargetConfigInfo={renderTargetConfigInfo}
-                                    stage={stage}
-                                />
+            <div className="trigger-details flexbox-col">
+                <div className="flexbox-col py-8 trigger-details__summary lh-20">
+                    <div className="display-grid trigger-details__grid">
+                        <div className="flexbox dc__content-center">
+                            <div className="flexbox-col dc__gap-4">
+                                <div className="flex flex-grow-1" />
+                                {renderDetailsSuccessIconBlock()}
                             </div>
                         </div>
 
-                        {executionInfo?.executionStartedOn && (
-                            <div className="display-grid trigger-details__grid">
-                                <div className="flexbox dc__content-center">
-                                    <div className="flexbox-col">
-                                        <div className="flex flex-grow-1">
-                                            <div className="dc__border-left--n7 h-100" />
-                                        </div>
-
-                                        {renderDetailsSuccessIconBlock()}
-                                    </div>
-                                </div>
-
-                                <div className="w-100 pr-20 flexbox dc__gap-8 py-12">
-                                    <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Execution started</h3>
-                                    <time className="cn-7 fs-13">{getFormattedTriggerTime(startedOn)}</time>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="display-grid trigger-details__grid">
-                            <div className="flexbox dc__content-center">
-                                <div className="flexbox-col">
-                                    <div className="flex flex-grow-1">
-                                        <div className="dc__border-left--n7 h-100" />
-                                    </div>
-
-                                    <CurrentStatusIcon
-                                        status={status}
-                                        executionInfoCurrentStatus={executionInfo?.currentStatus}
-                                    />
-                                </div>
-                            </div>
-
-                            <CurrentStatus
-                                executionInfo={executionInfo}
-                                status={status}
-                                finishedOn={finishedOn}
+                        <div className="flexbox-col flex-grow-1">
+                            <StartDetails
+                                startedOn={executionInfo?.triggeredOn || startedOn}
+                                triggeredBy={triggeredBy}
+                                triggeredByEmail={triggeredByEmail}
+                                ciMaterials={ciMaterials}
+                                gitTriggers={gitTriggers}
                                 artifact={artifact}
-                                stage={stage}
                                 type={type}
+                                environmentName={environmentName}
+                                renderTargetConfigInfo={renderTargetConfigInfo}
+                                stage={stage}
                             />
                         </div>
                     </div>
-                </div>
 
-                <div className="display-grid trigger-details__grid py-4">
-                    <WorkerStatus
-                        message={executionInfo?.workerDetails.message ?? message}
-                        podStatus={executionInfo?.workerDetails.status ?? podStatus}
-                        stage={stage}
-                        finishedOn={executionInfo?.workerDetails.endTime ?? finishedOn}
-                        clusterId={executionInfo?.workerDetails.clusterId || DEFAULT_CLUSTER_ID}
-                        workerPodName={workerPodName}
-                        namespace={namespace}
-                    />
+                    {!!triggerMetadata && !!renderDeploymentHistoryTriggerMetaText && (
+                        <div className="display-grid trigger-details__grid">
+                            <div className="flexbox dc__content-center">
+                                <div className="flexbox-col dc__gap-4">
+                                    {renderBlockWithBorder()}
+                                    {renderDeploymentHistoryTriggerMetaText(triggerMetadata, true)}
+                                    {renderBlockWithBorder()}
+                                </div>
+                            </div>
+
+                            {renderDeploymentHistoryTriggerMetaText(triggerMetadata)}
+                        </div>
+                    )}
+
+                    {isJobView && (
+                        <div className="display-grid trigger-details__grid">
+                            <div className="flexbox dc__content-center">
+                                <div className="flexbox-col dc__gap-4">
+                                    {renderBlockWithBorder()}
+                                    <ICEnvironment className="icon-dim-20 dc__no-shrink scn-9" />
+                                    {renderBlockWithBorder()}
+                                </div>
+                            </div>
+
+                            <div className="flexbox dc__align-items-center dc__gap-8 py-8">
+                                <span className="cn-9 fs-13 fw-6 lh-20">Env</span>
+                                <span className="fs-12 lh-20">
+                                    {environmentName !== '' ? environmentName : DEFAULT_ENV}
+                                </span>
+                                {environmentName === '' && <i className="fw-4 fs-12 lh-20">(Default)</i>}
+                            </div>
+                        </div>
+                    )}
+
+                    {!!executionInfo?.executionStartedOn && (
+                        <div className="display-grid trigger-details__grid">
+                            <div className="flexbox dc__content-center">
+                                <div className="flexbox-col dc__gap-4">
+                                    {renderBlockWithBorder()}
+                                    {renderDetailsSuccessIconBlock()}
+                                </div>
+                            </div>
+
+                            <div className="w-100 pr-20 flexbox dc__gap-8 py-8">
+                                <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Execution started</h3>
+                                <time className="cn-7 fs-13">
+                                    {getFormattedTriggerTime(executionInfo.executionStartedOn)}
+                                </time>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="display-grid trigger-details__grid">
+                        <div className="flexbox dc__content-center">
+                            <div className="flexbox-col dc__gap-4">
+                                {renderBlockWithBorder()}
+
+                                <CurrentStatusIcon
+                                    status={status}
+                                    executionInfoCurrentStatus={executionInfo?.currentStatus}
+                                />
+
+                                <div className="flex flex-grow-1" />
+                            </div>
+                        </div>
+
+                        <CurrentStatus
+                            executionInfo={executionInfo}
+                            status={status}
+                            finishedOn={finishedOn}
+                            artifact={artifact}
+                            stage={stage}
+                            type={type}
+                        />
+                    </div>
+
+                    <div className="display-grid trigger-details__grid py-4">
+                        <WorkerStatus
+                            message={executionInfo?.workerDetails.message || message}
+                            podStatus={executionInfo?.workerDetails.status || podStatus}
+                            stage={stage}
+                            finishedOn={executionInfo?.workerDetails.endTime || finishedOn}
+                            clusterId={executionInfo?.workerDetails.clusterId || DEFAULT_CLUSTER_ID}
+                            workerPodName={workerPodName}
+                            namespace={namespace}
+                        />
+                    </div>
                 </div>
             </div>
         )
