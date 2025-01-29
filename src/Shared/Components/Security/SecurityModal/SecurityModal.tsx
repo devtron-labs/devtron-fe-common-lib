@@ -138,6 +138,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
             <div className="flexbox-col p-20 dc__gap-16">
                 {!entities?.length ? null : (
                     <InfoCard
+                        // Added key so that segmented chart animation is visible on changing category/ subCategory
                         key={`${state.category}-${state.subCategory}`}
                         entities={entities}
                         lastScanTimeString={lastScanTimeString}
