@@ -19,6 +19,7 @@ import { ProgressingProps } from '@Common/Types'
 import { ButtonProps } from './types'
 
 export const BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> = {
+    [ComponentSizeType.xxs]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.xxs]} px-9 fw-6 dc__gap-6 mw-48`,
     [ComponentSizeType.xs]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.xs]} px-9 fw-6 dc__gap-6 mw-48`,
     [ComponentSizeType.small]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.small]} px-9 fw-6 dc__gap-8 mw-48`,
     [ComponentSizeType.medium]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.medium]} px-11 fw-6 dc__gap-8 mw-48`,
@@ -27,6 +28,7 @@ export const BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> 
 } as const
 
 export const ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> = {
+    [ComponentSizeType.xxs]: 'p-2',
     [ComponentSizeType.xs]: 'p-3',
     [ComponentSizeType.small]: 'p-5',
     [ComponentSizeType.medium]: 'p-7',
@@ -34,7 +36,17 @@ export const ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], str
     [ComponentSizeType.xl]: 'p-7',
 } as const
 
+export const BUTTON_SIZE_TO_ICON_SIZE_MAP: Record<ButtonProps['size'], ProgressingProps['size']> = {
+    [ComponentSizeType.xxs]: 14,
+    [ComponentSizeType.xs]: 14,
+    [ComponentSizeType.small]: 16,
+    [ComponentSizeType.medium]: 16,
+    [ComponentSizeType.large]: 16,
+    [ComponentSizeType.xl]: 20,
+} as const
+
 export const ICON_BUTTON_SIZE_TO_ICON_SIZE_MAP: Record<ButtonProps['size'], ProgressingProps['size']> = {
+    [ComponentSizeType.xxs]: 16,
     [ComponentSizeType.xs]: 16,
     [ComponentSizeType.small]: 16,
     [ComponentSizeType.medium]: 16,
