@@ -16,6 +16,7 @@
 
 import { getSanitizedIframe } from '@Common/Helper'
 import { PATTERNS } from '@Common/Constants'
+import { parse } from 'yaml'
 import { URLProtocolType } from './types'
 import { SKIP_LABEL_KEY_VALIDATION_PREFIX } from './constants'
 
@@ -452,4 +453,20 @@ export const validateCMVolumeMountPath = (value: string): { isValid: boolean; me
         }
     }
     return { isValid: true, message: '' }
+}
+
+export const validateYAML = (yamlString: string): ValidationResponseType => {
+    try {
+        if (yamlString) {
+            parse(yamlString)
+        }
+        return {
+            isValid: true,
+        }
+    } catch (err) {
+        return {
+            isValid: false,
+            message: err.message,
+        }
+    }
 }

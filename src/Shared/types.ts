@@ -960,3 +960,8 @@ export const TriggerType = {
     Auto: 'AUTOMATIC',
     Manual: 'MANUAL',
 } as const
+
+export interface AppEnvIdType {
+    appId: number
+    envId: number
+}

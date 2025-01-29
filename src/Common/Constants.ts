@@ -77,6 +77,7 @@ export const URLS = {
     DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
     GLOBAL_CONFIG_SCOPED_VARIABLES: '/global-config/scoped-variables',
     GLOBAL_CONFIG_DEPLOYMENT_CHARTS_LIST: '/global-config/deployment-charts',
+    GLOBAL_CONFIG_DEPLOYMENT_CHARTS_UPLOAD_CHART: '/global-config/deployment-charts/upload-chart',
     NETWORK_STATUS_INTERFACE: '/network-status-interface',
     CONFIG_DRIFT: 'config-drift',
     RESOURCE_BROWSER: '/resource-browser',
