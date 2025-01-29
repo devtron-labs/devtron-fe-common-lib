@@ -16,11 +16,12 @@
 
 import React from 'react'
 import Tippy from '@tippyjs/react'
-import { ConditionalWrap, CustomInput } from '../../../Common'
+import { ConditionalWrap } from '../../../Common'
 import { TEXT_MESSAGES } from './constants'
 import { KeyValueItemProps, KeyValueListActionType, KeyValueListProps } from './types'
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 import { Textarea } from '../Textarea'
+import { CustomInput } from '../CustomInput'
 
 const KeyValueItem = ({
     itemKey,

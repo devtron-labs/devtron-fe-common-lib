@@ -16,7 +16,7 @@
 
 import { KeyboardEvent, SyntheticEvent, useState } from 'react'
 import { showError } from '@Common/Helper'
-import { CustomInput } from '@Common/CustomInput'
+import { CustomInput } from '@Shared/Components/CustomInput'
 import { ButtonWithLoader, ImageWithFallback } from '@Shared/Components'
 import { validateIfImageExist, validateURL } from '@Shared/validations'
 import { ToastManager, ToastVariantType } from '@Shared/Services'

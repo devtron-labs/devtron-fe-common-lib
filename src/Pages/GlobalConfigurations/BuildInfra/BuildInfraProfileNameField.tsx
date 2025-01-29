@@ -15,8 +15,8 @@
  */
 
 import { FormEvent, FunctionComponent } from 'react'
+import { CustomInput } from '@Shared/Components'
 import { BuildInfraMetaConfigTypes, BuildInfraProfileMetaFieldProps } from './types'
-import { CustomInput } from '../../../Common'
 import { BUILD_INFRA_TEXT } from './constants'
 
 const BuildInfraProfileNameField: FunctionComponent<BuildInfraProfileMetaFieldProps> = ({

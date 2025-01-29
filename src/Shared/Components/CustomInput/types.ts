@@ -15,8 +15,8 @@
  */
 
 import { InputHTMLAttributes } from 'react'
-import { FormFieldWrapperProps } from '@Shared/Components/FormFieldWrapper'
 import { ComponentSizeType } from '@Shared/constants'
+import { FormFieldWrapperProps } from '../FormFieldWrapper'
 
 export interface CustomInputProps
     extends Omit<FormFieldWrapperProps, 'children' | 'inputId'>,

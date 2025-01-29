@@ -19,7 +19,7 @@ import warn from '../../Assets/Img/delete-medium.svg'
 import { Progressing } from '../Progressing'
 import ConfirmationDialog from './ConfirmationDialog'
 import { DeleteDialogProps } from './Types'
-import { CustomInput, CustomInputProps } from '../CustomInput'
+import { CustomInput, CustomInputProps } from '../../Shared/Components/CustomInput'
 
 export const DeleteDialog: React.FC<DeleteDialogProps> & { Description?: React.FC<any> } = ({
     showDeleteConfirmation: _showDeleteConfirmation,
