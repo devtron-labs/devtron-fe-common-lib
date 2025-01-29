@@ -14,34 +14,27 @@
  * limitations under the License.
  */
 
-import React, { HTMLInputTypeAttribute, InputHTMLAttributes, ReactNode } from 'react'
+import { InputHTMLAttributes } from 'react'
+import { FormFieldWrapperProps } from '@Shared/Components/FormFieldWrapper'
+import { ComponentSizeType } from '@Shared/constants'
 
-export interface CustomInputProps {
-    name: string
-    value: string | number
-    onChange: (e: any) => void
-    onFocus?: (e: any) => void
-    autoComplete?: string
-    label?: string | React.ReactNode
-    labelClassName?: string
-    type?: HTMLInputTypeAttribute
-    disabled?: boolean
-    placeholder?: string
-    tabIndex?: number
-    dataTestid?: string
-    isRequiredField?: boolean
-    autoFocus?: boolean
-    rootClassName?: string
-    error?: string[] | string
-    helperText?: ReactNode
-    onBlur?: (e) => void
-    readOnly?: boolean
-    noTrim?: boolean
-    onKeyPress?: (e) => void
-    defaultValue?: string | number | ReadonlyArray<string> | undefined
-    onKeyDown?: (e) => void
-    required?: boolean
-    additionalErrorInfo?: React.ReactNode
-    inputWrapClassName?: string
-    inputProps?: InputHTMLAttributes<HTMLInputElement>
+export interface CustomInputProps
+    extends Omit<FormFieldWrapperProps, 'children' | 'inputId'>,
+        Pick<
+            InputHTMLAttributes<HTMLInputElement>,
+            'onBlur' | 'disabled' | 'autoFocus' | 'onFocus' | 'type' | 'onKeyDown'
+        >,
+        Required<Pick<InputHTMLAttributes<HTMLInputElement>, 'placeholder' | 'onChange' | 'value' | 'name'>> {
+    /**
+     * If false, the input is not trimmed on blur
+     *
+     * @default true
+     */
+    shouldTrim?: boolean
+    /**
+     * Size of the textarea
+     *
+     * @default ComponentSizeType.large
+     */
+    size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large>
 }

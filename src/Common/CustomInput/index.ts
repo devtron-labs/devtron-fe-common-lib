@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export * from './CustomInput'
-export * from './Types'
+export { CustomInput } from './CustomInput'
+export type { CustomInputProps } from './Types'

@@ -14,39 +14,33 @@
  * limitations under the License.
  */
 
+import { InputHTMLAttributes, useEffect, useRef } from 'react'
+import { FormFieldWrapper, getFormFieldAriaAttributes } from '@Shared/Components/FormFieldWrapper'
+import {
+    COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP,
+    COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP,
+    ComponentSizeType,
+} from '@Shared/constants'
+import { getFormFieldBorderClassName } from '@Shared/Components/FormFieldWrapper/utils'
 import { CustomInputProps } from './Types'
-import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled-override.svg'
-import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-warning.svg'
-import { useEffect, useRef } from 'react'
 
 export const CustomInput = ({
     name,
-    value,
-    error,
-    onChange,
-    onFocus = (e) => {},
     label,
-    type = 'text',
-    disabled = false,
-    labelClassName = '',
-    placeholder = '',
-    tabIndex = 0,
-    dataTestid = '',
-    isRequiredField = false,
-    autoFocus = false,
-    rootClassName = '',
-    autoComplete = 'off',
-    helperText = '',
-    onBlur,
-    readOnly = false,
-    noTrim = false,
-    onKeyPress,
-    defaultValue,
-    onKeyDown,
+    fullWidth,
+    error,
+    helperText,
+    warningText,
+    layout,
     required,
-    additionalErrorInfo,
-    inputWrapClassName = '',
-    inputProps = {},
+    onBlur,
+    shouldTrim = true,
+    size = ComponentSizeType.large,
+    ariaLabel,
+    borderRadiusConfig,
+    type = 'text',
+    autoFocus = false,
+    ...props
 }: CustomInputProps) => {
     const inputRef = useRef<HTMLInputElement>()
 
@@ -59,22 +53,16 @@ export const CustomInput = ({
         }, 100)
     }, [autoFocus])
 
-    function handleError(error: any): any[] {
-        if (!Array.isArray(error)) {
-            return [error]
-        }
-        return error
-    }
-
-    const handleOnBlur = (event) => {
+    const handleBlur: CustomInputProps['onBlur'] = (event) => {
         // NOTE: This is to prevent the input from being trimmed when the user do not want to trim the input
-        if (!noTrim) {
+        if (shouldTrim) {
             const trimmedValue = event.target.value?.trim()
 
             if (event.target.value !== trimmedValue) {
                 event.stopPropagation()
+                // eslint-disable-next-line no-param-reassign
                 event.target.value = trimmedValue
-                onChange(event)
+                props.onChange(event)
             }
         }
         if (typeof onBlur === 'function') {
@@ -82,79 +70,46 @@ export const CustomInput = ({
         }
     }
 
-    const renderFormErrorWithIcon = (error: string) => (
-        <div className="flex left mt-4 mb-4 dc__gap-4 cr-5 fs-11 lh-16 fw-4" key={error}>
-            <ErrorIcon className="icon-dim-16 p-1 form__icon--error dc__align-self-start dc__no-shrink" />
-            <span>{error}</span>
-            {error && typeof additionalErrorInfo === 'function' && additionalErrorInfo()}
-        </div>
-    )
-
-    const getInputError = () => {
-        if (!error?.length) {
-            return null
+    const handleKeyDown: InputHTMLAttributes<HTMLInputElement>['onKeyDown'] = (event) => {
+        if (event.key === 'Enter' || event.key === 'Escape') {
+            event.stopPropagation()
         }
-        if (typeof error === 'object') {
-            return handleError(error).map((err: string) => renderFormErrorWithIcon(err))
-        }
-        return renderFormErrorWithIcon(error)
-    }
-
-    const renderInputLabelConditionally = () => {
-        if (typeof label === 'string') {
-            return <span className={`${isRequiredField ? 'dc__required-field' : ''}`}>{label}</span>
-        }
-        return label
-    }
-
-    const renderInputLabel = () => {
-        if (!label) {
-            return null
-        }
-        return (
-            <label className={`form__label ${labelClassName}`} data-testid={`label-${dataTestid}`}>
-                {renderInputLabelConditionally()}
-            </label>
-        )
     }
 
     return (
-        <div className={`flex column left top ${inputWrapClassName}`}>
-            {renderInputLabel()}
+        <FormFieldWrapper
+            inputId={name}
+            layout={layout}
+            label={label}
+            error={error}
+            helperText={helperText}
+            warningText={warningText}
+            required={required}
+            fullWidth={fullWidth}
+            ariaLabel={ariaLabel}
+            borderRadiusConfig={borderRadiusConfig}
+        >
             <input
-                data-testid={dataTestid}
-                type={type}
+                {...props}
+                {...getFormFieldAriaAttributes({
+                    inputId: name,
+                    required,
+                    label,
+                    ariaLabel,
+                    error,
+                    helperText,
+                })}
+                autoComplete="off"
                 name={name}
-                autoComplete={autoComplete}
-                className={`form__input fs-13 lh-20 fw-4 ${rootClassName}`}
-                onChange={(e) => {
-                    e.persist()
-                    onChange(e)
-                }}
-                onBlur={handleOnBlur}
-                onFocus={onFocus}
-                placeholder={placeholder}
-                value={value}
-                disabled={disabled}
-                tabIndex={tabIndex}
-                autoFocus={autoFocus}
-                readOnly={readOnly}
-                onKeyPress={onKeyPress}
-                defaultValue={defaultValue}
-                onKeyDown={onKeyDown}
+                id={name}
+                spellCheck={false}
+                data-testid={name}
                 required={required}
-                // Will be passing other props like other data attributes etc from inputProps
-                {...inputProps}
-                ref={inputRef}
+                onBlur={handleBlur}
+                onKeyDown={handleKeyDown}
+                type={type}
+                className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${getFormFieldBorderClassName(borderRadiusConfig)} w-100 dc__overflow-auto`}
             />
-
-            {getInputError()}
-            {helperText && (
-                <div className="flex left top dc__gap-4 fs-11 lh-16 cn-7 pt-4">
-                    <Info className="icon-dim-16" />
-                    <div>{helperText}</div>
-                </div>
-            )}
-        </div>
+        </FormFieldWrapper>
     )
 }
