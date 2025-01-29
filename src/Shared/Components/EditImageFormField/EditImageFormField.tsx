@@ -204,19 +204,17 @@ const EditImageFormField = ({
             {renderImage(false)}
 
             <div className="flexbox-col dc__gap-16 flex-grow-1">
-                <div className="flexbox-col dc__gap-6 w-100 dc__align-start">
-                    <CustomInput
-                        name={`${ariaLabelPrefix}-url-input`}
-                        label="Image URL"
-                        placeholder="Enter image url"
-                        value={url}
-                        onChange={handleChange}
-                        error={errorMessage || emptyPreviewURLErrorMessage}
-                        fullWidth
-                        onKeyDown={handleKeyDown}
-                        autoFocus
-                    />
-                </div>
+                <CustomInput
+                    name={`${ariaLabelPrefix}-url-input`}
+                    label="Image URL"
+                    placeholder="Enter image url"
+                    value={url}
+                    onChange={handleChange}
+                    error={errorMessage || emptyPreviewURLErrorMessage}
+                    fullWidth
+                    onKeyDown={handleKeyDown}
+                    autoFocus
+                />
 
                 <div className="flexbox dc__gap-8">
                     <ButtonWithLoader

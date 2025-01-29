@@ -38,19 +38,17 @@ const BuildInfraProfileNameField: FunctionComponent<BuildInfraProfileMetaFieldPr
     }
 
     return (
-        <div className="flexbox-col dc__gap-4 w-100 dc__align-start">
-            <CustomInput
-                name="profile-name"
-                label={BUILD_INFRA_TEXT.PROFILE_LABEL}
-                placeholder={BUILD_INFRA_TEXT.PROFILE_PLACEHOLDER}
-                value={currentValue}
-                onChange={handleChange}
-                error={error}
-                required
-                fullWidth
-                autoFocus
-            />
-        </div>
+        <CustomInput
+            name="profile-name"
+            label={BUILD_INFRA_TEXT.PROFILE_LABEL}
+            placeholder={BUILD_INFRA_TEXT.PROFILE_PLACEHOLDER}
+            value={currentValue}
+            onChange={handleChange}
+            error={error}
+            required
+            fullWidth
+            autoFocus
+        />
     )
 }
 
