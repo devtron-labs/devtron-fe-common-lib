@@ -161,7 +161,7 @@ export const getValidationSchema = ({
     validatorSchema,
     schemaURI,
 }: Pick<CodeEditorProps, 'schemaURI' | 'validatorSchema' | 'mode'>): Extension[] => {
-    if (!Object.keys(validatorSchema).length) {
+    if (!Object.keys(validatorSchema || {}).length) {
         return []
     }
 
