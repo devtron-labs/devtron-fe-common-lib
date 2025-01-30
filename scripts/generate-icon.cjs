@@ -58,7 +58,7 @@ const generateIconComponent = () => {
     import { IconBase } from './IconBase';
     import { IconBaseProps } from './types';
 
-    const iconMap = {
+    export const iconMap = {
         ${iconMapEntries.join('\n')}
     };
 
