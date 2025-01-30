@@ -23,6 +23,8 @@ import {
 } from '@Shared/constants'
 import { getFormFieldBorderClassName } from '@Shared/Components/FormFieldWrapper/utils'
 import { CustomInputProps } from './types'
+import { Button, ButtonProps, ButtonStyleType, ButtonVariantType } from '../Button'
+import { CUSTOM_INPUT_TO_ICON_BUTTON_SIZE_MAP } from './constants'
 
 const CustomInput = ({
     name,
@@ -40,6 +42,7 @@ const CustomInput = ({
     borderRadiusConfig,
     type = 'text',
     autoFocus = false,
+    endIconButtonConfig,
     ...props
 }: CustomInputProps) => {
     const inputRef = useRef<HTMLInputElement>()
@@ -91,27 +94,40 @@ const CustomInput = ({
             ariaLabel={ariaLabel}
             borderRadiusConfig={borderRadiusConfig}
         >
-            <input
-                {...props}
-                {...getFormFieldAriaAttributes({
-                    inputId: name,
-                    required,
-                    label,
-                    ariaLabel,
-                    error,
-                    helperText,
-                })}
-                autoComplete="off"
-                name={name}
-                id={name}
-                spellCheck={false}
-                data-testid={name}
-                required={required}
-                onBlur={handleBlur}
-                onKeyDown={handleKeyDown}
-                type={type}
-                className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${getFormFieldBorderClassName(borderRadiusConfig)} w-100 dc__overflow-auto`}
-            />
+            <>
+                <input
+                    {...props}
+                    {...getFormFieldAriaAttributes({
+                        inputId: name,
+                        required,
+                        label,
+                        ariaLabel,
+                        error,
+                        helperText,
+                    })}
+                    autoComplete="off"
+                    name={name}
+                    id={name}
+                    spellCheck={false}
+                    data-testid={name}
+                    required={required}
+                    onBlur={handleBlur}
+                    onKeyDown={handleKeyDown}
+                    type={type}
+                    className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${getFormFieldBorderClassName(borderRadiusConfig)} ${endIconButtonConfig ? 'pr-36-imp' : ''} w-100 dc__overflow-auto`}
+                />
+                {endIconButtonConfig && (
+                    <div className="dc__no-shrink dc__position-abs dc__top-4 dc__right-4">
+                        <Button
+                            style={ButtonStyleType.neutral}
+                            {...(endIconButtonConfig as ButtonProps)}
+                            dataTestId={`${name}-end-icon`}
+                            variant={ButtonVariantType.borderLess}
+                            size={CUSTOM_INPUT_TO_ICON_BUTTON_SIZE_MAP[size]}
+                        />
+                    </div>
+                )}
+            </>
         </FormFieldWrapper>
     )
 }

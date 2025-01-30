@@ -24,7 +24,7 @@ const FormFieldWrapper = ({
                         <FormFieldLabel inputId={inputId} label={label} required={required} layout={layout} />
                     </div>
                 )}
-                <div className="w-100">{children}</div>
+                <div className="w-100 dc__position-rel">{children}</div>
             </div>
             {(error || helperText || warningText) && (
                 <div className="flex left dc__gap-6 w-100">

@@ -17,6 +17,7 @@
 import { InputHTMLAttributes } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
 import { FormFieldWrapperProps } from '../FormFieldWrapper'
+import { ButtonProps } from '../Button'
 
 export interface CustomInputProps
     extends Omit<FormFieldWrapperProps, 'children' | 'inputId'>,
@@ -37,4 +38,8 @@ export interface CustomInputProps
      * @default ComponentSizeType.large
      */
     size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large>
+    endIconButtonConfig?: Pick<
+        ButtonProps,
+        'icon' | 'onClick' | 'disabled' | 'ariaLabel' | 'showAriaLabelInTippy' | 'style'
+    >
 }
