@@ -123,6 +123,7 @@ const UseRegisterShortcutProvider = ({
         if (
             ignoredTags.map((tag) => tag.toUpperCase()).indexOf((event.target as HTMLElement).tagName.toUpperCase()) >
                 -1 ||
+            (event.target as HTMLElement)?.role === 'textbox' ||
             disableShortcutsRef.current
         ) {
             return
