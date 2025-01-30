@@ -40,7 +40,7 @@ export const StatusFilterButtonComponent = ({
         setOverflowFilterIndex(Math.max(filterIndex, 0))
     }, [statusFilters])
 
-    const showOverflowFilters = statusFilters.length < maxInlineFiltersCount
+    const showOverflowFilters = maxInlineFiltersCount > 0 && statusFilters.length > maxInlineFiltersCount
 
     const inlineFilters = useMemo(() => {
         if (showOverflowFilters) {
