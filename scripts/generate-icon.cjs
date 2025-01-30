@@ -66,6 +66,7 @@ const generateIconComponent = () => {
     export type IconName = keyof typeof iconMap;
 
     export interface IconsProps extends Omit<IconBaseProps, 'name' | 'iconMap'> {
+        /** The name of the icon to render. */
         name: keyof typeof iconMap;
     }
 
