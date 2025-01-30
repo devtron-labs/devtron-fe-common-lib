@@ -453,12 +453,40 @@ export const ANSI_UP_REGEX = /\x1B\[.*?m/g
  * Size variants for components
  */
 export enum ComponentSizeType {
+    xxs = 'xxs',
     xs = 'xs',
     small = 'small',
     medium = 'medium',
     large = 'large',
     xl = 'xl',
 }
+
+export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xxs]: 'py-1 fs-12 lh-20',
+    [ComponentSizeType.xs]: 'py-1 fs-12 lh-20',
+    [ComponentSizeType.small]: 'py-3 fs-12 lh-20',
+    [ComponentSizeType.medium]: 'py-5 fs-13 lh-20',
+    [ComponentSizeType.large]: 'py-7 fs-13 lh-20',
+    [ComponentSizeType.xl]: 'py-9 fs-14 lh-20',
+} as const
+
+export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xxs]: 'px-5',
+    [ComponentSizeType.xs]: 'px-5',
+    [ComponentSizeType.small]: 'px-5',
+    [ComponentSizeType.medium]: 'px-7',
+    [ComponentSizeType.large]: 'px-7',
+    [ComponentSizeType.xl]: 'px-9',
+} as const
+
+export const COMPONENT_SIZE_TYPE_TO_ICON_SIZE_MAP: Record<ComponentSizeType, number> = {
+    [ComponentSizeType.xxs]: 14,
+    [ComponentSizeType.xs]: 14,
+    [ComponentSizeType.small]: 16,
+    [ComponentSizeType.medium]: 16,
+    [ComponentSizeType.large]: 16,
+    [ComponentSizeType.xl]: 20,
+} as const
 
 export const POP_UP_MENU_MODAL_ID = 'popup'
 
