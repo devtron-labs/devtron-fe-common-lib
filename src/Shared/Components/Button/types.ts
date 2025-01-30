@@ -41,138 +41,138 @@ export enum ButtonComponentType {
     link = 'link',
 }
 
-export type ButtonProps = (
-    | {
-          /**
-           * Component to be rendered from the available options
-           *
-           * @default ButtonComponentType.button
-           */
-          component?: ButtonComponentType.button | never
-          /**
-           * Props for the button component
-           */
-          buttonProps?: Omit<
-              ButtonHTMLAttributes<HTMLButtonElement>,
-              'children' | 'styles' | 'className' | 'disabled' | 'onClick'
-          >
-          linkProps?: never
-          onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick']
-      }
-    | {
-          component: ButtonComponentType.link
-          /**
-           * Props for the link component
-           */
-          linkProps: Omit<LinkProps, 'children' | 'styles' | 'className' | 'onClick'>
-          buttonProps?: never
-          onClick?: LinkProps['onClick']
-      }
-) & {
-    /**
-     * Variant of the button
-     *
-     * @default ButtonVariantType.primary
-     */
-    variant?: ButtonVariantType
-    /**
-     * Size of the button
-     *
-     * @default ComponentSizeType.large
-     */
-    size?: ComponentSizeType
-    /**
-     * Style to be applied on the button
-     *
-     * @default ButtonStyleType.default
-     */
-    style?: ButtonStyleType
-    /**
-     * If true, the loading state is shown for the button with disabled
-     */
-    isLoading?: boolean
-    /**
-     * Test id for the component
-     */
-    dataTestId: string
-    /**
-     * If true, the button is disabled
-     *
-     * @default false
-     */
-    disabled?: boolean
-    /**
-     * Determines if the button should expand to fill the full width of its container.
-     *
-     * @default false
-     */
-    fullWidth?: boolean
-    /**
-     * If true, the opacity is turned as 1 on hover of class with dc__opacity-hover--parent
-     *
-     * @default false
-     */
-    isOpacityHoverChild?: boolean
-    /**
-     * If provided, the button is clicked automatically after the pre-defined time
-     */
-    triggerAutoClickTimestamp?: number | null
-} & (
-        | {
+export type ButtonProps<ComponentType extends ButtonComponentType = ButtonComponentType.button> =
+    (ComponentType extends ButtonComponentType.link
+        ? {
+              component: ButtonComponentType.link
               /**
-               * If true, the tooltip is shown for the button
+               * Props for the link component
                */
-              showTooltip: boolean
-              /**
-               * Props for tooltip
-               */
-              // TODO: using some typing somersaults here, clean it up later
-              tooltipProps:
-                  | Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate' | 'shortcutKeyCombo'>
-                  | (Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate' | 'content'> &
-                        Required<Pick<TooltipProps, 'shortcutKeyCombo'>>)
+              linkProps: Omit<LinkProps, 'children' | 'styles' | 'className' | 'onClick'>
+              buttonProps?: never
+              onClick?: LinkProps['onClick']
           }
-        | {
-              showTooltip?: never
-              tooltipProps?: never
-          }
-    ) &
-    (
-        | {
-              icon?: never
-              ariaLabel?: never
-              showAriaLabelInTippy?: never
+        : {
               /**
-               * Text to be displayed in the button
-               */
-              text: string
-              /**
-               * If provided, icon to be displayed at the start of the button
-               */
-              startIcon?: ReactElement
-              /**
-               * If provided, icon to be displayed at the end of the button
-               */
-              endIcon?: ReactElement
-          }
-        | {
-              /**
-               * If provided, icon button is rendered
-               */
-              icon: ReactElement
-              /**
-               * If false, the ariaLabel is not shown in tippy
+               * Component to be rendered from the available options
                *
-               * @default true
+               * @default ButtonComponentType.button
                */
-              showAriaLabelInTippy?: boolean
+              component?: ComponentType | never
               /**
-               * Label for the icon button for accessibility.
-               * Shown on hover in tooltip if tippy is not provided explicitly
+               * Props for the button component
                */
-              ariaLabel: string
-              text?: never
-              startIcon?: never
-              endIcon?: never
-          }
-    )
+              buttonProps?: Omit<
+                  ButtonHTMLAttributes<HTMLButtonElement>,
+                  'children' | 'styles' | 'className' | 'disabled' | 'onClick'
+              >
+              linkProps?: never
+              onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick']
+          }) & {
+        /**
+         * Variant of the button
+         *
+         * @default ButtonVariantType.primary
+         */
+        variant?: ButtonVariantType
+        /**
+         * Size of the button
+         *
+         * @default ComponentSizeType.large
+         */
+        size?: ComponentSizeType
+        /**
+         * Style to be applied on the button
+         *
+         * @default ButtonStyleType.default
+         */
+        style?: ButtonStyleType
+        /**
+         * If true, the loading state is shown for the button with disabled
+         */
+        isLoading?: boolean
+        /**
+         * Test id for the component
+         */
+        dataTestId: string
+        /**
+         * If true, the button is disabled
+         *
+         * @default false
+         */
+        disabled?: boolean
+        /**
+         * Determines if the button should expand to fill the full width of its container.
+         *
+         * @default false
+         */
+        fullWidth?: boolean
+        /**
+         * If true, the opacity is turned as 1 on hover of class with dc__opacity-hover--parent
+         *
+         * @default false
+         */
+        isOpacityHoverChild?: boolean
+        /**
+         * If provided, the button is clicked automatically after the pre-defined time
+         */
+        triggerAutoClickTimestamp?: number | null
+    } & (
+            | {
+                  /**
+                   * If true, the tooltip is shown for the button
+                   */
+                  showTooltip: boolean
+                  /**
+                   * Props for tooltip
+                   */
+                  // TODO: using some typing somersaults here, clean it up later
+                  tooltipProps:
+                      | Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate' | 'shortcutKeyCombo'>
+                      | (Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate' | 'content'> &
+                            Required<Pick<TooltipProps, 'shortcutKeyCombo'>>)
+              }
+            | {
+                  showTooltip?: never
+                  tooltipProps?: never
+              }
+        ) &
+        (
+            | {
+                  icon?: never
+                  ariaLabel?: never
+                  showAriaLabelInTippy?: never
+                  /**
+                   * Text to be displayed in the button
+                   */
+                  text: string
+                  /**
+                   * If provided, icon to be displayed at the start of the button
+                   */
+                  startIcon?: ReactElement
+                  /**
+                   * If provided, icon to be displayed at the end of the button
+                   */
+                  endIcon?: ReactElement
+              }
+            | {
+                  /**
+                   * If provided, icon button is rendered
+                   */
+                  icon: ReactElement
+                  /**
+                   * If false, the ariaLabel is not shown in tippy
+                   *
+                   * @default true
+                   */
+                  showAriaLabelInTippy?: boolean
+                  /**
+                   * Label for the icon button for accessibility.
+                   * Shown on hover in tooltip if tippy is not provided explicitly
+                   */
+                  ariaLabel: string
+                  text?: never
+                  startIcon?: never
+                  endIcon?: never
+              }
+        )
