@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import { WidgetProps } from '@rjsf/utils'
 import ReactSelect, { MenuListProps, components } from 'react-select'
 import { PLACEHOLDERS } from '../constants'
-import { getCommonSelectStyle } from '../utils'
 
 import { ReactComponent as ArrowDown } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { deepEqual } from '@Common/Helper'
-
-const commonStyles = getCommonSelectStyle()
+import { commonSelectStyles } from '@Shared/Components'
 
 const MenuList = ({ children, ...props }: MenuListProps) => (
     <components.MenuList {...props}>{Array.isArray(children) ? children.slice(0, 20) : children}</components.MenuList>
@@ -75,11 +72,14 @@ export const SelectWidget = (props: WidgetProps) => {
             placeholder={placeholder || PLACEHOLDERS.SELECT}
             isDisabled={disabled || readonly}
             styles={{
-                ...commonStyles,
-                control: (base) => ({
-                    ...base,
-                    ...commonStyles.control,
-                    backgroundColor: 'var(--N50)',
+                ...commonSelectStyles,
+                control: (base, state) => ({
+                    ...commonSelectStyles.control(base, state),
+                    minHeight: '36px',
+                }),
+                multiValue: (base, state) => ({
+                    ...commonSelectStyles.multiValue(base, state),
+                    margin: '2px 8px 2px 2px',
                 }),
             }}
             components={{

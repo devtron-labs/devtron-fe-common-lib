@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { ReactComponent as ICArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { ReactComponent as ICAdd } from '@Icons/ic-add.svg'
 import { ComponentSizeType } from '@Shared/constants'
@@ -44,7 +60,7 @@ export const DynamicDataTableHeader = <K extends string, CustomStateType = Recor
         return (
             <div
                 key={`${key}-header`}
-                className={`bcn-50 ${shouldRenderAddRowButton ? 'py-6' : 'py-8'} px-8 flexbox dc__content-space dc__align-items-center ${(!isActionButtonAtTheStart && (key === firstHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : '')) || ''} ${key === lastHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}` : ''}`}
+                className={`bg__secondary ${shouldRenderAddRowButton ? 'py-6' : 'py-8'} px-8 flexbox dc__content-space dc__align-items-center ${(!isActionButtonAtTheStart && (key === firstHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}` : '')) || ''} ${key === lastHeaderKey ? `${hasRows || !isActionDisabled ? 'dc__top-right-radius-4' : 'dc__right-radius-4'}` : ''}`}
             >
                 {isSortable ? (
                     <button
@@ -95,7 +111,7 @@ export const DynamicDataTableHeader = <K extends string, CustomStateType = Recor
                 <div className="dynamic-data-table__row">
                     {isActionButtonAtTheStart && (
                         <div
-                            className={`bcn-50 ${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
+                            className={`bg__secondary ${hasRows || !isActionDisabled ? 'dc__top-left-radius' : 'dc__left-radius-4'}`}
                         />
                     )}
                     {headers.map((header) => renderHeaderCell(header))}

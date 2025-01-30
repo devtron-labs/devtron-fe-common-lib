@@ -15,7 +15,7 @@
  */
 
 .ci-details {
-    background-color: var(--white);
+    background-color: var(--bg-primary);
     overflow: hidden;
     height: 100%;
     width: 100%;
@@ -23,9 +23,6 @@
     display: flex;
 
     .ci-artifact {
-        .add-image-button {
-            margin-left: 52px;
-        }
         &.ci-artifact--report {
             svg path {
                 fill: currentColor;
@@ -66,7 +63,7 @@
 
             .trigger-details__summary {
                 .inprogress-status-color {
-                    color: var(--inprogress-orange);
+                    color: var(--O500);
                 }
             }
         }
@@ -99,19 +96,6 @@
     }
 }
 
-.historical-diff {
-    display: grid;
-    grid-template-rows: 60px auto;
-    height: 100%;
-    background-color: var(--white);
-}
-
-.historical-diff__container {
-    display: grid;
-    grid-template-columns: 280px auto;
-    height: calc(100vh - 147px);
-}
-
 .deployment-diff__upper {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -127,16 +111,10 @@
     }
 }
 
-.historical-diff__left {
-    padding: 16px 12px;
-    overflow: hidden;
-    min-width: 280px;
-}
-
 .history_diff__wrapper {
     .tab-list__tab-link.active {
         color: var(--N900);
-        background: #e5f2ff;
+        background: var(--B100);
         font-weight: 600;
         border-bottom: 0px;
     }
@@ -181,10 +159,10 @@
 }
 
 .icon-selected {
-    background-color: #0066cc;
+    background-color: var(--B500);
     border-radius: 4px;
     path {
-        stroke: #fff;
+        stroke: var(--N0);
     }
 }
 
@@ -193,7 +171,7 @@
 
     &:hover {
         text-decoration: unset;
-        background: var(--N50);
+        background: var(--bg-secondary);
     }
 
     &.active {
@@ -233,8 +211,8 @@
     .pulse-highlight {
         width: 12px;
         height: 12px;
-        border: solid 4px rgba(255, 126, 91, 0.4);
-        background-color: #ff7e5b;
+        border: solid 4px var(--O200);
+        background-color: var(--O500);
         position: relative;
         top: 5px;
         right: -5px;
@@ -259,7 +237,7 @@
     .resource-list {
         .app-status-row {
             &:hover {
-                background-color: var(--N50);
+                background-color: var(--bg-secondary);
             }
         }
     }

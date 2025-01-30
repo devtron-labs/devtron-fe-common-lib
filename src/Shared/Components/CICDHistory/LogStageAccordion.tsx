@@ -1,9 +1,27 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { RefCallback } from 'react'
 import DOMPurify from 'dompurify'
 import { getTimeDifference } from '@Shared/Helpers'
-import { RefCallback } from 'react'
+import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
+import { ReactComponent as ICStack } from '@Icons/ic-stack.svg'
+import { TargetPlatformListTooltip } from '../TargetPlatforms'
 import { LogStageAccordionProps } from './types'
 import { getLogSearchIndex, getStageStatusIcon } from './utils'
-import { ReactComponent as ICCaretDown } from '../../../Assets/Icon/ic-caret-down.svg'
 
 const LogsItemContainer = ({ children }: { children: React.ReactNode }) => (
     <div className="display-grid dc__column-gap-10 dc__align-start logs-renderer__log-item">{children}</div>
@@ -22,6 +40,7 @@ const LogStageAccordion = ({
     isLoading,
     fullScreenView,
     searchIndex,
+    targetPlatforms,
 }: LogStageAccordionProps) => {
     const handleAccordionToggle = () => {
         if (isOpen) {
@@ -69,17 +88,35 @@ const LogStageAccordion = ({
             >
                 <div className="flexbox dc__gap-8 dc__transparent dc__align-items-center">
                     <ICCaretDown
-                        className={`icon-dim-16 dc__no-shrink dc__transition--transform scn-0 ${!isOpen ? 'dc__flip-n90 dc__opacity-0_5' : ''}`}
+                        className={`icon-dim-16 dc__no-shrink dc__transition--transform icon-stroke__white ${!isOpen ? 'dc__flip-n90 dc__opacity-0_5' : ''}`}
                     />
 
                     <div className="flexbox dc__gap-12 dc__align-items-center">
                         {getStageStatusIcon(status)}
 
-                        <h3 className="m-0 cn-0 fs-13 fw-4 lh-20 dc__word-break">{stage}</h3>
+                        <h3 className="m-0 text__white fs-13 fw-4 lh-20 dc__word-break">{stage}</h3>
                     </div>
                 </div>
 
-                {!!endTime && <span className="cn-0 fs-13 fw-4 lh-20">{getFormattedTimeDifference()}</span>}
+                <div className="flexbox dc__gap-8 dc__align-items-center">
+                    {!!targetPlatforms?.length && (
+                        <>
+                            <TargetPlatformListTooltip targetPlatforms={targetPlatforms}>
+                                <div className="flexbox dc__gap-4 dc__align-items-center">
+                                    <ICStack className="dc__no-shrink icon-stroke__white icon-dim-12" />
+                                    <span className="text__white fs-13 fw-4 lh-20">
+                                        {targetPlatforms.length}&nbsp;target platform
+                                        {targetPlatforms.length > 1 ? 's' : ''}
+                                    </span>
+                                </div>
+                            </TargetPlatformListTooltip>
+
+                            {!!endTime && <div className="dc__bullet--white dc__bullet" />}
+                        </>
+                    )}
+
+                    {!!endTime && <span className="text__white fs-13 fw-4 lh-20">{getFormattedTimeDifference()}</span>}
+                </div>
             </button>
 
             {isOpen && (
@@ -101,7 +138,7 @@ const LogStageAccordion = ({
                                     {logsIndex + 1}
                                 </span>
                                 <pre
-                                    className="mono fs-14 mb-0-imp cn-0 dc__word-break lh-20 dc__unset-pre"
+                                    className="mono fs-14 mb-0-imp text__white dc__word-break lh-20 dc__unset-pre"
                                     // eslint-disable-next-line react/no-danger
                                     dangerouslySetInnerHTML={{
                                         __html: DOMPurify.sanitize(log),
@@ -114,7 +151,7 @@ const LogStageAccordion = ({
                     {isLoading && (
                         <LogsItemContainer>
                             <span />
-                            <div className="dc__loading-dots cn-0" />
+                            <div className="dc__loading-dots text__white" />
                         </LogsItemContainer>
                     )}
                 </div>

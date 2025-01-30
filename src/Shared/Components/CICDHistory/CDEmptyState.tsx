@@ -16,7 +16,7 @@
 
 import React from 'react'
 import { GenericEmptyState, ImageType } from '../../../Common'
-import AppNotDeployed from '../../../Assets/Img/app-not-deployed.png'
+import AppNotDeployed from '../../../Assets/Img/app-not-deployed.svg'
 import { EMPTY_STATE_STATUS } from '../../constants'
 
 const CDEmptyState = ({
@@ -54,7 +54,7 @@ const CDEmptyState = ({
             </button>
         ) : null
     return (
-        <div className="dc__position-rel" style={{ backgroundColor: 'var(--window-bg)' }}>
+        <div className="dc__position-rel" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
             <GenericEmptyState
                 image={imgSource || AppNotDeployed}
                 classname="fs-16"

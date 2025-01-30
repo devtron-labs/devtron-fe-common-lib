@@ -60,8 +60,8 @@ const AnnouncementBanner = ({ parentClassName = '', isCDMaterial = false }: Anno
     }
 
     const renderAnnouncementBanner = () => (
-        <div className="flex">
-            <div>{message}</div>
+        <div className="flex dc__gap-4">
+            <div className="dc__word-break cn-7">{message}</div>
             {isCDMaterial ? null : (
                 <Close className="icon-dim-20 ml-8 fcn-9" onClick={onClickCloseAnnouncememtBanner} />
             )}
@@ -72,9 +72,20 @@ const AnnouncementBanner = ({ parentClassName = '', isCDMaterial = false }: Anno
         <div className={`announcement-banner-container ${parentClassName}`}>
             <InfoColourBar
                 message={renderAnnouncementBanner()}
-                classname="announcement-bar fw-6 lh-20"
+                classname="warn fw-6 lh-20"
                 Icon={MegaphoneIcon}
+                iconClass="scn-6"
                 iconSize={20}
+                styles={
+                    isCDMaterial
+                        ? {
+                              borderTop: 'none',
+                              borderLeft: 'none',
+                              borderRight: 'none',
+                              borderRadius: 0,
+                          }
+                        : {}
+                }
             />
         </div>
     ) : null

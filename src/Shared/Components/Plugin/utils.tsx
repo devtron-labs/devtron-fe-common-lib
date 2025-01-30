@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-import { OptionProps } from 'react-select'
-import { OptionType } from '@Common/Types'
-import { Option } from '@Common/MultiSelectCustomization'
 import { ParentPluginDTO, PluginCreationType, PluginDataStoreType } from './types'
-import { commonSelectStyles } from '../ReactSelect'
 import { stringComparatorBySortOrder } from '../../Helpers'
 import { DEFAULT_PLUGIN_CREATED_BY } from './constants'
 
@@ -98,29 +94,6 @@ export const parsePluginDetailsDTOIntoPluginStore = (pluginData: ParentPluginDTO
         pluginVersionStore,
     }
 }
-
-export const pluginTagSelectStyles = {
-    ...commonSelectStyles,
-    option: (base, state) => ({
-        ...base,
-        height: '36px',
-        padding: '8px 0px',
-        backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
-        color: 'var(--N900)',
-        cursor: 'pointer',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-
-        ':active': {
-            backgroundColor: 'var(--N100)',
-        },
-    }),
-}
-
-export const PluginTagOption = (props: OptionProps<OptionType, true>) => (
-    <Option {...props} showTippy placement="left" />
-)
 
 /**
  * @description This method takes the initial plugin data store and updates the keys with the target parent plugin store and plugin version store

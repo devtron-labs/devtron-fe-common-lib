@@ -1,5 +1,17 @@
 /*
  * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 import IndexedTextDisplay from '../components/IndexedTextDisplay'
@@ -10,12 +22,7 @@ import {
     mapSeveritiesToSegmentedBarChartEntities,
     stringifySeverities,
 } from '../utils'
-import {
-    MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID,
-    SCAN_FAILED_EMPTY_STATE,
-    SCAN_IN_PROGRESS_EMPTY_STATE,
-    SEVERITY_DEFAULT_SORT_ORDER,
-} from '../constants'
+import { SCAN_FAILED_EMPTY_STATE, SCAN_IN_PROGRESS_EMPTY_STATE, SEVERITY_DEFAULT_SORT_ORDER } from '../constants'
 import {
     ScanResultDTO,
     CATEGORIES,
@@ -164,6 +171,7 @@ const getMisconfigurationsDetail = (
     lastScanTimeString: string,
     status: StatusType['status'],
     scanToolName: StatusType['scanToolName'],
+    scanToolUrl: StatusType['scanToolUrl'],
 ) => ({
     titlePrefix: 'File path',
     title: element.filePath,
@@ -231,7 +239,8 @@ const getMisconfigurationsDetail = (
     defaultSortIndex: 1,
     entities: mapSeveritiesToSegmentedBarChartEntities(element.misConfSummary.status),
     lastScanTimeString,
-    scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[scanToolName],
+    scanToolName,
+    scanToolUrl,
     hasExpandableRows: true,
     status,
 })
@@ -242,6 +251,7 @@ export const getCodeScanMisconfigurations = (
     lastScanTimeString: string,
     status: StatusType['status'],
     scanToolName: StatusType['scanToolName'],
+    scanToolUrl: StatusType['scanToolUrl'],
 ) => ({
     headers: [
         { headerText: 'file path (relative)', isSortable: true, width: 289 },
@@ -262,6 +272,7 @@ export const getCodeScanMisconfigurations = (
                                   lastScanTimeString,
                                   status,
                                   scanToolName,
+                                  scanToolUrl,
                               )}
                               setDetailViewData={setDetailViewData}
                           >
@@ -287,6 +298,7 @@ const getExposedSecretsDetail = (
     lastScanTimeString: string,
     status: StatusType['status'],
     scanToolName: StatusType['scanToolName'],
+    scanToolUrl: StatusType['scanToolUrl'],
 ) => ({
     titlePrefix: 'File',
     title: element.filePath,
@@ -336,7 +348,8 @@ const getExposedSecretsDetail = (
     defaultSortIndex: 1,
     entities: mapSeveritiesToSegmentedBarChartEntities(element.summary.severities),
     lastScanTimeString,
-    scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[scanToolName],
+    scanToolName,
+    scanToolUrl,
     hasExpandableRows: true,
     status,
 })
@@ -347,6 +360,7 @@ export const getCodeScanExposedSecrets = (
     lastScanTimeString: string,
     status: StatusType['status'],
     scanToolName: StatusType['scanToolName'],
+    scanToolUrl: StatusType['scanToolUrl'],
 ) => ({
     headers: [
         { headerText: 'file path (relative)', isSortable: true, width: 372 },
@@ -366,6 +380,7 @@ export const getCodeScanExposedSecrets = (
                                   lastScanTimeString,
                                   status,
                                   scanToolName,
+                                  scanToolUrl,
                               )}
                               setDetailViewData={setDetailViewData}
                           >
@@ -400,6 +415,7 @@ export const getCodeScanTableData = (
                 data.StartedOn,
                 data.status,
                 data.scanToolName,
+                data.scanToolUrl,
             )
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return getCodeScanExposedSecrets(
@@ -408,6 +424,7 @@ export const getCodeScanTableData = (
                 data.StartedOn,
                 data.status,
                 data.scanToolName,
+                data.scanToolUrl,
             )
         default:
             return null
@@ -418,30 +435,32 @@ export const getCodeScanInfoCardData = (
     data: CodeScan,
     subCategory: SecurityModalStateType['subCategory'],
 ): InfoCardPropsType => {
+    const { StartedOn, scanToolName, scanToolUrl } = data
+    const scanInfo: Omit<InfoCardPropsType, 'entities'> = {
+        lastScanTimeString: StartedOn,
+        scanToolName,
+        scanToolUrl,
+    }
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                lastScanTimeString: data.StartedOn,
-                scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName],
+                ...scanInfo,
             }
         case SUB_CATEGORIES.LICENSE:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                lastScanTimeString: data.StartedOn,
-                scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName],
+                ...scanInfo,
             }
         case SUB_CATEGORIES.MISCONFIGURATIONS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.misConfSummary.status),
-                lastScanTimeString: data.StartedOn,
-                scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName],
+                ...scanInfo,
             }
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                lastScanTimeString: data.StartedOn,
-                scanToolId: MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName],
+                ...scanInfo,
             }
         default:
             return null
@@ -460,27 +479,28 @@ const getCompletedEmptyState = (
 
     const detailViewTitleText = detailViewData ? `${detailViewData.titlePrefix}: ${detailViewData.title}` : ''
     const subTitleText = detailViewTitleText || 'code scan'
-    const scanToolId = MAP_SCAN_TOOL_NAME_TO_SCAN_TOOL_ID[data.scanToolName]
+    const { scanToolName, scanToolUrl } = data
+    const scanCompletedState = getScanCompletedEmptyState(scanToolName, scanToolUrl)
 
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
             return {
-                ...getScanCompletedEmptyState(scanToolId),
+                ...scanCompletedState,
                 subTitle: `No security vulnerability found in ${subTitleText}`,
             }
         case SUB_CATEGORIES.LICENSE:
             return {
-                ...getScanCompletedEmptyState(scanToolId),
+                ...scanCompletedState,
                 subTitle: `No license risks found in ${subTitleText}`,
             }
         case SUB_CATEGORIES.MISCONFIGURATIONS:
             return {
-                ...getScanCompletedEmptyState(scanToolId),
+                ...scanCompletedState,
                 subTitle: `No misconfigurations found in ${subTitleText}`,
             }
         case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
-                ...getScanCompletedEmptyState(scanToolId),
+                ...scanCompletedState,
                 subTitle: `No exposed secrets found in ${subTitleText}`,
             }
         default:

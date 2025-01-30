@@ -1,5 +1,17 @@
 /*
  * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 import React, { useState } from 'react'
@@ -19,7 +31,7 @@ import { ComponentSizeType } from '@Shared/constants'
 import { Table, InfoCard } from './components'
 import { getDefaultSecurityModalState } from './constants'
 import { getTableData, getInfoCardData } from './config'
-import { SecurityModalPropsType, SecurityModalStateType, DetailViewDataType, SidebarPropsType } from './types'
+import { SecurityModalPropsType, SecurityModalStateType, DetailViewDataType } from './types'
 import { getEmptyStateValues } from './config/EmptyState'
 import './styles.scss'
 
@@ -44,15 +56,14 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
 }) => {
     const data = responseData ?? null
 
-    const categoriesConfig: SidebarPropsType['categoriesConfig'] = {
-        imageScan: !!data?.imageScan,
-        imageScanLicenseRisks: !!data?.imageScan?.license,
-        codeScan: !!data?.codeScan,
-        kubernetesManifest: !!data?.kubernetesManifest,
-    }
-
     const [state, setState] = useState<SecurityModalStateType>(
-        defaultState ?? getDefaultSecurityModalState(categoriesConfig),
+        defaultState ??
+            getDefaultSecurityModalState({
+                imageScan: !!data?.imageScan,
+                imageScanLicenseRisks: !!data?.imageScan?.license,
+                codeScan: !!data?.codeScan,
+                kubernetesManifest: !!data?.kubernetesManifest,
+            }),
     )
 
     const setDetailViewData = (detailViewData: DetailViewDataType) => {
@@ -86,7 +97,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     )
 
     const renderDetailViewSubHeader = () => (
-        <div className="pt-10 pb-10 pl-12 pr-12 flexbox dc__align-items-center dc__gap-12 dc__position-sticky dc__border-bottom-n1 dc__top-0 bcn-0 dc__zi-20">
+        <div className="pt-10 pb-10 pl-12 pr-12 flexbox dc__align-items-center dc__gap-12 dc__position-sticky dc__border-bottom-n1 dc__top-0 bg__primary dc__zi-20">
             <button
                 type="button"
                 className="dc__unset-button-styles"
@@ -99,7 +110,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
             </button>
             <div className="flexbox dc__gap-4" data-testid="security-detail-view-strip">
                 <span className="fs-13 fw-6 lh-20 cn-900">{selectedDetailViewData.titlePrefix}:</span>
-                <span className="fs-13 fw-4 lh-20 cn-900 dc__ff-monospace dc__truncate dc__mxw-600">
+                <span className="fs-13 fw-4 lh-20 cn-900 mono dc__truncate dc__mxw-600">
                     {selectedDetailViewData.title}
                 </span>
                 <ClipboardButton content={selectedDetailViewData.title} />
@@ -120,13 +131,18 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
             selectedDetailViewData ||
             getTableData(data, state.category, state.subCategory, setDetailViewData, hidePolicy)
 
-        const { entities, lastScanTimeString, scanToolId } =
+        const { entities, lastScanTimeString, scanToolName, scanToolUrl } =
             selectedDetailViewData || getInfoCardData(data, state.category, state.subCategory)
 
         return (
             <div className="flexbox-col p-20 dc__gap-16">
                 {!entities?.length ? null : (
-                    <InfoCard entities={entities} lastScanTimeString={lastScanTimeString} scanToolId={scanToolId} />
+                    <InfoCard
+                        entities={entities}
+                        lastScanTimeString={lastScanTimeString}
+                        scanToolName={scanToolName}
+                        scanToolUrl={scanToolUrl}
+                    />
                 )}
                 <Table
                     // NOTE: this key is important. Whenever data changes the table should be remounted
@@ -162,9 +178,9 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
             /* NOTE: the height is restricted to (viewport - header) height since we need overflow-scroll */
             <div className="flexbox" style={{ height: 'calc(100vh - 49px)' }}>
                 {/* NOTE: only show sidebar in AppDetails */}
-                {Sidebar && <Sidebar modalState={state} setModalState={setState} categoriesConfig={categoriesConfig} />}
+                {Sidebar && <Sidebar modalState={state} setModalState={setState} scanResult={responseData} />}
                 <div className="dc__border-right-n1 h-100" />
-                <div className="dc__overflow-scroll flex-grow-1" style={{ width: '744px' }}>
+                <div className="dc__overflow-auto flex-grow-1" style={{ width: '744px' }}>
                     {selectedDetailViewData && renderDetailViewSubHeader()}
                     {data && renderInfoCardAndTable()}
                 </div>
@@ -175,7 +191,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     return (
         <VisibleModal2 className="dc__position-rel" close={handleModalClose}>
             <div
-                className={`${Sidebar ? 'w-1024' : 'w-800'} h-100vh bcn-0 flexbox-col dc__right-0 dc__top-0 dc__position-abs`}
+                className={`${Sidebar ? 'w-1024' : 'w-800'} h-100vh bg__primary flexbox-col dc__right-0 dc__top-0 dc__position-abs`}
                 onClick={stopPropagation}
             >
                 {renderHeader()}

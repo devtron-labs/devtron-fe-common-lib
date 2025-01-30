@@ -14,6 +14,18 @@
  * limitations under the License.
  */
 
+import {
+    BuildInfraCMCSConfigType,
+    BuildInfraCMCSValueType,
+    BuildInfraConfigPayloadType,
+    BuildInfraConfigurationItemPayloadType,
+    BuildInfraPayloadType,
+    BuildInfraProfileConfigBase,
+    DEFAULT_PROFILE_NAME,
+    INFRA_CONFIG_CONTAINING_SUB_VALUES,
+    INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP,
+    InfraConfigWithSubValues,
+} from '@Pages/index'
 import { ROUTES } from '../../../Common'
 import {
     BuildInfraConfigInfoType,
@@ -28,7 +40,6 @@ import {
     BuildInfraPlatformConfigurationMapDTO,
     BuildInfraProfileBase,
     BuildInfraProfileData,
-    BuildInfraProfileInfoDTO,
     BuildInfraProfileResponseType,
     BuildInfraProfileTransformerParamsType,
     BuildInfraProfileVariants,
@@ -45,7 +56,13 @@ import {
     INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X,
     USE_BUILD_X_DRIVER_FALLBACK,
 } from './constants'
-import { getUniqueId } from '../../../Shared'
+import {
+    CMSecretConfigData,
+    CMSecretPayloadType,
+    getConfigMapSecretFormInitialValues,
+    getConfigMapSecretPayload,
+    getUniqueId,
+} from '../../../Shared'
 
 export const parsePlatformConfigIntoValue = (
     configuration: BuildInfraConfigValuesType,
@@ -91,6 +108,13 @@ export const parsePlatformConfigIntoValue = (
                         }
                     })
                     .filter((toleranceItem) => toleranceItem.key),
+            }
+
+        case BuildInfraConfigTypes.CONFIG_MAP:
+        case BuildInfraConfigTypes.SECRET:
+            return {
+                key: configuration.key,
+                value: configuration.value || [],
             }
 
         case BuildInfraConfigTypes.BUILD_TIMEOUT:
@@ -145,8 +169,71 @@ const getBaseProfileObject = ({
     }
 }
 
+export const getDoesInfraConfigContainsSubValue = (
+    infraConfig: BuildInfraConfigTypes,
+): infraConfig is InfraConfigWithSubValues => !!INFRA_CONFIG_CONTAINING_SUB_VALUES[infraConfig]
+
+/**
+ * In case of locators other than cm/cs, we just pass data to parsePlatformConfigIntoValue
+ * In case of cm/cs we convert the DTO into intermediatory UI form with defaultValue as it itself
+ */
+const parsePlatformServerConfigIntoUIConfig = (
+    serverConfig: BuildInfraConfigurationDTO,
+    isDefaultProfile: boolean,
+): BuildInfraConfigValuesType => {
+    if (!INFRA_CONFIG_CONTAINING_SUB_VALUES[serverConfig.key]) {
+        return parsePlatformConfigIntoValue(serverConfig as BuildInfraConfigValuesType)
+    }
+
+    const parsedCMCSFormValues: BuildInfraCMCSConfigType['value'] = (serverConfig.value as CMSecretConfigData[])?.map(
+        (configMapSecretData) => {
+            const cmSecretFormProps = getConfigMapSecretFormInitialValues({
+                configMapSecretData,
+                componentType: INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP[serverConfig.key],
+                cmSecretStateLabel: null,
+                isJob: true,
+                fallbackMergeStrategy: null,
+            })
+
+            return {
+                useFormProps: structuredClone(cmSecretFormProps),
+                defaultValue: structuredClone(cmSecretFormProps),
+                initialResponse: structuredClone(configMapSecretData),
+                defaultValueInitialResponse: structuredClone(configMapSecretData),
+                id: getUniqueId(),
+                isOverridden: true,
+                canOverride: !isDefaultProfile,
+            }
+        },
+    )
+
+    return {
+        key: serverConfig.key as InfraConfigWithSubValues,
+        value: parsedCMCSFormValues,
+    }
+}
+
+const parseUIConfigToPayload = (uiConfig: BuildInfraConfigValuesType): BuildInfraConfigPayloadType => {
+    const parsedConfig = parsePlatformConfigIntoValue(uiConfig, false)
+    if (!INFRA_CONFIG_CONTAINING_SUB_VALUES[parsedConfig.key]) {
+        return parsedConfig as BuildInfraConfigPayloadType
+    }
+
+    // Only overridden values are needed in payload
+    const overriddenConfigs = (parsedConfig.value as BuildInfraCMCSValueType[])?.filter(
+        (configMapSecretData) => configMapSecretData.isOverridden,
+    )
+    const parsedCMCSValues = overriddenConfigs?.map(({ useFormProps }) => getConfigMapSecretPayload(useFormProps))
+
+    return {
+        key: parsedConfig.key as InfraConfigWithSubValues,
+        value: parsedCMCSValues,
+    }
+}
+
 const getConfigurationMapWithoutDefaultFallback = (
     platformConfigurationMap: BuildInfraPlatformConfigurationMapDTO,
+    isDefaultProfile: boolean,
 ): Record<string, BuildInfraConfigurationMapTypeWithoutDefaultFallback> =>
     Object.entries(platformConfigurationMap || {}).reduce<
         Record<string, BuildInfraConfigurationMapTypeWithoutDefaultFallback>
@@ -154,9 +241,17 @@ const getConfigurationMapWithoutDefaultFallback = (
         const platformConfigValuesMap: BuildInfraConfigurationMapTypeWithoutDefaultFallback =
             configurations?.reduce<BuildInfraConfigurationMapTypeWithoutDefaultFallback>(
                 (configurationMap, configuration) => {
-                    const currentConfigValue: BuildInfraConfigInfoType = {
-                        ...configuration,
+                    const configValues = parsePlatformServerConfigIntoUIConfig(configuration, isDefaultProfile)
+                    const baseValue: BuildInfraProfileConfigBase = {
+                        id: configuration.id,
+                        profileName: configuration.profileName,
+                        active: configuration.active,
                         targetPlatform: platformName,
+                    }
+
+                    const currentConfigValue: BuildInfraConfigInfoType = {
+                        ...baseValue,
+                        ...configValues,
                     }
 
                     // eslint-disable-next-line no-param-reassign
@@ -170,17 +265,21 @@ const getConfigurationMapWithoutDefaultFallback = (
                 {} as BuildInfraConfigurationMapTypeWithoutDefaultFallback,
             ) ?? ({} as BuildInfraConfigurationMapTypeWithoutDefaultFallback)
 
-        acc[platformName] = platformConfigValuesMap
+        acc[platformName] = structuredClone(platformConfigValuesMap)
 
         return acc
     }, {})
 
 const getPlatformConfigurationsWithDefaultValues = ({
-    profileConfigurationsMap,
-    defaultConfigurationsMap,
+    profileConfigurationsMap: profileConfigurationsMapProp,
+    defaultConfigurationsMap: defaultConfigurationsMapProp,
     platformName,
-}: GetPlatformConfigurationsWithDefaultValuesParamsType): BuildInfraConfigurationMapType =>
-    Object.values(BuildInfraConfigTypes).reduce<BuildInfraConfigurationMapType>((acc, configType) => {
+    isDefaultProfile = false,
+}: GetPlatformConfigurationsWithDefaultValuesParamsType): BuildInfraConfigurationMapType => {
+    const profileConfigurationsMap = structuredClone(profileConfigurationsMapProp)
+    const defaultConfigurationsMap = structuredClone(defaultConfigurationsMapProp)
+
+    return Object.values(BuildInfraConfigTypes).reduce<BuildInfraConfigurationMapType>((acc, configType) => {
         const defaultConfiguration = defaultConfigurationsMap[configType]
         const profileConfiguration = profileConfigurationsMap[configType]?.active
             ? profileConfigurationsMap[configType]
@@ -191,23 +290,87 @@ const getPlatformConfigurationsWithDefaultValues = ({
         }
 
         const defaultValue = parsePlatformConfigIntoValue(defaultConfiguration)
+
+        const configContainsSubValue = INFRA_CONFIG_CONTAINING_SUB_VALUES[configType] && !isDefaultProfile
         // If value is not present in profile that means we are inheriting the value
-        const finalConfiguration: BuildInfraConfigurationType = profileConfiguration
+        let finalConfiguration: BuildInfraConfigurationType = profileConfiguration
             ? {
                   ...profileConfiguration,
-                  defaultValue,
+                  defaultValue: !configContainsSubValue ? defaultValue : null,
               }
-            : {
-                  ...defaultValue,
-                  active: false,
-                  targetPlatform: platformName,
-                  defaultValue,
-              }
+            : null
+
+        if (configContainsSubValue) {
+            /**
+             * Logic is, all the values inside profileConfiguration are overridden values, and canOverride will be true, if name is present in defaultConfiguration and we will put that defaultConfiguration value in defaultValue
+             * Then we will traverse all the values in defaultConfiguration, and if they are not overridden by user, we will add them to finalCMCSValues
+             */
+
+            const defaultConfigurationValueMap = (defaultConfiguration.value as BuildInfraCMCSValueType[])?.reduce<
+                Record<string, BuildInfraCMCSValueType>
+            >((defaultCMCSMap, configMapSecretData) => {
+                // eslint-disable-next-line no-param-reassign
+                defaultCMCSMap[configMapSecretData.useFormProps.name] = configMapSecretData
+                return defaultCMCSMap
+            }, {})
+
+            const finalValues: BuildInfraCMCSValueType[] =
+                (profileConfiguration?.value as BuildInfraCMCSValueType[])?.map((configMapSecretData) => {
+                    const defaultConfigInfo = structuredClone(
+                        defaultConfigurationValueMap[configMapSecretData.useFormProps.name],
+                    )
+
+                    return {
+                        ...configMapSecretData,
+                        defaultValueInitialResponse: defaultConfigInfo?.defaultValueInitialResponse,
+                        defaultValue: defaultConfigInfo?.useFormProps,
+                        isOverridden: true,
+                        canOverride: !!defaultConfigInfo,
+                    }
+                }) || []
+
+            const overriddenValuesMap = finalValues.reduce<Record<string, BuildInfraCMCSValueType>>(
+                (overriddenValuesAcc, overriddenValue) => {
+                    // eslint-disable-next-line no-param-reassign
+                    overriddenValuesAcc[overriddenValue.useFormProps.name] = overriddenValue
+                    return overriddenValuesAcc
+                },
+                {} as Record<string, BuildInfraCMCSValueType>,
+            )
+
+            Object.values(defaultConfigurationValueMap).forEach((defaultCMCSValue) => {
+                if (!overriddenValuesMap[defaultCMCSValue.useFormProps.name]) {
+                    finalValues.push({
+                        ...defaultCMCSValue,
+                        isOverridden: false,
+                        canOverride: true,
+                    })
+                }
+            })
+
+            finalConfiguration = {
+                id: profileConfiguration?.id,
+                profileName: profileConfiguration?.profileName,
+                active: profileConfiguration?.active,
+                targetPlatform: platformName,
+                key: configType as InfraConfigWithSubValues,
+                value: finalValues,
+                defaultValue: null,
+            }
+        } else {
+            finalConfiguration = finalConfiguration || {
+                ...defaultValue,
+                active: false,
+                targetPlatform: platformName,
+                defaultValue,
+            }
+        }
 
         acc[configType] = finalConfiguration
 
         return acc
     }, {} as BuildInfraConfigurationMapType)
+}
 
 // Would receive a single profile and return transformed response
 export const getTransformedBuildInfraProfileResponse = ({
@@ -217,14 +380,20 @@ export const getTransformedBuildInfraProfileResponse = ({
     fromCreateView,
     canConfigureUseK8sDriver,
 }: BuildInfraProfileTransformerParamsType): BuildInfraProfileResponseType => {
-    // Ideal assumption is defaultConfigurations would contain all the required keys
-    const globalProfilePlatformConfigMap = getConfigurationMapWithoutDefaultFallback(defaultConfigurations)
+    const isDefaultProfile = !fromCreateView && profile?.name === DEFAULT_PROFILE_NAME
+
+    // For cm/cs this will return the values with default as null and isOverridden as true
+    const globalProfilePlatformConfigMap = getConfigurationMapWithoutDefaultFallback(
+        defaultConfigurations,
+        isDefaultProfile,
+    )
     const profileConfigurations = getConfigurationMapWithoutDefaultFallback(
         fromCreateView
             ? {
                   [BUILD_INFRA_DEFAULT_PLATFORM_NAME]: [],
               }
             : profile?.configurations,
+        isDefaultProfile,
     )
 
     // Would depict state of target platforms in current profile with their fallback/default value (we will display in case we inheriting) attached to them
@@ -238,6 +407,7 @@ export const getTransformedBuildInfraProfileResponse = ({
                 profileConfigurationsMap: profilePlatformConfigurationMap,
                 defaultConfigurationsMap: globalProfilePlatformConfigurationMap,
                 platformName,
+                isDefaultProfile,
             })
 
             return acc
@@ -251,6 +421,7 @@ export const getTransformedBuildInfraProfileResponse = ({
     >((acc, [platformName, globalPlatformConfig]) => {
         // Logic is, if we will pre-fill profile with default platform of current profile, and set active to true, i.e, overridden, with default values from global profile
         const baseConfigurations = configurations[BUILD_INFRA_DEFAULT_PLATFORM_NAME]
+
         acc[platformName] = Object.values(BuildInfraConfigTypes).reduce<BuildInfraConfigurationMapType>(
             (fallbackAcc, configType) => {
                 if (!globalPlatformConfig[configType]) {
@@ -260,6 +431,7 @@ export const getTransformedBuildInfraProfileResponse = ({
                 const baseValue = parsePlatformConfigIntoValue(baseConfigurations[configType])
                 const defaultValue = parsePlatformConfigIntoValue(globalPlatformConfig[configType])
 
+                // It does not matter what value we have in case its inheriting runner, since we show the values of runner
                 // eslint-disable-next-line no-param-reassign
                 fallbackAcc[configType] = {
                     ...baseValue,
@@ -290,40 +462,51 @@ export const getTransformedBuildInfraProfileResponse = ({
     }
 }
 
+export const getBuildxDriverTypeFromUseK8sDriver = (useK8sDriver: boolean): BuildXDriverType =>
+    useK8sDriver ? BuildXDriverType.KUBERNETES : BuildXDriverType.DOCKER_CONTAINER
+
 export const getBuildInfraProfilePayload = (
     profileInput: CreateBuildInfraProfileType['profileInput'],
     canConfigureUseK8sDriver: boolean,
-): BuildInfraProfileInfoDTO => {
+): BuildInfraPayloadType => {
     const platformConfigurationMap = profileInput.configurations || {}
-    const configurations: BuildInfraProfileInfoDTO['configurations'] = Object.entries(platformConfigurationMap).reduce<
-        BuildInfraProfileInfoDTO['configurations']
+    const configurations: BuildInfraPayloadType['configurations'] = Object.entries(platformConfigurationMap).reduce<
+        BuildInfraPayloadType['configurations']
     >((acc, [platformName, configurationLocatorMap]) => {
         // This converts the map of config types mapped to values into an array of values if user has activated the configuration or is editing it
-        const configurationList = Object.values(configurationLocatorMap).reduce<BuildInfraConfigurationDTO[]>(
-            (configurationListAcc, configuration) => {
-                if (configuration.id || configuration.active) {
-                    const infraConfigValues: BuildInfraConfigValuesType = parsePlatformConfigIntoValue(
-                        configuration,
-                        false,
-                    )
-                    if (!infraConfigValues) {
-                        return configurationListAcc
-                    }
+        const configurationList = Object.values(configurationLocatorMap).reduce<
+            BuildInfraConfigurationItemPayloadType[]
+        >((configurationListAcc, configuration) => {
+            const locatorContainsSubValues = !!INFRA_CONFIG_CONTAINING_SUB_VALUES[configuration.key]
+            const doesCMCSContainsOverriddenValues =
+                locatorContainsSubValues &&
+                (configuration.value as BuildInfraCMCSValueType[])?.some(
+                    (configMapSecretData) => configMapSecretData.isOverridden,
+                )
 
-                    const response: BuildInfraConfigurationDTO = {
-                        ...infraConfigValues,
-                        id: configuration.id,
-                        active: configuration.active,
-                    }
-
-                    configurationListAcc.push(response)
+            if (configuration.id || configuration.active || doesCMCSContainsOverriddenValues) {
+                const infraConfigValues = parseUIConfigToPayload(configuration)
+                if (!infraConfigValues) {
                     return configurationListAcc
                 }
 
+                const isActiveComputedValue = locatorContainsSubValues
+                    ? (infraConfigValues.value as CMSecretPayloadType[])?.length > 0
+                    : configuration.active
+                const isActive = profileInput.name === DEFAULT_PROFILE_NAME ? true : isActiveComputedValue
+
+                const response: BuildInfraConfigurationItemPayloadType = {
+                    ...infraConfigValues,
+                    id: configuration.id,
+                    active: isActive,
+                }
+
+                configurationListAcc.push(response)
                 return configurationListAcc
-            },
-            [],
-        )
+            }
+
+            return configurationListAcc
+        }, [])
 
         acc[platformName] = configurationList
         return acc
@@ -347,15 +530,13 @@ export const getBuildInfraProfilePayload = (
         })
     }
 
-    const payload: BuildInfraProfileInfoDTO = {
+    const payload: BuildInfraPayloadType = {
         name: profileInput.name,
         description: profileInput.description?.trim(),
         type: profileInput.type,
         configurations,
         ...(canConfigureUseK8sDriver && {
-            buildxDriverType: profileInput.useK8sDriver
-                ? BuildXDriverType.KUBERNETES
-                : BuildXDriverType.DOCKER_CONTAINER,
+            buildxDriverType: getBuildxDriverTypeFromUseK8sDriver(profileInput.useK8sDriver),
         }),
     }
     return payload

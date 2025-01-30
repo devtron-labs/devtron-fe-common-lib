@@ -20,15 +20,21 @@ import { CustomInput } from '../../../Common'
 import { BUILD_INFRA_TEXT } from './constants'
 
 const BuildInfraProfileNameField: FunctionComponent<BuildInfraProfileMetaFieldProps> = ({
+    onChange,
     handleProfileInputChange,
     currentValue,
     error,
 }) => {
     const handleChange = (e: FormEvent<HTMLInputElement>) => {
-        handleProfileInputChange({
-            action: BuildInfraMetaConfigTypes.NAME,
-            data: { value: e.currentTarget.value },
-        })
+        if (handleProfileInputChange) {
+            handleProfileInputChange({
+                action: BuildInfraMetaConfigTypes.NAME,
+                data: { value: e.currentTarget.value },
+            })
+            return
+        }
+
+        onChange(e)
     }
 
     return (
@@ -43,6 +49,7 @@ const BuildInfraProfileNameField: FunctionComponent<BuildInfraProfileMetaFieldPr
                 error={error}
                 required
                 inputWrapClassName="w-100"
+                autoFocus
             />
         </div>
     )

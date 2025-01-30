@@ -1,13 +1,26 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { Fragment, useEffect, useState } from 'react'
-import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { ReactComponent as ICSort } from '@Icons/ic-arrow-up-down.svg'
-import { ReactComponent as ICViewVariableToggle } from '@Icons/ic-view-variable-toggle.svg'
 import { Progressing } from '@Common/Progressing'
 import { SortingOrder } from '@Common/Constants'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
-import Toggle from '@Common/Toggle/Toggle'
 import { ComponentSizeType } from '@Shared/constants'
 import { DiffViewer } from '@Shared/Components/DiffViewer'
 
@@ -22,6 +35,7 @@ import {
     DeploymentConfigDiffAccordionProps,
 } from './DeploymentConfigDiff.types'
 import { renderDiffViewNoDifferenceState } from './DeploymentConfigDiff.utils'
+import { ToggleResolveScopedVariables } from '../ToggleResolveScopedVariables'
 
 export const DeploymentConfigDiffMain = ({
     isLoading,
@@ -145,26 +159,14 @@ export const DeploymentConfigDiffMain = ({
 
     const renderScopeVariablesButton = () => {
         if (scopeVariablesConfig) {
-            const { convertVariables } = scopeVariablesConfig
+            const { convertVariables, onConvertVariablesClick } = scopeVariablesConfig
 
             return (
-                <Tippy
-                    content={convertVariables ? 'Hide variables values' : 'Show variables values'}
-                    placement="bottom-start"
-                    animation="shift-away"
-                    className="default-tt"
-                    arrow={false}
-                >
-                    <div className="w-40 h-20">
-                        <Toggle
-                            selected={scopeVariablesConfig.convertVariables}
-                            color="var(--V500)"
-                            onSelect={scopeVariablesConfig.onConvertVariablesClick}
-                            Icon={ICViewVariableToggle}
-                            throttleOnChange
-                        />
-                    </div>
-                </Tippy>
+                <ToggleResolveScopedVariables
+                    resolveScopedVariables={convertVariables}
+                    handleToggleScopedVariablesView={onConvertVariablesClick}
+                    throttleOnChange
+                />
             )
         }
 
@@ -243,8 +245,8 @@ export const DeploymentConfigDiffMain = ({
     }
 
     return (
-        <div className="bcn-0 deployment-config-diff__main-top flexbox-col min-h-100">
-            <div className="dc__border-bottom-n1 flexbox dc__align-items-center dc__position-sticky dc__top-0 bcn-0 w-100 dc__zi-11">
+        <div className="bg__primary deployment-config-diff__main-top flexbox-col min-h-100">
+            <div className="dc__border-bottom-n1 flexbox dc__align-items-center dc__position-sticky dc__top-0 bg__primary w-100 dc__zi-11">
                 <div className="flexbox dc__align-items-center p-12 dc__gap-8 deployment-config-diff__main-top__header">
                     {!!headerText && <p className="m-0 cn-9 fs-13 lh-20">{headerText}</p>}
                     {renderHeaderSelectors(selectorsConfig.primaryConfig)}
@@ -261,7 +263,7 @@ export const DeploymentConfigDiffMain = ({
                     )}
                 </div>
             </div>
-            <div className="deployment-config-diff__main-content dc__overflow-y-auto">{renderContent()}</div>
+            <div className="deployment-config-diff__main-content dc__overflow-auto">{renderContent()}</div>
         </div>
     )
 }

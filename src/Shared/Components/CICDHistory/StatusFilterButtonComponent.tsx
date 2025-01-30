@@ -82,7 +82,7 @@ export const StatusFilterButtonComponent = ({ nodes, selectedTab, handleFilterCl
             <PopupMenu autoClose>
                 <PopupMenu.Button
                     isKebab
-                    rootClassName="flex p-4 dc__border dc__no-left-radius dc__right-radius-4 bcn-0 dc__hover-n50"
+                    rootClassName="flex p-4 dc__border dc__no-left-radius dc__right-radius-4 bg__primary dc__hover-n50"
                 >
                     <ICCaretDown className="icon-dim-14 scn-6" />
                 </PopupMenu.Button>
@@ -91,7 +91,7 @@ export const StatusFilterButtonComponent = ({ nodes, selectedTab, handleFilterCl
                         <button
                             key={filter.status}
                             type="button"
-                            className={`dc__transparent w-100 py-6 px-8 flex left dc__gap-8 fs-13 lh-20 fw-4 cn-9 ${filter.isSelected ? 'bcb-1' : 'bcn-0 dc__hover-n50'}`}
+                            className={`dc__transparent w-100 py-6 px-8 flex left dc__gap-8 fs-13 lh-20 fw-4 cn-9 ${filter.isSelected ? 'bcb-1' : 'bg__primary dc__hover-n50'}`}
                             onClick={() => handleFilterClick(filter.status)}
                         >
                             <span

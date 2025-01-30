@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {
     createElement,
     createRef,
@@ -283,7 +299,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
         // Adding 'no-error' class to hide error when SelectPickerTextArea is focused.
         return (
             <div
-                className={`dynamic-data-table__error bcn-0 dc__border br-4 py-7 px-8 flexbox-col dc__gap-4 ${isSelectText ? 'no-error' : ''}`}
+                className={`dynamic-data-table__error bg__primary dc__border br-4 py-7 px-8 flexbox-col dc__gap-4 ${isSelectText ? 'no-error' : ''}`}
             >
                 {errorMessages.map((error) => renderErrorMessage(error))}
             </div>
@@ -303,7 +319,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 plugins={[followCursor]}
             >
                 <div
-                    className={`dynamic-data-table__cell bcn-0 flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${!isDisabled && hasError ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
+                    className={`dynamic-data-table__cell bg__primary flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${!isDisabled && hasError ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
                 >
                     {renderCellIcon(row, key, true)}
                     {renderCellContent(row, key)}
@@ -319,7 +335,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
             const { renderer, position = 'start' } = actionButtonConfig
             const actionButtonNode = (
                 <div
-                    className={`dc__overflow-hidden flex top bcn-0 ${(position === 'start' && key === headers[0].key) || (isDeletionNotAllowed && position === 'end' && key === headers[headers.length - 1].key) ? 'dynamic-data-table__cell' : ''}`}
+                    className={`dc__overflow-hidden flex top bg__primary ${(position === 'start' && key === headers[0].key) || (isDeletionNotAllowed && position === 'end' && key === headers[headers.length - 1].key) ? 'dynamic-data-table__cell' : ''}`}
                 >
                     {renderer(row)}
                 </div>
@@ -355,7 +371,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             <Fragment key={key}>{renderCell(row, key, index)}</Fragment>
                         ))}
                         {!isDeletionNotAllowed && !readOnly && (
-                            <div className="dynamic-data-table__row-delete-btn bcn-0">
+                            <div className="dynamic-data-table__row-delete-btn bg__primary">
                                 <Button
                                     dataTestId="dynamic-data-table-row-delete-btn"
                                     ariaLabel="Delete Row"

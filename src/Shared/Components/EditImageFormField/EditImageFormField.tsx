@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { KeyboardEvent, SyntheticEvent, useState } from 'react'
 import { showError } from '@Common/Helper'
 import { CustomInput } from '@Common/CustomInput'
@@ -176,7 +192,7 @@ const EditImageFormField = ({
             >
                 {renderImage(true, BASE_IMAGE_CLASS)}
 
-                <div className="flex p-4 br-4 bcn-0 dc__border edit-image-form-field__figure-container--edit-image-icon dc__zi-1 bcn-0 dc__hover-n50 icon-dim-24">
+                <div className="flex p-4 br-4 bg__primary dc__border edit-image-form-field__figure-container--edit-image-icon dc__zi-1 bg__primary dc__hover-n50 icon-dim-24">
                     <ICPencil className="dc__no-shrink icon-dim-16" />
                 </div>
             </button>

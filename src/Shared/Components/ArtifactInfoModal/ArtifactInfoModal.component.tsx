@@ -49,7 +49,7 @@ const ArtifactInfoModal = ({
     return (
         <Drawer position="right" width="800px" onEscape={handleClose}>
             <div data-testid="visible-modal-commit-info" className="flexbox-col h-100">
-                <div className="flex dc__content-space py-10 px-20 cn-9 bcn-0 dc__border-bottom">
+                <div className="flex dc__content-space py-10 px-20 cn-9 bg__primary dc__border-bottom">
                     <div className="flexbox-col dc__content-center">
                         {!infoError &&
                             (isInfoLoading ? (
@@ -84,7 +84,7 @@ const ArtifactInfoModal = ({
                         <ICClose className="icon-dim-24 icon-use-fill-n6" />
                     </button>
                 </div>
-                <div className="flexbox-col flex-grow-1 dc__overflow-scroll dc__window-bg h-100">
+                <div className="flexbox-col flex-grow-1 dc__overflow-auto bg__tertiary h-100">
                     <APIResponseHandler
                         isLoading={isInfoLoading}
                         progressingProps={{
@@ -126,13 +126,14 @@ const ArtifactInfoModal = ({
                                     tagsEditable={artifactInfo.tagsEditable}
                                     hideImageTaggingHardDelete={false}
                                     renderCIListHeader={renderCIListHeader}
+                                    targetPlatforms={artifactInfo.targetPlatforms}
                                 />
                             </div>
                         ) : (
                             <GenericEmptyState
                                 title="Data not available"
                                 subTitle="The data you are looking for is not available"
-                                classname="h-100 bcn-0 flex-grow-1"
+                                classname="h-100 bg__primary flex-grow-1"
                             />
                         )}
                     </APIResponseHandler>

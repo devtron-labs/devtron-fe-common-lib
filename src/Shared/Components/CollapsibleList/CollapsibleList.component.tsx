@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React, { Fragment } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import Tippy, { TippyProps } from '@tippyjs/react'
@@ -56,11 +72,11 @@ export const CollapsibleList = <TabType extends TabOptions>({
     }
 
     const getButtonTabItem = (item: CollapsibleListItem<'button'>) => {
-        const { title, isActive, onClick } = item
+        const { title, isActive, onClick, id } = item
         return (
             <button
-                key={title}
-                className={`collapsible__item flexbox dc__align-items-center dc__gap-8 dc__no-decor br-4 py-6 px-8 cursor ${isActive ? 'active' : ''} dc__unset-button-styles w-100`}
+                key={id || title}
+                className={`collapsible__item flexbox dc__align-start dc__gap-8 dc__no-decor br-4 py-6 px-8 cursor ${isActive ? 'active' : ''} dc__unset-button-styles w-100 dc__align-left`}
                 onClick={(e) => {
                     // Prevent navigation to the same page
                     if (isActive) {
@@ -97,7 +113,7 @@ export const CollapsibleList = <TabType extends TabOptions>({
     }
 
     return (
-        <div className="mw-none bcn-0">
+        <div className="mw-none bg__primary">
             {config.map(({ id, header, headerIconConfig, items, noItemsText, isExpanded }) => (
                 <Fragment key={id}>
                     <div className="flexbox dc__align-items-center dc__gap-4 py-6 px-8 br-4 dc__hover-n50">
@@ -122,7 +138,7 @@ export const CollapsibleList = <TabType extends TabOptions>({
                                 <button
                                     {...headerIconConfig.btnProps}
                                     type="button"
-                                    className={`dc__unset-button-styles dc__no-shrink cursor br-4 bcn-0 flex ${headerIconConfig.btnProps?.className || ''}`}
+                                    className={`dc__unset-button-styles dc__no-shrink cursor br-4 bg__primary flex ${headerIconConfig.btnProps?.className || ''}`}
                                 >
                                     <headerIconConfig.Icon
                                         {...headerIconConfig.props}

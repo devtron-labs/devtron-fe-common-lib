@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { useCallback, useEffect } from 'react'
 import { SortingOrder } from '@Common/Constants'
 import { stopPropagation } from '@Common/Helper'
@@ -98,7 +114,7 @@ const BulkOperationsResultModal = ({
             parentClassName="h-100"
         >
             <dialog
-                className="bcn-0 h-100 cn-9 w-100 flexbox-col dc__overflow-hidden p-0 bulk-operation__results-modal"
+                className="bg__primary h-100 cn-9 w-100 flexbox-col dc__overflow-hidden p-0 bulk-operation__results-modal"
                 onClick={stopPropagation}
             >
                 <header className="px-20 py-12 lh-24 flexbox dc__content-space dc__align-items-center dc__border-bottom">
@@ -123,7 +139,7 @@ const BulkOperationsResultModal = ({
                     />
                 </header>
                 <div className="flexbox-col dc__gap-16 dc__overflow-hidden pt-20 flex-grow-1 bulk-operations__results-modal__content">
-                    <div className="bulk-operations__results-modal__bar-chart br-8 flexbox-col dc__align-start dc__align-self-stretch dc__border bcn-0 ml-20 mr-20">
+                    <div className="bulk-operations__results-modal__bar-chart br-8 flexbox-col dc__align-start dc__align-self-stretch dc__border bg__primary ml-20 mr-20">
                         <SegmentedBarChart
                             entities={resultsStore.getBarChartEntities()}
                             rootClassName="p-16 fs-13 dc__border-bottom-n1"
@@ -160,7 +176,7 @@ const BulkOperationsResultModal = ({
                             ))}
                         </div>
 
-                        <div className="dc__overflow-scroll px-20">
+                        <div className="dc__overflow-auto px-20">
                             {sortedList.map((result, index, arr) => (
                                 <div
                                     className={`dc__grid py-10 fs-13 dc__gap-16 dc__align-items-start ${index === arr.length - 1 ? 'mb-20' : ''}`}

@@ -29,8 +29,17 @@ import {
     useScrollable,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
-import { AggregationKeys, GitTriggers, Node, NodeType, ResourceKindType, ResourceVersionType } from '../../types'
+import {
+    AggregationKeys,
+    GitTriggers,
+    Node,
+    NodeType,
+    ResourceKindType,
+    ResourceVersionType,
+    TargetPlatformsDTO,
+} from '../../types'
 import { TERMINAL_STATUS_MAP } from './constants'
+import { TargetPlatformBadgeListProps } from '../TargetPlatforms'
 
 export enum HistoryComponentType {
     CI = 'CI',
@@ -103,7 +112,7 @@ export interface TargetConfigType {
     releaseChannelName?: string
 }
 
-export interface History {
+export interface History extends Pick<TargetPlatformsDTO, 'targetPlatforms'> {
     id: number
     name: string
     status: string
@@ -383,6 +392,45 @@ export interface VirtualHistoryArtifactProps {
         workflowId: number
     }
 }
+
+export type CIListItemType = Pick<History, 'promotionApprovalMetadata'> & {
+    userApprovalMetadata?: UserApprovalMetadataType
+    triggeredBy?: string
+    children: any
+
+    appliedFilters?: FilterConditionsListType[]
+    appliedFiltersTimestamp?: string
+    selectedEnvironmentName?: string
+    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+} & (
+        | {
+              type: 'artifact' | 'deployed-artifact'
+              targetPlatforms: TargetPlatformBadgeListProps['targetPlatforms']
+
+              ciPipelineId: number
+              artifactId: number
+              imageComment: ImageComment
+              imageReleaseTags: ReleaseTag[]
+              appReleaseTagNames: string[]
+              tagsEditable: boolean
+              hideImageTaggingHardDelete: boolean
+              isSuperAdmin: boolean
+          }
+        | {
+              type: 'report'
+              targetPlatforms?: never
+
+              ciPipelineId?: never
+              artifactId?: never
+              imageComment?: never
+              imageReleaseTags?: never
+              appReleaseTagNames?: never
+              tagsEditable?: never
+              hideImageTaggingHardDelete?: never
+              isSuperAdmin?: never
+          }
+    )
+
 export interface TriggerOutputProps extends RenderRunSourceType, Pick<TriggerDetailsType, 'renderTargetConfigInfo'> {
     fullScreenView: boolean
     triggerHistory: Map<number, History>
@@ -412,24 +460,25 @@ export interface TriggerOutputProps extends RenderRunSourceType, Pick<TriggerDet
 
 export interface HistoryLogsProps
     extends Pick<
-        TriggerOutputProps,
-        | 'scrollToTop'
-        | 'scrollToBottom'
-        | 'setFullScreenView'
-        | 'deploymentAppType'
-        | 'isBlobStorageConfigured'
-        | 'appReleaseTags'
-        | 'tagsEditable'
-        | 'hideImageTaggingHardDelete'
-        | 'selectedEnvironmentName'
-        | 'processVirtualEnvironmentDeploymentData'
-        | 'renderDeploymentApprovalInfo'
-        | 'renderCIListHeader'
-        | 'renderVirtualHistoryArtifacts'
-        | 'fullScreenView'
-        | 'appName'
-        | 'triggerHistory'
-    > {
+            TriggerOutputProps,
+            | 'scrollToTop'
+            | 'scrollToBottom'
+            | 'setFullScreenView'
+            | 'deploymentAppType'
+            | 'isBlobStorageConfigured'
+            | 'appReleaseTags'
+            | 'tagsEditable'
+            | 'hideImageTaggingHardDelete'
+            | 'selectedEnvironmentName'
+            | 'processVirtualEnvironmentDeploymentData'
+            | 'renderDeploymentApprovalInfo'
+            | 'renderCIListHeader'
+            | 'renderVirtualHistoryArtifacts'
+            | 'fullScreenView'
+            | 'appName'
+            | 'triggerHistory'
+        >,
+        Pick<TargetPlatformBadgeListProps, 'targetPlatforms'> {
     triggerDetails: History
     loading: boolean
     userApprovalMetadata: UserApprovalMetadataType
@@ -484,8 +533,6 @@ export interface DeploymentTemplateHistoryType {
     currentConfiguration: DeploymentHistoryDetail
     baseTemplateConfiguration: DeploymentHistoryDetail
     previousConfigAvailable: boolean
-    isUnpublished?: boolean
-    isDeleteDraft?: boolean
     rootClassName?: string
     codeEditorKey?: React.Key
 }
@@ -587,26 +634,49 @@ export interface ScrollerType {
     style: CSSProperties
 }
 
-export interface GitChangesType extends Pick<History, 'promotionApprovalMetadata'> {
+export type GitChangesType = {
     gitTriggers: Map<number, GitTriggers>
     ciMaterials: CiMaterial[]
-    artifact?: string
-    userApprovalMetadata?: UserApprovalMetadataType
-    triggeredByEmail?: string
-    imageComment?: ImageComment
-    imageReleaseTags?: ReleaseTag[]
-    artifactId?: number
-    ciPipelineId?: number
-    appReleaseTagNames?: string[]
-    tagsEditable?: boolean
-    hideImageTaggingHardDelete?: boolean
-    appliedFilters?: FilterConditionsListType[]
-    appliedFiltersTimestamp?: string
-    selectedEnvironmentName?: string
-    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
-}
+} & (
+    | {
+          artifact?: never
+          promotionApprovalMetadata?: never
+          targetPlatforms?: never
+          selectedEnvironmentName?: never
+          userApprovalMetadata?: never
+          triggeredByEmail?: never
+          imageComment?: never
+          imageReleaseTags?: never
+          artifactId?: never
+          ciPipelineId?: never
+          appReleaseTagNames?: never
+          tagsEditable?: never
+          hideImageTaggingHardDelete?: never
+          appliedFilters?: never
+          appliedFiltersTimestamp?: never
+          renderCIListHeader?: never
+      }
+    | {
+          artifact: string
+          promotionApprovalMetadata: History['promotionApprovalMetadata']
+          targetPlatforms: TargetPlatformBadgeListProps['targetPlatforms']
+          selectedEnvironmentName: CIListItemType['selectedEnvironmentName']
+          userApprovalMetadata?: UserApprovalMetadataType
+          triggeredByEmail?: string
+          imageComment?: ImageComment
+          imageReleaseTags?: ReleaseTag[]
+          artifactId?: number
+          ciPipelineId?: number
+          appReleaseTagNames?: string[]
+          tagsEditable?: boolean
+          hideImageTaggingHardDelete?: boolean
+          appliedFilters?: FilterConditionsListType[]
+          appliedFiltersTimestamp?: string
+          renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+      }
+)
 
-export interface ArtifactType {
+export interface ArtifactType extends Pick<TargetPlatformBadgeListProps, 'targetPlatforms'> {
     status: string
     artifact: string
     blobStorageEnabled: boolean
@@ -621,24 +691,6 @@ export interface ArtifactType {
     tagsEditable?: boolean
     hideImageTaggingHardDelete?: boolean
     rootClassName?: string
-    renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
-}
-
-export interface CIListItemType extends Pick<GitChangesType, 'promotionApprovalMetadata' | 'selectedEnvironmentName'> {
-    type: 'report' | 'artifact' | 'deployed-artifact'
-    userApprovalMetadata?: UserApprovalMetadataType
-    triggeredBy?: string
-    children: any
-    ciPipelineId?: number
-    artifactId?: number
-    imageComment?: ImageComment
-    imageReleaseTags?: ReleaseTag[]
-    appReleaseTagNames?: string[]
-    tagsEditable?: boolean
-    hideImageTaggingHardDelete?: boolean
-    appliedFilters?: FilterConditionsListType[]
-    appliedFiltersTimestamp?: string
-    isSuperAdmin?: boolean
     renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
 }
 
@@ -744,11 +796,13 @@ export interface StageInfoDTO {
     startTime: string
     endTime?: string
     status?: StageStatusType
+    metadata: Partial<Pick<TargetPlatformsDTO, 'targetPlatforms'>>
 }
 
 export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime' | 'endTime' | 'status'> {
     logs: string[]
     isOpen: boolean
+    targetPlatforms?: StageInfoDTO['metadata']['targetPlatforms']
 }
 
 export interface LogStageAccordionProps extends StageDetailType, Pick<LogsRendererType, 'fullScreenView'> {

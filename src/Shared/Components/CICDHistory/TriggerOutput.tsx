@@ -18,7 +18,7 @@ import { Redirect, Route, Switch, useLocation, useParams, useRouteMatch, Link, N
 import React, { useEffect, useMemo, useState } from 'react'
 import moment from 'moment'
 import { ShowMoreText } from '@Shared/Components/ShowMoreText'
-import { getHandleOpenURL } from '@Shared/Helpers'
+import { getHandleOpenURL, sanitizeTargetPlatforms } from '@Shared/Helpers'
 import { ImageChipCell } from '@Shared/Components/ImageChipCell'
 import { CommitChipCell } from '@Shared/Components/CommitChipCell'
 import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
@@ -508,6 +508,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
     fullScreenView,
     appName,
     triggerHistory,
+    targetPlatforms,
 }) => {
     const { path } = useRouteMatch()
     const { appId, pipelineId, triggerId, envId } = useParams<{
@@ -587,6 +588,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                             selectedEnvironmentName={selectedEnvironmentName}
                             promotionApprovalMetadata={triggerDetails?.promotionApprovalMetadata}
                             renderCIListHeader={renderCIListHeader}
+                            targetPlatforms={targetPlatforms}
                         />
                     </Route>
                     {triggerDetails.stage === 'DEPLOY' && (
@@ -626,6 +628,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                     hideImageTaggingHardDelete={hideImageTaggingHardDelete}
                                     downloadArtifactUrl={CDBuildReportUrl}
                                     renderCIListHeader={renderCIListHeader}
+                                    targetPlatforms={targetPlatforms}
                                     rootClassName="p-16 flex-grow-1"
                                 />
                             )}
@@ -687,6 +690,8 @@ const TriggerOutput = ({
         [triggerId, appId, envId],
         !!triggerId && !!pipelineId,
     )
+
+    const targetPlatforms = sanitizeTargetPlatforms(triggerDetails?.targetPlatforms)
 
     // Function to sync the trigger details as trigger details is also fetched with another api
     const syncState = (syncTriggerId: number, syncTriggerDetail: History, syncTriggerDetailsError: ServerError) => {
@@ -832,7 +837,7 @@ const TriggerOutput = ({
                         environmentName={selectedEnvironmentName}
                         renderTargetConfigInfo={renderTargetConfigInfo}
                     />
-                    <ul className="pl-50 pr-20 pt-8 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bcn-0 dc__zi-3">
+                    <ul className="pl-50 pr-20 pt-8 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bg__primary dc__zi-3">
                         {triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM && (
                             <li className="tab-list__tab" data-testid="deployment-history-steps-link">
                                 <NavLink
@@ -924,6 +929,7 @@ const TriggerOutput = ({
                 fullScreenView={fullScreenView}
                 appName={appName}
                 triggerHistory={triggerHistory}
+                targetPlatforms={targetPlatforms}
             />
         </>
     )

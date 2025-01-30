@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @import 'react-toastify/dist/ReactToastify.css';
 
 .Toastify {
@@ -26,8 +42,8 @@
     border-radius: 4px;
     margin-bottom: 16px;
     min-height: 0;
-    color: var(--N0);
-    background: #1B1C1E;
+    color: var(--white);
+    background: var(--bg-toast);
     font-family: inherit;
 
     &__body {
@@ -48,20 +64,20 @@
 
         // Override the style for the action button
         button.button, a.button {
-            color: var(--N0);
+            color: var(--white);
             width: fit-content;
 
             svg *[stroke^="#"] {
-                stroke: var(--N0);
+                stroke: var(--white);
             }
 
             svg *[fill^="#"] {
-                fill: var(--N0);
+                fill: var(--white);
             }
 
             &:hover,
             &:active {
-                color: var(--N0);
+                color: var(--white);
             }
         }
     }
@@ -71,13 +87,13 @@
         button {
             svg {
                 path {
-                    fill: var(--N0) !important;
+                    fill: var(--white) !important;
                 }
             }
 
             &:hover,
             &:active {
-                background: #fff3 !important;
+                background: var(--white-20) !important;
             }
         }
     }

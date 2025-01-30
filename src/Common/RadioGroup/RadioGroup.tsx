@@ -15,8 +15,8 @@
  */
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import Tippy from '@tippyjs/react'
 import React, { useState, useEffect, useMemo } from 'react'
+import { Tooltip } from '@Common/Tooltip'
 import { ConditionalWrap } from '../Helper'
 import './radioGroup.scss'
 import { RadioGroupComposition, RadioGroupInterface, RadioInterface } from '../Types'
@@ -52,9 +52,15 @@ const RadioGroup: React.FC<RadioGroupInterface> & RadioGroupComposition = React.
 )
 
 const TippyComponent = (children, tippyContent, tippyPlacement, tippyClass) => (
-    <Tippy className={`default-tt w-250 ${tippyClass}`} arrow={false} placement={tippyPlacement} content={tippyContent}>
+    <Tooltip
+        className={`default-tt ${tippyClass}`}
+        arrow={false}
+        placement={tippyPlacement}
+        content={tippyContent}
+        alwaysShowTippyOnHover
+    >
         {children}
-    </Tippy>
+    </Tooltip>
 )
 
 const Radio = ({

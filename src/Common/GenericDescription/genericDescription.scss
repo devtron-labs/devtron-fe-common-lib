@@ -53,24 +53,24 @@
     }
 
     .mark-down-editor-container {
-        border-bottom: 1px solid var(--N200);
+        border: 1px solid var(--N200);
         border-radius: 3px 3px 0 0;
         font-family: 'Open Sans', Arial, sans-serif !important;
         font-size: 13px !important;
         line-height: 1.67;
 
         .mark-down-editor-preview {
-            background-color: white !important;
+            background-color: var(--bg-primary) !important;
         }
 
         .mark-down-editor-textarea-wrapper {
             border-radius: 3px !important;
             border: 1px solid var(--N200) !important;
-            background-color: var(--N50) !important;
+            background-color: var(--bg-secondary) !important;
         }
 
         .mde-textarea-wrapper {
-            background-color: white !important;
+            background-color: var(--bg-primary) !important;
             padding: 10px !important;
         }
 
@@ -78,7 +78,8 @@
             justify-content: space-between !important;
             padding-left: 16px !important;
             padding-right: 16px !important;
-            background-color: white !important;
+            background-color: var(--bg-primary) !important;
+            border-bottom: 1px solid var(--N200);
         }
 
         .mde-header {
@@ -115,8 +116,37 @@
             .mde-preview-content {
                 padding: 0px !important;
 
-                a.anchor {
-                    color: var(--N900);
+                a {
+                    color: var(--B500);
+
+                    &.anchor {
+                        color: var(--N900);
+
+                        h1,
+                        h2,
+                        h3 {
+                            border-bottom: 1px solid var(--N200);
+                        }
+                    }
+                }
+
+                pre {
+                    background-color: var(--bg-secondary);
+
+                    // Would need to add theming to fix this altogether
+                    > code {
+                        color: var(--B700);
+                        background-color: var(--transparent);
+                        border-radius: 1px;
+                        display: inline;
+                        margin: 0;
+                        overflow: visible;
+                        line-height: inherit;
+                        word-wrap: normal;
+                        white-space: pre;
+                        border: 0;
+                        padding: 0;
+                    }
                 }
             }
         }

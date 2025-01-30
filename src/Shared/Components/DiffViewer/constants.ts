@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // Default variables and style keys
 
 import { ReactDiffViewerProps } from 'react-diff-viewer-continued'
@@ -5,7 +21,7 @@ import { ReactDiffViewerProps } from 'react-diff-viewer-continued'
 export const diffViewerStyles: ReactDiffViewerProps['styles'] = {
     variables: {
         light: {
-            diffViewerBackground: 'var(--N0)',
+            diffViewerBackground: 'var(--bg-primary)',
             diffViewerColor: 'var(--N900)',
             addedBackground: 'var(--G50)',
             addedColor: 'var(--N900)',
@@ -15,13 +31,13 @@ export const diffViewerStyles: ReactDiffViewerProps['styles'] = {
             wordRemovedBackground: 'var(--R200)',
             addedGutterBackground: 'var(--G100)',
             removedGutterBackground: 'var(--R100)',
-            gutterBackground: 'var(--N50)',
-            gutterBackgroundDark: 'var(--N50)',
+            gutterBackground: 'var(--bg-secondary)',
+            gutterBackgroundDark: 'var(--bg-secondary)',
             highlightBackground: 'var(--N100)',
             highlightGutterBackground: 'var(--N100)',
             codeFoldGutterBackground: 'var(--B100)',
             codeFoldBackground: 'var(--B50)',
-            emptyLineBackground: 'var(--N0)',
+            emptyLineBackground: 'var(--bg-primary)',
             gutterColor: 'var(--N500)',
             addedGutterColor: 'var(--N700)',
             removedGutterColor: 'var(--N700)',

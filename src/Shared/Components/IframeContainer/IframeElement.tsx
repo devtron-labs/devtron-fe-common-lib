@@ -76,7 +76,7 @@ const IframeElement = ({ URL, width, height, title, maxHeight, maxWidth }: Ifram
             {showFullScreen && (
                 <VisibleModal className="" close={handleExitFullScreen}>
                     <div
-                        className="dc__overflow-scroll br-8 dc__position-rel bcn-0 custom-panel--iframe-element flexbox-col dc__content-space"
+                        className="dc__overflow-auto br-8 dc__position-rel bg__primary custom-panel--iframe-element flexbox-col dc__content-space"
                         onClick={stopPropagation}
                     >
                         <div className="flexbox dc__align-items-center dc__content-space dc__border-bottom py-20 px-16">

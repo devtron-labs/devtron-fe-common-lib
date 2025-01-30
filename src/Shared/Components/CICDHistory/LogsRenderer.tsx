@@ -19,7 +19,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import AnsiUp from 'ansi_up'
 import DOMPurify from 'dompurify'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
-import { escapeRegExp } from '@Shared/Helpers'
+import { escapeRegExp, sanitizeTargetPlatforms } from '@Shared/Helpers'
 import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
 import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
 import { ReactComponent as ICArrow } from '@Icons/ic-caret-down.svg'
@@ -64,8 +64,8 @@ const renderLogsNotAvailable = (subtitle?: string): JSX.Element => (
             <div className="text-center">
                 <Info className="icon-dim-20" />
             </div>
-            <div className="text-center cn-0 fs-14 fw-6">Logs not available</div>
-            <div className="text-center cn-0 fs-13 fw-4">
+            <div className="text-center text__white fs-14 fw-6">Logs not available</div>
+            <div className="text-center text__white fs-13 fw-4">
                 {subtitle || 'Blob storage was not configured at pipeline run.'}
             </div>
         </div>
@@ -311,7 +311,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
         const newStageList = streamDataList.reduce((acc, streamItem: string, index) => {
             if (streamItem.startsWith(LOGS_STAGE_IDENTIFIER)) {
                 try {
-                    const { stage, startTime, endTime, status }: StageInfoDTO = JSON.parse(
+                    const { stage, startTime, endTime, status, metadata }: StageInfoDTO = JSON.parse(
                         streamItem.split(LOGS_STAGE_STREAM_SEPARATOR)[1],
                     )
                     const existingStage = acc.find((item) => item.stage === stage && item.startTime === startTime)
@@ -345,6 +345,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                                 !!targetSearchKey,
                             ),
                             status: derivedStatus,
+                            targetPlatforms: sanitizeTargetPlatforms(metadata?.targetPlatforms),
                             logs: [],
                         })
                     }
@@ -504,7 +505,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                             />
                             {!!searchKey && (
                                 <div className="flexbox px-10 py-6 dc__gap-8 dc__align-items-center">
-                                    <span className="fs-13 fw-4 lh-20 cn-0">
+                                    <span className="fs-13 fw-4 lh-20 text__white">
                                         {hasSearchResults ? currentSearchIndex + 1 : 0}/{searchResults.length}
                                         &nbsp;results
                                     </span>
@@ -517,7 +518,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                                             aria-label="Focus the previous search result match"
                                             disabled={!hasSearchResults}
                                         >
-                                            <ICArrow className="scn-0 dc__flip-180 icon-dim-14 dc__no-shrink" />
+                                            <ICArrow className="icon-stroke__white dc__flip-180 icon-dim-14 dc__no-shrink" />
                                         </button>
                                         <button
                                             type="button"
@@ -527,7 +528,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                                             aria-label="Focus the next search result match"
                                             disabled={!hasSearchResults}
                                         >
-                                            <ICArrow className="scn-0 icon-dim-14 dc__no-shrink" />
+                                            <ICArrow className="icon-stroke__white icon-dim-14 dc__no-shrink" />
                                         </button>
                                     </div>
                                 </div>
@@ -547,9 +548,9 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                                     aria-label={shortcutTippyText}
                                 >
                                     {areAllStagesExpanded ? (
-                                        <ICCollapseAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
+                                        <ICCollapseAll className="icon-dim-16 dc__no-shrink dc__transition--transform icon-stroke__white" />
                                     ) : (
-                                        <ICExpandAll className="icon-dim-16 dc__no-shrink dc__transition--transform scn-0" />
+                                        <ICExpandAll className="icon-dim-16 dc__no-shrink dc__transition--transform icon-stroke__white" />
                                     )}
                                 </button>
                             </Tooltip>
@@ -557,23 +558,26 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                     </div>
 
                     <div className="flexbox-col px-12 dc__gap-4">
-                        {stageList.map(({ stage, isOpen, logs, endTime, startTime, status }, index) => (
-                            <LogStageAccordion
-                                key={`${stage}-${startTime}-log-stage-accordion`}
-                                stage={stage}
-                                isOpen={isOpen}
-                                logs={logs}
-                                endTime={endTime}
-                                startTime={startTime}
-                                status={status}
-                                handleStageClose={handleStageClose}
-                                handleStageOpen={handleStageOpen}
-                                stageIndex={index}
-                                isLoading={index === stageList.length - 1 && areEventsProgressing}
-                                fullScreenView={fullScreenView}
-                                searchIndex={searchResults[currentSearchIndex]}
-                            />
-                        ))}
+                        {stageList.map(
+                            ({ stage, isOpen, logs, endTime, startTime, status, targetPlatforms }, index) => (
+                                <LogStageAccordion
+                                    key={`${stage}-${startTime}-log-stage-accordion`}
+                                    stage={stage}
+                                    isOpen={isOpen}
+                                    logs={logs}
+                                    endTime={endTime}
+                                    startTime={startTime}
+                                    targetPlatforms={targetPlatforms}
+                                    status={status}
+                                    handleStageClose={handleStageClose}
+                                    handleStageOpen={handleStageOpen}
+                                    stageIndex={index}
+                                    isLoading={index === stageList.length - 1 && areEventsProgressing}
+                                    fullScreenView={fullScreenView}
+                                    searchIndex={searchResults[currentSearchIndex]}
+                                />
+                            ),
+                        )}
                     </div>
                 </div>
             )

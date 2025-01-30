@@ -173,16 +173,18 @@ export const MultiValueChipContainer = ({ validator, isAllSelected = false, ...p
 export const multiSelectStyles = {
     control: (base, state) => ({
         ...base,
+        backgroundColor: 'var(--bg-primary)',
         cursor: state.isDisabled ? 'not-allowed' : 'normal',
-        border: state.isFocused ? '1px solid #06c' : '1px solid #d6dbdf',
+        border: state.isFocused ? '1px solid var(--B500)' : '1px solid var(--N200)',
         boxShadow: 'none',
     }),
     menu: (base, state) => ({
         ...base,
+        backgroundColor: 'var(--bg-primary)',
     }),
     option: (base, state) => ({
         ...base,
-        backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
+        backgroundColor: state.isFocused ? 'var(--N100)' : 'var(--bg-primary)',
         color: 'var(--N900)',
         padding: '8px 12px',
     }),
@@ -193,6 +195,14 @@ export const multiSelectStyles = {
     valueContainer: (base, state) => ({
         ...base,
         color: state.selectProps.menuIsOpen ? 'var(--N500)' : base.color,
+    }),
+    singleValue: (base) => ({
+        ...base,
+        color: 'var(--N900)',
+    }),
+    input: (base) => ({
+        ...base,
+        color: 'var(--N900)',
     }),
 }
 

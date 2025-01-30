@@ -28,7 +28,7 @@ export const CommonGroupedDropdownStyles = {
         ...base,
         boxShadow: 'none',
         minHeight: '36px',
-        backgroundColor: 'var(--N50)',
+        backgroundColor: 'var(--bg-secondary)',
         cursor: state.isDisabled ? 'not-allowed' : 'pointer',
         opacity: state.isDisabled ? 0.5 : 1,
     }),
@@ -41,7 +41,7 @@ export const CommonGroupedDropdownStyles = {
     option: (base, state) => ({
         ...base,
         padding: '6px 8px 6px 0',
-        backgroundColor: state.isFocused ? 'var(--N100)' : 'white',
+        backgroundColor: state.isFocused ? 'var(--N100)' : 'var(--bg-primary)',
         color: 'var(--N900)',
         cursor: 'pointer',
         overflow: 'hidden',
@@ -89,7 +89,7 @@ export const CommonGroupedDropdownStyles = {
         ...base,
         border: `1px solid var(--N200)`,
         borderRadius: `4px`,
-        background: 'white',
+        background: 'var(--bg-primary)',
         height: '28px',
         margin: '0px',
         padding: '2px',
@@ -103,5 +103,9 @@ export const CommonGroupedDropdownStyles = {
     placeholder: (base) => ({
         ...base,
         position: 'absolute',
+    }),
+    menu: (base) => ({
+        ...base,
+        backgroundColor: 'var(--bg-primary)',
     }),
 }

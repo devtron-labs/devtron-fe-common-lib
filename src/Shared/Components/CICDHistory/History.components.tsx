@@ -129,6 +129,7 @@ export const GitChanges = ({
     promotionApprovalMetadata,
     selectedEnvironmentName,
     renderCIListHeader,
+    targetPlatforms,
 }: GitChangesType) => {
     const { isSuperAdmin } = useSuperAdmin()
 
@@ -151,7 +152,7 @@ export const GitChanges = ({
                     <div
                         // eslint-disable-next-line react/no-array-index-key
                         key={`mat-${gitTrigger?.Commit}-${index}`}
-                        className="bcn-0 br-4 en-2 bw-1"
+                        className="bg__primary br-4 en-2 bw-1"
                         data-testid="source-code-git-hash"
                         style={{ width: 'min( 100%, 800px )' }}
                     >
@@ -192,6 +193,7 @@ export const GitChanges = ({
                         promotionApprovalMetadata={promotionApprovalMetadata}
                         selectedEnvironmentName={selectedEnvironmentName}
                         renderCIListHeader={renderCIListHeader}
+                        targetPlatforms={targetPlatforms}
                     >
                         <div className="flex column left hover-trigger">
                             <div className="cn-9 fs-14 flex left">

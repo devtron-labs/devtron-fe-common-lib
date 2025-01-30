@@ -45,11 +45,11 @@ import {
     WebhookEventNameType,
 } from '../Shared'
 import { ReactComponent as ArrowDown } from '@Icons/ic-chevron-down.svg'
-import webhookIcon from '@Icons/ic-webhook.svg'
-import branchIcon from '@Icons/ic-branch.svg'
-import regexIcon from '@Icons/ic-regex.svg'
-import pullRequest from '@Icons/ic-pull-request.svg'
-import tagIcon from '@Icons/ic-tag.svg'
+import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
+import { ReactComponent as ICBranch } from '@Icons/ic-branch.svg'
+import { ReactComponent as ICRegex } from '@Icons/ic-regex.svg'
+import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
+import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { SourceTypeMap } from '@Common/Common.service'
 import { getIsRequestAborted } from './Api'
 
@@ -151,16 +151,16 @@ export function useThrottledEffect(callback, delay, deps = []) {
 }
 
 const colors = [
-    '#FFB900',
-    '#D83B01',
-    '#B50E0E',
-    '#E81123',
-    '#B4009E',
-    '#5C2D91',
-    '#0078D7',
-    '#00B4FF',
-    '#008272',
-    '#107C10',
+    'var(--Y500)',
+    'var(--R600)',
+    'var(--R700)',
+    'var(--R500)',
+    'var(--R400)',
+    'var(--V700)',
+    'var(--B500)',
+    'var(--B400)',
+    'var(--G500)',
+    'var(--G700)',
 ]
 
 export function getRandomColor(email: string): string {
@@ -990,17 +990,17 @@ export const throttle = <T extends (...args: unknown[]) => unknown>(
 export const getBranchIcon = (sourceType, _isRegex?: boolean, webhookEventName?: string) => {
     if (sourceType === SourceTypeMap.WEBHOOK) {
         if (webhookEventName === WebhookEventNameType.PULL_REQUEST) {
-            return pullRequest
+            return <ICPullRequest className="scn-6" />
         }
         if (webhookEventName === WebhookEventNameType.TAG_CREATION) {
-            return tagIcon
+        return <ICTag className="scn-6" />
         }
-        return webhookIcon
+        return <ICWebhook />
     }
     if (sourceType === SourceTypeMap.BranchRegex || _isRegex) {
-        return regexIcon
+        return <ICRegex className="fcn-6" />
     }
-    return branchIcon
+    return <ICBranch className="fcn-6" />
 }
 
 // TODO: Might need to expose sandbox and referrer policy
@@ -1057,4 +1057,23 @@ export const getGoLangFormattedDateWithTimezone = (dateFormat: string) => {
     const formattedDate = now.format(dateFormat)
     const timezone = now.format('Z').replace(/([+/-])(\d{2})[:.](\d{2})/, '$1$2$3')
     return formattedDate.replace('Z', timezone)
+}
+
+/**
+ *
+ * @returns SHA-256 hashed value
+ */
+export const getHashedValue = async (value: string): Promise<string | null> => {
+    try {
+        const encoder = new TextEncoder()
+        const data = encoder.encode(value)
+        const hashBuffer = await window.crypto.subtle.digest('SHA-256', data)
+
+        return Array.from(new Uint8Array(hashBuffer))
+            .map((byte) => byte.toString(16).padStart(2, '0'))
+            .join('')
+    } catch (err) {
+        logExceptionToSentry(err)
+        return null
+    }
 }

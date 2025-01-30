@@ -28,7 +28,7 @@
     .radio-group input[type='checkbox']:checked + .radio__item-label {
         background: var(--N700);
         border-radius: 0;
-        color: var(--white);
+        color: var(--N0);
     }
 
     .radio__item-label {
@@ -74,7 +74,7 @@
                 width: 90%;
 
                 path {
-                    fill: green;
+                    fill: var(--G500);
                 }
             }
         }
@@ -84,19 +84,19 @@
 .code-editor__header-error {
     padding: 8px 16px;
     font-size: 12px;
-    border: solid 1px #d6dbdf;
+    border: solid 1px var(--N200);
     background-color: var(--R100);
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
     line-height: 1.33;
     letter-spacing: normal;
-    color: #f32e2e;
+    color: var(--R500);
 }
 
 .code-editor-container {
     width: 100%;
-    border: 1px solid #d6dbdf;
+    border: 1px solid var(--N200);
     border-radius: 4px;
     overflow: hidden;
 }
@@ -118,14 +118,7 @@
         margin: 0 12px;
     }
 
-    color: var(--white);
-}
-
-.diff-icon {
-    height: 20px;
-    width: 20px;
-    margin-right: 4px;
-    background: url('../../Assets/Icon/ic-compare.svg');
+    color: var(--N0);
 }
 
 .monaco-editor-hover {
@@ -140,6 +133,6 @@
 
 .code-editor__shebang {
     padding: 0 52px;
-    color: #151515;
+    color: var(--N900);
     opacity: 0.6;
 }

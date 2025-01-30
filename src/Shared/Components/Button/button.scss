@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @mixin svg-styles($color) {
     svg *[stroke^="#"] {
         stroke: $color;
@@ -94,7 +110,7 @@
         }
 
         &--warning {
-            @include button-variant-styles(var(--Y500), var(--N900), $border-color);
+            @include button-variant-styles(var(--Y500), var(--black), $border-color);
             @include pseudo-states(var(--Y600), var(--Y700));
         }
 
@@ -105,37 +121,37 @@
     }
 
     &__secondary {
-        $background: var(--N0);
+        $background: var(--bg-primary);
         $border-color: var(--N200);
 
         &--default {
             @include button-variant-styles($background, var(--B500), $border-color);
-            @include pseudo-states(var(--B100), var(--B200), var(--B500));
+            @include pseudo-states(var(--B100), var(--B200), var(--B300));
         }
 
         &--negative {
             @include button-variant-styles($background, var(--R600), $border-color);
-            @include pseudo-states(var(--R100), var(--R200), var(--R600), var(--R600));
+            @include pseudo-states(var(--R100), var(--R200), var(--R300), var(--R600));
         }
 
         &--negative-grey {
             @include button-variant-styles($background, var(--N700), $border-color);
-            @include pseudo-states(var(--R100), var(--R200), var(--R600), var(--R600));
+            @include pseudo-states(var(--R100), var(--R200), var(--R300), var(--R600));
         }
 
         &--positive {
             @include button-variant-styles($background, var(--G600), $border-color);
-            @include pseudo-states(var(--G100), var(--G200), var(--G600));
+            @include pseudo-states(var(--G100), var(--G200), var(--G300));
         }
 
         &--warning {
             @include button-variant-styles($background, var(--Y700), $border-color);
-            @include pseudo-states(var(--Y100), var(--Y200), var(--Y700));
+            @include pseudo-states(var(--Y100), var(--Y200), var(--Y300));
         }
 
         &--neutral {
             @include button-variant-styles($background, var(--N700), $border-color);
-            @include pseudo-states(var(--N100), var(--N200), var(--N700));
+            @include pseudo-states(var(--N100), var(--N200), var(--N300));
         }
     }
 

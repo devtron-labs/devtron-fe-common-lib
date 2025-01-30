@@ -38,7 +38,7 @@ const FilterChip = ({
     return (
         (labelToDisplay || shouldHideLabel) &&
         valueToDisplay && (
-            <div className="flexbox flex-align-center br-4 dc__border dc__bg-n50 pl-6 pr-6 pt-2 pb-2 dc__user-select-none h-24 dc__gap-6 fs-12 lh-20 cn-9 fw-4 dc__ellipsis-right">
+            <div className="flexbox flex-align-center br-4 dc__border bg__secondary pl-6 pr-6 pt-2 pb-2 dc__user-select-none h-24 dc__gap-6 fs-12 lh-20 cn-9 fw-4 dc__ellipsis-right">
                 {!shouldHideLabel && (
                     <>
                         <span className="fw-6 dc__capitalize">{labelToDisplay}</span>

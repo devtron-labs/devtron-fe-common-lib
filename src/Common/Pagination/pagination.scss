@@ -46,7 +46,7 @@
     width: 64px;
     position: absolute;
     bottom: 31px;
-    background-color: var(--white);
+    background-color: var(--bg-primary);
 }
 
 .select__button {
@@ -56,15 +56,18 @@
     border: solid 1px var(--N200);
     padding: 5px 10px;
     text-align: left;
+    color: var(--N700);
 }
 
 .select__item {
     padding: 5px 10px;
     cursor: pointer;
+    color: var(--N700);
 }
 
 .select__icon {
     margin-left: 18px;
+    color: var(--N500);
 }
 
 .page {
@@ -87,21 +90,21 @@
     height: 24px;
     border-radius: 8px;
     color: var(--B500);
-    background-color: var(--white);
+    background-color: var(--bg-primary);
     padding: 0px;
     user-select: none;
     border: none;
 }
 
 .page__button--icon {
-    background-color: var(--white);
+    background-color: var(--bg-primary);
     color: var(--B500);
 }
 
 /* MODIFIERS */
 
 .page__button--selected {
-    color: var(--white);
+    color: var(--N0);
     background-color: var(--B500);
 }
 
@@ -112,7 +115,7 @@
 }
 
 .select__item:hover {
-    background-color: var(--N50);
+    background-color: var(--bg-secondary);
 }
 
 .page__button:hover ~ :disabled {
@@ -120,7 +123,7 @@
 }
 
 .page__button--selected:hover {
-    color: var(--white);
+    color: var(--N0);
     background-color: var(--B500);
 }
 
