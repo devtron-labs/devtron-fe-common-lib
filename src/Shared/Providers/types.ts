@@ -39,7 +39,17 @@ export interface MainContext {
     }
     isAirgapped: boolean
     isSuperAdmin: boolean
-    isGitOpsEnabled: boolean
+    featureGitOpsFlags: {
+        isFeatureGitOpsEnabled: boolean
+        /**
+         *
+         */
+        isFeatureUserDefinedGitOpsEnabled: boolean
+        /**
+         * Feature flag for Migrate to devtron from argo cd
+         */
+        isFeatureArgoCdMigrationEnabled: boolean
+    }
     isManifestScanningEnabled: boolean
 }
 
