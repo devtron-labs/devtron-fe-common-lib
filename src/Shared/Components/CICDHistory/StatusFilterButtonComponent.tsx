@@ -29,7 +29,6 @@ export const StatusFilterButtonComponent = ({
     handleFilterClick,
     maxInlineFiltersCount = 0,
 }: StatusFilterButtonType) => {
-    const showOverflowFilters = !!maxInlineFiltersCount
     // STATES
     const [overflowFilterIndex, setOverflowFilterIndex] = useState(0)
 
@@ -40,6 +39,8 @@ export const StatusFilterButtonComponent = ({
         const filterIndex = statusFilters.findIndex(({ status }) => status === selectedTab)
         setOverflowFilterIndex(Math.max(filterIndex, 0))
     }, [statusFilters])
+
+    const showOverflowFilters = statusFilters.length < maxInlineFiltersCount
 
     const inlineFilters = useMemo(() => {
         if (showOverflowFilters) {
