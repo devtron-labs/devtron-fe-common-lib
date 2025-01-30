@@ -20,7 +20,9 @@ import { APP_STATUS } from './constants'
 
 export const AppStatus = ({ status, isJobView = false, isVirtualEnv = false, ...restProps }: AppStatusProps) => {
     const appStatus = isVirtualEnv ? APP_STATUS.NOT_AVAILABLE : status
-    const isNotDeployed = appStatus.toLowerCase().replace(/ /g, '-') === APP_STATUS.NOT_DEPLOYED
+    const isNotDeployed =
+        appStatus.toLowerCase().replace(/ /g, '-') === APP_STATUS.NOT_DEPLOYED ||
+        appStatus.toLowerCase() === APP_STATUS.NOT_DEPLOYED_NO_SPACE
     const notDeployedMessage = isJobView ? APP_STATUS.JOB_VIEW_NOT_DEPLOYED_MESSAGE : APP_STATUS.NOT_DEPLOYED_MESSAGE
     const textContent = isNotDeployed ? notDeployedMessage : appStatus
 
