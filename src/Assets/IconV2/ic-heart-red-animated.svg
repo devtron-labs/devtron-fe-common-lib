@@ -1,0 +1,58 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-style-override="false">
+  <style>
+    @keyframes beat {
+
+      0%,
+      35%,
+      to {
+        transform: scale(1.4);
+        animation-timing-function: ease-out
+      }
+
+      20%,
+      50% {
+        transform: scale(1);
+        animation-timing-function: ease-in
+      }
+    }
+
+    @keyframes line {
+      0% {
+        stroke-dashoffset: 40;
+        stroke-dasharray: 20
+      }
+
+      16% {
+        stroke-dashoffset: 30;
+        stroke-dasharray: 20
+      }
+
+      32% {
+        stroke-dashoffset: 20;
+        stroke-dasharray: 20
+      }
+
+      48% {
+        stroke-dashoffset: 0;
+        stroke-dasharray: 20
+      }
+
+      64% {
+        stroke-dashoffset: -20;
+        stroke-dasharray: 20
+      }
+
+      80% {
+        stroke-dashoffset: -30;
+        stroke-dasharray: 20
+      }
+
+      to {
+        stroke-dashoffset: -40;
+        stroke-dasharray: 20
+      }
+    }
+  </style>
+  <path d="M19.999 9.261c.056-2.28-1.846-4.214-4.241-4.238-1.604-.017-3.007.805-3.758 2.034-.75-1.229-2.154-2.051-3.758-2.034-2.395.024-4.297 1.957-4.24 4.238.126 5.098 6.527 9.53 7.785 10.354a.39.39 0 0 0 .426 0c1.258-.823 7.66-5.256 7.786-10.354" fill="#F33E3E" style="animation:beat 1s infinite linear;transform-origin:center center" />
+  <path d="M1.5 12.5h5l1.5 1 1.5-5 2.5 8 1-5h2l1 2 1-1h5.5" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:40;stroke-dashoffset:20;animation:line 2.5s infinite linear" />
+</svg>

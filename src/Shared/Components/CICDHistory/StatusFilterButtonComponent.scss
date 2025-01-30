@@ -22,6 +22,12 @@
             align-items: center;
             gap: 6px;
         }
+
+        .radio {
+            svg path {
+                stroke: unset !important;
+            }
+        }
     }
 
     &.with-menu-button {

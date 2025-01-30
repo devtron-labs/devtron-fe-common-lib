@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-import { TIMELINE_STATUS } from '../../Shared/constants'
+import { AppStatus } from './AppStatus'
+import { DeploymentStatusProps } from './types'
+import { getDeploymentStatusFromStatus } from './utils'
 
-export const triggerStatus = (triggerDetailStatus: string): string => {
-    const triggerStatus = triggerDetailStatus?.toUpperCase()
-    if (triggerStatus === TIMELINE_STATUS.ABORTED || triggerStatus === TIMELINE_STATUS.DEGRADED) {
-        return 'Failed'
-    }
-    if (triggerStatus === TIMELINE_STATUS.HEALTHY) {
-        return 'Succeeded'
-    }
-    if (triggerStatus === TIMELINE_STATUS.INPROGRESS) {
-        return 'Inprogress'
-    }
-    return triggerDetailStatus
-}
+export const DeploymentStatus = ({ status, ...restProps }: DeploymentStatusProps) => (
+    <AppStatus status={getDeploymentStatusFromStatus(status)} {...restProps} />
+)

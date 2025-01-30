@@ -30,10 +30,10 @@ const DeploymentEnvState = ({ envStateText, title, tooltipContent }: DeploymentE
     return (
         <ConditionalWrap condition={!!tooltipContent} wrap={renderTooltip}>
             <div className={`${stateClassName} br-4 cn-9 pt-3 pb-3 pl-6 pr-6 bw-1 mr-6`}>
-                <span className="fw-4 fs-11 lh-16 flex">
+                <span className="fw-4 fs-11 lh-16 flex dc__gap-4">
                     {Icon}
                     {envStateText}
-                    <span className="fw-6 ml-4">{title}</span>
+                    <span className="fw-6">{title}</span>
                 </span>
             </div>
         </ConditionalWrap>

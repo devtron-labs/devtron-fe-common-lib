@@ -21,7 +21,7 @@ import { PopupMenu, StyledRadioGroup as RadioGroup } from '../../../Common'
 import { StatusFilterButtonType } from './types'
 
 import './StatusFilterButtonComponent.scss'
-import { getNodesCount, getStatusFilters } from './utils'
+import { getAppStatusIcon, getNodesCount, getStatusFilters } from './utils'
 
 export const StatusFilterButtonComponent = ({
     nodes,
@@ -40,7 +40,7 @@ export const StatusFilterButtonComponent = ({
         setOverflowFilterIndex(Math.max(filterIndex, 0))
     }, [statusFilters])
 
-    const showOverflowFilters = statusFilters.length < maxInlineFiltersCount
+    const showOverflowFilters = maxInlineFiltersCount > 0 && statusFilters.length > maxInlineFiltersCount
 
     const inlineFilters = useMemo(() => {
         if (showOverflowFilters) {
@@ -97,10 +97,7 @@ export const StatusFilterButtonComponent = ({
                         tippyContent={status}
                         tippyClass="w-100 dc__first-letter-capitalize"
                     >
-                        <span
-                            className={`dc__app-summary__icon icon-dim-16 ${status} ${status}--node`}
-                            style={{ zIndex: 'unset' }}
-                        />
+                        {getAppStatusIcon(status, true)}
                         <span>{count}</span>
                     </RadioGroup.Radio>
                 ))}
@@ -118,14 +115,10 @@ export const StatusFilterButtonComponent = ({
                             <button
                                 key={status}
                                 type="button"
-                                className={`dc__transparent w-100 py-6 px-8 flex left dc__gap-8 fs-13 lh-20 fw-4 cn-9 dc__hover-n50 ${selectedTab === status ? 'bcb-1' : ''}`}
+                                className={`dc__transparent w-100 py-6 px-8 flex dc__content-space dc__gap-8 fs-13 lh-20 fw-4 cn-9 dc__hover-n50 ${selectedTab === status ? 'bcb-1' : ''}`}
                                 onClick={handleOverflowFilterClick(status, index)}
                             >
-                                <span
-                                    className={`dc__app-summary__icon icon-dim-16 ${status} ${status}--node`}
-                                    style={{ zIndex: 'unset' }}
-                                />
-                                <span className="dc__first-letter-capitalize flex-grow-1 text-left">{status}</span>
+                                {getAppStatusIcon(status)}
                                 <span>{count}</span>
                             </button>
                         ))}

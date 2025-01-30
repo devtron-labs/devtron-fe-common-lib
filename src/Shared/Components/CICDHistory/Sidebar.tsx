@@ -43,7 +43,7 @@ import { GitTriggers } from '../../types'
 import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
 import { HISTORY_LABEL, FILTER_STYLE } from './constants'
 import { statusColor as colorMap } from '../../constants'
-import { getTriggerStatusIcon } from './utils'
+import { DeploymentStatus } from '../StatusComponent'
 
 const SummaryTooltipCard = React.memo(
     ({
@@ -216,7 +216,7 @@ const HistorySummaryCard = React.memo(
                     ref={assignTargetCardRef}
                 >
                     <div className="w-100 deployment-history-card">
-                        {getTriggerStatusIcon(status)}
+                        <DeploymentStatus status={status} hideMessage hideIconTooltip iconSize={20} />
                         <div className="flexbox-col dc__gap-8">
                             <div className="flex column left">
                                 <div className="cn-9 fs-13 lh-20">

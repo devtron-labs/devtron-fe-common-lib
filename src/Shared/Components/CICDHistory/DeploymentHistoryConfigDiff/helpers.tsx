@@ -26,6 +26,7 @@ import {
     diffStateTextMap,
 } from '@Shared/Components/DeploymentConfigDiff'
 
+import { DeploymentStatus } from '@Shared/Components/StatusComponent'
 import { History } from '../types'
 import { DeploymentHistoryConfigDiffProps } from './types'
 
@@ -76,13 +77,7 @@ export const renderDeploymentHistoryConfig = (
     </div>
 )
 
-export const renderPipelineDeploymentStatusIcon = (status: string) => (
-    <span
-        className={`flexbox dc__align-items-start dc__app-summary__icon icon-dim-22 ${status
-            .toLocaleLowerCase()
-            .replace(/\s+/g, '')}`}
-    />
-)
+export const renderPipelineDeploymentStatusIcon = (status: string) => <DeploymentStatus status={status} />
 
 export const renderPipelineDeploymentOptionDescription = ({
     stage,
