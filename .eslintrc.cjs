@@ -122,7 +122,13 @@ module.exports = {
                             {
                                 name: 'react-toastify',
                                 message: 'Please use "ToastManager.showToast" instead.',
-                            }
+                            },
+                        ],
+                        patterns: [
+                            {
+                                group: ['IconBase'],
+                                message: 'Please use "Icon" component instead.',
+                            },
                         ],
                     },
                 ],

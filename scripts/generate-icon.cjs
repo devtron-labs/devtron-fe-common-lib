@@ -55,6 +55,7 @@ const generateIconComponent = () => {
 
     ${imports.join('\n')}
 
+    // eslint-disable-next-line no-restricted-imports
     import { IconBase } from './IconBase';
     import { IconBaseProps } from './types';
 
