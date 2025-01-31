@@ -18,12 +18,12 @@ import React, { useState } from 'react'
 import { ToastManager, ToastVariantType } from '@Shared/Services/ToastManager'
 import { ServerErrors } from '@Common/ServerError'
 import { showError } from '@Common/Helper'
-import { ConfirmationModalVariantType, DeleteComponentModalProps } from './types'
+import { ConfirmationModalVariantType, DeleteConfirmationModalProps } from './types'
 import ConfirmationModal from './ConfirmationModal'
 import { CannotDeleteModal } from './CannotDeleteModal'
 import { ForceDeleteConfirmationModal } from './ForceDeleteConfirmationModal'
 
-export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
+export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     title,
     subtitle = '',
     component = '',
@@ -38,14 +38,15 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     shouldStopPropagation = false,
     primaryButtonText = 'Delete',
     confirmationConfig,
-    handleError,
+    onError,
     children,
-}: DeleteComponentModalProps) => {
+}: DeleteConfirmationModalProps) => {
     const [isDeleting, setDeleting] = useState(isLoading)
     const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(false)
     const [showForceDeleteModal, setForceDeleteModal] = useState(false)
+    const [cannotDeleteText, setCannotDeleteText] = useState(renderCannotDeleteConfirmationSubTitle)
 
-    const handleDelete = async (e) => {
+    const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
         if (shouldStopPropagation) e.stopPropagation()
 
         setDeleting(true)
@@ -59,9 +60,16 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
         } catch (serverError) {
             if (serverError instanceof ServerErrors && serverError.code === errorCodeToShowCannotDeleteDialog) {
                 setCannotDeleteDialogModal(true)
+                if (
+                    Array.isArray(serverError.errors) &&
+                    serverError.errors.length > 0 &&
+                    !renderCannotDeleteConfirmationSubTitle
+                ) {
+                    setCannotDeleteText(serverError.errors[0].userMessage as string)
+                }
                 closeConfirmationModal()
-            } else if (typeof handleError === 'function') {
-                handleError(serverError)
+            } else if (typeof onError === 'function') {
+                onError(serverError)
             } else {
                 showError(serverError)
             }
@@ -77,7 +85,7 @@ export const DeleteConfirmationModal: React.FC<DeleteComponentModalProps> = ({
     const renderCannotDeleteDialogModal = () => (
         <CannotDeleteModal
             title={title}
-            subtitle={renderCannotDeleteConfirmationSubTitle}
+            subtitle={cannotDeleteText}
             showCannotDeleteDialogModal={showCannotDeleteDialogModal}
             closeConfirmationModal={handleCloseCannotDeleteModal}
             component={component}

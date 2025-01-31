@@ -109,7 +109,7 @@ export type ConfirmationModalBodyProps = Omit<ConfirmationModalProps, 'showConfi
  * This interface extends a subset of `ConfirmationModalProps` to configure
  * the confirmation modal behavior and allows additional customization options.
  */
-export interface DeleteComponentModalProps
+export interface DeleteConfirmationModalProps
     extends Partial<
         Pick<ConfirmationModalProps, 'title' | 'subtitle' | 'showConfirmationModal' | 'children' | 'confirmationConfig'>
     > {
@@ -152,7 +152,7 @@ export interface DeleteComponentModalProps
      *
      * Function to handle error
      */
-    handleError?: (error) => void
+    onError?: (error) => void
     // Additional Configuration
     /**
      * Boolean to determine if event propagation should be stopped.
@@ -166,20 +166,22 @@ export interface DeleteComponentModalProps
 
 /**
  * Props for the CannotDeleteModal component.
- * This interface extends selected properties from `DeleteComponentModalProps`
+ * This interface extends selected properties from `DeleteConfirmationModalProps`
  * and `ConfirmationModalProps` to configure the "Cannot Delete" modal.
  */
 export interface CannotDeleteModalProps
-    extends Partial<Pick<DeleteComponentModalProps, 'component' | 'closeConfirmationModal'>>,
+    extends Partial<Pick<DeleteConfirmationModalProps, 'component' | 'closeConfirmationModal'>>,
         Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle'>> {
     showCannotDeleteDialogModal: boolean
 }
 
 /**
  * Props for the ForceDeleteConfirmation component.
- * This interface extends selected properties from `DeleteComponentModalProps`
+ * This interface extends selected properties from `DeleteConfirmationModalProps`
  * and `ConfirmationModalProps` to configure the force delete confirmation modal.
  */
 export interface ForceDeleteConfirmationProps
-    extends Partial<Pick<DeleteComponentModalProps, 'onDelete' | 'showConfirmationModal' | 'closeConfirmationModal'>>,
+    extends Partial<
+            Pick<DeleteConfirmationModalProps, 'onDelete' | 'showConfirmationModal' | 'closeConfirmationModal'>
+        >,
         Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle'>> {}

@@ -16,7 +16,7 @@
 
 import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { CustomInput, noop, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
+import { CustomInput, noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
@@ -81,6 +81,7 @@ const ConfirmationModalBody = ({
                 exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}
                 initial={{ y: 100, opacity: 0, scale: 0.75 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
+                onClick={stopPropagation}
             >
                 <div className="flexbox-col dc__gap-12 p-20">
                     {cloneElement(RenderIcon, {

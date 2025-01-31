@@ -512,3 +512,8 @@ export const SKIP_LABEL_KEY_VALIDATION_PREFIX = 'devtron.ai/'
 export const UNSAVED_CHANGES_PROMPT_MESSAGE = 'You have unsaved changes. Are you sure you want to leave?'
 export const DEFAULT_ROUTE_PROMPT_MESSAGE =
     "Please don't wander off! Reloading or going back might disrupt the ongoing operation."
+
+export const DC_DELETE_SUBTITLES = {
+    DELETE_ENVIRONMENT_SUBTITLE: 'Are you sure you want to delete this environment?',
+    DELETE_CLUSTER_SUBTITLES: 'Are you sure you want to delete this cluster?',
+}
