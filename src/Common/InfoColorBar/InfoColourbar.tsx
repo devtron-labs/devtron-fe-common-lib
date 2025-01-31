@@ -118,7 +118,7 @@ const InfoColourBar = ({
                 className={`${classname} info_text flex dc__content-space pt-8 pb-8 pl-12 pr-12 br-4 top fs-13 fw-4`}
                 style={styles}
             >
-                <div className={`flex top ${typeof renderActionButton === 'function' ? 'mr-5' : ''}`}>
+                <div className={`flex top ${typeof renderActionButton === 'function' ? 'mr-5' : ''} ${!!textConfig ? 'flex-grow-1' : ''}`}>
                     {!hideIcon && (
                         <div className={`icon-dim-${iconSize ?? '20'} mr-10`}>
                             <Icon className={`icon-dim-${iconSize ?? '20'} ${iconClass || ''} mr-8`} />
