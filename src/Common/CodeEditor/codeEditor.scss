@@ -24,6 +24,10 @@
     border-left: 1px solid var(--N200);
 }
 
+.cm-scroller {
+    min-height: inherit;
+}
+
 .cm-editor {
     &.cm-focused {
         outline: none;
@@ -136,6 +140,7 @@
     // GUTTERS
     .cm-gutters {
         border: none;
+        min-height: inherit !important;
 
         // omitting first child since it is internally used by codemirror
         &:hover .cm-foldGutter .cm-gutterElement:not(:first-child) span {
@@ -271,7 +276,6 @@
         background-color: var(--bg-code-editor-base);
 
         &__gutter {
-            flex: 0 0 52px;
             background-color: var(--bg-code-editor-base-gutter);
         }
     }

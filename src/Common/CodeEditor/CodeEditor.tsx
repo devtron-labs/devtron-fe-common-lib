@@ -175,7 +175,6 @@ const CodeEditor = <DiffView extends boolean = false>({
         defaultKeymap: false,
         searchKeymap: false,
         foldGutter: false,
-        // TODO: need to remove this after getting proper colors from design
         drawSelection: false,
         highlightActiveLineGutter: false,
         tabSize,

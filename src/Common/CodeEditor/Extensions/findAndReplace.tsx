@@ -432,7 +432,7 @@ export const codeEditorFindReplace = (view: EditorView): Panel => {
         findField?.select()
     }
 
-    const update = ({ transactions, changes }: ViewUpdate) => {
+    const update = ({ transactions, docChanged, state, startState }: ViewUpdate) => {
         transactions.forEach((tr) => {
             tr.effects.forEach((effect) => {
                 if (effect.is(setSearchQuery)) {
@@ -441,7 +441,7 @@ export const codeEditorFindReplace = (view: EditorView): Panel => {
             })
         })
 
-        if (changes) {
+        if (docChanged || state.readOnly !== startState.readOnly) {
             renderFindReplace()
         }
     }
