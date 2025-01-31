@@ -140,8 +140,9 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         ...(getVariantOverrides(variant)?.control(base, state) || {}),
 
         '&:hover': {
-            borderColor: state.isDisabled ? 'var(--N200)' : 'var(--N300)',
+            borderColor: state.isDisabled ? 'var(--N200)' : `${error ? 'var(--R500)' : 'var(--N300)'}`,
         },
+
         '&:focus, &:focus-within': {
             borderColor: state.isDisabled ? 'var(--N200)' : 'var(--B500)',
             outline: 'none',

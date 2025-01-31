@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { ComponentSizeType } from '@Shared/constants'
+import { COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP, ComponentSizeType } from '@Shared/constants'
 import { ProgressingProps } from '@Common/Types'
 import { ButtonProps } from './types'
 
 export const BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> = {
-    [ComponentSizeType.xxs]: 'px-9 py-1 fs-12 lh-20 fw-6 dc__gap-6 mw-48',
-    [ComponentSizeType.xs]: 'px-9 py-1 fs-12 lh-20 fw-6 dc__gap-6 mw-48',
-    [ComponentSizeType.small]: 'px-9 py-3 fs-12 lh-20 fw-6 dc__gap-8 mw-48',
-    [ComponentSizeType.medium]: 'px-11 py-5 fs-13 lh-20 fw-6 dc__gap-8 mw-48',
-    [ComponentSizeType.large]: 'px-13 py-7 fs-13 lh-20 fw-6 dc__gap-8 mw-64',
-    [ComponentSizeType.xl]: 'px-15 py-9 fs-14 lh-20 fw-6 dc__gap-12 mw-64',
+    [ComponentSizeType.xxs]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.xxs]} px-9 fw-6 dc__gap-6 mw-48`,
+    [ComponentSizeType.xs]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.xs]} px-9 fw-6 dc__gap-6 mw-48`,
+    [ComponentSizeType.small]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.small]} px-9 fw-6 dc__gap-8 mw-48`,
+    [ComponentSizeType.medium]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.medium]} px-11 fw-6 dc__gap-8 mw-48`,
+    [ComponentSizeType.large]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.large]} px-13 fw-6 dc__gap-8 mw-64`,
+    [ComponentSizeType.xl]: `${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[ComponentSizeType.xl]} px-15 fw-6 dc__gap-12 mw-64`,
 } as const
 
 export const ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> = {
