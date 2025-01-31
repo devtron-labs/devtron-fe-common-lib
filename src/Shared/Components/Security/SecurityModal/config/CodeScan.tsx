@@ -443,11 +443,8 @@ export const getCodeScanInfoCardData = (
     }
     switch (subCategory) {
         case SUB_CATEGORIES.VULNERABILITIES:
-            return {
-                entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                ...scanInfo,
-            }
         case SUB_CATEGORIES.LICENSE:
+        case SUB_CATEGORIES.EXPOSED_SECRETS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
                 ...scanInfo,
@@ -455,11 +452,6 @@ export const getCodeScanInfoCardData = (
         case SUB_CATEGORIES.MISCONFIGURATIONS:
             return {
                 entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.misConfSummary.status),
-                ...scanInfo,
-            }
-        case SUB_CATEGORIES.EXPOSED_SECRETS:
-            return {
-                entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
                 ...scanInfo,
             }
         default:

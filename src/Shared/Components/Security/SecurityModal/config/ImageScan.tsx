@@ -321,24 +321,12 @@ export const getImageScanInfoCardData = (
     subCategory: SecurityModalStateType['subCategory'],
 ): InfoCardPropsType => {
     const image = data[subCategory]?.list?.[0]
-    const scanInfo: Pick<InfoCardPropsType, 'scanToolName' | 'scanToolUrl'> = {
+
+    return {
+        entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
         scanToolName: image?.scanToolName,
         scanToolUrl: image?.scanToolUrl,
-    }
-
-    switch (subCategory) {
-        case SUB_CATEGORIES.VULNERABILITIES:
-            return {
-                entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                ...scanInfo,
-            }
-        case SUB_CATEGORIES.LICENSE:
-            return {
-                entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                ...scanInfo,
-            }
-        default:
-            return null
+        lastScanTimeString: image?.StartedOn,
     }
 }
 

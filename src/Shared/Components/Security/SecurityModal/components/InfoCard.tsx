@@ -24,7 +24,7 @@ import { InfoCardPropsType } from '../types'
 
 const InfoCard: React.FC<InfoCardPropsType> = ({ entities, lastScanTimeString, scanToolName, scanToolUrl }) => (
     <div className="info-card">
-        <SegmentedBarChart entities={entities} rootClassName="p-16 fs-13" countClassName="fw-6" />
+        <SegmentedBarChart entities={entities} rootClassName="p-16 fs-13" countClassName="fw-6" showAnimationOnBar />
 
         {(lastScanTimeString || scanToolName) && (
             <>
