@@ -140,7 +140,6 @@
     // GUTTERS
     .cm-gutters {
         border: none;
-        min-height: inherit !important;
 
         // omitting first child since it is internally used by codemirror
         &:hover .cm-foldGutter .cm-gutterElement:not(:first-child) span {
