@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
+import { ReactNode } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
 import { Progressing } from '@Common/Progressing'
-import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-error-exclamation.svg'
-import { ReactComponent as ICInfoOutline } from '../../../Assets/Icon/ic-info-outline.svg'
+import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
+import { ReactComponent as ICInfoOutline } from '@Icons/ic-info-outline.svg'
+import { ReactComponent as ICArrowCounterClockwise } from '@Icons/ic-arrow-counter-clockwise.svg'
 import { Button, ButtonVariantType } from '../Button'
 import { GenericSectionErrorStateProps } from './types'
 
@@ -44,6 +46,18 @@ const GenericSectionErrorState = ({
         return <ErrorIcon className="icon-dim-24 alert-icon-r5-imp" />
     }
 
+    const renderSubHeading = (content: ReactNode) => {
+        if (!content) {
+            return null
+        }
+
+        if (typeof content === 'string') {
+            return <p className="m-0 dc__truncate--clamp-6">{content}</p>
+        }
+
+        return content
+    }
+
     return (
         <div className={`flex column dc__gap-8 p-16 ${withBorder ? 'dc__border br-4' : ''} ${rootClassName || ''}`}>
             {renderMarker()}
@@ -52,14 +66,15 @@ const GenericSectionErrorState = ({
                 <h3 className="fs-13 lh-20 fw-6 cn-9 m-0">{title}</h3>
                 {(subTitle || description) && (
                     <div className="flex column fs-13 lh-20 fw-4 cn-7">
-                        {subTitle && <p className="m-0">{subTitle}</p>}
-                        {description && <p className="m-0">{description}</p>}
+                        {renderSubHeading(subTitle)}
+                        {renderSubHeading(description)}
                     </div>
                 )}
             </div>
 
             {reload && (
                 <Button
+                    startIcon={<ICArrowCounterClockwise className="dc__flip" />}
                     text={buttonText}
                     onClick={reload}
                     variant={ButtonVariantType.text}

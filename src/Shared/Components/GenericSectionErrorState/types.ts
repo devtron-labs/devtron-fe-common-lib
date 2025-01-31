@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { ReactNode } from 'react'
 import { ProgressingProps } from '@Common/Types'
 
 export interface GenericSectionErrorStateProps {
@@ -34,11 +35,11 @@ export interface GenericSectionErrorStateProps {
     /**
      * @default 'We could not load the information on this page.'
      */
-    subTitle?: string
+    subTitle?: ReactNode
     /**
      * @default 'Please reload or try again later'
      */
-    description?: string
+    description?: ReactNode
     /**
      * @default 'Reload'
      */
