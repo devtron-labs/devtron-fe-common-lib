@@ -15,4 +15,5 @@
  */
 
 export { default as CustomInput } from './CustomInput'
-export type { CustomInputProps } from './types'
+export { default as PasswordField } from './PasswordField'
+export type { CustomInputProps, PasswordFieldProps } from './types'

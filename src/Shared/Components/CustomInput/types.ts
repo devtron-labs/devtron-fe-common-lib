@@ -21,10 +21,7 @@ import { ButtonComponentType, ButtonProps } from '../Button'
 
 export interface CustomInputProps
     extends Omit<FormFieldWrapperProps, 'children' | 'inputId'>,
-        Pick<
-            InputHTMLAttributes<HTMLInputElement>,
-            'onBlur' | 'disabled' | 'autoFocus' | 'onFocus' | 'type' | 'onKeyDown'
-        >,
+        Pick<InputHTMLAttributes<HTMLInputElement>, 'onBlur' | 'disabled' | 'autoFocus' | 'onFocus' | 'onKeyDown'>,
         Required<Pick<InputHTMLAttributes<HTMLInputElement>, 'placeholder' | 'onChange' | 'value' | 'name'>> {
     /**
      * If false, the input is not trimmed on blur
@@ -38,8 +35,24 @@ export interface CustomInputProps
      * @default ComponentSizeType.large
      */
     size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large>
-    endIconButtonConfig?: Pick<
-        ButtonProps<ButtonComponentType.button>,
-        'icon' | 'onClick' | 'disabled' | 'ariaLabel' | 'showAriaLabelInTippy' | 'style'
-    >
+    /**
+     * Type for the input
+     *
+     * Note: For password field, use PasswordField component
+     *
+     * @default 'text'
+     */
+    type?: Exclude<InputHTMLAttributes<HTMLInputElement>['type'], 'password'>
+    /**
+     * End icon button configuration
+     */
+    endIconButtonConfig?: Required<Pick<ButtonProps<ButtonComponentType.button>, 'icon' | 'onClick' | 'ariaLabel'>> &
+        Pick<ButtonProps<ButtonComponentType.button>, 'disabled' | 'showAriaLabelInTippy' | 'style'>
+}
+
+export interface PasswordFieldProps extends Omit<CustomInputProps, 'endIconButtonConfig' | 'type'> {
+    /**
+     * If true, the value is cleared & default placeholder is shown on blur
+     */
+    shouldShowDefaultPlaceholderOnBlur: boolean
 }
