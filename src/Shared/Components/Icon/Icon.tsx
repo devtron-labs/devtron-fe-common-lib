@@ -1,12 +1,16 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
 
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
+import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
+import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
+import { ReactComponent as ICGithub } from '@IconsV2/ic-github.svg'
+import { ReactComponent as ICGitlab } from '@IconsV2/ic-gitlab.svg'
 import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
 import { ReactComponent as ICHeartRedAnimated } from '@IconsV2/ic-heart-red-animated.svg'
 import { ReactComponent as ICHeartRed } from '@IconsV2/ic-heart-red.svg'
@@ -25,12 +29,16 @@ import { IconBaseProps } from './types'
 
 export const iconMap = {
     'ic-aborted': ICAborted,
+    'ic-bitbucket': ICBitbucket,
     'ic-cancelled': ICCancelled,
     'ic-circle-loader': ICCircleLoader,
     'ic-clock': ICClock,
     'ic-close-small': ICCloseSmall,
     'ic-error': ICError,
     'ic-failure': ICFailure,
+    'ic-git': ICGit,
+    'ic-github': ICGithub,
+    'ic-gitlab': ICGitlab,
     'ic-heart-green': ICHeartGreen,
     'ic-heart-red-animated': ICHeartRedAnimated,
     'ic-heart-red': ICHeartRed,

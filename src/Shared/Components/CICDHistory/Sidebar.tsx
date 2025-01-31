@@ -44,6 +44,7 @@ import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
 import { HISTORY_LABEL, FILTER_STYLE } from './constants'
 import { statusColor as colorMap } from '../../constants'
 import { DeploymentStatus } from '../StatusComponent'
+import { Icon } from '../Icon'
 
 const SummaryTooltipCard = React.memo(
     ({
@@ -89,7 +90,7 @@ const SummaryTooltipCard = React.memo(
                                     </div>
                                 ) : (
                                     <>
-                                        <div className="dc__git-logo"> </div>
+                                        <Icon name="ic-git" size={24} color={null} />
                                         <div className="flex left column">
                                             <a
                                                 href={createGitCommitUrl(gitMaterialUrl, gitDetail.Commit)}
