@@ -17,7 +17,7 @@ const FormFieldInfo = ({ error, helperText, warningText, inputId }: FormFieldInf
         {helperText && (
             <FormInfoItem
                 text={helperText}
-                icon={<ICInfoFilledOverride className="info-icon-n7" />}
+                icon={<ICInfoFilledOverride className="info-icon-n6" />}
                 textClass="cn-7"
                 id={`${inputId}-helper-text`}
             />
