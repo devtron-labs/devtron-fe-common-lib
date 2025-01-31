@@ -24,6 +24,7 @@ import { CreatableProps } from 'react-select/creatable'
 import type {} from 'react-select/base'
 import { TooltipProps } from '@Common/Tooltip/types'
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
+import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
 
 export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
     /**
@@ -164,19 +165,8 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
             >,
             'onCreateOption' | 'formatCreateLabel' | 'menuPortalTarget'
         >
-    > & {
-        /**
-         * Error message for the select
-         */
-        error?: ReactNode
-        /**
-         * Info text for the select, if any
-         */
-        helperText?: ReactNode
-        /**
-         * Label for the select. if required is added, the corresponding * is also added
-         */
-        label?: ReactNode
+    > &
+    Omit<FormFieldWrapperProps, 'children'> & {
         /**
          * Custom selected options count for use cases like filters
          */
