@@ -106,7 +106,7 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
         <ConfirmationModal
             variant={ConfirmationModalVariantType.delete}
             title={`Delete ${component} '${title}'`}
-            subtitle={subtitle ?? `Are you sure you want to delete this ${component} ?`}
+            subtitle={subtitle || `Are you sure you want to delete this ${component} ?`}
             buttonConfig={{
                 secondaryButtonConfig: {
                     text: 'Cancel',
