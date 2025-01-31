@@ -27,6 +27,8 @@ const Textarea = ({
     size = ComponentSizeType.large,
     ariaLabel,
     borderRadiusConfig,
+    labelTooltipConfig,
+    labelTippyCustomizedConfig,
     ...props
 }: TextareaProps) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -96,6 +98,8 @@ const Textarea = ({
             fullWidth={fullWidth}
             ariaLabel={ariaLabel}
             borderRadiusConfig={borderRadiusConfig}
+            labelTooltipConfig={labelTooltipConfig}
+            labelTippyCustomizedConfig={labelTippyCustomizedConfig}
         >
             <textarea
                 {...props}

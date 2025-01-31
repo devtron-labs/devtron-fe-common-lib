@@ -12,6 +12,8 @@ const FormFieldWrapper = ({
     warningText,
     required,
     children,
+    labelTippyCustomizedConfig,
+    labelTooltipConfig,
 }: Required<FormFieldWrapperProps>) => {
     const isRowLayout = layout === 'row'
     const itemContainerClassName = isRowLayout ? 'dc__mxw-250 w-100 mxh-36 dc__align-self-stretch' : ''
@@ -21,7 +23,19 @@ const FormFieldWrapper = ({
             <div className={`flex left top dc__gap-6 ${!isRowLayout ? 'column' : ''} w-100`}>
                 {label && (
                     <div className={`${itemContainerClassName} flex left`}>
-                        <FormFieldLabel inputId={inputId} label={label} required={required} layout={layout} />
+                        <FormFieldLabel
+                            inputId={inputId}
+                            label={label}
+                            required={required}
+                            layout={layout}
+                            {...(isRowLayout
+                                ? {
+                                      labelTooltipConfig,
+                                  }
+                                : {
+                                      labelTippyCustomizedConfig,
+                                  })}
+                        />
                     </div>
                 )}
                 <div className="w-100 dc__position-rel">{children}</div>

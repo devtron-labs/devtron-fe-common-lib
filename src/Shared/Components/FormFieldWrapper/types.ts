@@ -1,3 +1,5 @@
+import { TooltipProps } from '@Common/Tooltip'
+import { TippyCustomizedProps } from '@Common/Types'
 import { ReactElement, ReactNode } from 'react'
 
 export type LabelOrAriaLabelType =
@@ -10,7 +12,9 @@ export type LabelOrAriaLabelType =
           ariaLabel: string
       }
 
-export type FormFieldLabelProps = LabelOrAriaLabelType & {
+type LayoutType = 'row' | 'column'
+
+export type FormFieldLabelProps<Layout extends LayoutType = LayoutType> = LabelOrAriaLabelType & {
     /**
      * If true, the field is required and * is shown with the label
      */
@@ -22,8 +26,25 @@ export type FormFieldLabelProps = LabelOrAriaLabelType & {
     /**
      * Layout of the field
      */
-    layout?: 'row' | 'column'
-}
+    layout?: Layout
+} & (Layout extends 'row'
+        ? {
+              /**
+               * Tooltip configuration for the label in row layout
+               */
+              labelTooltipConfig?: Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate' | 'shortcutKeyCombo'>
+              labelTippyCustomizedConfig?: never
+          }
+        : {
+              labelTooltipConfig?: never
+              /**
+               * Tippy configuration for the label in column layout
+               */
+              labelTippyCustomizedConfig?: Pick<
+                  TippyCustomizedProps,
+                  'heading' | 'infoText' | 'documentationLink' | 'documentationLinkText'
+              >
+          })
 
 export interface FormFieldInfoProps extends Pick<FormFieldLabelProps, 'inputId'> {
     /**
@@ -48,7 +69,10 @@ export interface FormInfoItemProps {
 }
 
 export interface FormFieldWrapperProps
-    extends Pick<FormFieldLabelProps, 'label' | 'required' | 'ariaLabel' | 'layout'>,
+    extends Pick<
+            FormFieldLabelProps,
+            'label' | 'required' | 'ariaLabel' | 'layout' | 'labelTippyCustomizedConfig' | 'labelTooltipConfig'
+        >,
         FormFieldInfoProps {
     /**
      * If true, the field takes the full width of the parent

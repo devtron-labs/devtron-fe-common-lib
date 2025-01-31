@@ -44,6 +44,8 @@ const CustomInput = ({
     type = 'text',
     autoFocus = false,
     endIconButtonConfig,
+    labelTippyCustomizedConfig,
+    labelTooltipConfig,
     ...props
 }: CustomInputProps) => {
     const inputRef = useRef<HTMLInputElement>()
@@ -98,6 +100,8 @@ const CustomInput = ({
             fullWidth={fullWidth}
             ariaLabel={ariaLabel}
             borderRadiusConfig={borderRadiusConfig}
+            labelTippyCustomizedConfig={labelTippyCustomizedConfig}
+            labelTooltipConfig={labelTooltipConfig}
         >
             <>
                 <input
