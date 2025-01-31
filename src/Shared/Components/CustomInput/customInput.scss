@@ -1,0 +1,23 @@
+.custom-input {
+    &__icon-button {
+        &--medium {
+            top: 5px;
+            right: 7px;
+        }
+
+        &--large {
+            top: 6px;
+            right: 7px;
+        }
+    }
+
+    &__with-icon-button {
+        &--medium {
+            padding-right: 35px !important;
+        }
+
+        &--large {
+            padding-right: 37px !important;
+        }
+    }
+}

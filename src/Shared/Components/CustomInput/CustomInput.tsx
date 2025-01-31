@@ -25,6 +25,7 @@ import { getFormFieldBorderClassName } from '@Shared/Components/FormFieldWrapper
 import { CustomInputProps } from './types'
 import { Button, ButtonProps, ButtonStyleType, ButtonVariantType } from '../Button'
 import { CUSTOM_INPUT_TO_ICON_BUTTON_SIZE_MAP } from './constants'
+import './customInput.scss'
 
 const CustomInput = ({
     name,
@@ -81,6 +82,11 @@ const CustomInput = ({
         props.onKeyDown?.(event)
     }
 
+    const handleEndIconButtonClick: CustomInputProps['endIconButtonConfig']['onClick'] = (event) => {
+        event.stopPropagation()
+        endIconButtonConfig?.onClick(event)
+    }
+
     return (
         <FormFieldWrapper
             inputId={name}
@@ -114,16 +120,17 @@ const CustomInput = ({
                     onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
                     type={type}
-                    className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${getFormFieldBorderClassName(borderRadiusConfig)} ${endIconButtonConfig ? 'pr-36-imp' : ''} w-100 dc__overflow-auto`}
+                    className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${getFormFieldBorderClassName(borderRadiusConfig)} ${endIconButtonConfig ? `custom-input__with-icon-button--${size}` : ''} w-100 dc__overflow-auto`}
                 />
                 {endIconButtonConfig && (
-                    <div className="dc__no-shrink dc__position-abs dc__top-4 dc__right-4">
+                    <div className={`dc__no-shrink dc__position-abs custom-input__icon-button--${size}`}>
                         <Button
                             style={ButtonStyleType.neutral}
                             {...(endIconButtonConfig as ButtonProps)}
                             dataTestId={`${name}-end-icon`}
                             variant={ButtonVariantType.borderLess}
                             size={CUSTOM_INPUT_TO_ICON_BUTTON_SIZE_MAP[size]}
+                            onClick={handleEndIconButtonClick}
                         />
                     </div>
                 )}
