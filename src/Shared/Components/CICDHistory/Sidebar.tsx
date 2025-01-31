@@ -326,15 +326,19 @@ const Sidebar = React.memo(
             props.selectProps.styles.option = getCustomOptionSelectionStyle()
             return (
                 <components.Option {...props}>
-                    <div style={{ display: 'flex' }}>
+                    <div className="flexbox dc dc__gap-4">
                         {(type === HistoryComponentType.CI || type === HistoryComponentType.GROUP_CI) && (
-                            <div
-                                className={
-                                    `dc__ci-pipeline-type-icon mr-5 ${props.data.pipelineType?.toLowerCase()}` || ''
+                            <Icon
+                                name={
+                                    props.data.pipelineType?.toLowerCase() === 'ci_job'
+                                        ? 'ic-job-color'
+                                        : 'ic-build-color'
                                 }
+                                size={20}
+                                color={null}
                             />
                         )}
-                        {props.label}
+                        <span>{props.label}</span>
                     </div>
                 </components.Option>
             )

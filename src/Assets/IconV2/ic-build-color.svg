@@ -1,0 +1,33 @@
+<!--
+  - Copyright (c) 2024. Devtron Inc.
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  -     http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <g>
+                <g>
+                    <g>
+                        <path fill="#8898A6" d="M5.07 3.99l1.728 1.728c.219.22.219.575 0 .795L5.513 7.798c-.22.219-.575.219-.795 0L2.99 6.069c-.118-.118-.32-.063-.364.098-.328 1.21-.017 2.557.933 3.507 1.034 1.034 2.538 1.31 3.824.83l7.48 8.18c.767.84 2.08.87 2.885.064.809-.808.775-2.13-.074-2.895L9.476 8.459c.52-1.302.253-2.846-.802-3.9-.95-.95-2.297-1.26-3.507-.933-.161.044-.216.246-.098.364zm11.822 13.332c0 .33-.268.599-.598.599-.33 0-.599-.268-.599-.599 0-.33.268-.598.599-.598.33 0 .598.268.598.598z" transform="translate(-762 -518) translate(288 288) translate(0 220) translate(474 9) matrix(-1 0 0 1 20.833 0)"/>
+                        <g>
+                            <path fill="#F4910D" d="M3.623 3.623h2.899V16.79c0 .552-.448 1-1 1h-.899c-.552 0-1-.448-1-1V3.623z" transform="translate(-762 -518) translate(288 288) translate(0 220) translate(474 9) rotate(-45 10.841 3.882)"/>
+                            <path fill="#66757F" d="M1 4.076h.812l.31-.233c.262-.196.634-.143.83.118.027.036.05.074.067.115h3.624l.5-.644c.351-.45.89-.715 1.462-.715.58 0 1.136.23 1.546.64l.719.72c0-2.265-1.007-3.398-3.02-3.398H2.865c-.286 0-.558-.122-.748-.335L1.812 0H1C.448 0 0 .448 0 1v2.076c0 .552.448 1 1 1z" transform="translate(-762 -518) translate(288 288) translate(0 220) translate(474 9) rotate(-45 10.841 3.882)"/>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
