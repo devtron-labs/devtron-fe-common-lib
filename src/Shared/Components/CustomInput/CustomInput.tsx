@@ -69,9 +69,7 @@ const CustomInput = ({
                 props.onChange(event)
             }
         }
-        if (typeof onBlur === 'function') {
-            onBlur(event)
-        }
+        onBlur?.(event)
     }
 
     const handleKeyDown: InputHTMLAttributes<HTMLInputElement>['onKeyDown'] = (event) => {
@@ -84,6 +82,7 @@ const CustomInput = ({
 
     const handleEndIconButtonClick: CustomInputProps['endIconButtonConfig']['onClick'] = (event) => {
         event.stopPropagation()
+        inputRef.current.focus()
         endIconButtonConfig?.onClick(event)
     }
 
