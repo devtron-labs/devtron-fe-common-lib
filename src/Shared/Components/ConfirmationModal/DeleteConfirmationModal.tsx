@@ -56,6 +56,8 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
                 variant: ToastVariantType.success,
                 description: successToastMessage || 'Successfully deleted',
             })
+            setDeleting(false)
+
             closeConfirmationModal()
         } catch (serverError) {
             if (serverError instanceof ServerErrors && serverError.code === errorCodeToShowCannotDeleteDialog) {
@@ -73,7 +75,6 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
             } else {
                 showError(serverError)
             }
-        } finally {
             setDeleting(false)
         }
     }
