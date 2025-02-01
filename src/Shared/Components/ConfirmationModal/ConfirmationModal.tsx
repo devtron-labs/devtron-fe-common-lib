@@ -83,17 +83,20 @@ const ConfirmationModalBody = ({
                 animate={{ y: 0, opacity: 1, scale: 1 }}
                 onClick={stopPropagation}
             >
-                <div className="flexbox-col dc__gap-12 p-20">
+                <div className="flexbox-col dc__gap-16 p-20">
                     {cloneElement(RenderIcon, {
                         className: `${RenderIcon.props?.className ?? ''} icon-dim-48 dc__no-shrink`,
                     })}
-                    <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
 
-                    {typeof subtitle === 'string' ? (
-                        <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
-                    ) : (
-                        subtitle
-                    )}
+                    <div className="flexbox-col dc__gap-8">
+                        <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
+
+                        {typeof subtitle === 'string' ? (
+                            <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
+                        ) : (
+                            subtitle
+                        )}
+                    </div>
 
                     {children}
 
