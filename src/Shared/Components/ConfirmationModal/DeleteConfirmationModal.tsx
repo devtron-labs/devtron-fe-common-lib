@@ -27,36 +27,36 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
     title,
     subtitle = '',
     component = '',
+    primaryButtonText = 'Delete',
     disabled,
+    isDeleting,
     onDelete,
+    onError,
     showConfirmationModal,
     closeConfirmationModal,
+    confirmationConfig,
+    // Additional UI-related logic
     renderCannotDeleteConfirmationSubTitle,
     errorCodeToShowCannotDeleteDialog,
     successToastMessage,
-    isLoading,
-    shouldStopPropagation = false,
-    primaryButtonText = 'Delete',
-    confirmationConfig,
-    onError,
     children,
 }: DeleteConfirmationModalProps) => {
-    const [isDeleting, setDeleting] = useState(isLoading)
     const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(false)
     const [showForceDeleteModal, setForceDeleteModal] = useState(false)
     const [cannotDeleteText, setCannotDeleteText] = useState(renderCannotDeleteConfirmationSubTitle)
+    const [isLoading, setLoading] = useState(isDeleting)
 
     const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        if (shouldStopPropagation) e.stopPropagation()
+        e.stopPropagation()
 
-        setDeleting(true)
+        setLoading(true)
         try {
             await onDelete()
             ToastManager.showToast({
                 variant: ToastVariantType.success,
                 description: successToastMessage || 'Successfully deleted',
             })
-            setDeleting(false)
+            setLoading(false)
 
             closeConfirmationModal()
         } catch (serverError) {
@@ -75,7 +75,7 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
             } else {
                 showError(serverError)
             }
-            setDeleting(false)
+            setLoading(false)
         }
     }
 
@@ -116,7 +116,7 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
                 primaryButtonConfig: {
                     text: primaryButtonText,
                     onClick: handleDelete,
-                    isLoading: isDeleting,
+                    isLoading: isDeleting || isLoading,
                     disabled: isLoading || disabled,
                 },
             }}

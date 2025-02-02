@@ -139,7 +139,7 @@ export interface DeleteConfirmationModalProps
     /**
      * Boolean indicating if the delete action is in progress.
      */
-    isLoading?: boolean
+    isDeleting?: boolean
     /**
      * Custom ReactNode to render a subtitle when the component cannot be deleted.
      */
