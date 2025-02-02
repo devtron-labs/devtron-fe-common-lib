@@ -63,8 +63,10 @@ const AnnouncementBanner = ({ parentClassName = '', isCDMaterial = false }: Anno
 
     const renderAnnouncementBanner = () => (
         <div className="flex dc__gap-4">
-            // eslint-disable-next-line react/no-danger
-            <div className="dc__word-break cn-7" dangerouslySetInnerHTML={{ __html: message }} />
+            <div className="dc__word-break cn-7" 
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: message }} 
+            />
             {isCDMaterial ? null : (
                 <Close className="icon-dim-20 ml-8 fcn-9" onClick={onClickCloseAnnouncememtBanner} />
             )}
