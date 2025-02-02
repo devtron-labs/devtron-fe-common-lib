@@ -15,6 +15,7 @@
  */
 
 import { useState } from 'react'
+import DOMPurify from 'dompurify'
 import { InfoColourBar } from '../../../Common'
 import { ReactComponent as MegaphoneIcon } from '../../../Assets/Icon/ic-megaphone.svg'
 import { ReactComponent as Close } from '../../../Assets/Icon/ic-close.svg'
@@ -26,7 +27,8 @@ interface AnnouncementBannerType {
 }
 
 const AnnouncementBanner = ({ parentClassName = '', isCDMaterial = false }: AnnouncementBannerType) => {
-    const message = window?._env_?.ANNOUNCEMENT_BANNER_MSG
+    const rawMessage = window?._env_?.ANNOUNCEMENT_BANNER_MSG
+    const message = rawMessage ? DOMPurify.sanitize(rawMessage) : null
     const showAnnouncementBanner = (): boolean => {
         const expiryDateOfHidingAnnouncementBanner: string =
             typeof Storage !== 'undefined' &&
@@ -61,7 +63,7 @@ const AnnouncementBanner = ({ parentClassName = '', isCDMaterial = false }: Anno
 
     const renderAnnouncementBanner = () => (
         <div className="flex dc__gap-4">
-            <div className="dc__word-break cn-7">{message}</div>
+            <div className="dc__word-break cn-7" dangerouslySetInnerHTML={{ __html: message }} />
             {isCDMaterial ? null : (
                 <Close className="icon-dim-20 ml-8 fcn-9" onClick={onClickCloseAnnouncememtBanner} />
             )}
