@@ -17,7 +17,7 @@
 import React, { useState } from 'react'
 import { ToastManager, ToastVariantType } from '@Shared/Services/ToastManager'
 import { ServerErrors } from '@Common/ServerError'
-import { showError } from '@Common/Helper'
+import { showError, stopPropagation } from '@Common/Helper'
 import { ConfirmationModalVariantType, DeleteConfirmationModalProps } from './types'
 import ConfirmationModal from './ConfirmationModal'
 import { CannotDeleteModal } from './CannotDeleteModal'
@@ -47,7 +47,9 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
     const [isLoading, setLoading] = useState(isDeleting)
 
     const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation()
+        if (e) {
+            stopPropagation(e)
+        }
 
         setLoading(true)
         try {
@@ -57,7 +59,6 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
                 description: successToastMessage || 'Successfully deleted',
             })
             setLoading(false)
-
             closeConfirmationModal()
         } catch (serverError) {
             if (serverError instanceof ServerErrors && serverError.code === errorCodeToShowCannotDeleteDialog) {

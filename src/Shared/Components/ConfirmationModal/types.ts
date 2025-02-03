@@ -155,10 +155,6 @@ export interface DeleteConfirmationModalProps
     onError?: (error) => void
     // Additional Configuration
     /**
-     * Boolean to determine if event propagation should be stopped.
-     */
-    shouldStopPropagation?: boolean
-    /**
      * Boolean to disable the delete action.
      */
     disabled?: boolean
