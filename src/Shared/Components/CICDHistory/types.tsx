@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CSSProperties, ReactElement } from 'react'
+import { CSSProperties, Dispatch, ReactElement, SetStateAction } from 'react'
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import {
     OptionType,
@@ -560,7 +560,7 @@ export interface DeploymentHistorySidebarType {
 export interface AppStatusDetailsChartType {
     filterRemoveHealth?: boolean
     showFooter: boolean
-    showConfigDriftInfo?: boolean
+    setShowConfigDriftModal?: Dispatch<SetStateAction<boolean>>
     onClose?: () => void
 }
 
