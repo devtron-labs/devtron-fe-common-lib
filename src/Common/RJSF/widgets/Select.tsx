@@ -75,7 +75,11 @@ export const SelectWidget = (props: WidgetProps) => {
                 ...commonSelectStyles,
                 control: (base, state) => ({
                     ...commonSelectStyles.control(base, state),
-                    height: '36px',
+                    minHeight: '36px',
+                }),
+                multiValue: (base, state) => ({
+                    ...commonSelectStyles.multiValue(base, state),
+                    margin: '2px 8px 2px 2px',
                 }),
             }}
             components={{

@@ -1,4 +1,20 @@
-import { ButtonHTMLAttributes, ChangeEvent, useCallback, useEffect, useState } from 'react'
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CustomInput, noop, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
@@ -14,7 +30,7 @@ const ConfirmationModalBody = ({
     Icon,
     variant,
     buttonConfig,
-    customInputConfig,
+    confirmationConfig,
     children,
     handleClose,
     shouldCloseOnEscape = true,
@@ -23,14 +39,16 @@ const ConfirmationModalBody = ({
 
     const [confirmationText, setConfirmationText] = useState<string>('')
 
-    const customInputIdentifier = customInputConfig?.identifier
-    const confirmationKeyword = customInputConfig?.confirmationKeyword
+    const customInputIdentifier = confirmationConfig?.identifier
+    const confirmationKeyword = confirmationConfig?.confirmationKeyword
 
     const { primaryButtonConfig, secondaryButtonConfig } = buttonConfig
 
     const RenderIcon = Icon ?? getIconFromVariant(variant)
 
-    const disablePrimaryButton: boolean = confirmationKeyword && confirmationText.trim() !== confirmationKeyword
+    const disablePrimaryButton: boolean =
+        ('disabled' in primaryButtonConfig && primaryButtonConfig.disabled) ||
+        (confirmationKeyword && confirmationText.trim() !== confirmationKeyword)
 
     const handleTriggerPrimaryActionButton = () => {
         if (primaryButtonConfig && !disablePrimaryButton) {
@@ -64,17 +82,24 @@ const ConfirmationModalBody = ({
                 initial={{ y: 100, opacity: 0, scale: 0.75 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
             >
-                <div className="flexbox-col dc__gap-12 p-20">
-                    <RenderIcon className="icon-dim-48 dc__no-shrink" />
-                    <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
+                <div className="flexbox-col dc__gap-16 p-20">
+                    {cloneElement(RenderIcon, {
+                        className: `${RenderIcon.props?.className ?? ''} icon-dim-48 dc__no-shrink`,
+                    })}
 
-                    {typeof subtitle === 'string' ? (
-                        <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
-                    ) : (
-                        subtitle
-                    )}
+                    <div className="flexbox-col dc__gap-8">
+                        <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
 
-                    {customInputConfig && (
+                        {typeof subtitle === 'string' ? (
+                            <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
+                        ) : (
+                            subtitle
+                        )}
+                    </div>
+
+                    {children}
+
+                    {confirmationConfig && (
                         <CustomInput
                             name={customInputIdentifier}
                             value={confirmationText}
@@ -86,8 +111,6 @@ const ConfirmationModalBody = ({
                             autoFocus
                         />
                     )}
-
-                    {children}
                 </div>
                 <div className="p-16 dc__gap-12 flexbox dc__content-end">
                     {secondaryButtonConfig && (
@@ -118,10 +141,7 @@ const ConfirmationModalBody = ({
                                     ? primaryButtonConfig.style
                                     : getPrimaryButtonStyleFromVariant(variant)
                             }
-                            disabled={
-                                ('disabled' in primaryButtonConfig && primaryButtonConfig.disabled) ||
-                                disablePrimaryButton
-                            }
+                            disabled={disablePrimaryButton}
                             isLoading={primaryButtonConfig.isLoading}
                             text={primaryButtonConfig.text}
                             onClick={primaryButtonConfig.onClick as ButtonHTMLAttributes<HTMLButtonElement>['onClick']}

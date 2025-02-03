@@ -59,7 +59,7 @@ export interface K8sResourceListPayloadType {
 }
 
 export type K8sResourceDetailDataType = {
-    [key: string]: string | number | object
+    [key: string]: string | number | object | boolean
 }
 
 export interface K8sResourceDetailType {
@@ -71,10 +71,16 @@ export interface BulkSelectionActionWidgetProps {
     count: number
     handleOpenBulkDeleteModal: () => void
     handleClearBulkSelection: () => void
+    handleOpenCordonNodeModal: () => void
+    handleOpenUncordonNodeModal: () => void
+    handleOpenDrainNodeModal: () => void
     handleOpenRestartWorkloadModal: () => void
     parentRef: RefObject<HTMLDivElement>
     showBulkRestartOption: boolean
+    showNodeListingOptions: boolean
 }
+
+export type RBBulkOperationType = 'restart' | 'delete' | 'cordon' | 'uncordon' | 'drain'
 
 export interface CreateResourceRequestBodyType {
     appId: string

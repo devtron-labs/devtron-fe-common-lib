@@ -19,14 +19,10 @@ import {
     MultiValueProps,
     OptionProps,
     ValueContainerProps,
-    MenuPlacement,
     Props as ReactSelectProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { ReactElement, useCallback, useMemo, useState } from 'react'
-
-import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
-import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
@@ -47,6 +43,8 @@ import {
 } from './common'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
+import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
+import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
 
 /**
  * Generic component for select picker
@@ -217,6 +215,10 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     shouldRenderTextArea = false,
     onKeyDown,
     shouldHideMenu = false,
+    warningText,
+    layout,
+    ariaLabel,
+    borderRadiusConfig,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const [isFocussed, setIsFocussed] = useState(false)
@@ -242,9 +244,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     const selectSize = isMulti && controlShouldRenderValue ? ComponentSizeType.large : size
     const shouldShowSelectedOptionIcon = !isMulti && showSelectedOptionIcon
     const isSelectSearchable = !shouldRenderCustomOptions && isSearchable
-
-    const labelId = `${inputId}-label`
-    const errorElementId = `${inputId}-error-msg`
 
     // Option disabled, group null state, checkbox hover, create option visibility (scroll reset on search)
     const selectStyles = useMemo(
@@ -370,123 +369,86 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         props.onChange?.(...params)
     }
 
-    const commonProps = useMemo(
-        () => ({
-            name: name || inputId,
-            classNamePrefix: classNamePrefix || inputId,
-            isSearchable: isSelectSearchable,
-            placeholder,
-            styles: selectStyles,
-            menuPlacement: 'auto' as MenuPlacement,
-            menuPosition,
-            menuShouldScrollIntoView: true,
-            backspaceRemovesValue: isMulti && controlShouldRenderValue,
-            'aria-errormessage': errorElementId,
-            'aria-invalid': !!error,
-            'aria-labelledby': labelId,
-            hideSelectedOptions: false,
-            shouldRenderCustomOptions: shouldRenderCustomOptions || false,
-        }),
-        [
-            name,
-            inputId,
-            classNamePrefix,
-            isSelectSearchable,
-            placeholder,
-            selectStyles,
-            menuPosition,
-            errorElementId,
-            error,
-            labelId,
-            shouldRenderCustomOptions,
-            controlShouldRenderValue,
-            customDisplayText,
-        ],
-    )
-
     return (
-        <div className={`flex column left top dc__gap-4 ${fullWidth ? 'w-100' : ''}`}>
-            {/* Note: Common out for fields */}
-            <div className="flex column left top dc__gap-6 w-100">
-                {label && (
-                    <label
-                        className="fs-13 lh-20 cn-7 fw-4 dc__block mb-0"
-                        htmlFor={inputId}
-                        data-testid={`label-${inputId}`}
-                        id={labelId}
-                    >
-                        {typeof label === 'string' ? (
-                            <span className={`flex left ${required ? 'dc__required-field' : ''}`}>
-                                <span className="dc__truncate">{label}</span>
-                                {required && <span>&nbsp;</span>}
-                            </span>
-                        ) : (
-                            label
-                        )}
-                    </label>
-                )}
-                <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
-                    <div className="w-100">
-                        <CreatableSelect
-                            {...props}
-                            {...commonProps}
-                            isMulti={isMulti}
-                            ref={selectRef}
-                            components={{
-                                IndicatorSeparator: null,
-                                LoadingIndicator: SelectPickerLoadingIndicator,
-                                DropdownIndicator: SelectPickerDropdownIndicator,
-                                Control: SelectPickerControl,
-                                Option: renderOption,
-                                MenuList: SelectPickerMenuList,
-                                ClearIndicator: SelectPickerClearIndicator,
-                                ValueContainer: renderValueContainer,
-                                MultiValueLabel: renderMultiValueLabel,
-                                MultiValueRemove: SelectPickerMultiValueRemove,
-                                GroupHeading: renderGroupHeading,
-                                NoOptionsMessage: renderNoOptionsMessage,
-                                Input: SelectPickerInput,
-                                ...(shouldHideMenu && {
-                                    Menu: () => null,
-                                    DropdownIndicator: () => null,
-                                }),
-                            }}
-                            closeMenuOnSelect={!isMulti || closeMenuOnSelect}
-                            allowCreateWhileLoading={false}
-                            isValidNewOption={isValidNewOption}
-                            createOptionPosition="first"
-                            onCreateOption={handleCreateOption}
-                            renderMenuListFooter={!optionListError && renderMenuListFooter}
-                            inputValue={props.inputValue ?? inputValue}
-                            onInputChange={handleInputChange}
-                            icon={icon}
-                            showSelectedOptionIcon={shouldShowSelectedOptionIcon}
-                            onKeyDown={handleKeyDown}
-                            shouldRenderTextArea={shouldRenderTextArea}
-                            customDisplayText={customDisplayText}
-                            {...(!shouldRenderTextArea ? { onFocus: handleFocus } : {})}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            controlShouldRenderValue={controlShouldRenderValue}
-                            isFocussed={isFocussed}
-                        />
-                    </div>
-                </ConditionalWrap>
-            </div>
-            {error && (
-                <div className="flex left dc__gap-4 cr-5 fs-11 lh-16 fw-4" id={errorElementId}>
-                    <ErrorIcon className="icon-dim-16 p-1 form__icon--error dc__no-shrink dc__align-self-start" />
-                    <span className="dc__ellipsis-right__2nd-line">{error}</span>
+        <FormFieldWrapper
+            inputId={inputId}
+            layout={layout}
+            label={label}
+            error={error}
+            helperText={helperText}
+            warningText={warningText}
+            required={required}
+            fullWidth={fullWidth}
+            ariaLabel={ariaLabel}
+            // TODO: Add support for custom border radius with CustomInput refactoring
+            borderRadiusConfig={borderRadiusConfig}
+        >
+            <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
+                <div className="w-100">
+                    <CreatableSelect
+                        {...props}
+                        {...getFormFieldAriaAttributes({
+                            inputId,
+                            required,
+                            label,
+                            ariaLabel,
+                            error,
+                            helperText,
+                        })}
+                        name={name || inputId}
+                        classNamePrefix={classNamePrefix || inputId}
+                        isSearchable={isSelectSearchable}
+                        placeholder={placeholder}
+                        styles={selectStyles}
+                        menuPlacement="auto"
+                        menuPosition={menuPosition}
+                        menuShouldScrollIntoView
+                        backspaceRemovesValue={isMulti && controlShouldRenderValue}
+                        hideSelectedOptions={false}
+                        shouldRenderCustomOptions={shouldRenderCustomOptions || false}
+                        isMulti={isMulti}
+                        ref={selectRef}
+                        components={{
+                            IndicatorSeparator: null,
+                            LoadingIndicator: SelectPickerLoadingIndicator,
+                            DropdownIndicator: SelectPickerDropdownIndicator,
+                            Control: SelectPickerControl,
+                            Option: renderOption,
+                            MenuList: SelectPickerMenuList,
+                            ClearIndicator: SelectPickerClearIndicator,
+                            ValueContainer: renderValueContainer,
+                            MultiValueLabel: renderMultiValueLabel,
+                            MultiValueRemove: SelectPickerMultiValueRemove,
+                            GroupHeading: renderGroupHeading,
+                            NoOptionsMessage: renderNoOptionsMessage,
+                            Input: SelectPickerInput,
+                            ...(shouldHideMenu && {
+                                Menu: () => null,
+                                DropdownIndicator: () => null,
+                            }),
+                        }}
+                        closeMenuOnSelect={!isMulti || closeMenuOnSelect}
+                        allowCreateWhileLoading={false}
+                        isValidNewOption={isValidNewOption}
+                        createOptionPosition="first"
+                        onCreateOption={handleCreateOption}
+                        renderMenuListFooter={!optionListError && renderMenuListFooter}
+                        inputValue={props.inputValue ?? inputValue}
+                        onInputChange={handleInputChange}
+                        icon={icon}
+                        showSelectedOptionIcon={shouldShowSelectedOptionIcon}
+                        onKeyDown={handleKeyDown}
+                        shouldRenderTextArea={shouldRenderTextArea}
+                        customDisplayText={customDisplayText}
+                        {...(!shouldRenderTextArea ? { onFocus: handleFocus } : {})}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        controlShouldRenderValue={controlShouldRenderValue}
+                        isFocussed={isFocussed}
+                    />
                 </div>
-            )}
-            {/* Note: Common out for input fields */}
-            {helperText && (
-                <div className="flex left dc__gap-4 fs-11 lh-16 cn-7">
-                    <ICInfoFilledOverride className="icon-dim-16 dc__no-shrink dc__align-self-start" />
-                    <span className="dc__ellipsis-right__2nd-line">{helperText}</span>
-                </div>
-            )}
-        </div>
+            </ConditionalWrap>
+        </FormFieldWrapper>
     )
 }
 
