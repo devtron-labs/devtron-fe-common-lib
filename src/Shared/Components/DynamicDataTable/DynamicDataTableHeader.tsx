@@ -73,7 +73,7 @@ export const DynamicDataTableHeader = <K extends string, CustomStateType = Recor
                             className="icon-dim-16 dc__no-shrink scn-7 rotate cursor"
                             style={{
                                 ['--rotateBy' as string]:
-                                    sortingConfig?.sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
+                                    sortingConfig?.sortOrder === SortingOrder.DESC ? '0deg' : '180deg',
                             }}
                         />
                         {typeof renderAdditionalContent === 'function' && renderAdditionalContent()}
