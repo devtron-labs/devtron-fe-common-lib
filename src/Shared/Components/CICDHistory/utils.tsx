@@ -34,7 +34,8 @@ import {
     NodeFilters,
 } from './types'
 import { Icon } from '../Icon'
-import { AppStatus } from '../StatusComponent'
+import { AppStatus, StatusType } from '../StatusComponent'
+import { TERMINAL_STATUS_MAP } from './constants'
 
 export const getTriggerHistoryFilterCriteria = ({
     appId,
@@ -219,3 +220,17 @@ export const getStatusFilters = ({
 export const getAppStatusIcon = (status: NodeStatus | NodeFilters, hideMessage = false) => (
     <AppStatus status={status} hideMessage={hideMessage} hideIconTooltip />
 )
+
+export const getTriggerStatusIcon = (status: string) => {
+    const triggerStatus = status?.toLowerCase()
+
+    switch (triggerStatus) {
+        case TERMINAL_STATUS_MAP.RUNNING:
+        case TERMINAL_STATUS_MAP.PROGRESSING:
+        case TERMINAL_STATUS_MAP.STARTING:
+        case TERMINAL_STATUS_MAP.INITIATING:
+            return StatusType.INPROGRESS
+        default:
+            return status
+    }
+}

@@ -45,6 +45,7 @@ import { HISTORY_LABEL, FILTER_STYLE } from './constants'
 import { statusColor as colorMap } from '../../constants'
 import { DeploymentStatus } from '../StatusComponent'
 import { Icon } from '../Icon'
+import { getTriggerStatusIcon } from './utils'
 
 const SummaryTooltipCard = React.memo(
     ({
@@ -217,7 +218,12 @@ const HistorySummaryCard = React.memo(
                     ref={assignTargetCardRef}
                 >
                     <div className="w-100 deployment-history-card">
-                        <DeploymentStatus status={status} hideMessage hideIconTooltip iconSize={20} />
+                        <DeploymentStatus
+                            status={getTriggerStatusIcon(status)}
+                            hideMessage
+                            hideIconTooltip
+                            iconSize={20}
+                        />
                         <div className="flexbox-col dc__gap-8">
                             <div className="flex column left">
                                 <div className="cn-9 fs-13 lh-20">

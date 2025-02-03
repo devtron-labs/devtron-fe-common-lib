@@ -1,5 +1,6 @@
 import { TIMELINE_STATUS } from '@Shared/constants'
 import { IconName, IconsProps } from '../Icon'
+import { StatusType } from './types'
 
 export const getIconName = (status: string, showAnimatedIcon: boolean): IconName => {
     switch (status) {
@@ -42,8 +43,9 @@ export const getIconName = (status: string, showAnimatedIcon: boolean): IconName
         case 'running':
         case 'request_accepted':
         case 'starting':
-        case 'inprogress':
             return 'ic-circle-loader'
+        case 'inprogress':
+            return 'ic-in-progress'
         case 'hibernating':
         case 'hibernated':
             return 'ic-hibernate'
@@ -69,7 +71,6 @@ export const getIconColor = (status: string): IconsProps['color'] => {
         case 'running':
         case 'request_accepted':
         case 'starting':
-        case 'inprogress':
             return 'O500'
         case 'timedout':
         case 'timed_out':
@@ -84,13 +85,13 @@ export const getDeploymentStatusFromStatus = (status: string): string => {
 
     switch (deploymentStatus) {
         case TIMELINE_STATUS.ABORTED:
-            return 'Aborted'
+            return StatusType.ABORTED
         case TIMELINE_STATUS.DEGRADED:
-            return 'Failed'
+            return StatusType.FAILED
         case TIMELINE_STATUS.HEALTHY:
-            return 'Succeeded'
+            return StatusType.SUCCEEDED
         case TIMELINE_STATUS.INPROGRESS:
-            return 'Progressing'
+            return StatusType.INPROGRESS
         default:
             return status
     }

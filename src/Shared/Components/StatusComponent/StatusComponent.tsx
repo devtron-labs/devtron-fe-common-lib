@@ -34,7 +34,7 @@ export const StatusComponent = ({
     hideIconTooltip = false,
     message,
 }: StatusComponentProps) => {
-    const appStatusLowerCase = status.toLowerCase().replace(/ /g, '-')
+    const appStatusLowerCase = (status || '').toLowerCase().replace(/ /g, '-')
     const textContent = message || status || '-'
 
     const renderIcon = () => {
@@ -73,7 +73,7 @@ export const StatusComponent = ({
     const renderMessage = () => (
         <Tooltip content={textContent}>
             <p
-                data-testid={`${status}-status`}
+                data-testid={`${status || 'status-is-null'}-status`}
                 className="m-0 dc__ellipsis-right dc__first-letter-capitalize fs-13 lh-20 cn-6"
             >
                 {textContent}

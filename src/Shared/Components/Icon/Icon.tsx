@@ -26,6 +26,7 @@ import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
 import { ReactComponent as ICHeartRedAnimated } from '@IconsV2/ic-heart-red-animated.svg'
 import { ReactComponent as ICHeartRed } from '@IconsV2/ic-heart-red.svg'
 import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
+import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
@@ -70,6 +71,7 @@ export const iconMap = {
     'ic-heart-red-animated': ICHeartRedAnimated,
     'ic-heart-red': ICHeartRed,
     'ic-hibernate': ICHibernate,
+    'ic-in-progress': ICInProgress,
     'ic-info-outline': ICInfoOutline,
     'ic-job-color': ICJobColor,
     'ic-missing': ICMissing,
