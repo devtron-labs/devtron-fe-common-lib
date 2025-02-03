@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { RegistryType } from '@Shared/types'
 import { RegistryTypeDetailType } from './Types'
 import { getContainerRegistryIcon } from './utils'
 
@@ -237,7 +238,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
-        startIcon: getContainerRegistryIcon('ecr'),
+        startIcon: getContainerRegistryIcon(RegistryType.ECR),
     },
     'docker-hub': {
         value: 'docker-hub',
@@ -261,7 +262,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
-        startIcon: getContainerRegistryIcon('docker-hub'),
+        startIcon: getContainerRegistryIcon(RegistryType.DOCKER_HUB),
     },
     acr: {
         value: 'acr',
@@ -286,7 +287,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
-        startIcon: getContainerRegistryIcon('acr'),
+        startIcon: getContainerRegistryIcon(RegistryType.ACR),
     },
     'artifact-registry': {
         value: 'artifact-registry',
@@ -310,7 +311,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: 'Paste json file content here',
         },
-        startIcon: getContainerRegistryIcon('artifact-registry'),
+        startIcon: getContainerRegistryIcon(RegistryType.ARTIFACT_REGISTRY),
     },
     gcr: {
         value: 'gcr',
@@ -334,7 +335,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: 'Paste json file content here',
         },
-        startIcon: getContainerRegistryIcon('gcr'),
+        startIcon: getContainerRegistryIcon(RegistryType.GCR),
     },
     quay: {
         value: 'quay',
@@ -358,7 +359,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
-        startIcon: getContainerRegistryIcon('quay'),
+        startIcon: getContainerRegistryIcon(RegistryType.QUAY),
     },
     other: {
         value: 'other',
@@ -382,7 +383,7 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
             defaultValue: '',
             placeholder: '',
         },
-        startIcon: getContainerRegistryIcon('other'),
+        startIcon: getContainerRegistryIcon(RegistryType.OTHER),
     },
 }
 

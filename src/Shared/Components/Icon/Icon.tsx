@@ -1,6 +1,7 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
 
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
+import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
@@ -10,12 +11,17 @@ import { ReactComponent as ICCiWebhook } from '@IconsV2/ic-ci-webhook.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
+import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
+import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
+import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
 import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
 import { ReactComponent as ICGithub } from '@IconsV2/ic-github.svg'
 import { ReactComponent as ICGitlab } from '@IconsV2/ic-gitlab.svg'
+import { ReactComponent as ICGoogleArtifactRegistry } from '@IconsV2/ic-google-artifact-registry.svg'
+import { ReactComponent as ICGoogleContainerRegistry } from '@IconsV2/ic-google-container-registry.svg'
 import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
 import { ReactComponent as ICHeartRedAnimated } from '@IconsV2/ic-heart-red-animated.svg'
 import { ReactComponent as ICHeartRed } from '@IconsV2/ic-heart-red.svg'
@@ -27,6 +33,7 @@ import { ReactComponent as ICNodeScript } from '@IconsV2/ic-node-script.svg'
 import { ReactComponent as ICOpenInNew } from '@IconsV2/ic-open-in-new.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
+import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash.svg'
@@ -38,6 +45,7 @@ import { IconBaseProps } from './types'
 
 export const iconMap = {
     'ic-aborted': ICAborted,
+    'ic-azure': ICAzure,
     'ic-bitbucket': ICBitbucket,
     'ic-build-color': ICBuildColor,
     'ic-cancelled': ICCancelled,
@@ -47,12 +55,17 @@ export const iconMap = {
     'ic-circle-loader': ICCircleLoader,
     'ic-clock': ICClock,
     'ic-close-small': ICCloseSmall,
+    'ic-container': ICContainer,
+    'ic-dockerhub': ICDockerhub,
+    'ic-ecr': ICEcr,
     'ic-env': ICEnv,
     'ic-error': ICError,
     'ic-failure': ICFailure,
     'ic-git': ICGit,
     'ic-github': ICGithub,
     'ic-gitlab': ICGitlab,
+    'ic-google-artifact-registry': ICGoogleArtifactRegistry,
+    'ic-google-container-registry': ICGoogleContainerRegistry,
     'ic-heart-green': ICHeartGreen,
     'ic-heart-red-animated': ICHeartRedAnimated,
     'ic-heart-red': ICHeartRed,
@@ -64,6 +77,7 @@ export const iconMap = {
     'ic-open-in-new': ICOpenInNew,
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
+    'ic-quay': ICQuay,
     'ic-success': ICSuccess,
     'ic-suspended': ICSuspended,
     'ic-timeout-two-dash': ICTimeoutTwoDash,

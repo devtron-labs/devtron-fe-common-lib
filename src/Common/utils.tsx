@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
-export const getContainerRegistryIcon = (registryValue: string): JSX.Element => (
-    <div className={`dc__registry-icon ${registryValue}`} />
-)
+import { RegistryIcon } from '@Shared/Components'
+import { RegistryType } from '@Shared/types'
+
+export const getContainerRegistryIcon = (registryType: RegistryType) => <RegistryIcon registryType={registryType} />
