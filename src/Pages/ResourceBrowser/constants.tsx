@@ -72,6 +72,18 @@ export const CORDON_NODE_MODAL_MESSAGING = {
     cancel: 'Cancel',
 }
 
+export const DELETE_NODE_MODAL_MESSAGING = {
+    subtitle: (
+        <p className="fs-13 fw-4 cn-8 m-0">
+            Drain the node before deleting it as it may cause disruption because of pod deletion.
+            <br />
+            <br />
+            Are you sure you want to delete this node?
+        </p>
+    ),
+    successInfoToastMessage: 'Node deletion initiated',
+}
+
 export const NODE_DRAIN_OPTIONS_CHECKBOX_CONFIG: {
     key: Exclude<keyof NodeDrainRequest['nodeDrainOptions'], 'gracePeriodSeconds'>
     infoText: string
