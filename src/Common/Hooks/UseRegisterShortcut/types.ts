@@ -25,7 +25,7 @@ export const KEYBOARD_KEYS_MAP = {
     E: 'E',
     R: 'R',
     K: 'K',
-    Escape: 'Escape',
+    Escape: 'Esc',
     Enter: '↩',
 } as const
 

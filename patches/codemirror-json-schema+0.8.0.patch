@@ -1,0 +1,2069 @@
+diff --git a/node_modules/codemirror-json-schema/cjs/features/hover.js b/node_modules/codemirror-json-schema/cjs/features/hover.js
+index 1fd6249..5943497 100644
+--- a/node_modules/codemirror-json-schema/cjs/features/hover.js
++++ b/node_modules/codemirror-json-schema/cjs/features/hover.js
+@@ -166,7 +166,7 @@ class JSONHover {
+             return {
+                 pos: start,
+                 end,
+-                arrow: true,
++                arrow: false,
+                 // to mimic similar modes for other editors
+                 // otherwise, it gets into a z-index battle with completion/etc
+                 above: true,
+diff --git a/node_modules/codemirror-json-schema/cjs/features/validation.js b/node_modules/codemirror-json-schema/cjs/features/validation.js
+index b7b1073..0365f3e 100644
+--- a/node_modules/codemirror-json-schema/cjs/features/validation.js
++++ b/node_modules/codemirror-json-schema/cjs/features/validation.js
+@@ -61,9 +61,9 @@ class JSONValidation {
+                 return `Expected one of ${(0, formatting_1.joinWithOr)(errors, (data) => data.data.expected)}`;
+             }
+             if (error.code === "type-error") {
+-                return `Expected \`${((_a = error === null || error === void 0 ? void 0 : error.data) === null || _a === void 0 ? void 0 : _a.expected) && Array.isArray((_b = error === null || error === void 0 ? void 0 : error.data) === null || _b === void 0 ? void 0 : _b.expected)
++                return `Expected ${((_a = error === null || error === void 0 ? void 0 : error.data) === null || _a === void 0 ? void 0 : _a.expected) && Array.isArray((_b = error === null || error === void 0 ? void 0 : error.data) === null || _b === void 0 ? void 0 : _b.expected)
+                     ? (0, formatting_1.joinWithOr)((_c = error === null || error === void 0 ? void 0 : error.data) === null || _c === void 0 ? void 0 : _c.expected)
+-                    : (_d = error === null || error === void 0 ? void 0 : error.data) === null || _d === void 0 ? void 0 : _d.expected}\` but received \`${(_e = error === null || error === void 0 ? void 0 : error.data) === null || _e === void 0 ? void 0 : _e.received}\``;
++                    : (_d = error === null || error === void 0 ? void 0 : error.data) === null || _d === void 0 ? void 0 : _d.expected} but received \`${(_e = error === null || error === void 0 ? void 0 : error.data) === null || _e === void 0 ? void 0 : _e.received}\``;
+             }
+             const message = error.message
+                 // don't mention root object
+diff --git a/node_modules/codemirror-json-schema/dist/features/completion.js-e b/node_modules/codemirror-json-schema/dist/features/completion.js-e
+new file mode 100644
+index 0000000..f10aafb
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/features/completion.js-e
+@@ -0,0 +1,898 @@
++var __rest = (this && this.__rest) || function (s, e) {
++    var t = {};
++    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
++        t[p] = s[p];
++    if (s != null && typeof Object.getOwnPropertySymbols === "function")
++        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
++            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
++                t[p[i]] = s[p[i]];
++        }
++    return t;
++};
++import { snippetCompletion, } from "@codemirror/autocomplete";
++import { syntaxTree } from "@codemirror/language";
++import { debug } from "../utils/debug";
++import { findNodeIndexInArrayNode, getChildrenNodes, getChildValueNode, getClosestNode, getMatchingChildNode, getMatchingChildrenNodes, getNodeAtPosition, getWord, isPrimitiveValueNode, isPropertyNameNode, stripSurroundingQuotes, surroundingDoubleQuotesToSingle, } from "../utils/node";
++import { getJSONSchema } from "./state";
++import { Draft07, isJsonError } from "json-schema-library";
++import { jsonPointerForPosition, resolveTokenName, } from "../utils/json-pointers";
++import { MODES, TOKENS } from "../constants";
++import { el } from "../utils/dom";
++import { renderMarkdown } from "../utils/markdown";
++import { getDefaultParser } from "../parsers";
++import { replacePropertiesDeeply } from "../utils/recordUtil";
++class CompletionCollector {
++    constructor() {
++        this.completions = new Map();
++        this.reservedKeys = new Set();
++    }
++    reserve(key) {
++        this.reservedKeys.add(key);
++    }
++    add(completion) {
++        if (this.reservedKeys.has(completion.label)) {
++            return;
++        }
++        this.completions.set(completion.label, completion);
++    }
++}
++function isRealSchema(subSchema) {
++    return !(!subSchema ||
++        isJsonError(subSchema) ||
++        subSchema.name === "UnknownPropertyError" ||
++        subSchema.type === "undefined");
++}
++export class JSONCompletion {
++    // private lastKnownValidData: object | null = null;
++    constructor(opts) {
++        var _a, _b, _c;
++        this.opts = opts;
++        this.originalSchema = null;
++        /**
++         * Inlined (expanded) top-level $ref if present.
++         */
++        this.schema = null;
++        /**
++         * Inlined (expanded) top-level $ref if present.
++         * Does not contain any required properties and allows any additional properties everywhere.
++         */
++        this.laxSchema = null;
++        this.mode = MODES.JSON;
++        this.mode = (_a = opts.mode) !== null && _a !== void 0 ? _a : MODES.JSON;
++        this.parser = (_c = (_b = this.opts) === null || _b === void 0 ? void 0 : _b.jsonParser) !== null && _c !== void 0 ? _c : getDefaultParser(this.mode);
++    }
++    doComplete(ctx) {
++        var _a;
++        const schemaFromState = getJSONSchema(ctx.state);
++        if (this.originalSchema !== schemaFromState) {
++            // only process schema when it changed (could be huge)
++            this.schema =
++                (_a = expandSchemaProperty(schemaFromState, schemaFromState)) !== null && _a !== void 0 ? _a : schemaFromState;
++            this.laxSchema = makeSchemaLax(this.schema);
++        }
++        if (!this.schema || !this.laxSchema) {
++            // todo: should we even do anything without schema
++            // without taking over the existing mode responsibilties?
++            return [];
++        }
++        // first attempt to complete with the original schema
++        debug.log("xxx", "trying with original schema");
++        const completionResultForOriginalSchema = this.doCompleteForSchema(ctx, this.schema);
++        if (completionResultForOriginalSchema.options.length !== 0) {
++            return completionResultForOriginalSchema;
++        }
++        // if there are no completions, try with the lax schema (because json-schema-library would otherwise not provide schemas if invalid properties are present)
++        debug.log("xxx", "no completions with original schema, trying with lax schema");
++        return this.doCompleteForSchema(ctx, this.laxSchema);
++    }
++    doCompleteForSchema(ctx, rootSchema) {
++        var _a, _b;
++        const result = {
++            from: ctx.pos,
++            to: ctx.pos,
++            options: [],
++            filter: false, // will be handled manually
++        };
++        const text = ctx.state.doc.sliceString(0);
++        let node = getNodeAtPosition(ctx.state, ctx.pos);
++        // position node word prefix (without quotes) for matching
++        let prefix = ctx.state.sliceDoc(node.from, ctx.pos).replace(/^(["'])/, "");
++        debug.log("xxx", "node", node, "prefix", prefix, "ctx", ctx);
++        // Only show completions if we are filling out a word or right after the starting quote, or if explicitly requested
++        if (!(isPrimitiveValueNode(node, this.mode) ||
++            isPropertyNameNode(node, this.mode)) &&
++            !ctx.explicit) {
++            debug.log("xxx", "no completions for non-word/primitive", node);
++            return result;
++        }
++        const currentWord = getWord(ctx.state.doc, node);
++        const rawWord = getWord(ctx.state.doc, node, false);
++        // Calculate overwrite range
++        if (node &&
++            (isPrimitiveValueNode(node, this.mode) ||
++                isPropertyNameNode(node, this.mode))) {
++            result.from = node.from;
++            result.to = node.to;
++        }
++        else {
++            const word = ctx.matchBefore(/[A-Za-z0-9._]*/);
++            const overwriteStart = ctx.pos - currentWord.length;
++            debug.log("xxx", "overwriteStart after", overwriteStart, "ctx.pos", ctx.pos, "word", word, "currentWord", currentWord, "=>", text[overwriteStart - 1], "..", text[overwriteStart], "..", text);
++            result.from =
++                node.name === TOKENS.INVALID ? ((_a = word === null || word === void 0 ? void 0 : word.from) !== null && _a !== void 0 ? _a : ctx.pos) : overwriteStart;
++            result.to = ctx.pos;
++        }
++        const collector = new CompletionCollector();
++        let addValue = true;
++        const closestPropertyNameNode = getClosestNode(node, TOKENS.PROPERTY_NAME, this.mode);
++        // if we are inside a property name node, we need to get the parent property name node
++        // The only reason we would be inside a property name node is if the current node is invalid or a literal/primitive node
++        if (closestPropertyNameNode) {
++            debug.log("xxx", "closestPropertyNameNode", closestPropertyNameNode, "node", node);
++            node = closestPropertyNameNode;
++        }
++        if (isPropertyNameNode(node, this.mode)) {
++            debug.log("xxx", "isPropertyNameNode", node);
++            const parent = node.parent;
++            if (parent) {
++                // get value node from parent
++                const valueNode = getChildValueNode(parent, this.mode);
++                addValue =
++                    !valueNode ||
++                        (valueNode.name === TOKENS.INVALID &&
++                            valueNode.from - valueNode.to === 0) ||
++                        // TODO: Verify this doesn't break anything else
++                        (valueNode.parent
++                            ? getChildrenNodes(valueNode.parent).length <= 1
++                            : false);
++                debug.log("xxx", "addValue", addValue, getChildValueNode(parent, this.mode), node);
++                // find object node
++                node = (_b = getClosestNode(parent, TOKENS.OBJECT, this.mode)) !== null && _b !== void 0 ? _b : null;
++            }
++        }
++        debug.log("xxx", node, currentWord, ctx, "node at pos", getNodeAtPosition(ctx.state, ctx.pos));
++        // proposals for properties
++        if (node &&
++            [TOKENS.OBJECT, TOKENS.JSON_TEXT].includes(resolveTokenName(node.name, this.mode)) &&
++            (isPropertyNameNode(getNodeAtPosition(ctx.state, ctx.pos), this.mode) ||
++                closestPropertyNameNode)) {
++            // don't suggest keys when the cursor is just before the opening curly brace
++            if (node.from === ctx.pos) {
++                debug.log("xxx", "no completions for just before opening brace");
++                return result;
++            }
++            // property proposals with schema
++            this.getPropertyCompletions(rootSchema, ctx, node, collector, addValue, rawWord);
++        }
++        else {
++            // proposals for values
++            const types = {};
++            // value proposals with schema
++            const res = this.getValueCompletions(rootSchema, ctx, types, collector);
++            debug.log("xxx", "getValueCompletions res", res);
++            if (res) {
++                // TODO: While this works, we also need to handle the completion from and to positions to use it
++                // // use the value node to calculate the prefix
++                // prefix = res.valuePrefix;
++                // debug.log("xxx", "using valueNode prefix", prefix);
++            }
++        }
++        // handle filtering
++        result.options = Array.from(collector.completions.values()).filter((v) => stripSurroundingQuotes(v.label).startsWith(prefix));
++        debug.log("xxx", "result", result, "prefix", prefix, "collector.completions", collector.completions, "reservedKeys", collector.reservedKeys);
++        return result;
++    }
++    applySnippetCompletion(completion) {
++        return snippetCompletion(typeof completion.apply !== "string"
++            ? completion.label
++            : completion.apply, completion);
++    }
++    getPropertyCompletions(rootSchema, ctx, node, collector, addValue, rawWord) {
++        // don't suggest properties that are already present
++        const properties = getMatchingChildrenNodes(node, TOKENS.PROPERTY, this.mode);
++        debug.log("xxx", "getPropertyCompletions", node, ctx, properties);
++        properties.forEach((p) => {
++            const key = getWord(ctx.state.doc, getMatchingChildNode(p, TOKENS.PROPERTY_NAME, this.mode));
++            collector.reserve(stripSurroundingQuotes(key));
++        });
++        // TODO: Handle separatorAfter
++        // Get matching schemas
++        const schemas = this.getSchemas(rootSchema, ctx);
++        debug.log("xxx", "propertyCompletion schemas", schemas);
++        schemas.forEach((s) => {
++            if (typeof s !== "object") {
++                return;
++            }
++            const properties = s.properties;
++            if (properties) {
++                Object.entries(properties).forEach(([key, value]) => {
++                    var _a, _b;
++                    if (typeof value === "object") {
++                        const description = (_a = value.description) !== null && _a !== void 0 ? _a : "";
++                        const type = (_b = value.type) !== null && _b !== void 0 ? _b : "";
++                        const typeStr = Array.isArray(type) ? type.toString() : type;
++                        const completion = {
++                            // label is the unquoted key which will be displayed.
++                            label: key,
++                            apply: this.getInsertTextForProperty(key, addValue, rawWord, rootSchema, value),
++                            type: "property",
++                            detail: typeStr,
++                            info: () => el("div", {
++                                inner: renderMarkdown(description),
++                            }),
++                        };
++                        collector.add(this.applySnippetCompletion(completion));
++                    }
++                });
++            }
++            const propertyNames = s.propertyNames;
++            if (typeof propertyNames === "object") {
++                if (propertyNames.enum) {
++                    propertyNames.enum.forEach((v) => {
++                        const label = v === null || v === void 0 ? void 0 : v.toString();
++                        if (label) {
++                            const completion = {
++                                label,
++                                apply: this.getInsertTextForProperty(label, addValue, rawWord, rootSchema),
++                                type: "property",
++                            };
++                            collector.add(this.applySnippetCompletion(completion));
++                        }
++                    });
++                }
++                if (propertyNames.const) {
++                    const label = propertyNames.const.toString();
++                    const completion = {
++                        label,
++                        apply: this.getInsertTextForProperty(label, addValue, rawWord, rootSchema),
++                        type: "property",
++                    };
++                    collector.add(this.applySnippetCompletion(completion));
++                }
++            }
++        });
++    }
++    // apply is the quoted key which will be applied.
++    // Normally the label needs to match the token
++    // prefix i.e. if the token begins with `"to`, then the
++    // label needs to have the quotes as well for it to match.
++    // However we are manually filtering the results so we can
++    // just use the unquoted key as the label, which is nicer
++    // and gives us more control.
++    // If no property value is present, then we add the colon as well.
++    // Use snippetCompletion to handle insert value + position cursor e.g. "key": "#{}"
++    // doc: https://codemirror.net/docs/ref/#autocomplete.snippetCompletion
++    // idea: https://discuss.codemirror.net/t/autocomplete-cursor-position-in-apply-function/4088/3
++    getInsertTextForProperty(key, addValue, rawWord, rootSchema, propertySchema) {
++        // expand schema property if it is a reference
++        propertySchema = propertySchema
++            ? expandSchemaProperty(propertySchema, rootSchema)
++            : propertySchema;
++        let resultText = this.getInsertTextForPropertyName(key, rawWord);
++        if (!addValue) {
++            return resultText;
++        }
++        resultText += ": ";
++        let value;
++        let nValueProposals = 0;
++        if (typeof propertySchema === "object") {
++            if (typeof propertySchema.default !== "undefined") {
++                if (!value) {
++                    value = this.getInsertTextForGuessedValue(propertySchema.default, "");
++                }
++                nValueProposals++;
++            }
++            else {
++                if (propertySchema.enum) {
++                    if (!value && propertySchema.enum.length === 1) {
++                        value = this.getInsertTextForGuessedValue(propertySchema.enum[0], "");
++                    }
++                    nValueProposals += propertySchema.enum.length;
++                }
++                if (typeof propertySchema.const !== "undefined") {
++                    if (!value) {
++                        value = this.getInsertTextForGuessedValue(propertySchema.const, "");
++                    }
++                    nValueProposals++;
++                }
++                if (Array.isArray(propertySchema.examples) &&
++                    propertySchema.examples.length) {
++                    if (!value) {
++                        value = this.getInsertTextForGuessedValue(propertySchema.examples[0], "");
++                    }
++                    nValueProposals += propertySchema.examples.length;
++                }
++                if (value === undefined && nValueProposals === 0) {
++                    let type = Array.isArray(propertySchema.type)
++                        ? propertySchema.type[0]
++                        : propertySchema.type;
++                    if (!type) {
++                        if (propertySchema.properties) {
++                            type = "object";
++                        }
++                        else if (propertySchema.items) {
++                            type = "array";
++                        }
++                    }
++                    switch (type) {
++                        case "boolean":
++                            value = "#{}";
++                            break;
++                        case "string":
++                            value = this.getInsertTextForString("");
++                            break;
++                        case "object":
++                            switch (this.mode) {
++                                case MODES.JSON5:
++                                    value = "{#{}}";
++                                    break;
++                                case MODES.YAML:
++                                    value = "#{}";
++                                    break;
++                                default:
++                                    value = "{#{}}";
++                                    break;
++                            }
++                            break;
++                        case "array":
++                            value = "[#{}]";
++                            break;
++                        case "number":
++                        case "integer":
++                            value = "#{0}";
++                            break;
++                        case "null":
++                            value = "#{null}";
++                            break;
++                        default:
++                            // always advance the cursor after completing a property
++                            value = "#{}";
++                            break;
++                    }
++                }
++            }
++        }
++        if (!value || nValueProposals > 1) {
++            debug.log("xxx", "value", value, "nValueProposals", nValueProposals, propertySchema);
++            value = "#{}";
++        }
++        return resultText + value;
++    }
++    getInsertTextForPropertyName(key, rawWord) {
++        switch (this.mode) {
++            case MODES.JSON5:
++            case MODES.YAML: {
++                if (rawWord.startsWith('"')) {
++                    return `"${key}"`;
++                }
++                if (rawWord.startsWith("'")) {
++                    return `'${key}'`;
++                }
++                return key;
++            }
++            default:
++                return `"${key}"`;
++        }
++    }
++    getInsertTextForString(value, prf = "#") {
++        switch (this.mode) {
++            case MODES.JSON5:
++                return `'${prf}{${value}}'`;
++            case MODES.YAML:
++                return `${prf}{${value}}`;
++            default:
++                return `"${prf}{${value}}"`;
++        }
++    }
++    // TODO: Is this actually working?
++    getInsertTextForGuessedValue(value, separatorAfter = "") {
++        switch (typeof value) {
++            case "object":
++                if (value === null) {
++                    return "${null}" + separatorAfter;
++                }
++                return this.getInsertTextForValue(value, separatorAfter);
++            case "string": {
++                let snippetValue = JSON.stringify(value);
++                snippetValue = snippetValue.substr(1, snippetValue.length - 2); // remove quotes
++                snippetValue = this.getInsertTextForPlainText(snippetValue); // escape \ and }
++                return this.getInsertTextForString(snippetValue, "$") + separatorAfter;
++            }
++            case "number":
++            case "boolean":
++                return "${" + JSON.stringify(value) + "}" + separatorAfter;
++        }
++        return this.getInsertTextForValue(value, separatorAfter);
++    }
++    getInsertTextForPlainText(text) {
++        return text.replace(/[\\$}]/g, "\\$&"); // escape $, \ and }
++    }
++    getInsertTextForValue(value, separatorAfter) {
++        const text = JSON.stringify(value, null, "\t");
++        if (text === "{}") {
++            return "{#{}}" + separatorAfter;
++        }
++        else if (text === "[]") {
++            return "[#{}]" + separatorAfter;
++        }
++        return this.getInsertTextForPlainText(text + separatorAfter);
++    }
++    getValueCompletions(rootSchema, ctx, types, collector) {
++        let node = syntaxTree(ctx.state).resolveInner(ctx.pos, -1);
++        let valueNode = null;
++        let parentKey = undefined;
++        debug.log("xxx", "getValueCompletions", node, ctx);
++        if (node && isPrimitiveValueNode(node, this.mode)) {
++            valueNode = node;
++            node = node.parent;
++        }
++        if (!node) {
++            this.addSchemaValueCompletions(rootSchema, types, collector);
++            return;
++        }
++        if (resolveTokenName(node.name, this.mode) === TOKENS.PROPERTY) {
++            const keyNode = getMatchingChildNode(node, TOKENS.PROPERTY_NAME, this.mode);
++            if (keyNode) {
++                parentKey = getWord(ctx.state.doc, keyNode);
++                node = node.parent;
++            }
++        }
++        debug.log("xxx", "node", node, "parentKey", parentKey);
++        if (node &&
++            (parentKey !== undefined ||
++                resolveTokenName(node.name, this.mode) === TOKENS.ARRAY)) {
++            // Get matching schemas
++            const schemas = this.getSchemas(rootSchema, ctx);
++            for (const s of schemas) {
++                if (typeof s !== "object") {
++                    return;
++                }
++                if (resolveTokenName(node.name, this.mode) === TOKENS.ARRAY &&
++                    s.items) {
++                    let c = collector;
++                    if (s.uniqueItems) {
++                        c = Object.assign(Object.assign({}, c), { add(completion) {
++                                if (!c.completions.has(completion.label)) {
++                                    collector.add(completion);
++                                }
++                            },
++                            reserve(key) {
++                                collector.reserve(key);
++                            } });
++                    }
++                    if (Array.isArray(s.items)) {
++                        let arrayIndex = 0;
++                        if (valueNode) {
++                            // get index of next node in array
++                            const foundIdx = findNodeIndexInArrayNode(node, valueNode, this.mode);
++                            if (foundIdx >= 0) {
++                                arrayIndex = foundIdx;
++                            }
++                        }
++                        const itemSchema = s.items[arrayIndex];
++                        if (itemSchema) {
++                            this.addSchemaValueCompletions(itemSchema, types, c);
++                        }
++                    }
++                    else {
++                        this.addSchemaValueCompletions(s.items, types, c);
++                    }
++                }
++                if (s.type == null || s.type !== "object") {
++                    this.addSchemaValueCompletions(s, types, collector);
++                }
++                if (parentKey !== undefined) {
++                    let propertyMatched = false;
++                    if (s.properties) {
++                        const propertySchema = s.properties[parentKey];
++                        if (propertySchema) {
++                            propertyMatched = true;
++                            this.addSchemaValueCompletions(propertySchema, types, collector);
++                        }
++                    }
++                    if (s.patternProperties && !propertyMatched) {
++                        for (const pattern of Object.keys(s.patternProperties)) {
++                            const regex = this.extendedRegExp(pattern);
++                            if (regex === null || regex === void 0 ? void 0 : regex.test(parentKey)) {
++                                propertyMatched = true;
++                                const propertySchema = s.patternProperties[pattern];
++                                if (propertySchema) {
++                                    this.addSchemaValueCompletions(propertySchema, types, collector);
++                                }
++                            }
++                        }
++                    }
++                    if (s.additionalProperties && !propertyMatched) {
++                        const propertySchema = s.additionalProperties;
++                        this.addSchemaValueCompletions(propertySchema, types, collector);
++                    }
++                }
++                if (types["boolean"]) {
++                    this.addBooleanValueCompletion(true, collector);
++                    this.addBooleanValueCompletion(false, collector);
++                }
++                if (types["null"]) {
++                    this.addNullValueCompletion(collector);
++                }
++            }
++        }
++        // TODO: We need to pass the from and to for the value node as well
++        // TODO: What should be the from and to when the value node is null?
++        // TODO: (NOTE: if we pass a prefix but no from and to, it will autocomplete the value but replace
++        // TODO: the entire property nodewhich isn't what we want). Instead we need to change the from and to
++        // TODO: based on the corresponding (relevant) value node
++        const valuePrefix = valueNode
++            ? getWord(ctx.state.doc, valueNode, true, false)
++            : "";
++        return {
++            valuePrefix,
++        };
++    }
++    addSchemaValueCompletions(schema, 
++    // TODO this is buggy because it does not resolve refs, should hand down rootSchema and expand each ref
++    // rootSchema: JSONSchema7,
++    types, collector) {
++        if (typeof schema === "object") {
++            this.addEnumValueCompletions(schema, collector);
++            this.addDefaultValueCompletions(schema, collector);
++            this.collectTypes(schema, types);
++            if (Array.isArray(schema.allOf)) {
++                schema.allOf.forEach((s) => this.addSchemaValueCompletions(s, types, collector));
++            }
++            if (Array.isArray(schema.anyOf)) {
++                schema.anyOf.forEach((s) => this.addSchemaValueCompletions(s, types, collector));
++            }
++            if (Array.isArray(schema.oneOf)) {
++                schema.oneOf.forEach((s) => this.addSchemaValueCompletions(s, types, collector));
++            }
++        }
++    }
++    addDefaultValueCompletions(schema, collector, arrayDepth = 0) {
++        let hasProposals = false;
++        if (typeof schema.default !== "undefined") {
++            let type = schema.type;
++            let value = schema.default;
++            for (let i = arrayDepth; i > 0; i--) {
++                value = [value];
++                type = "array";
++            }
++            const completionItem = Object.assign(Object.assign({ type: type === null || type === void 0 ? void 0 : type.toString() }, this.getAppliedValue(value)), { detail: "Default value" });
++            collector.add(completionItem);
++            hasProposals = true;
++        }
++        if (Array.isArray(schema.examples)) {
++            schema.examples.forEach((example) => {
++                let type = schema.type;
++                let value = example;
++                for (let i = arrayDepth; i > 0; i--) {
++                    value = [value];
++                    type = "array";
++                }
++                collector.add(Object.assign({ type: type === null || type === void 0 ? void 0 : type.toString() }, this.getAppliedValue(value)));
++                hasProposals = true;
++            });
++        }
++        if (!hasProposals &&
++            typeof schema.items === "object" &&
++            !Array.isArray(schema.items) &&
++            arrayDepth < 5 /* beware of recursion */) {
++            this.addDefaultValueCompletions(schema.items, collector, arrayDepth + 1);
++        }
++    }
++    addEnumValueCompletions(schema, collector) {
++        var _a, _b;
++        if (typeof schema.const !== "undefined") {
++            collector.add(Object.assign(Object.assign({ type: (_a = schema.type) === null || _a === void 0 ? void 0 : _a.toString() }, this.getAppliedValue(schema.const)), { info: schema.description }));
++        }
++        if (Array.isArray(schema.enum)) {
++            for (let i = 0, length = schema.enum.length; i < length; i++) {
++                const enm = schema.enum[i];
++                collector.add(Object.assign(Object.assign({ type: (_b = schema.type) === null || _b === void 0 ? void 0 : _b.toString() }, this.getAppliedValue(enm)), { info: schema.description }));
++            }
++        }
++    }
++    addBooleanValueCompletion(value, collector) {
++        collector.add({
++            type: "boolean",
++            label: value ? "true" : "false",
++        });
++    }
++    addNullValueCompletion(collector) {
++        collector.add({
++            type: "null",
++            label: "null",
++        });
++    }
++    collectTypes(schema, types) {
++        if (Array.isArray(schema.enum) || typeof schema.const !== "undefined") {
++            return;
++        }
++        const type = schema.type;
++        if (Array.isArray(type)) {
++            type.forEach((t) => (types[t] = true));
++        }
++        else if (type) {
++            types[type] = true;
++        }
++    }
++    getSchemas(rootSchema, ctx) {
++        var _a, _b, _c;
++        const { data: documentData } = this.parser(ctx.state);
++        const draft = new Draft07(rootSchema);
++        let pointer = jsonPointerForPosition(ctx.state, ctx.pos, -1, this.mode);
++        // TODO make jsonPointer consistent and compatible with json-schema-library by default (root path '/' or ' ' or undefined or '#', idk)
++        if (pointer === "")
++            pointer = undefined;
++        if (pointer != null && pointer.endsWith("/")) {
++            // opening new property under pointer
++            // the property name is empty but json-schema-library would puke itself with a trailing slash, so we shouldn't even call it with that
++            pointer = pointer.substring(0, pointer.length - 1);
++            // when adding a new property, we just wanna return the possible properties if possible
++            const effectiveSchemaOfPointer = getEffectiveObjectWithPropertiesSchema(rootSchema, documentData, pointer);
++            if (effectiveSchemaOfPointer != null) {
++                return [effectiveSchemaOfPointer];
++            }
++        }
++        let parentPointer = pointer != null ? pointer.replace(/\/[^/]*$/, "") : undefined;
++        if (parentPointer === "")
++            parentPointer = undefined;
++        // Pass parsed data to getSchema to get the correct schema based on the data context (e.g. for anyOf or if-then)
++        const effectiveSchemaOfParent = getEffectiveObjectWithPropertiesSchema(rootSchema, documentData, parentPointer);
++        const deepestPropertyKey = pointer === null || pointer === void 0 ? void 0 : pointer.split("/").pop();
++        const pointerPointsToKnownProperty = deepestPropertyKey == null ||
++            deepestPropertyKey in ((_a = effectiveSchemaOfParent === null || effectiveSchemaOfParent === void 0 ? void 0 : effectiveSchemaOfParent.properties) !== null && _a !== void 0 ? _a : {});
++        // TODO upgrade json-schema-library, so this actually returns undefined if data and schema are incompatible (currently it sometimes pukes itself with invalid data and imagines schemas on-the-fly)
++        let subSchema = draft.getSchema({
++            pointer,
++            data: documentData !== null && documentData !== void 0 ? documentData : undefined,
++        });
++        if (!pointerPointsToKnownProperty &&
++            (subSchema === null || subSchema === void 0 ? void 0 : subSchema.type) === "null" &&
++            this.mode === "yaml") {
++            // TODO describe YAML special-case where null is given the value and json-schema-library simply makes up a new schema based on that null value for whatever reason
++            subSchema = undefined;
++        }
++        debug.log("xxxx", "draft.getSchema", subSchema, "data", documentData, "pointer", pointer, "pointerPointsToKnownProperty", pointerPointsToKnownProperty);
++        if (isJsonError(subSchema)) {
++            subSchema = (_b = subSchema.data) === null || _b === void 0 ? void 0 : _b.schema;
++        }
++        // if we don't have a schema for the current pointer, try the parent pointer with data to get a list of possible properties
++        if (!isRealSchema(subSchema)) {
++            if (effectiveSchemaOfParent) {
++                return [effectiveSchemaOfParent];
++            }
++        }
++        // then try the parent pointer without data
++        if (!isRealSchema(subSchema)) {
++            subSchema = draft.getSchema({ pointer: parentPointer });
++            // TODO should probably only change pointer if it actually found a schema there, but i left it as-is
++            pointer = parentPointer;
++        }
++        debug.log("xxx", "pointer..", JSON.stringify(pointer));
++        // For some reason, it returns undefined schema for the root pointer
++        // We use the root schema in that case as the relevant (sub)schema
++        if (!isRealSchema(subSchema) && (!pointer || pointer === "/")) {
++            subSchema = (_c = expandSchemaProperty(rootSchema, rootSchema)) !== null && _c !== void 0 ? _c : rootSchema;
++        }
++        // const subSchema = new Draft07(this.dirtyCtx.rootSchema).getSchema(pointer);
++        debug.log("xxx", "subSchema..", subSchema);
++        if (!subSchema) {
++            return [];
++        }
++        if (Array.isArray(subSchema.allOf)) {
++            return [
++                subSchema,
++                ...subSchema.allOf.map((s) => expandSchemaProperty(s, rootSchema)),
++            ];
++        }
++        if (Array.isArray(subSchema.oneOf)) {
++            return [
++                subSchema,
++                ...subSchema.oneOf.map((s) => expandSchemaProperty(s, rootSchema)),
++            ];
++        }
++        if (Array.isArray(subSchema.anyOf)) {
++            return [
++                subSchema,
++                ...subSchema.anyOf.map((s) => expandSchemaProperty(s, rootSchema)),
++            ];
++        }
++        return [subSchema];
++    }
++    getAppliedValue(value) {
++        const stripped = stripSurroundingQuotes(JSON.stringify(value));
++        switch (this.mode) {
++            case MODES.JSON5:
++                return {
++                    label: stripped,
++                    apply: surroundingDoubleQuotesToSingle(JSON.stringify(value)),
++                };
++            case MODES.YAML:
++                return {
++                    label: stripped,
++                    apply: stripped,
++                };
++            default:
++                return {
++                    label: stripped,
++                    apply: JSON.stringify(value),
++                };
++        }
++    }
++    getValueFromLabel(value) {
++        return JSON.parse(value);
++    }
++    extendedRegExp(pattern) {
++        let flags = "";
++        if (pattern.startsWith("(?i)")) {
++            pattern = pattern.substring(4);
++            flags = "i";
++        }
++        try {
++            return new RegExp(pattern, flags + "u");
++        }
++        catch (e) {
++            // could be an exception due to the 'u ' flag
++            try {
++                return new RegExp(pattern, flags);
++            }
++            catch (e) {
++                // invalid pattern
++                return undefined;
++            }
++        }
++    }
++}
++/**
++ * provides a JSON schema enabled autocomplete extension for codemirror
++ * @group Codemirror Extensions
++ */
++export function jsonCompletion(opts = {}) {
++    const completion = new JSONCompletion(opts);
++    return function jsonDoCompletion(ctx) {
++        return completion.doComplete(ctx);
++    };
++}
++/**
++ * removes required properties and allows additional properties everywhere
++ * @param schema
++ */
++function makeSchemaLax(schema) {
++    return replacePropertiesDeeply(schema, (key, value) => {
++        if (key === "additionalProperties" && value === false) {
++            return [];
++        }
++        if (key === "required" && Array.isArray(value)) {
++            return [];
++        }
++        if (key === "unevaluatedProperties" && value === false) {
++            return [];
++        }
++        if (key === "unevaluatedItems" && value === false) {
++            return [];
++        }
++        // TODO remove dependencies and other restrictions
++        // if (key === 'dependencies' && typeof value === 'object') {
++        //   return Object.keys(value).reduce((acc: any, depKey) => {
++        //     const depValue = value[depKey];
++        //     if (Array.isArray(depValue)) {
++        //       return acc;
++        //     }
++        //     return { ...acc, [depKey]: depValue };
++        //   }, {});
++        // }
++        return [key, value];
++    });
++}
++/**
++ * determines effective object schema for given data
++ * TODO support patternProperties, etc.
++ * @param schema
++ * @param data
++ * @param pointer
++ */
++function getEffectiveObjectWithPropertiesSchema(schema, data, pointer) {
++    // TODO (unimportant): [performance] cache Draft07 in case it does some pre-processing? but does not seem to be significant
++    const draft = new Draft07(schema);
++    const subSchema = draft.getSchema({
++        pointer,
++        data: data !== null && data !== void 0 ? data : undefined,
++    });
++    if (!isRealSchema(subSchema)) {
++        return undefined;
++    }
++    const possibleDirectPropertyNames = getAllPossibleDirectStaticPropertyNames(draft, subSchema);
++    const effectiveProperties = {};
++    for (let possibleDirectPropertyName of possibleDirectPropertyNames) {
++        let propertyPointer = extendJsonPointer(pointer, possibleDirectPropertyName);
++        const subSchemaForPropertyConsideringData = draft.getSchema({
++            // TODO [performance] use subSchema and only check it's sub-properties
++            pointer: propertyPointer,
++            data: data !== null && data !== void 0 ? data : undefined,
++            // pointer: `/${possibleDirectPropertyName}`,
++            // schema: subSchema
++        });
++        if (isRealSchema(subSchemaForPropertyConsideringData)) {
++            Object.assign(effectiveProperties, {
++                [possibleDirectPropertyName]: subSchemaForPropertyConsideringData,
++            });
++        }
++    }
++    if (possibleDirectPropertyNames.length === 0 ||
++        Object.keys(effectiveProperties).length === 0) {
++        // in case json-schema-library behaves too weirdly and returns nothing, just return no schema too to let other cases handle this edge-case
++        return undefined;
++    }
++    // TODO also resolve patternProperties of allOf, anyOf, oneOf
++    const _a = subSchema, { allOf, anyOf, oneOf } = _a, subSchemaRest = __rest(_a, ["allOf", "anyOf", "oneOf"]);
++    return Object.assign(Object.assign({}, subSchemaRest), { properties: effectiveProperties });
++}
++/**
++ * static means not from patternProperties
++ * @param rootDraft
++ * @param schema
++ */
++function getAllPossibleDirectStaticPropertyNames(rootDraft, schema) {
++    schema = expandSchemaProperty(schema, rootDraft.rootSchema);
++    if (typeof schema !== "object" || schema == null) {
++        return [];
++    }
++    const possiblePropertyNames = [];
++    function addFrom(subSchema) {
++        const possiblePropertyNamesOfSubSchema = getAllPossibleDirectStaticPropertyNames(rootDraft, subSchema);
++        possiblePropertyNames.push(...possiblePropertyNamesOfSubSchema);
++    }
++    if (typeof schema.properties === "object" && schema.properties != null) {
++        possiblePropertyNames.push(...Object.keys(schema.properties));
++    }
++    if (typeof schema.then === "object" && schema.then != null) {
++        addFrom(schema.then);
++    }
++    if (Array.isArray(schema.allOf)) {
++        for (const subSchema of schema.allOf) {
++            addFrom(subSchema);
++        }
++    }
++    if (Array.isArray(schema.anyOf)) {
++        for (const subSchema of schema.anyOf) {
++            addFrom(subSchema);
++        }
++    }
++    if (Array.isArray(schema.oneOf)) {
++        for (const subSchema of schema.oneOf) {
++            addFrom(subSchema);
++        }
++    }
++    return possiblePropertyNames;
++}
++function expandSchemaProperty(propertySchema, rootSchema) {
++    if (typeof propertySchema === "object" && propertySchema.$ref) {
++        const refSchema = getReferenceSchema(rootSchema, propertySchema.$ref);
++        if (typeof refSchema === "object") {
++            const dereferenced = Object.assign(Object.assign({}, propertySchema), refSchema);
++            Reflect.deleteProperty(dereferenced, "$ref");
++            return dereferenced;
++        }
++    }
++    return propertySchema;
++}
++function getReferenceSchema(schema, ref) {
++    const refPath = ref.split("/");
++    let curReference = schema;
++    refPath.forEach((cur) => {
++        if (!cur) {
++            return;
++        }
++        if (cur === "#") {
++            curReference = schema;
++            return;
++        }
++        if (typeof curReference === "object") {
++            curReference = curReference[cur];
++        }
++    });
++    return curReference;
++}
++function extendJsonPointer(pointer, key) {
++    return pointer === undefined ? `/${key}` : `${pointer}/${key}`;
++}
+diff --git a/node_modules/codemirror-json-schema/dist/features/hover.js b/node_modules/codemirror-json-schema/dist/features/hover.js
+index 7634362..72338ff 100644
+--- a/node_modules/codemirror-json-schema/dist/features/hover.js
++++ b/node_modules/codemirror-json-schema/dist/features/hover.js
+@@ -162,7 +162,7 @@ export class JSONHover {
+             return {
+                 pos: start,
+                 end,
+-                arrow: true,
++                arrow: false,
+                 // to mimic similar modes for other editors
+                 // otherwise, it gets into a z-index battle with completion/etc
+                 above: true,
+diff --git a/node_modules/codemirror-json-schema/dist/features/hover.js-e b/node_modules/codemirror-json-schema/dist/features/hover.js-e
+new file mode 100644
+index 0000000..72338ff
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/features/hover.js-e
+@@ -0,0 +1,181 @@
++import { Draft04, isJsonError, } from "json-schema-library";
++import { jsonPointerForPosition } from "../utils/json-pointers";
++import { joinWithOr } from "../utils/formatting";
++import { debug } from "../utils/debug";
++import { el } from "../utils/dom";
++import { getJSONSchema } from "./state";
++import { MODES } from "../constants";
++import { renderMarkdown } from "../utils/markdown";
++/**
++ * provides a JSON schema enabled tooltip extension for codemirror
++ * @group Codemirror Extensions
++ */
++export function jsonSchemaHover(options) {
++    const hover = new JSONHover(options);
++    return async function jsonDoHover(view, pos, side) {
++        return hover.doHover(view, pos, side);
++    };
++}
++function formatType(data) {
++    if (data.type) {
++        if (data.$ref) {
++            return `${data.$ref} (${data.type})`;
++        }
++        return data.type;
++    }
++    if (data.$ref) {
++        return `${data.$ref}`;
++    }
++}
++function formatComplexType(schema, complexType, draft) {
++    return `${complexType}: ${joinWithOr(schema[complexType].map((s) => {
++        try {
++            const { data } = draft.resolveRef({ data: s, pointer: s.$ref });
++            if (data) {
++                return formatType(data);
++            }
++            return formatType(s);
++        }
++        catch (err) {
++            return s.type;
++        }
++    }))}`;
++}
++export class JSONHover {
++    constructor(opts) {
++        var _a, _b;
++        this.opts = opts;
++        this.schema = null;
++        this.mode = MODES.JSON;
++        this.opts = Object.assign({ parser: JSON.parse }, this.opts);
++        this.mode = (_b = (_a = this.opts) === null || _a === void 0 ? void 0 : _a.mode) !== null && _b !== void 0 ? _b : MODES.JSON;
++    }
++    getDataForCursor(view, pos, side) {
++        const schema = getJSONSchema(view.state);
++        if (!schema) {
++            // todo: should we even do anything without schema
++            // without taking over the existing mode responsibilties?
++            return null;
++        }
++        this.schema = new Draft04(schema);
++        const pointer = jsonPointerForPosition(view.state, pos, side, this.mode);
++        let data = undefined;
++        // TODO: use the AST tree to return the right hand, data so that we don't have to parse the doc
++        try {
++            data = this.opts.parser(view.state.doc.toString());
++        }
++        catch (_a) { }
++        if (!pointer) {
++            return null;
++        }
++        // if the data is valid, we can infer a type for complex types
++        let subSchema = this.schema.getSchema({
++            pointer,
++            data,
++            withSchemaWarning: true,
++        });
++        if (isJsonError(subSchema)) {
++            if (subSchema === null || subSchema === void 0 ? void 0 : subSchema.data.schema["$ref"]) {
++                subSchema = this.schema.resolveRef(subSchema);
++            }
++            else {
++                subSchema = subSchema === null || subSchema === void 0 ? void 0 : subSchema.data.schema;
++            }
++        }
++        return { schema: subSchema, pointer };
++    }
++    formatMessage(texts) {
++        const { message, typeInfo } = texts;
++        if (message) {
++            return el("div", { class: "cm6-json-schema-hover" }, [
++                el("div", {
++                    class: "cm6-json-schema-hover--description",
++                    inner: renderMarkdown(message, false),
++                }),
++                el("div", { class: "cm6-json-schema-hover--code-wrapper" }, [
++                    el("div", {
++                        class: "cm6-json-schema-hover--code",
++                        inner: renderMarkdown(typeInfo, false),
++                    }),
++                ]),
++            ]);
++        }
++        return el("div", { class: "cm6-json-schema-hover" }, [
++            el("div", { class: "cm6-json-schema-hover--code-wrapper" }, [
++                el("code", {
++                    class: "cm6-json-schema-hover--code",
++                    inner: renderMarkdown(typeInfo, false),
++                }),
++            ]),
++        ]);
++    }
++    getHoverTexts(data, draft) {
++        let typeInfo = "";
++        let message = null;
++        const { schema } = data;
++        if (schema.oneOf) {
++            typeInfo = formatComplexType(schema, "oneOf", draft);
++        }
++        if (schema.anyOf) {
++            typeInfo = formatComplexType(schema, "anyOf", draft);
++        }
++        if (schema.allOf) {
++            typeInfo = formatComplexType(schema, "allOf", draft);
++        }
++        if (schema.type) {
++            typeInfo = Array.isArray(schema.type)
++                ? joinWithOr(schema.type)
++                : schema.type;
++        }
++        if (schema.$ref) {
++            typeInfo = ` Reference: ${schema.$ref}`;
++        }
++        if (schema.enum) {
++            typeInfo = `\`enum\`: ${joinWithOr(schema.enum)}`;
++        }
++        if (schema.format) {
++            typeInfo += `\`format\`: ${schema.format}`;
++        }
++        if (schema.pattern) {
++            typeInfo += `\`pattern\`: ${schema.pattern}`;
++        }
++        if (schema.description) {
++            message = schema.description;
++        }
++        return { message, typeInfo };
++    }
++    // return hover state for the current json schema property
++    async doHover(view, pos, side) {
++        var _a, _b, _c, _d;
++        const start = pos, end = pos;
++        try {
++            const cursorData = this.getDataForCursor(view, pos, side);
++            debug.log("cursorData", cursorData);
++            // if we don't have a (sub)schema, we can't show anything
++            if (!(cursorData === null || cursorData === void 0 ? void 0 : cursorData.schema))
++                return null;
++            const getHoverTexts = (_b = (_a = this.opts) === null || _a === void 0 ? void 0 : _a.getHoverTexts) !== null && _b !== void 0 ? _b : this.getHoverTexts;
++            const hoverTexts = getHoverTexts(cursorData, this.schema);
++            // allow users to override the hover
++            const formatter = (_d = (_c = this.opts) === null || _c === void 0 ? void 0 : _c.formatHover) !== null && _d !== void 0 ? _d : this.formatMessage;
++            const formattedDom = formatter(hoverTexts);
++            return {
++                pos: start,
++                end,
++                arrow: false,
++                // to mimic similar modes for other editors
++                // otherwise, it gets into a z-index battle with completion/etc
++                above: true,
++                create: (view) => {
++                    return {
++                        dom: formattedDom,
++                    };
++                },
++            };
++        }
++        catch (err) {
++            debug.log(err);
++            return null;
++        }
++    }
++}
+diff --git a/node_modules/codemirror-json-schema/dist/features/state.js-e b/node_modules/codemirror-json-schema/dist/features/state.js-e
+new file mode 100644
+index 0000000..431fe3c
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/features/state.js-e
+@@ -0,0 +1,24 @@
++import { StateEffect, StateField } from "@codemirror/state";
++const schemaEffect = StateEffect.define();
++export const schemaStateField = StateField.define({
++    create() { },
++    update(schema, tr) {
++        for (const e of tr.effects) {
++            if (e.is(schemaEffect)) {
++                return e.value;
++            }
++        }
++        return schema;
++    },
++});
++export const updateSchema = (view, schema) => {
++    view.dispatch({
++        effects: schemaEffect.of(schema),
++    });
++};
++export const getJSONSchema = (state) => {
++    return state.field(schemaStateField);
++};
++export const stateExtensions = (schema) => [
++    schemaStateField.init(() => schema),
++];
+diff --git a/node_modules/codemirror-json-schema/dist/features/validation.js b/node_modules/codemirror-json-schema/dist/features/validation.js
+index 2afa0a5..52ea6cd 100644
+--- a/node_modules/codemirror-json-schema/dist/features/validation.js
++++ b/node_modules/codemirror-json-schema/dist/features/validation.js
+@@ -56,9 +56,9 @@ export class JSONValidation {
+                 return `Expected one of ${joinWithOr(errors, (data) => data.data.expected)}`;
+             }
+             if (error.code === "type-error") {
+-                return `Expected \`${((_a = error === null || error === void 0 ? void 0 : error.data) === null || _a === void 0 ? void 0 : _a.expected) && Array.isArray((_b = error === null || error === void 0 ? void 0 : error.data) === null || _b === void 0 ? void 0 : _b.expected)
++                return `Expected ${((_a = error === null || error === void 0 ? void 0 : error.data) === null || _a === void 0 ? void 0 : _a.expected) && Array.isArray((_b = error === null || error === void 0 ? void 0 : error.data) === null || _b === void 0 ? void 0 : _b.expected)
+                     ? joinWithOr((_c = error === null || error === void 0 ? void 0 : error.data) === null || _c === void 0 ? void 0 : _c.expected)
+-                    : (_d = error === null || error === void 0 ? void 0 : error.data) === null || _d === void 0 ? void 0 : _d.expected}\` but received \`${(_e = error === null || error === void 0 ? void 0 : error.data) === null || _e === void 0 ? void 0 : _e.received}\``;
++                    : (_d = error === null || error === void 0 ? void 0 : error.data) === null || _d === void 0 ? void 0 : _d.expected} but received \`${(_e = error === null || error === void 0 ? void 0 : error.data) === null || _e === void 0 ? void 0 : _e.received}\``;
+             }
+             const message = error.message
+                 // don't mention root object
+diff --git a/node_modules/codemirror-json-schema/dist/features/validation.js-e b/node_modules/codemirror-json-schema/dist/features/validation.js-e
+new file mode 100644
+index 0000000..52ea6cd
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/features/validation.js-e
+@@ -0,0 +1,156 @@
++import { Draft04 } from "json-schema-library";
++import { getJSONSchema, schemaStateField } from "./state";
++import { joinWithOr } from "../utils/formatting";
++import { el } from "../utils/dom";
++import { renderMarkdown } from "../utils/markdown";
++import { MODES } from "../constants";
++import { debug } from "../utils/debug";
++import { getDefaultParser } from "../parsers";
++// return an object path that matches with the json-source-map pointer
++const getErrorPath = (error) => {
++    var _a, _b, _c;
++    // if a pointer is present, return without #
++    if (((_a = error === null || error === void 0 ? void 0 : error.data) === null || _a === void 0 ? void 0 : _a.pointer) && ((_b = error === null || error === void 0 ? void 0 : error.data) === null || _b === void 0 ? void 0 : _b.pointer) !== "#") {
++        return error.data.pointer.slice(1);
++    }
++    // return plain data.property if present
++    if ((_c = error === null || error === void 0 ? void 0 : error.data) === null || _c === void 0 ? void 0 : _c.property) {
++        return `/${error.data.property}`;
++    }
++    // else, return the empty pointer to represent the whole document
++    return "";
++};
++export const handleRefresh = (vu) => {
++    return (vu.startState.field(schemaStateField) !== vu.state.field(schemaStateField));
++};
++/**
++ * Helper for simpler class instantiaton
++ * @group Codemirror Extensions
++ */
++export function jsonSchemaLinter(options) {
++    const validation = new JSONValidation(options);
++    return (view) => {
++        return validation.doValidation(view);
++    };
++}
++// all the error types that apply to a specific key or value
++const positionalErrors = [
++    "NoAdditionalPropertiesError",
++    "RequiredPropertyError",
++    "InvalidPropertyNameError",
++    "ForbiddenPropertyError",
++    "UndefinedValueError",
++];
++export class JSONValidation {
++    constructor(options) {
++        var _a, _b, _c, _d;
++        this.options = options;
++        this.schema = null;
++        this.mode = MODES.JSON;
++        // rewrite the error message to be more human readable
++        this.rewriteError = (error) => {
++            var _a, _b, _c, _d, _e;
++            const errorData = error === null || error === void 0 ? void 0 : error.data;
++            const errors = errorData === null || errorData === void 0 ? void 0 : errorData.errors;
++            if (error.code === "one-of-error" && (errors === null || errors === void 0 ? void 0 : errors.length)) {
++                return `Expected one of ${joinWithOr(errors, (data) => data.data.expected)}`;
++            }
++            if (error.code === "type-error") {
++                return `Expected ${((_a = error === null || error === void 0 ? void 0 : error.data) === null || _a === void 0 ? void 0 : _a.expected) && Array.isArray((_b = error === null || error === void 0 ? void 0 : error.data) === null || _b === void 0 ? void 0 : _b.expected)
++                    ? joinWithOr((_c = error === null || error === void 0 ? void 0 : error.data) === null || _c === void 0 ? void 0 : _c.expected)
++                    : (_d = error === null || error === void 0 ? void 0 : error.data) === null || _d === void 0 ? void 0 : _d.expected} but received \`${(_e = error === null || error === void 0 ? void 0 : error.data) === null || _e === void 0 ? void 0 : _e.received}\``;
++            }
++            const message = error.message
++                // don't mention root object
++                .replaceAll("in `#` ", "")
++                .replaceAll("at `#`", "")
++                .replaceAll("/", ".")
++                .replaceAll("#.", "");
++            return message;
++        };
++        this.mode = (_b = (_a = this.options) === null || _a === void 0 ? void 0 : _a.mode) !== null && _b !== void 0 ? _b : MODES.JSON;
++        this.parser = (_d = (_c = this.options) === null || _c === void 0 ? void 0 : _c.jsonParser) !== null && _d !== void 0 ? _d : getDefaultParser(this.mode);
++        // TODO: support other versions of json schema.
++        // most standard schemas are draft 4 for some reason, probably
++        // backwards compatibility
++        //
++        // ajv did not support draft 4, so I used json-schema-library
++    }
++    get schemaTitle() {
++        var _a, _b, _c;
++        return (_c = (_b = (_a = this.schema) === null || _a === void 0 ? void 0 : _a.getSchema()) === null || _b === void 0 ? void 0 : _b.title) !== null && _c !== void 0 ? _c : "json-schema";
++    }
++    // validate using view as the linter extension signature requires
++    doValidation(view) {
++        const schema = getJSONSchema(view.state);
++        if (!schema) {
++            return [];
++        }
++        this.schema = new Draft04(schema);
++        if (!this.schema)
++            return [];
++        const text = view.state.doc.toString();
++        // ignore blank json strings
++        if (!(text === null || text === void 0 ? void 0 : text.length))
++            return [];
++        const json = this.parser(view.state);
++        let errors = [];
++        try {
++            errors = this.schema.validate(json.data);
++        }
++        catch (_a) { }
++        debug.log("xxx", "validation errors", errors, json.data);
++        if (!errors.length)
++            return [];
++        // reduce() because we want to filter out errors that don't have a pointer
++        return errors.reduce((acc, error) => {
++            const pushRoot = () => {
++                const errorString = this.rewriteError(error);
++                acc.push({
++                    from: 0,
++                    to: 0,
++                    message: errorString,
++                    severity: "error",
++                    source: this.schemaTitle,
++                    renderMessage: () => {
++                        const dom = el("div", {});
++                        dom.innerHTML = renderMarkdown(errorString);
++                        return dom;
++                    },
++                });
++            };
++            const errorPath = getErrorPath(error);
++            const pointer = json.pointers.get(errorPath);
++            if (error.name === "MaxPropertiesError" ||
++                error.name === "MinPropertiesError") {
++                pushRoot();
++            }
++            else if (pointer) {
++                // if the error is a property error, use the key position
++                const isKeyError = positionalErrors.includes(error.name);
++                const errorString = this.rewriteError(error);
++                const from = isKeyError ? pointer.keyFrom : pointer.valueFrom;
++                const to = isKeyError ? pointer.keyTo : pointer.valueTo;
++                // skip error if no from/to value is found
++                if (to !== undefined && from !== undefined) {
++                    acc.push({
++                        from,
++                        to,
++                        message: errorString,
++                        renderMessage: () => {
++                            const dom = el("div", {});
++                            dom.innerHTML = renderMarkdown(errorString);
++                            return dom;
++                        },
++                        severity: "error",
++                        source: this.schemaTitle,
++                    });
++                }
++            }
++            else {
++                pushRoot();
++            }
++            return acc;
++        }, []);
++    }
++}
+diff --git a/node_modules/codemirror-json-schema/dist/json/bundled.js-e b/node_modules/codemirror-json-schema/dist/json/bundled.js-e
+new file mode 100644
+index 0000000..4f664f8
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/json/bundled.js-e
+@@ -0,0 +1,25 @@
++import { json, jsonLanguage, jsonParseLinter } from "@codemirror/lang-json";
++import { hoverTooltip } from "@codemirror/view";
++import { jsonCompletion } from "../features/completion";
++import { handleRefresh, jsonSchemaLinter } from "../features/validation";
++import { jsonSchemaHover } from "../features/hover";
++import { stateExtensions } from "../features/state";
++import { linter } from "@codemirror/lint";
++/**
++ * Full featured cm6 extension for json, including `@codemirror/lang-json`
++ * @group Bundled Codemirror Extensions
++ */
++export function jsonSchema(schema) {
++    return [
++        json(),
++        linter(jsonParseLinter()),
++        linter(jsonSchemaLinter(), {
++            needsRefresh: handleRefresh,
++        }),
++        jsonLanguage.data.of({
++            autocomplete: jsonCompletion(),
++        }),
++        hoverTooltip(jsonSchemaHover()),
++        stateExtensions(schema),
++    ];
++}
+diff --git a/node_modules/codemirror-json-schema/dist/json5/bundled.js-e b/node_modules/codemirror-json-schema/dist/json5/bundled.js-e
+new file mode 100644
+index 0000000..1c3dd6c
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/json5/bundled.js-e
+@@ -0,0 +1,26 @@
++import { json5, json5Language, json5ParseLinter } from "codemirror-json5";
++import { hoverTooltip } from "@codemirror/view";
++import { json5Completion } from "./completion";
++import { json5SchemaLinter } from "./validation";
++import { json5SchemaHover } from "./hover";
++import { linter } from "@codemirror/lint";
++import { handleRefresh } from "../features/validation";
++import { stateExtensions } from "../features/state";
++/**
++ * Full featured cm6 extension for json5, including `codemirror-json5`
++ * @group Bundled Codemirror Extensions
++ */
++export function json5Schema(schema) {
++    return [
++        json5(),
++        linter(json5ParseLinter()),
++        linter(json5SchemaLinter(), {
++            needsRefresh: handleRefresh,
++        }),
++        json5Language.data.of({
++            autocomplete: json5Completion(),
++        }),
++        hoverTooltip(json5SchemaHover()),
++        stateExtensions(schema),
++    ];
++}
+diff --git a/node_modules/codemirror-json-schema/dist/json5/completion.js-e b/node_modules/codemirror-json-schema/dist/json5/completion.js-e
+new file mode 100644
+index 0000000..a30bee1
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/json5/completion.js-e
+@@ -0,0 +1,12 @@
++import { MODES } from "../constants";
++import { JSONCompletion } from "../features/completion";
++/**
++ * provides a JSON schema enabled autocomplete extension for codemirror and json5
++ * @group Codemirror Extensions
++ */
++export function json5Completion(opts = {}) {
++    const completion = new JSONCompletion(Object.assign(Object.assign({}, opts), { mode: MODES.JSON5 }));
++    return function jsonDoCompletion(ctx) {
++        return completion.doComplete(ctx);
++    };
++}
+diff --git a/node_modules/codemirror-json-schema/dist/json5/hover.js-e b/node_modules/codemirror-json-schema/dist/json5/hover.js-e
+new file mode 100644
+index 0000000..0c8234a
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/json5/hover.js-e
+@@ -0,0 +1,13 @@
++import { JSONHover } from "../features/hover";
++import json5 from "json5";
++import { MODES } from "../constants";
++/**
++ * Instantiates a JSONHover instance with the JSON5 mode
++ * @group Codemirror Extensions
++ */
++export function json5SchemaHover(options) {
++    const hover = new JSONHover(Object.assign(Object.assign({}, options), { parser: json5.parse, mode: MODES.JSON5 }));
++    return async function jsonDoHover(view, pos, side) {
++        return hover.doHover(view, pos, side);
++    };
++}
+diff --git a/node_modules/codemirror-json-schema/dist/json5/index.js-e b/node_modules/codemirror-json-schema/dist/json5/index.js-e
+new file mode 100644
+index 0000000..5468af8
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/json5/index.js-e
+@@ -0,0 +1,9 @@
++// json5
++export { json5SchemaLinter } from "./validation";
++export { json5SchemaHover } from "./hover";
++export { json5Completion } from "./completion";
++/**
++ * @group Bundled Codemirror Extensions
++ */
++export { json5Schema } from "./bundled";
++export * from "../parsers/json5-parser";
+diff --git a/node_modules/codemirror-json-schema/dist/json5/validation.js-e b/node_modules/codemirror-json-schema/dist/json5/validation.js-e
+new file mode 100644
+index 0000000..1c0d0de
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/json5/validation.js-e
+@@ -0,0 +1,13 @@
++import { JSONValidation, } from "../features/validation";
++import { MODES } from "../constants";
++import { parseJSON5DocumentState } from "../parsers/json5-parser";
++/**
++ * Instantiates a JSONValidation instance with the JSON5 mode
++ * @group Codemirror Extensions
++ */
++export function json5SchemaLinter(options) {
++    const validation = new JSONValidation(Object.assign({ jsonParser: parseJSON5DocumentState, mode: MODES.JSON5 }, options));
++    return (view) => {
++        return validation.doValidation(view);
++    };
++}
+diff --git a/node_modules/codemirror-json-schema/dist/parsers/index.js-e b/node_modules/codemirror-json-schema/dist/parsers/index.js-e
+new file mode 100644
+index 0000000..c3752df
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/parsers/index.js-e
+@@ -0,0 +1,14 @@
++import { MODES } from "../constants";
++import { parseJSONDocumentState } from "./json-parser";
++import { parseJSON5DocumentState } from "./json5-parser";
++import { parseYAMLDocumentState } from "./yaml-parser";
++export const getDefaultParser = (mode) => {
++    switch (mode) {
++        case MODES.JSON:
++            return parseJSONDocumentState;
++        case MODES.JSON5:
++            return parseJSON5DocumentState;
++        case MODES.YAML:
++            return parseYAMLDocumentState;
++    }
++};
+diff --git a/node_modules/codemirror-json-schema/dist/parsers/json-parser.js-e b/node_modules/codemirror-json-schema/dist/parsers/json-parser.js-e
+new file mode 100644
+index 0000000..9d87d91
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/parsers/json-parser.js-e
+@@ -0,0 +1,32 @@
++import { json } from "@codemirror/lang-json";
++import { EditorState } from "@codemirror/state";
++import { parse } from "best-effort-json-parser";
++import { MODES } from "../constants";
++import { getJsonPointers } from "../utils/json-pointers";
++/**
++ * Return parsed data and json pointers for a given codemirror EditorState
++ * @group Utilities
++ */
++export function parseJSONDocumentState(state) {
++    let data = null;
++    try {
++        data = JSON.parse(state.doc.toString());
++        // return pointers regardless of whether JSON.parse succeeds
++    }
++    catch (_a) {
++        try {
++            data = parse(state.doc.toString());
++        }
++        catch (_b) { }
++    }
++    const pointers = getJsonPointers(state, MODES.JSON);
++    return { data, pointers };
++}
++/**
++ * Mimics the behavior of `json-source-map`'s `parseJSONDocument` function using codemirror EditorState
++ * @group Utilities
++ */
++export function parseJSONDocument(jsonString) {
++    const state = EditorState.create({ doc: jsonString, extensions: [json()] });
++    return parseJSONDocumentState(state);
++}
+diff --git a/node_modules/codemirror-json-schema/dist/parsers/json5-parser.js-e b/node_modules/codemirror-json-schema/dist/parsers/json5-parser.js-e
+new file mode 100644
+index 0000000..2b4a33a
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/parsers/json5-parser.js-e
+@@ -0,0 +1,42 @@
++/**
++ * Mimics the behavior of `json-source-map`'s `parseJSONDocument` function using codemirror EditorState... for json5
++ */
++import { json5 as json5mode } from "codemirror-json5";
++import json5 from "json5";
++import { EditorState } from "@codemirror/state";
++import { parse as bestEffortParse } from "best-effort-json-parser";
++import { getJsonPointers } from "../utils/json-pointers";
++import { MODES } from "../constants";
++/**
++ * Return parsed data and json5 pointers for a given codemirror EditorState
++ * @group Utilities
++ */
++export function parseJSON5DocumentState(state) {
++    const stateDoc = state.doc.toString();
++    let data = null;
++    try {
++        data = json5.parse(stateDoc);
++    }
++    catch (_a) {
++        // try again with best-effort strategy
++        try {
++            data = bestEffortParse(stateDoc);
++        }
++        catch (_b) {
++            // return pointers regardless of whether JSON.parse succeeds
++        }
++    }
++    const pointers = getJsonPointers(state, MODES.JSON5);
++    return { data, pointers };
++}
++/**
++ * Mimics the behavior of `json-source-map`'s `parseJSONDocument` function, for json5!
++ * @group Utilities
++ */
++export function parseJSON5Document(jsonString) {
++    const state = EditorState.create({
++        doc: jsonString,
++        extensions: [json5mode()],
++    });
++    return parseJSON5DocumentState(state);
++}
+diff --git a/node_modules/codemirror-json-schema/dist/parsers/yaml-parser.js-e b/node_modules/codemirror-json-schema/dist/parsers/yaml-parser.js-e
+new file mode 100644
+index 0000000..c807281
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/parsers/yaml-parser.js-e
+@@ -0,0 +1,20 @@
++/**
++ * Mimics the behavior of `json-source-map`'s `parseJSONDocument` function using codemirror EditorState... for YAML
++ */
++import YAML from "yaml";
++import { getJsonPointers } from "../utils/json-pointers";
++import { MODES } from "../constants";
++/**
++ * Return parsed data and YAML pointers for a given codemirror EditorState
++ * @group Utilities
++ */
++export function parseYAMLDocumentState(state) {
++    let data = null;
++    try {
++        data = YAML.parse(state.doc.toString());
++        // return pointers regardless of whether YAML.parse succeeds
++    }
++    catch (_a) { }
++    const pointers = getJsonPointers(state, MODES.YAML);
++    return { data, pointers };
++}
+diff --git a/node_modules/codemirror-json-schema/dist/utils/debug.js-e b/node_modules/codemirror-json-schema/dist/utils/debug.js-e
+new file mode 100644
+index 0000000..4f78ac1
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/utils/debug.js-e
+@@ -0,0 +1,3 @@
++import log from "loglevel";
++log.setLevel(process.env.NODE_ENV !== "development" ? "silent" : "debug");
++export const debug = log;
+diff --git a/node_modules/codemirror-json-schema/dist/utils/dom.js-e b/node_modules/codemirror-json-schema/dist/utils/dom.js-e
+new file mode 100644
+index 0000000..2886db6
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/utils/dom.js-e
+@@ -0,0 +1,16 @@
++export function el(tagName, attributes, children = []) {
++    const e = document.createElement(tagName);
++    Object.entries(attributes).forEach(([k, v]) => {
++        if (k === "text") {
++            e.innerText = v;
++            return;
++        }
++        if (k === "inner") {
++            e.innerHTML = v;
++            return;
++        }
++        e.setAttribute(k, v);
++    });
++    children.forEach((c) => e.appendChild(c));
++    return e;
++}
+diff --git a/node_modules/codemirror-json-schema/dist/utils/formatting.js-e b/node_modules/codemirror-json-schema/dist/utils/formatting.js-e
+new file mode 100644
+index 0000000..8a5497f
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/utils/formatting.js-e
+@@ -0,0 +1,15 @@
++// a little english-centric utility
++// to join members of an array with commas and "or"
++export const joinWithOr = (arr, getPath) => {
++    const needsComma = arr.length > 2;
++    let data = arr.map((err, i) => {
++        const result = `\`` + (getPath ? getPath(err) : err) + `\``;
++        if (i === arr.length - 1)
++            return "or " + result;
++        return result;
++    });
++    if (needsComma) {
++        return data.join(", ");
++    }
++    return data.join(" ");
++};
+diff --git a/node_modules/codemirror-json-schema/dist/utils/json-pointers.js-e b/node_modules/codemirror-json-schema/dist/utils/json-pointers.js-e
+new file mode 100644
+index 0000000..c1a6235
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/utils/json-pointers.js-e
+@@ -0,0 +1,87 @@
++import { syntaxTree } from "@codemirror/language";
++import { JSON5_TOKENS_MAPPING, MODES, TOKENS, YAML_TOKENS_MAPPING, } from "../constants";
++import { findNodeIndexInArrayNode, getMatchingChildNode, getWord, isValueNode, } from "./node";
++export const resolveTokenName = (nodeName, mode) => {
++    var _a, _b;
++    switch (mode) {
++        case MODES.YAML:
++            return (_a = YAML_TOKENS_MAPPING[nodeName]) !== null && _a !== void 0 ? _a : nodeName;
++        case MODES.JSON5:
++            return (_b = JSON5_TOKENS_MAPPING[nodeName]) !== null && _b !== void 0 ? _b : nodeName;
++        default:
++            return nodeName;
++    }
++};
++// adapted from https://discuss.codemirror.net/t/json-pointer-at-cursor-seeking-implementation-critique/4793/3
++// this could be useful for other things later!
++export function getJsonPointerAt(docText, node, mode) {
++    const path = [];
++    for (let n = node; n === null || n === void 0 ? void 0 : n.parent; n = n.parent) {
++        switch (resolveTokenName(n.parent.name, mode)) {
++            case TOKENS.PROPERTY: {
++                const name = getMatchingChildNode(n.parent, TOKENS.PROPERTY_NAME, mode);
++                if (name) {
++                    let word = getWord(docText, name).replace(/[/~]/g, (v) => v === "~" ? "~0" : "~1");
++                    // TODO generally filter out pointers to objects being started?
++                    // if (word !== '') {
++                    path.unshift(word);
++                    // }
++                }
++                break;
++            }
++            case TOKENS.ARRAY: {
++                if (isValueNode(n, mode)) {
++                    const index = findNodeIndexInArrayNode(n.parent, n, mode);
++                    path.unshift(`${index}`);
++                }
++                break;
++            }
++        }
++    }
++    if (path.length === 0) {
++        // TODO json-schema-library does not seem to like / as root pointer (it probably just uses split and it will return two empty strings). So is this fine? And why is it not prefixed with #?
++        return "";
++    }
++    return "/" + path.join("/");
++}
++/**
++ * retrieve a JSON pointer for a given position in the editor
++ * @group Utilities
++ */
++export const jsonPointerForPosition = (state, pos, side = -1, mode) => {
++    return getJsonPointerAt(state.doc, syntaxTree(state).resolve(pos, side), mode);
++};
++/**
++ * retrieve a Map of all the json pointers in a document
++ * @group Utilities
++ */
++export const getJsonPointers = (state, mode) => {
++    const tree = syntaxTree(state);
++    const pointers = new Map();
++    tree.iterate({
++        enter: (type) => {
++            var _a, _b, _c, _d, _e, _f, _g, _h;
++            if ([TOKENS.PROPERTY_NAME, TOKENS.OBJECT].includes(resolveTokenName(type.name, mode))) {
++                const pointer = getJsonPointerAt(state.doc, type.node, mode);
++                const { from: keyFrom, to: keyTo } = type.node;
++                // if there's no value, we can't get the valueFrom/to
++                if (!((_b = (_a = type.node) === null || _a === void 0 ? void 0 : _a.nextSibling) === null || _b === void 0 ? void 0 : _b.node)) {
++                    pointers.set(pointer, { keyFrom, keyTo });
++                    return true;
++                }
++                // TODO: Make this generic enough to avoid mode-specific checks
++                const nextNode = mode === MODES.JSON
++                    ? (_d = (_c = type.node) === null || _c === void 0 ? void 0 : _c.nextSibling) === null || _d === void 0 ? void 0 : _d.node
++                    : (_h = (_g = (_f = (_e = type.node) === null || _e === void 0 ? void 0 : _e.nextSibling) === null || _f === void 0 ? void 0 : _f.node) === null || _g === void 0 ? void 0 : _g.nextSibling) === null || _h === void 0 ? void 0 : _h.node;
++                if (!nextNode) {
++                    pointers.set(pointer, { keyFrom, keyTo });
++                    return true;
++                }
++                const { from: valueFrom, to: valueTo } = nextNode;
++                pointers.set(pointer, { keyFrom, keyTo, valueFrom, valueTo });
++                return true;
++            }
++        },
++    });
++    return pointers;
++};
+diff --git a/node_modules/codemirror-json-schema/dist/utils/markdown.js-e b/node_modules/codemirror-json-schema/dist/utils/markdown.js-e
+new file mode 100644
+index 0000000..734b87e
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/utils/markdown.js-e
+@@ -0,0 +1,47 @@
++import md from "markdown-it";
++import { fromHighlighter } from "@shikijs/markdown-it/core";
++import { createHighlighterCore } from "shiki/core";
++// const defaultPlugins = [
++//   "markdown-it-abbr",
++//   "markdown-it-deflist",
++//   "markdown-it-emoji",
++//   "markdown-it-footnote",
++//   "markdown-it-ins",
++//   "markdown-it-mark",
++//   "markdown-it-sub",
++//   "markdown-it-sup",
++//   "markdown-it-task-lists",
++//   "markdown-it-toc",
++//   "markdown-it-attrs",
++//   "markdown-it-katex",
++//   "markdown-it-external-links",
++//   "markdown-it-table-of-contents",
++//   "markdown-it-anchor",
++//   "markdown-it-implicit-figures",
++//   "markdown-it-video",
++//   "markdown-it-highlightjs",
++// ];
++const renderer = md({
++    linkify: true,
++    typographer: true,
++});
++(async () => {
++    const highlighter = (await createHighlighterCore({
++        themes: [
++            import("shiki/themes/vitesse-light.mjs"),
++            import("shiki/themes/vitesse-dark.mjs"),
++        ],
++        langs: [import("shiki/langs/javascript.mjs")],
++    }));
++    renderer.use(fromHighlighter(highlighter, {
++        themes: {
++            light: "vitesse-light",
++            dark: "vitesse-dark",
++        },
++    }));
++})();
++export function renderMarkdown(markdown, inline = true) {
++    if (!inline)
++        return renderer.render(markdown);
++    return renderer.renderInline(markdown);
++}
+diff --git a/node_modules/codemirror-json-schema/dist/utils/node.js-e b/node_modules/codemirror-json-schema/dist/utils/node.js-e
+new file mode 100644
+index 0000000..f4aabbe
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/utils/node.js-e
+@@ -0,0 +1,87 @@
++import { COMPLEX_TYPES, TOKENS, PRIMITIVE_TYPES, MODES } from "../constants";
++import { syntaxTree } from "@codemirror/language";
++import { resolveTokenName } from "./json-pointers";
++export const getNodeAtPosition = (state, pos, side = -1) => {
++    return syntaxTree(state).resolveInner(pos, side);
++};
++export const stripSurroundingQuotes = (str) => {
++    return str.replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1");
++};
++export const surroundingDoubleQuotesToSingle = (str) => {
++    return str.replace(/^"(.*)"$/, "'$1'");
++};
++export const getWord = (doc, node, stripQuotes = true, onlyEvenQuotes = true) => {
++    const word = node ? doc.sliceString(node.from, node.to) : "";
++    if (!stripQuotes) {
++        return word;
++    }
++    if (onlyEvenQuotes) {
++        return stripSurroundingQuotes(word);
++    }
++    return word.replace(/(^["'])|(["']$)/g, "");
++};
++export const isInvalidValueNode = (node, mode) => {
++    var _a, _b, _c, _d;
++    return (resolveTokenName(node.name, mode) === TOKENS.INVALID &&
++        (resolveTokenName((_b = (_a = node.prevSibling) === null || _a === void 0 ? void 0 : _a.name) !== null && _b !== void 0 ? _b : "", mode) ===
++            TOKENS.PROPERTY_NAME ||
++            resolveTokenName((_d = (_c = node.prevSibling) === null || _c === void 0 ? void 0 : _c.name) !== null && _d !== void 0 ? _d : "", mode) ===
++                TOKENS.PROPERTY_COLON));
++};
++export const isPrimitiveValueNode = (node, mode) => {
++    return (PRIMITIVE_TYPES.includes(resolveTokenName(node.name, mode)) ||
++        isInvalidValueNode(node, mode));
++};
++export const isValueNode = (node, mode) => {
++    return ([...PRIMITIVE_TYPES, ...COMPLEX_TYPES].includes(resolveTokenName(node.name, mode)) || isInvalidValueNode(node, mode));
++};
++export const isPropertyNameNode = (node, mode) => {
++    var _a, _b, _c, _d, _e, _f;
++    return (resolveTokenName(node.name, mode) === TOKENS.PROPERTY_NAME ||
++        (resolveTokenName(node.name, mode) === TOKENS.INVALID &&
++            (resolveTokenName((_b = (_a = node.prevSibling) === null || _a === void 0 ? void 0 : _a.name) !== null && _b !== void 0 ? _b : "", mode) ===
++                TOKENS.PROPERTY ||
++                resolveTokenName((_d = (_c = node.prevSibling) === null || _c === void 0 ? void 0 : _c.name) !== null && _d !== void 0 ? _d : "", mode) === "{")) ||
++        // TODO: Can we make this work without checking for the mode?
++        (mode === MODES.YAML &&
++            resolveTokenName((_f = (_e = node.parent) === null || _e === void 0 ? void 0 : _e.name) !== null && _f !== void 0 ? _f : "", mode) === TOKENS.OBJECT));
++};
++export const getChildrenNodes = (node) => {
++    const children = [];
++    let child = node.firstChild;
++    while (child) {
++        if (child) {
++            children.push(child);
++        }
++        child = child === null || child === void 0 ? void 0 : child.nextSibling;
++    }
++    return children;
++};
++export const getMatchingChildrenNodes = (node, nodeName, mode) => {
++    return getChildrenNodes(node).filter((n) => resolveTokenName(n.name, mode) === nodeName);
++};
++export const getMatchingChildNode = (node, nodeName, mode) => {
++    var _a;
++    return ((_a = getChildrenNodes(node).find((n) => resolveTokenName(n.name, mode) === nodeName)) !== null && _a !== void 0 ? _a : null);
++};
++export const getChildValueNode = (node, mode) => {
++    return getChildrenNodes(node).find((n) => isPrimitiveValueNode(n, mode));
++};
++const getArrayNodeChildren = (node, mode) => {
++    return getChildrenNodes(node).filter((n) => PRIMITIVE_TYPES.includes(resolveTokenName(n.name, mode)) ||
++        COMPLEX_TYPES.includes(resolveTokenName(n.name, mode)));
++};
++export const findNodeIndexInArrayNode = (arrayNode, valueNode, mode) => {
++    return getArrayNodeChildren(arrayNode, mode).findIndex((nd) => nd.from === valueNode.from && nd.to === valueNode.to);
++};
++export const getClosestNode = (node, nodeName, mode, depth = Infinity) => {
++    let n = node;
++    while (n && depth > 0) {
++        if (resolveTokenName(n.name, mode) === nodeName) {
++            return n;
++        }
++        n = n.parent;
++        depth--;
++    }
++    return null;
++};
+diff --git a/node_modules/codemirror-json-schema/dist/utils/recordUtil.js-e b/node_modules/codemirror-json-schema/dist/utils/recordUtil.js-e
+new file mode 100644
+index 0000000..31dd500
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/utils/recordUtil.js-e
+@@ -0,0 +1,63 @@
++export function getRecordEntries(record) {
++    return Object.entries(record);
++}
++export function replacePropertiesDeeply(object, getReplacement) {
++    if (typeof object === "string") {
++        return object;
++    }
++    if (typeof object !== "object" || object === null) {
++        return object;
++    }
++    if (Array.isArray(object)) {
++        return object.map((element) => replacePropertiesDeeply(element, getReplacement));
++    }
++    if (object instanceof Map) {
++        const newMap = new Map();
++        for (const [key, value] of object) {
++            const newKey = key;
++            const newValue = replacePropertiesDeeply(value, getReplacement);
++            newMap.set(newKey, newValue);
++        }
++        return newMap;
++    }
++    if (object instanceof Set) {
++        const newSet = new Set();
++        for (const value of object) {
++            const newValue = replacePropertiesDeeply(value, getReplacement);
++            newSet.add(newValue);
++        }
++        return newSet;
++    }
++    // assertAlways(object instanceof Object);
++    const newObject = {};
++    function handleReplacementEntry(oldKey, oldValue, newKey, newValue) {
++        if (newKey === oldKey && newValue === oldValue) {
++            newObject[newKey] = replacePropertiesDeeply(oldValue, getReplacement);
++        }
++        else {
++            newObject[newKey] = newValue;
++        }
++    }
++    for (const [key, value] of getRecordEntries(object)) {
++        const replacement = getReplacement(key, value);
++        if (replacement.length === 2 && typeof replacement[0] === "string") {
++            handleReplacementEntry(key, value, replacement[0], replacement[1]);
++        }
++        else {
++            for (const [newKey, newValue] of replacement) {
++                handleReplacementEntry(key, value, newKey, newValue);
++            }
++        }
++    }
++    return newObject;
++}
++export function removeUndefinedValuesOnRecord(record) {
++    const newRecord = {};
++    for (const [key, value] of getRecordEntries(record)) {
++        if (value === undefined) {
++            continue;
++        }
++        newRecord[key] = value;
++    }
++    return newRecord;
++}
+diff --git a/node_modules/codemirror-json-schema/dist/yaml/bundled.js-e b/node_modules/codemirror-json-schema/dist/yaml/bundled.js-e
+new file mode 100644
+index 0000000..6d53093
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/yaml/bundled.js-e
+@@ -0,0 +1,25 @@
++import { yaml, yamlLanguage } from "@codemirror/lang-yaml";
++import { hoverTooltip } from "@codemirror/view";
++import { handleRefresh } from "../features/validation";
++import { stateExtensions } from "../features/state";
++import { linter } from "@codemirror/lint";
++import { yamlSchemaLinter } from "./validation";
++import { yamlCompletion } from "./completion";
++import { yamlSchemaHover } from "./hover";
++/**
++ * Full featured cm6 extension for json, including `@codemirror/lang-json`
++ * @group Bundled Codemirror Extensions
++ */
++export function yamlSchema(schema) {
++    return [
++        yaml(),
++        linter(yamlSchemaLinter(), {
++            needsRefresh: handleRefresh,
++        }),
++        yamlLanguage.data.of({
++            autocomplete: yamlCompletion(),
++        }),
++        hoverTooltip(yamlSchemaHover()),
++        stateExtensions(schema),
++    ];
++}
+diff --git a/node_modules/codemirror-json-schema/dist/yaml/completion.js-e b/node_modules/codemirror-json-schema/dist/yaml/completion.js-e
+new file mode 100644
+index 0000000..d4d3552
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/yaml/completion.js-e
+@@ -0,0 +1,12 @@
++import { MODES } from "../constants";
++import { JSONCompletion } from "../features/completion";
++/**
++ * provides a JSON schema enabled autocomplete extension for codemirror and yaml
++ * @group Codemirror Extensions
++ */
++export function yamlCompletion(opts = {}) {
++    const completion = new JSONCompletion(Object.assign(Object.assign({}, opts), { mode: MODES.YAML }));
++    return function jsonDoCompletion(ctx) {
++        return completion.doComplete(ctx);
++    };
++}
+diff --git a/node_modules/codemirror-json-schema/dist/yaml/hover.js-e b/node_modules/codemirror-json-schema/dist/yaml/hover.js-e
+new file mode 100644
+index 0000000..34a58b6
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/yaml/hover.js-e
+@@ -0,0 +1,13 @@
++import { JSONHover } from "../features/hover";
++import YAML from "yaml";
++import { MODES } from "../constants";
++/**
++ * Instantiates a JSONHover instance with the YAML mode
++ * @group Codemirror Extensions
++ */
++export function yamlSchemaHover(options) {
++    const hover = new JSONHover(Object.assign(Object.assign({}, options), { parser: YAML.parse, mode: MODES.YAML }));
++    return async function jsonDoHover(view, pos, side) {
++        return hover.doHover(view, pos, side);
++    };
++}
+diff --git a/node_modules/codemirror-json-schema/dist/yaml/index.js-e b/node_modules/codemirror-json-schema/dist/yaml/index.js-e
+new file mode 100644
+index 0000000..6919b46
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/yaml/index.js-e
+@@ -0,0 +1,9 @@
++// yaml
++export { yamlSchemaLinter } from "./validation";
++export { yamlSchemaHover } from "./hover";
++export { yamlCompletion } from "./completion";
++/**
++ * @group Bundled Codemirror Extensions
++ */
++export { yamlSchema } from "./bundled";
++export * from "../parsers/yaml-parser";
+diff --git a/node_modules/codemirror-json-schema/dist/yaml/validation.js-e b/node_modules/codemirror-json-schema/dist/yaml/validation.js-e
+new file mode 100644
+index 0000000..f13bf71
+--- /dev/null
++++ b/node_modules/codemirror-json-schema/dist/yaml/validation.js-e
+@@ -0,0 +1,13 @@
++import { JSONValidation, } from "../features/validation";
++import { MODES } from "../constants";
++import { parseYAMLDocumentState } from "../parsers/yaml-parser";
++/**
++ * Instantiates a JSONValidation instance with the YAML mode
++ * @group Codemirror Extensions
++ */
++export function yamlSchemaLinter(options) {
++    const validation = new JSONValidation(Object.assign({ jsonParser: parseYAMLDocumentState, mode: MODES.YAML }, options));
++    return (view) => {
++        return validation.doValidation(view);
++    };
++}

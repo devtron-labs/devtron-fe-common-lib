@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { SegmentedBarChart } from '@Common/SegmentedBarChart'
 import { ReactComponent as ICShieldWarning } from '@Icons/ic-shield-warning-outline.svg'
 import { ReactComponent as ICShieldSecure } from '@Icons/ic-shield-check.svg'
@@ -103,6 +119,7 @@ const SecurityCard = ({
                         labelClassName="fs-13 fw-4 lh-20 cn-9"
                         countClassName="fs-13 fw-6 lh-20 cn-7"
                         swapLegendAndBar
+                        showAnimationOnBar
                     />
                 )}
                 {subtitle && <span className="cn-9 fs-13 lh-20">{subtitle}</span>}

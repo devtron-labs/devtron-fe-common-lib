@@ -327,7 +327,7 @@ export const KeyValueTable = <K extends string>({
                     <ICArrowDown
                         className="icon-dim-16 dc__no-shrink scn-7 rotate cursor"
                         style={{
-                            ['--rotateBy' as string]: sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
+                            ['--rotateBy' as string]: sortOrder === SortingOrder.DESC ? '0deg' : '180deg',
                         }}
                     />
                 </button>
