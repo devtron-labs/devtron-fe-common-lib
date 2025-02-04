@@ -15,6 +15,7 @@
  */
 
 import { getSanitizedIframe } from '@Common/Helper'
+import { customizeValidator } from '@rjsf/validator-ajv8'
 import { PATTERNS } from '@Common/Constants'
 import { URLProtocolType } from './types'
 import { SKIP_LABEL_KEY_VALIDATION_PREFIX } from './constants'
@@ -378,10 +379,26 @@ export const validateSemanticVersioning = (version: string): ValidationResponseT
 export const validateDisplayName = (name: string): ValidationResponseType =>
     validateStringLength(name, DISPLAY_NAME_CONSTRAINTS.MAX_LIMIT, DISPLAY_NAME_CONSTRAINTS.MIN_LIMIT)
 
-export const validateJSON = (json: string): ValidationResponseType => {
+export const SCHEMA_07_VALIDATOR_STRICT = customizeValidator({
+    ajvOptionsOverrides: {
+        strict: true,
+        allowUnionTypes: true,
+    },
+})
+SCHEMA_07_VALIDATOR_STRICT.ajv.addKeyword('hidden')
+SCHEMA_07_VALIDATOR_STRICT.ajv.addFormat('memory', /^\d+(\.\d+)?(Ki|Mi|Gi|Ti|Pi|Ei|KiB|MiB|GiB|TiB|PiB|EiB)?$/)
+SCHEMA_07_VALIDATOR_STRICT.ajv.addFormat('cpu', /^(?:\d+(\.\d+)?|(\d+)(m))$/)
+
+const SCHEMA_07_VALIDATOR = customizeValidator({ ajvOptionsOverrides: { strict: false } })
+SCHEMA_07_VALIDATOR.ajv.addKeyword('hidden')
+
+export const doesJSONConformToSchema07 = (json: string, strict = false): ValidationResponseType => {
     try {
         if (json) {
-            JSON.parse(json)
+            // NOTE: if json is not parsable JSON.parse will through error
+            // if validators can't be compiled from the parsed json schema then
+            // provided json schema does not conform to json schema draft 07; again can throw error
+            ;(strict ? SCHEMA_07_VALIDATOR_STRICT : SCHEMA_07_VALIDATOR).ajv.compile(JSON.parse(json))
         }
         return {
             isValid: true,
