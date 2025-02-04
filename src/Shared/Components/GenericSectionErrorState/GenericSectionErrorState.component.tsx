@@ -19,7 +19,6 @@ import { ComponentSizeType } from '@Shared/constants'
 import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICInfoOutline } from '@Icons/ic-info-outline.svg'
-import { ReactComponent as ICArrowCounterClockwise } from '@Icons/ic-arrow-counter-clockwise.svg'
 import { Button, ButtonVariantType } from '../Button'
 import { GenericSectionErrorStateProps } from './types'
 
@@ -74,7 +73,6 @@ const GenericSectionErrorState = ({
 
             {reload && (
                 <Button
-                    startIcon={<ICArrowCounterClockwise className="dc__flip" />}
                     text={buttonText}
                     onClick={reload}
                     variant={ButtonVariantType.text}

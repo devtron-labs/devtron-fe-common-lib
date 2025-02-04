@@ -17,7 +17,7 @@
 import { ReactNode } from 'react'
 import { ProgressingProps } from '@Common/Types'
 
-export interface GenericSectionErrorStateProps {
+export type GenericSectionErrorStateProps = {
     /**
      * Handler for reloading the section
      */
@@ -48,14 +48,25 @@ export interface GenericSectionErrorStateProps {
      * to be applied on parent div
      */
     rootClassName?: string
-    /**
-     * If provided, would render the Progressing component with given props instead of error icon
-     */
-    progressingProps?: ProgressingProps
-    /**
-     * If true, info icon would be used instead of error
-     *
-     * @default false
-     */
-    useInfoIcon?: boolean
-}
+} & (
+    | {
+          /**
+           * If provided, would render the Progressing component with given props instead of error icon
+           */
+          progressingProps: ProgressingProps
+          useInfoIcon?: never
+      }
+    | {
+          progressingProps?: never
+          /**
+           * If true, info icon would be used instead of error
+           *
+           * @default false
+           */
+          useInfoIcon: boolean
+      }
+    | {
+          progressingProps?: never
+          useInfoIcon?: never
+      }
+)
