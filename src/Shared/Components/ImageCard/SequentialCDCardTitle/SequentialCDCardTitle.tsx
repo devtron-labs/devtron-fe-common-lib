@@ -50,7 +50,13 @@ const SequentialCDCardTitle = ({
                 <DeploymentEnvState
                     envStateText={getDeployedStateText()}
                     title={deployedOnTitle}
-                    tooltipContent={deployedOn.join(',')}
+                    tooltipContent={
+                        <div className="flexbox-col lh-20">
+                            {deployedOn.map((env) => (
+                                <span>{env}</span>
+                            ))}
+                        </div>
+                    }
                 />
             )
         }
