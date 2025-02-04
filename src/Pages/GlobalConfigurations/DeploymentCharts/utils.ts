@@ -22,8 +22,8 @@ export const convertDeploymentChartListToChartType = (data: DeploymentChartListD
     if (!data) {
         return []
     }
-    const chartMap = data.reduce(
-        (acc, { id, version, chartDescription: description = '', name, isUserUploaded = true, uploadedBy = '' }) => {
+    const chartMap = data.reduce<Record<string, DeploymentChartType>>(
+        (acc, { id, version, chartDescription, name, isUserUploaded, uploadedBy }) => {
             if (!name || !id || !version) {
                 return acc
             }
@@ -32,8 +32,8 @@ export const convertDeploymentChartListToChartType = (data: DeploymentChartListD
                 detail.versions.push({
                     id,
                     version,
-                    description,
-                    uploadedBy: isUserUploaded ? uploadedBy : 'Devtron',
+                    description: chartDescription || '',
+                    uploadedBy: isUserUploaded ? uploadedBy || '' : 'Devtron',
                     isUserUploaded,
                 })
             } else {
@@ -43,9 +43,9 @@ export const convertDeploymentChartListToChartType = (data: DeploymentChartListD
                         {
                             id,
                             version,
-                            description,
-                            uploadedBy: isUserUploaded ? uploadedBy : 'Devtron',
-                            isUserUploaded,
+                            description: chartDescription || '',
+                            uploadedBy: isUserUploaded ? uploadedBy || '' : 'Devtron',
+                            isUserUploaded: isUserUploaded || true,
                         },
                     ],
                 }
