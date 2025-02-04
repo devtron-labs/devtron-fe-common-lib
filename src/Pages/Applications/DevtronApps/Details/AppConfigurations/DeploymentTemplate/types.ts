@@ -147,7 +147,6 @@ interface BaseDeploymentTemplateConfigState {
     isOverridden?: never
     environmentConfig?: never
     mergeStrategy?: never
-    migratedFrom?: never
 }
 
 type EnvironmentOverrideDeploymentTemplateConfigState = {
@@ -155,10 +154,6 @@ type EnvironmentOverrideDeploymentTemplateConfigState = {
     isOverridden: boolean
     environmentConfig: EnvironmentConfigType
     mergeStrategy: OverrideMergeStrategyType
-    /**
-     * Readonly flag to show the user that the pipeline is migrated from external app to devtron, and can't change its version or delete override
-     */
-    migratedFrom: PipelineMigratedFromType
 }
 
 export interface DeploymentTemplateConfigCommonState extends SelectedChartDetailsType {
