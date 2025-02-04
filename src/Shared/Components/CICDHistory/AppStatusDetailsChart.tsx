@@ -28,7 +28,7 @@ import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 const AppStatusDetailsChart = ({
     filterRemoveHealth = false,
     showFooter,
-    setShowConfigDriftModal,
+    handleOpenConfigDriftModal,
     onClose,
 }: AppStatusDetailsChartType) => {
     const _appDetails = IndexStore.getAppDetails()
@@ -39,7 +39,7 @@ const AppStatusDetailsChart = ({
 
     const handleCompareDesiredManifest = () => {
         onClose()
-        setShowConfigDriftModal(true)
+        handleOpenConfigDriftModal()
     }
 
     const nodes: AggregatedNodes = useMemo(
@@ -148,7 +148,7 @@ const AppStatusDetailsChart = ({
                                         {nodeDetails.status ? nodeDetails.status : nodeDetails.health.status}
                                     </div>
                                     <div className="flexbox-col dc__gap-4">
-                                        {setShowConfigDriftModal && nodeDetails.hasDrift && (
+                                        {handleOpenConfigDriftModal && nodeDetails.hasDrift && (
                                             <div className="flexbox dc__gap-8 dc__align-items-center">
                                                 <span className="fs-13 fw-4 lh-20 cy-7">Config drift detected</span>
                                                 {onClose && appId && envId && (
