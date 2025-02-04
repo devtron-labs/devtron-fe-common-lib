@@ -25,8 +25,19 @@ export interface UseUrlFiltersProps<T, K> {
      * Callback function for parsing the search params
      */
     parseSearchParams?: (searchParams: URLSearchParams) => K
+    /**
+     * Local storage key to store the filters
+     */
     localStorageKey?: `${string}__${string}`
+    /**
+     * Method to be used for redirection in case of filter update
+     *
+     * @default 'replace'
+     */
+    redirectionMethod?: 'replace' | 'push'
 }
+
+export type UpdateSearchParamsOptionsType<T, K = unknown> = Partial<Pick<UseUrlFiltersProps<T, K>, 'redirectionMethod'>>
 
 export type UseUrlFiltersReturnType<T, K = unknown> = K & {
     /**
@@ -74,5 +85,5 @@ export type UseUrlFiltersReturnType<T, K = unknown> = K & {
     /**
      * Update the search params with the passed object
      */
-    updateSearchParams: (paramsToSerialize: Partial<K>) => void
+    updateSearchParams: (paramsToSerialize: Partial<K>, options?: UpdateSearchParamsOptionsType<T, K>) => void
 }
