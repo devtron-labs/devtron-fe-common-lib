@@ -1,5 +1,17 @@
 /*
  * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 import dayjs from 'dayjs'
@@ -309,24 +321,12 @@ export const getImageScanInfoCardData = (
     subCategory: SecurityModalStateType['subCategory'],
 ): InfoCardPropsType => {
     const image = data[subCategory]?.list?.[0]
-    const scanInfo: Pick<InfoCardPropsType, 'scanToolName' | 'scanToolUrl'> = {
+
+    return {
+        entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
         scanToolName: image?.scanToolName,
         scanToolUrl: image?.scanToolUrl,
-    }
-
-    switch (subCategory) {
-        case SUB_CATEGORIES.VULNERABILITIES:
-            return {
-                entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                ...scanInfo,
-            }
-        case SUB_CATEGORIES.LICENSE:
-            return {
-                entities: mapSeveritiesToSegmentedBarChartEntities(data[subCategory]?.summary.severities),
-                ...scanInfo,
-            }
-        default:
-            return null
+        lastScanTimeString: image?.StartedOn,
     }
 }
 

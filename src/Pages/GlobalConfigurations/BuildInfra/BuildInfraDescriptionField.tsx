@@ -15,7 +15,7 @@
  */
 
 import { FormEvent, FunctionComponent } from 'react'
-import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
+import { Textarea } from '@Shared/Components'
 import { BuildInfraMetaConfigTypes, BuildInfraProfileMetaFieldProps } from './types'
 import { BUILD_INFRA_TEXT } from './constants'
 
@@ -39,28 +39,14 @@ const BuildInfraProfileDescriptionField: FunctionComponent<BuildInfraProfileMeta
     }
 
     return (
-        <div className="flexbox-col dc__gap-4 w-100 dc__align-start">
-            <label htmlFor="build-infra-profile-description" className="m-0 fs-13 fw-4 lh-20 cn-7">
-                {BUILD_INFRA_TEXT.DESCRIPTION_LABEL}
-            </label>
-
-            <textarea
-                data-testid="build-infra-profile-description"
-                name="profile-description"
-                className="form__textarea mxh-140 dc__hover-border-n300"
-                id="build-infra-profile-description"
-                placeholder={BUILD_INFRA_TEXT.DESCRIPTION_PLACEHOLDER}
-                value={currentValue}
-                onChange={handleChange}
-            />
-
-            {error && (
-                <div className="form__error">
-                    <ErrorIcon className="form__icon form__icon--error" />
-                    {error}
-                </div>
-            )}
-        </div>
+        <Textarea
+            label={BUILD_INFRA_TEXT.DESCRIPTION_LABEL}
+            name="build-infra-profile-description"
+            placeholder={BUILD_INFRA_TEXT.DESCRIPTION_PLACEHOLDER}
+            value={currentValue}
+            onChange={handleChange}
+            error={error}
+        />
     )
 }
 

@@ -15,17 +15,18 @@
  */
 
 import { useState } from 'react'
-import { ReactComponent as ErrorIcon } from '../../../Assets/Icon/ic-warning.svg'
+import { ComponentSizeType } from '@Shared/constants'
 import { ReactComponent as EditIcon } from '../../../Assets/Icon/ic-pencil.svg'
-import { ButtonWithLoader } from '../ButtonWithLoader/ButtonWithLoader'
 import type { EditableTextAreaProps, Error } from './types'
+import { Textarea } from '../Textarea'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 
 const TextArea = (
     props: Omit<EditableTextAreaProps, 'emptyState'> & {
         setIsEditable: (boolean) => void
     },
 ) => {
-    const { rows, placeholder, initialText, setIsEditable, updateContent, validations } = props
+    const { placeholder, initialText, setIsEditable, updateContent, validations } = props
     const [text, setText] = useState<EditableTextAreaProps['initialText']>(initialText)
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<Error>({ isValid: true, message: '' })
@@ -74,38 +75,31 @@ const TextArea = (
 
     return (
         <div className="flexbox-col flex-grow-1 dc__gap-12">
-            <div>
-                <textarea
-                    rows={rows}
-                    placeholder={placeholder}
-                    value={text}
-                    className="form__textarea bg__primary fs-13 lh-20 cn-9 dc__resizable-textarea--vertical"
-                    onChange={handleChange}
-                />
-                {!error.isValid && (
-                    <span className="form__error">
-                        <ErrorIcon className="form__icon form__icon--error" />
-                        {error.message} <br />
-                    </span>
-                )}
-            </div>
+            <Textarea
+                placeholder={placeholder}
+                value={text}
+                onChange={handleChange}
+                name="editable-description"
+                error={!error.isValid && error.message}
+            />
             <div className="flex dc__gap-12 ml-auto">
-                <button
-                    type="button"
-                    className="cta cancel lh-20-imp h-28"
+                <Button
+                    size={ComponentSizeType.small}
+                    style={ButtonStyleType.neutral}
+                    variant={ButtonVariantType.secondary}
                     disabled={isLoading}
                     onClick={handleCancelEdit}
-                >
-                    Cancel
-                </button>
-                <ButtonWithLoader
-                    rootClassName="cta lh-20-imp h-28"
+                    text="Cancel"
+                    dataTestId="cancel-edit-text-area"
+                />
+                <Button
+                    size={ComponentSizeType.small}
                     onClick={handleSaveContent}
                     disabled={!error.isValid}
                     isLoading={isLoading}
-                >
-                    Save
-                </ButtonWithLoader>
+                    text="Save"
+                    dataTestId="save-edit-text-area"
+                />
             </div>
         </div>
     )

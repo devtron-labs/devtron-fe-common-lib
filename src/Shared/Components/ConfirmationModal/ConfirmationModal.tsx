@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CustomInput, noop, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
@@ -66,17 +82,20 @@ const ConfirmationModalBody = ({
                 initial={{ y: 100, opacity: 0, scale: 0.75 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
             >
-                <div className="flexbox-col dc__gap-12 p-20">
+                <div className="flexbox-col dc__gap-16 p-20">
                     {cloneElement(RenderIcon, {
                         className: `${RenderIcon.props?.className ?? ''} icon-dim-48 dc__no-shrink`,
                     })}
-                    <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
 
-                    {typeof subtitle === 'string' ? (
-                        <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
-                    ) : (
-                        subtitle
-                    )}
+                    <div className="flexbox-col dc__gap-8">
+                        <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
+
+                        {typeof subtitle === 'string' ? (
+                            <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
+                        ) : (
+                            subtitle
+                        )}
+                    </div>
 
                     {children}
 
