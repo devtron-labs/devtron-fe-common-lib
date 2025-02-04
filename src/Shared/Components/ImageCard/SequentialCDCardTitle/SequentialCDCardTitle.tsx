@@ -53,7 +53,7 @@ const SequentialCDCardTitle = ({
                     tooltipContent={
                         <div className="flexbox-col lh-20">
                             {deployedOn.map((env) => (
-                                <span>{env}</span>
+                                <span key={env}>{env}</span>
                             ))}
                         </div>
                     }

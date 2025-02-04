@@ -27,7 +27,7 @@ const DeploymentEnvState = ({ envStateText, title, tooltipContent }: DeploymentE
             content={tooltipContent}
             placement="right"
             interactive
-            className="w-250 dc__resizable-textarea__with-max-height"
+            className="w-250 dc__overflow-auto mxh-140"
         >
             <div className={`${stateClassName} br-4 cn-9 pt-3 pb-3 pl-6 pr-6 bw-1 mr-6`}>
                 <span className="fw-4 fs-11 lh-16 flex">
