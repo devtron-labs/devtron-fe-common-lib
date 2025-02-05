@@ -13,29 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import { ComponentSizeType } from '@Shared/constants'
 import GettingToast from '../../../Assets/Img/lifebuoy.png'
 import updateLoginCount from './service'
 import { LOGIN_COUNT, MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING } from '../../../Common'
 import { handlePostHogEventUpdate, setActionWithExpiry } from '../Header/utils'
 import { GettingStartedType } from './types'
 import './gettingStarted.scss'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 
 const GettingStartedCard = ({ className, hideGettingStartedCard }: GettingStartedType) => {
-    const onClickedOkay = async (e) => {
+    const onClickedOkay = async () => {
         setActionWithExpiry('clickedOkay', 1)
         hideGettingStartedCard()
-        await handlePostHogEventUpdate(e)
+        await handlePostHogEventUpdate(POSTHOG_EVENT_ONBOARDING.TOOLTIP_OKAY)
     }
 
-    const onClickedDontShowAgain = async (e) => {
+    const onClickedDontShowAgain = async () => {
         const updatedPayload = {
             key: LOGIN_COUNT,
             value: `${MAX_LOGIN_COUNT}`,
         }
         await updateLoginCount(updatedPayload)
         hideGettingStartedCard(updatedPayload.value)
-        await handlePostHogEventUpdate(e)
+        await handlePostHogEventUpdate(POSTHOG_EVENT_ONBOARDING.TOOLTIP_DONT_SHOW_AGAIN)
     }
 
     return (
@@ -46,22 +47,20 @@ const GettingStartedCard = ({ className, hideGettingStartedCard }: GettingStarte
                 <div className="flex column left fw-6">Getting started</div>
                 <div>You can always access the Getting Started guide from here.</div>
                 <div className="mt-12 lh-18">
-                    <button
+                    <Button
+                        text="Okay"
+                        size={ComponentSizeType.xs}
+                        dataTestId="getting-started-okay"
                         onClick={onClickedOkay}
-                        type="button"
-                        className="bw-0 cn-9 fw-6 br-4 mr-12 pt-4 pb-4 pl-8 pr-8 pl-8 pr-8"
-                        data-posthog={POSTHOG_EVENT_ONBOARDING.TOOLTIP_OKAY}
-                    >
-                        Okay
-                    </button>
-                    <button
-                        className="br-4 token__dont-show en-0 bw-1 dc__transparent pl-8 pr-8 pt-3 pb-3"
-                        type="button"
-                        data-posthog={POSTHOG_EVENT_ONBOARDING.TOOLTIP_DONT_SHOW_AGAIN}
+                    />
+                    <Button
+                        text="Don't show again"
+                        size={ComponentSizeType.xs}
+                        dataTestId="getting-started-don't-show-again"
                         onClick={onClickedDontShowAgain}
-                    >
-                        Don&apos;t show again
-                    </button>
+                        style={ButtonStyleType.neutral}
+                        variant={ButtonVariantType.secondary}
+                    />
                 </div>
             </div>
         </div>
