@@ -560,7 +560,7 @@ export interface DeploymentHistorySidebarType {
 export interface AppStatusDetailsChartType {
     filterRemoveHealth?: boolean
     showFooter: boolean
-    showConfigDriftInfo?: boolean
+    handleOpenConfigDriftModal?: () => void
     onClose?: () => void
 }
 

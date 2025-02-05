@@ -113,7 +113,7 @@ const ConfirmationModalBody = ({
                         />
                     )}
                 </div>
-                <div className="p-16 dc__gap-12 flexbox dc__content-end">
+                <div className="px-20 py-16 dc__gap-12 flexbox dc__content-end">
                     {secondaryButtonConfig && (
                         <Button
                             dataTestId="confirmation-modal-secondary-button"
