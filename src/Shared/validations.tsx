@@ -474,8 +474,11 @@ export const validateCMVolumeMountPath = (value: string): { isValid: boolean; me
 
 export const validateYAML = (yamlString: string, isRequired?: boolean): ValidationResponseType => {
     try {
-        if (isRequired) {
-            requiredField(yamlString)
+        if (!yamlString && isRequired) {
+            return {
+                isValid: false,
+                message: 'This field is required',
+            }
         }
         parse(yamlString)
         return {
