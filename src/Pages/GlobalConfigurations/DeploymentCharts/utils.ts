@@ -37,7 +37,7 @@ export const convertDeploymentChartListToChartType = (data: DeploymentChartListD
                 version,
                 description: chartDescription || '',
                 uploadedBy: isUserUploaded ? uploadedBy || '' : 'Devtron',
-                isUserUploaded: isUserUploaded || true,
+                isUserUploaded,
             }
             const detail = acc[name]
             if (detail) {
