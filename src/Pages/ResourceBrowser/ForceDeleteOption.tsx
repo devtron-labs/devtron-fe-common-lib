@@ -1,0 +1,33 @@
+import { Checkbox } from '@Common/Checkbox'
+import { CHECKBOX_VALUE } from '@Common/Types'
+import { AdditionalConfirmationModalOptionsProps } from './types'
+
+const ForceDeleteOption = ({
+    optionsData,
+    setOptionsData: setShouldForceDelete,
+    children,
+}: AdditionalConfirmationModalOptionsProps<boolean>) => {
+    const shouldForceDelete = optionsData ?? false
+
+    const handleToggleShouldForceDelete = () => {
+        setShouldForceDelete(!shouldForceDelete)
+    }
+
+    return (
+        <div className="flexbox-col dc__gap-12 w-100">
+            <Checkbox
+                value={CHECKBOX_VALUE.CHECKED}
+                isChecked={shouldForceDelete}
+                dataTestId="force-delete-resource"
+                rootClassName="m-0"
+                onChange={handleToggleShouldForceDelete}
+            >
+                Force delete resource
+            </Checkbox>
+
+            {children}
+        </div>
+    )
+}
+
+export default ForceDeleteOption
