@@ -69,7 +69,7 @@ const AnnouncementBanner = ({ parentClassName = '', isCDMaterial = false }: Anno
                 dangerouslySetInnerHTML={{ __html: message }}
             />
             {isCDMaterial ? null : (
-                <Close className="icon-dim-20 ml-8 fcn-9" onClick={onClickCloseAnnouncememtBanner} />
+                <Close className="icon-dim-20 ml-8 fcn-9 dc__no-shrink" onClick={onClickCloseAnnouncememtBanner} />
             )}
         </div>
     )

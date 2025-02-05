@@ -560,7 +560,7 @@ export interface DeploymentHistorySidebarType {
 export interface AppStatusDetailsChartType {
     filterRemoveHealth?: boolean
     showFooter: boolean
-    showConfigDriftInfo?: boolean
+    handleOpenConfigDriftModal?: () => void
     onClose?: () => void
 }
 
@@ -568,6 +568,7 @@ export interface StatusFilterButtonType {
     nodes: Array<Node>
     selectedTab: string
     handleFilterClick?: (selectedFilter: string) => void
+    maxInlineFiltersCount?: number
 }
 
 export enum NodeStatus {

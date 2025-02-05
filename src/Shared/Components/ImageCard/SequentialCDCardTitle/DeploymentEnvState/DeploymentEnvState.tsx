@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import Tippy from '@tippyjs/react'
-import { ConditionalWrap } from '../../../../../Common'
+import { Tooltip } from '../../../../../Common'
 import { DeploymentEnvStateProps } from './types'
 import { getDeploymentEnvConfig } from './utils'
 
 const DeploymentEnvState = ({ envStateText, title, tooltipContent }: DeploymentEnvStateProps) => {
     const { Icon, stateClassName } = getDeploymentEnvConfig(envStateText)
-    const renderTooltip = (children) => (
-        <Tippy content={tooltipContent} className="default-tt" placement="top" arrow={false} interactive>
-            {children}
-        </Tippy>
-    )
 
     return (
-        <ConditionalWrap condition={!!tooltipContent} wrap={renderTooltip}>
+        <Tooltip
+            alwaysShowTippyOnHover={!!tooltipContent}
+            content={tooltipContent}
+            placement="right"
+            interactive
+            className="w-250 dc__overflow-auto mxh-140"
+        >
             <div className={`${stateClassName} br-4 cn-9 pt-3 pb-3 pl-6 pr-6 bw-1 mr-6`}>
                 <span className="fw-4 fs-11 lh-16 flex">
                     {Icon}
@@ -36,7 +36,7 @@ const DeploymentEnvState = ({ envStateText, title, tooltipContent }: DeploymentE
                     <span className="fw-6 ml-4">{title}</span>
                 </span>
             </div>
-        </ConditionalWrap>
+        </Tooltip>
     )
 }
 
