@@ -15,7 +15,7 @@
  */
 import { ReactElement } from 'react'
 import moment from 'moment'
-import { TIMELINE_STATUS } from '@Shared/constants'
+import { ALL_RESOURCE_KIND_FILTER, TIMELINE_STATUS } from '@Shared/constants'
 import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
 import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
@@ -38,7 +38,7 @@ import {
     FAILED_WORKFLOW_STAGE_STATUS_MAP,
     TERMINAL_STATUS_MAP,
 } from './constants'
-import { ResourceKindType, WorkflowStatusEnum } from '../../types'
+import { Node, ResourceKindType, WorkflowStatusEnum } from '../../types'
 import {
     TriggerHistoryFilterCriteriaProps,
     DeploymentHistoryResultObject,
@@ -51,6 +51,8 @@ import {
     PodExecutionStageDTO,
     WorkflowStageStatusType,
     WorkflowExecutionStageNameType,
+    NodeStatus,
+    NodeFilters,
 } from './types'
 
 export const getTriggerHistoryFilterCriteria = ({
@@ -354,3 +356,71 @@ export const getFormattedTriggerTime = (time: string): string =>
     isTimeStringAvailable(time)
         ? moment(time, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)
         : ''
+export const getNodesCount = (nodes: Node[]) =>
+    (nodes || []).reduce(
+        (acc, node) => {
+            const nodeHealthStatus = node.health?.status?.toLowerCase() ?? ''
+
+            if (node.hasDrift) {
+                acc.driftedNodeCount += 1
+            }
+
+            switch (nodeHealthStatus) {
+                case NodeStatus.Healthy:
+                    acc.healthyNodeCount += 1
+                    break
+                case NodeStatus.Degraded:
+                    acc.failedNodeCount += 1
+                    break
+                case NodeStatus.Progressing:
+                    acc.progressingNodeCount += 1
+                    break
+                case NodeStatus.Missing:
+                    acc.missingNodeCount += 1
+                    break
+                default:
+            }
+
+            acc.allNodeCount += 1
+
+            return acc
+        },
+        {
+            allNodeCount: 0,
+            healthyNodeCount: 0,
+            progressingNodeCount: 0,
+            failedNodeCount: 0,
+            missingNodeCount: 0,
+            driftedNodeCount: 0,
+        },
+    )
+
+export const getStatusFilters = ({
+    allNodeCount,
+    missingNodeCount,
+    failedNodeCount,
+    progressingNodeCount,
+    healthyNodeCount,
+    driftedNodeCount,
+}: ReturnType<typeof getNodesCount>) => {
+    const allResourceKindFilter = { status: ALL_RESOURCE_KIND_FILTER, count: allNodeCount }
+    const statusFilters = [
+        { status: NodeStatus.Missing, count: missingNodeCount },
+        { status: NodeStatus.Degraded, count: failedNodeCount },
+        {
+            status: NodeStatus.Progressing,
+            count: progressingNodeCount,
+        },
+        { status: NodeStatus.Healthy, count: healthyNodeCount },
+        ...(window._env_.FEATURE_CONFIG_DRIFT_ENABLE
+            ? [
+                  {
+                      status: NodeFilters.drifted,
+                      count: driftedNodeCount,
+                  },
+              ]
+            : []),
+    ]
+
+    return { allResourceKindFilter, statusFilters: statusFilters.filter(({ count }) => count > 0) }
+}

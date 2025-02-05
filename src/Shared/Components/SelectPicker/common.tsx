@@ -225,7 +225,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                             {showDescription &&
                                 (typeof description === 'string' ? (
                                     <p
-                                        className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__ellipsis-right__2nd-line' : ''}`}
+                                        className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__ellipsis-right__2nd-line' : 'dc__word-break'}`}
                                     >
                                         {description}
                                     </p>
