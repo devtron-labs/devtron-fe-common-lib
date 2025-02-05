@@ -15,7 +15,12 @@
  */
 
 import { versionComparatorBySortOrder } from '@Shared/Helpers'
-import { DeploymentChartListDTO, DeploymentChartType, DEVTRON_DEPLOYMENT_CHART_NAMES } from './types'
+import {
+    DeploymentChartListDTO,
+    DeploymentChartType,
+    DeploymentChartVersionsType,
+    DEVTRON_DEPLOYMENT_CHART_NAMES,
+} from './types'
 import fallbackGuiSchema from './basicViewSchema.json'
 
 export const convertDeploymentChartListToChartType = (data: DeploymentChartListDTO): DeploymentChartType[] => {
@@ -27,27 +32,20 @@ export const convertDeploymentChartListToChartType = (data: DeploymentChartListD
             if (!name || !id || !version) {
                 return acc
             }
+            const currVersionDetail: DeploymentChartVersionsType = {
+                id,
+                version,
+                description: chartDescription || '',
+                uploadedBy: isUserUploaded ? uploadedBy || '' : 'Devtron',
+                isUserUploaded: isUserUploaded || true,
+            }
             const detail = acc[name]
             if (detail) {
-                detail.versions.push({
-                    id,
-                    version,
-                    description: chartDescription || '',
-                    uploadedBy: isUserUploaded ? uploadedBy || '' : 'Devtron',
-                    isUserUploaded,
-                })
+                detail.versions.push(currVersionDetail)
             } else {
                 acc[name] = {
                     name,
-                    versions: [
-                        {
-                            id,
-                            version,
-                            description: chartDescription || '',
-                            uploadedBy: isUserUploaded ? uploadedBy || '' : 'Devtron',
-                            isUserUploaded: isUserUploaded || true,
-                        },
-                    ],
+                    versions: [currVersionDetail],
                 }
             }
             return acc
