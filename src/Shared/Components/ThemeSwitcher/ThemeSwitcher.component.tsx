@@ -32,7 +32,7 @@ const ThemeSwitcher = ({ onChange }: ThemeSwitcherProps) => {
         return {
             tabs: availableThemePreferences.map((value) => ({
                 label: (
-                    <span className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">
+                    <span className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">
                         {THEME_PREFERENCE_TO_ICON_MAP[value].icon}
                     </span>
                 ),
@@ -53,7 +53,7 @@ const ThemeSwitcher = ({ onChange }: ThemeSwitcherProps) => {
     }
 
     return (
-        <div className="flex dc__content-space dc__gap-8 px-8 py-6" onClick={stopPropagation}>
+        <div className="flex dc__content-space dc__gap-8 px-12 py-6" onClick={stopPropagation}>
             <p className="m-0 fs-13 fw-4 lh-20 cn-9">Theme</p>
             <SegmentedControl
                 initialTab={themePreference}
@@ -61,7 +61,7 @@ const ThemeSwitcher = ({ onChange }: ThemeSwitcherProps) => {
                 onChange={handleThemeSwitch}
                 tabs={tabs}
                 tooltips={tooltips}
-                size={ComponentSizeType.large}
+                size={ComponentSizeType.medium}
                 variant={SegmentedControlVariant.GRAY_ON_WHITE}
             />
         </div>
