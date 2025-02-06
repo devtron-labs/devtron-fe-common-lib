@@ -960,3 +960,5 @@ export const TriggerType = {
     Auto: 'AUTOMATIC',
     Manual: 'MANUAL',
 } as const
+
+export type ComponentLayoutType = 'row' | 'column'

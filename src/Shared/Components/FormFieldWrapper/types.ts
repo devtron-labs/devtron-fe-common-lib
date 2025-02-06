@@ -1,3 +1,4 @@
+import { ComponentLayoutType } from '@Shared/types'
 import { ReactElement, ReactNode } from 'react'
 
 export type LabelOrAriaLabelType =
@@ -22,7 +23,7 @@ export type FormFieldLabelProps = LabelOrAriaLabelType & {
     /**
      * Layout of the field
      */
-    layout?: 'row' | 'column'
+    layout?: ComponentLayoutType
 }
 
 export interface FormFieldInfoProps extends Pick<FormFieldLabelProps, 'inputId'> {
