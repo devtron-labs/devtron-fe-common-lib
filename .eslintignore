@@ -20,11 +20,9 @@ src/Common/CustomTagSelector/ValidationRules.ts
 src/Common/DebouncedSearch/DebouncedSearch.tsx
 src/Common/DebouncedSearch/Utils.ts
 src/Common/DebouncedSearch/__tests__/DebouncedSearch.test.tsx
-src/Common/DeleteComponentModal/DeleteComponent.tsx
 src/Common/DevtronProgressing/DevtronProgressing.tsx
 src/Common/Dialogs/ConfirmationDialog.tsx
 src/Common/Dialogs/DialogForm.tsx
-src/Common/Dialogs/ForceDeleteDialog.tsx
 src/Common/DraggableWrapper/DraggableButton.tsx
 src/Common/DraggableWrapper/DraggableWrapper.tsx
 src/Common/Drawer/Drawer.tsx

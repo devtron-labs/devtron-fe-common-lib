@@ -24,6 +24,10 @@
     border-left: 1px solid var(--N200);
 }
 
+.cm-scroller {
+    min-height: inherit;
+}
+
 .cm-editor {
     &.cm-focused {
         outline: none;
@@ -271,7 +275,6 @@
         background-color: var(--bg-code-editor-base);
 
         &__gutter {
-            flex: 0 0 52px;
             background-color: var(--bg-code-editor-base-gutter);
         }
     }

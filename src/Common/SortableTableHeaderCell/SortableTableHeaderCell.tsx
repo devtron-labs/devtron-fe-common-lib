@@ -76,7 +76,7 @@ const SortableTableHeaderCell = ({
         if (isSorted) {
             return (
                 <SortArrowDown
-                    className={`icon-dim-12 mw-12 scn-7 dc__no-shrink dc__transition--transform ${sortOrder === SortingOrder.DESC ? 'dc__flip-180' : ''}`}
+                    className={`icon-dim-12 mw-12 scn-7 dc__no-shrink dc__transition--transform ${sortOrder !== SortingOrder.DESC ? 'dc__flip-180' : ''}`}
                 />
             )
         }
@@ -99,6 +99,7 @@ const SortableTableHeaderCell = ({
                 onClick={isSortable ? triggerSorting : noop}
                 disabled={disabled}
                 tabIndex={disabled || !isSortable ? -1 : 0}
+                data-testid={title}
             >
                 <Tooltip showOnTruncate={showTippyOnTruncate} content={title}>
                     <span className="dc__uppercase dc__truncate">{title}</span>
