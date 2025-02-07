@@ -12,7 +12,7 @@ type BaseGenericInfoCardProps = {
           linkProps?: Pick<LinkProps, 'to' | 'target' | 'rel'>
       }
     | {
-          onClick?: MouseEventHandler<HTMLButtonElement>
+          onClick?: MouseEventHandler<HTMLDivElement>
           linkProps?: never
       }
 )

@@ -6,7 +6,7 @@
     }
     
     &__arrow {
-        transition: transform 0.2s ease-out;
+        transition: all 0.2s ease-out;
         transform: translateX(-20%);
         visibility: hidden;
     }
@@ -16,11 +16,12 @@
         z-index: 1;
         box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.10);
         
-        &__title {
+        // NOTE: &__title was not working here
+        .generic-info-card__title {
             color: var(--B500);
         }
 
-        &__arrow {
+        .generic-info-card__arrow {
             transform: translateX(30%);
             visibility: visible;
         }
