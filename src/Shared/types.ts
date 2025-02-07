@@ -960,3 +960,8 @@ export const TriggerType = {
     Auto: 'AUTOMATIC',
     Manual: 'MANUAL',
 } as const
+
+export enum ViewIsPipelineRBACConfiguredRadioTabs {
+    ALL_ENVIRONMENTS = 'All environments',
+    ACCESS_ONLY = 'Access only',
+}
