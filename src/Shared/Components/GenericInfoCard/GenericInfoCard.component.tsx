@@ -39,7 +39,7 @@ const GenericInfoCard = ({
             ) : (
                 <>
                     {cloneElement(IconElement, {
-                        className: `${IconElement.props?.className ?? ''} icon-dim-40 dc__no-shrink br-6`,
+                        className: `${IconElement.props?.className ?? ''} icon-dim-40 dc__no-shrink br-6 dc__fill-available-space`,
                     })}
 
                     <div className="flexbox-col dc__gap-8 flex-grow-1">
