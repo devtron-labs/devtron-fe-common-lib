@@ -44,7 +44,7 @@ const GenericInfoCard = ({
             ) : (
                 <>
                     {cloneElement(IconElement, {
-                        className: `${IconElement.props?.className ?? ''} icon-dim-40 dc__no-shrink br-6`,
+                        className: `${IconElement.props?.className ?? ''} icon-dim-40 dc__no-shrink br-6 dc__fill-available-space`,
                     })}
 
                     <div className="flexbox-col dc__gap-8 flex-grow-1">
@@ -56,7 +56,6 @@ const GenericInfoCard = ({
                                     </h3>
                                 </Tooltip>
 
-                                {/* TODO: animation not working on hover */}
                                 <div className="generic-info-card__arrow dc__no-shrink flex">
                                     <ICCaretSmall className="icon-dim-16 dc__flip-180 scb-5" />
                                 </div>
