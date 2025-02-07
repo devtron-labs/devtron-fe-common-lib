@@ -14,38 +14,35 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useRef } from 'react'
+import React, { memo, useEffect, useRef } from 'react'
 import TippyHeadless from '@tippyjs/react/headless'
 import ReactGA from 'react-ga4'
 import { useHistory, useParams, useRouteMatch, generatePath, useLocation, NavLink } from 'react-router-dom'
 import ReactSelect, { components } from 'react-select'
 import moment from 'moment'
+import { ReactComponent as ICArrowBackward } from '@Icons/ic-arrow-backward.svg'
+import { ReactComponent as ICDocker } from '@Icons/ic-docker.svg'
+import { DeploymentStageType } from '@Shared/constants'
 import {
     SidebarType,
     CICDSidebarFilterOptionType,
     HistoryComponentType,
     HistorySummaryCardType,
-    SummaryTooltipCardType,
+    DeploymentSummaryTooltipCardType,
     FetchIdDataStatus,
 } from './types'
+import BuildAndTaskSummaryTooltipCard from './BuildAndTaskSummaryTooltipCard'
 import { getCustomOptionSelectionStyle } from '../ReactSelect'
 import { DetectBottom } from '../DetectBottom'
-import {
-    ConditionalWrap,
-    DATE_TIME_FORMATS,
-    SourceTypeMap,
-    createGitCommitUrl,
-    DropdownIndicator,
-} from '../../../Common'
-import { ReactComponent as ICArrowBackward } from '../../../Assets/Icon/ic-arrow-backward.svg'
-import { ReactComponent as ICDocker } from '../../../Assets/Icon/ic-docker.svg'
-import { GitTriggers } from '../../types'
-import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
-import { HISTORY_LABEL, FILTER_STYLE } from './constants'
-import { statusColor as colorMap } from '../../constants'
-import { getTriggerStatusIcon } from './utils'
+import { ConditionalWrap, DATE_TIME_FORMATS, DropdownIndicator, Tooltip } from '../../../Common'
+import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
+import { getHistoryItemStatusIconFromWorkflowStages, getTriggerStatusIcon, getWorkflowNodeStatusTitle } from './utils'
+import GitTriggerList from './GitTriggerList'
 
-const SummaryTooltipCard = React.memo(
+/**
+ * @description To be shown on deployment history or when we don't have workflowExecutionStages
+ */
+const DeploymentSummaryTooltipCard = memo(
     ({
         status,
         startedOn,
@@ -53,65 +50,35 @@ const SummaryTooltipCard = React.memo(
         triggeredByEmail,
         ciMaterials,
         gitTriggers,
-    }: SummaryTooltipCardType): JSX.Element => (
-        <div className="build-card-popup p-16 br-4 w-400 bg__primary mxh-300 dc__overflow-auto">
-            <span className="fw-6 fs-16 mb-4" style={{ color: colorMap[status.toLowerCase()] }}>
-                {status.toLowerCase() === 'cancelled' ? 'Aborted' : status}
-            </span>
-            <div className="flex column left">
-                <div className="flex left fs-12 cn-7">
-                    <div>{moment(startedOn).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}</div>
-                    <div className="dc__bullet ml-6 mr-6" />
-                    <div>{triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}</div>
+    }: DeploymentSummaryTooltipCardType): JSX.Element => {
+        const triggeredByText = triggeredBy === 1 ? 'auto trigger' : triggeredByEmail
+
+        return (
+            <div className="shadow__overlay p-16 br-4 w-400 bg__overlay border__primary mxh-300 dc__overflow-auto">
+                <span className="fw-6 fs-16 mb-4" style={{ color: colorMap[status.toLowerCase()] }}>
+                    {getWorkflowNodeStatusTitle(status)}
+                </span>
+                <div className="flex column left">
+                    <div className="flex left fs-12 cn-7">
+                        <div className="dc__no-shrink">
+                            {moment(startedOn).format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)}
+                        </div>
+
+                        <div className="dc__bullet ml-6 mr-6 dc__no-shrink" />
+
+                        <Tooltip content={triggeredByText}>
+                            <span className="dc__truncate">{triggeredByText}</span>
+                        </Tooltip>
+                    </div>
+
+                    <GitTriggerList addMarginTop ciMaterials={ciMaterials} gitTriggers={gitTriggers} />
                 </div>
-                {Object.keys(gitTriggers ?? {}).length > 0 &&
-                    ciMaterials?.map((ciMaterial) => {
-                        const gitDetail: GitTriggers = gitTriggers[ciMaterial.id]
-                        const sourceType = gitDetail?.CiConfigureSourceType
-                            ? gitDetail.CiConfigureSourceType
-                            : ciMaterial?.type
-                        const sourceValue = gitDetail?.CiConfigureSourceValue
-                            ? gitDetail.CiConfigureSourceValue
-                            : ciMaterial?.value
-                        const gitMaterialUrl = gitDetail?.GitRepoUrl ? gitDetail.GitRepoUrl : ciMaterial?.url
-                        if (sourceType !== SourceTypeMap.WEBHOOK && !gitDetail) {
-                            return null
-                        }
-                        return (
-                            <div className="mt-22 ci-material-detail" key={ciMaterial.id}>
-                                {sourceType === SourceTypeMap.WEBHOOK ? (
-                                    <div className="flex left column">
-                                        <CiPipelineSourceConfig
-                                            sourceType={sourceType}
-                                            sourceValue={sourceValue}
-                                            showTooltip={false}
-                                        />
-                                    </div>
-                                ) : (
-                                    <>
-                                        <div className="dc__git-logo"> </div>
-                                        <div className="flex left column">
-                                            <a
-                                                href={createGitCommitUrl(gitMaterialUrl, gitDetail.Commit)}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="fs-12 fw-6 cn-9 pointer"
-                                            >
-                                                /{sourceValue}
-                                            </a>
-                                            <p className="fs-12 cn-7">{gitDetail?.Message}</p>
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                        )
-                    })}
             </div>
-        </div>
-    ),
+        )
+    },
 )
 
-const ViewAllCardsTile = React.memo(
+const ViewAllCardsTile = memo(
     ({ handleViewAllHistory }: { handleViewAllHistory: () => void }): JSX.Element => (
         <div className="flex pt-12 pb-12 pl-16 pr-16 dc__gap-16 dc__align-self-stretch">
             <button
@@ -130,7 +97,7 @@ const ViewAllCardsTile = React.memo(
     ),
 )
 
-const HistorySummaryCard = React.memo(
+const HistorySummaryCard = memo(
     ({
         id,
         status,
@@ -146,6 +113,9 @@ const HistorySummaryCard = React.memo(
         renderRunSource,
         runSource,
         resourceId,
+        podName,
+        namespace,
+        workflowExecutionStages,
     }: HistorySummaryCardType): JSX.Element => {
         const { path, params } = useRouteMatch()
         const { pathname } = useLocation()
@@ -185,6 +155,9 @@ const HistorySummaryCard = React.memo(
             }
         }
 
+        const areWorkerStatusSeparated =
+            stage !== DeploymentStageType.DEPLOY && Object.keys(workflowExecutionStages || {}).length > 0
+
         return (
             <ConditionalWrap
                 condition={Array.isArray(ciMaterials)}
@@ -193,16 +166,29 @@ const HistorySummaryCard = React.memo(
                     <TippyHeadless
                         placement="right"
                         interactive
-                        render={() => (
-                            <SummaryTooltipCard
-                                status={status}
-                                startedOn={startedOn}
-                                triggeredBy={triggeredBy}
-                                triggeredByEmail={triggeredByEmail}
-                                ciMaterials={ciMaterials}
-                                gitTriggers={gitTriggers}
-                            />
-                        )}
+                        render={() =>
+                            // Adding check for workflowExecutionStages to cater backward compatibility
+                            areWorkerStatusSeparated ? (
+                                <BuildAndTaskSummaryTooltipCard
+                                    workflowExecutionStages={workflowExecutionStages}
+                                    triggeredByEmail={triggeredByEmail}
+                                    namespace={namespace}
+                                    podName={podName}
+                                    stage={stage}
+                                    gitTriggers={gitTriggers}
+                                    ciMaterials={ciMaterials}
+                                />
+                            ) : (
+                                <DeploymentSummaryTooltipCard
+                                    status={status}
+                                    startedOn={startedOn}
+                                    triggeredBy={triggeredBy}
+                                    triggeredByEmail={triggeredByEmail}
+                                    ciMaterials={ciMaterials}
+                                    gitTriggers={gitTriggers}
+                                />
+                            )
+                        }
                     >
                         {children}
                     </TippyHeadless>
@@ -216,7 +202,9 @@ const HistorySummaryCard = React.memo(
                     ref={assignTargetCardRef}
                 >
                     <div className="w-100 deployment-history-card">
-                        {getTriggerStatusIcon(status)}
+                        {areWorkerStatusSeparated
+                            ? getHistoryItemStatusIconFromWorkflowStages(workflowExecutionStages)
+                            : getTriggerStatusIcon(status)}
                         <div className="flexbox-col dc__gap-8">
                             <div className="flex column left">
                                 <div className="cn-9 fs-13 lh-20">
@@ -394,6 +382,9 @@ const Sidebar = React.memo(
                                 runSource={triggerDetails.runSource}
                                 renderRunSource={renderRunSource}
                                 resourceId={resourceId}
+                                workflowExecutionStages={triggerDetails.workflowExecutionStages}
+                                podName={triggerDetails.podName}
+                                namespace={triggerDetails.namespace}
                             />
                         ))}
                     {hasMore && (fetchIdData === FetchIdDataStatus.SUSPEND || !fetchIdData) && (

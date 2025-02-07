@@ -70,8 +70,8 @@
     }
 
     .cm-panels {
-        background-color: var(--bg-code-editor);
-        z-index: 0;
+        background-color: var(--bg-code-editor-base);
+        z-index: 1;
     }
 
     .cm-panels-top {
