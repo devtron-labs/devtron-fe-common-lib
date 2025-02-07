@@ -5,5 +5,5 @@ export const getClassNameForBorderVariant = (variant: GenericInfoCardBorderVaria
         return ''
     }
 
-    return 'br-4 dc__border-n1'
+    return 'dc__border-n1'
 }
