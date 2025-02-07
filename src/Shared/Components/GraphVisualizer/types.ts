@@ -1,11 +1,14 @@
 import { Dispatch, SetStateAction } from 'react'
-import { BuiltInNode, Edge } from '@xyflow/react'
+import { Edge } from '@xyflow/react'
 
 import { DropdownNodeProps, IconNodeProps, TextNodeProps } from './components'
 
-export type GraphVisualizerBaseNode = IconNodeProps | TextNodeProps | DropdownNodeProps | BuiltInNode
+export type GraphVisualizerExtendedNode = IconNodeProps | TextNodeProps | DropdownNodeProps
 
-export type GraphVisualizerNode = Omit<GraphVisualizerBaseNode, 'position'>
+export type GraphVisualizerNode =
+    | Omit<IconNodeProps, 'position'>
+    | Omit<TextNodeProps, 'position'>
+    | Omit<DropdownNodeProps, 'position'>
 
 export type GraphVisualizerEdge = Omit<Edge, 'type'>
 

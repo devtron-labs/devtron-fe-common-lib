@@ -1,7 +1,7 @@
 import { Edge, MarkerType } from '@xyflow/react'
 
 import { NODE_GAP_X, NODE_GAP_Y, NODE_HEIGHT_MAP, NODE_WIDTH_MAP } from './constants'
-import { GraphVisualizerBaseNode, GraphVisualizerNode, GraphVisualizerProps } from './types'
+import { GraphVisualizerExtendedNode, GraphVisualizerNode, GraphVisualizerProps } from './types'
 
 /**
  * Processes edges by assigning a default type and customizing the marker (arrow style).
@@ -29,22 +29,15 @@ export const processEdges = (edges: GraphVisualizerProps['edges']): Edge[] =>
  * @param edges - List of all edges representing parent-child relationships.
  * @returns The root node's ID, or `null` if no root is found.
  */
-const findRootNode = (nodes: GraphVisualizerProps['nodes'], edges: GraphVisualizerProps['edges']): string | null => {
+const findRootNodes = (nodes: GraphVisualizerProps['nodes'], edges: GraphVisualizerProps['edges']) => {
     // Create a set of all node IDs
     const nodeIds = new Set(nodes.map((node) => node.id))
 
     // Create a set of all child node IDs (targets in edges)
     const childIds = new Set(edges.map((edge) => edge.target))
 
-    // The root node is the one that is in nodeIds but not in childIds
-    const rootNodeId = Array.from(nodeIds).find((nodeId) => !childIds.has(nodeId))
-
-    if (rootNodeId) {
-        return rootNodeId
-    }
-
-    // If no root node is found, return null (could indicate a cycle or disconnected nodes)
-    return null
+    // Find all nodes that are NOT a child of any other node (i.e., root nodes)
+    return Array.from(nodeIds).filter((nodeId) => !childIds.has(nodeId))
 }
 
 /**
@@ -56,7 +49,7 @@ const findRootNode = (nodes: GraphVisualizerProps['nodes'], edges: GraphVisualiz
  * @param childrenMap - Map of node ID → child nodes.
  * @param nodeMap - Map of node ID → node data.
  */
-const placeNodes = (
+const placeNode = (
     nodeId: string,
     x: number,
     y: number,
@@ -88,19 +81,13 @@ const placeNodes = (
     // Determine x-position for child nodes
     const childX = x + nodeWidth + NODE_GAP_X
 
-    // Get height values for each child node
-    const childHeights = children.map((id) => NODE_HEIGHT_MAP[nodeMap.get(id).type])
-
-    // Calculate total height required for children (with spacing)
-    const totalHeight = childHeights.reduce((sum, h) => sum + h + NODE_GAP_Y, -NODE_GAP_Y)
-
-    // Start positioning children from the topmost position
-    let startY = y - totalHeight / 2
-
-    children.forEach((child, index) => {
+    // Start placing children **below** the parent
+    let startY = y
+    children.forEach((child) => {
+        const childHeight = NODE_HEIGHT_MAP[nodeMap.get(child).type]
         // Position each child at the calculated coordinates
-        placeNodes(child, childX, startY + childHeights[index] / 2, updatedPositions, childrenMap, nodeMap)
-        startY += childHeights[index] + NODE_GAP_Y // Move Y down for next sibling
+        placeNode(child, childX, startY, updatedPositions, childrenMap, nodeMap)
+        startY += childHeight + NODE_GAP_Y // Move the next sibling below
     })
 }
 
@@ -116,14 +103,19 @@ const calculateNodePositions = (nodes: GraphVisualizerProps['nodes'], edges: Gra
     nodes.forEach((node) => childrenMap.set(node.id, []))
     edges.forEach((edge) => childrenMap.get(edge.source).push(edge.target))
 
-    // Identify the root node (the node that is never a target in edges)
-    const rootNode = findRootNode(nodes, edges)
-    if (!rootNode) {
-        throw new Error('Either cyclic or disconnected nodes are present!')
+    // Identify all the root nodes (the nodes that are never a target in edges)
+    const rootNodes = findRootNodes(nodes, edges)
+    if (!rootNodes.length) {
+        return {}
     }
 
-    // Start recursive positioning from the root node
-    placeNodes(rootNode, 0, 0, positions, childrenMap, nodeMap)
+    // Place multiple root nodes vertically spaced at x = 0
+    let startY = 0
+    rootNodes.forEach((rootId) => {
+        const nodeHeight = NODE_HEIGHT_MAP[nodeMap.get(rootId).type]
+        placeNode(rootId, 0, startY, positions, childrenMap, nodeMap)
+        startY += nodeHeight + NODE_GAP_Y // Move next root node downward
+    })
 
     return positions
 }
@@ -138,7 +130,7 @@ const calculateNodePositions = (nodes: GraphVisualizerProps['nodes'], edges: Gra
 export const processNodes = (
     nodes: GraphVisualizerProps['nodes'],
     edges: GraphVisualizerProps['edges'],
-): GraphVisualizerBaseNode[] => {
+): GraphVisualizerExtendedNode[] => {
     // Compute node positions based on hierarchy
     const positions = calculateNodePositions(nodes, edges)
 
@@ -149,6 +141,6 @@ export const processNodes = (
                 selectable: node.type === 'dropdownNode',
                 // Assign computed position; default to (0,0) if not found (shouldn't happen in a valid tree)
                 position: positions[node.id] ?? { x: 0, y: 0 },
-            }) as GraphVisualizerBaseNode,
+            }) as GraphVisualizerExtendedNode,
     )
 }

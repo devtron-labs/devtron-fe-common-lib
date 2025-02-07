@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
     applyEdgeChanges,
     applyNodeChanges,
@@ -14,7 +14,7 @@ import {
 import '@xyflow/react/dist/style.css'
 
 import { DEFAULT_VIEWPORT, NODE_TYPES, PADDING_X, PADDING_Y } from './constants'
-import { GraphVisualizerBaseNode, GraphVisualizerProps } from './types'
+import { GraphVisualizerExtendedNode, GraphVisualizerProps } from './types'
 import { processEdges, processNodes } from './utils'
 
 import './styles.scss'
@@ -27,9 +27,11 @@ export const GraphVisualizer = ({
 }: GraphVisualizerProps) => {
     // REFS
     const reactFlowInstanceRef = useRef<ReactFlowInstance>()
+    const graphVisualizerRef = useRef<HTMLDivElement>()
 
     // STATES
     const [viewport, setViewport] = useState<Viewport>()
+    const [panOnScroll, setPanOnScroll] = useState(false)
 
     // MEMOS
     const nodes = useMemo(() => processNodes(initialNodes, initialEdges), [initialNodes])
@@ -59,8 +61,28 @@ export const GraphVisualizer = ({
         return 0
     }, [reactFlowInstanceRef.current, nodes])
 
+    // Enable `panOnScroll` if the total node width exceeds the available width.
+    // When `panOnScroll` is true, it prevents browser scrolling while interacting with the React Flow graph
+    // So we are disabling `panOnScroll` when no scrolling is needed, so as to browser scrolling works.
+    useEffect(() => {
+        if (!graphVisualizerRef.current || !reactFlowInstanceRef.current) return () => {}
+
+        const observer = new ResizeObserver((entries) => {
+            entries.forEach((entry) => {
+                const { width } = entry.contentRect
+                setPanOnScroll(reactFlowInstanceRef.current.getNodesBounds(nodes).width + PADDING_X * 2 > width)
+            })
+        })
+
+        observer.observe(graphVisualizerRef.current)
+
+        return () => {
+            observer.disconnect()
+        }
+    }, [reactFlowInstanceRef.current])
+
     // METHODS
-    const onNodesChange: OnNodesChange<GraphVisualizerBaseNode> = (changes) => {
+    const onNodesChange: OnNodesChange<GraphVisualizerExtendedNode> = (changes) => {
         setNodes((nds) =>
             applyNodeChanges(changes, processNodes(nds, edges)).map((node) => {
                 const _node = node
@@ -81,23 +103,25 @@ export const GraphVisualizer = ({
     }
 
     const onViewportChange = (updatedViewport: Viewport) => {
+        const bounds = reactFlowInstanceRef.current.getNodesBounds(nodes)
         const normalizedViewport = updatedViewport
         normalizedViewport.x = Math.min(updatedViewport.x, DEFAULT_VIEWPORT.x)
+        normalizedViewport.y = Math.abs(bounds.y - PADDING_Y)
         setViewport(normalizedViewport)
     }
 
     const onInit = async (reactFlowInstance: ReactFlowInstance) => {
         reactFlowInstanceRef.current = reactFlowInstance
-        const bounds = reactFlowInstance.getNodesBounds(nodes)
-        await reactFlowInstance.setViewport({
-            ...DEFAULT_VIEWPORT,
-            y: Math.abs(bounds.y - PADDING_Y),
-        })
+        await reactFlowInstance.setViewport(DEFAULT_VIEWPORT)
     }
 
     return (
         <ReactFlowProvider>
-            <div className="graph-visualizer" style={{ height: containerHeight ? `${containerHeight}px` : '100%' }}>
+            <div
+                ref={graphVisualizerRef}
+                className="graph-visualizer"
+                style={{ height: containerHeight ? `${containerHeight}px` : '100%' }}
+            >
                 <ReactFlow
                     className="border__secondary br-8"
                     nodes={nodes}
@@ -108,8 +132,9 @@ export const GraphVisualizer = ({
                     translateExtent={translateExtent}
                     viewport={viewport}
                     onViewportChange={onViewportChange}
-                    panOnScroll
+                    panOnScroll={panOnScroll}
                     panOnScrollMode={PanOnScrollMode.Horizontal}
+                    preventScrolling={panOnScroll}
                     panOnDrag={false}
                     zoomOnDoubleClick={false}
                     zoomOnPinch={false}
