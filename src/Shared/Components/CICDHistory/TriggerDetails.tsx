@@ -22,7 +22,12 @@ import {
     WorkflowStageStatusType,
     CurrentStatusIconProps,
 } from './types'
-import { getFormattedTriggerTime, sanitizeWorkflowExecutionStages, getIconFromWorkflowStageStatusType } from './utils'
+import {
+    getFormattedTriggerTime,
+    sanitizeWorkflowExecutionStages,
+    getIconFromWorkflowStageStatusType,
+    getWorkflowNodeStatusTitle,
+} from './utils'
 import { cancelCiTrigger, cancelPrePostCdTrigger } from './service'
 import {
     DEFAULT_CLUSTER_ID,
@@ -56,7 +61,7 @@ const Finished = memo(({ status, finishedOn, artifact, type, executionInfo }: Fi
                 className={`${status} fs-13 fw-6 ${TERMINAL_STATUS_COLOR_CLASS_MAP[status.toLowerCase()] || 'cn-5'}`}
                 data-testid="deployment-status-text"
             >
-                {status?.toLowerCase() === 'cancelled' ? 'Aborted' : status}
+                {getWorkflowNodeStatusTitle(status)}
             </div>
         )
     }
