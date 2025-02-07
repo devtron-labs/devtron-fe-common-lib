@@ -43,7 +43,7 @@ export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEdit
 
 export const Warning = ({ className, text, children }: CodeEditorStatusBarProps) => (
     <div
-        className={`code-editor__warning fs-12 fw-4 lh-16 cn-9 py-8 px-16 bcy-1 bw-1 ey-2 dc__height-auto ${className || ''}`}
+        className={`code-editor__warning fs-12 fw-4 lh-16 cn-9 py-8 px-16 bcy-1 dc__border-bottom-y2 dc__height-auto ${className || ''}`}
     >
         <ICWarningY5 className="code-editor__status-info-icon" />
         {text}
@@ -52,7 +52,7 @@ export const Warning = ({ className, text, children }: CodeEditorStatusBarProps)
 )
 
 export const ErrorBar = ({ className, text, children }: CodeEditorStatusBarProps) => (
-    <div className={`code-editor__error fs-12 fw-4 lh-16 py-8 px-16 dc__border-bottom bco-1 co-5 ${className || ''}`}>
+    <div className={`code-editor__error fs-12 fw-4 lh-16 py-8 px-16 bco-1 co-5 dc__border-bottom ${className || ''}`}>
         <ErrorIcon className="code-editor__status-info-icon" />
         {text}
         {children}
@@ -61,7 +61,7 @@ export const ErrorBar = ({ className, text, children }: CodeEditorStatusBarProps
 
 export const Information = ({ className, children, text }: CodeEditorStatusBarProps) => (
     <div
-        className={`code-editor__information fs-12 fw-4 lh-16 cn-9 dc__height-auto py-8 px-16 dc__border-bottom bcb-1 ${className || ''}`}
+        className={`code-editor__information fs-12 fw-4 lh-16 cn-9 py-8 px-16 bcb-1 dc__border-bottom dc__height-auto ${className || ''}`}
     >
         <Info className="code-editor__status-info-icon" />
         {text}
