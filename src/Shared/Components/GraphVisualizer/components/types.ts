@@ -21,7 +21,9 @@ export type TextNodeProps = Node<
 export type DropdownNodeProps = Node<
     Omit<
         SelectPickerProps<string | number, false>,
-        'variant' | 'fullWidth' | 'classNamePrefix' | 'menuPosition' | 'menuSize' | 'menuPortalTarget'
-    >,
+        'variant' | 'fullWidth' | 'classNamePrefix' | 'menuPosition' | 'menuSize' | 'menuPortalTarget' | 'error'
+    > & {
+        isError?: boolean
+    },
     'dropdownNode'
 >
