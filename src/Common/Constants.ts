@@ -86,6 +86,7 @@ export const URLS = {
     GLOBAL_CONFIG: '/global-config',
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP,
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_CREATE: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/create`,
+    // NOTE: using appId since we are re-using AppConfig component
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
 }
 
