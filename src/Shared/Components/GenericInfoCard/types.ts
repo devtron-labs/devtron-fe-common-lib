@@ -25,7 +25,7 @@ export enum GenericInfoCardBorderVariant {
 export type GenericInfoCardProps = { borderVariant: GenericInfoCardBorderVariant } & (
     | ({
           isLoading: true
-      } & Partial<BaseGenericInfoCardProps>)
+      } & Partial<Record<keyof BaseGenericInfoCardProps, never>>)
     | ({
           isLoading?: boolean
       } & BaseGenericInfoCardProps)
