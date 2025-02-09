@@ -12,7 +12,7 @@ type BaseGenericInfoCardProps = {
           linkProps?: Pick<LinkProps, 'to' | 'target' | 'rel'>
       }
     | {
-          onClick?: MouseEventHandler<HTMLButtonElement>
+          onClick?: MouseEventHandler<HTMLDivElement>
           linkProps?: never
       }
 )
@@ -25,7 +25,7 @@ export enum GenericInfoCardBorderVariant {
 export type GenericInfoCardProps = { borderVariant: GenericInfoCardBorderVariant } & (
     | ({
           isLoading: true
-      } & Partial<BaseGenericInfoCardProps>)
+      } & Partial<Record<keyof BaseGenericInfoCardProps, never>>)
     | ({
           isLoading?: boolean
       } & BaseGenericInfoCardProps)
