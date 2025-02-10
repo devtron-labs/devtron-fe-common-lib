@@ -68,10 +68,12 @@ export const GraphVisualizer = ({
         if (!graphVisualizerRef.current || !reactFlowInstanceRef.current) return () => {}
 
         const observer = new ResizeObserver((entries) => {
+            let shouldPanOnScroll = false
             entries.forEach((entry) => {
                 const { width } = entry.contentRect
-                setPanOnScroll(reactFlowInstanceRef.current.getNodesBounds(nodes).width + PADDING_X * 2 > width)
+                shouldPanOnScroll = reactFlowInstanceRef.current.getNodesBounds(nodes).width + PADDING_X * 2 > width
             })
+            setPanOnScroll(shouldPanOnScroll)
         })
 
         observer.observe(graphVisualizerRef.current)
@@ -84,22 +86,16 @@ export const GraphVisualizer = ({
     // METHODS
     const onNodesChange: OnNodesChange<GraphVisualizerExtendedNode> = (changes) => {
         setNodes((nds) =>
-            applyNodeChanges(changes, processNodes(nds, edges)).map((node) => {
-                const _node = node
-                delete _node.position
-                return _node
-            }),
+            applyNodeChanges(changes, processNodes(nds, edges)).map(
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                ({ position, ...node }) => node,
+            ),
         )
     }
 
     const onEdgesChange: OnEdgesChange = (changes) => {
-        setEdges((eds) =>
-            applyEdgeChanges(changes, processEdges(eds)).map((edge) => {
-                const _edge = edge
-                delete _edge.type
-                return _edge
-            }),
-        )
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        setEdges((eds) => applyEdgeChanges(changes, processEdges(eds)).map(({ type, ...edge }) => edge))
     }
 
     const onViewportChange = (updatedViewport: Viewport) => {

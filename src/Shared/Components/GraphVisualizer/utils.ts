@@ -1,4 +1,4 @@
-import { Edge, MarkerType } from '@xyflow/react'
+import { Edge, MarkerType, Viewport } from '@xyflow/react'
 
 import { NODE_GAP_X, NODE_GAP_Y, NODE_HEIGHT_MAP, NODE_WIDTH_MAP } from './constants'
 import { GraphVisualizerExtendedNode, GraphVisualizerNode, GraphVisualizerProps } from './types'
@@ -53,7 +53,7 @@ const placeNode = (
     nodeId: string,
     x: number,
     y: number,
-    positions: Record<string, { x: number; y: number }>,
+    positions: Record<string, Pick<Viewport, 'x' | 'y'>>,
     childrenMap: Map<string, string[]>,
     nodeMap: Map<string, GraphVisualizerNode>,
 ) => {
@@ -93,7 +93,7 @@ const placeNode = (
 
 const calculateNodePositions = (nodes: GraphVisualizerProps['nodes'], edges: GraphVisualizerProps['edges']) => {
     // Store calculated positions for each node
-    const positions: Record<string, { x: number; y: number }> = {}
+    const positions: Record<string, Pick<Viewport, 'x' | 'y'>> = {}
 
     // Map to store parent-child relationships
     const childrenMap = new Map<string, string[]>()

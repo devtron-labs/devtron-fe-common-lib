@@ -1,7 +1,14 @@
-import { ReactElement } from 'react'
+import { ReactElement, ReactNode } from 'react'
 import { Node } from '@xyflow/react'
 
 import { SelectPickerProps } from '../../SelectPicker'
+
+export interface BaseNodeProps {
+    id: string
+    className?: string
+    isConnectable: boolean
+    children: ReactNode
+}
 
 export type IconNodeProps = Node<
     {
