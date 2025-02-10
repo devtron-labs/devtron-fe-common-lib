@@ -965,3 +965,9 @@ export enum ViewIsPipelineRBACConfiguredRadioTabs {
     ALL_ENVIRONMENTS = 'All environments',
     ACCESS_ONLY = 'Access only',
 }
+
+export interface EnvironmentDataValuesDTO {
+    isAirGapEnvironment: boolean
+    isManifestScanningEnabled: boolean
+    canOnlyViewPermittedEnvOrgLevel: boolean
+}

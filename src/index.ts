@@ -105,6 +105,11 @@ export interface customEnv {
      * @default false
      */
     FEATURE_EXPERIMENTAL_THEMING_ENABLE?: boolean
+    /**
+     * If true, only pipelines to which the user has access will be shown across the application
+     * @default false
+     */
+    FEATURE_DEFAULT_AUTHENTICATED_VIEW_ENABLE?: boolean
 }
 declare global {
     interface Window {
