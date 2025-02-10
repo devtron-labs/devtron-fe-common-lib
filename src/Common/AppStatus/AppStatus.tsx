@@ -15,11 +15,13 @@
  */
 
 import Tippy from '@tippyjs/react'
+import { WorkflowStatusEnum } from '@Shared/types'
+import { renderProgressingTriggerIcon } from '@Shared/Components'
 import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
-import { ReactComponent as InfoIcon } from '../../Assets/Icon/ic-info-outlined.svg'
+import { ReactComponent as InfoIcon } from '@Icons/ic-info-outlined.svg'
 import { StatusConstants, YET_TO_RUN } from './constants'
 import { AppStatusType } from './types'
-import { triggerStatus } from './utils'
+import { parseJobStatus, triggerStatus } from './utils'
 
 export default function AppStatus({
     appStatus,
@@ -31,6 +33,8 @@ export default function AppStatus({
     let status = appStatus
     if (isDeploymentStatus) {
         status = triggerStatus(appStatus)
+    } else if (isJobView) {
+        status = parseJobStatus(appStatus)
     }
     const appStatusLowerCase = status?.toLowerCase()
     const isNotDeployed = appStatusLowerCase === StatusConstants.NOT_DEPLOYED.noSpaceLower
@@ -52,6 +56,10 @@ export default function AppStatus({
     const iconClass = getIconClass()
 
     const renderIcon = () => {
+        if (isJobView && appStatus === WorkflowStatusEnum.WAITING_TO_START) {
+            return renderProgressingTriggerIcon()
+        }
+
         if (iconClass) {
             return iconClass === 'failed' || iconClass === 'error' ? (
                 <ICErrorCross className="icon-dim-16 dc__no-shrink ic-error-cross-red" />
