@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { ResourceKindType } from '@Shared/types'
 import { ReactNode, SyntheticEvent } from 'react'
 
 export enum ConfigHeaderTabType {
@@ -53,4 +54,16 @@ export interface OverrideStrategyTippyContentProps {
      * Would be rendered as li conveying the information about the merge strategy
      */
     children?: ReactNode
+}
+
+export interface AppConfigProps {
+    appName: string
+    resourceKind: Extract<ResourceKindType, ResourceKindType.devtronApplication | ResourceKindType.job>
+    filteredEnvIds?: string
+    isTemplateView?: boolean
+}
+
+export interface GetTemplateAPIRouteProps {
+    type: 'git-material'
+    queryParams: { id: string } & Record<string, string>
 }
