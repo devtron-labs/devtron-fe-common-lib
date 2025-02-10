@@ -16,7 +16,8 @@
 
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { getRandomColor } from '../../Common'
+import { useMainContext } from '@Shared/Providers'
+import { getRandomColor, stopPropagation } from '../../Common'
 import { ThemeSwitcher } from './ThemeSwitcher'
 
 interface LogoutCardType {
@@ -28,6 +29,7 @@ interface LogoutCardType {
 
 const LogoutCard = ({ className, userFirstLetter, setShowLogOutCard, showLogOutCard }: LogoutCardType) => {
     const history = useHistory()
+    const { viewIsPipelineRBACConfiguredNode } = useMainContext()
 
     const onLogout = () => {
         document.cookie = `argocd.token=; expires=Thu, 01-Jan-1970 00:00:01 GMT;path=/`
@@ -40,9 +42,9 @@ const LogoutCard = ({ className, userFirstLetter, setShowLogOutCard, showLogOutC
 
     return (
         <div className="dc__transparent-div" onClick={toggleLogoutCard}>
-            <div className={`logout-card ${className}`}>
-                <div className="flexbox flex-justify p-16">
-                    <div className="logout-card-user ">
+            <div className={`logout-card ${className}`} onClick={stopPropagation}>
+                <div className="flexbox flex-justify py-16 px-12">
+                    <div className="logout-card-user">
                         <p className="logout-card__name dc__ellipsis-right">{userFirstLetter}</p>
                         <p className="logout-card__email dc__ellipsis-right">{userFirstLetter}</p>
                     </div>
@@ -55,8 +57,11 @@ const LogoutCard = ({ className, userFirstLetter, setShowLogOutCard, showLogOutC
                 </div>
                 <div className="dc__border-top-n1 py-4">
                     <ThemeSwitcher onChange={toggleLogoutCard} />
+
+                    {viewIsPipelineRBACConfiguredNode}
+
                     <button
-                        className="dc__unset-button-styles px-8 py-6 fs-13 fw-4 lh-20 cr-5 dc__hover-n50 cursor w-100 flex left"
+                        className="dc__unset-button-styles px-12 py-6 fs-13 fw-4 lh-20 cr-5 dc__hover-n50 cursor w-100 flex left"
                         data-testid="logout-button"
                         onClick={onLogout}
                         type="button"

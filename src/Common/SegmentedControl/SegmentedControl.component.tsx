@@ -29,6 +29,7 @@ const SegmentedControl = ({
     name,
     variant = SegmentedControlVariant.WHITE_ON_GRAY,
     size = ComponentSizeType.medium,
+    isControlled = false,
 }: SegmentedControlProps) => (
     <StyledRadioGroup
         className={`${variant} ${SEGMENTED_CONTROL_SIZE_TO_CLASS_MAP[size]} ${rootClassName}`}
@@ -45,6 +46,7 @@ const SegmentedControl = ({
                 showTippy={!!tooltips?.[index]}
                 tippyContent={tooltips?.[index] ?? ''}
                 dataTestId={`${name}-${tab.value}`}
+                canSelect={!isControlled}
             >
                 {tab.label}
             </StyledRadioGroup.Radio>
