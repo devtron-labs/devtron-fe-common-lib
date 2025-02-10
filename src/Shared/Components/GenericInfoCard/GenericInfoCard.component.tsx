@@ -66,7 +66,9 @@ const GenericInfoCard = ({
                             </Tooltip>
                         </div>
 
-                        <p className="fw-4 fs-12 lh-16 cn-7 m-0 dc__truncate--clamp-3">{description}</p>
+                        {description && (
+                            <p className="fw-4 fs-12 lh-16 cn-7 m-0 dc__truncate--clamp-3">{description}</p>
+                        )}
                     </div>
                 </>
             )}
