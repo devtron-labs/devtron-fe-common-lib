@@ -63,7 +63,19 @@ export interface AppConfigProps {
     isTemplateView?: boolean
 }
 
+export enum GetTemplateAPIRouteType {
+    GIT_MATERIAL = 'git-material',
+    CI_BUILD_CONFIG = 'ci-build-config',
+    STAGE_STATUS = 'stage-status',
+    CD_DEPLOY_CONFIG = 'cd-deploy-config',
+    CD_ENV_LIST = 'cd-env-list',
+    CONFIG_DEPLOYMENT_TEMPLATE = 'config/deployment-template',
+    CONFIG_MAP_CREATE = 'config/config-map',
+    CONFIG_SECRET_CREATE = 'config/secret',
+    WORKFLOW_LIST = 'workflow/list',
+}
+
 export interface GetTemplateAPIRouteProps {
-    type: 'git-material'
-    queryParams: { id: string } & Record<string, string>
+    type: GetTemplateAPIRouteType
+    queryParams: { id: string } & Record<string, any>
 }

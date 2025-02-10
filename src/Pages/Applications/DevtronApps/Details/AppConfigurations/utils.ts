@@ -15,8 +15,6 @@
  */
 
 import { DeploymentStageType } from '@Shared/constants'
-import { getUrlWithSearchParams } from '@Common/Helper'
-import { GetTemplateAPIRouteProps } from './types'
 
 export const getDeploymentStageTitle = (stage: DeploymentStageType) => {
     switch (stage) {
@@ -30,8 +28,3 @@ export const getDeploymentStageTitle = (stage: DeploymentStageType) => {
             return '-'
     }
 }
-
-const TEMPLATE_API_ROUTE_PREFIX = '/resource/template/devtron-application/alpha1'
-
-export const getTemplateAPIRoute = ({ type, queryParams }: GetTemplateAPIRouteProps) =>
-    getUrlWithSearchParams(`${TEMPLATE_API_ROUTE_PREFIX}/${type}`, { templateId: queryParams.id, ...queryParams })
