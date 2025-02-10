@@ -51,6 +51,8 @@ export const PATTERNS = {
     ALPHANUMERIC_WITH_SPECIAL_CHAR_AND_SLASH: /^[A-Za-z0-9._/-]+$/, // allow alphanumeric,(.) ,(-),(_),(/)
 }
 
+const GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP = '/global-config/templates/devtron-apps'
+
 export const URLS = {
     LOGIN_SSO: '/login/sso',
     PERMISSION_GROUPS: '/global-config/auth/groups',
@@ -81,6 +83,10 @@ export const URLS = {
     CONFIG_DRIFT: 'config-drift',
     RESOURCE_BROWSER: '/resource-browser',
     COMPARE_CLUSTERS: '/compare-clusters',
+    GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP,
+    GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_CREATE: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/create`,
+    // NOTE: using appId since we are re-using AppConfig component
+    GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
 }
 
 export const ROUTES = {
