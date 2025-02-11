@@ -139,6 +139,7 @@ export const ROUTES = {
     CD_TRIGGER_POST: 'app/cd-pipeline/trigger',
     DELETE_RESOURCE: 'k8s/resource/delete',
     NODE_CAPACITY: 'k8s/capacity/node',
+    ENVIRONMENT_DATA: 'global/environment-variables',
 }
 
 export enum KEY_VALUE {
