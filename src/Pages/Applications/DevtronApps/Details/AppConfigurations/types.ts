@@ -77,5 +77,5 @@ export enum GetTemplateAPIRouteType {
 
 export interface GetTemplateAPIRouteProps {
     type: GetTemplateAPIRouteType
-    queryParams: { id: string } & Record<string, any>
+    queryParams: { id: string | number } & Record<string, any>
 }
