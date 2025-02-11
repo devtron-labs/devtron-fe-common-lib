@@ -73,6 +73,8 @@ export enum GetTemplateAPIRouteType {
     CONFIG_MAP_CREATE = 'config/config-map',
     CONFIG_SECRET_CREATE = 'config/secret',
     WORKFLOW_LIST = 'workflow/list',
+    OVERVIEW = 'overview',
+    README = 'readme',
 }
 
 export interface GetTemplateAPIRouteProps {
