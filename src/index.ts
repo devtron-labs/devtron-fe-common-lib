@@ -105,6 +105,12 @@ export interface customEnv {
      * @default false
      */
     FEATURE_EXPERIMENTAL_THEMING_ENABLE?: boolean
+    /**
+     * If true, the application templates feature is enabled
+     *
+     * @default false
+     */
+    FEATURE_APPLICATION_TEMPLATES_ENABLE?: boolean
 }
 declare global {
     interface Window {
