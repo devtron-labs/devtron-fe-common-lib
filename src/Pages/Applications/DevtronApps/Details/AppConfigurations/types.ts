@@ -75,6 +75,12 @@ export enum GetTemplateAPIRouteType {
     WORKFLOW_LIST = 'workflow/list',
     OVERVIEW = 'overview',
     README = 'readme',
+    CD_PIPELINE_LIST = 'cd-pipeline/list',
+    EXTERNAL_CI_LIST = 'external-ci/list',
+    EXTERNAL_CI = 'external-ci',
+    CI_PIPELINE = 'ci-pipeline',
+    CD_PIPELINE = 'cd-pipeline',
+    CONFIG_STRATEGY = 'config/strategy',
 }
 
 export interface GetTemplateAPIRouteProps {
