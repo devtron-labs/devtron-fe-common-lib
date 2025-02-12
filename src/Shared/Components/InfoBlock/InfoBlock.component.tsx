@@ -8,15 +8,16 @@ import { Button } from '../Button'
 const InfoBlock = ({
     layout = 'row',
     variant = 'information',
-    size = ComponentSizeType.medium,
+    size = ComponentSizeType.large,
     customIcon,
     buttonProps,
     heading,
     description,
     borderRadiusConfig,
     borderConfig,
+    fullWidth = true,
 }: InfoBlockProps) => {
-    const baseContainerClass = `${size === ComponentSizeType.large ? 'px-12' : 'px-8'} ${VARIANT_TO_BG_MAP[variant]} ${deriveBorderRadiusClassFromConfig(borderRadiusConfig)} ${deriveBorderClassFromConfig(borderConfig)} py-8 br-4 bw-1`
+    const baseContainerClass = `${size === ComponentSizeType.large ? 'px-12' : 'px-8'} ${VARIANT_TO_BG_MAP[variant]} ${deriveBorderRadiusClassFromConfig(borderRadiusConfig)} ${deriveBorderClassFromConfig(borderConfig)} ${fullWidth ? 'w-100' : ''} py-8 br-4 bw-1`
     const Icon = customIcon ?? VARIANT_TO_ICON_MAP[variant]
 
     const renderIcon = () =>
