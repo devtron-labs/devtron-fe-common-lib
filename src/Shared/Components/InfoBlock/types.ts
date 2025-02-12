@@ -13,7 +13,7 @@ export type InfoBlockProps = {
      */
     variant?: 'error' | 'help' | 'information' | 'success' | 'warning'
     /**
-     * @default ComponentSizeType.medium
+     * @default ComponentSizeType.large
      */
     size?: Extract<ComponentSizeType, ComponentSizeType.large | ComponentSizeType.medium>
     /**
