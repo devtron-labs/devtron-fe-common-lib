@@ -81,6 +81,7 @@ export enum GetTemplateAPIRouteType {
     CI_PIPELINE = 'ci-pipeline',
     CD_PIPELINE = 'cd-pipeline',
     CONFIG_STRATEGY = 'config/strategy',
+    CHART_REF = 'chartref',
 }
 
 export interface GetTemplateAPIRouteProps {
