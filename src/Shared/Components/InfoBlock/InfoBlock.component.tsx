@@ -60,12 +60,17 @@ const InfoBlock = ({
         return description
     }
 
-    const renderContent = () => (
-        <div className="flexbox-col dc__gap-4 flex-grow-1">
-            {renderHeading()}
-            {renderDescription()}
-        </div>
-    )
+    const renderContent = () => {
+        const shouldAddGap = layout === 'column'
+        const columnLayoutGapClass = size === ComponentSizeType.medium ? 'dc__gap-2' : 'dc__gap-4'
+
+        return (
+            <div className={`flexbox-col flex-grow-1 ${shouldAddGap ? columnLayoutGapClass : ''}`}>
+                {renderHeading()}
+                {renderDescription()}
+            </div>
+        )
+    }
 
     if (layout === 'row') {
         return (
