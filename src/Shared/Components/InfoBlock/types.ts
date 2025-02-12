@@ -1,5 +1,5 @@
 import { ComponentSizeType } from '@Shared/constants'
-import { ComponentLayoutType } from '@Shared/types'
+import { BorderConfigType, ComponentLayoutType } from '@Shared/types'
 import { ReactElement, ReactNode } from 'react'
 import { ButtonProps } from '../Button'
 
@@ -21,6 +21,8 @@ export type InfoBlockProps = {
      */
     customIcon?: ReactElement
     buttonProps?: ButtonProps
+    borderConfig?: BorderConfigType
+    borderRadiusConfig?: BorderConfigType
 } & (
     | {
           /**

@@ -4,12 +4,12 @@ import {
     COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP,
     ComponentSizeType,
 } from '@Shared/constants'
+import { deriveBorderRadiusClassFromConfig } from '@Shared/Helpers'
 import { useThrottledEffect } from '@Common/Helper'
 import { FormFieldWrapper, getFormFieldAriaAttributes } from '../FormFieldWrapper'
 import { TextareaProps } from './types'
 import { TEXTAREA_CONSTRAINTS } from './constants'
 import './textarea.scss'
-import { getFormFieldBorderClassName } from '../FormFieldWrapper/utils'
 
 const { MIN_HEIGHT, AUTO_EXPANSION_MAX_HEIGHT } = TEXTAREA_CONSTRAINTS
 
@@ -131,7 +131,7 @@ const Textarea = ({
                 onChange={handleChange}
                 onBlur={handleBlur}
                 onKeyDown={handleKeyDown}
-                className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${getFormFieldBorderClassName(borderRadiusConfig)} w-100 dc__overflow-auto textarea`}
+                className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${deriveBorderRadiusClassFromConfig(borderRadiusConfig)} w-100 dc__overflow-auto textarea`}
                 ref={textareaRef}
                 style={{
                     // No max height when user is expanding

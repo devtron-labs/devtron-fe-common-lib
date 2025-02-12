@@ -49,6 +49,7 @@ import {
 } from '../Common'
 import {
     AggregationKeys,
+    BorderConfigType,
     GitTriggers,
     IntersectionChangeHandler,
     IntersectionOptions,
@@ -1034,4 +1035,21 @@ export const renderMaterialIcon = (url: string = '') => {
     }
 
     return <ICGit className={baseClass} />
+}
+
+const getSanitizedBorderConfig = (borderConfig: BorderConfigType = {}): BorderConfigType => {
+    const { top = true, right = true, bottom = true, left = true } = borderConfig
+    return { top, right, bottom, left }
+}
+
+export const deriveBorderRadiusClassFromConfig = (borderRadiusConfig: BorderConfigType = {}): string => {
+    const { top, right, bottom, left } = getSanitizedBorderConfig(borderRadiusConfig)
+
+    return `${!top ? 'dc__no-top-radius' : ''} ${!right ? 'dc__no-right-radius' : ''} ${!bottom ? 'dc__no-bottom-radius' : ''} ${!left ? 'dc__no-left-radius' : ''}`
+}
+
+export const deriveBorderClassFromConfig = (borderConfig: BorderConfigType = {}): string => {
+    const { top, right, bottom, left } = getSanitizedBorderConfig(borderConfig)
+
+    return `${!top ? 'dc__no-border-top-imp' : ''} ${!right ? 'dc__no-border-right-imp' : ''} ${!bottom ? 'dc__no-border-bottom-imp' : ''} ${!left ? 'dc__no-border-left-imp' : ''}`
 }

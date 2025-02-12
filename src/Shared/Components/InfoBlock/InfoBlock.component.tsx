@@ -1,5 +1,6 @@
 import { ComponentSizeType } from '@Shared/constants'
 import { cloneElement } from 'react'
+import { deriveBorderClassFromConfig, deriveBorderRadiusClassFromConfig } from '@Shared/Helpers'
 import { InfoBlockProps } from './types'
 import { VARIANT_TO_BG_MAP, VARIANT_TO_ICON_MAP } from './constants'
 import { Button } from '../Button'
@@ -12,8 +13,10 @@ const InfoBlock = ({
     buttonProps,
     heading,
     description,
+    borderRadiusConfig,
+    borderConfig,
 }: InfoBlockProps) => {
-    const baseContainerClass = `${size === ComponentSizeType.large ? 'px-12' : 'px-8'} ${VARIANT_TO_BG_MAP[variant]} py-8 br-4 bw-1`
+    const baseContainerClass = `${size === ComponentSizeType.large ? 'px-12' : 'px-8'} ${VARIANT_TO_BG_MAP[variant]} ${deriveBorderRadiusClassFromConfig(borderRadiusConfig)} ${deriveBorderClassFromConfig(borderConfig)} py-8 br-4 bw-1`
     const Icon = customIcon ?? VARIANT_TO_ICON_MAP[variant]
 
     const renderIcon = () =>

@@ -1,4 +1,4 @@
-import { ComponentLayoutType } from '@Shared/types'
+import { BorderConfigType, ComponentLayoutType } from '@Shared/types'
 import { ReactElement, ReactNode } from 'react'
 
 export type LabelOrAriaLabelType =
@@ -56,30 +56,5 @@ export interface FormFieldWrapperProps
      */
     fullWidth?: boolean
     children: ReactElement
-    borderRadiusConfig?: {
-        /**
-         * If false, the top border radius is not applied
-         *
-         * @default true
-         */
-        top?: boolean
-        /**
-         * If false, the right border radius is not applied
-         *
-         * @default true
-         */
-        right?: boolean
-        /**
-         * If false, the bottom border radius is not applied
-         *
-         * @default true
-         */
-        bottom?: boolean
-        /**
-         * If false, the left border radius is not applied
-         *
-         * @default true
-         */
-        left?: boolean
-    }
+    borderRadiusConfig?: BorderConfigType
 }
