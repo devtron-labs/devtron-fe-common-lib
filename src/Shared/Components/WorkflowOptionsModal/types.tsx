@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { AppConfigProps, GetTemplateAPIRouteProps } from '@Pages/index'
 import { ChangeCIPayloadType, CIPipelineNodeType, WorkflowType } from '@Shared/types'
 
 interface LinkedCDSourceVariant {
@@ -31,7 +32,7 @@ export interface SourceTypeCardProps extends LinkedCDSourceVariant {
     isDisabled?: boolean
 }
 
-export interface WorkflowOptionsModalProps {
+export interface WorkflowOptionsModalProps extends Required<Pick<AppConfigProps, 'isTemplateView'>> {
     handleCloseWorkflowOptionsModal: () => void
     addCIPipeline: (type: CIPipelineNodeType, workflowId?: number | string) => void
     addWebhookCD: (workflowId?: number | string) => void
@@ -44,4 +45,5 @@ export interface WorkflowOptionsModalProps {
     getWorkflows?: () => void
     linkedCDSourceVariant?: LinkedCDSourceVariant
     isAppGroup?: boolean
+    getTemplateAPIRoute: (props: GetTemplateAPIRouteProps) => string
 }
