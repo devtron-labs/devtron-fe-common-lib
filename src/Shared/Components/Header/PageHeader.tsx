@@ -100,7 +100,7 @@ const PageHeader = ({
         hideGettingStartedCard()
     }
 
-    const onClickHelp = async (e) => {
+    const onClickHelp = async () => {
         if (
             !window._env_.K8S_CLIENT &&
             currentServerInfo.serverInfo?.installationType !== InstallationType.ENTERPRISE
@@ -113,7 +113,7 @@ const PageHeader = ({
         }
         setActionWithExpiry('clickedOkay', 1)
         hideGettingStartedCard()
-        await handlePostHogEventUpdate(e, POSTHOG_EVENT_ONBOARDING.HELP)
+        await handlePostHogEventUpdate(POSTHOG_EVENT_ONBOARDING.HELP)
         ReactGA.event({
             category: 'Main Navigation',
             action: `Help Clicked`,
