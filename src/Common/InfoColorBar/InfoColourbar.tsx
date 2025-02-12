@@ -20,7 +20,7 @@ import { Tooltip } from '@Common/Tooltip'
 import './infoColourBar.scss'
 
 /**
- * @deprecated
+ * @deprecated Use InfoBlock instead
  */
 const InfoColourBar = ({
     message,
