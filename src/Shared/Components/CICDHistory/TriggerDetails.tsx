@@ -146,7 +146,7 @@ const ProgressingStatus = memo(({ stage, type, label = 'In progress' }: Progress
 
     return (
         <>
-            <div className="flex dc__gap-8 left">
+            <div className="flex dc__gap-8 left py-8">
                 <div className="dc__min-width-fit-content">
                     <div className="fs-13 fw-6 flex left inprogress-status-color">{label}</div>
                 </div>
@@ -242,7 +242,7 @@ const CurrentStatus = memo(
 
             if (executionInfo.currentStatus === WorkflowStageStatusType.UNKNOWN) {
                 return (
-                    <div className="flex dc__gap-8 left pt-12">
+                    <div className="flex dc__gap-8 left py-8">
                         <span className="cn-9 fs-13 fw-6 lh-20">Unknown status</span>
 
                         {type === HistoryComponentType.CI && artifact && (
