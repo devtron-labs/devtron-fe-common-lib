@@ -8,6 +8,7 @@ import {
     PanOnScrollMode,
     ReactFlow,
     ReactFlowInstance,
+    ReactFlowProps,
     ReactFlowProvider,
     Viewport,
 } from '@xyflow/react'
@@ -18,6 +19,10 @@ import { GraphVisualizerExtendedNode, GraphVisualizerProps } from './types'
 import { processEdges, processNodes } from './utils'
 
 import './styles.scss'
+
+const options: ReactFlowProps['proOptions'] = {
+    hideAttribution: true,
+}
 
 export const GraphVisualizer = ({
     nodes: initialNodes,
@@ -139,6 +144,7 @@ export const GraphVisualizer = ({
                     nodesDraggable={false}
                     elementsSelectable={false}
                     onInit={onInit}
+                    proOptions={options}
                 />
             </div>
         </ReactFlowProvider>
