@@ -1,8 +1,12 @@
 import { ComponentSizeType } from '@Shared/constants'
-import { cloneElement } from 'react'
 import { deriveBorderClassFromConfig, deriveBorderRadiusClassFromConfig } from '@Shared/Helpers'
 import { InfoBlockProps } from './types'
-import { VARIANT_TO_BG_MAP, VARIANT_TO_ICON_MAP } from './constants'
+import {
+    CONTAINER_SIZE_TO_CLASS_MAP,
+    SIZE_TO_ICON_CLASS_MAP,
+    VARIANT_TO_BG_MAP,
+    VARIANT_TO_ICON_MAP,
+} from './constants'
 import { Button } from '../Button'
 
 const InfoBlock = ({
@@ -15,15 +19,12 @@ const InfoBlock = ({
     description,
     borderRadiusConfig,
     borderConfig,
-    fullWidth = true,
 }: InfoBlockProps) => {
-    const baseContainerClass = `${size === ComponentSizeType.large ? 'px-12' : 'px-8'} ${VARIANT_TO_BG_MAP[variant]} ${deriveBorderRadiusClassFromConfig(borderRadiusConfig)} ${deriveBorderClassFromConfig(borderConfig)} ${fullWidth ? 'w-100' : ''} py-8 br-4 bw-1`
-    const Icon = customIcon ?? VARIANT_TO_ICON_MAP[variant]
+    const baseContainerClass = `${CONTAINER_SIZE_TO_CLASS_MAP[size]} ${VARIANT_TO_BG_MAP[variant]} ${deriveBorderRadiusClassFromConfig(borderRadiusConfig)} ${deriveBorderClassFromConfig(borderConfig)} w-100 py-8 br-4 bw-1`
+    const iconClass = `dc__no-shrink flex dc__fill-available-space ${SIZE_TO_ICON_CLASS_MAP[size]}`
+    const icon = customIcon ?? VARIANT_TO_ICON_MAP[variant]
 
-    const renderIcon = () =>
-        cloneElement(Icon, {
-            className: `${Icon.props?.className ?? ''} ${size === ComponentSizeType.large ? 'icon-dim-20' : 'icon-dim-18'} dc__no-shrink`,
-        })
+    const renderIcon = () => <span className={iconClass}>{icon}</span>
 
     const renderHeading = () => {
         if (!heading) {

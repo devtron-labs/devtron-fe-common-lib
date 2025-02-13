@@ -23,10 +23,6 @@ export type InfoBlockProps = {
     buttonProps?: ButtonProps
     borderConfig?: BorderConfigType
     borderRadiusConfig?: BorderConfigType
-    /**
-     * @default true
-     */
-    fullWidth?: boolean
 } & (
     | {
           /**
