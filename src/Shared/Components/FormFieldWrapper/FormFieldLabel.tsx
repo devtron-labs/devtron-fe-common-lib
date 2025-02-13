@@ -57,7 +57,7 @@ const FormFieldLabel = ({
             <div className={`flex left ${required ? 'dc__required-field' : ''}`}>
                 <ConditionalWrap condition={showTooltip} wrap={wrapWithTooltip}>
                     <label
-                        className={`fs-13 lh-20 fw-4 dc__block mb-0 cursor ${isRowLayout ? `cn-9 ${showTooltip ? 'dc__underline' : ''}` : 'cn-7'}`}
+                        className={`fs-13 lh-20 fw-4 dc__block mb-0 cursor ${isRowLayout ? `cn-9 ${showTooltip ? 'dc__underline-dotted' : ''}` : 'cn-7'}`}
                         htmlFor={inputId}
                         id={labelId}
                         data-testid={labelId}
@@ -76,7 +76,7 @@ const FormFieldLabel = ({
             {!isRowLayout && labelTippyCustomizedConfig && (
                 <TippyCustomized
                     theme={TippyTheme.white}
-                    className="w-400 dc__align-left"
+                    className="w-300 dc__align-left"
                     placement="bottom-start"
                     Icon={ICHelp}
                     iconClass="fcv-5"
