@@ -176,19 +176,20 @@ export const BaseConfirmationModal = () => {
     )
 }
 
-const ConfirmationModal = ({ showConfirmationModal, ...props }: ConfirmationModalProps) => {
-    const { setProps } = useConfirmationModalContext()
+const ConfirmationModal = (props: ConfirmationModalProps) => {
+    const { props: currentProps, setProps } = useConfirmationModalContext()
 
     useEffect(() => {
-        setProps(showConfirmationModal ? props : null)
-    }, [showConfirmationModal])
+        if (currentProps) {
+            throw new Error('Only one ConfirmationModal can be rendered at a time')
+        }
 
-    useEffect(
-        () => () => {
+        setProps(props)
+
+        return () => {
             setProps(null)
-        },
-        [],
-    )
+        }
+    }, [])
 
     return null
 }

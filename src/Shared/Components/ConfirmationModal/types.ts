@@ -65,7 +65,7 @@ type ButtonConfigAndVariantType<isConfig extends boolean> =
  * Supports optional configuration mode with conditional properties.
  *
  * @template isConfig - Boolean flag to determine if configuration mode is enabled.
- *                      When `false`, `handleClose` and `showConfirmationModal` are required.
+ *                      When `false`, `handleClose` is required.
  */
 export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWithChildren<{
     /**
@@ -95,14 +95,10 @@ export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWith
                * Accepts an optional SyntheticEvent.
                */
               handleClose: (e?: SyntheticEvent) => void
-              /**
-               * Boolean flag to control the visibility of the confirmation modal.
-               */
-              showConfirmationModal: boolean
           }
         : {})
 
-export type ConfirmationModalBodyProps = Omit<ConfirmationModalProps, 'showConfirmationModal'>
+export type ConfirmationModalBodyProps = ConfirmationModalProps
 
 /**
  * Props for the DeleteComponentModal component.
@@ -110,9 +106,7 @@ export type ConfirmationModalBodyProps = Omit<ConfirmationModalProps, 'showConfi
  * the confirmation modal behavior and allows additional customization options.
  */
 export interface DeleteConfirmationModalProps
-    extends Partial<
-        Pick<ConfirmationModalProps, 'title' | 'subtitle' | 'showConfirmationModal' | 'children' | 'confirmationConfig'>
-    > {
+    extends Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle' | 'children' | 'confirmationConfig'>> {
     // Required Props
     /**
      * Function to close the confirmation modal.
@@ -167,9 +161,7 @@ export interface DeleteConfirmationModalProps
  */
 export interface CannotDeleteModalProps
     extends Partial<Pick<DeleteConfirmationModalProps, 'component' | 'closeConfirmationModal'>>,
-        Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle'>> {
-    showCannotDeleteDialogModal: boolean
-}
+        Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle'>> {}
 
 /**
  * Props for the ForceDeleteConfirmation component.
@@ -177,12 +169,10 @@ export interface CannotDeleteModalProps
  * and `ConfirmationModalProps` to configure the force delete confirmation modal.
  */
 export interface ForceDeleteConfirmationProps
-    extends Partial<
-            Pick<DeleteConfirmationModalProps, 'onDelete' | 'showConfirmationModal' | 'closeConfirmationModal'>
-        >,
+    extends Partial<Pick<DeleteConfirmationModalProps, 'onDelete' | 'closeConfirmationModal'>>,
         Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle'>> {}
 
 export interface ConfirmationModalContextType {
-    props: Omit<ConfirmationModalProps, 'showConfirmationModal'> | null
+    props: ConfirmationModalProps | null
     setProps: Dispatch<SetStateAction<ConfirmationModalContextType['props']>>
 }

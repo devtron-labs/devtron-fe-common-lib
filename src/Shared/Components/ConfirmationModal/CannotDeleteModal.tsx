@@ -1,13 +1,7 @@
 import ConfirmationModal from './ConfirmationModal'
 import { ConfirmationModalVariantType, CannotDeleteModalProps } from './types'
 
-export const CannotDeleteModal = ({
-    title,
-    component,
-    subtitle,
-    closeConfirmationModal,
-    showCannotDeleteDialogModal,
-}: CannotDeleteModalProps) => (
+export const CannotDeleteModal = ({ title, component, subtitle, closeConfirmationModal }: CannotDeleteModalProps) => (
     <ConfirmationModal
         variant={ConfirmationModalVariantType.info}
         title={`Cannot delete ${component} '${title}'`}
@@ -18,7 +12,6 @@ export const CannotDeleteModal = ({
                 onClick: closeConfirmationModal,
             },
         }}
-        showConfirmationModal={showCannotDeleteDialogModal}
         handleClose={closeConfirmationModal}
     />
 )

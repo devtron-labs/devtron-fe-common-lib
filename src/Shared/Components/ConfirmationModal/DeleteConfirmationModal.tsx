@@ -32,7 +32,6 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
     isDeleting,
     onDelete,
     onError,
-    showConfirmationModal,
     closeConfirmationModal,
     confirmationConfig,
     // Additional UI-related logic
@@ -88,7 +87,6 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
         <CannotDeleteModal
             title={title}
             subtitle={cannotDeleteText}
-            showCannotDeleteDialogModal={showCannotDeleteDialogModal}
             closeConfirmationModal={handleCloseCannotDeleteModal}
             component={component}
         />
@@ -100,7 +98,6 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
             subtitle={subtitle}
             onDelete={onDelete}
             closeConfirmationModal={handleCloseForceDeleteModal}
-            showConfirmationModal={showForceDeleteModal}
         />
     )
 
@@ -121,7 +118,6 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
                     disabled: isLoading || disabled,
                 },
             }}
-            showConfirmationModal={showConfirmationModal}
             handleClose={closeConfirmationModal}
             confirmationConfig={confirmationConfig}
         >
