@@ -70,7 +70,9 @@ export const DeploymentHistoryConfigDiffCompare = ({
         // Set fullscreen for comparing deployment history config
         setFullScreenView(true)
         // Set default initial sorting
-        handleSorting(DEPLOYMENT_CONFIG_DIFF_SORT_KEY)
+        if (sortBy !== DEPLOYMENT_CONFIG_DIFF_SORT_KEY) {
+            handleSorting(DEPLOYMENT_CONFIG_DIFF_SORT_KEY)
+        }
 
         return () => {
             setConvertVariables(false)

@@ -1,4 +1,4 @@
-import { TextareaHTMLAttributes, useRef } from 'react'
+import { TextareaHTMLAttributes, useEffect, useRef, useState } from 'react'
 import {
     COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP,
     COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP,
@@ -29,9 +29,13 @@ const Textarea = ({
     borderRadiusConfig,
     labelTooltipConfig,
     labelTippyCustomizedConfig,
+    value,
     ...props
 }: TextareaProps) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null)
+    // If the passed value remains the same, the component will behave as un-controlled
+    // else, it behaves as controlled
+    const [text, setText] = useState('')
 
     const updateRefsHeight = (height: number) => {
         const refElement = textareaRef.current
@@ -59,7 +63,17 @@ const Textarea = ({
         updateRefsHeight(nextHeight)
     }
 
-    useThrottledEffect(reInitHeight, 300, [props.value])
+    useEffect(() => {
+        setText(value)
+    }, [value])
+
+    useThrottledEffect(reInitHeight, 300, [text])
+
+    const handleChange: TextareaProps['onChange'] = (e) => {
+        setText(e.target.value)
+
+        props.onChange?.(e)
+    }
 
     const handleBlur: TextareaProps['onBlur'] = (event) => {
         // NOTE: This is to prevent the input from being trimmed when the user do not want to trim the input
@@ -117,6 +131,8 @@ const Textarea = ({
                 spellCheck={false}
                 data-testid={name}
                 required={required}
+                value={text}
+                onChange={handleChange}
                 onBlur={handleBlur}
                 onKeyDown={handleKeyDown}
                 className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${getFormFieldBorderClassName(borderRadiusConfig)} w-100 dc__overflow-auto textarea`}
