@@ -66,7 +66,7 @@ export const getAppEnvDeploymentConfig = ({
     params: AppEnvDeploymentConfigPayloadType
     signal?: AbortSignal
     isTemplateView: AppConfigProps['isTemplateView']
-    appId: string | number
+    appId: string | number | null
 }): Promise<ResponseType<AppEnvDeploymentConfigDTO>> => {
     const url = isTemplateView
         ? getTemplateAPIRoute({

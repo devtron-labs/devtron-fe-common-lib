@@ -89,7 +89,7 @@ export const URLS = {
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_CREATE: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/create`,
     // NOTE: using appId since we are re-using AppConfig component
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
-}
+} as const
 
 export const ROUTES = {
     APP: 'app',
@@ -148,7 +148,8 @@ export const ROUTES = {
     CD_TRIGGER_POST: 'app/cd-pipeline/trigger',
     DELETE_RESOURCE: 'k8s/resource/delete',
     NODE_CAPACITY: 'k8s/capacity/node',
-}
+    RESOURCE_TEMPLATE: 'resource/template',
+} as const
 
 export enum KEY_VALUE {
     KEY = 'key',
