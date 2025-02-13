@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-.deployment-history-diff-view {
-    & .react-monaco-editor-container {
-        min-height: 100px;
-    }
+export const TEXTAREA_CONSTRAINTS = {
+    MIN_HEIGHT: 76,
+    AUTO_EXPANSION_MAX_HEIGHT: 140,
 }

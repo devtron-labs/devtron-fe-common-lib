@@ -14,21 +14,4 @@
  * limitations under the License.
  */
 
-export interface DeleteComponentProps {
-    /**
-     * @deprecated - Delete component internally handles loading for the `Delete Button`.
-     */
-    setDeleting?: (boolean) => void
-    toggleConfirmation: any
-    deleteComponent: (any) => Promise<any>
-    title: string
-    component: string
-    payload: any
-    confirmationDialogDescription?: string
-    redirectTo?: boolean
-    url?: string
-    reload?: () => void
-    configuration?: string
-    dataTestid?: string
-    closeCustomComponent?: () => void
-}
+export * from './ClipboardButton'

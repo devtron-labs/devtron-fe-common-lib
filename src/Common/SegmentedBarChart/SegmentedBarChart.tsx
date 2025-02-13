@@ -15,6 +15,7 @@
  */
 
 import React from 'react'
+import { motion } from 'framer-motion'
 import { SegmentedBarChartProps, Entity } from './types'
 import { FALLBACK_ENTITY } from './constants'
 import './styles.scss'
@@ -26,9 +27,10 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     labelClassName,
     isProportional,
     swapLegendAndBar = false,
+    showAnimationOnBar = false,
 }) => {
     const total = entities.reduce((sum, entity) => entity.value + sum, 0)
-    const filteredEntities = entities.filter((entity) => entity.value)
+    const filteredEntities = entities.filter((entity) => !!entity.value)
 
     const calcSegmentWidth = (entity: Entity) => `${(entity.value / total) * 100}%`
 
@@ -46,20 +48,20 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
 
     const renderContent = () => {
         if (isProportional) {
-            return entities
-                .filter((entity) => !!entity.value)
-                .map((entity) => (
-                    <div className="flexbox-col">
-                        {renderValue(entity.value, entity.label)}
-                        <div className="flex left dc__gap-6">
-                            <span style={{ backgroundColor: entity.color }} className="h-12 dc__border-radius-2 w-4" />
-                            {renderLabel(entity.label)}
-                        </div>
+            return filteredEntities.map((entity, idx) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={idx} className="flexbox-col">
+                    {renderValue(entity.value, entity.label)}
+                    <div className="flex left dc__gap-6">
+                        <span style={{ backgroundColor: entity.color }} className="h-12 dc__border-radius-2 w-4" />
+                        {renderLabel(entity.label)}
                     </div>
-                ))
+                </div>
+            ))
         }
-        return entities.map((entity) => (
-            <div className={`${isProportional ? 'flexbox-col' : 'flexbox  dc__gap-4 dc__align-items-center'}`}>
+        return entities.map((entity, idx) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <div key={idx} className="flexbox  dc__gap-4 dc__align-items-center">
                 <div className="dot" style={{ backgroundColor: entity.color, width: '10px', height: '10px' }} />
                 {renderValue(entity.value, entity.label)}
                 {renderLabel(entity.label)}
@@ -78,8 +80,17 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     )
 
     const renderBar = () => (
-        <div className="flexbox dc__gap-2">
-            {filteredEntities?.map((entity, index, map) => (
+        <motion.div
+            {...(showAnimationOnBar
+                ? {
+                      initial: { width: 0 },
+                      animate: { width: '100%' },
+                      transition: { duration: 0.6 },
+                  }
+                : {})}
+            className="flexbox dc__gap-2"
+        >
+            {filteredEntities.map((entity, index, map) => (
                 <div
                     key={entity.label}
                     className={`h-8 ${index === 0 ? 'dc__left-radius-4' : ''} ${
@@ -88,7 +99,7 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
                     style={{ backgroundColor: entity.color, width: calcSegmentWidth(entity) }}
                 />
             ))}
-        </div>
+        </motion.div>
     )
 
     return (

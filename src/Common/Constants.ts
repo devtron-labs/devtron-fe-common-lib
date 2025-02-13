@@ -78,7 +78,6 @@ export const URLS = {
     GLOBAL_CONFIG_SCOPED_VARIABLES: '/global-config/scoped-variables',
     GLOBAL_CONFIG_DEPLOYMENT_CHARTS_LIST: '/global-config/deployment-charts',
     NETWORK_STATUS_INTERFACE: '/network-status-interface',
-    CONFIG_DRIFT: 'config-drift',
     RESOURCE_BROWSER: '/resource-browser',
     COMPARE_CLUSTERS: '/compare-clusters',
 }

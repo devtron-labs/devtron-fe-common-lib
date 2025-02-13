@@ -16,7 +16,7 @@
 
 import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { CustomInput, noop, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
+import { CustomInput, noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
@@ -81,18 +81,22 @@ const ConfirmationModalBody = ({
                 exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}
                 initial={{ y: 100, opacity: 0, scale: 0.75 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
+                onClick={stopPropagation}
             >
-                <div className="flexbox-col dc__gap-12 p-20">
+                <div className="flexbox-col dc__gap-16 p-20">
                     {cloneElement(RenderIcon, {
                         className: `${RenderIcon.props?.className ?? ''} icon-dim-48 dc__no-shrink`,
                     })}
-                    <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
 
-                    {typeof subtitle === 'string' ? (
-                        <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
-                    ) : (
-                        subtitle
-                    )}
+                    <div className="flexbox-col dc__gap-8">
+                        <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
+
+                        {typeof subtitle === 'string' ? (
+                            <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
+                        ) : (
+                            subtitle
+                        )}
+                    </div>
 
                     {children}
 
@@ -109,7 +113,7 @@ const ConfirmationModalBody = ({
                         />
                     )}
                 </div>
-                <div className="p-16 dc__gap-12 flexbox dc__content-end">
+                <div className="px-20 py-16 dc__gap-12 flexbox dc__content-end">
                     {secondaryButtonConfig && (
                         <Button
                             dataTestId="confirmation-modal-secondary-button"

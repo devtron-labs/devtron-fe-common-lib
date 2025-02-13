@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { WorkflowStatusEnum } from '@Shared/types'
 import { TIMELINE_STATUS } from '../../Shared/constants'
 
 export const triggerStatus = (triggerDetailStatus: string): string => {
@@ -28,4 +29,12 @@ export const triggerStatus = (triggerDetailStatus: string): string => {
         return 'Inprogress'
     }
     return triggerDetailStatus
+}
+
+export const parseJobStatus = (status: string): string => {
+    if (status === WorkflowStatusEnum.WAITING_TO_START) {
+        return 'Waiting to start'
+    }
+
+    return status
 }
