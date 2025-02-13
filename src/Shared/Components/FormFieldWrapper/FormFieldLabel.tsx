@@ -38,7 +38,7 @@ const FormFieldLabel = ({
 
     const labelId = getFormLabelElementId(inputId)
     const isRowLayout = layout === 'row'
-    const showTooltip = !!labelTooltipConfig?.content
+    const showTooltip = isRowLayout && !!labelTooltipConfig?.content
 
     const wrapWithTooltip = (children: ReactElement) => (
         <Tooltip
