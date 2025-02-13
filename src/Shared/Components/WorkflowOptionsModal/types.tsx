@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AppConfigProps, GetTemplateAPIRouteProps } from '@Pages/index'
+import { AppConfigProps } from '@Pages/index'
 import { ChangeCIPayloadType, CIPipelineNodeType, WorkflowType } from '@Shared/types'
 
 interface LinkedCDSourceVariant {
@@ -45,5 +45,4 @@ export interface WorkflowOptionsModalProps extends Required<Pick<AppConfigProps,
     getWorkflows?: () => void
     linkedCDSourceVariant?: LinkedCDSourceVariant
     isAppGroup?: boolean
-    getTemplateAPIRoute: (props: GetTemplateAPIRouteProps) => string
 }

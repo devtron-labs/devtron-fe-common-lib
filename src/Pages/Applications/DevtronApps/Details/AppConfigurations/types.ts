@@ -70,6 +70,7 @@ export enum GetTemplateAPIRouteType {
     CD_DEPLOY_CONFIG = 'cd-deploy-config',
     CD_ENV_LIST = 'cd-env-list',
     CONFIG_DEPLOYMENT_TEMPLATE = 'config/deployment-template',
+    CONFIG_DATA = 'config-data',
     CONFIG_CM = 'config/config-map',
     CONFIG_CS = 'config/secret',
     WORKFLOW_LIST = 'workflow/list',

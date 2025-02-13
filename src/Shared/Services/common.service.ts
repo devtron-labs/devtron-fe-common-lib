@@ -15,9 +15,9 @@
  */
 
 import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
-import { WorkflowOptionsModalProps } from '@Shared/Components/WorkflowOptionsModal/types'
 import { getUrlWithSearchParams, post, ROUTES } from '../../Common'
 import { GetPolicyApiUrlProps, GetResourceApiUrlProps } from './types'
+import { getTemplateAPIRoute } from '..'
 
 export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryParams }: GetResourceApiUrlProps<T>) =>
     getUrlWithSearchParams(`${baseUrl}/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
@@ -25,13 +25,7 @@ export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryPara
 export const getPolicyApiUrl = <T>({ kind, version, queryParams, suffix }: GetPolicyApiUrlProps<T>) =>
     getUrlWithSearchParams(`global/policy/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
 
-export const saveCDPipeline = (
-    request,
-    {
-        getTemplateAPIRoute,
-        isTemplateView,
-    }: Pick<WorkflowOptionsModalProps, 'getTemplateAPIRoute'> & Required<Pick<AppConfigProps, 'isTemplateView'>>,
-) => {
+export const saveCDPipeline = (request, { isTemplateView }: Required<Pick<AppConfigProps, 'isTemplateView'>>) => {
     const url = isTemplateView
         ? getTemplateAPIRoute({
               type: GetTemplateAPIRouteType.CD_PIPELINE,
