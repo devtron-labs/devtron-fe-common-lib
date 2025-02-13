@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
 import { ROUTES, ResponseType, get, getUrlWithSearchParams, showError } from '../../Common'
 import {
     CIMaterialInfoDTO,
@@ -23,6 +24,7 @@ import {
     AppEnvDeploymentConfigPayloadType,
 } from './app.types'
 import { getParsedCIMaterialInfo } from './utils'
+import { getTemplateAPIRoute } from '..'
 
 export const getCITriggerInfo = async (params: GetCITriggerInfoParamsType): Promise<CIMaterialInfoType> => {
     try {
@@ -58,11 +60,26 @@ export const getArtifactInfo = async (
 export const getAppEnvDeploymentConfig = ({
     params,
     signal,
+    isTemplateView,
+    appId,
 }: {
     params: AppEnvDeploymentConfigPayloadType
     signal?: AbortSignal
-}): Promise<ResponseType<AppEnvDeploymentConfigDTO>> =>
-    get(getUrlWithSearchParams(ROUTES.CONFIG_DATA, params), { signal })
+    isTemplateView: AppConfigProps['isTemplateView']
+    appId: string | number | null
+}): Promise<ResponseType<AppEnvDeploymentConfigDTO>> => {
+    const url = isTemplateView
+        ? getTemplateAPIRoute({
+              type: GetTemplateAPIRouteType.CONFIG_DATA,
+              queryParams: {
+                  id: appId,
+                  ...params,
+              },
+          })
+        : getUrlWithSearchParams(ROUTES.CONFIG_DATA, params)
+
+    return get(url, { signal })
+}
 
 export const getCompareSecretsData = async (
     params: AppEnvDeploymentConfigPayloadType[],

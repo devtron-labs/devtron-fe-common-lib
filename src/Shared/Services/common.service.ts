@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
+import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
 import { getUrlWithSearchParams, post, ROUTES } from '../../Common'
 import { GetPolicyApiUrlProps, GetResourceApiUrlProps } from './types'
+import { getTemplateAPIRoute } from '..'
 
 export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryParams }: GetResourceApiUrlProps<T>) =>
     getUrlWithSearchParams(`${baseUrl}/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
@@ -23,4 +25,15 @@ export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryPara
 export const getPolicyApiUrl = <T>({ kind, version, queryParams, suffix }: GetPolicyApiUrlProps<T>) =>
     getUrlWithSearchParams(`global/policy/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
 
-export const saveCDPipeline = (request) => post(ROUTES.CD_CONFIG, request)
+export const saveCDPipeline = (request, { isTemplateView }: Required<Pick<AppConfigProps, 'isTemplateView'>>) => {
+    const url = isTemplateView
+        ? getTemplateAPIRoute({
+              type: GetTemplateAPIRouteType.CD_PIPELINE,
+              queryParams: {
+                  id: request.appId,
+              },
+          })
+        : ROUTES.CD_CONFIG
+
+    return post(url, request)
+}

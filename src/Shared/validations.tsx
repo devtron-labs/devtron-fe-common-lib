@@ -39,7 +39,7 @@ export const MESSAGES = {
     DATE_BEFORE_CURRENT_TIME: 'The date & time cannot be before the current time',
 }
 
-const MAX_DESCRIPTION_LENGTH = 350
+export const MAX_DESCRIPTION_LENGTH = 350
 const DISPLAY_NAME_CONSTRAINTS = {
     MAX_LIMIT: 50,
     MIN_LIMIT: 3,
