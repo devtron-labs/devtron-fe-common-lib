@@ -21,8 +21,9 @@ import { ComponentSizeType } from '@Shared/constants'
 import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
-import './confirmationModal.scss'
 import { Backdrop } from '../Backdrop'
+import { useConfirmationModalContext } from './ConfirmationModalContext'
+import './confirmationModal.scss'
 
 const ConfirmationModalBody = ({
     title,
@@ -156,14 +157,40 @@ const ConfirmationModalBody = ({
     )
 }
 
-const ConfirmationModal = ({ showConfirmationModal, ...props }: ConfirmationModalProps) => (
-    <AnimatePresence>{showConfirmationModal ? <ConfirmationModalBody {...props} /> : null}</AnimatePresence>
-)
+/**
+ * NOTE: In some cases, we use a boolean useState to render Modals.
+ * This approach can cause issues with the animation of ConfirmationModals,
+ * as the animation requires the ConfirmationModal to remain mounted,
+ * and only toggle the showConfirmationModal prop to true when it needs to be displayed.
+ * This implementation serves as a workaround to allow modals to function as required.
+ *
+ * Please see NodeActionMenu.tsx as an example of why this is required
+ */
+export const BaseConfirmationModal = () => {
+    const { props } = useConfirmationModalContext()
 
-const WrapWithShortcutProvider = (props: ConfirmationModalProps) => (
-    <UseRegisterShortcutProvider ignoreTags={['button']}>
-        <ConfirmationModal {...props} />
-    </UseRegisterShortcutProvider>
-)
+    return (
+        <UseRegisterShortcutProvider ignoreTags={['button']}>
+            <AnimatePresence>{props && <ConfirmationModalBody {...props} />}</AnimatePresence>
+        </UseRegisterShortcutProvider>
+    )
+}
 
-export default WrapWithShortcutProvider
+const ConfirmationModal = ({ showConfirmationModal, ...props }: ConfirmationModalProps) => {
+    const { setProps } = useConfirmationModalContext()
+
+    useEffect(() => {
+        setProps(showConfirmationModal ? props : null)
+    }, [showConfirmationModal])
+
+    useEffect(
+        () => () => {
+            setProps(null)
+        },
+        [],
+    )
+
+    return null
+}
+
+export default ConfirmationModal
