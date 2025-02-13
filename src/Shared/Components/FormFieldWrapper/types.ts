@@ -56,10 +56,8 @@ export type FormFieldLabelProps<Layout extends LayoutType = LayoutType> = LabelO
               /**
                * Tippy configuration for the label in column layout
                */
-              labelTippyCustomizedConfig?: Pick<
-                  TippyCustomizedProps,
-                  'heading' | 'infoText' | 'documentationLink' | 'documentationLinkText'
-              >
+              labelTippyCustomizedConfig?: Required<Pick<TippyCustomizedProps, 'heading' | 'infoText'>> &
+                  Pick<TippyCustomizedProps, 'documentationLink' | 'documentationLinkText'>
           })
 
 export interface FormFieldInfoProps extends Pick<FormFieldLabelProps, 'inputId'> {
