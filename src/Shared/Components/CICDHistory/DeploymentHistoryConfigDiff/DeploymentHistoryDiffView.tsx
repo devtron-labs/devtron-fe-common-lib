@@ -78,7 +78,8 @@ const DeploymentHistoryDiffView = ({
             <CodeEditor
                 key={codeEditorKey}
                 value={editorValuesRHS}
-                height="auto"
+                defaultValue={editorValuesLHS}
+                adjustEditorHeightToContent
                 disableSearch
                 readOnly
                 noParsing
