@@ -19,6 +19,9 @@ import { InfoColourBarType } from '../Types'
 import { Tooltip } from '@Common/Tooltip'
 import './infoColourBar.scss'
 
+/**
+ * @deprecated Use InfoBlock instead
+ */
 const InfoColourBar = ({
     message,
     classname,

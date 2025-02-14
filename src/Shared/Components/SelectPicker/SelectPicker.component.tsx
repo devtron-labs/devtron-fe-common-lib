@@ -26,7 +26,7 @@ import { ReactElement, useCallback, useMemo, useState } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
-import { isNullOrUndefined } from '@Shared/Helpers'
+import { deriveBorderRadiusAndBorderClassFromConfig, isNullOrUndefined } from '@Shared/Helpers'
 import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
 import {
     SelectPickerMultiValueLabel,
@@ -45,7 +45,6 @@ import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } fr
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
 import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
-import { getFormFieldBorderClassName } from '../FormFieldWrapper/utils'
 
 /**
  * Generic component for select picker
@@ -219,6 +218,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     warningText,
     layout,
     ariaLabel,
+    borderConfig,
     borderRadiusConfig,
     labelTippyCustomizedConfig,
     labelTooltipConfig,
@@ -383,6 +383,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             required={required}
             fullWidth={fullWidth}
             ariaLabel={ariaLabel}
+            borderConfig={borderConfig}
             borderRadiusConfig={borderRadiusConfig}
             labelTippyCustomizedConfig={labelTippyCustomizedConfig}
             labelTooltipConfig={labelTooltipConfig}
@@ -400,7 +401,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             helperText,
                         })}
                         classNames={{
-                            control: () => getFormFieldBorderClassName(borderRadiusConfig),
+                            control: () =>
+                                deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig }),
                         }}
                         name={name || inputId}
                         classNamePrefix={classNamePrefix || inputId}

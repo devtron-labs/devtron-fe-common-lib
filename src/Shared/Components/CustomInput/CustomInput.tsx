@@ -21,7 +21,7 @@ import {
     COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP,
     ComponentSizeType,
 } from '@Shared/constants'
-import { getFormFieldBorderClassName } from '@Shared/Components/FormFieldWrapper/utils'
+import { deriveBorderRadiusAndBorderClassFromConfig } from '@Shared/Helpers'
 import { CustomInputProps } from './types'
 import { Button, ButtonProps, ButtonStyleType, ButtonVariantType } from '../Button'
 import { CUSTOM_INPUT_TO_ICON_BUTTON_SIZE_MAP } from './constants'
@@ -40,6 +40,7 @@ const CustomInput = ({
     shouldTrim = true,
     size = ComponentSizeType.large,
     ariaLabel,
+    borderConfig,
     borderRadiusConfig,
     type = 'text',
     autoFocus = false,
@@ -99,6 +100,7 @@ const CustomInput = ({
             required={required}
             fullWidth={fullWidth}
             ariaLabel={ariaLabel}
+            borderConfig={borderConfig}
             borderRadiusConfig={borderRadiusConfig}
             labelTippyCustomizedConfig={labelTippyCustomizedConfig}
             labelTooltipConfig={labelTooltipConfig}
@@ -124,7 +126,7 @@ const CustomInput = ({
                     onKeyDown={handleKeyDown}
                     type={type}
                     ref={inputRef}
-                    className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${getFormFieldBorderClassName(borderRadiusConfig)} ${endIconButtonConfig ? `custom-input__with-icon-button--${size}` : ''} w-100 dc__overflow-auto`}
+                    className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig })} ${endIconButtonConfig ? `custom-input__with-icon-button--${size}` : ''} w-100 dc__overflow-auto`}
                 />
                 {endIconButtonConfig && (
                     <div className={`dc__no-shrink dc__position-abs custom-input__icon-button--${size}`}>

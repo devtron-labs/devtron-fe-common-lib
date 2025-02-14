@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { FormFieldInfoProps, FormFieldLabelProps, FormFieldWrapperProps } from './types'
+import { FormFieldInfoProps, FormFieldLabelProps } from './types'
 
 export const getFormErrorElementId = (inputId: FormFieldLabelProps['inputId']) => `${inputId}-error-msg`
 
@@ -53,9 +53,3 @@ export const getFormFieldAriaAttributes = ({
               'aria-label': ariaLabel,
           }),
 })
-
-export const getFormFieldBorderClassName = (borderRadiusConfig: FormFieldWrapperProps['borderRadiusConfig'] = {}) => {
-    const { top = true, right = true, bottom = true, left = true } = borderRadiusConfig
-
-    return `${!top ? 'dc__no-top-radius' : ''} ${!right ? 'dc__no-right-radius' : ''} ${!bottom ? 'dc__no-bottom-radius' : ''} ${!left ? 'dc__no-left-radius' : ''}`
-}
