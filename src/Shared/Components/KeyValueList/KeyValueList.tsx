@@ -68,6 +68,9 @@ const KeyValueItem = ({
                     value={itemKey}
                     disabled={isDisabled}
                     onChange={handleKeyUpdate}
+                    borderRadiusConfig={{
+                        bottom: false,
+                    }}
                 />
                 <Textarea
                     name={`item-value-${index}`}
@@ -75,6 +78,9 @@ const KeyValueItem = ({
                     placeholder={valuePlaceholder}
                     onChange={handleValueUpdate}
                     disabled={isDisabled}
+                    borderRadiusConfig={{
+                        top: false,
+                    }}
                 />
             </div>
 
