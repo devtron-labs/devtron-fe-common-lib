@@ -213,6 +213,7 @@ export const DeploymentConfigDiffMain = ({
                                 </div>
                             )}
                             <DeploymentHistoryDiffView
+                                codeEditorKey={`${sortingConfig?.sortBy}-${sortingConfig?.sortOrder}-${scopeVariablesConfig?.convertVariables}`}
                                 baseTemplateConfiguration={secondaryList}
                                 currentConfiguration={primaryList}
                                 previousConfigAvailable
