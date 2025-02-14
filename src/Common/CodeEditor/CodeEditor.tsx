@@ -85,6 +85,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         onFocus,
         adjustEditorHeightToContent = false,
         disableSearch = false,
+        originalEditable = false,
     }) => {
         const { appTheme } = useTheme()
 
@@ -214,10 +215,11 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
 
                 setContentHeight(Math.max(originalEditor.getContentHeight(), modifiedEditor.getContentHeight()))
             }
-
-            originalEditor.onDidChangeModelContent(() => {
-                codeEditorOnChange(modifiedEditor.getValue(), originalEditor.getValue())
-            })
+            if (originalEditable) {
+                originalEditor.onDidChangeModelContent(() => {
+                    codeEditorOnChange(modifiedEditor.getValue(), originalEditor.getValue())
+                })
+            }
 
             editorRef.current = editor
             monacoRef.current = monaco
@@ -340,7 +342,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
 
         const diffViewOptions: monaco.editor.IDiffEditorConstructionOptions = {
             ...options,
-            originalEditable: !readOnly,
+            originalEditable: originalEditable && !readOnly,
             useInlineViewWhenSpaceIsLimited: false,
         }
 
