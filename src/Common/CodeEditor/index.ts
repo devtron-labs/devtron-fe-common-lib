@@ -15,4 +15,4 @@
  */
 
 export { default as CodeEditor } from './CodeEditor'
-export type { CodeEditorProps } from './types'
+export * from './types'

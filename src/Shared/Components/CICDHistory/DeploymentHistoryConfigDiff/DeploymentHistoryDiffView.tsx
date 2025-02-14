@@ -19,18 +19,21 @@ import { useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { DiffViewer } from '@Shared/Components/DiffViewer'
 import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
-import { CodeEditor, MODES, Toggle, YAMLStringify } from '../../../../Common'
+import { MODES, Toggle, YAMLStringify } from '../../../../Common'
 import { DeploymentHistoryParamsType } from './types'
 import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../types'
+import CodeEditor from '../../../../Common/CodeEditor/CodeEditor'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
 import { ReactComponent as Info } from '../../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ViewVariablesIcon } from '../../../../Assets/Icon/ic-view-variable-toggle.svg'
+import './styles.scss'
 
 const DeploymentHistoryDiffView = ({
     currentConfiguration,
     baseTemplateConfiguration,
     previousConfigAvailable,
     rootClassName,
+    codeEditorKey,
 }: DeploymentTemplateHistoryType) => {
     const { historyComponent, historyComponentName } = useParams<DeploymentHistoryParamsType>()
 
@@ -73,7 +76,16 @@ const DeploymentHistoryDiffView = ({
                 codeFoldMessageRenderer={renderDiffViewNoDifferenceState(editorValuesLHS, editorValuesRHS)}
             />
         ) : (
-            <CodeEditor value={editorValuesRHS} height="auto" disableSearch readOnly noParsing mode={MODES.YAML} />
+            <CodeEditor
+                key={codeEditorKey}
+                value={editorValuesRHS}
+                defaultValue={editorValuesLHS}
+                adjustEditorHeightToContent
+                disableSearch
+                readOnly
+                noParsing
+                mode={MODES.YAML}
+            />
         )
 
     const handleShowVariablesClick = () => {
@@ -96,7 +108,7 @@ const DeploymentHistoryDiffView = ({
     )
 
     return (
-        <div>
+        <div className="deployment-history-diff-view">
             {!previousConfigAvailable && (
                 <div className="bcb-1 eb-2 pt-8 pb-8 br-4 flexbox pl-4 cn-9 fs-13 mt-16 mb-16 mr-20 ml-20">
                     <Info className="mr-8 ml-14 icon-dim-20" />

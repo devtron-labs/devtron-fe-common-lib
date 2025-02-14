@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-import { createContext, useContext } from 'react'
+import { AppThemeType } from '@Shared/Providers'
+import { CodeEditorInterface, CodeEditorThemesKeys } from './types'
 
-import { CodeEditorContextProps } from './types'
-
-export const CodeEditorContext = createContext<CodeEditorContextProps>(null)
-
-export const useCodeEditorContext = () => {
-    const context = useContext(CodeEditorContext)
-    if (!context) {
-        throw new Error(`cannot be rendered outside the component`)
+export const getCodeEditorThemeFromAppTheme = (
+    editorTheme: CodeEditorInterface['theme'],
+    appTheme: AppThemeType,
+): CodeEditorInterface['theme'] => {
+    if (!editorTheme) {
+        const editorThemeBasedOnAppTheme =
+            appTheme === AppThemeType.dark ? CodeEditorThemesKeys.vsDarkDT : CodeEditorThemesKeys.vs
+        return editorThemeBasedOnAppTheme
     }
-    return context
+
+    return editorTheme
 }

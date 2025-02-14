@@ -604,6 +604,7 @@ export interface DeploymentTemplateHistoryType {
     baseTemplateConfiguration: DeploymentHistoryDetail
     previousConfigAvailable: boolean
     rootClassName?: string
+    codeEditorKey?: React.Key
 }
 export interface DeploymentHistoryDetailRes extends ResponseType {
     result?: DeploymentHistoryDetail
