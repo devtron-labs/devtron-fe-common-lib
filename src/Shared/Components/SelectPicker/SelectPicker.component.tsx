@@ -45,6 +45,7 @@ import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } fr
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
 import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
+import { getFormFieldBorderClassName } from '../FormFieldWrapper/utils'
 
 /**
  * Generic component for select picker
@@ -382,7 +383,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             required={required}
             fullWidth={fullWidth}
             ariaLabel={ariaLabel}
-            // TODO: Add support for custom border radius with Select refactoring
             borderRadiusConfig={borderRadiusConfig}
             labelTippyCustomizedConfig={labelTippyCustomizedConfig}
             labelTooltipConfig={labelTooltipConfig}
@@ -399,6 +399,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             error,
                             helperText,
                         })}
+                        classNames={{
+                            control: () => getFormFieldBorderClassName(borderRadiusConfig),
+                        }}
                         name={name || inputId}
                         classNamePrefix={classNamePrefix || inputId}
                         isSearchable={isSelectSearchable}
