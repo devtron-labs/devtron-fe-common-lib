@@ -390,8 +390,10 @@ SCHEMA_07_VALIDATOR_STRICT.ajv.addKeyword('hidden')
 SCHEMA_07_VALIDATOR_STRICT.ajv.addFormat('memory', /^\d+(\.\d+)?(Ki|Mi|Gi|Ti|Pi|Ei|KiB|MiB|GiB|TiB|PiB|EiB)?$/)
 SCHEMA_07_VALIDATOR_STRICT.ajv.addFormat('cpu', /^(?:\d+(\.\d+)?|(\d+)(m))$/)
 
-const SCHEMA_07_VALIDATOR = customizeValidator({ ajvOptionsOverrides: { strict: false } })
+export const SCHEMA_07_VALIDATOR = customizeValidator({ ajvOptionsOverrides: { strict: false } })
 SCHEMA_07_VALIDATOR.ajv.addKeyword('hidden')
+SCHEMA_07_VALIDATOR.ajv.addFormat('memory', /^\d+(\.\d+)?(Ki|Mi|Gi|Ti|Pi|Ei|KiB|MiB|GiB|TiB|PiB|EiB)?$/)
+SCHEMA_07_VALIDATOR.ajv.addFormat('cpu', /^(?:\d+(\.\d+)?|(\d+)(m))$/)
 
 export const doesJSONConformToSchema07 = (json: string, strict = false): ValidationResponseType => {
     try {
