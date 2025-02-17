@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { exec } = require('child_process')
+const { execFile } = require('child_process')
 
 // Base path relative to the current script
 const basePath = path.resolve(__dirname, '../src')
@@ -10,7 +10,7 @@ const iconsDir = path.join(basePath, 'Assets', 'IconV2')
 const outputFile = path.join(basePath, 'Shared', 'Components', 'Icon', 'Icon.tsx')
 
 const runESLint = (filePath) => {
-    exec(`npx eslint ${filePath} --fix`, (error, stdout, stderr) => {
+    execFile('npx', ['eslint', filePath, '--fix'], (error, stdout, stderr) => {
         if (error) {
             console.error(`Error running ESLint: ${error.message}`)
             return
