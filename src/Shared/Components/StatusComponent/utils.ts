@@ -1,4 +1,6 @@
 import { TIMELINE_STATUS } from '@Shared/constants'
+import { WorkflowStatusEnum } from '@Shared/types'
+
 import { IconName, IconsProps } from '../Icon'
 import { StatusType } from './types'
 
@@ -45,6 +47,7 @@ export const getIconName = (status: string, showAnimatedIcon: boolean): IconName
         case 'starting':
             return 'ic-circle-loader'
         case 'inprogress':
+        case 'waiting-to-start':
             return 'ic-in-progress'
         case 'hibernating':
         case 'hibernated':
@@ -95,4 +98,12 @@ export const getDeploymentStatusFromStatus = (status: string): string => {
         default:
             return status
     }
+}
+
+export const getJobStatusFromStatus = (status: string): string => {
+    if (status === WorkflowStatusEnum.WAITING_TO_START) {
+        return 'Waiting to start'
+    }
+
+    return status
 }

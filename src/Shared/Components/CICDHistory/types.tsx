@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CSSProperties, ReactElement } from 'react'
+import { CSSProperties, ReactElement, ReactNode } from 'react'
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import {
     OptionType,
@@ -38,7 +38,6 @@ import {
     ResourceVersionType,
     TargetPlatformsDTO,
 } from '../../types'
-import { TERMINAL_STATUS_MAP } from './constants'
 import { TargetPlatformBadgeListProps } from '../TargetPlatforms'
 
 export enum HistoryComponentType {
@@ -112,7 +111,46 @@ export interface TargetConfigType {
     releaseChannelName?: string
 }
 
-export interface History extends Pick<TargetPlatformsDTO, 'targetPlatforms'> {
+export enum WorkflowExecutionStageType {
+    WORKFLOW = 'workflow',
+    POD = 'pod',
+}
+
+export enum WorkflowStageStatusType {
+    NOT_STARTED = 'NOT_STARTED',
+    RUNNING = 'RUNNING',
+    SUCCEEDED = 'SUCCEEDED',
+    FAILED = 'FAILED',
+    ABORTED = 'ABORTED',
+    TIMEOUT = 'TIMEOUT',
+    UNKNOWN = 'UNKNOWN',
+}
+
+export enum WorkflowExecutionStageNameType {
+    PREPARATION = 'Preparation',
+    EXECUTION = 'Execution',
+}
+
+interface WorkflowExecutionStageCommonDTO {
+    status: WorkflowStageStatusType
+    stageName: WorkflowExecutionStageNameType
+    startTime: string
+    endTime: string
+    message: string
+}
+
+export interface PodExecutionStageDTO extends WorkflowExecutionStageCommonDTO {
+    metadata: {
+        clusterId?: number
+    }
+}
+
+export interface WorkflowExecutionStagesMapDTO {
+    workflowExecutionStages: Record<WorkflowExecutionStageType.WORKFLOW, WorkflowExecutionStageCommonDTO[]> &
+        Record<WorkflowExecutionStageType.POD, PodExecutionStageDTO[]>
+}
+
+export interface History extends Pick<TargetPlatformsDTO, 'targetPlatforms'>, WorkflowExecutionStagesMapDTO {
     id: number
     name: string
     status: string
@@ -149,6 +187,29 @@ export interface History extends Pick<TargetPlatformsDTO, 'targetPlatforms'> {
     targetConfig?: TargetConfigType
 }
 
+export interface ExecutionInfoType {
+    /**
+     * Triggered is assumed to be true always, so status will be Succeeded
+     * Extracted from Preparation start time, if there, in case of old data this will be execution start time
+     * If triggeredOn is not there will not show startTime next to Triggered label but will show other details if possible like commit info, etc.
+     * and capture error on sentry
+     */
+    triggeredOn: string
+    /**
+     * Extracted from startTime from Execution stage (since will work in both old and new format)
+     * If this is not given then, we won't be showing Execution started field
+     * If preparation field has failed, then we will be using finishedOn field to show the status
+     */
+    executionStartedOn: string
+    /**
+     * Will be the endTime of Execution stage.
+     */
+    finishedOn?: string
+    currentStatus: Exclude<WorkflowStageStatusType, WorkflowStageStatusType.NOT_STARTED>
+    workerDetails: Pick<PodExecutionStageDTO, 'message' | 'status' | 'endTime'> &
+        Pick<PodExecutionStageDTO['metadata'], 'clusterId'>
+}
+
 export interface DeploymentHistoryResultObject {
     cdWorkflows: History[]
     appReleaseTagNames: string[]
@@ -176,7 +237,9 @@ export interface SidebarType extends RenderRunSourceType {
     resourceId?: number
 }
 
-export interface HistorySummaryCardType extends RenderRunSourceType {
+export interface HistorySummaryCardType
+    extends RenderRunSourceType,
+        Pick<History, 'workflowExecutionStages' | 'podName' | 'namespace'> {
     id: number
     status: string
     startedOn: string
@@ -195,7 +258,7 @@ export interface HistorySummaryCardType extends RenderRunSourceType {
     resourceId?: number
 }
 
-export interface SummaryTooltipCardType {
+export interface DeploymentSummaryTooltipCardType {
     status: string
     startedOn: string
     triggeredBy: number
@@ -203,6 +266,10 @@ export interface SummaryTooltipCardType {
     ciMaterials: CiMaterial[]
     gitTriggers: Map<number, GitTriggers>
 }
+
+export interface BuildAndTaskSummaryTooltipCardProps
+    extends Pick<History, 'workflowExecutionStages' | 'triggeredByEmail' | 'namespace' | 'podName' | 'stage'>,
+        Pick<HistorySummaryCardType, 'gitTriggers' | 'ciMaterials'> {}
 
 export interface DeploymentTemplateList {
     id: number
@@ -216,6 +283,7 @@ export interface CurrentStatusType {
     artifact: string
     stage: DeploymentStageType
     type: HistoryComponentType
+    executionInfo: ExecutionInfoType
 }
 
 export interface StartDetailsType {
@@ -227,9 +295,6 @@ export interface StartDetailsType {
     artifact: string
     type: HistoryComponentType
     environmentName?: string
-    isJobView?: boolean
-    triggerMetadata?: string
-    renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string) => JSX.Element
     /**
      * Callback handler for showing the target config
      */
@@ -237,7 +302,9 @@ export interface StartDetailsType {
     stage: DeploymentStageType
 }
 
-export interface TriggerDetailsType extends Pick<StartDetailsType, 'renderTargetConfigInfo'> {
+export interface TriggerDetailsType
+    extends Pick<StartDetailsType, 'renderTargetConfigInfo'>,
+        Pick<History, 'workflowExecutionStages' | 'namespace'> {
     status: string
     startedOn: string
     finishedOn: string
@@ -254,33 +321,52 @@ export interface TriggerDetailsType extends Pick<StartDetailsType, 'renderTarget
     isJobView?: boolean
     workerPodName?: string
     triggerMetadata?: string
-    renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string) => JSX.Element
+    renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string, onlyRenderIcon?: boolean) => JSX.Element
 }
 
-export interface ProgressingStatusType {
-    status: string
+export type ProgressingStatusType = {
     stage: DeploymentStageType
     type: HistoryComponentType
+    /**
+     * @default 'In progress''
+     */
+    label?: string
 }
 
-export interface WorkerStatusType {
+export interface CurrentStatusIconProps {
+    status: string
+    executionInfoCurrentStatus: WorkflowStageStatusType
+}
+
+export interface WorkerStatusType
+    extends Pick<ExecutionInfoType['workerDetails'], 'clusterId'>,
+        Pick<TriggerDetailsType, 'namespace'> {
     message: string
     podStatus: string
     stage: DeploymentStageType
     finishedOn?: string
     workerPodName?: string
+    workerMessageContainerClassName?: string
+    titleClassName?: string
+    viewWorkerPodClassName?: string
+    /**
+     * @default false
+     */
+    hideShowMoreMessageButton?: boolean
 }
 
-export interface FinishedType {
-    status: string
-    finishedOn: string
-    artifact: string
-    type: HistoryComponentType
-}
-
-export interface TriggerDetailsStatusIconType {
-    status: string
-}
+export type FinishedType = { artifact: string; type: HistoryComponentType } & (
+    | {
+          status: string
+          finishedOn: string
+          executionInfo?: never
+      }
+    | {
+          executionInfo: ExecutionInfoType
+          status?: never
+          finishedOn?: never
+      }
+)
 
 export interface SyncStageResourceDetail {
     id: number
@@ -313,22 +399,6 @@ export interface DeploymentStatusDetailsType {
 
 export interface DeploymentStatusDetailsResponse extends ResponseType {
     result?: DeploymentStatusDetailsType
-}
-
-export const TERMINAL_STATUS_COLOR_CLASS_MAP = {
-    [TERMINAL_STATUS_MAP.SUCCEEDED]: 'cg-5',
-    [TERMINAL_STATUS_MAP.HEALTHY]: 'cg-5',
-    [TERMINAL_STATUS_MAP.FAILED]: 'cr-5',
-    [TERMINAL_STATUS_MAP.CANCELLED]: 'cr-5',
-    [TERMINAL_STATUS_MAP.ERROR]: 'cr-5',
-}
-
-export const PROGRESSING_STATUS = {
-    [TERMINAL_STATUS_MAP.RUNNING]: 'running',
-    [TERMINAL_STATUS_MAP.PROGRESSING]: 'progressing',
-    [TERMINAL_STATUS_MAP.STARTING]: 'starting',
-    [TERMINAL_STATUS_MAP.INITIATING]: 'initiating',
-    [TERMINAL_STATUS_MAP.QUEUED]: 'queued',
 }
 
 interface DeploymentStatusDetailRow {
@@ -396,7 +466,7 @@ export interface VirtualHistoryArtifactProps {
 export type CIListItemType = Pick<History, 'promotionApprovalMetadata'> & {
     userApprovalMetadata?: UserApprovalMetadataType
     triggeredBy?: string
-    children: any
+    children: ReactNode
 
     appliedFilters?: FilterConditionsListType[]
     appliedFiltersTimestamp?: string
@@ -534,6 +604,7 @@ export interface DeploymentTemplateHistoryType {
     baseTemplateConfiguration: DeploymentHistoryDetail
     previousConfigAvailable: boolean
     rootClassName?: string
+    codeEditorKey?: string
 }
 export interface DeploymentHistoryDetailRes extends ResponseType {
     result?: DeploymentHistoryDetail

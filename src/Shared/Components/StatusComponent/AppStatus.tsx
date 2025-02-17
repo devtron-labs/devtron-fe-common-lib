@@ -18,9 +18,11 @@ import { Icon } from '../Icon'
 import { AppStatusProps } from './types'
 import { StatusComponent } from './StatusComponent'
 import { APP_STATUS } from './constants'
+import { getJobStatusFromStatus } from './utils'
 
 export const AppStatus = ({ status, isJobView = false, isVirtualEnv = false, ...restProps }: AppStatusProps) => {
-    const appStatus = isVirtualEnv ? APP_STATUS.NOT_AVAILABLE : (status ?? '')
+    const _status = isJobView ? getJobStatusFromStatus(status) : status
+    const appStatus = isVirtualEnv ? APP_STATUS.NOT_AVAILABLE : (_status ?? '')
     const isNotDeployed =
         appStatus.toLowerCase().replace(/ /g, '-') === APP_STATUS.NOT_DEPLOYED ||
         appStatus.toLowerCase() === APP_STATUS.NOT_DEPLOYED_NO_SPACE

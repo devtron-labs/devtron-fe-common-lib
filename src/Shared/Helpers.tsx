@@ -16,6 +16,7 @@
 
 /* eslint-disable no-param-reassign */
 import { useEffect, useRef, useState, ReactElement } from 'react'
+import { PromptProps } from 'react-router-dom'
 import Tippy from '@tippyjs/react'
 import { Pair } from 'yaml'
 import moment from 'moment'
@@ -25,7 +26,11 @@ import { MaterialHistoryType } from '@Shared/Services/app.types'
 import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
 import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
-import { PromptProps } from 'react-router-dom'
+import { ReactComponent as ICGithub } from '@Icons/ic-github.svg'
+import { ReactComponent as ICGitlab } from '@Icons/ic-gitlab.svg'
+import { ReactComponent as ICGit } from '@Icons/ic-git.svg'
+import { ReactComponent as ICBitbucket } from '@Icons/ic-bitbucket.svg'
+import { ReactComponent as ICAWSCodeCommit } from '@Icons/ic-aws-codecommit.svg'
 import {
     handleUTCTime,
     ManualApprovalType,
@@ -44,6 +49,7 @@ import {
 } from '../Common'
 import {
     AggregationKeys,
+    BorderConfigType,
     GitTriggers,
     IntersectionChangeHandler,
     IntersectionOptions,
@@ -1003,4 +1009,45 @@ export const sanitizeTargetPlatforms = (
     })
 
     return uniquePlatforms
+}
+
+// Should contain git-codecommit.*.amazonaws.com
+export const isAWSCodeCommitURL = (url: string = ''): boolean =>
+    url.includes('git-codecommit.') && url.includes('.amazonaws.com')
+
+export const renderMaterialIcon = (url: string = '') => {
+    const baseClass = 'dc__vertical-align-middle icon-dim-20 dc__no-shrink'
+
+    if (url.includes('gitlab')) {
+        return <ICGitlab className={baseClass} />
+    }
+
+    if (url.includes('github')) {
+        return <ICGithub className={`${baseClass} fcn-8`} />
+    }
+
+    if (url.includes('bitbucket')) {
+        return <ICBitbucket className={baseClass} />
+    }
+
+    if (isAWSCodeCommitURL(url)) {
+        return <ICAWSCodeCommit className="dc__vertical-align-middle icon-dim-18" />
+    }
+
+    return <ICGit className={baseClass} />
+}
+
+const getSanitizedBorderConfig = (borderConfig: BorderConfigType = {}): BorderConfigType => {
+    const { top = true, right = true, bottom = true, left = true } = borderConfig
+    return { top, right, bottom, left }
+}
+
+export const deriveBorderRadiusClassFromConfig = (borderRadiusConfig: BorderConfigType = {}): string => {
+    const { top, right, bottom, left } = getSanitizedBorderConfig(borderRadiusConfig)
+    return `${!top ? 'dc__no-top-radius' : ''} ${!right ? 'dc__no-right-radius' : ''} ${!bottom ? 'dc__no-bottom-radius' : ''} ${!left ? 'dc__no-left-radius' : ''}`
+}
+
+export const deriveBorderClassFromConfig = (borderConfig: BorderConfigType = {}): string => {
+    const { top, right, bottom, left } = getSanitizedBorderConfig(borderConfig)
+    return `${!top ? 'dc__no-border-top-imp' : ''} ${!right ? 'dc__no-border-right-imp' : ''} ${!bottom ? 'dc__no-border-bottom-imp' : ''} ${!left ? 'dc__no-border-left-imp' : ''}`
 }

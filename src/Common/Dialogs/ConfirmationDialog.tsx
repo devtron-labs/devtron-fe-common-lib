@@ -23,6 +23,9 @@ import {
     ConfirmationDialogType,
 } from './Types'
 
+/**
+ * @deprecated use confirmation modal instead
+ */
 const ConfirmationDialog = ({ className = '', children, close }: ConfirmationDialogType) => (
     <VisibleModal2 className="confirmation-dialog" close={close}>
         <div onClick={stopPropagation} className={`confirmation-dialog__body ${className}`}>{children}</div>

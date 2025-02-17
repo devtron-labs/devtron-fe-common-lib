@@ -380,35 +380,6 @@ export const statusIcon = {
     unabletofetch: 'failed',
 }
 
-export const statusColor = {
-    suspended: 'var(--Y500)',
-    unknown: 'var(--N700)',
-    queued: 'var(--N700)',
-    degraded: 'var(--R500)',
-    healthy: 'var(--G500)',
-    notdeployed: 'var(--N500)',
-    missing: 'var(--N700)',
-    progressing: 'var(--O500)',
-    initiating: 'var(--O500)',
-    starting: 'var(--O500)',
-    succeeded: 'var(--G500)',
-    running: 'var(--O500)',
-    failed: 'var(--R500)',
-    error: 'var(--R500)',
-    cancelled: 'var(--R500)',
-    aborted: 'var(--R500)',
-    timedout: 'var(--R500)',
-    unabletofetch: 'var(--R500)',
-    hibernating: 'var(--N700)',
-}
-
-export const PULSATING_STATUS_MAP: { [key in keyof typeof statusColor]?: boolean } = {
-    progressing: true,
-    initiating: true,
-    starting: true,
-    running: true,
-}
-
 export const APP_STATUS_HEADERS = ['KIND', 'NAME', 'STATUS', 'MESSAGE']
 
 export const MATERIAL_EXCLUDE_TIPPY_TEXT =
@@ -539,3 +510,8 @@ export const SKIP_LABEL_KEY_VALIDATION_PREFIX = 'devtron.ai/'
 export const UNSAVED_CHANGES_PROMPT_MESSAGE = 'You have unsaved changes. Are you sure you want to leave?'
 export const DEFAULT_ROUTE_PROMPT_MESSAGE =
     "Please don't wander off! Reloading or going back might disrupt the ongoing operation."
+
+export const DC_DELETE_SUBTITLES = {
+    DELETE_ENVIRONMENT_SUBTITLE: 'Are you sure you want to delete this environment?',
+    DELETE_CLUSTER_SUBTITLES: 'Are you sure you want to delete this cluster?',
+}

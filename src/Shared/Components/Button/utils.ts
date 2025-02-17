@@ -42,5 +42,10 @@ export const getButtonDerivedClass = ({
     style,
     isLoading,
     icon,
-}: Pick<ButtonProps, 'variant' | 'size' | 'style' | 'isLoading' | 'icon'>) =>
-    `button button__${variant}--${style} ${icon ? ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP[size] : BUTTON_SIZE_TO_CLASS_NAME_MAP[size]} ${isLoading ? 'button--loading' : ''}`
+    isAutoTriggerActive,
+}: Required<
+    Pick<ButtonProps, 'variant' | 'size' | 'style' | 'isLoading' | 'icon'> & {
+        isAutoTriggerActive: boolean
+    }
+>) =>
+    `button button__${variant}--${style} ${icon ? ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP[size] : BUTTON_SIZE_TO_CLASS_NAME_MAP[size]} ${isAutoTriggerActive ? 'button--auto-click' : ''} ${isLoading ? 'button--loading' : ''}`

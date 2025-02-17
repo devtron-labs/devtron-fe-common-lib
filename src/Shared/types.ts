@@ -941,6 +941,18 @@ export interface TargetPlatformsDTO {
     targetPlatforms: TargetPlatformItemDTO[]
 }
 
+/**
+ * These status are expected to be present in workflow nodes like ci node, linked ci node, job overview, etc.
+ */
+export enum WorkflowStatusEnum {
+    STARTING = 'Starting',
+    RUNNING = 'Running',
+    PROGRESSING = 'Progressing',
+    WAITING_TO_START = 'WaitingToStart',
+    TIMED_OUT = 'TimedOut',
+    CANCELLED = 'CANCELLED',
+}
+
 export enum CIPipelineNodeType {
     EXTERNAL_CI = 'EXTERNAL-CI',
     CI = 'CI',
@@ -960,3 +972,32 @@ export const TriggerType = {
     Auto: 'AUTOMATIC',
     Manual: 'MANUAL',
 } as const
+
+export type ComponentLayoutType = 'row' | 'column'
+
+export interface BorderConfigType {
+    /**
+     * If false, (border-radius/border)-top is not applied
+     *
+     * @default true
+     */
+    top?: boolean
+    /**
+     * If false, (border-radius/border)-right is not applied
+     *
+     * @default true
+     */
+    right?: boolean
+    /**
+     * If false, (border-radius/border)-bottom is not applied
+     *
+     * @default true
+     */
+    bottom?: boolean
+    /**
+     * If false, (border-radius/border)-left is not applied
+     *
+     * @default true
+     */
+    left?: boolean
+}

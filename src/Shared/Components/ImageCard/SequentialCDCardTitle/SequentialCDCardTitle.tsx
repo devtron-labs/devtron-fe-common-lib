@@ -50,7 +50,13 @@ const SequentialCDCardTitle = ({
                 <DeploymentEnvState
                     envStateText={getDeployedStateText()}
                     title={deployedOnTitle}
-                    tooltipContent={deployedOn.join(',')}
+                    tooltipContent={
+                        <div className="flexbox-col lh-20">
+                            {deployedOn.map((env) => (
+                                <span key={env}>{env}</span>
+                            ))}
+                        </div>
+                    }
                 />
             )
         }
@@ -68,15 +74,15 @@ const SequentialCDCardTitle = ({
     }
 
     const addFlexGap = stageType !== STAGE_TYPE.CD
+
+    const commonNoContentCondition = !isLatest && !additionalInfo
     const noContent =
-        (stageType !== STAGE_TYPE.CD && !isLatest && !additionalInfo) ||
-        (stageType === STAGE_TYPE.CD &&
-            !isLatest &&
-            !isRunningOnParentCD &&
-            !Object.values(ARTIFACT_STATUS).includes(artifactStatus) &&
-            !showLatestTag &&
-            !deployedOn?.length &&
-            !additionalInfo)
+        commonNoContentCondition &&
+        (stageType !== STAGE_TYPE.CD ||
+            (!isRunningOnParentCD &&
+                !Object.values(ARTIFACT_STATUS).includes(artifactStatus) &&
+                !showLatestTag &&
+                !deployedOn?.length))
 
     if (noContent) {
         return null

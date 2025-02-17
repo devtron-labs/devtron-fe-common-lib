@@ -89,7 +89,7 @@ const DateTimePicker = ({
                     withFullScreenPortal={false}
                     orientation="horizontal"
                     readOnly={readOnly || false}
-                    customInputIcon={<CalendarIcon className="icon-dim-20" />}
+                    customInputIcon={<CalendarIcon className="icon-dim-20 scn-6" />}
                     inputIconPosition="after"
                     displayFormat={DATE_TIME_FORMATS.DD_MMM_YYYY}
                     data-testid={dataTestidForDate}

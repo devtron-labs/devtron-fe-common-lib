@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+import { WorkflowStatusEnum } from '@Shared/types'
 import { multiSelectStyles } from '../../../Common/MultiSelectCustomization'
+import { WorkflowStageStatusType } from './types'
 
 export const HISTORY_LABEL = {
     APPLICATION: 'Application',
@@ -53,7 +55,8 @@ export const TERMINAL_STATUS_MAP = {
     ERROR: 'error',
     CANCELLED: 'cancelled',
     UNABLE_TO_FETCH: 'unabletofetch',
-    TIMED_OUT: 'timedout',
+    TIMED_OUT: WorkflowStatusEnum.TIMED_OUT.toLowerCase(),
+    WAITING_TO_START: WorkflowStatusEnum.WAITING_TO_START.toLowerCase(),
 }
 
 export const EVENT_STREAM_EVENTS_MAP = {
@@ -69,7 +72,8 @@ export const POD_STATUS = {
 
 export const TIMEOUT_VALUE = '1' // in hours
 
-export const WORKER_POD_BASE_URL = '/resource-browser/1/devtron-ci/pod/k8sEmptyGroup'
+export const DEFAULT_CLUSTER_ID = 1
+export const DEFAULT_NAMESPACE = 'devtron-ci'
 
 export const DEFAULT_ENV = 'devtron-ci'
 
@@ -82,3 +86,84 @@ export const MANIFEST_STATUS_HEADERS = ['KIND', 'NAME', 'SYNC STATUS', 'MESSAGE'
 export const LOGS_STAGE_IDENTIFIER = 'STAGE_INFO'
 
 export const LOGS_STAGE_STREAM_SEPARATOR = '|'
+
+export const statusColor = {
+    suspended: 'var(--Y500)',
+    unknown: 'var(--N700)',
+    queued: 'var(--N700)',
+    degraded: 'var(--R500)',
+    healthy: 'var(--G500)',
+    notdeployed: 'var(--N500)',
+    [WorkflowStageStatusType.NOT_STARTED.toLowerCase()]: 'var(--N500)',
+    missing: 'var(--N700)',
+    progressing: 'var(--O500)',
+    initiating: 'var(--O500)',
+    starting: 'var(--O500)',
+    [WorkflowStatusEnum.WAITING_TO_START.toLowerCase()]: 'var(--O500)',
+    [WorkflowStatusEnum.TIMED_OUT.toLowerCase()]: 'var(--R500)',
+    succeeded: 'var(--G500)',
+    running: 'var(--O500)',
+    failed: 'var(--R500)',
+    error: 'var(--R500)',
+    cancelled: 'var(--R500)',
+    aborted: 'var(--R500)',
+    timedout: 'var(--R500)',
+    [WorkflowStageStatusType.TIMEOUT.toLowerCase()]: 'var(--R500)',
+    unabletofetch: 'var(--R500)',
+    hibernating: 'var(--N700)',
+}
+
+export const PULSATING_STATUS_MAP: { [key in keyof typeof statusColor]?: boolean } = {
+    progressing: true,
+    initiating: true,
+    starting: true,
+    running: true,
+}
+
+export const WORKFLOW_STAGE_STATUS_TO_TEXT_MAP: Record<WorkflowStageStatusType, string> = {
+    [WorkflowStageStatusType.NOT_STARTED]: 'Waiting to start',
+    [WorkflowStageStatusType.RUNNING]: 'Running',
+    [WorkflowStageStatusType.SUCCEEDED]: 'Succeeded',
+    [WorkflowStageStatusType.FAILED]: 'Failed',
+    [WorkflowStageStatusType.ABORTED]: 'Aborted',
+    [WorkflowStageStatusType.TIMEOUT]: 'Timed out',
+    [WorkflowStageStatusType.UNKNOWN]: 'Unknown',
+}
+
+export const EXECUTION_FINISHED_TEXT_MAP: Partial<Record<WorkflowStageStatusType, string>> = {
+    [WorkflowStageStatusType.SUCCEEDED]: 'succeeded',
+    [WorkflowStageStatusType.FAILED]: 'failed',
+    [WorkflowStageStatusType.ABORTED]: 'aborted',
+    [WorkflowStageStatusType.TIMEOUT]: 'timed out',
+}
+
+export const TERMINAL_STATUS_COLOR_CLASS_MAP = {
+    [TERMINAL_STATUS_MAP.SUCCEEDED]: 'cg-5',
+    [TERMINAL_STATUS_MAP.HEALTHY]: 'cg-5',
+    [TERMINAL_STATUS_MAP.FAILED]: 'cr-5',
+    [TERMINAL_STATUS_MAP.CANCELLED]: 'cr-5',
+    [TERMINAL_STATUS_MAP.ERROR]: 'cr-5',
+    [TERMINAL_STATUS_MAP.TIMED_OUT]: 'cr-5',
+    [TERMINAL_STATUS_MAP.WAITING_TO_START]: 'co-5',
+} as const
+
+export const PROGRESSING_STATUS = {
+    [TERMINAL_STATUS_MAP.WAITING_TO_START]: 'running',
+    [TERMINAL_STATUS_MAP.RUNNING]: 'running',
+    [TERMINAL_STATUS_MAP.PROGRESSING]: 'progressing',
+    [TERMINAL_STATUS_MAP.STARTING]: 'starting',
+    [TERMINAL_STATUS_MAP.INITIATING]: 'initiating',
+    [TERMINAL_STATUS_MAP.QUEUED]: 'queued',
+} as const
+
+export const FAILED_WORKFLOW_STAGE_STATUS_MAP: Record<
+    Extract<
+        WorkflowStageStatusType,
+        WorkflowStageStatusType.ABORTED | WorkflowStageStatusType.FAILED | WorkflowStageStatusType.TIMEOUT
+    >,
+    true
+> = {
+    [WorkflowStageStatusType.ABORTED]: true,
+    [WorkflowStageStatusType.FAILED]: true,
+    [WorkflowStageStatusType.TIMEOUT]: true,
+}

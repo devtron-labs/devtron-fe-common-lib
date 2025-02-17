@@ -24,20 +24,20 @@ import './gettingStarted.scss'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 
 const GettingStartedCard = ({ className, hideGettingStartedCard }: GettingStartedType) => {
-    const onClickedOkay = async (e) => {
+    const onClickedOkay = async () => {
         setActionWithExpiry('clickedOkay', 1)
         hideGettingStartedCard()
-        await handlePostHogEventUpdate(e)
+        await handlePostHogEventUpdate(POSTHOG_EVENT_ONBOARDING.TOOLTIP_OKAY)
     }
 
-    const onClickedDontShowAgain = async (e) => {
+    const onClickedDontShowAgain = async () => {
         const updatedPayload = {
             key: LOGIN_COUNT,
             value: `${MAX_LOGIN_COUNT}`,
         }
         await updateLoginCount(updatedPayload)
         hideGettingStartedCard(updatedPayload.value)
-        await handlePostHogEventUpdate(e)
+        await handlePostHogEventUpdate(POSTHOG_EVENT_ONBOARDING.TOOLTIP_DONT_SHOW_AGAIN)
     }
 
     return (
@@ -53,7 +53,6 @@ const GettingStartedCard = ({ className, hideGettingStartedCard }: GettingStarte
                         size={ComponentSizeType.xs}
                         dataTestId="getting-started-okay"
                         onClick={onClickedOkay}
-                        data-posthog={POSTHOG_EVENT_ONBOARDING.TOOLTIP_OKAY}
                     />
                     <Button
                         text="Don't show again"
@@ -61,7 +60,6 @@ const GettingStartedCard = ({ className, hideGettingStartedCard }: GettingStarte
                         dataTestId="getting-started-don't-show-again"
                         onClick={onClickedDontShowAgain}
                         style={ButtonStyleType.neutral}
-                        data-posthog={POSTHOG_EVENT_ONBOARDING.TOOLTIP_DONT_SHOW_AGAIN}
                         variant={ButtonVariantType.secondary}
                     />
                 </div>

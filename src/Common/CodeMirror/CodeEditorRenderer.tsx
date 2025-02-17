@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import CodeMirrorMerge from 'react-codemirror-merge'
 import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror'
 
@@ -31,9 +47,18 @@ export const CodeEditorRenderer = ({
 }: CodeEditorRendererProps) => {
     // STATES
     const [isFocused, setIsFocused] = useState(false)
+    const [gutterWidth, setGutterWidth] = useState(0)
 
     // REFS
     const codeMirrorRef = useRef<ReactCodeMirrorRef>()
+
+    // This handling will be removed once shebang is shown inside the codeEditor rather than extra div
+    const updateGutterWith = () => {
+        const gutters = document.querySelector('.cm-gutters')
+        if (gutters) {
+            setGutterWidth(gutters.getBoundingClientRect().width)
+        }
+    }
 
     useEffect(() => {
         // Added timeout to ensure the autofocus code is executed post the re-renders
@@ -46,16 +71,22 @@ export const CodeEditorRenderer = ({
 
     // STOPPING OVERSCROLL BROWSER BACK/FORWARD BEHAVIOR WHEN CODE EDITOR IS FOCUSED
     useEffect(() => {
-        const html = document.querySelector('html')
-        if (html) {
+        const body = document.querySelector('body')
+        if (body) {
             const { scrollWidth, clientWidth } = codeMirrorRef.current?.view?.scrollDOM ?? {}
             if (isFocused && scrollWidth > clientWidth) {
-                html.classList.add('dc__overscroll-none')
+                body.classList.add('dc__overscroll-none')
             } else {
-                html.classList.remove('dc__overscroll-none')
+                body.classList.remove('dc__overscroll-none')
             }
         }
+
+        updateGutterWith()
     }, [state.lhsCode, state.code, isFocused])
+
+    const onCreateEditor = () => {
+        updateGutterWith()
+    }
 
     const handleOnFocus: FocusEventHandler<HTMLDivElement> = (e) => {
         setIsFocused(true)
@@ -105,12 +136,15 @@ export const CodeEditorRenderer = ({
     ) : (
         <div ref={codeMirrorParentDivRef} className={`w-100 ${codeEditorParentClassName}`}>
             {shebang && (
-                <div
-                    className={`flexbox text__white code-editor__shebang ${isDarkTheme ? 'code-editor__shebang__dark' : 'code-editor__shebang__light'}`}
+                <p
+                    className={`m-0 flexbox cn-9 code-editor__shebang ${isDarkTheme ? 'code-editor__shebang__dark' : 'code-editor__shebang__light'}`}
                 >
-                    <div className="code-editor__shebang__gutter dc__align-self-stretch" />
+                    <span
+                        className="code-editor__shebang__gutter dc__align-self-stretch"
+                        style={{ flex: `0 0 ${gutterWidth}px` }}
+                    />
                     {shebang}
-                </div>
+                </p>
             )}
             <CodeMirror
                 ref={codeMirrorRef}
@@ -122,6 +156,7 @@ export const CodeEditorRenderer = ({
                 readOnly={readOnly}
                 height={codeEditorHeight}
                 minHeight="250px"
+                onCreateEditor={onCreateEditor}
                 onFocus={handleOnFocus}
                 onBlur={handleOnBlur}
                 onChange={handleOnChange}

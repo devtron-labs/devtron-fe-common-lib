@@ -119,6 +119,7 @@ const SecurityCard = ({
                         labelClassName="fs-13 fw-4 lh-20 cn-9"
                         countClassName="fs-13 fw-6 lh-20 cn-7"
                         swapLegendAndBar
+                        showAnimationOnBar
                     />
                 )}
                 {subtitle && <span className="cn-9 fs-13 lh-20">{subtitle}</span>}
