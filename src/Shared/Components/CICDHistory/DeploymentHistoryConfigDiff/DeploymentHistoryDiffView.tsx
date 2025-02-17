@@ -25,14 +25,12 @@ import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
 import { ReactComponent as Info } from '../../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ViewVariablesIcon } from '../../../../Assets/Icon/ic-view-variable-toggle.svg'
-import './styles.scss'
 
 const DeploymentHistoryDiffView = ({
     currentConfiguration,
     baseTemplateConfiguration,
     previousConfigAvailable,
     rootClassName,
-    codeEditorKey,
 }: DeploymentTemplateHistoryType) => {
     const { historyComponent, historyComponentName } = useParams<DeploymentHistoryParamsType>()
 
@@ -75,16 +73,7 @@ const DeploymentHistoryDiffView = ({
                 codeFoldMessageRenderer={renderDiffViewNoDifferenceState(editorValuesLHS, editorValuesRHS)}
             />
         ) : (
-            <CodeEditor
-                key={codeEditorKey}
-                value={editorValuesRHS}
-                defaultValue={editorValuesLHS}
-                adjustEditorHeightToContent
-                disableSearch
-                readOnly
-                noParsing
-                mode={MODES.YAML}
-            />
+            <CodeEditor value={editorValuesRHS} height="auto" disableSearch readOnly noParsing mode={MODES.YAML} />
         )
 
     const handleShowVariablesClick = () => {
@@ -107,7 +96,7 @@ const DeploymentHistoryDiffView = ({
     )
 
     return (
-        <div className="deployment-history-diff-view">
+        <div>
             {!previousConfigAvailable && (
                 <div className="bcb-1 eb-2 pt-8 pb-8 br-4 flexbox pl-4 cn-9 fs-13 mt-16 mb-16 mr-20 ml-20">
                     <Info className="mr-8 ml-14 icon-dim-20" />

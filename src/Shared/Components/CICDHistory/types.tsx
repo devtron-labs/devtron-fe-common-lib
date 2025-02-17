@@ -604,7 +604,6 @@ export interface DeploymentTemplateHistoryType {
     baseTemplateConfiguration: DeploymentHistoryDetail
     previousConfigAvailable: boolean
     rootClassName?: string
-    codeEditorKey?: string
 }
 export interface DeploymentHistoryDetailRes extends ResponseType {
     result?: DeploymentHistoryDetail
@@ -631,7 +630,7 @@ export interface DeploymentHistorySidebarType {
 export interface AppStatusDetailsChartType {
     filterRemoveHealth?: boolean
     showFooter: boolean
-    showConfigDriftInfo?: boolean
+    handleOpenConfigDriftModal?: () => void
     onClose?: () => void
 }
 

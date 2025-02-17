@@ -80,7 +80,6 @@ export const URLS = {
     NETWORK_STATUS_INTERFACE: '/network-status-interface',
     RESOURCE_BROWSER: '/resource-browser',
     COMPARE_CLUSTERS: '/compare-clusters',
-    CONFIG_DRIFT: 'config-drift',
 }
 
 export const ROUTES = {

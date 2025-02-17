@@ -11,7 +11,6 @@ src/Common/CIPipeline.Types.ts
 src/Common/ChartVersionAndTypeSelector.tsx
 src/Common/Checkbox.tsx
 src/Common/ClipboardButton/__tests__/ClipboardButton.test.tsx
-src/Common/CodeEditor/CodeEditor.tsx
 src/Common/Common.service.ts
 src/Common/CustomInput/CustomInput.tsx
 src/Common/CustomTagSelector/PropagateTagInfo.tsx
