@@ -17,9 +17,7 @@
 import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CustomInput, noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
-import { ComponentSizeType, DEFAULT_ROUTE_PROMPT_MESSAGE } from '@Shared/constants'
-import { usePrompt } from '@Shared/Hooks'
-import { Prompt } from 'react-router-dom'
+import { ComponentSizeType } from '@Shared/constants'
 import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
@@ -171,9 +169,6 @@ const ConfirmationModalBody = ({
 export const BaseConfirmationModal = () => {
     const { modalKey, settersRef } = useConfirmationModalContext()
     const [confirmationProps, setConfirmationProps] = useState<ConfirmationModalProps | null>(null)
-    const apiCallInProgress = modalKey && (confirmationProps?.buttonConfig.primaryButtonConfig.isLoading ?? false)
-
-    usePrompt({ shouldPrompt: apiCallInProgress })
 
     useEffect(() => {
         settersRef.current = {
@@ -183,7 +178,6 @@ export const BaseConfirmationModal = () => {
 
     return (
         <UseRegisterShortcutProvider ignoreTags={['button']}>
-            <Prompt when={apiCallInProgress} message={DEFAULT_ROUTE_PROMPT_MESSAGE} />
             <AnimatePresence>{!!modalKey && <ConfirmationModalBody {...confirmationProps} />}</AnimatePresence>
         </UseRegisterShortcutProvider>
     )
