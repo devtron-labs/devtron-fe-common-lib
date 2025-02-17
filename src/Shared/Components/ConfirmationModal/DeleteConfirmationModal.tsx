@@ -21,7 +21,6 @@ import { showError, stopPropagation } from '@Common/Helper'
 import { ConfirmationModalVariantType, DeleteConfirmationModalProps } from './types'
 import ConfirmationModal from './ConfirmationModal'
 import { CannotDeleteModal } from './CannotDeleteModal'
-import { ForceDeleteConfirmationModal } from './ForceDeleteConfirmationModal'
 
 export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     title,
@@ -41,7 +40,6 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
     children,
 }: DeleteConfirmationModalProps) => {
     const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(false)
-    const [showForceDeleteModal, setForceDeleteModal] = useState(false)
     const [cannotDeleteText, setCannotDeleteText] = useState(renderCannotDeleteConfirmationSubTitle)
     const [isLoading, setLoading] = useState(isDeleting)
 
@@ -69,7 +67,6 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
                 ) {
                     setCannotDeleteText(serverError.errors[0].userMessage as string)
                 }
-                closeConfirmationModal()
             } else if (typeof onError === 'function') {
                 onError(serverError)
             } else {
@@ -79,9 +76,10 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
         }
     }
 
-    const handleCloseCannotDeleteModal = () => setCannotDeleteDialogModal(false)
-
-    const handleCloseForceDeleteModal = () => setForceDeleteModal(false)
+    const handleCloseCannotDeleteModal = () => {
+        setCannotDeleteDialogModal(false)
+        closeConfirmationModal()
+    }
 
     const renderCannotDeleteDialogModal = () => (
         <CannotDeleteModal
@@ -89,15 +87,6 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
             subtitle={cannotDeleteText}
             closeConfirmationModal={handleCloseCannotDeleteModal}
             component={component}
-        />
-    )
-
-    const renderForceDeleteModal = () => (
-        <ForceDeleteConfirmationModal
-            title={title}
-            subtitle={subtitle}
-            onDelete={onDelete}
-            closeConfirmationModal={handleCloseForceDeleteModal}
         />
     )
 
@@ -110,12 +99,13 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
                 secondaryButtonConfig: {
                     text: 'Cancel',
                     onClick: closeConfirmationModal,
+                    disabled: isDeleting || isLoading,
                 },
                 primaryButtonConfig: {
                     text: primaryButtonText,
                     onClick: handleDelete,
                     isLoading: isDeleting || isLoading,
-                    disabled: isLoading || disabled,
+                    disabled,
                 },
             }}
             handleClose={closeConfirmationModal}
@@ -127,9 +117,8 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
 
     return (
         <>
-            {renderDeleteModal()}
+            {!showCannotDeleteDialogModal && renderDeleteModal()}
             {showCannotDeleteDialogModal && renderCannotDeleteDialogModal()}
-            {showForceDeleteModal && renderForceDeleteModal()}
         </>
     )
 }

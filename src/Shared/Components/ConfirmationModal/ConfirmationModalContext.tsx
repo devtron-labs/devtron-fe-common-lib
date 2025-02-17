@@ -1,12 +1,13 @@
-import { createContext, PropsWithChildren, useContext, useMemo, useState } from 'react'
+import { createContext, PropsWithChildren, useContext, useMemo, useRef, useState } from 'react'
 import { ConfirmationModalContextType } from './types'
 
 export const ConfirmationModalContext = createContext<ConfirmationModalContextType>(null)
 
 export const ConfirmationModalProvider = ({ children }: PropsWithChildren<{}>) => {
-    const [props, setProps] = useState<ConfirmationModalContextType['props']>(null)
+    const settersRef = useRef<ConfirmationModalContextType['settersRef']['current']>(null)
+    const [modalKey, setModalKey] = useState('')
 
-    const value = useMemo(() => ({ props, setProps }), [props])
+    const value = useMemo(() => ({ modalKey, setModalKey, settersRef }), [modalKey])
 
     return <ConfirmationModalContext.Provider value={value}>{children}</ConfirmationModalContext.Provider>
 }

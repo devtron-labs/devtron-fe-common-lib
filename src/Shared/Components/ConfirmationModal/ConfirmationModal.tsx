@@ -17,13 +17,15 @@
 import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CustomInput, noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
-import { ComponentSizeType } from '@Shared/constants'
+import { ComponentSizeType, DEFAULT_ROUTE_PROMPT_MESSAGE } from '@Shared/constants'
+import { usePrompt } from '@Shared/Hooks'
+import { Prompt } from 'react-router-dom'
 import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Backdrop } from '../Backdrop'
-import { useConfirmationModalContext } from './ConfirmationModalContext'
 import './confirmationModal.scss'
+import { useConfirmationModalContext } from './ConfirmationModalContext'
 
 const ConfirmationModalBody = ({
     title,
@@ -167,29 +169,47 @@ const ConfirmationModalBody = ({
  * Please see NodeActionMenu.tsx as an example of why this is required
  */
 export const BaseConfirmationModal = () => {
-    const { props } = useConfirmationModalContext()
+    const { modalKey, settersRef } = useConfirmationModalContext()
+    const [confirmationProps, setConfirmationProps] = useState<ConfirmationModalProps | null>(null)
+    const apiCallInProgress = modalKey && (confirmationProps?.buttonConfig.primaryButtonConfig.isLoading ?? false)
+
+    usePrompt({ shouldPrompt: apiCallInProgress })
+
+    useEffect(() => {
+        settersRef.current = {
+            setProps: setConfirmationProps,
+        }
+    }, [])
 
     return (
         <UseRegisterShortcutProvider ignoreTags={['button']}>
-            <AnimatePresence>{props && <ConfirmationModalBody {...props} />}</AnimatePresence>
+            <Prompt when={apiCallInProgress} message={DEFAULT_ROUTE_PROMPT_MESSAGE} />
+            <AnimatePresence>{!!modalKey && <ConfirmationModalBody {...confirmationProps} />}</AnimatePresence>
         </UseRegisterShortcutProvider>
     )
 }
 
 const ConfirmationModal = (props: ConfirmationModalProps) => {
-    const { props: currentProps, setProps } = useConfirmationModalContext()
+    const { setModalKey, settersRef } = useConfirmationModalContext()
 
     useEffect(() => {
-        if (currentProps) {
-            throw new Error('Only one ConfirmationModal can be rendered at a time')
-        }
-
-        setProps(props)
+        const dateString = new Date().toISOString()
+        setModalKey(dateString)
 
         return () => {
-            setProps(null)
+            setModalKey((prev) => {
+                if (prev === dateString) {
+                    return ''
+                }
+
+                return prev
+            })
         }
     }, [])
+
+    useEffect(() => {
+        settersRef.current.setProps(props)
+    })
 
     return null
 }

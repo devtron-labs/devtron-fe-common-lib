@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-import { Dispatch, PropsWithChildren, ReactElement, ReactNode, SetStateAction, SyntheticEvent } from 'react'
+import {
+    Dispatch,
+    MutableRefObject,
+    PropsWithChildren,
+    ReactElement,
+    ReactNode,
+    SetStateAction,
+    SyntheticEvent,
+} from 'react'
 import { ButtonProps } from '../Button'
 
 export enum ConfirmationModalVariantType {
@@ -173,6 +181,9 @@ export interface ForceDeleteConfirmationProps
         Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle'>> {}
 
 export interface ConfirmationModalContextType {
-    props: ConfirmationModalProps | null
-    setProps: Dispatch<SetStateAction<ConfirmationModalContextType['props']>>
+    settersRef: MutableRefObject<{
+        setProps: Dispatch<SetStateAction<ConfirmationModalProps>>
+    }>
+    modalKey: string
+    setModalKey: Dispatch<SetStateAction<ConfirmationModalContextType['modalKey']>>
 }
