@@ -40,9 +40,12 @@ export interface MainContext {
     isAirgapped: boolean
     isSuperAdmin: boolean
     featureGitOpsFlags: {
+        /**
+         * Would define whether gitops (Global config tab) feature is enabled or not
+         */
         isFeatureGitOpsEnabled: boolean
         /**
-         *
+         * Would define whether user can select allow custom repo in gitops global config
          */
         isFeatureUserDefinedGitOpsEnabled: boolean
         /**
