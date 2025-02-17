@@ -20,7 +20,7 @@ const PasswordField = ({ onFocus, onBlur, shouldShowDefaultPlaceholderOnBlur, ..
     }
 
     const handleBlur: CustomInputProps['onBlur'] = (event) => {
-        if (shouldShowDefaultPlaceholderOnBlur && event.target.value === '') {
+        if (shouldShowDefaultPlaceholderOnBlur && !event.target.value) {
             // eslint-disable-next-line no-param-reassign
             event.target.value = DEFAULT_SECRET_PLACEHOLDER
         }
