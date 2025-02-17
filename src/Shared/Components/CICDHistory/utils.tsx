@@ -381,8 +381,6 @@ export const getTriggerStatusIcon = (status: string) => {
         case TERMINAL_STATUS_MAP.INITIATING:
         case TERMINAL_STATUS_MAP.WAITING_TO_START:
             return StatusType.INPROGRESS
-        case TERMINAL_STATUS_MAP.TIMED_OUT:
-            return StatusType.FAILED
         default:
             return status
     }

@@ -45,9 +45,9 @@ export const getIconName = (status: string, showAnimatedIcon: boolean): IconName
         case 'running':
         case 'request_accepted':
         case 'starting':
+        case 'waiting-to-start':
             return 'ic-circle-loader'
         case 'inprogress':
-        case 'waiting-to-start':
             return 'ic-in-progress'
         case 'hibernating':
         case 'hibernated':
