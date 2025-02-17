@@ -78,7 +78,7 @@ const getOptionBgColor = <OptionValue>(
     }
 
     if (state.isFocused) {
-        return 'var(--bg-secondary)'
+        return 'var(--bg-hover)'
     }
 
     return 'var(--transparent)'
@@ -163,7 +163,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         },
 
         ':hover': {
-            backgroundColor: 'var(--bg-secondary)',
+            backgroundColor: 'var(--bg-hover)',
         },
 
         ...(state.isDisabled && {
@@ -270,7 +270,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         fontWeight: 600,
         fontSize: '12px',
         color: 'var(--N900)',
-        backgroundColor: 'var(--N100)',
+        backgroundColor: 'var(--bg-menu-secondary)',
         marginBottom: 0,
         padding: '4px 8px',
         textTransform: 'none',
