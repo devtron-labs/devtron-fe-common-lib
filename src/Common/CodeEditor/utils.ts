@@ -14,44 +14,18 @@
  * limitations under the License.
  */
 
-.deployment-config-diff {
-  display: grid;
-  grid-template-columns: 255px 1fr;
-  height: 100%;
+import { AppThemeType } from '@Shared/Providers'
+import { CodeEditorInterface, CodeEditorThemesKeys } from './types'
 
-  &--drawer {
-    grid-template-columns: 220px 1fr;
-  }
-
-  &__accordion {
-    scroll-margin-top: 12px;
-  }
-
-  &__main-top {
-    &__header:first-child {
-      flex: 1 0 calc(50% - 2px);
+export const getCodeEditorThemeFromAppTheme = (
+    editorTheme: CodeEditorInterface['theme'],
+    appTheme: AppThemeType,
+): CodeEditorInterface['theme'] => {
+    if (!editorTheme) {
+        const editorThemeBasedOnAppTheme =
+            appTheme === AppThemeType.dark ? CodeEditorThemesKeys.vsDarkDT : CodeEditorThemesKeys.vs
+        return editorThemeBasedOnAppTheme
     }
 
-    &__header:last-child {
-      flex: 1 0 50%;
-    }
-  }
-
-  &__main-content {
-    flex-grow: 1;
-  }
-
-  & .react-monaco-editor-container {
-    min-height: 100px;
-  }
-
-  &__tab-list {
-    label {
-      flex-grow: 1;
-    }
-
-    .radio__item-label {
-      justify-content: center;
-    }
-  }
+    return editorTheme
 }

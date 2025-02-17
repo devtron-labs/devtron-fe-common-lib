@@ -14,44 +14,5 @@
  * limitations under the License.
  */
 
-.deployment-config-diff {
-  display: grid;
-  grid-template-columns: 255px 1fr;
-  height: 100%;
-
-  &--drawer {
-    grid-template-columns: 220px 1fr;
-  }
-
-  &__accordion {
-    scroll-margin-top: 12px;
-  }
-
-  &__main-top {
-    &__header:first-child {
-      flex: 1 0 calc(50% - 2px);
-    }
-
-    &__header:last-child {
-      flex: 1 0 50%;
-    }
-  }
-
-  &__main-content {
-    flex-grow: 1;
-  }
-
-  & .react-monaco-editor-container {
-    min-height: 100px;
-  }
-
-  &__tab-list {
-    label {
-      flex-grow: 1;
-    }
-
-    .radio__item-label {
-      justify-content: center;
-    }
-  }
-}
+export { default as CodeEditor } from './CodeEditor'
+export type { CodeEditorProps } from './types'
