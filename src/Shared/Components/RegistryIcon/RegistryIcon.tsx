@@ -3,34 +3,21 @@ import { RegistryType } from '@Shared/types'
 import { Icon, IconName } from '../Icon'
 import { RegistryIconProps } from './types'
 
-const getRegistryIcon = (registryType: RegistryType): IconName => {
-    switch (registryType) {
-        case RegistryType.GIT:
-            return 'ic-git'
-        case RegistryType.GITHUB:
-            return 'ic-github'
-        case RegistryType.GITLAB:
-            return 'ic-gitlab'
-        case RegistryType.BITBUCKET:
-            return 'ic-bitbucket'
-        case RegistryType.DOCKER:
-        case RegistryType.DOCKER_HUB:
-            return 'ic-dockerhub'
-        case RegistryType.ACR:
-            return 'ic-azure'
-        case RegistryType.QUAY:
-            return 'ic-quay'
-        case RegistryType.ECR:
-            return 'ic-ecr'
-        case RegistryType.ARTIFACT_REGISTRY:
-            return 'ic-google-artifact-registry'
-        case RegistryType.GCR:
-            return 'ic-google-container-registry'
-        default:
-            return 'ic-container'
-    }
+const registryIconMap: Record<RegistryType, IconName> = {
+    [RegistryType.GIT]: 'ic-git',
+    [RegistryType.GITHUB]: 'ic-github',
+    [RegistryType.GITLAB]: 'ic-gitlab',
+    [RegistryType.BITBUCKET]: 'ic-bitbucket',
+    [RegistryType.DOCKER]: 'ic-dockerhub',
+    [RegistryType.DOCKER_HUB]: 'ic-dockerhub',
+    [RegistryType.ACR]: 'ic-azure',
+    [RegistryType.QUAY]: 'ic-quay',
+    [RegistryType.ECR]: 'ic-ecr',
+    [RegistryType.ARTIFACT_REGISTRY]: 'ic-google-artifact-registry',
+    [RegistryType.GCR]: 'ic-google-container-registry',
+    [RegistryType.OTHER]: 'ic-container',
 }
 
 export const RegistryIcon = ({ registryType, size = 20 }: RegistryIconProps) => (
-    <Icon name={getRegistryIcon(registryType)} size={size} color={null} />
+    <Icon name={registryIconMap[registryType] || 'ic-container'} size={size} color={null} />
 )

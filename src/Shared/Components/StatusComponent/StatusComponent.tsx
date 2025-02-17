@@ -34,12 +34,12 @@ export const StatusComponent = ({
     hideIconTooltip = false,
     message,
 }: StatusComponentProps) => {
-    const appStatusLowerCase = (status || '').toLowerCase().replace(/ /g, '-')
-    const textContent = message || status || '-'
+    const statusLowercase = (status || '').toLowerCase().replace(/ /g, '-')
+    const textContent = message || status || ''
 
     const renderIcon = () => {
-        const iconName = getIconName(appStatusLowerCase, showAnimatedIcon)
-        const iconColor = getIconColor(appStatusLowerCase)
+        const iconName = getIconName(statusLowercase, showAnimatedIcon)
+        const iconColor = getIconColor(statusLowercase)
 
         if (iconName) {
             return (
@@ -56,30 +56,20 @@ export const StatusComponent = ({
             )
         }
 
-        return (
-            <Icon
-                name="ic-info-outline"
-                size={iconSize}
-                tooltipProps={{
-                    alwaysShowTippyOnHover: true,
-                    placement: 'top',
-                    content: 'To fetch app status for Helm based deployments open the app detail page',
-                }}
-                color="N600"
-            />
-        )
+        return null
     }
 
-    const renderMessage = () => (
-        <Tooltip content={textContent}>
-            <p
-                data-testid={`${status || 'status-is-null'}-status`}
-                className="m-0 dc__ellipsis-right dc__first-letter-capitalize fs-13 lh-20 cn-6"
-            >
-                {textContent}
-            </p>
-        </Tooltip>
-    )
+    const renderMessage = () =>
+        textContent ? (
+            <Tooltip content={textContent}>
+                <p
+                    data-testid={`${status || 'status-is-null'}-status`}
+                    className="m-0 dc__ellipsis-right dc__first-letter-capitalize fs-13 lh-20 cn-6"
+                >
+                    {textContent}
+                </p>
+            </Tooltip>
+        ) : null
 
     return (
         <ConditionalWrap condition={!hideIcon && !hideMessage} wrap={statusWrapComponent}>

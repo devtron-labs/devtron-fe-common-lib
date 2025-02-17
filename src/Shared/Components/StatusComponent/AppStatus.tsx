@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Icon } from '../Icon'
 import { AppStatusProps } from './types'
 import { StatusComponent } from './StatusComponent'
 import { APP_STATUS } from './constants'
@@ -26,5 +27,21 @@ export const AppStatus = ({ status, isJobView = false, isVirtualEnv = false, ...
     const notDeployedMessage = isJobView ? APP_STATUS.JOB_VIEW_NOT_DEPLOYED_MESSAGE : APP_STATUS.NOT_DEPLOYED_MESSAGE
     const textContent = isNotDeployed ? notDeployedMessage : appStatus
 
-    return <StatusComponent status={appStatus} message={textContent} {...restProps} />
+    return appStatus ? (
+        <StatusComponent status={appStatus} message={textContent} {...restProps} />
+    ) : (
+        <div className="flexbox dc__align-items-center dc__gap-6">
+            <Icon
+                name="ic-info-outline"
+                size={restProps.iconSize}
+                tooltipProps={{
+                    alwaysShowTippyOnHover: true,
+                    placement: 'top',
+                    content: 'To fetch app status for Helm based deployments open the app detail page',
+                }}
+                color="N600"
+            />
+            <span className="fs-13 lh-20 cn-6">-</span>
+        </div>
+    )
 }
