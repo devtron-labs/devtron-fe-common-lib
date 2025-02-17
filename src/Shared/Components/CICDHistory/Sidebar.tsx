@@ -36,6 +36,7 @@ import {
     SourceTypeMap,
     createGitCommitUrl,
     DropdownIndicator,
+    GitProviderType,
 } from '../../../Common'
 import { ReactComponent as ICArrowBackward } from '../../../Assets/Icon/ic-arrow-backward.svg'
 import { ReactComponent as ICDocker } from '../../../Assets/Icon/ic-docker.svg'
@@ -46,6 +47,7 @@ import { statusColor as colorMap } from '../../constants'
 import { DeploymentStatus } from '../StatusComponent'
 import { Icon } from '../Icon'
 import { getTriggerStatusIcon } from './utils'
+import { GitProviderIcon } from '../GitProviderIcon'
 
 const SummaryTooltipCard = React.memo(
     ({
@@ -91,7 +93,7 @@ const SummaryTooltipCard = React.memo(
                                     </div>
                                 ) : (
                                     <>
-                                        <Icon name="ic-git" size={24} color={null} />
+                                        <GitProviderIcon gitProvider={GitProviderType.GIT} size={24} />
                                         <div className="flex left column">
                                             <a
                                                 href={createGitCommitUrl(gitMaterialUrl, gitDetail.Commit)}

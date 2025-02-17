@@ -421,6 +421,7 @@ export enum GitProviderType {
     BITBUCKET = 'bitbucket',
     AZURE = 'azure',
     GITEA = 'gitea',
+    GIT = 'git',
 }
 
 /**
