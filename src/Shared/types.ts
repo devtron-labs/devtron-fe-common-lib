@@ -972,3 +972,32 @@ export const TriggerType = {
     Auto: 'AUTOMATIC',
     Manual: 'MANUAL',
 } as const
+
+export type ComponentLayoutType = 'row' | 'column'
+
+export interface BorderConfigType {
+    /**
+     * If false, (border-radius/border)-top is not applied
+     *
+     * @default true
+     */
+    top?: boolean
+    /**
+     * If false, (border-radius/border)-right is not applied
+     *
+     * @default true
+     */
+    right?: boolean
+    /**
+     * If false, (border-radius/border)-bottom is not applied
+     *
+     * @default true
+     */
+    bottom?: boolean
+    /**
+     * If false, (border-radius/border)-left is not applied
+     *
+     * @default true
+     */
+    left?: boolean
+}

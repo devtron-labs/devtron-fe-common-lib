@@ -20,6 +20,9 @@ import { Tooltip } from '@Common/Tooltip'
 import { Button } from '@Shared/Components'
 import './infoColourBar.scss'
 
+/**
+ * @deprecated Use InfoBlock instead
+ */
 const InfoColourBar = ({
     message,
     classname,
