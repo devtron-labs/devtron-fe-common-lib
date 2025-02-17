@@ -26,7 +26,6 @@ import {
     diffStateTextMap,
 } from '@Shared/Components/DeploymentConfigDiff'
 
-import { DeploymentStatus } from '@Shared/Components/StatusComponent'
 import { History } from '../types'
 import { DeploymentHistoryConfigDiffProps } from './types'
 
@@ -76,8 +75,6 @@ export const renderDeploymentHistoryConfig = (
         })}
     </div>
 )
-
-export const renderPipelineDeploymentStatusIcon = (status: string) => <DeploymentStatus status={status} />
 
 export const renderPipelineDeploymentOptionDescription = ({
     stage,
