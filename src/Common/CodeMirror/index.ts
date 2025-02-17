@@ -14,7 +14,5 @@
  * limitations under the License.
  */
 
-export const TEXTAREA_CONSTRAINTS = {
-    MIN_HEIGHT: 76,
-    AUTO_EXPANSION_MAX_HEIGHT: 140,
-}
+export { default as CodeEditor } from './CodeEditor'
+export type { CodeEditorProps } from './types'

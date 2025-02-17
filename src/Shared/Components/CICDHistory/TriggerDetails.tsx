@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { Fragment, memo, useMemo, useState } from 'react'
 import { useLocation, useParams, useRouteMatch, Link } from 'react-router-dom'
 import { getHandleOpenURL } from '@Shared/Helpers'
@@ -146,7 +162,7 @@ const ProgressingStatus = memo(({ stage, type, label = 'In progress' }: Progress
 
     return (
         <>
-            <div className="flex dc__gap-8 left">
+            <div className="flex dc__gap-8 left py-8">
                 <div className="dc__min-width-fit-content">
                     <div className="fs-13 fw-6 flex left inprogress-status-color">{label}</div>
                 </div>
@@ -246,7 +262,7 @@ const CurrentStatus = memo(
 
             if (executionInfo.currentStatus === WorkflowStageStatusType.UNKNOWN) {
                 return (
-                    <div className="flex dc__gap-8 left pt-12">
+                    <div className="flex dc__gap-8 left py-8">
                         <span className="cn-9 fs-13 fw-6 lh-20">Unknown status</span>
 
                         {type === HistoryComponentType.CI && artifact && (

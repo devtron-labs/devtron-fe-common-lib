@@ -16,6 +16,8 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react'
+import { useHistory } from 'react-router-dom'
+import { URLS } from '@Common/Constants'
 import { ReactComponent as InfoIcon } from '../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as Chat } from '../../../Assets/Icon/ic-chat-circle-dots.svg'
 import { AppStatusDetailsChartType, AggregatedNodes, STATUS_SORTING_ORDER, NodeFilters } from './types'
@@ -28,9 +30,10 @@ import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 const AppStatusDetailsChart = ({
     filterRemoveHealth = false,
     showFooter,
-    handleOpenConfigDriftModal,
+    showConfigDriftInfo = false,
     onClose,
 }: AppStatusDetailsChartType) => {
+    const history = useHistory()
     const _appDetails = IndexStore.getAppDetails()
     const [currentFilter, setCurrentFilter] = useState<string>(ALL_RESOURCE_KIND_FILTER)
     const [flattenedNodes, setFlattenedNodes] = useState([])
@@ -39,7 +42,7 @@ const AppStatusDetailsChart = ({
 
     const handleCompareDesiredManifest = () => {
         onClose()
-        handleOpenConfigDriftModal()
+        history.push(`${URLS.APP}/${appId}${URLS.DETAILS}/${envId}/${URLS.APP_DETAILS_K8}/${URLS.CONFIG_DRIFT}`)
     }
 
     const nodes: AggregatedNodes = useMemo(
@@ -148,7 +151,7 @@ const AppStatusDetailsChart = ({
                                         {nodeDetails.status ? nodeDetails.status : nodeDetails.health.status}
                                     </div>
                                     <div className="flexbox-col dc__gap-4">
-                                        {handleOpenConfigDriftModal && nodeDetails.hasDrift && (
+                                        {showConfigDriftInfo && nodeDetails.hasDrift && (
                                             <div className="flexbox dc__gap-8 dc__align-items-center">
                                                 <span className="fs-13 fw-4 lh-20 cy-7">Config drift detected</span>
                                                 {onClose && appId && envId && (
