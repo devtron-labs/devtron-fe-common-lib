@@ -33,7 +33,7 @@ const FormFieldWrapper = ({
 }: Required<FormFieldWrapperProps>) => {
     const isRowLayout = layout === 'row'
     const itemContainerClassName = isRowLayout ? 'dc__mxw-250 w-100 mxh-36 dc__align-self-stretch' : ''
-    const formError = Array.isArray(error) ? error?.[0] : error
+    const formError = Array.isArray(error) ? error[0] : error
 
     return (
         <div className={`flex left column top dc__gap-4 ${fullWidth ? 'w-100' : ''}`}>
