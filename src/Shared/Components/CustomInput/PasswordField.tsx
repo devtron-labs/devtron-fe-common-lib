@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 import { ReactComponent as ICVisibilityOn } from '@Icons/ic-visibility-on.svg'
 import { ReactComponent as ICVisibilityOff } from '@Icons/ic-visibility-off.svg'
@@ -7,23 +7,28 @@ import { CustomInputProps, PasswordFieldProps } from './types'
 
 const PasswordField = ({ onFocus, onBlur, shouldShowDefaultPlaceholderOnBlur, ...props }: PasswordFieldProps) => {
     const [fieldType, setFieldType] = useState<CustomInputProps['type']>('password')
+    const [isFocussed, setIsFocussed] = useState(false)
 
     const isFieldTypePassword = fieldType === 'password'
-
-    const handleFocus: CustomInputProps['onFocus'] = (event) => {
-        if (event.target.value === DEFAULT_SECRET_PLACEHOLDER) {
-            // eslint-disable-next-line no-param-reassign
-            event.target.value = ''
+    const value = useMemo(() => {
+        if (shouldShowDefaultPlaceholderOnBlur && isFocussed && props.value === DEFAULT_SECRET_PLACEHOLDER) {
+            return ''
         }
 
+        return !shouldShowDefaultPlaceholderOnBlur ||
+            isFocussed ||
+            (typeof props.value === 'string' && props.value?.length > 0)
+            ? props.value
+            : DEFAULT_SECRET_PLACEHOLDER
+    }, [shouldShowDefaultPlaceholderOnBlur, isFocussed, props.value])
+
+    const handleFocus: CustomInputProps['onFocus'] = (event) => {
+        setIsFocussed(true)
         onFocus?.(event)
     }
 
     const handleBlur: CustomInputProps['onBlur'] = (event) => {
-        if (shouldShowDefaultPlaceholderOnBlur && !event.target.value) {
-            // eslint-disable-next-line no-param-reassign
-            event.target.value = DEFAULT_SECRET_PLACEHOLDER
-        }
+        setIsFocussed(false)
         setFieldType('password')
         onBlur?.(event)
     }
@@ -31,11 +36,12 @@ const PasswordField = ({ onFocus, onBlur, shouldShowDefaultPlaceholderOnBlur, ..
     return (
         <CustomInput
             {...props}
+            value={value}
             onFocus={handleFocus}
             onBlur={handleBlur}
             type={fieldType}
             endIconButtonConfig={
-                props.value && props.value !== DEFAULT_SECRET_PLACEHOLDER
+                value && value !== DEFAULT_SECRET_PLACEHOLDER
                     ? {
                           icon: isFieldTypePassword ? <ICVisibilityOn /> : <ICVisibilityOff />,
                           onClick: () => {
