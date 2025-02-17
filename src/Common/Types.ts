@@ -25,6 +25,7 @@ import {
     Severity,
     PolicyBlockInfo,
     TargetPlatformItemDTO,
+    ComponentLayoutType,
 } from '../Shared'
 import {
     ACTION_STATE,
@@ -171,7 +172,7 @@ export interface GenericEmptyStateType {
     /**
      * @default 'column'
      */
-    layout?: 'row' | 'column'
+    layout?: ComponentLayoutType
     contentClassName?: string
 }
 
