@@ -49,7 +49,7 @@ const CustomInput = ({
     labelTooltipConfig,
     ...props
 }: CustomInputProps) => {
-    const inputRef = useRef<HTMLInputElement>()
+    const inputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         setTimeout(() => {

@@ -16,7 +16,7 @@
 
 import { ReactElement, ReactNode } from 'react'
 import { TooltipProps } from '@Common/Tooltip'
-import { TippyCustomizedProps } from '@Common/Types'
+import { InfoIconTippyProps } from '@Common/Types'
 import { BorderConfigType, ComponentLayoutType } from '@Shared/types'
 
 export type LabelOrAriaLabelType =
@@ -55,8 +55,8 @@ export type FormFieldLabelProps<Layout extends ComponentLayoutType = ComponentLa
               /**
                * Tippy configuration for the label in column layout
                */
-              labelTippyCustomizedConfig?: Required<Pick<TippyCustomizedProps, 'heading' | 'infoText'>> &
-                  Pick<TippyCustomizedProps, 'documentationLink' | 'documentationLinkText'>
+              labelTippyCustomizedConfig?: Required<Pick<InfoIconTippyProps, 'heading' | 'infoText'>> &
+                  Pick<InfoIconTippyProps, 'documentationLink' | 'documentationLinkText'>
           })
 
 export interface FormFieldInfoProps extends Pick<FormFieldLabelProps, 'inputId'> {

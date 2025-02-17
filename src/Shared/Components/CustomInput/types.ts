@@ -30,7 +30,7 @@ export interface CustomInputProps
      */
     shouldTrim?: boolean
     /**
-     * Size of the textarea
+     * Size of the input
      *
      * @default ComponentSizeType.large
      */

@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICHelpOutline } from '@Icons/ic-help-outline.svg'
-import { ReactComponent as ICHelp } from '@Icons/ic-help.svg'
-import { TippyCustomized } from '@Common/TippyCustomized'
-import { TippyTheme } from '@Common/Types'
 import { ConditionalWrap } from '@Common/Helper'
 import { ReactElement } from 'react'
 import { Tooltip, TooltipProps } from '@Common/Tooltip'
 import { getFormLabelElementId } from './utils'
 import { FormFieldLabelProps } from './types'
+import { InfoIconTippy } from '..'
 
 const FormFieldLabel = ({
     label,
@@ -74,21 +71,7 @@ const FormFieldLabel = ({
                 {required && <span>&nbsp;</span>}
             </div>
             {!isRowLayout && labelTippyCustomizedConfig && (
-                <TippyCustomized
-                    theme={TippyTheme.white}
-                    className="w-300 dc__align-left"
-                    placement="bottom-start"
-                    Icon={ICHelp}
-                    iconClass="fcv-5"
-                    showCloseButton
-                    trigger="click"
-                    interactive
-                    {...labelTippyCustomizedConfig}
-                >
-                    <div className="flex cursor">
-                        <ICHelpOutline className="fcn-7 icon-dim-16 dc__no-shrink" />
-                    </div>
-                </TippyCustomized>
+                <InfoIconTippy placement="bottom-start" iconClass="fcv-5" {...labelTippyCustomizedConfig} />
             )}
         </div>
     )
