@@ -21,6 +21,7 @@ import { showError, stopPropagation } from '@Common/Helper'
 import { ConfirmationModalVariantType, DeleteConfirmationModalProps } from './types'
 import ConfirmationModal from './ConfirmationModal'
 import { CannotDeleteModal } from './CannotDeleteModal'
+import { ForceDeleteConfirmationModal } from './ForceDeleteConfirmationModal'
 
 export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     title,
@@ -40,6 +41,7 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
     children,
 }: DeleteConfirmationModalProps) => {
     const [showCannotDeleteDialogModal, setCannotDeleteDialogModal] = useState(false)
+    const [showForceDeleteModal, setForceDeleteModal] = useState(false)
     const [cannotDeleteText, setCannotDeleteText] = useState(renderCannotDeleteConfirmationSubTitle)
     const [isLoading, setLoading] = useState(isDeleting)
 
@@ -81,12 +83,23 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
         closeConfirmationModal()
     }
 
+    const handleCloseForceDeleteModal = () => setForceDeleteModal(false)
+
     const renderCannotDeleteDialogModal = () => (
         <CannotDeleteModal
             title={title}
             subtitle={cannotDeleteText}
             closeConfirmationModal={handleCloseCannotDeleteModal}
             component={component}
+        />
+    )
+
+    const renderForceDeleteModal = () => (
+        <ForceDeleteConfirmationModal
+            title={title}
+            subtitle={subtitle}
+            onDelete={onDelete}
+            closeConfirmationModal={handleCloseForceDeleteModal}
         />
     )
 
@@ -117,8 +130,9 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
 
     return (
         <>
-            {!showCannotDeleteDialogModal && renderDeleteModal()}
+            {!showCannotDeleteDialogModal && !showForceDeleteModal && renderDeleteModal()}
             {showCannotDeleteDialogModal && renderCannotDeleteDialogModal()}
+            {showForceDeleteModal && renderForceDeleteModal()}
         </>
     )
 }
