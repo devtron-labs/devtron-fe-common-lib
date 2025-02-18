@@ -21,6 +21,7 @@ import { ReactComponent as Help } from '../Assets/Icon/ic-help.svg'
 import { ReactComponent as ICHelpOutline } from '../Assets/Icon/ic-help-outline.svg'
 import { ReactComponent as ICOpenInNew } from '../Assets/Icon/ic-open-in-new.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
+import 'tippy.js/animations/shift-toward.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
 import { not, stopPropagation } from './Helper'
 

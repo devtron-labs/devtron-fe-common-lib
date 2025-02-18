@@ -15,30 +15,37 @@
  */
 
 import { versionComparatorBySortOrder } from '@Shared/Helpers'
-import { DeploymentChartListDTO, DeploymentChartType, DEVTRON_DEPLOYMENT_CHART_NAMES } from './types'
+import {
+    DeploymentChartListDTO,
+    DeploymentChartType,
+    DeploymentChartVersionsType,
+    DEVTRON_DEPLOYMENT_CHART_NAMES,
+} from './types'
 import fallbackGuiSchema from './basicViewSchema.json'
 
 export const convertDeploymentChartListToChartType = (data: DeploymentChartListDTO): DeploymentChartType[] => {
     if (!data) {
         return []
     }
-    const chartMap = data.reduce(
-        (acc, { id, version, chartDescription: description = '', name, isUserUploaded = true }) => {
+    const chartMap = data.reduce<Record<string, DeploymentChartType>>(
+        (acc, { id, version, chartDescription, name, isUserUploaded, uploadedBy }) => {
             if (!name || !id || !version) {
                 return acc
             }
+            const currVersionDetail: DeploymentChartVersionsType = {
+                id,
+                version,
+                description: chartDescription || '',
+                uploadedBy: isUserUploaded ? uploadedBy || '' : 'Devtron',
+                isUserUploaded,
+            }
             const detail = acc[name]
             if (detail) {
-                detail.versions.push({
-                    id,
-                    version,
-                    description,
-                })
+                detail.versions.push(currVersionDetail)
             } else {
                 acc[name] = {
                     name,
-                    isUserUploaded,
-                    versions: [{ id, version, description }],
+                    versions: [currVersionDetail],
                 }
             }
             return acc
