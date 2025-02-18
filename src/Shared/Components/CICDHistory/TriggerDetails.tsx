@@ -411,7 +411,7 @@ const NonProgressingStatus = memo(
 
 const CurrentStatusIcon = memo(({ status, executionInfoCurrentStatus }: CurrentStatusIconProps): JSX.Element => {
     if (executionInfoCurrentStatus) {
-        return getIconFromWorkflowStageStatusType(executionInfoCurrentStatus, 'icon-dim-20 dc__no-shrink')
+        return getIconFromWorkflowStageStatusType(executionInfoCurrentStatus)
     }
 
     if (PULSATING_STATUS_MAP[status]) {

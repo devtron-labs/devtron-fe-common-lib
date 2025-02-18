@@ -2,6 +2,7 @@ import { ComponentSizeType } from '@Shared/constants'
 import { deriveBorderRadiusAndBorderClassFromConfig } from '@Shared/Helpers'
 import { InfoBlockProps } from './types'
 import {
+    CONTAINER_SIZE_TO_BUTTON_SIZE,
     CONTAINER_SIZE_TO_CLASS_MAP,
     SIZE_TO_ICON_CLASS_MAP,
     VARIANT_TO_BG_MAP,
@@ -82,7 +83,7 @@ const InfoBlock = ({
                     {renderContent()}
                 </div>
 
-                {buttonProps && <Button {...buttonProps} />}
+                {buttonProps && <Button {...buttonProps} size={CONTAINER_SIZE_TO_BUTTON_SIZE[size]} />}
             </div>
         )
     }
@@ -95,7 +96,7 @@ const InfoBlock = ({
                     {renderIcon()}
                 </div>
 
-                {buttonProps && <Button {...buttonProps} />}
+                {buttonProps && <Button {...buttonProps} size={CONTAINER_SIZE_TO_BUTTON_SIZE[size]} />}
             </div>
         )
     }
