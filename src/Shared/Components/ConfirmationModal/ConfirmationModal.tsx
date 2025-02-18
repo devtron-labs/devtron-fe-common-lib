@@ -18,6 +18,7 @@ import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect
 import { AnimatePresence, motion } from 'framer-motion'
 import { CustomInput, noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
+import { getUniqueId } from '@Shared/Helpers'
 import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
@@ -187,12 +188,12 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
     const { setModalKey, settersRef } = useConfirmationModalContext()
 
     useEffect(() => {
-        const dateString = new Date().toISOString()
-        setModalKey(dateString)
+        const id = getUniqueId()
+        setModalKey(id)
 
         return () => {
             setModalKey((prev) => {
-                if (prev === dateString) {
+                if (prev === id) {
                     return ''
                 }
 
@@ -203,7 +204,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
 
     useEffect(() => {
         settersRef.current.setProps(props)
-    })
+    }, [props])
 
     return null
 }
