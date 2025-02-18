@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { getUrlWithSearchParams, post, ROUTES } from '../../Common'
-import { GetPolicyApiUrlProps, GetResourceApiUrlProps } from './types'
+import { get, getUrlWithSearchParams, post, ROUTES } from '../../Common'
+import { EnvironmentDataValuesDTO, GetPolicyApiUrlProps, GetResourceApiUrlProps } from './types'
 
 export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryParams }: GetResourceApiUrlProps<T>) =>
     getUrlWithSearchParams(`${baseUrl}/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
@@ -24,3 +24,5 @@ export const getPolicyApiUrl = <T>({ kind, version, queryParams, suffix }: GetPo
     getUrlWithSearchParams(`global/policy/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
 
 export const saveCDPipeline = (request) => post(ROUTES.CD_CONFIG, request)
+
+export const getEnvironmentData = () => get<EnvironmentDataValuesDTO>(ROUTES.ENVIRONMENT_DATA)

@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-export interface GenericSectionErrorStateProps {
+import { ReactNode } from 'react'
+import { ProgressingProps } from '@Common/Types'
+
+export type GenericSectionErrorStateProps = {
     /**
      * Handler for reloading the section
      */
@@ -32,11 +35,11 @@ export interface GenericSectionErrorStateProps {
     /**
      * @default 'We could not load the information on this page.'
      */
-    subTitle?: string
+    subTitle?: ReactNode
     /**
      * @default 'Please reload or try again later'
      */
-    description?: string
+    description?: ReactNode
     /**
      * @default 'Reload'
      */
@@ -45,10 +48,25 @@ export interface GenericSectionErrorStateProps {
      * to be applied on parent div
      */
     rootClassName?: string
-    /**
-     * If true, info icon would be used instead of error
-     *
-     * @default false
-     */
-    useInfoIcon?: boolean
-}
+} & (
+    | {
+          /**
+           * If provided, would render the Progressing component with given props instead of error icon
+           */
+          progressingProps: ProgressingProps
+          useInfoIcon?: never
+      }
+    | {
+          progressingProps?: never
+          /**
+           * If true, info icon would be used instead of error
+           *
+           * @default false
+           */
+          useInfoIcon: boolean
+      }
+    | {
+          progressingProps?: never
+          useInfoIcon?: never
+      }
+)

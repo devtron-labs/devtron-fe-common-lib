@@ -642,6 +642,15 @@ export interface StatusFilterButtonType {
     maxInlineFiltersCount?: number
 }
 
+export enum NodeStatusDTO {
+    Healthy = 'Healthy',
+    Progressing = 'Progressing',
+    Unknown = 'Unknown',
+    Suspended = 'Suspended',
+    Degraded = 'Degraded',
+    Missing = 'Missing',
+}
+
 export enum NodeStatus {
     Degraded = 'degraded',
     Healthy = 'healthy',
