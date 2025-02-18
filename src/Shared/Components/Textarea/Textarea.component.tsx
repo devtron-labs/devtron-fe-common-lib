@@ -20,7 +20,7 @@ import {
     COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP,
     ComponentSizeType,
 } from '@Shared/constants'
-import { deriveBorderRadiusClassFromConfig } from '@Shared/Helpers'
+import { deriveBorderRadiusAndBorderClassFromConfig } from '@Shared/Helpers'
 import { useThrottledEffect } from '@Common/Helper'
 import { FormFieldWrapper, getFormFieldAriaAttributes } from '../FormFieldWrapper'
 import { TextareaProps } from './types'
@@ -43,7 +43,10 @@ const Textarea = ({
     size = ComponentSizeType.large,
     ariaLabel,
     borderRadiusConfig,
+    labelTooltipConfig,
+    labelTippyCustomizedConfig,
     value,
+    borderConfig,
     ...props
 }: TextareaProps) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -125,7 +128,10 @@ const Textarea = ({
             required={required}
             fullWidth={fullWidth}
             ariaLabel={ariaLabel}
+            borderConfig={borderConfig}
             borderRadiusConfig={borderRadiusConfig}
+            labelTooltipConfig={labelTooltipConfig}
+            labelTippyCustomizedConfig={labelTippyCustomizedConfig}
         >
             <textarea
                 {...props}
@@ -147,7 +153,7 @@ const Textarea = ({
                 onChange={handleChange}
                 onBlur={handleBlur}
                 onKeyDown={handleKeyDown}
-                className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${deriveBorderRadiusClassFromConfig(borderRadiusConfig)} w-100 dc__overflow-auto textarea`}
+                className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig })} w-100 dc__overflow-auto textarea`}
                 ref={textareaRef}
                 style={{
                     // No max height when user is expanding

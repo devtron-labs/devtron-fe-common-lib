@@ -16,15 +16,16 @@
 
 import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { CustomInput, noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
+import { noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'
 import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Backdrop } from '../Backdrop'
-import './confirmationModal.scss'
 import { useConfirmationModalContext } from './ConfirmationModalContext'
+import { CustomInput } from '../CustomInput'
+import './confirmationModal.scss'
 
 const ConfirmationModalBody = ({
     title,
@@ -108,9 +109,9 @@ const ConfirmationModalBody = ({
                             value={confirmationText}
                             onChange={handleCustomInputChange}
                             label={getConfirmationLabel(confirmationKeyword)}
-                            inputWrapClassName="w-100"
+                            fullWidth
                             placeholder="Type to confirm"
-                            isRequiredField
+                            required
                             autoFocus
                         />
                     )}
@@ -158,15 +159,6 @@ const ConfirmationModalBody = ({
     )
 }
 
-/**
- * NOTE: In some cases, we use a boolean useState to render Modals.
- * This approach can cause issues with the animation of ConfirmationModals,
- * as the animation requires the ConfirmationModal to remain mounted,
- * and only toggle the showConfirmationModal prop to true when it needs to be displayed.
- * This implementation serves as a workaround to allow modals to function as required.
- *
- * Please see NodeActionMenu.tsx as an example of why this is required
- */
 export const BaseConfirmationModal = () => {
     const { modalKey, settersRef } = useConfirmationModalContext()
     const [confirmationProps, setConfirmationProps] = useState<ConfirmationModalProps | null>(null)

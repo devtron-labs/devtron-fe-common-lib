@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Icon } from '@Shared/Components/Icon'
 import { DEPLOYMENT_ENV_TEXT } from './constants'
 import { GetDeploymentEnvConfigType } from './types'
 import { ReactComponent as ICWorld } from '../../../../../Assets/Icon/ic-world.svg'
@@ -23,14 +24,14 @@ export const getDeploymentEnvConfig = (envStateText: string): GetDeploymentEnvCo
     switch (envStateText) {
         case DEPLOYMENT_ENV_TEXT.VIRTUAL_ENV:
         case DEPLOYMENT_ENV_TEXT.ACTIVE:
-            return { Icon: <ICWorld className="icon-dim-16 mr-4 scg-5" />, stateClassName: 'bcg-1 eg-2' }
+            return { Icon: <ICWorld className="icon-dim-16 scg-5" />, stateClassName: 'bcg-1 eg-2' }
 
         case DEPLOYMENT_ENV_TEXT.FAILED:
-            return { Icon: <ICRocketFail className="icon-dim-16 mr-4" />, stateClassName: 'bcr-1 er-2' }
+            return { Icon: <ICRocketFail className="icon-dim-16" />, stateClassName: 'bcr-1 er-2' }
 
         case DEPLOYMENT_ENV_TEXT.DEPLOYING:
             return {
-                Icon: <div className="dc__app-summary__icon icon-dim-16 mr-6 progressing progressing--node" />,
+                Icon: <Icon name="ic-circle-loader" color="O500" />,
                 stateClassName: 'bcy-1 ey-2',
             }
 

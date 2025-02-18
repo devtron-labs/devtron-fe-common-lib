@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-export const getContainerRegistryIcon = (registryValue: string): JSX.Element => (
-    <div className={`dc__registry-icon dc__git-logo ${registryValue}`} />
-)
+export { default as CustomInput } from './CustomInput'
+export { default as PasswordField } from './PasswordField'
+export type { CustomInputProps, PasswordFieldProps } from './types'
