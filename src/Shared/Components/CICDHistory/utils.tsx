@@ -226,7 +226,7 @@ export const getIconFromWorkflowStageStatusType = (status: WorkflowStageStatusTy
         [WorkflowStageStatusType.ABORTED]: StatusType.ABORTED,
         [WorkflowStageStatusType.FAILED]: StatusType.FAILED,
         [WorkflowStageStatusType.SUCCEEDED]: StatusType.SUCCEEDED,
-        [WorkflowStageStatusType.NOT_STARTED]: StatusType.PROGRESSING,
+        [WorkflowStageStatusType.NOT_STARTED]: StatusType.INPROGRESS,
         [WorkflowStageStatusType.RUNNING]: StatusType.INPROGRESS,
     }
 
