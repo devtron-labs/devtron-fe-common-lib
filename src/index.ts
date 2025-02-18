@@ -28,7 +28,6 @@ export interface customEnv {
      */
     SENTRY_RELEASE_VERSION?: string
     SENTRY_TRACES_SAMPLE_RATE?: number
-    HOTJAR_ENABLED?: boolean
     CLUSTER_NAME?: boolean
     APPLICATION_METRICS_ENABLED?: boolean
     GA_ENABLED?: boolean
