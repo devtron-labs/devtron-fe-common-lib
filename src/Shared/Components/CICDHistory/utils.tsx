@@ -16,7 +16,6 @@
 import { ReactElement } from 'react'
 import moment from 'moment'
 import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'
-import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as Check } from '@Icons/ic-check-grey.svg'
 import { ReactComponent as ICHelpOutline } from '@Icons/ic-help-outline.svg'
@@ -26,9 +25,6 @@ import { ReactComponent as Disconnect } from '@Icons/ic-disconnected.svg'
 import { ReactComponent as TimeOut } from '@Icons/ic-timeout-red.svg'
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
-import { ReactComponent as ICHelpFilled } from '@Icons/ic-help-filled.svg'
-import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
-import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import {
@@ -54,7 +50,7 @@ import {
     NodeFilters,
 } from './types'
 import { Icon } from '../Icon'
-import { AppStatus, StatusType } from '../StatusComponent'
+import { AppStatus, DeploymentStatus, StatusType } from '../StatusComponent'
 
 export const getTriggerHistoryFilterCriteria = ({
     appId,
@@ -224,40 +220,30 @@ export const sanitizeWorkflowExecutionStages = (
     }
 }
 
-export const getIconFromWorkflowStageStatusType = (
-    status: WorkflowStageStatusType,
-    baseClass: string = 'icon-dim-20 dc__no-shrink',
-): ReactElement => {
-    switch (status) {
-        case WorkflowStageStatusType.TIMEOUT:
-            return <TimeOut className={baseClass} />
-
-        case WorkflowStageStatusType.ABORTED:
-            return <ICAborted className={baseClass} />
-
-        case WorkflowStageStatusType.FAILED:
-            return <Icon name="ic-failure" size={20} color={null} />
-
-        case WorkflowStageStatusType.SUCCEEDED:
-            return <ICSuccess className={baseClass} />
-
-        case WorkflowStageStatusType.NOT_STARTED:
-        case WorkflowStageStatusType.RUNNING:
-            return <Icon name="ic-in-progress" size={20} color={null} />
-
-        default:
-            return <ICHelpFilled className={baseClass} />
+export const getIconFromWorkflowStageStatusType = (status: WorkflowStageStatusType): ReactElement => {
+    const deploymentStatusMap = {
+        [WorkflowStageStatusType.TIMEOUT]: StatusType.TIMED_OUT,
+        [WorkflowStageStatusType.ABORTED]: StatusType.ABORTED,
+        [WorkflowStageStatusType.FAILED]: StatusType.FAILED,
+        [WorkflowStageStatusType.SUCCEEDED]: StatusType.SUCCEEDED,
+        [WorkflowStageStatusType.NOT_STARTED]: StatusType.PROGRESSING,
+        [WorkflowStageStatusType.RUNNING]: StatusType.INPROGRESS,
     }
+
+    return deploymentStatusMap[status] ? (
+        <DeploymentStatus status={deploymentStatusMap[status]} iconSize={20} />
+    ) : (
+        <Icon name="ic-help-outline" size={20} color="N500" />
+    )
 }
 
 export const getHistoryItemStatusIconFromWorkflowStages = (
     workflowExecutionStages: WorkflowExecutionStagesMapDTO['workflowExecutionStages'],
 ): ReactElement => {
     const executionInfo = sanitizeWorkflowExecutionStages(workflowExecutionStages)
-    const baseClass = 'icon-dim-20 dc__no-shrink'
 
     if (!executionInfo) {
-        return <ICHelpFilled className={baseClass} />
+        return <Icon name="ic-help-outline" size={20} color="N500" />
     }
 
     if (!executionInfo.finishedOn) {
@@ -268,10 +254,10 @@ export const getHistoryItemStatusIconFromWorkflowStages = (
         !FAILED_WORKFLOW_STAGE_STATUS_MAP[executionInfo.currentStatus] &&
         FAILED_WORKFLOW_STAGE_STATUS_MAP[executionInfo.workerDetails.status]
     ) {
-        return <ICWarningY5 className={baseClass} />
+        return <Icon name="ic-warning" size={20} color={null} />
     }
 
-    return getIconFromWorkflowStageStatusType(executionInfo.workerDetails.status, baseClass)
+    return getIconFromWorkflowStageStatusType(executionInfo.workerDetails.status)
 }
 
 export const getWorkerPodBaseUrl = (clusterId: number = DEFAULT_CLUSTER_ID, podNamespace: string = DEFAULT_NAMESPACE) =>
@@ -381,6 +367,8 @@ export const getTriggerStatusIcon = (status: string) => {
         case TERMINAL_STATUS_MAP.INITIATING:
         case TERMINAL_STATUS_MAP.WAITING_TO_START:
             return StatusType.INPROGRESS
+        case TERMINAL_STATUS_MAP.CANCELLED:
+            return StatusType.ABORTED
         default:
             return status
     }
