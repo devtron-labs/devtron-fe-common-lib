@@ -16,6 +16,7 @@
 
 import Tippy from '@tippyjs/react'
 import { Tooltip } from '@Common/Tooltip'
+import { RegistryIcon } from '@Shared/Components/RegistryIcon'
 import { DefaultUserKey } from '../../../types'
 import { ImagePathTippyContentProps } from './types'
 import { ArtifactInfoProps } from '../types'
@@ -101,8 +102,11 @@ const ArtifactInfo = ({
             <div className="flex left column">
                 {excludedImagePathNode ?? (
                     <ConditionalWrap condition={!!imagePath} wrap={renderImagePathTippy}>
-                        <div className="commit-hash commit-hash--docker" data-testid="cd-trigger-modal-image-value">
-                            <div className={`dc__registry-icon ${registryType} mr-8`} />
+                        <div
+                            className="commit-hash commit-hash--docker dc__gap-8"
+                            data-testid="cd-trigger-modal-image-value"
+                        >
+                            <RegistryIcon registryType={registryType} />
                             {image}
                         </div>
                     </ConditionalWrap>

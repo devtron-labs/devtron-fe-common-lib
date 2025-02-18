@@ -15,9 +15,8 @@
  */
 import { ReactElement } from 'react'
 import moment from 'moment'
-import { ALL_RESOURCE_KIND_FILTER, TIMELINE_STATUS } from '@Shared/constants'
+import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'
 import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
-import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as Check } from '@Icons/ic-check-grey.svg'
 import { ReactComponent as ICHelpOutline } from '@Icons/ic-help-outline.svg'
@@ -54,6 +53,8 @@ import {
     NodeStatus,
     NodeFilters,
 } from './types'
+import { Icon } from '../Icon'
+import { AppStatus, StatusType } from '../StatusComponent'
 
 export const getTriggerHistoryFilterCriteria = ({
     appId,
@@ -140,7 +141,7 @@ export const renderIcon = (iconState: string): JSX.Element => {
         case 'unreachable':
             return <Close className="icon-dim-20" />
         case 'loading':
-            return <div className="dc__app-summary__icon icon-dim-20 mr-6 progressing progressing--node" />
+            return <Icon name="ic-circle-loader" color="O500" size={20} />
         case 'disconnect':
             return <Disconnect className="icon-dim-20" />
         case 'time_out':
@@ -158,66 +159,6 @@ export const getStageStatusIcon = (status: StageStatusType): JSX.Element => {
             return <Close className="dc__no-shrink icon-dim-16 fcr-5" />
         default:
             return <ICInProgress className="dc__no-shrink icon-dim-16 ic-in-progress-orange" />
-    }
-}
-
-const renderAbortedTriggerIcon = (): JSX.Element => <ICAborted className="icon-dim-20 dc__no-shrink" />
-const renderFailedTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
-    <ICErrorCross className={`${baseClass} dc__no-shrink ic-error-cross-red`} />
-)
-export const renderProgressingTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
-    <ICInProgress className={`${baseClass} dc__no-shrink ic-in-progress-orange`} />
-)
-const renderSuccessTriggerIcon = (baseClass: string = 'icon-dim-20'): JSX.Element => (
-    <div className={`${baseClass} dc__app-summary__icon dc__no-shrink succeeded`} />
-)
-
-export const getTriggerStatusIcon = (triggerDetailStatus: string): JSX.Element => {
-    const triggerStatus = triggerDetailStatus?.toUpperCase()
-
-    // First check for TIMELINE_STATUS so as to not break existing functionality
-    // eslint-disable-next-line default-case
-    switch (triggerStatus) {
-        case TIMELINE_STATUS.ABORTED:
-            return renderAbortedTriggerIcon()
-        case TIMELINE_STATUS.DEGRADED:
-            return renderFailedTriggerIcon()
-        case TIMELINE_STATUS.INPROGRESS:
-            return renderProgressingTriggerIcon()
-        case TIMELINE_STATUS.HEALTHY:
-            return renderSuccessTriggerIcon()
-    }
-
-    const lowerCaseTriggerStatus = triggerStatus?.toLocaleLowerCase()
-
-    switch (lowerCaseTriggerStatus) {
-        case TERMINAL_STATUS_MAP.CANCELLED:
-            return renderAbortedTriggerIcon()
-
-        case TERMINAL_STATUS_MAP.FAILED:
-        case TERMINAL_STATUS_MAP.ERROR:
-        case TERMINAL_STATUS_MAP.TIMED_OUT:
-            return renderFailedTriggerIcon()
-
-        case TERMINAL_STATUS_MAP.RUNNING:
-        case TERMINAL_STATUS_MAP.PROGRESSING:
-        case TERMINAL_STATUS_MAP.STARTING:
-        case TERMINAL_STATUS_MAP.INITIATING:
-        case TERMINAL_STATUS_MAP.WAITING_TO_START:
-            return renderProgressingTriggerIcon()
-
-        case TERMINAL_STATUS_MAP.SUCCEEDED:
-            return renderSuccessTriggerIcon()
-
-        default:
-            return (
-                <div
-                    className={`dc__app-summary__icon dc__no-shrink icon-dim-20 ${lowerCaseTriggerStatus.replace(
-                        /\s+/g,
-                        '',
-                    )}`}
-                />
-            )
     }
 }
 
@@ -295,14 +236,14 @@ export const getIconFromWorkflowStageStatusType = (
             return <ICAborted className={baseClass} />
 
         case WorkflowStageStatusType.FAILED:
-            return renderFailedTriggerIcon(baseClass)
+            return <Icon name="ic-failure" size={20} color={null} />
 
         case WorkflowStageStatusType.SUCCEEDED:
             return <ICSuccess className={baseClass} />
 
         case WorkflowStageStatusType.NOT_STARTED:
         case WorkflowStageStatusType.RUNNING:
-            return renderProgressingTriggerIcon(baseClass)
+            return <Icon name="ic-in-progress" size={20} color={null} />
 
         default:
             return <ICHelpFilled className={baseClass} />
@@ -320,7 +261,7 @@ export const getHistoryItemStatusIconFromWorkflowStages = (
     }
 
     if (!executionInfo.finishedOn) {
-        return renderProgressingTriggerIcon(baseClass)
+        return <Icon name="ic-in-progress" size={20} color={null} />
     }
 
     if (
@@ -356,6 +297,7 @@ export const getFormattedTriggerTime = (time: string): string =>
     isTimeStringAvailable(time)
         ? moment(time, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)
         : ''
+
 export const getNodesCount = (nodes: Node[]) =>
     (nodes || []).reduce(
         (acc, node) => {
@@ -423,4 +365,23 @@ export const getStatusFilters = ({
     ]
 
     return { allResourceKindFilter, statusFilters: statusFilters.filter(({ count }) => count > 0) }
+}
+
+export const getAppStatusIcon = (status: NodeStatus | NodeFilters, hideMessage = false) => (
+    <AppStatus status={status} hideMessage={hideMessage} hideIconTooltip />
+)
+
+export const getTriggerStatusIcon = (status: string) => {
+    const triggerStatus = status?.toLowerCase()
+
+    switch (triggerStatus) {
+        case TERMINAL_STATUS_MAP.RUNNING:
+        case TERMINAL_STATUS_MAP.PROGRESSING:
+        case TERMINAL_STATUS_MAP.STARTING:
+        case TERMINAL_STATUS_MAP.INITIATING:
+        case TERMINAL_STATUS_MAP.WAITING_TO_START:
+            return StatusType.INPROGRESS
+        default:
+            return status
+    }
 }
