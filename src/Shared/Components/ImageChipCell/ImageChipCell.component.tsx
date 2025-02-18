@@ -16,9 +16,10 @@
 
 import { useState } from 'react'
 import Tippy from '@tippyjs/react'
-import { ReactComponent as DockerIcon } from '../../../Assets/Icon/ic-docker.svg'
+import { RegistryType } from '@Shared/index'
 import { ImageChipCellProps } from './types'
 import './imageChipCell.scss'
+import { RegistryIcon } from '../RegistryIcon'
 
 const ImageChipCell = ({
     imagePath,
@@ -43,11 +44,7 @@ const ImageChipCell = ({
                     className={`display-grid dc__align-items-center dc__select-text image-chip-cell__container ${isExpanded ? 'image-chip-cell__container--expanded' : ''} bcn-1 br-6 dc__transparent py-0 px-6 cursor max-w-100`}
                     onClick={handleClick || handleToggleExpand}
                 >
-                    {registryType ? (
-                        <div className={`h-14 w-14 dc__registry-icon ${registryType} br-8 dc__no-shrink`} />
-                    ) : (
-                        <DockerIcon className="icon-dim-14 mw-14" />
-                    )}
+                    <RegistryIcon registryType={registryType || RegistryType.DOCKER} size={14} />
                     {isExpanded ? (
                         <div className="mono dc__ellipsis-left direction-left">{imagePath}</div>
                     ) : (

@@ -1,0 +1,10 @@
+.icon-component {
+    &:not([data-style-override='false']) {
+        :where([stroke^='#']:not([data-style-override='false'])) {
+            stroke: var(--iconColor);
+        }
+        :where([fill^='#']:not([data-style-override='false'])) {
+            fill: var(--iconColor);
+        }
+    }
+}

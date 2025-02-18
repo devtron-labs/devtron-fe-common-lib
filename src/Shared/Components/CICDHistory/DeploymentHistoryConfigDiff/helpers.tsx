@@ -76,14 +76,6 @@ export const renderDeploymentHistoryConfig = (
     </div>
 )
 
-export const renderPipelineDeploymentStatusIcon = (status: string) => (
-    <span
-        className={`flexbox dc__align-items-start dc__app-summary__icon icon-dim-22 ${status
-            .toLocaleLowerCase()
-            .replace(/\s+/g, '')}`}
-    />
-)
-
 export const renderPipelineDeploymentOptionDescription = ({
     stage,
     triggeredBy,
