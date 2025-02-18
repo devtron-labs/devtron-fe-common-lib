@@ -28,7 +28,7 @@ export const BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> 
 } as const
 
 export const ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> = {
-    [ComponentSizeType.xxs]: 'p-2',
+    [ComponentSizeType.xxs]: 'p-1',
     [ComponentSizeType.xs]: 'p-3',
     [ComponentSizeType.small]: 'p-5',
     [ComponentSizeType.medium]: 'p-7',

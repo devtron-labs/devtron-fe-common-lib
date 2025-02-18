@@ -16,13 +16,14 @@
 
 import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { CustomInput, noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
+import { noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import './confirmationModal.scss'
 import { Backdrop } from '../Backdrop'
+import { CustomInput } from '../CustomInput'
 
 const ConfirmationModalBody = ({
     title,
@@ -106,9 +107,9 @@ const ConfirmationModalBody = ({
                             value={confirmationText}
                             onChange={handleCustomInputChange}
                             label={getConfirmationLabel(confirmationKeyword)}
-                            inputWrapClassName="w-100"
+                            fullWidth
                             placeholder="Type to confirm"
-                            isRequiredField
+                            required
                             autoFocus
                         />
                     )}

@@ -16,11 +16,12 @@
 
 import React from 'react'
 import Tippy from '@tippyjs/react'
-import { ConditionalWrap, CustomInput } from '../../../Common'
+import { ConditionalWrap } from '../../../Common'
 import { TEXT_MESSAGES } from './constants'
 import { KeyValueItemProps, KeyValueListActionType, KeyValueListProps } from './types'
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 import { Textarea } from '../Textarea'
+import { CustomInput } from '../CustomInput'
 
 const KeyValueItem = ({
     itemKey,
@@ -62,15 +63,14 @@ const KeyValueItem = ({
             <div className="pt-8 w-100">
                 <CustomInput
                     name="item-key"
-                    rootClassName={`w-100 dc__top-radius-4 pl-10 pr-10 pt-6 pb-6 en-2 bw-1 ${
-                        isDisabled ? 'cursor-not-allowed' : ''
-                    }`}
-                    autoComplete="off"
                     placeholder={keyPlaceholder}
                     type="text"
                     value={itemKey}
                     disabled={isDisabled}
                     onChange={handleKeyUpdate}
+                    borderRadiusConfig={{
+                        bottom: false,
+                    }}
                 />
                 <Textarea
                     name={`item-value-${index}`}
@@ -78,6 +78,9 @@ const KeyValueItem = ({
                     placeholder={valuePlaceholder}
                     onChange={handleValueUpdate}
                     disabled={isDisabled}
+                    borderRadiusConfig={{
+                        top: false,
+                    }}
                 />
             </div>
 
