@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.7.3",
+    "version": "1.7.4",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -32,7 +32,8 @@
         "build-lib": "vite build",
         "preview": "vite preview",
         "lint-staged": "lint-staged",
-        "postinstall": "patch-package"
+        "postinstall": "patch-package",
+        "generate-icon": "node ./scripts/generate-icon.cjs"
     },
     "devDependencies": {
         "@esbuild-plugins/node-globals-polyfill": "0.2.3",
