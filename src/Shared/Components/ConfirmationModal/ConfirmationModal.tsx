@@ -18,12 +18,14 @@ import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect
 import { AnimatePresence, motion } from 'framer-motion'
 import { noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
+import { getUniqueId } from '@Shared/Helpers'
 import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
-import './confirmationModal.scss'
 import { Backdrop } from '../Backdrop'
+import { useConfirmationModalContext } from './ConfirmationModalContext'
 import { CustomInput } from '../CustomInput'
+import './confirmationModal.scss'
 
 const ConfirmationModalBody = ({
     title,
@@ -157,14 +159,46 @@ const ConfirmationModalBody = ({
     )
 }
 
-const ConfirmationModal = ({ showConfirmationModal, ...props }: ConfirmationModalProps) => (
-    <AnimatePresence>{showConfirmationModal ? <ConfirmationModalBody {...props} /> : null}</AnimatePresence>
-)
+export const BaseConfirmationModal = () => {
+    const { modalKey, settersRef } = useConfirmationModalContext()
+    const [confirmationProps, setConfirmationProps] = useState<ConfirmationModalProps | null>(null)
 
-const WrapWithShortcutProvider = (props: ConfirmationModalProps) => (
-    <UseRegisterShortcutProvider ignoreTags={['button']}>
-        <ConfirmationModal {...props} />
-    </UseRegisterShortcutProvider>
-)
+    useEffect(() => {
+        settersRef.current = {
+            setProps: setConfirmationProps,
+        }
+    }, [])
 
-export default WrapWithShortcutProvider
+    return (
+        <UseRegisterShortcutProvider ignoreTags={['button']}>
+            <AnimatePresence>{!!modalKey && <ConfirmationModalBody {...confirmationProps} />}</AnimatePresence>
+        </UseRegisterShortcutProvider>
+    )
+}
+
+const ConfirmationModal = (props: ConfirmationModalProps) => {
+    const { setModalKey, settersRef } = useConfirmationModalContext()
+
+    useEffect(() => {
+        const id = getUniqueId()
+        setModalKey(id)
+
+        return () => {
+            setModalKey((prev) => {
+                if (prev === id) {
+                    return ''
+                }
+
+                return prev
+            })
+        }
+    }, [])
+
+    useEffect(() => {
+        settersRef.current.setProps(props)
+    }, [props])
+
+    return null
+}
+
+export default ConfirmationModal

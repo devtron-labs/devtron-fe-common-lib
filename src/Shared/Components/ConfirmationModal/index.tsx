@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-export { default as ConfirmationModal } from './ConfirmationModal'
+export { default as ConfirmationModal, BaseConfirmationModal } from './ConfirmationModal'
 export { DeleteConfirmationModal } from './DeleteConfirmationModal'
 export { ForceDeleteConfirmationModal } from './ForceDeleteConfirmationModal'
 export { CannotDeleteModal } from './CannotDeleteModal'
 export { ConfirmationModalVariantType, type ConfirmationModalProps } from './types'
+export { ConfirmationModalProvider } from './ConfirmationModalContext'
