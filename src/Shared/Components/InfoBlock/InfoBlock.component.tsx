@@ -1,7 +1,8 @@
 import { ComponentSizeType } from '@Shared/constants'
-import { deriveBorderClassFromConfig, deriveBorderRadiusClassFromConfig } from '@Shared/Helpers'
+import { deriveBorderRadiusAndBorderClassFromConfig } from '@Shared/Helpers'
 import { InfoBlockProps } from './types'
 import {
+    CONTAINER_SIZE_TO_BUTTON_SIZE,
     CONTAINER_SIZE_TO_CLASS_MAP,
     SIZE_TO_ICON_CLASS_MAP,
     VARIANT_TO_BG_MAP,
@@ -20,7 +21,7 @@ const InfoBlock = ({
     borderRadiusConfig,
     borderConfig,
 }: InfoBlockProps) => {
-    const baseContainerClass = `${CONTAINER_SIZE_TO_CLASS_MAP[size]} ${VARIANT_TO_BG_MAP[variant]} ${deriveBorderRadiusClassFromConfig(borderRadiusConfig)} ${deriveBorderClassFromConfig(borderConfig)} w-100 py-8 br-4 bw-1`
+    const baseContainerClass = `${CONTAINER_SIZE_TO_CLASS_MAP[size]} ${VARIANT_TO_BG_MAP[variant]} ${deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig })} w-100 py-8 br-4 bw-1`
     const iconClass = `dc__no-shrink flex dc__fill-available-space ${SIZE_TO_ICON_CLASS_MAP[size]}`
     const icon = customIcon ?? VARIANT_TO_ICON_MAP[variant]
 
@@ -82,7 +83,7 @@ const InfoBlock = ({
                     {renderContent()}
                 </div>
 
-                {buttonProps && <Button {...buttonProps} />}
+                {buttonProps && <Button {...buttonProps} size={CONTAINER_SIZE_TO_BUTTON_SIZE[size]} />}
             </div>
         )
     }
@@ -95,7 +96,7 @@ const InfoBlock = ({
                     {renderIcon()}
                 </div>
 
-                {buttonProps && <Button {...buttonProps} />}
+                {buttonProps && <Button {...buttonProps} size={CONTAINER_SIZE_TO_BUTTON_SIZE[size]} />}
             </div>
         )
     }

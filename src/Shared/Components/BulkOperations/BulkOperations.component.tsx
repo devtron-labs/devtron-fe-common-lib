@@ -188,7 +188,6 @@ const BulkOperations = ({
         <ConfirmationModal
             {...confirmationModalConfig}
             handleClose={handleModalClose}
-            showConfirmationModal
             buttonConfig={{
                 primaryButtonConfig: {
                     ...confirmationModalConfig.buttonConfig.primaryButtonConfig,

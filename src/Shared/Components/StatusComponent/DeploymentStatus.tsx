@@ -14,5 +14,10 @@
  * limitations under the License.
  */
 
-export { default as AppStatus } from './AppStatus'
-export * from './utils'
+import { AppStatus } from './AppStatus'
+import { DeploymentStatusProps } from './types'
+import { getDeploymentStatusFromStatus } from './utils'
+
+export const DeploymentStatus = ({ status, ...restProps }: DeploymentStatusProps) => (
+    <AppStatus status={getDeploymentStatusFromStatus(status)} {...restProps} />
+)

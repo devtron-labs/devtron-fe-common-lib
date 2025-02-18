@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.7.2-beta-1",
+    "version": "1.7.6-beta-1",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -32,7 +32,8 @@
         "build-lib": "vite build",
         "preview": "vite preview",
         "lint-staged": "lint-staged",
-        "postinstall": "patch-package"
+        "postinstall": "patch-package",
+        "generate-icon": "node ./scripts/generate-icon.cjs"
     },
     "devDependencies": {
         "@esbuild-plugins/node-globals-polyfill": "0.2.3",
@@ -84,7 +85,7 @@
         "@rjsf/utils": "^5.13.3",
         "@rjsf/validator-ajv8": "^5.13.3",
         "@typeform/embed-react": "2.20.0",
-        "dompurify": "^3.0.2",
+        "dompurify": "^3.2.4",
         "patch-package": "^8.0.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
@@ -111,7 +112,7 @@
         "dayjs": "^1.11.13",
         "fast-json-patch": "^3.1.1",
         "framer-motion": "^6.5.1",
-        "jsonpath-plus": "^10.0.0",
+        "jsonpath-plus": "^10.3.0",
         "marked": "^13.0.3",
         "nanoid": "^3.3.8",
         "react-codemirror-merge": "4.23.6",

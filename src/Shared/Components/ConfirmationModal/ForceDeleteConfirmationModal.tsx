@@ -22,7 +22,6 @@ export const ForceDeleteConfirmationModal = ({
     subtitle,
     onDelete,
     closeConfirmationModal,
-    showConfirmationModal,
 }: ForceDeleteConfirmationProps) => {
     const renderSubtitle = () => (
         <>
@@ -45,7 +44,6 @@ export const ForceDeleteConfirmationModal = ({
                     onClick: onDelete,
                 },
             }}
-            showConfirmationModal={showConfirmationModal}
             handleClose={closeConfirmationModal}
         />
     )

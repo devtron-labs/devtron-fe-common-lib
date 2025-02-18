@@ -4,6 +4,7 @@ import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { ReactComponent as ICHelp } from '@Icons/ic-help.svg'
 import { ComponentSizeType } from '@Shared/constants'
+import { ButtonProps } from '../Button'
 import { InfoBlockProps } from './types'
 
 export const VARIANT_TO_BG_MAP: Record<InfoBlockProps['variant'], string> = {
@@ -30,4 +31,9 @@ export const CONTAINER_SIZE_TO_CLASS_MAP: Record<InfoBlockProps['size'], string>
 export const SIZE_TO_ICON_CLASS_MAP: Record<InfoBlockProps['size'], string> = {
     [ComponentSizeType.large]: 'icon-dim-20',
     [ComponentSizeType.medium]: 'icon-dim-18',
+}
+
+export const CONTAINER_SIZE_TO_BUTTON_SIZE: Record<InfoBlockProps['size'], ButtonProps['size']> = {
+    [ComponentSizeType.large]: ComponentSizeType.medium,
+    [ComponentSizeType.medium]: ComponentSizeType.small,
 }
