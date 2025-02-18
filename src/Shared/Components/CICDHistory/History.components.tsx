@@ -16,6 +16,7 @@
 
 import { useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { AppThemeType, getComponentSpecificThemeClass } from '@Shared/Providers'
 import {
     ClipboardButton,
     GenericEmptyState,
@@ -60,54 +61,58 @@ export const LogResizeButton = ({
 
     return (
         showButton && (
-            <Tooltip
-                placement="left"
-                shortcutKeyCombo={{
-                    text: fullScreenView ? 'Exit fullscreen' : 'Enter fullscreen',
-                    combo: shortcutCombo,
-                }}
-            >
-                <button
-                    type="button"
-                    aria-label="Enter/Exit fullscreen view"
-                    className="zoom dc__zi-4 flex dc__no-border log-resize-button"
-                    onClick={toggleFullScreen}
+            <div className={getComponentSpecificThemeClass(AppThemeType.dark)}>
+                <Tooltip
+                    placement="left"
+                    shortcutKeyCombo={{
+                        text: fullScreenView ? 'Exit fullscreen' : 'Enter fullscreen',
+                        combo: shortcutCombo,
+                    }}
                 >
-                    {fullScreenView ? (
-                        <ZoomOut className="icon-dim-16 dc__no-shrink" />
-                    ) : (
-                        <ZoomIn className="icon-dim-16 dc__no-shrink" />
-                    )}
-                </button>
-            </Tooltip>
+                    <button
+                        type="button"
+                        aria-label="Enter/Exit fullscreen view"
+                        className="zoom dc__zi-4 flex dc__no-border log-resize-button"
+                        onClick={toggleFullScreen}
+                    >
+                        {fullScreenView ? (
+                            <ZoomOut className="icon-dim-16 dc__no-shrink" />
+                        ) : (
+                            <ZoomIn className="icon-dim-16 dc__no-shrink" />
+                        )}
+                    </button>
+                </Tooltip>
+            </div>
         )
     )
 }
 
 export const Scroller = ({ scrollToTop, scrollToBottom, style }: ScrollerType): JSX.Element => (
-    <div style={style} className="dc__element-scroller flex column top br-4">
-        <Tooltip alwaysShowTippyOnHover content="Scroll to Top" placement="left">
-            <button
-                className="flex"
-                disabled={!scrollToTop}
-                type="button"
-                onClick={scrollToTop}
-                aria-label="scroll-to-top"
-            >
-                <DropDownIcon className="rotate" style={{ ['--rotateBy' as any]: '180deg' }} />
-            </button>
-        </Tooltip>
-        <Tooltip alwaysShowTippyOnHover content="Scroll to Bottom" placement="left">
-            <button
-                className="flex"
-                disabled={!scrollToBottom}
-                type="button"
-                onClick={scrollToBottom}
-                aria-label="scroll-to-button"
-            >
-                <DropDownIcon className="rotate" />
-            </button>
-        </Tooltip>
+    <div className={getComponentSpecificThemeClass(AppThemeType.dark)}>
+        <div style={style} className="dc__element-scroller flex column top br-4">
+            <Tooltip alwaysShowTippyOnHover content="Scroll to Top" placement="left">
+                <button
+                    className="flex"
+                    disabled={!scrollToTop}
+                    type="button"
+                    onClick={scrollToTop}
+                    aria-label="scroll-to-top"
+                >
+                    <DropDownIcon className="rotate" style={{ ['--rotateBy' as any]: '180deg' }} />
+                </button>
+            </Tooltip>
+            <Tooltip alwaysShowTippyOnHover content="Scroll to Bottom" placement="left">
+                <button
+                    className="flex"
+                    disabled={!scrollToBottom}
+                    type="button"
+                    onClick={scrollToBottom}
+                    aria-label="scroll-to-button"
+                >
+                    <DropDownIcon className="rotate" />
+                </button>
+            </Tooltip>
+        </div>
     </div>
 )
 

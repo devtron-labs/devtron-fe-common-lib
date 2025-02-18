@@ -132,7 +132,7 @@ const LogStageAccordion = ({
                             >
                                 <span
                                     ref={scrollIntoView}
-                                    className="cn-4 col-2 lh-20 dc__text-align-end dc__word-break mono fs-14 dc__user-select-none"
+                                    className="cn-5 col-2 lh-20 dc__text-align-end dc__word-break mono fs-14 dc__user-select-none"
                                     data-contains-match={doesLineContainSearchMatch}
                                 >
                                     {logsIndex + 1}
