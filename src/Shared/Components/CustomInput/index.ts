@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 
-export * from './CustomInput'
-export * from './Types'
+export { default as CustomInput } from './CustomInput'
+export { default as PasswordField } from './PasswordField'
+export type { CustomInputProps, PasswordFieldProps } from './types'

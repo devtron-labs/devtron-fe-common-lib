@@ -16,7 +16,7 @@
 
 import { KeyboardEvent, SyntheticEvent, useState } from 'react'
 import { showError } from '@Common/Helper'
-import { CustomInput } from '@Common/CustomInput'
+import { CustomInput } from '@Shared/Components/CustomInput'
 import { ButtonWithLoader, ImageWithFallback } from '@Shared/Components'
 import { validateIfImageExist, validateURL } from '@Shared/validations'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
@@ -204,21 +204,17 @@ const EditImageFormField = ({
             {renderImage(false)}
 
             <div className="flexbox-col dc__gap-16 flex-grow-1">
-                <div className="flexbox-col dc__gap-6 w-100 dc__align-start">
-                    <CustomInput
-                        name={`${ariaLabelPrefix}-url-input`}
-                        label="Image URL"
-                        labelClassName="m-0 fs-13 fw-4 lh-20 cn-7"
-                        placeholder="Enter image url"
-                        value={url}
-                        onChange={handleChange}
-                        error={errorMessage || emptyPreviewURLErrorMessage}
-                        inputWrapClassName="w-100"
-                        dataTestid={`${dataTestIdPrefix}-input`}
-                        onKeyDown={handleKeyDown}
-                        autoFocus
-                    />
-                </div>
+                <CustomInput
+                    name={`${ariaLabelPrefix}-url-input`}
+                    label="Image URL"
+                    placeholder="Enter image url"
+                    value={url}
+                    onChange={handleChange}
+                    error={errorMessage || emptyPreviewURLErrorMessage}
+                    fullWidth
+                    onKeyDown={handleKeyDown}
+                    autoFocus
+                />
 
                 <div className="flexbox dc__gap-8">
                     <ButtonWithLoader
