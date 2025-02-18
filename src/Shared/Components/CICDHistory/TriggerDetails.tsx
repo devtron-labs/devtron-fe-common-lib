@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { Fragment, memo, useMemo, useState } from 'react'
 import { useLocation, useParams, useRouteMatch, Link } from 'react-router-dom'
 import { getHandleOpenURL } from '@Shared/Helpers'
@@ -146,7 +162,7 @@ const ProgressingStatus = memo(({ stage, type, label = 'In progress' }: Progress
 
     return (
         <>
-            <div className="flex dc__gap-8 left">
+            <div className="flex dc__gap-8 left py-8">
                 <div className="dc__min-width-fit-content">
                     <div className="fs-13 fw-6 flex left inprogress-status-color">{label}</div>
                 </div>
@@ -166,55 +182,59 @@ const ProgressingStatus = memo(({ stage, type, label = 'In progress' }: Progress
                     </>
                 )}
             </div>
-            <ConfirmationModal
-                variant={ConfirmationModalVariantType.warning}
-                title={type === HistoryComponentType.CD ? `Abort ${stage.toLowerCase()}-deployment?` : 'Abort build?'}
-                subtitle={
-                    type === HistoryComponentType.CD
-                        ? 'Are you sure you want to abort this stage?'
-                        : 'Are you sure you want to abort this build?'
-                }
-                buttonConfig={{
-                    secondaryButtonConfig: {
-                        disabled: aborting,
-                        onClick: toggleAbortConfiguration,
-                        text: 'Cancel',
-                    },
-                    primaryButtonConfig: {
-                        isLoading: aborting,
-                        onClick: abortRunning,
-                        text: 'Yes, Abort',
-                    },
-                }}
-                showConfirmationModal={abortConfirmation}
-                handleClose={toggleAbortConfiguration}
-            />
-            <ConfirmationModal
-                variant={ConfirmationModalVariantType.warning}
-                title="Could not abort build!"
-                subtitle={`Error: ${abortError.message}`}
-                buttonConfig={{
-                    secondaryButtonConfig: {
-                        disabled: aborting,
-                        onClick: closeForceAbortModal,
-                        text: 'Cancel',
-                    },
-                    primaryButtonConfig: {
-                        isLoading: aborting,
-                        onClick: abortRunning,
-                        text: 'Force Abort',
-                    },
-                }}
-                showConfirmationModal={abortError.status}
-                handleClose={closeForceAbortModal}
-            >
-                <div className="fs-13 fw-6 pt-12 cn-7 lh-1-54">
-                    <span>Please try to force abort</span>
-                </div>
-                <div className="pt-4 fw-4 cn-7 lh-1-54">
-                    <span>Some resource might get orphaned which will be cleaned up with Job-lifecycle</span>
-                </div>
-            </ConfirmationModal>
+            {abortConfirmation && (
+                <ConfirmationModal
+                    variant={ConfirmationModalVariantType.warning}
+                    title={
+                        type === HistoryComponentType.CD ? `Abort ${stage.toLowerCase()}-deployment?` : 'Abort build?'
+                    }
+                    subtitle={
+                        type === HistoryComponentType.CD
+                            ? 'Are you sure you want to abort this stage?'
+                            : 'Are you sure you want to abort this build?'
+                    }
+                    buttonConfig={{
+                        secondaryButtonConfig: {
+                            disabled: aborting,
+                            onClick: toggleAbortConfiguration,
+                            text: 'Cancel',
+                        },
+                        primaryButtonConfig: {
+                            isLoading: aborting,
+                            onClick: abortRunning,
+                            text: 'Yes, Abort',
+                        },
+                    }}
+                    handleClose={toggleAbortConfiguration}
+                />
+            )}
+            {abortError.status && (
+                <ConfirmationModal
+                    variant={ConfirmationModalVariantType.warning}
+                    title="Could not abort build!"
+                    subtitle={`Error: ${abortError.message}`}
+                    buttonConfig={{
+                        secondaryButtonConfig: {
+                            disabled: aborting,
+                            onClick: closeForceAbortModal,
+                            text: 'Cancel',
+                        },
+                        primaryButtonConfig: {
+                            isLoading: aborting,
+                            onClick: abortRunning,
+                            text: 'Force Abort',
+                        },
+                    }}
+                    handleClose={closeForceAbortModal}
+                >
+                    <div className="fs-13 fw-6 pt-12 cn-7 lh-1-54">
+                        <span>Please try to force abort</span>
+                    </div>
+                    <div className="pt-4 fw-4 cn-7 lh-1-54">
+                        <span>Some resource might get orphaned which will be cleaned up with Job-lifecycle</span>
+                    </div>
+                </ConfirmationModal>
+            )}
         </>
     )
 })
@@ -242,7 +262,7 @@ const CurrentStatus = memo(
 
             if (executionInfo.currentStatus === WorkflowStageStatusType.UNKNOWN) {
                 return (
-                    <div className="flex dc__gap-8 left pt-12">
+                    <div className="flex dc__gap-8 left py-8">
                         <span className="cn-9 fs-13 fw-6 lh-20">Unknown status</span>
 
                         {type === HistoryComponentType.CI && artifact && (

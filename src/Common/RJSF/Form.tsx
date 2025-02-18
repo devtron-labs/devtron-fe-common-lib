@@ -20,13 +20,13 @@ import RJSF from '@rjsf/core'
 import { templates, widgets } from './config'
 import { FormProps } from './types'
 import { translateString } from './utils'
-import { SCHEMA_07_VALIDATOR_STRICT } from '@Shared/validations'
+import { SCHEMA_07_VALIDATOR } from '@Shared/validations'
 import './rjsfForm.scss'
 
 // Need to use this way because the default import was not working as expected
 // The default import resolves to an object intead of a function
 const Form = RJSF
-const validator = SCHEMA_07_VALIDATOR_STRICT
+const validator = SCHEMA_07_VALIDATOR
 
 export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => (
     <Form
