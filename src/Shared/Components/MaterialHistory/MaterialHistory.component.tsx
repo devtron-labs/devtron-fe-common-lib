@@ -58,7 +58,7 @@ const MaterialHistory = ({
     return (
         // added for consistent typing
         // eslint-disable-next-line react/jsx-no-useless-fragment
-        <div className="flexbox-col dc__gap-12 py-12 px-16">
+        <div className="flexbox-col dc__gap-12">
             {dateKeys.map((date) => {
                 const historyList = materialHistoryMapWithTime[date]
                 return (
