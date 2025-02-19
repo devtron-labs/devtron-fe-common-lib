@@ -105,6 +105,11 @@ export interface customEnv {
      * @default false
      */
     FEATURE_EXPERIMENTAL_THEMING_ENABLE?: boolean
+    /**
+     * If true, the code-editor will use codemirror engine
+     * @default false
+     */
+    FEATURE_CODE_MIRROR_ENABLE?: boolean
 }
 declare global {
     interface Window {

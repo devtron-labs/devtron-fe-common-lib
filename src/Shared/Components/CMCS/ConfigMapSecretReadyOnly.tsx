@@ -16,12 +16,13 @@
 
 import { Progressing } from '@Common/Progressing'
 import { hasHashiOrAWS } from '@Pages/index'
-import { CodeEditor } from '@Common/CodeEditor'
 
 import { ClipboardButton } from '@Common/ClipboardButton'
+import { MODES } from '@Common/Constants'
 import { getConfigMapSecretReadOnlyValues } from './utils'
 import { ConfigMapSecretReadyOnlyProps } from './types'
 import { renderHashiOrAwsDeprecatedInfo } from './helpers'
+import { CodeEditor } from '../CodeEditorWrapper'
 
 const ConfigMapSecretReadyOnly = ({
     componentType,
@@ -73,7 +74,19 @@ const ConfigMapSecretReadyOnly = ({
                         <ClipboardButton content={displayValues.data} />
                     </div>
                     <div className="dc__overflow-hidden br-4">
-                        <CodeEditor value={displayValues.data} mode="yaml" inline height={350} readOnly />
+                        <CodeEditor
+                            mode={MODES.YAML}
+                            readOnly
+                            codeEditorProps={{
+                                value: displayValues.data,
+                                inline: true,
+                                height: 350,
+                            }}
+                            codeMirrorProps={{
+                                value: displayValues.data,
+                                height: 350,
+                            }}
+                        />
                     </div>
                 </div>
             )}
