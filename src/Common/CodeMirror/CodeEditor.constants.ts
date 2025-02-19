@@ -23,3 +23,5 @@ export const REPLACE_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = ['Enter']
 export const REPLACE_ALL_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = [IS_PLATFORM_MAC_OS ? 'Meta' : 'Control', 'Enter']
 export const SELECT_ALL_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = ['Alt', 'Enter']
 export const CLOSE_SEARCH_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = ['Escape']
+
+export const READ_ONLY_TOOLTIP_TIMEOUT = 2000
