@@ -43,7 +43,7 @@ const GettingStartedCard = ({ className, hideGettingStartedCard }: GettingStarte
     return (
         <div className="getting_tippy__position">
             <div className="arrow-up" />
-            <div className={`getting-started-card cn-0 p-20 br-8 fs-13 bg__overlay dc__border ${className}`}>
+            <div className={`getting-started-card cn-0 p-20 br-8 fs-13 bg__overlay--primary dc__border ${className}`}>
                 <img className="mb-12 icon-dim-32" src={GettingToast} alt="getting started icon" />
                 <div className="flex column left fw-6 cn-7">Getting started</div>
                 <div className="cn-7">You can always access the Getting Started guide from here.</div>

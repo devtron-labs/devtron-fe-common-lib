@@ -66,3 +66,5 @@ export const getThemeConfigFromLocalStorage = (): ThemeConfigType => {
         themePreference: selectedTheme,
     }
 }
+
+export const getComponentSpecificThemeClass = (appTheme: AppThemeType) => `component-specific-theme__${appTheme}`

@@ -171,7 +171,7 @@
 
     &:hover {
         text-decoration: unset;
-        background: var(--bg-secondary);
+        background: var(--bg-hover);
     }
 
     &.active {
@@ -259,8 +259,8 @@
     box-shadow:
         0 0 4px 0 rgba(0, 10, 20, 0.5),
         0 0 4px 0 rgba(0, 10, 20, 0.5);
-    background-color: #2c3354;
-    opacity: 0.8;
+    background-color: var(--bg-overlay-secondary);
+    border: 1px solid var(--border-primary);
     z-index: 11;
 
     & > svg {

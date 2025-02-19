@@ -19,7 +19,6 @@ import { useLocation, useParams, useRouteMatch, Link } from 'react-router-dom'
 import { getHandleOpenURL } from '@Shared/Helpers'
 import { ImageChipCell } from '@Shared/Components/ImageChipCell'
 import { CommitChipCell } from '@Shared/Components/CommitChipCell'
-import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { ReactComponent as ICPulsateStatus } from '@Icons/ic-pulsate-status.svg'
 import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
 import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
@@ -59,6 +58,7 @@ import { GitTriggers } from '../../types'
 import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
 import WorkerStatus from './WorkerStatus'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { Icon } from '../Icon'
 
 const Finished = memo(({ status, finishedOn, artifact, type, executionInfo }: FinishedType): JSX.Element => {
     const finishedOnTime = executionInfo?.finishedOn || finishedOn
@@ -386,7 +386,7 @@ const renderBlockWithBorder = () => (
 const renderDetailsSuccessIconBlock = () => (
     <>
         <div className="flex">
-            <ICSuccess className="icon-dim-20" />
+            <Icon size={20} name="ic-success" color={null} />
         </div>
 
         {renderBlockWithBorder()}

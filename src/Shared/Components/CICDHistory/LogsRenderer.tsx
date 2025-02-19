@@ -23,6 +23,7 @@ import { escapeRegExp, sanitizeTargetPlatforms } from '@Shared/Helpers'
 import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
 import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
 import { ReactComponent as ICArrow } from '@Icons/ic-caret-down.svg'
+import { AppThemeType, getComponentSpecificThemeClass } from '@Shared/Providers'
 import {
     Progressing,
     Host,
@@ -77,7 +78,7 @@ const renderBlobNotConfigured = (): JSX.Element => (
         {renderLogsNotAvailable('Logs are available only at runtime.')}
         <div className="flexbox configure-blob-container pt-8 pr-12 pb-8 pl-12 bcv-1 br-4">
             <HelpIcon className="icon-dim-20 fcv-5" />
-            <span className="fs-13 fw-4 mr-8 ml-8">Want to store logs to view later?</span>
+            <span className="fs-13 fw-4 mr-8 ml-8 text__white">Want to store logs to view later?</span>
             <a
                 className="fs-13 fw-6 cb-5 dc__no-decor"
                 href={DOCUMENTATION.BLOB_STORAGE}
@@ -483,13 +484,13 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                     className="flexbox-col pb-20 logs-renderer-container flex-grow-1"
                     data-testid="check-logs-detail"
                     style={{
-                        backgroundColor: '#0C1021',
+                        backgroundColor: 'var(--terminal-bg)',
                     }}
                 >
                     <div
                         className={`flexbox-col pb-7 dc__position-sticky dc__zi-2 ${fullScreenView ? 'dc__top-0' : 'dc__top-36'}`}
                         style={{
-                            backgroundColor: '#0C1021',
+                            backgroundColor: 'var(--terminal-bg)',
                         }}
                     >
                         <div className="flexbox logs-renderer__search-bar logs-renderer__filters-border-bottom pl-12">
@@ -610,11 +611,15 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
         )
     }
 
-    return triggerDetails.podStatus !== POD_STATUS.PENDING &&
-        logsNotAvailable &&
-        (!isBlobStorageConfigured || !triggerDetails.blobStorageEnabled)
-        ? renderConfigurationError(isBlobStorageConfigured)
-        : renderLogs()
+    return (
+        <div className={`flexbox-col flex-grow-1 ${getComponentSpecificThemeClass(AppThemeType.dark)}`}>
+            {triggerDetails.podStatus !== POD_STATUS.PENDING &&
+            logsNotAvailable &&
+            (!isBlobStorageConfigured || !triggerDetails.blobStorageEnabled)
+                ? renderConfigurationError(isBlobStorageConfigured)
+                : renderLogs()}
+        </div>
+    )
 }
 
 export default LogsRenderer

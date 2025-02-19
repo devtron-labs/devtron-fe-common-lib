@@ -38,7 +38,7 @@ const SuggestionItem = ({
 
     const sanitiseVariableValue = (value): JSX.Element => {
         if (isRedacted) {
-            return <i className="cn-3 fs-12 fw-6 lh-18 m-0">is sensitive & hidden</i>
+            return <i className="text__white fs-12 fw-6 lh-18 m-0">is sensitive & hidden</i>
         }
 
         const rootClassName = 'text__white fs-12 fw-6 lh-18 m-0'
@@ -50,7 +50,11 @@ const SuggestionItem = ({
             return <p className={rootClassName}>{value ? 'true' : 'false'}</p>
         }
         if (typeof value === 'object') {
-            return <pre className={`${rootClassName} bcn-9`}>{YAMLStringify(value)}</pre>
+            return (
+                <pre className={`${rootClassName} dc__transparent--unstyled border__primary`}>
+                    {YAMLStringify(value)}
+                </pre>
+            )
         }
         return <p className={rootClassName}>{value}</p>
     }

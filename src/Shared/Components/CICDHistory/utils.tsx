@@ -231,7 +231,7 @@ export const getIconFromWorkflowStageStatusType = (status: WorkflowStageStatusTy
     }
 
     return deploymentStatusMap[status] ? (
-        <DeploymentStatus status={deploymentStatusMap[status]} iconSize={20} />
+        <DeploymentStatus status={deploymentStatusMap[status]} iconSize={20} hideMessage hideIconTooltip />
     ) : (
         <Icon name="ic-help-outline" size={20} color="N500" />
     )

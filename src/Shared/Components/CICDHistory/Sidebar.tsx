@@ -57,7 +57,7 @@ const DeploymentSummaryTooltipCard = memo(
         const triggeredByText = triggeredBy === 1 ? 'auto trigger' : triggeredByEmail
 
         return (
-            <div className="shadow__overlay p-16 br-4 w-400 bg__overlay border__primary mxh-300 dc__overflow-auto">
+            <div className="shadow__overlay p-16 br-4 w-400 bg__overlay--primary border__primary mxh-300 dc__overflow-auto">
                 <span className="fw-6 fs-16 mb-4" style={{ color: colorMap[status.toLowerCase()] }}>
                     {getWorkflowNodeStatusTitle(status)}
                 </span>
