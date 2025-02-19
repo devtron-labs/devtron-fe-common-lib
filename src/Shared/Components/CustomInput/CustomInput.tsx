@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { InputHTMLAttributes, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { FormFieldWrapper, getFormFieldAriaAttributes } from '@Shared/Components/FormFieldWrapper'
 import {
     COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP,
@@ -75,14 +75,6 @@ const CustomInput = ({
         onBlur?.(event)
     }
 
-    const handleKeyDown: InputHTMLAttributes<HTMLInputElement>['onKeyDown'] = (event) => {
-        if (event.key === 'Enter' || event.key === 'Escape') {
-            event.stopPropagation()
-        }
-
-        props.onKeyDown?.(event)
-    }
-
     const handleEndIconButtonClick: CustomInputProps['endIconButtonConfig']['onClick'] = (event) => {
         event.stopPropagation()
         inputRef.current.focus()
@@ -123,7 +115,7 @@ const CustomInput = ({
                     data-testid={name}
                     required={required}
                     onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
+                    onKeyDown={props.onKeyDown}
                     type={type}
                     ref={inputRef}
                     className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig })} ${endIconButtonConfig ? `custom-input__with-icon-button--${size}` : ''} w-100 dc__overflow-auto`}
