@@ -25,6 +25,7 @@ import { ReactComponent as ICGoogleContainerRegistry } from '@IconsV2/ic-google-
 import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
 import { ReactComponent as ICHeartRedAnimated } from '@IconsV2/ic-heart-red-animated.svg'
 import { ReactComponent as ICHeartRed } from '@IconsV2/ic-heart-red.svg'
+import { ReactComponent as ICHelpOutline } from '@IconsV2/ic-help-outline.svg'
 import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
 import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilledOverride } from '@IconsV2/ic-info-filled-override.svg'
@@ -72,6 +73,7 @@ export const iconMap = {
     'ic-heart-green': ICHeartGreen,
     'ic-heart-red-animated': ICHeartRedAnimated,
     'ic-heart-red': ICHeartRed,
+    'ic-help-outline': ICHelpOutline,
     'ic-hibernate': ICHibernate,
     'ic-in-progress': ICInProgress,
     'ic-info-filled-override': ICInfoFilledOverride,
