@@ -27,6 +27,7 @@ import { foldGutter } from '@codemirror/language'
 import { search } from '@codemirror/search'
 import { lintGutter } from '@codemirror/lint'
 import { vscodeKeymap } from '@replit/codemirror-vscode-keymap'
+import { indentationMarkers } from '@replit/codemirror-indentation-markers'
 
 import { AppThemeType, useTheme } from '@Shared/Providers'
 import { getUniqueId } from '@Shared/Helpers'
@@ -196,6 +197,7 @@ const CodeEditor = <DiffView extends boolean = false>({
     const baseExtensions: Extension[] = [
         basicSetup(basicSetupOptions),
         keymap.of(vscodeKeymap.filter(({ key }) => !disableSearch || key !== 'Mod-f')),
+        indentationMarkers(),
         getLanguageExtension(mode),
         foldingCompartment.of(foldConfig),
         lintGutter(),
