@@ -115,7 +115,6 @@ const CustomInput = ({
                     data-testid={name}
                     required={required}
                     onBlur={handleBlur}
-                    onKeyDown={props.onKeyDown}
                     type={type}
                     ref={inputRef}
                     className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig })} ${endIconButtonConfig ? `custom-input__with-icon-button--${size}` : ''} w-100 dc__overflow-auto`}
