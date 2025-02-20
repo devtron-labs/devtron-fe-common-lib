@@ -34,7 +34,7 @@ import { getUniqueId } from '@Shared/Helpers'
 import { cleanKubeManifest, useEffectAfterMount } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
 
-import { codeEditorFindReplace, readOnlyTooltip } from './Extensions'
+import { codeEditorFindReplace, readOnlyTooltip, yamlHighlight } from './Extensions'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { getFoldGutterElement, getLanguageExtension, getValidationSchema } from './utils'
@@ -89,7 +89,7 @@ const CodeEditor = <DiffView extends boolean = false>({
 
     // CONSTANTS
     const isDarkTheme = (theme ?? appTheme) === AppThemeType.dark
-    const codeEditorTheme = getCodeEditorTheme(isDarkTheme)
+    const { codeEditorTheme, themeExtension } = getCodeEditorTheme(isDarkTheme)
 
     // STATES
     const [codemirrorMergeKey, setCodemirrorMergeKey] = useState<string>()
@@ -196,6 +196,7 @@ const CodeEditor = <DiffView extends boolean = false>({
 
     const baseExtensions: Extension[] = [
         basicSetup(basicSetupOptions),
+        themeExtension,
         keymap.of(vscodeKeymap.filter(({ key }) => !disableSearch || key !== 'Mod-f')),
         indentationMarkers(),
         getLanguageExtension(mode),
@@ -204,6 +205,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         search({
             createPanel: codeEditorFindReplace,
         }),
+        ...(mode === MODES.YAML ? [yamlHighlight] : []),
     ]
 
     const extensions: Extension[] = [
