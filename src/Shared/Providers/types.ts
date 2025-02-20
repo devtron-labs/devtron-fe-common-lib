@@ -54,7 +54,7 @@ export interface MainContext {
         isFeatureArgoCdMigrationEnabled: boolean
     }
     isManifestScanningEnabled: boolean
-    isOrgLevelRBACViewEnforced: boolean
+    canOnlyViewPermittedEnvOrgLevel: boolean
     viewIsPipelineRBACConfiguredNode: ReactNode
 }
 
