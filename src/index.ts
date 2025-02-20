@@ -28,7 +28,6 @@ export interface customEnv {
      */
     SENTRY_RELEASE_VERSION?: string
     SENTRY_TRACES_SAMPLE_RATE?: number
-    HOTJAR_ENABLED?: boolean
     CLUSTER_NAME?: boolean
     APPLICATION_METRICS_ENABLED?: boolean
     GA_ENABLED?: boolean
@@ -72,32 +71,22 @@ export interface customEnv {
     ENABLE_EXTERNAL_ARGO_CD: boolean
     API_BATCH_SIZE: number
     SERVICE_WORKER_TIMEOUT?: string
-    HIDE_RELEASES?: boolean
     FEATURE_USER_DEFINED_GITOPS_REPO_ENABLE: boolean
-    HIDE_RESOURCE_WATCHER?: boolean
     ORGANIZATION_NAME: string
     FEATURE_EXTERNAL_FLUX_CD_ENABLE: boolean
-    FEATURE_SCOPED_VARIABLE_ENVIRONMENT_LIST_ENABLE?: boolean
-    HIDE_NETWORK_STATUS_INTERFACE?: boolean
-    SYSTEM_CONTROLLER_LISTING_TIMEOUT?: number
-    FEATURE_IMAGE_PROMOTION_ENABLE?: boolean
-    FEATURE_CD_MANDATORY_PLUGINS_ENABLE?: boolean
     /**
      * If true, the direct permissions are hidden for non-super admins in user permissions
      *
      * @default false
      */
     FEATURE_HIDE_USER_DIRECT_PERMISSIONS_FOR_NON_SUPER_ADMINS?: boolean
-    FEATURE_CONFIG_DRIFT_ENABLE: boolean
     FEATURE_PROMO_EMBEDDED_BUTTON_TEXT?: string
     FEATURE_PROMO_EMBEDDED_MODAL_TITLE?: string
     FEATURE_PROMO_EMBEDDED_IFRAME_URL?: string
-    FEATURE_SWAP_TRAFFIC_ENABLE?: boolean
     FEATURE_BULK_RESTART_WORKLOADS_FROM_RB: string
     FEATURE_RB_SYNC_CLUSTER_ENABLE?: boolean
     FEATURE_DEFAULT_MERGE_STRATEGY?: OverrideMergeStrategyType
     FEATURE_DEFAULT_LANDING_RB_ENABLE?: boolean
-    FEATURE_CLUSTER_MAP_ENABLE?: boolean
     FEATURE_ACTION_AUDIOS_ENABLE?: boolean
     /**
      * If true, the experimental theming feature is enabled
@@ -105,6 +94,64 @@ export interface customEnv {
      * @default false
      */
     FEATURE_EXPERIMENTAL_THEMING_ENABLE?: boolean
+
+    // ================== Feature flags for the enterprise release ==================
+    /**
+     * Enable Image promotion feature
+     *
+     * @default false
+     */
+    FEATURE_IMAGE_PROMOTION_ENABLE?: boolean
+    /**
+     * Enable environment list for scoped variables
+     *
+     * @default false
+     */
+    FEATURE_SCOPED_VARIABLE_ENVIRONMENT_LIST_ENABLE?: boolean
+    /**
+     * If false, Enable release feature
+     *
+     * @default true
+     */
+    HIDE_RELEASES?: boolean
+    /**
+     * Enable resource watcher
+     *
+     * @default true
+     */
+    HIDE_RESOURCE_WATCHER?: boolean
+    /**
+     * Enable config drift
+     *
+     * @default false
+     */
+    FEATURE_CONFIG_DRIFT_ENABLE: boolean
+    /**
+     * Enable swap traffic (blue green deployment)
+     *
+     * @default false
+     */
+    FEATURE_SWAP_TRAFFIC_ENABLE?: boolean
+    /**
+     * Enable mandatory plugins for cd
+     *
+     * @default true
+     */
+    FEATURE_CD_MANDATORY_PLUGINS_ENABLE?: boolean
+    /**
+     * Enable cluster map
+     *
+     * @default true
+     */
+    FEATURE_CLUSTER_MAP_ENABLE?: boolean
+    /**
+     * @default true
+     */
+    HIDE_NETWORK_STATUS_INTERFACE?: boolean
+    /**
+     * @default 300000
+     */
+    SYSTEM_CONTROLLER_LISTING_TIMEOUT?: number
 }
 declare global {
     interface Window {

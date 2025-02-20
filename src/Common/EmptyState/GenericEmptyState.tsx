@@ -61,9 +61,9 @@ const GenericEmptyState = ({
                         className={imageClassName || ''}
                         src={image || AppNotDeployed}
                         style={{
-                            ...imageStyles,
                             width: `${getImageSize().width}`,
                             height: `${getImageSize().height}`,
+                            ...imageStyles,
                         }}
                         alt="empty-state"
                     />
@@ -71,9 +71,9 @@ const GenericEmptyState = ({
             ) : (
                 <SvgImage
                     style={{
-                        ...imageStyles,
                         width: `${getImageSize().width}`,
                         height: `${getImageSize().height}`,
+                        ...imageStyles,
                     }}
                 />
             )}
