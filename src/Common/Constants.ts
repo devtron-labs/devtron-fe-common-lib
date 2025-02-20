@@ -99,6 +99,7 @@ export const ROUTES = {
     TELEMETRY_EVENT: 'telemetry/event',
     SERVER_INFO_API: 'server',
     ATTRIBUTES_USER: 'attributes/user',
+    GET: 'get',
     UPDATE: 'update',
     ENVIRONMENT_LIST_MIN: 'env/autocomplete',
     CLUSTER: 'cluster',
