@@ -1012,3 +1012,8 @@ export interface BorderConfigType {
      */
     left?: boolean
 }
+
+export interface AppEnvIdType {
+    appId: number
+    envId: number
+}
