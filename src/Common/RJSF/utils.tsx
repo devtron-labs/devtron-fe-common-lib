@@ -15,7 +15,15 @@
  */
 
 import { TranslatableString, englishStringTranslator } from '@rjsf/utils'
-import { HiddenType, MetaHiddenType } from './types'
+import { buildObjectFromPath, convertJSONPointerToJSONPath, joinObjects } from '@Common/Helper'
+import { JSONPath } from 'jsonpath-plus'
+import {
+    GetFormStateFromFormDataProps,
+    HiddenType,
+    MetaHiddenType,
+    RJSFFormSchema,
+    UpdateFormDataFromFormStateProps,
+} from './types'
 
 /**
  * Override for the TranslatableString from RJSF
@@ -81,7 +89,7 @@ export const getInferredTypeFromValueType = (value) => {
     }
 }
 
-const conformPathToPointers = (path: string): string => {
+export const conformPathToPointers = (path: string): string => {
     if (!path) {
         return ''
     }
@@ -136,3 +144,127 @@ export const parseSchemaHiddenType = (hiddenSchema: HiddenType): MetaHiddenType 
     }
     return structuredClone(emptyMetaHiddenTypeInstance)
 }
+
+const _getSchemaPathToUpdatePathMap = (schema: RJSFFormSchema, path: string, map: Record<string, string>) => {
+    if (!schema) {
+        return
+    }
+
+    if (schema.type === 'object' && schema.properties && typeof schema.properties === 'object') {
+        Object.entries(schema.properties).forEach(([key, value]) => {
+            _getSchemaPathToUpdatePathMap(value, `${path}/${key}`, map)
+        })
+    }
+
+    if (
+        (schema.type === 'boolean' ||
+            schema.type === 'string' ||
+            schema.type === 'number' ||
+            schema.type === 'integer') &&
+        schema.updatePath
+    ) {
+        // eslint-disable-next-line no-param-reassign
+        map[path] = conformPathToPointers(schema.updatePath)
+    }
+}
+
+export const getSchemaPathToUpdatePathMap = (schema: RJSFFormSchema) => {
+    const map = {}
+    _getSchemaPathToUpdatePathMap(schema, '', map)
+    return map
+}
+
+const _recursivelyRemoveElement = (obj, index, tokens) => {
+    if (index >= tokens.length) {
+        return obj
+    }
+
+    const key = tokens[index]
+
+    if (index === tokens.length - 1) {
+        const copy = structuredClone(obj)
+        delete copy[key]
+        return copy
+    }
+
+    if (obj[key]) {
+        // eslint-disable-next-line no-param-reassign
+        obj[key] = _recursivelyRemoveElement(obj[key], index + 1, tokens)
+    }
+
+    if (Object.keys(obj[key] ?? {}).length === 0) {
+        const copy = structuredClone(obj)
+        delete copy[key]
+        return copy
+    }
+
+    return obj
+}
+
+const recursivelyRemoveElement = (obj, path) => {
+    if (!obj || typeof obj !== 'object') {
+        throw new Error('Invalid object')
+    }
+
+    if (!path || !path.startsWith('/')) {
+        throw new Error('Invalid path')
+    }
+
+    const tokens = path.split('/').slice(1)
+    return _recursivelyRemoveElement(obj, 0, tokens)
+}
+
+// NOTE: formState is the internal state managed by RJSF
+// while formData is the data provided by the user via props
+export const updateFormDataFromFormState = ({
+    formState,
+    formData,
+    schemaPathToUpdatePathMap,
+}: UpdateFormDataFromFormStateProps) => {
+    if (!formData || !formState || typeof formData !== 'object') {
+        return formData
+    }
+
+    const pathsToRemove = []
+
+    const objects = Object.entries(schemaPathToUpdatePathMap).map(([path, updatePath]) => {
+        const value = JSONPath({
+            json: formState,
+            path: convertJSONPointerToJSONPath(path),
+            resultType: 'value',
+            wrap: false,
+        })
+
+        if (value === undefined) {
+            pathsToRemove.push(updatePath)
+            return {}
+        }
+
+        return buildObjectFromPath(updatePath, value)
+    })
+
+    const updatedFormData = joinObjects([...objects, formData])
+
+    pathsToRemove.forEach((path) => recursivelyRemoveElement(updatedFormData, path))
+
+    return updatedFormData
+}
+
+export const getFormStateFromFormData = ({ formData, schemaPathToUpdatePathMap }: GetFormStateFromFormDataProps) =>
+    joinObjects([
+        ...Object.entries(schemaPathToUpdatePathMap).map(([path, updatePath]) => {
+            const value = JSONPath({
+                json: formData,
+                path: convertJSONPointerToJSONPath(updatePath),
+                resultType: 'value',
+                wrap: false,
+            })
+
+            if (value === undefined) {
+                return {}
+            }
+
+            return buildObjectFromPath(path, value)
+        }),
+        formData,
+    ])

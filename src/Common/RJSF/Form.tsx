@@ -14,35 +14,72 @@
  * limitations under the License.
  */
 
-import { forwardRef } from 'react'
+import { forwardRef, useMemo } from 'react'
 import RJSF from '@rjsf/core'
 
+import { SCHEMA_07_VALIDATOR } from '@Shared/validations'
 import { templates, widgets } from './config'
 import { FormProps } from './types'
-import { translateString } from './utils'
-import { SCHEMA_07_VALIDATOR } from '@Shared/validations'
+import {
+    getFormStateFromFormData,
+    getSchemaPathToUpdatePathMap,
+    translateString,
+    updateFormDataFromFormState,
+} from './utils'
 import './rjsfForm.scss'
 
 // Need to use this way because the default import was not working as expected
-// The default import resolves to an object intead of a function
+// The default import resolves to an object instead of a function
 const Form = RJSF
 const validator = SCHEMA_07_VALIDATOR
 
-export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => (
-    <Form
-        noHtml5Validate
-        showErrorList={false}
-        autoComplete="off"
-        {...props}
-        className={`rjsf-form-template__container ${props.className || ''}`}
-        validator={validator}
-        templates={{
-            ...templates,
-            ...props.templates,
-        }}
-        formContext={props.formData}
-        widgets={{ ...widgets, ...props.widgets }}
-        translateString={translateString}
-        ref={ref}
-    />
-))
+export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => {
+    const schemaPathToUpdatePathMap = useMemo(() => getSchemaPathToUpdatePathMap(props.schema), [props.schema])
+
+    const formState = useMemo(
+        () => getFormStateFromFormData({ formData: props.formData ?? {}, schemaPathToUpdatePathMap }),
+        [props.formData, schemaPathToUpdatePathMap],
+    )
+
+    const handleOnChange: FormProps['onChange'] = (data) => {
+        const updatedFormData = updateFormDataFromFormState({
+            formState: data.formData,
+            formData: props.formData,
+            schemaPathToUpdatePathMap,
+        })
+
+        props.onChange?.({ ...data, formData: updatedFormData })
+    }
+
+    const handleOnSubmit: FormProps['onSubmit'] = (data, event) => {
+        const updatedFormData = updateFormDataFromFormState({
+            formState: data.formData,
+            formData: props.formData,
+            schemaPathToUpdatePathMap,
+        })
+
+        props.onSubmit?.({ ...data, formData: updatedFormData }, event)
+    }
+
+    return (
+        <Form
+            noHtml5Validate
+            showErrorList={false}
+            autoComplete="off"
+            {...props}
+            formData={formState}
+            onChange={handleOnChange}
+            onSubmit={handleOnSubmit}
+            className={`rjsf-form-template__container ${props.className || ''}`}
+            validator={validator}
+            templates={{
+                ...templates,
+                ...props.templates,
+            }}
+            formContext={formState}
+            widgets={{ ...widgets, ...props.widgets }}
+            translateString={translateString}
+            ref={ref}
+        />
+    )
+})

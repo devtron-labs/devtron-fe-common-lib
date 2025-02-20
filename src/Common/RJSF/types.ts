@@ -18,8 +18,6 @@ import { ComponentProps } from 'react'
 import RJSFForm from '@rjsf/core'
 import { StrictRJSFSchema } from '@rjsf/utils'
 
-export type FormProps = Omit<ComponentProps<typeof RJSFForm>, 'validator'>
-
 export interface MetaHiddenType {
     value: any
     path: string
@@ -38,4 +36,16 @@ export interface RJSFFormSchema extends StrictRJSFSchema {
         [key: string]: RJSFFormSchema
     }
     hidden: HiddenType
+    updatePath: string
 }
+
+export type FormProps = Omit<ComponentProps<typeof RJSFForm<any, RJSFFormSchema>>, 'validator'>
+
+export interface UpdateFormDataFromFormStateProps {
+    formState: Record<string, unknown>
+    formData: Record<string, unknown>
+    schemaPathToUpdatePathMap: Record<string, string>
+}
+
+export interface GetFormStateFromFormDataProps
+    extends Pick<UpdateFormDataFromFormStateProps, 'formData' | 'schemaPathToUpdatePathMap'> {}
