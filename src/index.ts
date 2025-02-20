@@ -94,6 +94,10 @@ export interface customEnv {
      * @default false
      */
     FEATURE_EXPERIMENTAL_THEMING_ENABLE?: boolean
+    /**
+     * If true, the experimental layout feature is enabled
+     */
+    FEATURE_EXPERIMENTAL_MODERN_LAYOUT_ENABLE?: boolean
 
     // ================== Feature flags for the enterprise release ==================
     /**
