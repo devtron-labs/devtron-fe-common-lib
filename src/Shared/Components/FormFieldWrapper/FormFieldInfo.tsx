@@ -29,12 +29,7 @@ const FormFieldInfo = ({ error, helperText, warningText, inputId }: FormFieldInf
     <div className="flex left column dc__gap-4">
         {!!error && <FormInfoItem text={error} icon="ic-error" textClass="cr-5" id={getFormErrorElementId(inputId)} />}
         {!!helperText && (
-            <FormInfoItem
-                text={helperText}
-                icon="ic-info-filled-override"
-                textClass="cn-7"
-                id={`${inputId}-helper-text`}
-            />
+            <FormInfoItem text={helperText} icon="ic-info-filled" textClass="cn-7" id={`${inputId}-helper-text`} />
         )}
         {!!warningText && (
             <FormInfoItem text={warningText} icon="ic-warning" textClass="cy-7" id={`${inputId}-warning-msg`} />
