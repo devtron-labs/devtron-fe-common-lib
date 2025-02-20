@@ -73,7 +73,7 @@ export const StatusFilterButtonComponent = ({
     return (
         <div className="flexbox">
             <RadioGroup
-                className={`gui-yaml-switch status-filter-button ${showOverflowFilters ? 'with-menu-button' : ''}`}
+                className={`status-filter-button ${showOverflowFilters ? 'with-menu-button' : ''}`}
                 name="status-filter-button"
                 initialTab={selectedTab}
                 disabled={false}
