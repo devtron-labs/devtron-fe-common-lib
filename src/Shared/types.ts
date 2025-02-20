@@ -973,6 +973,17 @@ export const TriggerType = {
     Manual: 'MANUAL',
 } as const
 
+export enum ViewIsPipelineRBACConfiguredRadioTabs {
+    ALL_ENVIRONMENTS = 'All environments',
+    ACCESS_ONLY = 'Access only',
+}
+
+export interface EnvironmentDataValuesDTO {
+    isAirGapEnvironment: boolean
+    isManifestScanningEnabled: boolean
+    canOnlyViewPermittedEnvOrgLevel: boolean
+}
+
 export type ComponentLayoutType = 'row' | 'column'
 
 export interface BorderConfigType {
