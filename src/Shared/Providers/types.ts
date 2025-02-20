@@ -54,6 +54,8 @@ export interface MainContext {
         isFeatureArgoCdMigrationEnabled: boolean
     }
     isManifestScanningEnabled: boolean
+    isOrgLevelRBACViewEnforced: boolean
+    viewIsPipelineRBACConfiguredNode: ReactNode
 }
 
 export interface MainContextProviderProps {

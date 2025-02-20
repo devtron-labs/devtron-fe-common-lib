@@ -19,12 +19,12 @@ import { DeploymentStageType } from '@Shared/constants'
 import { NavLink } from 'react-router-dom'
 import moment from 'moment'
 import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
-import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 import { ShowMoreText } from '../ShowMoreText'
 import { FAILED_WORKFLOW_STAGE_STATUS_MAP, TIMEOUT_VALUE, WORKFLOW_STAGE_STATUS_TO_TEXT_MAP } from './constants'
 import { getWorkerPodBaseUrl } from './utils'
 import { WorkerStatusType } from './types'
+import { Icon } from '../Icon'
 
 const WorkerStatus = memo(
     ({
@@ -65,7 +65,7 @@ const WorkerStatus = memo(
             <>
                 <div className="flexbox dc__content-center">
                     {FAILED_WORKFLOW_STAGE_STATUS_MAP[podStatus] ? (
-                        <ICWarningY5 className="icon-dim-20 dc__no-shrink" />
+                        <Icon size={20} name="ic-warning" color={null} />
                     ) : (
                         <ICLines className="icon-dim-20 dc__no-shrink scn-7" />
                     )}

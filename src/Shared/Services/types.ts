@@ -16,7 +16,8 @@
 
 import { MainContext } from '@Shared/Providers'
 import { getUrlWithSearchParams } from '../../Common'
-import { PolicyKindType, ResourceKindType, ResourceVersionType } from '../types'
+import { PolicyKindType, ResourceKindType, ResourceVersionType, ViewIsPipelineRBACConfiguredRadioTabs } from '../types'
+import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 
 export interface ClusterType {
     id: number
@@ -54,4 +55,21 @@ export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitO
     isAirGapEnvironment: boolean
     isManifestScanningEnabled: boolean
     canOnlyViewPermittedEnvOrgLevel: boolean
+}
+export interface GetUserPreferencesQueryParamsType {
+    key: typeof USER_PREFERENCES_ATTRIBUTE_KEY
+}
+
+export interface GetUserPreferencesParsedDTO {
+    viewPermittedEnvOnly?: boolean
+}
+
+export interface UpdateUserPreferencesParsedValueType extends GetUserPreferencesParsedDTO {}
+
+export interface UpdateUserPreferencesPayloadType extends Pick<GetUserPreferencesQueryParamsType, 'key'> {
+    value: string
+}
+
+export interface UserPreferencesType {
+    pipelineRBACViewSelectedTab: ViewIsPipelineRBACConfiguredRadioTabs
 }
