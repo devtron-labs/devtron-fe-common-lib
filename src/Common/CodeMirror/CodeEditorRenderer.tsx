@@ -21,7 +21,7 @@ import { Progressing } from '@Common/Progressing'
 
 import { FocusEventHandler, useEffect, useRef, useState } from 'react'
 import { CodeEditorRendererProps } from './types'
-import { getCodeEditorHeight } from './utils'
+import { getCodeEditorHeight, getRevertControlButton } from './utils'
 
 export const CodeEditorRenderer = ({
     loading,
@@ -114,9 +114,11 @@ export const CodeEditorRenderer = ({
         <CodeMirrorMerge
             theme={codeEditorTheme}
             key={codemirrorMergeKey}
-            className={`w-100 vertical-divider ${isDarkTheme ? 'cm-merge-theme__dark' : 'cm-merge-theme__light'} ${codeEditorParentClassName}`}
+            className={`w-100 ${isDarkTheme ? 'cm-merge-theme__dark' : 'cm-merge-theme__light'} ${codeEditorParentClassName}`}
             gutter
             destroyRerender={false}
+            revertControls="a-to-b"
+            renderRevertControl={getRevertControlButton}
         >
             <CodeMirrorMerge.Original
                 basicSetup={false}

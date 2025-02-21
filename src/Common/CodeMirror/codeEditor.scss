@@ -20,12 +20,25 @@
     background-color: var(--bg-code-editor-base);
 }
 
+.cm-mergeViewEditor:first-child {
+    border-right: 1px solid var(--N200);
+}
+
 .cm-mergeViewEditor:last-child {
     border-left: 1px solid var(--N200);
 }
 
 .cm-scroller {
     min-height: inherit;
+}
+
+.cm-merge-revert {
+    background-color: var(--bg-primary);
+
+    button {
+        margin-top: 4px;
+        padding: 0;
+    }
 }
 
 .cm-editor {
@@ -45,10 +58,6 @@
     }
 
     &.cm-merge-a .cm-changedLineGutter {
-        position: absolute;
-        width: 100%;
-        left: 0;
-        z-index: -1;
         background: var(--bg-code-editor-red-gutter);
     }
 
@@ -62,10 +71,6 @@
     }
 
     &.cm-merge-b .cm-changedLineGutter {
-        position: absolute;
-        width: 100%;
-        left: 0;
-        z-index: -1;
         background: var(--bg-code-editor-green-gutter);
     }
 
@@ -145,6 +150,12 @@
         &:hover .cm-foldGutter .cm-gutterElement:not(:first-child) span {
             visibility: visible;
         }
+    }
+
+    .cm-changeGutter {
+        position: absolute;
+        width: 100%;
+        z-index: -1;
     }
 
     .cm-foldGutter .cm-gutterElement:not(:first-child) span:not(.is-closed) {

@@ -1,6 +1,7 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
 
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
+import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
@@ -49,6 +50,7 @@ import { IconBaseProps } from './types'
 
 export const iconMap = {
     'ic-aborted': ICAborted,
+    'ic-arrow-right': ICArrowRight,
     'ic-azure': ICAzure,
     'ic-bitbucket': ICBitbucket,
     'ic-build-color': ICBuildColor,
