@@ -20,8 +20,11 @@ import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/typ
 export const PREVIOUS_MATCH_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = ['Shift', 'Enter']
 export const NEXT_MATCH_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = ['Enter']
 export const REPLACE_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = ['Enter']
-export const REPLACE_ALL_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = [IS_PLATFORM_MAC_OS ? 'Meta' : 'Control', 'Enter']
-export const SELECT_ALL_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = ['Alt', 'Enter']
+export const REPLACE_ALL_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = [
+    IS_PLATFORM_MAC_OS ? 'Meta' : 'Control',
+    'Alt',
+    'Enter',
+]
 export const CLOSE_SEARCH_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = ['Escape']
 
 export const READ_ONLY_TOOLTIP_TIMEOUT = 2000

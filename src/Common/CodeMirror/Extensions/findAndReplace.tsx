@@ -49,7 +49,6 @@ import {
     PREVIOUS_MATCH_SHORTCUT_KEYS,
     REPLACE_ALL_SHORTCUT_KEYS,
     REPLACE_SHORTCUT_KEYS,
-    SELECT_ALL_SHORTCUT_KEYS,
 } from '../CodeEditor.constants'
 import { getFindReplaceToggleButtonIconClass, getUpdatedSearchMatchesCount } from '../utils'
 
@@ -322,10 +321,7 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
                 onClick={onSelectAllClick}
                 showTooltip
                 tooltipProps={{
-                    shortcutKeyCombo: {
-                        text: 'Select All',
-                        combo: SELECT_ALL_SHORTCUT_KEYS,
-                    },
+                    content: 'Select All',
                     placement: 'bottom',
                 }}
             />
