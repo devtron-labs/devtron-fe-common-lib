@@ -46,7 +46,6 @@ export interface customEnv {
     CENTRAL_API_ENDPOINT?: string
     HIDE_GITOPS_OR_HELM_OPTION?: boolean
     CONFIGURABLE_TIMEOUT?: string
-    HIDE_APPLICATION_GROUPS?: boolean
     K8S_CLIENT?: boolean
     CLUSTER_TERMINAL_CONNECTION_POLLING_INTERVAL?: number
     CLUSTER_TERMINAL_CONNECTION_RETRY_COUNT?: number
@@ -98,8 +97,12 @@ export interface customEnv {
      * If true, the experimental layout feature is enabled
      */
     FEATURE_EXPERIMENTAL_MODERN_LAYOUT_ENABLE?: boolean
-
     // ================== Feature flags for the enterprise release ==================
+    /**
+     * If true, only pipelines to which the user has access will be shown across the application
+     * @default false
+     */
+    FEATURE_DEFAULT_AUTHENTICATED_VIEW_ENABLE?: boolean
     /**
      * Enable Image promotion feature
      *
