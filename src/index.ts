@@ -70,7 +70,6 @@ export interface customEnv {
     ENABLE_EXTERNAL_ARGO_CD: boolean
     API_BATCH_SIZE: number
     SERVICE_WORKER_TIMEOUT?: string
-    FEATURE_USER_DEFINED_GITOPS_REPO_ENABLE: boolean
     ORGANIZATION_NAME: string
     FEATURE_EXTERNAL_FLUX_CD_ENABLE: boolean
     /**
