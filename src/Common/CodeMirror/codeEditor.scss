@@ -42,9 +42,8 @@
 }
 
 .cm-editor {
-    --indent-marker-bg-color: var(--border-primary);
-    // TODO: Need to update this color (Utkarsh)
-    --indent-marker-active-bg-color: var(--border-primary);
+    --indent-marker-bg-color: var(--N200);
+    --indent-marker-active-bg-color: var(--N300);
 
     &.cm-focused {
         outline: none;

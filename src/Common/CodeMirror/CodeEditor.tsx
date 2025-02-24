@@ -178,7 +178,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         searchKeymap: false,
         foldGutter: false,
         drawSelection: false,
-        highlightActiveLineGutter: false,
+        highlightActiveLineGutter: true,
         tabSize,
     }
 
