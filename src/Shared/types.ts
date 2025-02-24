@@ -771,11 +771,11 @@ export interface UserRoleConfig {
     // can be '' if access manager has no base access
     baseRole: string
     /**
-     * Only for devtron apps, ENT Only
+     * Only for devtron apps
      */
     additionalRoles?: Set<string>
     /**
-     * Only for devtron apps, ENT Only
+     * Only for devtron apps
      */
     accessManagerRoles?: Set<string>
 }

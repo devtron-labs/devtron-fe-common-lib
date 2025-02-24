@@ -1080,7 +1080,6 @@ export interface UserRole extends ResponseType {
         roles: string[]
         superAdmin: boolean
         /**
-         * ENT Only
          * Defines if a user is access manager and can manage all access
          */
         canManageAllAccess?: boolean
