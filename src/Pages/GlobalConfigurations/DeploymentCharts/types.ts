@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-export type DeploymentChartListDTO = Array<{
+interface DeploymentChartInfo {
     id: number
     chartDescription?: string
     isUserUploaded: boolean
     name: string
     version: string
-}>
+    uploadedBy: string
+}
 
-interface DeploymentChartVersionsType {
-    id: number
-    version: string
+export type DeploymentChartListDTO = DeploymentChartInfo[]
+
+export interface DeploymentChartVersionsType
+    extends Pick<DeploymentChartInfo, 'id' | 'version' | 'uploadedBy' | 'isUserUploaded'> {
     description: string
 }
 
-export interface DeploymentChartType {
-    name: string
-    isUserUploaded: boolean
+export interface DeploymentChartType extends Pick<DeploymentChartInfo, 'name'> {
     versions: DeploymentChartVersionsType[]
 }
 

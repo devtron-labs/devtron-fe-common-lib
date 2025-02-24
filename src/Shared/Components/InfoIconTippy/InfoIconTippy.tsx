@@ -47,6 +47,8 @@ const InfoIconTippy = ({
         documentationLink={documentationLink}
         documentationLinkText={documentationLinkText}
         additionalContent={additionalContent}
+        animation="shift-toward"
+        duration={400}
     >
         {children || (
             <button
