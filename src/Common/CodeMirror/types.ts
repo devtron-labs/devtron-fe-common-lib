@@ -98,6 +98,7 @@ export type FindReplaceQuery = Partial<
 export interface FindReplaceProps {
     view: EditorView
     defaultQuery: SearchQuery
+    defaultShowReplace: boolean
 }
 
 // REDUCER TYPES

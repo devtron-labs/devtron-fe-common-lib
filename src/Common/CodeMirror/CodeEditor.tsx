@@ -35,6 +35,7 @@ import { cleanKubeManifest, useEffectAfterMount } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
 
 import { codeEditorFindReplace, readOnlyTooltip, yamlHighlight } from './Extensions'
+import { openSearchPanel, openSearchPanelWithReplace, replaceAll, showReplaceFieldState } from './Commands'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { getFoldGutterElement, getLanguageExtension, getValidationSchema } from './utils'
@@ -197,7 +198,12 @@ const CodeEditor = <DiffView extends boolean = false>({
     const baseExtensions: Extension[] = [
         basicSetup(basicSetupOptions),
         themeExtension,
-        keymap.of(vscodeKeymap.filter(({ key }) => !disableSearch || key !== 'Mod-f')),
+        keymap.of([
+            ...vscodeKeymap.filter(({ key }) => key !== 'Mod-Alt-Enter' && key !== 'Mod-Enter' && key !== 'Mod-f'),
+            ...(!disableSearch ? [{ key: 'Mod-f', run: openSearchPanel, scope: 'editor search-panel' }] : []),
+            { key: 'Mod-Enter', run: replaceAll, scope: 'editor search-panel' },
+            { key: 'Mod-Alt-f', run: openSearchPanelWithReplace, scope: 'editor search-panel' },
+        ]),
         indentationMarkers(),
         getLanguageExtension(mode),
         foldingCompartment.of(foldConfig),
@@ -205,6 +211,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         search({
             createPanel: codeEditorFindReplace,
         }),
+        showReplaceFieldState,
         ...(mode === MODES.YAML ? [yamlHighlight] : []),
     ]
 

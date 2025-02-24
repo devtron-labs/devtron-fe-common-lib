@@ -51,6 +51,7 @@ import {
     REPLACE_SHORTCUT_KEYS,
 } from '../CodeEditor.constants'
 import { getFindReplaceToggleButtonIconClass, getUpdatedSearchMatchesCount } from '../utils'
+import { getShowReplaceField, setShowReplaceField } from '../Commands'
 
 const FindReplaceToggleButton = ({
     isChecked,
@@ -84,11 +85,11 @@ const FindReplaceToggleButton = ({
     )
 }
 
-const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
+const FindReplace = ({ view, defaultQuery, defaultShowReplace }: FindReplaceProps) => {
     // STATES
     const [query, setQuery] = useState<SearchQuery>(new SearchQuery({ search: '' }))
     const [matchesCount, setMatchesCount] = useState({ count: 0, current: 1 })
-    const [showReplace, setShowReplace] = useState(!!query.replace)
+    const [showReplace, setShowReplace] = useState<boolean>(defaultShowReplace)
 
     // CONSTANTS
     const isPreviousNextButtonDisabled = !matchesCount.count
@@ -127,6 +128,12 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
     useEffect(() => {
         setMatchesCount(getUpdatedSearchMatchesCount(defaultQuery, view))
     }, [view.state.doc.length])
+
+    useEffect(() => {
+        if (defaultShowReplace !== showReplace) {
+            setShowReplace(defaultShowReplace)
+        }
+    }, [defaultShowReplace])
 
     useEffect(() => {
         if (isReadOnly && showReplace) {
@@ -200,6 +207,7 @@ const FindReplace = ({ view, defaultQuery }: FindReplaceProps) => {
 
     const handleReplaceVisibility = () => {
         setShowReplace(!showReplace)
+        view.dispatch({ effects: [setShowReplaceField.of(!showReplace)] })
     }
 
     const handleClose = (e: MouseEvent<HTMLButtonElement>) => {
@@ -431,11 +439,19 @@ export const codeEditorFindReplace = (view: EditorView): Panel => {
         }
     }
 
-    dom.className = 'code-editor__search mt-8 mb-4 mr-8 ml-auto p-5 bg__secondary dc__border br-4 dc__w-fit-content'
+    dom.className =
+        'code-editor__search mt-8 mb-4 mr-8 ml-auto p-5 bg__secondary dc__border br-4 dc__w-fit-content fs-14'
     dom.onkeydown = keydown
 
     const renderFindReplace = () => {
-        render(<FindReplace view={view} defaultQuery={getSearchQuery(view.state)} />, dom)
+        render(
+            <FindReplace
+                view={view}
+                defaultQuery={getSearchQuery(view.state)}
+                defaultShowReplace={getShowReplaceField(view.state)}
+            />,
+            dom,
+        )
     }
 
     const mount = () => {
@@ -448,6 +464,9 @@ export const codeEditorFindReplace = (view: EditorView): Panel => {
         transactions.forEach((tr) => {
             tr.effects.forEach((effect) => {
                 if (effect.is(setSearchQuery)) {
+                    renderFindReplace()
+                }
+                if (effect.is(setShowReplaceField)) {
                     renderFindReplace()
                 }
             })
