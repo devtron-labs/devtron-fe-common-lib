@@ -30,6 +30,7 @@ import {
     PluginType,
 } from '../Common'
 import { BASE_CONFIGURATION_ENV_ID, EnvironmentTypeEnum, PatchOperationType } from './constants'
+import { SelectPickerOptionType } from './Components'
 
 export enum EnvType {
     CHART = 'helm_charts',
@@ -761,10 +762,29 @@ export type MetaPossibleRoles = Record<
 
 export interface CustomRoleAndMeta {
     customRoles: CustomRoles[]
-    possibleRolesMeta: MetaPossibleRoles
-    possibleRolesMetaForHelm: MetaPossibleRoles
+    possibleRolesMetaForDevtron: MetaPossibleRoles
+    possibleJobRoles: SelectPickerOptionType<string>[]
     possibleRolesMetaForCluster: MetaPossibleRoles
-    possibleRolesMetaForJob: MetaPossibleRoles
+}
+
+export interface UserRoleConfig {
+    // can be '' if access manager has no base access
+    baseRole: string
+    /**
+     * Only for devtron apps, ENT Only
+     */
+    additionalRoles?: Set<string>
+    /**
+     * Only for devtron apps, ENT Only
+     */
+    accessManagerRoles?: Set<string>
+}
+
+export type RoleType = keyof UserRoleConfig
+
+export type RoleSelectorOptionType = Pick<SelectPickerOptionType, 'label' | 'description'> & {
+    value: string
+    roleType: RoleType
 }
 
 interface CommonTabArgsType {

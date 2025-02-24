@@ -49,6 +49,7 @@ import {
     CDMaterialType,
     GlobalVariableDTO,
     GlobalVariableOptionType,
+    UserRole,
 } from './Types'
 import { ApiResourceType, STAGE_MAP } from '../Pages'
 import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
@@ -68,13 +69,6 @@ export const getTeamListMin = (): Promise<TeamList> => {
             result: list,
         }
     })
-}
-
-interface UserRole extends ResponseType {
-    result?: {
-        roles: string[]
-        superAdmin: boolean
-    }
 }
 
 export const SourceTypeMap = {

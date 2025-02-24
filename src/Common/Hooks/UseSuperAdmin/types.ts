@@ -16,4 +16,9 @@
 
 export interface useSuperAdminType {
     isSuperAdmin: boolean
+    /**
+     * ENT Only
+     * User can give access to all other users
+     */
+    canManageAllAccess?: boolean
 }
