@@ -21,20 +21,23 @@ import { showError } from '../../Helper'
 
 /**
  * @description It will return isSuperAdmin and would be set to false by default, might need few optimizations like dep, etc
- * @returns {useSuperAdminType} isSuperAdmin
+ * @returns {useSuperAdminType} isSuperAdmin, canManageAllAccess
  */
 export const useSuperAdmin = (): useSuperAdminType => {
-    const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false)
+    const [result, setResult] = useState<useSuperAdminType>({ isSuperAdmin: false, canManageAllAccess: false })
 
     useEffect(() => {
         getUserRole()
-            .then((response) => {
-                setSuperAdmin(response.result.superAdmin ?? false)
+            .then(({ result }) => {
+                setResult({
+                    isSuperAdmin: result.superAdmin ?? false,
+                    canManageAllAccess: result.canManageAllAccess ?? false,
+                })
             })
             .catch((error) => {
                 showError(error)
             })
     }, [])
 
-    return { isSuperAdmin }
+    return result
 }

@@ -1074,3 +1074,14 @@ export type GlobalVariableOptionType = Omit<GlobalVariableDTO, 'name'> & {
     value: string
     variableType: Extract<RefVariableType, RefVariableType.GLOBAL>
 }
+
+export interface UserRole extends ResponseType {
+    result?: {
+        roles: string[]
+        superAdmin: boolean
+        /**
+         * Defines if a user is access manager and can manage all access
+         */
+        canManageAllAccess?: boolean
+    }
+}
