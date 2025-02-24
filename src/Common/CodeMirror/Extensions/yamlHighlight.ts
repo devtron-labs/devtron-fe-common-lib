@@ -8,25 +8,28 @@ const isNumberOrBool = (value: string) => isBool(value) || /^[-+]?\d*\.\d+$/.tes
 const calculateDecorations = (state: EditorState) => {
     const decorations: Range<Decoration>[] = []
     const tree = ensureSyntaxTree(state, state.doc.length)
-    tree.iterate({
-        from: 0,
-        to: state.doc.length,
-        enter: (node) => {
-            if (node.name === 'Pair') {
-                const valueNode = node.node.getChild('Literal')
-                if (valueNode) {
-                    const valueText = state.sliceDoc(valueNode.from, valueNode.to).trim()
-                    if (isNumberOrBool(valueText)) {
-                        decorations.push(
-                            Decoration.mark({
-                                class: isBool(valueText) ? 'cm-highlight-bool' : 'cm-highlight-number',
-                            }).range(valueNode.from, valueNode.to),
-                        )
+
+    if (tree) {
+        tree.iterate({
+            from: 0,
+            to: state.doc.length,
+            enter: (node) => {
+                if (node.name === 'Pair') {
+                    const valueNode = node.node.getChild('Literal')
+                    if (valueNode) {
+                        const valueText = state.sliceDoc(valueNode.from, valueNode.to).trim()
+                        if (isNumberOrBool(valueText)) {
+                            decorations.push(
+                                Decoration.mark({
+                                    class: isBool(valueText) ? 'cm-highlight-bool' : 'cm-highlight-number',
+                                }).range(valueNode.from, valueNode.to),
+                            )
+                        }
                     }
                 }
-            }
-        },
-    })
+            },
+        })
+    }
 
     return Decoration.set(decorations)
 }

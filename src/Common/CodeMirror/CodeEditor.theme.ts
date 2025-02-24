@@ -22,42 +22,36 @@ export const getCodeEditorTheme = (isDark: boolean) => {
     const themeInit = isDark ? githubDarkInit : githubLightInit
     const styles = isDark
         ? [
-              { tag: [t.comment], color: '#8b949e' },
-              { tag: [t.variableName, t.attributeName], color: '#79c0ff' },
-              { tag: [t.string], color: '#a5d6ff' },
-              { tag: [t.number, t.bool], color: '#ffab70' },
-              { tag: [t.keyword], color: '#ff7b72' },
-              { tag: [t.operator, t.punctuation], color: '#8b949e' },
-              { tag: [t.meta], color: '#d2a8ff' },
+              { tag: [t.className, t.propertyName], color: 'var(--code-editor-property-name)' },
+              { tag: [t.variableName, t.attributeName, t.number, t.operator], color: 'var(--code-editor-number)' },
+              { tag: [t.heading, t.strong], color: 'var(--code-editor-property-name)', fontWeight: 'bold' },
+              { tag: [t.emphasis], color: 'var(--code-editor-property-name)', fontStyle: 'italic' },
+              { tag: [t.atom, t.bool, t.special(t.variableName)], color: 'var(--code-editor-boolean)' },
           ]
         : [
-              { tag: [t.comment], color: '#6a737d' },
-              { tag: [t.variableName, t.attributeName], color: '#005cc5' },
-              { tag: [t.string], color: '#032f62' },
-              { tag: [t.number, t.bool], color: '#e36209' },
-              { tag: [t.keyword], color: '#d73a49' },
-              { tag: [t.operator, t.punctuation], color: '#6a737d' },
-              { tag: [t.meta], color: '#6f42c1' },
+              { tag: [t.className, t.propertyName], color: 'var(--code-editor-property-name)' },
+              { tag: [t.variableName, t.attributeName, t.number, t.operator], color: 'var(--code-editor-number)' },
+              { tag: [t.atom, t.bool, t.special(t.variableName)], color: 'var(--code-editor-boolean)' },
           ]
 
     return {
         themeExtension: EditorView.theme({
             '.cm-highlight-number': {
-                color: isDark ? '#ffab70' : '#e36209',
+                color: 'var(--code-editor-number)',
             },
             '.cm-highlight-bool': {
-                color: isDark ? '#ffab70' : '#e36209',
+                color: 'var(--code-editor-boolean)',
             },
         }),
         codeEditorTheme: themeInit({
             settings: {
-                fontSize: '14px',
+                fontSize: '16px',
                 fontFamily: 'Inconsolata, monospace',
                 background: 'var(--bg-code-editor-base)',
-                foreground: 'var(--N900)',
+                foreground: 'var(--fg-code-editor)',
                 caret: 'var(--N900)',
                 gutterBackground: 'var(--bg-code-editor-base-gutter)',
-                gutterForeground: 'var(--N900)',
+                gutterForeground: 'var(--N500)',
                 gutterBorder: 'transparent',
                 lineHighlight: 'var(--active-line)',
             },

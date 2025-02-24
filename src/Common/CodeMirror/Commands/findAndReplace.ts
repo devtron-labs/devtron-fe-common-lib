@@ -22,16 +22,16 @@ export const getShowReplaceField = (state: EditorState) => {
 }
 
 export const openSearchPanel: Command = (view: EditorView) => {
-    cmOpenSearchPanel(view)
     view.dispatch({
         effects: [setShowReplaceField.of(searchPanelOpen(view.state) ? getShowReplaceField(view.state) : false)],
     })
+    cmOpenSearchPanel(view)
     return true
 }
 
 export const openSearchPanelWithReplace: Command = (view: EditorView) => {
     openSearchPanel(view)
-    view.dispatch({ effects: [setShowReplaceField.of(true)] })
+    view.dispatch({ effects: [setShowReplaceField.of(!view.state.readOnly && true)] })
     return true
 }
 
