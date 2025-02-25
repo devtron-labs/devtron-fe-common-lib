@@ -100,7 +100,7 @@ export interface CodeEditorHeaderComposition {
     Clipboard?: React.FC<any>
 }
 
-export type ActionTypes = 'changeLanguage' | 'setDiff' | 'setTheme' | 'setCode' | 'setDefaultCode' | 'setHeight'
+type ActionTypes = 'changeLanguage' | 'setDiff' | 'setTheme' | 'setCode' | 'setDefaultCode' | 'setHeight'
 
 export interface Action {
     type: ActionTypes

@@ -1085,3 +1085,13 @@ export interface UserRole extends ResponseType {
         canManageAllAccess?: boolean
     }
 }
+
+export enum ActionTypes {
+    MANAGER = 'manager',
+    ADMIN = 'admin',
+    TRIGGER = 'trigger',
+    VIEW = 'view',
+    UPDATE = 'update',
+    EDIT = 'edit',
+    APPROVER = 'approver',
+}
