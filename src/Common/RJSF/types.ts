@@ -32,18 +32,21 @@ export type HiddenType =
     | string
 
 export interface RJSFFormSchema extends StrictRJSFSchema {
-    properties: {
+    properties?: {
         [key: string]: RJSFFormSchema
     }
-    hidden: HiddenType
-    updatePath: string
+    hidden?: HiddenType
+    updatePath?: string
 }
 
 export type FormProps = Omit<ComponentProps<typeof RJSFForm<any, RJSFFormSchema>>, 'validator'>
 
 export interface UpdateFormDataFromFormStateProps {
-    formState: Record<string, unknown>
+    // NOTE: formData is data that is being passed from the user
     formData: Record<string, unknown>
+    // NOTE: formState is the latest state of the form
+    formState: Record<string, unknown>
+    oldFormState: UpdateFormDataFromFormStateProps['formState']
     schemaPathToUpdatePathMap: Record<string, string>
 }
 

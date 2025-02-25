@@ -34,26 +34,46 @@ const Form = RJSF
 const validator = SCHEMA_07_VALIDATOR
 
 export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => {
-    const schemaPathToUpdatePathMap = useMemo(() => getSchemaPathToUpdatePathMap(props.schema), [props.schema])
+    const { schemaPathToUpdatePathMap, isUpdatePathKeywordPresent } = useMemo(() => {
+        const map = getSchemaPathToUpdatePathMap(props.schema)
 
-    const formState = useMemo(
-        () => getFormStateFromFormData({ formData: props.formData ?? {}, schemaPathToUpdatePathMap }),
-        [props.formData, schemaPathToUpdatePathMap],
-    )
+        return {
+            schemaPathToUpdatePathMap: map,
+            isUpdatePathKeywordPresent: Object.entries(map).some(([path, updatePath]) => path !== updatePath),
+        }
+    }, [props.schema])
+
+    const formState = useMemo(() => {
+        if (!isUpdatePathKeywordPresent) {
+            return props.formData
+        }
+
+        return getFormStateFromFormData({ formData: props.formData ?? {}, schemaPathToUpdatePathMap })
+    }, [props.formData, schemaPathToUpdatePathMap, isUpdatePathKeywordPresent])
 
     const handleOnChange: FormProps['onChange'] = (data) => {
+        if (!props.onChange) {
+            return
+        }
+
         const updatedFormData = updateFormDataFromFormState({
             formState: data.formData,
+            oldFormState: formState,
             formData: props.formData,
             schemaPathToUpdatePathMap,
         })
 
-        props.onChange?.({ ...data, formData: updatedFormData })
+        props.onChange({ ...data, formData: updatedFormData })
     }
 
     const handleOnSubmit: FormProps['onSubmit'] = (data, event) => {
+        if (!props.onSubmit) {
+            return
+        }
+
         const updatedFormData = updateFormDataFromFormState({
             formState: data.formData,
+            oldFormState: formState,
             formData: props.formData,
             schemaPathToUpdatePathMap,
         })
@@ -68,8 +88,12 @@ export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => 
             autoComplete="off"
             {...props}
             formData={formState}
-            onChange={handleOnChange}
-            onSubmit={handleOnSubmit}
+            {...(isUpdatePathKeywordPresent
+                ? {
+                      onChange: handleOnChange,
+                      onSubmit: handleOnSubmit,
+                  }
+                : {})}
             className={`rjsf-form-template__container ${props.className || ''}`}
             validator={validator}
             templates={{

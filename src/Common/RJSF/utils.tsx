@@ -15,8 +15,9 @@
  */
 
 import { TranslatableString, englishStringTranslator } from '@rjsf/utils'
-import { buildObjectFromPath, convertJSONPointerToJSONPath, joinObjects } from '@Common/Helper'
+import { buildObjectFromPath, convertJSONPointerToJSONPath, joinObjects, logExceptionToSentry } from '@Common/Helper'
 import { JSONPath } from 'jsonpath-plus'
+import { applyOperation, applyPatch, compare } from 'fast-json-patch'
 import {
     GetFormStateFromFormDataProps,
     HiddenType,
@@ -93,17 +94,14 @@ export const conformPathToPointers = (path: string): string => {
     if (!path) {
         return ''
     }
+
     const trimmedPath = path.trim()
-    const isSlashSeparatedPathMissingBeginSlash = trimmedPath.match(/^\w+(\/\w+)*$/g)
-    if (isSlashSeparatedPathMissingBeginSlash) {
-        return `/${trimmedPath}`
-    }
-    const isDotSeparatedPath = trimmedPath.match(/^\w+(\.\w+)*$/g)
-    if (isDotSeparatedPath) {
-        // NOTE: replacing dots with forward slash (/)
-        return `/${trimmedPath.replaceAll(/\./g, '/')}`
-    }
-    return trimmedPath
+    const trimmedPathWithStartSlash = /^\/.+$/g.test(trimmedPath) ? trimmedPath : `/${trimmedPath}`
+    const finalPath = trimmedPathWithStartSlash.replaceAll(/\./g, '/')
+    // NOTE: test if the path is already a pointer
+    const pointerRegex = /(\/(([^/~])|(~[01]))*)/g
+
+    return pointerRegex.test(finalPath) ? finalPath : ''
 }
 
 const emptyMetaHiddenTypeInstance: MetaHiddenType = {
@@ -157,24 +155,23 @@ const _getSchemaPathToUpdatePathMap = (schema: RJSFFormSchema, path: string, map
     }
 
     if (
-        (schema.type === 'boolean' ||
-            schema.type === 'string' ||
-            schema.type === 'number' ||
-            schema.type === 'integer') &&
-        schema.updatePath
+        schema.type === 'boolean' ||
+        schema.type === 'string' ||
+        schema.type === 'number' ||
+        schema.type === 'integer'
     ) {
         // eslint-disable-next-line no-param-reassign
-        map[path] = conformPathToPointers(schema.updatePath)
+        map[path] = conformPathToPointers(schema.updatePath ?? path)
     }
 }
 
-export const getSchemaPathToUpdatePathMap = (schema: RJSFFormSchema) => {
+export const getSchemaPathToUpdatePathMap = (schema: RJSFFormSchema): Record<string, string> => {
     const map = {}
     _getSchemaPathToUpdatePathMap(schema, '', map)
     return map
 }
 
-const _recursivelyRemoveElement = (obj, index, tokens) => {
+const _recursivelyRemoveElement = (obj: Record<string, any>, index: number, tokens: string[]) => {
     if (index >= tokens.length) {
         return obj
     }
@@ -201,7 +198,7 @@ const _recursivelyRemoveElement = (obj, index, tokens) => {
     return obj
 }
 
-const recursivelyRemoveElement = (obj, path) => {
+const recursivelyRemoveElement = (obj: Record<string, any>, path: string) => {
     if (!obj || typeof obj !== 'object') {
         throw new Error('Invalid object')
     }
@@ -214,38 +211,79 @@ const recursivelyRemoveElement = (obj, path) => {
     return _recursivelyRemoveElement(obj, 0, tokens)
 }
 
-// NOTE: formState is the internal state managed by RJSF
+// TODO (update comment): formState is the internal state managed by RJSF
 // while formData is the data provided by the user via props
 export const updateFormDataFromFormState = ({
     formState,
+    oldFormState,
     formData,
     schemaPathToUpdatePathMap,
 }: UpdateFormDataFromFormStateProps) => {
-    if (!formData || !formState || typeof formData !== 'object') {
-        return formData
-    }
+    let updatedFormData = formState
 
-    const pathsToRemove = []
+    const patches = compare(oldFormState, formState)
+    patches.forEach((operation) => {
+        const { op, path } = operation
 
-    const objects = Object.entries(schemaPathToUpdatePathMap).map(([path, updatePath]) => {
-        const value = JSONPath({
-            json: formState,
+        if (!schemaPathToUpdatePathMap[path] || path === schemaPathToUpdatePathMap[path]) {
+            return
+        }
+
+        if (op === 'add') {
+            updatedFormData = joinObjects([
+                buildObjectFromPath(schemaPathToUpdatePathMap[path], operation.value),
+                updatedFormData,
+            ])
+
+            return
+        }
+
+        if (op === 'replace') {
+            applyOperation(
+                updatedFormData,
+                {
+                    op: 'replace',
+                    path: schemaPathToUpdatePathMap[path],
+                    value: operation.value,
+                },
+                false,
+                true,
+            )
+
+            return
+        }
+
+        if (op === 'remove') {
+            updatedFormData = recursivelyRemoveElement(updatedFormData, schemaPathToUpdatePathMap[path])
+
+            return
+        }
+
+        logExceptionToSentry('JSON Patch operation type other than add, replace, remove found')
+    })
+
+    Object.entries(schemaPathToUpdatePathMap).forEach(([path, updatePath]) => {
+        if (path === updatePath || !updatePath) {
+            return
+        }
+
+        const oldValueAgainstPath = JSONPath({
+            json: formData,
             path: convertJSONPointerToJSONPath(path),
             resultType: 'value',
             wrap: false,
         })
 
-        if (value === undefined) {
-            pathsToRemove.push(updatePath)
-            return {}
+        if (oldValueAgainstPath === undefined) {
+            updatedFormData = recursivelyRemoveElement(updatedFormData, path)
+
+            return
         }
 
-        return buildObjectFromPath(updatePath, value)
+        applyOperation(updatedFormData, { op: 'add', path, value: oldValueAgainstPath }, false, true)
     })
 
-    const updatedFormData = joinObjects([...objects, formData])
-
-    pathsToRemove.forEach((path) => recursivelyRemoveElement(updatedFormData, path))
+    updatedFormData = formData ? applyPatch(formData, compare(formData, updatedFormData)).newDocument : updatedFormData
 
     return updatedFormData
 }
@@ -253,6 +291,10 @@ export const updateFormDataFromFormState = ({
 export const getFormStateFromFormData = ({ formData, schemaPathToUpdatePathMap }: GetFormStateFromFormDataProps) =>
     joinObjects([
         ...Object.entries(schemaPathToUpdatePathMap).map(([path, updatePath]) => {
+            if (path === updatePath || !updatePath) {
+                return {}
+            }
+
             const value = JSONPath({
                 json: formData,
                 path: convertJSONPointerToJSONPath(updatePath),
@@ -266,5 +308,5 @@ export const getFormStateFromFormData = ({ formData, schemaPathToUpdatePathMap }
 
             return buildObjectFromPath(path, value)
         }),
-        formData,
+        structuredClone(formData),
     ])
