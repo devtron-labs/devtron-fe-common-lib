@@ -98,7 +98,7 @@ export const conformPathToPointers = (path: string): string => {
     const trimmedPath = path.trim()
     const trimmedPathWithStartSlash = /^\/.+$/g.test(trimmedPath) ? trimmedPath : `/${trimmedPath}`
     const finalPath = trimmedPathWithStartSlash.replaceAll(/\./g, '/')
-    // NOTE: test if the path is already a pointer
+    // NOTE: test if the path is a valid JSON pointer
     const pointerRegex = /(\/(([^/~])|(~[01]))*)/g
 
     return pointerRegex.test(finalPath) ? finalPath : ''
@@ -211,8 +211,6 @@ const recursivelyRemoveElement = (obj: Record<string, any>, path: string) => {
     return _recursivelyRemoveElement(obj, 0, tokens)
 }
 
-// TODO (update comment): formState is the internal state managed by RJSF
-// while formData is the data provided by the user via props
 export const updateFormDataFromFormState = ({
     formState,
     oldFormState,

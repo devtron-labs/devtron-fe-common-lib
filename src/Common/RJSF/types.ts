@@ -42,9 +42,13 @@ export interface RJSFFormSchema extends StrictRJSFSchema {
 export type FormProps = Omit<ComponentProps<typeof RJSFForm<any, RJSFFormSchema>>, 'validator'>
 
 export interface UpdateFormDataFromFormStateProps {
-    // NOTE: formData is data that is being passed from the user
+    /**
+     * formData is data that is being passed from the user
+     */
     formData: Record<string, unknown>
-    // NOTE: formState is the latest state of the form
+    /**
+     * formState is the latest state of the form
+     */
     formState: Record<string, unknown>
     oldFormState: UpdateFormDataFromFormStateProps['formState']
     schemaPathToUpdatePathMap: Record<string, string>
