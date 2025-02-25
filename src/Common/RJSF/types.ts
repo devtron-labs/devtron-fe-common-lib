@@ -50,7 +50,6 @@ export interface UpdateFormDataFromFormStateProps {
      * formState is the latest state of the form
      */
     formState: Record<string, unknown>
-    oldFormState: UpdateFormDataFromFormStateProps['formState']
     schemaPathToUpdatePathMap: Record<string, string>
 }
 

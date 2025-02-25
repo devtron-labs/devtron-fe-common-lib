@@ -58,7 +58,6 @@ export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => 
 
         const updatedFormData = updateFormDataFromFormState({
             formState: data.formData,
-            oldFormState: formState,
             formData: props.formData,
             schemaPathToUpdatePathMap,
         })
@@ -73,7 +72,6 @@ export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => 
 
         const updatedFormData = updateFormDataFromFormState({
             formState: data.formData,
-            oldFormState: formState,
             formData: props.formData,
             schemaPathToUpdatePathMap,
         })

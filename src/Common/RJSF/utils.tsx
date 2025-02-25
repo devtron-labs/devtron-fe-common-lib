@@ -15,9 +15,9 @@
  */
 
 import { TranslatableString, englishStringTranslator } from '@rjsf/utils'
-import { buildObjectFromPath, convertJSONPointerToJSONPath, joinObjects, logExceptionToSentry } from '@Common/Helper'
+import { buildObjectFromPath, convertJSONPointerToJSONPath, joinObjects } from '@Common/Helper'
 import { JSONPath } from 'jsonpath-plus'
-import { applyOperation, applyPatch, compare } from 'fast-json-patch'
+import { applyPatch, compare } from 'fast-json-patch'
 import {
     GetFormStateFromFormDataProps,
     HiddenType,
@@ -199,7 +199,7 @@ const _recursivelyRemoveElement = (obj: Record<string, any>, index: number, toke
 }
 
 const recursivelyRemoveElement = (obj: Record<string, any>, path: string) => {
-    if (!obj || typeof obj !== 'object') {
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
         throw new Error('Invalid object')
     }
 
@@ -213,77 +213,39 @@ const recursivelyRemoveElement = (obj: Record<string, any>, path: string) => {
 
 export const updateFormDataFromFormState = ({
     formState,
-    oldFormState,
     formData,
     schemaPathToUpdatePathMap,
 }: UpdateFormDataFromFormStateProps) => {
-    let updatedFormData = formState
+    let updatedFormData = structuredClone(formState)
 
-    const patches = compare(oldFormState, formState)
-    patches.forEach((operation) => {
-        const { op, path } = operation
-
-        if (!schemaPathToUpdatePathMap[path] || path === schemaPathToUpdatePathMap[path]) {
-            return
-        }
-
-        if (op === 'add') {
-            updatedFormData = joinObjects([
-                buildObjectFromPath(schemaPathToUpdatePathMap[path], operation.value),
-                updatedFormData,
-            ])
-
-            return
-        }
-
-        if (op === 'replace') {
-            applyOperation(
-                updatedFormData,
-                {
-                    op: 'replace',
-                    path: schemaPathToUpdatePathMap[path],
-                    value: operation.value,
-                },
-                false,
-                true,
-            )
-
-            return
-        }
-
-        if (op === 'remove') {
-            updatedFormData = recursivelyRemoveElement(updatedFormData, schemaPathToUpdatePathMap[path])
-
-            return
-        }
-
-        logExceptionToSentry('JSON Patch operation type other than add, replace, remove found')
-    })
+    if (!updatedFormData) {
+        return updatedFormData
+    }
 
     Object.entries(schemaPathToUpdatePathMap).forEach(([path, updatePath]) => {
         if (path === updatePath || !updatePath) {
             return
         }
 
-        const oldValueAgainstPath = JSONPath({
-            json: formData,
+        const value = JSONPath({
+            json: formState,
             path: convertJSONPointerToJSONPath(path),
             resultType: 'value',
             wrap: false,
         })
 
-        if (oldValueAgainstPath === undefined) {
-            updatedFormData = recursivelyRemoveElement(updatedFormData, path)
+        updatedFormData = recursivelyRemoveElement(updatedFormData, path)
 
+        if (value === undefined) {
             return
         }
 
-        applyOperation(updatedFormData, { op: 'add', path, value: oldValueAgainstPath }, false, true)
+        updatedFormData = joinObjects([buildObjectFromPath(updatePath, value), updatedFormData])
     })
 
-    updatedFormData = formData ? applyPatch(formData, compare(formData, updatedFormData)).newDocument : updatedFormData
-
-    return updatedFormData
+    return formData && updatedFormData
+        ? applyPatch(formData, compare(formData, updatedFormData), false, false).newDocument
+        : updatedFormData
 }
 
 export const getFormStateFromFormData = ({ formData, schemaPathToUpdatePathMap }: GetFormStateFromFormDataProps) =>
