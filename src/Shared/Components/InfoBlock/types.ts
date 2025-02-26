@@ -1,7 +1,7 @@
 import { ComponentSizeType } from '@Shared/constants'
 import { BorderConfigType, ComponentLayoutType } from '@Shared/types'
 import { ReactElement, ReactNode } from 'react'
-import { ButtonProps } from '../Button'
+import { ButtonComponentType, ButtonProps } from '../Button'
 
 export type InfoBlockProps = {
     /**
@@ -20,7 +20,7 @@ export type InfoBlockProps = {
      * If given would override the default icon derived from type
      */
     customIcon?: ReactElement
-    buttonProps?: ButtonProps
+    buttonProps?: ButtonProps<ButtonComponentType>
     borderConfig?: BorderConfigType
     borderRadiusConfig?: BorderConfigType
 } & (
