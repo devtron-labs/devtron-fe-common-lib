@@ -227,14 +227,25 @@ export const updateFormDataFromFormState = ({
             return
         }
 
+        const formDataValue = JSONPath({
+            json: formData,
+            path: convertJSONPointerToJSONPath(path),
+            resultType: 'value',
+            wrap: false,
+        })
+
+        if (formDataValue === undefined) {
+            updatedFormData = recursivelyRemoveElement(updatedFormData, path)
+        } else {
+            updatedFormData = joinObjects([buildObjectFromPath(path, formDataValue), updatedFormData])
+        }
+
         const value = JSONPath({
             json: formState,
             path: convertJSONPointerToJSONPath(path),
             resultType: 'value',
             wrap: false,
         })
-
-        updatedFormData = recursivelyRemoveElement(updatedFormData, path)
 
         if (value === undefined) {
             return
