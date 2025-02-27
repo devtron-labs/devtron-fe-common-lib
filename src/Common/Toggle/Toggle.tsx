@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useCallback } from 'react'
+import React, { SyntheticEvent, useCallback } from 'react'
 import { throttle, useEffectAfterMount } from '../Helper'
 import './Toggle.scss'
 
@@ -28,6 +28,7 @@ const Toggle = ({
     Icon = null,
     iconClass = '',
     throttleOnChange = false,
+    preventDefaultOnLabel = false,
     ...props
 }) => {
     const [active, setActive] = React.useState(selected)
@@ -44,7 +45,7 @@ const Toggle = ({
         setActive(selected)
     }, [selected])
 
-    function handleClick(e) {
+    function handleClick() {
         if (!disabled) {
             setActive((active) => !active)
         }
@@ -52,18 +53,29 @@ const Toggle = ({
 
     const throttledHandleClick = useCallback(throttle(handleClick, 500), [disabled])
 
+    const handleChange = () => {
+        if (throttleOnChange) {
+            throttledHandleClick()
+            return
+        }
+        handleClick()
+    }
+
+    const handleLabelClick = (e: SyntheticEvent) => {
+        if (preventDefaultOnLabel) {
+            e.preventDefault()
+            handleChange()
+        }
+    }
+
     return (
         <label
             {...props}
             className={`${rootClassName} toggle__switch ${disabled ? 'disabled' : ''}`}
             style={{ ['--color' as any]: color }}
+            onClick={handleLabelClick}
         >
-            <input
-                type="checkbox"
-                checked={!!active}
-                onChange={throttleOnChange ? throttledHandleClick : handleClick}
-                className="toggle__input"
-            />
+            <input type="checkbox" checked={!!active} onChange={handleChange} className="toggle__input" />
             <span className={`toggle__slider ${Icon ? 'with-icon br-4 dc__border' : 'round'}`} data-testid={dataTestId}>
                 {Icon && <Icon className={`icon-dim-20 br-4 p-2 ${iconClass}`} />}
             </span>
