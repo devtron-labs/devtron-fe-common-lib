@@ -17,6 +17,7 @@
 import { getSanitizedIframe } from '@Common/Helper'
 import { customizeValidator } from '@rjsf/validator-ajv8'
 import { PATTERNS } from '@Common/Constants'
+import { parse } from 'yaml'
 import { URLProtocolType } from './types'
 import { SKIP_LABEL_KEY_VALIDATION_PREFIX } from './constants'
 
@@ -473,4 +474,24 @@ export const validateCMVolumeMountPath = (value: string): { isValid: boolean; me
         }
     }
     return { isValid: true, message: '' }
+}
+
+export const validateYAML = (yamlString: string, isRequired?: boolean): ValidationResponseType => {
+    try {
+        if (!yamlString && isRequired) {
+            return {
+                isValid: false,
+                message: 'This field is required',
+            }
+        }
+        parse(yamlString)
+        return {
+            isValid: true,
+        }
+    } catch (err) {
+        return {
+            isValid: false,
+            message: err.message,
+        }
+    }
 }
