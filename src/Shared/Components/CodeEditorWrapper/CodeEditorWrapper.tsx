@@ -3,6 +3,8 @@ import { CodeEditor as CodeMirror, CodeEditorHeaderProps, CodeEditorStatusBarPro
 
 import { CodeEditorWrapperProps } from './types'
 
+export const isCodeMirrorEnabled = () => window._env_.FEATURE_CODE_MIRROR_ENABLE
+
 export const CodeEditorWrapper = <DiffView extends boolean>({
     codeEditorProps,
     codeMirrorProps,
@@ -31,8 +33,12 @@ const CodeEditorValidationErrorWrapper = () =>
 const CodeEditorClipboardWrapper = () =>
     window._env_.FEATURE_CODE_MIRROR_ENABLE ? <CodeMirror.Clipboard /> : <CodeEditor.Clipboard />
 
-const CodeEditorHeaderWrapper = (props: CodeEditorHeaderProps) =>
-    window._env_.FEATURE_CODE_MIRROR_ENABLE ? <CodeMirror.Header {...props} /> : <CodeEditor.Header {...props} />
+const CodeEditorHeaderWrapper = ({ diffViewWidth, ...props }: CodeEditorHeaderProps & { diffViewWidth?: boolean }) =>
+    window._env_.FEATURE_CODE_MIRROR_ENABLE ? (
+        <CodeMirror.Header {...props} />
+    ) : (
+        <CodeEditor.Header diffViewWidth={diffViewWidth} {...props} />
+    )
 
 const CodeEditorWarningWrapper = (props: CodeEditorStatusBarProps) =>
     window._env_.FEATURE_CODE_MIRROR_ENABLE ? <CodeMirror.Warning {...props} /> : <CodeEditor.Warning {...props} />
@@ -47,8 +53,19 @@ const CodeEditorInformationWrapper = (props: CodeEditorStatusBarProps) =>
         <CodeEditor.Information {...props} />
     )
 
-const CodeEditorContainerWrapper = (props: { children: React.ReactNode; flexExpand?: boolean }) =>
-    window._env_.FEATURE_CODE_MIRROR_ENABLE ? <CodeMirror.Container {...props} /> : null
+const CodeEditorContainerWrapper = ({
+    overflowHidden,
+    ...props
+}: {
+    children: React.ReactNode
+    flexExpand?: boolean
+    overflowHidden?: boolean
+}) =>
+    window._env_.FEATURE_CODE_MIRROR_ENABLE ? (
+        <CodeMirror.Container {...props} />
+    ) : (
+        <CodeEditor.Container overflowHidden={overflowHidden} {...props} />
+    )
 
 CodeEditorWrapper.LanguageChanger = CodeEditorLanguageChangerWrapper
 CodeEditorWrapper.ThemeChanger = CodeEditorThemeChangerWrapper

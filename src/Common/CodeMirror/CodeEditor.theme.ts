@@ -45,7 +45,7 @@ export const getCodeEditorTheme = (isDark: boolean) => {
         }),
         codeEditorTheme: themeInit({
             settings: {
-                fontSize: '16px',
+                fontSize: '15px',
                 fontFamily: 'Inconsolata, monospace',
                 background: 'var(--bg-code-editor-base)',
                 foreground: 'var(--fg-code-editor)',

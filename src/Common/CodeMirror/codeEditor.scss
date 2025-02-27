@@ -24,8 +24,10 @@
     border-right: 1px solid var(--N200);
 }
 
-.cm-mergeViewEditor:last-child {
-    border-left: 1px solid var(--N200);
+.cm-merge-theme:not(.code-editor__read-only) {
+    .cm-mergeViewEditor:last-child {
+        border-left: 1px solid var(--N200);
+    }
 }
 
 .cm-scroller {

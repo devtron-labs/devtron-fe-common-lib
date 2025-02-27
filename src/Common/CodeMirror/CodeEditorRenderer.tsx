@@ -114,11 +114,10 @@ export const CodeEditorRenderer = ({
         <CodeMirrorMerge
             theme={codeEditorTheme}
             key={codemirrorMergeKey}
-            className={`w-100 ${isDarkTheme ? 'cm-merge-theme__dark' : 'cm-merge-theme__light'} ${codeEditorParentClassName}`}
+            className={`w-100 ${isDarkTheme ? 'cm-merge-theme__dark' : 'cm-merge-theme__light'} ${codeEditorParentClassName} ${readOnly ? 'code-editor__read-only' : ''}`}
             gutter
             destroyRerender={false}
-            revertControls="a-to-b"
-            renderRevertControl={getRevertControlButton}
+            {...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {})}
         >
             <CodeMirrorMerge.Original
                 basicSetup={false}

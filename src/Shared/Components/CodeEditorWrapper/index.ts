@@ -1,1 +1,1 @@
-export { CodeEditorWrapper as CodeEditor } from './CodeEditorWrapper'
+export { CodeEditorWrapper as CodeEditor, isCodeMirrorEnabled } from './CodeEditorWrapper'

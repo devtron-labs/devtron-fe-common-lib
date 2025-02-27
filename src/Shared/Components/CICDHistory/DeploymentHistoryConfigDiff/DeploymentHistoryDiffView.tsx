@@ -26,7 +26,6 @@ import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
 import { ReactComponent as Info } from '../../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ViewVariablesIcon } from '../../../../Assets/Icon/ic-view-variable-toggle.svg'
-import './styles.scss'
 
 const DeploymentHistoryDiffView = ({
     currentConfiguration,
