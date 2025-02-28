@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="#596168" stroke-width="1.5" d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10Z" clip-rule="evenodd" vector-effect="non-scaling-stroke"/>
+  <path stroke="#596168" stroke-width="1.5" d="M12 18c-3.312 0-6-2.688-6-6s2.688-6 6-6 6 2.688 6 6-2.688 6-6 6Z" clip-rule="evenodd" vector-effect="non-scaling-stroke"/>
+  <path fill="#596168" fill-rule="evenodd" d="M12 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z" clip-rule="evenodd"/>
+  <path stroke="#596168" stroke-width="1.5" d="m12 12 7.071 7.071" vector-effect="non-scaling-stroke"/>
+</svg>
