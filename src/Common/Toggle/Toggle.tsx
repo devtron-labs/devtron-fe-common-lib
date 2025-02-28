@@ -28,7 +28,7 @@ const Toggle = ({
     Icon = null,
     iconClass = '',
     throttleOnChange = false,
-    preventDefaultOnLabel = false,
+    shouldToggleValueOnLabelClick = false,
     ...props
 }) => {
     const [active, setActive] = React.useState(selected)
@@ -62,7 +62,7 @@ const Toggle = ({
     }
 
     const handleLabelClick = (e: SyntheticEvent) => {
-        if (preventDefaultOnLabel) {
+        if (shouldToggleValueOnLabelClick) {
             e.preventDefault()
             handleChange()
         }
@@ -73,7 +73,7 @@ const Toggle = ({
             {...props}
             className={`${rootClassName} toggle__switch ${disabled ? 'disabled' : ''}`}
             style={{ ['--color' as any]: color }}
-            onClick={handleLabelClick}
+            {...(shouldToggleValueOnLabelClick ? {onClick: handleLabelClick} : {})}
         >
             <input type="checkbox" checked={!!active} onChange={handleChange} className="toggle__input" />
             <span className={`toggle__slider ${Icon ? 'with-icon br-4 dc__border' : 'round'}`} data-testid={dataTestId}>
