@@ -355,7 +355,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                     <CodeEditorPlaceholder customLoader={customLoader} />
                 ) : (
                     <>
-                        {shebang && <div className="code-editor__shebang">{shebang}</div>}
+                        {shebang && <div className="code-editor-shebang">{shebang}</div>}
                         {state.diffMode ? (
                             <MonacoDiffEditor
                                 original={state.defaultCode}
@@ -391,10 +391,14 @@ const Header: React.FC<CodeEditorHeaderInterface> & CodeEditorHeaderComposition 
     children,
     className,
     hideDefaultSplitHeader,
+    diffViewWidth,
 }) => {
     const { defaultValue } = useCodeEditorContext()
     return (
-        <div className={className || 'code-editor__header flex right'}>
+        <div
+            className={className || 'code-editor__header flex right'}
+            style={{ ...(diffViewWidth ? { width: 'calc(100% - 30px)' } : {}) }}
+        >
             {children}
             {!hideDefaultSplitHeader && defaultValue && <SplitPane />}
         </div>
@@ -518,6 +522,24 @@ const CodeEditorPlaceholder = ({ className = '', style = {}, customLoader }): JS
     )
 }
 
+const Container = ({
+    children,
+    flexExpand,
+    overflowHidden,
+}: {
+    children: React.ReactNode
+    flexExpand?: boolean
+    overflowHidden?: boolean
+}) => (
+    <div
+        data-code-editor-container
+        className={`code-editor__container w-100 dc__border br-4
+        ${flexExpand ? 'flex-grow-1 flexbox-col' : ''} ${overflowHidden ? 'dc__overflow-hidden' : ''}`}
+    >
+        {children}
+    </div>
+)
+
 CodeEditor.LanguageChanger = LanguageChanger
 CodeEditor.ThemeChanger = ThemeChanger
 CodeEditor.ValidationError = ValidationError
@@ -526,5 +548,6 @@ CodeEditor.Header = Header
 CodeEditor.Warning = Warning
 CodeEditor.ErrorBar = ErrorBar
 CodeEditor.Information = Information
+CodeEditor.Container = Container
 
 export default CodeEditor

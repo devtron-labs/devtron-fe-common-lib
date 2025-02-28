@@ -19,13 +19,13 @@ import { useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { DiffViewer } from '@Shared/Components/DiffViewer'
 import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
-import { CodeEditor, MODES, Toggle, YAMLStringify } from '../../../../Common'
+import { CodeEditor } from '@Shared/Components/CodeEditorWrapper'
+import { MODES, Toggle, YAMLStringify } from '../../../../Common'
 import { DeploymentHistoryParamsType } from './types'
 import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../types'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
 import { ReactComponent as Info } from '../../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ViewVariablesIcon } from '../../../../Assets/Icon/ic-view-variable-toggle.svg'
-import './styles.scss'
 
 const DeploymentHistoryDiffView = ({
     currentConfiguration,
@@ -77,13 +77,19 @@ const DeploymentHistoryDiffView = ({
         ) : (
             <CodeEditor
                 key={codeEditorKey}
-                value={editorValuesRHS}
-                defaultValue={editorValuesLHS}
-                adjustEditorHeightToContent
                 disableSearch
                 readOnly
                 noParsing
                 mode={MODES.YAML}
+                codeEditorProps={{
+                    value: editorValuesRHS,
+                    defaultValue: editorValuesLHS,
+                    adjustEditorHeightToContent: true,
+                }}
+                codeMirrorProps={{
+                    value: editorValuesRHS,
+                    height: 'auto',
+                }}
             />
         )
 
