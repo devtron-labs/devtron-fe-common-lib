@@ -11,7 +11,7 @@ export const CodeEditorWrapper = <DiffView extends boolean>({
     children,
     ...restProps
 }: CodeEditorWrapperProps<DiffView>) =>
-    window._env_.FEATURE_CODE_MIRROR_ENABLE ? (
+    isCodeMirrorEnabled() ? (
         <CodeMirror<DiffView> {...(codeMirrorProps as any)} {...restProps}>
             {children}
         </CodeMirror>
@@ -21,37 +21,29 @@ export const CodeEditorWrapper = <DiffView extends boolean>({
         </CodeEditor>
     )
 
-const CodeEditorLanguageChangerWrapper = () =>
-    window._env_.FEATURE_CODE_MIRROR_ENABLE ? null : <CodeEditor.LanguageChanger />
+const CodeEditorLanguageChangerWrapper = () => (isCodeMirrorEnabled() ? null : <CodeEditor.LanguageChanger />)
 
-const CodeEditorThemeChangerWrapper = () =>
-    window._env_.FEATURE_CODE_MIRROR_ENABLE ? null : <CodeEditor.ThemeChanger />
+const CodeEditorThemeChangerWrapper = () => (isCodeMirrorEnabled() ? null : <CodeEditor.ThemeChanger />)
 
-const CodeEditorValidationErrorWrapper = () =>
-    window._env_.FEATURE_CODE_MIRROR_ENABLE ? null : <CodeEditor.ValidationError />
+const CodeEditorValidationErrorWrapper = () => (isCodeMirrorEnabled() ? null : <CodeEditor.ValidationError />)
 
-const CodeEditorClipboardWrapper = () =>
-    window._env_.FEATURE_CODE_MIRROR_ENABLE ? <CodeMirror.Clipboard /> : <CodeEditor.Clipboard />
+const CodeEditorClipboardWrapper = () => (isCodeMirrorEnabled() ? <CodeMirror.Clipboard /> : <CodeEditor.Clipboard />)
 
 const CodeEditorHeaderWrapper = ({ diffViewWidth, ...props }: CodeEditorHeaderProps & { diffViewWidth?: boolean }) =>
-    window._env_.FEATURE_CODE_MIRROR_ENABLE ? (
+    isCodeMirrorEnabled() ? (
         <CodeMirror.Header {...props} />
     ) : (
         <CodeEditor.Header diffViewWidth={diffViewWidth} {...props} />
     )
 
 const CodeEditorWarningWrapper = (props: CodeEditorStatusBarProps) =>
-    window._env_.FEATURE_CODE_MIRROR_ENABLE ? <CodeMirror.Warning {...props} /> : <CodeEditor.Warning {...props} />
+    isCodeMirrorEnabled() ? <CodeMirror.Warning {...props} /> : <CodeEditor.Warning {...props} />
 
 const CodeEditorErrorBarWrapper = (props: CodeEditorStatusBarProps) =>
-    window._env_.FEATURE_CODE_MIRROR_ENABLE ? <CodeMirror.ErrorBar {...props} /> : <CodeEditor.ErrorBar {...props} />
+    isCodeMirrorEnabled() ? <CodeMirror.ErrorBar {...props} /> : <CodeEditor.ErrorBar {...props} />
 
 const CodeEditorInformationWrapper = (props: CodeEditorStatusBarProps) =>
-    window._env_.FEATURE_CODE_MIRROR_ENABLE ? (
-        <CodeMirror.Information {...props} />
-    ) : (
-        <CodeEditor.Information {...props} />
-    )
+    isCodeMirrorEnabled() ? <CodeMirror.Information {...props} /> : <CodeEditor.Information {...props} />
 
 const CodeEditorContainerWrapper = ({
     overflowHidden,
@@ -61,7 +53,7 @@ const CodeEditorContainerWrapper = ({
     flexExpand?: boolean
     overflowHidden?: boolean
 }) =>
-    window._env_.FEATURE_CODE_MIRROR_ENABLE ? (
+    isCodeMirrorEnabled() ? (
         <CodeMirror.Container {...props} />
     ) : (
         <CodeEditor.Container overflowHidden={overflowHidden} {...props} />

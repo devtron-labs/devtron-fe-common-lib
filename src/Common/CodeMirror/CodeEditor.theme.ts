@@ -16,46 +16,46 @@
 
 import { EditorView } from '@uiw/react-codemirror'
 import { githubDarkInit, githubLightInit } from '@uiw/codemirror-theme-github'
-import { tags as t } from '@lezer/highlight'
+import { tags } from '@lezer/highlight'
 
 export const getCodeEditorTheme = (isDark: boolean) => {
     const themeInit = isDark ? githubDarkInit : githubLightInit
     const styles = isDark
         ? [
               {
-                  tag: [t.className, t.propertyName],
+                  tag: [tags.className, tags.propertyName],
                   color: 'var(--code-editor-property-name)',
               },
               {
-                  tag: [t.variableName, t.attributeName, t.number, t.operator],
+                  tag: [tags.variableName, tags.attributeName, tags.number, tags.operator],
                   color: 'var(--code-editor-number)',
               },
               {
-                  tag: [t.heading, t.strong],
+                  tag: [tags.heading, tags.strong],
                   color: 'var(--code-editor-property-name)',
                   fontWeight: 'bold',
               },
               {
-                  tag: [t.emphasis],
+                  tag: [tags.emphasis],
                   color: 'var(--code-editor-property-name)',
                   fontStyle: 'italic',
               },
               {
-                  tag: [t.atom, t.bool, t.special(t.variableName)],
+                  tag: [tags.atom, tags.bool, tags.special(tags.variableName)],
                   color: 'var(--code-editor-boolean)',
               },
           ]
         : [
               {
-                  tag: [t.className, t.propertyName],
+                  tag: [tags.className, tags.propertyName],
                   color: 'var(--code-editor-property-name)',
               },
               {
-                  tag: [t.variableName, t.attributeName, t.number, t.operator],
+                  tag: [tags.variableName, tags.attributeName, tags.number, tags.operator],
                   color: 'var(--code-editor-number)',
               },
               {
-                  tag: [t.atom, t.bool, t.special(t.variableName)],
+                  tag: [tags.atom, tags.bool, tags.special(tags.variableName)],
                   color: 'var(--code-editor-boolean)',
               },
           ]

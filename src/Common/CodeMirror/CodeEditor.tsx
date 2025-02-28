@@ -89,7 +89,8 @@ const CodeEditor = <DiffView extends boolean = false>({
     const codeMirrorParentDivRef = useRef<HTMLDivElement>()
 
     // CONSTANTS
-    const isDarkTheme = (theme ?? appTheme) === AppThemeType.dark
+    const componentTheme = theme ?? appTheme
+    const isDarkTheme = componentTheme === AppThemeType.dark
     const { codeEditorTheme, themeExtension } = getCodeEditorTheme(isDarkTheme)
 
     // STATES
@@ -232,7 +233,7 @@ const CodeEditor = <DiffView extends boolean = false>({
                 codemirrorMergeKey={codemirrorMergeKey}
                 codeMirrorParentDivRef={codeMirrorParentDivRef}
                 codeEditorTheme={codeEditorTheme}
-                isDarkTheme={isDarkTheme}
+                theme={componentTheme}
                 state={state}
                 loading={loading}
                 customLoader={customLoader}

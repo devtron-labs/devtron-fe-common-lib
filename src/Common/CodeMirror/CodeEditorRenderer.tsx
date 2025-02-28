@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-import CodeMirrorMerge from 'react-codemirror-merge'
+import { FocusEventHandler, useEffect, useRef, useState } from 'react'
 import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror'
+import CodeMirrorMerge from 'react-codemirror-merge'
 
+import { getComponentSpecificThemeClass } from '@Shared/Providers'
 import { Progressing } from '@Common/Progressing'
 
-import { FocusEventHandler, useEffect, useRef, useState } from 'react'
 import { CodeEditorRendererProps } from './types'
 import { getCodeEditorHeight, getRevertControlButton } from './utils'
 
 export const CodeEditorRenderer = ({
+    theme,
     loading,
     customLoader,
     height,
     state,
     codeEditorTheme,
     codemirrorMergeKey,
-    isDarkTheme,
     readOnly,
     isOriginalModifiable,
     handleLhsOnChange,
@@ -51,6 +52,9 @@ export const CodeEditorRenderer = ({
 
     // REFS
     const codeMirrorRef = useRef<ReactCodeMirrorRef>()
+
+    // CONSTANTS
+    const componentSpecificThemeClass = getComponentSpecificThemeClass(theme)
 
     // This handling will be removed once shebang is shown inside the codeEditor rather than extra div
     const updateGutterWith = () => {
@@ -114,7 +118,7 @@ export const CodeEditorRenderer = ({
         <CodeMirrorMerge
             theme={codeEditorTheme}
             key={codemirrorMergeKey}
-            className={`w-100 ${isDarkTheme ? 'cm-merge-theme__dark' : 'cm-merge-theme__light'} ${codeEditorParentClassName} ${readOnly ? 'code-editor__read-only' : ''}`}
+            className={`w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName} ${readOnly ? 'code-editor__read-only' : ''}`}
             gutter
             destroyRerender={false}
             {...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {})}
@@ -137,9 +141,7 @@ export const CodeEditorRenderer = ({
     ) : (
         <div ref={codeMirrorParentDivRef} className={`w-100 ${codeEditorParentClassName}`}>
             {shebang && (
-                <p
-                    className={`m-0 flexbox cn-9 code-editor__shebang ${isDarkTheme ? 'code-editor__shebang__dark' : 'code-editor__shebang__light'}`}
-                >
+                <p className={`m-0 flexbox cn-9 code-editor__shebang ${componentSpecificThemeClass}`}>
                     <span
                         className="code-editor__shebang__gutter dc__align-self-stretch"
                         style={{ flex: `0 0 ${gutterWidth}px` }}
@@ -150,7 +152,7 @@ export const CodeEditorRenderer = ({
             <CodeMirror
                 ref={codeMirrorRef}
                 theme={codeEditorTheme}
-                className={`${isDarkTheme ? 'cm-theme__dark' : 'cm-theme__light'} ${codeEditorClassName}`}
+                className={`${componentSpecificThemeClass} ${codeEditorClassName}`}
                 basicSetup={false}
                 value={state.code}
                 placeholder={placeholder}
