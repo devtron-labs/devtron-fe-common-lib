@@ -37,5 +37,9 @@ export interface IconBaseProps extends Pick<SVGAttributes<SVGSVGElement>, 'strok
      * If `null`, the default color present in icon is used.
      * @example `'B500'`, `'N200'`, `'G50'`, `'R700'`
      */
-    color: `${'B' | 'N' | 'G' | 'Y' | 'R' | 'V' | 'O'}${`${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}00` | '50'}` | null
+    color:
+        | `${'B' | 'N' | 'G' | 'Y' | 'R' | 'V' | 'O'}${`${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}00` | '50'}`
+        | 'white'
+        | 'black'
+        | null
 }

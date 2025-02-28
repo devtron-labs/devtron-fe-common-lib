@@ -99,12 +99,15 @@ export interface customEnv {
      */
     FEATURE_CODE_MIRROR_ENABLE?: boolean
     /**
+     * If true, the experimental layout feature is enabled
+     */
+    FEATURE_EXPERIMENTAL_MODERN_LAYOUT_ENABLE?: boolean
+    // ================== Feature flags for the enterprise release ==================
+    /**
      * If true, only pipelines to which the user has access will be shown across the application
      * @default false
      */
     FEATURE_DEFAULT_AUTHENTICATED_VIEW_ENABLE?: boolean
-
-    // ================== Feature flags for the enterprise release ==================
     /**
      * Enable Image promotion feature
      *
