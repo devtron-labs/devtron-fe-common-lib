@@ -22,16 +22,42 @@ export const getCodeEditorTheme = (isDark: boolean) => {
     const themeInit = isDark ? githubDarkInit : githubLightInit
     const styles = isDark
         ? [
-              { tag: [t.className, t.propertyName], color: 'var(--code-editor-property-name)' },
-              { tag: [t.variableName, t.attributeName, t.number, t.operator], color: 'var(--code-editor-number)' },
-              { tag: [t.heading, t.strong], color: 'var(--code-editor-property-name)', fontWeight: 'bold' },
-              { tag: [t.emphasis], color: 'var(--code-editor-property-name)', fontStyle: 'italic' },
-              { tag: [t.atom, t.bool, t.special(t.variableName)], color: 'var(--code-editor-boolean)' },
+              {
+                  tag: [t.className, t.propertyName],
+                  color: 'var(--code-editor-property-name)',
+              },
+              {
+                  tag: [t.variableName, t.attributeName, t.number, t.operator],
+                  color: 'var(--code-editor-number)',
+              },
+              {
+                  tag: [t.heading, t.strong],
+                  color: 'var(--code-editor-property-name)',
+                  fontWeight: 'bold',
+              },
+              {
+                  tag: [t.emphasis],
+                  color: 'var(--code-editor-property-name)',
+                  fontStyle: 'italic',
+              },
+              {
+                  tag: [t.atom, t.bool, t.special(t.variableName)],
+                  color: 'var(--code-editor-boolean)',
+              },
           ]
         : [
-              { tag: [t.className, t.propertyName], color: 'var(--code-editor-property-name)' },
-              { tag: [t.variableName, t.attributeName, t.number, t.operator], color: 'var(--code-editor-number)' },
-              { tag: [t.atom, t.bool, t.special(t.variableName)], color: 'var(--code-editor-boolean)' },
+              {
+                  tag: [t.className, t.propertyName],
+                  color: 'var(--code-editor-property-name)',
+              },
+              {
+                  tag: [t.variableName, t.attributeName, t.number, t.operator],
+                  color: 'var(--code-editor-number)',
+              },
+              {
+                  tag: [t.atom, t.bool, t.special(t.variableName)],
+                  color: 'var(--code-editor-boolean)',
+              },
           ]
 
     return {

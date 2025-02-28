@@ -60,6 +60,11 @@
     .cm-deletedChunk .cm-deletedText {
         background: var(--bg-code-editor-red-highlight);
         border-radius: 4px;
+        padding: 0 2px;
+        color: var(--N900);
+        > span {
+            color: var(--N900);
+        }
     }
 
     &.cm-merge-a .cm-changedLineGutter {
@@ -73,6 +78,11 @@
     &.cm-merge-b .cm-changedText {
         background: var(--bg-code-editor-green-highlight);
         border-radius: 4px;
+        padding: 0 2px;
+        color: var(--N900);
+        > span {
+            color: var(--N900);
+        }
     }
 
     &.cm-merge-b .cm-changedLineGutter {
