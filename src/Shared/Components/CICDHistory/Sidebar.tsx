@@ -35,8 +35,11 @@ import BuildAndTaskSummaryTooltipCard from './BuildAndTaskSummaryTooltipCard'
 import { getCustomOptionSelectionStyle } from '../ReactSelect'
 import { DetectBottom } from '../DetectBottom'
 import { ConditionalWrap, DATE_TIME_FORMATS, DropdownIndicator, Tooltip } from '../../../Common'
+
 import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
-import { getHistoryItemStatusIconFromWorkflowStages, getTriggerStatusIcon, getWorkflowNodeStatusTitle } from './utils'
+import { DeploymentStatus } from '../StatusComponent'
+import { Icon } from '../Icon'
+import { getTriggerStatusIcon, getHistoryItemStatusIconFromWorkflowStages, getWorkflowNodeStatusTitle } from './utils'
 import GitTriggerList from './GitTriggerList'
 
 /**
@@ -54,7 +57,7 @@ const DeploymentSummaryTooltipCard = memo(
         const triggeredByText = triggeredBy === 1 ? 'auto trigger' : triggeredByEmail
 
         return (
-            <div className="shadow__overlay p-16 br-4 w-400 bg__overlay border__primary mxh-300 dc__overflow-auto">
+            <div className="shadow__overlay p-16 br-4 w-400 bg__overlay--primary border__primary mxh-300 dc__overflow-auto">
                 <span className="fw-6 fs-16 mb-4" style={{ color: colorMap[status.toLowerCase()] }}>
                     {getWorkflowNodeStatusTitle(status)}
                 </span>
@@ -202,9 +205,16 @@ const HistorySummaryCard = memo(
                     ref={assignTargetCardRef}
                 >
                     <div className="w-100 deployment-history-card">
-                        {areWorkerStatusSeparated
-                            ? getHistoryItemStatusIconFromWorkflowStages(workflowExecutionStages)
-                            : getTriggerStatusIcon(status)}
+                        {areWorkerStatusSeparated ? (
+                            getHistoryItemStatusIconFromWorkflowStages(workflowExecutionStages)
+                        ) : (
+                            <DeploymentStatus
+                                status={getTriggerStatusIcon(status)}
+                                hideMessage
+                                hideIconTooltip
+                                iconSize={20}
+                            />
+                        )}
                         <div className="flexbox-col dc__gap-8">
                             <div className="flex column left">
                                 <div className="cn-9 fs-13 lh-20">
@@ -313,15 +323,19 @@ const Sidebar = React.memo(
             props.selectProps.styles.option = getCustomOptionSelectionStyle()
             return (
                 <components.Option {...props}>
-                    <div style={{ display: 'flex' }}>
+                    <div className="flexbox dc dc__gap-4">
                         {(type === HistoryComponentType.CI || type === HistoryComponentType.GROUP_CI) && (
-                            <div
-                                className={
-                                    `dc__ci-pipeline-type-icon mr-5 ${props.data.pipelineType?.toLowerCase()}` || ''
+                            <Icon
+                                name={
+                                    props.data.pipelineType?.toLowerCase() === 'ci_job'
+                                        ? 'ic-job-color'
+                                        : 'ic-build-color'
                                 }
+                                size={20}
+                                color={null}
                             />
                         )}
-                        {props.label}
+                        <span>{props.label}</span>
                     </div>
                 </components.Option>
             )

@@ -30,7 +30,7 @@
         &:hover:not(.no-hover) {
             color: var(--N700);
             text-decoration: none;
-            background: var(--bg-secondary);
+            background: var(--bg-hover);
         }
 
         &:not(.active):not(.no-hover) &__title {

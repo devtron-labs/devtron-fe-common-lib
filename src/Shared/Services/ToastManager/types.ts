@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ButtonProps } from '@Shared/Components'
+import { ButtonComponentType, ButtonProps } from '@Shared/Components'
 import { ReactElement } from 'react'
 
 export enum ToastVariantType {
@@ -48,9 +48,9 @@ export interface ToastProps {
     /**
      * Props for the action button to be displayed in the toast
      *
-     * Note: Size, variant and style are hard-coded and cannot be overriden
+     * Note: Size, variant and style are hard-coded and cannot be overridden
      */
-    buttonProps?: ButtonProps
+    buttonProps?: ButtonProps<ButtonComponentType>
     /**
      * Custom progress bar color
      */

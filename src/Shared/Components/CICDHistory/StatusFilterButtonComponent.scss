@@ -14,13 +14,49 @@
  * limitations under the License.
  */
 
-.gui-yaml-switch.status-filter-button {
+.status-filter-button {
     &.radio-group {
-        .radio__item-label {
-            padding: 2px 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        padding: 0;
+        height: 24px;
+        overflow: hidden;
+        border-radius: 4px;
+
+        input + .radio__item-label {
+            border-radius: 0;
+            border: 1px solid var(--N200);
+        }
+
+        input[type='checkbox']:checked + .radio__item-label {
+            border-radius: 0;
+            background-color: var(--N100);
+            color: var(--N900);
+        }
+
+        .radio {
+            color: var(--N500);
+
+            &:hover:not(.disabled) {
+                color: var(--N900);
+            }
+
+            .radio__item-label {
+                border-right: unset;
+                padding: 2px 8px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            &:first-child input + .radio__item-label {
+                border-top-left-radius: 4px !important;
+                border-bottom-left-radius: 4px !important;
+            }
+
+            &:last-child input + .radio__item-label {
+                border-top-right-radius: 4px !important;
+                border-bottom-right-radius: 4px !important;
+                border: 1px solid var(--N200);
+            }
         }
     }
 

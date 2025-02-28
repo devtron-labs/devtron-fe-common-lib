@@ -40,6 +40,8 @@ export interface MainContext {
     isAirgapped: boolean
     isSuperAdmin: boolean
     isManifestScanningEnabled: boolean
+    isOrgLevelRBACViewEnforced: boolean
+    viewIsPipelineRBACConfiguredNode: ReactNode
 }
 
 export interface MainContextProviderProps {

@@ -1,0 +1,17 @@
+<!--
+  - Copyright (c) 2024. Devtron Inc.
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  -     http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -->
+
+<svg width="240" height="240" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><style>@keyframes rotate{0%{transform:rotate(0deg);stroke-dashoffset:0}50%{transform:rotate(360deg);stroke-dashoffset:15}to{transform:rotate(720deg);stroke-dashoffset:0}}</style><circle cx="12" cy="12" r="9" stroke="#596168" opacity=".2" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="#596168" stroke-width="2" stroke-linecap="round" style="animation:rotate 1s infinite linear;stroke-dasharray:20 200;transform-origin:center center"/></svg>

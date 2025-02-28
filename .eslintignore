@@ -1,4 +1,5 @@
 .eslintrc.cjs
+scripts/*.cjs
 
 # Files with ESLint errors/warnings
 src/Common/AddCDButton/AddCDButton.tsx
@@ -13,7 +14,6 @@ src/Common/Checkbox.tsx
 src/Common/ClipboardButton/__tests__/ClipboardButton.test.tsx
 src/Common/CodeEditor/CodeEditor.tsx
 src/Common/Common.service.ts
-src/Common/CustomInput/CustomInput.tsx
 src/Common/CustomTagSelector/PropagateTagInfo.tsx
 src/Common/CustomTagSelector/TagDetails.tsx
 src/Common/CustomTagSelector/TagLabelValueSelector.tsx

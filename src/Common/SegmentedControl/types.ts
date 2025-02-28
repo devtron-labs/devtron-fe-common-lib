@@ -37,4 +37,8 @@ export interface SegmentedControlProps {
      * @default ComponentSizeType.medium
      */
     size?: ComponentSizeType.medium | ComponentSizeType.large
+    /**
+     * @default false
+     */
+    isControlled?: boolean
 }

@@ -33,7 +33,7 @@ const ButtonElement = ({
     ...props
 }: PropsWithChildren<
     Omit<
-        ButtonProps,
+        ButtonProps<ButtonComponentType>,
         | 'text'
         | 'variant'
         | 'size'
@@ -142,7 +142,7 @@ const ButtonElement = ({
  * <Button icon={<ICCube />} ariaLabel="Label" />
  * ```
  */
-const Button = ({
+const Button = <ComponentType extends ButtonComponentType>({
     dataTestId,
     text,
     variant = ButtonVariantType.primary,
@@ -161,7 +161,7 @@ const Button = ({
     isOpacityHoverChild = false,
     triggerAutoClickTimestamp,
     ...props
-}: ButtonProps) => {
+}: ButtonProps<ComponentType>) => {
     const [isAutoClickActive, setIsAutoClickActive] = useState(false)
     const autoClickTimeoutRef = useRef<number>()
     const elementRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null)
@@ -192,7 +192,7 @@ const Button = ({
         }
     }, [triggerAutoClickTimestamp])
 
-    const handleClick: ButtonProps['onClick'] = (e) => {
+    const handleClick: ButtonProps<ComponentType>['onClick'] = (e) => {
         setIsAutoClickActive(false)
         clearTimeout(autoClickTimeoutRef.current)
 
@@ -227,7 +227,7 @@ const Button = ({
                     disabled={isDisabled}
                     className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${isOpacityHoverChild ? 'dc__opacity-hover--child' : ''} ${getButtonDerivedClass({ size, variant, style, isLoading, icon, isAutoTriggerActive: isAutoClickActive })} ${isDisabled ? 'dc__disabled' : ''} ${fullWidth ? 'w-100' : ''}`}
                     data-testid={dataTestId}
-                    aria-label={ariaLabel}
+                    aria-label={ariaLabel || (isLoading ? text : undefined)}
                     elementRef={elementRef}
                     onClick={handleClick}
                 >

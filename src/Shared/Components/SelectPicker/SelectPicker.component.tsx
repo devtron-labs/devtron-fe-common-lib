@@ -26,7 +26,7 @@ import { ReactElement, useCallback, useMemo, useState } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
-import { isNullOrUndefined } from '@Shared/Helpers'
+import { deriveBorderRadiusAndBorderClassFromConfig, isNullOrUndefined } from '@Shared/Helpers'
 import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
 import {
     SelectPickerMultiValueLabel,
@@ -218,7 +218,10 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     warningText,
     layout,
     ariaLabel,
+    borderConfig,
     borderRadiusConfig,
+    labelTippyCustomizedConfig,
+    labelTooltipConfig,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const [isFocussed, setIsFocussed] = useState(false)
@@ -380,8 +383,10 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             required={required}
             fullWidth={fullWidth}
             ariaLabel={ariaLabel}
-            // TODO: Add support for custom border radius with CustomInput refactoring
+            borderConfig={borderConfig}
             borderRadiusConfig={borderRadiusConfig}
+            labelTippyCustomizedConfig={labelTippyCustomizedConfig}
+            labelTooltipConfig={labelTooltipConfig}
         >
             <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
                 <div className="w-100">
@@ -395,6 +400,10 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             error,
                             helperText,
                         })}
+                        classNames={{
+                            control: () =>
+                                deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig }),
+                        }}
                         name={name || inputId}
                         classNamePrefix={classNamePrefix || inputId}
                         isSearchable={isSelectSearchable}
