@@ -17,6 +17,7 @@
 import { getSanitizedIframe } from '@Common/Helper'
 import { customizeValidator } from '@rjsf/validator-ajv8'
 import { PATTERNS } from '@Common/Constants'
+import { parse } from 'yaml'
 import { URLProtocolType } from './types'
 import { SKIP_LABEL_KEY_VALIDATION_PREFIX } from './constants'
 
@@ -386,11 +387,13 @@ export const SCHEMA_07_VALIDATOR_STRICT = customizeValidator({
     },
 })
 SCHEMA_07_VALIDATOR_STRICT.ajv.addKeyword('hidden')
+SCHEMA_07_VALIDATOR_STRICT.ajv.addKeyword('updatePath')
 SCHEMA_07_VALIDATOR_STRICT.ajv.addFormat('memory', /^\d+(\.\d+)?(Ki|Mi|Gi|Ti|Pi|Ei|KiB|MiB|GiB|TiB|PiB|EiB)?$/)
 SCHEMA_07_VALIDATOR_STRICT.ajv.addFormat('cpu', /^(?:\d+(\.\d+)?|(\d+)(m))$/)
 
 export const SCHEMA_07_VALIDATOR = customizeValidator({ ajvOptionsOverrides: { strict: false } })
 SCHEMA_07_VALIDATOR.ajv.addKeyword('hidden')
+SCHEMA_07_VALIDATOR.ajv.addKeyword('updatePath')
 SCHEMA_07_VALIDATOR.ajv.addFormat('memory', /^\d+(\.\d+)?(Ki|Mi|Gi|Ti|Pi|Ei|KiB|MiB|GiB|TiB|PiB|EiB)?$/)
 SCHEMA_07_VALIDATOR.ajv.addFormat('cpu', /^(?:\d+(\.\d+)?|(\d+)(m))$/)
 
@@ -471,4 +474,24 @@ export const validateCMVolumeMountPath = (value: string): { isValid: boolean; me
         }
     }
     return { isValid: true, message: '' }
+}
+
+export const validateYAML = (yamlString: string, isRequired?: boolean): ValidationResponseType => {
+    try {
+        if (!yamlString && isRequired) {
+            return {
+                isValid: false,
+                message: 'This field is required',
+            }
+        }
+        parse(yamlString)
+        return {
+            isValid: true,
+        }
+    } catch (err) {
+        return {
+            isValid: false,
+            message: err.message,
+        }
+    }
 }

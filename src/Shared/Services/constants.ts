@@ -14,5 +14,4 @@
  * limitations under the License.
  */
 
-export { default as KeyValueList } from './KeyValueList'
-export * from './types'
+export const USER_PREFERENCES_ATTRIBUTE_KEY = 'userPreferences'

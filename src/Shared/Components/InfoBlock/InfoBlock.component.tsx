@@ -1,7 +1,24 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { ComponentSizeType } from '@Shared/constants'
 import { deriveBorderRadiusAndBorderClassFromConfig } from '@Shared/Helpers'
 import { InfoBlockProps } from './types'
 import {
+    CONTAINER_SIZE_TO_BUTTON_SIZE,
     CONTAINER_SIZE_TO_CLASS_MAP,
     SIZE_TO_ICON_CLASS_MAP,
     VARIANT_TO_BG_MAP,
@@ -82,7 +99,7 @@ const InfoBlock = ({
                     {renderContent()}
                 </div>
 
-                {buttonProps && <Button {...buttonProps} />}
+                {buttonProps && <Button {...buttonProps} size={CONTAINER_SIZE_TO_BUTTON_SIZE[size]} />}
             </div>
         )
     }
@@ -95,7 +112,7 @@ const InfoBlock = ({
                     {renderIcon()}
                 </div>
 
-                {buttonProps && <Button {...buttonProps} />}
+                {buttonProps && <Button {...buttonProps} size={CONTAINER_SIZE_TO_BUTTON_SIZE[size]} />}
             </div>
         )
     }

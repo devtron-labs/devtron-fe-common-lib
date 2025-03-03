@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { FC, SVGAttributes, SVGProps } from 'react'
 
 import { TooltipProps } from '@Common/Tooltip/types'
@@ -21,5 +37,9 @@ export interface IconBaseProps extends Pick<SVGAttributes<SVGSVGElement>, 'strok
      * If `null`, the default color present in icon is used.
      * @example `'B500'`, `'N200'`, `'G50'`, `'R700'`
      */
-    color: `${'B' | 'N' | 'G' | 'Y' | 'R' | 'V' | 'O'}${`${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}00` | '50'}` | null
+    color:
+        | `${'B' | 'N' | 'G' | 'Y' | 'R' | 'V' | 'O'}${`${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}00` | '50'}`
+        | 'white'
+        | 'black'
+        | null
 }

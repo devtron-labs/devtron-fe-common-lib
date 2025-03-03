@@ -125,7 +125,8 @@ export const getCommonSelectStyle = (styleOverrides = {}): StylesConfig => ({
     }),
     menu: (base) => ({
         ...base,
-        backgroundColor: 'var(--bg-menu)',
+        backgroundColor: 'var(--bg-menu-primary)',
+        border: '1px solid var(--border-primary-translucent)',
     }),
     multiValue: (base) => ({
         ...base,
