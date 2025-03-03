@@ -161,10 +161,6 @@ export interface GenericEmptyStateType {
     subTitle?: ReactNode
     isButtonAvailable?: boolean
     styles?: CSSProperties
-    /**
-     * @deprecated To be removed; use flex based layout instead
-     */
-    heightToDeduct?: number
     imageType?: string
     SvgImage?
     renderButton?: () => JSX.Element
