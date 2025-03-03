@@ -25,6 +25,7 @@ import {
     Severity,
     PolicyBlockInfo,
     TargetPlatformItemDTO,
+    ButtonProps,
     ComponentLayoutType,
 } from '../Shared'
 import {
@@ -218,6 +219,7 @@ interface InfoColourBarTextConfigType {
      * If given would be shown below the heading (if given)
      */
     description: string
+    actionButtonConfig?: ButtonProps
 }
 
 type InfoColourBarMessageProp = {

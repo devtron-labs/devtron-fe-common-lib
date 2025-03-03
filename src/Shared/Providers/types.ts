@@ -39,8 +39,22 @@ export interface MainContext {
     }
     isAirgapped: boolean
     isSuperAdmin: boolean
+    featureGitOpsFlags: {
+        /**
+         * Would define whether gitops (Global config tab) feature is enabled or not
+         */
+        isFeatureGitOpsEnabled: boolean
+        /**
+         * Would define whether user can select allow custom repo in gitops global config
+         */
+        isFeatureUserDefinedGitOpsEnabled: boolean
+        /**
+         * Feature flag for Migrate to devtron from argo cd
+         */
+        isFeatureArgoCdMigrationEnabled: boolean
+    }
     isManifestScanningEnabled: boolean
-    isOrgLevelRBACViewEnforced: boolean
+    canOnlyViewPermittedEnvOrgLevel: boolean
     viewIsPipelineRBACConfiguredNode: ReactNode
 }
 
