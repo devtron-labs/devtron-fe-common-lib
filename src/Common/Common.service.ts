@@ -264,6 +264,7 @@ export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): Runt
     const runtimeParams = (response?.runtimePluginVariables ?? []).map<RuntimePluginVariables>((variable) => ({
         ...variable,
         defaultValue: variable.value,
+        stepVariableId: variable.stepVariableId || Math.floor(new Date().valueOf() * Math.random())
     }))
 
     runtimeParams.push(...envVariables)

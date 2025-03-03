@@ -15,7 +15,16 @@
  */
 
 import { TranslatableString, englishStringTranslator } from '@rjsf/utils'
-import { HiddenType, MetaHiddenType } from './types'
+import { buildObjectFromPath, convertJSONPointerToJSONPath, joinObjects } from '@Common/Helper'
+import { JSONPath } from 'jsonpath-plus'
+import { applyPatch, compare } from 'fast-json-patch'
+import {
+    GetFormStateFromFormDataProps,
+    HiddenType,
+    MetaHiddenType,
+    RJSFFormSchema,
+    UpdateFormDataFromFormStateProps,
+} from './types'
 
 /**
  * Override for the TranslatableString from RJSF
@@ -81,21 +90,18 @@ export const getInferredTypeFromValueType = (value) => {
     }
 }
 
-const conformPathToPointers = (path: string): string => {
+export const conformPathToPointers = (path: string): string => {
     if (!path) {
         return ''
     }
+
     const trimmedPath = path.trim()
-    const isSlashSeparatedPathMissingBeginSlash = trimmedPath.match(/^\w+(\/\w+)*$/g)
-    if (isSlashSeparatedPathMissingBeginSlash) {
-        return `/${trimmedPath}`
-    }
-    const isDotSeparatedPath = trimmedPath.match(/^\w+(\.\w+)*$/g)
-    if (isDotSeparatedPath) {
-        // NOTE: replacing dots with forward slash (/)
-        return `/${trimmedPath.replaceAll(/\./g, '/')}`
-    }
-    return trimmedPath
+    const trimmedPathWithStartSlash = /^\/.+$/g.test(trimmedPath) ? trimmedPath : `/${trimmedPath}`
+    const finalPath = trimmedPathWithStartSlash.replaceAll(/\./g, '/')
+    // NOTE: test if the path is a valid JSON pointer
+    const pointerRegex = /(\/(([^/~])|(~[01]))*)/g
+
+    return pointerRegex.test(finalPath) ? finalPath : ''
 }
 
 const emptyMetaHiddenTypeInstance: MetaHiddenType = {
@@ -136,3 +142,142 @@ export const parseSchemaHiddenType = (hiddenSchema: HiddenType): MetaHiddenType 
     }
     return structuredClone(emptyMetaHiddenTypeInstance)
 }
+
+const _getSchemaPathToUpdatePathMap = (schema: RJSFFormSchema, path: string, map: Record<string, string>) => {
+    if (!schema) {
+        return
+    }
+
+    if (schema.type === 'object' && schema.properties && typeof schema.properties === 'object') {
+        Object.entries(schema.properties).forEach(([key, value]) => {
+            _getSchemaPathToUpdatePathMap(value, `${path}/${key}`, map)
+        })
+    }
+
+    if (
+        schema.type === 'boolean' ||
+        schema.type === 'string' ||
+        schema.type === 'number' ||
+        schema.type === 'integer'
+    ) {
+        // eslint-disable-next-line no-param-reassign
+        map[path] = conformPathToPointers(schema.updatePath ?? path)
+    }
+}
+
+export const getSchemaPathToUpdatePathMap = (schema: RJSFFormSchema): Record<string, string> => {
+    const map = {}
+    _getSchemaPathToUpdatePathMap(schema, '', map)
+    return map
+}
+
+const _recursivelyRemoveElement = (obj: Record<string, any>, index: number, tokens: string[]) => {
+    if (index >= tokens.length) {
+        return obj
+    }
+
+    const key = tokens[index]
+
+    if (index === tokens.length - 1) {
+        const copy = structuredClone(obj)
+        delete copy[key]
+        return copy
+    }
+
+    if (obj[key]) {
+        // eslint-disable-next-line no-param-reassign
+        obj[key] = _recursivelyRemoveElement(obj[key], index + 1, tokens)
+    }
+
+    if (Object.keys(obj[key] ?? {}).length === 0) {
+        const copy = structuredClone(obj)
+        delete copy[key]
+        return copy
+    }
+
+    return obj
+}
+
+const recursivelyRemoveElement = (obj: Record<string, any>, path: string) => {
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
+        throw new Error('Invalid object')
+    }
+
+    if (!path || !path.startsWith('/')) {
+        throw new Error('Invalid path')
+    }
+
+    const tokens = path.split('/').slice(1)
+    return _recursivelyRemoveElement(obj, 0, tokens)
+}
+
+export const updateFormDataFromFormState = ({
+    formState,
+    formData,
+    schemaPathToUpdatePathMap,
+}: UpdateFormDataFromFormStateProps) => {
+    let updatedFormData = structuredClone(formState)
+
+    if (!updatedFormData) {
+        return updatedFormData
+    }
+
+    Object.entries(schemaPathToUpdatePathMap).forEach(([path, updatePath]) => {
+        if (path === updatePath || !updatePath) {
+            return
+        }
+
+        const formDataValue = JSONPath({
+            json: formData,
+            path: convertJSONPointerToJSONPath(path),
+            resultType: 'value',
+            wrap: false,
+        })
+
+        if (formDataValue === undefined) {
+            updatedFormData = recursivelyRemoveElement(updatedFormData, path)
+        } else {
+            updatedFormData = joinObjects([buildObjectFromPath(path, formDataValue), updatedFormData])
+        }
+
+        const value = JSONPath({
+            json: formState,
+            path: convertJSONPointerToJSONPath(path),
+            resultType: 'value',
+            wrap: false,
+        })
+
+        if (value === undefined) {
+            return
+        }
+
+        updatedFormData = joinObjects([buildObjectFromPath(updatePath, value), updatedFormData])
+    })
+
+    return formData && updatedFormData
+        ? applyPatch(formData, compare(formData, updatedFormData), false, false).newDocument
+        : updatedFormData
+}
+
+export const getFormStateFromFormData = ({ formData, schemaPathToUpdatePathMap }: GetFormStateFromFormDataProps) =>
+    joinObjects([
+        ...Object.entries(schemaPathToUpdatePathMap).map(([path, updatePath]) => {
+            if (path === updatePath || !updatePath) {
+                return {}
+            }
+
+            const value = JSONPath({
+                json: formData,
+                path: convertJSONPointerToJSONPath(updatePath),
+                resultType: 'value',
+                wrap: false,
+            })
+
+            if (value === undefined) {
+                return {}
+            }
+
+            return buildObjectFromPath(path, value)
+        }),
+        structuredClone(formData),
+    ])
