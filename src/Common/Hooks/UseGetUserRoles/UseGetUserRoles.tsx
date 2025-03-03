@@ -14,27 +14,32 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getUserRole } from '../../Common.service'
-import { useSuperAdminType } from './types'
+import { useGetUserRolesType } from './types'
 import { showError } from '../../Helper'
 
 /**
  * @description It will return isSuperAdmin and would be set to false by default, might need few optimizations like dep, etc
- * @returns {useSuperAdminType} isSuperAdmin
+ * @returns {useGetUserRolesType} isSuperAdmin, canManageAllAccess
  */
-export const useSuperAdmin = (): useSuperAdminType => {
-    const [isSuperAdmin, setSuperAdmin] = useState<boolean>(false)
+const useGetUserRoles = (): useGetUserRolesType => {
+    const [result, setResult] = useState<useGetUserRolesType>({ isSuperAdmin: false, canManageAllAccess: false })
 
     useEffect(() => {
         getUserRole()
-            .then((response) => {
-                setSuperAdmin(response.result.superAdmin ?? false)
+            .then(({ result: apiResult }) => {
+                setResult({
+                    isSuperAdmin: apiResult.superAdmin ?? false,
+                    canManageAllAccess: apiResult.canManageAllAccess ?? false,
+                })
             })
             .catch((error) => {
                 showError(error)
             })
     }, [])
 
-    return { isSuperAdmin }
+    return result
 }
+
+export default useGetUserRoles

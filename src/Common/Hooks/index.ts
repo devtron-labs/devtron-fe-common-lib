@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export { useSuperAdmin } from './UseSuperAdmin/UseSuperAdmin'
+export { useGetUserRoles } from './UseGetUserRoles'
 export { useClickOutside } from './UseClickOutside/UseClickOutside'
 export { useWindowSize } from './UseWindowSize/UseWindowSize'
 export * from './useUrlFilters'

@@ -15,6 +15,7 @@ import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
+import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
@@ -53,6 +54,7 @@ import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
+import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
 
 // eslint-disable-next-line no-restricted-imports
@@ -75,6 +77,7 @@ export const iconMap = {
     'ic-close-small': ICCloseSmall,
     'ic-code': ICCode,
     'ic-container': ICContainer,
+    'ic-crown': ICCrown,
     'ic-cube': ICCube,
     'ic-dockerhub': ICDockerhub,
     'ic-ecr': ICEcr,
@@ -113,6 +116,7 @@ export const iconMap = {
     'ic-suspended': ICSuspended,
     'ic-timeout-two-dash': ICTimeoutTwoDash,
     'ic-unknown': ICUnknown,
+    'ic-user-key': ICUserKey,
     'ic-warning': ICWarning,
 }
 
