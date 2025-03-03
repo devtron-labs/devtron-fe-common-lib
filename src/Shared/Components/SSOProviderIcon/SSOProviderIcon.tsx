@@ -29,6 +29,6 @@ const ssoProviderIconMap: Record<SSOProvider, IconName> = {
     [SSOProvider.openshift]: 'ic-openshift',
 }
 
-export const SSOProviderIcon = ({ ssoProvider, size = 20 }: SSOProviderIconProps) => (
-    <Icon name={ssoProviderIconMap[ssoProvider]} size={size} color={null} />
+export const SSOProviderIcon = ({ provider, size = 20 }: SSOProviderIconProps) => (
+    <Icon name={ssoProviderIconMap[provider]} size={size} color={null} />
 )

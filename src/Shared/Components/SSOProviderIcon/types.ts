@@ -19,7 +19,7 @@ import { SSOProvider } from '@Common/Constants'
 import { IconsProps } from '../Icon'
 
 export interface SSOProviderIconProps {
-    ssoProvider: SSOProvider
+    provider: SSOProvider
     /**
      * The size of the icon in pixels.
      * @default 20
