@@ -16,5 +16,10 @@
 
 export { RJSFForm } from './Form'
 export type * from './types'
-export { getInferredTypeFromValueType, getRedirectionProps } from './utils'
+export {
+    getInferredTypeFromValueType,
+    getRedirectionProps,
+    getSchemaPathToUpdatePathMap,
+    conformPathToPointers,
+} from './utils'
 export { HIDE_SUBMIT_BUTTON_UI_SCHEMA } from './constants'
