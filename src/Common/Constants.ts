@@ -435,3 +435,16 @@ export const UNCHANGED_ARRAY_ELEMENT_SYMBOL = Symbol(
     `The element at this index remains unchanged from the original object.
      This symbol is used by @buildObjectFromPath & later consumed by @recursivelyRemoveSymbolFromArraysInObject`,
 )
+
+/**
+ * Authorization config types for SSO Login
+ */
+export enum SSOProvider {
+    google = 'google',
+    github = 'github',
+    gitlab = 'gitlab',
+    microsoft = 'microsoft',
+    ldap = 'ldap',
+    oidc = 'oidc',
+    openshift = 'openshift',
+}
