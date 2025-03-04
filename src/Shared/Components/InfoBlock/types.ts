@@ -27,7 +27,7 @@ export type InfoBlockProps = {
     /**
      * @default 'information'
      */
-    variant?: 'error' | 'help' | 'information' | 'success' | 'warning'
+    variant?: 'error' | 'help' | 'information' | 'success' | 'warning' | 'neutral'
     /**
      * @default ComponentSizeType.large
      */

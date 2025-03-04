@@ -29,6 +29,7 @@ export const VARIANT_TO_BG_MAP: Record<InfoBlockProps['variant'], string> = {
     information: 'bcb-1 eb-2',
     success: 'bcg-1 eg-2',
     warning: 'bcy-1 ey-2',
+    neutral: 'bcn-1 en-2',
 }
 
 export const VARIANT_TO_ICON_MAP: Record<InfoBlockProps['variant'], InfoBlockProps['customIcon']> = {
@@ -37,6 +38,7 @@ export const VARIANT_TO_ICON_MAP: Record<InfoBlockProps['variant'], InfoBlockPro
     information: <ICInfoFilled />,
     success: <ICSuccess />,
     warning: <ICWarningY5 />,
+    neutral: <ICInfoFilled className="circle-fill--n7" />,
 }
 
 export const CONTAINER_SIZE_TO_CLASS_MAP: Record<InfoBlockProps['size'], string> = {
