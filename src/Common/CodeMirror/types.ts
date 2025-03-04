@@ -17,6 +17,7 @@
 import { Dispatch, FunctionComponent, Key, MutableRefObject, ReactNode, SVGProps } from 'react'
 import { JSONSchema7 } from 'json-schema'
 import { EditorView, ReactCodeMirrorProps } from '@uiw/react-codemirror'
+import { CodeMirrorMergeRef } from 'react-codemirror-merge'
 import { SearchQuery } from '@codemirror/search'
 
 import { MODES } from '@Common/Constants'
@@ -163,4 +164,10 @@ export type CodeEditorRendererProps = Required<
         originalViewExtensions: ReactCodeMirrorProps['extensions']
         modifiedViewExtensions: ReactCodeMirrorProps['extensions']
         extensions: ReactCodeMirrorProps['extensions']
+        diffMinimapExtensions: ReactCodeMirrorProps['extensions']
     }
+
+export interface DiffMinimapProps
+    extends Pick<CodeEditorRendererProps, 'state' | 'diffMinimapExtensions' | 'codeEditorTheme' | 'theme'> {
+    view: CodeMirrorMergeRef['view']
+}

@@ -16,13 +16,14 @@
 
 import { FocusEventHandler, useEffect, useRef, useState } from 'react'
 import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror'
-import CodeMirrorMerge from 'react-codemirror-merge'
+import CodeMirrorMerge, { CodeMirrorMergeRef } from 'react-codemirror-merge'
 
 import { getComponentSpecificThemeClass } from '@Shared/Providers'
 import { Progressing } from '@Common/Progressing'
 
 import { CodeEditorRendererProps } from './types'
 import { getCodeEditorHeight, getRevertControlButton } from './utils'
+import { DiffMinimap } from './Extensions'
 
 export const CodeEditorRenderer = ({
     theme,
@@ -45,6 +46,7 @@ export const CodeEditorRenderer = ({
     onBlur,
     extensions,
     autoFocus,
+    diffMinimapExtensions,
 }: CodeEditorRendererProps) => {
     // STATES
     const [isFocused, setIsFocused] = useState(false)
@@ -52,6 +54,7 @@ export const CodeEditorRenderer = ({
 
     // REFS
     const codeMirrorRef = useRef<ReactCodeMirrorRef>()
+    const codeMirrorMergeRef = useRef<CodeMirrorMergeRef>()
 
     // CONSTANTS
     const componentSpecificThemeClass = getComponentSpecificThemeClass(theme)
@@ -115,29 +118,41 @@ export const CodeEditorRenderer = ({
     }
 
     return state.diffMode ? (
-        <CodeMirrorMerge
-            theme={codeEditorTheme}
-            key={codemirrorMergeKey}
-            className={`w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName} ${readOnly ? 'code-editor__read-only' : ''}`}
-            gutter
-            destroyRerender={false}
-            {...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {})}
-        >
-            <CodeMirrorMerge.Original
-                basicSetup={false}
-                value={state.lhsCode}
-                readOnly={readOnly || !isOriginalModifiable}
-                onChange={handleLhsOnChange}
-                extensions={originalViewExtensions}
-            />
-            <CodeMirrorMerge.Modified
-                basicSetup={false}
-                value={state.code}
-                readOnly={readOnly}
-                onChange={handleOnChange}
-                extensions={modifiedViewExtensions}
-            />
-        </CodeMirrorMerge>
+        <div className={`flexbox w-100 ${codeEditorParentClassName}`}>
+            <CodeMirrorMerge
+                ref={codeMirrorMergeRef}
+                theme={codeEditorTheme}
+                key={codemirrorMergeKey}
+                className={`flex-grow-1 h-100 dc__overflow-hidden ${componentSpecificThemeClass} ${readOnly ? 'code-editor__read-only' : ''}`}
+                gutter
+                destroyRerender={false}
+                {...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {})}
+            >
+                <CodeMirrorMerge.Original
+                    basicSetup={false}
+                    value={state.lhsCode}
+                    readOnly={readOnly || !isOriginalModifiable}
+                    onChange={handleLhsOnChange}
+                    extensions={originalViewExtensions}
+                />
+                <CodeMirrorMerge.Modified
+                    basicSetup={false}
+                    value={state.code}
+                    readOnly={readOnly}
+                    onChange={handleOnChange}
+                    extensions={modifiedViewExtensions}
+                />
+            </CodeMirrorMerge>
+            {codeMirrorMergeRef.current && (
+                <DiffMinimap
+                    theme={theme}
+                    codeEditorTheme={codeEditorTheme}
+                    view={codeMirrorMergeRef.current.view}
+                    state={state}
+                    diffMinimapExtensions={diffMinimapExtensions}
+                />
+            )}
+        </div>
     ) : (
         <div ref={codeMirrorParentDivRef} className={`w-100 ${codeEditorParentClassName}`}>
             {shebang && (

@@ -20,11 +20,11 @@
     background-color: var(--bg-code-editor-base);
 }
 
-.cm-mergeViewEditor:first-child {
-    border-right: 1px solid var(--N200);
-}
+.cm-merge-theme:not(.code-editor__read-only):not(.code-editor__mini-map) {
+    .cm-mergeViewEditor:first-child {
+        border-right: 1px solid var(--N200);
+    }
 
-.cm-merge-theme:not(.code-editor__read-only) {
     .cm-mergeViewEditor:last-child {
         border-left: 1px solid var(--N200);
     }
@@ -216,6 +216,34 @@
         span {
             color: var(--white);
         }
+    }
+}
+
+// MINIMAP STYLES
+.code-editor__mini-map {
+    .cm-editor {
+        &.cm-merge-a .cm-changedLine,
+        .cm-deletedChunk,
+        &.cm-merge-a .cm-changedText,
+        .cm-deletedChunk .cm-deletedText,
+        &.cm-merge-a .cm-changedLineGutter {
+            background-color: var(--R200);
+        }
+
+        &.cm-merge-b .cm-changedLine,
+        &.cm-merge-b .cm-changedText,
+        &.cm-merge-b .cm-changedLineGutter {
+            background: var(--G200);
+        }
+    }
+
+    & .cm-line,
+    & .cm-line span {
+        color: transparent !important;
+    }
+
+    & .cm-scroller {
+        overflow: hidden !important;
     }
 }
 

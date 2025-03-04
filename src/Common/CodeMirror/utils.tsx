@@ -177,12 +177,12 @@ export const getRevertControlButton = () => {
 }
 
 // EXTENSION UTILS
-export const getLanguageExtension = (mode: CodeEditorProps['mode']): Extension => {
+export const getLanguageExtension = (mode: CodeEditorProps['mode'], disableLint = false): Extension => {
     switch (mode) {
         case MODES.JSON:
-            return [json(), linter(jsonParseLinter())]
+            return [json(), ...(!disableLint ? [linter(jsonParseLinter())] : [])]
         case MODES.YAML:
-            return [yaml(), linter(yamlParseLinter())]
+            return [yaml(), ...(!disableLint ? [linter(yamlParseLinter())] : [])]
         case MODES.SHELL:
             return StreamLanguage.define(shell)
         case MODES.DOCKERFILE:
