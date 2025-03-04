@@ -32,7 +32,6 @@ export const CodeEditorRenderer = ({
     height,
     state,
     codeEditorTheme,
-    codemirrorMergeKey,
     readOnly,
     isOriginalModifiable,
     handleLhsOnChange,
@@ -122,7 +121,6 @@ export const CodeEditorRenderer = ({
             <CodeMirrorMerge
                 ref={codeMirrorMergeRef}
                 theme={codeEditorTheme}
-                key={codemirrorMergeKey}
                 className={`flex-grow-1 h-100 dc__overflow-hidden ${componentSpecificThemeClass} ${readOnly ? 'code-editor__read-only' : ''}`}
                 gutter
                 destroyRerender={false}

@@ -18,6 +18,10 @@
 .cm-mergeView {
     height: 100%;
     background-color: var(--bg-code-editor-base);
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .cm-merge-theme:not(.code-editor__read-only):not(.code-editor__mini-map) {
@@ -221,6 +225,9 @@
 
 // MINIMAP STYLES
 .code-editor__mini-map {
+    user-select: none;
+    pointer-events: none;
+
     .cm-editor {
         &.cm-merge-a .cm-changedLine,
         .cm-deletedChunk,
@@ -375,5 +382,15 @@
 
     &__read-only-tooltip {
         background-color: var(--bg-tooltip-black);
+    }
+
+    &__minimap-container {
+        width: 30px;
+        background-color: var(--bg-code-editor-base);
+    }
+
+    &__minimap-overlay {
+        background-color: var(--bg-code-editor-diffmap-scrollbar);
+        cursor: grab;
     }
 }
