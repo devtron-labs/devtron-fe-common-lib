@@ -37,21 +37,32 @@ const useStickyEvent = <T extends HTMLElement = HTMLDivElement>({
             }
 
             let previousStuckState: boolean
+            let hasSentinelLeftView: boolean
+            let hasHeaderLeftView: boolean
+
+            const sentinelId = `${identifier}__sentinel`
 
             const intersectionObserver = new IntersectionObserver(
                 (entries) => {
                     entries.forEach((entry) => {
-                        const isStuck = !entry.isIntersecting
-                        if (isNullOrUndefined(previousStuckState) || isStuck !== previousStuckState) {
-                            callback(isStuck)
-                            previousStuckState = isStuck
+                        switch (entry.target.id) {
+                            case sentinelId:
+                                hasSentinelLeftView = !entry.isIntersecting
+                                break
+                            default:
+                                hasHeaderLeftView = !entry.isIntersecting
                         }
                     })
+
+                    const isStuck = hasSentinelLeftView && !hasHeaderLeftView
+
+                    if (isNullOrUndefined(previousStuckState) || isStuck !== previousStuckState) {
+                        callback(isStuck)
+                        previousStuckState = isStuck
+                    }
                 },
                 { root: stickyElementParent, threshold: OBSERVER_THRESHOLD, rootMargin: OBSERVER_ROOT_MARGIN },
             )
-
-            const sentinelId = `${identifier}__sentinel`
 
             let sentinelElement = document.getElementById(sentinelId)
 
@@ -76,6 +87,7 @@ const useStickyEvent = <T extends HTMLElement = HTMLDivElement>({
             stickyElementRef.current.appendChild(sentinelElement)
 
             intersectionObserver.observe(sentinelElement)
+            intersectionObserver.observe(stickyElementRef.current)
 
             return () => {
                 intersectionObserver.disconnect()
