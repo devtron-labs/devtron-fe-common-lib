@@ -37,7 +37,12 @@ const useStickyEvent = <T extends HTMLElement = HTMLDivElement>({
                 return noop
             }
 
-            // NOTE: these values are being used as closures
+            // The sentinel is a div used to detect when the sticky element is stuck.
+            // It is taller than the sticky element's top offset, ensuring it overflows
+            // the container when the sticky element sticks to the top.
+            // Using IntersectionObserver, we observe both the sticky element and the sentinel.
+            // When the sentinel is not fully in view, isIntersecting is false,
+            // indicating the sticky element is stuck given it is fully in view.
             let previousStuckState: boolean
             let hasSentinelLeftView: boolean
             let hasHeaderLeftView: boolean
@@ -49,6 +54,10 @@ const useStickyEvent = <T extends HTMLElement = HTMLDivElement>({
                     entries.forEach((entry) => {
                         switch (entry.target.id) {
                             case sentinelId:
+                                // NOTE: Since the threshold is set to 1.0, isIntersecting will be
+                                // true only when the target element is fully within the container
+                                // (root). If even a single pixel of the target element is outside
+                                // the container, isIntersecting will be false.
                                 hasSentinelLeftView = !entry.isIntersecting
                                 break
                             default:
