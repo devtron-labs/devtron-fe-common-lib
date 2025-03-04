@@ -26,7 +26,6 @@ const GenericEmptyState = ({
     isButtonAvailable,
     classname,
     styles,
-    heightToDeduct,
     imageType,
     renderButton,
     imageClassName,
@@ -53,7 +52,6 @@ const GenericEmptyState = ({
             className={`flex ${isRowLayout ? 'dc__gap-32' : 'column dc__gap-20'} empty-state ${classname || ''}`}
             style={styles}
             data-testid="generic-empty-state"
-            {...(heightToDeduct >= 0 && { style: { ...styles, height: `calc(100vh - ${heightToDeduct}px)` } })}
         >
             {!SvgImage ? (
                 !noImage && (

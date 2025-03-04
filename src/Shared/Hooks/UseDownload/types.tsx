@@ -24,6 +24,15 @@ export interface HandleDownloadProps {
     downloadSuccessToastContent?: string
 }
 
+export interface UseDownloadProps {
+    /**
+     * If true, the download will open in a new tab
+     *
+     * @default false
+     */
+    shouldOpenInNewTab?: boolean
+}
+
 export interface UseDownloadReturnType {
     handleDownload: (props: HandleDownloadProps) => Promise<Error | ServerErrors>
     isDownloading: boolean

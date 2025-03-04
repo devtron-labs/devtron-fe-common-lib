@@ -16,14 +16,14 @@
 
 import { showError } from '@Common/Helper'
 import { useState } from 'react'
-import { API_STATUS_CODES } from '@Common/Constants'
+import { API_STATUS_CODES, Host } from '@Common/Constants'
 import { ServerErrors } from '@Common/ServerError'
 import { getFileNameFromHeaders } from '@Shared/Helpers'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { getDownloadResponse } from './service'
-import { UseDownloadReturnType } from './types'
+import { UseDownloadProps, UseDownloadReturnType } from './types'
 
-const useDownload = (): UseDownloadReturnType => {
+const useDownload = ({ shouldOpenInNewTab }: UseDownloadProps = {}): UseDownloadReturnType => {
     const [isDownloading, setIsDownloading] = useState<boolean>(false)
 
     /**
@@ -40,9 +40,17 @@ const useDownload = (): UseDownloadReturnType => {
         showSuccessfulToast = true,
         downloadSuccessToastContent = 'Downloaded Successfully',
     }) => {
+        const downloadUrlWithHost = `${Host}/${downloadUrl}`
+
+        if (shouldOpenInNewTab) {
+            window.open(downloadUrlWithHost, '_blank')
+            return null
+        }
+
         setIsDownloading(true)
+
         try {
-            const response = await getDownloadResponse(downloadUrl)
+            const response = await getDownloadResponse(downloadUrlWithHost)
             if (response.status === API_STATUS_CODES.OK) {
                 if (showFilePreparingToast) {
                     ToastManager.showToast({
