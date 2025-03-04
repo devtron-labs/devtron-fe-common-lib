@@ -61,14 +61,13 @@ const Field = ({
                 if (!hiddenSchema.path) {
                     throw new Error('Empty path property of hidden descriptor field')
                 }
-                if (!hiddenSchema.path.match(/^\/\w+(\/\w+)*$/g)) {
-                    throw new Error('Provided path is not a valid JSON pointer')
-                }
                 // NOTE: formContext is the formData passed to RJSFForm
                 const value = JSONPath({
                     path: convertJSONPointerToJSONPath(hiddenSchema.path),
                     json: formContext,
-                })?.[0]
+                    resultType: 'value',
+                    wrap: false,
+                })
                 const isHidden = value === undefined || deepEquals(hiddenSchema.value, value)
                 return !isHidden
             } catch {
