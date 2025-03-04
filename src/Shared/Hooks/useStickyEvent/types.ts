@@ -19,15 +19,23 @@ export type UseStickyEventProps<T extends HTMLElement = HTMLDivElement> = {
      * - If the sticky element is always rendered, this flag can be ignored.
      */
     isStickyElementMounted?: boolean
+    /**
+     * The top offset value of the sticky element.
+     * This can be a CSS value such as '10px', '1rem', or 'calc(100% + 10px)'.
+     *
+     * If the top value is specified in 'px' or 'rem', this value can be ignored.
+     * Use this only if the top value is specified in percentage or uses 'calc'.
+     */
+    topOffset?: string
 } & (
     | {
           /**
            * Reference to the scroll container element that contains the sticky element
            *
-           * Either the reference can be passed or its class name
+           * Either the reference can be passed or its querySelector
            */
           containerRef: MutableRefObject<T>
-          containerClassName?: never
+          containerSelector?: never
       }
-    | { containerClassName: string; containerRef?: never }
+    | { containerSelector: string; containerRef?: never }
 )

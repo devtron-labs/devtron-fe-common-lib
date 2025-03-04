@@ -13,22 +13,23 @@ import './styles.scss'
  */
 const useStickyEvent = <T extends HTMLElement = HTMLDivElement>({
     callback,
-    containerClassName,
+    containerSelector,
     containerRef,
-    isStickyElementMounted,
     identifier,
+    topOffset,
+    isStickyElementMounted = true,
 }: UseStickyEventProps<T>) => {
     const stickyElementRef = useRef<T>(null)
 
     useEffect(
         () => {
-            if (!stickyElementRef.current || (!isNullOrUndefined(isStickyElementMounted) && !isStickyElementMounted)) {
+            if (!stickyElementRef.current || !isStickyElementMounted) {
                 return noop
             }
 
             const stickyElementParent = containerRef
                 ? containerRef.current
-                : Array.from(document.getElementsByClassName(containerClassName)).find((element) =>
+                : Array.from(document.querySelectorAll(containerSelector)).find((element) =>
                       element.contains(stickyElementRef.current),
                   )
 
@@ -36,6 +37,7 @@ const useStickyEvent = <T extends HTMLElement = HTMLDivElement>({
                 return noop
             }
 
+            // NOTE: these values are being used as closures
             let previousStuckState: boolean
             let hasSentinelLeftView: boolean
             let hasHeaderLeftView: boolean
@@ -75,14 +77,15 @@ const useStickyEvent = <T extends HTMLElement = HTMLDivElement>({
             // The sentinel element's height must exceed the sticky element's top CSS value.
             // This guarantees that when the sticky element sticks to the container's edge,
             // the sentinel element will extend beyond the scroll container.
-            sentinelElement.style.height =
-                window.getComputedStyle(stickyElementRef.current).top?.replace(/[0-9]+/g, (match) => {
-                    const nMatch = Number(match)
-                    if (Number.isNaN(nMatch)) {
-                        return FALLBACK_SENTINEL_HEIGHT
-                    }
-                    return `${nMatch + 1}`
-                }) ?? FALLBACK_SENTINEL_HEIGHT
+            sentinelElement.style.height = topOffset
+                ? `calc(${topOffset} + 1px)`
+                : (window.getComputedStyle(stickyElementRef.current).top?.replace(/[0-9]+/g, (match) => {
+                      const nMatch = Number(match)
+                      if (Number.isNaN(nMatch)) {
+                          return FALLBACK_SENTINEL_HEIGHT
+                      }
+                      return `${nMatch + 1}`
+                  }) ?? FALLBACK_SENTINEL_HEIGHT)
 
             stickyElementRef.current.appendChild(sentinelElement)
 
