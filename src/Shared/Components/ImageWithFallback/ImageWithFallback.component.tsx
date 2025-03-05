@@ -40,7 +40,13 @@ const ImageWithFallback = ({ imageProps, fallbackImage }: ImageWithFallbackProps
         // eslint-disable-next-line react/jsx-no-useless-fragment
         <>
             {imageUrl || (!imageUrl && typeof fallbackImage === 'string') ? (
-                <img alt="" {...imageProps} src={imageUrl || (fallbackImage as string)} onError={handleImageError} />
+                <img
+                    loading="lazy"
+                    alt=""
+                    {...imageProps}
+                    src={imageUrl || (fallbackImage as string)}
+                    onError={handleImageError}
+                />
             ) : (
                 fallbackImage
             )}

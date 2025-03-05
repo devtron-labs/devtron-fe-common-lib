@@ -16,9 +16,9 @@
 
 import { ReactNode } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
-import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICInfoOutline } from '@Icons/ic-info-outline.svg'
+import { Icon } from '../Icon'
 import { Button, ButtonVariantType } from '../Button'
 import { GenericSectionErrorStateProps } from './types'
 
@@ -35,7 +35,7 @@ const GenericSectionErrorState = ({
 }: GenericSectionErrorStateProps) => {
     const renderMarker = () => {
         if (progressingProps) {
-            return <Progressing {...progressingProps} />
+            return <Icon name="ic-circle-loader" {...progressingProps} />
         }
 
         if (useInfoIcon) {
