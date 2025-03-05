@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-export { RJSFForm } from './Form'
-export type * from './types'
-export {
-    getInferredTypeFromValueType,
-    getRedirectionProps,
-    getSchemaPathToUpdatePathMap,
-    conformPathToPointers,
-} from './utils'
-export { HIDE_SUBMIT_BUTTON_UI_SCHEMA } from './constants'
+import { SSOProvider } from '@Common/Constants'
+
+import { IconsProps } from '../Icon'
+
+export interface SSOProviderIconProps {
+    provider: SSOProvider
+    /**
+     * The size of the icon in pixels.
+     * @default 20
+     */
+    size?: IconsProps['size']
+}
