@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICInfoFilled } from '@Icons/ic-info-filled.svg'
 import { ReactComponent as ICError } from '@Icons/ic-error.svg'
 import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { ReactComponent as ICHelp } from '@Icons/ic-help.svg'
 import { ComponentSizeType } from '@Shared/constants'
 import { ButtonProps } from '../Button'
+import { Icon } from '../Icon'
 import { InfoBlockProps } from './types'
 
 export const VARIANT_TO_BG_MAP: Record<InfoBlockProps['variant'], string> = {
@@ -35,10 +35,10 @@ export const VARIANT_TO_BG_MAP: Record<InfoBlockProps['variant'], string> = {
 export const VARIANT_TO_ICON_MAP: Record<InfoBlockProps['variant'], InfoBlockProps['customIcon']> = {
     error: <ICError />,
     help: <ICHelp className="fcv-5" />,
-    information: <ICInfoFilled />,
+    information: <Icon name="ic-info-filled" color="B500" />,
     success: <ICSuccess />,
     warning: <ICWarningY5 />,
-    neutral: <ICInfoFilled className="circle-fill--n7" />,
+    neutral: <Icon name="ic-info-filled" color={null} />,
 }
 
 export const CONTAINER_SIZE_TO_CLASS_MAP: Record<InfoBlockProps['size'], string> = {
