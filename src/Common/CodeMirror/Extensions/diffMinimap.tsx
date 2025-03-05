@@ -146,12 +146,10 @@ export const DiffMinimap = ({ view, state, diffMinimapExtensions, codeEditorThem
             onClick={handleMinimapClick}
         >
             <CodeMirrorMerge
-                key={scalingFactor}
                 ref={minimapEditorRef}
                 theme={codeEditorTheme}
                 className="code-editor__mini-map dc__overflow-hidden w-100"
                 gutter={false}
-                destroyRerender={false}
             >
                 <CodeMirrorMerge.Original
                     basicSetup={false}

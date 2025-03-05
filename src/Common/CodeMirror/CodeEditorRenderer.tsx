@@ -47,6 +47,7 @@ export const CodeEditorRenderer = ({
     extensions,
     autoFocus,
     diffMinimapExtensions,
+    showDiffMinimap = true,
 }: CodeEditorRendererProps) => {
     // STATES
     const [isFocused, setIsFocused] = useState(false)
@@ -128,7 +129,7 @@ export const CodeEditorRenderer = ({
                 codeMirrorMergeRef.current.view.a.scrollDOM.removeEventListener('scroll', handleRHSScroll)
             }
         }
-    }, [loading])
+    }, [loading, state.diffMode])
 
     const onCreateEditor = () => {
         updateGutterWith()
@@ -157,11 +158,11 @@ export const CodeEditorRenderer = ({
     }
 
     return state.diffMode ? (
-        <div className={`flexbox w-100 ${codeEditorParentClassName}`}>
+        <div className={`flexbox w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}>
             <CodeMirrorMerge
                 ref={codeMirrorMergeRef}
                 theme={codeEditorTheme}
-                className={`flex-grow-1 h-100 dc__overflow-hidden ${componentSpecificThemeClass} ${readOnly ? 'code-editor__read-only' : ''}`}
+                className={`flex-grow-1 h-100 dc__overflow-hidden ${readOnly ? 'code-editor__read-only' : ''}`}
                 gutter
                 destroyRerender={false}
                 {...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {})}
@@ -181,19 +182,24 @@ export const CodeEditorRenderer = ({
                     extensions={modifiedViewExtensions}
                 />
             </CodeMirrorMerge>
-            <DiffMinimap
-                key={codeEditorDiffViewKey}
-                theme={theme}
-                codeEditorTheme={codeEditorTheme}
-                view={codeMirrorMergeRef.current?.view}
-                state={state}
-                diffMinimapExtensions={diffMinimapExtensions}
-            />
+            {showDiffMinimap && (
+                <DiffMinimap
+                    key={codeEditorDiffViewKey}
+                    theme={theme}
+                    codeEditorTheme={codeEditorTheme}
+                    view={codeMirrorMergeRef.current?.view}
+                    state={state}
+                    diffMinimapExtensions={diffMinimapExtensions}
+                />
+            )}
         </div>
     ) : (
-        <div ref={codeMirrorParentDivRef} className={`w-100 ${codeEditorParentClassName}`}>
+        <div
+            ref={codeMirrorParentDivRef}
+            className={`w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}
+        >
             {shebang && (
-                <p className={`m-0 flexbox cn-9 code-editor__shebang ${componentSpecificThemeClass}`}>
+                <p className="m-0 flexbox cn-9 code-editor__shebang">
                     <span
                         className="code-editor__shebang__gutter dc__align-self-stretch"
                         style={{ flex: `0 0 ${gutterWidth}px` }}
@@ -204,7 +210,7 @@ export const CodeEditorRenderer = ({
             <CodeMirror
                 ref={codeMirrorRef}
                 theme={codeEditorTheme}
-                className={`${componentSpecificThemeClass} ${codeEditorClassName}`}
+                className={codeEditorClassName}
                 basicSetup={false}
                 value={state.code}
                 placeholder={placeholder}

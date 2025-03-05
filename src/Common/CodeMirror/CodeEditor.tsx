@@ -73,6 +73,7 @@ const CodeEditor = <DiffView extends boolean = false>({
     onFocus,
     autoFocus,
     disableSearch = false,
+    showDiffMinimap,
 }: CodeEditorProps<DiffView>) => {
     // HOOKS
     const { appTheme } = useTheme()
@@ -112,8 +113,8 @@ const CodeEditor = <DiffView extends boolean = false>({
 
     // CONTEXT VALUE
     const contextValue = useMemo<CodeEditorContextProps>(
-        () => ({ dispatch, state, height, hasCodeEditorContainer }),
-        [state, hasCodeEditorContainer],
+        () => ({ dispatch, state, height, hasCodeEditorContainer, theme: componentTheme }),
+        [state, hasCodeEditorContainer, componentTheme],
     )
 
     // USE-EFFECTS
@@ -263,6 +264,7 @@ const CodeEditor = <DiffView extends boolean = false>({
                 modifiedViewExtensions={modifiedViewExtensions}
                 extensions={extensions}
                 diffMinimapExtensions={diffMinimapExtensions}
+                showDiffMinimap={showDiffMinimap}
             />
         </CodeEditorContext.Provider>
     )

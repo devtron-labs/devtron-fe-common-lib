@@ -21,6 +21,7 @@ import { ReactComponent as Info } from '@Icons/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICCompare } from '@Icons/ic-compare.svg'
 import { ClipboardButton } from '@Common/ClipboardButton'
+import { getComponentSpecificThemeClass } from '@Shared/Providers'
 
 import { useCodeEditorContext } from './CodeEditor.context'
 import { CodeEditorHeaderProps, CodeEditorStatusBarProps } from './types'
@@ -44,13 +45,13 @@ const SplitPane = () => {
 }
 
 export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEditorHeaderProps) => {
-    const { state, hasCodeEditorContainer } = useCodeEditorContext()
+    const { state, hasCodeEditorContainer, theme } = useCodeEditorContext()
 
     return (
-        <div className="flexbox w-100 dc__border-bottom ">
+        <div className={`${getComponentSpecificThemeClass(theme)} flexbox w-100 border__primary--bottom`}>
             <div
                 data-code-editor-header
-                className={`${hasCodeEditorContainer ? 'dc__top-radius-4' : ''} code-editor__header flex-grow-1 bg__secondary ${className || ''} ${state.diffMode ? 'dc__grid-half vertical-divider' : ''}`}
+                className={`${hasCodeEditorContainer ? 'dc__top-radius-4' : ''} code-editor__header flex-grow-1 bg__secondary ${className || 'px-16 pt-6 pb-5'} ${state.diffMode ? 'dc__grid-half vertical-divider' : ''}`}
             >
                 {children}
                 {!hideDefaultSplitHeader && state.lhsCode && <SplitPane />}

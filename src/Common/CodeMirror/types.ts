@@ -78,6 +78,7 @@ export type CodeEditorProps<DiffView extends boolean = false> = {
     disableSearch?: boolean
     diffView?: DiffView
     theme?: AppThemeType
+    showDiffMinimap?: boolean
 } & CodeEditorPropsBasedOnDiffView<DiffView>
 
 export interface GetCodeEditorHeightReturnType {
@@ -123,7 +124,7 @@ export interface CodeEditorState extends Pick<CodeEditorProps, 'noParsing'> {
     diffMode: CodeEditorProps<boolean>['diffView']
 }
 
-export interface CodeEditorContextProps extends Pick<CodeEditorProps, 'readOnly' | 'height'> {
+export interface CodeEditorContextProps extends Pick<CodeEditorProps, 'readOnly' | 'height' | 'theme'> {
     state: CodeEditorState
     hasCodeEditorContainer: boolean
     dispatch: Dispatch<CodeEditorPayloadType>
@@ -152,6 +153,7 @@ export type CodeEditorRendererProps = Required<
         | 'onBlur'
         | 'onFocus'
         | 'autoFocus'
+        | 'showDiffMinimap'
     >
 > &
     Required<Pick<CodeEditorDiffBaseProps, 'isOriginalModifiable'>> & {
