@@ -141,7 +141,7 @@ export const DeploymentConfigDiffMain = ({
                             <ICSortArrowDown
                                 className="rotate"
                                 style={{
-                                    ['--rotateBy' as string]: sortOrder === SortingOrder.ASC ? '0deg' : '180deg',
+                                    ['--rotateBy' as string]: sortOrder === SortingOrder.DESC ? '0deg' : '180deg',
                                 }}
                             />
                         ) : (

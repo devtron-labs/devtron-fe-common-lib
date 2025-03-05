@@ -25,6 +25,7 @@ import {
     Severity,
     PolicyBlockInfo,
     TargetPlatformItemDTO,
+    ComponentLayoutType,
 } from '../Shared'
 import {
     ACTION_STATE,
@@ -171,7 +172,7 @@ export interface GenericEmptyStateType {
     /**
      * @default 'column'
      */
-    layout?: 'row' | 'column'
+    layout?: ComponentLayoutType
     contentClassName?: string
 }
 
@@ -798,20 +799,6 @@ export interface UseSearchString {
     searchParams: {
         [key: string]: string
     }
-}
-
-export interface ResizableTextareaProps {
-    minHeight?: number
-    maxHeight?: number
-    value?: string
-    onChange?: (e) => void
-    onBlur?: (e) => void
-    onFocus?: (e) => void
-    className?: string
-    placeholder?: string
-    disabled?: boolean
-    name?: string
-    dataTestId?: string
 }
 
 export interface AsyncState<T> {

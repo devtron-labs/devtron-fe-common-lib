@@ -15,9 +15,19 @@
  */
 
 import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
-import { getUrlWithSearchParams, post, ROUTES } from '../../Common'
-import { GetPolicyApiUrlProps, GetResourceApiUrlProps } from './types'
+import { ViewIsPipelineRBACConfiguredRadioTabs } from '@Shared/types'
 import { getTemplateAPIRoute } from '..'
+import { get, getUrlWithSearchParams, post, ROUTES, showError } from '../../Common'
+import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
+import {
+    GetPolicyApiUrlProps,
+    GetResourceApiUrlProps,
+    GetUserPreferencesParsedDTO,
+    GetUserPreferencesQueryParamsType,
+    UpdateUserPreferencesParsedValueType,
+    UpdateUserPreferencesPayloadType,
+    UserPreferencesType,
+} from './types'
 
 export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryParams }: GetResourceApiUrlProps<T>) =>
     getUrlWithSearchParams(`${baseUrl}/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
@@ -36,4 +46,56 @@ export const saveCDPipeline = (request, { isTemplateView }: Required<Pick<AppCon
         : ROUTES.CD_CONFIG
 
     return post(url, request)
+}
+
+export const getUserPreferences = async (): Promise<UserPreferencesType> => {
+    const queryParamsPayload: Pick<GetUserPreferencesQueryParamsType, 'key'> = {
+        key: USER_PREFERENCES_ATTRIBUTE_KEY,
+    }
+
+    const { result } = await get<{ value: string }>(
+        getUrlWithSearchParams(`${ROUTES.ATTRIBUTES_USER}/${ROUTES.GET}`, queryParamsPayload),
+    )
+
+    if (!result?.value) {
+        return null
+    }
+
+    const parsedResult: GetUserPreferencesParsedDTO = JSON.parse(result.value)
+
+    const pipelineRBACViewSelectedTab = parsedResult.viewPermittedEnvOnly
+        ? ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY
+        : ViewIsPipelineRBACConfiguredRadioTabs.ALL_ENVIRONMENTS
+
+    return {
+        pipelineRBACViewSelectedTab,
+    }
+}
+
+export const updateUserPreferences = async (
+    updatedUserPreferences: UserPreferencesType,
+    shouldThrowError: boolean = false,
+): Promise<boolean> => {
+    try {
+        const value: UpdateUserPreferencesParsedValueType = {
+            viewPermittedEnvOnly:
+                updatedUserPreferences.pipelineRBACViewSelectedTab ===
+                ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
+        }
+
+        const payload: UpdateUserPreferencesPayloadType = {
+            key: USER_PREFERENCES_ATTRIBUTE_KEY,
+            value: JSON.stringify(value),
+        }
+
+        await post(`${ROUTES.ATTRIBUTES_USER}/${ROUTES.UPDATE}`, payload)
+        return true
+    } catch (error) {
+        if (shouldThrowError) {
+            throw error
+        }
+
+        showError(error)
+        return false
+    }
 }

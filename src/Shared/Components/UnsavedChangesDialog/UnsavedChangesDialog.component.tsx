@@ -17,9 +17,8 @@
 import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
 import { UnsavedChangesDialogProps } from './types'
 
-const UnsavedChangesDialog = ({ showUnsavedChangesDialog, handleClose, handleProceed }: UnsavedChangesDialogProps) => (
+const UnsavedChangesDialog = ({ handleClose, handleProceed }: UnsavedChangesDialogProps) => (
     <ConfirmationModal
-        showConfirmationModal={showUnsavedChangesDialog}
         handleClose={handleClose}
         variant={ConfirmationModalVariantType.warning}
         shouldCloseOnEscape={false}

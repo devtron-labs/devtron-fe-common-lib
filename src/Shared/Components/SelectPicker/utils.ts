@@ -78,7 +78,7 @@ const getOptionBgColor = <OptionValue>(
     }
 
     if (state.isFocused) {
-        return 'var(--bg-secondary)'
+        return 'var(--bg-hover)'
     }
 
     return 'var(--transparent)'
@@ -108,8 +108,8 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         ...base,
         overflow: 'hidden',
         marginBlock: '4px',
-        backgroundColor: 'var(--bg-menu)',
-        border: '1px solid var(--N200)',
+        backgroundColor: 'var(--bg-menu-primary)',
+        border: '1px solid var(--border-primary-translucent)',
         boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.20)',
         width: getMenuWidthFromSize(menuSize).width,
         minWidth: getMenuWidthFromSize(menuSize).minWidth,
@@ -140,8 +140,9 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         ...(getVariantOverrides(variant)?.control(base, state) || {}),
 
         '&:hover': {
-            borderColor: state.isDisabled ? 'var(--N200)' : 'var(--N300)',
+            borderColor: state.isDisabled ? 'var(--N200)' : `${error ? 'var(--R500)' : 'var(--N300)'}`,
         },
+
         '&:focus, &:focus-within': {
             borderColor: state.isDisabled ? 'var(--N200)' : 'var(--B500)',
             outline: 'none',
@@ -162,7 +163,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         },
 
         ':hover': {
-            backgroundColor: 'var(--bg-secondary)',
+            backgroundColor: 'var(--bg-hover)',
         },
 
         ...(state.isDisabled && {
@@ -269,7 +270,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         fontWeight: 600,
         fontSize: '12px',
         color: 'var(--N900)',
-        backgroundColor: 'var(--N100)',
+        backgroundColor: 'var(--bg-menu-secondary)',
         marginBottom: 0,
         padding: '4px 8px',
         textTransform: 'none',

@@ -16,13 +16,16 @@
 
 import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { CustomInput, noop, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
+import { noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
+import { getUniqueId } from '@Shared/Helpers'
 import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
-import './confirmationModal.scss'
 import { Backdrop } from '../Backdrop'
+import { useConfirmationModalContext } from './ConfirmationModalContext'
+import { CustomInput } from '../CustomInput'
+import './confirmationModal.scss'
 
 const ConfirmationModalBody = ({
     title,
@@ -77,22 +80,26 @@ const ConfirmationModalBody = ({
     return (
         <Backdrop onEscape={shouldCloseOnEscape ? handleCloseWrapper : noop}>
             <motion.div
-                className="confirmation-modal flexbox-col br-8 bg__primary dc__m-auto mt-40 w-400"
+                className="confirmation-modal border__secondary flexbox-col br-8 bg__primary dc__m-auto mt-40 w-400"
                 exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}
                 initial={{ y: 100, opacity: 0, scale: 0.75 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
+                onClick={stopPropagation}
             >
-                <div className="flexbox-col dc__gap-12 p-20">
+                <div className="flexbox-col dc__gap-16 p-20">
                     {cloneElement(RenderIcon, {
                         className: `${RenderIcon.props?.className ?? ''} icon-dim-48 dc__no-shrink`,
                     })}
-                    <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
 
-                    {typeof subtitle === 'string' ? (
-                        <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
-                    ) : (
-                        subtitle
-                    )}
+                    <div className="flexbox-col dc__gap-8">
+                        <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
+
+                        {typeof subtitle === 'string' ? (
+                            <span className="cn-8 fs-13 fw-4 lh-20 dc__word-break">{subtitle}</span>
+                        ) : (
+                            subtitle
+                        )}
+                    </div>
 
                     {children}
 
@@ -102,14 +109,14 @@ const ConfirmationModalBody = ({
                             value={confirmationText}
                             onChange={handleCustomInputChange}
                             label={getConfirmationLabel(confirmationKeyword)}
-                            inputWrapClassName="w-100"
+                            fullWidth
                             placeholder="Type to confirm"
-                            isRequiredField
+                            required
                             autoFocus
                         />
                     )}
                 </div>
-                <div className="p-16 dc__gap-12 flexbox dc__content-end">
+                <div className="px-20 py-16 dc__gap-12 flexbox dc__content-end">
                     {secondaryButtonConfig && (
                         <Button
                             dataTestId="confirmation-modal-secondary-button"
@@ -152,14 +159,46 @@ const ConfirmationModalBody = ({
     )
 }
 
-const ConfirmationModal = ({ showConfirmationModal, ...props }: ConfirmationModalProps) => (
-    <AnimatePresence>{showConfirmationModal ? <ConfirmationModalBody {...props} /> : null}</AnimatePresence>
-)
+export const BaseConfirmationModal = () => {
+    const { modalKey, settersRef } = useConfirmationModalContext()
+    const [confirmationProps, setConfirmationProps] = useState<ConfirmationModalProps | null>(null)
 
-const WrapWithShortcutProvider = (props: ConfirmationModalProps) => (
-    <UseRegisterShortcutProvider ignoreTags={['button']}>
-        <ConfirmationModal {...props} />
-    </UseRegisterShortcutProvider>
-)
+    useEffect(() => {
+        settersRef.current = {
+            setProps: setConfirmationProps,
+        }
+    }, [])
 
-export default WrapWithShortcutProvider
+    return (
+        <UseRegisterShortcutProvider ignoreTags={['button']}>
+            <AnimatePresence>{!!modalKey && <ConfirmationModalBody {...confirmationProps} />}</AnimatePresence>
+        </UseRegisterShortcutProvider>
+    )
+}
+
+const ConfirmationModal = (props: ConfirmationModalProps) => {
+    const { setModalKey, settersRef } = useConfirmationModalContext()
+
+    useEffect(() => {
+        const id = getUniqueId()
+        setModalKey(id)
+
+        return () => {
+            setModalKey((prev) => {
+                if (prev === id) {
+                    return ''
+                }
+
+                return prev
+            })
+        }
+    }, [])
+
+    useEffect(() => {
+        settersRef.current.setProps(props)
+    }, [props])
+
+    return null
+}
+
+export default ConfirmationModal

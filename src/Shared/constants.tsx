@@ -380,35 +380,6 @@ export const statusIcon = {
     unabletofetch: 'failed',
 }
 
-export const statusColor = {
-    suspended: 'var(--Y500)',
-    unknown: 'var(--N700)',
-    queued: 'var(--N700)',
-    degraded: 'var(--R500)',
-    healthy: 'var(--G500)',
-    notdeployed: 'var(--N500)',
-    missing: 'var(--N700)',
-    progressing: 'var(--O500)',
-    initiating: 'var(--O500)',
-    starting: 'var(--O500)',
-    succeeded: 'var(--G500)',
-    running: 'var(--O500)',
-    failed: 'var(--R500)',
-    error: 'var(--R500)',
-    cancelled: 'var(--R500)',
-    aborted: 'var(--R500)',
-    timedout: 'var(--R500)',
-    unabletofetch: 'var(--R500)',
-    hibernating: 'var(--N700)',
-}
-
-export const PULSATING_STATUS_MAP: { [key in keyof typeof statusColor]?: boolean } = {
-    progressing: true,
-    initiating: true,
-    starting: true,
-    running: true,
-}
-
 export const APP_STATUS_HEADERS = ['KIND', 'NAME', 'STATUS', 'MESSAGE']
 
 export const MATERIAL_EXCLUDE_TIPPY_TEXT =
@@ -453,12 +424,40 @@ export const ANSI_UP_REGEX = /\x1B\[.*?m/g
  * Size variants for components
  */
 export enum ComponentSizeType {
+    xxs = 'xxs',
     xs = 'xs',
     small = 'small',
     medium = 'medium',
     large = 'large',
     xl = 'xl',
 }
+
+export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xxs]: 'py-1 fs-12 lh-20',
+    [ComponentSizeType.xs]: 'py-1 fs-12 lh-20',
+    [ComponentSizeType.small]: 'py-3 fs-12 lh-20',
+    [ComponentSizeType.medium]: 'py-5 fs-13 lh-20',
+    [ComponentSizeType.large]: 'py-7 fs-13 lh-20',
+    [ComponentSizeType.xl]: 'py-9 fs-14 lh-20',
+} as const
+
+export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xxs]: 'px-5',
+    [ComponentSizeType.xs]: 'px-5',
+    [ComponentSizeType.small]: 'px-5',
+    [ComponentSizeType.medium]: 'px-7',
+    [ComponentSizeType.large]: 'px-7',
+    [ComponentSizeType.xl]: 'px-9',
+} as const
+
+export const COMPONENT_SIZE_TYPE_TO_ICON_SIZE_MAP: Record<ComponentSizeType, number> = {
+    [ComponentSizeType.xxs]: 14,
+    [ComponentSizeType.xs]: 14,
+    [ComponentSizeType.small]: 16,
+    [ComponentSizeType.medium]: 16,
+    [ComponentSizeType.large]: 16,
+    [ComponentSizeType.xl]: 20,
+} as const
 
 export const POP_UP_MENU_MODAL_ID = 'popup'
 
@@ -511,3 +510,8 @@ export const SKIP_LABEL_KEY_VALIDATION_PREFIX = 'devtron.ai/'
 export const UNSAVED_CHANGES_PROMPT_MESSAGE = 'You have unsaved changes. Are you sure you want to leave?'
 export const DEFAULT_ROUTE_PROMPT_MESSAGE =
     "Please don't wander off! Reloading or going back might disrupt the ongoing operation."
+
+export const DC_DELETE_SUBTITLES = {
+    DELETE_ENVIRONMENT_SUBTITLE: 'Are you sure you want to delete this environment?',
+    DELETE_CLUSTER_SUBTITLES: 'Are you sure you want to delete this cluster?',
+}

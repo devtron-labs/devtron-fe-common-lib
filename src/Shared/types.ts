@@ -924,12 +924,33 @@ export interface UploadFileProps {
     maxUploadSize?: number
 }
 
+/**
+ * A utility type that transforms all properties of a given type `T` to be optional and of type `never`. \
+ * This can be useful for scenarios where you want to explicitly mark that certain properties should not exist.
+ * @template T - The type whose properties will be transformed.
+ */
+export type Never<T> = {
+    [K in keyof T]?: never
+}
+
 export interface TargetPlatformItemDTO {
     name: string
 }
 
 export interface TargetPlatformsDTO {
     targetPlatforms: TargetPlatformItemDTO[]
+}
+
+/**
+ * These status are expected to be present in workflow nodes like ci node, linked ci node, job overview, etc.
+ */
+export enum WorkflowStatusEnum {
+    STARTING = 'Starting',
+    RUNNING = 'Running',
+    PROGRESSING = 'Progressing',
+    WAITING_TO_START = 'WaitingToStart',
+    TIMED_OUT = 'TimedOut',
+    CANCELLED = 'CANCELLED',
 }
 
 export enum CIPipelineNodeType {
@@ -951,3 +972,48 @@ export const TriggerType = {
     Auto: 'AUTOMATIC',
     Manual: 'MANUAL',
 } as const
+
+export enum ViewIsPipelineRBACConfiguredRadioTabs {
+    ALL_ENVIRONMENTS = 'All environments',
+    ACCESS_ONLY = 'Access only',
+}
+
+export interface EnvironmentDataValuesDTO {
+    isAirGapEnvironment: boolean
+    isManifestScanningEnabled: boolean
+    canOnlyViewPermittedEnvOrgLevel: boolean
+}
+
+export type ComponentLayoutType = 'row' | 'column'
+
+export interface BorderConfigType {
+    /**
+     * If false, (border-radius/border)-top is not applied
+     *
+     * @default true
+     */
+    top?: boolean
+    /**
+     * If false, (border-radius/border)-right is not applied
+     *
+     * @default true
+     */
+    right?: boolean
+    /**
+     * If false, (border-radius/border)-bottom is not applied
+     *
+     * @default true
+     */
+    bottom?: boolean
+    /**
+     * If false, (border-radius/border)-left is not applied
+     *
+     * @default true
+     */
+    left?: boolean
+}
+
+export interface AppEnvIdType {
+    appId: number
+    envId: number
+}

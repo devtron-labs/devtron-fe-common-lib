@@ -21,9 +21,10 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { configureMonacoYaml } from 'monaco-yaml'
 
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
+import { ReactComponent as ICCompare } from '@Icons/ic-compare.svg'
+import { useTheme } from '@Shared/Providers'
 import { ReactComponent as Info } from '../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '../../Assets/Icon/ic-error-exclamation.svg'
-import { ReactComponent as ICCompare } from '@Icons/ic-compare.svg'
 import './codeEditor.scss'
 import 'monaco-editor'
 
@@ -43,7 +44,6 @@ import {
 } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '../Constants'
-import { useTheme } from '@Shared/Providers'
 import { getCodeEditorThemeFromAppTheme } from './utils'
 
 const CodeEditorContext = React.createContext(null)
@@ -85,6 +85,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
         onFocus,
         adjustEditorHeightToContent = false,
         disableSearch = false,
+        originalEditable = false,
     }) => {
         const { appTheme } = useTheme()
 
@@ -123,10 +124,10 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
             inherit: true,
             rules: [
                 // @ts-ignore
-                { background: '#0B0F22' },
+                { background: '#181920' },
             ],
             colors: {
-                'editor.background': '#0B0F22',
+                'editor.background': '#181920',
             },
         })
 
@@ -214,10 +215,11 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
 
                 setContentHeight(Math.max(originalEditor.getContentHeight(), modifiedEditor.getContentHeight()))
             }
-
-            originalEditor.onDidChangeModelContent(() => {
-                codeEditorOnChange(modifiedEditor.getValue(), originalEditor.getValue())
-            })
+            if (originalEditable) {
+                originalEditor.onDidChangeModelContent(() => {
+                    codeEditorOnChange(modifiedEditor.getValue(), originalEditor.getValue())
+                })
+            }
 
             editorRef.current = editor
             monacoRef.current = monaco
@@ -340,7 +342,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
 
         const diffViewOptions: monaco.editor.IDiffEditorConstructionOptions = {
             ...options,
-            originalEditable: !readOnly,
+            originalEditable: originalEditable && !readOnly,
             useInlineViewWhenSpaceIsLimited: false,
         }
 

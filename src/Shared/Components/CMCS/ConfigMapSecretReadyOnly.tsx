@@ -17,10 +17,11 @@
 import { Progressing } from '@Common/Progressing'
 import { hasHashiOrAWS } from '@Pages/index'
 import { CodeEditor } from '@Common/CodeEditor'
-import { ClipboardButton } from '@Common/index'
+
+import { ClipboardButton } from '@Common/ClipboardButton'
+import { getConfigMapSecretReadOnlyValues } from './utils'
 import { ConfigMapSecretReadyOnlyProps } from './types'
 import { renderHashiOrAwsDeprecatedInfo } from './helpers'
-import { getConfigMapSecretReadOnlyValues } from './utils'
 
 const ConfigMapSecretReadyOnly = ({
     componentType,

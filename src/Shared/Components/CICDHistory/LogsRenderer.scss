@@ -52,29 +52,29 @@
         }
 
         &__stage-accordion {
-            background-color: #0c1021;
+            background-color: var(--transparent);
 
             &:not(&--open-stage):hover {
-                background-color: rgba(44, 51, 84, 0.5);
+                background-color: var(--bg-hover);
             }
 
             &--open-stage {
-                background-color: #2c3354;
+                background-color: var(--bg-overlay-primary);
             }
         }
 
         &__log-item {
-            grid-template-columns: 34px auto;
+            grid-template-columns: 36px auto;
             &:hover {
-                background-color: var(--white-20);
+                background-color: var(--bg-hover);
             }
         }
 
         &__filters-border-bottom {
-            border-bottom: 1px solid #2c3354;
+            border-bottom: 1px solid var(--border-secondary);
 
             & > :not(:first-child) {
-                border-left: 1px solid #2C3354;
+                border-left: 1px solid var(--border-secondary);
             }
         }
     }

@@ -59,6 +59,11 @@ interface CodeEditorBaseInterface {
      * @default false
      */
     disableSearch?: boolean
+    /**
+     * If true, Enable original value editing of monaco editor
+     * @default false
+     */
+    originalEditable?: boolean
 }
 
 export type CodeEditorInterface = CodeEditorBaseInterface &

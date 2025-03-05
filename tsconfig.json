@@ -5,6 +5,9 @@
       "@Icons/*": [
         "./src/Assets/Icon/*"
       ],
+      "@IconsV2/*": [
+        "./src/Assets/IconV2/*"
+      ],
       "@Sounds/*": [
         "./src/Assets/Sounds/*"
       ],
@@ -20,6 +23,7 @@
       "@Shared/*": [
         "./src/Shared/*"
       ],
+      "codemirror-json-schema/yaml": ["./node_modules/codemirror-json-schema/dist/yaml"],
     },
     "target": "ES2020",
     "useDefineForClassFields": true,

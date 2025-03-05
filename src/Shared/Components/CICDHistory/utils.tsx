@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { TIMELINE_STATUS } from '@Shared/constants'
-import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
-import { ReactComponent as ICErrorCross } from '@Icons/ic-error-cross.svg'
+import { ReactElement } from 'react'
+import moment from 'moment'
+import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as Check } from '@Icons/ic-check-grey.svg'
 import { ReactComponent as ICHelpOutline } from '@Icons/ic-help-outline.svg'
@@ -25,15 +25,32 @@ import { ReactComponent as Disconnect } from '@Icons/ic-disconnected.svg'
 import { ReactComponent as TimeOut } from '@Icons/ic-timeout-red.svg'
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
-import { TERMINAL_STATUS_MAP } from './constants'
-import { ResourceKindType } from '../../types'
+import { isTimeStringAvailable } from '@Shared/Helpers'
+import { DATE_TIME_FORMATS } from '@Common/Constants'
+import {
+    DEFAULT_CLUSTER_ID,
+    DEFAULT_NAMESPACE,
+    FAILED_WORKFLOW_STAGE_STATUS_MAP,
+    TERMINAL_STATUS_MAP,
+} from './constants'
+import { Node, ResourceKindType, WorkflowStatusEnum } from '../../types'
 import {
     TriggerHistoryFilterCriteriaProps,
     DeploymentHistoryResultObject,
     DeploymentHistory,
     TriggerHistoryFilterCriteriaType,
     StageStatusType,
+    WorkflowExecutionStagesMapDTO,
+    ExecutionInfoType,
+    WorkflowExecutionStageType,
+    PodExecutionStageDTO,
+    WorkflowStageStatusType,
+    WorkflowExecutionStageNameType,
+    NodeStatus,
+    NodeFilters,
 } from './types'
+import { Icon } from '../Icon'
+import { AppStatus, DeploymentStatus, StatusType } from '../StatusComponent'
 
 export const getTriggerHistoryFilterCriteria = ({
     appId,
@@ -120,7 +137,7 @@ export const renderIcon = (iconState: string): JSX.Element => {
         case 'unreachable':
             return <Close className="icon-dim-20" />
         case 'loading':
-            return <div className="dc__app-summary__icon icon-dim-20 mr-6 progressing progressing--node" />
+            return <Icon name="ic-circle-loader" color="O500" size={20} />
         case 'disconnect':
             return <Disconnect className="icon-dim-20" />
         case 'time_out':
@@ -141,65 +158,218 @@ export const getStageStatusIcon = (status: StageStatusType): JSX.Element => {
     }
 }
 
-const renderAbortedTriggerIcon = (): JSX.Element => <ICAborted className="icon-dim-20 dc__no-shrink" />
-const renderFailedTriggerIcon = (): JSX.Element => (
-    <ICErrorCross className="icon-dim-20 dc__no-shrink ic-error-cross-red" />
-)
-const renderProgressingTriggerIcon = (): JSX.Element => (
-    <ICInProgress className="dc__no-shrink icon-dim-20 ic-in-progress-orange" />
-)
-const renderSuccessTriggerIcon = (): JSX.Element => (
-    <div className="dc__app-summary__icon dc__no-shrink icon-dim-20 succeeded" />
-)
-
-export const getTriggerStatusIcon = (triggerDetailStatus: string): JSX.Element => {
-    const triggerStatus = triggerDetailStatus?.toUpperCase()
-
-    // First check for TIMELINE_STATUS so as to not break existing functionality
-    // eslint-disable-next-line default-case
-    switch (triggerStatus) {
-        case TIMELINE_STATUS.ABORTED:
-            return renderAbortedTriggerIcon()
-        case TIMELINE_STATUS.DEGRADED:
-            return renderFailedTriggerIcon()
-        case TIMELINE_STATUS.INPROGRESS:
-            return renderProgressingTriggerIcon()
-        case TIMELINE_STATUS.HEALTHY:
-            return renderSuccessTriggerIcon()
-    }
-
-    const lowerCaseTriggerStatus = triggerStatus?.toLocaleLowerCase()
-
-    switch (lowerCaseTriggerStatus) {
-        case TERMINAL_STATUS_MAP.CANCELLED:
-            return renderAbortedTriggerIcon()
-
-        case TERMINAL_STATUS_MAP.FAILED:
-        case TERMINAL_STATUS_MAP.ERROR:
-            return renderFailedTriggerIcon()
-
-        case TERMINAL_STATUS_MAP.RUNNING:
-        case TERMINAL_STATUS_MAP.PROGRESSING:
-        case TERMINAL_STATUS_MAP.STARTING:
-        case TERMINAL_STATUS_MAP.INITIATING:
-            return renderProgressingTriggerIcon()
-
-        case TERMINAL_STATUS_MAP.SUCCEEDED:
-            return renderSuccessTriggerIcon()
-
-        default:
-            return (
-                <div
-                    className={`dc__app-summary__icon dc__no-shrink icon-dim-20 ${lowerCaseTriggerStatus.replace(
-                        /\s+/g,
-                        '',
-                    )}`}
-                />
-            )
-    }
-}
-
 export const getLogSearchIndex = ({
     stageIndex,
     lineNumberInsideStage,
 }: Record<'stageIndex' | 'lineNumberInsideStage', number>) => `${stageIndex}-${lineNumberInsideStage}`
+
+const getWorkerInfoFromExecutionStages = (
+    workflowExecutionStages: WorkflowExecutionStagesMapDTO['workflowExecutionStages'],
+): ExecutionInfoType['workerDetails'] => {
+    const workerInfo: PodExecutionStageDTO = workflowExecutionStages?.[WorkflowExecutionStageType.POD]?.[0]
+    const { status, message, endTime, metadata } = workerInfo || {}
+
+    return {
+        status: status || WorkflowStageStatusType.UNKNOWN,
+        message: message || '',
+        clusterId: metadata?.clusterId || DEFAULT_CLUSTER_ID,
+        endTime: isTimeStringAvailable(endTime) ? endTime : '',
+    }
+}
+
+export const sanitizeWorkflowExecutionStages = (
+    workflowExecutionStages: WorkflowExecutionStagesMapDTO['workflowExecutionStages'],
+): ExecutionInfoType | null => {
+    if (!Object.keys(workflowExecutionStages || {}).length) {
+        return null
+    }
+
+    const workflowExecutionSteps = workflowExecutionStages[WorkflowExecutionStageType.WORKFLOW] || []
+
+    const preparationStage = workflowExecutionSteps.find(
+        (stage) => stage?.stageName === WorkflowExecutionStageNameType.PREPARATION,
+    )
+    const executionStage = workflowExecutionSteps.find(
+        (stage) => stage?.stageName === WorkflowExecutionStageNameType.EXECUTION,
+    )
+
+    const computedTriggeredOn = preparationStage?.startTime
+
+    let lastStatus: WorkflowStageStatusType = WorkflowStageStatusType.UNKNOWN
+    workflowExecutionSteps.forEach(({ status }) => {
+        if (status !== WorkflowStageStatusType.NOT_STARTED) {
+            lastStatus = status
+        }
+    })
+
+    let finishedOn: string = ''
+    workflowExecutionSteps.forEach(({ status, endTime }, index) => {
+        if (FAILED_WORKFLOW_STAGE_STATUS_MAP[status]) {
+            finishedOn = endTime
+        } else if (index === workflowExecutionSteps.length - 1 && status === WorkflowStageStatusType.SUCCEEDED) {
+            finishedOn = endTime
+        }
+    })
+
+    return {
+        triggeredOn: isTimeStringAvailable(computedTriggeredOn) ? computedTriggeredOn : '',
+        executionStartedOn: isTimeStringAvailable(executionStage?.startTime) ? executionStage?.startTime : '',
+        finishedOn: isTimeStringAvailable(finishedOn) ? finishedOn : '',
+        currentStatus: lastStatus,
+        workerDetails: getWorkerInfoFromExecutionStages(workflowExecutionStages),
+    }
+}
+
+export const getIconFromWorkflowStageStatusType = (status: WorkflowStageStatusType): ReactElement => {
+    const deploymentStatusMap = {
+        [WorkflowStageStatusType.TIMEOUT]: StatusType.TIMED_OUT,
+        [WorkflowStageStatusType.ABORTED]: StatusType.ABORTED,
+        [WorkflowStageStatusType.FAILED]: StatusType.FAILED,
+        [WorkflowStageStatusType.SUCCEEDED]: StatusType.SUCCEEDED,
+        [WorkflowStageStatusType.NOT_STARTED]: StatusType.INPROGRESS,
+        [WorkflowStageStatusType.RUNNING]: StatusType.INPROGRESS,
+    }
+
+    return deploymentStatusMap[status] ? (
+        <DeploymentStatus status={deploymentStatusMap[status]} iconSize={20} hideMessage hideIconTooltip />
+    ) : (
+        <Icon name="ic-help-outline" size={20} color="N500" />
+    )
+}
+
+export const getHistoryItemStatusIconFromWorkflowStages = (
+    workflowExecutionStages: WorkflowExecutionStagesMapDTO['workflowExecutionStages'],
+): ReactElement => {
+    const executionInfo = sanitizeWorkflowExecutionStages(workflowExecutionStages)
+
+    if (!executionInfo) {
+        return <Icon name="ic-help-outline" size={20} color="N500" />
+    }
+
+    if (!executionInfo.finishedOn) {
+        return <Icon name="ic-in-progress" size={20} color={null} />
+    }
+
+    if (
+        !FAILED_WORKFLOW_STAGE_STATUS_MAP[executionInfo.currentStatus] &&
+        FAILED_WORKFLOW_STAGE_STATUS_MAP[executionInfo.workerDetails.status]
+    ) {
+        return <Icon name="ic-warning" size={20} color={null} />
+    }
+
+    return getIconFromWorkflowStageStatusType(executionInfo.workerDetails.status)
+}
+
+export const getWorkerPodBaseUrl = (clusterId: number = DEFAULT_CLUSTER_ID, podNamespace: string = DEFAULT_NAMESPACE) =>
+    `/resource-browser/${clusterId}/${podNamespace}/pod/k8sEmptyGroup`
+
+export const getWorkflowNodeStatusTitle = (status: string) => {
+    if (!status) {
+        return null
+    }
+
+    if (status.toLowerCase() === 'cancelled') {
+        return 'Aborted'
+    }
+
+    if (status === WorkflowStatusEnum.WAITING_TO_START) {
+        return 'Waiting to start'
+    }
+
+    return status
+}
+
+export const getFormattedTriggerTime = (time: string): string =>
+    isTimeStringAvailable(time)
+        ? moment(time, 'YYYY-MM-DDTHH:mm:ssZ').format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT)
+        : ''
+
+export const getNodesCount = (nodes: Node[]) =>
+    (nodes || []).reduce(
+        (acc, node) => {
+            const nodeHealthStatus = node.health?.status?.toLowerCase() ?? ''
+
+            if (node.hasDrift) {
+                acc.driftedNodeCount += 1
+            }
+
+            switch (nodeHealthStatus) {
+                case NodeStatus.Healthy:
+                    acc.healthyNodeCount += 1
+                    break
+                case NodeStatus.Degraded:
+                    acc.failedNodeCount += 1
+                    break
+                case NodeStatus.Progressing:
+                    acc.progressingNodeCount += 1
+                    break
+                case NodeStatus.Missing:
+                    acc.missingNodeCount += 1
+                    break
+                default:
+            }
+
+            acc.allNodeCount += 1
+
+            return acc
+        },
+        {
+            allNodeCount: 0,
+            healthyNodeCount: 0,
+            progressingNodeCount: 0,
+            failedNodeCount: 0,
+            missingNodeCount: 0,
+            driftedNodeCount: 0,
+        },
+    )
+
+export const getStatusFilters = ({
+    allNodeCount,
+    missingNodeCount,
+    failedNodeCount,
+    progressingNodeCount,
+    healthyNodeCount,
+    driftedNodeCount,
+}: ReturnType<typeof getNodesCount>) => {
+    const allResourceKindFilter = { status: ALL_RESOURCE_KIND_FILTER, count: allNodeCount }
+    const statusFilters = [
+        { status: NodeStatus.Missing, count: missingNodeCount },
+        { status: NodeStatus.Degraded, count: failedNodeCount },
+        {
+            status: NodeStatus.Progressing,
+            count: progressingNodeCount,
+        },
+        { status: NodeStatus.Healthy, count: healthyNodeCount },
+        ...(window._env_.FEATURE_CONFIG_DRIFT_ENABLE
+            ? [
+                  {
+                      status: NodeFilters.drifted,
+                      count: driftedNodeCount,
+                  },
+              ]
+            : []),
+    ]
+
+    return { allResourceKindFilter, statusFilters: statusFilters.filter(({ count }) => count > 0) }
+}
+
+export const getAppStatusIcon = (status: NodeStatus | NodeFilters, hideMessage = false) => (
+    <AppStatus status={status} hideMessage={hideMessage} hideIconTooltip />
+)
+
+export const getTriggerStatusIcon = (status: string) => {
+    const triggerStatus = status?.toLowerCase()
+
+    switch (triggerStatus) {
+        case TERMINAL_STATUS_MAP.RUNNING:
+        case TERMINAL_STATUS_MAP.PROGRESSING:
+        case TERMINAL_STATUS_MAP.STARTING:
+        case TERMINAL_STATUS_MAP.INITIATING:
+        case TERMINAL_STATUS_MAP.WAITING_TO_START:
+            return StatusType.INPROGRESS
+        case TERMINAL_STATUS_MAP.CANCELLED:
+            return StatusType.ABORTED
+        default:
+            return status
+    }
+}

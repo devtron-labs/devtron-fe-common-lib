@@ -14,125 +14,125 @@
  * limitations under the License.
  */
 
-.code-editor__header {
-    height: 40px;
-    background: var(--N100);
-    padding: 0 16px;
-    border-bottom: 1px solid var(--N200);
+ .code-editor__header {
+  height: 40px;
+  background: var(--N100);
+  padding: 0 16px;
+  border-bottom: 1px solid var(--N200);
 
-    .radio-group {
-        height: 24px;
-        overflow: hidden;
-    }
+  .radio-group {
+      height: 24px;
+      overflow: hidden;
+  }
 
-    .radio-group input[type='checkbox']:checked + .radio__item-label {
-        background: var(--N700);
-        border-radius: 0;
-        color: var(--N0);
-    }
+  .radio-group input[type='checkbox']:checked + .radio__item-label {
+      background: var(--N700);
+      border-radius: 0;
+      color: var(--N0);
+  }
 
-    .radio__item-label {
-        padding: 0 8px;
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-        line-height: 24px;
-        cursor: pointer;
-    }
+  .radio__item-label {
+      padding: 0 8px;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      line-height: 24px;
+      cursor: pointer;
+  }
 
-    .radio-group {
-        padding: 0;
-    }
+  .radio-group {
+      padding: 0;
+  }
 
-    .code-editor__split-pane {
-        color: var(--N700);
-        margin-left: auto;
-        fill: var(--N700);
-    }
+  .code-editor__split-pane {
+      color: var(--N700);
+      margin-left: auto;
+      fill: var(--N700);
+  }
 
-    label.form__error {
-        margin-left: 8px;
-    }
+  label.form__error {
+      margin-left: 8px;
+  }
 
-    button.clipboard {
-        margin-left: auto;
-        height: 20px;
-        width: 20px;
-        padding: 0;
-        background: transparent;
-        border: unset;
-        outline: unset;
+  button.clipboard {
+      margin-left: auto;
+      height: 20px;
+      width: 20px;
+      padding: 0;
+      background: transparent;
+      border: unset;
+      outline: unset;
 
-        svg {
-            height: 100%;
-            width: 100%;
-        }
+      svg {
+          height: 100%;
+          width: 100%;
+      }
 
-        &:active {
-            svg {
-                height: 90%;
-                width: 90%;
+      &:active {
+          svg {
+              height: 90%;
+              width: 90%;
 
-                path {
-                    fill: var(--G500);
-                }
-            }
-        }
-    }
+              path {
+                  fill: var(--G500);
+              }
+          }
+      }
+  }
 }
 
 .code-editor__header-error {
-    padding: 8px 16px;
-    font-size: 12px;
-    border: solid 1px var(--N200);
-    background-color: var(--R100);
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.33;
-    letter-spacing: normal;
-    color: var(--R500);
+  padding: 8px 16px;
+  font-size: 12px;
+  border: solid 1px var(--N200);
+  background-color: var(--R100);
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  color: var(--R500);
 }
 
 .code-editor-container {
-    width: 100%;
-    border: 1px solid var(--N200);
-    border-radius: 4px;
-    overflow: hidden;
+  width: 100%;
+  border: 1px solid var(--N200);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .react-monaco-editor-container {
-    min-height: 300px;
+  min-height: 300px;
 }
 
 .code-editor__information-info-icon {
-    width: 16px;
-    height: 16px;
-    margin: 0 8px 0 0;
-    vertical-align: bottom;
+  width: 16px;
+  height: 16px;
+  margin: 0 8px 0 0;
+  vertical-align: bottom;
 }
 
 .code-editor__toggle {
-    .toggle__switch {
-        width: 32px;
-        margin: 0 12px;
-    }
+  .toggle__switch {
+      width: 32px;
+      margin: 0 12px;
+  }
 
-    color: var(--N0);
+  color: var(--N0);
 }
 
 .monaco-editor-hover {
-    margin-left: 40px;
+  margin-left: 40px;
 }
 
 .monaco-scrollable-element {
-    & > .visible {
-        z-index: 9;
-    }
+  & > .visible {
+      z-index: 9;
+  }
 }
 
 .code-editor__shebang {
-    padding: 0 52px;
-    color: var(--N900);
-    opacity: 0.6;
+  padding: 0 52px;
+  color: var(--N900);
+  opacity: 0.6;
 }

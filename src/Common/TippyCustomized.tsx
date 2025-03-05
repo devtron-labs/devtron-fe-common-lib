@@ -21,6 +21,7 @@ import { ReactComponent as Help } from '../Assets/Icon/ic-help.svg'
 import { ReactComponent as ICHelpOutline } from '../Assets/Icon/ic-help-outline.svg'
 import { ReactComponent as ICOpenInNew } from '../Assets/Icon/ic-open-in-new.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
+import 'tippy.js/animations/shift-toward.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
 import { not, stopPropagation } from './Helper'
 
@@ -85,7 +86,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                     <div
                         className={`dc__word-break dc__hyphens-auto flex dc__align-start left ${
                             isWhiteTheme
-                                ? `p-12 cn-9 ${props.noHeadingBorder ? '' : 'dc__border-bottom-n1'}`
+                                ? `p-12 cn-9 ${props.noHeadingBorder ? '' : 'border__secondary-translucent--bottom'}`
                                 : 'pt-20 pb-12 pr-20 pl-20 cn-0 top'
                         }`}
                     >

@@ -15,9 +15,8 @@
  */
 
 import { cloneElement } from 'react'
-import Tippy from '@tippyjs/react'
 import { components, MenuListProps, StylesConfig, ValueContainerProps } from 'react-select'
-import { OptionType, Progressing, stopPropagation } from '../../../Common'
+import { OptionType, Progressing } from '../../../Common'
 import { ReactComponent as ICSearch } from '../../../Assets/Icon/ic-search.svg'
 import { ReactComponent as ICFilter } from '../../../Assets/Icon/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '../../../Assets/Icon/ic-filter-applied.svg'
@@ -126,7 +125,8 @@ export const getCommonSelectStyle = (styleOverrides = {}): StylesConfig => ({
     }),
     menu: (base) => ({
         ...base,
-        backgroundColor: 'var(--bg-menu)',
+        backgroundColor: 'var(--bg-menu-primary)',
+        border: '1px solid var(--border-primary-translucent)',
     }),
     multiValue: (base) => ({
         ...base,
@@ -180,29 +180,6 @@ export const getCustomOptionSelectionStyle =
         fontSize: '13px',
         ...styleOverrides,
     })
-
-export const SelectOption = (props: any) => {
-    const { selectProps, data, showTippy, style, placement, tippyContent, tippyClass } = props
-    selectProps.styles.option = getCustomOptionSelectionStyle(style)
-    const getOption = () => (
-        <div onClick={stopPropagation}>
-            <components.Option {...props} />
-        </div>
-    )
-
-    return showTippy ? (
-        <Tippy
-            className={tippyClass || 'default-white'}
-            arrow={false}
-            placement={placement || 'right'}
-            content={tippyContent || data.label}
-        >
-            {getOption()}
-        </Tippy>
-    ) : (
-        getOption()
-    )
-}
 
 export const LoadingIndicator = () => <Progressing />
 

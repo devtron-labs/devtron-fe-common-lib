@@ -15,39 +15,36 @@
             },
             "title": "Container Port"
         },
-        "resources": {
+        "Limits": {
             "type": "object",
-            "title": "Resources (CPU & RAM)",
-            "description": "Minimum and maximum RAM and CPU available to the application",
+            "description": "Maximum RAM and CPU available to the application",
+            "required": ["CPU", "Memory"],
             "properties": {
-                "limits": {
-                    "type": "object",
-                    "description": "Maximum RAM and CPU available to the application",
-                    "required": ["cpu", "memory"],
-                    "properties": {
-                        "cpu": {
-                            "type": "string",
-                            "description": "Maximum allowed CPU limit"
-                        },
-                        "memory": {
-                            "type": "string",
-                            "description": "Maximum allowed memory limit"
-                        }
-                    }
+                "CPU": {
+                    "type": "string",
+                    "description": "Maximum allowed CPU limit",
+                    "updatePath": "/resources/limits/cpu"
                 },
-                "requests": {
-                    "type": "object",
-                    "description": "Minimum RAM and CPU available to the application",
-                    "properties": {
-                        "cpu": {
-                            "type": "string",
-                            "description": "Minimum CPU value"
-                        },
-                        "memory": {
-                            "type": "string",
-                            "description": "Minimum memory value"
-                        }
-                    }
+                "Memory": {
+                    "type": "string",
+                    "description": "Maximum allowed memory limit",
+                    "updatePath": "/resources/limits/memory"
+                }
+            }
+        },
+        "Requests": {
+            "type": "object",
+            "description": "Minimum RAM and CPU available to the application",
+            "properties": {
+                "CPU": {
+                    "type": "string",
+                    "description": "Minimum CPU value",
+                    "updatePath": "/resources/requests/cpu"
+                },
+                "Memory": {
+                    "type": "string",
+                    "description": "Minimum memory value",
+                    "updatePath": "/resources/requests/memory"
                 }
             }
         },
