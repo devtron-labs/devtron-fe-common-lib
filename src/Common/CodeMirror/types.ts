@@ -97,7 +97,10 @@ export type FindReplaceQuery = Partial<
 
 export interface FindReplaceProps {
     view: EditorView
+    /** Default value for Search Query state. */
     defaultQuery: SearchQuery
+    /** Default value for showReplaceField state. */
+    defaultShowReplace: boolean
 }
 
 // REDUCER TYPES
@@ -138,6 +141,7 @@ export interface FindReplaceToggleButtonProps {
 export type CodeEditorRendererProps = Required<
     Pick<
         CodeEditorProps,
+        | 'theme'
         | 'loading'
         | 'customLoader'
         | 'height'
@@ -153,7 +157,6 @@ export type CodeEditorRendererProps = Required<
         codemirrorMergeKey: Key
         codeMirrorParentDivRef: MutableRefObject<HTMLDivElement>
         codeEditorTheme: ReactCodeMirrorProps['theme']
-        isDarkTheme: boolean
         state: CodeEditorState
         handleOnChange: ReactCodeMirrorProps['onChange']
         handleLhsOnChange: ReactCodeMirrorProps['onChange']
