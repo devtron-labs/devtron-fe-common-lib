@@ -96,7 +96,10 @@ export const DeploymentHistoryConfigDiff = ({
 
             const [secretsData, ...configDatas] = await Promise.allSettled([
                 !isSuperAdmin ? getCompareSecretsData([...payloads]) : null,
-                ...payloads.map((payload) => payload && getAppEnvDeploymentConfig({ params: payload })),
+                ...payloads.map(
+                    (payload) =>
+                        payload && getAppEnvDeploymentConfig({ params: payload, appId: null, isTemplateView: false }),
+                ),
             ])
 
             if (secretsData.status !== 'fulfilled' || !secretsData.value) {
