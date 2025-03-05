@@ -16,13 +16,15 @@
 
 import { FocusEventHandler, useEffect, useRef, useState } from 'react'
 import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror'
-import CodeMirrorMerge from 'react-codemirror-merge'
+import CodeMirrorMerge, { CodeMirrorMergeRef } from 'react-codemirror-merge'
 
 import { getComponentSpecificThemeClass } from '@Shared/Providers'
+import { getUniqueId } from '@Shared/Helpers'
 import { Progressing } from '@Common/Progressing'
 
 import { CodeEditorRendererProps } from './types'
 import { getCodeEditorHeight, getRevertControlButton } from './utils'
+import { DiffMinimap } from './Extensions'
 
 export const CodeEditorRenderer = ({
     theme,
@@ -31,7 +33,6 @@ export const CodeEditorRenderer = ({
     height,
     state,
     codeEditorTheme,
-    codemirrorMergeKey,
     readOnly,
     isOriginalModifiable,
     handleLhsOnChange,
@@ -45,13 +46,16 @@ export const CodeEditorRenderer = ({
     onBlur,
     extensions,
     autoFocus,
+    diffMinimapExtensions,
 }: CodeEditorRendererProps) => {
     // STATES
     const [isFocused, setIsFocused] = useState(false)
     const [gutterWidth, setGutterWidth] = useState(0)
+    const [codeEditorDiffViewKey, setCodeEditorDiffViewKey] = useState<string>('')
 
     // REFS
     const codeMirrorRef = useRef<ReactCodeMirrorRef>()
+    const codeMirrorMergeRef = useRef<CodeMirrorMergeRef>()
 
     // CONSTANTS
     const componentSpecificThemeClass = getComponentSpecificThemeClass(theme)
@@ -88,6 +92,44 @@ export const CodeEditorRenderer = ({
         updateGutterWith()
     }, [state.lhsCode, state.code, isFocused])
 
+    // SYNCING LEFT RIGHT EDITOR HORIZONTAL SCROLLS
+    const handleLHSScroll = () => {
+        codeMirrorMergeRef.current.view.a.scrollDOM.scrollTo({
+            left: codeMirrorMergeRef.current.view.b.scrollDOM.scrollLeft,
+        })
+    }
+
+    const handleRHSScroll = () => {
+        codeMirrorMergeRef.current.view.b.scrollDOM.scrollTo({
+            left: codeMirrorMergeRef.current.view.a.scrollDOM.scrollLeft,
+        })
+    }
+    useEffect(() => {
+        if (!loading) {
+            // This timeout is added to ensure ref of diff editor is properly initialized and \
+            // key state is set to trigger re-render of diffMinimap with diff editor latest ref.
+            setTimeout(() => {
+                setCodeEditorDiffViewKey(getUniqueId())
+
+                // SYNCING LEFT RIGHT EDITOR HORIZONTAL SCROLLS
+                if (codeMirrorMergeRef.current?.view) {
+                    codeMirrorMergeRef.current.view.a.scrollDOM.addEventListener('scroll', handleRHSScroll)
+                    codeMirrorMergeRef.current.view.b.scrollDOM.addEventListener('scroll', handleLHSScroll)
+                }
+            }, 0)
+        }
+
+        return () => {
+            setCodeEditorDiffViewKey('')
+
+            // SYNCING LEFT RIGHT EDITOR HORIZONTAL SCROLLS
+            if (codeMirrorMergeRef.current?.view) {
+                codeMirrorMergeRef.current.view.b.scrollDOM.removeEventListener('scroll', handleLHSScroll)
+                codeMirrorMergeRef.current.view.a.scrollDOM.removeEventListener('scroll', handleRHSScroll)
+            }
+        }
+    }, [loading])
+
     const onCreateEditor = () => {
         updateGutterWith()
     }
@@ -115,29 +157,39 @@ export const CodeEditorRenderer = ({
     }
 
     return state.diffMode ? (
-        <CodeMirrorMerge
-            theme={codeEditorTheme}
-            key={codemirrorMergeKey}
-            className={`w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName} ${readOnly ? 'code-editor__read-only' : ''}`}
-            gutter
-            destroyRerender={false}
-            {...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {})}
-        >
-            <CodeMirrorMerge.Original
-                basicSetup={false}
-                value={state.lhsCode}
-                readOnly={readOnly || !isOriginalModifiable}
-                onChange={handleLhsOnChange}
-                extensions={originalViewExtensions}
+        <div className={`flexbox w-100 ${codeEditorParentClassName}`}>
+            <CodeMirrorMerge
+                ref={codeMirrorMergeRef}
+                theme={codeEditorTheme}
+                className={`flex-grow-1 h-100 dc__overflow-hidden ${componentSpecificThemeClass} ${readOnly ? 'code-editor__read-only' : ''}`}
+                gutter
+                destroyRerender={false}
+                {...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {})}
+            >
+                <CodeMirrorMerge.Original
+                    basicSetup={false}
+                    value={state.lhsCode}
+                    readOnly={readOnly || !isOriginalModifiable}
+                    onChange={handleLhsOnChange}
+                    extensions={originalViewExtensions}
+                />
+                <CodeMirrorMerge.Modified
+                    basicSetup={false}
+                    value={state.code}
+                    readOnly={readOnly}
+                    onChange={handleOnChange}
+                    extensions={modifiedViewExtensions}
+                />
+            </CodeMirrorMerge>
+            <DiffMinimap
+                key={codeEditorDiffViewKey}
+                theme={theme}
+                codeEditorTheme={codeEditorTheme}
+                view={codeMirrorMergeRef.current?.view}
+                state={state}
+                diffMinimapExtensions={diffMinimapExtensions}
             />
-            <CodeMirrorMerge.Modified
-                basicSetup={false}
-                value={state.code}
-                readOnly={readOnly}
-                onChange={handleOnChange}
-                extensions={modifiedViewExtensions}
-            />
-        </CodeMirrorMerge>
+        </div>
     ) : (
         <div ref={codeMirrorParentDivRef} className={`w-100 ${codeEditorParentClassName}`}>
             {shebang && (

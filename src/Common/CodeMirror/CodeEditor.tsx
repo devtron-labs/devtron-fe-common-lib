@@ -226,6 +226,18 @@ const CodeEditor = <DiffView extends boolean = false>({
 
     const modifiedViewExtensions: Extension[] = [...baseExtensions, readOnlyTooltip]
 
+    const diffMinimapExtensions: Extension[] = [
+        basicSetup({
+            ...basicSetupOptions,
+            lineNumbers: false,
+            foldGutter: false,
+            highlightActiveLine: false,
+            highlightActiveLineGutter: false,
+            syntaxHighlighting: false,
+        }),
+        getLanguageExtension(mode, true),
+    ]
+
     return (
         <CodeEditorContext.Provider value={contextValue}>
             {children}
@@ -250,6 +262,7 @@ const CodeEditor = <DiffView extends boolean = false>({
                 originalViewExtensions={originalViewExtensions}
                 modifiedViewExtensions={modifiedViewExtensions}
                 extensions={extensions}
+                diffMinimapExtensions={diffMinimapExtensions}
             />
         </CodeEditorContext.Provider>
     )
