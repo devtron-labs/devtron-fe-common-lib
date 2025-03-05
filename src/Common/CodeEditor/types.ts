@@ -82,7 +82,6 @@ export interface CodeEditorHeaderInterface {
     children?: any
     className?: string
     hideDefaultSplitHeader?: boolean
-    diffViewWidth?: boolean
 }
 export interface CodeEditorComposition {
     Header?: React.FC<any>

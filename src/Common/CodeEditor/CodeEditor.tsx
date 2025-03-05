@@ -391,16 +391,18 @@ const Header: React.FC<CodeEditorHeaderInterface> & CodeEditorHeaderComposition 
     children,
     className,
     hideDefaultSplitHeader,
-    diffViewWidth,
 }) => {
-    const { defaultValue } = useCodeEditorContext()
+    const { defaultValue, state } = useCodeEditorContext()
     return (
-        <div
-            className={className || 'code-editor__header flex right'}
-            style={{ ...(diffViewWidth ? { width: 'calc(100% - 30px)' } : {}) }}
-        >
-            {children}
-            {!hideDefaultSplitHeader && defaultValue && <SplitPane />}
+        <div className="flexbox w-100 dc__border-bottom ">
+            <div
+                data-code-editor-header
+                className={`code-editor__header flex-grow-1 bg__secondary ${className || ''} ${state.diffMode ? 'dc__grid-half vertical-divider' : ''}`}
+            >
+                {children}
+                {!hideDefaultSplitHeader && defaultValue && <SplitPane />}
+            </div>
+            {state.diffMode ? <div className="bg__secondary px-15 dc__align-self-stretch" /> : null}
         </div>
     )
 }

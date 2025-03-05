@@ -47,12 +47,15 @@ export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEdit
     const { state, hasCodeEditorContainer } = useCodeEditorContext()
 
     return (
-        <div
-            data-code-editor-header
-            className={`${hasCodeEditorContainer ? 'dc__top-radius-4' : ''} ${className || 'code-editor__header flex right bcn-1 pt-10 pb-9 px-16 dc__border-bottom'}`}
-        >
-            {children}
-            {!hideDefaultSplitHeader && state.lhsCode && <SplitPane />}
+        <div className="flexbox w-100 dc__border-bottom ">
+            <div
+                data-code-editor-header
+                className={`${hasCodeEditorContainer ? 'dc__top-radius-4' : ''} code-editor__header flex-grow-1 bg__secondary ${className || ''} ${state.diffMode ? 'dc__grid-half vertical-divider' : ''}`}
+            >
+                {children}
+                {!hideDefaultSplitHeader && state.lhsCode && <SplitPane />}
+            </div>
+            {state.diffMode ? <div className="bg__secondary px-5 dc__align-self-stretch" /> : null}
         </div>
     )
 }
