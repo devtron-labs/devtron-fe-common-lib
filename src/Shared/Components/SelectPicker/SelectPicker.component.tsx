@@ -235,6 +235,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         value,
         options,
         getOptionValue,
+        noOptionsMessage,
     } = props
     const {
         isGroupHeadingSelectable = false,
@@ -315,7 +316,13 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         }
 
         if (shouldShowNoOptionsMessage) {
-            return <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8">No options</p>
+            return (
+                <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8">
+                    {noOptionsMessage({
+                        inputValue,
+                    }) || 'No options'}
+                </p>
+            )
         }
 
         return null
