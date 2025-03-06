@@ -19,6 +19,7 @@ import TippyJS from '@tippyjs/react'
 import { TooltipProps } from './types'
 import ShortcutKeyComboTooltipContent from './ShortcutKeyComboTooltipContent'
 import './styles.scss'
+import { SUB_PIXEL_ERROR } from './constants'
 
 const Tooltip = ({
     shortcutKeyCombo,
@@ -33,7 +34,9 @@ const Tooltip = ({
 
     const handleMouseEnterEvent: React.MouseEventHandler = (event) => {
         const { currentTarget: node } = event
-        const isTextOverflowing = node.scrollWidth > node.clientWidth || node.scrollHeight > node.clientHeight
+        const isTextOverflowing =
+            node.scrollWidth > node.clientWidth + SUB_PIXEL_ERROR ||
+            node.scrollHeight > node.clientHeight + SUB_PIXEL_ERROR
         if (isTextOverflowing && !isTextTruncated) {
             setIsTextTruncated(true)
         } else if (!isTextOverflowing && isTextTruncated) {
