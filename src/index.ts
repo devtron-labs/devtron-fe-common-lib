@@ -94,6 +94,11 @@ export interface customEnv {
      */
     FEATURE_EXPERIMENTAL_THEMING_ENABLE?: boolean
     /**
+     * If true, the code-editor will use codemirror engine
+     * @default false
+     */
+    FEATURE_CODE_MIRROR_ENABLE?: boolean
+    /**
      * If true, the experimental layout feature is enabled
      */
     FEATURE_EXPERIMENTAL_MODERN_LAYOUT_ENABLE?: boolean

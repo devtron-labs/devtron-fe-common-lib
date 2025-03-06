@@ -27,13 +27,15 @@ import { foldGutter } from '@codemirror/language'
 import { search } from '@codemirror/search'
 import { lintGutter } from '@codemirror/lint'
 import { vscodeKeymap } from '@replit/codemirror-vscode-keymap'
+import { indentationMarkers } from '@replit/codemirror-indentation-markers'
 
 import { AppThemeType, useTheme } from '@Shared/Providers'
 import { getUniqueId } from '@Shared/Helpers'
 import { cleanKubeManifest, useEffectAfterMount } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
 
-import { codeEditorFindReplace, readOnlyTooltip } from './Extensions'
+import { codeEditorFindReplace, readOnlyTooltip, yamlHighlight } from './Extensions'
+import { openSearchPanel, openSearchPanelWithReplace, replaceAll, showReplaceFieldState } from './Commands'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
 import { getFoldGutterElement, getLanguageExtension, getValidationSchema } from './utils'
@@ -87,8 +89,9 @@ const CodeEditor = <DiffView extends boolean = false>({
     const codeMirrorParentDivRef = useRef<HTMLDivElement>()
 
     // CONSTANTS
-    const isDarkTheme = (theme ?? appTheme) === AppThemeType.dark
-    const codeEditorTheme = getCodeEditorTheme(isDarkTheme)
+    const componentTheme = theme ?? appTheme
+    const isDarkTheme = componentTheme === AppThemeType.dark
+    const { codeEditorTheme, themeExtension } = getCodeEditorTheme(isDarkTheme)
 
     // STATES
     const [codemirrorMergeKey, setCodemirrorMergeKey] = useState<string>()
@@ -176,7 +179,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         searchKeymap: false,
         foldGutter: false,
         drawSelection: false,
-        highlightActiveLineGutter: false,
+        highlightActiveLineGutter: true,
         tabSize,
     }
 
@@ -195,13 +198,22 @@ const CodeEditor = <DiffView extends boolean = false>({
 
     const baseExtensions: Extension[] = [
         basicSetup(basicSetupOptions),
-        keymap.of(vscodeKeymap.filter(({ key }) => !disableSearch || key !== 'Mod-f')),
+        themeExtension,
+        keymap.of([
+            ...vscodeKeymap.filter(({ key }) => key !== 'Mod-Alt-Enter' && key !== 'Mod-Enter' && key !== 'Mod-f'),
+            ...(!disableSearch ? [{ key: 'Mod-f', run: openSearchPanel, scope: 'editor search-panel' }] : []),
+            { key: 'Mod-Enter', run: replaceAll, scope: 'editor search-panel' },
+            { key: 'Mod-Alt-f', run: openSearchPanelWithReplace, scope: 'editor search-panel' },
+        ]),
+        indentationMarkers(),
         getLanguageExtension(mode),
         foldingCompartment.of(foldConfig),
         lintGutter(),
         search({
             createPanel: codeEditorFindReplace,
         }),
+        showReplaceFieldState,
+        ...(mode === MODES.YAML ? [yamlHighlight] : []),
     ]
 
     const extensions: Extension[] = [
@@ -221,7 +233,7 @@ const CodeEditor = <DiffView extends boolean = false>({
                 codemirrorMergeKey={codemirrorMergeKey}
                 codeMirrorParentDivRef={codeMirrorParentDivRef}
                 codeEditorTheme={codeEditorTheme}
-                isDarkTheme={isDarkTheme}
+                theme={componentTheme}
                 state={state}
                 loading={loading}
                 customLoader={customLoader}

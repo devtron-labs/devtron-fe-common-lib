@@ -2,6 +2,7 @@
 
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
+import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
@@ -71,6 +72,7 @@ import { IconBaseProps } from './types'
 export const iconMap = {
     'ic-aborted': ICAborted,
     'ic-app-group': ICAppGroup,
+    'ic-arrow-right': ICArrowRight,
     'ic-azure': ICAzure,
     'ic-bitbucket': ICBitbucket,
     'ic-browser': ICBrowser,
