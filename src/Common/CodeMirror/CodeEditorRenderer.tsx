@@ -64,7 +64,7 @@ export const CodeEditorRenderer = ({
     const componentSpecificThemeClass = getComponentSpecificThemeClass(theme)
 
     // This handling will be removed once shebang is shown inside the codeEditor rather than extra div
-    const updateGutterWith = () => {
+    const updateGutterWidth = () => {
         const gutters = document.querySelector('.cm-gutters')
         if (gutters) {
             setGutterWidth(gutters.getBoundingClientRect().width)
@@ -72,7 +72,7 @@ export const CodeEditorRenderer = ({
     }
 
     useEffect(() => {
-        updateGutterWith()
+        updateGutterWidth()
     }, [lhsValue, value])
 
     useEffect(() => {
@@ -155,7 +155,7 @@ export const CodeEditorRenderer = ({
     }, [loading, diffMode, codemirrorMergeKey])
 
     const onCreateEditor = () => {
-        updateGutterWith()
+        updateGutterWidth()
     }
 
     const { codeEditorClassName, codeEditorHeight, codeEditorParentClassName } = getCodeEditorHeight(height)
