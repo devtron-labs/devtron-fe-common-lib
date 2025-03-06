@@ -82,6 +82,7 @@ export interface CodeEditorHeaderInterface {
     children?: any
     className?: string
     hideDefaultSplitHeader?: boolean
+    diffViewWidth?: boolean
 }
 export interface CodeEditorComposition {
     Header?: React.FC<any>
@@ -92,6 +93,7 @@ export interface CodeEditorComposition {
     Warning?: React.FC<InformationBarProps>
     ErrorBar?: React.FC<InformationBarProps>
     Information?: React.FC<InformationBarProps>
+    Container?: React.FC<{ children: React.ReactNode; flexExpand?: boolean; overflowHidden?: boolean }>
 }
 export interface CodeEditorHeaderComposition {
     LanguageChanger?: React.FC<any>
