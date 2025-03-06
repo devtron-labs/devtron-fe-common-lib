@@ -397,7 +397,8 @@ const Header: React.FC<CodeEditorHeaderInterface> & CodeEditorHeaderComposition 
         <div className="flexbox w-100 dc__border-bottom ">
             <div
                 data-code-editor-header
-                className={`code-editor__header flex-grow-1 bg__secondary ${className || ''} ${state.diffMode ? 'dc__grid-half vertical-divider' : ''}`}
+                className={`code-editor__header flex-grow-1 bg__secondary ${className || 'px-16 pt-6 pb-5'} ${state.diffMode ? 'dc__grid-half vertical-divider' : ''}`}
+
             >
                 {children}
                 {!hideDefaultSplitHeader && defaultValue && <SplitPane />}
