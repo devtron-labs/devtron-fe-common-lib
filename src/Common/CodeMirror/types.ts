@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Dispatch, FunctionComponent, Key, MutableRefObject, ReactNode, SVGProps } from 'react'
+import { Dispatch, FunctionComponent, Key, MutableRefObject, ReactNode, SetStateAction, SVGProps } from 'react'
 import { JSONSchema7 } from 'json-schema'
 import { EditorView, ReactCodeMirrorProps } from '@uiw/react-codemirror'
 import { CodeMirrorMergeRef } from 'react-codemirror-merge'
@@ -105,29 +105,12 @@ export interface FindReplaceProps {
     defaultShowReplace: boolean
 }
 
-// REDUCER TYPES
-export type CodeEditorActionTypes = 'setDiff' | 'setCode' | 'setLhsCode'
-
-export interface CodeEditorPayloadType {
-    type: CodeEditorActionTypes
-    value: any
-}
-
-export interface CodeEditorInitialValueType extends Pick<CodeEditorProps, 'value' | 'noParsing' | 'tabSize' | 'mode'> {
-    lhsValue: ReactCodeMirrorProps['value']
-    diffView: boolean
-}
-
-export interface CodeEditorState extends Pick<CodeEditorProps, 'noParsing'> {
-    code: CodeEditorProps['value']
-    lhsCode: CodeEditorProps<true>['originalValue']
+export interface CodeEditorContextProps extends Required<Pick<CodeEditorProps, 'readOnly' | 'theme'>> {
     diffMode: CodeEditorProps<boolean>['diffView']
-}
-
-export interface CodeEditorContextProps extends Pick<CodeEditorProps, 'readOnly' | 'height' | 'theme'> {
-    state: CodeEditorState
+    value: CodeEditorProps['value']
+    lhsValue: CodeEditorProps<true>['originalValue']
     hasCodeEditorContainer: boolean
-    dispatch: Dispatch<CodeEditorPayloadType>
+    setDiffMode: Dispatch<SetStateAction<CodeEditorProps<boolean>['diffView']>>
 }
 
 // EXTENSION PROPS
@@ -160,7 +143,6 @@ export type CodeEditorRendererProps = Required<
         codemirrorMergeKey: Key
         codeMirrorParentDivRef: MutableRefObject<HTMLDivElement>
         codeEditorTheme: ReactCodeMirrorProps['theme']
-        state: CodeEditorState
         handleOnChange: ReactCodeMirrorProps['onChange']
         handleLhsOnChange: ReactCodeMirrorProps['onChange']
         originalViewExtensions: ReactCodeMirrorProps['extensions']
@@ -170,6 +152,6 @@ export type CodeEditorRendererProps = Required<
     }
 
 export interface DiffMinimapProps
-    extends Pick<CodeEditorRendererProps, 'state' | 'diffMinimapExtensions' | 'codeEditorTheme' | 'theme'> {
+    extends Pick<CodeEditorRendererProps, 'diffMinimapExtensions' | 'codeEditorTheme' | 'theme'> {
     view: CodeMirrorMergeRef['view']
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { FocusEventHandler, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror'
 import CodeMirrorMerge, { CodeMirrorMergeRef } from 'react-codemirror-merge'
 
@@ -22,16 +22,17 @@ import { getComponentSpecificThemeClass } from '@Shared/Providers'
 import { getUniqueId } from '@Shared/Helpers'
 import { Progressing } from '@Common/Progressing'
 
+import { useCodeEditorContext } from './CodeEditor.context'
 import { CodeEditorRendererProps } from './types'
 import { getCodeEditorHeight, getRevertControlButton } from './utils'
 import { DiffMinimap } from './Extensions'
 
 export const CodeEditorRenderer = ({
+    codemirrorMergeKey,
     theme,
     loading,
     customLoader,
     height,
-    state,
     codeEditorTheme,
     readOnly,
     isOriginalModifiable,
@@ -49,8 +50,10 @@ export const CodeEditorRenderer = ({
     diffMinimapExtensions,
     showDiffMinimap = true,
 }: CodeEditorRendererProps) => {
+    // CONTEXTS
+    const { value, lhsValue, diffMode } = useCodeEditorContext()
+
     // STATES
-    const [isFocused, setIsFocused] = useState(false)
     const [gutterWidth, setGutterWidth] = useState(0)
     const [codeEditorDiffViewKey, setCodeEditorDiffViewKey] = useState<string>('')
 
@@ -70,6 +73,10 @@ export const CodeEditorRenderer = ({
     }
 
     useEffect(() => {
+        updateGutterWith()
+    }, [lhsValue, value])
+
+    useEffect(() => {
         // Added timeout to ensure the autofocus code is executed post the re-renders
         setTimeout(() => {
             if (autoFocus && codeMirrorRef.current?.view) {
@@ -80,18 +87,34 @@ export const CodeEditorRenderer = ({
 
     // STOPPING OVERSCROLL BROWSER BACK/FORWARD BEHAVIOR WHEN CODE EDITOR IS FOCUSED
     useEffect(() => {
+        let isFocused = false
         const body = document.querySelector('body')
         if (body) {
-            const { scrollWidth, clientWidth } = codeMirrorRef.current?.view?.scrollDOM ?? {}
-            if (isFocused && scrollWidth > clientWidth) {
+            if (codeMirrorMergeRef.current?.view) {
+                const lhsEditor = codeMirrorMergeRef.current.view.a
+                const rhsEditor = codeMirrorMergeRef.current.view.b
+
+                isFocused =
+                    (lhsEditor.hasFocus || rhsEditor.hasFocus) &&
+                    (lhsEditor.scrollDOM.scrollWidth > lhsEditor.scrollDOM.clientWidth ||
+                        rhsEditor.scrollDOM.scrollWidth > rhsEditor.scrollDOM.clientWidth)
+            } else if (codeMirrorRef.current?.view) {
+                const { scrollWidth, clientWidth } = codeMirrorRef.current.view.scrollDOM
+
+                isFocused = codeMirrorRef.current.view.hasFocus && scrollWidth > clientWidth
+            }
+
+            if (isFocused) {
                 body.classList.add('dc__overscroll-none')
             } else {
                 body.classList.remove('dc__overscroll-none')
             }
         }
-
-        updateGutterWith()
-    }, [state.lhsCode, state.code, isFocused])
+    }, [
+        codeMirrorMergeRef.current?.view?.a?.hasFocus,
+        codeMirrorMergeRef.current?.view?.b?.hasFocus,
+        codeMirrorRef.current?.view?.hasFocus,
+    ])
 
     // SYNCING LEFT RIGHT EDITOR HORIZONTAL SCROLLS
     const handleLHSScroll = () => {
@@ -105,6 +128,7 @@ export const CodeEditorRenderer = ({
             left: codeMirrorMergeRef.current.view.a.scrollDOM.scrollLeft,
         })
     }
+
     useEffect(() => {
         if (!loading) {
             // This timeout is added to ensure ref of diff editor is properly initialized and \
@@ -129,20 +153,10 @@ export const CodeEditorRenderer = ({
                 codeMirrorMergeRef.current.view.a.scrollDOM.removeEventListener('scroll', handleRHSScroll)
             }
         }
-    }, [loading, state.diffMode])
+    }, [loading, diffMode, codemirrorMergeKey])
 
     const onCreateEditor = () => {
         updateGutterWith()
-    }
-
-    const handleOnFocus: FocusEventHandler<HTMLDivElement> = (e) => {
-        setIsFocused(true)
-        onFocus?.(e)
-    }
-
-    const handleOnBlur: FocusEventHandler<HTMLDivElement> = (e) => {
-        setIsFocused(false)
-        onBlur?.(e)
     }
 
     const { codeEditorClassName, codeEditorHeight, codeEditorParentClassName } = getCodeEditorHeight(height)
@@ -157,9 +171,10 @@ export const CodeEditorRenderer = ({
         )
     }
 
-    return state.diffMode ? (
+    return diffMode ? (
         <div className={`flexbox w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}>
             <CodeMirrorMerge
+                key={codemirrorMergeKey}
                 ref={codeMirrorMergeRef}
                 theme={codeEditorTheme}
                 className={`flex-grow-1 h-100 dc__overflow-hidden ${readOnly ? 'code-editor__read-only' : ''}`}
@@ -169,14 +184,14 @@ export const CodeEditorRenderer = ({
             >
                 <CodeMirrorMerge.Original
                     basicSetup={false}
-                    value={state.lhsCode}
+                    value={lhsValue}
                     readOnly={readOnly || !isOriginalModifiable}
                     onChange={handleLhsOnChange}
                     extensions={originalViewExtensions}
                 />
                 <CodeMirrorMerge.Modified
                     basicSetup={false}
-                    value={state.code}
+                    value={value}
                     readOnly={readOnly}
                     onChange={handleOnChange}
                     extensions={modifiedViewExtensions}
@@ -188,7 +203,6 @@ export const CodeEditorRenderer = ({
                     theme={theme}
                     codeEditorTheme={codeEditorTheme}
                     view={codeMirrorMergeRef.current?.view}
-                    state={state}
                     diffMinimapExtensions={diffMinimapExtensions}
                 />
             )}
@@ -212,14 +226,14 @@ export const CodeEditorRenderer = ({
                 theme={codeEditorTheme}
                 className={codeEditorClassName}
                 basicSetup={false}
-                value={state.code}
+                value={value}
                 placeholder={placeholder}
                 readOnly={readOnly}
                 height={codeEditorHeight}
                 minHeight="250px"
                 onCreateEditor={onCreateEditor}
-                onFocus={handleOnFocus}
-                onBlur={handleOnBlur}
+                onFocus={onFocus}
+                onBlur={onBlur}
                 onChange={handleOnChange}
                 extensions={extensions}
             />

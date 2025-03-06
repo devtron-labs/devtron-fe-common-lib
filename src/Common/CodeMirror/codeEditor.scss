@@ -19,18 +19,35 @@
     height: 100%;
     background-color: var(--bg-code-editor-base);
     scrollbar-width: none;
+
     &::-webkit-scrollbar {
         display: none;
     }
 }
 
-.cm-merge-theme:not(.code-editor__read-only):not(.code-editor__mini-map) {
+.cm-merge-theme:not(.code-editor__mini-map) {
     .cm-mergeViewEditor:first-child {
         border-right: 1px solid var(--N200);
     }
 
-    .cm-mergeViewEditor:last-child {
+    &:not(.code-editor__read-only) .cm-mergeViewEditor:last-child {
         border-left: 1px solid var(--N200);
+    }
+
+    .cm-mergeView {
+        position: relative;
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: calc(50%);
+            transform: translate(-50%);
+            width: 21px;
+            border-left: 1px solid var(--N200);
+            border-right: 1px solid var(--N200);
+            background-color: var(--bg-primary);
+        }
     }
 }
 

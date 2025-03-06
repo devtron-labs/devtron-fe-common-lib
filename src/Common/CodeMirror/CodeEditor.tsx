@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
     Extension,
     ReactCodeMirrorProps,
@@ -31,20 +31,22 @@ import { indentationMarkers } from '@replit/codemirror-indentation-markers'
 
 import { AppThemeType, useTheme } from '@Shared/Providers'
 import { getUniqueId } from '@Shared/Helpers'
-import { cleanKubeManifest, useEffectAfterMount } from '@Common/Helper'
+import { cleanKubeManifest } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
 
 import { codeEditorFindReplace, readOnlyTooltip, yamlHighlight } from './Extensions'
 import { openSearchPanel, openSearchPanelWithReplace, replaceAll, showReplaceFieldState } from './Commands'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
-import { CodeEditorReducer, initialState, parseValueToCode } from './CodeEditor.reducer'
-import { getFoldGutterElement, getLanguageExtension, getValidationSchema } from './utils'
+import { getFoldGutterElement, getLanguageExtension, getValidationSchema, parseValueToCode } from './utils'
 import { CodeEditorContext } from './CodeEditor.context'
 import { Clipboard, Container, ErrorBar, Header, Information, Warning } from './CodeEditor.components'
 import { getCodeEditorTheme } from './CodeEditor.theme'
 import { CodeEditorRenderer } from './CodeEditorRenderer'
 
 import './codeEditor.scss'
+
+// CODEMIRROR CLASSES
+const foldingCompartment = new Compartment()
 
 const CodeEditor = <DiffView extends boolean = false>({
     theme,
@@ -78,16 +80,36 @@ const CodeEditor = <DiffView extends boolean = false>({
     // HOOKS
     const { appTheme } = useTheme()
 
+    // REFS
+    const codeMirrorParentDivRef = useRef<HTMLDivElement>()
+    const codeEditorValues = useRef({ code: '', lhsCode: '' })
+
     // MEMOISED VALUES
     // Cleaning KubeManifest
     const value = useMemo(() => {
         const _value = diffView ? modifiedValue : propValue
-        return cleanData ? cleanKubeManifest(_value) : _value
-    }, [propValue, modifiedValue, diffView])
-    const lhsValue = useMemo(() => (cleanData ? cleanKubeManifest(originalValue) : originalValue), [originalValue])
+        const updatedValue = cleanData ? cleanKubeManifest(_value) : _value
 
-    // REFS
-    const codeMirrorParentDivRef = useRef<HTMLDivElement>()
+        if (updatedValue !== codeEditorValues.current.code) {
+            return ![MODES.JSON, MODES.YAML].includes(mode) || noParsing
+                ? updatedValue
+                : parseValueToCode(updatedValue, mode, tabSize)
+        }
+
+        return codeEditorValues.current.code
+    }, [propValue, modifiedValue, diffView, noParsing])
+
+    const lhsValue = useMemo(() => {
+        const updatedValue = cleanData ? cleanKubeManifest(originalValue) : originalValue
+
+        if (updatedValue !== codeEditorValues.current.lhsCode) {
+            return ![MODES.JSON, MODES.YAML].includes(mode) || noParsing
+                ? updatedValue
+                : parseValueToCode(updatedValue, mode, tabSize)
+        }
+
+        return codeEditorValues.current.lhsCode
+    }, [originalValue, noParsing])
 
     // CONSTANTS
     const componentTheme = theme ?? appTheme
@@ -97,24 +119,12 @@ const CodeEditor = <DiffView extends boolean = false>({
     // STATES
     const [codemirrorMergeKey, setCodemirrorMergeKey] = useState<string>()
     const [hasCodeEditorContainer, setHasCodeEditorContainer] = useState(false)
-
-    // REDUCER
-    const [state, dispatch] = useReducer(
-        CodeEditorReducer,
-        initialState({
-            mode,
-            value,
-            lhsValue,
-            noParsing,
-            tabSize,
-            diffView,
-        }),
-    )
+    const [diffMode, setDiffMode] = useState(diffView)
 
     // CONTEXT VALUE
     const contextValue = useMemo<CodeEditorContextProps>(
-        () => ({ dispatch, state, height, hasCodeEditorContainer, theme: componentTheme }),
-        [state, hasCodeEditorContainer, componentTheme],
+        () => ({ setDiffMode, diffMode, hasCodeEditorContainer, lhsValue, value, readOnly, theme: componentTheme }),
+        [diffMode, hasCodeEditorContainer, lhsValue, value, readOnly, componentTheme],
     )
 
     // USE-EFFECTS
@@ -127,8 +137,8 @@ const CodeEditor = <DiffView extends boolean = false>({
     }, [])
 
     useEffect(() => {
-        // Toggle `state.diffMode` based on `diffView`
-        dispatch({ type: 'setDiff', value: diffView })
+        // Toggle `diffMode` based on `diffView`
+        setDiffMode(diffView)
     }, [diffView])
 
     // Re-mounting codemirror-merge is necessary because its extensions don't automatically update after being changed.
@@ -143,8 +153,8 @@ const CodeEditor = <DiffView extends boolean = false>({
 
     // METHODS
     const setCode = (codeValue: string) => {
-        dispatch({ type: 'setCode', value: codeValue })
-        if (state.diffMode) {
+        codeEditorValues.current.code = codeValue
+        if (diffMode) {
             onModifiedValueChange?.(codeValue)
         } else {
             onChange?.(codeValue)
@@ -152,29 +162,11 @@ const CodeEditor = <DiffView extends boolean = false>({
     }
 
     const setLhsCode = (codeValue: string) => {
-        dispatch({ type: 'setLhsCode', value: codeValue })
+        codeEditorValues.current.lhsCode = codeValue
         onOriginalValueChange?.(codeValue)
     }
 
-    useEffectAfterMount(() => {
-        if (value === state.code) {
-            return
-        }
-
-        setCode(noParsing ? value : parseValueToCode(value, mode, tabSize))
-    }, [value, noParsing])
-
-    useEffectAfterMount(() => {
-        if (lhsValue === state.lhsCode) {
-            return
-        }
-
-        setLhsCode(noParsing ? lhsValue : parseValueToCode(lhsValue, mode, tabSize))
-    }, [lhsValue, noParsing])
-
     // CODEMIRROR PROPS
-    const foldingCompartment = new Compartment()
-
     const basicSetupOptions: BasicSetupOptions = {
         defaultKeymap: false,
         searchKeymap: false,
@@ -197,7 +189,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         markerDOM: getFoldGutterElement,
     })
 
-    const baseExtensions: Extension[] = [
+    const getBaseExtensions = (): Extension[] => [
         basicSetup(basicSetupOptions),
         themeExtension,
         keymap.of([
@@ -218,14 +210,14 @@ const CodeEditor = <DiffView extends boolean = false>({
     ]
 
     const extensions: Extension[] = [
-        ...baseExtensions,
-        ...(!state.diffMode ? getValidationSchema({ mode, schemaURI, validatorSchema }) : []),
+        ...getBaseExtensions(),
+        ...(!diffMode ? getValidationSchema({ mode, schemaURI, validatorSchema }) : []),
         readOnlyTooltip,
     ]
 
-    const originalViewExtensions: Extension[] = [...baseExtensions, readOnlyTooltip]
+    const originalViewExtensions: Extension[] = [...getBaseExtensions(), readOnlyTooltip]
 
-    const modifiedViewExtensions: Extension[] = [...baseExtensions, readOnlyTooltip]
+    const modifiedViewExtensions: Extension[] = [...getBaseExtensions(), readOnlyTooltip]
 
     const diffMinimapExtensions: Extension[] = [
         basicSetup({
@@ -247,7 +239,6 @@ const CodeEditor = <DiffView extends boolean = false>({
                 codeMirrorParentDivRef={codeMirrorParentDivRef}
                 codeEditorTheme={codeEditorTheme}
                 theme={componentTheme}
-                state={state}
                 loading={loading}
                 customLoader={customLoader}
                 height={height}

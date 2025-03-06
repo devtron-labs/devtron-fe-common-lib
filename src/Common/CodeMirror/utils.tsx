@@ -17,6 +17,7 @@
 import { render } from 'react-dom'
 import { renderToString } from 'react-dom/server'
 import DOMPurify from 'dompurify'
+import * as YAML from 'yaml'
 import { linter } from '@codemirror/lint'
 import { StreamLanguage } from '@codemirror/language'
 import { json, jsonLanguage, jsonParseLinter } from '@codemirror/lang-json'
@@ -40,11 +41,43 @@ import { yamlCompletion, yamlSchemaHover, yamlSchemaLinter } from 'codemirror-js
 
 import { Icon } from '@Shared/Components'
 import { Tooltip } from '@Common/Tooltip'
+import { noop, YAMLStringify } from '@Common/Helper'
 
 import { yamlParseLinter } from './Extensions'
 import { CodeEditorProps, FindReplaceToggleButtonProps, GetCodeEditorHeightReturnType, HoverTexts } from './types'
 
 // UTILS
+export const parseValueToCode = (value: string, mode: string, tabSize: number) => {
+    let obj = null
+
+    try {
+        obj = JSON.parse(value)
+    } catch {
+        try {
+            obj = YAML.parse(value)
+        } catch {
+            noop()
+        }
+    }
+
+    let final = value
+
+    if (obj) {
+        switch (mode) {
+            case MODES.JSON:
+                final = JSON.stringify(obj, null, tabSize)
+                break
+            case MODES.YAML:
+                final = YAMLStringify(obj)
+                break
+            default:
+                break
+        }
+    }
+
+    return final
+}
+
 export const getCodeEditorHeight = (height: CodeEditorProps['height']): GetCodeEditorHeightReturnType => {
     switch (height) {
         case '100%':

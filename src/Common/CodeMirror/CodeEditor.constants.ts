@@ -31,4 +31,4 @@ export const READ_ONLY_TOOLTIP_TIMEOUT = 2000
 
 export const CODE_EDITOR_FONT_SIZE = 15
 
-export const CODE_EDITOR_LINE_HEIGHT = 15
+export const CODE_EDITOR_LINE_HEIGHT = 1.4
