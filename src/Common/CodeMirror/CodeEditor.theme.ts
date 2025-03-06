@@ -82,6 +82,8 @@ export const getCodeEditorTheme = (isDark: boolean) => {
                 gutterForeground: 'var(--N500)',
                 gutterBorder: 'transparent',
                 lineHighlight: 'var(--active-line)',
+                selection: 'var(--selection-color)',
+                selectionMatch: 'var(--selection-match-color)',
             },
             styles,
             theme: isDark ? 'dark' : 'light',

@@ -48,7 +48,6 @@ export const CodeEditorRenderer = ({
     extensions,
     autoFocus,
     diffMinimapExtensions,
-    showDiffMinimap = true,
 }: CodeEditorRendererProps) => {
     // CONTEXTS
     const { value, lhsValue, diffMode } = useCodeEditorContext()
@@ -197,15 +196,13 @@ export const CodeEditorRenderer = ({
                     extensions={modifiedViewExtensions}
                 />
             </CodeMirrorMerge>
-            {showDiffMinimap && (
-                <DiffMinimap
-                    key={codeEditorDiffViewKey}
-                    theme={theme}
-                    codeEditorTheme={codeEditorTheme}
-                    view={codeMirrorMergeRef.current?.view}
-                    diffMinimapExtensions={diffMinimapExtensions}
-                />
-            )}
+            <DiffMinimap
+                key={codeEditorDiffViewKey}
+                theme={theme}
+                codeEditorTheme={codeEditorTheme}
+                view={codeMirrorMergeRef.current?.view}
+                diffMinimapExtensions={diffMinimapExtensions}
+            />
         </div>
     ) : (
         <div

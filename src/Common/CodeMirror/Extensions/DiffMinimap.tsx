@@ -1,13 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { EditorView } from '@uiw/react-codemirror'
 import CodeMirrorMerge, { CodeMirrorMergeRef } from 'react-codemirror-merge'
 
 import { getComponentSpecificThemeClass } from '@Shared/Providers'
+import { useDebouncedEffect } from '@Common/DebouncedSearch/Utils'
 
 import { DiffMinimapProps } from '../types'
-import { CODE_EDITOR_FONT_SIZE, CODE_EDITOR_LINE_HEIGHT } from '../CodeEditor.constants'
+import { CODE_EDITOR_FONT_SIZE, CODE_EDITOR_LINE_HEIGHT, CODE_EDITOR_MIN_OVERLAY_HEIGHT } from '../CodeEditor.constants'
+import { useCodeEditorContext } from '../CodeEditor.context'
+import { updateDiffMinimapValues } from '../utils'
 
-export const DiffMinimap = ({ view, state, diffMinimapExtensions, codeEditorTheme, theme }: DiffMinimapProps) => {
+export const DiffMinimap = ({ view, diffMinimapExtensions, codeEditorTheme, theme }: DiffMinimapProps) => {
+    // CONTEXTS
+    const { lhsValue, value } = useCodeEditorContext()
+
     // STATES
     const [overlayTop, setOverlayTop] = useState<number>(0)
     const [overlayHeight, setOverlayHeight] = useState<number>(50)
@@ -24,12 +29,27 @@ export const DiffMinimap = ({ view, state, diffMinimapExtensions, codeEditorThem
     const componentSpecificThemeClass = getComponentSpecificThemeClass(theme)
 
     const scalingFactor = useMemo(() => {
-        if (view?.dom) {
-            return view.dom.clientHeight / view.dom.scrollHeight
+        if (view) {
+            return Math.min(view.dom.clientHeight / view.dom.scrollHeight, 1)
         }
 
         return 1
-    }, [view?.a.state.doc.length, view?.b.state.doc.length])
+    }, [lhsValue, value])
+
+    // SETTING INITIAL DIFF MINI MAP VALUES
+    useEffect(() => {
+        setTimeout(() => {
+            updateDiffMinimapValues(minimapEditorRef.current?.view, value, lhsValue)
+        }, 0)
+    }, [])
+
+    useDebouncedEffect(
+        () => {
+            updateDiffMinimapValues(minimapEditorRef.current?.view, value, lhsValue)
+        },
+        300,
+        [value, lhsValue, scalingFactor],
+    )
 
     // Update the overlay position and size
     const updateOverlay = () => {
@@ -40,11 +60,13 @@ export const DiffMinimap = ({ view, state, diffMinimapExtensions, codeEditorThem
         const { clientHeight, scrollHeight, scrollTop } = view.dom
         const minimapHeight = minimapContainerRef.current.clientHeight
 
-        const _overlayHeight = (clientHeight / scrollHeight) * minimapHeight
-        const _overlayTop = (scrollTop / scrollHeight) * minimapHeight
+        let computedHeight = (clientHeight / scrollHeight) * minimapHeight
+        if (computedHeight < CODE_EDITOR_MIN_OVERLAY_HEIGHT) {
+            computedHeight = CODE_EDITOR_MIN_OVERLAY_HEIGHT
+        }
 
-        setOverlayHeight(_overlayHeight)
-        setOverlayTop(_overlayTop)
+        setOverlayHeight(computedHeight)
+        setOverlayTop((scrollTop / scrollHeight) * (minimapHeight - computedHeight))
     }
 
     useEffect(() => {
@@ -93,18 +115,18 @@ export const DiffMinimap = ({ view, state, diffMinimapExtensions, codeEditorThem
     }
 
     useEffect(() => {
-        if (view?.dom) {
+        if (view) {
             const { dom } = view
             dom.addEventListener('scroll', handleDiffScroll)
         }
 
         return () => {
-            if (view?.dom) {
+            if (view) {
                 const { dom } = view
                 dom.removeEventListener('scroll', handleDiffScroll)
             }
         }
-    }, [view])
+    }, [])
 
     useEffect(() => {
         if (isDragging) {
@@ -132,13 +154,6 @@ export const DiffMinimap = ({ view, state, diffMinimapExtensions, codeEditorThem
         view.dom.scrollTo({ top: scrollRatio * (scrollHeight - clientHeight) })
     }
 
-    const minimapTheme = EditorView.theme({
-        '&.cm-editor': {
-            fontSize: `${scalingFactor * CODE_EDITOR_FONT_SIZE}px`,
-            lineHeight: `${scalingFactor * CODE_EDITOR_LINE_HEIGHT}`,
-        },
-    })
-
     return (
         <div
             ref={minimapContainerRef}
@@ -150,20 +165,23 @@ export const DiffMinimap = ({ view, state, diffMinimapExtensions, codeEditorThem
                 theme={codeEditorTheme}
                 className="code-editor__mini-map dc__overflow-hidden w-100"
                 gutter={false}
+                destroyRerender={false}
+                style={{
+                    fontSize: `${scalingFactor * CODE_EDITOR_FONT_SIZE}px`,
+                    lineHeight: `${scalingFactor * CODE_EDITOR_LINE_HEIGHT}`,
+                }}
             >
                 <CodeMirrorMerge.Original
                     basicSetup={false}
-                    value={state.lhsCode}
                     readOnly
                     editable={false}
-                    extensions={[...diffMinimapExtensions, minimapTheme]}
+                    extensions={diffMinimapExtensions}
                 />
                 <CodeMirrorMerge.Modified
                     basicSetup={false}
-                    value={state.code}
                     readOnly
                     editable={false}
-                    extensions={[...diffMinimapExtensions, minimapTheme]}
+                    extensions={diffMinimapExtensions}
                 />
             </CodeMirrorMerge>
             <div

@@ -75,7 +75,6 @@ const CodeEditor = <DiffView extends boolean = false>({
     onFocus,
     autoFocus,
     disableSearch = false,
-    showDiffMinimap,
 }: CodeEditorProps<DiffView>) => {
     // HOOKS
     const { appTheme } = useTheme()
@@ -255,7 +254,6 @@ const CodeEditor = <DiffView extends boolean = false>({
                 modifiedViewExtensions={modifiedViewExtensions}
                 extensions={extensions}
                 diffMinimapExtensions={diffMinimapExtensions}
-                showDiffMinimap={showDiffMinimap}
             />
         </CodeEditorContext.Provider>
     )

@@ -246,6 +246,9 @@
     pointer-events: none;
 
     .cm-editor {
+        font-size: inherit;
+        line-height: inherit;
+
         &.cm-merge-a .cm-changedLine,
         .cm-deletedChunk,
         &.cm-merge-a .cm-changedText,

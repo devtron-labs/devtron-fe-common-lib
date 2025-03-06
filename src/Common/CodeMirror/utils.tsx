@@ -24,6 +24,7 @@ import { json, jsonLanguage, jsonParseLinter } from '@codemirror/lang-json'
 import { yaml, yamlLanguage } from '@codemirror/lang-yaml'
 import { shell } from '@codemirror/legacy-modes/mode/shell'
 import { dockerFile } from '@codemirror/legacy-modes/mode/dockerfile'
+import { CodeMirrorMergeRef } from 'react-codemirror-merge'
 
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 
@@ -133,6 +134,27 @@ export const getUpdatedSearchMatchesCount = (newQuery: SearchQuery, view: Editor
     }
 
     return updatedMatchesCount
+}
+
+export const updateDiffMinimapValues = (view: CodeMirrorMergeRef['view'], value: string, lhsValue: string) => {
+    if (!view) {
+        return
+    }
+
+    const currentLhsValue = view.a.state.doc.toString()
+    const currentRhsValue = view.b.state.doc.toString()
+
+    if (currentRhsValue !== value) {
+        view.b.dispatch({
+            changes: { from: 0, to: currentRhsValue.length, insert: value || '' },
+        })
+    }
+
+    if (currentLhsValue !== lhsValue) {
+        view.a.dispatch({
+            changes: { from: 0, to: currentLhsValue.length, insert: lhsValue || '' },
+        })
+    }
 }
 
 // DOM HELPERS
