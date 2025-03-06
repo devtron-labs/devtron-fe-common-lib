@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { render } from 'react-dom'
 import { renderToString } from 'react-dom/server'
 import DOMPurify from 'dompurify'
 import { linter } from '@codemirror/lint'
@@ -36,6 +37,10 @@ import {
     stateExtensions,
 } from 'codemirror-json-schema'
 import { yamlCompletion, yamlSchemaHover, yamlSchemaLinter } from 'codemirror-json-schema/yaml'
+
+import { Icon } from '@Shared/Components'
+import { Tooltip } from '@Common/Tooltip'
+
 import { yamlParseLinter } from './Extensions'
 import { CodeEditorProps, FindReplaceToggleButtonProps, GetCodeEditorHeightReturnType, HoverTexts } from './types'
 
@@ -152,6 +157,21 @@ export const getReadOnlyElement = () => {
     )
 
     dom.innerHTML = renderToString(node)
+
+    return dom
+}
+
+export const getRevertControlButton = () => {
+    const dom = document.createElement('button')
+
+    render(
+        <Tooltip content="Revert this chunk" alwaysShowTippyOnHover>
+            <div className="flex">
+                <Icon name="ic-arrow-right" color="N600" size={20} />
+            </div>
+        </Tooltip>,
+        dom,
+    )
 
     return dom
 }
