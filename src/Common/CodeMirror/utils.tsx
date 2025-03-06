@@ -17,12 +17,14 @@
 import { render } from 'react-dom'
 import { renderToString } from 'react-dom/server'
 import DOMPurify from 'dompurify'
+import * as YAML from 'yaml'
 import { linter } from '@codemirror/lint'
 import { StreamLanguage } from '@codemirror/language'
 import { json, jsonLanguage, jsonParseLinter } from '@codemirror/lang-json'
 import { yaml, yamlLanguage } from '@codemirror/lang-yaml'
 import { shell } from '@codemirror/legacy-modes/mode/shell'
 import { dockerFile } from '@codemirror/legacy-modes/mode/dockerfile'
+import { CodeMirrorMergeRef } from 'react-codemirror-merge'
 
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 
@@ -40,11 +42,43 @@ import { yamlCompletion, yamlSchemaHover, yamlSchemaLinter } from 'codemirror-js
 
 import { Icon } from '@Shared/Components'
 import { Tooltip } from '@Common/Tooltip'
+import { noop, YAMLStringify } from '@Common/Helper'
 
 import { yamlParseLinter } from './Extensions'
 import { CodeEditorProps, FindReplaceToggleButtonProps, GetCodeEditorHeightReturnType, HoverTexts } from './types'
 
 // UTILS
+export const parseValueToCode = (value: string, mode: string, tabSize: number) => {
+    let obj = null
+
+    try {
+        obj = JSON.parse(value)
+    } catch {
+        try {
+            obj = YAML.parse(value)
+        } catch {
+            noop()
+        }
+    }
+
+    let final = value
+
+    if (obj) {
+        switch (mode) {
+            case MODES.JSON:
+                final = JSON.stringify(obj, null, tabSize)
+                break
+            case MODES.YAML:
+                final = YAMLStringify(obj)
+                break
+            default:
+                break
+        }
+    }
+
+    return final
+}
+
 export const getCodeEditorHeight = (height: CodeEditorProps['height']): GetCodeEditorHeightReturnType => {
     switch (height) {
         case '100%':
@@ -100,6 +134,27 @@ export const getUpdatedSearchMatchesCount = (newQuery: SearchQuery, view: Editor
     }
 
     return updatedMatchesCount
+}
+
+export const updateDiffMinimapValues = (view: CodeMirrorMergeRef['view'], value: string, lhsValue: string) => {
+    if (!view) {
+        return
+    }
+
+    const currentLhsValue = view.a.state.doc.toString()
+    const currentRhsValue = view.b.state.doc.toString()
+
+    if (currentRhsValue !== value) {
+        view.b.dispatch({
+            changes: { from: 0, to: currentRhsValue.length, insert: value || '' },
+        })
+    }
+
+    if (currentLhsValue !== lhsValue) {
+        view.a.dispatch({
+            changes: { from: 0, to: currentLhsValue.length, insert: lhsValue || '' },
+        })
+    }
 }
 
 // DOM HELPERS
@@ -177,12 +232,12 @@ export const getRevertControlButton = () => {
 }
 
 // EXTENSION UTILS
-export const getLanguageExtension = (mode: CodeEditorProps['mode']): Extension => {
+export const getLanguageExtension = (mode: CodeEditorProps['mode'], disableLint = false): Extension => {
     switch (mode) {
         case MODES.JSON:
-            return [json(), linter(jsonParseLinter())]
+            return [json(), ...(!disableLint ? [linter(jsonParseLinter())] : [])]
         case MODES.YAML:
-            return [yaml(), linter(yamlParseLinter())]
+            return [yaml(), ...(!disableLint ? [linter(yamlParseLinter())] : [])]
         case MODES.SHELL:
             return StreamLanguage.define(shell)
         case MODES.DOCKERFILE:
