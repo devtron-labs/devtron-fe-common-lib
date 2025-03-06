@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { isNullOrUndefined } from '@Shared/Helpers'
 import { noop } from '@Common/Helper'
-import { UseStickyEventProps } from './types'
-import { FALLBACK_SENTINEL_HEIGHT, OBSERVER_ROOT_MARGIN, OBSERVER_THRESHOLD } from './constants'
+import { UseStickyEventProps, UseStickyEventReturnType } from './types'
+import { OBSERVER_ROOT_MARGIN, OBSERVER_THRESHOLD } from './constants'
+import { getHeightForStickyElementTopOffset } from './utils'
 
 import './styles.scss'
 
@@ -12,14 +13,13 @@ import './styles.scss'
  * as a reference for the implementation
  */
 const useStickyEvent = <T extends HTMLElement = HTMLDivElement>({
-    callback,
     containerSelector,
     containerRef,
     identifier,
-    topOffset,
     isStickyElementMounted = true,
-}: UseStickyEventProps<T>) => {
+}: UseStickyEventProps<T>): UseStickyEventReturnType<T> => {
     const stickyElementRef = useRef<T>(null)
+    const [isStuck, setIsStuck] = useState(false)
 
     useEffect(
         () => {
@@ -43,7 +43,6 @@ const useStickyEvent = <T extends HTMLElement = HTMLDivElement>({
             // Using IntersectionObserver, we observe both the sticky element and the sentinel.
             // When the sentinel is not fully in view, isIntersecting is false,
             // indicating the sticky element is stuck given it is fully in view.
-            let previousStuckState: boolean
             let hasSentinelLeftView: boolean
             let hasHeaderLeftView: boolean
 
@@ -65,12 +64,7 @@ const useStickyEvent = <T extends HTMLElement = HTMLDivElement>({
                         }
                     })
 
-                    const isStuck = hasSentinelLeftView && !hasHeaderLeftView
-
-                    if (isNullOrUndefined(previousStuckState) || isStuck !== previousStuckState) {
-                        callback(isStuck)
-                        previousStuckState = isStuck
-                    }
+                    setIsStuck(hasSentinelLeftView && !hasHeaderLeftView)
                 },
                 { root: stickyElementParent, threshold: OBSERVER_THRESHOLD, rootMargin: OBSERVER_ROOT_MARGIN },
             )
@@ -86,15 +80,7 @@ const useStickyEvent = <T extends HTMLElement = HTMLDivElement>({
             // The sentinel element's height must exceed the sticky element's top CSS value.
             // This guarantees that when the sticky element sticks to the container's edge,
             // the sentinel element will extend beyond the scroll container.
-            sentinelElement.style.height = topOffset
-                ? `calc(${topOffset} + 1px)`
-                : (window.getComputedStyle(stickyElementRef.current).top?.replace(/[0-9]+/g, (match) => {
-                      const nMatch = Number(match)
-                      if (Number.isNaN(nMatch)) {
-                          return FALLBACK_SENTINEL_HEIGHT
-                      }
-                      return `${nMatch + 1}`
-                  }) ?? FALLBACK_SENTINEL_HEIGHT)
+            sentinelElement.style.height = getHeightForStickyElementTopOffset<T>({ stickyElementRef })
 
             stickyElementRef.current.appendChild(sentinelElement)
 
@@ -114,7 +100,7 @@ const useStickyEvent = <T extends HTMLElement = HTMLDivElement>({
         isNullOrUndefined(isStickyElementMounted) ? [] : [isStickyElementMounted],
     )
 
-    return { stickyElementRef }
+    return { stickyElementRef, isStuck }
 }
 
 export default useStickyEvent
