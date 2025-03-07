@@ -92,6 +92,7 @@ export interface CodeEditorComposition {
     Warning?: React.FC<InformationBarProps>
     ErrorBar?: React.FC<InformationBarProps>
     Information?: React.FC<InformationBarProps>
+    Container?: React.FC<{ children: React.ReactNode; flexExpand?: boolean; overflowHidden?: boolean }>
 }
 export interface CodeEditorHeaderComposition {
     LanguageChanger?: React.FC<any>

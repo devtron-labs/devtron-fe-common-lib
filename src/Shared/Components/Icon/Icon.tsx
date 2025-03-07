@@ -2,6 +2,7 @@
 
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
+import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
@@ -27,6 +28,7 @@ import { ReactComponent as ICGithub } from '@IconsV2/ic-github.svg'
 import { ReactComponent as ICGitlab } from '@IconsV2/ic-gitlab.svg'
 import { ReactComponent as ICGoogleArtifactRegistry } from '@IconsV2/ic-google-artifact-registry.svg'
 import { ReactComponent as ICGoogleContainerRegistry } from '@IconsV2/ic-google-container-registry.svg'
+import { ReactComponent as ICGoogle } from '@IconsV2/ic-google.svg'
 import { ReactComponent as ICGridView } from '@IconsV2/ic-grid-view.svg'
 import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
 import { ReactComponent as ICHeartRedAnimated } from '@IconsV2/ic-heart-red-animated.svg'
@@ -39,11 +41,16 @@ import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
+import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
+import { ReactComponent as ICLoginDevtronLogo } from '@IconsV2/ic-login-devtron-logo.svg'
+import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
 import { ReactComponent as ICNodeScript } from '@IconsV2/ic-node-script.svg'
+import { ReactComponent as ICOidc } from '@IconsV2/ic-oidc.svg'
 import { ReactComponent as ICOpenBox } from '@IconsV2/ic-open-box.svg'
 import { ReactComponent as ICOpenInNew } from '@IconsV2/ic-open-in-new.svg'
+import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
@@ -62,6 +69,7 @@ import { IconBaseProps } from './types'
 export const iconMap = {
     'ic-aborted': ICAborted,
     'ic-app-group': ICAppGroup,
+    'ic-arrow-right': ICArrowRight,
     'ic-azure': ICAzure,
     'ic-bitbucket': ICBitbucket,
     'ic-browser': ICBrowser,
@@ -87,6 +95,7 @@ export const iconMap = {
     'ic-gitlab': ICGitlab,
     'ic-google-artifact-registry': ICGoogleArtifactRegistry,
     'ic-google-container-registry': ICGoogleContainerRegistry,
+    'ic-google': ICGoogle,
     'ic-grid-view': ICGridView,
     'ic-heart-green': ICHeartGreen,
     'ic-heart-red-animated': ICHeartRedAnimated,
@@ -99,11 +108,16 @@ export const iconMap = {
     'ic-info-outline': ICInfoOutline,
     'ic-job-color': ICJobColor,
     'ic-k8s-job': ICK8sJob,
+    'ic-ldap': ICLdap,
+    'ic-login-devtron-logo': ICLoginDevtronLogo,
+    'ic-microsoft': ICMicrosoft,
     'ic-missing': ICMissing,
     'ic-monitoring': ICMonitoring,
     'ic-node-script': ICNodeScript,
+    'ic-oidc': ICOidc,
     'ic-open-box': ICOpenBox,
     'ic-open-in-new': ICOpenInNew,
+    'ic-openshift': ICOpenshift,
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
     'ic-quay': ICQuay,

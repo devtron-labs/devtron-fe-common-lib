@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.8.2-beta-3",
+    "version": "1.8.5",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -103,6 +103,8 @@
         "@codemirror/legacy-modes": "6.4.2",
         "@codemirror/lint": "6.8.4",
         "@codemirror/search": "6.5.8",
+        "@lezer/highlight": "1.2.1",
+        "@replit/codemirror-indentation-markers": "6.5.3",
         "@replit/codemirror-vscode-keymap": "6.0.2",
         "@types/react-dates": "^21.8.6",
         "@uiw/codemirror-theme-github": "^4.23.7",
@@ -118,11 +120,11 @@
         "react-codemirror-merge": "4.23.6",
         "react-dates": "^21.8.0",
         "react-diff-viewer-continued": "^3.4.0",
+        "react-draggable": "^4.4.5",
         "react-monaco-editor": "^0.54.0",
         "react-virtualized-sticky-tree": "^3.0.0-beta18",
         "sass": "^1.69.7",
-        "tslib": "2.7.0",
-        "react-draggable": "^4.4.5"
+        "tslib": "2.7.0"
     },
     "overrides": {
         "cross-spawn": "^7.0.5",

@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
- .deployment-history-diff-view {
-  & .react-monaco-editor-container {
-      min-height: 100px;
-  }
+import { SSOProvider } from '@Common/Constants'
+
+import { IconsProps } from '../Icon'
+
+export interface SSOProviderIconProps {
+    provider: SSOProvider
+    /**
+     * The size of the icon in pixels.
+     * @default 20
+     */
+    size?: IconsProps['size']
 }
