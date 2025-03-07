@@ -123,7 +123,6 @@
         "react-diff-viewer-continued": "^3.4.0",
         "react-draggable": "^4.4.5",
         "react-monaco-editor": "^0.54.0",
-        "react-draggable": "^4.4.5",
         "react-virtualized-sticky-tree": "^3.0.0-beta18",
         "sass": "^1.69.7",
         "tslib": "2.7.0"
