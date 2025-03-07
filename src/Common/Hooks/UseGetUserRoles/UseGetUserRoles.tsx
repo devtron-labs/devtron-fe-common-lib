@@ -16,22 +16,29 @@
 
 import { useEffect, useState } from 'react'
 import { getUserRole } from '../../Common.service'
-import { useGetUserRolesType } from './types'
+import { UseGetUserRolesType } from './types'
 import { showError } from '../../Helper'
 
 /**
  * @description It will return isSuperAdmin and would be set to false by default, might need few optimizations like dep, etc
- * @returns {useGetUserRolesType} isSuperAdmin, canManageAllAccess
+ * @returns {UseGetUserRolesType} isSuperAdmin, canManageAllAccess
  */
-const useGetUserRoles = (): useGetUserRolesType => {
-    const [result, setResult] = useState<useGetUserRolesType>({ isSuperAdmin: false, canManageAllAccess: false })
+const useGetUserRoles = (): UseGetUserRolesType => {
+    const [result, setResult] = useState<UseGetUserRolesType>({
+        isSuperAdmin: false,
+        canManageAllAccess: false,
+        hasManagerPermissions: false,
+    })
 
     useEffect(() => {
         getUserRole()
             .then(({ result: apiResult }) => {
+                const hasManagerPermissions = apiResult.roles.some((role) => role.startsWith('role:manager'))
+
                 setResult({
                     isSuperAdmin: apiResult.superAdmin ?? false,
                     canManageAllAccess: apiResult.canManageAllAccess ?? false,
+                    hasManagerPermissions,
                 })
             })
             .catch((error) => {
