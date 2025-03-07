@@ -81,7 +81,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     const selectedDetailViewData = state.detailViewData?.[topLevelDetailViewDataIndex] ?? null
 
     const renderHeader = () => (
-        <div className="flexbox dc__content-space dc__align-items-center pl-20 pr-20 pt-12 pb-12 dc__border-bottom">
+        <div className="flexbox dc__content-space dc__align-items-center pl-20 pr-20 pt-12 pb-12 dc__border-bottom dc__no-shrink">
             <span className="fs-16 fw-6 lh-24 cn-9">Security</span>
             <Button
                 dataTestId="close-security-modal"
@@ -177,8 +177,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
         }
 
         return (
-            /* NOTE: the height is restricted to (viewport - header) height since we need overflow-scroll */
-            <div className="flexbox" style={{ height: 'calc(100vh - 49px)' }}>
+            <div className="flexbox flex-grow-1 dc__overflow-auto">
                 {/* NOTE: only show sidebar in AppDetails */}
                 {Sidebar && <Sidebar modalState={state} setModalState={setState} scanResult={responseData} />}
                 <div className="dc__border-right-n1 h-100" />
@@ -193,7 +192,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
     return (
         <VisibleModal2 className="dc__position-rel" close={handleModalClose}>
             <div
-                className={`${Sidebar ? 'w-1024' : 'w-800'} h-100vh bg__primary flexbox-col dc__right-0 dc__top-0 dc__position-abs`}
+                className={`${Sidebar ? 'w-1024' : 'w-800'} h-100 bg__modal--primary flexbox-col dc__right-0 dc__top-0 dc__position-abs dc__overflow-hidden`}
                 onClick={stopPropagation}
             >
                 {renderHeader()}

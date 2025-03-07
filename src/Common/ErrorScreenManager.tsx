@@ -27,7 +27,6 @@ const ErrorScreenManager = ({
     reload,
     subtitle,
     reloadClass,
-    heightToDeduct,
     redirectURL,
     imageType = ImageType.Large,
 }: ErrorScreenManagerProps) => {
@@ -41,7 +40,6 @@ const ErrorScreenManager = ({
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.BAD_REQUEST_MESSAGE}
                         image={badRequest}
                         imageType={imageType}
-                        heightToDeduct={heightToDeduct}
                         reload={reload}
                     />
                 )
@@ -53,7 +51,6 @@ const ErrorScreenManager = ({
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.UNAUTHORIZED_MESSAGE}
                         image={unauthorized}
                         imageType={imageType}
-                        heightToDeduct={heightToDeduct}
                     />
                 )
             case ERROR_STATUS_CODE.PERMISSION_DENIED:
@@ -64,7 +61,6 @@ const ErrorScreenManager = ({
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.FORBIDDEN_MESSAGE}
                         image={unauthorized}
                         imageType={imageType}
-                        heightToDeduct={heightToDeduct}
                     />
                 )
             case ERROR_STATUS_CODE.NOT_FOUND:
@@ -75,7 +71,6 @@ const ErrorScreenManager = ({
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.PAGE_NOT_EXIST}
                         image={notFound}
                         imageType={imageType}
-                        heightToDeduct={heightToDeduct}
                         redirectURL={redirectURL}
                     />
                 )
@@ -87,7 +82,6 @@ const ErrorScreenManager = ({
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.INTERNAL_SERVER_ERROR_MESSAGE}
                         image={badRequest}
                         imageType={imageType}
-                        heightToDeduct={heightToDeduct}
                         reload={reload}
                     />
                 )
@@ -99,7 +93,6 @@ const ErrorScreenManager = ({
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.BAD_GATEWAY_MESSAGE}
                         image={badRequest}
                         imageType={imageType}
-                        heightToDeduct={heightToDeduct}
                         reload={reload}
                     />
                 )
@@ -111,12 +104,11 @@ const ErrorScreenManager = ({
                         subTitle={subtitle || ERROR_EMPTY_SCREEN.SERVICE_TEMPORARY_UNAVAILABLE_MESSAGE}
                         image={badRequest}
                         imageType={imageType}
-                        heightToDeduct={heightToDeduct}
                         reload={reload}
                     />
                 )
             default:
-                return <Reload heightToDeduct={heightToDeduct} reload={reload} className={reloadClass} />
+                return <Reload reload={reload} className={reloadClass} />
         }
     }
     return getMessage()
