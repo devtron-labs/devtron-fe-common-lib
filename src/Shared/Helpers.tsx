@@ -1062,3 +1062,6 @@ export const deriveBorderRadiusAndBorderClassFromConfig = ({
     const { top, right, bottom, left } = getSanitizedBorderConfig(borderRadiusConfig)
     return `${deriveBorderClassFromConfig(borderConfig)} ${deriveBorderRadiusClassFromConfig({ top, right, bottom, left })}`
 }
+
+export const getClassNameForStickyHeaderWithShadow = (isStuck: boolean, topClassName = 'dc__top-0') =>
+    `dc__position-sticky ${topClassName} dc__transition--box-shadow ${isStuck ? 'dc__box-shadow--header' : ''}`

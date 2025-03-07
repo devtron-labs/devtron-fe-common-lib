@@ -28,4 +28,5 @@ export interface SegmentedBarChartProps {
     isProportional?: boolean
     swapLegendAndBar?: boolean
     showAnimationOnBar?: boolean
+    isLoading?: boolean
 }

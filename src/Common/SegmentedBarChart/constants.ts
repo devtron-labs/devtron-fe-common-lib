@@ -17,5 +17,5 @@
 export const FALLBACK_ENTITY = {
     color: 'var(--N300)',
     label: '-',
-    value: 0,
+    value: 1,
 }
