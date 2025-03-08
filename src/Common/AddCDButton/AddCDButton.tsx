@@ -22,7 +22,7 @@ const TooltipContent = ({ tooltipContent }: TooltipContentProps) => {
     if (tooltipContent) {
         return (
             <div className="dc__white-space-pre-wrap">
-                <p className="m-0 cn-0 fs-12 fw-6 lh-18">Click to add</p>
+                <p className="m-0 fs-12 fw-6 lh-18">Click to add</p>
 
                 {tooltipContent}
             </div>

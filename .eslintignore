@@ -30,7 +30,6 @@ src/Common/Drawer/Drawer.tsx
 src/Common/Grid/Grid.tsx
 src/Common/Helper.tsx
 src/Common/Hooks/UseClickOutside/UseClickOutside.tsx
-src/Common/Hooks/UseSuperAdmin/UseSuperAdmin.tsx
 src/Common/Hooks/UseWindowSize/UseWindowSize.tsx
 src/Common/ImageTags.tsx
 src/Common/InfoColorBar/InfoColourbar.tsx
