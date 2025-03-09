@@ -23,6 +23,7 @@ import {
     SetStateAction,
     SyntheticEvent,
 } from 'react'
+import { AppThemeType } from '@Shared/index'
 import { ButtonProps } from '../Button'
 
 export enum ConfirmationModalVariantType {
@@ -64,7 +65,7 @@ type ButtonConfigAndVariantType<isConfig extends boolean> =
       }
     | {
           variant: ConfirmationModalVariantType.custom
-          Icon: ReactElement
+          Icon?: ReactElement
           buttonConfig: ButtonConfig<isConfig, true>
       }
 
@@ -94,6 +95,10 @@ export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWith
      * Configuration object for confirmation behavior.
      */
     confirmationConfig?: ConfirmationConfigType
+    /**
+     * If provided, the modal will use the specified theme instead of using the theme set by theme provider.
+     */
+    overriddenTheme?: AppThemeType
 }> &
     ButtonConfigAndVariantType<isConfig> &
     (isConfig extends false

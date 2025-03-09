@@ -15,6 +15,7 @@
  */
 
 import { MainContext } from '@Shared/Providers'
+import { ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
 import { getUrlWithSearchParams } from '../../Common'
 import { PolicyKindType, ResourceKindType, ResourceVersionType, ViewIsPipelineRBACConfiguredRadioTabs } from '../types'
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
@@ -61,6 +62,11 @@ export interface GetUserPreferencesQueryParamsType {
 
 export interface GetUserPreferencesParsedDTO {
     viewPermittedEnvOnly?: boolean
+    /**
+     * Preferred theme for the user
+     * If null, would forcibly show user theme switcher dialog for user to select
+     */
+    themePreference: ThemePreferenceType | null
 }
 
 export interface UpdateUserPreferencesParsedValueType extends GetUserPreferencesParsedDTO {}
@@ -69,6 +75,6 @@ export interface UpdateUserPreferencesPayloadType extends Pick<GetUserPreference
     value: string
 }
 
-export interface UserPreferencesType {
+export interface UserPreferencesType extends Pick<GetUserPreferencesParsedDTO, 'themePreference'> {
     pipelineRBACViewSelectedTab: ViewIsPipelineRBACConfiguredRadioTabs
 }

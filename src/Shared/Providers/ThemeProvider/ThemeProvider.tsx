@@ -27,6 +27,7 @@ import { DARK_COLOR_SCHEME_MATCH_QUERY } from './constants'
 const themeContext = createContext<ThemeContextType>(null)
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
+    const [showThemeSwitcherDialog, setShowThemeSwitcherDialog] = useState<boolean>(false)
     const [themeConfig, setThemeConfig] = useState<ThemeConfigType>(getThemeConfigFromLocalStorage)
 
     const handleThemePreferenceChange: ThemeContextType['handleThemePreferenceChange'] = (updatedThemePreference) => {
@@ -68,12 +69,18 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
         }
     }, [themeConfig.themePreference])
 
+    const handleThemeSwitcherDialogVisibilityChange = (isVisible: boolean) => {
+        setShowThemeSwitcherDialog(isVisible)
+    }
+
     const value = useMemo<ThemeContextType>(
         () => ({
             ...themeConfig,
+            showThemeSwitcherDialog,
+            handleThemeSwitcherDialogVisibilityChange,
             handleThemePreferenceChange,
         }),
-        [themeConfig],
+        [themeConfig, showThemeSwitcherDialog],
     )
 
     return <themeContext.Provider value={value}>{children}</themeContext.Provider>
