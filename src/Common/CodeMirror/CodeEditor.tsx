@@ -28,6 +28,7 @@ import { search } from '@codemirror/search'
 import { lintGutter } from '@codemirror/lint'
 import { vscodeKeymap } from '@replit/codemirror-vscode-keymap'
 import { indentationMarkers } from '@replit/codemirror-indentation-markers'
+import { hyperLink } from '@uiw/codemirror-extensions-hyper-link'
 
 import { AppThemeType, useTheme } from '@Shared/Providers'
 import { getUniqueId } from '@Shared/Helpers'
@@ -35,7 +36,13 @@ import { cleanKubeManifest } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
 
 import { codeEditorFindReplace, readOnlyTooltip, yamlHighlight } from './Extensions'
-import { openSearchPanel, openSearchPanelWithReplace, replaceAll, showReplaceFieldState } from './Commands'
+import {
+    blurOnEscape,
+    openSearchPanel,
+    openSearchPanelWithReplace,
+    replaceAll,
+    showReplaceFieldState,
+} from './Commands'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { getFoldGutterElement, getLanguageExtension, getValidationSchema, parseValueToCode } from './utils'
 import { CodeEditorContext } from './CodeEditor.context'
@@ -47,6 +54,11 @@ import './codeEditor.scss'
 
 // CODEMIRROR CLASSES
 const foldingCompartment = new Compartment()
+
+// EXTENSIONS
+const foldConfig = foldGutter({
+    markerDOM: getFoldGutterElement,
+})
 
 const CodeEditor = <DiffView extends boolean = false>({
     theme,
@@ -184,10 +196,6 @@ const CodeEditor = <DiffView extends boolean = false>({
     }
 
     // EXTENSIONS
-    const foldConfig = foldGutter({
-        markerDOM: getFoldGutterElement,
-    })
-
     const getBaseExtensions = (): Extension[] => [
         basicSetup(basicSetupOptions),
         themeExtension,
@@ -196,6 +204,7 @@ const CodeEditor = <DiffView extends boolean = false>({
             ...(!disableSearch ? [{ key: 'Mod-f', run: openSearchPanel, scope: 'editor search-panel' }] : []),
             { key: 'Mod-Enter', run: replaceAll, scope: 'editor search-panel' },
             { key: 'Mod-Alt-f', run: openSearchPanelWithReplace, scope: 'editor search-panel' },
+            { key: 'Escape', run: blurOnEscape, stopPropagation: true },
         ]),
         indentationMarkers(),
         getLanguageExtension(mode),
@@ -206,6 +215,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         }),
         showReplaceFieldState,
         ...(mode === MODES.YAML ? [yamlHighlight] : []),
+        hyperLink,
     ]
 
     const extensions: Extension[] = [
@@ -222,7 +232,6 @@ const CodeEditor = <DiffView extends boolean = false>({
         basicSetup({
             ...basicSetupOptions,
             lineNumbers: false,
-            foldGutter: false,
             highlightActiveLine: false,
             highlightActiveLineGutter: false,
             syntaxHighlighting: false,

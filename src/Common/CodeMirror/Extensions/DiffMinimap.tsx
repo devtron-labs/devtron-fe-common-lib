@@ -60,13 +60,12 @@ export const DiffMinimap = ({ view, diffMinimapExtensions, codeEditorTheme, them
         const { clientHeight, scrollHeight, scrollTop } = view.dom
         const minimapHeight = minimapContainerRef.current.clientHeight
 
-        let computedHeight = (clientHeight / scrollHeight) * minimapHeight
-        if (computedHeight < CODE_EDITOR_MIN_OVERLAY_HEIGHT) {
-            computedHeight = CODE_EDITOR_MIN_OVERLAY_HEIGHT
-        }
-
-        setOverlayHeight(computedHeight)
-        setOverlayTop((scrollTop / scrollHeight) * (minimapHeight - computedHeight))
+        const computedHeight = (clientHeight / scrollHeight) * minimapHeight
+        const modifiedHeight = Math.max(computedHeight, CODE_EDITOR_MIN_OVERLAY_HEIGHT)
+        setOverlayHeight(modifiedHeight)
+        setOverlayTop(
+            (scrollTop / scrollHeight) * (minimapHeight - (modifiedHeight !== computedHeight ? modifiedHeight : 0)),
+        )
     }
 
     useEffect(() => {

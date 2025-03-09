@@ -45,7 +45,7 @@ const SplitPane = () => {
 }
 
 export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEditorHeaderProps) => {
-    const { diffMode, lhsValue, hasCodeEditorContainer, theme } = useCodeEditorContext()
+    const { diffMode, readOnly, lhsValue, hasCodeEditorContainer, theme } = useCodeEditorContext()
 
     return (
         <div className={`${getComponentSpecificThemeClass(theme)} flexbox w-100 border__primary--bottom`}>
@@ -56,7 +56,9 @@ export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEdit
                 {children}
                 {!hideDefaultSplitHeader && lhsValue && <SplitPane />}
             </div>
-            {diffMode ? <div className="bg__secondary px-5 dc__align-self-stretch" /> : null}
+            {diffMode ? (
+                <div className={`bg__secondary dc__align-self-stretch ${readOnly ? 'px-15' : 'px-5'}`} />
+            ) : null}
         </div>
     )
 }

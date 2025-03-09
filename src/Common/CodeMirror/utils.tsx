@@ -142,17 +142,16 @@ export const updateDiffMinimapValues = (view: CodeMirrorMergeRef['view'], value:
     }
 
     const currentLhsValue = view.a.state.doc.toString()
-    const currentRhsValue = view.b.state.doc.toString()
-
-    if (currentRhsValue !== value) {
-        view.b.dispatch({
-            changes: { from: 0, to: currentRhsValue.length, insert: value || '' },
-        })
-    }
-
     if (currentLhsValue !== lhsValue) {
         view.a.dispatch({
             changes: { from: 0, to: currentLhsValue.length, insert: lhsValue || '' },
+        })
+    }
+
+    const currentRhsValue = view.b.state.doc.toString()
+    if (currentRhsValue !== value) {
+        view.b.dispatch({
+            changes: { from: 0, to: currentRhsValue.length, insert: value || '' },
         })
     }
 }
