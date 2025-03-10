@@ -54,7 +54,6 @@ export const getThemeConfigFromLocalStorage = (): ThemeConfigType => {
         }
 
         if (!selectedTheme) {
-            setThemePreferenceInLocalStorage(themeConfig.themePreference)
             logThemeToAnalytics(themeConfig)
         }
 
