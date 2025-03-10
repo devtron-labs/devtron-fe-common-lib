@@ -25,8 +25,8 @@ export const ForceDeleteConfirmationModal = ({
 }: ForceDeleteConfirmationProps) => {
     const renderSubtitle = () => (
         <>
-            <p className="mt-12 mb-12 p-8 dc__break-word bg__tertiary">Error: {subtitle}</p>
-            <p>Do you want to force delete?</p>
+            <p className="p-8 dc__break-word bg__tertiary mxh-200 dc__overflow-auto br-4 m-0">Error: {subtitle}</p>
+            <p className="m-0">Do you want to force delete?</p>
         </>
     )
     return (

@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-export const THEME_PREFERENCE_STORAGE_KEY = 'themePreference'
+export const THEME_PREFERENCE_STORAGE_KEY = 'themePreference__v1'
 
 export const DARK_COLOR_SCHEME_MATCH_QUERY = '(prefers-color-scheme: dark)'

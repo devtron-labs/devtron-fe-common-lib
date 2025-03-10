@@ -64,7 +64,7 @@ type ButtonConfigAndVariantType<isConfig extends boolean> =
       }
     | {
           variant: ConfirmationModalVariantType.custom
-          Icon: ReactElement
+          Icon?: ReactElement
           buttonConfig: ButtonConfig<isConfig, true>
       }
 
@@ -94,6 +94,11 @@ export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWith
      * Configuration object for confirmation behavior.
      */
     confirmationConfig?: ConfirmationConfigType
+    /**
+     * @default false
+     * @deprecated Used to extend the width to 500px and remove gap between title and subTitle.
+     */
+    isLandscapeView?: boolean
 }> &
     ButtonConfigAndVariantType<isConfig> &
     (isConfig extends false

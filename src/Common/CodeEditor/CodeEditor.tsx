@@ -355,7 +355,7 @@ const CodeEditor: React.FC<CodeEditorInterface> & CodeEditorComposition = React.
                     <CodeEditorPlaceholder customLoader={customLoader} />
                 ) : (
                     <>
-                        {shebang && <div className="code-editor__shebang">{shebang}</div>}
+                        {shebang && <div className="code-editor-shebang">{shebang}</div>}
                         {state.diffMode ? (
                             <MonacoDiffEditor
                                 original={state.defaultCode}
@@ -392,11 +392,18 @@ const Header: React.FC<CodeEditorHeaderInterface> & CodeEditorHeaderComposition 
     className,
     hideDefaultSplitHeader,
 }) => {
-    const { defaultValue } = useCodeEditorContext()
+    const { defaultValue, state } = useCodeEditorContext()
     return (
-        <div className={className || 'code-editor__header flex right'}>
-            {children}
-            {!hideDefaultSplitHeader && defaultValue && <SplitPane />}
+        <div className="flexbox w-100 dc__border-bottom ">
+            <div
+                data-code-editor-header
+                className={`code-editor__header flex-grow-1 bg__secondary ${className || 'px-16 pt-6 pb-5'} ${state.diffMode ? 'dc__grid-half vertical-divider' : ''}`}
+
+            >
+                {children}
+                {!hideDefaultSplitHeader && defaultValue && <SplitPane />}
+            </div>
+            {state.diffMode ? <div className="bg__secondary px-15 dc__align-self-stretch" /> : null}
         </div>
     )
 }
@@ -518,6 +525,24 @@ const CodeEditorPlaceholder = ({ className = '', style = {}, customLoader }): JS
     )
 }
 
+const Container = ({
+    children,
+    flexExpand,
+    overflowHidden,
+}: {
+    children: React.ReactNode
+    flexExpand?: boolean
+    overflowHidden?: boolean
+}) => (
+    <div
+        data-code-editor-container
+        className={`code-editor__container w-100 dc__border br-4
+        ${flexExpand ? 'flex-grow-1 flexbox-col' : ''} ${overflowHidden ? 'dc__overflow-hidden' : ''}`}
+    >
+        {children}
+    </div>
+)
+
 CodeEditor.LanguageChanger = LanguageChanger
 CodeEditor.ThemeChanger = ThemeChanger
 CodeEditor.ValidationError = ValidationError
@@ -526,5 +551,6 @@ CodeEditor.Header = Header
 CodeEditor.Warning = Warning
 CodeEditor.ErrorBar = ErrorBar
 CodeEditor.Information = Information
+CodeEditor.Container = Container
 
 export default CodeEditor

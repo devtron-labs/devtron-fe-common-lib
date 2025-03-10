@@ -14,57 +14,36 @@
  * limitations under the License.
  */
 
-import { useTheme } from '@Shared/Providers'
-import { THEME_PREFERENCE_MAP, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
-import { SegmentedControl, SegmentedControlProps, SegmentedControlVariant } from '@Common/SegmentedControl'
-import { ChangeEvent, useMemo } from 'react'
-import { stopPropagation } from '@Common/Helper'
-import { ComponentSizeType } from '@Shared/constants'
-import { THEME_PREFERENCE_TO_ICON_MAP } from './constants'
+import { getThemePreferenceText, useTheme } from '@Shared/Providers'
+import { ReactComponent as ICCaretLeftSmall } from '@Icons/ic-caret-left-small.svg'
 import { ThemeSwitcherProps } from './types'
+import { LOGOUT_CARD_BASE_BUTTON_CLASS } from '../LogoutCard'
 
 const ThemeSwitcher = ({ onChange }: ThemeSwitcherProps) => {
-    const { themePreference, handleThemePreferenceChange } = useTheme()
-
-    const { tabs, tooltips } = useMemo<Required<Pick<SegmentedControlProps, 'tabs' | 'tooltips'>>>(() => {
-        const availableThemePreferences = Object.values(THEME_PREFERENCE_MAP)
-
-        return {
-            tabs: availableThemePreferences.map((value) => ({
-                label: (
-                    <span className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">
-                        {THEME_PREFERENCE_TO_ICON_MAP[value].icon}
-                    </span>
-                ),
-                value,
-            })),
-            tooltips: availableThemePreferences.map((value) => THEME_PREFERENCE_TO_ICON_MAP[value].tippyContent),
-        }
-    }, [])
+    const { handleThemeSwitcherDialogVisibilityChange, themePreference } = useTheme()
 
     if (!window._env_.FEATURE_EXPERIMENTAL_THEMING_ENABLE) {
         return null
     }
 
-    const handleThemeSwitch = (e: ChangeEvent<HTMLInputElement>) => {
-        const updatedThemePreference = e.target.value as ThemePreferenceType
-        handleThemePreferenceChange(updatedThemePreference)
+    const handleShowThemeSwitcherDialog = () => {
+        handleThemeSwitcherDialogVisibilityChange(true)
         onChange()
     }
 
     return (
-        <div className="flex dc__content-space dc__gap-8 px-12 py-6" onClick={stopPropagation}>
-            <p className="m-0 fs-13 fw-4 lh-20 cn-9">Theme</p>
-            <SegmentedControl
-                initialTab={themePreference}
-                name="theme-preference-selector"
-                onChange={handleThemeSwitch}
-                tabs={tabs}
-                tooltips={tooltips}
-                size={ComponentSizeType.medium}
-                variant={SegmentedControlVariant.GRAY_ON_WHITE}
-            />
-        </div>
+        <button
+            type="button"
+            data-testid="open-theme-switcher-dialog"
+            className={`${LOGOUT_CARD_BASE_BUTTON_CLASS} dc__hover-n50`}
+            onClick={handleShowThemeSwitcherDialog}
+        >
+            Theme
+            <div className="flexbox dc__gap-4 dc__align-items-center">
+                <span className="cn-7 fs-13 fw-4 lh-20">{getThemePreferenceText(themePreference)}</span>
+                <ICCaretLeftSmall className="dc__flip-180 icon-16 dc__no-shrink scn-7" />
+            </div>
+        </button>
     )
 }
 
