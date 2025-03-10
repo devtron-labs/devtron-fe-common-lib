@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-import { useTheme } from '@Shared/Providers'
+import { getThemePreferenceText, useTheme } from '@Shared/Providers'
+import { ReactComponent as ICCaretLeftSmall } from '@Icons/ic-caret-left-small.svg'
 import { ThemeSwitcherProps } from './types'
+import { LOGOUT_CARD_BASE_BUTTON_CLASS } from '../LogoutCard'
 
 const ThemeSwitcher = ({ onChange }: ThemeSwitcherProps) => {
-    const { handleThemeSwitcherDialogVisibilityChange } = useTheme()
+    const { handleThemeSwitcherDialogVisibilityChange, themePreference } = useTheme()
 
     if (!window._env_.FEATURE_EXPERIMENTAL_THEMING_ENABLE) {
         return null
@@ -33,10 +35,14 @@ const ThemeSwitcher = ({ onChange }: ThemeSwitcherProps) => {
         <button
             type="button"
             data-testid="open-theme-switcher-dialog"
-            className="dc__transparent fs-13 fw-4 lh-20 cn-9 dc__hover-n50 w-100"
+            className={`${LOGOUT_CARD_BASE_BUTTON_CLASS} dc__hover-n50`}
             onClick={handleShowThemeSwitcherDialog}
         >
             Theme
+            <div className="flexbox dc__gap-4 dc__align-items-center">
+                <span className="cn-7 fs-13 fw-4 lh-20">{getThemePreferenceText(themePreference)}</span>
+                <ICCaretLeftSmall className="dc__flip-180 icon-16 dc__no-shrink scn-7" />
+            </div>
         </button>
     )
 }

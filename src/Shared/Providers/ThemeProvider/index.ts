@@ -16,4 +16,4 @@
 
 export * from './ThemeProvider'
 export { AppThemeType } from './types'
-export { getComponentSpecificThemeClass, getAppThemeForAutoPreference } from './utils'
+export { getComponentSpecificThemeClass, getAppThemeForAutoPreference, getThemePreferenceText } from './utils'

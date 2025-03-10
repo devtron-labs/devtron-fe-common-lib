@@ -19,10 +19,10 @@ import Tippy from '@tippyjs/react'
 import './pageHeader.css'
 import ReactGA from 'react-ga4'
 import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
-import { ReactComponent as DropDownIcon } from '@Icons/ic-chevron-down.svg'
+import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as Question } from '@Icons/ic-help-outline.svg'
-import { getRandomColor, TippyCustomized, TippyTheme } from '../../../Common'
+import { getAlphabetIcon, TippyCustomized, TippyTheme } from '../../../Common'
 import LogoutCard from '../LogoutCard'
 import { setActionWithExpiry, handlePostHogEventUpdate } from './utils'
 import { InstallationType, ServerInfo, PageHeaderType } from './types'
@@ -143,9 +143,9 @@ const PageHeader = ({
                 <span className="fs-13 cn-9" data-testid="go-to-get-started">
                     Help
                 </span>
-                <DropDownIcon
+                <ICCaretDown
                     style={{ ['--rotateBy' as any]: `${180 * Number(showHelpCard)}deg` }}
-                    className="fcn-9 icon-dim-20 rotate pointer"
+                    className="scn-7 icon-dim-16 rotate pointer"
                 />
             </div>
             {!window._env_.K8S_CLIENT && (
@@ -164,14 +164,17 @@ const PageHeader = ({
                     arrow
                     onClose={handleCloseSwitchThemeLocationTippyChange}
                 >
-                    <div
-                        className="logout-card__initial cursor fs-13 icon-dim-24 flex logout-card__initial--nav"
-                        onClick={onClickLogoutButton}
-                        style={{ backgroundColor: getRandomColor(email) }}
+                    <button
+                        type="button"
                         data-testid="profile-button"
+                        onClick={onClickLogoutButton}
+                        className="dc__transparent flex p-4 dc__gap-4 br-18 bg__secondary border__secondary"
                     >
-                        {email[0]}
-                    </div>
+                        {getAlphabetIcon(email, 'm-0-imp')}
+                        <ICCaretDown
+                            className={`scn-7 icon-dim-16 ${showLogOutCard ? 'dc__flip-180' : ''} dc__transition--transform`}
+                        />
+                    </button>
                 </TippyCustomized>
             )}
         </>
@@ -285,7 +288,7 @@ const PageHeader = ({
                 )}
             {showLogOutCard && (
                 <LogoutCard
-                    className="logout-card__more-option"
+                    className="logout-card__more-option mt-8"
                     userFirstLetter={email}
                     setShowLogOutCard={setShowLogOutCard}
                     showLogOutCard={showLogOutCard}

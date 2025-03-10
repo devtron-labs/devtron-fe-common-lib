@@ -68,3 +68,16 @@ export const getThemeConfigFromLocalStorage = (): ThemeConfigType => {
 }
 
 export const getComponentSpecificThemeClass = (appTheme: AppThemeType) => `component-specific-theme__${appTheme}`
+
+export const getThemePreferenceText = (themePreference: ThemePreferenceType): string => {
+    switch (themePreference) {
+        case 'auto':
+            return `System (${getAppThemeForAutoPreference() === AppThemeType.dark ? 'Dark' : 'Light'})`
+        case AppThemeType.dark:
+            return 'Dark'
+        case AppThemeType.light:
+            return 'Light'
+        default:
+            return null
+    }
+}
