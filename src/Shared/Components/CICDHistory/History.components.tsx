@@ -22,7 +22,7 @@ import {
     GenericEmptyState,
     Tooltip,
     extractImage,
-    useSuperAdmin,
+    useGetUserRoles,
     useRegisterShortcut,
 } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
@@ -136,7 +136,7 @@ export const GitChanges = ({
     renderCIListHeader,
     targetPlatforms,
 }: GitChangesType) => {
-    const { isSuperAdmin } = useSuperAdmin()
+    const { isSuperAdmin } = useGetUserRoles()
 
     if (!ciMaterials?.length || !Object.keys(gitTriggers ?? {}).length) {
         return (
