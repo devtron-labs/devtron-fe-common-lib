@@ -16,12 +16,12 @@
 
 import { Progressing } from '@Common/Progressing'
 import { hasHashiOrAWS } from '@Pages/index'
-import { CodeEditor } from '@Common/CodeEditor'
 
-import { ClipboardButton } from '@Common/ClipboardButton'
+import { MODES } from '@Common/Constants'
 import { getConfigMapSecretReadOnlyValues } from './utils'
 import { ConfigMapSecretReadyOnlyProps } from './types'
 import { renderHashiOrAwsDeprecatedInfo } from './helpers'
+import { CodeEditor } from '../CodeEditorWrapper'
 
 const ConfigMapSecretReadyOnly = ({
     componentType,
@@ -50,7 +50,7 @@ const ConfigMapSecretReadyOnly = ({
         <div
             className={
                 containerClassName ||
-                `bg__primary h-100 flexbox-col dc__gap-12 dc__overflow-auto ${!hideCodeEditor ? 'p-16' : ''}`
+                `bg__primary flexbox-col dc__gap-12 dc__overflow-auto ${!hideCodeEditor ? 'p-16' : ''}`
             }
         >
             {hasHashiOrAWS(configMapSecretData?.externalType) && renderHashiOrAwsDeprecatedInfo()}
@@ -67,15 +67,28 @@ const ConfigMapSecretReadyOnly = ({
                 )}
             </div>
             {!hideCodeEditor && displayValues.data && (
-                <div className="dc__border br-4">
-                    <div className="px-16 py-6 dc__border-bottom flex dc__content-space">
-                        <p className="m-0 fs-13 lh-20 fw-6 cn-9">Data</p>
-                        <ClipboardButton content={displayValues.data} />
-                    </div>
-                    <div className="dc__overflow-hidden br-4">
-                        <CodeEditor value={displayValues.data} mode="yaml" inline height={350} readOnly />
-                    </div>
-                </div>
+                <CodeEditor.Container>
+                    <CodeEditor
+                        mode={MODES.YAML}
+                        readOnly
+                        codeEditorProps={{
+                            value: displayValues.data,
+                            inline: true,
+                            adjustEditorHeightToContent: true,
+                        }}
+                        codeMirrorProps={{
+                            value: displayValues.data,
+                            height: 'auto',
+                        }}
+                    >
+                        <CodeEditor.Header>
+                            <div className="flex dc__content-space">
+                                <p className="m-0 fs-13 lh-20 fw-6 cn-9">Data</p>
+                                <CodeEditor.Clipboard />
+                            </div>
+                        </CodeEditor.Header>
+                    </CodeEditor>
+                </CodeEditor.Container>
             )}
         </div>
     )

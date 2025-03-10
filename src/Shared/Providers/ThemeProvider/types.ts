@@ -40,12 +40,16 @@ export interface ThemeConfigType {
      *
      * @default THEME_PREFERENCE_MAP.auto
      *
-     * Note: This shouldn't be consumed other than in ThemeSwitcher component
+     * Note: This shouldn't be consumed other than in ThemeSwitcherDialog component
      */
     themePreference: ThemePreferenceType
 }
 
 export interface ThemeContextType extends ThemeConfigType {
+    showSwitchThemeLocationTippy: boolean
+    handleShowSwitchThemeLocationTippyChange: (isVisible: boolean) => void
+    showThemeSwitcherDialog: boolean
+    handleThemeSwitcherDialogVisibilityChange: (isVisible: boolean) => void
     handleThemePreferenceChange: (updatedThemePreference: ThemePreferenceType) => void
 }
 
