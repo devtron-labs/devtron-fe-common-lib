@@ -115,7 +115,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                         {showCloseButton && (
                             <div className="icon-dim-16 ml-auto">
                                 <CloseIcon
-                                    className={`icon-dim-16 cursor icon-fill__white ${isWhiteTheme ? 'fcn-9' : 'fcn-0'}`}
+                                    className={`icon-dim-16 cursor ${isWhiteTheme ? 'fcn-9' : 'icon-fill__white'}`}
                                     onClick={closeTippy}
                                 />
                             </div>
