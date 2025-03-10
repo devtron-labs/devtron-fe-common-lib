@@ -53,11 +53,6 @@ export const getThemeConfigFromLocalStorage = (): ThemeConfigType => {
             themePreference: THEME_PREFERENCE_MAP.auto,
         }
 
-        if (!selectedTheme) {
-            setThemePreferenceInLocalStorage(themeConfig.themePreference)
-            logThemeToAnalytics(themeConfig)
-        }
-
         return themeConfig
     }
 
