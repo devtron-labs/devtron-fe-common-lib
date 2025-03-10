@@ -18,6 +18,7 @@ import { ViewIsPipelineRBACConfiguredRadioTabs } from '@Shared/types'
 import { get, getUrlWithSearchParams, post, ROUTES, showError } from '../../Common'
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
+    EnvironmentDataValuesDTO,
     GetPolicyApiUrlProps,
     GetResourceApiUrlProps,
     GetUserPreferencesParsedDTO,
@@ -35,6 +36,7 @@ export const getPolicyApiUrl = <T>({ kind, version, queryParams, suffix }: GetPo
 
 export const saveCDPipeline = (request) => post(ROUTES.CD_CONFIG, request)
 
+export const getEnvironmentData = () => get<EnvironmentDataValuesDTO>(ROUTES.ENVIRONMENT_DATA)
 export const getUserPreferences = async (): Promise<UserPreferencesType> => {
     const queryParamsPayload: Pick<GetUserPreferencesQueryParamsType, 'key'> = {
         key: USER_PREFERENCES_ATTRIBUTE_KEY,

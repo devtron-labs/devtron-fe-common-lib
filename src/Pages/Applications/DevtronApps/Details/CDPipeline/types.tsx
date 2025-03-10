@@ -57,7 +57,7 @@ export interface CustomTagType {
 
 export enum ReleaseMode {
     NEW_DEPLOYMENT = 'create',
-    MIGRATE_HELM = 'link',
+    MIGRATE_EXTERNAL_APPS = 'link',
 }
 
 export interface CDFormType {
