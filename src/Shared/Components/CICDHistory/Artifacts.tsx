@@ -32,7 +32,7 @@ import {
     ClipboardButton,
     extractImage,
     DOCUMENTATION,
-    useSuperAdmin,
+    useGetUserRoles,
 } from '../../../Common'
 import { ArtifactType, CIListItemType } from './types'
 import { TERMINAL_STATUS_MAP } from './constants'
@@ -148,7 +148,7 @@ const Artifacts = ({
     renderCIListHeader,
     targetPlatforms,
 }: ArtifactType) => {
-    const { isSuperAdmin } = useSuperAdmin()
+    const { isSuperAdmin } = useGetUserRoles()
     const { handleDownload } = useDownload()
 
     const { triggerId, buildId } = useParams<{
