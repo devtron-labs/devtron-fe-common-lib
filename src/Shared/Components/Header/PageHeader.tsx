@@ -18,7 +18,11 @@ import { useEffect, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import './pageHeader.css'
 import ReactGA from 'react-ga4'
-import { getRandomColor } from '../../../Common'
+import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
+import { ReactComponent as DropDownIcon } from '@Icons/ic-chevron-down.svg'
+import { ReactComponent as Close } from '@Icons/ic-close.svg'
+import { ReactComponent as Question } from '@Icons/ic-help-outline.svg'
+import { getRandomColor, TippyCustomized, TippyTheme } from '../../../Common'
 import LogoutCard from '../LogoutCard'
 import { setActionWithExpiry, handlePostHogEventUpdate } from './utils'
 import { InstallationType, ServerInfo, PageHeaderType } from './types'
@@ -26,11 +30,8 @@ import { getServerInfo } from './service'
 import GettingStartedCard from '../GettingStartedCard/GettingStarted'
 import { POSTHOG_EVENT_ONBOARDING, MAX_LOGIN_COUNT } from '../../../Common/Constants'
 import HelpNav from './HelpNav'
-import { ReactComponent as Question } from '../../../Assets/Icon/ic-help-outline.svg'
-import { ReactComponent as Close } from '../../../Assets/Icon/ic-close.svg'
-import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import AnnouncementBanner from '../AnnouncementBanner/AnnouncementBanner'
-import { useMainContext, useUserEmail } from '../../Providers'
+import { useMainContext, useTheme, useUserEmail } from '../../Providers'
 import { InfoIconTippy } from '../InfoIconTippy'
 import { IframePromoButton } from './IframePromoButton'
 
@@ -50,6 +51,8 @@ const PageHeader = ({
 }: PageHeaderType) => {
     const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard, setGettingStartedClicked } =
         useMainContext()
+    const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
+
     const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
         tippyProps || {}
     const [showHelpCard, setShowHelpCard] = useState(false)
@@ -120,6 +123,17 @@ const PageHeader = ({
         })
     }
 
+    const handleCloseSwitchThemeLocationTippyChange = () => {
+        handleShowSwitchThemeLocationTippyChange(false)
+    }
+
+    const renderThemePreferenceLocationTippyContent = () => (
+        <div className="px-16 pb-16 flexbox-col dc__gap-4">
+            <h6 className="m-0 fs-14 fw-6 lh-20">Theme Preference</h6>
+            <p className="m-0 fs-13 fw-4 lh-20">You can change your theme preference here</p>
+        </div>
+    )
+
     const renderLogoutHelpSection = () => (
         <>
             <div className="flex left cursor dc__gap-8" onClick={onClickHelp}>
@@ -135,14 +149,30 @@ const PageHeader = ({
                 />
             </div>
             {!window._env_.K8S_CLIENT && (
-                <div
-                    className="logout-card__initial cursor fs-13 icon-dim-24 flex logout-card__initial--nav"
-                    onClick={onClickLogoutButton}
-                    style={{ backgroundColor: getRandomColor(email) }}
-                    data-testid="profile-button"
+                <TippyCustomized
+                    theme={TippyTheme.black}
+                    className="w-250"
+                    placement="bottom"
+                    visible={showSwitchThemeLocationTippy}
+                    Icon={ICMediumPaintBucket}
+                    iconClass="icon-dim-48 dc__no-shrink"
+                    iconSize={48}
+                    additionalContent={renderThemePreferenceLocationTippyContent()}
+                    showCloseButton
+                    trigger="manual"
+                    interactive
+                    arrow
+                    onClose={handleCloseSwitchThemeLocationTippyChange}
                 >
-                    {email[0]}
-                </div>
+                    <div
+                        className="logout-card__initial cursor fs-13 icon-dim-24 flex logout-card__initial--nav"
+                        onClick={onClickLogoutButton}
+                        style={{ backgroundColor: getRandomColor(email) }}
+                        data-testid="profile-button"
+                    >
+                        {email[0]}
+                    </div>
+                </TippyCustomized>
             )}
         </>
     )
