@@ -25,6 +25,7 @@ import {
     Severity,
     PolicyBlockInfo,
     TargetPlatformItemDTO,
+    ButtonProps,
     ComponentLayoutType,
 } from '../Shared'
 import {
@@ -215,6 +216,7 @@ interface InfoColourBarTextConfigType {
      * If given would be shown below the heading (if given)
      */
     description: string
+    actionButtonConfig?: ButtonProps
 }
 
 type InfoColourBarMessageProp = {
@@ -1069,4 +1071,25 @@ export type GlobalVariableOptionType = Omit<GlobalVariableDTO, 'name'> & {
     label: string
     value: string
     variableType: Extract<RefVariableType, RefVariableType.GLOBAL>
+}
+
+export interface UserRole extends ResponseType {
+    result?: {
+        roles: string[]
+        superAdmin: boolean
+        /**
+         * Defines if a user is access manager and can manage all access
+         */
+        canManageAllAccess?: boolean
+    }
+}
+
+export enum ActionTypes {
+    MANAGER = 'manager',
+    ADMIN = 'admin',
+    TRIGGER = 'trigger',
+    VIEW = 'view',
+    UPDATE = 'update',
+    EDIT = 'edit',
+    APPROVER = 'approver',
 }

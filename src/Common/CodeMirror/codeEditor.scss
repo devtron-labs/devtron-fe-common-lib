@@ -18,15 +18,50 @@
 .cm-mergeView {
     height: 100%;
     background-color: var(--bg-code-editor-base);
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
-.cm-mergeViewEditor:first-child {
-    border-right: 1px solid var(--N200);
-}
+.cm-merge-theme:not(.code-editor__mini-map) {
+    .cm-mergeViewEditor:first-child {
+        border-right: 1px solid var(--N200);
+    }
 
-.cm-merge-theme:not(.code-editor__read-only) {
-    .cm-mergeViewEditor:last-child {
+    &:not(.code-editor__read-only) .cm-mergeViewEditor:last-child {
         border-left: 1px solid var(--N200);
+    }
+
+    &:not(.code-editor__read-only) .cm-mergeView {
+        position: relative;
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: calc(50%);
+            transform: translate(-50%);
+            width: 21px;
+            border-left: 1px solid var(--N200);
+            border-right: 1px solid var(--N200);
+            background-color: var(--bg-primary);
+        }
+    }
+
+    &.code-editor__read-only .cm-mergeView {
+        position: relative;
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: calc(50%);
+            transform: translate(-50%);
+            width: 1px;
+            background-color: var(--N200);
+        }
     }
 }
 
@@ -144,11 +179,11 @@
         border-top-left-radius: 2px;
         border-bottom-left-radius: 2px;
         border-left: 2px solid var(--R500);
+        line-height: 18px;
     }
 
     .cm-diagnosticText {
         font-size: 12px;
-        line-height: 18px;
     }
 
     .cm-diagnosticSource {
@@ -216,6 +251,48 @@
         span {
             color: var(--white);
         }
+    }
+}
+
+// MINIMAP STYLES
+.code-editor__mini-map {
+    user-select: none;
+    pointer-events: none;
+
+    .cm-editor {
+        font-size: inherit;
+        line-height: inherit;
+
+        &.cm-merge-a .cm-changedLine,
+        .cm-deletedChunk,
+        &.cm-merge-a .cm-changedText,
+        .cm-deletedChunk .cm-deletedText,
+        &.cm-merge-a .cm-changedLineGutter {
+            background-color: var(--R300);
+        }
+
+        &.cm-merge-b .cm-changedLine,
+        &.cm-merge-b .cm-changedText,
+        &.cm-merge-b .cm-changedLineGutter {
+            background: var(--G300);
+        }
+    }
+
+    .cm-content {
+        padding: 0;
+    }
+
+    & .cm-line {
+        color: transparent !important;
+        padding: 0;
+
+        & span {
+            color: transparent !important;
+        }
+    }
+
+    & .cm-scroller {
+        overflow: hidden !important;
     }
 }
 
@@ -347,5 +424,15 @@
 
     &__read-only-tooltip {
         background-color: var(--bg-tooltip-black);
+    }
+
+    &__minimap-container {
+        width: 30px;
+        background-color: var(--bg-code-editor-base);
+    }
+
+    &__minimap-overlay {
+        background-color: var(--bg-code-editor-diffmap-scrollbar);
+        cursor: grab;
     }
 }

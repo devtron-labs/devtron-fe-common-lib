@@ -28,3 +28,9 @@ export const REPLACE_ALL_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = [
 export const CLOSE_SEARCH_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = ['Escape']
 
 export const READ_ONLY_TOOLTIP_TIMEOUT = 2000
+
+export const CODE_EDITOR_FONT_SIZE = 15
+
+export const CODE_EDITOR_LINE_HEIGHT = 1.4
+
+export const CODE_EDITOR_MIN_OVERLAY_HEIGHT = 20

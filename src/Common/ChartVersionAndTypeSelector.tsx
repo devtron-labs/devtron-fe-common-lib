@@ -75,7 +75,7 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
     }
 
     return (
-        <div className="flex">
+        <div className="flex left">
             <div className="chart-type-options flex" data-testid="chart-type-options">
                 <span className="cn-7 mr-4">Chart Type</span>
                 <SelectPicker
