@@ -19,6 +19,7 @@ import { useHistory } from 'react-router-dom'
 import { useMainContext } from '@Shared/Providers'
 import { getRandomColor, stopPropagation } from '../../Common'
 import { ThemeSwitcher } from './ThemeSwitcher'
+import { Icon } from './Icon'
 
 interface LogoutCardType {
     className: string
@@ -26,6 +27,9 @@ interface LogoutCardType {
     setShowLogOutCard: React.Dispatch<React.SetStateAction<boolean>>
     showLogOutCard: boolean
 }
+
+export const LOGOUT_CARD_BASE_BUTTON_CLASS =
+    'dc__unset-button-styles dc__content-space px-12 py-6 fs-13 fw-4 lh-20 cursor w-100 flex left br-4'
 
 const LogoutCard = ({ className, userFirstLetter, setShowLogOutCard, showLogOutCard }: LogoutCardType) => {
     const history = useHistory()
@@ -55,18 +59,19 @@ const LogoutCard = ({ className, userFirstLetter, setShowLogOutCard, showLogOutC
                         {userFirstLetter[0]}
                     </p>
                 </div>
-                <div className="dc__border-top-n1 py-4">
+                <div className="dc__border-top-n1 py-4 px-4 flexbox-col">
                     <ThemeSwitcher onChange={toggleLogoutCard} />
 
                     {viewIsPipelineRBACConfiguredNode}
 
                     <button
-                        className="dc__unset-button-styles px-12 py-6 fs-13 fw-4 lh-20 cr-5 dc__hover-n50 cursor w-100 flex left"
+                        className={`${LOGOUT_CARD_BASE_BUTTON_CLASS} cr-5 dc__hover-r50`}
                         data-testid="logout-button"
                         onClick={onLogout}
                         type="button"
                     >
                         Logout
+                        <Icon name="ic-logout" color="R500" />
                     </button>
                 </div>
             </div>
