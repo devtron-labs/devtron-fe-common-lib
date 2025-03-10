@@ -19,6 +19,9 @@ import { EditorView, Extension, showTooltip, StateEffect, StateField, Tooltip, V
 import { getReadOnlyElement } from '../utils'
 import { READ_ONLY_TOOLTIP_TIMEOUT } from '../CodeEditor.constants'
 
+/** Array of keys to be ignored on keypress */
+const ignoreKeys = ['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 'Enter', 'Escape']
+
 // Effect to update the tooltip in the editor state
 const updateTooltipEffect = StateEffect.define<Tooltip | null>()
 
@@ -84,8 +87,15 @@ const keypressTooltipPlugin = ViewPlugin.fromClass(
             }
         }
 
-        handleKeyPress = () => {
-            if (!this.view.state.readOnly) {
+        handleKeyPress = (e: KeyboardEvent) => {
+            if (
+                !this.view.state.readOnly ||
+                ignoreKeys.includes(e.key) ||
+                e.metaKey ||
+                e.shiftKey ||
+                e.altKey ||
+                e.ctrlKey
+            ) {
                 return
             }
 

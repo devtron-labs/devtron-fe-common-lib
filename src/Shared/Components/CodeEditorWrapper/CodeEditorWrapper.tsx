@@ -29,12 +29,8 @@ const CodeEditorValidationErrorWrapper = () => (isCodeMirrorEnabled() ? null : <
 
 const CodeEditorClipboardWrapper = () => (isCodeMirrorEnabled() ? <CodeMirror.Clipboard /> : <CodeEditor.Clipboard />)
 
-const CodeEditorHeaderWrapper = ({ diffViewWidth, ...props }: CodeEditorHeaderProps & { diffViewWidth?: boolean }) =>
-    isCodeMirrorEnabled() ? (
-        <CodeMirror.Header {...props} />
-    ) : (
-        <CodeEditor.Header diffViewWidth={diffViewWidth} {...props} />
-    )
+const CodeEditorHeaderWrapper = (props: CodeEditorHeaderProps) =>
+    isCodeMirrorEnabled() ? <CodeMirror.Header {...props} /> : <CodeEditor.Header {...props} />
 
 const CodeEditorWarningWrapper = (props: CodeEditorStatusBarProps) =>
     isCodeMirrorEnabled() ? <CodeMirror.Warning {...props} /> : <CodeEditor.Warning {...props} />

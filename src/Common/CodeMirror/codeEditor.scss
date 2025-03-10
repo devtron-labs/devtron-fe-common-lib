@@ -34,10 +34,10 @@
         border-left: 1px solid var(--N200);
     }
 
-    .cm-mergeView {
+    &:not(.code-editor__read-only) .cm-mergeView {
         position: relative;
         &::before {
-            content: "";
+            content: '';
             position: absolute;
             top: 0;
             bottom: 0;
@@ -47,6 +47,20 @@
             border-left: 1px solid var(--N200);
             border-right: 1px solid var(--N200);
             background-color: var(--bg-primary);
+        }
+    }
+
+    &.code-editor__read-only .cm-mergeView {
+        position: relative;
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: calc(50%);
+            transform: translate(-50%);
+            width: 1px;
+            background-color: var(--N200);
         }
     }
 }
@@ -165,11 +179,11 @@
         border-top-left-radius: 2px;
         border-bottom-left-radius: 2px;
         border-left: 2px solid var(--R500);
+        line-height: 18px;
     }
 
     .cm-diagnosticText {
         font-size: 12px;
-        line-height: 18px;
     }
 
     .cm-diagnosticSource {
@@ -268,9 +282,13 @@
         padding: 0;
     }
 
-    & .cm-line,
-    & .cm-line span {
+    & .cm-line {
         color: transparent !important;
+        padding: 0;
+
+        & span {
+            color: transparent !important;
+        }
     }
 
     & .cm-scroller {
