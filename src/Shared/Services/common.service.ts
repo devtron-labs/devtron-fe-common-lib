@@ -58,6 +58,7 @@ export const getUserPreferences = async (): Promise<UserPreferencesType> => {
 
     return {
         pipelineRBACViewSelectedTab,
+        themePreference: parsedResult.themePreference,
     }
 }
 
@@ -70,6 +71,7 @@ export const updateUserPreferences = async (
             viewPermittedEnvOnly:
                 updatedUserPreferences.pipelineRBACViewSelectedTab ===
                 ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
+            themePreference: updatedUserPreferences.themePreference,
         }
 
         const payload: UpdateUserPreferencesPayloadType = {
