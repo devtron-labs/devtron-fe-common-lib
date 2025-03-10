@@ -46,6 +46,8 @@ export interface ThemeConfigType {
 }
 
 export interface ThemeContextType extends ThemeConfigType {
+    showSwitchThemeLocationTippy: boolean
+    handleShowSwitchThemeLocationTippyChange: (isVisible: boolean) => void
     showThemeSwitcherDialog: boolean
     handleThemeSwitcherDialogVisibilityChange: (isVisible: boolean) => void
     handleThemePreferenceChange: (updatedThemePreference: ThemePreferenceType) => void
