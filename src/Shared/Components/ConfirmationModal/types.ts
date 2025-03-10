@@ -99,6 +99,11 @@ export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWith
      * If provided, the modal will use the specified theme instead of using the theme set by theme provider.
      */
     overriddenTheme?: AppThemeType
+    /**
+     * @default false
+     * @deprecated Used to extend the width to 500px and remove gap between title and subTitle.
+     */
+    isLandscapeView?: boolean
 }> &
     ButtonConfigAndVariantType<isConfig> &
     (isConfig extends false
