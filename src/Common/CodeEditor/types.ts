@@ -82,7 +82,6 @@ export interface CodeEditorHeaderInterface {
     children?: any
     className?: string
     hideDefaultSplitHeader?: boolean
-    diffViewWidth?: boolean
 }
 export interface CodeEditorComposition {
     Header?: React.FC<any>
@@ -102,7 +101,7 @@ export interface CodeEditorHeaderComposition {
     Clipboard?: React.FC<any>
 }
 
-export type ActionTypes = 'changeLanguage' | 'setDiff' | 'setTheme' | 'setCode' | 'setDefaultCode' | 'setHeight'
+type ActionTypes = 'changeLanguage' | 'setDiff' | 'setTheme' | 'setCode' | 'setDefaultCode' | 'setHeight'
 
 export interface Action {
     type: ActionTypes

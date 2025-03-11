@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.8.4",
+    "version": "1.8.11",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -108,7 +108,8 @@
         "@replit/codemirror-vscode-keymap": "6.0.2",
         "@types/react-dates": "^21.8.6",
         "@xyflow/react": "12.4.2",
-        "@uiw/codemirror-theme-github": "^4.23.7",
+        "@uiw/codemirror-extensions-hyper-link": "4.23.10",
+        "@uiw/codemirror-theme-github": "4.23.7",
         "@uiw/react-codemirror": "4.23.7",
         "ansi_up": "^5.2.1",
         "codemirror-json-schema": "0.8.0",

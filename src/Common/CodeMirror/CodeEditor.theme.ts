@@ -18,6 +18,8 @@ import { EditorView } from '@uiw/react-codemirror'
 import { githubDarkInit, githubLightInit } from '@uiw/codemirror-theme-github'
 import { tags } from '@lezer/highlight'
 
+import { CODE_EDITOR_FONT_SIZE } from './CodeEditor.constants'
+
 export const getCodeEditorTheme = (isDark: boolean) => {
     const themeInit = isDark ? githubDarkInit : githubLightInit
     const styles = isDark
@@ -71,7 +73,7 @@ export const getCodeEditorTheme = (isDark: boolean) => {
         }),
         codeEditorTheme: themeInit({
             settings: {
-                fontSize: '15px',
+                fontSize: `${CODE_EDITOR_FONT_SIZE}px`,
                 fontFamily: 'Inconsolata, monospace',
                 background: 'var(--bg-code-editor-base)',
                 foreground: 'var(--fg-code-editor)',
@@ -80,6 +82,8 @@ export const getCodeEditorTheme = (isDark: boolean) => {
                 gutterForeground: 'var(--N500)',
                 gutterBorder: 'transparent',
                 lineHighlight: 'var(--active-line)',
+                selection: 'var(--selection-color)',
+                selectionMatch: 'var(--selection-match-color)',
             },
             styles,
             theme: isDark ? 'dark' : 'light',

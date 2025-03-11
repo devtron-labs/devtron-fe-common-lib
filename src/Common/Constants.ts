@@ -149,6 +149,7 @@ export const ROUTES = {
     DELETE_RESOURCE: 'k8s/resource/delete',
     NODE_CAPACITY: 'k8s/capacity/node',
     RESOURCE_TEMPLATE: 'resource/template',
+    ENVIRONMENT_DATA: 'global/environment-variables',
 } as const
 
 export enum KEY_VALUE {

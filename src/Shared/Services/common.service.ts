@@ -20,6 +20,7 @@ import { getTemplateAPIRoute } from '..'
 import { get, getUrlWithSearchParams, post, ROUTES, showError } from '../../Common'
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
+    EnvironmentDataValuesDTO,
     GetPolicyApiUrlProps,
     GetResourceApiUrlProps,
     GetUserPreferencesParsedDTO,
@@ -48,6 +49,7 @@ export const saveCDPipeline = (request, { isTemplateView }: Required<Pick<AppCon
     return post(url, request)
 }
 
+export const getEnvironmentData = () => get<EnvironmentDataValuesDTO>(ROUTES.ENVIRONMENT_DATA)
 export const getUserPreferences = async (): Promise<UserPreferencesType> => {
     const queryParamsPayload: Pick<GetUserPreferencesQueryParamsType, 'key'> = {
         key: USER_PREFERENCES_ATTRIBUTE_KEY,
@@ -69,6 +71,7 @@ export const getUserPreferences = async (): Promise<UserPreferencesType> => {
 
     return {
         pipelineRBACViewSelectedTab,
+        themePreference: parsedResult.themePreference,
     }
 }
 
@@ -81,6 +84,7 @@ export const updateUserPreferences = async (
             viewPermittedEnvOnly:
                 updatedUserPreferences.pipelineRBACViewSelectedTab ===
                 ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
+            themePreference: updatedUserPreferences.themePreference,
         }
 
         const payload: UpdateUserPreferencesPayloadType = {

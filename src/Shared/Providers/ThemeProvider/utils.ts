@@ -30,6 +30,14 @@ export const setThemePreferenceInLocalStorage = (themePreference: ThemePreferenc
 export const logThemeToAnalytics = ({ appTheme, themePreference }: ThemeConfigType) => {
     const action = themePreference === THEME_PREFERENCE_MAP.auto ? `system-${appTheme}` : appTheme
 
+    if ('gtag' in window && window.gtag && typeof window.gtag === 'function') {
+        window.gtag('set', 'user_properties', {
+            appTheme,
+            themePreference,
+        })
+        ReactGA.send('pageview')
+    }
+
     ReactGA.event({
         category: 'application-theme',
         action: `theme-changed-to-${action}`,
@@ -68,3 +76,16 @@ export const getThemeConfigFromLocalStorage = (): ThemeConfigType => {
 }
 
 export const getComponentSpecificThemeClass = (appTheme: AppThemeType) => `component-specific-theme__${appTheme}`
+
+export const getThemePreferenceText = (themePreference: ThemePreferenceType): string => {
+    switch (themePreference) {
+        case 'auto':
+            return `System (${getAppThemeForAutoPreference() === AppThemeType.dark ? 'Dark' : 'Light'})`
+        case AppThemeType.dark:
+            return 'Dark'
+        case AppThemeType.light:
+            return 'Light'
+        default:
+            return null
+    }
+}
