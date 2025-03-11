@@ -129,6 +129,11 @@ export interface SelectedChartDetailsType {
     selectedChart: DeploymentChartVersionType
 }
 
+export enum PipelineMigratedFromType {
+    HELM_RELEASE = 'helmRelease',
+    ARGO_APPLICATION = 'argoApplication',
+}
+
 interface EnvironmentConfigType {
     id: number
     status: number

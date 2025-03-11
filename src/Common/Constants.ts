@@ -39,7 +39,8 @@ export const PATTERNS = {
     START_END_ALPHANUMERIC: /^(([A-Za-z0-9].*[A-Za-z0-9])|[A-Za-z0-9])$/,
     ALPHANUMERIC_WITH_SPECIAL_CHAR: /^[A-Za-z0-9._-]+$/, // allow alphanumeric,(.) ,(-),(_)
     ESCAPED_CHARACTERS: /[.*+?^${}()|[\]\\]/g,
-    NUMBERS_WITH_SCOPE_VARIABLES: /^(\d+(\.\d+)?|@{{[a-zA-Z0-9-]+}})$/,
+    NUMBERS_WITH_SCOPE_VARIABLES: /^(\d+(\.\d+)?|@{{([a-zA-Z0-9-_\s]+)}})$/,
+    BOOLEAN_WITH_SCOPE_VARIABLES: /^(TRUE|FALSE|true|false|True|False|@{{([a-zA-Z0-9-_\s]+)}})$/,
     ALL_DIGITS_BETWEEN_0_AND_7: /^[0-7]*$/,
     // eslint-disable-next-line no-useless-escape
     CONFIG_MAP_AND_SECRET_MULTIPLE_KEYS: /^[-._a-zA-Z0-9\,\?\s]*[-._a-zA-Z0-9\s]$/,
@@ -148,6 +149,7 @@ export const ROUTES = {
     DELETE_RESOURCE: 'k8s/resource/delete',
     NODE_CAPACITY: 'k8s/capacity/node',
     RESOURCE_TEMPLATE: 'resource/template',
+    ENVIRONMENT_DATA: 'global/environment-variables',
 } as const
 
 export enum KEY_VALUE {

@@ -17,3 +17,5 @@
 export * from './yamlParseLinter'
 export * from './readOnlyTooltip'
 export * from './findAndReplace'
+export * from './yamlHighlight'
+export * from './DiffMinimap'
