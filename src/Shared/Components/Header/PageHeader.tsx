@@ -94,7 +94,12 @@ const PageHeader = ({
         }
     }
 
+    const handleCloseSwitchThemeLocationTippyChange = () => {
+        handleShowSwitchThemeLocationTippyChange(false)
+    }
+
     const onClickLogoutButton = () => {
+        handleCloseSwitchThemeLocationTippyChange()
         setShowLogOutCard(!showLogOutCard)
         if (showHelpCard) {
             setShowHelpCard(false)
@@ -121,10 +126,6 @@ const PageHeader = ({
             category: 'Main Navigation',
             action: `Help Clicked`,
         })
-    }
-
-    const handleCloseSwitchThemeLocationTippyChange = () => {
-        handleShowSwitchThemeLocationTippyChange(false)
     }
 
     const renderThemePreferenceLocationTippyContent = () => (
