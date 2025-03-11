@@ -18,6 +18,7 @@ import { GitProviderType } from '@Common/Constants'
 
 import { Icon, IconName } from '../Icon'
 import { GitProviderIconProps } from './types'
+import { getGitIconName } from '../GitCommitInfoGeneric/GitMaterialInfoHeader'
 
 const gitProviderIconMap: Record<GitProviderType, IconName> = {
     [GitProviderType.GIT]: 'ic-git',
@@ -28,6 +29,10 @@ const gitProviderIconMap: Record<GitProviderType, IconName> = {
     [GitProviderType.AZURE]: 'ic-azure',
 }
 
-export const GitProviderIcon = ({ gitProvider, size = 20 }: GitProviderIconProps) => (
-    <Icon name={gitProviderIconMap[gitProvider] || 'ic-git'} size={size} color={null} />
+export const GitProviderIcon = ({ gitProvider, size = 20, gitRepoUrl }: GitProviderIconProps) => (
+    <Icon
+        name={(gitProvider ? gitProviderIconMap[gitProvider] : getGitIconName(gitRepoUrl)) || 'ic-git'}
+        size={size}
+        color={null}
+    />
 )

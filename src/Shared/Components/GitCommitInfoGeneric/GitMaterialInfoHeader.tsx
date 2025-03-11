@@ -20,7 +20,7 @@ import { Icon, IconName } from '../Icon'
 import './gitCommitInfoGeneric.scss'
 
 /* eslint-disable react/prop-types */
-const getGitIconName = (repoUrl: string): IconName => {
+export const getGitIconName = (repoUrl: string): IconName => {
     if (repoUrl.includes(GitProviderType.GITHUB)) {
         return 'ic-github'
     }
