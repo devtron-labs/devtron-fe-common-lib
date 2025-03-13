@@ -18,7 +18,7 @@ import { GitProviderType } from '@Common/Constants'
 
 import { Icon, IconName } from '../Icon'
 import { GitProviderIconProps } from './types'
-import { getGitIconName } from '../GitCommitInfoGeneric/GitMaterialInfoHeader'
+import { getGitIconName } from './utils'
 
 const gitProviderIconMap: Record<GitProviderType, IconName> = {
     [GitProviderType.GIT]: 'ic-git',

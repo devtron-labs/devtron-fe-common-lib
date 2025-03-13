@@ -14,24 +14,11 @@
  * limitations under the License.
  */
 
-import { GitProviderType } from '@Common/Constants'
-import { CiPipelineSourceConfig } from '../CICDHistory/CiPipelineSourceConfig'
-import { Icon, IconName } from '../Icon'
-import './gitCommitInfoGeneric.scss'
-
 /* eslint-disable react/prop-types */
-export const getGitIconName = (repoUrl: string): IconName => {
-    if (repoUrl.includes(GitProviderType.GITHUB)) {
-        return 'ic-github'
-    }
-    if (repoUrl.includes(GitProviderType.GITLAB)) {
-        return 'ic-gitlab'
-    }
-    if (repoUrl.includes(GitProviderType.BITBUCKET)) {
-        return 'ic-bitbucket'
-    }
-    return 'ic-git'
-}
+
+import { CiPipelineSourceConfig } from '../CICDHistory/CiPipelineSourceConfig'
+import { GitProviderIcon } from '../GitProviderIcon'
+import './gitCommitInfoGeneric.scss'
 
 const GitMaterialInfoHeader = ({
     index,
@@ -51,7 +38,7 @@ const GitMaterialInfoHeader = ({
             className="git-commit-info-generic__header px-16 py-12 dc__box-shadow fs-12 fw-6 dc__gap-4"
             style={style}
         >
-            <Icon name={getGitIconName(repoUrl)} size={20} color={null} />
+            <GitProviderIcon gitRepoUrl={repoUrl} size={20} />
             <div className="flex left left dc__gap-4 fs-13">
                 <div
                     className="repo cn-9 fw-6 dc__mxw-250 dc__ellipsis-right"
