@@ -20,7 +20,8 @@ export interface ImageWithFallbackProps {
     /**
      * Props for the image
      */
-    imageProps: ImgHTMLAttributes<HTMLImageElement>
+    imageProps: Omit<ImgHTMLAttributes<HTMLImageElement>, 'alt' | 'height' | 'width'> &
+        Required<Pick<ImgHTMLAttributes<HTMLImageElement>, 'alt' | 'height' | 'width'>>
     /**
      * Fallback image; can be a url or a jsx element
      */
