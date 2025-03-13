@@ -515,3 +515,14 @@ export const DC_DELETE_SUBTITLES = {
     DELETE_ENVIRONMENT_SUBTITLE: 'Are you sure you want to delete this environment?',
     DELETE_CLUSTER_SUBTITLES: 'Are you sure you want to delete this cluster?',
 }
+
+export const enum DeleteComponentsName {
+    Cluster = 'cluster',
+    Job = 'job pipeline',
+    BuildPipeline = 'build pipeline',
+}
+
+export const Routes = {
+    CI_PIPELINE_PATCH: 'app/ci-pipeline/patch',
+    WORKFLOW: 'app/app-wf',
+}
