@@ -29,7 +29,7 @@ interface LogoutCardType {
 }
 
 export const LOGOUT_CARD_BASE_BUTTON_CLASS =
-    'dc__unset-button-styles dc__content-space px-12 py-6 fs-13 fw-4 lh-20 cursor w-100 flex left br-4'
+    'dc__unset-button-styles dc__content-space px-12 py-8 fs-13 fw-4 lh-20 cursor w-100 flex left br-4'
 
 const LogoutCard = ({ className, userFirstLetter, setShowLogOutCard, showLogOutCard }: LogoutCardType) => {
     const history = useHistory()

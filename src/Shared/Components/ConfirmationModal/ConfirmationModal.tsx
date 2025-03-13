@@ -25,6 +25,7 @@ import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Backdrop } from '../Backdrop'
 import { useConfirmationModalContext } from './ConfirmationModalContext'
 import { CustomInput } from '../CustomInput'
+import { Confetti } from '../Confetti'
 import './confirmationModal.scss'
 
 const ConfirmationModalBody = ({
@@ -38,6 +39,7 @@ const ConfirmationModalBody = ({
     handleClose,
     shouldCloseOnEscape = true,
     isLandscapeView = false,
+    showConfetti = false,
 }: ConfirmationModalBodyProps) => {
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
@@ -159,6 +161,8 @@ const ConfirmationModalBody = ({
                     )}
                 </div>
             </motion.div>
+
+            {showConfetti && <Confetti />}
         </Backdrop>
     )
 }
