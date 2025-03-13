@@ -39,9 +39,10 @@ export const getCommonSelectStyle = (styleOverrides = {}): StylesConfig => ({
         ...base,
         minHeight: '32px',
         boxShadow: 'none',
-        backgroundColor: state.isDisabled ? 'var(--N100)' : 'var(--bg-secondary)',
+        backgroundColor: 'var(--bg-secondary)',
         border: '1px solid var(--N200)',
         cursor: state.isDisabled ? 'not-allowed' : 'pointer',
+        opacity: state.isDisabled ? 0.5 : 1,
 
         '&:hover': {
             borderColor: 'var(--N300)',
@@ -126,6 +127,7 @@ export const getCommonSelectStyle = (styleOverrides = {}): StylesConfig => ({
     menu: (base) => ({
         ...base,
         backgroundColor: 'var(--bg-menu-primary)',
+        border: '1px solid var(--border-primary-translucent)',
     }),
     multiValue: (base) => ({
         ...base,

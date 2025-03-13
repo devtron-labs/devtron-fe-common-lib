@@ -21,38 +21,44 @@ import { ReactComponent as Info } from '@Icons/ic-info-filled.svg'
 import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICCompare } from '@Icons/ic-compare.svg'
 import { ClipboardButton } from '@Common/ClipboardButton'
+import { getComponentSpecificThemeClass } from '@Shared/Providers'
 
 import { useCodeEditorContext } from './CodeEditor.context'
 import { CodeEditorHeaderProps, CodeEditorStatusBarProps } from './types'
 
 const SplitPane = () => {
-    const { state, dispatch, readOnly } = useCodeEditorContext()
+    const { diffMode, setDiffMode, readOnly } = useCodeEditorContext()
 
     const handleToggle = () => {
         if (readOnly) {
             return
         }
-        dispatch({ type: 'setDiff', value: !state.diffMode })
+        setDiffMode(!diffMode)
     }
 
     return (
         <div className="code-editor__split-pane flex pointer cn-7 fcn-7 ml-auto" onClick={handleToggle}>
             <ICCompare className="icon-dim-20 mr-4" />
-            {state.diffMode ? 'Hide comparison' : 'Compare with default'}
+            {diffMode ? 'Hide comparison' : 'Compare with default'}
         </div>
     )
 }
 
 export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEditorHeaderProps) => {
-    const { state, hasCodeEditorContainer } = useCodeEditorContext()
+    const { diffMode, readOnly, lhsValue, hasCodeEditorContainer, theme } = useCodeEditorContext()
 
     return (
-        <div
-            data-code-editor-header
-            className={`${hasCodeEditorContainer ? 'dc__top-radius-4' : ''} ${className || 'code-editor__header flex right bcn-1 pt-10 pb-9 px-16 dc__border-bottom'}`}
-        >
-            {children}
-            {!hideDefaultSplitHeader && state.lhsCode && <SplitPane />}
+        <div className={`${getComponentSpecificThemeClass(theme)} flexbox w-100 border__primary--bottom`}>
+            <div
+                data-code-editor-header
+                className={`${hasCodeEditorContainer ? 'dc__top-radius-4' : ''} code-editor__header flex-grow-1 bg__secondary ${className || 'px-16 pt-6 pb-5'} ${diffMode ? 'dc__grid-half vertical-divider' : ''}`}
+            >
+                {children}
+                {!hideDefaultSplitHeader && lhsValue && <SplitPane />}
+            </div>
+            {diffMode ? (
+                <div className={`bg__secondary dc__align-self-stretch ${readOnly ? 'px-15' : 'px-5'}`} />
+            ) : null}
         </div>
     )
 }
@@ -86,9 +92,9 @@ export const Information = ({ className, children, text }: CodeEditorStatusBarPr
 )
 
 export const Clipboard = () => {
-    const { state } = useCodeEditorContext()
+    const { value } = useCodeEditorContext()
 
-    return <ClipboardButton content={state.code} iconSize={16} />
+    return <ClipboardButton content={value} iconSize={16} />
 }
 
 export const Container = ({ children, flexExpand }: { children: ReactNode; flexExpand?: boolean }) => (

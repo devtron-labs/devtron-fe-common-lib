@@ -19,12 +19,13 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'
-import { ConfirmationModalBodyProps, ConfirmationModalProps } from './types'
+import { ConfirmationModalBodyProps, ConfirmationModalProps, ConfirmationModalVariantType } from './types'
 import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Backdrop } from '../Backdrop'
 import { useConfirmationModalContext } from './ConfirmationModalContext'
 import { CustomInput } from '../CustomInput'
+import { Confetti } from '../Confetti'
 import './confirmationModal.scss'
 
 const ConfirmationModalBody = ({
@@ -37,6 +38,8 @@ const ConfirmationModalBody = ({
     children,
     handleClose,
     shouldCloseOnEscape = true,
+    isLandscapeView = false,
+    showConfetti = false,
 }: ConfirmationModalBodyProps) => {
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
@@ -48,6 +51,7 @@ const ConfirmationModalBody = ({
     const { primaryButtonConfig, secondaryButtonConfig } = buttonConfig
 
     const RenderIcon = Icon ?? getIconFromVariant(variant)
+    const hideIcon = variant === ConfirmationModalVariantType.custom && !Icon
 
     const disablePrimaryButton: boolean =
         ('disabled' in primaryButtonConfig && primaryButtonConfig.disabled) ||
@@ -80,18 +84,20 @@ const ConfirmationModalBody = ({
     return (
         <Backdrop onEscape={shouldCloseOnEscape ? handleCloseWrapper : noop}>
             <motion.div
-                className="confirmation-modal border__secondary flexbox-col br-8 bg__primary dc__m-auto mt-40 w-400"
+                className={`${isLandscapeView ? 'w-500' : 'w-400'} confirmation-modal border__secondary flexbox-col br-8 bg__primary dc__m-auto mt-40 w-400`}
                 exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}
                 initial={{ y: 100, opacity: 0, scale: 0.75 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
                 onClick={stopPropagation}
             >
                 <div className="flexbox-col dc__gap-16 p-20">
-                    {cloneElement(RenderIcon, {
-                        className: `${RenderIcon.props?.className ?? ''} icon-dim-48 dc__no-shrink`,
-                    })}
+                    {hideIcon
+                        ? null
+                        : cloneElement(RenderIcon, {
+                              className: `${RenderIcon.props?.className ?? ''} icon-dim-48 dc__no-shrink`,
+                          })}
 
-                    <div className="flexbox-col dc__gap-8">
+                    <div className={`flexbox-col ${isLandscapeView ? '' : 'dc__gap-8'}`}>
                         <span className="cn-9 fs-16 fw-6 lh-24 dc__word-break">{title}</span>
 
                         {typeof subtitle === 'string' ? (
@@ -155,6 +161,8 @@ const ConfirmationModalBody = ({
                     )}
                 </div>
             </motion.div>
+
+            {showConfetti && <Confetti />}
         </Backdrop>
     )
 }

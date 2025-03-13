@@ -86,7 +86,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                     <div
                         className={`dc__word-break dc__hyphens-auto flex dc__align-start left ${
                             isWhiteTheme
-                                ? `p-12 cn-9 ${props.noHeadingBorder ? '' : 'dc__border-bottom-n1'}`
+                                ? `p-12 cn-9 ${props.noHeadingBorder ? '' : 'border__secondary-translucent--bottom'}`
                                 : 'pt-20 pb-12 pr-20 pl-20 cn-0 top'
                         }`}
                     >
@@ -115,7 +115,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                         {showCloseButton && (
                             <div className="icon-dim-16 ml-auto">
                                 <CloseIcon
-                                    className={`icon-dim-16 cursor ${isWhiteTheme ? 'fcn-9' : 'fcn-0'}`}
+                                    className={`icon-dim-16 cursor ${isWhiteTheme ? 'fcn-9' : 'icon-fill__white'}`}
                                     onClick={closeTippy}
                                 />
                             </div>

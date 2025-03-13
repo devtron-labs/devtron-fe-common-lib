@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-import {
-    EditorView,
-    Extension,
-    showTooltip,
-    StateEffect,
-    StateField,
-    Tooltip,
-    ViewPlugin,
-    ViewUpdate,
-} from '@uiw/react-codemirror'
+import { EditorView, Extension, showTooltip, StateEffect, StateField, Tooltip, ViewPlugin } from '@uiw/react-codemirror'
 
 import { getReadOnlyElement } from '../utils'
+import { READ_ONLY_TOOLTIP_TIMEOUT } from '../CodeEditor.constants'
+
+/** Array of keys to be ignored on keypress */
+const ignoreKeys = ['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 'Enter', 'Escape']
 
 // Effect to update the tooltip in the editor state
 const updateTooltipEffect = StateEffect.define<Tooltip | null>()
@@ -76,43 +71,53 @@ const createTooltip = (view: EditorView): Tooltip => {
     }
 }
 
-// Define a plugin to manage tooltip updates
-const focusTooltipPlugin = ViewPlugin.fromClass(
+// Plugin to show and remove tooltip on keypress
+const keypressTooltipPlugin = ViewPlugin.fromClass(
     class {
-        // Tracks whether an update is scheduled
-        public scheduled: boolean = false
+        private timeoutId: number | null = null
 
         constructor(public view: EditorView) {
-            this.scheduleUpdate()
+            this.view.dom.addEventListener('keydown', this.handleKeyPress)
         }
 
-        // Called when the editor state changes
-        update(update: ViewUpdate) {
-            if (update.focusChanged || update.selectionSet) {
-                this.scheduleUpdate()
+        destroy() {
+            this.view.dom.removeEventListener('keydown', this.handleKeyPress)
+            if (this.timeoutId) {
+                clearTimeout(this.timeoutId)
             }
         }
 
-        // Schedules a tooltip update in the next microtask
-        scheduleUpdate() {
-            if (this.scheduled) return
-            this.scheduled = true
+        handleKeyPress = (e: KeyboardEvent) => {
+            if (
+                !this.view.state.readOnly ||
+                ignoreKeys.includes(e.key) ||
+                e.metaKey ||
+                e.shiftKey ||
+                e.altKey ||
+                e.ctrlKey
+            ) {
+                return
+            }
 
-            // Update the tooltip asynchronously
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            Promise.resolve().then(() => {
-                this.scheduled = false
-                const tooltip = this.view.state.readOnly && this.view.hasFocus ? createTooltip(this.view) : null
-                this.view.dispatch({
-                    effects: updateTooltipEffect.of(tooltip),
-                })
-            })
+            // Show tooltip
+            const tooltip = createTooltip(this.view)
+            this.view.dispatch({ effects: updateTooltipEffect.of(tooltip) })
+
+            // Reset the timer after every key press
+            if (this.timeoutId) {
+                clearTimeout(this.timeoutId)
+            }
+
+            // Remove tooltip after timeout time
+            this.timeoutId = setTimeout(() => {
+                this.view.dispatch({ effects: updateTooltipEffect.of(null) })
+            }, READ_ONLY_TOOLTIP_TIMEOUT)
         }
     },
 )
 
 /**
  * The read-only tooltip extension for CodeMirror. \
- * Displays a tooltip at the cursor position when the editor is read-only and focused.
+ * Displays a tooltip at the cursor position when the editor is read-only and key is pressed.
  */
-export const readOnlyTooltip: Extension = [tooltipField, focusTooltipPlugin]
+export const readOnlyTooltip: Extension = [tooltipField, keypressTooltipPlugin]

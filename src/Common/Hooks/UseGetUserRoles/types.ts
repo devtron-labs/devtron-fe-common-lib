@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
- .deployment-history-diff-view {
-  & .react-monaco-editor-container {
-      min-height: 100px;
-  }
+export interface UseGetUserRolesType {
+    isSuperAdmin: boolean
+    /**
+     * User can give access to all other users
+     */
+    canManageAllAccess?: boolean
+    hasManagerPermissions: boolean
 }

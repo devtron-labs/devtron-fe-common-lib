@@ -17,6 +17,7 @@
 import { Link } from 'react-router-dom'
 import { InfoColourBarType } from '../Types'
 import { Tooltip } from '@Common/Tooltip'
+import { Button } from '@Shared/Components'
 import './infoColourBar.scss'
 
 /**
@@ -85,15 +86,23 @@ const InfoColourBar = ({
 
     const renderMessageWrapper = () => {
         if (textConfig) {
-            const { heading, description } = textConfig
+            const { heading, description, actionButtonConfig } = textConfig
 
             return (
-                <div className="flexbox-col">
-                    {heading && <h6 className="m-0 cn-9 fs-13 fw-6 lh-20 dc__truncate">{heading}</h6>}
+                <div className="flexbox flex-grow-1 dc__content-space dc__align-start">
+                    <div className="flexbox-col">
+                        {heading && <h6 className="m-0 cn-9 fs-13 fw-6 lh-20 dc__truncate">{heading}</h6>}
 
-                    <Tooltip content={description}>
-                        <p className="dc__truncate--clamp-3 m-0 cn-9 fs-13 fw-4 lh-20">{description}</p>
-                    </Tooltip>
+                        <Tooltip content={description}>
+                            <p className="dc__truncate--clamp-3 m-0 cn-9 fs-13 fw-4 lh-20">{description}</p>
+                        </Tooltip>
+                    </div>
+
+                    {actionButtonConfig && (
+                        <Button
+                            {...actionButtonConfig}
+                        />
+                    )}
                 </div>
             )
         }
@@ -112,7 +121,7 @@ const InfoColourBar = ({
                 className={`${classname} info_text flex dc__content-space pt-8 pb-8 pl-12 pr-12 br-4 top fs-13 fw-4`}
                 style={styles}
             >
-                <div className={`flex top ${typeof renderActionButton === 'function' ? 'mr-5' : ''}`}>
+                <div className={`flex top ${typeof renderActionButton === 'function' ? 'mr-5' : ''} ${!!textConfig ? 'flex-grow-1' : ''}`}>
                     {!hideIcon && (
                         <div className={`icon-dim-${iconSize ?? '20'} mr-10`}>
                             <Icon className={`icon-dim-${iconSize ?? '20'} ${iconClass || ''} mr-8`} />
