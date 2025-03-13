@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-export const CommonGroupedDropdownStyles = {
+import { components, DropdownIndicatorProps, StylesConfig } from 'react-select'
+import { ReactComponent as DropDownIcon } from '@Icons/ic-chevron-down.svg'
+
+export const CommonGroupedDropdownStyles: StylesConfig = {
     container: (base, state) => ({
         ...base,
         ...(state.isDisabled && {
@@ -108,4 +111,86 @@ export const CommonGroupedDropdownStyles = {
         ...base,
         backgroundColor: 'var(--bg-primary)',
     }),
+}
+
+export const APP_SELECTOR_STYLES: StylesConfig = {
+    control: (base, state) => ({
+        ...base,
+        border: state.menuIsOpen ? '1px solid var(--B500)' : 'unset',
+        boxShadow: 'none',
+        color: 'var(--N900)',
+        minHeight: '32px',
+        minWidth: state.menuIsOpen ? '300px' : 'unset',
+        justifyContent: state.menuIsOpen ? 'space-between' : 'flex-start',
+        cursor: 'pointer',
+        backgroundColor: 'var(--bg-primary)',
+    }),
+    valueContainer: (base, state) => ({
+        ...base,
+        display: 'flex',
+        flexDirection: 'row-reverse',
+        flexBasis: '0px',
+        justifyContent: 'flex-end',
+        padding: state.selectProps.menuIsOpen ? '0 0 0 4px' : '0',
+        color: state.selectProps.menuIsOpen ? 'var(--N500)' : 'var(--N900)',
+        height: '30px',
+    }),
+    singleValue: (base, state) => ({
+        ...base,
+        color: state.selectProps.menuIsOpen ? 'var(--N500)' : 'var(--N900)',
+    }),
+    menu: (base) => ({
+        ...base,
+        backgroundColor: 'var(--bg-primary)',
+        minWidth: '300px',
+        fontSize: '14px',
+        fontWeight: 'normal',
+    }),
+    menuList: (base) => ({
+        ...base,
+        padding: '8px',
+    }),
+    option: (base, state) => ({
+        ...base,
+        borderRadius: '4px',
+        color: state.isSelected ? 'var(--B500)' : 'var(--N900)',
+        // eslint-disable-next-line no-nested-ternary
+        backgroundColor: state.isSelected ? 'var(--B100)' : state.isFocused ? 'var(--N100)' : 'var(--bg-primary)',
+        fontWeight: state.isSelected ? 600 : 'normal',
+        marginRight: '8px',
+    }),
+    input: (base) => ({
+        ...base,
+        margin: '0',
+        flex: 'unset',
+        color: 'var(--N900)',
+    }),
+    dropdownIndicator: (base) => ({
+        ...base,
+        padding: '0 4px 0 4px',
+    }),
+}
+
+export const AppSelectorDropdownIndicator = (props: DropdownIndicatorProps) => {
+    const { selectProps } = props
+
+    return (
+        <components.DropdownIndicator {...props}>
+            <DropDownIcon
+                className="rotate"
+                style={{
+                    ['--rotateBy' as any]: selectProps.menuIsOpen ? '180deg' : '0deg',
+                    height: '24px',
+                    width: '24px',
+                }}
+            />
+        </components.DropdownIndicator>
+    )
+}
+
+export const AppSelectorNoOptionsMessage = (inputObj: { inputValue: string }): string => {
+    if (inputObj && (inputObj.inputValue === '' || inputObj.inputValue.length < 3)) {
+        return 'Type 3 chars to see matching results'
+    }
+    return 'No matching results'
 }
