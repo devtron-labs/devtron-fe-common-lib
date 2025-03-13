@@ -164,7 +164,10 @@ const DeploymentDetailSteps = ({
         deploymentStatusDetailsBreakdownData.deploymentStatus === DEPLOYMENT_STATUS.SUPERSEDED
     ) {
         return (
-            <div className="flexbox deployment-aborted" data-testid="deployment-history-steps-failed-message">
+            <div
+                className="flexbox flex-grow-1 dc__content-center"
+                data-testid="deployment-history-steps-failed-message"
+            >
                 <GenericEmptyState
                     title={EMPTY_STATE_STATUS.DEPLOYMENT_DETAILS_SETPS_FAILED.TITLE}
                     subTitle={EMPTY_STATE_STATUS.DEPLOYMENT_DETAILS_SETPS_FAILED.SUBTITLE}
