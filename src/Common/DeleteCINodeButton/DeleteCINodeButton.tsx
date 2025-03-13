@@ -15,7 +15,6 @@
  */
 
 import { useState } from 'react'
-
 import { ERROR_STATUS_CODE } from '@Common/Constants'
 import { Button, ButtonStyleType, ButtonVariantType, DeleteConfirmationModal } from '@Shared/Components'
 import { ComponentSizeType, DeleteComponentsName } from '@Shared/constants'
@@ -105,7 +104,7 @@ export const DeleteCINodeButton = ({
                 ariaLabel="Delete pipeline"
                 variant={ButtonVariantType.borderLess}
                 dataTestId={testId}
-                size={ComponentSizeType.xs}
+                size={ComponentSizeType.xxs_small_icon}
                 showAriaLabelInTippy
                 onClick={onClickDeleteShowModal}
                 style={ButtonStyleType.negativeGrey}
