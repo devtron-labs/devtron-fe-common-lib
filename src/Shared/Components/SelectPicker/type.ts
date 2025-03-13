@@ -142,6 +142,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     | 'onInputChange'
     | 'inputValue'
     | 'filterOption'
+    | 'noOptionsMessage'
 > &
     Partial<
         Pick<
