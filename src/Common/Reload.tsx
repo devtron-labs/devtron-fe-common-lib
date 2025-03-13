@@ -21,11 +21,10 @@ import { refresh } from './Helper'
 /**
  * @deprecated Use APIResponseHandler (Preferred) or error screen manager instead
  */
-export default function Reload({ reload, className = '', heightToDeduct = 0 }: ReloadType) {
+export default function Reload({ reload, className = '' }: ReloadType) {
     return (
         <article
             className={`flex w-100 h-100 ${className}`}
-            {...(heightToDeduct > 0 && { style: { height: `calc(100vh - ${heightToDeduct}px)` } })}
         >
             <div className="flex column w-250 dc__align-center" data-testid="reload">
                 <img src={loadingFailure} style={{ height: 'auto' }} className="w-100 mb-12" alt="load-error" />
