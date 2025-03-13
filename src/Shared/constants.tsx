@@ -424,7 +424,7 @@ export const ANSI_UP_REGEX = /\x1B\[.*?m/g
  * Size variants for components
  */
 export enum ComponentSizeType {
-    xxxs = 'xxxs',
+    xxs_small_icon = 'xxs-small-icon',
     xxs = 'xxs',
     xs = 'xs',
     small = 'small',
@@ -434,7 +434,7 @@ export enum ComponentSizeType {
 }
 
 export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<ComponentSizeType, string> = {
-    [ComponentSizeType.xxxs]: 'py-1 fs-12 lh-20',
+    [ComponentSizeType.xxs_small_icon]: 'py-1 fs-12 lh-20',
     [ComponentSizeType.xxs]: 'py-1 fs-12 lh-20',
     [ComponentSizeType.xs]: 'py-1 fs-12 lh-20',
     [ComponentSizeType.small]: 'py-3 fs-12 lh-20',
@@ -444,7 +444,7 @@ export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<Component
 } as const
 
 export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<ComponentSizeType, string> = {
-    [ComponentSizeType.xxxs]: 'px-1',
+    [ComponentSizeType.xxs_small_icon]: 'px-4',
     [ComponentSizeType.xxs]: 'px-5',
     [ComponentSizeType.xs]: 'px-5',
     [ComponentSizeType.small]: 'px-5',
@@ -454,7 +454,7 @@ export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<ComponentSizeType
 } as const
 
 export const COMPONENT_SIZE_TYPE_TO_ICON_SIZE_MAP: Record<ComponentSizeType, number> = {
-    [ComponentSizeType.xxxs]: 12,
+    [ComponentSizeType.xxs_small_icon]: 12,
     [ComponentSizeType.xxs]: 14,
     [ComponentSizeType.xs]: 14,
     [ComponentSizeType.small]: 16,
