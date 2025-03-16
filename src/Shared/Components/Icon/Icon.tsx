@@ -9,10 +9,12 @@ import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
+import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCiWebhook } from '@IconsV2/ic-ci-webhook.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
+import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
@@ -56,9 +58,14 @@ import { ReactComponent as ICOpenInNew } from '@IconsV2/ic-open-in-new.svg'
 import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
+import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
+import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
+import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.svg'
+import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
+import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash.svg'
@@ -80,10 +87,12 @@ export const iconMap = {
     'ic-build-color': ICBuildColor,
     'ic-cancelled': ICCancelled,
     'ic-cd': ICCd,
+    'ic-check': ICCheck,
     'ic-ci-linked': ICCiLinked,
     'ic-ci-webhook': ICCiWebhook,
     'ic-circle-loader': ICCircleLoader,
     'ic-clock': ICClock,
+    'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
     'ic-code': ICCode,
     'ic-container': ICContainer,
@@ -127,9 +136,14 @@ export const iconMap = {
     'ic-openshift': ICOpenshift,
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
+    'ic-pencil': ICPencil,
     'ic-quay': ICQuay,
     'ic-shield-check': ICShieldCheck,
+    'ic-sort-ascending': ICSortAscending,
+    'ic-sort-descending': ICSortDescending,
+    'ic-sortable': ICSortable,
     'ic-stack': ICStack,
+    'ic-stamp': ICStamp,
     'ic-success': ICSuccess,
     'ic-suspended': ICSuspended,
     'ic-timeout-two-dash': ICTimeoutTwoDash,
