@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { get } from '@Common/Api'
+import { get } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
 import { FloatingVariablesSuggestionsProps, ScopedVariableType } from './types'
 
