@@ -15,8 +15,8 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror'
-import CodeMirrorMerge, { CodeMirrorMergeRef } from 'react-codemirror-merge'
+import CodeMirror, { EditorView, ReactCodeMirrorRef, ViewUpdate } from '@uiw/react-codemirror'
+import { MergeView } from '@codemirror/merge'
 
 import { getComponentSpecificThemeClass } from '@Shared/Providers'
 import { getUniqueId } from '@Shared/Helpers'
@@ -24,7 +24,7 @@ import { Progressing } from '@Common/Progressing'
 
 import { useCodeEditorContext } from './CodeEditor.context'
 import { CodeEditorRendererProps } from './types'
-import { getCodeEditorHeight, getRevertControlButton } from './utils'
+import { getCodeEditorHeight, getRevertControlButton, updateDiffMinimapValues } from './utils'
 import { DiffMinimap } from './Extensions'
 
 export const CodeEditorRenderer = ({
@@ -35,7 +35,6 @@ export const CodeEditorRenderer = ({
     height,
     codeEditorTheme,
     readOnly,
-    isOriginalModifiable,
     handleLhsOnChange,
     originalViewExtensions,
     handleOnChange,
@@ -58,7 +57,10 @@ export const CodeEditorRenderer = ({
 
     // REFS
     const codeMirrorRef = useRef<ReactCodeMirrorRef>()
-    const codeMirrorMergeRef = useRef<CodeMirrorMergeRef>()
+    const codeMirrorMergeRef = useRef<MergeView>()
+    const codeMirrorMergeParentRef = useRef<HTMLDivElement>()
+    const diffMinimapRef = useRef<MergeView>()
+    const diffMinimapParentRef = useRef<HTMLDivElement>()
 
     // CONSTANTS
     const componentSpecificThemeClass = getComponentSpecificThemeClass(theme)
@@ -89,9 +91,9 @@ export const CodeEditorRenderer = ({
         let isFocused = false
         const body = document.querySelector('body')
         if (body) {
-            if (codeMirrorMergeRef.current?.view) {
-                const lhsEditor = codeMirrorMergeRef.current.view.a
-                const rhsEditor = codeMirrorMergeRef.current.view.b
+            if (codeMirrorMergeRef.current) {
+                const lhsEditor = codeMirrorMergeRef.current.a
+                const rhsEditor = codeMirrorMergeRef.current.b
 
                 isFocused =
                     (lhsEditor.hasFocus || rhsEditor.hasFocus) &&
@@ -110,21 +112,21 @@ export const CodeEditorRenderer = ({
             }
         }
     }, [
-        codeMirrorMergeRef.current?.view?.a?.hasFocus,
-        codeMirrorMergeRef.current?.view?.b?.hasFocus,
+        codeMirrorMergeRef.current?.a?.hasFocus,
+        codeMirrorMergeRef.current?.b?.hasFocus,
         codeMirrorRef.current?.view?.hasFocus,
     ])
 
     // SYNCING LEFT RIGHT EDITOR HORIZONTAL SCROLLS
     const handleLHSScroll = () => {
-        codeMirrorMergeRef.current.view.a.scrollDOM.scrollTo({
-            left: codeMirrorMergeRef.current.view.b.scrollDOM.scrollLeft,
+        codeMirrorMergeRef.current.a.scrollDOM.scrollTo({
+            left: codeMirrorMergeRef.current.b.scrollDOM.scrollLeft,
         })
     }
 
     const handleRHSScroll = () => {
-        codeMirrorMergeRef.current.view.b.scrollDOM.scrollTo({
-            left: codeMirrorMergeRef.current.view.a.scrollDOM.scrollLeft,
+        codeMirrorMergeRef.current.b.scrollDOM.scrollTo({
+            left: codeMirrorMergeRef.current.a.scrollDOM.scrollLeft,
         })
     }
 
@@ -136,9 +138,9 @@ export const CodeEditorRenderer = ({
                 setCodeEditorDiffViewKey(getUniqueId())
 
                 // SYNCING LEFT RIGHT EDITOR HORIZONTAL SCROLLS
-                if (codeMirrorMergeRef.current?.view) {
-                    codeMirrorMergeRef.current.view.a.scrollDOM.addEventListener('scroll', handleRHSScroll)
-                    codeMirrorMergeRef.current.view.b.scrollDOM.addEventListener('scroll', handleLHSScroll)
+                if (codeMirrorMergeRef.current) {
+                    codeMirrorMergeRef.current.a.scrollDOM.addEventListener('scroll', handleRHSScroll)
+                    codeMirrorMergeRef.current.b.scrollDOM.addEventListener('scroll', handleLHSScroll)
                 }
             }, 0)
         }
@@ -147,9 +149,9 @@ export const CodeEditorRenderer = ({
             setCodeEditorDiffViewKey('')
 
             // SYNCING LEFT RIGHT EDITOR HORIZONTAL SCROLLS
-            if (codeMirrorMergeRef.current?.view) {
-                codeMirrorMergeRef.current.view.b.scrollDOM.removeEventListener('scroll', handleLHSScroll)
-                codeMirrorMergeRef.current.view.a.scrollDOM.removeEventListener('scroll', handleRHSScroll)
+            if (codeMirrorMergeRef.current) {
+                codeMirrorMergeRef.current.b.scrollDOM.removeEventListener('scroll', handleLHSScroll)
+                codeMirrorMergeRef.current.a.scrollDOM.removeEventListener('scroll', handleRHSScroll)
             }
         }
     }, [loading, diffMode, codemirrorMergeKey])
@@ -157,6 +159,92 @@ export const CodeEditorRenderer = ({
     const onCreateEditor = () => {
         updateGutterWidth()
     }
+
+    // DIFF VIEW INITIALIZATIONS AND EXTENSIONS
+    const originalUpdateListener = EditorView.updateListener.of((vu: ViewUpdate) => {
+        if (vu.docChanged) {
+            const { doc } = vu.state
+            const val = doc.toString()
+            handleLhsOnChange(val, vu)
+        }
+
+        updateDiffMinimapValues(diffMinimapRef.current, vu.transactions, 'a')
+    })
+
+    const modifiedUpdateListener = EditorView.updateListener.of((vu: ViewUpdate) => {
+        if (vu.docChanged) {
+            const { doc } = vu.state
+            const val = doc.toString()
+            handleOnChange(val, vu)
+        }
+
+        updateDiffMinimapValues(diffMinimapRef.current, vu.transactions, 'b')
+    })
+
+    // DIFF VIEW INITIALIZATION
+    useEffect(() => {
+        if (!loading && codeMirrorMergeParentRef.current) {
+            codeMirrorMergeRef.current = new MergeView({
+                a: {
+                    doc: lhsValue,
+                    extensions: [...originalViewExtensions, originalUpdateListener],
+                },
+                b: {
+                    doc: value,
+                    extensions: [...modifiedViewExtensions, modifiedUpdateListener],
+                },
+                ...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {}),
+                diffConfig: { scanLimit: 5000 },
+                parent: codeMirrorMergeParentRef.current,
+            })
+        }
+
+        return () => {
+            codeMirrorMergeRef.current?.destroy()
+        }
+    }, [loading, codemirrorMergeKey, diffMode])
+
+    // Sync external changes of `lhsValue` and `value` state to the diff-editor state.
+    useEffect(() => {
+        if (codeMirrorMergeRef.current) {
+            const originalDoc = codeMirrorMergeRef.current.a.state.doc.toString()
+            if (originalDoc !== lhsValue) {
+                codeMirrorMergeRef.current.a.dispatch({
+                    changes: { from: 0, to: originalDoc.length, insert: lhsValue || '' },
+                })
+            }
+
+            const modifiedDoc = codeMirrorMergeRef.current.b.state.doc.toString()
+            if (modifiedDoc !== value) {
+                codeMirrorMergeRef.current.b.dispatch({
+                    changes: { from: 0, to: originalDoc.length, insert: value || '' },
+                })
+            }
+        }
+    }, [lhsValue, value])
+
+    // MINIMAP INITIALIZATION
+    useEffect(() => {
+        if (!loading && diffMinimapParentRef.current) {
+            diffMinimapRef.current = new MergeView({
+                a: {
+                    doc: lhsValue,
+                    extensions: diffMinimapExtensions,
+                },
+                b: {
+                    doc: value,
+                    extensions: diffMinimapExtensions,
+                },
+                gutter: false,
+                diffConfig: { scanLimit: 5000 },
+                parent: diffMinimapParentRef.current,
+            })
+        }
+
+        return () => {
+            diffMinimapRef.current?.destroy()
+        }
+    }, [codeEditorDiffViewKey])
 
     const { codeEditorClassName, codeEditorHeight, codeEditorParentClassName } = getCodeEditorHeight(height)
 
@@ -172,36 +260,15 @@ export const CodeEditorRenderer = ({
 
     return diffMode ? (
         <div className={`flexbox w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}>
-            <CodeMirrorMerge
-                key={codemirrorMergeKey}
-                ref={codeMirrorMergeRef}
-                theme={codeEditorTheme}
-                className={`flex-grow-1 h-100 dc__overflow-hidden ${readOnly ? 'code-editor__read-only' : ''}`}
-                gutter
-                destroyRerender={false}
-                {...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {})}
-            >
-                <CodeMirrorMerge.Original
-                    basicSetup={false}
-                    value={lhsValue}
-                    readOnly={readOnly || !isOriginalModifiable}
-                    onChange={handleLhsOnChange}
-                    extensions={originalViewExtensions}
-                />
-                <CodeMirrorMerge.Modified
-                    basicSetup={false}
-                    value={value}
-                    readOnly={readOnly}
-                    onChange={handleOnChange}
-                    extensions={modifiedViewExtensions}
-                />
-            </CodeMirrorMerge>
+            <div
+                ref={codeMirrorMergeParentRef}
+                className={`cm-merge-theme flex-grow-1 h-100 dc__overflow-hidden ${readOnly ? 'code-editor__read-only' : ''}`}
+            />
             <DiffMinimap
                 key={codeEditorDiffViewKey}
                 theme={theme}
-                codeEditorTheme={codeEditorTheme}
-                view={codeMirrorMergeRef.current?.view}
-                diffMinimapExtensions={diffMinimapExtensions}
+                view={codeMirrorMergeRef.current}
+                diffMinimapParentRef={diffMinimapParentRef}
             />
         </div>
     ) : (

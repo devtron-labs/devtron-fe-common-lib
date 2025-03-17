@@ -16,8 +16,8 @@
 
 import { Dispatch, FunctionComponent, Key, MutableRefObject, ReactNode, SetStateAction, SVGProps } from 'react'
 import { JSONSchema7 } from 'json-schema'
-import { EditorView, ReactCodeMirrorProps } from '@uiw/react-codemirror'
-import { CodeMirrorMergeRef } from 'react-codemirror-merge'
+import { EditorView, Extension, ReactCodeMirrorProps } from '@uiw/react-codemirror'
+import { MergeView } from '@codemirror/merge'
 import { SearchQuery } from '@codemirror/search'
 
 import { MODES } from '@Common/Constants'
@@ -136,20 +136,19 @@ export type CodeEditorRendererProps = Required<
         | 'onFocus'
         | 'autoFocus'
     >
-> &
-    Required<Pick<CodeEditorDiffBaseProps, 'isOriginalModifiable'>> & {
-        codemirrorMergeKey: Key
-        codeMirrorParentDivRef: MutableRefObject<HTMLDivElement>
-        codeEditorTheme: ReactCodeMirrorProps['theme']
-        handleOnChange: ReactCodeMirrorProps['onChange']
-        handleLhsOnChange: ReactCodeMirrorProps['onChange']
-        originalViewExtensions: ReactCodeMirrorProps['extensions']
-        modifiedViewExtensions: ReactCodeMirrorProps['extensions']
-        extensions: ReactCodeMirrorProps['extensions']
-        diffMinimapExtensions: ReactCodeMirrorProps['extensions']
-    }
+> & {
+    codemirrorMergeKey: Key
+    codeMirrorParentDivRef: MutableRefObject<HTMLDivElement>
+    codeEditorTheme: Extension
+    handleOnChange: ReactCodeMirrorProps['onChange']
+    handleLhsOnChange: ReactCodeMirrorProps['onChange']
+    originalViewExtensions: ReactCodeMirrorProps['extensions']
+    modifiedViewExtensions: ReactCodeMirrorProps['extensions']
+    extensions: ReactCodeMirrorProps['extensions']
+    diffMinimapExtensions: ReactCodeMirrorProps['extensions']
+}
 
-export interface DiffMinimapProps
-    extends Pick<CodeEditorRendererProps, 'diffMinimapExtensions' | 'codeEditorTheme' | 'theme'> {
-    view: CodeMirrorMergeRef['view']
+export interface DiffMinimapProps extends Pick<CodeEditorRendererProps, 'theme'> {
+    view: MergeView
+    diffMinimapParentRef: MutableRefObject<HTMLDivElement>
 }
