@@ -16,18 +16,17 @@
 
 import { useState } from 'react'
 import { ERROR_STATUS_CODE } from '@Common/Constants'
-import { Button, ButtonStyleType, ButtonVariantType, DeleteConfirmationModal } from '@Shared/Components'
+import { Button, ButtonStyleType, ButtonVariantType, DeleteConfirmationModal, Icon } from '@Shared/Components'
 import { ComponentSizeType, DeleteComponentsName } from '@Shared/constants'
 import { ToastManager, ToastVariantType } from '@Shared/index'
-import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
 import { deleteWorkflow, savePipeline } from './utils'
 import { DeleteCINodeButtonProps } from './types'
 import { preventDefault, showError, stopPropagation } from '..'
 
 export const DeleteCINodeButton = ({
     testId,
-    isCIPipeline,
-    disabled,
+    showIconOnly = true,
+    disabled = false,
     title,
     isJobView,
     deletePayloadConfig,
@@ -47,29 +46,31 @@ export const DeleteCINodeButton = ({
     }
 
     const onDeleteWorkflow = async () => {
-        await deleteWorkflow(String(deletePayloadConfig.appId), Number(deletePayloadConfig.appWorkflowId))
-            .then((response) => {
-                if (response.errors) {
-                    const { errors } = response
-                    const { userMessage } = errors[0]
-                    ToastManager.showToast({
-                        variant: ToastVariantType.error,
-                        description: userMessage,
-                    })
-                    return
-                }
+        try {
+            const response = await deleteWorkflow(
+                String(deletePayloadConfig.appId),
+                Number(deletePayloadConfig.appWorkflowId),
+            )
+            if (response.errors) {
+                const { errors } = response
+                const { userMessage } = errors[0]
+                ToastManager.showToast({
+                    variant: ToastVariantType.error,
+                    description: userMessage,
+                })
+                return
+            }
 
-                if (response.status.toLowerCase() === 'ok') {
-                    ToastManager.showToast({
-                        variant: ToastVariantType.success,
-                        description: 'Workflow Deleted',
-                    })
-                    getWorkflows()
-                }
-            })
-            .catch((errors) => {
-                showError(errors)
-            })
+            if (response.status.toLowerCase() === 'ok') {
+                ToastManager.showToast({
+                    variant: ToastVariantType.success,
+                    description: 'Workflow Deleted',
+                })
+                getWorkflows()
+            }
+        } catch (error) {
+            showError(error)
+        }
     }
 
     const onClickDelete = async () => {
@@ -86,20 +87,11 @@ export const DeleteCINodeButton = ({
         if (typeof onDelete === 'function') {
             onDelete()
         }
-
         await onDeleteWorkflow()
     }
 
     const renderDeleteButton = () =>
-        isCIPipeline ? (
-            <Button
-                dataTestId={testId}
-                disabled={disabled}
-                onClick={onClickDeleteShowModal}
-                text="Delete Pipeline"
-                style={ButtonStyleType.negative}
-            />
-        ) : (
+        showIconOnly ? (
             <Button
                 ariaLabel="Delete pipeline"
                 variant={ButtonVariantType.borderLess}
@@ -108,8 +100,21 @@ export const DeleteCINodeButton = ({
                 showAriaLabelInTippy
                 onClick={onClickDeleteShowModal}
                 style={ButtonStyleType.negativeGrey}
-                icon={<ICDelete />}
+                icon={<Icon name="ic-delete" color={null} strokeWidth={1} size={12} />}
                 disabled={disabled}
+                showTooltip
+                tooltipProps={{
+                    placement: 'right',
+                    content: 'Delete Pipeline',
+                }}
+            />
+        ) : (
+            <Button
+                dataTestId={testId}
+                disabled={disabled}
+                onClick={onClickDeleteShowModal}
+                text="Delete Pipeline"
+                style={ButtonStyleType.negative}
             />
         )
 

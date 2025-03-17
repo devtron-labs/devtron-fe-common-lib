@@ -7,9 +7,9 @@ interface DeletePayloadConfig {
 
 export interface DeleteCINodeButtonProps {
     testId: string
-    isCIPipeline?: boolean
-    disabled: boolean
     title: string
+    showIconOnly?: boolean
+    disabled?: boolean
     isJobView?: boolean
     deletePayloadConfig: DeletePayloadConfig
     onDelete?: () => void
