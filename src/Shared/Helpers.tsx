@@ -50,6 +50,7 @@ import {
 import {
     AggregationKeys,
     BorderConfigType,
+    DevtronLicenseDTO,
     GitTriggers,
     IntersectionChangeHandler,
     IntersectionOptions,
@@ -67,6 +68,7 @@ import {
     PodMetadatum,
 } from './Components'
 import { getAggregator } from '../Pages'
+import { DevtronLicenseCardProps, LicenseStatus } from './Components/LicenseInfoDialog/LicenseInfoDialog.components'
 
 interface HighlightSearchTextProps {
     /**
@@ -1065,3 +1067,43 @@ export const deriveBorderRadiusAndBorderClassFromConfig = ({
 
 export const getClassNameForStickyHeaderWithShadow = (isStuck: boolean, topClassName = 'dc__top-0') =>
     `dc__position-sticky ${topClassName} dc__transition--box-shadow ${isStuck ? 'dc__box-shadow--header' : ''}`
+
+const getDevtronLicenseStatus = ({
+    ttl,
+    reminderThreshold,
+}: Pick<DevtronLicenseDTO, 'ttl' | 'reminderThreshold'>): DevtronLicenseCardProps['licenseStatus'] => {
+    if (ttl < 0) {
+        return LicenseStatus.EXPIRED
+    }
+
+    if (ttl < reminderThreshold) {
+        return LicenseStatus.REMINDER_THRESHOLD_REACHED
+    }
+
+    return LicenseStatus.ACTIVE
+}
+
+export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard extends boolean = false>(
+    licenseDTO: DevtronLicenseDTO<isCentralDashboard>,
+    currentUserEmail?: isCentralDashboard extends true ? string : never,
+): DevtronLicenseCardProps => {
+    const {
+        isTrial,
+        expiry,
+        ttl,
+        reminderThreshold,
+        organisationMetadata,
+        license,
+        licenseSuffix,
+        claimedByUserDetails,
+    } = licenseDTO || {}
+
+    return {
+        enterpriseName: organisationMetadata?.name || '',
+        expiryDate: expiry ? moment(expiry).format(DATE_TIME_FORMATS['DD/MM/YYYY']) : '',
+        ttl,
+        licenseStatus: getDevtronLicenseStatus({ ttl, reminderThreshold }),
+        isTrial,
+        ...(currentUserEmail === claimedByUserDetails?.email ? { licenseKey: license } : { licenseSuffix }),
+    }
+}

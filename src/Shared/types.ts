@@ -1031,3 +1031,42 @@ export interface AppEnvIdType {
     appId: number
     envId: number
 }
+
+export interface DevtronLicenseBaseDTO {
+    fingerprint: string
+    isTrial: boolean
+    /**
+     * In timestamp format
+     */
+    expiry: string
+    /**
+     * Can be negative, depicts time left in seconds for license to expire
+     */
+    ttl: number
+    /**
+     * Show a reminder after these many DAYS left for license to expire, i.e,
+     * Show if `ttl` is less than `reminderThreshold` [converted to seconds]
+     */
+    reminderThreshold: number
+    organisationMetadata: {
+        name: string
+        domain: string
+    }
+}
+
+export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = DevtronLicenseBaseDTO &
+    (isCentralDashboard extends true
+        ? {
+              claimedByUserDetails: {
+                  firstName: string
+                  lastName: string
+                  email: string
+              }
+              license: string
+              licenseSuffix?: never
+          }
+        : {
+              claimedByUserDetails?: never
+              license?: never
+              licenseSuffix: string
+          })
