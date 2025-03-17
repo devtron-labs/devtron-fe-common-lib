@@ -45,6 +45,7 @@ import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
+import { ReactComponent as ICKey } from '@IconsV2/ic-key.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLoginDevtronLogo } from '@IconsV2/ic-login-devtron-logo.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
@@ -65,6 +66,7 @@ import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash.svg'
+import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
@@ -119,6 +121,7 @@ export const iconMap = {
     'ic-info-outline': ICInfoOutline,
     'ic-job-color': ICJobColor,
     'ic-k8s-job': ICK8sJob,
+    'ic-key': ICKey,
     'ic-ldap': ICLdap,
     'ic-login-devtron-logo': ICLoginDevtronLogo,
     'ic-logout': ICLogout,
@@ -139,6 +142,7 @@ export const iconMap = {
     'ic-success': ICSuccess,
     'ic-suspended': ICSuspended,
     'ic-timeout-two-dash': ICTimeoutTwoDash,
+    'ic-timer': ICTimer,
     'ic-unknown': ICUnknown,
     'ic-user-key': ICUserKey,
     'ic-warning': ICWarning,
