@@ -46,6 +46,7 @@ export const DevtronLicenseCard = ({
     expiryDate,
     licenseStatus,
     isTrial,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ttl,
 }: DevtronLicenseCardProps) => {
     const colorValue = getColorAccordingToStatus(licenseStatus)

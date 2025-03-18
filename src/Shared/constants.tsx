@@ -515,3 +515,5 @@ export const DC_DELETE_SUBTITLES = {
     DELETE_ENVIRONMENT_SUBTITLE: 'Are you sure you want to delete this environment?',
     DELETE_CLUSTER_SUBTITLES: 'Are you sure you want to delete this cluster?',
 }
+
+export const EULA_LINK = 'https://devtron.ai/end-user-license-agreement-eula'
