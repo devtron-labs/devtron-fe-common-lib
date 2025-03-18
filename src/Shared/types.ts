@@ -1033,25 +1033,26 @@ export interface AppEnvIdType {
 }
 
 export interface DevtronLicenseBaseDTO {
-    fingerprint: string
-    isTrial: boolean
+    fingerprint: string | null
+    isTrial: boolean | null
     /**
      * In timestamp format
      */
-    expiry: string
+    expiry: string | null
     /**
      * Can be negative, depicts time left in seconds for license to expire
      */
-    ttl: number
+    ttl: number | null
     /**
      * Show a reminder after these many DAYS left for license to expire, i.e,
      * Show if `ttl` is less than `reminderThreshold` [converted to seconds]
      */
-    reminderThreshold: number
+    reminderThreshold: number | null
     organisationMetadata: {
-        name: string
-        domain: string
-    }
+        name: string | null
+        domain: string | null
+    } | null
+    license: string | null
 }
 
 export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = DevtronLicenseBaseDTO &
@@ -1061,12 +1062,8 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
                   firstName: string
                   lastName: string
                   email: string
-              }
-              license: string
-              licenseSuffix?: never
+              } | null
           }
         : {
               claimedByUserDetails?: never
-              license?: never
-              licenseSuffix: string
           })

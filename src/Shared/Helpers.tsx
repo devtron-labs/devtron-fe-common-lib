@@ -1076,7 +1076,7 @@ const getDevtronLicenseStatus = ({
         return LicenseStatus.EXPIRED
     }
 
-    if (ttl < reminderThreshold) {
+    if (ttl < reminderThreshold * 24 * 60 * 60) {
         return LicenseStatus.REMINDER_THRESHOLD_REACHED
     }
 
@@ -1087,16 +1087,8 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
     licenseDTO: DevtronLicenseDTO<isCentralDashboard>,
     currentUserEmail?: isCentralDashboard extends true ? string : never,
 ): DevtronLicenseCardProps => {
-    const {
-        isTrial,
-        expiry,
-        ttl,
-        reminderThreshold,
-        organisationMetadata,
-        license,
-        licenseSuffix,
-        claimedByUserDetails,
-    } = licenseDTO || {}
+    const { isTrial, expiry, ttl, reminderThreshold, organisationMetadata, license, claimedByUserDetails } =
+        licenseDTO || {}
 
     return {
         enterpriseName: organisationMetadata?.name || '',
@@ -1104,6 +1096,6 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
         ttl,
         licenseStatus: getDevtronLicenseStatus({ ttl, reminderThreshold }),
         isTrial,
-        ...(currentUserEmail === claimedByUserDetails?.email ? { licenseKey: license } : { licenseSuffix }),
+        ...(currentUserEmail === claimedByUserDetails?.email ? { licenseKey: license } : { licenseSuffix: license }),
     }
 }
