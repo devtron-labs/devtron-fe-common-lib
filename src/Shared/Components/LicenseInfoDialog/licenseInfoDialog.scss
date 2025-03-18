@@ -1,0 +1,32 @@
+.license-info-dialog {
+    .radio-group {
+        overflow: visible !important;
+        .radio {
+            .radio__item-label {
+                width: 180px;
+                display: flex;
+                justify-content: center;
+            }
+        }
+    }
+}
+
+.license-card {
+    border: 1px solid var(--Divider-border-Border_secondary_translucent, rgba(255, 255, 255, 0.1));
+    background: radial-gradient(
+        340.2% 100% at 0% 0%,
+        var(--bg-primary, #0f0f10) 0%,
+        var(--bg-tertiary, #030303) 100%
+    );
+    box-shadow:
+        0px 1px 1px 0px rgba(0, 0, 0, 0.04),
+        0px 2px 6px 0px rgba(0, 0, 0, 0.04),
+        0px 4px 12px 0px rgba(0, 0, 0, 0.1);
+}
+
+.trial-license-badge {
+    background-color: var(--bg-hover);
+    letter-spacing: 0.55px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}

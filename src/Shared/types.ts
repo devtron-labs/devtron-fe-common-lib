@@ -1031,3 +1031,39 @@ export interface AppEnvIdType {
     appId: number
     envId: number
 }
+
+export interface DevtronLicenseBaseDTO {
+    fingerprint: string | null
+    isTrial: boolean | null
+    /**
+     * In timestamp format
+     */
+    expiry: string | null
+    /**
+     * Can be negative, depicts time left in seconds for license to expire
+     */
+    ttl: number | null
+    /**
+     * Show a reminder after these many DAYS left for license to expire, i.e,
+     * Show if `ttl` is less than `reminderThreshold` [converted to seconds]
+     */
+    reminderThreshold: number | null
+    organisationMetadata: {
+        name: string | null
+        domain: string | null
+    } | null
+    license: string | null
+}
+
+export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = DevtronLicenseBaseDTO &
+    (isCentralDashboard extends true
+        ? {
+              claimedByUserDetails: {
+                  firstName: string | null
+                  lastName: string | null
+                  email: string | null
+              } | null
+          }
+        : {
+              claimedByUserDetails?: never
+          })
