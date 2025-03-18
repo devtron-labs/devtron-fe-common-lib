@@ -46,6 +46,7 @@ import {
     DATE_TIME_FORMATS,
     ApprovalConfigDataType,
     UserApprovalInfo,
+    TOKEN_COOKIE_NAME,
 } from '../Common'
 import {
     AggregationKeys,
@@ -1098,4 +1099,8 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
         isTrial,
         ...(currentUserEmail === claimedByUserDetails?.email ? { licenseKey: license } : { licenseSuffix: license }),
     }
+}
+
+export const clearCookieOnLogout = () => {
+    document.cookie = `${TOKEN_COOKIE_NAME}=; expires=Thu, 01-Jan-1970 00:00:01 GMT;path=/`
 }
