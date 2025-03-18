@@ -28,14 +28,14 @@ export type DevtronLicenseCardProps = {
       }
 )
 
-export const getColorAccordingToStatus = (licenseStatus: LicenseStatus) => {
+export const getColorAccordingToStatus = (licenseStatus: LicenseStatus): { bgColor: string; textColor: string } => {
     switch (licenseStatus) {
         case LicenseStatus.ACTIVE:
-            return 'var(--G100)'
+            return { bgColor: 'var(--G100)', textColor: 'var(--G500)' }
         case LicenseStatus.REMINDER_THRESHOLD_REACHED:
-            return 'var(--Y100)'
+            return { bgColor: 'var(--Y100)', textColor: 'var(--Y700)' }
         default:
-            return 'var(--R100)'
+            return { bgColor: 'var(--R100)', textColor: 'var(--R500)' }
     }
 }
 
@@ -49,31 +49,37 @@ export const DevtronLicenseCard = ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ttl,
 }: DevtronLicenseCardProps) => {
-    const colorValue = getColorAccordingToStatus(licenseStatus)
+    const { bgColor, textColor } = getColorAccordingToStatus(licenseStatus)
 
     return (
-        <div className="flexbox-col p-8 br-16" style={{ backgroundColor: colorValue }}>
-            <div className="license-card flexbox-col dc__content-space br-12 p-20 h-200 bg__tertiary">
-                <div className="flexbox dc__align-items-center dc__content-space">
-                    <span className="font-merriweather cn-9 fs-16 fw-7 lh-1-5">{enterpriseName}</span>
-                    <Icon name="ic-devtron" color="N900" size={24} />
-                </div>
-                <div className="flexbox-col dc__gap-4">
-                    <div className="flexbox dc__align-items-center dc__gap-6">
-                        <Icon name="ic-key" color={null} size={20} />
-                        <div className="flex dc__gap-4 cn-7 fs-16 fw-5 lh-1-5 font-ibm-plex-mono">
-                            <span>••••</span>
-                            <span>{licenseSuffix || licenseKey.slice(-8)}</span>
+        <div className="flexbox-col p-8 br-16" style={{ backgroundColor: bgColor }}>
+            <div className="license-card br-12 h-200 bg__tertiary">
+                <div className="p-20 flexbox-col dc__content-space">
+                    <div className="flexbox dc__align-items-center dc__content-space">
+                        <span className="font-merriweather cn-9 fs-16 fw-7 lh-1-5">{enterpriseName}</span>
+                        <Icon name="ic-devtron" color="N900" size={24} />
+                    </div>
+                    <div className="flexbox-col dc__gap-4">
+                        <div className="flexbox dc__align-items-center dc__gap-6">
+                            <Icon name="ic-key" color={null} size={20} />
+                            <div className="flex dc__gap-4 cn-7 fs-16 fw-5 lh-1-5 font-ibm-plex-mono">
+                                <span>••••</span>
+                                <span>{licenseSuffix || licenseKey.slice(-8)}</span>
+                            </div>
+                            {licenseKey && <ClipboardButton content={licenseKey} />}
                         </div>
-                        {licenseKey && <ClipboardButton content={licenseKey} />}
-                    </div>
-                    <div className="flexbox dc__align-items-center dc__gap-4">
-                        <span>{expiryDate}</span>
-                        <span>•</span>
-                        <span style={{ color: colorValue }}>2 months remaining</span>
+                        <div className="flexbox dc__align-items-center dc__gap-4">
+                            <span>{expiryDate}</span>
+                            <span>•</span>
+                            <span style={{ color: textColor }}>2 months remaining</span>
+                        </div>
                     </div>
                 </div>
-                {isTrial && <div className="flexbox dc__align-items-center px-20 py-6">TRIAL LICENSE</div>}
+                {isTrial && (
+                    <span className="trial-license-badge flexbox dc__align-items-center px-20 py-6 cn-9 fs-11 fw-5 lh-1-5">
+                        TRIAL LICENSE
+                    </span>
+                )}
             </div>
             {licenseStatus !== LicenseStatus.ACTIVE && (
                 <div className="p-16 flexbox-col dc__gap-8">
@@ -133,7 +139,7 @@ export const LicenseInfo = ({ handleUpdateLicenseClick }: { handleUpdateLicenseC
             ttl={100}
             licenseStatus={LicenseStatus.ACTIVE}
             isTrial
-            expiryDate="2025-05-17"
+            expiryDate="17/05/2025"
         />
         <InstallationFingerprintInfo installationFingerprint="3ff0d8be-e7f2-4bf4-9c3f-70ec904b51f4" showHelpTip />
         <div className="border__primary--bottom h-1" />
