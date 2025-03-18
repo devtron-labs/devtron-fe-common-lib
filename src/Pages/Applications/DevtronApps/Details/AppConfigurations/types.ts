@@ -74,6 +74,7 @@ export enum GetTemplateAPIRouteType {
     CONFIG_DATA = 'config-data',
     CONFIG_CM = 'config/config-map',
     CONFIG_CS = 'config/secret',
+    WORKFLOW = 'workflow',
     WORKFLOW_LIST = 'workflow/list',
     OVERVIEW = 'overview',
     README = 'readme',
