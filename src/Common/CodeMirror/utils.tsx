@@ -42,7 +42,7 @@ import { yamlCompletion, yamlSchemaHover, yamlSchemaLinter } from 'codemirror-js
 
 import { Icon } from '@Shared/Components'
 import { Tooltip } from '@Common/Tooltip'
-import { noop, YAMLStringify } from '@Common/Helper'
+import { debounce, noop, YAMLStringify } from '@Common/Helper'
 
 import { yamlParseLinter } from './Extensions'
 import { CodeEditorProps, FindReplaceToggleButtonProps, GetCodeEditorHeightReturnType, HoverTexts } from './types'
@@ -154,10 +154,16 @@ export const updateDiffMinimapValues = (view: MergeView, transactions: readonly 
                 annotations.push(Transaction.userEvent.of(userEvent))
             }
 
-            view[side].dispatch({
-                changes: tr.changes,
-                annotations,
-            })
+            const debouncedDispatch = debounce(
+                () =>
+                    view[side].dispatch({
+                        changes: tr.changes,
+                        annotations,
+                    }),
+                300,
+            )
+
+            debouncedDispatch()
         }
     })
 }
