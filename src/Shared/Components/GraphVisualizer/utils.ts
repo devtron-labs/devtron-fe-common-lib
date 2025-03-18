@@ -101,7 +101,7 @@ const calculateNodePositions = (nodes: GraphVisualizerProps['nodes'], edges: Gra
 
     // Initialize adjacency list (each node starts with an empty children array)
     nodes.forEach((node) => childrenMap.set(node.id, []))
-    edges.forEach((edge) => childrenMap.get(edge.source).push(edge.target))
+    edges.forEach((edge) => (childrenMap.get(edge.source) ?? []).push(edge.target))
 
     // Identify all the root nodes (the nodes that are never a target in edges)
     const rootNodes = findRootNodes(nodes, edges)

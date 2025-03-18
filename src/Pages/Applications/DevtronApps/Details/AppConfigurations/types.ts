@@ -70,9 +70,11 @@ export enum GetTemplateAPIRouteType {
     CD_DEPLOY_CONFIG = 'cd-deploy-config',
     CD_ENV_LIST = 'cd-env-list',
     CONFIG_DEPLOYMENT_TEMPLATE = 'config/deployment-template',
+    CONFIG_DEPLOYMENT_TEMPLATE_ENV = 'config/deployment-template/env',
     CONFIG_DATA = 'config-data',
     CONFIG_CM = 'config/config-map',
     CONFIG_CS = 'config/secret',
+    WORKFLOW = 'workflow',
     WORKFLOW_LIST = 'workflow/list',
     OVERVIEW = 'overview',
     README = 'readme',
@@ -83,6 +85,8 @@ export enum GetTemplateAPIRouteType {
     CD_PIPELINE = 'cd-pipeline',
     CONFIG_STRATEGY = 'config/strategy',
     CHART_REF = 'chartRef',
+    PIPELINE_SUGGEST_CI = 'pipeline/suggest/ci',
+    PIPELINE_SUGGEST_CD = 'pipeline/suggest/cd',
 }
 
 export interface GetTemplateAPIRouteProps {

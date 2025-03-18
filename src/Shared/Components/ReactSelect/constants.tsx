@@ -124,6 +124,7 @@ export const APP_SELECTOR_STYLES: StylesConfig = {
         justifyContent: state.menuIsOpen ? 'space-between' : 'flex-start',
         cursor: 'pointer',
         backgroundColor: 'var(--bg-primary)',
+        maxWidth: '350px',
     }),
     valueContainer: (base, state) => ({
         ...base,
