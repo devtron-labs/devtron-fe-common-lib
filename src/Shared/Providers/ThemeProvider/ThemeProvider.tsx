@@ -50,7 +50,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     }
 
     const handleColorSchemeChange = () => {
-        handleThemePreferenceChange(THEME_PREFERENCE_MAP.auto)
+        handleThemePreferenceChange(THEME_PREFERENCE_MAP.auto, showThemeSwitcherDialog)
     }
 
     useEffect(() => {
@@ -73,7 +73,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
         return () => {
             matchQuery.removeEventListener('change', handleColorSchemeChange)
         }
-    }, [themeConfig.themePreference])
+    }, [themeConfig.themePreference, showThemeSwitcherDialog])
 
     const handleThemeSwitcherDialogVisibilityChange = (isVisible: boolean) => {
         setShowThemeSwitcherDialog(isVisible)
