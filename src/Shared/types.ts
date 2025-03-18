@@ -1059,9 +1059,9 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
     (isCentralDashboard extends true
         ? {
               claimedByUserDetails: {
-                  firstName: string
-                  lastName: string
-                  email: string
+                  firstName: string | null
+                  lastName: string | null
+                  email: string | null
               } | null
           }
         : {
