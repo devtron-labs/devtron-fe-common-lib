@@ -149,7 +149,9 @@ const Artifacts = ({
     targetPlatforms,
 }: ArtifactType) => {
     const { isSuperAdmin } = useGetUserRoles()
-    const { handleDownload } = useDownload()
+    const { handleDownload } = useDownload({
+        shouldOpenInNewTab: true,
+    })
 
     const { triggerId, buildId } = useParams<{
         triggerId: string
