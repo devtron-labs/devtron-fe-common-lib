@@ -9,6 +9,7 @@ import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
+import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
 import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
@@ -86,6 +87,7 @@ export const iconMap = {
     'ic-browser': ICBrowser,
     'ic-build-color': ICBuildColor,
     'ic-cancelled': ICCancelled,
+    'ic-caret-left': ICCaretLeft,
     'ic-cd': ICCd,
     'ic-chat-circle-dots': ICChatCircleDots,
     'ic-ci-linked': ICCiLinked,
