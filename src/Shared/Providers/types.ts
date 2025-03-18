@@ -56,6 +56,7 @@ export interface MainContext {
     isManifestScanningEnabled: boolean
     canOnlyViewPermittedEnvOrgLevel: boolean
     viewIsPipelineRBACConfiguredNode: ReactNode
+    setIsLicenseInfoDialogOpen: (isLicenseInfoDialogOpen: boolean) => void
 }
 
 export interface MainContextProviderProps {

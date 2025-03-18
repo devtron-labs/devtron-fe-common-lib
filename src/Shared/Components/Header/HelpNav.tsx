@@ -26,6 +26,7 @@ import { ReactComponent as Feedback } from '../../../Assets/Icon/ic-feedback.svg
 import { ReactComponent as Discord } from '../../../Assets/Icon/ic-discord-fill.svg'
 import { ReactComponent as File } from '../../../Assets/Icon/ic-file-text.svg'
 import { useMainContext } from '../../Providers'
+import { Icon } from '../Icon'
 
 const HelpNav = ({
     className,
@@ -34,6 +35,7 @@ const HelpNav = ({
     fetchingServerInfo,
     setGettingStartedClicked,
     showHelpCard,
+    openAboutDevtronDialog,
 }: HelpNavType) => {
     const { currentServerInfo } = useMainContext()
     const isEnterprise = currentServerInfo?.serverInfo?.installationType === InstallationType.ENTERPRISE
@@ -44,14 +46,12 @@ const HelpNav = ({
             name: 'View documentation',
             link: DOCUMENTATION_HOME_PAGE,
             icon: File,
-            showSeparator: true,
         },
 
         {
             name: 'Join discord community',
             link: DISCORD_LINK,
             icon: Discord,
-            showSeparator: isEnterprise,
         },
         ...(isEnterprise ? EnterpriseHelpOptions : OSSHelpOptions),
     ]
@@ -75,7 +75,7 @@ const HelpNav = ({
         <div onClick={stopPropagation} className="help-card__option help-card__link flex left cn-9">
             <Feedback />
             <SliderButton
-                className="dc__transparent help-card__option-name ml-12 cn-9 fs-14"
+                className="dc__transparent ml-12 cn-9 fs-14"
                 id={FEEDBACK_FORM_ID}
                 onClose={toggleHelpCard}
                 autoClose={2000}
@@ -92,7 +92,6 @@ const HelpNav = ({
 
     const renderHelpOptions = (): JSX.Element => (
         <>
-            {' '}
             {CommonHelpOptions.map((option, index) => (
                 <Fragment key={option.name}>
                     <a
@@ -105,12 +104,23 @@ const HelpNav = ({
                         onClick={handleHelpOptions}
                     >
                         <option.icon />
-                        <div className="help-card__option-name ml-12 cn-9 fs-14">{option.name}</div>
+                        <div className="ml-12 cn-9 fs-14">{option.name}</div>
                     </a>
                     {isEnterprise && index === 1 && (
-                        <div className="help__enterprise pl-8 pb-4-imp pt-4-imp dc__gap-12 flexbox dc__align-items-center h-28">
-                            Enterprise Support
-                        </div>
+                        <>
+                            <div
+                                role="button"
+                                tabIndex={0}
+                                className="help-card__option flexbox dc__align-items-center cn-9 dc__gap-12 fs-14"
+                                onClick={openAboutDevtronDialog}
+                            >
+                                <Icon name="ic-devtron" color="N600" size={20} />
+                                About Devtron
+                            </div>
+                            <div className="help__enterprise pl-8 pb-4-imp pt-4-imp dc__gap-12 flexbox dc__align-items-center h-28">
+                                Enterprise Support
+                            </div>
+                        </>
                     )}
                 </Fragment>
             ))}
@@ -128,7 +138,7 @@ const HelpNav = ({
                         onClick={onClickGettingStarted}
                     >
                         <GettingStartedIcon className="scn-6" />
-                        <div className="help-card__option-name ml-12 cn-9 fs-14" data-testid="getting-started-link">
+                        <div className="ml-12 cn-9 fs-14" data-testid="getting-started-link">
                             Getting started
                         </div>
                     </NavLink>
