@@ -5,6 +5,7 @@ import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
+import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
@@ -79,6 +80,7 @@ export const iconMap = {
     'ic-arrow-right': ICArrowRight,
     'ic-azure': ICAzure,
     'ic-bitbucket': ICBitbucket,
+    'ic-book-open': ICBookOpen,
     'ic-browser': ICBrowser,
     'ic-build-color': ICBuildColor,
     'ic-cancelled': ICCancelled,
