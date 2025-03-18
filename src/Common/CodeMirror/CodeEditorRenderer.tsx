@@ -54,6 +54,7 @@ export const CodeEditorRenderer = ({
     const [gutterWidth, setGutterWidth] = useState(0)
     const [codeMirrorMergeInstance, setCodeMirrorMergeInstance] = useState<MergeView>(null)
     const [diffMinimapInstance, setDiffMinimapInstance] = useState<MergeView>(null)
+    const [scalingFactor, setScalingFactor] = useState<number>(1)
 
     // REFS
     const codeMirrorRef = useRef<ReactCodeMirrorRef>()
@@ -198,6 +199,7 @@ export const CodeEditorRenderer = ({
 
         return () => {
             codeMirrorMergeInstance?.destroy()
+            setCodeMirrorMergeInstance(null)
         }
     }, [loading, codemirrorMergeKey, diffMode])
 
@@ -243,8 +245,21 @@ export const CodeEditorRenderer = ({
 
         return () => {
             diffMinimapInstance?.destroy()
+            setDiffMinimapInstance(null)
+            diffMinimapRef.current = null
         }
     }, [codeMirrorMergeInstance])
+
+    // SCALING FACTOR UPDATER
+    useEffect(() => {
+        setTimeout(() => {
+            setScalingFactor(
+                codeMirrorMergeInstance
+                    ? Math.min(codeMirrorMergeInstance.dom.clientHeight / codeMirrorMergeInstance.dom.scrollHeight, 1)
+                    : 1,
+            )
+        }, 100)
+    }, [lhsValue, value, codeMirrorMergeInstance])
 
     const { codeEditorClassName, codeEditorHeight, codeEditorParentClassName } = getCodeEditorHeight(height)
 
@@ -267,8 +282,8 @@ export const CodeEditorRenderer = ({
             <DiffMinimap
                 theme={theme}
                 view={codeMirrorMergeInstance}
-                minimapView={diffMinimapInstance}
                 diffMinimapParentRef={diffMinimapParentRef}
+                scalingFactor={scalingFactor}
             />
         </div>
     ) : (

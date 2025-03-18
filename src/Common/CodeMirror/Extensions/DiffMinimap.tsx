@@ -1,15 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { getComponentSpecificThemeClass } from '@Shared/Providers'
 
 import { DiffMinimapProps } from '../types'
 import { CODE_EDITOR_FONT_SIZE, CODE_EDITOR_MIN_OVERLAY_HEIGHT } from '../CodeEditor.constants'
-import { useCodeEditorContext } from '../CodeEditor.context'
 
-export const DiffMinimap = ({ view, minimapView, theme, diffMinimapParentRef }: DiffMinimapProps) => {
-    // CONTEXTS
-    const { lhsValue, value } = useCodeEditorContext()
-
+export const DiffMinimap = ({ view, theme, diffMinimapParentRef, scalingFactor }: DiffMinimapProps) => {
     // STATES
     const [overlayTop, setOverlayTop] = useState<number>(0)
     const [overlayHeight, setOverlayHeight] = useState<number>(50)
@@ -23,14 +19,6 @@ export const DiffMinimap = ({ view, minimapView, theme, diffMinimapParentRef }: 
 
     // CONSTANTS
     const componentSpecificThemeClass = getComponentSpecificThemeClass(theme)
-
-    const scalingFactor = useMemo(() => {
-        if (view) {
-            return Math.min(view.dom.clientHeight / view.dom.scrollHeight, 1)
-        }
-
-        return 1
-    }, [lhsValue, value, view, minimapView])
 
     // Update the overlay position and size
     const updateOverlay = () => {
