@@ -150,5 +150,6 @@ export type CodeEditorRendererProps = Required<
 
 export interface DiffMinimapProps extends Pick<CodeEditorRendererProps, 'theme'> {
     view: MergeView
+    minimapView: MergeView
     diffMinimapParentRef: MutableRefObject<HTMLDivElement>
 }

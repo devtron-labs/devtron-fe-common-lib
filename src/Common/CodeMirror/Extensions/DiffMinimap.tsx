@@ -6,7 +6,7 @@ import { DiffMinimapProps } from '../types'
 import { CODE_EDITOR_FONT_SIZE, CODE_EDITOR_MIN_OVERLAY_HEIGHT } from '../CodeEditor.constants'
 import { useCodeEditorContext } from '../CodeEditor.context'
 
-export const DiffMinimap = ({ view, theme, diffMinimapParentRef }: DiffMinimapProps) => {
+export const DiffMinimap = ({ view, minimapView, theme, diffMinimapParentRef }: DiffMinimapProps) => {
     // CONTEXTS
     const { lhsValue, value } = useCodeEditorContext()
 
@@ -30,7 +30,7 @@ export const DiffMinimap = ({ view, theme, diffMinimapParentRef }: DiffMinimapPr
         }
 
         return 1
-    }, [lhsValue, value])
+    }, [lhsValue, value, view, minimapView])
 
     // Update the overlay position and size
     const updateOverlay = () => {
@@ -107,7 +107,7 @@ export const DiffMinimap = ({ view, theme, diffMinimapParentRef }: DiffMinimapPr
                 dom.removeEventListener('scroll', handleDiffScroll)
             }
         }
-    }, [])
+    }, [view])
 
     useEffect(() => {
         if (isDragging) {
