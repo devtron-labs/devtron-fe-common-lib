@@ -220,6 +220,7 @@ const useUrlFilters = <T = string, K = unknown>({
         clearFilters,
         ...parsedParams,
         updateSearchParams,
+        isFilterApplied: !!Object.keys(parsedParams).length || !!searchKey,
     }
 }
 

@@ -116,6 +116,7 @@ const useStateFilters = <T = string,>({
         changePage,
         changePageSize,
         offset,
+        isFilterApplied: !!searchKey,
     }
 }
 
