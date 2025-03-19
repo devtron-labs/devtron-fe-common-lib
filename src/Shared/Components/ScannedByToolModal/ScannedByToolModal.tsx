@@ -37,6 +37,8 @@ const ScannedByToolModal: React.FC<ScannedByToolModalProps> = ({
                 src: scanToolUrl,
                 className: 'icon-dim-20-imp',
                 alt: 'scan-tool',
+                height: 20,
+                width: 20,
             }}
             fallbackImage={<ICScanFallback className="icon-dim-20-imp dc__no-shrink" />}
         />
