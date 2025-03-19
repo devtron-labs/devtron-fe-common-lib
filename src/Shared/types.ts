@@ -16,6 +16,7 @@
 
 import { Dayjs } from 'dayjs'
 import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
+import { ParsedCountry } from 'react-international-phone'
 import {
     OptionType,
     CommonNodeAttr,
@@ -1067,3 +1068,5 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
         : {
               claimedByUserDetails?: never
           })
+
+export type CountryISO2Type = ParsedCountry['iso2']

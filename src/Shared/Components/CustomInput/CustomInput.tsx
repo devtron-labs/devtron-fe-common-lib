@@ -47,9 +47,11 @@ const CustomInput = ({
     endIconButtonConfig,
     labelTippyCustomizedConfig,
     labelTooltipConfig,
+    inputRef: inputRefProp,
     ...props
 }: CustomInputProps) => {
-    const inputRef = useRef<HTMLInputElement>(null)
+    const localInputRef = useRef<HTMLInputElement>(null)
+    const inputRef = inputRefProp || localInputRef
 
     useEffect(() => {
         setTimeout(() => {

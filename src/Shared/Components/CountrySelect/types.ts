@@ -1,9 +1,10 @@
-import { ParsedCountry } from 'react-international-phone'
+import { CountryISO2Type } from '@Shared/index'
 import { SelectPickerProps } from '../SelectPicker'
 
-export type CountryISO2Type = ParsedCountry['iso2']
-
-export interface CountrySelectProps extends Pick<SelectPickerProps, 'required' | 'label' | 'error' | 'placeholder'> {
+export interface CountrySelectProps
+    extends Pick<SelectPickerProps, 'required' | 'label' | 'error' | 'placeholder' | 'size'>,
+        Required<Pick<SelectPickerProps, 'name'>> {
     selectedCountry: CountryISO2Type
     handleChange: (iso2: CountryISO2Type) => void
+    variant?: 'default' | 'selectPhoneCode'
 }
