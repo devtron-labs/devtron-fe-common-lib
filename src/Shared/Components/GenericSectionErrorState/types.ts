@@ -15,7 +15,7 @@
  */
 
 import { ReactNode } from 'react'
-import { ProgressingProps } from '@Common/Types'
+import { IconsProps } from '../Icon'
 
 export type GenericSectionErrorStateProps = {
     /**
@@ -51,10 +51,10 @@ export type GenericSectionErrorStateProps = {
 } & (
     | {
           /**
-           * If provided, would render the Progressing component with given props instead of error icon
+           * If provided, Icon with ic-circle-loader
            */
-          progressingProps: ProgressingProps
-          useInfoIcon?: never
+          progressingProps: Omit<IconsProps, 'name'>
+          useInfoIcon?: false
       }
     | {
           progressingProps?: never
@@ -63,7 +63,7 @@ export type GenericSectionErrorStateProps = {
            *
            * @default false
            */
-          useInfoIcon: boolean
+          useInfoIcon: true
       }
     | {
           progressingProps?: never

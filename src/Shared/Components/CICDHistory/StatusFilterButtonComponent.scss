@@ -60,7 +60,7 @@
         }
     }
 
-    &.with-menu-button {
+    &.radio-group.with-menu-button {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
 
@@ -68,6 +68,10 @@
             border-right: none;
             border-top-right-radius: 0 !important;
             border-bottom-right-radius: 0 !important;
+        }
+
+        .radio:first-child > .radio__item-label {
+            padding: 2px 4px;
         }
     }
 }
