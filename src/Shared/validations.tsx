@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-import { PhoneNumberUtil } from 'google-libphonenumber'
 import { getSanitizedIframe } from '@Common/Helper'
 import { customizeValidator } from '@rjsf/validator-ajv8'
 import { PATTERNS } from '@Common/Constants'
 import { parse } from 'yaml'
 import { URLProtocolType } from './types'
 import { SKIP_LABEL_KEY_VALIDATION_PREFIX } from './constants'
-
-const phoneUtil = PhoneNumberUtil.getInstance()
 
 export interface ValidationResponseType {
     isValid: boolean
@@ -495,21 +492,6 @@ export const validateYAML = (yamlString: string, isRequired?: boolean): Validati
         return {
             isValid: false,
             message: err.message,
-        }
-    }
-}
-
-export const isPhoneValid = (phone: string): ValidationResponseType => {
-    try {
-        const isValid = phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phone))
-        return {
-            isValid,
-            message: isValid ? '' : 'Invalid phone number',
-        }
-    } catch (error) {
-        return {
-            isValid: false,
-            message: error.message || 'Invalid phone number',
         }
     }
 }
