@@ -14,6 +14,7 @@ import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCiWebhook } from '@IconsV2/ic-ci-webhook.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
+import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
@@ -25,6 +26,7 @@ import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
+import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
 import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
 import { ReactComponent as ICGithub } from '@IconsV2/ic-github.svg'
@@ -58,6 +60,7 @@ import { ReactComponent as ICOpenInNew } from '@IconsV2/ic-open-in-new.svg'
 import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
+import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
@@ -87,6 +90,7 @@ export const iconMap = {
     'ic-ci-webhook': ICCiWebhook,
     'ic-circle-loader': ICCircleLoader,
     'ic-clock': ICClock,
+    'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
     'ic-code': ICCode,
     'ic-container': ICContainer,
@@ -98,6 +102,7 @@ export const iconMap = {
     'ic-env': ICEnv,
     'ic-error': ICError,
     'ic-failure': ICFailure,
+    'ic-folder-user': ICFolderUser,
     'ic-gear': ICGear,
     'ic-git': ICGit,
     'ic-github': ICGithub,
@@ -131,6 +136,7 @@ export const iconMap = {
     'ic-openshift': ICOpenshift,
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
+    'ic-pencil': ICPencil,
     'ic-quay': ICQuay,
     'ic-shield-check': ICShieldCheck,
     'ic-stack': ICStack,

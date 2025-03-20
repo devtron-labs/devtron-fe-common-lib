@@ -401,8 +401,7 @@ export enum CDMaterialSidebarType {
  * }
  * ```
  *
- * @example Usage with `PatchOperationType.remove`
- * Note: Value is not allowed for remove operation
+ * @example Usage with `PatchOperationType.remove` without value
  *
  * ```ts
  * const query: PatchQueryType<string> = {
@@ -410,8 +409,18 @@ export enum CDMaterialSidebarType {
  *  path: 'name'
  * }
  * ```
+ *
+ * @example Usage with `PatchOperationType.remove` with value
+ *
+ * ```ts
+ * const query: PatchQueryType<string, number, true> = {
+ *  op: PatchOperationType.remove,
+ *  path: 'name'
+ *  value: 1
+ * }
+ * ```
  */
-export type PatchQueryType<T extends string, K = unknown> = {
+export type PatchQueryType<T extends string, K = unknown, IsRemoveValueEnabled extends boolean = false> = {
     /**
      * The path of the json to be patched
      */
@@ -432,7 +441,7 @@ export type PatchQueryType<T extends string, K = unknown> = {
            * Operation type for patch
            */
           op: PatchOperationType.remove
-          value?: never
+          value?: IsRemoveValueEnabled extends true ? K : never
       }
     | {
           /**
