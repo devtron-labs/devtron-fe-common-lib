@@ -2,6 +2,7 @@ import { APIOptions } from '..'
 
 export interface CoreAPIConstructorParamsType {
     handleLogout: () => void
+    handleRedirectToLicenseActivation?: () => void
     /**
      * @default Host
      */
@@ -26,4 +27,8 @@ export interface FetchAPIParamsType<Data = object> extends Omit<FetchInTimeParam
      * @default false
      */
     preventAutoLogout?: boolean
+    /**
+     * @default false
+     */
+    preventLicenseRedirect?: boolean
 }

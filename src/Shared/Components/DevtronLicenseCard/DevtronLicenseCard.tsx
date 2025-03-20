@@ -21,7 +21,7 @@ export const DevtronLicenseCard = ({
 
     return (
         <div className="flexbox-col p-8 br-16" style={{ backgroundColor: bgColor }}>
-            <div className="license-card flexbox-col br-12 h-200 bg__tertiary">
+            <div className="license-card border__secondary-translucent flexbox-col br-12 h-200 bg__tertiary">
                 <div className="p-20 flexbox-col dc__content-space flex-grow-1">
                     <div className="flexbox dc__align-items-center dc__content-space">
                         <span className="font-merriweather cn-9 fs-16 fw-7 lh-1-5">{enterpriseName}</span>
@@ -44,7 +44,7 @@ export const DevtronLicenseCard = ({
                     </div>
                 </div>
                 {isTrial && (
-                    <span className="trial-license-badge flexbox dc__align-items-center px-20 py-6 cn-9 fs-11 fw-5 lh-1-5">
+                    <span className="trial-license-badge flexbox dc__align-items-center px-20 py-6 cn-9 fs-11 fw-5 lh-1-5 dc__bottom-radius-12">
                         TRIAL LICENSE
                     </span>
                 )}

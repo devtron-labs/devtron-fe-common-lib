@@ -1,18 +1,21 @@
-import { API_STATUS_CODES, APIOptions, FALLBACK_REQUEST_TIMEOUT, Host, ResponseType, ServerErrors } from '..'
+import { API_STATUS_CODES, APIOptions, FALLBACK_REQUEST_TIMEOUT, Host, noop, ResponseType, ServerErrors } from '..'
 import { CoreAPIConstructorParamsType, FetchAPIParamsType, FetchInTimeParamsType } from './types'
 import { handleServerError } from './utils'
 
 class CoreAPI {
     handleLogout: () => void
 
+    handleRedirectToLicenseActivation?: () => void
+
     host: string
 
     timeout: number
 
-    constructor({ handleLogout, host, timeout }: CoreAPIConstructorParamsType) {
+    constructor({ handleLogout, host, timeout, handleRedirectToLicenseActivation }: CoreAPIConstructorParamsType) {
         this.handleLogout = handleLogout
         this.host = host || Host
         this.timeout = timeout || FALLBACK_REQUEST_TIMEOUT
+        this.handleRedirectToLicenseActivation = handleRedirectToLicenseActivation || noop
     }
 
     private fetchAPI = async <K = object>({
@@ -21,6 +24,7 @@ class CoreAPI {
         data,
         signal,
         preventAutoLogout = false,
+        preventLicenseRedirect = false,
         isMultipartRequest,
     }: FetchAPIParamsType<K>): Promise<ResponseType> => {
         const options: RequestInit = {
@@ -41,6 +45,12 @@ class CoreAPI {
         ).then(
             // eslint-disable-next-line consistent-return
             async (response) => {
+                const isLicenseInvalid = response.headers.get('X-License-Status') === 'inValid'
+
+                if (isLicenseInvalid && !preventLicenseRedirect) {
+                    this.handleRedirectToLicenseActivation()
+                }
+
                 const contentType = response.headers.get('Content-Type')
                 if (response.status === API_STATUS_CODES.UNAUTHORIZED) {
                     if (preventAutoLogout) {
@@ -144,6 +154,7 @@ class CoreAPI {
                 data,
                 signal,
                 preventAutoLogout: options?.preventAutoLogout || false,
+                preventLicenseRedirect: options?.preventLicenseRedirect || false,
                 isMultipartRequest,
             }),
             timeoutPromise,
