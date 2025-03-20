@@ -1,6 +1,7 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
 
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
+import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
@@ -21,6 +22,7 @@ import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
+import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
@@ -80,6 +82,7 @@ import { IconBaseProps } from './types'
 
 export const iconMap = {
     'ic-aborted': ICAborted,
+    'ic-add': ICAdd,
     'ic-app-group': ICAppGroup,
     'ic-arrow-right': ICArrowRight,
     'ic-azure': ICAzure,
@@ -100,6 +103,7 @@ export const iconMap = {
     'ic-container': ICContainer,
     'ic-crown': ICCrown,
     'ic-cube': ICCube,
+    'ic-delete': ICDelete,
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
     'ic-devtron': ICDevtron,
     'ic-dockerhub': ICDockerhub,

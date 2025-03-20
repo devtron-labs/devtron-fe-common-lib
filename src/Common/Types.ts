@@ -166,7 +166,6 @@ export interface GenericEmptyStateType {
     subTitle?: ReactNode
     isButtonAvailable?: boolean
     styles?: CSSProperties
-    heightToDeduct?: number
     imageType?: string
     SvgImage?
     renderButton?: () => JSX.Element
@@ -185,7 +184,6 @@ export interface ErrorPageType
     extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>,
         Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
     code: number
-    heightToDeduct?: number
     redirectURL?: string
     reload?: () => void
 }
@@ -196,7 +194,6 @@ export interface ErrorScreenManagerProps {
     reload?: (...args) => any
     subtitle?: React.ReactChild
     reloadClass?: string
-    heightToDeduct?: number
     /**
      * Would be used to redirect URL in case of 404
      * @default - APP_LIST
@@ -264,7 +261,6 @@ export type InfoColourBarType = InfoColourBarMessageProp & {
 export interface ReloadType {
     reload?: (event?: any) => void
     className?: string
-    heightToDeduct?: number
 }
 
 export interface RadioGroupItemProps {

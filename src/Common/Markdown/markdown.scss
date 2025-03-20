@@ -61,6 +61,7 @@
         line-height: 1.45;
         background-color: var(--bg-secondary);
         border-radius: 3px;
+        flex-shrink: 0;
 
         code {
             display: inline;

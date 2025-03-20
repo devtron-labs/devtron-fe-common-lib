@@ -79,13 +79,7 @@ export const StatusFilterButtonComponent = ({
                 disabled={false}
                 onChange={handleInlineFilterClick}
             >
-                <RadioGroup.Radio
-                    key={allResourceKindFilter.status}
-                    value={allResourceKindFilter.status}
-                    tippyPlacement="top"
-                    tippyContent={allResourceKindFilter.status}
-                    tippyClass="w-100 dc__first-letter-capitalize"
-                >
+                <RadioGroup.Radio key={allResourceKindFilter.status} value={allResourceKindFilter.status}>
                     <span className="dc__first-letter-capitalize">{`${allResourceKindFilter.status} (${allResourceKindFilter.count})`}</span>
                 </RadioGroup.Radio>
                 {inlineFilters.map(({ status, count }) => (
