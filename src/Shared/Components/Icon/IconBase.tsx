@@ -18,6 +18,7 @@ import { ConditionalWrap } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
 
 import { IconBaseProps } from './types'
+import { ICON_STROKE_WIDTH_MAP } from './constants'
 
 import './styles.scss'
 
@@ -27,7 +28,7 @@ const conditionalWrap = (tooltipProps: IconBaseProps['tooltipProps']) => (childr
     </Tooltip>
 )
 
-export const IconBase = ({ name, iconMap, size = 16, tooltipProps, color, strokeWidth }: IconBaseProps) => {
+export const IconBase = ({ name, iconMap, size = 16, tooltipProps, color }: IconBaseProps) => {
     const IconComponent = iconMap[name]
 
     if (!IconComponent) {
@@ -37,9 +38,13 @@ export const IconBase = ({ name, iconMap, size = 16, tooltipProps, color, stroke
     return (
         <ConditionalWrap condition={!!tooltipProps?.content} wrap={conditionalWrap(tooltipProps)}>
             <IconComponent
-                className={`icon-dim-${size} ${color ? 'icon-component' : ''} dc__no-shrink`}
-                style={color ? { ['--iconColor' as string]: `var(--${color})` } : {}}
-                strokeWidth={strokeWidth}
+                className={`icon-dim-${size} ${color ? 'icon-component-color' : ''} ${ICON_STROKE_WIDTH_MAP[size] ? 'icon-component-stroke-width' : ''}  dc__no-shrink`}
+                style={{
+                    ...(color ? { ['--iconColor' as string]: `var(--${color})` } : {}),
+                    ...(ICON_STROKE_WIDTH_MAP[size]
+                        ? { ['--strokeWidth' as string]: ICON_STROKE_WIDTH_MAP[size] }
+                        : {}),
+                }}
             />
         </ConditionalWrap>
     )
