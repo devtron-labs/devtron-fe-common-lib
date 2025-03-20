@@ -195,6 +195,8 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
         selectOption(data)
     }
 
+    const iconBaseClass = 'dc__no-shrink icon-dim-16 flex dc__fill-available-space'
+
     return (
         <components.Option {...props}>
             <Tooltip {...getTooltipProps(tooltipProps)}>
@@ -210,9 +212,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                         />
                     )}
                     <div className={`flex left w-100 ${showDescription ? 'top' : ''} dc__gap-8`}>
-                        {startIcon && (
-                            <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{startIcon}</div>
-                        )}
+                        {startIcon && <div className={`${iconBaseClass} mt-2`}>{startIcon}</div>}
                         <div className="flex-grow-1">
                             <Tooltip content={label} placement="right">
                                 <h4
@@ -233,9 +233,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                                     <div className="fs-12 lh-18">{description}</div>
                                 ))}
                         </div>
-                        {endIcon && (
-                            <div className="dc__no-shrink icon-dim-16 flex dc__fill-available-space">{endIcon}</div>
-                        )}
+                        {endIcon && <div className={iconBaseClass}>{endIcon}</div>}
                     </div>
                 </div>
             </Tooltip>

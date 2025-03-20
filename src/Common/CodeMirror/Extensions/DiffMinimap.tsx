@@ -1,18 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import CodeMirrorMerge, { CodeMirrorMergeRef } from 'react-codemirror-merge'
+import { useEffect, useRef, useState } from 'react'
 
 import { getComponentSpecificThemeClass } from '@Shared/Providers'
-import { useDebouncedEffect } from '@Common/DebouncedSearch/Utils'
 
 import { DiffMinimapProps } from '../types'
-import { CODE_EDITOR_FONT_SIZE, CODE_EDITOR_LINE_HEIGHT, CODE_EDITOR_MIN_OVERLAY_HEIGHT } from '../CodeEditor.constants'
-import { useCodeEditorContext } from '../CodeEditor.context'
-import { updateDiffMinimapValues } from '../utils'
+import { CODE_EDITOR_FONT_SIZE, CODE_EDITOR_MIN_OVERLAY_HEIGHT } from '../CodeEditor.constants'
 
-export const DiffMinimap = ({ view, diffMinimapExtensions, codeEditorTheme, theme }: DiffMinimapProps) => {
-    // CONTEXTS
-    const { lhsValue, value } = useCodeEditorContext()
-
+export const DiffMinimap = ({ view, theme, diffMinimapParentRef, scalingFactor }: DiffMinimapProps) => {
     // STATES
     const [overlayTop, setOverlayTop] = useState<number>(0)
     const [overlayHeight, setOverlayHeight] = useState<number>(50)
@@ -20,36 +13,12 @@ export const DiffMinimap = ({ view, diffMinimapExtensions, codeEditorTheme, them
 
     // REFS
     const minimapContainerRef = useRef<HTMLDivElement>(null)
-    const minimapEditorRef = useRef<CodeMirrorMergeRef>(null)
     const overlayRef = useRef<HTMLDivElement>(null)
     const dragStartY = useRef<number>(0)
     const startScrollTop = useRef<number>(0)
 
     // CONSTANTS
     const componentSpecificThemeClass = getComponentSpecificThemeClass(theme)
-
-    const scalingFactor = useMemo(() => {
-        if (view) {
-            return Math.min(view.dom.clientHeight / view.dom.scrollHeight, 1)
-        }
-
-        return 1
-    }, [lhsValue, value])
-
-    // SETTING INITIAL DIFF MINI MAP VALUES
-    useEffect(() => {
-        setTimeout(() => {
-            updateDiffMinimapValues(minimapEditorRef.current?.view, value, lhsValue)
-        }, 0)
-    }, [])
-
-    useDebouncedEffect(
-        () => {
-            updateDiffMinimapValues(minimapEditorRef.current?.view, value, lhsValue)
-        },
-        300,
-        [value, lhsValue, scalingFactor],
-    )
 
     // Update the overlay position and size
     const updateOverlay = () => {
@@ -62,9 +31,10 @@ export const DiffMinimap = ({ view, diffMinimapExtensions, codeEditorTheme, them
 
         const computedHeight = (clientHeight / scrollHeight) * minimapHeight
         const modifiedHeight = Math.max(computedHeight, CODE_EDITOR_MIN_OVERLAY_HEIGHT)
+        const computedOverlayTop = (scrollTop / scrollHeight) * minimapHeight
         setOverlayHeight(modifiedHeight)
         setOverlayTop(
-            (scrollTop / scrollHeight) * (minimapHeight - (modifiedHeight !== computedHeight ? modifiedHeight : 0)),
+            computedOverlayTop + modifiedHeight > clientHeight ? clientHeight - modifiedHeight : computedOverlayTop,
         )
     }
 
@@ -125,7 +95,7 @@ export const DiffMinimap = ({ view, diffMinimapExtensions, codeEditorTheme, them
                 dom.removeEventListener('scroll', handleDiffScroll)
             }
         }
-    }, [])
+    }, [view])
 
     useEffect(() => {
         if (isDragging) {
@@ -159,30 +129,13 @@ export const DiffMinimap = ({ view, diffMinimapExtensions, codeEditorTheme, them
             className={`code-editor__minimap-container dc__position-rel dc__no-shrink cursor ${componentSpecificThemeClass}`}
             onClick={handleMinimapClick}
         >
-            <CodeMirrorMerge
-                ref={minimapEditorRef}
-                theme={codeEditorTheme}
-                className="code-editor__mini-map dc__overflow-hidden w-100"
-                gutter={false}
-                destroyRerender={false}
+            <div
+                ref={diffMinimapParentRef}
+                className="cm-merge-theme code-editor__mini-map dc__overflow-hidden w-100"
                 style={{
                     fontSize: `${scalingFactor * CODE_EDITOR_FONT_SIZE}px`,
-                    lineHeight: `${scalingFactor * CODE_EDITOR_LINE_HEIGHT}`,
                 }}
-            >
-                <CodeMirrorMerge.Original
-                    basicSetup={false}
-                    readOnly
-                    editable={false}
-                    extensions={diffMinimapExtensions}
-                />
-                <CodeMirrorMerge.Modified
-                    basicSetup={false}
-                    readOnly
-                    editable={false}
-                    extensions={diffMinimapExtensions}
-                />
-            </CodeMirrorMerge>
+            />
             <div
                 ref={overlayRef}
                 className="code-editor__minimap-overlay dc__position-abs dc__left-0 w-100 dc__zi-1"

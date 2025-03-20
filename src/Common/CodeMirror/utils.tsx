@@ -18,18 +18,18 @@ import { render } from 'react-dom'
 import { renderToString } from 'react-dom/server'
 import DOMPurify from 'dompurify'
 import * as YAML from 'yaml'
+import { Annotation, EditorView, Extension, hoverTooltip, Transaction } from '@uiw/react-codemirror'
 import { linter } from '@codemirror/lint'
 import { StreamLanguage } from '@codemirror/language'
 import { json, jsonLanguage, jsonParseLinter } from '@codemirror/lang-json'
 import { yaml, yamlLanguage } from '@codemirror/lang-yaml'
 import { shell } from '@codemirror/legacy-modes/mode/shell'
 import { dockerFile } from '@codemirror/legacy-modes/mode/dockerfile'
-import { CodeMirrorMergeRef } from 'react-codemirror-merge'
+import { MergeView } from '@codemirror/merge'
 
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 
 import { SearchQuery } from '@codemirror/search'
-import { EditorView, Extension, hoverTooltip } from '@uiw/react-codemirror'
 import { MODES } from '@Common/Constants'
 import {
     handleRefresh,
@@ -42,10 +42,13 @@ import { yamlCompletion, yamlSchemaHover, yamlSchemaLinter } from 'codemirror-js
 
 import { Icon } from '@Shared/Components'
 import { Tooltip } from '@Common/Tooltip'
-import { noop, YAMLStringify } from '@Common/Helper'
+import { debounce, noop, YAMLStringify } from '@Common/Helper'
 
 import { yamlParseLinter } from './Extensions'
 import { CodeEditorProps, FindReplaceToggleButtonProps, GetCodeEditorHeightReturnType, HoverTexts } from './types'
+
+const syncAnnotationA = Annotation.define<boolean>()
+const syncAnnotationB = Annotation.define<boolean>()
 
 // UTILS
 export const parseValueToCode = (value: string, mode: string, tabSize: number) => {
@@ -136,24 +139,33 @@ export const getUpdatedSearchMatchesCount = (newQuery: SearchQuery, view: Editor
     return updatedMatchesCount
 }
 
-export const updateDiffMinimapValues = (view: CodeMirrorMergeRef['view'], value: string, lhsValue: string) => {
+export const updateDiffMinimapValues = (view: MergeView, transactions: readonly Transaction[], side: 'a' | 'b') => {
     if (!view) {
         return
     }
 
-    const currentLhsValue = view.a.state.doc.toString()
-    if (currentLhsValue !== lhsValue) {
-        view.a.dispatch({
-            changes: { from: 0, to: currentLhsValue.length, insert: lhsValue || '' },
-        })
-    }
+    const syncAnnotation = side === 'a' ? syncAnnotationA : syncAnnotationB
+    transactions.forEach((tr) => {
+        if (!tr.changes.empty && !tr.annotation(syncAnnotation)) {
+            const annotations: Annotation<any>[] = [syncAnnotation.of(true)]
+            const userEvent = tr.annotation(Transaction.userEvent)
 
-    const currentRhsValue = view.b.state.doc.toString()
-    if (currentRhsValue !== value) {
-        view.b.dispatch({
-            changes: { from: 0, to: currentRhsValue.length, insert: value || '' },
-        })
-    }
+            if (userEvent) {
+                annotations.push(Transaction.userEvent.of(userEvent))
+            }
+
+            const debouncedDispatch = debounce(
+                () =>
+                    view[side].dispatch({
+                        changes: tr.changes,
+                        annotations,
+                    }),
+                300,
+            )
+
+            debouncedDispatch()
+        }
+    })
 }
 
 // DOM HELPERS

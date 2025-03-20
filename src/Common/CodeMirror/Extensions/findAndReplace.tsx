@@ -160,6 +160,7 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace }: FindReplaceProp
     }
 
     const onFindKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+        e.stopPropagation()
         if (e.key === 'Enter') {
             e.preventDefault()
             if (e.shiftKey) {
@@ -175,6 +176,7 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace }: FindReplaceProp
     }
 
     const onReplaceKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+        e.stopPropagation()
         if (e.key === 'Enter') {
             e.preventDefault()
             replaceNext(view)
