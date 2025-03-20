@@ -15,4 +15,4 @@ export const getLicenseColorsAccordingToStatus = (
 }
 
 export const getTTLInHumanReadableFormat = (ttl: number): string =>
-    moment.duration(Math.abs(ttl), 'seconds').humanize(true)
+    moment.duration(Math.abs(ttl), 'seconds').humanize(false)
