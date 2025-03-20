@@ -62,7 +62,6 @@ export interface HelpNavType {
     fetchingServerInfo: boolean
     setGettingStartedClicked: (isClicked: boolean) => void
     showHelpCard: boolean
-    openAboutDevtronDialog: () => void
 }
 
 export interface HelpOptionType {

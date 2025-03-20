@@ -49,14 +49,8 @@ const PageHeader = ({
     showAnnouncementHeader,
     tippyProps,
 }: PageHeaderType) => {
-    const {
-        loginCount,
-        setLoginCount,
-        showGettingStartedCard,
-        setShowGettingStartedCard,
-        setGettingStartedClicked,
-        setIsLicenseInfoDialogOpen,
-    } = useMainContext()
+    const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard, setGettingStartedClicked } =
+        useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
     const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
@@ -71,10 +65,6 @@ const PageHeader = ({
         },
     )
     const [expiryDate, setExpiryDate] = useState(0)
-
-    const handleOpenLicenseInfoDialog = () => {
-        setIsLicenseInfoDialogOpen(true)
-    }
 
     const getCurrentServerInfo = async () => {
         try {
@@ -283,7 +273,6 @@ const PageHeader = ({
                     fetchingServerInfo={currentServerInfo.fetchingServerInfo}
                     setGettingStartedClicked={setGettingStartedClicked}
                     showHelpCard={showHelpCard}
-                    openAboutDevtronDialog={handleOpenLicenseInfoDialog}
                 />
             )}
             {!window._env_.K8S_CLIENT &&

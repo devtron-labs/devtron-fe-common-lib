@@ -14,33 +14,5 @@ export const getLicenseColorsAccordingToStatus = (
     }
 }
 
-export const getTTLInHumanReadableFormat = (ttl: number): string => {
-    const duration = moment.duration(ttl, 'seconds')
-
-    if (duration.asYears() >= 1) {
-        const years = Math.floor(duration.asYears())
-        const months = duration.months()
-        if (months > 0) {
-            return `${years} ${years > 1 ? 'years' : 'year'}, ${months} ${months > 1 ? 'months' : 'month'}`
-        }
-        return `${years} ${years > 1 ? 'years' : 'year'}`
-    }
-
-    if (duration.asMonths() >= 1) {
-        const months = Math.floor(duration.asMonths())
-        return `${months} ${months > 1 ? 'months' : 'month'}`
-    }
-
-    if (duration.asDays() >= 1) {
-        const days = Math.floor(duration.asDays())
-        return `${days} ${days > 1 ? 'days' : 'day'}`
-    }
-
-    if (duration.asHours() >= 1) {
-        const hours = Math.floor(duration.asHours())
-        return `${hours} ${hours > 1 ? 'hours' : 'hour'}`
-    }
-
-    const minutes = Math.floor(duration.asMinutes())
-    return `${minutes} ${minutes > 1 ? 'minutes' : 'minute'}`
-}
+export const getTTLInHumanReadableFormat = (ttl: number): string =>
+    moment.duration(Math.abs(ttl), 'seconds').humanize(true)
