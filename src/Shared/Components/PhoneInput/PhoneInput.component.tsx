@@ -31,16 +31,18 @@ const PhoneInput = ({
         <div className="flexbox-col dc__gap-6">
             <span className={`${required ? 'dc__required-field' : ''} cn-7 fs-13 fw-4 lh-20`}>Phone Number</span>
 
-            <div className="flexbox-col dc__gap-4">
-                <div className="flexbox dc__gap-8">
-                    <CountrySelect
-                        placeholder=""
-                        selectedCountry={country.iso2}
-                        variant="selectPhoneCode"
-                        handleChange={handleUpdateCountry}
-                        name={countryCodeSelectName}
-                        size={countryCodeSelectSize}
-                    />
+            <div className="flexbox-col dc__gap-4 dc__grid">
+                <div className="flexbox dc__gap-8 w-100">
+                    <div className="flexbox dc__mxw-50-per">
+                        <CountrySelect
+                            placeholder=""
+                            selectedCountry={country.iso2}
+                            variant="selectPhoneCode"
+                            handleChange={handleUpdateCountry}
+                            name={countryCodeSelectName}
+                            size={countryCodeSelectSize}
+                        />
+                    </div>
 
                     <CustomInput
                         placeholder="Phone Number"
@@ -49,6 +51,7 @@ const PhoneInput = ({
                         value={inputValue}
                         onChange={handlePhoneValueChange}
                         inputRef={inputRef}
+                        fullWidth
                     />
                 </div>
 
