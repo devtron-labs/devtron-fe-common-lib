@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { SelectPickerOptionType } from '@Shared/Components'
-// import { ComponentSizeType } from '@Shared/constants'
+import { ComponentSizeType } from '@Shared/constants'
 
 type SegmentType = Pick<SelectPickerOptionType, 'label' | 'value' | 'startIcon' | 'tooltipProps'>
 
@@ -10,10 +10,16 @@ export interface NSegmentedControlProps {
     onChange?: (selectedTab: SegmentType) => void
     // disabled?: boolean
     name: string
-    // size?: Extract<ComponentSizeType, ComponentSizeType.xs | ComponentSizeType.small | ComponentSizeType.medium>
+    size?: Extract<ComponentSizeType, ComponentSizeType.xs | ComponentSizeType.small | ComponentSizeType.medium>
 }
 
-const NSegmentedControl = ({ segments, onChange, name }: NSegmentedControlProps) => {
+export const COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP: Record<NSegmentedControlProps['size'], string> = {
+    [ComponentSizeType.xs]: 'py-1 px-5',
+    [ComponentSizeType.small]: 'py-1 px-5',
+    [ComponentSizeType.medium]: 'py-3 px-7',
+} as const
+
+const NSegmentedControl = ({ segments, onChange, name, size = ComponentSizeType.medium }: NSegmentedControlProps) => {
     const [selectedSegmentValue, setSelectedSegmentValue] = useState<SegmentType['value'] | null>(segments[0].value)
 
     const handleSegmentChange = (updatedSegment: SegmentType) => {
@@ -23,7 +29,9 @@ const NSegmentedControl = ({ segments, onChange, name }: NSegmentedControlProps)
 
     return (
         <div>
-            <div className="dc__inline-flex dc__content-center dc__align-items-center dc__gap-2 br-6 bg__tertiary p-2">
+            <div
+                className={`dc__inline-flex dc__content-center dc__align-items-center dc__gap-2 br-6 bg__tertiary ${size === ComponentSizeType.xs ? 'p-1' : 'p-2'}`}
+            >
                 {segments.map((segment) => {
                     const isSelected = segment.value === selectedSegmentValue
 
@@ -45,11 +53,11 @@ const NSegmentedControl = ({ segments, onChange, name }: NSegmentedControlProps)
                             />
                             <label
                                 htmlFor={`${name}-${segment.value}`}
-                                className={`"pointer m-0 dc__block py-3 px-7 br-4 flex py-1 px-5 flex dc__gap-4 ${isSelected ? 'bg__primary' : ''}`}
+                                className={`pointer m-0 dc__block br-4 flex py-1 px-5 flex dc__gap-4 ${isSelected ? 'bg__primary' : ''} ${COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP[size]}`}
                                 style={
                                     isSelected
                                         ? {
-                                              border: '0.5px solid var(--border-secondary)',
+                                              border: '1px solid var(--border-secondary)',
                                               boxShadow: '0px 1px 2px 0px var(--black-20)',
                                           }
                                         : {}
