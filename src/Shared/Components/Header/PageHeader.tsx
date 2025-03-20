@@ -19,7 +19,7 @@ import Tippy from '@tippyjs/react'
 import './pageHeader.css'
 import ReactGA from 'react-ga4'
 import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
-import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
+import { ReactComponent as ICCaretDownSmall } from '@Icons/ic-caret-down-small.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as Question } from '@Icons/ic-help-outline.svg'
 import { getAlphabetIcon, TippyCustomized, TippyTheme } from '../../../Common'
@@ -104,7 +104,12 @@ const PageHeader = ({
         }
     }
 
+    const handleCloseSwitchThemeLocationTippyChange = () => {
+        handleShowSwitchThemeLocationTippyChange(false)
+    }
+
     const onClickLogoutButton = () => {
+        handleCloseSwitchThemeLocationTippyChange()
         setShowLogOutCard(!showLogOutCard)
         if (showHelpCard) {
             setShowHelpCard(false)
@@ -133,10 +138,6 @@ const PageHeader = ({
         })
     }
 
-    const handleCloseSwitchThemeLocationTippyChange = () => {
-        handleShowSwitchThemeLocationTippyChange(false)
-    }
-
     const renderThemePreferenceLocationTippyContent = () => (
         <div className="px-16 pb-16 flexbox-col dc__gap-4">
             <h6 className="m-0 fs-14 fw-6 lh-20">Theme Preference</h6>
@@ -153,7 +154,7 @@ const PageHeader = ({
                 <span className="fs-13 cn-9" data-testid="go-to-get-started">
                     Help
                 </span>
-                <ICCaretDown
+                <ICCaretDownSmall
                     style={{ ['--rotateBy' as any]: `${180 * Number(showHelpCard)}deg` }}
                     className="scn-7 icon-dim-16 rotate pointer"
                 />
@@ -165,8 +166,8 @@ const PageHeader = ({
                     placement="bottom"
                     visible={showSwitchThemeLocationTippy}
                     Icon={ICMediumPaintBucket}
-                    iconClass="icon-dim-48 dc__no-shrink"
-                    iconSize={48}
+                    iconClass="icon-dim-40 dc__no-shrink"
+                    iconSize={40}
                     additionalContent={renderThemePreferenceLocationTippyContent()}
                     showCloseButton
                     trigger="manual"
@@ -180,8 +181,8 @@ const PageHeader = ({
                         onClick={onClickLogoutButton}
                         className="dc__transparent flex p-4 dc__gap-4 br-18 bg__secondary border__secondary"
                     >
-                        {getAlphabetIcon(email, 'm-0-imp')}
-                        <ICCaretDown
+                        {getAlphabetIcon(email, 'm-0-imp h-24 w-24-imp')}
+                        <ICCaretDownSmall
                             className={`scn-7 icon-dim-16 ${showLogOutCard ? 'dc__flip-180' : ''} dc__transition--transform`}
                         />
                     </button>

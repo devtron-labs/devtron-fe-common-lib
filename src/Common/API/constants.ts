@@ -67,4 +67,4 @@ export const RESPONSE_MESSAGES = {
     511: 'Network Authentication Required',
     598: 'Network read timeout error',
     599: 'Network connect timeout error',
-}
+} as const
