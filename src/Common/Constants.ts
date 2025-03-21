@@ -80,6 +80,7 @@ export const URLS = {
     RESOURCE_BROWSER: '/resource-browser',
     COMPARE_CLUSTERS: '/compare-clusters',
     CONFIG_DRIFT: 'config-drift',
+    LICENSE_AUTH: '/license-auth',
 }
 
 export const ROUTES = {
@@ -400,6 +401,7 @@ export const DATE_TIME_FORMATS = {
     TWELVE_HOURS_EXPORT_FORMAT: 'DD-MMM-YYYY hh.mm A',
     DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
     DD_MMM_YYYY: 'DD MMM YYYY',
+    'DD/MM/YYYY': 'DD/MM/YYYY',
 }
 
 export const SEMANTIC_VERSION_DOCUMENTATION_LINK = 'https://semver.org/'

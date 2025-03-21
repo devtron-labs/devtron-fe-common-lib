@@ -16,7 +16,7 @@
 
 import { Prompt } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
-import { getIsRequestAborted } from '@Common/Api'
+import { getIsRequestAborted } from '@Common/API'
 import { showError } from '@Common/Helper'
 import { ServerErrors } from '@Common/ServerError'
 import { ApiQueuingWithBatch } from '@Shared/API'

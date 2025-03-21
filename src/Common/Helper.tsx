@@ -51,7 +51,7 @@ import { ReactComponent as ICRegex } from '@Icons/ic-regex.svg'
 import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
 import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { SourceTypeMap } from '@Common/Common.service'
-import { getIsRequestAborted } from './Api'
+import { getIsRequestAborted } from './API'
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
@@ -1077,3 +1077,6 @@ export const getHashedValue = async (value: string): Promise<string | null> => {
         return null
     }
 }
+
+export const getTTLInHumanReadableFormat = (ttl: number): string =>
+    moment.duration(Math.abs(ttl), 'seconds').humanize(false)
