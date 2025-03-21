@@ -1,19 +1,52 @@
 .segmented-control {
+    $segmented-control-selector: &;
+
     background: var(--bg-segmented-control);
+
+    &__container {
+        --segmented-control-highlight-width: auto;
+        --segmented-control-highlight-x-position: 0;
+
+        &::before {
+            content: '';
+            background: var(--bg-primary);
+            border-radius: 4px;
+            width: var(--segmented-control-highlight-width);
+            transform: translateX(var(--segmented-control-highlight-x-position));
+            position: absolute;
+            left: 0;
+            z-index: 0;
+            border: 0.5px solid var(--border-secondary);
+            box-shadow: 0px 1px 2px 0px var(--black-20);
+            height: 100%;
+            transition: transform 0.3s ease, width 0.3s ease;
+
+            &:has(#{$segmented-control-selector}__segment--xs) {
+                top: 1px;
+                bottom: 1px;
+            }
+
+            &:has(#{$segmented-control-selector}__segment--small),
+            &:has(#{$segmented-control-selector}__segment--medium) {
+                top: 2px;
+                bottom: 2px;
+            }
+        }
+    }
 
     &__segment {
         $parent-selector: &;
+        transition: color 0.3s ease;
 
-        &:hover {
+        &:hover:not(#{$parent-selector}--selected) {
             background-color: var(--bg-secondary);
         }
 
         &--selected {
-            border: 0.5px solid var(--border-secondary);
-            box-shadow: 0px 1px 2px 0px var(--black-20);
-
             &#{$parent-selector} {
-                &--xs, &--small {
+
+                &--xs,
+                &--small {
                     padding-block: 1.5px;
                     padding-inline: 5.5px;
                 }
