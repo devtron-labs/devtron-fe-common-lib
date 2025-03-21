@@ -50,6 +50,7 @@ import {
 import {
     AggregationKeys,
     BorderConfigType,
+    DevtronLicenseCardProps,
     DevtronLicenseDTO,
     GitTriggers,
     IntersectionChangeHandler,
@@ -69,7 +70,6 @@ import {
     PodMetadatum,
 } from './Components'
 import { getAggregator } from '../Pages'
-import { DevtronLicenseCardProps } from './Components/DevtronLicenseCard/types'
 
 interface HighlightSearchTextProps {
     /**
@@ -1097,6 +1097,8 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
         ttl,
         licenseStatus: getDevtronLicenseStatus({ ttl, reminderThreshold }),
         isTrial,
-        ...(currentUserEmail === claimedByUserDetails?.email ? { licenseKey: license } : { licenseSuffix: license }),
+        ...(currentUserEmail && currentUserEmail === claimedByUserDetails?.email
+            ? { licenseKey: license }
+            : { licenseSuffix: license }),
     }
 }
