@@ -24,6 +24,7 @@ import { CreatableProps } from 'react-select/creatable'
 import type {} from 'react-select/base'
 import { TooltipProps } from '@Common/Tooltip/types'
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
+import { AsyncProps } from 'react-select/async'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
 
 export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
@@ -314,3 +315,30 @@ export type SelectPickerTextAreaProps = Omit<
     | 'shouldRenderTextArea'
 > &
     Pick<ResizableTagTextAreaProps, 'maxHeight' | 'minHeight' | 'refVar' | 'dependentRefs'>
+
+export interface AsyncSelectProps
+    extends Partial<
+            Pick<
+                FormFieldWrapperProps,
+                | 'error'
+                | 'layout'
+                | 'label'
+                | 'helperText'
+                | 'warningText'
+                | 'required'
+                | 'fullWidth'
+                | 'borderConfig'
+                | 'borderRadiusConfig'
+                | 'labelTippyCustomizedConfig'
+                | 'labelTooltipConfig'
+                | 'ariaLabel'
+                | 'inputId'
+            >
+        >,
+        AsyncProps<SelectPickerOptionType, boolean, GroupBase<SelectPickerOptionType>>,
+        Partial<Pick<SelectPickerProps, 'size' | 'menuSize' | 'variant' | 'shouldMenuAlignRight'>> {
+    getIsOptionValid?: (option: SelectPickerOptionType) => boolean
+    isGroupHeadingSelectable?: boolean
+    // defaultOptions?: SelectPickerOptionType[]
+    loadingOptions?: SelectPickerOptionType[]
+}
