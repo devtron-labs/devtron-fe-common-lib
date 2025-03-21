@@ -15,8 +15,8 @@
  */
 
 .help-card__more-option {
-    top: 42px;
-    right: 56px;
+    top: 51px;
+    right: 65px;
 }
 
 .help-card__more-option.k8s-client-view {
@@ -25,6 +25,6 @@
 }
 
 .logout-card__more-option {
-    top: 42px;
-    right: 20px;
+    top: 51px;
+    right: 29px;
 }
