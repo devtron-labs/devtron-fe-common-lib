@@ -1,9 +1,10 @@
 import { usePhoneInput } from 'react-international-phone'
 import { CountryISO2Type } from '@Shared/index'
+import { useRef } from 'react'
 import { PhoneInputProps } from './types'
 import { CountrySelect } from '../CountrySelect'
 import { CustomInput } from '../CustomInput'
-import { Icon } from '../Icon'
+import FormFieldInfo from '../FormFieldWrapper/FormFieldInfo'
 
 const PhoneInput = ({
     error,
@@ -14,11 +15,18 @@ const PhoneInput = ({
     phoneValue,
     countryCodeSelectSize,
 }: PhoneInputProps) => {
+    const hasValueInitialized = useRef(false)
+
     // TODO: There are some issues with argentina country code, need to fix it
     const { inputValue, handlePhoneValueChange, inputRef, country, setCountry } = usePhoneInput({
         value: phoneValue,
         forceDialCode: true,
         onChange: (data) => {
+            // So initially this will format the phone or set the dial code to us if no phone is there, but since we expect user to enter phone number, we will ignore the first call
+            if (!hasValueInitialized.current) {
+                hasValueInitialized.current = true
+                return
+            }
             onChange(data.phone)
         },
     })
@@ -51,16 +59,13 @@ const PhoneInput = ({
                         value={inputValue}
                         onChange={handlePhoneValueChange}
                         inputRef={inputRef}
+                        // Since we are showing error below but want css of errors here
+                        error={error ? ' ' : null}
                         fullWidth
                     />
                 </div>
 
-                {error && (
-                    <div className="flexbox dc__gap-4 fs-11 lh-16 fw-4">
-                        <Icon name="ic-error" size={16} color={null} />
-                        <span className="dc__ellipsis-right__2nd-line cr-5">{error}</span>
-                    </div>
-                )}
+                {error && <FormFieldInfo error={error} inputId={phoneNumberInputName} />}
             </div>
         </div>
     )
