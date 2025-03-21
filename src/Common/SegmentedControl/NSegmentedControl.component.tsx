@@ -63,7 +63,7 @@ const NSegmentedControl = ({ segments, onChange, name, size = ComponentSizeType.
 
     return (
         <div
-            className={`dc__inline-flex dc__content-center dc__align-items-center dc__gap-2 br-6 bg__tertiary ${size === ComponentSizeType.xs ? 'p-1' : 'p-2'}`}
+            className={`segmented-control dc__inline-flex dc__content-center dc__align-items-center dc__gap-2 br-6 ${size === ComponentSizeType.xs ? 'p-1' : 'p-2'}`}
         >
             {segments.map((segment) => {
                 const { value, icon, isError, label, tooltipProps, ariaLabel } = segment
@@ -91,7 +91,7 @@ const NSegmentedControl = ({ segments, onChange, name, size = ComponentSizeType.
 
                             <label
                                 htmlFor={`${name}-${value}`}
-                                className={`pointer m-0 flex left dc__gap-4 br-4 dc__gap-4 segmented-control__segment segmented-control__segment--${size} ${isSelected ? 'bg__primary fw-6 segmented-control__segment--selected' : 'fw-4'} ${segment.isError ? 'cr-5' : 'cn-9'} ${COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP[size]}`}
+                                className={`pointer m-0 flex left dc__gap-4 br-4 segmented-control__segment segmented-control__segment--${size} ${isSelected ? 'bg__primary fw-6 segmented-control__segment--selected' : 'fw-4'} ${segment.isError ? 'cr-5' : 'cn-9'} ${COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP[size]}`}
                                 aria-label={ariaLabel}
                             >
                                 {(isError || icon) && (

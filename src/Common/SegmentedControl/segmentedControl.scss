@@ -1,6 +1,12 @@
 .segmented-control {
+    background: var(--bg-segmented-control);
+
     &__segment {
         $parent-selector: &;
+
+        &:hover {
+            background-color: var(--bg-secondary);
+        }
 
         &--selected {
             border: 0.5px solid var(--border-secondary);
