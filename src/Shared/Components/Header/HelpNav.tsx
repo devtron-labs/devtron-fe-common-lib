@@ -107,15 +107,14 @@ const HelpNav = ({
                     </a>
                     {isEnterprise && index === 1 && (
                         <>
-                            <div
-                                role="button"
-                                tabIndex={0}
-                                className="help-card__option flexbox dc__align-items-center cn-9 dc__gap-12 fs-14"
+                            <button
+                                type="button"
+                                className="dc__transparent help-card__option flexbox dc__align-items-center cn-9 dc__gap-12 fs-14"
                                 onClick={handleOpenLicenseInfoDialog}
                             >
                                 <Icon name="ic-devtron" color="N600" size={20} />
                                 About Devtron
-                            </div>
+                            </button>
                             <div className="help__enterprise pl-8 pb-4-imp pt-4-imp dc__gap-12 flexbox dc__align-items-center h-28">
                                 Enterprise Support
                             </div>
