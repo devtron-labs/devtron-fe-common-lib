@@ -9,6 +9,7 @@ import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
+import { ReactComponent as ICCalendar } from '@IconsV2/ic-calendar.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
 import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots.svg'
@@ -64,6 +65,7 @@ import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
+import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
@@ -88,6 +90,7 @@ export const iconMap = {
     'ic-book-open': ICBookOpen,
     'ic-browser': ICBrowser,
     'ic-build-color': ICBuildColor,
+    'ic-calendar': ICCalendar,
     'ic-cancelled': ICCancelled,
     'ic-cd': ICCd,
     'ic-chat-circle-dots': ICChatCircleDots,
@@ -143,6 +146,7 @@ export const iconMap = {
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
     'ic-quay': ICQuay,
+    'ic-quote': ICQuote,
     'ic-shield-check': ICShieldCheck,
     'ic-stack': ICStack,
     'ic-success': ICSuccess,

@@ -2,6 +2,7 @@ import { APIOptions } from '..'
 
 export interface CoreAPIConstructorParamsType {
     handleLogout: () => void
+    handleRedirectToLicenseActivation?: () => void
     /**
      * @default Host
      */
@@ -20,10 +21,8 @@ export interface FetchInTimeParamsType<Data = object> {
     isMultipartRequest?: boolean
 }
 
-export interface FetchAPIParamsType<Data = object> extends Omit<FetchInTimeParamsType<Data>, 'options'> {
+export interface FetchAPIParamsType<Data = object>
+    extends Omit<FetchInTimeParamsType<Data>, 'options'>,
+        Pick<APIOptions, 'preventAutoLogout' | 'preventLicenseRedirect'> {
     signal: AbortSignal
-    /**
-     * @default false
-     */
-    preventAutoLogout?: boolean
 }

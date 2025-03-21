@@ -46,3 +46,7 @@ export const handleDashboardLogout = () => {
     const continueParam = `${window.location.pathname.replace(window.__BASE_URL__, '')}${window.location.search}`
     window.location.href = `${window.location.origin}${window.__BASE_URL__}${URLS.LOGIN_SSO}?continue=${continueParam}`
 }
+
+export const handleRedirectToLicenseActivation = () => {
+    window.location.href = `${window.location.origin}${window.__BASE_URL__}${URLS.LICENSE_AUTH}`
+}

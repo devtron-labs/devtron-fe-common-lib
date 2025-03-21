@@ -1,9 +1,10 @@
 import CoreAPI from './CoreAPI'
-import { handleDashboardLogout } from './utils'
+import { handleDashboardLogout, handleRedirectToLicenseActivation } from './utils'
 
 const dashboardAPI = new CoreAPI({
     handleLogout: handleDashboardLogout,
     timeout: (window as any)?._env_?.GLOBAL_API_TIMEOUT,
+    handleRedirectToLicenseActivation,
 })
 
 export const { post, put, patch, get, trash } = dashboardAPI

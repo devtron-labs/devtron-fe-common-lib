@@ -80,6 +80,7 @@ export const URLS = {
     RESOURCE_BROWSER: '/resource-browser',
     COMPARE_CLUSTERS: '/compare-clusters',
     CONFIG_DRIFT: 'config-drift',
+    LICENSE_AUTH: '/license-auth',
 }
 
 export const ROUTES = {

@@ -57,8 +57,6 @@ export interface customEnv {
     ENABLE_SCOPED_VARIABLES?: boolean
     DEFAULT_CI_TRIGGER_TYPE_MANUAL: boolean
     ANNOUNCEMENT_BANNER_MSG?: string
-    LOGIN_PAGE_IMAGE?: string
-    LOGIN_PAGE_IMAGE_BG?: string
     HIDE_DEFAULT_CLUSTER?: boolean
     GLOBAL_API_TIMEOUT?: number
     TRIGGER_API_TIMEOUT?: number
