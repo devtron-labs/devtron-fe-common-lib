@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
+import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
 import { ViewIsPipelineRBACConfiguredRadioTabs } from '@Shared/types'
 import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
+import { getTemplateAPIRoute } from '..'
 import { get, getUrlWithSearchParams, post, ROUTES, showError } from '../../Common'
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
@@ -36,7 +38,18 @@ export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryPara
 export const getPolicyApiUrl = <T>({ kind, version, queryParams, suffix }: GetPolicyApiUrlProps<T>) =>
     getUrlWithSearchParams(`global/policy/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
 
-export const saveCDPipeline = (request) => post(ROUTES.CD_CONFIG, request)
+export const saveCDPipeline = (request, { isTemplateView }: Required<Pick<AppConfigProps, 'isTemplateView'>>) => {
+    const url = isTemplateView
+        ? getTemplateAPIRoute({
+              type: GetTemplateAPIRouteType.CD_PIPELINE,
+              queryParams: {
+                  id: request.appId,
+              },
+          })
+        : ROUTES.CD_CONFIG
+
+    return post(url, request)
+}
 
 export const getEnvironmentData = () => get<EnvironmentDataValuesDTO>(ROUTES.ENVIRONMENT_DATA)
 export const getUserPreferences = async (): Promise<UserPreferencesType> => {

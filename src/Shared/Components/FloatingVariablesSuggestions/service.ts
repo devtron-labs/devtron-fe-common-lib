@@ -29,14 +29,17 @@ const getScopedVariablesQuery = ({
     appId,
     envId,
     clusterId,
-}: Pick<FloatingVariablesSuggestionsProps, 'appId' | 'envId' | 'clusterId'>) => {
+    isTemplateView,
+}: Pick<FloatingVariablesSuggestionsProps, 'appId' | 'envId' | 'clusterId' | 'isTemplateView'>) => {
     if (!appId) {
         return ''
     }
 
-    let query = `?appId=${appId}&scope={`
+    let query = `?${isTemplateView ? '' : `appId=${appId}&`}scope={`
 
-    query += generateScope('appId', appId)
+    if (!isTemplateView) {
+        query += generateScope('appId', appId)
+    }
     query += generateScope('envId', envId)
     query += generateScope('clusterId', clusterId)
 
@@ -53,13 +56,17 @@ export const getScopedVariables = async (
     appId: FloatingVariablesSuggestionsProps['appId'],
     envId: FloatingVariablesSuggestionsProps['envId'],
     clusterId: FloatingVariablesSuggestionsProps['clusterId'],
-    hideObjectVariables: boolean = true,
+    {
+        hideObjectVariables,
+        isTemplateView,
+    }: Pick<FloatingVariablesSuggestionsProps, 'isTemplateView'> & { hideObjectVariables?: boolean },
 ): Promise<ScopedVariableType[]> => {
     const { result } = await get<ScopedVariableType[]>(
         `${ROUTES.SCOPED_GLOBAL_VARIABLES}${getScopedVariablesQuery({
             appId,
             envId,
             clusterId,
+            isTemplateView,
         })}`,
     )
     if (!result) {

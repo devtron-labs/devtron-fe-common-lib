@@ -32,6 +32,7 @@ export const DeleteCINodeButton = ({
     deletePayloadConfig,
     onDelete,
     getWorkflows,
+    isTemplateView,
 }: DeleteCINodeButtonProps) => {
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
 
@@ -50,6 +51,7 @@ export const DeleteCINodeButton = ({
             const response = await deleteWorkflow(
                 String(deletePayloadConfig.appId),
                 Number(deletePayloadConfig.appWorkflowId),
+                isTemplateView,
             )
             if (response.errors) {
                 const { errors } = response
@@ -83,7 +85,7 @@ export const DeleteCINodeButton = ({
                 name: deletePayloadConfig.pipelineName,
             },
         }
-        await savePipeline(deletePayload)
+        await savePipeline(deletePayload, { isTemplateView })
         if (typeof onDelete === 'function') {
             onDelete()
         }

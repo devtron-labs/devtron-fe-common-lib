@@ -18,9 +18,8 @@ import { useState, useRef, useEffect } from 'react'
 import Tippy from '@tippyjs/react'
 import ReactMde from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
-import moment from 'moment'
 import Markdown from '../Markdown/MarkDown'
-import { DATE_TIME_FORMATS, deepEqual, showError } from '..'
+import { deepEqual, showError } from '..'
 import './genericDescription.scss'
 import { ReactComponent as Edit } from '../../Assets/Icon/ic-pencil.svg'
 import { GenericDescriptionProps, MDEditorSelectedTabType } from './types'
@@ -43,6 +42,7 @@ import { ReactComponent as OrderedListIcon } from '../../Assets/Icon/ic-ordered-
 import { ReactComponent as UnorderedListIcon } from '../../Assets/Icon/ic-unordered-list.svg'
 import { ReactComponent as CheckedListIcon } from '../../Assets/Icon/ic-checked-list.svg'
 import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG } from './constant'
+import { getParsedUpdatedOnDate } from './utils'
 
 const GenericDescription = ({
     text,
@@ -65,9 +65,7 @@ const GenericDescription = ({
         setModifiedDescriptionText(text)
     }, [text])
 
-    // TODO (Arun): Replace with dayjs
-    const _moment = moment(updatedOn)
-    const _date = _moment.isValid() ? _moment.format(DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT) : updatedOn
+    const _date = getParsedUpdatedOnDate(updatedOn)
 
     const validateDescriptionText = (description: string): boolean => {
         let isValid = true

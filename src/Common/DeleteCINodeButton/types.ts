@@ -1,3 +1,5 @@
+import { AppConfigProps } from '@Pages/index'
+
 interface DeletePayloadConfig {
     appId: string
     appWorkflowId: number
@@ -5,7 +7,7 @@ interface DeletePayloadConfig {
     pipelineName: string
 }
 
-export interface DeleteCINodeButtonProps {
+export interface DeleteCINodeButtonProps extends Required<Pick<AppConfigProps, 'isTemplateView'>> {
     testId: string
     title: string
     showIconOnly?: boolean
