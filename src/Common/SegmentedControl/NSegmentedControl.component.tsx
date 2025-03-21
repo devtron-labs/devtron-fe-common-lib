@@ -29,7 +29,10 @@ type SegmentType = Pick<SelectPickerOptionType, 'value'> & {
 
 export interface NSegmentedControlProps {
     segments: SegmentType[]
-    // initialSelectedTab: TabType['value']
+    /**
+     * If defined, the component is controlled
+     */
+    value?: SegmentType['value']
     onChange?: (selectedTab: SegmentType) => void
     name: string
     size?: Extract<ComponentSizeType, ComponentSizeType.xs | ComponentSizeType.small | ComponentSizeType.medium>
@@ -53,8 +56,15 @@ const wrapWithTooltip = (tooltipProps: SegmentType['tooltipProps']) => (children
     </Tooltip>
 )
 
-const NSegmentedControl = ({ segments, onChange, name, size = ComponentSizeType.medium }: NSegmentedControlProps) => {
+const NSegmentedControl = ({
+    segments,
+    onChange,
+    name,
+    size = ComponentSizeType.medium,
+    value: controlledValue,
+}: NSegmentedControlProps) => {
     const [selectedSegmentValue, setSelectedSegmentValue] = useState<SegmentType['value'] | null>(segments[0].value)
+    const segmentValue = controlledValue === undefined ? selectedSegmentValue : controlledValue
 
     const handleSegmentChange = (updatedSegment: SegmentType) => {
         setSelectedSegmentValue(updatedSegment.value)
@@ -67,7 +77,7 @@ const NSegmentedControl = ({ segments, onChange, name, size = ComponentSizeType.
         >
             {segments.map((segment) => {
                 const { value, icon, isError, label, tooltipProps, ariaLabel } = segment
-                const isSelected = value === selectedSegmentValue
+                const isSelected = value === segmentValue
 
                 return (
                     <ConditionalWrap
