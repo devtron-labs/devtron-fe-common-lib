@@ -1,0 +1,22 @@
+.segmented-control {
+    &__segment {
+        $parent-selector: &;
+
+        &--selected {
+            border: 0.5px solid var(--border-secondary);
+            box-shadow: 0px 1px 2px 0px var(--black-20);
+
+            &#{$parent-selector} {
+                &--xs, &--small {
+                    padding-block: 1.5px;
+                    padding-inline: 5.5px;
+                }
+
+                &--medium {
+                    padding-block: 3.5px;
+                    padding-inline: 7.5px;
+                }
+            }
+        }
+    }
+}
