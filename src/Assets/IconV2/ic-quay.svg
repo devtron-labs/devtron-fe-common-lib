@@ -1,27 +1,11 @@
-<!--
-  - Copyright (c) 2024. Devtron Inc.
-  -
-  - Licensed under the Apache License, Version 2.0 (the "License");
-  - you may not use this file except in compliance with the License.
-  - You may obtain a copy of the License at
-  -
-  -     http://www.apache.org/licenses/LICENSE-2.0
-  -
-  - Unless required by applicable law or agreed to in writing, software
-  - distributed under the License is distributed on an "AS IS" BASIS,
-  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  - See the License for the specific language governing permissions and
-  - limitations under the License.
-  -->
-
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_702_1764)">
-<path d="M17.6354 3.00098L21.9756 12.1818L17.6354 21.3629H13.9404L18.2807 12.1818L13.9405 3.00098H17.6355H17.6354ZM10.5999 10.8007L12.1668 7.82473L11.9879 7.13191L10.0348 3.00098H6.33984L10.1404 11.0399L10.5999 10.8007ZM11.9879 16.6157L10.6337 13.5662L10.1404 13.3239L6.33984 21.3629H10.0348L11.9879 17.2316V16.6157H11.9879Z" fill="#40B4E5"/>
-<path d="M13.9408 21.3629L9.60055 12.1818L13.9408 3.00098H17.6357L13.2955 12.1818L17.6357 21.3629H13.9408ZM6.34023 21.3629L2 12.1818L6.34023 3.00098H10.0352L5.69492 12.1818L10.0352 21.3629H6.34023Z" fill="var(--B700)"/>
+<path d="M18.1991 2.00098L22.9734 11.9584L18.1991 21.9162H14.1347L18.9089 11.9584L14.1347 2.00098H18.1992H18.1991ZM10.46 10.4605L12.1836 7.23281L11.9868 6.48139L9.83844 2.00098H5.774L9.95463 10.72L10.46 10.4605ZM11.9868 16.7675L10.4972 13.46L9.95463 13.1973L5.774 21.9162H9.83844L11.9869 17.4355V16.7675H11.9868Z" fill="#40B4E5"/>
+<path d="M14.1349 21.9162L9.3606 11.9584L14.1349 2.00098H18.1993L13.425 11.9584L18.1993 21.9162H14.1349ZM5.77426 21.9162L1 11.9584L5.77426 2.00098H9.83876L5.06441 11.9584L9.83876 21.9162H5.77426Z" fill="var(--B700)"/>
 </g>
 <defs>
 <clipPath id="clip0_702_1764">
-<rect width="20" height="18.44" fill="white" transform="translate(2 3)"/>
+<rect width="22" height="20" fill="white" transform="translate(1 2)"/>
 </clipPath>
 </defs>
 </svg>
