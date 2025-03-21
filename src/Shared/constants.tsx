@@ -533,3 +533,5 @@ export const Routes = {
     CI_PIPELINE_PATCH: 'app/ci-pipeline/patch',
     WORKFLOW: 'app/app-wf',
 }
+
+export const ENTERPRISE_SUPPORT_LINK = 'enterprise@devtron.ai'
