@@ -16,6 +16,7 @@
 
 import { Dayjs } from 'dayjs'
 import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
+import { ParsedCountry } from 'react-international-phone'
 import {
     OptionType,
     CommonNodeAttr,
@@ -1068,25 +1069,4 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
               claimedByUserDetails?: never
           })
 
-export enum LicenseStatus {
-    ACTIVE = 'ACTIVE',
-    EXPIRED = 'EXPIRED',
-    REMINDER_THRESHOLD_REACHED = 'REMINDER_THRESHOLD_REACHED',
-}
-
-export type DevtronLicenseCardProps = {
-    enterpriseName: string
-    expiryDate: string
-    ttl: number
-    licenseStatus: LicenseStatus
-    isTrial: boolean
-} & (
-    | {
-          licenseKey: string
-          licenseSuffix?: never
-      }
-    | {
-          licenseKey?: never
-          licenseSuffix: string
-      }
-)
+export type CountryISO2Type = ParsedCountry['iso2']
