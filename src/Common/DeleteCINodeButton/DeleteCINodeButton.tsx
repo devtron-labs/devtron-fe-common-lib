@@ -102,7 +102,7 @@ export const DeleteCINodeButton = ({
                 showAriaLabelInTippy
                 onClick={onClickDeleteShowModal}
                 style={ButtonStyleType.negativeGrey}
-                icon={<Icon name="ic-delete" color={null} strokeWidth={1} size={12} />}
+                icon={<Icon name="ic-delete" color={null} size={12} />}
                 disabled={disabled}
                 showTooltip
                 tooltipProps={{
