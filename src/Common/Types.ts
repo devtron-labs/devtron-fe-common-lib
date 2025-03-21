@@ -65,6 +65,9 @@ export interface APIOptions {
      */
     signal?: AbortSignal
     abortControllerRef?: MutableRefObject<AbortController>
+    /**
+     * @default false
+     */
     preventAutoLogout?: boolean
     /**
      * @default false

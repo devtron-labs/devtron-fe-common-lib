@@ -1077,3 +1077,6 @@ export const getHashedValue = async (value: string): Promise<string | null> => {
         return null
     }
 }
+
+export const getTTLInHumanReadableFormat = (ttl: number): string =>
+    moment.duration(Math.abs(ttl), 'seconds').humanize(false)

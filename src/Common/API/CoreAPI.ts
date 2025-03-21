@@ -49,6 +49,12 @@ class CoreAPI {
 
                 if (isLicenseInvalid && !preventLicenseRedirect) {
                     this.handleRedirectToLicenseActivation()
+
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve({ code: API_STATUS_CODES.UNAUTHORIZED, status: 'Unauthorized', result: [] })
+                        }, 1000)
+                    })
                 }
 
                 const contentType = response.headers.get('Content-Type')

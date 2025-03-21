@@ -1,5 +1,4 @@
 import { LicenseStatus } from '@Shared/index'
-import moment from 'moment'
 
 export const getLicenseColorsAccordingToStatus = (
     licenseStatus: LicenseStatus,
@@ -13,6 +12,3 @@ export const getLicenseColorsAccordingToStatus = (
             return { bgColor: 'var(--R100)', textColor: 'var(--R500)' }
     }
 }
-
-export const getTTLInHumanReadableFormat = (ttl: number): string =>
-    moment.duration(Math.abs(ttl), 'seconds').humanize(false)
