@@ -50,7 +50,6 @@ import {
 import {
     AggregationKeys,
     BorderConfigType,
-    DevtronLicenseCardProps,
     DevtronLicenseDTO,
     GitTriggers,
     IntersectionChangeHandler,
@@ -70,6 +69,7 @@ import {
     PodMetadatum,
 } from './Components'
 import { getAggregator } from '../Pages'
+import { DevtronLicenseCardProps } from './Components/DevtronLicenseCard/types'
 
 interface HighlightSearchTextProps {
     /**
