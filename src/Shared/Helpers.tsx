@@ -51,10 +51,12 @@ import {
 import {
     AggregationKeys,
     BorderConfigType,
+    DevtronLicenseCardProps,
     DevtronLicenseDTO,
     GitTriggers,
     IntersectionChangeHandler,
     IntersectionOptions,
+    LicenseStatus,
     Nodes,
     PreventOutsideFocusProps,
     TargetPlatformItemDTO,
@@ -69,7 +71,6 @@ import {
     PodMetadatum,
 } from './Components'
 import { getAggregator } from '../Pages'
-import { DevtronLicenseCardProps, LicenseStatus } from './Components/LicenseInfoDialog/LicenseInfoDialog.components'
 
 interface HighlightSearchTextProps {
     /**
@@ -1072,7 +1073,7 @@ export const getClassNameForStickyHeaderWithShadow = (isStuck: boolean, topClass
 const getDevtronLicenseStatus = ({
     ttl,
     reminderThreshold,
-}: Pick<DevtronLicenseDTO, 'ttl' | 'reminderThreshold'>): DevtronLicenseCardProps['licenseStatus'] => {
+}: Pick<DevtronLicenseDTO, 'ttl' | 'reminderThreshold'>): LicenseStatus => {
     if (ttl < 0) {
         return LicenseStatus.EXPIRED
     }

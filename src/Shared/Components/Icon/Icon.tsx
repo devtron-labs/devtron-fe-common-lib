@@ -1,6 +1,7 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
 
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
+import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
@@ -8,6 +9,7 @@ import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
+import { ReactComponent as ICCalendar } from '@IconsV2/ic-calendar.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
@@ -21,6 +23,7 @@ import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
+import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
@@ -63,6 +66,7 @@ import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
+import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
@@ -79,6 +83,7 @@ import { IconBaseProps } from './types'
 
 export const iconMap = {
     'ic-aborted': ICAborted,
+    'ic-add': ICAdd,
     'ic-app-group': ICAppGroup,
     'ic-arrow-right': ICArrowRight,
     'ic-azure': ICAzure,
@@ -86,6 +91,7 @@ export const iconMap = {
     'ic-book-open': ICBookOpen,
     'ic-browser': ICBrowser,
     'ic-build-color': ICBuildColor,
+    'ic-calendar': ICCalendar,
     'ic-cancelled': ICCancelled,
     'ic-caret-left': ICCaretLeft,
     'ic-cd': ICCd,
@@ -99,6 +105,7 @@ export const iconMap = {
     'ic-container': ICContainer,
     'ic-crown': ICCrown,
     'ic-cube': ICCube,
+    'ic-delete': ICDelete,
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
     'ic-devtron': ICDevtron,
     'ic-dockerhub': ICDockerhub,
@@ -141,6 +148,7 @@ export const iconMap = {
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
     'ic-quay': ICQuay,
+    'ic-quote': ICQuote,
     'ic-shield-check': ICShieldCheck,
     'ic-stack': ICStack,
     'ic-success': ICSuccess,

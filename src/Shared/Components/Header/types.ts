@@ -68,5 +68,4 @@ export interface HelpOptionType {
     name: string
     link: string
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
-    showSeparator?: boolean
 }

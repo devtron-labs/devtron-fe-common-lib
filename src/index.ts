@@ -57,8 +57,6 @@ export interface customEnv {
     ENABLE_SCOPED_VARIABLES?: boolean
     DEFAULT_CI_TRIGGER_TYPE_MANUAL: boolean
     ANNOUNCEMENT_BANNER_MSG?: string
-    LOGIN_PAGE_IMAGE?: string
-    LOGIN_PAGE_IMAGE_BG?: string
     HIDE_DEFAULT_CLUSTER?: boolean
     GLOBAL_API_TIMEOUT?: number
     TRIGGER_API_TIMEOUT?: number
@@ -101,10 +99,6 @@ export interface customEnv {
      * @default false
      */
     FEATURE_CODE_MIRROR_ENABLE?: boolean
-    /**
-     * If true, the experimental layout feature is enabled
-     */
-    FEATURE_EXPERIMENTAL_MODERN_LAYOUT_ENABLE?: boolean
     // ================== Feature flags for the enterprise release ==================
     /**
      * If true, only pipelines to which the user has access will be shown across the application

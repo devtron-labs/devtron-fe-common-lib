@@ -22,7 +22,6 @@ export interface MainContext {
     serverMode: SERVER_MODE
     setServerMode: (serverMode: SERVER_MODE) => void
     isHelpGettingStartedClicked: boolean
-    setPageOverflowEnabled: (isPageOverflowEnabled: boolean) => void
     showCloseButtonAfterGettingStartedClicked: () => void
     loginCount: number
     setLoginCount: (loginCount: number) => void
@@ -56,6 +55,7 @@ export interface MainContext {
     isManifestScanningEnabled: boolean
     canOnlyViewPermittedEnvOrgLevel: boolean
     viewIsPipelineRBACConfiguredNode: ReactNode
+    handleOpenLicenseInfoDialog: () => void
 }
 
 export interface MainContextProviderProps {

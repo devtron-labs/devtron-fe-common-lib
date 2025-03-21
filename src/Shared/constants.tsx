@@ -424,6 +424,7 @@ export const ANSI_UP_REGEX = /\x1B\[.*?m/g
  * Size variants for components
  */
 export enum ComponentSizeType {
+    xxs_small_icon = 'xxs-small-icon',
     xxs = 'xxs',
     xs = 'xs',
     small = 'small',
@@ -433,6 +434,7 @@ export enum ComponentSizeType {
 }
 
 export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xxs_small_icon]: 'py-1 fs-12 lh-20',
     [ComponentSizeType.xxs]: 'py-1 fs-12 lh-20',
     [ComponentSizeType.xs]: 'py-1 fs-12 lh-20',
     [ComponentSizeType.small]: 'py-3 fs-12 lh-20',
@@ -442,6 +444,7 @@ export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<Component
 } as const
 
 export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xxs_small_icon]: 'px-4',
     [ComponentSizeType.xxs]: 'px-5',
     [ComponentSizeType.xs]: 'px-5',
     [ComponentSizeType.small]: 'px-5',
@@ -451,6 +454,7 @@ export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<ComponentSizeType
 } as const
 
 export const COMPONENT_SIZE_TYPE_TO_ICON_SIZE_MAP: Record<ComponentSizeType, number> = {
+    [ComponentSizeType.xxs_small_icon]: 12,
     [ComponentSizeType.xxs]: 14,
     [ComponentSizeType.xs]: 14,
     [ComponentSizeType.small]: 16,
@@ -518,3 +522,16 @@ export const DC_DELETE_SUBTITLES = {
 
 export const EULA_LINK = 'https://devtron.ai/end-user-license-agreement-eula'
 export const CONTACT_SUPPORT_LINK = 'https://share.hsforms.com/1Yp3bvPAaRCaHUEH5vtMjEQ4368n'
+
+export const enum DeleteComponentsName {
+    Cluster = 'cluster',
+    Job = 'job pipeline',
+    BuildPipeline = 'build pipeline',
+}
+
+export const Routes = {
+    CI_PIPELINE_PATCH: 'app/ci-pipeline/patch',
+    WORKFLOW: 'app/app-wf',
+}
+
+export const ENTERPRISE_SUPPORT_LINK = 'enterprise@devtron.ai'
