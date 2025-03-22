@@ -25,6 +25,7 @@ class CoreAPI {
         signal,
         preventAutoLogout = false,
         preventLicenseRedirect = false,
+        shouldParseServerErrorForUnauthorizedUser = false,
         isMultipartRequest,
     }: FetchAPIParamsType<K>): Promise<ResponseType> => {
         const options: RequestInit = {
@@ -60,6 +61,11 @@ class CoreAPI {
                 const contentType = response.headers.get('Content-Type')
                 if (response.status === API_STATUS_CODES.UNAUTHORIZED) {
                     if (preventAutoLogout) {
+                        if (shouldParseServerErrorForUnauthorizedUser) {
+                            await handleServerError(contentType, response)
+                            // Won't reach here as handleServerError will throw an error
+                            return null
+                        }
                         throw new ServerErrors({
                             code: API_STATUS_CODES.UNAUTHORIZED,
                             errors: [
@@ -161,6 +167,7 @@ class CoreAPI {
                 signal,
                 preventAutoLogout: options?.preventAutoLogout || false,
                 preventLicenseRedirect: options?.preventLicenseRedirect || false,
+                shouldParseServerErrorForUnauthorizedUser: options?.shouldParseServerErrorForUnauthorizedUser,
                 isMultipartRequest,
             }),
             timeoutPromise,

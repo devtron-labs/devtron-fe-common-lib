@@ -73,6 +73,10 @@ export interface APIOptions {
      * @default false
      */
     preventLicenseRedirect?: boolean
+    /**
+     * @default false
+     */
+    shouldParseServerErrorForUnauthorizedUser?: boolean
 }
 
 export interface OptionType<T = string, K = string> {
