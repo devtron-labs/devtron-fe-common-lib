@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { PhoneInputProps } from './types'
 import { CountrySelect } from '../CountrySelect'
 import { CustomInput } from '../CustomInput'
-import FormFieldInfo from '../FormFieldWrapper/FormFieldInfo'
+import { FormFieldInfo } from '../FormFieldWrapper'
 
 const PhoneInput = ({
     error,
@@ -59,8 +59,8 @@ const PhoneInput = ({
                         value={inputValue}
                         onChange={handlePhoneValueChange}
                         inputRef={inputRef}
-                        // Since we are showing error below but want css of errors here
-                        error={error ? ' ' : null}
+                        error={error}
+                        hideFormFieldInfo
                         fullWidth
                     />
                 </div>

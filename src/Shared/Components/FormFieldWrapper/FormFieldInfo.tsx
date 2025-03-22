@@ -27,9 +27,7 @@ const FormInfoItem = ({ id, text, icon, textClass }: FormInfoItemProps) => (
 
 const FormFieldInfo = ({ error, helperText, warningText, inputId }: FormFieldInfoProps) => (
     <div className="flex left column dc__gap-4">
-        {(typeof error === 'string' ? !!error.trim() : !!error) && (
-            <FormInfoItem text={error} icon="ic-error" textClass="cr-5" id={getFormErrorElementId(inputId)} />
-        )}
+        {!!error && <FormInfoItem text={error} icon="ic-error" textClass="cr-5" id={getFormErrorElementId(inputId)} />}
         {!!helperText && (
             <FormInfoItem text={helperText} icon="ic-info-filled" textClass="cn-7" id={`${inputId}-helper-text`} />
         )}

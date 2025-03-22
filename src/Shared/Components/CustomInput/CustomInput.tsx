@@ -48,6 +48,7 @@ const CustomInput = ({
     labelTippyCustomizedConfig,
     labelTooltipConfig,
     inputRef: inputRefProp,
+    hideFormFieldInfo,
     ...props
 }: CustomInputProps) => {
     const localInputRef = useRef<HTMLInputElement>(null)
@@ -98,6 +99,7 @@ const CustomInput = ({
             borderRadiusConfig={borderRadiusConfig}
             labelTippyCustomizedConfig={labelTippyCustomizedConfig}
             labelTooltipConfig={labelTooltipConfig}
+            hideFormFieldInfo={hideFormFieldInfo}
         >
             <>
                 <input
