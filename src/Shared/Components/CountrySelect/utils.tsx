@@ -1,4 +1,5 @@
 import { defaultCountries, parseCountry, ParsedCountry } from 'react-international-phone'
+import { Tooltip } from '@Common/Tooltip'
 import { CountrySelectProps } from './types'
 import { SelectPickerOptionType } from '../SelectPicker'
 import { FlagImage } from '../FlagImage'
@@ -15,7 +16,9 @@ export const getCountryOptions = (variant: CountrySelectProps['variant']): Selec
                 variant === 'selectPhoneCode' ? (
                     <div className="flexbox dc__gap-8 dc__align-items-center">
                         <FlagImage country={parsedCountry.iso2} size={16} />
-                        <span className="fs-13 fw-4 lh-20">{countryWithDialCode}</span>
+                        <Tooltip content={countryWithDialCode}>
+                            <span className="fs-13 fw-4 lh-20 dc__truncate">{countryWithDialCode}</span>
+                        </Tooltip>
                     </div>
                 ) : (
                     parsedCountry.name
