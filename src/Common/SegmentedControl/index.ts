@@ -14,8 +14,5 @@
  * limitations under the License.
  */
 
-export { type SegmentedControlProps, SegmentedControlVariant } from './types'
 export { default as SegmentedControl } from './SegmentedControl.component'
-
-export { default as NSegmentedControl } from './NSegmentedControl.component'
-export { type NSegmentedControlProps } from './NSegmentedControl.component'
+export { type SegmentedControlProps } from './types'
