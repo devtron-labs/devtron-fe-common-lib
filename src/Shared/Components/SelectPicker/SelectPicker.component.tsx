@@ -461,6 +461,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         onChange={handleChange}
                         controlShouldRenderValue={controlShouldRenderValue}
                         isFocussed={isFocussed}
+                        tabSelectsValue={false}
                     />
                 </div>
             </ConditionalWrap>
