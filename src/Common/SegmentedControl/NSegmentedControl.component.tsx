@@ -65,10 +65,12 @@ const NSegmentedControl = ({
     value: controlledValue,
     fullWidth = false,
 }: NSegmentedControlProps) => {
+    const isUnControlledComponent = controlledValue === undefined
+
     const segmentedControlRefContainer = useRef<HTMLDivElement>(null)
     const selectedSegmentRef = useRef<HTMLDivElement>(null)
     const [selectedSegmentValue, setSelectedSegmentValue] = useState<SegmentType['value'] | null>(segments[0].value)
-    const segmentValue = controlledValue === undefined ? selectedSegmentValue : controlledValue
+    const segmentValue = isUnControlledComponent ? selectedSegmentValue : controlledValue
 
     useEffect(() => {
         if (segmentValue) {
@@ -81,7 +83,9 @@ const NSegmentedControl = ({
     }, [segmentValue, size, fullWidth])
 
     const handleSegmentChange = (updatedSegment: SegmentType) => {
-        setSelectedSegmentValue(updatedSegment.value)
+        if (isUnControlledComponent) {
+            setSelectedSegmentValue(updatedSegment.value)
+        }
         onChange?.(updatedSegment)
     }
 
