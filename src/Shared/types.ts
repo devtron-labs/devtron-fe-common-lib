@@ -1032,6 +1032,20 @@ export interface AppEnvIdType {
     envId: number
 }
 
+export enum LicensingErrorCodes {
+    FingerPrintMisMatch = '11001',
+    LicenseExpired = '11002',
+    TamperedCertificate = '11002',
+    NoPublicKey = '11003',
+    InstallationModeMismatch = '11004',
+    NoCertFound = '11006',
+}
+
+export interface LicenseErrorStruct {
+    code: LicensingErrorCodes
+    userMessage: string
+}
+
 export interface DevtronLicenseBaseDTO {
     fingerprint: string | null
     isTrial: boolean | null
@@ -1053,6 +1067,8 @@ export interface DevtronLicenseBaseDTO {
         domain: string | null
     } | null
     license: string | null
+    showLicenseData: boolean
+    licenseStatusError?: LicenseErrorStruct
 }
 
 export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = DevtronLicenseBaseDTO &
