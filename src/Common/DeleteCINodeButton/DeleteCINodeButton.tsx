@@ -109,6 +109,7 @@ export const DeleteCINodeButton = ({
                     placement: 'right',
                     content: 'Delete Pipeline',
                 }}
+                fullWidth
             />
         ) : (
             <Button
