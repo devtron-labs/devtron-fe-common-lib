@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { AppConfigProps } from '@Pages/index'
 import { DraggableBounds } from 'react-draggable'
 
 export interface ScopedVariableType {
@@ -25,7 +26,7 @@ export interface ScopedVariableType {
     isRedacted: boolean
 }
 
-export interface FloatingVariablesSuggestionsProps {
+export interface FloatingVariablesSuggestionsProps extends Required<Pick<AppConfigProps, 'isTemplateView'>> {
     zIndex: number
     appId?: string
     envId?: string

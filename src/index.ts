@@ -161,6 +161,12 @@ export interface customEnv {
      * @default 300000
      */
     SYSTEM_CONTROLLER_LISTING_TIMEOUT?: number
+    /**
+     * If true, the application templates feature is enabled
+     *
+     * @default false
+     */
+    FEATURE_APPLICATION_TEMPLATES_ENABLE?: boolean
 }
 declare global {
     interface Window {

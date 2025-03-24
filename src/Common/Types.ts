@@ -920,6 +920,10 @@ export interface CiMaterial {
     id: number
     gitMaterialName: string
     isRegex?: boolean
+    /**
+     * Available only for template view
+     */
+    gitMaterialUrl: string
 }
 
 export interface Task {

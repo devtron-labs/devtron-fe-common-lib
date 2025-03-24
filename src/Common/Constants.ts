@@ -50,6 +50,8 @@ export const PATTERNS = {
     ALPHANUMERIC_WITH_SPECIAL_CHAR_AND_SLASH: /^[A-Za-z0-9._/-]+$/, // allow alphanumeric,(.) ,(-),(_),(/)
 }
 
+const GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP = '/global-config/templates/devtron-apps'
+
 export const URLS = {
     LOGIN_SSO: '/login/sso',
     PERMISSION_GROUPS: '/global-config/auth/groups',
@@ -80,9 +82,15 @@ export const URLS = {
     NETWORK_STATUS_INTERFACE: '/network-status-interface',
     RESOURCE_BROWSER: '/resource-browser',
     COMPARE_CLUSTERS: '/compare-clusters',
+    APP_CONFIG: 'edit',
+    GLOBAL_CONFIG: '/global-config',
     CONFIG_DRIFT: 'config-drift',
+    GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP,
+    GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_CREATE: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/create`,
+    // NOTE: using appId since we are re-using AppConfig component
+    GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
     LICENSE_AUTH: '/license-auth',
-}
+} as const
 
 export const ROUTES = {
     APP: 'app',
@@ -142,8 +150,9 @@ export const ROUTES = {
     CD_TRIGGER_POST: 'app/cd-pipeline/trigger',
     DELETE_RESOURCE: 'k8s/resource/delete',
     NODE_CAPACITY: 'k8s/capacity/node',
+    RESOURCE_TEMPLATE: 'resource/template',
     ENVIRONMENT_DATA: 'global/environment-variables',
-}
+} as const
 
 export enum KEY_VALUE {
     KEY = 'key',

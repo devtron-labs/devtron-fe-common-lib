@@ -1,0 +1,25 @@
+// REACT FLOW
+.graph-visualizer {
+    .react-flow {
+        --xy-attribution-background-color: var(--bg-tertiary);
+        --xy-edge-stroke-default: var(--N200);
+        --xy-background-color-default: var(--bg-secondary);
+
+        &__attribution {
+            a {
+                color: var(--N700);
+            }
+        }
+    }
+}
+
+.graph-visualizer-dropdown-node {
+    &__control {
+        gap: 8px !important;
+        padding: 7px !important;
+    }
+
+    &__menu {
+        width: 180px !important;
+    }
+}
