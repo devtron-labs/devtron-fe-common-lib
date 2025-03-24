@@ -2,7 +2,13 @@ import { useEffect, useRef } from 'react'
 import { animate, motion, useMotionTemplate, useMotionValue, useTransform } from 'framer-motion'
 import { ClipboardButton, getTTLInHumanReadableFormat } from '@Common/index'
 import { ReactComponent as ICChatSupport } from '@IconsV2/ic-chat-circle-dots.svg'
-import { DevtronLicenseCardProps, ENTERPRISE_SUPPORT_LINK, LicenseStatus } from '@Shared/index'
+import {
+    CONTACT_SUPPORT_LINK,
+    DevtronLicenseCardProps,
+    ENTERPRISE_SUPPORT_LINK,
+    getHandleOpenURL,
+    LicenseStatus,
+} from '@Shared/index'
 import { Button, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { getLicenseColorsAccordingToStatus } from './utils'
@@ -55,10 +61,10 @@ export const DevtronLicenseCard = ({
         }
     }, [])
 
-    const diagonalMovement = useTransform<number, number>([rotateX, rotateY], ([newRotateX, newRotateY]) => {
-        const position: number = newRotateX + newRotateY
-        return position
-    })
+    const diagonalMovement = useTransform<number, number>(
+        [rotateX, rotateY],
+        ([newRotateX, newRotateY]) => newRotateX + newRotateY,
+    )
     const sheenPosition = useTransform(diagonalMovement, [-5, 5], [-100, 200])
 
     const sheenOpacity = useTransform(sheenPosition, [-100, 50, 200], [0, 0.05, 0])
@@ -89,8 +95,8 @@ export const DevtronLicenseCard = ({
                             </div>
                             {licenseKey && <ClipboardButton content={licenseKey} />}
                         </div>
-                        <div className="flexbox dc__align-items-center dc__gap-4 font-ibm-plex-mono">
-                            <span>{expiryDate}</span>
+                        <div className="flexbox dc__align-items-center dc__gap-4 flex-wrap">
+                            <span className="font-ibm-plex-mono">{expiryDate}</span>
                             <span>•</span>
                             <span style={{ color: textColor }}>{remainingTimeString}</span>
                         </div>
@@ -116,12 +122,12 @@ export const DevtronLicenseCard = ({
                             size={16}
                         />
                     </div>
-                    {/* TODO: Add onClick, and common out the button */}
                     <Button
                         dataTestId="contact-support"
                         startIcon={<ICChatSupport />}
                         text="Contact support"
                         variant={ButtonVariantType.text}
+                        onClick={getHandleOpenURL(CONTACT_SUPPORT_LINK)}
                     />
                 </div>
             )}

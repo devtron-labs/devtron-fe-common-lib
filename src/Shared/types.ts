@@ -1073,8 +1073,6 @@ export interface DevtronLicenseBaseDTO {
         domain: string | null
     } | null
     license: string | null
-    showLicenseData: boolean
-    licenseStatusError?: LicenseErrorStruct
 }
 
 export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = DevtronLicenseBaseDTO &
@@ -1085,9 +1083,13 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
                   lastName: string | null
                   email: string | null
               } | null
+              showLicenseData?: never
+              licenseStatusError?: never
           }
         : {
               claimedByUserDetails?: never
+              showLicenseData: boolean
+              licenseStatusError?: LicenseErrorStruct
           })
 
 export enum LicenseStatus {

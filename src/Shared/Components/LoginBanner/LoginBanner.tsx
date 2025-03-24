@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Icon } from '../Icon'
 import { TESTIMONIAL_CARD_DATA, TESTIMONIAL_CARD_INTERVAL, TRANSITION_EASE_CURVE } from './constants'
 
@@ -98,9 +98,9 @@ const AnimatedBackground = () => (
 
 const LoginBanner = () => {
     const [currentIndex, setCurrentIndex] = useState<number>(0)
-    const testimonialCount = useMemo(() => TESTIMONIAL_CARD_DATA.length, [])
 
     useEffect(() => {
+        const testimonialCount = TESTIMONIAL_CARD_DATA.length
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonialCount)
         }, TESTIMONIAL_CARD_INTERVAL)
@@ -108,7 +108,7 @@ const LoginBanner = () => {
         return () => {
             clearInterval(interval)
         }
-    }, [testimonialCount])
+    }, [])
 
     const { quote, name, designation, iconName } = TESTIMONIAL_CARD_DATA[currentIndex]
 

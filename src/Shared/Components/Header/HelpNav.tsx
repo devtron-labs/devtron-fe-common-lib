@@ -115,6 +115,7 @@ const HelpNav = ({
                                 type="button"
                                 className="dc__transparent help-card__option flexbox dc__align-items-center cn-9 dc__gap-12 fs-14"
                                 onClick={handleOpenLicenseDialog}
+                                data-testid="about-devtron"
                             >
                                 <Icon name="ic-devtron" color="N600" size={20} />
                                 About Devtron
