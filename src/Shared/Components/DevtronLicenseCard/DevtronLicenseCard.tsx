@@ -1,11 +1,20 @@
+import { useEffect, useRef } from 'react'
+import { animate, motion, useMotionTemplate, useMotionValue, useTransform } from 'framer-motion'
 import { ClipboardButton, getTTLInHumanReadableFormat } from '@Common/index'
 import { ReactComponent as ICChatSupport } from '@IconsV2/ic-chat-circle-dots.svg'
-import { ENTERPRISE_SUPPORT_LINK } from '@Shared/index'
+import {
+    CONTACT_SUPPORT_LINK,
+    DevtronLicenseCardProps,
+    ENTERPRISE_SUPPORT_LINK,
+    getHandleOpenURL,
+    LicenseStatus,
+} from '@Shared/index'
 import { Button, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { getLicenseColorsAccordingToStatus } from './utils'
-import { DevtronLicenseCardProps, LicenseStatus } from './types'
 import './licenseCard.scss'
+
+const DAMPEN_FACTOR = 40
 
 export const DevtronLicenseCard = ({
     enterpriseName,
@@ -19,10 +28,59 @@ export const DevtronLicenseCard = ({
     const { bgColor, textColor } = getLicenseColorsAccordingToStatus(licenseStatus)
     const remainingTime = getTTLInHumanReadableFormat(ttl)
     const remainingTimeString = ttl < 0 ? `Expired ${remainingTime} ago` : `${remainingTime} remaining`
+    const isLicenseValid = ttl > 0
+
+    const cardRef = useRef<HTMLDivElement>(null)
+
+    const mouseX = useMotionValue(window.innerWidth)
+    const mouseY = useMotionValue(window.innerHeight)
+
+    const rotateX = useTransform<number, number>(mouseY, (newMouseY) => {
+        if (!cardRef.current) return 0
+        const rect = cardRef.current.getBoundingClientRect()
+        const newRotateX = newMouseY - rect.top - rect.height / 2
+        return -newRotateX / DAMPEN_FACTOR
+    })
+    const rotateY = useTransform(mouseX, (newMouseX) => {
+        if (!cardRef.current) return 0
+        const rect = cardRef.current.getBoundingClientRect()
+        const newRotateY = newMouseX - rect.left - rect.width / 2
+        return newRotateY / DAMPEN_FACTOR
+    })
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            animate(mouseX, e.clientX)
+            animate(mouseY, e.clientY)
+        }
+
+        window.addEventListener('mousemove', handleMouseMove)
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove)
+        }
+    }, [])
+
+    const diagonalMovement = useTransform<number, number>(
+        [rotateX, rotateY],
+        ([newRotateX, newRotateY]) => newRotateX + newRotateY,
+    )
+    const sheenPosition = useTransform(diagonalMovement, [-5, 5], [-100, 200])
+
+    const sheenOpacity = useTransform(sheenPosition, [-100, 50, 200], [0, 0.05, 0])
+    const sheenGradient = useMotionTemplate`linear-gradient(
+    55deg,
+    transparent,
+    rgba(255 255 255 / ${sheenOpacity}) ${sheenPosition}%,
+    transparent)`
 
     return (
         <div className="flexbox-col p-8 br-16" style={{ backgroundColor: bgColor }}>
-            <div className="license-card border__secondary-translucent flexbox-col br-12 h-200 bg__tertiary">
+            <motion.div
+                className="license-card border__secondary-translucent flexbox-col br-12 h-200 bg__tertiary"
+                ref={cardRef}
+                style={{ rotateX, rotateY, backgroundImage: sheenGradient }}
+            >
                 <div className="p-20 flexbox-col dc__content-space flex-grow-1">
                     <div className="flexbox dc__align-items-center dc__content-space">
                         <span className="font-merriweather cn-9 fs-16 fw-7 lh-1-5 dc__truncate">{enterpriseName}</span>
@@ -37,8 +95,8 @@ export const DevtronLicenseCard = ({
                             </div>
                             {licenseKey && <ClipboardButton content={licenseKey} />}
                         </div>
-                        <div className="flexbox dc__align-items-center dc__gap-4">
-                            <span>{expiryDate}</span>
+                        <div className="flexbox dc__align-items-center dc__gap-4 flex-wrap">
+                            <span className="font-ibm-plex-mono">{expiryDate}</span>
                             <span>•</span>
                             <span style={{ color: textColor }}>{remainingTimeString}</span>
                         </div>
@@ -49,7 +107,7 @@ export const DevtronLicenseCard = ({
                         TRIAL LICENSE
                     </span>
                 )}
-            </div>
+            </motion.div>
             {licenseStatus !== LicenseStatus.ACTIVE && (
                 <div className="p-16 flexbox-col dc__gap-8">
                     <div className="flexbox dc__gap-8">
@@ -58,14 +116,18 @@ export const DevtronLicenseCard = ({
                             <a href={`mailto:${ENTERPRISE_SUPPORT_LINK}`}>{ENTERPRISE_SUPPORT_LINK}</a> or contact your
                             Devtron representative.
                         </span>
-                        <Icon name={ttl < 0 ? 'ic-timer' : 'ic-error'} color={ttl < 0 ? 'Y500' : 'R500'} size={16} />
+                        <Icon
+                            name={isLicenseValid ? 'ic-timer' : 'ic-error'}
+                            color={isLicenseValid ? 'Y500' : 'R500'}
+                            size={16}
+                        />
                     </div>
-                    {/* TODO: Add onClick, and common out the button */}
                     <Button
                         dataTestId="contact-support"
                         startIcon={<ICChatSupport />}
                         text="Contact support"
                         variant={ButtonVariantType.text}
+                        onClick={getHandleOpenURL(CONTACT_SUPPORT_LINK)}
                     />
                 </div>
             )}

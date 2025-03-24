@@ -1033,6 +1033,26 @@ export interface AppEnvIdType {
     envId: number
 }
 
+export enum LicenseInfoDialogType {
+    ABOUT = 'about',
+    LICENSE = 'license',
+    UPDATE = 'update',
+}
+
+export enum LicensingErrorCodes {
+    FingerPrintMisMatch = '11001',
+    LicenseExpired = '11002',
+    TamperedCertificate = '11002',
+    NoPublicKey = '11003',
+    InstallationModeMismatch = '11004',
+    NoCertFound = '11006',
+}
+
+export interface LicenseErrorStruct {
+    code: LicensingErrorCodes
+    userMessage: string
+}
+
 export interface DevtronLicenseBaseDTO {
     fingerprint: string | null
     isTrial: boolean | null
@@ -1064,9 +1084,13 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
                   lastName: string | null
                   email: string | null
               } | null
+              showLicenseData?: never
+              licenseStatusError?: never
           }
         : {
               claimedByUserDetails?: never
+              showLicenseData: boolean
+              licenseStatusError?: LicenseErrorStruct
           })
 
 export type CountryISO2Type = ParsedCountry['iso2']

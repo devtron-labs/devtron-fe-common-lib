@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import { Icon } from '../Icon'
-import { TESTIMONIAL_CARD_DATA } from './constants'
+import { TESTIMONIAL_CARD_DATA, TESTIMONIAL_CARD_INTERVAL, TRANSITION_EASE_CURVE } from './constants'
 
 const AnimatedBackground = () => (
     <motion.div>
@@ -96,7 +97,20 @@ const AnimatedBackground = () => (
 )
 
 const LoginBanner = () => {
-    const { quote, name, designation, iconName } = TESTIMONIAL_CARD_DATA
+    const [currentIndex, setCurrentIndex] = useState<number>(0)
+
+    useEffect(() => {
+        const testimonialCount = TESTIMONIAL_CARD_DATA.length
+        const interval = setInterval(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonialCount)
+        }, TESTIMONIAL_CARD_INTERVAL)
+
+        return () => {
+            clearInterval(interval)
+        }
+    }, [])
+
+    const { quote, name, designation, iconName } = TESTIMONIAL_CARD_DATA[currentIndex]
 
     return (
         <div className="flexbox-col br-12 border__primary dc__position-rel dc__overflow-hidden">
@@ -111,7 +125,22 @@ const LoginBanner = () => {
                     <Icon name="ic-quote" color="N900" />
                     <div className="border__primary w-1 flex-grow-1" />
                 </div>
-                <div className="flexbox-col dc__gap-20">
+                <motion.div
+                    key={currentIndex}
+                    variants={{
+                        hidden: { opacity: 0, x: 200 },
+                        visible: { opacity: 1, x: 0 },
+                    }}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    transition={{
+                        staggerChildren: 0.3,
+                        opacity: { duration: 0.75, ease: TRANSITION_EASE_CURVE },
+                        x: { duration: 0.85, ease: TRANSITION_EASE_CURVE },
+                    }}
+                    className="flexbox-col dc__gap-20"
+                >
                     <div className="fs-14 fw-4 lh-1-5 cn-9">{quote}</div>
                     <div className="flexbox dc__content-space dc__align-items-center">
                         <div>
@@ -120,7 +149,7 @@ const LoginBanner = () => {
                         </div>
                         <Icon name={iconName} color={null} size={24} />
                     </div>
-                </div>
+                </motion.div>
             </div>
         </div>
     )
