@@ -1,9 +1,10 @@
 import { ClipboardButton, getTTLInHumanReadableFormat } from '@Common/index'
 import { ReactComponent as ICChatSupport } from '@IconsV2/ic-chat-circle-dots.svg'
-import { DevtronLicenseCardProps, ENTERPRISE_SUPPORT_LINK, LicenseStatus } from '@Shared/index'
+import { ENTERPRISE_SUPPORT_LINK } from '@Shared/index'
 import { Button, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { getLicenseColorsAccordingToStatus } from './utils'
+import { DevtronLicenseCardProps, LicenseStatus } from './types'
 import './licenseCard.scss'
 
 export const DevtronLicenseCard = ({

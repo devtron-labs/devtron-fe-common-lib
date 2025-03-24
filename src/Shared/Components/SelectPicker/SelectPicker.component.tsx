@@ -222,6 +222,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     borderRadiusConfig,
     labelTippyCustomizedConfig,
     labelTooltipConfig,
+    hideFormFieldInfo,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const [isFocussed, setIsFocussed] = useState(false)
@@ -387,6 +388,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             borderRadiusConfig={borderRadiusConfig}
             labelTippyCustomizedConfig={labelTippyCustomizedConfig}
             labelTooltipConfig={labelTooltipConfig}
+            hideFormFieldInfo={hideFormFieldInfo}
         >
             <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
                 <div className="w-100">

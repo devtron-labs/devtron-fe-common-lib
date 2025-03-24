@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { InputHTMLAttributes } from 'react'
+import { InputHTMLAttributes, MutableRefObject } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
 import { FormFieldWrapperProps } from '../FormFieldWrapper'
 import { ButtonComponentType, ButtonProps } from '../Button'
@@ -48,6 +48,10 @@ export interface CustomInputProps
      */
     endIconButtonConfig?: Required<Pick<ButtonProps<ButtonComponentType.button>, 'icon' | 'onClick' | 'ariaLabel'>> &
         Pick<ButtonProps<ButtonComponentType.button>, 'disabled' | 'showAriaLabelInTippy' | 'style'>
+    /**
+     * Ref for the input element
+     */
+    inputRef?: MutableRefObject<HTMLInputElement>
 }
 
 export interface PasswordFieldProps extends Omit<CustomInputProps, 'endIconButtonConfig' | 'type'> {

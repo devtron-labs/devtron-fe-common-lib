@@ -30,7 +30,8 @@ const FormFieldWrapper = ({
     children,
     labelTippyCustomizedConfig,
     labelTooltipConfig,
-}: Required<FormFieldWrapperProps>) => {
+    hideFormFieldInfo = false,
+}: Omit<Required<FormFieldWrapperProps>, 'hideFormFieldInfo'> & Pick<FormFieldWrapperProps, 'hideFormFieldInfo'>) => {
     const isRowLayout = layout === 'row'
     const itemContainerClassName = isRowLayout ? 'dc__mxw-250 w-100 mxh-36 dc__align-self-stretch' : ''
     const formError = Array.isArray(error) ? error[0] : error
@@ -57,7 +58,7 @@ const FormFieldWrapper = ({
                 )}
                 <div className="w-100 dc__position-rel">{children}</div>
             </div>
-            {(!!formError || !!helperText || !!warningText) && (
+            {!hideFormFieldInfo && (!!formError || !!helperText || !!warningText) && (
                 <div className="flex left dc__gap-6 w-100">
                     {/* Added a hidden div for layout sync */}
                     {isRowLayout && <div className={`${itemContainerClassName} dc__visibility-hidden`} />}
