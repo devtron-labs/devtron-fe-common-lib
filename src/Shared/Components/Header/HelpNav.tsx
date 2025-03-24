@@ -36,7 +36,7 @@ const HelpNav = ({
     setGettingStartedClicked,
     showHelpCard,
 }: HelpNavType) => {
-    const { currentServerInfo, handleOpenLicenseInfoDialog } = useMainContext()
+    const { currentServerInfo, handleOpenLicenseInfoDialog, showLicenseData } = useMainContext()
     const isEnterprise = currentServerInfo?.serverInfo?.installationType === InstallationType.ENTERPRISE
     const FEEDBACK_FORM_ID = `UheGN3KJ#source=${window.location.hostname}`
 
@@ -89,6 +89,10 @@ const HelpNav = ({
         onClickHelpOptions(option)
     }
 
+    const handleOpenLicenseDialog = () => {
+        handleOpenLicenseInfoDialog()
+    }
+
     const renderHelpOptions = (): JSX.Element => (
         <>
             {CommonHelpOptions.map((option, index) => (
@@ -105,12 +109,12 @@ const HelpNav = ({
                         <option.icon />
                         <div className="ml-12 cn-9 fs-14">{option.name}</div>
                     </a>
-                    {isEnterprise && index === 1 && (
+                    {isEnterprise && showLicenseData && index === 1 && (
                         <>
                             <button
                                 type="button"
                                 className="dc__transparent help-card__option flexbox dc__align-items-center cn-9 dc__gap-12 fs-14"
-                                onClick={handleOpenLicenseInfoDialog}
+                                onClick={handleOpenLicenseDialog}
                             >
                                 <Icon name="ic-devtron" color="N600" size={20} />
                                 About Devtron

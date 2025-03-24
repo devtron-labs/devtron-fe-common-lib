@@ -17,6 +17,7 @@
 import { MutableRefObject, ReactNode } from 'react'
 import { ServerInfo } from '../Components/Header/types'
 import { SERVER_MODE } from '../../Common'
+import { LicenseInfoDialogType } from '..'
 
 export interface MainContext {
     serverMode: SERVER_MODE
@@ -55,7 +56,11 @@ export interface MainContext {
     isManifestScanningEnabled: boolean
     canOnlyViewPermittedEnvOrgLevel: boolean
     viewIsPipelineRBACConfiguredNode: ReactNode
-    handleOpenLicenseInfoDialog: () => void
+    handleOpenLicenseInfoDialog: (
+        initialDialogType?: LicenseInfoDialogType.ABOUT | LicenseInfoDialogType.LICENSE,
+    ) => void
+    showLicenseData: boolean
+    setShowLicenseData: (showLicenseData: boolean) => void
 }
 
 export interface MainContextProviderProps {

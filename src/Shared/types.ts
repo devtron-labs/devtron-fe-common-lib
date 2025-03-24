@@ -1032,6 +1032,12 @@ export interface AppEnvIdType {
     envId: number
 }
 
+export enum LicenseInfoDialogType {
+    ABOUT = 'about',
+    LICENSE = 'license',
+    UPDATE = 'update',
+}
+
 export enum LicensingErrorCodes {
     FingerPrintMisMatch = '11001',
     LicenseExpired = '11002',
