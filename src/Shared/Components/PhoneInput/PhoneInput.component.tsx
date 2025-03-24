@@ -1,6 +1,6 @@
 import { usePhoneInput } from 'react-international-phone'
 import { CountryISO2Type } from '@Shared/index'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { PhoneInputProps } from './types'
 import { CountrySelect } from '../CountrySelect'
 import { CustomInput } from '../CustomInput'
@@ -31,6 +31,16 @@ const PhoneInput = ({
         },
     })
 
+    const [isCountrySelectOpen, setIsCountrySelectOpen] = useState<boolean>(false)
+
+    const handleOpenCountrySelect = () => {
+        setIsCountrySelectOpen(true)
+    }
+
+    const handleCloseCountrySelect = () => {
+        setIsCountrySelectOpen(false)
+    }
+
     const handleUpdateCountry = (updatedCountry: CountryISO2Type) => {
         setCountry(updatedCountry)
     }
@@ -41,7 +51,7 @@ const PhoneInput = ({
 
             <div className="flexbox-col dc__gap-4 dc__grid">
                 <div className="flexbox dc__gap-8 w-100">
-                    <div className="flexbox dc__mxw-50-per mw-76">
+                    <div className={`flexbox dc__mxw-50-per ${isCountrySelectOpen ? 'w-100' : ''}`}>
                         <CountrySelect
                             placeholder={null}
                             selectedCountry={country.iso2}
@@ -49,6 +59,8 @@ const PhoneInput = ({
                             handleChange={handleUpdateCountry}
                             name={countryCodeSelectName}
                             size={countryCodeSelectSize}
+                            onMenuClose={handleCloseCountrySelect}
+                            onMenuOpen={handleOpenCountrySelect}
                         />
                     </div>
 

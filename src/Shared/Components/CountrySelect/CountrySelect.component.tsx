@@ -14,6 +14,8 @@ const CountrySelect = ({
     name,
     variant = 'default',
     size,
+    onMenuClose,
+    onMenuOpen,
 }: CountrySelectProps) => {
     const countryOptions = useMemo(() => getCountryOptions(variant), [variant])
 
@@ -51,12 +53,15 @@ const CountrySelect = ({
             size={size}
             filterOption={filterOption}
             getOptionValue={getOptionValue}
+            onMenuClose={onMenuClose}
+            onMenuOpen={onMenuOpen}
             icon={
                 variant === 'selectPhoneCode' && selectedOption?.value?.iso2 ? (
                     <FlagImage country={selectedOption?.value?.iso2} />
                 ) : null
             }
             controlShouldRenderValue={variant !== 'selectPhoneCode'}
+            fullWidth
         />
     )
 }
