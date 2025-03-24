@@ -40,6 +40,9 @@ export const AsyncSelectPicker = ({
     borderRadiusConfig,
     labelTippyCustomizedConfig,
     labelTooltipConfig,
+    placeholder,
+    value,
+    isOptionDisabled,
 }: AsyncSelectProps) => {
     const selectRef = useRef<SelectInstance>(null)
 
@@ -109,8 +112,10 @@ export const AsyncSelectPicker = ({
                         MultiValueRemove: SelectPickerMultiValueRemove,
                         Input: SelectPickerInput,
                     }}
-                    value={defaultOptions?.[0]}
+                    value={value}
                     styles={selectStyles}
+                    isOptionDisabled={isOptionDisabled}
+                    placeholder={placeholder}
                 />
             </div>
         </FormFieldWrapper>

@@ -313,6 +313,7 @@ export type SelectPickerTextAreaProps = Omit<
     | 'onKeyDown'
     | 'onCreateOption'
     | 'shouldRenderTextArea'
+    | 'placeholder'
 > &
     Pick<ResizableTagTextAreaProps, 'maxHeight' | 'minHeight' | 'refVar' | 'dependentRefs'>
 
@@ -336,7 +337,12 @@ export interface AsyncSelectProps
             >
         >,
         AsyncProps<SelectPickerOptionType, boolean, GroupBase<SelectPickerOptionType>>,
-        Partial<Pick<SelectPickerProps, 'size' | 'menuSize' | 'variant' | 'shouldMenuAlignRight'>> {
+        Partial<
+            Pick<
+                SelectPickerProps,
+                'size' | 'menuSize' | 'variant' | 'shouldMenuAlignRight' | 'placeholder' | 'value' | 'isOptionDisabled'
+            >
+        > {
     getIsOptionValid?: (option: SelectPickerOptionType) => boolean
     isGroupHeadingSelectable?: boolean
     loadingOptions?: SelectPickerOptionType[]
