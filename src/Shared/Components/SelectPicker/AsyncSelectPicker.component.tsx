@@ -106,15 +106,11 @@ export const AsyncSelectPicker = ({
                         MenuList: SelectPickerMenuList,
                         ClearIndicator: SelectPickerClearIndicator,
                         ValueContainer: renderValueContainer,
-                        // MultiValueLabel: renderMultiValueLabel,
                         MultiValueRemove: SelectPickerMultiValueRemove,
-                        // GroupHeading: renderGroupHeading,
-                        // NoOptionsMessage: renderNoOptionsMessage,
                         Input: SelectPickerInput,
                     }}
                     value={defaultOptions?.[0]}
                     styles={selectStyles}
-                    // aria-describedby={getFormHelperTextElementId('app-selector')}
                 />
             </div>
         </FormFieldWrapper>

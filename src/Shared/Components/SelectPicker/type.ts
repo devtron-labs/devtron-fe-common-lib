@@ -339,6 +339,5 @@ export interface AsyncSelectProps
         Partial<Pick<SelectPickerProps, 'size' | 'menuSize' | 'variant' | 'shouldMenuAlignRight'>> {
     getIsOptionValid?: (option: SelectPickerOptionType) => boolean
     isGroupHeadingSelectable?: boolean
-    // defaultOptions?: SelectPickerOptionType[]
     loadingOptions?: SelectPickerOptionType[]
 }
