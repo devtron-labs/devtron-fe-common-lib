@@ -27,7 +27,7 @@ const PhoneInput = ({
                 hasValueInitialized.current = true
                 return
             }
-            onChange(data.phone)
+            onChange(data.phone, data.country.iso2 !== country.iso2)
         },
     })
 
