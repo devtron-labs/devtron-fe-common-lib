@@ -1042,10 +1042,12 @@ export enum LicenseInfoDialogType {
 export enum LicensingErrorCodes {
     FingerPrintMisMatch = '11001',
     LicenseExpired = '11002',
-    TamperedCertificate = '11002',
-    NoPublicKey = '11003',
-    InstallationModeMismatch = '11004',
-    NoCertFound = '11006',
+    TamperedCertificate = '11003',
+    NoPublicKey = '11004',
+    InstallationModeMismatch = '11005',
+    LicKeyMismatch = '11006',
+    NoCertFound = '11007',
+    LicKeyNotFound = '11008',
 }
 
 export interface LicenseErrorStruct {
