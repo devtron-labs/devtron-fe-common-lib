@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.9.5-beta-12",
+    "version": "1.9.5-beta-13",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -123,6 +123,7 @@
         "react-dates": "^21.8.0",
         "react-diff-viewer-continued": "^3.4.0",
         "react-draggable": "^4.4.5",
+        "react-international-phone": "^4.5.0",
         "react-monaco-editor": "^0.54.0",
         "react-virtualized-sticky-tree": "^3.0.0-beta18",
         "sass": "^1.69.7",

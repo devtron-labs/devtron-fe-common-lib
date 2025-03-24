@@ -45,6 +45,7 @@ const Textarea = ({
     borderRadiusConfig,
     labelTooltipConfig,
     labelTippyCustomizedConfig,
+    hideFormFieldInfo,
     value,
     borderConfig,
     ...props
@@ -132,6 +133,7 @@ const Textarea = ({
             borderRadiusConfig={borderRadiusConfig}
             labelTooltipConfig={labelTooltipConfig}
             labelTippyCustomizedConfig={labelTippyCustomizedConfig}
+            hideFormFieldInfo={hideFormFieldInfo}
         >
             <textarea
                 {...props}
