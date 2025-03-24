@@ -11,6 +11,7 @@ const SegmentedControl = ({
     size = ComponentSizeType.medium,
     value: controlledValue,
     fullWidth = false,
+    disabled,
 }: SegmentedControlProps) => {
     const isUnControlledComponent = controlledValue === undefined
 
@@ -38,7 +39,7 @@ const SegmentedControl = ({
 
     return (
         <div
-            className={`segmented-control ${!fullWidth ? 'dc__inline-flex' : ''} br-6 ${size === ComponentSizeType.xs ? 'p-1' : 'p-2'}`}
+            className={`segmented-control ${!fullWidth ? 'dc__inline-flex' : ''} ${disabled ? 'dc__disabled' : ''} br-6 ${size === ComponentSizeType.xs ? 'p-1' : 'p-2'}`}
         >
             <div
                 className="segmented-control__container flex left dc__position-rel dc__align-items-center dc__gap-2"
@@ -57,6 +58,7 @@ const SegmentedControl = ({
                             isSelected={isSelected}
                             fullWidth={fullWidth}
                             size={size}
+                            disabled={disabled}
                         />
                     )
                 })}

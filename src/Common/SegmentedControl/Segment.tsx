@@ -12,7 +12,16 @@ const wrapWithTooltip = (tooltipProps: SegmentType['tooltipProps']) => (children
     </Tooltip>
 )
 
-const Segment = ({ segment, isSelected, name, selectedSegmentRef, onChange, fullWidth, size }: SegmentProps) => {
+const Segment = ({
+    segment,
+    isSelected,
+    name,
+    selectedSegmentRef,
+    onChange,
+    fullWidth,
+    size,
+    disabled,
+}: SegmentProps) => {
     const { value, icon, isError, label, tooltipProps, ariaLabel } = segment
     const handleChange = () => {
         onChange(segment)
@@ -32,11 +41,12 @@ const Segment = ({ segment, isSelected, name, selectedSegmentRef, onChange, full
                     onChange={handleChange}
                     checked={isSelected}
                     className="dc__opacity-0 m-0-imp dc__top-0 dc__left-0 dc__position-abs dc__bottom-0 dc__right-0 w-100 pointer h-100 dc__visibility-hidden"
+                    disabled={disabled}
                 />
 
                 <label
                     htmlFor={`${name}-${value}`}
-                    className={`pointer m-0 flex ${!fullWidth ? 'left' : ''} dc__gap-4 br-4 segmented-control__segment segmented-control__segment--${size} ${isSelected ? 'fw-6 segmented-control__segment--selected' : 'fw-4'} ${segment.isError ? 'cr-5' : 'cn-9'} ${COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP[size]}`}
+                    className={`pointer m-0 flex ${!fullWidth ? 'left' : ''} dc__gap-4 br-4 segmented-control__segment segmented-control__segment--${size} ${isSelected ? 'fw-6 segmented-control__segment--selected' : 'fw-4'} ${segment.isError ? 'cr-5' : 'cn-9'} ${disabled ? 'cursor-not-allowed' : ''} ${COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP[size]}`}
                     aria-label={ariaLabel}
                 >
                     {(isError || icon) && (

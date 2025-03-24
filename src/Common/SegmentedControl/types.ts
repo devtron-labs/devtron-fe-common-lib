@@ -54,6 +54,7 @@ export type SegmentedControlProps = {
     name: string
     size?: Extract<ComponentSizeType, ComponentSizeType.xs | ComponentSizeType.small | ComponentSizeType.medium>
     fullWidth?: boolean
+    disabled?: boolean
 } & (
     | {
           value?: never
@@ -72,7 +73,7 @@ export type SegmentedControlProps = {
 )
 
 export interface SegmentProps
-    extends Required<Pick<SegmentedControlProps, 'name' | 'onChange' | 'fullWidth' | 'size'>> {
+    extends Required<Pick<SegmentedControlProps, 'name' | 'onChange' | 'fullWidth' | 'size' | 'disabled'>> {
     isSelected: boolean
     segment: SegmentType
     selectedSegmentRef: RefObject<HTMLDivElement> | undefined
