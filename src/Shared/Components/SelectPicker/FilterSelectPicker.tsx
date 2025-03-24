@@ -23,7 +23,7 @@ import { IS_PLATFORM_MAC_OS } from '@Common/Constants'
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import SelectPicker from './SelectPicker.component'
 import { FilterSelectPickerProps, SelectPickerOptionType, SelectPickerProps } from './type'
-import { Button } from '../Button'
+import { Button, ButtonProps, useTriggerAutoClickTimestamp } from '../Button'
 
 const APPLY_FILTER_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = [IS_PLATFORM_MAC_OS ? 'Meta' : 'Control', 'Enter']
 
@@ -34,6 +34,8 @@ const FilterSelectPicker = ({
     ...props
 }: FilterSelectPickerProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const { triggerAutoClickTimestamp, setTriggerAutoClickTimestampToNow, resetTriggerAutoClickTimestamp } =
+        useTriggerAutoClickTimestamp()
 
     const [selectedOptions, setSelectedOptions] = useState<SelectPickerOptionType[]>(
         structuredClone(appliedFilterOptions ?? []),
@@ -57,10 +59,12 @@ const FilterSelectPicker = ({
     }
 
     const closeMenu = () => {
+        resetTriggerAutoClickTimestamp()
         setIsMenuOpen(false)
     }
 
     const handleSelectOnChange: SelectPickerProps<number | string, true>['onChange'] = (selectedOptionsToUpdate) => {
+        setTriggerAutoClickTimestampToNow()
         setSelectedOptions(structuredClone(selectedOptionsToUpdate) as SelectPickerOptionType[])
     }
 
@@ -69,9 +73,15 @@ const FilterSelectPicker = ({
         setSelectedOptions(structuredClone(appliedFilterOptions ?? []))
     }
 
-    const handleApplyClick = () => {
+    const handleApplyClick: ButtonProps['onClick'] = (e) => {
         handleApplyFilter(selectedOptions)
-        closeMenu()
+        resetTriggerAutoClickTimestamp()
+
+        // If true, depicts the click event is triggered by the user
+        // Added !e to ensure it works for both click and keyboard shortcut event
+        if (!e || e.isTrusted) {
+            closeMenu()
+        }
     }
 
     const renderApplyButton = () => (
@@ -89,13 +99,14 @@ const FilterSelectPicker = ({
                         combo: APPLY_FILTER_SHORTCUT_KEYS,
                     },
                 }}
+                triggerAutoClickTimestamp={triggerAutoClickTimestamp}
             />
         </div>
     )
 
     useEffect(() => {
         if (isMenuOpen) {
-            registerShortcut({ keys: APPLY_FILTER_SHORTCUT_KEYS, callback: handleApplyClick })
+            registerShortcut({ keys: APPLY_FILTER_SHORTCUT_KEYS, callback: handleApplyClick as () => void })
         }
 
         return () => {
