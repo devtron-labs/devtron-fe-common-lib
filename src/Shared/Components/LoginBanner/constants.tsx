@@ -11,7 +11,7 @@ export const TESTIMONIAL_CARD_DATA: TestimonialCardConfig[] = [
     {
         quote: 'One of the best tools in the market. A production-ready platform that helps in automating all the requirements on Kubernetes. The platform is easy to get started with. Well done product! We run a lot of migrations and backup jobs daily, and Devtron makes it super easy and auditable for us.',
         name: 'Arun Jain',
-        designation: 'Froent developer',
+        designation: 'Devtron user',
         iconName: 'ic-devtron',
     },
     {
