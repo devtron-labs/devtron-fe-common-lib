@@ -43,6 +43,8 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
         ttl,
         licenseStatus: getDevtronLicenseStatus({ ttl, reminderThreshold }),
         isTrial,
-        ...(currentUserEmail === claimedByUserDetails?.email ? { licenseKey: license } : { licenseSuffix: license }),
+        ...(currentUserEmail && currentUserEmail === claimedByUserDetails?.email
+            ? { licenseKey: license }
+            : { licenseSuffix: license }),
     }
 }

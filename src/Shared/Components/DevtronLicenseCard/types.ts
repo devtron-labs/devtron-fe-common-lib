@@ -1,3 +1,5 @@
+import { DevtronLicenseBaseDTO } from '@Shared/index'
+
 export enum LicenseStatus {
     ACTIVE = 'ACTIVE',
     EXPIRED = 'EXPIRED',
@@ -20,3 +22,7 @@ export type DevtronLicenseCardProps = {
           licenseSuffix: string
       }
 )
+
+export interface InstallFingerprintInfoProps extends Pick<DevtronLicenseBaseDTO, 'fingerprint'> {
+    showHelpTooltip?: boolean
+}
