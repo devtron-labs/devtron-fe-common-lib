@@ -1,21 +1,9 @@
-import { useRef } from 'react'
-import { SelectInstance } from 'react-select'
 import AsyncSelect from 'react-select/async'
-import {
-    SelectPickerClearIndicator,
-    SelectPickerControl,
-    SelectPickerDropdownIndicator,
-    SelectPickerInput,
-    SelectPickerLoadingIndicator,
-    SelectPickerMenuList,
-    SelectPickerMultiValueRemove,
-    SelectPickerOption,
-    SelectPickerSingleValue,
-    SelectPickerValueContainer,
-} from './common'
+import { deriveBorderRadiusAndBorderClassFromConfig } from '@Shared/Helpers'
 import { AsyncSelectProps } from './type'
-import { FormFieldWrapper } from '../FormFieldWrapper'
-import useSelectStyles from './utils'
+import { FormFieldWrapper, getFormFieldAriaAttributes } from '../FormFieldWrapper'
+import { useSelectHooks } from './useSelectHooks'
+import { BaseSelectComponents } from './constants'
 
 export const AsyncSelectPicker = ({
     defaultOptions,
@@ -44,25 +32,28 @@ export const AsyncSelectPicker = ({
     placeholder,
     value,
     isOptionDisabled,
+    icon,
+    name,
+    classNamePrefix,
+    isSearchable = true,
+    onKeyDown,
+    onBlur,
+    ...props
 }: AsyncSelectProps) => {
-    const selectRef = useRef<SelectInstance>(null)
-
     // Option disabled, group null state, checkbox hover, create option visibility (scroll reset on search)
-    const selectStyles = useSelectStyles({
+    const { styles, selectRef, handleKeyDown, handleBlur, handleFocus, isFocussed } = useSelectHooks({
         error,
         size,
         menuSize,
         variant,
-        getIsOptionValid,
-        isGroupHeadingSelectable,
+        multiSelectProps: {
+            getIsOptionValid,
+            isGroupHeadingSelectable,
+        },
         shouldMenuAlignRight,
+        onKeyDown,
+        onBlur,
     })
-
-    const handleOnKeyDown = (event) => {
-        if (event.key === 'Escape') {
-            selectRef.current?.inputRef.blur()
-        }
-    }
 
     return (
         <FormFieldWrapper
@@ -81,30 +72,37 @@ export const AsyncSelectPicker = ({
             labelTooltipConfig={labelTooltipConfig}
         >
             <AsyncSelect
+                {...props}
+                {...getFormFieldAriaAttributes({
+                    inputId,
+                    required,
+                    label,
+                    ariaLabel,
+                    error,
+                    helperText,
+                })}
+                classNames={{
+                    control: () => deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig }),
+                }}
+                name={name || inputId}
+                classNamePrefix={classNamePrefix || inputId}
+                isSearchable={isSearchable}
                 ref={selectRef}
                 blurInputOnSelect
-                onKeyDown={handleOnKeyDown}
+                onKeyDown={handleKeyDown}
                 defaultOptions={defaultOptions}
                 loadOptions={loadOptions}
                 noOptionsMessage={noOptionsMessage}
                 onChange={onChange}
-                components={{
-                    IndicatorSeparator: null,
-                    LoadingIndicator: SelectPickerLoadingIndicator,
-                    DropdownIndicator: SelectPickerDropdownIndicator,
-                    Control: SelectPickerControl,
-                    Option: SelectPickerOption,
-                    MenuList: SelectPickerMenuList,
-                    ClearIndicator: SelectPickerClearIndicator,
-                    MultiValueRemove: SelectPickerMultiValueRemove,
-                    Input: SelectPickerInput,
-                    SingleValue: SelectPickerSingleValue,
-                    ValueContainer: SelectPickerValueContainer,
-                }}
+                components={BaseSelectComponents}
                 value={value}
-                styles={selectStyles}
+                styles={styles}
                 isOptionDisabled={isOptionDisabled}
                 placeholder={placeholder}
+                onBlur={handleBlur}
+                onFocus={handleFocus}
+                isFocussed={isFocussed}
+                icon={icon}
             />
         </FormFieldWrapper>
     )

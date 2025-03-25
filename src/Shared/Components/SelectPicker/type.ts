@@ -178,7 +178,10 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          *
          * @default 'ComponentSizeType.medium'
          */
-        size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large | ComponentSizeType.small>
+        size?: Extract<
+            ComponentSizeType,
+            ComponentSizeType.medium | ComponentSizeType.large | ComponentSizeType.small | ComponentSizeType.xl
+        >
         /**
          * Content to be shown in a tippy when disabled
          */
@@ -319,34 +322,45 @@ export type SelectPickerTextAreaProps = Omit<
     Pick<ResizableTagTextAreaProps, 'maxHeight' | 'minHeight' | 'refVar' | 'dependentRefs'>
 
 export interface AsyncSelectProps
-    extends Partial<
-            Pick<
-                FormFieldWrapperProps,
-                | 'error'
-                | 'layout'
-                | 'label'
-                | 'helperText'
-                | 'warningText'
-                | 'required'
-                | 'fullWidth'
-                | 'borderConfig'
-                | 'borderRadiusConfig'
-                | 'labelTippyCustomizedConfig'
-                | 'labelTooltipConfig'
-                | 'ariaLabel'
-                | 'inputId'
-            >
+    extends Omit<
+            SelectPickerProps<string, false>,
+            | 'isMulti'
+            | 'options'
+            | 'value'
+            | 'onChange'
+            | 'isSearchable'
+            | 'isClearable'
+            | 'isLoading'
+            | 'filterOption'
+            | 'formatOptionLabel'
+            | 'getOptionLabel'
+            | 'getOptionValue'
+            | 'inputId'
+            | 'isOptionDisabled'
+            | 'shouldRenderValue'
+            | 'isOptionSelected'
         >,
-        AsyncProps<SelectPickerOptionType, boolean, GroupBase<SelectPickerOptionType>>,
-        Partial<
-            Pick<
-                SelectPickerProps,
-                'size' | 'menuSize' | 'variant' | 'shouldMenuAlignRight' | 'placeholder' | 'value' | 'isOptionDisabled'
-            >
-        > {
+        AsyncProps<SelectPickerOptionType, boolean, GroupBase<SelectPickerOptionType>> {
     getIsOptionValid?: (option: SelectPickerOptionType) => boolean
     isGroupHeadingSelectable?: boolean
-    loadingOptions?: SelectPickerOptionType[]
+
+    // ✅ Override getOptionValue to always return a string
+    getOptionValue?: (option: SelectPickerOptionType) => string
 }
 
-export type OptionValue = SelectPickerOptionType['value']
+// export type OptionValue = SelectPickerOptionType['value']
+
+export interface SelectPickerHooksProps<OptionValue, IsMulti extends boolean>
+    extends Pick<
+        SelectPickerProps<OptionValue, IsMulti>,
+        | 'error'
+        | 'size'
+        | 'menuSize'
+        | 'variant'
+        | 'shouldMenuAlignRight'
+        | 'onKeyDown'
+        | 'onBlur'
+        | 'multiSelectProps'
+        | 'showSelectedOptionsCount'
+        | 'customSelectedOptionsCount'
+    > {}

@@ -17,21 +17,48 @@
 import { CSSProperties } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
 import { SelectPickerProps } from './type'
+import {
+    SelectPickerLoadingIndicator,
+    SelectPickerDropdownIndicator,
+    SelectPickerControl,
+    SelectPickerOption,
+    SelectPickerMenuList,
+    SelectPickerClearIndicator,
+    SelectPickerMultiValueRemove,
+    SelectPickerInput,
+    SelectPickerValueContainer,
+} from './common'
 
 export const SELECT_PICKER_FONT_SIZE_MAP: Record<SelectPickerProps['size'], CSSProperties['fontSize']> = {
     [ComponentSizeType.small]: '12px',
     [ComponentSizeType.medium]: '13px',
     [ComponentSizeType.large]: '13px',
+    [ComponentSizeType.xl]: '16px',
 }
 
 export const SELECT_PICKER_ICON_SIZE_MAP: Record<SelectPickerProps['size'], Pick<CSSProperties, 'width' | 'height'>> = {
     [ComponentSizeType.small]: { width: '12px', height: '12px' },
     [ComponentSizeType.medium]: { width: '16px', height: '16px' },
     [ComponentSizeType.large]: { width: '16px', height: '16px' },
+    [ComponentSizeType.xl]: { width: '16px', height: '16px' },
 }
 
 export const SELECT_PICKER_CONTROL_SIZE_MAP: Record<SelectPickerProps['size'], CSSProperties['minHeight']> = {
     [ComponentSizeType.small]: 'auto',
     [ComponentSizeType.medium]: 'auto',
     [ComponentSizeType.large]: '36px',
+    [ComponentSizeType.xl]: '36px',
+}
+
+export const BaseSelectComponents = {
+    IndicatorSeparator: null,
+    LoadingIndicator: SelectPickerLoadingIndicator,
+    DropdownIndicator: SelectPickerDropdownIndicator,
+    Control: SelectPickerControl,
+    Option: SelectPickerOption,
+    MenuList: SelectPickerMenuList,
+    ClearIndicator: SelectPickerClearIndicator,
+    MultiValueRemove: SelectPickerMultiValueRemove,
+    Input: SelectPickerInput,
+    ValueContainer: SelectPickerValueContainer,
 }
