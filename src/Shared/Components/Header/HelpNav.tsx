@@ -36,7 +36,7 @@ const HelpNav = ({
     setGettingStartedClicked,
     showHelpCard,
 }: HelpNavType) => {
-    const { currentServerInfo, handleOpenLicenseInfoDialog, showLicenseData } = useMainContext()
+    const { currentServerInfo, handleOpenLicenseInfoDialog, licenseData } = useMainContext()
     const isEnterprise = currentServerInfo?.serverInfo?.installationType === InstallationType.ENTERPRISE
     const FEEDBACK_FORM_ID = `UheGN3KJ#source=${window.location.hostname}`
 
@@ -109,7 +109,8 @@ const HelpNav = ({
                         <option.icon />
                         <div className="ml-12 cn-9 fs-14">{option.name}</div>
                     </a>
-                    {isEnterprise && showLicenseData && index === 1 && (
+                    {/* licenseData is only set when showLicenseData is received true */}
+                    {isEnterprise && licenseData && index === 1 && (
                         <>
                             <button
                                 type="button"

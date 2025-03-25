@@ -1096,3 +1096,9 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
           })
 
 export type CountryISO2Type = ParsedCountry['iso2']
+
+export interface CentralAPILocalConfig {
+    lastUpdatedDate: string
+    isConnected: boolean | null
+    updateCount: number
+}

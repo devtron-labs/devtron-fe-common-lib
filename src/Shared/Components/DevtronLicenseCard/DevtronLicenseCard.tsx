@@ -28,7 +28,7 @@ export const DevtronLicenseCard = ({
     const { bgColor, textColor } = getLicenseColorsAccordingToStatus(licenseStatus)
     const remainingTime = getTTLInHumanReadableFormat(ttl)
     const remainingTimeString = ttl < 0 ? `Expired ${remainingTime} ago` : `${remainingTime} remaining`
-    const isLicenseValid = ttl > 0
+    const isLicenseValid = licenseStatus !== LicenseStatus.EXPIRED
 
     const cardRef = useRef<HTMLDivElement>(null)
 

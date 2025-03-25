@@ -1079,7 +1079,12 @@ export const getHashedValue = async (value: string): Promise<string | null> => {
 }
 
 export const getTTLInHumanReadableFormat = (ttl: number): string => {
-    const humanizedDuration = moment.duration(Math.abs(ttl), 'seconds').humanize(false)
+    const absoluteTTL = Math.abs(ttl)
+    // moment return 'a few seconds' so returning directly
+    if (absoluteTTL <= 60) {
+        return '1 minute'
+    }
+    const humanizedDuration = moment.duration(absoluteTTL, 'seconds').humanize(false)
     // Since moment.js return "a" or "an" for singular values so replacing with 1.
     return humanizedDuration.replace(/^(a|an) /, '1 ');
 }

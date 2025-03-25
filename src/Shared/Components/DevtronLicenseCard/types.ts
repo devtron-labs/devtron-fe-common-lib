@@ -1,4 +1,4 @@
-import { DevtronLicenseBaseDTO } from '@Shared/index'
+import { DevtronLicenseBaseDTO, LicenseErrorStruct } from '@Shared/index'
 
 export enum LicenseStatus {
     ACTIVE = 'ACTIVE',
@@ -22,6 +22,12 @@ export type DevtronLicenseCardProps = {
           licenseSuffix: string
       }
 )
+
+export type DevtronLicenseInfo = DevtronLicenseCardProps & {
+    fingerprint: string
+    showLicenseData: boolean
+    licenseStatusError?: LicenseErrorStruct
+}
 
 export interface InstallFingerprintInfoProps extends Pick<DevtronLicenseBaseDTO, 'fingerprint'> {
     showHelpTooltip?: boolean

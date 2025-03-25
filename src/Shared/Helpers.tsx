@@ -51,6 +51,7 @@ import {
 import {
     AggregationKeys,
     BorderConfigType,
+    CentralAPILocalConfig,
     GitTriggers,
     IntersectionChangeHandler,
     IntersectionOptions,
@@ -60,7 +61,12 @@ import {
     TargetPlatformsDTO,
     WebhookEventNameType,
 } from './types'
-import { DEPLOYMENT_STATUS, TIMELINE_STATUS, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
+import {
+    CENTRAL_API_CONNECTIVITY_KEY,
+    DEPLOYMENT_STATUS,
+    TIMELINE_STATUS,
+    UNSAVED_CHANGES_PROMPT_MESSAGE,
+} from './constants'
 import {
     AggregatedNodes,
     DeploymentStatusDetailsBreakdownDataType,
@@ -1069,4 +1075,35 @@ export const getClassNameForStickyHeaderWithShadow = (isStuck: boolean, topClass
 
 export const clearCookieOnLogout = () => {
     document.cookie = `${TOKEN_COOKIE_NAME}=; expires=Thu, 01-Jan-1970 00:00:01 GMT;path=/`
+}
+
+export const getCentralAPIHealthObjectFromLocalStorage = (): CentralAPILocalConfig => {
+    try {
+        const localStorageString = localStorage.getItem(CENTRAL_API_CONNECTIVITY_KEY)
+        const healthObj: CentralAPILocalConfig = JSON.parse(localStorageString)
+
+        const { lastUpdatedDate, isConnected, updateCount } = healthObj
+
+        return {
+            lastUpdatedDate: lastUpdatedDate || '',
+            updateCount: updateCount || 0,
+            isConnected: isConnected || null,
+        }
+    } catch {
+        localStorage.removeItem(CENTRAL_API_CONNECTIVITY_KEY)
+        return {
+            lastUpdatedDate: '',
+            updateCount: 0,
+            isConnected: null,
+        }
+    }
+}
+
+/**
+ *
+ * @returns null if we do not know yet
+ */
+export const getCentralAPIHealthFromLocalStorage = (): boolean | null => {
+    const healthObject = getCentralAPIHealthObjectFromLocalStorage()
+    return healthObject.isConnected
 }
