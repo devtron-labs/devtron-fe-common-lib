@@ -1098,7 +1098,7 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
 export type CountryISO2Type = ParsedCountry['iso2']
 
 export interface CentralAPILocalConfig {
-    lastUpdatedDate: string
-    isConnected: boolean | null
-    updateCount: number
+    lastUpdatedDate: string // date on which local storage is updated
+    isConnected: boolean | null // true/false acc to connection, null for first time
+    updateCount: number // number of times it has been updated, max 3
 }

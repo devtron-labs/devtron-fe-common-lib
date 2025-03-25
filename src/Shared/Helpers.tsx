@@ -62,7 +62,7 @@ import {
     WebhookEventNameType,
 } from './types'
 import {
-    CENTRAL_API_CONNECTIVITY_KEY,
+    CENTRAL_API_LOCAL_STORAGE_KEY,
     DEPLOYMENT_STATUS,
     TIMELINE_STATUS,
     UNSAVED_CHANGES_PROMPT_MESSAGE,
@@ -1079,7 +1079,7 @@ export const clearCookieOnLogout = () => {
 
 export const getCentralAPIHealthObjectFromLocalStorage = (): CentralAPILocalConfig => {
     try {
-        const localStorageString = localStorage.getItem(CENTRAL_API_CONNECTIVITY_KEY)
+        const localStorageString = localStorage.getItem(CENTRAL_API_LOCAL_STORAGE_KEY)
         const healthObj: CentralAPILocalConfig = JSON.parse(localStorageString)
 
         const { lastUpdatedDate, isConnected, updateCount } = healthObj
@@ -1090,7 +1090,7 @@ export const getCentralAPIHealthObjectFromLocalStorage = (): CentralAPILocalConf
             isConnected: isConnected || null,
         }
     } catch {
-        localStorage.removeItem(CENTRAL_API_CONNECTIVITY_KEY)
+        localStorage.removeItem(CENTRAL_API_LOCAL_STORAGE_KEY)
         return {
             lastUpdatedDate: '',
             updateCount: 0,

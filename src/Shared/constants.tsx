@@ -536,4 +536,4 @@ export const Routes = {
 
 export const ENTERPRISE_SUPPORT_LINK = 'enterprise@devtron.ai'
 
-export const CENTRAL_API_CONNECTIVITY_KEY = 'centralAPIConfig'
+export const CENTRAL_API_LOCAL_STORAGE_KEY = 'centralAPIConfig'
