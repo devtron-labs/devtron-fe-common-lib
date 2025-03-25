@@ -22,7 +22,7 @@ import {
     Props as ReactSelectProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { ReactElement, useCallback, useMemo, useState } from 'react'
+import { ReactElement, useCallback, useMemo, useRef, useState } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
@@ -202,7 +202,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     classNamePrefix,
     shouldRenderCustomOptions = false,
     isSearchable,
-    selectRef,
+    selectRef: refFromConsumer,
     shouldMenuAlignRight = false,
     fullWidth = false,
     customSelectedOptionsCount = null,
@@ -223,6 +223,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     labelTooltipConfig,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
+    const innerRef = useRef<SelectPickerProps<OptionValue, IsMulti>['selectRef']['current']>(null)
+    const selectRef = refFromConsumer ?? innerRef
+
     const [isFocussed, setIsFocussed] = useState(false)
     const [inputValue, setInputValue] = useState('')
 
@@ -356,6 +359,11 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
             e.preventDefault()
         }
+
+        if (e.key === 'Escape' && !selectRef.current.props.menuIsOpen) {
+            selectRef.current.blur()
+        }
+
         onKeyDown?.(e)
     }
 
