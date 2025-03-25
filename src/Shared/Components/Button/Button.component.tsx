@@ -182,7 +182,7 @@ const Button = <ComponentType extends ButtonComponentType>({
                     elementRef.current.click()
                     // This is 100ms less than the duration of the transition in CSS
                     // Make sure to update the same in CSS if this is changed
-                }, 2400)
+                }, 1900)
             }, 100)
         }
 
