@@ -8,5 +8,5 @@ const dashboardAPI = new CoreAPI({
 })
 
 export const { post, put, patch, get, trash } = dashboardAPI
-export { getIsRequestAborted, abortPreviousRequests } from './utils'
+export { getIsRequestAborted, abortPreviousRequests, handleRedirectToLicenseActivation } from './utils'
 export { default as CoreAPI } from './CoreAPI'

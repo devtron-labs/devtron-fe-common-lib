@@ -122,7 +122,7 @@ const LoginBanner = () => {
                 <AnimatedBackground />
                 <img className="dc__zi-2" src={LoginBannerImg} alt="login-image" />
             </div>
-            <div className="p-40 dc__backdrop-filter bg__primary flex dc__gap-12 dc__bottom-radius-12">
+            <div className="p-40 dc__backdrop-filter bg__primary flex dc__gap-12">
                 <div className="flexbox-col dc__align-items-center h-100 dc__gap-8">
                     <Icon name="ic-quote" color="N900" />
                     <div className="border__primary w-1 flex-grow-1" />
@@ -143,7 +143,7 @@ const LoginBanner = () => {
                     }}
                     className="flexbox-col dc__gap-20"
                 >
-                    <div className="fs-14 fw-4 lh-1-5 cn-9">{quote}</div>
+                    <div className="fs-14 fw-4 lh-1-5 cn-9 dc__truncate--clamp-4">{quote}</div>
                     <div className="flex dc__content-space">
                         <div>
                             <div className="fs-13 fw-6 lh-1-5 cn-9">{name}</div>
