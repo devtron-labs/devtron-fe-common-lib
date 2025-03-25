@@ -1102,3 +1102,7 @@ export interface CentralAPILocalConfig {
     isConnected: boolean | null // true/false acc to connection, null for first time
     updateCount: number // number of times it has been updated, max 3
 }
+
+export enum ResponseHeaders {
+    LICENSE_STATUS = 'X-License-Status',
+}
