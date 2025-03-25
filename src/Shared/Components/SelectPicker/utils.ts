@@ -17,6 +17,7 @@
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 import { GroupBase, MultiValue, OptionsOrGroups, StylesConfig } from 'react-select'
+import { useMemo } from 'react'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 import { SELECT_PICKER_CONTROL_SIZE_MAP, SELECT_PICKER_FONT_SIZE_MAP, SELECT_PICKER_ICON_SIZE_MAP } from './constants'
 
@@ -381,3 +382,28 @@ export const getSelectPickerOptionByValue = <OptionValue>(
         }) ?? defaultOption
     )
 }
+
+const useSelectStyles = ({
+    error,
+    size,
+    menuSize,
+    variant,
+    getIsOptionValid,
+    isGroupHeadingSelectable,
+    shouldMenuAlignRight,
+}) =>
+    useMemo(
+        () =>
+            getCommonSelectStyle({
+                error,
+                size,
+                menuSize,
+                variant,
+                getIsOptionValid,
+                isGroupHeadingSelectable,
+                shouldMenuAlignRight,
+            }),
+        [error, size, menuSize, variant, isGroupHeadingSelectable, shouldMenuAlignRight],
+    )
+
+export default useSelectStyles

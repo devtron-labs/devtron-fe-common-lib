@@ -348,3 +348,5 @@ export interface AsyncSelectProps
     isGroupHeadingSelectable?: boolean
     loadingOptions?: SelectPickerOptionType[]
 }
+
+export type OptionValue = SelectPickerOptionType['value']

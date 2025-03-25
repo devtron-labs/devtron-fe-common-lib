@@ -22,12 +22,12 @@ import {
     Props as ReactSelectProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { ReactElement, useCallback, useMemo, useState } from 'react'
+import { ReactElement, useCallback, useState } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
 import { deriveBorderRadiusAndBorderClassFromConfig, isNullOrUndefined } from '@Shared/Helpers'
-import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
+import useSelectStyles, { getSelectPickerOptionByValue } from './utils'
 import {
     SelectPickerMultiValueLabel,
     SelectPickerMultiValueRemove,
@@ -250,19 +250,15 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     const isSelectSearchable = !shouldRenderCustomOptions && isSearchable
 
     // Option disabled, group null state, checkbox hover, create option visibility (scroll reset on search)
-    const selectStyles = useMemo(
-        () =>
-            getCommonSelectStyle({
-                error,
-                size: selectSize,
-                menuSize,
-                variant,
-                getIsOptionValid,
-                isGroupHeadingSelectable,
-                shouldMenuAlignRight,
-            }),
-        [error, selectSize, menuSize, variant, isGroupHeadingSelectable, shouldMenuAlignRight],
-    )
+    const selectStyles = useSelectStyles({
+        error,
+        size: selectSize,
+        menuSize,
+        variant,
+        getIsOptionValid,
+        isGroupHeadingSelectable,
+        shouldMenuAlignRight,
+    })
 
     // Used to show the create new option for creatable select and the option(s) doesn't have the input value
     const isValidNewOption = (_inputValue: string) => {

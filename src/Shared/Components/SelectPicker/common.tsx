@@ -26,6 +26,7 @@ import {
     MultiValueProps,
     MultiValue,
     InputProps,
+    SingleValueProps,
 } from 'react-select'
 import { Progressing } from '@Common/Progressing'
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
@@ -308,6 +309,15 @@ export const SelectPickerMultiValueRemove = (props: MultiValueRemoveProps) => (
         </span>
     </components.MultiValueRemove>
 )
+
+export const SelectPickerSingleValue = (props: SingleValueProps) => {
+    const { children } = props
+    return (
+        <components.SingleValue {...props}>
+            <div className="fs-16">{children}</div>
+        </components.SingleValue>
+    )
+}
 
 export const SelectPickerGroupHeading = <OptionValue,>({
     isGroupHeadingSelectable,

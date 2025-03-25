@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useRef } from 'react'
-import { SelectInstance, ValueContainerProps } from 'react-select'
+import { useRef } from 'react'
+import { SelectInstance } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import {
     SelectPickerClearIndicator,
@@ -10,11 +10,12 @@ import {
     SelectPickerMenuList,
     SelectPickerMultiValueRemove,
     SelectPickerOption,
+    SelectPickerSingleValue,
     SelectPickerValueContainer,
 } from './common'
-import { AsyncSelectProps, SelectPickerOptionType } from './type'
+import { AsyncSelectProps } from './type'
 import { FormFieldWrapper } from '../FormFieldWrapper'
-import { getCommonSelectStyle } from './utils'
+import useSelectStyles from './utils'
 
 export const AsyncSelectPicker = ({
     defaultOptions,
@@ -47,33 +48,21 @@ export const AsyncSelectPicker = ({
     const selectRef = useRef<SelectInstance>(null)
 
     // Option disabled, group null state, checkbox hover, create option visibility (scroll reset on search)
-    const selectStyles = useMemo(
-        () =>
-            getCommonSelectStyle({
-                error,
-                size,
-                menuSize,
-                variant,
-                getIsOptionValid,
-                isGroupHeadingSelectable,
-                shouldMenuAlignRight,
-            }),
-        [error, size, menuSize, variant, isGroupHeadingSelectable, shouldMenuAlignRight],
-    )
+    const selectStyles = useSelectStyles({
+        error,
+        size,
+        menuSize,
+        variant,
+        getIsOptionValid,
+        isGroupHeadingSelectable,
+        shouldMenuAlignRight,
+    })
 
     const handleOnKeyDown = (event) => {
         if (event.key === 'Escape') {
             selectRef.current?.inputRef.blur()
         }
     }
-    type OptionValue = string | number
-
-    const renderValueContainer = useCallback(
-        (valueContainerProps: ValueContainerProps<SelectPickerOptionType<OptionValue>>) => (
-            <SelectPickerValueContainer {...valueContainerProps} />
-        ),
-        [],
-    )
 
     return (
         <FormFieldWrapper
@@ -91,33 +80,32 @@ export const AsyncSelectPicker = ({
             labelTippyCustomizedConfig={labelTippyCustomizedConfig}
             labelTooltipConfig={labelTooltipConfig}
         >
-            <div className="w-100">
-                <AsyncSelect
-                    ref={selectRef}
-                    blurInputOnSelect
-                    onKeyDown={handleOnKeyDown}
-                    defaultOptions={defaultOptions}
-                    loadOptions={loadOptions}
-                    noOptionsMessage={noOptionsMessage}
-                    onChange={onChange}
-                    components={{
-                        IndicatorSeparator: null,
-                        LoadingIndicator: SelectPickerLoadingIndicator,
-                        DropdownIndicator: SelectPickerDropdownIndicator,
-                        Control: SelectPickerControl,
-                        Option: SelectPickerOption,
-                        MenuList: SelectPickerMenuList,
-                        ClearIndicator: SelectPickerClearIndicator,
-                        ValueContainer: renderValueContainer,
-                        MultiValueRemove: SelectPickerMultiValueRemove,
-                        Input: SelectPickerInput,
-                    }}
-                    value={value}
-                    styles={selectStyles}
-                    isOptionDisabled={isOptionDisabled}
-                    placeholder={placeholder}
-                />
-            </div>
+            <AsyncSelect
+                ref={selectRef}
+                blurInputOnSelect
+                onKeyDown={handleOnKeyDown}
+                defaultOptions={defaultOptions}
+                loadOptions={loadOptions}
+                noOptionsMessage={noOptionsMessage}
+                onChange={onChange}
+                components={{
+                    IndicatorSeparator: null,
+                    LoadingIndicator: SelectPickerLoadingIndicator,
+                    DropdownIndicator: SelectPickerDropdownIndicator,
+                    Control: SelectPickerControl,
+                    Option: SelectPickerOption,
+                    MenuList: SelectPickerMenuList,
+                    ClearIndicator: SelectPickerClearIndicator,
+                    MultiValueRemove: SelectPickerMultiValueRemove,
+                    Input: SelectPickerInput,
+                    SingleValue: SelectPickerSingleValue,
+                    ValueContainer: SelectPickerValueContainer,
+                }}
+                value={value}
+                styles={selectStyles}
+                isOptionDisabled={isOptionDisabled}
+                placeholder={placeholder}
+            />
         </FormFieldWrapper>
     )
 }
