@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ReactComponent as ICFilter } from '@Icons/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '@Icons/ic-filter-applied.svg'
 import { ComponentSizeType } from '@Shared/constants'
@@ -33,6 +33,8 @@ const FilterSelectPicker = ({
     options,
     ...props
 }: FilterSelectPickerProps) => {
+    const selectRef = useRef<SelectPickerProps<string | number, true>['selectRef']['current']>()
+
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const { triggerAutoClickTimestamp, setTriggerAutoClickTimestampToNow, resetTriggerAutoClickTimestamp } =
         useTriggerAutoClickTimestamp()
@@ -81,6 +83,12 @@ const FilterSelectPicker = ({
         // Added !e to ensure it works for both click and keyboard shortcut event
         if (!e || e.isTrusted) {
             closeMenu()
+        } else {
+            // If the event is not triggered by the user, focus on the select picker
+            // As it loses focus when auto-click is triggered and menu is not closed
+            setTimeout(() => {
+                selectRef.current.focus()
+            }, 100)
         }
     }
 
@@ -116,8 +124,9 @@ const FilterSelectPicker = ({
 
     return (
         <div className="dc__mxw-250">
-            <SelectPicker
+            <SelectPicker<string | number, true>
                 {...props}
+                selectRef={selectRef}
                 options={options}
                 value={selectedOptions}
                 isMulti
