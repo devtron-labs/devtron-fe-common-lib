@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import LoginBannerImg from '@Images/login-screen-ui.webp'
 import { Icon } from '../Icon'
 import { TESTIMONIAL_CARD_DATA, TESTIMONIAL_CARD_INTERVAL, TRANSITION_EASE_CURVE } from './constants'
 
@@ -119,8 +120,9 @@ const LoginBanner = () => {
                     <Icon name="ic-devtron-header-logo" color="N900" />
                 </div>
                 <AnimatedBackground />
+                <img className="dc__zi-2" src={LoginBannerImg} alt="login-image" />
             </div>
-            <div className="p-40 dc__backdrop-filter bg__primary flex dc__gap-12 dc__bottom-radius-12">
+            <div className="p-40 dc__backdrop-filter bg__primary flex dc__gap-12">
                 <div className="flexbox-col dc__align-items-center h-100 dc__gap-8">
                     <Icon name="ic-quote" color="N900" />
                     <div className="border__primary w-1 flex-grow-1" />
@@ -141,13 +143,17 @@ const LoginBanner = () => {
                     }}
                     className="flexbox-col dc__gap-20"
                 >
-                    <div className="fs-14 fw-4 lh-1-5 cn-9">{quote}</div>
-                    <div className="flexbox dc__content-space dc__align-items-center">
+                    <div className="fs-14 fw-4 lh-1-5 cn-9 dc__truncate--clamp-4">{quote}</div>
+                    <div className="flex dc__content-space">
                         <div>
                             <div className="fs-13 fw-6 lh-1-5 cn-9">{name}</div>
-                            <div className="fs-12 fw-4 lh-1-5 cn-7">{designation}</div>
+                            <div className="fs-12 fw-4 lh-1-5 cn-7 dc__truncate">{designation}</div>
                         </div>
-                        <Icon name={iconName} color={null} size={24} />
+                        {iconName && (
+                            <div className="dc__fill-available-space w-auto-imp h-36">
+                                <Icon name={iconName} color="N900" />
+                            </div>
+                        )}
                     </div>
                 </motion.div>
             </div>

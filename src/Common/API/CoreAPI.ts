@@ -1,3 +1,4 @@
+import { INVALID_LICENSE_KEY, ResponseHeaders } from '@Shared/index'
 import { API_STATUS_CODES, APIOptions, FALLBACK_REQUEST_TIMEOUT, Host, noop, ResponseType, ServerErrors } from '..'
 import { CoreAPIConstructorParamsType, FetchAPIParamsType, FetchInTimeParamsType } from './types'
 import { handleServerError } from './utils'
@@ -46,7 +47,7 @@ class CoreAPI {
         ).then(
             // eslint-disable-next-line consistent-return
             async (response) => {
-                const isLicenseInvalid = response.headers.get('X-License-Status') === 'inValid'
+                const isLicenseInvalid = response.headers.get(ResponseHeaders.LICENSE_STATUS) === INVALID_LICENSE_KEY
 
                 if (isLicenseInvalid && !preventLicenseRedirect) {
                     this.handleRedirectToLicenseActivation()

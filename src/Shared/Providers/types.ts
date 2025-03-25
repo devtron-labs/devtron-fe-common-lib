@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { MutableRefObject, ReactNode } from 'react'
+import { Dispatch, MutableRefObject, ReactNode, SetStateAction } from 'react'
 import { ServerInfo } from '../Components/Header/types'
 import { SERVER_MODE } from '../../Common'
-import { LicenseInfoDialogType } from '..'
+import { DevtronLicenseInfo, LicenseInfoDialogType } from '..'
 
 export interface MainContext {
     serverMode: SERVER_MODE
@@ -59,8 +59,11 @@ export interface MainContext {
     handleOpenLicenseInfoDialog: (
         initialDialogType?: LicenseInfoDialogType.ABOUT | LicenseInfoDialogType.LICENSE,
     ) => void
-    showLicenseData: boolean
-    setShowLicenseData: (showLicenseData: boolean) => void
+    /**
+     * Data is set only if showLicenseData is received as true
+     */
+    licenseData: DevtronLicenseInfo
+    setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
 }
 
 export interface MainContextProviderProps {

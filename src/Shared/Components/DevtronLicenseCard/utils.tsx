@@ -19,7 +19,7 @@ const getDevtronLicenseStatus = ({
     ttl,
     reminderThreshold,
 }: Pick<DevtronLicenseDTO, 'ttl' | 'reminderThreshold'>): LicenseStatus => {
-    if (ttl < 0) {
+    if (ttl <= 0) {
         return LicenseStatus.EXPIRED
     }
 

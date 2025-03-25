@@ -26,6 +26,7 @@ import { Modal, SERVER_MODE, URLS } from '../../../../Common'
 import { AppListConstants, ComponentSizeType } from '../../../constants'
 import './HeaderWithCreateButton.scss'
 import { useMainContext } from '../../../Providers'
+import { getIsShowingLicenseData } from '../utils'
 
 export interface HeaderWithCreateButtonProps {
     headerName: string
@@ -35,8 +36,10 @@ export const HeaderWithCreateButton = ({ headerName }: HeaderWithCreateButtonPro
     const params = useParams<{ appType: string }>()
     const history = useHistory()
     const location = useLocation()
-    const { serverMode } = useMainContext()
+    const { serverMode, licenseData } = useMainContext()
     const [showCreateSelectionModal, setShowCreateSelectionModal] = useState(false)
+
+    const showingLicenseBar = getIsShowingLicenseData(licenseData)
 
     const handleCreateButton = () => {
         setShowCreateSelectionModal((prevState) => !prevState)
@@ -75,7 +78,7 @@ export const HeaderWithCreateButton = ({ headerName }: HeaderWithCreateButtonPro
 
     const renderCreateSelectionModal = () => (
         <Modal
-            rootClassName={`create-modal-wrapper
+            rootClassName={`create-modal-wrapper${showingLicenseBar ? '__with-bar' : ''}
                 ${window._env_.FEATURE_PROMO_EMBEDDED_BUTTON_TEXT ? 'create-modal-wrapper--try-devtron' : ''}`}
             onClick={handleCreateButton}
         >

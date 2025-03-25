@@ -63,7 +63,6 @@ export interface customEnv {
     NODE_REACT_APP_GIT_SHA?: string
     REACT_APP_GIT_SHA?: string
     NODE_ENV?: string
-    LOGIN_DT_LOGO?: string
     SIDEBAR_DT_LOGO?: string
     ENABLE_EXTERNAL_ARGO_CD: boolean
     API_BATCH_SIZE: number

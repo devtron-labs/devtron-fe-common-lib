@@ -20,6 +20,11 @@
     top: 59px;
     overflow: hidden;
 
+    // Adding 28px for license bar/ announcement banner
+    &__with-bar {
+        top: 87px;
+    }
+
     .create-modal-child {
         padding: 10px 15px;
         display: flex;
