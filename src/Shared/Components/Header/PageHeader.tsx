@@ -34,6 +34,7 @@ import AnnouncementBanner from '../AnnouncementBanner/AnnouncementBanner'
 import { useMainContext, useTheme, useUserEmail } from '../../Providers'
 import { InfoIconTippy } from '../InfoIconTippy'
 import { IframePromoButton } from './IframePromoButton'
+import { LicenseStatus } from '../DevtronLicenseCard'
 
 const PageHeader = ({
     headerName,
@@ -49,8 +50,14 @@ const PageHeader = ({
     showAnnouncementHeader,
     tippyProps,
 }: PageHeaderType) => {
-    const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard, setGettingStartedClicked } =
-        useMainContext()
+    const {
+        loginCount,
+        setLoginCount,
+        showGettingStartedCard,
+        setShowGettingStartedCard,
+        setGettingStartedClicked,
+        licenseData,
+    } = useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
     const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
@@ -191,6 +198,8 @@ const PageHeader = ({
         <span className="fs-12 fw-4 lh-18 pt-1 pb-1 pl-6 pr-6 ml-8 cn-9 bcy-5 br-4">Beta</span>
     )
 
+    const showingLicenseBar = licenseData && (licenseData.licenseStatus !== LicenseStatus.ACTIVE || licenseData.isTrial)
+
     const renderIframeButton = () => <IframePromoButton />
 
     return (
@@ -267,7 +276,7 @@ const PageHeader = ({
             {showTabs && renderHeaderTabs()}
             {showHelpCard && (
                 <HelpNav
-                    className={`help-card__more-option ${window._env_.K8S_CLIENT ? 'k8s-client-view' : ''}`}
+                    className={`help-card__more-option${showingLicenseBar ? '__with-bar' : ''} ${window._env_.K8S_CLIENT ? 'k8s-client-view' : ''}`}
                     setShowHelpCard={setShowHelpCard}
                     serverInfo={currentServerInfo.serverInfo}
                     fetchingServerInfo={currentServerInfo.fetchingServerInfo}
@@ -289,7 +298,7 @@ const PageHeader = ({
                 )}
             {showLogOutCard && (
                 <LogoutCard
-                    className="logout-card__more-option mt-8"
+                    className={`logout-card__more-option${showingLicenseBar ? '__with-bar' : ''} mt-8`}
                     userFirstLetter={email}
                     setShowLogOutCard={setShowLogOutCard}
                     showLogOutCard={showLogOutCard}

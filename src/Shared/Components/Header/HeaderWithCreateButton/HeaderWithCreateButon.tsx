@@ -21,6 +21,7 @@ import { ReactComponent as DropDown } from '@Icons/ic-caret-down-small.svg'
 import { ReactComponent as ChartIcon } from '@Icons/ic-charts.svg'
 import { ReactComponent as AddIcon } from '@Icons/ic-add.svg'
 import { ReactComponent as JobIcon } from '@Icons/ic-k8s-job.svg'
+import { LicenseStatus } from '@Shared/Components/DevtronLicenseCard'
 import PageHeader from '../PageHeader'
 import { Modal, SERVER_MODE, URLS } from '../../../../Common'
 import { AppListConstants, ComponentSizeType } from '../../../constants'
@@ -35,8 +36,11 @@ export const HeaderWithCreateButton = ({ headerName }: HeaderWithCreateButtonPro
     const params = useParams<{ appType: string }>()
     const history = useHistory()
     const location = useLocation()
-    const { serverMode } = useMainContext()
+    const { serverMode, licenseData } = useMainContext()
     const [showCreateSelectionModal, setShowCreateSelectionModal] = useState(false)
+
+    const showingLicenseBar =
+        licenseData && licenseData && (licenseData.licenseStatus !== LicenseStatus.ACTIVE || licenseData.isTrial)
 
     const handleCreateButton = () => {
         setShowCreateSelectionModal((prevState) => !prevState)
@@ -75,7 +79,7 @@ export const HeaderWithCreateButton = ({ headerName }: HeaderWithCreateButtonPro
 
     const renderCreateSelectionModal = () => (
         <Modal
-            rootClassName={`create-modal-wrapper
+            rootClassName={`create-modal-wrapper${showingLicenseBar ? '__with-bar' : ''}
                 ${window._env_.FEATURE_PROMO_EMBEDDED_BUTTON_TEXT ? 'create-modal-wrapper--try-devtron' : ''}`}
             onClick={handleCreateButton}
         >
