@@ -35,7 +35,6 @@ import {
     SelectPickerControl,
     SelectPickerDropdownIndicator,
     SelectPickerGroupHeading,
-    SelectPickerLoadingIndicator,
     SelectPickerMenuList,
     SelectPickerOption,
     SelectPickerValueContainer,
@@ -426,7 +425,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         ref={selectRef}
                         components={{
                             IndicatorSeparator: null,
-                            LoadingIndicator: SelectPickerLoadingIndicator,
+                            LoadingIndicator: null,
                             DropdownIndicator: SelectPickerDropdownIndicator,
                             Control: SelectPickerControl,
                             Option: renderOption,

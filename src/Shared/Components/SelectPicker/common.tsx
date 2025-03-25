@@ -64,11 +64,14 @@ const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = 
 export const SelectPickerDropdownIndicator = <OptionValue,>(
     props: DropdownIndicatorProps<SelectPickerOptionType<OptionValue>>,
 ) => {
-    const { isDisabled } = props
+    const {
+        isDisabled,
+        selectProps: { isLoading },
+    } = props
 
     return (
         <components.DropdownIndicator {...props}>
-            <ICCaretDown className={isDisabled ? 'scn-3' : 'scn-6'} />
+            {isLoading ? <Progressing /> : <ICCaretDown className={isDisabled ? 'scn-3' : 'scn-6'} />}
         </components.DropdownIndicator>
     )
 }
@@ -168,8 +171,6 @@ export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>
         </div>
     )
 }
-
-export const SelectPickerLoadingIndicator = () => <Progressing />
 
 export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
     disableDescriptionEllipsis,
