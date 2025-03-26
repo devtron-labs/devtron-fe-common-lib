@@ -417,6 +417,11 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         classNames={{
                             control: () =>
                                 deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig }),
+                            ...(isMulti
+                                ? {
+                                      option: () => 'checkbox__parent-container',
+                                  }
+                                : {}),
                         }}
                         name={name || inputId}
                         classNamePrefix={classNamePrefix || inputId}
