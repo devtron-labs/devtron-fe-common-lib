@@ -1,7 +1,7 @@
 .select-picker {
     &__menu-list-footer-button {
-        &--secondary {
-            button {
+        &--border-less {
+            button, a {
                 justify-content: flex-start;
             }
         }

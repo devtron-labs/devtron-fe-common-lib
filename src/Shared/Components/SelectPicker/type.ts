@@ -25,7 +25,7 @@ import type {} from 'react-select/base'
 import { TooltipProps } from '@Common/Tooltip/types'
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
-import { ButtonProps, ButtonVariantType } from '../Button'
+import { ButtonComponentType, ButtonProps, ButtonVariantType } from '../Button'
 
 export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
     /**
@@ -55,7 +55,7 @@ type SelectProps<OptionValue, IsMulti extends boolean> = ReactSelectProps<
     GroupBase<SelectPickerOptionType<OptionValue>>
 >
 
-export type MenuListFooterConfigType =
+type MenuListFooterConfigType =
     | {
           type: 'text'
           value: string
@@ -65,8 +65,8 @@ export type MenuListFooterConfigType =
           type: 'button'
           value?: never
           buttonProps: {
-              variant: ButtonVariantType.primary | ButtonVariantType.secondary
-          } & Omit<ButtonProps, 'size' | 'fullWidth' | 'icon' | 'endIcon' | 'variant'>
+              variant: ButtonVariantType.primary | ButtonVariantType.borderLess
+          } & Omit<ButtonProps<ButtonComponentType>, 'size' | 'fullWidth' | 'icon' | 'endIcon' | 'variant' | 'style'>
       }
 
 declare module 'react-select/base' {
