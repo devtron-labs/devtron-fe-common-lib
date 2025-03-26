@@ -17,13 +17,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ReactComponent as ICFilter } from '@Icons/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '@Icons/ic-filter-applied.svg'
-import { ComponentSizeType } from '@Shared/constants'
 import { useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/Hooks'
 import { IS_PLATFORM_MAC_OS } from '@Common/Constants'
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import SelectPicker from './SelectPicker.component'
 import { FilterSelectPickerProps, SelectPickerOptionType, SelectPickerProps } from './type'
-import { Button, ButtonProps, useTriggerAutoClickTimestamp } from '../Button'
+import { ButtonProps, ButtonVariantType, useTriggerAutoClickTimestamp } from '../Button'
 
 const APPLY_FILTER_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = [IS_PLATFORM_MAC_OS ? 'Meta' : 'Control', 'Enter']
 
@@ -92,26 +91,6 @@ const FilterSelectPicker = ({
         }
     }
 
-    const renderApplyButton = () => (
-        <div className="p-8 dc__border-top-n1">
-            <Button
-                text="Apply"
-                dataTestId="filter-select-picker-apply"
-                onClick={handleApplyClick}
-                size={ComponentSizeType.small}
-                fullWidth
-                showTooltip
-                tooltipProps={{
-                    shortcutKeyCombo: {
-                        text: 'Apply filter',
-                        combo: APPLY_FILTER_SHORTCUT_KEYS,
-                    },
-                }}
-                triggerAutoClickTimestamp={triggerAutoClickTimestamp}
-            />
-        </div>
-    )
-
     useEffect(() => {
         if (isMenuOpen) {
             registerShortcut({ keys: APPLY_FILTER_SHORTCUT_KEYS, callback: handleApplyClick as () => void })
@@ -134,7 +113,23 @@ const FilterSelectPicker = ({
                 onMenuOpen={openMenu}
                 onMenuClose={handleMenuClose}
                 onChange={handleSelectOnChange}
-                renderMenuListFooter={renderApplyButton}
+                menuListFooterConfig={{
+                    type: 'button',
+                    buttonProps: {
+                        text: 'Apply',
+                        dataTestId: 'filter-select-picker-apply',
+                        onClick: handleApplyClick,
+                        showTooltip: true,
+                        tooltipProps: {
+                            shortcutKeyCombo: {
+                                text: 'Apply filter',
+                                combo: APPLY_FILTER_SHORTCUT_KEYS,
+                            },
+                        },
+                        triggerAutoClickTimestamp,
+                        variant: ButtonVariantType.primary,
+                    },
+                }}
                 controlShouldRenderValue={false}
                 showSelectedOptionsCount
                 isSearchable
