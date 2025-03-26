@@ -32,13 +32,28 @@ const CountrySelect = ({
         searchText,
     ) => {
         const searchValue = searchText.toLowerCase()
-        const searchCriterion = [option.data.value.name.toLowerCase(), `+${option.data.value.dialCode.toLowerCase()}`]
+        const searchCriterion = [
+            option.data.value.name.toLowerCase(),
+            `+${option.data.value.dialCode.toLowerCase()}`,
+            option.data.value.iso2.toLowerCase(),
+        ]
 
         return searchCriterion.some((criterion) => criterion.includes(searchValue))
     }
 
     const getOptionValue: SelectPickerProps<(typeof countryOptions)[number]['value']>['getOptionValue'] = (option) =>
         option.value.iso2
+
+    const formatOptionLabel: SelectPickerProps<(typeof countryOptions)[number]['value']>['formatOptionLabel'] = (
+        data,
+        formatOptionLabelMeta,
+    ) => {
+        if (formatOptionLabelMeta.context === 'menu') {
+            return data.label
+        }
+
+        return `+${data.value.dialCode}`
+    }
 
     return (
         <SelectPicker<(typeof countryOptions)[number]['value'], false>
@@ -57,11 +72,12 @@ const CountrySelect = ({
             onMenuOpen={onMenuOpen}
             icon={
                 variant === 'selectPhoneCode' && selectedOption?.value?.iso2 ? (
-                    <FlagImage country={selectedOption?.value?.iso2} />
+                    <FlagImage country={selectedOption?.value?.iso2} size={20} />
                 ) : null
             }
-            controlShouldRenderValue={variant !== 'selectPhoneCode'}
+            formatOptionLabel={formatOptionLabel}
             fullWidth
+            ariaLabel={variant === 'default' ? 'Country' : 'Phone Code'}
         />
     )
 }

@@ -20,7 +20,7 @@ const PhoneInput = ({
     // TODO: There are some issues with argentina country code, need to fix it
     const { inputValue, handlePhoneValueChange, inputRef, country, setCountry } = usePhoneInput({
         value: phoneValue,
-        forceDialCode: true,
+        disableDialCodeAndPrefix: true,
         onChange: (data) => {
             // So initially this will format the phone or set the dial code to us if no phone is there, but since we expect user to enter phone number, we will ignore the first call
             if (!hasValueInitialized.current) {
@@ -51,7 +51,7 @@ const PhoneInput = ({
 
             <div className="flexbox-col dc__gap-4 dc__grid">
                 <div className="flexbox dc__gap-8 w-100">
-                    <div className={`flexbox dc__mxw-50-per ${isCountrySelectOpen ? 'w-100' : ''}`}>
+                    <div className={`flexbox ${isCountrySelectOpen ? 'dc__mxw-50-per w-100' : 'dc__mnw-100'}`}>
                         <CountrySelect
                             placeholder={null}
                             selectedCountry={country.iso2}
@@ -73,6 +73,7 @@ const PhoneInput = ({
                         inputRef={inputRef}
                         error={error}
                         hideFormFieldInfo
+                        ariaLabel="Phone Number"
                         fullWidth
                     />
                 </div>
