@@ -2,14 +2,14 @@ import { useEffect, useRef } from 'react'
 import { animate, motion, useMotionTemplate, useMotionValue, useTransform } from 'framer-motion'
 import { ClipboardButton, getTTLInHumanReadableFormat } from '@Common/index'
 import { ReactComponent as ICChatSupport } from '@IconsV2/ic-chat-circle-dots.svg'
+import { getThemeOppositeThemeClass } from '@Shared/Providers/ThemeProvider/utils'
 import {
-    AppThemeType,
     CONTACT_SUPPORT_LINK,
     DevtronLicenseCardProps,
     ENTERPRISE_SUPPORT_LINK,
-    getComponentSpecificThemeClass,
     getHandleOpenURL,
     LicenseStatus,
+    useTheme,
 } from '@Shared/index'
 import { Button, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
@@ -28,6 +28,7 @@ export const DevtronLicenseCard = ({
     ttl,
 }: DevtronLicenseCardProps) => {
     const { bgColor, textColor } = getLicenseColorsAccordingToStatus(licenseStatus)
+    const { appTheme } = useTheme()
     const remainingTime = getTTLInHumanReadableFormat(ttl)
     const remainingTimeString = ttl < 0 ? `Expired ${remainingTime} ago` : `${remainingTime} remaining`
     const isLicenseValid = licenseStatus !== LicenseStatus.EXPIRED
@@ -80,7 +81,7 @@ export const DevtronLicenseCard = ({
         <div className="flexbox-col p-8 br-16" style={{ backgroundColor: bgColor }}>
             <div style={{ perspective: '1000px' }}>
                 <motion.div
-                    className={`license-card border__secondary flexbox-col br-12 h-200 dc__overflow-hidden bg__tertiary ${getComponentSpecificThemeClass(AppThemeType.dark)}`}
+                    className={`license-card shadow__overlay border__secondary flexbox-col br-12 h-200 dc__overflow-hidden bg__tertiary ${getThemeOppositeThemeClass(appTheme)}`}
                     ref={cardRef}
                     style={{
                         rotateX,
@@ -100,7 +101,7 @@ export const DevtronLicenseCard = ({
                         <div className="flexbox-col dc__gap-4">
                             <div className="flexbox dc__align-items-center dc__gap-6">
                                 <Icon name="ic-key" color={null} size={16} />
-                                <div className="flex dc__gap-4 cn-7 fs-16 fw-5 lh-1-5 font-ibm-plex-mono">
+                                <div className="flex dc__gap-4 cn-7 fs-16 fw-5 lh-1-5 cn-9 font-ibm-plex-mono">
                                     <span>&bull;&bull;&bull;&bull;</span>
                                     <span>{licenseSuffix || licenseKey?.slice(-8)}</span>
                                 </div>
