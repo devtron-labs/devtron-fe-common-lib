@@ -48,7 +48,7 @@ const CountrySelect = ({
         data,
         formatOptionLabelMeta,
     ) => {
-        if (formatOptionLabelMeta.context === 'menu') {
+        if (formatOptionLabelMeta.context === 'menu' || variant === 'default') {
             return data.label
         }
 
