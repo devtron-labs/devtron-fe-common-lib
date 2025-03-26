@@ -275,7 +275,7 @@ const PageHeader = ({
             {showTabs && renderHeaderTabs()}
             {showHelpCard && (
                 <HelpNav
-                    className={`help-card__more-option${showingLicenseBar ? '__with-bar' : ''} ${window._env_.K8S_CLIENT ? 'k8s-client-view' : ''}`}
+                    className={`help-card__more-option ${showingLicenseBar ? 'with-bar' : ''} ${window._env_.K8S_CLIENT ? 'k8s-client-view' : ''}`}
                     setShowHelpCard={setShowHelpCard}
                     serverInfo={currentServerInfo.serverInfo}
                     fetchingServerInfo={currentServerInfo.fetchingServerInfo}
@@ -297,7 +297,7 @@ const PageHeader = ({
                 )}
             {showLogOutCard && (
                 <LogoutCard
-                    className={`logout-card__more-option${showingLicenseBar ? '__with-bar' : ''} mt-8`}
+                    className={`logout-card__more-option ${showingLicenseBar ? 'with-bar' : ''} mt-8`}
                     userFirstLetter={email}
                     setShowLogOutCard={setShowLogOutCard}
                     showLogOutCard={showLogOutCard}

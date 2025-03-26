@@ -78,8 +78,8 @@ export const HeaderWithCreateButton = ({ headerName }: HeaderWithCreateButtonPro
 
     const renderCreateSelectionModal = () => (
         <Modal
-            rootClassName={`create-modal-wrapper${showingLicenseBar ? '__with-bar' : ''}
-                ${window._env_.FEATURE_PROMO_EMBEDDED_BUTTON_TEXT ? 'create-modal-wrapper--try-devtron' : ''}`}
+            rootClassName={`create-modal-wrapper ${showingLicenseBar ? 'with-bar' : ''}
+                 ${window._env_.FEATURE_PROMO_EMBEDDED_BUTTON_TEXT ? 'create-modal-wrapper--try-devtron' : ''}`}
             onClick={handleCreateButton}
         >
             <div

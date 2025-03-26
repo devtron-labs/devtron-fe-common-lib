@@ -114,18 +114,25 @@ const LoginBanner = () => {
     const { quote, name, designation, iconName } = TESTIMONIAL_CARD_DATA[currentIndex]
 
     return (
-        <div className="flexbox-col br-12 border__primary dc__position-rel dc__overflow-hidden">
+        <div className="flexbox-col br-12 border__primary dc__position-rel dc__overflow-hidden bg__primary">
             <div className="flexbox-col flex-grow-1 pt-32 pl-32 dc__content-space">
-                <div className="flex h-36 w-130 dc__fill-available-space dc__zi-2">
+                <div className="flex h-36 w-130 dc__fill-available-space">
                     <Icon name="ic-devtron-header-logo" color="N900" />
                 </div>
                 <AnimatedBackground />
-                <img className="dc__zi-2" src={LoginBannerImg} alt="login-image" />
+                <img
+                    className="dc__position-abs dc__top-180"
+                    src={LoginBannerImg}
+                    alt="login-image"
+                    style={{
+                        maxHeight: '90%',
+                    }}
+                />
             </div>
-            <div className="p-40 dc__backdrop-filter bg__primary flex dc__gap-12">
+            <div className="p-40 dc__backdrop-filter bg__primary flex dc__gap-12 dc__zi-2">
                 <div className="flexbox-col dc__align-items-center h-100 dc__gap-8">
                     <Icon name="ic-quote" color="N900" />
-                    <div className="border__primary w-1 flex-grow-1" />
+                    <div className="border__primary--left w-1 flex-grow-1" />
                 </div>
                 <motion.div
                     key={currentIndex}
@@ -143,7 +150,7 @@ const LoginBanner = () => {
                     }}
                     className="flexbox-col dc__gap-20"
                 >
-                    <div className="fs-14 fw-4 lh-1-5 cn-9 dc__truncate--clamp-4">{quote}</div>
+                    <div className="fs-14 fw-4 lh-1-5 cn-9 dc__truncate--clamp-4">{quote}&quot;</div>
                     <div className="flex dc__content-space">
                         <div>
                             <div className="fs-13 fw-6 lh-1-5 cn-9">{name}</div>

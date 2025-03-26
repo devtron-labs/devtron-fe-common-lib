@@ -19,7 +19,7 @@
     right: 65px;
 
     /* Adding 28px for license bar/ announcement banner */
-    &__with-bar {
+    &.with-bar {
         top: 79px;
     }
 }
@@ -34,7 +34,7 @@
     right: 29px;
 
     /* Adding 28px for license bar/ announcement banner */
-    &__with-bar {
+    &.with-bar {
         top: 79px;
     }
 }
