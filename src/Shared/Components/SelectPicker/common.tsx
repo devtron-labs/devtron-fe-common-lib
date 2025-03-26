@@ -43,7 +43,7 @@ import { ComponentSizeType } from '@Shared/constants'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
 import { Icon } from '../Icon'
-import { Button, ButtonProps } from '../Button'
+import { Button, ButtonProps, ButtonVariantType } from '../Button'
 
 const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
     if (tooltipProps) {
@@ -258,7 +258,7 @@ const SelectPickerMenuListFooter = ({
         const { value } = menuListFooterConfig
 
         return (
-            <div className="flex left dc__gap-6">
+            <div className="flex left dc__gap-6 p-8">
                 <Icon name="ic-info-outline" color="N700" size={16} />
                 <p className="fs-12 fw-4 fs-16 cn-8 dc__truncate">{value}</p>
             </div>
@@ -267,11 +267,14 @@ const SelectPickerMenuListFooter = ({
 
     if (type === 'button') {
         const { buttonProps } = menuListFooterConfig
+        const { variant } = buttonProps
 
         return (
-            // We are adding justify-content: flex-start for secondary variant
-            <div className={`select-picker__menu-list-footer-button--${buttonProps.variant}`}>
-                <Button {...(buttonProps as ButtonProps)} size={ComponentSizeType.small} fullWidth />
+            // We are adding justify-content: flex-start for borderLess variant using this class
+            <div
+                className={`select-picker__menu-list-footer-button--${variant} ${variant === ButtonVariantType.borderLess ? 'py-4' : 'p-8'}`}
+            >
+                <Button {...(buttonProps as ButtonProps)} size={ComponentSizeType.medium} fullWidth />
             </div>
         )
     }
@@ -308,7 +311,7 @@ export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPi
                 {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
             </components.MenuList>
             {!shouldRenderCustomOptions && menuListFooterConfig && (
-                <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bg__menu--primary dc__zi-2 p-8 dc__border-top-n1">
+                <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bg__menu--primary dc__zi-2 border__primary-translucent--top">
                     <SelectPickerMenuListFooter menuListFooterConfig={menuListFooterConfig} />
                 </div>
             )}
