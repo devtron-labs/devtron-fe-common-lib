@@ -320,8 +320,6 @@ export type SelectPickerTextAreaProps = Omit<
 > &
     Pick<ResizableTagTextAreaProps, 'maxHeight' | 'minHeight' | 'refVar' | 'dependentRefs'>
 
-// export type OptionValue = SelectPickerOptionType['value']
-
 export interface SelectPickerHooksProps<OptionValue, IsMulti extends boolean>
     extends Pick<
         SelectPickerProps<OptionValue, IsMulti>,
