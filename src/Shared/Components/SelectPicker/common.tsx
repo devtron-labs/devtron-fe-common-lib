@@ -260,7 +260,7 @@ const SelectPickerMenuListFooter = ({
         return (
             <div className="flex left dc__gap-6 p-8">
                 <Icon name="ic-info-outline" color="N700" size={16} />
-                <p className="fs-12 fw-4 fs-16 cn-8 dc__truncate m-0">{value}</p>
+                <p className="fs-12 fw-4 lh-16 cn-8 dc__truncate m-0">{value}</p>
             </div>
         )
     }
