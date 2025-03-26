@@ -4,12 +4,14 @@ import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
+import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
+import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCiWebhook } from '@IconsV2/ic-ci-webhook.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
@@ -47,6 +49,7 @@ import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
+import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLoginDevtronLogo } from '@IconsV2/ic-login-devtron-logo.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
@@ -63,7 +66,11 @@ import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-col
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
+import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
+import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.svg'
+import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
+import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash.svg'
@@ -80,12 +87,14 @@ export const iconMap = {
     'ic-add': ICAdd,
     'ic-app-group': ICAppGroup,
     'ic-arrow-right': ICArrowRight,
+    'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-azure': ICAzure,
     'ic-bitbucket': ICBitbucket,
     'ic-browser': ICBrowser,
     'ic-build-color': ICBuildColor,
     'ic-cancelled': ICCancelled,
     'ic-cd': ICCd,
+    'ic-check': ICCheck,
     'ic-ci-linked': ICCiLinked,
     'ic-ci-webhook': ICCiWebhook,
     'ic-circle-loader': ICCircleLoader,
@@ -123,6 +132,7 @@ export const iconMap = {
     'ic-job-color': ICJobColor,
     'ic-k8s-job': ICK8sJob,
     'ic-ldap': ICLdap,
+    'ic-lightning': ICLightning,
     'ic-login-devtron-logo': ICLoginDevtronLogo,
     'ic-logout': ICLogout,
     'ic-medium-paintbucket': ICMediumPaintbucket,
@@ -139,7 +149,11 @@ export const iconMap = {
     'ic-pencil': ICPencil,
     'ic-quay': ICQuay,
     'ic-shield-check': ICShieldCheck,
+    'ic-sort-ascending': ICSortAscending,
+    'ic-sort-descending': ICSortDescending,
+    'ic-sortable': ICSortable,
     'ic-stack': ICStack,
+    'ic-stamp': ICStamp,
     'ic-success': ICSuccess,
     'ic-suspended': ICSuspended,
     'ic-timeout-two-dash': ICTimeoutTwoDash,
