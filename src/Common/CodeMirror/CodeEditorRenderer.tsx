@@ -274,7 +274,10 @@ export const CodeEditorRenderer = ({
     }
 
     return diffMode ? (
-        <div className={`flexbox w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}>
+        <div
+            ref={codeMirrorParentDivRef}
+            className={`flexbox w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}
+        >
             <div
                 ref={codeMirrorMergeParentRef}
                 className={`cm-merge-theme flex-grow-1 h-100 dc__overflow-hidden ${readOnly ? 'code-editor__read-only' : ''}`}
