@@ -92,7 +92,7 @@ import './selectPicker.scss'
  *      menuListFooterConfig={{
  *          type: 'text',
  *          value: 'Info text',
- *     }}
+ *      }}
  * />
  * ```
  *

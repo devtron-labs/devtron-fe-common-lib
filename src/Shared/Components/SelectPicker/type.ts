@@ -187,6 +187,8 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     Omit<FormFieldWrapperProps, 'children'> & {
         /**
          * Config for the footer at the bottom of menu list. It is sticky by default
+         *
+         * Note: Re-declaring here since dynamic typing doesn't work with module augmentation
          */
         menuListFooterConfig?: MenuListFooterConfigType
         /**
