@@ -58,7 +58,10 @@ type SelectProps<OptionValue, IsMulti extends boolean> = ReactSelectProps<
 type MenuListFooterConfigType =
     | {
           type: 'text'
-          value: string
+          /**
+           * String is preferred for text type
+           */
+          value: ReactNode
           buttonProps?: never
       }
     | {
@@ -162,7 +165,6 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     Partial<
         Pick<
             SelectProps<OptionValue, IsMulti>,
-            | 'menuListFooterConfig'
             | 'shouldRenderCustomOptions'
             | 'renderCustomOptions'
             | 'icon'
@@ -183,6 +185,10 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
         >
     > &
     Omit<FormFieldWrapperProps, 'children'> & {
+        /**
+         * Config for the footer at the bottom of menu list. It is sticky by default
+         */
+        menuListFooterConfig?: MenuListFooterConfigType
         /**
          * Custom selected options count for use cases like filters
          */
