@@ -339,11 +339,9 @@ export interface AsyncSelectProps
             | 'isOptionDisabled'
             | 'shouldRenderValue'
             | 'isOptionSelected'
+            | 'selectRef'
         >,
         AsyncProps<SelectPickerOptionType, boolean, GroupBase<SelectPickerOptionType>> {
-    getIsOptionValid?: (option: SelectPickerOptionType) => boolean
-    isGroupHeadingSelectable?: boolean
-
     // ✅ Override getOptionValue to always return a string
     getOptionValue?: (option: SelectPickerOptionType) => string
 }
