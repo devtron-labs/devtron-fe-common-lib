@@ -24,7 +24,6 @@ import { CreatableProps } from 'react-select/creatable'
 import type {} from 'react-select/base'
 import { TooltipProps } from '@Common/Tooltip/types'
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
-import { AsyncProps } from 'react-select/async'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
 
 export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
@@ -320,31 +319,6 @@ export type SelectPickerTextAreaProps = Omit<
     | 'placeholder'
 > &
     Pick<ResizableTagTextAreaProps, 'maxHeight' | 'minHeight' | 'refVar' | 'dependentRefs'>
-
-export interface AsyncSelectProps
-    extends Omit<
-            SelectPickerProps<string, false>,
-            | 'isMulti'
-            | 'options'
-            | 'value'
-            | 'onChange'
-            | 'isSearchable'
-            | 'isClearable'
-            | 'isLoading'
-            | 'filterOption'
-            | 'formatOptionLabel'
-            | 'getOptionLabel'
-            | 'getOptionValue'
-            | 'inputId'
-            | 'isOptionDisabled'
-            | 'shouldRenderValue'
-            | 'isOptionSelected'
-            | 'selectRef'
-        >,
-        AsyncProps<SelectPickerOptionType, boolean, GroupBase<SelectPickerOptionType>> {
-    // ✅ Override getOptionValue to always return a string
-    getOptionValue?: (option: SelectPickerOptionType) => string
-}
 
 // export type OptionValue = SelectPickerOptionType['value']
 
