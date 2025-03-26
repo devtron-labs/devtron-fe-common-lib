@@ -32,6 +32,7 @@ export const DeleteCINodeButton = ({
     deletePayloadConfig,
     onDelete,
     getWorkflows,
+    isTemplateView,
 }: DeleteCINodeButtonProps) => {
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
 
@@ -50,6 +51,7 @@ export const DeleteCINodeButton = ({
             const response = await deleteWorkflow(
                 String(deletePayloadConfig.appId),
                 Number(deletePayloadConfig.appWorkflowId),
+                isTemplateView,
             )
             if (response.errors) {
                 const { errors } = response
@@ -83,7 +85,7 @@ export const DeleteCINodeButton = ({
                 name: deletePayloadConfig.pipelineName,
             },
         }
-        await savePipeline(deletePayload)
+        await savePipeline(deletePayload, { isTemplateView })
         if (typeof onDelete === 'function') {
             onDelete()
         }
@@ -100,13 +102,14 @@ export const DeleteCINodeButton = ({
                 showAriaLabelInTippy
                 onClick={onClickDeleteShowModal}
                 style={ButtonStyleType.negativeGrey}
-                icon={<Icon name="ic-delete" color={null} strokeWidth={1} size={12} />}
+                icon={<Icon name="ic-delete" color={null} size={12} />}
                 disabled={disabled}
                 showTooltip
                 tooltipProps={{
                     placement: 'right',
                     content: 'Delete Pipeline',
                 }}
+                fullWidth
             />
         ) : (
             <Button

@@ -50,7 +50,8 @@ const useGetResourceKindsOptions = ({
                 resourcesToFetchMap[ResourceKindType.cluster] ? getClusterOptions() : null,
                 resourcesToFetchMap[ResourceKindType.environment] ? getEnvironmentOptionsGroupedByClusters() : null,
             ]),
-        [resourcesToFetchMap],
+        // Using string to prevent re-renders since it is a array of string
+        [`${resourcesToFetchMap}`],
         resourcesToFetch.length > 0,
     )
 

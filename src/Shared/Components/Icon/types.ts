@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { FC, SVGAttributes, SVGProps } from 'react'
+import { FC, SVGProps } from 'react'
 
 import { TooltipProps } from '@Common/Tooltip/types'
 
 type IconMap = Record<string, FC<SVGProps<SVGSVGElement>>>
 
-export interface IconBaseProps extends Pick<SVGAttributes<SVGSVGElement>, 'strokeWidth'> {
+export interface IconBaseProps {
     /** The name of the icon to render. */
     name: keyof IconMap
     /** The map containing all available icons. */
