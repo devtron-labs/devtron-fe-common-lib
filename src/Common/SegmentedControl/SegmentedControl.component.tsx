@@ -16,6 +16,9 @@ const SegmentedControl = ({
     const isUnControlledComponent = controlledValue === undefined
 
     const segmentedControlRefContainer = useRef<HTMLDivElement>(null)
+    /**
+     * Using this ref to show the selected segment highlight with transition
+     */
     const selectedSegmentRef = useRef<HTMLDivElement>(null)
     const [selectedSegmentValue, setSelectedSegmentValue] = useState<SegmentType['value'] | null>(segments[0].value)
     const segmentValue = isUnControlledComponent ? selectedSegmentValue : controlledValue

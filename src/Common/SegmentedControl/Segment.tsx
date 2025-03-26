@@ -4,7 +4,7 @@ import { ComponentSizeType } from '@Shared/constants'
 import { Tooltip } from '@Common/Tooltip'
 import { SegmentProps, SegmentType } from './types'
 import { COMPONENT_SIZE_TO_ICON_CLASS_MAP, COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP } from './constants'
-import { ConditionalWrap } from '..'
+import { ConditionalWrap } from '../Helper'
 
 const wrapWithTooltip = (tooltipProps: SegmentType['tooltipProps']) => (children: ReactElement) => (
     <Tooltip content={tooltipProps.content} placement="bottom" {...tooltipProps} alwaysShowTippyOnHover>
