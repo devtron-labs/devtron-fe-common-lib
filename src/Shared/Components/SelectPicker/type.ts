@@ -25,6 +25,7 @@ import type {} from 'react-select/base'
 import { TooltipProps } from '@Common/Tooltip/types'
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
+import { ButtonProps, ButtonVariantType } from '../Button'
 
 export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
     /**
@@ -54,17 +55,31 @@ type SelectProps<OptionValue, IsMulti extends boolean> = ReactSelectProps<
     GroupBase<SelectPickerOptionType<OptionValue>>
 >
 
+export type MenuListFooterConfigType =
+    | {
+          type: 'text'
+          value: string
+          buttonProps?: never
+      }
+    | {
+          type: 'button'
+          value?: never
+          buttonProps: {
+              variant: ButtonVariantType.primary | ButtonVariantType.secondary
+          } & Omit<ButtonProps, 'size' | 'fullWidth' | 'icon' | 'endIcon' | 'variant'>
+      }
+
 declare module 'react-select/base' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     export interface Props<Option, IsMulti extends boolean, Group extends GroupBase<Option>> {
         /**
-         * Render function for the footer at the bottom of menu list. It is sticky by default
+         * Config for the footer at the bottom of menu list. It is sticky by default
          */
-        renderMenuListFooter?: () => ReactNode
+        menuListFooterConfig?: MenuListFooterConfigType
         /**
          * If true, custom options are rendered in the menuList component of react select
          *
-         * Note: renderCustomOptions is required to be passed; renderMenuListFooter is also not called
+         * Note: renderCustomOptions is required to be passed; menuListFooterConfig is also not used
          *
          * @default false
          */
@@ -147,7 +162,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     Partial<
         Pick<
             SelectProps<OptionValue, IsMulti>,
-            | 'renderMenuListFooter'
+            | 'menuListFooterConfig'
             | 'shouldRenderCustomOptions'
             | 'renderCustomOptions'
             | 'icon'

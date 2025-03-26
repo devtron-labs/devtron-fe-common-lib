@@ -39,8 +39,11 @@ import { ReactSelectInputAction } from '@Common/Constants'
 import { isNullOrUndefined } from '@Shared/Helpers'
 import { Tooltip } from '@Common/Tooltip'
 import { TooltipProps } from '@Common/Tooltip/types'
+import { ComponentSizeType } from '@Shared/constants'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
+import { Icon } from '../Icon'
+import { Button, ButtonProps } from '../Button'
 
 const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
     if (tooltipProps) {
@@ -242,12 +245,46 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
     )
 }
 
+const SelectPickerMenuListFooter = ({
+    menuListFooterConfig,
+}: Required<Pick<SelectPickerProps, 'menuListFooterConfig'>>) => {
+    if (!menuListFooterConfig) {
+        return null
+    }
+
+    const { type } = menuListFooterConfig
+
+    if (type === 'text') {
+        const { value } = menuListFooterConfig
+
+        return (
+            <div className="flex left dc__gap-6">
+                <Icon name="ic-info-outline" color="N700" size={16} />
+                <p className="fs-12 fw-4 fs-16 cn-8 dc__truncate">{value}</p>
+            </div>
+        )
+    }
+
+    if (type === 'button') {
+        const { buttonProps } = menuListFooterConfig
+
+        return (
+            // We are adding justify-content: flex-start for secondary variant
+            <div className={`select-picker__menu-list-footer-button--${buttonProps.variant}`}>
+                <Button {...(buttonProps as ButtonProps)} size={ComponentSizeType.small} fullWidth />
+            </div>
+        )
+    }
+
+    return null
+}
+
 export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPickerOptionType<OptionValue>>) => {
     const {
         children,
         selectProps: {
             inputValue,
-            renderMenuListFooter,
+            menuListFooterConfig,
             shouldRenderCustomOptions,
             renderCustomOptions,
             renderOptionsFooter,
@@ -270,9 +307,9 @@ export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPi
                 </div>
                 {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
             </components.MenuList>
-            {!shouldRenderCustomOptions && renderMenuListFooter && (
-                <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bg__menu--primary dc__zi-2">
-                    {renderMenuListFooter()}
+            {!shouldRenderCustomOptions && menuListFooterConfig && (
+                <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bg__menu--primary dc__zi-2 p-8 dc__border-top-n1">
+                    <SelectPickerMenuListFooter menuListFooterConfig={menuListFooterConfig} />
                 </div>
             )}
         </>

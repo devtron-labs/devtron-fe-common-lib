@@ -44,6 +44,7 @@ import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } fr
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
 import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
+import './selectPicker.scss'
 
 /**
  * Generic component for select picker
@@ -83,16 +84,15 @@ import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
  * <SelectPicker ... helperText="Help information" />
  * ```
  *
- * @example Menu list footer
+ * @example Menu list footer config
  * The footer is sticky by default
  * ```tsx
  * <SelectPicker
  *      ...
- *      renderMenuListFooter={() => (
- *          <div className="px-8 py-6 dc__border-top bg__secondary cn-6">
- *              <div>Foot note</div>
- *          </div>
- *      )}
+ *      menuListFooterConfig={{
+ *          type: 'text',
+ *          value: 'Info text',
+ *     }}
  * />
  * ```
  *
@@ -206,7 +206,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     shouldMenuAlignRight = false,
     fullWidth = false,
     customSelectedOptionsCount = null,
-    renderMenuListFooter,
+    menuListFooterConfig,
     isCreatable = false,
     onCreateOption,
     closeMenuOnSelect = false,
@@ -460,7 +460,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         isValidNewOption={isValidNewOption}
                         createOptionPosition="first"
                         onCreateOption={handleCreateOption}
-                        renderMenuListFooter={!optionListError && renderMenuListFooter}
+                        menuListFooterConfig={!optionListError ? menuListFooterConfig : null}
                         inputValue={props.inputValue ?? inputValue}
                         onInputChange={handleInputChange}
                         icon={icon}
