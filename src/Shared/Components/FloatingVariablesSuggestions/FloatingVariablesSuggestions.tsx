@@ -44,13 +44,14 @@ const FloatingVariablesSuggestions = ({
     bounds,
     hideObjectVariables = true,
     showValueOnHover = true,
+    isTemplateView,
 }: FloatingVariablesSuggestionsProps) => {
     const [isActive, setIsActive] = useState<boolean>(false)
     const [collapsedPosition, setCollapsedPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
     const [expandedPosition, setExpandedPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
 
     const [loadingScopedVariables, variablesData, error, reloadScopedVariables] = useAsync(
-        () => getScopedVariables(appId, envId, clusterId, hideObjectVariables),
+        () => getScopedVariables(appId, envId, clusterId, { hideObjectVariables, isTemplateView }),
         [appId, envId, clusterId],
     )
 
