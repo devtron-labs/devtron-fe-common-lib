@@ -265,6 +265,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         [error, selectSize, menuSize, variant, isGroupHeadingSelectable, shouldMenuAlignRight],
     )
 
+    // Used to show the create new option for creatable select and the option(s) doesn't have the input value
+
     const isValidNewOption = (_inputValue: string) => {
         const trimmedInput = _inputValue?.trim()
 
