@@ -90,6 +90,10 @@ const HelpNav = ({
     }
 
     const handleOpenLicenseDialog = () => {
+        ReactGA.event({
+            category: 'help-nav__about-devtron',
+            action: 'ABOUT_DEVTRON_CLICKED',
+        })
         handleOpenLicenseInfoDialog()
     }
 

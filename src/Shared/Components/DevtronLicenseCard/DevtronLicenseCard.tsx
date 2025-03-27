@@ -26,6 +26,7 @@ export const DevtronLicenseCard = ({
     isTrial,
     ttl,
     appTheme,
+    onCopyButtonClick,
 }: DevtronLicenseCardProps) => {
     const { bgColor, textColor } = getLicenseColorsAccordingToStatus(licenseStatus)
     const remainingTime = getTTLInHumanReadableFormat(ttl)
@@ -104,7 +105,7 @@ export const DevtronLicenseCard = ({
                                     <span>&bull;&bull;&bull;&bull;</span>
                                     <span>{licenseSuffix || licenseKey?.slice(-8)}</span>
                                 </div>
-                                {licenseKey && <ClipboardButton content={licenseKey} />}
+                                {licenseKey && <ClipboardButton content={licenseKey} onClick={onCopyButtonClick} />}
                             </div>
                             <div className="flexbox dc__align-items-center dc__gap-4 flex-wrap">
                                 <span className="font-ibm-plex-mono cn-9">{expiryDate}</span>

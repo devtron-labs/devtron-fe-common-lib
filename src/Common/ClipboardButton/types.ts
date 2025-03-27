@@ -21,4 +21,5 @@ export default interface ClipboardProps {
     copyToClipboardPromise?: Promise<void>
     rootClassName?: string
     iconSize?: number
+    onClick?: () => void
 }
