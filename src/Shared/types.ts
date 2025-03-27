@@ -28,6 +28,7 @@ import {
     VariableType,
     RefVariableType,
     PluginType,
+    SegmentedControlProps,
 } from '../Common'
 import { BASE_CONFIGURATION_ENV_ID, EnvironmentTypeEnum, PatchOperationType } from './constants'
 import { SelectPickerOptionType } from './Components'
@@ -704,7 +705,7 @@ export enum ConfigurationType {
     YAML = 'YAML',
 }
 
-export const CONFIGURATION_TYPE_OPTIONS: OptionType<ConfigurationType, ConfigurationType>[] = [
+export const CONFIGURATION_TYPE_OPTIONS: SegmentedControlProps['segments'] = [
     { label: ConfigurationType.GUI, value: ConfigurationType.GUI },
     { label: ConfigurationType.YAML, value: ConfigurationType.YAML },
 ] as const

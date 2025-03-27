@@ -1,3 +1,19 @@
+<!--
+  - Copyright (c) 2024. Devtron Inc.
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  -     http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -->
+
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
   <path stroke="#3B444C" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.052 14.108a29.982 29.982 0 0 1 5.897 0M4.364 18.466a.675.675 0 0 0 .125.252.706.706 0 0 0 .22.186.768.768 0 0 0 .574.07 26.805 26.805 0 0 1 13.43-.001.786.786 0 0 0 .575-.07.725.725 0 0 0 .22-.186.674.674 0 0 0 .124-.252l2.348-9.377a.653.653 0 0 0-.018-.38.693.693 0 0 0-.229-.312.78.78 0 0 0-.77-.1l-4.66 1.947a.781.781 0 0 1-.534.024.729.729 0 0 1-.41-.321l-2.714-4.59a.714.714 0 0 0-.27-.26.774.774 0 0 0-.748 0 .714.714 0 0 0-.271.26l-2.714 4.59a.728.728 0 0 1-.41.32.781.781 0 0 1-.534-.023L3.037 8.296a.78.78 0 0 0-.77.1.693.693 0 0 0-.229.312.653.653 0 0 0-.018.38l2.344 9.378Z" vector-effect="non-scaling-stroke"/>
 </svg>
