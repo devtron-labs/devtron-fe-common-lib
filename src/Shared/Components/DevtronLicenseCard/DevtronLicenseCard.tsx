@@ -106,7 +106,7 @@ export const DevtronLicenseCard = ({
                                 </div>
                                 {licenseKey && <ClipboardButton content={licenseKey} />}
                             </div>
-                            <div className="flexbox dc__align-items-center dc__gap-4 flex-wrap">
+                            <div className="flexbox dc__align-items-center dc__gap-4 flex-wrap fs-12">
                                 <span className="font-ibm-plex-mono cn-9">{expiryDate}</span>
                                 <span className="cn-9">·</span>
                                 <span style={{ color: textColor }}>{remainingTimeString}</span>
