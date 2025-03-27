@@ -1087,14 +1087,14 @@ export const getCentralAPIHealthObjectFromLocalStorage = (): CentralAPILocalConf
         return {
             lastUpdatedDate: lastUpdatedDate || '',
             updateCount: updateCount || 0,
-            isConnected: isConnected || null,
+            isConnected: isConnected || false,
         }
     } catch {
         localStorage.removeItem(CENTRAL_API_LOCAL_STORAGE_KEY)
         return {
             lastUpdatedDate: '',
             updateCount: 0,
-            isConnected: null,
+            isConnected: false,
         }
     }
 }

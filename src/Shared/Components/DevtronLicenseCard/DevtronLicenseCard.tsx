@@ -4,6 +4,7 @@ import { ClipboardButton, getTTLInHumanReadableFormat } from '@Common/index'
 import { ReactComponent as ICChatSupport } from '@IconsV2/ic-chat-circle-dots.svg'
 import { getThemeOppositeThemeClass } from '@Shared/Providers/ThemeProvider/utils'
 import {
+    AppThemeType,
     CONTACT_SUPPORT_LINK,
     DevtronLicenseCardProps,
     ENTERPRISE_SUPPORT_LINK,
@@ -32,6 +33,7 @@ export const DevtronLicenseCard = ({
     const remainingTime = getTTLInHumanReadableFormat(ttl)
     const remainingTimeString = ttl < 0 ? `Expired ${remainingTime} ago` : `${remainingTime} remaining`
     const isLicenseValid = licenseStatus !== LicenseStatus.EXPIRED
+    const isThemeDark = appTheme === AppThemeType.dark
 
     const cardRef = useRef<HTMLDivElement>(null)
 
@@ -70,12 +72,10 @@ export const DevtronLicenseCard = ({
     )
     const sheenPosition = useTransform(diagonalMovement, [-5, 5], [-100, 200])
 
-    const sheenOpacity = useTransform(sheenPosition, [-100, 50, 200], [0, 0.05, 0])
-    const sheenGradient = useMotionTemplate`linear-gradient(
-    55deg,
-    transparent,
-    rgba(255 255 255 / ${sheenOpacity}) ${sheenPosition}%,
-    transparent)`
+    const sheenOpacity = useTransform(sheenPosition, [-100, 50, 200], [0, isThemeDark ? 0.25 : 0.1, 0])
+    const sheenGradient = isThemeDark
+        ? useMotionTemplate`linear-gradient(55deg, transparent, rgba(122, 127, 131, ${sheenOpacity}) ${sheenPosition}%, transparent)`
+        : useMotionTemplate`linear-gradient(55deg, transparent, rgba(255, 255, 255, ${sheenOpacity}) ${sheenPosition}%, transparent)`
 
     return (
         <div className="flexbox-col p-8 br-16" style={{ backgroundColor: bgColor }}>
@@ -107,7 +107,7 @@ export const DevtronLicenseCard = ({
                                 </div>
                                 {licenseKey && <ClipboardButton content={licenseKey} onClick={onCopyButtonClick} />}
                             </div>
-                            <div className="flexbox dc__align-items-center dc__gap-4 flex-wrap">
+                            <div className="flexbox dc__align-items-center dc__gap-4 flex-wrap fs-12">
                                 <span className="font-ibm-plex-mono cn-9">{expiryDate}</span>
                                 <span className="cn-9">·</span>
                                 <span style={{ color: textColor }}>{remainingTimeString}</span>
