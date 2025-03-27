@@ -1,3 +1,19 @@
+<!--
+  - Copyright (c) 2024. Devtron Inc.
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  -     http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -->
+
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M21.1844 5.78683C21.1844 5.56504 21.0641 5.35835 20.847 5.23604L12.3319 1.08283C12.1376 0.972518 11.8961 0.972131 11.7021 1.08322L2.3147 6.43594C2.12071 6.54703 2 6.75333 2 6.97473V17.6798C2 17.9012 2.12071 18.1075 2.32058 18.2217L10.8525 22.9172C10.9497 22.9725 11.059 23 11.168 23C11.2765 23 11.3859 22.9725 11.4827 22.9172C11.6771 22.8065 11.7978 22.6002 11.7978 22.3784V11.4988L20.8697 6.32563C21.0641 6.21493 21.1844 6.00862 21.1844 5.78683ZM21.6849 7.58901C21.4901 7.47715 21.2487 7.47753 21.0543 7.58901L17.2994 9.72986C17.1818 9.79295 16.9052 9.9412 16.9052 10.247L16.8926 15.1716L13.3141 17.4445C13.1005 17.5699 12.9735 17.7684 12.9735 17.9782V22.347C12.9735 22.5657 13.093 22.7651 13.2933 22.8792C13.3979 22.9385 13.5143 22.9686 13.6303 22.9686C13.7444 22.9686 13.8584 22.94 13.9615 22.8812L21.6735 18.2387C21.8675 18.1276 21.9875 17.9213 21.9875 17.7011L22 8.12741C22 7.90601 21.8793 7.69971 21.6849 7.58901Z" fill="url(#paint0_linear_702_1763)"/>
 <defs>
