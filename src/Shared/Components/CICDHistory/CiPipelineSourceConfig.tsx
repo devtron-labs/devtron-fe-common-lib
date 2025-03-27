@@ -20,6 +20,7 @@ import { getBranchIcon, getWebhookEventsForEventId, SourceTypeMap, Tooltip } fro
 import { GIT_BRANCH_NOT_CONFIGURED, DEFAULT_GIT_BRANCH_VALUE } from './constants'
 import { buildHoverHtmlForWebhook } from './utils'
 import { CIPipelineSourceConfigInterface } from './types'
+import { Icon } from '../Icon'
 
 export const CiPipelineSourceConfig = ({
     sourceType,
@@ -38,9 +39,12 @@ export const CiPipelineSourceConfig = ({
     const [sourceValueBase, setSourceValueBase] = useState('')
     const [sourceValueAdv, setSourceValueAdv] = useState<ReactNode>('')
     const [loading, setLoading] = useState(!!_isWebhook)
+    const [hasError, setHasError] = useState(false)
 
     const updateSourceValue = () => {
         if (_isWebhook) {
+            setLoading(true)
+            setHasError(false)
             const _sourceValueObj = JSON.parse(sourceValue)
             getWebhookEventsForEventId(_sourceValueObj.eventId)
                 .then((_res) => {
@@ -55,8 +59,9 @@ export const CiPipelineSourceConfig = ({
                     )
                     setLoading(false)
                 })
-                .catch((error) => {
-                    throw error
+                .catch(() => {
+                    setLoading(false)
+                    setHasError(true)
                 })
         } else {
             setSourceValueBase(sourceValue)
@@ -89,6 +94,9 @@ export const CiPipelineSourceConfig = ({
         if (!_isWebhook) {
             return
         }
+
+        setLoading(true)
+        setHasError(false)
         const _sourceValueObj = JSON.parse(sourceValue)
         const _eventId = _sourceValueObj.eventId
         const _condition = _sourceValueObj.condition
@@ -100,8 +108,9 @@ export const CiPipelineSourceConfig = ({
                 setSourceValueAdv(buildHoverHtmlForWebhook(_webhookEvent.name, _condition, _webhookEvent.selectors))
                 setLoading(false)
             })
-            .catch((error) => {
-                throw error
+            .catch(() => {
+                setLoading(false)
+                setHasError(true)
             })
     }
 
@@ -116,6 +125,15 @@ export const CiPipelineSourceConfig = ({
         _init()
         regexTippyContent()
     }, [])
+
+    if (!loading && hasError) {
+        return (
+            <div className="flex left dc__gap-4">
+                <Icon name="ic-error" size={16} color={null} />
+                <span className="dc__truncate fw-5 cr-5">Failed to fetch</span>
+            </div>
+        )
+    }
 
     return (
         <div className={`flex left ${showTooltip ? 'fw-5' : ''}  ${rootClassName}`}>
