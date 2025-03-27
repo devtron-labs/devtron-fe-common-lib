@@ -39,7 +39,7 @@ export const KEYBOARD_KEYS_MAP = {
     End: 'End',
     Backspace: '⌫',
     Delete: '⌦',
-    Dot: '.',
+    '.': '.',
     Space: 'Space',
 } as const
 

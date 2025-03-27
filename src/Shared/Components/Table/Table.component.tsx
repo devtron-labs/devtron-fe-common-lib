@@ -347,7 +347,7 @@ const InternalTable = ({
     }
 
     const renderContent = () => {
-        if (!areFilteredRowsLoading && !filteredRows.length) {
+        if (!areFilteredRowsLoading && !filteredRows?.length) {
             return filtersVariant !== FiltersTypeEnum.NONE && isFilterApplied ? (
                 <GenericFilterEmptyState handleClearFilters={clearFilters} />
             ) : (
@@ -536,7 +536,7 @@ const TableWithKeyboardShortcuts = (tableProps: InternalTablePropsWithWrappers) 
         })
 
         registerShortcut({
-            keys: ['Dot'],
+            keys: ['.'],
             callback: () => {
                 dispatchEvent(SignalEnum.OPEN_CONTEXT_MENU)
             },
@@ -598,7 +598,7 @@ const TableWithKeyboardShortcuts = (tableProps: InternalTablePropsWithWrappers) 
             unregisterShortcut(['ArrowUp'])
             unregisterShortcut(['ArrowDown'])
             unregisterShortcut(['Enter'])
-            unregisterShortcut(['Dot'])
+            unregisterShortcut(['.'])
             unregisterShortcut(['Delete'])
 
             if (isBulkSelectionConfigured) {
@@ -724,7 +724,7 @@ const TableWrapper = (tableProps: TableProps) => {
     const wrapperProps = FilterWrapperComponent === Fragment ? {} : { additionalFilterProps }
 
     return (
-        <UseRegisterShortcutProvider shortcutTimeout={50} preventDefault>
+        <UseRegisterShortcutProvider shortcutTimeout={50}>
             <FilterWrapperComponent {...wrapperProps}>
                 {/* NOTE: filterData will be populated by FilterWrapperComponent */}
                 <VisibleColumnsWrapper
