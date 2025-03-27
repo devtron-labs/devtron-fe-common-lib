@@ -14,7 +14,7 @@ export const TESTIMONIAL_CARD_DATA: TestimonialCardConfig[] = [
         iconName: 'ic-livspace',
     },
     {
-        quote: "Prior to Devtron, managing multiple environments consistently was a challenge. Devtron's built-in features for consistent configurations across environments have been a huge win for us. We're confident that every deployment is identical, which has reduced discrepancies and improved our application’s resiliency. Plus, the rollback functionality has saved us countless hours of downtime. It's a single-click solution that gets us back on track quickly. Devtron has significantly enhanced our CI/CD pipeline, allowing us to achieve our goal of faster, more reliable deployments while reducing operational overhead.",
+        quote: "Prior to Devtron, managing multiple environments consistently was a challenge. Devtron's built-in features for consistent configurations across environments have been a huge win for us. We're confident that every deployment is identical, which has reduced discrepancies and improved our application’s resiliency.",
         designation: 'Engineering Manager at Delhivery',
         name: 'Vinay Mishra',
         iconName: 'ic-delhivery',
@@ -32,8 +32,8 @@ export const TESTIMONIAL_CARD_DATA: TestimonialCardConfig[] = [
         iconName: 'ic-73strings',
     },
     {
-        quote: 'Partnering with Devtron has revolutionized the way we deliver solutions to our customers. Their Kubernetes-native platform has empowered us to automate and scale our deployments, reducing time-to-market and significantly boosting DevOps efficiency. The collaboration has not only streamlined our processes but also enhanced our ability to serve customers with agility and precision.',
-        designation: 'CPT at Apica',
+        quote: 'Partnering with Devtron has revolutionized the way we deliver solutions to our customers. Their Kubernetes-native platform has empowered us to automate and scale our deployments, reducing time-to-market and significantly boosting DevOps efficiency.',
+        designation: 'CPTO at Apica',
         name: 'Ranjan Parthasarathy',
         iconName: 'ic-apica',
     },
@@ -44,7 +44,7 @@ export const TESTIMONIAL_CARD_DATA: TestimonialCardConfig[] = [
         iconName: 'ic-spinny',
     },
     {
-        quote: "Managing our complex Kubernetes environment used to be a major bottleneck. We were juggling 15+ pre-prod environments, and it felt like we needed to double our DevOps team just to keep up. Then we discovered Devtron and it has completely streamlined our SDLC processes! We've been able to efficiently manage all those environments without adding any additional DevOps resources. We've seen a significant reduction in lead time, and our developers are much happier now that they have self-service access and can onboard new applications effortlessly. Devtron  has helped us become more agile and efficient, so we can focus on what really matters: delivering value to our users.",
+        quote: 'Managing our complex Kubernetes environment used to be a major bottleneck. We were juggling 15+ pre-prod environments, and it felt like we needed to double our DevOps team just to keep up. Then we discovered Devtron and it has completely streamlined our SDLC processes!',
         designation: 'Director Architect at Tata1MG',
         name: 'Pankaj Pandey',
         iconName: 'ic-tata1mg',
