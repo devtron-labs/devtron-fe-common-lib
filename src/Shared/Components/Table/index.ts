@@ -1,9 +1,8 @@
 export { default as Table } from './Table.component'
-export { FiltersTypeEnum, PaginationEnum } from './types'
+export { FiltersTypeEnum, PaginationEnum, SignalEnum as TableSignalEnum } from './types'
 export type {
     ViewWrapperProps as TableViewWrapperProps,
-    RowComponentProps as TableRowComponentProps,
     Column as TableColumnType,
     TableProps,
-    Cell as TableCellType,
+    CellComponentProps as TableCellComponentProps,
 } from './types'

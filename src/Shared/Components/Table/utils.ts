@@ -1,7 +1,9 @@
 import { Fragment, FunctionComponent } from 'react'
 import { noop } from '@Common/Helper'
+import { SortingOrder } from '@Common/Constants'
 import {
     Column,
+    ConfigurableColumnsConfigType,
     ConfigurableColumnsType,
     FiltersTypeEnum,
     TableProps,
@@ -14,20 +16,20 @@ import { LOCAL_STORAGE_EXISTS, LOCAL_STORAGE_KEY_FOR_VISIBLE_COLUMNS } from './c
 
 export const searchAndSortRows = (
     rows: TableProps['rows'],
+    filter: TableProps['filter'],
     filterData: UseFiltersReturnType,
-    sortByIndex: number | null,
     comparator?: Column['comparator'],
 ) => {
-    const { searchKey } = filterData
+    const { searchKey, sortBy, sortOrder } = filterData
 
-    const filteredRows = searchKey
-        ? rows.filter((row) => row.some((cell) => cell.filter?.(cell.label, filterData, cell.data) ?? true))
-        : rows
+    const filteredRows = searchKey ? rows.filter((row) => filter(row, filterData)) : rows
 
-    const sortedRows =
-        sortByIndex && comparator
-            ? filteredRows.sort((rowA, rowB) => comparator(rowA[sortByIndex].data, rowB[sortByIndex].data))
-            : filteredRows
+    const sortedRows = comparator
+        ? filteredRows.sort(
+              (rowA, rowB) =>
+                  (sortOrder === SortingOrder.ASC ? 1 : -1) * comparator(rowA.data[sortBy], rowB.data[sortBy]),
+          )
+        : filteredRows
 
     return sortedRows
 }
@@ -36,14 +38,14 @@ export const getFilterWrapperComponent = (filtersVariant: FiltersTypeEnum): Func
     switch (filtersVariant) {
         case FiltersTypeEnum.STATE:
             return UseStateFilterWrapper
+
         case FiltersTypeEnum.URL:
             return UseUrlFilterWrapper
+
         default:
             return Fragment
     }
 }
-
-type ConfigurableColumnsConfigType = Record<string, ConfigurableColumnsType['visibleColumns']>
 
 export const getVisibleColumnsFromLocalStorage = ({
     allColumns,
