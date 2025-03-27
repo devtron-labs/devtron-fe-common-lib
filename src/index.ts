@@ -144,12 +144,6 @@ export interface customEnv {
      */
     FEATURE_SWAP_TRAFFIC_ENABLE?: boolean
     /**
-     * Enable mandatory plugins for cd
-     *
-     * @default true
-     */
-    FEATURE_CD_MANDATORY_PLUGINS_ENABLE?: boolean
-    /**
      * Enable cluster map
      *
      * @default true
