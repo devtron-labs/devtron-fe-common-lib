@@ -24,7 +24,7 @@ export type DevtronLicenseCardProps = {
       }
 )
 
-export type DevtronLicenseInfo = DevtronLicenseCardProps &
+export type DevtronLicenseInfo = Omit<DevtronLicenseCardProps, 'appTheme'> &
     Pick<DevtronLicenseDTO, 'fingerprint' | 'showLicenseData' | 'licenseStatusError'>
 
 export interface InstallFingerprintInfoProps extends Pick<DevtronLicenseBaseDTO, 'fingerprint'> {
