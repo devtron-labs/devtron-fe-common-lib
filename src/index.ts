@@ -91,12 +91,6 @@ export interface customEnv {
     FEATURE_DEFAULT_LANDING_RB_ENABLE?: boolean
     FEATURE_ACTION_AUDIOS_ENABLE?: boolean
     /**
-     * If true, the experimental theming feature is enabled
-     *
-     * @default false
-     */
-    FEATURE_EXPERIMENTAL_THEMING_ENABLE?: boolean
-    /**
      * If true, the code-editor will use codemirror engine
      * @default false
      */
