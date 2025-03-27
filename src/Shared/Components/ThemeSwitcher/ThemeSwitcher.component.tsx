@@ -22,10 +22,6 @@ import { LOGOUT_CARD_BASE_BUTTON_CLASS } from '../LogoutCard'
 const ThemeSwitcher = ({ onChange }: ThemeSwitcherProps) => {
     const { handleThemeSwitcherDialogVisibilityChange, themePreference } = useTheme()
 
-    if (!window._env_.FEATURE_EXPERIMENTAL_THEMING_ENABLE) {
-        return null
-    }
-
     const handleShowThemeSwitcherDialog = () => {
         handleThemeSwitcherDialogVisibilityChange(true)
         onChange()
