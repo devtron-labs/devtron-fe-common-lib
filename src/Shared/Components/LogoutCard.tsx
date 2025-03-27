@@ -17,6 +17,7 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { useMainContext } from '@Shared/Providers'
+import { clearCookieOnLogout } from '@Shared/Helpers'
 import { getRandomColor, stopPropagation } from '../../Common'
 import { ThemeSwitcher } from './ThemeSwitcher'
 import { Icon } from './Icon'
@@ -36,7 +37,7 @@ const LogoutCard = ({ className, userFirstLetter, setShowLogOutCard, showLogOutC
     const { viewIsPipelineRBACConfiguredNode } = useMainContext()
 
     const onLogout = () => {
-        document.cookie = `argocd.token=; expires=Thu, 01-Jan-1970 00:00:01 GMT;path=/`
+        clearCookieOnLogout()
         history.push('/login')
     }
 

@@ -16,9 +16,9 @@
 
 import YAML from 'yaml'
 import { showError, YAMLStringify } from '@Common/Helper'
-import { getIsRequestAborted, post } from '@Common/Api'
 import { ROUTES } from '@Common/Constants'
 import { ResponseType } from '@Common/Types'
+import { getIsRequestAborted, post } from '@Common/API'
 import {
     GetDeploymentManifestPayloadType,
     GetDeploymentManifestProps,

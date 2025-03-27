@@ -3,7 +3,6 @@ scripts/*.cjs
 
 # Files with ESLint errors/warnings
 src/Common/AddCDButton/AddCDButton.tsx
-src/Common/Api.ts
 src/Common/AppStatus/AppStatus.tsx
 src/Common/AppStatus/utils.ts
 src/Common/BreadCrumb/BreadCrumb.tsx

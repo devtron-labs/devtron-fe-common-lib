@@ -16,7 +16,7 @@
 
 import { ROUTES } from '@Common/Constants'
 import { getUrlWithSearchParams } from '@Common/Helper'
-import { get } from '@Common/Api'
+import { get } from '@Common/API'
 import { ResponseType } from '@Common/Types'
 import { ScanResultDTO, ScanResultParamsType } from './types'
 

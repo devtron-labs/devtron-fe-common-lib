@@ -39,7 +39,6 @@ export const OSSHelpOptions: HelpOptionType[] = [
         name: 'Chat with support',
         link: DISCORD_LINK,
         icon: Chat,
-        showSeparator: true,
     },
 
     {
