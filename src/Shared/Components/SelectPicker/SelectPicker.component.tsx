@@ -262,7 +262,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                 isGroupHeadingSelectable,
                 shouldMenuAlignRight,
             }),
-        [selectSize, variant, isMulti, isDisabled, isCreatable, shouldMenuAlignRight],
+        [error, selectSize, menuSize, variant, isGroupHeadingSelectable, shouldMenuAlignRight],
     )
 
     const isValidNewOption = (_inputValue: string) => {
