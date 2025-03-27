@@ -21,56 +21,69 @@ import { FALLBACK_ENTITY } from './constants'
 import './styles.scss'
 
 const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
-    entities = [FALLBACK_ENTITY],
+    entities: userEntities = [FALLBACK_ENTITY],
     rootClassName,
     countClassName,
     labelClassName,
     isProportional,
     swapLegendAndBar = false,
     showAnimationOnBar = false,
+    isLoading,
 }) => {
+    const entities = isLoading ? [FALLBACK_ENTITY] : userEntities
     const total = entities.reduce((sum, entity) => entity.value + sum, 0)
     const filteredEntities = entities.filter((entity) => !!entity.value)
 
     const calcSegmentWidth = (entity: Entity) => `${(entity.value / total) * 100}%`
 
-    const renderLabel = (label: string) => (
-        <span className={labelClassName} data-testid={`segmented-bar-chart-${label}-label`}>
-            {label}
-        </span>
-    )
+    const renderLabel = (label: Entity['label']) =>
+        isLoading ? (
+            <div className="shimmer w-120" />
+        ) : (
+            <span className={labelClassName} data-testid={`segmented-bar-chart-${label}-label`}>
+                {label}
+            </span>
+        )
 
-    const renderValue = (value: string | number, label: string) => (
-        <span className={countClassName} data-testid={`segmented-bar-chart-${label}-value`}>
-            {isProportional ? `${value}/${total}` : value}
-        </span>
-    )
+    const renderValue = (value: Entity['value'], label: Entity['label']) =>
+        isLoading ? (
+            <div className="shimmer w-64 lh-1-5 h-24" />
+        ) : (
+            <span className={countClassName} data-testid={`segmented-bar-chart-${label}-value`}>
+                {isProportional ? `${value}/${total}` : value}
+            </span>
+        )
 
     const renderContent = () => {
         if (isProportional) {
             return filteredEntities.map((entity, idx) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <div key={idx} className="flexbox-col">
+                <div key={idx} className={`flexbox-col ${isLoading ? 'dc__gap-10' : ''}`}>
                     {renderValue(entity.value, entity.label)}
+
                     <div className="flex left dc__gap-6">
-                        <span style={{ backgroundColor: entity.color }} className="h-12 dc__border-radius-2 w-4" />
+                        {!isLoading && (
+                            <span style={{ backgroundColor: entity.color }} className="h-12 dc__border-radius-2 w-4" />
+                        )}
+
                         {renderLabel(entity.label)}
                     </div>
                 </div>
             ))
         }
+
         return entities.map((entity, idx) => (
             // eslint-disable-next-line react/no-array-index-key
             <div key={idx} className="flexbox  dc__gap-4 dc__align-items-center">
-                <div className="dot" style={{ backgroundColor: entity.color, width: '10px', height: '10px' }} />
+                {!isLoading && (
+                    <div className="dot" style={{ backgroundColor: entity.color, width: '10px', height: '10px' }} />
+                )}
+
                 {renderValue(entity.value, entity.label)}
+
                 {renderLabel(entity.label)}
             </div>
         ))
-    }
-
-    if (!entities.length) {
-        return null
     }
 
     const renderLegend = () => (
@@ -92,15 +105,20 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
         >
             {filteredEntities.map((entity, index, map) => (
                 <div
-                    key={entity.label}
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={index}
                     className={`h-8 ${index === 0 ? 'dc__left-radius-4' : ''} ${
                         index === map.length - 1 ? 'dc__right-radius-4' : ''
-                    }`}
+                    } ${isLoading ? 'shimmer' : ''}`}
                     style={{ backgroundColor: entity.color, width: calcSegmentWidth(entity) }}
                 />
             ))}
         </motion.div>
     )
+
+    if (!entities.length) {
+        return null
+    }
 
     return (
         <div className={`flexbox-col w-100 dc__gap-12 ${rootClassName}`}>

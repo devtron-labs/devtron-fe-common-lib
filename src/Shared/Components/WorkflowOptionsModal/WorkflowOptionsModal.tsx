@@ -46,6 +46,7 @@ const WorkflowOptionsModal = ({
     resetChangeCIPayload,
     linkedCDSourceVariant,
     isAppGroup = false,
+    isTemplateView,
 }: Readonly<WorkflowOptionsModalProps>) => {
     const [currentCIPipelineType, setCurrentCIPipelineType] = useState<CIPipelineNodeType | WorkflowNodeType.WEBHOOK>(
         null,
@@ -112,7 +113,9 @@ const WorkflowOptionsModal = ({
             if (containsCDPipeline) {
                 // Only need to disable it in case of error
                 setLoadingWebhook(true)
-                saveCDPipeline(getSwitchToWebhookPayload(changeCIPayload))
+                saveCDPipeline(getSwitchToWebhookPayload(changeCIPayload), {
+                    isTemplateView,
+                })
                     .then((response) => {
                         if (response.result) {
                             ToastManager.showToast({
