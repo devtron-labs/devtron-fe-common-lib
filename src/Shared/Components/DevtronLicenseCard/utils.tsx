@@ -33,7 +33,7 @@ const getDevtronLicenseStatus = ({
 export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard extends boolean = false>(
     licenseDTO: DevtronLicenseDTO<isCentralDashboard>,
     currentUserEmail?: isCentralDashboard extends true ? string : never,
-): DevtronLicenseCardProps => {
+): Omit<DevtronLicenseCardProps, 'appTheme'> => {
     const { isTrial, expiry, ttl, reminderThreshold, organisationMetadata, license, claimedByUserDetails } =
         licenseDTO || {}
 
