@@ -74,8 +74,10 @@ export const cancelCiTrigger = (params, isForceAbort) => {
     return trash(URL)
 }
 
-export const cancelPrePostCdTrigger = (pipelineId, workflowRunner) => {
-    const URL = `${ROUTES.CD_MATERIAL_GET}/${pipelineId}/workflowRunner/${workflowRunner}`
+export const cancelPrePostCdTrigger = (pipelineId, workflowRunner, isForceAbort: boolean) => {
+    const URL = getUrlWithSearchParams(`${ROUTES.CD_MATERIAL_GET}/${pipelineId}/workflowRunner/${workflowRunner}`, {
+        forceAbort: isForceAbort,
+    })
     return trash(URL)
 }
 
