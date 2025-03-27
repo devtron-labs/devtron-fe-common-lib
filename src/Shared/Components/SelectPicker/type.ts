@@ -319,18 +319,3 @@ export type SelectPickerTextAreaProps = Omit<
     | 'placeholder'
 > &
     Pick<ResizableTagTextAreaProps, 'maxHeight' | 'minHeight' | 'refVar' | 'dependentRefs'>
-
-export interface SelectPickerHooksProps<OptionValue, IsMulti extends boolean>
-    extends Pick<
-        SelectPickerProps<OptionValue, IsMulti>,
-        | 'error'
-        | 'size'
-        | 'menuSize'
-        | 'variant'
-        | 'shouldMenuAlignRight'
-        | 'onKeyDown'
-        | 'onBlur'
-        | 'multiSelectProps'
-        | 'showSelectedOptionsCount'
-        | 'customSelectedOptionsCount'
-    > {}

@@ -22,17 +22,16 @@ import {
     ValueContainerProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { ReactElement, useCallback, useState } from 'react'
+import { ReactElement, useCallback, useMemo, useState } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
 import { deriveBorderRadiusAndBorderClassFromConfig, isNullOrUndefined } from '@Shared/Helpers'
-import { getSelectPickerOptionByValue } from './utils'
+import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
 
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
 import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
-import { useSelectHooks } from './useSelectHooks'
 import {
     SelectPickerClearIndicator,
     SelectPickerControl,
@@ -226,6 +225,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     labelTooltipConfig,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
+    const [isFocussed, setIsFocussed] = useState(false)
     const [inputValue, setInputValue] = useState('')
 
     const {
@@ -237,7 +237,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         options,
         getOptionValue,
         noOptionsMessage,
-        onBlur,
     } = props
     const {
         isGroupHeadingSelectable = false,
@@ -252,19 +251,19 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     const isSelectSearchable = !shouldRenderCustomOptions && isSearchable
 
     // Option disabled, group null state, checkbox hover, create option visibility (scroll reset on search)
-    const { styles, isFocussed, handleKeyDown, handleBlur, handleFocus } = useSelectHooks({
-        error,
-        size: selectSize,
-        menuSize,
-        variant,
-        multiSelectProps: {
-            getIsOptionValid,
-            isGroupHeadingSelectable,
-        },
-        shouldMenuAlignRight,
-        onKeyDown,
-        onBlur: onBlur as ReactSelectProps['onBlur'],
-    })
+    const selectStyles = useMemo(
+        () =>
+            getCommonSelectStyle({
+                error,
+                size: selectSize,
+                menuSize,
+                variant,
+                getIsOptionValid,
+                isGroupHeadingSelectable,
+                shouldMenuAlignRight,
+            }),
+        [selectSize, variant, isMulti, isDisabled, isCreatable, shouldMenuAlignRight],
+    )
 
     const isValidNewOption = (_inputValue: string) => {
         const trimmedInput = _inputValue?.trim()
@@ -353,6 +352,24 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         setInputValue(updatedInputValue)
     }
 
+    const handleKeyDown: ReactSelectProps['onKeyDown'] = (e) => {
+        // Prevent the option from being selected if meta or control key is pressed
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+            e.preventDefault()
+        }
+        onKeyDown?.(e)
+    }
+
+    const handleFocus: ReactSelectProps['onFocus'] = () => {
+        setIsFocussed(true)
+    }
+
+    const handleBlur: ReactSelectProps['onFocus'] = (e) => {
+        setIsFocussed(false)
+
+        props.onBlur?.(e)
+    }
+
     const handleChange: ReactSelectProps<SelectPickerOptionType<OptionValue>, IsMulti>['onChange'] = (...params) => {
         // Retain the input value on selection change
         if (isMulti && isNullOrUndefined(props.inputValue)) {
@@ -398,7 +415,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         classNamePrefix={classNamePrefix || inputId}
                         isSearchable={isSelectSearchable}
                         placeholder={placeholder}
-                        styles={styles}
+                        styles={selectStyles}
                         menuPlacement="auto"
                         menuPosition={menuPosition}
                         menuShouldScrollIntoView
