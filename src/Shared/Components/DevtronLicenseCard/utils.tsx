@@ -38,7 +38,7 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
         licenseDTO || {}
 
     return {
-        enterpriseName: organisationMetadata?.name || '',
+        enterpriseName: organisationMetadata?.name || 'Devtron Enterprise',
         expiryDate: expiry ? moment(expiry).format(DATE_TIME_FORMATS['DD/MM/YYYY']) : '',
         ttl,
         licenseStatus: getDevtronLicenseStatus({ ttl, reminderThreshold }),
