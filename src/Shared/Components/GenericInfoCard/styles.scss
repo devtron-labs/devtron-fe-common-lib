@@ -1,0 +1,29 @@
+.generic-info-card {
+    transition: box-shadow 0.2s ease-out;
+    
+    &__title {
+        transition: color 0.2s ease-out;
+    }
+    
+    &__arrow {
+        transition: all 0.2s ease-out;
+        transform: translateX(-20%);
+        visibility: hidden;
+    }
+    
+    &:hover {
+        position: relative;
+        z-index: 1;
+        box-shadow: var(--shadow-card-secondary);
+        
+        // NOTE: &__title was not working here
+        .generic-info-card__title {
+            color: var(--B500);
+        }
+
+        .generic-info-card__arrow {
+            transform: translateX(30%);
+            visibility: visible;
+        }
+    }
+}
