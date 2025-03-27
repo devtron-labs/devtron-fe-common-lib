@@ -5,15 +5,24 @@ import { UseResizableTableConfigWrapperProps } from './types'
 const UseResizableTableConfigWrapper = ({ children, columns }: UseResizableTableConfigWrapperProps) => {
     const resizableConfig = useResizableTableConfig({
         headersConfig: columns.map(({ label, size }) => {
-            const {
-                range: { minWidth, maxWidth, startWidth },
-            } = size
+            if (size.range) {
+                const {
+                    range: { minWidth, maxWidth, startWidth },
+                } = size
+
+                return {
+                    id: label,
+                    minWidth,
+                    width: startWidth,
+                    maxWidth: maxWidth === 'infinite' ? Number.MAX_SAFE_INTEGER : maxWidth,
+                }
+            }
 
             return {
                 id: label,
-                minWidth,
-                width: startWidth,
-                maxWidth: maxWidth === 'infinite' ? Number.MAX_SAFE_INTEGER : maxWidth,
+                minWidth: size.fixed,
+                width: size.fixed,
+                maxWidth: size.fixed,
             }
         }),
     })

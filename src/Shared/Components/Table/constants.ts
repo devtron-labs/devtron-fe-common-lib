@@ -5,3 +5,5 @@ export const LOCAL_STORAGE_EXISTS = !!(Storage && localStorage)
 export const LOCAL_STORAGE_KEY_FOR_VISIBLE_COLUMNS = 'generic-table-configurable-columns'
 
 export const BULK_ACTION_GUTTER_LABEL = 'bulk-action-gutter'
+
+export const EVENT_TARGET = new EventTarget()
