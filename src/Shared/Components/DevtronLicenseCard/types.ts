@@ -16,10 +16,12 @@ export type DevtronLicenseCardProps = {
 } & (
     | {
           licenseKey: string
+          onCopyButtonClick?: () => void
           licenseSuffix?: never
       }
     | {
           licenseKey?: never
+          onCopyButtonClick?: never
           licenseSuffix: string
       }
 )

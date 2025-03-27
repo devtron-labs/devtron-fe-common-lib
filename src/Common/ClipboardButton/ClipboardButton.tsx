@@ -36,6 +36,7 @@ export const ClipboardButton = ({
     copyToClipboardPromise,
     rootClassName = '',
     iconSize = 16,
+    onClick,
 }: ClipboardProps) => {
     const [copied, setCopied] = useState<boolean>(false)
     const setCopiedFalseTimeoutRef = useRef<ReturnType<typeof setTimeout>>(-1)
@@ -69,6 +70,7 @@ export const ClipboardButton = ({
             stopPropagation(e)
         }
 
+        onClick?.()
         await handleAwaitCopyToClipboardPromise(true)
     }
 
@@ -97,6 +99,7 @@ export const ClipboardButton = ({
             <button
                 type="button"
                 className={`dc__outline-none-imp p-0 flex dc__transparent--unstyled dc__no-border ${rootClassName}`}
+                aria-label={`Copy ${content}`}
                 onClick={handleCopyContent}
             >
                 <Tooltip content={copiedTippyText} alwaysShowTippyOnHover visible={copied}>
