@@ -1,4 +1,4 @@
-import { DevtronLicenseBaseDTO, DevtronLicenseDTO } from '@Shared/index'
+import { AppThemeType, DevtronLicenseBaseDTO, DevtronLicenseDTO } from '@Shared/index'
 
 export enum LicenseStatus {
     ACTIVE = 'ACTIVE',
@@ -12,6 +12,7 @@ export type DevtronLicenseCardProps = {
     ttl: number
     licenseStatus: LicenseStatus
     isTrial: boolean
+    appTheme: AppThemeType
 } & (
     | {
           licenseKey: string

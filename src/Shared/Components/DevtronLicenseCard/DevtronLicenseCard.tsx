@@ -9,7 +9,6 @@ import {
     ENTERPRISE_SUPPORT_LINK,
     getHandleOpenURL,
     LicenseStatus,
-    useTheme,
 } from '@Shared/index'
 import { Button, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
@@ -26,9 +25,9 @@ export const DevtronLicenseCard = ({
     licenseStatus,
     isTrial,
     ttl,
+    appTheme,
 }: DevtronLicenseCardProps) => {
     const { bgColor, textColor } = getLicenseColorsAccordingToStatus(licenseStatus)
-    const { appTheme } = useTheme()
     const remainingTime = getTTLInHumanReadableFormat(ttl)
     const remainingTimeString = ttl < 0 ? `Expired ${remainingTime} ago` : `${remainingTime} remaining`
     const isLicenseValid = licenseStatus !== LicenseStatus.EXPIRED
