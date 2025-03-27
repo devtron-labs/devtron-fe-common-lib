@@ -116,7 +116,7 @@ const LoginBanner = () => {
     return (
         <div className="flexbox-col br-12 border__primary dc__position-rel dc__overflow-hidden bg__primary">
             <div className="flexbox-col flex-grow-1 pt-32 pl-32 dc__content-space">
-                <div className="flex h-36 w-130 dc__fill-available-space">
+                <div className="flex h-36 w-130 dc__fill-available-space dc__zi-2">
                     <Icon name="ic-devtron-header-logo" color="N900" />
                 </div>
                 <AnimatedBackground />
