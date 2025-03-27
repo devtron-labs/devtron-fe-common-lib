@@ -190,11 +190,9 @@ export const AppSelectorDropdownIndicator = (props: DropdownIndicatorProps) => {
     )
 }
 
-export const AppSelectorNoOptionsMessage =
-    () =>
-    (inputObj: { inputValue: string }, showNoMatchingResOnly): string => {
-        if (inputObj && (inputObj.inputValue === '' || inputObj.inputValue.length < 3) && !showNoMatchingResOnly) {
-            return TYPE_3_CHARACTERS_TO_SEE_MATCHING_RESULTS
-        }
-        return NO_MATCHING_RESULT
+export const AppSelectorNoOptionsMessage = (inputObj: { inputValue: string }, showNoMatchingResOnly): string => {
+    if (inputObj && (inputObj.inputValue === '' || inputObj.inputValue.length < 3) && !showNoMatchingResOnly) {
+        return TYPE_3_CHARACTERS_TO_SEE_MATCHING_RESULTS
     }
+    return NO_MATCHING_RESULT
+}
