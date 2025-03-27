@@ -16,6 +16,7 @@
 
 import { components, DropdownIndicatorProps, StylesConfig } from 'react-select'
 import { ReactComponent as DropDownIcon } from '@Icons/ic-chevron-down.svg'
+import { NO_MATCHING_RESULT, TYPE_3_CHARACTERS_TO_SEE_MATCHING_RESULTS } from '@Shared/constants'
 
 export const CommonGroupedDropdownStyles: StylesConfig = {
     container: (base, state) => ({
@@ -189,9 +190,12 @@ export const AppSelectorDropdownIndicator = (props: DropdownIndicatorProps) => {
     )
 }
 
-export const AppSelectorNoOptionsMessage = (inputObj: { inputValue: string }): string => {
-    if (inputObj && (inputObj.inputValue === '' || inputObj.inputValue.length < 3)) {
-        return 'Type 3 chars to see matching results'
+export const AppSelectorNoOptionsMessage = (
+    inputObj: { inputValue: string },
+    hideCharacterResultInfo?: boolean,
+): string => {
+    if (inputObj && (inputObj.inputValue === '' || inputObj.inputValue.length < 3) && !hideCharacterResultInfo) {
+        return TYPE_3_CHARACTERS_TO_SEE_MATCHING_RESULTS
     }
-    return 'No matching results'
+    return NO_MATCHING_RESULT
 }

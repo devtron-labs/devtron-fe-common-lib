@@ -18,8 +18,8 @@ import {
     GroupHeadingProps,
     MultiValueProps,
     OptionProps,
-    ValueContainerProps,
     Props as ReactSelectProps,
+    ValueContainerProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { ReactElement, useCallback, useMemo, useState } from 'react'
@@ -28,23 +28,24 @@ import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
 import { deriveBorderRadiusAndBorderClassFromConfig, isNullOrUndefined } from '@Shared/Helpers'
 import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
+
+import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
+import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
+import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
 import {
-    SelectPickerMultiValueLabel,
-    SelectPickerMultiValueRemove,
     SelectPickerClearIndicator,
     SelectPickerControl,
     SelectPickerDropdownIndicator,
     SelectPickerGroupHeading,
+    SelectPickerInput,
     SelectPickerLoadingIndicator,
     SelectPickerMenuList,
+    SelectPickerMultiValueLabel,
+    SelectPickerMultiValueRemove,
     SelectPickerOption,
     SelectPickerValueContainer,
-    SelectPickerInput,
 } from './common'
-import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
-import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
-import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
 
 /**
  * Generic component for select picker
@@ -265,6 +266,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     )
 
     // Used to show the create new option for creatable select and the option(s) doesn't have the input value
+
     const isValidNewOption = (_inputValue: string) => {
         const trimmedInput = _inputValue?.trim()
 
