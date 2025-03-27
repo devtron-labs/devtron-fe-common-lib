@@ -79,6 +79,7 @@ import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
+import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
 
 // eslint-disable-next-line no-restricted-imports
@@ -165,6 +166,7 @@ export const iconMap = {
     'ic-timeout-two-dash': ICTimeoutTwoDash,
     'ic-unknown': ICUnknown,
     'ic-user-key': ICUserKey,
+    'ic-users': ICUsers,
     'ic-warning': ICWarning,
 }
 
