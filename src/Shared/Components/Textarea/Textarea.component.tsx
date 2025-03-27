@@ -114,6 +114,10 @@ const Textarea = ({
     ) => {
         if (event.key === 'Enter' || event.key === 'Escape') {
             event.stopPropagation()
+
+            if (event.key === 'Escape') {
+                textareaRef.current.blur()
+            }
         }
     }
 
