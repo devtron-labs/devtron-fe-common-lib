@@ -99,17 +99,32 @@ const AnimatedBackground = () => (
 
 const LoginBanner = () => {
     const [currentIndex, setCurrentIndex] = useState<number>(0)
+    const [isHovering, setIsHovering] = useState<boolean>(false)
+
+    const handleMouseEnter = () => {
+        setIsHovering(true)
+    }
+
+    const handleMouseLeave = () => {
+        setIsHovering(false)
+    }
 
     useEffect(() => {
         const testimonialCount = TESTIMONIAL_CARD_DATA.length
-        const interval = setInterval(() => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonialCount)
-        }, TESTIMONIAL_CARD_INTERVAL)
+        let interval: ReturnType<typeof setInterval>
+
+        if (!isHovering) {
+            interval = setInterval(() => {
+                setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonialCount)
+            }, TESTIMONIAL_CARD_INTERVAL)
+        }
 
         return () => {
-            clearInterval(interval)
+            if (interval) {
+                clearInterval(interval)
+            }
         }
-    }, [])
+    }, [isHovering])
 
     const { quote, name, designation, iconName } = TESTIMONIAL_CARD_DATA[currentIndex]
 
@@ -150,6 +165,8 @@ const LoginBanner = () => {
                         opacity: { duration: 0.75, ease: TRANSITION_EASE_CURVE },
                         x: { duration: 0.85, ease: TRANSITION_EASE_CURVE },
                     }}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                     className="flexbox-col dc__gap-20"
                 >
                     <div className="fs-14 fw-4 lh-1-5 cn-9 dc__truncate--clamp-4">{quote}&quot;</div>
