@@ -8,19 +8,19 @@ export const TESTIMONIAL_CARD_DATA: TestimonialCardConfig[] = [
         iconName: 'ic-travclan',
     },
     {
-        quote: 'All these factors ushered a new era in our Tech ecosystem. We started migrating all of our apps on to Devtron and were able to soon onboard 150+ microservices in a matter of few weeks. Earlier we couldn’t have thought of achieving it in months (maybe even quarters 😅).',
+        quote: 'Migrating to Devtron revolutionized our tech ecosystem. We onboarded 150+ microservices and multiple staging environments in just weeks. Software releases used to be a month long process and now take a week or even a day for some services. Devtron’s efficiency has transformed how we deliver value, setting a new benchmark for agility and speed.',
         designation: 'Principal Engineer at Livspace',
         name: 'Ankit Agarwal',
         iconName: 'ic-livspace',
     },
     {
-        quote: "Prior to Devtron, managing multiple environments consistently was a challenge. Devtron's built-in features for consistent configurations across environments have been a huge win for us. We're confident that every deployment is identical, which has reduced discrepancies and improved our application’s resiliency.",
+        quote: 'Before Devtron, managing environments consistently was a challenge. Its built-in features ensure identical deployments, reducing discrepancies and boosting resiliency. The one-click rollback saved hours of downtime, quickly getting us back on track. Devtron has streamlined our CI/CD pipeline, enabling faster, reliable deployments and cutting operational overhead.',
         designation: 'Engineering Manager at Delhivery',
         name: 'Vinay Mishra',
         iconName: 'ic-delhivery',
     },
     {
-        quote: "Devtron has been instrumental in our transition to Kubernetes. Its platform helped us streamline our CI/CD processes, ensuring consistent and secure deployments. We've seen significantly improved our deployment speed and security posture thanks to Devtron's built-in DevSecOps features.",
+        quote: "Devtron was key to our Kubernetes transition, streamlining CI/CD for consistent, secure deployments. Its built-in DevSecOps features improved deployment speed and security. The user-friendly platform simplifies Kubernetes management. Devtron's focus on security and automation aligns with our goals, and we’re excited to keep leveraging it as we shape electric mobility's future.",
         name: 'Sathish Kumar',
         designation: 'CloudOps/DevOps Lead at Ather Energy Pvt. Ltd.',
         iconName: 'ic-ather',
@@ -32,7 +32,7 @@ export const TESTIMONIAL_CARD_DATA: TestimonialCardConfig[] = [
         iconName: 'ic-73strings',
     },
     {
-        quote: 'Partnering with Devtron has revolutionized the way we deliver solutions to our customers. Their Kubernetes-native platform has empowered us to automate and scale our deployments, reducing time-to-market and significantly boosting DevOps efficiency.',
+        quote: 'Partnering with Devtron has revolutionized the way we deliver solutions to our customers. Their Kubernetes-native platform has empowered us to automate and scale our deployments, reducing time-to-market and significantly boosting DevOps efficiency. The collaboration has not only streamlined our processes but also enhanced our ability to serve customers with agility and precision.',
         designation: 'CPTO at Apica',
         name: 'Ranjan Parthasarathy',
         iconName: 'ic-apica',
@@ -44,7 +44,7 @@ export const TESTIMONIAL_CARD_DATA: TestimonialCardConfig[] = [
         iconName: 'ic-spinny',
     },
     {
-        quote: 'Managing our complex Kubernetes environment used to be a major bottleneck. We were juggling 15+ pre-prod environments, and it felt like we needed to double our DevOps team just to keep up. Then we discovered Devtron and it has completely streamlined our SDLC processes!',
+        quote: 'Managing our complex Kubernetes environment was a bottleneck, with 15+ pre-prod environments demanding more resources. Devtron streamlined our SDLC, enabling efficient management without extra DevOps hires. Lead times dropped, developers gained self-service access, and onboarding became easy. Devtron has made us more agile and efficient, letting us focus on delivering value.',
         designation: 'Director Architect at Tata1MG',
         name: 'Pankaj Pandey',
         iconName: 'ic-tata1mg',
