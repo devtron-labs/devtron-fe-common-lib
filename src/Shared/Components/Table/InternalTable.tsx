@@ -173,6 +173,7 @@ const InternalTable = ({
             behavior: 'smooth',
         })
 
+        // !FIXME: this will scroll to top but without smooth animation
         setActiveRowIndex(0)
     }, [offset])
 
@@ -191,13 +192,23 @@ const InternalTable = ({
         handleSorting(newSortBy)
     }
 
-    // FIXME: this is causing quick scroll on page switch
     const scrollIntoViewActiveRowRefCallback = (node: HTMLDivElement) => {
         if (!node || node.dataset.active !== 'true') {
             return
         }
 
-        node.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        const { bottom, top } = node.getBoundingClientRect()
+        const { bottom: parentBottom, top: parentTop } = rowsContainerRef.current.getBoundingClientRect()
+
+        // NOTE: please look into https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
+        // for more information what top and bottom pertain to
+        if (top < parentTop) {
+            rowsContainerRef.current.scrollTop += top - parentTop
+        }
+
+        if (bottom > parentBottom) {
+            rowsContainerRef.current.scrollTop += bottom - parentBottom
+        }
     }
 
     const showPagination =
@@ -250,9 +261,18 @@ const InternalTable = ({
             const isRowActive = activeRowIndex === visibleRowIndex
             const isRowBulkSelected = !!bulkSelectionState[row.id] || isBulkSelectionApplied
 
+            const handleChangeActiveRowIndex = () => {
+                setActiveRowIndex(visibleRowIndex)
+            }
+
+            const handleToggleBulkSelectionForRow = () => {
+                handleToggleBulkSelectionOnRow(row)
+            }
+
             return (
                 <div
                     ref={scrollIntoViewActiveRowRefCallback}
+                    onClick={handleChangeActiveRowIndex}
                     className={`dc__grid px-20 form__checkbox-parent ${
                         showSeparatorBetweenRows ? 'dc__border-bottom-n1' : ''
                     } fs-13 fw-4 lh-20 cn-9 generic-table__row dc__gap-16 ${
@@ -271,7 +291,7 @@ const InternalTable = ({
                             return (
                                 <Checkbox
                                     isChecked={isRowBulkSelected}
-                                    onChange={() => handleToggleBulkSelectionOnRow(row)}
+                                    onChange={handleToggleBulkSelectionForRow}
                                     rootClassName="mb-0"
                                     value={CHECKBOX_VALUE.CHECKED}
                                 />

@@ -149,12 +149,7 @@ const TableWrapper = (tableProps: TableProps) => {
     return (
         <UseRegisterShortcutProvider shortcutTimeout={50}>
             <FilterWrapperComponent {...wrapperProps}>
-                {/* NOTE: filterData will be populated by FilterWrapperComponent */}
-                <VisibleColumnsWrapper
-                    {...(tableProps as InternalTablePropsWithWrappers)}
-                    resizableConfig={null}
-                    filterData={null}
-                />
+                <VisibleColumnsWrapper {...(tableProps as InternalTablePropsWithWrappers)} />
             </FilterWrapperComponent>
         </UseRegisterShortcutProvider>
     )
