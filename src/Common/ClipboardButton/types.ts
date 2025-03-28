@@ -16,6 +16,7 @@
 
 export default interface ClipboardProps {
     content: string
+    initialTippyText?: string
     copiedTippyText?: string
     duration?: number
     copyToClipboardPromise?: Promise<void>

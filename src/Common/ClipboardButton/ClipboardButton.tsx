@@ -31,6 +31,7 @@ import { ReactComponent as Check } from '../../Assets/Icon/ic-check.svg'
  */
 export const ClipboardButton = ({
     content,
+    initialTippyText = 'Copy',
     copiedTippyText = 'Copied!',
     duration = 1000,
     copyToClipboardPromise,
@@ -94,7 +95,7 @@ export const ClipboardButton = ({
     const iconClassName = `icon-dim-${iconSize} dc__no-shrink`
 
     return (
-        <Tooltip content="Copy" alwaysShowTippyOnHover={!copied}>
+        <Tooltip content={copied ? copiedTippyText : initialTippyText} alwaysShowTippyOnHover>
             {/* TODO: semantically buttons should not be nested; fix later */}
             <button
                 type="button"
@@ -102,11 +103,9 @@ export const ClipboardButton = ({
                 aria-label={`Copy ${content}`}
                 onClick={handleCopyContent}
             >
-                <Tooltip content={copiedTippyText} alwaysShowTippyOnHover visible={copied}>
-                    <div className="flex">
-                        {copied ? <Check className={iconClassName} /> : <ICCopy className={iconClassName} />}
-                    </div>
-                </Tooltip>
+                <div className="flex">
+                    {copied ? <Check className={iconClassName} /> : <ICCopy className={iconClassName} />}
+                </div>
             </button>
         </Tooltip>
     )
