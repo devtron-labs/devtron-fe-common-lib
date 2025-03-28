@@ -86,4 +86,5 @@ export type UseUrlFiltersReturnType<T, K = unknown> = K & {
      * Update the search params with the passed object
      */
     updateSearchParams: (paramsToSerialize: Partial<K>, options?: UpdateSearchParamsOptionsType<T, K>) => void
+    isFilterApplied: boolean
 }
