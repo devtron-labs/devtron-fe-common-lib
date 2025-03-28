@@ -24,6 +24,7 @@ import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICCopy } from '@IconsV2/ic-copy.svg'
 import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
+import { ReactComponent as ICDeleteLightning } from '@IconsV2/ic-delete-lightning.svg'
 import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
@@ -111,6 +112,7 @@ export const iconMap = {
     'ic-copy': ICCopy,
     'ic-crown': ICCrown,
     'ic-cube': ICCube,
+    'ic-delete-lightning': ICDeleteLightning,
     'ic-delete': ICDelete,
     'ic-dockerhub': ICDockerhub,
     'ic-ecr': ICEcr,
