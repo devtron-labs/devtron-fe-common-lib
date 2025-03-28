@@ -5,4 +5,16 @@
     &__row--active > * {
         background-color: var(--bg-hover-opaque);
     }
+
+    &__row--bulk-selected,
+    &__row--bulk-selected > * {
+        background-color: var(--B50);
+    }
+
+    &__row--bulk-selected:hover,
+    &__row--bulk-selected:hover > *,
+    &__row--bulk-selected.generic-table__row--active,
+    &__row--bulk-selected.generic-table__row--active > * {
+        background-color: var(--B100);
+    }
 }

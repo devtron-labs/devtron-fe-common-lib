@@ -1,6 +1,6 @@
 import { useRegisterShortcut } from '@Common/Hooks'
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { noop } from 'rxjs'
+import { noop } from '@Common/Helper'
 import { BulkSelectionEvents } from '../BulkSelection'
 import { InternalTablePropsWithWrappers, RowsType, SignalEnum } from './types'
 import { EVENT_TARGET } from './constants'
@@ -202,6 +202,7 @@ const useTableWithKeyboardShortcuts = (
 
     return {
         activeRowIndex,
+        setActiveRowIndex,
     }
 }
 

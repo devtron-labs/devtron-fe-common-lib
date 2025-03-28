@@ -1,10 +1,18 @@
+import { useRef, useEffect, useMemo, Fragment } from 'react'
 import { Checkbox } from '@Common/Checkbox'
 import { DEFAULT_BASE_PAGE_SIZE } from '@Common/Constants'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
-import { useAsync, showError, CHECKBOX_VALUE, GenericFilterEmptyState, GenericEmptyState } from '@Common/index'
+import {
+    useAsync,
+    showError,
+    CHECKBOX_VALUE,
+    GenericFilterEmptyState,
+    GenericEmptyState,
+    useEffectAfterMount,
+} from '@Common/index'
 import { Pagination } from '@Common/Pagination'
 import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
-import { useRef, useEffect, useMemo, Fragment } from 'react'
+
 import { BulkSelection } from '../BulkSelection'
 import BulkSelectionActionWidget from './BulkSelectionActionWidget'
 import { SEARCH_SORT_CHANGE_DEBOUNCE_TIME, BULK_ACTION_GUTTER_LABEL, EVENT_TARGET } from './constants'
@@ -55,14 +63,6 @@ const InternalTable = ({
         clearFilters,
         isFilterApplied,
     } = filterData ?? {}
-
-    useEffect(() => {
-        rowsContainerRef.current.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth',
-        })
-    }, [offset])
 
     const isBulkSelectionConfigured = !!bulkSelectionConfig
 
@@ -161,10 +161,20 @@ const InternalTable = ({
         return paginatedRows
     }, [paginationVariant, offset, pageSize, filteredRows])
 
-    const { activeRowIndex } = useTableWithKeyboardShortcuts(
+    const { activeRowIndex, setActiveRowIndex } = useTableWithKeyboardShortcuts(
         { bulkSelectionConfig, bulkSelectionReturnValue, handleToggleBulkSelectionOnRow },
         visibleRows,
     )
+
+    useEffectAfterMount(() => {
+        rowsContainerRef.current.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth',
+        })
+
+        setActiveRowIndex(0)
+    }, [offset])
 
     useEffect(() => {
         setIdentifiers?.(
@@ -187,7 +197,7 @@ const InternalTable = ({
             return
         }
 
-        node.scrollIntoView({ behavior: 'instant', block: 'nearest' })
+        node.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     }
 
     const showPagination =
@@ -238,15 +248,18 @@ const InternalTable = ({
         return visibleRows.map((row, visibleRowIndex) => {
             const rowIndex = rowToIndexMap?.get(row)
             const isRowActive = activeRowIndex === visibleRowIndex
+            const isRowBulkSelected = !!bulkSelectionState[row.id] || isBulkSelectionApplied
 
             return (
                 <div
                     ref={scrollIntoViewActiveRowRefCallback}
-                    className={`dc__grid px-20 ${
+                    className={`dc__grid px-20 form__checkbox-parent ${
                         showSeparatorBetweenRows ? 'dc__border-bottom-n1' : ''
                     } fs-13 fw-4 lh-20 cn-9 generic-table__row dc__gap-16 ${
-                        isRowActive ? 'generic-table__row--active' : ''
-                    } ${RowActionsOnHoverComponent ? 'dc__position-rel dc__opacity-hover dc__opacity-hover--parent' : ''}`}
+                        isRowActive ? 'generic-table__row--active form__checkbox-parent--active' : ''
+                    } ${RowActionsOnHoverComponent ? 'dc__position-rel dc__opacity-hover dc__opacity-hover--parent' : ''} ${
+                        isRowBulkSelected ? 'generic-table__row--bulk-selected' : ''
+                    }`}
                     style={{
                         gridTemplateColumns,
                     }}
@@ -257,7 +270,7 @@ const InternalTable = ({
                         if (field === BULK_ACTION_GUTTER_LABEL) {
                             return (
                                 <Checkbox
-                                    isChecked={!!bulkSelectionState[row.id] || isBulkSelectionApplied}
+                                    isChecked={isRowBulkSelected}
                                     onChange={() => handleToggleBulkSelectionOnRow(row)}
                                     rootClassName="mb-0"
                                     value={CHECKBOX_VALUE.CHECKED}
@@ -271,8 +284,9 @@ const InternalTable = ({
                                     field={field}
                                     value={row.data[field]}
                                     signals={EVENT_TARGET as SignalsType}
-                                    data={row.data}
+                                    row={row}
                                     filterData={filterData}
+                                    isRowActive={isRowActive}
                                     {...additionalProps}
                                 />
                             )
@@ -306,8 +320,8 @@ const InternalTable = ({
 
         return (
             <div className="generic-table flexbox-col dc__overflow-hidden flex-grow-1">
-                <div className="flexbox-col flex-grow-1 w-100 dc__overflow-auto">
-                    <div className="bg__primary dc__min-width-fit-content px-20 dc__border-bottom-n1" ref={parentRef}>
+                <div className="flexbox-col flex-grow-1 w-100 dc__overflow-auto" ref={parentRef}>
+                    <div className="bg__primary dc__min-width-fit-content px-20 dc__border-bottom-n1">
                         {loading && !visibleColumns.length ? (
                             <div className="flexbox py-12 dc__gap-16">
                                 {Array(3)
@@ -334,10 +348,10 @@ const InternalTable = ({
                                         <SortableTableHeaderCell
                                             key={label}
                                             title={label}
-                                            isSortable={isSortable}
+                                            isSortable={!!isSortable}
                                             sortOrder={sortOrder}
-                                            isSorted={sortBy === label}
-                                            triggerSorting={getTriggerSortingHandler(label)}
+                                            isSorted={sortBy === field}
+                                            triggerSorting={getTriggerSortingHandler(field)}
                                             showTippyOnTruncate={showTippyOnTruncate}
                                             disabled={areFilteredRowsLoading}
                                             {...(isResizable

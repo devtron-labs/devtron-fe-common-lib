@@ -74,16 +74,19 @@ interface AdditionalProps {
     [key: string]: unknown
 }
 
-export type RowsType = {
+type RowType = {
     id: string
     data: Record<string, unknown>
-}[]
+}
+
+export type RowsType = RowType[]
 
 export interface CellComponentProps extends Pick<BaseColumnType, 'field'>, AdditionalProps {
     signals: SignalsType
     value: unknown
-    data: RowsType[number]['data']
+    row: RowType
     filterData: UseFiltersReturnType
+    isRowActive: boolean
 }
 
 export type Column = Pick<SortableTableHeaderCellProps, 'showTippyOnTruncate'> &
