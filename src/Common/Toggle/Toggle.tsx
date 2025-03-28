@@ -15,6 +15,7 @@
  */
 
 import React, { SyntheticEvent, useCallback } from 'react'
+import { Icon as IconComponent } from '@Shared/Components'
 import { throttle, useEffectAfterMount } from '../Helper'
 import './Toggle.scss'
 
@@ -29,6 +30,7 @@ const Toggle = ({
     iconClass = '',
     throttleOnChange = false,
     shouldToggleValueOnLabelClick = false,
+    isLoading = false,
     ...props
 }) => {
     const [active, setActive] = React.useState(selected)
@@ -68,12 +70,14 @@ const Toggle = ({
         }
     }
 
-    return (
+    return isLoading ? (
+        <IconComponent name='ic-circle-loader' color='B500' size={20} />
+    ) : (
         <label
             {...props}
             className={`${rootClassName} toggle__switch ${disabled ? 'disabled' : ''}`}
             style={{ ['--color' as any]: color }}
-            {...(shouldToggleValueOnLabelClick ? {onClick: handleLabelClick} : {})}
+            {...(shouldToggleValueOnLabelClick ? { onClick: handleLabelClick } : {})}
         >
             <input type="checkbox" checked={!!active} onChange={handleChange} className="toggle__input" />
             <span className={`toggle__slider ${Icon ? 'with-icon br-4 dc__border' : 'round'}`} data-testid={dataTestId}>

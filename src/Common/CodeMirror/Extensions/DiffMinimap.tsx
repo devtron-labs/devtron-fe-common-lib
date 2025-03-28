@@ -40,7 +40,7 @@ export const DiffMinimap = ({ view, theme, diffMinimapParentRef, scalingFactor }
 
     useEffect(() => {
         updateOverlay()
-    }, [scalingFactor])
+    }, [view, scalingFactor])
 
     // Sync overlay scrolling with the diff view
     const handleDiffScroll = () => {
@@ -109,7 +109,7 @@ export const DiffMinimap = ({ view, theme, diffMinimapParentRef, scalingFactor }
             document.removeEventListener('mousemove', handleOverlayMouseMove)
             document.removeEventListener('mouseup', handleOverlayMouseUp)
         }
-    }, [isDragging])
+    }, [view, isDragging])
 
     // Clicking on the minimap scrolls the diff viewer
     const handleMinimapClick = (event: React.MouseEvent<HTMLDivElement>) => {

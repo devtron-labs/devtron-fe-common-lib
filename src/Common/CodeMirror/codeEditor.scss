@@ -306,11 +306,29 @@
     }
 
     &__container {
+        .cm-merge-theme:not(.code-editor__mini-map) .cm-mergeView {
+            border-radius: 4px;
+        }
+
+        .code-editor__minimap-container {
+            border-bottom-right-radius: 4px;
+        }
+
         .cm-editor {
             border-radius: 4px;
 
             .cm-scroller {
                 border-radius: 4px;
+            }
+        }
+
+        .cm-merge-theme.code-editor__mini-map {
+            .cm-editor {
+                border-radius: 0;
+
+                .cm-scroller {
+                    border-radius: 0;
+                }
             }
         }
 
