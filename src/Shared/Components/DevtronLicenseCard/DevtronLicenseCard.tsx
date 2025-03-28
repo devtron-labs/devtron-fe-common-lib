@@ -90,6 +90,7 @@ export const DevtronLicenseCard = ({
                         transformStyle: 'preserve-3d',
                         transform: 'translateZ(0)',
                     }}
+                    whileHover={{ scale: 1.05 }}
                 >
                     <div className="p-20 flexbox-col dc__content-space flex-grow-1">
                         <div className="flexbox dc__content-space dc__gap-72">
@@ -98,9 +99,9 @@ export const DevtronLicenseCard = ({
                             </span>
                             <Icon name="ic-devtron" color="N900" size={24} />
                         </div>
-                        <div className="flexbox-col dc__gap-4">
+                        <div className="flexbox-col dc__gap-2">
                             <div className="flexbox dc__align-items-center dc__gap-6">
-                                <Icon name="ic-key" color={null} size={16} />
+                                <Icon name="ic-key" color="N900" size={16} />
                                 <div className="flex dc__gap-4 cn-7 fs-16 fw-5 lh-1-5 cn-9 font-ibm-plex-mono">
                                     <span>&bull;&bull;&bull;&bull;</span>
                                     <span>{licenseSuffix || licenseKey?.slice(-8)}</span>
