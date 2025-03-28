@@ -1,6 +1,7 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
 
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
+import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
@@ -8,6 +9,7 @@ import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
+import { ReactComponent as ICCardStack } from '@IconsV2/ic-card-stack.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCiWebhook } from '@IconsV2/ic-ci-webhook.svg'
@@ -16,8 +18,10 @@ import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
+import { ReactComponent as ICCopy } from '@IconsV2/ic-copy.svg'
 import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
+import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
@@ -49,6 +53,7 @@ import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintb
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
+import { ReactComponent as ICNew } from '@IconsV2/ic-new.svg'
 import { ReactComponent as ICNodeScript } from '@IconsV2/ic-node-script.svg'
 import { ReactComponent as ICOidc } from '@IconsV2/ic-oidc.svg'
 import { ReactComponent as ICOpenBox } from '@IconsV2/ic-open-box.svg'
@@ -72,6 +77,7 @@ import { IconBaseProps } from './types'
 
 export const iconMap = {
     'ic-aborted': ICAborted,
+    'ic-add': ICAdd,
     'ic-app-group': ICAppGroup,
     'ic-arrow-right': ICArrowRight,
     'ic-azure': ICAzure,
@@ -79,6 +85,7 @@ export const iconMap = {
     'ic-browser': ICBrowser,
     'ic-build-color': ICBuildColor,
     'ic-cancelled': ICCancelled,
+    'ic-card-stack': ICCardStack,
     'ic-cd': ICCd,
     'ic-ci-linked': ICCiLinked,
     'ic-ci-webhook': ICCiWebhook,
@@ -87,8 +94,10 @@ export const iconMap = {
     'ic-close-small': ICCloseSmall,
     'ic-code': ICCode,
     'ic-container': ICContainer,
+    'ic-copy': ICCopy,
     'ic-crown': ICCrown,
     'ic-cube': ICCube,
+    'ic-delete': ICDelete,
     'ic-dockerhub': ICDockerhub,
     'ic-ecr': ICEcr,
     'ic-env': ICEnv,
@@ -120,6 +129,7 @@ export const iconMap = {
     'ic-microsoft': ICMicrosoft,
     'ic-missing': ICMissing,
     'ic-monitoring': ICMonitoring,
+    'ic-new': ICNew,
     'ic-node-script': ICNodeScript,
     'ic-oidc': ICOidc,
     'ic-open-box': ICOpenBox,

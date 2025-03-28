@@ -22,6 +22,8 @@ import {
     BasicSetupOptions,
     Compartment,
     keymap,
+    EditorView,
+    EditorState,
 } from '@uiw/react-codemirror'
 import { foldGutter } from '@codemirror/language'
 import { search } from '@codemirror/search'
@@ -159,7 +161,7 @@ const CodeEditor = <DiffView extends boolean = false>({
             setCodemirrorMergeKey(getUniqueId())
         },
         // Include any props that modify codemirror-merge extensions directly, as a workaround for the unresolved bug.
-        [readOnly, tabSize, disableSearch, appTheme, mode],
+        [readOnly, tabSize, disableSearch, appTheme, mode, isOriginalModifiable],
     )
 
     // METHODS
@@ -224,11 +226,22 @@ const CodeEditor = <DiffView extends boolean = false>({
         readOnlyTooltip,
     ]
 
-    const originalViewExtensions: Extension[] = [...getBaseExtensions(), readOnlyTooltip]
+    const originalViewExtensions: Extension[] = [
+        codeEditorTheme,
+        ...getBaseExtensions(),
+        readOnlyTooltip,
+        EditorState.readOnly.of(readOnly || !isOriginalModifiable),
+    ]
 
-    const modifiedViewExtensions: Extension[] = [...getBaseExtensions(), readOnlyTooltip]
+    const modifiedViewExtensions: Extension[] = [
+        codeEditorTheme,
+        ...getBaseExtensions(),
+        readOnlyTooltip,
+        EditorState.readOnly.of(readOnly),
+    ]
 
     const diffMinimapExtensions: Extension[] = [
+        codeEditorTheme,
         basicSetup({
             ...basicSetupOptions,
             lineNumbers: false,
@@ -237,6 +250,8 @@ const CodeEditor = <DiffView extends boolean = false>({
             syntaxHighlighting: false,
         }),
         getLanguageExtension(mode, true),
+        EditorView.editable.of(false),
+        EditorState.readOnly.of(true),
     ]
 
     return (
@@ -255,7 +270,6 @@ const CodeEditor = <DiffView extends boolean = false>({
                 placeholder={placeholder}
                 handleOnChange={handleOnChange}
                 handleLhsOnChange={handleLhsOnChange}
-                isOriginalModifiable={isOriginalModifiable}
                 onBlur={onBlur}
                 onFocus={onFocus}
                 autoFocus={autoFocus}

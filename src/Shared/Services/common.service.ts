@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
+import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
 import { ViewIsPipelineRBACConfiguredRadioTabs } from '@Shared/types'
+import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
+import { getTemplateAPIRoute } from '..'
 import { get, getUrlWithSearchParams, post, ROUTES, showError } from '../../Common'
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
@@ -23,7 +26,8 @@ import {
     GetResourceApiUrlProps,
     GetUserPreferencesParsedDTO,
     GetUserPreferencesQueryParamsType,
-    UpdateUserPreferencesParsedValueType,
+    UpdatedUserPreferencesType,
+    UserPreferencesPayloadValueType,
     UpdateUserPreferencesPayloadType,
     UserPreferencesType,
 } from './types'
@@ -34,7 +38,18 @@ export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryPara
 export const getPolicyApiUrl = <T>({ kind, version, queryParams, suffix }: GetPolicyApiUrlProps<T>) =>
     getUrlWithSearchParams(`global/policy/${kind}/${version}${suffix ? `/${suffix}` : ''}`, queryParams)
 
-export const saveCDPipeline = (request) => post(ROUTES.CD_CONFIG, request)
+export const saveCDPipeline = (request, { isTemplateView }: Required<Pick<AppConfigProps, 'isTemplateView'>>) => {
+    const url = isTemplateView
+        ? getTemplateAPIRoute({
+              type: GetTemplateAPIRouteType.CD_PIPELINE,
+              queryParams: {
+                  id: request.appId,
+              },
+          })
+        : ROUTES.CD_CONFIG
+
+    return post(url, request)
+}
 
 export const getEnvironmentData = () => get<EnvironmentDataValuesDTO>(ROUTES.ENVIRONMENT_DATA)
 export const getUserPreferences = async (): Promise<UserPreferencesType> => {
@@ -58,20 +73,25 @@ export const getUserPreferences = async (): Promise<UserPreferencesType> => {
 
     return {
         pipelineRBACViewSelectedTab,
-        themePreference: parsedResult.themePreference,
+        themePreference:
+            parsedResult.computedAppTheme === 'system-dark' || parsedResult.computedAppTheme === 'system-light'
+                ? THEME_PREFERENCE_MAP.auto
+                : parsedResult.computedAppTheme,
     }
 }
 
 export const updateUserPreferences = async (
-    updatedUserPreferences: UserPreferencesType,
+    updatedUserPreferences: UpdatedUserPreferencesType,
     shouldThrowError: boolean = false,
 ): Promise<boolean> => {
     try {
-        const value: UpdateUserPreferencesParsedValueType = {
+        const { themePreference, appTheme } = updatedUserPreferences
+
+        const value: UserPreferencesPayloadValueType = {
             viewPermittedEnvOnly:
                 updatedUserPreferences.pipelineRBACViewSelectedTab ===
                 ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
-            themePreference: updatedUserPreferences.themePreference,
+            computedAppTheme: themePreference === THEME_PREFERENCE_MAP.auto ? `system-${appTheme}` : appTheme,
         }
 
         const payload: UpdateUserPreferencesPayloadType = {

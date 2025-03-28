@@ -50,7 +50,13 @@ export interface ThemeContextType extends ThemeConfigType {
     handleShowSwitchThemeLocationTippyChange: (isVisible: boolean) => void
     showThemeSwitcherDialog: boolean
     handleThemeSwitcherDialogVisibilityChange: (isVisible: boolean) => void
-    handleThemePreferenceChange: (updatedThemePreference: ThemePreferenceType) => void
+    handleThemePreferenceChange: (
+        updatedThemePreference: ThemePreferenceType,
+        /**
+         * @description If update is local we won't update local storage and analytics
+         * */
+        isLocalUpdate?: boolean,
+    ) => void
 }
 
 export interface ThemeProviderProps {

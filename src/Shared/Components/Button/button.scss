@@ -60,8 +60,6 @@
 }
 
 @mixin pseudo-states($hover-bg-color, $active-bg-color, $hover-border-color: null, $color: null) {
-    $parent-selector: &;
-
     &:hover:not([disabled]) {
         background: $hover-bg-color;
 
