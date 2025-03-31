@@ -201,7 +201,10 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          *
          * @default 'ComponentSizeType.medium'
          */
-        size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large | ComponentSizeType.small>
+        size?: Extract<
+            ComponentSizeType,
+            ComponentSizeType.medium | ComponentSizeType.large | ComponentSizeType.small | ComponentSizeType.xl
+        >
         /**
          * Content to be shown in a tippy when disabled
          */
