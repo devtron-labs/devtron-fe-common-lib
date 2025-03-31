@@ -68,11 +68,11 @@ const getVariantOverrides = <OptionValue>(
             }
         case SelectPickerVariantType.BORDER_LESS:
             return {
-                control: (base, state) => ({
+                control: (_, state) => ({
                     ...(!state.isFocused && {
                         '&:not(:hover)': {
                             backgroundColor: 'transparent',
-                            border: 'none',
+                            borderColor: 'transparent',
                             gap: '2px',
                         },
                     }),
@@ -80,7 +80,7 @@ const getVariantOverrides = <OptionValue>(
                         width: '250px',
                     }),
                 }),
-                singleValue: (base, state) => ({
+                singleValue: (_, state) => ({
                     ...(!state.selectProps.isFocussed && {
                         '&:not(:hover)': {
                             fontWeight: 600,
