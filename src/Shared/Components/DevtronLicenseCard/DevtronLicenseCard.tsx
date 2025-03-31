@@ -27,7 +27,7 @@ export const DevtronLicenseCard = ({
     isTrial,
     ttl,
     appTheme,
-    onCopyButtonClick,
+    handleCopySuccess,
 }: DevtronLicenseCardProps) => {
     const { bgColor, textColor } = getLicenseColorsAccordingToStatus(licenseStatus)
     const remainingTime = getTTLInHumanReadableFormat(ttl)
@@ -109,7 +109,7 @@ export const DevtronLicenseCard = ({
                                     <ClipboardButton
                                         initialTippyText="Copy license key"
                                         content={licenseKey}
-                                        onClick={onCopyButtonClick}
+                                        handleSuccess={handleCopySuccess}
                                     />
                                 )}
                             </div>

@@ -37,7 +37,7 @@ export const ClipboardButton = ({
     copyToClipboardPromise,
     rootClassName = '',
     iconSize = 16,
-    onClick,
+    handleSuccess,
 }: ClipboardProps) => {
     const [copied, setCopied] = useState<boolean>(false)
     const setCopiedFalseTimeoutRef = useRef<ReturnType<typeof setTimeout>>(-1)
@@ -60,6 +60,7 @@ export const ClipboardButton = ({
                 await copyToClipboardPromise
             }
 
+            handleSuccess?.()
             handleTriggerCopy()
         } catch {
             noop()
@@ -71,7 +72,6 @@ export const ClipboardButton = ({
             stopPropagation(e)
         }
 
-        onClick?.()
         await handleAwaitCopyToClipboardPromise(true)
     }
 
