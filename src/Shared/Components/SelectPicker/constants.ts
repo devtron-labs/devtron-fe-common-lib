@@ -31,7 +31,7 @@ export const SELECT_PICKER_ICON_SIZE_MAP: Record<SelectPickerProps['size'], Pick
 }
 
 export const SELECT_PICKER_CONTROL_SIZE_MAP: Record<SelectPickerProps['size'], CSSProperties['minHeight']> = {
-    [ComponentSizeType.small]: 'auto',
-    [ComponentSizeType.medium]: 'auto',
+    [ComponentSizeType.small]: '28px',
+    [ComponentSizeType.medium]: '32px',
     [ComponentSizeType.large]: '36px',
 }
