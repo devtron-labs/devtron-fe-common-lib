@@ -1,8 +1,9 @@
-import { Dispatch, FunctionComponent, ReactElement, SetStateAction } from 'react'
+import { Dispatch, FunctionComponent, PropsWithChildren, SetStateAction } from 'react'
 import { SortableTableHeaderCellProps, useResizableTableConfig } from '@Common/SortableTableHeaderCell'
 import { UseStateFiltersProps, UseStateFiltersReturnType, UseUrlFiltersProps } from '@Common/Hooks'
 import { GenericEmptyStateType } from '@Common/index'
 import { GenericFilterEmptyStateProps } from '@Common/EmptyState/types'
+import { TABLE_ID_MAP } from './constants'
 import { useBulkSelection, UseBulkSelectionProps } from '../BulkSelection'
 
 export interface UseFiltersReturnType extends UseStateFiltersReturnType<string> {}
@@ -13,11 +14,6 @@ export enum SignalEnum {
     ESCAPE_PRESSED = 'escape-pressed',
 
     OPEN_CONTEXT_MENU = 'open-context-menu',
-
-    /** TODO: Not yet implemented */
-    BULK_SELECTION_CHANGED = 'bulk-selection-changed',
-
-    ACTIVE_ROW_CHANGED = 'active-row-changed',
 
     ROW_CLICKED = 'row-clicked',
 }
@@ -74,7 +70,7 @@ interface AdditionalProps {
     [key: string]: unknown
 }
 
-type RowType = {
+export type RowType = {
     id: string
     data: Record<string, unknown>
 }
@@ -142,67 +138,73 @@ type AdditionalFilterPropsType<T extends Exclude<FiltersTypeEnum, FiltersTypeEnu
       >
     : Pick<UseStateFiltersProps<string>, 'initialSortKey'>
 
-export type InternalTableProps = Record<'filterData', UseFiltersReturnType> &
-    Record<'resizableConfig', ReturnType<typeof useResizableTableConfig>> &
-    Required<Pick<ConfigurableColumnsType, 'visibleColumns' | 'setVisibleColumns'>> & {
-        id: string
-
-        loading?: boolean
-
-        paginationVariant: PaginationEnum
-
-        /**
-         * Memoize columns before passing as props.
-         *
-         * For columns from backend: initialize as empty array and set loading
-         * to true until API call completes.
-         */
-        columns: Column[]
-
-        /** If bulk selections are not a concern omit this prop */
-        bulkSelectionConfig?: BulkSelectionConfigType
-
-        emptyStateConfig: {
-            noRowsConfig: Omit<GenericEmptyStateType, 'children'>
-            noRowsForFilterConfig?: Pick<GenericFilterEmptyStateProps, 'title' | 'subTitle'> & {
-                clearFilters: () => void
-            }
+export type ViewWrapperProps = PropsWithChildren<
+    Pick<UseFiltersReturnType, 'offset' | 'handleSearch' | 'searchKey' | 'sortBy' | 'sortOrder' | 'clearFilters'> &
+        AdditionalProps &
+        Partial<ConfigurableColumnsType> & {
+            areRowsLoading: boolean
         }
+>
 
-        /**
-         * Enable this to let users choose which columns to display.
-         * Example: Resource Browser > Node Listing
-         *
-         * Using the provided id for this table, we will store the user's preference in localStorage
-         */
-        configurableColumns?: boolean
+export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visibleColumns' | 'setVisibleColumns'>> & {
+    id: (typeof TABLE_ID_MAP)[keyof typeof TABLE_ID_MAP]
 
-        visibleRowsNumberRef: React.MutableRefObject<number>
+    loading?: boolean
 
-        activeRowIndex: number
+    paginationVariant: PaginationEnum
 
-        additionalProps?: AdditionalProps
+    /**
+     * Memoize columns before passing as props.
+     *
+     * For columns from backend: initialize as empty array and set loading
+     * to true until API call completes.
+     */
+    columns: Column[]
 
-        /** Control the look of the table using this prop */
-        stylesConfig?: {
-            showSeparatorBetweenRows: boolean
+    /** If bulk selections are not a concern omit this prop */
+    bulkSelectionConfig?: BulkSelectionConfigType
+
+    emptyStateConfig: {
+        noRowsConfig: Omit<GenericEmptyStateType, 'children'>
+        noRowsForFilterConfig?: Pick<GenericFilterEmptyStateProps, 'title' | 'subTitle'> & {
+            clearFilters: () => void
         }
+    }
 
-        /**
-         * Use this component to display additional content at the end of a row when it is hovered over.
-         */
-        RowActionsOnHoverComponent?: FunctionComponent<{ row: RowsType[number] }>
+    filterData: UseFiltersReturnType | null
 
-        bulkSelectionReturnValue: ReturnType<typeof useBulkSelection> | null
+    resizableConfig: ReturnType<typeof useResizableTableConfig> | null
 
-        handleClearBulkSelection: () => void
+    /**
+     * Enable this to let users choose which columns to display.
+     * Example: Resource Browser > Node Listing
+     *
+     * Using the provided id for this table, we will store the user's preference in localStorage
+     */
+    areColumnsConfigurable?: boolean
 
-        handleToggleBulkSelectionOnRow: (row: RowsType[number]) => void
+    additionalProps?: AdditionalProps
 
-        bulkSelectedRowIdsRef: React.MutableRefObject<string[]>
+    /** Control the look of the table using this prop */
+    stylesConfig?: {
+        showSeparatorBetweenRows: boolean
+    }
 
-        activeRowRef: React.MutableRefObject<RowsType[number] | null>
-    } & (
+    tableContainerRef: React.RefObject<HTMLDivElement>
+
+    /**
+     * Use this component to display additional content at the end of a row when it is hovered over.
+     */
+    RowActionsOnHoverComponent?: FunctionComponent<{ row: RowType }>
+
+    bulkSelectionReturnValue: ReturnType<typeof useBulkSelection> | null
+
+    handleClearBulkSelection: () => void
+
+    handleToggleBulkSelectionOnRow: (row: RowType) => void
+
+    ViewWrapper?: FunctionComponent<ViewWrapperProps>
+} & (
         | {
               /**
                * Direct rows data for frontend-only datasets like resource browser.
@@ -234,12 +236,12 @@ export type InternalTableProps = Record<'filterData', UseFiltersReturnType> &
                *
                * If filter is only being used for sorting, then send `noop` in this prop
                */
-              filter: (row: RowsType[number], filterData: UseFiltersReturnType) => boolean
+              filter: (row: RowType, filterData: UseFiltersReturnType) => boolean
           }
         | {
               filtersVariant: FiltersTypeEnum.STATE
               additionalFilterProps?: AdditionalFilterPropsType<FiltersTypeEnum.STATE>
-              filter: (row: RowsType[number], filterData: UseFiltersReturnType) => boolean
+              filter: (row: RowType, filterData: UseFiltersReturnType) => boolean
           }
         | {
               filtersVariant: FiltersTypeEnum.NONE
@@ -248,32 +250,22 @@ export type InternalTableProps = Record<'filterData', UseFiltersReturnType> &
           }
     )
 
-export interface WrapperProps {
-    children: ReactElement<InternalTableProps>
-}
+export type UseResizableTableConfigWrapperProps = Omit<InternalTableProps, 'resizableConfig'>
 
-export interface ViewWrapperProps
-    extends Pick<
-            UseFiltersReturnType,
-            'offset' | 'handleSearch' | 'searchKey' | 'sortBy' | 'sortOrder' | 'clearFilters'
-        >,
-        AdditionalProps,
-        Partial<ConfigurableColumnsType>,
-        WrapperProps {
-    areRowsLoading: boolean
-}
+export type TableWithBulkSelectionProps = Omit<
+    UseResizableTableConfigWrapperProps,
+    'bulkSelectionReturnValue' | 'handleClearBulkSelection' | 'handleToggleBulkSelectionOnRow'
+>
 
-interface WrappersType {
-    ViewWrapper?: FunctionComponent<ViewWrapperProps>
-}
+export type VisibleColumnsWrapperProps = Omit<TableWithBulkSelectionProps, 'visibleColumns' | 'setVisibleColumns'>
 
-export type InternalTablePropsWithWrappers = InternalTableProps & WrappersType
+export type FilterWrapperProps = Omit<VisibleColumnsWrapperProps, 'filterData'>
 
 export type TableProps = Pick<
-    InternalTableProps,
+    FilterWrapperProps,
     | 'additionalFilterProps'
     | 'bulkSelectionConfig'
-    | 'configurableColumns'
+    | 'areColumnsConfigurable'
     | 'emptyStateConfig'
     | 'filtersVariant'
     | 'filter'
@@ -286,16 +278,8 @@ export type TableProps = Pick<
     | 'id'
     | 'RowActionsOnHoverComponent'
     | 'loading'
-> &
-    WrappersType
-
-export interface FilterWrapperProps<T extends Exclude<FiltersTypeEnum, FiltersTypeEnum.NONE>> extends WrapperProps {
-    additionalFilterProps?: AdditionalFilterPropsType<T>
-}
-
-export interface UseResizableTableConfigWrapperProps extends WrapperProps {
-    columns: TableProps['columns']
-}
+    | 'ViewWrapper'
+>
 
 export interface BulkSelectionActionWidgetProps extends Pick<BulkSelectionConfigType, 'BulkActionsComponent'> {
     count: number
@@ -304,3 +288,8 @@ export interface BulkSelectionActionWidgetProps extends Pick<BulkSelectionConfig
 }
 
 export type ConfigurableColumnsConfigType = Record<string, ConfigurableColumnsType['visibleColumns']>
+
+export interface GetFilteringPromiseProps {
+    searchSortTimeoutRef: React.MutableRefObject<number>
+    callback: () => Promise<RowsType> | RowsType
+}

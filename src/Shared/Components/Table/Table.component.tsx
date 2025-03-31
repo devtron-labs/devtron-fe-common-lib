@@ -1,16 +1,60 @@
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
-import { noop, UseRegisterShortcutProvider } from '@Common/index'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+    noop,
+    UseRegisterShortcutProvider,
+    useResizableTableConfig,
+    useStateFilters,
+    useUrlFilters,
+} from '@Common/index'
 
-import { InternalTablePropsWithWrappers, RowsType, TableProps } from './types'
-import { getFilterWrapperComponent, getVisibleColumns, setVisibleColumnsToLocalStorage } from './utils'
+import {
+    FiltersTypeEnum,
+    FilterWrapperProps,
+    InternalTableProps,
+    RowType,
+    TableProps,
+    TableWithBulkSelectionProps,
+    UseResizableTableConfigWrapperProps,
+    VisibleColumnsWrapperProps,
+} from './types'
+import { getVisibleColumns, setVisibleColumnsToLocalStorage } from './utils'
 import { BULK_ACTION_GUTTER_LABEL } from './constants'
-import UseResizableTableConfigWrapper from './UseResizableTableConfigWrapper'
 import { BulkSelectionEvents, BulkSelectionProvider, useBulkSelection } from '../BulkSelection'
 import InternalTable from './InternalTable'
 
 import './styles.scss'
 
-const TableWithResizableConfigWrapper = (tableProps: InternalTablePropsWithWrappers) => {
+const UseResizableTableConfigWrapper = (props: InternalTableProps) => {
+    const { columns } = props
+
+    const resizableConfig = useResizableTableConfig({
+        headersConfig: columns.map(({ label, size }) => {
+            if (size.range) {
+                const {
+                    range: { minWidth, maxWidth, startWidth },
+                } = size
+
+                return {
+                    id: label,
+                    minWidth,
+                    width: startWidth,
+                    maxWidth: maxWidth === 'infinite' ? Number.MAX_SAFE_INTEGER : maxWidth,
+                }
+            }
+
+            return {
+                id: label,
+                minWidth: size.fixed,
+                width: size.fixed,
+                maxWidth: size.fixed,
+            }
+        }),
+    })
+
+    return <InternalTable {...props} resizableConfig={resizableConfig} />
+}
+
+const TableWithResizableConfigWrapper = (tableProps: UseResizableTableConfigWrapperProps) => {
     const { visibleColumns: columnsWithoutBulkActionGutter, bulkSelectionConfig: bulkActionsConfig } = tableProps
 
     const visibleColumns = useMemo(
@@ -27,16 +71,12 @@ const TableWithResizableConfigWrapper = (tableProps: InternalTablePropsWithWrapp
         throw new Error('If any column is resizable, all columns must have a fixed size')
     }
 
-    return isResizable ? (
-        <UseResizableTableConfigWrapper columns={visibleColumns}>
-            <InternalTable {...{ ...tableProps, visibleColumns }} />
-        </UseResizableTableConfigWrapper>
-    ) : (
-        <InternalTable {...{ ...tableProps, visibleColumns }} />
-    )
+    const commonProps = { ...tableProps, visibleColumns, resizableConfig: null } as InternalTableProps
+
+    return isResizable ? <UseResizableTableConfigWrapper {...commonProps} /> : <InternalTable {...commonProps} />
 }
 
-const TableWithUseBulkSelectionReturnValue = (tableProps: InternalTablePropsWithWrappers) => {
+const TableWithUseBulkSelectionReturnValue = (tableProps: TableWithBulkSelectionProps) => {
     const bulkSelectionReturnValue = useBulkSelection()
 
     const { selectedIdentifiers, handleBulkSelection, isBulkSelectionApplied } = bulkSelectionReturnValue
@@ -48,7 +88,7 @@ const TableWithUseBulkSelectionReturnValue = (tableProps: InternalTablePropsWith
     }
 
     const handleToggleBulkSelectionOnRow = useCallback(
-        (row: RowsType[number]) => {
+        (row: RowType) => {
             const isRowSelected = selectedIdentifiers[row.id]
 
             if (!isRowSelected) {
@@ -69,19 +109,10 @@ const TableWithUseBulkSelectionReturnValue = (tableProps: InternalTablePropsWith
                 return
             }
 
-            if (isRowSelected && isBulkSelectionApplied) {
-                handleBulkSelection({
-                    action: BulkSelectionEvents.CLEAR_IDENTIFIERS_AFTER_ACROSS_SELECTION,
-                    data: {
-                        identifierIds: [row.id],
-                    },
-                })
-
-                return
-            }
-
             handleBulkSelection({
-                action: BulkSelectionEvents.CLEAR_IDENTIFIERS,
+                action: isBulkSelectionApplied
+                    ? BulkSelectionEvents.CLEAR_IDENTIFIERS_AFTER_ACROSS_SELECTION
+                    : BulkSelectionEvents.CLEAR_IDENTIFIERS,
                 data: {
                     identifierIds: [row.id],
                 },
@@ -100,7 +131,7 @@ const TableWithUseBulkSelectionReturnValue = (tableProps: InternalTablePropsWith
     )
 }
 
-const TableWithBulkSelection = (tableProps: InternalTablePropsWithWrappers) => {
+const TableWithBulkSelection = (tableProps: TableWithBulkSelectionProps) => {
     const { bulkSelectionConfig } = tableProps
 
     return bulkSelectionConfig ? (
@@ -117,10 +148,10 @@ const TableWithBulkSelection = (tableProps: InternalTablePropsWithWrappers) => {
     )
 }
 
-const VisibleColumnsWrapper = (tableProps: InternalTablePropsWithWrappers) => {
-    const { columns, id, configurableColumns } = tableProps
+const VisibleColumnsWrapper = (tableProps: VisibleColumnsWrapperProps) => {
+    const { columns, id, areColumnsConfigurable } = tableProps
 
-    const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns({ columns, id, configurableColumns }))
+    const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns({ columns, id, areColumnsConfigurable }))
 
     const setVisibleColumnsWrapper = (newVisibleColumns: typeof visibleColumns) => {
         setVisibleColumns(newVisibleColumns)
@@ -128,8 +159,8 @@ const VisibleColumnsWrapper = (tableProps: InternalTablePropsWithWrappers) => {
     }
 
     useEffect(() => {
-        setVisibleColumns(getVisibleColumns({ columns, id, configurableColumns }))
-    }, [columns, id, configurableColumns])
+        setVisibleColumns(getVisibleColumns({ columns, id, areColumnsConfigurable }))
+    }, [columns, id, areColumnsConfigurable])
 
     return (
         <TableWithBulkSelection
@@ -140,17 +171,41 @@ const VisibleColumnsWrapper = (tableProps: InternalTablePropsWithWrappers) => {
     )
 }
 
-const TableWrapper = (tableProps: TableProps) => {
-    const { filtersVariant, additionalFilterProps } = tableProps
+const UseStateFilterWrapper = (props: FilterWrapperProps) => {
+    const { additionalFilterProps } = props
 
-    const FilterWrapperComponent = getFilterWrapperComponent(filtersVariant)
-    const wrapperProps = FilterWrapperComponent === Fragment ? {} : { additionalFilterProps }
+    const filterData = useStateFilters<string>(additionalFilterProps)
+
+    return <VisibleColumnsWrapper {...props} filterData={filterData} />
+}
+
+const UseUrlFilterWrapper = (props: FilterWrapperProps) => {
+    const { additionalFilterProps } = props
+
+    const filterData = useUrlFilters<string, unknown>(additionalFilterProps)
+
+    return <VisibleColumnsWrapper {...props} filterData={filterData} />
+}
+
+const TableWrapper = (tableProps: TableProps) => {
+    const { filtersVariant } = tableProps
+    const tableContainerRef = useRef<HTMLDivElement>(null)
+
+    const renderContent = () => {
+        if (filtersVariant === FiltersTypeEnum.NONE) {
+            return <UseStateFilterWrapper {...{ ...tableProps, tableContainerRef }} />
+        }
+
+        if (filtersVariant === FiltersTypeEnum.URL) {
+            return <UseUrlFilterWrapper {...{ ...tableProps, tableContainerRef }} />
+        }
+
+        return <VisibleColumnsWrapper {...{ ...tableProps, tableContainerRef, filterData: null }} />
+    }
 
     return (
-        <UseRegisterShortcutProvider shortcutTimeout={50}>
-            <FilterWrapperComponent {...wrapperProps}>
-                <VisibleColumnsWrapper {...(tableProps as InternalTablePropsWithWrappers)} />
-            </FilterWrapperComponent>
+        <UseRegisterShortcutProvider eventListenerTargetRef={tableContainerRef} shortcutTimeout={50} stopPropagation>
+            {renderContent()}
         </UseRegisterShortcutProvider>
     )
 }

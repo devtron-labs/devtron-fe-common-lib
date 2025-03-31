@@ -4,7 +4,6 @@ import { DEFAULT_BASE_PAGE_SIZE } from '@Common/Constants'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import {
     useAsync,
-    showError,
     CHECKBOX_VALUE,
     GenericFilterEmptyState,
     GenericEmptyState,
@@ -15,10 +14,10 @@ import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
 
 import { BulkSelection } from '../BulkSelection'
 import BulkSelectionActionWidget from './BulkSelectionActionWidget'
-import { SEARCH_SORT_CHANGE_DEBOUNCE_TIME, BULK_ACTION_GUTTER_LABEL, EVENT_TARGET } from './constants'
-import { InternalTablePropsWithWrappers, RowsType, PaginationEnum, SignalsType, FiltersTypeEnum } from './types'
+import { BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, SHIMMER_DUMMY_ARRAY } from './constants'
+import { PaginationEnum, SignalsType, FiltersTypeEnum, InternalTableProps } from './types'
 import useTableWithKeyboardShortcuts from './useTableWithKeyboardShortcuts'
-import { searchAndSortRows } from './utils'
+import { getFilteringPromise, searchAndSortRows } from './utils'
 
 const InternalTable = ({
     filtersVariant,
@@ -30,7 +29,7 @@ const InternalTable = ({
     resizableConfig,
     emptyStateConfig,
     additionalProps,
-    configurableColumns,
+    areColumnsConfigurable,
     filter,
     setVisibleColumns,
     visibleColumns,
@@ -42,7 +41,8 @@ const InternalTable = ({
     handleToggleBulkSelectionOnRow,
     paginationVariant,
     RowActionsOnHoverComponent,
-}: InternalTablePropsWithWrappers) => {
+    tableContainerRef,
+}: InternalTableProps) => {
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
 
@@ -50,7 +50,6 @@ const InternalTable = ({
 
     const { showSeparatorBetweenRows = true } = stylesConfig ?? {}
 
-    // FIXME: on resource browser kind change don't retain pageNumber only retain searchKey, and other filters for filter button
     const {
         sortBy,
         sortOrder,
@@ -62,6 +61,10 @@ const InternalTable = ({
         changePageSize,
         clearFilters,
         isFilterApplied,
+        // Destructuring specific filters, grouping the rest with the rest operator
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        handleSearch,
+        ...otherFilters
     } = filterData ?? {}
 
     const isBulkSelectionConfigured = !!bulkSelectionConfig
@@ -71,7 +74,6 @@ const InternalTable = ({
         isBulkSelectionApplied = false,
         setIdentifiers,
         getSelectedIdentifiersCount,
-        // TODO: maybe create a RowType
     } = bulkSelectionReturnValue ?? {}
 
     const {
@@ -83,6 +85,13 @@ const InternalTable = ({
 
     const searchSortTimeoutRef = useRef<number>(-1)
 
+    useEffect(
+        () => () => {
+            clearTimeout(searchSortTimeoutRef.current)
+        },
+        [],
+    )
+
     const sortByToColumnIndexMap: Record<string, number> = useMemo(
         () =>
             visibleColumns.reduce((acc, column, index) => {
@@ -90,63 +99,25 @@ const InternalTable = ({
 
                 return acc
             }, {}),
-        // NOTE: wrap columns in useMemo
         [visibleColumns],
     )
 
-    const rowToIndexMap = useMemo(() => {
-        if (!rows) {
-            return null
-        }
-
-        const map = new Map()
-        rows.forEach((row, index) => {
-            map.set(row, index)
-        })
-        return map
-    }, [rows])
-
     const [areFilteredRowsLoading, filteredRows, filteredRowsError] = useAsync(async () => {
-        if (rows) {
-            return new Promise<RowsType>((resolve, reject) => {
-                const sortByColumnIndex = sortByToColumnIndexMap[sortBy]
-
-                if (searchSortTimeoutRef.current !== -1) {
-                    clearTimeout(searchSortTimeoutRef.current)
-                }
-
-                searchSortTimeoutRef.current = setTimeout(() => {
-                    try {
-                        resolve(
-                            searchAndSortRows(rows, filter, filterData, visibleColumns[sortByColumnIndex]?.comparator),
-                        )
-                    } catch (error) {
-                        showError(error)
-                        reject(error)
-                    }
-
-                    searchSortTimeoutRef.current = -1
-                }, SEARCH_SORT_CHANGE_DEBOUNCE_TIME)
-            })
+        if (!rows && !getRows) {
+            throw new Error('Neither rows nor getRows function provided')
         }
 
-        return new Promise<RowsType>((resolve, reject) => {
-            if (searchSortTimeoutRef.current !== -1) {
-                clearTimeout(searchSortTimeoutRef.current)
-            }
+        return getFilteringPromise({
+            searchSortTimeoutRef,
+            callback: rows
+                ? () => {
+                      const sortByColumnIndex = sortByToColumnIndexMap[sortBy]
 
-            searchSortTimeoutRef.current = setTimeout(async () => {
-                try {
-                    resolve(await getRows(filterData))
-                } catch (error) {
-                    showError(error)
-                    reject(error)
-                }
-
-                searchSortTimeoutRef.current = -1
-            }, SEARCH_SORT_CHANGE_DEBOUNCE_TIME)
+                      return searchAndSortRows(rows, filter, filterData, visibleColumns[sortByColumnIndex]?.comparator)
+                  }
+                : () => getRows(filterData),
         })
-    }, [searchKey, sortBy, sortOrder, rows, sortByToColumnIndexMap])
+    }, [searchKey, sortBy, sortOrder, rows, sortByToColumnIndexMap, ...Object.values(otherFilters)])
 
     const bulkSelectionCount = getSelectedIdentifiersCount?.() ?? 0
 
@@ -197,67 +168,49 @@ const InternalTable = ({
             return
         }
 
-        const { bottom, top } = node.getBoundingClientRect()
-        const { bottom: parentBottom, top: parentTop } = rowsContainerRef.current.getBoundingClientRect()
-
-        // NOTE: please look into https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
-        // for more information what top and bottom pertain to
-        if (top < parentTop) {
-            rowsContainerRef.current.scrollTop += top - parentTop
-        }
-
-        if (bottom > parentBottom) {
-            rowsContainerRef.current.scrollTop += bottom - parentBottom
-        }
+        node.focus()
     }
 
     const showPagination =
-        paginationVariant === PaginationEnum.PAGINATED &&
-        !!filteredRows?.length &&
-        filteredRows.length > DEFAULT_BASE_PAGE_SIZE
+        paginationVariant === PaginationEnum.PAGINATED && filteredRows?.length > DEFAULT_BASE_PAGE_SIZE
 
     const renderRows = () => {
         if (loading && !visibleColumns.length) {
-            return Array(3)
-                .fill(null)
-                .map(() => (
-                    <div
-                        className={`px-20 flexbox py-12 dc__gap-16 ${showSeparatorBetweenRows ? 'dc__border-bottom-n1' : ''}`}
-                    >
-                        {isBulkSelectionConfigured ? <div className="shimmer w-20 mr-20" /> : null}
-                        {Array(3)
-                            .fill(null)
-                            .map(() => (
-                                <div className="shimmer mr-20 w-200" />
-                            ))}
-                    </div>
-                ))
+            return SHIMMER_DUMMY_ARRAY.map((shimmerRowLabel) => (
+                <div
+                    key={shimmerRowLabel}
+                    className={`px-20 flexbox py-12 dc__gap-16 ${showSeparatorBetweenRows ? 'border__secondary--bottom' : ''}`}
+                >
+                    {isBulkSelectionConfigured ? <div className="shimmer w-20 mr-20" /> : null}
+                    {SHIMMER_DUMMY_ARRAY.map((shimmerCellLabel) => (
+                        <div key={shimmerCellLabel} className="shimmer w-200" />
+                    ))}
+                </div>
+            ))
         }
 
         if (areFilteredRowsLoading) {
-            return Array(3)
-                .fill(null)
-                .map(() => (
-                    <div
-                        className="dc__grid px-20 dc__border-bottom-n1 dc__gap-16"
-                        style={{
-                            gridTemplateColumns,
-                        }}
-                    >
-                        {visibleColumns.map(({ horizontallySticky }) => (
-                            <div
-                                className={`${horizontallySticky ? 'dc__position-sticky dc__left-0 dc__zi-1' : ''} pr-12 py-12 flex`}
-                                aria-label="Loading..."
-                            >
-                                <div className="shimmer h-16 w-100" />
-                            </div>
-                        ))}
-                    </div>
-                ))
+            return SHIMMER_DUMMY_ARRAY.map((shimmerRowLabel) => (
+                <div
+                    key={shimmerRowLabel}
+                    className="dc__grid px-20 border__secondary--bottom dc__gap-16"
+                    style={{
+                        gridTemplateColumns,
+                    }}
+                >
+                    {visibleColumns.map(({ horizontallySticky }) => (
+                        <div
+                            className={`${horizontallySticky ? 'dc__position-sticky dc__left-0 dc__zi-1' : ''} pr-12 py-12 flex`}
+                            aria-label="Loading..."
+                        >
+                            <div className="shimmer h-16 w-100" />
+                        </div>
+                    ))}
+                </div>
+            ))
         }
 
         return visibleRows.map((row, visibleRowIndex) => {
-            const rowIndex = rowToIndexMap?.get(row)
             const isRowActive = activeRowIndex === visibleRowIndex
             const isRowBulkSelected = !!bulkSelectionState[row.id] || isBulkSelectionApplied
 
@@ -271,10 +224,11 @@ const InternalTable = ({
 
             return (
                 <div
+                    key={row.id}
                     ref={scrollIntoViewActiveRowRefCallback}
                     onClick={handleChangeActiveRowIndex}
                     className={`dc__grid px-20 form__checkbox-parent ${
-                        showSeparatorBetweenRows ? 'dc__border-bottom-n1' : ''
+                        showSeparatorBetweenRows ? 'border__secondary--bottom' : ''
                     } fs-13 fw-4 lh-20 cn-9 generic-table__row dc__gap-16 ${
                         isRowActive ? 'generic-table__row--active form__checkbox-parent--active' : ''
                     } ${RowActionsOnHoverComponent ? 'dc__position-rel dc__opacity-hover dc__opacity-hover--parent' : ''} ${
@@ -283,13 +237,15 @@ const InternalTable = ({
                     style={{
                         gridTemplateColumns,
                     }}
-                    key={rowIndex}
                     data-active={isRowActive}
+                    // NOTE: by giving it a negative tabIndex we can programmatically focus it through .focus()
+                    tabIndex={-1}
                 >
                     {visibleColumns.map(({ field, CellComponent }) => {
                         if (field === BULK_ACTION_GUTTER_LABEL) {
                             return (
                                 <Checkbox
+                                    key={field}
                                     isChecked={isRowBulkSelected}
                                     onChange={handleToggleBulkSelectionForRow}
                                     rootClassName="mb-0"
@@ -312,7 +268,11 @@ const InternalTable = ({
                             )
                         }
 
-                        return <span className="py-12">{row.data[field]}</span>
+                        return (
+                            <span key={field} className="py-12">
+                                {row.data[field]}
+                            </span>
+                        )
                     })}
 
                     {RowActionsOnHoverComponent && (
@@ -334,21 +294,19 @@ const InternalTable = ({
             )
         }
 
-        if (filteredRowsError) {
+        if (filteredRowsError && !areFilteredRowsLoading) {
             return <ErrorScreenManager code={filteredRowsError.code} />
         }
 
         return (
-            <div className="generic-table flexbox-col dc__overflow-hidden flex-grow-1">
+            <>
                 <div className="flexbox-col flex-grow-1 w-100 dc__overflow-auto" ref={parentRef}>
-                    <div className="bg__primary dc__min-width-fit-content px-20 dc__border-bottom-n1">
+                    <div className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom">
                         {loading && !visibleColumns.length ? (
                             <div className="flexbox py-12 dc__gap-16">
-                                {Array(3)
-                                    .fill(null)
-                                    .map(() => (
-                                        <div className="shimmer mr-20 w-200" />
-                                    ))}
+                                {SHIMMER_DUMMY_ARRAY.map((label) => (
+                                    <div key={label} className="shimmer w-180" />
+                                ))}
                             </div>
                         ) : (
                             <div
@@ -361,12 +319,12 @@ const InternalTable = ({
                                     const isResizable = !!size.range
 
                                     if (field === BULK_ACTION_GUTTER_LABEL) {
-                                        return <BulkSelection showPagination={showPagination} />
+                                        return <BulkSelection key={field} showPagination={showPagination} />
                                     }
 
                                     return (
                                         <SortableTableHeaderCell
-                                            key={label}
+                                            key={field}
                                             title={label}
                                             isSortable={!!isSortable}
                                             sortOrder={sortOrder}
@@ -407,11 +365,11 @@ const InternalTable = ({
                         changePage={changePage}
                         changePageSize={changePageSize}
                         offset={offset}
-                        rootClassName="dc__border-top flex dc__content-space px-20"
+                        rootClassName="border__primary--top flex dc__content-space px-20"
                         size={filteredRows.length}
                     />
                 )}
-            </div>
+            </>
         )
     }
 
@@ -421,7 +379,7 @@ const InternalTable = ({
                 ...filterData,
                 ...additionalProps,
                 areRowsLoading: areFilteredRowsLoading,
-                ...(configurableColumns
+                ...(areColumnsConfigurable
                     ? {
                           allColumns: columns,
                           setVisibleColumns,
@@ -430,7 +388,9 @@ const InternalTable = ({
                     : {}),
             }}
         >
-            {renderContent()}
+            <div ref={tableContainerRef} className="generic-table flexbox-col dc__overflow-hidden flex-grow-1">
+                {renderContent()}
+            </div>
         </Wrapper>
     )
 }

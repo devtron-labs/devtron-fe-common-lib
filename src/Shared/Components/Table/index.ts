@@ -6,3 +6,4 @@ export type {
     TableProps,
     CellComponentProps as TableCellComponentProps,
 } from './types'
+export { TABLE_ID_MAP } from './constants'

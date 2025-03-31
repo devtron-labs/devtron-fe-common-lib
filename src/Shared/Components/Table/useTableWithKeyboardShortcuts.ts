@@ -2,7 +2,7 @@ import { useRegisterShortcut } from '@Common/Hooks'
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { noop } from '@Common/Helper'
 import { BulkSelectionEvents } from '../BulkSelection'
-import { InternalTablePropsWithWrappers, RowsType, SignalEnum } from './types'
+import { InternalTableProps, RowsType, SignalEnum } from './types'
 import { EVENT_TARGET } from './constants'
 
 const useTableWithKeyboardShortcuts = (
@@ -10,10 +10,7 @@ const useTableWithKeyboardShortcuts = (
         bulkSelectionConfig,
         handleToggleBulkSelectionOnRow,
         bulkSelectionReturnValue,
-    }: Pick<
-        InternalTablePropsWithWrappers,
-        'bulkSelectionConfig' | 'bulkSelectionReturnValue' | 'handleToggleBulkSelectionOnRow'
-    >,
+    }: Pick<InternalTableProps, 'bulkSelectionConfig' | 'bulkSelectionReturnValue' | 'handleToggleBulkSelectionOnRow'>,
     visibleRows: RowsType,
 ) => {
     const isBulkSelectionConfigured = !!bulkSelectionConfig
@@ -34,10 +31,6 @@ const useTableWithKeyboardShortcuts = (
         },
         [activeRowIndex, visibleRows],
     )
-
-    useEffect(() => {
-        dispatchEvent(SignalEnum.ACTIVE_ROW_CHANGED)
-    }, [activeRowIndex])
 
     const getMoveFocusToNextRowHandler = useCallback(
         (type: string) => {
@@ -103,7 +96,7 @@ const useTableWithKeyboardShortcuts = (
         })
 
         registerShortcut({
-            keys: ['Delete'],
+            keys: ['Backspace'],
             callback: () => {
                 dispatchEvent(SignalEnum.DELETE_PRESSED)
             },
@@ -120,7 +113,7 @@ const useTableWithKeyboardShortcuts = (
             unregisterShortcut(['ArrowDown'])
             unregisterShortcut(['ArrowUp'])
             unregisterShortcut(['Enter'])
-            unregisterShortcut(['Delete'])
+            unregisterShortcut(['Backspace'])
             unregisterShortcut(['.'])
         }
     }, [getMoveFocusToNextRowHandler, getMoveFocusToPreviousRowHandler, dispatchEvent])

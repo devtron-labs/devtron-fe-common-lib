@@ -7,3 +7,11 @@ export const LOCAL_STORAGE_KEY_FOR_VISIBLE_COLUMNS = 'generic-table-configurable
 export const BULK_ACTION_GUTTER_LABEL = 'bulk-action-gutter'
 
 export const EVENT_TARGET = new EventTarget()
+
+export const DRAG_SELECTOR_IDENTIFIER = 'table-drag-selector'
+
+export const TABLE_ID_MAP = {
+    STORYBOOK: 'storybook',
+} as const
+
+export const SHIMMER_DUMMY_ARRAY = [1, 2, 3]

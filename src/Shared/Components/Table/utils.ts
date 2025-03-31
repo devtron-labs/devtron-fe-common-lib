@@ -1,18 +1,20 @@
-import { Fragment, FunctionComponent } from 'react'
-import { noop } from '@Common/Helper'
+import { showError } from '@Common/Helper'
 import { SortingOrder } from '@Common/Constants'
+import { isNullOrUndefined } from '@Shared/Helpers'
 import {
     Column,
     ConfigurableColumnsConfigType,
     ConfigurableColumnsType,
-    FiltersTypeEnum,
+    GetFilteringPromiseProps,
+    RowsType,
     TableProps,
     UseFiltersReturnType,
-    WrapperProps,
 } from './types'
-import UseStateFilterWrapper from './UseStateFilterWrapper'
-import UseUrlFilterWrapper from './UseUrlFilterWrapper'
-import { LOCAL_STORAGE_EXISTS, LOCAL_STORAGE_KEY_FOR_VISIBLE_COLUMNS } from './constants'
+import {
+    LOCAL_STORAGE_EXISTS,
+    LOCAL_STORAGE_KEY_FOR_VISIBLE_COLUMNS,
+    SEARCH_SORT_CHANGE_DEBOUNCE_TIME,
+} from './constants'
 
 export const searchAndSortRows = (
     rows: TableProps['rows'],
@@ -24,27 +26,12 @@ export const searchAndSortRows = (
 
     const filteredRows = searchKey ? rows.filter((row) => filter(row, filterData)) : rows
 
-    const sortedRows = comparator
+    return comparator && sortBy
         ? filteredRows.sort(
               (rowA, rowB) =>
                   (sortOrder === SortingOrder.ASC ? 1 : -1) * comparator(rowA.data[sortBy], rowB.data[sortBy]),
           )
         : filteredRows
-
-    return sortedRows
-}
-
-export const getFilterWrapperComponent = (filtersVariant: FiltersTypeEnum): FunctionComponent<WrapperProps> => {
-    switch (filtersVariant) {
-        case FiltersTypeEnum.STATE:
-            return UseStateFilterWrapper
-
-        case FiltersTypeEnum.URL:
-            return UseUrlFilterWrapper
-
-        default:
-            return Fragment
-    }
 }
 
 export const getVisibleColumnsFromLocalStorage = ({
@@ -65,7 +52,16 @@ export const getVisibleColumnsFromLocalStorage = ({
             throw new Error()
         }
 
-        return configurableColumnsConfig[id]
+        const visibleColumns = configurableColumnsConfig[id]
+
+        if (
+            !Array.isArray(visibleColumns) ||
+            visibleColumns.some((column) => !column || isNullOrUndefined(column.field))
+        ) {
+            throw new Error()
+        }
+
+        return visibleColumns
     } catch {
         // NOTE: show all headers by default
         return allColumns
@@ -89,13 +85,33 @@ export const setVisibleColumnsToLocalStorage = ({
             JSON.stringify({ ...configurableColumnsConfig, [id]: visibleColumns }),
         )
     } catch {
-        noop()
+        localStorage.removeItem(LOCAL_STORAGE_KEY_FOR_VISIBLE_COLUMNS)
     }
 }
 
 export const getVisibleColumns = ({
-    configurableColumns,
+    areColumnsConfigurable,
     columns,
     id,
-}: Pick<TableProps, 'configurableColumns' | 'columns' | 'id'>) =>
-    configurableColumns ? getVisibleColumnsFromLocalStorage({ allColumns: columns, id }) : columns
+}: Pick<TableProps, 'areColumnsConfigurable' | 'columns' | 'id'>) =>
+    areColumnsConfigurable ? getVisibleColumnsFromLocalStorage({ allColumns: columns, id }) : columns
+
+export const getFilteringPromise = ({ searchSortTimeoutRef, callback }: GetFilteringPromiseProps) =>
+    new Promise<RowsType>((resolve, reject) => {
+        if (searchSortTimeoutRef.current !== -1) {
+            clearTimeout(searchSortTimeoutRef.current)
+        }
+
+        // eslint-disable-next-line no-param-reassign
+        searchSortTimeoutRef.current = setTimeout(async () => {
+            try {
+                resolve(await callback())
+            } catch (error) {
+                showError(error)
+                reject(error)
+            }
+
+            // eslint-disable-next-line no-param-reassign
+            searchSortTimeoutRef.current = -1
+        }, SEARCH_SORT_CHANGE_DEBOUNCE_TIME)
+    })

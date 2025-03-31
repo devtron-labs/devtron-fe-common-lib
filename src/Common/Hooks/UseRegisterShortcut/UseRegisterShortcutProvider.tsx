@@ -26,8 +26,10 @@ const DEFAULT_TIMEOUT = 300
 const UseRegisterShortcutProvider = ({
     ignoreTags,
     preventDefault = false,
+    stopPropagation = false,
     shortcutTimeout,
     children,
+    eventListenerTargetRef,
 }: UseRegisterShortcutProviderType) => {
     const disableShortcutsRef = useRef<boolean>(false)
     const shortcutsRef = useRef<Record<string, ShortcutType>>({})
@@ -120,6 +122,10 @@ const UseRegisterShortcutProvider = ({
             event.preventDefault()
         }
 
+        if (stopPropagation) {
+            event.stopPropagation()
+        }
+
         if (
             ignoredTags.map((tag) => tag.toUpperCase()).indexOf((event.target as HTMLElement).tagName.toUpperCase()) >
                 -1 ||
@@ -156,14 +162,16 @@ const UseRegisterShortcutProvider = ({
     }, [])
 
     useEffect(() => {
-        window.addEventListener('keydown', handleKeydownEvent)
-        window.addEventListener('keyup', handleKeyupEvent)
-        window.addEventListener('blur', handleBlur)
+        const target = eventListenerTargetRef?.current ?? window
+
+        target.addEventListener('keydown', handleKeydownEvent)
+        target.addEventListener('keyup', handleKeyupEvent)
+        target.addEventListener('blur', handleBlur)
 
         return () => {
-            window.removeEventListener('keydown', handleKeydownEvent)
-            window.removeEventListener('keyup', handleKeyupEvent)
-            window.removeEventListener('blur', handleBlur)
+            target.removeEventListener('keydown', handleKeydownEvent)
+            target.removeEventListener('keyup', handleKeyupEvent)
+            target.removeEventListener('blur', handleBlur)
 
             if (keyDownTimeoutRef.current > -1) {
                 clearTimeout(keyDownTimeoutRef.current)

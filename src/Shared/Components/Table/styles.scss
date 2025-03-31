@@ -1,20 +1,26 @@
 .generic-table {
-    &__row:hover,
-    &__row:hover > *,
-    &__row--active,
-    &__row--active > * {
-        background-color: var(--bg-hover-opaque);
-    }
+    &__row {
+        &:focus {
+            outline: none;
+        }
 
-    &__row--bulk-selected,
-    &__row--bulk-selected > * {
-        background-color: var(--B50);
-    }
+        &:hover,
+        &:hover > *,
+        &--active,
+        &--active > * {
+            background-color: var(--bg-hover-opaque);
+        }
 
-    &__row--bulk-selected:hover,
-    &__row--bulk-selected:hover > *,
-    &__row--bulk-selected.generic-table__row--active,
-    &__row--bulk-selected.generic-table__row--active > * {
-        background-color: var(--B100);
+        &--bulk-selected,
+        &--bulk-selected > * {
+            background-color: var(--B50);
+        }
+
+        &--bulk-selected:hover,
+        &--bulk-selected:hover > *,
+        &--bulk-selected.generic-table__row--active,
+        &--bulk-selected.generic-table__row--active > * {
+            background-color: var(--B100);
+        }
     }
 }
