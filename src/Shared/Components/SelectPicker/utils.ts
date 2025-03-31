@@ -53,7 +53,7 @@ const getVariantOverrides = <OptionValue>(
     variant: SelectPickerVariantType,
 ): StylesConfig<SelectPickerOptionType<OptionValue>> => {
     switch (variant) {
-        case SelectPickerVariantType.BORDER_LESS:
+        case SelectPickerVariantType.COMPACT:
             return {
                 control: () => ({
                     backgroundColor: 'transparent',
