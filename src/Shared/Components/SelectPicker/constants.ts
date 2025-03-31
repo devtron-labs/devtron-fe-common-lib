@@ -22,7 +22,7 @@ export const SELECT_PICKER_FONT_SIZE_MAP: Record<SelectPickerProps['size'], CSSP
     [ComponentSizeType.small]: '12px',
     [ComponentSizeType.medium]: '13px',
     [ComponentSizeType.large]: '13px',
-    [ComponentSizeType.xl]: '20px',
+    [ComponentSizeType.xl]: '16px',
 }
 
 export const SELECT_PICKER_ICON_SIZE_MAP: Record<SelectPickerProps['size'], Pick<CSSProperties, 'width' | 'height'>> = {
