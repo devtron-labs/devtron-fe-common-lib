@@ -115,6 +115,8 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
         isOpacityHoverChild?: boolean
         /**
          * If provided, the button is clicked automatically after the pre-defined time
+         *
+         * Use from useTriggerAutoClickTimestamp hook
          */
         triggerAutoClickTimestamp?: number | null
     } & (

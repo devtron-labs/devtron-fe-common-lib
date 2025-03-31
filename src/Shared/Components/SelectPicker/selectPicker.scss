@@ -1,0 +1,10 @@
+.select-picker {
+    &__menu-list-footer-button {
+        &--border-less {
+            button, a {
+                justify-content: flex-start;
+                border-radius: 0;
+            }
+        }
+    }
+}
