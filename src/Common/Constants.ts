@@ -152,6 +152,7 @@ export const ROUTES = {
     NODE_CAPACITY: 'k8s/capacity/node',
     RESOURCE_TEMPLATE: 'resource/template',
     ENVIRONMENT_DATA: 'global/environment-variables',
+    DASHBOARD_EVENT: 'dashboard-event',
 } as const
 
 export enum KEY_VALUE {
