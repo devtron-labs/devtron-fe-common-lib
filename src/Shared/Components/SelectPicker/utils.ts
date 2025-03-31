@@ -60,7 +60,6 @@ const getVariantOverrides = <OptionValue>(
                     backgroundColor: 'transparent',
                     border: 'none',
                     padding: 0,
-                    gap: '2px',
                 }),
                 singleValue: () => ({
                     fontWeight: 600,
@@ -73,7 +72,6 @@ const getVariantOverrides = <OptionValue>(
                         '&:not(:hover)': {
                             backgroundColor: 'transparent',
                             borderColor: 'transparent',
-                            gap: '2px',
                         },
                     }),
                     ...(state.menuIsOpen && {
@@ -166,7 +164,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
             maxHeight: '120px',
             overflow: 'auto',
             alignItems: 'safe center',
-            transition: 'border-color 0.17s, border 0.17s, gap 0.17s',
+            transition: 'border-color 0.17s, border 0.17s',
             ...(control(base, state) || {}),
 
             '&:hover': {
