@@ -52,6 +52,7 @@ import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
+import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLoginDevtronLogo } from '@IconsV2/ic-login-devtron-logo.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
@@ -141,6 +142,7 @@ export const iconMap = {
     'ic-job-color': ICJobColor,
     'ic-k8s-job': ICK8sJob,
     'ic-ldap': ICLdap,
+    'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
     'ic-login-devtron-logo': ICLoginDevtronLogo,
     'ic-logout': ICLogout,
