@@ -92,7 +92,7 @@ export const DevtronLicenseCard = ({
                     }}
                     whileHover={{ scale: 1.05 }}
                 >
-                    <div className="p-20 flexbox-col dc__content-space flex-grow-1">
+                    <div className="p-20 flexbox-col dc__content-space flex-grow-1 textured-bg">
                         <div className="flexbox dc__content-space dc__gap-72">
                             <span className="font-merriweather cn-9 fs-16 fw-7 lh-1-5 dc__ellipsis-right__2nd-line">
                                 {enterpriseName}
