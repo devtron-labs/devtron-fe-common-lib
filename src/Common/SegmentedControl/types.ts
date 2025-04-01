@@ -13,6 +13,10 @@ export type SegmentType = Pick<SelectPickerOptionType, 'value'> & {
      * If true, the segment will be in error state with error icon
      */
     isError?: boolean
+    /**
+     * If true, the segment will be in disabled state
+     */
+    isDisabled?: boolean
 } & (
         | ({
               /**
