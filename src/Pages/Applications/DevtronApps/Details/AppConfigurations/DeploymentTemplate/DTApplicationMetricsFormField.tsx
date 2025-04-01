@@ -84,9 +84,9 @@ const DTApplicationMetricsFormField = ({
                 {!selectedChart.isAppMetricsSupported && (
                     <Tooltip
                         alwaysShowTippyOnHover
-                        content={`Application metrics is not supported for ${selectedChart.name} version ${selectedChart.version}.`}
+                        content={`Application metrics is not supported for chart '${selectedChart.name}' version ${selectedChart.version}.`}
                     >
-                        <span className="cr-5 fs-13 fw-4 lh-20 dc__border-bottom-dashed--n3 dc__no-shrink">
+                        <span className="cy-6 fs-13 fw-4 lh-20 dc__border-bottom-dashed--n3 dc__no-shrink">
                             Not supported
                         </span>
                     </Tooltip>
