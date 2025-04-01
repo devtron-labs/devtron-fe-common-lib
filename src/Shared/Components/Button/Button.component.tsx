@@ -180,9 +180,9 @@ const Button = <ComponentType extends ButtonComponentType>({
 
                 autoClickTimeoutRef.current = setTimeout(() => {
                     elementRef.current.click()
-                    // This is 100ms less than the duration of the transition in CSS
+                    // This is 5ms less than the duration of the transition in CSS
                     // Make sure to update the same in CSS if this is changed
-                }, 2400)
+                }, 1495)
             }, 100)
         }
 

@@ -83,7 +83,7 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
                     value={selectedChartType ?? chartTypeOptions[0]}
                     options={chartTypeOptions}
                     onChange={handleChartTypeChange}
-                    variant={SelectPickerVariantType.BORDER_LESS}
+                    variant={SelectPickerVariantType.COMPACT}
                 />
             </div>
             <div className="chart-version-options flex" data-testid="chart-version-options">
@@ -93,7 +93,7 @@ const ChartVersionAndTypeSelector = ({ setSelectedChartRefId }: ChartVersionAndT
                     value={selectedChartVersion ?? chartVersionOptions[0]}
                     options={chartVersionOptions}
                     onChange={handleChartVersionChange}
-                    variant={SelectPickerVariantType.BORDER_LESS}
+                    variant={SelectPickerVariantType.COMPACT}
                 />
             </div>
         </div>
