@@ -11,6 +11,7 @@ import {
     getHandleOpenURL,
     LicenseStatus,
 } from '@Shared/index'
+import { ReactComponent as TexturedBG } from '@Images/licenseCardBG.svg'
 import { Button, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { getLicenseColorsAccordingToStatus } from './utils'
@@ -92,7 +93,8 @@ export const DevtronLicenseCard = ({
                     }}
                     whileHover={{ scale: 1.05 }}
                 >
-                    <div className="p-20 flexbox-col dc__content-space flex-grow-1">
+                    <TexturedBG className="dc__position-abs" />
+                    <div className="p-20 flexbox-col dc__content-space flex-grow-1 textured-bg dc__zi-2">
                         <div className="flexbox dc__content-space dc__gap-72">
                             <span className="font-merriweather cn-9 fs-16 fw-7 lh-1-5 dc__ellipsis-right__2nd-line">
                                 {enterpriseName}
@@ -121,7 +123,7 @@ export const DevtronLicenseCard = ({
                         </div>
                     </div>
                     {isTrial && (
-                        <span className="trial-license-badge flexbox dc__align-items-center px-20 py-6 cn-9 fs-11 fw-5 lh-1-5">
+                        <span className="trial-license-badge flexbox dc__align-items-center px-20 py-6 cn-9 fs-11 fw-5 lh-1-5 dc__zi-2">
                             TRIAL LICENSE
                         </span>
                     )}
