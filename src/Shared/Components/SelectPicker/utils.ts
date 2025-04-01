@@ -76,7 +76,8 @@ const getVariantOverrides = <OptionValue>(
                         },
                     }),
                     ...(state.menuIsOpen && {
-                        width: '250px',
+                        minWidth: '250px',
+                        maxWidth: '250px',
                     }),
                 }),
                 singleValue: (_, state) => ({
@@ -165,7 +166,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
             maxHeight: '120px',
             overflow: 'auto',
             alignItems: 'safe center',
-            transition: 'border-color 0.17s, border 0.17s, padding-inline 0.17s',
+            transition: 'border-color 0.17s, border 0.17s, padding-inline 0.17s, min-width 0.17s',
             ...(control(base, state) || {}),
 
             '&:hover': {
@@ -208,7 +209,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
             flexShrink: '0',
             color: 'var(--N600)',
             padding: '0',
-            transition: 'all .2s ease',
+            transition: `transform .2s ease${variant === SelectPickerVariantType.BORDER_LESS ? ' 0.17s' : ''}`,
             transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
         }),
         clearIndicator: (base) => ({
