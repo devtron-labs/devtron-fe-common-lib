@@ -22,7 +22,7 @@ import {
     Props as ReactSelectProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { ReactElement, useCallback, useMemo, useState } from 'react'
+import { ReactElement, useCallback, useMemo, useRef, useState } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
 import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
@@ -35,7 +35,6 @@ import {
     SelectPickerControl,
     SelectPickerDropdownIndicator,
     SelectPickerGroupHeading,
-    SelectPickerLoadingIndicator,
     SelectPickerMenuList,
     SelectPickerOption,
     SelectPickerValueContainer,
@@ -45,6 +44,7 @@ import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } fr
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
 import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
+import './selectPicker.scss'
 
 /**
  * Generic component for select picker
@@ -84,16 +84,15 @@ import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
  * <SelectPicker ... helperText="Help information" />
  * ```
  *
- * @example Menu list footer
+ * @example Menu list footer config
  * The footer is sticky by default
  * ```tsx
  * <SelectPicker
  *      ...
- *      renderMenuListFooter={() => (
- *          <div className="px-8 py-6 dc__border-top bg__secondary cn-6">
- *              <div>Foot note</div>
- *          </div>
- *      )}
+ *      menuListFooterConfig={{
+ *          type: 'text',
+ *          value: 'Info text',
+ *      }}
  * />
  * ```
  *
@@ -203,11 +202,11 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     classNamePrefix,
     shouldRenderCustomOptions = false,
     isSearchable,
-    selectRef,
+    selectRef: refFromConsumer,
     shouldMenuAlignRight = false,
     fullWidth = false,
     customSelectedOptionsCount = null,
-    renderMenuListFooter,
+    menuListFooterConfig,
     isCreatable = false,
     onCreateOption,
     closeMenuOnSelect = false,
@@ -225,6 +224,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     hideFormFieldInfo,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
+    const innerRef = useRef<SelectPickerProps<OptionValue, IsMulti>['selectRef']['current']>(null)
+    const selectRef = refFromConsumer ?? innerRef
+
     const [isFocussed, setIsFocussed] = useState(false)
     const [inputValue, setInputValue] = useState('')
 
@@ -358,6 +360,15 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
             e.preventDefault()
         }
+
+        if (e.key === 'Escape') {
+            e.stopPropagation()
+
+            if (!selectRef.current.props.menuIsOpen) {
+                selectRef.current.blur()
+            }
+        }
+
         onKeyDown?.(e)
     }
 
@@ -412,6 +423,11 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         classNames={{
                             control: () =>
                                 deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig }),
+                            ...(isMulti
+                                ? {
+                                      option: () => 'checkbox__parent-container',
+                                  }
+                                : {}),
                         }}
                         name={name || inputId}
                         classNamePrefix={classNamePrefix || inputId}
@@ -428,7 +444,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         ref={selectRef}
                         components={{
                             IndicatorSeparator: null,
-                            LoadingIndicator: SelectPickerLoadingIndicator,
+                            LoadingIndicator: null,
                             DropdownIndicator: SelectPickerDropdownIndicator,
                             Control: SelectPickerControl,
                             Option: renderOption,
@@ -450,7 +466,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         isValidNewOption={isValidNewOption}
                         createOptionPosition="first"
                         onCreateOption={handleCreateOption}
-                        renderMenuListFooter={!optionListError && renderMenuListFooter}
+                        menuListFooterConfig={!optionListError ? menuListFooterConfig : null}
                         inputValue={props.inputValue ?? inputValue}
                         onInputChange={handleInputChange}
                         icon={icon}
@@ -463,6 +479,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         onChange={handleChange}
                         controlShouldRenderValue={controlShouldRenderValue}
                         isFocussed={isFocussed}
+                        tabSelectsValue={false}
                     />
                 </div>
             </ConditionalWrap>

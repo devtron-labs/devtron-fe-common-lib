@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ReactComponent as ICFilter } from '@Icons/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '@Icons/ic-filter-applied.svg'
-import { ComponentSizeType } from '@Shared/constants'
 import { useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/Hooks'
 import { IS_PLATFORM_MAC_OS } from '@Common/Constants'
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import SelectPicker from './SelectPicker.component'
 import { FilterSelectPickerProps, SelectPickerOptionType, SelectPickerProps } from './type'
-import { Button } from '../Button'
+import { ButtonProps, ButtonVariantType, useTriggerAutoClickTimestamp } from '../Button'
 
 const APPLY_FILTER_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = [IS_PLATFORM_MAC_OS ? 'Meta' : 'Control', 'Enter']
 
@@ -33,7 +32,11 @@ const FilterSelectPicker = ({
     options,
     ...props
 }: FilterSelectPickerProps) => {
+    const selectRef = useRef<SelectPickerProps<string | number, true>['selectRef']['current']>()
+
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const { triggerAutoClickTimestamp, setTriggerAutoClickTimestampToNow, resetTriggerAutoClickTimestamp } =
+        useTriggerAutoClickTimestamp()
 
     const [selectedOptions, setSelectedOptions] = useState<SelectPickerOptionType[]>(
         structuredClone(appliedFilterOptions ?? []),
@@ -57,10 +60,12 @@ const FilterSelectPicker = ({
     }
 
     const closeMenu = () => {
+        resetTriggerAutoClickTimestamp()
         setIsMenuOpen(false)
     }
 
     const handleSelectOnChange: SelectPickerProps<number | string, true>['onChange'] = (selectedOptionsToUpdate) => {
+        setTriggerAutoClickTimestampToNow()
         setSelectedOptions(structuredClone(selectedOptionsToUpdate) as SelectPickerOptionType[])
     }
 
@@ -69,33 +74,26 @@ const FilterSelectPicker = ({
         setSelectedOptions(structuredClone(appliedFilterOptions ?? []))
     }
 
-    const handleApplyClick = () => {
+    const handleApplyClick: ButtonProps['onClick'] = (e) => {
         handleApplyFilter(selectedOptions)
-        closeMenu()
-    }
+        resetTriggerAutoClickTimestamp()
 
-    const renderApplyButton = () => (
-        <div className="p-8 dc__border-top-n1">
-            <Button
-                text="Apply"
-                dataTestId="filter-select-picker-apply"
-                onClick={handleApplyClick}
-                size={ComponentSizeType.small}
-                fullWidth
-                showTooltip
-                tooltipProps={{
-                    shortcutKeyCombo: {
-                        text: 'Apply filter',
-                        combo: APPLY_FILTER_SHORTCUT_KEYS,
-                    },
-                }}
-            />
-        </div>
-    )
+        // If true, depicts the click event is triggered by the user
+        // Added !e to ensure it works for both click and keyboard shortcut event
+        if (!e || e.isTrusted) {
+            closeMenu()
+        } else {
+            // If the event is not triggered by the user, focus on the select picker
+            // As it loses focus when auto-click is triggered and menu is not closed
+            setTimeout(() => {
+                selectRef.current.focus()
+            }, 100)
+        }
+    }
 
     useEffect(() => {
         if (isMenuOpen) {
-            registerShortcut({ keys: APPLY_FILTER_SHORTCUT_KEYS, callback: handleApplyClick })
+            registerShortcut({ keys: APPLY_FILTER_SHORTCUT_KEYS, callback: handleApplyClick as () => void })
         }
 
         return () => {
@@ -105,8 +103,9 @@ const FilterSelectPicker = ({
 
     return (
         <div className="dc__mxw-250">
-            <SelectPicker
+            <SelectPicker<string | number, true>
                 {...props}
+                selectRef={selectRef}
                 options={options}
                 value={selectedOptions}
                 isMulti
@@ -114,7 +113,23 @@ const FilterSelectPicker = ({
                 onMenuOpen={openMenu}
                 onMenuClose={handleMenuClose}
                 onChange={handleSelectOnChange}
-                renderMenuListFooter={renderApplyButton}
+                menuListFooterConfig={{
+                    type: 'button',
+                    buttonProps: {
+                        text: 'Apply',
+                        dataTestId: 'filter-select-picker-apply',
+                        onClick: handleApplyClick,
+                        showTooltip: true,
+                        tooltipProps: {
+                            shortcutKeyCombo: {
+                                text: 'Apply filter',
+                                combo: APPLY_FILTER_SHORTCUT_KEYS,
+                            },
+                        },
+                        triggerAutoClickTimestamp,
+                        variant: ButtonVariantType.primary,
+                    },
+                }}
                 controlShouldRenderValue={false}
                 showSelectedOptionsCount
                 isSearchable
