@@ -360,8 +360,12 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             e.preventDefault()
         }
 
-        if (e.key === 'Escape' && !selectRef.current.props.menuIsOpen) {
-            selectRef.current.blur()
+        if (e.key === 'Escape') {
+            e.stopPropagation()
+
+            if (!selectRef.current.props.menuIsOpen) {
+                selectRef.current.blur()
+            }
         }
 
         onKeyDown?.(e)
