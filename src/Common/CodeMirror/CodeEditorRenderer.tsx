@@ -177,29 +177,54 @@ export const CodeEditorRenderer = ({
         updateDiffMinimapValues(diffMinimapRef.current, vu.transactions, 'b')
     })
 
-    // DIFF VIEW INITIALIZATION
     useEffect(() => {
+        // DIFF VIEW INITIALIZATION
         if (!loading && codeMirrorMergeParentRef.current) {
-            setCodeMirrorMergeInstance(
-                new MergeView({
+            codeMirrorMergeInstance?.destroy()
+
+            const codeMirrorMergeView = new MergeView({
+                a: {
+                    doc: lhsValue,
+                    extensions: [...originalViewExtensions, originalUpdateListener],
+                },
+                b: {
+                    doc: value,
+                    extensions: [...modifiedViewExtensions, modifiedUpdateListener],
+                },
+                ...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {}),
+                diffConfig: { scanLimit: 5000 },
+                parent: codeMirrorMergeParentRef.current,
+            })
+            setCodeMirrorMergeInstance(codeMirrorMergeView)
+
+            // MINIMAP INITIALIZATION
+            if (codeMirrorMergeView && diffMinimapParentRef.current) {
+                diffMinimapInstance?.destroy()
+                diffMinimapRef.current?.destroy()
+
+                const diffMinimapMergeView = new MergeView({
                     a: {
                         doc: lhsValue,
-                        extensions: [...originalViewExtensions, originalUpdateListener],
+                        extensions: diffMinimapExtensions,
                     },
                     b: {
                         doc: value,
-                        extensions: [...modifiedViewExtensions, modifiedUpdateListener],
+                        extensions: diffMinimapExtensions,
                     },
-                    ...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {}),
+                    gutter: false,
                     diffConfig: { scanLimit: 5000 },
-                    parent: codeMirrorMergeParentRef.current,
-                }),
-            )
+                    parent: diffMinimapParentRef.current,
+                })
+
+                diffMinimapRef.current = diffMinimapMergeView
+                setDiffMinimapInstance(diffMinimapMergeView)
+            }
         }
 
         return () => {
-            codeMirrorMergeInstance?.destroy()
             setCodeMirrorMergeInstance(null)
+            setDiffMinimapInstance(null)
+            diffMinimapRef.current = null
         }
     }, [loading, codemirrorMergeKey, diffMode])
 
@@ -216,39 +241,11 @@ export const CodeEditorRenderer = ({
             const modifiedDoc = codeMirrorMergeInstance.b.state.doc.toString()
             if (modifiedDoc !== value) {
                 codeMirrorMergeInstance.b.dispatch({
-                    changes: { from: 0, to: originalDoc.length, insert: value || '' },
+                    changes: { from: 0, to: modifiedDoc.length, insert: value || '' },
                 })
             }
         }
-    }, [lhsValue, value])
-
-    // MINIMAP INITIALIZATION
-    useEffect(() => {
-        if (codeMirrorMergeInstance && diffMinimapParentRef.current) {
-            const diffMinimapMergeView = new MergeView({
-                a: {
-                    doc: lhsValue,
-                    extensions: diffMinimapExtensions,
-                },
-                b: {
-                    doc: value,
-                    extensions: diffMinimapExtensions,
-                },
-                gutter: false,
-                diffConfig: { scanLimit: 5000 },
-                parent: diffMinimapParentRef.current,
-            })
-
-            diffMinimapRef.current = diffMinimapMergeView
-            setDiffMinimapInstance(diffMinimapMergeView)
-        }
-
-        return () => {
-            diffMinimapInstance?.destroy()
-            setDiffMinimapInstance(null)
-            diffMinimapRef.current = null
-        }
-    }, [codeMirrorMergeInstance])
+    }, [lhsValue, value, codeMirrorMergeInstance])
 
     // SCALING FACTOR UPDATER
     useEffect(() => {
@@ -274,7 +271,10 @@ export const CodeEditorRenderer = ({
     }
 
     return diffMode ? (
-        <div className={`flexbox w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}>
+        <div
+            ref={codeMirrorParentDivRef}
+            className={`flexbox w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}
+        >
             <div
                 ref={codeMirrorMergeParentRef}
                 className={`cm-merge-theme flex-grow-1 h-100 dc__overflow-hidden ${readOnly ? 'code-editor__read-only' : ''}`}
