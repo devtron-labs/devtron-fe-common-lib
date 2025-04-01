@@ -137,6 +137,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         maxHeight: '120px',
         overflow: 'auto',
         alignItems: 'safe center',
+        transition: 'border-color 0.17s, border 0.17s',
         ...(getVariantOverrides(variant)?.control(base, state) || {}),
 
         '&:hover': {

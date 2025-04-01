@@ -121,6 +121,7 @@ export const DeleteCINodeButton = ({
                 disabled={disabled}
                 onClick={onClickDeleteShowModal}
                 text="Delete Pipeline"
+                variant={ButtonVariantType.secondary}
                 style={ButtonStyleType.negative}
             />
         )

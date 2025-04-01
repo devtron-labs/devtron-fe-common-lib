@@ -15,4 +15,5 @@
  */
 
 export { default as Button } from './Button.component'
+export { default as useTriggerAutoClickTimestamp } from './useTriggerAutoClickTimestamp'
 export * from './types'
