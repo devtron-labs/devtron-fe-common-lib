@@ -169,7 +169,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             {...row.data[key].props}
                             inputId={`data-table-${row.id}-${key}-cell`}
                             classNamePrefix="dynamic-data-table__cell__select-picker"
-                            variant={SelectPickerVariantType.BORDER_LESS}
+                            variant={SelectPickerVariantType.COMPACT}
                             value={getSelectPickerOptionByValue(
                                 row.data[key].props?.options,
                                 row.data[key].value,
@@ -191,7 +191,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             isCreatable={isCreatable}
                             isClearable
                             {...props}
-                            variant={SelectPickerVariantType.BORDER_LESS}
+                            variant={SelectPickerVariantType.COMPACT}
                             classNamePrefix="dynamic-data-table__cell__select-picker-text-area"
                             inputId={`data-table-${row.id}-${key}-cell`}
                             minHeight={20}

@@ -127,6 +127,7 @@ declare module 'react-select/base' {
 export enum SelectPickerVariantType {
     DEFAULT = 'default',
     BORDER_LESS = 'border-less',
+    COMPACT = 'compact',
 }
 
 export type SelectPickerProps<OptionValue = number | string, IsMulti extends boolean = false> = Pick<
