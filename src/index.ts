@@ -166,6 +166,7 @@ export interface customEnv {
      * @default false
      */
     FEATURE_APPLICATION_TEMPLATES_ENABLE?: boolean
+    GATEKEEPER_URL?: string
 }
 declare global {
     interface Window {
