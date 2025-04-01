@@ -27,9 +27,8 @@ import {
     RuntimeParamsAPIResponseType,
     RuntimePluginVariables,
 } from '@Shared/types'
-import { get, post } from './Api'
 import { GitProviderType, ROUTES } from './Constants'
-import { getUrlWithSearchParams, showError, sortCallback } from './Helper'
+import { getUrlWithSearchParams, sortCallback } from './Helper'
 import {
     TeamList,
     ResponseType,
@@ -53,6 +52,7 @@ import {
 } from './Types'
 import { ApiResourceType, STAGE_MAP } from '../Pages'
 import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
+import { get, post } from './API'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field

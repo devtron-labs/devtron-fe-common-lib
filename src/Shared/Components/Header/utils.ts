@@ -16,6 +16,7 @@
 
 import { updatePostHogEvent } from './service'
 import { LOGIN_COUNT } from '../../../Common'
+import { DevtronLicenseInfo, LicenseStatus } from '../DevtronLicenseCard'
 
 const millisecondsInDay = 86400000
 export const getDateInMilliseconds = (days) => 1 + new Date().valueOf() + (days ?? 0) * millisecondsInDay
@@ -33,3 +34,6 @@ export const handlePostHogEventUpdate = async (eventName: string): Promise<void>
 export const setActionWithExpiry = (key: string, days: number): void => {
     localStorage.setItem(key, `${getDateInMilliseconds(days)}`)
 }
+
+export const getIsShowingLicenseData = (licenseData: DevtronLicenseInfo) =>
+    licenseData && (licenseData.licenseStatus !== LicenseStatus.ACTIVE || licenseData.isTrial)

@@ -95,4 +95,8 @@ export interface FormFieldWrapperProps
     children: ReactElement
     borderRadiusConfig?: BorderConfigType
     borderConfig?: BorderConfigType
+    /**
+     * @default false
+     */
+    hideFormFieldInfo?: boolean
 }

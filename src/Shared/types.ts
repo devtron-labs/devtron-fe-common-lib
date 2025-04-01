@@ -16,6 +16,7 @@
 
 import { Dayjs } from 'dayjs'
 import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
+import { ParsedCountry } from 'react-international-phone'
 import {
     OptionType,
     CommonNodeAttr,
@@ -1031,4 +1032,78 @@ export interface BorderConfigType {
 export interface AppEnvIdType {
     appId: number
     envId: number
+}
+
+export enum LicenseInfoDialogType {
+    ABOUT = 'about',
+    LICENSE = 'license',
+    UPDATE = 'update',
+}
+
+export enum LicensingErrorCodes {
+    FingerPrintMisMatch = '11001',
+    LicenseExpired = '11002',
+    TamperedCertificate = '11003',
+    NoPublicKey = '11004',
+    InstallationModeMismatch = '11005',
+    LicKeyMismatch = '11006',
+    NoCertFound = '11007',
+    LicKeyNotFound = '11008',
+}
+
+export interface LicenseErrorStruct {
+    code: LicensingErrorCodes
+    userMessage: string
+}
+
+export interface DevtronLicenseBaseDTO {
+    fingerprint: string | null
+    isTrial: boolean | null
+    /**
+     * In timestamp format
+     */
+    expiry: string | null
+    /**
+     * Can be negative, depicts time left in seconds for license to expire
+     */
+    ttl: number | null
+    /**
+     * Show a reminder after these many DAYS left for license to expire, i.e,
+     * Show if `ttl` is less than `reminderThreshold` [converted to seconds]
+     */
+    reminderThreshold: number | null
+    organisationMetadata: {
+        name: string | null
+        domain: string | null
+    } | null
+    license: string | null
+}
+
+export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = DevtronLicenseBaseDTO &
+    (isCentralDashboard extends true
+        ? {
+              claimedByUserDetails: {
+                  firstName: string | null
+                  lastName: string | null
+                  email: string | null
+              } | null
+              showLicenseData?: never
+              licenseStatusError?: never
+          }
+        : {
+              claimedByUserDetails?: never
+              showLicenseData: boolean
+              licenseStatusError?: LicenseErrorStruct
+          })
+
+export type CountryISO2Type = ParsedCountry['iso2']
+
+export interface CentralAPILocalConfig {
+    lastUpdatedDate: string // date on which local storage is updated
+    isConnected: boolean | null // true/false acc to connection, null for first time
+    updateCount: number // number of times it has been updated, max 3
+}
+
+export enum ResponseHeaders {
+    LICENSE_STATUS = 'X-License-Status',
 }
