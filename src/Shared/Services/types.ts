@@ -20,6 +20,11 @@ import { getUrlWithSearchParams } from '../../Common'
 import { PolicyKindType, ResourceKindType, ResourceVersionType, ViewIsPipelineRBACConfiguredRadioTabs } from '../types'
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 
+export interface BaseAppMetaData {
+    appId: number
+    appName: string
+}
+
 export interface ClusterType {
     id: number
     name: string
@@ -60,6 +65,18 @@ export interface GetUserPreferencesQueryParamsType {
     key: typeof USER_PREFERENCES_ATTRIBUTE_KEY
 }
 
+export enum ResourcesKindTypeActions {
+    RECENTLY_VISITED = 'recently-visited',
+}
+
+export interface ResourceKindActionType {
+    [ResourcesKindTypeActions.RECENTLY_VISITED]: BaseAppMetaData[]
+}
+
+export interface ResourceType {
+    [ResourceKindType.devtronApplication]: ResourceKindActionType
+}
+
 export interface GetUserPreferencesParsedDTO {
     viewPermittedEnvOnly?: boolean
     /**
@@ -67,7 +84,12 @@ export interface GetUserPreferencesParsedDTO {
      *
      * Could be 'light' | 'dark' | 'system-light' | 'system-dark'
      */
-    computedAppTheme: AppThemeType | `system-${AppThemeType}`
+    computedAppTheme?: AppThemeType | `system-${AppThemeType}`
+    /**
+     * @description resources object with key as resource kind and value as ResourceType
+     *
+     */
+    resources?: ResourceType
 }
 
 export interface UserPreferencesPayloadValueType extends GetUserPreferencesParsedDTO {}
@@ -81,8 +103,16 @@ export interface UserPreferencesType {
      * Preferred theme for the user
      * If null, would forcibly show user theme switcher dialog for user to select
      */
-    themePreference: ThemePreferenceType | null
-    pipelineRBACViewSelectedTab: ViewIsPipelineRBACConfiguredRadioTabs
+    themePreference?: ThemePreferenceType | null
+    /**
+     * @description If true, denotes that the user can only view permitted environments
+     * @default false
+     */
+    pipelineRBACViewSelectedTab?: ViewIsPipelineRBACConfiguredRadioTabs
+    /**
+     * @description resources object
+     */
+    resources?: ResourceType
 }
 
 export interface UpdatedUserPreferencesType extends UserPreferencesType, Pick<ThemeConfigType, 'appTheme'> {}

@@ -111,6 +111,7 @@ export const ROUTES = {
     ATTRIBUTES_USER: 'attributes/user',
     GET: 'get',
     UPDATE: 'update',
+    PATCH: 'patch',
     ENVIRONMENT_LIST_MIN: 'env/autocomplete',
     CLUSTER: 'cluster',
     API_RESOURCE: 'k8s/api-resources',

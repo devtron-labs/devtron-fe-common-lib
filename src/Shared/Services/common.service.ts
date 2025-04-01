@@ -17,8 +17,8 @@
 import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
 import { ViewIsPipelineRBACConfiguredRadioTabs } from '@Shared/types'
 import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
-import { getTemplateAPIRoute } from '..'
-import { get, getUrlWithSearchParams, post, ROUTES, showError } from '../../Common'
+import { BaseAppMetaData, getTemplateAPIRoute, ResourceKindType, ResourcesKindTypeActions, ResourceType } from '..'
+import { get, getUrlWithSearchParams, patch, post, ROUTES, showError } from '../../Common'
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
     EnvironmentDataValuesDTO,
@@ -52,6 +52,12 @@ export const saveCDPipeline = (request, { isTemplateView }: Required<Pick<AppCon
 }
 
 export const getEnvironmentData = () => get<EnvironmentDataValuesDTO>(ROUTES.ENVIRONMENT_DATA)
+
+/**
+ * @returns UserPreferencesType
+ * @description This function fetches the user preferences from the server. It uses the `get` method to make a request to the server and retrieves the user preferences based on the `USER_PREFERENCES_ATTRIBUTE_KEY`. The result is parsed and returned as a `UserPreferencesType` object.
+ * @throws Will throw an error if the request fails or if the result is not in the expected format.
+ */
 export const getUserPreferences = async (): Promise<UserPreferencesType> => {
     const queryParamsPayload: Pick<GetUserPreferencesQueryParamsType, 'key'> = {
         key: USER_PREFERENCES_ATTRIBUTE_KEY,
@@ -77,21 +83,43 @@ export const getUserPreferences = async (): Promise<UserPreferencesType> => {
             parsedResult.computedAppTheme === 'system-dark' || parsedResult.computedAppTheme === 'system-light'
                 ? THEME_PREFERENCE_MAP.auto
                 : parsedResult.computedAppTheme,
+        resources: parsedResult.resources,
     }
 }
 
+export const resourceTypes: ResourceKindType[] = [ResourceKindType.devtronApplication]
+
+const resourcesObj = (recentlyVisited: BaseAppMetaData[]): ResourceType =>
+    resourceTypes.reduce((acc, resource) => {
+        acc[resource] = {
+            [ResourcesKindTypeActions.RECENTLY_VISITED]: recentlyVisited,
+        }
+        return acc
+    }, {} as ResourceType)
+
+/**
+ * @description This function updates the user preferences in the server. It constructs a payload with the updated user preferences and sends a PATCH request to the server. If the request is successful, it returns true. If an error occurs, it shows an error message and returns false.
+ * @param updatedUserPreferences - The updated user preferences to be sent to the server.
+ * @param recentlyVisitedDevtronApps - The recently visited Devtron apps to be sent to the server.
+ * @param shouldThrowError - A boolean indicating whether to throw an error if the request fails. Default is false.
+ * @returns A promise that resolves to true if the request is successful, or false if an error occurs.
+ * @throws Will throw an error if `shouldThrowError` is true and the request fails.
+ */
+
 export const updateUserPreferences = async (
-    updatedUserPreferences: UpdatedUserPreferencesType,
+    updatedUserPreferences?: UpdatedUserPreferencesType,
+    recentlyVisitedDevtronApps?: BaseAppMetaData[],
     shouldThrowError: boolean = false,
 ): Promise<boolean> => {
     try {
-        const { themePreference, appTheme } = updatedUserPreferences
-
-        const value: UserPreferencesPayloadValueType = {
-            viewPermittedEnvOnly:
-                updatedUserPreferences.pipelineRBACViewSelectedTab ===
-                ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
+        let value: UserPreferencesPayloadValueType = null
+        const { themePreference, appTheme, pipelineRBACViewSelectedTab } = updatedUserPreferences
+        value = {
+            viewPermittedEnvOnly: pipelineRBACViewSelectedTab === ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
             computedAppTheme: themePreference === THEME_PREFERENCE_MAP.auto ? `system-${appTheme}` : appTheme,
+        }
+        if (recentlyVisitedDevtronApps?.length) {
+            value.resources = resourcesObj(recentlyVisitedDevtronApps)
         }
 
         const payload: UpdateUserPreferencesPayloadType = {
@@ -99,7 +127,7 @@ export const updateUserPreferences = async (
             value: JSON.stringify(value),
         }
 
-        await post(`${ROUTES.ATTRIBUTES_USER}/${ROUTES.UPDATE}`, payload)
+        await patch(`${ROUTES.ATTRIBUTES_USER}/${ROUTES.PATCH}`, payload)
         return true
     } catch (error) {
         if (shouldThrowError) {
