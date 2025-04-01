@@ -113,13 +113,19 @@ export const updateUserPreferences = async (
 ): Promise<boolean> => {
     try {
         let value: UserPreferencesPayloadValueType = null
-        const { themePreference, appTheme, pipelineRBACViewSelectedTab } = updatedUserPreferences
-        value = {
-            viewPermittedEnvOnly: pipelineRBACViewSelectedTab === ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
-            computedAppTheme: themePreference === THEME_PREFERENCE_MAP.auto ? `system-${appTheme}` : appTheme,
+        if (updatedUserPreferences) {
+            const { themePreference, appTheme, pipelineRBACViewSelectedTab } = updatedUserPreferences
+
+            value = {
+                viewPermittedEnvOnly: pipelineRBACViewSelectedTab === ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
+                computedAppTheme: themePreference === THEME_PREFERENCE_MAP.auto ? `system-${appTheme}` : appTheme,
+            }
         }
+
         if (recentlyVisitedDevtronApps?.length) {
-            value.resources = resourcesObj(recentlyVisitedDevtronApps)
+            value = {
+                resources: resourcesObj(recentlyVisitedDevtronApps),
+            }
         }
 
         const payload: UpdateUserPreferencesPayloadType = {
