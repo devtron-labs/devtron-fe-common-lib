@@ -102,7 +102,7 @@ const InternalTable = ({
         [visibleColumns],
     )
 
-    const [areFilteredRowsLoading, filteredRows, filteredRowsError] = useAsync(async () => {
+    const [areFilteredRowsLoading, filteredRows, filteredRowsError, reloadFilteredRows] = useAsync(async () => {
         if (!rows && !getRows) {
             throw new Error('Neither rows nor getRows function provided')
         }
@@ -117,7 +117,7 @@ const InternalTable = ({
                   }
                 : () => getRows(filterData),
         })
-    }, [searchKey, sortBy, sortOrder, rows, sortByToColumnIndexMap, ...Object.values(otherFilters)])
+    }, [searchKey, sortBy, sortOrder, rows, sortByToColumnIndexMap, JSON.stringify(otherFilters)])
 
     const bulkSelectionCount = getSelectedIdentifiersCount?.() ?? 0
 
@@ -192,8 +192,9 @@ const InternalTable = ({
                         gridTemplateColumns,
                     }}
                 >
-                    {visibleColumns.map(({ horizontallySticky }) => (
+                    {visibleColumns.map(({ horizontallySticky, label }) => (
                         <div
+                            key={label}
                             className={`${horizontallySticky ? 'dc__position-sticky dc__left-0 dc__zi-1' : ''} pr-12 py-12 flex`}
                             aria-label="Loading..."
                         >
@@ -289,7 +290,7 @@ const InternalTable = ({
         }
 
         if (filteredRowsError && !areFilteredRowsLoading) {
-            return <ErrorScreenManager code={filteredRowsError.code} />
+            return <ErrorScreenManager code={filteredRowsError.code} reload={reloadFilteredRows} />
         }
 
         return (
