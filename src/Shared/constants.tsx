@@ -111,6 +111,12 @@ export const NO_MATCHING_RESULT = 'No matching results'
  */
 export const TYPE_3_CHARACTERS_TO_SEE_MATCHING_RESULTS = 'Type 3 chars to see matching results'
 
+/**
+ * Constants for TYPE TO SEE MATCHING RESULTS
+ */
+
+export const TYPE_TO_SEE_MATCHING_RESULTS = 'Type to see matching results'
+
 export const EMPTY_STATE_STATUS = {
     DATA_NOT_AVAILABLE: 'Data not available',
     API_TOKEN: {
