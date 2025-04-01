@@ -57,15 +57,12 @@ export interface customEnv {
     ENABLE_SCOPED_VARIABLES?: boolean
     DEFAULT_CI_TRIGGER_TYPE_MANUAL: boolean
     ANNOUNCEMENT_BANNER_MSG?: string
-    LOGIN_PAGE_IMAGE?: string
-    LOGIN_PAGE_IMAGE_BG?: string
     HIDE_DEFAULT_CLUSTER?: boolean
     GLOBAL_API_TIMEOUT?: number
     TRIGGER_API_TIMEOUT?: number
     NODE_REACT_APP_GIT_SHA?: string
     REACT_APP_GIT_SHA?: string
     NODE_ENV?: string
-    LOGIN_DT_LOGO?: string
     SIDEBAR_DT_LOGO?: string
     ENABLE_EXTERNAL_ARGO_CD: boolean
     API_BATCH_SIZE: number

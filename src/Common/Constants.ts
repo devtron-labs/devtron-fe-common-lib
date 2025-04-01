@@ -18,6 +18,7 @@ export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
+export const DEVTRON_HOME_PAGE = 'https://devtron.ai/'
 export const DOCUMENTATION_VERSION = '/v/v0.7'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DEFAULT_JSON_SCHEMA_URI = 'https://json-schema.org/draft/2020-12/schema'
@@ -88,6 +89,7 @@ export const URLS = {
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_CREATE: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/create`,
     // NOTE: using appId since we are re-using AppConfig component
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
+    LICENSE_AUTH: '/license-auth',
 } as const
 
 export const ROUTES = {
@@ -150,6 +152,7 @@ export const ROUTES = {
     NODE_CAPACITY: 'k8s/capacity/node',
     RESOURCE_TEMPLATE: 'resource/template',
     ENVIRONMENT_DATA: 'global/environment-variables',
+    DASHBOARD_EVENT: 'dashboard-event',
 } as const
 
 export enum KEY_VALUE {
@@ -375,6 +378,7 @@ export const API_STATUS_CODES = {
     PERMISSION_DENIED: 403,
     NOT_FOUND: 404,
     REQUEST_TIMEOUT: 408,
+    CONFLICT: 409,
     EXPECTATION_FAILED: 417,
     UNPROCESSABLE_ENTITY: 422,
     LOCKED: 423,
@@ -409,6 +413,7 @@ export const DATE_TIME_FORMATS = {
     TWELVE_HOURS_EXPORT_FORMAT: 'DD-MMM-YYYY hh.mm A',
     DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
     DD_MMM_YYYY: 'DD MMM YYYY',
+    'DD/MM/YYYY': 'DD/MM/YYYY',
 }
 
 export const SEMANTIC_VERSION_DOCUMENTATION_LINK = 'https://semver.org/'

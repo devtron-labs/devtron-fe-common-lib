@@ -47,9 +47,12 @@ const CustomInput = ({
     endIconButtonConfig,
     labelTippyCustomizedConfig,
     labelTooltipConfig,
+    inputRef: inputRefProp,
+    hideFormFieldInfo,
     ...props
 }: CustomInputProps) => {
-    const inputRef = useRef<HTMLInputElement>(null)
+    const localInputRef = useRef<HTMLInputElement>(null)
+    const inputRef = inputRefProp || localInputRef
 
     useEffect(() => {
         setTimeout(() => {
@@ -96,6 +99,7 @@ const CustomInput = ({
             borderRadiusConfig={borderRadiusConfig}
             labelTippyCustomizedConfig={labelTippyCustomizedConfig}
             labelTooltipConfig={labelTooltipConfig}
+            hideFormFieldInfo={hideFormFieldInfo}
         >
             <>
                 <input
