@@ -34,7 +34,7 @@ export const DropdownNode = ({ id, data, isConnectable }: NodeProps<DropdownNode
             <SelectPicker<string | number, false>
                 {...restData}
                 classNamePrefix="graph-visualizer-dropdown-node"
-                variant={SelectPickerVariantType.BORDER_LESS}
+                variant={SelectPickerVariantType.COMPACT}
                 menuPortalTarget={document.querySelector('.graph-visualizer')}
                 menuSize={ComponentSizeType.xs}
                 fullWidth
