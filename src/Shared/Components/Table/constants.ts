@@ -11,7 +11,7 @@ export const EVENT_TARGET = new EventTarget()
 export const DRAG_SELECTOR_IDENTIFIER = 'table-drag-selector'
 
 export const TABLE_ID_MAP = {
-    STORYBOOK: 'storybook',
+    STORYBOOK: 'storybook-table',
 } as const
 
 export const SHIMMER_DUMMY_ARRAY = [1, 2, 3]

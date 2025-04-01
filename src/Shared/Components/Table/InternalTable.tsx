@@ -41,10 +41,10 @@ const InternalTable = ({
     handleToggleBulkSelectionOnRow,
     paginationVariant,
     RowActionsOnHoverComponent,
-    tableContainerRef,
 }: InternalTableProps) => {
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
+    const activeRowRef = useRef<HTMLDivElement>(null)
 
     const { BulkActionsComponent } = bulkSelectionConfig ?? {}
 
@@ -138,15 +138,8 @@ const InternalTable = ({
     )
 
     useEffectAfterMount(() => {
-        rowsContainerRef.current.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth',
-        })
-
-        // !FIXME: this will scroll to top but without smooth animation
         setActiveRowIndex(0)
-    }, [offset])
+    }, [offset, visibleRows])
 
     useEffect(() => {
         setIdentifiers?.(
@@ -163,13 +156,14 @@ const InternalTable = ({
         handleSorting(newSortBy)
     }
 
-    const scrollIntoViewActiveRowRefCallback = (node: HTMLDivElement) => {
-        if (!node || node.dataset.active !== 'true') {
-            return
-        }
-
-        node.focus()
-    }
+    useEffect(() => {
+        // Focus the active row only when activeRowIndex changes. This ensures that focus is not stolen from other elements,
+        // such as the search bar, when it is already focused. For example, when typing in the search bar, the rows may be replaced
+        // with loading shimmers, causing activeRowRef to be null. During this time, activeRowIndex might reset to 0, but focus
+        // will not shift. However, when navigating with arrow keys, activeRowIndex changes, and activeRowRef will point to the
+        // correct row once it is mounted, allowing focus to update appropriately.
+        activeRowRef.current?.focus()
+    }, [activeRowIndex])
 
     const showPagination =
         paginationVariant === PaginationEnum.PAGINATED && filteredRows?.length > DEFAULT_BASE_PAGE_SIZE
@@ -225,12 +219,12 @@ const InternalTable = ({
             return (
                 <div
                     key={row.id}
-                    ref={scrollIntoViewActiveRowRefCallback}
+                    ref={isRowActive ? activeRowRef : null}
                     onClick={handleChangeActiveRowIndex}
-                    className={`dc__grid px-20 form__checkbox-parent ${
+                    className={`dc__grid px-20 checkbox__parent-container ${
                         showSeparatorBetweenRows ? 'border__secondary--bottom' : ''
                     } fs-13 fw-4 lh-20 cn-9 generic-table__row dc__gap-16 ${
-                        isRowActive ? 'generic-table__row--active form__checkbox-parent--active' : ''
+                        isRowActive ? 'generic-table__row--active checkbox__parent-container--active' : ''
                     } ${RowActionsOnHoverComponent ? 'dc__position-rel dc__opacity-hover dc__opacity-hover--parent' : ''} ${
                         isRowBulkSelected ? 'generic-table__row--bulk-selected' : ''
                     }`}
@@ -299,7 +293,7 @@ const InternalTable = ({
         }
 
         return (
-            <>
+            <div tabIndex={0} role="grid" className="generic-table flexbox-col dc__overflow-hidden flex-grow-1">
                 <div className="flexbox-col flex-grow-1 w-100 dc__overflow-auto" ref={parentRef}>
                     <div className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom">
                         {loading && !visibleColumns.length ? (
@@ -369,7 +363,7 @@ const InternalTable = ({
                         size={filteredRows.length}
                     />
                 )}
-            </>
+            </div>
         )
     }
 
@@ -388,9 +382,7 @@ const InternalTable = ({
                     : {}),
             }}
         >
-            <div ref={tableContainerRef} className="generic-table flexbox-col dc__overflow-hidden flex-grow-1">
-                {renderContent()}
-            </div>
+            {renderContent()}
         </Wrapper>
     )
 }

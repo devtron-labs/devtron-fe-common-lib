@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
     noop,
     UseRegisterShortcutProvider,
@@ -25,10 +25,10 @@ import InternalTable from './InternalTable'
 import './styles.scss'
 
 const UseResizableTableConfigWrapper = (props: InternalTableProps) => {
-    const { columns } = props
+    const { visibleColumns } = props
 
     const resizableConfig = useResizableTableConfig({
-        headersConfig: columns.map(({ label, size }) => {
+        headersConfig: visibleColumns.map(({ label, size }) => {
             if (size.range) {
                 const {
                     range: { minWidth, maxWidth, startWidth },
@@ -189,25 +189,20 @@ const UseUrlFilterWrapper = (props: FilterWrapperProps) => {
 
 const TableWrapper = (tableProps: TableProps) => {
     const { filtersVariant } = tableProps
-    const tableContainerRef = useRef<HTMLDivElement>(null)
 
     const renderContent = () => {
-        if (filtersVariant === FiltersTypeEnum.NONE) {
-            return <UseStateFilterWrapper {...{ ...tableProps, tableContainerRef }} />
+        if (filtersVariant === FiltersTypeEnum.STATE) {
+            return <UseStateFilterWrapper {...tableProps} />
         }
 
         if (filtersVariant === FiltersTypeEnum.URL) {
-            return <UseUrlFilterWrapper {...{ ...tableProps, tableContainerRef }} />
+            return <UseUrlFilterWrapper {...tableProps} />
         }
 
-        return <VisibleColumnsWrapper {...{ ...tableProps, tableContainerRef, filterData: null }} />
+        return <VisibleColumnsWrapper {...{ ...tableProps, filterData: null }} />
     }
 
-    return (
-        <UseRegisterShortcutProvider eventListenerTargetRef={tableContainerRef} shortcutTimeout={50} stopPropagation>
-            {renderContent()}
-        </UseRegisterShortcutProvider>
-    )
+    return <UseRegisterShortcutProvider shortcutTimeout={50}>{renderContent()}</UseRegisterShortcutProvider>
 }
 
 export default TableWrapper

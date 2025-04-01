@@ -93,13 +93,4 @@ export interface UseRegisterShortcutProviderType {
      * If true, call preventDefault on the event
      */
     preventDefault?: boolean
-    /**
-     * If true, call stopPropagation on the event
-     */
-    stopPropagation?: boolean
-    /**
-     * The target to which the event listener is attached
-     * If not provided, the event listener will be attached to window
-     */
-    eventListenerTargetRef?: React.RefObject<HTMLElement>
 }

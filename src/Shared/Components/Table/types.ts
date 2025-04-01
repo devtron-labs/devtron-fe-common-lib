@@ -190,8 +190,6 @@ export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visible
         showSeparatorBetweenRows: boolean
     }
 
-    tableContainerRef: React.RefObject<HTMLDivElement>
-
     /**
      * Use this component to display additional content at the end of a row when it is hovered over.
      */

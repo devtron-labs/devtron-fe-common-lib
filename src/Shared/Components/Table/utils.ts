@@ -22,7 +22,7 @@ export const searchAndSortRows = (
     filterData: UseFiltersReturnType,
     comparator?: Column['comparator'],
 ) => {
-    const { searchKey, sortBy, sortOrder } = filterData
+    const { searchKey, sortBy, sortOrder } = filterData ?? {}
 
     const filteredRows = searchKey ? rows.filter((row) => filter(row, filterData)) : rows
 
