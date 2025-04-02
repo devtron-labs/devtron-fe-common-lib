@@ -44,16 +44,36 @@ const ActionMenu = ({ options, disableDescriptionEllipsis, children, onClick }: 
         <PopupMenu.Button isKebab rootClassName="flex left dc__no-background">
             {children}
         </PopupMenu.Button>
-        <PopupMenu.Body rootClassName="dc__border py-4">
+        <PopupMenu.Body rootClassName="dc__border py-4 mxh-300 dc__overflow-auto">
             {options.length > 0
-                ? options.map((option) => (
-                      <ActionMenuOption
-                          key={option.value}
-                          option={option}
-                          onClick={onClick}
-                          disableDescriptionEllipsis={disableDescriptionEllipsis}
-                      />
-                  ))
+                ? options.map((groupOrOption) =>
+                      'options' in groupOrOption ? (
+                          <div className="pt-4">
+                              <h4 className="fs-12 lh-18 cn-9 fw-6 py-4 px-8 dc__truncate bg__menu--secondary m-0 dc__top-0 dc__zi-1 dc__position-sticky">
+                                  {groupOrOption.label}
+                              </h4>
+                              {groupOrOption.options.length > 0 ? (
+                                  groupOrOption.options.map((option) => (
+                                      <ActionMenuOption
+                                          key={option.value}
+                                          option={option}
+                                          onClick={onClick}
+                                          disableDescriptionEllipsis={disableDescriptionEllipsis}
+                                      />
+                                  ))
+                              ) : (
+                                  <p className="fs-12 lh-20 fw-4 lh-18 cn-7 m-0">No options in group</p>
+                              )}
+                          </div>
+                      ) : (
+                          <ActionMenuOption
+                              key={groupOrOption.value}
+                              option={groupOrOption}
+                              onClick={onClick}
+                              disableDescriptionEllipsis={disableDescriptionEllipsis}
+                          />
+                      ),
+                  )
                 : 'No Options'}
         </PopupMenu.Body>
     </PopupMenu>
