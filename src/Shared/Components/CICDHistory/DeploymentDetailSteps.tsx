@@ -29,7 +29,7 @@ import { ReactComponent as Arrow } from '../../../Assets/Icon/ic-arrow-forward.s
 import mechanicalOperation from '../../../Assets/Icon/ic-mechanical-operation.svg'
 import CDEmptyState from './CDEmptyState'
 import DeploymentStatusDetailBreakdown from './DeploymentStatusBreakdown'
-import { getIsApprovalPolicyConfigured, processDeploymentStatusDetailsData } from '../../Helpers'
+import { getHandleOpenURL, getIsApprovalPolicyConfigured, processDeploymentStatusDetailsData } from '../../Helpers'
 
 let deploymentStatusTimer = null
 const DeploymentDetailSteps = ({
@@ -119,16 +119,15 @@ const DeploymentDetailSteps = ({
 
     const redirectToDeploymentStatus = () => {
         if (isHelmApps) {
-            history.push({
-                pathname: `${URLS.APP}/${URLS.DEVTRON_CHARTS}/${URLS.APP_DEPLOYMNENT_HISTORY}/${appId}/env/${envId}/${URLS.DETAILS}/${URLS.APP_DETAILS_K8}`,
-                search: DEPLOYMENT_STATUS_QUERY_PARAM,
-            })
+            getHandleOpenURL(
+                `${window.__BASE_URL__}${URLS.APP}/${URLS.DEVTRON_CHARTS}/${URLS.APP_DEPLOYMNENT_HISTORY}/${appId}/env/${envId}/${URLS.DETAILS}/${URLS.APP_DETAILS_K8}?${DEPLOYMENT_STATUS_QUERY_PARAM}`,
+            )()
             return
         }
-        history.push({
-            pathname: `${URLS.APP}/${appId}/${URLS.APP_DETAILS}/${envId}/${URLS.APP_DETAILS_K8}`,
-            search: DEPLOYMENT_STATUS_QUERY_PARAM,
-        })
+
+        getHandleOpenURL(
+            `${window.__BASE_URL__}${URLS.APP}/${appId}/${URLS.APP_DETAILS}/${envId}/${URLS.APP_DETAILS_K8}?${DEPLOYMENT_STATUS_QUERY_PARAM}`,
+        )()
     }
 
     const getDeploymentStatusDetails = () =>
