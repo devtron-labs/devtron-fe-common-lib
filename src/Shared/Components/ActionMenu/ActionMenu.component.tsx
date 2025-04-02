@@ -14,7 +14,7 @@ const ActionMenuOption = ({ option, onClick, disableDescriptionEllipsis }: Actio
     return (
         <Tooltip {...getTooltipProps(tooltipProps)}>
             <div
-                className={`flex left dc__gap-8 ${description ? 'top' : ''} py-6 px-8 cursor dc__hover-n50`}
+                className={`flex left dc__gap-8 ${description ? 'top' : ''} py-6 px-8 cursor dc__hover-n50 mr-4 ml-4 br-4`}
                 onClick={handleClick}
             >
                 {startIcon && <div className={`${iconBaseClass} mt-2`}>{startIcon}</div>}

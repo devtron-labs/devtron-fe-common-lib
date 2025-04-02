@@ -187,6 +187,9 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
             fontSize: '13px',
             lineHeight: '20px',
             fontWeight: 400,
+            borderRadius: '4px',
+            marginInline: '4px',
+            width: 'auto',
 
             ':active': {
                 backgroundColor: 'var(--N100)',
