@@ -12,7 +12,7 @@ const ActionMenu = ({ options, disableDescriptionEllipsis, children, onClick }: 
                 {options.length > 0
                     ? options.map((groupOrOption) =>
                           'options' in groupOrOption ? (
-                              <div className="pt-4">
+                              <div className="py-4">
                                   <h4 className="fs-12 lh-18 cn-9 fw-6 py-4 px-8 dc__truncate bg__menu--secondary m-0 dc__top-0 dc__zi-1 dc__position-sticky">
                                       {groupOrOption.label}
                                   </h4>

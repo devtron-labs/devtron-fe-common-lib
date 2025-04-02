@@ -291,11 +291,12 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         }),
         group: (base) => ({
             ...base,
-            paddingTop: '4px',
-            paddingBottom: 0,
+            paddingBlock: '4px',
+            borderTop: '1px solid var(--border-secondary-translucent)',
 
             '&:first-child': {
                 paddingTop: 0,
+                borderTop: 'none',
             },
         }),
         groupHeading: (base) => ({
@@ -304,7 +305,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
             fontSize: '12px',
             color: 'var(--N900)',
             backgroundColor: 'var(--bg-menu-secondary)',
-            marginBottom: 0,
+            marginBottom: '4px',
             padding: '4px 8px',
             textTransform: 'none',
             overflow: 'hidden',
