@@ -15,7 +15,7 @@
  */
 
 import { MutableRefObject } from 'react'
-import { getIsRequestAborted, post } from '@Common/Api'
+import { getIsRequestAborted, post } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
 import { getUrlWithSearchParams, showError } from '@Common/Helper'
 import { UploadFileDTO, UploadFileProps } from '@Shared/types'

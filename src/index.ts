@@ -57,15 +57,12 @@ export interface customEnv {
     ENABLE_SCOPED_VARIABLES?: boolean
     DEFAULT_CI_TRIGGER_TYPE_MANUAL: boolean
     ANNOUNCEMENT_BANNER_MSG?: string
-    LOGIN_PAGE_IMAGE?: string
-    LOGIN_PAGE_IMAGE_BG?: string
     HIDE_DEFAULT_CLUSTER?: boolean
     GLOBAL_API_TIMEOUT?: number
     TRIGGER_API_TIMEOUT?: number
     NODE_REACT_APP_GIT_SHA?: string
     REACT_APP_GIT_SHA?: string
     NODE_ENV?: string
-    LOGIN_DT_LOGO?: string
     SIDEBAR_DT_LOGO?: string
     ENABLE_EXTERNAL_ARGO_CD: boolean
     API_BATCH_SIZE: number
@@ -90,12 +87,6 @@ export interface customEnv {
     FEATURE_DEFAULT_MERGE_STRATEGY?: OverrideMergeStrategyType
     FEATURE_DEFAULT_LANDING_RB_ENABLE?: boolean
     FEATURE_ACTION_AUDIOS_ENABLE?: boolean
-    /**
-     * If true, the experimental theming feature is enabled
-     *
-     * @default false
-     */
-    FEATURE_EXPERIMENTAL_THEMING_ENABLE?: boolean
     /**
      * If true, the code-editor will use codemirror engine
      * @default false
@@ -144,12 +135,6 @@ export interface customEnv {
      */
     FEATURE_SWAP_TRAFFIC_ENABLE?: boolean
     /**
-     * Enable mandatory plugins for cd
-     *
-     * @default true
-     */
-    FEATURE_CD_MANDATORY_PLUGINS_ENABLE?: boolean
-    /**
      * Enable cluster map
      *
      * @default true
@@ -169,6 +154,7 @@ export interface customEnv {
      * @default false
      */
     FEATURE_APPLICATION_TEMPLATES_ENABLE?: boolean
+    GATEKEEPER_URL?: string
 }
 declare global {
     interface Window {

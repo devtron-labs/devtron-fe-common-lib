@@ -147,7 +147,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
                           name: 'deployment-config-diff-deployment-selector',
                           inputId: 'deployment-config-diff-deployment-selector',
                           classNamePrefix: 'deployment-config-diff-deployment-selector',
-                          variant: SelectPickerVariantType.BORDER_LESS,
+                          variant: SelectPickerVariantType.COMPACT,
                           options: pipelineDeploymentsOptions,
                           placeholder: 'Select Deployment',
                           value: getSelectPickerOptionByValue(pipelineDeploymentsOptions, compareWfrId, null),

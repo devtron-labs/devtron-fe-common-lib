@@ -16,12 +16,12 @@
 
 import { ResponseType, Teams } from '@Common/Types'
 import { getTeamListMin } from '@Common/Common.service'
-import { get } from '@Common/Api'
 import { ClusterType } from '@Shared/Services'
 import { EnvListMinDTO } from '@Shared/types'
 import { EnvironmentTypeEnum } from '@Shared/constants'
 import { ROUTES } from '@Common/Constants'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
+import { get } from '@Common/API'
 import { AppsGroupedByProjectsType, ClusterDTO, EnvironmentsGroupedByClustersType } from './types'
 
 export const getAppOptionsGroupedByProjects = async (): Promise<AppsGroupedByProjectsType> => {

@@ -221,6 +221,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     borderRadiusConfig,
     labelTippyCustomizedConfig,
     labelTooltipConfig,
+    hideFormFieldInfo,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const innerRef = useRef<SelectPickerProps<OptionValue, IsMulti>['selectRef']['current']>(null)
@@ -360,8 +361,12 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             e.preventDefault()
         }
 
-        if (e.key === 'Escape' && !selectRef.current.props.menuIsOpen) {
-            selectRef.current.blur()
+        if (e.key === 'Escape') {
+            e.stopPropagation()
+
+            if (!selectRef.current.props.menuIsOpen) {
+                selectRef.current.blur()
+            }
         }
 
         onKeyDown?.(e)
@@ -401,6 +406,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             borderRadiusConfig={borderRadiusConfig}
             labelTippyCustomizedConfig={labelTippyCustomizedConfig}
             labelTooltipConfig={labelTooltipConfig}
+            hideFormFieldInfo={hideFormFieldInfo}
         >
             <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
                 <div className="w-100">

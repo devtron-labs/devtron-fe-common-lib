@@ -45,14 +45,6 @@ export const logThemeToAnalytics = ({ appTheme, themePreference }: ThemeConfigTy
 }
 
 export const getThemeConfigFromLocalStorage = (): ThemeConfigType => {
-    // Handling the case if the theming is turned off at a later stage
-    if (!window._env_.FEATURE_EXPERIMENTAL_THEMING_ENABLE) {
-        return {
-            appTheme: AppThemeType.light,
-            themePreference: THEME_PREFERENCE_MAP.light,
-        }
-    }
-
     const selectedTheme = localStorage.getItem(THEME_PREFERENCE_STORAGE_KEY) as ThemePreferenceType
 
     if (!selectedTheme || selectedTheme === THEME_PREFERENCE_MAP.auto) {
@@ -71,6 +63,11 @@ export const getThemeConfigFromLocalStorage = (): ThemeConfigType => {
 }
 
 export const getComponentSpecificThemeClass = (appTheme: AppThemeType) => `component-specific-theme__${appTheme}`
+
+export const getThemeOppositeThemeClass = (appTheme: AppThemeType) =>
+    appTheme === AppThemeType.dark
+        ? `component-specific-theme__${AppThemeType.light}`
+        : `component-specific-theme__${AppThemeType.dark}`
 
 export const getThemePreferenceText = (themePreference: ThemePreferenceType): string => {
     switch (themePreference) {
