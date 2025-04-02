@@ -85,15 +85,11 @@ export const DeleteCINodeButton = ({
                 name: deletePayloadConfig.pipelineName,
             },
         }
-        try {
-            await savePipeline(deletePayload, { isTemplateView })
-            if (typeof onDelete === 'function') {
-                onDelete()
-            }
-            await onDeleteWorkflow()
-        } catch (error) {
-            showError(error)
+        await savePipeline(deletePayload, { isTemplateView })
+        if (typeof onDelete === 'function') {
+            onDelete()
         }
+        await onDeleteWorkflow()
     }
 
     const renderDeleteButton = () =>

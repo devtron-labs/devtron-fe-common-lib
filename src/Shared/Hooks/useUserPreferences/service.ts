@@ -46,7 +46,14 @@ export const getUserPreferences = async (): Promise<UserPreferencesType> => {
             parsedResult.computedAppTheme === 'system-dark' || parsedResult.computedAppTheme === 'system-light'
                 ? THEME_PREFERENCE_MAP.auto
                 : parsedResult.computedAppTheme,
-        resources: parsedResult.resources,
+        resources: {
+            [ResourceKindType.devtronApplication]: {
+                [UserPreferenceResourceActions.RECENTLY_VISITED]:
+                    parsedResult.resources?.[ResourceKindType.devtronApplication]?.[
+                        UserPreferenceResourceActions.RECENTLY_VISITED
+                    ] || ([] as BaseAppMetaData[]),
+            },
+        },
     }
 }
 
@@ -69,31 +76,36 @@ const resourcesObj = (recentlyVisited: BaseAppMetaData[]): UserPreferenceResourc
  * @throws Will throw an error if `shouldThrowError` is true and the request fails.
  */
 
+export type UpdateUserPreferencesProps =
+    | { type: 'updateTheme'; value: ThemePreferenceType | null; appTheme: ThemeConfigType['appTheme'] }
+    | { type: 'updatePipelineRBACView'; value: ViewIsPipelineRBACConfiguredRadioTabs }
+    | { type: 'updateRecentlyVisitedApps'; value: BaseAppMetaData[] }
+
 export const updateUserPreferences = async (
     updatedUserPreferences?: UpdatedUserPreferencesType,
     recentlyVisitedDevtronApps?: BaseAppMetaData[],
     shouldThrowError: boolean = false,
 ): Promise<boolean> => {
     try {
-        let value: UserPreferencesPayloadValueType = null
+        let data: UserPreferencesPayloadValueType = null
         if (updatedUserPreferences) {
             const { themePreference, appTheme, pipelineRBACViewSelectedTab } = updatedUserPreferences
 
-            value = {
+            data = {
                 viewPermittedEnvOnly: pipelineRBACViewSelectedTab === ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
                 computedAppTheme: themePreference === THEME_PREFERENCE_MAP.auto ? `system-${appTheme}` : appTheme,
             }
         }
 
         if (recentlyVisitedDevtronApps?.length) {
-            value = {
+            data = {
                 resources: resourcesObj(recentlyVisitedDevtronApps),
             }
         }
 
         const payload: UpdateUserPreferencesPayloadType = {
             key: USER_PREFERENCES_ATTRIBUTE_KEY,
-            value: JSON.stringify(value),
+            value: JSON.stringify(data),
         }
 
         await patch(`${ROUTES.ATTRIBUTES_USER}/${ROUTES.PATCH}`, payload)
@@ -107,8 +119,3 @@ export const updateUserPreferences = async (
         return false
     }
 }
-
-export type UserPreferencesUpdateType =
-    | { type: 'updateTheme'; value: ThemePreferenceType | null; appTheme: ThemeConfigType['appTheme'] }
-    | { type: 'updatePipelineRBACView'; value: ViewIsPipelineRBACConfiguredRadioTabs }
-    | { type: 'updateRecentlyVisitedApps'; value: BaseAppMetaData[] }
