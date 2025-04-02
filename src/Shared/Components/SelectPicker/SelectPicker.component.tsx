@@ -428,6 +428,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                       option: () => 'checkbox__parent-container',
                                   }
                                 : {}),
+                            group: () => 'select-picker__group',
                         }}
                         name={name || inputId}
                         classNamePrefix={classNamePrefix || inputId}

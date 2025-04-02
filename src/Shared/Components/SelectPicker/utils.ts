@@ -203,6 +203,10 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
                 cursor: 'not-allowed',
                 opacity: 0.5,
             }),
+
+            '+ .select-picker__group': {
+                marginTop: '4px',
+            },
         }),
         dropdownIndicator: (base, state) => ({
             ...base,
