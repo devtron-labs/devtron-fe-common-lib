@@ -278,6 +278,12 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          */
         shouldShowNoOptionsMessage?: boolean
         /**
+         * If true, the loading message is shown when loading
+         *
+         * @default false
+         */
+        shouldShowLoadingMessage?: boolean
+        /**
          * If true, the menu list and the dropdown indicator are hidden. Suitable for use cases like multi-inputs
          *
          * @default false

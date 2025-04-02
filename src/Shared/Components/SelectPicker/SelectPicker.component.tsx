@@ -221,6 +221,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     borderRadiusConfig,
     labelTippyCustomizedConfig,
     labelTooltipConfig,
+    shouldShowLoadingMessage = false,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const innerRef = useRef<SelectPickerProps<OptionValue, IsMulti>['selectRef']['current']>(null)
@@ -328,6 +329,13 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             )
         }
 
+        return null
+    }
+
+    const renderLoadingMessage = () => {
+        if (shouldShowLoadingMessage) {
+            return <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8">Loading...</p>
+        }
         return null
     }
 
@@ -454,6 +462,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             MultiValueRemove: SelectPickerMultiValueRemove,
                             GroupHeading: renderGroupHeading,
                             NoOptionsMessage: renderNoOptionsMessage,
+                            LoadingMessage: renderLoadingMessage,
                             Input: SelectPickerInput,
                             ...(shouldHideMenu && {
                                 Menu: () => null,
