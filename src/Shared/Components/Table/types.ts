@@ -3,7 +3,6 @@ import { SortableTableHeaderCellProps, useResizableTableConfig } from '@Common/S
 import { UseStateFiltersProps, UseStateFiltersReturnType, UseUrlFiltersProps } from '@Common/Hooks'
 import { GenericEmptyStateType } from '@Common/index'
 import { GenericFilterEmptyStateProps } from '@Common/EmptyState/types'
-import { TABLE_ID_MAP } from './constants'
 import { useBulkSelection, UseBulkSelectionProps } from '../BulkSelection'
 
 export interface UseFiltersReturnType extends UseStateFiltersReturnType<string> {}
@@ -147,7 +146,7 @@ export type ViewWrapperProps = PropsWithChildren<
 >
 
 export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visibleColumns' | 'setVisibleColumns'>> & {
-    id: (typeof TABLE_ID_MAP)[keyof typeof TABLE_ID_MAP]
+    id: `table__${string}`
 
     loading?: boolean
 
