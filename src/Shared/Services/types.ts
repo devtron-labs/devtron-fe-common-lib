@@ -51,7 +51,7 @@ export interface GetResourceApiUrlProps<T> extends BaseGetApiUrlProps<T, Resourc
 export interface GetPolicyApiUrlProps<T>
     extends Omit<BaseGetApiUrlProps<T, PolicyKindType, ResourceVersionType>, 'baseUrl'> {}
 
-export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitOpsFlags'> {
+export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitOpsFlags' | 'isScoopConfigured'> {
     isAirGapEnvironment: boolean
     isManifestScanningEnabled: boolean
     canOnlyViewPermittedEnvOrgLevel: boolean
