@@ -32,11 +32,7 @@ export const areAnyAdditionalFiltersApplied = (parsedParams: Record<string | num
             return false
         }
 
-        if (Array.isArray(parsedParams[key])) {
-            return parsedParams[key].length > 0
-        }
-
-        if (typeof parsedParams[key] === 'string') {
+        if (Array.isArray(parsedParams[key]) || typeof parsedParams[key] === 'string') {
             return parsedParams[key].length > 0
         }
 
