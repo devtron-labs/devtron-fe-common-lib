@@ -92,7 +92,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
     const CDBuildReportUrl = `app/cd-pipeline/workflow/download/${appId}/${envId}/${pipelineId}/${triggerId}`
 
     return (
-        <div className="trigger-outputs-container flexbox-col flex-grow-1 h-100">
+        <div className="trigger-outputs-container bg__tertiary flexbox-col flex-grow-1 h-100">
             {loading ? (
                 <Progressing pageLoader />
             ) : (
