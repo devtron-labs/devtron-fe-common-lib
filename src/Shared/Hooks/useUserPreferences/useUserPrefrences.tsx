@@ -7,7 +7,7 @@ import {
     UseUserPreferencesProps,
     ViewIsPipelineRBACConfiguredRadioTabs,
 } from './types'
-import { getUserPreferences } from './service'
+import { getUserPreferences, updateUserPreferences } from './service'
 
 export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreferencesProps) => {
     const [userPreferences, setUserPreferences] = useState<UserPreferencesType>(null)
@@ -25,11 +25,12 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
         // Ensure all items have valid `appId` and `appName`
         const validApps = _recentApps.filter((app) => app?.appId && app?.appName)
 
-        // Combine current app with previous list
-        const combinedList = [{ appId, appName }, ...validApps]
+        // Convert to a Map for uniqueness while maintaining stacking order
+        const uniqueApps = [
+            { appId, appName }, // Ensure new app is on top
+            ...validApps.filter((app) => app.appId !== appId), // Keep previous order, remove duplicate
+        ].slice(0, 6) // Limit to 6 items
 
-        // Filter out invalid app and limit to 6 &&  Ensure unique entries using a Set
-        const uniqueApps = Array.from(new Map(combinedList.map((app) => [app.appId, app])).values()).slice(0, 6)
         const uniqueFilteredApps = isInvalidAppId ? uniqueApps.filter((app) => app.appId !== Number(appId)) : uniqueApps
         setUserPreferences((prev) => ({
             ...prev,
@@ -41,6 +42,7 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
                 },
             },
         }))
+        await updateUserPreferences(null, uniqueFilteredApps)
     }
 
     const handleInitializeUserPreferencesFromResponse = (userPreferencesResponse: UserPreferencesType) => {
