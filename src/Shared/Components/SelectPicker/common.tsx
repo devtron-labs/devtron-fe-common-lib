@@ -74,7 +74,11 @@ export const SelectPickerDropdownIndicator = <OptionValue,>(
 
     return (
         <components.DropdownIndicator {...props}>
-            {isLoading ? <Progressing /> : <ICCaretDown className={isDisabled ? 'scn-3' : 'scn-6'} />}
+            {isLoading ? (
+                <Progressing fillColor="var(--N500)" />
+            ) : (
+                <ICCaretDown className={isDisabled ? 'scn-3' : 'scn-6'} />
+            )}
         </components.DropdownIndicator>
     )
 }

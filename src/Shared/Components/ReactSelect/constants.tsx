@@ -190,12 +190,21 @@ export const AppSelectorDropdownIndicator = (props: DropdownIndicatorProps) => {
     )
 }
 
-export const AppSelectorNoOptionsMessage = (
-    inputObj: { inputValue: string },
-    hideCharacterResultInfo?: boolean,
-): string => {
-    if (inputObj && (inputObj.inputValue === '' || inputObj.inputValue.length < 3) && !hideCharacterResultInfo) {
+/**
+ *
+ * @returns {string}
+ * @description Returns the no matching result text for the select component.
+ */
+export const getNoMatchingResultText = () => NO_MATCHING_RESULT
+
+/**
+ * @param inputObj
+ * @returns {string}
+ * @description Returns the no options message for the select component.
+ */
+export const AppSelectorNoOptionsMessage = (inputObj: { inputValue: string }): string => {
+    if (inputObj && (inputObj.inputValue === '' || inputObj.inputValue.length < 3)) {
         return TYPE_3_CHARACTERS_TO_SEE_MATCHING_RESULTS
     }
-    return NO_MATCHING_RESULT
+    return getNoMatchingResultText()
 }
