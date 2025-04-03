@@ -16,7 +16,7 @@
 
 import { SortingOrder } from '../../Constants'
 
-export interface UseUrlFiltersProps<T, K> {
+export interface UseUrlFiltersProps<T, K extends {}> {
     /**
      * The key on which the sorting should be applied
      */
@@ -37,9 +37,9 @@ export interface UseUrlFiltersProps<T, K> {
     redirectionMethod?: 'replace' | 'push'
 }
 
-export type UpdateSearchParamsOptionsType<T, K = unknown> = Partial<Pick<UseUrlFiltersProps<T, K>, 'redirectionMethod'>>
+export type UpdateSearchParamsOptionsType<T, K = {}> = Partial<Pick<UseUrlFiltersProps<T, K>, 'redirectionMethod'>>
 
-export type UseUrlFiltersReturnType<T, K = unknown> = K & {
+export type UseUrlFiltersReturnType<T, K = {}> = K & {
     /**
      * Currently applied page size
      */
@@ -86,4 +86,5 @@ export type UseUrlFiltersReturnType<T, K = unknown> = K & {
      * Update the search params with the passed object
      */
     updateSearchParams: (paramsToSerialize: Partial<K>, options?: UpdateSearchParamsOptionsType<T, K>) => void
+    isFilterApplied: boolean
 }

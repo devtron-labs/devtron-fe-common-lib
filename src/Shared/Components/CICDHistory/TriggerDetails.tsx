@@ -119,7 +119,7 @@ const ProgressingStatus = memo(({ stage, type, label = 'In progress' }: Progress
     if (type === HistoryComponentType.CI) {
         abort = (isForceAbort: boolean) => cancelCiTrigger({ pipelineId, workflowId: buildId }, isForceAbort)
     } else if (stage !== DeploymentStageType.DEPLOY) {
-        abort = () => cancelPrePostCdTrigger(pipelineId, triggerId)
+        abort = (isForceAbort: boolean) => cancelPrePostCdTrigger(pipelineId, triggerId, isForceAbort)
     }
 
     async function abortRunning() {

@@ -520,6 +520,9 @@ export const DC_DELETE_SUBTITLES = {
     DELETE_CLUSTER_SUBTITLES: 'Are you sure you want to delete this cluster?',
 }
 
+export const EULA_LINK = 'https://devtron.ai/end-user-license-agreement-eula'
+export const CONTACT_SUPPORT_LINK = 'https://devtron.ai/enterprise-support'
+
 export const enum DeleteComponentsName {
     Cluster = 'cluster',
     Job = 'job pipeline',
@@ -530,3 +533,9 @@ export const Routes = {
     CI_PIPELINE_PATCH: 'app/ci-pipeline/patch',
     WORKFLOW: 'app/app-wf',
 }
+
+export const ENTERPRISE_SUPPORT_LINK = 'enterprise@devtron.ai'
+
+export const CENTRAL_API_LOCAL_STORAGE_KEY = 'central-api-connection-config'
+
+export const INVALID_LICENSE_KEY = 'inValid'

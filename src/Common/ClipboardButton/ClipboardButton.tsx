@@ -31,11 +31,13 @@ import { ReactComponent as Check } from '../../Assets/Icon/ic-check.svg'
  */
 export const ClipboardButton = ({
     content,
+    initialTippyText = 'Copy',
     copiedTippyText = 'Copied!',
     duration = 1000,
     copyToClipboardPromise,
     rootClassName = '',
     iconSize = 16,
+    handleSuccess,
 }: ClipboardProps) => {
     const [copied, setCopied] = useState<boolean>(false)
     const setCopiedFalseTimeoutRef = useRef<ReturnType<typeof setTimeout>>(-1)
@@ -58,6 +60,7 @@ export const ClipboardButton = ({
                 await copyToClipboardPromise
             }
 
+            handleSuccess?.()
             handleTriggerCopy()
         } catch {
             noop()
@@ -92,18 +95,17 @@ export const ClipboardButton = ({
     const iconClassName = `icon-dim-${iconSize} dc__no-shrink`
 
     return (
-        <Tooltip content="Copy" alwaysShowTippyOnHover={!copied}>
+        <Tooltip content={copied ? copiedTippyText : initialTippyText} alwaysShowTippyOnHover>
             {/* TODO: semantically buttons should not be nested; fix later */}
             <button
                 type="button"
                 className={`dc__outline-none-imp p-0 flex dc__transparent--unstyled dc__no-border ${rootClassName}`}
+                aria-label={`Copy ${content}`}
                 onClick={handleCopyContent}
             >
-                <Tooltip content={copiedTippyText} alwaysShowTippyOnHover visible={copied}>
-                    <div className="flex">
-                        {copied ? <Check className={iconClassName} /> : <ICCopy className={iconClassName} />}
-                    </div>
-                </Tooltip>
+                <div className="flex">
+                    {copied ? <Check className={iconClassName} /> : <ICCopy className={iconClassName} />}
+                </div>
             </button>
         </Tooltip>
     )

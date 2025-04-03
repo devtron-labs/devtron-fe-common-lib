@@ -14,8 +14,28 @@
  * limitations under the License.
  */
 
+import { isNullOrUndefined } from '@Shared/Helpers'
+
 export const setItemInLocalStorageIfKeyExists = (localStorageKey: string, value: string) => {
     if (localStorageKey) {
         localStorage.setItem(localStorageKey, value)
     }
+}
+
+export const areAnyAdditionalFiltersApplied = (parsedParams: Record<string | number, any>) => {
+    if (!parsedParams || !Object.keys(parsedParams).length) {
+        return false
+    }
+
+    return Object.keys(parsedParams).some((key) => {
+        if (isNullOrUndefined(parsedParams[key])) {
+            return false
+        }
+
+        if (Array.isArray(parsedParams[key]) || typeof parsedParams[key] === 'string') {
+            return parsedParams[key].length > 0
+        }
+
+        return true
+    })
 }
