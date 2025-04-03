@@ -18,15 +18,13 @@ import { Fragment } from 'react'
 import ReactGA from 'react-ga4'
 import { NavLink } from 'react-router-dom'
 import { SliderButton } from '@typeform/embed-react'
-import { stopPropagation, DOCUMENTATION_HOME_PAGE, URLS, DISCORD_LINK } from '../../../Common'
+import { stopPropagation, URLS } from '../../../Common'
 import { InstallationType, HelpNavType, HelpOptionType } from './types'
-import { EnterpriseHelpOptions, OSSHelpOptions } from './constants'
 import { ReactComponent as GettingStartedIcon } from '../../../Assets/Icon/ic-onboarding.svg'
 import { ReactComponent as Feedback } from '../../../Assets/Icon/ic-feedback.svg'
-import { ReactComponent as Discord } from '../../../Assets/Icon/ic-discord-fill.svg'
-import { ReactComponent as File } from '../../../Assets/Icon/ic-file-text.svg'
 import { useMainContext } from '../../Providers'
 import { Icon } from '../Icon'
+import { getHelpOptions } from './utils'
 
 const HelpNav = ({
     className,
@@ -38,22 +36,10 @@ const HelpNav = ({
 }: HelpNavType) => {
     const { currentServerInfo, handleOpenLicenseInfoDialog, licenseData } = useMainContext()
     const isEnterprise = currentServerInfo?.serverInfo?.installationType === InstallationType.ENTERPRISE
+    const isTrial = licenseData?.isTrial ?? false
     const FEEDBACK_FORM_ID = `UheGN3KJ#source=${window.location.hostname}`
 
-    const CommonHelpOptions: HelpOptionType[] = [
-        {
-            name: 'View documentation',
-            link: DOCUMENTATION_HOME_PAGE,
-            icon: File,
-        },
-
-        {
-            name: 'Join discord community',
-            link: DISCORD_LINK,
-            icon: Discord,
-        },
-        ...(isEnterprise ? EnterpriseHelpOptions : OSSHelpOptions),
-    ]
+    const CommonHelpOptions: HelpOptionType[] = getHelpOptions(isEnterprise, isTrial)
 
     const onClickGettingStarted = (): void => {
         setGettingStartedClicked(true)
@@ -114,17 +100,19 @@ const HelpNav = ({
                         <div className="ml-12 cn-9 fs-14">{option.name}</div>
                     </a>
                     {/* licenseData is only set when showLicenseData is received true */}
-                    {isEnterprise && licenseData && index === 1 && (
+                    {isEnterprise && index === 1 && (
                         <>
-                            <button
-                                type="button"
-                                className="dc__transparent help-card__option flexbox dc__align-items-center cn-9 dc__gap-12 fs-14"
-                                onClick={handleOpenLicenseDialog}
-                                data-testid="about-devtron"
-                            >
-                                <Icon name="ic-devtron" color="N600" size={20} />
-                                About Devtron
-                            </button>
+                            {licenseData && (
+                                <button
+                                    type="button"
+                                    className="dc__transparent help-card__option flexbox dc__align-items-center cn-9 dc__gap-12 fs-14"
+                                    onClick={handleOpenLicenseDialog}
+                                    data-testid="about-devtron"
+                                >
+                                    <Icon name="ic-devtron" color="N600" size={20} />
+                                    About Devtron
+                                </button>
+                            )}
                             <div className="help__enterprise pl-8 pb-4-imp pt-4-imp dc__gap-12 flexbox dc__align-items-center h-28">
                                 Enterprise Support
                             </div>
