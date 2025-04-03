@@ -55,6 +55,7 @@ export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitO
     isAirGapEnvironment: boolean
     isManifestScanningEnabled: boolean
     canOnlyViewPermittedEnvOrgLevel: boolean
+    devtronManagedLicensingEnabled: boolean
 }
 export interface GetUserPreferencesQueryParamsType {
     key: typeof USER_PREFERENCES_ATTRIBUTE_KEY
