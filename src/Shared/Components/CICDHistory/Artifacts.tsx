@@ -98,7 +98,7 @@ export const CIListItem = ({
                 }`}
                 data-testid="hover-on-report-artifact"
             >
-                <div className="ci-artifacts-grid flex left">
+                <div className="flex left dc__gap-12">
                     <div className="bcn-1 flex br-4 icon-dim-40">
                         <img src={type === 'report' ? folder : docker} className="icon-dim-20" alt="type" />
                     </div>
