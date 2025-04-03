@@ -14,7 +14,7 @@ const ActionMenu = ({ options, disableDescriptionEllipsis, children, onClick }: 
                           'options' in groupOrOption ? (
                               // TODO: Add conditional padding/margin like select picker
                               <div className="flexbox-col dc__gap-4 py-4">
-                                  <h4 className="fs-12 lh-18 cn-9 fw-6 py-4 px-8 dc__truncate bg__menu--secondary m-0 dc__top-0 dc__zi-1 dc__position-sticky">
+                                  <h4 className="fs-12 lh-18 cn-9 fw-6 py-4 px-12 dc__truncate bg__menu--secondary m-0 dc__top-0 dc__zi-1 dc__position-sticky">
                                       {groupOrOption.label}
                                   </h4>
                                   {/* Added this to contain the options in a container */}
