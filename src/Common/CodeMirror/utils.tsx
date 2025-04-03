@@ -168,6 +168,28 @@ export const updateDiffMinimapValues = (view: MergeView, transactions: readonly 
     })
 }
 
+export const getScanLimit = (lhsValue: string, value: string) => {
+    const numberOfLines = Math.max((lhsValue ?? '').split('\n').length, (value ?? '').split('\n').length)
+
+    if (numberOfLines <= 5000) {
+        return 5000
+    }
+
+    if (numberOfLines > 5000 && numberOfLines <= 10000) {
+        return 10000
+    }
+
+    if (numberOfLines > 10000 && numberOfLines <= 15000) {
+        return 15000
+    }
+
+    if (numberOfLines > 15000 && numberOfLines <= 20000) {
+        return 20000
+    }
+
+    return 500
+}
+
 // DOM HELPERS
 export const getFoldGutterElement = (open: boolean) => {
     const icon = document.createElement('span')
