@@ -81,15 +81,15 @@ export interface UseUserPreferencesProps {
 export type UserPathValueMapType =
     | {
           path: 'themePreference'
-          value: Pick<UpdatedUserPreferencesType, 'themePreference' | 'appTheme'>
+          value: Required<Pick<UpdatedUserPreferencesType, 'themePreference' | 'appTheme'>>
       }
     | {
           path: 'pipelineRBACViewSelectedTab'
-          value: Pick<UserPreferencesType, 'pipelineRBACViewSelectedTab'>
+          value: Required<Pick<UserPreferencesType, 'pipelineRBACViewSelectedTab'>>
       }
     | {
           path: 'resources'
-          value: BaseAppMetaData[]
+          value: Required<BaseAppMetaData[]>
       }
 
 export type UserPreferenceResourceProps = UserPathValueMapType & {
