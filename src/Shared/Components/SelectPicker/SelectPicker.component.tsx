@@ -221,7 +221,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     borderRadiusConfig,
     labelTippyCustomizedConfig,
     labelTooltipConfig,
-    shouldShowLoadingMessage = false,
+    shouldShowLoadingMessage = true,
     hideFormFieldInfo,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {

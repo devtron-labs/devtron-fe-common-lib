@@ -1,13 +1,31 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { ResourceKindType, useTheme } from '@Shared/index'
 import { useState } from 'react'
 import { ServerErrors } from '@Common/ServerError'
 import {
+    UserPreferenceRecentlyVisitedAppsTypes,
     UserPreferenceResourceActions,
     UserPreferencesType,
     UseUserPreferencesProps,
     ViewIsPipelineRBACConfiguredRadioTabs,
 } from './types'
 import { getUserPreferences, updateUserPreferences } from './service'
+import { getFilteredUniqueAppList } from './utils'
 
 export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreferencesProps) => {
     const [userPreferences, setUserPreferences] = useState<UserPreferencesType>(null)
@@ -15,23 +33,14 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
 
     const { handleThemeSwitcherDialogVisibilityChange, handleThemePreferenceChange } = useTheme()
 
-    const fetchRecentlyVisitedParsedApps = async (appId: number, appName: string, isInvalidAppId: boolean = false) => {
+    const fetchRecentlyVisitedParsedApps = async ({
+        appId,
+        appName,
+        isInvalidAppId = false,
+    }: UserPreferenceRecentlyVisitedAppsTypes) => {
         const userPreferencesResponse = await getUserPreferences()
-        const _recentApps =
-            userPreferencesResponse?.resources?.[ResourceKindType.devtronApplication]?.[
-                UserPreferenceResourceActions.RECENTLY_VISITED
-            ] || []
 
-        // Ensure all items have valid `appId` and `appName`
-        const validApps = _recentApps.filter((app) => app?.appId && app?.appName)
-
-        // Convert to a Map for uniqueness while maintaining stacking order
-        const uniqueApps = [
-            { appId, appName }, // Ensure new app is on top
-            ...validApps.filter((app) => app.appId !== appId), // Keep previous order, remove duplicate
-        ].slice(0, 6) // Limit to 6 items
-
-        const uniqueFilteredApps = isInvalidAppId ? uniqueApps.filter((app) => app.appId !== Number(appId)) : uniqueApps
+        const uniqueFilteredApps = getFilteredUniqueAppList({ userPreferencesResponse, appId, appName, isInvalidAppId })
         setUserPreferences((prev) => ({
             ...prev,
             resources: {
@@ -42,14 +51,14 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
                 },
             },
         }))
-        await updateUserPreferences({ path: 'recentlyVisitedApps', value: uniqueFilteredApps })
+        await updateUserPreferences({ path: 'resources', value: uniqueFilteredApps })
     }
 
     const handleInitializeUserPreferencesFromResponse = (userPreferencesResponse: UserPreferencesType) => {
         if (!userPreferencesResponse?.themePreference) {
             handleThemeSwitcherDialogVisibilityChange(true)
         } else if (userPreferencesResponse?.themePreference) {
-            handleThemePreferenceChange(userPreferencesResponse?.themePreference)
+            handleThemePreferenceChange(userPreferencesResponse.themePreference)
         }
         setUserPreferences(userPreferencesResponse)
     }

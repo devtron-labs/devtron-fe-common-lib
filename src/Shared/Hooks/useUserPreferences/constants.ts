@@ -14,4 +14,8 @@
  * limitations under the License.
  */
 
+import { ResourceKindType } from '@Shared/index'
+
 export const USER_PREFERENCES_ATTRIBUTE_KEY = 'userPreferences'
+
+export const UserPreferenceResourceKeys: ResourceKindType[] = [ResourceKindType.devtronApplication]

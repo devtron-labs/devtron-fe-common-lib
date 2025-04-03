@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { ROUTES } from '@Common/Constants'
 import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
 import { ResourceKindType, BaseAppMetaData } from '@Shared/index'
@@ -8,13 +24,13 @@ import {
     GetUserPreferencesQueryParamsType,
     GetUserPreferencesParsedDTO,
     ViewIsPipelineRBACConfiguredRadioTabs,
-    UserPreferenceResourceType,
     UserPreferenceResourceActions,
     UserPreferencesPayloadValueType,
     UpdateUserPreferencesPayloadType,
     UserPathValueMapType,
     UserPreferenceResourceProps,
 } from './types'
+import { getUserPreferenceResourcesMetaData } from './utils'
 
 /**
  * @returns UserPreferencesType
@@ -57,16 +73,6 @@ export const getUserPreferences = async (): Promise<UserPreferencesType> => {
     }
 }
 
-export const resourceTypes: ResourceKindType[] = [ResourceKindType.devtronApplication]
-
-const resourcesObj = (recentlyVisited: BaseAppMetaData[]): UserPreferenceResourceType =>
-    resourceTypes.reduce((acc, resource) => {
-        acc[resource] = {
-            [UserPreferenceResourceActions.RECENTLY_VISITED]: recentlyVisited,
-        }
-        return acc
-    }, {} as UserPreferenceResourceType)
-
 /**
  * @description This function updates the user preferences in the server. It constructs a payload with the updated user preferences and sends a PATCH request to the server. If the request is successful, it returns true. If an error occurs, it shows an error message and returns false.
  * @param updatedUserPreferences - The updated user preferences to be sent to the server.
@@ -92,9 +98,9 @@ const getUserPreferencePayload = async ({
                     value.pipelineRBACViewSelectedTab === ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
             }
 
-        case 'recentlyVisitedApps':
+        case 'resources':
             return {
-                resources: resourcesObj(value as BaseAppMetaData[]),
+                resources: getUserPreferenceResourcesMetaData(value as BaseAppMetaData[]),
             }
         default:
             return {}
