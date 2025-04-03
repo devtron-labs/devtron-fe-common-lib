@@ -222,6 +222,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     labelTippyCustomizedConfig,
     labelTooltipConfig,
     shouldShowLoadingMessage = false,
+    hideFormFieldInfo,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const innerRef = useRef<SelectPickerProps<OptionValue, IsMulti>['selectRef']['current']>(null)
@@ -414,6 +415,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
             borderRadiusConfig={borderRadiusConfig}
             labelTippyCustomizedConfig={labelTippyCustomizedConfig}
             labelTooltipConfig={labelTooltipConfig}
+            hideFormFieldInfo={hideFormFieldInfo}
         >
             <ConditionalWrap condition={isDisabled && !!disabledTippyContent} wrap={renderDisabledTippy}>
                 <div className="w-100">

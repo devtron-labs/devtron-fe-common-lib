@@ -51,7 +51,7 @@ import { ReactComponent as ICRegex } from '@Icons/ic-regex.svg'
 import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
 import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { SourceTypeMap } from '@Common/Common.service'
-import { getIsRequestAborted } from './Api'
+import { getIsRequestAborted } from './API'
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
@@ -1076,4 +1076,15 @@ export const getHashedValue = async (value: string): Promise<string | null> => {
         logExceptionToSentry(err)
         return null
     }
+}
+
+export const getTTLInHumanReadableFormat = (ttl: number): string => {
+    const absoluteTTL = Math.abs(ttl)
+    // moment return 'a few seconds' so returning directly
+    if (absoluteTTL <= 60) {
+        return '1 minute'
+    }
+    const humanizedDuration = moment.duration(absoluteTTL, 'seconds').humanize(false)
+    // Since moment.js return "a" or "an" for singular values so replacing with 1.
+    return humanizedDuration.replace(/^(a|an) /, '1 ');
 }

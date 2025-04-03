@@ -1,6 +1,5 @@
-import { get, patch } from '@Common/Api'
 import { ROUTES } from '@Common/Constants'
-import { getUrlWithSearchParams, showError } from '@Common/index'
+import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
 import { ResourceKindType, BaseAppMetaData } from '@Shared/index'
 import { THEME_PREFERENCE_MAP, ThemeConfigType, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'

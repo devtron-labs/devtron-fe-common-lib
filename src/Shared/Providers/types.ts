@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import { MutableRefObject, ReactNode } from 'react'
+import { Dispatch, MutableRefObject, ReactNode, SetStateAction } from 'react'
 import { ServerInfo } from '../Components/Header/types'
 import { SERVER_MODE } from '../../Common'
+import { DevtronLicenseInfo, LicenseInfoDialogType } from '..'
 
 export interface MainContext {
     serverMode: SERVER_MODE
     setServerMode: (serverMode: SERVER_MODE) => void
     isHelpGettingStartedClicked: boolean
-    setPageOverflowEnabled: (isPageOverflowEnabled: boolean) => void
     showCloseButtonAfterGettingStartedClicked: () => void
     loginCount: number
     setLoginCount: (loginCount: number) => void
@@ -56,6 +56,14 @@ export interface MainContext {
     isManifestScanningEnabled: boolean
     canOnlyViewPermittedEnvOrgLevel: boolean
     viewIsPipelineRBACConfiguredNode: ReactNode
+    handleOpenLicenseInfoDialog: (
+        initialDialogType?: LicenseInfoDialogType.ABOUT | LicenseInfoDialogType.LICENSE,
+    ) => void
+    /**
+     * Data is set only if showLicenseData is received as true
+     */
+    licenseData: DevtronLicenseInfo
+    setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
 }
 
 export interface MainContextProviderProps {

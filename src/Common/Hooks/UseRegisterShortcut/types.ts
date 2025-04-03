@@ -16,6 +16,7 @@
 
 import { IS_PLATFORM_MAC_OS } from '@Common/Constants'
 
+// NOTE: check this link for more info on keyboard keys: https://w3c.github.io/uievents-key/
 export const KEYBOARD_KEYS_MAP = {
     Control: 'Ctrl',
     Shift: '⇧',
@@ -25,8 +26,22 @@ export const KEYBOARD_KEYS_MAP = {
     E: 'E',
     R: 'R',
     K: 'K',
+    X: 'X',
+    A: 'A',
     Escape: 'Esc',
     Enter: '↩',
+    ArrowLeft: '←',
+    ArrowRight: '→',
+    ArrowUp: '↑',
+    ArrowDown: '↓',
+    PageUp: 'PgUp',
+    PageDown: 'PgDn',
+    Home: 'Home',
+    End: 'End',
+    Backspace: '⌫',
+    Delete: '⌦',
+    '.': '.',
+    Space: 'Space',
 } as const
 
 export type SupportedKeyboardKeysType = keyof typeof KEYBOARD_KEYS_MAP

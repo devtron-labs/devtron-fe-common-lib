@@ -15,7 +15,7 @@
  */
 
 import { ROUTES } from '@Common/Constants'
-import { getIsRequestAborted, post } from '@Common/Api'
+import { getIsRequestAborted, post } from '@Common/API'
 import { getUrlWithSearchParams, showError } from '@Common/Helper'
 import { UploadFileDTO, UploadFileProps } from '@Shared/types'
 import { APIOptions } from '@Common/Types'
