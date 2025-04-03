@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { OPEN_NEW_TICKET, RAISE_ISSUE, VIEW_ALL_TICKETS } from '@Shared/constants'
+import { CONTACT_SUPPORT_LINK, OPEN_NEW_TICKET, RAISE_ISSUE, VIEW_ALL_TICKETS } from '@Shared/constants'
 import { HelpOptionType } from './types'
 import { ReactComponent as Chat } from '../../../Assets/Icon/ic-chat-circle-dots.svg'
 import { ReactComponent as EditFile } from '../../../Assets/Icon/ic-edit-file.svg'
@@ -44,6 +44,14 @@ export const OSSHelpOptions: HelpOptionType[] = [
     {
         name: 'Raise an issue/request',
         link: RAISE_ISSUE,
+        icon: EditFile,
+    },
+]
+
+export const TrialHelpOptions: HelpOptionType[] = [
+    {
+        name: 'Request Support',
+        link: CONTACT_SUPPORT_LINK,
         icon: EditFile,
     },
 ]
