@@ -1,13 +1,14 @@
-import { BaseAppMetaData, ResourceKindType, UserPreferenceResourceKeys } from '@Shared/index'
+import { BaseAppMetaData, ResourceKindType } from '@Shared/index'
 import { UserPreferenceFilteredListTypes, UserPreferenceResourceActions, UserPreferenceResourceType } from './types'
 
-export const getUserPreferenceResourcesMetaData = (recentlyVisited: BaseAppMetaData[]): UserPreferenceResourceType =>
-    UserPreferenceResourceKeys.reduce((acc, resource) => {
-        acc[resource] = {
-            [UserPreferenceResourceActions.RECENTLY_VISITED]: recentlyVisited,
-        }
-        return acc
-    }, {} as UserPreferenceResourceType)
+export const getUserPreferenceResourcesMetadata = (recentlyVisited: BaseAppMetaData[]): UserPreferenceResourceType => ({
+    [ResourceKindType.devtronApplication]: {
+        [UserPreferenceResourceActions.RECENTLY_VISITED]: recentlyVisited.map(({ appId, appName }) => ({
+            appId,
+            appName,
+        })),
+    },
+})
 
 export const getFilteredUniqueAppList = ({
     userPreferencesResponse,
@@ -29,6 +30,5 @@ export const getFilteredUniqueAppList = ({
         ...validApps.filter((app) => app.appId !== appId), // Keep previous order, remove duplicate
     ].slice(0, 6) // Limit to 6 items
 
-    const uniqueFilteredApps = isInvalidAppId ? uniqueApps.filter((app) => app.appId !== Number(appId)) : uniqueApps
-    return uniqueFilteredApps
+    return isInvalidAppId ? uniqueApps.filter((app) => app.appId !== Number(appId)) : uniqueApps
 }

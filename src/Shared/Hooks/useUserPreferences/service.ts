@@ -30,7 +30,7 @@ import {
     UserPathValueMapType,
     UserPreferenceResourceProps,
 } from './types'
-import { getUserPreferenceResourcesMetaData } from './utils'
+import { getUserPreferenceResourcesMetadata } from './utils'
 
 /**
  * @returns UserPreferencesType
@@ -100,7 +100,7 @@ const getUserPreferencePayload = async ({
 
         case 'resources':
             return {
-                resources: getUserPreferenceResourcesMetaData(value as BaseAppMetaData[]),
+                resources: getUserPreferenceResourcesMetadata(value as BaseAppMetaData[]),
             }
         default:
             return {}
