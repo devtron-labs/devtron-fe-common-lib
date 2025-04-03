@@ -221,7 +221,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     borderRadiusConfig,
     labelTippyCustomizedConfig,
     labelTooltipConfig,
-    shouldShowLoadingMessage = true,
     hideFormFieldInfo,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
@@ -333,12 +332,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         return null
     }
 
-    const renderLoadingMessage = () => {
-        if (shouldShowLoadingMessage) {
-            return <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8 dc__loading-dots">Loading</p>
-        }
-        return null
-    }
+    const renderLoadingMessage = () => <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8 dc__loading-dots">Loading</p>
 
     const renderDisabledTippy = (children: ReactElement) => (
         <Tippy content={disabledTippyContent} placement="top" className="default-tt" arrow={false}>
