@@ -426,6 +426,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             ...(isMulti
                                 ? {
                                       option: () => 'checkbox__parent-container',
+                                      ...(isGroupHeadingSelectable
+                                          ? { groupHeading: () => 'checkbox__parent-container' }
+                                          : {}),
                                   }
                                 : {}),
                             group: () => 'select-picker__group',
