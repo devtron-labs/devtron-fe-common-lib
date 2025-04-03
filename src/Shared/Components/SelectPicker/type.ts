@@ -346,6 +346,5 @@ export type SelectPickerTextAreaProps = Omit<
     | 'onKeyDown'
     | 'onCreateOption'
     | 'shouldRenderTextArea'
-    | 'placeholder'
 > &
     Pick<ResizableTagTextAreaProps, 'maxHeight' | 'minHeight' | 'refVar' | 'dependentRefs'>
