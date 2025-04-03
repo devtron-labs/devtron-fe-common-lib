@@ -267,13 +267,13 @@
         &.cm-merge-a .cm-changedText,
         .cm-deletedChunk .cm-deletedText,
         &.cm-merge-a .cm-changedLineGutter {
-            background: var(--R300);
+            background: var(--R500);
         }
 
         &.cm-merge-b .cm-changedLine,
         &.cm-merge-b .cm-changedText,
         &.cm-merge-b .cm-changedLineGutter {
-            background: var(--G300);
+            background: var(--G500);
         }
     }
 

@@ -457,9 +457,11 @@ export const codeEditorFindReplace = (view: EditorView): Panel => {
     }
 
     const mount = () => {
-        const findField = document.querySelector('[data-code-editor-find]') as HTMLInputElement
-        findField?.focus()
-        findField?.select()
+        requestAnimationFrame(() => {
+            const findField = document.querySelector('[data-code-editor-find]') as HTMLInputElement
+            findField?.focus()
+            findField?.select()
+        })
     }
 
     const update = ({ transactions, docChanged, state, startState }: ViewUpdate) => {
