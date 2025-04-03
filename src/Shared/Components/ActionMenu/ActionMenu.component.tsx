@@ -8,7 +8,7 @@ const ActionMenu = ({ options, disableDescriptionEllipsis, children, onClick }: 
         <PopupMenu.Button isKebab rootClassName="flex left dc__no-background">
             {children}
         </PopupMenu.Button>
-        <PopupMenu.Body rootClassName="dc__border mxh-300 dc__mxw-300 dc__hide-hscroll dc__overflow-auto mt-4 mb-4">
+        <PopupMenu.Body rootClassName="dc__border mxh-300 dc__mnw-100 dc__mxw-300 dc__hide-hscroll dc__overflow-auto mt-4 mb-4">
             <div className="py-4">
                 {options.length > 0
                     ? options.map((groupOrOption) =>
