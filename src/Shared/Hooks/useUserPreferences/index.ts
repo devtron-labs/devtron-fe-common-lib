@@ -17,4 +17,4 @@
 export { useUserPreferences } from './useUserPrefrences'
 export * from './constants'
 export * from './types'
-export { updateUserPreferences } from './service'
+export { updateUserPreferences, getUserPreferences } from './service'
