@@ -64,7 +64,7 @@ export interface MainContext {
      */
     licenseData: DevtronLicenseInfo
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
-    isScoopConfigured: boolean
+    deployUnhibernatedAppOnly: boolean
 }
 
 export interface MainContextProviderProps {
