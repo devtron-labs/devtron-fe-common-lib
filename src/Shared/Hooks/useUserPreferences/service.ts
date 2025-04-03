@@ -1,7 +1,7 @@
 import { ROUTES } from '@Common/Constants'
 import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
 import { ResourceKindType, BaseAppMetaData } from '@Shared/index'
-import { THEME_PREFERENCE_MAP, ThemeConfigType, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
+import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
     UserPreferencesType,
@@ -13,6 +13,8 @@ import {
     UpdatedUserPreferencesType,
     UserPreferencesPayloadValueType,
     UpdateUserPreferencesPayloadType,
+    UserPathValueMapType,
+    UserPreferenceResourceProps,
 } from './types'
 
 /**
@@ -75,10 +77,53 @@ const resourcesObj = (recentlyVisited: BaseAppMetaData[]): UserPreferenceResourc
  * @throws Will throw an error if `shouldThrowError` is true and the request fails.
  */
 
-export type UpdateUserPreferencesProps =
-    | { type: 'updateTheme'; value: ThemePreferenceType | null; appTheme: ThemeConfigType['appTheme'] }
-    | { type: 'updatePipelineRBACView'; value: ViewIsPipelineRBACConfiguredRadioTabs }
-    | { type: 'updateRecentlyVisitedApps'; value: BaseAppMetaData[] }
+const getUserPreferencePayload = async ({
+    path,
+    value,
+}: UserPathValueMapType): Promise<Partial<UserPreferencesPayloadValueType>> => {
+    switch (path) {
+        case 'themePreference':
+            return {
+                computedAppTheme:
+                    value.themePreference === THEME_PREFERENCE_MAP.auto ? `system-${value.appTheme}` : value.appTheme,
+            }
+        case 'pipelineRBACViewSelectedTab':
+            return {
+                viewPermittedEnvOnly:
+                    value.pipelineRBACViewSelectedTab === ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
+            }
+
+        case 'recentlyVisitedApps':
+            return {
+                resources: resourcesObj(value as BaseAppMetaData[]),
+            }
+        default:
+            return {}
+    }
+}
+
+export const updateUserPreferencesNew = async ({
+    path,
+    value,
+    shouldThrowError = false,
+}: UserPreferenceResourceProps): Promise<boolean> => {
+    try {
+        const payload: UpdateUserPreferencesPayloadType = {
+            key: USER_PREFERENCES_ATTRIBUTE_KEY,
+            value: JSON.stringify(await getUserPreferencePayload({ path, value } as UserPathValueMapType)),
+        }
+
+        await patch(`${ROUTES.ATTRIBUTES_USER}/${ROUTES.PATCH}`, payload)
+        return true
+    } catch (error) {
+        if (shouldThrowError) {
+            throw error
+        }
+
+        showError(error)
+        return false
+    }
+}
 
 export const updateUserPreferences = async (
     updatedUserPreferences?: UpdatedUserPreferencesType,

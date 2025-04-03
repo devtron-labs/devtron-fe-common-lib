@@ -61,3 +61,21 @@ export interface UpdatedUserPreferencesType extends UserPreferencesType, Pick<Th
 export interface UseUserPreferencesProps {
     migrateUserPreferences?: (userPreferencesResponse: UserPreferencesType) => Promise<UserPreferencesType>
 }
+
+export type UserPathValueMapType =
+    | {
+          path: 'themePreference'
+          value: Pick<UpdatedUserPreferencesType, 'themePreference' | 'appTheme'>
+      }
+    | {
+          path: 'pipelineRBACViewSelectedTab'
+          value: Pick<UserPreferencesType, 'pipelineRBACViewSelectedTab'>
+      }
+    | {
+          path: 'recentlyVisitedApps'
+          value: BaseAppMetaData[]
+      }
+
+export type UserPreferenceResourceProps = UserPathValueMapType & {
+    shouldThrowError?: boolean
+}

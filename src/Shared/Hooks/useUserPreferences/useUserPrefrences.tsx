@@ -7,7 +7,7 @@ import {
     UseUserPreferencesProps,
     ViewIsPipelineRBACConfiguredRadioTabs,
 } from './types'
-import { getUserPreferences, updateUserPreferences } from './service'
+import { getUserPreferences, updateUserPreferencesNew } from './service'
 
 export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreferencesProps) => {
     const [userPreferences, setUserPreferences] = useState<UserPreferencesType>(null)
@@ -42,7 +42,7 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
                 },
             },
         }))
-        await updateUserPreferences(null, uniqueFilteredApps)
+        await updateUserPreferencesNew({ path: 'recentlyVisitedApps', value: uniqueFilteredApps })
     }
 
     const handleInitializeUserPreferencesFromResponse = (userPreferencesResponse: UserPreferencesType) => {
