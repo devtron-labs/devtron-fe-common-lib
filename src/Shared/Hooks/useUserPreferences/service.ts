@@ -10,7 +10,6 @@ import {
     ViewIsPipelineRBACConfiguredRadioTabs,
     UserPreferenceResourceType,
     UserPreferenceResourceActions,
-    UpdatedUserPreferencesType,
     UserPreferencesPayloadValueType,
     UpdateUserPreferencesPayloadType,
     UserPathValueMapType,
@@ -102,7 +101,7 @@ const getUserPreferencePayload = async ({
     }
 }
 
-export const updateUserPreferencesNew = async ({
+export const updateUserPreferences = async ({
     path,
     value,
     shouldThrowError = false,
@@ -111,45 +110,6 @@ export const updateUserPreferencesNew = async ({
         const payload: UpdateUserPreferencesPayloadType = {
             key: USER_PREFERENCES_ATTRIBUTE_KEY,
             value: JSON.stringify(await getUserPreferencePayload({ path, value } as UserPathValueMapType)),
-        }
-
-        await patch(`${ROUTES.ATTRIBUTES_USER}/${ROUTES.PATCH}`, payload)
-        return true
-    } catch (error) {
-        if (shouldThrowError) {
-            throw error
-        }
-
-        showError(error)
-        return false
-    }
-}
-
-export const updateUserPreferences = async (
-    updatedUserPreferences?: UpdatedUserPreferencesType,
-    recentlyVisitedDevtronApps?: BaseAppMetaData[],
-    shouldThrowError: boolean = false,
-): Promise<boolean> => {
-    try {
-        let data: UserPreferencesPayloadValueType = null
-        if (updatedUserPreferences) {
-            const { themePreference, appTheme, pipelineRBACViewSelectedTab } = updatedUserPreferences
-
-            data = {
-                viewPermittedEnvOnly: pipelineRBACViewSelectedTab === ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
-                computedAppTheme: themePreference === THEME_PREFERENCE_MAP.auto ? `system-${appTheme}` : appTheme,
-            }
-        }
-
-        if (recentlyVisitedDevtronApps?.length) {
-            data = {
-                resources: resourcesObj(recentlyVisitedDevtronApps),
-            }
-        }
-
-        const payload: UpdateUserPreferencesPayloadType = {
-            key: USER_PREFERENCES_ATTRIBUTE_KEY,
-            value: JSON.stringify(data),
         }
 
         await patch(`${ROUTES.ATTRIBUTES_USER}/${ROUTES.PATCH}`, payload)
