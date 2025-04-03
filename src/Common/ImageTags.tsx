@@ -297,7 +297,7 @@ export const ImageTagsContainer = ({
 
     if (newDescription === '' && displayedTags.length === 0 && !isEditing) {
         return tagsEditable ? (
-            <div className="bg__primary mt-8 add-image-button">
+            <div className="bg__primary mt-8 flexbox">
                 <AddImageButton handleEditClick={handleEditClick} />
             </div>
         ) : (
@@ -568,11 +568,13 @@ const AddImageButton = ({ handleEditClick }) => {
     }
 
     return (
-        <div className="add-tag-button flex pt-12 pr-12" data-testid="add-tags-button" onClick={handleClick}>
-            <div className="lh-16 flex">
-                <Add className="icon-dim-16 cn-6" />
-                <span className="cn-7">Add labels/comment</span>
-            </div>
-        </div>
+        <button
+            className="dc__transparent px-8 py-4 flexbox dc__align-items-center dc__gap-4 dc__border-dashed--n3 br-4"
+            data-testid="add-tags-button"
+            onClick={handleClick}
+        >
+            <Add className="icon-dim-16 cn-6 dc__no-shrink" />
+            <span className="cn-7 lh-16">Add labels/comment</span>
+        </button>
     )
 }
