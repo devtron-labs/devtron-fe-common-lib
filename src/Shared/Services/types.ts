@@ -58,4 +58,5 @@ export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitO
     isAirGapEnvironment: boolean
     isManifestScanningEnabled: boolean
     canOnlyViewPermittedEnvOrgLevel: boolean
+    devtronManagedLicensingEnabled: boolean
 }
