@@ -13,7 +13,8 @@ const ActionMenuOption = ({ option, onClick, disableDescriptionEllipsis }: Actio
     return (
         <Tooltip {...getTooltipProps(tooltipProps)}>
             <div
-                className={`flex left dc__gap-8 ${description ? 'top' : ''} py-6 px-8 cursor dc__hover-n50 mr-4 ml-4 br-4`}
+                // Intentionally added margin to the left and right to have the gap on the edges of the options
+                className={`flex left dc__gap-8 ${description ? 'top' : ''} py-6 px-8 cursor dc__hover-n50 mr-4 ml-4 br-4 action-menu__option`}
                 onClick={handleClick}
             >
                 {startIcon && <div className={`${iconBaseClass} mt-2`}>{startIcon}</div>}

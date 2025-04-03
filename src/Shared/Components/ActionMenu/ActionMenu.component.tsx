@@ -1,6 +1,7 @@
 import PopupMenu from '@Common/PopupMenu'
 import { ActionMenuProps } from './types'
 import ActionMenuOption from './ActionMenuOption'
+import './actionMenu.scss'
 
 const ActionMenu = ({ options, disableDescriptionEllipsis, children, onClick }: ActionMenuProps) => (
     <PopupMenu autoClose>
@@ -12,12 +13,11 @@ const ActionMenu = ({ options, disableDescriptionEllipsis, children, onClick }: 
                 {options.length > 0
                     ? options.map((groupOrOption) =>
                           'options' in groupOrOption ? (
-                              // TODO: Add conditional padding/margin like select picker
-                              <div className="flexbox-col dc__gap-4 py-4">
+                              <div className="flexbox-col dc__gap-4 py-4 action-menu__group" key={groupOrOption.label}>
                                   <h4 className="fs-12 lh-18 cn-9 fw-6 py-4 px-12 dc__truncate bg__menu--secondary m-0 dc__top-0 dc__zi-1 dc__position-sticky">
                                       {groupOrOption.label}
                                   </h4>
-                                  {/* Added this to contain the options in a container */}
+                                  {/* Added this to contain the options in a container and have gap only b/w heading & container */}
                                   <div>
                                       {groupOrOption.options.length > 0 ? (
                                           groupOrOption.options.map((option) => (
@@ -29,7 +29,9 @@ const ActionMenu = ({ options, disableDescriptionEllipsis, children, onClick }: 
                                               />
                                           ))
                                       ) : (
-                                          <p className="fs-12 lh-20 fw-4 lh-18 cn-7 m-0">No options in group</p>
+                                          <p className="fs-13 lh-18 fw-4 lh-18 cn-7 py-6 px-12 m-0">
+                                              No options in group
+                                          </p>
                                       )}
                                   </div>
                               </div>
