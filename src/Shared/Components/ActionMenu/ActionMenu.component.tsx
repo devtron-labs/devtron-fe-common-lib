@@ -6,6 +6,7 @@ import './actionMenu.scss'
 const ActionMenu = ({ options, disableDescriptionEllipsis, children, onClick }: ActionMenuProps) => (
     <PopupMenu autoClose>
         <PopupMenu.Button isKebab rootClassName="flex left dc__no-background">
+            {/* TODO: fix the issue with immediate button child */}
             {children}
         </PopupMenu.Button>
         <PopupMenu.Body rootClassName="dc__border mxh-300 dc__mnw-100 dc__mxw-250 dc__hide-hscroll dc__overflow-auto mt-4 mb-4">
