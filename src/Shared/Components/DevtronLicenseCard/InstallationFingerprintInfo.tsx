@@ -1,6 +1,6 @@
 import { ClipboardButton } from '@Common/index'
 
-import { DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
+import { DOCUMENTATION } from '@Common/Constants'
 import { InfoIconTippy } from '..'
 import { InstallFingerprintInfoProps } from './types'
 
@@ -15,7 +15,7 @@ const InstallationFingerprintInfo = ({ fingerprint, showHelpTooltip = false }: I
                     documentationLinkText="Documentation"
                     iconClassName="icon-dim-20 fcn-6"
                     placement="right"
-                    documentationLink={DOCUMENTATION_HOME_PAGE}
+                    documentationLink={DOCUMENTATION.ENTERPRISE_LICENSE}
                 />
             )}
         </div>
