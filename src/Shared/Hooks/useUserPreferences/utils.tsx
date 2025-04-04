@@ -21,14 +21,12 @@ export const getFilteredUniqueAppList = ({
             UserPreferenceResourceActions.RECENTLY_VISITED
         ] || []
 
-    // Ensure all items have valid `appId` and `appName`
     const validApps = _recentApps.filter((app) => app?.appId && app?.appName)
 
     // Convert to a Map for uniqueness while maintaining stacking order
-    const uniqueApps = [
-        { appId, appName }, // Ensure new app is on top
-        ...validApps.filter((app) => app.appId !== appId), // Keep previous order, remove duplicate
-    ].slice(0, 6) // Limit to 6 items
+    const uniqueApps = (
+        appId && appName ? [{ appId, appName }, ...validApps.filter((app) => app.appId !== appId)] : validApps
+    ).slice(0, 6) // Limit to 6 items
 
     return isInvalidAppId ? uniqueApps.filter((app) => app.appId !== Number(appId)) : uniqueApps
 }
