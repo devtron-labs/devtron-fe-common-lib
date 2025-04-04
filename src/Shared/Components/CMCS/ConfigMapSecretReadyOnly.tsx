@@ -17,11 +17,9 @@
 import { Progressing } from '@Common/Progressing'
 import { hasHashiOrAWS } from '@Pages/index'
 
-import { MODES } from '@Common/Constants'
 import { getConfigMapSecretReadOnlyValues } from './utils'
 import { ConfigMapSecretReadyOnlyProps } from './types'
 import { renderHashiOrAwsDeprecatedInfo } from './helpers'
-import { CodeEditor } from '../CodeEditorWrapper'
 
 const ConfigMapSecretReadyOnly = ({
     componentType,
@@ -66,30 +64,7 @@ const ConfigMapSecretReadyOnly = ({
                     ) : null,
                 )}
             </div>
-            {!hideCodeEditor && displayValues.data && (
-                <CodeEditor.Container>
-                    <CodeEditor
-                        mode={MODES.YAML}
-                        readOnly
-                        codeEditorProps={{
-                            value: displayValues.data,
-                            inline: true,
-                            adjustEditorHeightToContent: true,
-                        }}
-                        codeMirrorProps={{
-                            value: displayValues.data,
-                            height: 'auto',
-                        }}
-                    >
-                        <CodeEditor.Header>
-                            <div className="flex dc__content-space">
-                                <p className="m-0 fs-13 lh-20 fw-6 cn-9">Data</p>
-                                <CodeEditor.Clipboard />
-                            </div>
-                        </CodeEditor.Header>
-                    </CodeEditor>
-                </CodeEditor.Container>
-            )}
+            {!hideCodeEditor && displayValues.data && null}
         </div>
     )
 }

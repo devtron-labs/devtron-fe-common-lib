@@ -19,8 +19,7 @@ import { useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { DiffViewer } from '@Shared/Components/DiffViewer'
 import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
-import { CodeEditor } from '@Shared/Components/CodeEditorWrapper'
-import { MODES, Toggle, YAMLStringify } from '../../../../Common'
+import { Toggle, YAMLStringify } from '../../../../Common'
 import { DeploymentHistoryParamsType } from './types'
 import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../types'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
@@ -32,7 +31,6 @@ const DeploymentHistoryDiffView = ({
     baseTemplateConfiguration,
     previousConfigAvailable,
     rootClassName,
-    codeEditorKey,
 }: DeploymentTemplateHistoryType) => {
     const { historyComponent, historyComponentName } = useParams<DeploymentHistoryParamsType>()
 
@@ -74,24 +72,7 @@ const DeploymentHistoryDiffView = ({
                 newValue={editorValuesRHS}
                 codeFoldMessageRenderer={renderDiffViewNoDifferenceState(editorValuesLHS, editorValuesRHS)}
             />
-        ) : (
-            <CodeEditor
-                key={codeEditorKey}
-                disableSearch
-                readOnly
-                noParsing
-                mode={MODES.YAML}
-                codeEditorProps={{
-                    value: editorValuesRHS,
-                    defaultValue: editorValuesLHS,
-                    adjustEditorHeightToContent: true,
-                }}
-                codeMirrorProps={{
-                    value: editorValuesRHS,
-                    height: 'auto',
-                }}
-            />
-        )
+        ) : null
 
     const handleShowVariablesClick = () => {
         setConvertVariables(!convertVariables)
