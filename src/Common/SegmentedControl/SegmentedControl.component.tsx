@@ -61,7 +61,7 @@ const SegmentedControl = ({
                             isSelected={isSelected}
                             fullWidth={fullWidth}
                             size={size}
-                            disabled={disabled}
+                            disabled={disabled || segment.isDisabled}
                         />
                     )
                 })}

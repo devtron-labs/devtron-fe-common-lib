@@ -38,7 +38,7 @@
         $parent-selector: &;
         transition: color 0.3s ease;
 
-        &:hover:not(#{$parent-selector}--selected) {
+        &:hover:not(#{$parent-selector}--selected):not(.cursor-not-allowed) {
             background-color: var(--bg-secondary);
         }
 

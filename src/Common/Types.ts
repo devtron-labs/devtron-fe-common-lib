@@ -435,6 +435,7 @@ export interface ApprovalConfigDataType extends Pick<UserApprovalInfo, 'currentC
             groupName: UserGroupDTO['name']
         })[]
     }
+    isExceptionUser: boolean
 }
 
 export enum ApprovalRuntimeStateType {
