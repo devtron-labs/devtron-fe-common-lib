@@ -204,7 +204,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
                 opacity: 0.5,
             }),
 
-            '+ .select-picker__group': {
+            '& + .select-picker__group': {
                 marginTop: '4px',
             },
         }),
