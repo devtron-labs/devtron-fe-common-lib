@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-export * from './UsePrompt'
-export * from './useGetResourceKindsOptions'
-export * from './UseDownload'
-export * from './useForm'
-export * from './useStickyEvent'
-export * from './useUserPreferences'
+export { useUserPreferences } from './useUserPrefrences'
+export * from './constants'
+export * from './types'
+export { updateUserPreferences, getUserPreferences } from './service'
