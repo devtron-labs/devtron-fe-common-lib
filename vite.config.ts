@@ -64,13 +64,6 @@ export default defineConfig({
                 assetFileNames: 'assets/[name][extname]',
                 entryFileNames: '[name].js',
                 manualChunks(id: string) {
-                    if (
-                        id.includes('/node_modules/monaco-editor') ||
-                        id.includes('/node_modules/react-monaco-editor')
-                    ) {
-                        return '@monaco-editor'
-                    }
-
                     if (id.includes('/node_modules/react-dates')) {
                         return '@react-dates'
                     }
@@ -93,10 +86,6 @@ export default defineConfig({
 
                     if (id.includes('/node_modules/')) {
                         return '@vendor'
-                    }
-
-                    if (id.includes('src/Common/CodeEditor')) {
-                        return '@code-editor'
                     }
 
                     if (id.includes('src/Common/RJSF')) {
