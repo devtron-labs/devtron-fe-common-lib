@@ -52,6 +52,10 @@
         &:hover:not(.tab-group__tab--block):not(.dc__disabled) {
             color: var(--B500);
             @include svg-styles(var(--B500));
+
+            svg.icon-component-color {
+                --overrideIconColor: var(--B500);
+            }
         }
 
         &--active {
@@ -92,7 +96,7 @@
                 color: var(--N900);
             }
 
-            &:hover:not([aria-disabled="true"]) {
+            &:hover:not([aria-disabled='true']) {
                 color: var(--B500);
             }
         }
