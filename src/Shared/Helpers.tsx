@@ -840,6 +840,7 @@ export const sanitizeApprovalConfigData = (
             }),
         ),
     },
+    isExceptionUser: approvalConfigData?.isExceptionUser ?? false,
 })
 
 /**

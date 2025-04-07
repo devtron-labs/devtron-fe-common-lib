@@ -17,22 +17,31 @@
 import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
 
-import { TabProps } from './TabGroup.types'
+import { Icon } from '../Icon'
+import { TabGroupProps, TabProps } from './TabGroup.types'
+import { TAB_ICON_SIZE_MAP } from './TabGroup.utils'
 
 export const getTabIcon = ({
-    icon: Icon,
+    icon,
     showError,
     showWarning,
     className,
-}: Pick<TabProps, 'showError' | 'showWarning' | 'icon'> & { className: string }) => {
+    size,
+    active,
+}: Pick<TabProps, 'showError' | 'showWarning' | 'icon' | 'active'> &
+    Pick<TabGroupProps, 'size'> & { className: string }) => {
     if (showError) {
         return <ICErrorExclamation className={className} />
     }
     if (showWarning) {
         return <ICWarning className={`${className} warning-icon-y7`} />
     }
-    if (Icon) {
-        return <Icon className={`${className} tab-group__tab__icon`} />
+    if (typeof icon === 'string') {
+        return <Icon name={icon} color={active ? 'B500' : 'N700'} size={TAB_ICON_SIZE_MAP[size]} />
+    }
+    if (icon) {
+        const RenderIcon = icon
+        return <RenderIcon className={`${className} tab-group__tab__icon`} />
     }
     return null
 }
