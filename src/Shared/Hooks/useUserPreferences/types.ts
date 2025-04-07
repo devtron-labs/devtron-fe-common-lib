@@ -99,7 +99,6 @@ export type UserPreferenceResourceProps = UserPathValueMapType & {
 export interface UserPreferenceRecentlyVisitedAppsTypes {
     appId: number
     appName: string
-    isInvalidAppId?: boolean
 }
 
 export interface UserPreferenceFilteredListTypes extends UserPreferenceRecentlyVisitedAppsTypes {

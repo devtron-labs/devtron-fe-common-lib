@@ -33,14 +33,15 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
 
     const { handleThemeSwitcherDialogVisibilityChange, handleThemePreferenceChange } = useTheme()
 
-    const fetchRecentlyVisitedParsedApps = async ({
-        appId,
-        appName,
-        isInvalidAppId = false,
-    }: UserPreferenceRecentlyVisitedAppsTypes) => {
+    const fetchRecentlyVisitedParsedApps = async ({ appId, appName }: UserPreferenceRecentlyVisitedAppsTypes) => {
         const userPreferencesResponse = await getUserPreferences()
 
-        const uniqueFilteredApps = getFilteredUniqueAppList({ userPreferencesResponse, appId, appName, isInvalidAppId })
+        const uniqueFilteredApps = getFilteredUniqueAppList({
+            userPreferencesResponse,
+            appId,
+            appName,
+        })
+
         setUserPreferences((prev) => ({
             ...prev,
             resources: {
