@@ -18,8 +18,8 @@ import {
     GroupHeadingProps,
     MultiValueProps,
     OptionProps,
-    ValueContainerProps,
     Props as ReactSelectProps,
+    ValueContainerProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { ReactElement, useCallback, useMemo, useRef, useState } from 'react'
@@ -28,23 +28,24 @@ import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
 import { deriveBorderRadiusAndBorderClassFromConfig, isNullOrUndefined } from '@Shared/Helpers'
 import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
+
+import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
+import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
+import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
 import {
-    SelectPickerMultiValueLabel,
-    SelectPickerMultiValueRemove,
+    renderLoadingMessage,
     SelectPickerClearIndicator,
     SelectPickerControl,
     SelectPickerDropdownIndicator,
     SelectPickerGroupHeading,
+    SelectPickerInput,
     SelectPickerMenuList,
+    SelectPickerMultiValueLabel,
+    SelectPickerMultiValueRemove,
     SelectPickerOption,
     SelectPickerValueContainer,
-    SelectPickerInput,
 } from './common'
-import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
-import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
-import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
-import './selectPicker.scss'
 
 /**
  * Generic component for select picker
@@ -180,6 +181,7 @@ import './selectPicker.scss'
  * />
  * ```
  */
+
 const SelectPicker = <OptionValue, IsMulti extends boolean>({
     error,
     icon,
@@ -268,6 +270,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     )
 
     // Used to show the create new option for creatable select and the option(s) doesn't have the input value
+
     const isValidNewOption = (_inputValue: string) => {
         const trimmedInput = _inputValue?.trim()
 
@@ -459,6 +462,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             MultiValueRemove: SelectPickerMultiValueRemove,
                             GroupHeading: renderGroupHeading,
                             NoOptionsMessage: renderNoOptionsMessage,
+                            LoadingMessage: renderLoadingMessage,
                             Input: SelectPickerInput,
                             ...(shouldHideMenu && {
                                 Menu: () => null,

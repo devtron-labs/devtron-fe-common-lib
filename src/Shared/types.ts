@@ -1004,11 +1004,6 @@ export const TriggerType = {
     Manual: 'MANUAL',
 } as const
 
-export enum ViewIsPipelineRBACConfiguredRadioTabs {
-    ALL_ENVIRONMENTS = 'All environments',
-    ACCESS_ONLY = 'Access only',
-}
-
 export type ComponentLayoutType = 'row' | 'column'
 
 export interface BorderConfigType {
