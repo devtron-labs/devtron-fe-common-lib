@@ -175,15 +175,15 @@ export const getScanLimit = (lhsValue: string, value: string) => {
         return 5000
     }
 
-    if (numberOfLines > 5000 && numberOfLines <= 10000) {
+    if (numberOfLines <= 10000) {
         return 10000
     }
 
-    if (numberOfLines > 10000 && numberOfLines <= 15000) {
+    if (numberOfLines <= 15000) {
         return 15000
     }
 
-    if (numberOfLines > 15000 && numberOfLines <= 20000) {
+    if (numberOfLines <= 20000) {
         return 20000
     }
 
