@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
-import { ButtonHTMLAttributes, MutableRefObject, PropsWithChildren, useEffect, useRef, useState } from 'react'
+import {
+    ButtonHTMLAttributes,
+    forwardRef,
+    MutableRefObject,
+    PropsWithChildren,
+    RefCallback,
+    useEffect,
+    useRef,
+    useState,
+} from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 import { Progressing } from '@Common/Progressing'
 import { Tooltip } from '@Common/Tooltip'
@@ -30,6 +39,7 @@ const ButtonElement = ({
     buttonProps,
     onClick,
     elementRef,
+    forwardedRef,
     ...props
 }: PropsWithChildren<
     Omit<
@@ -51,8 +61,28 @@ const ButtonElement = ({
         'data-testid': ButtonProps['dataTestId']
         'aria-label': ButtonProps['ariaLabel']
         elementRef: MutableRefObject<HTMLButtonElement | HTMLAnchorElement>
+        forwardedRef:
+            | RefCallback<HTMLButtonElement | HTMLAnchorElement>
+            | MutableRefObject<HTMLButtonElement | HTMLAnchorElement>
     }
 >) => {
+    const refCallback = (node: HTMLButtonElement | HTMLAnchorElement) => {
+        // eslint-disable-next-line no-param-reassign
+        elementRef.current = node
+
+        if (!forwardedRef) {
+            return
+        }
+
+        if (typeof forwardedRef === 'function') {
+            forwardedRef(node)
+            return
+        }
+
+        // eslint-disable-next-line no-param-reassign
+        forwardedRef.current = node
+    }
+
     if (component === ButtonComponentType.link) {
         return (
             <Link
@@ -61,7 +91,7 @@ const ButtonElement = ({
                 // Added the specific class to ensure that the link override is applied
                 className={`${props.className} button__link ${props.disabled ? 'dc__disable-click' : ''}`}
                 onClick={onClick as LinkProps['onClick']}
-                ref={elementRef as MutableRefObject<HTMLAnchorElement>}
+                ref={refCallback}
             />
         )
     }
@@ -73,7 +103,7 @@ const ButtonElement = ({
             // eslint-disable-next-line react/button-has-type
             type={buttonProps?.type || 'button'}
             onClick={onClick as ButtonHTMLAttributes<HTMLButtonElement>['onClick']}
-            ref={elementRef as MutableRefObject<HTMLButtonElement>}
+            ref={refCallback}
         />
     )
 }
@@ -142,116 +172,123 @@ const ButtonElement = ({
  * <Button icon={<ICCube />} ariaLabel="Label" />
  * ```
  */
-const Button = <ComponentType extends ButtonComponentType>({
-    dataTestId,
-    text,
-    variant = ButtonVariantType.primary,
-    size = ComponentSizeType.large,
-    style = ButtonStyleType.default,
-    startIcon = null,
-    endIcon = null,
-    disabled = false,
-    isLoading = false,
-    showTooltip = false,
-    tooltipProps = {},
-    icon = null,
-    ariaLabel = null,
-    showAriaLabelInTippy = true,
-    fullWidth = false,
-    isOpacityHoverChild = false,
-    triggerAutoClickTimestamp,
-    ...props
-}: ButtonProps<ComponentType>) => {
-    const [isAutoClickActive, setIsAutoClickActive] = useState(false)
-    const autoClickTimeoutRef = useRef<number>()
-    const elementRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null)
+const Button = forwardRef(
+    <ComponentType extends ButtonComponentType>(
+        {
+            dataTestId,
+            text,
+            variant = ButtonVariantType.primary,
+            size = ComponentSizeType.large,
+            style = ButtonStyleType.default,
+            startIcon = null,
+            endIcon = null,
+            disabled = false,
+            isLoading = false,
+            showTooltip = false,
+            tooltipProps = {},
+            icon = null,
+            ariaLabel = null,
+            showAriaLabelInTippy = true,
+            fullWidth = false,
+            isOpacityHoverChild = false,
+            triggerAutoClickTimestamp,
+            ...props
+        }: ButtonProps<ComponentType>,
+        forwardedRef,
+    ) => {
+        const [isAutoClickActive, setIsAutoClickActive] = useState(false)
+        const autoClickTimeoutRef = useRef<number>()
+        const elementRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null)
 
-    const isDisabled = disabled || isLoading
-    const iconClass = `dc__no-shrink flex dc__fill-available-space ${getButtonIconClassName({
-        size,
-        icon,
-    })}`
+        const isDisabled = disabled || isLoading
+        const iconClass = `dc__no-shrink flex dc__fill-available-space ${getButtonIconClassName({
+            size,
+            icon,
+        })}`
 
-    useEffect(() => {
-        if (triggerAutoClickTimestamp) {
-            // Adding after timeout to ensure the transition is triggered after the button is rendered
-            setTimeout(() => {
-                setIsAutoClickActive(true)
+        useEffect(() => {
+            if (triggerAutoClickTimestamp) {
+                // Adding after timeout to ensure the transition is triggered after the button is rendered
+                setTimeout(() => {
+                    setIsAutoClickActive(true)
 
-                autoClickTimeoutRef.current = setTimeout(() => {
-                    elementRef.current.click()
-                    // This is 100ms less than the duration of the transition in CSS
-                    // Make sure to update the same in CSS if this is changed
-                }, 2400)
-            }, 100)
-        }
+                    autoClickTimeoutRef.current = setTimeout(() => {
+                        elementRef.current.click()
+                        // This is 100ms less than the duration of the transition in CSS
+                        // Make sure to update the same in CSS if this is changed
+                    }, 2400)
+                }, 100)
+            }
 
-        return () => {
+            return () => {
+                setIsAutoClickActive(false)
+                clearTimeout(autoClickTimeoutRef.current)
+            }
+        }, [triggerAutoClickTimestamp])
+
+        const handleClick: ButtonProps<ComponentType>['onClick'] = (e) => {
             setIsAutoClickActive(false)
             clearTimeout(autoClickTimeoutRef.current)
+
+            props.onClick?.(e)
         }
-    }, [triggerAutoClickTimestamp])
 
-    const handleClick: ButtonProps<ComponentType>['onClick'] = (e) => {
-        setIsAutoClickActive(false)
-        clearTimeout(autoClickTimeoutRef.current)
+        const getTooltipProps = (): TooltipProps => {
+            // Show the aria label as tippy only if the action based tippy is not to be shown
+            if (!showTooltip && showAriaLabelInTippy && icon && ariaLabel) {
+                return {
+                    alwaysShowTippyOnHover: true,
+                    content: ariaLabel,
+                }
+            }
 
-        props.onClick?.(e)
-    }
+            if (Object.hasOwn(tooltipProps, 'shortcutKeyCombo') && 'shortcutKeyCombo' in tooltipProps) {
+                return tooltipProps
+            }
 
-    const getTooltipProps = (): TooltipProps => {
-        // Show the aria label as tippy only if the action based tippy is not to be shown
-        if (!showTooltip && showAriaLabelInTippy && icon && ariaLabel) {
             return {
-                alwaysShowTippyOnHover: true,
-                content: ariaLabel,
+                // TODO: using some typing somersaults here, clean it up later
+                alwaysShowTippyOnHover:
+                    showTooltip && !!(tooltipProps as Required<Pick<TooltipProps, 'content'>>)?.content,
+                ...(tooltipProps as Required<Pick<TooltipProps, 'content'>>),
             }
         }
 
-        if (Object.hasOwn(tooltipProps, 'shortcutKeyCombo') && 'shortcutKeyCombo' in tooltipProps) {
-            return tooltipProps
-        }
-
-        return {
-            // TODO: using some typing somersaults here, clean it up later
-            alwaysShowTippyOnHover: showTooltip && !!(tooltipProps as Required<Pick<TooltipProps, 'content'>>)?.content,
-            ...(tooltipProps as Required<Pick<TooltipProps, 'content'>>),
-        }
-    }
-
-    return (
-        <Tooltip {...getTooltipProps()}>
-            <div>
-                <ButtonElement
-                    {...props}
-                    disabled={isDisabled}
-                    className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${isOpacityHoverChild ? 'dc__opacity-hover--child' : ''} ${getButtonDerivedClass({ size, variant, style, isLoading, icon, isAutoTriggerActive: isAutoClickActive })} ${isDisabled ? 'dc__disabled' : ''} ${fullWidth ? 'w-100' : ''}`}
-                    data-testid={dataTestId}
-                    aria-label={ariaLabel || (isLoading ? text : undefined)}
-                    elementRef={elementRef}
-                    onClick={handleClick}
-                >
-                    {icon ? (
-                        <span className={iconClass}>{icon}</span>
-                    ) : (
-                        <>
-                            {startIcon && <span className={iconClass}>{startIcon}</span>}
-                            <span className="dc__align-left">{text}</span>
-                            {endIcon && <span className={iconClass}>{endIcon}</span>}
-                        </>
-                    )}
-                    {isLoading && (
-                        <Progressing
-                            size={getButtonLoaderSize({
-                                size,
-                                icon,
-                            })}
-                        />
-                    )}
-                </ButtonElement>
-            </div>
-        </Tooltip>
-    )
-}
+        return (
+            <Tooltip {...getTooltipProps()}>
+                <div>
+                    <ButtonElement
+                        {...props}
+                        forwardedRef={forwardedRef}
+                        disabled={isDisabled}
+                        className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${isOpacityHoverChild ? 'dc__opacity-hover--child' : ''} ${getButtonDerivedClass({ size, variant, style, isLoading, icon, isAutoTriggerActive: isAutoClickActive })} ${isDisabled ? 'dc__disabled' : ''} ${fullWidth ? 'w-100' : ''}`}
+                        data-testid={dataTestId}
+                        aria-label={ariaLabel || (isLoading ? text : undefined)}
+                        elementRef={elementRef}
+                        onClick={handleClick}
+                    >
+                        {icon ? (
+                            <span className={iconClass}>{icon}</span>
+                        ) : (
+                            <>
+                                {startIcon && <span className={iconClass}>{startIcon}</span>}
+                                <span className="dc__align-left">{text}</span>
+                                {endIcon && <span className={iconClass}>{endIcon}</span>}
+                            </>
+                        )}
+                        {isLoading && (
+                            <Progressing
+                                size={getButtonLoaderSize({
+                                    size,
+                                    icon,
+                                })}
+                            />
+                        )}
+                    </ButtonElement>
+                </div>
+            </Tooltip>
+        )
+    },
+)
 
 export default Button

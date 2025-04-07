@@ -462,6 +462,7 @@ export enum ResourceKindType {
     releaseChannel = 'release-channel',
     tenant = 'tenant',
     installation = 'installation',
+    installations = 'installations',
     environment = 'environment',
     cdPipeline = 'cd-pipeline',
     ciPipeline = 'ci-pipeline',

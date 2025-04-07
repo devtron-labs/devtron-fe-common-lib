@@ -64,6 +64,7 @@ export interface ClusterCapacityType {
     nodeErrors: Record<string, string>[]
     status?: ClusterStatusType
     isProd: boolean
+    installationId?: number
 }
 
 export interface ClusterDetail extends ClusterCapacityType {
