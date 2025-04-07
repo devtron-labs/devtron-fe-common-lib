@@ -23,7 +23,7 @@ import { Progressing } from '@Common/Progressing'
 
 import { useCodeEditorContext } from './CodeEditor.context'
 import { CodeEditorRendererProps } from './types'
-import { getCodeEditorHeight, getRevertControlButton, updateDiffMinimapValues } from './utils'
+import { getCodeEditorHeight, getRevertControlButton, getScanLimit, updateDiffMinimapValues } from './utils'
 import { DiffMinimap } from './Extensions'
 
 export const CodeEditorRenderer = ({
@@ -180,6 +180,8 @@ export const CodeEditorRenderer = ({
     useEffect(() => {
         // DIFF VIEW INITIALIZATION
         if (!loading && codeMirrorMergeParentRef.current) {
+            const scanLimit = getScanLimit(lhsValue, value)
+
             codeMirrorMergeInstance?.destroy()
 
             const codeMirrorMergeView = new MergeView({
@@ -192,7 +194,7 @@ export const CodeEditorRenderer = ({
                     extensions: [...modifiedViewExtensions, modifiedUpdateListener],
                 },
                 ...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {}),
-                diffConfig: { scanLimit: 5000 },
+                diffConfig: { scanLimit, timeout: 5000 },
                 parent: codeMirrorMergeParentRef.current,
             })
             setCodeMirrorMergeInstance(codeMirrorMergeView)
@@ -212,7 +214,7 @@ export const CodeEditorRenderer = ({
                         extensions: diffMinimapExtensions,
                     },
                     gutter: false,
-                    diffConfig: { scanLimit: 5000 },
+                    diffConfig: { scanLimit, timeout: 5000 },
                     parent: diffMinimapParentRef.current,
                 })
 
@@ -275,6 +277,11 @@ export const CodeEditorRenderer = ({
             ref={codeMirrorParentDivRef}
             className={`flexbox w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}
         >
+            {!codeMirrorMergeInstance && (
+                <div className="flex h-100 w-100">
+                    <p>Calculating diff for large file. Please wait...</p>
+                </div>
+            )}
             <div
                 ref={codeMirrorMergeParentRef}
                 className={`cm-merge-theme flex-grow-1 h-100 dc__overflow-hidden ${readOnly ? 'code-editor__read-only' : ''}`}
