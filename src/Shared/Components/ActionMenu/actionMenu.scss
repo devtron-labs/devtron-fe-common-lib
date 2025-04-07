@@ -1,0 +1,20 @@
+.action-menu {
+    &__group {
+        border-top: 1px solid var(--border-secondary-translucent);
+
+        &:first-child {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
+
+    &__option {
+        & + .action-menu__group {
+            margin-top: 4px;
+        }
+    }
+}

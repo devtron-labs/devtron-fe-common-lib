@@ -45,7 +45,7 @@ import { getGroupCheckboxValue } from './utils'
 import { Icon } from '../Icon'
 import { Button, ButtonProps, ButtonVariantType } from '../Button'
 
-const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
+export const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
     if (tooltipProps) {
         if (Object.hasOwn(tooltipProps, 'shortcutKeyCombo') && 'shortcutKeyCombo' in tooltipProps) {
             return tooltipProps
@@ -55,6 +55,7 @@ const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = 
             // TODO: using some typing somersaults here, clean it up later
             alwaysShowTippyOnHover: !!(tooltipProps as Required<Pick<TooltipProps, 'content'>>)?.content,
             ...(tooltipProps as Required<Pick<TooltipProps, 'content'>>),
+            placement: 'right',
         }
     }
 
