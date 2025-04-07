@@ -425,3 +425,7 @@ export const SelectPickerGroupHeading = <OptionValue,>({
         </components.GroupHeading>
     )
 }
+
+export const renderLoadingMessage = () => (
+    <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8 dc__loading-dots">Loading</p>
+)
