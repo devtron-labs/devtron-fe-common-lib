@@ -82,6 +82,7 @@ export interface ClusterDetail extends ClusterCapacityType {
     errorInNodeListing: string
     nodeNames?: string[]
     isVirtualCluster?: boolean
+    isInstallationCluster?: boolean
 }
 
 interface NodeCordonOptions {
@@ -110,20 +111,30 @@ export interface AdditionalConfirmationModalOptionsProps<T = unknown> {
     children?: ReactElement
 }
 
+export interface InstallationClusterStepType {
+    lastTransitionTime: string
+    lastProbeTime: string
+    message: string
+    reason: string
+    status: 'False' | 'True' | 'Unknown'
+    type: string
+}
+
 export interface InstallationClusterConfigDTO {
-    // TODO: check if this is correct
-    id: string
-    status: InstallationClusterStatus
+    installationId: number
+    installationStatus: InstallationClusterStatus
     name: string
     values: string
     valuesSchema: string
     isProd: boolean
     installationType: InstallationClusterType
+    conditions: InstallationClusterStepType[]
 }
 
-export interface InstallationClusterConfig extends Pick<InstallationClusterConfigDTO, 'installationType' | 'status'> {
+export interface InstallationClusterConfigType extends Pick<InstallationClusterConfigDTO, 'installationType'> {
     schema: object
     values: object
     installationId: number
     name: string
+    status: InstallationClusterStatus
 }
