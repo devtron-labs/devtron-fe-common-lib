@@ -153,6 +153,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                             promotionApprovalMetadata={triggerDetails?.promotionApprovalMetadata}
                             renderCIListHeader={renderCIListHeader}
                             targetPlatforms={targetPlatforms}
+                            isDeploymentWithoutApproval={triggerDetails.isDeploymentWithoutApproval ?? false}
                         />
                     </Route>
                     {triggerDetails.stage === 'DEPLOY' && (
