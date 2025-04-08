@@ -15,6 +15,7 @@
  */
 
 import { Dispatch, SetStateAction, ReactElement } from 'react'
+import { InstallationClusterType } from '@Shared/index'
 import { NodeActionRequest } from './ResourceBrowser.Types'
 
 export enum ClusterFiltersType {
@@ -23,10 +24,19 @@ export enum ClusterFiltersType {
     UNHEALTHY = 'unhealthy',
 }
 
+export enum InstallationClusterStatus {
+    Creating = 'Creating',
+    Updating = 'Updating',
+    Succeeded = 'Succeeded',
+    Failed = 'Failed',
+}
+
 export enum ClusterStatusType {
     HEALTHY = 'healthy',
     UNHEALTHY = 'unhealthy',
     CONNECTION_FAILED = 'connection failed',
+    CREATING = 'creating',
+    UPDATING = 'updating',
 }
 
 export interface ResourceDetail {
@@ -98,4 +108,22 @@ export interface AdditionalConfirmationModalOptionsProps<T = unknown> {
     optionsData: T
     setOptionsData: Dispatch<SetStateAction<T>>
     children?: ReactElement
+}
+
+export interface InstallationClusterConfigDTO {
+    // TODO: check if this is correct
+    id: string
+    status: InstallationClusterStatus
+    name: string
+    values: string
+    valuesSchema: string
+    isProd: boolean
+    installationType: InstallationClusterType
+}
+
+export interface InstallationClusterConfig extends Pick<InstallationClusterConfigDTO, 'installationType' | 'status'> {
+    schema: object
+    values: object
+    installationId: number
+    name: string
 }

@@ -1101,3 +1101,8 @@ export type CountryISO2Type = ParsedCountry['iso2']
 export enum ResponseHeaders {
     LICENSE_STATUS = 'X-License-Status',
 }
+
+export enum InstallationClusterType {
+    EKS_AUTO_CLUSTER = 'eksAutoCluster',
+    EKS_MANUAL_CLUSTER = 'eksManualCluster',
+}
