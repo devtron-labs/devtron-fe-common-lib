@@ -15,6 +15,7 @@
  */
 
 export interface AnimatedDeployButtonProps {
+    isLoading?: boolean
     isVirtualEnvironment: boolean
     onButtonClick: (e, disableDeployButton: boolean) => void
     canDeployWithoutApproval?: boolean

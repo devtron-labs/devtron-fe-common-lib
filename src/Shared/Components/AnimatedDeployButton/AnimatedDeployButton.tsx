@@ -24,6 +24,7 @@ import './animatedDeployButton.scss'
 import { AnimatedDeployButtonProps } from './types'
 
 const AnimatedDeployButton = ({
+    isLoading,
     isVirtualEnvironment,
     onButtonClick,
     canDeployWithoutApproval,
@@ -68,6 +69,7 @@ const AnimatedDeployButton = ({
         <motion.div whileHover="hover" className={`${clicked ? 'hide-button-text' : ''}`}>
             <Button
                 dataTestId="cd-trigger-deploy-button"
+                isLoading={isLoading}
                 text={
                     canDeployWithoutApproval
                         ? 'Deploy without approval'
