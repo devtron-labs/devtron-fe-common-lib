@@ -131,6 +131,8 @@ export interface InstallationClusterConfigDTO {
     isProd: boolean
     installationType: InstallationClusterType
     conditions: InstallationClusterStepType[]
+    // NOTE: for installation cluster, that is creating this will be 0
+    installedEntityId: number | 0
 }
 
 export interface InstallationClusterConfigType
