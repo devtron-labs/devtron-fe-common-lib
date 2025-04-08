@@ -22,11 +22,7 @@ import {
     sanitizeUserApprovalList,
     stringComparatorBySortOrder,
 } from '@Shared/Helpers'
-import {
-    PolicyBlockInfo,
-    RuntimeParamsAPIResponseType,
-    RuntimePluginVariables,
-} from '@Shared/types'
+import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
 import {
@@ -264,7 +260,7 @@ export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): Runt
     const runtimeParams = (response?.runtimePluginVariables ?? []).map<RuntimePluginVariables>((variable) => ({
         ...variable,
         defaultValue: variable.value,
-        stepVariableId: variable.stepVariableId || Math.floor(new Date().valueOf() * Math.random())
+        stepVariableId: variable.stepVariableId || Math.floor(new Date().valueOf() * Math.random()),
     }))
 
     runtimeParams.push(...envVariables)
@@ -324,6 +320,7 @@ export const processCDMaterialServiceResponse = (
             ...processCDMaterialsMetaInfo(cdMaterialsResult),
             ...processCDMaterialsApprovalInfo(false, cdMaterialsResult),
             ...processImagePromotionInfo(cdMaterialsResult),
+            isExceptionUser: false,
         }
     }
 
@@ -352,6 +349,7 @@ export const processCDMaterialServiceResponse = (
         ...approvalInfo,
         ...metaInfo,
         ...imagePromotionInfo,
+        isExceptionUser: cdMaterialsResult.userApprovalConfig?.isExceptionUser ?? false,
     }
 }
 
