@@ -73,7 +73,7 @@
         "sharp": "^0.33.5",
         "svgo": "^3.3.2",
         "typescript": "5.5.4",
-        "vite": "5.4.14",
+        "vite": "5.4.17",
         "vite-plugin-dts": "4.0.3",
         "vite-plugin-image-optimizer": "^1.1.8",
         "vite-plugin-lib-inject-css": "2.1.1",
@@ -108,10 +108,10 @@
         "@replit/codemirror-indentation-markers": "6.5.3",
         "@replit/codemirror-vscode-keymap": "6.0.2",
         "@types/react-dates": "^21.8.6",
-        "@xyflow/react": "12.4.2",
         "@uiw/codemirror-extensions-hyper-link": "4.23.10",
         "@uiw/codemirror-theme-github": "4.23.7",
         "@uiw/react-codemirror": "4.23.7",
+        "@xyflow/react": "12.4.2",
         "ansi_up": "^5.2.1",
         "codemirror-json-schema": "0.8.0",
         "dayjs": "^1.11.13",
@@ -140,7 +140,7 @@
             "monaco-editor": "0.44.0"
         },
         "vite-plugin-svgr": {
-            "vite": "5.4.14"
+            "vite": "5.4.17"
         },
         "react-virtualized-sticky-tree": {
             "react": "^17.0.2",
