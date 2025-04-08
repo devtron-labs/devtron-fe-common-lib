@@ -27,8 +27,10 @@ export enum ClusterFiltersType {
 export enum InstallationClusterStatus {
     Creating = 'Creating',
     Updating = 'Updating',
-    Succeeded = 'Succeeded',
+    Installed = 'Installed',
     Failed = 'Failed',
+    Superseded = 'Superseded',
+    Undefined = 'Undefined',
 }
 
 export enum ClusterStatusType {
@@ -131,7 +133,8 @@ export interface InstallationClusterConfigDTO {
     conditions: InstallationClusterStepType[]
 }
 
-export interface InstallationClusterConfigType extends Pick<InstallationClusterConfigDTO, 'installationType'> {
+export interface InstallationClusterConfigType
+    extends Pick<InstallationClusterConfigDTO, 'installationType' | 'conditions'> {
     schema: object
     values: object
     installationId: number
