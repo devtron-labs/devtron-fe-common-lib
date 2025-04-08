@@ -1,8 +1,10 @@
 import { Dispatch, FunctionComponent, PropsWithChildren, SetStateAction } from 'react'
-import { SortableTableHeaderCellProps, useResizableTableConfig } from '@Common/SortableTableHeaderCell'
+
+import { GenericFilterEmptyStateProps } from '@Common/EmptyState/types'
 import { UseStateFiltersProps, UseStateFiltersReturnType, UseUrlFiltersProps } from '@Common/Hooks'
 import { GenericEmptyStateType } from '@Common/index'
-import { GenericFilterEmptyStateProps } from '@Common/EmptyState/types'
+import { SortableTableHeaderCellProps, useResizableTableConfig } from '@Common/SortableTableHeaderCell'
+
 import { useBulkSelection, UseBulkSelectionProps } from '../BulkSelection'
 
 export interface UseFiltersReturnType extends UseStateFiltersReturnType<string> {}

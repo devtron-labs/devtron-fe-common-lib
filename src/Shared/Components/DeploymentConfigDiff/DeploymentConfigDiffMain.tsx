@@ -16,26 +16,26 @@
 
 import { Fragment, useEffect, useState } from 'react'
 
-import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { ReactComponent as ICSort } from '@Icons/ic-arrow-up-down.svg'
-import { Progressing } from '@Common/Progressing'
+import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { SortingOrder } from '@Common/Constants'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
-import { ComponentSizeType } from '@Shared/constants'
+import { Progressing } from '@Common/Progressing'
 import { DiffViewer } from '@Shared/Components/DiffViewer'
+import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
-import { SelectPicker } from '../SelectPicker'
 import { DeploymentHistoryDiffView } from '../CICDHistory'
-import { DeploymentConfigDiffAccordion } from './DeploymentConfigDiffAccordion'
+import { SelectPicker } from '../SelectPicker'
+import { ToggleResolveScopedVariables } from '../ToggleResolveScopedVariables'
 import {
+    DeploymentConfigDiffAccordionProps,
     DeploymentConfigDiffMainProps,
     DeploymentConfigDiffSelectPickerProps,
     DeploymentConfigDiffState,
-    DeploymentConfigDiffAccordionProps,
 } from './DeploymentConfigDiff.types'
 import { renderDiffViewNoDifferenceState } from './DeploymentConfigDiff.utils'
-import { ToggleResolveScopedVariables } from '../ToggleResolveScopedVariables'
+import { DeploymentConfigDiffAccordion } from './DeploymentConfigDiffAccordion'
 
 export const DeploymentConfigDiffMain = ({
     isLoading,

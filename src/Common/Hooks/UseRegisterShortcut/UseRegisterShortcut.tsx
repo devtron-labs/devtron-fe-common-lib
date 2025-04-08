@@ -15,6 +15,7 @@
  */
 
 import { useContext } from 'react'
+
 import { UseRegisterShortcutContext } from './UseRegisterShortcutContext'
 
 const useRegisterShortcut = () => useContext(UseRegisterShortcutContext)

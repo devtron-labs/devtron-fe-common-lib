@@ -16,10 +16,12 @@
 
 import React from 'react'
 import dayjs from 'dayjs'
-import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
-import { SegmentedBarChart } from '@Common/SegmentedBarChart'
+
 import { ReactComponent as ICClock } from '@Icons/ic-clock.svg'
-import { ZERO_TIME_STRING, DATE_TIME_FORMATS } from '../../../../../Common/Constants'
+import { SegmentedBarChart } from '@Common/SegmentedBarChart'
+import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
+
+import { DATE_TIME_FORMATS, ZERO_TIME_STRING } from '../../../../../Common/Constants'
 import { InfoCardPropsType } from '../types'
 
 const InfoCard: React.FC<InfoCardPropsType> = ({ entities, lastScanTimeString, scanToolName, scanToolUrl }) => (

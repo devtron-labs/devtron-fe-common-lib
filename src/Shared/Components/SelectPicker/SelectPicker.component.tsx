@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { ReactElement, useCallback, useMemo, useRef, useState } from 'react'
 import {
     GroupHeadingProps,
     MultiValueProps,
@@ -22,16 +23,15 @@ import {
     ValueContainerProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import { ReactElement, useCallback, useMemo, useRef, useState } from 'react'
-import { ComponentSizeType } from '@Shared/constants'
-import { ConditionalWrap } from '@Common/Helper'
 import Tippy from '@tippyjs/react'
-import { deriveBorderRadiusAndBorderClassFromConfig, isNullOrUndefined } from '@Shared/Helpers'
-import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
 
-import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
-import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
+import { ConditionalWrap } from '@Common/Helper'
+import { ComponentSizeType } from '@Shared/constants'
+import { deriveBorderRadiusAndBorderClassFromConfig, isNullOrUndefined } from '@Shared/Helpers'
+
 import { getFormFieldAriaAttributes } from '../FormFieldWrapper'
+import FormFieldWrapper from '../FormFieldWrapper/FormFieldWrapper'
+import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import {
     renderLoadingMessage,
     SelectPickerClearIndicator,
@@ -45,7 +45,8 @@ import {
     SelectPickerOption,
     SelectPickerValueContainer,
 } from './common'
-import { GenericSectionErrorState } from '../GenericSectionErrorState'
+import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
+import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
 
 /**
  * Generic component for select picker

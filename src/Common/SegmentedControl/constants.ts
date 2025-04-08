@@ -1,4 +1,5 @@
 import { ComponentSizeType } from '@Shared/constants'
+
 import { SegmentedControlProps } from './types'
 
 export const COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP: Record<SegmentedControlProps['size'], string> = {

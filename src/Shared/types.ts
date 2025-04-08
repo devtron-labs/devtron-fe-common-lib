@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-import { Dayjs } from 'dayjs'
-import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
 import { ParsedCountry } from 'react-international-phone'
+import { Dayjs } from 'dayjs'
+
+import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
+
 import {
-    OptionType,
     CommonNodeAttr,
-    VulnerabilityType,
     DeploymentAppTypes,
+    OptionType,
+    PluginType,
+    RefVariableType,
+    SegmentedControlProps,
     ServerErrors,
     SortingParams,
     TriggerBlockType,
     ValueConstraintType,
     VariableType,
-    RefVariableType,
-    PluginType,
-    SegmentedControlProps,
+    VulnerabilityType,
 } from '../Common'
-import { BASE_CONFIGURATION_ENV_ID, EnvironmentTypeEnum, PatchOperationType } from './constants'
 import { SelectPickerOptionType } from './Components'
+import { BASE_CONFIGURATION_ENV_ID, EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
     CHART = 'helm_charts',

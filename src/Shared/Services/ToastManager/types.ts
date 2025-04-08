@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { ButtonComponentType, ButtonProps } from '@Shared/Components'
 import { ReactElement } from 'react'
+
+import { ButtonComponentType, ButtonProps } from '@Shared/Components'
 
 export enum ToastVariantType {
     info = 'info',

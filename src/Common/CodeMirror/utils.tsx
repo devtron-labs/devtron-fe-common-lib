@@ -16,21 +16,15 @@
 
 import { render } from 'react-dom'
 import { renderToString } from 'react-dom/server'
-import DOMPurify from 'dompurify'
-import * as YAML from 'yaml'
-import { Annotation, EditorView, Extension, hoverTooltip, Transaction } from '@uiw/react-codemirror'
-import { linter } from '@codemirror/lint'
-import { StreamLanguage } from '@codemirror/language'
 import { json, jsonLanguage, jsonParseLinter } from '@codemirror/lang-json'
 import { yaml, yamlLanguage } from '@codemirror/lang-yaml'
-import { shell } from '@codemirror/legacy-modes/mode/shell'
+import { StreamLanguage } from '@codemirror/language'
 import { dockerFile } from '@codemirror/legacy-modes/mode/dockerfile'
+import { shell } from '@codemirror/legacy-modes/mode/shell'
+import { linter } from '@codemirror/lint'
 import { MergeView } from '@codemirror/merge'
-
-import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
-
 import { SearchQuery } from '@codemirror/search'
-import { MODES } from '@Common/Constants'
+import { Annotation, EditorView, Extension, hoverTooltip, Transaction } from '@uiw/react-codemirror'
 import {
     handleRefresh,
     jsonCompletion,
@@ -38,11 +32,15 @@ import {
     jsonSchemaLinter,
     stateExtensions,
 } from 'codemirror-json-schema'
-import { yamlCompletion, yamlSchemaHover, yamlSchemaLinter } from 'codemirror-json-schema/yaml'
+import DOMPurify from 'dompurify'
+import * as YAML from 'yaml'
 
-import { Icon } from '@Shared/Components'
-import { Tooltip } from '@Common/Tooltip'
+import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
+import { MODES } from '@Common/Constants'
 import { debounce, noop, YAMLStringify } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
+import { Icon } from '@Shared/Components'
+import { yamlCompletion, yamlSchemaHover, yamlSchemaLinter } from 'codemirror-json-schema/yaml'
 
 import { yamlParseLinter } from './Extensions'
 import { CodeEditorProps, FindReplaceToggleButtonProps, GetCodeEditorHeightReturnType, HoverTexts } from './types'

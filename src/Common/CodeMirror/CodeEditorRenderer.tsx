@@ -15,16 +15,16 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import CodeMirror, { EditorView, ReactCodeMirrorRef, ViewUpdate } from '@uiw/react-codemirror'
 import { MergeView } from '@codemirror/merge'
+import CodeMirror, { EditorView, ReactCodeMirrorRef, ViewUpdate } from '@uiw/react-codemirror'
 
-import { getComponentSpecificThemeClass } from '@Shared/Providers'
 import { Progressing } from '@Common/Progressing'
+import { getComponentSpecificThemeClass } from '@Shared/Providers'
 
 import { useCodeEditorContext } from './CodeEditor.context'
+import { DiffMinimap } from './Extensions'
 import { CodeEditorRendererProps } from './types'
 import { getCodeEditorHeight, getRevertControlButton, getScanLimit, updateDiffMinimapValues } from './utils'
-import { DiffMinimap } from './Extensions'
 
 export const CodeEditorRenderer = ({
     codemirrorMergeKey,

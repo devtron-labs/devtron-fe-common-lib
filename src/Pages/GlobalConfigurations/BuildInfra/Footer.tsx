@@ -16,9 +16,10 @@
 
 import { FunctionComponent, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
+
+import { ConditionalWrap, Progressing } from '../../../Common'
 import { BUILD_INFRA_TEST_IDS, BUILD_INFRA_TEXT } from './constants'
 import { FooterProps } from './types'
-import { ConditionalWrap, Progressing } from '../../../Common'
 
 const Footer: FunctionComponent<FooterProps> = ({ disabled, handleCancel, editProfile, loading }) => {
     const disableMessage = disabled

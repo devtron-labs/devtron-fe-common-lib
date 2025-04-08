@@ -15,6 +15,7 @@
  */
 
 import { RegistryType } from '@Shared/types'
+
 import { IconsProps } from '../Icon'
 
 export interface RegistryIconProps {

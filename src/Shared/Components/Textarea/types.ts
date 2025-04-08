@@ -15,7 +15,9 @@
  */
 
 import { TextareaHTMLAttributes } from 'react'
+
 import { ComponentSizeType } from '@Shared/constants'
+
 import { FormFieldWrapperProps } from '../FormFieldWrapper'
 
 export interface TextareaProps

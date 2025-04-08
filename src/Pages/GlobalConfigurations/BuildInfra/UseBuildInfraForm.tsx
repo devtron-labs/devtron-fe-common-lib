@@ -15,7 +15,17 @@
  */
 
 import { FormEvent, useEffect, useState } from 'react'
+
 import { logExceptionToSentry, showError, useAsync } from '@Common/Helper'
+import { getConfigMapSecretFormInitialValues } from '@Shared/Components'
+import { getUniqueId } from '@Shared/Helpers'
+import { CM_SECRET_STATE, ToastManager, ToastVariantType } from '@Shared/Services'
+import {
+    validateDescription,
+    validateLabelKey,
+    validateName,
+    validateRequiredPositiveInteger,
+} from '@Shared/validations'
 import {
     ACTION_TO_PERSISTED_VALUE_MAP,
     BUILD_INFRA_DEFAULT_PLATFORM_NAME,
@@ -49,19 +59,7 @@ import {
     UseBuildInfraFormProps,
     UseBuildInfraFormResponseType,
 } from '@Pages/index'
-import {
-    validateDescription,
-    validateLabelKey,
-    validateName,
-    validateRequiredPositiveInteger,
-} from '@Shared/validations'
-import {
-    CM_SECRET_STATE,
-    getConfigMapSecretFormInitialValues,
-    getUniqueId,
-    ToastManager,
-    ToastVariantType,
-} from '@Shared/index'
+
 import {
     validateLabelValue,
     validateNodeSelector,

@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-import { ResourceKindType, useTheme } from '@Shared/index'
 import { useState } from 'react'
+
 import { ServerErrors } from '@Common/ServerError'
+import { useTheme } from '@Shared/Providers'
+import { ResourceKindType } from '@Shared/types'
+
+import { getUserPreferences, updateUserPreferences } from './service'
 import {
     UserPreferenceRecentlyVisitedAppsTypes,
     UserPreferenceResourceActions,
@@ -24,7 +28,6 @@ import {
     UseUserPreferencesProps,
     ViewIsPipelineRBACConfiguredRadioTabs,
 } from './types'
-import { getUserPreferences, updateUserPreferences } from './service'
 import { getFilteredUniqueAppList } from './utils'
 
 export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreferencesProps) => {

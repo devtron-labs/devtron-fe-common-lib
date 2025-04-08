@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-import { useParams } from 'react-router-dom'
 import { useMemo, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import Tippy from '@tippyjs/react'
-import { DiffViewer } from '@Shared/Components/DiffViewer'
-import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
+
 import { CodeEditor } from '@Shared/Components/CodeEditorWrapper'
-import { MODES, Toggle, YAMLStringify } from '../../../../Common'
-import { DeploymentHistoryParamsType } from './types'
-import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../types'
-import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
+import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
+import { DiffViewer } from '@Shared/Components/DiffViewer'
+
 import { ReactComponent as Info } from '../../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ViewVariablesIcon } from '../../../../Assets/Icon/ic-view-variable-toggle.svg'
+import { MODES, Toggle, YAMLStringify } from '../../../../Common'
+import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
+import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../types'
+import { DeploymentHistoryParamsType } from './types'
 
 const DeploymentHistoryDiffView = ({
     currentConfiguration,

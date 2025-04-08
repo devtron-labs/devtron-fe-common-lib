@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+import { ReactElement, ReactNode } from 'react'
+
 import { ComponentSizeType } from '@Shared/constants'
 import { BorderConfigType, ComponentLayoutType } from '@Shared/types'
-import { ReactElement, ReactNode } from 'react'
+
 import { ButtonComponentType, ButtonProps } from '../Button'
 
 export type InfoBlockProps = {

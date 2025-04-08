@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-export * from './DeploymentTemplate'
-export * from './types'
-export * from './constants'
-export { default as OverrideStrategyTippyContent } from './OverrideStrategyTippyContent'
-export { getDeploymentStageTitle } from './utils'
 export * from './ConfigMapSecret'
+export * from './constants'
+export * from './DeploymentTemplate'
+export { default as OverrideStrategyTippyContent } from './OverrideStrategyTippyContent'
+export * from './types'
+export { getDeploymentStageTitle } from './utils'
