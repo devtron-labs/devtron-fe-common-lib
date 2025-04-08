@@ -142,4 +142,5 @@ export interface InstallationClusterConfigType
     installationId: number
     name: string
     status: InstallationClusterStatus
+    correspondingClusterId: number | 0
 }
