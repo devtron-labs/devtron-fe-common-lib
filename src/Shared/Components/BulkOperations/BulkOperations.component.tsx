@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-import { Prompt } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
+import { Prompt } from 'react-router-dom'
+import { noop } from 'rxjs'
+
 import { getIsRequestAborted } from '@Common/API'
 import { showError } from '@Common/Helper'
 import { ServerErrors } from '@Common/ServerError'
 import { ApiQueuingWithBatch } from '@Shared/API'
 import { usePrompt } from '@Shared/Hooks'
 import { ConfirmationModal, ToastManager, ToastVariantType } from '@Shared/index'
-import { noop } from 'rxjs'
-import { OperationResultStore } from './OperationResultStore'
+
 import BulkOperationsResultModal from './BulkOperationsResultModal'
-import { OperationResultStoreType, BulkOperationModalProps } from './types'
+import { OperationResultStore } from './OperationResultStore'
+import { BulkOperationModalProps, OperationResultStoreType } from './types'
+
 import './styles.scss'
 
 const BulkOperations = ({

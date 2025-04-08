@@ -15,11 +15,12 @@
  */
 
 import { useState } from 'react'
-import { DescriptorProps } from './types'
+
 import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
 import { BreadCrumb } from '../../../Common'
-import { FeatureDescriptionModal } from './FeatureDescriptionModal'
 import { InfoIconTippy } from '../InfoIconTippy'
+import { FeatureDescriptionModal } from './FeatureDescriptionModal'
+import { DescriptorProps } from './types'
 
 const FeatureTitleWithInfo = ({
     additionalContainerClasses,

@@ -18,10 +18,10 @@ import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
 
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { UseStateFiltersReturnType } from '@Common/Hooks'
-
 import { TooltipProps } from '@Common/Tooltip/types'
-import { SelectPickerOptionType, SelectPickerProps, SelectPickerTextAreaProps } from '../SelectPicker'
+
 import { FileUploadProps } from '../FileUpload'
+import { SelectPickerOptionType, SelectPickerProps, SelectPickerTextAreaProps } from '../SelectPicker'
 
 /**
  * Interface representing header for a dynamic data table.

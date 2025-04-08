@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-import { ConditionalWrap } from '@Common/Helper'
 import { ReactElement } from 'react'
+
+import { ConditionalWrap } from '@Common/Helper'
 import { Tooltip, TooltipProps } from '@Common/Tooltip'
-import { getFormLabelElementId } from './utils'
-import { FormFieldLabelProps } from './types'
+
 import { InfoIconTippy } from '..'
+import { FormFieldLabelProps } from './types'
+import { getFormLabelElementId } from './utils'
 
 const FormFieldLabel = ({
     label,

@@ -16,8 +16,8 @@
 
 import { EditorView, Extension, showTooltip, StateEffect, StateField, Tooltip, ViewPlugin } from '@uiw/react-codemirror'
 
-import { getReadOnlyElement } from '../utils'
 import { READ_ONLY_TOOLTIP_TIMEOUT } from '../CodeEditor.constants'
+import { getReadOnlyElement } from '../utils'
 
 /** Array of keys to be ignored on keypress */
 const ignoreKeys = ['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 'Enter', 'Escape']

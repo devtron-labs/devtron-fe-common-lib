@@ -15,6 +15,7 @@
  */
 
 import { AppThemeType } from '@Shared/Providers'
+
 import { MODES } from '../Constants'
 
 export interface InformationBarProps {

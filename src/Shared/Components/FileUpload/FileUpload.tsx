@@ -16,11 +16,10 @@
 
 import { ChangeEvent } from 'react'
 
-import { ReactComponent as ICUploadArrowAnimated } from '@Icons/ic-upload-arrow-animated.svg'
-import { ReactComponent as ICFileText } from '@Icons/ic-file-text.svg'
 import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
+import { ReactComponent as ICFileText } from '@Icons/ic-file-text.svg'
+import { ReactComponent as ICUploadArrowAnimated } from '@Icons/ic-upload-arrow-animated.svg'
 import { Tooltip } from '@Common/Tooltip'
-
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'

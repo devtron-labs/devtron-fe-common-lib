@@ -2,14 +2,16 @@
  * Copyright (c) 2024. Devtron Inc.
  */
 
+import { useEffect } from 'react'
+
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { DraggableButton, DraggablePositionVariant, DraggableWrapper } from '@Common/DraggableWrapper'
-import { ComponentSizeType } from '@Shared/constants'
 import { useRegisterShortcut } from '@Common/Hooks'
-import { useEffect } from 'react'
-import { BulkSelectionActionWidgetProps } from './types'
+import { ComponentSizeType } from '@Shared/constants'
+
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
 import { DRAG_SELECTOR_IDENTIFIER } from './constants'
+import { BulkSelectionActionWidgetProps } from './types'
 
 const BulkSelectionActionWidget = ({
     count,

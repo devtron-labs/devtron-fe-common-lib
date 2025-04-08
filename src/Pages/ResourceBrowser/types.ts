@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { Dispatch, SetStateAction, ReactElement } from 'react'
+import { Dispatch, ReactElement, SetStateAction } from 'react'
+
 import { NodeActionRequest } from './ResourceBrowser.Types'
 
 export enum ClusterFiltersType {

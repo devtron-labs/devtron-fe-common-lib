@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import BulkSelectionDropdownItems from './BulkSelectionDropdownItems'
-import { CHECKBOX_VALUE, Checkbox, PopupMenu, noop } from '../../../Common'
-import { useBulkSelection } from './BulkSelectionProvider'
-import { BulkSelectionDropdownItemsType, BulkSelectionEvents, BulkSelectionProps } from './types'
-import { BULK_DROPDOWN_TEST_ID, BulkSelectionOptionsLabels } from './constants'
-import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
-import { ReactComponent as ICCheckSquare } from '../../../Assets/Icon/ic-check-square.svg'
 import { ReactComponent as ICCheckAll } from '../../../Assets/Icon/ic-check-all.svg'
+import { ReactComponent as ICCheckSquare } from '../../../Assets/Icon/ic-check-square.svg'
+import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
+import { Checkbox, CHECKBOX_VALUE, noop, PopupMenu } from '../../../Common'
+import BulkSelectionDropdownItems from './BulkSelectionDropdownItems'
+import { useBulkSelection } from './BulkSelectionProvider'
+import { BULK_DROPDOWN_TEST_ID, BulkSelectionOptionsLabels } from './constants'
+import { BulkSelectionDropdownItemsType, BulkSelectionEvents, BulkSelectionProps } from './types'
 
 const BulkSelection = <T,>({ showPagination, disabled = false, showChevronDownIcon = true }: BulkSelectionProps) => {
     const { handleBulkSelection, isChecked, checkboxValue, getSelectedIdentifiersCount } = useBulkSelection<T>()

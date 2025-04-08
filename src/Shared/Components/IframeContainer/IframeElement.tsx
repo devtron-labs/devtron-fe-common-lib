@@ -16,12 +16,14 @@
 
 import { useState } from 'react'
 import Tippy from '@tippyjs/react'
-import { IframeElementProps } from './types'
-import { stopPropagation, VisibleModal } from '../../../Common'
-import { ReactComponent as ICFullScreen } from '../../../Assets/Icon/ic-fullscreen-2.svg'
+
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
-import './IframeElement.scss'
+import { ReactComponent as ICFullScreen } from '../../../Assets/Icon/ic-fullscreen-2.svg'
+import { stopPropagation, VisibleModal } from '../../../Common'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
+import { IframeElementProps } from './types'
+
+import './IframeElement.scss'
 
 const IframeElement = ({ URL, width, height, title, maxHeight, maxWidth }: IframeElementProps) => {
     const [showFullScreen, setShowFullScreen] = useState<boolean>(false)

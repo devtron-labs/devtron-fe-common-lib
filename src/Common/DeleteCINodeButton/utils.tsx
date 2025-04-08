@@ -15,8 +15,9 @@
  */
 
 import { Routes } from '@Shared/constants'
-import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
 import { getTemplateAPIRoute } from '@Shared/index'
+import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
+
 import { post, trash } from '..'
 
 export function savePipeline(

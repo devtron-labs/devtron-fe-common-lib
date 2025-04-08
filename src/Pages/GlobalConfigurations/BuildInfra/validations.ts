@@ -16,6 +16,13 @@
 
 import { PATTERNS } from '@Common/Constants'
 import {
+    requiredField,
+    validateLabelKey,
+    validateRequiredPositiveNumber,
+    validateStringLength,
+    ValidationResponseType,
+} from '@Shared/validations'
+import {
     BUILD_INFRA_INPUT_CONSTRAINTS,
     BUILD_INFRA_TEXT,
     BuildInfraConfigTypes,
@@ -24,13 +31,6 @@ import {
     ValidateRequestLimitResponseType,
     ValidateRequestLimitType,
 } from '@Pages/index'
-import {
-    requiredField,
-    validateLabelKey,
-    validateRequiredPositiveNumber,
-    validateStringLength,
-    ValidationResponseType,
-} from '@Shared/validations'
 
 /**
  * @description A valid platform name should not be empty and be less than 128 characters. Plus profile can not have duplicate platform names

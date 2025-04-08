@@ -15,13 +15,15 @@
  */
 
 import { useState } from 'react'
+
 import { ERROR_STATUS_CODE } from '@Common/Constants'
 import { Button, ButtonStyleType, ButtonVariantType, DeleteConfirmationModal, Icon } from '@Shared/Components'
 import { ComponentSizeType, DeleteComponentsName } from '@Shared/constants'
 import { ToastManager, ToastVariantType } from '@Shared/index'
-import { deleteWorkflow, savePipeline } from './utils'
-import { DeleteCINodeButtonProps } from './types'
+
 import { preventDefault, showError, stopPropagation } from '..'
+import { DeleteCINodeButtonProps } from './types'
+import { deleteWorkflow, savePipeline } from './utils'
 
 export const DeleteCINodeButton = ({
     testId,

@@ -1,4 +1,5 @@
 import { BaseAppMetaData, ResourceKindType } from '@Shared/index'
+
 import { UserPreferenceFilteredListTypes, UserPreferenceResourceActions, UserPreferenceResourceType } from './types'
 
 export const getUserPreferenceResourcesMetadata = (recentlyVisited: BaseAppMetaData[]): UserPreferenceResourceType => ({

@@ -16,6 +16,7 @@
 
 import { Checkbox } from '@Common/Checkbox'
 import { CHECKBOX_VALUE } from '@Common/Types'
+
 import { AdditionalConfirmationModalOptionsProps } from './types'
 
 const ForceDeleteOption = ({

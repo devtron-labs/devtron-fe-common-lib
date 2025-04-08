@@ -17,9 +17,9 @@
 import moment from 'moment'
 
 import { DATE_TIME_FORMATS, ERROR_STATUS_CODE } from '@Common/Constants'
-import { DeploymentStageType } from '@Shared/constants'
 import { SelectPickerOptionType } from '@Shared/Components/SelectPicker'
 import { DeploymentStatus } from '@Shared/Components/StatusComponent'
+import { DeploymentStageType } from '@Shared/constants'
 
 import { History } from '../types'
 import { renderPipelineDeploymentOptionDescription } from './helpers'

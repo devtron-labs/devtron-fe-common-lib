@@ -1,6 +1,6 @@
+import { DOCUMENTATION } from '@Common/Constants'
 import { ClipboardButton } from '@Common/index'
 
-import { DOCUMENTATION } from '@Common/Constants'
 import { InfoIconTippy } from '..'
 import { InstallFingerprintInfoProps } from './types'
 

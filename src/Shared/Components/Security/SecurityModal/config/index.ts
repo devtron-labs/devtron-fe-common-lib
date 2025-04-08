@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export { getTableData } from './Table'
+export { getProgressingStateForStatus } from './ImageScan'
 export { getInfoCardData } from './InfoCard'
 export { getSidebarData } from './Sidebar'
-export { getProgressingStateForStatus } from './ImageScan'
+export { getTableData } from './Table'

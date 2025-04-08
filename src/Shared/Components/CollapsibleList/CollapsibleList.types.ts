@@ -15,8 +15,8 @@
  */
 
 import React from 'react'
-import { TippyProps } from '@tippyjs/react'
 import { NavLinkProps } from 'react-router-dom'
+import { TippyProps } from '@tippyjs/react'
 
 interface ButtonTab {
     /**

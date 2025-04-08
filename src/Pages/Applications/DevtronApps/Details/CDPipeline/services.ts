@@ -15,15 +15,17 @@
  */
 
 import { MutableRefObject } from 'react'
+
 import { getIsRequestAborted, post } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
 import { getUrlWithSearchParams, showError } from '@Common/Helper'
-import { UploadFileDTO, UploadFileProps } from '@Shared/types'
 import { DeploymentNodeType } from '@Common/Types'
 import { DeploymentWithConfigType } from '@Shared/constants'
+import { UploadFileDTO, UploadFileProps } from '@Shared/types'
+
+import { STAGE_MAP } from './constants'
 import { TriggerCDNodeServiceProps, TriggerCDPipelinePayloadType } from './types'
 import { getAPIOptionsWithTriggerTimeout } from './utils'
-import { STAGE_MAP } from './constants'
 
 export const uploadCDPipelineFile = async ({
     file,

@@ -15,13 +15,15 @@
  */
 
 import { memo } from 'react'
+
 import { ReactComponent as ICBranch } from '@Icons/ic-branch.svg'
-import { GitTriggers } from '@Shared/types'
 import { createGitCommitUrl, SourceTypeMap } from '@Common/Common.service'
 import { getHandleOpenURL, renderMaterialIcon } from '@Shared/Helpers'
-import { DeploymentSummaryTooltipCardType } from './types'
-import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
+import { GitTriggers } from '@Shared/types'
+
 import { CommitChipCell } from '../CommitChipCell'
+import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
+import { DeploymentSummaryTooltipCardType } from './types'
 
 const GitTriggerList = memo(
     ({

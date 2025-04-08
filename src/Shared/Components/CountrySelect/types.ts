@@ -1,4 +1,5 @@
 import { CountryISO2Type } from '@Shared/index'
+
 import { SelectPickerProps } from '../SelectPicker'
 
 export interface CountrySelectProps
