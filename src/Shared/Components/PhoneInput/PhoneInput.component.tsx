@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { usePhoneInput } from 'react-international-phone'
 
-import { CountryISO2Type } from '@Shared/index'
+import { CountryISO2Type } from '@Shared/types'
 
 import { CountrySelect } from '../CountrySelect'
 import { CustomInput } from '../CustomInput'

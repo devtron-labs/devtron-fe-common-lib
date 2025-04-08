@@ -17,13 +17,9 @@
 import { FormEvent, useEffect, useState } from 'react'
 
 import { logExceptionToSentry, showError, useAsync } from '@Common/Helper'
-import {
-    CM_SECRET_STATE,
-    getConfigMapSecretFormInitialValues,
-    getUniqueId,
-    ToastManager,
-    ToastVariantType,
-} from '@Shared/index'
+import { getConfigMapSecretFormInitialValues } from '@Shared/Components'
+import { getUniqueId } from '@Shared/Helpers'
+import { CM_SECRET_STATE, ToastManager, ToastVariantType } from '@Shared/Services'
 import {
     validateDescription,
     validateLabelKey,

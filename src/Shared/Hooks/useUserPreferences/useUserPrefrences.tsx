@@ -17,7 +17,8 @@
 import { useState } from 'react'
 
 import { ServerErrors } from '@Common/ServerError'
-import { ResourceKindType, useTheme } from '@Shared/index'
+import { useTheme } from '@Shared/Providers'
+import { ResourceKindType } from '@Shared/types'
 
 import { getUserPreferences, updateUserPreferences } from './service'
 import {

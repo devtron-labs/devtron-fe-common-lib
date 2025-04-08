@@ -1,6 +1,10 @@
-import { INVALID_LICENSE_KEY, ResponseHeaders } from '@Shared/index'
+import { API_STATUS_CODES, FALLBACK_REQUEST_TIMEOUT, Host } from '@Common/Constants'
+import { noop } from '@Common/Helper'
+import { ServerErrors } from '@Common/ServerError'
+import { APIOptions, ResponseType } from '@Common/Types'
+import { INVALID_LICENSE_KEY } from '@Shared/constants'
+import { ResponseHeaders } from '@Shared/types'
 
-import { API_STATUS_CODES, APIOptions, FALLBACK_REQUEST_TIMEOUT, Host, noop, ResponseType, ServerErrors } from '..'
 import { CoreAPIConstructorParamsType, FetchAPIParamsType, FetchInTimeParamsType } from './types'
 import { handleServerError } from './utils'
 

@@ -21,7 +21,8 @@ import selectWorkflowSource from '@Images/select-image-source.png'
 import { showError, stopPropagation } from '@Common/Helper'
 import { VisibleModal } from '@Common/index'
 import { PipelineType, WorkflowNodeType } from '@Common/Types'
-import { CIPipelineNodeType, saveCDPipeline, ToastManager, ToastVariantType } from '@Shared/index'
+import { saveCDPipeline, ToastManager, ToastVariantType } from '@Shared/Services'
+import { CIPipelineNodeType } from '@Shared/types'
 
 import {
     CHANGE_SAME_CI,

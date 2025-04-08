@@ -16,8 +16,9 @@
 
 import { ROUTES } from '@Common/Constants'
 import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
-import { BaseAppMetaData, ResourceKindType } from '@Shared/index'
 import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
+import { BaseAppMetaData } from '@Shared/Services'
+import { ResourceKindType } from '@Shared/types'
 
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {

@@ -20,7 +20,7 @@ import { ReactComponent as ICSprayCan } from '@Icons/ic-spray-can.svg'
 import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { ReactComponent as ICTimer } from '@Icons/ic-timer.svg'
 import { UseBreadcrumbProps } from '@Common/BreadCrumb/Types'
-import { CMSecretComponentType } from '@Shared/index'
+import { CMSecretComponentType } from '@Shared/Services'
 
 import {
     BuildInfraAPIVersionType,

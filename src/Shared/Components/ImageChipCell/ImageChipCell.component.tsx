@@ -17,7 +17,7 @@
 import { useState } from 'react'
 import Tippy from '@tippyjs/react'
 
-import { RegistryType } from '@Shared/index'
+import { RegistryType } from '@Shared/types'
 
 import { RegistryIcon } from '../RegistryIcon'
 import { ImageChipCellProps } from './types'

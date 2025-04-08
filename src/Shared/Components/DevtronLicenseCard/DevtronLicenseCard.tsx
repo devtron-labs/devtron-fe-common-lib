@@ -4,18 +4,14 @@ import { animate, motion, useMotionTemplate, useMotionValue, useTransform } from
 import { ReactComponent as ICChatSupport } from '@IconsV2/ic-chat-circle-dots.svg'
 import { ReactComponent as TexturedBG } from '@Images/licenseCardBG.svg'
 import { ClipboardButton, getTTLInHumanReadableFormat } from '@Common/index'
-import {
-    AppThemeType,
-    CONTACT_SUPPORT_LINK,
-    DevtronLicenseCardProps,
-    ENTERPRISE_SUPPORT_LINK,
-    getHandleOpenURL,
-    LicenseStatus,
-} from '@Shared/index'
+import { CONTACT_SUPPORT_LINK, ENTERPRISE_SUPPORT_LINK } from '@Shared/constants'
+import { getHandleOpenURL } from '@Shared/Helpers'
+import { AppThemeType } from '@Shared/Providers'
 import { getThemeOppositeThemeClass } from '@Shared/Providers/ThemeProvider/utils'
 
 import { Button, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
+import { DevtronLicenseCardProps, LicenseStatus } from './types'
 import { getLicenseColorsAccordingToStatus } from './utils'
 
 import './licenseCard.scss'
