@@ -15,8 +15,8 @@
  */
 
 import unauthorized from '../Assets/Img/ic-not-authorized.svg'
-import { ERROR_EMPTY_SCREEN } from './Constants'
 import GenericEmptyState from './EmptyState/GenericEmptyState'
+import { ERROR_EMPTY_SCREEN } from './Constants'
 import { ErrorScreenNotAuthorizedProps } from './Types'
 
 const ErrorScreenNotAuthorized = ({ subtitle, title }: ErrorScreenNotAuthorizedProps) => (

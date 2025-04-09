@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export * from './RegistryIcon'
 export * from './constants'
+export * from './RegistryIcon'

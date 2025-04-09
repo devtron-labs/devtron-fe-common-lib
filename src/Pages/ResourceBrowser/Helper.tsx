@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AggregationKeys, NodeType, Nodes } from '../../Shared'
+import { AggregationKeys, Nodes, NodeType } from '../../Shared'
 import { ALL_NAMESPACE_OPTION } from './constants'
 import {
     ApiResourceGroupType,

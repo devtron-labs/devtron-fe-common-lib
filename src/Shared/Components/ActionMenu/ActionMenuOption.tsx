@@ -1,6 +1,7 @@
 import { Tooltip } from '@Common/Tooltip'
-import { ActionMenuOptionProps } from './types'
+
 import { getTooltipProps } from '../SelectPicker/common'
+import { ActionMenuOptionProps } from './types'
 
 const ActionMenuOption = ({ option, onClick, disableDescriptionEllipsis }: ActionMenuOptionProps) => {
     const iconBaseClass = 'dc__no-shrink icon-dim-16 flex dc__fill-available-space'

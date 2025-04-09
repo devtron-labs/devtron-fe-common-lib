@@ -15,8 +15,8 @@
  */
 
 import { ReactComponent as Error } from '../../../Assets/Icon/ic-error-exclamation.svg'
-import { ErrorInfoStatusBarType } from './types'
 import { TIMELINE_STATUS } from '../../constants'
+import { ErrorInfoStatusBarType } from './types'
 
 export const ErrorInfoStatusBar = ({
     nonDeploymentError,

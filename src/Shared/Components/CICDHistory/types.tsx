@@ -15,17 +15,19 @@
  */
 
 import { CSSProperties, ReactElement, ReactNode } from 'react'
+
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
+
 import {
-    OptionType,
-    UserApprovalMetadataType,
-    ReleaseTag,
-    ImageComment,
-    PromotionApprovalMetadataType,
-    FilterConditionsListType,
     DeploymentAppTypes,
-    ResponseType,
+    FilterConditionsListType,
+    ImageComment,
+    OptionType,
     PaginationProps,
+    PromotionApprovalMetadataType,
+    ReleaseTag,
+    ResponseType,
+    UserApprovalMetadataType,
     useScrollable,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'

@@ -1,4 +1,5 @@
-import { AppThemeType, DevtronLicenseBaseDTO, DevtronLicenseDTO } from '@Shared/index'
+import { AppThemeType } from '@Shared/Providers'
+import { DevtronLicenseBaseDTO, DevtronLicenseDTO } from '@Shared/types'
 
 export enum LicenseStatus {
     ACTIVE = 'ACTIVE',

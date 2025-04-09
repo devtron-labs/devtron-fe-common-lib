@@ -15,6 +15,7 @@
  */
 
 import { ReactNode } from 'react'
+
 import { IconsProps } from '../Icon'
 
 export type GenericSectionErrorStateProps = {

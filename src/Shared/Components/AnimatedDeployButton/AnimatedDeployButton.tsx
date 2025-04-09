@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-import { motion } from 'framer-motion'
-import { ReactComponent as ICDeploy } from '@Icons/ic-nav-rocket.svg'
-import { ComponentSizeType } from '@Shared/constants'
 import { SyntheticEvent, useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+
+import { ReactComponent as ICDeploy } from '@Icons/ic-nav-rocket.svg'
 import DeployAudio from '@Sounds/DeployAudio.mp3'
+import { ComponentSizeType } from '@Shared/constants'
+
 import { Button, ButtonStyleType } from '../Button'
-import './animatedDeployButton.scss'
 import { AnimatedDeployButtonProps } from './types'
+
+import './animatedDeployButton.scss'
 
 const AnimatedDeployButton = ({
     isLoading,

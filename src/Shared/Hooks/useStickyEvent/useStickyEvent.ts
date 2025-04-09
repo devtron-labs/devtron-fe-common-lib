@@ -15,10 +15,12 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { isNullOrUndefined } from '@Shared/Helpers'
+
 import { noop } from '@Common/Helper'
-import { UseStickyEventProps, UseStickyEventReturnType } from './types'
+import { isNullOrUndefined } from '@Shared/Helpers'
+
 import { OBSERVER_ROOT_MARGIN, OBSERVER_THRESHOLD } from './constants'
+import { UseStickyEventProps, UseStickyEventReturnType } from './types'
 import { getHeightForStickyElementTopOffset } from './utils'
 
 import './styles.scss'

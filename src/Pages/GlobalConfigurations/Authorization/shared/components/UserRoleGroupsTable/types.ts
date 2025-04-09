@@ -15,6 +15,7 @@
  */
 
 import { FC } from 'react'
+
 import { UserRoleGroup } from '../../../types'
 
 export type UserRoleGroupsTableProps = {

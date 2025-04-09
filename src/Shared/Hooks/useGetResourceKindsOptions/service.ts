@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import { ResponseType, Teams } from '@Common/Types'
+import { get } from '@Common/API'
 import { getTeamListMin } from '@Common/Common.service'
+import { ROUTES } from '@Common/Constants'
+import { ResponseType, Teams } from '@Common/Types'
+import { EnvironmentTypeEnum } from '@Shared/constants'
+import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { ClusterType } from '@Shared/Services'
 import { EnvListMinDTO } from '@Shared/types'
-import { EnvironmentTypeEnum } from '@Shared/constants'
-import { ROUTES } from '@Common/Constants'
-import { stringComparatorBySortOrder } from '@Shared/Helpers'
-import { get } from '@Common/API'
+
 import { AppsGroupedByProjectsType, ClusterDTO, EnvironmentsGroupedByClustersType } from './types'
 
 export const getAppOptionsGroupedByProjects = async (): Promise<AppsGroupedByProjectsType> => {

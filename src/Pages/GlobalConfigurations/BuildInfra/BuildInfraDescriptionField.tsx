@@ -15,9 +15,11 @@
  */
 
 import { FormEvent, FunctionComponent } from 'react'
+
 import { Textarea } from '@Shared/Components'
-import { BuildInfraMetaConfigTypes, BuildInfraProfileMetaFieldProps } from './types'
+
 import { BUILD_INFRA_TEXT } from './constants'
+import { BuildInfraMetaConfigTypes, BuildInfraProfileMetaFieldProps } from './types'
 
 const BuildInfraProfileDescriptionField: FunctionComponent<BuildInfraProfileMetaFieldProps> = ({
     handleProfileInputChange,

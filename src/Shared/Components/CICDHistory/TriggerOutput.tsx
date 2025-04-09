@@ -14,37 +14,40 @@
  * limitations under the License.
  */
 
-import { Redirect, Route, Switch, useParams, useRouteMatch, NavLink } from 'react-router-dom'
 import React, { useEffect, useMemo } from 'react'
+import { NavLink, Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
+
 import { sanitizeTargetPlatforms } from '@Shared/Helpers'
+
 import {
     DeploymentAppTypes,
     GenericEmptyState,
+    mapByKey,
     Progressing,
     Reload,
+    ServerError,
+    URLS,
     useAsync,
     useInterval,
-    URLS,
-    ServerError,
-    mapByKey,
 } from '../../../Common'
-import {
-    FetchIdDataStatus,
-    HistoryComponentType,
-    TriggerOutputProps,
-    statusSet,
-    terminalStatus,
-    History,
-    HistoryLogsProps,
-} from './types'
-import { getTagDetails, getTriggerDetails } from './service'
-import LogsRenderer from './LogsRenderer'
+import { EMPTY_STATE_STATUS } from '../../constants'
+import Artifacts from './Artifacts'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
 import { GitChanges, Scroller } from './History.components'
-import Artifacts from './Artifacts'
+import LogsRenderer from './LogsRenderer'
+import { getTagDetails, getTriggerDetails } from './service'
 import TriggerDetails from './TriggerDetails'
-import { EMPTY_STATE_STATUS } from '../../constants'
+import {
+    FetchIdDataStatus,
+    History,
+    HistoryComponentType,
+    HistoryLogsProps,
+    statusSet,
+    terminalStatus,
+    TriggerOutputProps,
+} from './types'
+
 import './cicdHistory.scss'
 
 const HistoryLogs: React.FC<HistoryLogsProps> = ({
