@@ -74,8 +74,6 @@ const Field = ({
                 return true
             }
         })
-        // NOTE: we probably should use uiSchema instead?
-        .sort((prop) => (schema.properties?.[prop.name]?.type === 'boolean' ? -1 : 1))
         .map((prop) => prop.content)
 
     if (hasAdditionalProperties) {
