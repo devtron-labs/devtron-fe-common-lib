@@ -9,6 +9,7 @@ import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
+import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
@@ -43,6 +44,7 @@ import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
+import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
 import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
@@ -95,6 +97,7 @@ import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
+import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
 import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
@@ -117,6 +120,7 @@ export const iconMap = {
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-ather': ICAther,
     'ic-azure': ICAzure,
+    'ic-bg-cluster': ICBgCluster,
     'ic-bharatpe': ICBharatpe,
     'ic-bitbucket': ICBitbucket,
     'ic-book-open': ICBookOpen,
@@ -151,6 +155,7 @@ export const iconMap = {
     'ic-env': ICEnv,
     'ic-error': ICError,
     'ic-failure': ICFailure,
+    'ic-file-key': ICFileKey,
     'ic-folder-user': ICFolderUser,
     'ic-gear': ICGear,
     'ic-git': ICGit,
@@ -203,6 +208,7 @@ export const iconMap = {
     'ic-success': ICSuccess,
     'ic-suspended': ICSuspended,
     'ic-tata1mg': ICTata1mg,
+    'ic-terminal-fill': ICTerminalFill,
     'ic-timeout-two-dash': ICTimeoutTwoDash,
     'ic-timer': ICTimer,
     'ic-travclan': ICTravclan,
