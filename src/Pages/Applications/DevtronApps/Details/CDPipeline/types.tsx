@@ -128,6 +128,7 @@ export interface TriggerCDNodeServiceProps extends Pick<APIOptions, 'abortContro
     ciArtifactId: number
     appId: number
     stageType: DeploymentNodeType
+    skipIfHibernated: boolean
     deploymentWithConfig?: string
     wfrId?: number
     /**
@@ -139,9 +140,10 @@ export interface TriggerCDNodeServiceProps extends Pick<APIOptions, 'abortContro
 
 export interface TriggerCDPipelinePayloadType
     extends Pick<
-        TriggerCDNodeServiceProps,
-        'pipelineId' | 'appId' | 'ciArtifactId' | 'runtimeParamsPayload' | 'deploymentWithConfig'
-    > {
+            TriggerCDNodeServiceProps,
+            'pipelineId' | 'appId' | 'ciArtifactId' | 'runtimeParamsPayload' | 'deploymentWithConfig'
+        >,
+        Partial<Pick<TriggerCDNodeServiceProps, 'skipIfHibernated'>> {
     cdWorkflowType: (typeof STAGE_MAP)[keyof typeof STAGE_MAP]
     isRollbackDeployment: boolean
     wfrIdForDeploymentWithSpecificTrigger?: number
