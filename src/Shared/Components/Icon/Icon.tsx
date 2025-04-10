@@ -5,7 +5,6 @@ import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
 import { ReactComponent as ICApica } from '@IconsV2/ic-apica.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
-import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
@@ -95,6 +94,7 @@ import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
+import { ReactComponent as ICSynced } from '@IconsV2/ic-synced.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
 import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
@@ -114,7 +114,6 @@ export const iconMap = {
     'ic-add': ICAdd,
     'ic-apica': ICApica,
     'ic-app-group': ICAppGroup,
-    'ic-arrow-clockwise': ICArrowClockwise,
     'ic-arrow-right': ICArrowRight,
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-ather': ICAther,
@@ -204,6 +203,7 @@ export const iconMap = {
     'ic-stamp': ICStamp,
     'ic-success': ICSuccess,
     'ic-suspended': ICSuspended,
+    'ic-synced': ICSynced,
     'ic-tata1mg': ICTata1mg,
     'ic-timeout-two-dash': ICTimeoutTwoDash,
     'ic-timer': ICTimer,
