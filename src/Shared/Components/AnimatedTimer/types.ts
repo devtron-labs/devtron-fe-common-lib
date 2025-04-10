@@ -6,4 +6,8 @@ export interface AnimatedTimerProps extends Pick<Parameters<typeof animate>[2], 
      */
     duration: number
     onComplete?: () => void
+    /**
+     * @default 24
+     */
+    size?: number
 }

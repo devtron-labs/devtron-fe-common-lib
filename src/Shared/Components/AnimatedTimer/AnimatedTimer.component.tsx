@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
 import { AnimatedTimerProps } from './types'
-import { CX, CY, END_ANGLE, RADIUS, START_ANGLE } from './constants'
+import { END_ANGLE, START_ANGLE } from './constants'
 
 const polarToCartesian = (cx: number, cy: number, r: number, angleInDegrees: number) => {
     const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0
@@ -25,7 +25,11 @@ const describeArcPath = (cx: number, cy: number, r: number, endAngle: number) =>
     `
 }
 
-const AnimatedTimer = ({ duration, onComplete }: AnimatedTimerProps) => {
+const AnimatedTimer = ({ duration, onComplete, size = 24 }: AnimatedTimerProps) => {
+    const CX = size / 2
+    const CY = size / 2
+    const RADIUS = size / 4
+
     const angle = useMotionValue<number>(START_ANGLE)
     const d = useTransform(angle, (currentAngle) => describeArcPath(CX, CY, RADIUS, currentAngle))
     useEffect(() => {
