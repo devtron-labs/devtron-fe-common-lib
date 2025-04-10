@@ -15,24 +15,27 @@
  */
 
 import React, { useState } from 'react'
+
+import { ReactComponent as ICBack } from '@Icons/ic-caret-left-small.svg'
+import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import {
-    ErrorScreenManager,
     ClipboardButton,
+    ErrorScreenManager,
     GenericEmptyState,
     ImageType,
     Progressing,
     stopPropagation,
     VisibleModal2,
 } from '@Common/index'
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { ReactComponent as ICBack } from '@Icons/ic-caret-left-small.svg'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components/Button'
 import { ComponentSizeType } from '@Shared/constants'
-import { Table, InfoCard } from './components'
-import { getDefaultSecurityModalState } from './constants'
-import { getTableData, getInfoCardData } from './config'
-import { SecurityModalPropsType, SecurityModalStateType, DetailViewDataType } from './types'
+
 import { getEmptyStateValues } from './config/EmptyState'
+import { InfoCard, Table } from './components'
+import { getInfoCardData, getTableData } from './config'
+import { getDefaultSecurityModalState } from './constants'
+import { DetailViewDataType, SecurityModalPropsType, SecurityModalStateType } from './types'
+
 import './styles.scss'
 
 /**

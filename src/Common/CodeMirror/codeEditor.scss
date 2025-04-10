@@ -267,13 +267,13 @@
         &.cm-merge-a .cm-changedText,
         .cm-deletedChunk .cm-deletedText,
         &.cm-merge-a .cm-changedLineGutter {
-            background: var(--R300);
+            background: var(--R500);
         }
 
         &.cm-merge-b .cm-changedLine,
         &.cm-merge-b .cm-changedText,
         &.cm-merge-b .cm-changedLineGutter {
-            background: var(--G300);
+            background: var(--G500);
         }
     }
 
@@ -306,11 +306,29 @@
     }
 
     &__container {
+        .cm-merge-theme:not(.code-editor__mini-map) .cm-mergeView {
+            border-radius: 4px;
+        }
+
+        .code-editor__minimap-container {
+            border-bottom-right-radius: 4px;
+        }
+
         .cm-editor {
             border-radius: 4px;
 
             .cm-scroller {
                 border-radius: 4px;
+            }
+        }
+
+        .cm-merge-theme.code-editor__mini-map {
+            .cm-editor {
+                border-radius: 0;
+
+                .cm-scroller {
+                    border-radius: 0;
+                }
             }
         }
 

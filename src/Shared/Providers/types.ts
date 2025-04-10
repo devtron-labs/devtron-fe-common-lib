@@ -15,8 +15,9 @@
  */
 
 import { Dispatch, MutableRefObject, ReactNode, SetStateAction } from 'react'
-import { ServerInfo } from '../Components/Header/types'
+
 import { SERVER_MODE } from '../../Common'
+import { ServerInfo } from '../Components/Header/types'
 import { DevtronLicenseInfo, LicenseInfoDialogType } from '..'
 
 export interface MainContext {

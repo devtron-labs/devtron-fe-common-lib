@@ -15,10 +15,13 @@
  */
 
 import YAML from 'yaml'
-import { showError, YAMLStringify } from '@Common/Helper'
-import { ROUTES } from '@Common/Constants'
-import { ResponseType } from '@Common/Types'
+
 import { getIsRequestAborted, post } from '@Common/API'
+import { ROUTES } from '@Common/Constants'
+import { showError, YAMLStringify } from '@Common/Helper'
+import { ResponseType } from '@Common/Types'
+
+import { GET_RESOLVED_DEPLOYMENT_TEMPLATE_EMPTY_RESPONSE } from './constants'
 import {
     GetDeploymentManifestPayloadType,
     GetDeploymentManifestProps,
@@ -28,7 +31,6 @@ import {
     ResolvedDeploymentTemplateDTO,
     ValuesAndManifestFlagDTO,
 } from './types'
-import { GET_RESOLVED_DEPLOYMENT_TEMPLATE_EMPTY_RESPONSE } from './constants'
 
 export const getDeploymentManifest = async (
     params: GetDeploymentManifestProps,

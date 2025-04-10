@@ -16,10 +16,10 @@
 
 import { ReactNode } from 'react'
 
-import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
-import { ReactComponent as Info } from '@Icons/ic-info-filled.svg'
-import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICCompare } from '@Icons/ic-compare.svg'
+import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
+import { ReactComponent as Info } from '@Icons/ic-info-filled.svg'
+import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
 import { ClipboardButton } from '@Common/ClipboardButton'
 import { getComponentSpecificThemeClass } from '@Shared/Providers'
 
@@ -57,7 +57,9 @@ export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEdit
                 {!hideDefaultSplitHeader && lhsValue && <SplitPane />}
             </div>
             {diffMode ? (
-                <div className={`bg__secondary dc__align-self-stretch ${readOnly ? 'px-15' : 'px-5'}`} />
+                <div
+                    className={`bg__secondary dc__align-self-stretch ${hasCodeEditorContainer ? 'dc__top-right-radius-4' : ''} ${readOnly ? 'px-15' : 'px-5'}`}
+                />
             ) : null}
         </div>
     )

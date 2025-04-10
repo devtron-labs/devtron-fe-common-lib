@@ -17,11 +17,12 @@
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
+
 import { PopupMenu, StyledRadioGroup as RadioGroup } from '../../../Common'
 import { StatusFilterButtonType } from './types'
+import { getAppStatusIcon, getNodesCount, getStatusFilters } from './utils'
 
 import './StatusFilterButtonComponent.scss'
-import { getAppStatusIcon, getNodesCount, getStatusFilters } from './utils'
 
 export const StatusFilterButtonComponent = ({
     nodes,

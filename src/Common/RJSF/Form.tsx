@@ -18,6 +18,7 @@ import { forwardRef, useMemo } from 'react'
 import RJSF from '@rjsf/core'
 
 import { SCHEMA_07_VALIDATOR } from '@Shared/validations'
+
 import { templates, widgets } from './config'
 import { FormProps } from './types'
 import {
@@ -26,6 +27,7 @@ import {
     translateString,
     updateFormDataFromFormState,
 } from './utils'
+
 import './rjsfForm.scss'
 
 // Need to use this way because the default import was not working as expected

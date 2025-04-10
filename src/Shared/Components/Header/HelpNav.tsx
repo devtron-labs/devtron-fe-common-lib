@@ -18,12 +18,13 @@ import { Fragment } from 'react'
 import ReactGA from 'react-ga4'
 import { NavLink } from 'react-router-dom'
 import { SliderButton } from '@typeform/embed-react'
-import { stopPropagation, URLS } from '../../../Common'
-import { InstallationType, HelpNavType, HelpOptionType } from './types'
-import { ReactComponent as GettingStartedIcon } from '../../../Assets/Icon/ic-onboarding.svg'
+
 import { ReactComponent as Feedback } from '../../../Assets/Icon/ic-feedback.svg'
+import { ReactComponent as GettingStartedIcon } from '../../../Assets/Icon/ic-onboarding.svg'
+import { stopPropagation, URLS } from '../../../Common'
 import { useMainContext } from '../../Providers'
 import { Icon } from '../Icon'
+import { HelpNavType, HelpOptionType, InstallationType } from './types'
 import { getHelpOptions } from './utils'
 
 const HelpNav = ({

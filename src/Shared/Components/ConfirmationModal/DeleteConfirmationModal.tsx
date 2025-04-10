@@ -15,13 +15,15 @@
  */
 
 import React, { useState } from 'react'
-import { ToastManager, ToastVariantType } from '@Shared/Services/ToastManager'
-import { ServerErrors } from '@Common/ServerError'
+
 import { showError, stopPropagation } from '@Common/Helper'
-import { ConfirmationModalVariantType, DeleteConfirmationModalProps } from './types'
-import ConfirmationModal from './ConfirmationModal'
+import { ServerErrors } from '@Common/ServerError'
+import { ToastManager, ToastVariantType } from '@Shared/Services/ToastManager'
+
 import { CannotDeleteModal } from './CannotDeleteModal'
+import ConfirmationModal from './ConfirmationModal'
 import { ForceDeleteConfirmationModal } from './ForceDeleteConfirmationModal'
+import { ConfirmationModalVariantType, DeleteConfirmationModalProps } from './types'
 
 export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     title,

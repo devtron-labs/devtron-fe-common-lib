@@ -15,9 +15,10 @@
  */
 
 import Tippy from '@tippyjs/react'
+
+import { ReactComponent as ICAbort } from '../../../Assets/Icon/ic-abort.svg'
 import { EXCLUDED_IMAGE_TOOLTIP } from '../../constants'
 import { ExcludedImageNodeProps } from './types'
-import { ReactComponent as ICAbort } from '../../../Assets/Icon/ic-abort.svg'
 
 const ExcludedImageNode = ({ image }: ExcludedImageNodeProps) => (
     <Tippy className="default-tt w-200" arrow={false} placement="top" content={EXCLUDED_IMAGE_TOOLTIP}>

@@ -16,9 +16,10 @@
 
 import { useMemo } from 'react'
 import ReactSelect from 'react-select'
+
+import { ClearIndicator, useAsync } from '../../../Common'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import { commonSelectStyles, GroupHeading, LoadingIndicator } from '../ReactSelect'
-import { ClearIndicator, useAsync } from '../../../Common'
 import { ENVIRONMENT_SELECTOR_TEXT } from './constants'
 import { getEnvironmentsGroupedByCluster } from './service'
 import { EnvironmentSelectorProps } from './types'

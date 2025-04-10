@@ -16,8 +16,9 @@
 
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { deepEquals } from '@rjsf/utils'
+
+import { ShortcutType, UseRegisterShortcutContextType, UseRegisterShortcutProviderType } from './types'
 import { UseRegisterShortcutContext } from './UseRegisterShortcutContext'
-import { UseRegisterShortcutProviderType, ShortcutType, UseRegisterShortcutContextType } from './types'
 import { preprocessKeys, verifyCallbackStack } from './utils'
 
 const IGNORE_TAGS_FALLBACK = ['input', 'textarea', 'select']

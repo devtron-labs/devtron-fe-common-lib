@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+
 import {
     noop,
     UseRegisterShortcutProvider,
@@ -7,6 +8,9 @@ import {
     useUrlFilters,
 } from '@Common/index'
 
+import { BulkSelectionEvents, BulkSelectionProvider, useBulkSelection } from '../BulkSelection'
+import { BULK_ACTION_GUTTER_LABEL } from './constants'
+import InternalTable from './InternalTable'
 import {
     FiltersTypeEnum,
     FilterWrapperProps,
@@ -18,9 +22,6 @@ import {
     VisibleColumnsWrapperProps,
 } from './types'
 import { getVisibleColumns, setVisibleColumnsToLocalStorage } from './utils'
-import { BULK_ACTION_GUTTER_LABEL } from './constants'
-import { BulkSelectionEvents, BulkSelectionProvider, useBulkSelection } from '../BulkSelection'
-import InternalTable from './InternalTable'
 
 import './styles.scss'
 

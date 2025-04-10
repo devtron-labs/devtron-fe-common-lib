@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
+import { GroupBase, MultiValue, OptionsOrGroups, StylesConfig } from 'react-select'
+
+import { noop } from '@Common/Helper'
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
-import { GroupBase, MultiValue, OptionsOrGroups, StylesConfig } from 'react-select'
-import { noop } from '@Common/Helper'
-import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
+
 import { SELECT_PICKER_CONTROL_SIZE_MAP, SELECT_PICKER_FONT_SIZE_MAP, SELECT_PICKER_ICON_SIZE_MAP } from './constants'
+import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 
 const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
     menuSize: SelectPickerProps<OptionValue, IsMulti>['menuSize'],
@@ -187,6 +189,9 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
             fontSize: '13px',
             lineHeight: '20px',
             fontWeight: 400,
+            borderRadius: '4px',
+            marginInline: '4px',
+            width: 'auto',
 
             ':active': {
                 backgroundColor: 'var(--N100)',
@@ -200,6 +205,10 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
                 cursor: 'not-allowed',
                 opacity: 0.5,
             }),
+
+            '& + .select-picker__group': {
+                marginTop: '4px',
+            },
         }),
         dropdownIndicator: (base, state) => ({
             ...base,
@@ -288,11 +297,16 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         }),
         group: (base) => ({
             ...base,
-            paddingTop: '4px',
-            paddingBottom: 0,
+            paddingBlock: '4px',
+            borderTop: '1px solid var(--border-secondary-translucent)',
 
             '&:first-child': {
                 paddingTop: 0,
+                borderTop: 'none',
+            },
+
+            '&:last-child': {
+                paddingBottom: 0,
             },
         }),
         groupHeading: (base) => ({
@@ -301,8 +315,8 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
             fontSize: '12px',
             color: 'var(--N900)',
             backgroundColor: 'var(--bg-menu-secondary)',
-            marginBottom: 0,
-            padding: '4px 8px',
+            marginBottom: '4px',
+            padding: '4px 12px',
             textTransform: 'none',
             overflow: 'hidden',
             textOverflow: 'ellipsis',

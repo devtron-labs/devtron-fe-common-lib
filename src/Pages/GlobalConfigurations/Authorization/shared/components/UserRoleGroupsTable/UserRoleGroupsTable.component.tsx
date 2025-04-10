@@ -16,6 +16,7 @@
 
 import { UserRoleGroupsTableProps } from './types'
 import UserRoleGroupTableRow from './UserRoleGroupTableRow'
+
 import './userRoleGroupsTable.scss'
 
 const getModifierClassName = (showStatus, showDelete) => {

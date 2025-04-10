@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-import { Tooltip } from '@Common/Tooltip'
 import Draggable, { DraggableProps } from 'react-draggable'
+
 import { ReactComponent as SortIcon } from '@Icons/ic-arrow-up-down.svg'
 import { ReactComponent as SortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
+import { Tooltip } from '@Common/Tooltip'
+
 import { SortingOrder } from '../Constants'
 import { noop } from '../Helper'
 import { SortableTableHeaderCellProps } from './types'
+
 import './sortableTableHeaderCell.scss'
 
 /**

@@ -16,9 +16,11 @@
 
 import { LinkProps, NavLinkProps } from 'react-router-dom'
 
+import { TooltipProps } from '@Common/Tooltip/types'
 import { ComponentSizeType } from '@Shared/constants'
 import { DataAttributes } from '@Shared/types'
-import { TooltipProps } from '@Common/Tooltip/types'
+
+import { IconName } from '../Icon'
 
 type TabComponentProps<TabTypeProps> = TabTypeProps & DataAttributes
 
@@ -106,10 +108,11 @@ export type TabProps = {
      */
     description?: string | string[]
     /**
-     * Icon component to be displayed in the tab.
-     * This should be a functional component that renders an SVG.
+     * Icon to be displayed in the tab.
+     * This can either be a functional component that renders a SVG
+     * or a string representing the name of the icon to be rendered by the Icon component.
      */
-    icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+    icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>> | IconName
     /**
      * Badge number to be displayed on the tab, typically for notifications.
      */

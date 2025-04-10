@@ -1,8 +1,10 @@
 import { defaultCountries, parseCountry, ParsedCountry } from 'react-international-phone'
+
 import { Tooltip } from '@Common/Tooltip'
-import { CountrySelectProps } from './types'
-import { SelectPickerOptionType } from '../SelectPicker'
+
 import { FlagImage } from '../FlagImage'
+import { SelectPickerOptionType } from '../SelectPicker'
+import { CountrySelectProps } from './types'
 
 export const getCountryOptions = (variant: CountrySelectProps['variant']): SelectPickerOptionType<ParsedCountry>[] =>
     defaultCountries.map((countryData) => {

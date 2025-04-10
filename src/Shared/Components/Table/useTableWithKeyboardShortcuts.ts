@@ -1,9 +1,11 @@
-import { useRegisterShortcut } from '@Common/Hooks'
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
 import { noop } from '@Common/Helper'
+import { useRegisterShortcut } from '@Common/Hooks'
+
 import { BulkSelectionEvents } from '../BulkSelection'
-import { InternalTableProps, RowsType, SignalEnum } from './types'
 import { EVENT_TARGET } from './constants'
+import { InternalTableProps, RowsType, SignalEnum } from './types'
 
 const useTableWithKeyboardShortcuts = (
     {

@@ -15,12 +15,14 @@
  */
 
 import YAML from 'yaml'
-import { hasESO } from '@Pages/index'
-import { CMSecretExternalType, CMSecretYamlData, ConfigMapSecretUseFormProps } from '@Shared/Services'
-import { UseFormValidation, UseFormValidations } from '@Shared/Hooks'
-import { YAMLStringify } from '@Common/Helper'
+
 import { PATTERNS } from '@Common/Constants'
+import { YAMLStringify } from '@Common/Helper'
+import { UseFormValidation, UseFormValidations } from '@Shared/Hooks'
+import { CMSecretExternalType, CMSecretYamlData, ConfigMapSecretUseFormProps } from '@Shared/Services'
 import { validateCMVolumeMountPath } from '@Shared/validations'
+import { hasESO } from '@Pages/index'
+
 import { CONFIG_MAP_SECRET_YAML_PARSE_ERROR, SECRET_TOAST_INFO } from './constants'
 import { getESOSecretDataFromYAML } from './utils'
 
@@ -32,9 +34,12 @@ import { getESOSecretDataFromYAML } from './utils'
  */
 const validateYaml = (yaml: string): UseFormValidation['custom'] => {
     try {
-        // Check if the YAML string is empty or undefined, if so, throw a no-data error.
+        // Check if the YAML string is empty or undefined, if so, return required field error.
         if (!yaml) {
-            throw new Error('This is a required field')
+            return {
+                isValid: () => false,
+                message: 'This is a required field',
+            }
         }
 
         // Parse the YAML string into a JSON object.
@@ -47,11 +52,13 @@ const validateYaml = (yaml: string): UseFormValidation['custom'] => {
             const errorKeys = [] // To store keys that do not match the key pattern.
             const errorValues = [] // To store values that are boolean or numeric, which should be quoted.
 
+            let updatedError = ''
+
             // Iterate through the object keys and validate each key-value pair.
             Object.keys(json).forEach((k) => {
-                // If a key or its corresponding value is empty, throw a no-data error.
+                // If a key or its corresponding value is empty, set required field error.
                 if (!k && !json[k]) {
-                    throw new Error('This is a required field')
+                    updatedError = 'This is a required field'
                 }
 
                 // Convert the value to a string for easier validation, handle nested objects using YAMLStringify.
@@ -68,7 +75,12 @@ const validateYaml = (yaml: string): UseFormValidation['custom'] => {
                 }
             })
 
-            let updatedError = ''
+            if (updatedError) {
+                return {
+                    isValid: () => false,
+                    message: updatedError,
+                }
+            }
 
             // If there are invalid keys, append a message listing the problematic keys.
             if (errorKeys.length > 0) {
@@ -116,9 +128,14 @@ const validateYaml = (yaml: string): UseFormValidation['custom'] => {
  */
 const validateEsoSecretYaml = (esoSecretYaml: string): UseFormValidation => {
     try {
-        // Check if the provided YAML string is empty or undefined, and throw a no-data error.
+        // Check if the provided YAML string is empty or undefined, and return required field error.
         if (!esoSecretYaml) {
-            throw new Error('This is a required field')
+            return {
+                custom: {
+                    isValid: () => false,
+                    message: 'This is a required field',
+                },
+            }
         }
 
         // Parse the YAML string into a JSON object.

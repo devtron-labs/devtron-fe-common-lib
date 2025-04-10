@@ -15,8 +15,9 @@
  */
 
 import { useMemo } from 'react'
-import { PluginTagSelectProps } from './types'
+
 import { FilterSelectPicker, FilterSelectPickerProps, SelectPickerOptionType } from '../SelectPicker'
+import { PluginTagSelectProps } from './types'
 
 const PluginTagSelect = ({
     availableTags,
