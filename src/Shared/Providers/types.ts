@@ -65,7 +65,7 @@ export interface MainContext {
      */
     licenseData: DevtronLicenseInfo
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
-    fetchHelmAppStatus: boolean
+    canFetchHelmAppStatus: boolean
 }
 
 export interface MainContextProviderProps {
