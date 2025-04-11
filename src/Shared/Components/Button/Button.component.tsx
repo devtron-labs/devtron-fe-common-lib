@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { ButtonHTMLAttributes, MutableRefObject, PropsWithChildren, useEffect, useRef, useState } from 'react'
-import { Link, LinkProps } from 'react-router-dom'
+import { MutableRefObject, PropsWithChildren, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Progressing } from '@Common/Progressing'
 import { Tooltip } from '@Common/Tooltip'
 import { TooltipProps } from '@Common/Tooltip/types'
@@ -26,6 +26,7 @@ import './button.scss'
 
 const ButtonElement = ({
     component = ButtonComponentType.button,
+    anchorProps,
     linkProps,
     buttonProps,
     onClick,
@@ -53,16 +54,34 @@ const ButtonElement = ({
         elementRef: MutableRefObject<HTMLButtonElement | HTMLAnchorElement>
     }
 >) => {
+    // Added the specific class to ensure that the link override is applied
+    const linkOrAnchorClassName = `${props.className} button__link ${props.disabled ? 'dc__disable-click' : ''}`
+
     if (component === ButtonComponentType.link) {
         return (
             <Link
                 {...linkProps}
                 {...props}
-                // Added the specific class to ensure that the link override is applied
-                className={`${props.className} button__link ${props.disabled ? 'dc__disable-click' : ''}`}
-                onClick={onClick as LinkProps['onClick']}
+                className={linkOrAnchorClassName}
+                onClick={onClick as ButtonProps<typeof component>['onClick']}
                 ref={elementRef as MutableRefObject<HTMLAnchorElement>}
             />
+        )
+    }
+
+    if (component === ButtonComponentType.anchor) {
+        return (
+            <a
+                target="_blank"
+                rel="noopener noreferrer"
+                {...anchorProps}
+                {...props}
+                className={linkOrAnchorClassName}
+                onClick={onClick as ButtonProps<typeof component>['onClick']}
+                ref={elementRef as MutableRefObject<HTMLAnchorElement>}
+            >
+                {props.children}
+            </a>
         )
     }
 
@@ -72,7 +91,7 @@ const ButtonElement = ({
             {...props}
             // eslint-disable-next-line react/button-has-type
             type={buttonProps?.type || 'button'}
-            onClick={onClick as ButtonHTMLAttributes<HTMLButtonElement>['onClick']}
+            onClick={onClick as ButtonProps<typeof component>['onClick']}
             ref={elementRef as MutableRefObject<HTMLButtonElement>}
         />
     )
@@ -180,9 +199,9 @@ const Button = <ComponentType extends ButtonComponentType>({
 
                 autoClickTimeoutRef.current = setTimeout(() => {
                     elementRef.current.click()
-                    // This is 100ms less than the duration of the transition in CSS
+                    // This is 5ms less than the duration of the transition in CSS
                     // Make sure to update the same in CSS if this is changed
-                }, 2400)
+                }, 1495)
             }, 100)
         }
 

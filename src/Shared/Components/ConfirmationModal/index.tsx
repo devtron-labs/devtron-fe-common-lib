@@ -18,5 +18,6 @@ export { default as ConfirmationModal, BaseConfirmationModal } from './Confirmat
 export { DeleteConfirmationModal } from './DeleteConfirmationModal'
 export { ForceDeleteConfirmationModal } from './ForceDeleteConfirmationModal'
 export { CannotDeleteModal } from './CannotDeleteModal'
-export { ConfirmationModalVariantType, type ConfirmationModalProps } from './types'
+export { ConfirmationModalVariantType, type ConfirmationModalProps, type DeleteConfirmationModalProps } from './types'
 export { ConfirmationModalProvider } from './ConfirmationModalContext'
+export { getConfirmationLabel } from './utils'

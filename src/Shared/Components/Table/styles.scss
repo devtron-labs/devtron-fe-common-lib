@@ -1,0 +1,26 @@
+.generic-table {
+    &__row {
+        &:focus {
+            outline: none;
+        }
+
+        &:hover,
+        &:hover > *,
+        &--active,
+        &--active > * {
+            background-color: var(--bg-hover-opaque);
+        }
+
+        &--bulk-selected,
+        &--bulk-selected > * {
+            background-color: var(--B50);
+        }
+
+        &--bulk-selected:hover,
+        &--bulk-selected:hover > *,
+        &--bulk-selected.generic-table__row--active,
+        &--bulk-selected.generic-table__row--active > * {
+            background-color: var(--B100);
+        }
+    }
+}

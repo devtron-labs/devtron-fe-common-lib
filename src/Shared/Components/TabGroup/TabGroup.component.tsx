@@ -63,7 +63,7 @@ const Tab = ({
         const content = (
             <>
                 <p className="m-0 flexbox dc__align-items-center dc__gap-6">
-                    {getTabIcon({ className: iconClassName, icon, showError, showWarning })}
+                    {getTabIcon({ className: iconClassName, icon, showError, showWarning, size, active })}
                     {label}
                     {getTabBadge(badge, badgeClassName)}
                     {getTabIndicator(showIndicator)}

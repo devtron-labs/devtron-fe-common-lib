@@ -16,7 +16,7 @@
 
 import { TooltipProps } from '@Common/Tooltip/types'
 import { ComponentSizeType } from '@Shared/constants'
-import { ButtonHTMLAttributes, ReactElement } from 'react'
+import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactElement } from 'react'
 import { LinkProps } from 'react-router-dom'
 
 // Using the same for BEM class elements
@@ -39,6 +39,7 @@ export enum ButtonStyleType {
 export enum ButtonComponentType {
     button = 'button',
     link = 'link',
+    anchor = 'anchor',
 }
 
 export type ButtonProps<ComponentType extends ButtonComponentType = ButtonComponentType.button> =
@@ -50,25 +51,43 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                */
               linkProps: Omit<LinkProps, 'children' | 'styles' | 'className' | 'onClick'>
               buttonProps?: never
+              anchorProps?: never
               onClick?: LinkProps['onClick']
           }
-        : {
-              /**
-               * Component to be rendered from the available options
-               *
-               * @default ButtonComponentType.button
-               */
-              component?: ComponentType | never
-              /**
-               * Props for the button component
-               */
-              buttonProps?: Omit<
-                  ButtonHTMLAttributes<HTMLButtonElement>,
-                  'children' | 'styles' | 'className' | 'disabled' | 'onClick'
-              >
-              linkProps?: never
-              onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick']
-          }) & {
+        : ComponentType extends ButtonComponentType.anchor
+          ? {
+                component: ButtonComponentType.anchor
+                linkProps?: never
+                buttonProps?: never
+                /**
+                 * Props for the anchor component
+                 *
+                 * Note: The target is '_blank' & rel is 'noopener noreferrer' by default.
+                 */
+                anchorProps: Omit<
+                    AnchorHTMLAttributes<HTMLAnchorElement>,
+                    'children' | 'styles' | 'className' | 'onClick'
+                >
+                onClick?: AnchorHTMLAttributes<HTMLAnchorElement>['onClick']
+            }
+          : {
+                /**
+                 * Component to be rendered from the available options
+                 *
+                 * @default ButtonComponentType.button
+                 */
+                component?: ComponentType | never
+                /**
+                 * Props for the button component
+                 */
+                buttonProps?: Omit<
+                    ButtonHTMLAttributes<HTMLButtonElement>,
+                    'children' | 'styles' | 'className' | 'disabled' | 'onClick'
+                >
+                linkProps?: never
+                anchorProps?: never
+                onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick']
+            }) & {
         /**
          * Variant of the button
          *
@@ -115,6 +134,8 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
         isOpacityHoverChild?: boolean
         /**
          * If provided, the button is clicked automatically after the pre-defined time
+         *
+         * Use from useTriggerAutoClickTimestamp hook
          */
         triggerAutoClickTimestamp?: number | null
     } & (

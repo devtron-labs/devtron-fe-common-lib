@@ -273,7 +273,10 @@ export const CodeEditorRenderer = ({
     }
 
     return diffMode ? (
-        <div className={`flexbox w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}>
+        <div
+            ref={codeMirrorParentDivRef}
+            className={`flexbox w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}
+        >
             {!codeMirrorMergeInstance && (
                 <div className="flex h-100 w-100">
                     <p>Calculating diff for large file. Please wait...</p>

@@ -1,57 +1,73 @@
-/*
- * Copyright (c) 2024. Devtron Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
+import { useEffect, useRef, useState } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
-import StyledRadioGroup from '../RadioGroup/RadioGroup'
-import { SegmentedControlProps, SegmentedControlVariant } from './types'
-import { SEGMENTED_CONTROL_SIZE_TO_CLASS_MAP } from './constants'
+import { SegmentedControlProps, SegmentType } from './types'
+import './segmentedControl.scss'
+import Segment from './Segment'
 
 const SegmentedControl = ({
-    tabs,
-    initialTab,
+    segments,
     onChange,
-    tooltips,
-    disabled = false,
-    rootClassName = '',
     name,
-    variant = SegmentedControlVariant.WHITE_ON_GRAY,
     size = ComponentSizeType.medium,
-    isControlled = false,
-}: SegmentedControlProps) => (
-    <StyledRadioGroup
-        className={`${variant} ${SEGMENTED_CONTROL_SIZE_TO_CLASS_MAP[size]} ${rootClassName}`}
-        onChange={onChange}
-        initialTab={initialTab}
-        name={name}
-        disabled={disabled}
-    >
-        {tabs.map((tab, index) => (
-            <StyledRadioGroup.Radio
-                value={tab.value}
-                key={tab.value}
-                className="fs-12 cn-7 fw-6 lh-20"
-                showTippy={!!tooltips?.[index]}
-                tippyContent={tooltips?.[index] ?? ''}
-                dataTestId={`${name}-${tab.value}`}
-                canSelect={!isControlled}
+    value: controlledValue,
+    fullWidth = false,
+    disabled,
+}: SegmentedControlProps) => {
+    const isUnControlledComponent = controlledValue === undefined
+
+    const segmentedControlRefContainer = useRef<HTMLDivElement>(null)
+    /**
+     * Using this ref to show the selected segment highlight with transition
+     */
+    const selectedSegmentRef = useRef<HTMLDivElement>(null)
+    const [selectedSegmentValue, setSelectedSegmentValue] = useState<SegmentType['value'] | null>(segments[0].value)
+    const segmentValue = isUnControlledComponent ? selectedSegmentValue : controlledValue
+
+    useEffect(() => {
+        if (segmentValue) {
+            const { offsetWidth, offsetLeft } = selectedSegmentRef.current
+            const { style } = segmentedControlRefContainer.current
+
+            style.setProperty('--segmented-control-highlight-width', `${offsetWidth}px`)
+            style.setProperty('--segmented-control-highlight-x-position', `${offsetLeft}px`)
+        }
+    }, [segmentValue, size, fullWidth])
+
+    const handleSegmentChange = (updatedSegment: SegmentType) => {
+        if (isUnControlledComponent) {
+            setSelectedSegmentValue(updatedSegment.value)
+        }
+        onChange?.(updatedSegment)
+    }
+
+    return (
+        <div
+            className={`segmented-control ${!fullWidth ? 'dc__inline-flex' : ''} ${disabled ? 'dc__disabled' : ''} br-6 ${size === ComponentSizeType.xs ? 'p-1' : 'p-2'}`}
+        >
+            <div
+                className="segmented-control__container flex left dc__position-rel dc__align-items-center dc__gap-2"
+                ref={segmentedControlRefContainer}
             >
-                {tab.label}
-            </StyledRadioGroup.Radio>
-        ))}
-    </StyledRadioGroup>
-)
+                {segments.map((segment) => {
+                    const isSelected = segment.value === segmentValue
+
+                    return (
+                        <Segment
+                            selectedSegmentRef={isSelected ? selectedSegmentRef : undefined}
+                            segment={segment}
+                            key={segment.value}
+                            name={name}
+                            onChange={handleSegmentChange}
+                            isSelected={isSelected}
+                            fullWidth={fullWidth}
+                            size={size}
+                            disabled={disabled || segment.isDisabled}
+                        />
+                    )
+                })}
+            </div>
+        </div>
+    )
+}
 
 export default SegmentedControl

@@ -263,9 +263,7 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             const validation = validations[name]
             const error = checkValidation(data[name], validation)
 
-            if (error) {
-                setErrors({ ...errors, [name]: error })
-            }
+            setErrors({ ...errors, [name]: error })
 
             return error
         }
@@ -288,10 +286,19 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             shouldDirty?: boolean
             /** A boolean indicating whether to mark the field as touched after setting the value. */
             shouldTouch?: boolean
+            /** A boolean indicating whether to trigger validation after setting the value. */
+            triggerError?: boolean
         },
     ) => {
         // Update the form data with the new value.
         setData((prev) => ({ ...prev, [name]: value }))
+        if (valueOptions?.triggerError) {
+            const validations = getValidations({ ...data, [name]: value })
+            const validation = validations[name]
+            const error = checkValidation(value, validation)
+
+            setErrors((prev) => ({ ...prev, [name]: error }))
+        }
         if (valueOptions?.shouldDirty) {
             const initialValues = initialValuesRef.current
             // Mark the field as dirty if the new value differs from the initial value.
@@ -320,8 +327,14 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             keepErrors?: boolean
             /** A boolean indicating whether the form should check for dirty state upon reset. */
             triggerDirty?: boolean
+            /** A boolean indicating whether the form should check for errors upon reset. */
+            triggerError?: boolean
             /** A boolean indicating whether the initial values of the form should be retained after reset. If false, provided formData will become initial data. */
             keepInitialValues?: boolean
+            /** Partial initial values to override the current initial values upon reset.
+             * @note `keepInitialValues` will have no effect when this is provided.
+             */
+            formInitialValues?: Partial<T>
         },
     ) => {
         const {
@@ -329,16 +342,23 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             keepTouched = false,
             keepErrors = false,
             triggerDirty = false,
+            triggerError = false,
             keepInitialValues = false,
+            formInitialValues = {},
         } = resetOptions ?? {} // Destructure reset options with defaults.
 
         setData(formData)
 
-        if (!keepInitialValues) {
+        if (Object.keys(formInitialValues).length) {
+            initialValuesRef.current = formInitialValues
+        } else if (!keepInitialValues) {
             initialValuesRef.current = formData
         }
 
-        if (!keepErrors) {
+        if (triggerError) {
+            const newErrors = getErrorsFromFormData(formData)
+            setErrors(newErrors)
+        } else if (!keepErrors) {
             setErrors({})
         }
 

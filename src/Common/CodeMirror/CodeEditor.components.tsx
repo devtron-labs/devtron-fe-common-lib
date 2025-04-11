@@ -57,7 +57,9 @@ export const Header = ({ children, className, hideDefaultSplitHeader }: CodeEdit
                 {!hideDefaultSplitHeader && lhsValue && <SplitPane />}
             </div>
             {diffMode ? (
-                <div className={`bg__secondary dc__align-self-stretch ${readOnly ? 'px-15' : 'px-5'}`} />
+                <div
+                    className={`bg__secondary dc__align-self-stretch ${hasCodeEditorContainer ? 'dc__top-right-radius-4' : ''} ${readOnly ? 'px-15' : 'px-5'}`}
+                />
             ) : null}
         </div>
     )
