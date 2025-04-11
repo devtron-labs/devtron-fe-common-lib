@@ -21,12 +21,18 @@ import { ReactComponent as ICDeploy } from '@Icons/ic-nav-rocket.svg'
 import DeployAudio from '@Sounds/DeployAudio.mp3'
 import { ComponentSizeType } from '@Shared/constants'
 
-import { Button } from '../Button'
+import { Button, ButtonStyleType } from '../Button'
 import { AnimatedDeployButtonProps } from './types'
 
 import './animatedDeployButton.scss'
 
-const AnimatedDeployButton = ({ isVirtualEnvironment, onButtonClick }: AnimatedDeployButtonProps) => {
+const AnimatedDeployButton = ({
+    isLoading,
+    isVirtualEnvironment,
+    onButtonClick,
+    canDeployWithoutApproval,
+    isBulkCDTrigger,
+}: AnimatedDeployButtonProps) => {
     const audioRef = useRef<HTMLAudioElement>(null)
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null)
     const isAudioEnabled: boolean = window._env_.FEATURE_ACTION_AUDIOS_ENABLE
@@ -66,7 +72,12 @@ const AnimatedDeployButton = ({ isVirtualEnvironment, onButtonClick }: AnimatedD
         <motion.div whileHover="hover" className={`${clicked ? 'hide-button-text' : ''}`}>
             <Button
                 dataTestId="cd-trigger-deploy-button"
-                text={`Deploy${isVirtualEnvironment ? ' to isolated env' : ''}`}
+                isLoading={isLoading}
+                text={
+                    canDeployWithoutApproval
+                        ? 'Deploy without approval'
+                        : `Deploy${isVirtualEnvironment ? ' to isolated env' : ''}`
+                }
                 startIcon={
                     <motion.div
                         variants={svgMotionVariants}
@@ -88,6 +99,13 @@ const AnimatedDeployButton = ({ isVirtualEnvironment, onButtonClick }: AnimatedD
                 }
                 size={ComponentSizeType.large}
                 onClick={handleButtonClick}
+                style={canDeployWithoutApproval && !isBulkCDTrigger ? ButtonStyleType.warning : ButtonStyleType.default}
+                showTooltip={canDeployWithoutApproval}
+                tooltipProps={{
+                    content: isBulkCDTrigger
+                        ? 'Non-approved image(s) are selected for some applications. You are authorized to deploy.'
+                        : 'A non-approved image is selected. You are authorized to deploy.',
+                }}
             />
             {/* Disabling es-lint as captions are not required */}
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}

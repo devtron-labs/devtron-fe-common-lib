@@ -61,7 +61,7 @@ const ArtifactInfo = ({
         }
 
         return (
-            <div className="material-history__info flex left fs-13 dc__gap-8">
+            <div className="material-history__info flex left fs-13 dc__gap-6">
                 <DeployIcon className="icon-dim-16 scn-6" />
                 <span className="fs-13 fw-4">{deployedTime}</span>
             </div>

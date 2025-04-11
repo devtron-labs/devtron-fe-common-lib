@@ -187,6 +187,7 @@ export interface History extends Pick<TargetPlatformsDTO, 'targetPlatforms'>, Wo
     triggerMetadata?: string
     runSource?: RunSourceType
     targetConfig?: TargetConfigType
+    isDeploymentWithoutApproval?: boolean
 }
 
 export interface ExecutionInfoType {
@@ -445,7 +446,7 @@ export interface DeploymentDetailStepsType {
     renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
 }
 
-export interface RenderCIListHeaderProps {
+export interface RenderCIListHeaderProps extends Pick<History, 'isDeploymentWithoutApproval'> {
     userApprovalMetadata: UserApprovalMetadataType
     triggeredBy: string
     appliedFilters: FilterConditionsListType[]
@@ -465,7 +466,7 @@ export interface VirtualHistoryArtifactProps {
     }
 }
 
-export type CIListItemType = Pick<History, 'promotionApprovalMetadata'> & {
+export type CIListItemType = Pick<History, 'promotionApprovalMetadata' | 'isDeploymentWithoutApproval'> & {
     userApprovalMetadata?: UserApprovalMetadataType
     triggeredBy?: string
     children: ReactNode
@@ -737,6 +738,7 @@ export type GitChangesType = {
           appliedFilters?: never
           appliedFiltersTimestamp?: never
           renderCIListHeader?: never
+          isDeploymentWithoutApproval?: never
       }
     | {
           artifact: string
@@ -755,6 +757,7 @@ export type GitChangesType = {
           appliedFilters?: FilterConditionsListType[]
           appliedFiltersTimestamp?: string
           renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+          isDeploymentWithoutApproval?: History['isDeploymentWithoutApproval']
       }
 )
 

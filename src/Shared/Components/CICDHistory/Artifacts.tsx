@@ -67,6 +67,7 @@ export const CIListItem = ({
     selectedEnvironmentName,
     renderCIListHeader,
     targetPlatforms,
+    isDeploymentWithoutApproval,
 }: CIListItemType) => {
     const headerMetaDataPresent =
         !!getIsApprovalPolicyConfigured(userApprovalMetadata?.approvalConfigData) ||
@@ -92,6 +93,7 @@ export const CIListItem = ({
                     appliedFiltersTimestamp,
                     promotionApprovalMetadata,
                     selectedEnvironmentName,
+                    isDeploymentWithoutApproval,
                 })}
 
             <div

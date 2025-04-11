@@ -21,6 +21,7 @@ import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
 import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots.svg'
 import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
+import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCiWebhook } from '@IconsV2/ic-ci-webhook.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
@@ -85,6 +86,8 @@ import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-col
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
+import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
+import { ReactComponent as ICSelected } from '@IconsV2/ic-selected.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
 import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
 import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.svg'
@@ -95,7 +98,7 @@ import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
-import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash.svg'
+import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
@@ -129,6 +132,7 @@ export const iconMap = {
     'ic-cd': ICCd,
     'ic-chat-circle-dots': ICChatCircleDots,
     'ic-check': ICCheck,
+    'ic-checks': ICChecks,
     'ic-ci-linked': ICCiLinked,
     'ic-ci-webhook': ICCiWebhook,
     'ic-circle-loader': ICCircleLoader,
@@ -193,6 +197,8 @@ export const iconMap = {
     'ic-pencil': ICPencil,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
+    'ic-rocket-launch': ICRocketLaunch,
+    'ic-selected': ICSelected,
     'ic-shield-check': ICShieldCheck,
     'ic-sort-ascending': ICSortAscending,
     'ic-sort-descending': ICSortDescending,
@@ -203,7 +209,7 @@ export const iconMap = {
     'ic-success': ICSuccess,
     'ic-suspended': ICSuspended,
     'ic-tata1mg': ICTata1mg,
-    'ic-timeout-two-dash': ICTimeoutTwoDash,
+    'ic-timeout-dash': ICTimeoutDash,
     'ic-timer': ICTimer,
     'ic-travclan': ICTravclan,
     'ic-unknown': ICUnknown,
