@@ -14,47 +14,13 @@
  * limitations under the License.
  */
 
-import { ReactNode } from 'react'
+import { TooltipProps } from '@Common/Tooltip'
 
-import { ResizableTagTextAreaProps } from '../../../Common'
+import { DynamicDataTableProps } from '../DynamicDataTable'
 
-/**
- * Interface representing a key-value header.
- * @template K - A string representing the key type.
- */
-export interface KeyValueHeader<K extends string> {
-    /** The label of the header. */
-    label: string
-    /** The key associated with the header. */
-    key: K
-    /** An optional class name for the header. */
-    className?: string
-}
+export type KeyValueTableDataType = 'key' | 'value'
 
-/**
- * Type representing a key-value row.
- * @template K - A string representing the key type.
- */
-export type KeyValueRow<K extends string> = {
-    data: {
-        [key in K]: Pick<ResizableTagTextAreaProps, 'value' | 'disabled' | 'tabIndex'> & {
-            /** An optional boolean indicating if an asterisk should be shown. */
-            required?: boolean
-        }
-    }
-    id: string | number
-}
-
-/**
- * Interface representing the configuration for a key-value table.
- * @template K - A string representing the key type.
- */
-export interface KeyValueConfig<K extends string> {
-    /** An array containing two key-value headers. */
-    headers: [KeyValueHeader<K>, KeyValueHeader<K>]
-    /** An array of key-value rows. */
-    rows: KeyValueRow<K>[]
-}
+export type KeyValueTableInternalProps = DynamicDataTableProps<KeyValueTableDataType, never>
 
 type ErrorUIProps =
     | {
@@ -82,64 +48,91 @@ type ErrorUIProps =
           validateEmptyKeys?: never
       }
 
-/**
- * Type representing a mask for key-value pairs.
- * @template K - A string representing the key type.
- */
-export type KeyValueMask<K extends string> = {
+export type KeyValueHeaderLabel<K extends KeyValueTableDataType = KeyValueTableDataType> = {
+    [key in K]: string
+}
+
+export type KeyValueMask<K extends KeyValueTableDataType = KeyValueTableDataType> = {
     [key in K]?: boolean
 }
 
-export type KeyValuePlaceholder<K extends string> = {
+export type KeyValuePlaceholder<K extends KeyValueTableDataType = KeyValueTableDataType> = {
     [key in K]?: string
 }
 
+export interface KeyValueTableRowType<K extends KeyValueTableDataType = KeyValueTableDataType> {
+    id: string | number
+    data: {
+        [key in K]: {
+            value: string
+            /** An optional boolean indicating if the cell should be marked as disabled. */
+            disabled?: boolean
+            /** An optional boolean indicating if an asterisk should be shown. */
+            required?: boolean
+            /** An optional tooltip to show when hovering over cell. */
+            tooltip?: Partial<Pick<TooltipProps, 'content' | 'className'>>
+        }
+    }
+}
+
+export interface KeyValueTableData extends Pick<KeyValueTableRowType, 'id'> {
+    key: string
+    value: string
+}
+
 /**
- * Interface representing the properties for a key-value table component.
- * @template K - A string representing the key type.
+ * Props for the KeyValueTable component.
  */
-export type KeyValueTableProps<K extends string> = {
-    /** The configuration for the key-value table. */
-    config: KeyValueConfig<K>
-    /** An optional mask for the key-value pairs. */
-    maskValue?: KeyValueMask<K>
-    placeholder?: KeyValuePlaceholder<K>
-    /** An optional boolean indicating if the table is sortable. */
+export type KeyValueTableProps = Pick<
+    DynamicDataTableProps<KeyValueTableDataType>,
+    'isAdditionNotAllowed' | 'readOnly' | 'headerComponent'
+> & {
+    /**
+     * The label for the table header.
+     */
+    headerLabel: KeyValueHeaderLabel
+    /**
+     * The initial rows of the key-value table.
+     */
+    initialRows: KeyValueTableRowType[]
+    /**
+     * An optional configuration to mask values in the table.
+     */
+    maskValue?: KeyValueMask
+    /**
+     * An optional placeholder configuration for the table columns.
+     */
+    placeholder?: KeyValuePlaceholder
+    /**
+     * An optional boolean indicating if the `key` column is sortable.
+     */
     isSortable?: boolean
-    /** An optional React node for a custom header component. */
-    headerComponent?: ReactNode
-    /** When true, data addition field will not be shown. */
-    isAdditionNotAllowed?: boolean
-    /** When true, data add or update is disabled. */
-    readOnly?: boolean
     /**
-     * An optional function to handle changes in the table rows.
-     * @param rowId - The id of the row that changed.
-     * @param headerKey - The key of the header that changed.
-     * @param value - The value of the cell.
+     * A callback function triggered when the table rows change.
+     *
+     * @param data - The updated table data.
      */
-    onChange?: (rowId: string | number, headerKey: K, value: string) => void
+    onChange?: (data: KeyValueTableData[]) => void
     /**
-     * An optional function to handle row deletions.
-     * @param deletedRowIndex - The index of the row that was deleted.
-     */
-    onDelete?: (deletedRowId: string | number) => void
-    /**
-     * The function to use to validate the value of the cell.
+     * A function to validate the value of a cell.
+     *
      * @param value - The value to validate.
-     * @param key - The row key of the value.
-     * @param rowId - The id of the row.
-     * @returns Return true if the value is valid, otherwise false
-     * and set `showError` to `true` and provide errorMessages array to show error message.
+     * @param key - The key of the header associated with the value.
+     * @param rowId - The id of the row containing the value.
+     * @returns A boolean indicating whether the value is valid. If false,
+     *          `showError` should be set to `true` and `errorMessages` should
+     *          provide an array of error messages to display.
      */
-    validationSchema?: (value: string, key: K, rowId: string | number) => boolean
+    validationSchema?: (value: string, key: KeyValueTableDataType, rowId: KeyValueTableRowType['id']) => boolean
     /**
-     * An array of error messages to be displayed in the cell error tooltip.
+     * An array of error messages to display in the cell error tooltip.
      */
     errorMessages?: string[]
     /**
-     * A callback function called when an error occurs.
-     * @param errorState - The error state, true when any cell has error, otherwise false.
+     * A callback function triggered when an error occurs in the table.
+     *
+     * @param errorState - A boolean indicating the error state. True if any
+     *                     cell has an error, otherwise false.
      */
     onError?: (errorState: boolean) => void
 } & ErrorUIProps
