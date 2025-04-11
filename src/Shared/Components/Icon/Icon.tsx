@@ -40,6 +40,8 @@ import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-heade
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
+import { ReactComponent as ICEnterpriseFeat } from '@IconsV2/ic-enterprise-feat.svg'
+import { ReactComponent as ICEnterpriseTag } from '@IconsV2/ic-enterprise-tag.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
@@ -64,7 +66,6 @@ import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
-import { ReactComponent as ICLoginDevtronLogo } from '@IconsV2/ic-login-devtron-logo.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
@@ -140,6 +141,8 @@ export const iconMap = {
     'ic-devtron': ICDevtron,
     'ic-dockerhub': ICDockerhub,
     'ic-ecr': ICEcr,
+    'ic-enterprise-feat': ICEnterpriseFeat,
+    'ic-enterprise-tag': ICEnterpriseTag,
     'ic-env': ICEnv,
     'ic-error': ICError,
     'ic-failure': ICFailure,
@@ -164,7 +167,6 @@ export const iconMap = {
     'ic-k8s-job': ICK8sJob,
     'ic-ldap': ICLdap,
     'ic-livspace': ICLivspace,
-    'ic-login-devtron-logo': ICLoginDevtronLogo,
     'ic-logout': ICLogout,
     'ic-medium-paintbucket': ICMediumPaintbucket,
     'ic-microsoft': ICMicrosoft,

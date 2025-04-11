@@ -214,7 +214,14 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                     <div className={`flex left w-100 ${showDescription ? 'top' : ''} dc__gap-8`}>
                         {startIcon && <div className={`${iconBaseClass} mt-2`}>{startIcon}</div>}
                         <div className="flex-grow-1">
-                            <Tooltip content={label} placement="right">
+                            <Tooltip
+                                {...(typeof label !== 'string'
+                                    ? { alwaysShowTippyOnHover: false, content: null }
+                                    : {
+                                          content: label,
+                                      })}
+                                placement="right"
+                            >
                                 <h4
                                     className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}
                                 >
