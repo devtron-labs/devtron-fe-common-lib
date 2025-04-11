@@ -98,7 +98,7 @@ import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
-import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash.svg'
+import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
@@ -209,7 +209,7 @@ export const iconMap = {
     'ic-success': ICSuccess,
     'ic-suspended': ICSuspended,
     'ic-tata1mg': ICTata1mg,
-    'ic-timeout-two-dash': ICTimeoutTwoDash,
+    'ic-timeout-dash': ICTimeoutDash,
     'ic-timer': ICTimer,
     'ic-travclan': ICTravclan,
     'ic-unknown': ICUnknown,
