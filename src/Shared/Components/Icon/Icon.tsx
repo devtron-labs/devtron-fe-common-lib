@@ -3,6 +3,7 @@
 import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
+import { ReactComponent as ICAmazonEks } from '@IconsV2/ic-amazon-eks.svg'
 import { ReactComponent as ICApica } from '@IconsV2/ic-apica.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
@@ -19,10 +20,12 @@ import { ReactComponent as ICCardStack } from '@IconsV2/ic-card-stack.svg'
 import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
 import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots.svg'
+import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCiWebhook } from '@IconsV2/ic-ci-webhook.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
+import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
@@ -75,9 +78,11 @@ import { ReactComponent as ICOpenInNew } from '@IconsV2/ic-open-in-new.svg'
 import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
+import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
+import { ReactComponent as ICSlidersVertical } from '@IconsV2/ic-sliders-vertical.svg'
 import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
@@ -98,6 +103,7 @@ export const iconMap = {
     'ic-73strings': IC73strings,
     'ic-aborted': ICAborted,
     'ic-add': ICAdd,
+    'ic-amazon-eks': ICAmazonEks,
     'ic-apica': ICApica,
     'ic-app-group': ICAppGroup,
     'ic-arrow-right': ICArrowRight,
@@ -114,10 +120,12 @@ export const iconMap = {
     'ic-caret-left': ICCaretLeft,
     'ic-cd': ICCd,
     'ic-chat-circle-dots': ICChatCircleDots,
+    'ic-check': ICCheck,
     'ic-ci-linked': ICCiLinked,
     'ic-ci-webhook': ICCiWebhook,
     'ic-circle-loader': ICCircleLoader,
     'ic-clock': ICClock,
+    'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
     'ic-cluster': ICCluster,
     'ic-code': ICCode,
@@ -170,9 +178,11 @@ export const iconMap = {
     'ic-openshift': ICOpenshift,
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
+    'ic-pencil': ICPencil,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
     'ic-shield-check': ICShieldCheck,
+    'ic-sliders-vertical': ICSlidersVertical,
     'ic-spinny': ICSpinny,
     'ic-stack': ICStack,
     'ic-success': ICSuccess,

@@ -15,6 +15,7 @@
  */
 
 import { Dispatch, SetStateAction, ReactElement } from 'react'
+import { InstallationClusterType } from '@Shared/index'
 import { NodeActionRequest } from './ResourceBrowser.Types'
 
 export enum ClusterFiltersType {
@@ -23,10 +24,21 @@ export enum ClusterFiltersType {
     UNHEALTHY = 'unhealthy',
 }
 
+export enum InstallationClusterStatus {
+    Creating = 'Creating',
+    Updating = 'Updating',
+    Installed = 'Installed',
+    Failed = 'Failed',
+    Superseded = 'Superseded',
+    Undefined = 'Undefined',
+}
+
 export enum ClusterStatusType {
     HEALTHY = 'healthy',
     UNHEALTHY = 'unhealthy',
     CONNECTION_FAILED = 'connection failed',
+    CREATING = 'creating',
+    UPDATING = 'updating',
 }
 
 export interface ResourceDetail {
@@ -64,6 +76,7 @@ export interface ClusterCapacityType {
     nodeErrors: Record<string, string>[]
     status?: ClusterStatusType
     isProd: boolean
+    installationId?: number
 }
 
 export interface ClusterDetail extends ClusterCapacityType {
@@ -71,6 +84,7 @@ export interface ClusterDetail extends ClusterCapacityType {
     errorInNodeListing: string
     nodeNames?: string[]
     isVirtualCluster?: boolean
+    isInstallationCluster?: boolean
 }
 
 interface NodeCordonOptions {
@@ -97,4 +111,36 @@ export interface AdditionalConfirmationModalOptionsProps<T = unknown> {
     optionsData: T
     setOptionsData: Dispatch<SetStateAction<T>>
     children?: ReactElement
+}
+
+export interface InstallationClusterStepType {
+    lastTransitionTime: string
+    lastProbeTime: string
+    message: string
+    reason: string
+    status: 'False' | 'True' | 'Unknown'
+    type: string
+}
+
+export interface InstallationClusterConfigDTO {
+    installationId: number
+    installationStatus: InstallationClusterStatus
+    name: string
+    values: string
+    valuesSchema: string
+    isProd: boolean
+    installationType: InstallationClusterType
+    conditions: InstallationClusterStepType[]
+    // NOTE: for installation cluster, that is creating this will be 0
+    installedEntityId: number | 0
+}
+
+export interface InstallationClusterConfigType
+    extends Pick<InstallationClusterConfigDTO, 'installationType' | 'conditions'> {
+    schema: object
+    values: object
+    installationId: number
+    name: string
+    status: InstallationClusterStatus
+    correspondingClusterId: number | 0
 }
