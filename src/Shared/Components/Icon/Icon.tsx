@@ -27,6 +27,7 @@ import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
+import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
@@ -135,6 +136,7 @@ export const iconMap = {
     'ic-clock': ICClock,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
+    'ic-cluster': ICCluster,
     'ic-code': ICCode,
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
