@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useMemo } from 'react'
 
 import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
 import { ReactComponent as ICFileText } from '@Icons/ic-file-text.svg'
 import { ReactComponent as ICUploadArrowAnimated } from '@Icons/ic-upload-arrow-animated.svg'
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
+import { getUniqueId } from '@Shared/Helpers'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { FileUploadProps } from './types'
@@ -35,6 +36,8 @@ export const FileUpload = ({
     fileTypes = [],
     onUpload,
 }: FileUploadProps) => {
+    const id = useMemo(() => `fileInput-${getUniqueId()}`, [])
+
     // METHODS
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -87,11 +90,11 @@ export const FileUpload = ({
             ) : (
                 <div className="dc__position-rel flex">
                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                    <label htmlFor="fileInput" className="m-0 fw-4 cb-5 fs-13 lh-20 flex-grow-1 cursor">
+                    <label htmlFor={id} className="m-0 fw-4 cb-5 fs-13 lh-20 flex-grow-1 cursor">
                         {label || 'Upload file…'}
                     </label>
                     <input
-                        id="fileInput"
+                        id={id}
                         type="file"
                         className="dc__visibility-hidden dc__position-abs dc__top-0 dc__right-0 dc__bottom-0 dc__left-0"
                         onChange={handleFileChange}
