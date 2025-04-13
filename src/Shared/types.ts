@@ -1134,3 +1134,12 @@ export type IconBaseColorType =
     | 'white'
     | 'black'
     | null
+
+export interface GetTimeDifferenceParamsType {
+    startTime: string
+    endTime: string
+    /**
+     * @default '-'
+     */
+    fallbackString?: string
+}

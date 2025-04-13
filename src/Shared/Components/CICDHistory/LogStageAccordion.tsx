@@ -51,7 +51,7 @@ const LogStageAccordion = ({
     }
 
     const getFormattedTimeDifference = (): string => {
-        const timeDifference = getTimeDifference(startTime, endTime)
+        const timeDifference = getTimeDifference({ startTime, endTime })
         if (timeDifference === '0s') {
             return '< 1s'
         }
