@@ -1,5 +1,6 @@
-import { IconBaseSizeType } from '@Shared/index'
 import { animate } from 'framer-motion'
+
+import { IconBaseSizeType } from '@Shared/index'
 
 export interface AnimatedTimerProps extends Pick<Parameters<typeof animate>[2], 'onComplete'> {
     /**

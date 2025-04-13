@@ -15,14 +15,15 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { CIPipelineNodeType, saveCDPipeline, ToastManager, ToastVariantType } from '@Shared/index'
-import { PipelineType, WorkflowNodeType } from '@Common/Types'
-import { showError, stopPropagation } from '@Common/Helper'
-import { VisibleModal } from '@Common/index'
+
 import changeCI from '@Images/change-source.png'
 import selectWorkflowSource from '@Images/select-image-source.png'
-import SourceTypeCard from './SourceTypeCard'
-import { WorkflowOptionsModalProps } from './types'
+import { showError, stopPropagation } from '@Common/Helper'
+import { VisibleModal } from '@Common/index'
+import { PipelineType, WorkflowNodeType } from '@Common/Types'
+import { saveCDPipeline, ToastManager, ToastVariantType } from '@Shared/Services'
+import { CIPipelineNodeType } from '@Shared/types'
+
 import {
     CHANGE_SAME_CI,
     NO_ENV_FOUND,
@@ -32,6 +33,8 @@ import {
     WORKFLOW_OPTIONS_MODAL,
     WORKFLOW_OPTIONS_MODAL_TYPES,
 } from './constants'
+import SourceTypeCard from './SourceTypeCard'
+import { WorkflowOptionsModalProps } from './types'
 import { getSwitchToWebhookPayload } from './utils'
 
 const WorkflowOptionsModal = ({

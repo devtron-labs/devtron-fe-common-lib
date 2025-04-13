@@ -15,9 +15,10 @@
  */
 
 /* eslint-disable dot-notation */
-import { ROUTES, ResponseType, get, getUrlWithSearchParams, sanitizeUserApprovalMetadata, trash } from '../../../Common'
-import { ResourceKindType, ResourceVersionType } from '../../types'
+import { get, getUrlWithSearchParams, ResponseType, ROUTES, sanitizeUserApprovalMetadata, trash } from '../../../Common'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from '../../constants'
+import { decode } from '../../Helpers'
+import { ResourceKindType, ResourceVersionType } from '../../types'
 import {
     DeploymentConfigurationsRes,
     DeploymentHistoryDetail,
@@ -32,7 +33,6 @@ import {
     TriggerHistoryParamsType,
 } from './types'
 import { getParsedTriggerHistory, getTriggerHistoryFilterCriteria } from './utils'
-import { decode } from '../../Helpers'
 
 const getTriggerDetailsQuery = (fetchIdData) => {
     if (fetchIdData && fetchIdData === FetchIdDataStatus.FETCHING) {

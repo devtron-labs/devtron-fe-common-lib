@@ -15,6 +15,7 @@
  */
 
 import { Tooltip } from '@Common/Tooltip'
+
 import { InvalidYAMLTippyWrapperProps } from './types'
 import { getInvalidTippyContent } from './utils'
 

@@ -15,50 +15,52 @@
  */
 
 import { Fragment, memo, useMemo, useState } from 'react'
-import { useLocation, useParams, useRouteMatch, Link } from 'react-router-dom'
-import { getHandleOpenURL } from '@Shared/Helpers'
-import { ImageChipCell } from '@Shared/Components/ImageChipCell'
-import { CommitChipCell } from '@Shared/Components/CommitChipCell'
-import { ReactComponent as ICPulsateStatus } from '@Icons/ic-pulsate-status.svg'
+import { Link, useLocation, useParams, useRouteMatch } from 'react-router-dom'
+
 import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
 import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
 import { ReactComponent as ICEnvironment } from '@Icons/ic-environment.svg'
+import { ReactComponent as ICPulsateStatus } from '@Icons/ic-pulsate-status.svg'
+import { createGitCommitUrl } from '@Common/Common.service'
+import { ZERO_TIME_STRING } from '@Common/Constants'
+import { CommitChipCell } from '@Shared/Components/CommitChipCell'
+import { ImageChipCell } from '@Shared/Components/ImageChipCell'
+import { getHandleOpenURL } from '@Shared/Helpers'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { getDeploymentStageTitle } from '@Pages/Applications'
-import { ZERO_TIME_STRING } from '@Common/Constants'
-import { createGitCommitUrl } from '@Common/Common.service'
+
+import { ComponentSizeType, DeploymentStageType } from '../../constants'
+import { GitTriggers } from '../../types'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
+import { Icon } from '../Icon'
 import {
-    TriggerDetailsType,
+    DEFAULT_CLUSTER_ID,
+    DEFAULT_ENV,
+    EXECUTION_FINISHED_TEXT_MAP,
+    PROGRESSING_STATUS,
+    PULSATING_STATUS_MAP,
+    statusColor as colorMap,
+    TERMINAL_STATUS_COLOR_CLASS_MAP,
+} from './constants'
+import { cancelCiTrigger, cancelPrePostCdTrigger } from './service'
+import {
+    CurrentStatusIconProps,
     CurrentStatusType,
     FinishedType,
     HistoryComponentType,
     ProgressingStatusType,
     StartDetailsType,
+    TriggerDetailsType,
     WorkflowStageStatusType,
-    CurrentStatusIconProps,
 } from './types'
 import {
     getFormattedTriggerTime,
-    sanitizeWorkflowExecutionStages,
     getIconFromWorkflowStageStatusType,
     getWorkflowNodeStatusTitle,
+    sanitizeWorkflowExecutionStages,
 } from './utils'
-import { cancelCiTrigger, cancelPrePostCdTrigger } from './service'
-import {
-    DEFAULT_CLUSTER_ID,
-    DEFAULT_ENV,
-    statusColor as colorMap,
-    PULSATING_STATUS_MAP,
-    TERMINAL_STATUS_COLOR_CLASS_MAP,
-    PROGRESSING_STATUS,
-    EXECUTION_FINISHED_TEXT_MAP,
-} from './constants'
-import { ComponentSizeType, DeploymentStageType } from '../../constants'
-import { GitTriggers } from '../../types'
-import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
 import WorkerStatus from './WorkerStatus'
-import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
-import { Icon } from '../Icon'
 
 const Finished = memo(({ status, finishedOn, artifact, type, executionInfo }: FinishedType): JSX.Element => {
     const finishedOnTime = executionInfo?.finishedOn || finishedOn

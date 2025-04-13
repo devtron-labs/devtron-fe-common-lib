@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
-import { AnimatedTimerProps } from './types'
+import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
+
 import { CX, CY, END_ANGLE, RADIUS, START_ANGLE } from './constants'
+import { AnimatedTimerProps } from './types'
 
 const polarToCartesian = (cx: number, cy: number, r: number, angleInDegrees: number) => {
     const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0

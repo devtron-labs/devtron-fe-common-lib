@@ -16,9 +16,11 @@
 
 import { RefCallback } from 'react'
 import DOMPurify from 'dompurify'
-import { getTimeDifference } from '@Shared/Helpers'
+
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICStack } from '@Icons/ic-stack.svg'
+import { getTimeDifference } from '@Shared/Helpers'
+
 import { TargetPlatformListTooltip } from '../TargetPlatforms'
 import { LogStageAccordionProps } from './types'
 import { getLogSearchIndex, getStageStatusIcon } from './utils'

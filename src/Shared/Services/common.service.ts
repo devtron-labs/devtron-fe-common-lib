@@ -15,8 +15,9 @@
  */
 
 import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
-import { getTemplateAPIRoute } from '..'
+
 import { get, getUrlWithSearchParams, post, ROUTES } from '../../Common'
+import { getTemplateAPIRoute } from '..'
 import { EnvironmentDataValuesDTO, GetPolicyApiUrlProps, GetResourceApiUrlProps } from './types'
 
 export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryParams }: GetResourceApiUrlProps<T>) =>

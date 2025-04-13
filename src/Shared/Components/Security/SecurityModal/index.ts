@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
+export { getProgressingStateForStatus, getSidebarData } from './config'
+export { CATEGORY_LABELS } from './constants'
 export { default as SecurityModal } from './SecurityModal'
+export { getSecurityScan } from './service'
+export type {
+    GetResourceScanDetailsPayloadType,
+    GetResourceScanDetailsResponseType,
+    ScanResultDTO,
+    SidebarDataChildType,
+    SidebarDataType,
+    SidebarPropsType,
+} from './types'
+export { SeveritiesDTO } from './types'
 export {
     getSecurityScanSeveritiesCount,
     getTotalVulnerabilityCount,
     parseGetResourceScanDetailsResponse,
 } from './utils'
-export type {
-    ScanResultDTO,
-    SidebarPropsType,
-    SidebarDataChildType,
-    SidebarDataType,
-    GetResourceScanDetailsPayloadType,
-    GetResourceScanDetailsResponseType,
-} from './types'
-export { SeveritiesDTO } from './types'
-export { getSidebarData, getProgressingStateForStatus } from './config'
-export { CATEGORY_LABELS } from './constants'
-export { getSecurityScan } from './service'

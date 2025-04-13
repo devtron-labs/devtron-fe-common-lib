@@ -1,69 +1,40 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@Icons/*": [
-        "./src/Assets/Icon/*"
-      ],
-      "@IconsV2/*": [
-        "./src/Assets/IconV2/*"
-      ],
-      "@Sounds/*": [
-        "./src/Assets/Sounds/*"
-      ],
-      "@Images/*": [
-        "./src/Assets/Img/*"
-      ],
-      "@Common/*": [
-        "./src/Common/*"
-      ],
-      "@Pages/*": [
-        "./src/Pages/*"
-      ],
-      "@Shared/*": [
-        "./src/Shared/*"
-      ],
-      "codemirror-json-schema/yaml": ["./node_modules/codemirror-json-schema/dist/yaml"],
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@Icons/*": ["./src/Assets/Icon/*"],
+            "@IconsV2/*": ["./src/Assets/IconV2/*"],
+            "@Sounds/*": ["./src/Assets/Sounds/*"],
+            "@Images/*": ["./src/Assets/Img/*"],
+            "@Common/*": ["./src/Common/*"],
+            "@Shared/*": ["./src/Shared/*"],
+            "@Pages/*": ["./src/Pages/*"],
+            "codemirror-json-schema/yaml": ["./node_modules/codemirror-json-schema/dist/yaml"]
+        },
+        "target": "ES2020",
+        "useDefineForClassFields": true,
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "module": "ESNext",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "declaration": true,
+        "strict": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noFallthroughCasesInSwitch": false,
+        "types": ["vite/client"]
     },
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    /* Bundler mode */
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "declaration": true,
-    /* Linting */
-    "strict": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": false,
-    "types": [
-      "vite/client"
+    "include": ["src"],
+    "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "src/**/*.test.ts", "src/**/*.test.tsx"],
+    "references": [
+        {
+            "path": "./tsconfig.node.json"
+        }
     ]
-  },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "src/**/*.spec.ts",
-    "src/**/*.spec.tsx",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
 }

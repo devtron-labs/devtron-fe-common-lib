@@ -15,6 +15,11 @@
  */
 
 import { useCallback, useEffect } from 'react'
+
+import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
+import { ReactComponent as ICRestart } from '@Icons/ic-arrows-clockwise.svg'
+import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { ReactComponent as ICInfo } from '@Icons/ic-info-outline.svg'
 import { SortingOrder } from '@Common/Constants'
 import { stopPropagation } from '@Common/Helper'
 import { useStateFilters } from '@Common/Hooks'
@@ -24,14 +29,11 @@ import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
-import { ReactComponent as ICInfo } from '@Icons/ic-info-outline.svg'
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
-import { ReactComponent as ICRestart } from '@Icons/ic-arrows-clockwise.svg'
-import { RESULTS_MODAL_HEADERS, SORT_KEY_TO_NORMALIZER, SORT_ORDER_TO_KEY } from './constants'
-import { BulkOperationResultType, BulkOperationsResultModalProps } from './types'
+
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
 import { getProgressingStateForStatus } from '../Security'
+import { RESULTS_MODAL_HEADERS, SORT_KEY_TO_NORMALIZER, SORT_ORDER_TO_KEY } from './constants'
+import { BulkOperationResultType, BulkOperationsResultModalProps } from './types'
 
 const BulkOperationsResultModal = ({
     apiCallInProgress,

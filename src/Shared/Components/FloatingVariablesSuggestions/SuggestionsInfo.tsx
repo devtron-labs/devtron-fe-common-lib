@@ -16,9 +16,11 @@
 
 import { memo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { URLS } from '@Common/Constants'
-import { ReactComponent as ICHelp } from '@Icons/ic-help.svg'
+
 import { ReactComponent as ICDown } from '@Icons/ic-chevron-down.svg'
+import { ReactComponent as ICHelp } from '@Icons/ic-help.svg'
+import { URLS } from '@Common/Constants'
+
 import { SUGGESTIONS_INFO_TITLE } from './constants'
 
 const SuggestionsInfo = () => {

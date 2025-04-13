@@ -16,11 +16,12 @@
 
 import { ReactComponent as ICStack } from '@Icons/ic-stack.svg'
 import { TargetPlatformListTooltip } from '@Shared/Components/TargetPlatforms'
-import { ARTIFACT_STATUS, STAGE_TYPE } from '../../../constants'
-import { DeploymentEnvState } from './DeploymentEnvState'
-import { DEPLOYMENT_ENV_TEXT } from './DeploymentEnvState/constants'
-import { SequentialCDCardTitleProps } from '../types'
+
 import { ImageTagButton } from '../../../../Common'
+import { ARTIFACT_STATUS, STAGE_TYPE } from '../../../constants'
+import { SequentialCDCardTitleProps } from '../types'
+import { DEPLOYMENT_ENV_TEXT } from './DeploymentEnvState/constants'
+import { DeploymentEnvState } from './DeploymentEnvState'
 
 const SequentialCDCardTitle = ({
     isLatest,

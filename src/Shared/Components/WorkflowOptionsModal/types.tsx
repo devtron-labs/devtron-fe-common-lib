@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { AppConfigProps } from '@Pages/index'
 import { ChangeCIPayloadType, CIPipelineNodeType, WorkflowType } from '@Shared/types'
+import { AppConfigProps } from '@Pages/index'
 
 interface LinkedCDSourceVariant {
     title: string

@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
+import { useState } from 'react'
+
+import { ReactComponent as NoVulnerability } from '@Icons/ic-vulnerability-not-found.svg'
+import { GenericEmptyState } from '@Common/index'
+import { GenericSectionErrorState } from '@Shared/Components/GenericSectionErrorState'
 import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
 import { EMPTY_STATE_STATUS } from '@Shared/constants'
-import { useState } from 'react'
-import { GenericEmptyState } from '@Common/index'
-import { ReactComponent as NoVulnerability } from '@Icons/ic-vulnerability-not-found.svg'
-import { GenericSectionErrorState } from '@Shared/Components/GenericSectionErrorState'
-import SecurityCard from './SecurityCard'
-import { CATEGORIES, SecurityModalStateType, SUB_CATEGORIES } from '../SecurityModal/types'
-import { SecurityCardProps, SecurityDetailsCardsProps } from './types'
+
 import { SecurityModal } from '../SecurityModal'
 import { DEFAULT_SECURITY_MODAL_IMAGE_STATE } from '../SecurityModal/constants'
+import { CATEGORIES, SecurityModalStateType, SUB_CATEGORIES } from '../SecurityModal/types'
 import { ScanCategories, ScanSubCategories } from '../types'
-import { getSecurityConfig, getCompiledSecurityThreats, getTotalSeverities, getStatusForScanList } from '../utils'
+import { getCompiledSecurityThreats, getSecurityConfig, getStatusForScanList, getTotalSeverities } from '../utils'
+import SecurityCard from './SecurityCard'
+import { SecurityCardProps, SecurityDetailsCardsProps } from './types'
+
 import './securityCard.scss'
 
 const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps) => {

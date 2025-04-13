@@ -15,39 +15,49 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { useEffect, useRef, useState, ReactElement } from 'react'
+import { ReactElement, useEffect, useRef, useState } from 'react'
 import { PromptProps } from 'react-router-dom'
+import { StrictRJSFSchema } from '@rjsf/utils'
 import Tippy from '@tippyjs/react'
-import { Pair } from 'yaml'
 import moment from 'moment'
 import { nanoid } from 'nanoid'
-import { StrictRJSFSchema } from '@rjsf/utils'
-import { MaterialHistoryType } from '@Shared/Services/app.types'
+import { Pair } from 'yaml'
+
+import { ReactComponent as ICAWSCodeCommit } from '@Icons/ic-aws-codecommit.svg'
+import { ReactComponent as ICBitbucket } from '@Icons/ic-bitbucket.svg'
+import { ReactComponent as ICGit } from '@Icons/ic-git.svg'
+import { ReactComponent as ICGithub } from '@Icons/ic-github.svg'
+import { ReactComponent as ICGitlab } from '@Icons/ic-gitlab.svg'
 import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
 import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
-import { ReactComponent as ICGithub } from '@Icons/ic-github.svg'
-import { ReactComponent as ICGitlab } from '@Icons/ic-gitlab.svg'
-import { ReactComponent as ICGit } from '@Icons/ic-git.svg'
-import { ReactComponent as ICBitbucket } from '@Icons/ic-bitbucket.svg'
-import { ReactComponent as ICAWSCodeCommit } from '@Icons/ic-aws-codecommit.svg'
+import { MaterialHistoryType } from '@Shared/Services/app.types'
+
 import {
+    ApprovalConfigDataType,
+    DATE_TIME_FORMATS,
     handleUTCTime,
     ManualApprovalType,
     mapByKey,
     MaterialInfo,
+    noop,
+    PATTERNS,
     shallowEqual,
     SortingOrder,
-    UserApprovalConfigType,
-    PATTERNS,
-    ZERO_TIME_STRING,
-    noop,
     SourceTypeMap,
-    DATE_TIME_FORMATS,
-    ApprovalConfigDataType,
-    UserApprovalInfo,
     TOKEN_COOKIE_NAME,
+    UserApprovalConfigType,
+    UserApprovalInfo,
+    ZERO_TIME_STRING,
 } from '../Common'
+import { getAggregator } from '../Pages'
+import {
+    AggregatedNodes,
+    DeploymentStatusDetailsBreakdownDataType,
+    DeploymentStatusDetailsType,
+    PodMetadatum,
+} from './Components'
+import { DEPLOYMENT_STATUS, TIMELINE_STATUS, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
 import {
     AggregationKeys,
     BorderConfigType,
@@ -61,14 +71,6 @@ import {
     TargetPlatformsDTO,
     WebhookEventNameType,
 } from './types'
-import { DEPLOYMENT_STATUS, TIMELINE_STATUS, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
-import {
-    AggregatedNodes,
-    DeploymentStatusDetailsBreakdownDataType,
-    DeploymentStatusDetailsType,
-    PodMetadatum,
-} from './Components'
-import { getAggregator } from '../Pages'
 
 interface HighlightSearchTextProps {
     /**

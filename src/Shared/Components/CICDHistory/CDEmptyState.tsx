@@ -15,8 +15,9 @@
  */
 
 import React from 'react'
-import { GenericEmptyState, ImageType } from '../../../Common'
+
 import AppNotDeployed from '../../../Assets/Img/app-not-deployed.svg'
+import { GenericEmptyState, ImageType } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
 
 const CDEmptyState = ({

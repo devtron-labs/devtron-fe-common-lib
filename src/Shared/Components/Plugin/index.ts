@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-export * from './types'
-export * from './service'
-export * from './utils'
 export * from './constants'
+export { default as PluginImageContainer } from './PluginImageContainer'
 export { default as PluginListContainer } from './PluginListContainer'
 export { default as PluginTagsContainer } from './PluginTagsContainer'
-export { default as PluginImageContainer } from './PluginImageContainer'
+export * from './service'
+export * from './types'
+export * from './utils'

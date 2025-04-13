@@ -18,6 +18,7 @@
 
 import { CiPipelineSourceConfig } from '../CICDHistory/CiPipelineSourceConfig'
 import { GitProviderIcon } from '../GitProviderIcon'
+
 import './gitCommitInfoGeneric.scss'
 
 const GitMaterialInfoHeader = ({

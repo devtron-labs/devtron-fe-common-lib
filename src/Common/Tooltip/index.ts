@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-export { default as Tooltip } from './Tooltip'
 export { TOOLTIP_CONTENTS } from './constants'
+export { default as Tooltip } from './Tooltip'
 export type { TooltipProps } from './types'

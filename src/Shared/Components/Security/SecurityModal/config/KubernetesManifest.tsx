@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import { getScanCompletedEmptyState, mapSeveritiesToSegmentedBarChartEntities } from '../utils'
+import { SCAN_FAILED_EMPTY_STATE, SCAN_IN_PROGRESS_EMPTY_STATE } from '../constants'
 import {
-    ScanResultDTO,
     CATEGORIES,
     DetailViewDataType,
     EmptyStateType,
     InfoCardPropsType,
     KubernetesManifest,
     OpenDetailViewButtonProps,
-    SUB_CATEGORIES,
+    ScanResultDTO,
     SecurityModalStateType,
+    SUB_CATEGORIES,
     TablePropsType,
 } from '../types'
-import { SCAN_FAILED_EMPTY_STATE, SCAN_IN_PROGRESS_EMPTY_STATE } from '../constants'
+import { getScanCompletedEmptyState, mapSeveritiesToSegmentedBarChartEntities } from '../utils'
 import { getCodeScanExposedSecrets, getCodeScanMisconfigurations } from './CodeScan'
 
 export const getKubernetesManifestTableData = (

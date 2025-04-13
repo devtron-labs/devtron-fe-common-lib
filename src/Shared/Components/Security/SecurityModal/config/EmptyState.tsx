@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
+import { CATEGORIES, DetailViewDataType, ScanResultDTO, SecurityModalStateType } from '../types'
 import { getCodeScanEmptyState } from './CodeScan'
 import { getImageScanEmptyState } from './ImageScan'
 import { getKubernetesManifestEmptyState } from './KubernetesManifest'
-import { ScanResultDTO, CATEGORIES, DetailViewDataType, SecurityModalStateType } from '../types'
 
 export const getEmptyStateValues = (
     data: ScanResultDTO,

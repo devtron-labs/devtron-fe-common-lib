@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
+
 import { ComponentSizeType } from '@Shared/constants'
-import { SegmentedControlProps, SegmentType } from './types'
-import './segmentedControl.scss'
+
 import Segment from './Segment'
+import { SegmentedControlProps, SegmentType } from './types'
+
+import './segmentedControl.scss'
 
 const SegmentedControl = ({
     segments,

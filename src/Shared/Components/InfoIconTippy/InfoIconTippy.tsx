@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { TippyCustomized } from '../../../Common/TippyCustomized'
-import { TippyTheme, InfoIconTippyProps } from '../../../Common/Types'
-import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
+import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
+import { TippyCustomized } from '../../../Common/TippyCustomized'
+import { InfoIconTippyProps, TippyTheme } from '../../../Common/Types'
 
 const InfoIconTippy = ({
     heading,

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import { Moment } from 'moment'
-import { SelectInstance } from 'react-select'
 import { SingleDatePickerShape } from 'react-dates'
+import { SelectInstance } from 'react-select'
+import { Moment } from 'moment'
+
 import { SelectPickerOptionType } from '../SelectPicker'
 
 export interface SingleDatePickerProps {

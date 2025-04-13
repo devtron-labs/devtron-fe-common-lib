@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import { TranslatableString, englishStringTranslator } from '@rjsf/utils'
-import { buildObjectFromPath, convertJSONPointerToJSONPath, joinObjects } from '@Common/Helper'
-import { JSONPath } from 'jsonpath-plus'
+import { englishStringTranslator, TranslatableString } from '@rjsf/utils'
 import { applyPatch, compare } from 'fast-json-patch'
+import { JSONPath } from 'jsonpath-plus'
+
+import { buildObjectFromPath, convertJSONPointerToJSONPath, joinObjects } from '@Common/Helper'
+
 import {
     GetFormStateFromFormDataProps,
     HiddenType,

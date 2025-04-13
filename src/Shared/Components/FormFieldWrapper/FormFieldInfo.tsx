@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import { Icon } from '../Icon'
 import { FormFieldInfoProps, FormInfoItemProps } from './types'
 import { getFormErrorElementId } from './utils'
-import { Icon } from '../Icon'
 
 const FormInfoItem = ({ id, text, icon, textClass }: FormInfoItemProps) => (
     <div className="flexbox dc__gap-4 fs-11 lh-16 fw-4" id={id}>
