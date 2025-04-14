@@ -1,0 +1,7 @@
+<!--
+  - Copyright (c) 2024. Devtron Inc.
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="#3B444C" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.124 10.875v9.375m0-9.375a2.25 2.25 0 1 0 0-4.5m0 4.5a2.25 2.25 0 0 1 0-4.5m0-2.625v2.625m-8.25 9.75v4.125m0-4.125a2.25 2.25 0 1 0 0-4.5m0 4.5a2.25 2.25 0 0 1 0-4.5m0-7.875v7.875" vector-effect="non-scaling-stroke"/>
+</svg>
