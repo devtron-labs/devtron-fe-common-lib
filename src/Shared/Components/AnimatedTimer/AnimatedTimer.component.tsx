@@ -42,7 +42,7 @@ const AnimatedTimer = ({ duration, onComplete, size = 24, tooltipContent }: Anim
 
     return (
         <Tooltip alwaysShowTippyOnHover={!!tooltipContent} content={tooltipContent}>
-            <div>
+            <div className="flex">
                 <svg
                     width={CX * 2}
                     height={CY * 2}
