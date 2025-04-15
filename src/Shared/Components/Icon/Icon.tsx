@@ -89,6 +89,7 @@ import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
+import { ReactComponent as ICSlidersVertical } from '@IconsV2/ic-sliders-vertical.svg'
 import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
 import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.svg'
 import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
@@ -201,6 +202,7 @@ export const iconMap = {
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
     'ic-shield-check': ICShieldCheck,
+    'ic-sliders-vertical': ICSlidersVertical,
     'ic-sort-ascending': ICSortAscending,
     'ic-sort-descending': ICSortDescending,
     'ic-sortable': ICSortable,
