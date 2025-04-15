@@ -1100,3 +1100,8 @@ export type CountryISO2Type = ParsedCountry['iso2']
 export enum ResponseHeaders {
     LICENSE_STATUS = 'X-License-Status',
 }
+
+export enum OtherRegistryAuthenticationType {
+    USERNAME_PASSWORD = 'username_password',
+    ANONYMOUS = 'anonymous',
+}
