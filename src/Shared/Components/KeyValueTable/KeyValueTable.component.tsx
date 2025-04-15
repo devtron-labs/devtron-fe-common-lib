@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
+import { SortingOrder } from '@Common/Constants'
 import { debounce, noop } from '@Common/Helper'
 import { useStateFilters } from '@Common/Hooks'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
@@ -98,19 +99,6 @@ export const KeyValueTable = ({
         ),
         [],
     )
-
-    // USE-EFFECTS
-    useEffect(() => {
-        if (isSortable) {
-            setRows((prevRows) => {
-                const sortedRows = prevRows
-                sortedRows.sort((a, b) =>
-                    stringComparatorBySortOrder(a.data[sortBy].value, b.data[sortBy].value, sortOrder),
-                )
-                return sortedRows
-            })
-        }
-    }, [sortOrder])
 
     // METHODS
     const validationSchema = (
@@ -226,6 +214,24 @@ export const KeyValueTable = ({
         setUpdatedRows(updatedRows, true)
     }
 
+    const onSorting = (_sortBy: KeyValueTableDataType) => {
+        handleSorting(_sortBy)
+
+        if (isSortable) {
+            setRows((prevRows) => {
+                const sortedRows = prevRows
+                sortedRows.sort((a, b) =>
+                    stringComparatorBySortOrder(
+                        a.data[_sortBy].value,
+                        b.data[_sortBy].value,
+                        sortOrder === SortingOrder.ASC ? SortingOrder.DESC : SortingOrder.ASC,
+                    ),
+                )
+                return sortedRows
+            })
+        }
+    }
+
     return (
         <DynamicDataTable
             headers={getKeyValueHeaders({ headerLabel, isSortable })}
@@ -240,7 +246,7 @@ export const KeyValueTable = ({
             sortingConfig={{
                 sortBy,
                 sortOrder,
-                handleSorting,
+                handleSorting: onSorting,
             }}
         />
     )
