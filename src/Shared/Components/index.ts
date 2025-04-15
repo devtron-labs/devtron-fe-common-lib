@@ -17,6 +17,7 @@
 export * from './ActionMenu'
 export * from './ActivityIndicator'
 export * from './AnimatedDeployButton'
+export * from './AnimatedTimer'
 export * from './AnnouncementBanner'
 export * from './APIResponseHandler'
 export * from './ArtifactInfoModal'
