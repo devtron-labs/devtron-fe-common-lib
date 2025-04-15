@@ -29,6 +29,7 @@ export const DOCUMENTATION = {
     BLOB_STORAGE: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/getting-started/install/installation-configuration#configuration-of-blob-storage`,
     GLOBAL_CONFIG_BUILD_INFRA: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/global-configurations/build-infra`,
     ENTERPRISE_LICENSE: `${DOCUMENTATION_HOME_PAGE}/enterprise-license`,
+    KUBE_CONFIG: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/resource-browser#running-kubectl-commands-locally`,
 }
 
 export const PATTERNS = {
