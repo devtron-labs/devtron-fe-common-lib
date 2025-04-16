@@ -16,12 +16,12 @@
 
 import { Link, NavLink } from 'react-router-dom'
 
-import { ComponentSizeType } from '@Shared/constants'
 import { Tooltip } from '@Common/Tooltip'
+import { ComponentSizeType } from '@Shared/constants'
 
+import { getTabBadge, getTabDescription, getTabIcon, getTabIndicator } from './TabGroup.helpers'
 import { TabGroupProps, TabProps } from './TabGroup.types'
 import { getClassNameBySizeMap, tabGroupClassMap } from './TabGroup.utils'
-import { getTabBadge, getTabDescription, getTabIcon, getTabIndicator } from './TabGroup.helpers'
 
 import './TabGroup.scss'
 
@@ -63,7 +63,7 @@ const Tab = ({
         const content = (
             <>
                 <p className="m-0 flexbox dc__align-items-center dc__gap-6">
-                    {getTabIcon({ className: iconClassName, icon, showError, showWarning })}
+                    {getTabIcon({ className: iconClassName, icon, showError, showWarning, size, active })}
                     {label}
                     {getTabBadge(badge, badgeClassName)}
                     {getTabIndicator(showIndicator)}

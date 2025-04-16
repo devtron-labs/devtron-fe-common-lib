@@ -16,9 +16,9 @@
 
 import { BuildStageType, FormType } from '@Common/CIPipeline.Types'
 import { APIOptions, DeploymentAppTypes, DeploymentNodeType } from '@Common/Types'
-import { STAGE_MAP } from '@Pages/index'
 import { DeploymentStrategy } from '@Shared/Components'
 import { EnvListMinDTO, RuntimeParamsTriggerPayloadType } from '@Shared/types'
+import { STAGE_MAP } from '@Pages/index'
 
 interface ConfigSecretType {
     label: string
@@ -128,6 +128,7 @@ export interface TriggerCDNodeServiceProps extends Pick<APIOptions, 'abortContro
     ciArtifactId: number
     appId: number
     stageType: DeploymentNodeType
+    skipIfHibernated: boolean
     deploymentWithConfig?: string
     wfrId?: number
     /**
@@ -139,9 +140,10 @@ export interface TriggerCDNodeServiceProps extends Pick<APIOptions, 'abortContro
 
 export interface TriggerCDPipelinePayloadType
     extends Pick<
-        TriggerCDNodeServiceProps,
-        'pipelineId' | 'appId' | 'ciArtifactId' | 'runtimeParamsPayload' | 'deploymentWithConfig'
-    > {
+            TriggerCDNodeServiceProps,
+            'pipelineId' | 'appId' | 'ciArtifactId' | 'runtimeParamsPayload' | 'deploymentWithConfig'
+        >,
+        Partial<Pick<TriggerCDNodeServiceProps, 'skipIfHibernated'>> {
     cdWorkflowType: (typeof STAGE_MAP)[keyof typeof STAGE_MAP]
     isRollbackDeployment: boolean
     wfrIdForDeploymentWithSpecificTrigger?: number

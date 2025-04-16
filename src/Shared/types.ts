@@ -14,24 +14,27 @@
  * limitations under the License.
  */
 
-import { Dayjs } from 'dayjs'
-import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
 import { ParsedCountry } from 'react-international-phone'
+import { Dayjs } from 'dayjs'
+
+import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
+
 import {
-    OptionType,
     CommonNodeAttr,
-    VulnerabilityType,
     DeploymentAppTypes,
+    OptionType,
+    PluginType,
+    RefVariableType,
+    SegmentedControlProps,
     ServerErrors,
     SortingParams,
     TriggerBlockType,
     ValueConstraintType,
     VariableType,
-    RefVariableType,
-    PluginType,
+    VulnerabilityType,
 } from '../Common'
-import { BASE_CONFIGURATION_ENV_ID, EnvironmentTypeEnum, PatchOperationType } from './constants'
 import { SelectPickerOptionType } from './Components'
+import { BASE_CONFIGURATION_ENV_ID, EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
     CHART = 'helm_charts',
@@ -402,8 +405,7 @@ export enum CDMaterialSidebarType {
  * }
  * ```
  *
- * @example Usage with `PatchOperationType.remove`
- * Note: Value is not allowed for remove operation
+ * @example Usage with `PatchOperationType.remove` without value
  *
  * ```ts
  * const query: PatchQueryType<string> = {
@@ -411,8 +413,18 @@ export enum CDMaterialSidebarType {
  *  path: 'name'
  * }
  * ```
+ *
+ * @example Usage with `PatchOperationType.remove` with value
+ *
+ * ```ts
+ * const query: PatchQueryType<string, number, true> = {
+ *  op: PatchOperationType.remove,
+ *  path: 'name'
+ *  value: 1
+ * }
+ * ```
  */
-export type PatchQueryType<T extends string, K = unknown> = {
+export type PatchQueryType<T extends string, K = unknown, IsRemoveValueEnabled extends boolean = false> = {
     /**
      * The path of the json to be patched
      */
@@ -433,7 +445,7 @@ export type PatchQueryType<T extends string, K = unknown> = {
            * Operation type for patch
            */
           op: PatchOperationType.remove
-          value?: never
+          value?: IsRemoveValueEnabled extends true ? K : never
       }
     | {
           /**
@@ -706,7 +718,7 @@ export enum ConfigurationType {
     YAML = 'YAML',
 }
 
-export const CONFIGURATION_TYPE_OPTIONS: OptionType<ConfigurationType, ConfigurationType>[] = [
+export const CONFIGURATION_TYPE_OPTIONS: SegmentedControlProps['segments'] = [
     { label: ConfigurationType.GUI, value: ConfigurationType.GUI },
     { label: ConfigurationType.YAML, value: ConfigurationType.YAML },
 ] as const
@@ -995,11 +1007,6 @@ export const TriggerType = {
     Manual: 'MANUAL',
 } as const
 
-export enum ViewIsPipelineRBACConfiguredRadioTabs {
-    ALL_ENVIRONMENTS = 'All environments',
-    ACCESS_ONLY = 'Access only',
-}
-
 export type ComponentLayoutType = 'row' | 'column'
 
 export interface BorderConfigType {
@@ -1105,4 +1112,42 @@ export enum ResponseHeaders {
 export enum InstallationClusterType {
     EKS_AUTO_CLUSTER = 'eksAutoCluster',
     EKS_MANUAL_CLUSTER = 'eksManualCluster',
+}
+
+export type IconBaseSizeType =
+    | 6
+    | 8
+    | 10
+    | 12
+    | 14
+    | 16
+    | 18
+    | 20
+    | 22
+    | 24
+    | 28
+    | 30
+    | 32
+    | 34
+    | 36
+    | 40
+    | 42
+    | 44
+    | 48
+    | 72
+    | 80
+
+export type IconBaseColorType =
+    | `${'B' | 'N' | 'G' | 'Y' | 'R' | 'V' | 'O'}${`${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}00` | '50' | '0'}`
+    | 'white'
+    | 'black'
+    | null
+
+export interface GetTimeDifferenceParamsType {
+    startTime: string
+    endTime: string
+    /**
+     * @default '-'
+     */
+    fallbackString?: string
 }

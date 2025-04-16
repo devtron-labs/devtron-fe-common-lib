@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Tooltip } from '@Common/Tooltip'
 import { ConditionalWrap } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
 
 import { Icon } from '../Icon'
 import { StatusComponentProps } from './types'

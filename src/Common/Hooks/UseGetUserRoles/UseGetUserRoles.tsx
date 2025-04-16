@@ -15,9 +15,10 @@
  */
 
 import { useEffect, useState } from 'react'
+
 import { getUserRole } from '../../Common.service'
-import { UseGetUserRolesType } from './types'
 import { showError } from '../../Helper'
+import { UseGetUserRolesType } from './types'
 
 /**
  * @description It will return isSuperAdmin and would be set to false by default, might need few optimizations like dep, etc

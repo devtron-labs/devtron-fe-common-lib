@@ -16,11 +16,13 @@
 
 import { useMemo, useRef } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
+
 import { getUrlWithSearchParams } from '@Common/Helper'
+
 import { DEFAULT_BASE_PAGE_SIZE, EXCLUDED_FALSY_VALUES, SortingOrder } from '../../Constants'
 import { DEFAULT_PAGE_NUMBER, URL_FILTER_KEYS } from './constants'
 import { UpdateSearchParamsOptionsType, UseUrlFiltersProps, UseUrlFiltersReturnType } from './types'
-import { setItemInLocalStorageIfKeyExists } from './utils'
+import { areAnyAdditionalFiltersApplied, setItemInLocalStorageIfKeyExists } from './utils'
 
 const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_KEYS
 
@@ -41,7 +43,8 @@ const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_K
  * ```
  *
  */
-const useUrlFilters = <T = string, K = unknown>({
+
+const useUrlFilters = <T = string, K = {}>({
     initialSortKey,
     parseSearchParams,
     localStorageKey,
@@ -220,6 +223,7 @@ const useUrlFilters = <T = string, K = unknown>({
         clearFilters,
         ...parsedParams,
         updateSearchParams,
+        isFilterApplied: !!searchKey || areAnyAdditionalFiltersApplied(parsedParams),
     }
 }
 

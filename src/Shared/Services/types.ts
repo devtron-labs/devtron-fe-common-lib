@@ -15,10 +15,14 @@
  */
 
 import { MainContext } from '@Shared/Providers'
-import { AppThemeType, ThemeConfigType, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
+
 import { getUrlWithSearchParams } from '../../Common'
-import { PolicyKindType, ResourceKindType, ResourceVersionType, ViewIsPipelineRBACConfiguredRadioTabs } from '../types'
-import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
+import { PolicyKindType, ResourceKindType, ResourceVersionType } from '../types'
+
+export interface BaseAppMetaData {
+    appId: number
+    appName: string
+}
 
 export interface ClusterType {
     id: number
@@ -51,39 +55,9 @@ export interface GetResourceApiUrlProps<T> extends BaseGetApiUrlProps<T, Resourc
 export interface GetPolicyApiUrlProps<T>
     extends Omit<BaseGetApiUrlProps<T, PolicyKindType, ResourceVersionType>, 'baseUrl'> {}
 
-export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitOpsFlags'> {
+export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitOpsFlags' | 'canFetchHelmAppStatus'> {
     isAirGapEnvironment: boolean
     isManifestScanningEnabled: boolean
     canOnlyViewPermittedEnvOrgLevel: boolean
     devtronManagedLicensingEnabled: boolean
 }
-export interface GetUserPreferencesQueryParamsType {
-    key: typeof USER_PREFERENCES_ATTRIBUTE_KEY
-}
-
-export interface GetUserPreferencesParsedDTO {
-    viewPermittedEnvOnly?: boolean
-    /**
-     * Computed app theme for the user
-     *
-     * Could be 'light' | 'dark' | 'system-light' | 'system-dark'
-     */
-    computedAppTheme: AppThemeType | `system-${AppThemeType}`
-}
-
-export interface UserPreferencesPayloadValueType extends GetUserPreferencesParsedDTO {}
-
-export interface UpdateUserPreferencesPayloadType extends Pick<GetUserPreferencesQueryParamsType, 'key'> {
-    value: string
-}
-
-export interface UserPreferencesType {
-    /**
-     * Preferred theme for the user
-     * If null, would forcibly show user theme switcher dialog for user to select
-     */
-    themePreference: ThemePreferenceType | null
-    pipelineRBACViewSelectedTab: ViewIsPipelineRBACConfiguredRadioTabs
-}
-
-export interface UpdatedUserPreferencesType extends UserPreferencesType, Pick<ThemeConfigType, 'appTheme'> {}

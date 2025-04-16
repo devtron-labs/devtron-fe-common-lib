@@ -17,6 +17,7 @@
 import { get, post, put, trash } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
 import { APIOptions, ResponseType } from '@Common/Types'
+
 import {
     CreateResourceDTO,
     CreateResourcePayload,

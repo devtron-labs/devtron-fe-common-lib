@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
+export * from './DropdownNode'
 export * from './IconNode'
 export * from './TextNode'
-export * from './DropdownNode'
-
 export * from './types'

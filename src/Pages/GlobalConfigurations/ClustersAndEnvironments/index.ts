@@ -1,1 +1,1 @@
-export type { NewClusterFormProps, NewClusterFormFooterProps } from './types'
+export type { NewClusterFormFooterProps, NewClusterFormProps } from './types'

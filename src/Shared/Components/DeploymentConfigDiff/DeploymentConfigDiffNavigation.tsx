@@ -19,13 +19,13 @@ import { Link, NavLink } from 'react-router-dom'
 import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { ReactComponent as ICInfoOutlined } from '@Icons/ic-info-outlined.svg'
 import { ReactComponent as ICError } from '@Icons/ic-error.svg'
+import { ReactComponent as ICInfoOutlined } from '@Icons/ic-info-outlined.svg'
 import { StyledRadioGroup } from '@Common/index'
 
 import { CollapsibleList, CollapsibleListConfig } from '../CollapsibleList'
-import { DeploymentConfigDiffNavigationProps, DeploymentConfigDiffState } from './DeploymentConfigDiff.types'
 import { diffStateIconMap, diffStateTooltipTextMap } from './DeploymentConfigDiff.constants'
+import { DeploymentConfigDiffNavigationProps, DeploymentConfigDiffState } from './DeploymentConfigDiff.types'
 
 // LOADING SHIMMER
 const ShimmerText = ({ width }: { width: string }) => (

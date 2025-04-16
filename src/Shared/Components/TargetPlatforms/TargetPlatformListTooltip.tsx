@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { Tooltip } from '@Common/Tooltip'
 import { stopPropagation } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
+
 import { TargetPlatformListTooltipProps } from './types'
 
 const TooltipContent = ({ targetPlatforms }: Pick<TargetPlatformListTooltipProps, 'targetPlatforms'>) => (

@@ -29,22 +29,22 @@ import {
 import { followCursor } from 'tippy.js'
 
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { Tooltip } from '@Common/Tooltip'
-import { ConditionalWrap } from '@Common/Helper'
 import { ResizableTagTextArea } from '@Common/CustomTagSelector'
+import { ConditionalWrap } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { FileUpload } from '../FileUpload'
 import {
     getSelectPickerOptionByValue,
     SelectPicker,
-    SelectPickerTextArea,
     SelectPickerOptionType,
+    SelectPickerTextArea,
     SelectPickerVariantType,
 } from '../SelectPicker'
-import { FileUpload } from '../FileUpload'
+import { DynamicDataTableRowDataType, DynamicDataTableRowProps, DynamicDataTableRowType } from './types'
 import { getActionButtonPosition, getRowGridTemplateColumn, rowTypeHasInputField } from './utils'
-import { DynamicDataTableRowType, DynamicDataTableRowProps, DynamicDataTableRowDataType } from './types'
 
 const getWrapperForButtonCell =
     <K extends string, CustomStateType = Record<string, unknown>>(
@@ -169,7 +169,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             {...row.data[key].props}
                             inputId={`data-table-${row.id}-${key}-cell`}
                             classNamePrefix="dynamic-data-table__cell__select-picker"
-                            variant={SelectPickerVariantType.BORDER_LESS}
+                            variant={SelectPickerVariantType.COMPACT}
                             value={getSelectPickerOptionByValue(
                                 row.data[key].props?.options,
                                 row.data[key].value,
@@ -191,7 +191,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             isCreatable={isCreatable}
                             isClearable
                             {...props}
-                            variant={SelectPickerVariantType.BORDER_LESS}
+                            variant={SelectPickerVariantType.COMPACT}
                             classNamePrefix="dynamic-data-table__cell__select-picker-text-area"
                             inputId={`data-table-${row.id}-${key}-cell`}
                             minHeight={20}

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-import { Progressing } from '@Common/Progressing'
-import { Checkbox } from '@Common/Checkbox'
-import { CHECKBOX_VALUE } from '@Common/Types'
-import { Tooltip } from '@Common/Tooltip'
-import { DOCUMENTATION } from '@Common/Constants'
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
+import { Checkbox } from '@Common/Checkbox'
+import { DOCUMENTATION } from '@Common/Constants'
+import { Progressing } from '@Common/Progressing'
+import { Tooltip } from '@Common/Tooltip'
+import { CHECKBOX_VALUE } from '@Common/Types'
 import { InfoIconTippy, InvalidYAMLTippyWrapper } from '@Shared/Components'
+
 import { DTApplicationMetricsFormFieldProps } from './types'
 
 const DTApplicationMetricsFormField = ({
@@ -84,9 +85,9 @@ const DTApplicationMetricsFormField = ({
                 {!selectedChart.isAppMetricsSupported && (
                     <Tooltip
                         alwaysShowTippyOnHover
-                        content={`Application metrics is not supported for ${selectedChart.name} version ${selectedChart.version}.`}
+                        content={`Application metrics is not supported for chart '${selectedChart.name}' version ${selectedChart.version}.`}
                     >
-                        <span className="cr-5 fs-13 fw-4 lh-20 dc__border-bottom-dashed--n3 dc__no-shrink">
+                        <span className="cy-6 fs-13 fw-4 lh-20 dc__border-bottom-dashed--n3 dc__no-shrink">
                             Not supported
                         </span>
                     </Tooltip>

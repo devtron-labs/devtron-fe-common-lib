@@ -16,6 +16,7 @@
 
 import { ComponentSizeType } from '@Shared/constants'
 
+import { IconsProps } from '../Icon'
 import { TabGroupProps } from './TabGroup.types'
 
 export const getClassNameBySizeMap = ({
@@ -45,6 +46,12 @@ export const getClassNameBySizeMap = ({
         badgeClassName: 'fs-12 lh-20',
     },
 })
+
+export const TAB_ICON_SIZE_MAP: Record<TabGroupProps['size'], IconsProps['size']> = {
+    [ComponentSizeType.medium]: 14,
+    [ComponentSizeType.large]: 16,
+    [ComponentSizeType.xl]: 16,
+}
 
 export const tabGroupClassMap: Record<TabGroupProps['size'], string> = {
     [ComponentSizeType.medium]: 'dc__gap-12',

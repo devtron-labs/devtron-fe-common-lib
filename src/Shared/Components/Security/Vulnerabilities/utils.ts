@@ -15,6 +15,7 @@
  */
 
 import { numberComparatorBySortOrder } from '@Shared/Helpers'
+
 import { SortingOrder, VULNERABILITIES_SORT_PRIORITY } from '../../../../Common'
 
 export const getSortedVulnerabilities = (vulnerabilities) =>

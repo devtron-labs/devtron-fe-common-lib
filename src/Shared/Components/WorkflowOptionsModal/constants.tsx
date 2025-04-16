@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import linkedPipeline from '@Icons/ic-source-linked-build.svg'
 import ci from '@Icons/ic-source-build.svg'
-import webhook from '@Icons/ic-source-webhook.svg'
 import ciJobIcon from '@Icons/ic-source-job.svg'
-import { CIPipelineNodeType } from '@Shared/types'
+import linkedPipeline from '@Icons/ic-source-linked-build.svg'
+import webhook from '@Icons/ic-source-webhook.svg'
 import { PipelineType } from '@Common/Types'
+import { CIPipelineNodeType } from '@Shared/types'
 
 export const WORKFLOW_OPTIONS_MODAL = {
     ACTION_TEXT: 'Select an image source for new workflow',

@@ -16,8 +16,8 @@
 
 import { NodeProps } from '@xyflow/react'
 
-import { IconNodeProps } from './types'
 import { BaseNode } from './BaseNode'
+import { IconNodeProps } from './types'
 
 export const IconNode = ({ data, id, isConnectable }: NodeProps<IconNodeProps>) => {
     const { icon } = data

@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-import { ObjectFieldTemplateProps, canExpand, titleId, deepEquals } from '@rjsf/utils'
+import { canExpand, deepEquals, ObjectFieldTemplateProps, titleId } from '@rjsf/utils'
 import { JSONPath } from 'jsonpath-plus'
+
 import { convertJSONPointerToJSONPath } from '@Common/Helper'
+
 import { FieldRowWithLabel } from '../common/FieldRow'
-import { TitleField } from './TitleField'
-import { AddButton } from './ButtonTemplates'
 import { RJSFFormSchema } from '../types'
 import { parseSchemaHiddenType } from '../utils'
+import { AddButton } from './ButtonTemplates'
+import { TitleField } from './TitleField'
 
 const Field = ({
     disabled,

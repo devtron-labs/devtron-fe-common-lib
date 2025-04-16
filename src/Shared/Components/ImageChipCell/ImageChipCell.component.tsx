@@ -16,10 +16,13 @@
 
 import { useState } from 'react'
 import Tippy from '@tippyjs/react'
-import { RegistryType } from '@Shared/index'
-import { ImageChipCellProps } from './types'
-import './imageChipCell.scss'
+
+import { RegistryType } from '@Shared/types'
+
 import { RegistryIcon } from '../RegistryIcon'
+import { ImageChipCellProps } from './types'
+
+import './imageChipCell.scss'
 
 const ImageChipCell = ({
     imagePath,

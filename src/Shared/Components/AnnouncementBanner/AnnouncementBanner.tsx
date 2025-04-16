@@ -16,10 +16,11 @@
 
 import { useState } from 'react'
 import DOMPurify from 'dompurify'
-import { InfoColourBar } from '../../../Common'
-import { ReactComponent as MegaphoneIcon } from '../../../Assets/Icon/ic-megaphone.svg'
+
 import { ReactComponent as Close } from '../../../Assets/Icon/ic-close.svg'
-import { setActionWithExpiry, getDateInMilliseconds } from '../Header/utils'
+import { ReactComponent as MegaphoneIcon } from '../../../Assets/Icon/ic-megaphone.svg'
+import { InfoColourBar } from '../../../Common'
+import { getDateInMilliseconds, setActionWithExpiry } from '../Header/utils'
 
 interface AnnouncementBannerType {
     parentClassName?: string

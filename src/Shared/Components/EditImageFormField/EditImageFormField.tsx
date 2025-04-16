@@ -15,19 +15,22 @@
  */
 
 import { KeyboardEvent, SyntheticEvent, useState } from 'react'
-import { showError } from '@Common/Helper'
-import { CustomInput } from '@Shared/Components/CustomInput'
-import { ButtonWithLoader, ImageWithFallback } from '@Shared/Components'
-import { validateIfImageExist, validateURL } from '@Shared/validations'
-import { ToastManager, ToastVariantType } from '@Shared/Services'
+
 import { ReactComponent as ICPencil } from '@Icons/ic-pencil.svg'
-import { EditImageFormFieldProps, FallbackImageProps } from './types'
+import { showError } from '@Common/Helper'
+import { ButtonWithLoader, ImageWithFallback } from '@Shared/Components'
+import { CustomInput } from '@Shared/Components/CustomInput'
+import { ToastManager, ToastVariantType } from '@Shared/Services'
+import { validateIfImageExist, validateURL } from '@Shared/validations'
+
 import {
     BASE_IMAGE_CLASS,
     DEFAULT_IMAGE_DIMENSIONS,
     DEFAULT_MAX_IMAGE_SIZE,
     EMPTY_PREVIEW_URL_ERROR_MESSAGE,
 } from './constants'
+import { EditImageFormFieldProps, FallbackImageProps } from './types'
+
 import './EditImageFormField.scss'
 
 const FallbackImage = ({ showEditIcon, defaultIcon }: FallbackImageProps) => (

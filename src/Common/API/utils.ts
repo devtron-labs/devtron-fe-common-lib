@@ -1,6 +1,8 @@
-import { ServerErrors } from '@Common/ServerError'
 import { MutableRefObject } from 'react'
+
 import { URLS } from '@Common/Constants'
+import { ServerErrors } from '@Common/ServerError'
+
 import { RESPONSE_MESSAGES } from './constants'
 
 export const handleServerError = async (contentType: string, response: Response) => {

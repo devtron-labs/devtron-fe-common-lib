@@ -15,16 +15,16 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import CodeMirror, { EditorView, ReactCodeMirrorRef, ViewUpdate } from '@uiw/react-codemirror'
 import { MergeView } from '@codemirror/merge'
+import CodeMirror, { EditorView, ReactCodeMirrorRef, ViewUpdate } from '@uiw/react-codemirror'
 
-import { getComponentSpecificThemeClass } from '@Shared/Providers'
 import { Progressing } from '@Common/Progressing'
+import { getComponentSpecificThemeClass } from '@Shared/Providers'
 
 import { useCodeEditorContext } from './CodeEditor.context'
+import { DiffMinimap } from './Extensions'
 import { CodeEditorRendererProps } from './types'
 import { getCodeEditorHeight, getRevertControlButton, getScanLimit, updateDiffMinimapValues } from './utils'
-import { DiffMinimap } from './Extensions'
 
 export const CodeEditorRenderer = ({
     codemirrorMergeKey,
@@ -273,7 +273,10 @@ export const CodeEditorRenderer = ({
     }
 
     return diffMode ? (
-        <div className={`flexbox w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}>
+        <div
+            ref={codeMirrorParentDivRef}
+            className={`flexbox w-100 ${componentSpecificThemeClass} ${codeEditorParentClassName}`}
+        >
             {!codeMirrorMergeInstance && (
                 <div className="flex h-100 w-100">
                     <p>Calculating diff for large file. Please wait...</p>

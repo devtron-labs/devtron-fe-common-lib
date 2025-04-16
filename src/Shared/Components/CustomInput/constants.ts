@@ -15,6 +15,7 @@
  */
 
 import { ComponentSizeType } from '@Shared/constants'
+
 import { ButtonProps } from '../Button'
 import { CustomInputProps } from './types'
 

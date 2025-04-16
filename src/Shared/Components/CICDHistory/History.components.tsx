@@ -16,22 +16,25 @@
 
 import { useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+
 import { AppThemeType, getComponentSpecificThemeClass } from '@Shared/Providers'
+
+import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
+import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscreen.svg'
+import { ReactComponent as ZoomIn } from '../../../Assets/Icon/ic-fullscreen.svg'
 import {
     ClipboardButton,
+    extractImage,
     GenericEmptyState,
     Tooltip,
-    extractImage,
     useGetUserRoles,
     useRegisterShortcut,
 } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
-import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
-import { GitChangesType, LogResizeButtonType, ScrollerType } from './types'
 import GitCommitInfoGeneric from '../GitCommitInfoGeneric/GitCommitInfoGeneric'
 import { CIListItem } from './Artifacts'
-import { ReactComponent as ZoomIn } from '../../../Assets/Icon/ic-fullscreen.svg'
-import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscreen.svg'
+import { GitChangesType, LogResizeButtonType, ScrollerType } from './types'
+
 import './cicdHistory.scss'
 
 export const LogResizeButton = ({

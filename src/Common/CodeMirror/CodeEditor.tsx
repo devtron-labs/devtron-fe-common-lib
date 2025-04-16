@@ -15,29 +15,32 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { foldGutter } from '@codemirror/language'
+import { lintGutter } from '@codemirror/lint'
+import { search } from '@codemirror/search'
+import { indentationMarkers } from '@replit/codemirror-indentation-markers'
+import { vscodeKeymap } from '@replit/codemirror-vscode-keymap'
+import { hyperLink } from '@uiw/codemirror-extensions-hyper-link'
 import {
-    Extension,
-    ReactCodeMirrorProps,
     basicSetup,
     BasicSetupOptions,
     Compartment,
-    keymap,
-    EditorView,
     EditorState,
+    EditorView,
+    Extension,
+    keymap,
+    ReactCodeMirrorProps,
 } from '@uiw/react-codemirror'
-import { foldGutter } from '@codemirror/language'
-import { search } from '@codemirror/search'
-import { lintGutter } from '@codemirror/lint'
-import { vscodeKeymap } from '@replit/codemirror-vscode-keymap'
-import { indentationMarkers } from '@replit/codemirror-indentation-markers'
-import { hyperLink } from '@uiw/codemirror-extensions-hyper-link'
 
-import { AppThemeType, useTheme } from '@Shared/Providers'
-import { getUniqueId } from '@Shared/Helpers'
-import { cleanKubeManifest } from '@Common/Helper'
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
+import { cleanKubeManifest } from '@Common/Helper'
+import { getUniqueId } from '@Shared/Helpers'
+import { AppThemeType, useTheme } from '@Shared/Providers'
 
-import { codeEditorFindReplace, readOnlyTooltip, yamlHighlight } from './Extensions'
+import { Clipboard, Container, ErrorBar, Header, Information, Warning } from './CodeEditor.components'
+import { CodeEditorContext } from './CodeEditor.context'
+import { getCodeEditorTheme } from './CodeEditor.theme'
+import { CodeEditorRenderer } from './CodeEditorRenderer'
 import {
     blurOnEscape,
     openSearchPanel,
@@ -45,12 +48,9 @@ import {
     replaceAll,
     showReplaceFieldState,
 } from './Commands'
+import { codeEditorFindReplace, readOnlyTooltip, yamlHighlight } from './Extensions'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { getFoldGutterElement, getLanguageExtension, getValidationSchema, parseValueToCode } from './utils'
-import { CodeEditorContext } from './CodeEditor.context'
-import { Clipboard, Container, ErrorBar, Header, Information, Warning } from './CodeEditor.components'
-import { getCodeEditorTheme } from './CodeEditor.theme'
-import { CodeEditorRenderer } from './CodeEditorRenderer'
 
 import './codeEditor.scss'
 

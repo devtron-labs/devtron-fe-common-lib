@@ -15,16 +15,19 @@
  */
 
 import { TextareaHTMLAttributes, useEffect, useRef, useState } from 'react'
+
+import { useThrottledEffect } from '@Common/Helper'
 import {
     COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP,
     COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP,
     ComponentSizeType,
 } from '@Shared/constants'
 import { deriveBorderRadiusAndBorderClassFromConfig } from '@Shared/Helpers'
-import { useThrottledEffect } from '@Common/Helper'
+
 import { FormFieldWrapper, getFormFieldAriaAttributes } from '../FormFieldWrapper'
-import { TextareaProps } from './types'
 import { TEXTAREA_CONSTRAINTS } from './constants'
+import { TextareaProps } from './types'
+
 import './textarea.scss'
 
 const { MIN_HEIGHT, AUTO_EXPANSION_MAX_HEIGHT } = TEXTAREA_CONSTRAINTS
@@ -115,6 +118,10 @@ const Textarea = ({
     ) => {
         if (event.key === 'Enter' || event.key === 'Escape') {
             event.stopPropagation()
+
+            if (event.key === 'Escape') {
+                textareaRef.current.blur()
+            }
         }
     }
 
