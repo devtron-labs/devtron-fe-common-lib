@@ -3,9 +3,10 @@ import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
+import { AppStatusBody } from './AppStatusBody'
 import { AppStatusModalProps } from './types'
 
-const AppStatusModal = ({ title, handleClose }: AppStatusModalProps) => (
+const AppStatusModal = ({ title, handleClose, type, appDetails }: AppStatusModalProps) => (
     <Drawer position="right" width="1024px" onClose={handleClose} onEscape={handleClose}>
         <div
             className="flexbox-col dc__content-space h-100 border__primary--left bg__modal--primary shadow__modal"
@@ -28,7 +29,9 @@ const AppStatusModal = ({ title, handleClose }: AppStatusModalProps) => (
                 </div>
             </div>
 
-            <div className="flexbox-col flex-grow-1 dc__overflow-auto p-20 dc__gap-16" />
+            <div className="flexbox-col flex-grow-1 dc__overflow-auto p-20 dc__gap-16">
+                <AppStatusBody appDetails={appDetails} type={type} />
+            </div>
         </div>
     </Drawer>
 )
