@@ -49,6 +49,7 @@ import {
     GlobalVariableDTO,
     GlobalVariableOptionType,
     UserRole,
+    APIOptions,
 } from './Types'
 import { ApiResourceType, STAGE_MAP } from '../Pages'
 import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
@@ -452,9 +453,9 @@ export function getClusterListMin() {
 export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType<ApiResourceType>> =>
     get(`${ROUTES.API_RESOURCE}/${ROUTES.GVK}/${clusterId}`)
 
-export function getNamespaceListMin(clusterIdsCsv: string): Promise<EnvironmentListHelmResponse> {
+export function getNamespaceListMin(clusterIdsCsv: string, abortControllerRef?: APIOptions['abortControllerRef']): Promise<EnvironmentListHelmResponse> {
     const URL = `${ROUTES.NAMESPACE}/autocomplete?ids=${clusterIdsCsv}`
-    return get(URL)
+    return get(URL, { abortControllerRef })
 }
 export function getWebhookEventsForEventId(eventId: string | number) {
     const URL = `${ROUTES.GIT_HOST_EVENT}/${eventId}`
