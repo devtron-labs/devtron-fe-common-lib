@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export { type GenericInfoCardProps, GenericInfoCardBorderVariant } from './types'
 export { default as GenericInfoCard } from './GenericInfoCard.component'
+export { GenericInfoCardBorderVariant, type GenericInfoCardProps } from './types'

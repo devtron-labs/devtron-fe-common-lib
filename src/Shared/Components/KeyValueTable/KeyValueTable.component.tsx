@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-import { createRef, useEffect, useRef, useState, ReactElement, Fragment, useMemo } from 'react'
+import { createRef, Fragment, ReactElement, useEffect, useMemo, useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
-import { ReactComponent as ICArrowDown } from '@Icons/ic-sort-arrow-down.svg'
+import { ReactComponent as ICAdd } from '@Icons/ic-add.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
-import { ReactComponent as ICAdd } from '@Icons/ic-add.svg'
+import { ReactComponent as ICArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { ConditionalWrap, ResizableTagTextArea, SortingOrder, useStateFilters } from '@Common/index'
-import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
+import { stringComparatorBySortOrder } from '@Shared/Helpers'
 
-import { KeyValueRow, KeyValueTableProps } from './KeyValueTable.types'
 import { DUPLICATE_KEYS_VALIDATION_MESSAGE, EMPTY_KEY_VALIDATION_MESSAGE } from './constants'
+import { KeyValueRow, KeyValueTableProps } from './KeyValueTable.types'
+
 import './KeyValueTable.scss'
 
 const renderWithReadOnlyTippy = (children: ReactElement) => (

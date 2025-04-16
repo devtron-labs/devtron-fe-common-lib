@@ -15,12 +15,15 @@
  */
 
 import { createContext, useContext, useMemo, useState } from 'react'
+
 import { ToastManager, ToastVariantType } from '@Shared/Services'
+
+import { CHECKBOX_VALUE, noop, useEffectAfterMount } from '../../../Common'
 import {
     BULK_SELECTION_CONTEXT_ERROR,
     CLEAR_SELECTIONS_WARNING,
-    SELECT_ALL_ACROSS_PAGES_LOCATOR,
     getInvalidActionMessage,
+    SELECT_ALL_ACROSS_PAGES_LOCATOR,
 } from './constants'
 import {
     BulkSelectionEvents,
@@ -30,7 +33,6 @@ import {
     UseBulkSelectionProps,
     UseBulkSelectionReturnType,
 } from './types'
-import { CHECKBOX_VALUE, noop, useEffectAfterMount } from '../../../Common'
 
 // giving type any here since not exporting this context, rather using it through useBulkSelection hook which is typed
 const BulkSelectionContext = createContext<UseBulkSelectionReturnType<any>>({

@@ -16,13 +16,16 @@
 
 import { useState } from 'react'
 import { SingleDatePicker } from 'react-dates'
-import moment, { Moment } from 'moment'
 import CustomizableCalendarDay from 'react-dates/lib/components/CustomizableCalendarDay'
-import { SingleDatePickerProps } from './types'
-import { customDayStyles } from './constants'
+import moment, { Moment } from 'moment'
+
 import 'react-dates/initialize'
-import 'react-dates/lib/css/_datepicker.css'
+
 import CalenderIcon from '../../../Assets/Icon/ic-calender-blank.svg'
+import { customDayStyles } from './constants'
+import { SingleDatePickerProps } from './types'
+
+import 'react-dates/lib/css/_datepicker.css'
 
 const blockToday = (day: Moment): boolean => day.isSame(moment(), 'day')
 

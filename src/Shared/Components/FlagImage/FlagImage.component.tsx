@@ -1,4 +1,5 @@
 import { FlagImage as FlagImageHelper } from 'react-international-phone'
+
 import { FlagImageProps } from './types'
 
 const FlagImage = ({ country, size }: FlagImageProps) => (

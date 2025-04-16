@@ -15,28 +15,30 @@
  */
 
 import { useParams } from 'react-router-dom'
-import { useDownload } from '@Shared/Hooks'
-import { ReactComponent as Download } from '@Icons/ic-download.svg'
-import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
-import { ReactComponent as OpenInNew } from '@Icons/ic-arrow-out.svg'
+
 import { ReactComponent as Down } from '@Icons/ic-arrow-forward.svg'
-import { ReactComponent as ICHelpOutline } from '@Icons/ic-help.svg'
-import folder from '@Icons/ic-folder.svg'
+import { ReactComponent as OpenInNew } from '@Icons/ic-arrow-out.svg'
 import docker from '@Icons/ic-docker.svg'
+import { ReactComponent as Download } from '@Icons/ic-download.svg'
+import folder from '@Icons/ic-folder.svg'
+import { ReactComponent as ICHelpOutline } from '@Icons/ic-help.svg'
+import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
 import noartifact from '@Images/no-artifact.webp'
 import { getIsApprovalPolicyConfigured } from '@Shared/Helpers'
-import { TargetPlatformBadgeList } from '../TargetPlatforms'
+import { useDownload } from '@Shared/Hooks'
+
 import {
+    ClipboardButton,
+    DOCUMENTATION,
+    extractImage,
     GenericEmptyState,
     ImageTagsContainer,
-    ClipboardButton,
-    extractImage,
-    DOCUMENTATION,
     useGetUserRoles,
 } from '../../../Common'
-import { ArtifactType, CIListItemType } from './types'
-import { TERMINAL_STATUS_MAP } from './constants'
 import { EMPTY_STATE_STATUS } from '../../constants'
+import { TargetPlatformBadgeList } from '../TargetPlatforms'
+import { TERMINAL_STATUS_MAP } from './constants'
+import { ArtifactType, CIListItemType } from './types'
 
 const CIProgressView = (): JSX.Element => (
     <GenericEmptyState

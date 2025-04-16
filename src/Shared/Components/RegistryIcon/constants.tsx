@@ -16,6 +16,7 @@
 
 import { RegistryTypeDetailType } from '@Common/Types'
 import { RegistryType } from '@Shared/types'
+
 import { RegistryIcon } from './RegistryIcon'
 
 export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {

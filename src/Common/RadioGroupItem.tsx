@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { RadioGroupItemProps } from './Types'
 import { RadioGroupContext } from './RadioGroup'
+import { RadioGroupItemProps } from './Types'
 
 const RadioGroupItem = ({ value, disabled, children, dataTestId }: RadioGroupItemProps) => (
     <RadioGroupContext.Consumer>

@@ -15,6 +15,7 @@
  */
 
 import { ReactComponent as ICArrowCounterClockwise } from '@Icons/ic-arrow-counter-clockwise.svg'
+
 import { DEFAULT_INVALID_YAML_ERROR } from './constants'
 import { InvalidTippyProps, InvalidTippyTypeEnum } from './types'
 

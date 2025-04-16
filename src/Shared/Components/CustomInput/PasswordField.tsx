@@ -15,9 +15,11 @@
  */
 
 import { useMemo, useState } from 'react'
-import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
-import { ReactComponent as ICVisibilityOn } from '@Icons/ic-visibility-on.svg'
+
 import { ReactComponent as ICVisibilityOff } from '@Icons/ic-visibility-off.svg'
+import { ReactComponent as ICVisibilityOn } from '@Icons/ic-visibility-on.svg'
+import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
+
 import CustomInput from './CustomInput'
 import { CustomInputProps, PasswordFieldProps } from './types'
 

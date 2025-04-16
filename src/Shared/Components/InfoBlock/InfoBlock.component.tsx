@@ -16,7 +16,8 @@
 
 import { ComponentSizeType } from '@Shared/constants'
 import { deriveBorderRadiusAndBorderClassFromConfig } from '@Shared/Helpers'
-import { InfoBlockProps } from './types'
+
+import { Button } from '../Button'
 import {
     CONTAINER_SIZE_TO_BUTTON_SIZE,
     CONTAINER_SIZE_TO_CLASS_MAP,
@@ -24,7 +25,7 @@ import {
     VARIANT_TO_BG_MAP,
     VARIANT_TO_ICON_MAP,
 } from './constants'
-import { Button } from '../Button'
+import { InfoBlockProps } from './types'
 
 const InfoBlock = ({
     layout = 'row',

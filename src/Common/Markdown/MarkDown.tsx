@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import { marked, Tokens } from 'marked'
-import DOMPurify from 'dompurify'
 import { useEffect, useRef } from 'react'
+import DOMPurify from 'dompurify'
+import { marked, Tokens } from 'marked'
+
 import { MarkDownProps } from './Types'
+
 import './markdown.scss'
 
 const renderer = new marked.Renderer()

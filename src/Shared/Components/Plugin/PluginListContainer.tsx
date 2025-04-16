@@ -16,23 +16,25 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { APIResponseHandler } from '../APIResponseHandler'
-import PluginTagSelect from './PluginTagSelect'
-import PluginList from './PluginList'
-import { FilterChips } from '../FilterChips'
-import PluginCardSkeletonList from './PluginCardSkeletonList'
+
 import { abortPreviousRequests, getIsRequestAborted, SearchBar, useAsync } from '../../../Common'
+import { APIResponseHandler } from '../APIResponseHandler'
+import { FilterChips } from '../FilterChips'
+import { DEFAULT_PLUGIN_LIST_FILTERS } from './constants'
+import PluginCardSkeletonList from './PluginCardSkeletonList'
+import PluginList from './PluginList'
+import PluginTagSelect from './PluginTagSelect'
 import { getAvailablePluginTags, getPluginStoreData } from './service'
 import {
-    PluginListParamsType,
     PluginListContainerProps,
-    PluginListProps,
     PluginListFiltersType,
     PluginListItemType,
+    PluginListParamsType,
+    PluginListProps,
 } from './types'
-import { DEFAULT_PLUGIN_LIST_FILTERS } from './constants'
-import './pluginListContainer.scss'
 import { getUpdatedPluginStore } from './utils'
+
+import './pluginListContainer.scss'
 
 const PluginListContainer = ({
     availableTags,

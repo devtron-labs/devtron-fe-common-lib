@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { Toggle, Tooltip } from '@Common/index'
 import { ReactComponent as ICViewVariableToggle } from '@Icons/ic-view-variable-toggle.svg'
+import { Toggle, Tooltip } from '@Common/index'
+
 import { ToggleResolveScopedVariablesProps } from './types'
 
 const ToggleResolveScopedVariables = ({

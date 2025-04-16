@@ -16,8 +16,9 @@
 
 // ====== Service Types: Start ====== //
 
-import { EnvironmentType, ResourceKindType } from '@Shared/types'
 import { ServerErrors } from '@Common/ServerError'
+import { EnvironmentType, ResourceKindType } from '@Shared/types'
+
 import { getAppOptionsGroupedByProjects, getClusterOptions, getProjectOptions } from './service'
 
 export interface AppType {

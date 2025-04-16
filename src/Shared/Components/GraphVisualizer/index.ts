@@ -15,4 +15,4 @@
  */
 
 export * from './GraphVisualizer'
-export type { GraphVisualizerProps, GraphVisualizerNode, GraphVisualizerEdge } from './types'
+export type { GraphVisualizerEdge, GraphVisualizerNode, GraphVisualizerProps } from './types'

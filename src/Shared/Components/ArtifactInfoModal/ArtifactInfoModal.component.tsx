@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
+import { ReactComponent as ICArrowDown } from '../../../Assets/Icon/ic-arrow-down.svg'
+import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
 import { Drawer, GenericEmptyState, useAsync } from '../../../Common'
 import { getArtifactInfo, getCITriggerInfo } from '../../Services/app.service'
 import { APIResponseHandler } from '../APIResponseHandler'
-import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
-import { ReactComponent as ICArrowDown } from '../../../Assets/Icon/ic-arrow-down.svg'
 import { Artifacts } from '../CICDHistory'
 import MaterialHistory from '../MaterialHistory/MaterialHistory.component'
 import { ArtifactInfoModalProps } from './types'

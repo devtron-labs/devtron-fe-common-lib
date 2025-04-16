@@ -15,6 +15,7 @@
  */
 
 import { WorkflowStatusEnum } from '@Shared/types'
+
 import { multiSelectStyles } from '../../../Common/MultiSelectCustomization'
 import { WorkflowStageStatusType } from './types'
 

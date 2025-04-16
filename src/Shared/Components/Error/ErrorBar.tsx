@@ -16,11 +16,12 @@
 
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+
 import { ReactComponent as ErrorInfo } from '../../../Assets/Icon/ic-errorInfo.svg'
-import { ErrorBarType, AppDetailsErrorType } from './types'
-import { AppType } from '../../types'
-import { renderErrorHeaderMessage } from './utils'
 import { URLS } from '../../../Common'
+import { AppType } from '../../types'
+import { AppDetailsErrorType, ErrorBarType } from './types'
+import { renderErrorHeaderMessage } from './utils'
 
 const ErrorBar = ({ appDetails }: ErrorBarType) => {
     const [isImagePullBackOff, setIsImagePullBackOff] = useState(false)

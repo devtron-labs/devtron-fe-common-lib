@@ -15,6 +15,7 @@
  */
 
 import { useEffect, useRef } from 'react'
+
 import { FormFieldWrapper, getFormFieldAriaAttributes } from '@Shared/Components/FormFieldWrapper'
 import {
     COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP,
@@ -22,9 +23,11 @@ import {
     ComponentSizeType,
 } from '@Shared/constants'
 import { deriveBorderRadiusAndBorderClassFromConfig } from '@Shared/Helpers'
-import { CustomInputProps } from './types'
+
 import { Button, ButtonProps, ButtonStyleType, ButtonVariantType } from '../Button'
 import { CUSTOM_INPUT_TO_ICON_BUTTON_SIZE_MAP } from './constants'
+import { CustomInputProps } from './types'
+
 import './customInput.scss'
 
 const CustomInput = ({

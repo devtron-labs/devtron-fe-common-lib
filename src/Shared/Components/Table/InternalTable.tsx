@@ -1,12 +1,13 @@
-import { useRef, useEffect, useMemo, Fragment } from 'react'
+import { Fragment, useEffect, useMemo, useRef } from 'react'
+
 import { Checkbox } from '@Common/Checkbox'
 import { DEFAULT_BASE_PAGE_SIZE } from '@Common/Constants'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import {
-    useAsync,
     CHECKBOX_VALUE,
-    GenericFilterEmptyState,
     GenericEmptyState,
+    GenericFilterEmptyState,
+    useAsync,
     useEffectAfterMount,
 } from '@Common/index'
 import { Pagination } from '@Common/Pagination'
@@ -15,7 +16,7 @@ import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
 import { BulkSelection } from '../BulkSelection'
 import BulkSelectionActionWidget from './BulkSelectionActionWidget'
 import { BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, SHIMMER_DUMMY_ARRAY } from './constants'
-import { PaginationEnum, SignalsType, FiltersTypeEnum, InternalTableProps } from './types'
+import { FiltersTypeEnum, InternalTableProps, PaginationEnum, SignalsType } from './types'
 import useTableWithKeyboardShortcuts from './useTableWithKeyboardShortcuts'
 import { getFilteringPromise, searchAndSortRows } from './utils'
 

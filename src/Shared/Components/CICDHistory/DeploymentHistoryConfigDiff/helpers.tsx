@@ -16,8 +16,8 @@
 
 import { NavLink } from 'react-router-dom'
 
-import { ReactComponent as ICFileCode } from '@Icons/ic-file-code.svg'
 import { ReactComponent as ICDocker } from '@Icons/ic-docker.svg'
+import { ReactComponent as ICFileCode } from '@Icons/ic-file-code.svg'
 import {
     DeploymentConfigDiffProps,
     DeploymentConfigDiffState,

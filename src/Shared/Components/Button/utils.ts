@@ -15,6 +15,7 @@
  */
 
 import { COMPONENT_SIZE_TYPE_TO_ICON_SIZE_MAP } from '@Shared/constants'
+
 import {
     BUTTON_SIZE_TO_CLASS_NAME_MAP,
     ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP,

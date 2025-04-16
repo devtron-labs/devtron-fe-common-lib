@@ -15,7 +15,9 @@
  */
 
 import Tippy from '@tippyjs/react'
+
 import { ConditionalWrap } from '@Common/Helper'
+
 import { SourceTypeCardProps } from './types'
 
 const SourceTypeCard = ({

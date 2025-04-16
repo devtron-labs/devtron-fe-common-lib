@@ -15,6 +15,7 @@
  */
 
 import { ModuleStatus } from '@Shared/types'
+
 import { ResponseType, TippyCustomizedProps } from '../../../Common'
 
 export enum InstallationType {

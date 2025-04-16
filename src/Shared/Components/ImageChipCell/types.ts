@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Tippy from '@tippyjs/react'
 import { ComponentProps, SyntheticEvent } from 'react'
+import Tippy from '@tippyjs/react'
+
 import { RegistryType } from '../../types'
 
 type ImageChipCellButtonActionProps =

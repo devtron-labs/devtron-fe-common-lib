@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { NodeType, Nodes } from '@Shared/types'
 import { RefObject } from 'react'
+
+import { Nodes, NodeType } from '@Shared/types'
 
 export interface GVKType {
     Group: string

@@ -16,19 +16,21 @@
 
 import { ROUTES } from '@Common/Constants'
 import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
-import { ResourceKindType, BaseAppMetaData } from '@Shared/index'
 import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
+import { BaseAppMetaData } from '@Shared/Services'
+import { ResourceKindType } from '@Shared/types'
+
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
-    UserPreferencesType,
-    GetUserPreferencesQueryParamsType,
     GetUserPreferencesParsedDTO,
-    ViewIsPipelineRBACConfiguredRadioTabs,
-    UserPreferenceResourceActions,
-    UserPreferencesPayloadValueType,
+    GetUserPreferencesQueryParamsType,
     UpdateUserPreferencesPayloadType,
     UserPathValueMapType,
+    UserPreferenceResourceActions,
     UserPreferenceResourceProps,
+    UserPreferencesPayloadValueType,
+    UserPreferencesType,
+    ViewIsPipelineRBACConfiguredRadioTabs,
 } from './types'
 import { getUserPreferenceResourcesMetadata } from './utils'
 

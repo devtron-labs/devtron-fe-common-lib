@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { OverrideMergeStrategyType } from '@Pages/index'
 import { CM_SECRET_STATE, CMSecretComponentType, CMSecretConfigData } from '@Shared/Services'
+import { OverrideMergeStrategyType } from '@Pages/index'
+
 import { SelectPickerOptionType } from '../SelectPicker'
 
 export interface ConfigMapSecretReadyOnlyProps {

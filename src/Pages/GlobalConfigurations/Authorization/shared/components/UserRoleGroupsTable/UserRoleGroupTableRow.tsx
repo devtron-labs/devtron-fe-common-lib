@@ -18,11 +18,12 @@ import { Link } from 'react-router-dom'
 
 import { URLS } from '@Common/Constants'
 import { getRandomColor } from '@Common/Helper'
-import { ComponentSizeType } from '@Shared/constants'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
-import { UserRoleGroupsTableProps } from './types'
+import { ComponentSizeType } from '@Shared/constants'
+
 import { ReactComponent as TrashIcon } from '../../../../../../Assets/Icon/ic-delete-interactive.svg'
 import { UserRoleGroup } from '../../../types'
+import { UserRoleGroupsTableProps } from './types'
 
 const UserRoleGroupTableRow = ({
     id,

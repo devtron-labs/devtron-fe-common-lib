@@ -15,11 +15,13 @@
  */
 
 import { useState } from 'react'
+
 import { ReactComponent as ICDropdown } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { PopupMenu } from '../../../Common'
-import { ButtonWithSelectorProps } from './types'
-import './buttonWithSelector.scss'
 import { ButtonWithLoader } from '../ButtonWithLoader'
+import { ButtonWithSelectorProps } from './types'
+
+import './buttonWithSelector.scss'
 
 /**
  * Button With Selector

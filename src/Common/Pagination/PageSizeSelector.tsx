@@ -15,8 +15,9 @@
  */
 
 import { useRef, useState } from 'react'
-import { PageSizeItemsProps, PageSizeOption, PageSizeSelectorProps } from './types'
+
 import { useClickOutside } from '../Hooks'
+import { PageSizeItemsProps, PageSizeOption, PageSizeSelectorProps } from './types'
 import { getDefaultPageValueOptions } from './utils'
 
 const PageSizeItems = ({

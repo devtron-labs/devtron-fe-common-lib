@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
+
+import { FlagImage } from '../FlagImage'
 import { SelectPicker, SelectPickerProps } from '../SelectPicker'
 import { CountrySelectProps } from './types'
 import { getCountryOptions } from './utils'
-import { FlagImage } from '../FlagImage'
 
 const CountrySelect = ({
     selectedCountry,

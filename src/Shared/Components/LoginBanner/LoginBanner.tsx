@@ -1,6 +1,8 @@
-import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
+
 import LoginBannerImg from '@Images/login-screen-ui.webp'
+
 import { Icon } from '../Icon'
 import { TESTIMONIAL_CARD_DATA, TESTIMONIAL_CARD_INTERVAL, TRANSITION_EASE_CURVE } from './constants'
 

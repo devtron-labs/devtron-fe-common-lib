@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
+import { getCVEUrlFromCVEName } from '../../utils'
+import { OpenDetailViewButton } from '../components'
 import IndexedTextDisplay from '../components/IndexedTextDisplay'
-import {
-    compareSeverities,
-    compareSeverity,
-    getScanCompletedEmptyState,
-    mapSeveritiesToSegmentedBarChartEntities,
-    stringifySeverities,
-} from '../utils'
 import { SCAN_FAILED_EMPTY_STATE, SCAN_IN_PROGRESS_EMPTY_STATE, SEVERITY_DEFAULT_SORT_ORDER } from '../constants'
 import {
-    ScanResultDTO,
     CATEGORIES,
     CodeScan,
     CodeScanExposedSecretsListType,
@@ -33,13 +27,19 @@ import {
     EmptyStateType,
     InfoCardPropsType,
     OpenDetailViewButtonProps,
-    SUB_CATEGORIES,
+    ScanResultDTO,
     SecurityModalStateType,
     StatusType,
+    SUB_CATEGORIES,
     TablePropsType,
 } from '../types'
-import { OpenDetailViewButton } from '../components'
-import { getCVEUrlFromCVEName } from '../../utils'
+import {
+    compareSeverities,
+    compareSeverity,
+    getScanCompletedEmptyState,
+    mapSeveritiesToSegmentedBarChartEntities,
+    stringifySeverities,
+} from '../utils'
 
 export const getCodeScanVulnerabilities = (data: CodeScan['vulnerability'], hidePolicy: boolean) => ({
     headers: [

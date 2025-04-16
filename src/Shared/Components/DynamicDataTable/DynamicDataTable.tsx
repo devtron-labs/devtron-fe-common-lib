@@ -19,6 +19,7 @@ import { useMemo } from 'react'
 import { DynamicDataTableHeader } from './DynamicDataTableHeader'
 import { DynamicDataTableRow } from './DynamicDataTableRow'
 import { DynamicDataTableProps } from './types'
+
 import './styles.scss'
 
 export const DynamicDataTable = <K extends string, CustomStateType = Record<string, unknown>>({

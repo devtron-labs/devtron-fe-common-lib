@@ -15,14 +15,14 @@
  */
 
 import { Dispatch, FunctionComponent, Key, MutableRefObject, ReactNode, SetStateAction, SVGProps } from 'react'
-import { JSONSchema7 } from 'json-schema'
-import { EditorView, Extension, ReactCodeMirrorProps } from '@uiw/react-codemirror'
 import { MergeView } from '@codemirror/merge'
 import { SearchQuery } from '@codemirror/search'
+import { EditorView, Extension, ReactCodeMirrorProps } from '@uiw/react-codemirror'
+import { JSONSchema7 } from 'json-schema'
 
 import { MODES } from '@Common/Constants'
-import { Never } from '@Shared/types'
 import { AppThemeType } from '@Shared/Providers'
+import { Never } from '@Shared/types'
 
 // COMPONENT PROPS
 export interface CodeEditorStatusBarProps {

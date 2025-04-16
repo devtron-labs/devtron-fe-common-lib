@@ -15,8 +15,9 @@
  */
 
 import ReactGA from 'react-ga4'
+
 import { DARK_COLOR_SCHEME_MATCH_QUERY, THEME_PREFERENCE_STORAGE_KEY } from './constants'
-import { AppThemeType, THEME_PREFERENCE_MAP, ThemePreferenceType, ThemeConfigType } from './types'
+import { AppThemeType, THEME_PREFERENCE_MAP, ThemeConfigType, ThemePreferenceType } from './types'
 
 export const getAppThemeForAutoPreference = (): AppThemeType =>
     window.matchMedia && window.matchMedia(DARK_COLOR_SCHEME_MATCH_QUERY).matches

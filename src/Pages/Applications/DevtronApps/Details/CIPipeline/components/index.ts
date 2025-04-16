@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export * from './SystemVariableIcon'
 export * from './FileConfigTippy'
+export * from './SystemVariableIcon'

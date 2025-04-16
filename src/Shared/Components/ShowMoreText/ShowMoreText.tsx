@@ -15,6 +15,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
+
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 
 interface ShowMoreTextProps {

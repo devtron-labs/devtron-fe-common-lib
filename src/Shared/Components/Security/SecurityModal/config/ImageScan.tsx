@@ -15,24 +15,28 @@
  */
 
 import dayjs from 'dayjs'
-import { Progressing } from '@Common/Progressing'
+
 import { ReactComponent as ICError } from '@Icons/ic-error-cross.svg'
 import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
-import { ZERO_TIME_STRING, DATE_TIME_FORMATS } from '../../../../../Common/Constants'
+import { Progressing } from '@Common/Progressing'
+
+import { DATE_TIME_FORMATS, ZERO_TIME_STRING } from '../../../../../Common/Constants'
+import { OpenDetailViewButton } from '../components'
+import { SCAN_FAILED_EMPTY_STATE, SCAN_IN_PROGRESS_EMPTY_STATE, SEVERITY_DEFAULT_SORT_ORDER } from '../constants'
 import {
-    DetailViewDataType,
-    ImageScanVulnerabilityListType,
-    ImageScan,
-    SUB_CATEGORIES,
-    SecurityModalStateType,
-    TablePropsType,
-    StatusType,
-    InfoCardPropsType,
-    ImageScanLicenseListType,
-    EmptyStateType,
-    ScanResultDTO,
     CATEGORIES,
+    DetailViewDataType,
+    EmptyStateType,
+    ImageScan,
+    ImageScanLicenseListType,
+    ImageScanVulnerabilityListType,
+    InfoCardPropsType,
     OpenDetailViewButtonProps,
+    ScanResultDTO,
+    SecurityModalStateType,
+    StatusType,
+    SUB_CATEGORIES,
+    TablePropsType,
 } from '../types'
 import {
     compareSeverities,
@@ -42,9 +46,7 @@ import {
     mapSeveritiesToSegmentedBarChartEntities,
     stringifySeverities,
 } from '../utils'
-import { SCAN_FAILED_EMPTY_STATE, SCAN_IN_PROGRESS_EMPTY_STATE, SEVERITY_DEFAULT_SORT_ORDER } from '../constants'
 import { getCodeScanVulnerabilities } from './CodeScan'
-import { OpenDetailViewButton } from '../components'
 
 const getVulnerabilitiesDetailBaseData = (element: ImageScanVulnerabilityListType) => ({
     titlePrefix: 'Image',

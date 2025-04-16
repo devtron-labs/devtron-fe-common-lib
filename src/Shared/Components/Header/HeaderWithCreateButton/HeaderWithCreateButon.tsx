@@ -16,17 +16,20 @@
 
 import { useState } from 'react'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
-import Button from '@Shared/Components/Button/Button.component'
+
+import { ReactComponent as AddIcon } from '@Icons/ic-add.svg'
 import { ReactComponent as DropDown } from '@Icons/ic-caret-down-small.svg'
 import { ReactComponent as ChartIcon } from '@Icons/ic-charts.svg'
-import { ReactComponent as AddIcon } from '@Icons/ic-add.svg'
 import { ReactComponent as JobIcon } from '@Icons/ic-k8s-job.svg'
-import PageHeader from '../PageHeader'
+import Button from '@Shared/Components/Button/Button.component'
+
 import { Modal, SERVER_MODE, URLS } from '../../../../Common'
 import { AppListConstants, ComponentSizeType } from '../../../constants'
-import './HeaderWithCreateButton.scss'
 import { useMainContext } from '../../../Providers'
+import PageHeader from '../PageHeader'
 import { getIsShowingLicenseData } from '../utils'
+
+import './HeaderWithCreateButton.scss'
 
 export interface HeaderWithCreateButtonProps {
     headerName: string

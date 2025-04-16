@@ -15,32 +15,33 @@
  */
 
 import React, { memo, useEffect, useRef } from 'react'
-import TippyHeadless from '@tippyjs/react/headless'
 import ReactGA from 'react-ga4'
-import { useHistory, useParams, useRouteMatch, generatePath, useLocation, NavLink } from 'react-router-dom'
+import { generatePath, NavLink, useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom'
 import ReactSelect, { components } from 'react-select'
+import TippyHeadless from '@tippyjs/react/headless'
 import moment from 'moment'
+
 import { ReactComponent as ICArrowBackward } from '@Icons/ic-arrow-backward.svg'
 import { ReactComponent as ICDocker } from '@Icons/ic-docker.svg'
 import { DeploymentStageType } from '@Shared/constants'
+
+import { ConditionalWrap, DATE_TIME_FORMATS, DropdownIndicator, Tooltip } from '../../../Common'
+import { DetectBottom } from '../DetectBottom'
+import { Icon } from '../Icon'
+import { getCustomOptionSelectionStyle } from '../ReactSelect'
+import { DeploymentStatus } from '../StatusComponent'
+import BuildAndTaskSummaryTooltipCard from './BuildAndTaskSummaryTooltipCard'
+import { FILTER_STYLE, HISTORY_LABEL, statusColor as colorMap } from './constants'
+import GitTriggerList from './GitTriggerList'
 import {
-    SidebarType,
     CICDSidebarFilterOptionType,
-    HistoryComponentType,
-    HistorySummaryCardType,
     DeploymentSummaryTooltipCardType,
     FetchIdDataStatus,
+    HistoryComponentType,
+    HistorySummaryCardType,
+    SidebarType,
 } from './types'
-import BuildAndTaskSummaryTooltipCard from './BuildAndTaskSummaryTooltipCard'
-import { getCustomOptionSelectionStyle } from '../ReactSelect'
-import { DetectBottom } from '../DetectBottom'
-import { ConditionalWrap, DATE_TIME_FORMATS, DropdownIndicator, Tooltip } from '../../../Common'
-
-import { HISTORY_LABEL, FILTER_STYLE, statusColor as colorMap } from './constants'
-import { DeploymentStatus } from '../StatusComponent'
-import { Icon } from '../Icon'
-import { getTriggerStatusIcon, getHistoryItemStatusIconFromWorkflowStages, getWorkflowNodeStatusTitle } from './utils'
-import GitTriggerList from './GitTriggerList'
+import { getHistoryItemStatusIconFromWorkflowStages, getTriggerStatusIcon, getWorkflowNodeStatusTitle } from './utils'
 
 /**
  * @description To be shown on deployment history or when we don't have workflowExecutionStages

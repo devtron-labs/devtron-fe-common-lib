@@ -15,7 +15,9 @@
  */
 
 import YAML from 'yaml'
+
 import { noop, YAMLStringify } from '@Common/Helper'
+
 import { MODES } from '../Constants'
 import { Action, CodeEditorInitialValueType, CodeEditorState } from './types'
 import { getCodeEditorThemeFromAppTheme } from './utils'

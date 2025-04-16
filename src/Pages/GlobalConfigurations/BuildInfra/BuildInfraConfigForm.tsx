@@ -15,10 +15,11 @@
  */
 
 import { FunctionComponent } from 'react'
+
 import { Progressing } from '../../../Common'
+import BuildInfraProfileDescriptionField from './BuildInfraDescriptionField'
 import BuildInfraFormAction from './BuildInfraFormAction'
 import BuildInfraFormItem from './BuildInfraFormItem'
-import BuildInfraProfileDescriptionField from './BuildInfraDescriptionField'
 import BuildInfraProfileNameField from './BuildInfraProfileNameField'
 import { BUILD_INFRA_DEFAULT_PLATFORM_NAME, BUILD_INFRA_FORM_FIELDS, BUILD_INFRA_TEXT } from './constants'
 import {

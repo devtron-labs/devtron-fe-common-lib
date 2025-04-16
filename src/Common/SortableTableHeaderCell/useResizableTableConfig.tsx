@@ -15,8 +15,9 @@
  */
 
 import { useEffect, useState } from 'react'
-import { UseResizableTableConfigProps } from './types'
+
 import { DEFAULT_MAXIMUM_HEADER_WIDTH, DEFAULT_MINIMUM_HEADER_WIDTH } from './constants'
+import { UseResizableTableConfigProps } from './types'
 
 const useResizableTableConfig = ({ headersConfig }: UseResizableTableConfigProps) => {
     const [headerDimensionsConfig, setHeaderDimensionsConfig] = useState<

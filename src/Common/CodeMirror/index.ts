@@ -15,4 +15,4 @@
  */
 
 export { default as CodeEditor } from './CodeEditor'
-export type { CodeEditorProps, CodeEditorHeaderProps, CodeEditorStatusBarProps } from './types'
+export type { CodeEditorHeaderProps, CodeEditorProps, CodeEditorStatusBarProps } from './types'

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
+import { ReactComponent as ICBookOpen } from '../../../Assets/Icon/ic-book-open.svg'
 import { Checkbox, CHECKBOX_VALUE, stopPropagation } from '../../../Common'
 import PluginImageContainer from './PluginImageContainer'
 import PluginTagsContainer from './PluginTagsContainer'
 import { PluginCardProps } from './types'
-import { ReactComponent as ICBookOpen } from '../../../Assets/Icon/ic-book-open.svg'
 
 const PluginCard = ({
     isSelectable,

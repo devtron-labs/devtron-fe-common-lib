@@ -15,14 +15,16 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+
 import { ReactComponent as ICFilter } from '@Icons/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '@Icons/ic-filter-applied.svg'
-import { useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/Hooks'
 import { IS_PLATFORM_MAC_OS } from '@Common/Constants'
+import { useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/Hooks'
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
+
+import { ButtonProps, ButtonVariantType, useTriggerAutoClickTimestamp } from '../Button'
 import SelectPicker from './SelectPicker.component'
 import { FilterSelectPickerProps, SelectPickerOptionType, SelectPickerProps } from './type'
-import { ButtonProps, ButtonVariantType, useTriggerAutoClickTimestamp } from '../Button'
 
 const APPLY_FILTER_SHORTCUT_KEYS: SupportedKeyboardKeysType[] = [IS_PLATFORM_MAC_OS ? 'Meta' : 'Control', 'Enter']
 

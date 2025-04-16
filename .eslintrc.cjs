@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+const tsconfigPath = require('./tsconfig.json')
+
 module.exports = {
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint', 'react', 'prettier', 'import'],
+    plugins: ['@typescript-eslint', 'react', 'prettier', 'import', 'simple-import-sort'],
     env: {
         browser: true,
         es2021: true,
@@ -109,6 +111,26 @@ module.exports = {
         'import/prefer-default-export': 'off',
         'no-restricted-exports': 'off',
         'import/named': 'off',
+        'simple-import-sort/imports': [
+                    'error',
+                    {
+                        groups: [
+                            // Packages `react` related packages and external packages.
+                            ['^react', '^@?\\w'],
+                            // Devtron packages
+                            ['^@devtron-labs'],
+                            // Internal packages.
+                            [...Object.keys(tsconfigPath.compilerOptions.paths).map((alias) => alias.replace('/*', ''))],
+                            // Side effect imports.
+                            ['^\\u0000'],
+                            // Put same-folder imports, `..` and `.` last. Other relative imports.
+                            ['^\\.\\.(?!/?$)', '^\\.\\./?$', '^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$',],
+                            // Style imports.
+                            [ '^.+\\.?(css|scss)$'],
+                        ],
+                    },
+                ],
+        'simple-import-sort/exports': 'error',
     },
     overrides: [
         {

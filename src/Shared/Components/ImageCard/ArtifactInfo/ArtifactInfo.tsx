@@ -15,14 +15,16 @@
  */
 
 import Tippy from '@tippyjs/react'
+
 import { Tooltip } from '@Common/Tooltip'
 import { RegistryIcon } from '@Shared/Components/RegistryIcon'
-import { DefaultUserKey } from '../../../types'
-import { ImagePathTippyContentProps } from './types'
-import { ArtifactInfoProps } from '../types'
-import { ConditionalWrap, getRandomColor } from '../../../../Common/Helper'
-import { ReactComponent as DeployIcon } from '../../../../Assets/Icon/ic-nav-rocket.svg'
+
 import { ReactComponent as ICBot } from '../../../../Assets/Icon/ic-bot.svg'
+import { ReactComponent as DeployIcon } from '../../../../Assets/Icon/ic-nav-rocket.svg'
+import { ConditionalWrap, getRandomColor } from '../../../../Common/Helper'
+import { DefaultUserKey } from '../../../types'
+import { ArtifactInfoProps } from '../types'
+import { ImagePathTippyContentProps } from './types'
 
 const ImagePathTippyContent = ({ imagePath, registryName }: ImagePathTippyContentProps) => (
     <div>

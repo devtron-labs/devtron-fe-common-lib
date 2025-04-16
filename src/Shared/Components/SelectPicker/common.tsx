@@ -14,36 +14,38 @@
  * limitations under the License.
  */
 
+import { ChangeEvent, Children } from 'react'
 import {
-    components,
-    DropdownIndicatorProps,
-    ControlProps,
-    OptionProps,
     ClearIndicatorProps,
-    ValueContainerProps,
-    MenuListProps,
-    MultiValueRemoveProps,
-    MultiValueProps,
-    MultiValue,
+    components,
+    ControlProps,
+    DropdownIndicatorProps,
     InputProps,
+    MenuListProps,
+    MultiValue,
+    MultiValueProps,
+    MultiValueRemoveProps,
+    OptionProps,
+    ValueContainerProps,
 } from 'react-select'
-import { Progressing } from '@Common/Progressing'
+
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
-import { ChangeEvent, Children } from 'react'
-import { noop } from '@Common/Helper'
-import { CHECKBOX_VALUE } from '@Common/Types'
 import { Checkbox } from '@Common/Checkbox'
 import { ReactSelectInputAction } from '@Common/Constants'
-import { isNullOrUndefined } from '@Shared/Helpers'
+import { noop } from '@Common/Helper'
+import { Progressing } from '@Common/Progressing'
 import { Tooltip } from '@Common/Tooltip'
 import { TooltipProps } from '@Common/Tooltip/types'
+import { CHECKBOX_VALUE } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
+import { isNullOrUndefined } from '@Shared/Helpers'
+
+import { Button, ButtonProps, ButtonVariantType } from '../Button'
+import { Icon } from '../Icon'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
-import { Icon } from '../Icon'
-import { Button, ButtonProps, ButtonVariantType } from '../Button'
 
 export const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
     if (tooltipProps) {
@@ -223,7 +225,14 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                     <div className={`flex left w-100 ${showDescription ? 'top' : ''} dc__gap-8`}>
                         {startIcon && <div className={`${iconBaseClass} mt-2`}>{startIcon}</div>}
                         <div className="flex-grow-1">
-                            <Tooltip content={label} placement="right">
+                            <Tooltip
+                                {...(typeof label !== 'string'
+                                    ? { alwaysShowTippyOnHover: false, content: null }
+                                    : {
+                                          content: label,
+                                      })}
+                                placement="right"
+                            >
                                 <h4
                                     className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}
                                 >

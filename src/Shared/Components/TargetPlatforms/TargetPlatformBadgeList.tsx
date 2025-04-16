@@ -16,6 +16,7 @@
 
 import { ReactComponent as ICStack } from '@Icons/ic-stack.svg'
 import { Tooltip } from '@Common/Tooltip'
+
 import { TargetPlatformBadgeListProps } from './types'
 
 const TargetPlatformBadge = ({ name }: TargetPlatformBadgeListProps['targetPlatforms'][number]) => (

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { PromiseAllStatusType, ApiQueuingWithBatchResponseItem, BatchConfigType } from '../types'
+import { ApiQueuingWithBatchResponseItem, BatchConfigType, PromiseAllStatusType } from '../types'
 
 const eachCall = (batchConfig, functionCalls, resolve, reject, shouldRejectOnError) => {
     const callIndex = batchConfig.lastIndex

@@ -20,21 +20,21 @@ import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICCheckCircleDots } from '@Icons/ic-check-circle-dots.svg'
 import { ReactComponent as ICEditFile } from '@Icons/ic-edit-file.svg'
 import { ReactComponent as ICFileCode } from '@Icons/ic-file-code.svg'
-import { stringComparatorBySortOrder, yamlComparatorBySortOrder } from '@Shared/Helpers'
-import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '@Shared/constants'
+import { deepEqual, noop, YAMLStringify } from '@Common/Helper'
 import {
+    AppEnvDeploymentConfigListParams,
     DeploymentConfigDiffProps,
     DeploymentConfigDiffState,
     DeploymentHistoryDetail,
     DeploymentHistorySingleValue,
-    AppEnvDeploymentConfigListParams,
     DiffHeadingDataType,
-    prepareHistoryData,
     GenericSectionErrorState,
+    prepareHistoryData,
 } from '@Shared/Components'
-import { deepEqual, noop, YAMLStringify } from '@Common/Helper'
-
+import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '@Shared/constants'
+import { stringComparatorBySortOrder, yamlComparatorBySortOrder } from '@Shared/Helpers'
 import { ManifestTemplateDTO } from '@Pages/Applications'
+
 import {
     CMSecretExternalType,
     ConfigMapSecretDataConfigDatumDTO,

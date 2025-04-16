@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export * from './Vulnerabilities'
+export * from './SecurityDetailsCards'
 export * from './SecurityModal'
 export * from './utils'
-export * from './SecurityDetailsCards'
+export * from './Vulnerabilities'

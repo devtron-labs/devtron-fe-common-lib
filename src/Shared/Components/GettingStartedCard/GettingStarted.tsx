@@ -15,13 +15,15 @@
  */
 
 import { ComponentSizeType } from '@Shared/constants'
+
 import GettingToast from '../../../Assets/Img/lifebuoy.png'
-import updateLoginCount from './service'
 import { LOGIN_COUNT, MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING } from '../../../Common'
-import { handlePostHogEventUpdate, setActionWithExpiry } from '../Header/utils'
-import { GettingStartedType } from './types'
-import './gettingStarted.scss'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { handlePostHogEventUpdate, setActionWithExpiry } from '../Header/utils'
+import updateLoginCount from './service'
+import { GettingStartedType } from './types'
+
+import './gettingStarted.scss'
 
 const GettingStartedCard = ({ className, hideGettingStartedCard }: GettingStartedType) => {
     const onClickedOkay = async () => {

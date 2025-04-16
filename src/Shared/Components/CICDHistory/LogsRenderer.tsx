@@ -14,28 +14,32 @@
  * limitations under the License.
  */
 
-import { useParams } from 'react-router-dom'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import AnsiUp from 'ansi_up'
 import DOMPurify from 'dompurify'
+
+import { ReactComponent as ICArrow } from '@Icons/ic-caret-down.svg'
+import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
+import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
 import { escapeRegExp, sanitizeTargetPlatforms } from '@Shared/Helpers'
-import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
-import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
-import { ReactComponent as ICArrow } from '@Icons/ic-caret-down.svg'
 import { AppThemeType, getComponentSpecificThemeClass } from '@Shared/Providers'
+
+import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
+import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
+import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
 import {
-    Progressing,
-    Host,
-    useInterval,
     DOCUMENTATION,
+    Host,
+    Progressing,
     ROUTES,
     SearchBar,
-    useUrlFilters,
     Tooltip,
+    useInterval,
     useRegisterShortcut,
+    useUrlFilters,
 } from '../../../Common'
-import LogStageAccordion from './LogStageAccordion'
 import {
     EVENT_STREAM_EVENTS_MAP,
     LOGS_RETRY_COUNT,
@@ -43,6 +47,7 @@ import {
     LOGS_STAGE_STREAM_SEPARATOR,
     POD_STATUS,
 } from './constants'
+import LogStageAccordion from './LogStageAccordion'
 import {
     CreateMarkupPropsType,
     CreateMarkupReturnType,
@@ -54,9 +59,7 @@ import {
     StageStatusType,
 } from './types'
 import { getLogSearchIndex } from './utils'
-import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
-import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
-import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
+
 import './LogsRenderer.scss'
 
 const renderLogsNotAvailable = (subtitle?: string): JSX.Element => (

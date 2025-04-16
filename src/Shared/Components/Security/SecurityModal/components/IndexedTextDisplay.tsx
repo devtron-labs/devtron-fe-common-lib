@@ -15,8 +15,10 @@
  */
 
 import React from 'react'
-import { ClipboardButton } from '@Common/index'
+
 import { ReactComponent as ICInfoOutline } from '@Icons/ic-info-outlined.svg'
+import { ClipboardButton } from '@Common/index'
+
 import { IndexedTextDisplayPropsType } from '../types'
 
 const EmptyState: React.FC<{ href: string }> = ({ href }) => (

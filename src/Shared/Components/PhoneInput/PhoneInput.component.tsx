@@ -1,10 +1,12 @@
-import { usePhoneInput } from 'react-international-phone'
-import { CountryISO2Type } from '@Shared/index'
 import { useRef, useState } from 'react'
-import { PhoneInputProps } from './types'
+import { usePhoneInput } from 'react-international-phone'
+
+import { CountryISO2Type } from '@Shared/types'
+
 import { CountrySelect } from '../CountrySelect'
 import { CustomInput } from '../CustomInput'
 import { FormFieldInfo } from '../FormFieldWrapper'
+import { PhoneInputProps } from './types'
 
 const PhoneInput = ({
     error,

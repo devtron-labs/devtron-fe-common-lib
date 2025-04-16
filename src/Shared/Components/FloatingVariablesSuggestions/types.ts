@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { AppConfigProps } from '@Pages/index'
 import { DraggableBounds } from 'react-draggable'
+
+import { AppConfigProps } from '@Pages/index'
 
 export interface ScopedVariableType {
     variableName: string

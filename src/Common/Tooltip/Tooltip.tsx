@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-import { useState, cloneElement } from 'react'
+import { cloneElement, useState } from 'react'
 import TippyJS from '@tippyjs/react'
-import { TooltipProps } from './types'
-import ShortcutKeyComboTooltipContent from './ShortcutKeyComboTooltipContent'
-import './styles.scss'
+
 import { SUB_PIXEL_ERROR } from './constants'
+import ShortcutKeyComboTooltipContent from './ShortcutKeyComboTooltipContent'
+import { TooltipProps } from './types'
+
+import './styles.scss'
 
 const Tooltip = ({
     shortcutKeyCombo,

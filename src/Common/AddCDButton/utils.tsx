@@ -15,7 +15,7 @@
  */
 
 import { AddCDPositions, AddPipelineType, PipelineType, WorkflowNodeType } from '../Types'
-import { HandleAddCD, GetPipelineType } from './types'
+import { GetPipelineType, HandleAddCD } from './types'
 
 const getPipelineType = ({ startNode }: GetPipelineType) => {
     if (startNode.type === WorkflowNodeType.WEBHOOK) {

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import { TippyProps } from '@tippyjs/react'
+
+import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 
 type BaseTooltipProps =
     | {

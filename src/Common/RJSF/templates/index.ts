@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-export { ArrayFieldTemplate } from './ArrayFieldTemplate'
 export { ArrayFieldItemTemplate } from './ArrayFieldItemTemplate'
+export { ArrayFieldTemplate } from './ArrayFieldTemplate'
 export { BaseInput as BaseInputTemplate } from './BaseInput'
 export * from './ButtonTemplates'
 export { Field as FieldTemplate } from './Field'

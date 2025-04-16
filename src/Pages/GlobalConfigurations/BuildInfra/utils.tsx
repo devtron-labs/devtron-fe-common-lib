@@ -26,7 +26,21 @@ import {
     INFRA_CONFIG_TO_CM_SECRET_COMPONENT_TYPE_MAP,
     InfraConfigWithSubValues,
 } from '@Pages/index'
+
 import { ROUTES } from '../../../Common'
+import {
+    CMSecretConfigData,
+    CMSecretPayloadType,
+    getConfigMapSecretFormInitialValues,
+    getConfigMapSecretPayload,
+    getUniqueId,
+} from '../../../Shared'
+import {
+    BUILD_INFRA_DEFAULT_PLATFORM_NAME,
+    BUILD_INFRA_LATEST_API_VERSION,
+    INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X,
+    USE_BUILD_X_DRIVER_FALLBACK,
+} from './constants'
 import {
     BuildInfraConfigInfoType,
     BuildInfraConfigTypes,
@@ -50,19 +64,6 @@ import {
     GetBaseProfileObjectParamsType,
     GetPlatformConfigurationsWithDefaultValuesParamsType,
 } from './types'
-import {
-    BUILD_INFRA_DEFAULT_PLATFORM_NAME,
-    BUILD_INFRA_LATEST_API_VERSION,
-    INFRA_CONFIG_NOT_SUPPORTED_BY_BUILD_X,
-    USE_BUILD_X_DRIVER_FALLBACK,
-} from './constants'
-import {
-    CMSecretConfigData,
-    CMSecretPayloadType,
-    getConfigMapSecretFormInitialValues,
-    getConfigMapSecretPayload,
-    getUniqueId,
-} from '../../../Shared'
 
 export const parsePlatformConfigIntoValue = (
     configuration: BuildInfraConfigValuesType,

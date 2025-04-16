@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { InfoColourBar } from '@Common/index'
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
+import { InfoColourBar } from '@Common/index'
 
 export const renderHashiOrAwsDeprecatedInfo = () => (
     <InfoColourBar

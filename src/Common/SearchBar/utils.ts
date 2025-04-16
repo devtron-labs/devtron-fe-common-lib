@@ -15,6 +15,7 @@
  */
 
 import { ComponentSizeType } from '@Shared/constants'
+
 import { SearchBarProps } from './types'
 
 export const getSearchBarHeightFromSize = (size: SearchBarProps['size']): string => {

@@ -16,7 +16,7 @@
 
 import { ScanCategoriesWithLicense } from '../../types'
 import { CATEGORY_LABELS, SUB_CATEGORY_LABELS } from '../constants'
-import { CATEGORIES, SUB_CATEGORIES, SidebarDataType } from '../types'
+import { CATEGORIES, SidebarDataType, SUB_CATEGORIES } from '../types'
 
 export const getSidebarData = (categoriesConfig: Record<ScanCategoriesWithLicense, boolean>): SidebarDataType[] => {
     const { imageScan, codeScan, kubernetesManifest, imageScanLicenseRisks } = categoriesConfig

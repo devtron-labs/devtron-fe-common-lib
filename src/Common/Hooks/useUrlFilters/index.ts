@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export { default as useUrlFilters } from './useUrlFilters'
 export type { UseUrlFiltersProps, UseUrlFiltersReturnType } from './types'
+export { default as useUrlFilters } from './useUrlFilters'

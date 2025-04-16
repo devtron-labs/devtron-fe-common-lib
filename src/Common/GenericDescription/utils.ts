@@ -15,6 +15,7 @@
  */
 
 import moment from 'moment'
+
 import { DATE_TIME_FORMATS, ZERO_TIME_STRING } from '@Common/Constants'
 
 export const getParsedUpdatedOnDate = (updatedOn: string) => {

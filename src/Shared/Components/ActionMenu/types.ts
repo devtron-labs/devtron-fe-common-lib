@@ -1,5 +1,6 @@
 import { ReactElement } from 'react'
 import { GroupBase, OptionsOrGroups } from 'react-select'
+
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 
 type ActionMenuOptionType = SelectPickerOptionType & {

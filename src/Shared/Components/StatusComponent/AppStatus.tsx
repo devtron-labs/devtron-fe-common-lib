@@ -15,9 +15,9 @@
  */
 
 import { Icon } from '../Icon'
-import { AppStatusProps } from './types'
-import { StatusComponent } from './StatusComponent'
 import { APP_STATUS } from './constants'
+import { StatusComponent } from './StatusComponent'
+import { AppStatusProps } from './types'
 import { getJobStatusFromStatus } from './utils'
 
 export const AppStatus = ({ status, isJobView = false, isVirtualEnv = false, ...restProps }: AppStatusProps) => {

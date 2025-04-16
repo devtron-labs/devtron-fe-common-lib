@@ -15,9 +15,10 @@
  */
 
 import { InfoIconTippy } from '@Shared/Components/InfoIconTippy'
-import { BuildInfraDescriptorProps } from './types'
+
 import { BreadCrumb, DOCUMENTATION } from '../../../Common'
 import { BUILD_INFRA_TEXT } from './constants'
+import { BuildInfraDescriptorProps } from './types'
 
 const Descriptor = ({
     additionalContainerClasses,

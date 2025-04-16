@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+import { ROUTES } from '@Common/Constants'
 import { getUrlWithSearchParams } from '@Common/Helper'
 import { GetTemplateAPIRouteProps } from '@Pages/index'
-import { ROUTES } from '@Common/Constants'
+
 import { getResourceApiUrl, ResourceKindType, ResourceVersionType } from '..'
 
 export const getTemplateAPIRoute = ({ type, queryParams: { id, ...restQueryParams } }: GetTemplateAPIRouteProps) =>

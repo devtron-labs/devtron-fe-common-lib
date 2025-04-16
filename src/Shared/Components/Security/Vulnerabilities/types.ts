@@ -15,6 +15,7 @@
  */
 
 import { ImageCardAccordionProps } from '@Shared/Components/ImageCardAccordion/types'
+
 import { MaterialSecurityInfoType } from '../../../types'
 
 export interface VulnerabilitiesProps

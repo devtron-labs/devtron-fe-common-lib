@@ -28,12 +28,12 @@ import {
     ReactFlowProvider,
     Viewport,
 } from '@xyflow/react'
-import '@xyflow/react/dist/style.css'
 
 import { DEFAULT_VIEWPORT, NODE_TYPES, PADDING_X, PADDING_Y } from './constants'
 import { GraphVisualizerExtendedNode, GraphVisualizerProps } from './types'
 import { processEdges, processNodes } from './utils'
 
+import '@xyflow/react/dist/style.css'
 import './styles.scss'
 
 const options: ReactFlowProps['proOptions'] = {

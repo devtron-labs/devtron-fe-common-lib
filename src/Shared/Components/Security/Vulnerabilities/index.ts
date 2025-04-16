@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export { default as Vulnerabilities } from './Vulnerabilities'
 export * from './utils'
+export { default as Vulnerabilities } from './Vulnerabilities'

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-export { useGetUserRoles } from './UseGetUserRoles'
 export { useClickOutside } from './UseClickOutside/UseClickOutside'
-export { useWindowSize } from './UseWindowSize/UseWindowSize'
-export * from './useUrlFilters'
+export { useGetUserRoles } from './UseGetUserRoles'
 export * from './UseRegisterShortcut'
 export * from './useStateFilters'
+export * from './useUrlFilters'
+export { useWindowSize } from './UseWindowSize/UseWindowSize'

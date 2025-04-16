@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
+import { GroupBase } from 'react-select'
+
 import { get, ResponseType, ROUTES } from '@Common/index'
 import { SelectPickerOptionType } from '@Shared/Components'
 import { API_TOKEN_PREFIX } from '@Shared/constants'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { DefaultUserKey } from '@Shared/types'
-import { GroupBase } from 'react-select'
+
 import { UserMinType } from './types'
 import { getUserAndApiTokenOption } from './utils'
 

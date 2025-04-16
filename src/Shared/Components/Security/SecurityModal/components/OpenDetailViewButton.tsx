@@ -15,6 +15,7 @@
  */
 
 import { PropsWithChildren } from 'react'
+
 import { OpenDetailViewButtonProps } from '../types'
 
 const OpenDetailViewButton = ({

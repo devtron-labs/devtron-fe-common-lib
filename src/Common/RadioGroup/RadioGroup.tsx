@@ -15,11 +15,14 @@
  */
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+
 import { Tooltip } from '@Common/Tooltip'
+
 import { ConditionalWrap } from '../Helper'
-import './radioGroup.scss'
 import { RadioGroupComposition, RadioGroupInterface, RadioInterface } from '../Types'
+
+import './radioGroup.scss'
 
 const RadioContext = React.createContext(null)
 

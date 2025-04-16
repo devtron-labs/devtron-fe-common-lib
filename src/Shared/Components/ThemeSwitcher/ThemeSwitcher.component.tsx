@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { getThemePreferenceText, useTheme } from '@Shared/Providers'
 import { ReactComponent as ICCaretLeftSmall } from '@Icons/ic-caret-left-small.svg'
-import { ThemeSwitcherProps } from './types'
+import { getThemePreferenceText, useTheme } from '@Shared/Providers'
+
 import { LOGOUT_CARD_BASE_BUTTON_CLASS } from '../LogoutCard'
+import { ThemeSwitcherProps } from './types'
 
 const ThemeSwitcher = ({ onChange }: ThemeSwitcherProps) => {
     const { handleThemeSwitcherDialogVisibilityChange, themePreference } = useTheme()

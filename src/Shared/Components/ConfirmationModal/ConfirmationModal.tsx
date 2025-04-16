@@ -16,16 +16,19 @@
 
 import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+
 import { noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'
-import { ConfirmationModalBodyProps, ConfirmationModalProps, ConfirmationModalVariantType } from './types'
-import { getPrimaryButtonStyleFromVariant, getConfirmationLabel, getIconFromVariant } from './utils'
-import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+
 import { Backdrop } from '../Backdrop'
-import { useConfirmationModalContext } from './ConfirmationModalContext'
-import { CustomInput } from '../CustomInput'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Confetti } from '../Confetti'
+import { CustomInput } from '../CustomInput'
+import { useConfirmationModalContext } from './ConfirmationModalContext'
+import { ConfirmationModalBodyProps, ConfirmationModalProps, ConfirmationModalVariantType } from './types'
+import { getConfirmationLabel, getIconFromVariant, getPrimaryButtonStyleFromVariant } from './utils'
+
 import './confirmationModal.scss'
 
 const ConfirmationModalBody = ({

@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-import { useState, memo, useEffect } from 'react'
-import { DebouncedSearch, GenericEmptyState, Progressing, Reload } from '@Common/index'
-import NoVariables from '@Images/no-artifact.webp'
+import { memo, useEffect, useState } from 'react'
+
 import { ReactComponent as ICClose } from '@Icons/ic-cross.svg'
 import { ReactComponent as ICSearch } from '@Icons/ic-search.svg'
 import { ReactComponent as ICVariable } from '@Icons/ic-view-variable-toggle.svg'
+import NoVariables from '@Images/no-artifact.webp'
+import { DebouncedSearch, GenericEmptyState, Progressing, Reload } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
-import SuggestionItem from './SuggestionItem'
-import { SuggestionsProps, ScopedVariableType } from './types'
-import SuggestionsInfo from './SuggestionsInfo'
-import { NO_DEFINED_DESCRIPTION, NO_DEFINED_VALUE } from './constants'
+
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { NO_DEFINED_DESCRIPTION, NO_DEFINED_VALUE } from './constants'
+import SuggestionItem from './SuggestionItem'
+import SuggestionsInfo from './SuggestionsInfo'
+import { ScopedVariableType, SuggestionsProps } from './types'
 
 const Suggestions = ({
     handleDeActivation,

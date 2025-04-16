@@ -14,35 +14,37 @@
  * limitations under the License.
  */
 
-import { useState, useRef, useEffect } from 'react'
-import Tippy from '@tippyjs/react'
+import { useEffect, useRef, useState } from 'react'
 import ReactMde from 'react-mde'
-import 'react-mde/lib/styles/css/react-mde-all.css'
-import Markdown from '../Markdown/MarkDown'
-import { deepEqual, showError } from '..'
-import './genericDescription.scss'
-import { ReactComponent as Edit } from '../../Assets/Icon/ic-pencil.svg'
-import { GenericDescriptionProps, MDEditorSelectedTabType } from './types'
-import {
-    DEFAULT_MARKDOWN_EDITOR_PREVIEW_MESSAGE,
-    MARKDOWN_EDITOR_COMMANDS,
-    MARKDOWN_EDITOR_COMMAND_TITLE,
-    MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT,
-} from '../Markdown/constant'
-import { ButtonWithLoader, ToastManager, ToastVariantType } from '../../Shared'
-import { ReactComponent as HeaderIcon } from '../../Assets/Icon/ic-header.svg'
+import Tippy from '@tippyjs/react'
+
 import { ReactComponent as BoldIcon } from '../../Assets/Icon/ic-bold.svg'
+import { ReactComponent as CheckedListIcon } from '../../Assets/Icon/ic-checked-list.svg'
+import { ReactComponent as CodeIcon } from '../../Assets/Icon/ic-code.svg'
+import { ReactComponent as HeaderIcon } from '../../Assets/Icon/ic-header.svg'
+import { ReactComponent as ImageIcon } from '../../Assets/Icon/ic-image.svg'
 import { ReactComponent as ItalicIcon } from '../../Assets/Icon/ic-italic.svg'
 import { ReactComponent as LinkIcon } from '../../Assets/Icon/ic-link.svg'
-import { ReactComponent as StrikethroughIcon } from '../../Assets/Icon/ic-strikethrough.svg'
-import { ReactComponent as CodeIcon } from '../../Assets/Icon/ic-code.svg'
-import { ReactComponent as QuoteIcon } from '../../Assets/Icon/ic-quote.svg'
-import { ReactComponent as ImageIcon } from '../../Assets/Icon/ic-image.svg'
 import { ReactComponent as OrderedListIcon } from '../../Assets/Icon/ic-ordered-list.svg'
+import { ReactComponent as Edit } from '../../Assets/Icon/ic-pencil.svg'
+import { ReactComponent as QuoteIcon } from '../../Assets/Icon/ic-quote.svg'
+import { ReactComponent as StrikethroughIcon } from '../../Assets/Icon/ic-strikethrough.svg'
 import { ReactComponent as UnorderedListIcon } from '../../Assets/Icon/ic-unordered-list.svg'
-import { ReactComponent as CheckedListIcon } from '../../Assets/Icon/ic-checked-list.svg'
+import { ButtonWithLoader, ToastManager, ToastVariantType } from '../../Shared'
+import {
+    DEFAULT_MARKDOWN_EDITOR_PREVIEW_MESSAGE,
+    MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT,
+    MARKDOWN_EDITOR_COMMAND_TITLE,
+    MARKDOWN_EDITOR_COMMANDS,
+} from '../Markdown/constant'
+import Markdown from '../Markdown/MarkDown'
+import { deepEqual, showError } from '..'
 import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG } from './constant'
+import { GenericDescriptionProps, MDEditorSelectedTabType } from './types'
 import { getParsedUpdatedOnDate } from './utils'
+
+import 'react-mde/lib/styles/css/react-mde-all.css'
+import './genericDescription.scss'
 
 const GenericDescription = ({
     text,

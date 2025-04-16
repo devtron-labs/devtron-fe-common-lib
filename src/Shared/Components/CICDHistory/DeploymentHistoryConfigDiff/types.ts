@@ -16,10 +16,10 @@
 
 import { Dispatch, SetStateAction } from 'react'
 
+import { UseUrlFiltersReturnType } from '@Common/Hooks'
 import { DeploymentConfigDiffProps } from '@Shared/Components/DeploymentConfigDiff'
 import { EnvResourceType } from '@Shared/Services'
 
-import { UseUrlFiltersReturnType } from '@Common/Hooks'
 import { History, HistoryLogsProps } from '../types'
 
 export interface DeploymentHistoryConfigDiffQueryParams {

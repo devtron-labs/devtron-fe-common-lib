@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export { default as useStateFilters } from './useStateFilters'
 export type { UseStateFiltersProps, UseStateFiltersReturnType } from './types'
+export { default as useStateFilters } from './useStateFilters'

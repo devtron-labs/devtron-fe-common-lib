@@ -15,6 +15,7 @@
  */
 
 import { AppThemeType } from '@Shared/Providers'
+
 import { CodeEditorInterface, CodeEditorThemesKeys } from './types'
 
 export const getCodeEditorThemeFromAppTheme = (

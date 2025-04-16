@@ -15,13 +15,14 @@
  */
 
 import { useRouteMatch } from 'react-router-dom'
+
 import { URLS } from '../../../Common'
 import { TIMELINE_STATUS } from '../../constants'
-import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
-import { DeploymentStatusDetailRow } from './DeploymentStatusDetailRow'
-import { DeploymentStatusDetailBreakdownType } from './types'
-import ErrorBar from '../Error/ErrorBar'
 import { IndexStore } from '../../Store'
+import ErrorBar from '../Error/ErrorBar'
+import { DeploymentStatusDetailRow } from './DeploymentStatusDetailRow'
+import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
+import { DeploymentStatusDetailBreakdownType } from './types'
 
 const DeploymentStatusDetailBreakdown = ({
     deploymentStatusDetailsBreakdownData,

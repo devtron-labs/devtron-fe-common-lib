@@ -15,13 +15,16 @@
  */
 
 import { FormEvent, FunctionComponent, useMemo } from 'react'
+
+import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
 import { SelectPicker } from '@Shared/Components/SelectPicker'
 import { ComponentSizeType } from '@Shared/constants'
 import { isNullOrUndefined } from '@Shared/Helpers'
-import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
-import { BuildInfraFormActionProps } from './types'
+
 import { OptionType } from '../../../Common'
 import { BUILD_INFRA_DEFAULT_PLATFORM_NAME, BUILD_INFRA_INPUT_CONSTRAINTS } from './constants'
+import { BuildInfraFormActionProps } from './types'
+
 import './BuildInfraUnitSelect.scss'
 
 /**

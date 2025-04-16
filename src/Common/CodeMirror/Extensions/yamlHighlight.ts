@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Decoration, DecorationSet, EditorState, EditorView, Extension, Range, StateField } from '@uiw/react-codemirror'
 import { ensureSyntaxTree } from '@codemirror/language'
+import { Decoration, DecorationSet, EditorState, EditorView, Extension, Range, StateField } from '@uiw/react-codemirror'
 
 const isBool = (value: string) => /^(true|false)$/i.test(value)
 

@@ -17,9 +17,11 @@
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
+
 import { useRegisterShortcut } from '@Common/Hooks'
-import { preventBodyScroll, preventOutsideFocus } from '@Shared/Helpers'
 import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
+import { preventBodyScroll, preventOutsideFocus } from '@Shared/Helpers'
+
 import { BackdropProps } from './types'
 
 const Backdrop = ({ children, onEscape }: BackdropProps) => {

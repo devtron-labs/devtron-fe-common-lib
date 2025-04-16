@@ -1,7 +1,8 @@
+import { RefObject } from 'react'
+
 import { TooltipProps } from '@Common/Tooltip'
 import { IconsProps, SelectPickerOptionType } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
-import { RefObject } from 'react'
 
 type SegmentTooltipProps = Omit<
     TooltipProps,

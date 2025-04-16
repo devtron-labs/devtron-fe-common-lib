@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
+import { GroupBase, MultiValue, OptionsOrGroups, StylesConfig } from 'react-select'
+
+import { noop } from '@Common/Helper'
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
-import { GroupBase, MultiValue, OptionsOrGroups, StylesConfig } from 'react-select'
-import { noop } from '@Common/Helper'
-import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
+
 import { SELECT_PICKER_CONTROL_SIZE_MAP, SELECT_PICKER_FONT_SIZE_MAP, SELECT_PICKER_ICON_SIZE_MAP } from './constants'
+import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 
 const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
     menuSize: SelectPickerProps<OptionValue, IsMulti>['menuSize'],

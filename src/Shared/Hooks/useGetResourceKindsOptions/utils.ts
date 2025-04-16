@@ -15,6 +15,7 @@
  */
 
 import { ResourceKindType } from '@Shared/types'
+
 import { UseGetResourceKindsOptionsProps } from './types'
 
 export const getResourcesToFetchMap = (resourcesToFetch: UseGetResourceKindsOptionsProps['resourcesToFetch']) =>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
+export { THEME_PREFERENCE_STORAGE_KEY } from './constants'
 export * from './ThemeProvider'
 export { AppThemeType } from './types'
 export { getComponentSpecificThemeClass, getThemePreferenceText } from './utils'
-export { THEME_PREFERENCE_STORAGE_KEY } from './constants'

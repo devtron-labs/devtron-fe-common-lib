@@ -15,11 +15,12 @@
  */
 
 import { CONTACT_SUPPORT_LINK, OPEN_NEW_TICKET, RAISE_ISSUE, VIEW_ALL_TICKETS } from '@Shared/constants'
-import { HelpOptionType } from './types'
+
 import { ReactComponent as Chat } from '../../../Assets/Icon/ic-chat-circle-dots.svg'
 import { ReactComponent as EditFile } from '../../../Assets/Icon/ic-edit-file.svg'
 import { ReactComponent as Files } from '../../../Assets/Icon/ic-files.svg'
 import { DISCORD_LINK } from '../../../Common'
+import { HelpOptionType } from './types'
 
 export const EnterpriseHelpOptions: HelpOptionType[] = [
     {

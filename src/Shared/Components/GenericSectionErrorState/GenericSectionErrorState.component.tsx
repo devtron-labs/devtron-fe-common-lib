@@ -15,11 +15,13 @@
  */
 
 import { ReactNode } from 'react'
-import { ComponentSizeType } from '@Shared/constants'
+
 import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICInfoOutline } from '@Icons/ic-info-outline.svg'
-import { Icon } from '../Icon'
+import { ComponentSizeType } from '@Shared/constants'
+
 import { Button, ButtonVariantType } from '../Button'
+import { Icon } from '../Icon'
 import { GenericSectionErrorStateProps } from './types'
 
 const GenericSectionErrorState = ({

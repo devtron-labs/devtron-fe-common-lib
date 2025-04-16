@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { MONTHLY_DATE_OPTIONS } from './utils'
-import { MonthlySelectProps } from './types'
-import { DATE_PICKER_IDS } from './constants'
 import { SelectPicker } from '../SelectPicker'
+import { DATE_PICKER_IDS } from './constants'
+import { MonthlySelectProps } from './types'
+import { MONTHLY_DATE_OPTIONS } from './utils'
 
 export const MonthlySelect = ({
     selectedMonthlyDate,

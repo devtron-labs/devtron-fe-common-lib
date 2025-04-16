@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import { DeploymentConfigDiffNavigation } from './DeploymentConfigDiffNavigation'
-import { DeploymentConfigDiffMain } from './DeploymentConfigDiffMain'
 import { DeploymentConfigDiffProps } from './DeploymentConfigDiff.types'
+import { DeploymentConfigDiffMain } from './DeploymentConfigDiffMain'
+import { DeploymentConfigDiffNavigation } from './DeploymentConfigDiffNavigation'
+
 import './DeploymentConfigDiff.scss'
 
 export const DeploymentConfigDiff = ({

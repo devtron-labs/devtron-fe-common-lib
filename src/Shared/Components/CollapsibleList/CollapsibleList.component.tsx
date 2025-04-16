@@ -17,12 +17,14 @@
 import React, { Fragment } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import Tippy, { TippyProps } from '@tippyjs/react'
+
+import { ReactComponent as ICExpand } from '@Icons/ic-expand.svg'
 import { ConditionalWrap } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
-import { ReactComponent as ICExpand } from '@Icons/ic-expand.svg'
 
 import { Collapse } from '../Collapse'
 import { CollapsibleListItem, CollapsibleListProps, TabOptions } from './CollapsibleList.types'
+
 import './CollapsibleList.scss'
 
 const renderWithTippy = (tippyProps: TippyProps) => (children: React.ReactElement) => (

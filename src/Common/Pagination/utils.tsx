@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { CreatePageArrType, Page, PageSizeOption } from './types'
 import { FALLBACK_PAGE_SIZE_OPTIONS, VISIBLE_PAGES_LIMIT } from './constants'
+import { CreatePageArrType, Page, PageSizeOption } from './types'
 
 /**
  * Returns an array of pages numbers and whether they are selected, visible or not

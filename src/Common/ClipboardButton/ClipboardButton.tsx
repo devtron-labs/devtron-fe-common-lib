@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
 import Tooltip from '@Common/Tooltip/Tooltip'
+
+import { ReactComponent as Check } from '../../Assets/Icon/ic-check.svg'
+import { ReactComponent as ICCopy } from '../../Assets/Icon/ic-copy.svg'
 import { copyToClipboard, noop, stopPropagation } from '../Helper'
 import ClipboardProps from './types'
-import { ReactComponent as ICCopy } from '../../Assets/Icon/ic-copy.svg'
-import { ReactComponent as Check } from '../../Assets/Icon/ic-check.svg'
 
 /**
  * @param content - Content to be copied

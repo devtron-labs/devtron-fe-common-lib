@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-import { ChangeEvent, useCallback, useRef, useState, KeyboardEvent, useEffect } from 'react'
-import { ComponentSizeType } from '@Shared/constants'
-import { ReactComponent as Search } from '@Icons/ic-search.svg'
+import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react'
+
 import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
+import { ReactComponent as Search } from '@Icons/ic-search.svg'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
-import { SearchBarProps } from './types'
-import './searchBar.scss'
+import { ComponentSizeType } from '@Shared/constants'
+
 import { debounce } from '../Helper'
+import { SearchBarProps } from './types'
 import { getSearchBarHeightFromSize } from './utils'
+
+import './searchBar.scss'
 
 /**
  * Generic search input component with support for enter based and debounced search

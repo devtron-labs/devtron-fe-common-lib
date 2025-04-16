@@ -15,9 +15,11 @@
  */
 
 import { InputHTMLAttributes, MutableRefObject } from 'react'
+
 import { ComponentSizeType } from '@Shared/constants'
-import { FormFieldWrapperProps } from '../FormFieldWrapper'
+
 import { ButtonComponentType, ButtonProps } from '../Button'
+import { FormFieldWrapperProps } from '../FormFieldWrapper'
 
 export interface CustomInputProps
     extends Omit<FormFieldWrapperProps, 'children' | 'inputId'>,

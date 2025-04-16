@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
+import { ChangeEvent, FocusEvent } from 'react'
+
+import { ReactComponent as ICTimer } from '@Icons/ic-timer.svg'
 import { Checkbox } from '@Common/Checkbox'
 import { Tooltip } from '@Common/Tooltip'
 import { CHECKBOX_VALUE } from '@Common/Types'
-import { ReactComponent as ICTimer } from '@Icons/ic-timer.svg'
-import { ChangeEvent, FocusEvent } from 'react'
+
 import { DRAIN_NODE_MODAL_MESSAGING, NODE_DRAIN_OPTIONS_CHECKBOX_CONFIG } from './constants'
 import { AdditionalConfirmationModalOptionsProps, NodeDrainRequest } from './types'
 

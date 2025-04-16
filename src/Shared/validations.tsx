@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-import { getSanitizedIframe } from '@Common/Helper'
 import { customizeValidator } from '@rjsf/validator-ajv8'
-import { PATTERNS } from '@Common/Constants'
 import { parse } from 'yaml'
-import { URLProtocolType } from './types'
+
+import { PATTERNS } from '@Common/Constants'
+import { getSanitizedIframe } from '@Common/Helper'
+
 import { SKIP_LABEL_KEY_VALIDATION_PREFIX } from './constants'
+import { URLProtocolType } from './types'
 
 export interface ValidationResponseType {
     isValid: boolean

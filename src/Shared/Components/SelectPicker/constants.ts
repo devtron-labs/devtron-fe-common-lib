@@ -15,7 +15,9 @@
  */
 
 import { CSSProperties } from 'react'
+
 import { ComponentSizeType } from '@Shared/constants'
+
 import { SelectPickerProps } from './type'
 
 export const SELECT_PICKER_FONT_SIZE_MAP: Record<SelectPickerProps['size'], CSSProperties['fontSize']> = {

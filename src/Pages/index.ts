@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
+export * from './Applications'
 export * from './GlobalConfigurations'
 export * from './ResourceBrowser'
-export * from './Applications'

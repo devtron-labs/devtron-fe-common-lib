@@ -15,7 +15,6 @@
  */
 
 import { SortingOrder } from '@Common/Constants'
-
 import {
     AppEnvDeploymentConfigDTO,
     ConfigMapSecretDataConfigDatumDTO,
@@ -23,12 +22,12 @@ import {
     EnvResourceType,
     TemplateListDTO,
 } from '@Shared/Services'
-
 import { ManifestTemplateDTO } from '@Pages/Applications'
+
 import { DeploymentHistoryDetail } from '../CICDHistory'
+import { CollapseProps } from '../Collapse'
 import { CollapsibleListConfig, CollapsibleListItem } from '../CollapsibleList'
 import { SelectPickerProps } from '../SelectPicker'
-import { CollapseProps } from '../Collapse'
 
 export enum DeploymentConfigDiffState {
     NO_DIFF = 'noDiff',

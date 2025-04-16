@@ -15,6 +15,7 @@
  */
 
 import { OptionType } from '@Common/Types'
+
 import { CDMaterialSidebarType, ConfigKeysWithLockType, ConfigurationType } from './types'
 
 export const ARTIFACT_STATUS = {

@@ -15,8 +15,10 @@
  */
 
 import { useMemo } from 'react'
-import { ResourceKindType } from '@Shared/types'
+
 import { useAsync } from '@Common/Helper'
+import { ResourceKindType } from '@Shared/types'
+
 import {
     getAppOptionsGroupedByProjects,
     getClusterOptions,

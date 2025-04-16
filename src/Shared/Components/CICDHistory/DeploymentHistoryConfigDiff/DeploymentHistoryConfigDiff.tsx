@@ -18,26 +18,26 @@ import { useMemo, useState } from 'react'
 import { generatePath, Route, Switch, useLocation, useRouteMatch } from 'react-router-dom'
 
 import { ReactComponent as ICError } from '@Icons/ic-error.svg'
-import { getAppEnvDeploymentConfigList } from '@Shared/Components/DeploymentConfigDiff'
-import { useAsync } from '@Common/Helper'
-import { EnvResourceType, getAppEnvDeploymentConfig, getCompareSecretsData } from '@Shared/Services'
-import { groupArrayByObjectKey } from '@Shared/Helpers'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
-import { Progressing } from '@Common/Progressing'
+import { useAsync } from '@Common/Helper'
 import { useUrlFilters } from '@Common/Hooks'
 import { GenericEmptyState, InfoColourBar } from '@Common/index'
-
+import { Progressing } from '@Common/Progressing'
+import { getAppEnvDeploymentConfigList } from '@Shared/Components/DeploymentConfigDiff'
+import { groupArrayByObjectKey } from '@Shared/Helpers'
 import { useMainContext } from '@Shared/Providers'
+import { EnvResourceType, getAppEnvDeploymentConfig, getCompareSecretsData } from '@Shared/Services'
+
 import { DeploymentHistoryConfigDiffCompare } from './DeploymentHistoryConfigDiffCompare'
+import { renderDeploymentHistoryConfig } from './helpers'
 import { DeploymentHistoryConfigDiffProps, DeploymentHistoryConfigDiffQueryParams } from './types'
 import {
-    getPipelineDeploymentsWfrIds,
-    getPipelineDeployments,
-    parseDeploymentHistoryDiffSearchParams,
-    isDeploymentHistoryConfigDiffNotFoundError,
     getDeploymentHistoryConfigDiffError,
+    getPipelineDeployments,
+    getPipelineDeploymentsWfrIds,
+    isDeploymentHistoryConfigDiffNotFoundError,
+    parseDeploymentHistoryDiffSearchParams,
 } from './utils'
-import { renderDeploymentHistoryConfig } from './helpers'
 
 export const DeploymentHistoryConfigDiff = ({
     appName,

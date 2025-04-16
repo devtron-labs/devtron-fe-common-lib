@@ -1,4 +1,6 @@
-import { BaseAppMetaData, ResourceKindType } from '@Shared/index'
+import { BaseAppMetaData } from '@Shared/Services'
+import { ResourceKindType } from '@Shared/types'
+
 import { UserPreferenceFilteredListTypes, UserPreferenceResourceActions, UserPreferenceResourceType } from './types'
 
 export const getUserPreferenceResourcesMetadata = (recentlyVisited: BaseAppMetaData[]): UserPreferenceResourceType => ({

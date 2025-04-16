@@ -16,8 +16,10 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { SegmentedBarChartProps, Entity } from './types'
+
 import { FALLBACK_ENTITY } from './constants'
+import { Entity, SegmentedBarChartProps } from './types'
+
 import './styles.scss'
 
 const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({

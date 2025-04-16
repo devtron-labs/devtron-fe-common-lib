@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP, ComponentSizeType } from '@Shared/constants'
 import { ProgressingProps } from '@Common/Types'
+import { COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP, ComponentSizeType } from '@Shared/constants'
+
 import { ButtonProps } from './types'
 
 export const BUTTON_SIZE_TO_CLASS_NAME_MAP: Record<ButtonProps['size'], string> = {

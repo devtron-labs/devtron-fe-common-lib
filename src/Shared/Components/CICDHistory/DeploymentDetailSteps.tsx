@@ -16,20 +16,21 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom'
+
+import { ReactComponent as Arrow } from '../../../Assets/Icon/ic-arrow-forward.svg'
+import mechanicalOperation from '../../../Assets/Icon/ic-mechanical-operation.svg'
 import { DeploymentAppTypes, GenericEmptyState, Progressing, URLS } from '../../../Common'
-import { DEPLOYMENT_STATUS, TIMELINE_STATUS, EMPTY_STATE_STATUS } from '../../constants'
+import { DEPLOYMENT_STATUS, EMPTY_STATE_STATUS, TIMELINE_STATUS } from '../../constants'
+import { getHandleOpenURL, getIsApprovalPolicyConfigured, processDeploymentStatusDetailsData } from '../../Helpers'
+import CDEmptyState from './CDEmptyState'
+import { DEPLOYMENT_STATUS_QUERY_PARAM } from './constants'
+import DeploymentStatusDetailBreakdown from './DeploymentStatusBreakdown'
 import { getDeploymentStatusDetail } from './service'
 import {
     DeploymentDetailStepsType,
     DeploymentStatusDetailsBreakdownDataType,
     DeploymentStatusDetailsType,
 } from './types'
-import { DEPLOYMENT_STATUS_QUERY_PARAM } from './constants'
-import { ReactComponent as Arrow } from '../../../Assets/Icon/ic-arrow-forward.svg'
-import mechanicalOperation from '../../../Assets/Icon/ic-mechanical-operation.svg'
-import CDEmptyState from './CDEmptyState'
-import DeploymentStatusDetailBreakdown from './DeploymentStatusBreakdown'
-import { getHandleOpenURL, getIsApprovalPolicyConfigured, processDeploymentStatusDetailsData } from '../../Helpers'
 
 let deploymentStatusTimer = null
 const DeploymentDetailSteps = ({

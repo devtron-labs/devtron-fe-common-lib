@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { ROUTES } from '@Common/Constants'
 import { getIsRequestAborted, post } from '@Common/API'
+import { ROUTES } from '@Common/Constants'
 import { getUrlWithSearchParams, showError } from '@Common/Helper'
-import { UploadFileDTO, UploadFileProps } from '@Shared/types'
 import { APIOptions } from '@Common/Types'
+import { UploadFileDTO, UploadFileProps } from '@Shared/types'
 
 export const uploadCIPipelineFile = async ({
     file,

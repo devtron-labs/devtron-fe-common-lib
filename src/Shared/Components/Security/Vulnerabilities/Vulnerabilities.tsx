@@ -15,13 +15,14 @@
  */
 
 import { useEffect, useState } from 'react'
+
 import { Progressing, useAsync } from '../../../../Common'
-import { VulnerabilitiesProps } from './types'
-import { getSecurityScan } from '../SecurityModal/service'
 import { SecurityCard } from '../SecurityDetailsCards'
-import { CATEGORIES, SUB_CATEGORIES } from '../SecurityModal/types'
 import { SecurityModal } from '../SecurityModal'
+import { getSecurityScan } from '../SecurityModal/service'
+import { CATEGORIES, SUB_CATEGORIES } from '../SecurityModal/types'
 import { getStatusForScanList } from '../utils'
+import { VulnerabilitiesProps } from './types'
 
 const Vulnerabilities = ({
     isScanned,

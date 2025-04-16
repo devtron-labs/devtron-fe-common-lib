@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { ParentPluginDTO, PluginCreationType, PluginDataStoreType } from './types'
 import { stringComparatorBySortOrder } from '../../Helpers'
 import { DEFAULT_PLUGIN_CREATED_BY } from './constants'
+import { ParentPluginDTO, PluginCreationType, PluginDataStoreType } from './types'
 
 const parseMinimalPluginVersionsDTO = (
     pluginVersionData: ParentPluginDTO['pluginVersions']['minimalPluginVersionData'],

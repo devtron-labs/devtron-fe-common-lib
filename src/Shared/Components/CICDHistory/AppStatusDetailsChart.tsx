@@ -15,17 +15,19 @@
  */
 
 import { useEffect, useMemo, useState } from 'react'
-import Tippy from '@tippyjs/react'
 import { useHistory } from 'react-router-dom'
+import Tippy from '@tippyjs/react'
+
 import { URLS } from '@Common/Constants'
-import { ReactComponent as InfoIcon } from '../../../Assets/Icon/ic-info-filled.svg'
+
 import { ReactComponent as Chat } from '../../../Assets/Icon/ic-chat-circle-dots.svg'
-import { AppStatusDetailsChartType, AggregatedNodes, STATUS_SORTING_ORDER, NodeFilters } from './types'
-import { StatusFilterButtonComponent } from './StatusFilterButtonComponent'
-import { DEPLOYMENT_STATUS, APP_STATUS_HEADERS, ComponentSizeType, ALL_RESOURCE_KIND_FILTER } from '../../constants'
-import { IndexStore } from '../../Store'
+import { ReactComponent as InfoIcon } from '../../../Assets/Icon/ic-info-filled.svg'
+import { ALL_RESOURCE_KIND_FILTER, APP_STATUS_HEADERS, ComponentSizeType, DEPLOYMENT_STATUS } from '../../constants'
 import { aggregateNodes } from '../../Helpers'
+import { IndexStore } from '../../Store'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { StatusFilterButtonComponent } from './StatusFilterButtonComponent'
+import { AggregatedNodes, AppStatusDetailsChartType, NodeFilters, STATUS_SORTING_ORDER } from './types'
 
 const AppStatusDetailsChart = ({
     filterRemoveHealth = false,

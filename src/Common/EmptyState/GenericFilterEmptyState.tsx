@@ -17,6 +17,7 @@
 import noResult from '@Images/empty-noresult@2x.png'
 import { Button, ButtonVariantType } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
+
 import GenericEmptyState from './GenericEmptyState'
 import { GenericFilterEmptyStateProps } from './types'
 

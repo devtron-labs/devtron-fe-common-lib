@@ -15,6 +15,7 @@
  */
 
 import { createContext, PropsWithChildren, useContext, useMemo, useRef, useState } from 'react'
+
 import { ConfirmationModalContextType } from './types'
 
 export const ConfirmationModalContext = createContext<ConfirmationModalContextType>(null)

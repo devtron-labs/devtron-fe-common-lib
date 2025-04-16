@@ -1,5 +1,6 @@
 import { get } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
+
 import { ServerAnalyticsEventType } from './types'
 
 export const handleSendAnalyticsEventToServer = async (

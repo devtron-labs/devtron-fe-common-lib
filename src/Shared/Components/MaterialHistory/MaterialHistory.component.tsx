@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+import { useMemo } from 'react'
+
 import { getWebhookDate } from '@Shared/Helpers'
 import { MaterialHistoryType } from '@Shared/Services'
-import { useMemo } from 'react'
+
 import { SourceTypeMap } from '../../../Common'
 import { GitCommitInfoGeneric } from '../GitCommitInfoGeneric'
 import { MaterialHistoryProps } from './types'

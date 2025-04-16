@@ -16,9 +16,9 @@
 
 import { FunctionComponent, SVGProps } from 'react'
 
-import { ReactComponent as ICDiffFileUpdated } from '@Icons/ic-diff-file-updated.svg'
 import { ReactComponent as ICDiffFileAdded } from '@Icons/ic-diff-file-added.svg'
 import { ReactComponent as ICDiffFileRemoved } from '@Icons/ic-diff-file-removed.svg'
+import { ReactComponent as ICDiffFileUpdated } from '@Icons/ic-diff-file-updated.svg'
 
 import { DeploymentConfigDiffState } from './DeploymentConfigDiff.types'
 

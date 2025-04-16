@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+import unauthorized from '../Assets/Img/ic-not-authorized.svg'
 import notFound from '../Assets/Img/ic-not-found.svg'
 import badRequest from '../Assets/Img/ic-page-not-found.svg'
-import unauthorized from '../Assets/Img/ic-not-authorized.svg'
-import { ERROR_STATUS_CODE, ERROR_EMPTY_SCREEN } from './Constants'
-import Reload from './Reload'
+import { ERROR_EMPTY_SCREEN, ERROR_STATUS_CODE } from './Constants'
 import ErrorPage from './ErrorPage'
+import Reload from './Reload'
 import { ErrorScreenManagerProps, ImageType } from './Types'
 
 const ErrorScreenManager = ({

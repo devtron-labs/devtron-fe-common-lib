@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ResponseType, post, ROUTES, get } from '../../../Common'
+import { get, post, ResponseType, ROUTES } from '../../../Common'
 import { ServerInfoResponse } from './types'
 
 export const updatePostHogEvent = (payload): Promise<ResponseType> => post(ROUTES.TELEMETRY_EVENT, payload)

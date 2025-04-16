@@ -16,12 +16,12 @@
 
 import { Link, NavLink } from 'react-router-dom'
 
-import { ComponentSizeType } from '@Shared/constants'
 import { Tooltip } from '@Common/Tooltip'
+import { ComponentSizeType } from '@Shared/constants'
 
+import { getTabBadge, getTabDescription, getTabIcon, getTabIndicator } from './TabGroup.helpers'
 import { TabGroupProps, TabProps } from './TabGroup.types'
 import { getClassNameBySizeMap, tabGroupClassMap } from './TabGroup.utils'
-import { getTabBadge, getTabDescription, getTabIcon, getTabIndicator } from './TabGroup.helpers'
 
 import './TabGroup.scss'
 

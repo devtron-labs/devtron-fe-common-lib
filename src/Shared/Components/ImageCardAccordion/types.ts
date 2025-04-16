@@ -15,6 +15,7 @@
  */
 
 import React, { ReactNode } from 'react'
+
 import { CDModalTabType, VulnerabilityType } from '../../../Common'
 import { MaterialSecurityInfoType } from '../../types'
 import { SidebarPropsType } from '../Security'

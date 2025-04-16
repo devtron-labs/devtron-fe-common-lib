@@ -19,8 +19,8 @@ import { NodeProps } from '@xyflow/react'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { SelectPicker, SelectPickerVariantType } from '../../SelectPicker'
-import { DropdownNodeProps } from './types'
 import { BaseNode } from './BaseNode'
+import { DropdownNodeProps } from './types'
 
 export const DropdownNode = ({ id, data, isConnectable }: NodeProps<DropdownNodeProps>) => {
     const { isError, ...restData } = data

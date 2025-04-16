@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
-import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
-import { Severity } from '@Shared/types'
-import { VulnerabilityType } from '@Common/Types'
 import { ReactComponent as NoVulnerability } from '@Icons/ic-vulnerability-not-found.svg'
+import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
+import { VulnerabilityType } from '@Common/Types'
+import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
+import { Severity } from '@Shared/types'
+
+import { ORDERED_SEVERITY_KEYS, SEVERITIES, TRIVY_ICON_URL } from './constants'
 import {
-    ScanResultDTO,
-    SeveritiesDTO,
     CATEGORIES,
     GetResourceScanDetailsResponseType,
     ImageScanVulnerabilityType,
     ImageVulnerabilityType,
+    ScanResultDTO,
+    SeveritiesDTO,
     SUB_CATEGORIES,
     VulnerabilityCountType,
     VulnerabilityState,
 } from './types'
-import { SEVERITIES, ORDERED_SEVERITY_KEYS, TRIVY_ICON_URL } from './constants'
 
 export const mapSeveritiesToSegmentedBarChartEntities = (
     severities: Partial<Record<keyof typeof SEVERITIES, number>>,

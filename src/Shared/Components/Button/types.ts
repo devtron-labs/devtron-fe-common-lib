@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { TooltipProps } from '@Common/Tooltip/types'
-import { ComponentSizeType } from '@Shared/constants'
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactElement } from 'react'
 import { LinkProps } from 'react-router-dom'
+
+import { TooltipProps } from '@Common/Tooltip/types'
+import { ComponentSizeType } from '@Shared/constants'
 
 // Using the same for BEM class elements
 export enum ButtonVariantType {

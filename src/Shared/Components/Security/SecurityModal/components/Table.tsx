@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import React, { useState, useMemo } from 'react'
-import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
-import { SortingOrder } from '@Common/Constants'
+import React, { useMemo, useState } from 'react'
+
 import { ReactComponent as ICExpand } from '@Icons/ic-expand.svg'
+import { SortingOrder } from '@Common/Constants'
+import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
+
 import { SortOrderEnum, TablePropsType, TableSortStateType } from '../types'
 import { compareStringAndObject } from '../utils'
 

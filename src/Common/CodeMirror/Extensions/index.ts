@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-export * from './yamlParseLinter'
-export * from './readOnlyTooltip'
-export * from './findAndReplace'
-export * from './yamlHighlight'
 export * from './DiffMinimap'
+export * from './findAndReplace'
+export * from './readOnlyTooltip'
+export * from './yamlHighlight'
+export * from './yamlParseLinter'

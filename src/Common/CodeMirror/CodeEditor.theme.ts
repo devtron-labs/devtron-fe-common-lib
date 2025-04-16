@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { EditorView } from '@uiw/react-codemirror'
-import { githubDarkInit, githubLightInit } from '@uiw/codemirror-theme-github'
 import { tags } from '@lezer/highlight'
+import { githubDarkInit, githubLightInit } from '@uiw/codemirror-theme-github'
+import { EditorView } from '@uiw/react-codemirror'
 
 import { CODE_EDITOR_FONT_SIZE } from './CodeEditor.constants'
 

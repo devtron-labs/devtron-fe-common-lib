@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-import YAML from 'yaml'
 import { GroupBase, OptionsOrGroups } from 'react-select'
+import YAML from 'yaml'
+
+import { noop, YAMLStringify } from '@Common/Helper'
+import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
+import { decode } from '@Shared/Helpers'
 import {
     CM_SECRET_STATE,
     CMSecretComponentType,
@@ -31,16 +35,14 @@ import {
     ProcessCMCSCurrentDataParamsType,
 } from '@Shared/Services'
 import { hasESO, OverrideMergeStrategyType } from '@Pages/index'
-import { noop, YAMLStringify } from '@Common/Helper'
-import { decode } from '@Shared/Helpers'
-import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
-import { ConfigMapSecretDataTypeOptionType, GetConfigMapSecretReadOnlyValuesParamsType } from './types'
+
 import { getSelectPickerOptionByValue } from '../SelectPicker'
 import {
     CONFIG_MAP_SECRET_DEFAULT_CURRENT_DATA,
     configMapDataTypeOptions,
     configMapSecretMountDataMap,
 } from './constants'
+import { ConfigMapSecretDataTypeOptionType, GetConfigMapSecretReadOnlyValuesParamsType } from './types'
 
 export const getSecretDataTypeOptions = (
     isJob: boolean,

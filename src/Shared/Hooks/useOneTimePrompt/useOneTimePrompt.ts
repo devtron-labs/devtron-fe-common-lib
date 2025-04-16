@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { UseOneTimePromptProps } from './types'
 import { ONE_TIME_PROMPT_LOCAL_STORAGE_KEY } from './constants'
+import { UseOneTimePromptProps } from './types'
 
 const getOneTimePromptLocalStorageValue = () => {
     try {

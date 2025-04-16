@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export { default as useDownload } from './UseDownload'
 export * from './types'
+export { default as useDownload } from './UseDownload'

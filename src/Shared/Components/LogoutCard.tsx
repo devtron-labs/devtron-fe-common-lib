@@ -16,11 +16,13 @@
 
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { useMainContext } from '@Shared/Providers'
+
 import { clearCookieOnLogout } from '@Shared/Helpers'
+import { useMainContext } from '@Shared/Providers'
+
 import { getRandomColor, stopPropagation } from '../../Common'
-import { ThemeSwitcher } from './ThemeSwitcher'
 import { Icon } from './Icon'
+import { ThemeSwitcher } from './ThemeSwitcher'
 
 interface LogoutCardType {
     className: string

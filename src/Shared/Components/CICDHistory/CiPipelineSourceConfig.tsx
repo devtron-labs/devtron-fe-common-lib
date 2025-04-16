@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-import { useState, useEffect, ReactNode } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
+
 import { ReactComponent as Info } from '@Icons/ic-info-outlined.svg'
+
 import { getBranchIcon, getWebhookEventsForEventId, SourceTypeMap, Tooltip } from '../../../Common'
-import { GIT_BRANCH_NOT_CONFIGURED, DEFAULT_GIT_BRANCH_VALUE } from './constants'
-import { buildHoverHtmlForWebhook } from './utils'
-import { CIPipelineSourceConfigInterface } from './types'
 import { Icon } from '../Icon'
+import { DEFAULT_GIT_BRANCH_VALUE, GIT_BRANCH_NOT_CONFIGURED } from './constants'
+import { CIPipelineSourceConfigInterface } from './types'
+import { buildHoverHtmlForWebhook } from './utils'
 
 export const CiPipelineSourceConfig = ({
     sourceType,

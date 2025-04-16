@@ -15,7 +15,7 @@
  */
 
 import ConfirmationModal from './ConfirmationModal'
-import { ConfirmationModalVariantType, CannotDeleteModalProps } from './types'
+import { CannotDeleteModalProps, ConfirmationModalVariantType } from './types'
 
 export const CannotDeleteModal = ({ title, component, subtitle, closeConfirmationModal }: CannotDeleteModalProps) => (
     <ConfirmationModal

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CMSecretExternalType } from '@Shared/index'
+import { CMSecretExternalType } from '@Shared/Services'
 
 export const hasHashiOrAWS = (externalType: CMSecretExternalType): boolean =>
     externalType === CMSecretExternalType.AWSSecretsManager ||

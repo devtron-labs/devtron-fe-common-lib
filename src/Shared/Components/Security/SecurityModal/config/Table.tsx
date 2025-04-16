@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { ScanResultDTO, CATEGORIES, OpenDetailViewButtonProps, SecurityModalStateType, TablePropsType } from '../types'
-import { getImageScanTableData } from './ImageScan'
+import { CATEGORIES, OpenDetailViewButtonProps, ScanResultDTO, SecurityModalStateType, TablePropsType } from '../types'
 import { getCodeScanTableData } from './CodeScan'
+import { getImageScanTableData } from './ImageScan'
 import { getKubernetesManifestTableData } from './KubernetesManifest'
 
 export const getTableData = (

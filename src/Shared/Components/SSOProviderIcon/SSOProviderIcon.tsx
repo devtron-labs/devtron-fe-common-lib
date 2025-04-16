@@ -15,9 +15,9 @@
  */
 
 import { SSOProvider } from '@Common/Constants'
-import { SSOProviderIconProps } from './types'
 
 import { Icon, IconName } from '../Icon'
+import { SSOProviderIconProps } from './types'
 
 const ssoProviderIconMap: Record<SSOProvider, IconName> = {
     [SSOProvider.google]: 'ic-google',

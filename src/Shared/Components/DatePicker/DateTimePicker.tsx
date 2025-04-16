@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
+import { useState } from 'react'
 import { SingleDatePicker } from 'react-dates'
+import CustomizableCalendarDay from 'react-dates/esm/components/CustomizableCalendarDay'
 import { SelectInstance } from 'react-select'
 import moment from 'moment'
-import CustomizableCalendarDay from 'react-dates/esm/components/CustomizableCalendarDay'
-import { useState } from 'react'
-import { ReactComponent as ClockIcon } from '@Icons/ic-clock.svg'
+
 import { ReactComponent as CalendarIcon } from '@Icons/ic-calendar.svg'
+import { ReactComponent as ClockIcon } from '@Icons/ic-clock.svg'
 import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
 import { ComponentSizeType } from '@Shared/constants'
-import { DEFAULT_TIME_OPTIONS, getTimeValue, updateDate, updateTime } from './utils'
-import { DateTimePickerProps } from './types'
-import { DATE_PICKER_IDS, DATE_PICKER_PLACEHOLDER, customDayStyles } from './constants'
-import './datePicker.scss'
-import { DATE_TIME_FORMATS } from '../../../Common'
+
 import 'react-dates/initialize'
-import 'react-dates/lib/css/_datepicker.css'
+
+import { DATE_TIME_FORMATS } from '../../../Common'
 import { SelectPicker } from '../SelectPicker'
+import { customDayStyles, DATE_PICKER_IDS, DATE_PICKER_PLACEHOLDER } from './constants'
+import { DateTimePickerProps } from './types'
+import { DEFAULT_TIME_OPTIONS, getTimeValue, updateDate, updateTime } from './utils'
+
+import './datePicker.scss'
+import 'react-dates/lib/css/_datepicker.css'
 
 const DateTimePicker = ({
     date: dateObject = new Date(),

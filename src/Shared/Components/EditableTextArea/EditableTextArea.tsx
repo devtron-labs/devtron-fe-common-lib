@@ -15,11 +15,13 @@
  */
 
 import { useState } from 'react'
+
 import { ComponentSizeType } from '@Shared/constants'
+
 import { ReactComponent as EditIcon } from '../../../Assets/Icon/ic-pencil.svg'
-import type { EditableTextAreaProps, Error } from './types'
-import { Textarea } from '../Textarea'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { Textarea } from '../Textarea'
+import type { EditableTextAreaProps, Error } from './types'
 
 const TextArea = (
     props: Omit<EditableTextAreaProps, 'emptyState'> & {

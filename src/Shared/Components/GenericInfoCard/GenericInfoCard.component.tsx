@@ -16,10 +16,13 @@
 
 import { cloneElement } from 'react'
 import { Link } from 'react-router-dom'
+
 import { ReactComponent as ICCaretSmall } from '@Icons/ic-caret-left-small.svg'
 import { Tooltip } from '@Common/Tooltip'
+
 import { GenericInfoCardProps } from './types'
 import { getClassNameForBorderVariant } from './utils'
+
 import './styles.scss'
 
 const GenericInfoCard = ({
