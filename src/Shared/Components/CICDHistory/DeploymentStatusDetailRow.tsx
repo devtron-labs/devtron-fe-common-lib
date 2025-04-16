@@ -31,6 +31,8 @@ import { getManualSync } from './service'
 import { DeploymentStatusDetailRowType } from './types'
 import { renderIcon } from './utils'
 
+const appHealthDropDownlist = ['inprogress', 'failed', 'disconnect', 'timed_out']
+
 export const DeploymentStatusDetailRow = ({
     type,
     hideVerticalConnector,
@@ -39,7 +41,7 @@ export const DeploymentStatusDetailRow = ({
     const { appId, envId } = useParams<{ appId: string; envId: string }>()
     const statusBreakDownType = deploymentDetailedData.deploymentStatusBreakdown[type]
     const [collapsed, toggleCollapsed] = useState<boolean>(statusBreakDownType.isCollapsed)
-    const appHealthDropDownlist = ['inprogress', 'failed', 'disconnect', 'timed_out']
+
     const isHelmManifestPushFailed =
         type === TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO &&
         deploymentDetailedData.deploymentStatus === statusIcon.failed
@@ -50,8 +52,7 @@ export const DeploymentStatusDetailRow = ({
 
     async function manualSyncData() {
         try {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const response = await getManualSync({ appId, envId })
+            await getManualSync({ appId, envId })
         } catch (error) {
             showError(error)
         }

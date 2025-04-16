@@ -2,6 +2,7 @@ import { ComponentProps, ReactNode, useMemo } from 'react'
 
 import { Tooltip } from '@Common/Tooltip'
 
+import { ErrorBar } from '../Error'
 import { ShowMoreText } from '../ShowMoreText'
 import { AppStatus } from '../StatusComponent'
 import { APP_STATUS_CUSTOM_MESSAGES } from './constants'
@@ -55,6 +56,8 @@ export const AppStatusBody = ({ appDetails, type }: Pick<AppStatusModalProps, 'a
                     />
                 ))}
             </div>
+
+            <ErrorBar appDetails={appDetails} />
         </div>
     )
 }

@@ -14,32 +14,16 @@
  * limitations under the License.
  */
 
-import { useMemo } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { ReactComponent as ErrorInfo } from '../../../Assets/Icon/ic-errorInfo.svg'
 import { URLS } from '../../../Common'
 import { AppType } from '../../types'
-import { AppDetailsErrorType, ErrorBarType } from './types'
-import { renderErrorHeaderMessage } from './utils'
+import { ErrorBarType } from './types'
+import { getIsImagePullBackOff, renderErrorHeaderMessage } from './utils'
 
 const ErrorBar = ({ appDetails }: ErrorBarType) => {
-    const isImagePullBackOff = useMemo(() => {
-        if (appDetails?.appType === AppType.DEVTRON_APP && appDetails?.resourceTree?.nodes?.length) {
-            appDetails.resourceTree.nodes.some(
-                (node) =>
-                    !!node.info?.some((info) => {
-                        const infoValueLowerCase = info?.value?.toLowerCase()
-                        return (
-                            infoValueLowerCase === AppDetailsErrorType.ERRIMAGEPULL ||
-                            infoValueLowerCase === AppDetailsErrorType.IMAGEPULLBACKOFF
-                        )
-                    }),
-            )
-        }
-
-        return false
-    }, [appDetails])
+    const isImagePullBackOff = getIsImagePullBackOff(appDetails)
 
     if (
         !appDetails ||
