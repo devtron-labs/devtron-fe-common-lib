@@ -1145,3 +1145,8 @@ export interface GetTimeDifferenceParamsType {
      */
     fallbackString?: string
 }
+
+export enum OtherRegistryAuthenticationType {
+    USERNAME_PASSWORD = 'username_password',
+    ANONYMOUS = 'anonymous',
+}
