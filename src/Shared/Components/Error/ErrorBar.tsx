@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { ReactComponent as ErrorInfo } from '../../../Assets/Icon/ic-errorInfo.svg'
@@ -24,33 +24,21 @@ import { AppDetailsErrorType, ErrorBarType } from './types'
 import { renderErrorHeaderMessage } from './utils'
 
 const ErrorBar = ({ appDetails }: ErrorBarType) => {
-    const [isImagePullBackOff, setIsImagePullBackOff] = useState(false)
-
-    useEffect(() => {
-        if (appDetails.appType === AppType.DEVTRON_APP && appDetails.resourceTree?.nodes?.length) {
-            for (let index = 0; index < appDetails.resourceTree.nodes.length; index++) {
-                const node = appDetails.resourceTree.nodes[index]
-                let _isImagePullBackOff = false
-                if (node.info?.length) {
-                    for (let idx = 0; idx < node.info.length; idx++) {
-                        const info = node.info[idx]
-                        if (
-                            info.value &&
-                            (info.value.toLowerCase() === AppDetailsErrorType.ERRIMAGEPULL ||
-                                info.value.toLowerCase() === AppDetailsErrorType.IMAGEPULLBACKOFF)
-                        ) {
-                            _isImagePullBackOff = true
-                            break
-                        }
-                    }
-
-                    if (_isImagePullBackOff) {
-                        setIsImagePullBackOff(true)
-                        break
-                    }
-                }
-            }
+    const isImagePullBackOff = useMemo(() => {
+        if (appDetails?.appType === AppType.DEVTRON_APP && appDetails?.resourceTree?.nodes?.length) {
+            appDetails.resourceTree.nodes.some(
+                (node) =>
+                    !!node.info?.some((info) => {
+                        const infoValueLowerCase = info?.value?.toLowerCase()
+                        return (
+                            infoValueLowerCase === AppDetailsErrorType.ERRIMAGEPULL ||
+                            infoValueLowerCase === AppDetailsErrorType.IMAGEPULLBACKOFF
+                        )
+                    }),
+            )
         }
+
+        return false
     }, [appDetails])
 
     if (
