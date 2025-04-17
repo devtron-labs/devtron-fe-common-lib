@@ -30,7 +30,7 @@ const AnimatedDeployButton = ({
     isLoading,
     isVirtualEnvironment,
     onButtonClick,
-    canDeployWithoutApproval,
+    exceptionUserConfig,
     isBulkCDTrigger,
 }: AnimatedDeployButtonProps) => {
     const audioRef = useRef<HTMLAudioElement>(null)
@@ -42,6 +42,7 @@ const AnimatedDeployButton = ({
             rotate: 45,
         },
     }
+    const isExceptionUser = exceptionUserConfig?.canDeploy || exceptionUserConfig?.isImageApprover
 
     const handleButtonClick = async (e: SyntheticEvent) => {
         if (clicked) {
@@ -74,7 +75,7 @@ const AnimatedDeployButton = ({
                 dataTestId="cd-trigger-deploy-button"
                 isLoading={isLoading}
                 text={
-                    canDeployWithoutApproval
+                    exceptionUserConfig?.canDeploy
                         ? 'Deploy without approval'
                         : `Deploy${isVirtualEnvironment ? ' to isolated env' : ''}`
                 }
@@ -99,12 +100,12 @@ const AnimatedDeployButton = ({
                 }
                 size={ComponentSizeType.large}
                 onClick={handleButtonClick}
-                style={canDeployWithoutApproval && !isBulkCDTrigger ? ButtonStyleType.warning : ButtonStyleType.default}
-                showTooltip={canDeployWithoutApproval}
+                style={isExceptionUser && !isBulkCDTrigger ? ButtonStyleType.warning : ButtonStyleType.default}
+                showTooltip={isExceptionUser}
                 tooltipProps={{
                     content: isBulkCDTrigger
-                        ? 'Non-approved image(s) are selected for some applications. You are authorized to deploy.'
-                        : 'A non-approved image is selected. You are authorized to deploy.',
+                        ? 'You are authorized to deploy as an exception user for some applications'
+                        : 'You are authorized to deploy as an exception user',
                 }}
             />
             {/* Disabling es-lint as captions are not required */}
