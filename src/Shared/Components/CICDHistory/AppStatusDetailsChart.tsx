@@ -29,6 +29,9 @@ import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { StatusFilterButtonComponent } from './StatusFilterButtonComponent'
 import { AggregatedNodes, AppStatusDetailsChartType, NodeFilters, STATUS_SORTING_ORDER } from './types'
 
+/**
+ * @deprecated Remove after migration to new modal
+ */
 const AppStatusDetailsChart = ({
     filterRemoveHealth = false,
     showFooter,
