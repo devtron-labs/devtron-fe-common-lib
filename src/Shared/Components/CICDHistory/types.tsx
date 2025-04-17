@@ -446,7 +446,7 @@ export interface DeploymentDetailStepsType {
     renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
 }
 
-export interface RenderCIListHeaderProps extends Pick<History, 'isDeploymentWithoutApproval'> {
+export interface RenderCIListHeaderProps {
     userApprovalMetadata: UserApprovalMetadataType
     triggeredBy: string
     appliedFilters: FilterConditionsListType[]

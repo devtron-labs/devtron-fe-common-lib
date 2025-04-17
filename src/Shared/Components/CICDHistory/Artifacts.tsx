@@ -36,6 +36,7 @@ import {
     useGetUserRoles,
 } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
+import { Icon } from '../Icon'
 import { TargetPlatformBadgeList } from '../TargetPlatforms'
 import { TERMINAL_STATUS_MAP } from './constants'
 import { ArtifactType, CIListItemType } from './types'
@@ -84,6 +85,13 @@ export const CIListItem = ({
                 </div>
             )}
 
+            {isDeploymentWithoutApproval && (
+                <div className="w-100 bg__primary flex left dc__gap-6 px-12 pt-8 pb-7 border__secondary--bottom border__primary--top border__primary--left border__primary--right dc__top-radius-4">
+                    <Icon name="ic-lightning-fill" color="Y500" />
+                    <p className="m-0 fs-13 lh-20 cn-9">Deployed by an exception user</p>
+                </div>
+            )}
+
             {headerMetaDataPresent &&
                 renderCIListHeader &&
                 renderCIListHeader({
@@ -93,12 +101,13 @@ export const CIListItem = ({
                     appliedFiltersTimestamp,
                     promotionApprovalMetadata,
                     selectedEnvironmentName,
-                    isDeploymentWithoutApproval,
                 })}
 
             <div
                 className={`dc__h-fit-content ci-artifact image-tag-parent-card bg__primary br-4 dc__border p-12 w-100 dc__mxw-800 ci-artifact--${type} ${
-                    headerMetaDataPresent && renderCIListHeader ? 'dc__no-top-radius dc__no-top-border' : ''
+                    (headerMetaDataPresent && renderCIListHeader) || isDeploymentWithoutApproval
+                        ? 'dc__no-top-radius dc__no-top-border'
+                        : ''
                 }`}
                 data-testid="hover-on-report-artifact"
             >
