@@ -14,28 +14,18 @@
  * limitations under the License.
  */
 
-import { useCallback, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-import { SortingOrder } from '@Common/Constants'
-import { debounce, noop } from '@Common/Helper'
 import { useStateFilters } from '@Common/Hooks'
-import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
-import { stringComparatorBySortOrder } from '@Shared/Helpers'
 
-import { DynamicDataTable, DynamicDataTableCellValidationState } from '../DynamicDataTable'
-import { DUPLICATE_KEYS_VALIDATION_MESSAGE, EMPTY_KEY_VALIDATION_MESSAGE } from './constants'
-import {
-    KeyValueTableData,
-    KeyValueTableDataType,
-    KeyValueTableInternalProps,
-    KeyValueTableProps,
-} from './KeyValueTable.types'
+import { DynamicDataTable } from '../DynamicDataTable'
+import { KeyValueTableDataType, KeyValueTableInternalProps, KeyValueTableProps } from './KeyValueTable.types'
 import {
     getEmptyRow,
     getKeyValueHeaders,
-    getKeyValueInitialCellError,
-    getKeyValueInitialRows,
-    getKeyValueTableKeysFrequency,
+    getKeyValueTableCellError,
+    getKeyValueTableRows,
+    getKeyValueTableSortedRows,
     getModifiedDataForOnChange,
 } from './utils'
 
@@ -43,7 +33,7 @@ import './KeyValueTable.scss'
 
 export const KeyValueTable = ({
     headerLabel,
-    initialRows,
+    rows: initialRows,
     placeholder,
     maskValue,
     isSortable,
@@ -53,133 +43,50 @@ export const KeyValueTable = ({
     readOnly,
     showError,
     validationSchema: parentValidationSchema,
-    errorMessages: parentErrorMessages = [],
     onError,
     validateDuplicateKeys = false,
     validateEmptyKeys = false,
 }: KeyValueTableProps) => {
     // STATES
-    const [rows, setRows] = useState<KeyValueTableInternalProps['rows']>(
-        getKeyValueInitialRows({ initialRows, placeholder }),
-    )
-
-    const [cellError, setCellError] = useState<KeyValueTableInternalProps['cellError']>(
-        getKeyValueInitialCellError(rows),
-    )
+    const [cellError, setCellError] = useState<KeyValueTableInternalProps['cellError']>({})
 
     // HOOKS
     const { sortBy, sortOrder, handleSorting } = useStateFilters<KeyValueTableDataType>({
         initialSortKey: isSortable ? 'key' : null,
     })
 
-    const rowWithMaskedValues = useMemo<typeof rows>(() => {
-        if (maskValue && Object.keys(maskValue).length) {
-            return rows.map((row) => ({
-                ...row,
-                data: {
-                    ...row.data,
-                    key: {
-                        ...row.data.key,
-                        value: maskValue.key ? DEFAULT_SECRET_PLACEHOLDER : row.data.key.value,
-                    },
-                    value: {
-                        ...row.data.value,
-                        value: maskValue.value ? DEFAULT_SECRET_PLACEHOLDER : row.data.value.value,
-                    },
-                },
-            }))
-        }
-
-        return rows
-    }, [rows, maskValue])
-
-    const debounceOnChange = useCallback(
-        debounce((modifiedRows: KeyValueTableData[]) =>
-            typeof onChange === 'function' ? onChange(modifiedRows) : noop,
-        ),
-        [],
+    // COMPUTED ROWS FOR DYNAMIC DATA TABLE
+    const rows = useMemo<KeyValueTableInternalProps['rows']>(
+        () => getKeyValueTableRows({ rows: initialRows, placeholder, maskValue }),
+        [initialRows, placeholder, maskValue, isSortable, sortOrder, sortBy],
     )
 
-    // METHODS
-    const validationSchema = (
-        value: Parameters<typeof parentValidationSchema>[0],
-        key: Parameters<typeof parentValidationSchema>[1],
-        rowId: Parameters<typeof parentValidationSchema>[2],
-        keysFrequency: Record<string, number> = {},
-    ): DynamicDataTableCellValidationState => {
-        const trimmedValue = value.trim()
+    // Set cell error on mount
+    useEffect(() => {
+        const { isValid, updatedCellError } = getKeyValueTableCellError({
+            rows,
+            validateDuplicateKeys,
+            validateEmptyKeys,
+            validationSchema: parentValidationSchema,
+        })
 
-        if (validateDuplicateKeys && key === 'key' && (keysFrequency[trimmedValue] ?? 0) > 1) {
-            return {
-                isValid: false,
-                errorMessages: [DUPLICATE_KEYS_VALIDATION_MESSAGE],
-            }
-        }
-
-        if (validateEmptyKeys && key === 'key' && !trimmedValue) {
-            const isValuePresentAtRow = rows.some(({ id, data }) => id === rowId && data.value.value.trim())
-            if (isValuePresentAtRow) {
-                return {
-                    isValid: false,
-                    errorMessages: [EMPTY_KEY_VALIDATION_MESSAGE],
-                }
-            }
-        }
-
-        if (parentValidationSchema) {
-            const isValid = parentValidationSchema(value, key, rowId)
-            return {
-                isValid,
-                errorMessages: !isValid ? parentErrorMessages : [],
-            }
-        }
-
-        return {
-            isValid: true,
-            errorMessages: [],
-        }
-    }
-
-    const checkAllRowsAreValid = (updatedRows: typeof rows) => {
-        let isValid = true
-
-        const updatedCellError = updatedRows.reduce((acc, { data, id }) => {
-            const keyError = validationSchema(
-                data.key.value,
-                'key',
-                id,
-                validateDuplicateKeys ? getKeyValueTableKeysFrequency(rows) : {},
-            )
-            const valueError = validationSchema(data.value.value, 'value', id)
-
-            if (isValid && !(keyError.isValid && valueError.isValid)) {
-                isValid = false
-            }
-
-            acc[id] = {
-                key: keyError,
-                value: valueError,
-            }
-
-            return acc
-        }, {})
-
-        return { isValid, updatedCellError }
-    }
-
-    const setUpdatedRows = (updatedRows: typeof rows, shouldDebounceChange = false) => {
-        const { isValid, updatedCellError } = checkAllRowsAreValid(updatedRows)
-
-        setRows(updatedRows)
         setCellError(updatedCellError)
+        onError?.(!isValid)
+    }, [])
 
+    // METHODS
+    const setUpdatedRows = (updatedRows: typeof rows) => {
+        const { isValid, updatedCellError } = getKeyValueTableCellError({
+            rows: updatedRows,
+            validateDuplicateKeys,
+            validateEmptyKeys,
+            validationSchema: parentValidationSchema,
+        })
+
+        setCellError(updatedCellError)
         onError?.(!isValid)
 
-        if (shouldDebounceChange) {
-            debounceOnChange(getModifiedDataForOnChange(updatedRows))
-        } else {
-            onChange?.(getModifiedDataForOnChange(updatedRows))
-        }
+        onChange(getModifiedDataForOnChange(updatedRows))
     }
 
     const onRowAdd = () => {
@@ -211,31 +118,13 @@ export const KeyValueTable = ({
             updatedRows[rowIndex] = selectedRow
         }
 
-        setUpdatedRows(updatedRows, true)
-    }
-
-    const onSorting = (_sortBy: KeyValueTableDataType) => {
-        handleSorting(_sortBy)
-
-        if (isSortable) {
-            setRows((prevRows) => {
-                const sortedRows = prevRows
-                sortedRows.sort((a, b) =>
-                    stringComparatorBySortOrder(
-                        a.data[_sortBy].value,
-                        b.data[_sortBy].value,
-                        sortOrder === SortingOrder.ASC ? SortingOrder.DESC : SortingOrder.ASC,
-                    ),
-                )
-                return sortedRows
-            })
-        }
+        setUpdatedRows(updatedRows)
     }
 
     return (
         <DynamicDataTable
             headers={getKeyValueHeaders({ headerLabel, isSortable })}
-            rows={rowWithMaskedValues}
+            rows={getKeyValueTableSortedRows({ isSortable, rows, sortBy, sortOrder })}
             cellError={showError ? cellError : {}}
             onRowAdd={onRowAdd}
             onRowDelete={onRowDelete}
@@ -246,7 +135,7 @@ export const KeyValueTable = ({
             sortingConfig={{
                 sortBy,
                 sortOrder,
-                handleSorting: onSorting,
+                handleSorting,
             }}
         />
     )

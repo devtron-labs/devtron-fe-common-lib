@@ -92,9 +92,9 @@ export type KeyValueTableProps = Pick<
      */
     headerLabel: KeyValueHeaderLabel
     /**
-     * The initial rows of the key-value table.
+     * The rows of the key-value table.
      */
-    initialRows: KeyValueTableRowType[]
+    rows: KeyValueTableRowType[]
     /**
      * An optional configuration to mask values in the table.
      */
@@ -112,22 +112,29 @@ export type KeyValueTableProps = Pick<
      *
      * @param data - The updated table data.
      */
-    onChange?: (data: KeyValueTableData[]) => void
+    onChange: (data: KeyValueTableData[]) => void
     /**
      * A function to validate the value of a cell.
      *
      * @param value - The value to validate.
      * @param key - The key of the header associated with the value.
-     * @param rowId - The id of the row containing the value.
+     * @param row - The row containing the value.
      * @returns A boolean indicating whether the value is valid. If false,
      *          `showError` should be set to `true` and `errorMessages` should
      *          provide an array of error messages to display.
      */
-    validationSchema?: (value: string, key: KeyValueTableDataType, rowId: KeyValueTableRowType['id']) => boolean
-    /**
-     * An array of error messages to display in the cell error tooltip.
-     */
-    errorMessages?: string[]
+    validationSchema?: (
+        value: string,
+        key: KeyValueTableDataType,
+        row: KeyValueTableRowType,
+    ) => {
+        /** Boolean indicating if the cell data is valid or not. */
+        isValid: boolean
+        /**
+         * An array of error messages to display in the cell error tooltip.
+         */
+        errorMessages?: string[]
+    }
     /**
      * A callback function triggered when an error occurs in the table.
      *
@@ -136,3 +143,11 @@ export type KeyValueTableProps = Pick<
      */
     onError?: (errorState: boolean) => void
 } & ErrorUIProps
+
+export type KeyValueValidationSchemaProps = {
+    value: Parameters<KeyValueTableProps['validationSchema']>[0]
+    key: Parameters<KeyValueTableProps['validationSchema']>[1]
+    row: Parameters<KeyValueTableProps['validationSchema']>[2]
+    keysFrequency?: Record<string, number>
+} & Pick<KeyValueTableProps, 'validateDuplicateKeys' | 'validateEmptyKeys' | 'validationSchema'> &
+    Partial<Pick<KeyValueTableInternalProps, 'rows'>>
