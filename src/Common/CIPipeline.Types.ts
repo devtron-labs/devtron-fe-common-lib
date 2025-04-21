@@ -158,7 +158,7 @@ export interface PortMapType {
     portOnLocal: number
     portOnContainer: number
 }
-interface ConditionDetails {
+export interface ConditionDetails {
     id: number
     conditionOnVariable: string
     conditionOperator: string
@@ -314,7 +314,15 @@ export enum InputOutputVariablesHeaderKeys {
     VALUE = 'val',
 }
 
+export enum ConditionDataTableHeaderKeys {
+    VARIABLE = 'variable',
+    OPERATOR = 'operator',
+    VALUE = 'val',
+}
+
 export type InputOutputVariablesErrorObj = Record<InputOutputVariablesHeaderKeys, DynamicDataTableCellValidationState>
+
+export type ConditionDetailsErrorObj = Record<ConditionDataTableHeaderKeys, DynamicDataTableCellValidationState>
 
 export interface TaskErrorObj {
     isValid: boolean
@@ -324,12 +332,16 @@ export interface TaskErrorObj {
         outputVariables?: Record<number, InputOutputVariablesErrorObj>
         isInputVariablesValid?: boolean
         isOutputVariablesValid?: boolean
+        conditionDetails?: Record<number, ConditionDetailsErrorObj>
+        isConditionDetailsValid?: boolean
     }
     pluginRefStepDetail?: {
         inputVariables?: Record<number, InputOutputVariablesErrorObj>
         outputVariables?: Record<number, InputOutputVariablesErrorObj>
         isInputVariablesValid?: boolean
         isOutputVariablesValid?: boolean
+        conditionDetails?: Record<number, ConditionDetailsErrorObj>
+        isConditionDetailsValid?: boolean
     }
 }
 export interface FormErrorObjectType {
