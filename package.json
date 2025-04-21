@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.11.0-pre-6",
+    "version": "1.11.0-pre-7",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -121,6 +121,7 @@
         "jsonpath-plus": "^10.3.0",
         "marked": "^13.0.3",
         "nanoid": "^3.3.8",
+        "qrcode.react": "^4.2.0",
         "react-canvas-confetti": "^2.0.7",
         "react-dates": "^21.8.0",
         "react-diff-viewer-continued": "^3.4.0",
