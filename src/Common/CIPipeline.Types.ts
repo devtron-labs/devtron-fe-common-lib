@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { DynamicDataTableCellValidationState } from '@Shared/Components'
+import { DynamicDataTableCellValidationState, KeyValueTableData } from '@Shared/Components'
 
 export interface MaterialType {
     name: string
@@ -266,7 +266,7 @@ export enum WORKFLOW_CACHE_CONFIG_ENUM {
 
 export interface FormType {
     name: string
-    args: { key: string; value: string }[]
+    args: KeyValueTableData[]
     materials: MaterialType[]
     gitHost: Githost
     webhookEvents: WebhookEvent[]
