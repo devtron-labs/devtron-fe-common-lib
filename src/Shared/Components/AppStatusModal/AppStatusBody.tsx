@@ -5,8 +5,9 @@ import { Tooltip } from '@Common/Tooltip'
 import { ErrorBar } from '../Error'
 import { ShowMoreText } from '../ShowMoreText'
 import { AppStatus } from '../StatusComponent'
+import AppStatusContent from './AppStatusContent'
 import { APP_STATUS_CUSTOM_MESSAGES } from './constants'
-import { AppStatusModalProps } from './types'
+import { AppStatusBodyProps } from './types'
 import { getAppStatusMessageFromAppDetails } from './utils'
 
 const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; value: ReactNode; isLast?: boolean }) => (
@@ -21,7 +22,7 @@ const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; val
     </div>
 )
 
-export const AppStatusBody = ({ appDetails, type }: Pick<AppStatusModalProps, 'appDetails' | 'type'>) => {
+export const AppStatusBody = ({ appDetails, type, handleShowConfigDriftModal }: AppStatusBodyProps) => {
     const message = useMemo(() => getAppStatusMessageFromAppDetails(appDetails), [appDetails])
     const customMessage = APP_STATUS_CUSTOM_MESSAGES[appDetails.resourceTree?.status?.toUpperCase()]
 
@@ -43,6 +44,7 @@ export const AppStatusBody = ({ appDetails, type }: Pick<AppStatusModalProps, 'a
         },
     ]
 
+    // TODO: Reminder to add footer here
     return (
         <div className="flexbox-col dc__gap-16">
             {/* Info card */}
@@ -58,6 +60,8 @@ export const AppStatusBody = ({ appDetails, type }: Pick<AppStatusModalProps, 'a
             </div>
 
             <ErrorBar appDetails={appDetails} />
+
+            <AppStatusContent appDetails={appDetails} handleShowConfigDriftModal={handleShowConfigDriftModal} />
         </div>
     )
 }
