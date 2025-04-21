@@ -30,6 +30,21 @@ export type DevtronLicenseCardProps = {
 export type DevtronLicenseInfo = Omit<DevtronLicenseCardProps, 'appTheme'> &
     Pick<DevtronLicenseDTO, 'fingerprint' | 'showLicenseData' | 'licenseStatusError'>
 
+export interface ActivateLicenseDialogProps extends Pick<DevtronLicenseBaseDTO, 'fingerprint'> {
+    enterpriseName: string
+    handleClose?: () => void
+    handleLicenseActivateSuccess: () => void
+}
+
 export interface InstallFingerprintInfoProps extends Pick<DevtronLicenseBaseDTO, 'fingerprint'> {
     showHelpTooltip?: boolean
+}
+
+export interface GatekeeperQRDialogProps {
+    fingerprint: string
+    handleClose: () => void
+}
+
+export interface CopyButtonProps {
+    copyContent: string
 }
