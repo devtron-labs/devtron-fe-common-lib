@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
-import { DevtronLicenseCardProps, DevtronLicenseDTO, LicenseStatus } from '@Shared/index'
+import { DevtronLicenseCardProps, DevtronLicenseDTO, DevtronLicenseInfo, LicenseStatus } from '@Shared/index'
+import { getUrlWithSearchParams } from '@Common/index'
 
 export const getLicenseColorsAccordingToStatus = (
     licenseStatus: LicenseStatus,
@@ -30,7 +31,7 @@ const getDevtronLicenseStatus = ({
     return LicenseStatus.ACTIVE
 }
 
-export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard extends boolean = false>(
+const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard extends boolean = false>(
     licenseDTO: DevtronLicenseDTO<isCentralDashboard>,
     currentUserEmail?: isCentralDashboard extends true ? string : never,
 ): Omit<DevtronLicenseCardProps, 'appTheme'> => {
@@ -48,3 +49,16 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
             : { licenseSuffix: license }),
     }
 }
+
+export const parseDevtronLicenseData = (result: DevtronLicenseDTO): DevtronLicenseInfo => {
+    const parsedResponse = parseDevtronLicenseDTOIntoLicenseCardData(result)
+    return {
+        ...parsedResponse,
+        fingerprint: result?.fingerprint || '',
+        showLicenseData: result?.showLicenseData,
+        licenseStatusError: result?.licenseStatusError,
+    }
+}
+
+export const getGateKeeperUrl = (fingerprint: string) =>
+    getUrlWithSearchParams(window._env_.GATEKEEPER_URL, { fingerprint })
