@@ -40,7 +40,7 @@ export const getKeyValueTableRows = ({
 }: Required<Pick<KeyValueTableProps, 'rows' | 'placeholder' | 'maskValue'>>): KeyValueTableInternalProps['rows'] => {
     const isMaskValue = maskValue && Object.keys(maskValue).length
 
-    const rows: KeyValueTableInternalProps['rows'] = initialRows.length
+    const rows: KeyValueTableInternalProps['rows'] = initialRows?.length
         ? initialRows.map(({ data: { key, value }, id }) => ({
               data: {
                   key: {
