@@ -38,7 +38,7 @@ export const VARIANT_TO_ICON_MAP: Record<InfoBlockProps['variant'], InfoBlockPro
     help: <ICHelp className="fcv-5" />,
     information: <Icon name="ic-info-filled" color="B500" />,
     success: <ICSuccess />,
-    warning: <ICWarningY5 />,
+    warning: <ICWarningY5 className="icon-dim-20-imp" />,
     neutral: <Icon name="ic-info-filled" color={null} />,
 }
 
