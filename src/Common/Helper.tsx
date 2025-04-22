@@ -247,10 +247,6 @@ export function useSearchString(): UseSearchString {
         return queryParams
     }, [location])
 
-    // const searchParams={}
-    // for (let [key, value] of queryParams.entries()){
-    //     searchParams[key]=value
-    // }
     const searchParams = Array.from(queryParams.entries()).reduce((agg, curr, idx) => {
         agg[curr[0]] = curr[1]
         return agg
