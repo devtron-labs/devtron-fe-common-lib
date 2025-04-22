@@ -38,7 +38,7 @@ const InfoBlock = ({
     borderRadiusConfig,
     borderConfig,
 }: InfoBlockProps) => {
-    const baseContainerClass = `override-empty-svg-dim ${CONTAINER_SIZE_TO_CLASS_MAP[size]} ${VARIANT_TO_BG_MAP[variant]} ${deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig })} w-100 py-8 br-4 bw-1`
+    const baseContainerClass = `${CONTAINER_SIZE_TO_CLASS_MAP[size]} ${VARIANT_TO_BG_MAP[variant]} ${deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig })} w-100 py-8 br-4 bw-1`
     const iconClass = `dc__no-shrink flex dc__fill-available-space ${SIZE_TO_ICON_CLASS_MAP[size]}`
     const icon = customIcon ?? VARIANT_TO_ICON_MAP[variant]
 

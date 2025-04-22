@@ -16,22 +16,6 @@
 
 .empty-state {
     height: 100%;
-    img {
-        height: 40%;
-        max-height: 200px;
-        width: auto;
-        max-width: 250px;
-    }
-    svg {
-        height: 40%;
-        max-height: 200px;
-        width: auto;
-    }
-    .button, .override-empty-svg-dim svg {
-        height: 100%;
-        max-height: none;
-        width: 100%;
-    }
     h1,
     h2,
     h3,
