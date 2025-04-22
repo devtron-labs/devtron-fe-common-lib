@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import { ChangeEvent, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
+import { SegmentType } from '@Common/SegmentedControl/types'
+import { ComponentSizeType } from '@Shared/constants'
 
-import { PopupMenu, StyledRadioGroup as RadioGroup } from '../../../Common'
+import { PopupMenu, SegmentedControl } from '../../../Common'
 import { StatusFilterButtonType } from './types'
 import { getAppStatusIcon, getNodesCount, getStatusFilters } from './utils'
-
-import './StatusFilterButtonComponent.scss'
 
 export const StatusFilterButtonComponent = ({
     nodes,
@@ -54,13 +54,14 @@ export const StatusFilterButtonComponent = ({
         return statusFilters
     }, [statusFilters.length, overflowFilterIndex, maxInlineFiltersCount])
 
-    const handleInlineFilterClick = (e: ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target
+    const handleInlineFilterClick = (segment: SegmentType) => {
+        const { value } = segment
+
         if (value === allResourceKindFilter.status) {
             setOverflowFilterIndex(0)
         }
         if (selectedTab !== value) {
-            handleFilterClick(value)
+            handleFilterClick(value as string)
         }
     }
 
@@ -71,32 +72,37 @@ export const StatusFilterButtonComponent = ({
         }
     }
 
+    const segments: SegmentType[] = [
+        {
+            value: allResourceKindFilter.status,
+            label: `All (${allResourceKindFilter.count})`,
+        },
+
+        ...inlineFilters.map<SegmentType>(({ status, count }) => ({
+            value: status,
+            label: (
+                <span className="flexbox dc__align-items-center dc__gap-4">
+                    {getAppStatusIcon(status, true)}
+                    <span>{count}</span>
+                </span>
+            ),
+            tooltipProps: {
+                content: status,
+                className: 'w-100 dc__first-letter-capitalize',
+            },
+        })),
+    ]
+
     return (
         <div className="flexbox">
-            <RadioGroup
-                className={`status-filter-button ${showOverflowFilters ? 'with-menu-button' : ''}`}
-                name="status-filter-button"
-                initialTab={selectedTab}
-                disabled={false}
+            <SegmentedControl
+                segments={segments}
+                value={selectedTab}
                 onChange={handleInlineFilterClick}
-            >
-                <RadioGroup.Radio key={allResourceKindFilter.status} value={allResourceKindFilter.status}>
-                    <span className="dc__first-letter-capitalize">{`${allResourceKindFilter.status} (${allResourceKindFilter.count})`}</span>
-                </RadioGroup.Radio>
-                {inlineFilters.map(({ status, count }) => (
-                    <RadioGroup.Radio
-                        key={status}
-                        value={status}
-                        showTippy
-                        tippyPlacement="top"
-                        tippyContent={status}
-                        tippyClass="w-100 dc__first-letter-capitalize"
-                    >
-                        {getAppStatusIcon(status, true)}
-                        <span>{count}</span>
-                    </RadioGroup.Radio>
-                ))}
-            </RadioGroup>
+                name="status-filter-button"
+                size={ComponentSizeType.small}
+            />
+
             {showOverflowFilters && (
                 <PopupMenu autoClose>
                     <PopupMenu.Button

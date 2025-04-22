@@ -66,7 +66,7 @@ const AppStatusContent = ({
     const renderRows = () => {
         if (!flattenedNodes.length) {
             return (
-                <div className="flexbox-col dc__gap-4 dc__align-center h-100">
+                <div className="flex column py-16 dc__gap-4 dc__align-center h-100">
                     <Icon name="ic-info-filled" size={20} color={null} />
                     <span>Checking resources status</span>
                 </div>
@@ -117,9 +117,9 @@ const AppStatusContent = ({
     }
 
     return (
-        <div className={`flexbox-col ${isCardLayout ? 'br-6 border__primary' : ''}`}>
+        <div className={`flexbox-col ${isCardLayout ? 'br-6 border__primary dc__overflow-hidden' : ''}`}>
             {!!flattenedNodes.length && (
-                <div>
+                <div className="p-12">
                     <StatusFilterButtonComponent
                         nodes={flattenedNodes}
                         selectedTab={currentFilter}

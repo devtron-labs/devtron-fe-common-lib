@@ -88,7 +88,7 @@ const AppStatusDetailsChart = ({
         if (
             _appDetails.resourceTree?.resourcesSyncResult &&
             // eslint-disable-next-line no-prototype-builtins
-            _appDetails.resourceTree?.resourcesSyncResult.hasOwnProperty(`${kind}/${name}`)
+            _appDetails.resourceTree.resourcesSyncResult.hasOwnProperty(`${kind}/${name}`)
         ) {
             return _appDetails.resourceTree.resourcesSyncResult[`${kind}/${name}`]
         }

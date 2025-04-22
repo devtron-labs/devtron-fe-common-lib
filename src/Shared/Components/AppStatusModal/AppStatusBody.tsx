@@ -15,7 +15,7 @@ const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; val
         className={`py-12 px-16 flexbox dc__align-items-center dc__gap-16 ${!isLast ? 'border__secondary--bottom' : ''}`}
     >
         <Tooltip content={heading}>
-            <h3 className="cn-9 fs-13 fw-4 lh-1-5 dc__truncate">{heading}</h3>
+            <h3 className="cn-9 fs-13 fw-4 lh-1-5 dc__truncate m-0">{heading}</h3>
         </Tooltip>
 
         {typeof value === 'string' ? <ShowMoreText textClass="cn-9 fs-13 fw-4 lh-1-5" text={value} /> : value}
@@ -32,19 +32,26 @@ export const AppStatusBody = ({ appDetails, type, handleShowConfigDriftModal }: 
             heading: type !== 'stack-manager' ? 'Application Status' : 'Status',
             value: <AppStatus status={appDetails.resourceTree?.status?.toUpperCase() || appDetails.appStatus} />,
         },
-        message && {
-            id: 2,
-            heading: 'Message',
-            value: message,
-        },
-        customMessage && {
-            id: 3,
-            heading: 'Message',
-            value: customMessage,
-        },
+        ...(message
+            ? [
+                  {
+                      id: 2,
+                      heading: 'Message',
+                      value: message,
+                  },
+              ]
+            : []),
+        ...(customMessage
+            ? [
+                  {
+                      id: 3,
+                      heading: 'Message',
+                      value: customMessage,
+                  },
+              ]
+            : []),
     ]
 
-    // TODO: Reminder to add footer here
     return (
         <div className="flexbox-col dc__gap-16">
             {/* Info card */}

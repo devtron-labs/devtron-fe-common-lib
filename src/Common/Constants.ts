@@ -134,6 +134,7 @@ export const ROUTES = {
     ATTRIBUTES_CREATE: 'attributes/create',
     ATTRIBUTES_UPDATE: 'attributes/update',
     APP_LIST_MIN: 'app/min',
+    APP_DETAIL: 'app/detail',
     CLUSTER_LIST_MIN: 'cluster/autocomplete',
     CLUSTER_LIST_RAW: 'k8s/capacity/cluster/list/raw',
     PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
