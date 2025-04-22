@@ -65,6 +65,7 @@ import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
+import { ReactComponent as ICKey } from '@IconsV2/ic-key.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
@@ -177,6 +178,7 @@ export const iconMap = {
     'ic-info-outline': ICInfoOutline,
     'ic-job-color': ICJobColor,
     'ic-k8s-job': ICK8sJob,
+    'ic-key': ICKey,
     'ic-ldap': ICLdap,
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
