@@ -24,11 +24,13 @@ export type AppStatusModalProps = {
       }
 )
 
-export interface AppStatusBodyProps extends Pick<AppStatusModalProps, 'appDetails' | 'type'> {
+export interface AppStatusBodyProps extends Required<Pick<AppStatusModalProps, 'appDetails' | 'type'>> {
     handleShowConfigDriftModal: () => void
 }
 
-export interface AppStatusContentProps extends Pick<AppStatusBodyProps, 'appDetails' | 'handleShowConfigDriftModal'> {
+export interface AppStatusContentProps
+    extends Required<Pick<AppStatusBodyProps, 'appDetails'>>,
+        Partial<Pick<AppStatusBodyProps, 'handleShowConfigDriftModal'>> {
     /**
      * @default false
      */

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { ReactComponent as ICChatCircleDots } from '@Icons/ic-chat-circle-dots.svg'
 import {
     abortPreviousRequests,
     DISCORD_LINK,
@@ -128,7 +127,7 @@ const AppStatusModal = ({
             >
                 <div className="flexbox-col px-20 border__primary--bottom dc__no-shrink">
                     <div className="flexbox py-12 dc__content-space">
-                        {title}
+                        <div className="fs-16 fw-6 lh-1-5">{title}</div>
 
                         <Button
                             dataTestId="close-modal-header-icon-button"
@@ -143,7 +142,7 @@ const AppStatusModal = ({
                     </div>
                 </div>
 
-                <div className="flexbox-col flex-grow-1 dc__overflow-auto p-20 dc__gap-16">
+                <div className="flexbox-col flex-grow-1 dc__overflow-auto dc__gap-16 dc__content-space">
                     <APIResponseHandler
                         isLoading={areInitialAppDetailsLoadingWithAbortedError}
                         progressingProps={{
@@ -162,7 +161,7 @@ const AppStatusModal = ({
                         />
 
                         {type === 'stack-manager' && (
-                            <div className="bg__primary flexbox dc__content-space dc__border-top p-16 fs-13 fw-6">
+                            <div className="bg__primary flexbox dc__align-items-center dc__content-space dc__border-top py-16 px-20 fs-13 fw-6">
                                 <span className="fs-13 fw-6">Facing issues in installing integration?</span>
 
                                 <Button
@@ -173,10 +172,8 @@ const AppStatusModal = ({
                                         target: '_blank',
                                         rel: 'noreferrer noopener',
                                     }}
-                                    // TODO: Can we use Icon component
-                                    icon={<ICChatCircleDots />}
-                                    ariaLabel="Chat with support"
-                                    showAriaLabelInTippy={false}
+                                    startIcon={<Icon name="ic-chat-circle-dots" color={null} />}
+                                    text="Chat with support"
                                 />
                             </div>
                         )}

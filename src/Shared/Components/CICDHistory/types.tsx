@@ -630,13 +630,6 @@ export interface DeploymentHistorySidebarType {
     setDeploymentHistoryList: React.Dispatch<React.SetStateAction<DeploymentTemplateList[]>>
 }
 
-export interface AppStatusDetailsChartType {
-    filterRemoveHealth?: boolean
-    showFooter: boolean
-    showConfigDriftInfo?: boolean
-    onClose?: () => void
-}
-
 export interface StatusFilterButtonType {
     nodes: Array<Node>
     selectedTab: string

@@ -20,11 +20,12 @@ import { useParams } from 'react-router-dom'
 import moment from 'moment'
 
 import { ShowMoreText } from '@Shared/Components/ShowMoreText'
+import { IndexStore } from '@Shared/Store'
 
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { DATE_TIME_FORMATS, showError } from '../../../Common'
 import { DEPLOYMENT_STATUS, statusIcon, TIMELINE_STATUS } from '../../constants'
-import AppStatusDetailsChart from './AppStatusDetailsChart'
+import { AppStatusContent } from '../AppStatusModal'
 import { MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
 import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
 import { getManualSync } from './service'
@@ -45,6 +46,8 @@ export const DeploymentStatusDetailRow = ({
     const isHelmManifestPushFailed =
         type === TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO &&
         deploymentDetailedData.deploymentStatus === statusIcon.failed
+
+    const appDetails = IndexStore.getAppDetails()
 
     useEffect(() => {
         toggleCollapsed(statusBreakDownType.isCollapsed)
@@ -152,7 +155,8 @@ export const DeploymentStatusDetailRow = ({
                     </div>
                 )}
                 <div>
-                    <AppStatusDetailsChart filterRemoveHealth showFooter={false} />
+                    {/* TODO: Test */}
+                    <AppStatusContent appDetails={appDetails} filterHealthyNodes isCardLayout={false} />
                 </div>
             </div>
         )

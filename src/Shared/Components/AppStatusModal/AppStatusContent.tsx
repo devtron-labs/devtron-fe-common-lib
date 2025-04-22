@@ -119,7 +119,7 @@ const AppStatusContent = ({
     }
 
     return (
-        <div className={`flexbox-col ${isCardLayout ? 'br-6 border__primary dc__overflow-hidden' : ''}`}>
+        <div className={`flexbox-col ${isCardLayout ? 'br-6 border__primary' : ''}`}>
             {!!flattenedNodes.length && (
                 <div className="p-12">
                     <StatusFilterButtonComponent
@@ -131,7 +131,7 @@ const AppStatusContent = ({
             )}
 
             <div
-                className={`${APP_STATUS_ROWS_BASE_CLASS} cn-7 fs-13 fw-6 lh-20 border__secondary--bottom bg__primary`}
+                className={`${APP_STATUS_ROWS_BASE_CLASS} dc__position-sticky dc__top-0 dc__zi-1 cn-7 fs-13 fw-6 lh-20 border__secondary--bottom bg__primary dc__top-radius-6`}
             >
                 {APP_STATUS_HEADERS.map((headerKey) => (
                     <SortableTableHeaderCell key={`header_${headerKey}`} isSortable={false} title={headerKey} />
