@@ -49,9 +49,7 @@ export const UserIdentifier = ({
             ) : (
                 <UserIdentifierTooltip tooltipContent={tooltipContent}>
                     {isUserGroup ? (
-                        <span className="flex p-1">
-                            <Icon name="ic-users" color="N700" size={18} />
-                        </span>
+                        <Icon name="ic-users" color="N700" size={20} />
                     ) : (
                         getAlphabetIcon(email, 'dc__no-shrink m-0-imp')
                     )}
