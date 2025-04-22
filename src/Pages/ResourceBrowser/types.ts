@@ -39,8 +39,6 @@ export enum ClusterStatusType {
     HEALTHY = 'healthy',
     UNHEALTHY = 'unhealthy',
     CONNECTION_FAILED = 'connection failed',
-    CREATING = 'creating',
-    UPDATING = 'updating',
 }
 
 export interface ResourceDetail {
@@ -86,7 +84,6 @@ export interface ClusterDetail extends ClusterCapacityType {
     errorInNodeListing: string
     nodeNames?: string[]
     isVirtualCluster?: boolean
-    isInstallationCluster?: boolean
 }
 
 interface NodeCordonOptions {
