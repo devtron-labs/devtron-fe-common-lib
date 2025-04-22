@@ -100,7 +100,7 @@ const AnimatedDeployButton = ({
                 }
                 size={ComponentSizeType.large}
                 onClick={handleButtonClick}
-                style={isExceptionUser && !isBulkCDTrigger ? ButtonStyleType.warning : ButtonStyleType.default}
+                style={isExceptionUser ? ButtonStyleType.warning : ButtonStyleType.default}
                 showTooltip={isExceptionUser}
                 tooltipProps={{
                     content: isBulkCDTrigger

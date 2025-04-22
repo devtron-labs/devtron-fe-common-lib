@@ -785,7 +785,6 @@ export interface CDMaterialResponseType
         CDMaterialsApprovalInfo,
         ImagePromotionMaterialInfo {
     materials: CDMaterialType[]
-    isExceptionUser: boolean
 }
 
 export interface InputDetailType {

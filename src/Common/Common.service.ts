@@ -320,7 +320,6 @@ export const processCDMaterialServiceResponse = (
             ...processCDMaterialsMetaInfo(cdMaterialsResult),
             ...processCDMaterialsApprovalInfo(false, cdMaterialsResult),
             ...processImagePromotionInfo(cdMaterialsResult),
-            isExceptionUser: false,
         }
     }
 
@@ -349,7 +348,6 @@ export const processCDMaterialServiceResponse = (
         ...approvalInfo,
         ...metaInfo,
         ...imagePromotionInfo,
-        isExceptionUser: cdMaterialsResult.userApprovalConfig?.isExceptionUser ?? false,
     }
 }
 
