@@ -51,12 +51,14 @@ const AppStatusContent = ({
     }
 
     const getNodeMessage = (nodeDetails: Node) => {
+        const resourceKey = getResourceKey(nodeDetails)
+
         if (
             appDetails.resourceTree?.resourcesSyncResult &&
             // eslint-disable-next-line no-prototype-builtins
-            appDetails.resourceTree.resourcesSyncResult.hasOwnProperty(getResourceKey(nodeDetails))
+            appDetails.resourceTree.resourcesSyncResult.hasOwnProperty(resourceKey)
         ) {
-            return appDetails.resourceTree.resourcesSyncResult[getResourceKey(nodeDetails)]
+            return appDetails.resourceTree.resourcesSyncResult[resourceKey]
         }
         return ''
     }
