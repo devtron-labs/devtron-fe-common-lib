@@ -390,7 +390,7 @@ export interface DeploymentStatusDetailsTimelineType {
     statusTime: string
     resourceDetails?: SyncStageResourceDetail[]
 }
-export interface DeploymentStatusDetailsType {
+export interface DeploymentStatusDetailsType extends Pick<History, 'isDeploymentWithoutApproval'> {
     deploymentFinishedOn: string
     deploymentStartedOn: string
     triggeredBy: string
@@ -406,7 +406,7 @@ export interface DeploymentStatusDetailsResponse extends ResponseType {
 
 interface DeploymentStatusDetailRow {
     icon: string
-    displayText: string
+    displayText: ReactNode
     displaySubText: string
     time: string
     resourceDetails?: any
@@ -432,7 +432,7 @@ export interface DeploymentStatusDetailsBreakdownDataType {
     }
 }
 
-export interface DeploymentDetailStepsType {
+export interface DeploymentDetailStepsType extends Pick<History, 'isDeploymentWithoutApproval'> {
     deploymentStatus?: string
     deploymentAppType?: DeploymentAppTypes
     isHelmApps?: boolean
@@ -446,7 +446,7 @@ export interface DeploymentDetailStepsType {
     renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
 }
 
-export interface RenderCIListHeaderProps {
+export interface RenderCIListHeaderProps extends Required<Pick<History, 'isDeploymentWithoutApproval'>> {
     userApprovalMetadata: UserApprovalMetadataType
     triggeredBy: string
     appliedFilters: FilterConditionsListType[]

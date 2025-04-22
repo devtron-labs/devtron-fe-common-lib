@@ -133,6 +133,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                 isVirtualEnvironment={triggerDetails.IsVirtualEnvironment}
                                 processVirtualEnvironmentDeploymentData={processVirtualEnvironmentDeploymentData}
                                 renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}
+                                isDeploymentWithoutApproval={triggerDetails.isDeploymentWithoutApproval ?? false}
                             />
                         </Route>
                     )}
