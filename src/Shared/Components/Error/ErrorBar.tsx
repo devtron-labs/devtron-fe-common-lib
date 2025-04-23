@@ -38,7 +38,7 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
     return (
         isImagePullBackOff && (
             <div className={`er-2 bw-1 br-4 ${useParentMargin ? 'm-20' : ''} fs-13`}>
-                <div className="bcr-1 pl-12 pr-12 pt-8 pb-8 dc__border-bottom-r2 flex left">
+                <div className="bcr-1 pl-12 pr-12 pt-8 pb-8 dc__border-bottom-r2 flex left dc__top-radius-4">
                     <ErrorInfo className="icon-dim-24 mr-8" /> <span className="mr-8">IMAGEPULLBACKOFF:</span>
                     {renderErrorHeaderMessage(appDetails, 'error-bar')}
                 </div>

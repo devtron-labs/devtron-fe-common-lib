@@ -34,12 +34,12 @@ export const StatusFilterButtonComponent = ({
     const [overflowFilterIndex, setOverflowFilterIndex] = useState(0)
 
     // STATUS FILTERS
-    const { allResourceKindFilter, statusFilters } = useMemo(() => getStatusFilters(getNodesCount(nodes)), [nodes])
+    const { allResourceKindFilter, statusFilters } = getStatusFilters(getNodesCount(nodes))
 
     useEffect(() => {
         const filterIndex = statusFilters.findIndex(({ status }) => status === selectedTab)
         setOverflowFilterIndex(Math.max(filterIndex, 0))
-    }, [statusFilters])
+    }, [JSON.stringify(statusFilters)])
 
     const showOverflowFilters = maxInlineFiltersCount > 0 && statusFilters.length > maxInlineFiltersCount
 

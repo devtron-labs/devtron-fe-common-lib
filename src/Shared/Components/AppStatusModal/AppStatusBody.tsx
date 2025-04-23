@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode, useMemo } from 'react'
+import { ComponentProps, ReactNode } from 'react'
 
 import { Tooltip } from '@Common/Tooltip'
 
@@ -28,7 +28,7 @@ const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; val
 
 export const AppStatusBody = ({ appDetails, type, handleShowConfigDriftModal }: AppStatusBodyProps) => {
     const appStatus = appDetails.resourceTree?.status?.toUpperCase() || appDetails.appStatus
-    const message = useMemo(() => getAppStatusMessageFromAppDetails(appDetails), [appDetails])
+    const message = getAppStatusMessageFromAppDetails(appDetails)
     const customMessage =
         type === 'stack-manager'
             ? 'The installation will complete when status for all the below resources become HEALTHY.'
@@ -61,17 +61,19 @@ export const AppStatusBody = ({ appDetails, type, handleShowConfigDriftModal }: 
     ]
 
     return (
-        <div className="flexbox-col dc__gap-16 p-20 dc__overflow-auto">
+        <div className="flexbox-col px-20 dc__gap-16 dc__overflow-auto">
             {/* Info card */}
-            <div className="flexbox-col br-8 border__primary bg__primary shadow__card--secondary">
-                {infoCardItems.map((item, index) => (
-                    <InfoCardItem
-                        key={item.id}
-                        heading={item.heading}
-                        value={item.value}
-                        isLast={index === infoCardItems.length - 1}
-                    />
-                ))}
+            <div className="flexbox-col pt-20">
+                <div className="flexbox-col br-8 border__primary bg__primary shadow__card--secondary">
+                    {infoCardItems.map((item, index) => (
+                        <InfoCardItem
+                            key={item.id}
+                            heading={item.heading}
+                            value={item.value}
+                            isLast={index === infoCardItems.length - 1}
+                        />
+                    ))}
+                </div>
             </div>
 
             <ErrorBar appDetails={appDetails} useParentMargin={false} />

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
 import { Tooltip } from '@Common/Tooltip'
@@ -8,6 +8,7 @@ import { Node } from '@Shared/types'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { NodeFilters, StatusFilterButtonComponent } from '../CICDHistory'
 import { Icon } from '../Icon'
+import { ShowMoreText } from '../ShowMoreText'
 import { AppStatusContentProps } from './types'
 import { getFlattenedNodesFromAppDetails, getResourceKey } from './utils'
 
@@ -24,24 +25,16 @@ const AppStatusContent = ({
     const [currentFilter, setCurrentFilter] = useState<string>(ALL_RESOURCE_KIND_FILTER)
     const { appId, environmentId: envId } = appDetails
 
-    const flattenedNodes = useMemo(
-        () =>
-            getFlattenedNodesFromAppDetails({
-                appDetails,
-                filterHealthyNodes,
-            }),
-        [appDetails, filterHealthyNodes],
-    )
+    const flattenedNodes = getFlattenedNodesFromAppDetails({
+        appDetails,
+        filterHealthyNodes,
+    })
 
-    const filteredFlattenedNodes = useMemo(
-        () =>
-            flattenedNodes.filter(
-                (nodeDetails) =>
-                    currentFilter === ALL_RESOURCE_KIND_FILTER ||
-                    (currentFilter === NodeFilters.drifted && nodeDetails.hasDrift) ||
-                    nodeDetails.health.status?.toLowerCase() === currentFilter,
-            ),
-        [flattenedNodes, currentFilter],
+    const filteredFlattenedNodes = flattenedNodes.filter(
+        (nodeDetails) =>
+            currentFilter === ALL_RESOURCE_KIND_FILTER ||
+            (currentFilter === NodeFilters.drifted && nodeDetails.hasDrift) ||
+            nodeDetails.health.status?.toLowerCase() === currentFilter,
     )
 
     const handleFilterClick = (selectedFilter: string) => {
@@ -90,11 +83,13 @@ const AppStatusContent = ({
 
                         <span className="dc__word-break">{nodeDetails.name}</span>
 
-                        <div
-                            className={`app-summary__status-name f-${getNodeStatus(nodeDetails)?.toLowerCase() || ''} dc__first-letter-capitalize--imp fs-13 fw-4 lh-20 dc__word-break`}
-                        >
-                            {getNodeStatus(nodeDetails)}
-                        </div>
+                        <Tooltip content={getNodeStatus(nodeDetails)}>
+                            <span
+                                className={`app-summary__status-name f-${getNodeStatus(nodeDetails)?.toLowerCase() || ''} dc__first-letter-capitalize--imp fs-13 fw-4 lh-20 dc__ellipsis-right`}
+                            >
+                                {getNodeStatus(nodeDetails)}
+                            </span>
+                        </Tooltip>
 
                         <div className="flexbox-col dc__gap-4">
                             {handleShowConfigDriftModal && nodeDetails.hasDrift && (
@@ -112,7 +107,7 @@ const AppStatusContent = ({
                                     )}
                                 </div>
                             )}
-                            <div className="dc__word-break">{getNodeMessage(nodeDetails)}</div>
+                            <ShowMoreText key={getNodeMessage(nodeDetails)} text={getNodeMessage(nodeDetails)} />
                         </div>
                     </div>
                 ))}
