@@ -40,6 +40,7 @@ import { ReactComponent as ICDeleteLightning } from '@IconsV2/ic-delete-lightnin
 import { ReactComponent as ICDelhivery } from '@IconsV2/ic-delhivery.svg'
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
+import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
@@ -48,6 +49,7 @@ import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
 import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
+import { ReactComponent as ICGift } from '@IconsV2/ic-gift.svg'
 import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
 import { ReactComponent as ICGithub } from '@IconsV2/ic-github.svg'
 import { ReactComponent as ICGitlab } from '@IconsV2/ic-gitlab.svg'
@@ -74,6 +76,7 @@ import { ReactComponent as ICLoginDevtronLogo } from '@IconsV2/ic-login-devtron-
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
+import { ReactComponent as ICMegaphoneLeft } from '@IconsV2/ic-megaphone-left.svg'
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
@@ -93,6 +96,7 @@ import { ReactComponent as ICSlidersVertical } from '@IconsV2/ic-sliders-vertica
 import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
 import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.svg'
 import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
+import { ReactComponent as ICSparkleColor } from '@IconsV2/ic-sparkle-color.svg'
 import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
@@ -153,6 +157,7 @@ export const iconMap = {
     'ic-delhivery': ICDelhivery,
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
     'ic-devtron': ICDevtron,
+    'ic-disconnect': ICDisconnect,
     'ic-dockerhub': ICDockerhub,
     'ic-ecr': ICEcr,
     'ic-env': ICEnv,
@@ -161,6 +166,7 @@ export const iconMap = {
     'ic-file-key': ICFileKey,
     'ic-folder-user': ICFolderUser,
     'ic-gear': ICGear,
+    'ic-gift': ICGift,
     'ic-git': ICGit,
     'ic-github': ICGithub,
     'ic-gitlab': ICGitlab,
@@ -187,6 +193,7 @@ export const iconMap = {
     'ic-logout': ICLogout,
     'ic-medium-delete': ICMediumDelete,
     'ic-medium-paintbucket': ICMediumPaintbucket,
+    'ic-megaphone-left': ICMegaphoneLeft,
     'ic-microsoft': ICMicrosoft,
     'ic-missing': ICMissing,
     'ic-monitoring': ICMonitoring,
@@ -206,6 +213,7 @@ export const iconMap = {
     'ic-sort-ascending': ICSortAscending,
     'ic-sort-descending': ICSortDescending,
     'ic-sortable': ICSortable,
+    'ic-sparkle-color': ICSparkleColor,
     'ic-spinny': ICSpinny,
     'ic-stack': ICStack,
     'ic-stamp': ICStamp,
