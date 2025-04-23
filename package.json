@@ -33,7 +33,8 @@
         "preview": "vite preview",
         "lint-staged": "lint-staged",
         "postinstall": "patch-package",
-        "generate-icon": "node ./scripts/generate-icon.cjs"
+        "generate-icon": "node ./scripts/generate-icon.cjs",
+        "bump-version": "node ./scripts/bump-version.cjs"
     },
     "devDependencies": {
         "@esbuild-plugins/node-globals-polyfill": "0.2.3",

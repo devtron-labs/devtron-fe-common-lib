@@ -1,0 +1,52 @@
+# .github/workflows/bump-version.yml
+name: Bump version
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+      - test_bump_version_script
+    types:
+      - labeled
+
+jobs:
+  version-bump:
+    if: github.event.label.name == 'ready-to-merge'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Use Node.js version from .nvmrc
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Run bump-version script
+        run: |
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          HEAD_BRANCH="${{ github.event.pull_request.head.ref }}"
+
+          echo "Base: $BASE_BRANCH"
+          echo "Head: $HEAD_BRANCH"
+
+          if [[ "$BASE_BRANCH" == "main" ]]; then
+            if [[ "$HEAD_BRANCH" == hotfix-* ]]; then
+              npm run bump-version hotfix
+            elif [[ "$HEAD_BRANCH" == release-candidate-* ]]; then
+              npm run bump-version rc
+            else
+              echo "Unknown source branch type: $HEAD_BRANCH"
+            fi
+          elif [[ "$BASE_BRANCH" == "develop" ]]; then
+              npm run bump-version feature
+          elif [[ "$BASE_BRANCH" == "test_bump_version_script" ]]; then
+              npm run bump-version feature
+          else
+            echo "Base branch is not main/develop — skipping version bump"
+          fi
