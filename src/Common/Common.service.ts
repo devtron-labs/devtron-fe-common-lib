@@ -49,6 +49,8 @@ import {
     GlobalVariableDTO,
     GlobalVariableOptionType,
     UserRole,
+    EnvAppsMetaDTO,
+    GetAppsInfoForEnvProps,
 } from './Types'
 import { ApiResourceType, STAGE_MAP } from '../Pages'
 import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
@@ -513,5 +515,17 @@ export const getGlobalVariables = async ({
         return variableList
     } catch (err) {
         throw err
+    }
+}
+
+export const getAppsInfoForEnv = async ({ envId, appIds }: GetAppsInfoForEnvProps): Promise<EnvAppsMetaDTO> => {
+    const url = getUrlWithSearchParams(`${ROUTES.ENV}/${envId}/${ROUTES.APP_METADATA}`, {
+        appIds: appIds?.join(),
+    })
+    const response = await get<EnvAppsMetaDTO>(url)
+
+    return {
+        appCount: response.result?.appCount ?? 0,
+        apps: response.result?.apps ?? [],
     }
 }

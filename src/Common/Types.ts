@@ -27,6 +27,7 @@ import {
     TargetPlatformItemDTO,
     ButtonProps,
     ComponentLayoutType,
+    StatusType,
 } from '../Shared'
 import {
     ACTION_STATE,
@@ -1108,4 +1109,20 @@ export enum ActionTypes {
     UPDATE = 'update',
     EDIT = 'edit',
     APPROVER = 'approver',
+}
+
+export interface GetAppsInfoForEnvProps {
+    envId: number
+    appIds?: number[]
+}
+
+interface AppMeta {
+    appId: number
+    appStatus: StatusType
+    appName: string
+}
+
+export interface EnvAppsMetaDTO {
+    appCount: number
+    apps: AppMeta[]
 }
