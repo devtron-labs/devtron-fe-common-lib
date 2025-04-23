@@ -83,13 +83,13 @@ const AppStatusContent = ({
                         key={getResourceKey(nodeDetails)}
                     >
                         <Tooltip content={nodeDetails.kind}>
-                            <span>{nodeDetails.kind}</span>
+                            <span className="dc__word-break">{nodeDetails.kind}</span>
                         </Tooltip>
 
-                        <span>{nodeDetails.name}</span>
+                        <span className="dc__word-break">{nodeDetails.name}</span>
 
                         <div
-                            className={`app-summary__status-name f-${getNodeStatus(nodeDetails)?.toLowerCase() || ''}`}
+                            className={`app-summary__status-name f-${getNodeStatus(nodeDetails)?.toLowerCase() || ''} dc__first-letter-capitalize--imp`}
                         >
                             {getNodeStatus(nodeDetails)}
                         </div>
@@ -110,7 +110,7 @@ const AppStatusContent = ({
                                     )}
                                 </div>
                             )}
-                            <div>{getNodeMessage(nodeDetails)}</div>
+                            <div className="dc__word-break">{getNodeMessage(nodeDetails)}</div>
                         </div>
                     </div>
                 ))}

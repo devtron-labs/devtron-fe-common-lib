@@ -11,18 +11,15 @@ import { AppStatusBodyProps } from './types'
 import { getAppStatusMessageFromAppDetails } from './utils'
 
 const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; value: ReactNode; isLast?: boolean }) => (
-    <div className={`py-12 px-16 flexbox dc__gap-16 ${!isLast ? 'border__secondary--bottom' : ''}`}>
+    <div
+        className={`py-12 px-16 dc__grid dc__column-gap-16 info-card-item ${!isLast ? 'border__secondary--bottom' : ''}`}
+    >
         <Tooltip content={heading}>
-            <h3 className="cn-9 fs-13 fw-4 lh-1-5 dc__truncate m-0 dc__no-shrink w-140">{heading}</h3>
+            <h3 className="cn-9 fs-13 fw-4 lh-1-5 dc__truncate m-0 dc__no-shrink">{heading}</h3>
         </Tooltip>
 
         {typeof value === 'string' ? (
-            <ShowMoreText
-                key={`show-more-text-${value}`}
-                textClass="cn-9 fs-13 fw-4 lh-1-5"
-                containerClass="pr-20"
-                text={value}
-            />
+            <ShowMoreText key={`show-more-text-${value}`} textClass="cn-9 fs-13 fw-4 lh-1-5" text={value} />
         ) : (
             value
         )}
