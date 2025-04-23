@@ -183,7 +183,9 @@ export const DeploymentStatusDetailRow = ({
                     <span className="ml-12 mr-12 fs-13">
                         <span data-testid="deployment-status-step-name">{statusBreakDownType.displayText}</span>
                         {statusBreakDownType.displaySubText && (
-                            <span className={`ml-12 f-${statusBreakDownType.icon || 'waiting'}`}>
+                            <span
+                                className={`ml-12 app-summary__status-name f-${statusBreakDownType.icon || 'waiting'}`}
+                            >
                                 {statusBreakDownType.displaySubText}
                             </span>
                         )}

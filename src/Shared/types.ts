@@ -247,9 +247,9 @@ export interface AppDetails {
     FluxAppStatusDetail?: FluxAppStatusDetail
 }
 
-export interface ConfigDriftModalProps extends Pick<AppDetails, 'appId'> {
+export interface ConfigDriftModalProps extends Required<Pick<AppDetails, 'appId'>> {
+    envId: number
     handleCloseModal?: () => void
-    envId?: number
 }
 
 export enum RegistryType {
