@@ -127,7 +127,7 @@ const AppStatusModal = ({
             >
                 <div className="flexbox-col px-20 border__primary--bottom dc__no-shrink">
                     <div className="flexbox py-12 dc__content-space">
-                        <div className="fs-16 fw-6 lh-1-5">{title}</div>
+                        {title}
 
                         <Button
                             dataTestId="close-modal-header-icon-button"
