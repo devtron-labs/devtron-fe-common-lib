@@ -11,6 +11,8 @@ import { Icon } from '../Icon'
 import { AppStatusContentProps } from './types'
 import { getFlattenedNodesFromAppDetails, getResourceKey } from './utils'
 
+import './AppStatusContent.scss'
+
 const APP_STATUS_ROWS_BASE_CLASS = 'px-16 py-8 dc__grid dc__column-gap-16 app-status-content__row'
 
 const AppStatusContent = ({
@@ -119,7 +121,7 @@ const AppStatusContent = ({
     }
 
     return (
-        <div className={`flexbox-col ${isCardLayout ? 'br-6 border__primary' : ''}`}>
+        <div className={`flexbox-col app-status-content ${isCardLayout ? 'br-6 border__primary' : ''}`}>
             {!!flattenedNodes.length && (
                 <div className="p-12">
                     <StatusFilterButtonComponent

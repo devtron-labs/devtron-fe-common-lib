@@ -155,7 +155,6 @@ export const DeploymentStatusDetailRow = ({
                     </div>
                 )}
                 <div>
-                    {/* TODO: Test */}
                     <AppStatusContent appDetails={appDetails} filterHealthyNodes isCardLayout={false} />
                 </div>
             </div>

@@ -17,8 +17,6 @@ import { AppStatusBody } from './AppStatusBody'
 import { getAppDetails } from './service'
 import { AppStatusModalProps } from './types'
 
-import './AppStatusModal.scss'
-
 const AppStatusModal = ({
     title,
     handleClose,

@@ -23,8 +23,6 @@ import { ErrorBarType } from './types'
 import { getIsImagePullBackOff, renderErrorHeaderMessage } from './utils'
 
 const ErrorBar = ({ appDetails }: ErrorBarType) => {
-    const isImagePullBackOff = getIsImagePullBackOff(appDetails)
-
     if (
         !appDetails ||
         appDetails.appType !== AppType.DEVTRON_APP ||
@@ -34,6 +32,8 @@ const ErrorBar = ({ appDetails }: ErrorBarType) => {
     ) {
         return null
     }
+
+    const isImagePullBackOff = getIsImagePullBackOff(appDetails)
 
     return (
         isImagePullBackOff && (
