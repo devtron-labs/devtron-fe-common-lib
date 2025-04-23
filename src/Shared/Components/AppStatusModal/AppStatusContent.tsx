@@ -91,7 +91,7 @@ const AppStatusContent = ({
                         <span className="dc__word-break">{nodeDetails.name}</span>
 
                         <div
-                            className={`app-summary__status-name f-${getNodeStatus(nodeDetails)?.toLowerCase() || ''} dc__first-letter-capitalize--imp fs-13 fw-4 lh-20`}
+                            className={`app-summary__status-name f-${getNodeStatus(nodeDetails)?.toLowerCase() || ''} dc__first-letter-capitalize--imp fs-13 fw-4 lh-20 dc__word-break`}
                         >
                             {getNodeStatus(nodeDetails)}
                         </div>

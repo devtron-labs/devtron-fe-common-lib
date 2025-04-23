@@ -74,8 +74,7 @@ export const AppStatusBody = ({ appDetails, type, handleShowConfigDriftModal }: 
                 ))}
             </div>
 
-            {/* TODO: Test */}
-            <ErrorBar appDetails={appDetails} />
+            <ErrorBar appDetails={appDetails} useParentMargin={false} />
 
             <AppStatusContent appDetails={appDetails} handleShowConfigDriftModal={handleShowConfigDriftModal} />
         </div>

@@ -71,7 +71,7 @@ export const getAppStatusModalTitle = (segments: string[]) => {
     const filteredSegments = (segments || []).filter((segment) => !!segment)
 
     return (
-        <h2 className="m-0 dc__truncate fs-16 fw-6 lh-1-5">
+        <h2 className="m-0 dc__truncate fs-16 fw-6 lh-1-5 dc__gap-4">
             {filteredSegments?.map((segment, index) => (
                 <Fragment key={segment}>
                     {segment}

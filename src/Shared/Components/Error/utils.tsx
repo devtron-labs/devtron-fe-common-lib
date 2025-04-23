@@ -19,7 +19,7 @@ import { AppDetailsErrorType } from './types'
 
 export const getIsImagePullBackOff = (appDetails: AppDetails): boolean => {
     if (appDetails?.appType === AppType.DEVTRON_APP && appDetails?.resourceTree?.nodes?.length) {
-        appDetails.resourceTree.nodes.some(
+        return appDetails.resourceTree.nodes.some(
             (node) =>
                 !!node.info?.some((info) => {
                     const infoValueLowerCase = info?.value?.toLowerCase()

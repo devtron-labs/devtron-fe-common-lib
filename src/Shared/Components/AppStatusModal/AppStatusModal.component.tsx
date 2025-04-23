@@ -17,6 +17,8 @@ import { AppStatusBody } from './AppStatusBody'
 import { getAppDetails } from './service'
 import { AppStatusModalProps } from './types'
 
+import './AppStatusModal.scss'
+
 const AppStatusModal = ({
     title,
     handleClose,
@@ -47,7 +49,7 @@ const AppStatusModal = ({
         fetchedAppDetailsError,
         reloadInitialAppDetails,
         setFetchedAppDetails,
-    ] = useAsync(getAppDetailsWrapper, [appId, envId, type], type === 'release')
+    ] = useAsync(getAppDetailsWrapper, [appId, envId], type === 'release')
 
     const handleExternalSync = async () => {
         try {

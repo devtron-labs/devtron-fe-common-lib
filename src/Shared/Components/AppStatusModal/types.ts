@@ -18,7 +18,7 @@ export type AppStatusModalProps = {
           envId: number
       }
     | {
-          type: 'devtron-app' | 'external-apps' | 'stack-manager'
+          type: 'devtron-app' | 'other-apps' | 'stack-manager'
           appId?: never
           envId?: never
       }

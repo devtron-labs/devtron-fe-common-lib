@@ -1,19 +1,25 @@
 import { get, getIsRequestAborted } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
-import { showError } from '@Common/Helper'
+import { getUrlWithSearchParams, showError } from '@Common/Helper'
 import { APIOptions } from '@Common/Types'
+import { AppDetails, AppType } from '@Shared/types'
 
 export const getAppDetails = async (
     appId: number,
     envId: number,
     abortControllerRef: APIOptions['abortControllerRef'],
-) => {
+): Promise<AppDetails> => {
     try {
+        const queryParams = getUrlWithSearchParams('', {
+            'app-id': appId,
+            'env-id': envId,
+        })
+
         const [appDetails, resourceTree] = await Promise.all([
-            get(`${ROUTES.APP_DETAIL}/v2?app-id=${appId}&env-id=${envId}`, {
+            get(`${ROUTES.APP_DETAIL}/v2?${queryParams}`, {
                 abortControllerRef,
             }),
-            get(`${ROUTES.APP_DETAIL}/resource-tree?app-id=${appId}&env-id=${envId}`, {
+            get(`${ROUTES.APP_DETAIL}/resource-tree?${queryParams}`, {
                 abortControllerRef,
             }),
         ])
@@ -21,6 +27,7 @@ export const getAppDetails = async (
         return {
             ...(appDetails.result || {}),
             resourceTree: resourceTree.result,
+            appType: AppType.DEVTRON_APP,
         }
     } catch (error) {
         if (getIsRequestAborted(error)) {
