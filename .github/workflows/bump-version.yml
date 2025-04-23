@@ -26,6 +26,16 @@ jobs:
     if: github.event.label.name == 'ready-to-merge'
     runs-on: ubuntu-latest
     steps:
+      - name: Wait for all required status checks to pass
+        uses: peter-evans/wait-for-check@v3
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          check-name: .*
+          ref: '${{ github.event.pull_request.head.sha }}'
+          repo: '${{ github.repository }}'
+          interval: 10
+          timeout: 600
+          allowed-conclusions: success
       - name: Checkout source branch
         uses: actions/checkout@v4
         with:
