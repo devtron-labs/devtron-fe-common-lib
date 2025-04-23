@@ -22,12 +22,17 @@ jobs:
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
           script: "const message = `\n\U0001F44B Hi @${{ github.event.pull_request.user.login }}!\n\n  To finalize this PR, please add the \\`ready-to-merge\\` label.\n\n  This will trigger an automatic version bump and merge the PR \U0001F680.`;\n\ngithub.rest.issues.createComment({\n  issue_number: context.issue.number,\n  owner: context.repo.owner,\n  repo: context.repo.repo,\n  body: message\n});\n"
+      - name: Remove 'ready-to-merge' label
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          github_token: '${{ secrets.GITHUB_TOKEN }}'
+          labels: ready-to-merge
   version-bump:
     if: github.event.label.name == 'ready-to-merge'
     runs-on: ubuntu-latest
     steps:
       - name: Wait for all required status checks to pass
-        uses: peter-evans/wait-for-check@v3
+        uses: peter-evans/wait-for-check@v1
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
           check-name: .*
