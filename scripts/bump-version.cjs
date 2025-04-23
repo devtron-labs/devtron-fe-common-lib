@@ -156,8 +156,8 @@ console.log('📦 Running npm install...')
 run('npm install')
 
 // ✅ Step 7: Commit changes
-run('git config user.name "systemsdt"')
-run('git config user.email "devops@devtron.ai"')
+run('git config user.name "github-actions[bot]"')
+run('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"')
 run('git add package.json package-lock.json')
 const commitMsg = `chore(version): bump to ${newVersion}`
 run(`git commit -m "${commitMsg}"`)
