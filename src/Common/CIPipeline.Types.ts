@@ -320,29 +320,23 @@ export enum ConditionDataTableHeaderKeys {
     VALUE = 'val',
 }
 
-export type InputOutputVariablesErrorObj = Record<InputOutputVariablesHeaderKeys, DynamicDataTableCellValidationState>
+type InputOutputVariablesErrorObj = Record<InputOutputVariablesHeaderKeys, DynamicDataTableCellValidationState>
+type ConditionDetailsErrorObj = Record<ConditionDataTableHeaderKeys, DynamicDataTableCellValidationState>
 
-export type ConditionDetailsErrorObj = Record<ConditionDataTableHeaderKeys, DynamicDataTableCellValidationState>
+interface StepDetailTaskErrorObj {
+    inputVariables?: Record<number, InputOutputVariablesErrorObj>
+    outputVariables?: Record<number, InputOutputVariablesErrorObj>
+    isInputVariablesValid?: boolean
+    isOutputVariablesValid?: boolean
+    conditionDetails?: Record<number, ConditionDetailsErrorObj>
+    isConditionDetailsValid?: boolean
+}
 
 export interface TaskErrorObj {
     isValid: boolean
     name: ErrorObj
-    inlineStepDetail?: {
-        inputVariables?: Record<number, InputOutputVariablesErrorObj>
-        outputVariables?: Record<number, InputOutputVariablesErrorObj>
-        isInputVariablesValid?: boolean
-        isOutputVariablesValid?: boolean
-        conditionDetails?: Record<number, ConditionDetailsErrorObj>
-        isConditionDetailsValid?: boolean
-    }
-    pluginRefStepDetail?: {
-        inputVariables?: Record<number, InputOutputVariablesErrorObj>
-        outputVariables?: Record<number, InputOutputVariablesErrorObj>
-        isInputVariablesValid?: boolean
-        isOutputVariablesValid?: boolean
-        conditionDetails?: Record<number, ConditionDetailsErrorObj>
-        isConditionDetailsValid?: boolean
-    }
+    inlineStepDetail?: StepDetailTaskErrorObj
+    pluginRefStepDetail?: StepDetailTaskErrorObj
 }
 export interface FormErrorObjectType {
     name: ErrorObj
