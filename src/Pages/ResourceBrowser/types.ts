@@ -16,7 +16,7 @@
 
 import { Dispatch, ReactElement, SetStateAction } from 'react'
 
-import { InstallationClusterType } from '@Shared/index'
+import { InstallationClusterType } from '@Shared/types'
 
 import { NodeActionRequest } from './ResourceBrowser.Types'
 
