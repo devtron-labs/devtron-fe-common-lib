@@ -22,11 +22,7 @@ import {
     sanitizeUserApprovalList,
     stringComparatorBySortOrder,
 } from '@Shared/Helpers'
-import {
-    PolicyBlockInfo,
-    RuntimeParamsAPIResponseType,
-    RuntimePluginVariables,
-} from '@Shared/types'
+import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
 import {
@@ -268,7 +264,7 @@ export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): Runt
     const runtimeParams = (response?.runtimePluginVariables ?? []).map<RuntimePluginVariables>((variable) => ({
         ...variable,
         defaultValue: variable.value,
-        stepVariableId: variable.stepVariableId || Math.floor(new Date().valueOf() * Math.random())
+        stepVariableId: variable.stepVariableId || Math.floor(new Date().valueOf() * Math.random()),
     }))
 
     runtimeParams.push(...envVariables)
@@ -528,12 +524,13 @@ export const getAppsInfoForEnv = async ({ envId, appIds }: GetAppsInfoForEnvProp
 
     return {
         appCount: response.result?.appCount ?? 0,
-        apps: (response.result?.apps ?? []).reduce<AppMeta[]>((agg, {appId, appName, appStatus}) => {
+        apps: (response.result?.apps ?? []).reduce<AppMeta[]>((agg, { appId, appName, appStatus }) => {
             if (!appId) {
                 return agg
             }
             agg.push({
-                appId, appName: appName || '',
+                appId,
+                appName: appName || '',
                 appStatus: appStatus || StatusType.UNKNOWN,
             })
         }, []),
