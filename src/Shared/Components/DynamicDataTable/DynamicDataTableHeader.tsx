@@ -27,6 +27,7 @@ export const DynamicDataTableHeader = <K extends string, CustomStateType = Recor
     headers,
     rows,
     sortingConfig,
+    addBtnTooltip,
     onRowAdd,
     readOnly,
     isAdditionNotAllowed,
@@ -89,12 +90,11 @@ export const DynamicDataTableHeader = <K extends string, CustomStateType = Recor
                 {shouldRenderAddRowButton && (
                     <Button
                         dataTestId="data-table-add-row-button"
-                        ariaLabel="Add"
+                        ariaLabel={addBtnTooltip}
                         onClick={onRowAdd}
                         icon={<ICAdd />}
                         variant={ButtonVariantType.borderLess}
                         size={ComponentSizeType.xs}
-                        showAriaLabelInTippy={false}
                     />
                 )}
                 {key === lastHeaderKey && headerComponent}
