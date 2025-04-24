@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export { CodeEditorWrapper as CodeEditor, isCodeMirrorEnabled } from './CodeEditorWrapper'
+export { CodeEditorWrapper as CodeEditor } from './CodeEditorWrapper'

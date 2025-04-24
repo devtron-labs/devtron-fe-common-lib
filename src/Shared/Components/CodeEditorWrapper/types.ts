@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { CodeEditorInterface } from '@Common/CodeEditor'
 import { CodeEditorProps } from '@Common/CodeMirror'
 
 export type CodeEditorWrapperProps<DiffView extends boolean> = Pick<
@@ -31,19 +30,12 @@ export type CodeEditorWrapperProps<DiffView extends boolean> = Pick<
     | 'children'
 > & {
     diffView?: DiffView
-    codeEditorProps: Omit<
-        CodeEditorInterface,
-        | 'mode'
-        | 'tabSize'
-        | 'readOnly'
-        | 'placeholder'
-        | 'noParsing'
-        | 'loading'
-        | 'customLoader'
-        | 'cleanData'
-        | 'disableSearch'
-        | 'children'
-    >
+    /**
+     * @deprecated
+     * Monaco editor has been removed. \
+     * This prop is no longer required and will be removed in future releases.
+     */
+    codeEditorProps?: any
     codeMirrorProps: Omit<
         CodeEditorProps<DiffView>,
         | 'mode'

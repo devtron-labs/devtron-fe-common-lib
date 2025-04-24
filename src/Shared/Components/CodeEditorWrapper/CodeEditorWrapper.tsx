@@ -14,66 +14,44 @@
  * limitations under the License.
  */
 
-import { CodeEditor } from '@Common/CodeEditor'
 import { CodeEditor as CodeMirror, CodeEditorHeaderProps, CodeEditorStatusBarProps } from '@Common/CodeMirror'
 
 import { CodeEditorWrapperProps } from './types'
 
-export const isCodeMirrorEnabled = () => window._env_.FEATURE_CODE_MIRROR_ENABLE
-
 export const CodeEditorWrapper = <DiffView extends boolean>({
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     codeEditorProps,
     codeMirrorProps,
     children,
     ...restProps
-}: CodeEditorWrapperProps<DiffView>) =>
-    isCodeMirrorEnabled() ? (
-        <CodeMirror<DiffView> {...(codeMirrorProps as any)} {...restProps}>
-            {children}
-        </CodeMirror>
-    ) : (
-        <CodeEditor {...(codeEditorProps as any)} {...restProps}>
-            {children}
-        </CodeEditor>
-    )
+}: CodeEditorWrapperProps<DiffView>) => (
+    <CodeMirror<DiffView> {...(codeMirrorProps as any)} {...restProps}>
+        {children}
+    </CodeMirror>
+)
 
-const CodeEditorLanguageChangerWrapper = () => (isCodeMirrorEnabled() ? null : <CodeEditor.LanguageChanger />)
+const CodeEditorClipboardWrapper = () => <CodeMirror.Clipboard />
 
-const CodeEditorThemeChangerWrapper = () => (isCodeMirrorEnabled() ? null : <CodeEditor.ThemeChanger />)
+const CodeEditorHeaderWrapper = (props: CodeEditorHeaderProps) => <CodeMirror.Header {...props} />
 
-const CodeEditorValidationErrorWrapper = () => (isCodeMirrorEnabled() ? null : <CodeEditor.ValidationError />)
+const CodeEditorWarningWrapper = (props: CodeEditorStatusBarProps) => <CodeMirror.Warning {...props} />
 
-const CodeEditorClipboardWrapper = () => (isCodeMirrorEnabled() ? <CodeMirror.Clipboard /> : <CodeEditor.Clipboard />)
+const CodeEditorErrorBarWrapper = (props: CodeEditorStatusBarProps) => <CodeMirror.ErrorBar {...props} />
 
-const CodeEditorHeaderWrapper = (props: CodeEditorHeaderProps) =>
-    isCodeMirrorEnabled() ? <CodeMirror.Header {...props} /> : <CodeEditor.Header {...props} />
-
-const CodeEditorWarningWrapper = (props: CodeEditorStatusBarProps) =>
-    isCodeMirrorEnabled() ? <CodeMirror.Warning {...props} /> : <CodeEditor.Warning {...props} />
-
-const CodeEditorErrorBarWrapper = (props: CodeEditorStatusBarProps) =>
-    isCodeMirrorEnabled() ? <CodeMirror.ErrorBar {...props} /> : <CodeEditor.ErrorBar {...props} />
-
-const CodeEditorInformationWrapper = (props: CodeEditorStatusBarProps) =>
-    isCodeMirrorEnabled() ? <CodeMirror.Information {...props} /> : <CodeEditor.Information {...props} />
+const CodeEditorInformationWrapper = (props: CodeEditorStatusBarProps) => <CodeMirror.Information {...props} />
 
 const CodeEditorContainerWrapper = ({
+    children,
+    flexExpand,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     overflowHidden,
-    ...props
 }: {
     children: React.ReactNode
     flexExpand?: boolean
+    /** @deprecated this prop does not have any effect on codeEditor */
     overflowHidden?: boolean
-}) =>
-    isCodeMirrorEnabled() ? (
-        <CodeMirror.Container {...props} />
-    ) : (
-        <CodeEditor.Container overflowHidden={overflowHidden} {...props} />
-    )
+}) => <CodeMirror.Container flexExpand={flexExpand}>{children}</CodeMirror.Container>
 
-CodeEditorWrapper.LanguageChanger = CodeEditorLanguageChangerWrapper
-CodeEditorWrapper.ThemeChanger = CodeEditorThemeChangerWrapper
-CodeEditorWrapper.ValidationError = CodeEditorValidationErrorWrapper
 CodeEditorWrapper.Clipboard = CodeEditorClipboardWrapper
 CodeEditorWrapper.Header = CodeEditorHeaderWrapper
 CodeEditorWrapper.Warning = CodeEditorWarningWrapper
