@@ -51,10 +51,12 @@ import {
     UserRole,
     EnvAppsMetaDTO,
     GetAppsInfoForEnvProps,
+    AppMeta,
 } from './Types'
 import { ApiResourceType, STAGE_MAP } from '../Pages'
 import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
 import { get, post } from './API'
+import { StatusType } from '@Shared/Components'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -526,6 +528,14 @@ export const getAppsInfoForEnv = async ({ envId, appIds }: GetAppsInfoForEnvProp
 
     return {
         appCount: response.result?.appCount ?? 0,
-        apps: response.result?.apps ?? [],
+        apps: (response.result?.apps ?? []).reduce<AppMeta[]>((agg, {appId, appName, appStatus}) => {
+            if (!appId) {
+                return agg
+            }
+            agg.push({
+                appId, appName: appName || '',
+                appStatus: appStatus || StatusType.UNKNOWN,
+            })
+        }, []),
     }
 }

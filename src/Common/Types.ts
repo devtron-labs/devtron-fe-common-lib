@@ -1116,7 +1116,7 @@ export interface GetAppsInfoForEnvProps {
     appIds?: number[]
 }
 
-interface AppMeta {
+export interface AppMeta {
     appId: number
     appStatus: StatusType
     appName: string
