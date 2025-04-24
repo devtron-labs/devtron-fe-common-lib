@@ -33,6 +33,7 @@ import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
 import { ReactComponent as ICCopy } from '@IconsV2/ic-copy.svg'
+import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
 import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
 import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
@@ -61,6 +62,7 @@ import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
 import { ReactComponent as ICHeartRed } from '@IconsV2/ic-heart-red.svg'
 import { ReactComponent as ICHeartRedAnimated } from '@IconsV2/ic-heart-red-animated.svg'
 import { ReactComponent as ICHelm } from '@IconsV2/ic-helm.svg'
+import { ReactComponent as ICHelpFilled } from '@IconsV2/ic-help-filled.svg'
 import { ReactComponent as ICHelpOutline } from '@IconsV2/ic-help-outline.svg'
 import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
 import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
@@ -77,6 +79,7 @@ import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
 import { ReactComponent as ICMegaphoneLeft } from '@IconsV2/ic-megaphone-left.svg'
+import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
@@ -150,6 +153,7 @@ export const iconMap = {
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
     'ic-copy': ICCopy,
+    'ic-cpu': ICCpu,
     'ic-crown': ICCrown,
     'ic-cube': ICCube,
     'ic-delete-lightning': ICDeleteLightning,
@@ -178,6 +182,7 @@ export const iconMap = {
     'ic-heart-red-animated': ICHeartRedAnimated,
     'ic-heart-red': ICHeartRed,
     'ic-helm': ICHelm,
+    'ic-help-filled': ICHelpFilled,
     'ic-help-outline': ICHelpOutline,
     'ic-hibernate': ICHibernate,
     'ic-in-progress': ICInProgress,
@@ -194,6 +199,7 @@ export const iconMap = {
     'ic-medium-delete': ICMediumDelete,
     'ic-medium-paintbucket': ICMediumPaintbucket,
     'ic-megaphone-left': ICMegaphoneLeft,
+    'ic-memory': ICMemory,
     'ic-microsoft': ICMicrosoft,
     'ic-missing': ICMissing,
     'ic-monitoring': ICMonitoring,
