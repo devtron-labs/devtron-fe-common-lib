@@ -4,5 +4,6 @@ export interface NewClusterFormFooterProps {
 }
 
 export interface NewClusterFormProps extends Pick<NewClusterFormFooterProps, 'handleModalClose'> {
-    FooterComponent: React.FunctionComponent<NewClusterFormFooterProps>
+    FooterComponent: React.FunctionComponent<NewClusterFormFooterProps> &
+        Record<'CTA' | 'Start', React.FunctionComponent<{}>>
 }
