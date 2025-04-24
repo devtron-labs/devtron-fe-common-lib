@@ -69,12 +69,12 @@ export const CIListItem = ({
     targetPlatforms,
     isDeploymentWithoutApproval,
 }: CIListItemType) => {
-    const headerMetaDataPresent =
-        !!getIsApprovalPolicyConfigured(userApprovalMetadata?.approvalConfigData) ||
-        !!appliedFilters?.length ||
-        !!promotionApprovalMetadata?.promotedFromType
-
-    const showCIListHeader = (headerMetaDataPresent || isDeploymentWithoutApproval) && !!renderCIListHeader
+    const showCIListHeader =
+        !!renderCIListHeader &&
+        (!!getIsApprovalPolicyConfigured(userApprovalMetadata?.approvalConfigData) ||
+            !!appliedFilters?.length ||
+            !!promotionApprovalMetadata?.promotedFromType ||
+            isDeploymentWithoutApproval)
 
     return (
         <>

@@ -25,46 +25,51 @@ export const UserIdentifier = ({
     // HOOKS
     const { email: currentUserEmail } = useUserEmail()
 
+    if (!email) {
+        return null
+    }
+
     // CONSTANTS
     const isCurrentUser = email === currentUserEmail
+    const isApiToken = email.startsWith(API_TOKEN_PREFIX)
+
+    const renderIcon = () => {
+        if (isApiToken) {
+            return <Icon name="ic-key" color="N700" size={20} />
+        }
+
+        return isUserGroup ? (
+            <Icon name="ic-users" color="N700" size={20} />
+        ) : (
+            getAlphabetIcon(email, 'dc__no-shrink m-0-imp')
+        )
+    }
+
+    const renderText = () => {
+        if (isCurrentUser) {
+            return 'You'
+        }
+
+        if (isApiToken) {
+            return email.split(':')?.[1] || '-'
+        }
+
+        return email
+    }
 
     return (
         <div className={`flexbox dc__gap-8 ${rootClassName || ''}`}>
-            {email.startsWith(API_TOKEN_PREFIX) ? (
-                <UserIdentifierTooltip tooltipContent={tooltipContent}>
-                    <Icon name="ic-key" color="N700" size={20} />
-                    <div className="flexbox dc__gap-2">
-                        <Tooltip
-                            {...(tooltipContent
-                                ? { content: email, alwaysShowTippyOnHover: false }
-                                : { content: email })}
-                        >
-                            <span className="cn-9 fs-13 fw-4 lh-20 dc__truncate">
-                                {isCurrentUser ? 'You' : email.split(':')?.[1] || '-'}
-                            </span>
-                        </Tooltip>
-                        {children}
-                    </div>
-                </UserIdentifierTooltip>
-            ) : (
-                <UserIdentifierTooltip tooltipContent={tooltipContent}>
-                    {isUserGroup ? (
-                        <Icon name="ic-users" color="N700" size={20} />
-                    ) : (
-                        getAlphabetIcon(email, 'dc__no-shrink m-0-imp')
-                    )}
-                    <div className="flexbox dc__gap-2">
-                        <Tooltip
-                            {...(tooltipContent
-                                ? { content: email, alwaysShowTippyOnHover: false }
-                                : { content: email })}
-                        >
-                            <span className="cn-9 fs-13 fw-4 lh-20 dc__truncate">{isCurrentUser ? 'You' : email}</span>
-                        </Tooltip>
-                        {children}
-                    </div>
-                </UserIdentifierTooltip>
-            )}
+            <UserIdentifierTooltip tooltipContent={tooltipContent}>
+                {renderIcon()}
+                <div className="flexbox dc__gap-2">
+                    <Tooltip
+                        {...(tooltipContent ? { content: email, alwaysShowTippyOnHover: false } : { content: email })}
+                    >
+                        <span className="cn-9 fs-13 fw-4 lh-20 dc__truncate">{renderText()}</span>
+                    </Tooltip>
+                    {children}
+                </div>
+            </UserIdentifierTooltip>
         </div>
     )
 }
