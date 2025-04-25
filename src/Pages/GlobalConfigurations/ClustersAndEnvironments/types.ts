@@ -1,6 +1,7 @@
 export interface NewClusterFormFooterProps {
     apiCallInProgress: boolean
     handleModalClose: () => void
+    closeButtonText?: string
 }
 
 export interface NewClusterFormProps extends Pick<NewClusterFormFooterProps, 'handleModalClose'> {

@@ -28,6 +28,7 @@ export enum ClusterFiltersType {
 
 export enum InstallationClusterStatus {
     Creating = 'Creating',
+    Deleting = 'Deleting',
     Updating = 'Updating',
     Installed = 'Installed',
     Failed = 'Failed',
