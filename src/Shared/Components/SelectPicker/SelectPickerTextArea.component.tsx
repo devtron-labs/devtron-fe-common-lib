@@ -20,8 +20,8 @@ import { InputActionMeta, SelectInstance, SingleValue } from 'react-select'
 import { ReactSelectInputAction } from '@Common/Constants'
 import { useThrottledEffect } from '@Common/Helper'
 
-import { SelectPickerOptionType, SelectPickerTextAreaProps } from './type'
 import SelectPicker from './SelectPicker.component'
+import { SelectPickerOptionType, SelectPickerTextAreaProps } from './type'
 
 export const SelectPickerTextArea = ({
     value,

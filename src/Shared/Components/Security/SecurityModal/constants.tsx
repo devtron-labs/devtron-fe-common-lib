@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-import PageNotFound from '@Images/ic-page-not-found.svg'
 import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
+import PageNotFound from '@Images/ic-page-not-found.svg'
+
+import { ScanCategoriesWithLicense } from '../types'
 import {
     CATEGORIES,
-    SUB_CATEGORIES,
-    SeveritiesDTO,
-    SortOrderEnum,
     EmptyStateType,
     SecurityModalStateType,
+    SeveritiesDTO,
+    SortOrderEnum,
+    SUB_CATEGORIES,
 } from './types'
-import { ScanCategoriesWithLicense } from '../types'
 
 export const DEFAULT_SECURITY_MODAL_IMAGE_STATE = {
     category: CATEGORIES.IMAGE_SCAN,

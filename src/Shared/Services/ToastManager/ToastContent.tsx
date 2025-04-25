@@ -16,6 +16,7 @@
 
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
+
 import { ToastProps } from './types'
 
 export const ToastContent = ({

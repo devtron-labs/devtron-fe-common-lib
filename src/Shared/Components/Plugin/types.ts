@@ -15,6 +15,7 @@
  */
 
 import { MutableRefObject } from 'react'
+
 import { ConsequenceType, ServerErrors, VariableType } from '../../../Common'
 import { BaseFilterQueryParams } from '../../types'
 import { ImageWithFallbackProps } from '../ImageWithFallback'

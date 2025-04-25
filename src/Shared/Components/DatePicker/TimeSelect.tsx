@@ -16,10 +16,11 @@
 
 import { ReactComponent as ClockIcon } from '@Icons/ic-clock.svg'
 import { ComponentSizeType } from '@Shared/constants'
-import { DEFAULT_TIME_OPTIONS } from './utils'
-import { TimeSelectProps } from './types'
-import { DATE_PICKER_IDS } from './constants'
+
 import { SelectPicker } from '../SelectPicker'
+import { DATE_PICKER_IDS } from './constants'
+import { TimeSelectProps } from './types'
+import { DEFAULT_TIME_OPTIONS } from './utils'
 
 export const TimePickerSelect = ({
     disabled = false,

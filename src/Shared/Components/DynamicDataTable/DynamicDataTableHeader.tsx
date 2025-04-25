@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { ReactComponent as ICAdd } from '@Icons/ic-add.svg'
-import { ComponentSizeType } from '@Shared/constants'
+import { ReactComponent as ICArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { SortingOrder } from '@Common/Constants'
+import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonVariantType } from '../Button'
+import { DynamicDataTableHeaderProps, DynamicDataTableHeaderType } from './types'
 import { getActionButtonPosition, getHeaderGridTemplateColumn } from './utils'
-import { DynamicDataTableHeaderType, DynamicDataTableHeaderProps } from './types'
 
 export const DynamicDataTableHeader = <K extends string, CustomStateType = Record<string, unknown>>({
     headers,

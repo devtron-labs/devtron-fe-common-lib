@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-import { useState, useCallback } from 'react'
+import { useCallback, useState } from 'react'
+import ReactGA from 'react-ga4'
+
+import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { GenericEmptyState, stopPropagation, VisibleModal } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
-import ReactGA from 'react-ga4'
-import { ReactComponent as Close } from '@Icons/ic-close.svg'
+
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 
 export const IframePromoButton = () => {

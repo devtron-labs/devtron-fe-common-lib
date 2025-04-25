@@ -16,10 +16,11 @@
 
 import { cloneElement } from 'react'
 import { components, MenuListProps, StylesConfig, ValueContainerProps } from 'react-select'
-import { OptionType, Progressing } from '../../../Common'
-import { ReactComponent as ICSearch } from '../../../Assets/Icon/ic-search.svg'
+
 import { ReactComponent as ICFilter } from '../../../Assets/Icon/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '../../../Assets/Icon/ic-filter-applied.svg'
+import { ReactComponent as ICSearch } from '../../../Assets/Icon/ic-search.svg'
+import { OptionType, Progressing } from '../../../Common'
 
 export const getCommonSelectStyle = (styleOverrides = {}): StylesConfig => ({
     container: (base, state) => ({

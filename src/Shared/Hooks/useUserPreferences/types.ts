@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import { AppThemeType, BaseAppMetaData, ResourceKindType } from '@Shared/index'
-import { ThemeConfigType, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from '@Shared/Hooks/useUserPreferences/constants'
+import { AppThemeType, ThemeConfigType, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
+import { BaseAppMetaData } from '@Shared/Services'
+import { ResourceKindType } from '@Shared/types'
 
 export interface GetUserPreferencesQueryParamsType {
     key: typeof USER_PREFERENCES_ATTRIBUTE_KEY

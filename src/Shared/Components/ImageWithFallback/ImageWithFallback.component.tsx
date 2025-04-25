@@ -15,6 +15,7 @@
  */
 
 import { SyntheticEvent, useEffect, useState } from 'react'
+
 import { ImageWithFallbackProps } from './types'
 
 const ImageWithFallback = ({ imageProps, fallbackImage }: ImageWithFallbackProps) => {

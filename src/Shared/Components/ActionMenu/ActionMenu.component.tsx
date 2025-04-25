@@ -1,6 +1,8 @@
 import PopupMenu from '@Common/PopupMenu'
-import { ActionMenuProps } from './types'
+
 import ActionMenuOption from './ActionMenuOption'
+import { ActionMenuProps } from './types'
+
 import './actionMenu.scss'
 
 const ActionMenu = ({ options, disableDescriptionEllipsis, children, onClick }: ActionMenuProps) => (

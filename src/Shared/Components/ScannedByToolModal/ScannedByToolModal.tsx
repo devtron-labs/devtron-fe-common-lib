@@ -15,9 +15,11 @@
  */
 
 import React from 'react'
+
 import { ReactComponent as ICScanFallback } from '@Icons/ic-scan-fallback.svg'
-import { ScannedByToolModalProps } from './types'
+
 import { ImageWithFallback } from '../ImageWithFallback'
+import { ScannedByToolModalProps } from './types'
 
 const ScannedByToolModal: React.FC<ScannedByToolModalProps> = ({
     scanToolName,

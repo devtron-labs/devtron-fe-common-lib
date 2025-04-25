@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { ResourceKindType } from '@Shared/types'
 import { ReactNode, SyntheticEvent } from 'react'
+
+import { ResourceKindType } from '@Shared/types'
 
 export enum ConfigHeaderTabType {
     VALUES = 'values',

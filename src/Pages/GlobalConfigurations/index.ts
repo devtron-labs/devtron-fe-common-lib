@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export * from './BuildInfra'
 export * from './Authorization'
-export * from './ScopedVariables'
+export * from './BuildInfra'
 export * from './DeploymentCharts'
+export * from './ScopedVariables'

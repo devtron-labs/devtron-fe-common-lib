@@ -15,8 +15,9 @@
  */
 
 import { Tooltip } from '@Common/Tooltip'
-import { FieldRowProps } from './types'
+
 import { DEFAULT_FIELD_TITLE } from '../constants'
+import { FieldRowProps } from './types'
 
 export const FieldRowWithLabel = ({
     showLabel,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export { useUserPreferences } from './useUserPrefrences'
 export * from './constants'
+export { getUserPreferences, updateUserPreferences } from './service'
 export * from './types'
-export { updateUserPreferences, getUserPreferences } from './service'
+export { useUserPreferences } from './useUserPrefrences'

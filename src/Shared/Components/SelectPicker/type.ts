@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-import { ServerErrors } from '@Common/ServerError'
-import { OptionType } from '@Common/Types'
-import { ComponentSizeType } from '@Shared/constants'
 import { MutableRefObject, ReactElement, ReactNode } from 'react'
 import { GroupBase, GroupHeadingProps, Props as ReactSelectProps, SelectInstance } from 'react-select'
-import { CreatableProps } from 'react-select/creatable'
 // This import allows to extend the base interface in react-select module via module augmentation
 import type {} from 'react-select/base'
-import { TooltipProps } from '@Common/Tooltip/types'
+import { CreatableProps } from 'react-select/creatable'
+
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
-import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
+import { ServerErrors } from '@Common/ServerError'
+import { TooltipProps } from '@Common/Tooltip/types'
+import { OptionType } from '@Common/Types'
+import { ComponentSizeType } from '@Shared/constants'
+
 import { ButtonComponentType, ButtonProps, ButtonVariantType } from '../Button'
+import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
 
 export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
     /**

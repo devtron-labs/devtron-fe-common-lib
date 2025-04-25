@@ -15,24 +15,27 @@
  */
 
 import { useEffect, useState } from 'react'
-import Tippy from '@tippyjs/react'
 import ReactGA from 'react-ga4'
-import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
+import Tippy from '@tippyjs/react'
+
 import { ReactComponent as ICCaretDownSmall } from '@Icons/ic-caret-down-small.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as Question } from '@Icons/ic-help-outline.svg'
+import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
+
 import { getAlphabetIcon, TippyCustomized, TippyTheme } from '../../../Common'
-import LogoutCard from '../LogoutCard'
-import { setActionWithExpiry, handlePostHogEventUpdate, getIsShowingLicenseData } from './utils'
-import { InstallationType, ServerInfo, PageHeaderType } from './types'
-import { getServerInfo } from './service'
-import GettingStartedCard from '../GettingStartedCard/GettingStarted'
-import { POSTHOG_EVENT_ONBOARDING, MAX_LOGIN_COUNT } from '../../../Common/Constants'
-import HelpNav from './HelpNav'
-import AnnouncementBanner from '../AnnouncementBanner/AnnouncementBanner'
+import { MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING } from '../../../Common/Constants'
 import { useMainContext, useTheme, useUserEmail } from '../../Providers'
+import AnnouncementBanner from '../AnnouncementBanner/AnnouncementBanner'
+import GettingStartedCard from '../GettingStartedCard/GettingStarted'
 import { InfoIconTippy } from '../InfoIconTippy'
+import LogoutCard from '../LogoutCard'
+import HelpNav from './HelpNav'
 import { IframePromoButton } from './IframePromoButton'
+import { getServerInfo } from './service'
+import { InstallationType, PageHeaderType, ServerInfo } from './types'
+import { getIsShowingLicenseData, handlePostHogEventUpdate, setActionWithExpiry } from './utils'
+
 import './pageHeader.scss'
 
 const PageHeader = ({

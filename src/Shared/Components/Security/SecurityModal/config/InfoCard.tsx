@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { InfoCardPropsType, ScanResultDTO, CATEGORIES, SecurityModalStateType } from '../types'
-import { getImageScanInfoCardData } from './ImageScan'
+import { CATEGORIES, InfoCardPropsType, ScanResultDTO, SecurityModalStateType } from '../types'
 import { getCodeScanInfoCardData } from './CodeScan'
+import { getImageScanInfoCardData } from './ImageScan'
 import { getKubernetesManifestInfoCardData } from './KubernetesManifest'
 
 export const getInfoCardData = (

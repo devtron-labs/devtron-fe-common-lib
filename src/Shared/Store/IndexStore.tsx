@@ -17,8 +17,10 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable array-callback-return */
 import { BehaviorSubject } from 'rxjs'
+
 import { NodeFilters } from '@Shared/Components'
-import { AppDetails, AppType, EnvDetails, EnvType, Node, Nodes, PodMetaData, iNode } from '../types'
+
+import { AppDetails, AppType, EnvDetails, EnvType, iNode, Node, Nodes, PodMetaData } from '../types'
 
 const _appDetailsSubject: BehaviorSubject<AppDetails> = new BehaviorSubject({} as AppDetails)
 const _nodesSubject: BehaviorSubject<Array<Node>> = new BehaviorSubject([] as Node[])

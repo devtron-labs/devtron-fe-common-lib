@@ -15,6 +15,7 @@
  */
 
 import { sanitizeTargetPlatforms } from '@Shared/Helpers'
+
 import { createGitCommitUrl, handleUTCTime } from '../../Common'
 import { CIMaterialInfoDTO, CIMaterialInfoType } from './app.types'
 

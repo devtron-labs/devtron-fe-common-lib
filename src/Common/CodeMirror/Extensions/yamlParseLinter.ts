@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import YAML, { YAMLParseError } from 'yaml'
-import { EditorView } from '@uiw/react-codemirror'
 import { Diagnostic } from '@codemirror/lint'
+import { EditorView } from '@uiw/react-codemirror'
+import YAML, { YAMLParseError } from 'yaml'
 
 export const yamlParseLinter =
     () =>

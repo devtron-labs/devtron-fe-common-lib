@@ -1,4 +1,5 @@
 import { useState } from 'react'
+
 import { ButtonProps } from './types'
 
 const useTriggerAutoClickTimestamp = () => {

@@ -1,9 +1,10 @@
+import { useEffect, useRef, useState } from 'react'
+
+import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
+import { ReactComponent as ICClipboard } from '@Icons/ic-copy.svg'
+import { DOCUMENTATION } from '@Common/Constants'
 import { ClipboardButton, copyToClipboard, showError } from '@Common/index'
 
-import { DOCUMENTATION } from '@Common/Constants'
-import { useEffect, useRef, useState } from 'react'
-import { ReactComponent as ICClipboard } from '@Icons/ic-copy.svg'
-import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { Backdrop, Button, ButtonStyleType, ButtonVariantType, Icon, InfoIconTippy, QRCode } from '..'
 import { CopyButtonProps, GatekeeperQRDialogProps, InstallFingerprintInfoProps } from './types'
 import { getGateKeeperUrl } from './utils'

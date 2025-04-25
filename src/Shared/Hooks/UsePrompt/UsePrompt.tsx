@@ -15,6 +15,7 @@
  */
 
 import { useCallback, useEffect } from 'react'
+
 import { UsePromptProps } from './types'
 
 /**
