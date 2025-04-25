@@ -29,6 +29,7 @@ export const DOCUMENTATION = {
     BLOB_STORAGE: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/getting-started/install/installation-configuration#configuration-of-blob-storage`,
     GLOBAL_CONFIG_BUILD_INFRA: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/global-configurations/build-infra`,
     ENTERPRISE_LICENSE: `${DOCUMENTATION_HOME_PAGE}/enterprise-license`,
+    KUBE_CONFIG: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/resource-browser#running-kubectl-commands-locally`,
 }
 
 export const PATTERNS = {
@@ -155,6 +156,7 @@ export const ROUTES = {
     RESOURCE_TEMPLATE: 'resource/template',
     ENVIRONMENT_DATA: 'global/environment-variables',
     DASHBOARD_EVENT: 'dashboard-event',
+    LICENSE_DATA: 'license/data',
 } as const
 
 export enum KEY_VALUE {
@@ -384,7 +386,6 @@ export const API_STATUS_CODES = {
     EXPECTATION_FAILED: 417,
     UNPROCESSABLE_ENTITY: 422,
     LOCKED: 423,
-    UNPROCESSABLE_CONTENT: 422,
 }
 
 export enum SERVER_MODE {

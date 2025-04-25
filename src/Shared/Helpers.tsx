@@ -61,6 +61,7 @@ import { DEPLOYMENT_STATUS, TIMELINE_STATUS, UNSAVED_CHANGES_PROMPT_MESSAGE } fr
 import {
     AggregationKeys,
     BorderConfigType,
+    GetTimeDifferenceParamsType,
     GitTriggers,
     IntersectionChangeHandler,
     IntersectionOptions,
@@ -780,9 +781,13 @@ export const decode = (data, isEncoded: boolean = false) =>
 
 export const isTimeStringAvailable = (time: string): boolean => !!time && time !== ZERO_TIME_STRING
 
-export const getTimeDifference = (startTime: string, endTime: string): string => {
+export const getTimeDifference = ({
+    startTime,
+    endTime,
+    fallbackString = '-',
+}: GetTimeDifferenceParamsType): string => {
     if (!isTimeStringAvailable(startTime) || !isTimeStringAvailable(endTime)) {
-        return '-'
+        return fallbackString
     }
 
     const seconds = moment(endTime).diff(moment(startTime), 'seconds')

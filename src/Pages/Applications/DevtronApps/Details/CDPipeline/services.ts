@@ -71,6 +71,7 @@ export const triggerCDNode = ({
     wfrId,
     runtimeParamsPayload,
     abortControllerRef,
+    skipIfHibernated,
     isRollbackTrigger = false,
 }: TriggerCDNodeServiceProps) => {
     const areRuntimeParamsConfigured =
@@ -83,6 +84,7 @@ export const triggerCDNode = ({
         cdWorkflowType: STAGE_MAP[stageType],
         isRollbackDeployment: isRollbackTrigger,
         ...(areRuntimeParamsConfigured && runtimeParamsPayload),
+        ...(skipIfHibernated ? { skipIfHibernated: true } : {}),
     }
 
     if (deploymentWithConfig) {
