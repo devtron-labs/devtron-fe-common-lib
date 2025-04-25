@@ -45,24 +45,12 @@
             border-top-right-radius: 2px;
         }
 
-        &--align-active-border::after {
-            bottom: -1px;
-        }
-
         &:hover:not(.tab-group__tab--block):not(.dc__disabled) {
             color: var(--B500);
             @include svg-styles(var(--B500));
 
             svg.icon-component-color {
                 --overrideIconColor: var(--B500);
-            }
-        }
-
-        &--active {
-            @include svg-styles(var(--B500));
-
-            &::after {
-                background-color: var(--B500);
             }
         }
 
@@ -102,12 +90,6 @@
 
             &:hover:not([aria-disabled='true']) {
                 color: var(--B500);
-            }
-        }
-
-        &:has(.active) {
-            &::after {
-                background-color: var(--B500);
             }
         }
     }

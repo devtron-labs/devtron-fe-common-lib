@@ -14,16 +14,32 @@
  * limitations under the License.
  */
 
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useRouteMatch } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
-import { getTabBadge, getTabDescription, getTabIcon, getTabIndicator } from './TabGroup.helpers'
+import { getPathnameToMatch, getTabBadge, getTabDescription, getTabIcon, getTabIndicator } from './TabGroup.helpers'
 import { TabGroupProps, TabProps } from './TabGroup.types'
 import { getClassNameBySizeMap, tabGroupClassMap } from './TabGroup.utils'
 
 import './TabGroup.scss'
+
+const MotionLayoutUnderline = ({
+    layoutId,
+    alignActiveBorderWithContainer,
+}: {
+    layoutId: string
+    alignActiveBorderWithContainer: boolean
+}) => (
+    <motion.div
+        layout="position"
+        layoutId={layoutId}
+        className="bcb-5"
+        style={{ height: 2, ...(alignActiveBorderWithContainer ? { bottom: -1 } : {}) }}
+    />
+)
 
 const Tab = ({
     label,
@@ -42,7 +58,13 @@ const Tab = ({
     description,
     shouldWrapTooltip,
     tooltipProps,
-}: TabProps & Pick<TabGroupProps, 'size' | 'alignActiveBorderWithContainer' | 'hideTopPadding'>) => {
+    uniqueGroupId,
+}: TabProps &
+    Pick<TabGroupProps, 'size' | 'alignActiveBorderWithContainer' | 'hideTopPadding'> & { uniqueGroupId: string }) => {
+    const { path } = useRouteMatch()
+    const pathToMatch = tabType === 'navLink' || tabType === 'link' ? getPathnameToMatch(props.to, path) : ''
+    const match = useRouteMatch(pathToMatch)
+
     const { tabClassName, iconClassName, badgeClassName } = getClassNameBySizeMap({
         hideTopPadding,
         alignActiveBorderWithContainer,
@@ -119,11 +141,19 @@ const Tab = ({
         }
     }
 
+    const isTabActive = tabType === 'button' ? active : !!match
+
     const renderTabContainer = () => (
         <li
-            className={`tab-group__tab lh-20 ${active ? 'tab-group__tab--active cb-5 fw-6' : 'cn-9 fw-4'} ${alignActiveBorderWithContainer ? 'tab-group__tab--align-active-border' : ''} ${tabType === 'block' ? 'tab-group__tab--block' : ''} ${disabled ? 'dc__disabled' : 'cursor'}`}
+            className={`tab-group__tab lh-20 ${active ? 'cb-5 fw-6' : 'cn-9 fw-4'} ${tabType === 'block' ? 'tab-group__tab--block' : ''} ${disabled ? 'dc__disabled' : 'cursor'}`}
         >
             {getTabComponent()}
+            {isTabActive && (
+                <MotionLayoutUnderline
+                    layoutId={uniqueGroupId}
+                    alignActiveBorderWithContainer={alignActiveBorderWithContainer}
+                />
+            )}
         </li>
     )
 
@@ -140,20 +170,26 @@ export const TabGroup = ({
     rightComponent,
     alignActiveBorderWithContainer,
     hideTopPadding,
-}: TabGroupProps) => (
-    <div className="flexbox dc__align-items-center dc__content-space">
-        <ul role="tablist" className={`tab-group flexbox dc__align-items-center p-0 m-0 ${tabGroupClassMap[size]}`}>
-            {tabs.map(({ id, ...resProps }) => (
-                <Tab
-                    key={id}
-                    id={id}
-                    size={size}
-                    alignActiveBorderWithContainer={alignActiveBorderWithContainer}
-                    hideTopPadding={hideTopPadding}
-                    {...resProps}
-                />
-            ))}
-        </ul>
-        {rightComponent || null}
-    </div>
-)
+}: TabGroupProps) => {
+    // Unique layoutId for motion.div to handle multiple tab groups on same page
+    const uniqueGroupId = tabs.map((tab) => tab.label).join('-')
+
+    return (
+        <div className="flexbox dc__align-items-center dc__content-space">
+            <ul role="tablist" className={`tab-group flexbox dc__align-items-center p-0 m-0 ${tabGroupClassMap[size]}`}>
+                {tabs.map(({ id, ...resProps }) => (
+                    <Tab
+                        key={id}
+                        id={id}
+                        size={size}
+                        alignActiveBorderWithContainer={alignActiveBorderWithContainer}
+                        hideTopPadding={hideTopPadding}
+                        uniqueGroupId={uniqueGroupId}
+                        {...resProps}
+                    />
+                ))}
+            </ul>
+            {rightComponent || null}
+        </div>
+    )
+}
