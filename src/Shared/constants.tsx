@@ -16,6 +16,7 @@
 
 import { OptionType } from '@Common/Types'
 
+import { InfoBlockProps } from './Components'
 import { CDMaterialSidebarType, ConfigKeysWithLockType, ConfigurationType } from './types'
 
 export const ARTIFACT_STATUS = {
@@ -553,3 +554,30 @@ export const Routes = {
 export const ENTERPRISE_SUPPORT_LINK = 'enterprise@devtron.ai'
 
 export const INVALID_LICENSE_KEY = 'inValid'
+
+export const VARIANT_TO_BG_MAP: Record<InfoBlockProps['variant'], string> = {
+    error: 'bcr-1',
+    help: 'bcv-1',
+    information: 'bcb-1',
+    success: 'bcg-1',
+    warning: 'bcy-1',
+    neutral: 'bcn-1',
+}
+
+export const VARIANT_TO_ICON_COLOR_MAP: Record<InfoBlockProps['variant'], string> = {
+    error: 'R500',
+    help: 'V500',
+    information: 'B500',
+    success: 'G500',
+    warning: 'Y700',
+    neutral: 'N500',
+}
+
+export const VARIANT_TO_BORDER_MAP: Record<InfoBlockProps['variant'], string> = {
+    error: 'er-2',
+    help: 'ev-2',
+    information: 'eb-2',
+    success: 'eg-2',
+    warning: 'ey-2',
+    neutral: 'en-2',
+}
