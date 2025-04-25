@@ -21,9 +21,9 @@ import { ReactComponent as ICError } from '@Icons/ic-error.svg'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { useAsync } from '@Common/Helper'
 import { useUrlFilters } from '@Common/Hooks'
-import { GenericEmptyState, InfoColourBar } from '@Common/index'
+import { GenericEmptyState, InfoColourBar, SortingOrder } from '@Common/index'
 import { Progressing } from '@Common/Progressing'
-import { getAppEnvDeploymentConfigList } from '@Shared/Components/DeploymentConfigDiff'
+import { DEPLOYMENT_CONFIG_DIFF_SORT_KEY, getAppEnvDeploymentConfigList } from '@Shared/Components/DeploymentConfigDiff'
 import { groupArrayByObjectKey } from '@Shared/Helpers'
 import { useMainContext } from '@Shared/Providers'
 import { EnvResourceType, getAppEnvDeploymentConfig, getCompareSecretsData } from '@Shared/Services'
@@ -125,7 +125,7 @@ export const DeploymentHistoryConfigDiff = ({
         `${generatePath(path, { ...params })}/${resourceType}${resourceName ? `/${resourceName}` : ''}${search}`
 
     // Generate the deployment history config list
-    const deploymentConfigList = useMemo(() => {
+    const { deploymentConfigList, sortedDeploymentConfigList } = useMemo(() => {
         if (!compareDeploymentConfigLoader && compareDeploymentConfig) {
             const compareList =
                 isPreviousDeploymentConfigAvailable && compareDeploymentConfig[1].status === 'fulfilled'
@@ -140,6 +140,8 @@ export const DeploymentHistoryConfigDiff = ({
             const currentList =
                 compareDeploymentConfig[0].status === 'fulfilled' ? compareDeploymentConfig[0].value.result : null
 
+            // This data is displayed on the deployment history diff view page.
+            // It requires dynamic sorting based on the current sortBy and sortOrder, which the user can modify using the Sort Button.
             const configData = getAppEnvDeploymentConfigList({
                 currentList,
                 compareList,
@@ -147,10 +149,21 @@ export const DeploymentHistoryConfigDiff = ({
                 convertVariables,
                 sortingConfig: { sortBy, sortOrder },
             })
-            return configData
+
+            // Sorting is hardcoded here because this data is displayed on the deployment history configuration tab.
+            // The diff needs to be shown on sorted data, and no additional sorting will be applied.
+            const sortedConfigData = getAppEnvDeploymentConfigList({
+                currentList,
+                compareList,
+                getNavItemHref,
+                convertVariables,
+                sortingConfig: { sortBy: DEPLOYMENT_CONFIG_DIFF_SORT_KEY, sortOrder: SortingOrder.ASC },
+            })
+
+            return { deploymentConfigList: configData, sortedDeploymentConfigList: sortedConfigData }
         }
 
-        return null
+        return { deploymentConfigList: null, sortedDeploymentConfigList: null }
     }, [
         isPreviousDeploymentConfigAvailable,
         compareDeploymentConfigLoader,
@@ -170,8 +183,11 @@ export const DeploymentHistoryConfigDiff = ({
     )
 
     const groupedDeploymentConfigList = useMemo(
-        () => (deploymentConfigList ? groupArrayByObjectKey(deploymentConfigList.configList, 'groupHeader') : []),
-        [deploymentConfigList],
+        () =>
+            sortedDeploymentConfigList
+                ? groupArrayByObjectKey(sortedDeploymentConfigList.configList, 'groupHeader')
+                : [],
+        [sortedDeploymentConfigList],
     )
 
     /** Previous deployment config has 404 error. */
