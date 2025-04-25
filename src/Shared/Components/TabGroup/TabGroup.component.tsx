@@ -21,7 +21,7 @@ import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { getPathnameToMatch, getTabBadge, getTabDescription, getTabIcon, getTabIndicator } from './TabGroup.helpers'
-import { TabGroupProps, TabProps } from './TabGroup.types'
+import { AdditionalTabProps, TabGroupProps, TabProps } from './TabGroup.types'
 import { getClassNameBySizeMap, tabGroupClassMap } from './TabGroup.utils'
 
 import './TabGroup.scss'
@@ -60,7 +60,8 @@ const Tab = ({
     tooltipProps,
     uniqueGroupId,
 }: TabProps &
-    Pick<TabGroupProps, 'size' | 'alignActiveBorderWithContainer' | 'hideTopPadding'> & { uniqueGroupId: string }) => {
+    Pick<TabGroupProps, 'size' | 'alignActiveBorderWithContainer' | 'hideTopPadding'> &
+    AdditionalTabProps) => {
     const { path } = useRouteMatch()
     const pathToMatch = tabType === 'navLink' || tabType === 'link' ? getPathnameToMatch(props.to, path) : ''
     const match = useRouteMatch(pathToMatch)

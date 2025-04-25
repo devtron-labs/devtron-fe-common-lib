@@ -163,3 +163,7 @@ export interface TabGroupProps {
      */
     hideTopPadding?: boolean
 }
+
+export type AdditionalTabProps = {
+    uniqueGroupId: string
+}
