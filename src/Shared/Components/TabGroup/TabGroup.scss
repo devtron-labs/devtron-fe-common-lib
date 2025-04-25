@@ -33,14 +33,8 @@
 
         @include svg-styles(var(--N700));
 
-        &::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
+        .underline {
             height: 2px;
-            background-color: transparent;
             border-top-left-radius: 2px;
             border-top-right-radius: 2px;
         }

@@ -36,8 +36,8 @@ const MotionLayoutUnderline = ({
     <motion.div
         layout="position"
         layoutId={layoutId}
-        className="bcb-5"
-        style={{ height: 2, ...(alignActiveBorderWithContainer ? { bottom: -1 } : {}) }}
+        className="underline bcb-5"
+        style={{ ...(alignActiveBorderWithContainer ? { bottom: -1 } : {}) }}
     />
 )
 
