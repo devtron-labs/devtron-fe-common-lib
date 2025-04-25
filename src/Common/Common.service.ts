@@ -533,6 +533,7 @@ export const getAppsInfoForEnv = async ({ envId, appIds }: GetAppsInfoForEnvProp
                 appName: appName || '',
                 appStatus: appStatus || StatusType.UNKNOWN,
             })
+            return agg
         }, []),
     }
 }
