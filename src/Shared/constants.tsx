@@ -17,7 +17,7 @@
 import { OptionType } from '@Common/Types'
 
 import { InfoBlockProps } from './Components'
-import { CDMaterialSidebarType, ConfigKeysWithLockType, ConfigurationType } from './types'
+import { CDMaterialSidebarType, ConfigKeysWithLockType, ConfigurationType, IconBaseColorType } from './types'
 
 export const ARTIFACT_STATUS = {
     PROGRESSING: 'Progressing',
@@ -564,7 +564,7 @@ export const VARIANT_TO_BG_MAP: Record<InfoBlockProps['variant'], string> = {
     neutral: 'bcn-1',
 }
 
-export const VARIANT_TO_ICON_COLOR_MAP: Record<InfoBlockProps['variant'], string> = {
+export const VARIANT_TO_ICON_COLOR_MAP: Record<InfoBlockProps['variant'], IconBaseColorType> = {
     error: 'R500',
     help: 'V500',
     information: 'B500',
