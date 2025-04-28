@@ -33,12 +33,13 @@ const Toggle = ({
     shouldToggleValueOnLabelClick = false,
     isLoading = false,
     value = CHECKBOX_VALUE.CHECKED,
+    isControlled = false,
     ...props
 }) => {
     const [active, setActive] = React.useState(selected)
 
     useEffectAfterMount(() => {
-        if (typeof onSelect === 'function') {
+        if (typeof onSelect === 'function' && !isControlled) {
             if (active !== selected) {
                 onSelect(active)
             }
@@ -51,7 +52,11 @@ const Toggle = ({
 
     function handleClick() {
         if (!disabled) {
-            setActive((active) => !active)
+            if (isControlled) {
+                onSelect(!active)
+            } else {
+                setActive((active) => !active)
+            }
         }
     }
 
