@@ -22,16 +22,18 @@ const AboutDevtronBody = () => {
     }
 
     return (
-        <div className="flexbox-col dc__align-items-center dc__gap-20">
-            <div className="flex p-6 border__primary br-8">
-                <Icon name="ic-devtron" color="B500" size={40} />
+        <div className="flexbox-col p-32 dc__gap-24 br-16 border__secondary bg__secondary">
+            <div className="flexbox-col dc__align-items-center dc__gap-16 text-center">
+                <div className="flex p-6 border__primary br-8">
+                    <Icon name="ic-devtron" color="B500" size={40} />
+                </div>
+                <div>
+                    <p className="fs-16 cn-9 fw-6 lh-1-5 m-0">Devtron</p>
+                    <p className="fs-13 cn-7 fw-4 lh-20 m-0">{`${isEnterprise ? 'Enterprise' : 'OSS'} Version${currentVersion ? `(${currentVersion})` : ''}`}</p>
+                </div>
+                <DevtronCopyright />
             </div>
-            <div className="text-center">
-                <p className="fs-16 cn-9 fw-6 lh-1-5 m-0">Devtron</p>
-                <p className="fs-13 cn-7 fw-4 lh-20 m-0">{`${isEnterprise ? 'Enterprise' : 'OSS'} Version${currentVersion ? `(${currentVersion})` : ''}`}</p>
-            </div>
-            <DevtronCopyright />
-            <div className="flexbox flex-wrap dc__content-center dc__gap-6">
+            <div className="flexbox flex-wrap dc__content-center dc__gap-4">
                 <Button
                     dataTestId="terms-of-service"
                     text="Terms of service"
