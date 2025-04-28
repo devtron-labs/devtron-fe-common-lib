@@ -16,10 +16,16 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
+import { useEffectAfterMount } from '@Common/Helper'
 import { useStateFilters } from '@Common/Hooks'
 
 import { DynamicDataTable } from '../DynamicDataTable'
-import { KeyValueTableDataType, KeyValueTableInternalProps, KeyValueTableProps } from './KeyValueTable.types'
+import {
+    KeyValueTableDataType,
+    KeyValueTableInternalProps,
+    KeyValueTableProps,
+    KeyValueTableRowType,
+} from './KeyValueTable.types'
 import {
     getEmptyRow,
     getKeyValueHeaders,
@@ -49,6 +55,7 @@ export const KeyValueTable = ({
 }: KeyValueTableProps) => {
     // STATES
     const [cellError, setCellError] = useState<KeyValueTableInternalProps['cellError']>({})
+    const [sortedRows, setSortedRows] = useState<KeyValueTableInternalProps['rows']>([])
 
     // HOOKS
     const { sortBy, sortOrder, handleSorting } = useStateFilters<KeyValueTableDataType>({
@@ -61,8 +68,21 @@ export const KeyValueTable = ({
         [initialRows, placeholder, maskValue, isSortable, sortOrder, sortBy],
     )
 
-    // Set cell error on mount
+    /** Function to update the sorted rows based on the current sorting configuration */
+    const updateSortedRows = () => {
+        if (isSortable) {
+            setSortedRows(
+                getKeyValueTableSortedRows({
+                    rows,
+                    sortBy,
+                    sortOrder,
+                }),
+            )
+        }
+    }
+
     useEffect(() => {
+        // Set cell error on mount
         const { isValid, updatedCellError } = getKeyValueTableCellError({
             rows,
             validateDuplicateKeys,
@@ -72,7 +92,45 @@ export const KeyValueTable = ({
 
         setCellError(updatedCellError)
         onError?.(!isValid)
+
+        // Set sorted rows on mount
+        updateSortedRows()
     }, [])
+
+    // Sort rows for display purposes only. \
+    // The `sortedRows` state is used internally to render the data, while the original `rows` prop remains unaltered during sorting.
+    useEffectAfterMount(() => {
+        if (isSortable) {
+            // Create a map of rows using their IDs for quick lookup
+            const rowMap = rows.reduce<Record<KeyValueTableRowType['id'], KeyValueTableInternalProps['rows'][number]>>(
+                (acc, row) => {
+                    acc[row.id] = row
+                    return acc
+                },
+                {},
+            )
+
+            // Create a set of IDs from the currently sorted rows for efficient lookup
+            const sortedRowSet = new Set(sortedRows.map(({ id }) => id))
+
+            // Update the sorted rows by filtering out rows that no longer exist and mapping them to the latest data
+            const updatedSortedRows = sortedRows.filter(({ id }) => rowMap[id]).map(({ id }) => rowMap[id])
+
+            // Identify rows that are not part of the current sorted set (new or unsorted rows)
+            const unsortedRows = rows.filter(({ id }) => !sortedRowSet.has(id))
+
+            // Combine unsorted rows with updated sorted rows and set them as the new sorted rows
+            setSortedRows([...unsortedRows, ...updatedSortedRows])
+        } else {
+            // If sorting is disabled, directly set the rows as the sorted rows
+            setSortedRows(rows)
+        }
+    }, [rows])
+
+    // Update the sorted rows whenever the sorting configuration changes
+    useEffectAfterMount(() => {
+        updateSortedRows()
+    }, [sortBy, sortOrder])
 
     // METHODS
     const setUpdatedRows = (updatedRows: typeof rows) => {
@@ -124,7 +182,7 @@ export const KeyValueTable = ({
     return (
         <DynamicDataTable
             headers={getKeyValueHeaders({ headerLabel, isSortable })}
-            rows={getKeyValueTableSortedRows({ isSortable, rows, sortBy, sortOrder })}
+            rows={sortedRows}
             cellError={showError ? cellError : {}}
             onRowAdd={onRowAdd}
             onRowDelete={onRowDelete}

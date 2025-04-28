@@ -64,21 +64,14 @@ export const getKeyValueTableRows = ({
 }
 
 export const getKeyValueTableSortedRows = ({
-    isSortable,
     rows,
     sortBy,
     sortOrder,
-}: Required<Pick<KeyValueTableProps, 'isSortable'>> &
-    Required<Pick<UseStateFiltersReturnType<KeyValueTableDataType>, 'sortBy' | 'sortOrder'>> &
-    Pick<KeyValueTableInternalProps, 'rows'>) => {
-    if (isSortable) {
-        return rows
-            .map((item) => item)
-            .sort((a, b) => stringComparatorBySortOrder(a.data[sortBy].value, b.data[sortBy].value, sortOrder))
-    }
-
-    return rows
-}
+}: Required<Pick<UseStateFiltersReturnType<KeyValueTableDataType>, 'sortBy' | 'sortOrder'>> &
+    Pick<KeyValueTableInternalProps, 'rows'>) =>
+    rows
+        .map((item) => item)
+        .sort((a, b) => stringComparatorBySortOrder(a.data[sortBy].value, b.data[sortBy].value, sortOrder))
 
 export const getKeyValueHeaders = ({
     headerLabel,
