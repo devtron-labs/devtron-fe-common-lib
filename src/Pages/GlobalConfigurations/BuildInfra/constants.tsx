@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICCpu } from '@Icons/ic-cpu.svg'
-import { ReactComponent as ICMemory } from '@Icons/ic-memory.svg'
 import { ReactComponent as ICSprayCan } from '@Icons/ic-spray-can.svg'
 import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { ReactComponent as ICTimer } from '@Icons/ic-timer.svg'
+import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
+import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
 import { UseBreadcrumbProps } from '@Common/BreadCrumb/Types'
 import { CMSecretComponentType } from '@Shared/Services'
 
