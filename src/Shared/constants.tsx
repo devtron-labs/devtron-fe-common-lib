@@ -16,7 +16,7 @@
 
 import { OptionType } from '@Common/Types'
 
-import { InfoBlockProps } from './Components'
+import { InfoBlockVariant } from './Components'
 import { CDMaterialSidebarType, ConfigKeysWithLockType, ConfigurationType, IconBaseColorType } from './types'
 
 export const ARTIFACT_STATUS = {
@@ -555,29 +555,29 @@ export const ENTERPRISE_SUPPORT_LINK = 'enterprise@devtron.ai'
 
 export const INVALID_LICENSE_KEY = 'inValid'
 
-export const VARIANT_TO_BG_MAP: Record<InfoBlockProps['variant'], string> = {
-    error: 'bcr-1',
-    help: 'bcv-1',
-    information: 'bcb-1',
-    success: 'bcg-1',
-    warning: 'bcy-1',
-    neutral: 'bcn-1',
+export const VARIANT_TO_BG_MAP: Record<InfoBlockVariant, string> = {
+    [InfoBlockVariant.ERROR]: 'bcr-1',
+    [InfoBlockVariant.HELP]: 'bcv-1',
+    [InfoBlockVariant.INFORMATION]: 'bcb-1',
+    [InfoBlockVariant.SUCCESS]: 'bcg-1',
+    [InfoBlockVariant.WARNING]: 'bcy-1',
+    [InfoBlockVariant.NEUTRAL]: 'bcn-1',
 }
 
-export const VARIANT_TO_ICON_COLOR_MAP: Record<InfoBlockProps['variant'], IconBaseColorType> = {
-    error: 'R500',
-    help: 'V500',
-    information: 'B500',
-    success: 'G500',
-    warning: 'Y700',
-    neutral: 'N500',
+export const VARIANT_TO_ICON_COLOR_MAP: Record<InfoBlockVariant, IconBaseColorType> = {
+    [InfoBlockVariant.ERROR]: 'R500',
+    [InfoBlockVariant.HELP]: 'V500',
+    [InfoBlockVariant.INFORMATION]: 'B500',
+    [InfoBlockVariant.SUCCESS]: 'G500',
+    [InfoBlockVariant.WARNING]: 'Y700',
+    [InfoBlockVariant.NEUTRAL]: 'N500',
 }
 
-export const VARIANT_TO_BORDER_MAP: Record<InfoBlockProps['variant'], string> = {
-    error: 'er-2',
-    help: 'ev-2',
-    information: 'eb-2',
-    success: 'eg-2',
-    warning: 'ey-2',
-    neutral: 'en-2',
+export const VARIANT_TO_BORDER_MAP: Record<InfoBlockVariant, string> = {
+    [InfoBlockVariant.ERROR]: 'er-2',
+    [InfoBlockVariant.HELP]: 'ev-2',
+    [InfoBlockVariant.INFORMATION]: 'eb-2',
+    [InfoBlockVariant.SUCCESS]: 'eg-2',
+    [InfoBlockVariant.WARNING]: 'ey-2',
+    [InfoBlockVariant.NEUTRAL]: 'en-2',
 }

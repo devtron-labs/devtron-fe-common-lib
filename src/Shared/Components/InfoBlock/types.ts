@@ -21,6 +21,14 @@ import { BorderConfigType, ComponentLayoutType } from '@Shared/types'
 
 import { ButtonComponentType, ButtonProps } from '../Button'
 
+export enum InfoBlockVariant {
+    ERROR = 'error',
+    HELP = 'help',
+    INFORMATION = 'information',
+    SUCCESS = 'success',
+    WARNING = 'warning',
+    NEUTRAL = 'neutral',
+}
 export type InfoBlockProps = {
     /**
      * @default 'row'
@@ -29,7 +37,7 @@ export type InfoBlockProps = {
     /**
      * @default 'information'
      */
-    variant?: 'error' | 'help' | 'information' | 'success' | 'warning' | 'neutral'
+    variant?: InfoBlockVariant
     /**
      * @default ComponentSizeType.large
      */

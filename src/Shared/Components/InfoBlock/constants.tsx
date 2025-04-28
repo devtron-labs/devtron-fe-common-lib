@@ -18,15 +18,15 @@ import { ComponentSizeType } from '@Shared/constants'
 
 import { ButtonProps } from '../Button'
 import { Icon } from '../Icon'
-import { InfoBlockProps } from './types'
+import { InfoBlockProps, InfoBlockVariant } from './types'
 
-export const VARIANT_TO_ICON_MAP: Record<InfoBlockProps['variant'], InfoBlockProps['customIcon']> = {
-    error: <Icon name="ic-error" color="R500" />,
-    help: <Icon name="ic-help-outline" color="V500" />,
-    information: <Icon name="ic-info-filled" color="B500" />,
-    success: <Icon name="ic-success" color="G500" />,
-    warning: <Icon name="ic-warning" color="Y500" />,
-    neutral: <Icon name="ic-info-filled" color={null} />,
+export const VARIANT_TO_ICON_MAP: Record<InfoBlockVariant, InfoBlockProps['customIcon']> = {
+    [InfoBlockVariant.ERROR]: <Icon name="ic-error" color="R500" />,
+    [InfoBlockVariant.HELP]: <Icon name="ic-help-outline" color="V500" />,
+    [InfoBlockVariant.INFORMATION]: <Icon name="ic-info-filled" color="B500" />,
+    [InfoBlockVariant.SUCCESS]: <Icon name="ic-success" color="G500" />,
+    [InfoBlockVariant.WARNING]: <Icon name="ic-warning" color="Y500" />,
+    [InfoBlockVariant.NEUTRAL]: <Icon name="ic-info-filled" color={null} />,
 }
 
 export const CONTAINER_SIZE_TO_CLASS_MAP: Record<InfoBlockProps['size'], string> = {
