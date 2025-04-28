@@ -71,15 +71,9 @@ export const getTabDescription = (description: TabProps['description']) =>
 const replaceTrailingSlash = (pathname: string) => pathname.replace(/\/+$/, '')
 
 export const getPathnameToMatch = (to: NavLinkProps['to'] | LinkProps['to'], currentPathname: string): string => {
-    // Handling both absolute and relative paths
-    if (typeof to === 'string') {
-        return to.startsWith('/') ? to : `${replaceTrailingSlash(currentPathname)}/${to}`
-    }
-    if (typeof to === 'function') {
-        return ''
-    }
-    if (to && typeof to === 'object' && 'pathname' in to) {
-        const pathname = to.pathname || ''
+    if (typeof to === 'string' || (to && typeof to === 'object' && 'pathname' in to)) {
+        const pathname = typeof to === 'string' ? to : to.pathname || ''
+        // handling absolute and relative paths
         return pathname.startsWith('/') ? pathname : `${replaceTrailingSlash(currentPathname)}/${pathname}`
     }
     return ''

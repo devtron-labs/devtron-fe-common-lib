@@ -39,6 +39,10 @@
             border-top-right-radius: 2px;
         }
 
+        &--active {
+            @include svg-styles(var(--B500));
+        }
+
         &:hover:not(.tab-group__tab--block):not(.dc__disabled) {
             color: var(--B500);
             @include svg-styles(var(--B500));

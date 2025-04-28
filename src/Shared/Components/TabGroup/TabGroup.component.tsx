@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { useMemo } from 'react'
 import { Link, NavLink, useRouteMatch } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
@@ -26,19 +27,8 @@ import { getClassNameBySizeMap, tabGroupClassMap } from './TabGroup.utils'
 
 import './TabGroup.scss'
 
-const MotionLayoutUnderline = ({
-    layoutId,
-    alignActiveBorderWithContainer,
-}: {
-    layoutId: string
-    alignActiveBorderWithContainer: boolean
-}) => (
-    <motion.div
-        layout="position"
-        layoutId={layoutId}
-        className="underline bcb-5"
-        style={{ ...(alignActiveBorderWithContainer ? { bottom: -1 } : {}) }}
-    />
+const MotionLayoutUnderline = ({ layoutId }: { layoutId: string }) => (
+    <motion.div layout="position" layoutId={layoutId} className="underline bcb-5" />
 )
 
 const Tab = ({
@@ -49,7 +39,6 @@ const Tab = ({
     icon,
     size,
     badge = null,
-    alignActiveBorderWithContainer,
     hideTopPadding,
     showIndicator,
     showError,
@@ -59,16 +48,18 @@ const Tab = ({
     shouldWrapTooltip,
     tooltipProps,
     uniqueGroupId,
-}: TabProps &
-    Pick<TabGroupProps, 'size' | 'alignActiveBorderWithContainer' | 'hideTopPadding'> &
-    AdditionalTabProps) => {
+}: TabProps & Pick<TabGroupProps, 'size' | 'hideTopPadding'> & AdditionalTabProps) => {
     const { path } = useRouteMatch()
     const pathToMatch = tabType === 'navLink' || tabType === 'link' ? getPathnameToMatch(props.to, path) : ''
+
+    // using match to define if tab is active as useRouteMatch return an object if path is matched otherwise return null/undefined
     const match = useRouteMatch(pathToMatch)
+
+    const isTabActive = tabType === 'button' ? active : !!match
 
     const { tabClassName, iconClassName, badgeClassName } = getClassNameBySizeMap({
         hideTopPadding,
-        alignActiveBorderWithContainer,
+        isTabActive,
     })[size]
 
     const onClickHandler = (
@@ -142,19 +133,12 @@ const Tab = ({
         }
     }
 
-    const isTabActive = tabType === 'button' ? active : !!match
-
     const renderTabContainer = () => (
         <li
             className={`tab-group__tab lh-20 ${active ? 'cb-5 fw-6' : 'cn-9 fw-4'} ${tabType === 'block' ? 'tab-group__tab--block' : ''} ${disabled ? 'dc__disabled' : 'cursor'}`}
         >
             {getTabComponent()}
-            {isTabActive && (
-                <MotionLayoutUnderline
-                    layoutId={uniqueGroupId}
-                    alignActiveBorderWithContainer={alignActiveBorderWithContainer}
-                />
-            )}
+            {isTabActive && <MotionLayoutUnderline layoutId={uniqueGroupId} />}
         </li>
     )
 
@@ -169,11 +153,11 @@ export const TabGroup = ({
     tabs = [],
     size = ComponentSizeType.large,
     rightComponent,
-    alignActiveBorderWithContainer,
     hideTopPadding,
 }: TabGroupProps) => {
     // Unique layoutId for motion.div to handle multiple tab groups on same page
-    const uniqueGroupId = tabs.map((tab) => tab.label).join('-')
+    // Using tab labels so that id remains same on re mount as well
+    const uniqueGroupId = useMemo(() => tabs.map((tab) => tab.label).join('-'), [])
 
     return (
         <div className="flexbox dc__align-items-center dc__content-space">
@@ -183,7 +167,6 @@ export const TabGroup = ({
                         key={id}
                         id={id}
                         size={size}
-                        alignActiveBorderWithContainer={alignActiveBorderWithContainer}
                         hideTopPadding={hideTopPadding}
                         uniqueGroupId={uniqueGroupId}
                         {...resProps}
