@@ -156,6 +156,7 @@ export const ROUTES = {
     RESOURCE_TEMPLATE: 'resource/template',
     ENVIRONMENT_DATA: 'global/environment-variables',
     DASHBOARD_EVENT: 'dashboard-event',
+    LICENSE_DATA: 'license/data',
 } as const
 
 export enum KEY_VALUE {

@@ -18,7 +18,7 @@ import { ReactComponent as Discord } from '@Icons/ic-discord-fill.svg'
 import { ReactComponent as File } from '@Icons/ic-file-text.svg'
 
 import { DISCORD_LINK, DOCUMENTATION_HOME_PAGE, LOGIN_COUNT } from '../../../Common'
-import { DevtronLicenseInfo, LicenseStatus } from '../DevtronLicenseCard'
+import { DevtronLicenseInfo, LicenseStatus } from '../License'
 import { EnterpriseHelpOptions, OSSHelpOptions, TrialHelpOptions } from './constants'
 import { updatePostHogEvent } from './service'
 
