@@ -29,6 +29,15 @@ export enum InfoBlockVariant {
     WARNING = 'warning',
     NEUTRAL = 'neutral',
 }
+
+export type InfoBlockVariantType =
+    | InfoBlockVariant.ERROR
+    | InfoBlockVariant.HELP
+    | InfoBlockVariant.INFORMATION
+    | InfoBlockVariant.SUCCESS
+    | InfoBlockVariant.WARNING
+    | InfoBlockVariant.NEUTRAL
+
 export type InfoBlockProps = {
     /**
      * @default 'row'
@@ -37,7 +46,7 @@ export type InfoBlockProps = {
     /**
      * @default 'information'
      */
-    variant?: InfoBlockVariant
+    variant?: InfoBlockVariantType
     /**
      * @default ComponentSizeType.large
      */

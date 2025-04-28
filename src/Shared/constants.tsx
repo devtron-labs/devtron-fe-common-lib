@@ -16,7 +16,7 @@
 
 import { OptionType } from '@Common/Types'
 
-import { InfoBlockVariant } from './Components'
+import { InfoBlockProps, InfoBlockVariant } from './Components'
 import { CDMaterialSidebarType, ConfigKeysWithLockType, ConfigurationType, IconBaseColorType } from './types'
 
 export const ARTIFACT_STATUS = {
@@ -555,7 +555,7 @@ export const ENTERPRISE_SUPPORT_LINK = 'enterprise@devtron.ai'
 
 export const INVALID_LICENSE_KEY = 'inValid'
 
-export const VARIANT_TO_BG_MAP: Record<InfoBlockVariant, string> = {
+export const VARIANT_TO_BG_MAP: Record<InfoBlockProps['variant'], string> = {
     [InfoBlockVariant.ERROR]: 'bcr-1',
     [InfoBlockVariant.HELP]: 'bcv-1',
     [InfoBlockVariant.INFORMATION]: 'bcb-1',
@@ -564,7 +564,7 @@ export const VARIANT_TO_BG_MAP: Record<InfoBlockVariant, string> = {
     [InfoBlockVariant.NEUTRAL]: 'bcn-1',
 }
 
-export const VARIANT_TO_ICON_COLOR_MAP: Record<InfoBlockVariant, IconBaseColorType> = {
+export const VARIANT_TO_ICON_COLOR_MAP: Record<InfoBlockProps['variant'], IconBaseColorType> = {
     [InfoBlockVariant.ERROR]: 'R500',
     [InfoBlockVariant.HELP]: 'V500',
     [InfoBlockVariant.INFORMATION]: 'B500',
@@ -573,7 +573,7 @@ export const VARIANT_TO_ICON_COLOR_MAP: Record<InfoBlockVariant, IconBaseColorTy
     [InfoBlockVariant.NEUTRAL]: 'N500',
 }
 
-export const VARIANT_TO_BORDER_MAP: Record<InfoBlockVariant, string> = {
+export const VARIANT_TO_BORDER_MAP: Record<InfoBlockProps['variant'], string> = {
     [InfoBlockVariant.ERROR]: 'er-2',
     [InfoBlockVariant.HELP]: 'ev-2',
     [InfoBlockVariant.INFORMATION]: 'eb-2',
