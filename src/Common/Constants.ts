@@ -30,6 +30,7 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_BUILD_INFRA: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/global-configurations/build-infra`,
     ENTERPRISE_LICENSE: `${DOCUMENTATION_HOME_PAGE}/enterprise-license`,
     KUBE_CONFIG: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/resource-browser#running-kubectl-commands-locally`,
+    TENANT_INSTALLATION: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/software-distribution-hub/tenants`,
 }
 
 export const PATTERNS = {

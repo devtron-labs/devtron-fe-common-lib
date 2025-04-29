@@ -679,6 +679,7 @@ export const applyCompareDiffOnUneditedDocument = (uneditedDocument: object, edi
 
 /**
  * Returns a debounced variant of the function
+ * @deprecated - It should use useRef instead, pls use useDebounce
  */
 export const debounce = (func, timeout = 500) => {
     let timer
@@ -690,6 +691,17 @@ export const debounce = (func, timeout = 500) => {
             timer = null
             func.apply(context, args)
         }, timeout)
+    }
+}
+
+export const useDebounce = <Callback extends (...args: any[]) => void>(cb: Callback, delay: number) => {
+    const timeoutId = useRef<ReturnType<typeof setTimeout>>(null)
+
+    return (...args: Parameters<Callback>) => {
+        if (timeoutId.current) {
+            clearTimeout(timeoutId.current)
+        }
+        timeoutId.current = setTimeout(() => cb(...args), delay)
     }
 }
 
