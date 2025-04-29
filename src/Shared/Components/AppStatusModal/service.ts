@@ -16,10 +16,10 @@ export const getAppDetails = async (
         })
 
         const [appDetails, resourceTree] = await Promise.all([
-            get(`${ROUTES.APP_DETAIL}/v2?${queryParams}`, {
+            get(`${ROUTES.APP_DETAIL}/v2${queryParams}`, {
                 abortControllerRef,
             }),
-            get(`${ROUTES.APP_DETAIL}/resource-tree?${queryParams}`, {
+            get(`${ROUTES.APP_DETAIL}/resource-tree${queryParams}`, {
                 abortControllerRef,
             }),
         ])
