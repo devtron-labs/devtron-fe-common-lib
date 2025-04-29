@@ -26,13 +26,11 @@ import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-
 import { DATE_TIME_FORMATS, showError } from '../../../Common'
 import { DEPLOYMENT_STATUS, statusIcon, TIMELINE_STATUS } from '../../constants'
 import { AppStatusContent } from '../AppStatusModal'
-import { MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
+import { APP_HEALTH_DROP_DOWN_LIST, MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
 import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
 import { getManualSync } from './service'
 import { DeploymentStatusDetailRowType } from './types'
 import { renderIcon } from './utils'
-
-const appHealthDropDownlist = ['inprogress', 'failed', 'disconnect', 'timed_out']
 
 export const DeploymentStatusDetailRow = ({
     type,
@@ -204,7 +202,7 @@ export const DeploymentStatusDetailRow = ({
                     )}
                     {((type === TIMELINE_STATUS.KUBECTL_APPLY && statusBreakDownType.kubeList?.length) ||
                         (type === TIMELINE_STATUS.APP_HEALTH &&
-                            appHealthDropDownlist.includes(statusBreakDownType.icon)) ||
+                            APP_HEALTH_DROP_DOWN_LIST.includes(statusBreakDownType.icon)) ||
                         ((type === TIMELINE_STATUS.GIT_COMMIT || type === TIMELINE_STATUS.ARGOCD_SYNC) &&
                             statusBreakDownType.icon === 'failed')) && (
                         <DropDownIcon

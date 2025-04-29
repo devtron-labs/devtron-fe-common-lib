@@ -18,16 +18,15 @@ import { AppDetails, AppType } from '../../types'
 import { AppDetailsErrorType } from './types'
 
 export const getIsImagePullBackOff = (appDetails: AppDetails): boolean => {
-    if (appDetails?.appType === AppType.DEVTRON_APP && appDetails?.resourceTree?.nodes?.length) {
-        return appDetails.resourceTree.nodes.some(
-            (node) =>
-                !!node.info?.some((info) => {
-                    const infoValueLowerCase = info?.value?.toLowerCase()
-                    return (
-                        infoValueLowerCase === AppDetailsErrorType.ERRIMAGEPULL ||
-                        infoValueLowerCase === AppDetailsErrorType.IMAGEPULLBACKOFF
-                    )
-                }),
+    if (appDetails?.appType === AppType.DEVTRON_APP && appDetails.resourceTree?.nodes?.length) {
+        return appDetails.resourceTree.nodes.some((node) =>
+            (node.info || []).some((info) => {
+                const infoValueLowerCase = info.value?.toLowerCase()
+                return (
+                    infoValueLowerCase === AppDetailsErrorType.ERRIMAGEPULL ||
+                    infoValueLowerCase === AppDetailsErrorType.IMAGEPULLBACKOFF
+                )
+            }),
         )
     }
 

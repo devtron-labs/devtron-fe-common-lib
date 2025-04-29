@@ -1,13 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 
-import {
-    abortPreviousRequests,
-    DISCORD_LINK,
-    Drawer,
-    getIsRequestAborted,
-    stopPropagation,
-    useAsync,
-} from '@Common/index'
+import { abortPreviousRequests, getIsRequestAborted } from '@Common/API'
+import { DISCORD_LINK } from '@Common/Constants'
+import { Drawer } from '@Common/Drawer'
+import { stopPropagation, useAsync } from '@Common/Helper'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { APIResponseHandler } from '../APIResponseHandler'
@@ -20,7 +16,7 @@ import { AppStatusModalProps } from './types'
 import './AppStatusModal.scss'
 
 const AppStatusModal = ({
-    title,
+    titleSegments,
     handleClose,
     type,
     appDetails: appDetailsProp,
@@ -119,6 +115,8 @@ const AppStatusModal = ({
         )
     }
 
+    const filteredTitleSegments = (titleSegments || []).filter((segment) => !!segment)
+
     return (
         <Drawer position="right" width="1024px" onClose={handleClose} onEscape={handleClose}>
             <div
@@ -127,7 +125,14 @@ const AppStatusModal = ({
             >
                 <div className="flexbox-col px-20 border__primary--bottom dc__no-shrink">
                     <div className="flexbox py-12 dc__content-space">
-                        {title}
+                        <h2 className="m-0 dc__truncate fs-16 fw-6 lh-1-5 dc__gap-4">
+                            {filteredTitleSegments.map((segment, index) => (
+                                <Fragment key={segment}>
+                                    {segment}
+                                    {index !== titleSegments.length - 1 && <span className="cn-6 fs-16 fw-4">/</span>}
+                                </Fragment>
+                            ))}
+                        </h2>
 
                         <Button
                             dataTestId="close-modal-header-icon-button"

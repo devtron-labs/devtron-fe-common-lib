@@ -1,5 +1,3 @@
-import { Fragment } from 'react'
-
 import { DEPLOYMENT_STATUS } from '@Shared/constants'
 import { aggregateNodes } from '@Shared/Helpers'
 import { AppDetails, Node } from '@Shared/types'
@@ -66,18 +64,3 @@ export const getFlattenedNodesFromAppDetails = ({
 }
 
 export const getResourceKey = (nodeDetails: Node) => `${nodeDetails.kind}/${nodeDetails.name}`
-
-export const getAppStatusModalTitle = (segments: string[]) => {
-    const filteredSegments = (segments || []).filter((segment) => !!segment)
-
-    return (
-        <h2 className="m-0 dc__truncate fs-16 fw-6 lh-1-5 dc__gap-4">
-            {filteredSegments?.map((segment, index) => (
-                <Fragment key={segment}>
-                    {segment}
-                    {index !== segments.length - 1 && <span className="cn-6 fs-16 fw-4">/</span>}
-                </Fragment>
-            ))}
-        </h2>
-    )
-}

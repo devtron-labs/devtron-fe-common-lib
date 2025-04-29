@@ -1,9 +1,9 @@
-import { FunctionComponent, ReactNode } from 'react'
+import { FunctionComponent } from 'react'
 
 import { AppDetails, ConfigDriftModalProps } from '@Shared/types'
 
 export type AppStatusModalProps = {
-    title: ReactNode
+    titleSegments: string[]
     handleClose: () => void
     /**
      * If given would not poll for app details and resource tree, Polling for gitops timeline would still be done
