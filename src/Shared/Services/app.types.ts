@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { KeyValueTableData } from '@Shared/Components'
 import { TargetPlatformsDTO } from '@Shared/types'
 import { OverrideMergeStrategyType } from '@Pages/Applications'
 
@@ -241,12 +242,6 @@ export interface ConfigMapSecretDataType {
     isDeletable: boolean
 }
 
-export interface CMSecretYamlData {
-    k: string
-    v: string
-    id: string | number
-}
-
 export interface ConfigMapSecretUseFormProps {
     name: string
     isSecret: boolean
@@ -261,7 +256,7 @@ export interface ConfigMapSecretUseFormProps {
     roleARN: string
     yamlMode: boolean
     yaml: string
-    currentData: CMSecretYamlData[]
+    currentData: KeyValueTableData[]
     secretDataYaml: string
     esoSecretYaml: string
     hasCurrentDataErr: boolean
