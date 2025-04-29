@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { SegmentType } from '@Common/SegmentedControl/types'
@@ -48,7 +48,7 @@ export const StatusFilterButtonComponent = ({
 
     const showOverflowFilters = maxInlineFiltersCount > 0 && statusFilters.length > maxInlineFiltersCount
 
-    const inlineFilters = useMemo(() => {
+    const getInlineFilters = () => {
         if (showOverflowFilters) {
             const min = Math.max(0, Math.min(overflowFilterIndex - 1, statusFilters.length - maxInlineFiltersCount))
             const max = Math.min(min + maxInlineFiltersCount, statusFilters.length)
@@ -57,7 +57,9 @@ export const StatusFilterButtonComponent = ({
         }
 
         return statusFilters
-    }, [statusFilters.length, overflowFilterIndex, maxInlineFiltersCount])
+    }
+
+    const inlineFilters = getInlineFilters()
 
     const handleInlineFilterClick = (segment: SegmentType) => {
         const { value } = segment

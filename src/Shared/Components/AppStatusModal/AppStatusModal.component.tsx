@@ -101,6 +101,7 @@ const AppStatusModal = ({
         : null
 
     const handleCloseConfigDriftModal = () => {
+        handleClose()
         setShowConfigDriftModal(false)
     }
 
