@@ -290,16 +290,18 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 ? cellError[row.id][key]
                 : { isValid: true, errorMessages: [] }
 
-        const isSelectText = row.data[key].type === DynamicDataTableRowDataType.SELECT_TEXT
+        const isDropdown =
+            row.data[key].type === DynamicDataTableRowDataType.SELECT_TEXT ||
+            row.data[key].type === DynamicDataTableRowDataType.DROPDOWN
 
         if (isValid) {
             return null
         }
 
-        // Adding 'no-error' class to hide error when SelectPickerTextArea is focused.
+        // Adding 'no-error' class to hide error when SelectPicker or SelectPickerTextArea is focused.
         return (
             <div
-                className={`dynamic-data-table__error bg__primary dc__border br-4 py-7 px-8 flexbox-col dc__gap-4 ${isSelectText ? 'no-error' : ''}`}
+                className={`dynamic-data-table__error bg__primary dc__border br-4 py-7 px-8 flexbox-col dc__gap-4 ${isDropdown ? 'no-error' : ''}`}
             >
                 {errorMessages.map((error) => renderErrorMessage(error))}
             </div>
