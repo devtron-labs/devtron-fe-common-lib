@@ -695,7 +695,7 @@ export const debounce = (func, timeout = 500) => {
 }
 
 export const useDebounce = <Callback extends (...args: any[]) => void>(cb: Callback, delay: number) => {
-    const timeoutId = useRef(null)
+    const timeoutId = useRef<ReturnType<typeof setTimeout>>(null)
 
     return (...args: Parameters<Callback>) => {
         if (timeoutId.current) {
