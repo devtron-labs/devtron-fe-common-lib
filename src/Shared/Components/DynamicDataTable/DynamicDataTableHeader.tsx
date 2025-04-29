@@ -27,7 +27,7 @@ export const DynamicDataTableHeader = <K extends string, CustomStateType = Recor
     headers,
     rows,
     sortingConfig,
-    addBtnTooltip,
+    addBtnTooltip = 'Add',
     onRowAdd,
     readOnly,
     isAdditionNotAllowed,
