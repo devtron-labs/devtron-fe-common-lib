@@ -38,6 +38,11 @@ export const StatusFilterButtonComponent = ({
 
     useEffect(() => {
         const filterIndex = statusFilters.findIndex(({ status }) => status === selectedTab)
+
+        if (filterIndex === -1) {
+            handleFilterClick(allResourceKindFilter.status)
+        }
+
         setOverflowFilterIndex(Math.max(filterIndex, 0))
     }, [JSON.stringify(statusFilters)])
 

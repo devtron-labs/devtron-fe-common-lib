@@ -81,15 +81,18 @@ const AppStatusModal = ({
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             handleExternalSync()
         }
+    }, [areInitialAppDetailsLoading, fetchedAppDetails, fetchedAppDetailsError])
 
-        return () => {
+    useEffect(
+        () => () => {
             if (pollingTimeoutRef.current) {
                 clearTimeout(pollingTimeoutRef.current)
             }
 
             abortControllerRef.current.abort()
-        }
-    }, [areInitialAppDetailsLoading, fetchedAppDetails, fetchedAppDetailsError])
+        },
+        [],
+    )
 
     const handleShowConfigDriftModal = isConfigDriftEnabled
         ? () => {
