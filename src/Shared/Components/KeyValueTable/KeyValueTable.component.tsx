@@ -20,12 +20,7 @@ import { useEffectAfterMount } from '@Common/Helper'
 import { useStateFilters } from '@Common/Hooks'
 
 import { DynamicDataTable } from '../DynamicDataTable'
-import {
-    KeyValueTableDataType,
-    KeyValueTableInternalProps,
-    KeyValueTableProps,
-    KeyValueTableRowType,
-} from './KeyValueTable.types'
+import { KeyValueTableDataType, KeyValueTableInternalProps, KeyValueTableProps } from './KeyValueTable.types'
 import {
     getEmptyRow,
     getKeyValueHeaders,
@@ -100,31 +95,26 @@ export const KeyValueTable = ({
     // Sort rows for display purposes only. \
     // The `sortedRows` state is used internally to render the data, while the original `rows` prop remains unaltered during sorting.
     useEffectAfterMount(() => {
-        if (isSortable) {
-            // Create a map of rows using their IDs for quick lookup
-            const rowMap = rows.reduce<Record<KeyValueTableRowType['id'], KeyValueTableInternalProps['rows'][number]>>(
-                (acc, row) => {
-                    acc[row.id] = row
-                    return acc
-                },
-                {},
-            )
-
-            // Create a set of IDs from the currently sorted rows for efficient lookup
-            const sortedRowSet = new Set(sortedRows.map(({ id }) => id))
-
-            // Update the sorted rows by filtering out rows that no longer exist and mapping them to the latest data
-            const updatedSortedRows = sortedRows.filter(({ id }) => rowMap[id]).map(({ id }) => rowMap[id])
-
-            // Identify rows that are not part of the current sorted set (new or unsorted rows)
-            const unsortedRows = rows.filter(({ id }) => !sortedRowSet.has(id))
-
-            // Combine unsorted rows with updated sorted rows and set them as the new sorted rows
-            setSortedRows([...unsortedRows, ...updatedSortedRows])
-        } else {
-            // If sorting is disabled, directly set the rows as the sorted rows
+        if (!isSortable) {
+            // If sorting is disabled, directly set rows without any processing
             setSortedRows(rows)
+            return
         }
+
+        // Create a mapping of row IDs to row objects for quick lookup
+        const rowMap = new Map(rows.map((row) => [row.id, row]))
+
+        // Create a set of IDs from the current sorted rows for efficient membership checking
+        const sortedRowIds = new Set(sortedRows.map((row) => row.id))
+
+        // Update the sorted rows by mapping them to the latest version from `rows` and filtering out any rows that no longer exist
+        const updatedSortedRows = sortedRows.map((row) => rowMap.get(row.id)).filter(Boolean)
+
+        // Find any new rows that are not already in the sorted list
+        const newUnsortedRows = rows.filter((row) => !sortedRowIds.has(row.id))
+
+        // Combine new unsorted rows (at the top) with the updated sorted rows (preserving original order)
+        setSortedRows([...newUnsortedRows, ...updatedSortedRows])
     }, [rows])
 
     // Update the sorted rows whenever the sorting configuration changes
