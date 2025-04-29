@@ -16,27 +16,10 @@
 
 import { ReactElement, ReactNode } from 'react'
 
-import { ComponentSizeType } from '@Shared/constants'
+import { ComponentSizeType, InfoBlockVariantType } from '@Shared/constants'
 import { BorderConfigType, ComponentLayoutType } from '@Shared/types'
 
 import { ButtonComponentType, ButtonProps } from '../Button'
-
-export enum InfoBlockVariant {
-    ERROR = 'error',
-    HELP = 'help',
-    INFORMATION = 'information',
-    SUCCESS = 'success',
-    WARNING = 'warning',
-    NEUTRAL = 'neutral',
-}
-
-export type InfoBlockVariantType =
-    | InfoBlockVariant.ERROR
-    | InfoBlockVariant.HELP
-    | InfoBlockVariant.INFORMATION
-    | InfoBlockVariant.SUCCESS
-    | InfoBlockVariant.WARNING
-    | InfoBlockVariant.NEUTRAL
 
 export type InfoBlockProps = {
     /**

@@ -24,11 +24,11 @@ import {
     SIZE_TO_ICON_CLASS_MAP,
     VARIANT_TO_ICON_MAP,
 } from './constants'
-import { InfoBlockProps, InfoBlockVariant } from './types'
+import { InfoBlockProps } from './types'
 
 const InfoBlock = ({
     layout = 'row',
-    variant = InfoBlockVariant.INFORMATION,
+    variant = 'information',
     size = ComponentSizeType.large,
     customIcon,
     buttonProps,

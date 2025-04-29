@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { ComponentSizeType } from '@Shared/constants'
+import { ComponentSizeType, InfoBlockVariant } from '@Shared/constants'
 
 import { ButtonProps } from '../Button'
 import { Icon } from '../Icon'
-import { InfoBlockProps, InfoBlockVariant } from './types'
+import { InfoBlockProps } from './types'
 
 export const VARIANT_TO_ICON_MAP: Record<InfoBlockVariant, InfoBlockProps['customIcon']> = {
     [InfoBlockVariant.ERROR]: <Icon name="ic-error" color="R500" />,

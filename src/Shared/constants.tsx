@@ -16,7 +16,7 @@
 
 import { OptionType } from '@Common/Types'
 
-import { InfoBlockProps, InfoBlockVariant } from './Components'
+import { InfoBlockProps } from './Components'
 import { CDMaterialSidebarType, ConfigKeysWithLockType, ConfigurationType, IconBaseColorType } from './types'
 
 export const ARTIFACT_STATUS = {
@@ -554,6 +554,17 @@ export const Routes = {
 export const ENTERPRISE_SUPPORT_LINK = 'enterprise@devtron.ai'
 
 export const INVALID_LICENSE_KEY = 'inValid'
+
+export enum InfoBlockVariant {
+    ERROR = 'error',
+    HELP = 'help',
+    INFORMATION = 'information',
+    SUCCESS = 'success',
+    WARNING = 'warning',
+    NEUTRAL = 'neutral',
+}
+
+export type InfoBlockVariantType = 'error' | 'help' | 'information' | 'success' | 'warning' | 'neutral'
 
 export const VARIANT_TO_BG_MAP: Record<InfoBlockProps['variant'], string> = {
     [InfoBlockVariant.ERROR]: 'bcr-1',
