@@ -217,7 +217,7 @@ const GitCommitInfoGeneric = ({
 
     return (
         <div className="git-commit-info-generic__wrapper cn-9 fs-12">
-            {showMaterialInfoHeader && (_isWebhook || lowerCaseCommitInfo.commit) && (
+            {showMaterialInfoHeader && (_isWebhook || lowerCaseCommitInfo.commit) && !!materialUrl && (
                 <GitMaterialInfoHeader
                     index={index}
                     repoUrl={materialUrl}
