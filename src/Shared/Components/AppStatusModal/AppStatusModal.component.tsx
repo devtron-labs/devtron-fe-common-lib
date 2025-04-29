@@ -1,8 +1,10 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 
+import NoAppStatusImage from '@Images/no-artifact.webp'
 import { abortPreviousRequests, getIsRequestAborted } from '@Common/API'
 import { DISCORD_LINK } from '@Common/Constants'
 import { Drawer } from '@Common/Drawer'
+import { GenericEmptyState } from '@Common/EmptyState'
 import { stopPropagation, useAsync } from '@Common/Helper'
 import { ComponentSizeType } from '@Shared/constants'
 
@@ -111,6 +113,40 @@ const AppStatusModal = ({
 
     const filteredTitleSegments = (titleSegments || []).filter((segment) => !!segment)
 
+    const renderContent = () => {
+        if (!appDetails?.resourceTree) {
+            return <GenericEmptyState image={NoAppStatusImage} title="Application status is not available" />
+        }
+
+        return (
+            <>
+                <AppStatusBody
+                    appDetails={appDetails}
+                    type={type}
+                    handleShowConfigDriftModal={handleShowConfigDriftModal}
+                />
+
+                {type === 'stack-manager' && (
+                    <div className="bg__primary flexbox dc__align-items-center dc__content-space dc__border-top py-16 px-20 fs-13 fw-6">
+                        <span className="fs-13 fw-6">Facing issues in installing integration?</span>
+
+                        <Button
+                            dataTestId="chat-with-support-button"
+                            component={ButtonComponentType.anchor}
+                            anchorProps={{
+                                href: DISCORD_LINK,
+                                target: '_blank',
+                                rel: 'noreferrer noopener',
+                            }}
+                            startIcon={<Icon name="ic-chat-circle-dots" color={null} />}
+                            text="Chat with support"
+                        />
+                    </div>
+                )}
+            </>
+        )
+    }
+
     return (
         <Drawer position="right" width="1024px" onClose={handleClose} onEscape={handleClose}>
             <div
@@ -153,29 +189,7 @@ const AppStatusModal = ({
                             reload: reloadInitialAppDetails,
                         }}
                     >
-                        <AppStatusBody
-                            appDetails={appDetails}
-                            type={type}
-                            handleShowConfigDriftModal={handleShowConfigDriftModal}
-                        />
-
-                        {type === 'stack-manager' && (
-                            <div className="bg__primary flexbox dc__align-items-center dc__content-space dc__border-top py-16 px-20 fs-13 fw-6">
-                                <span className="fs-13 fw-6">Facing issues in installing integration?</span>
-
-                                <Button
-                                    dataTestId="chat-with-support-button"
-                                    component={ButtonComponentType.anchor}
-                                    anchorProps={{
-                                        href: DISCORD_LINK,
-                                        target: '_blank',
-                                        rel: 'noreferrer noopener',
-                                    }}
-                                    startIcon={<Icon name="ic-chat-circle-dots" color={null} />}
-                                    text="Chat with support"
-                                />
-                            </div>
-                        )}
+                        {renderContent()}
                     </APIResponseHandler>
                 </div>
             </div>
