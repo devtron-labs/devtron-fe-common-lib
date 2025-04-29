@@ -107,7 +107,11 @@ const AppStatusContent = ({
                                     )}
                                 </div>
                             )}
-                            <ShowMoreText key={getNodeMessage(nodeDetails)} text={getNodeMessage(nodeDetails)} />
+                            <ShowMoreText
+                                key={`${getNodeMessage(nodeDetails)}-${nodeDetails.name}-${nodeDetails.kind}`}
+                                containerClass="w-450"
+                                text={getNodeMessage(nodeDetails)}
+                            />
                         </div>
                     </div>
                 ))}

@@ -19,7 +19,12 @@ const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; val
         </Tooltip>
 
         {typeof value === 'string' ? (
-            <ShowMoreText key={`show-more-text-${value}`} textClass="cn-9 fs-13 fw-4 lh-1-5" text={value} />
+            <ShowMoreText
+                key={`show-more-text-${value}`}
+                containerClass="mw-720 pr-20"
+                textClass="cn-9 fs-13 fw-4 lh-1-5"
+                text={value}
+            />
         ) : (
             value
         )}
