@@ -49,11 +49,10 @@ const AppStatusModal = ({
 
     const handleExternalSync = async () => {
         try {
-            const response = await getAppDetailsWrapper()
-            setFetchedAppDetails(response)
-
             pollingTimeoutRef.current = setTimeout(
-                () => {
+                async () => {
+                    const response = await getAppDetailsWrapper()
+                    setFetchedAppDetails(response)
                     // eslint-disable-next-line @typescript-eslint/no-floating-promises
                     handleExternalSync()
                 },
@@ -77,13 +76,8 @@ const AppStatusModal = ({
             fetchedAppDetails &&
             !pollingTimeoutRef.current
         ) {
-            pollingTimeoutRef.current = setTimeout(
-                () => {
-                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                    handleExternalSync()
-                },
-                Number(window._env_.DEVTRON_APP_DETAILS_POLLING_INTERVAL) || 30000,
-            )
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            handleExternalSync()
         }
 
         return () => {

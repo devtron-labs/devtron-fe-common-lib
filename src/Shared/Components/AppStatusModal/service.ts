@@ -30,7 +30,7 @@ export const getAppDetails = async (
             appType: AppType.DEVTRON_APP,
         }
     } catch (error) {
-        if (getIsRequestAborted(error)) {
+        if (!getIsRequestAborted(error)) {
             showError(error)
         }
         throw error

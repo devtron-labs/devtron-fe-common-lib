@@ -32,7 +32,7 @@ export const AppStatusBody = ({ appDetails, type, handleShowConfigDriftModal }: 
     const customMessage =
         type === 'stack-manager'
             ? 'The installation will complete when status for all the below resources become HEALTHY.'
-            : APP_STATUS_CUSTOM_MESSAGES[appDetails.resourceTree?.status?.toUpperCase()]
+            : APP_STATUS_CUSTOM_MESSAGES[appStatus]
 
     const infoCardItems: (Omit<ComponentProps<typeof InfoCardItem>, 'isLast'> & { id: number })[] = [
         {

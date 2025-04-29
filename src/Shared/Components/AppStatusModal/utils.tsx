@@ -10,17 +10,18 @@ export const getAppStatusMessageFromAppDetails = (appDetails: AppDetails): strin
         return ''
     }
 
+    const { conditions } = appDetails.resourceTree
+
+    if (Array.isArray(conditions) && conditions.length > 0 && conditions[0].message) {
+        return conditions[0].message
+    }
+
     const nodes: AggregatedNodes = aggregateNodes(
         appDetails.resourceTree.nodes || [],
         appDetails.resourceTree.podMetadata || [],
     )
 
-    const { conditions } = appDetails.resourceTree
     const rollout = nodes?.nodes?.Rollout?.entries()?.next()?.value?.[1]
-
-    if (Array.isArray(conditions) && conditions.length > 0 && conditions[0].message) {
-        return conditions[0].message
-    }
 
     if (rollout?.health?.message) {
         return rollout.health.message
