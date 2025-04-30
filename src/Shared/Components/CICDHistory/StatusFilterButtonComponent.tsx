@@ -104,9 +104,15 @@ export const StatusFilterButtonComponent = ({
 
     const segmentValue = segments.find(({ value }) => value === selectedTab)?.value || null
 
+    const segmentControlKey = inlineFilters.reduce<string>(
+        (acc, inlineFilter) => `${acc}-${inlineFilter.count}-${inlineFilter.status}`,
+        `${allResourceKindFilter.status}-${allResourceKindFilter.count}`,
+    )
+
     return (
         <div className="flexbox status-filter__container">
             <SegmentedControl
+                key={segmentControlKey}
                 segments={segments}
                 value={segmentValue}
                 onChange={handleInlineFilterClick}

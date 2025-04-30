@@ -34,7 +34,7 @@ const SegmentedControl = ({
             style.setProperty('--segmented-control-highlight-width', `${offsetWidth}px`)
             style.setProperty('--segmented-control-highlight-x-position', `${offsetLeft}px`)
         }
-    }, [segmentValue, size, fullWidth, segments.length])
+    }, [segmentValue, size, fullWidth])
 
     const handleSegmentChange = (updatedSegment: SegmentType) => {
         if (isUnControlledComponent) {
