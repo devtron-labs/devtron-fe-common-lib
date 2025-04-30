@@ -116,6 +116,7 @@ export interface CheckboxProps {
     onClick?: (event) => void
     id?: string
     dataTestId?: string
+    children?: ReactNode
 }
 
 export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
