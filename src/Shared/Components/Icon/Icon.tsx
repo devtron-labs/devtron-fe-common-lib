@@ -61,6 +61,7 @@ import { ReactComponent as ICGoogle } from '@IconsV2/ic-google.svg'
 import { ReactComponent as ICGoogleArtifactRegistry } from '@IconsV2/ic-google-artifact-registry.svg'
 import { ReactComponent as ICGoogleContainerRegistry } from '@IconsV2/ic-google-container-registry.svg'
 import { ReactComponent as ICGridView } from '@IconsV2/ic-grid-view.svg'
+import { ReactComponent as ICHandPointing } from '@IconsV2/ic-hand-pointing.svg'
 import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
 import { ReactComponent as ICHeartRed } from '@IconsV2/ic-heart-red.svg'
 import { ReactComponent as ICHeartRedAnimated } from '@IconsV2/ic-heart-red-animated.svg'
@@ -95,6 +96,7 @@ import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-col
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
+import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
 import { ReactComponent as ICSlidersVertical } from '@IconsV2/ic-sliders-vertical.svg'
 import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
@@ -181,6 +183,7 @@ export const iconMap = {
     'ic-google-container-registry': ICGoogleContainerRegistry,
     'ic-google': ICGoogle,
     'ic-grid-view': ICGridView,
+    'ic-hand-pointing': ICHandPointing,
     'ic-heart-green': ICHeartGreen,
     'ic-heart-red-animated': ICHeartRedAnimated,
     'ic-heart-red': ICHeartRed,
@@ -215,6 +218,7 @@ export const iconMap = {
     'ic-pencil': ICPencil,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
+    'ic-rocket-launch': ICRocketLaunch,
     'ic-shield-check': ICShieldCheck,
     'ic-sliders-vertical': ICSlidersVertical,
     'ic-sort-ascending': ICSortAscending,

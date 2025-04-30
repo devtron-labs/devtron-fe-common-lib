@@ -157,6 +157,8 @@ export const ROUTES = {
     ENVIRONMENT_DATA: 'global/environment-variables',
     DASHBOARD_EVENT: 'dashboard-event',
     LICENSE_DATA: 'license/data',
+    ENV: 'env',
+    APP_METADATA: 'app-metadata',
 } as const
 
 export enum KEY_VALUE {
