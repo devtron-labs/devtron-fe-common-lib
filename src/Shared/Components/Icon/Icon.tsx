@@ -1,5 +1,6 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
 
+import { ReactComponent as IC14DayTrialChip } from '@IconsV2/ic-14-day-trial-chip.svg'
 import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
@@ -20,6 +21,7 @@ import { ReactComponent as ICCalendar } from '@IconsV2/ic-calendar.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCardStack } from '@IconsV2/ic-card-stack.svg'
 import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
+import { ReactComponent as ICCaretRight } from '@IconsV2/ic-caret-right.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
 import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots.svg'
 import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
@@ -45,6 +47,7 @@ import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
+import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
 import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
@@ -109,6 +112,7 @@ import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
+import { ReactComponent as ICUserCircle } from '@IconsV2/ic-user-circle.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
@@ -118,6 +122,7 @@ import { IconBase } from './IconBase'
 import { IconBaseProps } from './types'
 
 export const iconMap = {
+    'ic-14-day-trial-chip': IC14DayTrialChip,
     'ic-73strings': IC73strings,
     'ic-aborted': ICAborted,
     'ic-add': ICAdd,
@@ -138,6 +143,7 @@ export const iconMap = {
     'ic-cancelled': ICCancelled,
     'ic-card-stack': ICCardStack,
     'ic-caret-left': ICCaretLeft,
+    'ic-caret-right': ICCaretRight,
     'ic-cd': ICCd,
     'ic-chat-circle-dots': ICChatCircleDots,
     'ic-check': ICCheck,
@@ -163,6 +169,7 @@ export const iconMap = {
     'ic-ecr': ICEcr,
     'ic-env': ICEnv,
     'ic-error': ICError,
+    'ic-expand-right-sm': ICExpandRightSm,
     'ic-failure': ICFailure,
     'ic-file-key': ICFileKey,
     'ic-folder-user': ICFolderUser,
@@ -227,6 +234,7 @@ export const iconMap = {
     'ic-timer': ICTimer,
     'ic-travclan': ICTravclan,
     'ic-unknown': ICUnknown,
+    'ic-user-circle': ICUserCircle,
     'ic-user-key': ICUserKey,
     'ic-users': ICUsers,
     'ic-warning': ICWarning,
