@@ -24,6 +24,8 @@ import { PopupMenu, SegmentedControl } from '../../../Common'
 import { StatusFilterButtonType } from './types'
 import { getAppStatusIcon, getNodesCount, getStatusFilters } from './utils'
 
+import './StatusFilterButton.scss'
+
 export const StatusFilterButtonComponent = ({
     nodes,
     selectedTab,
@@ -100,11 +102,13 @@ export const StatusFilterButtonComponent = ({
         })),
     ]
 
+    const segmentValue = segments.find(({ value }) => value === selectedTab)?.value || null
+
     return (
-        <div className="flexbox">
+        <div className="flexbox status-filter__container">
             <SegmentedControl
                 segments={segments}
-                value={selectedTab}
+                value={segmentValue}
                 onChange={handleInlineFilterClick}
                 name="status-filter-button"
                 size={ComponentSizeType.small}
@@ -114,7 +118,7 @@ export const StatusFilterButtonComponent = ({
                 <PopupMenu autoClose>
                     <PopupMenu.Button
                         isKebab
-                        rootClassName="flex p-4 dc__border dc__no-left-radius dc__right-radius-4 bg__primary dc__hover-n50"
+                        rootClassName="flex p-4 dc__no-left-radius dc__right-radius-4 bg__primary dc__hover-n50"
                     >
                         <ICCaretDown className="icon-dim-14 scn-6" />
                     </PopupMenu.Button>
