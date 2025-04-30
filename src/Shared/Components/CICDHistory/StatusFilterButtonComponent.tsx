@@ -105,8 +105,8 @@ export const StatusFilterButtonComponent = ({
     const segmentValue = segments.find(({ value }) => value === selectedTab)?.value || null
 
     const segmentControlKey = inlineFilters.reduce<string>(
-        (acc, inlineFilter) => `${acc}-${inlineFilter.count}-${inlineFilter.status}`,
-        `${allResourceKindFilter.status}-${allResourceKindFilter.count}`,
+        (acc, inlineFilter) => `${acc}-${inlineFilter.status}`,
+        `${allResourceKindFilter.status}`,
     )
 
     return (
