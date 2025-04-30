@@ -28,12 +28,12 @@ export enum ClusterFiltersType {
 
 export enum InstallationClusterStatus {
     Creating = 'Creating',
-    Deleting = 'Deleting',
+    Updated = 'Updated',
     Updating = 'Updating',
     Installed = 'Installed',
     Failed = 'Failed',
-    Superseded = 'Superseded',
-    Undefined = 'Undefined',
+    Deleting = 'Deleting',
+    Deleted = 'Deleted',
 }
 
 export enum ClusterStatusType {

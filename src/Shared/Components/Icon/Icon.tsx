@@ -39,6 +39,7 @@ import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
 import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
 import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
+import { ReactComponent as ICDeleteDots } from '@IconsV2/ic-delete-dots.svg'
 import { ReactComponent as ICDeleteLightning } from '@IconsV2/ic-delete-lightning.svg'
 import { ReactComponent as ICDelhivery } from '@IconsV2/ic-delhivery.svg'
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
@@ -157,6 +158,7 @@ export const iconMap = {
     'ic-cpu': ICCpu,
     'ic-crown': ICCrown,
     'ic-cube': ICCube,
+    'ic-delete-dots': ICDeleteDots,
     'ic-delete-lightning': ICDeleteLightning,
     'ic-delete': ICDelete,
     'ic-delhivery': ICDelhivery,
