@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+export { ValueContainerWithLoadingShimmer } from './common'
 export { default as FilterSelectPicker } from './FilterSelectPicker'
 export { default as SelectPicker } from './SelectPicker.component'
 export * from './SelectPickerTextArea.component'

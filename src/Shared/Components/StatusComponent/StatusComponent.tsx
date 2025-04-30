@@ -64,7 +64,7 @@ export const StatusComponent = ({
             <Tooltip content={textContent}>
                 <p
                     data-testid={`${status || 'status-is-null'}-status`}
-                    className="m-0 dc__ellipsis-right dc__first-letter-capitalize fs-13 lh-20 cn-6"
+                    className="m-0 dc__ellipsis-right dc__first-letter-capitalize fs-13 lh-20 cn-9"
                 >
                     {textContent}
                 </p>

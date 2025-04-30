@@ -34,6 +34,7 @@ export enum StatusType {
     INPROGRESS = 'INPROGRESS',
     HIBERNATING = 'HIBERNATING',
     TIMED_OUT = 'TIMED_OUT',
+    DELETING = 'DELETING',
 }
 
 export interface StatusComponentProps {

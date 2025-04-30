@@ -24,8 +24,7 @@ const ShortcutKeyComboTooltipContent = ({ text, combo }: TooltipProps['shortcutK
         {!!combo?.length && (
             <div className="flexbox dc__gap-4 dc__align-items-center flex-wrap">
                 {combo.map((key) => (
-                    // TODO: check styling for this since span was replaced by kbd
-                    <kbd key={key} className="shortcut-keys__chip dc__capitalize lh-16 fs-11 fw-5 flex">
+                    <kbd key={key} className="shortcut-keys__chip dc__capitalize lh-16 fs-11 fw-5 flex text__white">
                         {KEYBOARD_KEYS_MAP[key]}
                     </kbd>
                 ))}
