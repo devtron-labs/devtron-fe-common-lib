@@ -14,7 +14,7 @@ const AboutDevtronBody = ({ isFELibAvailable }: { isFELibAvailable: boolean }) =
     const currentVersion = currentServerInfo?.serverInfo?.currentVersion
     const isEnterprise = currentServerInfo?.serverInfo?.installationType === InstallationType.ENTERPRISE
 
-    const isVersionSame = isFELibAvailable === isEnterprise
+    const isVersionCompatible = isFELibAvailable === isEnterprise
 
     const handleEULAClick = () => {
         ReactGA.event({
@@ -31,7 +31,7 @@ const AboutDevtronBody = ({ isFELibAvailable }: { isFELibAvailable: boolean }) =
                 </div>
                 <div>
                     <p className="fs-16 cn-9 fw-6 lh-1-5 m-0">Devtron</p>
-                    {isVersionSame && (
+                    {isVersionCompatible && (
                         <p className="fs-13 cn-7 fw-4 lh-20 m-0">{`${isEnterprise ? 'Enterprise' : 'OSS'} Version${currentVersion ? `(${currentVersion})` : ''}`}</p>
                     )}
                 </div>
