@@ -8,11 +8,13 @@ import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from 
 import { InstallationType } from '../Header/types'
 import { Icon } from '../Icon'
 
-const AboutDevtronBody = () => {
+const AboutDevtronBody = ({ isFELibAvailable }: { isFELibAvailable: boolean }) => {
     const { currentServerInfo } = useMainContext()
 
     const currentVersion = currentServerInfo?.serverInfo?.currentVersion
     const isEnterprise = currentServerInfo?.serverInfo?.installationType === InstallationType.ENTERPRISE
+
+    const isVersionSame = isFELibAvailable === isEnterprise
 
     const handleEULAClick = () => {
         ReactGA.event({
@@ -29,7 +31,9 @@ const AboutDevtronBody = () => {
                 </div>
                 <div>
                     <p className="fs-16 cn-9 fw-6 lh-1-5 m-0">Devtron</p>
-                    <p className="fs-13 cn-7 fw-4 lh-20 m-0">{`${isEnterprise ? 'Enterprise' : 'OSS'} Version${currentVersion ? `(${currentVersion})` : ''}`}</p>
+                    {isVersionSame && (
+                        <p className="fs-13 cn-7 fw-4 lh-20 m-0">{`${isEnterprise ? 'Enterprise' : 'OSS'} Version${currentVersion ? `(${currentVersion})` : ''}`}</p>
+                    )}
                 </div>
                 <DevtronCopyright />
             </div>
