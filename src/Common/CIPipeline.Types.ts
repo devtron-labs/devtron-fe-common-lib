@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { DynamicDataTableCellValidationState } from '@Shared/Components'
+import { DynamicDataTableCellValidationState, KeyValueTableData } from '@Shared/Components'
 
 export interface MaterialType {
     name: string
@@ -158,7 +158,7 @@ export interface PortMapType {
     portOnLocal: number
     portOnContainer: number
 }
-interface ConditionDetails {
+export interface ConditionDetails {
     id: number
     conditionOnVariable: string
     conditionOperator: string
@@ -266,7 +266,7 @@ export enum WORKFLOW_CACHE_CONFIG_ENUM {
 
 export interface FormType {
     name: string
-    args: { key: string; value: string }[]
+    args: KeyValueTableData[]
     materials: MaterialType[]
     gitHost: Githost
     webhookEvents: WebhookEvent[]
@@ -314,23 +314,29 @@ export enum InputOutputVariablesHeaderKeys {
     VALUE = 'val',
 }
 
-export type InputOutputVariablesErrorObj = Record<InputOutputVariablesHeaderKeys, DynamicDataTableCellValidationState>
+export enum ConditionDataTableHeaderKeys {
+    VARIABLE = 'variable',
+    OPERATOR = 'operator',
+    VALUE = 'val',
+}
+
+type InputOutputVariablesErrorObj = Record<InputOutputVariablesHeaderKeys, DynamicDataTableCellValidationState>
+type ConditionDetailsErrorObj = Record<ConditionDataTableHeaderKeys, DynamicDataTableCellValidationState>
+
+interface StepDetailTaskErrorObj {
+    inputVariables?: Record<number, InputOutputVariablesErrorObj>
+    outputVariables?: Record<number, InputOutputVariablesErrorObj>
+    isInputVariablesValid?: boolean
+    isOutputVariablesValid?: boolean
+    conditionDetails?: Record<number, ConditionDetailsErrorObj>
+    isConditionDetailsValid?: boolean
+}
 
 export interface TaskErrorObj {
     isValid: boolean
     name: ErrorObj
-    inlineStepDetail?: {
-        inputVariables?: Record<number, InputOutputVariablesErrorObj>
-        outputVariables?: Record<number, InputOutputVariablesErrorObj>
-        isInputVariablesValid?: boolean
-        isOutputVariablesValid?: boolean
-    }
-    pluginRefStepDetail?: {
-        inputVariables?: Record<number, InputOutputVariablesErrorObj>
-        outputVariables?: Record<number, InputOutputVariablesErrorObj>
-        isInputVariablesValid?: boolean
-        isOutputVariablesValid?: boolean
-    }
+    inlineStepDetail?: StepDetailTaskErrorObj
+    pluginRefStepDetail?: StepDetailTaskErrorObj
 }
 export interface FormErrorObjectType {
     name: ErrorObj

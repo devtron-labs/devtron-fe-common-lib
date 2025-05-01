@@ -19,10 +19,11 @@ import YAML from 'yaml'
 import { PATTERNS } from '@Common/Constants'
 import { YAMLStringify } from '@Common/Helper'
 import { UseFormValidation, UseFormValidations } from '@Shared/Hooks'
-import { CMSecretExternalType, CMSecretYamlData, ConfigMapSecretUseFormProps } from '@Shared/Services'
+import { CMSecretExternalType, ConfigMapSecretUseFormProps } from '@Shared/Services'
 import { validateCMVolumeMountPath } from '@Shared/validations'
 import { hasESO } from '@Pages/index'
 
+import { KeyValueTableData } from '../KeyValueTable'
 import { CONFIG_MAP_SECRET_YAML_PARSE_ERROR, SECRET_TOAST_INFO } from './constants'
 import { getESOSecretDataFromYAML } from './utils'
 
@@ -310,7 +311,7 @@ export const getConfigMapSecretFormValidations: UseFormValidations<ConfigMapSecr
                             },
                             currentData: {
                                 custom: {
-                                    isValid: (value: CMSecretYamlData[]) => !!value.filter(({ k }) => !!k).length,
+                                    isValid: (value: KeyValueTableData[]) => !!value.filter(({ key }) => !!key).length,
                                     message: 'This is a required field',
                                 },
                             },

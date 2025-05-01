@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { CMSecretExternalType, CMSecretYamlData } from '@Shared/Services'
+import { CMSecretExternalType } from '@Shared/Services'
 
+import { KeyValueTableData } from '../KeyValueTable'
 import { ConfigMapSecretDataTypeOptionType } from './types'
 
 export const CONFIG_MAP_SECRET_YAML_PARSE_ERROR = 'Please provide valid YAML'
@@ -33,7 +34,7 @@ export const configMapDataTypeOptions: ConfigMapSecretDataTypeOptionType[] = [
     { value: CMSecretExternalType.KubernetesConfigMap, label: 'Kubernetes External ConfigMap' },
 ]
 
-export const CONFIG_MAP_SECRET_DEFAULT_CURRENT_DATA: CMSecretYamlData[] = [{ k: '', v: '', id: 0 }]
+export const CONFIG_MAP_SECRET_DEFAULT_CURRENT_DATA: KeyValueTableData[] = [{ key: '', value: '', id: 0 }]
 
 export const configMapSecretMountDataMap = {
     environment: { title: 'Environment Variable', value: 'environment' },
