@@ -8,6 +8,7 @@ import { ReactComponent as ICApica } from '@IconsV2/ic-apica.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
+import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out.svg'
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
@@ -20,6 +21,7 @@ import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
 import { ReactComponent as ICCalendar } from '@IconsV2/ic-calendar.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCardStack } from '@IconsV2/ic-card-stack.svg'
+import { ReactComponent as ICCaretDownSmall } from '@IconsV2/ic-caret-down-small.svg'
 import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
 import { ReactComponent as ICCaretRight } from '@IconsV2/ic-caret-right.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
@@ -70,8 +72,10 @@ import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
 import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
+import { ReactComponent as ICInstall } from '@IconsV2/ic-install.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
+import { ReactComponent as ICLaptop } from '@IconsV2/ic-laptop.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
@@ -83,6 +87,7 @@ import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintb
 import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
+import { ReactComponent as ICMobile } from '@IconsV2/ic-mobile.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
 import { ReactComponent as ICNew } from '@IconsV2/ic-new.svg'
 import { ReactComponent as ICNodeScript } from '@IconsV2/ic-node-script.svg'
@@ -130,6 +135,7 @@ export const iconMap = {
     'ic-app-group': ICAppGroup,
     'ic-arrow-clockwise': ICArrowClockwise,
     'ic-arrow-right': ICArrowRight,
+    'ic-arrow-square-out': ICArrowSquareOut,
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-ather': ICAther,
     'ic-azure': ICAzure,
@@ -142,6 +148,7 @@ export const iconMap = {
     'ic-calendar': ICCalendar,
     'ic-cancelled': ICCancelled,
     'ic-card-stack': ICCardStack,
+    'ic-caret-down-small': ICCaretDownSmall,
     'ic-caret-left': ICCaretLeft,
     'ic-caret-right': ICCaretRight,
     'ic-cd': ICCd,
@@ -192,8 +199,10 @@ export const iconMap = {
     'ic-in-progress': ICInProgress,
     'ic-info-filled': ICInfoFilled,
     'ic-info-outline': ICInfoOutline,
+    'ic-install': ICInstall,
     'ic-job-color': ICJobColor,
     'ic-k8s-job': ICK8sJob,
+    'ic-laptop': ICLaptop,
     'ic-ldap': ICLdap,
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
@@ -205,6 +214,7 @@ export const iconMap = {
     'ic-memory': ICMemory,
     'ic-microsoft': ICMicrosoft,
     'ic-missing': ICMissing,
+    'ic-mobile': ICMobile,
     'ic-monitoring': ICMonitoring,
     'ic-new': ICNew,
     'ic-node-script': ICNodeScript,

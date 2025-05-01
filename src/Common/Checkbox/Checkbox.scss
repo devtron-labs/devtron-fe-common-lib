@@ -30,7 +30,7 @@ $checkbox-hover-bg-image: url('./assets/ic-checkbox-hover.svg');
     transition: background-image 0.17s;
 
     &:hover {
-        background-image: url($checkbox-hover-bg-image);
+        background-image: $checkbox-hover-bg-image;
     }
 }
 
