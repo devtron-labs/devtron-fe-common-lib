@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+export * from './AboutDevtron'
 export * from './ActionMenu'
 export * from './ActivityIndicator'
 export * from './AnimatedDeployButton'
