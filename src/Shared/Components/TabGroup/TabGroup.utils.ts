@@ -21,8 +21,8 @@ import { TabGroupProps } from './TabGroup.types'
 
 export const getClassNameBySizeMap = ({
     hideTopPadding,
-    alignActiveBorderWithContainer,
-}: Pick<TabGroupProps, 'hideTopPadding' | 'alignActiveBorderWithContainer'>): Record<
+    isTabActive,
+}: Pick<TabGroupProps, 'hideTopPadding'> & { isTabActive: boolean }): Record<
     TabGroupProps['size'],
     {
         tabClassName: string
@@ -31,17 +31,17 @@ export const getClassNameBySizeMap = ({
     }
 > => ({
     [ComponentSizeType.medium]: {
-        tabClassName: `fs-12 ${!hideTopPadding ? 'pt-6' : ''} ${alignActiveBorderWithContainer ? 'pb-5' : 'pb-6'}`,
+        tabClassName: `fs-12 ${!hideTopPadding ? 'pt-6' : ''} ${isTabActive ? 'pb-3' : 'pb-5'}`,
         iconClassName: 'icon-dim-14',
         badgeClassName: 'fs-11 lh-18 tab-group__tab__badge--medium',
     },
     [ComponentSizeType.large]: {
-        tabClassName: `fs-13 ${!hideTopPadding ? 'pt-8' : ''} ${alignActiveBorderWithContainer ? 'pb-7' : 'pb-8'}`,
+        tabClassName: `fs-13 ${!hideTopPadding ? 'pt-8' : ''} ${isTabActive ? 'pb-5' : 'pb-7'}`,
         iconClassName: 'icon-dim-16',
         badgeClassName: 'fs-12 lh-20',
     },
     [ComponentSizeType.xl]: {
-        tabClassName: `min-w-200 fs-13 ${!hideTopPadding ? 'pt-10' : ''} ${alignActiveBorderWithContainer ? 'pb-9' : 'pb-10'}`,
+        tabClassName: `min-w-200 fs-13 ${!hideTopPadding ? 'pt-10' : ''} ${isTabActive ? 'pb-7' : 'pb-9'}`,
         iconClassName: 'icon-dim-16',
         badgeClassName: 'fs-12 lh-20',
     },
