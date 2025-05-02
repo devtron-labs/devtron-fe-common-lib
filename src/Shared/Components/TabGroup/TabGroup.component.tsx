@@ -28,7 +28,15 @@ import { getClassNameBySizeMap, tabGroupClassMap } from './TabGroup.utils'
 import './TabGroup.scss'
 
 const MotionLayoutUnderline = ({ layoutId }: { layoutId: string }) => (
-    <motion.div layout="position" layoutId={layoutId} className="underline bcb-5" />
+    <motion.div
+        layout="position"
+        transformTemplate={(_, generatedTransform) =>
+            // Replace the y value in translate3d(x, y, z) with 0px to omit y axis transitions
+            generatedTransform.replace(/translate3d\(([^,]+),\s*[^,]+,\s*([^)]+)\)/, 'translate3d($1, 0px, $2)')
+        }
+        layoutId={layoutId}
+        className="underline bcb-5"
+    />
 )
 
 const Tab = ({
