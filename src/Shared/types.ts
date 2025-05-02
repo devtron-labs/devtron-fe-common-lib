@@ -1150,3 +1150,10 @@ export enum RegistryCredentialsType {
     USERNAME_PASSWORD = 'username_password',
     ANONYMOUS = 'anonymous',
 }
+
+export interface IntelligenceConfig {
+    clusterId: number
+    metadata: Record<string, string>
+    prompt: string
+    analyticsCategory: string
+}
