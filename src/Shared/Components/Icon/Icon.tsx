@@ -4,6 +4,7 @@ import { ReactComponent as IC14DayTrialChip } from '@IconsV2/ic-14-day-trial-chi
 import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
+import { ReactComponent as ICAmazonEks } from '@IconsV2/ic-amazon-eks.svg'
 import { ReactComponent as ICApica } from '@IconsV2/ic-apica.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
@@ -12,6 +13,7 @@ import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
+import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
@@ -33,6 +35,7 @@ import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
+import { ReactComponent as ICCloudVms } from '@IconsV2/ic-cloud-vms.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
@@ -60,6 +63,7 @@ import { ReactComponent as ICGitlab } from '@IconsV2/ic-gitlab.svg'
 import { ReactComponent as ICGoogle } from '@IconsV2/ic-google.svg'
 import { ReactComponent as ICGoogleArtifactRegistry } from '@IconsV2/ic-google-artifact-registry.svg'
 import { ReactComponent as ICGoogleContainerRegistry } from '@IconsV2/ic-google-container-registry.svg'
+import { ReactComponent as ICGoogleGke } from '@IconsV2/ic-google-gke.svg'
 import { ReactComponent as ICGridView } from '@IconsV2/ic-grid-view.svg'
 import { ReactComponent as ICHandPointing } from '@IconsV2/ic-hand-pointing.svg'
 import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
@@ -74,7 +78,9 @@ import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
 import { ReactComponent as ICInstall } from '@IconsV2/ic-install.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
+import { ReactComponent as ICK3s } from '@IconsV2/ic-k3s.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
+import { ReactComponent as ICKind } from '@IconsV2/ic-kind.svg'
 import { ReactComponent as ICLaptop } from '@IconsV2/ic-laptop.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
@@ -86,6 +92,7 @@ import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
 import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
+import { ReactComponent as ICMinikube } from '@IconsV2/ic-minikube.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
 import { ReactComponent as ICMobile } from '@IconsV2/ic-mobile.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
@@ -116,11 +123,13 @@ import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
 import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
+import { ReactComponent as ICUbuntu } from '@IconsV2/ic-ubuntu.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
 import { ReactComponent as ICUserCircle } from '@IconsV2/ic-user-circle.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
+import { ReactComponent as ICWifiSlash } from '@IconsV2/ic-wifi-slash.svg'
 
 // eslint-disable-next-line no-restricted-imports
 import { IconBase } from './IconBase'
@@ -131,6 +140,7 @@ export const iconMap = {
     'ic-73strings': IC73strings,
     'ic-aborted': ICAborted,
     'ic-add': ICAdd,
+    'ic-amazon-eks': ICAmazonEks,
     'ic-apica': ICApica,
     'ic-app-group': ICAppGroup,
     'ic-arrow-clockwise': ICArrowClockwise,
@@ -138,6 +148,7 @@ export const iconMap = {
     'ic-arrow-square-out': ICArrowSquareOut,
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-ather': ICAther,
+    'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
     'ic-bg-cluster': ICBgCluster,
     'ic-bharatpe': ICBharatpe,
@@ -160,6 +171,7 @@ export const iconMap = {
     'ic-clock': ICClock,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
+    'ic-cloud-vms': ICCloudVms,
     'ic-code': ICCode,
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
@@ -186,6 +198,7 @@ export const iconMap = {
     'ic-gitlab': ICGitlab,
     'ic-google-artifact-registry': ICGoogleArtifactRegistry,
     'ic-google-container-registry': ICGoogleContainerRegistry,
+    'ic-google-gke': ICGoogleGke,
     'ic-google': ICGoogle,
     'ic-grid-view': ICGridView,
     'ic-hand-pointing': ICHandPointing,
@@ -201,7 +214,9 @@ export const iconMap = {
     'ic-info-outline': ICInfoOutline,
     'ic-install': ICInstall,
     'ic-job-color': ICJobColor,
+    'ic-k3s': ICK3s,
     'ic-k8s-job': ICK8sJob,
+    'ic-kind': ICKind,
     'ic-laptop': ICLaptop,
     'ic-ldap': ICLdap,
     'ic-lightning-fill': ICLightningFill,
@@ -213,6 +228,7 @@ export const iconMap = {
     'ic-medium-paintbucket': ICMediumPaintbucket,
     'ic-memory': ICMemory,
     'ic-microsoft': ICMicrosoft,
+    'ic-minikube': ICMinikube,
     'ic-missing': ICMissing,
     'ic-mobile': ICMobile,
     'ic-monitoring': ICMonitoring,
@@ -243,11 +259,13 @@ export const iconMap = {
     'ic-timeout-two-dash': ICTimeoutTwoDash,
     'ic-timer': ICTimer,
     'ic-travclan': ICTravclan,
+    'ic-ubuntu': ICUbuntu,
     'ic-unknown': ICUnknown,
     'ic-user-circle': ICUserCircle,
     'ic-user-key': ICUserKey,
     'ic-users': ICUsers,
     'ic-warning': ICWarning,
+    'ic-wifi-slash': ICWifiSlash,
 }
 
 export type IconName = keyof typeof iconMap
