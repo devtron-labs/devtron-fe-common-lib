@@ -85,7 +85,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
     const paramsData = {
         appId,
         envId,
-        appName: `${triggerDetails.helmPackageName}.tgz`,
+        appName: triggerDetails.helmPackageName,
         workflowId: triggerDetails.id,
         cdWorkflowType: DEPLOYMENT_STAGE_TO_NODE_MAP[triggerDetails.stage],
     }
