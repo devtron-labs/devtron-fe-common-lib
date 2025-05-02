@@ -27,7 +27,6 @@ import {
     URLS,
     ServerError,
     mapByKey,
-    DeploymentNodeType,
 } from '../../../Common'
 import {
     FetchIdDataStatus,
@@ -45,7 +44,7 @@ import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
 import TriggerDetails from './TriggerDetails'
-import { DeploymentStageType, EMPTY_STATE_STATUS } from '../../constants'
+import { DEPLOYMENT_STAGE_TO_NODE_MAP, EMPTY_STATE_STATUS } from '../../constants'
 import './cicdHistory.scss'
 
 const HistoryLogs: React.FC<HistoryLogsProps> = ({
@@ -83,24 +82,12 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
         envId: string
     }>()
 
-    const getCDWorkflowType = () => {
-        if (triggerDetails.stage === DeploymentStageType.PRE) {
-            return DeploymentNodeType.PRECD
-        }
-
-        if (triggerDetails.stage === DeploymentStageType.POST) {
-            return DeploymentNodeType.POSTCD
-        }
-
-        return DeploymentNodeType.CD
-    }
-
     const paramsData = {
         appId,
         envId,
         appName: `${triggerDetails.helmPackageName}.tgz`,
         workflowId: triggerDetails.id,
-        cdWorkflowType: getCDWorkflowType(),
+        cdWorkflowType: DEPLOYMENT_STAGE_TO_NODE_MAP[triggerDetails.stage],
     }
 
     const CDBuildReportUrl = `app/cd-pipeline/workflow/download/${appId}/${envId}/${pipelineId}/${triggerId}`
