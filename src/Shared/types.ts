@@ -298,6 +298,8 @@ export interface WorkflowType {
     showTippy?: boolean
     appId?: number
     isSelected?: boolean
+    isExceptionUser?: boolean
+    canApproverDeploy?: boolean
     approvalConfiguredIdsMap?: Record<number, ApprovalConfigDataType>
     imageReleaseTags: string[]
     appReleaseTags?: string[]
