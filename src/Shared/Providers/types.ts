@@ -18,7 +18,7 @@ import { Dispatch, MutableRefObject, ReactNode, SetStateAction } from 'react'
 
 import { SERVER_MODE } from '../../Common'
 import { ServerInfo } from '../Components/Header/types'
-import { DevtronLicenseInfo, LicenseInfoDialogType } from '..'
+import { DevtronLicenseInfo, LicenseInfoDialogType, ToastManager } from '..'
 
 export interface MainContext {
     serverMode: SERVER_MODE
@@ -66,6 +66,12 @@ export interface MainContext {
     licenseData: DevtronLicenseInfo
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
     canFetchHelmAppStatus: boolean
+    bgUpdated: boolean
+    handleAppUpdate: () => void
+    doesNeedRefresh: boolean
+    updateServiceWorker: (reloadPage?: boolean) => Promise<void>
+    handleControllerChange: () => void
+    updateToastRef: MutableRefObject<ReturnType<typeof ToastManager.showToast>>
 }
 
 export interface MainContextProviderProps {
