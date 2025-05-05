@@ -17,11 +17,11 @@
 import { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 
-import { ReactComponent as ICDeploy } from '@Icons/ic-nav-rocket.svg'
 import DeployAudio from '@Sounds/DeployAudio.mp3'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType } from '../Button'
+import { Icon } from '../Icon'
 import { AnimatedDeployButtonProps } from './types'
 
 import './animatedDeployButton.scss'
@@ -95,7 +95,7 @@ const AnimatedDeployButton = ({
                                 : {}
                         }
                     >
-                        <ICDeploy className="icon-dim-16" />
+                        <Icon name="ic-rocket-launch" color={null} />
                     </motion.div>
                 }
                 size={ComponentSizeType.large}

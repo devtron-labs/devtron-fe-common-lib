@@ -16,11 +16,11 @@
 
 import Tippy from '@tippyjs/react'
 
+import { ReactComponent as ICBot } from '@Icons/ic-bot.svg'
 import { Tooltip } from '@Common/Tooltip'
+import { Icon } from '@Shared/Components/Icon'
 import { RegistryIcon } from '@Shared/Components/RegistryIcon'
 
-import { ReactComponent as ICBot } from '../../../../Assets/Icon/ic-bot.svg'
-import { ReactComponent as DeployIcon } from '../../../../Assets/Icon/ic-nav-rocket.svg'
 import { ConditionalWrap, getRandomColor } from '../../../../Common/Helper'
 import { DefaultUserKey } from '../../../types'
 import { ArtifactInfoProps } from '../types'
@@ -61,8 +61,8 @@ const ArtifactInfo = ({
         }
 
         return (
-            <div className="material-history__info flex left fs-13 dc__gap-6">
-                <DeployIcon className="icon-dim-16 scn-6" />
+            <div className="material-history__info flex left fs-13 dc__gap-8">
+                <Icon name="ic-rocket-launch" color="N600" />
                 <span className="fs-13 fw-4">{deployedTime}</span>
             </div>
         )

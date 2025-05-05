@@ -15,4 +15,4 @@
  */
 
 export * from './KeyValueTable.component'
-export * from './KeyValueTable.types'
+export type { KeyValueTableData, KeyValueTableProps } from './KeyValueTable.types'
