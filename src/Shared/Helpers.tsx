@@ -790,7 +790,14 @@ export const getTimeDifference = ({
         return fallbackString
     }
 
-    const duration = moment.duration(moment(endTime).diff(moment(startTime)))
+    const start = moment(startTime)
+    const end = moment(endTime)
+    if (!start.isValid() || !end.isValid()) {
+        return fallbackString
+    }
+
+    const diff = Math.abs(end.diff(start))
+    const duration = moment.duration(diff)
 
     const units = [
         { label: 'd', value: duration.days() },
