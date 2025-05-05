@@ -67,11 +67,14 @@ export const CIListItem = ({
     selectedEnvironmentName,
     renderCIListHeader,
     targetPlatforms,
+    isDeploymentWithoutApproval,
 }: CIListItemType) => {
-    const headerMetaDataPresent =
-        !!getIsApprovalPolicyConfigured(userApprovalMetadata?.approvalConfigData) ||
-        !!appliedFilters?.length ||
-        !!promotionApprovalMetadata?.promotedFromType
+    const showCIListHeader =
+        !!renderCIListHeader &&
+        (!!getIsApprovalPolicyConfigured(userApprovalMetadata?.approvalConfigData) ||
+            !!appliedFilters?.length ||
+            !!promotionApprovalMetadata?.promotedFromType ||
+            isDeploymentWithoutApproval)
 
     return (
         <>
@@ -83,8 +86,7 @@ export const CIListItem = ({
                 </div>
             )}
 
-            {headerMetaDataPresent &&
-                renderCIListHeader &&
+            {showCIListHeader &&
                 renderCIListHeader({
                     userApprovalMetadata,
                     triggeredBy,
@@ -92,11 +94,12 @@ export const CIListItem = ({
                     appliedFiltersTimestamp,
                     promotionApprovalMetadata,
                     selectedEnvironmentName,
+                    isDeploymentWithoutApproval,
                 })}
 
             <div
                 className={`dc__h-fit-content ci-artifact image-tag-parent-card bg__primary br-4 dc__border p-12 w-100 dc__mxw-800 ci-artifact--${type} ${
-                    headerMetaDataPresent && renderCIListHeader ? 'dc__no-top-radius dc__no-top-border' : ''
+                    showCIListHeader ? 'dc__no-top-radius dc__no-top-border' : ''
                 }`}
                 data-testid="hover-on-report-artifact"
             >

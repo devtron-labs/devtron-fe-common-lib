@@ -133,6 +133,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                 isVirtualEnvironment={triggerDetails.IsVirtualEnvironment}
                                 processVirtualEnvironmentDeploymentData={processVirtualEnvironmentDeploymentData}
                                 renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}
+                                isDeploymentWithoutApproval={triggerDetails.isDeploymentWithoutApproval ?? false}
                             />
                         </Route>
                     )}
@@ -156,6 +157,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                             promotionApprovalMetadata={triggerDetails?.promotionApprovalMetadata}
                             renderCIListHeader={renderCIListHeader}
                             targetPlatforms={targetPlatforms}
+                            isDeploymentWithoutApproval={triggerDetails.isDeploymentWithoutApproval ?? false}
                         />
                     </Route>
                     {triggerDetails.stage === 'DEPLOY' && (
