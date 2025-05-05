@@ -20,6 +20,14 @@ import { SERVER_MODE } from '../../Common'
 import { ServerInfo } from '../Components/Header/types'
 import { DevtronLicenseInfo, LicenseInfoDialogType, ToastManager } from '..'
 
+export interface ReloadVersionConfigTypes {
+    bgUpdated: boolean
+    handleAppUpdate: () => void
+    doesNeedRefresh: boolean
+    updateServiceWorker: () => Promise<void>
+    handleControllerChange: () => void
+    updateToastRef: MutableRefObject<ReturnType<typeof ToastManager.showToast>> | null
+}
 export interface MainContext {
     serverMode: SERVER_MODE
     setServerMode: (serverMode: SERVER_MODE) => void
@@ -66,12 +74,7 @@ export interface MainContext {
     licenseData: DevtronLicenseInfo
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
     canFetchHelmAppStatus: boolean
-    bgUpdated: boolean
-    handleAppUpdate: () => void
-    doesNeedRefresh: boolean
-    updateServiceWorker: (reloadPage?: boolean) => Promise<void>
-    handleControllerChange: () => void
-    updateToastRef: MutableRefObject<ReturnType<typeof ToastManager.showToast>>
+    reloadVersionConfig: ReloadVersionConfigTypes
 }
 
 export interface MainContextProviderProps {
