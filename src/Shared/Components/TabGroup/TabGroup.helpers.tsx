@@ -49,7 +49,7 @@ export const getTabIcon = ({
 }
 
 export const getTabBadge = (badge: TabProps['badge'], className: string) =>
-    badge !== null && <div className={`tab-group__tab__badge bcn-1 cn-7 fw-6 flex px-4 ${className}`}>{badge}</div>
+    badge !== null && <span className={`tab-group__tab__badge bcn-1 cn-7 fw-6 flex px-4 ${className}`}>{badge}</span>
 
 export const getTabIndicator = (showIndicator: TabProps['showIndicator']) =>
     showIndicator && <span className="tab-group__tab__indicator bcr-5 mt-4 dc__align-self-start" />
