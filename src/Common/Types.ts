@@ -231,25 +231,27 @@ interface InfoColourBarTextConfigType {
     actionButtonConfig?: ButtonProps
 }
 
-type InfoColourBarMessageProp = {
-    message: ReactNode
-    linkText?: ReactNode
-    redirectLink?: string
-    linkOnClick?: () => void
-    linkClass?: string
-    internalLink?: boolean
+type InfoColourBarMessageProp =
+    | {
+          message: ReactNode
+          linkText?: ReactNode
+          redirectLink?: string
+          linkOnClick?: () => void
+          linkClass?: string
+          internalLink?: boolean
 
-    textConfig?: never
-} | {
-    textConfig: InfoColourBarTextConfigType
+          textConfig?: never
+      }
+    | {
+          textConfig: InfoColourBarTextConfigType
 
-    message?: never
-    linkText?: never
-    redirectLink?: never
-    linkOnClick?: () => never
-    linkClass?: never
-    internalLink?: never
-}
+          message?: never
+          linkText?: never
+          redirectLink?: never
+          linkOnClick?: () => never
+          linkClass?: never
+          internalLink?: never
+      }
 
 export type InfoColourBarType = InfoColourBarMessageProp & {
     classname: string
@@ -848,7 +850,7 @@ export interface Strategy {
     default?: boolean
 }
 
-export interface CDStage extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo' | 'isTriggerBlocked' >> {
+export interface CDStage extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo' | 'isTriggerBlocked'>> {
     status: string
     name: string
     triggerType: 'AUTOMATIC' | 'MANUAL'
@@ -860,7 +862,9 @@ export interface CDStageConfigMapSecretNames {
     secrets: any[]
 }
 
-export interface PrePostDeployStageType extends MandatoryPluginBaseStateType, Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
+export interface PrePostDeployStageType
+    extends MandatoryPluginBaseStateType,
+        Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     isValid: boolean
     steps: TaskErrorObj[]
     triggerType: string
