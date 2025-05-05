@@ -18,7 +18,7 @@ import { useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Tippy from '@tippyjs/react'
 
-import { CodeEditor } from '@Shared/Components/CodeEditorWrapper'
+import { CodeEditor } from '@Shared/Components/CodeEditor'
 import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
 import { DiffViewer } from '@Shared/Components/DiffViewer'
 
@@ -79,19 +79,12 @@ const DeploymentHistoryDiffView = ({
         ) : (
             <CodeEditor
                 key={codeEditorKey}
+                value={editorValuesRHS}
+                height="auto"
                 disableSearch
                 readOnly
                 noParsing
                 mode={MODES.YAML}
-                codeEditorProps={{
-                    value: editorValuesRHS,
-                    defaultValue: editorValuesLHS,
-                    adjustEditorHeightToContent: true,
-                }}
-                codeMirrorProps={{
-                    value: editorValuesRHS,
-                    height: 'auto',
-                }}
             />
         )
 
