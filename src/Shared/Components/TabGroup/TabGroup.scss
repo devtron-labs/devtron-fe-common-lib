@@ -34,9 +34,10 @@
         @include svg-styles(var(--N700));
 
         .underline {
-            height: 2px;
+            height: 2px !important;
             border-top-left-radius: 2px;
             border-top-right-radius: 2px;
+            bottom: -1px;
         }
 
         &--active {
