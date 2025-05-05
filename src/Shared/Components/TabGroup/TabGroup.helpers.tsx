@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { LinkProps, NavLinkProps } from 'react-router-dom'
+
 import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
 
@@ -65,3 +67,14 @@ export const getTabDescription = (description: TabProps['description']) =>
                 : description}
         </ul>
     )
+
+const replaceTrailingSlash = (pathname: string) => pathname.replace(/\/+$/, '')
+
+export const getPathnameToMatch = (to: NavLinkProps['to'] | LinkProps['to'], currentPathname: string): string => {
+    if (typeof to === 'string' || (to && typeof to === 'object' && 'pathname' in to)) {
+        const pathname = typeof to === 'string' ? to : to.pathname || ''
+        // handling absolute and relative paths
+        return pathname.startsWith('/') ? pathname : `${replaceTrailingSlash(currentPathname)}/${pathname}`
+    }
+    return ''
+}
