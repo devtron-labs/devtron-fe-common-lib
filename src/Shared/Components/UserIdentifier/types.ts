@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
 export interface UserIdentifierProps {
-    email: string
+    identifier: string
     children?: ReactNode
     isUserGroup?: boolean
     rootClassName?: string

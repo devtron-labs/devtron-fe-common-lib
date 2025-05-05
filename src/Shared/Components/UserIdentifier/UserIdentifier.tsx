@@ -16,7 +16,7 @@ const UserIdentifierTooltip = ({
 )
 
 export const UserIdentifier = ({
-    email,
+    identifier,
     children,
     rootClassName,
     tooltipContent,
@@ -25,13 +25,13 @@ export const UserIdentifier = ({
     // HOOKS
     const { email: currentUserEmail } = useUserEmail()
 
-    if (!email) {
+    if (!identifier) {
         return null
     }
 
     // CONSTANTS
-    const isCurrentUser = email === currentUserEmail
-    const isApiToken = email.startsWith(API_TOKEN_PREFIX)
+    const isCurrentUser = identifier === currentUserEmail
+    const isApiToken = identifier.startsWith(API_TOKEN_PREFIX)
 
     const renderIcon = () => {
         if (isApiToken) {
@@ -41,7 +41,7 @@ export const UserIdentifier = ({
         return isUserGroup ? (
             <Icon name="ic-users" color="N700" size={20} />
         ) : (
-            getAlphabetIcon(email, 'dc__no-shrink m-0-imp')
+            getAlphabetIcon(identifier, 'dc__no-shrink m-0-imp')
         )
     }
 
@@ -51,10 +51,10 @@ export const UserIdentifier = ({
         }
 
         if (isApiToken) {
-            return email.split(':')?.[1] || '-'
+            return identifier.split(':')?.[1] || '-'
         }
 
-        return email
+        return identifier
     }
 
     return (
@@ -63,7 +63,9 @@ export const UserIdentifier = ({
                 {renderIcon()}
                 <div className="flexbox dc__gap-2">
                     <Tooltip
-                        {...(tooltipContent ? { content: email, alwaysShowTippyOnHover: false } : { content: email })}
+                        {...(tooltipContent
+                            ? { content: identifier, alwaysShowTippyOnHover: false }
+                            : { content: identifier })}
                     >
                         <span className="cn-9 fs-13 fw-4 lh-20 dc__truncate">{renderText()}</span>
                     </Tooltip>
