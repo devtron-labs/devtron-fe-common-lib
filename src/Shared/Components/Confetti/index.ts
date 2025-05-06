@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export { default as Confetti } from './Confetti.component'
+export { default as Confetti, SnowConfetti } from './Confetti.component'
