@@ -15,8 +15,8 @@
  */
 
 import { ComponentProps } from 'react'
-import Snow from 'react-canvas-confetti/dist/presets/snow'
 import Pride from 'react-canvas-confetti/dist/presets/pride'
+import Snow from 'react-canvas-confetti/dist/presets/snow'
 
 export const SnowConfetti = () => {
     const decorateOptions: ComponentProps<typeof Snow>['decorateOptions'] = (options) => ({
