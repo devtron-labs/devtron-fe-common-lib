@@ -16,9 +16,11 @@
 
 import { useState } from 'react'
 import DOMPurify from 'dompurify'
+
 import { ClipboardButton, ConditionalWrap, copyToClipboard, Tooltip, YAMLStringify } from '@Common/index'
-import { SuggestionsItemProps } from './types'
+
 import { NO_DEFINED_DESCRIPTION } from './constants'
+import { SuggestionsItemProps } from './types'
 
 const SuggestionItem = ({
     variableName,

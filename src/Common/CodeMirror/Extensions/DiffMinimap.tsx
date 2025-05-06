@@ -18,8 +18,8 @@ import { useEffect, useRef, useState } from 'react'
 
 import { getComponentSpecificThemeClass } from '@Shared/Providers'
 
-import { DiffMinimapProps } from '../types'
 import { CODE_EDITOR_FONT_SIZE, CODE_EDITOR_MIN_OVERLAY_HEIGHT } from '../CodeEditor.constants'
+import { DiffMinimapProps } from '../types'
 
 export const DiffMinimap = ({ view, theme, diffMinimapParentRef, scalingFactor }: DiffMinimapProps) => {
     // STATES

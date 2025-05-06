@@ -15,6 +15,7 @@
  */
 
 import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer-continued'
+
 import { diffViewerStyles } from './constants'
 import { DiffViewerProps, DiffViewTitleWrapperProps } from './types'
 

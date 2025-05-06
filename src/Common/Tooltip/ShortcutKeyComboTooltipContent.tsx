@@ -15,6 +15,7 @@
  */
 
 import { KEYBOARD_KEYS_MAP } from '@Common/Hooks/UseRegisterShortcut/types'
+
 import { TooltipProps } from './types'
 
 const ShortcutKeyComboTooltipContent = ({ text, combo }: TooltipProps['shortcutKeyCombo']) => (

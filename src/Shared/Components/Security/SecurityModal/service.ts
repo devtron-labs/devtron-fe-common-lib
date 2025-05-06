@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
+import { get } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
 import { getUrlWithSearchParams } from '@Common/Helper'
-import { get } from '@Common/API'
 import { ResponseType } from '@Common/Types'
+
 import { ScanResultDTO, ScanResultParamsType } from './types'
 
 export const getSecurityScan = async ({

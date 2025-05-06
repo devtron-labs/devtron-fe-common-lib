@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
 import { ReactNode } from 'react'
+
 import { APIOptions, DrawerProps } from '@Common/index'
-import { getProgressingStateForStatus } from '../Security'
+import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
+
 import { ConfirmationModalProps } from '../ConfirmationModal/types'
+import { getProgressingStateForStatus } from '../Security'
 
 interface BulkOperationAdditionalKeysType {
     label: string

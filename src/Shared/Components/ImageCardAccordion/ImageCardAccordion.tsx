@@ -15,10 +15,11 @@
  */
 
 import { useState } from 'react'
+
+import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { CDModalTab, CDModalTabType } from '../../../Common'
 import { Vulnerabilities } from '../Security/Vulnerabilities'
 import { AccordionItemProps, ImageCardAccordionProps } from './types'
-import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
 
 const AccordionItem = ({ currentTab, activeTab, setActiveTab, buttonText }: AccordionItemProps) => {
     const handleTabSwitch = () => {

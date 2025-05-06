@@ -14,35 +14,34 @@
  * limitations under the License.
  */
 
-import { ChangeEvent, MouseEvent, KeyboardEvent as ReactKeyboardEvent, useEffect, useState } from 'react'
+import { ChangeEvent, KeyboardEvent as ReactKeyboardEvent, MouseEvent, useEffect, useState } from 'react'
 import { render } from 'react-dom'
-import { EditorView, Panel, runScopeHandlers, ViewUpdate } from '@uiw/react-codemirror'
 import {
+    closeSearchPanel,
     findNext,
     findPrevious,
-    SearchQuery,
-    setSearchQuery,
     getSearchQuery,
-    replaceNext,
     replaceAll,
-    closeSearchPanel,
+    replaceNext,
+    SearchQuery,
     selectMatches,
+    setSearchQuery,
 } from '@codemirror/search'
+import { EditorView, Panel, runScopeHandlers, ViewUpdate } from '@uiw/react-codemirror'
 
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICArrowDown } from '@Icons/ic-arrow-down.svg'
-import { ReactComponent as ICWorld } from '@Icons/ic-world.svg'
-import { ReactComponent as ICReplaceText } from '@Icons/ic-replace-text.svg'
-import { ReactComponent as ICReplaceAllText } from '@Icons/ic-replace-all-text.svg'
+import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
+import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICMatchCase } from '@Icons/ic-match-case.svg'
 import { ReactComponent as ICMatchWord } from '@Icons/ic-match-word.svg'
 import { ReactComponent as ICRegex } from '@Icons/ic-regex.svg'
+import { ReactComponent as ICReplaceAllText } from '@Icons/ic-replace-all-text.svg'
+import { ReactComponent as ICReplaceText } from '@Icons/ic-replace-text.svg'
+import { ReactComponent as ICWorld } from '@Icons/ic-world.svg'
+import { Tooltip } from '@Common/Tooltip'
 import { Button, ButtonStyleType, ButtonVariantType, Collapse } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
-import { Tooltip } from '@Common/Tooltip'
 
-import { FindReplaceProps, FindReplaceQuery, FindReplaceToggleButtonProps } from '../types'
 import {
     CLOSE_SEARCH_SHORTCUT_KEYS,
     NEXT_MATCH_SHORTCUT_KEYS,
@@ -50,8 +49,9 @@ import {
     REPLACE_ALL_SHORTCUT_KEYS,
     REPLACE_SHORTCUT_KEYS,
 } from '../CodeEditor.constants'
-import { getFindReplaceToggleButtonIconClass, getUpdatedSearchMatchesCount } from '../utils'
 import { getShowReplaceField, setShowReplaceField } from '../Commands'
+import { FindReplaceProps, FindReplaceQuery, FindReplaceToggleButtonProps } from '../types'
+import { getFindReplaceToggleButtonIconClass, getUpdatedSearchMatchesCount } from '../utils'
 
 const FindReplaceToggleButton = ({
     isChecked,

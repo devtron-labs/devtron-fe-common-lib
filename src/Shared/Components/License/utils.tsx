@@ -1,7 +1,10 @@
 import moment from 'moment'
+
 import { DATE_TIME_FORMATS } from '@Common/Constants'
-import { DevtronLicenseCardProps, DevtronLicenseDTO, DevtronLicenseInfo, LicenseStatus } from '@Shared/index'
 import { getUrlWithSearchParams } from '@Common/index'
+import { DevtronLicenseDTO } from '@Shared/types'
+
+import { DevtronLicenseCardProps, DevtronLicenseInfo, LicenseStatus } from './types'
 
 export const getLicenseColorsAccordingToStatus = (
     licenseStatus: LicenseStatus,

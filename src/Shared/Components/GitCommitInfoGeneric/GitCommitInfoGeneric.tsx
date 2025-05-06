@@ -15,26 +15,28 @@
  */
 
 /* eslint-disable eqeqeq */
-import moment from 'moment'
 import Tippy from '@tippyjs/react'
-import { ClipboardButton } from '@Common/ClipboardButton/ClipboardButton'
+import moment from 'moment'
+
+import { ReactComponent as Abort } from '@Icons/ic-abort.svg'
+import { ReactComponent as CalendarIcon } from '@Icons/ic-calendar.svg'
+import { ReactComponent as Check } from '@Icons/ic-check-circle.svg'
 import { ReactComponent as Circle } from '@Icons/ic-circle.svg'
 import { ReactComponent as Commit } from '@Icons/ic-commit.svg'
-import { ReactComponent as PersonIcon } from '@Icons/ic-person.svg'
-import { ReactComponent as CalendarIcon } from '@Icons/ic-calendar.svg'
-import { ReactComponent as MessageIcon } from '@Icons/ic-message.svg'
-import { ReactComponent as PullRequestIcon } from '@Icons/ic-pull-request.svg'
-import { ReactComponent as Check } from '@Icons/ic-check-circle.svg'
-import { ReactComponent as Abort } from '@Icons/ic-abort.svg'
-import { SourceTypeMap, createGitCommitUrl, getGitBranchUrl } from '@Common/Common.service'
-import { stopPropagation } from '@Common/Helper'
-import { DATE_TIME_FORMATS, GitProviderType } from '@Common/Constants'
-import { ReactComponent as Tag } from '@Icons/ic-tag.svg'
-import { getLowerCaseObject, getWebhookDate } from '@Shared/Helpers'
 import { ReactComponent as Hash } from '@Icons/ic-hash.svg'
-import GitMaterialInfoHeader from './GitMaterialInfoHeader'
+import { ReactComponent as MessageIcon } from '@Icons/ic-message.svg'
+import { ReactComponent as PersonIcon } from '@Icons/ic-person.svg'
+import { ReactComponent as PullRequestIcon } from '@Icons/ic-pull-request.svg'
+import { ReactComponent as Tag } from '@Icons/ic-tag.svg'
+import { ClipboardButton } from '@Common/ClipboardButton/ClipboardButton'
+import { createGitCommitUrl, getGitBranchUrl, SourceTypeMap } from '@Common/Common.service'
+import { DATE_TIME_FORMATS, GitProviderType } from '@Common/Constants'
+import { stopPropagation } from '@Common/Helper'
+import { getLowerCaseObject, getWebhookDate } from '@Shared/Helpers'
+
 import { MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../constants'
 import { WEBHOOK_EVENT_ACTION_TYPE } from './constants'
+import GitMaterialInfoHeader from './GitMaterialInfoHeader'
 import { GitCommitInfoGenericProps } from './types'
 
 const GitCommitInfoGeneric = ({
@@ -215,7 +217,7 @@ const GitCommitInfoGeneric = ({
 
     return (
         <div className="git-commit-info-generic__wrapper cn-9 fs-12">
-            {showMaterialInfoHeader && (_isWebhook || lowerCaseCommitInfo.commit) && (
+            {showMaterialInfoHeader && (_isWebhook || lowerCaseCommitInfo.commit) && !!materialUrl && (
                 <GitMaterialInfoHeader
                     index={index}
                     repoUrl={materialUrl}

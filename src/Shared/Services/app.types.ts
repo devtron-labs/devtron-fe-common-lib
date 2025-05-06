@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import { OverrideMergeStrategyType } from '@Pages/Applications'
 import { TargetPlatformsDTO } from '@Shared/types'
-import { ReleaseTag, UserApprovalMetadataType, ResponseType } from '../../Common'
+import { OverrideMergeStrategyType } from '@Pages/Applications'
+
+import { ReleaseTag, ResponseType, UserApprovalMetadataType } from '../../Common'
 
 interface WebhookDataType {
     id: number

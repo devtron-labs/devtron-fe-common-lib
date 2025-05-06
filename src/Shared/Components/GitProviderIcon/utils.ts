@@ -15,6 +15,7 @@
  */
 
 import { GitProviderType } from '@Common/Constants'
+
 import { IconName } from '../Icon'
 
 export const getGitIconName = (repoUrl: string): IconName => {

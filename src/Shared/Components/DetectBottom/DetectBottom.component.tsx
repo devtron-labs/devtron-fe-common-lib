@@ -15,6 +15,7 @@
  */
 
 import { useEffect, useRef } from 'react'
+
 import { useIntersection } from '../../Helpers'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 

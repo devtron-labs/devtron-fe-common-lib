@@ -1,5 +1,8 @@
 import { ChangeEvent, SyntheticEvent, useState } from 'react'
+
 import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
+import { API_STATUS_CODES } from '@Common/Constants'
+import { showError } from '@Common/index'
 import {
     ActivateLicenseDialogProps,
     Button,
@@ -14,11 +17,10 @@ import {
     ToastManager,
     ToastVariantType,
 } from '@Shared/index'
-import { API_STATUS_CODES } from '@Common/Constants'
-import { showError } from '@Common/index'
-import { getGateKeeperUrl } from './utils'
-import { activateLicense } from './services'
+
 import { GatekeeperQRDialog, ICDevtronWithBorder } from './License.components'
+import { activateLicense } from './services'
+import { getGateKeeperUrl } from './utils'
 
 const ActivateLicenseDialog = ({
     fingerprint,

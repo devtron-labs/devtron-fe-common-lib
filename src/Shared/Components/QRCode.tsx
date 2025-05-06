@@ -1,4 +1,5 @@
 import { QRCodeSVG } from 'qrcode.react'
+
 import { IconsProps } from './Icon'
 
 interface QRCodeProps {

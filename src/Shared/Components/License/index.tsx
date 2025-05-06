@@ -1,6 +1,5 @@
-export { default as DevtronLicenseCard } from './DevtronLicenseCard'
-export { parseDevtronLicenseData } from './utils'
-export { default as InstallationFingerprintInfo, ICDevtronWithBorder } from './License.components'
 export { default as ActivateLicenseDialog } from './ActivateLicenseDialog'
-
+export { default as DevtronLicenseCard } from './DevtronLicenseCard'
+export { ICDevtronWithBorder, default as InstallationFingerprintInfo } from './License.components'
 export * from './types'
+export { parseDevtronLicenseData } from './utils'

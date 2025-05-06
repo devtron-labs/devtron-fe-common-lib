@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-import { SegmentedBarChart } from '@Common/SegmentedBarChart'
-import { ReactComponent as ICShieldWarning } from '@Icons/ic-shield-warning-outline.svg'
-import { ReactComponent as ICShieldSecure } from '@Icons/ic-shield-check.svg'
-import { ReactComponent as ICError } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICArrowRight } from '@Icons/ic-caret-down-small.svg'
-import { SecurityCardProps } from './types'
-import { SUB_CATEGORIES } from '../SecurityModal/types'
-import { SEVERITIES } from '../SecurityModal/constants'
-import './securityCard.scss'
-import { getTotalSeverities } from '../utils'
+import { ReactComponent as ICError } from '@Icons/ic-error-exclamation.svg'
+import { ReactComponent as ICShieldSecure } from '@Icons/ic-shield-check.svg'
+import { ReactComponent as ICShieldWarning } from '@Icons/ic-shield-warning-outline.svg'
+import { SegmentedBarChart } from '@Common/SegmentedBarChart'
+
 import { SECURITY_CONFIG } from '../constants'
+import { SEVERITIES } from '../SecurityModal/constants'
+import { SUB_CATEGORIES } from '../SecurityModal/types'
+import { getTotalSeverities } from '../utils'
+import { SecurityCardProps } from './types'
+
+import './securityCard.scss'
 
 const SecurityCard = ({
     category,

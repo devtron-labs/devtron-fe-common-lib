@@ -15,10 +15,11 @@
  */
 
 import { ReactComponent as ICError } from '@Icons/ic-error.svg'
+import { ReactComponent as ICHelp } from '@Icons/ic-help.svg'
 import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
-import { ReactComponent as ICHelp } from '@Icons/ic-help.svg'
 import { ComponentSizeType } from '@Shared/constants'
+
 import { ButtonProps } from '../Button'
 import { Icon } from '../Icon'
 import { InfoBlockProps } from './types'

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { FormFieldWrapperProps } from './types'
-import FormFieldLabel from './FormFieldLabel'
 import FormFieldInfo from './FormFieldInfo'
+import FormFieldLabel from './FormFieldLabel'
+import { FormFieldWrapperProps } from './types'
 
 const FormFieldWrapper = ({
     layout,

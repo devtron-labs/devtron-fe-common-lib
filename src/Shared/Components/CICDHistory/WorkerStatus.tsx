@@ -15,16 +15,18 @@
  */
 
 import { memo } from 'react'
-import { DeploymentStageType } from '@Shared/constants'
 import { NavLink } from 'react-router-dom'
 import moment from 'moment'
+
 import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
+import { DeploymentStageType } from '@Shared/constants'
 import { isTimeStringAvailable } from '@Shared/Helpers'
+
+import { Icon } from '../Icon'
 import { ShowMoreText } from '../ShowMoreText'
 import { FAILED_WORKFLOW_STAGE_STATUS_MAP, TIMEOUT_VALUE, WORKFLOW_STAGE_STATUS_TO_TEXT_MAP } from './constants'
-import { getWorkerPodBaseUrl } from './utils'
 import { WorkerStatusType } from './types'
-import { Icon } from '../Icon'
+import { getWorkerPodBaseUrl } from './utils'
 
 const WorkerStatus = memo(
     ({

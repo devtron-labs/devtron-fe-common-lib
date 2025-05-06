@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-import { Dayjs } from 'dayjs'
-import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
 import { ParsedCountry } from 'react-international-phone'
+import { Dayjs } from 'dayjs'
+
+import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
+
 import {
-    OptionType,
     CommonNodeAttr,
-    VulnerabilityType,
     DeploymentAppTypes,
+    OptionType,
+    PluginType,
+    RefVariableType,
+    SegmentedControlProps,
     ServerErrors,
     SortingParams,
     TriggerBlockType,
     ValueConstraintType,
     VariableType,
-    RefVariableType,
-    PluginType,
-    SegmentedControlProps,
+    VulnerabilityType,
 } from '../Common'
-import { BASE_CONFIGURATION_ENV_ID, EnvironmentTypeEnum, PatchOperationType } from './constants'
 import { SelectPickerOptionType } from './Components'
+import { BASE_CONFIGURATION_ENV_ID, EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
     CHART = 'helm_charts',
@@ -1104,4 +1106,47 @@ export type CountryISO2Type = ParsedCountry['iso2']
 
 export enum ResponseHeaders {
     LICENSE_STATUS = 'X-License-Status',
+}
+
+export type IconBaseSizeType =
+    | 6
+    | 8
+    | 10
+    | 12
+    | 14
+    | 16
+    | 18
+    | 20
+    | 22
+    | 24
+    | 28
+    | 30
+    | 32
+    | 34
+    | 36
+    | 40
+    | 42
+    | 44
+    | 48
+    | 72
+    | 80
+
+export type IconBaseColorType =
+    | `${'B' | 'N' | 'G' | 'Y' | 'R' | 'V' | 'O'}${`${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}00` | '50' | '0'}`
+    | 'white'
+    | 'black'
+    | null
+
+export interface GetTimeDifferenceParamsType {
+    startTime: string
+    endTime: string
+    /**
+     * @default '-'
+     */
+    fallbackString?: string
+}
+
+export enum RegistryCredentialsType {
+    USERNAME_PASSWORD = 'username_password',
+    ANONYMOUS = 'anonymous',
 }

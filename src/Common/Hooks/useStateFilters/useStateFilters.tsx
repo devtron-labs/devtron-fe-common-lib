@@ -15,9 +15,10 @@
  */
 
 import { useState } from 'react'
+
 import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '../../Constants'
-import { PaginationType, UseStateFiltersProps, UseStateFiltersReturnType } from './types'
 import { DEFAULT_PAGE_NUMBER } from '../useUrlFilters/constants'
+import { PaginationType, UseStateFiltersProps, UseStateFiltersReturnType } from './types'
 
 /**
  * Generic hook for implementing state based pagination, search, sorting.
