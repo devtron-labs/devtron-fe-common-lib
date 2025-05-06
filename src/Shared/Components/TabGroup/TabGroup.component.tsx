@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { useMemo } from 'react'
-import { Link, NavLink, useRouteMatch } from 'react-router-dom'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
-import { getPathnameToMatch, getTabBadge, getTabDescription, getTabIcon, getTabIndicator } from './TabGroup.helpers'
+import { getTabBadge, getTabDescription, getTabIcon, getTabIndicator } from './TabGroup.helpers'
 import { AdditionalTabProps, TabGroupProps, TabProps } from './TabGroup.types'
 import { getClassNameBySizeMap, tabGroupClassMap } from './TabGroup.utils'
 
@@ -57,13 +57,17 @@ const Tab = ({
     tooltipProps,
     uniqueGroupId,
 }: TabProps & Pick<TabGroupProps, 'size' | 'hideTopPadding'> & AdditionalTabProps) => {
-    const { path } = useRouteMatch()
-    const pathToMatch = tabType === 'navLink' || tabType === 'link' ? getPathnameToMatch(props.to, path) : ''
+    const { pathname, search } = useLocation()
+    const ref = useRef<HTMLAnchorElement>(null)
+    const [isTabActive, setIsTabActive] = useState(tabType === 'button' && active)
 
-    // using match to define if tab is active as useRouteMatch return an object if path is matched otherwise return null/undefined
-    const match = useRouteMatch(pathToMatch)
-
-    const isTabActive = tabType === 'button' ? active : !!match
+    useEffect(() => {
+        if (tabType === 'navLink') {
+            setIsTabActive(ref.current?.classList.contains('active') || false)
+            return
+        }
+        setIsTabActive(active)
+    }, [active, tabType, pathname, search])
 
     const { tabClassName, iconClassName, badgeClassName } = getClassNameBySizeMap({
         hideTopPadding,
@@ -110,6 +114,7 @@ const Tab = ({
             case 'navLink':
                 return (
                     <NavLink
+                        ref={ref}
                         className={`${tabClassName} dc__no-decor flexbox-col tab-group__tab__nav-link ${disabled ? 'cursor-not-allowed' : ''}`}
                         aria-disabled={disabled}
                         {...props}
