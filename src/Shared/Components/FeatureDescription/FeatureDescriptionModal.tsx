@@ -15,14 +15,17 @@
  */
 
 import { ChangeEvent, useState } from 'react'
+
 import { ComponentSizeType } from '@Shared/constants'
-import { StyledRadioGroup, VisibleModal, stopPropagation } from '../../../Common'
+
+import { ReactComponent as ArrowOutSquare } from '../../../Assets/Icon/ic-arrow-square-out.svg'
+import { stopPropagation, StyledRadioGroup, VisibleModal } from '../../../Common'
+import { Button } from '../Button'
 import { BUTTON_TEXT } from './constant'
 import { FeatureDescriptionModalProps } from './types'
-import './featureDescription.scss'
-import { ReactComponent as ArrowOutSquare } from '../../../Assets/Icon/ic-arrow-square-out.svg'
 import { getImageSize } from './utils'
-import { Button } from '../Button'
+
+import './featureDescription.scss'
 
 const FeatureDescriptionModalContent = ({
     renderDescriptionContent,

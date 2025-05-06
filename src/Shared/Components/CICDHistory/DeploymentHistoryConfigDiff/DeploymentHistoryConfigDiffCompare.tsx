@@ -17,23 +17,23 @@
 import { useEffect, useState } from 'react'
 import { generatePath, useRouteMatch } from 'react-router-dom'
 
+import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '@Common/Constants'
+import { Button, ButtonVariantType } from '@Shared/Components/Button'
 import {
     DEPLOYMENT_CONFIG_DIFF_SORT_KEY,
     DeploymentConfigDiff,
     DeploymentConfigDiffProps,
 } from '@Shared/Components/DeploymentConfigDiff'
-import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '@Common/Constants'
 import {
     getSelectPickerOptionByValue,
     SelectPickerOptionType,
     SelectPickerVariantType,
 } from '@Shared/Components/SelectPicker'
 import { ComponentSizeType } from '@Shared/constants'
-import { Button, ButtonVariantType } from '@Shared/Components/Button'
 
-import { DeploymentHistoryDiffDetailedProps, DeploymentHistoryConfigDiffRouteParams } from './types'
-import { getPipelineDeployments, getPipelineDeploymentsOptions } from './utils'
 import { getTriggerHistory } from '../service'
+import { DeploymentHistoryConfigDiffRouteParams, DeploymentHistoryDiffDetailedProps } from './types'
+import { getPipelineDeployments, getPipelineDeploymentsOptions } from './utils'
 
 export const DeploymentHistoryConfigDiffCompare = ({
     envName,
@@ -147,7 +147,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
                           name: 'deployment-config-diff-deployment-selector',
                           inputId: 'deployment-config-diff-deployment-selector',
                           classNamePrefix: 'deployment-config-diff-deployment-selector',
-                          variant: SelectPickerVariantType.BORDER_LESS,
+                          variant: SelectPickerVariantType.COMPACT,
                           options: pipelineDeploymentsOptions,
                           placeholder: 'Select Deployment',
                           value: getSelectPickerOptionByValue(pipelineDeploymentsOptions, compareWfrId, null),

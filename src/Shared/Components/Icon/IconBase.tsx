@@ -17,8 +17,8 @@
 import { ConditionalWrap } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
 
-import { IconBaseProps } from './types'
 import { ICON_STROKE_WIDTH_MAP } from './constants'
+import { IconBaseProps } from './types'
 
 import './styles.scss'
 

@@ -15,42 +15,44 @@
  */
 import { ReactElement } from 'react'
 import moment from 'moment'
-import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'
-import { ReactComponent as Close } from '@Icons/ic-close.svg'
-import { ReactComponent as Check } from '@Icons/ic-check-grey.svg'
-import { ReactComponent as ICHelpOutline } from '@Icons/ic-help-outline.svg'
-import { ReactComponent as Error } from '@Icons/ic-error-exclamation.svg'
-import { ReactComponent as Timer } from '@Icons/ic-timer.svg'
-import { ReactComponent as Disconnect } from '@Icons/ic-disconnected.svg'
-import { ReactComponent as TimeOut } from '@Icons/ic-timeout-red.svg'
+
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
+import { ReactComponent as Check } from '@Icons/ic-check-grey.svg'
+import { ReactComponent as Close } from '@Icons/ic-close.svg'
+import { ReactComponent as Disconnect } from '@Icons/ic-disconnected.svg'
+import { ReactComponent as Error } from '@Icons/ic-error-exclamation.svg'
+import { ReactComponent as ICHelpOutline } from '@Icons/ic-help-outline.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
-import { isTimeStringAvailable } from '@Shared/Helpers'
+import { ReactComponent as TimeOut } from '@Icons/ic-timeout-red.svg'
+import { ReactComponent as Timer } from '@Icons/ic-timer.svg'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
+import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'
+import { isTimeStringAvailable } from '@Shared/Helpers'
+
+import { Node, ResourceKindType, WorkflowStatusEnum } from '../../types'
+import { Icon } from '../Icon'
+import { AppStatus, DeploymentStatus, StatusType } from '../StatusComponent'
 import {
     DEFAULT_CLUSTER_ID,
     DEFAULT_NAMESPACE,
     FAILED_WORKFLOW_STAGE_STATUS_MAP,
     TERMINAL_STATUS_MAP,
 } from './constants'
-import { Node, ResourceKindType, WorkflowStatusEnum } from '../../types'
 import {
-    TriggerHistoryFilterCriteriaProps,
-    DeploymentHistoryResultObject,
     DeploymentHistory,
-    TriggerHistoryFilterCriteriaType,
-    StageStatusType,
-    WorkflowExecutionStagesMapDTO,
+    DeploymentHistoryResultObject,
     ExecutionInfoType,
-    WorkflowExecutionStageType,
-    PodExecutionStageDTO,
-    WorkflowStageStatusType,
-    WorkflowExecutionStageNameType,
-    NodeStatus,
     NodeFilters,
+    NodeStatus,
+    PodExecutionStageDTO,
+    StageStatusType,
+    TriggerHistoryFilterCriteriaProps,
+    TriggerHistoryFilterCriteriaType,
+    WorkflowExecutionStageNameType,
+    WorkflowExecutionStagesMapDTO,
+    WorkflowExecutionStageType,
+    WorkflowStageStatusType,
 } from './types'
-import { Icon } from '../Icon'
-import { AppStatus, DeploymentStatus, StatusType } from '../StatusComponent'
 
 export const getTriggerHistoryFilterCriteria = ({
     appId,

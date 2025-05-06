@@ -15,16 +15,17 @@
  */
 
 import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
-import { ROUTES, ResponseType, get, getUrlWithSearchParams, showError } from '../../Common'
+
+import { get, getUrlWithSearchParams, ResponseType, ROUTES, showError } from '../../Common'
+import { getTemplateAPIRoute } from '..'
 import {
+    AppEnvDeploymentConfigDTO,
+    AppEnvDeploymentConfigPayloadType,
     CIMaterialInfoDTO,
     CIMaterialInfoType,
     GetCITriggerInfoParamsType,
-    AppEnvDeploymentConfigDTO,
-    AppEnvDeploymentConfigPayloadType,
 } from './app.types'
 import { getParsedCIMaterialInfo } from './utils'
-import { getTemplateAPIRoute } from '..'
 
 export const getCITriggerInfo = async (params: GetCITriggerInfoParamsType): Promise<CIMaterialInfoType> => {
     try {

@@ -23,6 +23,7 @@ import {
     SetStateAction,
     SyntheticEvent,
 } from 'react'
+
 import { ButtonProps } from '../Button'
 
 export enum ConfirmationModalVariantType {

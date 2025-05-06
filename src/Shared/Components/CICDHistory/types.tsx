@@ -15,17 +15,19 @@
  */
 
 import { CSSProperties, ReactElement, ReactNode } from 'react'
+
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
+
 import {
-    OptionType,
-    UserApprovalMetadataType,
-    ReleaseTag,
-    ImageComment,
-    PromotionApprovalMetadataType,
-    FilterConditionsListType,
     DeploymentAppTypes,
-    ResponseType,
+    FilterConditionsListType,
+    ImageComment,
+    OptionType,
     PaginationProps,
+    PromotionApprovalMetadataType,
+    ReleaseTag,
+    ResponseType,
+    UserApprovalMetadataType,
     useScrollable,
 } from '../../../Common'
 import { DeploymentStageType } from '../../constants'
@@ -185,6 +187,7 @@ export interface History extends Pick<TargetPlatformsDTO, 'targetPlatforms'>, Wo
     triggerMetadata?: string
     runSource?: RunSourceType
     targetConfig?: TargetConfigType
+    isDeploymentWithoutApproval?: boolean
 }
 
 export interface ExecutionInfoType {
@@ -387,7 +390,7 @@ export interface DeploymentStatusDetailsTimelineType {
     statusTime: string
     resourceDetails?: SyncStageResourceDetail[]
 }
-export interface DeploymentStatusDetailsType {
+export interface DeploymentStatusDetailsType extends Pick<History, 'isDeploymentWithoutApproval'> {
     deploymentFinishedOn: string
     deploymentStartedOn: string
     triggeredBy: string
@@ -403,7 +406,7 @@ export interface DeploymentStatusDetailsResponse extends ResponseType {
 
 interface DeploymentStatusDetailRow {
     icon: string
-    displayText: string
+    displayText: ReactNode
     displaySubText: string
     time: string
     resourceDetails?: any
@@ -429,7 +432,7 @@ export interface DeploymentStatusDetailsBreakdownDataType {
     }
 }
 
-export interface DeploymentDetailStepsType {
+export interface DeploymentDetailStepsType extends Pick<History, 'isDeploymentWithoutApproval'> {
     deploymentStatus?: string
     deploymentAppType?: DeploymentAppTypes
     isHelmApps?: boolean
@@ -443,7 +446,7 @@ export interface DeploymentDetailStepsType {
     renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
 }
 
-export interface RenderCIListHeaderProps {
+export interface RenderCIListHeaderProps extends Required<Pick<History, 'isDeploymentWithoutApproval'>> {
     userApprovalMetadata: UserApprovalMetadataType
     triggeredBy: string
     appliedFilters: FilterConditionsListType[]
@@ -463,7 +466,7 @@ export interface VirtualHistoryArtifactProps {
     }
 }
 
-export type CIListItemType = Pick<History, 'promotionApprovalMetadata'> & {
+export type CIListItemType = Pick<History, 'promotionApprovalMetadata' | 'isDeploymentWithoutApproval'> & {
     userApprovalMetadata?: UserApprovalMetadataType
     triggeredBy?: string
     children: ReactNode
@@ -735,6 +738,7 @@ export type GitChangesType = {
           appliedFilters?: never
           appliedFiltersTimestamp?: never
           renderCIListHeader?: never
+          isDeploymentWithoutApproval?: never
       }
     | {
           artifact: string
@@ -753,6 +757,7 @@ export type GitChangesType = {
           appliedFilters?: FilterConditionsListType[]
           appliedFiltersTimestamp?: string
           renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+          isDeploymentWithoutApproval?: History['isDeploymentWithoutApproval']
       }
 )
 

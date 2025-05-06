@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-import { ReactComponent as File } from '@Icons/ic-file-text.svg'
 import { ReactComponent as Discord } from '@Icons/ic-discord-fill.svg'
-import { updatePostHogEvent } from './service'
+import { ReactComponent as File } from '@Icons/ic-file-text.svg'
+
 import { DISCORD_LINK, DOCUMENTATION_HOME_PAGE, LOGIN_COUNT } from '../../../Common'
-import { DevtronLicenseInfo, LicenseStatus } from '../DevtronLicenseCard'
+import { DevtronLicenseInfo, LicenseStatus } from '../License'
 import { EnterpriseHelpOptions, OSSHelpOptions, TrialHelpOptions } from './constants'
+import { updatePostHogEvent } from './service'
 
 const millisecondsInDay = 86400000
 export const getDateInMilliseconds = (days) => 1 + new Date().valueOf() + (days ?? 0) * millisecondsInDay

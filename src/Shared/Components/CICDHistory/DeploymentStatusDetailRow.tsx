@@ -16,17 +16,19 @@
 
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react'
-import moment from 'moment'
 import { useParams } from 'react-router-dom'
+import moment from 'moment'
+
 import { ShowMoreText } from '@Shared/Components/ShowMoreText'
+
+import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { DATE_TIME_FORMATS, showError } from '../../../Common'
 import { DEPLOYMENT_STATUS, statusIcon, TIMELINE_STATUS } from '../../constants'
-import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
-import { DeploymentStatusDetailRowType } from './types'
-import { getManualSync } from './service'
-import { MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
-import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import AppStatusDetailsChart from './AppStatusDetailsChart'
+import { MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
+import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
+import { getManualSync } from './service'
+import { DeploymentStatusDetailRowType } from './types'
 import { renderIcon } from './utils'
 
 export const DeploymentStatusDetailRow = ({
@@ -174,7 +176,9 @@ export const DeploymentStatusDetailRow = ({
                 >
                     {renderIcon(statusBreakDownType.icon)}
                     <span className="ml-12 mr-12 fs-13">
-                        <span data-testid="deployment-status-step-name">{statusBreakDownType.displayText}</span>
+                        <span data-testid="deployment-status-step-name" className="flex left">
+                            {statusBreakDownType.displayText}
+                        </span>
                         {statusBreakDownType.displaySubText && (
                             <span className={`ml-12 f-${statusBreakDownType.icon || 'waiting'}`}>
                                 {statusBreakDownType.displaySubText}

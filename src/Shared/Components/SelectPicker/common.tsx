@@ -14,35 +14,40 @@
  * limitations under the License.
  */
 
+import { ChangeEvent, Children } from 'react'
 import {
-    components,
-    DropdownIndicatorProps,
-    ControlProps,
-    OptionProps,
     ClearIndicatorProps,
-    ValueContainerProps,
-    MenuListProps,
-    MultiValueRemoveProps,
-    MultiValueProps,
-    MultiValue,
+    components,
+    ControlProps,
+    DropdownIndicatorProps,
     InputProps,
+    MenuListProps,
+    MultiValue,
+    MultiValueProps,
+    MultiValueRemoveProps,
+    OptionProps,
+    ValueContainerProps,
 } from 'react-select'
-import { Progressing } from '@Common/Progressing'
+
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
-import { ChangeEvent, Children } from 'react'
-import { noop } from '@Common/Helper'
-import { CHECKBOX_VALUE } from '@Common/Types'
 import { Checkbox } from '@Common/Checkbox'
 import { ReactSelectInputAction } from '@Common/Constants'
-import { isNullOrUndefined } from '@Shared/Helpers'
+import { noop } from '@Common/Helper'
+import { Progressing } from '@Common/Progressing'
 import { Tooltip } from '@Common/Tooltip'
 import { TooltipProps } from '@Common/Tooltip/types'
+import { CHECKBOX_VALUE } from '@Common/Types'
+import { ComponentSizeType } from '@Shared/constants'
+import { isNullOrUndefined } from '@Shared/Helpers'
+
+import { Button, ButtonProps, ButtonVariantType } from '../Button'
+import { Icon } from '../Icon'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
 
-const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
+export const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
     if (tooltipProps) {
         if (Object.hasOwn(tooltipProps, 'shortcutKeyCombo') && 'shortcutKeyCombo' in tooltipProps) {
             return tooltipProps
@@ -52,6 +57,7 @@ const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = 
             // TODO: using some typing somersaults here, clean it up later
             alwaysShowTippyOnHover: !!(tooltipProps as Required<Pick<TooltipProps, 'content'>>)?.content,
             ...(tooltipProps as Required<Pick<TooltipProps, 'content'>>),
+            placement: 'right',
         }
     }
 
@@ -64,11 +70,18 @@ const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = 
 export const SelectPickerDropdownIndicator = <OptionValue,>(
     props: DropdownIndicatorProps<SelectPickerOptionType<OptionValue>>,
 ) => {
-    const { isDisabled } = props
+    const {
+        isDisabled,
+        selectProps: { isLoading },
+    } = props
 
     return (
         <components.DropdownIndicator {...props}>
-            <ICCaretDown className={isDisabled ? 'scn-3' : 'scn-6'} />
+            {isLoading ? (
+                <Progressing fillColor="var(--N500)" />
+            ) : (
+                <ICCaretDown className={isDisabled ? 'scn-3' : 'scn-6'} />
+            )}
         </components.DropdownIndicator>
     )
 }
@@ -169,8 +182,6 @@ export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>
     )
 }
 
-export const SelectPickerLoadingIndicator = () => <Progressing />
-
 export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
     disableDescriptionEllipsis,
     ...props
@@ -241,12 +252,50 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
     )
 }
 
+const SelectPickerMenuListFooter = ({
+    menuListFooterConfig,
+}: Required<Pick<SelectPickerProps, 'menuListFooterConfig'>>) => {
+    if (!menuListFooterConfig) {
+        return null
+    }
+
+    const { type } = menuListFooterConfig
+
+    if (type === 'text') {
+        const { value } = menuListFooterConfig
+
+        return (
+            <div className="flexbox dc__gap-6 p-8">
+                <Icon name="ic-info-outline" color="N700" size={16} />
+                {/* Explicitly not adding truncate here since the value would be static */}
+                <p className="fs-12 fw-4 lh-16 cn-8 dc__word-break m-0">{value}</p>
+            </div>
+        )
+    }
+
+    if (type === 'button') {
+        const { buttonProps } = menuListFooterConfig
+        const { variant } = buttonProps
+
+        return (
+            // We are adding justify-content: flex-start for borderLess variant using this class
+            <div
+                className={`select-picker__menu-list-footer-button--${variant} ${variant === ButtonVariantType.borderLess ? 'py-4' : 'p-8'}`}
+            >
+                <Button {...(buttonProps as ButtonProps)} size={ComponentSizeType.medium} fullWidth />
+            </div>
+        )
+    }
+
+    return null
+}
+
 export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPickerOptionType<OptionValue>>) => {
     const {
         children,
         selectProps: {
             inputValue,
-            renderMenuListFooter,
+            menuListFooterConfig,
             shouldRenderCustomOptions,
             renderCustomOptions,
             renderOptionsFooter,
@@ -269,9 +318,9 @@ export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPi
                 </div>
                 {/* Added to the bottom of menu list to prevent from hiding when the menu is opened close to the bottom of the screen */}
             </components.MenuList>
-            {!shouldRenderCustomOptions && renderMenuListFooter && (
-                <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bg__menu--primary dc__zi-2">
-                    {renderMenuListFooter()}
+            {!shouldRenderCustomOptions && menuListFooterConfig && (
+                <div className="dc__position-sticky dc__bottom-0 dc__bottom-radius-4 bg__menu--primary dc__zi-2 border__primary-translucent--top">
+                    <SelectPickerMenuListFooter menuListFooterConfig={menuListFooterConfig} />
                 </div>
             )}
         </>
@@ -378,3 +427,7 @@ export const SelectPickerGroupHeading = <OptionValue,>({
         </components.GroupHeading>
     )
 }
+
+export const renderLoadingMessage = () => (
+    <p className="m-0 cn-7 fs-13 fw-4 lh-20 py-6 px-8 dc__loading-dots">Loading</p>
+)

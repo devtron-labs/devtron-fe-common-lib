@@ -18,12 +18,13 @@ import { Fragment } from 'react'
 import ReactGA from 'react-ga4'
 import { NavLink } from 'react-router-dom'
 import { SliderButton } from '@typeform/embed-react'
-import { stopPropagation, URLS } from '../../../Common'
-import { InstallationType, HelpNavType, HelpOptionType } from './types'
-import { ReactComponent as GettingStartedIcon } from '../../../Assets/Icon/ic-onboarding.svg'
+
 import { ReactComponent as Feedback } from '../../../Assets/Icon/ic-feedback.svg'
+import { ReactComponent as GettingStartedIcon } from '../../../Assets/Icon/ic-onboarding.svg'
+import { stopPropagation, URLS } from '../../../Common'
 import { useMainContext } from '../../Providers'
 import { Icon } from '../Icon'
+import { HelpNavType, HelpOptionType, InstallationType } from './types'
 import { getHelpOptions } from './utils'
 
 const HelpNav = ({
@@ -75,7 +76,7 @@ const HelpNav = ({
         onClickHelpOptions(option)
     }
 
-    const handleOpenLicenseDialog = () => {
+    const handleOpenAboutDevtron = () => {
         ReactGA.event({
             category: 'help-nav__about-devtron',
             action: 'ABOUT_DEVTRON_CLICKED',
@@ -99,23 +100,22 @@ const HelpNav = ({
                         <option.icon />
                         <div className="ml-12 cn-9 fs-14">{option.name}</div>
                     </a>
-                    {/* licenseData is only set when showLicenseData is received true */}
-                    {isEnterprise && index === 1 && (
+                    {index === 1 && (
                         <>
-                            {licenseData && (
-                                <button
-                                    type="button"
-                                    className="dc__transparent help-card__option flexbox dc__align-items-center cn-9 dc__gap-12 fs-14"
-                                    onClick={handleOpenLicenseDialog}
-                                    data-testid="about-devtron"
-                                >
-                                    <Icon name="ic-devtron" color="N600" size={20} />
-                                    About Devtron
-                                </button>
+                            <button
+                                type="button"
+                                className="dc__transparent help-card__option flexbox dc__align-items-center cn-9 dc__gap-12 fs-14"
+                                onClick={handleOpenAboutDevtron}
+                                data-testid="about-devtron"
+                            >
+                                <Icon name="ic-devtron" color="N600" size={20} />
+                                About Devtron
+                            </button>
+                            {isEnterprise && (
+                                <div className="help__enterprise pl-8 pb-4-imp pt-4-imp dc__gap-12 flexbox dc__align-items-center h-28">
+                                    Enterprise Support
+                                </div>
                             )}
-                            <div className="help__enterprise pl-8 pb-4-imp pt-4-imp dc__gap-12 flexbox dc__align-items-center h-28">
-                                Enterprise Support
-                            </div>
                         </>
                     )}
                 </Fragment>

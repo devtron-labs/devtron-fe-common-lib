@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICError } from '@Icons/ic-error.svg'
-import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
-import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
-import { ReactComponent as ICHelp } from '@Icons/ic-help.svg'
 import { ComponentSizeType } from '@Shared/constants'
+
 import { ButtonProps } from '../Button'
 import { Icon } from '../Icon'
 import { InfoBlockProps } from './types'
@@ -33,11 +30,11 @@ export const VARIANT_TO_BG_MAP: Record<InfoBlockProps['variant'], string> = {
 }
 
 export const VARIANT_TO_ICON_MAP: Record<InfoBlockProps['variant'], InfoBlockProps['customIcon']> = {
-    error: <ICError />,
-    help: <ICHelp className="fcv-5" />,
+    error: <Icon name="ic-error" color="R500" />,
+    help: <Icon name="ic-help-outline" color="V500" />,
     information: <Icon name="ic-info-filled" color="B500" />,
-    success: <ICSuccess />,
-    warning: <ICWarningY5 />,
+    success: <Icon name="ic-success" color="G500" />,
+    warning: <Icon name="ic-warning" color="Y500" />,
     neutral: <Icon name="ic-info-filled" color={null} />,
 }
 

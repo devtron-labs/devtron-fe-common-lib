@@ -15,9 +15,11 @@
  */
 
 import { useEffect, useState } from 'react'
+
 import PageSizeSelector from './PageSizeSelector'
 import { Page, PageValueItemProps, PaginationProps } from './types'
 import { createPageArr } from './utils'
+
 import './pagination.scss'
 
 const PageValueItem = ({ value, isSelected, selectPage }: PageValueItemProps) => {

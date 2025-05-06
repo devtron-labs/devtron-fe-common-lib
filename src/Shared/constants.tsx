@@ -15,6 +15,7 @@
  */
 
 import { DeploymentNodeType, OptionType } from '@Common/Types'
+
 import { CDMaterialSidebarType, ConfigKeysWithLockType, ConfigurationType } from './types'
 
 export const ARTIFACT_STATUS = {
@@ -101,11 +102,26 @@ export enum TIMELINE_STATUS {
     HELM_MANIFEST_PUSHED_TO_HELM_REPO = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO',
     HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED',
 }
+/**
+ * Constants for NO MATCHING result
+ */
+export const NO_MATCHING_RESULT = 'No matching results'
+
+/**
+ * Constants for TYPE 3 CHARACTERS
+ */
+export const TYPE_3_CHARACTERS_TO_SEE_MATCHING_RESULTS = 'Type 3 chars to see matching results'
+
+/**
+ * Constants for TYPE TO SEE MATCHING RESULTS
+ */
+
+export const TYPE_TO_SEE_MATCHING_RESULTS = 'Type to see matching results'
 
 export const EMPTY_STATE_STATUS = {
     DATA_NOT_AVAILABLE: 'Data not available',
     API_TOKEN: {
-        TITLE: 'No matching results',
+        TITLE: NO_MATCHING_RESULT,
         SUBTITLE: "We couldn't find any matching token",
     },
     ARTIFACTS_EMPTY_STATE_TEXTS: {
@@ -223,7 +239,7 @@ export const EMPTY_STATE_STATUS = {
     },
 
     NO_MATCHING_RESULT: {
-        TITLE: 'No matching results',
+        TITLE: NO_MATCHING_RESULT,
         SUBTITLE: "We couldn't find any matching cluster",
     },
 
@@ -522,6 +538,8 @@ export const DC_DELETE_SUBTITLES = {
 
 export const EULA_LINK = 'https://devtron.ai/end-user-license-agreement-eula'
 export const CONTACT_SUPPORT_LINK = 'https://devtron.ai/enterprise-support'
+export const PRIVACY_POLICY_LINK = 'https://devtron.ai/privacy-policy'
+export const TERMS_OF_USE_LINK = 'https://devtron.ai/terms-of-use'
 
 export const enum DeleteComponentsName {
     Cluster = 'cluster',

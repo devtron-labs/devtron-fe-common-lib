@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-import YAML from 'yaml'
 import { GroupBase, OptionsOrGroups } from 'react-select'
+import YAML from 'yaml'
+
+import { noop, YAMLStringify } from '@Common/Helper'
+import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
+import { decode } from '@Shared/Helpers'
 import {
     CM_SECRET_STATE,
     CMSecretComponentType,
     CMSecretConfigData,
     CMSecretExternalType,
     CMSecretPayloadType,
-    CMSecretYamlData,
     CODE_EDITOR_RADIO_STATE,
     ConfigDatum,
     ConfigMapSecretUseFormProps,
@@ -31,16 +34,15 @@ import {
     ProcessCMCSCurrentDataParamsType,
 } from '@Shared/Services'
 import { hasESO, OverrideMergeStrategyType } from '@Pages/index'
-import { noop, YAMLStringify } from '@Common/Helper'
-import { decode } from '@Shared/Helpers'
-import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
-import { ConfigMapSecretDataTypeOptionType, GetConfigMapSecretReadOnlyValuesParamsType } from './types'
+
+import { KeyValueTableData } from '../KeyValueTable'
 import { getSelectPickerOptionByValue } from '../SelectPicker'
 import {
     CONFIG_MAP_SECRET_DEFAULT_CURRENT_DATA,
     configMapDataTypeOptions,
     configMapSecretMountDataMap,
 } from './constants'
+import { ConfigMapSecretDataTypeOptionType, GetConfigMapSecretReadOnlyValuesParamsType } from './types'
 
 export const getSecretDataTypeOptions = (
     isJob: boolean,
@@ -91,7 +93,7 @@ export const getSecretDataTypeOptions = (
     return isJob ? kubernetesOptions : [...kubernetesOptions, ...esoOptions, ...(isHashiOrAWS ? kesOptions : [])]
 }
 
-const secureValues = (data: Record<string, string>, decodeData: boolean): CMSecretYamlData[] => {
+const secureValues = (data: Record<string, string>, decodeData: boolean): KeyValueTableData[] => {
     let decodedData = data || DEFAULT_SECRET_PLACEHOLDER
 
     if (decodeData) {
@@ -102,9 +104,9 @@ const secureValues = (data: Record<string, string>, decodeData: boolean): CMSecr
         }
     }
 
-    return Object.keys(decodedData).map((k, id) => ({
-        k,
-        v: typeof decodedData[k] === 'object' ? YAMLStringify(decodedData[k]) : decodedData[k],
+    return Object.keys(decodedData).map((key, id) => ({
+        key,
+        value: typeof decodedData[key] === 'object' ? YAMLStringify(decodedData[key]) : decodedData[key],
         id,
     }))
 }
@@ -148,8 +150,8 @@ const processExternalSubPathValues = ({
     return ''
 }
 
-export const convertKeyValuePairToYAML = (currentData: CMSecretYamlData[]) =>
-    currentData.length ? YAMLStringify(currentData.reduce((agg, { k, v }) => ({ ...agg, [k]: v }), {})) : ''
+export const convertKeyValuePairToYAML = (currentData: KeyValueTableData[]) =>
+    currentData.length ? YAMLStringify(currentData.reduce((agg, { key, value }) => ({ ...agg, [key]: value }), {})) : ''
 
 const getSecretDataFromConfigData = ({
     secretData,
@@ -366,29 +368,30 @@ export const getConfigMapSecretReadOnlyValues = ({
                 ? [
                       {
                           displayName: 'Keys',
-                          value: currentData?.length > 0 ? currentData.map((d) => d.k).join(', ') : 'No keys available',
+                          value:
+                              currentData?.length > 0 ? currentData.map((d) => d.key).join(', ') : 'No keys available',
                           key: 'keys',
                       },
                   ]
                 : []),
         ],
-        data: !mountExistingExternal ? (currentData?.[0]?.k && yaml) || esoSecretYaml || secretDataYaml : null,
+        data: !mountExistingExternal ? (currentData?.[0]?.key && yaml) || esoSecretYaml || secretDataYaml : null,
     }
 }
 
-export const convertYAMLToKeyValuePair = (yaml: string): CMSecretYamlData[] => {
+export const convertYAMLToKeyValuePair = (yaml: string): KeyValueTableData[] => {
     try {
         const obj = yaml && YAML.parse(yaml)
         if (typeof obj !== 'object') {
             throw new Error()
         }
-        const keyValueArray: CMSecretYamlData[] = Object.keys(obj).reduce((agg, k, id) => {
-            if (!k && !obj[k]) {
+        const keyValueArray = Object.keys(obj).reduce<KeyValueTableData[]>((agg, key, id) => {
+            if (!key && !obj[key]) {
                 return CONFIG_MAP_SECRET_DEFAULT_CURRENT_DATA
             }
-            const v = obj[k] && typeof obj[k] === 'object' ? YAMLStringify(obj[k]) : obj[k].toString()
+            const value = obj[key] && typeof obj[key] === 'object' ? YAMLStringify(obj[key]) : obj[key].toString()
 
-            return [...agg, { k, v: v ?? '', id }]
+            return [...agg, { key, value: value ?? '', id }]
         }, [])
         return keyValueArray
     } catch {
@@ -447,14 +450,14 @@ export const getConfigMapSecretPayload = ({
     const isESO = isSecret && hasESO(externalType)
     const _currentData = yamlMode ? convertYAMLToKeyValuePair(yaml) : currentData
     const data = _currentData.reduce((acc, curr) => {
-        if (!curr.k) {
+        if (!curr.key) {
             return acc
         }
-        const value = curr.v ?? ''
+        const value = curr.value ?? ''
 
         return {
             ...acc,
-            [curr.k]: isSecret && externalType === '' ? btoa(value) : value,
+            [curr.key]: isSecret && externalType === '' ? btoa(value) : value,
         }
     }, {})
 

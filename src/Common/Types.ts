@@ -27,6 +27,7 @@ import {
     TargetPlatformItemDTO,
     ButtonProps,
     ComponentLayoutType,
+    StatusType,
 } from '../Shared'
 import {
     ACTION_STATE,
@@ -230,25 +231,27 @@ interface InfoColourBarTextConfigType {
     actionButtonConfig?: ButtonProps
 }
 
-type InfoColourBarMessageProp = {
-    message: ReactNode
-    linkText?: ReactNode
-    redirectLink?: string
-    linkOnClick?: () => void
-    linkClass?: string
-    internalLink?: boolean
+type InfoColourBarMessageProp =
+    | {
+          message: ReactNode
+          linkText?: ReactNode
+          redirectLink?: string
+          linkOnClick?: () => void
+          linkClass?: string
+          internalLink?: boolean
 
-    textConfig?: never
-} | {
-    textConfig: InfoColourBarTextConfigType
+          textConfig?: never
+      }
+    | {
+          textConfig: InfoColourBarTextConfigType
 
-    message?: never
-    linkText?: never
-    redirectLink?: never
-    linkOnClick?: () => never
-    linkClass?: never
-    internalLink?: never
-}
+          message?: never
+          linkText?: never
+          redirectLink?: never
+          linkOnClick?: () => never
+          linkClass?: never
+          internalLink?: never
+      }
 
 export type InfoColourBarType = InfoColourBarMessageProp & {
     classname: string
@@ -435,6 +438,7 @@ export interface ApprovalConfigDataType extends Pick<UserApprovalInfo, 'currentC
             groupName: UserGroupDTO['name']
         })[]
     }
+    isExceptionUser: boolean
 }
 
 export enum ApprovalRuntimeStateType {
@@ -846,7 +850,7 @@ export interface Strategy {
     default?: boolean
 }
 
-export interface CDStage extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo' | 'isTriggerBlocked' >> {
+export interface CDStage extends Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo' | 'isTriggerBlocked'>> {
     status: string
     name: string
     triggerType: 'AUTOMATIC' | 'MANUAL'
@@ -858,7 +862,9 @@ export interface CDStageConfigMapSecretNames {
     secrets: any[]
 }
 
-export interface PrePostDeployStageType extends MandatoryPluginBaseStateType, Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
+export interface PrePostDeployStageType
+    extends MandatoryPluginBaseStateType,
+        Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     isValid: boolean
     steps: TaskErrorObj[]
     triggerType: string
@@ -1065,16 +1071,6 @@ export interface EnvironmentHelmResult {
 
 export type EnvironmentListHelmResponse = ResponseType<EnvironmentListHelmResult[]>
 
-export interface WidgetEventDetails {
-    message: string
-    namespace: string
-    object: string
-    source: string
-    count: number
-    age: string
-    lastSeen: string
-}
-
 export interface GlobalVariableDTO {
     name: string
     format: VariableTypeFormat
@@ -1107,4 +1103,20 @@ export enum ActionTypes {
     UPDATE = 'update',
     EDIT = 'edit',
     APPROVER = 'approver',
+}
+
+export interface GetAppsInfoForEnvProps {
+    envId: number
+    appIds?: number[]
+}
+
+export interface AppMeta {
+    appId: number
+    appStatus: StatusType
+    appName: string
+}
+
+export interface EnvAppsMetaDTO {
+    appCount: number
+    apps: AppMeta[]
 }

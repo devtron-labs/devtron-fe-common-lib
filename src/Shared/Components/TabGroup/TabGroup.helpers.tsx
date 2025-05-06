@@ -14,31 +14,42 @@
  * limitations under the License.
  */
 
+import { LinkProps, NavLinkProps } from 'react-router-dom'
+
 import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
 
-import { TabProps } from './TabGroup.types'
+import { Icon } from '../Icon'
+import { TabGroupProps, TabProps } from './TabGroup.types'
+import { TAB_ICON_SIZE_MAP } from './TabGroup.utils'
 
 export const getTabIcon = ({
-    icon: Icon,
+    icon,
     showError,
     showWarning,
     className,
-}: Pick<TabProps, 'showError' | 'showWarning' | 'icon'> & { className: string }) => {
+    size,
+    active,
+}: Pick<TabProps, 'showError' | 'showWarning' | 'icon' | 'active'> &
+    Pick<TabGroupProps, 'size'> & { className: string }) => {
     if (showError) {
         return <ICErrorExclamation className={className} />
     }
     if (showWarning) {
         return <ICWarning className={`${className} warning-icon-y7`} />
     }
-    if (Icon) {
-        return <Icon className={`${className} tab-group__tab__icon`} />
+    if (typeof icon === 'string') {
+        return <Icon name={icon} color={active ? 'B500' : 'N700'} size={TAB_ICON_SIZE_MAP[size]} />
+    }
+    if (icon) {
+        const RenderIcon = icon
+        return <RenderIcon className={`${className} tab-group__tab__icon`} />
     }
     return null
 }
 
 export const getTabBadge = (badge: TabProps['badge'], className: string) =>
-    badge !== null && <div className={`tab-group__tab__badge bcn-1 cn-7 fw-6 flex px-4 ${className}`}>{badge}</div>
+    badge !== null && <span className={`tab-group__tab__badge bcn-1 cn-7 fw-6 flex px-4 ${className}`}>{badge}</span>
 
 export const getTabIndicator = (showIndicator: TabProps['showIndicator']) =>
     showIndicator && <span className="tab-group__tab__indicator bcr-5 mt-4 dc__align-self-start" />
@@ -56,3 +67,14 @@ export const getTabDescription = (description: TabProps['description']) =>
                 : description}
         </ul>
     )
+
+const replaceTrailingSlash = (pathname: string) => pathname.replace(/\/+$/, '')
+
+export const getPathnameToMatch = (to: NavLinkProps['to'] | LinkProps['to'], currentPathname: string): string => {
+    if (typeof to === 'string' || (to && typeof to === 'object' && 'pathname' in to)) {
+        const pathname = typeof to === 'string' ? to : to.pathname || ''
+        // handling absolute and relative paths
+        return pathname.startsWith('/') ? pathname : `${replaceTrailingSlash(currentPathname)}/${pathname}`
+    }
+    return ''
+}

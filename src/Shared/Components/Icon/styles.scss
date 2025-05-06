@@ -17,10 +17,11 @@
 .icon-component-color {
     &:not([data-style-override='false']) {
         :where([stroke^='#']:not([data-style-override='false'])) {
-            stroke: var(--iconColor);
+            stroke: var(--overrideIconColor, var(--iconColor));
+
         }
         :where([fill^='#']:not([data-style-override='false'])) {
-            fill: var(--iconColor);
+            fill: var(--overrideIconColor, var(--iconColor));
         }
     }
 }

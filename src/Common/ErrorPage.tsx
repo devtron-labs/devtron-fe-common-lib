@@ -15,10 +15,11 @@
  */
 
 import { useHistory } from 'react-router-dom'
-import { ERROR_STATUS_CODE, ERROR_EMPTY_SCREEN, ROUTES } from './Constants'
+
 import GenericEmptyState from './EmptyState/GenericEmptyState'
-import { ErrorPageType } from './Types'
+import { ERROR_EMPTY_SCREEN, ERROR_STATUS_CODE, ROUTES } from './Constants'
 import { noop, refresh, reportIssue } from './Helper'
+import { ErrorPageType } from './Types'
 
 const ErrorPage = ({ code, image, title, subTitle, imageType, redirectURL, reload }: ErrorPageType) => {
     const { push } = useHistory()

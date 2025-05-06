@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-import { OverrideMergeStrategyType } from '@Pages/Applications'
+import { KeyValueTableData } from '@Shared/Components'
 import { TargetPlatformsDTO } from '@Shared/types'
-import { ReleaseTag, UserApprovalMetadataType, ResponseType } from '../../Common'
+import { OverrideMergeStrategyType } from '@Pages/Applications'
+
+import { ReleaseTag, ResponseType, UserApprovalMetadataType } from '../../Common'
 
 interface WebhookDataType {
     id: number
@@ -240,12 +242,6 @@ export interface ConfigMapSecretDataType {
     isDeletable: boolean
 }
 
-export interface CMSecretYamlData {
-    k: string
-    v: string
-    id: string | number
-}
-
 export interface ConfigMapSecretUseFormProps {
     name: string
     isSecret: boolean
@@ -260,7 +256,7 @@ export interface ConfigMapSecretUseFormProps {
     roleARN: string
     yamlMode: boolean
     yaml: string
-    currentData: CMSecretYamlData[]
+    currentData: KeyValueTableData[]
     secretDataYaml: string
     esoSecretYaml: string
     hasCurrentDataErr: boolean

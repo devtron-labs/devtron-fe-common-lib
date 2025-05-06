@@ -15,42 +15,53 @@
  */
 
 /* eslint-disable no-param-reassign */
-import { useEffect, useRef, useState, ReactElement } from 'react'
+import { ReactElement, useEffect, useRef, useState } from 'react'
 import { PromptProps } from 'react-router-dom'
+import { StrictRJSFSchema } from '@rjsf/utils'
 import Tippy from '@tippyjs/react'
-import { Pair } from 'yaml'
 import moment from 'moment'
 import { nanoid } from 'nanoid'
-import { StrictRJSFSchema } from '@rjsf/utils'
-import { MaterialHistoryType } from '@Shared/Services/app.types'
+import { Pair } from 'yaml'
+
+import { ReactComponent as ICAWSCodeCommit } from '@Icons/ic-aws-codecommit.svg'
+import { ReactComponent as ICBitbucket } from '@Icons/ic-bitbucket.svg'
+import { ReactComponent as ICGit } from '@Icons/ic-git.svg'
+import { ReactComponent as ICGithub } from '@Icons/ic-github.svg'
+import { ReactComponent as ICGitlab } from '@Icons/ic-gitlab.svg'
 import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
 import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
-import { ReactComponent as ICGithub } from '@Icons/ic-github.svg'
-import { ReactComponent as ICGitlab } from '@Icons/ic-gitlab.svg'
-import { ReactComponent as ICGit } from '@Icons/ic-git.svg'
-import { ReactComponent as ICBitbucket } from '@Icons/ic-bitbucket.svg'
-import { ReactComponent as ICAWSCodeCommit } from '@Icons/ic-aws-codecommit.svg'
+import { MaterialHistoryType } from '@Shared/Services/app.types'
+
 import {
+    ApprovalConfigDataType,
+    DATE_TIME_FORMATS,
     handleUTCTime,
     ManualApprovalType,
     mapByKey,
     MaterialInfo,
+    noop,
+    PATTERNS,
     shallowEqual,
     SortingOrder,
-    UserApprovalConfigType,
-    PATTERNS,
-    ZERO_TIME_STRING,
-    noop,
     SourceTypeMap,
-    DATE_TIME_FORMATS,
-    ApprovalConfigDataType,
-    UserApprovalInfo,
     TOKEN_COOKIE_NAME,
+    UserApprovalConfigType,
+    UserApprovalInfo,
+    ZERO_TIME_STRING,
 } from '../Common'
+import { getAggregator } from '../Pages'
+import {
+    AggregatedNodes,
+    DeploymentStatusDetailsBreakdownDataType,
+    DeploymentStatusDetailsType,
+    PodMetadatum,
+} from './Components'
+import { DEPLOYMENT_STATUS, TIMELINE_STATUS, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
 import {
     AggregationKeys,
     BorderConfigType,
+    GetTimeDifferenceParamsType,
     GitTriggers,
     IntersectionChangeHandler,
     IntersectionOptions,
@@ -60,14 +71,6 @@ import {
     TargetPlatformsDTO,
     WebhookEventNameType,
 } from './types'
-import { DEPLOYMENT_STATUS, TIMELINE_STATUS, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
-import {
-    AggregatedNodes,
-    DeploymentStatusDetailsBreakdownDataType,
-    DeploymentStatusDetailsType,
-    PodMetadatum,
-} from './Components'
-import { getAggregator } from '../Pages'
 
 interface HighlightSearchTextProps {
     /**
@@ -778,24 +781,40 @@ export const decode = (data, isEncoded: boolean = false) =>
 
 export const isTimeStringAvailable = (time: string): boolean => !!time && time !== ZERO_TIME_STRING
 
-export const getTimeDifference = (startTime: string, endTime: string): string => {
+export const getTimeDifference = ({
+    startTime,
+    endTime,
+    fallbackString = '-',
+}: GetTimeDifferenceParamsType): string => {
     if (!isTimeStringAvailable(startTime) || !isTimeStringAvailable(endTime)) {
-        return '-'
+        return fallbackString
     }
 
-    const seconds = moment(endTime).diff(moment(startTime), 'seconds')
-    const minutes = moment(endTime).diff(moment(startTime), 'minutes')
-    const hours = moment(endTime).diff(moment(startTime), 'hours')
+    const start = moment(startTime)
+    const end = moment(endTime)
+    if (!start.isValid() || !end.isValid()) {
+        return fallbackString
+    }
 
-    if (seconds < 60) {
-        return `${seconds}s`
+    const diff = Math.abs(end.diff(start))
+    const duration = moment.duration(diff)
+
+    const units = [
+        { label: 'd', value: duration.days() },
+        { label: 'h', value: duration.hours() },
+        { label: 'm', value: duration.minutes() },
+        { label: 's', value: duration.seconds() },
+    ]
+
+    // Filter out zero values and take the first two non-zero units
+    const nonZeroUnits = units.filter((unit) => unit.value > 0).slice(0, 2)
+
+    // If all units are zero, show "0s"
+    if (nonZeroUnits.length === 0) {
+        return '0s'
     }
-    if (minutes < 60) {
-        return `${minutes}m ${seconds % 60}s`
-    }
-    const leftOverMinutes = minutes - hours * 60
-    const leftOverSeconds = seconds - minutes * 60
-    return `${hours}h ${leftOverMinutes}m ${leftOverSeconds}s`
+
+    return nonZeroUnits.map((unit) => `${unit.value}${unit.label}`).join(' ')
 }
 
 export const getFileNameFromHeaders = (headers: Headers) =>
@@ -840,6 +859,7 @@ export const sanitizeApprovalConfigData = (
             }),
         ),
     },
+    isExceptionUser: approvalConfigData?.isExceptionUser ?? false,
 })
 
 /**

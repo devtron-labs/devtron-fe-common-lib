@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
+import { DetailedHTMLProps, Dispatch, ReactElement, ReactNode, SetStateAction } from 'react'
 
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { UseStateFiltersReturnType } from '@Common/Hooks'
-
 import { TooltipProps } from '@Common/Tooltip/types'
-import { SelectPickerOptionType, SelectPickerProps, SelectPickerTextAreaProps } from '../SelectPicker'
+
 import { FileUploadProps } from '../FileUpload'
+import { SelectPickerOptionType, SelectPickerProps, SelectPickerTextAreaProps } from '../SelectPicker'
 
 /**
  * Interface representing header for a dynamic data table.
@@ -169,6 +169,10 @@ export type DynamicDataTableProps<K extends string, CustomStateType = Record<str
     isDeletionNotAllowed?: boolean
     /** When true, data add or update is disabled. */
     readOnly?: boolean
+    /** Tooltip for add button.
+     * @default 'Add'
+     */
+    addBtnTooltip?: string
     /** Function to handle the addition of a new row to the table. */
     onRowAdd: () => void
     /**
@@ -233,6 +237,7 @@ export interface DynamicDataTableHeaderProps<K extends string, CustomStateType =
         | 'rows'
         | 'headerComponent'
         | 'sortingConfig'
+        | 'addBtnTooltip'
         | 'onRowAdd'
         | 'readOnly'
         | 'isAdditionNotAllowed'
@@ -256,4 +261,7 @@ export interface DynamicDataTableRowProps<K extends string, CustomStateType = Re
         | 'trailingCellIcon'
         | 'buttonCellWrapComponent'
         | 'focusableFieldKey'
-    > {}
+    > {
+    isAddRowButtonClicked: boolean
+    setIsAddRowButtonClicked: Dispatch<SetStateAction<boolean>>
+}

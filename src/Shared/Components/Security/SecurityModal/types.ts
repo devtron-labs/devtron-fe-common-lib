@@ -15,10 +15,12 @@
  */
 
 import React from 'react'
-import { GenericEmptyStateType } from '@Common/Types'
-import { LastExecutionResultType, NodeType, Nodes } from '@Shared/types'
+
 import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
 import { ServerErrors } from '@Common/ServerError'
+import { GenericEmptyStateType } from '@Common/Types'
+import { LastExecutionResultType, Nodes, NodeType } from '@Shared/types'
+
 import { ScanCategories, ScanSubCategories } from '../types'
 
 export interface GetResourceScanDetailsPayloadType {

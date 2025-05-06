@@ -29,22 +29,22 @@ import {
 import { followCursor } from 'tippy.js'
 
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { Tooltip } from '@Common/Tooltip'
-import { ConditionalWrap } from '@Common/Helper'
 import { ResizableTagTextArea } from '@Common/CustomTagSelector'
+import { ConditionalWrap } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { FileUpload } from '../FileUpload'
 import {
     getSelectPickerOptionByValue,
     SelectPicker,
-    SelectPickerTextArea,
     SelectPickerOptionType,
+    SelectPickerTextArea,
     SelectPickerVariantType,
 } from '../SelectPicker'
-import { FileUpload } from '../FileUpload'
+import { DynamicDataTableRowDataType, DynamicDataTableRowProps, DynamicDataTableRowType } from './types'
 import { getActionButtonPosition, getRowGridTemplateColumn, rowTypeHasInputField } from './utils'
-import { DynamicDataTableRowType, DynamicDataTableRowProps, DynamicDataTableRowDataType } from './types'
 
 const getWrapperForButtonCell =
     <K extends string, CustomStateType = Record<string, unknown>>(
@@ -73,6 +73,8 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     trailingCellIcon,
     buttonCellWrapComponent,
     focusableFieldKey,
+    isAddRowButtonClicked,
+    setIsAddRowButtonClicked,
 }: DynamicDataTableRowProps<K, CustomStateType>) => {
     // CONSTANTS
     const isFirstRowEmpty = headers.every(({ key }) => !rows[0]?.data[key].value)
@@ -105,6 +107,8 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     useEffect(() => {
         setIsRowAdded(rows.length > 0 && Object.keys(cellRef.current).length < rows.length)
 
+        // When a new row is added, we create references for its cells.
+        // This logic ensures that references are created only for the newly added row, while retaining the existing references.
         const updatedCellRef = rowIds.reduce((acc, curr) => {
             if (cellRef.current[curr]) {
                 acc[curr] = cellRef.current[curr]
@@ -118,15 +122,16 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     }, [JSON.stringify(rowIds)])
 
     useEffect(() => {
-        if (isRowAdded) {
+        if (isAddRowButtonClicked && isRowAdded) {
             // Using the below logic to ensure the cell is focused after row addition.
             const cell = cellRef.current[rows[0].id][focusableFieldKey || headers[0].key].current
             if (cell) {
                 cell.focus()
                 setIsRowAdded(false)
+                setIsAddRowButtonClicked(false)
             }
         }
-    }, [isRowAdded])
+    }, [isRowAdded, isAddRowButtonClicked])
 
     // METHODS
     const onChange =
@@ -169,7 +174,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             {...row.data[key].props}
                             inputId={`data-table-${row.id}-${key}-cell`}
                             classNamePrefix="dynamic-data-table__cell__select-picker"
-                            variant={SelectPickerVariantType.BORDER_LESS}
+                            variant={SelectPickerVariantType.COMPACT}
                             value={getSelectPickerOptionByValue(
                                 row.data[key].props?.options,
                                 row.data[key].value,
@@ -191,7 +196,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                             isCreatable={isCreatable}
                             isClearable
                             {...props}
-                            variant={SelectPickerVariantType.BORDER_LESS}
+                            variant={SelectPickerVariantType.COMPACT}
                             classNamePrefix="dynamic-data-table__cell__select-picker-text-area"
                             inputId={`data-table-${row.id}-${key}-cell`}
                             minHeight={20}
@@ -290,16 +295,18 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 ? cellError[row.id][key]
                 : { isValid: true, errorMessages: [] }
 
-        const isSelectText = row.data[key].type === DynamicDataTableRowDataType.SELECT_TEXT
+        const isDropdown =
+            row.data[key].type === DynamicDataTableRowDataType.SELECT_TEXT ||
+            row.data[key].type === DynamicDataTableRowDataType.DROPDOWN
 
         if (isValid) {
             return null
         }
 
-        // Adding 'no-error' class to hide error when SelectPickerTextArea is focused.
+        // Adding 'no-error' class to hide error when SelectPicker or SelectPickerTextArea is focused.
         return (
             <div
-                className={`dynamic-data-table__error bg__primary dc__border br-4 py-7 px-8 flexbox-col dc__gap-4 ${isSelectText ? 'no-error' : ''}`}
+                className={`dynamic-data-table__error bg__primary dc__border br-4 py-7 px-8 flexbox-col dc__gap-4 ${isDropdown ? 'no-error' : ''}`}
             >
                 {errorMessages.map((error) => renderErrorMessage(error))}
             </div>

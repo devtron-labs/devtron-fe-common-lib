@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { CATEGORY_LABELS } from './SecurityModal'
 import { CATEGORIES, SUB_CATEGORIES } from './SecurityModal/types'
+import { CATEGORY_LABELS } from './SecurityModal'
 import { SecurityConfigType } from './types'
 
 export const SECURITY_CONFIG: SecurityConfigType = {

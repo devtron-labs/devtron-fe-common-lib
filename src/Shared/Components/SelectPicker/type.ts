@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-import { ServerErrors } from '@Common/ServerError'
-import { OptionType } from '@Common/Types'
-import { ComponentSizeType } from '@Shared/constants'
 import { MutableRefObject, ReactElement, ReactNode } from 'react'
 import { GroupBase, GroupHeadingProps, Props as ReactSelectProps, SelectInstance } from 'react-select'
-import { CreatableProps } from 'react-select/creatable'
 // This import allows to extend the base interface in react-select module via module augmentation
 import type {} from 'react-select/base'
-import { TooltipProps } from '@Common/Tooltip/types'
+import { CreatableProps } from 'react-select/creatable'
+
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
+import { ServerErrors } from '@Common/ServerError'
+import { TooltipProps } from '@Common/Tooltip/types'
+import { OptionType } from '@Common/Types'
+import { ComponentSizeType } from '@Shared/constants'
+
+import { ButtonComponentType, ButtonProps, ButtonVariantType } from '../Button'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
 
 export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
@@ -54,17 +57,34 @@ type SelectProps<OptionValue, IsMulti extends boolean> = ReactSelectProps<
     GroupBase<SelectPickerOptionType<OptionValue>>
 >
 
+type MenuListFooterConfigType =
+    | {
+          type: 'text'
+          /**
+           * String is preferred for text type
+           */
+          value: ReactNode
+          buttonProps?: never
+      }
+    | {
+          type: 'button'
+          value?: never
+          buttonProps: {
+              variant: ButtonVariantType.primary | ButtonVariantType.borderLess
+          } & Omit<ButtonProps<ButtonComponentType>, 'size' | 'fullWidth' | 'icon' | 'endIcon' | 'variant' | 'style'>
+      }
+
 declare module 'react-select/base' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     export interface Props<Option, IsMulti extends boolean, Group extends GroupBase<Option>> {
         /**
-         * Render function for the footer at the bottom of menu list. It is sticky by default
+         * Config for the footer at the bottom of menu list. It is sticky by default
          */
-        renderMenuListFooter?: () => ReactNode
+        menuListFooterConfig?: MenuListFooterConfigType
         /**
          * If true, custom options are rendered in the menuList component of react select
          *
-         * Note: renderCustomOptions is required to be passed; renderMenuListFooter is also not called
+         * Note: renderCustomOptions is required to be passed; menuListFooterConfig is also not used
          *
          * @default false
          */
@@ -109,6 +129,7 @@ declare module 'react-select/base' {
 export enum SelectPickerVariantType {
     DEFAULT = 'default',
     BORDER_LESS = 'border-less',
+    COMPACT = 'compact',
 }
 
 export type SelectPickerProps<OptionValue = number | string, IsMulti extends boolean = false> = Pick<
@@ -147,7 +168,6 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     Partial<
         Pick<
             SelectProps<OptionValue, IsMulti>,
-            | 'renderMenuListFooter'
             | 'shouldRenderCustomOptions'
             | 'renderCustomOptions'
             | 'icon'
@@ -169,6 +189,12 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     > &
     Omit<FormFieldWrapperProps, 'children'> & {
         /**
+         * Config for the footer at the bottom of menu list. It is sticky by default
+         *
+         * Note: Re-declaring here since dynamic typing doesn't work with module augmentation
+         */
+        menuListFooterConfig?: MenuListFooterConfigType
+        /**
          * Custom selected options count for use cases like filters
          */
         customSelectedOptionsCount?: number
@@ -177,7 +203,10 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
          *
          * @default 'ComponentSizeType.medium'
          */
-        size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large | ComponentSizeType.small>
+        size?: Extract<
+            ComponentSizeType,
+            ComponentSizeType.medium | ComponentSizeType.large | ComponentSizeType.small | ComponentSizeType.xl
+        >
         /**
          * Content to be shown in a tippy when disabled
          */

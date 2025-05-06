@@ -14,16 +14,25 @@
  * limitations under the License.
  */
 
-import { motion } from 'framer-motion'
-import { ReactComponent as ICDeploy } from '@Icons/ic-nav-rocket.svg'
-import { ComponentSizeType } from '@Shared/constants'
 import { SyntheticEvent, useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+
 import DeployAudio from '@Sounds/DeployAudio.mp3'
-import { Button } from '../Button'
-import './animatedDeployButton.scss'
+import { ComponentSizeType } from '@Shared/constants'
+
+import { Button, ButtonStyleType } from '../Button'
+import { Icon } from '../Icon'
 import { AnimatedDeployButtonProps } from './types'
 
-const AnimatedDeployButton = ({ isVirtualEnvironment, onButtonClick }: AnimatedDeployButtonProps) => {
+import './animatedDeployButton.scss'
+
+const AnimatedDeployButton = ({
+    isLoading,
+    isVirtualEnvironment,
+    onButtonClick,
+    exceptionUserConfig,
+    isBulkCDTrigger,
+}: AnimatedDeployButtonProps) => {
     const audioRef = useRef<HTMLAudioElement>(null)
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null)
     const isAudioEnabled: boolean = window._env_.FEATURE_ACTION_AUDIOS_ENABLE
@@ -33,6 +42,7 @@ const AnimatedDeployButton = ({ isVirtualEnvironment, onButtonClick }: AnimatedD
             rotate: 45,
         },
     }
+    const isExceptionUser = exceptionUserConfig?.canDeploy || exceptionUserConfig?.isImageApprover
 
     const handleButtonClick = async (e: SyntheticEvent) => {
         if (clicked) {
@@ -63,7 +73,12 @@ const AnimatedDeployButton = ({ isVirtualEnvironment, onButtonClick }: AnimatedD
         <motion.div whileHover="hover" className={`${clicked ? 'hide-button-text' : ''}`}>
             <Button
                 dataTestId="cd-trigger-deploy-button"
-                text={`Deploy${isVirtualEnvironment ? ' to isolated env' : ''}`}
+                isLoading={isLoading}
+                text={
+                    exceptionUserConfig?.canDeploy
+                        ? 'Deploy without approval'
+                        : `Deploy${isVirtualEnvironment ? ' to isolated env' : ''}`
+                }
                 startIcon={
                     <motion.div
                         variants={svgMotionVariants}
@@ -80,11 +95,18 @@ const AnimatedDeployButton = ({ isVirtualEnvironment, onButtonClick }: AnimatedD
                                 : {}
                         }
                     >
-                        <ICDeploy className="icon-dim-16" />
+                        <Icon name="ic-rocket-launch" color={null} />
                     </motion.div>
                 }
                 size={ComponentSizeType.large}
                 onClick={handleButtonClick}
+                style={isExceptionUser ? ButtonStyleType.warning : ButtonStyleType.default}
+                showTooltip={isExceptionUser}
+                tooltipProps={{
+                    content: isBulkCDTrigger
+                        ? 'You are authorized to deploy as an exception user for some applications'
+                        : 'You are authorized to deploy as an exception user',
+                }}
             />
             {/* Disabling es-lint as captions are not required */}
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}

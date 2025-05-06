@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
+import { MODES } from '@Common/Constants'
 import { Progressing } from '@Common/Progressing'
 import { hasHashiOrAWS } from '@Pages/index'
 
-import { MODES } from '@Common/Constants'
-import { getConfigMapSecretReadOnlyValues } from './utils'
-import { ConfigMapSecretReadyOnlyProps } from './types'
+import { CodeEditor } from '../CodeEditor'
 import { renderHashiOrAwsDeprecatedInfo } from './helpers'
-import { CodeEditor } from '../CodeEditorWrapper'
+import { ConfigMapSecretReadyOnlyProps } from './types'
+import { getConfigMapSecretReadOnlyValues } from './utils'
 
 const ConfigMapSecretReadyOnly = ({
     componentType,
@@ -68,19 +68,7 @@ const ConfigMapSecretReadyOnly = ({
             </div>
             {!hideCodeEditor && displayValues.data && (
                 <CodeEditor.Container>
-                    <CodeEditor
-                        mode={MODES.YAML}
-                        readOnly
-                        codeEditorProps={{
-                            value: displayValues.data,
-                            inline: true,
-                            adjustEditorHeightToContent: true,
-                        }}
-                        codeMirrorProps={{
-                            value: displayValues.data,
-                            height: 'auto',
-                        }}
-                    >
+                    <CodeEditor mode={MODES.YAML} readOnly value={displayValues.data} height="auto">
                         <CodeEditor.Header>
                             <div className="flex dc__content-space">
                                 <p className="m-0 fs-13 lh-20 fw-6 cn-9">Data</p>

@@ -22,11 +22,7 @@ import {
     sanitizeUserApprovalList,
     stringComparatorBySortOrder,
 } from '@Shared/Helpers'
-import {
-    PolicyBlockInfo,
-    RuntimeParamsAPIResponseType,
-    RuntimePluginVariables,
-} from '@Shared/types'
+import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
 import {
@@ -49,10 +45,14 @@ import {
     GlobalVariableDTO,
     GlobalVariableOptionType,
     UserRole,
+    EnvAppsMetaDTO,
+    GetAppsInfoForEnvProps,
+    AppMeta,
 } from './Types'
 import { ApiResourceType, STAGE_MAP } from '../Pages'
 import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
 import { get, post } from './API'
+import { StatusType } from '@Shared/Components'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -264,7 +264,7 @@ export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): Runt
     const runtimeParams = (response?.runtimePluginVariables ?? []).map<RuntimePluginVariables>((variable) => ({
         ...variable,
         defaultValue: variable.value,
-        stepVariableId: variable.stepVariableId || Math.floor(new Date().valueOf() * Math.random())
+        stepVariableId: variable.stepVariableId || Math.floor(new Date().valueOf() * Math.random()),
     }))
 
     runtimeParams.push(...envVariables)
@@ -513,5 +513,27 @@ export const getGlobalVariables = async ({
         return variableList
     } catch (err) {
         throw err
+    }
+}
+
+export const getAppsInfoForEnv = async ({ envId, appIds }: GetAppsInfoForEnvProps): Promise<EnvAppsMetaDTO> => {
+    const url = getUrlWithSearchParams(`${ROUTES.ENV}/${envId}/${ROUTES.APP_METADATA}`, {
+        appIds: appIds?.join(),
+    })
+    const response = await get<EnvAppsMetaDTO>(url)
+
+    return {
+        appCount: response.result?.appCount ?? 0,
+        apps: (response.result?.apps ?? []).reduce<AppMeta[]>((agg, { appId, appName, appStatus }) => {
+            if (!appId) {
+                return agg
+            }
+            agg.push({
+                appId,
+                appName: appName || '',
+                appStatus: appStatus || StatusType.UNKNOWN,
+            })
+            return agg
+        }, []),
     }
 }

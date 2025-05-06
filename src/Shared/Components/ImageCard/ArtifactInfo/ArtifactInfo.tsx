@@ -15,14 +15,16 @@
  */
 
 import Tippy from '@tippyjs/react'
+
+import { ReactComponent as ICBot } from '@Icons/ic-bot.svg'
 import { Tooltip } from '@Common/Tooltip'
+import { Icon } from '@Shared/Components/Icon'
 import { RegistryIcon } from '@Shared/Components/RegistryIcon'
-import { DefaultUserKey } from '../../../types'
-import { ImagePathTippyContentProps } from './types'
-import { ArtifactInfoProps } from '../types'
+
 import { ConditionalWrap, getRandomColor } from '../../../../Common/Helper'
-import { ReactComponent as DeployIcon } from '../../../../Assets/Icon/ic-nav-rocket.svg'
-import { ReactComponent as ICBot } from '../../../../Assets/Icon/ic-bot.svg'
+import { DefaultUserKey } from '../../../types'
+import { ArtifactInfoProps } from '../types'
+import { ImagePathTippyContentProps } from './types'
 
 const ImagePathTippyContent = ({ imagePath, registryName }: ImagePathTippyContentProps) => (
     <div>
@@ -60,7 +62,7 @@ const ArtifactInfo = ({
 
         return (
             <div className="material-history__info flex left fs-13 dc__gap-8">
-                <DeployIcon className="icon-dim-16 scn-6" />
+                <Icon name="ic-rocket-launch" color="N600" />
                 <span className="fs-13 fw-4">{deployedTime}</span>
             </div>
         )
