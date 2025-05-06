@@ -27,6 +27,7 @@ export interface ReloadVersionConfigTypes {
     updateServiceWorker: () => Promise<void>
     handleControllerChange: () => void
     updateToastRef: MutableRefObject<ReturnType<typeof ToastManager.showToast>> | null
+    isRefreshing: boolean
 }
 export interface MainContext {
     serverMode: SERVER_MODE
