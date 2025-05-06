@@ -90,11 +90,6 @@ export interface customEnv {
     FEATURE_DEFAULT_MERGE_STRATEGY?: OverrideMergeStrategyType
     FEATURE_DEFAULT_LANDING_RB_ENABLE?: boolean
     FEATURE_ACTION_AUDIOS_ENABLE?: boolean
-    /**
-     * If true, the code-editor will use codemirror engine
-     * @default false
-     */
-    FEATURE_CODE_MIRROR_ENABLE?: boolean
     // ================== Feature flags for the enterprise release ==================
     /**
      * If true, only pipelines to which the user has access will be shown across the application
@@ -158,6 +153,7 @@ export interface customEnv {
      */
     FEATURE_APPLICATION_TEMPLATES_ENABLE?: boolean
     GATEKEEPER_URL?: string
+    FEATURE_AI_INTEGRATION_ENABLE?: boolean
 }
 declare global {
     interface Window {

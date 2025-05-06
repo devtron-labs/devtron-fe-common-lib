@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+export * from './AboutDevtron'
 export * from './ActionMenu'
 export * from './ActivityIndicator'
 export * from './AnimatedDeployButton'
@@ -28,7 +29,7 @@ export * from './ButtonWithLoader'
 export * from './ButtonWithSelector'
 export * from './CICDHistory'
 export * from './CMCS'
-export * from './CodeEditorWrapper'
+export * from './CodeEditor'
 export * from './Collapse'
 export * from './CollapsibleList'
 export * from './CommitChipCell'
@@ -94,5 +95,6 @@ export * from './ThemeSwitcher'
 export * from './ToggleResolveScopedVariables'
 export * from './UnsavedChanges'
 export * from './UnsavedChangesDialog'
+export * from './UserIdentifier'
 export * from './VirtualizedList'
 export * from './WorkflowOptionsModal'

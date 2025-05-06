@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { OptionType } from '@Common/Types'
+import { DeploymentNodeType, OptionType } from '@Common/Types'
 
 import { InfoBlockProps } from './Components'
 import { CDMaterialSidebarType, ConfigKeysWithLockType, ConfigurationType, IconBaseColorType } from './types'
@@ -539,6 +539,8 @@ export const DC_DELETE_SUBTITLES = {
 
 export const EULA_LINK = 'https://devtron.ai/end-user-license-agreement-eula'
 export const CONTACT_SUPPORT_LINK = 'https://devtron.ai/enterprise-support'
+export const PRIVACY_POLICY_LINK = 'https://devtron.ai/privacy-policy'
+export const TERMS_OF_USE_LINK = 'https://devtron.ai/terms-of-use'
 
 export const enum DeleteComponentsName {
     Cluster = 'cluster',
@@ -591,4 +593,9 @@ export const VARIANT_TO_BORDER_MAP: Record<InfoBlockProps['variant'], string> = 
     [InfoBlockVariant.SUCCESS]: 'eg-2',
     [InfoBlockVariant.WARNING]: 'ey-2',
     [InfoBlockVariant.NEUTRAL]: 'en-2',
+}
+export const DEPLOYMENT_STAGE_TO_NODE_MAP: Readonly<Record<DeploymentStageType, DeploymentNodeType>> = {
+    [DeploymentStageType.DEPLOY]: DeploymentNodeType.CD,
+    [DeploymentStageType.POST]: DeploymentNodeType.POSTCD,
+    [DeploymentStageType.PRE]: DeploymentNodeType.PRECD,
 }

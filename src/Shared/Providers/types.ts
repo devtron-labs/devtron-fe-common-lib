@@ -18,7 +18,7 @@ import { Dispatch, MutableRefObject, ReactNode, SetStateAction } from 'react'
 
 import { SERVER_MODE } from '../../Common'
 import { ServerInfo } from '../Components/Header/types'
-import { DevtronLicenseInfo, LicenseInfoDialogType, ToastManager } from '..'
+import { DevtronLicenseInfo, IntelligenceConfig, LicenseInfoDialogType, ToastManager } from '..'
 
 export interface ReloadVersionConfigTypes {
     bgUpdated: boolean
@@ -76,6 +76,8 @@ export interface MainContext {
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
     canFetchHelmAppStatus: boolean
     reloadVersionConfig: ReloadVersionConfigTypes
+    intelligenceConfig: IntelligenceConfig
+    setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
 }
 
 export interface MainContextProviderProps {
