@@ -1,9 +1,14 @@
+import { DeploymentAppTypes } from '@Common/Types'
 import { DEPLOYMENT_STATUS } from '@Shared/constants'
 import { aggregateNodes } from '@Shared/Helpers'
-import { AppDetails, Node } from '@Shared/types'
+import { AppDetails, AppType, Node } from '@Shared/types'
+import { ReleaseMode } from '@Pages/index'
 
 import { AggregatedNodes, STATUS_SORTING_ORDER } from '../CICDHistory'
-import { GetFilteredFlattenedNodesFromAppDetailsParamsType as GetFlattenedNodesFromAppDetailsParamsType } from './types'
+import {
+    AppStatusModalProps,
+    GetFilteredFlattenedNodesFromAppDetailsParamsType as GetFlattenedNodesFromAppDetailsParamsType,
+} from './types'
 
 export const getAppStatusMessageFromAppDetails = (appDetails: AppDetails): string => {
     if (!appDetails?.resourceTree) {
@@ -65,3 +70,33 @@ export const getFlattenedNodesFromAppDetails = ({
 }
 
 export const getResourceKey = (nodeDetails: Node) => `${nodeDetails.kind}/${nodeDetails.name}`
+
+export const getShowDeploymentStatusModal = ({
+    type,
+    appDetails,
+}: Pick<AppStatusModalProps, 'type' | 'appDetails'>): boolean => {
+    if (!appDetails) {
+        return false
+    }
+
+    const isHelmOrDevtronApp =
+        appDetails.appType === AppType.DEVTRON_APP || appDetails.appType === AppType.DEVTRON_HELM_CHART
+
+    if (type === 'stack-manager' || !isHelmOrDevtronApp) {
+        return false
+    }
+
+    if (appDetails.appType === AppType.DEVTRON_HELM_CHART) {
+        if (!appDetails.lastDeployedTime || appDetails.deploymentAppType === DeploymentAppTypes.HELM) {
+            return false
+        }
+
+        return true
+    }
+
+    if (appDetails.releaseMode === ReleaseMode.MIGRATE_EXTERNAL_APPS && !appDetails?.isPipelineTriggered) {
+        return false
+    }
+
+    return true
+}

@@ -18,6 +18,7 @@ import { ParsedCountry } from 'react-international-phone'
 import { Dayjs } from 'dayjs'
 
 import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
+import { ReleaseMode } from '@Pages/index'
 
 import {
     CommonNodeAttr,
@@ -245,6 +246,8 @@ export interface AppDetails {
     chartAvatar?: string
     fluxTemplateType?: string
     FluxAppStatusDetail?: FluxAppStatusDetail
+    isPipelineTriggered?: boolean
+    releaseMode?: ReleaseMode
 }
 
 export interface ConfigDriftModalProps extends Required<Pick<AppDetails, 'appId'>> {

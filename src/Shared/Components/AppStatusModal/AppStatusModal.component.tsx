@@ -12,8 +12,10 @@ import { APIResponseHandler } from '../APIResponseHandler'
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { AppStatusBody } from './AppStatusBody'
+import AppStatusModalTabList from './AppStatusModalTabList'
 import { getAppDetails } from './service'
-import { AppStatusModalProps } from './types'
+import { AppStatusModalProps, AppStatusModalTabType } from './types'
+import { getShowDeploymentStatusModal } from './utils'
 
 import './AppStatusModal.scss'
 
@@ -22,19 +24,29 @@ const AppStatusModal = ({
     handleClose,
     type,
     appDetails: appDetailsProp,
+    deploymentStatusDetailsBreakdownData: deploymentStatusDetailsBreakdownDataProps,
+    processVirtualEnvironmentDeploymentData,
     isConfigDriftEnabled,
     configDriftModal: ConfigDriftModal,
     appId,
     envId,
+    initialTab,
 }: AppStatusModalProps) => {
     const [showConfigDriftModal, setShowConfigDriftModal] = useState(false)
+    const [selectedTab, setSelectedTab] = useState<AppStatusModalTabType>(initialTab || null)
 
     const abortControllerRef = useRef<AbortController>(new AbortController())
     const pollingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     const getAppDetailsWrapper = async () => {
         const response = await abortPreviousRequests(
-            () => getAppDetails(appId, envId, abortControllerRef),
+            () =>
+                getAppDetails({
+                    appId,
+                    envId,
+                    abortControllerRef,
+                    deploymentStatusConfig: { showTimeline: false, processVirtualEnvironmentDeploymentData },
+                }),
             abortControllerRef,
         )
 
@@ -68,7 +80,11 @@ const AppStatusModal = ({
     const areInitialAppDetailsLoadingWithAbortedError =
         areInitialAppDetailsLoading || getIsRequestAborted(fetchedAppDetailsError)
 
-    const appDetails = type === 'release' ? fetchedAppDetails : appDetailsProp
+    const appDetails = type === 'release' ? fetchedAppDetails?.appDetails : appDetailsProp
+    const deploymentStatusDetailsBreakdownData =
+        type === 'release'
+            ? fetchedAppDetails?.deploymentStatusDetailsBreakdownData
+            : deploymentStatusDetailsBreakdownDataProps
 
     // Adding useEffect to initiate timer for external sync and clear it on unmount
     useEffect(() => {
@@ -105,6 +121,10 @@ const AppStatusModal = ({
         setShowConfigDriftModal(false)
     }
 
+    const handleSelectTab = (updatedTab: AppStatusModalTabType) => {
+        setSelectedTab(updatedTab)
+    }
+
     if (showConfigDriftModal) {
         return (
             <ConfigDriftModal
@@ -117,9 +137,29 @@ const AppStatusModal = ({
 
     const filteredTitleSegments = (titleSegments || []).filter((segment) => !!segment)
 
+    const getEmptyStateMessage = () => {
+        if (!selectedTab) {
+            return 'Status is not available'
+        }
+
+        if (selectedTab === AppStatusModalTabType.APP_STATUS) {
+            if (!appDetails?.resourceTree) {
+                return 'Application status is not available'
+            }
+        }
+
+        if (!deploymentStatusDetailsBreakdownData || getShowDeploymentStatusModal({ type, appDetails })) {
+            return 'Deployment status is not available'
+        }
+
+        return ''
+    }
+
     const renderContent = () => {
-        if (!appDetails?.resourceTree) {
-            return <GenericEmptyState image={NoAppStatusImage} title="Application status is not available" />
+        const emptyStateMessage = getEmptyStateMessage()
+
+        if (emptyStateMessage) {
+            return <GenericEmptyState image={NoAppStatusImage} title={emptyStateMessage} />
         }
 
         return (
@@ -179,6 +219,17 @@ const AppStatusModal = ({
                             onClick={handleClose}
                         />
                     </div>
+
+                    {/* TODO: Handle error states */}
+                    {!areInitialAppDetailsLoadingWithAbortedError && !fetchedAppDetailsError && (
+                        <AppStatusModalTabList
+                            handleSelectTab={handleSelectTab}
+                            appDetails={appDetails}
+                            type={type}
+                            selectedTab={selectedTab}
+                            deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}
+                        />
+                    )}
                 </div>
 
                 <div className="flexbox-col flex-grow-1 dc__overflow-auto dc__gap-16 dc__content-space">

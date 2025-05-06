@@ -1,33 +1,52 @@
 import { get, getIsRequestAborted } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
 import { getUrlWithSearchParams, showError } from '@Common/Helper'
-import { APIOptions } from '@Common/Types'
+import { processDeploymentStatusDetailsData } from '@Shared/Helpers'
 import { AppDetails, AppType } from '@Shared/types'
 
-export const getAppDetails = async (
-    appId: number,
-    envId: number,
-    abortControllerRef: APIOptions['abortControllerRef'],
-): Promise<AppDetails> => {
+import { DeploymentStatusDetailsBreakdownDataType, DeploymentStatusDetailsType } from '../CICDHistory'
+import { GetAppDetailsParamsType } from './types'
+
+export const getAppDetails = async ({
+    appId,
+    envId,
+    abortControllerRef,
+    deploymentStatusConfig,
+}: GetAppDetailsParamsType): Promise<{
+    appDetails: AppDetails
+    deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType
+}> => {
     try {
         const queryParams = getUrlWithSearchParams('', {
             'app-id': appId,
             'env-id': envId,
         })
 
-        const [appDetails, resourceTree] = await Promise.all([
-            get(`${ROUTES.APP_DETAIL}/v2${queryParams}`, {
+        const [appDetails, resourceTree, deploymentStatusDetails] = await Promise.all([
+            get<Omit<AppDetails, 'resourceTree'>>(`${ROUTES.APP_DETAIL}/v2${queryParams}`, {
                 abortControllerRef,
             }),
-            get(`${ROUTES.APP_DETAIL}/resource-tree${queryParams}`, {
+            get<AppDetails['resourceTree']>(`${ROUTES.APP_DETAIL}/resource-tree${queryParams}`, {
                 abortControllerRef,
             }),
+            deploymentStatusConfig
+                ? get<DeploymentStatusDetailsType>(
+                      getUrlWithSearchParams(`${ROUTES.DEPLOYMENT_STATUS}/${appId}/${envId}`, {
+                          showTimeline: deploymentStatusConfig.showTimeline,
+                      }),
+                  )
+                : null,
         ])
 
         return {
-            ...(appDetails.result || {}),
-            resourceTree: resourceTree.result,
-            appType: AppType.DEVTRON_APP,
+            appDetails: {
+                ...(appDetails.result || ({} as AppDetails)),
+                resourceTree: resourceTree.result,
+                appType: AppType.DEVTRON_APP,
+            },
+            deploymentStatusDetailsBreakdownData: appDetails.result?.isVirtualEnvironment
+                ? deploymentStatusConfig.processVirtualEnvironmentDeploymentData(deploymentStatusDetails.result)
+                : processDeploymentStatusDetailsData(deploymentStatusDetails.result),
         }
     } catch (error) {
         if (!getIsRequestAborted(error)) {
