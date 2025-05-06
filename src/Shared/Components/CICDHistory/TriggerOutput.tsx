@@ -44,7 +44,7 @@ import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
 import { GitChanges, Scroller } from './History.components'
 import Artifacts from './Artifacts'
 import TriggerDetails from './TriggerDetails'
-import { EMPTY_STATE_STATUS } from '../../constants'
+import { DEPLOYMENT_STAGE_TO_NODE_MAP, EMPTY_STATE_STATUS } from '../../constants'
 import './cicdHistory.scss'
 
 const HistoryLogs: React.FC<HistoryLogsProps> = ({
@@ -85,8 +85,9 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
     const paramsData = {
         appId,
         envId,
-        appName: `${triggerDetails.helmPackageName}.tgz`,
+        appName: triggerDetails.helmPackageName,
         workflowId: triggerDetails.id,
+        cdWorkflowType: DEPLOYMENT_STAGE_TO_NODE_MAP[triggerDetails.stage],
     }
 
     const CDBuildReportUrl = `app/cd-pipeline/workflow/download/${appId}/${envId}/${pipelineId}/${triggerId}`
