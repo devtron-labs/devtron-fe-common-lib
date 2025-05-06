@@ -15,7 +15,25 @@
  */
 
 import { ComponentProps } from 'react'
+import Snow from 'react-canvas-confetti/dist/presets/snow'
 import Pride from 'react-canvas-confetti/dist/presets/pride'
+
+export const SnowConfetti = () => {
+    const decorateOptions: ComponentProps<typeof Snow>['decorateOptions'] = (options) => ({
+        ...options,
+        colors: ['#a864fd'],
+    })
+
+    return (
+        <Snow
+            autorun={{ speed: 30 }}
+            decorateOptions={decorateOptions}
+            style={{
+                height: '100%',
+            }}
+        />
+    )
+}
 
 const Confetti = () => {
     const decorateOptions: ComponentProps<typeof Pride>['decorateOptions'] = (options) => ({
