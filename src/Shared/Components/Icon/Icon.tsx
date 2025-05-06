@@ -1,6 +1,5 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
 
-import { ReactComponent as IC14DayTrialChip } from '@IconsV2/ic-14-day-trial-chip.svg'
 import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
@@ -58,6 +57,7 @@ import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
 import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
+import { ReactComponent as ICGiftGradient } from '@IconsV2/ic-gift-gradient.svg'
 import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
 import { ReactComponent as ICGithub } from '@IconsV2/ic-github.svg'
 import { ReactComponent as ICGitlab } from '@IconsV2/ic-gitlab.svg'
@@ -141,7 +141,6 @@ import { IconBase } from './IconBase'
 import { IconBaseProps } from './types'
 
 export const iconMap = {
-    'ic-14-day-trial-chip': IC14DayTrialChip,
     'ic-73strings': IC73strings,
     'ic-aborted': ICAborted,
     'ic-add': ICAdd,
@@ -199,6 +198,7 @@ export const iconMap = {
     'ic-file-key': ICFileKey,
     'ic-folder-user': ICFolderUser,
     'ic-gear': ICGear,
+    'ic-gift-gradient': ICGiftGradient,
     'ic-git': ICGit,
     'ic-github': ICGithub,
     'ic-gitlab': ICGitlab,
