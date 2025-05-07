@@ -450,7 +450,7 @@ export function useAsync<T>(
             setState((state) => ({ ...state, loading: false }))
             return
         }
-        setState((state) => ({ ...state, dependencies: dependencyArray }))
+        setState((state) => ({ ...state, loading: true, dependencies: dependencyArray }))
         reload()
         return () =>
             setState((state) => ({

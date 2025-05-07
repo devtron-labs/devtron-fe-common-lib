@@ -19,7 +19,7 @@ const useTableWithKeyboardShortcuts = (
 
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
-    const { handleBulkSelection } = bulkSelectionReturnValue
+    const { handleBulkSelection } = bulkSelectionReturnValue ?? {}
 
     const [activeRowIndex, setActiveRowIndex] = useState<number>(0)
 
