@@ -64,7 +64,7 @@ const AppStatusModalTabList = ({
                       active: selectedTab === AppStatusModalTabType.DEPLOYMENT_STATUS,
                       iconElement: (
                           <DeploymentStatus
-                              status={deploymentStatusDetailsBreakdownData.deploymentStatus}
+                              status={deploymentStatusDetailsBreakdownData?.deploymentStatus}
                               hideMessage
                               showAnimatedIcon
                           />

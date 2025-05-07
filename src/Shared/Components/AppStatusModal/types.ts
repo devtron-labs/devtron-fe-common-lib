@@ -25,15 +25,15 @@ export type AppStatusModalProps = {
           envId: number
           appDetails?: never
           deploymentStatusDetailsBreakdownData?: never
-          isLoading?: never
           initialTab?: never
+          isDeploymentTimelineLoading?: never
       }
     | {
           type: 'devtron-app' | 'other-apps' | 'stack-manager'
           appDetails: AppDetails
           deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType | null
           initialTab: AppStatusModalTabType
-          isLoading?: boolean
+          isDeploymentTimelineLoading?: boolean
           processVirtualEnvironmentDeploymentData?: never
           appId?: never
           envId?: never

@@ -5,25 +5,28 @@ import { abortPreviousRequests, getIsRequestAborted } from '@Common/API'
 import { DISCORD_LINK } from '@Common/Constants'
 import { Drawer } from '@Common/Drawer'
 import { GenericEmptyState } from '@Common/EmptyState'
-import { stopPropagation, useAsync } from '@Common/Helper'
+import { handleUTCTime, stopPropagation, useAsync } from '@Common/Helper'
+import { DeploymentAppTypes } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { APIResponseHandler } from '../APIResponseHandler'
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
+import { DeploymentStatus } from '../StatusComponent'
 import { AppStatusBody } from './AppStatusBody'
 import AppStatusModalTabList from './AppStatusModalTabList'
 import { getAppDetails } from './service'
 import { AppStatusModalProps, AppStatusModalTabType } from './types'
-import { getShowDeploymentStatusModal } from './utils'
+import { getEmptyViewImageFromHelmDeploymentStatus, getShowDeploymentStatusModal } from './utils'
 
 import './AppStatusModal.scss'
 
+// TODO: Need to handleTabChange for appDetails view since polling is external
 const AppStatusModal = ({
     titleSegments,
     handleClose,
     type,
-    isLoading: isLoadingProp,
+    isDeploymentTimelineLoading,
     appDetails: appDetailsProp,
     deploymentStatusDetailsBreakdownData: deploymentStatusDetailsBreakdownDataProps,
     processVirtualEnvironmentDeploymentData,
@@ -78,14 +81,19 @@ const AppStatusModal = ({
         }
     }
 
-    const areInitialAppDetailsLoadingWithAbortedError =
-        isLoadingProp || areInitialAppDetailsLoading || getIsRequestAborted(fetchedAppDetailsError)
-
     const appDetails = type === 'release' ? fetchedAppDetails?.appDetails : appDetailsProp
     const deploymentStatusDetailsBreakdownData =
         type === 'release'
             ? fetchedAppDetails?.deploymentStatusDetailsBreakdownData
             : deploymentStatusDetailsBreakdownDataProps
+
+    const areInitialAppDetailsLoadingWithAbortedError =
+        areInitialAppDetailsLoading || getIsRequestAborted(fetchedAppDetailsError)
+
+    const isTimelineRequiredAndLoading =
+        selectedTab === AppStatusModalTabType.DEPLOYMENT_STATUS &&
+        appDetails?.deploymentAppType !== DeploymentAppTypes.HELM &&
+        isDeploymentTimelineLoading
 
     // Adding useEffect to initiate timer for external sync and clear it on unmount
     useEffect(() => {
@@ -164,6 +172,27 @@ const AppStatusModal = ({
             return <GenericEmptyState image={NoAppStatusImage} title={emptyStateMessage} />
         }
 
+        // Empty states for helm based deployment status
+        if (
+            selectedTab === AppStatusModalTabType.DEPLOYMENT_STATUS &&
+            appDetails.deploymentAppType === DeploymentAppTypes.HELM
+        ) {
+            return (
+                <GenericEmptyState
+                    image={getEmptyViewImageFromHelmDeploymentStatus(
+                        deploymentStatusDetailsBreakdownData.deploymentStatus,
+                    )}
+                    title={
+                        <div className="flexbox dc__gap-4 dc__align-items-center">
+                            <span className="fs-13 lh-20">Deployment status:</span>
+                            <DeploymentStatus status={deploymentStatusDetailsBreakdownData.deploymentStatus} hideIcon />
+                        </div>
+                    }
+                    subTitle={`Triggered at ${handleUTCTime(deploymentStatusDetailsBreakdownData.deploymentTriggerTime)} by ${deploymentStatusDetailsBreakdownData.triggeredBy}`}
+                />
+            )
+        }
+
         return (
             <>
                 <AppStatusBody
@@ -224,8 +253,7 @@ const AppStatusModal = ({
                         />
                     </div>
 
-                    {/* TODO: Handle error states */}
-                    {!areInitialAppDetailsLoadingWithAbortedError && !fetchedAppDetailsError && fetchedAppDetails && (
+                    {!areInitialAppDetailsLoadingWithAbortedError && !fetchedAppDetailsError && !!appDetails && (
                         <AppStatusModalTabList
                             handleSelectTab={handleSelectTab}
                             appDetails={appDetails}
@@ -238,7 +266,7 @@ const AppStatusModal = ({
 
                 <div className="flexbox-col flex-grow-1 dc__overflow-auto dc__gap-16 dc__content-space">
                     <APIResponseHandler
-                        isLoading={areInitialAppDetailsLoadingWithAbortedError}
+                        isLoading={areInitialAppDetailsLoadingWithAbortedError || isTimelineRequiredAndLoading}
                         progressingProps={{
                             pageLoader: true,
                         }}

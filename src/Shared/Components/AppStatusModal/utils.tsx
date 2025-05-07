@@ -1,4 +1,8 @@
-import { DeploymentAppTypes } from '@Common/Types'
+import ICCelebration from '@Images/ic-celebration.svg'
+import ICManOnRocket from '@Images/ic-man-on-rocket.svg'
+import ICPageNotFound from '@Images/ic-page-not-found.svg'
+import NoDeploymentStatusImage from '@Images/no-artifact.webp'
+import { DeploymentAppTypes, GenericEmptyStateType } from '@Common/Types'
 import { DEPLOYMENT_STATUS } from '@Shared/constants'
 import { aggregateNodes } from '@Shared/Helpers'
 import { AppDetails, AppType, Node } from '@Shared/types'
@@ -94,9 +98,27 @@ export const getShowDeploymentStatusModal = ({
         return true
     }
 
-    if (appDetails.releaseMode === ReleaseMode.MIGRATE_EXTERNAL_APPS && !appDetails?.isPipelineTriggered) {
+    if (appDetails.releaseMode === ReleaseMode.MIGRATE_EXTERNAL_APPS && !appDetails.isPipelineTriggered) {
         return false
     }
 
     return true
+}
+
+export const getEmptyViewImageFromHelmDeploymentStatus = (status: string): GenericEmptyStateType['image'] => {
+    switch (status?.toLowerCase()) {
+        case DEPLOYMENT_STATUS.STARTING:
+        case DEPLOYMENT_STATUS.PROGRESSING:
+        case DEPLOYMENT_STATUS.INITIATING:
+            return ICManOnRocket
+
+        case DEPLOYMENT_STATUS.SUCCEEDED:
+            return ICCelebration
+
+        case DEPLOYMENT_STATUS.FAILED:
+            return ICPageNotFound
+
+        default:
+            return NoDeploymentStatusImage
+    }
 }
