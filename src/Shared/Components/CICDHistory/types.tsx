@@ -33,6 +33,7 @@ import {
 import { DeploymentStageType } from '../../constants'
 import {
     AggregationKeys,
+    AppDetails,
     GitTriggers,
     Node,
     NodeType,
@@ -569,16 +570,20 @@ export interface LogsRendererType
 export interface DeploymentStatusDetailBreakdownType {
     deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType
     isVirtualEnvironment?: boolean
+    /**
+     * Won't be available if coming directly to deployment history from url
+     */
+    appDetails: AppDetails | null
 }
 
-export interface DeploymentStatusDetailRowType {
+export interface DeploymentStatusDetailRowType extends Pick<DeploymentStatusDetailBreakdownType, 'appDetails'> {
     type: string
     hideVerticalConnector?: boolean
     deploymentDetailedData: DeploymentStatusDetailsBreakdownDataType
 }
 
 export interface ErrorInfoStatusBarType {
-    nonDeploymentError: string
+    lastFailedStatusType: string
     type: string
     errorMessage: string
     hideVerticalConnector?: boolean

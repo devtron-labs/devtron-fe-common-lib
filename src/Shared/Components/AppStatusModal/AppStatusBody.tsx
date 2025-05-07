@@ -2,12 +2,13 @@ import { ComponentProps, ReactNode } from 'react'
 
 import { Tooltip } from '@Common/Tooltip'
 
+import { DeploymentStatusDetailBreakdown } from '../CICDHistory'
 import { ErrorBar } from '../Error'
 import { ShowMoreText } from '../ShowMoreText'
-import { AppStatus } from '../StatusComponent'
+import { AppStatus, DeploymentStatus } from '../StatusComponent'
 import AppStatusContent from './AppStatusContent'
 import { APP_STATUS_CUSTOM_MESSAGES } from './constants'
-import { AppStatusBodyProps } from './types'
+import { AppStatusBodyProps, AppStatusModalTabType } from './types'
 import { getAppStatusMessageFromAppDetails } from './utils'
 
 const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; value: ReactNode; isLast?: boolean }) => (
@@ -31,39 +32,66 @@ const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; val
     </div>
 )
 
-export const AppStatusBody = ({ appDetails, type, handleShowConfigDriftModal }: AppStatusBodyProps) => {
+export const AppStatusBody = ({
+    appDetails,
+    type,
+    handleShowConfigDriftModal,
+    deploymentStatusDetailsBreakdownData,
+    selectedTab,
+}: AppStatusBodyProps) => {
     const appStatus = appDetails.resourceTree?.status?.toUpperCase() || appDetails.appStatus
-    const message = getAppStatusMessageFromAppDetails(appDetails)
-    const customMessage =
-        type === 'stack-manager'
-            ? 'The installation will complete when status for all the below resources become HEALTHY.'
-            : APP_STATUS_CUSTOM_MESSAGES[appStatus]
 
-    const infoCardItems: (Omit<ComponentProps<typeof InfoCardItem>, 'isLast'> & { id: number })[] = [
-        {
-            id: 1,
-            heading: type !== 'stack-manager' ? 'Application Status' : 'Status',
-            value: appStatus ? <AppStatus status={appStatus} /> : '--',
-        },
-        ...(message
-            ? [
+    const getAppStatusInfoCardItems = (): (Omit<ComponentProps<typeof InfoCardItem>, 'isLast'> & { id: string })[] => {
+        const message = getAppStatusMessageFromAppDetails(appDetails)
+        const customMessage =
+            type === 'stack-manager'
+                ? 'The installation will complete when status for all the below resources become HEALTHY.'
+                : APP_STATUS_CUSTOM_MESSAGES[appStatus]
+
+        return [
+            {
+                id: `app-status-${1}`,
+                heading: type !== 'stack-manager' ? 'Application Status' : 'Status',
+                value: appStatus ? <AppStatus status={appStatus} showAnimatedIcon /> : '--',
+            },
+            ...(message
+                ? [
+                      {
+                          id: `app-status-${2}`,
+                          heading: 'Message',
+                          value: message,
+                      },
+                  ]
+                : []),
+            ...(customMessage
+                ? [
+                      {
+                          id: `app-status-${3}`,
+                          heading: 'Message',
+                          value: customMessage,
+                      },
+                  ]
+                : []),
+        ]
+    }
+
+    const infoCardItems: ReturnType<typeof getAppStatusInfoCardItems> =
+        selectedTab === AppStatusModalTabType.APP_STATUS
+            ? getAppStatusInfoCardItems()
+            : [
                   {
-                      id: 2,
-                      heading: 'Message',
-                      value: message,
+                      id: `deployment-status-${1}`,
+                      heading: 'Deployment Status',
+                      value: deploymentStatusDetailsBreakdownData?.deploymentStatus ? (
+                          <DeploymentStatus
+                              status={deploymentStatusDetailsBreakdownData.deploymentStatus}
+                              showAnimatedIcon
+                          />
+                      ) : (
+                          '--'
+                      ),
                   },
               ]
-            : []),
-        ...(customMessage
-            ? [
-                  {
-                      id: 3,
-                      heading: 'Message',
-                      value: customMessage,
-                  },
-              ]
-            : []),
-    ]
 
     return (
         <div className="flexbox-col px-20 dc__gap-16 dc__overflow-auto">
@@ -83,7 +111,15 @@ export const AppStatusBody = ({ appDetails, type, handleShowConfigDriftModal }: 
 
             <ErrorBar appDetails={appDetails} useParentMargin={false} />
 
-            <AppStatusContent appDetails={appDetails} handleShowConfigDriftModal={handleShowConfigDriftModal} />
+            {selectedTab === AppStatusModalTabType.APP_STATUS ? (
+                <AppStatusContent appDetails={appDetails} handleShowConfigDriftModal={handleShowConfigDriftModal} />
+            ) : (
+                <DeploymentStatusDetailBreakdown
+                    deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}
+                    isVirtualEnvironment={appDetails.isVirtualEnvironment}
+                    appDetails={appDetails}
+                />
+            )}
         </div>
     )
 }

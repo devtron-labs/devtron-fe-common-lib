@@ -14,36 +14,47 @@
  * limitations under the License.
  */
 
+import { Fragment } from 'react'
 import { useRouteMatch } from 'react-router-dom'
 
 import { URLS } from '../../../Common'
 import { TIMELINE_STATUS } from '../../constants'
-import { IndexStore } from '../../Store'
 import ErrorBar from '../Error/ErrorBar'
 import { DeploymentStatusDetailRow } from './DeploymentStatusDetailRow'
 import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
-import { DeploymentStatusDetailBreakdownType } from './types'
+import { DeploymentStatusDetailBreakdownType, DeploymentStatusDetailRowType, ErrorInfoStatusBarType } from './types'
+
+import './DeploymentStatusBreakdown.scss'
 
 const DeploymentStatusDetailBreakdown = ({
     deploymentStatusDetailsBreakdownData,
     isVirtualEnvironment,
+    appDetails,
 }: DeploymentStatusDetailBreakdownType) => {
-    const _appDetails = IndexStore.getAppDetails()
     const { url } = useRouteMatch()
     const isHelmManifestPushed =
         deploymentStatusDetailsBreakdownData.deploymentStatusBreakdown[
             TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO
         ]?.showHelmManifest
+
+    const deploymentStatusDetailRowProps: Pick<DeploymentStatusDetailRowType, 'appDetails' | 'deploymentDetailedData'> =
+        {
+            appDetails,
+            deploymentDetailedData: deploymentStatusDetailsBreakdownData,
+        }
+
+    const errorInfoStatusBarProps: Pick<ErrorInfoStatusBarType, 'lastFailedStatusType' | 'errorMessage'> = {
+        lastFailedStatusType: deploymentStatusDetailsBreakdownData.nonDeploymentError,
+        errorMessage: deploymentStatusDetailsBreakdownData.deploymentError,
+    }
+
     return (
         <>
-            {!url.includes(`/${URLS.CD_DETAILS}`) && <ErrorBar appDetails={_appDetails} />}
-            <div
-                className="deployment-status-breakdown-container pl-20 pr-20 pt-20 pb-20"
-                data-testid="deployment-history-steps-status"
-            >
+            {!url.includes(`/${URLS.CD_DETAILS}`) && <ErrorBar appDetails={appDetails} />}
+            <div className="deployment-status-breakdown-container" data-testid="deployment-history-steps-status">
                 <DeploymentStatusDetailRow
                     type={TIMELINE_STATUS.DEPLOYMENT_INITIATED}
-                    deploymentDetailedData={deploymentStatusDetailsBreakdownData}
+                    {...deploymentStatusDetailRowProps}
                 />
                 {!(
                     isVirtualEnvironment &&
@@ -52,40 +63,22 @@ const DeploymentStatusDetailBreakdown = ({
                     ]
                 ) ? (
                     <>
-                        <ErrorInfoStatusBar
-                            type={TIMELINE_STATUS.GIT_COMMIT}
-                            nonDeploymentError={deploymentStatusDetailsBreakdownData.nonDeploymentError}
-                            errorMessage={deploymentStatusDetailsBreakdownData.deploymentError}
-                        />
-                        <DeploymentStatusDetailRow
-                            type={TIMELINE_STATUS.GIT_COMMIT}
-                            deploymentDetailedData={deploymentStatusDetailsBreakdownData}
-                        />
-
-                        <ErrorInfoStatusBar
-                            type={TIMELINE_STATUS.ARGOCD_SYNC}
-                            nonDeploymentError={deploymentStatusDetailsBreakdownData.nonDeploymentError}
-                            errorMessage={deploymentStatusDetailsBreakdownData.deploymentError}
-                        />
-                        <DeploymentStatusDetailRow
-                            type={TIMELINE_STATUS.ARGOCD_SYNC}
-                            deploymentDetailedData={deploymentStatusDetailsBreakdownData}
-                        />
-
-                        <ErrorInfoStatusBar
-                            type={TIMELINE_STATUS.KUBECTL_APPLY}
-                            nonDeploymentError={deploymentStatusDetailsBreakdownData.nonDeploymentError}
-                            errorMessage={deploymentStatusDetailsBreakdownData.deploymentError}
-                        />
-                        <DeploymentStatusDetailRow
-                            type={TIMELINE_STATUS.KUBECTL_APPLY}
-                            deploymentDetailedData={deploymentStatusDetailsBreakdownData}
-                        />
+                        {[TIMELINE_STATUS.GIT_COMMIT, TIMELINE_STATUS.ARGOCD_SYNC, TIMELINE_STATUS.KUBECTL_APPLY].map(
+                            (timelineStatus) => (
+                                <Fragment key={timelineStatus}>
+                                    <ErrorInfoStatusBar type={timelineStatus} {...errorInfoStatusBarProps} />
+                                    <DeploymentStatusDetailRow
+                                        type={timelineStatus}
+                                        {...deploymentStatusDetailRowProps}
+                                    />
+                                </Fragment>
+                            ),
+                        )}
 
                         <DeploymentStatusDetailRow
                             type={TIMELINE_STATUS.APP_HEALTH}
                             hideVerticalConnector
-                            deploymentDetailedData={deploymentStatusDetailsBreakdownData}
+                            {...deploymentStatusDetailRowProps}
                         />
                     </>
                 ) : (
@@ -93,13 +86,13 @@ const DeploymentStatusDetailBreakdown = ({
                         <DeploymentStatusDetailRow
                             type={TIMELINE_STATUS.HELM_PACKAGE_GENERATED}
                             hideVerticalConnector={!isHelmManifestPushed}
-                            deploymentDetailedData={deploymentStatusDetailsBreakdownData}
+                            {...deploymentStatusDetailRowProps}
                         />
                         {isHelmManifestPushed && (
                             <DeploymentStatusDetailRow
                                 type={TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO}
                                 hideVerticalConnector
-                                deploymentDetailedData={deploymentStatusDetailsBreakdownData}
+                                {...deploymentStatusDetailRowProps}
                             />
                         )}
                     </>

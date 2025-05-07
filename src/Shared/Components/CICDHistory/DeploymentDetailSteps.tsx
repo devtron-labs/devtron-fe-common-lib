@@ -17,6 +17,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom'
 
+import { IndexStore } from '@Shared/Store'
+
 import { ReactComponent as Arrow } from '../../../Assets/Icon/ic-arrow-forward.svg'
 import mechanicalOperation from '../../../Assets/Icon/ic-mechanical-operation.svg'
 import { DeploymentAppTypes, GenericEmptyState, Progressing, URLS } from '../../../Common'
@@ -50,6 +52,7 @@ const DeploymentDetailSteps = ({
     const [deploymentListLoader, setDeploymentListLoader] = useState<boolean>(
         deploymentStatus?.toUpperCase() !== TIMELINE_STATUS.ABORTED,
     )
+    const appDetails = IndexStore.getAppDetails()
     const isVirtualEnv = useRef(isVirtualEnvironment)
     const processedData =
         isVirtualEnv.current && processVirtualEnvironmentDeploymentData
@@ -155,6 +158,7 @@ const DeploymentDetailSteps = ({
                 <DeploymentStatusDetailBreakdown
                     deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}
                     isVirtualEnvironment={isVirtualEnv.current}
+                    appDetails={appDetails}
                 />
             </div>
         )

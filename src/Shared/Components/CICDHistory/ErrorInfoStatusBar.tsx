@@ -19,13 +19,13 @@ import { TIMELINE_STATUS } from '../../constants'
 import { ErrorInfoStatusBarType } from './types'
 
 export const ErrorInfoStatusBar = ({
-    nonDeploymentError,
+    lastFailedStatusType,
     type,
     errorMessage,
     hideVerticalConnector,
     hideErrorIcon,
 }: ErrorInfoStatusBarType) =>
-    nonDeploymentError === type ? (
+    lastFailedStatusType === type ? (
         <>
             <div
                 className={`bcr-1 ${

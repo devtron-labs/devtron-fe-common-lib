@@ -42,7 +42,11 @@ const AppStatusModalTabList = ({
                       },
                       active: selectedTab === AppStatusModalTabType.APP_STATUS,
                       iconElement: (
-                          <AppStatus status={appDetails.resourceTree?.status?.toUpperCase() || appDetails.appStatus} />
+                          <AppStatus
+                              status={appDetails.resourceTree?.status?.toUpperCase() || appDetails.appStatus}
+                              hideMessage
+                              showAnimatedIcon
+                          />
                       ),
                   } satisfies TabProps,
               ]
@@ -58,7 +62,13 @@ const AppStatusModalTabList = ({
                           'data-testid': 'deployment-status-tab',
                       },
                       active: selectedTab === AppStatusModalTabType.DEPLOYMENT_STATUS,
-                      iconElement: <DeploymentStatus status={deploymentStatusDetailsBreakdownData.deploymentStatus} />,
+                      iconElement: (
+                          <DeploymentStatus
+                              status={deploymentStatusDetailsBreakdownData.deploymentStatus}
+                              hideMessage
+                              showAnimatedIcon
+                          />
+                      ),
                   } satisfies TabProps,
               ]
             : []),
@@ -71,7 +81,7 @@ const AppStatusModalTabList = ({
         }
     }, [])
 
-    if (!tabGroups.length) {
+    if (tabGroups.length <= 1) {
         return null
     }
 

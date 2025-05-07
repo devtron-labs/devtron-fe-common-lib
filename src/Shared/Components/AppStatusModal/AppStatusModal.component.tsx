@@ -148,7 +148,7 @@ const AppStatusModal = ({
             }
         }
 
-        if (!deploymentStatusDetailsBreakdownData || getShowDeploymentStatusModal({ type, appDetails })) {
+        if (!deploymentStatusDetailsBreakdownData || !getShowDeploymentStatusModal({ type, appDetails })) {
             return 'Deployment status is not available'
         }
 
@@ -168,6 +168,8 @@ const AppStatusModal = ({
                     appDetails={appDetails}
                     type={type}
                     handleShowConfigDriftModal={handleShowConfigDriftModal}
+                    deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}
+                    selectedTab={selectedTab}
                 />
 
                 {type === 'stack-manager' && (
@@ -221,7 +223,7 @@ const AppStatusModal = ({
                     </div>
 
                     {/* TODO: Handle error states */}
-                    {!areInitialAppDetailsLoadingWithAbortedError && !fetchedAppDetailsError && (
+                    {!areInitialAppDetailsLoadingWithAbortedError && !fetchedAppDetailsError && fetchedAppDetails && (
                         <AppStatusModalTabList
                             handleSelectTab={handleSelectTab}
                             appDetails={appDetails}

@@ -38,8 +38,10 @@ export type AppStatusModalProps = {
       }
 )
 
-export interface AppStatusBodyProps extends Required<Pick<AppStatusModalProps, 'appDetails' | 'type'>> {
+export interface AppStatusBodyProps
+    extends Required<Pick<AppStatusModalProps, 'appDetails' | 'type' | 'deploymentStatusDetailsBreakdownData'>> {
     handleShowConfigDriftModal: () => void
+    selectedTab: AppStatusModalTabType
 }
 
 export interface AppStatusContentProps
