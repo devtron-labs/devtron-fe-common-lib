@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ReactElement } from 'react'
+import { ComponentProps, ReactElement } from 'react'
 import moment from 'moment'
 
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
-import { ReactComponent as Check } from '@Icons/ic-check-grey.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
-import { ReactComponent as Disconnect } from '@Icons/ic-disconnected.svg'
-import { ReactComponent as Error } from '@Icons/ic-error-exclamation.svg'
-import { ReactComponent as ICHelpOutline } from '@Icons/ic-help-outline.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
-import { ReactComponent as TimeOut } from '@Icons/ic-timeout-red.svg'
-import { ReactComponent as Timer } from '@Icons/ic-timer.svg'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'
 import { isTimeStringAvailable } from '@Shared/Helpers'
@@ -123,29 +117,36 @@ export const buildHoverHtmlForWebhook = (eventName, condition, selectors) => {
 }
 
 export const renderIcon = (iconState: string): JSX.Element => {
+    const iconBaseProps: Pick<ComponentProps<typeof Icon>, 'size' | 'color'> = {
+        color: null,
+        size: 20,
+    }
+
     switch (iconState) {
         case 'success':
-            return <Check className="icon-dim-20 green-tick" data-testid="success-green-tick" />
+            return <Icon {...iconBaseProps} name="ic-check" color="G500" dataTestId="success-green-tick" />
         case 'failed':
-            return <Error className="icon-dim-20" />
+            return <Icon {...iconBaseProps} name="ic-error" />
         case 'unknown':
-            return <ICHelpOutline className="icon-dim-20" />
+            return <Icon {...iconBaseProps} name="ic-help-outline" />
         case 'inprogress':
             return (
-                <div className="icon-dim-20">
+                <div className="icon-dim-20 dc__no-shrink">
                     <div className="pulse-highlight" />
                 </div>
             )
         case 'unreachable':
-            return <Close className="icon-dim-20" />
+            return <Icon {...iconBaseProps} name="ic-close-small" />
         case 'loading':
-            return <Icon name="ic-circle-loader" color="O500" size={20} />
+            return <Icon {...iconBaseProps} name="ic-circle-loader" color="O500" />
         case 'disconnect':
-            return <Disconnect className="icon-dim-20" />
+            return <Icon {...iconBaseProps} name="ic-disconnect" />
         case 'time_out':
-            return <TimeOut className="icon-dim-20" />
+        case 'timed_out':
+            // TODO: Test
+            return <Icon {...iconBaseProps} name="ic-timeout-two-dash" color="R500" />
         default:
-            return <Timer className="icon-dim-20 timer-icon" />
+            return <Icon {...iconBaseProps} name="ic-timer" color="N600" />
     }
 }
 

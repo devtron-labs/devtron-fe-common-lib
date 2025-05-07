@@ -39,4 +39,5 @@ export interface IconBaseProps {
      * @example `'B500'`, `'N200'`, `'G50'`, `'R700'`
      */
     color: IconBaseColorType
+    dataTestId?: string
 }

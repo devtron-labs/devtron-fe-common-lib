@@ -23,6 +23,7 @@ const AppStatusModal = ({
     titleSegments,
     handleClose,
     type,
+    isLoading: isLoadingProp,
     appDetails: appDetailsProp,
     deploymentStatusDetailsBreakdownData: deploymentStatusDetailsBreakdownDataProps,
     processVirtualEnvironmentDeploymentData,
@@ -78,7 +79,7 @@ const AppStatusModal = ({
     }
 
     const areInitialAppDetailsLoadingWithAbortedError =
-        areInitialAppDetailsLoading || getIsRequestAborted(fetchedAppDetailsError)
+        isLoadingProp || areInitialAppDetailsLoading || getIsRequestAborted(fetchedAppDetailsError)
 
     const appDetails = type === 'release' ? fetchedAppDetails?.appDetails : appDetailsProp
     const deploymentStatusDetailsBreakdownData =
@@ -146,6 +147,7 @@ const AppStatusModal = ({
             if (!appDetails?.resourceTree) {
                 return 'Application status is not available'
             }
+            return ''
         }
 
         if (!deploymentStatusDetailsBreakdownData || !getShowDeploymentStatusModal({ type, appDetails })) {

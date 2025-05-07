@@ -24,8 +24,9 @@ import { AppType } from '@Shared/types'
 
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { DATE_TIME_FORMATS, showError } from '../../../Common'
-import { DEPLOYMENT_STATUS, statusIcon, TIMELINE_STATUS } from '../../constants'
+import { ComponentSizeType, DEPLOYMENT_STATUS, statusIcon, TIMELINE_STATUS } from '../../constants'
 import { AppStatusContent } from '../AppStatusModal'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { APP_HEALTH_DROP_DOWN_LIST, MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
 import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
 import { getManualSync } from './service'
@@ -163,10 +164,13 @@ export const DeploymentStatusDetailRow = ({
 
                         {(deploymentDetailedData.deploymentStatus === DEPLOYMENT_STATUS.TIMED_OUT ||
                             deploymentDetailedData.deploymentStatus === DEPLOYMENT_STATUS.UNABLE_TO_FETCH) && (
-                            // TODO: Try to make to Button
-                            <span className="cb-5 fw-6 ml-8 cursor" onClick={manualSyncData}>
-                                Try now
-                            </span>
+                            <Button
+                                dataTestId="manual-sync-resource-status"
+                                text="Try now"
+                                variant={ButtonVariantType.text}
+                                size={ComponentSizeType.xxs}
+                                onClick={manualSyncData}
+                            />
                         )}
                     </div>
                 )}
@@ -186,40 +190,52 @@ export const DeploymentStatusDetailRow = ({
         <>
             <div className="bw-1 en-2">
                 <div
-                    className={`deployment-status-breakdown-row py-8 px-8 bg__primary ${collapsed ? (!isHelmManifestPushFailed ? 'br-4' : '') : 'border-collapse'}`}
+                    className={`flexbox dc__align-items-center dc__content-space dc__gap-12 py-8 px-8 bg__primary ${collapsed ? (!isHelmManifestPushFailed ? 'br-4' : '') : 'border-collapse'}`}
                 >
-                    {renderIcon(statusBreakDownType.icon)}
-                    <span className="ml-12 mr-12 fs-13">
-                        <span data-testid="deployment-status-step-name" className="dc__truncate">
-                            {statusBreakDownType.displayText}
-                        </span>
-                        {statusBreakDownType.displaySubText && (
-                            <span
-                                className={`ml-12 app-summary__status-name f-${statusBreakDownType.icon || 'waiting'}`}
-                            >
-                                {statusBreakDownType.displaySubText}
+                    <div className="flexbox dc__align-items-center dc__gap-12 flex-grow-1">
+                        {renderIcon(statusBreakDownType.icon)}
+                        <span className="fs-13 flexbox dc__gap-6">
+                            <span data-testid="deployment-status-step-name" className="dc__truncate">
+                                {statusBreakDownType.displayText}
                             </span>
-                        )}
-                    </span>
-
-                    {statusBreakDownType.time !== '' && statusBreakDownType.icon !== 'inprogress' && (
-                        <span
-                            data-testid="deployment-status-kubernetes-dropdown dc__no-shrink"
-                            className={`px-8 py-4 br-12 ${
-                                statusBreakDownType.icon === 'failed' ? 'bcr-1 cr-5' : 'bcg-1 cg-7'
-                            }`}
-                        >
-                            {moment(statusBreakDownType.time, 'YYYY-MM-DDTHH:mm:ssZ').format(
-                                DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
+                            {statusBreakDownType.displaySubText && (
+                                <span className={`app-summary__status-name f-${statusBreakDownType.icon || 'waiting'}`}>
+                                    {statusBreakDownType.displaySubText}
+                                </span>
                             )}
                         </span>
-                    )}
+
+                        {statusBreakDownType.time !== '' && statusBreakDownType.icon !== 'inprogress' && (
+                            <span
+                                data-testid="deployment-status-kubernetes-dropdown dc__no-shrink"
+                                className={`px-8 py-4 br-12 ${
+                                    statusBreakDownType.icon === 'failed' ? 'bcr-1 cr-5' : 'bcg-1 cg-7'
+                                }`}
+                            >
+                                {moment(statusBreakDownType.time, 'YYYY-MM-DDTHH:mm:ssZ').format(
+                                    DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
+                                )}
+                            </span>
+                        )}
+                    </div>
                     {isAccordion && (
-                        <DropDownIcon
-                            style={{ marginLeft: 'auto', ['--rotateBy' as any]: `${180 * Number(!collapsed)}deg` }}
-                            className="icon-dim-24 rotate pointer"
+                        <Button
+                            dataTestId="steps-deployment-history-dropdown"
                             onClick={toggleDropdown}
-                            data-testid="steps-deployment-history-dropdown"
+                            variant={ButtonVariantType.borderLess}
+                            style={ButtonStyleType.neutral}
+                            size={ComponentSizeType.small}
+                            icon={
+                                <DropDownIcon
+                                    style={{
+                                        marginLeft: 'auto',
+                                        ['--rotateBy' as any]: `${180 * Number(!!collapsed)}deg`,
+                                    }}
+                                    className="rotate"
+                                />
+                            }
+                            ariaLabel="Toggle dropdown"
+                            showAriaLabelInTippy={false}
                         />
                     )}
                 </div>

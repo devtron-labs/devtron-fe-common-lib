@@ -28,7 +28,7 @@ const conditionalWrap = (tooltipProps: IconBaseProps['tooltipProps']) => (childr
     </Tooltip>
 )
 
-export const IconBase = ({ name, iconMap, size = 16, tooltipProps, color }: IconBaseProps) => {
+export const IconBase = ({ name, iconMap, size = 16, tooltipProps, color, dataTestId }: IconBaseProps) => {
     const IconComponent = iconMap[name]
 
     if (!IconComponent) {
@@ -38,6 +38,7 @@ export const IconBase = ({ name, iconMap, size = 16, tooltipProps, color }: Icon
     return (
         <ConditionalWrap condition={!!tooltipProps?.content} wrap={conditionalWrap(tooltipProps)}>
             <IconComponent
+                data-testid={dataTestId}
                 className={`icon-dim-${size} ${color ? 'icon-component-color' : ''} ${ICON_STROKE_WIDTH_MAP[size] ? 'icon-component-stroke-width' : ''}  dc__no-shrink`}
                 style={{
                     ...(color ? { ['--iconColor' as string]: `var(--${color})` } : {}),

@@ -41,6 +41,7 @@ import { ReactComponent as ICDeleteLightning } from '@IconsV2/ic-delete-lightnin
 import { ReactComponent as ICDelhivery } from '@IconsV2/ic-delhivery.svg'
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
+import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
@@ -160,6 +161,7 @@ export const iconMap = {
     'ic-delhivery': ICDelhivery,
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
     'ic-devtron': ICDevtron,
+    'ic-disconnect': ICDisconnect,
     'ic-dockerhub': ICDockerhub,
     'ic-ecr': ICEcr,
     'ic-env': ICEnv,

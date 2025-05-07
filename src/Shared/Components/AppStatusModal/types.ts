@@ -21,17 +21,19 @@ export type AppStatusModalProps = {
           processVirtualEnvironmentDeploymentData: (
               data?: DeploymentStatusDetailsType,
           ) => DeploymentStatusDetailsBreakdownDataType
-          appDetails?: never
-          deploymentStatusDetailsBreakdownData?: never
           appId: number
           envId: number
+          appDetails?: never
+          deploymentStatusDetailsBreakdownData?: never
+          isLoading?: never
           initialTab?: never
       }
     | {
           type: 'devtron-app' | 'other-apps' | 'stack-manager'
           appDetails: AppDetails
-          deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType
+          deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType | null
           initialTab: AppStatusModalTabType
+          isLoading?: boolean
           processVirtualEnvironmentDeploymentData?: never
           appId?: never
           envId?: never
