@@ -19,7 +19,7 @@ const AppStatusModalTabList = ({
             appDetails,
         })
 
-    const showApplicationStatus = selectedTab === AppStatusModalTabType.APP_STATUS || !appDetails
+    const showApplicationStatus = selectedTab === AppStatusModalTabType.APP_STATUS || !!appDetails?.resourceTree
 
     const handleSelectAppStatus = () => {
         handleSelectTab(AppStatusModalTabType.APP_STATUS)
@@ -85,7 +85,7 @@ const AppStatusModalTabList = ({
         return null
     }
 
-    return <TabGroup tabs={tabGroups} />
+    return <TabGroup tabs={tabGroups} hideTopPadding />
 }
 
 export default AppStatusModalTabList

@@ -1,9 +1,13 @@
-import { ComponentProps, ReactNode } from 'react'
+import { ComponentProps, PropsWithChildren, ReactNode } from 'react'
 
 import { Tooltip } from '@Common/Tooltip'
+import { ComponentSizeType } from '@Shared/constants'
+import { getAppDetailsURL } from '@Shared/Helpers'
 
+import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { DeploymentStatusDetailBreakdown } from '../CICDHistory'
 import { ErrorBar } from '../Error'
+import { Icon } from '../Icon'
 import { ShowMoreText } from '../ShowMoreText'
 import { AppStatus, DeploymentStatus } from '../StatusComponent'
 import AppStatusContent from './AppStatusContent'
@@ -13,7 +17,7 @@ import { getAppStatusMessageFromAppDetails } from './utils'
 
 const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; value: ReactNode; isLast?: boolean }) => (
     <div
-        className={`py-12 px-16 dc__grid dc__column-gap-16 info-card-item ${!isLast ? 'border__secondary--bottom' : ''}`}
+        className={`py-12 px-16 dc__grid dc__column-gap-16 info-card-item dc__align-items-center ${!isLast ? 'border__secondary--bottom' : ''}`}
     >
         <Tooltip content={heading}>
             <h3 className="cn-9 fs-13 fw-4 lh-1-5 dc__truncate m-0 dc__no-shrink">{heading}</h3>
@@ -29,6 +33,31 @@ const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; val
         ) : (
             value
         )}
+    </div>
+)
+
+const StatusHeadingContainer = ({
+    children,
+    type,
+    appId,
+}: PropsWithChildren<Pick<AppStatusBodyProps, 'type'>> & { appId: number }) => (
+    <div className="flexbox dc__content-space w-100">
+        {children}
+        {type === 'release' ? (
+            <Button
+                dataTestId="visit-app-details"
+                component={ButtonComponentType.link}
+                variant={ButtonVariantType.secondary}
+                size={ComponentSizeType.xs}
+                endIcon={<Icon name="ic-arrow-square-out" color={null} />}
+                text="Visit app"
+                linkProps={{
+                    to: getAppDetailsURL(appId),
+                    target: '_blank',
+                    rel: 'noopener noreferrer',
+                }}
+            />
+        ) : null}
     </div>
 )
 
@@ -52,7 +81,11 @@ export const AppStatusBody = ({
             {
                 id: `app-status-${1}`,
                 heading: type !== 'stack-manager' ? 'Application Status' : 'Status',
-                value: appStatus ? <AppStatus status={appStatus} showAnimatedIcon /> : '--',
+                value: (
+                    <StatusHeadingContainer type={type} appId={appDetails.appId}>
+                        {appStatus ? <AppStatus status={appStatus} showAnimatedIcon /> : '--'}
+                    </StatusHeadingContainer>
+                ),
             },
             ...(message
                 ? [
@@ -82,13 +115,17 @@ export const AppStatusBody = ({
                   {
                       id: `deployment-status-${1}`,
                       heading: 'Deployment Status',
-                      value: deploymentStatusDetailsBreakdownData?.deploymentStatus ? (
-                          <DeploymentStatus
-                              status={deploymentStatusDetailsBreakdownData.deploymentStatus}
-                              showAnimatedIcon
-                          />
-                      ) : (
-                          '--'
+                      value: (
+                          <StatusHeadingContainer type={type} appId={appDetails.appId}>
+                              {deploymentStatusDetailsBreakdownData?.deploymentStatus ? (
+                                  <DeploymentStatus
+                                      status={deploymentStatusDetailsBreakdownData.deploymentStatus}
+                                      showAnimatedIcon
+                                  />
+                              ) : (
+                                  '--'
+                              )}
+                          </StatusHeadingContainer>
                       ),
                   },
               ]

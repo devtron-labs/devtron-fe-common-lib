@@ -46,6 +46,7 @@ import {
     SortingOrder,
     SourceTypeMap,
     TOKEN_COOKIE_NAME,
+    URLS,
     UserApprovalConfigType,
     UserApprovalInfo,
     ZERO_TIME_STRING,
@@ -1077,4 +1078,12 @@ export const getClassNameForStickyHeaderWithShadow = (isStuck: boolean, topClass
 
 export const clearCookieOnLogout = () => {
     document.cookie = `${TOKEN_COOKIE_NAME}=; expires=Thu, 01-Jan-1970 00:00:01 GMT;path=/`
+}
+
+export const getAppDetailsURL = (appId: number | string, envId?: number | string): string => {
+    const baseURL = `${URLS.APP}/${appId}/${URLS.APP_DETAILS}`
+    if (envId) {
+        return `${baseURL}/${envId}`
+    }
+    return baseURL
 }

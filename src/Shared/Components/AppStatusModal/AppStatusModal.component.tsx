@@ -201,8 +201,8 @@ const AppStatusModal = ({
                 className="flexbox-col dc__content-space h-100 border__primary--left bg__modal--primary shadow__modal app-status-modal"
                 onClick={stopPropagation}
             >
-                <div className="flexbox-col px-20 border__primary--bottom dc__no-shrink">
-                    <div className="flexbox py-12 dc__content-space">
+                <div className="app-status-modal__header pt-12 flexbox-col px-20 dc__gap-12 border__primary--bottom dc__no-shrink">
+                    <div className="flexbox dc__content-space">
                         <h2 className="m-0 dc__truncate fs-16 fw-6 lh-1-5 dc__gap-4">
                             {filteredTitleSegments.map((segment, index) => (
                                 <Fragment key={segment}>
