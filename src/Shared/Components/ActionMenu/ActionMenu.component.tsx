@@ -1,8 +1,9 @@
 import { Fragment } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-import ActionMenuOption from './ActionMenuOption'
-import { ActionMenuOptionType, ActionMenuProps } from './types'
+import { CustomInput } from '../CustomInput'
+import { ActionMenuItem } from './ActionMenuItem'
+import { ActionMenuItemType, ActionMenuProps } from './types'
 import { useActionMenu } from './useActionMenu.hook'
 
 import './actionMenu.scss'
@@ -13,39 +14,52 @@ export const ActionMenu = ({
     position,
     alignment,
     width,
+    isSearchable,
     disableDescriptionEllipsis,
     children,
 }: ActionMenuProps) => {
     // HOOKS
-    const { open, flatOptions, triggerProps, menuProps, focusedIndex, setFocusedIndex, closeMenu } = useActionMenu({
+    const {
+        open,
+        filteredOptions,
+        flatOptions,
+        triggerProps,
+        menuProps,
+        focusedIndex,
+        searchTerm,
+        setFocusedIndex,
+        closeMenu,
+        handleSearch,
+    } = useActionMenu({
         options,
-        onClick,
         position,
         alignment,
         width,
+        isSearchable,
+        onClick,
     })
 
     // HANDLERS
     const handleOptionMouseEnter = (index: number) => () => setFocusedIndex(index)
 
-    const handleOptionOnClick = (option: ActionMenuOptionType) => () => {
-        onClick(option)
+    const handleOptionOnClick = (item: ActionMenuItemType) => () => {
+        onClick(item)
         closeMenu()
     }
 
     // RENDERERS
-    const renderOption = (option: ActionMenuOptionType, sectionIndex: number, itemIndex: number) => {
+    const renderOption = (item: ActionMenuItemType, sectionIndex: number, itemIndex: number) => {
         const index = flatOptions.findIndex(
             (flatOption) => flatOption.sectionIndex === sectionIndex && flatOption.itemIndex === itemIndex,
         )
 
         return (
-            <ActionMenuOption
-                key={option.value}
-                option={option}
+            <ActionMenuItem
+                key={item.value}
+                item={item}
                 isFocused={index === focusedIndex}
                 onMouseEnter={handleOptionMouseEnter(index)}
-                onClick={handleOptionOnClick(option)}
+                onClick={handleOptionOnClick(item)}
                 disableDescriptionEllipsis={disableDescriptionEllipsis}
             />
         )
@@ -58,42 +72,47 @@ export const ActionMenu = ({
             <AnimatePresence>
                 {open && (
                     <motion.ul {...menuProps}>
-                        {options.map((groupOrOption, sectionIndex) => {
-                            if ('options' in groupOrOption) {
-                                return (
-                                    <li
-                                        key={groupOrOption.label}
-                                        role="menuitem"
-                                        className="action-menu__group flexbox-col dc__gap-4 py-4"
-                                    >
-                                        {groupOrOption.label && (
-                                            <h4 className="action-menu__group-label bg__menu--secondary dc__truncate m-0 fs-12 lh-18 cn-9 fw-6 py-4 px-12 dc__position-sticky dc__zi-1">
-                                                {groupOrOption.label}
-                                            </h4>
-                                        )}
-                                        {groupOrOption.options.length > 0 ? (
-                                            <ul className="action-menu__group-list p-0">
-                                                {groupOrOption.options.map((option, itemIndex) => (
-                                                    <Fragment key={option.value}>
-                                                        {renderOption(option, sectionIndex, itemIndex)}
-                                                    </Fragment>
-                                                ))}
-                                            </ul>
-                                        ) : (
-                                            <p className="m-0 fs-13 lh-18 fw-4 lh-18 cn-7 py-6 px-12">
-                                                No options in group
-                                            </p>
-                                        )}
-                                    </li>
-                                )
-                            }
-
-                            return (
-                                <Fragment key={groupOrOption.value}>
-                                    {renderOption(groupOrOption, sectionIndex, -1)}
-                                </Fragment>
-                            )
-                        })}
+                        {isSearchable && (
+                            <li role="menuitem" className="action-menu__searchbox px-12 py-8">
+                                <CustomInput
+                                    name="action-menu-search-box"
+                                    value={searchTerm}
+                                    placeholder="Search"
+                                    onChange={handleSearch}
+                                    fullWidth
+                                />
+                            </li>
+                        )}
+                        {filteredOptions.length ? (
+                            filteredOptions.map((option, sectionIndex) => (
+                                <li
+                                    key={option.groupLabel}
+                                    role="menuitem"
+                                    className="action-menu__group flexbox-col dc__gap-4 py-4"
+                                >
+                                    {option.groupLabel && (
+                                        <h4 className="bg__menu--secondary dc__truncate m-0 fs-12 lh-18 cn-9 fw-6 py-4 px-12 dc__position-sticky dc__top-0 dc__zi-1">
+                                            {option.groupLabel}
+                                        </h4>
+                                    )}
+                                    {option.items.length ? (
+                                        <ul className="action-menu__group-list p-0">
+                                            {option.items.map((item, itemIndex) => (
+                                                <Fragment key={item.value}>
+                                                    {renderOption(item, sectionIndex, itemIndex)}
+                                                </Fragment>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p className="m-0 fs-13 lh-18 fw-4 cn-7 py-6 px-12">No options in group</p>
+                                    )}
+                                </li>
+                            ))
+                        ) : (
+                            <li role="menuitem" className="border__secondary--top py-8 px-12">
+                                <p className="m-0 fs-13 lh-20 fw-4 cn-7">No options</p>
+                            </li>
+                        )}
                     </motion.ul>
                 )}
             </AnimatePresence>

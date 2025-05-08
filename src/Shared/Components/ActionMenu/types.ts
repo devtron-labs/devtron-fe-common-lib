@@ -1,21 +1,34 @@
 import { ReactElement } from 'react'
-import { GroupBase, OptionsOrGroups } from 'react-select'
 
 import { IconsProps } from '../Icon'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 
-export type ActionMenuOptionType = Omit<SelectPickerOptionType, 'endIcon' | 'startIcon'> & {
-    /** Indicates whether the menu option is disabled. */
+export type ActionMenuItemType = Omit<SelectPickerOptionType, 'label' | 'endIcon' | 'startIcon'> & {
+    /** The text label for the menu item. */
+    label: string
+    /** Indicates whether the menu item is disabled. */
     isDisabled?: boolean
     /**
-     * Specifies the type of the menu option.
+     * Specifies the type of the menu item.
      * @default 'neutral'
      */
     type?: 'neutral' | 'negative'
-    /** Defines the icon to be displayed at the start of the menu option. */
+    /** Defines the icon to be displayed at the start of the menu item. */
     startIcon?: Pick<IconsProps, 'name' | 'color'>
-    /** Defines the icon to be displayed at the end of the menu option. */
+    /** Defines the icon to be displayed at the end of the menu item. */
     endIcon?: Pick<IconsProps, 'name' | 'color'>
+}
+
+export type ActionMenuOptionType = {
+    /**
+     * The label for the group of menu items. \
+     * This is optional and can be used to categorize items under a specific group.
+     */
+    groupLabel?: string
+    /**
+     * The list of items belonging to this group.
+     */
+    items: ActionMenuItemType[]
 }
 
 export type UseActionMenuProps = {
@@ -45,14 +58,18 @@ export type UseActionMenuProps = {
      */
     alignment?: 'start' | 'middle' | 'end'
     /**
-     * The options or grouped options to display in the action menu.
+     * The options to display in the action menu.
      */
-    options: OptionsOrGroups<ActionMenuOptionType, GroupBase<ActionMenuOptionType>>
+    options: ActionMenuOptionType[]
     /**
-     * Callback function triggered when an option is clicked.
-     * @param option - The selected option of type `ActionMenuOptionType`.
+     * Determines whether the action menu is searchable.
      */
-    onClick: (option: ActionMenuOptionType) => void
+    isSearchable?: boolean
+    /**
+     * Callback function triggered when an item is clicked.
+     * @param item - The selected item.
+     */
+    onClick: (item: ActionMenuItemType) => void
 }
 
 export type ActionMenuProps = UseActionMenuProps &
@@ -61,8 +78,8 @@ export type ActionMenuProps = UseActionMenuProps &
         children: ReactElement
     }
 
-export type ActionMenuOptionProps = Pick<ActionMenuProps, 'onClick' | 'disableDescriptionEllipsis'> & {
-    option: ActionMenuOptionType
+export type ActionMenuItemProps = Pick<ActionMenuProps, 'onClick' | 'disableDescriptionEllipsis'> & {
+    item: ActionMenuItemType
     isFocused?: boolean
     onMouseEnter?: () => void
 }
