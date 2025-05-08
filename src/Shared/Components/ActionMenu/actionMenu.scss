@@ -1,10 +1,13 @@
 .action-menu {
+    list-style: none;
+    margin: 0;
+
     &__group {
         border-top: 1px solid var(--border-secondary-translucent);
 
         &:first-child {
             border-top: none;
-            padding-top: 0;
+            padding-top: 4px;
         }
 
         &:last-child {
@@ -12,7 +15,23 @@
         }
     }
 
+    &__group-list {
+        list-style: none;
+    }
+
+    &__group-label {
+        top: -4px;
+    }
+
     &__option {
+        &--focused {
+            background-color: var(--bg-hover);
+        }
+
+        &--focused-negative {
+            background-color: var(--R50);
+        }
+
         & + .action-menu__group {
             margin-top: 4px;
         }

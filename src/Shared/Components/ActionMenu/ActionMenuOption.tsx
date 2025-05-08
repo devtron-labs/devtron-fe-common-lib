@@ -1,31 +1,61 @@
+import { LegacyRef } from 'react'
+
 import { Tooltip } from '@Common/Tooltip'
 
+import { Icon } from '../Icon'
 import { getTooltipProps } from '../SelectPicker/common'
 import { ActionMenuOptionProps } from './types'
 
-const ActionMenuOption = ({ option, onClick, disableDescriptionEllipsis }: ActionMenuOptionProps) => {
-    const iconBaseClass = 'dc__no-shrink icon-dim-16 flex dc__fill-available-space'
+const ActionMenuOption = ({
+    option,
+    isFocused,
+    onClick,
+    onMouseEnter,
+    disableDescriptionEllipsis = false,
+}: ActionMenuOptionProps) => {
     const { description, label, startIcon, endIcon, tooltipProps, type = 'neutral', isDisabled } = option
+
+    // REFS
+    const ref: LegacyRef<HTMLLIElement> = (el) => {
+        if (isFocused && el) {
+            el.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+        }
+    }
+
+    // CONSTANTS
     const isNegativeType = type === 'negative'
 
+    // HANDLERS
     const handleClick = () => {
         onClick(option)
     }
 
+    // RENDERERS
+    const renderIcon = (iconProps: typeof startIcon) =>
+        iconProps && (
+            <div className="mt-2 flex dc__no-shrink">
+                <Icon {...iconProps} />
+            </div>
+        )
+
     return (
         <Tooltip {...getTooltipProps(tooltipProps)}>
-            <div
+            <li
+                ref={ref}
+                role="menuitem"
+                onMouseEnter={onMouseEnter}
+                tabIndex={-1}
                 // Intentionally added margin to the left and right to have the gap on the edges of the options
-                className={`flex left dc__gap-8 ${description ? 'top' : ''} py-6 px-8 ${isDisabled ? 'dc__disabled' : 'cursor'} ${isNegativeType ? 'dc__hover-r50' : 'dc__hover-n50'} mr-4 ml-4 br-4 action-menu__option`}
+                className={`action-menu__option br-4 flex left top dc__gap-8 mr-4 ml-4 py-6 px-8 ${isDisabled ? 'dc__disabled' : 'cursor'} ${isNegativeType ? 'dc__hover-r50' : 'dc__hover-n50'} ${isFocused ? `action-menu__option--focused${isNegativeType ? '-negative' : ''}` : ''}`}
                 onClick={!isDisabled ? handleClick : undefined}
                 aria-disabled={isDisabled}
             >
-                {startIcon && <div className={`${iconBaseClass} mt-2`}>{startIcon}</div>}
+                {renderIcon(startIcon)}
                 <div className="flex-grow-1">
                     <Tooltip content={label} placement="right">
-                        <h4 className={`m-0 fs-13 fw-4 lh-20 dc__truncate ${isNegativeType ? 'cr-5' : 'cn-9'}`}>
+                        <h5 className={`m-0 fs-13 fw-4 lh-20 dc__truncate ${isNegativeType ? 'cr-5' : 'cn-9'}`}>
                             {label}
-                        </h4>
+                        </h5>
                     </Tooltip>
                     {description &&
                         (typeof description === 'string' ? (
@@ -38,8 +68,8 @@ const ActionMenuOption = ({ option, onClick, disableDescriptionEllipsis }: Actio
                             <div className="fs-12 lh-18 cn-7">{description}</div>
                         ))}
                 </div>
-                {endIcon && <div className={iconBaseClass}>{endIcon}</div>}
-            </div>
+                {renderIcon(endIcon)}
+            </li>
         </Tooltip>
     )
 }
