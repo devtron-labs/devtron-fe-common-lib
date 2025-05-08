@@ -4,16 +4,16 @@ import { Tooltip } from '@Common/Tooltip'
 
 import { Icon } from '../Icon'
 import { getTooltipProps } from '../SelectPicker/common'
-import { ActionMenuOptionProps } from './types'
+import { ActionMenuItemProps } from './types'
 
-const ActionMenuOption = ({
-    option,
+export const ActionMenuItem = ({
+    item,
     isFocused,
     onClick,
     onMouseEnter,
     disableDescriptionEllipsis = false,
-}: ActionMenuOptionProps) => {
-    const { description, label, startIcon, endIcon, tooltipProps, type = 'neutral', isDisabled } = option
+}: ActionMenuItemProps) => {
+    const { description, label, startIcon, endIcon, tooltipProps, type = 'neutral', isDisabled } = item
 
     // REFS
     const ref: LegacyRef<HTMLLIElement> = (el) => {
@@ -27,7 +27,7 @@ const ActionMenuOption = ({
 
     // HANDLERS
     const handleClick = () => {
-        onClick(option)
+        onClick(item)
     }
 
     // RENDERERS
@@ -73,5 +73,3 @@ const ActionMenuOption = ({
         </Tooltip>
     )
 }
-
-export default ActionMenuOption

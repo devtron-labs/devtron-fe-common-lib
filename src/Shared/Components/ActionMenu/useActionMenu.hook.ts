@@ -1,9 +1,11 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 
-import { ActionMenuOptionType, UseActionMenuProps } from './types'
+import { UseActionMenuProps } from './types'
 import {
+    filterActionMenuOptions,
     getActionMenuActualPositionAlignment,
     getActionMenuAlignmentStyle,
+    getActionMenuFlatOptions,
     getActionMenuFramerProps,
     getActionMenuPositionStyle,
 } from './utils'
@@ -13,6 +15,7 @@ export const useActionMenu = ({
     alignment = 'start',
     width = 'auto',
     options,
+    isSearchable,
     onClick,
 }: UseActionMenuProps) => {
     // STATES
@@ -20,28 +23,18 @@ export const useActionMenu = ({
     const [focusedIndex, setFocusedIndex] = useState(-1)
     const [actualPosition, setActualPosition] = useState<UseActionMenuProps['position']>(position)
     const [actualAlignment, setActualAlignment] = useState<UseActionMenuProps['alignment']>(alignment)
+    const [searchTerm, setSearchTerm] = useState<string>('')
 
     // CONSTANTS
     const isAutoWidth = width === 'auto'
-    const flatOptions = useMemo<{ option: ActionMenuOptionType; itemIndex: number; sectionIndex: number }[]>(
-        () =>
-            options.reduce((acc, option, sectionIndex) => {
-                if ('options' in option) {
-                    acc.push(
-                        ...option.options.map((groupOption, itemIndex) => ({
-                            option: groupOption,
-                            itemIndex,
-                            sectionIndex,
-                        })),
-                    )
-                } else {
-                    acc.push({ option, itemIndex: -1, sectionIndex })
-                }
 
-                return acc
-            }, []),
-        [JSON.stringify(options)],
+    // MEMOIZED CONSTANTS
+    const filteredOptions = useMemo(
+        () => (isSearchable ? filterActionMenuOptions(options, searchTerm) : options),
+        [isSearchable, JSON.stringify(options), searchTerm],
     )
+
+    const flatOptions = useMemo(() => getActionMenuFlatOptions(filteredOptions), [filteredOptions])
 
     // REFS
     const triggerRef = useRef<HTMLDivElement | null>(null)
@@ -110,6 +103,10 @@ export const useActionMenu = ({
         handleMenuKeyDown(e)
     }
 
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value)
+    }
+
     useEffect(() => {
         const onClickOutside = (e: MouseEvent) => {
             if (!menuRef.current?.contains(e.target as Node) && !triggerRef.current?.contains(e.target as Node)) {
@@ -142,6 +139,7 @@ export const useActionMenu = ({
     return {
         open,
         flatOptions,
+        filteredOptions,
         focusedIndex,
         triggerProps: {
             role: 'button',
@@ -155,7 +153,7 @@ export const useActionMenu = ({
         menuProps: {
             role: 'menu',
             ref: menuRef,
-            className: `action-menu dc__position-abs bg__menu--primary shadow__menu border__primary br-6 py-4 px-0 dc__zi-5 mxh-300 dc__overflow-auto ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''}`,
+            className: `action-menu dc__position-abs bg__menu--primary shadow__menu border__primary br-6 px-0 dc__zi-5 mxh-300 dc__overflow-auto ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''}`,
             onKeyDown: handleMenuKeyDown,
             style: {
                 width: !isAutoWidth ? `${width}px` : undefined,
@@ -167,5 +165,7 @@ export const useActionMenu = ({
         },
         setFocusedIndex,
         closeMenu,
+        searchTerm,
+        handleSearch,
     }
 }
