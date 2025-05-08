@@ -18,7 +18,7 @@ import { Dispatch, MutableRefObject, ReactNode, SetStateAction } from 'react'
 
 import { SERVER_MODE } from '../../Common'
 import { ServerInfo } from '../Components/Header/types'
-import { DevtronLicenseInfo, LicenseInfoDialogType } from '..'
+import { DevtronLicenseInfo, IntelligenceConfig, LicenseInfoDialogType } from '..'
 
 export interface MainContext {
     serverMode: SERVER_MODE
@@ -66,6 +66,8 @@ export interface MainContext {
     licenseData: DevtronLicenseInfo
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
     canFetchHelmAppStatus: boolean
+    intelligenceConfig: IntelligenceConfig
+    setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
 }
 
 export interface MainContextProviderProps {

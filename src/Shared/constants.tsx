@@ -538,6 +538,8 @@ export const DC_DELETE_SUBTITLES = {
 
 export const EULA_LINK = 'https://devtron.ai/end-user-license-agreement-eula'
 export const CONTACT_SUPPORT_LINK = 'https://devtron.ai/enterprise-support'
+export const PRIVACY_POLICY_LINK = 'https://devtron.ai/privacy-policy'
+export const TERMS_OF_USE_LINK = 'https://devtron.ai/terms-of-use'
 
 export const enum DeleteComponentsName {
     Cluster = 'cluster',

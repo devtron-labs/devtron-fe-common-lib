@@ -23,6 +23,7 @@ import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
 import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots.svg'
 import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
+import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCiWebhook } from '@IconsV2/ic-ci-webhook.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
@@ -33,6 +34,7 @@ import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
 import { ReactComponent as ICCopy } from '@IconsV2/ic-copy.svg'
+import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
 import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
 import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
@@ -55,10 +57,12 @@ import { ReactComponent as ICGoogle } from '@IconsV2/ic-google.svg'
 import { ReactComponent as ICGoogleArtifactRegistry } from '@IconsV2/ic-google-artifact-registry.svg'
 import { ReactComponent as ICGoogleContainerRegistry } from '@IconsV2/ic-google-container-registry.svg'
 import { ReactComponent as ICGridView } from '@IconsV2/ic-grid-view.svg'
+import { ReactComponent as ICHandPointing } from '@IconsV2/ic-hand-pointing.svg'
 import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
 import { ReactComponent as ICHeartRed } from '@IconsV2/ic-heart-red.svg'
 import { ReactComponent as ICHeartRedAnimated } from '@IconsV2/ic-heart-red-animated.svg'
 import { ReactComponent as ICHelm } from '@IconsV2/ic-helm.svg'
+import { ReactComponent as ICHelpFilled } from '@IconsV2/ic-help-filled.svg'
 import { ReactComponent as ICHelpOutline } from '@IconsV2/ic-help-outline.svg'
 import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
 import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
@@ -66,6 +70,7 @@ import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
+import { ReactComponent as ICKey } from '@IconsV2/ic-key.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
@@ -74,6 +79,7 @@ import { ReactComponent as ICLoginDevtronLogo } from '@IconsV2/ic-login-devtron-
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
+import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
@@ -88,6 +94,8 @@ import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-col
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
+import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
+import { ReactComponent as ICSelected } from '@IconsV2/ic-selected.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
 import { ReactComponent as ICSlidersVertical } from '@IconsV2/ic-sliders-vertical.svg'
 import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
@@ -100,7 +108,9 @@ import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
 import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
-import { ReactComponent as ICTimeoutTwoDash } from '@IconsV2/ic-timeout-two-dash.svg'
+import { ReactComponent as ICThumbDown } from '@IconsV2/ic-thumb-down.svg'
+import { ReactComponent as ICThumbUp } from '@IconsV2/ic-thumb-up.svg'
+import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
@@ -136,6 +146,7 @@ export const iconMap = {
     'ic-cd': ICCd,
     'ic-chat-circle-dots': ICChatCircleDots,
     'ic-check': ICCheck,
+    'ic-checks': ICChecks,
     'ic-ci-linked': ICCiLinked,
     'ic-ci-webhook': ICCiWebhook,
     'ic-circle-loader': ICCircleLoader,
@@ -146,6 +157,7 @@ export const iconMap = {
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
     'ic-copy': ICCopy,
+    'ic-cpu': ICCpu,
     'ic-crown': ICCrown,
     'ic-cube': ICCube,
     'ic-delete-lightning': ICDeleteLightning,
@@ -168,10 +180,12 @@ export const iconMap = {
     'ic-google-container-registry': ICGoogleContainerRegistry,
     'ic-google': ICGoogle,
     'ic-grid-view': ICGridView,
+    'ic-hand-pointing': ICHandPointing,
     'ic-heart-green': ICHeartGreen,
     'ic-heart-red-animated': ICHeartRedAnimated,
     'ic-heart-red': ICHeartRed,
     'ic-helm': ICHelm,
+    'ic-help-filled': ICHelpFilled,
     'ic-help-outline': ICHelpOutline,
     'ic-hibernate': ICHibernate,
     'ic-in-progress': ICInProgress,
@@ -179,6 +193,7 @@ export const iconMap = {
     'ic-info-outline': ICInfoOutline,
     'ic-job-color': ICJobColor,
     'ic-k8s-job': ICK8sJob,
+    'ic-key': ICKey,
     'ic-ldap': ICLdap,
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
@@ -187,6 +202,7 @@ export const iconMap = {
     'ic-logout': ICLogout,
     'ic-medium-delete': ICMediumDelete,
     'ic-medium-paintbucket': ICMediumPaintbucket,
+    'ic-memory': ICMemory,
     'ic-microsoft': ICMicrosoft,
     'ic-missing': ICMissing,
     'ic-monitoring': ICMonitoring,
@@ -201,6 +217,8 @@ export const iconMap = {
     'ic-pencil': ICPencil,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
+    'ic-rocket-launch': ICRocketLaunch,
+    'ic-selected': ICSelected,
     'ic-shield-check': ICShieldCheck,
     'ic-sliders-vertical': ICSlidersVertical,
     'ic-sort-ascending': ICSortAscending,
@@ -213,7 +231,9 @@ export const iconMap = {
     'ic-suspended': ICSuspended,
     'ic-tata1mg': ICTata1mg,
     'ic-terminal-fill': ICTerminalFill,
-    'ic-timeout-two-dash': ICTimeoutTwoDash,
+    'ic-thumb-down': ICThumbDown,
+    'ic-thumb-up': ICThumbUp,
+    'ic-timeout-dash': ICTimeoutDash,
     'ic-timer': ICTimer,
     'ic-travclan': ICTravclan,
     'ic-unknown': ICUnknown,

@@ -22,7 +22,6 @@ export { default as ChartVersionAndTypeSelector } from './ChartVersionAndTypeSel
 export * from './Checkbox'
 export * from './CIPipeline.Types'
 export { ClipboardButton } from './ClipboardButton/ClipboardButton'
-export * from './CodeEditor/types'
 export * from './Common.service'
 export * from './Constants'
 export * from './CustomTagSelector'
