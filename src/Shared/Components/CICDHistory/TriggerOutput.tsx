@@ -15,7 +15,7 @@
  */
 
 import React, { useEffect, useMemo } from 'react'
-import { NavLink, Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
+import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 
 import { sanitizeTargetPlatforms } from '@Shared/Helpers'
 
@@ -31,6 +31,7 @@ import {
     useInterval,
 } from '../../../Common'
 import { DEPLOYMENT_STAGE_TO_NODE_MAP, EMPTY_STATE_STATUS } from '../../constants'
+import { TabGroup } from '../TabGroup'
 import Artifacts from './Artifacts'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
@@ -409,66 +410,73 @@ const TriggerOutput = ({
                         workflowExecutionStages={triggerDetails.workflowExecutionStages}
                         namespace={triggerDetails.namespace}
                     />
-                    <ul className="pl-50 pr-20 pt-8 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bg__primary dc__zi-3">
-                        {triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM && (
-                            <li className="tab-list__tab" data-testid="deployment-history-steps-link">
-                                <NavLink
-                                    replace
-                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                    activeClassName="active"
-                                    to="deployment-steps"
-                                >
-                                    Steps
-                                </NavLink>
-                            </li>
-                        )}
-                        {!(triggerDetails.stage === 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
-                            <li className="tab-list__tab" data-testid="deployment-history-logs-link">
-                                <NavLink
-                                    replace
-                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                    activeClassName="active"
-                                    to="logs"
-                                >
-                                    Logs
-                                </NavLink>
-                            </li>
-                        )}
-                        <li className="tab-list__tab" data-testid="deployment-history-source-code-link">
-                            <NavLink
-                                replace
-                                className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                activeClassName="active"
-                                to="source-code"
-                            >
-                                Source
-                            </NavLink>
-                        </li>
-                        {triggerDetails.stage === 'DEPLOY' && (
-                            <li className="tab-list__tab" data-testid="deployment-history-configuration-link">
-                                <NavLink
-                                    replace
-                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                    activeClassName="active"
-                                    to="configuration"
-                                >
-                                    Configuration
-                                </NavLink>
-                            </li>
-                        )}
-                        {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
-                            <li className="tab-list__tab" data-testid="deployment-history-artifacts-link">
-                                <NavLink
-                                    replace
-                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                    activeClassName="active"
-                                    to="artifacts"
-                                >
-                                    Artifacts
-                                </NavLink>
-                            </li>
-                        )}
-                    </ul>
+                    <div className="pl-50 pr-20 pt-8 dc__border-bottom dc__position-sticky dc__top-0 bg__primary dc__zi-3">
+                        <TabGroup
+                            tabs={[
+                                ...(triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM
+                                    ? [
+                                          {
+                                              id: 'deployment-history-steps-link',
+                                              label: 'Steps',
+                                              tabType: 'navLink' as const,
+                                              props: {
+                                                  to: 'deployment-steps',
+                                                  'data-testid': 'deployment-history-steps-link',
+                                              },
+                                          },
+                                      ]
+                                    : []),
+                                ...(!(triggerDetails.stage === 'DEPLOY' || triggerDetails.IsVirtualEnvironment)
+                                    ? [
+                                          {
+                                              id: 'deployment-history-logs-link',
+                                              label: 'Logs',
+                                              tabType: 'navLink' as const,
+                                              props: {
+                                                  to: 'logs',
+                                                  'data-testid': 'deployment-history-logs-link',
+                                              },
+                                          },
+                                      ]
+                                    : []),
+                                {
+                                    id: 'deployment-history-source-code-link',
+                                    label: 'Source',
+                                    tabType: 'navLink',
+                                    props: {
+                                        to: 'source-code',
+                                        'data-testid': 'deployment-history-source-code-link',
+                                    },
+                                },
+                                ...(triggerDetails.stage === 'DEPLOY'
+                                    ? [
+                                          {
+                                              id: 'deployment-history-configuration-link',
+                                              label: 'Configuration',
+                                              tabType: 'navLink' as const,
+                                              props: {
+                                                  to: 'configuration',
+                                                  'data-testid': 'deployment-history-configuration-link',
+                                              },
+                                          },
+                                      ]
+                                    : []),
+                                ...(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment
+                                    ? [
+                                          {
+                                              id: 'deployment-history-artifacts-link',
+                                              label: 'Artifacts',
+                                              tabType: 'navLink' as const,
+                                              props: {
+                                                  to: 'artifacts',
+                                                  'data-testid': 'deployment-history-artifacts-link',
+                                              },
+                                          },
+                                      ]
+                                    : []),
+                            ]}
+                        />
+                    </div>
                 </>
             )}
             <HistoryLogs
