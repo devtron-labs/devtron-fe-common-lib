@@ -17,6 +17,9 @@
 import { MouseEventHandler, ReactElement } from 'react'
 import { LinkProps } from 'react-router-dom'
 
+import { GenericFilterEmptyStateProps } from '@Common/EmptyState/types'
+import { GenericEmptyStateType } from '@Common/Types'
+
 type BaseGenericInfoCardProps = {
     title: string
     description: string
@@ -46,3 +49,15 @@ export type GenericInfoCardProps = { borderVariant: GenericInfoCardBorderVariant
           isLoading?: boolean
       } & BaseGenericInfoCardProps)
 )
+
+export interface GenericInfoCardListingProps
+    extends Pick<GenericInfoCardProps, 'borderVariant'>,
+        Pick<GenericFilterEmptyStateProps, 'handleClearFilters'> {
+    list: (Pick<GenericInfoCardProps, 'Icon' | 'author' | 'description' | 'linkProps' | 'onClick' | 'title'> &
+        Record<'id', string>)[]
+    emptyStateConfig: Pick<GenericEmptyStateType, 'title' | 'subTitle' | 'image'>
+    searchKey?: string
+    reloadList?: () => void
+    error?: Record<string, unknown>
+    isLoading?: boolean
+}
