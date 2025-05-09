@@ -3,12 +3,15 @@
     margin: 0;
 
     &__group {
-        border-top: 1px solid var(--border-secondary-translucent);
+        border-top: 1px solid var(--border-secondary);
 
         &:first-child {
             border-top: none;
-            padding-top: 0;
         }
+    }
+
+    &__group-label {
+        top: 0;
     }
 
     &__group-list {
@@ -23,11 +26,25 @@
         &--focused-negative {
             background-color: var(--R50);
         }
+
+        > button {
+            text-align: left;
+        }
     }
 
-    &__searchbox input {
-        border: none;
-        padding: 0;
-        background-color: transparent;
+    &__searchbox {
+        & + .action-menu__group {
+            border-top: none;
+        }
+
+        & ~ .action-menu__group .action-menu__group-label {
+            top: 37.5px;
+        }
+
+        input {
+            border: none;
+            padding: 0;
+            background-color: transparent;
+        }
     }
 }

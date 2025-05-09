@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, useLayoutEffect, useMemo, useRef, useState } from 'react'
 
 import { UseActionMenuProps } from './types'
 import {
@@ -10,6 +10,8 @@ import {
     getActionMenuPositionStyle,
 } from './utils'
 
+const ACTION_MENU_Z_INDEX_CLASS = 'dc__zi-20'
+
 export const useActionMenu = ({
     position = 'bottom',
     alignment = 'start',
@@ -17,6 +19,7 @@ export const useActionMenu = ({
     options,
     isSearchable,
     onClick,
+    onOpen,
 }: UseActionMenuProps) => {
     // STATES
     const [open, setOpen] = useState(false)
@@ -41,11 +44,16 @@ export const useActionMenu = ({
     const menuRef = useRef<HTMLUListElement | null>(null)
 
     // HANDLERS
-    const toggleMenu = () => setOpen(!open)
+    const updateOpenState = (openState: typeof open) => {
+        setOpen(openState)
+        onOpen?.(openState)
+    }
+
+    const toggleMenu = () => updateOpenState(!open)
 
     const closeMenu = () => {
         setFocusedIndex(-1)
-        setOpen(false)
+        updateOpenState(false)
     }
 
     const getNextIndex = (start: number, arrowDirection: 1 | -1) => {
@@ -96,7 +104,7 @@ export const useActionMenu = ({
     const handleTriggerKeyDown = (e: React.KeyboardEvent) => {
         if (!open && (e.key === 'Enter' || e.key === ' ')) {
             e.preventDefault()
-            setOpen(true)
+            updateOpenState(true)
             setFocusedIndex(0)
         }
 
@@ -106,16 +114,6 @@ export const useActionMenu = ({
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value)
     }
-
-    useEffect(() => {
-        const onClickOutside = (e: MouseEvent) => {
-            if (!menuRef.current?.contains(e.target as Node) && !triggerRef.current?.contains(e.target as Node)) {
-                closeMenu()
-            }
-        }
-        document.addEventListener('mousedown', onClickOutside)
-        return () => document.removeEventListener('mousedown', onClickOutside)
-    }, [])
 
     useLayoutEffect(() => {
         if (!open || !triggerRef.current || !menuRef.current) {
@@ -134,6 +132,25 @@ export const useActionMenu = ({
 
         setActualPosition(fallbackPosition)
         setActualAlignment(fallbackAlignment)
+
+        // prevent scroll propagation unless scrollable
+        const handleWheel = (e: WheelEvent) => {
+            e.stopPropagation()
+            const atTop = menuRef.current.scrollTop === 0 && e.deltaY < 0
+            const atBottom =
+                menuRef.current.scrollHeight - menuRef.current.clientHeight === menuRef.current.scrollTop &&
+                e.deltaY > 0
+
+            if (atTop || atBottom) {
+                e.preventDefault()
+            }
+        }
+
+        menuRef.current.addEventListener('wheel', handleWheel, { passive: false })
+        // eslint-disable-next-line consistent-return
+        return () => {
+            menuRef.current.removeEventListener('wheel', handleWheel)
+        }
     }, [open, position, alignment])
 
     return {
@@ -150,10 +167,15 @@ export const useActionMenu = ({
             'aria-expanded': open,
             tabIndex: 0,
         },
+        overlayProps: {
+            role: 'dialog',
+            onClick: closeMenu,
+            className: `dc__position-fixed dc__top-0 dc__right-0 dc__left-0 dc__bottom-0 ${ACTION_MENU_Z_INDEX_CLASS}`,
+        },
         menuProps: {
             role: 'menu',
             ref: menuRef,
-            className: `action-menu dc__position-abs bg__menu--primary shadow__menu border__primary br-6 px-0 dc__zi-5 mxh-300 dc__overflow-auto ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''}`,
+            className: `action-menu dc__position-abs bg__menu--primary shadow__menu border__primary br-6 px-0 mxh-300 dc__overflow-auto ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''} ${ACTION_MENU_Z_INDEX_CLASS}`,
             onKeyDown: handleMenuKeyDown,
             style: {
                 width: !isAutoWidth ? `${width}px` : undefined,

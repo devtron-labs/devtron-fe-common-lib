@@ -1,7 +1,31 @@
 import { ReactElement } from 'react'
+import { LinkProps } from 'react-router-dom'
 
+import { ButtonProps } from '../Button'
 import { IconsProps } from '../Icon'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
+
+type ConditionalActionMenuComponentType =
+    | {
+          /**
+           * @default 'button'
+           */
+          componentType?: 'button'
+          href?: never
+          to?: never
+      }
+    | {
+          componentType?: 'anchor'
+          /** Specifies the URL for the `<a>` tag. */
+          href: string
+          to?: never
+      }
+    | {
+          componentType?: 'link'
+          /** Specifies the `to` property for react-router `Link` */
+          to: LinkProps['to']
+          href?: never
+      }
 
 export type ActionMenuItemType = Omit<SelectPickerOptionType, 'label' | 'endIcon' | 'startIcon'> & {
     /** The text label for the menu item. */
@@ -17,7 +41,7 @@ export type ActionMenuItemType = Omit<SelectPickerOptionType, 'label' | 'endIcon
     startIcon?: Pick<IconsProps, 'name' | 'color'>
     /** Defines the icon to be displayed at the end of the menu item. */
     endIcon?: Pick<IconsProps, 'name' | 'color'>
-}
+} & ConditionalActionMenuComponentType
 
 export type ActionMenuOptionType = {
     /**
@@ -70,13 +94,32 @@ export type UseActionMenuProps = {
      * @param item - The selected item.
      */
     onClick: (item: ActionMenuItemType) => void
+    /**
+     * Callback function triggered when the action menu is opened or closed.
+     * @param open - A boolean indicating whether the menu is open.
+     */
+    onOpen?: (open: boolean) => void
 }
 
 export type ActionMenuProps = UseActionMenuProps &
-    Pick<SelectPickerProps, 'disableDescriptionEllipsis'> & {
-        /** The React element to which the ActionMenu is attached. */
-        children: ReactElement
-    }
+    Pick<SelectPickerProps, 'disableDescriptionEllipsis'> &
+    (
+        | {
+              /**
+               * The React element to which the ActionMenu is attached.
+               * @note only use when children is not `Button` component otherwise use `buttonProps`.
+               */
+              children: ReactElement
+              buttonProps?: never
+          }
+        | {
+              /**
+               * Properties for the button to which the ActionMenu is attached.
+               */
+              buttonProps: ButtonProps
+              children?: never
+          }
+    )
 
 export type ActionMenuItemProps = Pick<ActionMenuProps, 'onClick' | 'disableDescriptionEllipsis'> & {
     item: ActionMenuItemType
