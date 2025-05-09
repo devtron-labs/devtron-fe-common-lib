@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-import { ReactComponent as Discord } from '@Icons/ic-discord-fill.svg'
-import { ReactComponent as File } from '@Icons/ic-file-text.svg'
+import { LOGIN_COUNT } from '@Common/Constants'
 
-import { DISCORD_LINK, DOCUMENTATION_HOME_PAGE, LOGIN_COUNT } from '../../../Common'
+import { ActionMenuProps } from '../ActionMenu'
 import { DevtronLicenseInfo, LicenseStatus } from '../License'
-import { EnterpriseHelpOptions, OSSHelpOptions, TrialHelpOptions } from './constants'
+import {
+    COMMON_HELP_ACTION_MENU_ITEMS,
+    ENTERPRISE_HELP_ACTION_MENU_ITEMS,
+    ENTERPRISE_TRIAL_HELP_ACTION_MENU_ITEMS,
+    OSS_HELP_ACTION_MENU_ITEMS,
+} from './constants'
 import { updatePostHogEvent } from './service'
 
 const millisecondsInDay = 86400000
@@ -42,27 +46,27 @@ export const setActionWithExpiry = (key: string, days: number): void => {
 export const getIsShowingLicenseData = (licenseData: DevtronLicenseInfo) =>
     licenseData && (licenseData.licenseStatus !== LicenseStatus.ACTIVE || licenseData.isTrial)
 
-const getInstallationSpecificHelpOptions = (isEnterprise: boolean, isTrial: boolean) => {
-    if (isEnterprise) {
-        return isTrial ? TrialHelpOptions : EnterpriseHelpOptions
-    }
-    return OSSHelpOptions
-}
-
-export const getHelpOptions = (isEnterprise: boolean, isTrial: boolean) => {
-    const HelpOptions = getInstallationSpecificHelpOptions(isEnterprise, isTrial)
-    return [
-        {
-            name: 'View documentation',
-            link: DOCUMENTATION_HOME_PAGE,
-            icon: File,
-        },
-
-        {
-            name: 'Join discord community',
-            link: DISCORD_LINK,
-            icon: Discord,
-        },
-        ...HelpOptions,
-    ]
-}
+export const getHelpActionMenuOptions = ({
+    isEnterprise,
+    isTrial,
+}: {
+    isEnterprise: boolean
+    isTrial: boolean
+    isOSSHelm: boolean
+}): ActionMenuProps['options'] => [
+    {
+        items: COMMON_HELP_ACTION_MENU_ITEMS,
+    },
+    ...(isEnterprise
+        ? [
+              {
+                  groupLabel: 'Enterprise Support',
+                  items: isTrial ? ENTERPRISE_TRIAL_HELP_ACTION_MENU_ITEMS : ENTERPRISE_HELP_ACTION_MENU_ITEMS,
+              },
+          ]
+        : [
+              {
+                  items: OSS_HELP_ACTION_MENU_ITEMS,
+              },
+          ]),
+]

@@ -49,6 +49,7 @@ import { ReactComponent as ICDelhivery } from '@IconsV2/ic-delhivery.svg'
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
 import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
+import { ReactComponent as ICDiscordFill } from '@IconsV2/ic-discord-fill.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
@@ -56,7 +57,10 @@ import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
 import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
+import { ReactComponent as ICFile } from '@IconsV2/ic-file.svg'
+import { ReactComponent as ICFileEdit } from '@IconsV2/ic-file-edit.svg'
 import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
+import { ReactComponent as ICFiles } from '@IconsV2/ic-files.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
 import { ReactComponent as ICGift } from '@IconsV2/ic-gift.svg'
@@ -96,6 +100,7 @@ import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
 import { ReactComponent as ICMegaphoneLeft } from '@IconsV2/ic-megaphone-left.svg'
+import { ReactComponent as ICMegaphoneRight } from '@IconsV2/ic-megaphone-right.svg'
 import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
 import { ReactComponent as ICMinikube } from '@IconsV2/ic-minikube.svg'
@@ -110,6 +115,7 @@ import { ReactComponent as ICOpenInNew } from '@IconsV2/ic-open-in-new.svg'
 import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
+import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
@@ -195,6 +201,7 @@ export const iconMap = {
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
     'ic-devtron': ICDevtron,
     'ic-disconnect': ICDisconnect,
+    'ic-discord-fill': ICDiscordFill,
     'ic-dockerhub': ICDockerhub,
     'ic-ecr': ICEcr,
     'ic-env': ICEnv,
@@ -202,7 +209,10 @@ export const iconMap = {
     'ic-expand-right-sm': ICExpandRightSm,
     'ic-expand-sm': ICExpandSm,
     'ic-failure': ICFailure,
+    'ic-file-edit': ICFileEdit,
     'ic-file-key': ICFileKey,
+    'ic-file': ICFile,
+    'ic-files': ICFiles,
     'ic-folder-user': ICFolderUser,
     'ic-gear': ICGear,
     'ic-gift-gradient': ICGiftGradient,
@@ -242,6 +252,7 @@ export const iconMap = {
     'ic-medium-delete': ICMediumDelete,
     'ic-medium-paintbucket': ICMediumPaintbucket,
     'ic-megaphone-left': ICMegaphoneLeft,
+    'ic-megaphone-right': ICMegaphoneRight,
     'ic-memory': ICMemory,
     'ic-microsoft': ICMicrosoft,
     'ic-minikube': ICMinikube,
@@ -256,6 +267,7 @@ export const iconMap = {
     'ic-openshift': ICOpenshift,
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
+    'ic-path': ICPath,
     'ic-pencil': ICPencil,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
