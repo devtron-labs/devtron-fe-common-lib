@@ -31,7 +31,7 @@ import {
     useInterval,
 } from '../../../Common'
 import { DEPLOYMENT_STAGE_TO_NODE_MAP, EMPTY_STATE_STATUS } from '../../constants'
-import { TabGroup } from '../TabGroup'
+import { TabGroup, TabGroupProps } from '../TabGroup'
 import Artifacts from './Artifacts'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
@@ -48,6 +48,7 @@ import {
     terminalStatus,
     TriggerOutputProps,
 } from './types'
+import { getTriggerOutputTabs } from './utils'
 
 import './cicdHistory.scss'
 
@@ -317,6 +318,11 @@ const TriggerOutput = ({
             (!!triggerDetailsResult?.result?.artifactId || !!triggerDetails?.artifactId),
     )
 
+    const tabs: TabGroupProps['tabs'] = useMemo(
+        () => getTriggerOutputTabs(triggerDetails, deploymentAppType),
+        [triggerDetails, deploymentAppType],
+    )
+
     useEffect(() => {
         if (triggerDetailsLoading) {
             return
@@ -411,71 +417,7 @@ const TriggerOutput = ({
                         namespace={triggerDetails.namespace}
                     />
                     <div className="pl-50 pr-20 pt-8 dc__border-bottom dc__position-sticky dc__top-0 bg__primary dc__zi-3">
-                        <TabGroup
-                            tabs={[
-                                ...(triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM
-                                    ? [
-                                          {
-                                              id: 'deployment-history-steps-link',
-                                              label: 'Steps',
-                                              tabType: 'navLink' as const,
-                                              props: {
-                                                  to: 'deployment-steps',
-                                                  'data-testid': 'deployment-history-steps-link',
-                                              },
-                                          },
-                                      ]
-                                    : []),
-                                ...(!(triggerDetails.stage === 'DEPLOY' || triggerDetails.IsVirtualEnvironment)
-                                    ? [
-                                          {
-                                              id: 'deployment-history-logs-link',
-                                              label: 'Logs',
-                                              tabType: 'navLink' as const,
-                                              props: {
-                                                  to: 'logs',
-                                                  'data-testid': 'deployment-history-logs-link',
-                                              },
-                                          },
-                                      ]
-                                    : []),
-                                {
-                                    id: 'deployment-history-source-code-link',
-                                    label: 'Source',
-                                    tabType: 'navLink',
-                                    props: {
-                                        to: 'source-code',
-                                        'data-testid': 'deployment-history-source-code-link',
-                                    },
-                                },
-                                ...(triggerDetails.stage === 'DEPLOY'
-                                    ? [
-                                          {
-                                              id: 'deployment-history-configuration-link',
-                                              label: 'Configuration',
-                                              tabType: 'navLink' as const,
-                                              props: {
-                                                  to: 'configuration',
-                                                  'data-testid': 'deployment-history-configuration-link',
-                                              },
-                                          },
-                                      ]
-                                    : []),
-                                ...(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment
-                                    ? [
-                                          {
-                                              id: 'deployment-history-artifacts-link',
-                                              label: 'Artifacts',
-                                              tabType: 'navLink' as const,
-                                              props: {
-                                                  to: 'artifacts',
-                                                  'data-testid': 'deployment-history-artifacts-link',
-                                              },
-                                          },
-                                      ]
-                                    : []),
-                            ]}
-                        />
+                        <TabGroup tabs={tabs} />
                     </div>
                 </>
             )}
