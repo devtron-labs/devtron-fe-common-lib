@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { OptionType } from '@Common/Types'
+import { DeploymentNodeType, OptionType } from '@Common/Types'
 
 import { CDMaterialSidebarType, ConfigKeysWithLockType, ConfigurationType } from './types'
 
@@ -555,3 +555,9 @@ export const Routes = {
 export const ENTERPRISE_SUPPORT_LINK = 'enterprise@devtron.ai'
 
 export const INVALID_LICENSE_KEY = 'inValid'
+
+export const DEPLOYMENT_STAGE_TO_NODE_MAP: Readonly<Record<DeploymentStageType, DeploymentNodeType>> = {
+    [DeploymentStageType.DEPLOY]: DeploymentNodeType.CD,
+    [DeploymentStageType.POST]: DeploymentNodeType.POSTCD,
+    [DeploymentStageType.PRE]: DeploymentNodeType.PRECD,
+}
