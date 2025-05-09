@@ -245,6 +245,7 @@ export const IndexStore = {
 
         const podMetadata = data.resourceTree?.podMetadata || []
 
+        // Not brave enough to remove this method but seems like its not doing anything
         getiNodesByRootNodeWithChildNodes(
             _nodes,
             _nodes.filter((_n) => (_n.parentRefs ?? []).length == 0).map((_n) => _n as iNode),

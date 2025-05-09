@@ -153,6 +153,7 @@ export interface Node {
     canBeHibernated: boolean
     isHibernated: boolean
     hasDrift?: boolean
+    status?: string
 }
 
 // eslint-disable-next-line no-use-before-define
@@ -244,6 +245,11 @@ export interface AppDetails {
     chartAvatar?: string
     fluxTemplateType?: string
     FluxAppStatusDetail?: FluxAppStatusDetail
+}
+
+export interface ConfigDriftModalProps extends Required<Pick<AppDetails, 'appId'>> {
+    envId: number
+    handleCloseModal?: () => void
 }
 
 export enum RegistryType {

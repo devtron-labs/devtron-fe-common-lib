@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import { preventBodyScroll } from '../../Shared'
 import { VisibleModal } from '../Modals/VisibleModal'
 import './Drawer.scss'

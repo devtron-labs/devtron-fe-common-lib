@@ -63,6 +63,12 @@
         background-color: var(--white);
         transition: all 0.4s ease;
     }
+
+    &.intermediate::before {
+        width: 0px;
+        height: 0px;
+    }
+
     &.with-icon {
         background-color: var(--bg-primary) !important;
         svg {

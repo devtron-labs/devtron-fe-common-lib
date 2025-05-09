@@ -165,6 +165,7 @@ export interface InfoIconTippyProps
     dataTestid?: string
     children?: TippyCustomizedProps['children']
     iconClassName?: string
+    buttonPadding?: string
 }
 
 export interface GenericEmptyStateType {

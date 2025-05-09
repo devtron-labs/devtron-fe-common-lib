@@ -14,45 +14,15 @@
  * limitations under the License.
  */
 
-import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { ReactComponent as ErrorInfo } from '../../../Assets/Icon/ic-errorInfo.svg'
 import { URLS } from '../../../Common'
 import { AppType } from '../../types'
-import { AppDetailsErrorType, ErrorBarType } from './types'
-import { renderErrorHeaderMessage } from './utils'
+import { ErrorBarType } from './types'
+import { getIsImagePullBackOff, renderErrorHeaderMessage } from './utils'
 
-const ErrorBar = ({ appDetails }: ErrorBarType) => {
-    const [isImagePullBackOff, setIsImagePullBackOff] = useState(false)
-
-    useEffect(() => {
-        if (appDetails.appType === AppType.DEVTRON_APP && appDetails.resourceTree?.nodes?.length) {
-            for (let index = 0; index < appDetails.resourceTree.nodes.length; index++) {
-                const node = appDetails.resourceTree.nodes[index]
-                let _isImagePullBackOff = false
-                if (node.info?.length) {
-                    for (let idx = 0; idx < node.info.length; idx++) {
-                        const info = node.info[idx]
-                        if (
-                            info.value &&
-                            (info.value.toLowerCase() === AppDetailsErrorType.ERRIMAGEPULL ||
-                                info.value.toLowerCase() === AppDetailsErrorType.IMAGEPULLBACKOFF)
-                        ) {
-                            _isImagePullBackOff = true
-                            break
-                        }
-                    }
-
-                    if (_isImagePullBackOff) {
-                        setIsImagePullBackOff(true)
-                        break
-                    }
-                }
-            }
-        }
-    }, [appDetails])
-
+const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
     if (
         !appDetails ||
         appDetails.appType !== AppType.DEVTRON_APP ||
@@ -63,10 +33,12 @@ const ErrorBar = ({ appDetails }: ErrorBarType) => {
         return null
     }
 
+    const isImagePullBackOff = getIsImagePullBackOff(appDetails)
+
     return (
         isImagePullBackOff && (
-            <div className="er-2 bw-1 br-4 m-20 fs-13">
-                <div className="bcr-1 pl-12 pr-12 pt-8 pb-8 dc__border-bottom-r2 flex left">
+            <div className={`er-2 bw-1 br-4 ${useParentMargin ? 'm-20' : ''} fs-13`}>
+                <div className="bcr-1 pl-12 pr-12 pt-8 pb-8 dc__border-bottom-r2 flex left dc__top-radius-4">
                     <ErrorInfo className="icon-dim-24 mr-8" /> <span className="mr-8">IMAGEPULLBACKOFF:</span>
                     {renderErrorHeaderMessage(appDetails, 'error-bar')}
                 </div>
