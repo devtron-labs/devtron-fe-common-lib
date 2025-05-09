@@ -154,6 +154,7 @@ export interface customEnv {
     FEATURE_APPLICATION_TEMPLATES_ENABLE?: boolean
     GATEKEEPER_URL?: string
     FEATURE_AI_INTEGRATION_ENABLE?: boolean
+    LOGIN_PAGE_IMAGE?: string
 }
 declare global {
     interface Window {
