@@ -1,4 +1,5 @@
 import { LegacyRef } from 'react'
+import { Link } from 'react-router-dom'
 
 import { Tooltip } from '@Common/Tooltip'
 
@@ -38,11 +39,54 @@ export const ActionMenuItem = ({
             </div>
         )
 
+    const renderContent = () => (
+        <>
+            <Tooltip content={label} placement="right">
+                <span className={`m-0 fs-13 fw-4 lh-20 dc__truncate ${isNegativeType ? 'cr-5' : 'cn-9'}`}>{label}</span>
+            </Tooltip>
+            {description &&
+                (typeof description === 'string' ? (
+                    <span
+                        className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__ellipsis-right__2nd-line' : 'dc__word-break'}`}
+                    >
+                        {description}
+                    </span>
+                ) : (
+                    description
+                ))}
+        </>
+    )
+
+    const renderComponent = () => {
+        switch (item.componentType) {
+            case 'anchor':
+                return (
+                    <a className="flex-grow-1" href={item.href} target="_blank" rel="noreferrer">
+                        {renderContent()}
+                    </a>
+                )
+            case 'link':
+                return (
+                    <Link className="flex-grow-1" to={item.to}>
+                        {renderContent()}
+                    </Link>
+                )
+            case 'button':
+            default:
+                return (
+                    <button type="button" className="dc__transparent p-0 flex-grow-1">
+                        {renderContent()}
+                    </button>
+                )
+        }
+    }
+
     return (
         <Tooltip {...getTooltipProps(tooltipProps)}>
             <li
                 ref={ref}
                 role="menuitem"
+                data-testid={`action-menu-item-${item.value}`}
                 onMouseEnter={onMouseEnter}
                 tabIndex={-1}
                 // Intentionally added margin to the left and right to have the gap on the edges of the options
@@ -51,23 +95,7 @@ export const ActionMenuItem = ({
                 aria-disabled={isDisabled}
             >
                 {renderIcon(startIcon)}
-                <div className="flex-grow-1">
-                    <Tooltip content={label} placement="right">
-                        <h5 className={`m-0 fs-13 fw-4 lh-20 dc__truncate ${isNegativeType ? 'cr-5' : 'cn-9'}`}>
-                            {label}
-                        </h5>
-                    </Tooltip>
-                    {description &&
-                        (typeof description === 'string' ? (
-                            <p
-                                className={`m-0 fs-12 fw-4 lh-18 cn-7 ${!disableDescriptionEllipsis ? 'dc__ellipsis-right__2nd-line' : 'dc__word-break'}`}
-                            >
-                                {description}
-                            </p>
-                        ) : (
-                            <div className="fs-12 lh-18 cn-7">{description}</div>
-                        ))}
-                </div>
+                {renderComponent()}
                 {renderIcon(endIcon)}
             </li>
         </Tooltip>
