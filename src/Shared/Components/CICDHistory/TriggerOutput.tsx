@@ -30,7 +30,7 @@ import {
     useAsync,
     useInterval,
 } from '../../../Common'
-import { EMPTY_STATE_STATUS } from '../../constants'
+import { DEPLOYMENT_STAGE_TO_NODE_MAP, EMPTY_STATE_STATUS } from '../../constants'
 import Artifacts from './Artifacts'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
@@ -88,8 +88,9 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
     const paramsData = {
         appId,
         envId,
-        appName: `${triggerDetails.helmPackageName}.tgz`,
+        appName: triggerDetails.helmPackageName,
         workflowId: triggerDetails.id,
+        cdWorkflowType: DEPLOYMENT_STAGE_TO_NODE_MAP[triggerDetails.stage],
     }
 
     const CDBuildReportUrl = `app/cd-pipeline/workflow/download/${appId}/${envId}/${pipelineId}/${triggerId}`
@@ -133,6 +134,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                 isVirtualEnvironment={triggerDetails.IsVirtualEnvironment}
                                 processVirtualEnvironmentDeploymentData={processVirtualEnvironmentDeploymentData}
                                 renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}
+                                isDeploymentWithoutApproval={triggerDetails.isDeploymentWithoutApproval ?? false}
                             />
                         </Route>
                     )}
@@ -156,6 +158,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                             promotionApprovalMetadata={triggerDetails?.promotionApprovalMetadata}
                             renderCIListHeader={renderCIListHeader}
                             targetPlatforms={targetPlatforms}
+                            isDeploymentWithoutApproval={triggerDetails.isDeploymentWithoutApproval ?? false}
                         />
                     </Route>
                     {triggerDetails.stage === 'DEPLOY' && (

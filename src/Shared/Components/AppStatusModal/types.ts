@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react'
 
-import { AppDetails, ConfigDriftModalProps } from '@Shared/types'
+import { AppDetails, ConfigDriftModalProps, IntelligenceConfig } from '@Shared/types'
 
 export type AppStatusModalProps = {
     titleSegments: string[]
@@ -9,8 +9,11 @@ export type AppStatusModalProps = {
      * If given would not poll for app details and resource tree, Polling for gitops timeline would still be done
      */
     appDetails?: AppDetails
+
     isConfigDriftEnabled: boolean
     configDriftModal: FunctionComponent<ConfigDriftModalProps>
+
+    debugWithAIButton: FunctionComponent<{ intelligenceConfig: IntelligenceConfig }>
 } & (
     | {
           type: 'release'
@@ -24,7 +27,8 @@ export type AppStatusModalProps = {
       }
 )
 
-export interface AppStatusBodyProps extends Required<Pick<AppStatusModalProps, 'appDetails' | 'type'>> {
+export interface AppStatusBodyProps
+    extends Required<Pick<AppStatusModalProps, 'appDetails' | 'type' | 'debugWithAIButton'>> {
     handleShowConfigDriftModal: () => void
 }
 

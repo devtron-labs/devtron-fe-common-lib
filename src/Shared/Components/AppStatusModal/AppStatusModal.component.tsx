@@ -26,6 +26,7 @@ const AppStatusModal = ({
     configDriftModal: ConfigDriftModal,
     appId,
     envId,
+    debugWithAIButton,
 }: AppStatusModalProps) => {
     const [showConfigDriftModal, setShowConfigDriftModal] = useState(false)
 
@@ -128,6 +129,7 @@ const AppStatusModal = ({
                     appDetails={appDetails}
                     type={type}
                     handleShowConfigDriftModal={handleShowConfigDriftModal}
+                    debugWithAIButton={debugWithAIButton}
                 />
 
                 {type === 'stack-manager' && (

@@ -304,6 +304,8 @@ export interface WorkflowType {
     showTippy?: boolean
     appId?: number
     isSelected?: boolean
+    isExceptionUser?: boolean
+    canApproverDeploy?: boolean
     approvalConfiguredIdsMap?: Record<number, ApprovalConfigDataType>
     imageReleaseTags: string[]
     appReleaseTags?: string[]
@@ -1155,4 +1157,11 @@ export interface GetTimeDifferenceParamsType {
 export enum RegistryCredentialsType {
     USERNAME_PASSWORD = 'username_password',
     ANONYMOUS = 'anonymous',
+}
+
+export interface IntelligenceConfig {
+    clusterId: number
+    metadata: Record<string, string>
+    prompt: string
+    analyticsCategory: string
 }

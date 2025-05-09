@@ -76,7 +76,7 @@ const HelpNav = ({
         onClickHelpOptions(option)
     }
 
-    const handleOpenLicenseDialog = () => {
+    const handleOpenAboutDevtron = () => {
         ReactGA.event({
             category: 'help-nav__about-devtron',
             action: 'ABOUT_DEVTRON_CLICKED',
@@ -100,23 +100,22 @@ const HelpNav = ({
                         <option.icon />
                         <div className="ml-12 cn-9 fs-14">{option.name}</div>
                     </a>
-                    {/* licenseData is only set when showLicenseData is received true */}
-                    {isEnterprise && index === 1 && (
+                    {index === 1 && (
                         <>
-                            {licenseData && (
-                                <button
-                                    type="button"
-                                    className="dc__transparent help-card__option flexbox dc__align-items-center cn-9 dc__gap-12 fs-14"
-                                    onClick={handleOpenLicenseDialog}
-                                    data-testid="about-devtron"
-                                >
-                                    <Icon name="ic-devtron" color="N600" size={20} />
-                                    About Devtron
-                                </button>
+                            <button
+                                type="button"
+                                className="dc__transparent help-card__option flexbox dc__align-items-center cn-9 dc__gap-12 fs-14"
+                                onClick={handleOpenAboutDevtron}
+                                data-testid="about-devtron"
+                            >
+                                <Icon name="ic-devtron" color="N600" size={20} />
+                                About Devtron
+                            </button>
+                            {isEnterprise && (
+                                <div className="help__enterprise pl-8 pb-4-imp pt-4-imp dc__gap-12 flexbox dc__align-items-center h-28">
+                                    Enterprise Support
+                                </div>
                             )}
-                            <div className="help__enterprise pl-8 pb-4-imp pt-4-imp dc__gap-12 flexbox dc__align-items-center h-28">
-                                Enterprise Support
-                            </div>
                         </>
                     )}
                 </Fragment>

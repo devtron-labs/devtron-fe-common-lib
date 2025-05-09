@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
+import { DetailedHTMLProps, Dispatch, ReactElement, ReactNode, SetStateAction } from 'react'
 
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { UseStateFiltersReturnType } from '@Common/Hooks'
@@ -261,4 +261,7 @@ export interface DynamicDataTableRowProps<K extends string, CustomStateType = Re
         | 'trailingCellIcon'
         | 'buttonCellWrapComponent'
         | 'focusableFieldKey'
-    > {}
+    > {
+    isAddRowButtonClicked: boolean
+    setIsAddRowButtonClicked: Dispatch<SetStateAction<boolean>>
+}

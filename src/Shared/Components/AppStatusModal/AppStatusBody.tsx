@@ -1,10 +1,12 @@
 import { ComponentProps, ReactNode } from 'react'
 
+import { getAIAnalyticsEvents } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
+import { AppType } from '@Shared/types'
 
 import { ErrorBar } from '../Error'
 import { ShowMoreText } from '../ShowMoreText'
-import { AppStatus } from '../StatusComponent'
+import { AppStatus, StatusType } from '../StatusComponent'
 import AppStatusContent from './AppStatusContent'
 import { APP_STATUS_CUSTOM_MESSAGES } from './constants'
 import { AppStatusBodyProps } from './types'
@@ -31,9 +33,18 @@ const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; val
     </div>
 )
 
-export const AppStatusBody = ({ appDetails, type, handleShowConfigDriftModal }: AppStatusBodyProps) => {
+export const AppStatusBody = ({
+    appDetails,
+    type,
+    handleShowConfigDriftModal,
+    debugWithAIButton: ExplainWithAIButton,
+}: AppStatusBodyProps) => {
     const appStatus = appDetails.resourceTree?.status?.toUpperCase() || appDetails.appStatus
     const message = getAppStatusMessageFromAppDetails(appDetails)
+    const debugNode = appDetails.resourceTree?.nodes?.find(
+        (node) => node.kind === 'Deployment' || node.kind === 'Rollout',
+    )
+    const debugObject = `${debugNode?.kind}/${debugNode?.name}`
     const customMessage =
         type === 'stack-manager'
             ? 'The installation will complete when status for all the below resources become HEALTHY.'
@@ -43,7 +54,31 @@ export const AppStatusBody = ({ appDetails, type, handleShowConfigDriftModal }: 
         {
             id: 1,
             heading: type !== 'stack-manager' ? 'Application Status' : 'Status',
-            value: appStatus ? <AppStatus status={appStatus} /> : '--',
+            value: (
+                <div className="flexbox w-100 dc__content-space dc__gap-8">
+                    {appStatus ? <AppStatus status={appStatus} /> : '--'}
+
+                    {ExplainWithAIButton &&
+                        appDetails.appStatus?.toLowerCase() !== StatusType.HEALTHY.toLowerCase() &&
+                        (debugNode || message) && (
+                            <ExplainWithAIButton
+                                intelligenceConfig={{
+                                    clusterId: appDetails.clusterId,
+                                    metadata: {
+                                        ...(debugNode ? { object: debugObject } : { message }),
+                                        namespace: appDetails.namespace,
+                                        status: debugNode?.health?.status ?? appDetails.appStatus,
+                                    },
+                                    prompt: `Debug ${message || 'error'} ${debugNode ? `of ${debugObject}` : ''} in ${appDetails.namespace}`,
+                                    analyticsCategory: getAIAnalyticsEvents(
+                                        'APP_STATUS',
+                                        appDetails.appStatus as AppType,
+                                    ),
+                                }}
+                            />
+                        )}
+                </div>
+            ),
         },
         ...(message
             ? [
