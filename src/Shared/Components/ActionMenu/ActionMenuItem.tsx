@@ -1,4 +1,4 @@
-import { LegacyRef } from 'react'
+import { LegacyRef, Ref } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Tooltip } from '@Common/Tooltip'
@@ -9,6 +9,7 @@ import { ActionMenuItemProps } from './types'
 
 export const ActionMenuItem = ({
     item,
+    itemRef,
     isFocused,
     onClick,
     onMouseEnter,
@@ -61,20 +62,30 @@ export const ActionMenuItem = ({
         switch (item.componentType) {
             case 'anchor':
                 return (
-                    <a className="flex-grow-1" href={item.href} target="_blank" rel="noreferrer">
+                    <a
+                        ref={itemRef as LegacyRef<HTMLAnchorElement>}
+                        className="flex-grow-1"
+                        href={item.href}
+                        target="_blank"
+                        rel="noreferrer"
+                    >
                         {renderContent()}
                     </a>
                 )
             case 'link':
                 return (
-                    <Link className="flex-grow-1" to={item.to}>
+                    <Link ref={itemRef as Ref<HTMLAnchorElement>} className="flex-grow-1" to={item.to}>
                         {renderContent()}
                     </Link>
                 )
             case 'button':
             default:
                 return (
-                    <button type="button" className="dc__transparent p-0 flex-grow-1">
+                    <button
+                        ref={itemRef as LegacyRef<HTMLButtonElement>}
+                        type="button"
+                        className="dc__transparent p-0 flex-grow-1"
+                    >
                         {renderContent()}
                     </button>
                 )

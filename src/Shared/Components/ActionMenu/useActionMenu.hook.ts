@@ -1,35 +1,21 @@
-import { ChangeEvent, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, createRef, RefObject, useEffect, useMemo, useRef, useState } from 'react'
 
+import { usePopover, UsePopoverProps } from '../Popover'
 import { UseActionMenuProps } from './types'
-import {
-    filterActionMenuOptions,
-    getActionMenuActualPositionAlignment,
-    getActionMenuAlignmentStyle,
-    getActionMenuFlatOptions,
-    getActionMenuFramerProps,
-    getActionMenuPositionStyle,
-} from './utils'
-
-const ACTION_MENU_Z_INDEX_CLASS = 'dc__zi-20'
+import { filterActionMenuOptions, getActionMenuFlatOptions } from './utils'
 
 export const useActionMenu = ({
+    id,
     position = 'bottom',
     alignment = 'start',
     width = 'auto',
     options,
     isSearchable,
-    onClick,
     onOpen,
 }: UseActionMenuProps) => {
     // STATES
-    const [open, setOpen] = useState(false)
     const [focusedIndex, setFocusedIndex] = useState(-1)
-    const [actualPosition, setActualPosition] = useState<UseActionMenuProps['position']>(position)
-    const [actualAlignment, setActualAlignment] = useState<UseActionMenuProps['alignment']>(alignment)
-    const [searchTerm, setSearchTerm] = useState<string>('')
-
-    // CONSTANTS
-    const isAutoWidth = width === 'auto'
+    const [searchTerm, setSearchTerm] = useState('')
 
     // MEMOIZED CONSTANTS
     const filteredOptions = useMemo(
@@ -40,20 +26,17 @@ export const useActionMenu = ({
     const flatOptions = useMemo(() => getActionMenuFlatOptions(filteredOptions), [filteredOptions])
 
     // REFS
-    const triggerRef = useRef<HTMLDivElement | null>(null)
-    const menuRef = useRef<HTMLUListElement | null>(null)
+    const itemsRef = useRef<RefObject<HTMLAnchorElement | HTMLButtonElement>[]>(
+        flatOptions.map(() => createRef<HTMLAnchorElement | HTMLButtonElement>()),
+    )
+
+    useEffect(() => {
+        itemsRef.current = flatOptions.map(() => createRef<HTMLAnchorElement | HTMLButtonElement>())
+    }, [flatOptions.length])
 
     // HANDLERS
-    const updateOpenState = (openState: typeof open) => {
-        setOpen(openState)
-        onOpen?.(openState)
-    }
-
-    const toggleMenu = () => updateOpenState(!open)
-
-    const closeMenu = () => {
-        setFocusedIndex(-1)
-        updateOpenState(false)
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value)
     }
 
     const getNextIndex = (start: number, arrowDirection: 1 | -1) => {
@@ -68,15 +51,14 @@ export const useActionMenu = ({
         return start
     }
 
-    const handleMenuKeyDown = (e: React.KeyboardEvent) => {
+    const handlePopoverKeyDown: UsePopoverProps['onPopoverKeyDown'] = (e, openState, closePopover) => {
         e.stopPropagation()
 
-        if (open) {
+        if (openState) {
             switch (e.key) {
                 case 'Escape':
                     e.preventDefault()
-                    closeMenu()
-                    triggerRef.current?.focus()
+                    closePopover()
                     break
                 case 'ArrowDown':
                     e.preventDefault()
@@ -90,9 +72,9 @@ export const useActionMenu = ({
                 case ' ': {
                     e.preventDefault()
                     const selectedItem = flatOptions[focusedIndex].option
-                    if (!selectedItem.isDisabled) {
-                        onClick(selectedItem)
-                        closeMenu()
+                    const selectedItemRef = itemsRef.current[focusedIndex].current
+                    if (!selectedItem.isDisabled && selectedItemRef) {
+                        selectedItemRef.click()
                     }
                     break
                 }
@@ -101,92 +83,42 @@ export const useActionMenu = ({
         }
     }
 
-    const handleTriggerKeyDown = (e: React.KeyboardEvent) => {
-        if (!open && (e.key === 'Enter' || e.key === ' ')) {
-            e.preventDefault()
-            updateOpenState(true)
+    const handleTriggerKeyDown: UsePopoverProps['onTriggerKeyDown'] = (e, openState, closePopover) => {
+        if (!openState && (e.key === 'Enter' || e.key === ' ')) {
             setFocusedIndex(0)
         }
 
-        handleMenuKeyDown(e)
+        handlePopoverKeyDown(e, openState, closePopover)
     }
 
-    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(e.target.value)
-    }
+    // POPOVER HOOK
+    const { open, closePopover, overlayProps, popoverProps, triggerProps } = usePopover({
+        id,
+        position,
+        alignment,
+        width,
+        onOpen,
+        onPopoverKeyDown: handlePopoverKeyDown,
+        onTriggerKeyDown: handleTriggerKeyDown,
+    })
 
-    useLayoutEffect(() => {
-        if (!open || !triggerRef.current || !menuRef.current) {
-            return
+    useEffect(() => {
+        if (!open) {
+            setFocusedIndex(-1)
         }
-
-        const triggerRect = triggerRef.current.getBoundingClientRect()
-        const menuRect = menuRef.current.getBoundingClientRect()
-
-        const { fallbackPosition, fallbackAlignment } = getActionMenuActualPositionAlignment({
-            position,
-            alignment,
-            triggerRect,
-            menuRect,
-        })
-
-        setActualPosition(fallbackPosition)
-        setActualAlignment(fallbackAlignment)
-
-        // prevent scroll propagation unless scrollable
-        const handleWheel = (e: WheelEvent) => {
-            e.stopPropagation()
-            const atTop = menuRef.current.scrollTop === 0 && e.deltaY < 0
-            const atBottom =
-                menuRef.current.scrollHeight - menuRef.current.clientHeight === menuRef.current.scrollTop &&
-                e.deltaY > 0
-
-            if (atTop || atBottom) {
-                e.preventDefault()
-            }
-        }
-
-        menuRef.current.addEventListener('wheel', handleWheel, { passive: false })
-        // eslint-disable-next-line consistent-return
-        return () => {
-            menuRef.current.removeEventListener('wheel', handleWheel)
-        }
-    }, [open, position, alignment])
+    }, [open])
 
     return {
         open,
         flatOptions,
         filteredOptions,
         focusedIndex,
-        triggerProps: {
-            role: 'button',
-            ref: triggerRef,
-            onClick: toggleMenu,
-            onKeyDown: handleTriggerKeyDown,
-            'aria-haspopup': 'menu' as const,
-            'aria-expanded': open,
-            tabIndex: 0,
-        },
-        overlayProps: {
-            role: 'dialog',
-            onClick: closeMenu,
-            className: `dc__position-fixed dc__top-0 dc__right-0 dc__left-0 dc__bottom-0 ${ACTION_MENU_Z_INDEX_CLASS}`,
-        },
-        menuProps: {
-            role: 'menu',
-            ref: menuRef,
-            className: `action-menu dc__position-abs bg__menu--primary shadow__menu border__primary br-6 px-0 mxh-300 dc__overflow-auto ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''} ${ACTION_MENU_Z_INDEX_CLASS}`,
-            onKeyDown: handleMenuKeyDown,
-            style: {
-                width: !isAutoWidth ? `${width}px` : undefined,
-                ...getActionMenuPositionStyle({ position: actualPosition }),
-                ...getActionMenuAlignmentStyle({ position: actualPosition, alignment: actualAlignment }),
-            },
-            ...getActionMenuFramerProps({ position: actualPosition, alignment: actualAlignment }),
-            transition: { duration: 0.2 },
-        },
+        itemsRef,
+        triggerProps,
+        overlayProps,
+        popoverProps,
         setFocusedIndex,
-        closeMenu,
+        closePopover,
         searchTerm,
         handleSearch,
     }

@@ -1,8 +1,8 @@
-import { ReactElement } from 'react'
+import { LegacyRef, Ref } from 'react'
 import { LinkProps } from 'react-router-dom'
 
-import { ButtonProps } from '../Button'
 import { IconsProps } from '../Icon'
+import { PopoverProps, UsePopoverProps } from '../Popover'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 
 type ConditionalActionMenuComponentType =
@@ -55,32 +55,7 @@ export type ActionMenuOptionType = {
     items: ActionMenuItemType[]
 }
 
-export type UseActionMenuProps = {
-    /**
-     * The width of the action menu. \
-     * Can be a number representing the width in pixels or the string 'auto' for automatic sizing (upto 250px).
-     * @default 'auto'
-     */
-    width?: number | 'auto'
-    /**
-     * The position of the action menu relative to its trigger element. \
-     * Possible values are:
-     * - 'bottom': Positions the menu below the trigger.
-     * - 'top': Positions the menu above the trigger.
-     * - 'left': Positions the menu to the left of the trigger.
-     * - 'right': Positions the menu to the right of the trigger.
-     * @default 'bottom'
-     */
-    position?: 'bottom' | 'top' | 'left' | 'right'
-    /**
-     * The alignment of the action menu relative to its trigger element. \
-     * Possible values are:
-     * - 'start': Aligns the menu to the start of the trigger.
-     * - 'middle': Aligns the menu to the center of the trigger.
-     * - 'end': Aligns the menu to the end of the trigger.
-     * @default 'start'
-     */
-    alignment?: 'start' | 'middle' | 'end'
+export type UseActionMenuProps = Omit<UsePopoverProps, 'onPopoverKeyDown' | 'onTriggerKeyDown'> & {
     /**
      * The options to display in the action menu.
      */
@@ -89,40 +64,36 @@ export type UseActionMenuProps = {
      * Determines whether the action menu is searchable.
      */
     isSearchable?: boolean
-    /**
-     * Callback function triggered when an item is clicked.
-     * @param item - The selected item.
-     */
-    onClick: (item: ActionMenuItemType) => void
-    /**
-     * Callback function triggered when the action menu is opened or closed.
-     * @param open - A boolean indicating whether the menu is open.
-     */
-    onOpen?: (open: boolean) => void
 }
 
 export type ActionMenuProps = UseActionMenuProps &
-    Pick<SelectPickerProps, 'disableDescriptionEllipsis'> &
-    (
+    Pick<SelectPickerProps, 'disableDescriptionEllipsis'> & {
+        /**
+         * Callback function triggered when an item is clicked.
+         * @param item - The selected item.
+         */
+        onClick: (item: ActionMenuItemType) => void
+    } & (
         | {
               /**
                * The React element to which the ActionMenu is attached.
                * @note only use when children is not `Button` component otherwise use `buttonProps`.
                */
-              children: ReactElement
+              children: NonNullable<PopoverProps['triggerElement']>
               buttonProps?: never
           }
         | {
-              /**
-               * Properties for the button to which the ActionMenu is attached.
-               */
-              buttonProps: ButtonProps
               children?: never
+              /**
+               * Properties for the button to which the Popover is attached.
+               */
+              buttonProps: NonNullable<PopoverProps['buttonProps']>
           }
     )
 
 export type ActionMenuItemProps = Pick<ActionMenuProps, 'onClick' | 'disableDescriptionEllipsis'> & {
     item: ActionMenuItemType
+    itemRef: Ref<HTMLAnchorElement> | LegacyRef<HTMLAnchorElement | HTMLButtonElement>
     isFocused?: boolean
     onMouseEnter?: () => void
 }
