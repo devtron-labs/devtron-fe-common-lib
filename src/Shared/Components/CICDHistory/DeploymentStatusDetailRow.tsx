@@ -20,18 +20,17 @@ import { useParams } from 'react-router-dom'
 import moment from 'moment'
 
 import { ShowMoreText } from '@Shared/Components/ShowMoreText'
-import { AppType } from '@Shared/types'
+import { AppType, TIMELINE_STATUS } from '@Shared/types'
 
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { DATE_TIME_FORMATS, showError } from '../../../Common'
-import { ComponentSizeType, DEPLOYMENT_STATUS, statusIcon, TIMELINE_STATUS } from '../../constants'
+import { ComponentSizeType, DEPLOYMENT_STATUS, statusIcon } from '../../constants'
 import { AppStatusContent } from '../AppStatusModal'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { APP_HEALTH_DROP_DOWN_LIST, MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
-import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
 import { getManualSync } from './service'
 import { DeploymentStatusDetailRowType } from './types'
-import { renderIcon } from './utils'
+import { getDeploymentTimelineBGColorFromIcon, renderDeploymentTimelineIcon } from './utils'
 
 export const DeploymentStatusDetailRow = ({
     type,
@@ -43,19 +42,22 @@ export const DeploymentStatusDetailRow = ({
     // Can't use appDetails directly as in case of deployment history, appDetails will be null
     const { appId: paramAppId, envId: paramEnvId } = useParams<{ appId: string; envId: string }>()
 
+    const [isManualSyncLoading, setIsManualSyncLoading] = useState<boolean>(false)
+
     const statusBreakDownType = deploymentDetailedData.deploymentStatusBreakdown[type]
-    const [collapsed, toggleCollapsed] = useState<boolean>(statusBreakDownType.isCollapsed)
+    const [isCollapsed, setIsCollapsed] = useState<boolean>(statusBreakDownType.isCollapsed)
 
     const isHelmManifestPushFailed =
         type === TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO &&
         deploymentDetailedData.deploymentStatus === statusIcon.failed
 
     useEffect(() => {
-        toggleCollapsed(statusBreakDownType.isCollapsed)
+        setIsCollapsed(statusBreakDownType.isCollapsed)
     }, [statusBreakDownType.isCollapsed])
 
     const manualSyncData = async () => {
         try {
+            setIsManualSyncLoading(true)
             const { appId: appDetailsAppId, appType, environmentId: appDetailsEnvId, installedAppId } = appDetails || {}
             const parsedAppIdFromAppDetails = appType === AppType.DEVTRON_HELM_CHART ? installedAppId : appDetailsAppId
 
@@ -65,10 +67,12 @@ export const DeploymentStatusDetailRow = ({
             await getManualSync({ appId, envId })
         } catch (error) {
             showError(error)
+        } finally {
+            setIsManualSyncLoading(false)
         }
     }
     const toggleDropdown = () => {
-        toggleCollapsed(!collapsed)
+        setIsCollapsed(!isCollapsed)
     }
 
     const renderDetailedData = () => {
@@ -78,16 +82,15 @@ export const DeploymentStatusDetailRow = ({
 
         return (
             <div className="px-8 py-12">
-                <div className="">
-                    {deploymentDetailedData.deploymentStatusBreakdown[TIMELINE_STATUS.KUBECTL_APPLY].kubeList?.map(
-                        (items, index) => (
-                            // eslint-disable-next-line react/no-array-index-key
-                            <div className="flex left lh-20 mb-8" key={`item-${index}`}>
-                                {renderIcon(items.icon)}
-                                <span className="ml-12">{items.message}</span>
-                            </div>
-                        ),
-                    )}
+                <div>
+                    {/* TODO: Can be statusBreakDownType */}
+                    {statusBreakDownType.subSteps?.map((items, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <div className="flex left lh-20 mb-8" key={`item-${index}`}>
+                            {renderDeploymentTimelineIcon(items.icon)}
+                            <span className="ml-12">{items.message}</span>
+                        </div>
+                    ))}
                 </div>
                 {statusBreakDownType.resourceDetails?.length ? (
                     <div className="pl-32">
@@ -129,24 +132,30 @@ export const DeploymentStatusDetailRow = ({
         )
     }
 
-    const renderErrorInfoBar = () => (
-        <ErrorInfoStatusBar
-            type={TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO}
-            lastFailedStatusType={deploymentDetailedData.nonDeploymentError}
-            errorMessage={deploymentDetailedData.deploymentError}
-            hideVerticalConnector
-            hideErrorIcon
-        />
-    )
+    const renderErrorInfoBar = () => {
+        if (deploymentDetailedData.lastFailedStatusType !== TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO) {
+            return null
+        }
+
+        return (
+            <div className="bcr-1 fs-13 p-8">
+                <span className="dc__word-break lh-20">{deploymentDetailedData.deploymentError}</span>
+                <ol className="m-0 pl-20">
+                    <li>Ensure provided repository path is valid</li>
+                    <li>Check if credentials provided for OCI registry are valid and have PUSH permission</li>
+                </ol>
+            </div>
+        )
+    }
 
     const isAccordion =
-        (type === TIMELINE_STATUS.KUBECTL_APPLY && statusBreakDownType.kubeList?.length) ||
+        statusBreakDownType.subSteps?.length ||
         (type === TIMELINE_STATUS.APP_HEALTH && APP_HEALTH_DROP_DOWN_LIST.includes(statusBreakDownType.icon)) ||
         ((type === TIMELINE_STATUS.GIT_COMMIT || type === TIMELINE_STATUS.ARGOCD_SYNC) &&
             statusBreakDownType.icon === 'failed')
 
     const renderAccordionDetails = () => {
-        if (!isAccordion || !collapsed) {
+        if (isCollapsed) {
             return null
         }
 
@@ -158,9 +167,7 @@ export const DeploymentStatusDetailRow = ({
                             statusBreakDownType.icon !== 'inprogress' ? 'bcr-1' : 'bcy-2'
                         }`}
                     >
-                        {type === TIMELINE_STATUS.APP_HEALTH
-                            ? statusBreakDownType.timelineStatus
-                            : deploymentDetailedData.deploymentStatusBreakdown[type].timelineStatus}
+                        {statusBreakDownType.timelineStatus}
 
                         {(deploymentDetailedData.deploymentStatus === DEPLOYMENT_STATUS.TIMED_OUT ||
                             deploymentDetailedData.deploymentStatus === DEPLOYMENT_STATUS.UNABLE_TO_FETCH) && (
@@ -170,6 +177,7 @@ export const DeploymentStatusDetailRow = ({
                                 variant={ButtonVariantType.text}
                                 size={ComponentSizeType.xxs}
                                 onClick={manualSyncData}
+                                isLoading={isManualSyncLoading}
                             />
                         )}
                     </div>
@@ -190,10 +198,10 @@ export const DeploymentStatusDetailRow = ({
         <>
             <div className="bw-1 en-2">
                 <div
-                    className={`flexbox dc__align-items-center dc__content-space dc__gap-12 py-8 px-8 bg__primary ${collapsed ? (!isHelmManifestPushFailed ? 'br-4' : '') : 'border-collapse'}`}
+                    className={`flexbox dc__align-items-center dc__content-space dc__gap-12 py-8 px-8 bg__primary ${isCollapsed ? (!isHelmManifestPushFailed ? 'br-4' : '') : 'border-collapse'}`}
                 >
                     <div className="flexbox dc__align-items-center dc__gap-12 flex-grow-1">
-                        {renderIcon(statusBreakDownType.icon)}
+                        {renderDeploymentTimelineIcon(statusBreakDownType.icon)}
                         <span className="fs-13 flexbox dc__gap-6">
                             <span data-testid="deployment-status-step-name" className="dc__truncate">
                                 {statusBreakDownType.displayText}
@@ -208,9 +216,9 @@ export const DeploymentStatusDetailRow = ({
                         {statusBreakDownType.time !== '' && statusBreakDownType.icon !== 'inprogress' && (
                             <span
                                 data-testid="deployment-status-kubernetes-dropdown dc__no-shrink"
-                                className={`px-8 py-4 br-12 ${
-                                    statusBreakDownType.icon === 'failed' ? 'bcr-1 cr-5' : 'bcg-1 cg-7'
-                                }`}
+                                className={`px-8 py-4 br-12 ${getDeploymentTimelineBGColorFromIcon(
+                                    statusBreakDownType.icon,
+                                )}`}
                             >
                                 {moment(statusBreakDownType.time, 'YYYY-MM-DDTHH:mm:ssZ').format(
                                     DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
@@ -229,7 +237,7 @@ export const DeploymentStatusDetailRow = ({
                                 <DropDownIcon
                                     style={{
                                         marginLeft: 'auto',
-                                        ['--rotateBy' as any]: `${180 * Number(!!collapsed)}deg`,
+                                        ['--rotateBy' as any]: `${180 * Number(!isCollapsed)}deg`,
                                     }}
                                     className="rotate"
                                 />

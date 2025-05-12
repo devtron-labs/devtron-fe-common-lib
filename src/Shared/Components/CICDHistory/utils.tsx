@@ -23,7 +23,7 @@ import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 
-import { Node, ResourceKindType, WorkflowStatusEnum } from '../../types'
+import { DeploymentStatusBreakdownItemType, Node, ResourceKindType, WorkflowStatusEnum } from '../../types'
 import { Icon } from '../Icon'
 import { AppStatus, DeploymentStatus, StatusType } from '../StatusComponent'
 import {
@@ -114,40 +114,6 @@ export const buildHoverHtmlForWebhook = (eventName, condition, selectors) => {
             </ul>
         </>
     )
-}
-
-export const renderIcon = (iconState: string): JSX.Element => {
-    const iconBaseProps: Pick<ComponentProps<typeof Icon>, 'size' | 'color'> = {
-        color: null,
-        size: 20,
-    }
-
-    switch (iconState) {
-        case 'success':
-            return <Icon {...iconBaseProps} name="ic-check" color="G500" dataTestId="success-green-tick" />
-        case 'failed':
-            return <Icon {...iconBaseProps} name="ic-error" />
-        case 'unknown':
-            return <Icon {...iconBaseProps} name="ic-help-outline" />
-        case 'inprogress':
-            return (
-                <div className="icon-dim-20 dc__no-shrink">
-                    <div className="pulse-highlight" />
-                </div>
-            )
-        case 'unreachable':
-            return <Icon {...iconBaseProps} name="ic-close-small" />
-        case 'loading':
-            return <Icon {...iconBaseProps} name="ic-circle-loader" color="O500" />
-        case 'disconnect':
-            return <Icon {...iconBaseProps} name="ic-disconnect" />
-        case 'time_out':
-        case 'timed_out':
-            // TODO: Test
-            return <Icon {...iconBaseProps} name="ic-timeout-two-dash" color="R500" />
-        default:
-            return <Icon {...iconBaseProps} name="ic-timer" color="N600" />
-    }
 }
 
 export const getStageStatusIcon = (status: StageStatusType): JSX.Element => {
@@ -374,5 +340,56 @@ export const getTriggerStatusIcon = (status: string) => {
             return StatusType.ABORTED
         default:
             return status
+    }
+}
+
+export const renderDeploymentTimelineIcon = (iconState: DeploymentStatusBreakdownItemType['icon']): JSX.Element => {
+    const iconBaseProps: Pick<ComponentProps<typeof Icon>, 'size' | 'color'> = {
+        color: null,
+        size: 20,
+    }
+
+    switch (iconState) {
+        case 'success':
+            return <Icon {...iconBaseProps} name="ic-check" color="G500" dataTestId="success-green-tick" />
+        case 'failed':
+            return <Icon {...iconBaseProps} name="ic-error" />
+        case 'unknown':
+            return <Icon {...iconBaseProps} name="ic-help-outline" />
+        case 'inprogress':
+            return (
+                <div className="icon-dim-20 dc__no-shrink">
+                    <div className="pulse-highlight" />
+                </div>
+            )
+        case 'unreachable':
+            return <Icon {...iconBaseProps} name="ic-close-small" />
+        case 'loading':
+            return <Icon {...iconBaseProps} name="ic-circle-loader" color="O500" />
+        case 'disconnect':
+            return <Icon {...iconBaseProps} name="ic-disconnect" />
+        case 'time_out':
+        case 'timed_out':
+            // TODO: Test
+            return <Icon {...iconBaseProps} name="ic-timeout-two-dash" color="R500" />
+        default:
+            return <Icon {...iconBaseProps} name="ic-timer" color="N600" />
+    }
+}
+
+export const getDeploymentTimelineBGColorFromIcon = (icon: DeploymentStatusBreakdownItemType['icon']): string => {
+    switch (icon) {
+        case 'success':
+            return 'bcg-1 cg-7'
+        case 'failed':
+        case 'disconnect':
+        case 'time_out':
+        case 'timed_out':
+            return 'bcr-1 cr-5'
+        case 'inprogress':
+        case 'loading':
+            return 'bcy-1 cy-5'
+        default:
+            return 'bcn-1 cn-9'
     }
 }

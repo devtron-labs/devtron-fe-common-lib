@@ -17,12 +17,12 @@
 import { Fragment } from 'react'
 import { useRouteMatch } from 'react-router-dom'
 
+import { TIMELINE_STATUS } from '@Shared/types'
+
 import { URLS } from '../../../Common'
-import { TIMELINE_STATUS } from '../../constants'
 import ErrorBar from '../Error/ErrorBar'
 import { DeploymentStatusDetailRow } from './DeploymentStatusDetailRow'
-import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
-import { DeploymentStatusDetailBreakdownType, DeploymentStatusDetailRowType, ErrorInfoStatusBarType } from './types'
+import { DeploymentStatusDetailBreakdownType, DeploymentStatusDetailRowType } from './types'
 
 import './DeploymentStatusBreakdown.scss'
 
@@ -43,11 +43,6 @@ const DeploymentStatusDetailBreakdown = ({
             deploymentDetailedData: deploymentStatusDetailsBreakdownData,
         }
 
-    const errorInfoStatusBarProps: Pick<ErrorInfoStatusBarType, 'lastFailedStatusType' | 'errorMessage'> = {
-        lastFailedStatusType: deploymentStatusDetailsBreakdownData.nonDeploymentError,
-        errorMessage: deploymentStatusDetailsBreakdownData.deploymentError,
-    }
-
     return (
         <>
             {!url.includes(`/${URLS.CD_DETAILS}`) && <ErrorBar appDetails={appDetails} />}
@@ -63,17 +58,17 @@ const DeploymentStatusDetailBreakdown = ({
                     ]
                 ) ? (
                     <>
-                        {[TIMELINE_STATUS.GIT_COMMIT, TIMELINE_STATUS.ARGOCD_SYNC, TIMELINE_STATUS.KUBECTL_APPLY].map(
-                            (timelineStatus) => (
-                                <Fragment key={timelineStatus}>
-                                    <ErrorInfoStatusBar type={timelineStatus} {...errorInfoStatusBarProps} />
-                                    <DeploymentStatusDetailRow
-                                        type={timelineStatus}
-                                        {...deploymentStatusDetailRowProps}
-                                    />
-                                </Fragment>
-                            ),
-                        )}
+                        {(
+                            [
+                                TIMELINE_STATUS.GIT_COMMIT,
+                                TIMELINE_STATUS.ARGOCD_SYNC,
+                                TIMELINE_STATUS.KUBECTL_APPLY,
+                            ] as DeploymentStatusDetailRowType['type'][]
+                        ).map((timelineStatus) => (
+                            <Fragment key={timelineStatus}>
+                                <DeploymentStatusDetailRow type={timelineStatus} {...deploymentStatusDetailRowProps} />
+                            </Fragment>
+                        ))}
 
                         <DeploymentStatusDetailRow
                             type={TIMELINE_STATUS.APP_HEALTH}

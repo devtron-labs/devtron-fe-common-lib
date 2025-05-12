@@ -18,21 +18,19 @@ import { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom'
 
 import { IndexStore } from '@Shared/Store'
+import { DeploymentStatusDetailsBreakdownDataType, DeploymentStatusDetailsType, TIMELINE_STATUS } from '@Shared/types'
 
 import { ReactComponent as Arrow } from '../../../Assets/Icon/ic-arrow-forward.svg'
 import mechanicalOperation from '../../../Assets/Icon/ic-mechanical-operation.svg'
 import { DeploymentAppTypes, GenericEmptyState, Progressing, URLS } from '../../../Common'
-import { DEPLOYMENT_STATUS, EMPTY_STATE_STATUS, TIMELINE_STATUS } from '../../constants'
-import { getHandleOpenURL, getIsApprovalPolicyConfigured, processDeploymentStatusDetailsData } from '../../Helpers'
+import { DEPLOYMENT_STATUS, EMPTY_STATE_STATUS } from '../../constants'
+import { getHandleOpenURL, getIsApprovalPolicyConfigured } from '../../Helpers'
+import { processDeploymentStatusDetailsData } from '../DeploymentStatusBreakdown'
 import CDEmptyState from './CDEmptyState'
 import { DEPLOYMENT_STATUS_QUERY_PARAM } from './constants'
 import DeploymentStatusDetailBreakdown from './DeploymentStatusBreakdown'
 import { getDeploymentStatusDetail } from './service'
-import {
-    DeploymentDetailStepsType,
-    DeploymentStatusDetailsBreakdownDataType,
-    DeploymentStatusDetailsType,
-} from './types'
+import { DeploymentDetailStepsType } from './types'
 
 let deploymentStatusTimer = null
 const DeploymentDetailSteps = ({

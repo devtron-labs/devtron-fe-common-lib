@@ -1,10 +1,14 @@
 import { get, getIsRequestAborted } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
 import { getUrlWithSearchParams, showError } from '@Common/Helper'
-import { processDeploymentStatusDetailsData } from '@Shared/Helpers'
-import { AppDetails, AppType } from '@Shared/types'
+import {
+    AppDetails,
+    AppType,
+    DeploymentStatusDetailsBreakdownDataType,
+    DeploymentStatusDetailsType,
+} from '@Shared/types'
 
-import { DeploymentStatusDetailsBreakdownDataType, DeploymentStatusDetailsType } from '../CICDHistory'
+import { processDeploymentStatusDetailsData } from '../DeploymentStatusBreakdown'
 import { GetAppDetailsParamsType } from './types'
 
 export const getAppDetails = async ({

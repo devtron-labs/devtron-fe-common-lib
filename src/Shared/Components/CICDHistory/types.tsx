@@ -34,6 +34,9 @@ import { DeploymentStageType } from '../../constants'
 import {
     AggregationKeys,
     AppDetails,
+    DeploymentStatusDetailsBreakdownDataType,
+    DeploymentStatusDetailsType,
+    DeploymentStatusTimelineType,
     GitTriggers,
     Node,
     NodeType,
@@ -371,66 +374,7 @@ export type FinishedType = { artifact: string; type: HistoryComponentType } & (
       }
 )
 
-export interface SyncStageResourceDetail {
-    id: number
-    cdWorkflowRunnerId: number
-    resourceGroup: string
-    resourceKind: string
-    resourceName: string
-    resourcePhase: string
-    resourceStatus: string
-    statusMessage: string
-}
-
-export interface DeploymentStatusDetailsTimelineType {
-    id: number
-    cdWorkflowRunnerId: number
-    status: string
-    statusDetail: string
-    statusTime: string
-    resourceDetails?: SyncStageResourceDetail[]
-}
-export interface DeploymentStatusDetailsType {
-    deploymentFinishedOn: string
-    deploymentStartedOn: string
-    triggeredBy: string
-    statusFetchCount: number
-    statusLastFetchedAt: string
-    timelines: DeploymentStatusDetailsTimelineType[]
-    wfrStatus?: string
-}
-
-export interface DeploymentStatusDetailsResponse extends ResponseType {
-    result?: DeploymentStatusDetailsType
-}
-
-interface DeploymentStatusDetailRow {
-    icon: string
-    displayText: string
-    displaySubText: string
-    time: string
-    resourceDetails?: any
-    isCollapsed?: boolean
-    kubeList?: { icon: any; message: string }[]
-    timelineStatus?: string
-}
-export interface DeploymentStatusDetailsBreakdownDataType {
-    deploymentStatus: string
-    deploymentStatusText: string
-    deploymentTriggerTime: string
-    deploymentEndTime: string
-    deploymentError: string
-    triggeredBy: string
-    nonDeploymentError: string
-    deploymentStatusBreakdown: {
-        DEPLOYMENT_INITIATED: DeploymentStatusDetailRow
-        GIT_COMMIT?: DeploymentStatusDetailRow
-        ARGOCD_SYNC?: DeploymentStatusDetailRow
-        KUBECTL_APPLY?: DeploymentStatusDetailRow
-        APP_HEALTH?: DeploymentStatusDetailRow
-        HELM_PACKAGE_GENERATED?: DeploymentStatusDetailRow
-    }
-}
+export type DeploymentStatusDetailsResponse = ResponseType<DeploymentStatusDetailsType>
 
 export interface DeploymentDetailStepsType {
     deploymentStatus?: string
@@ -577,7 +521,7 @@ export interface DeploymentStatusDetailBreakdownType {
 }
 
 export interface DeploymentStatusDetailRowType extends Pick<DeploymentStatusDetailBreakdownType, 'appDetails'> {
-    type: string
+    type: DeploymentStatusTimelineType
     hideVerticalConnector?: boolean
     deploymentDetailedData: DeploymentStatusDetailsBreakdownDataType
 }

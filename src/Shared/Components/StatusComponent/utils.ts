@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { TIMELINE_STATUS } from '@Shared/constants'
-import { WorkflowStatusEnum } from '@Shared/types'
+import { TIMELINE_STATUS, WorkflowStatusEnum } from '@Shared/types'
 
 import { IconName, IconsProps } from '../Icon'
 import { StatusType } from './types'

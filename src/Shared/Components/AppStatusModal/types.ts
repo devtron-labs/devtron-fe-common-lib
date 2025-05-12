@@ -1,9 +1,12 @@
 import { FunctionComponent } from 'react'
 
 import { APIOptions } from '@Common/Types'
-import { AppDetails, ConfigDriftModalProps } from '@Shared/types'
-
-import { DeploymentStatusDetailsBreakdownDataType, DeploymentStatusDetailsType } from '../CICDHistory'
+import {
+    AppDetails,
+    ConfigDriftModalProps,
+    DeploymentStatusDetailsBreakdownDataType,
+    DeploymentStatusDetailsType,
+} from '@Shared/types'
 
 export enum AppStatusModalTabType {
     APP_STATUS = 'appStatus',

@@ -35,7 +35,7 @@ import {
     VulnerabilityType,
 } from '../Common'
 import { SelectPickerOptionType } from './Components'
-import { BASE_CONFIGURATION_ENV_ID, EnvironmentTypeEnum, PatchOperationType } from './constants'
+import { BASE_CONFIGURATION_ENV_ID, DEPLOYMENT_STATUS, EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
     CHART = 'helm_charts',
@@ -1158,4 +1158,125 @@ export interface GetTimeDifferenceParamsType {
 export enum RegistryCredentialsType {
     USERNAME_PASSWORD = 'username_password',
     ANONYMOUS = 'anonymous',
+}
+
+export interface SyncStageResourceDetail {
+    id: number
+    cdWorkflowRunnerId: number
+    resourceGroup: string
+    resourceKind: string
+    resourceName: string
+    resourcePhase: string
+    resourceStatus: string
+    statusMessage: string
+}
+
+export interface DeploymentStatusDetailsTimelineType {
+    id: number
+    cdWorkflowRunnerId: number
+    status: string
+    statusDetail: string
+    statusTime: string
+    resourceDetails?: SyncStageResourceDetail[]
+}
+
+export interface DeploymentStatusDetailsType {
+    deploymentFinishedOn: string
+    deploymentStartedOn: string
+    triggeredBy: string
+    statusFetchCount: number
+    statusLastFetchedAt: string
+    timelines: DeploymentStatusDetailsTimelineType[]
+    wfrStatus?: string
+}
+
+export enum TIMELINE_STATUS {
+    DEPLOYMENT_INITIATED = 'DEPLOYMENT_INITIATED',
+    GIT_COMMIT = 'GIT_COMMIT',
+    GIT_COMMIT_FAILED = 'GIT_COMMIT_FAILED',
+    ARGOCD_SYNC = 'ARGOCD_SYNC',
+    ARGOCD_SYNC_FAILED = 'ARGOCD_SYNC_FAILED',
+    KUBECTL_APPLY = 'KUBECTL_APPLY',
+    KUBECTL_APPLY_STARTED = 'KUBECTL_APPLY_STARTED',
+    KUBECTL_APPLY_SYNCED = 'KUBECTL_APPLY_SYNCED',
+    HEALTHY = 'HEALTHY',
+    APP_HEALTH = 'APP_HEALTH',
+    DEPLOYMENT_FAILED = 'FAILED',
+    FETCH_TIMED_OUT = 'TIMED_OUT',
+    UNABLE_TO_FETCH_STATUS = 'UNABLE_TO_FETCH_STATUS',
+    DEGRADED = 'DEGRADED',
+    DEPLOYMENT_SUPERSEDED = 'DEPLOYMENT_SUPERSEDED',
+    ABORTED = 'ABORTED',
+    INPROGRESS = 'INPROGRESS',
+    HELM_PACKAGE_GENERATED = 'HELM_PACKAGE_GENERATED',
+    HELM_PACKAGE_GENERATION_FAILED = 'HELM_PACKAGE_GENERATION_FAILED',
+    HELM_MANIFEST_PUSHED_TO_HELM_REPO = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO',
+    HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED',
+}
+
+export type DeploymentStatusTimelineType =
+    | TIMELINE_STATUS.DEPLOYMENT_INITIATED
+    | TIMELINE_STATUS.GIT_COMMIT
+    | TIMELINE_STATUS.ARGOCD_SYNC
+    | TIMELINE_STATUS.KUBECTL_APPLY
+    | TIMELINE_STATUS.APP_HEALTH
+    | TIMELINE_STATUS.HELM_PACKAGE_GENERATED
+    | TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO
+
+export type DeploymentStatusBreakdownItemIconType =
+    | 'success'
+    | 'failed'
+    | 'unknown'
+    | 'inprogress'
+    | 'unreachable'
+    // Loading is for subSteps
+    | 'loading'
+    | 'disconnect'
+    | 'time_out'
+    | 'timed_out'
+    | ''
+
+export enum DeploymentPhaseType {
+    PRE_SYNC = 'PreSync',
+    SYNC = 'Sync',
+    POST_SYNC = 'PostSync',
+    SKIP = 'Skip',
+    SYNC_FAIL = 'SyncFail',
+}
+
+export interface DeploymentStatusBreakdownItemType {
+    icon: DeploymentStatusBreakdownItemIconType
+    displayText: string
+    displaySubText: string
+    time: string
+    /**
+     * Shown in accordion details if type is TIMELINE_STATUS.KUBECTL_APPLY to display resource details
+     */
+    resourceDetails?: SyncStageResourceDetail[]
+    isCollapsed?: boolean
+    /**
+     * Sub-Steps in accordion details in case type is TIMELINE_STATUS.KUBECTL_APPLY
+     */
+    subSteps?: { icon: DeploymentStatusBreakdownItemIconType; message: string; phase?: DeploymentPhaseType }[]
+    /**
+     * To be shown in accordion details below heading tile
+     */
+    timelineStatus?: string
+    showHelmManifest?: boolean
+}
+
+export interface DeploymentStatusDetailsBreakdownDataType {
+    deploymentStatus: (typeof DEPLOYMENT_STATUS)[keyof typeof DEPLOYMENT_STATUS]
+    deploymentTriggerTime: string
+    deploymentEndTime: string
+    /**
+     * Only required - isHelmManifestPushFailed === true then in error bar below heading tile
+     */
+    deploymentError?: string
+    triggeredBy: string
+    /**
+     * Only required - isHelmManifestPushFailed === true then in error bar below heading tile
+     */
+    lastFailedStatusType?: DeploymentStatusTimelineType | ''
+    deploymentStatusBreakdown: Partial<Record<DeploymentStatusTimelineType, DeploymentStatusBreakdownItemType>>
 }
