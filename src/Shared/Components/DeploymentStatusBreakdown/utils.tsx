@@ -130,10 +130,16 @@ const processKubeCTLApply = (
         currentTableData: [{ icon: 'success', message: 'Started by Argo CD' }],
     }
 
-    if (element.resourceDetails) {
+    // Resource details are present in KUBECTL_APPLY_STARTED timeline alone
+    const resourceDetails = data?.timelines?.find(
+        (item) => item.status === TIMELINE_STATUS.KUBECTL_APPLY_STARTED,
+    )?.resourceDetails
+
+    if (resourceDetails) {
+        // TODO: Confirm this logic since, can have duplication
         // Used to parse resource details base struct with current phase as last phase
         DEPLOYMENT_PHASES.forEach((phase) => {
-            element.resourceDetails.forEach((item) => {
+            resourceDetails.forEach((item) => {
                 if (phase === item.resourcePhase) {
                     tableData.currentPhase = phase
                     tableData.currentTableData.push({
