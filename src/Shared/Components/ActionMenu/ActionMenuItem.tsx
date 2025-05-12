@@ -36,7 +36,7 @@ export const ActionMenuItem = ({
     const renderIcon = (iconProps: typeof startIcon) =>
         iconProps && (
             <div className="mt-2 flex dc__no-shrink">
-                <Icon {...iconProps} />
+                <Icon {...iconProps} color={iconProps.color || 'N800'} />
             </div>
         )
 

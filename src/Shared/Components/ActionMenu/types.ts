@@ -27,6 +27,11 @@ type ConditionalActionMenuComponentType =
           href?: never
       }
 
+type ActionMenuItemIconType = Pick<IconsProps, 'name'> & {
+    /** @default 'N800' */
+    color?: IconsProps['color']
+}
+
 export type ActionMenuItemType = Omit<SelectPickerOptionType, 'label' | 'endIcon' | 'startIcon'> & {
     /** The text label for the menu item. */
     label: string
@@ -38,9 +43,9 @@ export type ActionMenuItemType = Omit<SelectPickerOptionType, 'label' | 'endIcon
      */
     type?: 'neutral' | 'negative'
     /** Defines the icon to be displayed at the start of the menu item. */
-    startIcon?: Pick<IconsProps, 'name' | 'color'>
+    startIcon?: ActionMenuItemIconType
     /** Defines the icon to be displayed at the end of the menu item. */
-    endIcon?: Pick<IconsProps, 'name' | 'color'>
+    endIcon?: ActionMenuItemIconType
 } & ConditionalActionMenuComponentType
 
 export type ActionMenuOptionType = {

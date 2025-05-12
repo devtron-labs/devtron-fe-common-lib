@@ -99,7 +99,7 @@ export const ActionMenu = ({
                 {filteredOptions.length > 0 ? (
                     filteredOptions.map((option, sectionIndex) => (
                         <li
-                            key={option.groupLabel}
+                            key={option.groupLabel || `no-group-label-${sectionIndex}`}
                             role="menuitem"
                             className="action-menu__group flexbox-col dc__gap-4 py-4"
                         >
