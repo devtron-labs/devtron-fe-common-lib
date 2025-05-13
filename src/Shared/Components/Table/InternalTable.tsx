@@ -42,6 +42,7 @@ const InternalTable = ({
     handleToggleBulkSelectionOnRow,
     paginationVariant,
     RowActionsOnHoverComponent,
+    children,
 }: InternalTableProps) => {
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
@@ -170,7 +171,7 @@ const InternalTable = ({
         paginationVariant === PaginationEnum.PAGINATED && filteredRows?.length > DEFAULT_BASE_PAGE_SIZE
 
     const renderRows = () => {
-        if (loading && !visibleColumns.length) {
+        if (loading) {
             return SHIMMER_DUMMY_ARRAY.map((shimmerRowLabel) => (
                 <div
                     key={shimmerRowLabel}
@@ -298,7 +299,7 @@ const InternalTable = ({
             <div tabIndex={0} role="grid" className="generic-table flexbox-col dc__overflow-hidden flex-grow-1">
                 <div className="flexbox-col flex-grow-1 w-100 dc__overflow-auto" ref={parentRef}>
                     <div className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom">
-                        {loading && !visibleColumns.length ? (
+                        {loading ? (
                             <div className="flexbox py-12 dc__gap-16">
                                 {SHIMMER_DUMMY_ARRAY.map((label) => (
                                     <div key={label} className="shimmer w-180" />
@@ -312,7 +313,7 @@ const InternalTable = ({
                                 }}
                             >
                                 {visibleColumns.map(({ label, field, isSortable, size, showTippyOnTruncate }) => {
-                                    const isResizable = !!size.range
+                                    const isResizable = !!size?.range
 
                                     if (field === BULK_ACTION_GUTTER_LABEL) {
                                         return <BulkSelection key={field} showPagination={showPagination} />
@@ -361,10 +362,12 @@ const InternalTable = ({
                         changePage={changePage}
                         changePageSize={changePageSize}
                         offset={offset}
-                        rootClassName="border__primary--top flex dc__content-space px-20"
+                        rootClassName="border__secondary--top flex dc__content-space px-20"
                         size={filteredRows.length}
                     />
                 )}
+
+                {children}
             </div>
         )
     }
