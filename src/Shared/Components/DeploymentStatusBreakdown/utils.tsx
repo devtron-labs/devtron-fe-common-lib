@@ -244,7 +244,6 @@ export const processDeploymentStatusDetailsData = (
 
     // After initial processing will mark all unavailable timelines [present before last invalid state] as success
     PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER.forEach((timelineStatusType, index) => {
-        // TODO: Confirm for findRight approach is fine? since, for e.g, i believe apply start should be before apply synced
         const element = findRight(data.timelines, getPredicate(timelineStatusType))
         const timelineData = deploymentData.deploymentStatusBreakdown[timelineStatusType]
 

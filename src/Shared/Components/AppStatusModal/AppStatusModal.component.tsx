@@ -79,7 +79,9 @@ const AppStatusModal = ({
                             ? appDetails.installedAppId
                             : appDetails.appId,
                     envId: appDetails.environmentId,
-                    showTimeline: selectedTab === AppStatusModalTabType.DEPLOYMENT_STATUS,
+                    showTimeline:
+                        selectedTab === AppStatusModalTabType.DEPLOYMENT_STATUS &&
+                        appDetails.deploymentAppType !== DeploymentAppTypes.HELM,
                     virtualEnvironmentConfig: appDetails.isVirtualEnvironment
                         ? {
                               processVirtualEnvironmentDeploymentData,
