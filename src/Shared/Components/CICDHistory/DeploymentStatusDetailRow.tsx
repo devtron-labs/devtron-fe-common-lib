@@ -24,7 +24,7 @@ import { AppType, TIMELINE_STATUS } from '@Shared/types'
 
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { DATE_TIME_FORMATS, showError } from '../../../Common'
-import { ComponentSizeType, DEPLOYMENT_STATUS, statusIcon } from '../../constants'
+import { ComponentSizeType, DEPLOYMENT_STATUS } from '../../constants'
 import { AppStatusContent } from '../AppStatusModal'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { APP_HEALTH_DROP_DOWN_LIST, MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
@@ -46,10 +46,6 @@ export const DeploymentStatusDetailRow = ({
 
     const statusBreakDownType = deploymentDetailedData.deploymentStatusBreakdown[type]
     const [isCollapsed, setIsCollapsed] = useState<boolean>(statusBreakDownType.isCollapsed)
-
-    const isHelmManifestPushFailed =
-        type === TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO &&
-        deploymentDetailedData.deploymentStatus === statusIcon.failed
 
     useEffect(() => {
         setIsCollapsed(statusBreakDownType.isCollapsed)
@@ -132,22 +128,6 @@ export const DeploymentStatusDetailRow = ({
         )
     }
 
-    const renderErrorInfoBar = () => {
-        if (deploymentDetailedData.lastFailedStatusType !== TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO) {
-            return null
-        }
-
-        return (
-            <div className="bcr-1 fs-13 p-8">
-                <span className="dc__word-break lh-20">{deploymentDetailedData.deploymentError}</span>
-                <ol className="m-0 pl-20">
-                    <li>Ensure provided repository path is valid</li>
-                    <li>Check if credentials provided for OCI registry are valid and have PUSH permission</li>
-                </ol>
-            </div>
-        )
-    }
-
     const isAccordion =
         statusBreakDownType.subSteps?.length ||
         (type === TIMELINE_STATUS.APP_HEALTH && APP_HEALTH_DROP_DOWN_LIST.includes(statusBreakDownType.icon)) ||
@@ -198,7 +178,7 @@ export const DeploymentStatusDetailRow = ({
         <>
             <div className="bw-1 en-2">
                 <div
-                    className={`flexbox dc__align-items-center dc__content-space dc__gap-12 py-8 px-8 bg__primary ${isCollapsed ? (!isHelmManifestPushFailed ? 'br-4' : '') : 'border-collapse'}`}
+                    className={`flexbox dc__align-items-center dc__content-space dc__gap-12 py-8 px-8 bg__primary ${isCollapsed ? 'br-4' : 'border-collapse'}`}
                 >
                     <div className="flexbox dc__align-items-center dc__gap-12 flex-grow-1">
                         {renderDeploymentTimelineIcon(statusBreakDownType.icon)}
@@ -247,7 +227,6 @@ export const DeploymentStatusDetailRow = ({
                         />
                     )}
                 </div>
-                {isHelmManifestPushFailed && renderErrorInfoBar()}
             </div>
 
             {renderAccordionDetails()}

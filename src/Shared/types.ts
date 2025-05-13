@@ -1265,7 +1265,7 @@ export interface DeploymentStatusBreakdownItemType {
     /**
      * To be shown in accordion details below heading tile
      */
-    timelineStatus?: string
+    timelineStatus?: ReactNode
     showHelmManifest?: boolean
 }
 
