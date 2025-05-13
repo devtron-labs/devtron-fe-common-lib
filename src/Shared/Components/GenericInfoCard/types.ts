@@ -20,6 +20,8 @@ import { LinkProps } from 'react-router-dom'
 import { GenericFilterEmptyStateProps } from '@Common/EmptyState/types'
 import { GenericEmptyStateType } from '@Common/Types'
 
+import { APIResponseHandlerProps } from '../APIResponseHandler'
+
 type BaseGenericInfoCardProps = {
     title: string
     description: string
@@ -58,6 +60,6 @@ export interface GenericInfoCardListingProps
     emptyStateConfig: Pick<GenericEmptyStateType, 'title' | 'subTitle' | 'image'>
     searchKey?: string
     reloadList?: () => void
-    error?: Record<string, unknown>
+    error?: APIResponseHandlerProps['error']
     isLoading?: boolean
 }

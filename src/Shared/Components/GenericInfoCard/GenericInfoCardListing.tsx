@@ -9,6 +9,7 @@ import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { GenericEmptyState, GenericFilterEmptyState } from '@Common/index'
 
 import GenericInfoCard from './GenericInfoCard.component'
+import { GenericInfoListSkeleton } from './GenericInfoListSkeleton'
 import { GenericInfoCardListingProps } from './types'
 
 export const GenericInfoCardListing = ({
@@ -31,13 +32,7 @@ export const GenericInfoCardListing = ({
     }, [searchKey, list, error])
 
     if (isLoading) {
-        return (
-            <>
-                <GenericInfoCard isLoading borderVariant={borderVariant} />
-                <GenericInfoCard isLoading borderVariant={borderVariant} />
-                <GenericInfoCard isLoading borderVariant={borderVariant} />
-            </>
-        )
+        return <GenericInfoListSkeleton borderVariant={borderVariant} />
     }
 
     if (error) {
