@@ -48,6 +48,7 @@ import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
 import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
+import { ReactComponent as ICFlask } from '@IconsV2/ic-flask.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
 import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
@@ -175,6 +176,7 @@ export const iconMap = {
     'ic-error': ICError,
     'ic-failure': ICFailure,
     'ic-file-key': ICFileKey,
+    'ic-flask': ICFlask,
     'ic-folder-user': ICFolderUser,
     'ic-gear': ICGear,
     'ic-git': ICGit,
