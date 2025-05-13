@@ -35,7 +35,6 @@ export interface PageHeaderType {
     showCloseButton?: boolean
     onClose?: () => void
     markAsBeta?: boolean
-    showAnnouncementHeader?: boolean
     tippyProps?: Pick<TippyCustomizedProps, 'additionalContent'> & {
         isTippyCustomized?: boolean
         tippyRedirectLink?: string
