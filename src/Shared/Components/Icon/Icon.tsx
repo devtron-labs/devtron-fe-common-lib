@@ -54,6 +54,7 @@ import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
+import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
 import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
@@ -199,6 +200,7 @@ export const iconMap = {
     'ic-env': ICEnv,
     'ic-error': ICError,
     'ic-expand-right-sm': ICExpandRightSm,
+    'ic-expand-sm': ICExpandSm,
     'ic-failure': ICFailure,
     'ic-file-key': ICFileKey,
     'ic-folder-user': ICFolderUser,
