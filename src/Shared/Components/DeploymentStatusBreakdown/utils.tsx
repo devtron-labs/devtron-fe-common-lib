@@ -39,7 +39,6 @@ const getDefaultDeploymentStatusTimeline = (
         deploymentStatus: WFR_STATUS_DTO_TO_DEPLOYMENT_STATUS_MAP[data?.wfrStatus] || DEPLOYMENT_STATUS.INPROGRESS,
         deploymentTriggerTime: data?.deploymentStartedOn || '',
         deploymentEndTime: data?.deploymentFinishedOn || '',
-        deploymentError: '',
         triggeredBy: data?.triggeredBy || '',
         lastFailedStatusType: '',
         deploymentStatusBreakdown: {

@@ -1273,10 +1273,6 @@ export interface DeploymentStatusDetailsBreakdownDataType {
     deploymentStatus: (typeof DEPLOYMENT_STATUS)[keyof typeof DEPLOYMENT_STATUS]
     deploymentTriggerTime: string
     deploymentEndTime: string
-    /**
-     * Only required - isHelmManifestPushFailed === true then in error bar below heading tile
-     */
-    deploymentError?: string
     triggeredBy: string
     /**
      * Only required - isHelmManifestPushFailed === true then in error bar below heading tile
