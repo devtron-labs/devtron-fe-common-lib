@@ -1159,3 +1159,5 @@ export interface IntelligenceConfig {
     prompt: string
     analyticsCategory: string
 }
+
+export type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE-GREEN'
