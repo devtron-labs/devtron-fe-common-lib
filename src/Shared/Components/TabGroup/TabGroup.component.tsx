@@ -14,16 +14,30 @@
  * limitations under the License.
  */
 
-import { Link, NavLink } from 'react-router-dom'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { getTabBadge, getTabDescription, getTabIcon, getTabIndicator } from './TabGroup.helpers'
-import { TabGroupProps, TabProps } from './TabGroup.types'
+import { AdditionalTabProps, TabGroupProps, TabProps } from './TabGroup.types'
 import { getClassNameBySizeMap, tabGroupClassMap } from './TabGroup.utils'
 
 import './TabGroup.scss'
+
+const MotionLayoutUnderline = ({ layoutId }: { layoutId: string }) => (
+    <motion.div
+        layout="position"
+        transformTemplate={(_, generatedTransform) =>
+            // Replace the y value in translate3d(x, y, z) with 0px to omit y axis transitions
+            generatedTransform.replace(/translate3d\(([^,]+),\s*[^,]+,\s*([^)]+)\)/, 'translate3d($1, 0px, $2)')
+        }
+        layoutId={layoutId}
+        className="underline bcb-5 w-100 dc__position-abs"
+    />
+)
 
 const Tab = ({
     label,
@@ -33,7 +47,6 @@ const Tab = ({
     icon,
     size,
     badge = null,
-    alignActiveBorderWithContainer,
     hideTopPadding,
     showIndicator,
     showError,
@@ -42,11 +55,23 @@ const Tab = ({
     description,
     shouldWrapTooltip,
     tooltipProps,
+    uniqueGroupId,
     iconElement,
-}: TabProps & Pick<TabGroupProps, 'size' | 'alignActiveBorderWithContainer' | 'hideTopPadding'>) => {
+}: TabProps & Pick<TabGroupProps, 'size' | 'hideTopPadding'> & AdditionalTabProps) => {
+    const { pathname, search } = useLocation()
+    const ref = useRef<HTMLAnchorElement>(null)
+    const [isTabActive, setIsTabActive] = useState(tabType === 'button' && active)
+
+    useEffect(() => {
+        if (tabType === 'navLink') {
+            setIsTabActive(ref.current?.classList.contains('active') || false)
+            return
+        }
+        setIsTabActive(active)
+    }, [active, tabType, pathname, search])
+
     const { tabClassName, iconClassName, badgeClassName } = getClassNameBySizeMap({
         hideTopPadding,
-        alignActiveBorderWithContainer,
     })[size]
 
     const onClickHandler = (
@@ -63,12 +88,14 @@ const Tab = ({
     const getTabComponent = () => {
         const content = (
             <>
-                <p className="m-0 flexbox dc__align-items-center dc__gap-6">
+                <span className="m-0 flexbox dc__align-items-center dc__gap-6">
                     {getTabIcon({ className: iconClassName, icon, showError, showWarning, size, active, iconElement })}
-                    {label}
+                    <Tooltip content={label}>
+                        <span className="dc__truncate">{label}</span>
+                    </Tooltip>
                     {getTabBadge(badge, badgeClassName)}
                     {getTabIndicator(showIndicator)}
-                </p>
+                </span>
                 {getTabDescription(description)}
             </>
         )
@@ -88,6 +115,7 @@ const Tab = ({
             case 'navLink':
                 return (
                     <NavLink
+                        ref={ref}
                         className={`${tabClassName} dc__no-decor flexbox-col tab-group__tab__nav-link ${disabled ? 'cursor-not-allowed' : ''}`}
                         aria-disabled={disabled}
                         {...props}
@@ -122,9 +150,10 @@ const Tab = ({
 
     const renderTabContainer = () => (
         <li
-            className={`tab-group__tab lh-20 ${active ? 'tab-group__tab--active cb-5 fw-6' : 'cn-9 fw-4'} ${alignActiveBorderWithContainer ? 'tab-group__tab--align-active-border' : ''} ${tabType === 'block' ? 'tab-group__tab--block' : ''} ${disabled ? 'dc__disabled' : 'cursor'}`}
+            className={`tab-group__tab lh-20 ${active ? 'cb-5 fw-6' : 'cn-9 fw-4'} ${tabType === 'block' ? 'tab-group__tab--block' : ''} ${disabled ? 'dc__disabled' : 'cursor'}`}
         >
             {getTabComponent()}
+            {isTabActive && <MotionLayoutUnderline layoutId={uniqueGroupId} />}
         </li>
     )
 
@@ -139,22 +168,27 @@ export const TabGroup = ({
     tabs = [],
     size = ComponentSizeType.large,
     rightComponent,
-    alignActiveBorderWithContainer,
     hideTopPadding,
-}: TabGroupProps) => (
-    <div className="flexbox dc__align-items-center dc__content-space">
-        <ul role="tablist" className={`tab-group flexbox dc__align-items-center p-0 m-0 ${tabGroupClassMap[size]}`}>
-            {tabs.map(({ id, ...resProps }) => (
-                <Tab
-                    key={id}
-                    id={id}
-                    size={size}
-                    alignActiveBorderWithContainer={alignActiveBorderWithContainer}
-                    hideTopPadding={hideTopPadding}
-                    {...resProps}
-                />
-            ))}
-        </ul>
-        {rightComponent || null}
-    </div>
-)
+}: TabGroupProps) => {
+    // Unique layoutId for motion.div to handle multiple tab groups on same page
+    // Using tab labels so that id remains same on re mount as well
+    const uniqueGroupId = useMemo(() => tabs.map((tab) => tab.label).join('-'), [])
+
+    return (
+        <div className="flexbox dc__align-items-center dc__content-space">
+            <ul role="tablist" className={`tab-group flexbox dc__align-items-center p-0 m-0 ${tabGroupClassMap[size]}`}>
+                {tabs.map(({ id, ...resProps }) => (
+                    <Tab
+                        key={id}
+                        id={id}
+                        size={size}
+                        hideTopPadding={hideTopPadding}
+                        uniqueGroupId={uniqueGroupId}
+                        {...resProps}
+                    />
+                ))}
+            </ul>
+            {rightComponent || null}
+        </div>
+    )
+}

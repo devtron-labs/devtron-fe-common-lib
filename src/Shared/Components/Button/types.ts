@@ -35,6 +35,8 @@ export enum ButtonStyleType {
     positive = 'positive',
     warning = 'warning',
     neutral = 'neutral',
+    neutralN0 = 'neutral-n0',
+    neutralWhite = 'neutral-white',
 }
 
 export enum ButtonComponentType {

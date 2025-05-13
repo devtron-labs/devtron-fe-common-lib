@@ -65,7 +65,6 @@ export const URLS = {
     CREATE_JOB: 'create-job',
     GETTING_STARTED: 'getting-started',
     STACK_MANAGER_ABOUT: '/stack-manager/about',
-    APP_LIST_HELM: 'h',
     APP_CI_DETAILS: 'ci-details',
     LOGS: 'Logs',
     CREATE: '/create',

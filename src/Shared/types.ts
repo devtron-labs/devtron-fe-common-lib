@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { ReactNode } from 'react'
 import { ParsedCountry } from 'react-international-phone'
 import { Dayjs } from 'dayjs'
 
@@ -308,6 +309,8 @@ export interface WorkflowType {
     showTippy?: boolean
     appId?: number
     isSelected?: boolean
+    isExceptionUser?: boolean
+    canApproverDeploy?: boolean
     approvalConfiguredIdsMap?: Record<number, ApprovalConfigDataType>
     imageReleaseTags: string[]
     appReleaseTags?: string[]
@@ -1189,6 +1192,7 @@ export interface DeploymentStatusDetailsType {
     statusLastFetchedAt: string
     timelines: DeploymentStatusDetailsTimelineType[]
     wfrStatus?: string
+    isDeploymentWithoutApproval: boolean
 }
 
 export enum TIMELINE_STATUS {
@@ -1246,7 +1250,7 @@ export enum DeploymentPhaseType {
 
 export interface DeploymentStatusBreakdownItemType {
     icon: DeploymentStatusBreakdownItemIconType
-    displayText: string
+    displayText: ReactNode
     displaySubText: string
     time: string
     /**
@@ -1279,4 +1283,11 @@ export interface DeploymentStatusDetailsBreakdownDataType {
      */
     lastFailedStatusType?: DeploymentStatusTimelineType | ''
     deploymentStatusBreakdown: Partial<Record<DeploymentStatusTimelineType, DeploymentStatusBreakdownItemType>>
+}
+
+export interface IntelligenceConfig {
+    clusterId: number
+    metadata: Record<string, string>
+    prompt: string
+    analyticsCategory: string
 }

@@ -43,6 +43,7 @@ import {
     ToastVariantType,
     versionComparatorBySortOrder,
     WebhookEventNameType,
+    AppType,
 } from '../Shared'
 import { ReactComponent as ArrowDown } from '@Icons/ic-chevron-down.svg'
 import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
@@ -1103,6 +1104,25 @@ export const getTTLInHumanReadableFormat = (ttl: number): string => {
     // Since moment.js return "a" or "an" for singular values so replacing with 1.
     return humanizedDuration.replace(/^(a|an) /, '1 ')
 }
+
+const getAppTypeCategory = (appType: AppType) => {
+    switch (appType) {
+        case AppType.DEVTRON_APP:
+            return 'DA'
+        case AppType.DEVTRON_HELM_CHART:
+        case AppType.EXTERNAL_HELM_CHART:
+            return 'HA'
+        case AppType.EXTERNAL_ARGO_APP:
+            return 'ACD'
+        case AppType.EXTERNAL_FLUX_APP:
+            return 'FCD'
+        default:
+            return 'DA'
+    }
+}
+
+export const getAIAnalyticsEvents = (context: string, appType?: AppType) =>
+    `AI_${appType ? `${getAppTypeCategory(appType)}_` : ''}${context}`
 
 export const findRight = <T,>(arr: T[], predicate: (item: T) => boolean): T => {
     for (let i = arr.length - 1; i >= 0; i--) {

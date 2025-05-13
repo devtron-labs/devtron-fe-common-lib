@@ -30,7 +30,7 @@ export interface IconBaseProps {
      * The size of the icon in pixels.
      * @default 16
      */
-    size?: IconBaseSizeType
+    size?: IconBaseSizeType | null
     /** Props to configure the tooltip when hovering over the icon. */
     tooltipProps?: TooltipProps
     /**

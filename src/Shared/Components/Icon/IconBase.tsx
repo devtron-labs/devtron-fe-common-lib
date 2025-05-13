@@ -39,7 +39,7 @@ export const IconBase = ({ name, iconMap, size = 16, tooltipProps, color, dataTe
         <ConditionalWrap condition={!!tooltipProps?.content} wrap={conditionalWrap(tooltipProps)}>
             <IconComponent
                 data-testid={dataTestId}
-                className={`icon-dim-${size} ${color ? 'icon-component-color' : ''} ${ICON_STROKE_WIDTH_MAP[size] ? 'icon-component-stroke-width' : ''}  dc__no-shrink`}
+                className={`${size ? `icon-dim-${size}` : ''} ${color ? 'icon-component-color' : ''} ${ICON_STROKE_WIDTH_MAP[size] ? 'icon-component-stroke-width' : ''} dc__no-shrink`}
                 style={{
                     ...(color ? { ['--iconColor' as string]: `var(--${color})` } : {}),
                     ...(ICON_STROKE_WIDTH_MAP[size]

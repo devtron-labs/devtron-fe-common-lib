@@ -1,15 +1,17 @@
 import { ComponentProps, PropsWithChildren, ReactNode } from 'react'
 
+import { getAIAnalyticsEvents } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { getAppDetailsURL } from '@Shared/Helpers'
+import { AppType } from '@Shared/types'
 
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { DeploymentStatusDetailBreakdown } from '../CICDHistory'
 import { ErrorBar } from '../Error'
 import { Icon } from '../Icon'
 import { ShowMoreText } from '../ShowMoreText'
-import { AppStatus, DeploymentStatus } from '../StatusComponent'
+import { AppStatus, DeploymentStatus, StatusType } from '../StatusComponent'
 import AppStatusContent from './AppStatusContent'
 import { APP_STATUS_CUSTOM_MESSAGES } from './constants'
 import { AppStatusBodyProps, AppStatusModalTabType } from './types'
@@ -41,24 +43,33 @@ const StatusHeadingContainer = ({
     type,
     appId,
     envId,
-}: PropsWithChildren<Pick<AppStatusBodyProps, 'type'>> & { appId: number; envId?: number }) => (
+    actionButton,
+}: PropsWithChildren<Pick<AppStatusBodyProps, 'type'>> & {
+    appId: number
+    envId?: number
+    actionButton?: ReactNode
+}) => (
     <div className="flexbox dc__content-space w-100">
         {children}
-        {type === 'release' ? (
-            <Button
-                dataTestId="visit-app-details"
-                component={ButtonComponentType.link}
-                variant={ButtonVariantType.secondary}
-                size={ComponentSizeType.xs}
-                endIcon={<Icon name="ic-arrow-square-out" color={null} />}
-                text="Visit app"
-                linkProps={{
-                    to: getAppDetailsURL(appId, envId),
-                    target: '_blank',
-                    rel: 'noopener noreferrer',
-                }}
-            />
-        ) : null}
+
+        <div className="flexbox dc__align-items-center dc__gap-4">
+            {actionButton}
+            {type === 'release' ? (
+                <Button
+                    dataTestId="visit-app-details"
+                    component={ButtonComponentType.link}
+                    variant={ButtonVariantType.secondary}
+                    size={ComponentSizeType.xs}
+                    endIcon={<Icon name="ic-arrow-square-out" color={null} />}
+                    text="Visit app"
+                    linkProps={{
+                        to: getAppDetailsURL(appId, envId),
+                        target: '_blank',
+                        rel: 'noopener noreferrer',
+                    }}
+                />
+            ) : null}
+        </div>
     </div>
 )
 
@@ -68,6 +79,7 @@ export const AppStatusBody = ({
     handleShowConfigDriftModal,
     deploymentStatusDetailsBreakdownData,
     selectedTab,
+    debugWithAIButton: ExplainWithAIButton,
 }: AppStatusBodyProps) => {
     const appStatus = appDetails.resourceTree?.status?.toUpperCase() || appDetails.appStatus
 
@@ -78,12 +90,42 @@ export const AppStatusBody = ({
                 ? 'The installation will complete when status for all the below resources become HEALTHY.'
                 : APP_STATUS_CUSTOM_MESSAGES[appStatus]
 
+        const debugNode = appDetails.resourceTree?.nodes?.find(
+            (node) => node.kind === 'Deployment' || node.kind === 'Rollout',
+        )
+        const debugObject = `${debugNode?.kind}/${debugNode?.name}`
+
         return [
             {
                 id: `app-status-${1}`,
                 heading: type !== 'stack-manager' ? 'Application Status' : 'Status',
                 value: (
-                    <StatusHeadingContainer type={type} appId={appDetails.appId} envId={appDetails.environmentId}>
+                    <StatusHeadingContainer
+                        type={type}
+                        appId={appDetails.appId}
+                        envId={appDetails.environmentId}
+                        actionButton={
+                            ExplainWithAIButton &&
+                            appDetails.appStatus?.toLowerCase() !== StatusType.HEALTHY.toLowerCase() &&
+                            (debugNode || message) ? (
+                                <ExplainWithAIButton
+                                    intelligenceConfig={{
+                                        clusterId: appDetails.clusterId,
+                                        metadata: {
+                                            ...(debugNode ? { object: debugObject } : { message }),
+                                            namespace: appDetails.namespace,
+                                            status: debugNode?.health?.status ?? appDetails.appStatus,
+                                        },
+                                        prompt: `Debug ${message || 'error'} ${debugNode ? `of ${debugObject}` : ''} in ${appDetails.namespace}`,
+                                        analyticsCategory: getAIAnalyticsEvents(
+                                            'APP_STATUS',
+                                            appDetails.appStatus as AppType,
+                                        ),
+                                    }}
+                                />
+                            ) : null
+                        }
+                    >
                         {appStatus ? <AppStatus status={appStatus} showAnimatedIcon /> : '--'}
                     </StatusHeadingContainer>
                 ),

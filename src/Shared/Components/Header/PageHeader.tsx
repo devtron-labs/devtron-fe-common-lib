@@ -26,7 +26,6 @@ import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintb
 import { getAlphabetIcon, TippyCustomized, TippyTheme } from '../../../Common'
 import { MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING } from '../../../Common/Constants'
 import { useMainContext, useTheme, useUserEmail } from '../../Providers'
-import AnnouncementBanner from '../AnnouncementBanner/AnnouncementBanner'
 import GettingStartedCard from '../GettingStartedCard/GettingStarted'
 import { InfoIconTippy } from '../InfoIconTippy'
 import LogoutCard from '../LogoutCard'
@@ -49,7 +48,6 @@ const PageHeader = ({
     showCloseButton = false,
     onClose,
     markAsBeta,
-    showAnnouncementHeader,
     tippyProps,
 }: PageHeaderType) => {
     const {
@@ -313,7 +311,6 @@ const PageHeader = ({
                     {renderLogoutHelpSection()}
                 </div>
             )}
-            {showAnnouncementHeader && <AnnouncementBanner parentClassName="page-header-banner" />}
         </div>
     )
 }

@@ -191,6 +191,7 @@ export interface History extends Pick<TargetPlatformsDTO, 'targetPlatforms'>, Wo
     triggerMetadata?: string
     runSource?: RunSourceType
     targetConfig?: TargetConfigType
+    isDeploymentWithoutApproval?: boolean
 }
 
 export interface ExecutionInfoType {
@@ -376,7 +377,7 @@ export type FinishedType = { artifact: string; type: HistoryComponentType } & (
 
 export type DeploymentStatusDetailsResponse = ResponseType<DeploymentStatusDetailsType>
 
-export interface DeploymentDetailStepsType {
+export interface DeploymentDetailStepsType extends Pick<History, 'isDeploymentWithoutApproval'> {
     deploymentStatus?: string
     deploymentAppType?: DeploymentAppTypes
     isHelmApps?: boolean
@@ -390,7 +391,7 @@ export interface DeploymentDetailStepsType {
     renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
 }
 
-export interface RenderCIListHeaderProps {
+export interface RenderCIListHeaderProps extends Required<Pick<History, 'isDeploymentWithoutApproval'>> {
     userApprovalMetadata: UserApprovalMetadataType
     triggeredBy: string
     appliedFilters: FilterConditionsListType[]
@@ -410,7 +411,7 @@ export interface VirtualHistoryArtifactProps {
     }
 }
 
-export type CIListItemType = Pick<History, 'promotionApprovalMetadata'> & {
+export type CIListItemType = Pick<History, 'promotionApprovalMetadata' | 'isDeploymentWithoutApproval'> & {
     userApprovalMetadata?: UserApprovalMetadataType
     triggeredBy?: string
     children: ReactNode
@@ -679,6 +680,7 @@ export type GitChangesType = {
           appliedFilters?: never
           appliedFiltersTimestamp?: never
           renderCIListHeader?: never
+          isDeploymentWithoutApproval?: never
       }
     | {
           artifact: string
@@ -697,6 +699,7 @@ export type GitChangesType = {
           appliedFilters?: FilterConditionsListType[]
           appliedFiltersTimestamp?: string
           renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+          isDeploymentWithoutApproval?: History['isDeploymentWithoutApproval']
       }
 )
 

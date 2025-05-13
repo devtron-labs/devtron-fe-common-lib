@@ -43,6 +43,7 @@ const DeploymentDetailSteps = ({
     isVirtualEnvironment,
     processVirtualEnvironmentDeploymentData,
     renderDeploymentApprovalInfo,
+    isDeploymentWithoutApproval,
 }: DeploymentDetailStepsType) => {
     const history = useHistory()
     const { url } = useRouteMatch()
@@ -52,6 +53,8 @@ const DeploymentDetailSteps = ({
     )
     const appDetails = IndexStore.getAppDetails()
     const isVirtualEnv = useRef(isVirtualEnvironment)
+    const isDeploymentWithoutApprovalRef = useRef(isDeploymentWithoutApproval)
+
     const processedData =
         isVirtualEnv.current && processVirtualEnvironmentDeploymentData
             ? processVirtualEnvironmentDeploymentData()
@@ -70,7 +73,10 @@ const DeploymentDetailSteps = ({
             .then((deploymentStatusDetailRes) => {
                 if (deploymentStatus !== 'Aborted') {
                     // eslint-disable-next-line no-use-before-define
-                    processDeploymentStatusData(deploymentStatusDetailRes.result)
+                    processDeploymentStatusData({
+                        ...deploymentStatusDetailRes.result,
+                        isDeploymentWithoutApproval: isDeploymentWithoutApprovalRef.current,
+                    })
                 }
             })
             .catch(() => {
@@ -97,6 +103,10 @@ const DeploymentDetailSteps = ({
     useEffect(() => {
         isVirtualEnv.current = isVirtualEnvironment
     }, [isVirtualEnvironment])
+
+    useEffect(() => {
+        isDeploymentWithoutApprovalRef.current = isDeploymentWithoutApproval
+    }, [isDeploymentWithoutApproval])
 
     const processDeploymentStatusData = (deploymentStatusDetailRes: DeploymentStatusDetailsType): void => {
         const processedDeploymentStatusDetailsData =

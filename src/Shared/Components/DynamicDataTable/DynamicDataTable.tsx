@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 import { DynamicDataTableHeader } from './DynamicDataTableHeader'
 import { DynamicDataTableRow } from './DynamicDataTableRow'
@@ -24,14 +24,30 @@ import './styles.scss'
 
 export const DynamicDataTable = <K extends string, CustomStateType = Record<string, unknown>>({
     headers,
+    onRowAdd,
     ...props
 }: DynamicDataTableProps<K, CustomStateType>) => {
+    // STATES
+    const [isAddRowButtonClicked, setIsAddRowButtonClicked] = useState(false)
+
+    // CONSTANTS
     const filteredHeaders = useMemo(() => headers.filter(({ isHidden }) => !isHidden), [headers])
+
+    // HANDLERS
+    const handleRowAdd = () => {
+        setIsAddRowButtonClicked(true)
+        onRowAdd()
+    }
 
     return (
         <div className="w-100">
-            <DynamicDataTableHeader headers={filteredHeaders} {...props} />
-            <DynamicDataTableRow headers={filteredHeaders} {...props} />
+            <DynamicDataTableHeader headers={filteredHeaders} onRowAdd={handleRowAdd} {...props} />
+            <DynamicDataTableRow
+                headers={filteredHeaders}
+                isAddRowButtonClicked={isAddRowButtonClicked}
+                setIsAddRowButtonClicked={setIsAddRowButtonClicked}
+                {...props}
+            />
         </div>
     )
 }

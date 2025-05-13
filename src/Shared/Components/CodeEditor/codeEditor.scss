@@ -175,6 +175,10 @@
         max-width: 300px;
     }
 
+    .cm-tooltip-autocomplete {
+        background-color: var(--bg-primary);
+    }
+
     .cm-diagnostic-error {
         border-top-left-radius: 2px;
         border-bottom-left-radius: 2px;

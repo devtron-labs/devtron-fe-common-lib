@@ -172,13 +172,12 @@ export interface TabGroupProps {
      */
     rightComponent?: React.ReactElement
     /**
-     * Set to `true` to align the active tab's border with the bottom border of the parent container.
-     * @default false
-     */
-    alignActiveBorderWithContainer?: boolean
-    /**
      * Determines if the top padding of the tab group should be hidden.
      * @default false
      */
     hideTopPadding?: boolean
+}
+
+export type AdditionalTabProps = {
+    uniqueGroupId: string
 }

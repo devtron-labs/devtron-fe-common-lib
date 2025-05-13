@@ -20,12 +20,14 @@ import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
+import { DeploymentAppTypes } from '@Common/Types'
 import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 
 import { DeploymentStatusBreakdownItemType, Node, ResourceKindType, WorkflowStatusEnum } from '../../types'
 import { Icon } from '../Icon'
 import { AppStatus, DeploymentStatus, StatusType } from '../StatusComponent'
+import { TabGroupProps } from '../TabGroup'
 import {
     DEFAULT_CLUSTER_ID,
     DEFAULT_NAMESPACE,
@@ -36,6 +38,7 @@ import {
     DeploymentHistory,
     DeploymentHistoryResultObject,
     ExecutionInfoType,
+    History,
     NodeFilters,
     NodeStatus,
     PodExecutionStageDTO,
@@ -367,9 +370,9 @@ export const renderDeploymentTimelineIcon = (iconState: DeploymentStatusBreakdow
         case 'loading':
             return <Icon {...iconBaseProps} name="ic-circle-loader" color="O500" />
         case 'disconnect':
-            return <Icon {...iconBaseProps} name="ic-disconnect" />
+            return <Icon {...iconBaseProps} name="ic-disconnect" color="R500" />
         case 'timed_out':
-            return <Icon {...iconBaseProps} name="ic-timeout-two-dash" color="R500" />
+            return <Icon {...iconBaseProps} name="ic-timeout-dash" color="R500" />
         default:
             return <Icon {...iconBaseProps} name="ic-timer" color="N600" />
     }
@@ -390,3 +393,69 @@ export const getDeploymentTimelineBGColorFromIcon = (icon: DeploymentStatusBreak
             return 'bcn-1 cn-9'
     }
 }
+export const getTriggerOutputTabs = (
+    triggerDetails: History,
+    deploymentAppType: DeploymentAppTypes,
+): TabGroupProps['tabs'] => [
+    ...(triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM
+        ? [
+              {
+                  id: 'deployment-history-steps-link',
+                  label: 'Steps',
+                  tabType: 'navLink' as const,
+                  props: {
+                      to: 'deployment-steps',
+                      'data-testid': 'deployment-history-steps-link',
+                  },
+              },
+          ]
+        : []),
+    ...(!(triggerDetails.stage === 'DEPLOY' || triggerDetails.IsVirtualEnvironment)
+        ? [
+              {
+                  id: 'deployment-history-logs-link',
+                  label: 'Logs',
+                  tabType: 'navLink' as const,
+                  props: {
+                      to: 'logs',
+                      'data-testid': 'deployment-history-logs-link',
+                  },
+              },
+          ]
+        : []),
+    {
+        id: 'deployment-history-source-code-link',
+        label: 'Source',
+        tabType: 'navLink',
+        props: {
+            to: 'source-code',
+            'data-testid': 'deployment-history-source-code-link',
+        },
+    },
+    ...(triggerDetails.stage === 'DEPLOY'
+        ? [
+              {
+                  id: 'deployment-history-configuration-link',
+                  label: 'Configuration',
+                  tabType: 'navLink' as const,
+                  props: {
+                      to: 'configuration',
+                      'data-testid': 'deployment-history-configuration-link',
+                  },
+              },
+          ]
+        : []),
+    ...(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment
+        ? [
+              {
+                  id: 'deployment-history-artifacts-link',
+                  label: 'Artifacts',
+                  tabType: 'navLink' as const,
+                  props: {
+                      to: 'artifacts',
+                      'data-testid': 'deployment-history-artifacts-link',
+                  },
+              },
+          ]
+        : []),
+]

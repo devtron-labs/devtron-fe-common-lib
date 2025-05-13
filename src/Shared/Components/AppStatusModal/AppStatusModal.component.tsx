@@ -35,6 +35,7 @@ const AppStatusModal = ({
     appId,
     envId,
     initialTab,
+    debugWithAIButton,
 }: AppStatusModalProps) => {
     const [showConfigDriftModal, setShowConfigDriftModal] = useState(false)
     const [selectedTab, setSelectedTab] = useState<AppStatusModalTabType>(initialTab || null)
@@ -288,6 +289,7 @@ const AppStatusModal = ({
                     handleShowConfigDriftModal={handleShowConfigDriftModal}
                     deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}
                     selectedTab={selectedTab}
+                    debugWithAIButton={debugWithAIButton}
                 />
 
                 {type === 'stack-manager' && (

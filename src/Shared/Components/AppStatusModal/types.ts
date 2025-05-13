@@ -6,6 +6,7 @@ import {
     ConfigDriftModalProps,
     DeploymentStatusDetailsBreakdownDataType,
     DeploymentStatusDetailsType,
+    IntelligenceConfig,
 } from '@Shared/types'
 
 export enum AppStatusModalTabType {
@@ -21,6 +22,7 @@ export type AppStatusModalProps = {
     processVirtualEnvironmentDeploymentData: (
         data?: DeploymentStatusDetailsType,
     ) => DeploymentStatusDetailsBreakdownDataType
+    debugWithAIButton: FunctionComponent<{ intelligenceConfig: IntelligenceConfig }>
 } & (
     | {
           type: 'release'
@@ -40,7 +42,8 @@ export type AppStatusModalProps = {
       }
 )
 
-export interface AppStatusBodyProps extends Required<Pick<AppStatusModalProps, 'appDetails' | 'type'>> {
+export interface AppStatusBodyProps
+    extends Required<Pick<AppStatusModalProps, 'appDetails' | 'type' | 'debugWithAIButton'>> {
     handleShowConfigDriftModal: () => void
     selectedTab: AppStatusModalTabType
     deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType
