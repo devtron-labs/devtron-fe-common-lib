@@ -3,9 +3,7 @@ import { HTMLMotionProps } from 'framer-motion'
 import { UsePopoverProps } from './types'
 
 export const getPopoverAlignmentStyle = ({ position, alignment }: Pick<UsePopoverProps, 'position' | 'alignment'>) => {
-    const isYDirection = position === 'top' || position === 'bottom'
-
-    if (isYDirection) {
+    if (position === 'top' || position === 'bottom') {
         switch (alignment) {
             case 'end':
                 return { right: 0 }
@@ -43,10 +41,9 @@ export const getPopoverPositionStyle = ({ position }: Pick<UsePopoverProps, 'pos
 }
 
 export const getPopoverFramerProps = ({ position, alignment }: Pick<UsePopoverProps, 'position' | 'alignment'>) => {
-    const isYDirection = position === 'top' || position === 'bottom'
     const isMiddleAlignment = alignment === 'middle'
 
-    if (isYDirection) {
+    if (position === 'top' || position === 'bottom') {
         const initialY = position === 'bottom' ? -12 : 12
 
         return {
@@ -99,23 +96,22 @@ export const getPopoverActualPositionAlignment = ({
         (fits.left && 'left') ||
         position
 
-    const isYDirection = fallbackPosition === 'top' || fallbackPosition === 'bottom'
-
-    const fitsAlign = isYDirection
-        ? {
-              start: triggerRect.left + popoverRect.width <= window.innerWidth,
-              middle:
-                  triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2 >= 0 &&
-                  triggerRect.left + triggerRect.width / 2 + popoverRect.width / 2 <= window.innerWidth,
-              end: triggerRect.right - popoverRect.width >= 0,
-          }
-        : {
-              start: triggerRect.top + popoverRect.height <= window.innerHeight,
-              middle:
-                  triggerRect.top + triggerRect.height / 2 - popoverRect.height / 2 >= 0 &&
-                  triggerRect.top + triggerRect.height / 2 + popoverRect.height / 2 <= window.innerHeight,
-              end: triggerRect.bottom - popoverRect.height >= 0,
-          }
+    const fitsAlign =
+        fallbackPosition === 'top' || fallbackPosition === 'bottom'
+            ? {
+                  start: triggerRect.left + popoverRect.width <= window.innerWidth,
+                  middle:
+                      triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2 >= 0 &&
+                      triggerRect.left + triggerRect.width / 2 + popoverRect.width / 2 <= window.innerWidth,
+                  end: triggerRect.right - popoverRect.width >= 0,
+              }
+            : {
+                  start: triggerRect.top + popoverRect.height <= window.innerHeight,
+                  middle:
+                      triggerRect.top + triggerRect.height / 2 - popoverRect.height / 2 >= 0 &&
+                      triggerRect.top + triggerRect.height / 2 + popoverRect.height / 2 <= window.innerHeight,
+                  end: triggerRect.bottom - popoverRect.height >= 0,
+              }
 
     const fallbackAlignment =
         (fitsAlign[alignment] && alignment) ||
