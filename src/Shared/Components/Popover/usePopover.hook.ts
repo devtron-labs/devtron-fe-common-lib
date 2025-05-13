@@ -8,8 +8,6 @@ import {
     getPopoverPositionStyle,
 } from './utils'
 
-const POPOVER_Z_INDEX_CLASS = 'dc__zi-20'
-
 export const usePopover = ({
     id,
     position = 'bottom',
@@ -106,13 +104,13 @@ export const usePopover = ({
         overlayProps: {
             role: 'dialog',
             onClick: closePopover,
-            className: `dc__position-fixed dc__top-0 dc__right-0 dc__left-0 dc__bottom-0 ${POPOVER_Z_INDEX_CLASS}`,
+            className: 'popover-overlay',
         },
         popoverProps: {
             id,
             ref: popover,
             role: 'listbox',
-            className: `dc__position-abs bg__menu--primary shadow__menu border__primary br-6 dc__overflow-hidden ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''} ${POPOVER_Z_INDEX_CLASS}`,
+            className: `popover-content dc__position-abs bg__menu--primary shadow__menu border__primary br-6 dc__overflow-hidden ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''}`,
             onKeyDown: handlePopoverKeyDown,
             style: {
                 width: !isAutoWidth ? `${width}px` : undefined,

@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from '../Button'
 import { PopoverProps } from './types'
 
+import './popover.scss'
+
 /**
  * Popover Component \
  * This component serves as a base for creating popovers. It is not intended to be used directly.
