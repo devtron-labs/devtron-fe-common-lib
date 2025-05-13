@@ -173,6 +173,7 @@ export interface ResourceTree {
     podMetadata: Array<PodMetaData>
     status: string
     resourcesSyncResult?: Record<string, string>
+    wfrId?: number
 }
 
 export enum AppType {

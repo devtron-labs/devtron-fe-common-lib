@@ -9,49 +9,67 @@ import {
 } from '@Shared/types'
 
 import { processDeploymentStatusDetailsData } from '../DeploymentStatusBreakdown'
-import { GetAppDetailsParamsType } from './types'
+import { GetAppDetailsParamsType, GetDeploymentStatusWithTimelineParamsType } from './types'
 
 export const getAppDetails = async ({
     appId,
     envId,
     abortControllerRef,
-    deploymentStatusConfig,
-}: GetAppDetailsParamsType): Promise<{
-    appDetails: AppDetails
-    deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType
-}> => {
+}: GetAppDetailsParamsType): Promise<AppDetails> => {
     try {
         const queryParams = getUrlWithSearchParams('', {
             'app-id': appId,
             'env-id': envId,
         })
 
-        const [appDetails, resourceTree, deploymentStatusDetails] = await Promise.all([
+        const [appDetails, resourceTree] = await Promise.all([
             get<Omit<AppDetails, 'resourceTree'>>(`${ROUTES.APP_DETAIL}/v2${queryParams}`, {
                 abortControllerRef,
             }),
             get<AppDetails['resourceTree']>(`${ROUTES.APP_DETAIL}/resource-tree${queryParams}`, {
                 abortControllerRef,
             }),
-            deploymentStatusConfig
-                ? get<DeploymentStatusDetailsType>(
-                      getUrlWithSearchParams(`${ROUTES.DEPLOYMENT_STATUS}/${appId}/${envId}`, {
-                          showTimeline: deploymentStatusConfig.showTimeline,
-                      }),
-                  )
-                : null,
         ])
 
         return {
-            appDetails: {
-                ...(appDetails.result || ({} as AppDetails)),
-                resourceTree: resourceTree.result,
-                appType: AppType.DEVTRON_APP,
-            },
-            deploymentStatusDetailsBreakdownData: appDetails.result?.isVirtualEnvironment
-                ? deploymentStatusConfig.processVirtualEnvironmentDeploymentData(deploymentStatusDetails.result)
-                : processDeploymentStatusDetailsData(deploymentStatusDetails.result),
+            ...(appDetails.result || ({} as AppDetails)),
+            resourceTree: resourceTree.result,
+            appType: AppType.DEVTRON_APP,
         }
+    } catch (error) {
+        if (!getIsRequestAborted(error)) {
+            showError(error)
+        }
+        throw error
+    }
+}
+
+export const getDeploymentStatusWithTimeline = async ({
+    abortControllerRef,
+    appId,
+    envId,
+    showTimeline,
+    virtualEnvironmentConfig,
+    isHelmApp,
+}: GetDeploymentStatusWithTimelineParamsType): Promise<DeploymentStatusDetailsBreakdownDataType> => {
+    try {
+        const baseURL = isHelmApp ? ROUTES.HELM_DEPLOYMENT_STATUS_TIMELINE_INSTALLED_APP : ROUTES.DEPLOYMENT_STATUS
+
+        const deploymentStatusDetailsResponse = await get<DeploymentStatusDetailsType>(
+            getUrlWithSearchParams(`${baseURL}/${appId}/${envId}`, {
+                showTimeline,
+                ...(virtualEnvironmentConfig && {
+                    wfrId: virtualEnvironmentConfig.wfrId,
+                }),
+            }),
+            {
+                abortControllerRef,
+            },
+        )
+
+        return virtualEnvironmentConfig
+            ? virtualEnvironmentConfig.processVirtualEnvironmentDeploymentData(deploymentStatusDetailsResponse.result)
+            : processDeploymentStatusDetailsData(deploymentStatusDetailsResponse.result)
     } catch (error) {
         if (!getIsRequestAborted(error)) {
             showError(error)

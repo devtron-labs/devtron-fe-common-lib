@@ -18,35 +18,32 @@ export type AppStatusModalProps = {
     handleClose: () => void
     isConfigDriftEnabled: boolean
     configDriftModal: FunctionComponent<ConfigDriftModalProps>
+    processVirtualEnvironmentDeploymentData: (
+        data?: DeploymentStatusDetailsType,
+    ) => DeploymentStatusDetailsBreakdownDataType
 } & (
     | {
           type: 'release'
-          processVirtualEnvironmentDeploymentData: (
-              data?: DeploymentStatusDetailsType,
-          ) => DeploymentStatusDetailsBreakdownDataType
           appId: number
           envId: number
           appDetails?: never
-          deploymentStatusDetailsBreakdownData?: never
           initialTab?: never
-          isDeploymentTimelineLoading?: never
+          handleUpdateDeploymentStatusDetailsBreakdownData?: never
       }
     | {
           type: 'devtron-app' | 'other-apps' | 'stack-manager'
           appDetails: AppDetails
-          deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType | null
           initialTab: AppStatusModalTabType
-          isDeploymentTimelineLoading?: boolean
-          processVirtualEnvironmentDeploymentData?: never
+          handleUpdateDeploymentStatusDetailsBreakdownData: (data: DeploymentStatusDetailsBreakdownDataType) => void
           appId?: never
           envId?: never
       }
 )
 
-export interface AppStatusBodyProps
-    extends Required<Pick<AppStatusModalProps, 'appDetails' | 'type' | 'deploymentStatusDetailsBreakdownData'>> {
+export interface AppStatusBodyProps extends Required<Pick<AppStatusModalProps, 'appDetails' | 'type'>> {
     handleShowConfigDriftModal: () => void
     selectedTab: AppStatusModalTabType
+    deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType
 }
 
 export interface AppStatusContentProps
@@ -71,17 +68,24 @@ export interface GetFilteredFlattenedNodesFromAppDetailsParamsType
 export interface GetAppDetailsParamsType extends Pick<APIOptions, 'abortControllerRef'> {
     appId: number
     envId: number
-    /**
-     * If given would fetch deploymentConfig
-     */
-    deploymentStatusConfig: {
-        showTimeline: boolean
-        processVirtualEnvironmentDeploymentData: AppStatusModalProps['processVirtualEnvironmentDeploymentData']
-    } | null
 }
 
-export interface AppStatusModalTabListProps
-    extends Pick<AppStatusModalProps, 'appDetails' | 'type' | 'deploymentStatusDetailsBreakdownData'> {
+export type GetDeploymentStatusWithTimelineParamsType = Pick<APIOptions, 'abortControllerRef'> & {
+    /**
+     * Incase of helm apps this is installed app id
+     */
+    appId: number
+    envId: number
+    showTimeline: boolean
+    virtualEnvironmentConfig?: {
+        processVirtualEnvironmentDeploymentData: AppStatusModalProps['processVirtualEnvironmentDeploymentData']
+        wfrId: AppDetails['resourceTree']['wfrId']
+    }
+    isHelmApp?: boolean
+}
+
+export interface AppStatusModalTabListProps extends Pick<AppStatusModalProps, 'appDetails' | 'type'> {
     handleSelectTab: (updatedTab: AppStatusModalTabType) => void
     selectedTab: AppStatusModalTabType
+    deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType
 }

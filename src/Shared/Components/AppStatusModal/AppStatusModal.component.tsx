@@ -8,28 +8,28 @@ import { GenericEmptyState } from '@Common/EmptyState'
 import { handleUTCTime, stopPropagation, useAsync } from '@Common/Helper'
 import { DeploymentAppTypes } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
+import { AppType } from '@Shared/types'
 
 import { APIResponseHandler } from '../APIResponseHandler'
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
+import { PROGRESSING_DEPLOYMENT_STATUS } from '../DeploymentStatusBreakdown'
 import { Icon } from '../Icon'
 import { DeploymentStatus } from '../StatusComponent'
 import { AppStatusBody } from './AppStatusBody'
 import AppStatusModalTabList from './AppStatusModalTabList'
-import { getAppDetails } from './service'
+import { getAppDetails, getDeploymentStatusWithTimeline } from './service'
 import { AppStatusModalProps, AppStatusModalTabType } from './types'
 import { getEmptyViewImageFromHelmDeploymentStatus, getShowDeploymentStatusModal } from './utils'
 
 import './AppStatusModal.scss'
 
-// TODO: Need to handleTabChange for appDetails view since polling is external
 const AppStatusModal = ({
     titleSegments,
     handleClose,
     type,
-    isDeploymentTimelineLoading,
     appDetails: appDetailsProp,
-    deploymentStatusDetailsBreakdownData: deploymentStatusDetailsBreakdownDataProps,
     processVirtualEnvironmentDeploymentData,
+    handleUpdateDeploymentStatusDetailsBreakdownData,
     isConfigDriftEnabled,
     configDriftModal: ConfigDriftModal,
     appId,
@@ -39,8 +39,8 @@ const AppStatusModal = ({
     const [showConfigDriftModal, setShowConfigDriftModal] = useState(false)
     const [selectedTab, setSelectedTab] = useState<AppStatusModalTabType>(initialTab || null)
 
-    const abortControllerRef = useRef<AbortController>(new AbortController())
-    const pollingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+    const appDetailsAbortControllerRef = useRef<AbortController>(new AbortController())
+    const appDetailsPollingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     const getAppDetailsWrapper = async () => {
         const response = await abortPreviousRequests(
@@ -48,12 +48,10 @@ const AppStatusModal = ({
                 getAppDetails({
                     appId,
                     envId,
-                    abortControllerRef,
-                    deploymentStatusConfig: { showTimeline: false, processVirtualEnvironmentDeploymentData },
+                    abortControllerRef: appDetailsAbortControllerRef,
                 }),
-            abortControllerRef,
+            appDetailsAbortControllerRef,
         )
-
         return response
     }
 
@@ -65,35 +63,97 @@ const AppStatusModal = ({
         setFetchedAppDetails,
     ] = useAsync(getAppDetailsWrapper, [appId, envId], type === 'release')
 
-    const handleExternalSync = async () => {
-        try {
-            pollingTimeoutRef.current = setTimeout(
-                async () => {
-                    const response = await getAppDetailsWrapper()
-                    setFetchedAppDetails(response)
-                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                    handleExternalSync()
-                },
-                Number(window._env_.DEVTRON_APP_DETAILS_POLLING_INTERVAL) || 30000,
-            )
-        } catch {
-            // Do nothing
-        }
+    const appDetails = type === 'release' ? fetchedAppDetails : appDetailsProp
+
+    const showDeploymentStatusModal = getShowDeploymentStatusModal({ type, appDetails })
+    const deploymentStatusAbortControllerRef = useRef<AbortController>(new AbortController())
+    const deploymentStatusPollingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+    const getDeploymentStatusWrapper = async () => {
+        const response = await abortPreviousRequests(
+            () =>
+                getDeploymentStatusWithTimeline({
+                    abortControllerRef: deploymentStatusAbortControllerRef,
+                    appId:
+                        appDetails.appType === AppType.DEVTRON_HELM_CHART
+                            ? appDetails.installedAppId
+                            : appDetails.appId,
+                    envId: appDetails.environmentId,
+                    showTimeline: selectedTab === AppStatusModalTabType.DEPLOYMENT_STATUS,
+                    virtualEnvironmentConfig: appDetails.isVirtualEnvironment
+                        ? {
+                              processVirtualEnvironmentDeploymentData,
+                              wfrId: appDetails.resourceTree?.wfrId,
+                          }
+                        : null,
+                    isHelmApp: appDetails.appType === AppType.DEVTRON_HELM_CHART,
+                }),
+            deploymentStatusAbortControllerRef,
+        )
+
+        handleUpdateDeploymentStatusDetailsBreakdownData?.(response)
+
+        return response
     }
 
-    const appDetails = type === 'release' ? fetchedAppDetails?.appDetails : appDetailsProp
-    const deploymentStatusDetailsBreakdownData =
-        type === 'release'
-            ? fetchedAppDetails?.deploymentStatusDetailsBreakdownData
-            : deploymentStatusDetailsBreakdownDataProps
+    const [
+        isDeploymentTimelineLoading,
+        deploymentStatusDetailsBreakdownData,
+        deploymentStatusDetailsBreakdownDataError,
+        reloadDeploymentStatusDetailsBreakdownData,
+        setDeploymentStatusDetailsBreakdownData,
+    ] = useAsync(
+        getDeploymentStatusWrapper,
+        [appId, envId, showDeploymentStatusModal, selectedTab],
+        !!showDeploymentStatusModal,
+    )
+
+    const handleAppDetailsExternalSync = async () => {
+        appDetailsPollingTimeoutRef.current = setTimeout(
+            async () => {
+                try {
+                    const response = await getAppDetailsWrapper()
+                    setFetchedAppDetails(response)
+                } catch {
+                    // Do nothing
+                }
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                handleAppDetailsExternalSync()
+            },
+            Number(window._env_.DEVTRON_APP_DETAILS_POLLING_INTERVAL) || 30000,
+        )
+    }
+
+    const handleDeploymentStatusExternalSync = async () => {
+        const isDeploymentInProgress = PROGRESSING_DEPLOYMENT_STATUS.includes(
+            deploymentStatusDetailsBreakdownData?.deploymentStatus,
+        )
+
+        const pollingIntervalFromFlag = Number(window._env_.DEVTRON_APP_DETAILS_POLLING_INTERVAL) || 30000
+
+        deploymentStatusPollingTimeoutRef.current = setTimeout(
+            async () => {
+                try {
+                    const response = await getDeploymentStatusWrapper()
+                    setDeploymentStatusDetailsBreakdownData(response)
+                } catch {
+                    // Do nothing
+                }
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                handleDeploymentStatusExternalSync()
+            },
+            isDeploymentInProgress ? 10000 : pollingIntervalFromFlag,
+        )
+    }
 
     const areInitialAppDetailsLoadingWithAbortedError =
         areInitialAppDetailsLoading || getIsRequestAborted(fetchedAppDetailsError)
 
+    const isDeploymentStatusLoadingWithAbortedError =
+        isDeploymentTimelineLoading || getIsRequestAborted(deploymentStatusDetailsBreakdownDataError)
+
     const isTimelineRequiredAndLoading =
-        selectedTab === AppStatusModalTabType.DEPLOYMENT_STATUS &&
-        appDetails?.deploymentAppType !== DeploymentAppTypes.HELM &&
-        isDeploymentTimelineLoading
+        selectedTab === AppStatusModalTabType.DEPLOYMENT_STATUS && isDeploymentStatusLoadingWithAbortedError
 
     // Adding useEffect to initiate timer for external sync and clear it on unmount
     useEffect(() => {
@@ -101,20 +161,42 @@ const AppStatusModal = ({
             !areInitialAppDetailsLoading &&
             !fetchedAppDetailsError &&
             fetchedAppDetails &&
-            !pollingTimeoutRef.current
+            !appDetailsPollingTimeoutRef.current
         ) {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            handleExternalSync()
+            handleAppDetailsExternalSync()
         }
     }, [areInitialAppDetailsLoading, fetchedAppDetails, fetchedAppDetailsError])
 
+    useEffect(() => {
+        if (
+            !isDeploymentTimelineLoading &&
+            !deploymentStatusDetailsBreakdownDataError &&
+            deploymentStatusDetailsBreakdownData &&
+            !deploymentStatusPollingTimeoutRef.current
+        ) {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            handleDeploymentStatusExternalSync()
+        }
+    }, [isDeploymentTimelineLoading, deploymentStatusDetailsBreakdownData, deploymentStatusDetailsBreakdownDataError])
+
+    const handleClearDeploymentStatusTimeout = () => {
+        if (deploymentStatusPollingTimeoutRef.current) {
+            clearTimeout(deploymentStatusPollingTimeoutRef.current)
+            deploymentStatusPollingTimeoutRef.current = null
+        }
+    }
+
     useEffect(
         () => () => {
-            if (pollingTimeoutRef.current) {
-                clearTimeout(pollingTimeoutRef.current)
+            if (appDetailsPollingTimeoutRef.current) {
+                clearTimeout(appDetailsPollingTimeoutRef.current)
             }
 
-            abortControllerRef.current.abort()
+            handleClearDeploymentStatusTimeout()
+
+            appDetailsAbortControllerRef.current.abort()
+            deploymentStatusAbortControllerRef.current.abort()
         },
         [],
     )
@@ -130,7 +212,8 @@ const AppStatusModal = ({
         setShowConfigDriftModal(false)
     }
 
-    const handleSelectTab = (updatedTab: AppStatusModalTabType) => {
+    const handleSelectTab = async (updatedTab: AppStatusModalTabType) => {
+        handleClearDeploymentStatusTimeout()
         setSelectedTab(updatedTab)
     }
 
@@ -224,6 +307,14 @@ const AppStatusModal = ({
         )
     }
 
+    const timelineError =
+        selectedTab === AppStatusModalTabType.DEPLOYMENT_STATUS ? deploymentStatusDetailsBreakdownDataError : null
+
+    const bodyErrorData = fetchedAppDetailsError || timelineError
+    const bodyErrorReload = fetchedAppDetailsError
+        ? reloadInitialAppDetails
+        : reloadDeploymentStatusDetailsBreakdownData
+
     return (
         <Drawer position="right" width="1024px" onClose={handleClose} onEscape={handleClose}>
             <div
@@ -270,10 +361,10 @@ const AppStatusModal = ({
                         progressingProps={{
                             pageLoader: true,
                         }}
-                        error={fetchedAppDetailsError}
+                        error={bodyErrorData}
                         errorScreenManagerProps={{
-                            code: fetchedAppDetailsError?.code,
-                            reload: reloadInitialAppDetails,
+                            code: bodyErrorData?.code,
+                            reload: bodyErrorReload,
                         }}
                     >
                         {renderContent()}
