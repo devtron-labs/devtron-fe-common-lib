@@ -106,6 +106,7 @@ const AppStatusModal = ({
         getDeploymentStatusWrapper,
         [appId, envId, showDeploymentStatusModal, selectedTab],
         !!showDeploymentStatusModal,
+        { resetOnChange: false },
     )
 
     const handleAppDetailsExternalSync = async () => {

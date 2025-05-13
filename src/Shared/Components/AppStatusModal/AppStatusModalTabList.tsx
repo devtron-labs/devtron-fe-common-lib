@@ -76,7 +76,7 @@ const AppStatusModalTabList = ({
 
     // Could have achieved via onDataLoad but, have done this through useEffect to avoid abrupt shift in case some tabs went missing after polling
     useEffect(() => {
-        if (tabGroups.length) {
+        if (tabGroups.length && !selectedTab) {
             handleSelectTab(tabGroups[0]?.id as AppStatusModalTabType)
         }
     }, [])
