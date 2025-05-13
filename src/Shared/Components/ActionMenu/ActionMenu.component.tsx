@@ -131,7 +131,7 @@ export const ActionMenu = ({
                     )}
                 </ul>
                 {footerConfig && (
-                    <div className="border__secondary--top">
+                    <div className="bg__menu--secondary border__secondary--top">
                         <SelectPickerMenuListFooter menuListFooterConfig={footerConfig} />
                     </div>
                 )}
