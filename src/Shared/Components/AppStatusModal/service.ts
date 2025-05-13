@@ -21,7 +21,7 @@ export const getAppDetails = async ({
         'env-id': envId,
     })
 
-    const [appDetails, resourceTree] = await Promise.all([
+    const [appDetailsResponse, resourceTreeResponse] = await Promise.allSettled([
         get<Omit<AppDetails, 'resourceTree'>>(`${ROUTES.APP_DETAIL}/v2${queryParams}`, {
             abortControllerRef,
         }),
@@ -29,6 +29,13 @@ export const getAppDetails = async ({
             abortControllerRef,
         }),
     ])
+
+    if (appDetailsResponse.status === 'rejected') {
+        throw appDetailsResponse.reason
+    }
+
+    const appDetails = appDetailsResponse.value
+    const resourceTree = resourceTreeResponse.status === 'fulfilled' ? resourceTreeResponse.value : null
 
     return {
         ...(appDetails.result || ({} as AppDetails)),

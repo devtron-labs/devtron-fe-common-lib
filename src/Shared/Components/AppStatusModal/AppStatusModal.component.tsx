@@ -62,7 +62,7 @@ const AppStatusModal = ({
         fetchedAppDetailsError,
         reloadInitialAppDetails,
         setFetchedAppDetails,
-    ] = useAsync(getAppDetailsWrapper, [appId, envId], type === 'release')
+    ] = useAsync(getAppDetailsWrapper, [], type === 'release')
 
     const appDetails = type === 'release' ? fetchedAppDetails : appDetailsProp
 
@@ -82,7 +82,8 @@ const AppStatusModal = ({
                     envId: appDetails.environmentId,
                     showTimeline:
                         selectedTab === AppStatusModalTabType.DEPLOYMENT_STATUS &&
-                        appDetails.deploymentAppType !== DeploymentAppTypes.HELM,
+                        appDetails.deploymentAppType !== DeploymentAppTypes.HELM &&
+                        !appDetails.isVirtualEnvironment,
                     virtualEnvironmentConfig: appDetails.isVirtualEnvironment
                         ? {
                               processVirtualEnvironmentDeploymentData,
@@ -105,12 +106,9 @@ const AppStatusModal = ({
         deploymentStatusDetailsBreakdownDataError,
         reloadDeploymentStatusDetailsBreakdownData,
         setDeploymentStatusDetailsBreakdownData,
-    ] = useAsync(
-        getDeploymentStatusWrapper,
-        [appId, envId, showDeploymentStatusModal, selectedTab],
-        !!showDeploymentStatusModal,
-        { resetOnChange: false },
-    )
+    ] = useAsync(getDeploymentStatusWrapper, [showDeploymentStatusModal, selectedTab], !!showDeploymentStatusModal, {
+        resetOnChange: false,
+    })
 
     const handleAppDetailsExternalSync = async () => {
         appDetailsPollingTimeoutRef.current = setTimeout(
@@ -133,7 +131,12 @@ const AppStatusModal = ({
             deploymentStatusDetailsBreakdownData?.deploymentStatus,
         )
 
-        const pollingIntervalFromFlag = Number(window._env_.DEVTRON_APP_DETAILS_POLLING_INTERVAL) || 30000
+        const pollingIntervalFromFlag =
+            Number(
+                appDetails.appType !== AppType.DEVTRON_HELM_CHART
+                    ? window._env_.DEVTRON_APP_DETAILS_POLLING_INTERVAL
+                    : window._env_.HELM_APP_DETAILS_POLLING_INTERVAL,
+            ) || 30000
 
         deploymentStatusPollingTimeoutRef.current = setTimeout(
             async () => {
