@@ -2,16 +2,40 @@ import { useRef, useState } from 'react'
 import ReactGA from 'react-ga4'
 import { SliderButton } from '@typeform/embed-react'
 
+import { URLS } from '@Common/Constants'
 import { ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
 
 import { ActionMenu, ActionMenuItemType, ActionMenuProps } from '../ActionMenu'
-import { ButtonStyleType, ButtonVariantType } from '../Button'
+import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { HelpButtonProps, HelpMenuItems, InstallationType } from './types'
 import { getHelpActionMenuOptions } from './utils'
 
-export const HelpButton = ({ serverInfo, handleGettingStartedClick, onClick }: HelpButtonProps) => {
+const CheckForUpdates = ({
+    serverInfo,
+    fetchingServerInfo,
+}: Pick<HelpButtonProps, 'serverInfo' | 'fetchingServerInfo'>) => (
+    <div className="bg__menu--secondary flex column left px-10 py-6">
+        {fetchingServerInfo ? (
+            <p className="m-0 dc__loading-dots fs-13 fw-4 cn-7">Checking version</p>
+        ) : (
+            <p className="m-0 fs-13 fw-4 cn-9">Version {serverInfo?.currentVersion || ''}</p>
+        )}
+        <Button
+            dataTestId="check-for-updates-link"
+            component={ButtonComponentType.link}
+            variant={ButtonVariantType.text}
+            size={ComponentSizeType.medium}
+            linkProps={{
+                to: URLS.STACK_MANAGER_ABOUT,
+            }}
+            text="Check for updates"
+        />
+    </div>
+)
+
+export const HelpButton = ({ serverInfo, fetchingServerInfo, handleGettingStartedClick, onClick }: HelpButtonProps) => {
     // STATES
     const [isActionMenuOpen, setIsActionMenuOpen] = useState(false)
 
@@ -46,7 +70,7 @@ export const HelpButton = ({ serverInfo, handleGettingStartedClick, onClick }: H
     }
 
     const handleActionMenuClick: ActionMenuProps['onClick'] = (item) => {
-        switch (item.value) {
+        switch (item.id) {
             case HelpMenuItems.GETTING_STARTED:
                 handleGettingStartedClick()
                 break
@@ -71,33 +95,42 @@ export const HelpButton = ({ serverInfo, handleGettingStartedClick, onClick }: H
     return (
         <>
             <ActionMenu
+                id="page-header-help-action-menu"
                 alignment="end"
                 width={220}
                 options={getHelpActionMenuOptions({
                     isTrial: licenseData?.isTrial ?? false,
                     isEnterprise,
-                    isOSSHelm: serverInfo?.installationType !== InstallationType.OSS_HELM,
                 })}
                 onClick={handleActionMenuClick}
                 onOpen={setIsActionMenuOpen}
-                buttonProps={{
-                    dataTestId: 'page-header-help-button',
-                    text: 'Help',
-                    variant: ButtonVariantType.borderLess,
-                    style: ButtonStyleType.neutral,
-                    size: ComponentSizeType.medium,
-                    startIcon: <Icon name="ic-help-outline" color={null} />,
-                    endIcon: (
-                        <div
-                            className="rotate"
-                            style={{ ['--rotateBy' as string]: isActionMenuOpen ? '180deg' : '0deg' }}
-                        >
-                            <Icon name="ic-caret-down-small" color={null} />
-                        </div>
-                    ),
-                    onClick,
-                }}
-            />
+                {...(serverInfo?.installationType === InstallationType.OSS_HELM
+                    ? {
+                          menuListFooterConfig: {
+                              type: 'customNode',
+                              value: (
+                                  <CheckForUpdates serverInfo={serverInfo} fetchingServerInfo={fetchingServerInfo} />
+                              ),
+                          },
+                      }
+                    : {})}
+            >
+                <button
+                    type="button"
+                    data-testid="page-header-help-button"
+                    className="dc__transparent p-6 br-6 dc__hover-n50 flex dc__gap-4 fs-13 lh-20 fw-6 cn-9"
+                    onClick={onClick}
+                >
+                    <Icon name="ic-help-outline" color="N900" size={20} />
+                    <span>Help</span>
+                    <span
+                        className="flex rotate"
+                        style={{ ['--rotateBy' as string]: isActionMenuOpen ? '180deg' : '0deg' }}
+                    >
+                        <Icon name="ic-caret-down-small" color={null} />
+                    </span>
+                </button>
+            </ActionMenu>
             {isEnterprise && (
                 <SliderButton
                     ref={typeFormSliderButtonRef}
@@ -111,15 +144,3 @@ export const HelpButton = ({ serverInfo, handleGettingStartedClick, onClick }: H
         </>
     )
 }
-
-// {serverInfo?.installationType === InstallationType.OSS_HELM && (
-//     <div className="help-card__update-option fs-11 fw-6 mt-4">
-//         {fetchingServerInfo ? (
-//             <span className="dc__loading-dots">Checking current version</span>
-//         ) : (
-//             <span>version {serverInfo?.currentVersion || ''}</span>
-//         )}
-//         <br />
-//         <NavLink to={URLS.STACK_MANAGER_ABOUT}>Check for Updates</NavLink>
-//     </div>
-// )}

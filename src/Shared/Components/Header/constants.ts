@@ -24,47 +24,47 @@ export const COMMON_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
     ...((!window._env_?.K8S_CLIENT
         ? [
               {
+                  id: HelpMenuItems.GETTING_STARTED,
                   label: 'Getting started',
-                  value: HelpMenuItems.GETTING_STARTED,
-                  startIcon: { name: 'ic-path', color: 'N600' },
+                  startIcon: { name: 'ic-path' },
                   componentType: 'link',
                   to: `/${URLS.GETTING_STARTED}`,
               },
           ]
         : []) satisfies ActionMenuItemType[]),
     {
+        id: HelpMenuItems.VIEW_DOCUMENTATION,
         label: 'View documentation',
-        value: HelpMenuItems.VIEW_DOCUMENTATION,
-        startIcon: { name: 'ic-file', color: 'N600' },
+        startIcon: { name: 'ic-book-open' },
         componentType: 'anchor',
         href: DOCUMENTATION_HOME_PAGE,
     },
     {
+        id: HelpMenuItems.JOIN_DISCORD_COMMUNITY,
         label: 'Join discord community',
-        value: HelpMenuItems.JOIN_DISCORD_COMMUNITY,
-        startIcon: { name: 'ic-discord-fill', color: 'N600' },
+        startIcon: { name: 'ic-discord-fill' },
         componentType: 'anchor',
         href: DISCORD_LINK,
     },
     {
+        id: HelpMenuItems.ABOUT_DEVTRON,
         label: 'About Devtron',
-        value: HelpMenuItems.ABOUT_DEVTRON,
-        startIcon: { name: 'ic-devtron', color: 'N600' },
+        startIcon: { name: 'ic-devtron' },
     },
 ]
 
 export const OSS_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
     {
+        id: HelpMenuItems.CHAT_WITH_SUPPORT,
         label: 'Chat with support',
-        value: HelpMenuItems.CHAT_WITH_SUPPORT,
         componentType: 'anchor',
-        href: CONTACT_SUPPORT_LINK,
-        startIcon: { name: 'ic-chat-circle-dots', color: 'N600' },
+        href: DISCORD_LINK,
+        startIcon: { name: 'ic-chat-circle-online' },
     },
     {
+        id: HelpMenuItems.RAISE_ISSUE_REQUEST,
         label: 'Raise an issue/request',
-        value: HelpMenuItems.RAISE_ISSUE_REQUEST,
-        startIcon: { name: 'ic-file-edit', color: 'N600' },
+        startIcon: { name: 'ic-file-edit' },
         componentType: 'anchor',
         href: RAISE_ISSUE,
     },
@@ -72,32 +72,32 @@ export const OSS_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
 
 export const ENTERPRISE_TRIAL_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
     {
+        id: HelpMenuItems.REQUEST_SUPPORT,
         label: 'Request Support',
-        value: HelpMenuItems.REQUEST_SUPPORT,
-        startIcon: { name: 'ic-file-edit', color: 'N600' },
+        startIcon: { name: 'ic-file-edit' },
         componentType: 'anchor',
-        href: OPEN_NEW_TICKET,
+        href: CONTACT_SUPPORT_LINK,
     },
 ]
 
 export const ENTERPRISE_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
     {
+        id: HelpMenuItems.OPEN_NEW_TICKET,
         label: 'Open new ticket',
-        value: HelpMenuItems.OPEN_NEW_TICKET,
-        startIcon: { name: 'ic-file-edit', color: 'N600' },
+        startIcon: { name: 'ic-edit' },
         componentType: 'anchor',
         href: OPEN_NEW_TICKET,
     },
     {
+        id: HelpMenuItems.VIEW_ALL_TICKETS,
         label: 'View all tickets',
-        value: HelpMenuItems.VIEW_ALL_TICKETS,
-        startIcon: { name: 'ic-files', color: 'N600' },
+        startIcon: { name: 'ic-files' },
         componentType: 'anchor',
         href: VIEW_ALL_TICKETS,
     },
     {
+        id: HelpMenuItems.GIVE_FEEDBACK,
         label: 'Give feedback',
-        value: HelpMenuItems.GIVE_FEEDBACK,
-        startIcon: { name: 'ic-megaphone-right', color: 'N600' },
+        startIcon: { name: 'ic-megaphone-right' },
     },
 ]

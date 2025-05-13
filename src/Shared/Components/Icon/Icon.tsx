@@ -27,6 +27,7 @@ import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
 import { ReactComponent as ICCaretRight } from '@IconsV2/ic-caret-right.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
 import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots.svg'
+import { ReactComponent as ICChatCircleOnline } from '@IconsV2/ic-chat-circle-online.svg'
 import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
 import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
@@ -52,6 +53,7 @@ import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
 import { ReactComponent as ICDiscordFill } from '@IconsV2/ic-discord-fill.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
+import { ReactComponent as ICEdit } from '@IconsV2/ic-edit.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
@@ -179,6 +181,7 @@ export const iconMap = {
     'ic-caret-right': ICCaretRight,
     'ic-cd': ICCd,
     'ic-chat-circle-dots': ICChatCircleDots,
+    'ic-chat-circle-online': ICChatCircleOnline,
     'ic-check': ICCheck,
     'ic-checks': ICChecks,
     'ic-ci-linked': ICCiLinked,
@@ -204,6 +207,7 @@ export const iconMap = {
     'ic-discord-fill': ICDiscordFill,
     'ic-dockerhub': ICDockerhub,
     'ic-ecr': ICEcr,
+    'ic-edit': ICEdit,
     'ic-env': ICEnv,
     'ic-error': ICError,
     'ic-expand-right-sm': ICExpandRightSm,

@@ -52,7 +52,6 @@ export const getHelpActionMenuOptions = ({
 }: {
     isEnterprise: boolean
     isTrial: boolean
-    isOSSHelm: boolean
 }): ActionMenuProps['options'] => [
     {
         items: COMMON_HELP_ACTION_MENU_ITEMS,
