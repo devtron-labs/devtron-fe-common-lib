@@ -46,6 +46,7 @@ const AppStatusModalTabList = ({
                               status={appDetails.resourceTree?.status?.toUpperCase() || appDetails.appStatus}
                               hideMessage
                               showAnimatedIcon
+                              hideIconTooltip
                           />
                       ),
                   } satisfies TabProps,
@@ -67,6 +68,7 @@ const AppStatusModalTabList = ({
                               status={deploymentStatusDetailsBreakdownData?.deploymentStatus}
                               hideMessage
                               showAnimatedIcon
+                              hideIconTooltip
                           />
                       ),
                   } satisfies TabProps,
