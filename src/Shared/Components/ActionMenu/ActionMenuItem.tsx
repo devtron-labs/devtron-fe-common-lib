@@ -15,7 +15,17 @@ export const ActionMenuItem = ({
     onMouseEnter,
     disableDescriptionEllipsis = false,
 }: ActionMenuItemProps) => {
-    const { description, label, startIcon, endIcon, tooltipProps, type = 'neutral', isDisabled } = item
+    const {
+        id,
+        description,
+        label,
+        startIcon,
+        endIcon,
+        tooltipProps,
+        type = 'neutral',
+        isDisabled,
+        componentType = 'button',
+    } = item
 
     // REFS
     const ref: LegacyRef<HTMLLIElement> = (el) => {
@@ -36,7 +46,7 @@ export const ActionMenuItem = ({
     const renderIcon = (iconProps: typeof startIcon) =>
         iconProps && (
             <div className="mt-2 flex dc__no-shrink">
-                <Icon {...iconProps} color={iconProps.color || 'N800'} />
+                <Icon {...iconProps} color={iconProps.color || isNegativeType ? 'R500' : 'N800'} />
             </div>
         )
 
@@ -59,7 +69,7 @@ export const ActionMenuItem = ({
     )
 
     const renderComponent = () => {
-        switch (item.componentType) {
+        switch (componentType) {
             case 'anchor':
                 return (
                     <a
@@ -97,7 +107,7 @@ export const ActionMenuItem = ({
             <li
                 ref={ref}
                 role="menuitem"
-                data-testid={`action-menu-item-${item.value}`}
+                data-testid={`action-menu-item-${id}`}
                 onMouseEnter={onMouseEnter}
                 tabIndex={-1}
                 // Intentionally added margin to the left and right to have the gap on the edges of the options

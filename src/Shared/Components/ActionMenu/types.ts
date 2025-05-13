@@ -32,7 +32,9 @@ type ActionMenuItemIconType = Pick<IconsProps, 'name'> & {
     color?: IconsProps['color']
 }
 
-export type ActionMenuItemType = Omit<SelectPickerOptionType, 'label' | 'endIcon' | 'startIcon'> & {
+export type ActionMenuItemType = Omit<SelectPickerOptionType, 'label' | 'value' | 'endIcon' | 'startIcon'> & {
+    /** A unique identifier for the action menu item. */
+    id: string | number
     /** The text label for the menu item. */
     label: string
     /** Indicates whether the menu item is disabled. */
@@ -78,6 +80,10 @@ export type ActionMenuProps = UseActionMenuProps &
          * @param item - The selected item.
          */
         onClick: (item: ActionMenuItemType) => void
+        /**
+         * Config for the footer at the bottom of action menu list. It is sticky by default
+         */
+        footerConfig?: SelectPickerProps['menuListFooterConfig']
     } & (
         | {
               /**

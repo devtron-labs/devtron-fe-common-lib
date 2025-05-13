@@ -252,7 +252,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
     )
 }
 
-const SelectPickerMenuListFooter = ({
+export const SelectPickerMenuListFooter = ({
     menuListFooterConfig,
 }: Required<Pick<SelectPickerProps, 'menuListFooterConfig'>>) => {
     if (!menuListFooterConfig) {
@@ -285,6 +285,12 @@ const SelectPickerMenuListFooter = ({
                 <Button {...(buttonProps as ButtonProps)} size={ComponentSizeType.medium} fullWidth />
             </div>
         )
+    }
+
+    if (type === 'customNode') {
+        const { value } = menuListFooterConfig
+
+        return value
     }
 
     return null

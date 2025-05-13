@@ -54,11 +54,38 @@ export interface UsePopoverProps {
     onPopoverKeyDown?: (e: KeyboardEvent, openState: boolean, closePopover: () => void) => void
 }
 
+/**
+ * Represents the return type of the `usePopover` hook, providing properties and methods
+ * to manage and interact with a popover component.
+ */
 export interface UsePopoverReturnType {
+    /**
+     * Indicates whether the popover is currently open.
+     */
     open: boolean
+    /**
+     * Props to be spread onto the trigger element that opens the popover.
+     * These props include standard HTML attributes for a `div` element.
+     */
     triggerProps: DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+    /**
+     * Props to be spread onto the overlay element of the popover.
+     * These props include standard HTML attributes for a `div` element.
+     */
     overlayProps: DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+    /**
+     * Props to be spread onto the popover element itself.
+     * Includes motion-related props for animations and a `ref` to the popover's `div` element.
+     */
     popoverProps: HTMLMotionProps<'div'> & { ref: MutableRefObject<HTMLDivElement> }
+    /**
+     * A mutable reference to the scrollable element inside the popover. \
+     * This reference should be assigned to the element that is scrollable.
+     */
+    scrollableRef: MutableRefObject<HTMLElement>
+    /**
+     * A function to close the popover.
+     */
     closePopover: () => void
 }
 

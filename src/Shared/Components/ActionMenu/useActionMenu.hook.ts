@@ -92,7 +92,7 @@ export const useActionMenu = ({
     }
 
     // POPOVER HOOK
-    const { open, closePopover, overlayProps, popoverProps, triggerProps } = usePopover({
+    const { open, closePopover, overlayProps, popoverProps, triggerProps, scrollableRef } = usePopover({
         id,
         position,
         alignment,
@@ -121,5 +121,6 @@ export const useActionMenu = ({
         closePopover,
         searchTerm,
         handleSearch,
+        scrollableRef,
     }
 }
