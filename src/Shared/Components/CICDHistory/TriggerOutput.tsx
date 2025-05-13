@@ -15,7 +15,7 @@
  */
 
 import React, { useEffect, useMemo } from 'react'
-import { NavLink, Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
+import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 
 import { sanitizeTargetPlatforms } from '@Shared/Helpers'
 
@@ -31,6 +31,7 @@ import {
     useInterval,
 } from '../../../Common'
 import { DEPLOYMENT_STAGE_TO_NODE_MAP, EMPTY_STATE_STATUS } from '../../constants'
+import { TabGroup, TabGroupProps } from '../TabGroup'
 import Artifacts from './Artifacts'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
@@ -47,6 +48,7 @@ import {
     terminalStatus,
     TriggerOutputProps,
 } from './types'
+import { getTriggerOutputTabs } from './utils'
 
 import './cicdHistory.scss'
 
@@ -316,6 +318,11 @@ const TriggerOutput = ({
             (!!triggerDetailsResult?.result?.artifactId || !!triggerDetails?.artifactId),
     )
 
+    const tabs: TabGroupProps['tabs'] = useMemo(
+        () => getTriggerOutputTabs(triggerDetails, deploymentAppType),
+        [triggerDetails, deploymentAppType],
+    )
+
     useEffect(() => {
         if (triggerDetailsLoading) {
             return
@@ -409,66 +416,9 @@ const TriggerOutput = ({
                         workflowExecutionStages={triggerDetails.workflowExecutionStages}
                         namespace={triggerDetails.namespace}
                     />
-                    <ul className="pl-50 pr-20 pt-8 tab-list tab-list--nodes dc__border-bottom dc__position-sticky dc__top-0 bg__primary dc__zi-3">
-                        {triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM && (
-                            <li className="tab-list__tab" data-testid="deployment-history-steps-link">
-                                <NavLink
-                                    replace
-                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                    activeClassName="active"
-                                    to="deployment-steps"
-                                >
-                                    Steps
-                                </NavLink>
-                            </li>
-                        )}
-                        {!(triggerDetails.stage === 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
-                            <li className="tab-list__tab" data-testid="deployment-history-logs-link">
-                                <NavLink
-                                    replace
-                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                    activeClassName="active"
-                                    to="logs"
-                                >
-                                    Logs
-                                </NavLink>
-                            </li>
-                        )}
-                        <li className="tab-list__tab" data-testid="deployment-history-source-code-link">
-                            <NavLink
-                                replace
-                                className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                activeClassName="active"
-                                to="source-code"
-                            >
-                                Source
-                            </NavLink>
-                        </li>
-                        {triggerDetails.stage === 'DEPLOY' && (
-                            <li className="tab-list__tab" data-testid="deployment-history-configuration-link">
-                                <NavLink
-                                    replace
-                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                    activeClassName="active"
-                                    to="configuration"
-                                >
-                                    Configuration
-                                </NavLink>
-                            </li>
-                        )}
-                        {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
-                            <li className="tab-list__tab" data-testid="deployment-history-artifacts-link">
-                                <NavLink
-                                    replace
-                                    className="tab-list__tab-link fs-13-imp pb-8 pt-0-imp"
-                                    activeClassName="active"
-                                    to="artifacts"
-                                >
-                                    Artifacts
-                                </NavLink>
-                            </li>
-                        )}
-                    </ul>
+                    <div className="pl-50 pr-20 pt-8 dc__border-bottom dc__position-sticky dc__top-0 bg__primary dc__zi-3">
+                        <TabGroup tabs={tabs} />
+                    </div>
                 </>
             )}
             <HistoryLogs
