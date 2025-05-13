@@ -136,7 +136,7 @@ const processKubeCTLApply = (
     )?.resourceDetails
 
     if (resourceDetails) {
-        // TODO: Confirm this logic since, can have duplication
+        // TODO: Confirm this logic since, can have duplication of resourcePhase in the resourceDetails
         // Used to parse resource details base struct with current phase as last phase
         DEPLOYMENT_PHASES.forEach((phase) => {
             resourceDetails.forEach((item) => {

@@ -368,9 +368,7 @@ export const renderDeploymentTimelineIcon = (iconState: DeploymentStatusBreakdow
             return <Icon {...iconBaseProps} name="ic-circle-loader" color="O500" />
         case 'disconnect':
             return <Icon {...iconBaseProps} name="ic-disconnect" />
-        case 'time_out':
         case 'timed_out':
-            // TODO: Test
             return <Icon {...iconBaseProps} name="ic-timeout-two-dash" color="R500" />
         default:
             return <Icon {...iconBaseProps} name="ic-timer" color="N600" />
@@ -383,7 +381,6 @@ export const getDeploymentTimelineBGColorFromIcon = (icon: DeploymentStatusBreak
             return 'bcg-1 cg-7'
         case 'failed':
         case 'disconnect':
-        case 'time_out':
         case 'timed_out':
             return 'bcr-1 cr-5'
         case 'inprogress':

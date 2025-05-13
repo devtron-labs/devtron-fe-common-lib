@@ -15,12 +15,9 @@
  */
 
 import { Fragment } from 'react'
-import { useRouteMatch } from 'react-router-dom'
 
 import { TIMELINE_STATUS } from '@Shared/types'
 
-import { URLS } from '../../../Common'
-import ErrorBar from '../Error/ErrorBar'
 import { DeploymentStatusDetailRow } from './DeploymentStatusDetailRow'
 import { DeploymentStatusDetailBreakdownType, DeploymentStatusDetailRowType } from './types'
 
@@ -31,7 +28,6 @@ const DeploymentStatusDetailBreakdown = ({
     isVirtualEnvironment,
     appDetails,
 }: DeploymentStatusDetailBreakdownType) => {
-    const { url } = useRouteMatch()
     const isHelmManifestPushed =
         deploymentStatusDetailsBreakdownData.deploymentStatusBreakdown[
             TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO
@@ -44,56 +40,51 @@ const DeploymentStatusDetailBreakdown = ({
         }
 
     return (
-        <>
-            {!url.includes(`/${URLS.CD_DETAILS}`) && <ErrorBar appDetails={appDetails} />}
-            <div className="deployment-status-breakdown-container" data-testid="deployment-history-steps-status">
-                <DeploymentStatusDetailRow
-                    type={TIMELINE_STATUS.DEPLOYMENT_INITIATED}
-                    {...deploymentStatusDetailRowProps}
-                />
-                {!(
-                    isVirtualEnvironment &&
-                    deploymentStatusDetailsBreakdownData.deploymentStatusBreakdown[
-                        TIMELINE_STATUS.HELM_PACKAGE_GENERATED
-                    ]
-                ) ? (
-                    <>
-                        {(
-                            [
-                                TIMELINE_STATUS.GIT_COMMIT,
-                                TIMELINE_STATUS.ARGOCD_SYNC,
-                                TIMELINE_STATUS.KUBECTL_APPLY,
-                            ] as DeploymentStatusDetailRowType['type'][]
-                        ).map((timelineStatus) => (
-                            <Fragment key={timelineStatus}>
-                                <DeploymentStatusDetailRow type={timelineStatus} {...deploymentStatusDetailRowProps} />
-                            </Fragment>
-                        ))}
+        <div className="deployment-status-breakdown-container" data-testid="deployment-history-steps-status">
+            <DeploymentStatusDetailRow
+                type={TIMELINE_STATUS.DEPLOYMENT_INITIATED}
+                {...deploymentStatusDetailRowProps}
+            />
+            {!(
+                isVirtualEnvironment &&
+                deploymentStatusDetailsBreakdownData.deploymentStatusBreakdown[TIMELINE_STATUS.HELM_PACKAGE_GENERATED]
+            ) ? (
+                <>
+                    {(
+                        [
+                            TIMELINE_STATUS.GIT_COMMIT,
+                            TIMELINE_STATUS.ARGOCD_SYNC,
+                            TIMELINE_STATUS.KUBECTL_APPLY,
+                        ] as DeploymentStatusDetailRowType['type'][]
+                    ).map((timelineStatus) => (
+                        <Fragment key={timelineStatus}>
+                            <DeploymentStatusDetailRow type={timelineStatus} {...deploymentStatusDetailRowProps} />
+                        </Fragment>
+                    ))}
 
+                    <DeploymentStatusDetailRow
+                        type={TIMELINE_STATUS.APP_HEALTH}
+                        hideVerticalConnector
+                        {...deploymentStatusDetailRowProps}
+                    />
+                </>
+            ) : (
+                <>
+                    <DeploymentStatusDetailRow
+                        type={TIMELINE_STATUS.HELM_PACKAGE_GENERATED}
+                        hideVerticalConnector={!isHelmManifestPushed}
+                        {...deploymentStatusDetailRowProps}
+                    />
+                    {isHelmManifestPushed && (
                         <DeploymentStatusDetailRow
-                            type={TIMELINE_STATUS.APP_HEALTH}
+                            type={TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO}
                             hideVerticalConnector
                             {...deploymentStatusDetailRowProps}
                         />
-                    </>
-                ) : (
-                    <>
-                        <DeploymentStatusDetailRow
-                            type={TIMELINE_STATUS.HELM_PACKAGE_GENERATED}
-                            hideVerticalConnector={!isHelmManifestPushed}
-                            {...deploymentStatusDetailRowProps}
-                        />
-                        {isHelmManifestPushed && (
-                            <DeploymentStatusDetailRow
-                                type={TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO}
-                                hideVerticalConnector
-                                {...deploymentStatusDetailRowProps}
-                            />
-                        )}
-                    </>
-                )}
-            </div>
-        </>
+                    )}
+                </>
+            )}
+        </div>
     )
 }
 

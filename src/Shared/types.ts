@@ -1232,7 +1232,6 @@ export type DeploymentStatusBreakdownItemIconType =
     // Loading is for subSteps
     | 'loading'
     | 'disconnect'
-    | 'time_out'
     | 'timed_out'
     | ''
 
