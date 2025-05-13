@@ -6,7 +6,7 @@ import { DISCORD_LINK } from '@Common/Constants'
 import { Drawer } from '@Common/Drawer'
 import { GenericEmptyState } from '@Common/EmptyState'
 import { handleUTCTime, stopPropagation, useAsync } from '@Common/Helper'
-import { DeploymentAppTypes } from '@Common/Types'
+import { DeploymentAppTypes, ImageType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 import { AppType } from '@Shared/types'
 
@@ -275,6 +275,7 @@ const AppStatusModal = ({
                         </div>
                     }
                     subTitle={`Triggered at ${handleUTCTime(deploymentStatusDetailsBreakdownData.deploymentTriggerTime)} by ${deploymentStatusDetailsBreakdownData.triggeredBy}`}
+                    imageType={ImageType.Large}
                 />
             )
         }

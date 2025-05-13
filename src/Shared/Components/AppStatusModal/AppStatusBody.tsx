@@ -40,7 +40,8 @@ const StatusHeadingContainer = ({
     children,
     type,
     appId,
-}: PropsWithChildren<Pick<AppStatusBodyProps, 'type'>> & { appId: number }) => (
+    envId,
+}: PropsWithChildren<Pick<AppStatusBodyProps, 'type'>> & { appId: number; envId?: number }) => (
     <div className="flexbox dc__content-space w-100">
         {children}
         {type === 'release' ? (
@@ -52,7 +53,7 @@ const StatusHeadingContainer = ({
                 endIcon={<Icon name="ic-arrow-square-out" color={null} />}
                 text="Visit app"
                 linkProps={{
-                    to: getAppDetailsURL(appId),
+                    to: getAppDetailsURL(appId, envId),
                     target: '_blank',
                     rel: 'noopener noreferrer',
                 }}
@@ -82,7 +83,7 @@ export const AppStatusBody = ({
                 id: `app-status-${1}`,
                 heading: type !== 'stack-manager' ? 'Application Status' : 'Status',
                 value: (
-                    <StatusHeadingContainer type={type} appId={appDetails.appId}>
+                    <StatusHeadingContainer type={type} appId={appDetails.appId} envId={appDetails.environmentId}>
                         {appStatus ? <AppStatus status={appStatus} showAnimatedIcon /> : '--'}
                     </StatusHeadingContainer>
                 ),
@@ -116,7 +117,7 @@ export const AppStatusBody = ({
                       id: `deployment-status-${1}`,
                       heading: 'Deployment Status',
                       value: (
-                          <StatusHeadingContainer type={type} appId={appDetails.appId}>
+                          <StatusHeadingContainer type={type} appId={appDetails.appId} envId={appDetails.environmentId}>
                               {deploymentStatusDetailsBreakdownData?.deploymentStatus ? (
                                   <DeploymentStatus
                                       status={deploymentStatusDetailsBreakdownData.deploymentStatus}

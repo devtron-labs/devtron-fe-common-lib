@@ -153,11 +153,13 @@ const DeploymentDetailSteps = ({
                 {renderDeploymentApprovalInfo &&
                     getIsApprovalPolicyConfigured(userApprovalMetadata?.approvalConfigData) &&
                     renderDeploymentApprovalInfo(userApprovalMetadata)}
-                <DeploymentStatusDetailBreakdown
-                    deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}
-                    isVirtualEnvironment={isVirtualEnv.current}
-                    appDetails={appDetails}
-                />
+                <div className="p-20 w-100">
+                    <DeploymentStatusDetailBreakdown
+                        deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}
+                        isVirtualEnvironment={isVirtualEnv.current}
+                        appDetails={appDetails}
+                    />
+                </div>
             </div>
         )
 

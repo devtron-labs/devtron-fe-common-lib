@@ -5,10 +5,15 @@ import NoDeploymentStatusImage from '@Images/no-artifact.webp'
 import { DeploymentAppTypes, GenericEmptyStateType } from '@Common/Types'
 import { DEPLOYMENT_STATUS } from '@Shared/constants'
 import { aggregateNodes } from '@Shared/Helpers'
-import { AppDetails, AppType, Node } from '@Shared/types'
+import { AppDetails, AppType, DeploymentStatusDetailsBreakdownDataType, Node } from '@Shared/types'
 import { ReleaseMode } from '@Pages/index'
 
 import { AggregatedNodes, STATUS_SORTING_ORDER } from '../CICDHistory'
+import {
+    FAILED_DEPLOYMENT_STATUS,
+    PROGRESSING_DEPLOYMENT_STATUS,
+    SUCCESSFUL_DEPLOYMENT_STATUS,
+} from '../DeploymentStatusBreakdown'
 import {
     AppStatusModalProps,
     GetFilteredFlattenedNodesFromAppDetailsParamsType as GetFlattenedNodesFromAppDetailsParamsType,
@@ -105,20 +110,20 @@ export const getShowDeploymentStatusModal = ({
     return true
 }
 
-export const getEmptyViewImageFromHelmDeploymentStatus = (status: string): GenericEmptyStateType['image'] => {
-    switch (status?.toLowerCase()) {
-        case DEPLOYMENT_STATUS.STARTING:
-        case DEPLOYMENT_STATUS.PROGRESSING:
-        case DEPLOYMENT_STATUS.INITIATING:
-            return ICManOnRocket
-
-        case DEPLOYMENT_STATUS.SUCCEEDED:
-            return ICCelebration
-
-        case DEPLOYMENT_STATUS.FAILED:
-            return ICPageNotFound
-
-        default:
-            return NoDeploymentStatusImage
+export const getEmptyViewImageFromHelmDeploymentStatus = (
+    status: DeploymentStatusDetailsBreakdownDataType['deploymentStatus'],
+): GenericEmptyStateType['image'] => {
+    if (PROGRESSING_DEPLOYMENT_STATUS.includes(status)) {
+        return ICManOnRocket
     }
+
+    if (SUCCESSFUL_DEPLOYMENT_STATUS.includes(status)) {
+        return ICCelebration
+    }
+
+    if (FAILED_DEPLOYMENT_STATUS.includes(status)) {
+        return ICPageNotFound
+    }
+
+    return NoDeploymentStatusImage
 }

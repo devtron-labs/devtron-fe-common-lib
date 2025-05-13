@@ -245,6 +245,7 @@ export const processDeploymentStatusDetailsData = (
     // After initial processing will mark all unavailable timelines [present before last invalid state] as success
     PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER.forEach((timelineStatusType, index) => {
         const element = findRight(data.timelines, getPredicate(timelineStatusType))
+
         const timelineData = deploymentData.deploymentStatusBreakdown[timelineStatusType]
 
         if (!element) {
@@ -290,6 +291,7 @@ export const processDeploymentStatusDetailsData = (
             case TIMELINE_STATUS.ARGOCD_SYNC:
                 timelineData.time = element.statusTime
                 timelineData.icon = 'success'
+                timelineData.displaySubText = ''
 
                 // These are singular events so either their success will come or failure
                 if (
@@ -337,7 +339,6 @@ export const processDeploymentStatusDetailsData = (
                 break
         }
 
-        // TODO: Should we add in progress check here?
         if (timelineData.icon === 'success' && index !== PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER.length - 1) {
             // Moving the next timeline to inprogress
             const nextTimelineStatus = PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER[index + 1]
