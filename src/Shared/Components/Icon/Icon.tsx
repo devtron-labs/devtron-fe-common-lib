@@ -104,6 +104,10 @@ import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
 import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
+import { ReactComponent as ICStrategyBlueGreen } from '@IconsV2/ic-strategy-blue-green.svg'
+import { ReactComponent as ICStrategyCanary } from '@IconsV2/ic-strategy-canary.svg'
+import { ReactComponent as ICStrategyRecreate } from '@IconsV2/ic-strategy-recreate.svg'
+import { ReactComponent as ICStrategyRolling } from '@IconsV2/ic-strategy-rolling.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
@@ -227,6 +231,10 @@ export const iconMap = {
     'ic-spinny': ICSpinny,
     'ic-stack': ICStack,
     'ic-stamp': ICStamp,
+    'ic-strategy-blue-green': ICStrategyBlueGreen,
+    'ic-strategy-canary': ICStrategyCanary,
+    'ic-strategy-recreate': ICStrategyRecreate,
+    'ic-strategy-rolling': ICStrategyRolling,
     'ic-success': ICSuccess,
     'ic-suspended': ICSuspended,
     'ic-tata1mg': ICTata1mg,
