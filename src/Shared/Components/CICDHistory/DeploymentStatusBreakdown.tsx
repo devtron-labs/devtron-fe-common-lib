@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { Fragment } from 'react'
-
 import { TIMELINE_STATUS } from '@Shared/types'
 
 import { DeploymentStatusDetailRow } from './DeploymentStatusDetailRow'
@@ -57,9 +55,11 @@ const DeploymentStatusDetailBreakdown = ({
                             TIMELINE_STATUS.KUBECTL_APPLY,
                         ] as DeploymentStatusDetailRowType['type'][]
                     ).map((timelineStatus) => (
-                        <Fragment key={timelineStatus}>
-                            <DeploymentStatusDetailRow type={timelineStatus} {...deploymentStatusDetailRowProps} />
-                        </Fragment>
+                        <DeploymentStatusDetailRow
+                            key={timelineStatus}
+                            type={timelineStatus}
+                            {...deploymentStatusDetailRowProps}
+                        />
                     ))}
 
                     <DeploymentStatusDetailRow

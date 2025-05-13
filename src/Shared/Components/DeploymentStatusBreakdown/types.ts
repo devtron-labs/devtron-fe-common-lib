@@ -15,7 +15,7 @@ export enum WorkflowRunnerStatusDTO {
     STARTING = 'Starting',
     QUEUED = 'Queued',
     INITIATING = 'Initiating',
-    // Not found on BE but for Backward compatibility
+    // Not found on BE but added for Backward compatibility
     HEALTHY = 'Healthy',
     DEGRADED = 'Degraded',
 }

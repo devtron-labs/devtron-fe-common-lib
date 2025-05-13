@@ -86,7 +86,7 @@ const getPredicate =
 
             case TIMELINE_STATUS.APP_HEALTH:
                 return [TIMELINE_STATUS.HEALTHY, TIMELINE_STATUS.DEGRADED, TIMELINE_STATUS.DEPLOYMENT_FAILED].includes(
-                    timelineItem.status as TIMELINE_STATUS,
+                    timelineItem.status,
                 )
 
             default:
@@ -136,22 +136,15 @@ const processKubeCTLApply = (
     if (resourceDetails) {
         // Used to parse resource details base struct with current phase as last phase
         DEPLOYMENT_PHASES.forEach((phase) => {
-            let breakPhase = false
-            resourceDetails.forEach((item) => {
-                if (breakPhase) {
-                    return
-                }
-
-                if (phase === item.resourcePhase) {
-                    tableData.currentPhase = phase
-                    tableData.currentTableData.push({
-                        icon: 'success',
-                        phase,
-                        message: `${phase}: Create and update resources based on manifest`,
-                    })
-                    breakPhase = true
-                }
-            })
+            const resourceWithSamePhase = resourceDetails.find((item) => item.resourcePhase === phase)
+            if (resourceWithSamePhase) {
+                tableData.currentPhase = phase
+                tableData.currentTableData.push({
+                    icon: 'success',
+                    phase,
+                    message: `${phase}: Create and update resources based on manifest`,
+                })
+            }
         })
     }
 
@@ -231,16 +224,15 @@ export const processDeploymentStatusDetailsData = (
         return deploymentData
     }
 
-    // Would move for each timeline iteratively and if timeline is in terminal state then early return
-    // If timeline is in non-terminal state then we mark it as waiting
-    if (!data?.timelines?.length) {
+    if (!data.timelines.length) {
         return deploymentData
     }
 
     const isProgressing = PROGRESSING_DEPLOYMENT_STATUS.includes(deploymentStatus)
-    const isArgoCDAvailable = data.timelines.some((timeline) => timeline.status.includes(TIMELINE_STATUS.ARGOCD_SYNC))
+    const isArgoCDSyncAvailable = data.timelines.some((timeline) =>
+        timeline.status.includes(TIMELINE_STATUS.ARGOCD_SYNC),
+    )
 
-    // After initial processing will mark all unavailable timelines [present before last invalid state] as success
     PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER.forEach((timelineStatusType, index) => {
         const element = findRight(data.timelines, getPredicate(timelineStatusType))
 
@@ -292,11 +284,7 @@ export const processDeploymentStatusDetailsData = (
                 timelineData.displaySubText = ''
 
                 // These are singular events so either their success will come or failure
-                if (
-                    [TIMELINE_STATUS.GIT_COMMIT_FAILED, TIMELINE_STATUS.ARGOCD_SYNC_FAILED].includes(
-                        element.status as TIMELINE_STATUS,
-                    )
-                ) {
+                if ([TIMELINE_STATUS.GIT_COMMIT_FAILED, TIMELINE_STATUS.ARGOCD_SYNC_FAILED].includes(element.status)) {
                     timelineData.displaySubText = 'Failed'
                     timelineData.icon = 'failed'
                     timelineData.isCollapsed = false
@@ -307,7 +295,7 @@ export const processDeploymentStatusDetailsData = (
                 break
 
             case TIMELINE_STATUS.KUBECTL_APPLY: {
-                if (!isArgoCDAvailable) {
+                if (!isArgoCDSyncAvailable) {
                     deploymentData.deploymentStatusBreakdown.ARGOCD_SYNC.icon = 'success'
                     deploymentData.deploymentStatusBreakdown.ARGOCD_SYNC.displaySubText = ''
                     deploymentData.deploymentStatusBreakdown.ARGOCD_SYNC.time = element.statusTime
@@ -337,8 +325,8 @@ export const processDeploymentStatusDetailsData = (
                 break
         }
 
+        // Moving the next timeline to inprogress
         if (timelineData.icon === 'success' && index !== PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER.length - 1) {
-            // Moving the next timeline to inprogress
             const nextTimelineStatus = PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER[index + 1]
             const nextTimeline = deploymentData.deploymentStatusBreakdown[nextTimelineStatus]
 
@@ -353,7 +341,6 @@ export const processDeploymentStatusDetailsData = (
         const timelineData = deploymentData.deploymentStatusBreakdown[timelineStatusType]
 
         if (timelineData.icon === 'inprogress' || timelineData.icon === 'success') {
-            // If the timeline is in progress or success then we will mark all the previous steps as success
             for (let j = i - 1; j >= 0; j -= 1) {
                 const prevTimelineStatusType = PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER[j]
                 const prevTimelineData = deploymentData.deploymentStatusBreakdown[prevTimelineStatusType]

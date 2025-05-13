@@ -70,6 +70,8 @@ export const getIconName = (status: string, showAnimatedIcon: boolean): IconName
         case 'timedout':
         case 'timed_out':
             return 'ic-timeout-dash'
+        case 'unable_to_fetch':
+            return 'ic-disconnect'
         default:
             return null
     }
@@ -90,6 +92,7 @@ export const getIconColor = (status: string): IconsProps['color'] => {
         case 'request_accepted':
         case 'starting':
             return 'O500'
+        case 'unable_to_fetch':
         case 'timedout':
         case 'timed_out':
             return 'R500'

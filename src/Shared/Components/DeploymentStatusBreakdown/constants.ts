@@ -3,12 +3,13 @@ import { DeploymentPhaseType, DeploymentStatusTimelineType, TIMELINE_STATUS } fr
 
 import { WorkflowRunnerStatusDTO } from './types'
 
-export const DEPLOYMENT_STATUS_TEXT_MAP: Record<(typeof DEPLOYMENT_STATUS)[keyof typeof DEPLOYMENT_STATUS], string> = {
+export const DEPLOYMENT_STATUS_TEXT_MAP: Readonly<
+    Record<(typeof DEPLOYMENT_STATUS)[keyof typeof DEPLOYMENT_STATUS], string>
+> = {
     [DEPLOYMENT_STATUS.SUCCEEDED]: 'Succeeded',
     [DEPLOYMENT_STATUS.HEALTHY]: 'Healthy',
     [DEPLOYMENT_STATUS.FAILED]: 'Failed',
     [DEPLOYMENT_STATUS.TIMED_OUT]: 'Timed out',
-    // TODO: Add icons
     [DEPLOYMENT_STATUS.UNABLE_TO_FETCH]: 'Unable to fetch status',
     [DEPLOYMENT_STATUS.INPROGRESS]: 'In progress',
     [DEPLOYMENT_STATUS.PROGRESSING]: 'Progressing',
@@ -21,9 +22,8 @@ export const DEPLOYMENT_STATUS_TEXT_MAP: Record<(typeof DEPLOYMENT_STATUS)[keyof
 }
 
 // Might be more but as per BE its only these for now
-export const WFR_STATUS_DTO_TO_DEPLOYMENT_STATUS_MAP: Record<
-    WorkflowRunnerStatusDTO,
-    (typeof DEPLOYMENT_STATUS)[keyof typeof DEPLOYMENT_STATUS]
+export const WFR_STATUS_DTO_TO_DEPLOYMENT_STATUS_MAP: Readonly<
+    Record<WorkflowRunnerStatusDTO, (typeof DEPLOYMENT_STATUS)[keyof typeof DEPLOYMENT_STATUS]>
 > = {
     [WorkflowRunnerStatusDTO.ABORTED]: DEPLOYMENT_STATUS.FAILED,
     [WorkflowRunnerStatusDTO.FAILED]: DEPLOYMENT_STATUS.FAILED,
@@ -43,7 +43,7 @@ export const WFR_STATUS_DTO_TO_DEPLOYMENT_STATUS_MAP: Record<
     [WorkflowRunnerStatusDTO.QUEUED]: DEPLOYMENT_STATUS.QUEUED,
 }
 
-export const PROGRESSING_DEPLOYMENT_STATUS: (typeof DEPLOYMENT_STATUS)[keyof typeof DEPLOYMENT_STATUS][] = [
+export const PROGRESSING_DEPLOYMENT_STATUS: Readonly<(typeof DEPLOYMENT_STATUS)[keyof typeof DEPLOYMENT_STATUS][]> = [
     DEPLOYMENT_STATUS.INPROGRESS,
     DEPLOYMENT_STATUS.PROGRESSING,
     DEPLOYMENT_STATUS.STARTING,

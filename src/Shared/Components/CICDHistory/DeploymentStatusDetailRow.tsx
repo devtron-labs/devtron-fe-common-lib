@@ -68,7 +68,7 @@ export const DeploymentStatusDetailRow = ({
         }
     }
     const toggleDropdown = () => {
-        setIsCollapsed(!isCollapsed)
+        setIsCollapsed((prevState) => !prevState)
     }
 
     const renderDetailedData = () => {
@@ -79,7 +79,6 @@ export const DeploymentStatusDetailRow = ({
         return (
             <div className="px-8 py-12">
                 <div>
-                    {/* TODO: Can be statusBreakDownType */}
                     {statusBreakDownType.subSteps?.map((items, index) => (
                         // eslint-disable-next-line react/no-array-index-key
                         <div className="flex left lh-20 mb-8" key={`item-${index}`}>
@@ -101,7 +100,7 @@ export const DeploymentStatusDetailRow = ({
                         <div className="resource-list fs-13">
                             {statusBreakDownType.resourceDetails.map((nodeDetails) => (
                                 <div
-                                    className="app-status-row pt-8 pb-8"
+                                    className="app-status-row py-8"
                                     key={`${nodeDetails.resourceKind}/${nodeDetails.resourceName}`}
                                 >
                                     <div className="dc__break-word">{nodeDetails.resourceKind}</div>
@@ -129,7 +128,7 @@ export const DeploymentStatusDetailRow = ({
     }
 
     const isAccordion =
-        statusBreakDownType.subSteps?.length ||
+        !!statusBreakDownType.subSteps?.length ||
         (type === TIMELINE_STATUS.APP_HEALTH && APP_HEALTH_DROP_DOWN_LIST.includes(statusBreakDownType.icon)) ||
         ((type === TIMELINE_STATUS.GIT_COMMIT || type === TIMELINE_STATUS.ARGOCD_SYNC) &&
             statusBreakDownType.icon === 'failed')

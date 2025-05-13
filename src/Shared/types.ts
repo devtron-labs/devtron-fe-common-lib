@@ -1175,25 +1175,6 @@ export interface SyncStageResourceDetail {
     statusMessage: string
 }
 
-export interface DeploymentStatusDetailsTimelineType
-    extends Pick<SyncStageResourceDetail, 'id' | 'cdWorkflowRunnerId'> {
-    status: string
-    statusDetail: string
-    statusTime: string
-    resourceDetails?: SyncStageResourceDetail[]
-}
-
-export interface DeploymentStatusDetailsType {
-    deploymentFinishedOn: string
-    deploymentStartedOn: string
-    triggeredBy: string
-    statusFetchCount: number
-    statusLastFetchedAt: string
-    timelines: DeploymentStatusDetailsTimelineType[]
-    wfrStatus?: WorkflowRunnerStatusDTO
-    isDeploymentWithoutApproval: boolean
-}
-
 export enum TIMELINE_STATUS {
     DEPLOYMENT_INITIATED = 'DEPLOYMENT_INITIATED',
     GIT_COMMIT = 'GIT_COMMIT',
@@ -1216,6 +1197,25 @@ export enum TIMELINE_STATUS {
     HELM_PACKAGE_GENERATION_FAILED = 'HELM_PACKAGE_GENERATION_FAILED',
     HELM_MANIFEST_PUSHED_TO_HELM_REPO = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO',
     HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED',
+}
+
+export interface DeploymentStatusDetailsTimelineType
+    extends Pick<SyncStageResourceDetail, 'id' | 'cdWorkflowRunnerId'> {
+    status: TIMELINE_STATUS
+    statusDetail: string
+    statusTime: string
+    resourceDetails?: SyncStageResourceDetail[]
+}
+
+export interface DeploymentStatusDetailsType {
+    deploymentFinishedOn: string
+    deploymentStartedOn: string
+    triggeredBy: string
+    statusFetchCount: number
+    statusLastFetchedAt: string
+    timelines: DeploymentStatusDetailsTimelineType[]
+    wfrStatus?: WorkflowRunnerStatusDTO
+    isDeploymentWithoutApproval: boolean
 }
 
 export type DeploymentStatusTimelineType =
