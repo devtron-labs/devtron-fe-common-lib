@@ -46,7 +46,7 @@ export const ActionMenuItem = ({
     const renderIcon = (iconProps: typeof startIcon) =>
         iconProps && (
             <div className="mt-2 flex dc__no-shrink">
-                <Icon {...iconProps} color={iconProps.color || isNegativeType ? 'R500' : 'N800'} />
+                <Icon {...iconProps} color={iconProps.color || (isNegativeType ? 'R500' : 'N800')} />
             </div>
         )
 

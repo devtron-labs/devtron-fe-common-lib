@@ -66,25 +66,25 @@ export const ActionMenu = ({
             triggerElement={children}
         >
             <div className="flexbox-col mxh-300">
+                {isSearchable && (
+                    <div
+                        role="search"
+                        className="action-menu__searchbox bg__primary px-12 py-8 border__secondary--bottom"
+                    >
+                        <CustomInput
+                            name="action-menu-search-box"
+                            value={searchTerm}
+                            placeholder="Search"
+                            onChange={handleSearch}
+                            fullWidth
+                        />
+                    </div>
+                )}
                 <ul
                     ref={scrollableRef as MutableRefObject<HTMLUListElement>}
                     role="menu"
                     className="action-menu m-0 p-0 flex-grow-1 dc__overflow-auto dc__overscroll-none"
                 >
-                    {isSearchable && (
-                        <li
-                            role="menuitem"
-                            className="action-menu__searchbox bg__primary px-12 py-8 border__secondary--bottom dc__position-sticky dc__top-0 dc__zi-2"
-                        >
-                            <CustomInput
-                                name="action-menu-search-box"
-                                value={searchTerm}
-                                placeholder="Search"
-                                onChange={handleSearch}
-                                fullWidth
-                            />
-                        </li>
-                    )}
                     {filteredOptions.length > 0 ? (
                         filteredOptions.map((option, sectionIndex) => (
                             <li
@@ -93,7 +93,7 @@ export const ActionMenu = ({
                                 className="action-menu__group flexbox-col dc__gap-4 py-4"
                             >
                                 {option.groupLabel && (
-                                    <h4 className="action-menu__group-label bg__menu--secondary dc__truncate m-0 fs-12 lh-18 cn-9 fw-6 py-4 px-12 dc__position-sticky dc__zi-1">
+                                    <h4 className="bg__menu--secondary dc__truncate m-0 fs-12 lh-18 cn-9 fw-6 py-4 px-12 dc__position-sticky dc__top-0 dc__zi-1">
                                         {option.groupLabel}
                                     </h4>
                                 )}

@@ -9,10 +9,6 @@
         }
     }
 
-    &__group-label {
-        top: 0;
-    }
-
     &__group-list {
         list-style: none;
     }
@@ -31,19 +27,9 @@
         }
     }
 
-    &__searchbox {
-        & + .action-menu__group {
-            border-top: none;
-        }
-
-        & ~ .action-menu__group .action-menu__group-label {
-            top: 37.5px;
-        }
-
-        input {
-            border: none;
-            padding: 0;
-            background-color: transparent;
-        }
+    &__searchbox input {
+        border: none;
+        padding: 0;
+        background-color: transparent;
     }
 }
