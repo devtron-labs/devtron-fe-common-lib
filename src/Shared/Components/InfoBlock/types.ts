@@ -16,7 +16,7 @@
 
 import { ReactElement, ReactNode } from 'react'
 
-import { ComponentSizeType } from '@Shared/constants'
+import { ComponentSizeType, InfoBlockVariantType } from '@Shared/constants'
 import { BorderConfigType, ComponentLayoutType } from '@Shared/types'
 
 import { ButtonComponentType, ButtonProps } from '../Button'
@@ -29,7 +29,7 @@ export type InfoBlockProps = {
     /**
      * @default 'information'
      */
-    variant?: 'error' | 'help' | 'information' | 'success' | 'warning' | 'neutral'
+    variant?: InfoBlockVariantType
     /**
      * @default ComponentSizeType.large
      */

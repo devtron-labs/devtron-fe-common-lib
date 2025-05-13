@@ -168,3 +168,5 @@ export const FAILED_WORKFLOW_STAGE_STATUS_MAP: Record<
     [WorkflowStageStatusType.FAILED]: true,
     [WorkflowStageStatusType.TIMEOUT]: true,
 }
+
+export const APP_HEALTH_DROP_DOWN_LIST = ['inprogress', 'failed', 'disconnect', 'timed_out']

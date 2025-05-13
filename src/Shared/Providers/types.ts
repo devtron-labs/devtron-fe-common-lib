@@ -18,8 +18,17 @@ import { Dispatch, MutableRefObject, ReactNode, SetStateAction } from 'react'
 
 import { SERVER_MODE } from '../../Common'
 import { ServerInfo } from '../Components/Header/types'
-import { DevtronLicenseInfo, IntelligenceConfig, LicenseInfoDialogType } from '..'
+import { DevtronLicenseInfo, IntelligenceConfig, LicenseInfoDialogType, ToastManager } from '..'
 
+export interface ReloadVersionConfigTypes {
+    bgUpdated: boolean
+    handleAppUpdate: () => void
+    doesNeedRefresh: boolean
+    updateServiceWorker: () => Promise<void>
+    handleControllerChange: () => void
+    updateToastRef: MutableRefObject<ReturnType<typeof ToastManager.showToast>> | null
+    isRefreshing: boolean
+}
 export interface MainContext {
     serverMode: SERVER_MODE
     setServerMode: (serverMode: SERVER_MODE) => void
@@ -66,6 +75,7 @@ export interface MainContext {
     licenseData: DevtronLicenseInfo
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
     canFetchHelmAppStatus: boolean
+    reloadVersionConfig: ReloadVersionConfigTypes
     intelligenceConfig: IntelligenceConfig
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
 }
