@@ -20,12 +20,13 @@ import { useParams } from 'react-router-dom'
 import moment from 'moment'
 
 import { ShowMoreText } from '@Shared/Components/ShowMoreText'
+import { IndexStore } from '@Shared/Store'
 
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { DATE_TIME_FORMATS, showError } from '../../../Common'
 import { DEPLOYMENT_STATUS, statusIcon, TIMELINE_STATUS } from '../../constants'
-import AppStatusDetailsChart from './AppStatusDetailsChart'
-import { MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
+import { AppStatusContent } from '../AppStatusModal'
+import { APP_HEALTH_DROP_DOWN_LIST, MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
 import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
 import { getManualSync } from './service'
 import { DeploymentStatusDetailRowType } from './types'
@@ -39,10 +40,12 @@ export const DeploymentStatusDetailRow = ({
     const { appId, envId } = useParams<{ appId: string; envId: string }>()
     const statusBreakDownType = deploymentDetailedData.deploymentStatusBreakdown[type]
     const [collapsed, toggleCollapsed] = useState<boolean>(statusBreakDownType.isCollapsed)
-    const appHealthDropDownlist = ['inprogress', 'failed', 'disconnect', 'timed_out']
+
     const isHelmManifestPushFailed =
         type === TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO &&
         deploymentDetailedData.deploymentStatus === statusIcon.failed
+
+    const appDetails = IndexStore.getAppDetails()
 
     useEffect(() => {
         toggleCollapsed(statusBreakDownType.isCollapsed)
@@ -50,8 +53,7 @@ export const DeploymentStatusDetailRow = ({
 
     async function manualSyncData() {
         try {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const response = await getManualSync({ appId, envId })
+            await getManualSync({ appId, envId })
         } catch (error) {
             showError(error)
         }
@@ -151,7 +153,7 @@ export const DeploymentStatusDetailRow = ({
                     </div>
                 )}
                 <div>
-                    <AppStatusDetailsChart filterRemoveHealth showFooter={false} />
+                    <AppStatusContent appDetails={appDetails} filterHealthyNodes isCardLayout={false} />
                 </div>
             </div>
         )
@@ -180,7 +182,9 @@ export const DeploymentStatusDetailRow = ({
                             {statusBreakDownType.displayText}
                         </span>
                         {statusBreakDownType.displaySubText && (
-                            <span className={`ml-12 f-${statusBreakDownType.icon || 'waiting'}`}>
+                            <span
+                                className={`ml-12 app-summary__status-name f-${statusBreakDownType.icon || 'waiting'}`}
+                            >
                                 {statusBreakDownType.displaySubText}
                             </span>
                         )}
@@ -200,7 +204,7 @@ export const DeploymentStatusDetailRow = ({
                     )}
                     {((type === TIMELINE_STATUS.KUBECTL_APPLY && statusBreakDownType.kubeList?.length) ||
                         (type === TIMELINE_STATUS.APP_HEALTH &&
-                            appHealthDropDownlist.includes(statusBreakDownType.icon)) ||
+                            APP_HEALTH_DROP_DOWN_LIST.includes(statusBreakDownType.icon)) ||
                         ((type === TIMELINE_STATUS.GIT_COMMIT || type === TIMELINE_STATUS.ARGOCD_SYNC) &&
                             statusBreakDownType.icon === 'failed')) && (
                         <DropDownIcon
