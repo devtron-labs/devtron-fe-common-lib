@@ -40,7 +40,6 @@ const getDefaultDeploymentStatusTimeline = (
         deploymentTriggerTime: data?.deploymentStartedOn || '',
         deploymentEndTime: data?.deploymentFinishedOn || '',
         triggeredBy: data?.triggeredBy || '',
-        lastFailedStatusType: '',
         deploymentStatusBreakdown: {
             [TIMELINE_STATUS.DEPLOYMENT_INITIATED]: {
                 ...commonProps,

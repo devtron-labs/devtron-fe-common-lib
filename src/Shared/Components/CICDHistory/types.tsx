@@ -527,14 +527,6 @@ export interface DeploymentStatusDetailRowType extends Pick<DeploymentStatusDeta
     deploymentDetailedData: DeploymentStatusDetailsBreakdownDataType
 }
 
-export interface ErrorInfoStatusBarType {
-    lastFailedStatusType: string
-    type: string
-    errorMessage: string
-    hideVerticalConnector?: boolean
-    hideErrorIcon?: boolean
-}
-
 export interface DeploymentConfigurationsRes extends ResponseType {
     result?: DeploymentTemplateList[]
 }

@@ -35,7 +35,7 @@ import {
     VariableType,
     VulnerabilityType,
 } from '../Common'
-import { SelectPickerOptionType } from './Components'
+import { SelectPickerOptionType, WorkflowRunnerStatusDTO } from './Components'
 import { BASE_CONFIGURATION_ENV_ID, DEPLOYMENT_STATUS, EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
@@ -1175,9 +1175,8 @@ export interface SyncStageResourceDetail {
     statusMessage: string
 }
 
-export interface DeploymentStatusDetailsTimelineType {
-    id: number
-    cdWorkflowRunnerId: number
+export interface DeploymentStatusDetailsTimelineType
+    extends Pick<SyncStageResourceDetail, 'id' | 'cdWorkflowRunnerId'> {
     status: string
     statusDetail: string
     statusTime: string
@@ -1191,7 +1190,7 @@ export interface DeploymentStatusDetailsType {
     statusFetchCount: number
     statusLastFetchedAt: string
     timelines: DeploymentStatusDetailsTimelineType[]
-    wfrStatus?: string
+    wfrStatus?: WorkflowRunnerStatusDTO
     isDeploymentWithoutApproval: boolean
 }
 
@@ -1274,10 +1273,6 @@ export interface DeploymentStatusDetailsBreakdownDataType {
     deploymentTriggerTime: string
     deploymentEndTime: string
     triggeredBy: string
-    /**
-     * Only required - isHelmManifestPushFailed === true then in error bar below heading tile
-     */
-    lastFailedStatusType?: DeploymentStatusTimelineType | ''
     deploymentStatusBreakdown: Partial<Record<DeploymentStatusTimelineType, DeploymentStatusBreakdownItemType>>
 }
 
