@@ -121,10 +121,10 @@ const processKubeCTLApply = (
     data: DeploymentStatusDetailsType,
 ) => {
     const tableData: {
-        currentPhase: DeploymentPhaseType | ''
+        currentPhase: DeploymentPhaseType | null
         currentTableData: DeploymentStatusBreakdownItemType['subSteps']
     } = {
-        currentPhase: '',
+        currentPhase: null,
         currentTableData: [{ icon: 'success', message: 'Started by Argo CD' }],
     }
 
