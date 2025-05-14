@@ -577,3 +577,6 @@ export const DEPLOYMENT_STAGE_TO_NODE_MAP: Readonly<Record<DeploymentStageType, 
     [DeploymentStageType.POST]: DeploymentNodeType.POSTCD,
     [DeploymentStageType.PRE]: DeploymentNodeType.PRECD,
 }
+
+export const APP_DETAILS_FALLBACK_POLLING_INTERVAL = 30000
+export const PROGRESSING_DEPLOYMENT_STATUS_POLLING_INTERVAL = 10000

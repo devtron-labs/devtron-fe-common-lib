@@ -20,7 +20,7 @@ export enum WorkflowRunnerStatusDTO {
     DEGRADED = 'Degraded',
 }
 
-export interface HandleUpdateTimelineDataForTimedOutOrUnableToFetchStatusParamsType {
+export interface ProcessUnableToFetchOrTimedOutStatusType {
     timelineData: DeploymentStatusBreakdownItemType
     timelineStatusType: DeploymentStatusTimelineType
     deploymentStatus: typeof DEPLOYMENT_STATUS.UNABLE_TO_FETCH | typeof DEPLOYMENT_STATUS.TIMED_OUT

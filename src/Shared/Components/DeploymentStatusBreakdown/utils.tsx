@@ -19,7 +19,7 @@ import {
     SUCCESSFUL_DEPLOYMENT_STATUS,
     WFR_STATUS_DTO_TO_DEPLOYMENT_STATUS_MAP,
 } from './constants'
-import { HandleUpdateTimelineDataForTimedOutOrUnableToFetchStatusParamsType } from './types'
+import { ProcessUnableToFetchOrTimedOutStatusType } from './types'
 
 const getDefaultDeploymentStatusTimeline = (
     data?: DeploymentStatusDetailsType,
@@ -94,13 +94,13 @@ const getPredicate =
         }
     }
 
-const handleUpdateTimelineDataForTimedOutOrUnableToFetchStatus = ({
+const processUnableToFetchOrTimedOutStatus = ({
     timelineData,
     timelineStatusType,
     deploymentStatus,
     statusLastFetchedAt,
     statusFetchCount,
-}: HandleUpdateTimelineDataForTimedOutOrUnableToFetchStatusParamsType) => {
+}: ProcessUnableToFetchOrTimedOutStatusType) => {
     timelineData.icon = deploymentStatus === DEPLOYMENT_STATUS.UNABLE_TO_FETCH ? 'disconnect' : 'timed_out'
     timelineData.displaySubText = 'Unknown'
     timelineData.isCollapsed = false
@@ -149,7 +149,7 @@ const processKubeCTLApply = (
     }
 
     if (element.status === TIMELINE_STATUS.KUBECTL_APPLY_STARTED) {
-        timelineData.resourceDetails = element.resourceDetails?.filter(
+        timelineData.resourceDetails = (element.resourceDetails || []).filter(
             (item) => item.resourcePhase === tableData.currentPhase,
         )
 
@@ -176,7 +176,7 @@ const processKubeCTLApply = (
             deploymentStatus === DEPLOYMENT_STATUS.TIMED_OUT ||
             deploymentStatus === DEPLOYMENT_STATUS.UNABLE_TO_FETCH
         ) {
-            handleUpdateTimelineDataForTimedOutOrUnableToFetchStatus({
+            processUnableToFetchOrTimedOutStatus({
                 timelineData,
                 timelineStatusType: TIMELINE_STATUS.KUBECTL_APPLY,
                 deploymentStatus,
@@ -202,6 +202,24 @@ const processKubeCTLApply = (
     }
 }
 
+/**
+ * @description
+ * This function processes the deployment status details data and returns a breakdown of the deployment status.
+ * Cases it handles:
+ * 1. If timelines are not present, say the case of helm deployment, we will parse the wfrStatus and put the status and basic deployment info [triggeredBy, deploymentStartedOn, deploymentFinishedOn] into the breakdown data and return it.
+ * 2. In case of gitops:
+ *  - There are five timelines in chronological order:
+ *    - Deployment Initiated
+ *    - Git commit
+ *    - ArgoCD Sync
+ *    - Kubectl Apply
+ *    - App Health
+ *  - Basic flow is we traverse the timelines in order, if find the last status for that specific timeline from response by traversing the timelines in reverse order.
+ *  - If element is found, we will parse the status and set the icon, display text, time, etc. for that timeline and set the next timeline to inprogress.
+ *  - If element is not found, we will parse on basis of factors like:
+ *   - If this timeline is not inprogress and deploymentStatus is progressing, we will set the current timeline to waiting.
+ *   - In similar fashion based on the deploymentStatus we will set the icon and display text for the timeline.
+ */
 export const processDeploymentStatusDetailsData = (
     data?: DeploymentStatusDetailsType,
 ): DeploymentStatusDetailsBreakdownDataType => {
@@ -229,6 +247,8 @@ export const processDeploymentStatusDetailsData = (
     }
 
     const isProgressing = PROGRESSING_DEPLOYMENT_STATUS.includes(deploymentStatus)
+    // This key will be used since argocd sync is manual or auto based on flag on BE.
+    // And in old data as well this timeline won't be present so in KUBECTL_APPLY timeline we will set the icon to success
     const isArgoCDSyncAvailable = data.timelines.some((timeline) =>
         timeline.status.includes(TIMELINE_STATUS.ARGOCD_SYNC),
     )
@@ -263,7 +283,7 @@ export const processDeploymentStatusDetailsData = (
                     deploymentStatus === DEPLOYMENT_STATUS.TIMED_OUT) &&
                 timelineData.icon === 'inprogress'
             ) {
-                handleUpdateTimelineDataForTimedOutOrUnableToFetchStatus({
+                processUnableToFetchOrTimedOutStatus({
                     timelineData,
                     timelineStatusType,
                     deploymentStatus,

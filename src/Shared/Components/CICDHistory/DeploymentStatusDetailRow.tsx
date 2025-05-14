@@ -78,18 +78,18 @@ export const DeploymentStatusDetailRow = ({
 
         return (
             <div className="px-8 py-12">
-                <div>
-                    {statusBreakDownType.subSteps?.map((items, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <div className="flex left lh-20 mb-8" key={`item-${index}`}>
+                {statusBreakDownType.subSteps?.map((items, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div key={`item-${index}`}>
+                        <div className="flex left lh-20 mb-8">
                             {renderDeploymentTimelineIcon(items.icon)}
                             <span className="ml-12">{items.message}</span>
                         </div>
-                    ))}
-                </div>
+                    </div>
+                ))}
                 {statusBreakDownType.resourceDetails?.length ? (
                     <div className="pl-32">
-                        <div className="app-status-row dc__border-bottom pt-8 pb-8">
+                        <div className="app-status-row dc__border-bottom py-8">
                             {MANIFEST_STATUS_HEADERS.map((headerKey, index) => (
                                 // eslint-disable-next-line react/no-array-index-key
                                 <div className="fs-13 fw-6 cn-7" key={`header_${index}`}>

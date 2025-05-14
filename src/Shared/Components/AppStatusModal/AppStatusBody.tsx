@@ -1,4 +1,4 @@
-import { ComponentProps, PropsWithChildren, ReactNode } from 'react'
+import { ComponentProps, ReactNode } from 'react'
 
 import { getAIAnalyticsEvents } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
@@ -13,7 +13,7 @@ import { ShowMoreText } from '../ShowMoreText'
 import { AppStatus, DeploymentStatus, StatusType } from '../StatusComponent'
 import AppStatusContent from './AppStatusContent'
 import { APP_STATUS_CUSTOM_MESSAGES } from './constants'
-import { AppStatusBodyProps, AppStatusModalTabType } from './types'
+import { AppStatusBodyProps, AppStatusModalTabType, StatusHeadingContainerProps } from './types'
 import { getAppStatusMessageFromAppDetails } from './utils'
 
 const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; value: ReactNode; isLast?: boolean }) => (
@@ -37,17 +37,7 @@ const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; val
     </div>
 )
 
-const StatusHeadingContainer = ({
-    children,
-    type,
-    appId,
-    envId,
-    actionItem,
-}: PropsWithChildren<Pick<AppStatusBodyProps, 'type'>> & {
-    appId: number
-    envId?: number
-    actionItem?: ReactNode
-}) => (
+const StatusHeadingContainer = ({ children, type, appId, envId, actionItem }: StatusHeadingContainerProps) => (
     <div className="flexbox dc__content-space w-100">
         {children}
 
@@ -96,7 +86,7 @@ export const AppStatusBody = ({
 
         return [
             {
-                id: `app-status-block${1}`,
+                id: 'app-status-row',
                 heading: type !== 'stack-manager' ? 'Application Status' : 'Status',
                 value: (
                     <StatusHeadingContainer
@@ -129,7 +119,7 @@ export const AppStatusBody = ({
             ...(message
                 ? [
                       {
-                          id: `app-status-block${2}`,
+                          id: 'app-status-primary-message',
                           heading: 'Message',
                           value: message,
                       },
@@ -138,7 +128,7 @@ export const AppStatusBody = ({
             ...(customMessage
                 ? [
                       {
-                          id: `app-status-block${3}`,
+                          id: 'app-status-secondary-message',
                           heading: 'Message',
                           value: customMessage,
                       },
@@ -152,7 +142,7 @@ export const AppStatusBody = ({
             ? getAppStatusInfoCardItems()
             : [
                   {
-                      id: `deployment-status-block-${1}`,
+                      id: 'deployment-status-row',
                       heading: 'Deployment Status',
                       value: (
                           <StatusHeadingContainer type={type} appId={appDetails.appId} envId={appDetails.environmentId}>

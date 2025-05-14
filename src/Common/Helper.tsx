@@ -1124,7 +1124,7 @@ const getAppTypeCategory = (appType: AppType) => {
 export const getAIAnalyticsEvents = (context: string, appType?: AppType) =>
     `AI_${appType ? `${getAppTypeCategory(appType)}_` : ''}${context}`
 
-export const findRight = <T,>(arr: T[], predicate: (item: T) => boolean): T => {
+export const findRight = <T,>(arr: T[], predicate: (item: T) => boolean): T | null => {
     for (let i = arr.length - 1; i >= 0; i--) {
         if (predicate(arr[i])) {
             return arr[i]

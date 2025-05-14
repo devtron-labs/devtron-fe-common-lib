@@ -7,7 +7,11 @@ import { Drawer } from '@Common/Drawer'
 import { GenericEmptyState } from '@Common/EmptyState'
 import { handleUTCTime, stopPropagation, useAsync } from '@Common/Helper'
 import { DeploymentAppTypes, ImageType } from '@Common/Types'
-import { ComponentSizeType } from '@Shared/constants'
+import {
+    APP_DETAILS_FALLBACK_POLLING_INTERVAL,
+    ComponentSizeType,
+    PROGRESSING_DEPLOYMENT_STATUS_POLLING_INTERVAL,
+} from '@Shared/constants'
 import { AppType } from '@Shared/types'
 
 import { APIResponseHandler } from '../APIResponseHandler'
@@ -56,6 +60,10 @@ const AppStatusModal = ({
         return response
     }
 
+    /**
+     * Fetching logic for app details is we initially call from useAsync then through useEffect initiate polling
+     * Since the dependency of useAsync is empty array, it will only be called once and then we will call the polling method is triggered based on the polling interval set in the environment variables.
+     */
     const [
         areInitialAppDetailsLoading,
         fetchedAppDetails,
@@ -100,6 +108,12 @@ const AppStatusModal = ({
         return response
     }
 
+    /**
+     * Fetching logic for deployment status is we initially call from useAsync then through useEffect initiate polling
+     * Now on tab switch we need to clear the previous timeout and set a new one reason being tab would have changed and in polling method that would not be reflected since closure is created
+     * So we re-trigger useAsync to get the new data and set a new timeout
+     * resetOnChange is there so that user don't see the change in icon in tabs
+     */
     const [
         isDeploymentTimelineLoading,
         deploymentStatusDetailsBreakdownData,
@@ -122,7 +136,7 @@ const AppStatusModal = ({
                 // eslint-disable-next-line @typescript-eslint/no-floating-promises
                 handleAppDetailsExternalSync()
             },
-            Number(window._env_.DEVTRON_APP_DETAILS_POLLING_INTERVAL) || 30000,
+            Number(window._env_.DEVTRON_APP_DETAILS_POLLING_INTERVAL) || APP_DETAILS_FALLBACK_POLLING_INTERVAL,
         )
     }
 
@@ -136,7 +150,7 @@ const AppStatusModal = ({
                 appDetails.appType !== AppType.DEVTRON_HELM_CHART
                     ? window._env_.DEVTRON_APP_DETAILS_POLLING_INTERVAL
                     : window._env_.HELM_APP_DETAILS_POLLING_INTERVAL,
-            ) || 30000
+            ) || APP_DETAILS_FALLBACK_POLLING_INTERVAL
 
         deploymentStatusPollingTimeoutRef.current = setTimeout(
             async () => {
@@ -149,7 +163,7 @@ const AppStatusModal = ({
                 // eslint-disable-next-line @typescript-eslint/no-floating-promises
                 handleDeploymentStatusExternalSync()
             },
-            isDeploymentInProgress ? 10000 : pollingIntervalFromFlag,
+            isDeploymentInProgress ? PROGRESSING_DEPLOYMENT_STATUS_POLLING_INTERVAL : pollingIntervalFromFlag,
         )
     }
 

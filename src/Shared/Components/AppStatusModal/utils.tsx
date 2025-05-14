@@ -84,30 +84,19 @@ export const getShowDeploymentStatusModal = ({
     type,
     appDetails,
 }: Pick<AppStatusModalProps, 'type' | 'appDetails'>): boolean => {
-    if (!appDetails) {
-        return false
-    }
-
-    const isHelmOrDevtronApp =
-        appDetails.appType === AppType.DEVTRON_APP || appDetails.appType === AppType.DEVTRON_HELM_CHART
-
-    if (type === 'stack-manager' || !isHelmOrDevtronApp) {
+    if (
+        !appDetails ||
+        type === 'stack-manager' ||
+        (appDetails.appType !== AppType.DEVTRON_APP && appDetails.appType !== AppType.DEVTRON_HELM_CHART)
+    ) {
         return false
     }
 
     if (appDetails.appType === AppType.DEVTRON_HELM_CHART) {
-        if (!appDetails.lastDeployedTime || appDetails.deploymentAppType === DeploymentAppTypes.HELM) {
-            return false
-        }
-
-        return true
+        return !!appDetails.lastDeployedTime && appDetails.deploymentAppType !== DeploymentAppTypes.HELM
     }
 
-    if (appDetails.releaseMode === ReleaseMode.MIGRATE_EXTERNAL_APPS && !appDetails.isPipelineTriggered) {
-        return false
-    }
-
-    return true
+    return appDetails.releaseMode !== ReleaseMode.MIGRATE_EXTERNAL_APPS || appDetails.isPipelineTriggered
 }
 
 export const getEmptyViewImageFromHelmDeploymentStatus = (

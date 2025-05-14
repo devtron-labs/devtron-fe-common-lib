@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, PropsWithChildren, ReactNode } from 'react'
 
 import { APIOptions } from '@Common/Types'
 import {
@@ -91,4 +91,10 @@ export interface AppStatusModalTabListProps extends Pick<AppStatusModalProps, 'a
     handleSelectTab: (updatedTab: AppStatusModalTabType) => void
     selectedTab: AppStatusModalTabType
     deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType
+}
+
+export interface StatusHeadingContainerProps extends PropsWithChildren<Pick<AppStatusBodyProps, 'type'>> {
+    appId: number
+    envId?: number
+    actionItem?: ReactNode
 }
