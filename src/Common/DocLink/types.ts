@@ -1,6 +1,8 @@
-export interface DocLinkProps {
+import { ButtonComponentType, ButtonProps } from '@Shared/Components'
+
+export interface DocLinkProps extends Pick<ButtonProps<ButtonComponentType.anchor>, 'onClick' | 'dataTestId'> {
     docLink: string
-    dataTestId: string
     docLinkText?: string
     className?: string
+    showEndIcon?: boolean
 }
