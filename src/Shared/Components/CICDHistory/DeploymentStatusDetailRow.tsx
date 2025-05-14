@@ -186,7 +186,9 @@ export const DeploymentStatusDetailRow = ({
                                 {statusBreakDownType.displayText}
                             </span>
                             {statusBreakDownType.displaySubText && (
-                                <span className={`app-summary__status-name f-${statusBreakDownType.icon || 'waiting'}`}>
+                                <span
+                                    className={`app-summary__status-name dc__first-letter-capitalize--imp f-${statusBreakDownType.icon || 'waiting'}`}
+                                >
                                     {statusBreakDownType.displaySubText}
                                 </span>
                             )}

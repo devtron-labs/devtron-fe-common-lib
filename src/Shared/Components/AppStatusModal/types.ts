@@ -30,13 +30,13 @@ export type AppStatusModalProps = {
           envId: number
           appDetails?: never
           initialTab?: never
-          handleUpdateDeploymentStatusDetailsBreakdownData?: never
+          updateDeploymentStatusDetailsBreakdownData?: never
       }
     | {
           type: 'devtron-app' | 'other-apps' | 'stack-manager'
           appDetails: AppDetails
           initialTab: AppStatusModalTabType
-          handleUpdateDeploymentStatusDetailsBreakdownData: (data: DeploymentStatusDetailsBreakdownDataType) => void
+          updateDeploymentStatusDetailsBreakdownData: (data: DeploymentStatusDetailsBreakdownDataType) => void
           appId?: never
           envId?: never
       }

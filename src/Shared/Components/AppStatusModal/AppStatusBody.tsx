@@ -4,7 +4,6 @@ import { getAIAnalyticsEvents } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { getAppDetailsURL } from '@Shared/Helpers'
-import { AppType } from '@Shared/types'
 
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { DeploymentStatusDetailBreakdown } from '../CICDHistory'
@@ -106,7 +105,7 @@ export const AppStatusBody = ({
                         envId={appDetails.environmentId}
                         actionItem={
                             ExplainWithAIButton &&
-                            appDetails.appStatus?.toLowerCase() !== StatusType.HEALTHY.toLowerCase() &&
+                            appStatus?.toLowerCase() !== StatusType.HEALTHY.toLowerCase() &&
                             (debugNode || message) ? (
                                 <ExplainWithAIButton
                                     intelligenceConfig={{
@@ -114,13 +113,10 @@ export const AppStatusBody = ({
                                         metadata: {
                                             ...(debugNode ? { object: debugObject } : { message }),
                                             namespace: appDetails.namespace,
-                                            status: debugNode?.health?.status ?? appDetails.appStatus,
+                                            status: debugNode?.health?.status ?? appStatus,
                                         },
                                         prompt: `Debug ${message || 'error'} ${debugNode ? `of ${debugObject}` : ''} in ${appDetails.namespace}`,
-                                        analyticsCategory: getAIAnalyticsEvents(
-                                            'APP_STATUS',
-                                            appDetails.appStatus as AppType,
-                                        ),
+                                        analyticsCategory: getAIAnalyticsEvents('APP_STATUS', appDetails.appType),
                                     }}
                                 />
                             ) : null

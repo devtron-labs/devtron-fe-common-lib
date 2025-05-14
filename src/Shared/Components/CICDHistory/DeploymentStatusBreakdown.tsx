@@ -25,6 +25,7 @@ const DeploymentStatusDetailBreakdown = ({
     deploymentStatusDetailsBreakdownData,
     isVirtualEnvironment,
     appDetails,
+    rootClassName = '',
 }: DeploymentStatusDetailBreakdownType) => {
     const isHelmManifestPushed =
         deploymentStatusDetailsBreakdownData.deploymentStatusBreakdown[
@@ -38,7 +39,10 @@ const DeploymentStatusDetailBreakdown = ({
         }
 
     return (
-        <div className="deployment-status-breakdown-container" data-testid="deployment-history-steps-status">
+        <div
+            className={`deployment-status-breakdown-container ${rootClassName}`}
+            data-testid="deployment-history-steps-status"
+        >
             <DeploymentStatusDetailRow
                 type={TIMELINE_STATUS.DEPLOYMENT_INITIATED}
                 {...deploymentStatusDetailRowProps}

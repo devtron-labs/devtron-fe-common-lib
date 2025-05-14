@@ -57,3 +57,7 @@
         border-top: 0;
     }
 }
+
+.deployment-approval-container + .deployment-status-breakdown-container {
+    padding-top: 0px;
+}

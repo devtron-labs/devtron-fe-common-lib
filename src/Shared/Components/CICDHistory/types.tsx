@@ -519,6 +519,7 @@ export interface DeploymentStatusDetailBreakdownType {
      * Won't be available if coming directly to deployment history from url
      */
     appDetails: AppDetails | null
+    rootClassName?: string
 }
 
 export interface DeploymentStatusDetailRowType extends Pick<DeploymentStatusDetailBreakdownType, 'appDetails'> {

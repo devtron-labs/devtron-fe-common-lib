@@ -29,7 +29,7 @@ const AppStatusModal = ({
     type,
     appDetails: appDetailsProp,
     processVirtualEnvironmentDeploymentData,
-    handleUpdateDeploymentStatusDetailsBreakdownData,
+    updateDeploymentStatusDetailsBreakdownData,
     isConfigDriftEnabled,
     configDriftModal: ConfigDriftModal,
     appId,
@@ -95,7 +95,7 @@ const AppStatusModal = ({
             deploymentStatusAbortControllerRef,
         )
 
-        handleUpdateDeploymentStatusDetailsBreakdownData?.(response)
+        updateDeploymentStatusDetailsBreakdownData?.(response)
 
         return response
     }
