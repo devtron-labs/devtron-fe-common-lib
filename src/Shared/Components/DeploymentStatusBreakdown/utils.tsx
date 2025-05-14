@@ -376,6 +376,8 @@ export const processDeploymentStatusDetailsData = (
                 const prevTimelineData = deploymentData.deploymentStatusBreakdown[prevTimelineStatusType]
                 prevTimelineData.icon = 'success'
                 prevTimelineData.displaySubText = ''
+                prevTimelineData.isCollapsed = false
+                prevTimelineData.timelineStatus = ''
             }
             break
         }
