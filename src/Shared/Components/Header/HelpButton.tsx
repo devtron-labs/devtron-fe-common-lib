@@ -127,12 +127,7 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
                 >
                     <Icon name="ic-help-outline" color="N900" size={20} />
                     <span>Help</span>
-                    <span
-                        className="flex rotate"
-                        style={{ ['--rotateBy' as string]: isActionMenuOpen ? '180deg' : '0deg' }}
-                    >
-                        <Icon name="ic-caret-down-small" color={null} />
-                    </span>
+                    <Icon name="ic-caret-down-small" color={null} rotateBy={isActionMenuOpen ? 180 : 0} />
                 </button>
             </ActionMenu>
             {isEnterprise && (
