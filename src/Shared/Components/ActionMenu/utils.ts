@@ -1,6 +1,6 @@
 import { UseActionMenuProps } from './types'
 
-export const getActionMenuFlatOptions = (options: UseActionMenuProps['options']) =>
+export const getActionMenuFlatOptions = <T extends string | number>(options: UseActionMenuProps<T>['options']) =>
     options.flatMap(
         (option, sectionIndex) =>
             option.items.map((groupOption, itemIndex) => ({
@@ -15,7 +15,10 @@ const normalize = (str: string) => str.toLowerCase()
 
 const fuzzyMatch = (text: string, term: string) => normalize(text).includes(term)
 
-export const filterActionMenuOptions = (options: UseActionMenuProps['options'], searchTerm: string) => {
+export const filterActionMenuOptions = <T extends string | number>(
+    options: UseActionMenuProps<T>['options'],
+    searchTerm: string,
+) => {
     if (!searchTerm) {
         return options
     }

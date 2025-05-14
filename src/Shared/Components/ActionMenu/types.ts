@@ -32,9 +32,12 @@ type ActionMenuItemIconType = Pick<IconsProps, 'name'> & {
     color?: IconsProps['color']
 }
 
-export type ActionMenuItemType = Omit<SelectPickerOptionType, 'label' | 'value' | 'endIcon' | 'startIcon'> & {
+export type ActionMenuItemType<T extends string | number = string | number> = Omit<
+    SelectPickerOptionType,
+    'label' | 'value' | 'endIcon' | 'startIcon'
+> & {
     /** A unique identifier for the action menu item. */
-    id: string | number
+    id: T
     /** The text label for the menu item. */
     label: string
     /** Indicates whether the menu item is disabled. */
@@ -50,7 +53,7 @@ export type ActionMenuItemType = Omit<SelectPickerOptionType, 'label' | 'value' 
     endIcon?: ActionMenuItemIconType
 } & ConditionalActionMenuComponentType
 
-export type ActionMenuOptionType = {
+export type ActionMenuOptionType<T extends string | number> = {
     /**
      * The label for the group of menu items. \
      * This is optional and can be used to categorize items under a specific group.
@@ -59,27 +62,30 @@ export type ActionMenuOptionType = {
     /**
      * The list of items belonging to this group.
      */
-    items: ActionMenuItemType[]
+    items: ActionMenuItemType<T>[]
 }
 
-export type UseActionMenuProps = Omit<UsePopoverProps, 'onPopoverKeyDown' | 'onTriggerKeyDown'> & {
+export type UseActionMenuProps<T extends string | number> = Omit<
+    UsePopoverProps,
+    'onPopoverKeyDown' | 'onTriggerKeyDown'
+> & {
     /**
      * The options to display in the action menu.
      */
-    options: ActionMenuOptionType[]
+    options: ActionMenuOptionType<T>[]
     /**
      * Determines whether the action menu is searchable.
      */
     isSearchable?: boolean
 }
 
-export type ActionMenuProps = UseActionMenuProps &
+export type ActionMenuProps<T extends string | number = string | number> = UseActionMenuProps<T> &
     Pick<SelectPickerProps, 'disableDescriptionEllipsis'> & {
         /**
          * Callback function triggered when an item is clicked.
          * @param item - The selected item.
          */
-        onClick: (item: ActionMenuItemType) => void
+        onClick: (item: ActionMenuItemType<T>) => void
         /**
          * Config for the footer at the bottom of action menu list. It is sticky by default
          */
@@ -102,8 +108,11 @@ export type ActionMenuProps = UseActionMenuProps &
           }
     )
 
-export type ActionMenuItemProps = Pick<ActionMenuProps, 'onClick' | 'disableDescriptionEllipsis'> & {
-    item: ActionMenuItemType
+export type ActionMenuItemProps<T extends string | number> = Pick<
+    ActionMenuProps<T>,
+    'onClick' | 'disableDescriptionEllipsis'
+> & {
+    item: ActionMenuItemType<T>
     itemRef: Ref<HTMLAnchorElement> | LegacyRef<HTMLAnchorElement | HTMLButtonElement>
     isFocused?: boolean
     onMouseEnter?: () => void

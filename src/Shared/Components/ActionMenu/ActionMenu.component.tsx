@@ -9,7 +9,7 @@ import { useActionMenu } from './useActionMenu.hook'
 
 import './actionMenu.scss'
 
-export const ActionMenu = ({
+export const ActionMenu = <T extends string | number = string | number>({
     id,
     options,
     onClick,
@@ -22,7 +22,7 @@ export const ActionMenu = ({
     children,
     onOpen,
     footerConfig,
-}: ActionMenuProps) => {
+}: ActionMenuProps<T>) => {
     // HOOKS
     const {
         open,
@@ -51,7 +51,7 @@ export const ActionMenu = ({
     // HANDLERS
     const handleOptionMouseEnter = (index: number) => () => setFocusedIndex(index)
 
-    const handleOptionOnClick = (item: ActionMenuItemType) => () => {
+    const handleOptionOnClick = (item: ActionMenuItemType<T>) => () => {
         onClick(item)
         closePopover()
     }
@@ -107,7 +107,7 @@ export const ActionMenu = ({
                                             )
 
                                             return (
-                                                <ActionMenuItem
+                                                <ActionMenuItem<T>
                                                     key={`${item.label}-${item.id}`}
                                                     item={item}
                                                     itemRef={itemsRef.current[index]}

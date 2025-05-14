@@ -7,14 +7,14 @@ import { Icon } from '../Icon'
 import { getTooltipProps } from '../SelectPicker/common'
 import { ActionMenuItemProps } from './types'
 
-export const ActionMenuItem = ({
+export const ActionMenuItem = <T extends string | number>({
     item,
     itemRef,
     isFocused,
     onClick,
     onMouseEnter,
     disableDescriptionEllipsis = false,
-}: ActionMenuItemProps) => {
+}: ActionMenuItemProps<T>) => {
     const {
         id,
         description,

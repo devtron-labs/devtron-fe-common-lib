@@ -4,7 +4,7 @@ import { usePopover, UsePopoverProps } from '../Popover'
 import { UseActionMenuProps } from './types'
 import { filterActionMenuOptions, getActionMenuFlatOptions } from './utils'
 
-export const useActionMenu = ({
+export const useActionMenu = <T extends string | number>({
     id,
     position = 'bottom',
     alignment = 'start',
@@ -12,7 +12,7 @@ export const useActionMenu = ({
     options,
     isSearchable,
     onOpen,
-}: UseActionMenuProps) => {
+}: UseActionMenuProps<T>) => {
     // STATES
     const [focusedIndex, setFocusedIndex] = useState(-1)
     const [searchTerm, setSearchTerm] = useState('')
@@ -102,9 +102,11 @@ export const useActionMenu = ({
         onTriggerKeyDown: handleTriggerKeyDown,
     })
 
+    // CLEANING UP STATES AFTER ACTION MENU CLOSE
     useEffect(() => {
         if (!open) {
             setFocusedIndex(-1)
+            setSearchTerm('')
         }
     }, [open])
 

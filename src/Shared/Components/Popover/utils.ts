@@ -40,32 +40,27 @@ export const getPopoverPositionStyle = ({ position }: Pick<UsePopoverProps, 'pos
     }
 }
 
+const getPopoverAnimationProps = (axisKey: 'x' | 'y', axisInitialValue: number, isMiddleAlignment: boolean) =>
+    ({
+        initial: { opacity: 0, [axisKey]: axisInitialValue },
+        animate: { opacity: 1, [axisKey]: 0 },
+        exit: { opacity: 0, [axisKey]: axisInitialValue },
+        transformTemplate: (isMiddleAlignment
+            ? (params) =>
+                  axisKey === 'y' ? `translate(-50%, ${params[axisKey]})` : `translate(${params[axisKey]}, -50%,)`
+            : undefined) as HTMLMotionProps<'div'>['transformTemplate'],
+    }) satisfies HTMLMotionProps<'div'>
+
 export const getPopoverFramerProps = ({ position, alignment }: Pick<UsePopoverProps, 'position' | 'alignment'>) => {
     const isMiddleAlignment = alignment === 'middle'
 
     if (position === 'top' || position === 'bottom') {
         const initialY = position === 'bottom' ? -12 : 12
-
-        return {
-            initial: { opacity: 0, y: initialY },
-            animate: { opacity: 1, y: 0 },
-            exit: { opacity: 0, y: initialY },
-            transformTemplate: (isMiddleAlignment
-                ? ({ y }) => `translate(-50%, ${y})`
-                : undefined) as HTMLMotionProps<'div'>['transformTemplate'],
-        } satisfies HTMLMotionProps<'div'>
+        return getPopoverAnimationProps('y', initialY, isMiddleAlignment)
     }
 
     const initialX = position === 'right' ? -12 : 12
-
-    return {
-        initial: { opacity: 0, x: initialX },
-        animate: { opacity: 1, x: 0 },
-        exit: { opacity: 0, x: initialX },
-        transformTemplate: (isMiddleAlignment
-            ? ({ x }) => `translate(${x}, -50%)`
-            : undefined) as HTMLMotionProps<'div'>['transformTemplate'],
-    } satisfies HTMLMotionProps<'div'>
+    return getPopoverAnimationProps('x', initialX, isMiddleAlignment)
 }
 
 export const getPopoverActualPositionAlignment = ({
