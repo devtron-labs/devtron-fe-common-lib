@@ -52,7 +52,7 @@ const StatusHeadingContainer = ({
     <div className="flexbox dc__content-space w-100">
         {children}
 
-        <div className="flexbox dc__align-items-center dc__gap-4">
+        <div className="flexbox dc__align-items-center dc__gap-8">
             {actionItem}
             {type === 'release' ? (
                 <Button

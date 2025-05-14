@@ -182,7 +182,7 @@ export const DeploymentStatusDetailRow = ({
                     <div className="flexbox dc__align-items-center dc__gap-12 flex-grow-1">
                         {renderDeploymentTimelineIcon(statusBreakDownType.icon)}
                         <span className="fs-13 flexbox dc__gap-6">
-                            <span data-testid="deployment-status-step-name" className="dc__truncate">
+                            <span data-testid="deployment-status-step-name" className="dc__truncate flexbox">
                                 {statusBreakDownType.displayText}
                             </span>
                             {statusBreakDownType.displaySubText && (
