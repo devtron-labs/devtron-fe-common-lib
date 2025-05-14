@@ -22,6 +22,7 @@ import DOMPurify from 'dompurify'
 import { ReactComponent as ICArrow } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
 import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
+import { DocLink } from '@Common/DocLink'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
 import { escapeRegExp, sanitizeTargetPlatforms } from '@Shared/Helpers'
 import { AppThemeType, getComponentSpecificThemeClass } from '@Shared/Providers'
@@ -82,14 +83,12 @@ const renderBlobNotConfigured = (): JSX.Element => (
         <div className="flexbox configure-blob-container pt-8 pr-12 pb-8 pl-12 bcv-1 br-4">
             <HelpIcon className="icon-dim-20 fcv-5" />
             <span className="fs-13 fw-4 mr-8 ml-8 text__white">Want to store logs to view later?</span>
-            <a
-                className="fs-13 fw-6 cb-5 dc__no-decor"
-                href={DOCUMENTATION.BLOB_STORAGE}
-                target="_blank"
-                rel="noreferrer"
-            >
-                Configure blob storage
-            </a>
+
+            <DocLink
+                docLink={DOCUMENTATION.BLOB_STORAGE}
+                docLinkText="Configure blob storage"
+                dataTestId="configure-blob-storage"
+            />
             <OpenInNew className="icon-dim-20 ml-8" />
         </div>
     </>

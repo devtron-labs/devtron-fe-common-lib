@@ -23,13 +23,13 @@ export const DOCUMENTATION_VERSION = '/v/v0.7'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DEFAULT_JSON_SCHEMA_URI = 'https://json-schema.org/draft/2020-12/schema'
 export const DOCUMENTATION = {
-    APP_METRICS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/app-details/app-metrics`,
-    APP_TAGS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/create-application#tags`,
-    APP_OVERVIEW_TAGS: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/applications/overview#manage-tags`,
-    BLOB_STORAGE: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/getting-started/install/installation-configuration#configuration-of-blob-storage`,
-    GLOBAL_CONFIG_BUILD_INFRA: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/global-configurations/build-infra`,
-    ENTERPRISE_LICENSE: `${DOCUMENTATION_HOME_PAGE}/enterprise-license`,
-    KUBE_CONFIG: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/resource-browser#running-kubectl-commands-locally`,
+    APP_METRICS: `usage/applications/app-details/app-metrics`,
+    APP_TAGS: `usage/applications/create-application#tags`,
+    APP_OVERVIEW_TAGS: `usage/applications/overview#manage-tags`,
+    BLOB_STORAGE: `getting-started/install/installation-configuration#configuration-of-blob-storage`,
+    GLOBAL_CONFIG_BUILD_INFRA: `global-configurations/build-infra`,
+    ENTERPRISE_LICENSE: `enterprise-license`,
+    KUBE_CONFIG: `usage/resource-browser#running-kubectl-commands-locally`,
     TENANT_INSTALLATION: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/software-distribution-hub/tenants`,
 }
 

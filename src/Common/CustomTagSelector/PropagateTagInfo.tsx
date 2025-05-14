@@ -20,6 +20,7 @@ import { ReactComponent as ICHelpOutline } from '../../Assets/Icon/ic-help-outli
 import { TippyCustomized } from '../TippyCustomized'
 import { TippyTheme } from '../Types'
 import { DOCUMENTATION } from '../Constants'
+import { getDocumentationUrl } from '@Common/DocLink'
 
 export default function PropagateTagInfo({ isCreateApp }: { isCreateApp: boolean }) {
     const additionalInfo = () => (
@@ -47,7 +48,7 @@ export default function PropagateTagInfo({ isCreateApp }: { isCreateApp: boolean
             showCloseButton
             trigger="click"
             interactive
-            documentationLink={isCreateApp ? DOCUMENTATION.APP_TAGS : DOCUMENTATION.APP_OVERVIEW_TAGS}
+            documentationLink={isCreateApp ? getDocumentationUrl(DOCUMENTATION.APP_TAGS) : getDocumentationUrl(DOCUMENTATION.APP_OVERVIEW_TAGS)}
             documentationLinkText="View Documentation"
         >
             <div className="flexbox cursor">
