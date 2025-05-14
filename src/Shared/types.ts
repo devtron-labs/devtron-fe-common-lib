@@ -1274,6 +1274,10 @@ export interface DeploymentStatusDetailsBreakdownDataType {
     deploymentEndTime: string
     triggeredBy: string
     deploymentStatusBreakdown: Partial<Record<DeploymentStatusTimelineType, DeploymentStatusBreakdownItemType>>
+    errorBarConfig?: {
+        deploymentErrorMessage: string
+        nextTimelineToProcess: DeploymentStatusTimelineType
+    } | null
 }
 
 export interface IntelligenceConfig {

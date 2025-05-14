@@ -35,8 +35,16 @@ const getDefaultDeploymentStatusTimeline = (
         isCollapsed: true,
     }
 
+    const deploymentStatus = WFR_STATUS_DTO_TO_DEPLOYMENT_STATUS_MAP[data?.wfrStatus] || DEPLOYMENT_STATUS.INPROGRESS
+    // Incase of git commit failed or argocd sync failed, DEPLOYMENT_STATUS.FAILED won't come from BE
+    const deploymentErrorMessage =
+        deploymentStatus === DEPLOYMENT_STATUS.FAILED
+            ? data?.timelines?.find((timeline) => timeline.status === TIMELINE_STATUS.DEPLOYMENT_FAILED)
+                  ?.statusDetail || ''
+            : ''
+
     return {
-        deploymentStatus: WFR_STATUS_DTO_TO_DEPLOYMENT_STATUS_MAP[data?.wfrStatus] || DEPLOYMENT_STATUS.INPROGRESS,
+        deploymentStatus,
         deploymentTriggerTime: data?.deploymentStartedOn || '',
         deploymentEndTime: data?.deploymentFinishedOn || '',
         triggeredBy: data?.triggeredBy || '',
@@ -65,6 +73,12 @@ const getDefaultDeploymentStatusTimeline = (
                 displayText: 'Propagate manifest to Kubernetes resources',
             },
         },
+        errorBarConfig: deploymentErrorMessage
+            ? {
+                  deploymentErrorMessage,
+                  nextTimelineToProcess: TIMELINE_STATUS.GIT_COMMIT,
+              }
+            : null,
     }
 }
 
@@ -85,9 +99,7 @@ const getPredicate =
                 return timelineItem.status.includes(TIMELINE_STATUS.KUBECTL_APPLY)
 
             case TIMELINE_STATUS.APP_HEALTH:
-                return [TIMELINE_STATUS.HEALTHY, TIMELINE_STATUS.DEGRADED, TIMELINE_STATUS.DEPLOYMENT_FAILED].includes(
-                    timelineItem.status,
-                )
+                return [TIMELINE_STATUS.HEALTHY, TIMELINE_STATUS.DEGRADED].includes(timelineItem.status)
 
             default:
                 return false
@@ -247,6 +259,7 @@ export const processDeploymentStatusDetailsData = (
     }
 
     const isProgressing = PROGRESSING_DEPLOYMENT_STATUS.includes(deploymentStatus)
+    const hasDeploymentFailed = deploymentStatus === DEPLOYMENT_STATUS.FAILED
     // This key will be used since argocd sync is manual or auto based on flag on BE.
     // And in old data as well this timeline won't be present so in KUBECTL_APPLY timeline we will set the icon to success
     const isArgoCDSyncAvailable = data.timelines.some((timeline) =>
@@ -255,7 +268,6 @@ export const processDeploymentStatusDetailsData = (
 
     PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER.forEach((timelineStatusType, index) => {
         const element = findRight(data.timelines, getPredicate(timelineStatusType))
-
         const timelineData = deploymentData.deploymentStatusBreakdown[timelineStatusType]
 
         if (!element) {
@@ -265,6 +277,7 @@ export const processDeploymentStatusDetailsData = (
                 timelineData.displaySubText = 'Waiting'
             }
 
+            // We don't even need to clean this in final loop since deployment status won't be in progress if next timeline is progressing
             if (isProgressing && timelineStatusType === TIMELINE_STATUS.KUBECTL_APPLY) {
                 timelineData.subSteps = [
                     { icon: '', message: 'Waiting to be started by Argo CD' },
@@ -273,9 +286,13 @@ export const processDeploymentStatusDetailsData = (
                 timelineData.isCollapsed = false
             }
 
-            if (deploymentStatus === DEPLOYMENT_STATUS.FAILED) {
-                timelineData.displaySubText = ''
-                timelineData.icon = 'unreachable'
+            if (hasDeploymentFailed) {
+                const hasCurrentTimelineFailed =
+                    timelineStatusType === TIMELINE_STATUS.APP_HEALTH &&
+                    deploymentData.deploymentStatusBreakdown.KUBECTL_APPLY.icon === 'success'
+
+                timelineData.displaySubText = hasCurrentTimelineFailed ? 'Failed' : ''
+                timelineData.icon = hasCurrentTimelineFailed ? 'failed' : 'unreachable'
             }
 
             if (
@@ -291,7 +308,6 @@ export const processDeploymentStatusDetailsData = (
                     statusFetchCount: data?.statusFetchCount,
                 })
             }
-
             return
         }
 
@@ -327,18 +343,8 @@ export const processDeploymentStatusDetailsData = (
 
             case TIMELINE_STATUS.APP_HEALTH:
                 timelineData.time = element.statusTime
-                if (element.status === TIMELINE_STATUS.DEPLOYMENT_FAILED) {
-                    // TODO: Check why its icon is not failed in earlier implementation
-                    timelineData.icon = 'failed'
-                    timelineData.displaySubText = 'Failed'
-                    timelineData.timelineStatus = element.statusDetail
-                    break
-                }
-
-                if (element.status === TIMELINE_STATUS.HEALTHY || element.status === TIMELINE_STATUS.DEGRADED) {
-                    timelineData.icon = 'success'
-                    timelineData.displaySubText = element.status === TIMELINE_STATUS.HEALTHY ? '' : 'Degraded'
-                }
+                timelineData.icon = 'success'
+                timelineData.displaySubText = element.status === TIMELINE_STATUS.HEALTHY ? '' : 'Degraded'
                 break
 
             default:
@@ -349,6 +355,10 @@ export const processDeploymentStatusDetailsData = (
         if (timelineData.icon === 'success' && index !== PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER.length - 1) {
             const nextTimelineStatus = PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER[index + 1]
             const nextTimeline = deploymentData.deploymentStatusBreakdown[nextTimelineStatus]
+
+            if (deploymentData.errorBarConfig) {
+                deploymentData.errorBarConfig.nextTimelineToProcess = nextTimelineStatus
+            }
 
             nextTimeline.icon = 'inprogress'
             nextTimeline.displaySubText = 'In progress'

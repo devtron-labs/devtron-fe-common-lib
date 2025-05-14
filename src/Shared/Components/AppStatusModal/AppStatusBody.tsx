@@ -184,6 +184,7 @@ export const AppStatusBody = ({
                     deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}
                     isVirtualEnvironment={appDetails.isVirtualEnvironment}
                     appDetails={appDetails}
+                    rootClassName="pb-20"
                 />
             )}
         </div>

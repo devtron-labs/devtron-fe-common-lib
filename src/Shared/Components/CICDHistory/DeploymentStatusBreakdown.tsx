@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
+import { Fragment } from 'react'
+
 import { TIMELINE_STATUS } from '@Shared/types'
 
+import { InfoBlock } from '../InfoBlock'
 import { DeploymentStatusDetailRow } from './DeploymentStatusDetailRow'
 import { DeploymentStatusDetailBreakdownType, DeploymentStatusDetailRowType } from './types'
 
@@ -59,11 +62,21 @@ const DeploymentStatusDetailBreakdown = ({
                             TIMELINE_STATUS.KUBECTL_APPLY,
                         ] as DeploymentStatusDetailRowType['type'][]
                     ).map((timelineStatus) => (
-                        <DeploymentStatusDetailRow
-                            key={timelineStatus}
-                            type={timelineStatus}
-                            {...deploymentStatusDetailRowProps}
-                        />
+                        <Fragment key={timelineStatus}>
+                            {deploymentStatusDetailsBreakdownData.errorBarConfig?.nextTimelineToProcess ===
+                                timelineStatus && (
+                                <>
+                                    <InfoBlock
+                                        variant="error"
+                                        description={
+                                            deploymentStatusDetailsBreakdownData.errorBarConfig.deploymentErrorMessage
+                                        }
+                                    />
+                                    <div className="vertical-connector" />
+                                </>
+                            )}
+                            <DeploymentStatusDetailRow type={timelineStatus} {...deploymentStatusDetailRowProps} />
+                        </Fragment>
                     ))}
 
                     <DeploymentStatusDetailRow
