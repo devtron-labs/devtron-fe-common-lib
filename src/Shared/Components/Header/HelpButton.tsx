@@ -6,10 +6,10 @@ import { URLS } from '@Common/Constants'
 import { ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
 
-import { ActionMenu, ActionMenuItemType, ActionMenuProps } from '../ActionMenu'
+import { ActionMenu, ActionMenuItemType } from '../ActionMenu'
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
-import { HelpButtonProps, HelpMenuItems, InstallationType } from './types'
+import { HelpButtonActionMenuProps, HelpButtonProps, HelpMenuItems, InstallationType } from './types'
 import { getHelpActionMenuOptions } from './utils'
 
 const CheckForUpdates = ({
@@ -35,12 +35,12 @@ const CheckForUpdates = ({
     </div>
 )
 
-export const HelpButton = ({ serverInfo, fetchingServerInfo, handleGettingStartedClick, onClick }: HelpButtonProps) => {
+export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButtonProps) => {
     // STATES
     const [isActionMenuOpen, setIsActionMenuOpen] = useState(false)
 
     // HOOKS
-    const { currentServerInfo, handleOpenLicenseInfoDialog, licenseData } = useMainContext()
+    const { currentServerInfo, handleOpenLicenseInfoDialog, licenseData, setGettingStartedClicked } = useMainContext()
 
     // REFS
     const typeFormSliderButtonRef = useRef(null)
@@ -69,7 +69,11 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, handleGettingStarte
         typeFormSliderButtonRef.current?.open()
     }
 
-    const handleActionMenuClick: ActionMenuProps['onClick'] = (item) => {
+    const handleGettingStartedClick = () => {
+        setGettingStartedClicked(true)
+    }
+
+    const handleActionMenuClick: HelpButtonActionMenuProps['onClick'] = (item) => {
         switch (item.id) {
             case HelpMenuItems.GETTING_STARTED:
                 handleGettingStartedClick()
@@ -94,7 +98,7 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, handleGettingStarte
 
     return (
         <>
-            <ActionMenu
+            <ActionMenu<HelpMenuItems>
                 id="page-header-help-action-menu"
                 alignment="end"
                 width={220}

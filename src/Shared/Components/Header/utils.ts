@@ -16,7 +16,6 @@
 
 import { LOGIN_COUNT } from '@Common/Constants'
 
-import { ActionMenuProps } from '../ActionMenu'
 import { DevtronLicenseInfo, LicenseStatus } from '../License'
 import {
     COMMON_HELP_ACTION_MENU_ITEMS,
@@ -25,6 +24,7 @@ import {
     OSS_HELP_ACTION_MENU_ITEMS,
 } from './constants'
 import { updatePostHogEvent } from './service'
+import { HelpButtonActionMenuProps } from './types'
 
 const millisecondsInDay = 86400000
 export const getDateInMilliseconds = (days) => 1 + new Date().valueOf() + (days ?? 0) * millisecondsInDay
@@ -52,7 +52,7 @@ export const getHelpActionMenuOptions = ({
 }: {
     isEnterprise: boolean
     isTrial: boolean
-}): ActionMenuProps['options'] => [
+}): HelpButtonActionMenuProps['options'] => [
     {
         items: COMMON_HELP_ACTION_MENU_ITEMS,
     },

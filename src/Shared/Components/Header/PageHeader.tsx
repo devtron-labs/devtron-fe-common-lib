@@ -49,14 +49,8 @@ const PageHeader = ({
     markAsBeta,
     tippyProps,
 }: PageHeaderType) => {
-    const {
-        loginCount,
-        setLoginCount,
-        showGettingStartedCard,
-        setShowGettingStartedCard,
-        setGettingStartedClicked,
-        licenseData,
-    } = useMainContext()
+    const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard, licenseData } =
+        useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
     const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
@@ -91,10 +85,6 @@ const PageHeader = ({
     useEffect(() => {
         setExpiryDate(+localStorage.getItem('clickedOkay'))
     }, [])
-
-    const handleGettingStartedClick = () => {
-        setGettingStartedClicked(true)
-    }
 
     const hideGettingStartedCard = (count?: string) => {
         setShowGettingStartedCard(false)
@@ -147,7 +137,6 @@ const PageHeader = ({
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
-                handleGettingStartedClick={handleGettingStartedClick}
                 onClick={onHelpButtonClick}
             />
             {!window._env_.K8S_CLIENT && (

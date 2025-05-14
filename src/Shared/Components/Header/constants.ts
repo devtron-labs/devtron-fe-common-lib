@@ -17,10 +17,9 @@
 import { DISCORD_LINK, DOCUMENTATION_HOME_PAGE, URLS } from '@Common/Constants'
 import { CONTACT_SUPPORT_LINK, OPEN_NEW_TICKET, RAISE_ISSUE, VIEW_ALL_TICKETS } from '@Shared/constants'
 
-import { ActionMenuItemType } from '../ActionMenu'
-import { HelpMenuItems } from './types'
+import { HelpButtonActionMenuProps, HelpMenuItems } from './types'
 
-export const COMMON_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
+export const COMMON_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][number]['items'] = [
     ...((!window._env_?.K8S_CLIENT
         ? [
               {
@@ -31,7 +30,7 @@ export const COMMON_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
                   to: `/${URLS.GETTING_STARTED}`,
               },
           ]
-        : []) satisfies ActionMenuItemType[]),
+        : []) satisfies HelpButtonActionMenuProps['options'][number]['items']),
     {
         id: HelpMenuItems.VIEW_DOCUMENTATION,
         label: 'View documentation',
@@ -53,7 +52,7 @@ export const COMMON_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
     },
 ]
 
-export const OSS_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
+export const OSS_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][number]['items'] = [
     {
         id: HelpMenuItems.CHAT_WITH_SUPPORT,
         label: 'Chat with support',
@@ -70,7 +69,7 @@ export const OSS_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
     },
 ]
 
-export const ENTERPRISE_TRIAL_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
+export const ENTERPRISE_TRIAL_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][number]['items'] = [
     {
         id: HelpMenuItems.REQUEST_SUPPORT,
         label: 'Request Support',
@@ -80,7 +79,7 @@ export const ENTERPRISE_TRIAL_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
     },
 ]
 
-export const ENTERPRISE_HELP_ACTION_MENU_ITEMS: ActionMenuItemType[] = [
+export const ENTERPRISE_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][number]['items'] = [
     {
         id: HelpMenuItems.OPEN_NEW_TICKET,
         label: 'Open new ticket',

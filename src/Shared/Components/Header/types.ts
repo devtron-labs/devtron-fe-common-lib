@@ -17,6 +17,7 @@
 import { ModuleStatus } from '@Shared/types'
 
 import { ResponseType, TippyCustomizedProps } from '../../../Common'
+import { ActionMenuProps } from '../ActionMenu'
 
 export enum InstallationType {
     OSS_KUBECTL = 'oss_kubectl',
@@ -58,7 +59,6 @@ export interface ServerInfoResponse extends ResponseType {
 export interface HelpButtonProps {
     serverInfo: ServerInfo
     fetchingServerInfo: boolean
-    handleGettingStartedClick: () => void
     onClick: () => void
 }
 
@@ -74,3 +74,5 @@ export enum HelpMenuItems {
     CHAT_WITH_SUPPORT = 'chat-with-support',
     RAISE_ISSUE_REQUEST = 'raise-issue-request',
 }
+
+export type HelpButtonActionMenuProps = ActionMenuProps<HelpMenuItems>
