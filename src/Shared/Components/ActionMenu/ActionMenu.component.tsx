@@ -69,7 +69,7 @@ export const ActionMenu = <T extends string | number = string | number>({
                 {isSearchable && (
                     <div
                         role="search"
-                        className="action-menu__searchbox bg__primary px-12 py-8 border__secondary--bottom"
+                        className="action-menu__searchbox bg__primary border__secondary-translucent--bottom"
                     >
                         <CustomInput
                             name="action-menu-search-box"
@@ -77,6 +77,7 @@ export const ActionMenu = <T extends string | number = string | number>({
                             placeholder="Search"
                             onChange={handleSearch}
                             fullWidth
+                            autoFocus
                         />
                     </div>
                 )}
@@ -125,13 +126,13 @@ export const ActionMenu = <T extends string | number = string | number>({
                             </li>
                         ))
                     ) : (
-                        <li role="menuitem" className="border__secondary--top py-8 px-12">
+                        <li role="menuitem" className="py-8 px-12">
                             <p className="m-0 fs-13 lh-20 fw-4 cn-7">No options</p>
                         </li>
                     )}
                 </ul>
                 {footerConfig && (
-                    <div className="bg__menu--secondary border__secondary--top">
+                    <div className="bg__menu--secondary border__secondary-translucent--top">
                         <SelectPickerMenuListFooter menuListFooterConfig={footerConfig} />
                     </div>
                 )}

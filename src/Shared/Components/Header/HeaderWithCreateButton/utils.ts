@@ -13,10 +13,6 @@ export const getCreateActionMenuOptions = (createCustomAppURL: string): CreateAc
                 componentType: 'link',
                 to: createCustomAppURL,
             },
-        ],
-    },
-    {
-        items: [
             {
                 id: CreateActionMenuItems.CHART_STORE,
                 label: 'From Chart store',
