@@ -31,7 +31,6 @@ import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.s
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
 import {
-    DOCUMENTATION,
     Host,
     Progressing,
     ROUTES,
@@ -84,11 +83,7 @@ const renderBlobNotConfigured = (): JSX.Element => (
             <HelpIcon className="icon-dim-20 fcv-5" />
             <span className="fs-13 fw-4 mr-8 ml-8 text__white">Want to store logs to view later?</span>
 
-            <DocLink
-                docLink={DOCUMENTATION.BLOB_STORAGE}
-                docLinkText="Configure blob storage"
-                dataTestId="configure-blob-storage"
-            />
+            <DocLink doc="BLOB_STORAGE" text="Configure blob storage" dataTestId="configure-blob-storage" />
             <OpenInNew className="icon-dim-20 ml-8" />
         </div>
     </>

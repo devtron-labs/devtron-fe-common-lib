@@ -1,8 +1,9 @@
 import { ButtonComponentType, ButtonProps } from '@Shared/Components'
 
+import { DOCUMENTATION } from './constants'
+
 export interface DocLinkProps extends Pick<ButtonProps<ButtonComponentType.anchor>, 'onClick' | 'dataTestId'> {
-    docLink: string
-    docLinkText?: string
-    className?: string
-    showEndIcon?: boolean
+    doc: keyof typeof DOCUMENTATION
+    text?: string
+    showExternalIcon?: boolean
 }

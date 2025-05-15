@@ -28,14 +28,7 @@ import { DocLink } from '@Common/DocLink'
 import { getIsApprovalPolicyConfigured } from '@Shared/Helpers'
 import { useDownload } from '@Shared/Hooks'
 
-import {
-    ClipboardButton,
-    DOCUMENTATION,
-    extractImage,
-    GenericEmptyState,
-    ImageTagsContainer,
-    useGetUserRoles,
-} from '../../../Common'
+import { ClipboardButton, extractImage, GenericEmptyState, ImageTagsContainer, useGetUserRoles } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
 import { TargetPlatformBadgeList } from '../TargetPlatforms'
 import { TERMINAL_STATUS_MAP } from './constants'
@@ -275,17 +268,9 @@ const Artifacts = ({
                         <span className="fs-13 fw-4 mr-8 ml-8">
                             {EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.StoreFiles}
                         </span>
-                        {/* <a
-                            className="fs-13 fw-6 cb-5 dc__no-decor"
-                            href={getDocumentationUrl(DOCUMENTATION.BLOB_STORAGE)}
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            {EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.ConfigureBlobStorage}
-                        </a> */}
                         <DocLink
-                            docLink={DOCUMENTATION.BLOB_STORAGE}
-                            docLinkText={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.ConfigureBlobStorage}
+                            doc="BLOB_STORAGE"
+                            text={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.ConfigureBlobStorage}
                             dataTestId="configure-blob-storage"
                         />
                         <OpenInNew className="icon-dim-20 ml-8" />

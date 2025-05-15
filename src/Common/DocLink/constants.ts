@@ -51,7 +51,7 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_GROUPS: 'getting-started/global-configurations/authorization/permission-groups',
     GLOBAL_CONFIG_HOST_URL: 'getting-started/global-configurations/host-url',
     GLOBAL_CONFIG_NOTIFICATION: 'getting-started/global-configurations/manage-notification',
-    GLOBAL_CONFIG_PERMISSION: `${DOCUMENTATION_HOME_PAGE}/global-configurations/authorization/user-access#devtron-apps-permissions`,
+    GLOBAL_CONFIG_PERMISSION: `global-configurations/authorization/user-access#devtron-apps-permissions`,
     GLOBAL_CONFIG_PROJECT: 'getting-started/global-configurations/projects',
     GLOBAL_CONFIG_SSO: 'getting-started/global-configurations/sso-login',
     GLOBAL_CONFIG_SCOPED_VARIABLES: 'getting-started/global-configurations/scoped-variables',
@@ -61,10 +61,9 @@ export const DOCUMENTATION = {
     JOB_SOURCE_CODE: 'usage/jobs/configuration-job',
     JOB_WORKFLOW_EDITOR: 'usage/jobs/workflow-editor-job',
     K8S_RESOURCES_PERMISSIONS: 'global-configurations/authorization/user-access#kubernetes-resources-permissions',
-    MANDATORY_TAGS: `${DOCUMENTATION_HOME_PAGE}/global-configurations/tags-policy#create-application-with-mandatory-tags`,
     PRE_POST_BUILD_STAGE: 'usage/applications/creating-application/ci-pipeline/ci-build-pre-post-plugins',
     ROLLOUT: 'usage/applications/creating-application/deployment-template/rollout-deployment',
     SECURITY: 'usage/security-features',
     SPECIFY_IMAGE_PULL_SECRET: 'getting-started/global-configurations/container-registries#specify-image-pull-secret',
     TENANT_INSTALLATION: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/software-distribution-hub/tenants`,
-}
+} as const

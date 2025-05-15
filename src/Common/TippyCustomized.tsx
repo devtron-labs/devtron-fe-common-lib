@@ -158,10 +158,10 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                 {documentationLink && (
                     <div className="px-12 pb-12 flexbox">
                         <DocLink
-                            docLink={documentationLink}
-                            docLinkText={documentationLinkText}
+                            doc={'APP_CREATE'}
+                            text={documentationLinkText}
                             dataTestId="learn-more-about-creating-job-link"
-                            showEndIcon
+                            showExternalIcon
                             onClick={closeTippy}
                         />
                     </div>

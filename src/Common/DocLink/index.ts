@@ -1,2 +1,3 @@
 export { DOCUMENTATION } from './constants'
-export { DocLink, getDocumentationUrl } from './DocLink'
+export { DocLink } from './DocLink'
+export { getDocumentationUrl } from './utils'
