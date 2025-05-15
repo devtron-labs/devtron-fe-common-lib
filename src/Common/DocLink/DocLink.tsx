@@ -4,11 +4,18 @@ import { ComponentSizeType } from '@Shared/constants'
 import { DocLinkProps } from './types'
 import { getDocumentationUrl } from './utils'
 
-export const DocLink = ({ doc, text = 'Learn more', dataTestId, showExternalIcon, onClick }: DocLinkProps) => (
+export const DocLink = ({
+    docLinkKey,
+    text = 'Learn more',
+    dataTestId,
+    showExternalIcon,
+    onClick,
+    hideVersion = false,
+}: DocLinkProps) => (
     <Button
         component={ButtonComponentType.anchor}
         anchorProps={{
-            href: getDocumentationUrl(doc),
+            href: getDocumentationUrl({ docLinkKey, hideVersion }),
         }}
         onClick={onClick}
         dataTestId={dataTestId}

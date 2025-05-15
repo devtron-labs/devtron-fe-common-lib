@@ -83,7 +83,7 @@ const renderBlobNotConfigured = (): JSX.Element => (
             <HelpIcon className="icon-dim-20 fcv-5" />
             <span className="fs-13 fw-4 mr-8 ml-8 text__white">Want to store logs to view later?</span>
 
-            <DocLink doc="BLOB_STORAGE" text="Configure blob storage" dataTestId="configure-blob-storage" />
+            <DocLink docLinkKey="BLOB_STORAGE" text="Configure blob storage" dataTestId="configure-blob-storage" />
             <OpenInNew className="icon-dim-20 ml-8" />
         </div>
     </>

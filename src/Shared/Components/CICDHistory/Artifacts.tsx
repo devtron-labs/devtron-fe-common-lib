@@ -269,7 +269,7 @@ const Artifacts = ({
                             {EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.StoreFiles}
                         </span>
                         <DocLink
-                            doc="BLOB_STORAGE"
+                            docLinkKey="BLOB_STORAGE"
                             text={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.ConfigureBlobStorage}
                             dataTestId="configure-blob-storage"
                         />
