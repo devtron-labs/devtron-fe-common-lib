@@ -70,7 +70,7 @@ export const getIconName = (status: string, showAnimatedIcon: boolean): IconName
             return 'ic-hibernate'
         case 'timedout':
         case 'timed_out':
-            return 'ic-timeout-two-dash'
+            return 'ic-timeout-dash'
         case 'deleting':
             return 'ic-delete-dots'
         case 'deleted':

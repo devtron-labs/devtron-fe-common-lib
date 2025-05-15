@@ -73,6 +73,8 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     trailingCellIcon,
     buttonCellWrapComponent,
     focusableFieldKey,
+    isAddRowButtonClicked,
+    setIsAddRowButtonClicked,
 }: DynamicDataTableRowProps<K, CustomStateType>) => {
     // CONSTANTS
     const isFirstRowEmpty = headers.every(({ key }) => !rows[0]?.data[key].value)
@@ -105,6 +107,8 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     useEffect(() => {
         setIsRowAdded(rows.length > 0 && Object.keys(cellRef.current).length < rows.length)
 
+        // When a new row is added, we create references for its cells.
+        // This logic ensures that references are created only for the newly added row, while retaining the existing references.
         const updatedCellRef = rowIds.reduce((acc, curr) => {
             if (cellRef.current[curr]) {
                 acc[curr] = cellRef.current[curr]
@@ -118,15 +122,16 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     }, [JSON.stringify(rowIds)])
 
     useEffect(() => {
-        if (isRowAdded) {
+        if (isAddRowButtonClicked && isRowAdded) {
             // Using the below logic to ensure the cell is focused after row addition.
             const cell = cellRef.current[rows[0].id][focusableFieldKey || headers[0].key].current
             if (cell) {
                 cell.focus()
                 setIsRowAdded(false)
+                setIsAddRowButtonClicked(false)
             }
         }
-    }, [isRowAdded])
+    }, [isRowAdded, isAddRowButtonClicked])
 
     // METHODS
     const onChange =

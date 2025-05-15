@@ -187,6 +187,7 @@ export interface History extends Pick<TargetPlatformsDTO, 'targetPlatforms'>, Wo
     triggerMetadata?: string
     runSource?: RunSourceType
     targetConfig?: TargetConfigType
+    isDeploymentWithoutApproval?: boolean
 }
 
 export interface ExecutionInfoType {
@@ -389,7 +390,7 @@ export interface DeploymentStatusDetailsTimelineType {
     statusTime: string
     resourceDetails?: SyncStageResourceDetail[]
 }
-export interface DeploymentStatusDetailsType {
+export interface DeploymentStatusDetailsType extends Pick<History, 'isDeploymentWithoutApproval'> {
     deploymentFinishedOn: string
     deploymentStartedOn: string
     triggeredBy: string
@@ -405,7 +406,7 @@ export interface DeploymentStatusDetailsResponse extends ResponseType {
 
 interface DeploymentStatusDetailRow {
     icon: string
-    displayText: string
+    displayText: ReactNode
     displaySubText: string
     time: string
     resourceDetails?: any
@@ -431,7 +432,7 @@ export interface DeploymentStatusDetailsBreakdownDataType {
     }
 }
 
-export interface DeploymentDetailStepsType {
+export interface DeploymentDetailStepsType extends Pick<History, 'isDeploymentWithoutApproval'> {
     deploymentStatus?: string
     deploymentAppType?: DeploymentAppTypes
     isHelmApps?: boolean
@@ -445,7 +446,7 @@ export interface DeploymentDetailStepsType {
     renderDeploymentApprovalInfo: (userApprovalMetadata: UserApprovalMetadataType) => JSX.Element
 }
 
-export interface RenderCIListHeaderProps {
+export interface RenderCIListHeaderProps extends Required<Pick<History, 'isDeploymentWithoutApproval'>> {
     userApprovalMetadata: UserApprovalMetadataType
     triggeredBy: string
     appliedFilters: FilterConditionsListType[]
@@ -465,7 +466,7 @@ export interface VirtualHistoryArtifactProps {
     }
 }
 
-export type CIListItemType = Pick<History, 'promotionApprovalMetadata'> & {
+export type CIListItemType = Pick<History, 'promotionApprovalMetadata' | 'isDeploymentWithoutApproval'> & {
     userApprovalMetadata?: UserApprovalMetadataType
     triggeredBy?: string
     children: ReactNode
@@ -630,13 +631,6 @@ export interface DeploymentHistorySidebarType {
     setDeploymentHistoryList: React.Dispatch<React.SetStateAction<DeploymentTemplateList[]>>
 }
 
-export interface AppStatusDetailsChartType {
-    filterRemoveHealth?: boolean
-    showFooter: boolean
-    showConfigDriftInfo?: boolean
-    onClose?: () => void
-}
-
 export interface StatusFilterButtonType {
     nodes: Array<Node>
     selectedTab: string
@@ -737,6 +731,7 @@ export type GitChangesType = {
           appliedFilters?: never
           appliedFiltersTimestamp?: never
           renderCIListHeader?: never
+          isDeploymentWithoutApproval?: never
       }
     | {
           artifact: string
@@ -755,6 +750,7 @@ export type GitChangesType = {
           appliedFilters?: FilterConditionsListType[]
           appliedFiltersTimestamp?: string
           renderCIListHeader: (renderCIListHeaderProps: RenderCIListHeaderProps) => JSX.Element
+          isDeploymentWithoutApproval?: History['isDeploymentWithoutApproval']
       }
 )
 

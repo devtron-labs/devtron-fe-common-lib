@@ -153,6 +153,7 @@ export interface Node {
     canBeHibernated: boolean
     isHibernated: boolean
     hasDrift?: boolean
+    status?: string
 }
 
 // eslint-disable-next-line no-use-before-define
@@ -246,6 +247,11 @@ export interface AppDetails {
     FluxAppStatusDetail?: FluxAppStatusDetail
 }
 
+export interface ConfigDriftModalProps extends Required<Pick<AppDetails, 'appId'>> {
+    envId: number
+    handleCloseModal?: () => void
+}
+
 export enum RegistryType {
     GIT = 'git',
     GITHUB = 'github',
@@ -298,6 +304,8 @@ export interface WorkflowType {
     showTippy?: boolean
     appId?: number
     isSelected?: boolean
+    isExceptionUser?: boolean
+    canApproverDeploy?: boolean
     approvalConfiguredIdsMap?: Record<number, ApprovalConfigDataType>
     imageReleaseTags: string[]
     appReleaseTags?: string[]
@@ -1155,4 +1163,11 @@ export interface GetTimeDifferenceParamsType {
 export enum RegistryCredentialsType {
     USERNAME_PASSWORD = 'username_password',
     ANONYMOUS = 'anonymous',
+}
+
+export interface IntelligenceConfig {
+    clusterId: number
+    metadata: Record<string, string>
+    prompt: string
+    analyticsCategory: string
 }

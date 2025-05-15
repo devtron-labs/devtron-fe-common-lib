@@ -790,19 +790,31 @@ export const getTimeDifference = ({
         return fallbackString
     }
 
-    const seconds = moment(endTime).diff(moment(startTime), 'seconds')
-    const minutes = moment(endTime).diff(moment(startTime), 'minutes')
-    const hours = moment(endTime).diff(moment(startTime), 'hours')
+    const start = moment(startTime)
+    const end = moment(endTime)
+    if (!start.isValid() || !end.isValid()) {
+        return fallbackString
+    }
 
-    if (seconds < 60) {
-        return `${seconds}s`
+    const diff = Math.abs(end.diff(start))
+    const duration = moment.duration(diff)
+
+    const units = [
+        { label: 'd', value: duration.days() },
+        { label: 'h', value: duration.hours() },
+        { label: 'm', value: duration.minutes() },
+        { label: 's', value: duration.seconds() },
+    ]
+
+    // Filter out zero values and take the first two non-zero units
+    const nonZeroUnits = units.filter((unit) => unit.value > 0).slice(0, 2)
+
+    // If all units are zero, show "0s"
+    if (nonZeroUnits.length === 0) {
+        return '0s'
     }
-    if (minutes < 60) {
-        return `${minutes}m ${seconds % 60}s`
-    }
-    const leftOverMinutes = minutes - hours * 60
-    const leftOverSeconds = seconds - minutes * 60
-    return `${hours}h ${leftOverMinutes}m ${leftOverSeconds}s`
+
+    return nonZeroUnits.map((unit) => `${unit.value}${unit.label}`).join(' ')
 }
 
 export const getFileNameFromHeaders = (headers: Headers) =>
