@@ -47,6 +47,7 @@ import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
+import { ReactComponent as ICFastForward } from '@IconsV2/ic-fast-forward.svg'
 import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
 import { ReactComponent as ICFlask } from '@IconsV2/ic-flask.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
@@ -73,11 +74,13 @@ import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
 import { ReactComponent as ICKey } from '@IconsV2/ic-key.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
+import { ReactComponent as ICLego } from '@IconsV2/ic-lego.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
 import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
 import { ReactComponent as ICLoginDevtronLogo } from '@IconsV2/ic-login-devtron-logo.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
+import { ReactComponent as ICMagnifyingGlass } from '@IconsV2/ic-magnifying-glass.svg'
 import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
 import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
@@ -93,6 +96,7 @@ import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
+import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
@@ -175,6 +179,7 @@ export const iconMap = {
     'ic-env': ICEnv,
     'ic-error': ICError,
     'ic-failure': ICFailure,
+    'ic-fast-forward': ICFastForward,
     'ic-file-key': ICFileKey,
     'ic-flask': ICFlask,
     'ic-folder-user': ICFolderUser,
@@ -201,11 +206,13 @@ export const iconMap = {
     'ic-k8s-job': ICK8sJob,
     'ic-key': ICKey,
     'ic-ldap': ICLdap,
+    'ic-lego': ICLego,
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
     'ic-livspace': ICLivspace,
     'ic-login-devtron-logo': ICLoginDevtronLogo,
     'ic-logout': ICLogout,
+    'ic-magnifying-glass': ICMagnifyingGlass,
     'ic-medium-delete': ICMediumDelete,
     'ic-medium-paintbucket': ICMediumPaintbucket,
     'ic-memory': ICMemory,
@@ -221,6 +228,7 @@ export const iconMap = {
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
     'ic-pencil': ICPencil,
+    'ic-play-outline': ICPlayOutline,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
     'ic-rocket-launch': ICRocketLaunch,
