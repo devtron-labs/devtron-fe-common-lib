@@ -1,7 +1,12 @@
 import { Dispatch, FunctionComponent, PropsWithChildren, SetStateAction } from 'react'
 
 import { GenericFilterEmptyStateProps } from '@Common/EmptyState/types'
-import { UseStateFiltersProps, UseStateFiltersReturnType, UseUrlFiltersProps } from '@Common/Hooks'
+import {
+    UseStateFiltersProps,
+    UseStateFiltersReturnType,
+    UseUrlFiltersProps,
+    UseUrlFiltersReturnType,
+} from '@Common/Hooks'
 import { GenericEmptyStateType } from '@Common/index'
 import { SortableTableHeaderCellProps, useResizableTableConfig } from '@Common/SortableTableHeaderCell'
 
@@ -78,11 +83,21 @@ export type RowType = {
 
 export type RowsType = RowType[]
 
-export interface CellComponentProps extends Pick<BaseColumnType, 'field'>, AdditionalProps {
+export enum FiltersTypeEnum {
+    STATE = 'state',
+    URL = 'url',
+    NONE = 'none',
+}
+
+export interface CellComponentProps<T = FiltersTypeEnum.NONE> extends Pick<BaseColumnType, 'field'>, AdditionalProps {
     signals: SignalsType
     value: unknown
     row: RowType
-    filterData: UseFiltersReturnType
+    filterData: T extends FiltersTypeEnum.NONE
+        ? null
+        : T extends FiltersTypeEnum.STATE
+          ? UseFiltersReturnType
+          : UseUrlFiltersReturnType<string>
     isRowActive: boolean
 }
 
@@ -106,8 +121,6 @@ export type Column = Pick<SortableTableHeaderCellProps, 'showTippyOnTruncate'> &
     )
 
 type BulkSelectionConfigType = Pick<UseBulkSelectionProps<unknown>, 'getSelectAllDialogStatus'> & {
-    /** Make sure to wrap it in useCallback */
-    onBulkSelectionChanged: (selectedRows: RowsType) => void
     BulkActionsComponent: FunctionComponent<{}>
 }
 
@@ -115,12 +128,6 @@ export enum PaginationEnum {
     PAGINATED = 'paginated',
     INFINITE = 'infinite',
     NOT_PAGINATED = 'not-paginated',
-}
-
-export enum FiltersTypeEnum {
-    STATE = 'state',
-    URL = 'url',
-    NONE = 'none',
 }
 
 export interface ConfigurableColumnsType {
@@ -139,12 +146,17 @@ type AdditionalFilterPropsType<T extends Exclude<FiltersTypeEnum, FiltersTypeEnu
       >
     : Pick<UseStateFiltersProps<string>, 'initialSortKey'>
 
-export type ViewWrapperProps = PropsWithChildren<
-    Pick<UseFiltersReturnType, 'offset' | 'handleSearch' | 'searchKey' | 'sortBy' | 'sortOrder' | 'clearFilters'> &
+export type ViewWrapperProps<T = FiltersTypeEnum.STATE> = PropsWithChildren<
+    (T extends FiltersTypeEnum.NONE
+        ? {}
+        : Pick<
+              UseFiltersReturnType,
+              'offset' | 'handleSearch' | 'searchKey' | 'sortBy' | 'sortOrder' | 'clearFilters'
+          >) &
         AdditionalProps &
         Partial<ConfigurableColumnsType> & {
             areRowsLoading: boolean
-        }
+        } & (T extends FiltersTypeEnum.URL ? Pick<UseUrlFiltersReturnType<string>, 'updateSearchParams'> : {})
 >
 
 export type InternalTableProps = PropsWithChildren<

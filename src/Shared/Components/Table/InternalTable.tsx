@@ -15,7 +15,7 @@ import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
 
 import { BulkSelection } from '../BulkSelection'
 import BulkSelectionActionWidget from './BulkSelectionActionWidget'
-import { BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, SHIMMER_DUMMY_ARRAY } from './constants'
+import { BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, NO_ROWS_OR_GET_ROWS_ERROR, SHIMMER_DUMMY_ARRAY } from './constants'
 import { FiltersTypeEnum, InternalTableProps, PaginationEnum, SignalsType } from './types'
 import useTableWithKeyboardShortcuts from './useTableWithKeyboardShortcuts'
 import { getFilteringPromise, searchAndSortRows } from './utils'
@@ -104,9 +104,9 @@ const InternalTable = ({
         [visibleColumns],
     )
 
-    const [areFilteredRowsLoading, filteredRows, filteredRowsError, reloadFilteredRows] = useAsync(async () => {
+    const [_areFilteredRowsLoading, filteredRows, filteredRowsError, reloadFilteredRows] = useAsync(async () => {
         if (!rows && !getRows) {
-            throw new Error('Neither rows nor getRows function provided')
+            throw NO_ROWS_OR_GET_ROWS_ERROR
         }
 
         return getFilteringPromise({
@@ -120,6 +120,8 @@ const InternalTable = ({
                 : () => getRows(filterData),
         })
     }, [searchKey, sortBy, sortOrder, rows, sortByToColumnIndexMap, JSON.stringify(otherFilters)])
+
+    const areFilteredRowsLoading = _areFilteredRowsLoading || filteredRowsError === NO_ROWS_OR_GET_ROWS_ERROR
 
     const bulkSelectionCount = getSelectedIdentifiersCount?.() ?? 0
 
@@ -258,7 +260,7 @@ const InternalTable = ({
                                     value={row.data[field]}
                                     signals={EVENT_TARGET as SignalsType}
                                     row={row}
-                                    filterData={filterData}
+                                    filterData={filterData as any}
                                     isRowActive={isRowActive}
                                     {...additionalProps}
                                 />
@@ -283,16 +285,16 @@ const InternalTable = ({
     }
 
     const renderContent = () => {
-        if (!areFilteredRowsLoading && !filteredRows?.length) {
+        if (filteredRowsError && !areFilteredRowsLoading && !loading) {
+            return <ErrorScreenManager code={filteredRowsError.code} reload={reloadFilteredRows} />
+        }
+
+        if (!areFilteredRowsLoading && !filteredRows?.length && !loading) {
             return filtersVariant !== FiltersTypeEnum.NONE && isFilterApplied ? (
                 <GenericFilterEmptyState handleClearFilters={clearFilters} />
             ) : (
                 <GenericEmptyState {...emptyStateConfig.noRowsConfig} />
             )
-        }
-
-        if (filteredRowsError && !areFilteredRowsLoading) {
-            return <ErrorScreenManager code={filteredRowsError.code} reload={reloadFilteredRows} />
         }
 
         return (
