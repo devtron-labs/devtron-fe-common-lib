@@ -43,6 +43,7 @@ const LogStageAccordion = ({
     fullScreenView,
     searchIndex,
     targetPlatforms,
+    logsRendererRef,
 }: LogStageAccordionProps) => {
     const handleAccordionToggle = () => {
         if (isOpen) {
@@ -78,6 +79,8 @@ const LogStageAccordion = ({
         }
     }
 
+    const getLogsRendererReference = () => logsRendererRef.current
+
     return (
         <div className="flexbox-col dc__gap-8">
             <button
@@ -103,7 +106,10 @@ const LogStageAccordion = ({
                 <div className="flexbox dc__gap-8 dc__align-items-center">
                     {!!targetPlatforms?.length && (
                         <>
-                            <TargetPlatformListTooltip targetPlatforms={targetPlatforms}>
+                            <TargetPlatformListTooltip
+                                targetPlatforms={targetPlatforms}
+                                appendTo={getLogsRendererReference}
+                            >
                                 <div className="flexbox dc__gap-4 dc__align-items-center">
                                     <ICStack className="dc__no-shrink icon-stroke__white icon-dim-12" />
                                     <span className="text__white fs-13 fw-4 lh-20">
