@@ -33,7 +33,6 @@ import {
     ACTION_STATE,
     DEPLOYMENT_WINDOW_TYPE,
     DockerConfigOverrideType,
-    DOCUMENTATION,
     RefVariableType,
     SortingOrder,
     TaskErrorObj,
