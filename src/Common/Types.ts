@@ -28,6 +28,7 @@ import {
     ButtonProps,
     ComponentLayoutType,
     StatusType,
+    DeploymentStrategyType,
 } from '../Shared'
 import {
     ACTION_STATE,
@@ -845,7 +846,7 @@ export interface AppEnvironment {
 }
 
 export interface Strategy {
-    deploymentTemplate: string
+    deploymentTemplate: DeploymentStrategyType
     config: any
     default?: boolean
 }

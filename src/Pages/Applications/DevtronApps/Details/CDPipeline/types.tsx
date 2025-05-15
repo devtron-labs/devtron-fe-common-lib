@@ -17,7 +17,7 @@
 import { BuildStageType, FormType } from '@Common/CIPipeline.Types'
 import { APIOptions, DeploymentAppTypes, DeploymentNodeType } from '@Common/Types'
 import { DeploymentStrategy } from '@Shared/Components'
-import { EnvListMinDTO, RuntimeParamsTriggerPayloadType } from '@Shared/types'
+import { DeploymentStrategyType, EnvListMinDTO, RuntimeParamsTriggerPayloadType } from '@Shared/types'
 import { STAGE_MAP } from '@Pages/index'
 
 interface ConfigSecretType {
@@ -136,6 +136,7 @@ export interface TriggerCDNodeServiceProps extends Pick<APIOptions, 'abortContro
      */
     runtimeParamsPayload?: RuntimeParamsTriggerPayloadType
     isRollbackTrigger?: boolean
+    strategy?: DeploymentStrategyType
 }
 
 export interface TriggerCDPipelinePayloadType
