@@ -18,9 +18,8 @@ import { ChangeEvent, useState } from 'react'
 
 import { ComponentSizeType } from '@Shared/constants'
 
-import { ReactComponent as ArrowOutSquare } from '../../../Assets/Icon/ic-arrow-square-out.svg'
-import { stopPropagation, StyledRadioGroup, VisibleModal } from '../../../Common'
-import { Button } from '../Button'
+import { DocLink, stopPropagation, StyledRadioGroup, VisibleModal } from '../../../Common'
+import { Button, ButtonVariantType } from '../Button'
 import { BUTTON_TEXT } from './constant'
 import { FeatureDescriptionModalProps } from './types'
 import { getImageSize } from './utils'
@@ -35,6 +34,7 @@ const FeatureDescriptionModalContent = ({
     imageVariant,
     SVGImage,
     imageStyles = {},
+    hideVersion,
 }: Required<Omit<FeatureDescriptionModalProps, 'tabsConfig' | 'title'>>) => {
     const renderImage = () => {
         if (!SVGImage) {
@@ -64,15 +64,14 @@ const FeatureDescriptionModalContent = ({
             className={`flex right w-100 dc__align-right dc__border-top-n1 px-20 py-16 ${docLink ? 'dc__content-space' : 'right'}`}
         >
             {docLink.length > 0 && (
-                <a
-                    className="flex dc__link en-2 bw-1 dc__gap-6 br-4 fw-6 lh-20 px-8 py-6 h-32 anchor dc__hover-n50"
-                    href={docLink}
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    {BUTTON_TEXT.VIEW_DOCUMENTATION}
-                    <ArrowOutSquare className="icon-dim-16 scb-5" />
-                </a>
+                <DocLink
+                    docLinkKey={docLink}
+                    text={BUTTON_TEXT.VIEW_DOCUMENTATION}
+                    dataTestId="feature-desc__view-doc"
+                    showExternalIcon
+                    hideVersion={hideVersion}
+                    variant={ButtonVariantType.secondary}
+                />
             )}
             <Button
                 text={closeModalText}
@@ -101,6 +100,7 @@ export const FeatureDescriptionModal = ({
     SVGImage,
     imageStyles = {},
     tabsConfig,
+    hideVersion,
 }: FeatureDescriptionModalProps) => {
     const [selectedTabId, setSelectedTabId] = useState(tabsConfig?.[0]?.id ?? null)
     const selectedTab = tabsConfig?.find((tab) => tab.id === selectedTabId) ?? null
@@ -143,6 +143,7 @@ export const FeatureDescriptionModal = ({
                                 renderDescriptionContent={selectedTab.renderDescriptionContent}
                                 closeModal={closeModal}
                                 closeModalText={closeModalText}
+                                hideVersion={hideVersion}
                             />
                         </>
                     )
@@ -155,6 +156,7 @@ export const FeatureDescriptionModal = ({
                         imageStyles={imageStyles}
                         imageVariant={imageVariant}
                         renderDescriptionContent={renderDescriptionContent}
+                        hideVersion={hideVersion}
                     />
                 )}
             </div>

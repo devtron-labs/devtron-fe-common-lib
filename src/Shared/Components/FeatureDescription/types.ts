@@ -16,12 +16,14 @@
 
 import React, { ReactNode } from 'react'
 
-import { DOCUMENTATION, ImageType } from '../../../Common'
+import { DocLinkProps } from '@Common/DocLink/types'
+
+import { ImageType } from '../../../Common'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
 
 interface BaseFeatureDescriptionModalProps {
     renderDescriptionContent?: () => ReactNode
-    docLink?: keyof typeof DOCUMENTATION
+    docLink?: DocLinkProps['docLinkKey']
     imageVariant?: ImageType
     SVGImage?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     imageStyles?: React.CSSProperties
@@ -53,6 +55,7 @@ export type FeatureDescriptionModalProps = {
     title: string
     closeModalText?: string
     closeModal?: () => void
+    hideVersion?: DocLinkProps['hideVersion']
 } & (
     | (BaseFeatureDescriptionModalProps & {
           tabsConfig?: never
