@@ -78,6 +78,9 @@ export interface MainContext {
     reloadVersionConfig: ReloadVersionConfigTypes
     intelligenceConfig: IntelligenceConfig
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
+
+    sideDocLink: string | null
+    setSideDocLink: Dispatch<SetStateAction<string | null>>
 }
 
 export interface MainContextProviderProps {

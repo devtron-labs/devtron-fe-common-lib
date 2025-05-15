@@ -24,10 +24,12 @@ import 'tippy.js/animations/shift-toward-subtle.css'
 import 'tippy.js/animations/shift-toward.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
 import { not, stopPropagation } from './Helper'
+import { useMainContext } from '@Shared/Providers'
 
 // This component will handle some of the new tippy designs and interactions
 // So this can be updated to support further for new features or interactions
 export const TippyCustomized = (props: TippyCustomizedProps) => {
+    const { setSideDocLink } = useMainContext()
     const tippyRef = useRef(null)
     const [showHeadingInfo, setShowHeadingInfo] = useState(false)
     const isWhiteTheme = props.theme === TippyTheme.white
@@ -157,16 +159,29 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                 {additionalContent}
                 {documentationLink && (
                     <div className="pl-12 pb-12">
-                        <a
-                            href={documentationLink}
-                            target="_blank"
-                            rel="noreferrer noopener"
-                            className="fs-13 cb-5 flex left"
-                            onClick={closeTippy}
-                        >
-                            {documentationLinkText || 'Learn more'}
-                            <ICOpenInNew className="icon-dim-14 ml-4 scb-5" />
-                        </a>
+                        {documentationLink.startsWith('https://docs.devtron.ai/') ? (
+                            <button
+                                className="dc__transparent p-0 fs-13 cb-5 flex left"
+                                onClick={(e) => {
+                                    setSideDocLink(props.documentationLink)
+                                    closeTippy(e)
+                                }}
+                            >
+                                {documentationLinkText || 'Learn more'}
+                                <ICOpenInNew className="icon-dim-14 ml-4 scb-5" />
+                            </button>
+                        ) : (
+                            <a
+                                href={documentationLink}
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                className="fs-13 cb-5 flex left"
+                                onClick={closeTippy}
+                            >
+                                {documentationLinkText || 'Learn more'}
+                                <ICOpenInNew className="icon-dim-14 ml-4 scb-5" />
+                            </a>
+                        )}
                     </div>
                 )}
             </>
