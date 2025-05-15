@@ -61,4 +61,5 @@ export const drainNodeCapacity = (
     abortControllerRef?: APIOptions['abortControllerRef'],
 ): Promise<ResponseType> => put(`${ROUTES.NODE_CAPACITY}/drain`, requestPayload, { abortControllerRef })
 
-export const getClusterListRaw = () => get<ClusterDetail[]>(ROUTES.CLUSTER_LIST_RAW)
+export const getClusterListRaw = (abortControllerRef?: APIOptions['abortControllerRef']) =>
+    get<ClusterDetail[]>(ROUTES.CLUSTER_LIST_RAW, { abortControllerRef })
