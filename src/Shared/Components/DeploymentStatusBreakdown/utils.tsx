@@ -335,6 +335,7 @@ export const processDeploymentStatusDetailsData = (
                     deploymentData.deploymentStatusBreakdown.ARGOCD_SYNC.icon = 'success'
                     deploymentData.deploymentStatusBreakdown.ARGOCD_SYNC.displaySubText = ''
                     deploymentData.deploymentStatusBreakdown.ARGOCD_SYNC.time = element.statusTime
+                    deploymentData.deploymentStatusBreakdown.ARGOCD_SYNC.isCollapsed = true
                 }
 
                 processKubeCTLApply(timelineData, element, deploymentStatus, data)
