@@ -11,6 +11,7 @@ export const DocLink = ({
     showExternalIcon,
     onClick,
     hideVersion = false,
+    size = ComponentSizeType.medium,
 }: DocLinkProps) => (
     <Button
         component={ButtonComponentType.anchor}
@@ -21,7 +22,7 @@ export const DocLink = ({
         dataTestId={dataTestId}
         text={text}
         variant={ButtonVariantType.text}
-        size={ComponentSizeType.medium}
+        size={size}
         endIcon={showExternalIcon && <Icon name="ic-open-in-new" color={null} />}
     />
 )
