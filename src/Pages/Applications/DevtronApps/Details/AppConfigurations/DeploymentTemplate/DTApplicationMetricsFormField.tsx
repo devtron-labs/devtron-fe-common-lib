@@ -16,7 +16,6 @@
 
 import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
 import { Checkbox } from '@Common/Checkbox'
-import { DOCUMENTATION } from '@Common/index'
 import { Progressing } from '@Common/Progressing'
 import { Tooltip } from '@Common/Tooltip'
 import { CHECKBOX_VALUE } from '@Common/Types'
@@ -96,7 +95,7 @@ const DTApplicationMetricsFormField = ({
                 <InfoIconTippy
                     heading="Application Metrics"
                     infoText="Capture and show key application metrics over time. (E.g. Status codes 2xx, 3xx, 5xx; throughput and latency)."
-                    documentationLink={DOCUMENTATION.APP_METRICS}
+                    documentationLink="APP_METRICS"
                     documentationLinkText="Learn more"
                     dataTestid="app-metrics-info"
                     iconClassName="dc__no-shrink icon-dim-16 fcn-6"

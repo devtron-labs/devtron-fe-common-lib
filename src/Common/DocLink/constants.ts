@@ -1,5 +1,3 @@
-import { DOCUMENTATION_HOME_PAGE, DOCUMENTATION_VERSION } from '@Common/Constants'
-
 export const DOCUMENTATION = {
     ADMIN_PASSWORD: 'install/install-devtron#devtron-admin-credentials',
     APP_CI_CONFIG_BUILD_WITHOUT_DOCKER:
@@ -56,7 +54,7 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_SSO: 'getting-started/global-configurations/sso-login',
     GLOBAL_CONFIG_SCOPED_VARIABLES: 'getting-started/global-configurations/scoped-variables',
     GLOBAL_CONFIG_USER: 'getting-started/global-configurations/authorization/user-access',
-    HYPERION: `${DOCUMENTATION_HOME_PAGE}/#hyperion`,
+    HYPERION: `usage/applications#view-external-helm-app-listing`,
     JOB_CRONJOB: 'usage/applications/creating-application/deployment-template/job-and-cronjob',
     JOB_SOURCE_CODE: 'usage/jobs/configuration-job',
     JOB_WORKFLOW_EDITOR: 'usage/jobs/workflow-editor-job',
@@ -65,5 +63,36 @@ export const DOCUMENTATION = {
     ROLLOUT: 'usage/applications/creating-application/deployment-template/rollout-deployment',
     SECURITY: 'usage/security-features',
     SPECIFY_IMAGE_PULL_SECRET: 'getting-started/global-configurations/container-registries#specify-image-pull-secret',
-    TENANT_INSTALLATION: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/software-distribution-hub/tenants`,
+    TENANT_INSTALLATION: 'usage/software-distribution-hub/tenants',
+
+    // ENTERPRISE
+
+    IMAGE_PROMOTION: 'global-configurations/image-promotion-policy',
+    IMAGE_PROMOTION_ASSIGN_TO: 'global-configurations/image-promotion-policy#applying-an-image-promotion-policy',
+    TAGS: 'usage/applications/create-application#tags',
+    TAGS_POLICY: `global-configurations/tags-policy`,
+    RESOURCE_WATCHER: 'usage/resource-watcher',
+    GITOPS_BITBUCKET: 'global-configurations/gitops#bitbucket',
+    DEPLOYMENT_CONFIGS: 'resources/glossary#base-deployment-template',
+    RJSF_PLAYGROUND: 'https://rjsf-team.github.io/react-jsonschema-form/',
+
+    // GLOBAL CONFIGURATION
+    GLOBAL_CONFIG_DEPLOYMENT_WINDOW: 'global-configurations/deployment-window',
+    GLOBAL_CONFIG_CATALOG_FRAMEWORK: 'global-configurations/catalog-framework',
+    GLOBAL_CONFIG_DEVTRON_APP_TEMPLATES: 'global-configurations',
+    GLOBAL_CONFIG_FILTER_CONDITION: 'global-configurations/filter-condition',
+    GLOBAL_CONFIG_LOCK_DEPLOYMENT_CONFIG: 'global-configurations/lock-deployment-config',
+    GLOBAL_CONFIG_PLUGINS_POLICY: 'global-configurations/plugins-policy',
+    GLOBAL_CONFIG_APPROVAL_POLICY: 'global-configurations/approval-policy',
+    GLOBAL_CONFIG_SSO_LOGIN_LDAP: 'global-configurations/authorization/sso-login/ldap',
+    GLOBAL_CONFIG_SSO_LOGIN_MICROSOFT: 'global-configurations/authorization/sso-login/microsoft',
+    GLOBAL_CONFIG_PULL_IMAGE_DIGEST: 'global-configurations/pull-image-digest',
+    GLOBAL_CONFIG_TAGS: 'getting-started/global-configurations/tags-policy',
+
+    // Software distribution hub
+    SOFTWARE_DISTRIBUTION_HUB: 'usage/software-distribution-hub',
+    RELEASE_TRACKS: 'usage/software-distribution-hub/release-hub#creating-release-tracks-and-versions',
+    RELEASES: 'usage/software-distribution-hub/release-hub#creating-release-tracks-and-versions',
+    TENANTS: 'usage/software-distribution-hub/tenants#adding-installation',
+    TENANTS_INSTALLATION: 'usage/software-distribution-hub/tenants',
 } as const

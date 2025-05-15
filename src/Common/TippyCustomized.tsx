@@ -23,7 +23,7 @@ import 'tippy.js/animations/shift-toward-subtle.css'
 import 'tippy.js/animations/shift-toward.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
 import { not, stopPropagation } from './Helper'
-import { DocLink } from './DocLink'
+import { DocLink, DOCUMENTATION } from './DocLink'
 
 // This component will handle some of the new tippy designs and interactions
 // So this can be updated to support further for new features or interactions
@@ -79,6 +79,7 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
             additionalContent,
             documentationLink,
             documentationLinkText,
+            hideVersion,
         } = props
         return (
             <>
@@ -158,11 +159,12 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                 {documentationLink && (
                     <div className="px-12 pb-12 flexbox">
                         <DocLink
-                            docLinkKey={'APP_CREATE'}
+                            docLinkKey={documentationLink as keyof typeof DOCUMENTATION}
                             text={documentationLinkText}
                             dataTestId="learn-more-about-creating-job-link"
                             showExternalIcon
                             onClick={closeTippy}
+                            hideVersion={hideVersion}
                         />
                     </div>
                 )}

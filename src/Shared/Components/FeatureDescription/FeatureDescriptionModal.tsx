@@ -30,7 +30,7 @@ import './featureDescription.scss'
 const FeatureDescriptionModalContent = ({
     renderDescriptionContent,
     closeModalText = BUTTON_TEXT.GOT_IT,
-    docLink = '',
+    docLink,
     closeModal,
     imageVariant,
     SVGImage,
@@ -95,7 +95,7 @@ export const FeatureDescriptionModal = ({
     title,
     renderDescriptionContent,
     closeModalText = BUTTON_TEXT.GOT_IT,
-    docLink = '',
+    docLink,
     closeModal,
     imageVariant,
     SVGImage,

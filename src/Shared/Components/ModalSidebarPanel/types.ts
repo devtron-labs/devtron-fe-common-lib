@@ -16,10 +16,12 @@
 
 import { ReactNode } from 'react'
 
-export interface ModalSidebarPanelProps {
+import { DocLinkProps } from '@Common/DocLink/types'
+
+export interface ModalSidebarPanelProps extends Pick<DocLinkProps, 'hideVersion'> {
     rootClassName?: string
     heading: string | null
     icon?: JSX.Element
     children?: ReactNode
-    documentationLink: string
+    documentationLink: DocLinkProps['docLinkKey']
 }
