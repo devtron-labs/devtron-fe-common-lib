@@ -28,7 +28,8 @@ export const getTabIcon = ({
     className,
     size,
     active,
-}: Pick<TabProps, 'showError' | 'showWarning' | 'icon' | 'active'> &
+    iconElement,
+}: Pick<TabProps, 'showError' | 'showWarning' | 'icon' | 'active' | 'iconElement'> &
     Pick<TabGroupProps, 'size'> & { className: string }) => {
     if (showError) {
         return <ICErrorExclamation className={className} />
@@ -42,6 +43,9 @@ export const getTabIcon = ({
     if (icon) {
         const RenderIcon = icon
         return <RenderIcon className={`${className} tab-group__tab__icon`} />
+    }
+    if (iconElement) {
+        return iconElement
     }
     return null
 }

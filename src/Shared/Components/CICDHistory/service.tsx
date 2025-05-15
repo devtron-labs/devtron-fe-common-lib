@@ -81,6 +81,9 @@ export const cancelPrePostCdTrigger = (pipelineId, workflowRunner, isForceAbort:
     return trash(URL)
 }
 
+/**
+ * @deprecated
+ */
 export function getDeploymentStatusDetail(
     appId: string,
     envId: string,

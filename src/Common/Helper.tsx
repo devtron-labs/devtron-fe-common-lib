@@ -17,7 +17,7 @@
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DOMPurify from 'dompurify'
 import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
-import { compare as compareJSON, applyPatch, unescapePathComponent,deepClone } from 'fast-json-patch'
+import { compare as compareJSON, applyPatch, unescapePathComponent, deepClone } from 'fast-json-patch'
 import { components } from 'react-select'
 import * as Sentry from '@sentry/browser'
 import moment from 'moment'
@@ -517,7 +517,7 @@ export const getUrlWithSearchParams = <T extends string | number = string | numb
 /**
  * Custom exception logger function for logging errors to sentry
  */
-export const logExceptionToSentry: typeof Sentry.captureException  = Sentry.captureException.bind(window)
+export const logExceptionToSentry: typeof Sentry.captureException = Sentry.captureException.bind(window)
 
 export const customStyles = {
     control: (base, state) => ({
@@ -615,7 +615,10 @@ const buildObjectFromPathTokens = (index: number, tokens: string[], value: any) 
     const numberKey = Number(key)
     const isKeyNumber = !Number.isNaN(numberKey)
     return isKeyNumber
-        ? [...Array(numberKey).fill(UNCHANGED_ARRAY_ELEMENT_SYMBOL), buildObjectFromPathTokens(index + 1, tokens, value)]
+        ? [
+              ...Array(numberKey).fill(UNCHANGED_ARRAY_ELEMENT_SYMBOL),
+              buildObjectFromPathTokens(index + 1, tokens, value),
+          ]
         : { [unescapePathComponent(key)]: buildObjectFromPathTokens(index + 1, tokens, value) }
 }
 
@@ -665,7 +668,12 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
     })
 
 export const convertJSONPointerToJSONPath = (pointer: string) =>
-    unescapePathComponent(pointer.replace(/\/([\*0-9]+)\//g, '[$1].').replace(/\//g, '.').replace(/\./, '$.'))
+    unescapePathComponent(
+        pointer
+            .replace(/\/([\*0-9]+)\//g, '[$1].')
+            .replace(/\//g, '.')
+            .replace(/\./, '$.'),
+    )
 
 export const flatMapOfJSONPaths = (
     paths: string[],
@@ -1002,7 +1010,7 @@ export const getBranchIcon = (sourceType, _isRegex?: boolean, webhookEventName?:
             return <ICPullRequest className="scn-6" />
         }
         if (webhookEventName === WebhookEventNameType.TAG_CREATION) {
-        return <ICTag className="scn-6" />
+            return <ICTag className="scn-6" />
         }
         return <ICWebhook />
     }
@@ -1025,7 +1033,6 @@ export const getSanitizedIframe = (iframeString: string) =>
 export const getIframeWithDefaultAttributes = (iframeString: string, defaultName?: string): string => {
     const parentDiv = document.createElement('div')
     parentDiv.innerHTML = getSanitizedIframe(iframeString)
-
 
     const iframe = parentDiv.querySelector('iframe')
     if (iframe) {
@@ -1095,7 +1102,7 @@ export const getTTLInHumanReadableFormat = (ttl: number): string => {
     }
     const humanizedDuration = moment.duration(absoluteTTL, 'seconds').humanize(false)
     // Since moment.js return "a" or "an" for singular values so replacing with 1.
-    return humanizedDuration.replace(/^(a|an) /, '1 ');
+    return humanizedDuration.replace(/^(a|an) /, '1 ')
 }
 
 const getAppTypeCategory = (appType: AppType) => {
@@ -1116,3 +1123,13 @@ const getAppTypeCategory = (appType: AppType) => {
 
 export const getAIAnalyticsEvents = (context: string, appType?: AppType) =>
     `AI_${appType ? `${getAppTypeCategory(appType)}_` : ''}${context}`
+
+export const findRight = <T,>(arr: T[], predicate: (item: T) => boolean): T | null => {
+    for (let i = arr.length - 1; i >= 0; i--) {
+        if (predicate(arr[i])) {
+            return arr[i]
+        }
+    }
+
+    return null
+}

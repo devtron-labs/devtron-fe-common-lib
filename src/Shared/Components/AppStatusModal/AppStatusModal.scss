@@ -2,4 +2,10 @@
     .info-card-item {
         grid-template-columns: 140px 1fr;
     }
+
+    &__header {
+        &:not(:has([role="tablist"])) {
+            padding-bottom: 12px;
+        }
+    }
 }
