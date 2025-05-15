@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { getDocumentationUrl } from '@Common/DocLink'
 import { InfoIconTippy } from '@Shared/Components/InfoIconTippy'
 
 import { BreadCrumb, DOCUMENTATION } from '../../../Common'
@@ -39,7 +38,7 @@ const Descriptor = ({
                         infoText={tippyInfoText ?? BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
                         additionalContent={tippyAdditionalContent}
                         heading={tooltipHeading || BUILD_INFRA_TEXT.HEADING}
-                        documentationLink={getDocumentationUrl(DOCUMENTATION.GLOBAL_CONFIG_BUILD_INFRA)}
+                        documentationLink={DOCUMENTATION.GLOBAL_CONFIG_BUILD_INFRA}
                         documentationLinkText="View Documentation"
                         iconClassName="icon-dim-20 fcn-6"
                     />

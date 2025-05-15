@@ -19,8 +19,8 @@ import { ReactComponent as InjectTag } from '../../Assets/Icon/inject-tag.svg'
 import { ReactComponent as ICHelpOutline } from '../../Assets/Icon/ic-help-outline.svg'
 import { TippyCustomized } from '../TippyCustomized'
 import { TippyTheme } from '../Types'
-import { DOCUMENTATION } from '../Constants'
-import { getDocumentationUrl } from '@Common/DocLink'
+
+import { DOCUMENTATION } from '@Common/DocLink'
 
 export default function PropagateTagInfo({ isCreateApp }: { isCreateApp: boolean }) {
     const additionalInfo = () => (
@@ -48,7 +48,7 @@ export default function PropagateTagInfo({ isCreateApp }: { isCreateApp: boolean
             showCloseButton
             trigger="click"
             interactive
-            documentationLink={isCreateApp ? getDocumentationUrl(DOCUMENTATION.APP_TAGS) : getDocumentationUrl(DOCUMENTATION.APP_OVERVIEW_TAGS)}
+            documentationLink={isCreateApp ? DOCUMENTATION.APP_TAGS : DOCUMENTATION.APP_OVERVIEW_TAGS}
             documentationLinkText="View Documentation"
         >
             <div className="flexbox cursor">
