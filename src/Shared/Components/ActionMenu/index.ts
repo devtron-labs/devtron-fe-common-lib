@@ -1,2 +1,2 @@
-export { default as ActionMenu } from './ActionMenu.component'
-export type { ActionMenuProps } from './types'
+export * from './ActionMenu.component'
+export type { ActionMenuItemType, ActionMenuOptionType, ActionMenuProps } from './types'
