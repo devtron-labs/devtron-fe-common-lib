@@ -15,7 +15,7 @@ import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
 
 import { BulkSelection } from '../BulkSelection'
 import BulkSelectionActionWidget from './BulkSelectionActionWidget'
-import { BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, SHIMMER_DUMMY_ARRAY } from './constants'
+import { BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, NO_ROWS_OR_GET_ROWS_ERROR, SHIMMER_DUMMY_ARRAY } from './constants'
 import { FiltersTypeEnum, InternalTableProps, PaginationEnum, SignalsType } from './types'
 import useTableWithKeyboardShortcuts from './useTableWithKeyboardShortcuts'
 import { getFilteringPromise, searchAndSortRows } from './utils'
@@ -42,6 +42,7 @@ const InternalTable = ({
     handleToggleBulkSelectionOnRow,
     paginationVariant,
     RowActionsOnHoverComponent,
+    children,
 }: InternalTableProps) => {
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
@@ -103,9 +104,9 @@ const InternalTable = ({
         [visibleColumns],
     )
 
-    const [areFilteredRowsLoading, filteredRows, filteredRowsError, reloadFilteredRows] = useAsync(async () => {
+    const [_areFilteredRowsLoading, filteredRows, filteredRowsError, reloadFilteredRows] = useAsync(async () => {
         if (!rows && !getRows) {
-            throw new Error('Neither rows nor getRows function provided')
+            throw NO_ROWS_OR_GET_ROWS_ERROR
         }
 
         return getFilteringPromise({
@@ -119,6 +120,8 @@ const InternalTable = ({
                 : () => getRows(filterData),
         })
     }, [searchKey, sortBy, sortOrder, rows, sortByToColumnIndexMap, JSON.stringify(otherFilters)])
+
+    const areFilteredRowsLoading = _areFilteredRowsLoading || filteredRowsError === NO_ROWS_OR_GET_ROWS_ERROR
 
     const bulkSelectionCount = getSelectedIdentifiersCount?.() ?? 0
 
@@ -170,7 +173,7 @@ const InternalTable = ({
         paginationVariant === PaginationEnum.PAGINATED && filteredRows?.length > DEFAULT_BASE_PAGE_SIZE
 
     const renderRows = () => {
-        if (loading && !visibleColumns.length) {
+        if (loading) {
             return SHIMMER_DUMMY_ARRAY.map((shimmerRowLabel) => (
                 <div
                     key={shimmerRowLabel}
@@ -257,7 +260,7 @@ const InternalTable = ({
                                     value={row.data[field]}
                                     signals={EVENT_TARGET as SignalsType}
                                     row={row}
-                                    filterData={filterData}
+                                    filterData={filterData as any}
                                     isRowActive={isRowActive}
                                     {...additionalProps}
                                 />
@@ -282,7 +285,11 @@ const InternalTable = ({
     }
 
     const renderContent = () => {
-        if (!areFilteredRowsLoading && !filteredRows?.length) {
+        if (filteredRowsError && !areFilteredRowsLoading && !loading) {
+            return <ErrorScreenManager code={filteredRowsError.code} reload={reloadFilteredRows} />
+        }
+
+        if (!areFilteredRowsLoading && !filteredRows?.length && !loading) {
             return filtersVariant !== FiltersTypeEnum.NONE && isFilterApplied ? (
                 <GenericFilterEmptyState handleClearFilters={clearFilters} />
             ) : (
@@ -290,15 +297,11 @@ const InternalTable = ({
             )
         }
 
-        if (filteredRowsError && !areFilteredRowsLoading) {
-            return <ErrorScreenManager code={filteredRowsError.code} reload={reloadFilteredRows} />
-        }
-
         return (
             <div tabIndex={0} role="grid" className="generic-table flexbox-col dc__overflow-hidden flex-grow-1">
                 <div className="flexbox-col flex-grow-1 w-100 dc__overflow-auto" ref={parentRef}>
                     <div className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom">
-                        {loading && !visibleColumns.length ? (
+                        {loading ? (
                             <div className="flexbox py-12 dc__gap-16">
                                 {SHIMMER_DUMMY_ARRAY.map((label) => (
                                     <div key={label} className="shimmer w-180" />
@@ -312,7 +315,7 @@ const InternalTable = ({
                                 }}
                             >
                                 {visibleColumns.map(({ label, field, isSortable, size, showTippyOnTruncate }) => {
-                                    const isResizable = !!size.range
+                                    const isResizable = !!size?.range
 
                                     if (field === BULK_ACTION_GUTTER_LABEL) {
                                         return <BulkSelection key={field} showPagination={showPagination} />
@@ -361,10 +364,12 @@ const InternalTable = ({
                         changePage={changePage}
                         changePageSize={changePageSize}
                         offset={offset}
-                        rootClassName="border__primary--top flex dc__content-space px-20"
+                        rootClassName="border__secondary--top flex dc__content-space px-20"
                         size={filteredRows.length}
                     />
                 )}
+
+                {children}
             </div>
         )
     }

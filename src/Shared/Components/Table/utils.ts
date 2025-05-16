@@ -23,9 +23,9 @@ export const searchAndSortRows = (
     filterData: UseFiltersReturnType,
     comparator?: Column['comparator'],
 ) => {
-    const { searchKey, sortBy, sortOrder } = filterData ?? {}
+    const { sortBy, sortOrder, isFilterApplied } = filterData ?? {}
 
-    const filteredRows = searchKey ? rows.filter((row) => filter(row, filterData)) : rows
+    const filteredRows = isFilterApplied ? rows.filter((row) => filter(row, filterData)) : rows
 
     return comparator && sortBy
         ? filteredRows.sort(
@@ -62,7 +62,9 @@ export const getVisibleColumnsFromLocalStorage = ({
             throw new Error()
         }
 
-        return visibleColumns
+        const visibleColumnsFieldSet = new Set(visibleColumns.map((column) => column.field))
+
+        return allColumns.filter((column) => visibleColumnsFieldSet.has(column.field))
     } catch {
         // NOTE: show all headers by default
         return allColumns
