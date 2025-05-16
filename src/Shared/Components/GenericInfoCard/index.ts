@@ -15,4 +15,6 @@
  */
 
 export { default as GenericInfoCard } from './GenericInfoCard.component'
-export { GenericInfoCardBorderVariant, type GenericInfoCardProps } from './types'
+export * from './GenericInfoCardListing'
+export { GenericInfoListSkeleton } from './GenericInfoListSkeleton'
+export { GenericInfoCardBorderVariant, type GenericInfoCardListingProps, type GenericInfoCardProps } from './types'
