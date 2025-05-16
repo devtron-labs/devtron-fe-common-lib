@@ -45,7 +45,14 @@ export const GenericInfoCardListing = ({
             return <GenericFilterEmptyState handleClearFilters={handleClearFilters} />
         }
 
-        return <GenericEmptyState image={emptyStateConfig.image ?? emptyList} {...emptyStateConfig} />
+        return (
+            <GenericEmptyState
+                image={emptyStateConfig.image ?? emptyList}
+                renderButton={emptyStateConfig.renderButton}
+                isButtonAvailable={!!emptyStateConfig.renderButton}
+                {...emptyStateConfig}
+            />
+        )
     }
 
     return (

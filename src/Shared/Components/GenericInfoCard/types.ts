@@ -57,11 +57,11 @@ export interface GenericInfoCardListingProps
         Pick<GenericFilterEmptyStateProps, 'handleClearFilters'> {
     list: (Pick<GenericInfoCardProps, 'Icon' | 'author' | 'description' | 'linkProps' | 'onClick' | 'title'> &
         Record<'id', string>)[]
-    emptyStateConfig: Pick<GenericEmptyStateType, 'title' | 'subTitle' | 'image'>
+    emptyStateConfig: Pick<GenericEmptyStateType, 'title' | 'subTitle' | 'image' | 'renderButton' | 'renderButton'>
     searchKey?: string
     reloadList?: () => void
     error?: APIResponseHandlerProps['error']
     isLoading?: boolean
 }
 
-export interface GenericInfoListSkeletonProps extends Pick<GenericInfoCardProps, 'borderVariant'> {}
+export interface GenericInfoListSkeletonProps extends Partial<Pick<GenericInfoCardProps, 'borderVariant'>> {}
