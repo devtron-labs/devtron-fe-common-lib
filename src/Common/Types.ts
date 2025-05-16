@@ -148,6 +148,7 @@ export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
     documentationLinkText?: string
     children: React.ReactElement<any>
     disableClose?: boolean
+    hideVersion?: boolean
 }
 
 export interface InfoIconTippyProps
@@ -156,12 +157,13 @@ export interface InfoIconTippyProps
         | 'heading'
         | 'infoText'
         | 'iconClass'
-        | 'documentationLink'
         | 'documentationLinkText'
         | 'additionalContent'
         | 'placement'
         | 'Icon'
         | 'headingInfo'
+        | 'hideVersion'
+        | 'documentationLink'
     > {
     dataTestid?: string
     children?: TippyCustomizedProps['children']

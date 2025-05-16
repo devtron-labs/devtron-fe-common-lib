@@ -32,6 +32,7 @@ const InfoIconTippy = ({
     children,
     headingInfo,
     buttonPadding = 'p-0',
+    hideVersion,
 }: InfoIconTippyProps) => (
     <TippyCustomized
         theme={TippyTheme.white}
@@ -50,6 +51,7 @@ const InfoIconTippy = ({
         additionalContent={additionalContent}
         animation="shift-toward"
         duration={400}
+        hideVersion={hideVersion}
     >
         {children || (
             <button

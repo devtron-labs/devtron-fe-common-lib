@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ArrowOut } from '../../../Assets/Icon/ic-arrow-square-out.svg'
+import { DocLink } from '@Common/DocLink'
+
 import { ModalSidebarPanelProps } from './types'
 
 const ModalSidebarPanel = ({
@@ -23,6 +24,7 @@ const ModalSidebarPanel = ({
     icon,
     children,
     documentationLink,
+    hideVersion,
 }: ModalSidebarPanelProps) => (
     <div className={`flexbox-col w-250 dc__gap-24 dc__modal-gradient ${rootClassName}`}>
         <div className="flexbox-col dc__gap-12">
@@ -36,15 +38,13 @@ const ModalSidebarPanel = ({
         </div>
         <div className="flexbox-col dc__gap-4">
             <span className="fs-13 fw-6 lh-20 cn-9">📙 Need help?</span>
-            <a
-                href={documentationLink}
-                target="_blank"
-                className="dc__no-decor flexbox dc__align-items-center dc__gap-4"
-                rel="noreferrer"
-            >
-                <span className="fs-13 fw-6 lh-20 cb-5">View documentation</span>
-                <ArrowOut className="scb-5 icon-dim-14" />
-            </a>
+            <DocLink
+                docLinkKey={documentationLink}
+                text="View documentation"
+                dataTestId="learn-more-about-creating-job-link"
+                showExternalIcon
+                hideVersion={hideVersion}
+            />
         </div>
     </div>
 )
