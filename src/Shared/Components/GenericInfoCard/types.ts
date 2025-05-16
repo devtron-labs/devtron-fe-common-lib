@@ -63,3 +63,5 @@ export interface GenericInfoCardListingProps
     error?: APIResponseHandlerProps['error']
     isLoading?: boolean
 }
+
+export interface GenericInfoListSkeletonProps extends Pick<GenericInfoCardProps, 'borderVariant'> {}

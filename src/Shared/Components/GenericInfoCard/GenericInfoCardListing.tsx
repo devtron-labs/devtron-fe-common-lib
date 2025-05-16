@@ -23,8 +23,9 @@ export const GenericInfoCardListing = ({
     emptyStateConfig,
 }: GenericInfoCardListingProps) => {
     const filteredList = useMemo(() => {
+        const sanitizedList = list || []
         if (!searchKey || error) {
-            return list
+            return sanitizedList
         }
 
         const loweredSearchKey = searchKey.toLowerCase()
