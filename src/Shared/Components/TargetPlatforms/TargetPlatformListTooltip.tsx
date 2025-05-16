@@ -33,12 +33,13 @@ const TooltipContent = ({ targetPlatforms }: Pick<TargetPlatformListTooltipProps
     </div>
 )
 
-const TargetPlatformListTooltip = ({ targetPlatforms, children }: TargetPlatformListTooltipProps) => (
+const TargetPlatformListTooltip = ({ targetPlatforms, children, appendTo }: TargetPlatformListTooltipProps) => (
     <Tooltip
         content={<TooltipContent targetPlatforms={targetPlatforms} />}
         placement="right"
         alwaysShowTippyOnHover
         interactive
+        appendTo={appendTo}
     >
         {children}
     </Tooltip>
