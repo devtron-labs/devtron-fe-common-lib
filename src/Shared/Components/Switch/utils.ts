@@ -1,15 +1,17 @@
 import { IconBaseColorType } from '@Shared/types'
 
+import {
+    ROUNDED_SWITCH_SIZE_MAP,
+    ROUNDED_SWITCH_THUMB_SIZE_MAP,
+    ROUNDED_SWITCH_TRACK_COLOR_MAP,
+    SQUARE_SWITCH_SIZE_MAP,
+    SQUARE_SWITCH_TRACK_COLOR_MAP,
+    SWITCH_HEIGHT_MAP,
+} from './constants'
 import { SwitchProps } from './types'
 
-// On intro of size there will changes in almost all methods
-export const getSwitchContainerClass = ({ shape }: Required<Pick<SwitchProps, 'shape'>>): string => {
-    if (shape === 'rounded') {
-        return 'py-3 h-24 w-20'
-    }
-
-    return 'w-28 h-18'
-}
+export const getSwitchContainerClass = ({ shape, size }: Required<Pick<SwitchProps, 'shape' | 'size'>>): string =>
+    `${SWITCH_HEIGHT_MAP[size]} ${shape === 'rounded' ? ROUNDED_SWITCH_SIZE_MAP[size] : SQUARE_SWITCH_SIZE_MAP[size]}`
 
 export const getSwitchTrackColor = ({
     shape,
@@ -20,31 +22,19 @@ export const getSwitchTrackColor = ({
         return 'var(--N200)'
     }
 
-    if (shape === 'rounded') {
-        if (variant === 'theme') {
-            return 'var(--B500)'
-        }
-
-        return 'var(--G500)'
-    }
-
-    if (variant === 'theme') {
-        return 'var(--B300)'
-    }
-
-    return 'var(--G300)'
+    return shape === 'rounded' ? ROUNDED_SWITCH_TRACK_COLOR_MAP[variant] : SQUARE_SWITCH_TRACK_COLOR_MAP[variant]
 }
 
 export const getSwitchThumbClass = ({
-    indeterminate,
     shape,
-    isChecked,
-}: Pick<SwitchProps, 'indeterminate' | 'shape' | 'isChecked'>) => {
-    if (isChecked && indeterminate) {
+    size,
+    showIndeterminateIcon,
+}: Pick<SwitchProps, 'shape' | 'size'> & { showIndeterminateIcon: boolean }) => {
+    if (showIndeterminateIcon) {
         return 'w-100 h-100 flex'
     }
 
-    return `flex p-2 ${shape === 'rounded' ? 'dc__border-radius-50-per icon-dim-10' : 'br-3'} bg__white`
+    return `flex p-3 ${shape === 'rounded' ? `dc__border-radius-50-per ${ROUNDED_SWITCH_THUMB_SIZE_MAP[size]}` : 'br-3'} bg__white`
 }
 
 export const getSwitchIconColor = ({

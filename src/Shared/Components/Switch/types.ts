@@ -1,3 +1,4 @@
+import { ComponentSizeType } from '@Shared/constants'
 import { IconBaseColorType } from '@Shared/types'
 
 import { IconName } from '../Icon'
@@ -14,7 +15,7 @@ import { IconName } from '../Icon'
  *   - `iconName` specifies the name of the icon to display.
  *   - `iconColor` allows customization of the icon's color in the active state.
  *   - `indeterminate` indicates whether the switch is in an indeterminate state, typically used for checkboxes to represent a mixed state.
- *     If `indeterminate` is true, the switch will not be fully checked or unchecked, and its role will change to `checkbox`.
+ *     If `indeterminate` is true, the switch will not be fully checked or unchecked.
  */
 type SwitchShapeProps =
     | {
@@ -32,7 +33,14 @@ type SwitchShapeProps =
            * Icon color is not applicable for the `rounded` shape.
            */
           iconColor?: never
-          indeterminate?: never
+          /**
+           * Indicates whether the switch is in an indeterminate state.
+           * This state is typically used for checkboxes to indicate a mixed state.
+           * If true, the switch will not be fully checked or unchecked. Due this state alone we are keeping role as `checkbox` instead of `switch`.
+           * This property is not applicable for the `square` shape.
+           * @default false
+           */
+          indeterminate?: boolean
       }
     | {
           /**
@@ -49,14 +57,7 @@ type SwitchShapeProps =
            * The color of the icon. If provided, this will override the default color in the active state.
            */
           iconColor?: IconBaseColorType
-          /**
-           * Indicates whether the switch is in an indeterminate state.
-           * This state is typically used for checkboxes to indicate a mixed state.
-           * If true, the switch will not be fully checked or unchecked. We will change the role to checkbox in this case since the indeterminate state is not applicable for the switch.
-           * This property is not applicable for the `rounded` shape.
-           * @default false
-           */
-          indeterminate?: boolean
+          indeterminate?: never
       }
 
 /**
@@ -80,7 +81,13 @@ export type SwitchProps = {
      */
     variant?: 'theme' | 'positive'
 
-    handleChange: () => void
+    /**
+     * The size of the switch.
+     * @default `ComponentSizeType.medium`
+     */
+    size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.small>
+
+    onChange: () => void
 
     /**
      * Indicates whether the switch is disabled.
